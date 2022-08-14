@@ -14,7 +14,7 @@ namespace NzbDrone.Core.Queue
     {
         public Series Series { get; set; }
         public Episode Episode { get; set; }
-        public Language Language { get; set; }
+        public List<Language> Languages { get; set; }
         public QualityModel Quality { get; set; }
         public decimal Size { get; set; }
         public string Title { get; set; }

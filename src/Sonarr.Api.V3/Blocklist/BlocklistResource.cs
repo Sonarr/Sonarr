@@ -15,7 +15,7 @@ namespace Sonarr.Api.V3.Blocklist
         public int SeriesId { get; set; }
         public List<int> EpisodeIds { get; set; }
         public string SourceTitle { get; set; }
-        public Language Language { get; set; }
+        public List<Language> Languages { get; set; }
         public QualityModel Quality { get; set; }
         public List<CustomFormatResource> CustomFormats { get; set; }
         public DateTime Date { get; set; }
@@ -42,7 +42,7 @@ namespace Sonarr.Api.V3.Blocklist
                 SeriesId = model.SeriesId,
                 EpisodeIds = model.EpisodeIds,
                 SourceTitle = model.SourceTitle,
-                Language = model.Language,
+                Languages = model.Languages,
                 Quality = model.Quality,
                 CustomFormats = formatCalculator.ParseCustomFormat(model).ToResource(),
                 Date = model.Date,

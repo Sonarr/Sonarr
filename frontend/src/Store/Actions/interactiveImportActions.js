@@ -177,7 +177,7 @@ export const actionHandlers = handleThunks({
         seasonNumber: item.seasonNumber,
         episodeIds: (item.episodes || []).map((e) => e.id),
         quality: item.quality,
-        language: item.language,
+        languages: item.languages,
         releaseGroup: item.releaseGroup,
         downloadId: item.downloadId
       };

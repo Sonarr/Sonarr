@@ -6,7 +6,7 @@ import ConfirmModal from 'Components/Modal/ConfirmModal';
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
 import TableRow from 'Components/Table/TableRow';
 import Popover from 'Components/Tooltip/Popover';
-import EpisodeLanguage from 'Episode/EpisodeLanguage';
+import EpisodeLanguages from 'Episode/EpisodeLanguages';
 import EpisodeQuality from 'Episode/EpisodeQuality';
 import { icons, kinds, tooltipPositions } from 'Helpers/Props';
 import formatBytes from 'Utilities/Number/formatBytes';
@@ -50,7 +50,7 @@ class EpisodeFileRow extends Component {
     const {
       path,
       size,
-      language,
+      languages,
       quality,
       languageCutoffNotMet,
       qualityCutoffNotMet,
@@ -87,14 +87,14 @@ class EpisodeFileRow extends Component {
               );
             }
 
-            if (name === 'language') {
+            if (name === 'languages') {
               return (
                 <TableRowCell
                   key={name}
-                  className={styles.language}
+                  className={styles.languages}
                 >
-                  <EpisodeLanguage
-                    language={language}
+                  <EpisodeLanguages
+                    languages={languages}
                     isCutoffNotMet={languageCutoffNotMet}
                   />
                 </TableRowCell>
@@ -167,7 +167,7 @@ class EpisodeFileRow extends Component {
 EpisodeFileRow.propTypes = {
   path: PropTypes.string.isRequired,
   size: PropTypes.number.isRequired,
-  language: PropTypes.object.isRequired,
+  languages: PropTypes.arrayOf(PropTypes.object).isRequired,
   languageCutoffNotMet: PropTypes.bool.isRequired,
   quality: PropTypes.object.isRequired,
   qualityCutoffNotMet: PropTypes.bool.isRequired,

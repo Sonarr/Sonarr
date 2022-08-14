@@ -212,7 +212,6 @@ class SeriesEditor extends Component {
           deleteError={deleteError}
           isOrganizingSeries={isOrganizingSeries}
           columns={columns}
-          showLanguageProfile={columns.find((column) => column.name === 'languageProfileId').isVisible}
           onSaveSelected={this.onSaveSelected}
           onOrganizeSeriesPress={this.onOrganizeSeriesPress}
         />

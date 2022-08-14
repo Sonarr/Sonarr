@@ -25,7 +25,6 @@ class ImportSeriesFooter extends Component {
     const {
       defaultMonitor,
       defaultQualityProfileId,
-      defaultLanguageProfileId,
       defaultSeasonFolder,
       defaultSeriesType
     } = props;
@@ -33,7 +32,6 @@ class ImportSeriesFooter extends Component {
     this.state = {
       monitor: defaultMonitor,
       qualityProfileId: defaultQualityProfileId,
-      languageProfileId: defaultLanguageProfileId,
       seriesType: defaultSeriesType,
       seasonFolder: defaultSeasonFolder
     };
@@ -43,12 +41,10 @@ class ImportSeriesFooter extends Component {
     const {
       defaultMonitor,
       defaultQualityProfileId,
-      defaultLanguageProfileId,
       defaultSeriesType,
       defaultSeasonFolder,
       isMonitorMixed,
       isQualityProfileIdMixed,
-      isLanguageProfileIdMixed,
       isSeriesTypeMixed,
       isSeasonFolderMixed
     } = this.props;
@@ -56,7 +52,6 @@ class ImportSeriesFooter extends Component {
     const {
       monitor,
       qualityProfileId,
-      languageProfileId,
       seriesType,
       seasonFolder
     } = this.state;
@@ -73,12 +68,6 @@ class ImportSeriesFooter extends Component {
       newState.qualityProfileId = MIXED;
     } else if (!isQualityProfileIdMixed && qualityProfileId !== defaultQualityProfileId) {
       newState.qualityProfileId = defaultQualityProfileId;
-    }
-
-    if (isLanguageProfileIdMixed && languageProfileId !== MIXED) {
-      newState.languageProfileId = MIXED;
-    } else if (!isLanguageProfileIdMixed && languageProfileId !== defaultLanguageProfileId) {
-      newState.languageProfileId = defaultLanguageProfileId;
     }
 
     if (isSeriesTypeMixed && seriesType !== MIXED) {
@@ -116,10 +105,8 @@ class ImportSeriesFooter extends Component {
       isLookingUpSeries,
       isMonitorMixed,
       isQualityProfileIdMixed,
-      isLanguageProfileIdMixed,
       isSeriesTypeMixed,
       hasUnsearchedItems,
-      showLanguageProfile,
       importError,
       onImportPress,
       onLookupPress,
@@ -129,7 +116,6 @@ class ImportSeriesFooter extends Component {
     const {
       monitor,
       qualityProfileId,
-      languageProfileId,
       seriesType,
       seasonFolder
     } = this.state;
@@ -165,24 +151,6 @@ class ImportSeriesFooter extends Component {
             onChange={this.onInputChange}
           />
         </div>
-
-        {
-          showLanguageProfile &&
-            <div className={styles.inputContainer}>
-              <div className={styles.label}>
-                Language Profile
-              </div>
-
-              <FormInputGroup
-                type={inputTypes.LANGUAGE_PROFILE_SELECT}
-                name="languageProfileId"
-                value={languageProfileId}
-                isDisabled={!selectedCount}
-                includeMixed={isLanguageProfileIdMixed}
-                onChange={this.onInputChange}
-              />
-            </div>
-        }
 
         <div className={styles.inputContainer}>
           <div className={styles.label}>
@@ -308,16 +276,13 @@ ImportSeriesFooter.propTypes = {
   isLookingUpSeries: PropTypes.bool.isRequired,
   defaultMonitor: PropTypes.string.isRequired,
   defaultQualityProfileId: PropTypes.number,
-  defaultLanguageProfileId: PropTypes.number,
   defaultSeriesType: PropTypes.string.isRequired,
   defaultSeasonFolder: PropTypes.bool.isRequired,
   isMonitorMixed: PropTypes.bool.isRequired,
   isQualityProfileIdMixed: PropTypes.bool.isRequired,
-  isLanguageProfileIdMixed: PropTypes.bool.isRequired,
   isSeriesTypeMixed: PropTypes.bool.isRequired,
   isSeasonFolderMixed: PropTypes.bool.isRequired,
   hasUnsearchedItems: PropTypes.bool.isRequired,
-  showLanguageProfile: PropTypes.bool.isRequired,
   importError: PropTypes.object,
   onInputChange: PropTypes.func.isRequired,
   onImportPress: PropTypes.func.isRequired,

@@ -3,7 +3,6 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Languages;
-using NzbDrone.Core.Profiles.Languages;
 using NzbDrone.Core.Profiles.Qualities;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
@@ -26,24 +25,14 @@ namespace NzbDrone.Core.Test.TvTests.SeriesRepositoryTests
                     Name = "TestProfile"
                 };
 
-            var langProfile = new LanguageProfile
-                {
-                    Name = "TestProfile",
-                    Languages = Languages.LanguageFixture.GetDefaultLanguages(Language.English),
-                    Cutoff = Language.English
-                };
-
             Mocker.Resolve<QualityProfileRepository>().Insert(profile);
-            Mocker.Resolve<LanguageProfileRepository>().Insert(langProfile);
 
             var series = Builder<Series>.CreateNew().BuildNew();
             series.QualityProfileId = profile.Id;
-            series.LanguageProfileId = langProfile.Id;
 
             Subject.Insert(series);
 
             StoredModel.QualityProfile.Should().NotBeNull();
-            StoredModel.LanguageProfile.Should().NotBeNull();
         }
 
         private void GivenSeries()

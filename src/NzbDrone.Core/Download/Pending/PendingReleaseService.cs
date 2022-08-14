@@ -180,7 +180,7 @@ namespace NzbDrone.Core.Download.Pending
                                     Id = GetQueueId(pendingRelease, episode),
                                     Series = pendingRelease.RemoteEpisode.Series,
                                     Episode = episode,
-                                    Language = pendingRelease.RemoteEpisode.ParsedEpisodeInfo.Language,
+                                    Languages = pendingRelease.RemoteEpisode.ParsedEpisodeInfo.Languages,
                                     Quality = pendingRelease.RemoteEpisode.ParsedEpisodeInfo.Quality,
                                     Title = pendingRelease.Title,
                                     Size = pendingRelease.RemoteEpisode.Release.Size,

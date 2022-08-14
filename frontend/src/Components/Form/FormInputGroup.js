@@ -12,7 +12,6 @@ import EnhancedSelectInputConnector from './EnhancedSelectInputConnector';
 import FormInputHelpText from './FormInputHelpText';
 import IndexerSelectInputConnector from './IndexerSelectInputConnector';
 import KeyValueListInput from './KeyValueListInput';
-import LanguageProfileSelectInputConnector from './LanguageProfileSelectInputConnector';
 import MonitorEpisodesSelectInput from './MonitorEpisodesSelectInput';
 import NumberInput from './NumberInput';
 import OAuthInputConnector from './OAuthInputConnector';
@@ -63,9 +62,6 @@ function getComponent(type) {
 
     case inputTypes.QUALITY_PROFILE_SELECT:
       return QualityProfileSelectInputConnector;
-
-    case inputTypes.LANGUAGE_PROFILE_SELECT:
-      return LanguageProfileSelectInputConnector;
 
     case inputTypes.INDEXER_SELECT:
       return IndexerSelectInputConnector;

@@ -66,8 +66,8 @@ const columns = [
     isVisible: true
   },
   {
-    name: 'language',
-    label: 'Language',
+    name: 'languages',
+    label: 'Languages',
     isSortable: true,
     isVisible: true
   },

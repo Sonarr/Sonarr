@@ -5,7 +5,6 @@ import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
 import SettingsToolbarConnector from 'Settings/SettingsToolbarConnector';
 import DelayProfilesConnector from './Delay/DelayProfilesConnector';
-import LanguageProfilesConnector from './Language/LanguageProfilesConnector';
 import QualityProfilesConnector from './Quality/QualityProfilesConnector';
 import ReleaseProfilesConnector from './Release/ReleaseProfilesConnector';
 
@@ -25,7 +24,6 @@ class Profiles extends Component {
         <PageContentBody>
           <DndProvider options={HTML5toTouch}>
             <QualityProfilesConnector />
-            <LanguageProfilesConnector />
             <DelayProfilesConnector />
             <ReleaseProfilesConnector />
           </DndProvider>

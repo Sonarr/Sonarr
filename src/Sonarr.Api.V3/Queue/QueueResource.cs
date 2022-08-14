@@ -19,7 +19,7 @@ namespace Sonarr.Api.V3.Queue
         public int? EpisodeId { get; set; }
         public SeriesResource Series { get; set; }
         public EpisodeResource Episode { get; set; }
-        public Language Language { get; set; }
+        public List<Language> Languages { get; set; }
         public QualityModel Quality { get; set; }
         public List<CustomFormatResource> CustomFormats { get; set; }
         public decimal Size { get; set; }
@@ -55,7 +55,7 @@ namespace Sonarr.Api.V3.Queue
                 EpisodeId = model.Episode?.Id,
                 Series = includeSeries && model.Series != null ? model.Series.ToResource() : null,
                 Episode = includeEpisode && model.Episode != null ? model.Episode.ToResource() : null,
-                Language = model.Language,
+                Languages = model.Languages,
                 Quality = model.Quality,
                 CustomFormats = model.RemoteEpisode?.CustomFormats?.ToResource(),
                 Size = model.Size,

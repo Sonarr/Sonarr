@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { clearPendingChanges } from 'Store/Actions/baseActions';
-import { fetchLanguageProfileSchema, fetchUISettings, saveUISettings, setUISettingsValue } from 'Store/Actions/settingsActions';
+import { fetchUISettings, saveUISettings, setUISettingsValue } from 'Store/Actions/settingsActions';
 import createLanguagesSelector from 'Store/Selectors/createLanguagesSelector';
 import createSettingsSectionSelector from 'Store/Selectors/createSettingsSectionSelector';
 import UISettings from './UISettings';
@@ -20,11 +20,11 @@ function createFilteredLanguagesSelector() {
       }
 
       const newItems = languages.items
-        .filter((lang) => !FILTER_LANGUAGES.includes(lang.language.name))
+        .filter((lang) => !FILTER_LANGUAGES.includes(lang.name))
         .map((item) => {
           return {
-            key: item.language.id,
-            value: item.language.name
+            key: item.id,
+            value: item.name
           };
         });
 
@@ -58,8 +58,7 @@ const mapDispatchToProps = {
   dispatchSetUISettingsValue: setUISettingsValue,
   dispatchSaveUISettings: saveUISettings,
   dispatchFetchUISettings: fetchUISettings,
-  dispatchClearPendingChanges: clearPendingChanges,
-  dispatchFetchLanguageProfileSchema: fetchLanguageProfileSchema
+  dispatchClearPendingChanges: clearPendingChanges
 };
 
 class UISettingsConnector extends Component {
@@ -69,16 +68,10 @@ class UISettingsConnector extends Component {
 
   componentDidMount() {
     const {
-      isLanguagesPopulated,
-      dispatchFetchUISettings,
-      dispatchFetchLanguageProfileSchema
+      dispatchFetchUISettings
     } = this.props;
 
     dispatchFetchUISettings();
-
-    if (!isLanguagesPopulated) {
-      dispatchFetchLanguageProfileSchema();
-    }
   }
 
   componentWillUnmount() {
@@ -115,8 +108,7 @@ UISettingsConnector.propTypes = {
   dispatchSetUISettingsValue: PropTypes.func.isRequired,
   dispatchSaveUISettings: PropTypes.func.isRequired,
   dispatchFetchUISettings: PropTypes.func.isRequired,
-  dispatchClearPendingChanges: PropTypes.func.isRequired,
-  dispatchFetchLanguageProfileSchema: PropTypes.func.isRequired
+  dispatchClearPendingChanges: PropTypes.func.isRequired
 };
 
 export default connect(createMapStateToProps, mapDispatchToProps)(UISettingsConnector);

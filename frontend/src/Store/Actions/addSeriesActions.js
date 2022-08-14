@@ -34,7 +34,6 @@ export const defaultState = {
     rootFolderPath: '',
     monitor: monitorOptions[0].key,
     qualityProfileId: 0,
-    languageProfileId: 0,
     seriesType: seriesTypes.STANDARD,
     seasonFolder: true,
     searchForMissingEpisodes: false,

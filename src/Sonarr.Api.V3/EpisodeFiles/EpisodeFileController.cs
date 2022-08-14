@@ -130,9 +130,9 @@ namespace Sonarr.Api.V3.EpisodeFiles
 
             foreach (var episodeFile in episodeFiles)
             {
-                if (resource.Language != null)
+                if (resource.Languages != null)
                 {
-                    episodeFile.Language = resource.Language;
+                    episodeFile.Languages = resource.Languages;
                 }
 
                 if (resource.Quality != null)
@@ -198,9 +198,9 @@ namespace Sonarr.Api.V3.EpisodeFiles
             {
                 var resourceEpisodeFile = resources.Single(r => r.Id == episodeFile.Id);
 
-                if (resourceEpisodeFile.Language != null)
+                if (resourceEpisodeFile.Languages != null)
                 {
-                    episodeFile.Language = resourceEpisodeFile.Language;
+                    episodeFile.Languages = resourceEpisodeFile.Languages;
                 }
 
                 if (resourceEpisodeFile.Quality != null)

@@ -11,7 +11,6 @@ using NzbDrone.Core.Download.Pending;
 using NzbDrone.Core.Download.TrackedDownloads;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.Messaging.Events;
-using NzbDrone.Core.Profiles.Languages;
 using NzbDrone.Core.Profiles.Qualities;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Queue;
@@ -30,7 +29,6 @@ namespace Sonarr.Api.V3.Queue
         private readonly IQueueService _queueService;
         private readonly IPendingReleaseService _pendingReleaseService;
 
-        private readonly LanguageComparer _languageComparer;
         private readonly QualityModelComparer _qualityComparer;
         private readonly ITrackedDownloadService _trackedDownloadService;
         private readonly IFailedDownloadService _failedDownloadService;
@@ -42,7 +40,6 @@ namespace Sonarr.Api.V3.Queue
                            IQueueService queueService,
                            IPendingReleaseService pendingReleaseService,
                            IQualityProfileService qualityProfileService,
-                           ILanguageProfileService languageProfileService,
                            ITrackedDownloadService trackedDownloadService,
                            IFailedDownloadService failedDownloadService,
                            IIgnoredDownloadService ignoredDownloadService,
@@ -59,7 +56,6 @@ namespace Sonarr.Api.V3.Queue
             _blocklistService = blocklistService;
 
             _qualityComparer = new QualityModelComparer(qualityProfileService.GetDefaultProfile(string.Empty));
-            _languageComparer = new LanguageComparer(languageProfileService.GetDefaultProfile(string.Empty));
         }
 
         protected override QueueResource GetResourceById(int id)
@@ -156,11 +152,11 @@ namespace Sonarr.Api.V3.Queue
                     ? fullQueue.OrderBy(q => q.Quality, _qualityComparer)
                     : fullQueue.OrderByDescending(q => q.Quality, _qualityComparer);
             }
-            else if (pagingSpec.SortKey == "language")
+            else if (pagingSpec.SortKey == "languages")
             {
                 ordered = ascending
-                    ? fullQueue.OrderBy(q => q.Language, _languageComparer)
-                    : fullQueue.OrderByDescending(q => q.Language, _languageComparer);
+                    ? fullQueue.OrderBy(q => q.Languages, new LanguagesComparer())
+                    : fullQueue.OrderByDescending(q => q.Languages, new LanguagesComparer());
             }
             else
             {
@@ -197,8 +193,8 @@ namespace Sonarr.Api.V3.Queue
                     return q => q.Episode?.AirDateUtc ?? DateTime.MinValue;
                 case "episodes.title":
                     return q => q.Episode?.Title ?? string.Empty;
-                case "language":
-                    return q => q.Language;
+                case "languages":
+                    return q => q.Languages;
                 case "quality":
                     return q => q.Quality;
                 case "progress":

@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Languages;
-using NzbDrone.Core.Profiles.Languages;
 using NzbDrone.Core.Profiles.Qualities;
 using NzbDrone.Core.Qualities;
 
@@ -18,13 +17,11 @@ namespace NzbDrone.Core.Tv
     {
         private readonly IEpisodeRepository _episodeRepository;
         private readonly IQualityProfileService _qualityProfileService;
-        private readonly ILanguageProfileService _languageProfileService;
 
-        public EpisodeCutoffService(IEpisodeRepository episodeRepository, IQualityProfileService qualityProfileService, ILanguageProfileService languageProfileService, Logger logger)
+        public EpisodeCutoffService(IEpisodeRepository episodeRepository, IQualityProfileService qualityProfileService, Logger logger)
         {
             _episodeRepository = episodeRepository;
             _qualityProfileService = qualityProfileService;
-            _languageProfileService = languageProfileService;
         }
 
         public PagingSpec<Episode> EpisodesWhereCutoffUnmet(PagingSpec<Episode> pagingSpec)
@@ -32,7 +29,6 @@ namespace NzbDrone.Core.Tv
             var qualitiesBelowCutoff = new List<QualitiesBelowCutoff>();
             var languagesBelowCutoff = new List<LanguagesBelowCutoff>();
             var profiles = _qualityProfileService.All();
-            var languageProfiles = _languageProfileService.All();
 
             //Get all items less than the cutoff
             foreach (var profile in profiles)
@@ -44,18 +40,6 @@ namespace NzbDrone.Core.Tv
                 if (belowCutoff.Any())
                 {
                     qualitiesBelowCutoff.Add(new QualitiesBelowCutoff(profile.Id, belowCutoff.SelectMany(i => i.GetQualities().Select(q => q.Id))));
-                }
-            }
-
-            foreach (var profile in languageProfiles)
-            {
-                var languageCutoff = profile.UpgradeAllowed ? profile.Cutoff : profile.FirstAllowedLanguage();
-                var languageCutoffIndex = profile.Languages.FindIndex(v => v.Language == languageCutoff);
-                var belowLanguageCutoff = profile.Languages.Take(languageCutoffIndex).ToList();
-
-                if (belowLanguageCutoff.Any())
-                {
-                    languagesBelowCutoff.Add(new LanguagesBelowCutoff(profile.Id, belowLanguageCutoff.Select(l => l.Language.Id)));
                 }
             }
 

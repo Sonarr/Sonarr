@@ -148,7 +148,7 @@ namespace NzbDrone.Core.History
                     SeriesId = episode.SeriesId,
                     EpisodeId = episode.Id,
                     DownloadId = message.DownloadId,
-                    Language = message.Episode.ParsedEpisodeInfo.Language,
+                    Languages = message.Episode.ParsedEpisodeInfo.Languages,
                 };
 
                 history.Data.Add("Indexer", message.Episode.Release.Indexer);
@@ -210,7 +210,7 @@ namespace NzbDrone.Core.History
                         SeriesId = message.ImportedEpisode.SeriesId,
                         EpisodeId = episode.Id,
                         DownloadId = downloadId,
-                        Language = message.EpisodeInfo.Language
+                        Languages = message.EpisodeInfo.Languages
                     };
 
                 history.Data.Add("FileId", message.ImportedEpisode.Id.ToString());
@@ -237,7 +237,7 @@ namespace NzbDrone.Core.History
                     SeriesId = message.SeriesId,
                     EpisodeId = episodeId,
                     DownloadId = message.DownloadId,
-                    Language = message.Language
+                    Languages = message.Languages
                 };
 
                 history.Data.Add("DownloadClient", message.DownloadClient);
@@ -272,7 +272,7 @@ namespace NzbDrone.Core.History
                     SourceTitle = message.EpisodeFile.Path,
                     SeriesId = message.EpisodeFile.SeriesId,
                     EpisodeId = episode.Id,
-                    Language = message.EpisodeFile.Language
+                    Languages = message.EpisodeFile.Languages
                 };
 
                 history.Data.Add("Reason", message.Reason.ToString());
@@ -299,7 +299,7 @@ namespace NzbDrone.Core.History
                     SourceTitle = message.OriginalPath,
                     SeriesId = message.EpisodeFile.SeriesId,
                     EpisodeId = episode.Id,
-                    Language = message.EpisodeFile.Language
+                    Languages = message.EpisodeFile.Languages
                 };
 
                 history.Data.Add("SourcePath", sourcePath);
@@ -327,7 +327,7 @@ namespace NzbDrone.Core.History
                                   SeriesId = message.SeriesId,
                                   EpisodeId = episodeId,
                                   DownloadId = message.DownloadId,
-                                  Language = message.Language
+                                  Languages = message.Languages
                               };
 
                 history.Data.Add("DownloadClient", message.DownloadClientInfo.Type);

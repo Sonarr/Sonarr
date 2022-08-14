@@ -62,7 +62,6 @@ class SeriesIndexTable extends Component {
           component={SeriesIndexRow}
           columns={columns}
           seriesId={series.id}
-          languageProfileId={series.languageProfileId}
           qualityProfileId={series.qualityProfileId}
           showBanners={showBanners}
         />

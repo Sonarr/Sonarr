@@ -2,7 +2,6 @@ using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.Languages;
-using NzbDrone.Core.Profiles.Languages;
 using NzbDrone.Core.Profiles.Qualities;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
@@ -14,29 +13,6 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
     public class UpgradeAllowedSpecificationFixture : CoreTest<UpgradableSpecification>
     {
         [Test]
-        public void should_return_false_when_quality_are_the_same_language_is_better_and_upgrade_allowed_is_false_for_language_profile()
-        {
-            Subject.IsUpgradeAllowed(
-                new QualityProfile
-                {
-                    Cutoff = Quality.Bluray1080p.Id,
-                    Items = Qualities.QualityFixture.GetDefaultQualities(),
-                    UpgradeAllowed = true
-                },
-                new LanguageProfile
-                {
-                    Languages = LanguageFixture.GetDefaultLanguages(Language.English, Language.French),
-                    Cutoff = Language.French,
-                    UpgradeAllowed = false
-                },
-                new QualityModel(Quality.DVD),
-                Language.English,
-                new QualityModel(Quality.DVD),
-                Language.French)
-            .Should().BeFalse();
-        }
-
-        [Test]
         public void should_return_false_when_quality_is_better_languages_are_the_same_and_upgrade_allowed_is_false_for_quality_profile()
         {
             Subject.IsUpgradeAllowed(
@@ -46,16 +22,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                     Items = Qualities.QualityFixture.GetDefaultQualities(),
                     UpgradeAllowed = false
                 },
-                new LanguageProfile
-                {
-                    Languages = LanguageFixture.GetDefaultLanguages(Language.English),
-                    Cutoff = Language.English,
-                    UpgradeAllowed = true
-                },
                 new QualityModel(Quality.DVD),
-                Language.English,
-                new QualityModel(Quality.Bluray1080p),
-                Language.English)
+                new QualityModel(Quality.Bluray1080p))
             .Should().BeFalse();
         }
 
@@ -69,16 +37,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                     Items = Qualities.QualityFixture.GetDefaultQualities(),
                     UpgradeAllowed = true
                 },
-                new LanguageProfile
-                {
-                    Languages = LanguageFixture.GetDefaultLanguages(Language.English, Language.French),
-                    Cutoff = Language.French,
-                    UpgradeAllowed = true
-                },
                 new QualityModel(Quality.DVD),
-                Language.English,
-                new QualityModel(Quality.DVD),
-                Language.French)
+                new QualityModel(Quality.DVD))
             .Should().BeTrue();
         }
 
@@ -92,16 +52,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                     Items = Qualities.QualityFixture.GetDefaultQualities(),
                     UpgradeAllowed = true
                 },
-                new LanguageProfile
-                {
-                    Languages = LanguageFixture.GetDefaultLanguages(Language.English, Language.French),
-                    Cutoff = Language.French,
-                    UpgradeAllowed = true
-                },
                 new QualityModel(Quality.DVD),
-                Language.English,
-                new QualityModel(Quality.DVD),
-                Language.English)
+                new QualityModel(Quality.DVD))
             .Should().BeTrue();
         }
 
@@ -115,16 +67,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                     Items = Qualities.QualityFixture.GetDefaultQualities(),
                     UpgradeAllowed = true
                 },
-                new LanguageProfile
-                {
-                    Languages = LanguageFixture.GetDefaultLanguages(Language.English, Language.French),
-                    Cutoff = Language.French,
-                    UpgradeAllowed = false
-                },
                 new QualityModel(Quality.DVD),
-                Language.English,
-                new QualityModel(Quality.DVD),
-                Language.English)
+                new QualityModel(Quality.DVD))
             .Should().BeTrue();
         }
 
@@ -138,16 +82,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                     Items = Qualities.QualityFixture.GetDefaultQualities(),
                     UpgradeAllowed = true
                 },
-                new LanguageProfile
-                {
-                    Languages = LanguageFixture.GetDefaultLanguages(Language.English, Language.French),
-                    Cutoff = Language.French,
-                    UpgradeAllowed = true
-                },
                 new QualityModel(Quality.DVD),
-                Language.French,
-                new QualityModel(Quality.DVD),
-                Language.English)
+                new QualityModel(Quality.DVD))
             .Should().BeTrue();
         }
 
@@ -161,16 +97,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                     Items = Qualities.QualityFixture.GetDefaultQualities(),
                     UpgradeAllowed = true
                 },
-                new LanguageProfile
-                {
-                    Languages = LanguageFixture.GetDefaultLanguages(Language.English, Language.French),
-                    Cutoff = Language.French,
-                    UpgradeAllowed = false
-                },
                 new QualityModel(Quality.DVD),
-                Language.French,
-                new QualityModel(Quality.DVD),
-                Language.English)
+                new QualityModel(Quality.DVD))
             .Should().BeTrue();
         }
 
@@ -184,16 +112,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                     Items = Qualities.QualityFixture.GetDefaultQualities(),
                     UpgradeAllowed = true
                 },
-                new LanguageProfile
-                {
-                    Languages = LanguageFixture.GetDefaultLanguages(Language.English),
-                    Cutoff = Language.English,
-                    UpgradeAllowed = true
-                },
                 new QualityModel(Quality.DVD),
-                Language.English,
-                new QualityModel(Quality.Bluray1080p),
-                Language.English)
+                new QualityModel(Quality.Bluray1080p))
             .Should().BeTrue();
         }
 
@@ -207,16 +127,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                     Items = Qualities.QualityFixture.GetDefaultQualities(),
                     UpgradeAllowed = true
                 },
-                new LanguageProfile
-                {
-                    Languages = LanguageFixture.GetDefaultLanguages(Language.English),
-                    Cutoff = Language.English,
-                    UpgradeAllowed = true
-                },
                 new QualityModel(Quality.DVD),
-                Language.English,
-                new QualityModel(Quality.DVD),
-                Language.English)
+                new QualityModel(Quality.DVD))
             .Should().BeTrue();
         }
 
@@ -230,16 +142,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                     Items = Qualities.QualityFixture.GetDefaultQualities(),
                     UpgradeAllowed = false
                 },
-                new LanguageProfile
-                {
-                    Languages = LanguageFixture.GetDefaultLanguages(Language.English),
-                    Cutoff = Language.English,
-                    UpgradeAllowed = true
-                },
                 new QualityModel(Quality.DVD),
-                Language.English,
-                new QualityModel(Quality.DVD),
-                Language.English)
+                new QualityModel(Quality.DVD))
             .Should().BeTrue();
         }
 
@@ -253,16 +157,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                     Items = Qualities.QualityFixture.GetDefaultQualities(),
                     UpgradeAllowed = true
                 },
-                new LanguageProfile
-                {
-                    Languages = LanguageFixture.GetDefaultLanguages(Language.English),
-                    Cutoff = Language.English,
-                    UpgradeAllowed = true
-                },
                 new QualityModel(Quality.DVD),
-                Language.English,
-                new QualityModel(Quality.SDTV),
-                Language.English)
+                new QualityModel(Quality.SDTV))
             .Should().BeTrue();
         }
 
@@ -276,16 +172,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                     Items = Qualities.QualityFixture.GetDefaultQualities(),
                     UpgradeAllowed = false
                 },
-                new LanguageProfile
-                {
-                    Languages = LanguageFixture.GetDefaultLanguages(Language.English),
-                    Cutoff = Language.English,
-                    UpgradeAllowed = true
-                },
                 new QualityModel(Quality.DVD),
-                Language.English,
-                new QualityModel(Quality.SDTV),
-                Language.English)
+                new QualityModel(Quality.SDTV))
             .Should().BeTrue();
         }
     }

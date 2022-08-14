@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Languages;
-using NzbDrone.Core.Profiles.Languages;
 using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.Languages
@@ -77,28 +76,6 @@ namespace NzbDrone.Core.Test.Languages
         {
             var i = (int)source;
             i.Should().Be(expected);
-        }
-
-        public static List<LanguageProfileItem> GetDefaultLanguages(params Language[] allowed)
-        {
-            var languages = new List<Language>
-            {
-                Language.English,
-                Language.Spanish,
-                Language.French
-            };
-
-            if (allowed.Length == 0)
-            {
-                allowed = languages.ToArray();
-            }
-
-            var items = languages
-                .Except(allowed)
-                .Concat(allowed)
-                .Select(v => new LanguageProfileItem { Language = v, Allowed = allowed.Contains(v) }).ToList();
-
-            return items;
         }
     }
 }

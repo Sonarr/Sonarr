@@ -180,11 +180,11 @@ class EpisodeRow extends Component {
               );
             }
 
-            if (name === 'language') {
+            if (name === 'languages') {
               return (
                 <TableRowCell
                   key={name}
-                  className={styles.language}
+                  className={styles.languages}
                 >
                   <EpisodeFileLanguageConnector
                     episodeFileId={episodeFileId}

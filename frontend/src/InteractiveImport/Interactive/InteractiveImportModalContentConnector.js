@@ -193,7 +193,7 @@ class InteractiveImportModalContentConnector extends Component {
           episodes,
           releaseGroup,
           quality,
-          language,
+          languages,
           episodeFileId
         } = item;
 
@@ -217,8 +217,8 @@ class InteractiveImportModalContentConnector extends Component {
           return;
         }
 
-        if (!language) {
-          this.setState({ interactiveImportErrorMessage: 'Language must be chosen for each selected file' });
+        if (!languages) {
+          this.setState({ interactiveImportErrorMessage: 'Language(s) must be chosen for each selected file' });
           return;
         }
 
@@ -230,7 +230,7 @@ class InteractiveImportModalContentConnector extends Component {
               id: episodeFileId,
               releaseGroup,
               quality,
-              language
+              languages
             });
 
             return;
@@ -244,7 +244,7 @@ class InteractiveImportModalContentConnector extends Component {
           episodeIds: episodes.map((e) => e.id),
           releaseGroup,
           quality,
-          language,
+          languages,
           downloadId: this.props.downloadId,
           episodeFileId
         });

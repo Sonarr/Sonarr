@@ -11,7 +11,7 @@ namespace NzbDrone.Core.Download.Clients.Flood.Models
         Quality = 1,
 
         [FieldOption(Hint = "English")]
-        Language = 2,
+        Languages = 2,
 
         [FieldOption(Hint = "Example-Raws")]
         ReleaseGroup = 3,

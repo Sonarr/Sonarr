@@ -12,7 +12,6 @@ using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Profiles.Delay;
-using NzbDrone.Core.Profiles.Languages;
 using NzbDrone.Core.Profiles.Qualities;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
@@ -43,7 +42,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             var remoteEpisode = new RemoteEpisode();
             remoteEpisode.ParsedEpisodeInfo = new ParsedEpisodeInfo();
             remoteEpisode.ParsedEpisodeInfo.Quality = quality;
-            remoteEpisode.ParsedEpisodeInfo.Language = language;
+            remoteEpisode.ParsedEpisodeInfo.Languages = new List<Language> { language };
 
             remoteEpisode.Episodes = new List<Episode>();
             remoteEpisode.Episodes.AddRange(episodes);
@@ -58,11 +57,6 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                                                   .With(e => e.QualityProfile = new QualityProfile
                                                   {
                                                       Items = Qualities.QualityFixture.GetDefaultQualities()
-                                                  })
-                                                  .With(l => l.LanguageProfile = new LanguageProfile
-                                                  {
-                                                      Languages = LanguageFixture.GetDefaultLanguages(),
-                                                      Cutoff = Language.Spanish
                                                   })
                                                   .Build();
 
@@ -432,23 +426,6 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             var qualifiedReports = Subject.PrioritizeDecisions(decisions);
             ((TorrentInfo)qualifiedReports.First().RemoteEpisode.Release).Should().Be(torrentInfo1);
-        }
-
-        [Test]
-        public void should_order_by_language()
-        {
-            var remoteEpisode1 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p), Language.English);
-            var remoteEpisode2 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p), Language.French);
-            var remoteEpisode3 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p), Language.German);
-
-            var decisions = new List<DownloadDecision>();
-            decisions.Add(new DownloadDecision(remoteEpisode1));
-            decisions.Add(new DownloadDecision(remoteEpisode2));
-            decisions.Add(new DownloadDecision(remoteEpisode3));
-
-            var qualifiedReports = Subject.PrioritizeDecisions(decisions);
-            qualifiedReports.First().RemoteEpisode.ParsedEpisodeInfo.Language.Should().Be(Language.French);
-            qualifiedReports.Last().RemoteEpisode.ParsedEpisodeInfo.Language.Should().Be(Language.German);
         }
 
         [Test]

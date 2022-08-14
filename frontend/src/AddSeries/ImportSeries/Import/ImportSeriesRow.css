@@ -16,8 +16,7 @@
   min-width: 185px;
 }
 
-.qualityProfile,
-.languageProfile {
+.qualityProfile {
   composes: cell from '~Components/Table/Cells/VirtualTableRowCell.css';
 
   flex: 0 1 250px;
@@ -43,10 +42,4 @@
 
   flex: 0 1 400px;
   min-width: 300px;
-}
-
-.hideLanguageProfile {
-  composes: cell from '~Components/Table/Cells/VirtualTableRowCell.css';
-
-  display: none;
 }

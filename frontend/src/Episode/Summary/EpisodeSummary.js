@@ -24,8 +24,8 @@ const columns = [
     isVisible: true
   },
   {
-    name: 'language',
-    label: 'Language',
+    name: 'languages',
+    label: 'Languages',
     isSortable: false,
     isVisible: true
   },
@@ -84,7 +84,7 @@ class EpisodeSummary extends Component {
       mediaInfo,
       path,
       size,
-      language,
+      languages,
       quality,
       languageCutoffNotMet,
       qualityCutoffNotMet,
@@ -132,7 +132,7 @@ class EpisodeSummary extends Component {
                 <EpisodeFileRow
                   path={path}
                   size={size}
-                  language={language}
+                  languages={languages}
                   languageCutoffNotMet={languageCutoffNotMet}
                   quality={quality}
                   qualityCutoffNotMet={qualityCutoffNotMet}
@@ -168,7 +168,7 @@ EpisodeSummary.propTypes = {
   mediaInfo: PropTypes.object,
   path: PropTypes.string,
   size: PropTypes.number,
-  language: PropTypes.object,
+  languages: PropTypes.arrayOf(PropTypes.object),
   languageCutoffNotMet: PropTypes.bool,
   quality: PropTypes.object,
   qualityCutoffNotMet: PropTypes.bool,

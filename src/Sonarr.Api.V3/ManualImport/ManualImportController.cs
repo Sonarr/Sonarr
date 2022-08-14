@@ -38,16 +38,16 @@ namespace Sonarr.Api.V3.ManualImport
         {
             foreach (var item in items)
             {
-                var processedItem = _manualImportService.ReprocessItem(item.Path, item.DownloadId, item.SeriesId, item.SeasonNumber, item.EpisodeIds ?? new List<int>(), item.ReleaseGroup, item.Quality, item.Language);
+                var processedItem = _manualImportService.ReprocessItem(item.Path, item.DownloadId, item.SeriesId, item.SeasonNumber, item.EpisodeIds ?? new List<int>(), item.ReleaseGroup, item.Quality, item.Languages);
 
                 item.SeasonNumber = processedItem.SeasonNumber;
                 item.Episodes = processedItem.Episodes.ToResource();
                 item.Rejections = processedItem.Rejections;
 
                 // Only set the language/quality if they're unknown
-                if (item.Language == Language.Unknown)
+                if (item.Languages.Single() == Language.Unknown)
                 {
-                    item.Language = processedItem.Language;
+                    item.Languages = processedItem.Languages;
                 }
 
                 if (item.Quality?.Quality == Quality.Unknown)

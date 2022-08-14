@@ -54,12 +54,6 @@ export const defaultState = {
       isVisible: true
     },
     {
-      name: 'languageProfileId',
-      label: 'Language Profile',
-      isSortable: true,
-      isVisible: true
-    },
-    {
       name: 'seriesType',
       label: 'Type',
       isSortable: true,

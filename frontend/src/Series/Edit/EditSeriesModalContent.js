@@ -59,7 +59,6 @@ class EditSeriesModalContent extends Component {
       title,
       item,
       isSaving,
-      showLanguageProfile,
       originalPath,
       onInputChange,
       onModalClose,
@@ -71,7 +70,6 @@ class EditSeriesModalContent extends Component {
       monitored,
       seasonFolder,
       qualityProfileId,
-      languageProfileId,
       seriesType,
       path,
       tags
@@ -119,20 +117,6 @@ class EditSeriesModalContent extends Component {
                 onChange={onInputChange}
               />
             </FormGroup>
-
-            {
-              showLanguageProfile &&
-                <FormGroup>
-                  <FormLabel>Language Profile</FormLabel>
-
-                  <FormInputGroup
-                    type={inputTypes.LANGUAGE_PROFILE_SELECT}
-                    name="languageProfileId"
-                    {...languageProfileId}
-                    onChange={onInputChange}
-                  />
-                </FormGroup>
-            }
 
             <FormGroup>
               <FormLabel>Series Type</FormLabel>
@@ -209,7 +193,6 @@ EditSeriesModalContent.propTypes = {
   title: PropTypes.string.isRequired,
   item: PropTypes.object.isRequired,
   isSaving: PropTypes.bool.isRequired,
-  showLanguageProfile: PropTypes.bool.isRequired,
   isPathChanging: PropTypes.bool.isRequired,
   originalPath: PropTypes.string.isRequired,
   onInputChange: PropTypes.func.isRequired,

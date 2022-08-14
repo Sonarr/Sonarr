@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
@@ -29,7 +30,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
         {
             var episodeFile = Builder<EpisodeFile>.CreateNew()
                 .With(h => h.Quality = new QualityModel())
-                .With(h => h.Language = Language.English)
+                .With(h => h.Languages = new List<Language> { Language.English })
                 .BuildNew();
 
             Db.Insert(episodeFile);

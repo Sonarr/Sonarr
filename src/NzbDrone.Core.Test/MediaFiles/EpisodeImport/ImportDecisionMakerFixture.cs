@@ -11,7 +11,6 @@ using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
 using NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Profiles.Languages;
 using NzbDrone.Core.Profiles.Qualities;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
@@ -58,7 +57,6 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
             _series = Builder<Series>.CreateNew()
                                      .With(e => e.Path = @"C:\Test\Series".AsOsAgnostic())
                                      .With(e => e.QualityProfile = new QualityProfile { Items = Qualities.QualityFixture.GetDefaultQualities() })
-                                     .With(e => e.LanguageProfile = new LanguageProfile { Languages = Languages.LanguageFixture.GetDefaultLanguages() })
                                      .Build();
 
             _quality = new QualityModel(Quality.DVD);
@@ -67,7 +65,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
             {
                 Series = _series,
                 Quality = _quality,
-                Language = Language.Spanish,
+                Languages = new List<Language> { Language.Spanish },
                 Episodes = new List<Episode> { new Episode() },
                 Path = @"C:\Test\Unsorted\The.Office.S03E115.DVDRip.Spanish.XviD-OSiTV.avi"
             };

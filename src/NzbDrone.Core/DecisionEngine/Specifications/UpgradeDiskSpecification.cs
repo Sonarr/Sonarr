@@ -38,18 +38,15 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
                 var customFormats = _formatService.ParseCustomFormat(file);
 
-                _logger.Debug("Comparing file quality and language with report. Existing file is {0} - {1}", file.Quality, file.Language);
+                _logger.Debug("Comparing file quality with report. Existing file is {0}", file.Quality);
 
                 if (!_upgradableSpecification.IsUpgradable(subject.Series.QualityProfile,
-                                                           subject.Series.LanguageProfile,
                                                            file.Quality,
-                                                           file.Language,
                                                            customFormats,
                                                            subject.ParsedEpisodeInfo.Quality,
-                                                           subject.ParsedEpisodeInfo.Language,
                                                            subject.CustomFormats))
                 {
-                    return Decision.Reject("Existing file on disk is of equal or higher preference: {0} - {1}", file.Quality, file.Language);
+                    return Decision.Reject("Existing file on disk is of equal or higher preference: {0}", file.Quality);
                 }
             }
 

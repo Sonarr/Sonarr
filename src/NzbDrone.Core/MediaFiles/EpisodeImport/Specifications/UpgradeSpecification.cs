@@ -31,7 +31,6 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
         {
             var downloadPropersAndRepacks = _configService.DownloadPropersAndRepacks;
             var qualityComparer = new QualityModelComparer(localEpisode.Series.QualityProfile);
-            var languageComparer = new LanguageComparer(localEpisode.Series.LanguageProfile);
 
             foreach (var episode in localEpisode.Episodes.Where(e => e.EpisodeFileId > 0))
             {
@@ -44,7 +43,6 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                 }
 
                 var qualityCompare = qualityComparer.Compare(localEpisode.Quality.Quality, episodeFile.Quality.Quality);
-                var languageCompare = languageComparer.Compare(localEpisode.Language, episodeFile.Language);
                 var customFormatScore = GetCustomFormatScore(localEpisode);
 
                 if (qualityCompare < 0)
@@ -58,18 +56,11 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                 // they just don't import automatically.
 
                 if (qualityCompare == 0 &&
-                    languageCompare <= 0 &&
                     downloadPropersAndRepacks != ProperDownloadTypes.DoNotPrefer &&
                     localEpisode.Quality.Revision.CompareTo(episodeFile.Quality.Revision) < 0)
                 {
                     _logger.Debug("This file isn't a quality revision upgrade for all episodes. Skipping {0}", localEpisode.Path);
                     return Decision.Reject("Not a quality revision upgrade for existing episode file(s)");
-                }
-
-                if (languageCompare < 0 && qualityCompare == 0)
-                {
-                    _logger.Debug("This file isn't a language upgrade for all episodes. Skipping {0}", localEpisode.Path);
-                    return Decision.Reject("Not a language upgrade for existing episode file(s)");
                 }
 
                 var customFormats = _customFormatCalculationService.ParseCustomFormat(episodeFile);

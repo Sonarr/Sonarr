@@ -66,8 +66,7 @@
   flex: 2 0 90px;
 }
 
-.qualityProfileId,
-.languageProfileId {
+.qualityProfileId {
   composes: cell;
 
   flex: 1 0 125px;

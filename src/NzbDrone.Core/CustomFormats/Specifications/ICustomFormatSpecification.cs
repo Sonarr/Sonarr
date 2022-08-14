@@ -1,4 +1,5 @@
 using NzbDrone.Core.Parser.Model;
+using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.CustomFormats
 {
@@ -10,6 +11,8 @@ namespace NzbDrone.Core.CustomFormats
         string Name { get; set; }
         bool Negate { get; set; }
         bool Required { get; set; }
+
+        NzbDroneValidationResult Validate();
 
         ICustomFormatSpecification Clone();
         bool IsSatisfiedBy(ParsedEpisodeInfo episodeInfo);

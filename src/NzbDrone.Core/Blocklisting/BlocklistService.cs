@@ -80,7 +80,7 @@ namespace NzbDrone.Core.Blocklisting
                                 Indexer = remoteEpisode.Release.Indexer,
                                 Protocol = remoteEpisode.Release.DownloadProtocol,
                                 Message = message,
-                                Language = remoteEpisode.ParsedEpisodeInfo.Language
+                                Languages = remoteEpisode.ParsedEpisodeInfo.Languages
                             };
 
             if (remoteEpisode.Release is TorrentInfo torrentRelease)
@@ -181,7 +181,7 @@ namespace NzbDrone.Core.Blocklisting
                                 Protocol = (DownloadProtocol)Convert.ToInt32(message.Data.GetValueOrDefault("protocol")),
                                 Message = message.Message,
                                 TorrentInfoHash = message.Data.GetValueOrDefault("torrentInfoHash"),
-                                Language = message.Language
+                                Languages = message.Languages
                             };
 
             _blocklistRepository.Insert(blocklist);

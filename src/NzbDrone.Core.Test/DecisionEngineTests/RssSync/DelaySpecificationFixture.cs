@@ -15,7 +15,6 @@ using NzbDrone.Core.Languages;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Profiles.Delay;
-using NzbDrone.Core.Profiles.Languages;
 using NzbDrone.Core.Profiles.Qualities;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
@@ -27,7 +26,6 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
     public class DelaySpecificationFixture : CoreTest<DelaySpecification>
     {
         private QualityProfile _profile;
-        private LanguageProfile _langProfile;
         private DelayProfile _delayProfile;
         private RemoteEpisode _remoteEpisode;
 
@@ -37,16 +35,12 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
             _profile = Builder<QualityProfile>.CreateNew()
                                        .Build();
 
-            _langProfile = Builder<LanguageProfile>.CreateNew()
-                                                   .Build();
-
             _delayProfile = Builder<DelayProfile>.CreateNew()
                                                  .With(d => d.PreferredProtocol = DownloadProtocol.Usenet)
                                                  .Build();
 
             var series = Builder<Series>.CreateNew()
                                         .With(s => s.QualityProfile = _profile)
-                                        .With(s => s.LanguageProfile = _langProfile)
                                         .Build();
 
             _remoteEpisode = Builder<RemoteEpisode>.CreateNew()
@@ -59,9 +53,6 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
             _profile.Items.Add(new QualityProfileQualityItem { Allowed = true, Quality = Quality.Bluray720p });
 
             _profile.Cutoff = Quality.WEBDL720p.Id;
-
-            _langProfile.Cutoff = Language.Spanish;
-            _langProfile.Languages = Languages.LanguageFixture.GetDefaultLanguages();
 
             _remoteEpisode.ParsedEpisodeInfo = new ParsedEpisodeInfo();
             _remoteEpisode.Release = new ReleaseInfo();
@@ -86,7 +77,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
             _remoteEpisode.Episodes.First().EpisodeFile = new EpisodeFile
             {
                 Quality = quality,
-                Language = language,
+                Languages = new List<Language> { language },
                 SceneName = "Series.Title.S01E01.720p.HDTV.x264-Sonarr"
             };
         }
@@ -94,7 +85,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
         private void GivenUpgradeForExistingFile()
         {
             Mocker.GetMock<IUpgradableSpecification>()
-                  .Setup(s => s.IsUpgradable(It.IsAny<QualityProfile>(), It.IsAny<LanguageProfile>(), It.IsAny<QualityModel>(), It.IsAny<Language>(), It.IsAny<List<CustomFormat>>(), It.IsAny<QualityModel>(), It.IsAny<Language>(), It.IsAny<List<CustomFormat>>()))
+                  .Setup(s => s.IsUpgradable(It.IsAny<QualityProfile>(), It.IsAny<QualityModel>(), It.IsAny<List<CustomFormat>>(), It.IsAny<QualityModel>(), It.IsAny<List<CustomFormat>>()))
                   .Returns(true);
         }
 
@@ -127,7 +118,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
         public void should_be_false_when_quality_and_language_is_last_allowed_in_profile_and_bypass_disabled()
         {
             _remoteEpisode.ParsedEpisodeInfo.Quality = new QualityModel(Quality.Bluray720p);
-            _remoteEpisode.ParsedEpisodeInfo.Language = Language.French;
+            _remoteEpisode.ParsedEpisodeInfo.Languages = new List<Language> { Language.French };
 
             Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
         }
@@ -138,7 +129,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
             _delayProfile.BypassIfHighestQuality = true;
 
             _remoteEpisode.ParsedEpisodeInfo.Quality = new QualityModel(Quality.Bluray720p);
-            _remoteEpisode.ParsedEpisodeInfo.Language = Language.French;
+            _remoteEpisode.ParsedEpisodeInfo.Languages = new List<Language> { Language.French };
 
             Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
         }

@@ -7,7 +7,7 @@ import TableRowCellButton from 'Components/Table/Cells/TableRowCellButton';
 import TableSelectCell from 'Components/Table/Cells/TableSelectCell';
 import TableRow from 'Components/Table/TableRow';
 import Popover from 'Components/Tooltip/Popover';
-import EpisodeLanguage from 'Episode/EpisodeLanguage';
+import EpisodeLanguages from 'Episode/EpisodeLanguages';
 import EpisodeQuality from 'Episode/EpisodeQuality';
 import { icons, kinds, tooltipPositions } from 'Helpers/Props';
 import SelectEpisodeModal from 'InteractiveImport/Episode/SelectEpisodeModal';
@@ -47,7 +47,7 @@ class InteractiveImportRow extends Component {
       seasonNumber,
       episodes,
       quality,
-      language,
+      languages,
       episodeFileId,
       columns
     } = this.props;
@@ -58,7 +58,7 @@ class InteractiveImportRow extends Component {
       seasonNumber != null &&
       episodes.length &&
       quality &&
-      language
+      languages
     ) {
       this.props.onSelectedChange({
         id,
@@ -79,7 +79,7 @@ class InteractiveImportRow extends Component {
       seasonNumber,
       episodes,
       quality,
-      language,
+      languages,
       isSelected,
       onValidRowChange
     } = this.props;
@@ -89,7 +89,7 @@ class InteractiveImportRow extends Component {
       prevProps.seasonNumber === seasonNumber &&
       !hasDifferentItems(prevProps.episodes, episodes) &&
       prevProps.quality === quality &&
-      prevProps.language === language &&
+      prevProps.languages === languages &&
       prevProps.isSelected === isSelected
     ) {
       return;
@@ -100,7 +100,7 @@ class InteractiveImportRow extends Component {
       seasonNumber != null &&
       episodes.length &&
       quality &&
-      language
+      languages
     );
 
     if (isSelected && !isValid) {
@@ -210,7 +210,7 @@ class InteractiveImportRow extends Component {
       seasonNumber,
       episodes,
       quality,
-      language,
+      languages,
       releaseGroup,
       size,
       rejections,
@@ -252,7 +252,7 @@ class InteractiveImportRow extends Component {
     const showEpisodeNumbersPlaceholder = isSelected && Number.isInteger(seasonNumber) && !episodes.length;
     const showReleaseGroupPlaceholder = isSelected && !releaseGroup;
     const showQualityPlaceholder = isSelected && !quality;
-    const showLanguagePlaceholder = isSelected && !language;
+    const showLanguagePlaceholder = isSelected && !languages;
 
     return (
       <TableRow>
@@ -352,10 +352,10 @@ class InteractiveImportRow extends Component {
           }
 
           {
-            !showLanguagePlaceholder && !!language &&
-              <EpisodeLanguage
+            !showLanguagePlaceholder && !!languages &&
+              <EpisodeLanguages
                 className={styles.label}
-                language={language}
+                languages={languages}
               />
           }
         </TableRowCellButton>
@@ -441,7 +441,7 @@ class InteractiveImportRow extends Component {
         <SelectLanguageModal
           isOpen={isSelectLanguageModalOpen}
           ids={[id]}
-          languageId={language ? language.id : 0}
+          languageId={languages ? languages.id : 0}
           modalTitle={modalTitle}
           onModalClose={this.onSelectLanguageModalClose}
         />
@@ -460,7 +460,7 @@ InteractiveImportRow.propTypes = {
   episodes: PropTypes.arrayOf(PropTypes.object).isRequired,
   releaseGroup: PropTypes.string,
   quality: PropTypes.object,
-  language: PropTypes.object,
+  languages: PropTypes.arrayOf(PropTypes.object),
   size: PropTypes.number.isRequired,
   rejections: PropTypes.arrayOf(PropTypes.object).isRequired,
   columns: PropTypes.arrayOf(PropTypes.object).isRequired,

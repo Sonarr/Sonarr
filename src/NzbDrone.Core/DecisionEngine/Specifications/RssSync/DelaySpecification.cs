@@ -2,7 +2,6 @@ using System.Linq;
 using NLog;
 using NzbDrone.Core.Download.Pending;
 using NzbDrone.Core.IndexerSearch.Definitions;
-using NzbDrone.Core.Languages;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Profiles.Delay;
 using NzbDrone.Core.Qualities;
@@ -36,7 +35,6 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
             }
 
             var qualityProfile = subject.Series.QualityProfile.Value;
-            var languageProfile = subject.Series.LanguageProfile.Value;
             var delayProfile = _delayProfileService.BestForTags(subject.Series.Tags);
             var delay = delayProfile.GetProtocolDelay(subject.Release.DownloadProtocol);
             var isPreferredProtocol = subject.Release.DownloadProtocol == delayProfile.PreferredProtocol;
@@ -48,7 +46,6 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
             }
 
             var qualityComparer = new QualityModelComparer(qualityProfile);
-            var languageComparer = new LanguageComparer(languageProfile);
 
             if (isPreferredProtocol)
             {
@@ -71,11 +68,10 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
             {
                 var bestQualityInProfile = qualityProfile.LastAllowedQuality();
                 var isBestInProfile = qualityComparer.Compare(subject.ParsedEpisodeInfo.Quality.Quality, bestQualityInProfile) >= 0;
-                var isBestInProfileLanguage = languageComparer.Compare(subject.ParsedEpisodeInfo.Language, languageProfile.LastAllowedLanguage()) >= 0;
 
-                if (isBestInProfile && isBestInProfileLanguage && isPreferredProtocol)
+                if (isBestInProfile && isPreferredProtocol)
                 {
-                    _logger.Debug("Quality and language is highest in profile for preferred protocol, will not delay");
+                    _logger.Debug("Quality is highest in profile for preferred protocol, will not delay");
                     return Decision.Accept();
                 }
             }

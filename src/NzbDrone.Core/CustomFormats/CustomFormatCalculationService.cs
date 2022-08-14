@@ -79,7 +79,7 @@ namespace NzbDrone.Core.CustomFormats
                 SeriesTitle = episodeFile.Series.Value.Title,
                 ReleaseTitle  = sceneName,
                 Quality = episodeFile.Quality,
-                Language = episodeFile.Language,
+                Languages = episodeFile.Languages,
                 ReleaseGroup = episodeFile.ReleaseGroup,
                 ExtraInfo = new Dictionary<string, object>
                 {
@@ -111,7 +111,7 @@ namespace NzbDrone.Core.CustomFormats
                 SeriesTitle = movie.Title,
                 ReleaseTitle = parsed?.ReleaseTitle ?? blocklist.SourceTitle,
                 Quality = blocklist.Quality,
-                Language = blocklist.Language,
+                Languages = blocklist.Languages,
                 ReleaseGroup = parsed?.ReleaseGroup,
                 ExtraInfo = new Dictionary<string, object>
                 {
@@ -134,7 +134,7 @@ namespace NzbDrone.Core.CustomFormats
                 SeriesTitle = movie.Title,
                 ReleaseTitle = parsed?.ReleaseTitle ?? history.SourceTitle,
                 Quality = history.Quality,
-                Language = history.Language,
+                Languages = history.Languages,
                 ReleaseGroup = parsed?.ReleaseGroup,
                 ExtraInfo = new Dictionary<string, object>
                 {

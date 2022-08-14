@@ -10,7 +10,7 @@ namespace NzbDrone.Core.Download
     {
         public int SeriesId { get; set; }
         public List<int> EpisodeIds { get; set; }
-        public Language Language { get; set; }
+        public List<Language> Languages { get; set; }
         public QualityModel Quality { get; set; }
         public string SourceTitle { get; set; }
         public DownloadClientItemClientInfo DownloadClientInfo { get; set; }

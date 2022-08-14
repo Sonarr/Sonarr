@@ -87,8 +87,8 @@ export const defaultState = {
         isVisible: false
       },
       {
-        name: 'language',
-        label: 'Language',
+        name: 'languages',
+        label: 'Languages',
         isSortable: true,
         isVisible: false
       },

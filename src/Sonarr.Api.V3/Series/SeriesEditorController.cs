@@ -39,11 +39,6 @@ namespace Sonarr.Api.V3.Series
                     series.QualityProfileId = resource.QualityProfileId.Value;
                 }
 
-                if (resource.LanguageProfileId.HasValue)
-                {
-                    series.LanguageProfileId = resource.LanguageProfileId.Value;
-                }
-
                 if (resource.SeriesType.HasValue)
                 {
                     series.SeriesType = resource.SeriesType.Value;

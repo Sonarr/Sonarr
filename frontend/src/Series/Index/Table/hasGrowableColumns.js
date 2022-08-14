@@ -1,7 +1,6 @@
 const growableColumns = [
   'network',
   'qualityProfileId',
-  'languageProfileId',
   'path',
   'tags'
 ];

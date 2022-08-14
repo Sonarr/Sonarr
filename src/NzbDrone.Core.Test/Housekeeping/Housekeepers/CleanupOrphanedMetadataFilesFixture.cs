@@ -1,4 +1,5 @@
-﻿using FizzWare.NBuilder;
+using System.Collections.Generic;
+using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Extras.Metadata;
@@ -71,7 +72,7 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
 
             var episodeFile = Builder<EpisodeFile>.CreateNew()
                 .With(h => h.Quality = new QualityModel())
-                .With(h => h.Language = Language.English)
+                .With(h => h.Languages = new List<Language> { Language.English })
                 .BuildNew();
 
             Db.Insert(series);

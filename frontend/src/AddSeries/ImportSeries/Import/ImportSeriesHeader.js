@@ -12,7 +12,6 @@ import styles from './ImportSeriesHeader.css';
 
 function ImportSeriesHeader(props) {
   const {
-    showLanguageProfile,
     allSelected,
     allUnselected,
     onSelectAllChange
@@ -59,16 +58,6 @@ function ImportSeriesHeader(props) {
         Quality Profile
       </VirtualTableHeaderCell>
 
-      {
-        showLanguageProfile &&
-          <VirtualTableHeaderCell
-            className={styles.languageProfile}
-            name="languageProfileId"
-          >
-            Language Profile
-          </VirtualTableHeaderCell>
-      }
-
       <VirtualTableHeaderCell
         className={styles.seriesType}
         name="seriesType"
@@ -106,7 +95,6 @@ function ImportSeriesHeader(props) {
 }
 
 ImportSeriesHeader.propTypes = {
-  showLanguageProfile: PropTypes.bool.isRequired,
   allSelected: PropTypes.bool.isRequired,
   allUnselected: PropTypes.bool.isRequired,
   onSelectAllChange: PropTypes.func.isRequired

@@ -47,10 +47,6 @@ class AddNewSeriesModalContent extends Component {
     this.props.onInputChange({ name: 'qualityProfileId', value: parseInt(value) });
   };
 
-  onLanguageProfileIdChange = ({ value }) => {
-    this.props.onInputChange({ name: 'languageProfileId', value: parseInt(value) });
-  };
-
   onAddSeriesPress = () => {
     const {
       seriesType
@@ -74,14 +70,12 @@ class AddNewSeriesModalContent extends Component {
       rootFolderPath,
       monitor,
       qualityProfileId,
-      languageProfileId,
       seriesType,
       seasonFolder,
       searchForMissingEpisodes,
       searchForCutoffUnmetEpisodes,
       folder,
       tags,
-      showLanguageProfile,
       isSmallScreen,
       isWindows,
       onModalClose,
@@ -177,17 +171,6 @@ class AddNewSeriesModalContent extends Component {
                     name="qualityProfileId"
                     onChange={this.onQualityProfileIdChange}
                     {...qualityProfileId}
-                  />
-                </FormGroup>
-
-                <FormGroup className={showLanguageProfile ? undefined : styles.hideLanguageProfile}>
-                  <FormLabel>Language Profile</FormLabel>
-
-                  <FormInputGroup
-                    type={inputTypes.LANGUAGE_PROFILE_SELECT}
-                    name="languageProfileId"
-                    onChange={this.onLanguageProfileIdChange}
-                    {...languageProfileId}
                   />
                 </FormGroup>
 
@@ -299,14 +282,12 @@ AddNewSeriesModalContent.propTypes = {
   rootFolderPath: PropTypes.object,
   monitor: PropTypes.object.isRequired,
   qualityProfileId: PropTypes.object,
-  languageProfileId: PropTypes.object,
   seriesType: PropTypes.object.isRequired,
   seasonFolder: PropTypes.object.isRequired,
   searchForMissingEpisodes: PropTypes.object.isRequired,
   searchForCutoffUnmetEpisodes: PropTypes.object.isRequired,
   folder: PropTypes.string.isRequired,
   tags: PropTypes.object.isRequired,
-  showLanguageProfile: PropTypes.bool.isRequired,
   isSmallScreen: PropTypes.bool.isRequired,
   isWindows: PropTypes.bool.isRequired,
   onModalClose: PropTypes.func.isRequired,

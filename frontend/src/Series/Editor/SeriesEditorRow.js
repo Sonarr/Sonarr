@@ -33,7 +33,6 @@ class SeriesEditorRow extends Component {
       titleSlug,
       seriesType,
       qualityProfile,
-      languageProfile,
       path,
       tags,
       seasonFolder,
@@ -91,14 +90,6 @@ class SeriesEditorRow extends Component {
               return (
                 <TableRowCell key={name}>
                   {qualityProfile.name}
-                </TableRowCell>
-              );
-            }
-
-            if (name === 'languageProfileId') {
-              return (
-                <TableRowCell key={name}>
-                  {languageProfile.name}
                 </TableRowCell>
               );
             }
@@ -167,7 +158,6 @@ SeriesEditorRow.propTypes = {
   titleSlug: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   monitored: PropTypes.bool.isRequired,
-  languageProfile: PropTypes.object.isRequired,
   qualityProfile: PropTypes.object.isRequired,
   seriesType: PropTypes.string.isRequired,
   seasonFolder: PropTypes.bool.isRequired,

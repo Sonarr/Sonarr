@@ -11,10 +11,9 @@ import AddNewSeriesModalContent from './AddNewSeriesModalContent';
 function createMapStateToProps() {
   return createSelector(
     (state) => state.addSeries,
-    (state) => state.settings.languageProfiles,
     createDimensionsSelector(),
     createSystemStatusSelector(),
-    (addSeriesState, languageProfiles, dimensions, systemStatus) => {
+    (addSeriesState, dimensions, systemStatus) => {
       const {
         isAdding,
         addError,
@@ -30,7 +29,6 @@ function createMapStateToProps() {
       return {
         isAdding,
         addError,
-        showLanguageProfile: languageProfiles.items.length > 1,
         isSmallScreen: dimensions.isSmallScreen,
         validationErrors,
         validationWarnings,
@@ -61,7 +59,6 @@ class AddNewSeriesModalContentConnector extends Component {
       rootFolderPath,
       monitor,
       qualityProfileId,
-      languageProfileId,
       seasonFolder,
       searchForMissingEpisodes,
       searchForCutoffUnmetEpisodes,
@@ -73,7 +70,6 @@ class AddNewSeriesModalContentConnector extends Component {
       rootFolderPath: rootFolderPath.value,
       monitor: monitor.value,
       qualityProfileId: qualityProfileId.value,
-      languageProfileId: languageProfileId.value,
       seriesType,
       seasonFolder: seasonFolder.value,
       searchForMissingEpisodes: searchForMissingEpisodes.value,
@@ -101,7 +97,6 @@ AddNewSeriesModalContentConnector.propTypes = {
   rootFolderPath: PropTypes.object,
   monitor: PropTypes.object.isRequired,
   qualityProfileId: PropTypes.object,
-  languageProfileId: PropTypes.object,
   seriesType: PropTypes.object.isRequired,
   seasonFolder: PropTypes.object.isRequired,
   searchForMissingEpisodes: PropTypes.object.isRequired,

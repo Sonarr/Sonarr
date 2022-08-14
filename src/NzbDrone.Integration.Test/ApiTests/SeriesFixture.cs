@@ -19,7 +19,6 @@ namespace NzbDrone.Integration.Test.ApiTests
             var series = Series.Lookup("tvdb:266189").Single();
 
             series.QualityProfileId = 1;
-            series.LanguageProfileId = 1;
             series.Path = Path.Combine(SeriesRootFolder, series.Title);
             series.Tags = new HashSet<int>();
             series.Tags.Add(tag.Id);
@@ -65,7 +64,6 @@ namespace NzbDrone.Integration.Test.ApiTests
             var series = Series.Lookup("tvdb:266189").Single();
 
             series.QualityProfileId = 1;
-            series.LanguageProfileId = 1;
             series.Path = Path.Combine(SeriesRootFolder, series.Title);
 
             var result = Series.Post(series);
@@ -73,7 +71,6 @@ namespace NzbDrone.Integration.Test.ApiTests
             result.Should().NotBeNull();
             result.Id.Should().NotBe(0);
             result.QualityProfileId.Should().Be(1);
-            result.LanguageProfileId.Should().Be(1);
             result.Path.Should().Be(Path.Combine(SeriesRootFolder, series.Title));
         }
 

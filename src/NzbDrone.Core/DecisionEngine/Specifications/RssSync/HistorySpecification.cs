@@ -65,20 +65,15 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
                     // Instead of fetching the series from the DB reuse the known series.
                     var cutoffUnmet = _upgradableSpecification.CutoffNotMet(
                         subject.Series.QualityProfile,
-                        subject.Series.LanguageProfile,
                         mostRecent.Quality,
-                        mostRecent.Language,
                         customFormats,
                         subject.ParsedEpisodeInfo.Quality);
 
                     var upgradeable = _upgradableSpecification.IsUpgradable(
                         subject.Series.QualityProfile,
-                        subject.Series.LanguageProfile,
                         mostRecent.Quality,
-                        mostRecent.Language,
                         customFormats,
                         subject.ParsedEpisodeInfo.Quality,
-                        subject.ParsedEpisodeInfo.Language,
                         subject.CustomFormats);
 
                     if (!cutoffUnmet)

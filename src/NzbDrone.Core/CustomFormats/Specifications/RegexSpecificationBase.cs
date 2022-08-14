@@ -1,10 +1,23 @@
 using System.Text.RegularExpressions;
+using FluentValidation;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Annotations;
+using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.CustomFormats
 {
+    public class RegexSpecificationBaseValidator : AbstractValidator<RegexSpecificationBase>
+    {
+        public RegexSpecificationBaseValidator()
+        {
+            RuleFor(c => c.Value).NotEmpty().WithMessage("Regex Pattern must not be empty");
+        }
+    }
+
     public abstract class RegexSpecificationBase : CustomFormatSpecificationBase
     {
+        private static readonly RegexSpecificationBaseValidator Validator = new RegexSpecificationBaseValidator();
+
         protected Regex _regex;
         protected string _raw;
 
@@ -15,7 +28,11 @@ namespace NzbDrone.Core.CustomFormats
             set
             {
                 _raw = value;
-                _regex = new Regex(value, RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+                if (value.IsNotNullOrWhiteSpace())
+                {
+                    _regex = new Regex(value, RegexOptions.Compiled | RegexOptions.IgnoreCase);
+                }
             }
         }
 
@@ -27,6 +44,11 @@ namespace NzbDrone.Core.CustomFormats
             }
 
             return _regex.IsMatch(compared);
+        }
+
+        public override NzbDroneValidationResult Validate()
+        {
+            return new NzbDroneValidationResult(Validator.Validate(this));
         }
     }
 }

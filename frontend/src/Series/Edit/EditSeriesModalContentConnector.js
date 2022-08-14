@@ -27,10 +27,9 @@ function createIsPathChangingSelector() {
 function createMapStateToProps() {
   return createSelector(
     (state) => state.series,
-    (state) => state.settings.languageProfiles,
     createSeriesSelector(),
     createIsPathChangingSelector(),
-    (seriesState, languageProfiles, series, isPathChanging) => {
+    (seriesState, series, isPathChanging) => {
       const {
         isSaving,
         saveError,
@@ -41,7 +40,6 @@ function createMapStateToProps() {
         'monitored',
         'seasonFolder',
         'qualityProfileId',
-        'languageProfileId',
         'seriesType',
         'path',
         'tags'
@@ -56,7 +54,6 @@ function createMapStateToProps() {
         isPathChanging,
         originalPath: series.path,
         item: settings.settings,
-        showLanguageProfile: languageProfiles.items.length > 1,
         ...settings
       };
     }

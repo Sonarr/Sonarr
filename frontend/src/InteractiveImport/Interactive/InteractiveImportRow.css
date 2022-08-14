@@ -5,7 +5,7 @@
 }
 
 .quality,
-.language {
+.languages {
   composes: cell from '~Components/Table/Cells/TableRowCell.css';
 
   text-align: center;

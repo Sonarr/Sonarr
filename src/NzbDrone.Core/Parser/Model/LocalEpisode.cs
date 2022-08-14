@@ -13,6 +13,7 @@ namespace NzbDrone.Core.Parser.Model
         public LocalEpisode()
         {
             Episodes = new List<Episode>();
+            Languages = new List<Language>();
         }
 
         public string Path { get; set; }
@@ -23,7 +24,7 @@ namespace NzbDrone.Core.Parser.Model
         public Series Series { get; set; }
         public List<Episode> Episodes { get; set; }
         public QualityModel Quality { get; set; }
-        public Language Language { get; set; }
+        public List<Language> Languages { get; set; }
         public MediaInfoModel MediaInfo { get; set; }
         public bool ExistingFile { get; set; }
         public bool SceneSource { get; set; }

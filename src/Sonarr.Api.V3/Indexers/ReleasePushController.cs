@@ -10,7 +10,6 @@ using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Profiles.Languages;
 using NzbDrone.Core.Profiles.Qualities;
 using Sonarr.Http;
 
@@ -27,10 +26,9 @@ namespace Sonarr.Api.V3.Indexers
         public ReleasePushController(IMakeDownloadDecision downloadDecisionMaker,
                                  IProcessDownloadDecisions downloadDecisionProcessor,
                                  IIndexerFactory indexerFactory,
-                                 ILanguageProfileService languageProfileService,
                                  IQualityProfileService qualityProfileService,
                                  Logger logger)
-            : base(languageProfileService, qualityProfileService)
+            : base(qualityProfileService)
         {
             _downloadDecisionMaker = downloadDecisionMaker;
             _downloadDecisionProcessor = downloadDecisionProcessor;

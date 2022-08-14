@@ -11,7 +11,6 @@ function ErrorPage(props) {
     customFiltersError,
     tagsError,
     qualityProfilesError,
-    languageProfilesError,
     uiSettingsError,
     systemStatusError
   } = props;
@@ -28,8 +27,6 @@ function ErrorPage(props) {
     errorMessage = getErrorMessage(tagsError, 'Failed to load tags from API');
   } else if (qualityProfilesError) {
     errorMessage = getErrorMessage(qualityProfilesError, 'Failed to load quality profiles from API');
-  } else if (languageProfilesError) {
-    errorMessage = getErrorMessage(languageProfilesError, 'Failed to load language profiles from API');
   } else if (uiSettingsError) {
     errorMessage = getErrorMessage(uiSettingsError, 'Failed to load UI settings from API');
   } else if (systemStatusError) {
@@ -56,7 +53,6 @@ ErrorPage.propTypes = {
   customFiltersError: PropTypes.object,
   tagsError: PropTypes.object,
   qualityProfilesError: PropTypes.object,
-  languageProfilesError: PropTypes.object,
   uiSettingsError: PropTypes.object,
   systemStatusError: PropTypes.object
 };

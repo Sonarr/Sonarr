@@ -16,11 +16,10 @@ namespace Sonarr.Api.V3.History
         public int EpisodeId { get; set; }
         public int SeriesId { get; set; }
         public string SourceTitle { get; set; }
-        public Language Language { get; set; }
+        public List<Language> Languages { get; set; }
         public QualityModel Quality { get; set; }
         public List<CustomFormatResource> CustomFormats { get; set; }
         public bool QualityCutoffNotMet { get; set; }
-        public bool LanguageCutoffNotMet { get; set; }
         public DateTime Date { get; set; }
         public string DownloadId { get; set; }
 
@@ -48,7 +47,7 @@ namespace Sonarr.Api.V3.History
                 EpisodeId = model.EpisodeId,
                 SeriesId = model.SeriesId,
                 SourceTitle = model.SourceTitle,
-                Language = model.Language,
+                Languages = model.Languages,
                 Quality = model.Quality,
                 CustomFormats = formatCalculator.ParseCustomFormat(model).ToResource(),
 

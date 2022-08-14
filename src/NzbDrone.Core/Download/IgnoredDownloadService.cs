@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Download.TrackedDownloads;
@@ -39,7 +39,7 @@ namespace NzbDrone.Core.Download
                                       {
                                           SeriesId = series.Id,
                                           EpisodeIds = episodes.Select(e => e.Id).ToList(),
-                                          Language = trackedDownload.RemoteEpisode.ParsedEpisodeInfo.Language,
+                                          Languages = trackedDownload.RemoteEpisode.ParsedEpisodeInfo.Languages,
                                           Quality = trackedDownload.RemoteEpisode.ParsedEpisodeInfo.Quality,
                                           SourceTitle = trackedDownload.DownloadItem.Title,
                                           DownloadClientInfo = trackedDownload.DownloadItem.DownloadClientInfo,

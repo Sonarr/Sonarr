@@ -6,7 +6,7 @@ import TableRowCell from 'Components/Table/Cells/TableRowCell';
 import TableRow from 'Components/Table/TableRow';
 import episodeEntities from 'Episode/episodeEntities';
 import EpisodeFormats from 'Episode/EpisodeFormats';
-import EpisodeLanguage from 'Episode/EpisodeLanguage';
+import EpisodeLanguages from 'Episode/EpisodeLanguages';
 import EpisodeQuality from 'Episode/EpisodeQuality';
 import EpisodeTitleLink from 'Episode/EpisodeTitleLink';
 import SeasonEpisodeNumber from 'Episode/SeasonEpisodeNumber';
@@ -59,7 +59,7 @@ class HistoryRow extends Component {
       episodeId,
       series,
       episode,
-      language,
+      languages,
       languageCutoffNotMet,
       quality,
       customFormats,
@@ -144,11 +144,11 @@ class HistoryRow extends Component {
               );
             }
 
-            if (name === 'language') {
+            if (name === 'languages') {
               return (
                 <TableRowCell key={name}>
-                  <EpisodeLanguage
-                    language={language}
+                  <EpisodeLanguages
+                    languages={languages}
                     isCutoffMet={languageCutoffNotMet}
                   />
                 </TableRowCell>
@@ -278,7 +278,7 @@ HistoryRow.propTypes = {
   episodeId: PropTypes.number,
   series: PropTypes.object.isRequired,
   episode: PropTypes.object,
-  language: PropTypes.object.isRequired,
+  languages: PropTypes.arrayOf(PropTypes.object).isRequired,
   languageCutoffNotMet: PropTypes.bool.isRequired,
   quality: PropTypes.object.isRequired,
   customFormats: PropTypes.arrayOf(PropTypes.object),

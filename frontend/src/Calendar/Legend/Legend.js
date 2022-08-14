@@ -47,7 +47,7 @@ function Legend(props) {
         name="Cutoff Not Met"
         icon={icons.EPISODE_FILE}
         kind={fullColorEvents ? kinds.DEFAULT : kinds.WARNING}
-        tooltip="Quality or language cutoff has not been met"
+        tooltip="Quality cutoff has not been met"
       />
     );
   }

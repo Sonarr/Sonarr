@@ -243,7 +243,6 @@ class SeriesIndexPosters extends Component {
           timeFormat={timeFormat}
           style={style}
           seriesId={series.id}
-          languageProfileId={series.languageProfileId}
           qualityProfileId={series.qualityProfileId}
         />
       </div>

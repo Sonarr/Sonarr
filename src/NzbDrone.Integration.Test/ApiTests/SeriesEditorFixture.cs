@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Test.Common;
@@ -18,7 +18,6 @@ namespace NzbDrone.Integration.Test.ApiTests
                 var newSeries = Series.Lookup(title).First();
 
                 newSeries.QualityProfileId = 1;
-                newSeries.LanguageProfileId = 1;
                 newSeries.Path = string.Format(@"C:\Test\{0}", title).AsOsAgnostic();
 
                 Series.Post(newSeries);

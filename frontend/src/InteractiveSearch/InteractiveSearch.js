@@ -51,7 +51,7 @@ const columns = [
   },
   {
     name: 'languageWeight',
-    label: 'Language',
+    label: 'Languages',
     isSortable: true,
     isVisible: true
   },

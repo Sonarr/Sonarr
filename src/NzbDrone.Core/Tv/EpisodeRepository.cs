@@ -219,9 +219,8 @@ namespace NzbDrone.Core.Tv
             .Where<Episode>(e => e.EpisodeFileId != 0)
             .Where<Episode>(e => e.SeasonNumber >= startingSeasonNumber)
             .Where(
-                string.Format("({0} OR {1})",
-                    BuildQualityCutoffWhereClause(qualitiesBelowCutoff),
-                    BuildLanguageCutoffWhereClause(languagesBelowCutoff)))
+                string.Format("({0})",
+                    BuildQualityCutoffWhereClause(qualitiesBelowCutoff)))
             .GroupBy<Episode>(e => e.Id);
 
         private string BuildQualityCutoffWhereClause(List<QualitiesBelowCutoff> qualitiesBelowCutoff)
@@ -233,21 +232,6 @@ namespace NzbDrone.Core.Tv
                 foreach (var belowCutoff in profile.QualityIds)
                 {
                     clauses.Add(string.Format("(Series.[QualityProfileId] = {0} AND EpisodeFiles.Quality LIKE '%_quality_: {1},%')", profile.ProfileId, belowCutoff));
-                }
-            }
-
-            return string.Format("({0})", string.Join(" OR ", clauses));
-        }
-
-        private string BuildLanguageCutoffWhereClause(List<LanguagesBelowCutoff> languagesBelowCutoff)
-        {
-            var clauses = new List<string>();
-
-            foreach (var profile in languagesBelowCutoff)
-            {
-                foreach (var belowCutoff in profile.LanguageIds)
-                {
-                    clauses.Add(string.Format("(Series.[LanguageProfileId] = {0} AND EpisodeFiles.Language = {1})", profile.ProfileId, belowCutoff));
                 }
             }
 

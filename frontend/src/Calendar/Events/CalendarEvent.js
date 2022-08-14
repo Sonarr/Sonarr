@@ -153,20 +153,6 @@ class CalendarEvent extends Component {
               }
 
               {
-                showCutoffUnmetIcon &&
-                !!episodeFile &&
-                episodeFile.languageCutoffNotMet &&
-                !episodeFile.qualityCutoffNotMet ?
-                  <Icon
-                    className={styles.statusIcon}
-                    name={icons.EPISODE_FILE}
-                    kind={fullColorEvents ? kinds.DEFAULT : kinds.WARNING}
-                    title="Language cutoff has not been met"
-                  /> :
-                  null
-              }
-
-              {
                 episodeNumber === 1 && seasonNumber > 0 ?
                   <Icon
                     className={styles.statusIcon}

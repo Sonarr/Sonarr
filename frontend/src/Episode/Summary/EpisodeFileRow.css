@@ -4,7 +4,7 @@
   width: 100px;
 }
 
-.language,
+.languages,
 .quality {
   composes: cell from '~Components/Table/Cells/TableRowCell.css';
 

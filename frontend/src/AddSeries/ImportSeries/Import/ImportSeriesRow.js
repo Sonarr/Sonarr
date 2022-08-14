@@ -12,12 +12,10 @@ function ImportSeriesRow(props) {
     id,
     monitor,
     qualityProfileId,
-    languageProfileId,
     seasonFolder,
     seriesType,
     selectedSeries,
     isExistingSeries,
-    showLanguageProfile,
     isSelected,
     onSelectedChange,
     onInputChange
@@ -55,17 +53,6 @@ function ImportSeriesRow(props) {
         />
       </VirtualTableRowCell>
 
-      <VirtualTableRowCell
-        className={showLanguageProfile ? styles.languageProfile : styles.hideLanguageProfile}
-      >
-        <FormInputGroup
-          type={inputTypes.LANGUAGE_PROFILE_SELECT}
-          name="languageProfileId"
-          value={languageProfileId}
-          onChange={onInputChange}
-        />
-      </VirtualTableRowCell>
-
       <VirtualTableRowCell className={styles.seriesType}>
         <FormInputGroup
           type={inputTypes.SERIES_TYPE_SELECT}
@@ -99,13 +86,11 @@ ImportSeriesRow.propTypes = {
   id: PropTypes.string.isRequired,
   monitor: PropTypes.string.isRequired,
   qualityProfileId: PropTypes.number.isRequired,
-  languageProfileId: PropTypes.number.isRequired,
   seriesType: PropTypes.string.isRequired,
   seasonFolder: PropTypes.bool.isRequired,
   selectedSeries: PropTypes.object,
   isExistingSeries: PropTypes.bool.isRequired,
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
-  showLanguageProfile: PropTypes.bool.isRequired,
   isSelected: PropTypes.bool,
   onSelectedChange: PropTypes.func.isRequired,
   onInputChange: PropTypes.func.isRequired

@@ -1,4 +1,5 @@
-﻿using FizzWare.NBuilder;
+using System.Collections.Generic;
+using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.History;
@@ -15,7 +16,7 @@ namespace NzbDrone.Core.Test.HistoryTests
         public void should_read_write_dictionary()
         {
             var history = Builder<EpisodeHistory>.CreateNew()
-                .With(c => c.Language = Language.English)
+                .With(c => c.Languages = new List<Language> { Language.English })
                 .With(c => c.Quality = new QualityModel())
                 .BuildNew();
 
@@ -31,14 +32,14 @@ namespace NzbDrone.Core.Test.HistoryTests
         public void should_get_download_history()
         {
             var historyBluray = Builder<EpisodeHistory>.CreateNew()
-                .With(c => c.Language = Language.English)
+                .With(c => c.Languages = new List<Language> { Language.English })
                 .With(c => c.Quality = new QualityModel(Quality.Bluray1080p))
                 .With(c => c.SeriesId = 12)
                 .With(c => c.EventType = EpisodeHistoryEventType.Grabbed)
                 .BuildNew();
 
             var historyDvd = Builder<EpisodeHistory>.CreateNew()
-                .With(c => c.Language = Language.English)
+                .With(c => c.Languages = new List<Language> { Language.English })
                 .With(c => c.Quality = new QualityModel(Quality.DVD))
                 .With(c => c.SeriesId = 12)
                 .With(c => c.EventType = EpisodeHistoryEventType.Grabbed)

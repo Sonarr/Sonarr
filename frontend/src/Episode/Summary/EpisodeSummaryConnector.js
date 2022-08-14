@@ -28,7 +28,7 @@ function createMapStateToProps() {
         mediaInfo,
         path,
         size,
-        language,
+        languages,
         languageCutoffNotMet,
         quality,
         qualityCutoffNotMet
@@ -42,7 +42,7 @@ function createMapStateToProps() {
         mediaInfo,
         path,
         size,
-        language,
+        languages,
         languageCutoffNotMet,
         quality,
         qualityCutoffNotMet

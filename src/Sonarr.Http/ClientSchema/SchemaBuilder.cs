@@ -169,33 +169,44 @@ namespace Sonarr.Http.ClientSchema
 
         private static List<SelectOption> GetSelectOptions(Type selectOptions)
         {
-            var options = selectOptions.GetFields().Where(v => v.IsStatic).Select(v =>
+            if (selectOptions.IsEnum)
             {
-                var name = v.Name.Replace('_', ' ');
-                var value = Convert.ToInt32(v.GetRawConstantValue());
-                var attrib = v.GetCustomAttribute<FieldOptionAttribute>();
-                if (attrib != null)
+                var options = selectOptions.GetFields().Where(v => v.IsStatic).Select(v =>
                 {
-                    return new SelectOption
+                    var name = v.Name.Replace('_', ' ');
+                    var value = Convert.ToInt32(v.GetRawConstantValue());
+                    var attrib = v.GetCustomAttribute<FieldOptionAttribute>();
+                    if (attrib != null)
                     {
-                        Value = value,
-                        Name = attrib.Label ?? name,
-                        Order = attrib.Order,
-                        Hint = attrib.Hint ?? $"({value})"
-                    };
-                }
-                else
-                {
-                    return new SelectOption
+                        return new SelectOption
+                        {
+                            Value = value,
+                            Name = attrib.Label ?? name,
+                            Order = attrib.Order,
+                            Hint = attrib.Hint ?? $"({value})"
+                        };
+                    }
+                    else
                     {
-                        Value = value,
-                        Name = name,
-                        Order = value
-                    };
-                }
-            });
+                        return new SelectOption
+                        {
+                            Value = value,
+                            Name = name,
+                            Order = value
+                        };
+                    }
+                });
 
-            return options.OrderBy(o => o.Order).ToList();
+                return options.OrderBy(o => o.Order).ToList();
+            }
+
+            if (typeof(ISelectOptionsConverter).IsAssignableFrom(selectOptions))
+            {
+                var converter = Activator.CreateInstance(selectOptions) as ISelectOptionsConverter;
+                return converter.GetSelectOptions();
+            }
+
+            throw new NotSupportedException();
         }
 
         private static Func<object, object> GetValueConverter(Type propertyType)

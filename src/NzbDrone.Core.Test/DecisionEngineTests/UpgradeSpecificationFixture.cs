@@ -5,7 +5,6 @@ using NzbDrone.Core.Configuration;
 using NzbDrone.Core.CustomFormats;
 using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.Languages;
-using NzbDrone.Core.Profiles.Languages;
 using NzbDrone.Core.Profiles.Qualities;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
@@ -57,53 +56,11 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 Items = Qualities.QualityFixture.GetDefaultQualities()
             };
 
-            var langProfile = new LanguageProfile
-            {
-                UpgradeAllowed = true,
-                Languages = LanguageFixture.GetDefaultLanguages(),
-                Cutoff = Language.English
-            };
-
             Subject.IsUpgradable(
                        profile,
-                       langProfile,
                        new QualityModel(current, new Revision(version: currentVersion)),
-                       Language.English,
                        new List<CustomFormat>(),
                        new QualityModel(newQuality, new Revision(version: newVersion)),
-                       Language.English,
-                       new List<CustomFormat>())
-                    .Should().Be(expected);
-        }
-
-        [Test]
-        [TestCaseSource("IsUpgradeTestCasesLanguages")]
-        public void IsUpgradeTestLanguage(Quality current, int currentVersion, Language currentLanguage, Quality newQuality, int newVersion, Language newLanguage, Quality cutoff, Language languageCutoff, bool expected)
-        {
-            GivenAutoDownloadPropers(ProperDownloadTypes.PreferAndUpgrade);
-
-            var profile = new QualityProfile
-            {
-                UpgradeAllowed = true,
-                Items = Qualities.QualityFixture.GetDefaultQualities(),
-                Cutoff = cutoff.Id,
-            };
-
-            var langProfile = new LanguageProfile
-            {
-                UpgradeAllowed = true,
-                Languages = LanguageFixture.GetDefaultLanguages(),
-                Cutoff = languageCutoff
-            };
-
-            Subject.IsUpgradable(
-                       profile,
-                       langProfile,
-                       new QualityModel(current, new Revision(version: currentVersion)),
-                       currentLanguage,
-                       new List<CustomFormat>(),
-                       new QualityModel(newQuality, new Revision(version: newVersion)),
-                       newLanguage,
                        new List<CustomFormat>())
                     .Should().Be(expected);
         }
@@ -118,20 +75,11 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 Items = Qualities.QualityFixture.GetDefaultQualities(),
             };
 
-            var langProfile = new LanguageProfile
-            {
-                Languages = LanguageFixture.GetDefaultLanguages(),
-                Cutoff = Language.English
-            };
-
             Subject.IsUpgradable(
                        profile,
-                       langProfile,
                        new QualityModel(Quality.DVD, new Revision(version: 1)),
-                       Language.English,
                        new List<CustomFormat>(),
                        new QualityModel(Quality.DVD, new Revision(version: 2)),
-                       Language.English,
                        new List<CustomFormat>())
                     .Should().BeTrue();
         }
@@ -146,20 +94,11 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                               Items = Qualities.QualityFixture.GetDefaultQualities(),
                           };
 
-            var langProfile = new LanguageProfile
-                              {
-                                  Languages = LanguageFixture.GetDefaultLanguages(),
-                                  Cutoff = Language.English
-                              };
-
             Subject.IsUpgradable(
                        profile,
-                       langProfile,
                        new QualityModel(Quality.DVD, new Revision(version: 1)),
-                       Language.English,
                        new List<CustomFormat>(),
                        new QualityModel(Quality.DVD, new Revision(version: 2)),
-                       Language.English,
                        new List<CustomFormat>())
                    .Should().BeFalse();
         }
@@ -172,20 +111,11 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                               Items = Qualities.QualityFixture.GetDefaultQualities(),
                           };
 
-            var langProfile = new LanguageProfile
-                              {
-                                  Languages = LanguageFixture.GetDefaultLanguages(),
-                                  Cutoff = Language.English
-                              };
-
             Subject.IsUpgradable(
                        profile,
-                       langProfile,
                        new QualityModel(Quality.HDTV720p, new Revision(version: 1)),
-                       Language.English,
                        new List<CustomFormat>(),
                        new QualityModel(Quality.HDTV720p, new Revision(version: 1)),
-                       Language.English,
                        new List<CustomFormat>())
                    .Should().BeFalse();
         }

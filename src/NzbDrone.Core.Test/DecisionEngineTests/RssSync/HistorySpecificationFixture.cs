@@ -12,7 +12,6 @@ using NzbDrone.Core.History;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Profiles.Languages;
 using NzbDrone.Core.Profiles.Qualities;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.CustomFormats;
@@ -61,18 +60,12 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
                     MinFormatScore = 0,
                     Items = Qualities.QualityFixture.GetDefaultQualities()
                 })
-                .With(l => l.LanguageProfile = new LanguageProfile
-                {
-                    UpgradeAllowed = true,
-                    Cutoff = Language.Spanish,
-                    Languages = LanguageFixture.GetDefaultLanguages()
-                })
                 .Build();
 
             _parseResultMulti = new RemoteEpisode
             {
                 Series = _fakeSeries,
-                ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.DVD, new Revision(version: 2)), Language = Language.English },
+                ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.DVD, new Revision(version: 2)), Languages = new List<Language> { Language.English } },
                 Episodes = doubleEpisodeList,
                 CustomFormats = new List<CustomFormat>()
             };
@@ -80,7 +73,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
             _parseResultSingle = new RemoteEpisode
             {
                 Series = _fakeSeries,
-                ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.DVD, new Revision(version: 2)), Language = Language.English },
+                ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.DVD, new Revision(version: 2)), Languages = new List<Language> { Language.English } },
                 Episodes = singleEpisodeList,
                 CustomFormats = new List<CustomFormat>()
             };
@@ -101,7 +94,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
         private void GivenMostRecentForEpisode(int episodeId, string downloadId, Tuple<QualityModel, Language> quality, DateTime date, EpisodeHistoryEventType eventType)
         {
             Mocker.GetMock<IHistoryService>().Setup(s => s.MostRecentForEpisode(episodeId))
-                  .Returns(new EpisodeHistory { DownloadId = downloadId, Quality = quality.Item1, Date = date, EventType = eventType, Language = quality.Item2 });
+                  .Returns(new EpisodeHistory { DownloadId = downloadId, Quality = quality.Item1, Date = date, EventType = eventType, Languages = new List<Language> { quality.Item2 } });
         }
 
         private void GivenCdhDisabled()
@@ -194,19 +187,6 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
             GivenMostRecentForEpisode(FIRST_EPISODE_ID, string.Empty, _upgradableQuality, DateTime.UtcNow, EpisodeHistoryEventType.Grabbed);
 
             _upgradeHistory.IsSatisfiedBy(_parseResultSingle, null).Accepted.Should().BeFalse();
-        }
-
-        [Test]
-        public void should_be_upgradable_if_episode_is_of_same_quality_as_existing_but_new_has_better_language()
-        {
-            _fakeSeries.QualityProfile = new QualityProfile { Cutoff = Quality.WEBDL1080p.Id, Items = Qualities.QualityFixture.GetDefaultQualities() };
-            _parseResultSingle.ParsedEpisodeInfo.Quality = new QualityModel(Quality.WEBDL1080p, new Revision(version: 1));
-            _parseResultSingle.ParsedEpisodeInfo.Language = Language.Spanish;
-            _upgradableQuality = new Tuple<QualityModel, Language>(new QualityModel(Quality.WEBDL1080p, new Revision(version: 1)), Language.English);
-
-            GivenMostRecentForEpisode(FIRST_EPISODE_ID, string.Empty, _upgradableQuality, DateTime.UtcNow, EpisodeHistoryEventType.Grabbed);
-
-            _upgradeHistory.IsSatisfiedBy(_parseResultSingle, null).Accepted.Should().BeTrue();
         }
 
         [Test]

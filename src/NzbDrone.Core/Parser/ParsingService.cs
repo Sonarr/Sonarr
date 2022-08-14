@@ -330,7 +330,7 @@ namespace NzbDrone.Core.Parser
                     FullSeason = false,
                     Quality = QualityParser.ParseQuality(releaseTitle),
                     ReleaseGroup = Parser.ParseReleaseGroup(releaseTitle),
-                    Language = LanguageParser.ParseLanguage(releaseTitle),
+                    Languages = LanguageParser.ParseLanguages(releaseTitle),
                     Special = true
                 };
 

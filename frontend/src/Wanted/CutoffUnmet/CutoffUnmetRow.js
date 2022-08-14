@@ -106,11 +106,11 @@ function CutoffUnmetRow(props) {
             );
           }
 
-          if (name === 'language') {
+          if (name === 'languages') {
             return (
               <TableRowCell
                 key={name}
-                className={styles.language}
+                className={styles.languages}
               >
                 <EpisodeFileLanguageConnector
                   episodeFileId={episodeFileId}

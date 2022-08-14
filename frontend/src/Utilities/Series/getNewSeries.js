@@ -4,7 +4,6 @@ function getNewSeries(series, payload) {
     rootFolderPath,
     monitor,
     qualityProfileId,
-    languageProfileId,
     seriesType,
     seasonFolder,
     tags,
@@ -21,7 +20,6 @@ function getNewSeries(series, payload) {
   series.addOptions = addOptions;
   series.monitored = true;
   series.qualityProfileId = qualityProfileId;
-  series.languageProfileId = languageProfileId;
   series.rootFolderPath = rootFolderPath;
   series.seriesType = seriesType;
   series.seasonFolder = seasonFolder;

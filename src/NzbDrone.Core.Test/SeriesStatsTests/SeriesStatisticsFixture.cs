@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
@@ -38,7 +39,7 @@ namespace NzbDrone.Core.Test.SeriesStatsTests
             _episodeFile = Builder<EpisodeFile>.CreateNew()
                                            .With(e => e.SeriesId = _series.Id)
                                            .With(e => e.Quality = new QualityModel(Quality.HDTV720p))
-                                           .With(e => e.Language = Language.English)
+                                           .With(e => e.Languages = new List<Language> { Language.English })
                                            .BuildNew();
         }
 

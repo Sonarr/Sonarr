@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using FizzWare.NBuilder;
@@ -11,7 +11,6 @@ using NzbDrone.Core.Languages;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Profiles.Languages;
 using NzbDrone.Core.Profiles.Qualities;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
@@ -24,7 +23,6 @@ namespace NzbDrone.Core.Test.HistoryTests
     {
         private QualityProfile _profile;
         private QualityProfile _profileCustom;
-        private LanguageProfile _languageProfile;
 
         [SetUp]
         public void Setup()
@@ -40,12 +38,6 @@ namespace NzbDrone.Core.Test.HistoryTests
                     Cutoff = Quality.WEBDL720p.Id,
                     Items = QualityFixture.GetDefaultQualities(Quality.DVD),
                 };
-
-            _languageProfile = new LanguageProfile
-            {
-                Cutoff = Language.Spanish,
-                Languages = Languages.LanguageFixture.GetDefaultLanguages()
-            };
         }
 
         [Test]

@@ -9,8 +9,8 @@ export const OAUTH = 'oauth';
 export const PASSWORD = 'password';
 export const PATH = 'path';
 export const QUALITY_PROFILE_SELECT = 'qualityProfileSelect';
-export const LANGUAGE_PROFILE_SELECT = 'languageProfileSelect';
 export const INDEXER_SELECT = 'indexerSelect';
+export const LANGUAGE_SELECT = 'languageSelect';
 export const DOWNLOAD_CLIENT_SELECT = 'downloadClientSelect';
 export const ROOT_FOLDER_SELECT = 'rootFolderSelect';
 export const SELECT = 'select';
@@ -35,10 +35,10 @@ export const all = [
   PASSWORD,
   PATH,
   QUALITY_PROFILE_SELECT,
-  LANGUAGE_PROFILE_SELECT,
   INDEXER_SELECT,
   DOWNLOAD_CLIENT_SELECT,
   ROOT_FOLDER_SELECT,
+  LANGUAGE_SELECT,
   SELECT,
   DYNAMIC_SELECT,
   SERIES_TYPE_SELECT,

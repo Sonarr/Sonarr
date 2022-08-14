@@ -1,4 +1,5 @@
-﻿using System.Linq;
+using System.Collections.Generic;
+using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
@@ -18,9 +19,8 @@ namespace NzbDrone.Core.Test.Datastore
         public void one_to_one()
         {
             var episodeFile = Builder<EpisodeFile>.CreateNew()
-                .With(c => c.Language = Language.English)
+                .With(c => c.Languages = new List<Language> { Language.English })
                 .With(c => c.Quality = new QualityModel())
-                .With(c => c.Language = Language.English)
                 .BuildNew();
 
             Db.Insert(episodeFile);
@@ -61,7 +61,7 @@ namespace NzbDrone.Core.Test.Datastore
             var quality = new QualityModel { Quality = Quality.Bluray720p, Revision = new Revision(version: 2) };
 
             var history = Builder<EpisodeHistory>.CreateNew()
-                .With(c => c.Language = Language.English)
+                .With(c => c.Languages = new List<Language> { Language.English })
                 .With(c => c.Id = 0)
                 .With(c => c.Quality = quality)
                 .Build();
@@ -78,7 +78,7 @@ namespace NzbDrone.Core.Test.Datastore
             var history = Builder<EpisodeHistory>.CreateListOfSize(2)
                 .All()
                 .With(c => c.Id = 0)
-                .With(c => c.Language = Language.English)
+                .With(c => c.Languages = new List<Language> { Language.English })
                 .Build().ToList();
 
             history[0].Quality = new QualityModel(Quality.HDTV1080p, new Revision(version: 2));

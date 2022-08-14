@@ -16,14 +16,12 @@ function createMapStateToProps() {
     (state) => state.addSeries,
     (state) => state.importSeries,
     (state) => state.settings.qualityProfiles,
-    (state) => state.settings.languageProfiles,
     (
       match,
       rootFolders,
       addSeries,
       importSeriesState,
-      qualityProfiles,
-      languageProfiles
+      qualityProfiles
     ) => {
       const {
         isFetching: rootFoldersFetching,
@@ -40,10 +38,7 @@ function createMapStateToProps() {
         rootFoldersPopulated,
         rootFoldersError,
         qualityProfiles: qualityProfiles.items,
-        languageProfiles: languageProfiles.items,
-        showLanguageProfile: languageProfiles.items.length > 1,
-        defaultQualityProfileId: addSeries.defaults.qualityProfileId,
-        defaultLanguageProfileId: addSeries.defaults.languageProfileId
+        defaultQualityProfileId: addSeries.defaults.qualityProfileId
       };
 
       if (items.length) {
@@ -78,9 +73,7 @@ class ImportSeriesConnector extends Component {
     const {
       rootFolderId,
       qualityProfiles,
-      languageProfiles,
       defaultQualityProfileId,
-      defaultLanguageProfileId,
       dispatchFetchRootFolders,
       dispatchSetAddSeriesDefault
     } = this.props;
@@ -96,14 +89,6 @@ class ImportSeriesConnector extends Component {
     ) {
       setDefaults = true;
       setDefaultPayload.qualityProfileId = qualityProfiles[0].id;
-    }
-
-    if (
-      !defaultLanguageProfileId ||
-      !languageProfiles.some((p) => p.id === defaultLanguageProfileId)
-    ) {
-      setDefaults = true;
-      setDefaultPayload.languageProfileId = languageProfiles[0].id;
     }
 
     if (setDefaults) {
@@ -157,9 +142,7 @@ ImportSeriesConnector.propTypes = {
   rootFoldersFetching: PropTypes.bool.isRequired,
   rootFoldersPopulated: PropTypes.bool.isRequired,
   qualityProfiles: PropTypes.arrayOf(PropTypes.object).isRequired,
-  languageProfiles: PropTypes.arrayOf(PropTypes.object).isRequired,
   defaultQualityProfileId: PropTypes.number.isRequired,
-  defaultLanguageProfileId: PropTypes.number.isRequired,
   dispatchSetImportSeriesValue: PropTypes.func.isRequired,
   dispatchImportSeries: PropTypes.func.isRequired,
   dispatchClearImportSeries: PropTypes.func.isRequired,

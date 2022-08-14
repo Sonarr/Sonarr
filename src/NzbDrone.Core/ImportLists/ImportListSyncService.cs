@@ -123,7 +123,6 @@ namespace NzbDrone.Core.ImportLists
                         Monitored = monitored,
                         RootFolderPath = importList.RootFolderPath,
                         QualityProfileId = importList.QualityProfileId,
-                        LanguageProfileId = importList.LanguageProfileId,
                         SeriesType = importList.SeriesType,
                         SeasonFolder = importList.SeasonFolder,
                         Tags = importList.Tags,

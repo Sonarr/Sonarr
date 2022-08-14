@@ -2,20 +2,23 @@ import { createSelector } from 'reselect';
 
 function createLanguagesSelector() {
   return createSelector(
-    (state) => state.settings.languageProfiles,
-    (languageProfiles) => {
+    (state) => state.settings.languages,
+    (languages) => {
       const {
-        isSchemaFetching: isFetching,
-        isSchemaPopulated: isPopulated,
-        schemaError: error,
-        schema
-      } = languageProfiles;
+        isFetching,
+        isPopulated,
+        error,
+        items
+      } = languages;
+
+      const filterItems = ['Any'];
+      const filteredLanguages = items.filter((lang) => !filterItems.includes(lang.name));
 
       return {
         isFetching,
         isPopulated,
         error,
-        items: schema.languages ? [...schema.languages].reverse() : []
+        items: filteredLanguages
       };
     }
   );

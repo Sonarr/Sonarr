@@ -11,7 +11,7 @@ import TableRowCell from 'Components/Table/Cells/TableRowCell';
 import TableRow from 'Components/Table/TableRow';
 import Popover from 'Components/Tooltip/Popover';
 import Tooltip from 'Components/Tooltip/Tooltip';
-import EpisodeLanguage from 'Episode/EpisodeLanguage';
+import EpisodeLanguages from 'Episode/EpisodeLanguages';
 import EpisodeQuality from 'Episode/EpisodeQuality';
 import { icons, kinds, tooltipPositions } from 'Helpers/Props';
 import formatPreferredWordScore from 'Utilities/Number/formatPreferredWordScore';
@@ -65,7 +65,7 @@ class EpisodeHistoryRow extends Component {
     const {
       eventType,
       sourceTitle,
-      language,
+      languages,
       languageCutoffNotMet,
       quality,
       qualityCutoffNotMet,
@@ -90,8 +90,8 @@ class EpisodeHistoryRow extends Component {
         </TableRowCell>
 
         <TableRowCell>
-          <EpisodeLanguage
-            language={language}
+          <EpisodeLanguages
+            languages={languages}
             isCutoffNotMet={languageCutoffNotMet}
           />
         </TableRowCell>
@@ -177,7 +177,7 @@ EpisodeHistoryRow.propTypes = {
   id: PropTypes.number.isRequired,
   eventType: PropTypes.string.isRequired,
   sourceTitle: PropTypes.string.isRequired,
-  language: PropTypes.object.isRequired,
+  languages: PropTypes.arrayOf(PropTypes.object).isRequired,
   languageCutoffNotMet: PropTypes.bool.isRequired,
   quality: PropTypes.object.isRequired,
   qualityCutoffNotMet: PropTypes.bool.isRequired,

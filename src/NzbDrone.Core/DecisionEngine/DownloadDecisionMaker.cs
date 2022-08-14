@@ -126,7 +126,7 @@ namespace NzbDrone.Core.DecisionEngine
                         {
                             parsedEpisodeInfo = new ParsedEpisodeInfo
                             {
-                                Language = LanguageParser.ParseLanguage(report.Title),
+                                Languages = LanguageParser.ParseLanguages(report.Title),
                                 Quality = QualityParser.ParseQuality(report.Title)
                             };
                         }

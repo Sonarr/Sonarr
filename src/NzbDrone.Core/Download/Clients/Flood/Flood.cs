@@ -56,8 +56,8 @@ namespace NzbDrone.Core.Download.Clients.Flood
                         case (int)AdditionalTags.Quality:
                             result.Add(remoteEpisode.ParsedEpisodeInfo.Quality.Quality.ToString());
                             break;
-                        case (int)AdditionalTags.Language:
-                            result.Add(remoteEpisode.ParsedEpisodeInfo.Language.ToString());
+                        case (int)AdditionalTags.Languages:
+                            result.UnionWith(remoteEpisode.ParsedEpisodeInfo.Languages.ConvertAll(language => language.ToString()));
                             break;
                         case (int)AdditionalTags.ReleaseGroup:
                             result.Add(remoteEpisode.ParsedEpisodeInfo.ReleaseGroup);

@@ -9,7 +9,7 @@ import TableRowCell from 'Components/Table/Cells/TableRowCell';
 import TableSelectCell from 'Components/Table/Cells/TableSelectCell';
 import TableRow from 'Components/Table/TableRow';
 import EpisodeFormats from 'Episode/EpisodeFormats';
-import EpisodeLanguage from 'Episode/EpisodeLanguage';
+import EpisodeLanguages from 'Episode/EpisodeLanguages';
 import EpisodeQuality from 'Episode/EpisodeQuality';
 import EpisodeTitleLink from 'Episode/EpisodeTitleLink';
 import SeasonEpisodeNumber from 'Episode/SeasonEpisodeNumber';
@@ -88,7 +88,7 @@ class QueueRow extends Component {
       errorMessage,
       series,
       episode,
-      language,
+      languages,
       quality,
       customFormats,
       protocol,
@@ -225,11 +225,11 @@ class QueueRow extends Component {
               );
             }
 
-            if (name === 'language') {
+            if (name === 'languages') {
               return (
                 <TableRowCell key={name}>
-                  <EpisodeLanguage
-                    language={language}
+                  <EpisodeLanguages
+                    languages={languages}
                   />
                 </TableRowCell>
               );
@@ -410,7 +410,7 @@ QueueRow.propTypes = {
   errorMessage: PropTypes.string,
   series: PropTypes.object,
   episode: PropTypes.object,
-  language: PropTypes.object.isRequired,
+  languages: PropTypes.arrayOf(PropTypes.object).isRequired,
   quality: PropTypes.object.isRequired,
   customFormats: PropTypes.arrayOf(PropTypes.object),
   protocol: PropTypes.string.isRequired,

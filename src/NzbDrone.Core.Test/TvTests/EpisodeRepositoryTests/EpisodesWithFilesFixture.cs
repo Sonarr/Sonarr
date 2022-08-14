@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
             _episodeFiles = Builder<EpisodeFile>.CreateListOfSize(5)
                                                 .All()
                                                 .With(c => c.Quality = new QualityModel())
-                                                .With(c => c.Language = Language.English)
+                                                .With(c => c.Languages = new List<Language> { Language.English })
                                                 .BuildListOfNew();
 
             Db.InsertMany(_episodeFiles);
@@ -59,7 +59,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
             var episodeFile = Builder<EpisodeFile>.CreateNew()
                                                   .With(f => f.RelativePath = "another path")
                                                   .With(c => c.Quality = new QualityModel())
-                                                  .With(c => c.Language = Language.English)
+                                                  .With(c => c.Languages = new List<Language> { Language.English })
                                                   .BuildNew();
 
             Db.Insert(episodeFile);

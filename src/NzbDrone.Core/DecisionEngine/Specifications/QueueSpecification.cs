@@ -42,7 +42,6 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             {
                 var remoteEpisode = queueItem.RemoteEpisode;
                 var qualityProfile = subject.Series.QualityProfile.Value;
-                var languageProfile = subject.Series.LanguageProfile.Value;
 
                 // To avoid a race make sure it's not FailedPending (failed awaiting removal/search).
                 // Failed items (already searching for a replacement) won't be part of the queue since
@@ -55,42 +54,34 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
                 var queuedItemCustomFormats = _formatService.ParseCustomFormat(remoteEpisode.ParsedEpisodeInfo);
 
-                _logger.Debug("Checking if existing release in queue meets cutoff. Queued: {0} - {1}", remoteEpisode.ParsedEpisodeInfo.Quality, remoteEpisode.ParsedEpisodeInfo.Language);
+                _logger.Debug("Checking if existing release in queue meets cutoff. Queued: {0}", remoteEpisode.ParsedEpisodeInfo.Quality);
 
                 if (!_upgradableSpecification.CutoffNotMet(qualityProfile,
-                    languageProfile,
                     remoteEpisode.ParsedEpisodeInfo.Quality,
-                    remoteEpisode.ParsedEpisodeInfo.Language,
                     queuedItemCustomFormats,
                     subject.ParsedEpisodeInfo.Quality))
                 {
-                    return Decision.Reject("Release in queue already meets cutoff: {0} - {1}", remoteEpisode.ParsedEpisodeInfo.Quality, remoteEpisode.ParsedEpisodeInfo.Language);
+                    return Decision.Reject("Release in queue already meets cutoff: {0}", remoteEpisode.ParsedEpisodeInfo.Quality);
                 }
 
-                _logger.Debug("Checking if release is higher quality than queued release. Queued: {0} - {1}", remoteEpisode.ParsedEpisodeInfo.Quality, remoteEpisode.ParsedEpisodeInfo.Language);
+                _logger.Debug("Checking if release is higher quality than queued release. Queued: {0}", remoteEpisode.ParsedEpisodeInfo.Quality);
 
                 if (!_upgradableSpecification.IsUpgradable(qualityProfile,
-                                                           languageProfile,
                                                            remoteEpisode.ParsedEpisodeInfo.Quality,
-                                                           remoteEpisode.ParsedEpisodeInfo.Language,
                                                            remoteEpisode.CustomFormats,
                                                            subject.ParsedEpisodeInfo.Quality,
-                                                           subject.ParsedEpisodeInfo.Language,
                                                            subject.CustomFormats))
                 {
-                    return Decision.Reject("Release in queue is of equal or higher preference: {0} - {1}", remoteEpisode.ParsedEpisodeInfo.Quality, remoteEpisode.ParsedEpisodeInfo.Language);
+                    return Decision.Reject("Release in queue is of equal or higher preference: {0}", remoteEpisode.ParsedEpisodeInfo.Quality);
                 }
 
-                _logger.Debug("Checking if profiles allow upgrading. Queued: {0} - {1}", remoteEpisode.ParsedEpisodeInfo.Quality, remoteEpisode.ParsedEpisodeInfo.Language);
+                _logger.Debug("Checking if profiles allow upgrading. Queued: {0}", remoteEpisode.ParsedEpisodeInfo.Quality);
 
                 if (!_upgradableSpecification.IsUpgradeAllowed(subject.Series.QualityProfile,
-                                                               subject.Series.LanguageProfile,
                                                                remoteEpisode.ParsedEpisodeInfo.Quality,
-                                                               remoteEpisode.ParsedEpisodeInfo.Language,
-                                                               subject.ParsedEpisodeInfo.Quality,
-                                                               subject.ParsedEpisodeInfo.Language))
+                                                               subject.ParsedEpisodeInfo.Quality))
                 {
-                    return Decision.Reject("Another release is queued and the Quality or Language profile does not allow upgrades");
+                    return Decision.Reject("Another release is queued and the Quality profile does not allow upgrades");
                 }
             }
 

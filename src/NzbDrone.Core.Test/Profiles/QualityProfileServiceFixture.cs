@@ -101,7 +101,6 @@ namespace NzbDrone.Core.Test.Profiles
 
             var importLists = Builder<ImportListDefinition>.CreateListOfSize(3)
                                                            .Random(1)
-                                                           .With(c => c.LanguageProfileId = 1)
                                                            .Build().ToList();
 
             Mocker.GetMock<IProfileRepository>().Setup(c => c.Get(profile.Id)).Returns(profile);

@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import LanguageProfileSelectInputConnector from 'Components/Form/LanguageProfileSelectInputConnector';
 import QualityProfileSelectInputConnector from 'Components/Form/QualityProfileSelectInputConnector';
 import RootFolderSelectInputConnector from 'Components/Form/RootFolderSelectInputConnector';
 import SelectInput from 'Components/Form/SelectInput';
@@ -27,7 +26,6 @@ class SeriesEditorFooter extends Component {
     this.state = {
       monitored: NO_CHANGE,
       qualityProfileId: NO_CHANGE,
-      languageProfileId: NO_CHANGE,
       seriesType: NO_CHANGE,
       seasonFolder: NO_CHANGE,
       rootFolderPath: NO_CHANGE,
@@ -49,7 +47,6 @@ class SeriesEditorFooter extends Component {
       this.setState({
         monitored: NO_CHANGE,
         qualityProfileId: NO_CHANGE,
-        languageProfileId: NO_CHANGE,
         seriesType: NO_CHANGE,
         seasonFolder: NO_CHANGE,
         rootFolderPath: NO_CHANGE,
@@ -152,7 +149,6 @@ class SeriesEditorFooter extends Component {
     const {
       monitored,
       qualityProfileId,
-      languageProfileId,
       seriesType,
       seasonFolder,
       rootFolderPath,
@@ -217,28 +213,6 @@ class SeriesEditorFooter extends Component {
                   <QualityProfileSelectInputConnector
                     name="qualityProfileId"
                     value={qualityProfileId}
-                    includeNoChange={true}
-                    isDisabled={!selectedCount}
-                    onChange={this.onInputChange}
-                  />
-                </div>
-              );
-            }
-
-            if (name === 'languageProfileId') {
-              return (
-                <div
-                  key={name}
-                  className={styles.inputContainer}
-                >
-                  <SeriesEditorFooterLabel
-                    label="Language Profile"
-                    isSaving={isSaving && languageProfileId !== NO_CHANGE}
-                  />
-
-                  <LanguageProfileSelectInputConnector
-                    name="languageProfileId"
-                    value={languageProfileId}
                     includeNoChange={true}
                     isDisabled={!selectedCount}
                     onChange={this.onInputChange}
@@ -392,7 +366,6 @@ SeriesEditorFooter.propTypes = {
   isDeleting: PropTypes.bool.isRequired,
   deleteError: PropTypes.object,
   isOrganizingSeries: PropTypes.bool.isRequired,
-  showLanguageProfile: PropTypes.bool.isRequired,
   columns: PropTypes.arrayOf(PropTypes.object).isRequired,
   onSaveSelected: PropTypes.func.isRequired,
   onOrganizeSeriesPress: PropTypes.func.isRequired

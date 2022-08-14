@@ -8,7 +8,6 @@ using NzbDrone.Core.Languages;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Profiles.Languages;
 using NzbDrone.Core.Profiles.Qualities;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
@@ -29,11 +28,6 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
         {
             var series = Builder<Series>.CreateNew()
                                         .With(e => e.QualityProfile = new QualityProfile { Items = Qualities.QualityFixture.GetDefaultQualities() })
-                                        .With(l => l.LanguageProfile = new LanguageProfile
-                                                                       {
-                                                                           Cutoff = Language.Spanish,
-                                                                           Languages = Languages.LanguageFixture.GetDefaultLanguages()
-                                                                       })
                                         .With(s => s.Path = @"C:\Test\TV\Series Title".AsOsAgnostic())
                                         .Build();
 

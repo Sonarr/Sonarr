@@ -57,12 +57,6 @@
   composes: button from '~Components/Link/SpinnerButton.css';
 }
 
-.hideLanguageProfile {
-  composes: group from '~Components/Form/FormGroup.css';
-
-  display: none;
-}
-
 @media only screen and (max-width: $breakpointSmall) {
   .modalFooter {
     display: block;

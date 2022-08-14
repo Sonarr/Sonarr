@@ -162,7 +162,7 @@ export const actionHandlers = handleThunks({
 
           props.qualityCutoffNotMet = episodeFile.qualityCutoffNotMet;
           props.languageCutoffNotMet = episodeFile.languageCutoffNotMet;
-          props.language = file.language;
+          props.languages = file.languages;
           props.quality = file.quality;
           props.releaseGroup = file.releaseGroup;
 

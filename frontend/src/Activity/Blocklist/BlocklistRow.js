@@ -6,7 +6,7 @@ import TableRowCell from 'Components/Table/Cells/TableRowCell';
 import TableSelectCell from 'Components/Table/Cells/TableSelectCell';
 import TableRow from 'Components/Table/TableRow';
 import EpisodeFormats from 'Episode/EpisodeFormats';
-import EpisodeLanguage from 'Episode/EpisodeLanguage';
+import EpisodeLanguages from 'Episode/EpisodeLanguages';
 import EpisodeQuality from 'Episode/EpisodeQuality';
 import { icons, kinds } from 'Helpers/Props';
 import SeriesTitleLink from 'Series/SeriesTitleLink';
@@ -45,7 +45,7 @@ class BlocklistRow extends Component {
       id,
       series,
       sourceTitle,
-      language,
+      languages,
       quality,
       customFormats,
       date,
@@ -96,14 +96,14 @@ class BlocklistRow extends Component {
               );
             }
 
-            if (name === 'language') {
+            if (name === 'languages') {
               return (
                 <TableRowCell
                   key={name}
-                  className={styles.language}
+                  className={styles.languages}
                 >
-                  <EpisodeLanguage
-                    language={language}
+                  <EpisodeLanguages
+                    languages={languages}
                   />
                 </TableRowCell>
               );
@@ -195,7 +195,7 @@ BlocklistRow.propTypes = {
   id: PropTypes.number.isRequired,
   series: PropTypes.object.isRequired,
   sourceTitle: PropTypes.string.isRequired,
-  language: PropTypes.object.isRequired,
+  languages: PropTypes.arrayOf(PropTypes.object).isRequired,
   quality: PropTypes.object.isRequired,
   customFormats: PropTypes.arrayOf(PropTypes.object).isRequired,
   date: PropTypes.string.isRequired,

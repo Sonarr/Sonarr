@@ -122,8 +122,8 @@ export const defaultState = {
         isVisible: true
       },
       {
-        name: 'language',
-        label: 'Language',
+        name: 'languages',
+        label: 'Languages',
         isVisible: false
       },
       {

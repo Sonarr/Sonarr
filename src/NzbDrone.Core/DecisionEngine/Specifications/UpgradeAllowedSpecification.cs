@@ -22,7 +22,6 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
         public virtual Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
             var qualityProfile = subject.Series.QualityProfile.Value;
-            var languageProfile = subject.Series.LanguageProfile.Value;
 
             foreach (var file in subject.Episodes.Where(c => c.EpisodeFileId != 0).Select(c => c.EpisodeFile.Value))
             {
@@ -32,18 +31,15 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                     continue;
                 }
 
-                _logger.Debug("Comparing file quality and language with report. Existing file is {0} - {1}", file.Quality, file.Language);
+                _logger.Debug("Comparing file quality with report. Existing file is {0} - {1}", file.Quality);
 
                 if (!_upgradableSpecification.IsUpgradeAllowed(qualityProfile,
-                                                               languageProfile,
                                                                file.Quality,
-                                                               file.Language,
-                                                               subject.ParsedEpisodeInfo.Quality,
-                                                               subject.ParsedEpisodeInfo.Language))
+                                                               subject.ParsedEpisodeInfo.Quality))
                 {
-                    _logger.Debug("Upgrading is not allowed by the quality or language profile");
+                    _logger.Debug("Upgrading is not allowed by the quality profile");
 
-                    return Decision.Reject("Existing file and the Quality or Language profile does not allow upgrades");
+                    return Decision.Reject("Existing file and the Quality profile does not allow upgrades");
                 }
             }
 

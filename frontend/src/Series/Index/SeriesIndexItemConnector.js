@@ -6,7 +6,6 @@ import { createSelector } from 'reselect';
 import * as commandNames from 'Commands/commandNames';
 import { executeCommand } from 'Store/Actions/commandActions';
 import createExecutingCommandsSelector from 'Store/Selectors/createExecutingCommandsSelector';
-import createSeriesLanguageProfileSelector from 'Store/Selectors/createSeriesLanguageProfileSelector';
 import createSeriesQualityProfileSelector from 'Store/Selectors/createSeriesQualityProfileSelector';
 import createSeriesSelector from 'Store/Selectors/createSeriesSelector';
 
@@ -32,13 +31,11 @@ function createMapStateToProps() {
   return createSelector(
     createSeriesSelector(),
     createSeriesQualityProfileSelector(),
-    createSeriesLanguageProfileSelector(),
     selectShowSearchAction(),
     createExecutingCommandsSelector(),
     (
       series,
       qualityProfile,
-      languageProfile,
       showSearchAction,
       executingCommands
     ) => {
@@ -71,7 +68,6 @@ function createMapStateToProps() {
       return {
         ...series,
         qualityProfile,
-        languageProfile,
         latestSeason,
         showSearchAction,
         isRefreshingSeries,

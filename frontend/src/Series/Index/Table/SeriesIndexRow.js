@@ -86,7 +86,6 @@ class SeriesIndexRow extends Component {
       seriesType,
       network,
       qualityProfile,
-      languageProfile,
       nextAiring,
       previousAiring,
       added,
@@ -220,17 +219,6 @@ class SeriesIndexRow extends Component {
                   className={styles[name]}
                 >
                   {qualityProfile.name}
-                </VirtualTableRowCell>
-              );
-            }
-
-            if (name === 'languageProfileId') {
-              return (
-                <VirtualTableRowCell
-                  key={name}
-                  className={styles[name]}
-                >
-                  {languageProfile.name}
                 </VirtualTableRowCell>
               );
             }
@@ -525,7 +513,6 @@ SeriesIndexRow.propTypes = {
   seriesType: PropTypes.string.isRequired,
   network: PropTypes.string,
   qualityProfile: PropTypes.object.isRequired,
-  languageProfile: PropTypes.object.isRequired,
   nextAiring: PropTypes.string,
   previousAiring: PropTypes.string,
   added: PropTypes.string,

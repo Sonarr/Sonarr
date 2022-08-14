@@ -1,4 +1,5 @@
-﻿using FizzWare.NBuilder;
+using System.Collections.Generic;
+using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.History;
@@ -42,7 +43,7 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
             GivenEpisode();
 
             var history = Builder<EpisodeHistory>.CreateNew()
-                .With(h => h.Language = Language.English)
+                .With(h => h.Languages = new List<Language> { Language.English })
                 .With(h => h.Quality = new QualityModel())
                 .With(h => h.EpisodeId = _episode.Id)
                 .BuildNew();
@@ -58,7 +59,7 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
             GivenSeries();
 
             var history = Builder<EpisodeHistory>.CreateNew()
-                .With(h => h.Language = Language.English)
+                .With(h => h.Languages = new List<Language> { Language.English })
                 .With(h => h.Quality = new QualityModel())
                 .With(h => h.SeriesId = _series.Id)
                 .BuildNew();
@@ -76,7 +77,7 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
 
             var history = Builder<EpisodeHistory>.CreateListOfSize(2)
                 .All()
-                .With(h => h.Language = Language.English)
+                .With(h => h.Languages = new List<Language> { Language.English })
                 .With(h => h.Quality = new QualityModel())
                 .With(h => h.EpisodeId = _episode.Id)
                 .TheFirst(1)
@@ -98,7 +99,7 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
 
             var history = Builder<EpisodeHistory>.CreateListOfSize(2)
                 .All()
-                .With(h => h.Language = Language.English)
+                .With(h => h.Languages = new List<Language> { Language.English })
                 .With(h => h.Quality = new QualityModel())
                 .With(h => h.SeriesId = _series.Id)
                 .TheFirst(1)

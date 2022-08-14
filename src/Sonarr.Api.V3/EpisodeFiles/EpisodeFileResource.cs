@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.MediaFiles;
@@ -21,13 +20,12 @@ namespace Sonarr.Api.V3.EpisodeFiles
         public DateTime DateAdded { get; set; }
         public string SceneName { get; set; }
         public string ReleaseGroup { get; set; }
-        public Language Language { get; set; }
+        public List<Language> Languages { get; set; }
         public QualityModel Quality { get; set; }
         public List<CustomFormatResource> CustomFormats { get; set; }
         public MediaInfoResource MediaInfo { get; set; }
 
         public bool QualityCutoffNotMet { get; set; }
-        public bool LanguageCutoffNotMet { get; set; }
     }
 
     public static class EpisodeFileResourceMapper
@@ -52,7 +50,7 @@ namespace Sonarr.Api.V3.EpisodeFiles
                 DateAdded = model.DateAdded,
                 SceneName = model.SceneName,
                 ReleaseGroup = model.ReleaseGroup,
-                Language = model.Language,
+                Languages = model.Languages,
                 Quality = model.Quality,
                 MediaInfo = model.MediaInfo.ToResource(model.SceneName)
 
@@ -79,11 +77,10 @@ namespace Sonarr.Api.V3.EpisodeFiles
                 DateAdded = model.DateAdded,
                 SceneName = model.SceneName,
                 ReleaseGroup = model.ReleaseGroup,
-                Language = model.Language,
+                Languages = model.Languages,
                 Quality = model.Quality,
                 MediaInfo = model.MediaInfo.ToResource(model.SceneName),
                 QualityCutoffNotMet = upgradableSpecification.QualityCutoffNotMet(series.QualityProfile.Value, model.Quality),
-                LanguageCutoffNotMet = upgradableSpecification.LanguageCutoffNotMet(series.LanguageProfile.Value, model.Language)
             };
         }
     }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Indexers;
@@ -22,6 +22,6 @@ namespace NzbDrone.Core.Blocklisting
         public string Indexer { get; set; }
         public string Message { get; set; }
         public string TorrentInfoHash { get; set; }
-        public Language Language { get; set; }
+        public List<Language> Languages { get; set; }
     }
 }

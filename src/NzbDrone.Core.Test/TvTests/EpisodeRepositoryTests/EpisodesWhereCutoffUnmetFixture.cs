@@ -7,7 +7,6 @@ using NUnit.Framework;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.MediaFiles;
-using NzbDrone.Core.Profiles.Languages;
 using NzbDrone.Core.Profiles.Qualities;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
@@ -40,20 +39,12 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
                 }
             };
 
-            var langProfile = new LanguageProfile
-            {
-                Id = 1,
-                Languages = Languages.LanguageFixture.GetDefaultLanguages(),
-                Cutoff = Language.Spanish
-            };
-
             _monitoredSeries = Builder<Series>.CreateNew()
                                               .With(s => s.TvRageId = RandomNumber)
                                               .With(s => s.Runtime = 30)
                                               .With(s => s.Monitored = true)
                                               .With(s => s.TitleSlug = "Title3")
                                               .With(s => s.QualityProfileId = profile.Id)
-                                              .With(s => s.LanguageProfileId = langProfile.Id)
                                               .BuildNew();
 
             _unmonitoredSeries = Builder<Series>.CreateNew()
@@ -62,7 +53,6 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
                                                 .With(s => s.Monitored = false)
                                                 .With(s => s.TitleSlug = "Title2")
                                                 .With(s => s.QualityProfileId = profile.Id)
-                                                .With(s => s.LanguageProfileId = langProfile.Id)
                                                 .BuildNew();
 
             _monitoredSeries.Id = Db.Insert(_monitoredSeries).Id;
@@ -86,15 +76,15 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
                                         new LanguagesBelowCutoff(profile.Id, new[] { Language.English.Id })
                                     };
 
-            var qualityMetLanguageUnmet = new EpisodeFile { RelativePath = "a", Quality = new QualityModel { Quality = Quality.WEBDL480p }, Language = Language.English };
-            var qualityMetLanguageMet = new EpisodeFile { RelativePath = "b", Quality = new QualityModel { Quality = Quality.WEBDL480p }, Language = Language.Spanish };
-            var qualityMetLanguageExceed = new EpisodeFile { RelativePath = "c", Quality = new QualityModel { Quality = Quality.WEBDL480p }, Language = Language.French };
-            var qualityUnmetLanguageUnmet = new EpisodeFile { RelativePath = "d", Quality = new QualityModel { Quality = Quality.SDTV }, Language = Language.English };
-            var qualityUnmetLanguageMet = new EpisodeFile { RelativePath = "e", Quality = new QualityModel { Quality = Quality.SDTV }, Language = Language.Spanish };
-            var qualityUnmetLanguageExceed = new EpisodeFile { RelativePath = "f", Quality = new QualityModel { Quality = Quality.SDTV }, Language = Language.French };
-            var qualityRawHDLanguageUnmet = new EpisodeFile { RelativePath = "g", Quality = new QualityModel { Quality = Quality.RAWHD }, Language = Language.English };
-            var qualityRawHDLanguageMet = new EpisodeFile { RelativePath = "h", Quality = new QualityModel { Quality = Quality.RAWHD }, Language = Language.Spanish };
-            var qualityRawHDLanguageExceed = new EpisodeFile { RelativePath = "i", Quality = new QualityModel { Quality = Quality.RAWHD }, Language = Language.French };
+            var qualityMetLanguageUnmet = new EpisodeFile { RelativePath = "a", Quality = new QualityModel { Quality = Quality.WEBDL480p }, Languages = new List<Language> { Language.English } };
+            var qualityMetLanguageMet = new EpisodeFile { RelativePath = "b", Quality = new QualityModel { Quality = Quality.WEBDL480p }, Languages = new List<Language> { Language.Spanish } };
+            var qualityMetLanguageExceed = new EpisodeFile { RelativePath = "c", Quality = new QualityModel { Quality = Quality.WEBDL480p }, Languages = new List<Language> { Language.French } };
+            var qualityUnmetLanguageUnmet = new EpisodeFile { RelativePath = "d", Quality = new QualityModel { Quality = Quality.SDTV }, Languages = new List<Language> { Language.English } };
+            var qualityUnmetLanguageMet = new EpisodeFile { RelativePath = "e", Quality = new QualityModel { Quality = Quality.SDTV }, Languages = new List<Language> { Language.Spanish } };
+            var qualityUnmetLanguageExceed = new EpisodeFile { RelativePath = "f", Quality = new QualityModel { Quality = Quality.SDTV }, Languages = new List<Language> { Language.French } };
+            var qualityRawHDLanguageUnmet = new EpisodeFile { RelativePath = "g", Quality = new QualityModel { Quality = Quality.RAWHD }, Languages = new List<Language> { Language.English } };
+            var qualityRawHDLanguageMet = new EpisodeFile { RelativePath = "h", Quality = new QualityModel { Quality = Quality.RAWHD }, Languages = new List<Language> { Language.Spanish } };
+            var qualityRawHDLanguageExceed = new EpisodeFile { RelativePath = "i", Quality = new QualityModel { Quality = Quality.RAWHD }, Languages = new List<Language> { Language.French } };
 
             MediaFileRepository fileRepository = Mocker.Resolve<MediaFileRepository>();
 

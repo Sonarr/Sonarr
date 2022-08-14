@@ -188,7 +188,6 @@ class SeriesIndexOverviews extends Component {
           isSmallScreen={isSmallScreen}
           style={style}
           seriesId={series.id}
-          languageProfileId={series.languageProfileId}
           qualityProfileId={series.qualityProfileId}
         />
       </div>

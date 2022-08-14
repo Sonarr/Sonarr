@@ -10,7 +10,7 @@ import TableRowCell from 'Components/Table/Cells/TableRowCell';
 import TableRow from 'Components/Table/TableRow';
 import Popover from 'Components/Tooltip/Popover';
 import Tooltip from 'Components/Tooltip/Tooltip';
-import EpisodeLanguage from 'Episode/EpisodeLanguage';
+import EpisodeLanguages from 'Episode/EpisodeLanguages';
 import EpisodeQuality from 'Episode/EpisodeQuality';
 import { icons, kinds, tooltipPositions } from 'Helpers/Props';
 import formatDateTime from 'Utilities/Date/formatDateTime';
@@ -116,7 +116,7 @@ class InteractiveSearchRow extends Component {
       seeders,
       leechers,
       quality,
-      language,
+      languages,
       customFormatScore,
       customFormats,
       sceneMapping,
@@ -188,8 +188,8 @@ class InteractiveSearchRow extends Component {
           }
         </TableRowCell>
 
-        <TableRowCell className={styles.language}>
-          <EpisodeLanguage language={language} />
+        <TableRowCell className={styles.languages}>
+          <EpisodeLanguages languages={languages} />
         </TableRowCell>
 
         <TableRowCell className={styles.quality}>
@@ -286,7 +286,7 @@ InteractiveSearchRow.propTypes = {
   seeders: PropTypes.number,
   leechers: PropTypes.number,
   quality: PropTypes.object.isRequired,
-  language: PropTypes.object.isRequired,
+  languages: PropTypes.arrayOf(PropTypes.object).isRequired,
   customFormats: PropTypes.arrayOf(PropTypes.object),
   customFormatScore: PropTypes.number.isRequired,
   sceneMapping: PropTypes.object,

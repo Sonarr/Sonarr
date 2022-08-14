@@ -16,7 +16,6 @@ class ImportSeriesTable extends Component {
       unmappedFolders,
       defaultMonitor,
       defaultQualityProfileId,
-      defaultLanguageProfileId,
       defaultSeriesType,
       defaultSeasonFolder,
       onSeriesLookup,
@@ -26,7 +25,6 @@ class ImportSeriesTable extends Component {
     const values = {
       monitor: defaultMonitor,
       qualityProfileId: defaultQualityProfileId,
-      languageProfileId: defaultLanguageProfileId,
       seriesType: defaultSeriesType,
       seasonFolder: defaultSeasonFolder
     };
@@ -106,7 +104,6 @@ class ImportSeriesTable extends Component {
       rootFolderId,
       items,
       selectedState,
-      showLanguageProfile,
       onSelectedChange
     } = this.props;
 
@@ -120,7 +117,6 @@ class ImportSeriesTable extends Component {
         <ImportSeriesRowConnector
           key={item.id}
           rootFolderId={rootFolderId}
-          showLanguageProfile={showLanguageProfile}
           isSelected={selectedState[item.id]}
           onSelectedChange={onSelectedChange}
           id={item.id}
@@ -139,7 +135,6 @@ class ImportSeriesTable extends Component {
       allUnselected,
       isSmallScreen,
       scroller,
-      showLanguageProfile,
       selectedState,
       onSelectAllChange
     } = this.props;
@@ -158,7 +153,6 @@ class ImportSeriesTable extends Component {
         rowRenderer={this.rowRenderer}
         header={
           <ImportSeriesHeader
-            showLanguageProfile={showLanguageProfile}
             allSelected={allSelected}
             allUnselected={allUnselected}
             onSelectAllChange={onSelectAllChange}
@@ -176,7 +170,6 @@ ImportSeriesTable.propTypes = {
   unmappedFolders: PropTypes.arrayOf(PropTypes.object),
   defaultMonitor: PropTypes.string.isRequired,
   defaultQualityProfileId: PropTypes.number,
-  defaultLanguageProfileId: PropTypes.number,
   defaultSeriesType: PropTypes.string.isRequired,
   defaultSeasonFolder: PropTypes.bool.isRequired,
   allSelected: PropTypes.bool.isRequired,
@@ -185,7 +178,6 @@ ImportSeriesTable.propTypes = {
   isSmallScreen: PropTypes.bool.isRequired,
   allSeries: PropTypes.arrayOf(PropTypes.object),
   scroller: PropTypes.instanceOf(Element).isRequired,
-  showLanguageProfile: PropTypes.bool.isRequired,
   onSelectAllChange: PropTypes.func.isRequired,
   onSelectedChange: PropTypes.func.isRequired,
   onRemoveSelectedStateItem: PropTypes.func.isRequired,

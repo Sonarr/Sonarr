@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import EpisodeLanguage from 'Episode/EpisodeLanguage';
+import EpisodeLanguages from 'Episode/EpisodeLanguages';
 import createEpisodeFileSelector from 'Store/Selectors/createEpisodeFileSelector';
 
 function createMapStateToProps() {
@@ -8,10 +8,10 @@ function createMapStateToProps() {
     createEpisodeFileSelector(),
     (episodeFile) => {
       return {
-        language: episodeFile ? episodeFile.language : undefined
+        languages: episodeFile ? episodeFile.languages : undefined
       };
     }
   );
 }
 
-export default connect(createMapStateToProps)(EpisodeLanguage);
+export default connect(createMapStateToProps)(EpisodeLanguages);

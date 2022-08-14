@@ -50,7 +50,6 @@ namespace Sonarr.Api.V3.History
             if (model.Series != null)
             {
                 resource.QualityCutoffNotMet = _upgradableSpecification.QualityCutoffNotMet(model.Series.QualityProfile.Value, model.Quality);
-                resource.LanguageCutoffNotMet = _upgradableSpecification.LanguageCutoffNotMet(model.Series.LanguageProfile.Value, model.Language);
             }
 
             return resource;

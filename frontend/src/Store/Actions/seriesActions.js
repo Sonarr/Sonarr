@@ -205,12 +205,6 @@ export const filterBuilderProps = [
     valueType: filterBuilderValueTypes.QUALITY_PROFILE
   },
   {
-    name: 'languageProfileId',
-    label: 'Language Profile',
-    type: filterBuilderTypes.EXACT,
-    valueType: filterBuilderValueTypes.LANGUAGE_PROFILE
-  },
-  {
     name: 'nextAiring',
     label: 'Next Airing',
     type: filterBuilderTypes.DATE,
