@@ -27,14 +27,12 @@ namespace Sonarr.Http.ClientSchema
             foreach (var mapping in mappings)
             {
                 var field = mapping.Field.Clone();
+                field.Value = mapping.GetterFunc(model);
 
-                if (field.Privacy == PrivacyLevel.ApiKey || field.Privacy == PrivacyLevel.Password)
+                if (field.Value != null && !field.Value.Equals(string.Empty) &&
+                    (field.Privacy == PrivacyLevel.ApiKey || field.Privacy == PrivacyLevel.Password))
                 {
                     field.Value = PRIVATE_VALUE;
-                }
-                else
-                {
-                    field.Value = mapping.GetterFunc(model);
                 }
 
                 result.Add(field);
