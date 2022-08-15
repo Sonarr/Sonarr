@@ -109,6 +109,7 @@ namespace NzbDrone.Core.Notifications.CustomScript
             {
                 environmentVariables.Add("Sonarr_DeletedRelativePaths", string.Join("|", message.OldFiles.Select(e => e.RelativePath)));
                 environmentVariables.Add("Sonarr_DeletedPaths", string.Join("|", message.OldFiles.Select(e => Path.Combine(series.Path, e.RelativePath))));
+                environmentVariables.Add("Sonarr_DeletedDateAdded", string.Join("|", message.OldFiles.Select(e => e.DateAdded)));
             }
 
             ExecuteScript(environmentVariables);
