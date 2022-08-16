@@ -91,9 +91,7 @@ namespace NzbDrone.Core.Indexers.Nyaa
 
             foreach (var queryTitle in searchCriteria.EpisodeQueryTitles)
             {
-                pageableRequests.Add(GetPagedRequests(MaxPages,
-                    string.Format("&term={0}",
-                    PrepareQuery(queryTitle))));
+                pageableRequests.Add(GetPagedRequests(MaxPages, PrepareQuery(queryTitle)));
             }
 
             return pageableRequests;
