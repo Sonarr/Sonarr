@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
                                 };
 
             Mocker.GetMock<IBuildFileNames>()
-                  .Setup(s => s.RequiresAbsoluteEpisodeNumber(_series, episodes))
+                  .Setup(s => s.RequiresAbsoluteEpisodeNumber())
                   .Returns(true);
         }
 
@@ -68,7 +68,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
             _localEpisode.Episodes.First().AbsoluteEpisodeNumber = null;
 
             Mocker.GetMock<IBuildFileNames>()
-                  .Setup(s => s.RequiresAbsoluteEpisodeNumber(_series, _localEpisode.Episodes))
+                  .Setup(s => s.RequiresAbsoluteEpisodeNumber())
                   .Returns(false);
 
             Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeTrue();

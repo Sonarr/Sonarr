@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Organizer
         string GetSeriesFolder(Series series, NamingConfig namingConfig = null);
         string GetSeasonFolder(Series series, int seasonNumber, NamingConfig namingConfig = null);
         bool RequiresEpisodeTitle(Series series, List<Episode> episodes);
-        bool RequiresAbsoluteEpisodeNumber(Series series, List<Episode> episodes);
+        bool RequiresAbsoluteEpisodeNumber();
     }
 
     public class FileNameBuilder : IBuildFileNames
@@ -166,7 +166,9 @@ namespace NzbDrone.Core.Organizer
                 pattern = namingConfig.DailyEpisodeFormat;
             }
 
-            if (series.SeriesType == SeriesTypes.Anime && episodes.All(e => e.AbsoluteEpisodeNumber.HasValue))
+            if (series.SeriesType == SeriesTypes.Anime &&
+                (episodes.All(e => e.AbsoluteEpisodeNumber.HasValue) ||
+                !RequiresAbsoluteEpisodeNumber()))
             {
                 pattern = namingConfig.AnimeEpisodeFormat;
             }
@@ -433,13 +435,8 @@ namespace NzbDrone.Core.Organizer
             });
         }
 
-        public bool RequiresAbsoluteEpisodeNumber(Series series, List<Episode> episodes)
+        public bool RequiresAbsoluteEpisodeNumber()
         {
-            if (series.SeriesType != SeriesTypes.Anime)
-            {
-                return false;
-            }
-
             var namingConfig = _namingConfigService.GetConfig();
             var pattern = namingConfig.AnimeEpisodeFormat;
 
