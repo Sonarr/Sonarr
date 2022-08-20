@@ -21,11 +21,11 @@ ProgressEnd()
 
 UpdateVersionNumber()
 {
-    if [ "$SONARRVERSION" != "" ]; then
-        echo "Updating Version Info"
-        sed -i'' -e "s/<AssemblyVersion>[0-9.*]\+<\/AssemblyVersion>/<AssemblyVersion>$SONARRVERSION<\/AssemblyVersion>/g" src/Directory.Build.props
+    if [ "$SONARR_VERSION" != "" ]; then
+        echo "Updating version info to: $SONARR_VERSION"
+        sed -i'' -e "s/<AssemblyVersion>[0-9.*]\+<\/AssemblyVersion>/<AssemblyVersion>$SONARR_VERSION<\/AssemblyVersion>/g" src/Directory.Build.props
         sed -i'' -e "s/<AssemblyConfiguration>[\$()A-Za-z-]\+<\/AssemblyConfiguration>/<AssemblyConfiguration>${BUILD_SOURCEBRANCHNAME}<\/AssemblyConfiguration>/g" src/Directory.Build.props
-        sed -i'' -e "s/<string>10.0.0.0<\/string>/<string>$SONARRVERSION<\/string>/g" distribution/macOS/Sonarr.app/Contents/Info.plist
+        sed -i'' -e "s/<string>10.0.0.0<\/string>/<string>$SONARR_VERSION<\/string>/g" distribution/macOS/Sonarr.app/Contents/Info.plist
     fi
 }
 
@@ -38,6 +38,13 @@ EnableBsdSupport()
     if grep -qv freebsd-x64 src/Directory.Build.props; then
         sed -i'' -e "s^<RuntimeIdentifiers>\(.*\)</RuntimeIdentifiers>^<RuntimeIdentifiers>\1;freebsd-x64</RuntimeIdentifiers>^g" src/Directory.Build.props
     fi
+}
+
+SetExecutableBits()
+{
+    find . -name "ffprobe" -exec chmod a+x {} \;
+    find . -name "Sonarr" -exec chmod a+x {} \;
+    find . -name "Sonarr.Update" -exec chmod a+x {} \;
 }
 
 LintUI()
@@ -364,11 +371,14 @@ set -- "${POSITIONAL[@]}" # restore positional parameters
 if [ "$BACKEND" = "YES" ];
 then
     UpdateVersionNumber
+
     if [ "$ENABLE_BSD" = "YES" ];
     then
         EnableBsdSupport
     fi
+
     Build
+
     if [[ -z "$RID" || -z "$FRAMEWORK" ]];
     then
         PackageTests "net6.0" "win-x64"
@@ -406,6 +416,7 @@ fi
 if [ "$PACKAGES" = "YES" ];
 then
     UpdateVersionNumber
+    SetExecutableBits
 
     if [[ -z "$RID" || -z "$FRAMEWORK" ]];
     then
