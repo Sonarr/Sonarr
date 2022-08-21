@@ -60,7 +60,7 @@ namespace NzbDrone.Core.ImportLists.Trakt
         [FieldDefinition(0, Label = "Auth User", Type = FieldType.Textbox, Hidden = HiddenType.Hidden)]
         public string AuthUser { get; set; }
 
-        [FieldDefinition(5, Label = "Limit", HelpText = "Limit the number of movies to get")]
+        [FieldDefinition(5, Label = "Limit", HelpText = "Limit the number of series to get")]
         public int Limit { get; set; }
 
         [FieldDefinition(6, Label = "Additional Parameters", HelpText = "Additional Trakt API parameters", Advanced = true)]
