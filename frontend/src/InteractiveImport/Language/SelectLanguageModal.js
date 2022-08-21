@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import Modal from 'Components/Modal/Modal';
+import { sizes } from 'Helpers/Props';
 import SelectLanguageModalContentConnector from './SelectLanguageModalContentConnector';
 
 class SelectLanguageModal extends Component {
@@ -19,6 +20,7 @@ class SelectLanguageModal extends Component {
       <Modal
         isOpen={isOpen}
         onModalClose={onModalClose}
+        size={sizes.MEDIUM}
       >
         <SelectLanguageModalContentConnector
           {...otherProps}

@@ -441,7 +441,7 @@ class InteractiveImportRow extends Component {
         <SelectLanguageModal
           isOpen={isSelectLanguageModalOpen}
           ids={[id]}
-          languageId={languages ? languages.id : 0}
+          languageIds={languages ? languages.map((l) => l.id) : []}
           modalTitle={modalTitle}
           onModalClose={this.onSelectLanguageModalClose}
         />

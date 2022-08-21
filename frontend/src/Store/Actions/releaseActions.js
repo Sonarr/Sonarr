@@ -1,6 +1,7 @@
 import { createAction } from 'redux-actions';
-import { filterBuilderTypes, filterBuilderValueTypes, filterTypes, sortDirections } from 'Helpers/Props';
+import { filterBuilderTypes, filterBuilderValueTypes, filterTypePredicates, filterTypes, sortDirections } from 'Helpers/Props';
 import { createThunk, handleThunks } from 'Store/thunks';
+import sortByName from 'Utilities/Array/sortByName';
 import createAjaxRequest from 'Utilities/createAjaxRequest';
 import createFetchHandler from './Creators/createFetchHandler';
 import createHandleActions from './Creators/createHandleActions';
@@ -37,6 +38,13 @@ export const defaultState = {
       return seeders * 1000000 + leechers;
     },
 
+    languages: function(item, direction) {
+      if (item.languages.length > 1) {
+        return 10000;
+      }
+
+      return item.languages[0].id;
+    },
     rejections: function(item, direction) {
       const rejections = item.rejections;
       const releaseWeight = item.releaseWeight;
@@ -95,6 +103,13 @@ export const defaultState = {
       return false;
     },
 
+    languages: function(item, filterValue, type) {
+      const predicate = filterTypePredicates[type];
+
+      const languages = item.languages.map((language) => language.name);
+
+      return predicate(languages, filterValue);
+    },
     rejectionCount: function(item, value, type) {
       const rejectionCount = item.rejections.length;
 
@@ -196,6 +211,25 @@ export const defaultState = {
       label: 'Quality',
       type: filterBuilderTypes.EXACT,
       valueType: filterBuilderValueTypes.QUALITY
+    },
+    {
+      name: 'languages',
+      label: 'Languages',
+      type: filterBuilderTypes.ARRAY,
+      optionsSelector: function(items) {
+        const genreList = items.reduce((acc, release) => {
+          release.languages.forEach((language) => {
+            acc.push({
+              id: language.name,
+              name: language.name
+            });
+          });
+
+          return acc;
+        }, []);
+
+        return genreList.sort(sortByName);
+      }
     },
     {
       name: 'rejectionCount',
