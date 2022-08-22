@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Notifications.Ntfy
             Priority = 3;
         }
 
-        [FieldDefinition(0, Label = "Server Url", Type = FieldType.Url, HelpLink = "https://ntfy.sh/docs/install/", HelpText = "Leave blank to use public server (https://ntfy.sh)", Placeholder = "https://ntfy.sh")]
+        [FieldDefinition(0, Label = "Server Url", Type = FieldType.Url, HelpLink = "https://ntfy.sh/docs/install/", HelpText = "Leave blank to use public server (https://ntfy.sh)")]
         public string ServerUrl { get; set; }
 
         [FieldDefinition(1, Label = "User Name", HelpText = "Optional Authorization", Privacy = PrivacyLevel.UserName)]
@@ -46,13 +46,13 @@ namespace NzbDrone.Core.Notifications.Ntfy
         [FieldDefinition(3, Label = "Priority", Type = FieldType.Select, SelectOptions = typeof(NtfyPriority))]
         public int Priority { get; set; }
 
-        [FieldDefinition(4, Label = "Topics", HelpText = "List of Topics to send notifications to", Type = FieldType.Tag, Placeholder = "Topic1234,Topic4321")]
+        [FieldDefinition(4, Label = "Topics", HelpText = "List of Topics to send notifications to", Type = FieldType.Tag)]
         public IEnumerable<string> Topics { get; set; }
 
-        [FieldDefinition(5, Label = "Ntfy Tags and Emojis", Type = FieldType.Tag, HelpText = "Optional list of tags or emojis to use", Placeholder = "warning,skull", HelpLink = "https://ntfy.sh/docs/emojis/")]
+        [FieldDefinition(5, Label = "Ntfy Tags and Emojis", Type = FieldType.Tag, HelpText = "Optional list of tags or emojis to use", HelpLink = "https://ntfy.sh/docs/emojis/")]
         public IEnumerable<string> Tags { get; set; }
 
-        [FieldDefinition(6, Label = "Click Url", Type = FieldType.Url, HelpText = "Optional link when user clicks notification", Placeholder = "https://myserver.example.com/radarr")]
+        [FieldDefinition(6, Label = "Click Url", Type = FieldType.Url, HelpText = "Optional link when user clicks notification")]
         public string ClickUrl { get; set; }
 
         public NzbDroneValidationResult Validate()
