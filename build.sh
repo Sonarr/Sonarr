@@ -40,13 +40,6 @@ EnableBsdSupport()
     fi
 }
 
-SetExecutableBits()
-{
-    find . -name "ffprobe" -exec chmod a+x {} \;
-    find . -name "Sonarr" -exec chmod a+x {} \;
-    find . -name "Sonarr.Update" -exec chmod a+x {} \;
-}
-
 LintUI()
 {
     ProgressStart 'ESLint'
@@ -110,7 +103,11 @@ PackageFiles()
     mkdir -p $folder
     cp -r $outputFolder/$framework/$runtime/publish/* $folder
     cp -r $outputFolder/Sonarr.Update/$framework/$runtime/publish $folder/Sonarr.Update
-    cp -r $outputFolder/UI $folder
+    
+    if [ "$FRONTEND" = "YES" ];
+    then
+        cp -r $outputFolder/UI $folder
+    fi
 
     echo "Adding LICENSE"
     cp LICENSE.md $folder
@@ -235,7 +232,6 @@ Package()
             ;;
         osx)
             PackageMacOS "$framework" "$runtime"
-            PackageMacOSApp "$framework" "$runtime"
             ;;
     esac
 }
@@ -280,19 +276,26 @@ UploadArtifacts()
     for dir in $artifactsFolder/*
     do
         local runtime=$(basename "$dir")
-        local extension="tar.gz"
 
-        if [[ "$runtime" =~ win-|-app ]]; then
-            extension="zip"
-        fi
-
-        echo "##teamcity[publishArtifacts '$artifactsFolder/$runtime/$framework/** => Sonarr.$BRANCH.$BUILD_NUMBER.$runtime.$extension']"
+        echo "##teamcity[publishArtifacts '$artifactsFolder/$runtime/$framework/** => Sonarr.$BRANCH.$SONARR_VERSION.$runtime.zip']"
     done
 
-    # Debian Package
+    # Debian Package / Windows installer / macOS app
     echo "##teamcity[publishArtifacts 'distribution/** => distribution.zip']"
 
     ProgressEnd 'Publishing Artifacts'
+}
+
+UploadUIArtifacts()
+{
+    local framework="$1"
+
+    ProgressStart 'Publishing UI Artifacts'
+
+    # UI folder
+    echo "##teamcity[publishArtifacts '$outputFolder/UI/** => UI.zip']"
+
+    ProgressEnd 'Publishing UI Artifacts'
 }
 
 # Use mono or .net depending on OS
@@ -397,12 +400,6 @@ then
     UploadTestArtifacts "net6.0"
 fi
 
-if [ "$FRONTEND" = "YES" ];
-then
-    YarnInstall
-    RunWebpack
-fi
-
 if [ "$LINT" = "YES" ];
 then
     if [ -z "$FRONTEND" ];
@@ -413,10 +410,16 @@ then
     LintUI
 fi
 
+if [ "$FRONTEND" = "YES" ];
+then
+    YarnInstall
+    RunWebpack
+    UploadUIArtifacts
+fi
+
 if [ "$PACKAGES" = "YES" ];
 then
     UpdateVersionNumber
-    SetExecutableBits
 
     if [[ -z "$RID" || -z "$FRAMEWORK" ]];
     then
