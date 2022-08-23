@@ -232,7 +232,7 @@ namespace NzbDrone.Core.Test.ParserTests
         public void should_parse_language_hungarian(string postTitle)
         {
             var result = LanguageParser.ParseLanguages(postTitle);
-            result.First().Id.Should().Be(Language.Hungarian.Id);
+            result.Should().Contain(lang => lang.Id == Language.Hungarian.Id);
         }
 
         [TestCase("Title.the.Series.S01-03.DVDRip.HebDub")]
@@ -307,6 +307,16 @@ namespace NzbDrone.Core.Test.ParserTests
         {
             var result = LanguageParser.ParseLanguages(postTitle);
             result.First().Name.Should().Be(Language.English.Name);
+        }
+
+        [TestCase("[GroupName] Series Title - 08 [1080p][Multiple Subtitle] [ENG][POR-BR][SPA-LA][RUS]")]
+        public void should_parse_multiple_languages(string postTitle)
+        {
+            var result = LanguageParser.ParseLanguages(postTitle);
+            result.Should().Contain(l => l.Id == Language.English.Id);
+            result.Should().Contain(l => l.Id == Language.Portuguese.Id);
+            result.Should().Contain(l => l.Id == Language.Spanish.Id);
+            result.Should().Contain(l => l.Id == Language.Russian.Id);
         }
     }
 }
