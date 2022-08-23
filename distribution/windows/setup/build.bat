@@ -1,4 +1,4 @@
-REM SET BUILD_NUMBER=1
+REM SET SONARR_VERSION=1
 REM SET BRANCH=develop
 echo ##teamcity[progressStart 'Building setup file']
 inno\ISCC.exe sonarr.iss

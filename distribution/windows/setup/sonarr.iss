@@ -7,13 +7,13 @@
 #define ForumsURL "https://forums.sonarr.tv/"
 #define AppExeName "Sonarr.exe"
 #define BuildNumber "3.0"
-#define BuildNumber GetEnv('BUILD_NUMBER')
+#define BuildNumber GetEnv('SONARR_VERSION')
 #define BranchName GetEnv('BRANCH')
 #define Framework GetEnv('FRAMEWORK')
 #define Runtime GetEnv('RUNTIME')
 
 [Setup]
-; NOTE: The value of AppId uniquely identifies this application.
+; NOTE: The value of AppId uniquely identifies this appl ication.
 ; Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{56C1065D-3523-4025-B76D-6F73F67F7F71}
