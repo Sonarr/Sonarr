@@ -3,6 +3,8 @@
 # Or use systemd built-in override functionality using 'systemctl edit sonarr'
 [Unit]
 Description=Sonarr Daemon
+StartLimitIntervalSec=60
+StartLimitBurst=3
 After=network.target
 
 [Service]
