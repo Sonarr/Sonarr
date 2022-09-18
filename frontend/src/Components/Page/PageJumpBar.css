@@ -1,4 +1,5 @@
 .jumpBar {
+  z-index: $pageJumpBarZIndex;
   display: flex;
   align-content: stretch;
   align-items: stretch;
