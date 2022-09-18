@@ -108,6 +108,10 @@ function Settings() {
           Metadata
         </Link>
 
+        <div className={styles.summary}>
+          Create metadata files when episodes are imported or series are refreshed
+        </div>
+
         <Link
           className={styles.link}
           to="/settings/metadatasource"
@@ -116,7 +120,7 @@ function Settings() {
         </Link>
 
         <div className={styles.summary}>
-          Create metadata files when episodes are imported or series are refreshed
+          Information on where Sonarr gets Series and Episode information
         </div>
 
         <Link
