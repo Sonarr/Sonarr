@@ -48,7 +48,7 @@ namespace NzbDrone.Core.Parser
             if (isoCode.Length == 2)
             {
                 //Lookup ISO639-1 code
-                return All.SingleOrDefault(l => l.TwoLetterCode == isoCode);
+                return All.FirstOrDefault(l => l.TwoLetterCode == isoCode);
             }
             else if (isoCode.Length == 3)
             {
@@ -58,7 +58,7 @@ namespace NzbDrone.Core.Parser
                     isoCode = mapped;
                 }
 
-                return All.SingleOrDefault(l => l.ThreeLetterCode == isoCode);
+                return All.FirstOrDefault(l => l.ThreeLetterCode == isoCode);
             }
 
             return null;
