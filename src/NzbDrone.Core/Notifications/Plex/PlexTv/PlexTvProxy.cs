@@ -1,3 +1,4 @@
+using System;
 using System.Net;
 using NLog;
 using NzbDrone.Common.EnvironmentInfo;
@@ -10,6 +11,7 @@ namespace NzbDrone.Core.Notifications.Plex.PlexTv
     public interface IPlexTvProxy
     {
         string GetAuthToken(string clientIdentifier, int pinId);
+        bool Ping(string clientIdentifier, string authToken);
     }
 
     public class PlexTvProxy : IPlexTvProxy
@@ -36,6 +38,30 @@ namespace NzbDrone.Core.Notifications.Plex.PlexTv
             }
 
             return response.AuthToken;
+        }
+
+        public bool Ping(string clientIdentifier, string authToken)
+        {
+            try
+            {
+                // Allows us to tell plex.tv that we're still active and tokens should not be expired.
+
+                var request = BuildRequest(clientIdentifier);
+
+                request.ResourceUrl = "/api/v2/ping";
+                request.AddQueryParam("X-Plex-Token", authToken);
+
+                ProcessRequest(request);
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                // Catch all exceptions and log at trace, this information could be interesting in debugging, but expired tokens will be handled elsewhere.
+                _logger.Trace(e, "Unable to ping plex.tv");
+            }
+
+            return false;
         }
 
         private HttpRequestBuilder BuildRequest(string clientIdentifier)
