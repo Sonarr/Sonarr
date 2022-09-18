@@ -96,11 +96,11 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators.Au
                                                    .With(m => m.AudioLanguages = new List<string> { "eng", "ger" })
                                                    .Build();
 
-            var localMovie = Builder<LocalEpisode>.CreateNew()
+            var localEpisode = Builder<LocalEpisode>.CreateNew()
                                                     .With(l => l.MediaInfo = mediaInfo)
                                                     .Build();
 
-            var result = Subject.AugmentLanguage(localMovie, null);
+            var result = Subject.AugmentLanguage(localEpisode, null);
 
             result.Languages.Count.Should().Be(2);
             result.Languages.Should().Contain(Core.Languages.Language.English);
