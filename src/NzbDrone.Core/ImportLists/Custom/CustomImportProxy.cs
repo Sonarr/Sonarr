@@ -13,18 +13,18 @@ using NzbDrone.Common.Http;
 
 namespace NzbDrone.Core.ImportLists.Custom
 {
-    public interface ICustomProxy
+    public interface ICustomImportProxy
     {
         List<CustomSeries> GetSeries(CustomSettings settings);
         ValidationFailure Test(CustomSettings settings);
     }
 
-    public class CustomProxy : ICustomProxy
+    public class CustomImportProxy : ICustomImportProxy
     {
         private readonly IHttpClient _httpClient;
         private readonly Logger _logger;
 
-        public CustomProxy(IHttpClient httpClient, Logger logger)
+        public CustomImportProxy(IHttpClient httpClient, Logger logger)
         {
             _httpClient = httpClient;
             _logger = logger;
@@ -69,11 +69,8 @@ namespace NzbDrone.Core.ImportLists.Custom
             }
 
             var baseUrl = settings.BaseUrl.TrimEnd('/');
-
             var request = new HttpRequestBuilder(baseUrl).Accept(HttpAccept.Json).Build();
-
             var response = _httpClient.Get(request);
-
             var results = JsonConvert.DeserializeObject<List<TResource>>(response.Content);
 
             return results;
