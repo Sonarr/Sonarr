@@ -1,9 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Parser.Model;
@@ -171,6 +173,72 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                    .Accepted
                    .Should()
                    .BeFalse();
+        }
+
+        [Test]
+        public void should_return_true_when_repacks_are_not_preferred()
+        {
+            Mocker.GetMock<IConfigService>()
+            .Setup(s => s.DownloadPropersAndRepacks)
+            .Returns(ProperDownloadTypes.DoNotPrefer);
+
+            _parsedEpisodeInfo.Quality.Revision.IsRepack = true;
+            _episodes.First().EpisodeFileId = 1;
+            _episodes.First().EpisodeFile = Builder<EpisodeFile>.CreateNew()
+                                                                .With(e => e.Quality = new QualityModel(Quality.SDTV))
+                                                                .With(e => e.ReleaseGroup = "Sonarr")
+                                                                .Build();
+
+            var remoteEpisode = Builder<RemoteEpisode>.CreateNew()
+                                                      .With(e => e.ParsedEpisodeInfo = _parsedEpisodeInfo)
+                                                      .With(e => e.Episodes = _episodes)
+                                                      .Build();
+
+            Subject.IsSatisfiedBy(remoteEpisode, null).Accepted.Should().BeTrue();
+        }
+
+        [Test]
+        public void should_return_true_when_repack_but_auto_download_repacks_is_true()
+        {
+            Mocker.GetMock<IConfigService>()
+            .Setup(s => s.DownloadPropersAndRepacks)
+            .Returns(ProperDownloadTypes.PreferAndUpgrade);
+
+            _parsedEpisodeInfo.Quality.Revision.IsRepack = true;
+            _episodes.First().EpisodeFileId = 1;
+            _episodes.First().EpisodeFile = Builder<EpisodeFile>.CreateNew()
+                                                                .With(e => e.Quality = new QualityModel(Quality.SDTV))
+                                                                .With(e => e.ReleaseGroup = "Sonarr")
+                                                                .Build();
+
+            var remoteEpisode = Builder<RemoteEpisode>.CreateNew()
+                                                      .With(e => e.ParsedEpisodeInfo = _parsedEpisodeInfo)
+                                                      .With(e => e.Episodes = _episodes)
+                                                      .Build();
+
+            Subject.IsSatisfiedBy(remoteEpisode, null).Accepted.Should().BeTrue();
+        }
+
+        [Test]
+        public void should_return_false_when_repack_but_auto_download_repacks_is_false()
+        {
+            Mocker.GetMock<IConfigService>()
+            .Setup(s => s.DownloadPropersAndRepacks)
+            .Returns(ProperDownloadTypes.DoNotUpgrade);
+
+            _parsedEpisodeInfo.Quality.Revision.IsRepack = true;
+            _episodes.First().EpisodeFileId = 1;
+            _episodes.First().EpisodeFile = Builder<EpisodeFile>.CreateNew()
+                                                                .With(e => e.Quality = new QualityModel(Quality.SDTV))
+                                                                .With(e => e.ReleaseGroup = "Sonarr")
+                                                                .Build();
+
+            var remoteEpisode = Builder<RemoteEpisode>.CreateNew()
+                                                      .With(e => e.ParsedEpisodeInfo = _parsedEpisodeInfo)
+                                                      .With(e => e.Episodes = _episodes)
+                                                      .Build();
+
+            Subject.IsSatisfiedBy(remoteEpisode, null).Accepted.Should().BeFalse();
         }
     }
 }
