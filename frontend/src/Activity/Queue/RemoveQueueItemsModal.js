@@ -116,7 +116,7 @@ class RemoveQueueItemsModal extends Component {
                 type={inputTypes.CHECK}
                 name="blocklist"
                 value={blocklist}
-                helpText="Prevents Sonarr from automatically grabbing this episode again"
+                helpText="Prevents Sonarr from automatically grabbing this release again"
                 onChange={this.onBlocklistChange}
               />
             </FormGroup>
