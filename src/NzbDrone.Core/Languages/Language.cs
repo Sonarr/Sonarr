@@ -101,6 +101,7 @@ namespace NzbDrone.Core.Languages
         public static Language Bulgarian => new Language(28, "Bulgarian");
         public static Language Malayalam => new Language(29, "Malayalam");
         public static Language Ukrainian => new Language(30, "Ukrainian");
+        public static Language Slovak => new Language(31, "Slovak");
 
         public static List<Language> All
         {
@@ -138,7 +139,8 @@ namespace NzbDrone.Core.Languages
                     Hindi,
                     Bulgarian,
                     Malayalam,
-                    Ukrainian
+                    Ukrainian,
+                    Slovak
                 };
             }
         }

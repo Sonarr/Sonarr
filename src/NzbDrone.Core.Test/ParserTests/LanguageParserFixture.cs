@@ -298,6 +298,14 @@ namespace NzbDrone.Core.Test.ParserTests
             result.First().Id.Should().Be(Language.Ukrainian.Id);
         }
 
+        [TestCase("Title.the.Series.2022.S02E22.Slovak.HDTV.XviD-LOL")]
+        [TestCase("Title.the.Series.2021.S01E11.HDTV.XviD.ENG.SK-LOL")]
+        public void should_parse_language_slovak(string postTitle)
+        {
+            var result = LanguageParser.ParseLanguage(postTitle);
+            result.Id.Should().Be(Language.Slovak.Id);
+        }
+
         [TestCase("Title.the.Russian.Series.S01E07.Cold.Action.HDTV.XviD-Droned")]
         [TestCase("Title.the.Russian.Series.S01E07E08.Cold.Action.HDTV.XviD-Droned")]
         [TestCase("Title.the.Russian.Series.S01.1080p.WEBRip.DDP5.1.x264-Drone")]
