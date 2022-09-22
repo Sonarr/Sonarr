@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Serialization;
@@ -47,7 +48,16 @@ namespace Sonarr.Api.V3.CustomFormats
 
         private static ICustomFormatSpecification MapSpecification(CustomFormatSpecificationSchema resource, List<ICustomFormatSpecification> specifications)
         {
-            var type = specifications.SingleOrDefault(x => x.GetType().Name == resource.Implementation).GetType();
+            var matchingSpec =
+                specifications.SingleOrDefault(x => x.GetType().Name == resource.Implementation);
+
+            if (matchingSpec is null)
+            {
+                throw new ArgumentException(
+                    $"{resource.Implementation} is not a valid specification implementation");
+            }
+
+            var type = matchingSpec.GetType();
 
             // Finding the exact current specification isn't possible given the dynamic nature of them and the possibility that multiple
             // of the same type exist within the same format. Passing in null is safe as long as there never exists a specification that
