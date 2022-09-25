@@ -329,6 +329,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series.Title.2x11.Nato.Per.La.Truffa.Bluray.Remux.AVC.1080p.AC3.ITA", false)]
         [TestCase("Series.Title.2x11.Nato.Per.La.Truffa.Bluray.Remux.AVC.AC3.ITA", false)]
         [TestCase("Series.Title.S03E01.The.Calm.1080p.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR", false)]
+        [TestCase("Series Title Season 2 (BDRemux 1080p HEVC FLAC) [Netaro]", false)]
         public void should_parse_bluray1080p_remux_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.Bluray1080pRemux, proper);
