@@ -40,7 +40,7 @@ namespace NzbDrone.Core.Parser
         private static readonly Regex RepackRegex = new Regex(@"\b(?<repack>repack|rerip)\b",
             RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        private static readonly Regex VersionRegex = new Regex(@"\dv(?<version>\d)\b|\[v(?<version>\d)\]",
+        private static readonly Regex VersionRegex = new Regex(@"\d[-._ ]?v(?<version>\d)[-._ ]|\[v(?<version>\d)\]",
                                                                 RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private static readonly Regex RealRegex = new Regex(@"\b(?<real>REAL)\b",
