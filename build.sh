@@ -400,19 +400,15 @@ then
     UploadTestArtifacts "net6.0"
 fi
 
-if [ "$LINT" = "YES" ];
-then
-    if [ -z "$FRONTEND" ];
-    then
-        YarnInstall
-    fi
-
-    LintUI
-fi
-
 if [ "$FRONTEND" = "YES" ];
 then
     YarnInstall
+
+    if [ "$LINT" = "YES" ];
+    then
+        LintUI
+    fi
+
     RunWebpack
     UploadUIArtifacts
 fi
