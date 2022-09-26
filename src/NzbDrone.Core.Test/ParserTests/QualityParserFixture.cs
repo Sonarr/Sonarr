@@ -244,6 +244,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[LostYears] Series Title - 01-17 (WEB 1080p x264 10-bit AAC) [Dual-Audio]", false)]
         [TestCase("Series.and.Titles.S01.1080p.NF.WEB.DD2.0.x264-SNEAkY", false)]
         [TestCase("Series.Title.S02E02.This.Year.Will.Be.Different.1080p.WEB.H 265", false)]
+        [TestCase("Series Title Season 2 [WEB 1080p HEVC Opus] [Netaro]", false)]
+        [TestCase("Series Title Season 2 (WEB 1080p HEVC Opus) [Netaro]", false)]
         public void should_parse_webdl1080p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.WEBDL1080p, proper);
@@ -330,6 +332,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series.Title.2x11.Nato.Per.La.Truffa.Bluray.Remux.AVC.AC3.ITA", false)]
         [TestCase("Series.Title.S03E01.The.Calm.1080p.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR", false)]
         [TestCase("Series Title Season 2 (BDRemux 1080p HEVC FLAC) [Netaro]", false)]
+        [TestCase("[Vodes] Series Title - Other Title (2020) [BDRemux 1080p HEVC Dual-Audio]", false)]
         public void should_parse_bluray1080p_remux_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.Bluray1080pRemux, proper);
