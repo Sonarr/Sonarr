@@ -67,6 +67,8 @@ namespace NzbDrone.Core.Notifications.CustomScript
             environmentVariables.Add("Sonarr_Download_Client", message.DownloadClientName ?? string.Empty);
             environmentVariables.Add("Sonarr_Download_Client_Type", message.DownloadClientType ?? string.Empty);
             environmentVariables.Add("Sonarr_Download_Id", message.DownloadId ?? string.Empty);
+            environmentVariables.Add("Sonarr_Release_CustomFormat", string.Join("|", remoteEpisode.CustomFormats));
+            environmentVariables.Add("Sonarr_Release_CustomFormatScore", remoteEpisode.CustomFormatScore.ToString());
 
             ExecuteScript(environmentVariables);
         }
