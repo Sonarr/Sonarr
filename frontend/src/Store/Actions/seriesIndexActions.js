@@ -96,6 +96,12 @@ export const defaultState = {
       isVisible: false
     },
     {
+      name: 'originalLanguage',
+      label: 'Original Language',
+      isSortable: true,
+      isVisible: false
+    },
+    {
       name: 'added',
       label: 'Added',
       isSortable: true,
@@ -247,6 +253,12 @@ export const defaultState = {
       const { statistics = {} } = item;
 
       return statistics.seasonCount;
+    },
+
+    originalLanguage: function(item) {
+      const { originalLanguage = {} } = item;
+
+      return originalLanguage.name;
     },
 
     ratings: function(item) {

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Datastore;
+using NzbDrone.Core.Languages;
 using NzbDrone.Core.Profiles.Qualities;
 
 namespace NzbDrone.Core.Tv
@@ -15,6 +16,7 @@ namespace NzbDrone.Core.Tv
             Actors = new List<Actor>();
             Seasons = new List<Season>();
             Tags = new HashSet<int>();
+            OriginalLanguage = Language.English;
         }
 
         public int TvdbId { get; set; }
@@ -47,6 +49,7 @@ namespace NzbDrone.Core.Tv
         public DateTime Added { get; set; }
         public DateTime? FirstAired { get; set; }
         public LazyLoaded<QualityProfile> QualityProfile { get; set; }
+        public Language OriginalLanguage { get; set; }
 
         public List<Season> Seasons { get; set; }
         public HashSet<int> Tags { get; set; }

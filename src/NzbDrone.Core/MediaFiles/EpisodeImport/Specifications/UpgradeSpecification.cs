@@ -5,9 +5,7 @@ using NzbDrone.Core.Configuration;
 using NzbDrone.Core.CustomFormats;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
-using NzbDrone.Core.Languages;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Profiles.Releases;
 using NzbDrone.Core.Qualities;
 
 namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
@@ -43,7 +41,6 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                 }
 
                 var qualityCompare = qualityComparer.Compare(localEpisode.Quality.Quality, episodeFile.Quality.Quality);
-                var customFormatScore = GetCustomFormatScore(localEpisode);
 
                 if (qualityCompare < 0)
                 {
@@ -62,46 +59,9 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                     _logger.Debug("This file isn't a quality revision upgrade for all episodes. Skipping {0}", localEpisode.Path);
                     return Decision.Reject("Not a quality revision upgrade for existing episode file(s)");
                 }
-
-                var customFormats = _customFormatCalculationService.ParseCustomFormat(episodeFile);
-                var episodeFileCustomFormatScore = localEpisode.Series.QualityProfile.Value.CalculateCustomFormatScore(customFormats);
-
-                if (qualityCompare == 0 && customFormatScore < episodeFileCustomFormatScore)
-                {
-                    _logger.Debug("This file isn't a custom format upgrade for episode. Skipping {0}", localEpisode.Path);
-                    return Decision.Reject("Not a custom format upgrade for existing episode file(s)");
-                }
             }
 
             return Decision.Accept();
-        }
-
-        private int GetCustomFormatScore(LocalEpisode localEpisode)
-        {
-            var series = localEpisode.Series;
-            var scores = new List<int>();
-            var fileFormats = new List<CustomFormat>();
-            var folderFormats = new List<CustomFormat>();
-            var clientFormats = new List<CustomFormat>();
-
-            if (localEpisode.FileEpisodeInfo != null)
-            {
-                fileFormats = _customFormatCalculationService.ParseCustomFormat(localEpisode.FileEpisodeInfo);
-            }
-
-            if (localEpisode.FolderEpisodeInfo != null)
-            {
-                folderFormats = _customFormatCalculationService.ParseCustomFormat(localEpisode.FolderEpisodeInfo);
-            }
-
-            if (localEpisode.DownloadClientEpisodeInfo != null)
-            {
-                clientFormats = _customFormatCalculationService.ParseCustomFormat(localEpisode.DownloadClientEpisodeInfo);
-            }
-
-            var formats = fileFormats.Union(folderFormats.Union(clientFormats)).ToList();
-
-            return series.QualityProfile.Value.CalculateCustomFormatScore(formats);
         }
     }
 }

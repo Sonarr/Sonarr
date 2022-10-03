@@ -7,6 +7,7 @@ using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.IndexerSearch.Definitions;
+using NzbDrone.Core.Languages;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
@@ -41,7 +42,8 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
                 SeriesTitle = _series.Title,
                 SeasonNumber = 1,
                 EpisodeNumbers = new[] { 1 },
-                AbsoluteEpisodeNumbers = new int[0]
+                AbsoluteEpisodeNumbers = new int[0],
+                Languages = new List<Language> { Language.English }
             };
 
             _singleEpisodeSearchCriteria = new SingleEpisodeSearchCriteria

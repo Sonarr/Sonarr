@@ -139,6 +139,14 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
             var rootFolder = Path.GetDirectoryName(path);
             var series = _seriesService.GetSeries(seriesId);
 
+            var languageParse = LanguageParser.ParseLanguages(path);
+
+            if (languageParse.Count <= 1 && languageParse.First() == Language.Unknown && series != null)
+            {
+                languageParse = new List<Language> { series.OriginalLanguage };
+                _logger.Debug("Language couldn't be parsed from release, falling back to series original language: {0}", series.OriginalLanguage.Name);
+            }
+
             if (episodeIds.Any())
             {
                 var downloadClientItem = GetTrackedDownload(downloadId)?.DownloadItem;
@@ -153,7 +161,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                 localEpisode.ExistingFile = series.Path.IsParentPath(path);
                 localEpisode.Size = _diskProvider.GetFileSize(path);
                 localEpisode.ReleaseGroup = releaseGroup.IsNullOrWhiteSpace() ? Parser.Parser.ParseReleaseGroup(path) : releaseGroup;
-                localEpisode.Languages = (languages?.SingleOrDefault() ?? Language.Unknown) == Language.Unknown ? LanguageParser.ParseLanguages(path) : languages;
+                localEpisode.Languages = (languages?.SingleOrDefault() ?? Language.Unknown) == Language.Unknown ? languageParse : languages;
                 localEpisode.Quality = quality.Quality == Quality.Unknown ? QualityParser.ParseQuality(path) : quality;
 
                 return MapItem(_importDecisionMaker.GetDecision(localEpisode, downloadClientItem), rootFolder, downloadId, null);

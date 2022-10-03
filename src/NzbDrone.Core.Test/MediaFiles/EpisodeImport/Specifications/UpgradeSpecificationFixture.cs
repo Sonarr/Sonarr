@@ -261,46 +261,6 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
         }
 
         [Test]
-        public void should_return_false_if_it_is_a_preferred_word_downgrade_and_equal_language_and_quality()
-        {
-            var lowFormat = new List<CustomFormat> { new CustomFormat("Bad Format", new ResolutionSpecification { Value = (int)Resolution.R1080p }) { Id = 2 } };
-
-            CustomFormatsFixture.GivenCustomFormats(lowFormat.First());
-
-            _series.QualityProfile.Value.FormatItems = CustomFormatsFixture.GetSampleFormatItems();
-
-            Mocker.GetMock<IConfigService>()
-                  .Setup(s => s.DownloadPropersAndRepacks)
-                  .Returns(ProperDownloadTypes.DoNotPrefer);
-
-            Mocker.GetMock<ICustomFormatCalculationService>()
-                  .Setup(s => s.ParseCustomFormat(It.IsAny<EpisodeFile>()))
-                  .Returns(new List<CustomFormat>());
-
-            Mocker.GetMock<ICustomFormatCalculationService>()
-                  .Setup(s => s.ParseCustomFormat(It.IsAny<ParsedEpisodeInfo>()))
-                  .Returns(lowFormat);
-
-            _localEpisode.Quality = new QualityModel(Quality.Bluray1080p);
-
-            _localEpisode.Episodes = Builder<Episode>.CreateListOfSize(1)
-                                                     .All()
-                                                     .With(e => e.EpisodeFileId = 1)
-                                                     .With(e => e.EpisodeFile = new LazyLoaded<EpisodeFile>(
-                                                         new EpisodeFile
-                                                         {
-                                                             Quality = new QualityModel(Quality.Bluray1080p),
-                                                             Languages = new List<Language> { Language.Spanish }
-                                                         }))
-                                                     .Build()
-                                                     .ToList();
-
-            _localEpisode.FileEpisodeInfo = Builder<ParsedEpisodeInfo>.CreateNew().Build();
-
-            Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeFalse();
-        }
-
-        [Test]
         public void should_return_true_if_it_is_a_preferred_word_downgrade_and_language_downgrade_and_a_quality_upgrade()
         {
             Mocker.GetMock<IConfigService>()

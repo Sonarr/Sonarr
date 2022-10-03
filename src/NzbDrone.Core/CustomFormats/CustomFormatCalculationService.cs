@@ -84,7 +84,8 @@ namespace NzbDrone.Core.CustomFormats
                 ExtraInfo = new Dictionary<string, object>
                 {
                     { "Size", episodeFile.Size },
-                    { "Filename", Path.GetFileName(episodeFile.RelativePath) }
+                    { "Filename", Path.GetFileName(episodeFile.RelativePath) },
+                    { "OriginalLanguage", episodeFile.Series.Value.OriginalLanguage }
                 }
             };
 

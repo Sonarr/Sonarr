@@ -91,6 +91,7 @@ namespace NzbDrone.Core.Tv
             series.ImdbId = seriesInfo.ImdbId;
             series.AirTime = seriesInfo.AirTime;
             series.Overview = seriesInfo.Overview;
+            series.OriginalLanguage = seriesInfo.OriginalLanguage;
             series.Status = seriesInfo.Status;
             series.CleanTitle = seriesInfo.CleanTitle;
             series.SortTitle = seriesInfo.SortTitle;

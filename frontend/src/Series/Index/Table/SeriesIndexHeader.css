@@ -30,6 +30,7 @@
   flex: 2 0 90px;
 }
 
+.originalLanguage,
 .qualityProfileId {
   composes: headerCell from '~Components/Table/VirtualTableHeaderCell.css';
 

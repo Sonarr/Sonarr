@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using NzbDrone.Core.Languages;
 using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.Tv;
 using Sonarr.Http.REST;
@@ -30,7 +31,7 @@ namespace Sonarr.Api.V3.Series
         public string Network { get; set; }
         public string AirTime { get; set; }
         public List<MediaCover> Images { get; set; }
-
+        public Language OriginalLanguage { get; set; }
         public string RemotePoster { get; set; }
         public List<SeasonResource> Seasons { get; set; }
         public int Year { get; set; }
@@ -100,6 +101,7 @@ namespace Sonarr.Api.V3.Series
 
                        Seasons = model.Seasons.ToResource(includeSeasonImages),
                        Year = model.Year,
+                       OriginalLanguage = model.OriginalLanguage,
 
                        Path = model.Path,
                        QualityProfileId = model.QualityProfileId,
@@ -161,6 +163,7 @@ namespace Sonarr.Api.V3.Series
 
                        Seasons = resource.Seasons?.ToModel() ?? new List<Season>(),
                        Year = resource.Year,
+                       OriginalLanguage = resource.OriginalLanguage,
 
                        Path = resource.Path,
                        QualityProfileId = resource.QualityProfileId,

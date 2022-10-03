@@ -6,6 +6,8 @@ using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Instrumentation.Extensions;
 using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.IndexerSearch.Definitions;
+using NzbDrone.Core.Languages;
+using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
 
@@ -181,6 +183,29 @@ namespace NzbDrone.Core.Parser
                 if (ValidateParsedEpisodeInfo.ValidateForSeriesType(parsedEpisodeInfo, series))
                 {
                     remoteEpisode.Episodes = GetEpisodes(parsedEpisodeInfo, series, remoteEpisode.MappedSeasonNumber, sceneSource, searchCriteria);
+                }
+
+                parsedEpisodeInfo.ExtraInfo["OriginalLanguage"] = series.OriginalLanguage;
+            }
+
+            // Use series language as fallback if we could't parse a language (more accurate than just using English)
+            if (parsedEpisodeInfo.Languages.Count <= 1 && parsedEpisodeInfo.Languages.First() == Language.Unknown && series != null)
+            {
+                parsedEpisodeInfo.Languages = new List<Language> { series.OriginalLanguage };
+                _logger.Debug("Language couldn't be parsed from release, fallback to series original language: {0}", series.OriginalLanguage.Name);
+            }
+
+            if (parsedEpisodeInfo.Languages.Contains(Language.Original))
+            {
+                parsedEpisodeInfo.Languages.Remove(Language.Original);
+
+                if (series != null && !parsedEpisodeInfo.Languages.Contains(series.OriginalLanguage))
+                {
+                    parsedEpisodeInfo.Languages.Add(series.OriginalLanguage);
+                }
+                else
+                {
+                    parsedEpisodeInfo.Languages.Add(Language.Unknown);
                 }
             }
 

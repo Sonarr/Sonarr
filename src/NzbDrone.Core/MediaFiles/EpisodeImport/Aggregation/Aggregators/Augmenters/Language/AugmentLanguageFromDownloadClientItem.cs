@@ -23,7 +23,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators.Augment
 
             foreach (var episode in localEpisode.Episodes)
             {
-                var episodeTitleLanguage = LanguageParser.ParseLanguages(episode.Title, false);
+                var episodeTitleLanguage = LanguageParser.ParseLanguages(episode.Title);
 
                 languages = languages.Except(episodeTitleLanguage).ToList();
             }
