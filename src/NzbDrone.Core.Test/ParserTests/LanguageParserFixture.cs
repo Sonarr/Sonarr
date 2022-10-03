@@ -11,21 +11,27 @@ namespace NzbDrone.Core.Test.ParserTests
     public class LanguageParserFixture : CoreTest
     {
         [TestCase("Title.the.Series.2009.S01E14.English.HDTV.XviD-LOL")]
+        [TestCase("Series Title - S01E01 - Pilot.English.sub")]
+        [TestCase("Series Title - S01E01 - Pilot.english.sub")]
+        public void should_parse_language_english(string postTitle)
+        {
+            var result = LanguageParser.ParseLanguages(postTitle);
+            result.First().Should().Be(Language.English);
+        }
+
+        [TestCase("Spanish Killroy was Here S02E02 Flodden 720p AMZN WEB-DL DDP5 1 H 264-NTb")]
+        [TestCase("Title.the.Spanish.Series.S02E02.1080p.WEB.H264-CAKES")]
+        [TestCase("Title.the.Spanish.Series.S02E06.Field.of.Cloth.of.Gold.1080p.AMZN.WEBRip.DDP5.1.x264-NTb")]
         [TestCase("Title.the.Series.2009.S01E14.Germany.HDTV.XviD-LOL")]
         [TestCase("Title.the.Series.2009.S01E14.HDTV.XviD-LOL")]
         [TestCase("Title.the.Italian.Series.S01E01.The.Family.720p.HDTV.x264-FTP")]
         [TestCase("Title.the.Italy.Series.S02E01.720p.HDTV.x264-TLA")]
         [TestCase("Series Title - S01E01 - Pilot.en.sub")]
         [TestCase("Series Title - S01E01 - Pilot.eng.sub")]
-        [TestCase("Series Title - S01E01 - Pilot.English.sub")]
-        [TestCase("Series Title - S01E01 - Pilot.english.sub")]
-        [TestCase("Spanish Killroy was Here S02E02 Flodden 720p AMZN WEB-DL DDP5 1 H 264-NTb")]
-        [TestCase("Title.the.Spanish.Series.S02E02.1080p.WEB.H264-CAKES")]
-        [TestCase("Title.the.Spanish.Series.S02E06.Field.of.Cloth.of.Gold.1080p.AMZN.WEBRip.DDP5.1.x264-NTb")]
-        public void should_parse_language_english(string postTitle)
+        public void should_parse_language_unknown(string postTitle)
         {
             var result = LanguageParser.ParseLanguages(postTitle);
-            result.First().Should().Be(Language.English);
+            result.First().Should().Be(Language.Unknown);
         }
 
         [TestCase("Series Title - S01E01 - Pilot.sub")]
@@ -314,7 +320,7 @@ namespace NzbDrone.Core.Test.ParserTests
         public void should_not_parse_series_or_episode_title(string postTitle)
         {
             var result = LanguageParser.ParseLanguages(postTitle);
-            result.First().Name.Should().Be(Language.English.Name);
+            result.First().Name.Should().Be(Language.Unknown.Name);
         }
     }
 }

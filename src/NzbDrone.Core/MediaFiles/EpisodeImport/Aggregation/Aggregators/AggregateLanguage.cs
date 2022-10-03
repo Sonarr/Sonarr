@@ -22,7 +22,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators
 
         public LocalEpisode Aggregate(LocalEpisode localEpisode, DownloadClientItem downloadClientItem)
         {
-            var languages = new List<Language> { Language.English };
+            var languages = new List<Language> { localEpisode.Series?.OriginalLanguage ?? Language.Unknown };
             var languagesConfidence = Confidence.Default;
 
             foreach (var augmentLanguage in _augmentLanguages)
@@ -37,7 +37,6 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators
 
                 if (augmentedLanguage?.Languages != null &&
                     augmentedLanguage.Languages.Count > 0 &&
-                    !(augmentedLanguage.Languages.Count == 1 && augmentedLanguage.Languages.Contains(Language.English)) &&
                     !(augmentedLanguage.Languages.Count == 1 && augmentedLanguage.Languages.Contains(Language.Unknown)))
                 {
                     languages = augmentedLanguage.Languages;

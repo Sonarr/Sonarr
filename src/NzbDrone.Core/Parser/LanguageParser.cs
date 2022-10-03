@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Parser
 
         private static readonly Regex SubtitleLanguageRegex = new Regex(".+?[-_. ](?<iso_code>[a-z]{2,3})([-_. ](?<tags>full|forced|foreign|default|cc|psdh|sdh))*$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        public static List<Language> ParseLanguages(string title, bool defaultToEnglish = true)
+        public static List<Language> ParseLanguages(string title)
         {
             foreach (var regex in CleanSeriesTitleRegex)
             {
@@ -175,7 +175,7 @@ namespace NzbDrone.Core.Parser
 
             if (!languages.Any())
             {
-                languages.Add(defaultToEnglish ? Language.English : Language.Unknown);
+                languages.Add(Language.Unknown);
             }
 
             return languages.DistinctBy(l => (int)l).ToList();

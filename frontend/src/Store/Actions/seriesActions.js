@@ -131,6 +131,13 @@ export const filterPredicates = {
     return predicate(item.ratings.value * 10, filterValue);
   },
 
+  originalLanguage: function(item, filterValue, type) {
+    const predicate = filterTypePredicates[type];
+    const { originalLanguage } = item;
+
+    return predicate(originalLanguage ? originalLanguage.name : '', filterValue);
+  },
+
   releaseGroups: function(item, filterValue, type) {
     const { statistics = {} } = item;
 
@@ -265,6 +272,25 @@ export const filterBuilderProps = [
       }, []);
 
       return tagList.sort(sortByName);
+    }
+  },
+  {
+    name: 'originalLanguage',
+    label: 'Original Language',
+    type: filterBuilderTypes.EXACT,
+    optionsSelector: function(items) {
+      const languageList = items.reduce((acc, series) => {
+        if (series.originalLanguage) {
+          acc.push({
+            id: series.originalLanguage.name,
+            name: series.originalLanguage.name
+          });
+        }
+
+        return acc;
+      }, []);
+
+      return languageList.sort(sortByName);
     }
   },
   {

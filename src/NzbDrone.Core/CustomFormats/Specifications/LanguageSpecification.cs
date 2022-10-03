@@ -34,7 +34,11 @@ namespace NzbDrone.Core.CustomFormats
 
         protected override bool IsSatisfiedByWithoutNegate(ParsedEpisodeInfo episodeInfo)
         {
-            return episodeInfo?.Languages?.Contains((Language)Value) ?? false;
+            var comparedLanguage = episodeInfo != null && Value == Language.Original.Id && episodeInfo.ExtraInfo.ContainsKey("OriginalLanguage")
+                ? (Language)episodeInfo.ExtraInfo["OriginalLanguage"]
+                : (Language)Value;
+
+            return episodeInfo?.Languages?.Contains(comparedLanguage) ?? false;
         }
 
         public override NzbDroneValidationResult Validate()

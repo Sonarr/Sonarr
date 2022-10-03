@@ -18,6 +18,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
     public class AggregateLanguageFixture : CoreTest<AggregateLanguage>
     {
         private LocalEpisode _localEpisode;
+        private Series _series;
         private string _simpleReleaseTitle = "Series.Title.S01E01.xyz-RlsGroup";
 
         [SetUp]
@@ -26,11 +27,16 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
             var episodes = Builder<Episode>.CreateListOfSize(1)
                                            .BuildList();
 
+            _series = Builder<Series>.CreateNew()
+                       .With(m => m.OriginalLanguage = Language.English)
+                       .Build();
+
             _localEpisode = Builder<LocalEpisode>.CreateNew()
                                                  .With(l => l.DownloadClientEpisodeInfo = null)
                                                  .With(l => l.FolderEpisodeInfo = null)
                                                  .With(l => l.FileEpisodeInfo = null)
                                                  .With(l => l.Episodes = episodes)
+                                                 .With(l => l.Series = _series)
                                                  .Build();
         }
 
@@ -72,7 +78,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
         {
             var result = Subject.Aggregate(_localEpisode, null);
 
-            result.Languages.Should().Contain(Language.English);
+            result.Languages.Should().Contain(_series.OriginalLanguage);
         }
 
         [Test]
@@ -120,13 +126,13 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
         [Test]
         public void should_return_file_language_when_file_language_is_higher_than_others()
         {
-            _localEpisode.DownloadClientEpisodeInfo = GetParsedEpisodeInfo(new List<Language> { Language.English }, _simpleReleaseTitle);
-            _localEpisode.FolderEpisodeInfo = GetParsedEpisodeInfo(new List<Language> { Language.English }, _simpleReleaseTitle);
+            _localEpisode.DownloadClientEpisodeInfo = GetParsedEpisodeInfo(new List<Language> { Language.Unknown }, _simpleReleaseTitle);
+            _localEpisode.FolderEpisodeInfo = GetParsedEpisodeInfo(new List<Language> { Language.Unknown }, _simpleReleaseTitle);
             _localEpisode.FileEpisodeInfo = GetParsedEpisodeInfo(new List<Language> { Language.French }, _simpleReleaseTitle);
 
             GivenAugmenters(new List<Language> { Language.French },
-                new List<Language> { Language.English },
-                new List<Language> { Language.English },
+                new List<Language> { Language.Unknown },
+                new List<Language> { Language.Unknown },
                 null);
 
             Subject.Aggregate(_localEpisode, null).Languages.Should().Contain(_localEpisode.FileEpisodeInfo.Languages);
@@ -135,9 +141,9 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
         [Test]
         public void should_return_multi_language()
         {
-            GivenAugmenters(new List<Language> { Language.English },
+            GivenAugmenters(new List<Language> { Language.Unknown },
                             new List<Language> { Language.French, Language.German },
-                            new List<Language> { Language.English },
+                            new List<Language> { Language.Unknown },
                             null);
 
             Subject.Aggregate(_localEpisode, null).Languages.Should().Equal(new List<Language> { Language.French, Language.German });

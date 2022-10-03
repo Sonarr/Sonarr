@@ -11,7 +11,22 @@ function createMapStateToProps() {
   return createSelector(
     createLanguagesSelector(),
     (languages) => {
-      return languages;
+      const {
+        isFetching,
+        isPopulated,
+        error,
+        items
+      } = languages;
+
+      const filterItems = ['Any', 'Original'];
+      const filteredLanguages = items.filter((lang) => !filterItems.includes(lang.name));
+
+      return {
+        isFetching,
+        isPopulated,
+        error,
+        items: filteredLanguages
+      };
     }
   );
 }

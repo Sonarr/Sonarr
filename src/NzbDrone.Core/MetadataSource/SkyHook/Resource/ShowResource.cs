@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace NzbDrone.Core.MetadataSource.SkyHook.Resource
 {
@@ -29,6 +29,7 @@ namespace NzbDrone.Core.MetadataSource.SkyHook.Resource
 
         public string Network { get; set; }
         public string ImdbId { get; set; }
+        public string OriginalLanguage { get; set; }
 
         public List<ActorResource> Actors { get; set; }
         public List<string> Genres { get; set; }
