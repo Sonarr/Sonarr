@@ -13,12 +13,12 @@ namespace NzbDrone.Core.ImportLists.Custom
 {
     public class CustomImport : ImportListBase<CustomSettings>
     {
-        private readonly ICustomProxy _customProxy;
+        private readonly ICustomImportProxy _customProxy;
         public override string Name => "Custom List";
 
         public override ImportListType ListType => ImportListType.Advanced;
 
-        public CustomImport(ICustomProxy customProxy,
+        public CustomImport(ICustomImportProxy customProxy,
                             IImportListStatusService importListStatusService,
                             IConfigService configService,
                             IParsingService parsingService,
