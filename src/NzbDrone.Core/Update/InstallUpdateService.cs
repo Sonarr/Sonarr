@@ -146,7 +146,7 @@ namespace NzbDrone.Core.Update
             _logger.Info("Preparing client");
             _diskTransferService.TransferFolder(_appFolderInfo.GetUpdateClientFolder(), updateSandboxFolder, TransferMode.Move);
 
-            var updateClientExePath = _appFolderInfo.GetUpdateClientExePath(updatePackage.Runtime);
+            var updateClientExePath = _appFolderInfo.GetUpdateClientExePath();
 
             if (!_diskProvider.FileExists(updateClientExePath))
             {
@@ -155,7 +155,7 @@ namespace NzbDrone.Core.Update
             }
 
             // Set executable flag on update app
-            if (OsInfo.IsOsx || (OsInfo.IsLinux && PlatformInfo.IsNetCore))
+            if (OsInfo.IsOsx || OsInfo.IsLinux)
             {
                 _diskProvider.SetFilePermissions(updateClientExePath, "755", null);
             }

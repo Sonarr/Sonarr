@@ -247,9 +247,7 @@ namespace NzbDrone.Mono.Disk
                     newFile.CreateSymbolicLinkTo(fullPath);
                 }
             }
-            else if (((PlatformInfo.Platform == PlatformType.Mono && PlatformInfo.GetVersion() >= new Version(6, 0)) ||
-                      PlatformInfo.Platform == PlatformType.NetCore) &&
-                     (!FileExists(destination) || overwrite))
+            else if (!FileExists(destination) || overwrite)
             {
                 TransferFilePatched(source, destination, overwrite, false);
             }
@@ -294,14 +292,9 @@ namespace NzbDrone.Mono.Disk
                     throw;
                 }
             }
-            else if ((PlatformInfo.Platform == PlatformType.Mono && PlatformInfo.GetVersion() >= new Version(6, 0)) ||
-                     PlatformInfo.Platform == PlatformType.NetCore)
-            {
-                TransferFilePatched(source, destination, false, true);
-            }
             else
             {
-                base.MoveFileInternal(source, destination);
+                TransferFilePatched(source, destination, false, true);
             }
         }
 
@@ -313,7 +306,7 @@ namespace NzbDrone.Mono.Disk
             // Catch the exception and attempt to handle these edgecases
 
             // Mono 6.x till 6.10 doesn't properly try use rename first.
-            if (move && (PlatformInfo.Platform == PlatformType.NetCore))
+            if (move)
             {
                 if (Syscall.lstat(source, out var sourcestat) == 0 &&
                     Syscall.lstat(destination, out var deststat) != 0 &&
@@ -341,7 +334,7 @@ namespace NzbDrone.Mono.Disk
                 var dstInfo = new FileInfo(destination);
                 var exists = dstInfo.Exists && srcInfo.Exists;
 
-                if (PlatformInfo.Platform == PlatformType.NetCore && exists && dstInfo.Length == srcInfo.Length)
+                if (exists && dstInfo.Length == srcInfo.Length)
                 {
                     // mono 6.0, mono 6.4 and netcore 3.1 bug: full length file since utime and chmod happens at the end
                     _logger.Debug("{3} failed to {2} file likely due to known {3} bug, attempting to {2} directly. '{0}' -> '{1}'", source, destination, move ? "move" : "copy", PlatformInfo.PlatformName);
