@@ -20,6 +20,7 @@ namespace NzbDrone.Core.Notifications.Webhook
             SceneName = episodeFile.SceneName;
             Size = episodeFile.Size;
             DateAdded = episodeFile.DateAdded;
+            MediaInfo = new WebhookEpisodeFileMediaInfo(episodeFile);
         }
 
         public int Id { get; set; }
@@ -31,5 +32,6 @@ namespace NzbDrone.Core.Notifications.Webhook
         public string SceneName { get; set; }
         public long Size { get; set; }
         public DateTime DateAdded { get; set; }
+        public WebhookEpisodeFileMediaInfo MediaInfo { get; set; }
     }
 }
