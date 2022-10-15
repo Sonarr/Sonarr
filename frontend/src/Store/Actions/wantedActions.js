@@ -111,7 +111,7 @@ export const defaultState = {
         isVisible: true
       },
       {
-        name: 'episodes.episodeTitle',
+        name: 'episodes.title',
         label: 'Episode Title',
         isVisible: true
       },
