@@ -75,6 +75,10 @@ namespace NzbDrone.Common.Test.InstrumentationTests
         // Webhooks - Notifiarr
         [TestCase(@"https://xxx.yyy/api/v1/notification/sonarr/9pr04sg6-0123-3210-imav-eql2tyu8xyui")]
 
+        // Discord
+        [TestCase(@"https://discord.com/api/webhooks/mySecret")]
+        [TestCase(@"https://discord.com/api/webhooks/mySecret/01233210")]
+
         public void should_clean_message(string message)
         {
             var cleansedMessage = CleanseLogMessage.Cleanse(message);
