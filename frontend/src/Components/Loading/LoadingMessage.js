@@ -60,7 +60,7 @@ const messages = [
   'Offer void where prohibited',
   'No purchase necessary',
   'Sonarr does what CouchPotaton\'t',
-  'Sonarr does what Sick Beardn\'t,
+  'Sonarr does what Sick Beardn\'t',
   'If loading lasts for more than four hours, contact your doctor'
 ];
 
