@@ -22,7 +22,6 @@ namespace NzbDrone.Core.Download
     {
         private readonly IProvideDownloadClient _downloadClientProvider;
         private readonly IDownloadClientStatusService _downloadClientStatusService;
-        private readonly IIndexerFactory _indexerFactory;
         private readonly IIndexerStatusService _indexerStatusService;
         private readonly IRateLimitService _rateLimitService;
         private readonly IEventAggregator _eventAggregator;
@@ -31,7 +30,6 @@ namespace NzbDrone.Core.Download
 
         public DownloadService(IProvideDownloadClient downloadClientProvider,
                                IDownloadClientStatusService downloadClientStatusService,
-                               IIndexerFactory indexerFactory,
                                IIndexerStatusService indexerStatusService,
                                IRateLimitService rateLimitService,
                                IEventAggregator eventAggregator,
@@ -40,7 +38,6 @@ namespace NzbDrone.Core.Download
         {
             _downloadClientProvider = downloadClientProvider;
             _downloadClientStatusService = downloadClientStatusService;
-            _indexerFactory = indexerFactory;
             _indexerStatusService = indexerStatusService;
             _rateLimitService = rateLimitService;
             _eventAggregator = eventAggregator;
@@ -112,26 +109,7 @@ namespace NzbDrone.Core.Download
                 episodeGrabbedEvent.DownloadId = downloadClientId;
             }
 
-            var indexerName = "Unknown";
-
-            try
-            {
-                if (remoteEpisode.Release.IndexerId > 0)
-                {
-                    var indexer = _indexerFactory.Find(remoteEpisode.Release.IndexerId);
-
-                    if (indexer != null)
-                    {
-                        indexerName = indexer.Name;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex, "Unable to fetch indexer name. ID: {0}", remoteEpisode.Release.IndexerId);
-            }
-
-            _logger.ProgressInfo("Report sent to {0}. Indexer {1}. {2}", downloadClient.Definition.Name, indexerName, downloadTitle);
+            _logger.ProgressInfo("Report sent to {0}. Indexer {1}. {2}", downloadClient.Definition.Name, remoteEpisode.Release.Indexer, downloadTitle);
             _eventAggregator.PublishEvent(episodeGrabbedEvent);
         }
     }
