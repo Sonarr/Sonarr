@@ -69,7 +69,7 @@ namespace NzbDrone.Core.Test.UpdateTests
                   .Returns(true);
 
             Mocker.GetMock<IDiskProvider>()
-                  .Setup(v => v.FileExists(It.Is<string>(s => s.EndsWith("Sonarr.Update.exe"))))
+                  .Setup(v => v.FileExists(It.Is<string>(s => s.EndsWith("Sonarr.Update".ProcessNameToExe()))))
                   .Returns(true);
 
             _sandboxFolder = Mocker.GetMock<IAppFolderInfo>().Object.GetUpdateSandboxFolder();
@@ -154,7 +154,7 @@ namespace NzbDrone.Core.Test.UpdateTests
         public void should_return_with_warning_if_updater_doesnt_exists()
         {
             Mocker.GetMock<IDiskProvider>()
-                  .Setup(v => v.FileExists(It.Is<string>(s => s.EndsWith("Sonarr.Update.exe"))))
+                  .Setup(v => v.FileExists(It.Is<string>(s => s.EndsWith("Sonarr.Update".ProcessNameToExe()))))
                   .Returns(false);
 
             Subject.Execute(new ApplicationUpdateCommand());
@@ -186,7 +186,7 @@ namespace NzbDrone.Core.Test.UpdateTests
         }
 
         [Test]
-        [Platform("Mono")]
+        [Platform(Exclude = "Win")]
         public void should_run_script_if_configured()
         {
             const string scriptPath = "/tmp/nzbdrone/update.sh";
@@ -199,7 +199,7 @@ namespace NzbDrone.Core.Test.UpdateTests
         }
 
         [Test]
-        [Platform("Mono")]
+        [Platform(Exclude = "Win")]
         public void should_throw_if_script_is_not_set()
         {
             const string scriptPath = "/tmp/nzbdrone/update.sh";
@@ -213,7 +213,7 @@ namespace NzbDrone.Core.Test.UpdateTests
         }
 
         [Test]
-        [Platform("Mono")]
+        [Platform(Exclude = "Win")]
         public void should_throw_if_script_is_null()
         {
             const string scriptPath = "/tmp/nzbdrone/update.sh";
@@ -227,7 +227,7 @@ namespace NzbDrone.Core.Test.UpdateTests
         }
 
         [Test]
-        [Platform("Mono")]
+        [Platform(Exclude = "Win")]
         public void should_throw_if_script_path_does_not_exist()
         {
             const string scriptPath = "/tmp/nzbdrone/update.sh";
