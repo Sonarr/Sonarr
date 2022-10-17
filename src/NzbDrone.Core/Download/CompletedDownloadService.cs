@@ -57,7 +57,8 @@ namespace NzbDrone.Core.Download
 
         public void Check(TrackedDownload trackedDownload)
         {
-            if (trackedDownload.DownloadItem.Status != DownloadItemStatus.Completed)
+            if (trackedDownload.DownloadItem.Status != DownloadItemStatus.Completed
+                || trackedDownload.State == TrackedDownloadState.ImportPendingNotified)
             {
                 return;
             }
@@ -103,6 +104,15 @@ namespace NzbDrone.Core.Download
                 if (seriesMatchType == SeriesMatchType.Id)
                 {
                     trackedDownload.Warn("Found matching series via grab history, but release was matched to series by ID. Automatic import is not possible.");
+                    trackedDownload.State = TrackedDownloadState.ImportPendingNotified;
+
+                    var manualInteractionEvent = new ManualInteractionEvent(trackedDownload);
+
+                    manualInteractionEvent.DownloadClient = trackedDownload.DownloadItem.DownloadClientInfo.Type;
+                    manualInteractionEvent.DownloadClientId = trackedDownload.DownloadItem.DownloadClientInfo.Id;
+                    manualInteractionEvent.DownloadClientName = trackedDownload.DownloadItem.DownloadClientInfo.Name;
+
+                    _eventAggregator.PublishEvent(manualInteractionEvent);
                     return;
                 }
             }

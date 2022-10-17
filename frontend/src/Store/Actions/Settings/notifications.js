@@ -110,6 +110,7 @@ export default {
         selectedSchema.onEpisodeFileDelete = selectedSchema.supportsOnEpisodeFileDelete;
         selectedSchema.onEpisodeFileDeleteForUpgrade = selectedSchema.supportsOnEpisodeFileDeleteForUpgrade;
         selectedSchema.onApplicationUpdate = selectedSchema.supportsOnApplicationUpdate;
+        selectedSchema.onManualInteraction = selectedSchema.supportsOnManualInteraction;
 
         return selectedSchema;
       });

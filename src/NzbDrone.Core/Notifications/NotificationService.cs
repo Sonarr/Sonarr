@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
@@ -23,6 +23,7 @@ namespace NzbDrone.Core.Notifications
           IHandle<EpisodeFileDeletedEvent>,
           IHandle<HealthCheckFailedEvent>,
           IHandle<UpdateInstalledEvent>,
+          IHandle<ManualInteractionEvent>,
           IHandleAsync<DeleteCompletedEvent>,
           IHandleAsync<DownloadsProcessedEvent>,
           IHandleAsync<RenameCompletedEvent>,
@@ -212,6 +213,38 @@ namespace NzbDrone.Core.Notifications
                 catch (Exception ex)
                 {
                     _logger.Warn(ex, "Unable to send OnApplicationUpdate notification to: " + notification.Definition.Name);
+                }
+            }
+        }
+
+        public void Handle(ManualInteractionEvent message)
+        {
+            var manualInteractionMessage = new ManualInteractionMessage
+            {
+                Message = GetMessage(message.Episode.Series, message.Episode.Episodes, message.Episode.ParsedEpisodeInfo.Quality),
+                Series = message.Episode.Series,
+                Quality = message.Episode.ParsedEpisodeInfo.Quality,
+                Episode = message.Episode,
+                TrackedDownload = message.TrackedDownload,
+                DownloadClientType = message.DownloadClient,
+                DownloadClientName = message.DownloadClientName,
+                DownloadId = message.DownloadId
+            };
+
+            foreach (var notification in _notificationFactory.OnManualInteractionEnabled())
+            {
+                try
+                {
+                    if (!ShouldHandleSeries(notification.Definition, message.Episode.Series))
+                    {
+                        continue;
+                    }
+
+                    notification.OnManualInteraction(manualInteractionMessage);
+                }
+                catch (Exception ex)
+                {
+                    _logger.Error(ex, "Unable to send OnManualInteraction notification to {0}", notification.Definition.Name);
                 }
             }
         }

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Tv;
@@ -16,6 +16,7 @@ namespace NzbDrone.Core.Notifications
         void OnSeriesDelete(SeriesDeleteMessage deleteMessage);
         void OnHealthIssue(HealthCheck.HealthCheck healthCheck);
         void OnApplicationUpdate(ApplicationUpdateMessage updateMessage);
+        void OnManualInteraction(ManualInteractionMessage manualInteractionMessage);
         void ProcessQueue();
         bool SupportsOnGrab { get; }
         bool SupportsOnDownload { get; }
@@ -26,5 +27,6 @@ namespace NzbDrone.Core.Notifications
         bool SupportsOnEpisodeFileDeleteForUpgrade { get; }
         bool SupportsOnHealthIssue { get; }
         bool SupportsOnApplicationUpdate { get; }
+        bool SupportsOnManualInteraction { get; }
     }
 }

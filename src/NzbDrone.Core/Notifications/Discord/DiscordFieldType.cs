@@ -30,4 +30,18 @@ namespace NzbDrone.Core.Notifications.Discord
         Poster,
         Fanart
     }
+
+    public enum DiscordManualInteractionFieldType
+    {
+        Overview,
+        Rating,
+        Genres,
+        Quality,
+        Group,
+        Size,
+        Links,
+        Release,
+        Poster,
+        Fanart
+    }
 }

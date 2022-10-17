@@ -63,6 +63,7 @@ class Notification extends Component {
       onEpisodeFileDeleteForUpgrade,
       onHealthIssue,
       onApplicationUpdate,
+      onManualInteraction,
       supportsOnGrab,
       supportsOnDownload,
       supportsOnUpgrade,
@@ -71,7 +72,8 @@ class Notification extends Component {
       supportsOnEpisodeFileDelete,
       supportsOnEpisodeFileDeleteForUpgrade,
       supportsOnHealthIssue,
-      supportsOnApplicationUpdate
+      supportsOnApplicationUpdate,
+      supportsOnManualInteraction
     } = this.props;
 
     return (
@@ -133,6 +135,14 @@ class Notification extends Component {
         }
 
         {
+          supportsOnManualInteraction && onManualInteraction ?
+            <Label kind={kinds.SUCCESS}>
+              On Manual Interaction
+            </Label> :
+            null
+        }
+
+        {
           supportsOnSeriesDelete && onSeriesDelete ?
             <Label kind={kinds.SUCCESS}>
               On Series Delete
@@ -157,7 +167,7 @@ class Notification extends Component {
         }
 
         {
-          !onGrab && !onDownload && !onRename && !onHealthIssue && !onApplicationUpdate && !onSeriesDelete && !onEpisodeFileDelete ?
+          !onGrab && !onDownload && !onRename && !onHealthIssue && !onApplicationUpdate && !onManualInteraction && !onSeriesDelete && !onEpisodeFileDelete ?
             <Label
               kind={kinds.DISABLED}
               outline={true}
@@ -200,6 +210,7 @@ Notification.propTypes = {
   onEpisodeFileDeleteForUpgrade: PropTypes.bool.isRequired,
   onHealthIssue: PropTypes.bool.isRequired,
   onApplicationUpdate: PropTypes.bool.isRequired,
+  onManualInteraction: PropTypes.bool.isRequired,
   supportsOnGrab: PropTypes.bool.isRequired,
   supportsOnDownload: PropTypes.bool.isRequired,
   supportsOnSeriesDelete: PropTypes.bool.isRequired,
@@ -209,6 +220,7 @@ Notification.propTypes = {
   supportsOnRename: PropTypes.bool.isRequired,
   supportsOnHealthIssue: PropTypes.bool.isRequired,
   supportsOnApplicationUpdate: PropTypes.bool.isRequired,
+  supportsOnManualInteraction: PropTypes.bool.isRequired,
   onConfirmDeleteNotification: PropTypes.func.isRequired
 };
 

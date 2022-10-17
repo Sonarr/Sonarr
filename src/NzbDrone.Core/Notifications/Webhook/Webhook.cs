@@ -131,6 +131,25 @@ namespace NzbDrone.Core.Notifications.Webhook
             _proxy.SendWebhook(payload, Settings);
         }
 
+        public override void OnManualInteraction(ManualInteractionMessage manualInteractionMessage)
+        {
+            var remoteEpisode = manualInteractionMessage.Episode;
+            var quality = manualInteractionMessage.Quality;
+
+            var payload = new WebhookManualInteractionPayload
+            {
+                EventType = WebhookEventType.Grab,
+                Series = new WebhookSeries(manualInteractionMessage.Series),
+                Episodes = remoteEpisode.Episodes.ConvertAll(x => new WebhookEpisode(x)),
+                Release = new WebhookRelease(quality, remoteEpisode),
+                DownloadClient = manualInteractionMessage.DownloadClientName,
+                DownloadClientType = manualInteractionMessage.DownloadClientType,
+                DownloadId = manualInteractionMessage.DownloadId
+            };
+
+            _proxy.SendWebhook(payload, Settings);
+        }
+
         public override string Name => "Webhook";
 
         public override ValidationResult Test()

@@ -1,4 +1,4 @@
-﻿using NzbDrone.Core.Indexers;
+using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Download.TrackedDownloads
@@ -37,6 +37,7 @@ namespace NzbDrone.Core.Download.TrackedDownloads
     public enum TrackedDownloadState
     {
         Downloading,
+        ImportPendingNotified,
         ImportPending,
         Importing,
         Imported,

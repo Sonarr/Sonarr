@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using FluentAssertions;
 using FluentValidation.Results;
@@ -83,6 +83,11 @@ namespace NzbDrone.Core.Test.NotificationTests
             {
                 TestLogger.Info("OnApplicationUpdate was called");
             }
+
+            public override void OnManualInteraction(ManualInteractionMessage manualInteractionMessage)
+            {
+                TestLogger.Info("OnManualInteraction was called");
+            }
         }
 
         private class TestNotificationWithNoEvents : NotificationBase<TestSetting>
@@ -122,6 +127,7 @@ namespace NzbDrone.Core.Test.NotificationTests
             notification.SupportsOnEpisodeFileDeleteForUpgrade.Should().BeTrue();
             notification.SupportsOnHealthIssue.Should().BeTrue();
             notification.SupportsOnApplicationUpdate.Should().BeTrue();
+            notification.SupportsOnManualInteraction.Should().BeTrue();
         }
 
         [Test]
@@ -138,6 +144,7 @@ namespace NzbDrone.Core.Test.NotificationTests
             notification.SupportsOnEpisodeFileDeleteForUpgrade.Should().BeFalse();
             notification.SupportsOnHealthIssue.Should().BeFalse();
             notification.SupportsOnApplicationUpdate.Should().BeFalse();
+            notification.SupportsOnManualInteraction.Should().BeFalse();
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
@@ -15,6 +15,7 @@ namespace NzbDrone.Core.Download.TrackedDownloads
                                              IExecute<CheckForFinishedDownloadCommand>,
                                              IHandle<EpisodeGrabbedEvent>,
                                              IHandle<EpisodeImportedEvent>,
+                                             IHandle<ManualInteractionEvent>,
                                              IHandle<DownloadsProcessedEvent>,
                                              IHandle<TrackedDownloadsRemovedEvent>
     {
@@ -164,6 +165,11 @@ namespace NzbDrone.Core.Download.TrackedDownloads
         }
 
         public void Handle(EpisodeGrabbedEvent message)
+        {
+            _refreshDebounce.Execute();
+        }
+
+        public void Handle(ManualInteractionEvent message)
         {
             _refreshDebounce.Execute();
         }
