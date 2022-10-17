@@ -54,11 +54,11 @@ namespace NzbDrone.Core.Notifications.CustomScript
             var environmentVariables = new StringDictionary();
 
             environmentVariables.Add("Sonarr_EventType", "Grab");
-            environmentVariables.Add("Sonarr_InstanceName", _configFileProvider.InstanceName.ToString());
-            environmentVariables.Add("Sonarr_ApplicationUrl", _configService.ApplicationUrl.ToString());
+            environmentVariables.Add("Sonarr_InstanceName", _configFileProvider.InstanceName);
+            environmentVariables.Add("Sonarr_ApplicationUrl", _configService.ApplicationUrl);
             environmentVariables.Add("Sonarr_Series_Id", series.Id.ToString());
             environmentVariables.Add("Sonarr_Series_Title", series.Title);
-            environmentVariables.Add("Sonarr_Series_TitleSlug", series.TitleSlug.ToString());
+            environmentVariables.Add("Sonarr_Series_TitleSlug", series.TitleSlug);
             environmentVariables.Add("Sonarr_Series_TvdbId", series.TvdbId.ToString());
             environmentVariables.Add("Sonarr_Series_TvMazeId", series.TvMazeId.ToString());
             environmentVariables.Add("Sonarr_Series_ImdbId", series.ImdbId ?? string.Empty);
@@ -94,12 +94,12 @@ namespace NzbDrone.Core.Notifications.CustomScript
             var environmentVariables = new StringDictionary();
 
             environmentVariables.Add("Sonarr_EventType", "Download");
-            environmentVariables.Add("Sonarr_InstanceName", _configFileProvider.InstanceName.ToString());
-            environmentVariables.Add("Sonarr_ApplicationUrl", _configService.ApplicationUrl.ToString());
+            environmentVariables.Add("Sonarr_InstanceName", _configFileProvider.InstanceName);
+            environmentVariables.Add("Sonarr_ApplicationUrl", _configService.ApplicationUrl);
             environmentVariables.Add("Sonarr_IsUpgrade", message.OldFiles.Any().ToString());
             environmentVariables.Add("Sonarr_Series_Id", series.Id.ToString());
             environmentVariables.Add("Sonarr_Series_Title", series.Title);
-            environmentVariables.Add("Sonarr_Series_TitleSlug", series.TitleSlug.ToString());
+            environmentVariables.Add("Sonarr_Series_TitleSlug", series.TitleSlug);
             environmentVariables.Add("Sonarr_Series_Path", series.Path);
             environmentVariables.Add("Sonarr_Series_TvdbId", series.TvdbId.ToString());
             environmentVariables.Add("Sonarr_Series_TvMazeId", series.TvMazeId.ToString());
@@ -150,11 +150,11 @@ namespace NzbDrone.Core.Notifications.CustomScript
             var environmentVariables = new StringDictionary();
 
             environmentVariables.Add("Sonarr_EventType", "Rename");
-            environmentVariables.Add("Sonarr_InstanceName", _configFileProvider.InstanceName.ToString());
-            environmentVariables.Add("Sonarr_ApplicationUrl", _configService.ApplicationUrl.ToString());
+            environmentVariables.Add("Sonarr_InstanceName", _configFileProvider.InstanceName);
+            environmentVariables.Add("Sonarr_ApplicationUrl", _configService.ApplicationUrl);
             environmentVariables.Add("Sonarr_Series_Id", series.Id.ToString());
             environmentVariables.Add("Sonarr_Series_Title", series.Title);
-            environmentVariables.Add("Sonarr_Series_TitleSlug", series.TitleSlug.ToString());
+            environmentVariables.Add("Sonarr_Series_TitleSlug", series.TitleSlug);
             environmentVariables.Add("Sonarr_Series_Path", series.Path);
             environmentVariables.Add("Sonarr_Series_TvdbId", series.TvdbId.ToString());
             environmentVariables.Add("Sonarr_Series_TvMazeId", series.TvMazeId.ToString());
@@ -177,12 +177,12 @@ namespace NzbDrone.Core.Notifications.CustomScript
             var environmentVariables = new StringDictionary();
 
             environmentVariables.Add("Sonarr_EventType", "EpisodeFileDelete");
-            environmentVariables.Add("Sonarr_InstanceName", _configFileProvider.InstanceName.ToString());
-            environmentVariables.Add("Sonarr_ApplicationUrl", _configService.ApplicationUrl.ToString());
+            environmentVariables.Add("Sonarr_InstanceName", _configFileProvider.InstanceName);
+            environmentVariables.Add("Sonarr_ApplicationUrl", _configService.ApplicationUrl);
             environmentVariables.Add("Sonarr_EpisodeFile_DeleteReason", deleteMessage.Reason.ToString());
             environmentVariables.Add("Sonarr_Series_Id", series.Id.ToString());
             environmentVariables.Add("Sonarr_Series_Title", series.Title);
-            environmentVariables.Add("Sonarr_Series_TitleSlug", series.TitleSlug.ToString());
+            environmentVariables.Add("Sonarr_Series_TitleSlug", series.TitleSlug);
             environmentVariables.Add("Sonarr_Series_Path", series.Path);
             environmentVariables.Add("Sonarr_Series_TvdbId", series.TvdbId.ToString());
             environmentVariables.Add("Sonarr_Series_TvMazeId", series.TvMazeId.ToString());
@@ -213,11 +213,11 @@ namespace NzbDrone.Core.Notifications.CustomScript
             var environmentVariables = new StringDictionary();
 
             environmentVariables.Add("Sonarr_EventType", "SeriesDelete");
-            environmentVariables.Add("Sonarr_InstanceName", _configFileProvider.InstanceName.ToString());
-            environmentVariables.Add("Sonarr_ApplicationUrl", _configService.ApplicationUrl.ToString());
+            environmentVariables.Add("Sonarr_InstanceName", _configFileProvider.InstanceName);
+            environmentVariables.Add("Sonarr_ApplicationUrl", _configService.ApplicationUrl);
             environmentVariables.Add("Sonarr_Series_Id", series.Id.ToString());
             environmentVariables.Add("Sonarr_Series_Title", series.Title);
-            environmentVariables.Add("Sonarr_Series_TitleSlug", series.TitleSlug.ToString());
+            environmentVariables.Add("Sonarr_Series_TitleSlug", series.TitleSlug);
             environmentVariables.Add("Sonarr_Series_Path", series.Path);
             environmentVariables.Add("Sonarr_Series_TvdbId", series.TvdbId.ToString());
             environmentVariables.Add("Sonarr_Series_TvMazeId", series.TvMazeId.ToString());
@@ -233,8 +233,8 @@ namespace NzbDrone.Core.Notifications.CustomScript
             var environmentVariables = new StringDictionary();
 
             environmentVariables.Add("Sonarr_EventType", "HealthIssue");
-            environmentVariables.Add("Sonarr_InstanceName", _configFileProvider.InstanceName.ToString());
-            environmentVariables.Add("Sonarr_ApplicationUrl", _configService.ApplicationUrl.ToString());
+            environmentVariables.Add("Sonarr_InstanceName", _configFileProvider.InstanceName);
+            environmentVariables.Add("Sonarr_ApplicationUrl", _configService.ApplicationUrl);
             environmentVariables.Add("Sonarr_Health_Issue_Level", Enum.GetName(typeof(HealthCheckResult), healthCheck.Type));
             environmentVariables.Add("Sonarr_Health_Issue_Message", healthCheck.Message);
             environmentVariables.Add("Sonarr_Health_Issue_Type", healthCheck.Source.Name);
@@ -248,8 +248,8 @@ namespace NzbDrone.Core.Notifications.CustomScript
             var environmentVariables = new StringDictionary();
 
             environmentVariables.Add("Sonarr_EventType", "ApplicationUpdate");
-            environmentVariables.Add("Sonarr_InstanceName", _configFileProvider.InstanceName.ToString());
-            environmentVariables.Add("Sonarr_ApplicationUrl", _configService.ApplicationUrl.ToString());
+            environmentVariables.Add("Sonarr_InstanceName", _configFileProvider.InstanceName);
+            environmentVariables.Add("Sonarr_ApplicationUrl", _configService.ApplicationUrl);
             environmentVariables.Add("Sonarr_Update_Message", updateMessage.Message);
             environmentVariables.Add("Sonarr_Update_NewVersion", updateMessage.NewVersion.ToString());
             environmentVariables.Add("Sonarr_Update_PreviousVersion", updateMessage.PreviousVersion.ToString());
@@ -280,8 +280,8 @@ namespace NzbDrone.Core.Notifications.CustomScript
                 {
                     var environmentVariables = new StringDictionary();
                     environmentVariables.Add("Sonarr_EventType", "Test");
-                    environmentVariables.Add("Sonarr_InstanceName", _configFileProvider.InstanceName.ToString());
-                    environmentVariables.Add("Sonarr_ApplicationUrl", _configService.ApplicationUrl.ToString());
+                    environmentVariables.Add("Sonarr_InstanceName", _configFileProvider.InstanceName);
+                    environmentVariables.Add("Sonarr_ApplicationUrl", _configService.ApplicationUrl);
 
                     var processOutput = ExecuteScript(environmentVariables);
 
