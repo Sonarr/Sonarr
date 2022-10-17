@@ -163,7 +163,7 @@ namespace NzbDrone.Core.Download.Clients.FreeboxDownload
         {
             try
             {
-                _proxy.AuthVerify(Settings);
+                _proxy.Authenticate(Settings);
             }
             catch (DownloadClientUnavailableException ex)
             {

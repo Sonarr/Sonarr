@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Download.Clients.FreeboxDownload
 {
     public interface IFreeboxDownloadProxy
     {
-        void AuthVerify(FreeboxDownloadSettings settings);
+        void Authenticate(FreeboxDownloadSettings settings);
         string AddTaskFromUrl(string url, string directory, bool addPaused, bool addFirst, double? seedRatio, FreeboxDownloadSettings settings);
         string AddTaskFromFile(string fileName, byte[] fileContent, string directory, bool addPaused, bool addFirst, double? seedRatio, FreeboxDownloadSettings settings);
         void DeleteTask(string id, bool deleteData, FreeboxDownloadSettings settings);
@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Download.Clients.FreeboxDownload
             _authSessionTokenCache = cacheManager.GetCache<string>(GetType(), "authSessionToken");
         }
 
-        public void AuthVerify(FreeboxDownloadSettings settings)
+        public void Authenticate(FreeboxDownloadSettings settings)
         {
             var request = BuildRequest(settings).Resource("/login").Build();
 
