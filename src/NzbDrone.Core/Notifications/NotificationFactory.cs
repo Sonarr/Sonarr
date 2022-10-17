@@ -21,6 +21,7 @@ namespace NzbDrone.Core.Notifications
         List<INotification> OnHealthIssueEnabled();
         List<INotification> OnHealthRestoredEnabled();
         List<INotification> OnApplicationUpdateEnabled();
+        List<INotification> OnManualInteractionEnabled();
     }
 
     public class NotificationFactory : ProviderFactory<INotification, NotificationDefinition>, INotificationFactory
@@ -85,6 +86,11 @@ namespace NzbDrone.Core.Notifications
             return GetAvailableProviders().Where(n => ((NotificationDefinition)n.Definition).OnApplicationUpdate).ToList();
         }
 
+        public List<INotification> OnManualInteractionEnabled()
+        {
+            return GetAvailableProviders().Where(n => ((NotificationDefinition)n.Definition).OnManualInteractionRequired).ToList();
+        }
+
         public override void SetProviderCharacteristics(INotification provider, NotificationDefinition definition)
         {
             base.SetProviderCharacteristics(provider, definition);
@@ -100,6 +106,7 @@ namespace NzbDrone.Core.Notifications
             definition.SupportsOnHealthIssue = provider.SupportsOnHealthIssue;
             definition.SupportsOnHealthRestored = provider.SupportsOnHealthRestored;
             definition.SupportsOnApplicationUpdate = provider.SupportsOnApplicationUpdate;
+            definition.SupportsOnManualInteractionRequired = provider.SupportsOnManualInteractionRequired;
         }
     }
 }

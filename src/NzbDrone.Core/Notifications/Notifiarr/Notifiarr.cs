@@ -67,6 +67,11 @@ namespace NzbDrone.Core.Notifications.Notifiarr
             _proxy.SendNotification(BuildApplicationUpdatePayload(updateMessage), Settings);
         }
 
+        public override void OnManualInteractionRequired(ManualInteractionRequiredMessage message)
+        {
+            _proxy.SendNotification(BuildManualInteractionRequiredPayload(message), Settings);
+        }
+
         public override ValidationResult Test()
         {
             var failures = new List<ValidationFailure>();

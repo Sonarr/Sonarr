@@ -84,6 +84,11 @@ namespace NzbDrone.Core.Notifications.Xbmc
             Notify(Settings, APPLICATION_UPDATE_TITLE_BRANDED, updateMessage.Message);
         }
 
+        public override void OnManualInteractionRequired(ManualInteractionRequiredMessage message)
+        {
+            Notify(Settings, MANUAL_INTERACTION_REQUIRED_TITLE, message.Message);
+        }
+
         public override string Name => "Kodi";
 
         public override ValidationResult Test()

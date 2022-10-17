@@ -78,6 +78,13 @@ namespace NzbDrone.Core.Notifications.Email
             SendEmail(Settings, APPLICATION_UPDATE_TITLE_BRANDED, body);
         }
 
+        public override void OnManualInteractionRequired(ManualInteractionRequiredMessage message)
+        {
+            var body = $"{message.Message} requires manual interaction.";
+
+            SendEmail(Settings, MANUAL_INTERACTION_REQUIRED_TITLE_BRANDED, body);
+        }
+
         public override ValidationResult Test()
         {
             var failures = new List<ValidationFailure>();

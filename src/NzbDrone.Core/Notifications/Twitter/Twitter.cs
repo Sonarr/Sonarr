@@ -58,6 +58,11 @@ namespace NzbDrone.Core.Notifications.Twitter
             _twitterService.SendNotification($"Application Updated: {updateMessage.Message}", Settings);
         }
 
+        public override void OnManualInteractionRequired(ManualInteractionRequiredMessage message)
+        {
+            _twitterService.SendNotification($"Manual Interaction Required: {message.Message}", Settings);
+        }
+
         public override object RequestAction(string action, IDictionary<string, string> query)
         {
             if (action == "startOAuth")

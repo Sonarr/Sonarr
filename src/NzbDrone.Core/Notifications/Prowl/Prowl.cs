@@ -56,6 +56,11 @@ namespace NzbDrone.Core.Notifications.Prowl
             _prowlProxy.SendNotification(APPLICATION_UPDATE_TITLE, updateMessage.Message, Settings);
         }
 
+        public override void OnManualInteractionRequired(ManualInteractionRequiredMessage message)
+        {
+            _prowlProxy.SendNotification(MANUAL_INTERACTION_REQUIRED_TITLE, message.Message, Settings);
+        }
+
         public override ValidationResult Test()
         {
             var failures = new List<ValidationFailure>();

@@ -25,6 +25,7 @@ function NotificationEventItems(props) {
     onHealthIssue,
     onHealthRestored,
     onApplicationUpdate,
+    onManualInteractionRequired,
     supportsOnGrab,
     supportsOnDownload,
     supportsOnUpgrade,
@@ -34,6 +35,7 @@ function NotificationEventItems(props) {
     supportsOnEpisodeFileDelete,
     supportsOnEpisodeFileDeleteForUpgrade,
     supportsOnApplicationUpdate,
+    supportsOnManualInteractionRequired,
     supportsOnHealthIssue,
     supportsOnHealthRestored,
     includeHealthWarnings
@@ -185,6 +187,17 @@ function NotificationEventItems(props) {
               helpText="On Application Update"
               isDisabled={!supportsOnApplicationUpdate.value}
               {...onApplicationUpdate}
+              onChange={onInputChange}
+            />
+          </div>
+
+          <div>
+            <FormInputGroup
+              type={inputTypes.CHECK}
+              name="onManualInteractionRequired"
+              helpText="On Manual Interaction Required"
+              isDisabled={!supportsOnManualInteractionRequired.value}
+              {...onManualInteractionRequired}
               onChange={onInputChange}
             />
           </div>

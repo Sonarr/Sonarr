@@ -65,6 +65,7 @@ class Notification extends Component {
       onHealthIssue,
       onHealthRestored,
       onApplicationUpdate,
+      onManualInteractionRequired,
       supportsOnGrab,
       supportsOnDownload,
       supportsOnUpgrade,
@@ -75,7 +76,8 @@ class Notification extends Component {
       supportsOnEpisodeFileDeleteForUpgrade,
       supportsOnHealthIssue,
       supportsOnHealthRestored,
-      supportsOnApplicationUpdate
+      supportsOnApplicationUpdate,
+      supportsOnManualInteractionRequired
     } = this.props;
 
     return (
@@ -177,7 +179,15 @@ class Notification extends Component {
         }
 
         {
-          !onGrab && !onDownload && !onRename && !onHealthIssue && !onHealthRestored && !onApplicationUpdate && !onSeriesDelete && !onEpisodeFileDelete ?
+          supportsOnManualInteractionRequired && onManualInteractionRequired ?
+            <Label kind={kinds.SUCCESS}>
+              On Manual Interaction Required
+            </Label> :
+            null
+        }
+
+        {
+          !onGrab && !onDownload && !onRename && !onHealthIssue && !onHealthRestored && !onApplicationUpdate && !onSeriesDelete && !onEpisodeFileDelete && !onManualInteractionRequired ?
             <Label
               kind={kinds.DISABLED}
               outline={true}
@@ -222,6 +232,7 @@ Notification.propTypes = {
   onHealthIssue: PropTypes.bool.isRequired,
   onHealthRestored: PropTypes.bool.isRequired,
   onApplicationUpdate: PropTypes.bool.isRequired,
+  onManualInteractionRequired: PropTypes.bool.isRequired,
   supportsOnGrab: PropTypes.bool.isRequired,
   supportsOnDownload: PropTypes.bool.isRequired,
   supportsOnSeriesAdd: PropTypes.bool.isRequired,
@@ -233,6 +244,7 @@ Notification.propTypes = {
   supportsOnHealthIssue: PropTypes.bool.isRequired,
   supportsOnHealthRestored: PropTypes.bool.isRequired,
   supportsOnApplicationUpdate: PropTypes.bool.isRequired,
+  supportsOnManualInteractionRequired: PropTypes.bool.isRequired,
   onConfirmDeleteNotification: PropTypes.func.isRequired
 };
 

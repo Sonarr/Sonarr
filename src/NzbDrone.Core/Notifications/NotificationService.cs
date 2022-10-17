@@ -4,6 +4,7 @@ using System.Linq;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Download;
+using NzbDrone.Core.Download.TrackedDownloads;
 using NzbDrone.Core.HealthCheck;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Events;
@@ -25,6 +26,7 @@ namespace NzbDrone.Core.Notifications
           IHandle<HealthCheckFailedEvent>,
           IHandle<HealthCheckRestoredEvent>,
           IHandle<UpdateInstalledEvent>,
+          IHandle<ManualInteractionRequiredEvent>,
           IHandleAsync<DeleteCompletedEvent>,
           IHandleAsync<DownloadsProcessedEvent>,
           IHandleAsync<RenameCompletedEvent>,
@@ -216,6 +218,38 @@ namespace NzbDrone.Core.Notifications
                 catch (Exception ex)
                 {
                     _logger.Warn(ex, "Unable to send OnApplicationUpdate notification to: " + notification.Definition.Name);
+                }
+            }
+        }
+
+        public void Handle(ManualInteractionRequiredEvent message)
+        {
+            var manualInteractionMessage = new ManualInteractionRequiredMessage
+            {
+                Message = GetMessage(message.Episode.Series, message.Episode.Episodes, message.Episode.ParsedEpisodeInfo.Quality),
+                Series = message.Episode.Series,
+                Quality = message.Episode.ParsedEpisodeInfo.Quality,
+                Episode = message.Episode,
+                TrackedDownload = message.TrackedDownload,
+                DownloadClientType = message.TrackedDownload.DownloadItem.DownloadClientInfo.Type,
+                DownloadClientName = message.TrackedDownload.DownloadItem.DownloadClientInfo.Name,
+                DownloadId = message.TrackedDownload.DownloadItem.DownloadId
+            };
+
+            foreach (var notification in _notificationFactory.OnManualInteractionEnabled())
+            {
+                try
+                {
+                    if (!ShouldHandleSeries(notification.Definition, message.Episode.Series))
+                    {
+                        continue;
+                    }
+
+                    notification.OnManualInteractionRequired(manualInteractionMessage);
+                }
+                catch (Exception ex)
+                {
+                    _logger.Error(ex, "Unable to send OnManualInteractionRequired notification to {0}", notification.Definition.Name);
                 }
             }
         }

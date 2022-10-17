@@ -15,6 +15,7 @@ namespace NzbDrone.Core.Notifications
         public bool OnHealthIssue { get; set; }
         public bool OnHealthRestored { get; set; }
         public bool OnApplicationUpdate { get; set; }
+        public bool OnManualInteractionRequired { get; set; }
         public bool SupportsOnGrab { get; set; }
         public bool SupportsOnDownload { get; set; }
         public bool SupportsOnUpgrade { get; set; }
@@ -27,7 +28,8 @@ namespace NzbDrone.Core.Notifications
         public bool SupportsOnHealthRestored { get; set; }
         public bool IncludeHealthWarnings { get; set; }
         public bool SupportsOnApplicationUpdate { get; set; }
+        public bool SupportsOnManualInteractionRequired { get; set; }
 
-        public override bool Enable => OnGrab || OnDownload || (OnDownload && OnUpgrade) || OnSeriesAdd || OnSeriesDelete || OnEpisodeFileDelete || OnEpisodeFileDeleteForUpgrade || OnHealthIssue || OnHealthRestored || OnApplicationUpdate;
+        public override bool Enable => OnGrab || OnDownload || (OnDownload && OnUpgrade) || OnSeriesAdd || OnSeriesDelete || OnEpisodeFileDelete || OnEpisodeFileDeleteForUpgrade || OnHealthIssue || OnHealthRestored || OnApplicationUpdate || OnManualInteractionRequired;
     }
 }

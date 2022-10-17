@@ -158,6 +158,23 @@ namespace NzbDrone.Core.Notifications.Webhook
             };
         }
 
+        protected WebhookManualInteractionPayload BuildManualInteractionRequiredPayload(ManualInteractionRequiredMessage message)
+        {
+            var remoteEpisode = message.Episode;
+            var quality = message.Quality;
+
+            return new WebhookManualInteractionPayload
+            {
+                EventType = WebhookEventType.Grab,
+                Series = new WebhookSeries(message.Series),
+                Episodes = remoteEpisode.Episodes.ConvertAll(x => new WebhookEpisode(x)),
+                DownloadInfo = new WebhookDownloadClientItem(quality, message.TrackedDownload.DownloadItem),
+                DownloadClient = message.DownloadClientName,
+                DownloadClientType = message.DownloadClientType,
+                DownloadId = message.DownloadId
+            };
+        }
+
         protected WebhookPayload BuildTestPayload()
         {
             return new WebhookGrabPayload

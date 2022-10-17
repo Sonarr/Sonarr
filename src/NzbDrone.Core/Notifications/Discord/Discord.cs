@@ -375,6 +375,96 @@ namespace NzbDrone.Core.Notifications.Discord
             _proxy.SendPayload(payload, Settings);
         }
 
+        public override void OnManualInteractionRequired(ManualInteractionRequiredMessage message)
+        {
+            var series = message.Series;
+            var episodes = message.Episode.Episodes;
+
+            var embed = new Embed
+            {
+                Author = new DiscordAuthor
+                {
+                    Name = Settings.Author.IsNullOrWhiteSpace() ? Environment.MachineName : Settings.Author,
+                    IconUrl = "https://raw.githubusercontent.com/Sonarr/Sonarr/develop/Logo/256.png"
+                },
+                Url = $"http://thetvdb.com/?tab=series&id={series.TvdbId}",
+                Description = "Manual interaction needed",
+                Title = GetTitle(series, episodes),
+                Color = (int)DiscordColors.Standard,
+                Fields = new List<DiscordField>(),
+                Timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffZ")
+            };
+
+            if (Settings.ManualInteractionFields.Contains((int)DiscordGrabFieldType.Poster))
+            {
+                embed.Thumbnail = new DiscordImage
+                {
+                    Url = series.Images.FirstOrDefault(x => x.CoverType == MediaCoverTypes.Poster)?.Url
+                };
+            }
+
+            if (Settings.ManualInteractionFields.Contains((int)DiscordGrabFieldType.Fanart))
+            {
+                embed.Image = new DiscordImage
+                {
+                    Url = series.Images.FirstOrDefault(x => x.CoverType == MediaCoverTypes.Fanart)?.Url
+                };
+            }
+
+            foreach (var field in Settings.ManualInteractionFields)
+            {
+                var discordField = new DiscordField();
+
+                switch ((DiscordManualInteractionFieldType)field)
+                {
+                    case DiscordManualInteractionFieldType.Overview:
+                        var overview = episodes.First().Overview ?? "";
+                        discordField.Name = "Overview";
+                        discordField.Value = overview.Length <= 300 ? overview : $"{overview.AsSpan(0, 300)}...";
+                        break;
+                    case DiscordManualInteractionFieldType.Rating:
+                        discordField.Name = "Rating";
+                        discordField.Value = episodes.First().Ratings.Value.ToString();
+                        break;
+                    case DiscordManualInteractionFieldType.Genres:
+                        discordField.Name = "Genres";
+                        discordField.Value = series.Genres.Take(5).Join(", ");
+                        break;
+                    case DiscordManualInteractionFieldType.Quality:
+                        discordField.Name = "Quality";
+                        discordField.Inline = true;
+                        discordField.Value = message.Quality.Quality.Name;
+                        break;
+                    case DiscordManualInteractionFieldType.Group:
+                        discordField.Name = "Group";
+                        discordField.Value = message.Episode.ParsedEpisodeInfo.ReleaseGroup;
+                        break;
+                    case DiscordManualInteractionFieldType.Size:
+                        discordField.Name = "Size";
+                        discordField.Value = BytesToString(message.TrackedDownload.DownloadItem.TotalSize);
+                        discordField.Inline = true;
+                        break;
+                    case DiscordManualInteractionFieldType.DownloadTitle:
+                        discordField.Name = "Download";
+                        discordField.Value = string.Format("```{0}```", message.TrackedDownload.DownloadItem.Title);
+                        break;
+                    case DiscordManualInteractionFieldType.Links:
+                        discordField.Name = "Links";
+                        discordField.Value = GetLinksString(series);
+                        break;
+                }
+
+                if (discordField.Name.IsNotNullOrWhiteSpace() && discordField.Value.IsNotNullOrWhiteSpace())
+                {
+                    embed.Fields.Add(discordField);
+                }
+            }
+
+            var payload = CreatePayload(null, new List<Embed> { embed });
+
+            _proxy.SendPayload(payload, Settings);
+        }
+
         public override ValidationResult Test()
         {
             var failures = new List<ValidationFailure>();

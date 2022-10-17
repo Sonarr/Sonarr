@@ -21,6 +21,7 @@ namespace NzbDrone.Core.Notifications.Discord
             // Set Default Fields
             GrabFields = new[] { 0, 1, 2, 3, 5, 6, 7, 8, 9 };
             ImportFields = new[] { 0, 1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12 };
+            ManualInteractionFields = new[] { 0, 1, 2, 3, 5, 6, 7, 8, 9 };
         }
 
         private static readonly DiscordSettingsValidator Validator = new DiscordSettingsValidator();
@@ -42,6 +43,9 @@ namespace NzbDrone.Core.Notifications.Discord
 
         [FieldDefinition(5, Label = "On Import Fields", Advanced = true, SelectOptions = typeof(DiscordImportFieldType), HelpText = "Change the fields that are passed for this 'on import' notification", Type = FieldType.TagSelect)]
         public IEnumerable<int> ImportFields { get; set; }
+
+        [FieldDefinition(6, Label = "On Manual Interaction Fields", Advanced = true, SelectOptions = typeof(DiscordManualInteractionFieldType), HelpText = "Change the fields that are passed for this 'on manual interaction' notification", Type = FieldType.TagSelect)]
+        public IEnumerable<int> ManualInteractionFields { get; set; }
 
         public NzbDroneValidationResult Validate()
         {

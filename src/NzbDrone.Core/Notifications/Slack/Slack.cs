@@ -168,6 +168,23 @@ namespace NzbDrone.Core.Notifications.Slack
             _proxy.SendPayload(payload, Settings);
         }
 
+        public override void OnManualInteractionRequired(ManualInteractionRequiredMessage message)
+        {
+            var attachments = new List<Attachment>
+            {
+                new Attachment
+                {
+                    Title = Environment.MachineName,
+                    Text = message.Message,
+                    Color = "warning"
+                }
+            };
+
+            var payload = CreatePayload("Manual Interaction Required", attachments);
+
+            _proxy.SendPayload(payload, Settings);
+        }
+
         public override ValidationResult Test()
         {
             var failures = new List<ValidationFailure>();

@@ -105,6 +105,15 @@ namespace NzbDrone.Core.Download
                 if (seriesMatchType == SeriesMatchType.Id && releaseSource != ReleaseSourceType.InteractiveSearch)
                 {
                     trackedDownload.Warn("Found matching series via grab history, but release was matched to series by ID. Automatic import is not possible. See the FAQ for details.");
+
+                    if (!trackedDownload.HasNotifiedManualInteractionRequired)
+                    {
+                        trackedDownload.HasNotifiedManualInteractionRequired = true;
+
+                        var manualInteractionEvent = new ManualInteractionRequiredEvent(trackedDownload);
+                        _eventAggregator.PublishEvent(manualInteractionEvent);
+                    }
+
                     return;
                 }
             }
