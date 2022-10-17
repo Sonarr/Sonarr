@@ -120,11 +120,6 @@ namespace NzbDrone.Core.Download.Clients.FreeboxDownload
 
         private void SetTorrentSettings(string id, bool addPaused, bool addFirst, double? seedRatio, FreeboxDownloadSettings settings)
         {
-            if (!addPaused && !addFirst && seedRatio == null)
-            {
-                return;
-            }
-
             var request = BuildRequest(settings).Resource("/downloads/" + id).Build();
 
             request.Method = HttpMethod.Put;
@@ -145,6 +140,11 @@ namespace NzbDrone.Core.Download.Clients.FreeboxDownload
             {
                 // 0 means unlimited seeding
                 body.Add("stop_ratio", seedRatio);
+            }
+
+            if (body.Count == 0)
+            {
+                return;
             }
 
             request.SetContent(body.ToJson());
