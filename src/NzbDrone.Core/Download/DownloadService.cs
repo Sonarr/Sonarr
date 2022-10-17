@@ -109,7 +109,7 @@ namespace NzbDrone.Core.Download
                 episodeGrabbedEvent.DownloadId = downloadClientId;
             }
 
-            _logger.ProgressInfo("Report sent to {0}. {1}", downloadClient.Definition.Name, downloadTitle);
+            _logger.ProgressInfo("Report sent to {0}. Indexer {1}. {2}", downloadClient.Definition.Name, remoteEpisode.Release.Indexer, downloadTitle);
             _eventAggregator.PublishEvent(episodeGrabbedEvent);
         }
     }
