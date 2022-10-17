@@ -12,6 +12,7 @@ using NzbDrone.Core.History;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
 using NzbDrone.Core.Messaging.Events;
+using NzbDrone.Core.Notifications;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
@@ -58,7 +59,7 @@ namespace NzbDrone.Core.Download
         public void Check(TrackedDownload trackedDownload)
         {
             if (trackedDownload.DownloadItem.Status != DownloadItemStatus.Completed
-                || trackedDownload.State == TrackedDownloadState.ImportPendingNotified)
+                || trackedDownload.IsManualInteractionNotified)
             {
                 return;
             }
@@ -104,7 +105,7 @@ namespace NzbDrone.Core.Download
                 if (seriesMatchType == SeriesMatchType.Id)
                 {
                     trackedDownload.Warn("Found matching series via grab history, but release was matched to series by ID. Automatic import is not possible.");
-                    trackedDownload.State = TrackedDownloadState.ImportPendingNotified;
+                    trackedDownload.IsManualInteractionNotified = true;
 
                     var manualInteractionEvent = new ManualInteractionEvent(trackedDownload);
 
