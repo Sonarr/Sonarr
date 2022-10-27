@@ -144,7 +144,7 @@ namespace NzbDrone.Common.Http.Dispatchers
 
             headers.Add(responseMessage.Content.Headers.ToNameValueCollection());
 
-            return new HttpResponse(request, new HttpHeader(responseMessage.Headers), data, responseMessage.StatusCode);
+            return new HttpResponse(request, new HttpHeader(headers), data, responseMessage.StatusCode);
         }
 
         protected virtual System.Net.Http.HttpClient GetClient(HttpUri uri)
