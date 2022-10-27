@@ -5,6 +5,7 @@ using System.Linq;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Instrumentation.Extensions;
+using NzbDrone.Core.AutoTagging;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Exceptions;
 using NzbDrone.Core.MediaFiles;
@@ -26,6 +27,7 @@ namespace NzbDrone.Core.Tv
         private readonly IDiskScanService _diskScanService;
         private readonly ICheckIfSeriesShouldBeRefreshed _checkIfSeriesShouldBeRefreshed;
         private readonly IConfigService _configService;
+        private readonly IAutoTaggingService _autoTagService;
         private readonly Logger _logger;
 
         public RefreshSeriesService(IProvideSeriesInfo seriesInfo,
@@ -35,6 +37,7 @@ namespace NzbDrone.Core.Tv
                                     IDiskScanService diskScanService,
                                     ICheckIfSeriesShouldBeRefreshed checkIfSeriesShouldBeRefreshed,
                                     IConfigService configService,
+                                    IAutoTaggingService autoTagService,
                                     Logger logger)
         {
             _seriesInfo = seriesInfo;
@@ -44,6 +47,7 @@ namespace NzbDrone.Core.Tv
             _diskScanService = diskScanService;
             _checkIfSeriesShouldBeRefreshed = checkIfSeriesShouldBeRefreshed;
             _configService = configService;
+            _autoTagService = autoTagService;
             _logger = logger;
         }
 
@@ -189,6 +193,39 @@ namespace NzbDrone.Core.Tv
             }
         }
 
+        private void UpdateTags(Series series)
+        {
+            _logger.Trace("Updating tags for {0}", series);
+
+            var tagsAdded = new HashSet<int>();
+            var tagsRemoved = new HashSet<int>();
+            var changes = _autoTagService.GetTagChanges(series);
+
+            foreach (var tag in changes.TagsToRemove)
+            {
+                if (series.Tags.Contains(tag))
+                {
+                    series.Tags.Remove(tag);
+                    tagsRemoved.Add(tag);
+                }
+            }
+
+            foreach (var tag in changes.TagsToAdd)
+            {
+                if (!series.Tags.Contains(tag))
+                {
+                    series.Tags.Add(tag);
+                    tagsAdded.Add(tag);
+                }
+            }
+
+            if (tagsAdded.Any() || tagsRemoved.Any())
+            {
+                _seriesService.UpdateSeries(series);
+                _logger.Debug("Updated tags for '{0}'. Added: {1}, Removed: {2}", series.Title, tagsAdded.Count, tagsRemoved.Count);
+            }
+        }
+
         public void Execute(RefreshSeriesCommand message)
         {
             var trigger = message.Trigger;
@@ -202,6 +239,7 @@ namespace NzbDrone.Core.Tv
                 try
                 {
                     series = RefreshSeriesInfo(message.SeriesId.Value);
+                    UpdateTags(series);
                     RescanSeries(series, isNew, trigger);
                 }
                 catch (SeriesNotFoundException)
@@ -211,6 +249,7 @@ namespace NzbDrone.Core.Tv
                 catch (Exception e)
                 {
                     _logger.Error(e, "Couldn't refresh info for {0}", series);
+                    UpdateTags(series);
                     RescanSeries(series, isNew, trigger);
                     throw;
                 }
@@ -238,11 +277,13 @@ namespace NzbDrone.Core.Tv
                             _logger.Error(e, "Couldn't refresh info for {0}", seriesLocal);
                         }
 
+                        UpdateTags(series);
                         RescanSeries(seriesLocal, false, trigger);
                     }
                     else
                     {
                         _logger.Info("Skipping refresh of series: {0}", seriesLocal.Title);
+                        UpdateTags(series);
                         RescanSeries(seriesLocal, false, trigger);
                     }
                 }

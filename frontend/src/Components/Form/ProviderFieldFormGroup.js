@@ -35,6 +35,8 @@ function getType({ type, selectOptionsProviderAction }) {
       return inputTypes.TEXT;
     case 'oAuth':
       return inputTypes.OAUTH;
+    case 'rootFolder':
+      return inputTypes.ROOT_FOLDER_SELECT;
     default:
       return inputTypes.TEXT;
   }

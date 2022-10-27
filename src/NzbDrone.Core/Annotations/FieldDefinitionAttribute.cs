@@ -64,7 +64,8 @@ namespace NzbDrone.Core.Annotations
         Captcha,
         OAuth,
         Device,
-        TagSelect
+        TagSelect,
+        RootFolder
     }
 
     public enum HiddenType

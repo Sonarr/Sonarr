@@ -77,6 +77,14 @@ function createMatchingIndexersSelector() {
   );
 }
 
+function createMatchingAutoTagsSelector() {
+  return createSelector(
+    (state, { autoTagIds }) => autoTagIds,
+    (state) => state.settings.autoTaggings.items,
+    findMatchingItems
+  );
+}
+
 function createMapStateToProps() {
   return createSelector(
     createMatchingSeriesSelector(),
@@ -85,14 +93,16 @@ function createMapStateToProps() {
     createMatchingNotificationsSelector(),
     createMatchingReleaseProfilesSelector(),
     createMatchingIndexersSelector(),
-    (series, delayProfiles, importLists, notifications, releaseProfiles, indexers) => {
+    createMatchingAutoTagsSelector(),
+    (series, delayProfiles, importLists, notifications, releaseProfiles, indexers, autoTags) => {
       return {
         series,
         delayProfiles,
         importLists,
         notifications,
         releaseProfiles,
-        indexers
+        indexers,
+        autoTags
       };
     }
   );

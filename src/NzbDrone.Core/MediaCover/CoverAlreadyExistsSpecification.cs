@@ -1,4 +1,4 @@
-﻿using NzbDrone.Common.Disk;
+using NzbDrone.Common.Disk;
 using NzbDrone.Common.Http;
 
 namespace NzbDrone.Core.MediaCover
