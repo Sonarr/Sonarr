@@ -3,7 +3,7 @@
     <TargetFrameworks>net6.0</TargetFrameworks>
   </PropertyGroup>
   <!--
-       The netstandard veresion here doesn't work in net framework
+       The netstandard version here doesn't work in net framework
        See https://github.com/xamarin/XamarinComponents/issues/282
   -->
   <ItemGroup>

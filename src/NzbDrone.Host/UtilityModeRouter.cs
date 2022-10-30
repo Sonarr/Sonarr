@@ -77,7 +77,7 @@ namespace NzbDrone.Host
 
                 case ApplicationModes.RegisterUrl:
                     {
-                        _logger.Debug("Regiser URL selected");
+                        _logger.Debug("Register URL selected");
                         _remoteAccessAdapter.MakeAccessible(false);
 
                         break;

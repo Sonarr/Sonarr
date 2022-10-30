@@ -132,7 +132,7 @@ class SeriesIndexPosterOptionsModalContent extends Component {
                 type={inputTypes.CHECK}
                 name="detailedProgressBar"
                 value={detailedProgressBar}
-                helpText="Show text on progess bar"
+                helpText="Show text on progress bar"
                 onChange={this.onChangePosterOption}
               />
             </FormGroup>
