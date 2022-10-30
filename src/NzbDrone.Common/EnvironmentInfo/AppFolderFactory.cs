@@ -69,7 +69,7 @@ namespace NzbDrone.Common.EnvironmentInfo
             }
             catch (Exception ex)
             {
-                _logger.Warn(ex, "Coudn't set app folder permission");
+                _logger.Warn(ex, "Couldn't set app folder permission");
             }
         }
 

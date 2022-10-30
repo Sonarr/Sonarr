@@ -106,7 +106,7 @@ namespace NzbDrone.Core.ImportLists
 
                 if (excludedSeries != null)
                 {
-                    _logger.Debug("{0} [{1}] Rejected due to list exlcusion", report.TvdbId, report.Title);
+                    _logger.Debug("{0} [{1}] Rejected due to list exclusion", report.TvdbId, report.Title);
                     continue;
                 }
 

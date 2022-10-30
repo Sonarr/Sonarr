@@ -124,7 +124,7 @@ namespace NzbDrone.Core.DecisionEngine
         private int ComparePeersIfTorrent(DownloadDecision x, DownloadDecision y)
         {
             // Different protocols should get caught when checking the preferred protocol,
-            // since we're dealing with the same series in our comparisions
+            // since we're dealing with the same series in our comparisons
             if (x.RemoteEpisode.Release.DownloadProtocol != DownloadProtocol.Torrent ||
                 y.RemoteEpisode.Release.DownloadProtocol != DownloadProtocol.Torrent)
             {

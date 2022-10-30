@@ -57,7 +57,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 }
                 catch (Exception ex)
                 {
-                    _logger.Error(ex, "Unknown error occured in DownloadClientRootFolderCheck HealthCheck");
+                    _logger.Error(ex, "Unknown error occurred in DownloadClientRootFolderCheck HealthCheck");
                 }
             }
 

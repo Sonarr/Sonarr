@@ -113,7 +113,7 @@ namespace NzbDrone.Common.Instrumentation.Sentry
             _debounce = new SentryDebounce();
 
             // initialize to true and reconfigure later
-            // Otherwise it will default to false and any errors occuring
+            // Otherwise it will default to false and any errors occurring
             // before config file gets read will not be filtered
             FilterEvents = true;
 

@@ -46,7 +46,7 @@ namespace NzbDrone.Common.Test.Http
             // Use mirrors for tests that use two hosts
             var candidates = new[] { "httpbin1.servarr.com" };
 
-            // httpbin.org is broken right now, occassionally redirecting to https if it's unavailable.
+            // httpbin.org is broken right now, occasionally redirecting to https if it's unavailable.
             _httpBinHost = mainHost;
             _httpBinHosts = candidates.Where(IsTestSiteAvailable).ToArray();
 

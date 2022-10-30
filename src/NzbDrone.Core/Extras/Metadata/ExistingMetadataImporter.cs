@@ -43,7 +43,7 @@ namespace NzbDrone.Core.Extras.Metadata
 
             foreach (var possibleMetadataFile in filterResult.FilesOnDisk)
             {
-                // Don't process files that have known Subtitle file extensions (saves a bit of unecessary processing)
+                // Don't process files that have known Subtitle file extensions (saves a bit of unnecessary processing)
 
                 if (SubtitleFileExtensions.Extensions.Contains(Path.GetExtension(possibleMetadataFile)))
                 {

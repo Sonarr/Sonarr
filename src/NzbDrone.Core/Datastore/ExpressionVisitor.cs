@@ -87,7 +87,7 @@ namespace NzbDrone.Core.Datastore
         }
 
         /// <summary>
-        /// Visits the memeber access expression. To be implemented by user.
+        /// Visits the member access expression. To be implemented by user.
         /// </summary>
         /// <param name="expression"></param>
         /// <returns></returns>
