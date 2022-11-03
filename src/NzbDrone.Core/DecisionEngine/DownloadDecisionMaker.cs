@@ -88,6 +88,11 @@ namespace NzbDrone.Core.DecisionEngine
                         }
                     }
 
+                    if (report.Size > 0)
+                    {
+                        parsedEpisodeInfo.ExtraInfo.Add("Size", report.Size);
+                    }
+
                     if (parsedEpisodeInfo != null && !parsedEpisodeInfo.SeriesTitle.IsNullOrWhiteSpace())
                     {
                         var remoteEpisode = _parsingService.Map(parsedEpisodeInfo, report.TvdbId, report.TvRageId, searchCriteria);
