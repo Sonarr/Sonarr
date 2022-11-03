@@ -1,5 +1,5 @@
 name: Bug Report
-description: 'Support Requests will be closed immediately, if you are not 100% certain this is a bug please go to our Reddit, Discord, Forums, or IRC first. Exceptions do not mean you found a bug! Sonarr v2 is end of life and not supported. Sonarr v4 is non-public and not supported.'
+description: 'Support Requests will be closed immediately, if you are not 100% certain this is a bug please go to our Reddit, Discord, Forums, or IRC first. Exceptions do not mean you found a bug! Sonarr v2 is end of life and not supported.'
 labels: ['needs-triage']
 body:
 - type: checkboxes
