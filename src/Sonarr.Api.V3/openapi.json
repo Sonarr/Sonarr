@@ -3020,56 +3020,36 @@
         }
       }
     },
-    "/api/v3/languageprofile": {
-      "post": {
+    "/api/v3/language": {
+      "get": {
         "tags": [
-          "LanguageProfile"
+          "Language"
         ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/LanguageProfileResource"
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "Success",
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/LanguageProfileResource"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LanguageResource"
+                  }
                 }
               },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/LanguageProfileResource"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/LanguageProfileResource"
-                }
-              }
-            }
-          }
-        }
-      },
-      "get": {
-        "tags": [
-          "LanguageProfile"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
               "application/json": {
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/LanguageProfileResource"
+                    "$ref": "#/components/schemas/LanguageResource"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LanguageResource"
                   }
                 }
               }
@@ -3078,77 +3058,10 @@
         }
       }
     },
-    "/api/v3/languageprofile/{id}": {
-      "delete": {
-        "tags": [
-          "LanguageProfile"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success"
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "LanguageProfile"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/LanguageProfileResource"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/LanguageProfileResource"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/LanguageProfileResource"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/LanguageProfileResource"
-                }
-              }
-            }
-          }
-        }
-      },
+    "/api/v3/language/{id}": {
       "get": {
         "tags": [
-          "LanguageProfile"
+          "Language"
         ],
         "parameters": [
           {
@@ -3167,7 +3080,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/LanguageProfileResource"
+                  "$ref": "#/components/schemas/LanguageResource"
                 }
               }
             }
@@ -3175,10 +3088,10 @@
         }
       }
     },
-    "/api/v3/languageprofile/schema": {
+    "/api/v3/localization": {
       "get": {
         "tags": [
-          "LanguageProfileSchema"
+          "Localization"
         ],
         "responses": {
           "200": {
@@ -3186,7 +3099,37 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/LanguageProfileResource"
+                  "$ref": "#/components/schemas/LocalizationResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v3/localization/{id}": {
+      "get": {
+        "tags": [
+          "Localization"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LocalizationResource"
                 }
               }
             }
@@ -6715,8 +6658,12 @@
             "type": "string",
             "nullable": true
           },
-          "language": {
-            "$ref": "#/components/schemas/Language"
+          "languages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Language"
+            },
+            "nullable": true
           },
           "quality": {
             "$ref": "#/components/schemas/QualityModel"
@@ -6816,6 +6763,10 @@
             "readOnly": true
           },
           "isExclusive": {
+            "type": "boolean",
+            "readOnly": true
+          },
+          "isLongRunning": {
             "type": "boolean",
             "readOnly": true
           },
@@ -7221,8 +7172,12 @@
             },
             "nullable": true
           },
-          "language": {
-            "$ref": "#/components/schemas/Language"
+          "languages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Language"
+            },
+            "nullable": true
           },
           "quality": {
             "$ref": "#/components/schemas/QualityModel"
@@ -7277,8 +7232,12 @@
             "type": "string",
             "nullable": true
           },
-          "language": {
-            "$ref": "#/components/schemas/Language"
+          "languages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Language"
+            },
+            "nullable": true
           },
           "quality": {
             "$ref": "#/components/schemas/QualityModel"
@@ -7294,9 +7253,6 @@
             "$ref": "#/components/schemas/MediaInfoResource"
           },
           "qualityCutoffNotMet": {
-            "type": "boolean"
-          },
-          "languageCutoffNotMet": {
             "type": "boolean"
           }
         },
@@ -7607,8 +7563,12 @@
             "type": "string",
             "nullable": true
           },
-          "language": {
-            "$ref": "#/components/schemas/Language"
+          "languages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Language"
+            },
+            "nullable": true
           },
           "quality": {
             "$ref": "#/components/schemas/QualityModel"
@@ -7621,9 +7581,6 @@
             "nullable": true
           },
           "qualityCutoffNotMet": {
-            "type": "boolean"
-          },
-          "languageCutoffNotMet": {
             "type": "boolean"
           },
           "date": {
@@ -7764,6 +7721,10 @@
             "nullable": true
           },
           "instanceName": {
+            "type": "string",
+            "nullable": true
+          },
+          "applicationUrl": {
             "type": "string",
             "nullable": true
           },
@@ -7951,10 +7912,6 @@
             "type": "integer",
             "format": "int32"
           },
-          "languageProfileId": {
-            "type": "integer",
-            "format": "int32"
-          },
           "seriesType": {
             "$ref": "#/components/schemas/SeriesTypes"
           },
@@ -7976,7 +7933,8 @@
           "program",
           "plex",
           "trakt",
-          "other"
+          "other",
+          "advanced"
         ],
         "type": "string"
       },
@@ -8081,6 +8039,10 @@
             "type": "integer",
             "format": "int32"
           },
+          "seasonSearchMaximumSingleEpisodeAge": {
+            "type": "integer",
+            "format": "int32"
+          },
           "downloadClientId": {
             "type": "integer",
             "format": "int32"
@@ -8102,23 +8064,7 @@
         },
         "additionalProperties": false
       },
-      "LanguageProfileItemResource": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "language": {
-            "$ref": "#/components/schemas/Language"
-          },
-          "allowed": {
-            "type": "boolean"
-          }
-        },
-        "additionalProperties": false
-      },
-      "LanguageProfileResource": {
+      "LanguageResource": {
         "type": "object",
         "properties": {
           "id": {
@@ -8129,16 +8075,26 @@
             "type": "string",
             "nullable": true
           },
-          "upgradeAllowed": {
-            "type": "boolean"
+          "nameLower": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "LocalizationResource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
           },
-          "cutoff": {
-            "$ref": "#/components/schemas/Language"
-          },
-          "languages": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/LanguageProfileItemResource"
+          "strings": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "nullable": true
             },
             "nullable": true
           }
@@ -8286,8 +8242,12 @@
           "quality": {
             "$ref": "#/components/schemas/QualityModel"
           },
-          "language": {
-            "$ref": "#/components/schemas/Language"
+          "languages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Language"
+            },
+            "nullable": true
           },
           "releaseGroup": {
             "type": "string",
@@ -8361,8 +8321,12 @@
           "quality": {
             "$ref": "#/components/schemas/QualityModel"
           },
-          "language": {
-            "$ref": "#/components/schemas/Language"
+          "languages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Language"
+            },
+            "nullable": true
           },
           "qualityWeight": {
             "type": "integer",
@@ -8913,8 +8877,12 @@
             "type": "string",
             "nullable": true
           },
-          "language": {
-            "$ref": "#/components/schemas/Language"
+          "languages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Language"
+            },
+            "nullable": true
           },
           "fullSeason": {
             "type": "boolean"
@@ -9223,8 +9191,12 @@
           "episode": {
             "$ref": "#/components/schemas/EpisodeResource"
           },
-          "language": {
-            "$ref": "#/components/schemas/Language"
+          "languages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Language"
+            },
+            "nullable": true
           },
           "quality": {
             "$ref": "#/components/schemas/QualityModel"
@@ -9510,8 +9482,12 @@
             "type": "integer",
             "format": "int32"
           },
-          "language": {
-            "$ref": "#/components/schemas/Language"
+          "languages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Language"
+            },
+            "nullable": true
           },
           "languageWeight": {
             "type": "integer",
@@ -9932,11 +9908,6 @@
             "format": "int32",
             "nullable": true
           },
-          "languageProfileId": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
           "seriesType": {
             "$ref": "#/components/schemas/SeriesTypes"
           },
@@ -10053,10 +10024,6 @@
             "nullable": true
           },
           "qualityProfileId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "languageProfileId": {
             "type": "integer",
             "format": "int32"
           },
@@ -10480,6 +10447,10 @@
           "theme": {
             "type": "string",
             "nullable": true
+          },
+          "uiLanguage": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false
