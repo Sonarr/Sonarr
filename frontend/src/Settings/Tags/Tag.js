@@ -122,7 +122,7 @@ class Tag extends Component {
               {
                 restrictionIds.length ?
                   <div>
-                    {restrictionIds.length} restriction{restrictionIds.length > 1 && 's'}
+                    {restrictionIds.length} release profile{restrictionIds.length > 1 && 's'}
                   </div> :
                   null
               }
