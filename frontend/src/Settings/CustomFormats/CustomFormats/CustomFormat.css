@@ -36,3 +36,9 @@
   margin: 0;
   border: none;
 }
+
+.label {
+  composes: label from '~Components/Label.css';
+
+  max-width: 100%;
+}
