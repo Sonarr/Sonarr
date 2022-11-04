@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using FFMpegCore;
 using NzbDrone.Core.Datastore;
 
@@ -22,8 +21,6 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
         public long VideoBitrate { get; set; }
 
         public int VideoBitDepth { get; set; }
-
-        public int VideoMultiViewCount { get; set; }
 
         public string VideoColourPrimaries { get; set; }
 

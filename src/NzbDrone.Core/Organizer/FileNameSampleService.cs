@@ -103,7 +103,6 @@ namespace NzbDrone.Core.Organizer
             {
                 VideoFormat = "AVC",
                 VideoBitDepth = 10,
-                VideoMultiViewCount = 2,
                 VideoColourPrimaries = "bt2020",
                 VideoTransferCharacteristics = "HLG",
                 AudioFormat = "DTS",
