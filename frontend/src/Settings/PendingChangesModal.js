@@ -19,7 +19,7 @@ function PendingChangesModal(props) {
 
   useEffect(() => {
     bindShortcut('enter', onConfirm);
-  }, [onConfirm]);
+  }, [bindShortcut, onConfirm]);
 
   return (
     <Modal

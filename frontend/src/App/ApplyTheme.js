@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment, useCallback, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import themes from 'Styles/Themes';
@@ -19,7 +19,8 @@ function createMapStateToProps() {
 
 function ApplyTheme({ theme, children }) {
   // Update the CSS Variables
-  function updateCSSVariables() {
+
+  const updateCSSVariables = useCallback(() => {
     const arrayOfVariableKeys = Object.keys(themes[theme]);
     const arrayOfVariableValues = Object.values(themes[theme]);
 
@@ -31,12 +32,12 @@ function ApplyTheme({ theme, children }) {
         arrayOfVariableValues[index]
       );
     });
-  }
+  }, [theme]);
 
   // On Component Mount and Component Update
   useEffect(() => {
     updateCSSVariables(theme);
-  }, [theme]);
+  }, [updateCSSVariables, theme]);
 
   return <Fragment>{children}</Fragment>;
 }

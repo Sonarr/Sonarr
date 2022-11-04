@@ -33,7 +33,7 @@ function ConfirmModal(props) {
 
       return () => unbindShortcut('enter', onConfirm);
     }
-  }, [isOpen, onConfirm]);
+  }, [bindShortcut, unbindShortcut, isOpen, onConfirm]);
 
   return (
     <Modal
