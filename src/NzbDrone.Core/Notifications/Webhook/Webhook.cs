@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using FluentValidation.Results;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Validation;
@@ -11,10 +12,16 @@ namespace NzbDrone.Core.Notifications.Webhook
 {
     public class Webhook : NotificationBase<WebhookSettings>
     {
+        private readonly IConfigFileProvider _configFileProvider;
+        private readonly IConfigService _configService;
         private readonly IWebhookProxy _proxy;
 
-        public Webhook(IWebhookProxy proxy)
+        public Webhook(IConfigFileProvider configFileProvider,
+            IConfigService configService,
+            IWebhookProxy proxy)
         {
+            _configFileProvider = configFileProvider;
+            _configService = configService;
             _proxy = proxy;
         }
 
@@ -28,6 +35,8 @@ namespace NzbDrone.Core.Notifications.Webhook
             var payload = new WebhookGrabPayload
             {
                 EventType = WebhookEventType.Grab,
+                InstanceName = _configFileProvider.InstanceName,
+                ApplicationUrl = _configService.ApplicationUrl,
                 Series = new WebhookSeries(message.Series),
                 Episodes = remoteEpisode.Episodes.ConvertAll(x => new WebhookEpisode(x)),
                 Release = new WebhookRelease(quality, remoteEpisode),
@@ -46,6 +55,8 @@ namespace NzbDrone.Core.Notifications.Webhook
             var payload = new WebhookImportPayload
             {
                 EventType = WebhookEventType.Download,
+                InstanceName = _configFileProvider.InstanceName,
+                ApplicationUrl = _configService.ApplicationUrl,
                 Series = new WebhookSeries(message.Series),
                 Episodes = episodeFile.Episodes.Value.ConvertAll(x => new WebhookEpisode(x)),
                 EpisodeFile = new WebhookEpisodeFile(episodeFile),
@@ -71,6 +82,8 @@ namespace NzbDrone.Core.Notifications.Webhook
             var payload = new WebhookRenamePayload
             {
                 EventType = WebhookEventType.Rename,
+                InstanceName = _configFileProvider.InstanceName,
+                ApplicationUrl = _configService.ApplicationUrl,
                 Series = new WebhookSeries(series),
                 RenamedEpisodeFiles = renamedFiles.ConvertAll(x => new WebhookRenamedEpisodeFile(x))
             };
@@ -83,6 +96,8 @@ namespace NzbDrone.Core.Notifications.Webhook
             var payload = new WebhookEpisodeDeletePayload
             {
                 EventType = WebhookEventType.EpisodeFileDelete,
+                InstanceName = _configFileProvider.InstanceName,
+                ApplicationUrl = _configService.ApplicationUrl,
                 Series = new WebhookSeries(deleteMessage.Series),
                 Episodes = deleteMessage.EpisodeFile.Episodes.Value.ConvertAll(x => new WebhookEpisode(x)),
                 EpisodeFile = deleteMessage.EpisodeFile,
@@ -97,6 +112,8 @@ namespace NzbDrone.Core.Notifications.Webhook
             var payload = new WebhookSeriesDeletePayload
             {
                 EventType = WebhookEventType.SeriesDelete,
+                InstanceName = _configFileProvider.InstanceName,
+                ApplicationUrl = _configService.ApplicationUrl,
                 Series = new WebhookSeries(deleteMessage.Series),
                 DeletedFiles = deleteMessage.DeletedFiles
             };
@@ -109,6 +126,8 @@ namespace NzbDrone.Core.Notifications.Webhook
             var payload = new WebhookHealthPayload
             {
                 EventType = WebhookEventType.Health,
+                InstanceName = _configFileProvider.InstanceName,
+                ApplicationUrl = _configService.ApplicationUrl,
                 Level = healthCheck.Type,
                 Message = healthCheck.Message,
                 Type = healthCheck.Source.Name,
@@ -123,6 +142,8 @@ namespace NzbDrone.Core.Notifications.Webhook
             var payload = new WebhookApplicationUpdatePayload
             {
                 EventType = WebhookEventType.ApplicationUpdate,
+                InstanceName = _configFileProvider.InstanceName,
+                ApplicationUrl = _configService.ApplicationUrl,
                 Message = updateMessage.Message,
                 PreviousVersion = updateMessage.PreviousVersion.ToString(),
                 NewVersion = updateMessage.NewVersion.ToString()
@@ -149,6 +170,8 @@ namespace NzbDrone.Core.Notifications.Webhook
                 var payload = new WebhookGrabPayload
                 {
                     EventType = WebhookEventType.Test,
+                    InstanceName = _configFileProvider.InstanceName,
+                    ApplicationUrl = _configService.ApplicationUrl,
                     Series = new WebhookSeries()
                     {
                         Id = 1,
