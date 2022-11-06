@@ -88,7 +88,7 @@ namespace NzbDrone.Core.DecisionEngine
                         }
                     }
 
-                    if (report.Size > 0)
+                    if (parsedEpisodeInfo != null && report.Size > 0)
                     {
                         parsedEpisodeInfo.ExtraInfo.Add("Size", report.Size);
                     }
