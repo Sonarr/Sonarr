@@ -7,7 +7,7 @@
     <PackageReference Include="MailKit" Version="2.10.1" />
     <PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="6.0.6" />
     <PackageReference Include="Servarr.FFMpegCore" Version="4.8.0-29" />
-    <PackageReference Include="Servarr.FFprobe" Version="5.1.2.103" />
+    <PackageReference Include="Servarr.FFprobe" Version="5.1.2.106" />
     <PackageReference Include="System.Memory" Version="4.5.4" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
