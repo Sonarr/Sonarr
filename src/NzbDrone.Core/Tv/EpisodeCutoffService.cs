@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Tv
             var languagesBelowCutoff = new List<LanguagesBelowCutoff>();
             var profiles = _qualityProfileService.All();
 
-            //Get all items less than the cutoff
+            // Get all items less than the cutoff
             foreach (var profile in profiles)
             {
                 var cutoff = profile.UpgradeAllowed ? profile.Cutoff : profile.FirststAllowedQuality().Id;

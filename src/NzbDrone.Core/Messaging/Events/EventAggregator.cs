@@ -84,7 +84,7 @@ namespace NzbDrone.Core.Messaging.Events
                 subscribers = target as EventSubscribers<TEvent>;
             }
 
-            //call synchronous handlers first.
+            // call synchronous handlers first.
             var handlers = subscribers._syncHandlers;
             foreach (var handler in handlers)
             {

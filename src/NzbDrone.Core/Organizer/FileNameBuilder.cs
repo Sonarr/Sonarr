@@ -75,7 +75,7 @@ namespace NzbDrone.Core.Organizer
         private static readonly Regex ScenifyRemoveChars = new Regex(@"(?<=\s)(,|<|>|\/|\\|;|:|'|""|\||`|~|!|\?|@|$|%|^|\*|-|_|=){1}(?=\s)|('|:|\?|,)(?=(?:(?:s|m)\s)|\s|$)|(\(|\)|\[|\]|\{|\})", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static readonly Regex ScenifyReplaceChars = new Regex(@"[\/]", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        //TODO: Support Written numbers (One, Two, etc) and Roman Numerals (I, II, III etc)
+        // TODO: Support Written numbers (One, Two, etc) and Roman Numerals (I, II, III etc)
         private static readonly Regex MultiPartCleanupRegex = new Regex(@"(?:\:?\s?(?:\(\d+\)|(Part|Pt\.?)\s?\d+))$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private static readonly char[] EpisodeTitleTrimCharacters = new[] { ' ', '.', '?' };
@@ -497,7 +497,7 @@ namespace NzbDrone.Core.Organizer
                         seasonEpisodePattern = FormatRangeNumberTokens(seasonEpisodePattern, formatPattern, episodes);
                         break;
 
-                    //MultiEpisodeStyle.Extend
+                    // MultiEpisodeStyle.Extend
                     default:
                         formatPattern = "-" + episodeFormat.EpisodePattern;
                         seasonEpisodePattern = FormatNumberTokens(seasonEpisodePattern, formatPattern, episodes);
@@ -571,7 +571,7 @@ namespace NzbDrone.Core.Organizer
                         absoluteEpisodePattern = FormatAbsoluteNumberTokens(absoluteEpisodePattern, formatPattern, eps);
                         break;
 
-                        //MultiEpisodeStyle.Extend
+                        // MultiEpisodeStyle.Extend
                     default:
                         formatPattern = "-" + absoluteEpisodeFormat.AbsoluteEpisodePattern;
                         absoluteEpisodePattern = FormatAbsoluteNumberTokens(absoluteEpisodePattern, formatPattern, episodes);
@@ -1037,7 +1037,7 @@ namespace NzbDrone.Core.Organizer
 
         private string CleanupEpisodeTitle(string title)
         {
-            //this will remove (1),(2) from the end of multi part episodes.
+            // this will remove (1),(2) from the end of multi part episodes.
             return MultiPartCleanupRegex.Replace(title, string.Empty).Trim();
         }
 

@@ -45,7 +45,7 @@ namespace Sonarr.Api.V3.EpisodeFiles
                 SeasonNumber = model.SeasonNumber,
                 RelativePath = model.RelativePath,
 
-                //Path
+                // Path
                 Size = model.Size,
                 DateAdded = model.DateAdded,
                 SceneName = model.SceneName,
@@ -54,7 +54,7 @@ namespace Sonarr.Api.V3.EpisodeFiles
                 Quality = model.Quality,
                 MediaInfo = model.MediaInfo.ToResource(model.SceneName)
 
-                //QualityCutoffNotMet
+                // QualityCutoffNotMet
             };
         }
 

@@ -12,8 +12,8 @@ namespace NzbDrone.Core.Datastore.Migration
         {
             Create.Column("RelativePath").OnTable("EpisodeFiles").AsString().Nullable();
 
-            //TODO: Add unique contraint for series ID and Relative Path
-            //TODO: Warn if multiple series share the same path
+            // TODO: Add unique contraint for series ID and Relative Path
+            // TODO: Warn if multiple series share the same path
 
             Execute.WithConnection(UpdateRelativePaths);
         }

@@ -8,11 +8,11 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
-            //Support XEM names
+            // Support XEM names
             Alter.Table("SceneMappings").AddColumn("Type").AsString().Nullable();
             Execute.Sql("DELETE FROM SceneMappings");
 
-            //Add AnimeEpisodeFormat (set to Standard Episode format for now)
+            // Add AnimeEpisodeFormat (set to Standard Episode format for now)
             Alter.Table("NamingConfig").AddColumn("AnimeEpisodeFormat").AsString().Nullable();
             Execute.Sql("UPDATE NamingConfig SET AnimeEpisodeFormat = StandardEpisodeFormat");
         }

@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Indexers.FileList
             {
                 var id = result.Id;
 
-                //if (result.FreeLeech)
+                // if (result.FreeLeech)
 
                 torrentInfos.Add(new TorrentInfo()
                 {

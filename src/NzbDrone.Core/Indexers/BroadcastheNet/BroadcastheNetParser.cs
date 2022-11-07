@@ -67,7 +67,7 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
                 torrentInfo.DownloadUrl = RegexProtocol.Replace(torrent.DownloadURL, protocol);
                 torrentInfo.InfoUrl = string.Format("{0}//broadcasthe.net/torrents.php?id={1}&torrentid={2}", protocol, torrent.GroupID, torrent.TorrentID);
 
-                //torrentInfo.CommentUrl =
+                // torrentInfo.CommentUrl =
                 if (torrent.TvdbID.HasValue)
                 {
                     torrentInfo.TvdbId = torrent.TvdbID.Value;
@@ -80,7 +80,7 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
 
                 torrentInfo.PublishDate = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc).ToUniversalTime().AddSeconds(torrent.Time);
 
-                //torrentInfo.MagnetUrl =
+                // torrentInfo.MagnetUrl =
                 torrentInfo.InfoHash = torrent.InfoHash;
                 torrentInfo.Seeders = torrent.Seeders;
                 torrentInfo.Peers = torrent.Leechers + torrent.Seeders;

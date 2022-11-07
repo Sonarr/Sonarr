@@ -16,30 +16,30 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
-            //Add Custom Format Columns
+            // Add Custom Format Columns
             Create.TableForModel("CustomFormats")
                 .WithColumn("Name").AsString().Unique()
                 .WithColumn("Specifications").AsString().WithDefaultValue("[]")
                 .WithColumn("IncludeCustomFormatWhenRenaming").AsBoolean().WithDefaultValue(false);
 
-            //Add Custom Format Columns to Quality Profiles
+            // Add Custom Format Columns to Quality Profiles
             Alter.Table("QualityProfiles").AddColumn("FormatItems").AsString().WithDefaultValue("[]");
             Alter.Table("QualityProfiles").AddColumn("MinFormatScore").AsInt32().WithDefaultValue(0);
             Alter.Table("QualityProfiles").AddColumn("CutoffFormatScore").AsInt32().WithDefaultValue(0);
 
-            //Migrate Preferred Words to Custom Formats
+            // Migrate Preferred Words to Custom Formats
             Execute.WithConnection(MigratePreferredTerms);
             Execute.WithConnection(MigrateNamingConfigs);
 
-            //Remove Preferred Word Columns from ReleaseProfiles
+            // Remove Preferred Word Columns from ReleaseProfiles
             Delete.Column("Preferred").FromTable("ReleaseProfiles");
             Delete.Column("IncludePreferredWhenRenaming").FromTable("ReleaseProfiles");
 
-            //Remove Profiles that will no longer validate
+            // Remove Profiles that will no longer validate
             Execute.Sql("DELETE FROM ReleaseProfiles WHERE Required == '[]' AND Ignored == '[]'");
 
-            //TODO: Kill any references to Preferred in History and Files
-            //Data.PreferredWordScore
+            // TODO: Kill any references to Preferred in History and Files
+            // Data.PreferredWordScore
         }
 
         private void MigratePreferredTerms(IDbConnection conn, IDbTransaction tran)
@@ -66,7 +66,7 @@ namespace NzbDrone.Core.Datastore.Migration
                 }
             }
 
-            //Generate List of Custom Formats from Preferred Words
+            // Generate List of Custom Formats from Preferred Words
             using (var cmd = conn.CreateCommand())
             {
                 cmd.Transaction = tran;

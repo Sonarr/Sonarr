@@ -209,7 +209,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
             if (!Json.TryDeserialize<SabnzbdJsonError>(response.Content, out result))
             {
-                //Handle plain text responses from SAB
+                // Handle plain text responses from SAB
                 result = new SabnzbdJsonError();
 
                 if (response.Content.StartsWith("error", StringComparison.InvariantCultureIgnoreCase))

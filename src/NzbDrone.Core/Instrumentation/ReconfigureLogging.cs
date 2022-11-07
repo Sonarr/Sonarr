@@ -50,19 +50,19 @@ namespace NzbDrone.Core.Instrumentation
 
             var rules = LogManager.Configuration.LoggingRules;
 
-            //Console
+            // Console
             SetMinimumLogLevel(rules, "consoleLogger", minimumConsoleLogLevel);
 
-            //Log Files
+            // Log Files
             SetMinimumLogLevel(rules, "appFileInfo", minimumLogLevel <= LogLevel.Info ? LogLevel.Info : LogLevel.Off);
             SetMinimumLogLevel(rules, "appFileDebug", minimumLogLevel <= LogLevel.Debug ? LogLevel.Debug : LogLevel.Off);
             SetMinimumLogLevel(rules, "appFileTrace", minimumLogLevel <= LogLevel.Trace ? LogLevel.Trace : LogLevel.Off);
             SetLogRotation();
 
-            //Log Sql
+            // Log Sql
             SqlBuilderExtensions.LogSql = _configFileProvider.LogSql;
 
-            //Sentry
+            // Sentry
             ReconfigureSentry();
 
             LogManager.ReconfigExistingLoggers();

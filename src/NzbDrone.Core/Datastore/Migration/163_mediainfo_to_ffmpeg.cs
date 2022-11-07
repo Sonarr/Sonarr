@@ -682,7 +682,7 @@ namespace NzbDrone.Core.Datastore.Migration
             var audioChannelsContainer = mediaInfo.AudioChannelsContainer;
             var audioChannelsStream = mediaInfo.AudioChannelsStream;
 
-            //Skip if the positions texts give us nothing
+            // Skip if the positions texts give us nothing
             if ((audioChannelPositionsTextContainer.IsNullOrWhiteSpace() || audioChannelPositionsTextContainer == "Object Based") &&
                 (audioChannelPositionsTextStream.IsNullOrWhiteSpace() || audioChannelPositionsTextStream == "Object Based"))
             {

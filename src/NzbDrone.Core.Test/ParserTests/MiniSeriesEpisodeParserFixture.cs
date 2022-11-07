@@ -13,8 +13,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series and Show 2012 Part 1 REPACK 720p HDTV x264 2HD", "Series and Show 2012", 1)]
         [TestCase("Series Show.2016.E04.Power.720p.WEB-DL.DD5.1.H.264-MARS", "Series Show 2016", 4)]
 
-        //[TestCase("Killroy.Jumped.And.Was.Here.EP02.Episode.Title.DVDRiP.XviD-DEiTY", "Killroy.Jumped.And.Was.Here", 2)]
-        //[TestCase("", "", 0)]
+        // [TestCase("Killroy.Jumped.And.Was.Here.EP02.Episode.Title.DVDRiP.XviD-DEiTY", "Killroy.Jumped.And.Was.Here", 2)]
+        // [TestCase("", "", 0)]
         public void should_parse_mini_series_episode(string postTitle, string title, int episodeNumber)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
@@ -32,7 +32,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series.E191.190121.720p-NEXT.mp4", "Series", 191, "2019-01-21")]
         [TestCase("The Series Title Challenge.E932.190120.720p-NEXT.mp4", "The Series Title Challenge", 932, "2019-01-20")]
 
-        //[TestCase("", "", 0, "")]
+        // [TestCase("", "", 0, "")]
         public void should_parse_korean_series_episode(string postTitle, string title, int episodeNumber, string airdate)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
@@ -45,7 +45,7 @@ namespace NzbDrone.Core.Test.ParserTests
             result.FullSeason.Should().BeFalse();
 
             // We don't support both SxxExx and airdate yet
-            //result.AirDate.Should().Be(airdate);
+            // result.AirDate.Should().Be(airdate);
         }
     }
 }

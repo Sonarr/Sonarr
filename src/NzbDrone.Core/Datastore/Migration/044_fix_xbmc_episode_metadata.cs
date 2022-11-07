@@ -8,7 +8,7 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
-            //Convert Episode Metadata to proper type
+            // Convert Episode Metadata to proper type
             Execute.Sql("UPDATE MetadataFiles " +
                         "SET Type = 2 " +
                         "WHERE Consumer = 'XbmcMetadata' " +
@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Datastore.Migration
                         "AND Type = 4 " +
                         "AND RelativePath LIKE '%.nfo'");
 
-            //Convert Episode Images to proper type
+            // Convert Episode Images to proper type
             Execute.Sql("UPDATE MetadataFiles " +
                         "SET Type = 5 " +
                         "WHERE Consumer = 'XbmcMetadata' " +

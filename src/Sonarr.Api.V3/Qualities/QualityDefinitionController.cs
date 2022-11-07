@@ -44,7 +44,7 @@ namespace Sonarr.Api.V3.Qualities
         [HttpPut("update")]
         public object UpdateMany([FromBody] List<QualityDefinitionResource> resource)
         {
-            //Read from request
+            // Read from request
             var qualityDefinitions = resource
                                                  .ToModel()
                                                  .ToList();

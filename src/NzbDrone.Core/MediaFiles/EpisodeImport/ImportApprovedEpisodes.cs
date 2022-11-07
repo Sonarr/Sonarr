@@ -63,7 +63,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
                 try
                 {
-                    //check if already imported
+                    // check if already imported
                     if (importResults.SelectMany(r => r.ImportDecision.LocalEpisode.Episodes)
                                          .Select(e => e.Id)
                                          .Intersect(localEpisode.Episodes.Select(e => e.Id))
@@ -150,7 +150,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                 }
             }
 
-            //Adding all the rejected decisions
+            // Adding all the rejected decisions
             importResults.AddRange(decisions.Where(c => !c.Approved)
                                             .Select(d => new ImportResult(d, d.Rejections.Select(r => r.Reason).ToArray())));
 

@@ -99,7 +99,7 @@ namespace NzbDrone.Core.History
             var episodeIds = trackedDownload.EpisodeInfo.Episodes.Select(c => c.Id).ToList();
             var allHistory = _historyRepository.FindDownloadHistory(trackedDownload.EpisodeInfo.Series.Id, trackedDownload.ImportedEpisode.Quality);
 
-            //Find download related items for these episodes
+            // Find download related items for these episodes
             var episodesHistory = allHistory.Where(h => episodeIds.Contains(h.EpisodeId)).ToList();
 
             var processedDownloadId = episodesHistory

@@ -48,9 +48,9 @@ namespace Sonarr.Api.V3.RootFolders
 
                 Path = resource.Path
 
-                //Accessible
-                //FreeSpace
-                //UnmappedFolders
+                // Accessible
+                // FreeSpace
+                // UnmappedFolders
             };
         }
 

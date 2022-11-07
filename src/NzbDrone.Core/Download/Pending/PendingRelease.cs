@@ -14,7 +14,7 @@ namespace NzbDrone.Core.Download.Pending
         public PendingReleaseReason Reason { get; set; }
         public PendingReleaseAdditionalInfo AdditionalInfo { get; set; }
 
-        //Not persisted
+        // Not persisted
         public RemoteEpisode RemoteEpisode { get; set; }
     }
 

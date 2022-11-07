@@ -12,7 +12,7 @@ namespace NzbDrone.Core.Download.Clients.Blackhole
     {
         public TorrentBlackholeSettingsValidator()
         {
-            //Todo: Validate that the path actually exists
+            // Todo: Validate that the path actually exists
             RuleFor(c => c.TorrentFolder).IsValidPath();
             RuleFor(c => c.MagnetFileExtension).NotEmpty();
         }

@@ -74,7 +74,7 @@ namespace NzbDrone.Core.RootFolders
                     }
                 }
 
-                //We don't want an exception to prevent the root folders from loading in the UI, so they can still be deleted
+                // We don't want an exception to prevent the root folders from loading in the UI, so they can still be deleted
                 catch (Exception ex)
                 {
                     _logger.Error(ex, "Unable to get free space and unmapped folders for root folder {0}", folder.Path);

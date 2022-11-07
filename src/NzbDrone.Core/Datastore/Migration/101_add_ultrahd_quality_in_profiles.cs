@@ -21,12 +21,12 @@ namespace NzbDrone.Core.Datastore.Migration
             updater.Commit();
 
             // WEBRip migrations.
-            //updater.SplitQualityAppend(1, 11);   // HDTV480p    after  SDTV
-            //updater.SplitQualityPrepend(8, 12);  // WEBRip480p  before WEBDL480p
-            //updater.SplitQualityAppend(2, 13);   // Bluray480p  after  DVD
-            //updater.SplitQualityPrepend(5, 14);  // WEBRip720p  before WEBDL720p
-            //updater.SplitQualityPrepend(3, 15);  // WEBRip1080p before WEBDL1080p
-            //updater.SplitQualityPrepend(18, 17); // WEBRip2160p before WEBDL2160p
+            // updater.SplitQualityAppend(1, 11);   // HDTV480p    after  SDTV
+            // updater.SplitQualityPrepend(8, 12);  // WEBRip480p  before WEBDL480p
+            // updater.SplitQualityAppend(2, 13);   // Bluray480p  after  DVD
+            // updater.SplitQualityPrepend(5, 14);  // WEBRip720p  before WEBDL720p
+            // updater.SplitQualityPrepend(3, 15);  // WEBRip1080p before WEBDL1080p
+            // updater.SplitQualityPrepend(18, 17); // WEBRip2160p before WEBDL2160p
         }
     }
 }

@@ -199,7 +199,7 @@ namespace NzbDrone.Core.Tv
 
         private List<Episode> MapAbsoluteEpisodeNumbers(List<Episode> remoteEpisodes)
         {
-            //Return all episodes with no abs number, but distinct for those with abs number
+            // Return all episodes with no abs number, but distinct for those with abs number
             return remoteEpisodes.Where(e => e.AbsoluteEpisodeNumber.HasValue)
                                  .OrderByDescending(e => e.SeasonNumber)
                                  .DistinctBy(e => e.AbsoluteEpisodeNumber.Value)

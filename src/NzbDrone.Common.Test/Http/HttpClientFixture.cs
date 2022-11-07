@@ -106,7 +106,7 @@ namespace NzbDrone.Common.Test.Http
             Mocker.SetConstant<IHttpDispatcher>(Mocker.Resolve<TDispatcher>());
 
             // Used for manual testing of socks proxies.
-            //Mocker.GetMock<IHttpProxySettingsProvider>()
+            // Mocker.GetMock<IHttpProxySettingsProvider>()
             //      .Setup(v => v.GetProxySettings(It.IsAny<HttpRequest>()))
             //      .Returns(new HttpProxySettings(ProxyType.Socks5, "127.0.0.1", 5476, "", false));
 

@@ -29,7 +29,7 @@ namespace NzbDrone.Automation.Test.PageModel
 
         public void WaitForNoSpinner(int timeout = 30)
         {
-            //give the spinner some time to show up.
+            // give the spinner some time to show up.
             Thread.Sleep(200);
 
             var wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(timeout));

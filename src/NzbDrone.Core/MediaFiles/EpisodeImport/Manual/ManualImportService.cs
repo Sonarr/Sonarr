@@ -487,7 +487,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                 localEpisode.Quality = file.Quality;
                 localEpisode.Languages = file.Languages;
 
-                //TODO: Cleanup non-tracked downloads
+                // TODO: Cleanup non-tracked downloads
 
                 var importDecision = new ImportDecision(localEpisode);
 

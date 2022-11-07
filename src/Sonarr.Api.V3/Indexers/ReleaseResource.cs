@@ -92,7 +92,7 @@ namespace Sonarr.Api.V3.Indexers
                 Guid = releaseInfo.Guid,
                 Quality = parsedEpisodeInfo.Quality,
 
-                //QualityWeight
+                // QualityWeight
                 Age = releaseInfo.Age,
                 AgeHours = releaseInfo.AgeHours,
                 AgeMinutes = releaseInfo.AgeMinutes,
@@ -125,7 +125,7 @@ namespace Sonarr.Api.V3.Indexers
                 EpisodeRequested = remoteEpisode.EpisodeRequested,
                 DownloadAllowed = remoteEpisode.DownloadAllowed,
 
-                //ReleaseWeight
+                // ReleaseWeight
                 CustomFormatScore = remoteEpisode.CustomFormatScore,
                 CustomFormats = remoteEpisode.CustomFormats?.ToResource(),
                 SceneMapping = remoteEpisode.SceneMapping.ToResource(),

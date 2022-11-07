@@ -337,9 +337,9 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
                         details.Add(fileInfo);
                     }
 
-                    //Todo: get guest stars, writer and director
-                    //details.Add(new XElement("credits", tvdbEpisode.Writer.FirstOrDefault()));
-                    //details.Add(new XElement("director", tvdbEpisode.Directors.FirstOrDefault()));
+                    // Todo: get guest stars, writer and director
+                    // details.Add(new XElement("credits", tvdbEpisode.Writer.FirstOrDefault()));
+                    // details.Add(new XElement("director", tvdbEpisode.Directors.FirstOrDefault()));
 
                     doc.Add(details);
                     doc.Save(xw);

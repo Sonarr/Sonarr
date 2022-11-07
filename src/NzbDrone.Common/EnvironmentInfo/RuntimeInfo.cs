@@ -204,7 +204,7 @@ namespace NzbDrone.Common.EnvironmentInfo
 
         private static bool InternalIsOfficialBuild()
         {
-            //Official builds will never have such a high revision
+            // Official builds will never have such a high revision
             if (BuildInfo.Version.Major >= 10 || BuildInfo.Version.Revision > 10000)
             {
                 return false;

@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Datastore.Migration
                         var includeQuality = namingConfigReader.GetBoolean(includeQualityIndex);
                         var replaceSpaces = namingConfigReader.GetBoolean(replaceSpacesIndex);
 
-                        //Output settings
+                        // Output settings
                         var seriesTitlePattern = "";
                         var episodeTitlePattern = "";
                         var dailyEpisodePattern = "{Air-Date}";
