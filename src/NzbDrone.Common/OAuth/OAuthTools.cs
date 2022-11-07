@@ -256,7 +256,7 @@ namespace NzbDrone.Common.OAuth
             sb.Append(!basic && !secure ? qualified : "");
             sb.Append(url.AbsolutePath);
 
-            return sb.ToString(); //.ToLower();
+            return sb.ToString(); // .ToLower();
         }
 
         /// <summary>

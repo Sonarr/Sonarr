@@ -77,7 +77,7 @@ namespace NzbDrone.Core.Download.Clients.Aria2
             {
                 var firstFile = torrent.Files?.FirstOrDefault();
 
-                //skip metadata download
+                // skip metadata download
                 if (firstFile?.Path?.Contains("[METADATA]") == true)
                 {
                     continue;

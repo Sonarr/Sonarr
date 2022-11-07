@@ -55,7 +55,7 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
                 "d.ratio=", // long
                 "d.is_open=", // long
                 "d.is_active=", // long
-                "d.complete=", //long
+                "d.complete=", // long
                 "d.timestamp.finished="); // long (unix timestamp)
 
             var torrents = document.XPathSelectElement("./methodResponse/params/param/value/array/data")

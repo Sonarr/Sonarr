@@ -34,20 +34,20 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeMonitoredServiceTests
                                         .With(e => e.Monitored = true)
                                         .With(e => e.AirDateUtc = DateTime.UtcNow.AddDays(-7))
 
-                                        //Missing
+                                        // Missing
                                         .TheFirst(1)
                                         .With(e => e.EpisodeFileId = 0)
 
-                                        //Has File
+                                        // Has File
                                         .TheNext(1)
                                         .With(e => e.EpisodeFileId = 1)
 
-                                         //Future
+                                         // Future
                                         .TheNext(1)
                                         .With(e => e.EpisodeFileId = 0)
                                         .With(e => e.AirDateUtc = DateTime.UtcNow.AddDays(7))
 
-                                        //Future/TBA
+                                        // Future/TBA
                                         .TheNext(1)
                                         .With(e => e.EpisodeFileId = 0)
                                         .With(e => e.AirDateUtc = null)

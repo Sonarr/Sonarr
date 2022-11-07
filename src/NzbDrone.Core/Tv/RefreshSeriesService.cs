@@ -134,7 +134,7 @@ namespace NzbDrone.Core.Tv
             {
                 var existingSeason = series.Seasons.FirstOrDefault(s => s.SeasonNumber == season.SeasonNumber);
 
-                //Todo: Should this should use the previous season's monitored state?
+                // Todo: Should this should use the previous season's monitored state?
                 if (existingSeason == null)
                 {
                     if (season.SeasonNumber == 0)

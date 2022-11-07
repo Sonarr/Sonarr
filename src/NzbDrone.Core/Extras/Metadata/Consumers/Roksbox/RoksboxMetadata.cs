@@ -72,7 +72,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Roksbox
                                RelativePath = series.Path.GetRelativePath(path)
                            };
 
-            //Series and season images are both named folder.jpg, only season ones sit in season folders
+            // Series and season images are both named folder.jpg, only season ones sit in season folders
             if (Path.GetFileNameWithoutExtension(filename).Equals(parentdir.Name, StringComparison.InvariantCultureIgnoreCase))
             {
                 var seasonMatch = SeasonImagesRegex.Match(parentdir.Name);
@@ -125,7 +125,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Roksbox
 
         public override MetadataFileResult SeriesMetadata(Series series)
         {
-            //Series metadata is not supported
+            // Series metadata is not supported
             return null;
         }
 
@@ -216,7 +216,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Roksbox
                 return new List<ImageFileResult>();
             }
 
-            //Roksbox only supports one season image, so first of all try for poster otherwise just use whatever is first in the collection
+            // Roksbox only supports one season image, so first of all try for poster otherwise just use whatever is first in the collection
             var image = season.Images.SingleOrDefault(c => c.CoverType == MediaCoverTypes.Poster) ?? season.Images.FirstOrDefault();
             if (image == null)
             {

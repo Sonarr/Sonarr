@@ -5,6 +5,6 @@ namespace NzbDrone.Core.ThingiProvider
     public interface IProviderRepository<TProvider> : IBasicRepository<TProvider>
         where TProvider : ModelBase, new()
     {
-//        void DeleteImplementations(string implementation);
+// void DeleteImplementations(string implementation);
     }
 }

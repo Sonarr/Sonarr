@@ -486,7 +486,7 @@ namespace NzbDrone.Core.Extras.Metadata
                 return null;
             }
 
-            //Remove duplicate metadata files from DB and disk
+            // Remove duplicate metadata files from DB and disk
             foreach (var file in matchingMetadataFiles.Skip(1))
             {
                 var path = Path.Combine(series.Path, file.RelativePath);

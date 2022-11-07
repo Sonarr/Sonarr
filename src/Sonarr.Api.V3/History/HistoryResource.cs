@@ -51,7 +51,7 @@ namespace Sonarr.Api.V3.History
                 Quality = model.Quality,
                 CustomFormats = formatCalculator.ParseCustomFormat(model).ToResource(),
 
-                //QualityCutoffNotMet
+                // QualityCutoffNotMet
                 Date = model.Date,
                 DownloadId = model.DownloadId,
 
@@ -59,8 +59,8 @@ namespace Sonarr.Api.V3.History
 
                 Data = model.Data
 
-                //Episode
-                //Series
+                // Episode
+                // Series
             };
         }
     }

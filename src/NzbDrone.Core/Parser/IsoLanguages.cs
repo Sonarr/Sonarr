@@ -48,12 +48,12 @@ namespace NzbDrone.Core.Parser
         {
             if (isoCode.Length == 2)
             {
-                //Lookup ISO639-1 code
+                // Lookup ISO639-1 code
                 return All.FirstOrDefault(l => l.TwoLetterCode == isoCode);
             }
             else if (isoCode.Length == 3)
             {
-                //Lookup ISO639-2T code
+                // Lookup ISO639-2T code
                 if (FileNameBuilder.Iso639BTMap.TryGetValue(isoCode, out var mapped))
                 {
                     isoCode = mapped;

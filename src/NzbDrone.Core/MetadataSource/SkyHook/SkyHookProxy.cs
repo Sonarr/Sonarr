@@ -242,7 +242,7 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
 
             episode.Ratings = MapRatings(oracleEpisode.Rating);
 
-            //Don't include series fanart images as episode screenshot
+            // Don't include series fanart images as episode screenshot
             if (oracleEpisode.Image != null)
             {
                 episode.Images.Add(new MediaCover.MediaCover(MediaCoverTypes.Screenshot, oracleEpisode.Image));

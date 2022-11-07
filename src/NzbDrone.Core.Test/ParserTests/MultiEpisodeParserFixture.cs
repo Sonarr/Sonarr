@@ -36,8 +36,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("The Series US S01E01-E02 720p HDTV x264", "The Series US", 1, new[] { 1, 2 })]
         [TestCase("Series Title Season 01 Episode 05-06 720p", "Series Title", 1, new[] { 5, 6 })]
 
-        //[TestCase("My Name Is Sonarr - S03E01-E02 - My Name Is Code 28301-016 [SDTV]", "My Name Is Sonarr", 3, new[] { 1, 2 })]
-        //[TestCase("Adventure Series - 5x01 - x02 - Dev the Human (2) & Sonarr the Robot (3)", "Adventure Series", 5, new [] { 1, 2 })]
+        // [TestCase("My Name Is Sonarr - S03E01-E02 - My Name Is Code 28301-016 [SDTV]", "My Name Is Sonarr", 3, new[] { 1, 2 })]
+        // [TestCase("Adventure Series - 5x01 - x02 - Dev the Human (2) & Sonarr the Robot (3)", "Adventure Series", 5, new [] { 1, 2 })]
         [TestCase("The Series And The Code - S42 Ep10718 - Ep10722", "The Series And The Code", 42, new[] { 10718, 10719, 10720, 10721, 10722 })]
         [TestCase("The Series And The Code - S42 Ep10688 - Ep10692", "The Series And The Code", 42, new[] { 10688, 10689, 10690, 10691, 10692 })]
         [TestCase("Series.S01E02E03.1080p.BluRay.x264-DeBTViD", "Series", 1, new[] { 2, 3 })]
@@ -73,7 +73,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series Title! (2013) - S04E44-E45 - Il 200 spettacolare episodio da narcisisti!", "Series Title! (2013)", 4, new[] { 44, 45 })]
         [TestCase("Series Title! (2013) - S04E44-E45 - Il 200 spettacolare episodio da narcisisti! [NetflixHD 720p HEVC] [ITA+ENG].mkv", "Series Title! (2013)", 4, new[] { 44, 45 })]
 
-        //[TestCase("", "", , new [] {  })]
+        // [TestCase("", "", , new [] {  })]
         public void should_parse_multiple_episodes(string postTitle, string title, int season, int[] episodes)
         {
             var result = Parser.Parser.ParseTitle(postTitle);

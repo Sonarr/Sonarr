@@ -52,7 +52,7 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
                   .Returns(new List<CustomFormat>());
         }
 
-//        { "\\", "/", "<", ">", "?", "*", ":", "|", "\"" };
+// { "\\", "/", "<", ">", "?", "*", ":", "|", "\"" };
 //        { "+", "+", "", "", "!", "-", " -", "", "" };
 
         [TestCase("CSI: Crime Scene Investigation", "CSI - Crime Scene Investigation")]

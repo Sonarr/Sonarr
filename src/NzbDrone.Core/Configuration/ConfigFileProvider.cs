@@ -273,13 +273,13 @@ namespace NzbDrone.Core.Configuration
                         return valueHolder.First().Value.Trim();
                     }
 
-                    //Save the value
+                    // Save the value
                     if (persist)
                     {
                         SetValue(key, defaultValue);
                     }
 
-                    //return the default value
+                    // return the default value
                     return defaultValue.ToString();
                 });
         }

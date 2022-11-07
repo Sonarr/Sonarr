@@ -34,7 +34,7 @@ namespace NzbDrone.Core.IndexerSearch.Definitions
             cleanTitle = SpecialCharacter.Replace(cleanTitle, "");
             cleanTitle = NonWord.Replace(cleanTitle, "+");
 
-            //remove any repeating +s
+            // remove any repeating +s
             cleanTitle = Regex.Replace(cleanTitle, @"\+{2,}", "+");
             cleanTitle = cleanTitle.RemoveAccent();
             return cleanTitle.Trim('+', ' ');

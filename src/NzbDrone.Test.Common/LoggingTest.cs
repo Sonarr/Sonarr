@@ -95,8 +95,8 @@ namespace NzbDrone.Test.Common
         [TearDown]
         public void LoggingDownBase()
         {
-            //can't use because of a bug in mono with 2.6.2,
-            //https://bugs.launchpad.net/nunitv2/+bug/1076932
+            // can't use because of a bug in mono with 2.6.2,
+            // https://bugs.launchpad.net/nunitv2/+bug/1076932
             if (BuildInfo.IsDebug && TestContext.CurrentContext.Result.Outcome == ResultState.Success)
             {
                 ExceptionVerification.AssertNoUnexpectedLogs();

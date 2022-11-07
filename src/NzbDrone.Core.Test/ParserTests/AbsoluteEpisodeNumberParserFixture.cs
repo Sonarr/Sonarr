@@ -47,7 +47,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Initial_Series_Title - 14 DVD - Central Anime", "Initial Series Title", 14, 0, 0)]
         [TestCase("Initial_Series_Title_-_14(DVD)_-_(Central_Anime)[0183D922].mkv", "Initial Series Title", 14, 0, 0)]
 
-//        [TestCase("Initial D - 4th Stage Ep 01.mkv", "Initial D - 4th Stage", 1, 0, 0)]
+// [TestCase("Initial D - 4th Stage Ep 01.mkv", "Initial D - 4th Stage", 1, 0, 0)]
         [TestCase("[ChihiroDesuYo].Series.Title.-.09.1280x720.10bit.AAC.[24CCE81D]", "Series Title", 9, 0, 0)]
         [TestCase("Series Title - 001 - Fairy Tail", "Series Title", 001, 0, 0)]
         [TestCase("Series Title - 049 - The Day of Fated Meeting", "Series Title", 049, 0, 0)]
@@ -55,7 +55,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series Title - 099 - Natsu vs. Gildarts", "Series Title", 099, 0, 0)]
         [TestCase("Series Title - 100 - Mest", "Series Title", 100, 0, 0)]
 
-//        [TestCase("Fairy Tail - 101 - Mest", "Fairy Tail", 101, 0, 0)] //This gets caught up in the 'see' numbering
+// [TestCase("Fairy Tail - 101 - Mest", "Fairy Tail", 101, 0, 0)] //This gets caught up in the 'see' numbering
         [TestCase("[Exiled-Destiny] Series Title Ep01 (D2201EC5).mkv", "Series Title", 1, 0, 0)]
         [TestCase("[Commie] Series Title - 23 [5396CA24].mkv", "Series Title", 23, 0, 0)]
         [TestCase("[FFF] Series Title - 01 [1FB538B5].mkv", "Series Title", 1, 0, 0)]
@@ -79,7 +79,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[HorribleSubs] Series Title 21 - 101 [480p].mkv", "Series Title 21", 101, 0, 0)]
         [TestCase("[Cthuyuu].Series.Title.-.03.[720p.H264.AAC][8AD82C3A]", "Series Title", 3, 0, 0)]
 
-        //[TestCase("Series.Title.-.03.(1280x720.HEVC.AAC)", "Series Title", 3, 0, 0)]
+        // [TestCase("Series.Title.-.03.(1280x720.HEVC.AAC)", "Series Title", 3, 0, 0)]
         [TestCase("[Cthuyuu] Series Title - 03 [720p H264 AAC][8AD82C3A]", "Series Title", 3, 0, 0)]
         [TestCase("Series Title Episode 56 [VOSTFR V2][720p][AAC]-Mystic Z-Team", "Series Title", 56, 0, 0)]
         [TestCase("[Mystic Z-Team] Series Title Episode 69 [VOSTFR_Finale][1080p][AAC].mp4", "Series Title", 69, 0, 0)]
@@ -116,7 +116,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Mob Psycho 100 S3 - 01 (1080p) [5A493522]", "Mob Psycho 100 S3", 1, 0, 0)]
         [TestCase("[SubsPlease] Mob Psycho 100 S3 - 01 (1080p) [5A493522]", "Mob Psycho 100 S3", 1, 0, 0)]
 
-        //[TestCase("", "", 0, 0, 0)]
+        // [TestCase("", "", 0, 0, 0)]
         public void should_parse_absolute_numbers(string postTitle, string title, int absoluteEpisodeNumber, int seasonNumber, int episodeNumber)
         {
             var result = Parser.Parser.ParseTitle(postTitle);

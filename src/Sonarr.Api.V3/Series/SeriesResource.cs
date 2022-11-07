@@ -10,11 +10,11 @@ namespace Sonarr.Api.V3.Series
 {
     public class SeriesResource : RestResource
     {
-        //Todo: Sorters should be done completely on the client
-        //Todo: Is there an easy way to keep IgnoreArticlesWhenSorting in sync between, Series, History, Missing?
-        //Todo: We should get the entire QualityProfile instead of ID and Name separately
+        // Todo: Sorters should be done completely on the client
+        // Todo: Is there an easy way to keep IgnoreArticlesWhenSorting in sync between, Series, History, Missing?
+        // Todo: We should get the entire QualityProfile instead of ID and Name separately
 
-        //View Only
+        // View Only
         public string Title { get; set; }
         public List<AlternateTitleResource> AlternateTitles { get; set; }
         public string SortTitle { get; set; }
@@ -36,11 +36,11 @@ namespace Sonarr.Api.V3.Series
         public List<SeasonResource> Seasons { get; set; }
         public int Year { get; set; }
 
-        //View & Edit
+        // View & Edit
         public string Path { get; set; }
         public int QualityProfileId { get; set; }
 
-        //Editing Only
+        // Editing Only
         public bool SeasonFolder { get; set; }
         public bool Monitored { get; set; }
 
@@ -83,18 +83,18 @@ namespace Sonarr.Api.V3.Series
 
                        Title = model.Title,
 
-                       //AlternateTitles
+                       // AlternateTitles
                        SortTitle = model.SortTitle,
 
-                       //TotalEpisodeCount
-                       //EpisodeCount
-                       //EpisodeFileCount
-                       //SizeOnDisk
+                       // TotalEpisodeCount
+                       // EpisodeCount
+                       // EpisodeFileCount
+                       // SizeOnDisk
                        Status = model.Status,
                        Overview = model.Overview,
 
-                       //NextAiring
-                       //PreviousAiring
+                       // NextAiring
+                       // PreviousAiring
                        Network = model.Network,
                        AirTime = model.AirTime,
                        Images = model.Images,
@@ -145,18 +145,18 @@ namespace Sonarr.Api.V3.Series
 
                        Title = resource.Title,
 
-                       //AlternateTitles
+                       // AlternateTitles
                        SortTitle = resource.SortTitle,
 
-                       //TotalEpisodeCount
-                       //EpisodeCount
-                       //EpisodeFileCount
-                       //SizeOnDisk
+                       // TotalEpisodeCount
+                       // EpisodeCount
+                       // EpisodeFileCount
+                       // SizeOnDisk
                        Status = resource.Status,
                        Overview = resource.Overview,
 
-                       //NextAiring
-                       //PreviousAiring
+                       // NextAiring
+                       // PreviousAiring
                        Network = resource.Network,
                        AirTime = resource.AirTime,
                        Images = resource.Images,

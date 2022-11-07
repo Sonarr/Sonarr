@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Datastore.Migration
                         var settings = Json.Deserialize<PushoverSettingsForV33>(reader.GetString(settingsIndex));
                         settings.ApiKey = API_KEY;
 
-                        //Set priority to high if its currently emergency
+                        // Set priority to high if its currently emergency
                         if (settings.Priority == 2)
                         {
                             settings.Priority = 1;

@@ -81,7 +81,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
             var filter = new Dictionary<string, object>();
 
             // TODO: get_torrents_status returns the files as well, which starts to cause deluge timeouts when you get enough season packs.
-            //var response = ProcessRequest<Dictionary<String, DelugeTorrent>>(settings, "core.get_torrents_status", filter, new String[0]);
+            // var response = ProcessRequest<Dictionary<String, DelugeTorrent>>(settings, "core.get_torrents_status", filter, new String[0]);
             var response = ProcessRequest<DelugeUpdateUIResult>(settings, "web.update_ui", RequiredProperties, filter);
 
             return GetTorrents(response);
@@ -92,7 +92,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
             var filter = new Dictionary<string, object>();
             filter.Add("label", label);
 
-            //var response = ProcessRequest<Dictionary<String, DelugeTorrent>>(settings, "core.get_torrents_status", filter, new String[0]);
+            // var response = ProcessRequest<Dictionary<String, DelugeTorrent>>(settings, "core.get_torrents_status", filter, new String[0]);
             var response = ProcessRequest<DelugeUpdateUIResult>(settings, "web.update_ui", RequiredProperties, filter);
 
             return GetTorrents(response);

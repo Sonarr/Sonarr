@@ -15,11 +15,11 @@ namespace NzbDrone.Core.Datastore.Migration
             Alter.Table("Profiles").AddColumn("GrabDelayMode").AsInt32().Nullable();
             Execute.Sql("UPDATE Profiles SET Language = 1, GrabDelay = 0, GrabDelayMode = 0");
 
-            //Rename QualityProfileId in Series
+            // Rename QualityProfileId in Series
             Alter.Table("Series").AddColumn("ProfileId").AsInt32().Nullable();
             Execute.Sql("UPDATE Series SET ProfileId = QualityProfileId");
 
-            //Add HeldReleases
+            // Add HeldReleases
             Create.TableForModel("PendingReleases")
                   .WithColumn("SeriesId").AsInt32()
                   .WithColumn("Title").AsString()

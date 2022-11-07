@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Notifications.Pushover
             Devices = new string[] { };
         }
 
-        //TODO: Get Pushover to change our app name (or create a new app) when we have a new logo
+        // TODO: Get Pushover to change our app name (or create a new app) when we have a new logo
         [FieldDefinition(0, Label = "API Key", Privacy = PrivacyLevel.ApiKey, HelpLink = "https://pushover.net/apps/clone/sonarr")]
         public string ApiKey { get; set; }
 

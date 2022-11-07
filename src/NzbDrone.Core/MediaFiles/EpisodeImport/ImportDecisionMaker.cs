@@ -179,8 +179,8 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
             }
             catch (Exception e)
             {
-                //e.Data.Add("report", remoteEpisode.Report.ToJson());
-                //e.Data.Add("parsed", remoteEpisode.ParsedEpisodeInfo.ToJson());
+                // e.Data.Add("report", remoteEpisode.Report.ToJson());
+                // e.Data.Add("parsed", remoteEpisode.ParsedEpisodeInfo.ToJson());
                 _logger.Error(e, "Couldn't evaluate decision on {0}", localEpisode.Path);
                 return new Rejection($"{spec.GetType().Name}: {e.Message}");
             }

@@ -65,7 +65,7 @@ namespace NzbDrone.Core.Test.MetadataSource.SkyHook
             series.Runtime.Should().BeGreaterThan(0);
             series.TitleSlug.Should().NotBeNullOrWhiteSpace();
 
-            //series.TvRageId.Should().BeGreaterThan(0);
+            // series.TvRageId.Should().BeGreaterThan(0);
             series.TvdbId.Should().BeGreaterThan(0);
         }
 
@@ -83,7 +83,7 @@ namespace NzbDrone.Core.Test.MetadataSource.SkyHook
             {
                 ValidateEpisode(episode);
 
-                //if atleast one episdoe has title it means parse it working.
+                // if atleast one episdoe has title it means parse it working.
                 episodes.Should().Contain(c => !string.IsNullOrWhiteSpace(c.Title));
             }
         }
@@ -92,7 +92,7 @@ namespace NzbDrone.Core.Test.MetadataSource.SkyHook
         {
             episode.Should().NotBeNull();
 
-            //TODO: Is there a better way to validate that episode number or season number is greater than zero?
+            // TODO: Is there a better way to validate that episode number or season number is greater than zero?
             (episode.EpisodeNumber + episode.SeasonNumber).Should().NotBe(0);
 
             episode.Should().NotBeNull();

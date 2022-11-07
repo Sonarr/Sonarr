@@ -174,22 +174,22 @@ namespace NzbDrone.Common.Extensions
 
         public static string ToUrlSlug(this string value)
         {
-            //First to lower case
+            // First to lower case
             value = value.ToLowerInvariant();
 
-            //Remove all accents
+            // Remove all accents
             value = value.RemoveAccent();
 
-            //Replace spaces
+            // Replace spaces
             value = Regex.Replace(value, @"\s", "-", RegexOptions.Compiled);
 
-            //Remove invalid chars
+            // Remove invalid chars
             value = Regex.Replace(value, @"[^a-z0-9\s-_]", "", RegexOptions.Compiled);
 
-            //Trim dashes from end
+            // Trim dashes from end
             value = value.Trim('-', '_');
 
-            //Replace double occurrences of - or _
+            // Replace double occurrences of - or _
             value = Regex.Replace(value, @"([-_]){2,}", "$1", RegexOptions.Compiled);
 
             return value;

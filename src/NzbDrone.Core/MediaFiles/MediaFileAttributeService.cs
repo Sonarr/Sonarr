@@ -33,7 +33,7 @@ namespace NzbDrone.Core.MediaFiles
         {
             if (OsInfo.IsWindows)
             {
-                //Wrapped in Try/Catch to prevent this from causing issues with remote NAS boxes
+                // Wrapped in Try/Catch to prevent this from causing issues with remote NAS boxes
                 try
                 {
                     _diskProvider.InheritFolderPermissions(path);

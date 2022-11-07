@@ -56,7 +56,7 @@ namespace NzbDrone.Core.MediaFiles
                         continue;
                     }
 
-//                    var localEpsiode = _parsingService.GetLocalEpisode(episodeFile.Path, series);
+// var localEpsiode = _parsingService.GetLocalEpisode(episodeFile.Path, series);
 //
 //                    if (localEpsiode == null || episodes.Count != localEpsiode.Episodes.Count)
 //                    {

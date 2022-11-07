@@ -394,7 +394,7 @@ namespace NzbDrone.Common.Test.DiskTests
             var destination = new DirectoryInfo(GetTempFilePath());
             Subject.TransferFolder(source.FullName, destination.FullName, TransferMode.Copy);
 
-            //Delete Random File
+            // Delete Random File
             destination.GetFiles("*.*", SearchOption.AllDirectories).First().Delete();
 
             Subject.TransferFolder(source.FullName, destination.FullName, TransferMode.Copy);

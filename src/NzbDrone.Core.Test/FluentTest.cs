@@ -89,7 +89,7 @@ namespace NzbDrone.Core.Test
         {
             var result = new List<int>().MaxOrDefault();
 
-            //Resolve
+            // Resolve
             result.Should().Be(0);
         }
 
@@ -100,7 +100,7 @@ namespace NzbDrone.Core.Test
 
             var result = list.MaxOrDefault();
 
-            //Resolve
+            // Resolve
             result.Should().Be(10);
         }
 
@@ -111,7 +111,7 @@ namespace NzbDrone.Core.Test
 
             var result = list.MaxOrDefault();
 
-            //Resolve
+            // Resolve
             result.Should().Be(0);
         }
 
@@ -122,7 +122,7 @@ namespace NzbDrone.Core.Test
 
             var resultString = str.Truncate(1000);
 
-            //Resolve
+            // Resolve
             var result = new UTF8Encoding().GetBytes(resultString);
             result.Length.Should().BeLessOrEqualTo(1000);
         }
@@ -134,7 +134,7 @@ namespace NzbDrone.Core.Test
 
             var resultString = str.Truncate(1000);
 
-            //Resolve
+            // Resolve
             var result = new UTF8Encoding().GetBytes(resultString);
             result.Length.Should().Be(11);
         }
@@ -144,7 +144,7 @@ namespace NzbDrone.Core.Test
         {
             var result = new List<int>().MinOrDefault();
 
-            //Resolve
+            // Resolve
             result.Should().Be(0);
         }
 
@@ -155,7 +155,7 @@ namespace NzbDrone.Core.Test
 
             var result = list.MinOrDefault();
 
-            //Resolve
+            // Resolve
             result.Should().Be(3);
         }
 
@@ -166,7 +166,7 @@ namespace NzbDrone.Core.Test
 
             var result = list.MinOrDefault();
 
-            //Resolve
+            // Resolve
             result.Should().Be(0);
         }
 

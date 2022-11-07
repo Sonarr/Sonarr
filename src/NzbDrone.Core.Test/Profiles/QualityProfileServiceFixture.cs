@@ -38,8 +38,8 @@ namespace NzbDrone.Core.Test.Profiles
 
         [Test]
 
-        //This confirms that new profiles are added only if no other profiles exists.
-        //We don't want to keep adding them back if a user deleted them on purpose.
+        // This confirms that new profiles are added only if no other profiles exists.
+        // We don't want to keep adding them back if a user deleted them on purpose.
         public void Init_should_skip_if_any_profiles_already_exist()
         {
             Mocker.GetMock<IProfileRepository>()

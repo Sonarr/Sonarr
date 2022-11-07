@@ -61,8 +61,8 @@ namespace Sonarr.Api.V3.Config
                 AuthenticationRequired = model.AuthenticationRequired,
                 AnalyticsEnabled = model.AnalyticsEnabled,
 
-                //Username
-                //Password
+                // Username
+                // Password
                 LogLevel = model.LogLevel,
                 ConsoleLogLevel = model.ConsoleLogLevel,
                 Branch = model.Branch,

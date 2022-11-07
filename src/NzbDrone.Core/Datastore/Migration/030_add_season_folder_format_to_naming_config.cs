@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Datastore.Migration
                 {
                     while (namingConfigReader.Read())
                     {
-                        //only getting one column, so its index is 0
+                        // only getting one column, so its index is 0
                         seasonFormat = namingConfigReader.GetString(0);
 
                         seasonFormat = seasonFormat.Replace("%sn", "{Series Title}")

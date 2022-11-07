@@ -55,7 +55,7 @@ namespace Sonarr.Api.V3.ManualImport
                 Quality = model.Quality,
                 Languages = model.Languages,
 
-                //QualityWeight
+                // QualityWeight
                 DownloadId = model.DownloadId,
                 Rejections = model.Rejections
             };

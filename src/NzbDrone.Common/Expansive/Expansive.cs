@@ -179,10 +179,10 @@ namespace NzbDrone.Common.Expansive
         private static dynamic ToExpando(this object o)
         {
             var result = new ExpandoObject();
-            var d = result as IDictionary<string, object>; //work with the Expando as a Dictionary
+            var d = result as IDictionary<string, object>; // work with the Expando as a Dictionary
             if (o is ExpandoObject)
             {
-                return o; //shouldn't have to... but just in case
+                return o; // shouldn't have to... but just in case
             }
 
             if (o is NameValueCollection || o.GetType().IsSubclassOf(typeof(NameValueCollection)))

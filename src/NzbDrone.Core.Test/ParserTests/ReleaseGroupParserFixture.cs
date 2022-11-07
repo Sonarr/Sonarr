@@ -44,7 +44,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[Erai-raws] Series - 0955 ~ 1005 [1080p]", "Erai-raws")]
         [TestCase("[Exiled-Destiny] Series Title", "Exiled-Destiny")]
 
-        //[TestCase("", "")]
+        // [TestCase("", "")]
         public void should_parse_release_group(string title, string expected)
         {
             Parser.Parser.ParseReleaseGroup(title).Should().Be(expected);
@@ -82,7 +82,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series.Title.S02E04.720p.WEBRip.x264-SKGTV_English", "SKGTV")]
         [TestCase("Series.Title.S02E04.720p.WEBRip.x264-SKGTV.English", "SKGTV")]
 
-        //[TestCase("", "")]
+        // [TestCase("", "")]
         public void should_not_include_language_in_release_group(string title, string expected)
         {
             Parser.Parser.ParseReleaseGroup(title).Should().Be(expected);
@@ -125,8 +125,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[Anime-Koi] Series Title - S01E07 - A High-Grade Sonarr", "Anime-Koi")]
         [TestCase("[Anime-Koi] Series Title 2 - 01 [h264-720p][28D54E2C]", "Anime-Koi")]
 
-        //[TestCase("Tokyo.Ghoul.02x01.013.HDTV-720p-Anime-Koi", "Anime-Koi")]
-        //[TestCase("", "")]
+        // [TestCase("Tokyo.Ghoul.02x01.013.HDTV-720p-Anime-Koi", "Anime-Koi")]
+        // [TestCase("", "")]
         public void should_parse_anime_release_groups(string title, string expected)
         {
             Parser.Parser.ParseReleaseGroup(title).Should().Be(expected);

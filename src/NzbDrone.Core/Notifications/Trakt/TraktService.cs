@@ -219,7 +219,7 @@ namespace NzbDrone.Core.Notifications.Trakt
         {
             var traktResolution = string.Empty;
 
-            //var interlacedTypes = new string[] { "Interlaced", "MBAFF", "PAFF" };
+            // var interlacedTypes = new string[] { "Interlaced", "MBAFF", "PAFF" };
             var scanIdentifier = scanType.IsNotNullOrWhiteSpace() && TraktInterlacedTypes.interlacedTypes.Contains(scanType) ? "i" : "p";
 
             switch (resolution)

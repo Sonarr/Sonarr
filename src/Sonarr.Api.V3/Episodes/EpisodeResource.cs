@@ -37,7 +37,7 @@ namespace Sonarr.Api.V3.Episodes
 
         public List<MediaCover> Images { get; set; }
 
-        //Hiding this so people don't think its usable (only used to set the initial state)
+        // Hiding this so people don't think its usable (only used to set the initial state)
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
         public bool Grabbed { get; set; }
     }
@@ -65,7 +65,7 @@ namespace Sonarr.Api.V3.Episodes
                 AirDateUtc = model.AirDateUtc,
                 Overview = model.Overview,
 
-                //EpisodeFile
+                // EpisodeFile
 
                 HasFile = model.HasFile,
                 Monitored = model.Monitored,
@@ -76,7 +76,7 @@ namespace Sonarr.Api.V3.Episodes
                 UnverifiedSceneNumbering = model.UnverifiedSceneNumbering,
                 SeriesTitle = model.SeriesTitle,
 
-                //Series = model.Series.MapToResource(),
+                // Series = model.Series.MapToResource(),
             };
         }
 

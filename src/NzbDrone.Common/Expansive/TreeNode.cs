@@ -55,7 +55,7 @@ namespace NzbDrone.Common.Expansive
         {
             get
             {
-                //return (Parent == null) ? this : Parent.Root;
+                // return (Parent == null) ? this : Parent.Root;
 
                 TreeNode<T> node = this;
                 while (node.Parent != null)

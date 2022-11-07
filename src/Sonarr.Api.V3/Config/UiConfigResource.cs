@@ -5,11 +5,11 @@ namespace Sonarr.Api.V3.Config
 {
     public class UiConfigResource : RestResource
     {
-        //Calendar
+        // Calendar
         public int FirstDayOfWeek { get; set; }
         public string CalendarWeekColumnHeader { get; set; }
 
-        //Dates
+        // Dates
         public string ShortDateFormat { get; set; }
         public string LongDateFormat { get; set; }
         public string TimeFormat { get; set; }

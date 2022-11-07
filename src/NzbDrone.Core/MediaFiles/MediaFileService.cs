@@ -58,7 +58,7 @@ namespace NzbDrone.Core.MediaFiles
 
         public void Delete(EpisodeFile episodeFile, DeleteMediaFileReason reason)
         {
-            //Little hack so we have the episodes and series attached for the event consumers
+            // Little hack so we have the episodes and series attached for the event consumers
             episodeFile.Episodes.LazyLoad();
             episodeFile.Path = Path.Combine(episodeFile.Series.Value.Path, episodeFile.RelativePath);
 
