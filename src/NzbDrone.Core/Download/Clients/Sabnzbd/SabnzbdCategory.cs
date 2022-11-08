@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.Download.Clients.Sabnzbd.JsonConverters;
@@ -7,10 +7,14 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 {
     public class SabnzbdConfig
     {
+        public SabnzbdConfig()
+        {
+            Categories = new List<SabnzbdCategory>();
+            Servers = new List<object>();
+        }
+
         public SabnzbdConfigMisc Misc { get; set; }
-
         public List<SabnzbdCategory> Categories { get; set; }
-
         public List<object> Servers { get; set; }
     }
 
