@@ -146,6 +146,10 @@ namespace NzbDrone.Core.Parser
                 new Regex(@"^(?<title>.+?)[-_. ]+(?<absoluteepisode>(?<!\d+)\d{2}(?!\d+))[-_. ](\(\d{4}\))[-_. ]\[(?<subgroup>.+?)\]",
                             RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
+                //Anime - Title with trailing number, Absolute Episode Number and hash
+                new Regex(@"^(?<title>[^-]+?)(?:(?<![-_. ]|\b[0]\d+) - )(?:[-_. ]?(?<absoluteepisode>\d{2,3}(\.\d{1,2})?(?!\d+)))+(?:[-_. ]+(?<special>special|ova|ovd))?.*?(?<hash>\[\w{8}\])(?:$|\.mkv)",
+                    RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
                 //Anime - Title Absolute Episode Number [Hash]
                 new Regex(@"^(?<title>.+?)(?:(?:_|-|\s|\.)+(?<absoluteepisode>\d{2,3}(\.\d{1,2})?(?!\d+)))+(?:[-_. ]+(?<special>special|ova|ovd))?[-_. ]+.*?(?<hash>\[\w{8}\])(?:$|\.)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
