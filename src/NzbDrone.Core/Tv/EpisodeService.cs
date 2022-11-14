@@ -269,7 +269,7 @@ namespace NzbDrone.Core.Tv
                 return sortedEpisodes[part.Value - 1];
             }
 
-            throw new InvalidOperationException("Multiple episodes with the same air date found");
+            throw new InvalidOperationException($"Multiple episodes with the same air date found. Date: {date}");
         }
     }
 }

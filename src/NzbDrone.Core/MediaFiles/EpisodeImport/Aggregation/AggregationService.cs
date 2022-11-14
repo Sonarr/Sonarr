@@ -69,7 +69,9 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation
                 }
                 catch (Exception ex)
                 {
-                    _logger.Warn(ex, ex.Message);
+                    var message = $"Unable to augment information for file: '{localEpisode.Path}'. Series: {localEpisode.Series} Error: {ex.Message}";
+
+                    _logger.Warn(ex, message);
                 }
             }
 
