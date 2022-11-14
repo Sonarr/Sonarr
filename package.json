@@ -52,7 +52,7 @@
     "react-addons-shallow-compare": "15.6.3",
     "react-async-script": "1.2.0",
     "react-autosuggest": "10.1.0",
-    "react-custom-scrollbars": "4.2.1",
+    "react-custom-scrollbars-2": "4.5.0",
     "react-dnd": "14.0.2",
     "react-dnd-html5-backend": "14.0.0",
     "react-dnd-multi-backend": "6.0.2",
