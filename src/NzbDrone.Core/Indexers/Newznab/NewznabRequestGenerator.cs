@@ -326,6 +326,11 @@ namespace NzbDrone.Core.Indexers.Newznab
                 var queryTitles = TextSearchEngine == "raw" ? searchCriteria.SceneTitles : searchCriteria.CleanSceneTitles;
                 foreach (var queryTitle in queryTitles)
                 {
+                    AddTvIdPageableRequests(pageableRequests,
+                        Settings.Categories,
+                        searchCriteria,
+                        $"&q={searchCriteria.AbsoluteEpisodeNumber:00}");
+
                     pageableRequests.Add(GetPagedRequests(MaxPages,
                         Settings.AnimeCategories,
                         "search",
@@ -333,6 +338,11 @@ namespace NzbDrone.Core.Indexers.Newznab
 
                     if (Settings.AnimeStandardFormatSearch && searchCriteria.SeasonNumber > 0 && searchCriteria.EpisodeNumber > 0)
                     {
+                        AddTvIdPageableRequests(pageableRequests,
+                            Settings.Categories,
+                            searchCriteria,
+                            $"&season={NewznabifySeasonNumber(searchCriteria.SeasonNumber)}&ep={searchCriteria.EpisodeNumber}");
+
                         pageableRequests.Add(GetPagedRequests(MaxPages,
                             Settings.AnimeCategories,
                             "tvsearch",
