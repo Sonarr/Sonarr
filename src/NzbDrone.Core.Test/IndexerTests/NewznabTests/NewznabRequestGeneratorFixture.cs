@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using Moq;
@@ -36,6 +36,7 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
 
             _animeSearchCriteria = new AnimeEpisodeSearchCriteria()
             {
+                Series = new Tv.Series { TvRageId = 10, TvdbId = 20, TvMazeId = 30, ImdbId = "t40" },
                 SceneTitles = new List<string>() { "Monkey+Island" },
                 AbsoluteEpisodeNumber = 100,
                 SeasonNumber = 5,
@@ -80,11 +81,12 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
         {
             var results = Subject.GetSearchRequests(_animeSearchCriteria);
 
-            results.GetAllTiers().Should().HaveCount(1);
+            results.GetAllTiers().Should().HaveCount(2);
 
-            var page = results.GetAllTiers().First().First();
+            var pages = results.GetTier(0).Select(t => t.First()).ToList();
 
-            page.Url.FullUri.Should().Contain("&cat=3,4&");
+            pages[0].Url.FullUri.Should().Contain("&cat=3,4&");
+            pages[1].Url.FullUri.Should().Contain("&cat=3,4&");
         }
 
         [Test]
@@ -92,11 +94,10 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
         {
             var results = Subject.GetSearchRequests(_animeSearchCriteria);
 
-            results.GetAllTiers().Should().HaveCount(1);
+            results.GetAllTiers().Should().HaveCount(2);
 
-            var page = results.GetAllTiers().First().First();
-
-            page.Url.FullUri.Should().Contain("?t=search&");
+            results.GetAllTiers().First().First().Url.FullUri.Should().Contain("?t=tvsearch&");
+            results.GetAllTiers().Last().First().Url.FullUri.Should().Contain("?t=search&");
         }
 
         [Test]
@@ -104,7 +105,7 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
         {
             var results = Subject.GetSearchRequests(_animeSearchCriteria);
 
-            results.GetAllTiers().Should().HaveCount(1);
+            results.GetAllTiers().Should().HaveCount(2);
 
             var pages = results.GetAllTiers().First().Take(3).ToList();
 
@@ -118,7 +119,7 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
         {
             var results = Subject.GetSearchRequests(_animeSearchCriteria);
 
-            results.GetAllTiers().Should().HaveCount(1);
+            results.GetAllTiers().Should().HaveCount(2);
 
             var pages = results.GetAllTiers().First().Take(500).ToList();
 
@@ -130,11 +131,12 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
         {
             var results = Subject.GetSearchRequests(_animeSearchCriteria);
 
-            results.GetAllTiers().Should().HaveCount(1);
+            results.GetAllTiers().Should().HaveCount(2);
 
-            var page = results.GetAllTiers().First().First();
+            var pages = results.GetTier(0).Select(t => t.First()).ToList();
 
-            page.Url.FullUri.Should().Contain("q=Monkey%20Island+100");
+            pages[0].Url.FullUri.Should().Contain("rid=10&q=100");
+            pages[1].Url.FullUri.Should().Contain("q=Monkey%20Island+100");
         }
 
         [Test]
@@ -143,11 +145,13 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
             Subject.Settings.AnimeStandardFormatSearch = true;
             var results = Subject.GetSearchRequests(_animeSearchCriteria);
 
-            results.GetTier(0).Should().HaveCount(2);
-            var pages = results.GetTier(0).Take(2).Select(t => t.First()).ToList();
+            results.GetTier(0).Should().HaveCount(4);
+            var pages = results.GetTier(0).Select(t => t.First()).ToList();
 
-            pages[0].Url.FullUri.Should().Contain("q=Monkey%20Island+100");
-            pages[1].Url.FullUri.Should().Contain("q=Monkey%20Island&season=5&ep=4");
+            pages[0].Url.FullUri.Should().Contain("rid=10&q=100");
+            pages[1].Url.FullUri.Should().Contain("q=Monkey%20Island+100");
+            pages[2].Url.FullUri.Should().Contain("rid=10&season=5&ep=4");
+            pages[3].Url.FullUri.Should().Contain("q=Monkey%20Island&season=5&ep=4");
         }
 
         [Test]

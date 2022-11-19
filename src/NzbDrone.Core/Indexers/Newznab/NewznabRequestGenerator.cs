@@ -327,7 +327,7 @@ namespace NzbDrone.Core.Indexers.Newznab
                 foreach (var queryTitle in queryTitles)
                 {
                     AddTvIdPageableRequests(pageableRequests,
-                        Settings.Categories,
+                        Settings.AnimeCategories,
                         searchCriteria,
                         $"&q={searchCriteria.AbsoluteEpisodeNumber:00}");
 
@@ -339,7 +339,7 @@ namespace NzbDrone.Core.Indexers.Newznab
                     if (Settings.AnimeStandardFormatSearch && searchCriteria.SeasonNumber > 0 && searchCriteria.EpisodeNumber > 0)
                     {
                         AddTvIdPageableRequests(pageableRequests,
-                            Settings.Categories,
+                            Settings.AnimeCategories,
                             searchCriteria,
                             $"&season={NewznabifySeasonNumber(searchCriteria.SeasonNumber)}&ep={searchCriteria.EpisodeNumber}");
 
