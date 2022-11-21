@@ -18,6 +18,8 @@ using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Instrumentation;
+using NzbDrone.Core.Lifecycle;
+using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Host;
 using NzbDrone.Host.AccessControl;
 using NzbDrone.Http.Authentication;
@@ -202,6 +204,7 @@ namespace NzbDrone.Host
                               IConfigFileProvider configFileProvider,
                               IRuntimeInfo runtimeInfo,
                               IFirewallAdapter firewallAdapter,
+                              IEventAggregator eventAggregator,
                               SonarrErrorPipeline errorHandler)
         {
             initializeLogger.Initialize();
@@ -222,6 +225,8 @@ namespace NzbDrone.Host
             {
                 Console.CancelKeyPress += (sender, eventArgs) => NLog.LogManager.Configuration = null;
             }
+
+            eventAggregator.PublishEvent(new ApplicationStartingEvent());
 
             if (OsInfo.IsWindows && runtimeInfo.IsAdmin)
             {
