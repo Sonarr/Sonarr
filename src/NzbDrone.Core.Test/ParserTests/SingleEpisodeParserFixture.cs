@@ -153,6 +153,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series Title - Temporada 2 [HDTV 720p][Cap.1901][AC3 5.1 Castellano][www.pctnew.com]", "Series Title", 19, 1)]
         [TestCase("Series Title 1x1", "Series Title", 1, 1)]
         [TestCase("1x1", "", 1, 1)]
+        [TestCase("Series Title [2022] [S25E13] [PL] [720p] [WEB-DL-CZRG] [x264] ", "Series Title [2022]", 25, 13)]
 
         // [TestCase("", "", 0, 0)]
         public void should_parse_single_episode(string postTitle, string title, int seasonNumber, int episodeNumber)
