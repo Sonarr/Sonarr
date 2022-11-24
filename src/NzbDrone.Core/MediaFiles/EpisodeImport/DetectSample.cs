@@ -43,6 +43,19 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                 _logger.Debug("Skipping sample check for .strm file");
                 return DetectSampleResult.NotSample;
             }
+            
+            string[] videoExtensions = {".webm", ".mkv", ".flv", ".mts", ".m2ts", ".mt", ".mov", ".wmv", ".amv", ".mp4", ".mpg", ".mpeg", ".mpv", ".m4v", "3gp", "3g2", ".flv", ".avi"};
+            
+            bool isVideo = false;
+            for (int i = 0; i < videoExtensions.Length; i++){
+            	if (extension != null && extension.Equals(videoExtensions[i], StringComparison.InvariantCultureIgnoreCase)){
+               	isVideo = true;
+                	break;
+            	}
+	    }
+	    if (!isVideo){
+	    	_logger.Debug("[{0}] Not a video extension, possibly malicious file. Treat with caution.");
+	    }
 
             // TODO: Use MediaInfo from the import process, no need to re-process the file again here
             var runTime = _videoFileInfoReader.GetRunTime(path);
