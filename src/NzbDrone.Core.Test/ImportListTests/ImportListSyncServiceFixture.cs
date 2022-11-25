@@ -25,17 +25,21 @@ namespace NzbDrone.Core.Test.ImportListTests
 
             _importListReports = new List<ImportListItemInfo> { importListItem1 };
 
-            Mocker.GetMock<IFetchAndParseImportList>()
-                  .Setup(v => v.Fetch())
-                  .Returns(_importListReports);
+            Mocker.GetMock<ISeriesService>()
+                  .Setup(v => v.AllSeriesTvdbIds())
+                  .Returns(new List<int>());
 
             Mocker.GetMock<ISearchForNewSeries>()
                   .Setup(v => v.SearchForNewSeries(It.IsAny<string>()))
                   .Returns(new List<Series>());
 
+            Mocker.GetMock<ISearchForNewSeries>()
+                  .Setup(v => v.SearchForNewSeriesByImdbId(It.IsAny<string>()))
+                  .Returns(new List<Series>());
+
             Mocker.GetMock<IImportListFactory>()
-                  .Setup(v => v.Get(It.IsAny<int>()))
-                  .Returns(new ImportListDefinition { ShouldMonitor = MonitorTypes.All });
+                  .Setup(v => v.All())
+                  .Returns(new List<ImportListDefinition> { new ImportListDefinition { ShouldMonitor = MonitorTypes.All } });
 
             Mocker.GetMock<IFetchAndParseImportList>()
                   .Setup(v => v.Fetch())
@@ -51,11 +55,16 @@ namespace NzbDrone.Core.Test.ImportListTests
             _importListReports.First().TvdbId = 81189;
         }
 
+        private void WithImdbId()
+        {
+            _importListReports.First().ImdbId = "tt0496424";
+        }
+
         private void WithExistingSeries()
         {
             Mocker.GetMock<ISeriesService>()
-                  .Setup(v => v.FindByTvdbId(_importListReports.First().TvdbId))
-                  .Returns(new Series { TvdbId = _importListReports.First().TvdbId });
+                  .Setup(v => v.AllSeriesTvdbIds())
+                  .Returns(new List<int> { _importListReports.First().TvdbId });
         }
 
         private void WithExcludedSeries()
@@ -74,8 +83,8 @@ namespace NzbDrone.Core.Test.ImportListTests
         private void WithMonitorType(MonitorTypes monitor)
         {
             Mocker.GetMock<IImportListFactory>()
-                  .Setup(v => v.Get(It.IsAny<int>()))
-                  .Returns(new ImportListDefinition { ShouldMonitor = monitor });
+                  .Setup(v => v.All())
+                  .Returns(new List<ImportListDefinition> { new ImportListDefinition { ShouldMonitor = monitor } });
         }
 
         [Test]
@@ -95,6 +104,16 @@ namespace NzbDrone.Core.Test.ImportListTests
 
             Mocker.GetMock<ISearchForNewSeries>()
                   .Verify(v => v.SearchForNewSeries(It.IsAny<string>()), Times.Never());
+        }
+
+        [Test]
+        public void should_search_by_imdb_if_series_title_and_series_imdb()
+        {
+            WithImdbId();
+            Subject.Execute(new ImportListSyncCommand());
+
+            Mocker.GetMock<ISearchForNewSeries>()
+                  .Verify(v => v.SearchForNewSeriesByImdbId(It.IsAny<string>()), Times.Once());
         }
 
         [Test]

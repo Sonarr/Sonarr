@@ -16,6 +16,7 @@ namespace NzbDrone.Core.Tv
         Series FindByTvdbId(int tvdbId);
         Series FindByTvRageId(int tvRageId);
         Series FindByPath(string path);
+        List<int> AllSeriesTvdbIds();
         Dictionary<int, string> AllSeriesPaths();
     }
 
@@ -71,6 +72,14 @@ namespace NzbDrone.Core.Tv
         {
             return Query(s => s.Path == path)
                         .FirstOrDefault();
+        }
+
+        public List<int> AllSeriesTvdbIds()
+        {
+            using (var conn = _database.OpenConnection())
+            {
+                return conn.Query<int>("SELECT TvdbId FROM Series").ToList();
+            }
         }
 
         public Dictionary<int, string> AllSeriesPaths()

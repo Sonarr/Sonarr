@@ -1,6 +1,7 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Core.MetadataSource;
 using NzbDrone.Core.MetadataSource.SkyHook;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
@@ -38,6 +39,30 @@ namespace NzbDrone.Core.Test.MetadataSource.SkyHook
             result.Should().NotBeEmpty();
 
             result[0].Title.Should().Be(expected);
+
+            ExceptionVerification.IgnoreWarns();
+        }
+
+        [TestCase("tt0496424", "30 Rock")]
+        public void should_search_by_imdb(string title, string expected)
+        {
+            var result = Subject.SearchForNewSeriesByImdbId(title);
+
+            result.Should().NotBeEmpty();
+
+            result[0].Title.Should().Be(expected);
+
+            ExceptionVerification.IgnoreWarns();
+        }
+
+        [TestCase("4565se")]
+        public void should_not_search_by_imdb_if_invalid(string title)
+        {
+            var result = Subject.SearchForNewSeriesByImdbId(title);
+            result.Should().BeEmpty();
+
+            Mocker.GetMock<ISearchForNewSeries>()
+                  .Verify(v => v.SearchForNewSeries(It.IsAny<string>()), Times.Never());
 
             ExceptionVerification.IgnoreWarns();
         }

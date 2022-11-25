@@ -69,6 +69,8 @@ namespace NzbDrone.Core.ImportLists
             var reportNumber = 1;
 
             var listExclusions = _importListExclusionService.All();
+            var importLists = _importListFactory.All();
+            var existingTvdbIds = _seriesService.AllSeriesTvdbIds();
 
             foreach (var report in reports)
             {
@@ -76,7 +78,20 @@ namespace NzbDrone.Core.ImportLists
 
                 reportNumber++;
 
-                var importList = _importListFactory.Get(report.ImportListId);
+                var importList = importLists.Single(x => x.Id == report.ImportListId);
+
+                // Map by IMDbId if we have it
+                if (report.TvdbId <= 0 && report.ImdbId.IsNotNullOrWhiteSpace())
+                {
+                    var mappedSeries = _seriesSearchService.SearchForNewSeriesByImdbId(report.ImdbId)
+                        .FirstOrDefault();
+
+                    if (mappedSeries != null)
+                    {
+                        report.TvdbId = mappedSeries.TvdbId;
+                        report.Title = mappedSeries?.Title;
+                    }
+                }
 
                 // Map TVDb if we only have a series name
                 if (report.TvdbId <= 0 && report.Title.IsNotNullOrWhiteSpace())
@@ -91,22 +106,19 @@ namespace NzbDrone.Core.ImportLists
                     }
                 }
 
-                // Check to see if series in DB
-                var existingSeries = _seriesService.FindByTvdbId(report.TvdbId);
-
-                // Break if Series Exists in DB
-                if (existingSeries != null)
-                {
-                    _logger.Debug("{0} [{1}] Rejected, Series Exists in DB", report.TvdbId, report.Title);
-                    continue;
-                }
-
                 // Check to see if series excluded
                 var excludedSeries = listExclusions.Where(s => s.TvdbId == report.TvdbId).SingleOrDefault();
 
                 if (excludedSeries != null)
                 {
                     _logger.Debug("{0} [{1}] Rejected due to list exclusion", report.TvdbId, report.Title);
+                    continue;
+                }
+
+                // Break if Series Exists in DB
+                if (existingTvdbIds.Any(x => x == report.TvdbId))
+                {
+                    _logger.Debug("{0} [{1}] Rejected, Series Exists in DB", report.TvdbId, report.Title);
                     continue;
                 }
 
