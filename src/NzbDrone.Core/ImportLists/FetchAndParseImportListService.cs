@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using NLog;
-using NzbDrone.Common.Extensions;
 using NzbDrone.Common.TPL;
 using NzbDrone.Core.Parser.Model;
 
@@ -18,11 +17,13 @@ namespace NzbDrone.Core.ImportLists
     public class FetchAndParseImportListService : IFetchAndParseImportList
     {
         private readonly IImportListFactory _importListFactory;
+        private readonly IImportListStatusService _importListStatusService;
         private readonly Logger _logger;
 
-        public FetchAndParseImportListService(IImportListFactory importListFactory, Logger logger)
+        public FetchAndParseImportListService(IImportListFactory importListFactory, IImportListStatusService importListStatusService, Logger logger)
         {
             _importListFactory = importListFactory;
+            _importListStatusService = importListStatusService;
             _logger = logger;
         }
 
@@ -46,6 +47,13 @@ namespace NzbDrone.Core.ImportLists
             foreach (var importList in importLists)
             {
                 var importListLocal = importList;
+                var importListStatus = _importListStatusService.GetLastSyncListInfo(importListLocal.Definition.Id);
+
+                if (DateTime.UtcNow < (importListStatus + importListLocal.MinRefreshInterval))
+                {
+                    _logger.Trace("Skipping refresh of Import List {0} due to minimum refresh inverval", importListLocal.Definition.Name);
+                    continue;
+                }
 
                 var task = taskFactory.StartNew(() =>
                      {
@@ -59,6 +67,8 @@ namespace NzbDrone.Core.ImportLists
 
                                  result.AddRange(importListReports);
                              }
+
+                             _importListStatusService.UpdateListSyncStatus(importList.Definition.Id);
                          }
                          catch (Exception e)
                          {
@@ -87,6 +97,14 @@ namespace NzbDrone.Core.ImportLists
             if (importList == null || !definition.EnableAutomaticAdd)
             {
                 _logger.Debug("Import list not enabled, skipping.");
+                return result;
+            }
+
+            var importListStatus = _importListStatusService.GetLastSyncListInfo(importList.Definition.Id);
+
+            if (DateTime.UtcNow < (importListStatus + importList.MinRefreshInterval))
+            {
+                _logger.Trace("Skipping refresh of Import List {0} due to minimum refresh inverval", importList.Definition.Name);
                 return result;
             }
 
