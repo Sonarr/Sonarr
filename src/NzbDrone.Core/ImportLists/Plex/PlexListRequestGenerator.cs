@@ -17,12 +17,12 @@ namespace NzbDrone.Core.ImportLists.Plex
         {
             var pageableRequests = new ImportListPageableRequestChain();
 
-            pageableRequests.Add(GetMoviesRequest());
+            pageableRequests.Add(GetSeriesRequest());
 
             return pageableRequests;
         }
 
-        private IEnumerable<ImportListRequest> GetMoviesRequest()
+        private IEnumerable<ImportListRequest> GetSeriesRequest()
         {
             var request = new ImportListRequest(_plexTvService.GetWatchlist(Settings.AccessToken));
 
