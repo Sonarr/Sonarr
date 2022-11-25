@@ -29,14 +29,22 @@ UpdateVersionNumber()
     fi
 }
 
-EnableBsdSupport()
+EnableExtraPlatformsInSDK()
 {
-    #todo enable sdk with
-    #SDK_PATH=$(dotnet --list-sdks | grep -P '5\.\d\.\d+' | head -1 | sed 's/\(5\.[0-9]*\.[0-9]*\).*\[\(.*\)\]/\2\/\1/g')
-    # BUNDLED_VERSIONS="${SDK_PATH}/Microsoft.NETCoreSdk.BundledVersions.props"
+    SDK_PATH=$(dotnet --list-sdks | grep -P '6\.\d\.\d+' | head -1 | sed 's/\(6\.[0-9]*\.[0-9]*\).*\[\(.*\)\]/\2\/\1/g')
+    BUNDLEDVERSIONS="${SDK_PATH}/Microsoft.NETCoreSdk.BundledVersions.props"
+    if grep -q freebsd-x64 $BUNDLEDVERSIONS; then
+        echo "Extra platforms already enabled"
+    else
+        echo "Enabling extra platform support"
+        sed -i.ORI 's/osx-x64/osx-x64;freebsd-x64;linux-x86/' $BUNDLEDVERSIONS
+    fi
+}
 
+EnableExtraPlatforms()
+{
     if grep -qv freebsd-x64 src/Directory.Build.props; then
-        sed -i'' -e "s^<RuntimeIdentifiers>\(.*\)</RuntimeIdentifiers>^<RuntimeIdentifiers>\1;freebsd-x64</RuntimeIdentifiers>^g" src/Directory.Build.props
+        sed -i'' -e "s^<RuntimeIdentifiers>\(.*\)</RuntimeIdentifiers>^<RuntimeIdentifiers>\1;freebsd-x64;linux-x86</RuntimeIdentifiers>^g" src/Directory.Build.props
     fi
 }
 
@@ -318,7 +326,8 @@ if [ $# -eq 0 ]; then
     FRONTEND=YES
     PACKAGES=YES
     LINT=YES
-    ENABLE_BSD=NO
+    ENABLE_EXTRA_PLATFORMS=NO
+    ENABLE_EXTRA_PLATFORMS_IN_SDK=NO
 fi
 
 while [[ $# -gt 0 ]]
@@ -330,8 +339,12 @@ case $key in
         BACKEND=YES
         shift # past argument
         ;;
-    --enable-bsd)
-        ENABLE_BSD=YES
+    --enable-bsd|--enable-extra-platforms)
+        ENABLE_EXTRA_PLATFORMS=YES
+        shift # past argument
+        ;;
+    --enable-extra-platforms-in-sdk)
+        ENABLE_EXTRA_PLATFORMS_IN_SDK=YES
         shift # past argument
         ;;
     -r|--runtime)
@@ -371,13 +384,17 @@ esac
 done
 set -- "${POSITIONAL[@]}" # restore positional parameters
 
+if [ "$ENABLE_EXTRA_PLATFORMS_IN_SDK" = "YES" ];
+then
+    EnableExtraPlatformsInSDK
+fi
+
 if [ "$BACKEND" = "YES" ];
 then
     UpdateVersionNumber
-
-    if [ "$ENABLE_BSD" = "YES" ];
+    if [ "$ENABLE_EXTRA_PLATFORMS" = "YES" ];
     then
-        EnableBsdSupport
+        EnableExtraPlatforms
     fi
 
     Build
@@ -389,9 +406,10 @@ then
         PackageTests "net6.0" "linux-x64"
         PackageTests "net6.0" "linux-musl-x64"
         PackageTests "net6.0" "osx-x64"
-        if [ "$ENABLE_BSD" = "YES" ];
+        if [ "$ENABLE_EXTRA_PLATFORMS" = "YES" ];
         then
             PackageTests "net6.0" "freebsd-x64"
+            PackageTests "net6.0" "linux-x86"
         fi
     else
         PackageTests "$FRAMEWORK" "$RID"
@@ -426,11 +444,13 @@ then
         Package "net6.0" "linux-arm64"
         Package "net6.0" "linux-musl-arm64"
         Package "net6.0" "linux-arm"
+        Package "net6.0" "linux-musl-arm"
         Package "net6.0" "osx-x64"
         Package "net6.0" "osx-arm64"
-        if [ "$ENABLE_BSD" = "YES" ];
+        if [ "$ENABLE_EXTRA_PLATFORMS" = "YES" ];
         then
             Package "net6.0" "freebsd-x64"
+            Package "net6.0" "linux-x86"
         fi
     else
         Package "$FRAMEWORK" "$RID"
