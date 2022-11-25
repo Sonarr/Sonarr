@@ -69,6 +69,20 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
             return new Tuple<Series, List<Episode>>(series, episodes.ToList());
         }
 
+        public List<Series> SearchForNewSeriesByImdbId(string imdbId)
+        {
+            imdbId = Parser.Parser.NormalizeImdbId(imdbId);
+
+            if (imdbId == null)
+            {
+                return new List<Series>();
+            }
+
+            var results = SearchForNewSeries($"imdb:{imdbId}");
+
+            return results;
+        }
+
         public List<Series> SearchForNewSeries(string title)
         {
             try

@@ -165,9 +165,9 @@ namespace NzbDrone.Core.ImportLists
             return CleanupListItems(releases);
         }
 
-        protected virtual bool IsValidItem(ImportListItemInfo release)
+        protected virtual bool IsValidItem(ImportListItemInfo listItem)
         {
-            if (release.Title.IsNullOrWhiteSpace())
+            if (listItem.Title.IsNullOrWhiteSpace() && listItem.ImdbId.IsNullOrWhiteSpace() && listItem.TmdbId == 0)
             {
                 return false;
             }

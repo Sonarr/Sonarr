@@ -733,6 +733,24 @@ namespace NzbDrone.Core.Parser
             return title.Trim().ToLower();
         }
 
+        public static string NormalizeImdbId(string imdbId)
+        {
+            var imdbRegex = new Regex(@"^(\d{1,10}|(tt)\d{1,10})$");
+
+            if (!imdbRegex.IsMatch(imdbId))
+            {
+                return null;
+            }
+
+            if (imdbId.Length > 2)
+            {
+                imdbId = imdbId.Replace("tt", "").PadLeft(7, '0');
+                return $"tt{imdbId}";
+            }
+
+            return null;
+        }
+
         public static string ParseReleaseGroup(string title)
         {
             title = title.Trim();
