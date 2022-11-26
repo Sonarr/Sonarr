@@ -65,6 +65,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[Anime Time] A Show [BD][Dual Audio][1080p][HEVC 10bit x265][AAC][Eng Sub] [Batch] Title)", "Anime Time")]
         [TestCase("[Project Angel] Anime Series [DVD 480p] [10-bit x265 HEVC | Opus]", "Project Angel")]
         [TestCase("[Hakata Ramen] Show Title - Season 2 - Revival of The Commandments", "Hakata Ramen")]
+        [TestCase("Show Name (2022) S01 (2160p DSNP WEB-DL H265 DV HDR DDP Atmos 5.1 English - HONE)", "HONE")]
+        [TestCase("Show Title (2021) S01 (2160p ATVP WEB-DL Hybrid H265 DV HDR10+ DDP Atmos 5.1 English - HONE)", "HONE")]
         public void should_parse_exception_release_group(string title, string expected)
         {
             Parser.Parser.ParseReleaseGroup(title).Should().Be(expected);
