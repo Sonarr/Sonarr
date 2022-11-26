@@ -11,26 +11,41 @@ namespace NzbDrone.Common.Instrumentation.Sentry
         {
             try
             {
-                sentryEvent.Message = CleanseLogMessage.Cleanse(sentryEvent.Message);
+                if (sentryEvent.Message is not null)
+                {
+                    sentryEvent.Message.Formatted = CleanseLogMessage.Cleanse(sentryEvent.Message.Formatted);
+                    sentryEvent.Message.Message = CleanseLogMessage.Cleanse(sentryEvent.Message.Message);
+                    sentryEvent.Message.Params = sentryEvent.Message.Params?.Select(x => CleanseLogMessage.Cleanse(x switch
+                    {
+                        string str => str,
+                        _ => x.ToString()
+                    })).ToList();
+                }
 
-                if (sentryEvent.Fingerprint != null)
+                if (sentryEvent.Fingerprint.Any())
                 {
                     var fingerprint = sentryEvent.Fingerprint.Select(x => CleanseLogMessage.Cleanse(x)).ToList();
                     sentryEvent.SetFingerprint(fingerprint);
                 }
 
-                if (sentryEvent.Extra != null)
+                if (sentryEvent.Extra.Any())
                 {
-                    var extras = sentryEvent.Extra.ToDictionary(x => x.Key, y => (object)CleanseLogMessage.Cleanse((string)y.Value));
+                    var extras = sentryEvent.Extra.ToDictionary(x => x.Key, y => (object)CleanseLogMessage.Cleanse(y.Value as string));
                     sentryEvent.SetExtras(extras);
                 }
 
-                foreach (var exception in sentryEvent.SentryExceptions)
+                if (sentryEvent.SentryExceptions is not null)
                 {
-                    exception.Value = CleanseLogMessage.Cleanse(exception.Value);
-                    foreach (var frame in exception.Stacktrace.Frames)
+                    foreach (var exception in sentryEvent.SentryExceptions)
                     {
-                        frame.FileName = ShortenPath(frame.FileName);
+                        exception.Value = CleanseLogMessage.Cleanse(exception.Value);
+                        if (exception.Stacktrace is not null)
+                        {
+                            foreach (var frame in exception.Stacktrace.Frames)
+                            {
+                                frame.FileName = ShortenPath(frame.FileName);
+                            }
+                        }
                     }
                 }
             }
