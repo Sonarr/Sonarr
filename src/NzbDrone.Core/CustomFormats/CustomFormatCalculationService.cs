@@ -14,8 +14,8 @@ namespace NzbDrone.Core.CustomFormats
 {
     public interface ICustomFormatCalculationService
     {
-        List<CustomFormat> ParseCustomFormat(ParsedEpisodeInfo movieInfo);
-        List<CustomFormat> ParseCustomFormat(EpisodeFile movieFile);
+        List<CustomFormat> ParseCustomFormat(ParsedEpisodeInfo episodeInfo, Series series);
+        List<CustomFormat> ParseCustomFormat(EpisodeFile episodeFile);
         List<CustomFormat> ParseCustomFormat(Blocklist blocklist);
         List<CustomFormat> ParseCustomFormat(EpisodeHistory history);
     }
@@ -92,24 +92,25 @@ namespace NzbDrone.Core.CustomFormats
             return ParseCustomFormat(info, allCustomFormats);
         }
 
-        public List<CustomFormat> ParseCustomFormat(ParsedEpisodeInfo movieInfo)
+        public List<CustomFormat> ParseCustomFormat(ParsedEpisodeInfo episodeInfo, Series series)
         {
-            return ParseCustomFormat(movieInfo, _formatService.All());
+            episodeInfo.ExtraInfo["OriginalLanguage"] = series.OriginalLanguage;
+            return ParseCustomFormat(episodeInfo, _formatService.All());
         }
 
-        public List<CustomFormat> ParseCustomFormat(EpisodeFile wpisodeFile)
+        public List<CustomFormat> ParseCustomFormat(EpisodeFile episodeFile)
         {
-            return ParseCustomFormat(wpisodeFile, _formatService.All());
+            return ParseCustomFormat(episodeFile, _formatService.All());
         }
 
         public List<CustomFormat> ParseCustomFormat(Blocklist blocklist)
         {
-            var movie = _seriesService.GetSeries(blocklist.SeriesId);
+            var series = _seriesService.GetSeries(blocklist.SeriesId);
             var parsed = Parser.Parser.ParseTitle(blocklist.SourceTitle);
 
             var info = new ParsedEpisodeInfo
             {
-                SeriesTitle = movie.Title,
+                SeriesTitle = series.Title,
                 ReleaseTitle = parsed?.ReleaseTitle ?? blocklist.SourceTitle,
                 Quality = blocklist.Quality,
                 Languages = blocklist.Languages,
@@ -120,19 +121,19 @@ namespace NzbDrone.Core.CustomFormats
                 }
             };
 
-            return ParseCustomFormat(info);
+            return ParseCustomFormat(info, series);
         }
 
         public List<CustomFormat> ParseCustomFormat(EpisodeHistory history)
         {
-            var movie = _seriesService.GetSeries(history.SeriesId);
+            var series = _seriesService.GetSeries(history.SeriesId);
             var parsed = Parser.Parser.ParseTitle(history.SourceTitle);
 
             long.TryParse(history.Data.GetValueOrDefault("size"), out var size);
 
             var info = new ParsedEpisodeInfo
             {
-                SeriesTitle = movie.Title,
+                SeriesTitle = series.Title,
                 ReleaseTitle = parsed?.ReleaseTitle ?? history.SourceTitle,
                 Quality = history.Quality,
                 Languages = history.Languages,
@@ -143,7 +144,7 @@ namespace NzbDrone.Core.CustomFormats
                 }
             };
 
-            return ParseCustomFormat(info);
+            return ParseCustomFormat(info, series);
         }
     }
 }

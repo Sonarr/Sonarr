@@ -272,7 +272,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
                   .Returns(new List<CustomFormat>());
 
             Mocker.GetMock<ICustomFormatCalculationService>()
-                  .Setup(s => s.ParseCustomFormat(It.IsAny<ParsedEpisodeInfo>()))
+                  .Setup(s => s.ParseCustomFormat(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<Series>()))
                   .Returns(new List<CustomFormat>());
 
             _localEpisode.Quality = new QualityModel(Quality.Bluray2160p);
@@ -306,7 +306,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
                   .Returns(new List<CustomFormat>());
 
             Mocker.GetMock<ICustomFormatCalculationService>()
-                  .Setup(s => s.ParseCustomFormat(It.IsAny<ParsedEpisodeInfo>()))
+                  .Setup(s => s.ParseCustomFormat(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<Series>()))
                   .Returns(new List<CustomFormat>());
 
             _localEpisode.Quality = new QualityModel(Quality.Bluray1080p);
@@ -384,7 +384,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
                   .Returns(new List<CustomFormat>());
 
             Mocker.GetMock<ICustomFormatCalculationService>()
-                  .Setup(s => s.ParseCustomFormat(It.IsAny<ParsedEpisodeInfo>()))
+                  .Setup(s => s.ParseCustomFormat(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<Series>()))
                   .Returns(new List<CustomFormat>());
 
             _localEpisode.Quality = new QualityModel(Quality.Bluray1080p);
@@ -417,7 +417,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
                   .Returns(new List<CustomFormat>());
 
             Mocker.GetMock<ICustomFormatCalculationService>()
-                  .Setup(s => s.ParseCustomFormat(It.IsAny<ParsedEpisodeInfo>()))
+                  .Setup(s => s.ParseCustomFormat(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<Series>()))
                   .Returns(new List<CustomFormat>());
 
             _localEpisode.Quality = new QualityModel(Quality.Bluray1080p);

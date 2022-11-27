@@ -52,7 +52,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                     continue;
                 }
 
-                var queuedItemCustomFormats = _formatService.ParseCustomFormat(remoteEpisode.ParsedEpisodeInfo);
+                var queuedItemCustomFormats = _formatService.ParseCustomFormat(remoteEpisode.ParsedEpisodeInfo, subject.Series);
 
                 _logger.Debug("Checking if existing release in queue meets cutoff. Queued: {0}", remoteEpisode.ParsedEpisodeInfo.Quality);
 
