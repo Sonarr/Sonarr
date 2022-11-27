@@ -98,7 +98,7 @@ namespace NzbDrone.Core.DecisionEngine
                         var remoteEpisode = _parsingService.Map(parsedEpisodeInfo, report.TvdbId, report.TvRageId, searchCriteria);
                         remoteEpisode.Release = report;
 
-                        remoteEpisode.CustomFormats = _formatCalculator.ParseCustomFormat(parsedEpisodeInfo);
+                        remoteEpisode.CustomFormats = _formatCalculator.ParseCustomFormat(parsedEpisodeInfo, remoteEpisode.Series);
                         remoteEpisode.CustomFormatScore = remoteEpisode?.Series?.QualityProfile?.Value.CalculateCustomFormatScore(remoteEpisode.CustomFormats) ?? 0;
 
                         if (remoteEpisode.Series == null)
