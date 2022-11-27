@@ -78,14 +78,14 @@ function ReleaseSceneIndicator(props) {
 
   if (isMixed) {
     level = styles.levelMixed;
-    messages.push(<div>{comment ?? 'Source'} releases exist with ambiguous numbering, unable to reliably identify episode.</div>);
+    messages.push(<div key="source">{comment ?? 'Source'} releases exist with ambiguous numbering, unable to reliably identify episode.</div>);
   } else if (isUnknown) {
     level = styles.levelUnknown;
-    messages.push(<div>Numbering varies for this episode and release does not match any known mappings.</div>);
+    messages.push(<div key="unknown">Numbering varies for this episode and release does not match any known mappings.</div>);
     if (sceneOrigin === 'unknown') {
-      messages.push(<div>Assuming Scene numbering.</div>);
+      messages.push(<div key="origin">Assuming Scene numbering.</div>);
     } else if (sceneOrigin === 'unknown:tvdb') {
-      messages.push(<div>Assuming TheTVDB numbering.</div>);
+      messages.push(<div key="origin">Assuming TheTVDB numbering.</div>);
     }
   } else if (mappingDifferent) {
     level = styles.levelMapped;
@@ -98,9 +98,9 @@ function ReleaseSceneIndicator(props) {
       level = styles.levelNotRequested;
     }
     if (mappedNumber) {
-      messages.push(<div>Mapped episode wasn't requested in this search.</div>);
+      messages.push(<div key="not-requested">Mapped episode wasn't requested in this search.</div>);
     } else {
-      messages.push(<div>Unknown episode or series.</div>);
+      messages.push(<div key="unknown-series">Unknown episode or series.</div>);
     }
   }
 
@@ -152,10 +152,7 @@ function ReleaseSceneIndicator(props) {
     <Popover
       anchor={
         <div className={classNames(level, styles.container, className)}>
-          <Icon
-            name={icons.SCENE_MAPPING}
-            size={sizes.SMALL}
-          />
+          <Icon name={icons.SCENE_MAPPING} />
         </div>
       }
       title="Scene Info"
