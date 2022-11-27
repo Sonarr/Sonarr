@@ -1,3 +1,4 @@
+using System;
 using NzbDrone.Core.ImportLists;
 using NzbDrone.Core.Tv;
 
@@ -13,6 +14,7 @@ namespace Sonarr.Api.V3.ImportLists
         public bool SeasonFolder { get; set; }
         public ImportListType ListType { get; set; }
         public int ListOrder { get; set; }
+        public TimeSpan MinRefreshInterval { get; set; }
     }
 
     public class ImportListResourceMapper : ProviderResourceMapper<ImportListResource, ImportListDefinition>
@@ -34,6 +36,7 @@ namespace Sonarr.Api.V3.ImportLists
             resource.SeasonFolder = definition.SeasonFolder;
             resource.ListType = definition.ListType;
             resource.ListOrder = (int)definition.ListType;
+            resource.MinRefreshInterval = definition.MinRefreshInterval;
 
             return resource;
         }
@@ -54,6 +57,7 @@ namespace Sonarr.Api.V3.ImportLists
             definition.SeriesType = resource.SeriesType;
             definition.SeasonFolder = resource.SeasonFolder;
             definition.ListType = resource.ListType;
+            definition.MinRefreshInterval = resource.MinRefreshInterval;
 
             return definition;
         }

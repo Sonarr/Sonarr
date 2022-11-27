@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import SeriesMonitoringOptionsPopoverContent from 'AddSeries/SeriesMonitoringOptionsPopoverContent';
 import SeriesTypePopoverContent from 'AddSeries/SeriesTypePopoverContent';
+import Alert from 'Components/Alert';
 import Form from 'Components/Form/Form';
 import FormGroup from 'Components/Form/FormGroup';
 import FormInputGroup from 'Components/Form/FormInputGroup';
@@ -17,6 +18,7 @@ import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import Popover from 'Components/Tooltip/Popover';
 import { icons, inputTypes, kinds, tooltipPositions } from 'Helpers/Props';
+import formatShortTimeSpan from 'Utilities/Date/formatShortTimeSpan';
 import styles from './EditImportListModalContent.css';
 
 function EditImportListModalContent(props) {
@@ -42,6 +44,7 @@ function EditImportListModalContent(props) {
     id,
     name,
     enableAutomaticAdd,
+    minRefreshInterval,
     shouldMonitor,
     rootFolderPath,
     qualityProfileId,
@@ -73,6 +76,14 @@ function EditImportListModalContent(props) {
         {
           !isFetching && !error ?
             <Form {...otherProps}>
+
+              <Alert
+                kind={kinds.INFO}
+                className={styles.message}
+              >
+                {`List will refresh every ${formatShortTimeSpan(minRefreshInterval.value)}`}
+              </Alert>
+
               <FormGroup>
                 <FormLabel>Name</FormLabel>
 

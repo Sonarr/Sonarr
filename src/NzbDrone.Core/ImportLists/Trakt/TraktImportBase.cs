@@ -14,8 +14,7 @@ namespace NzbDrone.Core.ImportLists.Trakt
     where TSettings : TraktSettingsBase<TSettings>, new()
     {
         public override ImportListType ListType => ImportListType.Trakt;
-
-        public override TimeSpan MinRefreshInterval => TimeSpan.FromHours(24);
+        public override TimeSpan MinRefreshInterval => TimeSpan.FromHours(12);
 
         public const string OAuthUrl = "https://trakt.tv/oauth/authorize";
         public const string RedirectUri = "https://auth.servarr.com/v1/trakt_sonarr/auth";

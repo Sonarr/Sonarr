@@ -1,3 +1,4 @@
+using System;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Tv;
 
@@ -16,5 +17,6 @@ namespace NzbDrone.Core.ImportLists
 
         public ImportListStatus Status { get; set; }
         public ImportListType ListType { get; set; }
+        public TimeSpan MinRefreshInterval { get; set; }
     }
 }
