@@ -7,6 +7,7 @@ using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.CustomFormats;
 using NzbDrone.Core.DecisionEngine;
+using NzbDrone.Core.Download.Aggregation;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Languages;
@@ -45,6 +46,7 @@ namespace NzbDrone.Core.Download.Pending
         private readonly ITaskManager _taskManager;
         private readonly IConfigService _configService;
         private readonly ICustomFormatCalculationService _customFormatCalculationService;
+        private readonly IRemoteEpisodeAggregationService _aggregationService;
         private readonly IEventAggregator _eventAggregator;
         private readonly Logger _logger;
 
@@ -56,6 +58,7 @@ namespace NzbDrone.Core.Download.Pending
                                     ITaskManager taskManager,
                                     IConfigService configService,
                                     ICustomFormatCalculationService customFormatCalculationService,
+                                    IRemoteEpisodeAggregationService aggregationService,
                                     IEventAggregator eventAggregator,
                                     Logger logger)
         {
@@ -67,6 +70,7 @@ namespace NzbDrone.Core.Download.Pending
             _taskManager = taskManager;
             _configService = configService;
             _customFormatCalculationService = customFormatCalculationService;
+            _aggregationService = aggregationService;
             _eventAggregator = eventAggregator;
             _logger = logger;
         }
@@ -158,6 +162,7 @@ namespace NzbDrone.Core.Download.Pending
             var nextRssSync = new Lazy<DateTime>(() => _taskManager.GetNextExecution(typeof(RssSyncCommand)));
 
             var pendingReleases = IncludeRemoteEpisodes(_repository.WithoutFallback());
+
             foreach (var pendingRelease in pendingReleases)
             {
                 foreach (var episode in pendingRelease.RemoteEpisode.Episodes)
@@ -185,7 +190,7 @@ namespace NzbDrone.Core.Download.Pending
                                     Id = GetQueueId(pendingRelease, episode),
                                     Series = pendingRelease.RemoteEpisode.Series,
                                     Episode = episode,
-                                    Languages = pendingRelease.RemoteEpisode.ParsedEpisodeInfo.Languages,
+                                    Languages = pendingRelease.RemoteEpisode.Languages,
                                     Quality = pendingRelease.RemoteEpisode.ParsedEpisodeInfo.Quality,
                                     Title = pendingRelease.Title,
                                     Size = pendingRelease.RemoteEpisode.Release.Size,
@@ -330,6 +335,7 @@ namespace NzbDrone.Core.Download.Pending
                     release.RemoteEpisode.Episodes = new List<Episode>();
                 }
 
+                _aggregationService.Augment(release.RemoteEpisode);                
                 release.RemoteEpisode.CustomFormats = _customFormatCalculationService.ParseCustomFormat(release.RemoteEpisode.ParsedEpisodeInfo, release.RemoteEpisode.Series);
 
                 result.Add(release);

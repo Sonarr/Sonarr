@@ -104,7 +104,7 @@ namespace Sonarr.Api.V3.Indexers
                 Title = releaseInfo.Title,
                 FullSeason = parsedEpisodeInfo.FullSeason,
                 SeasonNumber = parsedEpisodeInfo.SeasonNumber,
-                Languages = parsedEpisodeInfo.Languages,
+                Languages = remoteEpisode.Languages,
                 AirDate = parsedEpisodeInfo.AirDate,
                 SeriesTitle = parsedEpisodeInfo.SeriesTitle,
                 EpisodeNumbers = parsedEpisodeInfo.EpisodeNumbers,

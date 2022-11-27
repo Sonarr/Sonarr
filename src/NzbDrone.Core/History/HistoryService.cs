@@ -148,7 +148,7 @@ namespace NzbDrone.Core.History
                     SeriesId = episode.SeriesId,
                     EpisodeId = episode.Id,
                     DownloadId = message.DownloadId,
-                    Languages = message.Episode.ParsedEpisodeInfo.Languages,
+                    Languages = message.Episode.Languages,
                 };
 
                 history.Data.Add("Indexer", message.Episode.Release.Indexer);

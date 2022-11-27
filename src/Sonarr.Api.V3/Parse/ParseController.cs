@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Core.Download.Aggregation;
 using NzbDrone.Core.Parser;
 using Sonarr.Api.V3.Episodes;
 using Sonarr.Api.V3.Series;
@@ -11,10 +12,13 @@ namespace Sonarr.Api.V3.Parse
     public class ParseController : Controller
     {
         private readonly IParsingService _parsingService;
+        private readonly IRemoteEpisodeAggregationService _aggregationService;
 
-        public ParseController(IParsingService parsingService)
+        public ParseController(IParsingService parsingService,
+                               IRemoteEpisodeAggregationService aggregationService)
         {
             _parsingService = parsingService;
+            _aggregationService = aggregationService;
         }
 
         [HttpGet]
@@ -37,6 +41,8 @@ namespace Sonarr.Api.V3.Parse
             }
 
             var remoteEpisode = _parsingService.Map(parsedEpisodeInfo, 0, 0);
+
+            _aggregationService.Augment(remoteEpisode);
 
             if (remoteEpisode != null)
             {
