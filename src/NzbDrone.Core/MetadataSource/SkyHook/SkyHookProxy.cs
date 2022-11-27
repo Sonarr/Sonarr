@@ -174,7 +174,9 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
             series.CleanTitle = Parser.Parser.CleanSeriesTitle(show.Title);
             series.SortTitle = SeriesTitleNormalizer.Normalize(show.Title, show.TvdbId);
 
-            series.OriginalLanguage = IsoLanguages.Find(show.OriginalLanguage?.ToLower())?.Language ?? Language.English;
+            series.OriginalLanguage = show.OriginalLanguage.IsNotNullOrWhiteSpace() ?
+                IsoLanguages.Find(show.OriginalLanguage.ToLower())?.Language ?? Language.English :
+                Language.English;
 
             if (show.FirstAired != null)
             {
