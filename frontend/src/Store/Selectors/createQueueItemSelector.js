@@ -10,11 +10,7 @@ function createQueueItemSelector() {
       }
 
       return details.find((item) => {
-        if (item.episode) {
-          return item.episode.id === episodeId;
-        }
-
-        return false;
+        return item.episodeId === episodeId;
       });
     }
   );
