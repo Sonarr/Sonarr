@@ -36,7 +36,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                     continue;
                 }
 
-                _logger.Debug("Comparing file quality with report. Existing file is {0} - {1}", file.Quality);
+                _logger.Debug("Comparing file quality with report. Existing file is {0}", file.Quality);
 
                 var customFormats = _formatService.ParseCustomFormat(file);
 
