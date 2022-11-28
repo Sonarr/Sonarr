@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Download.Aggregation.Aggregators
             var series = remoteEpisode.Series;
             var releaseTokens = parsedEpisodeInfo.ReleaseTokens ?? parsedEpisodeInfo.ReleaseTitle;
             var normalizedReleaseTokens = Parser.Parser.NormalizeEpisodeTitle(releaseTokens);
-            var cleanNormalizedReleaseTokens = normalizedReleaseTokens.CleanSeriesTitle();
+            var languagesToRemove = new List<Language>();
 
             if (series == null)
             {
@@ -43,15 +43,21 @@ namespace NzbDrone.Core.Download.Aggregation.Aggregators
                 if (!episodeTitleLanguage.Contains(Language.Unknown))
                 {
                     var normalizedEpisodeTitle = Parser.Parser.NormalizeEpisodeTitle(episode.Title);
-                    var cleanNormalizedEpisodeTitle = normalizedEpisodeTitle.CleanSeriesTitle();
+                    var episodeTitleIndex = normalizedReleaseTokens.IndexOf(normalizedEpisodeTitle, StringComparison.CurrentCultureIgnoreCase);
 
-                    if (normalizedReleaseTokens.Contains(normalizedEpisodeTitle, StringComparison.CurrentCultureIgnoreCase) ||
-                        cleanNormalizedReleaseTokens.Contains(cleanNormalizedEpisodeTitle, StringComparison.CurrentCultureIgnoreCase))
+                    if (episodeTitleIndex >= 0)
                     {
-                        languages = languages.Except(episodeTitleLanguage).ToList();
+                        releaseTokens = releaseTokens.Remove(episodeTitleIndex, normalizedEpisodeTitle.Length);
+                        languagesToRemove.AddRange(episodeTitleLanguage);
                     }
                 }
             }
+
+            // Remove any languages still in the title that would normally be removed
+            languagesToRemove = languagesToRemove.Except(LanguageParser.ParseLanguages(releaseTokens)).ToList();
+
+            // Remove all languages that aren't part of the updated releaseTokens
+            languages = languages.Except(languagesToRemove).ToList();
 
             // Use series language as fallback if we couldn't parse a language
             if (languages.Count == 0 || (languages.Count == 1 && languages.First() == Language.Unknown))

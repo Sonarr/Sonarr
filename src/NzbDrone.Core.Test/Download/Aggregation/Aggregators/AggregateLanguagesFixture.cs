@@ -74,7 +74,7 @@ namespace NzbDrone.Core.Test.Download.Aggregation.Aggregators
         }
 
         [Test]
-        public void should_use_parsed_language_that_is_part_of_episode_title_when_release_tokens_contains_episode_title()
+        public void should_remove_parsed_language_that_is_part_of_episode_title_when_release_tokens_contains_episode_title()
         {
             var releaseTitle = "Series.Title.S01E01.Jimmy.The.Greek.French.xyz-RlsGroup";
             var releaseTokens = ".Jimmy.The.Greek.French.xyz-RlsGroup";
@@ -90,6 +90,18 @@ namespace NzbDrone.Core.Test.Download.Aggregation.Aggregators
         {
             var releaseTitle = "Series.Title.S01E01.xyz-RlsGroup";
             var releaseTokens = ".xyz-RlsGroup";
+
+            _remoteEpisode.Episodes.First().Title = "Jimmy The Greek";
+            _remoteEpisode.ParsedEpisodeInfo = GetParsedEpisodeInfo(new List<Language> { Language.Greek }, releaseTitle, releaseTokens);
+
+            Subject.Aggregate(_remoteEpisode).Languages.Should().Equal(Language.Greek);
+        }
+
+        [Test]
+        public void should_use_reparse_language_after_determining_languages_that_are_in_episode_titles()
+        {
+            var releaseTitle = "Series.Title.S01E01.Jimmy.The.Greek.Greek.xyz-RlsGroup";
+            var releaseTokens = ".Jimmy.The.Greek.Greek.xyz-RlsGroup";
 
             _remoteEpisode.Episodes.First().Title = "Jimmy The Greek";
             _remoteEpisode.ParsedEpisodeInfo = GetParsedEpisodeInfo(new List<Language> { Language.Greek }, releaseTitle, releaseTokens);
