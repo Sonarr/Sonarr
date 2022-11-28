@@ -6,7 +6,7 @@ import DescriptionList from 'Components/DescriptionList/DescriptionList';
 import DescriptionListItem from 'Components/DescriptionList/DescriptionListItem';
 import Icon from 'Components/Icon';
 import Popover from 'Components/Tooltip/Popover';
-import { icons, sizes, tooltipPositions } from 'Helpers/Props';
+import { icons, tooltipPositions } from 'Helpers/Props';
 import styles from './ReleaseSceneIndicator.css';
 
 function formatReleaseNumber(seasonNumber, episodeNumbers, absoluteEpisodeNumbers) {
