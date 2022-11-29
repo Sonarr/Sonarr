@@ -70,6 +70,12 @@ namespace Sonarr.Http.REST
 
                 foreach (var resource in resourceArgs)
                 {
+                    // Map route Id to body resource if not set in request
+                    if (Request.Method == "PUT" && resource.Id == 0 && context.RouteData.Values.TryGetValue("id", out var routeId))
+                    {
+                        resource.Id = Convert.ToInt32(routeId);
+                    }
+
                     ValidateResource(resource, skipValidate, skipShared);
                 }
             }

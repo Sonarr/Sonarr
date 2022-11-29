@@ -8,6 +8,7 @@ using NzbDrone.SignalR;
 using Sonarr.Http;
 using Sonarr.Http.Extensions;
 using Sonarr.Http.REST;
+using Sonarr.Http.REST.Attributes;
 
 namespace Sonarr.Api.V3.Episodes
 {
@@ -47,9 +48,9 @@ namespace Sonarr.Api.V3.Episodes
             throw new BadRequestException("seriesId or episodeIds must be provided");
         }
 
-        [HttpPut("{id}")]
+        [RestPutById]
         [Consumes("application/json")]
-        public IActionResult SetEpisodeMonitored([FromBody] EpisodeResource resource, [FromRoute] int id)
+        public ActionResult<EpisodeResource> SetEpisodeMonitored([FromRoute] int id, [FromBody] EpisodeResource resource)
         {
             _episodeService.SetEpisodeMonitored(id, resource.Monitored);
 
