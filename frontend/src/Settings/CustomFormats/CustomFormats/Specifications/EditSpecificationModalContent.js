@@ -51,7 +51,7 @@ function EditSpecificationModalContent(props) {
             fields && fields.some((x) => x.label === 'Regular Expression') &&
               <Alert kind={kinds.INFO}>
                 <div>
-                  <div dangerouslySetInnerHTML={{ __html: 'This condition matches using Regular Expressions. Note that the characters <code>\\^$.|?*+()[{</code> have special meanings and need escaping with a <code>\\</code>' }} />
+                  <div dangerouslySetInnerHTML={{ __html: 'This condition matches using Regular Expressions and is case insensitive. Note that the characters <code>\\^$.|?*+()[{</code> have special meanings and need escaping with a <code>\\</code>' }} />
                   {'More details'} <Link to="https://www.regular-expressions.info/tutorial.html">{'Here'}</Link>
                 </div>
                 <div>
