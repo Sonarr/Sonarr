@@ -94,7 +94,11 @@ namespace NzbDrone.Core.CustomFormats
 
         public List<CustomFormat> ParseCustomFormat(ParsedEpisodeInfo episodeInfo, Series series)
         {
-            episodeInfo.ExtraInfo["OriginalLanguage"] = series.OriginalLanguage;
+            if (series?.OriginalLanguage != null)
+            {
+                episodeInfo.ExtraInfo["OriginalLanguage"] = series.OriginalLanguage;
+            }
+
             return ParseCustomFormat(episodeInfo, _formatService.All());
         }
 
