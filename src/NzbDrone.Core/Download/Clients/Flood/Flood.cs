@@ -132,21 +132,21 @@ namespace NzbDrone.Core.Download.Clients.Flood
                     item.RemainingTime = TimeSpan.FromSeconds(properties.Eta);
                 }
 
-                if (properties.Status.Contains("error"))
-                {
-                    item.Status = DownloadItemStatus.Warning;
-                }
-                else if (properties.Status.Contains("seeding") || properties.Status.Contains("complete"))
+                if (properties.Status.Contains("seeding") || properties.Status.Contains("complete"))
                 {
                     item.Status = DownloadItemStatus.Completed;
-                }
-                else if (properties.Status.Contains("downloading"))
-                {
-                    item.Status = DownloadItemStatus.Downloading;
                 }
                 else if (properties.Status.Contains("stopped"))
                 {
                     item.Status = DownloadItemStatus.Paused;
+                }
+                else if (properties.Status.Contains("error"))
+                {
+                    item.Status = DownloadItemStatus.Warning;
+                }
+                else if (properties.Status.Contains("downloading"))
+                {
+                    item.Status = DownloadItemStatus.Downloading;
                 }
 
                 if (item.Status == DownloadItemStatus.Completed)
