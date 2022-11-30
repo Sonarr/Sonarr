@@ -6,7 +6,10 @@ using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
+using NLog;
+using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Datastore;
+using NzbDrone.Http.REST.Attributes;
 using Sonarr.Http.REST.Attributes;
 using Sonarr.Http.Validation;
 
@@ -16,6 +19,9 @@ namespace Sonarr.Http.REST
         where TResource : RestResource, new()
     {
         private static readonly List<Type> VALIDATE_ID_ATTRIBUTES = new List<Type> { typeof(RestPutByIdAttribute), typeof(RestDeleteByIdAttribute) };
+        private static readonly List<Type> DEPRECATED_ATTRIBUTE = new List<Type> { typeof(DeprecatedAttribute) };
+
+        private readonly Logger _logger;
 
         protected ResourceValidator<TResource> PostValidator { get; private set; }
         protected ResourceValidator<TResource> PutValidator { get; private set; }
@@ -31,6 +37,8 @@ namespace Sonarr.Http.REST
 
         protected RestController()
         {
+            _logger = NzbDroneLogger.GetLogger(this);
+
             PostValidator = new ResourceValidator<TResource>();
             PutValidator = new ResourceValidator<TResource>();
             SharedValidator = new ResourceValidator<TResource>();
@@ -87,6 +95,12 @@ namespace Sonarr.Http.REST
                 {
                     ValidateId((int)idObj);
                 }
+            }
+
+            if (attributes.Any(x => DEPRECATED_ATTRIBUTE.Contains(x.AttributeType)))
+            {
+                _logger.Warn("API call made to deprecated endpoint from {0}", Request.Headers.UserAgent.ToString());
+                Response.Headers.Add("Deprecation", "true");
             }
 
             base.OnActionExecuting(context);
