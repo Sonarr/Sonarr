@@ -35,7 +35,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
 
         public void Notify(XbmcSettings settings, string title, string message)
         {
-            ProcessRequest(settings, "GUI.ShowNotification", title, message, "https://raw.github.com/Sonarr/Sonarr/phantom-develop/Logo/64.png", settings.DisplayTime * 1000);
+            ProcessRequest(settings, "GUI.ShowNotification", title, message, "https://raw.github.com/Sonarr/Sonarr/develop/Logo/64.png", settings.DisplayTime * 1000);
         }
 
         public string UpdateLibrary(XbmcSettings settings, string path)
