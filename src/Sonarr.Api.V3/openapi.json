@@ -27,6 +27,18 @@
     }
   ],
   "paths": {
+    "/api": {
+      "get": {
+        "tags": [
+          "ApiInfo"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/login": {
       "post": {
         "tags": [
@@ -1596,7 +1608,24 @@
         },
         "responses": {
           "200": {
-            "description": "Success"
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/EpisodeResource"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EpisodeResource"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EpisodeResource"
+                }
+              }
+            }
           }
         }
       },
@@ -3081,6 +3110,195 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/LanguageResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v3/languageprofile": {
+      "post": {
+        "tags": [
+          "LanguageProfile"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LanguageProfileResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LanguageProfileResource"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true
+      },
+      "get": {
+        "tags": [
+          "LanguageProfile"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LanguageProfileResource"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true
+      }
+    },
+    "/api/v3/languageprofile/{id}": {
+      "delete": {
+        "tags": [
+          "LanguageProfile"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        },
+        "deprecated": true
+      },
+      "put": {
+        "tags": [
+          "LanguageProfile"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LanguageProfileResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LanguageProfileResource"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true
+      },
+      "get": {
+        "tags": [
+          "LanguageProfile"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LanguageProfileResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v3/languageprofile/schema": {
+      "get": {
+        "tags": [
+          "LanguageProfileSchema"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LanguageProfileResource"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true
+      }
+    },
+    "/api/v3/languageprofile/schema/{id}": {
+      "get": {
+        "tags": [
+          "LanguageProfileSchema"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LanguageProfileResource"
                 }
               }
             }
@@ -8064,6 +8282,49 @@
         },
         "additionalProperties": false
       },
+      "LanguageProfileItemResource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "language": {
+            "$ref": "#/components/schemas/Language"
+          },
+          "allowed": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "LanguageProfileResource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "upgradeAllowed": {
+            "type": "boolean"
+          },
+          "cutoff": {
+            "$ref": "#/components/schemas/Language"
+          },
+          "languages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LanguageProfileItemResource"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "LanguageResource": {
         "type": "object",
         "properties": {
@@ -10004,6 +10265,9 @@
             },
             "nullable": true
           },
+          "originalLanguage": {
+            "$ref": "#/components/schemas/Language"
+          },
           "remotePoster": {
             "type": "string",
             "nullable": true
@@ -10116,6 +10380,12 @@
           "episodesChanged": {
             "type": "boolean",
             "nullable": true
+          },
+          "languageProfileId": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true,
+            "deprecated": true
           }
         },
         "additionalProperties": false

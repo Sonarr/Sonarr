@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using NLog;
 using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Datastore;
-using NzbDrone.Http.REST.Attributes;
 using Sonarr.Http.REST.Attributes;
 using Sonarr.Http.Validation;
 
@@ -19,7 +18,7 @@ namespace Sonarr.Http.REST
         where TResource : RestResource, new()
     {
         private static readonly List<Type> VALIDATE_ID_ATTRIBUTES = new List<Type> { typeof(RestPutByIdAttribute), typeof(RestDeleteByIdAttribute) };
-        private static readonly List<Type> DEPRECATED_ATTRIBUTE = new List<Type> { typeof(DeprecatedAttribute) };
+        private static readonly Type DEPRECATED_ATTRIBUTE = typeof(ObsoleteAttribute);
 
         private readonly Logger _logger;
 
@@ -97,7 +96,8 @@ namespace Sonarr.Http.REST
                 }
             }
 
-            if (attributes.Any(x => DEPRECATED_ATTRIBUTE.Contains(x.AttributeType)))
+            var controllerAttributes = descriptor.ControllerTypeInfo.CustomAttributes;
+            if (controllerAttributes.Any(x => x.AttributeType == DEPRECATED_ATTRIBUTE) || attributes.Any(x => x.AttributeType == DEPRECATED_ATTRIBUTE))
             {
                 _logger.Warn("API call made to deprecated endpoint from {0}", Request.Headers.UserAgent.ToString());
                 Response.Headers.Add("Deprecation", "true");

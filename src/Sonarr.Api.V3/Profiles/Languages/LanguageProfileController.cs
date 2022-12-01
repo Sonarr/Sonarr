@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Core.Languages;
-using NzbDrone.Http.REST.Attributes;
 using Sonarr.Http;
 using Sonarr.Http.REST;
 using Sonarr.Http.REST.Attributes;
@@ -10,30 +9,31 @@ using Sonarr.Http.REST.Attributes;
 namespace Sonarr.Api.V3.Profiles.Languages
 {
     [V3ApiController]
+    [Obsolete("Deprecated")]
     public class LanguageProfileController : RestController<LanguageProfileResource>
     {
         [RestPostById]
-        [Deprecated]
+        [Produces("application/json")]
+        [Consumes("application/json")]
         public ActionResult<LanguageProfileResource> Create(LanguageProfileResource resource)
         {
             return Accepted(resource);
         }
 
         [RestDeleteById]
-        [Deprecated]
         public void DeleteProfile(int id)
         {
         }
 
         [RestPutById]
-        [Deprecated]
+        [Produces("application/json")]
+        [Consumes("application/json")]
         public ActionResult<LanguageProfileResource> Update(LanguageProfileResource resource)
         {
             return Accepted(resource);
         }
 
         [RestGetById]
-        [Deprecated]
         [Produces("application/json")]
         protected override LanguageProfileResource GetResourceById(int id)
         {
@@ -55,7 +55,6 @@ namespace Sonarr.Api.V3.Profiles.Languages
         }
 
         [HttpGet]
-        [Deprecated]
         [Produces("application/json")]
         public ActionResult<List<LanguageProfileResource>> GetAll()
         {

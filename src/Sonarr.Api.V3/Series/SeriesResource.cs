@@ -66,6 +66,9 @@ namespace Sonarr.Api.V3.Series
         public SeriesStatisticsResource Statistics { get; set; }
 
         public bool? EpisodesChanged { get; set; }
+
+        [Obsolete("Deprecated")]
+        public int LanguageProfileId  => 1;
     }
 
     public static class SeriesResourceMapper
