@@ -32,11 +32,11 @@ UpdateVersionNumber()
 EnableExtraPlatformsInSDK()
 {
     BUNDLEDVERSIONS="${SDK_PATH}/Microsoft.NETCoreSdk.BundledVersions.props"
-    if grep -q freebsd-x64 $BUNDLEDVERSIONS; then
+    if grep -q freebsd-x64 "$BUNDLEDVERSIONS"; then
         echo "Extra platforms already enabled"
     else
         echo "Enabling extra platform support"
-        sed -i.ORI 's/osx-x64/osx-x64;freebsd-x64;linux-x86/' $BUNDLEDVERSIONS
+        sed -i.ORI 's/osx-x64/osx-x64;freebsd-x64;linux-x86/' "$BUNDLEDVERSIONS"
     fi
 }
 
