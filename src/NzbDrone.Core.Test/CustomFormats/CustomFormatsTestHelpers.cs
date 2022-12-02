@@ -7,7 +7,7 @@ using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.CustomFormats
 {
-    public class CustomFormatsTestHelers : CoreTest
+    public class CustomFormatsTestHelpers : CoreTest
     {
         private static List<CustomFormat> _customFormats { get; set; }
 

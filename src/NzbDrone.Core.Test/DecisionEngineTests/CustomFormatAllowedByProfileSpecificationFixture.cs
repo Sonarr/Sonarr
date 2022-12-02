@@ -46,14 +46,14 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 ParsedEpisodeInfo = new ParsedEpisodeInfo { Quality = new QualityModel(Quality.DVD, new Revision(version: 2)) },
             };
 
-            CustomFormatsTestHelers.GivenCustomFormats(_format1, _format2);
+            CustomFormatsTestHelpers.GivenCustomFormats(_format1, _format2);
         }
 
         [Test]
         public void should_allow_if_format_score_greater_than_min()
         {
             _remoteEpisode.CustomFormats = new List<CustomFormat> { _format1 };
-            _remoteEpisode.Series.QualityProfile.Value.FormatItems = CustomFormatsTestHelers.GetSampleFormatItems(_format1.Name);
+            _remoteEpisode.Series.QualityProfile.Value.FormatItems = CustomFormatsTestHelpers.GetSampleFormatItems(_format1.Name);
             _remoteEpisode.CustomFormatScore = _remoteEpisode.Series.QualityProfile.Value.CalculateCustomFormatScore(_remoteEpisode.CustomFormats);
 
             Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
@@ -63,7 +63,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void should_deny_if_format_score_not_greater_than_min()
         {
             _remoteEpisode.CustomFormats = new List<CustomFormat> { _format2 };
-            _remoteEpisode.Series.QualityProfile.Value.FormatItems = CustomFormatsTestHelers.GetSampleFormatItems(_format1.Name);
+            _remoteEpisode.Series.QualityProfile.Value.FormatItems = CustomFormatsTestHelpers.GetSampleFormatItems(_format1.Name);
             _remoteEpisode.CustomFormatScore = _remoteEpisode.Series.QualityProfile.Value.CalculateCustomFormatScore(_remoteEpisode.CustomFormats);
 
             Console.WriteLine(_remoteEpisode.CustomFormatScore);
@@ -76,7 +76,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void should_deny_if_format_score_not_greater_than_min_2()
         {
             _remoteEpisode.CustomFormats = new List<CustomFormat> { _format2, _format1 };
-            _remoteEpisode.Series.QualityProfile.Value.FormatItems = CustomFormatsTestHelers.GetSampleFormatItems(_format1.Name);
+            _remoteEpisode.Series.QualityProfile.Value.FormatItems = CustomFormatsTestHelpers.GetSampleFormatItems(_format1.Name);
             _remoteEpisode.CustomFormatScore = _remoteEpisode.Series.QualityProfile.Value.CalculateCustomFormatScore(_remoteEpisode.CustomFormats);
 
             Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
@@ -86,7 +86,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void should_allow_if_all_format_is_defined_in_profile()
         {
             _remoteEpisode.CustomFormats = new List<CustomFormat> { _format2, _format1 };
-            _remoteEpisode.Series.QualityProfile.Value.FormatItems = CustomFormatsTestHelers.GetSampleFormatItems(_format1.Name, _format2.Name);
+            _remoteEpisode.Series.QualityProfile.Value.FormatItems = CustomFormatsTestHelpers.GetSampleFormatItems(_format1.Name, _format2.Name);
             _remoteEpisode.CustomFormatScore = _remoteEpisode.Series.QualityProfile.Value.CalculateCustomFormatScore(_remoteEpisode.CustomFormats);
 
             Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
@@ -96,7 +96,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void should_deny_if_no_format_was_parsed_and_min_score_positive()
         {
             _remoteEpisode.CustomFormats = new List<CustomFormat> { };
-            _remoteEpisode.Series.QualityProfile.Value.FormatItems = CustomFormatsTestHelers.GetSampleFormatItems(_format1.Name, _format2.Name);
+            _remoteEpisode.Series.QualityProfile.Value.FormatItems = CustomFormatsTestHelpers.GetSampleFormatItems(_format1.Name, _format2.Name);
             _remoteEpisode.CustomFormatScore = _remoteEpisode.Series.QualityProfile.Value.CalculateCustomFormatScore(_remoteEpisode.CustomFormats);
 
             Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
@@ -106,7 +106,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void should_allow_if_no_format_was_parsed_min_score_is_zero()
         {
             _remoteEpisode.CustomFormats = new List<CustomFormat> { };
-            _remoteEpisode.Series.QualityProfile.Value.FormatItems = CustomFormatsTestHelers.GetSampleFormatItems(_format1.Name, _format2.Name);
+            _remoteEpisode.Series.QualityProfile.Value.FormatItems = CustomFormatsTestHelpers.GetSampleFormatItems(_format1.Name, _format2.Name);
             _remoteEpisode.Series.QualityProfile.Value.MinFormatScore = 0;
             _remoteEpisode.CustomFormatScore = _remoteEpisode.Series.QualityProfile.Value.CalculateCustomFormatScore(_remoteEpisode.CustomFormats);
 
