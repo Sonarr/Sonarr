@@ -88,17 +88,12 @@ namespace NzbDrone.Core.DecisionEngine
                         }
                     }
 
-                    if (parsedEpisodeInfo != null && report.Size > 0)
-                    {
-                        parsedEpisodeInfo.ExtraInfo.Add("Size", report.Size);
-                    }
-
                     if (parsedEpisodeInfo != null && !parsedEpisodeInfo.SeriesTitle.IsNullOrWhiteSpace())
                     {
                         var remoteEpisode = _parsingService.Map(parsedEpisodeInfo, report.TvdbId, report.TvRageId, searchCriteria);
                         remoteEpisode.Release = report;
 
-                        remoteEpisode.CustomFormats = _formatCalculator.ParseCustomFormat(parsedEpisodeInfo, remoteEpisode.Series);
+                        remoteEpisode.CustomFormats = _formatCalculator.ParseCustomFormat(remoteEpisode);
                         remoteEpisode.CustomFormatScore = remoteEpisode?.Series?.QualityProfile?.Value.CalculateCustomFormatScore(remoteEpisode.CustomFormats) ?? 0;
 
                         if (remoteEpisode.Series == null)

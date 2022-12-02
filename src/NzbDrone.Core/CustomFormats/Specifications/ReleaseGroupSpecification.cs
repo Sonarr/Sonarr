@@ -1,5 +1,3 @@
-using NzbDrone.Core.Parser.Model;
-
 namespace NzbDrone.Core.CustomFormats
 {
     public class ReleaseGroupSpecification : RegexSpecificationBase
@@ -8,9 +6,9 @@ namespace NzbDrone.Core.CustomFormats
         public override string ImplementationName => "Release Group";
         public override string InfoLink => "https://wiki.servarr.com/sonarr/settings#custom-formats-2";
 
-        protected override bool IsSatisfiedByWithoutNegate(ParsedEpisodeInfo episodeInfo)
+        protected override bool IsSatisfiedByWithoutNegate(CustomFormatInput input)
         {
-            return MatchString(episodeInfo?.ReleaseGroup);
+            return MatchString(input.EpisodeInfo?.ReleaseGroup);
         }
     }
 }

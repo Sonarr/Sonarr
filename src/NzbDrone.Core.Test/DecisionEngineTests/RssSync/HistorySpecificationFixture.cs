@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
             Mocker.Resolve<UpgradableSpecification>();
             _upgradeHistory = Mocker.Resolve<HistorySpecification>();
 
-            CustomFormatsFixture.GivenCustomFormats();
+            CustomFormatsTestHelers.GivenCustomFormats();
 
             var singleEpisodeList = new List<Episode> { new Episode { Id = FIRST_EPISODE_ID, SeasonNumber = 12, EpisodeNumber = 3 } };
             var doubleEpisodeList = new List<Episode>
@@ -56,7 +56,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
                 {
                     UpgradeAllowed = true,
                     Cutoff = Quality.Bluray1080p.Id,
-                    FormatItems = CustomFormatsFixture.GetSampleFormatItems("None"),
+                    FormatItems = CustomFormatsTestHelers.GetSampleFormatItems("None"),
                     MinFormatScore = 0,
                     Items = Qualities.QualityFixture.GetDefaultQualities()
                 })

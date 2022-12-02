@@ -153,7 +153,7 @@ namespace NzbDrone.Core.Download.TrackedDownloads
                 // Calculate custom formats
                 if (trackedDownload.RemoteEpisode != null)
                 {
-                    trackedDownload.RemoteEpisode.CustomFormats = _formatCalculator.ParseCustomFormat(parsedEpisodeInfo, trackedDownload.RemoteEpisode.Series);
+                    trackedDownload.RemoteEpisode.CustomFormats = _formatCalculator.ParseCustomFormat(trackedDownload.RemoteEpisode);
                 }
 
                 // Track it so it can be displayed in the queue even though we can't determine which series it is for

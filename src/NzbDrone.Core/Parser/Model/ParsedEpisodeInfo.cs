@@ -30,9 +30,6 @@ namespace NzbDrone.Core.Parser.Model
         public string ReleaseTokens { get; set; }
         public int? DailyPart { get; set; }
 
-        [JsonIgnore]
-        public Dictionary<string, object> ExtraInfo { get; set; } = new Dictionary<string, object>();
-
         public ParsedEpisodeInfo()
         {
             EpisodeNumbers = new int[0];

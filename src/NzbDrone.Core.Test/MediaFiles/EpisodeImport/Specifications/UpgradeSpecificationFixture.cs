@@ -10,12 +10,9 @@ using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.EpisodeImport.Specifications;
-using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Profiles.Qualities;
-using NzbDrone.Core.Profiles.Releases;
 using NzbDrone.Core.Qualities;
-using NzbDrone.Core.Test.CustomFormats;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 
@@ -272,7 +269,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
                   .Returns(new List<CustomFormat>());
 
             Mocker.GetMock<ICustomFormatCalculationService>()
-                  .Setup(s => s.ParseCustomFormat(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<Series>()))
+                  .Setup(s => s.ParseCustomFormat(It.IsAny<RemoteEpisode>()))
                   .Returns(new List<CustomFormat>());
 
             _localEpisode.Quality = new QualityModel(Quality.Bluray2160p);
@@ -306,7 +303,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
                   .Returns(new List<CustomFormat>());
 
             Mocker.GetMock<ICustomFormatCalculationService>()
-                  .Setup(s => s.ParseCustomFormat(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<Series>()))
+                  .Setup(s => s.ParseCustomFormat(It.IsAny<RemoteEpisode>()))
                   .Returns(new List<CustomFormat>());
 
             _localEpisode.Quality = new QualityModel(Quality.Bluray1080p);
@@ -384,7 +381,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
                   .Returns(new List<CustomFormat>());
 
             Mocker.GetMock<ICustomFormatCalculationService>()
-                  .Setup(s => s.ParseCustomFormat(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<Series>()))
+                  .Setup(s => s.ParseCustomFormat(It.IsAny<RemoteEpisode>()))
                   .Returns(new List<CustomFormat>());
 
             _localEpisode.Quality = new QualityModel(Quality.Bluray1080p);
@@ -417,7 +414,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
                   .Returns(new List<CustomFormat>());
 
             Mocker.GetMock<ICustomFormatCalculationService>()
-                  .Setup(s => s.ParseCustomFormat(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<Series>()))
+                  .Setup(s => s.ParseCustomFormat(It.IsAny<RemoteEpisode>()))
                   .Returns(new List<CustomFormat>());
 
             _localEpisode.Quality = new QualityModel(Quality.Bluray1080p);

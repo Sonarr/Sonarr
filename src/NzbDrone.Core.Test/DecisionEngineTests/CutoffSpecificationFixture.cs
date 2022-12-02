@@ -45,8 +45,8 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
         private void GivenProfile(QualityProfile profile)
         {
-            CustomFormatsFixture.GivenCustomFormats();
-            profile.FormatItems = CustomFormatsFixture.GetSampleFormatItems();
+            CustomFormatsTestHelers.GivenCustomFormats();
+            profile.FormatItems = CustomFormatsTestHelers.GetSampleFormatItems();
             profile.MinFormatScore = 0;
             _remoteMovie.Series.QualityProfile = profile;
 
@@ -79,7 +79,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             _customFormat = new CustomFormat("My Format", new ResolutionSpecification { Value = (int)Resolution.R1080p }) { Id = 1 };
 
-            CustomFormatsFixture.GivenCustomFormats(_customFormat);
+            CustomFormatsTestHelers.GivenCustomFormats(_customFormat);
         }
 
         [Test]
@@ -221,7 +221,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 Cutoff = Quality.HDTV720p.Id,
                 Items = Qualities.QualityFixture.GetDefaultQualities(),
                 MinFormatScore = 0,
-                FormatItems = CustomFormatsFixture.GetSampleFormatItems("My Format"),
+                FormatItems = CustomFormatsTestHelers.GetSampleFormatItems("My Format"),
                 UpgradeAllowed = true
             });
 

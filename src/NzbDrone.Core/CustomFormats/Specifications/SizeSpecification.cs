@@ -1,8 +1,5 @@
-using System.Collections.Generic;
 using FluentValidation;
-using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Annotations;
-using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.CustomFormats
@@ -29,9 +26,9 @@ namespace NzbDrone.Core.CustomFormats
         [FieldDefinition(1, Label = "Maximum Size", HelpText = "Release must be less than or equal to this size", Unit = "GB", Type = FieldType.Number)]
         public double Max { get; set; }
 
-        protected override bool IsSatisfiedByWithoutNegate(ParsedEpisodeInfo episodeInfo)
+        protected override bool IsSatisfiedByWithoutNegate(CustomFormatInput input)
         {
-            var size = (episodeInfo?.ExtraInfo?.GetValueOrDefault("Size", 0.0) as long?) ?? 0;
+            var size = input.Size;
 
             return size > Min.Gigabytes() && size <= Max.Gigabytes();
         }

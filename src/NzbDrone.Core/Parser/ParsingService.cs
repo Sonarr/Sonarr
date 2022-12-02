@@ -184,8 +184,6 @@ namespace NzbDrone.Core.Parser
                 {
                     remoteEpisode.Episodes = GetEpisodes(parsedEpisodeInfo, series, remoteEpisode.MappedSeasonNumber, sceneSource, searchCriteria);
                 }
-
-                parsedEpisodeInfo.ExtraInfo["OriginalLanguage"] = series.OriginalLanguage;
             }
 
             remoteEpisode.Languages = parsedEpisodeInfo.Languages;

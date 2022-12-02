@@ -1,7 +1,3 @@
-using System.Collections.Generic;
-using NzbDrone.Common.Extensions;
-using NzbDrone.Core.Parser.Model;
-
 namespace NzbDrone.Core.CustomFormats
 {
     public class ReleaseTitleSpecification : RegexSpecificationBase
@@ -10,11 +6,9 @@ namespace NzbDrone.Core.CustomFormats
         public override string ImplementationName => "Release Title";
         public override string InfoLink => "https://wiki.servarr.com/sonarr/settings#custom-formats-2";
 
-        protected override bool IsSatisfiedByWithoutNegate(ParsedEpisodeInfo episodeInfo)
+        protected override bool IsSatisfiedByWithoutNegate(CustomFormatInput input)
         {
-            var filename = (string)episodeInfo?.ExtraInfo?.GetValueOrDefault("Filename");
-
-            return MatchString(episodeInfo?.ReleaseTitle) || MatchString(filename);
+            return MatchString(input.EpisodeInfo?.ReleaseTitle) || MatchString(input.Filename);
         }
     }
 }
