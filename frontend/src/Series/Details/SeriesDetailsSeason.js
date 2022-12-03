@@ -496,6 +496,7 @@ class SeriesDetailsSeason extends Component {
           autoSelectRow={false}
           showDelete={true}
           showImportMode={false}
+          modalTitle={'Manage Episodes'}
           onModalClose={this.onManageEpisodesModalClose}
         />
 
