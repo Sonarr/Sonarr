@@ -31,6 +31,7 @@ export const defaultState = {
     age: function(item, direction) {
       return item.ageMinutes;
     },
+
     peers: function(item, direction) {
       const seeders = item.seeders || 0;
       const leechers = item.leechers || 0;
@@ -45,6 +46,7 @@ export const defaultState = {
 
       return item.languages[0].id;
     },
+
     rejections: function(item, direction) {
       const rejections = item.rejections;
       const releaseWeight = item.releaseWeight;
@@ -110,6 +112,7 @@ export const defaultState = {
 
       return predicate(languages, filterValue);
     },
+
     rejectionCount: function(item, value, type) {
       const rejectionCount = item.rejections.length;
 
@@ -230,6 +233,11 @@ export const defaultState = {
 
         return genreList.sort(sortByName);
       }
+    },
+    {
+      name: 'customFormatScore',
+      label: 'Custom Format Score',
+      type: filterBuilderTypes.NUMBER
     },
     {
       name: 'rejectionCount',
