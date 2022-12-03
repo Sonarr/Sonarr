@@ -35,7 +35,7 @@ namespace NzbDrone.Core.Parser
                 new RegexReplace(@"^\[(?<subgroup>[^\]]+)\](?:\s)(?:(?<chinesetitle>(?=[^\]]*?[\u4E00-\u9FCC])[^\]]*?)(?:\s/\s))(?<title>[^\]]+?)(?:[- ]+)(?<episode>[0-9]+(?:-[0-9]+)?)话?(?:END|完)?", "[${subgroup}] ${title} - ${episode} ", RegexOptions.Compiled),
 
                 // GM-Team releases with lots of square brackets
-                new RegexReplace(@"^\[(?<subgroup>[^\]]+)\](?:\[(?<chinesubgroup>(?=[^\]]*?[\u4E00-\u9FCC])[^\]]*?)\])(?:\[(?<chinesetitle>(?=[^\]]*?[\u4E00-\u9FCC])[^\]]*?)\])\[(?<title>[^\]]+?)\]\[(?<junk>[^\]]+?)\]\[(?<year>[^\]]+?)\]\[(?<episode>[0-9]+(?:-[0-9]+)?)\]", "[${subgroup}] ${title} - ${episode} ", RegexOptions.Compiled)
+                new RegexReplace(@"^\[(?<subgroup>[^\]]+)\](?:\[(?<chinesubgroup>(?=[^\]]*?[\u4E00-\u9FCC])[^\]]*?)\])(?:\[(?<chinesetitle>(?=[^\]]*?[\u4E00-\u9FCC])[^\]]*?)\])?\[(?<title>[^\]]+?)\]\[(?<junk>[^\]]+?)\]\[(?<year>[^\]]+?)\]\[(?<episode>[0-9]+(?:-[0-9]+)?)\]", "[${subgroup}] ${title} - ${episode} ", RegexOptions.Compiled)
             };
 
         private static readonly Regex[] ReportTitleRegex = new[]

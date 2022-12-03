@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -74,6 +74,19 @@ namespace NzbDrone.Core.Test.ParserTests
             result.AbsoluteEpisodeNumbers.Should().BeEquivalentTo(absoluteEpisodeNumbers);
             result.SeriesTitle.Should().Be(title);
             result.FullSeason.Should().BeFalse();
+            result.FullSeason.Should().BeFalse();
+        }
+
+        [TestCase("[GM-Team][国漫][斗罗大陆][Anime Title][Douro Mainland][2019][215][AVC][GB][1080P]", "Anime Title", 215)]
+        [TestCase("[GM-Team][国漫][Anime Title][Douro Mainland][2019][234][AVC][GB][1080P]", "Anime Title", 234)]
+        public void should_parse_gm_team_releases_and_files(string postTitle, string title, int absoluteEpisodeNumber)
+        {
+            var result = Parser.Parser.ParseTitle(postTitle);
+            result.Should().NotBeNull();
+            result.AbsoluteEpisodeNumbers.Single().Should().Be(absoluteEpisodeNumber);
+            result.SeriesTitle.Should().Be(title);
+            result.FullSeason.Should().BeFalse();
+            result.ReleaseGroup.Should().Be("GM-Team");
         }
 
         [TestCase("[Subz] My Series - １５８ [h264 10-bit][1080p]", "My Series", 158)]
