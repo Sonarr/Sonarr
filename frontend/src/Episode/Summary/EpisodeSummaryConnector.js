@@ -31,7 +31,8 @@ function createMapStateToProps() {
         languages,
         languageCutoffNotMet,
         quality,
-        qualityCutoffNotMet
+        qualityCutoffNotMet,
+        customFormats
       } = episodeFile;
 
       return {
@@ -45,7 +46,8 @@ function createMapStateToProps() {
         languages,
         languageCutoffNotMet,
         quality,
-        qualityCutoffNotMet
+        qualityCutoffNotMet,
+        customFormats
       };
     }
   );

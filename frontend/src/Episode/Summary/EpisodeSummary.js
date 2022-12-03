@@ -36,6 +36,12 @@ const columns = [
     isVisible: true
   },
   {
+    name: 'customFormats',
+    label: 'Formats',
+    isSortable: false,
+    isVisible: true
+  },
+  {
     name: 'actions',
     label: '',
     isSortable: false,
@@ -86,6 +92,7 @@ class EpisodeSummary extends Component {
       size,
       languages,
       quality,
+      customFormats,
       languageCutoffNotMet,
       qualityCutoffNotMet,
       onDeleteEpisodeFile
@@ -136,6 +143,7 @@ class EpisodeSummary extends Component {
                   languageCutoffNotMet={languageCutoffNotMet}
                   quality={quality}
                   qualityCutoffNotMet={qualityCutoffNotMet}
+                  customFormats={customFormats}
                   mediaInfo={mediaInfo}
                   columns={columns}
                   onDeleteEpisodeFile={onDeleteEpisodeFile}
@@ -172,6 +180,7 @@ EpisodeSummary.propTypes = {
   languageCutoffNotMet: PropTypes.bool,
   quality: PropTypes.object,
   qualityCutoffNotMet: PropTypes.bool,
+  customFormats: PropTypes.arrayOf(PropTypes.object),
   onDeleteEpisodeFile: PropTypes.func.isRequired
 };
 

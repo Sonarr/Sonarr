@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import Icon from 'Components/Icon';
+import Label from 'Components/Label';
 import IconButton from 'Components/Link/IconButton';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
@@ -52,6 +53,7 @@ class EpisodeFileRow extends Component {
       size,
       languages,
       quality,
+      customFormats,
       languageCutoffNotMet,
       qualityCutoffNotMet,
       mediaInfo,
@@ -115,6 +117,25 @@ class EpisodeFileRow extends Component {
               );
             }
 
+            if (name === 'customFormats') {
+              return (
+                <TableRowCell
+                  key={name}
+                  className={styles.customFormats}
+                >
+                  {
+                    customFormats.map((format) => {
+                      return (
+                        <Label key={format.id}>
+                          {format.name}
+                        </Label>
+                      );
+                    })
+                  }
+                </TableRowCell>
+              );
+            }
+
             if (name === 'actions') {
               return (
                 <TableRowCell
@@ -171,6 +192,7 @@ EpisodeFileRow.propTypes = {
   languageCutoffNotMet: PropTypes.bool.isRequired,
   quality: PropTypes.object.isRequired,
   qualityCutoffNotMet: PropTypes.bool.isRequired,
+  customFormats: PropTypes.arrayOf(PropTypes.object),
   mediaInfo: PropTypes.object,
   columns: PropTypes.arrayOf(PropTypes.object).isRequired,
   onDeleteEpisodeFile: PropTypes.func.isRequired
