@@ -9,6 +9,7 @@ using NzbDrone.Core.CustomFormats;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Jobs;
+using NzbDrone.Core.Languages;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
@@ -295,6 +296,12 @@ namespace NzbDrone.Core.Download.Pending
                 if (series == null)
                 {
                     return null;
+                }
+
+                // Languages will be empty if added before upgrading to v4, reparsing the languages if they're empty will set it to Unknown or better.
+                if (release.ParsedEpisodeInfo.Languages.Empty())
+                {
+                    release.ParsedEpisodeInfo.Languages = LanguageParser.ParseLanguages(release.Title);
                 }
 
                 release.RemoteEpisode = new RemoteEpisode
