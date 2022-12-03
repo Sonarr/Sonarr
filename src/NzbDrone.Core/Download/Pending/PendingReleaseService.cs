@@ -5,6 +5,7 @@ using NLog;
 using NzbDrone.Common.Crypto;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.CustomFormats;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Jobs;
@@ -42,6 +43,7 @@ namespace NzbDrone.Core.Download.Pending
         private readonly IDelayProfileService _delayProfileService;
         private readonly ITaskManager _taskManager;
         private readonly IConfigService _configService;
+        private readonly ICustomFormatCalculationService _customFormatCalculationService;
         private readonly IEventAggregator _eventAggregator;
         private readonly Logger _logger;
 
@@ -52,6 +54,7 @@ namespace NzbDrone.Core.Download.Pending
                                     IDelayProfileService delayProfileService,
                                     ITaskManager taskManager,
                                     IConfigService configService,
+                                    ICustomFormatCalculationService customFormatCalculationService,
                                     IEventAggregator eventAggregator,
                                     Logger logger)
         {
@@ -62,6 +65,7 @@ namespace NzbDrone.Core.Download.Pending
             _delayProfileService = delayProfileService;
             _taskManager = taskManager;
             _configService = configService;
+            _customFormatCalculationService = customFormatCalculationService;
             _eventAggregator = eventAggregator;
             _logger = logger;
         }
@@ -318,6 +322,8 @@ namespace NzbDrone.Core.Download.Pending
                     release.RemoteEpisode.MappedSeasonNumber = release.ParsedEpisodeInfo.SeasonNumber;
                     release.RemoteEpisode.Episodes = new List<Episode>();
                 }
+
+                release.RemoteEpisode.CustomFormats = _customFormatCalculationService.ParseCustomFormat(release.RemoteEpisode.ParsedEpisodeInfo, release.RemoteEpisode.Series);
 
                 result.Add(release);
             }
