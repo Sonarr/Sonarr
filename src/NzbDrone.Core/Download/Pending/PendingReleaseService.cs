@@ -45,7 +45,7 @@ namespace NzbDrone.Core.Download.Pending
         private readonly IDelayProfileService _delayProfileService;
         private readonly ITaskManager _taskManager;
         private readonly IConfigService _configService;
-        private readonly ICustomFormatCalculationService _customFormatCalculationService;
+        private readonly ICustomFormatCalculationService _formatCalculator;
         private readonly IRemoteEpisodeAggregationService _aggregationService;
         private readonly IEventAggregator _eventAggregator;
         private readonly Logger _logger;
@@ -57,7 +57,7 @@ namespace NzbDrone.Core.Download.Pending
                                     IDelayProfileService delayProfileService,
                                     ITaskManager taskManager,
                                     IConfigService configService,
-                                    ICustomFormatCalculationService customFormatCalculationService,
+                                    ICustomFormatCalculationService formatCalculator,
                                     IRemoteEpisodeAggregationService aggregationService,
                                     IEventAggregator eventAggregator,
                                     Logger logger)
@@ -69,7 +69,7 @@ namespace NzbDrone.Core.Download.Pending
             _delayProfileService = delayProfileService;
             _taskManager = taskManager;
             _configService = configService;
-            _customFormatCalculationService = customFormatCalculationService;
+            _formatCalculator = formatCalculator;
             _aggregationService = aggregationService;
             _eventAggregator = eventAggregator;
             _logger = logger;
@@ -336,7 +336,7 @@ namespace NzbDrone.Core.Download.Pending
                 }
 
                 _aggregationService.Augment(release.RemoteEpisode);
-                release.RemoteEpisode.CustomFormats = _customFormatCalculationService.ParseCustomFormat(release.RemoteEpisode);
+                release.RemoteEpisode.CustomFormats = _formatCalculator.ParseCustomFormat(release.RemoteEpisode);
 
                 result.Add(release);
             }

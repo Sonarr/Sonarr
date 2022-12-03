@@ -59,7 +59,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
                         continue;
                     }
 
-                    var customFormats = _formatService.ParseCustomFormat(mostRecent);
+                    var customFormats = _formatService.ParseCustomFormat(mostRecent, subject.Series);
 
                     // The series will be the same as the one in history since it's the same episode.
                     // Instead of fetching the series from the DB reuse the known series.

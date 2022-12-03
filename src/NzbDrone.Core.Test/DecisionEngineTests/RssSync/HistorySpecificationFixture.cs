@@ -87,7 +87,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
                   .Returns(true);
 
             Mocker.GetMock<ICustomFormatCalculationService>()
-                  .Setup(x => x.ParseCustomFormat(It.IsAny<EpisodeHistory>()))
+                  .Setup(x => x.ParseCustomFormat(It.IsAny<EpisodeHistory>(), It.IsAny<Series>()))
                   .Returns(new List<CustomFormat>());
         }
 

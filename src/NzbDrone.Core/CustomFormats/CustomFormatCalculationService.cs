@@ -14,58 +14,19 @@ namespace NzbDrone.Core.CustomFormats
     public interface ICustomFormatCalculationService
     {
         List<CustomFormat> ParseCustomFormat(RemoteEpisode remoteEpisode);
+        List<CustomFormat> ParseCustomFormat(EpisodeFile episodeFile, Series series);
         List<CustomFormat> ParseCustomFormat(EpisodeFile episodeFile);
-        List<CustomFormat> ParseCustomFormat(Blocklist blocklist);
-        List<CustomFormat> ParseCustomFormat(EpisodeHistory history);
+        List<CustomFormat> ParseCustomFormat(Blocklist blocklist, Series series);
+        List<CustomFormat> ParseCustomFormat(EpisodeHistory history, Series series);
     }
 
     public class CustomFormatCalculationService : ICustomFormatCalculationService
     {
         private readonly ICustomFormatService _formatService;
-        private readonly ISeriesService _seriesService;
 
-        public CustomFormatCalculationService(ICustomFormatService formatService,
-                                              ISeriesService seriesService)
+        public CustomFormatCalculationService(ICustomFormatService formatService)
         {
             _formatService = formatService;
-            _seriesService = seriesService;
-        }
-
-        public static List<CustomFormat> ParseCustomFormat(EpisodeFile episodeFile, List<CustomFormat> allCustomFormats)
-        {
-            var sceneName = string.Empty;
-            if (episodeFile.SceneName.IsNotNullOrWhiteSpace())
-            {
-                sceneName = episodeFile.SceneName;
-            }
-            else if (episodeFile.OriginalFilePath.IsNotNullOrWhiteSpace())
-            {
-                sceneName = episodeFile.OriginalFilePath;
-            }
-            else if (episodeFile.RelativePath.IsNotNullOrWhiteSpace())
-            {
-                sceneName = Path.GetFileName(episodeFile.RelativePath);
-            }
-
-            var episodeInfo = new ParsedEpisodeInfo
-            {
-                SeriesTitle = episodeFile.Series.Value.Title,
-                ReleaseTitle  = sceneName,
-                Quality = episodeFile.Quality,
-                Languages = episodeFile.Languages,
-                ReleaseGroup = episodeFile.ReleaseGroup
-            };
-
-            var input = new CustomFormatInput
-            {
-                EpisodeInfo = episodeInfo,
-                Series = episodeFile.Series.Value,
-                Size = episodeFile.Size,
-                Languages = episodeFile.Languages,
-                Filename = Path.GetFileName(episodeFile.RelativePath)
-            };
-
-            return ParseCustomFormat(input, allCustomFormats);
         }
 
         public List<CustomFormat> ParseCustomFormat(RemoteEpisode remoteEpisode)
@@ -81,14 +42,18 @@ namespace NzbDrone.Core.CustomFormats
             return ParseCustomFormat(input);
         }
 
-        public List<CustomFormat> ParseCustomFormat(EpisodeFile episodeFile)
+        public List<CustomFormat> ParseCustomFormat(EpisodeFile episodeFile, Series series)
         {
-            return ParseCustomFormat(episodeFile, _formatService.All());
+            return ParseCustomFormat(episodeFile, series, _formatService.All());
         }
 
-        public List<CustomFormat> ParseCustomFormat(Blocklist blocklist)
+        public List<CustomFormat> ParseCustomFormat(EpisodeFile episodeFile)
         {
-            var series = _seriesService.GetSeries(blocklist.SeriesId);
+            return ParseCustomFormat(episodeFile, episodeFile.Series.Value, _formatService.All());
+        }
+
+        public List<CustomFormat> ParseCustomFormat(Blocklist blocklist, Series series)
+        {
             var parsed = Parser.Parser.ParseTitle(blocklist.SourceTitle);
 
             var episodeInfo = new ParsedEpisodeInfo
@@ -111,9 +76,8 @@ namespace NzbDrone.Core.CustomFormats
             return ParseCustomFormat(input);
         }
 
-        public List<CustomFormat> ParseCustomFormat(EpisodeHistory history)
+        public List<CustomFormat> ParseCustomFormat(EpisodeHistory history, Series series)
         {
-            var series = _seriesService.GetSeries(history.SeriesId);
             var parsed = Parser.Parser.ParseTitle(history.SourceTitle);
 
             long.TryParse(history.Data.GetValueOrDefault("size"), out var size);
@@ -164,6 +128,43 @@ namespace NzbDrone.Core.CustomFormats
             }
 
             return matches;
+        }
+
+        private static List<CustomFormat> ParseCustomFormat(EpisodeFile episodeFile, Series series, List<CustomFormat> allCustomFormats)
+        {
+            var sceneName = string.Empty;
+            if (episodeFile.SceneName.IsNotNullOrWhiteSpace())
+            {
+                sceneName = episodeFile.SceneName;
+            }
+            else if (episodeFile.OriginalFilePath.IsNotNullOrWhiteSpace())
+            {
+                sceneName = episodeFile.OriginalFilePath;
+            }
+            else if (episodeFile.RelativePath.IsNotNullOrWhiteSpace())
+            {
+                sceneName = Path.GetFileName(episodeFile.RelativePath);
+            }
+
+            var episodeInfo = new ParsedEpisodeInfo
+            {
+                SeriesTitle = episodeFile.Series.Value.Title,
+                ReleaseTitle = sceneName,
+                Quality = episodeFile.Quality,
+                Languages = episodeFile.Languages,
+                ReleaseGroup = episodeFile.ReleaseGroup
+            };
+
+            var input = new CustomFormatInput
+            {
+                EpisodeInfo = episodeInfo,
+                Series = series,
+                Size = episodeFile.Size,
+                Languages = episodeFile.Languages,
+                Filename = Path.GetFileName(episodeFile.RelativePath)
+            };
+
+            return ParseCustomFormat(input, allCustomFormats);
         }
     }
 }

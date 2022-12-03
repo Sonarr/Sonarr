@@ -38,7 +38,7 @@ namespace NzbDrone.Core.Organizer
         private readonly INamingConfigService _namingConfigService;
         private readonly IQualityDefinitionService _qualityDefinitionService;
         private readonly IUpdateMediaInfo _mediaInfoUpdater;
-        private readonly ICustomFormatService _formatService;
+        private readonly ICustomFormatCalculationService _formatCalculator;
         private readonly ICached<EpisodeFormat[]> _episodeFormatCache;
         private readonly ICached<AbsoluteEpisodeFormat[]> _absoluteEpisodeFormatCache;
         private readonly ICached<bool> _requiresEpisodeTitleCache;
@@ -115,13 +115,13 @@ namespace NzbDrone.Core.Organizer
                                IQualityDefinitionService qualityDefinitionService,
                                ICacheManager cacheManager,
                                IUpdateMediaInfo mediaInfoUpdater,
-                               ICustomFormatService formatService,
+                               ICustomFormatCalculationService formatCalculator,
                                Logger logger)
         {
             _namingConfigService = namingConfigService;
             _qualityDefinitionService = qualityDefinitionService;
             _mediaInfoUpdater = mediaInfoUpdater;
-            _formatService = formatService;
+            _formatCalculator = formatCalculator;
             _episodeFormatCache = cacheManager.GetCache<EpisodeFormat[]>(GetType(), "episodeFormat");
             _absoluteEpisodeFormatCache = cacheManager.GetCache<AbsoluteEpisodeFormat[]>(GetType(), "absoluteEpisodeFormat");
             _requiresEpisodeTitleCache = cacheManager.GetCache<bool>(GetType(), "requiresEpisodeTitle");
@@ -691,7 +691,7 @@ namespace NzbDrone.Core.Organizer
             if (customFormats == null)
             {
                 episodeFile.Series = series;
-                customFormats = CustomFormatCalculationService.ParseCustomFormat(episodeFile, _formatService.All());
+                customFormats = _formatCalculator.ParseCustomFormat(episodeFile, series);
             }
 
             tokenHandlers["{Custom Formats}"] = m => string.Join(" ", customFormats.Where(x => x.IncludeCustomFormatWhenRenaming));
