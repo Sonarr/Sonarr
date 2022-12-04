@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using FizzWare.NBuilder;
 using Moq;
@@ -56,6 +56,7 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
             _pending.Add(new PendingRelease
              {
                  Id = id,
+                 Title = "Series.Title.S01E05.abc-Sonarr",
                  ParsedEpisodeInfo = new ParsedEpisodeInfo { SeasonNumber = seasonNumber, EpisodeNumbers = episodes }
              });
         }

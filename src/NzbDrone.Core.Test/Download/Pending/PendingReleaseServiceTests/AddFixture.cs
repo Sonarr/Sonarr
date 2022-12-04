@@ -104,6 +104,7 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
                                                    .With(h => h.Title = title)
                                                    .With(h => h.Release = release)
                                                    .With(h => h.Reason = reason)
+                                                   .With(h => h.ParsedEpisodeInfo = _parsedEpisodeInfo)
                                                    .Build();
 
             _heldReleases.AddRange(heldReleases);
