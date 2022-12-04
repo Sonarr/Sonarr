@@ -16,7 +16,8 @@ namespace NzbDrone.Http
         }
 
         [HttpGet("/ping")]
-        public IActionResult GetStatus()
+        [Produces("application/json")]
+        public ActionResult<PingResource> GetStatus()
         {
             try
             {

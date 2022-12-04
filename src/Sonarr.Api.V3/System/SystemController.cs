@@ -55,9 +55,9 @@ namespace Sonarr.Api.V3.System
 
         [HttpGet("status")]
         [Produces("application/json")]
-        public object GetStatus()
+        public SystemResource GetStatus()
         {
-            return new
+            return new SystemResource
             {
                 AppName = BuildInfo.AppName,
                 InstanceName = _configFileProvider.InstanceName,
