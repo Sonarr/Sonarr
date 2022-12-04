@@ -5,6 +5,7 @@ using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.MediaFiles.EpisodeImport.Manual;
 using NzbDrone.Core.Qualities;
+using Sonarr.Api.V3.CustomFormats;
 using Sonarr.Api.V3.Episodes;
 using Sonarr.Api.V3.Series;
 using Sonarr.Http.REST;
@@ -27,6 +28,7 @@ namespace Sonarr.Api.V3.ManualImport
         public List<Language> Languages { get; set; }
         public int QualityWeight { get; set; }
         public string DownloadId { get; set; }
+        public List<CustomFormatResource> CustomFormats { get; set; }
         public IEnumerable<Rejection> Rejections { get; set; }
     }
 
@@ -54,6 +56,7 @@ namespace Sonarr.Api.V3.ManualImport
                 ReleaseGroup = model.ReleaseGroup,
                 Quality = model.Quality,
                 Languages = model.Languages,
+                CustomFormats = model.CustomFormats.ToResource(),
 
                 // QualityWeight
                 DownloadId = model.DownloadId,

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using NzbDrone.Core.CustomFormats;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.Qualities;
@@ -21,6 +22,12 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
         public List<Language> Languages { get; set; }
         public string ReleaseGroup { get; set; }
         public string DownloadId { get; set; }
+        public List<CustomFormat> CustomFormats { get; set; }
         public IEnumerable<Rejection> Rejections { get; set; }
+
+        public ManualImportItem()
+        {
+            CustomFormats = new List<CustomFormat>();
+        }
     }
 }

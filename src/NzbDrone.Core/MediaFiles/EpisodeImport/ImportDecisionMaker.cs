@@ -4,6 +4,7 @@ using System.Linq;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Core.CustomFormats;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation;
@@ -28,6 +29,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
         private readonly IAggregationService _aggregationService;
         private readonly IDiskProvider _diskProvider;
         private readonly IDetectSample _detectSample;
+        private readonly ICustomFormatCalculationService _formatCalculator;
         private readonly Logger _logger;
 
         public ImportDecisionMaker(IEnumerable<IImportDecisionEngineSpecification> specifications,
@@ -35,6 +37,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                                    IAggregationService aggregationService,
                                    IDiskProvider diskProvider,
                                    IDetectSample detectSample,
+                                   ICustomFormatCalculationService formatCalculator,
                                    Logger logger)
         {
             _specifications = specifications;
@@ -42,6 +45,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
             _aggregationService = aggregationService;
             _diskProvider = diskProvider;
             _detectSample = detectSample;
+            _formatCalculator = formatCalculator;
             _logger = logger;
         }
 

@@ -7,6 +7,7 @@ import TableRowCellButton from 'Components/Table/Cells/TableRowCellButton';
 import TableSelectCell from 'Components/Table/Cells/TableSelectCell';
 import TableRow from 'Components/Table/TableRow';
 import Popover from 'Components/Tooltip/Popover';
+import EpisodeFormats from 'Episode/EpisodeFormats';
 import EpisodeLanguages from 'Episode/EpisodeLanguages';
 import EpisodeQuality from 'Episode/EpisodeQuality';
 import { icons, kinds, tooltipPositions } from 'Helpers/Props';
@@ -213,6 +214,7 @@ class InteractiveImportRow extends Component {
       languages,
       releaseGroup,
       size,
+      customFormats,
       rejections,
       isReprocessing,
       isSelected,
@@ -366,7 +368,26 @@ class InteractiveImportRow extends Component {
 
         <TableRowCell>
           {
-            rejections && rejections.length ?
+            customFormats?.length ?
+              <Popover
+                anchor={
+                  <Icon name={icons.INTERACTIVE} />
+                }
+                title="Formats"
+                body={
+                  <div className={styles.customFormatTooltip}>
+                    <EpisodeFormats formats={customFormats} />
+                  </div>
+                }
+                position={tooltipPositions.LEFT}
+              /> :
+              null
+          }
+        </TableRowCell>
+
+        <TableRowCell>
+          {
+            rejections.length ?
               <Popover
                 anchor={
                   <Icon
@@ -389,6 +410,7 @@ class InteractiveImportRow extends Component {
                   </ul>
                 }
                 position={tooltipPositions.LEFT}
+                canFlip={false}
               /> :
               null
           }
@@ -462,6 +484,7 @@ InteractiveImportRow.propTypes = {
   quality: PropTypes.object,
   languages: PropTypes.arrayOf(PropTypes.object),
   size: PropTypes.number.isRequired,
+  customFormats: PropTypes.arrayOf(PropTypes.object),
   rejections: PropTypes.arrayOf(PropTypes.object).isRequired,
   columns: PropTypes.arrayOf(PropTypes.object).isRequired,
   episodeFileId: PropTypes.number,
