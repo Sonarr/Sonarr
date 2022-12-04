@@ -6,6 +6,7 @@ using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Instrumentation.Extensions;
+using NzbDrone.Core.CustomFormats;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.TrackedDownloads;
@@ -40,6 +41,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
         private readonly ITrackedDownloadService _trackedDownloadService;
         private readonly IDownloadedEpisodesImportService _downloadedEpisodesImportService;
         private readonly IMediaFileService _mediaFileService;
+        private readonly ICustomFormatCalculationService _formatCalculator;
         private readonly IEventAggregator _eventAggregator;
         private readonly Logger _logger;
 
@@ -54,6 +56,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                                    ITrackedDownloadService trackedDownloadService,
                                    IDownloadedEpisodesImportService downloadedEpisodesImportService,
                                    IMediaFileService mediaFileService,
+                                   ICustomFormatCalculationService formatCalculator,
                                    IEventAggregator eventAggregator,
                                    Logger logger)
         {
@@ -68,6 +71,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
             _trackedDownloadService = trackedDownloadService;
             _downloadedEpisodesImportService = downloadedEpisodesImportService;
             _mediaFileService = mediaFileService;
+            _formatCalculator = formatCalculator;
             _eventAggregator = eventAggregator;
             _logger = logger;
         }
@@ -382,6 +386,8 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
             if (decision.LocalEpisode.Series != null)
             {
                 item.Series = decision.LocalEpisode.Series;
+
+                item.CustomFormats = _formatCalculator.ParseCustomFormat(decision.LocalEpisode);
             }
 
             if (decision.LocalEpisode.Episodes.Any() && decision.LocalEpisode.Episodes.Select(c => c.SeasonNumber).Distinct().Count() == 1)
@@ -429,6 +435,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
             item.Size = _diskProvider.GetFileSize(item.Path);
             item.Rejections = Enumerable.Empty<Rejection>();
             item.EpisodeFileId = episodeFile.Id;
+            item.CustomFormats = _formatCalculator.ParseCustomFormat(episodeFile, series);
 
             return item;
         }

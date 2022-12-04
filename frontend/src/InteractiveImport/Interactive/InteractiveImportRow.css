@@ -23,3 +23,7 @@
   margin-top: 0;
   text-align: start;
 }
+
+.customFormatTooltip {
+  max-width: 250px;
+}

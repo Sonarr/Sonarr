@@ -18,6 +18,7 @@ namespace NzbDrone.Core.CustomFormats
         List<CustomFormat> ParseCustomFormat(EpisodeFile episodeFile);
         List<CustomFormat> ParseCustomFormat(Blocklist blocklist, Series series);
         List<CustomFormat> ParseCustomFormat(EpisodeHistory history, Series series);
+        List<CustomFormat> ParseCustomFormat(LocalEpisode localEpisode);
     }
 
     public class CustomFormatCalculationService : ICustomFormatCalculationService
@@ -102,6 +103,28 @@ namespace NzbDrone.Core.CustomFormats
             return ParseCustomFormat(input);
         }
 
+        public List<CustomFormat> ParseCustomFormat(LocalEpisode localEpisode)
+        {
+            var episodeInfo = new ParsedEpisodeInfo
+            {
+                SeriesTitle = localEpisode.Series.Title,
+                ReleaseTitle = localEpisode.SceneName,
+                Quality = localEpisode.Quality,
+                Languages = localEpisode.Languages,
+                ReleaseGroup = localEpisode.ReleaseGroup
+            };
+
+            var input = new CustomFormatInput
+            {
+                EpisodeInfo = episodeInfo,
+                Series = localEpisode.Series,
+                Size = localEpisode.Size,
+                Languages = localEpisode.Languages
+            };
+
+            return ParseCustomFormat(input);
+        }
+
         private List<CustomFormat> ParseCustomFormat(CustomFormatInput input)
         {
             return ParseCustomFormat(input, _formatService.All());
@@ -148,7 +171,7 @@ namespace NzbDrone.Core.CustomFormats
 
             var episodeInfo = new ParsedEpisodeInfo
             {
-                SeriesTitle = episodeFile.Series.Value.Title,
+                SeriesTitle = series.Title,
                 ReleaseTitle = sceneName,
                 Quality = episodeFile.Quality,
                 Languages = episodeFile.Languages,
