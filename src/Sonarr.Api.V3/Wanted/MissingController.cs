@@ -1,5 +1,6 @@
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using NzbDrone.Core.CustomFormats;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.DecisionEngine.Specifications;
@@ -17,8 +18,9 @@ namespace Sonarr.Api.V3.Wanted
         public MissingController(IEpisodeService episodeService,
                              ISeriesService seriesService,
                              IUpgradableSpecification upgradableSpecification,
+                             ICustomFormatCalculationService formatCalculator,
                              IBroadcastSignalRMessage signalRBroadcaster)
-            : base(episodeService, seriesService, upgradableSpecification, signalRBroadcaster)
+            : base(episodeService, seriesService, upgradableSpecification, formatCalculator, signalRBroadcaster)
         {
         }
 

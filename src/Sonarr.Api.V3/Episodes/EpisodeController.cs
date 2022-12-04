@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using NzbDrone.Core.CustomFormats;
 using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.Tv;
 using NzbDrone.SignalR;
@@ -18,8 +19,9 @@ namespace Sonarr.Api.V3.Episodes
         public EpisodeController(ISeriesService seriesService,
                              IEpisodeService episodeService,
                              IUpgradableSpecification upgradableSpecification,
+                             ICustomFormatCalculationService formatCalculator,
                              IBroadcastSignalRMessage signalRBroadcaster)
-            : base(episodeService, seriesService, upgradableSpecification, signalRBroadcaster)
+            : base(episodeService, seriesService, upgradableSpecification, formatCalculator, signalRBroadcaster)
         {
         }
 

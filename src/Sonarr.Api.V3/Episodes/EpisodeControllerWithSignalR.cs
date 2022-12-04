@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+using NzbDrone.Core.CustomFormats;
 using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.Download;
@@ -21,21 +22,25 @@ namespace Sonarr.Api.V3.Episodes
         protected readonly IEpisodeService _episodeService;
         protected readonly ISeriesService _seriesService;
         protected readonly IUpgradableSpecification _upgradableSpecification;
+        protected readonly ICustomFormatCalculationService _formatCalculator;
 
         protected EpisodeControllerWithSignalR(IEpisodeService episodeService,
                                            ISeriesService seriesService,
                                            IUpgradableSpecification upgradableSpecification,
+                                           ICustomFormatCalculationService formatCalculator,
                                            IBroadcastSignalRMessage signalRBroadcaster)
             : base(signalRBroadcaster)
         {
             _episodeService = episodeService;
             _seriesService = seriesService;
             _upgradableSpecification = upgradableSpecification;
+            _formatCalculator = formatCalculator;
         }
 
         protected EpisodeControllerWithSignalR(IEpisodeService episodeService,
                                            ISeriesService seriesService,
                                            IUpgradableSpecification upgradableSpecification,
+                                           ICustomFormatCalculationService formatCalculator,
                                            IBroadcastSignalRMessage signalRBroadcaster,
                                            string resource)
             : base(signalRBroadcaster)
@@ -43,6 +48,7 @@ namespace Sonarr.Api.V3.Episodes
             _episodeService = episodeService;
             _seriesService = seriesService;
             _upgradableSpecification = upgradableSpecification;
+            _formatCalculator = formatCalculator;
         }
 
         protected override EpisodeResource GetResourceById(int id)
@@ -67,7 +73,7 @@ namespace Sonarr.Api.V3.Episodes
 
                 if (includeEpisodeFile && episode.EpisodeFileId != 0)
                 {
-                    resource.EpisodeFile = episode.EpisodeFile.Value.ToResource(series, _upgradableSpecification);
+                    resource.EpisodeFile = episode.EpisodeFile.Value.ToResource(series, _upgradableSpecification, _formatCalculator);
                 }
 
                 if (includeImages)
@@ -101,7 +107,7 @@ namespace Sonarr.Api.V3.Episodes
 
                     if (includeEpisodeFile && episode.EpisodeFileId != 0)
                     {
-                        resource.EpisodeFile = episode.EpisodeFile.Value.ToResource(series, _upgradableSpecification);
+                        resource.EpisodeFile = episode.EpisodeFile.Value.ToResource(series, _upgradableSpecification, _formatCalculator);
                     }
 
                     if (includeImages)

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using NzbDrone.Core.CustomFormats;
 using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.MediaFiles;
@@ -58,12 +59,14 @@ namespace Sonarr.Api.V3.EpisodeFiles
             };
         }
 
-        public static EpisodeFileResource ToResource(this EpisodeFile model, NzbDrone.Core.Tv.Series series, IUpgradableSpecification upgradableSpecification)
+        public static EpisodeFileResource ToResource(this EpisodeFile model, NzbDrone.Core.Tv.Series series, IUpgradableSpecification upgradableSpecification, ICustomFormatCalculationService formatCalculationService)
         {
             if (model == null)
             {
                 return null;
             }
+
+            model.Series = series;
 
             return new EpisodeFileResource
             {
@@ -81,6 +84,7 @@ namespace Sonarr.Api.V3.EpisodeFiles
                 Quality = model.Quality,
                 MediaInfo = model.MediaInfo.ToResource(model.SceneName),
                 QualityCutoffNotMet = upgradableSpecification.QualityCutoffNotMet(series.QualityProfile.Value, model.Quality),
+                CustomFormats = formatCalculationService.ParseCustomFormat(model).ToResource()
             };
         }
     }

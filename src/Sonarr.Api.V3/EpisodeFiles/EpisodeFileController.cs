@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Resources;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Core.CustomFormats;
 using NzbDrone.Core.Datastore.Events;
@@ -51,8 +52,7 @@ namespace Sonarr.Api.V3.EpisodeFiles
             var episodeFile = _mediaFileService.Get(id);
             var series = _seriesService.GetSeries(episodeFile.SeriesId);
 
-            var resource = episodeFile.ToResource(series, _upgradableSpecification);
-            resource.CustomFormats = _formatCalculator.ParseCustomFormat(episodeFile).ToResource();
+            var resource = episodeFile.ToResource(series, _upgradableSpecification, _formatCalculator);
 
             return resource;
         }
@@ -76,19 +76,8 @@ namespace Sonarr.Api.V3.EpisodeFiles
                     return new List<EpisodeFileResource>();
                 }
 
-                var resources = new List<EpisodeFileResource>();
-
-                foreach (var file in files)
-                {
-                    var resource = file.ToResource(series, _upgradableSpecification);
-                    file.Series = series;
-
-                    resource.CustomFormats = _formatCalculator.ParseCustomFormat(file).ToResource();
-
-                    resources.Add(resource);
-                }
-
-                return resources;
+                return files.ConvertAll(e => e.ToResource(series, _upgradableSpecification, _formatCalculator))
+                            .ToList();
             }
             else
             {
@@ -96,7 +85,7 @@ namespace Sonarr.Api.V3.EpisodeFiles
 
                 return episodeFiles.GroupBy(e => e.SeriesId)
                                    .SelectMany(f => f.ToList()
-                                                     .ConvertAll(e => e.ToResource(_seriesService.GetSeries(f.Key), _upgradableSpecification)))
+                                                     .ConvertAll(e => e.ToResource(_seriesService.GetSeries(f.Key), _upgradableSpecification, _formatCalculator)))
                                    .ToList();
             }
         }
@@ -155,7 +144,7 @@ namespace Sonarr.Api.V3.EpisodeFiles
 
             var series = _seriesService.GetSeries(episodeFiles.First().SeriesId);
 
-            return Accepted(episodeFiles.ConvertAll(f => f.ToResource(series, _upgradableSpecification)));
+            return Accepted(episodeFiles.ConvertAll(f => f.ToResource(series, _upgradableSpecification, _formatCalculator)));
         }
 
         [RestDeleteById]
@@ -221,7 +210,7 @@ namespace Sonarr.Api.V3.EpisodeFiles
 
             _mediaFileService.Update(episodeFiles);
             var series = _seriesService.GetSeries(episodeFiles.First().SeriesId);
-            return Accepted(episodeFiles.ConvertAll(f => f.ToResource(series, _upgradableSpecification)));
+            return Accepted(episodeFiles.ConvertAll(f => f.ToResource(series, _upgradableSpecification, _formatCalculator)));
         }
 
         [NonAction]
