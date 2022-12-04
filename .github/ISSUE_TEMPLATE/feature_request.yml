@@ -5,9 +5,9 @@ body:
 - type: checkboxes
   attributes:
     label: Is there an existing issue for this?
-    description: Please search to see if an issue already exists for the feature you are requesting.
+    description: Please search to see if an open or closed issue already exists for the feature you are requesting. If a feature request exists and it is closed as complete it may not yet be in a stable release.
     options:
-    - label: I have searched the existing issues
+    - label: I have searched the existing open and closed issues
       required: true
 - type: textarea
   attributes:
