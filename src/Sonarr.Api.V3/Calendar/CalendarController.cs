@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using NzbDrone.Core.CustomFormats;
 using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.Tv;
 using NzbDrone.SignalR;
@@ -16,8 +17,9 @@ namespace Sonarr.Api.V3.Calendar
         public CalendarController(IBroadcastSignalRMessage signalR,
                             IEpisodeService episodeService,
                             ISeriesService seriesService,
-                            IUpgradableSpecification qualityUpgradableSpecification)
-            : base(episodeService, seriesService, qualityUpgradableSpecification, signalR)
+                            IUpgradableSpecification qualityUpgradableSpecification,
+                            ICustomFormatCalculationService formatCalculator)
+            : base(episodeService, seriesService, qualityUpgradableSpecification, formatCalculator, signalR)
         {
         }
 

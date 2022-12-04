@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import Icon from 'Components/Icon';
-import Label from 'Components/Label';
 import IconButton from 'Components/Link/IconButton';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
 import TableRow from 'Components/Table/TableRow';
 import Popover from 'Components/Tooltip/Popover';
+import EpisodeFormats from 'Episode/EpisodeFormats';
 import EpisodeLanguages from 'Episode/EpisodeLanguages';
 import EpisodeQuality from 'Episode/EpisodeQuality';
 import { icons, kinds, tooltipPositions } from 'Helpers/Props';
@@ -123,15 +123,9 @@ class EpisodeFileRow extends Component {
                   key={name}
                   className={styles.customFormats}
                 >
-                  {
-                    customFormats.map((format) => {
-                      return (
-                        <Label key={format.id}>
-                          {format.name}
-                        </Label>
-                      );
-                    })
-                  }
+                  <EpisodeFormats
+                    formats={customFormats}
+                  />
                 </TableRowCell>
               );
             }
