@@ -1,5 +1,6 @@
-﻿using FluentValidation;
+using FluentValidation;
 using Newtonsoft.Json;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
@@ -43,7 +44,7 @@ namespace NzbDrone.Core.Notifications.Emby
         public bool UpdateLibrary { get; set; }
 
         [JsonIgnore]
-        public string Address => $"{Host}:{Port}";
+        public string Address => $"{Host.ToUrlHost()}:{Port}";
 
         public bool IsValid => !string.IsNullOrWhiteSpace(Host) && Port > 0;
 
