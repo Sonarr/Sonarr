@@ -33,9 +33,9 @@ namespace Sonarr.Api.V3.Config
             _userService = userService;
 
             SharedValidator.RuleFor(c => c.BindAddress)
-                           .ValidIp4Address()
+                           .ValidIpAddress()
                            .NotListenAllIp4Address()
-                           .When(c => c.BindAddress != "*");
+                           .When(c => c.BindAddress != "*" && c.BindAddress != "localhost");
 
             SharedValidator.RuleFor(c => c.Port).ValidPort();
 
