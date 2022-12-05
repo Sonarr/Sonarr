@@ -79,6 +79,8 @@ namespace NzbDrone.Core.Test.ParserTests
 
         [TestCase("[GM-Team][国漫][斗罗大陆][Anime Title][Douro Mainland][2019][215][AVC][GB][1080P]", "Anime Title", 215)]
         [TestCase("[GM-Team][国漫][Anime Title][Douro Mainland][2019][234][AVC][GB][1080P]", "Anime Title", 234)]
+        [TestCase("[GM-Team][国漫][Anime Title][2019][234][AVC][GB][1080P]", "Anime Title", 234)]
+        [TestCase("[GM-Team][国漫][Anime Title][2019][234 END][AVC][GB][1080P]", "Anime Title", 234)]
         public void should_parse_gm_team_releases_and_files(string postTitle, string title, int absoluteEpisodeNumber)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
