@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Tv
         private readonly IDiskScanService _diskScanService;
         private readonly ICheckIfSeriesShouldBeRefreshed _checkIfSeriesShouldBeRefreshed;
         private readonly IConfigService _configService;
-        private readonly IAutoTaggingService _autoTagService;
+        private readonly IAutoTaggingService _autoTaggingService;
         private readonly Logger _logger;
 
         public RefreshSeriesService(IProvideSeriesInfo seriesInfo,
@@ -37,7 +37,7 @@ namespace NzbDrone.Core.Tv
                                     IDiskScanService diskScanService,
                                     ICheckIfSeriesShouldBeRefreshed checkIfSeriesShouldBeRefreshed,
                                     IConfigService configService,
-                                    IAutoTaggingService autoTagService,
+                                    IAutoTaggingService autoTaggingService,
                                     Logger logger)
         {
             _seriesInfo = seriesInfo;
@@ -47,7 +47,7 @@ namespace NzbDrone.Core.Tv
             _diskScanService = diskScanService;
             _checkIfSeriesShouldBeRefreshed = checkIfSeriesShouldBeRefreshed;
             _configService = configService;
-            _autoTagService = autoTagService;
+            _autoTaggingService = autoTaggingService;
             _logger = logger;
         }
 
@@ -199,7 +199,7 @@ namespace NzbDrone.Core.Tv
 
             var tagsAdded = new HashSet<int>();
             var tagsRemoved = new HashSet<int>();
-            var changes = _autoTagService.GetTagChanges(series);
+            var changes = _autoTaggingService.GetTagChanges(series);
 
             foreach (var tag in changes.TagsToRemove)
             {
