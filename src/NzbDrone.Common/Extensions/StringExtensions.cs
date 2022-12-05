@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net;
+using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -214,6 +216,26 @@ namespace NzbDrone.Common.Extensions
                 .Replace("*", "%2A")
                 .Replace("'", "%27")
                 .Replace("%7E", "~");
+        }
+
+        public static bool IsValidIpAddress(this string value)
+        {
+            if (!IPAddress.TryParse(value, out var parsedAddress))
+            {
+                return false;
+            }
+
+            if (parsedAddress.Equals(IPAddress.Parse("255.255.255.255")))
+            {
+                return false;
+            }
+
+            if (parsedAddress.IsIPv6Multicast)
+            {
+                return false;
+            }
+
+            return parsedAddress.AddressFamily == AddressFamily.InterNetwork || parsedAddress.AddressFamily == AddressFamily.InterNetworkV6;
         }
     }
 }
