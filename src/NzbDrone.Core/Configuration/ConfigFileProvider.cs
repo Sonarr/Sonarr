@@ -191,7 +191,7 @@ namespace NzbDrone.Core.Configuration
         public string LogLevel => GetValue("LogLevel", "info").ToLowerInvariant();
         public string ConsoleLogLevel => GetValue("ConsoleLogLevel", string.Empty, persist: false);
 
-        public string Theme => GetValue("Theme", "light", persist: false);
+        public string Theme => GetValue("Theme", "auto", persist: false);
         public bool LogSql => GetValueBoolean("LogSql", false, persist: false);
         public int LogRotate => GetValueInt("LogRotate", 50, persist: false);
         public bool FilterSentryEvents => GetValueBoolean("FilterSentryEvents", true, persist: false);

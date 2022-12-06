@@ -177,7 +177,7 @@ class UISettings extends Component {
                     <FormInputGroup
                       type={inputTypes.SELECT}
                       name="theme"
-                      helpText="Change Application UI Theme, Inspired by Theme.Park"
+                      helpText="Change Application UI Theme, 'Auto' Theme will use your OS Theme to set Light or Dark mode. Inspired by Theme.Park"
                       values={themeOptions}
                       onChange={onInputChange}
                       {...settings.theme}
