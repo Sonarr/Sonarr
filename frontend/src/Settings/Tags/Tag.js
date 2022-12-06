@@ -4,6 +4,7 @@ import Card from 'Components/Card';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import { kinds } from 'Helpers/Props';
 import TagDetailsModal from './Details/TagDetailsModal';
+import TagInUse from './TagInUse';
 import styles from './Tag.css';
 
 class Tag extends Component {
@@ -57,6 +58,7 @@ class Tag extends Component {
       notificationIds,
       restrictionIds,
       indexerIds,
+      autoTagIds,
       seriesIds
     } = this.props;
 
@@ -71,6 +73,7 @@ class Tag extends Component {
       notificationIds.length ||
       restrictionIds.length ||
       indexerIds.length ||
+      autoTagIds.length ||
       seriesIds.length
     );
 
@@ -85,56 +88,46 @@ class Tag extends Component {
         </div>
 
         {
-          isTagUsed &&
+          isTagUsed ?
             <div>
-              {
-                seriesIds.length ?
-                  <div>
-                    {seriesIds.length} series
-                  </div> :
-                  null
-              }
+              <TagInUse
+                label="series"
+                count={seriesIds.length}
+                shouldPluralize={false}
+              />
 
-              {
-                delayProfileIds.length ?
-                  <div>
-                    {delayProfileIds.length} delay profile{delayProfileIds.length > 1 && 's'}
-                  </div> :
-                  null
-              }
+              <TagInUse
+                label="delay profile"
+                count={delayProfileIds.length}
+              />
 
-              {
-                importListIds.length ?
-                  <div>
-                    {importListIds.length} import list{importListIds.length > 1 && 's'}
-                  </div> :
-                  null
-              }
+              <TagInUse
+                label="import list"
+                count={importListIds.length}
+              />
 
-              {
-                notificationIds.length ?
-                  <div>
-                    {notificationIds.length} connection{notificationIds.length > 1 && 's'}
-                  </div> :
-                  null
-              }
+              <TagInUse
+                label="connection"
+                count={notificationIds.length}
+              />
 
-              {
-                restrictionIds.length ?
-                  <div>
-                    {restrictionIds.length} release profile{restrictionIds.length > 1 && 's'}
-                  </div> :
-                  null
-              }
+              <TagInUse
+                label="release profile"
+                count={restrictionIds.length}
+              />
 
-              {
-                indexerIds.length ?
-                  <div>
-                    {indexerIds.length} indexer{indexerIds.length > 1 && 's'}
-                  </div> :
-                  null
-              }
-            </div>
+              <TagInUse
+                label="indexer"
+                count={indexerIds.length}
+              />
+
+              <TagInUse
+                label="auto tagging"
+                count={autoTagIds.length}
+                shouldPluralize={false}
+              />
+            </div> :
+            null
         }
 
         {
@@ -153,6 +146,7 @@ class Tag extends Component {
           notificationIds={notificationIds}
           restrictionIds={restrictionIds}
           indexerIds={indexerIds}
+          autoTagIds={autoTagIds}
           isOpen={isDetailsModalOpen}
           onModalClose={this.onDetailsModalClose}
           onDeleteTagPress={this.onDeleteTagPress}
@@ -180,6 +174,7 @@ Tag.propTypes = {
   notificationIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   restrictionIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   indexerIds: PropTypes.arrayOf(PropTypes.number).isRequired,
+  autoTagIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   seriesIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   onConfirmDeleteTag: PropTypes.func.isRequired
 };
@@ -190,6 +185,7 @@ Tag.defaultProps = {
   notificationIds: [],
   restrictionIds: [],
   indexerIds: [],
+  autoTagIds: [],
   seriesIds: []
 };
 

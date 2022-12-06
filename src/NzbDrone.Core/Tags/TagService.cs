@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using NzbDrone.Core.AutoTagging;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.ImportLists;
 using NzbDrone.Core.Indexers;
@@ -35,6 +36,7 @@ namespace NzbDrone.Core.Tags
         private readonly IReleaseProfileService _releaseProfileService;
         private readonly ISeriesService _seriesService;
         private readonly IIndexerFactory _indexerService;
+        private readonly IAutoTaggingService _autoTaggingService;
 
         public TagService(ITagRepository repo,
                           IEventAggregator eventAggregator,
@@ -43,7 +45,8 @@ namespace NzbDrone.Core.Tags
                           INotificationFactory notificationFactory,
                           IReleaseProfileService releaseProfileService,
                           ISeriesService seriesService,
-                          IIndexerFactory indexerService)
+                          IIndexerFactory indexerService,
+                          IAutoTaggingService autoTaggingService)
         {
             _repo = repo;
             _eventAggregator = eventAggregator;
@@ -53,6 +56,7 @@ namespace NzbDrone.Core.Tags
             _releaseProfileService = releaseProfileService;
             _seriesService = seriesService;
             _indexerService = indexerService;
+            _autoTaggingService = autoTaggingService;
         }
 
         public Tag GetTag(int tagId)
@@ -86,6 +90,7 @@ namespace NzbDrone.Core.Tags
             var restrictions = _releaseProfileService.AllForTag(tagId);
             var series = _seriesService.AllForTag(tagId);
             var indexers = _indexerService.AllForTag(tagId);
+            var autoTags = _autoTaggingService.AllForTag(tagId);
 
             return new TagDetails
             {
@@ -96,7 +101,8 @@ namespace NzbDrone.Core.Tags
                 NotificationIds = notifications.Select(c => c.Id).ToList(),
                 RestrictionIds = restrictions.Select(c => c.Id).ToList(),
                 SeriesIds = series.Select(c => c.Id).ToList(),
-                IndexerIds = indexers.Select(c => c.Id).ToList()
+                IndexerIds = indexers.Select(c => c.Id).ToList(),
+                AutoTagIds = autoTags.Select(c => c.Id).ToList()
             };
         }
 
@@ -109,6 +115,7 @@ namespace NzbDrone.Core.Tags
             var restrictions = _releaseProfileService.All();
             var series = _seriesService.GetAllSeries();
             var indexers = _indexerService.All();
+            var autotags = _autoTaggingService.All();
 
             var details = new List<TagDetails>();
 
@@ -123,7 +130,8 @@ namespace NzbDrone.Core.Tags
                         NotificationIds = notifications.Where(c => c.Tags.Contains(tag.Id)).Select(c => c.Id).ToList(),
                         RestrictionIds = restrictions.Where(c => c.Tags.Contains(tag.Id)).Select(c => c.Id).ToList(),
                         SeriesIds = series.Where(c => c.Tags.Contains(tag.Id)).Select(c => c.Id).ToList(),
-                        IndexerIds = indexers.Where(c => c.Tags.Contains(tag.Id)).Select(c => c.Id).ToList()
+                        IndexerIds = indexers.Where(c => c.Tags.Contains(tag.Id)).Select(c => c.Id).ToList(),
+                        AutoTagIds = autotags.Where(c => c.Tags.Contains(tag.Id)).Select(c => c.Id).ToList(),
                     });
             }
 
