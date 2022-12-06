@@ -31,13 +31,13 @@ namespace NzbDrone.Core.ImportLists.Trakt.User
             switch (Settings.TraktListType)
             {
                 case (int)TraktUserListType.UserWatchList:
-                    link += $"/users/{userName}/watchlist/shows?limit={Settings.Limit}";
+                    link += $"/users/{userName}/watchlist/shows?limit={Settings.Limit}{Settings.TraktAdditionalParameters}";
                     break;
                 case (int)TraktUserListType.UserWatchedList:
-                    link += $"/users/{userName}/watched/shows?limit={Settings.Limit}";
+                    link += $"/users/{userName}/watched/shows?limit={Settings.Limit}{Settings.TraktAdditionalParameters}";
                     break;
                 case (int)TraktUserListType.UserCollectionList:
-                    link += $"/users/{userName}/collection/shows?limit={Settings.Limit}";
+                    link += $"/users/{userName}/collection/shows?limit={Settings.Limit}{Settings.TraktAdditionalParameters}";
                     break;
             }
 
