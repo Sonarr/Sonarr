@@ -93,9 +93,6 @@ namespace NzbDrone.Core.DecisionEngine
                         var remoteEpisode = _parsingService.Map(parsedEpisodeInfo, report.TvdbId, report.TvRageId, searchCriteria);
                         remoteEpisode.Release = report;
 
-                        remoteEpisode.CustomFormats = _formatCalculator.ParseCustomFormat(remoteEpisode);
-                        remoteEpisode.CustomFormatScore = remoteEpisode?.Series?.QualityProfile?.Value.CalculateCustomFormatScore(remoteEpisode.CustomFormats) ?? 0;
-
                         if (remoteEpisode.Series == null)
                         {
                             var reason = "Unknown Series";
@@ -115,6 +112,10 @@ namespace NzbDrone.Core.DecisionEngine
                         else
                         {
                             _aggregationService.Augment(remoteEpisode);
+
+                            remoteEpisode.CustomFormats = _formatCalculator.ParseCustomFormat(remoteEpisode);
+                            remoteEpisode.CustomFormatScore = remoteEpisode?.Series?.QualityProfile?.Value.CalculateCustomFormatScore(remoteEpisode.CustomFormats) ?? 0;
+
                             remoteEpisode.DownloadAllowed = remoteEpisode.Episodes.Any();
                             decision = GetDecisionForReport(remoteEpisode, searchCriteria);
                         }
