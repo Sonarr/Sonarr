@@ -81,52 +81,40 @@ function AuthenticationRequiredModalContent(props) {
                 />
               </FormGroup>
 
-              {
-                authenticationEnabled ?
-                  <FormGroup>
-                    <FormLabel>Authentication Required</FormLabel>
+              <FormGroup>
+                <FormLabel>Authentication Required</FormLabel>
 
-                    <FormInputGroup
-                      type={inputTypes.SELECT}
-                      name="authenticationRequired"
-                      values={authenticationRequiredOptions}
-                      helpText="Change which requests authentication is required for. Do not change unless you understand the risks."
-                      onChange={onInputChange}
-                      {...authenticationRequired}
-                    />
-                  </FormGroup> :
-                  null
-              }
+                <FormInputGroup
+                  type={inputTypes.SELECT}
+                  name="authenticationRequired"
+                  values={authenticationRequiredOptions}
+                  helpText="Change which requests authentication is required for. Do not change unless you understand the risks."
+                  onChange={onInputChange}
+                  {...authenticationRequired}
+                />
+              </FormGroup>
 
-              {
-                authenticationEnabled ?
-                  <FormGroup>
-                    <FormLabel>Username</FormLabel>
+              <FormGroup>
+                <FormLabel>Username</FormLabel>
 
-                    <FormInputGroup
-                      type={inputTypes.TEXT}
-                      name="username"
-                      onChange={onInputChange}
-                      {...username}
-                    />
-                  </FormGroup> :
-                  null
-              }
+                <FormInputGroup
+                  type={inputTypes.TEXT}
+                  name="username"
+                  onChange={onInputChange}
+                  {...username}
+                />
+              </FormGroup>
 
-              {
-                authenticationEnabled ?
-                  <FormGroup>
-                    <FormLabel>Password</FormLabel>
+              <FormGroup>
+                <FormLabel>Password</FormLabel>
 
-                    <FormInputGroup
-                      type={inputTypes.PASSWORD}
-                      name="password"
-                      onChange={onInputChange}
-                      {...password}
-                    />
-                  </FormGroup> :
-                  null
-              }
+                <FormInputGroup
+                  type={inputTypes.PASSWORD}
+                  name="password"
+                  onChange={onInputChange}
+                  {...password}
+                />
+              </FormGroup>
             </div> :
             null
         }
