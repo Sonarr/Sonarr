@@ -172,6 +172,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("My Title - S01E01 - EpTitle [HEVC 4k DTSHD-MA-6ch]", false)]
         [TestCase("My Title - S01E01 - EpTitle [HEVC-4k DTSHD-MA-6ch]", false)]
         [TestCase("My Title - S01E01 - EpTitle [4k HEVC DTSHD-MA-6ch]", false)]
+        [TestCase("[GM-Team][国漫][诛仙][Series Title][2022][19][HEVC][GB][4K]", false)]
         public void should_parse_hdtv2160p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.HDTV2160p, proper);

@@ -49,8 +49,8 @@ namespace NzbDrone.Core.Parser
         private static readonly Regex ResolutionRegex = new Regex(@"\b(?:(?<R360p>360p)|(?<R480p>480p|640x480|848x480)|(?<R540p>540p)|(?<R576p>576p)|(?<R720p>720p|1280x720|960p)|(?<R1080p>1080p|1920x1080|1440p|FHD|1080i|4kto1080p)|(?<R2160p>2160p|3840x2160|4k[-_. ](?:UHD|HEVC|BD|H265)|(?:UHD|HEVC|BD|H265)[-_. ]4k))\b",
                                                                 RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        // Handle cases where no resolution is in the release name; assume if UHD then 4k
-        private static readonly Regex ImpliedResolutionRegex = new Regex(@"\b(?<R2160p>UHD)\b",
+        // Handle cases where no resolution is in the release name (assume if UHD then 4k) or resolution is non-standard
+        private static readonly Regex AlternativeResolutionRegex = new Regex(@"\b(?<R2160p>UHD)\b|(?<R2160p>\[4K\])",
                                                                 RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private static readonly Regex CodecRegex = new Regex(@"\b(?:(?<x264>x264)|(?<h264>h264)|(?<xvidhd>XvidHD)|(?<xvid>Xvid)|(?<divx>divx))\b",
@@ -558,10 +558,9 @@ namespace NzbDrone.Core.Parser
         private static Resolution ParseResolution(string name)
         {
             var match = ResolutionRegex.Match(name);
+            var alternativeMatch = AlternativeResolutionRegex.Match(name);
 
-            var matchimplied = ImpliedResolutionRegex.Match(name);
-
-            if (!match.Success & !matchimplied.Success)
+            if (!match.Success & !alternativeMatch.Success)
             {
                 return Resolution.Unknown;
             }
@@ -601,7 +600,7 @@ namespace NzbDrone.Core.Parser
                 return Resolution.R2160p;
             }
 
-            if (matchimplied.Groups["R2160p"].Success)
+            if (alternativeMatch.Groups["R2160p"].Success)
             {
                 return Resolution.R2160p;
             }
