@@ -343,7 +343,7 @@ namespace NzbDrone.Core.History
 
         public void Handle(SeriesDeletedEvent message)
         {
-            _historyRepository.DeleteForSeries(message.Series.Id);
+            _historyRepository.DeleteForSeries(message.Series.Select(m => m.Id).ToList());
         }
 
         public List<EpisodeHistory> Since(DateTime date, EpisodeHistoryEventType? eventType)

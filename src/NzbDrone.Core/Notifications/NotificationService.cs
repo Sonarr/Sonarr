@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
@@ -252,20 +252,23 @@ namespace NzbDrone.Core.Notifications
 
         public void Handle(SeriesDeletedEvent message)
         {
-            var deleteMessage = new SeriesDeleteMessage(message.Series, message.DeleteFiles);
-
-            foreach (var notification in _notificationFactory.OnSeriesDeleteEnabled())
+            foreach (var series in message.Series)
             {
-                try
+                var deleteMessage = new SeriesDeleteMessage(series, message.DeleteFiles);
+
+                foreach (var notification in _notificationFactory.OnSeriesDeleteEnabled())
                 {
-                    if (ShouldHandleSeries(notification.Definition, deleteMessage.Series))
+                    try
                     {
-                        notification.OnSeriesDelete(deleteMessage);
+                        if (ShouldHandleSeries(notification.Definition, deleteMessage.Series))
+                        {
+                            notification.OnSeriesDelete(deleteMessage);
+                        }
                     }
-                }
-                catch (Exception ex)
-                {
-                    _logger.Warn(ex, "Unable to send OnDelete notification to: " + notification.Definition.Name);
+                    catch (Exception ex)
+                    {
+                        _logger.Warn(ex, "Unable to send OnDelete notification to: " + notification.Definition.Name);
+                    }
                 }
             }
         }

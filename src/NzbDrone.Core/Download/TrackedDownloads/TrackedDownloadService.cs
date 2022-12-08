@@ -252,7 +252,7 @@ namespace NzbDrone.Core.Download.TrackedDownloads
         {
             var cachedItems = _cache.Values.Where(t =>
                                         t.RemoteEpisode?.Series != null &&
-                                        t.RemoteEpisode.Series.Id == message.Series.Id)
+                                        message.Series.Any(s => s.Id == t.RemoteEpisode.Series.Id))
                                     .ToList();
 
             if (cachedItems.Any())

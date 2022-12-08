@@ -211,7 +211,7 @@ namespace NzbDrone.Core.Tv
 
         public void HandleAsync(SeriesDeletedEvent message)
         {
-            var episodes = GetEpisodeBySeries(message.Series.Id);
+            var episodes = _episodeRepository.GetEpisodesBySeriesIds(message.Series.Select(s => s.Id).ToList());
             _episodeRepository.DeleteMany(episodes);
         }
 

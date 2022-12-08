@@ -17,7 +17,7 @@ namespace NzbDrone.Core.History
         List<EpisodeHistory> GetBySeries(int seriesId, EpisodeHistoryEventType? eventType);
         List<EpisodeHistory> GetBySeason(int seriesId, int seasonNumber, EpisodeHistoryEventType? eventType);
         List<EpisodeHistory> FindDownloadHistory(int idSeriesId, QualityModel quality);
-        void DeleteForSeries(int seriesId);
+        void DeleteForSeries(List<int> seriesIds);
         List<EpisodeHistory> Since(DateTime date, EpisodeHistoryEventType? eventType);
     }
 
@@ -100,9 +100,9 @@ namespace NzbDrone.Core.History
                  .ToList();
         }
 
-        public void DeleteForSeries(int seriesId)
+        public void DeleteForSeries(List<int> seriesIds)
         {
-            Delete(c => c.SeriesId == seriesId);
+            Delete(c => seriesIds.Contains(c.SeriesId));
         }
 
         protected override SqlBuilder PagedBuilder() => new SqlBuilder()
