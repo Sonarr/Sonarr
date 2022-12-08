@@ -168,39 +168,7 @@ namespace Sonarr.Http.Extensions
                 remoteIP = remoteIP.MapToIPv4();
             }
 
-            var remoteAddress = remoteIP.ToString();
-
-            // Only check if forwarded by a local network reverse proxy
-            if (remoteIP.IsLocalAddress())
-            {
-                var realIPHeader = request.Headers["X-Real-IP"];
-                if (realIPHeader.Any())
-                {
-                    return realIPHeader.First().ToString();
-                }
-
-                var forwardedForHeader = request.Headers["X-Forwarded-For"];
-                if (forwardedForHeader.Any())
-                {
-                    // Get the first address that was forwarded by a local IP to prevent remote clients faking another proxy
-                    foreach (var forwardedForAddress in forwardedForHeader.SelectMany(v => v.Split(',')).Select(v => v.Trim()).Reverse())
-                    {
-                        if (!IPAddress.TryParse(forwardedForAddress, out remoteIP))
-                        {
-                            return remoteAddress;
-                        }
-
-                        if (!remoteIP.IsLocalAddress())
-                        {
-                            return forwardedForAddress;
-                        }
-
-                        remoteAddress = forwardedForAddress;
-                    }
-                }
-            }
-
-            return remoteAddress;
+            return remoteIP.ToString();
         }
 
         public static void DisableCache(this IHeaderDictionary headers)
