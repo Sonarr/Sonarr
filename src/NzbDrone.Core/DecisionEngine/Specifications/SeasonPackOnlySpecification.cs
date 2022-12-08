@@ -11,12 +11,10 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 {
     public class SeasonPackOnlySpecification : IDecisionEngineSpecification
     {
-        private readonly IConfigService _configService;
         private readonly Logger _logger;
 
-        public SeasonPackOnlySpecification(IConfigService configService, Logger logger)
+        public SeasonPackOnlySpecification(Logger logger)
         {
-            _configService = configService;
             _logger = logger;
         }
 
