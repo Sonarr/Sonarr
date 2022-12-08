@@ -5,6 +5,7 @@ using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.ThingiProvider;
@@ -22,6 +23,8 @@ namespace NzbDrone.Core.ImportLists
         public abstract string Name { get; }
 
         public abstract ImportListType ListType { get; }
+
+        public abstract TimeSpan MinRefreshInterval { get; }
 
         public ImportListBase(IImportListStatusService importListStatusService, IConfigService configService, IParsingService parsingService, Logger logger)
         {

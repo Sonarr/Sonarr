@@ -1,16 +1,16 @@
+using System;
 using NLog;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Messaging.Events;
-using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.ThingiProvider.Status;
 
 namespace NzbDrone.Core.ImportLists
 {
     public interface IImportListStatusService : IProviderStatusServiceBase<ImportListStatus>
     {
-        ImportListItemInfo GetLastSyncListInfo(int importListId);
+        DateTime GetLastSyncListInfo(int importListId);
 
-        void UpdateListSyncStatus(int importListId, ImportListItemInfo listItemInfo);
+        void UpdateListSyncStatus(int importListId);
     }
 
     public class ImportListStatusService : ProviderStatusServiceBase<IImportList, ImportListStatus>, IImportListStatusService
@@ -20,18 +20,18 @@ namespace NzbDrone.Core.ImportLists
         {
         }
 
-        public ImportListItemInfo GetLastSyncListInfo(int importListId)
+        public DateTime GetLastSyncListInfo(int importListId)
         {
-            return GetProviderStatus(importListId).LastSyncListInfo;
+            return GetProviderStatus(importListId).LastInfoSync;
         }
 
-        public void UpdateListSyncStatus(int importListId, ImportListItemInfo listItemInfo)
+        public void UpdateListSyncStatus(int importListId)
         {
             lock (_syncRoot)
             {
                 var status = GetProviderStatus(importListId);
 
-                status.LastSyncListInfo = listItemInfo;
+                status.LastInfoSync = DateTime.UtcNow;
 
                 _providerStatusRepository.Upsert(status);
             }

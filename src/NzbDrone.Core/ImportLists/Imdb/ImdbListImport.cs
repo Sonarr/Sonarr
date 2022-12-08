@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using NLog;
 using NzbDrone.Common.Http;
@@ -12,6 +13,7 @@ namespace NzbDrone.Core.ImportLists.Imdb
         public override string Name => "IMDb Lists";
 
         public override ImportListType ListType => ImportListType.Other;
+        public override TimeSpan MinRefreshInterval => TimeSpan.FromHours(12);
 
         public ImdbListImport(IHttpClient httpClient,
                               IImportListStatusService importListStatusService,

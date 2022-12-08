@@ -17,6 +17,7 @@ namespace NzbDrone.Core.ImportLists.Sonarr
         public override string Name => "Sonarr";
 
         public override ImportListType ListType => ImportListType.Program;
+        public override TimeSpan MinRefreshInterval => TimeSpan.FromMinutes(5);
 
         public SonarrImport(ISonarrV3Proxy sonarrV3Proxy,
                             IImportListStatusService importListStatusService,

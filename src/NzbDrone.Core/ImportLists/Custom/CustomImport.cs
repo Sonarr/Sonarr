@@ -1,9 +1,7 @@
+using System;
 using System.Collections.Generic;
-
 using FluentValidation.Results;
-
 using NLog;
-
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Parser;
@@ -15,6 +13,8 @@ namespace NzbDrone.Core.ImportLists.Custom
     {
         private readonly ICustomImportProxy _customProxy;
         public override string Name => "Custom List";
+
+        public override TimeSpan MinRefreshInterval => TimeSpan.FromHours(6);
 
         public override ImportListType ListType => ImportListType.Advanced;
 

@@ -41,6 +41,7 @@ namespace NzbDrone.Core.ImportLists
             base.SetProviderCharacteristics(provider, definition);
 
             definition.ListType = provider.ListType;
+            definition.MinRefreshInterval = provider.MinRefreshInterval;
         }
 
         public List<IImportList> AutomaticAddEnabled(bool filterBlockedImportLists = true)
