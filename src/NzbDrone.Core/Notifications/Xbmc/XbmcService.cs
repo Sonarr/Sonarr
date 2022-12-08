@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 using FluentValidation.Results;
@@ -86,19 +86,18 @@ namespace NzbDrone.Core.Notifications.Xbmc
         {
             try
             {
-                var moviePath = GetSeriesPath(settings, series);
+                var seriesPath = GetSeriesPath(settings, series);
 
-                if (moviePath != null)
+                if (seriesPath != null)
                 {
-                    moviePath = new OsPath(moviePath).Directory.FullPath.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
-                    _logger.Debug("Updating series {0} (Path: {1}) on XBMC host: {2}", series, moviePath, settings.Address);
+                    _logger.Debug("Updating series {0} (Path: {1}) on XBMC host: {2}", series, seriesPath, settings.Address);
                 }
                 else
                 {
                     _logger.Debug("Series {0} doesn't exist on XBMC host: {1}, Updating Entire Library", series, settings.Address);
                 }
 
-                var response = _proxy.UpdateLibrary(settings, moviePath);
+                var response = _proxy.UpdateLibrary(settings, seriesPath);
 
                 if (!response.Equals("OK", StringComparison.InvariantCultureIgnoreCase))
                 {
