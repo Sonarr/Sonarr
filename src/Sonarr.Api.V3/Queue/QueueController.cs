@@ -189,10 +189,13 @@ namespace Sonarr.Api.V3.Queue
                     return q => q.Title;
                 case "episode":
                     return q => q.Episode;
+                case "episode.airDateUtc":
                 case "episodes.airDateUtc":
                     return q => q.Episode?.AirDateUtc ?? DateTime.MinValue;
+                case "episode.title":
                 case "episodes.title":
                     return q => q.Episode?.Title ?? string.Empty;
+                case "language":
                 case "languages":
                     return q => q.Languages;
                 case "quality":
