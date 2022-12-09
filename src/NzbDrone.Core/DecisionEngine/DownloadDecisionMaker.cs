@@ -113,7 +113,7 @@ namespace NzbDrone.Core.DecisionEngine
                         {
                             _aggregationService.Augment(remoteEpisode);
 
-                            remoteEpisode.CustomFormats = _formatCalculator.ParseCustomFormat(remoteEpisode);
+                            remoteEpisode.CustomFormats = _formatCalculator.ParseCustomFormat(remoteEpisode, remoteEpisode.Release.Size);
                             remoteEpisode.CustomFormatScore = remoteEpisode?.Series?.QualityProfile?.Value.CalculateCustomFormatScore(remoteEpisode.CustomFormats) ?? 0;
 
                             remoteEpisode.DownloadAllowed = remoteEpisode.Episodes.Any();

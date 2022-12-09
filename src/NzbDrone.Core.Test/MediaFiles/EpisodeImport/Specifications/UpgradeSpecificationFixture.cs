@@ -269,7 +269,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
                   .Returns(new List<CustomFormat>());
 
             Mocker.GetMock<ICustomFormatCalculationService>()
-                  .Setup(s => s.ParseCustomFormat(It.IsAny<RemoteEpisode>()))
+                  .Setup(s => s.ParseCustomFormat(It.IsAny<RemoteEpisode>(), It.IsAny<long>()))
                   .Returns(new List<CustomFormat>());
 
             _localEpisode.Quality = new QualityModel(Quality.Bluray2160p);
@@ -303,7 +303,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
                   .Returns(new List<CustomFormat>());
 
             Mocker.GetMock<ICustomFormatCalculationService>()
-                  .Setup(s => s.ParseCustomFormat(It.IsAny<RemoteEpisode>()))
+                  .Setup(s => s.ParseCustomFormat(It.IsAny<RemoteEpisode>(), It.IsAny<long>()))
                   .Returns(new List<CustomFormat>());
 
             _localEpisode.Quality = new QualityModel(Quality.Bluray1080p);
@@ -381,7 +381,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
                   .Returns(new List<CustomFormat>());
 
             Mocker.GetMock<ICustomFormatCalculationService>()
-                  .Setup(s => s.ParseCustomFormat(It.IsAny<RemoteEpisode>()))
+                  .Setup(s => s.ParseCustomFormat(It.IsAny<RemoteEpisode>(), It.IsAny<long>()))
                   .Returns(new List<CustomFormat>());
 
             _localEpisode.Quality = new QualityModel(Quality.Bluray1080p);
@@ -414,7 +414,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
                   .Returns(new List<CustomFormat>());
 
             Mocker.GetMock<ICustomFormatCalculationService>()
-                  .Setup(s => s.ParseCustomFormat(It.IsAny<RemoteEpisode>()))
+                  .Setup(s => s.ParseCustomFormat(It.IsAny<RemoteEpisode>(), It.IsAny<long>()))
                   .Returns(new List<CustomFormat>());
 
             _localEpisode.Quality = new QualityModel(Quality.Bluray1080p);

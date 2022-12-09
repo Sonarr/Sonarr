@@ -336,7 +336,7 @@ namespace NzbDrone.Core.Download.Pending
                 }
 
                 _aggregationService.Augment(release.RemoteEpisode);
-                release.RemoteEpisode.CustomFormats = _formatCalculator.ParseCustomFormat(release.RemoteEpisode);
+                release.RemoteEpisode.CustomFormats = _formatCalculator.ParseCustomFormat(release.RemoteEpisode, release.Release.Size);
 
                 result.Add(release);
             }

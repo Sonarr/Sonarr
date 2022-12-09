@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Blocklisting;
-using NzbDrone.Core.Datastore.Migration;
 using NzbDrone.Core.History;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Parser.Model;
@@ -13,7 +12,7 @@ namespace NzbDrone.Core.CustomFormats
 {
     public interface ICustomFormatCalculationService
     {
-        List<CustomFormat> ParseCustomFormat(RemoteEpisode remoteEpisode);
+        List<CustomFormat> ParseCustomFormat(RemoteEpisode remoteEpisode, long size);
         List<CustomFormat> ParseCustomFormat(EpisodeFile episodeFile, Series series);
         List<CustomFormat> ParseCustomFormat(EpisodeFile episodeFile);
         List<CustomFormat> ParseCustomFormat(Blocklist blocklist, Series series);
@@ -30,13 +29,13 @@ namespace NzbDrone.Core.CustomFormats
             _formatService = formatService;
         }
 
-        public List<CustomFormat> ParseCustomFormat(RemoteEpisode remoteEpisode)
+        public List<CustomFormat> ParseCustomFormat(RemoteEpisode remoteEpisode, long size)
         {
             var input = new CustomFormatInput
             {
                 EpisodeInfo = remoteEpisode.ParsedEpisodeInfo,
                 Series = remoteEpisode.Series,
-                Size = remoteEpisode.Release.Size,
+                Size = size,
                 Languages = remoteEpisode.Languages
             };
 

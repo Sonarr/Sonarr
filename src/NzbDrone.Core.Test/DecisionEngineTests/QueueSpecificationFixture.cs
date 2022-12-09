@@ -74,7 +74,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                                                    .Build();
 
             Mocker.GetMock<ICustomFormatCalculationService>()
-                  .Setup(x => x.ParseCustomFormat(It.IsAny<RemoteEpisode>()))
+                  .Setup(x => x.ParseCustomFormat(It.IsAny<RemoteEpisode>(), It.IsAny<long>()))
                   .Returns(new List<CustomFormat>());
         }
 
@@ -88,7 +88,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         private void GivenQueueFormats(List<CustomFormat> formats)
         {
             Mocker.GetMock<ICustomFormatCalculationService>()
-                  .Setup(x => x.ParseCustomFormat(It.IsAny<RemoteEpisode>()))
+                  .Setup(x => x.ParseCustomFormat(It.IsAny<RemoteEpisode>(), It.IsAny<long>()))
                   .Returns(formats);
         }
 
