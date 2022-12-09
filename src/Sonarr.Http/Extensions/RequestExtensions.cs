@@ -16,6 +16,9 @@ namespace Sonarr.Http.Extensions
         private static readonly HashSet<string> VALID_SORT_KEYS = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
             "series.sortname", // Workaround authors table properties not being added on isValidSortKey call
+            "episode.title", // Deprecated
+            "episode.airDateUtc", // Deprecated
+            "episode.language", // Deprecated
             "timeleft",
             "estimatedCompletionTime",
             "protocol",
