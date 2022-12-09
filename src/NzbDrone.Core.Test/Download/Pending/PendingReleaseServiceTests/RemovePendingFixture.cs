@@ -57,7 +57,8 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
              {
                  Id = id,
                  Title = "Series.Title.S01E05.abc-Sonarr",
-                 ParsedEpisodeInfo = new ParsedEpisodeInfo { SeasonNumber = seasonNumber, EpisodeNumbers = episodes }
+                 ParsedEpisodeInfo = new ParsedEpisodeInfo { SeasonNumber = seasonNumber, EpisodeNumbers = episodes },
+                 Release = Builder<ReleaseInfo>.CreateNew().Build()
              });
         }
 
