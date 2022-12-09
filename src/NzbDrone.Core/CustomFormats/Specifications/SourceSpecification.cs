@@ -24,9 +24,9 @@ namespace NzbDrone.Core.CustomFormats
         [FieldDefinition(1, Label = "Source", Type = FieldType.Select, SelectOptions = typeof(QualitySource))]
         public int Value { get; set; }
 
-        protected override bool IsSatisfiedByWithoutNegate(ParsedEpisodeInfo episodeInfo)
+        protected override bool IsSatisfiedByWithoutNegate(CustomFormatInput input)
         {
-            return (episodeInfo?.Quality?.Quality?.Source ?? (int)QualitySource.Unknown) == (QualitySource)Value;
+            return (input.EpisodeInfo?.Quality?.Quality?.Source ?? (int)QualitySource.Unknown) == (QualitySource)Value;
         }
 
         public override NzbDroneValidationResult Validate()

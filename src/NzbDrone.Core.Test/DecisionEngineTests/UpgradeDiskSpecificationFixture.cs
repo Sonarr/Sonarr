@@ -35,7 +35,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             Mocker.Resolve<UpgradableSpecification>();
             _upgradeDisk = Mocker.Resolve<UpgradeDiskSpecification>();
 
-            CustomFormatsFixture.GivenCustomFormats();
+            CustomFormatsTestHelpers.GivenCustomFormats();
 
             _firstFile = new EpisodeFile { Quality = new QualityModel(Quality.Bluray1080p, new Revision(version: 2)), DateAdded = DateTime.Now, Languages = new List<Language> { Language.English } };
             _secondFile = new EpisodeFile { Quality = new QualityModel(Quality.Bluray1080p, new Revision(version: 2)), DateAdded = DateTime.Now, Languages = new List<Language> { Language.English } };
@@ -49,7 +49,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                     UpgradeAllowed = true,
                     Cutoff = Quality.Bluray1080p.Id,
                     Items = Qualities.QualityFixture.GetDefaultQualities(),
-                    FormatItems = CustomFormatsFixture.GetSampleFormatItems("None"),
+                    FormatItems = CustomFormatsTestHelpers.GetSampleFormatItems("None"),
                     MinFormatScore = 0,
                 })
                 .Build();

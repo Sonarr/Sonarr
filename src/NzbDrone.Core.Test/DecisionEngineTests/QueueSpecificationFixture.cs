@@ -36,14 +36,14 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             Mocker.Resolve<UpgradableSpecification>();
 
-            CustomFormatsFixture.GivenCustomFormats();
+            CustomFormatsTestHelpers.GivenCustomFormats();
 
             _series = Builder<Series>.CreateNew()
                                      .With(e => e.QualityProfile = new QualityProfile
                                                                 {
                                                                     UpgradeAllowed = true,
                                                                     Items = Qualities.QualityFixture.GetDefaultQualities(),
-                                                                    FormatItems = CustomFormatsFixture.GetSampleFormatItems(),
+                                                                    FormatItems = CustomFormatsTestHelpers.GetSampleFormatItems(),
                                                                     MinFormatScore = 0
                                                                 })
                                      .Build();
@@ -74,7 +74,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                                                    .Build();
 
             Mocker.GetMock<ICustomFormatCalculationService>()
-                  .Setup(x => x.ParseCustomFormat(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<Series>()))
+                  .Setup(x => x.ParseCustomFormat(It.IsAny<RemoteEpisode>()))
                   .Returns(new List<CustomFormat>());
         }
 
@@ -88,7 +88,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         private void GivenQueueFormats(List<CustomFormat> formats)
         {
             Mocker.GetMock<ICustomFormatCalculationService>()
-                  .Setup(x => x.ParseCustomFormat(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<Series>()))
+                  .Setup(x => x.ParseCustomFormat(It.IsAny<RemoteEpisode>()))
                   .Returns(formats);
         }
 
@@ -215,9 +215,9 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             var lowFormat = new List<CustomFormat> { new CustomFormat("Bad Format", new ResolutionSpecification { Value = (int)Resolution.R1080p }) { Id = 2 } };
 
-            CustomFormatsFixture.GivenCustomFormats(_remoteEpisode.CustomFormats.First(), lowFormat.First());
+            CustomFormatsTestHelpers.GivenCustomFormats(_remoteEpisode.CustomFormats.First(), lowFormat.First());
 
-            _series.QualityProfile.Value.FormatItems = CustomFormatsFixture.GetSampleFormatItems("My Format");
+            _series.QualityProfile.Value.FormatItems = CustomFormatsTestHelpers.GetSampleFormatItems("My Format");
 
             GivenQueueFormats(lowFormat);
 

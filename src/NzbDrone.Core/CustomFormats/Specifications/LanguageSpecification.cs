@@ -2,7 +2,6 @@ using System.Linq;
 using FluentValidation;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.Languages;
-using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.CustomFormats
@@ -32,13 +31,13 @@ namespace NzbDrone.Core.CustomFormats
         [FieldDefinition(1, Label = "Language", Type = FieldType.Select, SelectOptions = typeof(LanguageFieldConverter))]
         public int Value { get; set; }
 
-        protected override bool IsSatisfiedByWithoutNegate(ParsedEpisodeInfo episodeInfo)
+        protected override bool IsSatisfiedByWithoutNegate(CustomFormatInput input)
         {
-            var comparedLanguage = episodeInfo != null && Value == Language.Original.Id && episodeInfo.ExtraInfo.ContainsKey("OriginalLanguage")
-                ? (Language)episodeInfo.ExtraInfo["OriginalLanguage"]
+            var comparedLanguage = input.EpisodeInfo != null && Value == Language.Original.Id && input.Series.OriginalLanguage != Language.Unknown
+                ? input.Series.OriginalLanguage
                 : (Language)Value;
 
-            return episodeInfo?.Languages?.Contains(comparedLanguage) ?? false;
+            return input.Languages?.Contains(comparedLanguage) ?? false;
         }
 
         public override NzbDroneValidationResult Validate()

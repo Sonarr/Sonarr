@@ -1,4 +1,3 @@
-using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.CustomFormats
@@ -21,9 +20,9 @@ namespace NzbDrone.Core.CustomFormats
 
         public abstract NzbDroneValidationResult Validate();
 
-        public bool IsSatisfiedBy(ParsedEpisodeInfo episodeInfo)
+        public bool IsSatisfiedBy(CustomFormatInput input)
         {
-            var match = IsSatisfiedByWithoutNegate(episodeInfo);
+            var match = IsSatisfiedByWithoutNegate(input);
             if (Negate)
             {
                 match = !match;
@@ -32,6 +31,6 @@ namespace NzbDrone.Core.CustomFormats
             return match;
         }
 
-        protected abstract bool IsSatisfiedByWithoutNegate(ParsedEpisodeInfo episodeInfo);
+        protected abstract bool IsSatisfiedByWithoutNegate(CustomFormatInput input);
     }
 }
