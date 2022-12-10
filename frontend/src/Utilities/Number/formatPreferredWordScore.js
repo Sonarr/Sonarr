@@ -10,7 +10,7 @@ function formatPreferredWordScore(input, customFormatsLength = 0) {
     return score;
   }
 
-  return customFormatsLength > 0 ? '+1' : '';
+  return customFormatsLength > 0 ? '+0' : '';
 }
 
 export default formatPreferredWordScore;
