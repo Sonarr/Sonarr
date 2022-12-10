@@ -44,7 +44,7 @@ namespace Sonarr.Api.V3.CustomFormats
 
         protected override CustomFormatResource GetResourceById(int id)
         {
-            return _formatService.GetById(id).ToResource();
+            return _formatService.GetById(id).ToResource(true);
         }
 
         [RestPostById]
@@ -69,7 +69,7 @@ namespace Sonarr.Api.V3.CustomFormats
         [Produces("application/json")]
         public List<CustomFormatResource> GetAll()
         {
-            return _formatService.All().ToResource();
+            return _formatService.All().ToResource(true);
         }
 
         [RestDeleteById]

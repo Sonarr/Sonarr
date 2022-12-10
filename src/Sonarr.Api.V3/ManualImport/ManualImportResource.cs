@@ -56,7 +56,7 @@ namespace Sonarr.Api.V3.ManualImport
                 ReleaseGroup = model.ReleaseGroup,
                 Quality = model.Quality,
                 Languages = model.Languages,
-                CustomFormats = model.CustomFormats.ToResource(),
+                CustomFormats = model.CustomFormats.ToResource(false),
 
                 // QualityWeight
                 DownloadId = model.DownloadId,

@@ -84,7 +84,7 @@ namespace Sonarr.Api.V3.EpisodeFiles
                 Quality = model.Quality,
                 MediaInfo = model.MediaInfo.ToResource(model.SceneName),
                 QualityCutoffNotMet = upgradableSpecification.QualityCutoffNotMet(series.QualityProfile.Value, model.Quality),
-                CustomFormats = formatCalculationService.ParseCustomFormat(model).ToResource()
+                CustomFormats = formatCalculationService.ParseCustomFormat(model).ToResource(false)
             };
         }
     }

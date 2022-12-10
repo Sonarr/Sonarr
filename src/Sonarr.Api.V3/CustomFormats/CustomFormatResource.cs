@@ -13,26 +13,32 @@ namespace Sonarr.Api.V3.CustomFormats
         [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
         public override int Id { get; set; }
         public string Name { get; set; }
-        public bool IncludeCustomFormatWhenRenaming { get; set; }
+        public bool? IncludeCustomFormatWhenRenaming { get; set; }
         public List<CustomFormatSpecificationSchema> Specifications { get; set; }
     }
 
     public static class CustomFormatResourceMapper
     {
-        public static CustomFormatResource ToResource(this CustomFormat model)
+        public static CustomFormatResource ToResource(this CustomFormat model, bool includeDetails)
         {
-            return new CustomFormatResource
+            var resource = new CustomFormatResource
             {
                 Id = model.Id,
-                Name = model.Name,
-                IncludeCustomFormatWhenRenaming = model.IncludeCustomFormatWhenRenaming,
-                Specifications = model.Specifications.Select(x => x.ToSchema()).ToList()
+                Name = model.Name
             };
+
+            if (includeDetails)
+            {
+                resource.IncludeCustomFormatWhenRenaming = model.IncludeCustomFormatWhenRenaming;
+                resource.Specifications = model.Specifications.Select(x => x.ToSchema()).ToList();
+            }
+
+            return resource;
         }
 
-        public static List<CustomFormatResource> ToResource(this IEnumerable<CustomFormat> models)
+        public static List<CustomFormatResource> ToResource(this IEnumerable<CustomFormat> models, bool includeDetails)
         {
-            return models.Select(m => m.ToResource()).ToList();
+            return models.Select(m => m.ToResource(includeDetails)).ToList();
         }
 
         public static CustomFormat ToModel(this CustomFormatResource resource, List<ICustomFormatSpecification> specifications)
@@ -41,8 +47,8 @@ namespace Sonarr.Api.V3.CustomFormats
             {
                 Id = resource.Id,
                 Name = resource.Name,
-                IncludeCustomFormatWhenRenaming = resource.IncludeCustomFormatWhenRenaming,
-                Specifications = resource.Specifications.Select(x => MapSpecification(x, specifications)).ToList()
+                IncludeCustomFormatWhenRenaming = resource.IncludeCustomFormatWhenRenaming ?? false,
+                Specifications = resource.Specifications?.Select(x => MapSpecification(x, specifications)).ToList() ?? new List<ICustomFormatSpecification>()
             };
         }
 

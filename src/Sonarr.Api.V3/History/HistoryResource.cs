@@ -49,7 +49,7 @@ namespace Sonarr.Api.V3.History
                 SourceTitle = model.SourceTitle,
                 Languages = model.Languages,
                 Quality = model.Quality,
-                CustomFormats = formatCalculator.ParseCustomFormat(model, model.Series).ToResource(),
+                CustomFormats = formatCalculator.ParseCustomFormat(model, model.Series).ToResource(false),
 
                 // QualityCutoffNotMet
                 Date = model.Date,
