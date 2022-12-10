@@ -97,8 +97,8 @@ namespace NzbDrone.Core.Extras.Files
 
         public void HandleAsync(SeriesDeletedEvent message)
         {
-            _logger.Debug("Deleting Extra from database for series: {0}", message.Series);
-            _repository.DeleteForSeries(message.Series.Id);
+            _logger.Debug("Deleting Extra from database for series: {0}", string.Join(',', message.Series));
+            _repository.DeleteForSeriesIds(message.Series.Select(m => m.Id).ToList());
         }
 
         public void Handle(EpisodeFileDeletedEvent message)

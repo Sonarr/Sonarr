@@ -451,7 +451,7 @@ namespace NzbDrone.Core.Download.Pending
 
         public void Handle(SeriesDeletedEvent message)
         {
-            _repository.DeleteBySeriesId(message.Series.Id);
+            _repository.DeleteBySeriesIds(message.Series.Select(m => m.Id).ToList());
         }
 
         public void Handle(EpisodeGrabbedEvent message)

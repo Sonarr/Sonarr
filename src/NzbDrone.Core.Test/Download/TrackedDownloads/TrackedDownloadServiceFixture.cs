@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using Moq;
@@ -320,7 +320,7 @@ namespace NzbDrone.Core.Test.Download.TrackedDownloads
                   .Setup(s => s.Map(It.IsAny<ParsedEpisodeInfo>(), It.IsAny<int>(), It.IsAny<int>(), null))
                   .Returns(default(RemoteEpisode));
 
-            Subject.Handle(new SeriesDeletedEvent(remoteEpisode.Series, true, true));
+            Subject.Handle(new SeriesDeletedEvent(new List<Series> { remoteEpisode.Series }, true, true));
 
             var trackedDownloads = Subject.GetTrackedDownloads();
             trackedDownloads.Should().HaveCount(1);

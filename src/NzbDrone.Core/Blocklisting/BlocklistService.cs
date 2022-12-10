@@ -189,9 +189,7 @@ namespace NzbDrone.Core.Blocklisting
 
         public void HandleAsync(SeriesDeletedEvent message)
         {
-            var blocklisted = _blocklistRepository.BlocklistedBySeries(message.Series.Id);
-
-            _blocklistRepository.DeleteMany(blocklisted);
+            _blocklistRepository.DeleteForSeriesIds(message.Series.Select(m => m.Id).ToList());
         }
     }
 }

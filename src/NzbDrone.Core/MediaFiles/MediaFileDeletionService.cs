@@ -92,35 +92,37 @@ namespace NzbDrone.Core.MediaFiles
         {
             if (message.DeleteFiles)
             {
-                var series = message.Series;
-                var allSeries = _seriesService.GetAllSeries();
+                var allSeries = _seriesService.GetAllSeriesPaths();
 
-                foreach (var s in allSeries)
+                foreach (var series in message.Series)
                 {
-                    if (s.Id == series.Id)
+                    foreach (var s in allSeries)
                     {
-                        continue;
+                        if (s.Key == series.Id)
+                        {
+                            continue;
+                        }
+
+                        if (series.Path.IsParentPath(s.Value))
+                        {
+                            _logger.Error("Series path: '{0}' is a parent of another series, not deleting files.", series.Path);
+                            return;
+                        }
+
+                        if (series.Path.PathEquals(s.Value))
+                        {
+                            _logger.Error("Series path: '{0}' is the same as another series, not deleting files.", series.Path);
+                            return;
+                        }
                     }
 
-                    if (series.Path.IsParentPath(s.Path))
+                    if (_diskProvider.FolderExists(series.Path))
                     {
-                        _logger.Error("Series path: '{0}' is a parent of another series, not deleting files.", series.Path);
-                        return;
+                        _recycleBinProvider.DeleteFolder(series.Path);
                     }
 
-                    if (series.Path.PathEquals(s.Path))
-                    {
-                        _logger.Error("Series path: '{0}' is the same as another series, not deleting files.", series.Path);
-                        return;
-                    }
+                    _eventAggregator.PublishEvent(new DeleteCompletedEvent());
                 }
-
-                if (_diskProvider.FolderExists(message.Series.Path))
-                {
-                    _recycleBinProvider.DeleteFolder(message.Series.Path);
-                }
-
-                _eventAggregator.PublishEvent(new DeleteCompletedEvent());
             }
         }
 

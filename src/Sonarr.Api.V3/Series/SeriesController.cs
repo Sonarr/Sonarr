@@ -172,7 +172,7 @@ namespace Sonarr.Api.V3.Series
             var deleteFiles = Request.GetBooleanQueryParameter("deleteFiles");
             var addImportListExclusion = Request.GetBooleanQueryParameter("addImportListExclusion");
 
-            _seriesService.DeleteSeries(id, deleteFiles, addImportListExclusion);
+            _seriesService.DeleteSeries(new List<int> { id }, deleteFiles, addImportListExclusion);
         }
 
         private SeriesResource GetSeriesResource(NzbDrone.Core.Tv.Series series, bool includeSeasonImages)
@@ -292,7 +292,10 @@ namespace Sonarr.Api.V3.Series
         [NonAction]
         public void Handle(SeriesDeletedEvent message)
         {
-            BroadcastResourceChange(ModelAction.Deleted, message.Series.ToResource());
+            foreach (var series in message.Series)
+            {
+                BroadcastResourceChange(ModelAction.Deleted, series.ToResource());
+            }
         }
 
         [NonAction]

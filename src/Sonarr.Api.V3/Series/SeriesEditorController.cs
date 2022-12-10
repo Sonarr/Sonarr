@@ -94,10 +94,7 @@ namespace Sonarr.Api.V3.Series
         [HttpDelete]
         public object DeleteSeries([FromBody] SeriesEditorResource resource)
         {
-            foreach (var seriesId in resource.SeriesIds)
-            {
-                _seriesService.DeleteSeries(seriesId, resource.DeleteFiles, resource.AddImportListExclusion);
-            }
+            _seriesService.DeleteSeries(resource.SeriesIds, resource.DeleteFiles, resource.AddImportListExclusion);
 
             return new { };
         }

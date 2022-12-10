@@ -230,7 +230,7 @@ namespace NzbDrone.Core.Download.History
 
         public void Handle(SeriesDeletedEvent message)
         {
-            _repository.DeleteBySeriesId(message.Series.Id);
+            _repository.DeleteBySeriesIds(message.Series.Select(m => m.Id).ToList());
         }
     }
 }

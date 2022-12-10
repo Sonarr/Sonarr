@@ -61,20 +61,25 @@ namespace NzbDrone.Core.ImportLists.Exclusions
                 return;
             }
 
-            var existingExclusion = _repo.FindByTvdbId(message.Series.TvdbId);
+            var exclusionsToAdd = new List<ImportListExclusion>();
 
-            if (existingExclusion != null)
+            foreach (var series in message.Series.DistinctBy(s => s.TvdbId))
             {
-                return;
+                var existingExclusion = _repo.FindByTvdbId(series.TvdbId);
+
+                if (existingExclusion != null)
+                {
+                    continue;
+                }
+
+                exclusionsToAdd.Add(new ImportListExclusion
+                {
+                    TvdbId = series.TvdbId,
+                    Title = series.Title
+                });
             }
 
-            var importExclusion = new ImportListExclusion
-            {
-                TvdbId = message.Series.TvdbId,
-                Title = message.Series.Title
-            };
-
-            _repo.Insert(importExclusion);
+            _repo.InsertMany(exclusionsToAdd);
         }
     }
 }

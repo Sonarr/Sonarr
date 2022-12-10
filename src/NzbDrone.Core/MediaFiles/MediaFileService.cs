@@ -110,8 +110,7 @@ namespace NzbDrone.Core.MediaFiles
 
         public void HandleAsync(SeriesDeletedEvent message)
         {
-            var files = GetFilesBySeries(message.Series.Id);
-            _mediaFileRepository.DeleteMany(files);
+            _mediaFileRepository.DeleteForSeries(message.Series.Select(s => s.Id).ToList());
         }
 
         public static List<string> FilterExistingFiles(List<string> files, List<EpisodeFile> seriesFiles, Series series)

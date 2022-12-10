@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
@@ -217,10 +217,13 @@ namespace NzbDrone.Core.MediaCover
 
         public void HandleAsync(SeriesDeletedEvent message)
         {
-            var path = GetSeriesCoverPath(message.Series.Id);
-            if (_diskProvider.FolderExists(path))
+            foreach (var series in message.Series)
             {
-                _diskProvider.DeleteFolder(path, true);
+                var path = GetSeriesCoverPath(series.Id);
+                if (_diskProvider.FolderExists(path))
+                {
+                    _diskProvider.DeleteFolder(path, true);
+                }
             }
         }
     }

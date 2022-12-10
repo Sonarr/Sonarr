@@ -10,6 +10,7 @@ namespace NzbDrone.Core.Blocklisting
         List<Blocklist> BlocklistedByTitle(int seriesId, string sourceTitle);
         List<Blocklist> BlocklistedByTorrentInfoHash(int seriesId, string torrentInfoHash);
         List<Blocklist> BlocklistedBySeries(int seriesId);
+        void DeleteForSeriesIds(List<int> seriesIds);
     }
 
     public class BlocklistRepository : BasicRepository<Blocklist>, IBlocklistRepository
@@ -32,6 +33,11 @@ namespace NzbDrone.Core.Blocklisting
         public List<Blocklist> BlocklistedBySeries(int seriesId)
         {
             return Query(b => b.SeriesId == seriesId);
+        }
+
+        public void DeleteForSeriesIds(List<int> seriesIds)
+        {
+            Delete(x => seriesIds.Contains(x.SeriesId));
         }
 
         protected override SqlBuilder PagedBuilder() => new SqlBuilder().Join<Blocklist, Series>((b, m) => b.SeriesId == m.Id);

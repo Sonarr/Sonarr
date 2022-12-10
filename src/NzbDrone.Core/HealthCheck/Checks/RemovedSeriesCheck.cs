@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Tv;
@@ -41,7 +41,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
 
         public bool ShouldCheckOnEvent(SeriesDeletedEvent deletedEvent)
         {
-            return deletedEvent.Series.Status == SeriesStatusType.Deleted;
+            return deletedEvent.Series.Any(s => s.Status == SeriesStatusType.Deleted);
         }
 
         public bool ShouldCheckOnEvent(SeriesUpdatedEvent updatedEvent)
