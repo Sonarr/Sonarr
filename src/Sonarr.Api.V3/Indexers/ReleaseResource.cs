@@ -127,7 +127,7 @@ namespace Sonarr.Api.V3.Indexers
 
                 // ReleaseWeight
                 CustomFormatScore = remoteEpisode.CustomFormatScore,
-                CustomFormats = remoteEpisode.CustomFormats?.ToResource(),
+                CustomFormats = remoteEpisode.CustomFormats?.ToResource(false),
                 SceneMapping = remoteEpisode.SceneMapping.ToResource(),
 
                 MagnetUrl = torrentInfo.MagnetUrl,

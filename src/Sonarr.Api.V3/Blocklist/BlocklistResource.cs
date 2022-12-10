@@ -44,7 +44,7 @@ namespace Sonarr.Api.V3.Blocklist
                 SourceTitle = model.SourceTitle,
                 Languages = model.Languages,
                 Quality = model.Quality,
-                CustomFormats = formatCalculator.ParseCustomFormat(model, model.Series).ToResource(),
+                CustomFormats = formatCalculator.ParseCustomFormat(model, model.Series).ToResource(false),
                 Date = model.Date,
                 Protocol = model.Protocol,
                 Indexer = model.Indexer,

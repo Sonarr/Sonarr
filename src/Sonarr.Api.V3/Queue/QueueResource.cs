@@ -57,7 +57,7 @@ namespace Sonarr.Api.V3.Queue
                 Episode = includeEpisode && model.Episode != null ? model.Episode.ToResource() : null,
                 Languages = model.Languages,
                 Quality = model.Quality,
-                CustomFormats = model.RemoteEpisode?.CustomFormats?.ToResource(),
+                CustomFormats = model.RemoteEpisode?.CustomFormats?.ToResource(false),
                 Size = model.Size,
                 Title = model.Title,
                 Sizeleft = model.Sizeleft,
