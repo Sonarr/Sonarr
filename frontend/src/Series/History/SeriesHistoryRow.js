@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import HistoryDetailsConnector from 'Activity/History/Details/HistoryDetailsConnector';
 import HistoryEventTypeCell from 'Activity/History/HistoryEventTypeCell';
 import Icon from 'Components/Icon';
-import Label from 'Components/Label';
 import IconButton from 'Components/Link/IconButton';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import RelativeDateCellConnector from 'Components/Table/Cells/RelativeDateCellConnector';
@@ -11,6 +10,7 @@ import TableRowCell from 'Components/Table/Cells/TableRowCell';
 import TableRow from 'Components/Table/TableRow';
 import Popover from 'Components/Tooltip/Popover';
 import Tooltip from 'Components/Tooltip/Tooltip';
+import EpisodeFormats from 'Episode/EpisodeFormats';
 import EpisodeLanguages from 'Episode/EpisodeLanguages';
 import EpisodeNumber from 'Episode/EpisodeNumber';
 import EpisodeQuality from 'Episode/EpisodeQuality';
@@ -149,21 +149,9 @@ class SeriesHistoryRow extends Component {
         <TableRowCell className={styles.customFormatScore}>
           <Tooltip
             anchor={
-              formatPreferredWordScore(data.customFormatScore)
+              formatPreferredWordScore(data.customFormatScore, customFormats.length)
             }
-            tooltip={
-              <div>
-                {
-                  customFormats.map((format) => {
-                    return (
-                      <Label key={format.id}>
-                        {format.name}
-                      </Label>
-                    );
-                  })
-                }
-              </div>
-            }
+            tooltip={<EpisodeFormats formats={customFormats} />}
             position={tooltipPositions.BOTTOM}
           />
         </TableRowCell>

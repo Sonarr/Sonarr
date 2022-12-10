@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import ProtocolLabel from 'Activity/Queue/ProtocolLabel';
 import Icon from 'Components/Icon';
-import Label from 'Components/Label';
 import Link from 'Components/Link/Link';
 import SpinnerIconButton from 'Components/Link/SpinnerIconButton';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
@@ -10,6 +9,7 @@ import TableRowCell from 'Components/Table/Cells/TableRowCell';
 import TableRow from 'Components/Table/TableRow';
 import Popover from 'Components/Tooltip/Popover';
 import Tooltip from 'Components/Tooltip/Tooltip';
+import EpisodeFormats from 'Episode/EpisodeFormats';
 import EpisodeLanguages from 'Episode/EpisodeLanguages';
 import EpisodeQuality from 'Episode/EpisodeQuality';
 import { icons, kinds, tooltipPositions } from 'Helpers/Props';
@@ -199,21 +199,9 @@ class InteractiveSearchRow extends Component {
         <TableRowCell className={styles.customFormatScore}>
           <Tooltip
             anchor={
-              formatPreferredWordScore(customFormatScore)
+              formatPreferredWordScore(customFormatScore, customFormats.length)
             }
-            tooltip={
-              <div>
-                {
-                  customFormats.map((format) => {
-                    return (
-                      <Label key={format.id}>
-                        {format.name}
-                      </Label>
-                    );
-                  })
-                }
-              </div>
-            }
+            tooltip={<EpisodeFormats formats={customFormats} />}
             position={tooltipPositions.BOTTOM}
           />
         </TableRowCell>
