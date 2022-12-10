@@ -31,7 +31,7 @@
   background-color: var(--sliderAccentColor);
   box-shadow: 0 0 0 #000;
 
-  &:nth-child(odd) {
+  &:nth-child(3n+1) {
     background-color: #ddd;
   }
 }
