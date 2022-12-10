@@ -7,6 +7,7 @@ using NzbDrone.Core.Datastore;
 using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.History;
+using NzbDrone.Core.Tv;
 using Sonarr.Api.V3.Episodes;
 using Sonarr.Api.V3.Series;
 using Sonarr.Http;
@@ -21,16 +22,19 @@ namespace Sonarr.Api.V3.History
         private readonly ICustomFormatCalculationService _formatCalculator;
         private readonly IUpgradableSpecification _upgradableSpecification;
         private readonly IFailedDownloadService _failedDownloadService;
+        private readonly ISeriesService _seriesService;
 
         public HistoryController(IHistoryService historyService,
                              ICustomFormatCalculationService formatCalculator,
                              IUpgradableSpecification upgradableSpecification,
-                             IFailedDownloadService failedDownloadService)
+                             IFailedDownloadService failedDownloadService,
+                             ISeriesService seriesService)
         {
             _historyService = historyService;
             _formatCalculator = formatCalculator;
             _upgradableSpecification = upgradableSpecification;
             _failedDownloadService = failedDownloadService;
+            _seriesService = seriesService;
         }
 
         protected HistoryResource MapToResource(EpisodeHistory model, bool includeSeries, bool includeEpisode)
@@ -98,12 +102,24 @@ namespace Sonarr.Api.V3.History
         [Produces("application/json")]
         public List<HistoryResource> GetSeriesHistory(int seriesId, int? seasonNumber, EpisodeHistoryEventType? eventType = null, bool includeSeries = false, bool includeEpisode = false)
         {
+            var series = _seriesService.GetSeries(seriesId);
+
             if (seasonNumber.HasValue)
             {
-                return _historyService.GetBySeason(seriesId, seasonNumber.Value, eventType).Select(h => MapToResource(h, includeSeries, includeEpisode)).ToList();
+                return _historyService.GetBySeason(seriesId, seasonNumber.Value, eventType).Select(h =>
+                {
+                    h.Series = series;
+
+                    return MapToResource(h, includeSeries, includeEpisode);
+                }).ToList();
             }
 
-            return _historyService.GetBySeries(seriesId, eventType).Select(h => MapToResource(h, includeSeries, includeEpisode)).ToList();
+            return _historyService.GetBySeries(seriesId, eventType).Select(h =>
+            {
+                h.Series = series;
+
+                return MapToResource(h, includeSeries, includeEpisode);
+            }).ToList();
         }
 
         [HttpPost("failed/{id}")]
