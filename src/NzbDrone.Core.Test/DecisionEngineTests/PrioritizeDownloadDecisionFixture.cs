@@ -15,7 +15,6 @@ using NzbDrone.Core.Profiles.Delay;
 using NzbDrone.Core.Profiles.Qualities;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Test.Languages;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Test.DecisionEngineTests
@@ -27,6 +26,17 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void Setup()
         {
             GivenPreferredDownloadProtocol(DownloadProtocol.Usenet);
+
+            Mocker.GetMock<IQualityDefinitionService>()
+                .Setup(s => s.Get(It.IsAny<Quality>()))
+                .Returns(new QualityDefinition { PreferredSize = null });
+        }
+
+        private void GivenPreferredSize(double? size)
+        {
+            Mocker.GetMock<IQualityDefinitionService>()
+                .Setup(s => s.Get(It.IsAny<Quality>()))
+                .Returns(new QualityDefinition { PreferredSize = size });
         }
 
         private Episode GivenEpisode(int id)
@@ -54,6 +64,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             remoteEpisode.Release.IndexerPriority = indexerPriority;
 
             remoteEpisode.Series = Builder<Series>.CreateNew()
+                                                  .With(e => e.Runtime = 60)
                                                   .With(e => e.QualityProfile = new QualityProfile
                                                   {
                                                       Items = Qualities.QualityFixture.GetDefaultQualities()
@@ -159,6 +170,44 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             var qualifiedReports = Subject.PrioritizeDecisions(decisions);
             qualifiedReports.First().RemoteEpisode.Should().Be(remoteEpisodeHdLargeYoung);
+        }
+
+        [Test]
+        public void should_order_by_closest_to_preferred_size_if_both_under()
+        {
+            // 200 MB/Min * 60 Min Runtime = 12000 MB
+            GivenPreferredSize(200);
+
+            var remoteEpisodeSmall = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p), Language.English, size: 1200.Megabytes(), age: 1);
+            var remoteEpisodeLarge = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p), Language.English, size: 10000.Megabytes(), age: 1);
+
+            var decisions = new List<DownloadDecision>();
+            decisions.Add(new DownloadDecision(remoteEpisodeSmall));
+            decisions.Add(new DownloadDecision(remoteEpisodeLarge));
+
+            var qualifiedReports = Subject.PrioritizeDecisions(decisions);
+            qualifiedReports.First().RemoteEpisode.Should().Be(remoteEpisodeLarge);
+        }
+
+        [Test]
+        public void should_order_by_closest_to_preferred_size_if_preferred_is_in_between()
+        {
+            // 46 MB/Min * 60 Min Runtime = 6900 MB
+            GivenPreferredSize(46);
+
+            var remoteEpisode1 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p), Language.English, size: 500.Megabytes(), age: 1);
+            var remoteEpisode2 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p), Language.English, size: 2000.Megabytes(), age: 1);
+            var remoteEpisode3 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p), Language.English, size: 3000.Megabytes(), age: 1);
+            var remoteEpisode4 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p), Language.English, size: 5000.Megabytes(), age: 1);
+
+            var decisions = new List<DownloadDecision>();
+            decisions.Add(new DownloadDecision(remoteEpisode1));
+            decisions.Add(new DownloadDecision(remoteEpisode2));
+            decisions.Add(new DownloadDecision(remoteEpisode3));
+            decisions.Add(new DownloadDecision(remoteEpisode4));
+
+            var qualifiedReports = Subject.PrioritizeDecisions(decisions);
+            qualifiedReports.First().RemoteEpisode.Should().Be(remoteEpisode3);
         }
 
         [Test]

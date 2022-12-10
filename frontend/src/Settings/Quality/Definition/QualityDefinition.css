@@ -31,7 +31,7 @@
   background-color: var(--sliderAccentColor);
   box-shadow: 0 0 0 #000;
 
-  &:nth-child(odd) {
+  &:nth-child(3n+1) {
     background-color: #ddd;
   }
 }
@@ -56,7 +56,7 @@
 .megabytesPerMinute {
   display: flex;
   justify-content: space-between;
-  flex: 0 0 250px;
+  flex: 0 0 400px;
 }
 
 .sizeInput {

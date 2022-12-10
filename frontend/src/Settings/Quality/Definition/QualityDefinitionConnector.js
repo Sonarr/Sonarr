@@ -23,11 +23,12 @@ class QualityDefinitionConnector extends Component {
     this.props.setQualityDefinitionValue({ id: this.props.id, name: 'title', value });
   };
 
-  onSizeChange = ({ minSize, maxSize }) => {
+  onSizeChange = ({ minSize, maxSize, preferredSize }) => {
     const {
       id,
       minSize: currentMinSize,
-      maxSize: currentMaxSize
+      maxSize: currentMaxSize,
+      preferredSize: currentPreferredSize
     } = this.props;
 
     if (minSize !== currentMinSize) {
@@ -36,6 +37,10 @@ class QualityDefinitionConnector extends Component {
 
     if (maxSize !== currentMaxSize) {
       this.props.setQualityDefinitionValue({ id, name: 'maxSize', value: maxSize });
+    }
+
+    if (preferredSize !== currentPreferredSize) {
+      this.props.setQualityDefinitionValue({ id, name: 'preferredSize', value: preferredSize });
     }
   };
 
@@ -57,6 +62,7 @@ QualityDefinitionConnector.propTypes = {
   id: PropTypes.number.isRequired,
   minSize: PropTypes.number,
   maxSize: PropTypes.number,
+  preferredSize: PropTypes.number,
   setQualityDefinitionValue: PropTypes.func.isRequired,
   clearPendingChanges: PropTypes.func.isRequired
 };

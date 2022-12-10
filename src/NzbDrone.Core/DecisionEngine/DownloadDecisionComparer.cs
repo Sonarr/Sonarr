@@ -14,14 +14,16 @@ namespace NzbDrone.Core.DecisionEngine
     {
         private readonly IConfigService _configService;
         private readonly IDelayProfileService _delayProfileService;
+        private readonly IQualityDefinitionService _qualityDefinitionService;
 
         public delegate int CompareDelegate(DownloadDecision x, DownloadDecision y);
         public delegate int CompareDelegate<TSubject, TValue>(DownloadDecision x, DownloadDecision y);
 
-        public DownloadDecisionComparer(IConfigService configService, IDelayProfileService delayProfileService)
+        public DownloadDecisionComparer(IConfigService configService, IDelayProfileService delayProfileService, IQualityDefinitionService qualityDefinitionService)
         {
             _configService = configService;
             _delayProfileService = delayProfileService;
+            _qualityDefinitionService = qualityDefinitionService;
         }
 
         public int Compare(DownloadDecision x, DownloadDecision y)
@@ -180,9 +182,25 @@ namespace NzbDrone.Core.DecisionEngine
 
         private int CompareSize(DownloadDecision x, DownloadDecision y)
         {
-            // TODO: Is smaller better? Smaller for usenet could mean no par2 files.
+            var sizeCompare =  CompareBy(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode =>
+            {
+                var preferredSize = _qualityDefinitionService.Get(remoteEpisode.ParsedEpisodeInfo.Quality.Quality).PreferredSize;
 
-            return CompareBy(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode => remoteEpisode.Release.Size.Round(200.Megabytes()));
+                // If no value for preferred it means unlimited so fallback to sort largest is best
+                if (preferredSize.HasValue && remoteEpisode.Series.Runtime > 0)
+                {
+                    var preferredMovieSize = remoteEpisode.Series.Runtime * preferredSize.Value.Megabytes();
+
+                    // Calculate closest to the preferred size
+                    return Math.Abs((remoteEpisode.Release.Size - preferredMovieSize).Round(200.Megabytes())) * (-1);
+                }
+                else
+                {
+                    return remoteEpisode.Release.Size.Round(200.Megabytes());
+                }
+            });
+
+            return sizeCompare;
         }
     }
 }
