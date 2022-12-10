@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
@@ -157,6 +158,25 @@ namespace NzbDrone.Core.Test.ParserTests
 
         // [TestCase("", "", 0, 0)]
         public void should_parse_single_episode(string postTitle, string title, int seasonNumber, int episodeNumber)
+        {
+            var result = Parser.Parser.ParseTitle(postTitle);
+            result.Should().NotBeNull();
+            result.EpisodeNumbers.Should().HaveCount(1);
+            result.SeasonNumber.Should().Be(seasonNumber);
+            result.EpisodeNumbers.First().Should().Be(episodeNumber);
+            result.SeriesTitle.Should().Be(title);
+            result.AbsoluteEpisodeNumbers.Should().BeEmpty();
+            result.FullSeason.Should().BeFalse();
+        }
+
+        [TestCase("221208 ABC123 Series Title Season 39 ep11.mp4", "ABC123 Series Title", 39, 11)]
+        [TestCase("221208 ABC123 Series Title ep34[1080p60 H264].mp4", "ABC123 Series Title", 1, 34)]
+        [TestCase("221205 ABC123 17研究所！ #17.ts", "ABC123 17研究所！", 1, 17)]
+        [TestCase("221201 Series Title! ABC123 ep219[720p.h264].mp4", "Series Title! ABC123", 1, 219)]
+        [TestCase("221206 Series Title! ep08(Tanaka Miku).ts", "Series Title!", 1, 8)]
+        [TestCase("210810 ABC123 Series Title ep05.mp4", "ABC123 Series Title", 1, 5)]
+        [TestCase("221204 乃木坂工事中 ep389.mp4", "乃木坂工事中", 1, 389)]
+        public void should_parse_japanese_variety_show_format(string postTitle, string title, int seasonNumber, int episodeNumber)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
             result.Should().NotBeNull();
