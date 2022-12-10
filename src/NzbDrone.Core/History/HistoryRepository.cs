@@ -119,14 +119,22 @@ namespace NzbDrone.Core.History
 
         public List<EpisodeHistory> Since(DateTime date, EpisodeHistoryEventType? eventType)
         {
-            var builder = Builder().Where<EpisodeHistory>(x => x.Date >= date);
+            var builder = Builder()
+                .Join<EpisodeHistory, Series>((h, a) => h.SeriesId == a.Id)
+                .Join<EpisodeHistory, Episode>((h, a) => h.EpisodeId == a.Id)
+                .Where<EpisodeHistory>(x => x.Date >= date);
 
             if (eventType.HasValue)
             {
                 builder.Where<EpisodeHistory>(h => h.EventType == eventType);
             }
 
-            return Query(builder).OrderBy(h => h.Date).ToList();
+            return _database.QueryJoined<EpisodeHistory, Series, Episode>(builder, (history, series, episode) =>
+            {
+                history.Series = series;
+                history.Episode = episode;
+                return history;
+            }).OrderBy(h => h.Date).ToList();
         }
     }
 }
