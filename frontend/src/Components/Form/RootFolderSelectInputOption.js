@@ -67,7 +67,7 @@ RootFolderSelectInputOption.propTypes = {
   id: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
   freeSpace: PropTypes.number,
-  isMissing: PropTypes.boolean,
+  isMissing: PropTypes.bool,
   seriesFolder: PropTypes.string,
   isMobile: PropTypes.bool.isRequired,
   isWindows: PropTypes.bool

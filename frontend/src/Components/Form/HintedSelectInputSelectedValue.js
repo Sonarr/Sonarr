@@ -24,7 +24,7 @@ function HintedSelectInputSelectedValue(props) {
     >
       <div className={styles.valueText}>
         {
-          isMultiSelect &&
+          isMultiSelect ?
             value.map((key, index) => {
               const v = valuesMap[key];
               return (
@@ -32,26 +32,28 @@ function HintedSelectInputSelectedValue(props) {
                   {v ? v.value : key}
                 </Label>
               );
-            })
+            }) :
+            null
         }
 
         {
-          !isMultiSelect && value
+          isMultiSelect ? null : value
         }
       </div>
 
       {
-        hint != null && includeHint &&
+        hint != null && includeHint ?
           <div className={styles.hintText}>
             {hint}
-          </div>
+          </div> :
+          null
       }
     </EnhancedSelectInputSelectedValue>
   );
 }
 
 HintedSelectInputSelectedValue.propTypes = {
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number]))]).isRequired,
+  value: PropTypes.oneOfType([PropTypes.number, PropTypes.string, PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number]))]).isRequired,
   values: PropTypes.arrayOf(PropTypes.object).isRequired,
   hint: PropTypes.string,
   isMultiSelect: PropTypes.bool.isRequired,
