@@ -312,6 +312,15 @@ namespace NzbDrone.Core.Test.ParserTests
             result.First().Id.Should().Be(Language.Slovak.Id);
         }
 
+        [TestCase("Thai.Series.Title.S01.THAI.1080p.WEBRip.x265-RARBG")]
+        [TestCase("Series.Title.S02.THAI.1080p.NF.WEBRip.DDP2.0.x264-PAAI[rartv]")]
+        [TestCase("Series.Title.S01.THAI.1080p.NF.WEBRip.DDP5.1.x264-NTG[rartv]")]
+        public void should_parse_language_thai(string postTitle)
+        {
+            var result = LanguageParser.ParseLanguages(postTitle);
+            result.First().Id.Should().Be(Language.Thai.Id);
+        }
+
         [TestCase("Title.the.Russian.Series.S01E07.Cold.Action.HDTV.XviD-Droned")]
         [TestCase("Title.the.Russian.Series.S01E07E08.Cold.Action.HDTV.XviD-Droned")]
         [TestCase("Title.the.Russian.Series.S01.1080p.WEBRip.DDP5.1.x264-Drone")]

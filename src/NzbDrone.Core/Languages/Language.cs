@@ -102,6 +102,7 @@ namespace NzbDrone.Core.Languages
         public static Language Malayalam => new Language(29, "Malayalam");
         public static Language Ukrainian => new Language(30, "Ukrainian");
         public static Language Slovak => new Language(31, "Slovak");
+        public static Language Thai => new Language(32, "Thai");
         public static Language Original => new Language(-2, "Original");
 
         public static List<Language> All
@@ -142,6 +143,7 @@ namespace NzbDrone.Core.Languages
                     Malayalam,
                     Ukrainian,
                     Slovak,
+                    Thai,
                     Original
                 };
             }
