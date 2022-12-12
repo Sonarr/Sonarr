@@ -487,6 +487,8 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
 
                 // Augment episode file so imported files have all additional information an automatic import would
                 localEpisode = _aggregationService.Augment(localEpisode, trackedDownload?.DownloadItem);
+                localEpisode.CustomFormats = _formatCalculator.ParseCustomFormat(localEpisode);
+                localEpisode.CustomFormatScore = localEpisode.Series.QualityProfile?.Value.CalculateCustomFormatScore(localEpisode.CustomFormats) ?? 0;
 
                 // Apply the user-chosen values.
                 localEpisode.Series = series;

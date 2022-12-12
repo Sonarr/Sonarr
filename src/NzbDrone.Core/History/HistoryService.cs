@@ -219,6 +219,7 @@ namespace NzbDrone.Core.History
                 history.Data.Add("DownloadClient", message.DownloadClientInfo?.Type);
                 history.Data.Add("DownloadClientName", message.DownloadClientInfo?.Name);
                 history.Data.Add("ReleaseGroup", message.EpisodeInfo.ReleaseGroup);
+                history.Data.Add("CustomFormatScore", message.EpisodeInfo.CustomFormatScore.ToString());
 
                 _historyRepository.Insert(history);
             }

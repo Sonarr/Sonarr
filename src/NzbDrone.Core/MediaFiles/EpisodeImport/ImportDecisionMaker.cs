@@ -140,6 +140,9 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                 }
                 else
                 {
+                    localEpisode.CustomFormats = _formatCalculator.ParseCustomFormat(localEpisode);
+                    localEpisode.CustomFormatScore = localEpisode.Series.QualityProfile?.Value.CalculateCustomFormatScore(localEpisode.CustomFormats) ?? 0;
+
                     decision = GetDecision(localEpisode, downloadClientItem);
                 }
             }
