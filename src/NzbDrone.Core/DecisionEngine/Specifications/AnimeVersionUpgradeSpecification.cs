@@ -1,8 +1,10 @@
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
+using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications
@@ -10,11 +12,13 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
     public class AnimeVersionUpgradeSpecification : IDecisionEngineSpecification
     {
         private readonly UpgradableSpecification _upgradableSpecification;
+        private readonly IConfigService _configService;
         private readonly Logger _logger;
 
-        public AnimeVersionUpgradeSpecification(UpgradableSpecification upgradableSpecification, Logger logger)
+        public AnimeVersionUpgradeSpecification(UpgradableSpecification upgradableSpecification, IConfigService configService, Logger logger)
         {
             _upgradableSpecification = upgradableSpecification;
+            _configService = configService;
             _logger = logger;
         }
 
@@ -27,6 +31,14 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
             if (subject.Series.SeriesType != SeriesTypes.Anime)
             {
+                return Decision.Accept();
+            }
+
+            var downloadPropersAndRepacks = _configService.DownloadPropersAndRepacks;
+
+            if (downloadPropersAndRepacks == ProperDownloadTypes.DoNotPrefer)
+            {
+                _logger.Debug("Version upgrades are not preferred, skipping check");
                 return Decision.Accept();
             }
 
