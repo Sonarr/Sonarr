@@ -117,7 +117,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 .Setup(s => s.DownloadPropersAndRepacks)
                 .Returns(ProperDownloadTypes.DoNotPrefer);
 
-            _subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
+            _subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
         }
     }
 }
