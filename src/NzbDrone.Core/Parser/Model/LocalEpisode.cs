@@ -15,6 +15,7 @@ namespace NzbDrone.Core.Parser.Model
         {
             Episodes = new List<Episode>();
             Languages = new List<Language>();
+            CustomFormats = new List<CustomFormat>();
         }
 
         public string Path { get; set; }

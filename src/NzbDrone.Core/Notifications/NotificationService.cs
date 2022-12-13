@@ -152,6 +152,7 @@ namespace NzbDrone.Core.Notifications
             {
                 Message = GetMessage(message.EpisodeInfo.Series, message.EpisodeInfo.Episodes, message.EpisodeInfo.Quality),
                 Series = message.EpisodeInfo.Series,
+                EpisodeInfo = message.EpisodeInfo,
                 EpisodeFile = message.ImportedEpisode,
                 OldFiles = message.OldFiles,
                 SourcePath = message.EpisodeInfo.Path,

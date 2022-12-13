@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace NzbDrone.Core.Notifications.Webhook
 {
@@ -10,5 +10,6 @@ namespace NzbDrone.Core.Notifications.Webhook
         public string DownloadClient { get; set; }
         public string DownloadClientType { get; set; }
         public string DownloadId { get; set; }
+        public WebhookCustomFormatInfo CustomFormatInfo { get; set; }
     }
 }
