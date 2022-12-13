@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
@@ -113,24 +113,26 @@ namespace NzbDrone.Core.Download.TrackedDownloads
 
         private TrackedDownload ProcessClientItem(IDownloadClient downloadClient, DownloadClientItem downloadItem)
         {
+            TrackedDownload trackedDownload = null;
+
             try
             {
-                var trackedDownload = _trackedDownloadService.TrackDownload((DownloadClientDefinition)downloadClient.Definition, downloadItem);
+                trackedDownload =
+                    _trackedDownloadService.TrackDownload((DownloadClientDefinition)downloadClient.Definition,
+                        downloadItem);
 
                 if (trackedDownload != null && trackedDownload.State == TrackedDownloadState.Downloading)
                 {
                     _failedDownloadService.Check(trackedDownload);
                     _completedDownloadService.Check(trackedDownload);
                 }
-
-                return trackedDownload;
             }
             catch (Exception e)
             {
                 _logger.Error(e, "Couldn't process tracked download {0}", downloadItem.Title);
             }
 
-            return null;
+            return trackedDownload;
         }
 
         private bool DownloadIsTrackable(TrackedDownload trackedDownload)

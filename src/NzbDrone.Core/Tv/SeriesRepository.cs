@@ -103,7 +103,7 @@ namespace NzbDrone.Core.Tv
                 return series.First();
             }
 
-            throw new MultipleSeriesFoundException("Expected one series, but found {0}. Matching series: {1}", series.Count, string.Join(",", series));
+            throw new MultipleSeriesFoundException(series, "Expected one series, but found {0}. Matching series: {1}", series.Count, string.Join(", ", series));
         }
     }
 }

@@ -334,6 +334,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                 Path = file,
                 RelativePath = rootFolder.GetRelativePath(file),
                 Name = Path.GetFileNameWithoutExtension(file),
+                Size = _diskProvider.GetFileSize(file),
                 Rejections = new List<Rejection>()
             };
         }

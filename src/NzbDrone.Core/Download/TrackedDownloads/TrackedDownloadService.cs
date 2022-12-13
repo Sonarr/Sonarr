@@ -10,6 +10,7 @@ using NzbDrone.Core.Download.History;
 using NzbDrone.Core.History;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Parser;
+using NzbDrone.Core.Tv;
 using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.Download.TrackedDownloads
@@ -141,11 +142,15 @@ namespace NzbDrone.Core.Download.TrackedDownloads
                     {
                         // Try parsing the original source title and if that fails, try parsing it as a special
                         // TODO: Pass the TVDB ID and TVRage IDs in as well so we have a better chance for finding the item
-                        parsedEpisodeInfo = Parser.Parser.ParseTitle(firstHistoryItem.SourceTitle) ?? _parsingService.ParseSpecialEpisodeTitle(parsedEpisodeInfo, firstHistoryItem.SourceTitle, 0, 0);
+                        parsedEpisodeInfo = Parser.Parser.ParseTitle(firstHistoryItem.SourceTitle) ??
+                                            _parsingService.ParseSpecialEpisodeTitle(parsedEpisodeInfo, firstHistoryItem.SourceTitle, 0, 0);
 
                         if (parsedEpisodeInfo != null)
                         {
-                            trackedDownload.RemoteEpisode = _parsingService.Map(parsedEpisodeInfo, firstHistoryItem.SeriesId, historyItems.Where(v => v.EventType == EpisodeHistoryEventType.Grabbed).Select(h => h.EpisodeId).Distinct());
+                            trackedDownload.RemoteEpisode = _parsingService.Map(parsedEpisodeInfo,
+                                firstHistoryItem.SeriesId,
+                                historyItems.Where(v => v.EventType == EpisodeHistoryEventType.Grabbed)
+                                    .Select(h => h.EpisodeId).Distinct());
                         }
                     }
                 }
@@ -162,10 +167,17 @@ namespace NzbDrone.Core.Download.TrackedDownloads
                     _logger.Trace("No Episode found for download '{0}'", trackedDownload.DownloadItem.Title);
                 }
             }
+            catch (MultipleSeriesFoundException e)
+            {
+                _logger.Debug(e, "Found multiple series for " + downloadItem.Title);
+
+                trackedDownload.Warn("Unable to import automatically, found multiple series: {0}", string.Join(", ", e.Series));
+            }
             catch (Exception e)
             {
                 _logger.Debug(e, "Failed to find episode for " + downloadItem.Title);
-                return null;
+
+                trackedDownload.Warn("Unable to parse episodes from title");
             }
 
             LogItemChange(trackedDownload, existingItem?.DownloadItem, trackedDownload.DownloadItem);
