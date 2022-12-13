@@ -70,6 +70,7 @@ class EpisodeHistoryRow extends Component {
       quality,
       qualityCutoffNotMet,
       customFormats,
+      customFormatScore,
       date,
       data
     } = this.props;
@@ -129,7 +130,7 @@ class EpisodeHistoryRow extends Component {
         <TableRowCell className={styles.customFormatScore}>
           <Tooltip
             anchor={
-              formatPreferredWordScore(data.customFormatScore, customFormats.length)
+              formatPreferredWordScore(customFormatScore, customFormats.length)
             }
             tooltip={<EpisodeFormats formats={customFormats} />}
             position={tooltipPositions.BOTTOM}
@@ -170,6 +171,7 @@ EpisodeHistoryRow.propTypes = {
   quality: PropTypes.object.isRequired,
   qualityCutoffNotMet: PropTypes.bool.isRequired,
   customFormats: PropTypes.arrayOf(PropTypes.object),
+  customFormatScore: PropTypes.number.isRequired,
   date: PropTypes.string.isRequired,
   data: PropTypes.object.isRequired,
   onMarkAsFailedPress: PropTypes.func.isRequired
