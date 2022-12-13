@@ -19,6 +19,7 @@ namespace Sonarr.Api.V3.History
         public List<Language> Languages { get; set; }
         public QualityModel Quality { get; set; }
         public List<CustomFormatResource> CustomFormats { get; set; }
+        public int CustomFormatScore { get; set; }
         public bool QualityCutoffNotMet { get; set; }
         public DateTime Date { get; set; }
         public string DownloadId { get; set; }
@@ -40,6 +41,9 @@ namespace Sonarr.Api.V3.History
                 return null;
             }
 
+            var customFormats = formatCalculator.ParseCustomFormat(model, model.Series);
+            var customFormatScore = model.Series.QualityProfile.Value.CalculateCustomFormatScore(customFormats);
+
             return new HistoryResource
             {
                 Id = model.Id,
@@ -49,7 +53,8 @@ namespace Sonarr.Api.V3.History
                 SourceTitle = model.SourceTitle,
                 Languages = model.Languages,
                 Quality = model.Quality,
-                CustomFormats = formatCalculator.ParseCustomFormat(model, model.Series).ToResource(false),
+                CustomFormats = customFormats.ToResource(false),
+                CustomFormatScore = customFormatScore,
 
                 // QualityCutoffNotMet
                 Date = model.Date,
