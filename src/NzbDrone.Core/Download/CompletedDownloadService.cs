@@ -147,6 +147,18 @@ namespace NzbDrone.Core.Download
                 return;
             }
 
+            if (importResults.Count == 1)
+            {
+                var firstResult = importResults.First();
+
+                if (firstResult.Result == ImportResultType.Rejected && firstResult.ImportDecision.LocalEpisode == null)
+                {
+                    trackedDownload.Warn(new TrackedDownloadStatusMessage(firstResult.Errors.First(), new List<string>()));
+
+                    return;
+                }
+            }
+
             var statusMessages = new List<TrackedDownloadStatusMessage>
                                  {
                                     new TrackedDownloadStatusMessage("One or more episodes expected in this release were not imported or missing", new List<string>())
