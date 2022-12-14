@@ -28,6 +28,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("【动漫国字幕组】★01月新番[Anime Series Title～！][01][1080P][简体][MP4]", "Anime Series Title～！", "动漫国字幕组", 1)]
         [TestCase("[风车字幕组][名侦探柯南][857][米花町反复变化之谜（前篇）][简体][MP4][1080P]", "名侦探柯南", "风车字幕组", 857)]
         [TestCase("[风车字幕组][名侦探柯南][857集][米花町反复变化之谜（前篇）][简体][MP4][1080P]", "名侦探柯南", "风车字幕组", 857)]
+        [TestCase("【喵萌奶茶屋】★10月新番★[后宫之乌/后宫の乌/Series Title][07][1080p][简日双语][招募翻译校对]", "Series Title", "喵萌奶茶屋", 7)]
         public void should_parse_chinese_anime_releases(string postTitle, string title, string subgroup, int absoluteEpisodeNumber)
         {
             postTitle = XmlCleaner.ReplaceUnicode(postTitle);
