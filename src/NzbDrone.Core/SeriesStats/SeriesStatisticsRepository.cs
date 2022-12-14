@@ -55,7 +55,7 @@ namespace NzbDrone.Core.SeriesStats
             return new SqlBuilder()
             .Select(@"Episodes.SeriesId AS SeriesId,
                              Episodes.SeasonNumber,
-                             SUM(COALESCE(EpisodeFiles.Size, 0)) * COUNT(DISTINCT EpisodeFiles.Id) / COUNT(EpisodeFiles.Id) AS SizeOnDisk,
+                             SUM(COALESCE(EpisodeFiles.Size, 0)) AS SizeOnDisk,
                              GROUP_CONCAT(EpisodeFiles.ReleaseGroup, '|') AS ReleaseGroupsString,
                              COUNT(*) AS TotalEpisodeCount,
                              SUM(CASE WHEN AirdateUtc <= @currentDate OR EpisodeFileId > 0 THEN 1 ELSE 0 END) AS AvailableEpisodeCount,

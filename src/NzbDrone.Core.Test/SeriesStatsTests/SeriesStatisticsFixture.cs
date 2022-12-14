@@ -4,7 +4,6 @@ using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Qualities;
@@ -175,26 +174,6 @@ namespace NzbDrone.Core.Test.SeriesStatsTests
             GivenEpisodeWithFile();
             GivenEpisode();
             GivenEpisodeFile();
-
-            var stats = Subject.SeriesStatistics();
-
-            stats.Should().HaveCount(1);
-            stats.First().SizeOnDisk.Should().Be(_episodeFile.Size);
-        }
-
-        [Test]
-        public void should_not_duplicate_size_for_multi_episode_files()
-        {
-            GivenEpisodeWithFile();
-            GivenEpisode();
-            GivenEpisodeFile();
-
-            var episode2 = _episode.JsonClone();
-
-            episode2.Id = 0;
-            episode2.EpisodeNumber += 1;
-
-            Db.Insert(episode2);
 
             var stats = Subject.SeriesStatistics();
 
