@@ -257,6 +257,7 @@ class SeriesDetailsSeason extends Component {
 
             <Popover
               className={styles.episodeCountTooltip}
+              canFlip={true}
               anchor={
                 <Label
                   kind={getEpisodeCountKind(monitored, episodeFileCount, episodeCount)}
