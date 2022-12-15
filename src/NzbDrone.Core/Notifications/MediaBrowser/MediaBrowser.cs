@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using FluentValidation.Results;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.MediaFiles;
@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Notifications.Emby
         }
 
         public override string Link => "https://emby.media/";
-        public override string Name => "Emby";
+        public override string Name => "Emby / Jellyfin";
 
         public override void OnGrab(GrabMessage grabMessage)
         {
