@@ -57,10 +57,10 @@ namespace NzbDrone.Core.Indexers
         [FieldDefinition(0, Type = FieldType.Textbox, Label = "Seed Ratio", HelpText = "The ratio a torrent should reach before stopping, empty is download client's default. Ratio should be at least 1.0 and follow the indexers rules")]
         public double? SeedRatio { get; set; }
 
-        [FieldDefinition(1, Type = FieldType.Number, Label = "Seed Time", Unit = "minutes", HelpText = "The time a torrent should be seeded before stopping, empty is download client's default", Advanced = true)]
+        [FieldDefinition(1, Type = FieldType.Number, Label = "Seed Time", Unit = "minutes", HelpText = "The time a torrent should be seeded before stopping, empty is download client's default")]
         public int? SeedTime { get; set; }
 
-        [FieldDefinition(2, Type = FieldType.Number, Label = "Season-Pack Seed Time", Unit = "minutes", HelpText = "The time a torrent should be seeded before stopping, empty is download client's default", Advanced = true)]
+        [FieldDefinition(2, Type = FieldType.Number, Label = "Season-Pack Seed Time", Unit = "minutes", HelpText = "The time a torrent should be seeded before stopping, empty is download client's default")]
         public int? SeasonPackSeedTime { get; set; }
     }
 }
