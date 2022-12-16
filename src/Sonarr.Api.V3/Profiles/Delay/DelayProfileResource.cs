@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Profiles.Delay;
@@ -14,6 +14,8 @@ namespace Sonarr.Api.V3.Profiles.Delay
         public int UsenetDelay { get; set; }
         public int TorrentDelay { get; set; }
         public bool BypassIfHighestQuality { get; set; }
+        public bool BypassIfAboveCustomFormatScore { get; set; }
+        public int MinimumCustomFormatScore { get; set; }
         public int Order { get; set; }
         public HashSet<int> Tags { get; set; }
     }
@@ -37,6 +39,8 @@ namespace Sonarr.Api.V3.Profiles.Delay
                 UsenetDelay = model.UsenetDelay,
                 TorrentDelay = model.TorrentDelay,
                 BypassIfHighestQuality = model.BypassIfHighestQuality,
+                BypassIfAboveCustomFormatScore = model.BypassIfAboveCustomFormatScore,
+                MinimumCustomFormatScore = model.MinimumCustomFormatScore,
                 Order = model.Order,
                 Tags = new HashSet<int>(model.Tags)
             };
@@ -59,6 +63,8 @@ namespace Sonarr.Api.V3.Profiles.Delay
                 UsenetDelay = resource.UsenetDelay,
                 TorrentDelay = resource.TorrentDelay,
                 BypassIfHighestQuality = resource.BypassIfHighestQuality,
+                BypassIfAboveCustomFormatScore = resource.BypassIfAboveCustomFormatScore,
+                MinimumCustomFormatScore = resource.MinimumCustomFormatScore,
                 Order = resource.Order,
                 Tags = new HashSet<int>(resource.Tags)
             };

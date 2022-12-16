@@ -46,6 +46,8 @@ function EditDelayProfileModalContent(props) {
     usenetDelay,
     torrentDelay,
     bypassIfHighestQuality,
+    bypassIfAboveCustomFormatScore,
+    minimumCustomFormatScore,
     tags
   } = item;
 
@@ -85,7 +87,7 @@ function EditDelayProfileModalContent(props) {
               </FormGroup>
 
               {
-                enableUsenet.value &&
+                enableUsenet.value ?
                   <FormGroup>
                     <FormLabel>Usenet Delay</FormLabel>
 
@@ -97,11 +99,12 @@ function EditDelayProfileModalContent(props) {
                       helpText="Delay in minutes to wait before grabbing a release from Usenet"
                       onChange={onInputChange}
                     />
-                  </FormGroup>
+                  </FormGroup> :
+                  null
               }
 
               {
-                enableTorrent.value &&
+                enableTorrent.value ?
                   <FormGroup>
                     <FormLabel>Torrent Delay</FormLabel>
 
@@ -113,21 +116,48 @@ function EditDelayProfileModalContent(props) {
                       helpText="Delay in minutes to wait before grabbing a torrent"
                       onChange={onInputChange}
                     />
-                  </FormGroup>
+                  </FormGroup> :
+                  null
               }
 
-              {
-                <FormGroup>
-                  <FormLabel>Bypass if Highest Quality</FormLabel>
+              <FormGroup>
+                <FormLabel>Bypass if Highest Quality</FormLabel>
 
-                  <FormInputGroup
-                    type={inputTypes.CHECK}
-                    name="bypassIfHighestQuality"
-                    {...bypassIfHighestQuality}
-                    helpText="Bypass delay when release has the highest enabled quality in the quality profile with the preferred protocol"
-                    onChange={onInputChange}
-                  />
-                </FormGroup>
+                <FormInputGroup
+                  type={inputTypes.CHECK}
+                  name="bypassIfHighestQuality"
+                  {...bypassIfHighestQuality}
+                  helpText="Bypass delay when release has the highest enabled quality in the quality profile with the preferred protocol"
+                  onChange={onInputChange}
+                />
+              </FormGroup>
+
+              <FormGroup>
+                <FormLabel>Bypass if Above Custom Format Score</FormLabel>
+
+                <FormInputGroup
+                  type={inputTypes.CHECK}
+                  name="bypassIfAboveCustomFormatScore"
+                  {...bypassIfAboveCustomFormatScore}
+                  helpText="Enable bypass when release has a score higher than the configured minimum custom format score"
+                  onChange={onInputChange}
+                />
+              </FormGroup>
+
+              {
+                bypassIfAboveCustomFormatScore.value ?
+                  <FormGroup>
+                    <FormLabel>Minimum Custom Format Score</FormLabel>
+
+                    <FormInputGroup
+                      type={inputTypes.NUMBER}
+                      name="minimumCustomFormatScore"
+                      {...minimumCustomFormatScore}
+                      helpText="Minimum Custom Format Score required to bypass delay for the preferred protocol"
+                      onChange={onInputChange}
+                    />
+                  </FormGroup> :
+                  null
               }
 
               {

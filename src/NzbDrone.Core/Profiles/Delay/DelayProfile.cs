@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Indexers;
 
@@ -13,6 +13,8 @@ namespace NzbDrone.Core.Profiles.Delay
         public int TorrentDelay { get; set; }
         public int Order { get; set; }
         public bool BypassIfHighestQuality { get; set; }
+        public bool BypassIfAboveCustomFormatScore { get; set; }
+        public int MinimumCustomFormatScore { get; set; }
         public HashSet<int> Tags { get; set; }
 
         public DelayProfile()
