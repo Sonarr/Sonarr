@@ -43,6 +43,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[Tenrai-Sensei] Series [BD][1080p][HEVC 10bit x265][Dual Audio]", "Tenrai-Sensei")]
         [TestCase("[Erai-raws] Series - 0955 ~ 1005 [1080p]", "Erai-raws")]
         [TestCase("[Exiled-Destiny] Series Title", "Exiled-Destiny")]
+        [TestCase("Series.Title.S01E09.1080p.DSNP.WEB-DL.DDP2.0.H.264-VARYG", "VARYG")]
 
         // [TestCase("", "")]
         public void should_parse_release_group(string title, string expected)
@@ -67,6 +68,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[Hakata Ramen] Show Title - Season 2 - Revival of The Commandments", "Hakata Ramen")]
         [TestCase("Show Name (2022) S01 (2160p DSNP WEB-DL H265 DV HDR DDP Atmos 5.1 English - HONE)", "HONE")]
         [TestCase("Show Title (2021) S01 (2160p ATVP WEB-DL Hybrid H265 DV HDR10+ DDP Atmos 5.1 English - HONE)", "HONE")]
+        [TestCase("Series.Title.S01E09.1080p.DSNP.WEB-DL.DDP2.0.H.264-VARYG (Blue Lock, Multi-Subs)", "VARYG")]
         public void should_parse_exception_release_group(string title, string expected)
         {
             Parser.Parser.ParseReleaseGroup(title).Should().Be(expected);
