@@ -44,8 +44,9 @@ namespace Sonarr.Api.V3.ManualImport
                 item.Episodes = processedItem.Episodes.ToResource();
                 item.Rejections = processedItem.Rejections;
 
-                // Only set the language/quality if they're unknown
-                if (item.Languages.Single() == Language.Unknown)
+                // Only set the language/quality if they're unknown and languages were returned.
+                // Languages won't be returned when reprocessing if the season/episode isn't filled in yet and we don't want to return no languages to the client.
+                if ((item.Languages.SingleOrDefault() ?? Language.Unknown) == Language.Unknown && processedItem.Languages.Any())
                 {
                     item.Languages = processedItem.Languages;
                 }
