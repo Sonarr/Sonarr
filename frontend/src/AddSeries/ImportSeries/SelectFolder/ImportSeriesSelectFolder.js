@@ -118,13 +118,19 @@ class ImportSeriesSelectFolder extends Component {
 
                       <ul>
                         {
-                          saveError.responseJSON.map((e, index) => {
-                            return (
-                              <li key={index}>
-                                {e.errorMessage}
-                              </li>
-                            );
-                          })
+                          Array.isArray(saveError.responseJSON) ?
+                            saveError.responseJSON.map((e, index) => {
+                              return (
+                                <li key={index}>
+                                  {e.errorMessage}
+                                </li>
+                              );
+                            }) :
+                            <li>
+                              {
+                                JSON.stringify(saveError.responseJSON)
+                              }
+                            </li>
                         }
                       </ul>
                     </Alert> :
