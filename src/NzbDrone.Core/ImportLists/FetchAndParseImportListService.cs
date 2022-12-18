@@ -100,14 +100,6 @@ namespace NzbDrone.Core.ImportLists
                 return result;
             }
 
-            var importListStatus = _importListStatusService.GetLastSyncListInfo(importList.Definition.Id);
-
-            if (DateTime.UtcNow < (importListStatus + importList.MinRefreshInterval))
-            {
-                _logger.Trace("Skipping refresh of Import List {0} due to minimum refresh inverval", importList.Definition.Name);
-                return result;
-            }
-
             var taskList = new List<Task>();
             var taskFactory = new TaskFactory(TaskCreationOptions.LongRunning, TaskContinuationOptions.None);
 
@@ -125,6 +117,8 @@ namespace NzbDrone.Core.ImportLists
 
                         result.AddRange(importListReports);
                     }
+
+                    _importListStatusService.UpdateListSyncStatus(importList.Definition.Id);
                 }
                 catch (Exception e)
                 {
