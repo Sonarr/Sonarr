@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Languages;
@@ -33,7 +31,19 @@ namespace NzbDrone.Core.Test.Languages
                 new object[] { 19, Language.Flemish },
                 new object[] { 20, Language.Greek },
                 new object[] { 21, Language.Korean },
-                new object[] { 22, Language.Hungarian }
+                new object[] { 22, Language.Hungarian },
+                new object[] { 23, Language.Hebrew },
+                new object[] { 24, Language.Lithuanian },
+                new object[] { 25, Language.Czech },
+                new object[] { 26, Language.Arabic },
+                new object[] { 27, Language.Hindi },
+                new object[] { 28, Language.Bulgarian },
+                new object[] { 29, Language.Malayalam },
+                new object[] { 30, Language.Ukrainian },
+                new object[] { 31, Language.Slovak },
+                new object[] { 32, Language.Thai },
+                new object[] { 33, Language.PortugueseBrazil },
+                new object[] { 34, Language.SpanishLatino }
             };
 
         public static object[] ToIntCases =
@@ -59,7 +69,19 @@ namespace NzbDrone.Core.Test.Languages
                 new object[] { Language.Flemish, 19 },
                 new object[] { Language.Greek, 20 },
                 new object[] { Language.Korean, 21 },
-                new object[] { Language.Hungarian, 22 }
+                new object[] { Language.Hungarian, 22 },
+                new object[] { Language.Hebrew, 23 },
+                new object[] { Language.Lithuanian, 24 },
+                new object[] { Language.Czech, 25 },
+                new object[] { Language.Arabic, 26 },
+                new object[] { Language.Hindi, 27 },
+                new object[] { Language.Bulgarian, 28 },
+                new object[] { Language.Malayalam, 29 },
+                new object[] { Language.Ukrainian, 30 },
+                new object[] { Language.Slovak, 31 },
+                new object[] { Language.Thai, 32 },
+                new object[] { Language.PortugueseBrazil, 33 },
+                new object[] { Language.SpanishLatino, 34 }
             };
 
         [Test]

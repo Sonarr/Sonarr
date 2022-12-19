@@ -49,20 +49,32 @@ namespace NzbDrone.Core.Parser
 
         public static IsoLanguage Find(string isoCode)
         {
-            if (isoCode.Length == 2)
+            var isoArray = isoCode.Split('-');
+            var langCode = isoArray[0].ToLower();
+
+            if (langCode.Length == 2)
             {
                 // Lookup ISO639-1 code
-                return All.FirstOrDefault(l => l.TwoLetterCode == isoCode);
-            }
-            else if (isoCode.Length == 3)
-            {
-                // Lookup ISO639-2T code
-                if (FileNameBuilder.Iso639BTMap.TryGetValue(isoCode, out var mapped))
+                var isoLanguages = All.Where(l => l.TwoLetterCode == langCode).ToList();
+
+                if (isoArray.Length > 1)
                 {
-                    isoCode = mapped;
+                    isoLanguages = isoLanguages.Any(l => l.CountryCode == isoArray[1].ToLower()) ?
+                        isoLanguages.Where(l => l.CountryCode == isoArray[1].ToLower()).ToList() :
+                        isoLanguages.Where(l => string.IsNullOrEmpty(l.CountryCode)).ToList();
                 }
 
-                return All.FirstOrDefault(l => l.ThreeLetterCode == isoCode);
+                return isoLanguages.FirstOrDefault();
+            }
+            else if (langCode.Length == 3)
+            {
+                // Lookup ISO639-2T code
+                if (FileNameBuilder.Iso639BTMap.TryGetValue(langCode, out var mapped))
+                {
+                    langCode = mapped;
+                }
+
+                return All.FirstOrDefault(l => l.ThreeLetterCode == langCode);
             }
 
             return null;
