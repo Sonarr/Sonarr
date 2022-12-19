@@ -321,15 +321,24 @@ namespace NzbDrone.Core.Test.ParserTests
             result.First().Id.Should().Be(Language.Thai.Id);
         }
 
-        [TestCase("Title.the.Russian.Series.S01E07.Cold.Action.HDTV.XviD-Droned")]
-        [TestCase("Title.the.Russian.Series.S01E07E08.Cold.Action.HDTV.XviD-Droned")]
-        [TestCase("Title.the.Russian.Series.S01.1080p.WEBRip.DDP5.1.x264-Drone")]
-        [TestCase("Title.the.Spanish.Series.S02E08.Peace.1080p.AMZN.WEBRip.DDP5.1.x264-NTb")]
-        [TestCase("Title The Spanish S02E02 Flodden 720p AMZN WEB-DL DDP5 1 H 264-NTb")]
-        public void should_not_parse_series_or_episode_title(string postTitle)
+        [TestCase("Title.the.Series.2009.S01E14.Brazilian.HDTV.XviD-LOL")]
+        [TestCase("Title.the.Series.2009.S01E14.Dublado.HDTV.XviD-LOL")]
+        public void should_parse_language_portuguese_brazil(string postTitle)
         {
             var result = LanguageParser.ParseLanguages(postTitle);
-            result.First().Name.Should().Be(Language.Unknown.Name);
+            result.First().Id.Should().Be(Language.PortugueseBrazil.Id);
+        }
+
+        [TestCase("Series.Title.S01.2019.720p_Eng-Spa(Latino)_MovieClubMx")]
+        [TestCase("Series.Title.1.WEB-DL.720p.Complete.Latino.YG")]
+        [TestCase("Series.Title.S08E01.1080p.WEB.H264.Latino.YG")]
+        [TestCase("Series Title latino")]
+        [TestCase("Series Title (Temporada 11 Completa) Audio Dual Ingles/Latino 1920x1080")]
+        [TestCase("series title 7x4 audio latino")]
+        public void should_parse_language_spanish_latino(string postTitle)
+        {
+            var result = LanguageParser.ParseLanguages(postTitle);
+            result.First().Id.Should().Be(Language.SpanishLatino.Id);
         }
     }
 }
