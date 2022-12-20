@@ -164,6 +164,30 @@ export const filterPredicates = {
       0;
 
     return predicate(sizeOnDisk, filterValue);
+  },
+
+  hasMissingSeason: function(item, filterValue, type) {
+    const { seasons = [] } = item;
+
+    return seasons.some((season) => {
+      const {
+        seasonNumber,
+        statistics = {}
+      } = season;
+
+      const {
+        episodeFileCount = 0,
+        episodeCount = 0,
+        totalEpisodeCount = 0
+      } = statistics;
+
+      return (
+        seasonNumber > 0 &&
+        totalEpisodeCount > 0 &&
+        episodeCount === totalEpisodeCount &&
+        episodeFileCount === 0
+      );
+    });
   }
 };
 
@@ -317,6 +341,11 @@ export const filterBuilderProps = [
   {
     name: 'useSceneNumbering',
     label: 'Scene Numbering',
+    type: filterBuilderTypes.EXACT
+  },
+  {
+    name: 'hasMissingSeason',
+    label: 'Has Missing Season',
     type: filterBuilderTypes.EXACT
   }
 ];
