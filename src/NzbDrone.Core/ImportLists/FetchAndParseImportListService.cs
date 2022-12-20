@@ -49,7 +49,7 @@ namespace NzbDrone.Core.ImportLists
                 var importListLocal = importList;
                 var importListStatus = _importListStatusService.GetLastSyncListInfo(importListLocal.Definition.Id);
 
-                if (DateTime.UtcNow < (importListStatus + importListLocal.MinRefreshInterval))
+                if (importListStatus.HasValue && DateTime.UtcNow < (importListStatus + importListLocal.MinRefreshInterval))
                 {
                     _logger.Trace("Skipping refresh of Import List {0} due to minimum refresh inverval", importListLocal.Definition.Name);
                     continue;

@@ -6,6 +6,6 @@ namespace NzbDrone.Core.ImportLists
 {
     public class ImportListStatus : ProviderStatusBase
     {
-        public DateTime LastInfoSync { get; set; }
+        public DateTime? LastInfoSync { get; set; }
     }
 }

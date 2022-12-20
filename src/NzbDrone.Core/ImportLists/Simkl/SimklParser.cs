@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Net;
-using Newtonsoft.Json;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Common.Serializer;
 using NzbDrone.Core.ImportLists.Exceptions;
 using NzbDrone.Core.Parser.Model;
 
@@ -26,21 +26,21 @@ namespace NzbDrone.Core.ImportLists.Simkl
                 return series;
             }
 
-            var jsonResponse = JsonConvert.DeserializeObject<SimklResponse>(_importResponse.Content);
+            var jsonResponse = STJson.Deserialize<SimklResponse>(_importResponse.Content);
 
-            // no movies were return
+            // no shows were return
             if (jsonResponse == null)
             {
                 return series;
             }
 
-            foreach (var movie in jsonResponse.Shows)
+            foreach (var show in jsonResponse.Shows)
             {
                 series.AddIfNotNull(new ImportListItemInfo()
                 {
-                    Title = movie.Show.Title,
-                    TvdbId = int.TryParse(movie.Show.Ids.Tvdb, out var tvdbId) ? tvdbId : 0,
-                    ImdbId = movie.Show.Ids.Imdb
+                    Title = show.Show.Title,
+                    TvdbId = int.TryParse(show.Show.Ids.Tvdb, out var tvdbId) ? tvdbId : 0,
+                    ImdbId = show.Show.Ids.Imdb
                 });
             }
 

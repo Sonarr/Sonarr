@@ -8,7 +8,7 @@ namespace NzbDrone.Core.ImportLists
 {
     public interface IImportListStatusService : IProviderStatusServiceBase<ImportListStatus>
     {
-        DateTime GetLastSyncListInfo(int importListId);
+        DateTime? GetLastSyncListInfo(int importListId);
 
         void UpdateListSyncStatus(int importListId);
     }
@@ -20,7 +20,7 @@ namespace NzbDrone.Core.ImportLists
         {
         }
 
-        public DateTime GetLastSyncListInfo(int importListId)
+        public DateTime? GetLastSyncListInfo(int importListId)
         {
             return GetProviderStatus(importListId).LastInfoSync;
         }

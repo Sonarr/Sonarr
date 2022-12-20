@@ -49,12 +49,13 @@ namespace NzbDrone.Core.ImportLists.Simkl
             var lastActivity = GetLastActivity();
 
             // Check to see if user has any activity since last sync, if not return empty to avoid work
-            if (lastActivity < lastFetch.AddHours(-2))
+            if (lastFetch.HasValue && lastActivity < lastFetch.Value.AddHours(-2))
             {
                 return new List<ImportListItemInfo>();
             }
 
             var generator = GetRequestGenerator();
+
             return FetchItems(g => g.GetListItems(), true);
         }
 
@@ -165,7 +166,7 @@ namespace NzbDrone.Core.ImportLists.Simkl
                     var token = response.Resource;
                     Settings.AccessToken = token.AccessToken;
                     Settings.Expires = DateTime.UtcNow.AddSeconds(token.ExpiresIn);
-                    Settings.RefreshToken = token.RefreshToken != null ? token.RefreshToken : Settings.RefreshToken;
+                    Settings.RefreshToken = token.RefreshToken ?? Settings.RefreshToken;
 
                     if (Definition.Id > 0)
                     {
