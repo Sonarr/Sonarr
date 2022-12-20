@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
@@ -53,5 +54,16 @@ namespace NzbDrone.Core.ImportLists.Simkl
     public class SimklUserAccountResource
     {
         public int Id { get; set; }
+    }
+
+    public class SimklSyncActivityResource
+    {
+        [JsonProperty("tv_shows")]
+        public SimklTvSyncActivityResource TvShows { get; set; }
+    }
+
+    public class SimklTvSyncActivityResource
+    {
+        public DateTime All { get; set; }
     }
 }

@@ -14,7 +14,7 @@ namespace NzbDrone.Core.ImportLists.Simkl
     where TSettings : SimklSettingsBase<TSettings>, new()
     {
         public override ImportListType ListType => ImportListType.Simkl;
-        public override TimeSpan MinRefreshInterval => TimeSpan.FromHours(12);
+        public override TimeSpan MinRefreshInterval => TimeSpan.FromHours(6);
 
         public const string OAuthUrl = "https://simkl.com/oauth/authorize";
         public const string RedirectUri = "https://auth.servarr.com/v1/simkl_sonarr/auth";
@@ -43,6 +43,15 @@ namespace NzbDrone.Core.ImportLists.Simkl
             if (Settings.RefreshToken.IsNotNullOrWhiteSpace() && Settings.Expires < DateTime.UtcNow.AddMinutes(5))
             {
                 RefreshToken();
+            }
+
+            var lastFetch = _importListStatusService.GetLastSyncListInfo(Definition.Id);
+            var lastActivity = GetLastActivity();
+
+            // Check to see if user has any activity since last sync, if not return empty to avoid work
+            if (lastActivity < lastFetch.AddHours(-2))
+            {
+                return new List<ImportListItemInfo>();
             }
 
             var generator = GetRequestGenerator();
@@ -82,6 +91,30 @@ namespace NzbDrone.Core.ImportLists.Simkl
             }
 
             return new { };
+        }
+
+        private DateTime GetLastActivity()
+        {
+            var request = new HttpRequestBuilder(string.Format("{0}/sync/activities", Settings.BaseUrl)).Build();
+
+            request.Headers.Add("simkl-api-key", ClientId);
+            request.Headers.Add("Authorization", "Bearer " + Settings.AccessToken);
+
+            try
+            {
+                var response = _httpClient.Get<SimklSyncActivityResource>(request);
+
+                if (response != null && response.Resource != null)
+                {
+                    return response.Resource.TvShows.All;
+                }
+            }
+            catch (HttpException)
+            {
+                _logger.Warn($"Error fetching user activity");
+            }
+
+            return DateTime.UtcNow;
         }
 
         private string GetUserId(string accessToken)
