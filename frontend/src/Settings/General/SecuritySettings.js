@@ -14,6 +14,7 @@ export const authenticationRequiredWarning = 'To prevent remote access without a
 
 export const authenticationMethodOptions = [
   { key: 'none', value: 'None', isDisabled: true },
+  { key: 'external', value: 'External', isHidden: true },
   { key: 'basic', value: 'Basic (Browser Popup)' },
   { key: 'forms', value: 'Forms (Login Page)' }
 ];
