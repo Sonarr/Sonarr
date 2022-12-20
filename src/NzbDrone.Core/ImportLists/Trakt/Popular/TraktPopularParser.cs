@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using Newtonsoft.Json;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.ImportLists.Trakt.Popular
@@ -30,11 +30,11 @@ namespace NzbDrone.Core.ImportLists.Trakt.Popular
 
             if (_settings.TraktListType == (int)TraktPopularListType.Popular)
             {
-                jsonResponse = JsonConvert.DeserializeObject<List<TraktSeriesResource>>(_importResponse.Content);
+                jsonResponse = STJson.Deserialize<List<TraktSeriesResource>>(_importResponse.Content);
             }
             else
             {
-                jsonResponse = JsonConvert.DeserializeObject<List<TraktResponse>>(_importResponse.Content).SelectList(c => c.Show);
+                jsonResponse = STJson.Deserialize<List<TraktResponse>>(_importResponse.Content).SelectList(c => c.Show);
             }
 
             // no movies were return

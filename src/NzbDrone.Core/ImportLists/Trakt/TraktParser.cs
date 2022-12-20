@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Net;
-using Newtonsoft.Json;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Common.Serializer;
 using NzbDrone.Core.ImportLists.Exceptions;
 using NzbDrone.Core.Parser.Model;
 
@@ -26,20 +26,20 @@ namespace NzbDrone.Core.ImportLists.Trakt
                 return series;
             }
 
-            var jsonResponse = JsonConvert.DeserializeObject<List<TraktResponse>>(_importResponse.Content);
+            var jsonResponse = STJson.Deserialize<List<TraktResponse>>(_importResponse.Content);
 
-            // no movies were return
+            // no series were return
             if (jsonResponse == null)
             {
                 return series;
             }
 
-            foreach (var movie in jsonResponse)
+            foreach (var show in jsonResponse)
             {
                 series.AddIfNotNull(new ImportListItemInfo()
                 {
-                    Title = movie.Show.Title,
-                    TvdbId = movie.Show.Ids.Tvdb.GetValueOrDefault()
+                    Title = show.Show.Title,
+                    TvdbId = show.Show.Ids.Tvdb.GetValueOrDefault()
                 });
             }
 

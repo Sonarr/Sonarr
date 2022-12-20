@@ -45,6 +45,7 @@ namespace NzbDrone.Core.ImportLists.Trakt
             }
 
             var generator = GetRequestGenerator();
+
             return FetchItems(g => g.GetListItems(), true);
         }
 
@@ -132,7 +133,7 @@ namespace NzbDrone.Core.ImportLists.Trakt
                     var token = response.Resource;
                     Settings.AccessToken = token.AccessToken;
                     Settings.Expires = DateTime.UtcNow.AddSeconds(token.ExpiresIn);
-                    Settings.RefreshToken = token.RefreshToken != null ? token.RefreshToken : Settings.RefreshToken;
+                    Settings.RefreshToken = token.RefreshToken ?? Settings.RefreshToken;
 
                     if (Definition.Id > 0)
                     {

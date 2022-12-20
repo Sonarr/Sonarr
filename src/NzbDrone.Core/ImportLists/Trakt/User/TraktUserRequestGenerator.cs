@@ -41,7 +41,7 @@ namespace NzbDrone.Core.ImportLists.Trakt.User
                     break;
             }
 
-            var request = new ImportListRequest($"{link}", HttpAccept.Json);
+            var request = new ImportListRequest(link, HttpAccept.Json);
 
             request.HttpRequest.Headers.Add("trakt-api-version", "2");
             request.HttpRequest.Headers.Add("trakt-api-key", ClientId);
