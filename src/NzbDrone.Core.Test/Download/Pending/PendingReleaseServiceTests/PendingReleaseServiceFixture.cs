@@ -37,7 +37,7 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
 
             results.Should().NotBeEmpty();
             Mocker.GetMock<IMakeDownloadDecision>()
-                  .Verify(v => v.GetRssDecision(It.Is<List<ReleaseInfo>>(d => d.Count == 0)), Times.Never());
+                  .Verify(v => v.GetRssDecision(It.Is<List<ReleaseInfo>>(d => d.Count == 0), It.IsAny<bool>()), Times.Never());
         }
 
         [Test]

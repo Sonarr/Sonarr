@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Parser.Model;
 
@@ -21,5 +21,6 @@ namespace NzbDrone.Core.Download.Pending
     public class PendingReleaseAdditionalInfo
     {
         public SeriesMatchType SeriesMatchType { get; set; }
+        public ReleaseSourceType ReleaseSource { get; set; }
     }
 }
