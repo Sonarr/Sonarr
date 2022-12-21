@@ -11,6 +11,7 @@ namespace NzbDrone.Core.History
     {
         public const string DOWNLOAD_CLIENT = "downloadClient";
         public const string SERIES_MATCH_TYPE = "seriesMatchType";
+        public const string RELEASE_SOURCE = "releaseSource";
 
         public EpisodeHistory()
         {

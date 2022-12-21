@@ -313,6 +313,7 @@ namespace NzbDrone.Core.Download.Pending
                 {
                     Series = series,
                     SeriesMatchType = release.AdditionalInfo?.SeriesMatchType ?? SeriesMatchType.Unknown,
+                    ReleaseSource = release.AdditionalInfo?.ReleaseSource ?? ReleaseSourceType.Unknown,
                     ParsedEpisodeInfo = release.ParsedEpisodeInfo,
                     Release = release.Release
                 };
