@@ -161,6 +161,16 @@ namespace NzbDrone.Core.Parser
                 languages.Add(Language.Slovak);
             }
 
+            if (lowerTitle.Contains("brazilian") || lowerTitle.Contains("dublado"))
+            {
+                languages.Add(Language.PortugueseBrazil);
+            }
+
+            if (lowerTitle.Contains("latino"))
+            {
+                languages.Add(Language.SpanishLatino);
+            }
+
             var regexLanguages = RegexLanguage(title);
 
             if (regexLanguages.Any())
