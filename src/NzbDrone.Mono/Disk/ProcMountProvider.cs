@@ -27,6 +27,8 @@ namespace NzbDrone.Mono.Disk
 
         private static Dictionary<string, bool> _fileSystems;
 
+        private bool _hasLoggedProcMountFailure = false;
+
         public ProcMountProvider(Logger logger)
         {
             _logger = logger;
@@ -45,7 +47,11 @@ namespace NzbDrone.Mono.Disk
             }
             catch (Exception ex)
             {
-                _logger.Debug(ex, "Failed to retrieve mounts from {0}", PROC_MOUNTS_FILENAME);
+                if (!_hasLoggedProcMountFailure)
+                {
+                    _logger.Debug(ex, "Failed to retrieve mounts from {0}", PROC_MOUNTS_FILENAME);
+                    _hasLoggedProcMountFailure = true;
+                }
             }
 
             return new List<IMount>();
