@@ -101,7 +101,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                 mediaInfoModel.RawStreamData = ffprobeOutput;
                 mediaInfoModel.SchemaRevision = CURRENT_MEDIA_INFO_SCHEMA_REVISION;
 
-                if (analysis.Format.Tags?.TryGetValue("Title", out var title) ?? false)
+                if (analysis.Format.Tags?.TryGetValue("title", out var title) ?? false)
                 {
                     mediaInfoModel.Title = title;
                 }

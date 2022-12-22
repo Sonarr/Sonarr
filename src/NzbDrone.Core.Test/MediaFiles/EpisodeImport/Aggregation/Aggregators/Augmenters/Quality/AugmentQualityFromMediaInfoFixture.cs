@@ -106,7 +106,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators.Au
 
             result.Should().NotBe(null);
             result.Resolution.Should().Be(1080);
-            result.Source.Should().Be(QualitySource.Web);
+            result.Source.Should().Be(QualitySource.Unknown);
         }
     }
 }

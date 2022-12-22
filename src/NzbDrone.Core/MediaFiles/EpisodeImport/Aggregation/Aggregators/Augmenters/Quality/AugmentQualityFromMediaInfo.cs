@@ -36,7 +36,9 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators.Augment
             {
                 var parsedQuality = QualityParser.ParseQualityName(title.Trim());
 
-                if (parsedQuality.Quality.Source != QualitySource.Unknown)
+                // Only use the quality if it's not unknown and the source is from the name (which is MediaInfo's title in this case)
+                if (parsedQuality.Quality.Source != QualitySource.Unknown &&
+                    parsedQuality.SourceDetectionSource == QualityDetectionSource.Name)
                 {
                     source = parsedQuality.Quality.Source;
                     sourceConfidence = Confidence.MediaInfo;
