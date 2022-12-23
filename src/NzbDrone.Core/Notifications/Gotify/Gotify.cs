@@ -1,7 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using FluentValidation.Results;
 using NLog;
+using NzbDrone.Core.MediaCover;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Notifications.Gotify
 {
@@ -19,34 +23,34 @@ namespace NzbDrone.Core.Notifications.Gotify
         public override string Name => "Gotify";
         public override string Link => "https://gotify.net/";
 
-        public override void OnGrab(GrabMessage grabMessage)
+        public override void OnGrab(GrabMessage message)
         {
-            _proxy.SendNotification(EPISODE_GRABBED_TITLE, grabMessage.Message, Settings);
+            SendNotification(EPISODE_GRABBED_TITLE, message.Message, message.Series);
         }
 
         public override void OnDownload(DownloadMessage message)
         {
-            _proxy.SendNotification(EPISODE_DOWNLOADED_TITLE, message.Message, Settings);
+            SendNotification(EPISODE_DOWNLOADED_TITLE, message.Message, message.Series);
         }
 
-        public override void OnEpisodeFileDelete(EpisodeDeleteMessage deleteMessage)
+        public override void OnEpisodeFileDelete(EpisodeDeleteMessage message)
         {
-            _proxy.SendNotification(EPISODE_DELETED_TITLE, deleteMessage.Message, Settings);
+            SendNotification(EPISODE_DELETED_TITLE, message.Message, message.Series);
         }
 
-        public override void OnSeriesDelete(SeriesDeleteMessage deleteMessage)
+        public override void OnSeriesDelete(SeriesDeleteMessage message)
         {
-            _proxy.SendNotification(SERIES_DELETED_TITLE, deleteMessage.Message, Settings);
+            SendNotification(SERIES_DELETED_TITLE, message.Message, message.Series);
         }
 
         public override void OnHealthIssue(HealthCheck.HealthCheck healthCheck)
         {
-            _proxy.SendNotification(HEALTH_ISSUE_TITLE, healthCheck.Message, Settings);
+            SendNotification(HEALTH_ISSUE_TITLE, healthCheck.Message, null);
         }
 
-        public override void OnApplicationUpdate(ApplicationUpdateMessage updateMessage)
+        public override void OnApplicationUpdate(ApplicationUpdateMessage message)
         {
-            _proxy.SendNotification(APPLICATION_UPDATE_TITLE, updateMessage.Message, Settings);
+            SendNotification(APPLICATION_UPDATE_TITLE, message.Message, null);
         }
 
         public override ValidationResult Test()
@@ -55,10 +59,29 @@ namespace NzbDrone.Core.Notifications.Gotify
 
             try
             {
+                var isMarkdown = false;
                 const string title = "Test Notification";
-                const string body = "This is a test message from Sonarr";
 
-                _proxy.SendNotification(title, body, Settings);
+                var sb = new StringBuilder();
+                sb.AppendLine("This is a test message from Sonarr");
+
+                if (Settings.IncludeSeriesPoster)
+                {
+                    isMarkdown = true;
+
+                    sb.AppendLine("\r![](https://raw.githubusercontent.com/Sonarr/Sonarr/develop/Logo/128.png)");
+                }
+
+                var payload = new GotifyMessage
+                {
+                    Title = title,
+                    Message = sb.ToString(),
+                    Priority = Settings.Priority
+                };
+
+                payload.SetContentType(isMarkdown);
+
+                _proxy.SendNotification(payload, Settings);
             }
             catch (Exception ex)
             {
@@ -67,6 +90,36 @@ namespace NzbDrone.Core.Notifications.Gotify
             }
 
             return new ValidationResult(failures);
+        }
+
+        private void SendNotification(string title, string message, Series series)
+        {
+            var isMarkdown = false;
+            var sb = new StringBuilder();
+
+            sb.AppendLine(message);
+
+            if (Settings.IncludeSeriesPoster && series != null)
+            {
+                var poster = series.Images.FirstOrDefault(x => x.CoverType == MediaCoverTypes.Poster)?.Url;
+
+                if (poster != null)
+                {
+                    isMarkdown = true;
+                    sb.AppendLine($"\r![]({poster})");
+                }
+            }
+
+            var payload = new GotifyMessage
+            {
+                Title = title,
+                Message = sb.ToString(),
+                Priority = Settings.Priority
+            };
+
+            payload.SetContentType(isMarkdown);
+
+            _proxy.SendNotification(payload, Settings);
         }
     }
 }
