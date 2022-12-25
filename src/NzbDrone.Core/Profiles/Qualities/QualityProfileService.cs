@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.CustomFormats;
 using NzbDrone.Core.CustomFormats.Events;
 using NzbDrone.Core.ImportLists;
@@ -149,6 +150,7 @@ namespace NzbDrone.Core.Profiles.Qualities
         public void Handle(CustomFormatAddedEvent message)
         {
             var all = All();
+
             foreach (var profile in all)
             {
                 profile.FormatItems.Insert(0, new ProfileFormatItem
@@ -167,7 +169,8 @@ namespace NzbDrone.Core.Profiles.Qualities
             foreach (var profile in all)
             {
                 profile.FormatItems = profile.FormatItems.Where(c => c.Format.Id != message.CustomFormat.Id).ToList();
-                if (!profile.FormatItems.Any())
+
+                if (profile.FormatItems.Empty())
                 {
                     profile.MinFormatScore = 0;
                     profile.CutoffFormatScore = 0;
