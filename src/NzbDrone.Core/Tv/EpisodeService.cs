@@ -31,6 +31,7 @@ namespace NzbDrone.Core.Tv
         void SetEpisodeMonitored(int episodeId, bool monitored);
         void SetMonitored(IEnumerable<int> ids, bool monitored);
         void UpdateEpisodes(List<Episode> episodes);
+        void UpdateLastSearchTime(List<Episode> episodes);
         List<Episode> EpisodesBetweenDates(DateTime start, DateTime end, bool includeUnmonitored);
         void InsertMany(List<Episode> episodes);
         void UpdateMany(List<Episode> episodes);
@@ -185,6 +186,11 @@ namespace NzbDrone.Core.Tv
         public void UpdateEpisodes(List<Episode> episodes)
         {
             _episodeRepository.UpdateMany(episodes);
+        }
+
+        public void UpdateLastSearchTime(List<Episode> episodes)
+        {
+            _episodeRepository.SetFields(episodes, e => e.LastSearchTime);
         }
 
         public List<Episode> EpisodesBetweenDates(DateTime start, DateTime end, bool includeUnmonitored)

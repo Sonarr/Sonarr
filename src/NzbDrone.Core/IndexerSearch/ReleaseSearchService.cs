@@ -540,7 +540,7 @@ namespace NzbDrone.Core.IndexerSearch
                 _logger.Debug("Setting last search time to: {0}", lastSearchTime);
 
                 criteriaBase.Episodes.ForEach(e => e.LastSearchTime = lastSearchTime);
-                _episodeService.UpdateEpisodes(criteriaBase.Episodes);
+                _episodeService.UpdateLastSearchTime(criteriaBase.Episodes);
             }
 
             return _makeDownloadDecision.GetSearchDecision(reports, criteriaBase).ToList();
