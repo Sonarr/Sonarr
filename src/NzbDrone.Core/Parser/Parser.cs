@@ -321,7 +321,7 @@ namespace NzbDrone.Core.Parser
                 new Regex(@"^(?<title>.+?)?(?:(?:[-_. ](?<![()\[!]))*(?<season>(?<!\d+|\(|\[|e|x)\d{2})(?<episode>(?<!e|x)(?:[1-9][0-9]|[0][1-9])(?!p|i|\d+|\)|\]|\W\d+|\W(?:e|ep|x)\d+)))+([-_. ]+|$)(?!\\)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
-                // Danish/Flemish release titles
+                // Dutch/Flemish release titles
                 new Regex(@"^(?<title>.+?)[-_. ](?:Se\.(?<season>(?<!\d+)(?:\d{1,2}|\d{4})(?!\d+))(?:(?:[-_ ]?afl\.)(?<episode>\d{1,3}(?!\d+))(?:(?:[-]|[-_ ]en[-_ ])(?<episode>\d{1,3}(?!\d+)))*))",
                     RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
