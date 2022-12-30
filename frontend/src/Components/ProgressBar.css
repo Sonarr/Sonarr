@@ -20,7 +20,11 @@
 
 .frontTextContainer {
   z-index: 1;
-  color: var(--white);
+  color: var(--progressBarFrontTextColor);
+}
+
+.backTextContainer {
+  color: var(--progressBarBackTextColor);
 }
 
 .backTextContainer,
