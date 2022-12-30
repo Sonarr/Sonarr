@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import TextTruncate from 'react-text-truncate';
@@ -59,8 +60,9 @@ function getExpandedState(newState) {
 }
 
 function getDateYear(date) {
-  const dateDate = new Date(date);
-  return dateDate.getFullYear();
+  const dateDate = moment(date);
+
+  return dateDate.format('YYYY');
 }
 
 class SeriesDetails extends Component {
