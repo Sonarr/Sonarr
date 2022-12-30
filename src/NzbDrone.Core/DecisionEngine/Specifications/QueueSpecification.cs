@@ -4,7 +4,6 @@ using NzbDrone.Core.CustomFormats;
 using NzbDrone.Core.Download.TrackedDownloads;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Profiles.Releases;
 using NzbDrone.Core.Queue;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications
@@ -68,7 +67,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
                 if (!_upgradableSpecification.IsUpgradable(qualityProfile,
                                                            remoteEpisode.ParsedEpisodeInfo.Quality,
-                                                           remoteEpisode.CustomFormats,
+                                                           queuedItemCustomFormats,
                                                            subject.ParsedEpisodeInfo.Quality,
                                                            subject.CustomFormats))
                 {
@@ -79,7 +78,9 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
                 if (!_upgradableSpecification.IsUpgradeAllowed(subject.Series.QualityProfile,
                                                                remoteEpisode.ParsedEpisodeInfo.Quality,
-                                                               subject.ParsedEpisodeInfo.Quality))
+                                                               queuedItemCustomFormats,
+                                                               subject.ParsedEpisodeInfo.Quality,
+                                                               subject.CustomFormats))
                 {
                     return Decision.Reject("Another release is queued and the Quality profile does not allow upgrades");
                 }
