@@ -35,7 +35,6 @@ function EpisodeStatus(props) {
           {...queueItem}
           progressBar={
             <ProgressBar
-              title={`Episode is downloading - ${progress.toFixed(1)}% ${queueItem.title}`}
               progress={progress}
               kind={kinds.PURPLE}
               size={sizes.MEDIUM}

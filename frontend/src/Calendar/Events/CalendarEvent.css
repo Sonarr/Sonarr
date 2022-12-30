@@ -1,11 +1,22 @@
 $fullColorGradient: rgba(244, 245, 246, 0.2);
 
 .event {
-  overflow-x: hidden;
+  position: relative;
   margin: 4px 2px;
   padding: 5px;
   border-bottom: 1px solid var(--calendarBorderColor);
   border-left: 4px solid var(--calendarBorderColor);
+}
+
+.underlay {
+  @add-mixin cover;
+}
+
+.overlay {
+  @add-mixin linkOverlay;
+
+  position: relative;
+  overflow-x: hidden;
   font-size: 12px;
 
   &:global(.colorImpaired) {
@@ -45,6 +56,8 @@ $fullColorGradient: rgba(244, 245, 246, 0.2);
 
 .statusIcon {
   margin-left: 3px;
+  cursor: default;
+  pointer-events: all;
 }
 
 .airTime {

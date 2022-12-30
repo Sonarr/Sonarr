@@ -74,12 +74,13 @@ class AgendaEvent extends Component {
     const seasonStatistics = season?.statistics || {};
 
     return (
-      <div>
+      <div className={styles.event}>
         <Link
-          className={styles.event}
-          component="div"
+          className={styles.underlay}
           onPress={this.onPress}
-        >
+        />
+
+        <div className={styles.overlay}>
           <div className={styles.date}>
             {
               showDate &&
@@ -209,7 +210,7 @@ class AgendaEvent extends Component {
                 />
             }
           </div>
-        </Link>
+        </div>
 
         <EpisodeDetailsModal
           isOpen={this.state.isDetailsModalOpen}

@@ -1,115 +1,70 @@
-import moment from 'moment';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Icon from 'Components/Icon';
-import { icons, kinds } from 'Helpers/Props';
+import Popover from 'Components/Tooltip/Popover';
+import { icons, tooltipPositions } from 'Helpers/Props';
+import QueueStatus from './QueueStatus';
+import styles from './QueueDetails.css';
 
 function QueueDetails(props) {
   const {
     title,
     size,
     sizeleft,
-    estimatedCompletionTime,
     status,
     trackedDownloadState,
     trackedDownloadStatus,
+    statusMessages,
     errorMessage,
     progressBar
   } = props;
 
   const progress = (100 - sizeleft / size * 100);
+  const isDownloading = status === 'downloading';
+  const isPaused = status === 'paused';
+  const hasWarning = trackedDownloadStatus === 'warning';
+  const hasError = trackedDownloadStatus === 'error';
 
-  if (status === 'pending') {
-    return (
-      <Icon
-        name={icons.PENDING}
-        title={`Release will be processed ${moment(estimatedCompletionTime).fromNow()}`}
-      />
-    );
-  }
+  if (
+    (isDownloading || isPaused) &&
+    !hasWarning &&
+    !hasError
+  ) {
+    const state = isPaused ? 'Paused' : 'Downloading';
 
-  if (status === 'completed') {
-    if (errorMessage) {
+    if (progress < 5) {
       return (
         <Icon
-          name={icons.DOWNLOAD}
-          kind={kinds.DANGER}
-          title={`Import failed: ${errorMessage}`}
+          name={icons.DOWNLOADING}
+          title={`${state} - ${progress.toFixed(1)}% ${title}`}
         />
       );
     }
 
-    if (trackedDownloadStatus === 'warning') {
-      return (
-        <Icon
-          name={icons.DOWNLOAD}
-          kind={kinds.WARNING}
-          title={'Downloaded - Unable to Import: check logs for details'}
-        />
-      );
-    }
-
-    if (trackedDownloadState === 'importPending') {
-      return (
-        <Icon
-          name={icons.DOWNLOAD}
-          kind={kinds.PURPLE}
-          title={'Downloaded - Waiting to Import'}
-        />
-      );
-    }
-
-    if (trackedDownloadState === 'importing') {
-      return (
-        <Icon
-          name={icons.DOWNLOAD}
-          kind={kinds.PURPLE}
-          title={'Downloaded - Importing'}
-        />
-      );
-    }
-  }
-
-  if (errorMessage) {
     return (
-      <Icon
-        name={icons.DOWNLOADING}
-        kind={kinds.DANGER}
-        title={`Download failed: ${errorMessage}`}
+      <Popover
+        className={styles.progressBarContainer}
+        anchor={progressBar}
+        title={`${state} - ${progress.toFixed(1)}%`}
+        body={
+          <div>{title}</div>
+        }
+        position={tooltipPositions.LEFT}
       />
     );
   }
 
-  if (status === 'failed') {
-    return (
-      <Icon
-        name={icons.DOWNLOADING}
-        kind={kinds.DANGER}
-        title="Download failed: check download client for more details"
-      />
-    );
-  }
-
-  if (status === 'warning') {
-    return (
-      <Icon
-        name={icons.DOWNLOADING}
-        kind={kinds.WARNING}
-        title="Download warning: check download client for more details"
-      />
-    );
-  }
-
-  if (progress < 5) {
-    return (
-      <Icon
-        name={icons.DOWNLOADING}
-        title={`Episode is downloading - ${progress.toFixed(1)}% ${title}`}
-      />
-    );
-  }
-
-  return progressBar;
+  return (
+    <QueueStatus
+      sourceTitle={title}
+      status={status}
+      trackedDownloadStatus={trackedDownloadStatus}
+      trackedDownloadState={trackedDownloadState}
+      statusMessages={statusMessages}
+      errorMessage={errorMessage}
+      position={tooltipPositions.LEFT}
+    />
+  );
 }
 
 QueueDetails.propTypes = {
@@ -120,6 +75,7 @@ QueueDetails.propTypes = {
   status: PropTypes.string.isRequired,
   trackedDownloadState: PropTypes.string.isRequired,
   trackedDownloadStatus: PropTypes.string.isRequired,
+  statusMessages: PropTypes.arrayOf(PropTypes.object),
   errorMessage: PropTypes.string,
   progressBar: PropTypes.node.isRequired
 };

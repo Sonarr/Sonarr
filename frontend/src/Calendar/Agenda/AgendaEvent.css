@@ -1,12 +1,27 @@
 .event {
-  display: flex;
-  overflow-x: hidden;
+  position: relative;
   padding: 5px;
   border-bottom: 1px solid var(--borderColor);
-  font-size: $defaultFontSize;
+}
+
+.underlay {
+  @add-mixin cover;
 
   &:hover {
     background-color: var(--tableRowHoverBackgroundColor);
+  }
+}
+
+.overlay {
+  @add-mixin linkOverlay;
+
+  position: relative;
+  display: flex;
+  overflow-x: hidden;
+  font-size: $defaultFontSize;
+
+  &:global(.colorImpaired) {
+    border-left-width: 5px;
   }
 }
 
@@ -56,6 +71,8 @@
 
 .statusIcon {
   margin-left: 3px;
+  cursor: default;
+  pointer-events: all;
 }
 
 /*

@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import moment from 'moment';
 import PropTypes from 'prop-types';
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import getStatusStyle from 'Calendar/getStatusStyle';
 import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
@@ -82,17 +82,20 @@ class CalendarEvent extends Component {
     const seasonStatistics = season?.statistics || {};
 
     return (
-      <Fragment>
+      <div
+        className={classNames(
+          styles.event,
+          styles[statusStyle],
+          colorImpairedMode && 'colorImpaired',
+          fullColorEvents && 'fullColor'
+        )}
+      >
         <Link
-          className={classNames(
-            styles.event,
-            styles[statusStyle],
-            colorImpairedMode && 'colorImpaired',
-            fullColorEvents && 'fullColor'
-          )}
-          component="div"
+          className={styles.underlay}
           onPress={this.onPress}
-        >
+        />
+
+        <div className={styles.overlay} >
           <div className={styles.info}>
             <div className={styles.seriesTitle}>
               {series.title}
@@ -215,7 +218,7 @@ class CalendarEvent extends Component {
           <div className={styles.airTime}>
             {formatTime(airDateUtc, timeFormat)} - {formatTime(endTime.toISOString(), timeFormat, { includeMinuteZero: true })}
           </div>
-        </Link>
+        </div>
 
         <EpisodeDetailsModal
           isOpen={this.state.isDetailsModalOpen}
@@ -226,7 +229,7 @@ class CalendarEvent extends Component {
           showOpenSeriesButton={true}
           onModalClose={this.onDetailsModalClose}
         />
-      </Fragment>
+      </div>
     );
   }
 }
