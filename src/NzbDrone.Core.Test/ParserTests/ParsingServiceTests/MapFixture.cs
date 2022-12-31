@@ -220,5 +220,45 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
             Mocker.GetMock<ISeriesService>()
                   .Verify(v => v.FindByTitle(It.IsAny<string>()), Times.Never());
         }
+
+        [Test]
+        public void should_use_scene_season_number_from_xem_mapping_if_alias_matches_a_specific_season_number()
+        {
+            _parsedEpisodeInfo.SeasonNumber = 1;
+
+            var sceneMapping = new SceneMapping
+            {
+                Type = "XemService",
+                SceneSeasonNumber = 2
+            };
+
+            Mocker.GetMock<ISceneMappingService>()
+                .Setup(s => s.FindSceneMapping(_parsedEpisodeInfo.SeriesTitle, _parsedEpisodeInfo.ReleaseTitle, _parsedEpisodeInfo.SeasonNumber))
+                .Returns(sceneMapping);
+
+            var result = Subject.Map(_parsedEpisodeInfo, _series);
+
+            result.MappedSeasonNumber.Should().Be(sceneMapping.SceneSeasonNumber);
+        }
+
+        [Test]
+        public void should_not_use_scene_season_number_from_xem_mapping_if_alias_matches_a_specific_season_number_but_did_not_parse_season_1()
+        {
+            _parsedEpisodeInfo.SeasonNumber = 2;
+
+            var sceneMapping = new SceneMapping
+            {
+                Type = "XemService",
+                SceneSeasonNumber = 2
+            };
+
+            Mocker.GetMock<ISceneMappingService>()
+                .Setup(s => s.FindSceneMapping(_parsedEpisodeInfo.SeriesTitle, _parsedEpisodeInfo.ReleaseTitle, _parsedEpisodeInfo.SeasonNumber))
+                .Returns(sceneMapping);
+
+            var result = Subject.Map(_parsedEpisodeInfo, _series);
+
+            result.MappedSeasonNumber.Should().Be(sceneMapping.SceneSeasonNumber);
+        }
     }
 }
