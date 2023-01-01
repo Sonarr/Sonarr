@@ -19,7 +19,7 @@ function createMapStateToProps() {
 
 function createMapDispatchToProps(dispatch, props) {
   return {
-    setDeleteOption(option) {
+    onDeleteOptionChange(option) {
       dispatch(
         setDeleteOption({
           [option.name]: option.value
@@ -27,7 +27,7 @@ function createMapDispatchToProps(dispatch, props) {
       );
     },
 
-    onDeleteSelectedPress(deleteFiles, addImportListExclusion) {
+    onDeletePress(deleteFiles, addImportListExclusion) {
       dispatch(
         deleteSeries({
           id: props.seriesId,
