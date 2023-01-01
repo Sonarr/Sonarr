@@ -384,8 +384,15 @@ export const defaultState = {
   items: [],
   sortKey: 'sortTitle',
   sortDirection: sortDirections.ASCENDING,
-  pendingChanges: {}
+  pendingChanges: {},
+  deleteOptions: {
+    addImportListExclusion: false
+  }
 };
+
+export const persistState = [
+  'series.deleteOptions'
+];
 
 //
 // Actions Types
@@ -398,6 +405,8 @@ export const DELETE_SERIES = 'series/deleteSeries';
 export const TOGGLE_SERIES_MONITORED = 'series/toggleSeriesMonitored';
 export const TOGGLE_SEASON_MONITORED = 'series/toggleSeasonMonitored';
 export const UPDATE_SERIES_MONITOR = 'series/updateSeriesMonitor';
+
+export const SET_DELETE_OPTION = 'series/setDeleteOption';
 
 //
 // Action Creators
@@ -439,6 +448,8 @@ export const setSeriesValue = createAction(SET_SERIES_VALUE, (payload) => {
     ...payload
   };
 });
+
+export const setDeleteOption = createAction(SET_DELETE_OPTION);
 
 //
 // Helpers
@@ -655,6 +666,15 @@ export const actionHandlers = handleThunks({
 
 export const reducers = createHandleActions({
 
-  [SET_SERIES_VALUE]: createSetSettingValueReducer(section)
+  [SET_SERIES_VALUE]: createSetSettingValueReducer(section),
+
+  [SET_DELETE_OPTION]: (state, { payload }) => {
+    return {
+      ...state,
+      deleteOptions: {
+        ...payload
+      }
+    };
+  }
 
 }, defaultState, section);

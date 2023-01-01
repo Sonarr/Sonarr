@@ -20,8 +20,7 @@ class DeleteSeriesModalContent extends Component {
     super(props, context);
 
     this.state = {
-      deleteFiles: false,
-      addImportListExclusion: false
+      deleteFiles: false
     };
   }
 
@@ -32,17 +31,11 @@ class DeleteSeriesModalContent extends Component {
     this.setState({ deleteFiles: value });
   };
 
-  onAddImportListExclusionChange = ({ value }) => {
-    this.setState({ addImportListExclusion: value });
-  };
-
   onDeleteSeriesConfirmed = () => {
-    const {
-      addImportListExclusion,
-      deleteFiles
-    } = this.state;
+    const deleteFiles = this.state.deleteFiles;
+    const addImportListExclusion = this.props.deleteOptions.addImportListExclusion;
 
-    this.setState({ deleteFiles: false, addImportListExclusion: false });
+    this.setState({ deleteFiles: false });
     this.props.onDeleteSelectedPress(deleteFiles, addImportListExclusion);
   };
 
@@ -52,11 +45,12 @@ class DeleteSeriesModalContent extends Component {
   render() {
     const {
       series,
-      onModalClose
+      deleteOptions,
+      onModalClose,
+      setDeleteOption
     } = this.props;
 
     const {
-      addImportListExclusion,
       deleteFiles
     } = this.state;
 
@@ -74,9 +68,9 @@ class DeleteSeriesModalContent extends Component {
               <FormInputGroup
                 type={inputTypes.CHECK}
                 name="addImportListExclusion"
-                value={addImportListExclusion}
+                value={deleteOptions.addImportListExclusion}
                 helpText="Prevent series from being added to Sonarr by lists"
-                onChange={this.onAddImportListExclusionChange}
+                onChange={setDeleteOption}
               />
             </FormGroup>
 
@@ -140,7 +134,9 @@ class DeleteSeriesModalContent extends Component {
 
 DeleteSeriesModalContent.propTypes = {
   series: PropTypes.arrayOf(PropTypes.object).isRequired,
+  deleteOptions: PropTypes.arrayOf(PropTypes.object).isRequired,
   onModalClose: PropTypes.func.isRequired,
+  setDeleteOption: PropTypes.func.isRequired,
   onDeleteSelectedPress: PropTypes.func.isRequired
 };
 

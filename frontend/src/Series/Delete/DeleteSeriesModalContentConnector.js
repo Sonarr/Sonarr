@@ -1,56 +1,44 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { deleteSeries } from 'Store/Actions/seriesActions';
+import { deleteSeries, setDeleteOption } from 'Store/Actions/seriesActions';
 import createSeriesSelector from 'Store/Selectors/createSeriesSelector';
 import DeleteSeriesModalContent from './DeleteSeriesModalContent';
 
 function createMapStateToProps() {
   return createSelector(
+    (state) => state.series.deleteOptions,
     createSeriesSelector(),
-    (series) => {
-      return series;
+    (deleteOptions, series) => {
+      return {
+        ...series,
+        deleteOptions
+      };
     }
   );
 }
 
-const mapDispatchToProps = {
-  deleteSeries
-};
+function createMapDispatchToProps(dispatch, props) {
+  return {
+    setDeleteOption(option) {
+      dispatch(
+        setDeleteOption({
+          [option.name]: option.value
+        })
+      );
+    },
 
-class DeleteSeriesModalContentConnector extends Component {
+    onDeleteSelectedPress(deleteFiles, addImportListExclusion) {
+      dispatch(
+        deleteSeries({
+          id: props.seriesId,
+          deleteFiles,
+          addImportListExclusion
+        })
+      );
 
-  //
-  // Listeners
-
-  onDeletePress = (deleteFiles, addImportListExclusion) => {
-    this.props.deleteSeries({
-      id: this.props.seriesId,
-      deleteFiles,
-      addImportListExclusion
-    });
-
-    this.props.onModalClose(true);
+      props.onModalClose(true);
+    }
   };
-
-  //
-  // Render
-
-  render() {
-    return (
-      <DeleteSeriesModalContent
-        {...this.props}
-        onDeletePress={this.onDeletePress}
-      />
-    );
-  }
 }
 
-DeleteSeriesModalContentConnector.propTypes = {
-  seriesId: PropTypes.number.isRequired,
-  onModalClose: PropTypes.func.isRequired,
-  deleteSeries: PropTypes.func.isRequired
-};
-
-export default connect(createMapStateToProps, mapDispatchToProps)(DeleteSeriesModalContentConnector);
+export default connect(createMapStateToProps, createMapDispatchToProps)(DeleteSeriesModalContent);
