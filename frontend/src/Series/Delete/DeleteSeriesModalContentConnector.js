@@ -19,7 +19,7 @@ function createMapStateToProps() {
 
 function createMapDispatchToProps(dispatch, props) {
   return {
-    setDeleteOption(option) {
+    onDeleteOptionChange(option) {
       dispatch(
         setDeleteOption({
           [option.name]: option.value

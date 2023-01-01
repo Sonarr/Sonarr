@@ -38,7 +38,7 @@ class DeleteSeriesModalContent extends Component {
     const addImportListExclusion = this.props.deleteOptions.addImportListExclusion;
 
     this.setState({ deleteFiles: false });
-    this.props.onDeletePress(deleteFiles, addImportListExclusion);
+    this.props.onDeleteSelectedPress(deleteFiles, addImportListExclusion);
   };
 
   //
@@ -150,7 +150,7 @@ DeleteSeriesModalContent.propTypes = {
   deleteOptions: PropTypes.object.isRequired,
   onDeleteOptionChange: PropTypes.func.isRequired,
   onAddImportListExclusionChange: PropTypes.func.isRequired,
-  onDeletePress: PropTypes.func.isRequired,
+  onDeleteSelectedPress: PropTypes.func.isRequired,
   onModalClose: PropTypes.func.isRequired
 };
 
