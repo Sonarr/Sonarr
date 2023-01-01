@@ -87,6 +87,7 @@ function EditIndexerModalContent(props) {
                 <FormInputGroup
                   type={inputTypes.CHECK}
                   name="enableRss"
+                  helpText={supportsRss.value ? 'Will be used when Sonarr periodically looks for releases via RSS Sync' : undefined}
                   helpTextWarning={supportsRss.value ? undefined : 'RSS is not supported with this indexer'}
                   isDisabled={!supportsRss.value}
                   {...enableRss}
