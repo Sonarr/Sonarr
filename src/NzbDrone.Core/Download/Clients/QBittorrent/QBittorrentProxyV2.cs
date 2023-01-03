@@ -46,6 +46,11 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                     return true;
                 }
 
+                if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    throw new DownloadClientException("Failed to connect to qBittorrent. Check your settings and qBittorrent configuration.", new HttpException(response));
+                }
+
                 if (response.HasHttpError)
                 {
                     throw new DownloadClientException("Failed to connect to qBittorrent, check your settings.", new HttpException(response));
