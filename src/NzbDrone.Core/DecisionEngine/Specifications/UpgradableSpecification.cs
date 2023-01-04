@@ -140,8 +140,6 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
         {
             var isQualityUpgrade = new QualityModelComparer(qualityProfile).Compare(newQuality, currentQuality) > 0;
             var isCustomFormatUpgrade = qualityProfile.CalculateCustomFormatScore(newCustomFormats) > qualityProfile.CalculateCustomFormatScore(currentCustomFormats);
-            var t1 = qualityProfile.CalculateCustomFormatScore(newCustomFormats);
-            var t2 = qualityProfile.CalculateCustomFormatScore(currentCustomFormats);
 
             if ((isQualityUpgrade || isCustomFormatUpgrade) && qualityProfile.UpgradeAllowed)
             {
