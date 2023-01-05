@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using FluentAssertions;
 using Moq;
@@ -85,6 +86,57 @@ namespace NzbDrone.Core.Test.IndexerTests.RarbgTests
             releases.Should().HaveCount(0);
 
             ExceptionVerification.ExpectedWarns(1);
+        }
+
+        [Test]
+        public void should_warn_and_record_failure_on_429_response()
+        {
+            Mocker.GetMock<IHttpClient>()
+                .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.Get)))
+                .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), "", HttpStatusCode.TooManyRequests));
+
+            var releases = Subject.FetchRecent();
+
+            releases.Should().HaveCount(0);
+
+            ExceptionVerification.ExpectedWarns(1);
+
+            Mocker.GetMock<IIndexerStatusService>()
+                  .Verify(v => v.RecordFailure(It.IsAny<int>(), It.Is<TimeSpan>(t => t == TimeSpan.FromMinutes(2))));
+        }
+
+        [Test]
+        public void should_warn_and_record_failure_on_520_response()
+        {
+            Mocker.GetMock<IHttpClient>()
+                .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.Get)))
+                .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), "", (HttpStatusCode)520));
+
+            var releases = Subject.FetchRecent();
+
+            releases.Should().HaveCount(0);
+
+            ExceptionVerification.ExpectedWarns(1);
+
+            Mocker.GetMock<IIndexerStatusService>()
+                  .Verify(v => v.RecordFailure(It.IsAny<int>(), It.Is<TimeSpan>(t => t == TimeSpan.FromMinutes(3))));
+        }
+
+        [Test]
+        public void should_warn_and_record_failure_on_200_response_with_rate_limit()
+        {
+            Mocker.GetMock<IHttpClient>()
+                .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.Get)))
+                .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), "{ rate_limit: 1 }"));
+
+            var releases = Subject.FetchRecent();
+
+            releases.Should().HaveCount(0);
+
+            ExceptionVerification.ExpectedWarns(1);
+
+            Mocker.GetMock<IIndexerStatusService>()
+                .Verify(v => v.RecordFailure(It.IsAny<int>(), It.Is<TimeSpan>(t => t == TimeSpan.FromMinutes(5))));
         }
     }
 }

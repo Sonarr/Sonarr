@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -243,9 +243,17 @@ namespace NzbDrone.Core.Indexers
                 _indexerStatusService.RecordFailure(Definition.Id);
                 _logger.Warn("{0} {1}", this, ex.Message);
             }
-            catch (RequestLimitReachedException)
+            catch (RequestLimitReachedException ex)
             {
-                _indexerStatusService.RecordFailure(Definition.Id, TimeSpan.FromHours(1));
+                if (ex.RetryAfter != TimeSpan.Zero)
+                {
+                    _indexerStatusService.RecordFailure(Definition.Id, ex.RetryAfter);
+                }
+                else
+                {
+                    _indexerStatusService.RecordFailure(Definition.Id, TimeSpan.FromHours(1));
+                }
+
                 _logger.Warn("API Request Limit reached for {0}", this);
             }
             catch (ApiKeyException)

@@ -7,6 +7,7 @@ namespace NzbDrone.Core.Indexers.Rarbg
     {
         public string error { get; set; }
         public int? error_code { get; set; }
+        public int? rate_limit { get; set; }
         public List<RarbgTorrent> torrent_results { get; set; }
     }
 
