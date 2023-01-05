@@ -9,7 +9,7 @@ import createSettingsSectionSelector from 'Store/Selectors/createSettingsSection
 import UISettings from './UISettings';
 
 const SECTION = 'ui';
-const FILTER_LANGUAGES = ['Any', 'Unknown'];
+const FILTER_LANGUAGES = ['Any', 'Unknown', 'Original'];
 
 function createFilteredLanguagesSelector() {
   return createSelector(

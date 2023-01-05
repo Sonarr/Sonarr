@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React from 'react';
+import getLanguageName from 'Utilities/String/getLanguageName';
 import * as mediaInfoTypes from './mediaInfoTypes';
 
 function formatLanguages(languages) {
@@ -8,7 +9,7 @@ function formatLanguages(languages) {
     return null;
   }
 
-  const splitLanguages = _.uniq(languages.split(' / '));
+  const splitLanguages = _.uniq(languages.split('/')).map((l) => getLanguageName(l));
 
   if (splitLanguages.length > 3) {
     return (
@@ -40,18 +41,15 @@ function MediaInfo(props) {
     return (
       <span>
         {
-          !!audioCodec &&
-            audioCodec
+          audioCodec ? audioCodec : ''
         }
 
         {
-          !!audioCodec && !!audioChannels &&
-          ' - '
+          audioCodec && audioChannels ? ' - ' : ''
         }
 
         {
-          !!audioChannels &&
-          audioChannels.toFixed(1)
+          audioChannels ? audioChannels.toFixed(1) : ''
         }
       </span>
     );

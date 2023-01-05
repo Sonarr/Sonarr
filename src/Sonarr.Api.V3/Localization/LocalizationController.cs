@@ -26,5 +26,17 @@ namespace Sonarr.Api.V3.Localization
         {
             return _localizationService.GetLocalizationDictionary().ToResource();
         }
+
+        [HttpGet("language")]
+        [Produces("application/json")]
+        public LanguageResource GetLanguage()
+        {
+            var identifier = _localizationService.GetLanguageIdentifier();
+
+            return new LanguageResource
+            {
+                Identifier = identifier
+            };
+        }
     }
 }
