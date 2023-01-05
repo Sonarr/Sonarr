@@ -68,7 +68,6 @@ class SeriesHistoryRow extends Component {
       eventType,
       sourceTitle,
       languages,
-      languageCutoffNotMet,
       quality,
       qualityCutoffNotMet,
       customFormats,
@@ -110,10 +109,7 @@ class SeriesHistoryRow extends Component {
         </TableRowCell>
 
         <TableRowCell>
-          <EpisodeLanguages
-            languages={languages}
-            isCutoffNotMet={languageCutoffNotMet}
-          />
+          <EpisodeLanguages languages={languages} />
         </TableRowCell>
 
         <TableRowCell>
@@ -186,7 +182,6 @@ SeriesHistoryRow.propTypes = {
   eventType: PropTypes.string.isRequired,
   sourceTitle: PropTypes.string.isRequired,
   languages: PropTypes.object.isRequired,
-  languageCutoffNotMet: PropTypes.bool.isRequired,
   quality: PropTypes.object.isRequired,
   qualityCutoffNotMet: PropTypes.bool.isRequired,
   customFormats: PropTypes.arrayOf(PropTypes.object),

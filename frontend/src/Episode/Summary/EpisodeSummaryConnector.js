@@ -29,7 +29,6 @@ function createMapStateToProps() {
         path,
         size,
         languages,
-        languageCutoffNotMet,
         quality,
         qualityCutoffNotMet,
         customFormats
@@ -44,7 +43,6 @@ function createMapStateToProps() {
         path,
         size,
         languages,
-        languageCutoffNotMet,
         quality,
         qualityCutoffNotMet,
         customFormats

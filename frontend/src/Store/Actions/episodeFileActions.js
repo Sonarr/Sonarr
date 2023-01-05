@@ -161,7 +161,6 @@ export const actionHandlers = handleThunks({
           const episodeFile = data.find((f) => f.id === id);
 
           props.qualityCutoffNotMet = episodeFile.qualityCutoffNotMet;
-          props.languageCutoffNotMet = episodeFile.languageCutoffNotMet;
           props.languages = file.languages;
           props.quality = file.quality;
           props.releaseGroup = file.releaseGroup;

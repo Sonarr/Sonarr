@@ -54,7 +54,6 @@ class EpisodeFileRow extends Component {
       languages,
       quality,
       customFormats,
-      languageCutoffNotMet,
       qualityCutoffNotMet,
       mediaInfo,
       columns
@@ -95,10 +94,7 @@ class EpisodeFileRow extends Component {
                   key={name}
                   className={styles.languages}
                 >
-                  <EpisodeLanguages
-                    languages={languages}
-                    isCutoffNotMet={languageCutoffNotMet}
-                  />
+                  <EpisodeLanguages languages={languages} />
                 </TableRowCell>
               );
             }
@@ -183,7 +179,6 @@ EpisodeFileRow.propTypes = {
   path: PropTypes.string.isRequired,
   size: PropTypes.number.isRequired,
   languages: PropTypes.arrayOf(PropTypes.object).isRequired,
-  languageCutoffNotMet: PropTypes.bool.isRequired,
   quality: PropTypes.object.isRequired,
   qualityCutoffNotMet: PropTypes.bool.isRequired,
   customFormats: PropTypes.arrayOf(PropTypes.object),

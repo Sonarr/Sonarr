@@ -60,7 +60,6 @@ class HistoryRow extends Component {
       series,
       episode,
       languages,
-      languageCutoffNotMet,
       quality,
       customFormats,
       qualityCutoffNotMet,
@@ -147,10 +146,7 @@ class HistoryRow extends Component {
             if (name === 'languages') {
               return (
                 <TableRowCell key={name}>
-                  <EpisodeLanguages
-                    languages={languages}
-                    isCutoffMet={languageCutoffNotMet}
-                  />
+                  <EpisodeLanguages languages={languages} />
                 </TableRowCell>
               );
             }
@@ -279,7 +275,6 @@ HistoryRow.propTypes = {
   series: PropTypes.object.isRequired,
   episode: PropTypes.object,
   languages: PropTypes.arrayOf(PropTypes.object).isRequired,
-  languageCutoffNotMet: PropTypes.bool.isRequired,
   quality: PropTypes.object.isRequired,
   customFormats: PropTypes.arrayOf(PropTypes.object),
   qualityCutoffNotMet: PropTypes.bool.isRequired,

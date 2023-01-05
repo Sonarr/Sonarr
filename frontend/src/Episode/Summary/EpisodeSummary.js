@@ -93,7 +93,6 @@ class EpisodeSummary extends Component {
       languages,
       quality,
       customFormats,
-      languageCutoffNotMet,
       qualityCutoffNotMet,
       onDeleteEpisodeFile
     } = this.props;
@@ -140,7 +139,6 @@ class EpisodeSummary extends Component {
                   path={path}
                   size={size}
                   languages={languages}
-                  languageCutoffNotMet={languageCutoffNotMet}
                   quality={quality}
                   qualityCutoffNotMet={qualityCutoffNotMet}
                   customFormats={customFormats}
@@ -177,7 +175,6 @@ EpisodeSummary.propTypes = {
   path: PropTypes.string,
   size: PropTypes.number,
   languages: PropTypes.arrayOf(PropTypes.object),
-  languageCutoffNotMet: PropTypes.bool,
   quality: PropTypes.object,
   qualityCutoffNotMet: PropTypes.bool,
   customFormats: PropTypes.arrayOf(PropTypes.object),
