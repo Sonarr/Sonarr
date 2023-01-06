@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Menu from 'Components/Menu/Menu';
 import ToolbarMenuButton from 'Components/Menu/ToolbarMenuButton';
-import { icons } from 'Helpers/Props';
+import { align, icons } from 'Helpers/Props';
 
 function ViewMenu(props) {
   const {
@@ -27,7 +27,8 @@ function ViewMenu(props) {
 
 ViewMenu.propTypes = {
   children: PropTypes.node.isRequired,
-  isDisabled: PropTypes.bool.isRequired
+  isDisabled: PropTypes.bool.isRequired,
+  alignMenu: PropTypes.oneOf([align.LEFT, align.RIGHT])
 };
 
 ViewMenu.defaultProps = {

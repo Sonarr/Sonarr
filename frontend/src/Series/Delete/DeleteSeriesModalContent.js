@@ -149,7 +149,6 @@ DeleteSeriesModalContent.propTypes = {
   statistics: PropTypes.object.isRequired,
   deleteOptions: PropTypes.object.isRequired,
   onDeleteOptionChange: PropTypes.func.isRequired,
-  onAddImportListExclusionChange: PropTypes.func.isRequired,
   onDeletePress: PropTypes.func.isRequired,
   onModalClose: PropTypes.func.isRequired
 };

@@ -15,6 +15,10 @@ function SeriesPoster(props) {
 }
 
 SeriesPoster.propTypes = {
+  ...SeriesImage.propTypes,
+  coverType: PropTypes.string,
+  placeholder: PropTypes.string,
+  overflow: PropTypes.bool,
   size: PropTypes.number.isRequired
 };
 

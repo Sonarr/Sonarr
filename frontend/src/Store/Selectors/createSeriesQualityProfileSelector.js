@@ -1,10 +1,10 @@
 import { createSelector } from 'reselect';
 import createSeriesSelector from './createSeriesSelector';
 
-function createSeriesQualityProfileSelector() {
+function createSeriesQualityProfileSelector(seriesId) {
   return createSelector(
     (state) => state.settings.qualityProfiles.items,
-    createSeriesSelector(),
+    createSeriesSelector(seriesId),
     (qualityProfiles, series = {}) => {
       return qualityProfiles.find((profile) => {
         return profile.id === series.qualityProfileId;

@@ -1,12 +1,22 @@
 import { createSelector } from 'reselect';
 
-function createSeriesSelector() {
+function createSeriesSelector(id) {
+  if (id == null) {
+    return createSelector(
+      (state, { seriesId }) => seriesId,
+      (state) => state.series.itemMap,
+      (state) => state.series.items,
+      (seriesId, itemMap, allSeries) => {
+        return allSeries[itemMap[seriesId]];
+      }
+    );
+  }
+
   return createSelector(
-    (state, { seriesId }) => seriesId,
     (state) => state.series.itemMap,
     (state) => state.series.items,
-    (seriesId, itemMap, allSeries) => {
-      return allSeries[itemMap[seriesId]];
+    (itemMap, allSeries) => {
+      return allSeries[itemMap[id]];
     }
   );
 }

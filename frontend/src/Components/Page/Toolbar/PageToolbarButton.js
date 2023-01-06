@@ -45,7 +45,8 @@ PageToolbarButton.propTypes = {
   iconName: PropTypes.object.isRequired,
   spinningName: PropTypes.object,
   isSpinning: PropTypes.bool,
-  isDisabled: PropTypes.bool
+  isDisabled: PropTypes.bool,
+  onPress: PropTypes.func
 };
 
 PageToolbarButton.defaultProps = {

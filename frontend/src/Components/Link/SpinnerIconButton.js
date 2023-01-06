@@ -23,6 +23,8 @@ function SpinnerIconButton(props) {
 }
 
 SpinnerIconButton.propTypes = {
+  ...IconButton.propTypes,
+  className: PropTypes.string,
   name: PropTypes.object.isRequired,
   spinningName: PropTypes.object.isRequired,
   isDisabled: PropTypes.bool.isRequired,
