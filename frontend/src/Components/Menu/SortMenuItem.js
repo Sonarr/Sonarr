@@ -27,6 +27,7 @@ SortMenuItem.propTypes = {
   name: PropTypes.string,
   sortKey: PropTypes.string,
   sortDirection: PropTypes.oneOf(sortDirections.all),
+  children: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
   onPress: PropTypes.func.isRequired
 };
 

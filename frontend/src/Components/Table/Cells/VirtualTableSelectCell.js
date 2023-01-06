@@ -13,6 +13,7 @@ export function virtualTableSelectCellRenderer(cellProps) {
   } = cellProps;
 
   return (
+    // eslint-disable-next-line no-use-before-define
     <VirtualTableSelectCell
       key={cellKey}
       id={rowData.name}

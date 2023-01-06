@@ -173,7 +173,7 @@ OverlayScroller.defaultProps = {
   scrollDirection: scrollDirections.VERTICAL,
   autoHide: false,
   autoScroll: true,
-  registerScroller: () => {}
+  registerScroller: () => { /* no-op */ }
 };
 
 export default OverlayScroller;

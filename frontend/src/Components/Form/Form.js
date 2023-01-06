@@ -4,7 +4,15 @@ import Alert from 'Components/Alert';
 import { kinds } from 'Helpers/Props';
 import styles from './Form.css';
 
-function Form({ children, validationErrors, validationWarnings, ...otherProps }) {
+function Form(props) {
+  const {
+    children,
+    validationErrors,
+    validationWarnings,
+    // eslint-disable-next-line no-unused-vars
+    ...otherProps
+  } = props;
+
   return (
     <div>
       {

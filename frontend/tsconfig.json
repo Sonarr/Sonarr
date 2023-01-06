@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+      "target": "es6",
+      "allowJs": true,
+      "checkJs": false,
+      "baseUrl": "src",
+      "jsx": "react",
+      "module": "commonjs",
+      "moduleResolution": "node",
+      "noEmit": true,
+      "esModuleInterop": true,
+      "typeRoots": ["node_modules/@types", "typings"],
+      "paths": {
+          "*": [
+              "*"
+          ]
+      },
+      "plugins": [{ "name": "typescript-plugin-css-modules" }]
+  },
+  "include": [
+      "./src/**/*",
+      "./.eslintrc.js",
+      "./build/webpack.config.js",
+      "./typings/*.ts",
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
