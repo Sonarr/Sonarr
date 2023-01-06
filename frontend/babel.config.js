@@ -17,7 +17,8 @@ module.exports = {
   env: {
     development: {
       presets: [
-        ['@babel/preset-react', { development: true }]
+        ['@babel/preset-react', { development: true }],
+        '@babel/preset-typescript'
       ],
       plugins: [
         'babel-plugin-inline-classnames'
@@ -25,7 +26,8 @@ module.exports = {
     },
     production: {
       presets: [
-        '@babel/preset-react'
+        '@babel/preset-react',
+        '@babel/preset-typescript'
       ],
       plugins: [
         'babel-plugin-transform-react-remove-prop-types'

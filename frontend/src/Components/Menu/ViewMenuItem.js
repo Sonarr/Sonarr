@@ -22,7 +22,9 @@ function ViewMenuItem(props) {
 
 ViewMenuItem.propTypes = {
   name: PropTypes.string,
-  selectedView: PropTypes.string.isRequired
+  selectedView: PropTypes.string.isRequired,
+  children: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
+  onPress: PropTypes.func.isRequired
 };
 
 export default ViewMenuItem;

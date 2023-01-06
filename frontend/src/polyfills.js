@@ -1,4 +1,4 @@
-/* eslint no-empty-function: 0 no-extend-native: 0 */
+/* eslint no-empty-function: 0, no-extend-native: 0, "@typescript-eslint/no-empty-function": 0 */
 
 window.console = window.console || {};
 window.console.log = window.console.log || function() {};

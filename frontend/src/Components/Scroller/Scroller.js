@@ -89,7 +89,7 @@ Scroller.defaultProps = {
   scrollDirection: scrollDirections.VERTICAL,
   autoFocus: true,
   autoScroll: true,
-  registerScroller: () => {}
+  registerScroller: () => { /* no-op */ }
 };
 
 export default Scroller;
