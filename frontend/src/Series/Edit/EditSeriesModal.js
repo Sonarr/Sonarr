@@ -18,6 +18,7 @@ function EditSeriesModal({ isOpen, onModalClose, ...otherProps }) {
 }
 
 EditSeriesModal.propTypes = {
+  ...EditSeriesModalContentConnector.propTypes,
   isOpen: PropTypes.bool.isRequired,
   onModalClose: PropTypes.func.isRequired
 };

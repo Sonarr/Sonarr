@@ -26,6 +26,7 @@ function DeleteSeriesModal(props) {
 }
 
 DeleteSeriesModal.propTypes = {
+  ...DeleteSeriesModalContentConnector.propTypes,
   isOpen: PropTypes.bool.isRequired,
   onModalClose: PropTypes.func.isRequired
 };

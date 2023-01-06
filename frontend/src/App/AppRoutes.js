@@ -12,7 +12,7 @@ import Switch from 'Components/Router/Switch';
 import SeasonPassConnector from 'SeasonPass/SeasonPassConnector';
 import SeriesDetailsPageConnector from 'Series/Details/SeriesDetailsPageConnector';
 import SeriesEditorConnector from 'Series/Editor/SeriesEditorConnector';
-import SeriesIndexConnector from 'Series/Index/SeriesIndexConnector';
+import SeriesIndex from 'Series/Index/SeriesIndex';
 import CustomFormatSettingsConnector from 'Settings/CustomFormats/CustomFormatSettingsConnector';
 import DownloadClientSettingsConnector from 'Settings/DownloadClients/DownloadClientSettingsConnector';
 import GeneralSettingsConnector from 'Settings/General/GeneralSettingsConnector';
@@ -51,7 +51,7 @@ function AppRoutes(props) {
       <Route
         exact={true}
         path="/"
-        component={SeriesIndexConnector}
+        component={SeriesIndex}
       />
 
       {
