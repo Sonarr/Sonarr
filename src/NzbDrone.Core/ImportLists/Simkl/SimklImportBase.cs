@@ -105,7 +105,7 @@ namespace NzbDrone.Core.ImportLists.Simkl
             {
                 var response = _httpClient.Get<SimklSyncActivityResource>(request);
 
-                if (response != null && response.Resource != null)
+                if (response?.Resource != null)
                 {
                     return response.Resource.TvShows.All;
                 }
@@ -134,7 +134,7 @@ namespace NzbDrone.Core.ImportLists.Simkl
             {
                 var response = _httpClient.Get<UserSettingsResponse>(request);
 
-                if (response != null && response.Resource != null)
+                if (response?.Resource != null)
                 {
                     return response.Resource.Account.Id.ToString();
                 }
@@ -161,7 +161,7 @@ namespace NzbDrone.Core.ImportLists.Simkl
             {
                 var response = _httpClient.Get<RefreshRequestResponse>(request);
 
-                if (response != null && response.Resource != null)
+                if (response?.Resource != null)
                 {
                     var token = response.Resource;
                     Settings.AccessToken = token.AccessToken;
