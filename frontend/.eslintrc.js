@@ -45,7 +45,8 @@ module.exports = {
     'react-hooks',
     'simple-import-sort',
     'import',
-    '@typescript-eslint'
+    '@typescript-eslint',
+    'prettier'
   ],
 
   settings: {
@@ -348,12 +349,17 @@ module.exports = {
         project: './tsconfig.json'
       },
 
+      extends: [
+        'prettier'
+      ],
+
       rules: Object.assign(typescriptEslintRecommended.rules, {
         'no-shadow': 'off',
         // These should be enabled after cleaning things up
         '@typescript-eslint/no-unused-vars': 'warn',
         '@typescript-eslint/explicit-function-return-type': 'off',
         'react/prop-types': 'off',
+        'prettier/prettier': 'error',
         'simple-import-sort/imports': [
           'error',
           {
