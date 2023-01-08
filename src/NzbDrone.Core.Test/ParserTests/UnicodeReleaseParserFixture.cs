@@ -41,21 +41,21 @@ namespace NzbDrone.Core.Test.ParserTests
             result.FullSeason.Should().BeFalse();
         }
 
-        [TestCase("[Lilith-Raws] 在地下城尋求邂逅是否搞錯了什麼 / Anime-Series Title S04 - 12 [Baha][WEB-DL][1080p][AVC AAC][CHT][MP4]", "Anime-Series Title", "Lilith-Raws", 4,12)]
-        [TestCase("[Lilith-Raws] 魔王學院的不適任者 / Anime-Series Title S02 - 01 [Baha][WEB-DL][1080p][AVC AAC][CHT][MP4]", "Anime-Series Title", "Lilith-Raws", 2,1)]
-        [TestCase("[Lilith-Raws] 不要欺負我，長瀞同學 / Anime-Series Title S02 - 01 [Baha][WEB-DL][1080p][AVC AAC][CHT][MP4]", "Anime-Series Title", "Lilith-Raws", 2,1)]
-        [TestCase("[SweetSub&LoliHouse] 来自深渊 烈日黄金乡 / Anime-Series Title S2 - 07 [WebRip 1080p HEVC-10bit AAC][简繁日内封字幕]", "Anime-Series Title", "Lilith-Raws", 2,7)]
-        [TestCase("[LoliHouse] Love Live! 虹咲学园学园偶像同好会 第二季 / Anime-Series Title S2 - 10 [WebRip 1080p HEVC-10bit AAC][简繁内封字幕]", "Anime-Series Title", "Lilith-Raws", 2,10)]
-        [TestCase("[澄空学园&雪飘工作室&LoliHouse] 辉夜大小姐想让我告白 第三季 / Anime-Series Title S3 - 06 [WebRip 1080p HEVC-10bit AAC][简繁内封字幕]", "Anime-Series Title", "Lilith-Raws", 3,6)]
-        public void should_parse_chinese_anime_season_episode_releases(string postTitle, string title, string subgroup, int SeasonNumber, int EpisodeNumber)
+        [TestCase("[Lilith-Raws] 在地下城尋求邂逅是否搞錯了什麼 / Anime-Series Title S04 - 12 [Baha][WEB-DL][1080p][AVC AAC][CHT][MP4]", "Anime-Series Title", "Lilith-Raws", 4, 12)]
+        [TestCase("[Lilith-Raws] 魔王學院的不適任者 / Anime-Series Title S02 - 01 [Baha][WEB-DL][1080p][AVC AAC][CHT][MP4]", "Anime-Series Title", "Lilith-Raws", 2, 1)]
+        [TestCase("[Lilith-Raws] 不要欺負我，長瀞同學 / Anime-Series Title S02 - 01 [Baha][WEB-DL][1080p][AVC AAC][CHT][MP4]", "Anime-Series Title", "Lilith-Raws", 2, 1)]
+        [TestCase("[SweetSub&LoliHouse] 来自深渊 烈日黄金乡 / Anime-Series Title S2 - 07 [WebRip 1080p HEVC-10bit AAC][简繁日内封字幕]", "Anime-Series Title", "SweetSub&LoliHouse", 2, 7)]
+        [TestCase("[LoliHouse] Love Live! 虹咲学园学园偶像同好会 第二季 / Anime-Series Title S2 - 10 [WebRip 1080p HEVC-10bit AAC][简繁内封字幕]", "Anime-Series Title", "LoliHouse", 2, 10)]
+        [TestCase("[澄空学园&雪飘工作室&LoliHouse] 辉夜大小姐想让我告白 第三季 / Anime-Series Title S3 - 06 [WebRip 1080p HEVC-10bit AAC][简繁内封字幕]", "Anime-Series Title", "澄空学园&雪飘工作室&LoliHouse", 3, 6)]
+        public void should_parse_chinese_anime_season_episode_releases(string postTitle, string title, string subgroup, int seasonNumber, int episodeNumber)
         {
             postTitle = XmlCleaner.ReplaceUnicode(postTitle);
 
             var result = Parser.Parser.ParseTitle(postTitle);
             result.Should().NotBeNull();
             result.ReleaseGroup.Should().Be(subgroup);
-            result.SeasonNumber.Single().Should().Be(SeasonNumber);
-            result.EpisodeNumbers.Single().Should().Be(EpisodeNumber);
+            result.SeasonNumber.Should().Be(seasonNumber);
+            result.EpisodeNumbers.Single().Should().Be(episodeNumber);
             result.SeriesTitle.Should().Be(title);
             result.FullSeason.Should().BeFalse();
         }
