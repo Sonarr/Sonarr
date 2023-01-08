@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import MiddleTruncate from 'react-middle-truncate';
 import Card from 'Components/Card';
 import Label from 'Components/Label';
 import IconButton from 'Components/Link/IconButton';
@@ -90,7 +89,7 @@ class CustomFormat extends Component {
             {name}
           </div>
 
-          <div>
+          <div className={styles.buttons}>
             <IconButton
               className={styles.cloneButton}
               title="Clone Custom Format"
@@ -128,11 +127,7 @@ class CustomFormat extends Component {
                   key={index}
                   kind={kind}
                 >
-                  <MiddleTruncate
-                    text={item.name}
-                    start={10}
-                    end={14}
-                  />
+                  {item.name}
                 </Label>
               );
             })
