@@ -1,4 +1,23 @@
 // Place your settings in this file to overwrite default and user settings.
 {
-  "files.insertFinalNewline": true
+  "files.insertFinalNewline": true,
+
+  "files.exclude": {
+    "**/node_modules": true,
+    "**/*.d.css": true
+  },
+
+  "editor.formatOnSave": false,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true
+  },
+
+  "typescript.preferences.quoteStyle": "single",
+
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
 }
