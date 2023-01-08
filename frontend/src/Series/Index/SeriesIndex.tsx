@@ -10,6 +10,7 @@ import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
 import PageToolbarSection from 'Components/Page/Toolbar/PageToolbarSection';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
 import TableOptionsModalWrapper from 'Components/Table/TableOptions/TableOptionsModalWrapper';
+import withScrollPosition from 'Components/withScrollPosition';
 import { align, icons } from 'Helpers/Props';
 import SortDirection from 'Helpers/Props/SortDirection';
 import NoSeries from 'Series/NoSeries';
@@ -48,7 +49,11 @@ function getViewComponent(view) {
   return SeriesIndexTable;
 }
 
-function SeriesIndex() {
+interface SeriesIndexProps {
+  initialScrollTop?: number;
+}
+
+const SeriesIndex = withScrollPosition((props) => {
   const {
     isFetching,
     isPopulated,
@@ -257,6 +262,7 @@ function SeriesIndex() {
           ref={scrollerRef}
           className={styles.contentBody}
           innerClassName={styles[`${view}InnerContentBody`]}
+          initialScrollTop={props.initialScrollTop}
           onScroll={onScroll}
         >
           {isFetching && !isPopulated ? <LoadingIndicator /> : null}
@@ -301,6 +307,6 @@ function SeriesIndex() {
       ) : null}
     </PageContent>
   );
-}
+}, 'seriesIndex');
 
 export default SeriesIndex;
