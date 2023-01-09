@@ -21,6 +21,9 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
         {
             Mocker.SetConstant<IQualityProfileFormatItemsCleanupRepository>(
                 new QualityProfileFormatItemsCleanupRepository(Mocker.Resolve<IMainDatabase>(), Mocker.Resolve<IEventAggregator>()));
+
+            Mocker.SetConstant<ICustomFormatRepository>(
+                new CustomFormatRepository(Mocker.Resolve<IMainDatabase>(), Mocker.Resolve<IEventAggregator>()));
         }
 
         [Test]
@@ -30,7 +33,12 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
                 .With(h => h.Items = Qualities.QualityFixture.GetDefaultQualities())
                 .With(h => h.MinFormatScore = 50)
                 .With(h => h.CutoffFormatScore = 100)
-                .With(h => h.FormatItems = Builder<ProfileFormatItem>.CreateListOfSize(1).Build().ToList())
+                .With(h => h.FormatItems = new List<ProfileFormatItem>
+                {
+                    Builder<ProfileFormatItem>.CreateNew()
+                        .With(c => c.Format = new CustomFormat("My Custom Format") { Id = 0 })
+                        .Build()
+                })
                 .BuildNew();
 
             Db.Insert(qualityProfile);
@@ -62,9 +70,10 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
                 .With(h => h.CutoffFormatScore = cutoffFormatScore)
                 .With(h => h.FormatItems = new List<ProfileFormatItem>
                 {
-                    Builder<ProfileFormatItem>.CreateNew().With(f => f.Id = customFormat.Id).Build()
+                    Builder<ProfileFormatItem>.CreateNew()
+                        .With(c => c.Format = customFormat)
+                        .Build()
                 })
-
                 .BuildNew();
 
             Db.Insert(qualityProfile);
@@ -74,6 +83,50 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
 
             result.Should().HaveCount(1);
             result.First().FormatItems.Should().HaveCount(1);
+            result.First().MinFormatScore.Should().Be(minFormatScore);
+            result.First().CutoffFormatScore.Should().Be(cutoffFormatScore);
+        }
+
+        [Test]
+        public void should_add_missing_custom_formats()
+        {
+            var minFormatScore = 50;
+            var cutoffFormatScore = 100;
+
+            var customFormat1 = Builder<CustomFormat>.CreateNew()
+                .With(h => h.Id = 1)
+                .With(h => h.Name = "Custom Format 1")
+                .With(h => h.Specifications = new List<ICustomFormatSpecification>())
+                .BuildNew();
+
+            var customFormat2 = Builder<CustomFormat>.CreateNew()
+                .With(h => h.Id = 2)
+                .With(h => h.Name = "Custom Format 2")
+                .With(h => h.Specifications = new List<ICustomFormatSpecification>())
+                .BuildNew();
+
+            Db.Insert(customFormat1);
+            Db.Insert(customFormat2);
+
+            var qualityProfile = Builder<QualityProfile>.CreateNew()
+                .With(h => h.Items = Qualities.QualityFixture.GetDefaultQualities())
+                .With(h => h.MinFormatScore = minFormatScore)
+                .With(h => h.CutoffFormatScore = cutoffFormatScore)
+                .With(h => h.FormatItems = new List<ProfileFormatItem>
+                {
+                    Builder<ProfileFormatItem>.CreateNew()
+                        .With(c => c.Format = customFormat1)
+                        .Build()
+                })
+                .BuildNew();
+
+            Db.Insert(qualityProfile);
+
+            Subject.Clean();
+            var result = AllStoredModels;
+
+            result.Should().HaveCount(1);
+            result.First().FormatItems.Should().HaveCount(2);
             result.First().MinFormatScore.Should().Be(minFormatScore);
             result.First().CutoffFormatScore.Should().Be(cutoffFormatScore);
         }

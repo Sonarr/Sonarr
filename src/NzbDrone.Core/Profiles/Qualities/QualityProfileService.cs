@@ -221,7 +221,6 @@ namespace NzbDrone.Core.Profiles.Qualities
 
             var formatItems = _formatService.All().Select(format => new ProfileFormatItem
             {
-                Id = format.Id,
                 Score = 0,
                 Format = format
             }).ToList();
