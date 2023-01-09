@@ -34,20 +34,10 @@ namespace NzbDrone.Core.Profiles.Qualities
             // all the custom formats
             foreach (var profile in profiles)
             {
-                var formatItems = new List<ProfileFormatItem>();
-
                 foreach (var formatItem in profile.FormatItems)
                 {
-                    // Skip any format that has been removed, but the profile wasn't updated properly
-                    if (cfs.ContainsKey(formatItem.Format.Id))
-                    {
-                        formatItem.Format = cfs[formatItem.Format.Id];
-
-                        formatItems.Add(formatItem);
-                    }
+                    formatItem.Format = cfs[formatItem.Format.Id];
                 }
-
-                profile.FormatItems = formatItems;
             }
 
             return profiles;
