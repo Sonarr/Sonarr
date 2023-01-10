@@ -46,7 +46,7 @@ namespace NzbDrone.Host
             try
             {
                 Logger.Info("Starting Sonarr - {0} - Version {1}",
-                            Process.GetCurrentProcess().MainModule.FileName,
+                            Environment.ProcessPath,
                             Assembly.GetExecutingAssembly().GetName().Version);
 
                 var startupContext = new StartupContext(args);
