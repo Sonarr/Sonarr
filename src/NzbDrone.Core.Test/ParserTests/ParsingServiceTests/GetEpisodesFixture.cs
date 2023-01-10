@@ -42,7 +42,7 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
                 SeriesTitle = _series.Title,
                 SeasonNumber = 1,
                 EpisodeNumbers = new[] { 1 },
-                AbsoluteEpisodeNumbers = new int[0],
+                AbsoluteEpisodeNumbers = Array.Empty<int>(),
                 Languages = new List<Language> { Language.English }
             };
 
@@ -282,7 +282,7 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
         {
             GivenAbsoluteNumberingSeries();
             _parsedEpisodeInfo.SeasonNumber = seasonNumber;
-            _parsedEpisodeInfo.EpisodeNumbers = new int[] { };
+            _parsedEpisodeInfo.EpisodeNumbers = Array.Empty<int>();
 
             Mocker.GetMock<IEpisodeService>()
                   .Setup(s => s.FindEpisodesBySceneNumbering(It.IsAny<int>(), seasonNumber, It.IsAny<int>()))
@@ -303,7 +303,7 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
         {
             GivenAbsoluteNumberingSeries();
             _parsedEpisodeInfo.SeasonNumber = seasonNumber;
-            _parsedEpisodeInfo.EpisodeNumbers = new int[] { };
+            _parsedEpisodeInfo.EpisodeNumbers = Array.Empty<int>();
 
             Mocker.GetMock<IEpisodeService>()
                   .Setup(s => s.FindEpisodesBySceneNumbering(It.IsAny<int>(), seasonNumber, It.IsAny<int>()))

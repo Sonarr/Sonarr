@@ -126,7 +126,7 @@ namespace NzbDrone.Host
 
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
-                    { apiKeyHeader, new string[] { } }
+                    { apiKeyHeader, Array.Empty<string>() }
                 });
 
                 var apikeyQuery = new OpenApiSecurityScheme
@@ -157,7 +157,7 @@ namespace NzbDrone.Host
 
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
-                    { apikeyQuery, new string[] { } }
+                    { apikeyQuery, Array.Empty<string>() }
                 });
             });
 

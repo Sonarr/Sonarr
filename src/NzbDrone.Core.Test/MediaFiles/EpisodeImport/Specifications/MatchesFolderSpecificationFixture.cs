@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
@@ -84,7 +85,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
         public void should_should_be_accepted_for_full_season()
         {
             _localEpisode.Path = @"C:\Test\Unsorted\Series.Title.S01\S01E01.mkv".AsOsAgnostic();
-            _localEpisode.FolderEpisodeInfo.EpisodeNumbers = new int[0];
+            _localEpisode.FolderEpisodeInfo.EpisodeNumbers = Array.Empty<int>();
             _localEpisode.FolderEpisodeInfo.FullSeason = true;
 
             GivenEpisodes(_localEpisode.FileEpisodeInfo, _localEpisode.FileEpisodeInfo.EpisodeNumbers);

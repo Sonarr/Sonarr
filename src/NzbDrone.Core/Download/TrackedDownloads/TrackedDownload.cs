@@ -1,4 +1,5 @@
-﻿using NzbDrone.Core.Indexers;
+﻿using System;
+using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Download.TrackedDownloads
@@ -18,7 +19,7 @@ namespace NzbDrone.Core.Download.TrackedDownloads
 
         public TrackedDownload()
         {
-            StatusMessages = new TrackedDownloadStatusMessage[] { };
+            StatusMessages = Array.Empty<TrackedDownloadStatusMessage>();
         }
 
         public void Warn(string message, params object[] args)

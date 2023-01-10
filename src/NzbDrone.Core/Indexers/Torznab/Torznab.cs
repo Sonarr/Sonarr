@@ -41,8 +41,8 @@ namespace NzbDrone.Core.Indexers.Torznab
             get
             {
                 yield return GetDefinition("HD4Free.xyz", GetSettings("http://hd4free.xyz"));
-                yield return GetDefinition("AnimeTosho Torrents", GetSettings("https://feed.animetosho.org", apiPath: @"/nabapi", categories: new int[0], animeCategories: new[] { 5070 }));
-                yield return GetDefinition("Nyaa Pantsu", GetSettings("https://nyaa.pantsu.cat", apiPath: @"/feed/torznab", categories: new int[0], animeCategories: new[] { 5070 }));
+                yield return GetDefinition("AnimeTosho Torrents", GetSettings("https://feed.animetosho.org", apiPath: @"/nabapi", categories: Array.Empty<int>(), animeCategories: new[] { 5070 }));
+                yield return GetDefinition("Nyaa Pantsu", GetSettings("https://nyaa.pantsu.cat", apiPath: @"/feed/torznab", categories: Array.Empty<int>(), animeCategories: new[] { 5070 }));
             }
         }
 

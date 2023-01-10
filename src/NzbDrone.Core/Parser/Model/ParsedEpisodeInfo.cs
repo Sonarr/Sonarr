@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Serialization;
@@ -32,9 +33,9 @@ namespace NzbDrone.Core.Parser.Model
 
         public ParsedEpisodeInfo()
         {
-            EpisodeNumbers = new int[0];
-            AbsoluteEpisodeNumbers = new int[0];
-            SpecialAbsoluteEpisodeNumbers = new decimal[0];
+            EpisodeNumbers = Array.Empty<int>();
+            AbsoluteEpisodeNumbers = Array.Empty<int>();
+            SpecialAbsoluteEpisodeNumbers = Array.Empty<decimal>();
             Languages = new List<Language>();
         }
 

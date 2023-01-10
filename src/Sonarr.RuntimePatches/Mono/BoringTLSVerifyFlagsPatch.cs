@@ -49,8 +49,8 @@ namespace NzbDrone.RuntimePatches.Mono
             Instance.DebugOpcodes("Before", codes);
 
             var targetType = method.DeclaringType;
-            var copyMethod = targetType.GetMethod("Copy", new Type[0]);
-            var disposeMethod = targetType.GetMethod("Dispose", new Type[0]);
+            var copyMethod = targetType.GetMethod("Copy", Array.Empty<Type>());
+            var disposeMethod = targetType.GetMethod("Dispose", Array.Empty<Type>());
             var setFlagsMethod = targetType.GetMethod("SetFlags", new[] { typeof(ulong) });
 
             if (patchable && copyMethod != null && disposeMethod != null && setFlagsMethod != null)

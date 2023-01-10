@@ -132,7 +132,7 @@ namespace NzbDrone.Core.Test.Download
         public void Download_report_should_trigger_indexer_backoff_on_http429_with_long_time()
         {
             var request = new HttpRequest("http://my.indexer.com");
-            var response = new HttpResponse(request, new HttpHeader(), new byte[0], (HttpStatusCode)429);
+            var response = new HttpResponse(request, new HttpHeader(), Array.Empty<byte>(), (HttpStatusCode)429);
             response.Headers["Retry-After"] = "300";
 
             var mock = WithUsenetClient();
@@ -152,7 +152,7 @@ namespace NzbDrone.Core.Test.Download
         public void Download_report_should_trigger_indexer_backoff_on_http429_based_on_date()
         {
             var request = new HttpRequest("http://my.indexer.com");
-            var response = new HttpResponse(request, new HttpHeader(), new byte[0], (HttpStatusCode)429);
+            var response = new HttpResponse(request, new HttpHeader(), Array.Empty<byte>(), (HttpStatusCode)429);
             response.Headers["Retry-After"] = DateTime.UtcNow.AddSeconds(300).ToString("r");
 
             var mock = WithUsenetClient();
