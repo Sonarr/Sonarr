@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using NzbDrone.Common.Extensions;
 
 namespace NzbDrone.Common.OAuth
 {
@@ -16,7 +17,7 @@ namespace NzbDrone.Common.OAuth
             {
                 var parameters = this.Where(p => p.Name.Equals(name));
 
-                if (parameters.Count() == 0)
+                if (parameters.Empty())
                 {
                     return null;
                 }
