@@ -12,9 +12,9 @@ namespace Sonarr.Http.Middleware
 {
     public class StartingUpMiddleware
     {
+        private const string MESSAGE = "Sonarr is starting up, please try again later";
         private readonly RequestDelegate _next;
         private readonly IRuntimeInfo _runtimeInfo;
-        private static readonly string MESSAGE = "Sonarr is starting up, please try again later";
 
         public StartingUpMiddleware(RequestDelegate next, IRuntimeInfo runtimeInfo)
         {
@@ -32,7 +32,7 @@ namespace Sonarr.Http.Middleware
 
                 context.Response.StatusCode = 503;
                 context.Response.ContentType = isJson ? "application/json" : "text/plain";
-                await context.Response.Body.WriteAsync(bytes, 0, bytes.Length);
+                await context.Response.Body.WriteAsync(bytes);
 
                 return;
             }
