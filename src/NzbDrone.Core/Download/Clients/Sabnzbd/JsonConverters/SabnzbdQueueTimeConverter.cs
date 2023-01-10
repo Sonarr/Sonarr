@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd.JsonConverters
         {
             var split = reader.Value.ToString().Split(':').Select(int.Parse).ToArray();
 
-            switch (split.Count())
+            switch (split.Length)
             {
                 case 4:
                     return new TimeSpan((split[0] * 24) + split[1], split[2], split[3]);

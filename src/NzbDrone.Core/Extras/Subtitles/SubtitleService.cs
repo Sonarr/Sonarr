@@ -149,7 +149,7 @@ namespace NzbDrone.Core.Extras.Subtitles
                                               .Where(file => MediaFileExtensions.Extensions.Contains(Path.GetExtension(file)))
                                               .ToList();
 
-                if (videoFiles.Count() > 2)
+                if (videoFiles.Count > 2)
                 {
                     return importedFiles;
                 }

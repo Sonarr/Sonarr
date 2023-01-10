@@ -68,7 +68,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
         {
             var newFiles = filterExistingFiles ? _mediaFileService.FilterExistingFiles(videoFiles.ToList(), series) : videoFiles.ToList();
 
-            _logger.Debug("Analyzing {0}/{1} files.", newFiles.Count, videoFiles.Count());
+            _logger.Debug("Analyzing {0}/{1} files.", newFiles.Count, videoFiles.Count);
 
             ParsedEpisodeInfo downloadClientItemInfo = null;
 

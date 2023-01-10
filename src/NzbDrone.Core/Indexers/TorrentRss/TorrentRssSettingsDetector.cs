@@ -177,7 +177,7 @@ namespace NzbDrone.Core.Indexers.TorrentRss
             releases = ParseResponse(parser, response);
             ValidateReleases(releases, indexerSettings);
 
-            if (releases.Count(r => r.Size >= ValidSizeThreshold) > releases.Count() / 2)
+            if (releases.Count(r => r.Size >= ValidSizeThreshold) > releases.Length / 2)
             {
                 if (releases.Any(r => r.Size < ValidSizeThreshold))
                 {
