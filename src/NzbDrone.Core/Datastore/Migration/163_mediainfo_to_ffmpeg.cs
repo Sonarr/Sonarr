@@ -627,13 +627,13 @@ namespace NzbDrone.Core.Datastore.Migration
 
             try
             {
-                if (audioChannelPositions.Contains("+"))
+                if (audioChannelPositions.Contains('+'))
                 {
                     return audioChannelPositions.Split('+')
                         .Sum(s => decimal.Parse(s.Trim(), CultureInfo.InvariantCulture));
                 }
 
-                if (audioChannelPositions.Contains("/"))
+                if (audioChannelPositions.Contains('/'))
                 {
                     var channelStringList = Regex.Replace(audioChannelPositions,
                             @"^\d+\sobjects",
