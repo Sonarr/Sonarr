@@ -115,7 +115,7 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
         public void should_record_indexer_failure_if_caps_throw()
         {
             var request = new HttpRequest("http://my.indexer.com");
-            var response = new HttpResponse(request, new HttpHeader(), new byte[0], (HttpStatusCode)429);
+            var response = new HttpResponse(request, new HttpHeader(), Array.Empty<byte>(), (HttpStatusCode)429);
             response.Headers["Retry-After"] = "300";
 
             Mocker.GetMock<INewznabCapabilitiesProvider>()

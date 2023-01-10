@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
         {
             Mocker.GetMock<IProvideDownloadClient>()
                   .Setup(s => s.GetDownloadClients())
-                  .Returns(new IDownloadClient[0]);
+                  .Returns(Array.Empty<IDownloadClient>());
 
             Subject.Check().ShouldBeWarning();
         }

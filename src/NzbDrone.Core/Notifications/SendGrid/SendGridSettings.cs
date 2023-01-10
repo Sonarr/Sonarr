@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using FluentValidation;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
@@ -24,7 +25,7 @@ namespace NzbDrone.Core.Notifications.SendGrid
         public SendGridSettings()
         {
             BaseUrl = "https://api.sendgrid.com/v3/";
-            Recipients = new string[] { };
+            Recipients = Array.Empty<string>();
         }
 
         public string BaseUrl { get; set; }

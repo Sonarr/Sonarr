@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -91,7 +92,7 @@ namespace NzbDrone.Core.Test.MediaFiles
         private void WasImportedResponse()
         {
             Mocker.GetMock<IDiskScanService>().Setup(c => c.GetVideoFiles(It.IsAny<string>(), It.IsAny<bool>()))
-                  .Returns(new string[0]);
+                  .Returns(Array.Empty<string>());
         }
 
         [Test]
@@ -140,7 +141,7 @@ namespace NzbDrone.Core.Test.MediaFiles
 
             Mocker.GetMock<IDiskScanService>()
                   .Setup(c => c.GetVideoFiles(It.IsAny<string>(), It.IsAny<bool>()))
-                  .Returns(new string[0]);
+                  .Returns(Array.Empty<string>());
 
             Subject.ProcessRootFolder(new DirectoryInfo(_droneFactory));
 

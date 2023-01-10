@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using FluentValidation;
 using NzbDrone.Core.Annotations;
@@ -22,9 +23,9 @@ namespace NzbDrone.Core.ImportLists.Sonarr
         {
             BaseUrl = "";
             ApiKey = "";
-            ProfileIds = new int[] { };
-            LanguageProfileIds = new int[] { };
-            TagIds = new int[] { };
+            ProfileIds = Array.Empty<int>();
+            LanguageProfileIds = Array.Empty<int>();
+            TagIds = Array.Empty<int>();
         }
 
         [FieldDefinition(0, Label = "Full URL", HelpText = "URL, including port, of the Sonarr V3 instance to import from")]

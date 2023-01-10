@@ -890,8 +890,8 @@ namespace NzbDrone.Core.Parser
                 result = new ParsedEpisodeInfo
                 {
                     ReleaseTitle = releaseTitle,
-                    EpisodeNumbers = new int[0],
-                    AbsoluteEpisodeNumbers = new int[0]
+                    EpisodeNumbers = Array.Empty<int>(),
+                    AbsoluteEpisodeNumbers = Array.Empty<int>()
                 };
 
                 foreach (Match matchGroup in matchCollection)

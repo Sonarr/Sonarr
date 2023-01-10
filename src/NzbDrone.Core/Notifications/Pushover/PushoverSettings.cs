@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using FluentValidation;
 using NzbDrone.Core.Annotations;
@@ -23,7 +24,7 @@ namespace NzbDrone.Core.Notifications.Pushover
         public PushoverSettings()
         {
             Priority = 0;
-            Devices = new string[] { };
+            Devices = Array.Empty<string>();
         }
 
         // TODO: Get Pushover to change our app name (or create a new app) when we have a new logo

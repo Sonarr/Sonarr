@@ -60,7 +60,7 @@ namespace NzbDrone.Common.Http
 
         public string[] GetCookieHeaders()
         {
-            return Headers.GetValues("Set-Cookie") ?? new string[0];
+            return Headers.GetValues("Set-Cookie") ?? Array.Empty<string>();
         }
 
         public Dictionary<string, string> GetCookies()

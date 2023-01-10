@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using FluentValidation;
@@ -36,7 +37,7 @@ namespace NzbDrone.Core.Indexers.FileList
                 (int)FileListCategories.TV_4K
             };
 
-            AnimeCategories = new int[0];
+            AnimeCategories = Array.Empty<int>();
         }
 
         [FieldDefinition(0, Label = "Username", Privacy = PrivacyLevel.UserName)]

@@ -112,7 +112,7 @@ namespace NzbDrone.Core.Download.Clients.Hadouken
         {
             if (torrentsRaw == null)
             {
-                return new HadoukenTorrent[0];
+                return Array.Empty<HadoukenTorrent>();
             }
 
             var torrents = new List<HadoukenTorrent>();
