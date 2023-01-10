@@ -109,7 +109,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
                     // Ensure that this is either the first episode
                     // or is the last episode in a season that has 10 or more episodes
-                    if (seasonEpisodes.First().Id == firstEpisode.Id || (seasonEpisodes.Count() >= 10 && seasonEpisodes.Last().Id == firstEpisode.Id))
+                    if (seasonEpisodes.First().Id == firstEpisode.Id || (seasonEpisodes.Count >= 10 && seasonEpisodes.Last().Id == firstEpisode.Id))
                     {
                         _logger.Debug("Possible double episode, doubling allowed size.");
                         maxSize = maxSize * 2;

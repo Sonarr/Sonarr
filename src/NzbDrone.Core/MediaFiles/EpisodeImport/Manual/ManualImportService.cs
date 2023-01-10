@@ -244,7 +244,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                 // If the series is unknown for the directory and there are more than 100 files in the folder don't process the items before returning.
                 var files = _diskScanService.FilterPaths(rootFolder, _diskScanService.GetVideoFiles(baseFolder, false));
 
-                if (files.Count() > 100)
+                if (files.Count > 100)
                 {
                     _logger.Warn("Unable to determine series from folder name and found more than 100 files. Skipping parsing");
                     return ProcessDownloadDirectory(rootFolder, files);

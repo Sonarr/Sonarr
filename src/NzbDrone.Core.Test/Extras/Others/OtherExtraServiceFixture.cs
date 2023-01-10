@@ -71,7 +71,7 @@ namespace NzbDrone.Core.Test.Extras.Others
 
             var results = Subject.ImportFiles(_localEpisode, _episodeFile, files, true).ToList();
 
-            results.Count().Should().Be(1);
+            results.Count.Should().Be(1);
 
             results[0].RelativePath.AsOsAgnostic().PathEquals(Path.Combine("Season 1", expectedOutputPath).AsOsAgnostic()).Should().Be(true);
         }
@@ -87,7 +87,7 @@ namespace NzbDrone.Core.Test.Extras.Others
 
             var results = Subject.ImportFiles(_localEpisode, _episodeFile, files, true).ToList();
 
-            results.Count().Should().Be(1);
+            results.Count.Should().Be(1);
         }
     }
 }

@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeServiceTests
 
         private void GivenEpisodesWithTitles(params string[] titles)
         {
-            for (int i = 0; i < titles.Count(); i++)
+            for (int i = 0; i < titles.Length; i++)
             {
                 _episodes[i].Title = titles[i];
             }
