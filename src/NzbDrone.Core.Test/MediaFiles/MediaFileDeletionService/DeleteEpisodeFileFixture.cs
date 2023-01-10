@@ -14,7 +14,7 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaFileDeletionService
     [TestFixture]
     public class DeleteEpisodeFileFixture : CoreTest<Core.MediaFiles.MediaFileDeletionService>
     {
-        private static readonly string RootFolder = @"C:\Test\TV";
+        private const string ROOT_FOLDER = @"C:\Test\TV";
         private Series _series;
         private EpisodeFile _episodeFile;
 
@@ -22,7 +22,7 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaFileDeletionService
         public void Setup()
         {
             _series = Builder<Series>.CreateNew()
-                                     .With(s => s.Path = Path.Combine(RootFolder, "Series Title"))
+                                     .With(s => s.Path = Path.Combine(ROOT_FOLDER, "Series Title"))
                                      .Build();
 
             _episodeFile = Builder<EpisodeFile>.CreateNew()
@@ -32,7 +32,7 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaFileDeletionService
 
             Mocker.GetMock<IDiskProvider>()
                   .Setup(s => s.GetParentFolder(_series.Path))
-                  .Returns(RootFolder);
+                  .Returns(ROOT_FOLDER);
 
             Mocker.GetMock<IDiskProvider>()
                   .Setup(s => s.GetParentFolder(_episodeFile.Path))
@@ -42,14 +42,14 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaFileDeletionService
         private void GivenRootFolderExists()
         {
             Mocker.GetMock<IDiskProvider>()
-                  .Setup(s => s.FolderExists(RootFolder))
+                  .Setup(s => s.FolderExists(ROOT_FOLDER))
                   .Returns(true);
         }
 
         private void GivenRootFolderHasFolders()
         {
             Mocker.GetMock<IDiskProvider>()
-                  .Setup(s => s.GetDirectories(RootFolder))
+                  .Setup(s => s.GetDirectories(ROOT_FOLDER))
                   .Returns(new[] { _series.Path });
         }
 

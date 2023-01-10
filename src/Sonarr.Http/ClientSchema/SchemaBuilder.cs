@@ -13,7 +13,7 @@ namespace Sonarr.Http.ClientSchema
 {
     public static class SchemaBuilder
     {
-        private static readonly string PRIVATE_VALUE = "********";
+        private const string PRIVATE_VALUE = "********";
         private static Dictionary<Type, FieldMapping[]> _mappings = new Dictionary<Type, FieldMapping[]>();
 
         public static List<Field> ToSchema(object model)

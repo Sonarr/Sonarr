@@ -23,13 +23,13 @@ namespace NzbDrone.Core.Authentication
 
     public class UserService : IUserService, IHandle<ApplicationStartedEvent>
     {
+        private const int ITERATIONS = 10000;
+        private const int SALT_SIZE = 128 / 8;
+        private const int NUMBER_OF_BYTES = 256 / 8;
+
         private readonly IUserRepository _repo;
         private readonly IAppFolderInfo _appFolderInfo;
         private readonly IDiskProvider _diskProvider;
-
-        private static readonly int ITERATIONS = 10000;
-        private static readonly int SALT_SIZE = 128 / 8;
-        private static readonly int NUMBER_OF_BYTES = 256 / 8;
 
         public UserService(IUserRepository repo, IAppFolderInfo appFolderInfo, IDiskProvider diskProvider)
         {
