@@ -133,7 +133,7 @@ namespace NzbDrone.Core.Localization
 
             await CopyInto(dictionary, baseFilenamePath).ConfigureAwait(false);
 
-            if (culture.Contains("_"))
+            if (culture.Contains('_'))
             {
                 var languageBaseFilenamePath = Path.Combine(prefix, GetResourceFilename(culture.Split('_')[0]));
                 await CopyInto(dictionary, languageBaseFilenamePath).ConfigureAwait(false);
