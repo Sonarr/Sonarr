@@ -27,7 +27,7 @@ namespace NzbDrone.Test.Common
 
         public int Start()
         {
-            int threadId = Thread.CurrentThread.ManagedThreadId;
+            int threadId = Environment.CurrentManagedThreadId;
             lock (_mutex)
             {
                 _threads[threadId] = 1;
