@@ -11,7 +11,7 @@ namespace NzbDrone.Core.Indexers
     public class TorrentRssParser : RssParser
     {
         // Use to sum/calculate Peers as Leechers+Seeders
-        public bool CalculatePeersAsSum { get; set; } = false;
+        public bool CalculatePeersAsSum { get; set; }
 
         // Use the specified element name to determine the Infohash
         public string InfoHashElementName { get; set; }
