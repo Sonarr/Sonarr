@@ -93,7 +93,7 @@ namespace Sonarr.Api.V3.System.Backup
                 throw new BadRequestException("file must be provided");
             }
 
-            var file = files.First();
+            var file = files[0];
             var extension = Path.GetExtension(file.FileName);
 
             if (!ValidExtensions.Contains(extension))
