@@ -69,7 +69,7 @@ namespace NzbDrone.Core.Notifications.Discord
                     case DiscordGrabFieldType.Overview:
                         var overview = episodes.First().Overview ?? "";
                         discordField.Name = "Overview";
-                        discordField.Value = overview.Length <= 300 ? overview : overview.Substring(0, 300) + "...";
+                        discordField.Value = overview.Length <= 300 ? overview : $"{overview.AsSpan(0, 300)}...";
                         break;
                     case DiscordGrabFieldType.Rating:
                         discordField.Name = "Rating";
@@ -160,7 +160,7 @@ namespace NzbDrone.Core.Notifications.Discord
                     case DiscordImportFieldType.Overview:
                         var overview = episodes.First().Overview ?? "";
                         discordField.Name = "Overview";
-                        discordField.Value = overview.Length <= 300 ? overview : overview.Substring(0, 300) + "...";
+                        discordField.Value = overview.Length <= 300 ? overview : $"{overview.AsSpan(0, 300)}...";
                         break;
                     case DiscordImportFieldType.Rating:
                         discordField.Name = "Rating";

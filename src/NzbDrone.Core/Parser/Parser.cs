@@ -545,7 +545,7 @@ namespace NzbDrone.Core.Parser
                 var titleWithoutExtension = RemoveFileExtension(title).ToCharArray();
                 Array.Reverse(titleWithoutExtension);
 
-                title = new string(titleWithoutExtension) + title.Substring(titleWithoutExtension.Length);
+                title = string.Concat(new string(titleWithoutExtension), title.AsSpan(titleWithoutExtension.Length));
 
                 Logger.Debug("Reversed name detected. Converted to '{0}'", title);
             }
@@ -576,7 +576,7 @@ namespace NzbDrone.Core.Parser
                     var titleWithoutExtension = RemoveFileExtension(title).ToCharArray();
                     Array.Reverse(titleWithoutExtension);
 
-                    title = new string(titleWithoutExtension) + title.Substring(titleWithoutExtension.Length);
+                    title = string.Concat(new string(titleWithoutExtension), title.AsSpan(titleWithoutExtension.Length));
 
                     Logger.Debug("Reversed name detected. Converted to '{0}'", title);
                 }

@@ -170,7 +170,7 @@ namespace NzbDrone.Common.Http
 
             if (baseSlashIndex >= 0)
             {
-                return basePath.Substring(0, baseSlashIndex) + "/" + relativePath;
+                return $"{basePath.AsSpan(0, baseSlashIndex)}/{relativePath}";
             }
 
             return relativePath;
