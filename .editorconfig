@@ -194,7 +194,6 @@ dotnet_diagnostic.CA1819.severity = suggestion
 dotnet_diagnostic.CA1822.severity = suggestion
 dotnet_diagnostic.CA1823.severity = suggestion
 dotnet_diagnostic.CA1824.severity = suggestion
-dotnet_diagnostic.CA1826.severity = suggestion
 dotnet_diagnostic.CA1827.severity = suggestion
 dotnet_diagnostic.CA1829.severity = suggestion
 dotnet_diagnostic.CA1834.severity = suggestion
