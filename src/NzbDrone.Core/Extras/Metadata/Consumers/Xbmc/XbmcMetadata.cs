@@ -239,7 +239,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
                 xmlResult += "https://www.thetvdb.com/?tab=series&id=" + series.TvdbId;
             }
 
-            return xmlResult == string.Empty ? null : new MetadataFileResult("tvshow.nfo", xmlResult);
+            return xmlResult.IsNullOrWhiteSpace() ? null : new MetadataFileResult("tvshow.nfo", xmlResult);
         }
 
         public override MetadataFileResult EpisodeMetadata(Series series, EpisodeFile episodeFile)
