@@ -1,7 +1,9 @@
 <Project>
   <!-- Common to all Sonarr Projects -->
   <PropertyGroup>
+    <AnalysisLevel>6.0-all</AnalysisLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
 
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -72,7 +74,7 @@
     <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
     <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
-    
+
     <Deterministic Condition="$(AssemblyVersion.EndsWith('*'))">False</Deterministic>
   </PropertyGroup>
   <!-- Set the AssemblyConfiguration attribute for projects -->
