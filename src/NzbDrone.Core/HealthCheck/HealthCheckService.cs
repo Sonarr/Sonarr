@@ -33,8 +33,8 @@ namespace NzbDrone.Core.HealthCheck
 
         private readonly ICached<HealthCheck> _healthCheckResults;
 
-        private bool _hasRunHealthChecksAfterGracePeriod = false;
-        private bool _isRunningHealthChecksAfterGracePeriod = false;
+        private bool _hasRunHealthChecksAfterGracePeriod;
+        private bool _isRunningHealthChecksAfterGracePeriod;
 
         public HealthCheckService(IEnumerable<IProvideHealthCheck> healthChecks,
                                   IEventAggregator eventAggregator,

@@ -27,7 +27,7 @@ namespace NzbDrone.Mono.Disk
 
         private static Dictionary<string, bool> _fileSystems;
 
-        private bool _hasLoggedProcMountFailure = false;
+        private bool _hasLoggedProcMountFailure;
 
         public ProcMountProvider(Logger logger)
         {

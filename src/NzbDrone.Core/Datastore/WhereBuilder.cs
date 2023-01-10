@@ -15,9 +15,9 @@ namespace NzbDrone.Core.Datastore
 
         private const DbType EnumerableMultiParameter = (DbType)(-1);
         private readonly string _paramNamePrefix;
-        private readonly bool _requireConcreteValue = false;
-        private int _paramCount = 0;
-        private bool _gotConcreteValue = false;
+        private readonly bool _requireConcreteValue;
+        private int _paramCount;
+        private bool _gotConcreteValue;
 
         public WhereBuilder(Expression filter, bool requireConcreteValue, int seq)
         {
