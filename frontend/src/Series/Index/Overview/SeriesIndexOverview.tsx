@@ -9,6 +9,7 @@ import { icons } from 'Helpers/Props';
 import DeleteSeriesModal from 'Series/Delete/DeleteSeriesModal';
 import EditSeriesModalConnector from 'Series/Edit/EditSeriesModalConnector';
 import SeriesIndexProgressBar from 'Series/Index/ProgressBar/SeriesIndexProgressBar';
+import SeriesIndexPosterSelect from 'Series/Index/Select/SeriesIndexPosterSelect';
 import SeriesPoster from 'Series/SeriesPoster';
 import { executeCommand } from 'Store/Actions/commandActions';
 import dimensions from 'Styles/Variables/dimensions';
@@ -35,6 +36,7 @@ interface SeriesIndexOverviewProps {
   posterWidth: number;
   posterHeight: number;
   rowHeight: number;
+  isSelectMode: boolean;
   isSmallScreen: boolean;
 }
 
@@ -45,6 +47,7 @@ function SeriesIndexOverview(props: SeriesIndexOverviewProps) {
     posterWidth,
     posterHeight,
     rowHeight,
+    isSelectMode,
     isSmallScreen,
   } = props;
 
@@ -135,6 +138,10 @@ function SeriesIndexOverview(props: SeriesIndexOverviewProps) {
       <div className={styles.content}>
         <div className={styles.poster}>
           <div className={styles.posterContainer}>
+            {isSelectMode ? (
+              <SeriesIndexPosterSelect seriesId={seriesId} />
+            ) : null}
+
             {status === 'ended' && (
               <div className={styles.ended} title="Ended" />
             )}

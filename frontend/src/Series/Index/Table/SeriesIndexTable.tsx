@@ -25,6 +25,7 @@ interface RowItemData {
   items: Series[];
   sortKey: string;
   columns: Column[];
+  isSelectMode: boolean;
 }
 
 interface SeriesIndexTableProps {
@@ -34,6 +35,7 @@ interface SeriesIndexTableProps {
   jumpToCharacter?: string;
   scrollTop?: number;
   scrollerRef: React.MutableRefObject<HTMLElement>;
+  isSelectMode: boolean;
   isSmallScreen: boolean;
 }
 
@@ -47,7 +49,7 @@ const Row: React.FC<ListChildComponentProps<RowItemData>> = ({
   style,
   data,
 }) => {
-  const { items, sortKey, columns } = data;
+  const { items, sortKey, columns, isSelectMode } = data;
 
   if (index >= items.length) {
     return null;
@@ -67,6 +69,7 @@ const Row: React.FC<ListChildComponentProps<RowItemData>> = ({
         seriesId={series.id}
         sortKey={sortKey}
         columns={columns}
+        isSelectMode={isSelectMode}
       />
     </div>
   );
@@ -82,6 +85,7 @@ function SeriesIndexTable(props: SeriesIndexTableProps) {
     sortKey,
     sortDirection,
     jumpToCharacter,
+    isSelectMode,
     isSmallScreen,
     scrollerRef,
   } = props;
@@ -177,6 +181,7 @@ function SeriesIndexTable(props: SeriesIndexTableProps) {
           columns={columns}
           sortKey={sortKey}
           sortDirection={sortDirection}
+          isSelectMode={isSelectMode}
         />
         <List<RowItemData>
           ref={listRef}
@@ -193,6 +198,7 @@ function SeriesIndexTable(props: SeriesIndexTableProps) {
             items,
             sortKey,
             columns,
+            isSelectMode,
           }}
         >
           {Row}

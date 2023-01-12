@@ -1,0 +1,36 @@
+.checkContainer {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 3;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background-color: var(--defaultColor);
+}
+
+.icon {
+  position: absolute;
+  top: -1px;
+  left: -1px;
+}
+
+.selected {
+  composes: icon;
+
+  color: var(--sonarrBlue);
+
+  &:hover {
+    color: var(--white);
+  }
+}
+
+.unselected {
+  composes: icon;
+
+  color: var(--white);
+
+  &:hover {
+    color: var(--sonarrBlue);
+  }
+}

@@ -9,6 +9,7 @@ import { icons } from 'Helpers/Props';
 import DeleteSeriesModal from 'Series/Delete/DeleteSeriesModal';
 import EditSeriesModalConnector from 'Series/Edit/EditSeriesModalConnector';
 import SeriesIndexProgressBar from 'Series/Index/ProgressBar/SeriesIndexProgressBar';
+import SeriesIndexPosterSelect from 'Series/Index/Select/SeriesIndexPosterSelect';
 import SeriesPoster from 'Series/SeriesPoster';
 import { executeCommand } from 'Store/Actions/commandActions';
 import createUISettingsSelector from 'Store/Selectors/createUISettingsSelector';
@@ -21,12 +22,13 @@ import styles from './SeriesIndexPoster.css';
 interface SeriesIndexPosterProps {
   seriesId: number;
   sortKey: string;
+  isSelectMode: boolean;
   posterWidth: number;
   posterHeight: number;
 }
 
 function SeriesIndexPoster(props: SeriesIndexPosterProps) {
-  const { seriesId, sortKey, posterWidth, posterHeight } = props;
+  const { seriesId, sortKey, isSelectMode, posterWidth, posterHeight } = props;
 
   const { series, qualityProfile, isRefreshingSeries, isSearchingSeries } =
     useSelector(createSeriesIndexItemSelector(props.seriesId));
@@ -120,6 +122,8 @@ function SeriesIndexPoster(props: SeriesIndexPosterProps) {
   return (
     <div className={styles.content}>
       <div className={styles.posterContainer}>
+        {isSelectMode ? <SeriesIndexPosterSelect seriesId={seriesId} /> : null}
+
         <Label className={styles.controls}>
           <SpinnerIconButton
             className={styles.action}

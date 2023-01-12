@@ -27,6 +27,7 @@ interface RowItemData {
   posterWidth: number;
   posterHeight: number;
   rowHeight: number;
+  isSelectMode: boolean;
   isSmallScreen: boolean;
 }
 
@@ -37,6 +38,7 @@ interface SeriesIndexOverviewsProps {
   jumpToCharacter?: string;
   scrollTop?: number;
   scrollerRef: React.MutableRefObject<HTMLElement>;
+  isSelectMode: boolean;
   isSmallScreen: boolean;
 }
 
@@ -65,7 +67,14 @@ function getWindowScrollTopPosition() {
 }
 
 function SeriesIndexOverviews(props: SeriesIndexOverviewsProps) {
-  const { items, sortKey, jumpToCharacter, isSmallScreen, scrollerRef } = props;
+  const {
+    items,
+    sortKey,
+    jumpToCharacter,
+    scrollerRef,
+    isSelectMode,
+    isSmallScreen,
+  } = props;
 
   const { size: posterSize, detailedProgressBar } = useSelector(
     selectOverviewOptions
@@ -191,6 +200,7 @@ function SeriesIndexOverviews(props: SeriesIndexOverviewsProps) {
           posterWidth,
           posterHeight,
           rowHeight,
+          isSelectMode,
           isSmallScreen,
         }}
       >
