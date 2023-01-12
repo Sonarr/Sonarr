@@ -51,7 +51,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[诸神字幕组][致不灭的你 第二季][Anime-Series Title S2][10][简繁日语字幕][1080P][MKV HEVC]", "Anime-Series Title", "诸神字幕组", 2, 10)]
         [TestCase("[NC-Raws] 魔王学院的不适任者～史上最强的魔王始祖，转生就读子孙们的学校～第二季 / Anime-Series Title S2 - 01 (Baha 1920x1080 AVC AAC MP4)", "Anime-Series Title", "NC-Raws", 2, 1)]
         [TestCase("[Lilith-Raws] Anime-Series Title S02 - 11 [Baha][WEB-DL][1080p][AVC AAC][CHT][MP4].mp4", "Anime-Series Title", "Lilith-Raws", 2, 11)]
-        [TestCase("[Lilith-Raws] Anime-Series Title S02 - 01 [Baha][WEB-DL][1080p][AVC AAC][CHT][MP4].mp4", "Anime-Series Title", "Lilith-Raws", 2, 1)]
+        [TestCase("[天月搬运组] 不要欺负我，长瀞同学 2nd Attack / Anime-Series Title S02 - 01 [1080P][简繁日外挂]", "Anime-Series Title", "天月搬运组", 2, 1)]
+        [TestCase("[Skymoon-Raws] 怕痛的我，把防御力点满就对了 第二季 / Anime-Series Title S02 - 01 [ViuTV][WEB-DL][1080p][AVC AAC][繁体外挂][MP4+ASS](正式版本) ", "Anime-Series Title", "Skymoon-Raws", 2, 1)]
         public void should_parse_chinese_anime_season_episode_releases(string postTitle, string title, string subgroup, int seasonNumber, int episodeNumber)
         {
             postTitle = XmlCleaner.ReplaceUnicode(postTitle);
