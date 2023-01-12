@@ -11,6 +11,7 @@ import SpinnerIconButton from 'Components/Link/SpinnerIconButton';
 import ProgressBar from 'Components/ProgressBar';
 import RelativeDateCellConnector from 'Components/Table/Cells/RelativeDateCellConnector';
 import VirtualTableRowCell from 'Components/Table/Cells/VirtualTableRowCell';
+import VirtualTableSelectCell from 'Components/Table/Cells/VirtualTableSelectCell';
 import Column from 'Components/Table/Column';
 import TagListConnector from 'Components/TagListConnector';
 import { icons } from 'Helpers/Props';
@@ -32,10 +33,11 @@ interface SeriesIndexRowProps {
   seriesId: number;
   sortKey: string;
   columns: Column[];
+  isSelectMode: boolean;
 }
 
 function SeriesIndexRow(props: SeriesIndexRowProps) {
-  const { seriesId, columns } = props;
+  const { seriesId, columns, isSelectMode } = props;
 
   const {
     series,
@@ -82,6 +84,7 @@ function SeriesIndexRow(props: SeriesIndexRowProps) {
   const [hasBannerError, setHasBannerError] = useState(false);
   const [isEditSeriesModalOpen, setIsEditSeriesModalOpen] = useState(false);
   const [isDeleteSeriesModalOpen, setIsDeleteSeriesModalOpen] = useState(false);
+  const [selectState, selectDispatch] = useSelect();
 
   const onRefreshPress = useCallback(() => {
     dispatch(
@@ -130,8 +133,29 @@ function SeriesIndexRow(props: SeriesIndexRowProps) {
     // Mock handler to satisfy `onChange` being required for `CheckInput`.
   }, []);
 
+  const onSelectedChange = useCallback(
+    ({ id, value, shiftKey }) => {
+      selectDispatch({
+        type: SelectActionType.ToggleSelected,
+        id,
+        isSelected: value,
+        shiftKey,
+      });
+    },
+    [selectDispatch]
+  );
+
   return (
     <>
+      {isSelectMode ? (
+        <VirtualTableSelectCell
+          id={seriesId}
+          isSelected={selectState.selectedState[seriesId]}
+          isDisabled={false}
+          onSelectedChange={onSelectedChange}
+        />
+      ) : null}
+
       {columns.map((column) => {
         const { name, isVisible } = column;
 

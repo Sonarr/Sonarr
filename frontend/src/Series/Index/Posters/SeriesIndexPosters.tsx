@@ -36,6 +36,7 @@ interface CellItemData {
   };
   items: Series[];
   sortKey: string;
+  isSelectMode: boolean;
 }
 
 interface SeriesIndexPostersProps {
@@ -45,6 +46,7 @@ interface SeriesIndexPostersProps {
   jumpToCharacter?: string;
   scrollTop?: number;
   scrollerRef: React.MutableRefObject<HTMLElement>;
+  isSelectMode: boolean;
   isSmallScreen: boolean;
 }
 
@@ -63,10 +65,8 @@ const Cell: React.FC<GridChildComponentProps<CellItemData>> = ({
   style,
   data,
 }) => {
-  const { layout, items, sortKey } = data;
-
+  const { layout, items, sortKey, isSelectMode } = data;
   const { columnCount, padding, posterWidth, posterHeight } = layout;
-
   const index = rowIndex * columnCount + columnIndex;
 
   if (index >= items.length) {
@@ -85,6 +85,7 @@ const Cell: React.FC<GridChildComponentProps<CellItemData>> = ({
       <SeriesIndexPoster
         seriesId={series.id}
         sortKey={sortKey}
+        isSelectMode={isSelectMode}
         posterWidth={posterWidth}
         posterHeight={posterHeight}
       />
@@ -97,7 +98,14 @@ function getWindowScrollTopPosition() {
 }
 
 export default function SeriesIndexPosters(props: SeriesIndexPostersProps) {
-  const { scrollerRef, items, sortKey, jumpToCharacter, isSmallScreen } = props;
+  const {
+    scrollerRef,
+    items,
+    sortKey,
+    jumpToCharacter,
+    isSelectMode,
+    isSmallScreen,
+  } = props;
 
   const { posterOptions } = useSelector(seriesIndexSelector);
   const ref: React.MutableRefObject<Grid> = useRef();
@@ -273,6 +281,7 @@ export default function SeriesIndexPosters(props: SeriesIndexPostersProps) {
           },
           items,
           sortKey,
+          isSelectMode,
         }}
       >
         {Cell}
