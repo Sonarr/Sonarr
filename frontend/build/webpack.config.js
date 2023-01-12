@@ -154,7 +154,7 @@ module.exports = (env) => {
           }
         },
         {
-          test: /\.js?$/,
+          test: /\.jsx?$/,
           exclude: /(node_modules|JsLibraries)/,
           use: [
             {
