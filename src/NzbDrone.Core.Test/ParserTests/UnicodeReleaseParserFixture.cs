@@ -7,6 +7,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Test.Framework;
+using Sentry;
 
 namespace NzbDrone.Core.Test.ParserTests
 {
@@ -47,35 +48,11 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[SweetSub&LoliHouse] 来自深渊 烈日黄金乡 / Anime-Series Title S2 - 07 [WebRip 1080p HEVC-10bit AAC][简繁日内封字幕]", "Anime-Series Title", "SweetSub&LoliHouse", 2, 7)]
         [TestCase("[LoliHouse] Love Live! 虹咲学园学园偶像同好会 第二季 / Anime-Series Title S2 - 10 [WebRip 1080p HEVC-10bit AAC][简繁内封字幕]", "Anime-Series Title", "LoliHouse", 2, 10)]
         [TestCase("[澄空学园&雪飘工作室&LoliHouse] 辉夜大小姐想让我告白 第三季 / Anime-Series Title S3 - 06 [WebRip 1080p HEVC-10bit AAC][简繁内封字幕]", "Anime-Series Title", "澄空学园&雪飘工作室&LoliHouse", 3, 6)]
-        public void should_parse_chinese_anime_season_episode_releases_1(string postTitle, string title, string subgroup, int seasonNumber, int episodeNumber)
-        {
-            postTitle = XmlCleaner.ReplaceUnicode(postTitle);
-
-            var result = Parser.Parser.ParseTitle(postTitle);
-            result.Should().NotBeNull();
-            result.ReleaseGroup.Should().Be(subgroup);
-            result.SeasonNumber.Should().Be(seasonNumber);
-            result.EpisodeNumbers.Single().Should().Be(episodeNumber);
-            result.SeriesTitle.Should().Be(title);
-            result.FullSeason.Should().BeFalse();
-        }
-
         [TestCase("[诸神字幕组][致不灭的你 第二季][Anime-Series Title S2][10][简繁日语字幕][1080P][MKV HEVC]", "Anime-Series Title", "诸神字幕组", 2, 10)]
-        public void should_parse_chinese_anime_season_episode_releases_2(string postTitle, string title, string subgroup, int seasonNumber, int episodeNumber)
-        {
-            postTitle = XmlCleaner.ReplaceUnicode(postTitle);
-
-            var result = Parser.Parser.ParseTitle(postTitle);
-            result.Should().NotBeNull();
-            result.ReleaseGroup.Should().Be(subgroup);
-            result.SeasonNumber.Should().Be(seasonNumber);
-            result.EpisodeNumbers.Single().Should().Be(episodeNumber);
-            result.SeriesTitle.Should().Be(title);
-            result.FullSeason.Should().BeFalse();
-        }
-
         [TestCase("[NC-Raws] 魔王学院的不适任者～史上最强的魔王始祖，转生就读子孙们的学校～第二季 / Anime-Series Title S2 - 01 (Baha 1920x1080 AVC AAC MP4)", "Anime-Series Title", "NC-Raws", 2, 1)]
-        public void should_parse_chinese_anime_season_episode_releases_3(string postTitle, string title, string subgroup, int seasonNumber, int episodeNumber)
+        [TestCase("[Lilith-Raws] Anime-Series Title S02 - 11 [Baha][WEB-DL][1080p][AVC AAC][CHT][MP4].mp4", "Anime-Series Title", "Lilith-Raws", 2, 11)]
+        [TestCase("[Lilith-Raws] Anime-Series Title S02 - 01 [Baha][WEB-DL][1080p][AVC AAC][CHT][MP4].mp4", "Anime-Series Title", "Lilith-Raws", 2, 1)]
+        public void should_parse_chinese_anime_season_episode_releases(string postTitle, string title, string subgroup, int seasonNumber, int episodeNumber)
         {
             postTitle = XmlCleaner.ReplaceUnicode(postTitle);
 
