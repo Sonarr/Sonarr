@@ -25,7 +25,7 @@ namespace NzbDrone.Core.Parser
                 // Some Chinese anime releases contain both English and Chinese titles, remove the Chinese title and replace with normal anime pattern
                 new RegexReplace(@"^\[(?:(?<subgroup>[^\]]+?)(?:[\u4E00-\u9FCC]+)?)\]\[(?<title>[^\]]+?)(?:\s(?<chinesetitle>[\u4E00-\u9FCC][^\]]*?))\]\[(?:(?:[\u4E00-\u9FCC]+?)?(?<episode>\d{1,4})(?:[\u4E00-\u9FCC]+?)?)\]", "[${subgroup}] ${title} - ${episode} - ", RegexOptions.Compiled),
 
-                // Chinese LoliHouse/Lilith-Raws releases use Season - Episode Number format, normalize using SxxExx format
+                // Chinese LoliHouse/Lilith-Raws releases use Season  Episode Number, normalize using SxxExx format
                 new RegexReplace(@"^\[(?<subgroup>[^\]]*?(?:LoliHouse|ZERO|Lilith-Raws)[^\]]*?)\].*/(?<title>[^\[\]]+?)(?:S?(?<season>(?<!\d+)\d{1,2}(?!\d+)))(?: - (?<episode>[0-9-]+)\s*|\[第?(?<episode>[0-9]+(?:-[0-9]+)?)话?(?:END|完)?\])\[", "[${subgroup}] ${title} S${season}E${episode} [", RegexOptions.Compiled),
 
                 // Chinese LoliHouse/ZERO/Lilith-Raws releases don't use the expected brackets, normalize using brackets
