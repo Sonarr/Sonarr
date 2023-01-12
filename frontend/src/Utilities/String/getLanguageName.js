@@ -1,6 +1,6 @@
 import createAjaxRequest from 'Utilities/createAjaxRequest';
 
-function getTranslations() {
+function getLanguage() {
   return createAjaxRequest({
     global: false,
     dataType: 'json',
@@ -8,10 +8,16 @@ function getTranslations() {
   }).request;
 }
 
-let languageNames = new Intl.DisplayNames(['en'], { type: 'language' });
+function getDisplayName(code) {
+  return Intl.DisplayNames ?
+    new Intl.DisplayNames([code], { type: 'language' }) :
+    null;
+}
 
-getTranslations().then((data) => {
-  const names = new Intl.DisplayNames([data.identifier], { type: 'language' });
+let languageNames = getDisplayName('en');
+
+getLanguage().then((data) => {
+  const names = getDisplayName(data.identifier);
 
   if (names) {
     languageNames = names;
