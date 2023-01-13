@@ -246,7 +246,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
 
                 if (files.Count() > 100)
                 {
-                    _logger.Warn("Found more than 100 files for multiple series. Skipping parsing.");
+                    _logger.Warn("Found more than 100 files for multiple series or no series. Skipping parsing.");
                     return ProcessDownloadDirectory(rootFolder, files);
                 }
 
