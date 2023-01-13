@@ -33,10 +33,11 @@ namespace NzbDrone.Core.Indexers.Rarbg
 
             var jsonResponse = new HttpResponse<RarbgResponse>(indexerResponse.HttpResponse);
 
-            if (jsonResponse.Resource.rate_limit == 1)
-            {
-                throw new RequestLimitReachedException("Indexer API limit reached", TimeSpan.FromMinutes(5));
-            }
+            // TODO: Uncomment when RARBG doesn't return it for most valid requests
+            // if (jsonResponse.Resource.rate_limit == 1)
+            // {
+            //     throw new RequestLimitReachedException("Indexer API limit reached", TimeSpan.FromMinutes(5));
+            // }
 
             if (jsonResponse.Resource.error_code.HasValue)
             {
