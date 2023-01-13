@@ -42,26 +42,25 @@ namespace NzbDrone.Core.Test.ParserTests
             result.FullSeason.Should().BeFalse();
         }
 
-        [TestCase("[Lilith-Raws] 在地下城尋求邂逅是否搞錯了什麼 / Anime-Series Title S04 - 12 [Baha][WEB-DL][1080p][AVC AAC][CHT][MP4]", "Anime-Series Title", "Lilith-Raws", 4, 12)]
-        [TestCase("[Lilith-Raws] 魔王學院的不適任者 / Anime-Series Title S02 - 01 [Baha][WEB-DL][1080p][AVC AAC][CHT][MP4]", "Anime-Series Title", "Lilith-Raws", 2, 1)]
-        [TestCase("[Lilith-Raws] 不要欺負我，長瀞同學 / Anime-Series Title S02 - 01 [Baha][WEB-DL][1080p][AVC AAC][CHT][MP4]", "Anime-Series Title", "Lilith-Raws", 2, 1)]
-        [TestCase("[SweetSub&LoliHouse] 来自深渊 烈日黄金乡 / Anime-Series Title S2 - 07 [WebRip 1080p HEVC-10bit AAC][简繁日内封字幕]", "Anime-Series Title", "SweetSub&LoliHouse", 2, 7)]
-        [TestCase("[LoliHouse] Love Live! 虹咲学园学园偶像同好会 第二季 / Anime-Series Title S2 - 10 [WebRip 1080p HEVC-10bit AAC][简繁内封字幕]", "Anime-Series Title", "LoliHouse", 2, 10)]
-        [TestCase("[澄空学园&雪飘工作室&LoliHouse] 辉夜大小姐想让我告白 第三季 / Anime-Series Title S3 - 06 [WebRip 1080p HEVC-10bit AAC][简繁内封字幕]", "Anime-Series Title", "澄空学园&雪飘工作室&LoliHouse", 3, 6)]
-        [TestCase("[诸神字幕组][致不灭的你 第二季][Anime-Series Title S2][10][简繁日语字幕][1080P][MKV HEVC]", "Anime-Series Title", "诸神字幕组", 2, 10)]
-        [TestCase("[NC-Raws] 魔王学院的不适任者～史上最强的魔王始祖，转生就读子孙们的学校～第二季 / Anime-Series Title S2 - 01 (Baha 1920x1080 AVC AAC MP4)", "Anime-Series Title", "NC-Raws", 2, 1)]
-        [TestCase("[Lilith-Raws] Anime-Series Title S02 - 11 [Baha][WEB-DL][1080p][AVC AAC][CHT][MP4].mp4", "Anime-Series Title", "Lilith-Raws", 2, 11)]
-        [TestCase("[天月搬运组] 不要欺负我，长瀞同学 2nd Attack / Anime-Series Title S02 - 01 [1080P][简繁日外挂]", "Anime-Series Title", "天月搬运组", 2, 1)]
-        [TestCase("[Skymoon-Raws] 怕痛的我，把防御力点满就对了 第二季 / Anime-Series Title S02 - 01 [ViuTV][WEB-DL][1080p][AVC AAC][繁体外挂][MP4+ASS](正式版本) ", "Anime-Series Title", "Skymoon-Raws", 2, 1)]
-        public void should_parse_chinese_anime_season_episode_releases(string postTitle, string title, string subgroup, int seasonNumber, int episodeNumber)
+        [TestCase("[Lilith-Raws] 在地下城尋求邂逅是否搞錯了什麼 / Anime-Series Title S04 - 12 [Baha][WEB-DL][1080p][AVC AAC][CHT][MP4]", "Anime-Series Title S4", "Lilith-Raws", 12)]
+        [TestCase("[Lilith-Raws] 魔王學院的不適任者 / Anime-Series Title S02 - 01 [Baha][WEB-DL][1080p][AVC AAC][CHT][MP4]", "Anime-Series Title S2", "Lilith-Raws", 1)]
+        [TestCase("[Lilith-Raws] 不要欺負我，長瀞同學 / Anime-Series Title S02 - 01 [Baha][WEB-DL][1080p][AVC AAC][CHT][MP4]", "Anime-Series Title S2", "Lilith-Raws", 1)]
+        [TestCase("[SweetSub&LoliHouse] 来自深渊 烈日黄金乡 / Anime-Series Title S2 - 07 [WebRip 1080p HEVC-10bit AAC][简繁日内封字幕]", "Anime-Series Title S2", "SweetSub&LoliHouse", 7)]
+        [TestCase("[LoliHouse] Love Live! 虹咲学园学园偶像同好会 第二季 / Anime-Series Title S2 - 10 [WebRip 1080p HEVC-10bit AAC][简繁内封字幕]", "Anime-Series Title S2", "LoliHouse", 10)]
+        [TestCase("[澄空学园&雪飘工作室&LoliHouse] 辉夜大小姐想让我告白 第三季 / Anime-Series Title S3 - 06 [WebRip 1080p HEVC-10bit AAC][简繁内封字幕]", "Anime-Series Title S3", "澄空学园&雪飘工作室&LoliHouse", 6)]
+        [TestCase("[诸神字幕组][致不灭的你 第二季][Anime-Series Title S2][10][简繁日语字幕][1080P][MKV HEVC]", "Anime-Series Title S2", "诸神字幕组", 10)]
+        [TestCase("[NC-Raws] 魔王学院的不适任者～史上最强的魔王始祖，转生就读子孙们的学校～第二季 / Anime-Series Title S2 - 01 (Baha 1920x1080 AVC AAC MP4)", "Anime-Series Title S2", "NC-Raws", 1)]
+        [TestCase("[Lilith-Raws] Anime-Series Title S02 - 11 [Baha][WEB-DL][1080p][AVC AAC][CHT][MP4].mp4", "Anime-Series Title S2", "Lilith-Raws", 11)]
+        [TestCase("[天月搬运组] 不要欺负我，长瀞同学 2nd Attack / Anime-Series Title S02 - 01 [1080P][简繁日外挂]", "Anime-Series Title S2", "天月搬运组", 1)]
+        [TestCase("[Skymoon-Raws] 怕痛的我，把防御力点满就对了 第二季 / Anime-Series Title S02 - 01 [ViuTV][WEB-DL][1080p][AVC AAC][繁体外挂][MP4+ASS](正式版本) ", "Anime-Series Title S2", "Skymoon-Raws", 1)]
+        public void should_parse_chinese_anime_season_episode_releases(string postTitle, string title, string subgroup, int absoluteEpisodeNumber)
         {
             postTitle = XmlCleaner.ReplaceUnicode(postTitle);
 
             var result = Parser.Parser.ParseTitle(postTitle);
             result.Should().NotBeNull();
             result.ReleaseGroup.Should().Be(subgroup);
-            result.SeasonNumber.Should().Be(seasonNumber);
-            result.EpisodeNumbers.Single().Should().Be(episodeNumber);
+            result.AbsoluteEpisodeNumbers.Single().Should().Be(absoluteEpisodeNumber);
             result.SeriesTitle.Should().Be(title);
             result.FullSeason.Should().BeFalse();
         }
