@@ -101,6 +101,11 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                 mediaInfoModel.RawStreamData = ffprobeOutput;
                 mediaInfoModel.SchemaRevision = CURRENT_MEDIA_INFO_SCHEMA_REVISION;
 
+                if (analysis.Format.Tags?.TryGetValue("title", out var title) ?? false)
+                {
+                    mediaInfoModel.Title = title;
+                }
+
                 FFProbeFrames frames = null;
 
                 // if it looks like PQ10 or similar HDR, do a frame analysis to figure out which type it is

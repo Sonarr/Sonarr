@@ -36,5 +36,10 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators.Augment
         {
             return new AugmentQualityResult(QualitySource.Unknown, Confidence.Default, resolution, resolutionConfidence, null, Confidence.Default);
         }
+
+        public static AugmentQualityResult SourceAndResolutionOnly(QualitySource source, Confidence sourceConfidence, int resolution, Confidence resolutionConfidence)
+        {
+            return new AugmentQualityResult(source, sourceConfidence, resolution, resolutionConfidence, null, Confidence.Default);
+        }
     }
 }

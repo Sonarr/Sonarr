@@ -4,6 +4,7 @@ using NUnit.Framework;
 using NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators.Augmenters.Quality;
 using NzbDrone.Core.MediaFiles.MediaInfo;
 using NzbDrone.Core.Parser.Model;
+using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
 
 namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators.Augmenters.Quality
@@ -65,6 +66,47 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators.Au
 
             result.Should().NotBe(null);
             result.Resolution.Should().Be(expectedResolution);
+            result.Source.Should().Be(QualitySource.Unknown);
+        }
+
+        [Test]
+        public void should_include_source_if_extracted_from_title()
+        {
+            var mediaInfo = Builder<MediaInfoModel>.CreateNew()
+                .With(m => m.Width = 1920)
+                .With(m => m.Height = 1080)
+                .With(m => m.Title = "Series.Title.S01E05.WEB.x264-Sonarr")
+                .Build();
+
+            var localEpisode = Builder<LocalEpisode>.CreateNew()
+                .With(l => l.MediaInfo = mediaInfo)
+                .Build();
+
+            var result = Subject.AugmentQuality(localEpisode, null);
+
+            result.Should().NotBe(null);
+            result.Resolution.Should().Be(1080);
+            result.Source.Should().Be(QualitySource.Web);
+        }
+
+        [Test]
+        public void should_have_unknown_source_if_no_source_extracted_from_title()
+        {
+            var mediaInfo = Builder<MediaInfoModel>.CreateNew()
+                .With(m => m.Width = 1920)
+                .With(m => m.Height = 1080)
+                .With(m => m.Title = "Series.Title.S01E05.x264-Sonarr")
+                .Build();
+
+            var localEpisode = Builder<LocalEpisode>.CreateNew()
+                .With(l => l.MediaInfo = mediaInfo)
+                .Build();
+
+            var result = Subject.AugmentQuality(localEpisode, null);
+
+            result.Should().NotBe(null);
+            result.Resolution.Should().Be(1080);
+            result.Source.Should().Be(QualitySource.Unknown);
         }
     }
 }

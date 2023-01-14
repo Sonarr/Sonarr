@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using FFMpegCore;
 using NzbDrone.Core.Datastore;
 
@@ -57,5 +58,8 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
         public List<string> Subtitles { get; set; }
 
         public string ScanType { get; set; }
+
+        [JsonIgnore]
+        public string Title { get; set; }
     }
 }
