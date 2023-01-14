@@ -641,6 +641,7 @@ export const actionHandlers = handleThunks({
       }),
       dataType: 'json'
     }).request;
+
     promise.done((data) => {
       dispatch(fetchEpisodes({ seriesId: id }));
 

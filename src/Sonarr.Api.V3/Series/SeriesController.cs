@@ -284,7 +284,7 @@ namespace Sonarr.Api.V3.Series
         [NonAction]
         public void Handle(SeriesEditedEvent message)
         {
-            var resource = message.Series.ToResource();
+            var resource = GetSeriesResource(message.Series, false);
             resource.EpisodesChanged = message.EpisodesChanged;
             BroadcastResourceChange(ModelAction.Updated, resource);
         }

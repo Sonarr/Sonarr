@@ -53,7 +53,7 @@ namespace Sonarr.Api.V3.SeasonPass
                 _episodeMonitoredService.SetEpisodeMonitoredStatus(series, resource.MonitoringOptions);
             }
 
-            return Accepted();
+            return Accepted(new object());
         }
     }
 }

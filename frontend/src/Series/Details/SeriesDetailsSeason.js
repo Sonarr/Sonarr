@@ -225,7 +225,8 @@ class SeriesDetailsSeason extends Component {
       episodeFileCount,
       totalEpisodeCount,
       monitoredEpisodeCount,
-      hasMonitoredEpisodes
+      hasMonitoredEpisodes,
+      sizeOnDisk
     } = getSeasonStatistics(items);
 
     const {
@@ -273,7 +274,7 @@ class SeriesDetailsSeason extends Component {
                     totalEpisodeCount={totalEpisodeCount}
                     monitoredEpisodeCount={monitoredEpisodeCount}
                     episodeFileCount={episodeFileCount}
-                    sizeOnDisk={statistics.sizeOnDisk}
+                    sizeOnDisk={sizeOnDisk}
                   />
                 </div>
               }
@@ -281,9 +282,9 @@ class SeriesDetailsSeason extends Component {
             />
 
             {
-              statistics.sizeOnDisk ?
+              sizeOnDisk ?
                 <div className={styles.sizeOnDisk}>
-                  {formatBytes(statistics.sizeOnDisk)}
+                  {formatBytes(sizeOnDisk)}
                 </div> :
                 null
             }
