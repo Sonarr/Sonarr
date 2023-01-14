@@ -76,6 +76,19 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
                 }
             }
 
+            // If quality meets or exceeds the best allowed quality in the profile accept it immediately
+            if (delayProfile.BypassIfAboveCustomFormatScore)
+            {
+                var score = subject.CustomFormatScore;
+                var minimum = delayProfile.MinimumCustomFormatScore;
+
+                if (score >= minimum && isPreferredProtocol)
+                {
+                    _logger.Debug("Custom format score ({0}) meets minimum ({1}) for preferred protocol, will not delay", score, minimum);
+                    return Decision.Accept();
+                }
+            }
+
             var episodeIds = subject.Episodes.Select(e => e.Id);
 
             var oldest = _pendingReleaseService.OldestPendingRelease(subject.Series.Id, episodeIds.ToArray());

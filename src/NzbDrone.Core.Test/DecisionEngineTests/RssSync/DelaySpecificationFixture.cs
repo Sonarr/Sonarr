@@ -117,17 +117,22 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
         [Test]
         public void should_be_false_when_quality_and_language_is_last_allowed_in_profile_and_bypass_disabled()
         {
+            _remoteEpisode.Release.PublishDate = DateTime.UtcNow;
             _remoteEpisode.ParsedEpisodeInfo.Quality = new QualityModel(Quality.Bluray720p);
             _remoteEpisode.ParsedEpisodeInfo.Languages = new List<Language> { Language.French };
 
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
+            _delayProfile.UsenetDelay = 720;
+
+            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
         }
 
         [Test]
         public void should_be_true_when_quality_and_language_is_last_allowed_in_profile_and_bypass_enabled()
         {
+            _delayProfile.UsenetDelay = 720;
             _delayProfile.BypassIfHighestQuality = true;
 
+            _remoteEpisode.Release.PublishDate = DateTime.UtcNow;
             _remoteEpisode.ParsedEpisodeInfo.Quality = new QualityModel(Quality.Bluray720p);
             _remoteEpisode.ParsedEpisodeInfo.Languages = new List<Language> { Language.French };
 
@@ -203,6 +208,44 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
             _delayProfile.UsenetDelay = 720;
 
             Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
+        }
+
+        [Test]
+        public void should_be_false_when_custom_format_score_is_above_minimum_but_bypass_disabled()
+        {
+            _remoteEpisode.Release.PublishDate = DateTime.UtcNow;
+            _remoteEpisode.CustomFormatScore = 100;
+
+            _delayProfile.UsenetDelay = 720;
+            _delayProfile.MinimumCustomFormatScore = 50;
+
+            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
+        }
+
+        [Test]
+        public void should_be_false_when_custom_format_score_is_above_minimum_and_bypass_enabled_but_under_minimum()
+        {
+            _remoteEpisode.Release.PublishDate = DateTime.UtcNow;
+            _remoteEpisode.CustomFormatScore = 5;
+
+            _delayProfile.UsenetDelay = 720;
+            _delayProfile.BypassIfAboveCustomFormatScore = true;
+            _delayProfile.MinimumCustomFormatScore = 50;
+
+            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
+        }
+
+        [Test]
+        public void should_be_true_when_custom_format_score_is_above_minimum_and_bypass_enabled()
+        {
+            _remoteEpisode.Release.PublishDate = DateTime.UtcNow;
+            _remoteEpisode.CustomFormatScore = 100;
+
+            _delayProfile.UsenetDelay = 720;
+            _delayProfile.BypassIfAboveCustomFormatScore = true;
+            _delayProfile.MinimumCustomFormatScore = 50;
+
+            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
         }
     }
 }
