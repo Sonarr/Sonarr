@@ -221,12 +221,15 @@ class SeriesDetailsSeason extends Component {
     } = this.props;
 
     const {
+      sizeOnDisk = 0
+    } = statistics;
+
+    const {
       episodeCount,
       episodeFileCount,
       totalEpisodeCount,
       monitoredEpisodeCount,
-      hasMonitoredEpisodes,
-      sizeOnDisk
+      hasMonitoredEpisodes
     } = getSeasonStatistics(items);
 
     const {
