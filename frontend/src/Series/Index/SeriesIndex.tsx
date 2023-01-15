@@ -34,6 +34,10 @@ import SeriesIndexOverviews from './Overview/SeriesIndexOverviews';
 import SeriesIndexPosterOptionsModal from './Posters/Options/SeriesIndexPosterOptionsModal';
 import SeriesIndexPosters from './Posters/SeriesIndexPosters';
 import SeriesIndexSelectAllButton from './Select/SeriesIndexSelectAllButton';
+import SeriesIndexSelectAllMenuItem from './Select/SeriesIndexSelectAllMenuItem';
+import SeriesIndexSelectFooter from './Select/SeriesIndexSelectFooter';
+import SeriesIndexSelectModeButton from './Select/SeriesIndexSelectModeButton';
+import SeriesIndexSelectModeMenuItem from './Select/SeriesIndexSelectModeMenuItem';
 import SeriesIndexFooter from './SeriesIndexFooter';
 import SeriesIndexTable from './Table/SeriesIndexTable';
 import SeriesIndexTableOptions from './Table/SeriesIndexTableOptions';
@@ -201,7 +205,7 @@ const SeriesIndex = withScrollPosition((props: SeriesIndexProps) => {
   const hasNoSeries = !totalItems;
 
   return (
-    <SelectProvider isSelectMode={isSelectMode} items={items}>
+    <SelectProvider items={items}>
       <PageContent>
         <PageToolbar>
           <PageToolbarSection>
@@ -224,13 +228,19 @@ const SeriesIndex = withScrollPosition((props: SeriesIndexProps) => {
 
             <PageToolbarSeparator />
 
-            <PageToolbarButton
+            <SeriesIndexSelectModeButton
               label={isSelectMode ? 'Stop Selecting' : 'Select Series'}
               iconName={isSelectMode ? icons.SERIES_ENDED : icons.CHECK}
+              isSelectMode={isSelectMode}
+              overflowComponent={SeriesIndexSelectModeMenuItem}
               onPress={onSelectModePress}
             />
 
-            {isSelectMode ? <SeriesIndexSelectAllButton /> : null}
+            <SeriesIndexSelectAllButton
+              label="SelectAll"
+              isSelectMode={isSelectMode}
+              overflowComponent={SeriesIndexSelectAllMenuItem}
+            />
           </PageToolbarSection>
 
           <PageToolbarSection
@@ -310,7 +320,6 @@ const SeriesIndex = withScrollPosition((props: SeriesIndexProps) => {
               <NoSeries totalItems={totalItems} />
             ) : null}
           </PageContentBody>
-
           {isLoaded && !!jumpBarItems.order.length ? (
             <PageJumpBar
               items={jumpBarItems}
@@ -318,6 +327,9 @@ const SeriesIndex = withScrollPosition((props: SeriesIndexProps) => {
             />
           ) : null}
         </div>
+
+        {isSelectMode ? <SeriesIndexSelectFooter /> : null}
+
         {view === 'posters' ? (
           <SeriesIndexPosterOptionsModal
             isOpen={isOptionsModalOpen}

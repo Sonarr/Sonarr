@@ -4,7 +4,9 @@ import React from 'react';
 import { kinds } from 'Helpers/Props';
 import styles from './Alert.css';
 
-function Alert({ className, kind, children, ...otherProps }) {
+function Alert(props) {
+  const { className, kind, children, ...otherProps } = props;
+
   return (
     <div
       className={classNames(
@@ -19,8 +21,8 @@ function Alert({ className, kind, children, ...otherProps }) {
 }
 
 Alert.propTypes = {
-  className: PropTypes.string.isRequired,
-  kind: PropTypes.oneOf(kinds.all).isRequired,
+  className: PropTypes.string,
+  kind: PropTypes.oneOf(kinds.all),
   children: PropTypes.node.isRequired
 };
 

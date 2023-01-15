@@ -90,6 +90,12 @@
   flex: 0 0 100px;
 }
 
+.seasonFolder {
+  composes: cell;
+
+  width: 150px;
+}
+
 .episodeProgress,
 .latestSeason {
   composes: cell;

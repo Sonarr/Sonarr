@@ -1,0 +1,68 @@
+.footer {
+  composes: contentFooter from '~Components/Page/PageContentFooter.css';
+
+  align-items: center;
+}
+
+.buttons {
+  display: flex;
+}
+
+.actionButtons,
+.deleteButtons {
+  display: flex;
+  gap: 10px;
+}
+
+.deleteButtons {
+  margin-left: 50px;
+}
+
+.selected {
+  display: flex;
+  justify-content: flex-end;
+  flex-grow: 1;
+  font-weight: bold;
+}
+
+@media only screen and (max-width: $breakpointMedium) {
+  .buttons {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .selected {
+    justify-content: center;
+    margin-bottom: 20px;
+    width: 100%;
+    order: -1;
+  }
+}
+
+@media only screen and (max-width: $breakpointSmall) {
+  .footer {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .buttons {
+    flex-direction: column;
+    margin-top: 20px;
+    gap: 20px;
+  }
+
+  .actionButtons,
+  .deleteButtons {
+    display: flex;
+    justify-content: center;
+  }
+
+  .deleteButtons {
+    margin-left: 0;
+  }
+
+  .selected {
+    justify-content: center;
+    order: -1;
+  }
+}

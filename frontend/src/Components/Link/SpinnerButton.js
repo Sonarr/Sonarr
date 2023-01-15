@@ -42,6 +42,7 @@ function SpinnerButton(props) {
 }
 
 SpinnerButton.propTypes = {
+  ...Button.Props,
   className: PropTypes.string.isRequired,
   isSpinning: PropTypes.bool.isRequired,
   isDisabled: PropTypes.bool,

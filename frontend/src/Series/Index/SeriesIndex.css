@@ -7,6 +7,7 @@
 .contentBody {
   composes: contentBody from '~Components/Page/PageContentBody.css';
 
+  position: relative;
   display: flex;
   flex-direction: column;
 }

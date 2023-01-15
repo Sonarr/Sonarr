@@ -13,7 +13,8 @@ function createMapStateToProps() {
     (state, { value }) => value,
     (state, { includeMissingValue }) => includeMissingValue,
     (state, { includeNoChange }) => includeNoChange,
-    (rootFolders, value, includeMissingValue, includeNoChange) => {
+    (state, { includeNoChangeDisabled }) => includeNoChangeDisabled,
+    (rootFolders, value, includeMissingValue, includeNoChange, includeNoChangeDisabled = true) => {
       const values = rootFolders.items.map((rootFolder) => {
         return {
           key: rootFolder.path,
@@ -27,7 +28,7 @@ function createMapStateToProps() {
         values.unshift({
           key: 'noChange',
           value: 'No Change',
-          isDisabled: true,
+          isDisabled: includeNoChangeDisabled,
           isMissing: false
         });
       }
