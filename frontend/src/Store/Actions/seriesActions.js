@@ -381,6 +381,8 @@ export const defaultState = {
   error: null,
   isSaving: false,
   saveError: null,
+  isDeleting: false,
+  deleteError: null,
   items: [],
   sortKey: 'sortTitle',
   sortDirection: sortDirections.ASCENDING,
@@ -405,6 +407,8 @@ export const DELETE_SERIES = 'series/deleteSeries';
 export const TOGGLE_SERIES_MONITORED = 'series/toggleSeriesMonitored';
 export const TOGGLE_SEASON_MONITORED = 'series/toggleSeasonMonitored';
 export const UPDATE_SERIES_MONITOR = 'series/updateSeriesMonitor';
+export const SAVE_SERIES_EDITOR = 'series/saveSeriesEditor';
+export const BULK_DELETE_SERIES = 'series/bulkDeleteSeries';
 
 export const SET_DELETE_OPTION = 'series/setDeleteOption';
 
@@ -441,6 +445,8 @@ export const deleteSeries = createThunk(DELETE_SERIES, (payload) => {
 export const toggleSeriesMonitored = createThunk(TOGGLE_SERIES_MONITORED);
 export const toggleSeasonMonitored = createThunk(TOGGLE_SEASON_MONITORED);
 export const updateSeriesMonitor = createThunk(UPDATE_SERIES_MONITOR);
+export const saveSeriesEditor = createThunk(SAVE_SERIES_EDITOR);
+export const bulkDeleteSeries = createThunk(BULK_DELETE_SERIES);
 
 export const setSeriesValue = createAction(SET_SERIES_VALUE, (payload) => {
   return {
@@ -657,6 +663,87 @@ export const actionHandlers = handleThunks({
         section,
         isSaving: false,
         saveError: xhr
+      }));
+    });
+  },
+
+  [SAVE_SERIES_EDITOR]: function(getState, payload, dispatch) {
+    dispatch(set({
+      section,
+      isSaving: true
+    }));
+
+    const promise = createAjaxRequest({
+      url: '/series/editor',
+      method: 'PUT',
+      data: JSON.stringify(payload),
+      dataType: 'json'
+    }).request;
+
+    promise.done((data) => {
+      dispatch(batchActions([
+        ...data.map((series) => {
+
+          const {
+            alternateTitles,
+            images,
+            rootFolderPath,
+            statistics,
+            ...propsToUpdate
+          } = series;
+
+          return updateItem({
+            id: series.id,
+            section: 'series',
+            ...propsToUpdate
+          });
+        }),
+
+        set({
+          section,
+          isSaving: false,
+          saveError: null
+        })
+      ]));
+    });
+
+    promise.fail((xhr) => {
+      dispatch(set({
+        section,
+        isSaving: false,
+        saveError: xhr
+      }));
+    });
+  },
+
+  [BULK_DELETE_SERIES]: function(getState, payload, dispatch) {
+    dispatch(set({
+      section,
+      isDeleting: true
+    }));
+
+    const promise = createAjaxRequest({
+      url: '/series/editor',
+      method: 'DELETE',
+      data: JSON.stringify(payload),
+      dataType: 'json'
+    }).request;
+
+    promise.done(() => {
+      // SignaR will take care of removing the series from the collection
+
+      dispatch(set({
+        section,
+        isDeleting: false,
+        deleteError: null
+      }));
+    });
+
+    promise.fail((xhr) => {
+      dispatch(set({
+        section,
+        isDeleting: false,
+        deleteError: xhr
       }));
     });
   }

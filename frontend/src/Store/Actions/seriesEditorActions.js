@@ -134,10 +134,19 @@ export const actionHandlers = handleThunks({
     promise.done((data) => {
       dispatch(batchActions([
         ...data.map((series) => {
+
+          const {
+            alternateTitles,
+            images,
+            rootFolderPath,
+            statistics,
+            ...propsToUpdate
+          } = series;
+
           return updateItem({
             id: series.id,
             section: 'series',
-            ...series
+            ...propsToUpdate
           });
         }),
 

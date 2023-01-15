@@ -1,6 +1,14 @@
 .inputContainer {
   margin-right: 20px;
   min-width: 150px;
+
+  div {
+    margin-top: 10px;
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
 }
 
 .label {
@@ -34,4 +42,18 @@
 
 .importError {
   margin-left: 10px;
+}
+
+@media only screen and (max-width: $breakpointSmall) {
+  .inputContainer {
+    margin-top: 10px;
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+
+  .importButtonContainer {
+    margin-top: 10px;
+  }
 }

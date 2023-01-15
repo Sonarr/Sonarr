@@ -114,6 +114,12 @@ export const defaultState = {
       isVisible: true
     },
     {
+      name: 'seasonFolder',
+      label: 'Season Folder',
+      isSortable: true,
+      isVisible: false
+    },
+    {
       name: 'episodeProgress',
       label: 'Episodes',
       isSortable: true,

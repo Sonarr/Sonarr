@@ -40,7 +40,7 @@ module.exports = {
   themeDarkColor: '#494949',
   themeLightColor: '#595959',
   pageBackground: '#202020',
-  pageFooterBackgroud: 'rgba(0, 0, 0, .25)',
+  pageFooterBackground: 'rgba(0, 0, 0, .25)',
 
   torrentColor: '#00853d',
   usenetColor: '#17b1d9',

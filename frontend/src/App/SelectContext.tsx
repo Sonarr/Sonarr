@@ -57,7 +57,6 @@ const initialState = {
 interface SelectProviderOptions<T extends ModelBase> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   children: any;
-  isSelectMode: boolean;
   items: Array<T>;
 }
 
@@ -97,7 +96,7 @@ function selectReducer(state: SelectState, action: SelectAction): SelectState {
       };
     }
     case SelectActionType.ToggleSelected: {
-      var result = {
+      const result = {
         items,
         ...toggleSelected(
           state,
@@ -129,7 +128,7 @@ function selectReducer(state: SelectState, action: SelectAction): SelectState {
 export function SelectProvider<T extends ModelBase>(
   props: SelectProviderOptions<T>
 ) {
-  const { isSelectMode, items } = props;
+  const { items } = props;
   const selectedState = getSelectedState(items, {});
 
   const [state, dispatch] = React.useReducer(selectReducer, {
@@ -141,12 +140,6 @@ export function SelectProvider<T extends ModelBase>(
   });
 
   const value: [SelectState, Dispatch] = [state, dispatch];
-
-  useEffect(() => {
-    if (!isSelectMode) {
-      dispatch({ type: SelectActionType.Reset });
-    }
-  }, [isSelectMode]);
 
   useEffect(() => {
     dispatch({ type: SelectActionType.UpdateItems, items });

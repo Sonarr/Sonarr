@@ -8,14 +8,6 @@
 @media only screen and (max-width: $breakpointSmall) {
   .contentFooter {
     display: block;
-
-    div {
-      margin-top: 10px;
-
-      &:first-child {
-        margin-top: 0;
-      }
-    }
   }
 }
 

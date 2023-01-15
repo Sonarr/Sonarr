@@ -59,6 +59,7 @@ function SeriesIndexRow(props: SeriesIndexRowProps) {
     previousAiring,
     added,
     statistics = {},
+    seasonFolder,
     images,
     seriesType,
     network,
@@ -129,7 +130,7 @@ function SeriesIndexRow(props: SeriesIndexRowProps) {
     setIsDeleteSeriesModalOpen(false);
   }, [setIsDeleteSeriesModalOpen]);
 
-  const onUseSceneNumberingChange = useCallback(() => {
+  const checkInputCallback = useCallback(() => {
     // Mock handler to satisfy `onChange` being required for `CheckInput`.
   }, []);
 
@@ -280,6 +281,19 @@ function SeriesIndexRow(props: SeriesIndexRowProps) {
           );
         }
 
+        if (name === 'seasonFolder') {
+          return (
+            <VirtualTableRowCell key={name} className={styles[name]}>
+              <CheckInput
+                name="seasonFolder"
+                value={seasonFolder}
+                isDisabled={true}
+                onChange={checkInputCallback}
+              />
+            </VirtualTableRowCell>
+          );
+        }
+
         if (name === 'episodeProgress') {
           const progress = episodeCount
             ? (episodeFileCount / episodeCount) * 100
@@ -413,7 +427,7 @@ function SeriesIndexRow(props: SeriesIndexRowProps) {
                 name="useSceneNumbering"
                 value={useSceneNumbering}
                 isDisabled={true}
-                onChange={onUseSceneNumberingChange}
+                onChange={checkInputCallback}
               />
             </VirtualTableRowCell>
           );
