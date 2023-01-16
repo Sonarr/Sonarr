@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
@@ -102,7 +102,7 @@ namespace NzbDrone.Core.Test.MetadataSource.SkyHook
                 episode.AirDateUtc.Value.Kind.Should().Be(DateTimeKind.Utc);
             }
 
-            episode.Images.Any(i => i.CoverType == MediaCoverTypes.Screenshot && i.Url.Contains("-940."))
+            episode.Images.Any(i => i.CoverType == MediaCoverTypes.Screenshot && i.RemoteUrl.Contains("-940."))
                    .Should()
                    .BeFalse();
         }

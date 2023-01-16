@@ -22,10 +22,10 @@ namespace NzbDrone.Core.MediaCover
         {
         }
 
-        public MediaCover(MediaCoverTypes coverType, string url)
+        public MediaCover(MediaCoverTypes coverType, string remoteUrl)
         {
             CoverType = coverType;
-            Url = url;
+            RemoteUrl = remoteUrl;
         }
     }
 }

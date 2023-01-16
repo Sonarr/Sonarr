@@ -205,7 +205,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
 
                         if (actor.Images.Any())
                         {
-                            xmlActor.Add(new XElement("thumb", actor.Images.First().Url));
+                            xmlActor.Add(new XElement("thumb", actor.Images.First().RemoteUrl));
                         }
 
                         tvShow.Add(xmlActor);
@@ -287,7 +287,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
                     }
                     else
                     {
-                        details.Add(new XElement("thumb", image.Url));
+                        details.Add(new XElement("thumb", image.RemoteUrl));
                     }
 
                     details.Add(new XElement("watched", watched));
@@ -394,7 +394,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
 
                 return new List<ImageFileResult>
                    {
-                       new ImageFileResult(GetEpisodeImageFilename(episodeFile.RelativePath), screenshot.Url)
+                       new ImageFileResult(GetEpisodeImageFilename(episodeFile.RelativePath), screenshot.RemoteUrl)
                    };
             }
             catch (Exception ex)
@@ -427,7 +427,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
                     filename = string.Format("season-specials-{0}.jpg", image.CoverType.ToString().ToLower());
                 }
 
-                yield return new ImageFileResult(filename, image.Url);
+                yield return new ImageFileResult(filename, image.RemoteUrl);
             }
         }
 

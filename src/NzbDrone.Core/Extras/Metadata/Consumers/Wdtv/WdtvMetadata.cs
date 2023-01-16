@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -220,7 +220,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Wdtv
 
             var path = Path.Combine(seasonFolder, "folder.jpg");
 
-            return new List<ImageFileResult> { new ImageFileResult(path, image.Url) };
+            return new List<ImageFileResult> { new ImageFileResult(path, image.RemoteUrl) };
         }
 
         public override List<ImageFileResult> EpisodeImages(Series series, EpisodeFile episodeFile)
@@ -238,7 +238,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Wdtv
                 return new List<ImageFileResult>();
             }
 
-            return new List<ImageFileResult> { new ImageFileResult(GetEpisodeImageFilename(episodeFile.RelativePath), screenshot.Url) };
+            return new List<ImageFileResult> { new ImageFileResult(GetEpisodeImageFilename(episodeFile.RelativePath), screenshot.RemoteUrl) };
         }
 
         private string GetEpisodeMetadataFilename(string episodeFilePath)

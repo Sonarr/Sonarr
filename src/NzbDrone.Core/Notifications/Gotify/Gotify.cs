@@ -101,7 +101,7 @@ namespace NzbDrone.Core.Notifications.Gotify
 
             if (Settings.IncludeSeriesPoster && series != null)
             {
-                var poster = series.Images.FirstOrDefault(x => x.CoverType == MediaCoverTypes.Poster)?.Url;
+                var poster = series.Images.FirstOrDefault(x => x.CoverType == MediaCoverTypes.Poster)?.RemoteUrl;
 
                 if (poster != null)
                 {

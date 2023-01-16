@@ -227,7 +227,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Roksbox
             var filename = Path.GetFileName(seasonFolder) + ".jpg";
             var path = series.Path.GetRelativePath(Path.Combine(series.Path, seasonFolder, filename));
 
-            return new List<ImageFileResult> { new ImageFileResult(path, image.Url) };
+            return new List<ImageFileResult> { new ImageFileResult(path, image.RemoteUrl) };
         }
 
         public override List<ImageFileResult> EpisodeImages(Series series, EpisodeFile episodeFile)
@@ -245,7 +245,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Roksbox
                 return new List<ImageFileResult>();
             }
 
-            return new List<ImageFileResult> { new ImageFileResult(GetEpisodeImageFilename(episodeFile.RelativePath), screenshot.Url) };
+            return new List<ImageFileResult> { new ImageFileResult(GetEpisodeImageFilename(episodeFile.RelativePath), screenshot.RemoteUrl) };
         }
 
         private string GetEpisodeMetadataFilename(string episodeFilePath)
