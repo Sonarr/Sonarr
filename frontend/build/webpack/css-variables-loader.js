@@ -1,3 +1,4 @@
+// eslint-disable-next-line filenames/match-exported
 const loaderUtils = require('loader-utils');
 
 module.exports = function cssVariablesLoader(source) {

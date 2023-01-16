@@ -8,8 +8,8 @@
     "clean": "rimraf ./_output/UI && rimraf \"**/*.js.map\"",
     "start": "webpack --watch --config ./frontend/build/webpack.config.js",
     "watch": "webpack --watch --config ./frontend/build/webpack.config.js",
-    "lint": "esprint check",
-    "lint-fix": "esprint check --fix",
+    "lint": "eslint --config frontend/.eslintrc.js --ignore-path frontend/.eslintignore frontend/",
+    "lint-fix": "yarn lint --fix",
     "stylelint": "stylelint frontend/**/*.css --config frontend/.stylelintrc"
   },
   "repository": "https://github.com/Sonarr/Sonarr",
@@ -123,7 +123,6 @@
     "eslint-plugin-react": "7.30.0",
     "eslint-plugin-react-hooks": "4.6.0",
     "eslint-plugin-simple-import-sort": "8.0.0",
-    "esprint": "3.6.0",
     "file-loader": "6.2.0",
     "filemanager-webpack-plugin": "7.0.0-beta.0",
     "fork-ts-checker-webpack-plugin": "7.2.14",
