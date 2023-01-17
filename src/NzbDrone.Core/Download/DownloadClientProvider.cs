@@ -10,7 +10,7 @@ namespace NzbDrone.Core.Download
     public interface IProvideDownloadClient
     {
         IDownloadClient GetDownloadClient(DownloadProtocol downloadProtocol, int indexerId = 0);
-        IEnumerable<IDownloadClient> GetDownloadClients();
+        IEnumerable<IDownloadClient> GetDownloadClients(bool filterBlockedClients = false);
         IDownloadClient Get(int id);
     }
 
@@ -86,14 +86,37 @@ namespace NzbDrone.Core.Download
             return provider;
         }
 
-        public IEnumerable<IDownloadClient> GetDownloadClients()
+        public IEnumerable<IDownloadClient> GetDownloadClients(bool filterBlockedClients = false)
         {
-            return _downloadClientFactory.GetAvailableProviders();
+            var enabledClients = _downloadClientFactory.GetAvailableProviders();
+
+            if (filterBlockedClients)
+            {
+                return FilterBlockedDownloadClients(enabledClients).ToList();
+            }
+
+            return enabledClients;
         }
 
         public IDownloadClient Get(int id)
         {
             return _downloadClientFactory.GetAvailableProviders().Single(d => d.Definition.Id == id);
+        }
+
+        private IEnumerable<IDownloadClient> FilterBlockedDownloadClients(IEnumerable<IDownloadClient> clients)
+        {
+            var blockedClients = _downloadClientStatusService.GetBlockedProviders().ToDictionary(v => v.ProviderId, v => v);
+
+            foreach (var client in clients)
+            {
+                if (blockedClients.TryGetValue(client.Definition.Id, out var blockedClientStatus))
+                {
+                    _logger.Debug("Temporarily ignoring client {0} till {1} due to recent failures.", client.Definition.Name, blockedClientStatus.DisabledTill.Value.ToLocalTime());
+                    continue;
+                }
+
+                yield return client;
+            }
         }
     }
 }

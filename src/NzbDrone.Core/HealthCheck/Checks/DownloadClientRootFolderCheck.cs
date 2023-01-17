@@ -35,7 +35,8 @@ namespace NzbDrone.Core.HealthCheck.Checks
         public override HealthCheck Check()
         {
             // Only check clients not in failure status, those get another message
-            var clients = _downloadClientProvider.GetDownloadClients();
+            var clients = _downloadClientProvider.GetDownloadClients(true);
+
             var rootFolders = _rootFolderService.All();
 
             foreach (var client in clients)
