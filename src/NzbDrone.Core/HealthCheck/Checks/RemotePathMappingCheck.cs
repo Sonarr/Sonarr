@@ -50,7 +50,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
             }
 
             // Only check clients not in failure status, those get another message
-            var clients = _downloadClientProvider.GetDownloadClients();
+            var clients = _downloadClientProvider.GetDownloadClients(true);
 
             foreach (var client in clients)
             {
@@ -143,7 +143,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 // If the previous case did not match then the failure occured in DownloadedEpisodeImportService,
                 // while trying to locate the files reported by the download client
                 // Only check clients not in failure status, those get another message
-                var client = _downloadClientProvider.GetDownloadClients().FirstOrDefault(x => x.Definition.Name == failureMessage.DownloadClientInfo.Name);
+                var client = _downloadClientProvider.GetDownloadClients(true).FirstOrDefault(x => x.Definition.Name == failureMessage.DownloadClientInfo.Name);
 
                 if (client == null)
                 {

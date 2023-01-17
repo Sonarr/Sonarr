@@ -39,7 +39,7 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
                 .Returns(_clientStatus);
 
             Mocker.GetMock<IProvideDownloadClient>()
-                .Setup(s => s.GetDownloadClients())
+                .Setup(s => s.GetDownloadClients(It.IsAny<bool>()))
                 .Returns(new IDownloadClient[] { _downloadClient.Object });
         }
 

@@ -28,7 +28,7 @@ namespace NzbDrone.Core.Test.Download
             _downloadClients = new List<IDownloadClient>();
 
             Mocker.GetMock<IProvideDownloadClient>()
-                .Setup(v => v.GetDownloadClients())
+                .Setup(v => v.GetDownloadClients(It.IsAny<bool>()))
                 .Returns(_downloadClients);
 
             Mocker.GetMock<IProvideDownloadClient>()
