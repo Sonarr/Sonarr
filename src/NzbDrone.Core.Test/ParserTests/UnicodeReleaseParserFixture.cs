@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FizzWare.NBuilder.Dates;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Indexers;
@@ -44,7 +45,7 @@ namespace NzbDrone.Core.Test.ParserTests
 
         [TestCase("[Lilith-Raws] 在地下城尋求邂逅是否搞錯了什麼 / Anime-Series Title S04 - 12 [Baha][WEB-DL][1080p][AVC AAC][CHT][MP4]", "Anime-Series Title S4", "Lilith-Raws", 12)]
         [TestCase("[Lilith-Raws] 魔王學院的不適任者 / Anime-Series Title S02 - 01 [Baha][WEB-DL][1080p][AVC AAC][CHT][MP4]", "Anime-Series Title S2", "Lilith-Raws", 1)]
-        [TestCase("[Lilith-Raws] 不要欺負我，長瀞同學 / Anime-Series Title S02 - 01 [Baha][WEB-DL][1080p][AVC AAC][CHT][MP4]", "Anime-Series Title S2", "Lilith-Raws", 1)]
+        [TestCase("[Lilith-Raws x WitEx.io] 盾之勇者成名录 / Anime-Series Title S02 - 03 [Baha][WEB-DL][1080p][AVC AAC][CHT][MP4] [557.3MB]", "Anime-Series Title S2", "Lilith-Raws x WitEx.io", 3)]
         [TestCase("[SweetSub&LoliHouse] 来自深渊 烈日黄金乡 / Anime-Series Title S2 - 07 [WebRip 1080p HEVC-10bit AAC][简繁日内封字幕]", "Anime-Series Title S2", "SweetSub&LoliHouse", 7)]
         [TestCase("[LoliHouse] Love Live! 虹咲学园学园偶像同好会 第二季 / Anime-Series Title S2 - 10 [WebRip 1080p HEVC-10bit AAC][简繁内封字幕]", "Anime-Series Title S2", "LoliHouse", 10)]
         [TestCase("[澄空学园&雪飘工作室&LoliHouse] 辉夜大小姐想让我告白 第三季 / Anime-Series Title S3 - 06 [WebRip 1080p HEVC-10bit AAC][简繁内封字幕]", "Anime-Series Title S3", "澄空学园&雪飘工作室&LoliHouse", 6)]
@@ -53,6 +54,9 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[Lilith-Raws] Anime-Series Title S02 - 11 [Baha][WEB-DL][1080p][AVC AAC][CHT][MP4].mp4", "Anime-Series Title S2", "Lilith-Raws", 11)]
         [TestCase("[天月搬运组] 不要欺负我，长瀞同学 2nd Attack / Anime-Series Title S02 - 01 [1080P][简繁日外挂]", "Anime-Series Title S2", "天月搬运组", 1)]
         [TestCase("[Skymoon-Raws] 怕痛的我，把防御力点满就对了 第二季 / Anime-Series Title S02 - 01 [ViuTV][WEB-DL][1080p][AVC AAC][繁体外挂][MP4+ASS](正式版本) ", "Anime-Series Title S2", "Skymoon-Raws", 1)]
+        [TestCase("[Skymoon-Raws] Anime-Series Title S02 - 01 [ViuTV][CHT][WEB-DL][1080p][AVC AAC][MP4+ASS]", "Anime-Series Title S2", "Skymoon-Raws", 1)]
+        [TestCase("[orion origin] Anime-Series Title S02[07][1080p][H264 AAC][CHS][ENG＆JPN stidio]", "Anime-Series Title S2", "orion origin", 7)]
+        [TestCase("[UHA-WINGS][Anime-Series Title S02][01][x264 1080p][CHT].mp4", "Anime-Series Title S2", "UHA-WINGS", 1)]
         public void should_parse_chinese_anime_season_episode_releases(string postTitle, string title, string subgroup, int absoluteEpisodeNumber)
         {
             postTitle = XmlCleaner.ReplaceUnicode(postTitle);
@@ -87,6 +91,7 @@ namespace NzbDrone.Core.Test.ParserTests
 
         [TestCase("[YMDR][慕留人 -火影忍者新時代-][Anime Series Title-][2017][88-91][1080p][AVC][JAP][BIG5][MP4-AAC][繁中]", "Anime Series Title", "YMDR", new[] { 88, 89, 90, 91 })]
         [TestCase("[诸神字幕组][战栗杀机][ANIME SERIES TITLE][01-24完][简日双语字幕][720P][MP4]", "ANIME SERIES TITLE", "诸神字幕组", new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24 })]
+        [TestCase("[orion origin] Anime-Series Title S02 [01-07] [1080p] [H264 AAC] [CHS] [ENG＆JPN stidio]", "Anime-Series Title S2", "orion origin", new[] { 1, 2, 3, 4, 5, 6, 7 })]
 
         // [TestCase("【漫貓&愛戀字幕組】[五等分的新娘/五等分的花嫁/五等分の花嫁][Anime Series Title][01_03][BIG5][720P][HEVC]", "Anime Series Title", "漫貓&愛戀字幕組", new[] { 1, 2, 3 })]
         public void should_parse_chinese_multiepisode_releases(string postTitle, string title, string subgroup, int[] absoluteEpisodeNumbers)
