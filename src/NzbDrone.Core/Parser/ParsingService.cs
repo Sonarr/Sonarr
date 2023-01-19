@@ -164,7 +164,7 @@ namespace NzbDrone.Core.Parser
                     sceneSource = false;
                 }
                 else if (sceneMapping.Type == "XemService" &&
-                         sceneMapping.SceneSeasonNumber.HasValue &&
+                         sceneMapping.SceneSeasonNumber.NonNegative().HasValue &&
                          parsedEpisodeInfo.SeasonNumber == 1 &&
                          sceneMapping.SceneSeasonNumber != parsedEpisodeInfo.SeasonNumber)
                 {
