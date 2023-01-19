@@ -16,7 +16,7 @@
   @add-mixin truncate;
   flex: 1 0 1px;
   margin-right: 10px;
-  color: #3a3f51;
+  color: var(--calendarTextDimAlternate);
   font-size: $defaultFontSize;
 }
 
