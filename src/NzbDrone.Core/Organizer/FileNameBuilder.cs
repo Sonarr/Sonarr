@@ -66,7 +66,7 @@ namespace NzbDrone.Core.Organizer
 
         public static readonly Regex AirDateRegex = new Regex(@"\{Air(\s|\W|_)Date\}", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        public static readonly Regex SeriesTitleRegex = new Regex(@"(?<token>\{(?:Series)(?<separator>[- ._])(Clean)?Title(The)?(Year)?\})",
+        public static readonly Regex SeriesTitleRegex = new Regex(@"(?<token>\{(?:Series)(?<separator>[- ._])(Clean)?Title(The)?(Without)?(Year)?\})",
                                                                             RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private static readonly Regex FileNameCleanupRegex = new Regex(@"([- ._])(\1)+", RegexOptions.Compiled);
@@ -370,6 +370,13 @@ namespace NzbDrone.Core.Organizer
             return $"{title} ({year})";
         }
 
+        public static string TitleWithoutYear(string title)
+        {
+            title = YearRegex.Replace(title, "");
+
+            return title;
+        }
+
         public static string CleanFileName(string name, bool replace = true)
         {
             string result = name;
@@ -453,9 +460,12 @@ namespace NzbDrone.Core.Organizer
             tokenHandlers["{Series Title}"] = m => series.Title;
             tokenHandlers["{Series CleanTitle}"] = m => CleanTitle(series.Title);
             tokenHandlers["{Series CleanTitleYear}"] = m => CleanTitle(TitleYear(series.Title, series.Year));
+            tokenHandlers["{Series CleanTitleWithoutYear}"] = m => CleanTitle(TitleWithoutYear(series.Title));
             tokenHandlers["{Series TitleThe}"] = m => TitleThe(series.Title);
             tokenHandlers["{Series TitleYear}"] = m => TitleYear(series.Title, series.Year);
+            tokenHandlers["{Series TitleWithoutYear}"] = m => TitleWithoutYear(series.Title);
             tokenHandlers["{Series TitleTheYear}"] = m => TitleYear(TitleThe(series.Title), series.Year);
+            tokenHandlers["{Series TitleTheWithoutYear}"] = m => TitleWithoutYear(TitleThe(series.Title));
             tokenHandlers["{Series TitleFirstCharacter}"] = m => TitleThe(series.Title).Substring(0, 1).FirstCharToUpper();
             tokenHandlers["{Series Year}"] = m => series.Year.ToString();
         }
