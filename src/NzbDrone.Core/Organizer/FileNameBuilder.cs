@@ -372,12 +372,6 @@ namespace NzbDrone.Core.Organizer
 
         public static string TitleWithoutYear(string title)
         {
-            // Regex match incase the year in the title doesn't match the year, for whatever reason.
-            // if (YearRegex.IsMatch(title))
-            // {
-            //    return title;
-            // }
-
             title = YearRegex.Replace(title, "");
 
             return title;
