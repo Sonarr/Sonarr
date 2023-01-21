@@ -46,9 +46,12 @@ const seriesTokens = [
   { token: '{Series Title}', example: 'Series Title\'s' },
   { token: '{Series CleanTitle}', example: 'Series Titles' },
   { token: '{Series CleanTitleYear}', example: 'Series Titles! 2010' },
+  { token: '{Series CleanTitleWithoutYear}', example: 'Series Titles!' },
   { token: '{Series TitleThe}', example: 'Series Title\'s, The' },
   { token: '{Series TitleTheYear}', example: 'Series Title\'s, The (2010)' },
+  { token: '{Series TitleTheWithoutYear}', example: 'Series Title\'s, The' },
   { token: '{Series TitleYear}', example: 'Series Title\'s (2010)' },
+  { token: '{Series TitleWithoutYear}', example: 'Series Title\'s' },
   { token: '{Series TitleFirstCharacter}', example: 'S' },
   { token: '{Series Year}', example: '2010' }
 ];
