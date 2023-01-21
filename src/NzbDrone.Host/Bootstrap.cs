@@ -198,10 +198,19 @@ namespace NzbDrone.Host
         private static IConfiguration GetConfiguration(StartupContext context)
         {
             var appFolder = new AppFolderInfo(context);
-            return new ConfigurationBuilder()
-                .AddXmlFile(appFolder.GetConfigPath(), optional: true, reloadOnChange: false)
-                .AddInMemoryCollection(new List<KeyValuePair<string, string>> { new ("dataProtectionFolder", appFolder.GetDataProtectionPath()) })
-                .Build();
+            var configPath = appFolder.GetConfigPath();
+
+            try
+            {
+                return new ConfigurationBuilder()
+                    .AddXmlFile(configPath, optional: true, reloadOnChange: false)
+                    .AddInMemoryCollection(new List<KeyValuePair<string, string>> { new ("dataProtectionFolder", appFolder.GetDataProtectionPath()) })
+                    .Build();
+            }
+            catch (InvalidDataException ex)
+            {
+                throw new InvalidConfigFileException($"{configPath} is corrupt or invalid. Please delete the config file and Sonarr will recreate it.", ex);
+            }
         }
 
         private static string BuildUrl(string scheme, string bindAddress, int port)
