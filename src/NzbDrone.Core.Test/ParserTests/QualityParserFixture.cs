@@ -468,8 +468,10 @@ namespace NzbDrone.Core.Test.ParserTests
 
         [TestCase("Series Title S04E87 REPACK 720p HDTV x264 aAF", true)]
         [TestCase("Series.Title.S04E87.REPACK.720p.HDTV.x264-aAF", true)]
+        [TestCase("Series.Title.S04E87.REPACK2.720p.HDTV.x264-aAF", true)]
         [TestCase("Series.Title.S04E87.PROPER.720p.HDTV.x264-aAF", false)]
         [TestCase("Series.Title.S01E07.RERIP.720p.BluRay.x264-DEMAND", true)]
+        [TestCase("Series.Title.S01E07.RERIP2.720p.BluRay.x264-DEMAND", true)]
         public void should_be_able_to_parse_repack(string title, bool isRepack)
         {
             var result = QualityParser.ParseQuality(title);
