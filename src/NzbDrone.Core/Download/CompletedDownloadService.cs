@@ -94,7 +94,7 @@ namespace NzbDrone.Core.Download
 
                 if (series == null)
                 {
-                    trackedDownload.Warn("Series title mismatch; automatic import is not possible.");
+                    trackedDownload.Warn("Series title mismatch; automatic import is not possible. Check the download troubleshooting entry on the wiki for common causes.");
                     return;
                 }
 
@@ -104,7 +104,7 @@ namespace NzbDrone.Core.Download
                 // Show a warning if the release was matched by ID and the source is not interactive search
                 if (seriesMatchType == SeriesMatchType.Id && releaseSource != ReleaseSourceType.InteractiveSearch)
                 {
-                    trackedDownload.Warn("Found matching series via grab history, but release was matched to series by ID. Automatic import is not possible.");
+                    trackedDownload.Warn("Found matching series via grab history, but release was matched to series by ID. Automatic import is not possible. See the FAQ for details.");
                     return;
                 }
             }
@@ -163,7 +163,7 @@ namespace NzbDrone.Core.Download
 
             var statusMessages = new List<TrackedDownloadStatusMessage>
                                  {
-                                    new TrackedDownloadStatusMessage("One or more episodes expected in this release were not imported or missing", new List<string>())
+                                    new TrackedDownloadStatusMessage("One or more episodes expected in this release were not imported or missing from the release", new List<string>())
                                  };
 
             if (importResults.Any(c => c.Result != ImportResultType.Imported))
@@ -242,7 +242,7 @@ namespace NzbDrone.Core.Download
                 return true;
             }
 
-            _logger.Debug("Not all episodes have been imported for {0}", trackedDownload.DownloadItem.Title);
+            _logger.Debug("Not all episodes have been imported for the release '{0}'", trackedDownload.DownloadItem.Title);
             return false;
         }
 
@@ -264,7 +264,7 @@ namespace NzbDrone.Core.Download
             if ((OsInfo.IsWindows && !downloadItemOutputPath.IsWindowsPath) ||
                 (OsInfo.IsNotWindows && !downloadItemOutputPath.IsUnixPath))
             {
-                trackedDownload.Warn("[{0}] is not a valid local path. You may need a Remote Path Mapping.", downloadItemOutputPath);
+                trackedDownload.Warn("[{0}] is not a valid local path. You may need a Remote Path Mapping. Check the download troubleshooting entry on the wiki for details.", downloadItemOutputPath);
                 return false;
             }
 
