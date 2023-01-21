@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.Profiles.Qualities;
@@ -41,6 +42,13 @@ namespace NzbDrone.Core.Tv
                 {
                     qualitiesBelowCutoff.Add(new QualitiesBelowCutoff(profile.Id, belowCutoff.SelectMany(i => i.GetQualities().Select(q => q.Id))));
                 }
+            }
+
+            if (qualitiesBelowCutoff.Empty())
+            {
+                pagingSpec.Records = new List<Episode>();
+
+                return pagingSpec;
             }
 
             return _episodeRepository.EpisodesWhereCutoffUnmet(pagingSpec, qualitiesBelowCutoff, languagesBelowCutoff, false);
