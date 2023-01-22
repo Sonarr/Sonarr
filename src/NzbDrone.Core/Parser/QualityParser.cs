@@ -636,24 +636,22 @@ namespace NzbDrone.Core.Parser
 
             var versionRegexResult = VersionRegex.Match(normalizedName);
 
+            if (versionRegexResult.Success)
+            {
+                result.Revision.Version = Convert.ToInt32(versionRegexResult.Groups["version"].Value);
+                result.RevisionDetectionSource = QualityDetectionSource.Name;
+            }
+
             if (ProperRegex.IsMatch(normalizedName))
             {
                 result.Revision.Version = versionRegexResult.Success ? Convert.ToInt32(versionRegexResult.Groups["version"].Value) + 1 : 2;
                 result.RevisionDetectionSource = QualityDetectionSource.Name;
-                return result;
             }
 
             if (RepackRegex.IsMatch(normalizedName))
             {
                 result.Revision.Version = versionRegexResult.Success ? Convert.ToInt32(versionRegexResult.Groups["version"].Value) + 1 : 2;
                 result.Revision.IsRepack = true;
-                result.RevisionDetectionSource = QualityDetectionSource.Name;
-                return result;
-            }
-
-            if (versionRegexResult.Success)
-            {
-                result.Revision.Version = Convert.ToInt32(versionRegexResult.Groups["version"].Value);
                 result.RevisionDetectionSource = QualityDetectionSource.Name;
             }
 
