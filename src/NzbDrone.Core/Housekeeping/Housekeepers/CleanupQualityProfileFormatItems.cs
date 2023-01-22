@@ -23,7 +23,6 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
 
         public void Clean()
         {
-            var test = _customFormatRepository.All();
             var customFormats = _customFormatRepository.All().ToDictionary(c => c.Id);
             var profiles = _repository.All();
             var updatedProfiles = new List<QualityProfile>();
