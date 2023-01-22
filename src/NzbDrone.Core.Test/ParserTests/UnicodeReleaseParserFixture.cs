@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using FizzWare.NBuilder.Dates;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Test.Framework;
-using Sentry;
 
 namespace NzbDrone.Core.Test.ParserTests
 {
