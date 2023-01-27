@@ -25,6 +25,7 @@ import formatBytes from 'Utilities/Number/formatBytes';
 import getProgressBarKind from 'Utilities/Series/getProgressBarKind';
 import titleCase from 'Utilities/String/titleCase';
 import hasGrowableColumns from './hasGrowableColumns';
+import SeasonsCell from './SeasonsCell';
 import selectTableOptions from './selectTableOptions';
 import SeriesStatusCell from './SeriesStatusCell';
 import styles from './SeriesIndexRow.css';
@@ -69,7 +70,9 @@ function SeriesIndexRow(props: SeriesIndexRowProps) {
     useSceneNumbering,
     genres = [],
     ratings,
+    seasons = [],
     tags = [],
+    isSaving = false,
   } = series;
 
   const {
@@ -169,8 +172,11 @@ function SeriesIndexRow(props: SeriesIndexRowProps) {
             <SeriesStatusCell
               key={name}
               className={styles[name]}
+              seriesId={seriesId}
               monitored={monitored}
               status={status}
+              isSelectMode={isSelectMode}
+              isSaving={isSaving}
               component={VirtualTableRowCell}
             />
           );
@@ -275,9 +281,14 @@ function SeriesIndexRow(props: SeriesIndexRowProps) {
 
         if (name === 'seasonCount') {
           return (
-            <VirtualTableRowCell key={name} className={styles[name]}>
-              {seasonCount}
-            </VirtualTableRowCell>
+            <SeasonsCell
+              key={name}
+              className={styles[name]}
+              seriesId={seriesId}
+              seasonCount={seasonCount}
+              seasons={seasons}
+              isSelectMode={isSelectMode}
+            />
           );
         }
 

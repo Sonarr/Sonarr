@@ -621,15 +621,23 @@ export const actionHandlers = handleThunks({
 
   [UPDATE_SERIES_MONITOR]: function(getState, payload, dispatch) {
     const {
-      id,
-      monitor
+      seriesIds,
+      monitor,
+      monitored,
+      shouldFetchEpisodesAfterUpdate = false
     } = payload;
 
-    const seriesToUpdate = { id };
+    const series = [];
 
-    if (monitor !== 'None') {
-      seriesToUpdate.monitored = true;
-    }
+    seriesIds.forEach((id) => {
+      const seriesToUpdate = { id };
+
+      if (monitored != null) {
+        seriesToUpdate.monitored = monitored;
+      }
+
+      series.push(seriesToUpdate);
+    });
 
     dispatch(set({
       section,
@@ -640,16 +648,16 @@ export const actionHandlers = handleThunks({
       url: '/seasonPass',
       method: 'POST',
       data: JSON.stringify({
-        series: [
-          seriesToUpdate
-        ],
+        series,
         monitoringOptions: { monitor }
       }),
       dataType: 'json'
     }).request;
 
     promise.done((data) => {
-      dispatch(fetchEpisodes({ seriesId: id }));
+      if (shouldFetchEpisodesAfterUpdate) {
+        dispatch(fetchEpisodes({ seriesId: seriesIds[0] }));
+      }
 
       dispatch(set({
         section,

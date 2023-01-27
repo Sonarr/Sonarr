@@ -51,6 +51,10 @@
     gap: 20px;
   }
 
+  .actionButtons {
+    flex-wrap: wrap;
+  }
+
   .actionButtons,
   .deleteButtons {
     display: flex;

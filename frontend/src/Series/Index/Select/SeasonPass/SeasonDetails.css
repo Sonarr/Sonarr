@@ -1,0 +1,10 @@
+.seasons {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.truncated {
+  align-self: center;
+  flex: 0 0 100%;
+  padding: 4px 6px;
+}
