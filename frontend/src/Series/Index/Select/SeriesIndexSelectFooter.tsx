@@ -7,13 +7,17 @@ import SpinnerButton from 'Components/Link/SpinnerButton';
 import PageContentFooter from 'Components/Page/PageContentFooter';
 import { kinds } from 'Helpers/Props';
 import { fetchRootFolders } from 'Store/Actions/rootFolderActions';
-import { saveSeriesEditor } from 'Store/Actions/seriesActions';
+import {
+  saveSeriesEditor,
+  updateSeriesMonitor,
+} from 'Store/Actions/seriesActions';
 import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
 import translate from 'Utilities/String/translate';
 import getSelectedIds from 'Utilities/Table/getSelectedIds';
 import DeleteSeriesModal from './Delete/DeleteSeriesModal';
 import EditSeriesModal from './Edit/EditSeriesModal';
 import OrganizeSeriesModal from './Organize/OrganizeSeriesModal';
+import ChangeMonitoringModal from './SeasonPass/ChangeMonitoringModal';
 import TagsModal from './Tags/TagsModal';
 import styles from './SeriesIndexSelectFooter.css';
 
@@ -21,12 +25,12 @@ const seriesEditorSelector = createSelector(
   (state) => state.series,
   (series) => {
     const { isSaving, isDeleting, deleteError } = series;
-    
+
     return {
       isSaving,
       isDeleting,
-      deleteError
-    }
+      deleteError,
+    };
   }
 );
 
@@ -43,9 +47,11 @@ function SeriesIndexSelectFooter() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isOrganizeModalOpen, setIsOrganizeModalOpen] = useState(false);
   const [isTagsModalOpen, setIsTagsModalOpen] = useState(false);
+  const [isMonitoringModalOpen, setIsMonitoringModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isSavingSeries, setIsSavingSeries] = useState(false);
   const [isSavingTags, setIsSavingTags] = useState(false);
+  const [isSavingMonitoring, setIsSavingMonitoring] = useState(false);
 
   const [selectState, selectDispatch] = useSelect();
   const { selectedState } = selectState;
@@ -111,6 +117,29 @@ function SeriesIndexSelectFooter() {
     [seriesIds, dispatch]
   );
 
+  const onMonitoringPress = useCallback(() => {
+    setIsMonitoringModalOpen(true);
+  }, [setIsMonitoringModalOpen]);
+
+  const onMonitoringClose = useCallback(() => {
+    setIsEditModalOpen(false);
+  }, [setIsMonitoringModalOpen]);
+
+  const onMonitoringSavePress = useCallback(
+    (monitor) => {
+      setIsSavingMonitoring(true);
+      setIsMonitoringModalOpen(false);
+
+      dispatch(
+        updateSeriesMonitor({
+          seriesIds,
+          monitor,
+        })
+      );
+    },
+    [seriesIds, dispatch]
+  );
+
   const onDeletePress = useCallback(() => {
     setIsDeleteModalOpen(true);
   }, [setIsDeleteModalOpen]);
@@ -123,6 +152,7 @@ function SeriesIndexSelectFooter() {
     if (!isSaving) {
       setIsSavingSeries(false);
       setIsSavingTags(false);
+      setIsSavingMonitoring(false);
     }
   }, [isSaving]);
 
@@ -166,6 +196,14 @@ function SeriesIndexSelectFooter() {
           >
             {translate('Set Tags')}
           </SpinnerButton>
+
+          <SpinnerButton
+            isSpinning={isSaving && isSavingMonitoring}
+            isDisabled={!anySelected || isOrganizingSeries}
+            onPress={onMonitoringPress}
+          >
+            {translate('Update Monitoring')}
+          </SpinnerButton>
         </div>
 
         <div className={styles.deleteButtons}>
@@ -196,6 +234,13 @@ function SeriesIndexSelectFooter() {
         seriesIds={seriesIds}
         onApplyTagsPress={onApplyTagsPress}
         onModalClose={onTagsModalClose}
+      />
+
+      <ChangeMonitoringModal
+        isOpen={isMonitoringModalOpen}
+        seriesIds={seriesIds}
+        onSavePress={onMonitoringSavePress}
+        onModalClose={onMonitoringClose}
       />
 
       <OrganizeSeriesModal

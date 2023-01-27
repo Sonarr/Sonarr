@@ -1,0 +1,25 @@
+.season {
+  display: flex;
+  align-items: stretch;
+  overflow: hidden;
+  margin: 2px 4px;
+  border: 1px solid var(--borderColor);
+  border-radius: 4px;
+  background-color: var(--seasonBackgroundColor);
+  cursor: default;
+}
+
+.info {
+  padding: 0 4px;
+}
+
+.episodes {
+  padding: 0 4px;
+  background-color: var(--episodesBackgroundColor);
+  color: var(--defaultColor);
+}
+
+.allEpisodes {
+  background-color: #e0ffe0;
+  color: var(--darkGray);
+}

@@ -46,8 +46,9 @@ class MonitoringOptionsModalContentConnector extends Component {
 
   onSavePress = ({ monitor }) => {
     this.props.dispatchUpdateMonitoringOptions({
-      id: this.props.seriesId,
-      monitor
+      seriesIds: [this.props.seriesId],
+      monitor,
+      shouldFetchEpisodesAfterUpdate: true
     });
   };
 

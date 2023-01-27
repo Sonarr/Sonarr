@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import { tooltipPositions } from 'Helpers/Props';
 import Tooltip from './Tooltip';
 import styles from './Popover.css';
 
@@ -30,8 +31,13 @@ function Popover(props) {
 }
 
 Popover.propTypes = {
+  className: PropTypes.string,
+  bodyClassName: PropTypes.string,
+  anchor: PropTypes.node.isRequired,
   title: PropTypes.string.isRequired,
-  body: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired
+  body: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
+  position: PropTypes.oneOf(tooltipPositions.all),
+  canFlip: PropTypes.bool
 };
 
 export default Popover;
