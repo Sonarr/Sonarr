@@ -11,7 +11,6 @@ import NotFound from 'Components/NotFound';
 import Switch from 'Components/Router/Switch';
 import SeasonPassConnector from 'SeasonPass/SeasonPassConnector';
 import SeriesDetailsPageConnector from 'Series/Details/SeriesDetailsPageConnector';
-import SeriesEditorConnector from 'Series/Editor/SeriesEditorConnector';
 import SeriesIndex from 'Series/Index/SeriesIndex';
 import CustomFormatSettingsConnector from 'Settings/CustomFormats/CustomFormatSettingsConnector';
 import DownloadClientSettingsConnector from 'Settings/DownloadClients/DownloadClientSettingsConnector';
@@ -83,7 +82,15 @@ function AppRoutes(props) {
 
       <Route
         path="/serieseditor"
-        component={SeriesEditorConnector}
+        exact={true}
+        render={() => {
+          return (
+            <Redirect
+              to={getPathWithUrlBase('/')}
+              component={app}
+            />
+          );
+        }}
       />
 
       <Route
