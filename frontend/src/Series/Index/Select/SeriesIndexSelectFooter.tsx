@@ -122,7 +122,7 @@ function SeriesIndexSelectFooter() {
   }, [setIsMonitoringModalOpen]);
 
   const onMonitoringClose = useCallback(() => {
-    setIsEditModalOpen(false);
+    setIsMonitoringModalOpen(false);
   }, [setIsMonitoringModalOpen]);
 
   const onMonitoringSavePress = useCallback(
