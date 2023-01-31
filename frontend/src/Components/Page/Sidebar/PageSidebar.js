@@ -31,10 +31,6 @@ const links = [
       {
         title: 'Library Import',
         to: '/add/import'
-      },
-      {
-        title: 'Season Pass',
-        to: '/seasonpass'
       }
     ]
   },

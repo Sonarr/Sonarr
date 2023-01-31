@@ -9,7 +9,6 @@ import ImportSeries from 'AddSeries/ImportSeries/ImportSeries';
 import CalendarPageConnector from 'Calendar/CalendarPageConnector';
 import NotFound from 'Components/NotFound';
 import Switch from 'Components/Router/Switch';
-import SeasonPassConnector from 'SeasonPass/SeasonPassConnector';
 import SeriesDetailsPageConnector from 'Series/Details/SeriesDetailsPageConnector';
 import SeriesIndex from 'Series/Index/SeriesIndex';
 import CustomFormatSettingsConnector from 'Settings/CustomFormats/CustomFormatSettingsConnector';
@@ -95,7 +94,15 @@ function AppRoutes(props) {
 
       <Route
         path="/seasonpass"
-        component={SeasonPassConnector}
+        exact={true}
+        render={() => {
+          return (
+            <Redirect
+              to={getPathWithUrlBase('/')}
+              component={app}
+            />
+          );
+        }}
       />
 
       <Route
