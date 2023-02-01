@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NzbDrone.Common.Cache;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Http.Ping;
 
@@ -9,19 +12,22 @@ namespace NzbDrone.Http
     public class PingController : Controller
     {
         private readonly IConfigRepository _configRepository;
+        private readonly ICached<IEnumerable<Config>> _cache;
 
-        public PingController(IConfigRepository configRepository)
+        public PingController(IConfigRepository configRepository, ICacheManager cacheManager)
         {
             _configRepository = configRepository;
+            _cache = cacheManager.GetCache<IEnumerable<Config>>(GetType());
         }
 
+        [AllowAnonymous]
         [HttpGet("/ping")]
         [Produces("application/json")]
         public ActionResult<PingResource> GetStatus()
         {
             try
             {
-                _configRepository.All();
+                _cache.Get("ping", _configRepository.All, TimeSpan.FromSeconds(5));
             }
             catch (Exception)
             {
