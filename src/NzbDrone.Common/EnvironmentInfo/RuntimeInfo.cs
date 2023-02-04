@@ -19,6 +19,7 @@ namespace NzbDrone.Common.EnvironmentInfo
             _logger = logger;
 
             IsWindowsService = hostLifetime is WindowsServiceLifetime;
+            IsStarting = true;
 
             // net6.0 will return Sonarr.dll for entry assembly, we need the actual
             // executable name (Sonarr on linux).  On mono this will return the location of
@@ -82,6 +83,7 @@ namespace NzbDrone.Common.EnvironmentInfo
 
         public bool IsWindowsService { get; private set; }
 
+        public bool IsStarting { get; set; }
         public bool IsExiting { get; set; }
         public bool IsTray
         {

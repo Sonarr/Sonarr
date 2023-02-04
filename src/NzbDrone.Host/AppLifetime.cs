@@ -56,6 +56,7 @@ namespace NzbDrone.Host
 
         private void OnAppStarted()
         {
+            _runtimeInfo.IsStarting = false;
             _runtimeInfo.IsExiting = false;
 
             if (!_startupContext.Flags.Contains(StartupContext.NO_BROWSER)

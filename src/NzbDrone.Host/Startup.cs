@@ -251,6 +251,7 @@ namespace NzbDrone.Host
 
             app.UseMiddleware<VersionMiddleware>();
             app.UseMiddleware<UrlBaseMiddleware>(configFileProvider.UrlBase);
+            app.UseMiddleware<StartingUpMiddleware>();
             app.UseMiddleware<CacheHeaderMiddleware>();
             app.UseMiddleware<IfModifiedMiddleware>();
             app.UseMiddleware<BufferingMiddleware>(new List<string> { "/api/v3/command" });
