@@ -37,10 +37,10 @@ namespace NzbDrone.Core.Parser
         private static readonly Regex ProperRegex = new Regex(@"\b(?<proper>proper)\b",
                                                                 RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        private static readonly Regex RepackRegex = new Regex(@"\b(?<repack>repack|rerip)\b",
+        private static readonly Regex RepackRegex = new Regex(@"\b(?<repack>repack\d?|rerip\d?)\b",
             RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        private static readonly Regex VersionRegex = new Regex(@"\d[-._ ]?v(?<version>\d)[-._ ]|\[v(?<version>\d)\]",
+        private static readonly Regex VersionRegex = new Regex(@"\d[-._ ]?v(?<version>\d)[-._ ]|\[v(?<version>\d)\]|repack(?<version>\d)|rerip(?<version>\d)",
                                                                 RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private static readonly Regex RealRegex = new Regex(@"\b(?<real>REAL)\b",
@@ -634,24 +634,24 @@ namespace NzbDrone.Core.Parser
         {
             var result = new QualityModel { Quality = Quality.Unknown };
 
-            if (ProperRegex.IsMatch(normalizedName))
-            {
-                result.Revision.Version = 2;
-                result.RevisionDetectionSource = QualityDetectionSource.Name;
-            }
-
-            if (RepackRegex.IsMatch(normalizedName))
-            {
-                result.Revision.Version = 2;
-                result.Revision.IsRepack = true;
-                result.RevisionDetectionSource = QualityDetectionSource.Name;
-            }
-
             var versionRegexResult = VersionRegex.Match(normalizedName);
 
             if (versionRegexResult.Success)
             {
                 result.Revision.Version = Convert.ToInt32(versionRegexResult.Groups["version"].Value);
+                result.RevisionDetectionSource = QualityDetectionSource.Name;
+            }
+
+            if (ProperRegex.IsMatch(normalizedName))
+            {
+                result.Revision.Version = versionRegexResult.Success ? Convert.ToInt32(versionRegexResult.Groups["version"].Value) + 1 : 2;
+                result.RevisionDetectionSource = QualityDetectionSource.Name;
+            }
+
+            if (RepackRegex.IsMatch(normalizedName))
+            {
+                result.Revision.Version = versionRegexResult.Success ? Convert.ToInt32(versionRegexResult.Groups["version"].Value) + 1 : 2;
+                result.Revision.IsRepack = true;
                 result.RevisionDetectionSource = QualityDetectionSource.Name;
             }
 
