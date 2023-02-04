@@ -67,6 +67,7 @@ export const actionHandlers = handleThunks({
     const {
       name,
       path,
+      relativePath,
       term,
       topOfQueue = false
     } = payload;
@@ -76,6 +77,7 @@ export const actionHandlers = handleThunks({
       id: name,
       term,
       path,
+      relativePath,
       isFetching: false,
       isPopulated: false,
       error: null

@@ -10,6 +10,7 @@ import styles from './ImportSeriesRow.css';
 function ImportSeriesRow(props) {
   const {
     id,
+    relativePath,
     monitor,
     qualityProfileId,
     seasonFolder,
@@ -32,7 +33,7 @@ function ImportSeriesRow(props) {
       />
 
       <VirtualTableRowCell className={styles.folder}>
-        {id}
+        {relativePath}
       </VirtualTableRowCell>
 
       <VirtualTableRowCell className={styles.monitor}>
@@ -84,6 +85,7 @@ function ImportSeriesRow(props) {
 
 ImportSeriesRow.propTypes = {
   id: PropTypes.string.isRequired,
+  relativePath: PropTypes.string.isRequired,
   monitor: PropTypes.string.isRequired,
   qualityProfileId: PropTypes.number.isRequired,
   seriesType: PropTypes.string.isRequired,

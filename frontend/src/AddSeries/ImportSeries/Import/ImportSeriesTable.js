@@ -32,7 +32,7 @@ class ImportSeriesTable extends Component {
     unmappedFolders.forEach((unmappedFolder) => {
       const id = unmappedFolder.name;
 
-      onSeriesLookup(id, unmappedFolder.path);
+      onSeriesLookup(id, unmappedFolder.path, unmappedFolder.relativePath);
 
       onSetImportSeriesValue({
         id,

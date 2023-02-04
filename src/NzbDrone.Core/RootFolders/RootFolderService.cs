@@ -7,6 +7,7 @@ using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.RootFolders
@@ -26,6 +27,7 @@ namespace NzbDrone.Core.RootFolders
         private readonly IRootFolderRepository _rootFolderRepository;
         private readonly IDiskProvider _diskProvider;
         private readonly ISeriesRepository _seriesRepository;
+        private readonly INamingConfigService _namingConfigService;
         private readonly Logger _logger;
 
         private static readonly HashSet<string> SpecialFolders = new HashSet<string>
@@ -44,11 +46,13 @@ namespace NzbDrone.Core.RootFolders
         public RootFolderService(IRootFolderRepository rootFolderRepository,
                                  IDiskProvider diskProvider,
                                  ISeriesRepository seriesRepository,
+                                 INamingConfigService namingConfigService,
                                  Logger logger)
         {
             _rootFolderRepository = rootFolderRepository;
             _diskProvider = diskProvider;
             _seriesRepository = seriesRepository;
+            _namingConfigService = namingConfigService;
             _logger = logger;
         }
 
@@ -139,13 +143,28 @@ namespace NzbDrone.Core.RootFolders
                 return results;
             }
 
+            var subFolderDepth = _namingConfigService.GetConfig().SeriesFolderFormat.Count(f => f == Path.DirectorySeparatorChar);
             var possibleSeriesFolders = _diskProvider.GetDirectories(path).ToList();
+
+            if (subFolderDepth > 0)
+            {
+                for (int i = 0; i < subFolderDepth; i++)
+                {
+                    possibleSeriesFolders = possibleSeriesFolders.SelectMany(_diskProvider.GetDirectories).ToList();
+                }
+            }
+
             var unmappedFolders = possibleSeriesFolders.Except(seriesPaths.Select(s => s.Value), PathEqualityComparer.Instance).ToList();
 
-            foreach (string unmappedFolder in unmappedFolders)
+            foreach (var unmappedFolder in unmappedFolders)
             {
                 var di = new DirectoryInfo(unmappedFolder.Normalize());
-                results.Add(new UnmappedFolder { Name = di.Name, Path = di.FullName });
+                results.Add(new UnmappedFolder
+                {
+                    Name = di.Name,
+                    Path = di.FullName,
+                    RelativePath = path.GetRelativePath(di.FullName)
+                });
             }
 
             var setToRemove = SpecialFolders;
@@ -181,8 +200,8 @@ namespace NzbDrone.Core.RootFolders
 
         private void GetDetails(RootFolder rootFolder, Dictionary<int, string> seriesPaths, bool timeout)
         {
-            Task.Run(() =>
-            {
+            // Task.Run(() =>
+            // {
                 if (_diskProvider.FolderExists(rootFolder.Path))
                 {
                     rootFolder.Accessible = true;
@@ -190,7 +209,8 @@ namespace NzbDrone.Core.RootFolders
                     rootFolder.TotalSpace = _diskProvider.GetTotalSize(rootFolder.Path);
                     rootFolder.UnmappedFolders = GetUnmappedFolders(rootFolder.Path, seriesPaths);
                 }
-            }).Wait(timeout ? 5000 : -1);
+
+            // }).Wait(timeout ? 5000 : -1);
         }
     }
 }

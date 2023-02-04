@@ -26,10 +26,11 @@ function createMapStateToProps() {
 
 function createMapDispatchToProps(dispatch, props) {
   return {
-    onSeriesLookup(name, path) {
+    onSeriesLookup(name, path, relativePath) {
       dispatch(queueLookupSeries({
         name,
         path,
+        relativePath,
         term: name
       }));
     },
