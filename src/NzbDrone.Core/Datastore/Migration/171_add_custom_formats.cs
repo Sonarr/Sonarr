@@ -101,7 +101,10 @@ namespace NzbDrone.Core.Datastore.Migration
 
                         foreach (var term in data)
                         {
-                            var regexTerm = term.Key.TrimStart('/').TrimEnd("/i");
+                            var regexTerm = term.Key
+                                .TrimStart('/')
+                                .TrimEnd('/')
+                                .TrimEnd("/i");
 
                             // Validate Regex before creating a CF
                             try

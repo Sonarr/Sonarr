@@ -482,6 +482,70 @@ namespace NzbDrone.Core.Test.Datastore.Migration
             customFormats.First().AnimeEpisodeFormat.Should().Be("{Series Title} - S{season:00}E{episode:00} - {Custom_Formats} {Quality Full}");
         }
 
+        [Test]
+        public void should_migrate_case_sensitive_regex()
+        {
+            var db = WithMigrationTestDb(c =>
+            {
+                c.Insert.IntoTable("ReleaseProfiles").Row(new
+                {
+                    Name = "Profile",
+                    Preferred = new[]
+                    {
+                        new
+                        {
+                            Key = "/somestring/",
+                            Value = 2
+                        }
+                    }.ToJson(),
+                    Required = "[]",
+                    Ignored = "[]",
+                    Tags = "[]",
+                    IncludePreferredWhenRenaming = true,
+                    Enabled = true,
+                    IndexerId = 0
+                });
+            });
+
+            var customFormats = db.Query<CustomFormat171>("SELECT Id, Name, IncludeCustomFormatWhenRenaming, Specifications FROM CustomFormats");
+
+            customFormats.Should().HaveCount(1);
+            customFormats.First().Specifications.Should().HaveCount(1);
+            customFormats.First().Specifications.First().Body.Value.Should().Be("somestring");
+        }
+
+        [Test]
+        public void should_migrate_case_insensitive_regex()
+        {
+            var db = WithMigrationTestDb(c =>
+            {
+                c.Insert.IntoTable("ReleaseProfiles").Row(new
+                {
+                    Name = "Profile",
+                    Preferred = new[]
+                    {
+                        new
+                        {
+                            Key = "/somestring/i",
+                            Value = 2
+                        }
+                    }.ToJson(),
+                    Required = "[]",
+                    Ignored = "[]",
+                    Tags = "[]",
+                    IncludePreferredWhenRenaming = true,
+                    Enabled = true,
+                    IndexerId = 0
+                });
+            });
+
+            var customFormats = db.Query<CustomFormat171>("SELECT Id, Name, IncludeCustomFormatWhenRenaming, Specifications FROM CustomFormats");
+
+            customFormats.Should().HaveCount(1);
+            customFormats.First().Specifications.Should().HaveCount(1);
+            customFormats.First().Specifications.First().Body.Value.Should().Be("somestring");
+        }
+
         private class NamingConfig171
         {
             public string StandardEpisodeFormat { get; set; }
