@@ -5,3 +5,7 @@
   height: 25px;
   border: 2px dashed var(--dangerColor);
 }
+
+.optional {
+  border: 2px dashed var(--gray);
+}
