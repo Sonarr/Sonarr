@@ -27,3 +27,11 @@
 .customFormatTooltip {
   max-width: 250px;
 }
+
+.optional {
+  display: inline-block;
+  margin: -8px 0;
+  width: 100%;
+  height: 25px;
+  border: 2px dashed var(--gray);
+}

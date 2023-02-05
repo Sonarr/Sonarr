@@ -319,7 +319,9 @@ class InteractiveImportRow extends Component {
         >
           {
             showReleaseGroupPlaceholder ?
-              <InteractiveImportRowCellPlaceholder /> :
+              <InteractiveImportRowCellPlaceholder
+                className={styles.optional}
+              /> :
               releaseGroup
           }
         </TableRowCellButton>
