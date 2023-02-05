@@ -153,7 +153,7 @@ namespace NzbDrone.Core.Test.RootFolderTests
         [Test]
         public void should_get_unmapped_folders_inside_letter_subfolder()
         {
-            _namingConfig.SeriesFolderFormat = "{Series TitleFirstCharacter}\\{Series Title}";
+            _namingConfig.SeriesFolderFormat = "{Series TitleFirstCharacter}\\{Series Title}".AsOsAgnostic();
 
             var rootFolderPath = @"C:\Test\TV".AsOsAgnostic();
             var rootFolder = Builder<RootFolder>.CreateNew()
