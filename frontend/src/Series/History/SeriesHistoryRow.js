@@ -75,7 +75,8 @@ class SeriesHistoryRow extends Component {
       data,
       fullSeries,
       series,
-      episode
+      episode,
+      customFormatScore
     } = this.props;
 
     const {
@@ -145,7 +146,7 @@ class SeriesHistoryRow extends Component {
         <TableRowCell className={styles.customFormatScore}>
           <Tooltip
             anchor={
-              formatPreferredWordScore(data.customFormatScore, customFormats.length)
+              formatPreferredWordScore(customFormatScore, customFormats.length)
             }
             tooltip={<EpisodeFormats formats={customFormats} />}
             position={tooltipPositions.BOTTOM}
