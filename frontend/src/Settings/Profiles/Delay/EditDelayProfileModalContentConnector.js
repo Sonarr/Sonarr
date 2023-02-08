@@ -13,6 +13,9 @@ const newDelayProfile = {
   preferredProtocol: 'usenet',
   usenetDelay: 0,
   torrentDelay: 0,
+  bypassIfHighestQuality: false,
+  bypassIfAboveCustomFormatScore: false,
+  minimumCustomFormatScore: 0,
   tags: []
 };
 
