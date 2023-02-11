@@ -136,7 +136,7 @@ namespace NzbDrone.Core.Test.IndexerTests.TorznabTests
         }
 
         [Test]
-        public void should_use_bestpagesize_reported_by_caps()
+        public void should_use_best_pagesize_reported_by_caps()
         {
             _caps.MaxPageSize = 30;
             _caps.DefaultPageSize = 25;
@@ -145,7 +145,7 @@ namespace NzbDrone.Core.Test.IndexerTests.TorznabTests
         }
 
         [Test]
-        public void should_use_not_use_over_100_pagesize_reported_by_caps()
+        public void should_not_use_pagesize_over_100_even_if_reported_in_caps()
         {
             _caps.MaxPageSize = 250;
             _caps.DefaultPageSize = 25;
