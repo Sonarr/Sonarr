@@ -113,6 +113,173 @@
         }
       }
     },
+    "/api/v3/autotagging": {
+      "post": {
+        "tags": [
+          "AutoTagging"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AutoTaggingResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/AutoTaggingResource"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AutoTaggingResource"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AutoTaggingResource"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "AutoTagging"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AutoTaggingResource"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v3/autotagging/{id}": {
+      "put": {
+        "tags": [
+          "AutoTagging"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AutoTaggingResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/AutoTaggingResource"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AutoTaggingResource"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AutoTaggingResource"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "AutoTagging"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "AutoTagging"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AutoTaggingResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v3/autotagging/schema": {
+      "get": {
+        "tags": [
+          "AutoTagging"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/api/v3/system/backup": {
       "get": {
         "tags": [
@@ -3049,263 +3216,6 @@
         }
       }
     },
-    "/api/v3/language": {
-      "get": {
-        "tags": [
-          "Language"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/LanguageResource"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/LanguageResource"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/LanguageResource"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v3/language/{id}": {
-      "get": {
-        "tags": [
-          "Language"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/LanguageResource"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v3/languageprofile": {
-      "post": {
-        "tags": [
-          "LanguageProfile"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/LanguageProfileResource"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/LanguageProfileResource"
-                }
-              }
-            }
-          }
-        },
-        "deprecated": true
-      },
-      "get": {
-        "tags": [
-          "LanguageProfile"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/LanguageProfileResource"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "deprecated": true
-      }
-    },
-    "/api/v3/languageprofile/{id}": {
-      "delete": {
-        "tags": [
-          "LanguageProfile"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success"
-          }
-        },
-        "deprecated": true
-      },
-      "put": {
-        "tags": [
-          "LanguageProfile"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/LanguageProfileResource"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/LanguageProfileResource"
-                }
-              }
-            }
-          }
-        },
-        "deprecated": true
-      },
-      "get": {
-        "tags": [
-          "LanguageProfile"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/LanguageProfileResource"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v3/languageprofile/schema": {
-      "get": {
-        "tags": [
-          "LanguageProfileSchema"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/LanguageProfileResource"
-                }
-              }
-            }
-          }
-        },
-        "deprecated": true
-      }
-    },
-    "/api/v3/languageprofile/schema/{id}": {
-      "get": {
-        "tags": [
-          "LanguageProfileSchema"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/LanguageProfileResource"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/v3/localization": {
       "get": {
         "tags": [
@@ -3318,6 +3228,25 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/LocalizationResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v3/localization/language": {
+      "get": {
+        "tags": [
+          "Localization"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LanguageResource"
                 }
               }
             }
@@ -6816,6 +6745,74 @@
         ],
         "type": "string"
       },
+      "AutoTaggingResource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "removeTagsAutomatically": {
+            "type": "boolean"
+          },
+          "tags": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          },
+          "specifications": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AutoTaggingSpecificationSchema"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "AutoTaggingSpecificationSchema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "implementation": {
+            "type": "string",
+            "nullable": true
+          },
+          "implementationName": {
+            "type": "string",
+            "nullable": true
+          },
+          "negate": {
+            "type": "boolean"
+          },
+          "required": {
+            "type": "boolean"
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Field"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "BackupResource": {
         "type": "object",
         "properties": {
@@ -7012,6 +7009,11 @@
             "format": "date-time",
             "nullable": true
           },
+          "lastStartTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
           "trigger": {
             "$ref": "#/components/schemas/CommandTrigger"
           },
@@ -7166,7 +7168,8 @@
             "nullable": true
           },
           "includeCustomFormatWhenRenaming": {
-            "type": "boolean"
+            "type": "boolean",
+            "nullable": true
           },
           "specifications": {
             "type": "array",
@@ -7250,6 +7253,13 @@
           },
           "bypassIfHighestQuality": {
             "type": "boolean"
+          },
+          "bypassIfAboveCustomFormatScore": {
+            "type": "boolean"
+          },
+          "minimumCustomFormatScore": {
+            "type": "integer",
+            "format": "int32"
           },
           "order": {
             "type": "integer",
@@ -7812,6 +7822,10 @@
             },
             "nullable": true
           },
+          "customFormatScore": {
+            "type": "integer",
+            "format": "int32"
+          },
           "qualityCutoffNotMet": {
             "type": "boolean"
           },
@@ -8156,6 +8170,9 @@
           "listOrder": {
             "type": "integer",
             "format": "int32"
+          },
+          "minRefreshInterval": {
+            "$ref": "#/components/schemas/TimeSpan"
           }
         },
         "additionalProperties": false
@@ -8165,6 +8182,7 @@
           "program",
           "plex",
           "trakt",
+          "simkl",
           "other",
           "advanced"
         ],
@@ -8296,64 +8314,12 @@
         },
         "additionalProperties": false
       },
-      "LanguageProfileItemResource": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "language": {
-            "$ref": "#/components/schemas/Language"
-          },
-          "allowed": {
-            "type": "boolean"
-          }
-        },
-        "additionalProperties": false
-      },
-      "LanguageProfileResource": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "name": {
-            "type": "string",
-            "nullable": true
-          },
-          "upgradeAllowed": {
-            "type": "boolean"
-          },
-          "cutoff": {
-            "$ref": "#/components/schemas/Language"
-          },
-          "languages": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/LanguageProfileItemResource"
-            },
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
       "LanguageResource": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "name": {
+          "identifier": {
             "type": "string",
             "nullable": true
-          },
-          "nameLower": {
-            "type": "string",
-            "nullable": true,
-            "readOnly": true
           }
         },
         "additionalProperties": false
@@ -8609,6 +8575,13 @@
           },
           "downloadId": {
             "type": "string",
+            "nullable": true
+          },
+          "customFormats": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CustomFormatResource"
+            },
             "nullable": true
           },
           "rejections": {
@@ -9337,6 +9310,11 @@
             "nullable": true
           },
           "maxSize": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "preferredSize": {
             "type": "number",
             "format": "double",
             "nullable": true
@@ -10673,6 +10651,14 @@
             },
             "nullable": true
           },
+          "autoTagIds": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          },
           "seriesIds": {
             "type": "array",
             "items": {
@@ -10721,9 +10707,16 @@
             "type": "string",
             "format": "date-time"
           },
+          "lastStartTime": {
+            "type": "string",
+            "format": "date-time"
+          },
           "nextExecution": {
             "type": "string",
             "format": "date-time"
+          },
+          "lastDuration": {
+            "$ref": "#/components/schemas/TimeSpan"
           }
         },
         "additionalProperties": false
@@ -10877,6 +10870,10 @@
             "nullable": true
           },
           "path": {
+            "type": "string",
+            "nullable": true
+          },
+          "relativePath": {
             "type": "string",
             "nullable": true
           }
