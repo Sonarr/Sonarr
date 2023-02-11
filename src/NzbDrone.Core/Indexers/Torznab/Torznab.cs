@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Indexers.Torznab
         public override string Name => "Torznab";
 
         public override DownloadProtocol Protocol => DownloadProtocol.Torrent;
-        public override int PageSize => _capabilitiesProvider.GetCapabilities(Settings).DefaultPageSize;
+        public override int PageSize => Math.Min(100, Math.Max(_capabilitiesProvider.GetCapabilities(Settings).DefaultPageSize, _capabilitiesProvider.GetCapabilities(Settings).MaxPageSize));
 
         public override IIndexerRequestGenerator GetRequestGenerator()
         {
