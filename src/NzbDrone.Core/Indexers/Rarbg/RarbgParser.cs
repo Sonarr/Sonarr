@@ -33,12 +33,6 @@ namespace NzbDrone.Core.Indexers.Rarbg
 
             var jsonResponse = new HttpResponse<RarbgResponse>(indexerResponse.HttpResponse);
 
-            // TODO: Uncomment when RARBG doesn't return it for most valid requests
-            // if (jsonResponse.Resource.rate_limit == 1)
-            // {
-            //     throw new RequestLimitReachedException("Indexer API limit reached", TimeSpan.FromMinutes(5));
-            // }
-
             if (jsonResponse.Resource.error_code.HasValue)
             {
                 if (jsonResponse.Resource.error_code == 5 || jsonResponse.Resource.error_code == 8
@@ -55,6 +49,11 @@ namespace NzbDrone.Core.Indexers.Rarbg
 
             if (jsonResponse.Resource.torrent_results == null)
             {
+                if (jsonResponse.Resource.rate_limit == 1)
+                {
+                    throw new RequestLimitReachedException("Indexer API limit reached", TimeSpan.FromMinutes(5));
+                }
+
                 return results;
             }
 
