@@ -191,7 +191,8 @@ SeriesHistoryRow.propTypes = {
   fullSeries: PropTypes.bool.isRequired,
   series: PropTypes.object.isRequired,
   episode: PropTypes.object.isRequired,
-  onMarkAsFailedPress: PropTypes.func.isRequired
+  onMarkAsFailedPress: PropTypes.func.isRequired,
+  customFormatScore: PropTypes.number.isRequired
 };
 
 export default SeriesHistoryRow;
