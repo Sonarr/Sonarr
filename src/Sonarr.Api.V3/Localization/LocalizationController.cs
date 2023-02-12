@@ -29,11 +29,11 @@ namespace Sonarr.Api.V3.Localization
 
         [HttpGet("language")]
         [Produces("application/json")]
-        public LanguageResource GetLanguage()
+        public LocalizationLanguageResource GetLanguage()
         {
             var identifier = _localizationService.GetLanguageIdentifier();
 
-            return new LanguageResource
+            return new LocalizationLanguageResource
             {
                 Identifier = identifier
             };

@@ -1,6 +1,6 @@
 namespace Sonarr.Api.V3.Localization
 {
-    public class LanguageResource
+    public class LocalizationLanguageResource
     {
         public string Identifier { get; set; }
     }
