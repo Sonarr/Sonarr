@@ -21,4 +21,5 @@
 
 .allEpisodes {
   background-color: #e0ffe0;
+  color: var(--darkGray);
 }
