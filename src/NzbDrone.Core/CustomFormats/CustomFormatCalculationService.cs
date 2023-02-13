@@ -155,13 +155,14 @@ namespace NzbDrone.Core.CustomFormats
         private static List<CustomFormat> ParseCustomFormat(EpisodeFile episodeFile, Series series, List<CustomFormat> allCustomFormats)
         {
             var sceneName = string.Empty;
+
             if (episodeFile.SceneName.IsNotNullOrWhiteSpace())
             {
                 sceneName = episodeFile.SceneName;
             }
             else if (episodeFile.OriginalFilePath.IsNotNullOrWhiteSpace())
             {
-                sceneName = episodeFile.OriginalFilePath;
+                sceneName = Path.GetFileName(episodeFile.OriginalFilePath);
             }
             else if (episodeFile.RelativePath.IsNotNullOrWhiteSpace())
             {
