@@ -15,9 +15,9 @@ function createSeriesSelector() {
 
 function createFilterBuilderPropsSelector() {
   return createSelector(
-    (state) => state.series.items,
-    (series) => {
-      return series;
+    (state) => state.seriesIndex.filterBuilderProps,
+    (filterBuilderProps) => {
+      return filterBuilderProps;
     }
   );
 }

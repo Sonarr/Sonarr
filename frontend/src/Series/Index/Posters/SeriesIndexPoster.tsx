@@ -52,7 +52,7 @@ function SeriesIndexPoster(props: SeriesIndexPosterProps) {
     path,
     titleSlug,
     nextAiring,
-    statistics,
+    statistics = {},
     images,
   } = series;
 
