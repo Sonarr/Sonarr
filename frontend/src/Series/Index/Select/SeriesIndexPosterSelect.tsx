@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import { SelectActionType, useSelect } from 'App/SelectContext';
-import IconButton from 'Components/Link/IconButton';
+import Icon from 'Components/Icon';
+import Link from 'Components/Link/Link';
 import { icons } from 'Helpers/Props';
 import styles from './SeriesIndexPosterSelect.css';
 
@@ -28,13 +29,15 @@ function SeriesIndexPosterSelect(props: SeriesIndexPosterSelectProps) {
   );
 
   return (
-    <IconButton
-      className={styles.checkContainer}
-      iconClassName={isSelected ? styles.selected : styles.unselected}
-      name={isSelected ? icons.CHECK_CIRCLE : icons.CIRCLE_OUTLINE}
-      size={20}
-      onPress={onSelectPress}
-    />
+    <Link className={styles.checkButton} onPress={onSelectPress}>
+      <span className={styles.checkContainer}>
+        <Icon
+          className={isSelected ? styles.selected : styles.unselected}
+          name={isSelected ? icons.CHECK_CIRCLE : icons.CIRCLE_OUTLINE}
+          size={20}
+        />
+      </span>
+    </Link>
   );
 }
 
