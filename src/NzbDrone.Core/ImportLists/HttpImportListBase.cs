@@ -216,7 +216,7 @@ namespace NzbDrone.Core.ImportLists
                 {
                     return new NzbDroneValidationFailure(string.Empty,
                                "No results were returned from your import list, please check your settings.")
-                           { IsWarning = true };
+                    { IsWarning = true };
                 }
             }
             catch (RequestLimitReachedException)
@@ -239,7 +239,7 @@ namespace NzbDrone.Core.ImportLists
             {
                 _logger.Warn(ex, "Unable to connect to import list");
 
-                return new ValidationFailure(string.Empty, "Unable to connect to import list, check the log for more details");
+                return new ValidationFailure(string.Empty, "Unable to connect to import list: {ex.Message}. Check the log surrounding this error for details");
             }
 
             return null;

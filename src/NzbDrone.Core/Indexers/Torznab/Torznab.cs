@@ -126,7 +126,7 @@ namespace NzbDrone.Core.Indexers.Torznab
             {
                 _logger.Warn(ex, "Unable to connect to indexer: " + ex.Message);
 
-                return new ValidationFailure(string.Empty, "Unable to connect to indexer, check the log for more details");
+                return new ValidationFailure(string.Empty, "Unable to connect to indexer: {ex.Message}. Check the log surrounding this error for details");
             }
         }
 
