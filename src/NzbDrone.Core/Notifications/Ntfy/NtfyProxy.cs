@@ -114,12 +114,16 @@ namespace NzbDrone.Core.Notifications.Ntfy
                     requestBuilder.Headers.Add("X-Click", settings.ClickUrl);
                 }
 
-                var request = requestBuilder.Build();
-
-                if (!settings.UserName.IsNullOrWhiteSpace() && !settings.Password.IsNullOrWhiteSpace())
+                if (!settings.AccessToken.IsNullOrWhiteSpace())
                 {
-                    request.Credentials = new BasicNetworkCredential(settings.UserName, settings.Password);
+                    requestBuilder.Headers.Add("Authorization", "Bearer " + settings.AccessToken);
                 }
+                else if (!settings.UserName.IsNullOrWhiteSpace() && !settings.Password.IsNullOrWhiteSpace())
+                {
+                    requestBuilder.NetworkCredential = new BasicNetworkCredential(settings.UserName, settings.Password);
+                }
+
+                var request = requestBuilder.Build();
 
                 _httpClient.Execute(request);
             }
