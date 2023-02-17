@@ -26,6 +26,22 @@ namespace NzbDrone.Windows.Disk
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool CreateHardLink(string lpFileName, string lpExistingFileName, IntPtr lpSecurityAttributes);
 
+        public override IMount GetMount(string path)
+        {
+            var reparsePoint = GetReparsePoint(path);
+
+            return reparsePoint ?? base.GetMount(path);
+        }
+
+        public override string GetPathRoot(string path)
+        {
+            Ensure.That(path, () => path).IsValidPath();
+
+            var reparsePoint = GetReparsePoint(path);
+
+            return reparsePoint?.RootDirectory ?? base.GetPathRoot(path);
+        }
+
         public override long? GetAvailableSpace(string path)
         {
             Ensure.That(path, () => path).IsValidPath();
@@ -170,6 +186,24 @@ namespace NzbDrone.Windows.Disk
                 Logger.Debug(ex, string.Format("Hardlink '{0}' to '{1}' failed.", source, destination));
                 return false;
             }
+        }
+
+        private IMount GetReparsePoint(string path)
+        {
+            var di = new DirectoryInfo(path);
+            var isReparsePoint = di.Attributes.HasFlag(FileAttributes.ReparsePoint);
+
+            while (!isReparsePoint && (di = di.Parent) != null)
+            {
+                isReparsePoint = di.Attributes.HasFlag(FileAttributes.ReparsePoint);
+            }
+
+            if (isReparsePoint)
+            {
+                return new FolderMount(di);
+            }
+
+            return null;
         }
     }
 }
