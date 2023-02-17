@@ -25,6 +25,10 @@
   white-space: pre-wrap;
 }
 
+.version {
+  margin-top: 20px;
+}
+
 @media only screen and (max-width: $breakpointMedium) {
   .image {
     height: 250px;
