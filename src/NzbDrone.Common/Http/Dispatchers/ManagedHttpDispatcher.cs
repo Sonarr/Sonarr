@@ -238,7 +238,7 @@ namespace NzbDrone.Common.Http.Dispatchers
             }
         }
 
-        private void AddContentHeader(HttpRequestMessage request, string header, string value)
+        private static void AddContentHeader(HttpRequestMessage request, string header, string value)
         {
             var headers = request.Content?.Headers;
             if (headers == null)
