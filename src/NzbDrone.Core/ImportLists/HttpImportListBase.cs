@@ -215,7 +215,7 @@ namespace NzbDrone.Core.ImportLists
                 if (releases.Empty())
                 {
                     return new NzbDroneValidationFailure(string.Empty,
-                               "No results were returned from your import list, please check your settings.")
+                               "No results were returned from your import list, please check your settings and the log for details.")
                     { IsWarning = true };
                 }
             }
@@ -233,13 +233,13 @@ namespace NzbDrone.Core.ImportLists
             {
                 _logger.Warn(ex, "Unable to connect to import list");
 
-                return new ValidationFailure(string.Empty, "Unable to connect to import list. " + ex.Message);
+                return new ValidationFailure(string.Empty, "Unable to connect to import list: {ex.Message}. Check the log surrounding this error for details.");
             }
             catch (Exception ex)
             {
                 _logger.Warn(ex, "Unable to connect to import list");
 
-                return new ValidationFailure(string.Empty, "Unable to connect to import list: {ex.Message}. Check the log surrounding this error for details");
+			     return new ValidationFailure(string.Empty, "Unable to connect to import list: {ex.Message}. Check the log surrounding this error for details.");
             }
 
             return null;

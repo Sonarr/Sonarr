@@ -49,13 +49,13 @@ namespace NzbDrone.Core.ImportLists.Custom
                     return new ValidationFailure("BaseUrl", "It seems we are unauthorized to make this request.");
                 }
 
-                _logger.Error(ex, "Unable to send test message");
+                _logger.Error(ex, "Unable to connect to import list.");
                 return new ValidationFailure("BaseUrl", $"We are unable to make the request to that URL. StatusCode: {ex.Response.StatusCode}");
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "Unable to send test message");
-                return new ValidationFailure("", "Unable to send test message");
+                _logger.Error(ex, "Unable to connect to import list.");
+                return new ValidationFailure(string.Empty, "Unable to connect to import list: {ex.Message}. Check the log surrounding this error for details.");
             }
 
             return null;
