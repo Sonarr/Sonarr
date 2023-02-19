@@ -4,6 +4,7 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.CustomFormats;
 using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.Download.TrackedDownloads;
@@ -365,7 +366,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         }
 
         [Test]
-        public void should_return_false_if_quality_and_language_in_queue_meets_cutoff()
+        public void should_return_false_if_quality_in_queue_meets_cutoff()
         {
             _series.QualityProfile.Value.Cutoff = _remoteEpisode.ParsedEpisodeInfo.Quality.Quality.Id;
 
@@ -447,6 +448,33 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             GivenQueue(new List<RemoteEpisode> { remoteEpisode }, TrackedDownloadState.FailedPending);
 
             Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
+        }
+
+        [Test]
+        public void should_return_false_if_same_quality_non_proper_in_queue_and_download_propers_is_do_not_upgrade()
+        {
+            _remoteEpisode.ParsedEpisodeInfo.Quality = new QualityModel(Quality.HDTV720p, new Revision(2));
+            _series.QualityProfile.Value.Cutoff = _remoteEpisode.ParsedEpisodeInfo.Quality.Quality.Id;
+
+            Mocker.GetMock<IConfigService>()
+                .Setup(s => s.DownloadPropersAndRepacks)
+                .Returns(ProperDownloadTypes.DoNotUpgrade);
+
+            var remoteEpisode = Builder<RemoteEpisode>.CreateNew()
+                .With(r => r.Series = _series)
+                .With(r => r.Episodes = new List<Episode> { _episode })
+                .With(r => r.ParsedEpisodeInfo = new ParsedEpisodeInfo
+                {
+                    Quality = new QualityModel(Quality.HDTV720p),
+                    Languages = new List<Language> { Language.English }
+                })
+                .With(r => r.Release = _releaseInfo)
+                .With(r => r.CustomFormats = new List<CustomFormat>())
+                .Build();
+
+            GivenQueue(new List<RemoteEpisode> { remoteEpisode });
+
+            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
         }
     }
 }
