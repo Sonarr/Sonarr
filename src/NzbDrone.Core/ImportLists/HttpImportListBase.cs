@@ -239,7 +239,7 @@ namespace NzbDrone.Core.ImportLists
             {
                 _logger.Warn(ex, "Unable to connect to import list");
 
-			     return new ValidationFailure(string.Empty, "Unable to connect to import list: {ex.Message}. Check the log surrounding this error for details.");
+                return new ValidationFailure(string.Empty, "Unable to connect to import list: {ex.Message}. Check the log surrounding this error for details.");
             }
 
             return null;
