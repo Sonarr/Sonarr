@@ -116,7 +116,7 @@ function selectReducer(state: SelectState, action: SelectAction): SelectState {
         ...state,
         ...areAllSelected(nextSelectedState),
         selectedState: nextSelectedState,
-        items,
+        items: action.items,
       };
     }
     default: {
