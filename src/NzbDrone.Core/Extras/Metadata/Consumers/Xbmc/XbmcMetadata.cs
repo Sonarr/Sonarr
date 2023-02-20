@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Extras.Metadata.Files;
 using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.MediaFiles;
@@ -209,6 +211,15 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
                         }
 
                         tvShow.Add(xmlActor);
+                    }
+
+                    if (Settings.SeriesMetadataEpisodeGuide)
+                    {
+                        var episodeGuide = new KodiEpisodeGuide(series);
+                        var serializerSettings = STJson.GetSerializerSettings();
+                        serializerSettings.WriteIndented = false;
+
+                        tvShow.Add(new XElement("episodeguide", JsonSerializer.Serialize(episodeGuide, serializerSettings)));
                     }
 
                     var doc = new XDocument(tvShow);
