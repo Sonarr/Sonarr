@@ -157,6 +157,25 @@ namespace NzbDrone.Common.Test
             path.GetParentPath().Should().Be(parentPath);
         }
 
+        [TestCase(@"C:\Test\mydir", "Test")]
+        [TestCase(@"C:\Test\", @"C:\")]
+        [TestCase(@"C:\", null)]
+        [TestCase(@"\\server\share", null)]
+        [TestCase(@"\\server\share\test", @"\\server\share")]
+        public void path_should_return_parent_name_windows(string path, string parentPath)
+        {
+            WindowsOnly();
+            path.GetParentName().Should().Be(parentPath);
+        }
+
+        [TestCase(@"/", null)]
+        [TestCase(@"/test", "/")]
+        public void path_should_return_parent_name_mono(string path, string parentPath)
+        {
+            PosixOnly();
+            path.GetParentName().Should().Be(parentPath);
+        }
+
         [Test]
         public void path_should_return_parent_for_oversized_path()
         {

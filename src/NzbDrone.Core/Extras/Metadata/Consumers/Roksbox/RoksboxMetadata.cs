@@ -112,7 +112,8 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Roksbox
 
                 if (extension == ".jpg")
                 {
-                    if (!Path.GetFileNameWithoutExtension(filename).EndsWith("-thumb"))
+                    if (!Path.GetFileNameWithoutExtension(filename).EndsWith("-thumb") &&
+                        !path.GetParentName().Equals("metadata", StringComparison.InvariantCultureIgnoreCase))
                     {
                         metadata.Type = MetadataType.EpisodeImage;
                         return metadata;

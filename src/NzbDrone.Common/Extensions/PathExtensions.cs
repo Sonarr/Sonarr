@@ -86,9 +86,7 @@ namespace NzbDrone.Common.Extensions
 
         public static string GetParentPath(this string childPath)
         {
-            var cleanPath = OsInfo.IsWindows
-                ? PARENT_PATH_END_SLASH_REGEX.Replace(childPath, "")
-                : childPath.TrimEnd(Path.DirectorySeparatorChar);
+            var cleanPath = childPath.GetCleanPath();
 
             if (cleanPath.IsNullOrWhiteSpace())
             {
@@ -96,6 +94,13 @@ namespace NzbDrone.Common.Extensions
             }
 
             return Directory.GetParent(cleanPath)?.FullName;
+        }
+
+        public static string GetParentName(this string childPath)
+        {
+            var cleanPath = childPath.GetCleanPath();
+
+            return Directory.GetParent(cleanPath)?.Name;
         }
 
         public static string GetCleanPath(this string path)
