@@ -47,6 +47,10 @@ export const possibleFilterTypes = {
     { key: filterTypes.CONTAINS, value: 'contains' },
     { key: filterTypes.NOT_CONTAINS, value: 'does not contain' },
     { key: filterTypes.EQUAL, value: 'equal' },
-    { key: filterTypes.NOT_EQUAL, value: 'not equal' }
+    { key: filterTypes.NOT_EQUAL, value: 'not equal' },
+    { key: filterTypes.STARTS_WITH, value: 'starts with' },
+    { key: filterTypes.NOT_STARTS_WITH, value: 'does not start with' },
+    { key: filterTypes.ENDS_WITH, value: 'ends with' },
+    { key: filterTypes.NOT_ENDS_WITH, value: 'does not end with' }
   ]
 };
