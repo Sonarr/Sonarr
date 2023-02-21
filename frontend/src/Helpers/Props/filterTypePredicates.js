@@ -39,6 +39,22 @@ const filterTypePredicates = {
 
   [filterTypes.NOT_EQUAL]: function(itemValue, filterValue) {
     return itemValue !== filterValue;
+  },
+
+  [filterTypes.STARTS_WITH]: function(itemValue, filterValue) {
+    return itemValue.toLowerCase().startsWith(filterValue.toLowerCase());
+  },
+
+  [filterTypes.NOT_STARTS_WITH]: function(itemValue, filterValue) {
+    return !itemValue.toLowerCase().startsWith(filterValue.toLowerCase());
+  },
+
+  [filterTypes.ENDS_WITH]: function(itemValue, filterValue) {
+    return itemValue.toLowerCase().endsWith(filterValue.toLowerCase());
+  },
+
+  [filterTypes.NOT_ENDS_WITH]: function(itemValue, filterValue) {
+    return !itemValue.toLowerCase().endsWith(filterValue.toLowerCase());
   }
 };
 
