@@ -100,6 +100,11 @@ namespace NzbDrone.Common.Extensions
         {
             var cleanPath = childPath.GetCleanPath();
 
+            if (cleanPath.IsNullOrWhiteSpace())
+            {
+                return null;
+            }
+
             return Directory.GetParent(cleanPath)?.Name;
         }
 
