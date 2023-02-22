@@ -6,6 +6,7 @@ const monitorOptions = [
   { key: 'pilot', value: 'Pilot Episode' },
   { key: 'firstSeason', value: 'Only First Season' },
   { key: 'latestSeason', value: 'Only Latest Season' },
+  { key: 'specials', value: 'Special Episodes'},
   { key: 'none', value: 'None' }
 ];
 

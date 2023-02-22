@@ -9150,6 +9150,7 @@
           "firstSeason",
           "latestSeason",
           "pilot",
+          "specials",
           "none"
         ],
         "type": "string"
