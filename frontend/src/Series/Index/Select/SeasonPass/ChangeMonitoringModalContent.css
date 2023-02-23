@@ -8,6 +8,10 @@
   font-weight: bold;
 }
 
+.labelIcon {
+  margin-left: 8px;
+}
+
 @media only screen and (max-width: $breakpointExtraSmall) {
   .modalFooter {
     flex-direction: column;
