@@ -64,17 +64,17 @@ namespace NzbDrone.Core.Indexers.Newznab
         private IndexerDefinition GetDefinition(string name, NewznabSettings settings)
         {
             return new IndexerDefinition
-                   {
-                       EnableRss = false,
-                       EnableAutomaticSearch = false,
-                       EnableInteractiveSearch = false,
-                       Name = name,
-                       Implementation = GetType().Name,
-                       Settings = settings,
-                       Protocol = DownloadProtocol.Usenet,
-                       SupportsRss = SupportsRss,
-                       SupportsSearch = SupportsSearch
-                   };
+            {
+                EnableRss = false,
+                EnableAutomaticSearch = false,
+                EnableInteractiveSearch = false,
+                Name = name,
+                Implementation = GetType().Name,
+                Settings = settings,
+                Protocol = DownloadProtocol.Usenet,
+                SupportsRss = SupportsRss,
+                SupportsSearch = SupportsSearch
+            };
         }
 
         private NewznabSettings GetSettings(string url, string apiPath = null, int[] categories = null, int[] animeCategories = null)
@@ -134,7 +134,7 @@ namespace NzbDrone.Core.Indexers.Newznab
             {
                 _logger.Warn(ex, "Unable to connect to indexer: " + ex.Message);
 
-                return new ValidationFailure(string.Empty, "Unable to connect to indexer, check the log for more details");
+                return new ValidationFailure(string.Empty, "Unable to connect to indexer: {ex.Message}. Check the log surrounding this error for details");
             }
         }
 

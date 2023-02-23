@@ -57,7 +57,7 @@ namespace NzbDrone.Core.Notifications.Notifiarr
             catch (Exception ex)
             {
                 _logger.Error(ex, ex.Message);
-                return new ValidationFailure("", "Unable to send test notification. Check the log for more details.");
+                return new ValidationFailure(string.Empty, "Unable to send test notification: {ex.Message}. Check the log surrounding this error for details");
             }
         }
 

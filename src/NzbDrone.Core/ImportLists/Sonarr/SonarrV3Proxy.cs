@@ -63,13 +63,13 @@ namespace NzbDrone.Core.ImportLists.Sonarr
                     return new ValidationFailure("ApiKey", "API Key is invalid");
                 }
 
-                _logger.Error(ex, "Unable to send test message");
-                return new ValidationFailure("ApiKey", "Unable to send test message");
+                _logger.Error(ex, "Unable to connect to import list.");
+                return new ValidationFailure(string.Empty, "Unable to connect to import list: {ex.Message}. Check the log surrounding this error for details.");
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "Unable to send test message");
-                return new ValidationFailure("", "Unable to send test message");
+                _logger.Error(ex, "Unable to connect to import list.");
+                return new ValidationFailure(string.Empty, "Unable to connect to import list: {ex.Message}. Check the log surrounding this error for details.");
             }
 
             return null;

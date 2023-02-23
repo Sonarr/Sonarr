@@ -175,7 +175,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
                 }
 
                 // Here we detect if Deluge is managing the torrent and whether the seed criteria has been met.
-                // This allows drone to delete the torrent as appropriate.
+                // This allows Sonarr to delete the torrent as appropriate.
                 item.CanMoveFiles = item.CanBeRemoved =
                     torrent.IsAutoManaged &&
                     torrent.StopAtRatio &&
@@ -254,12 +254,12 @@ namespace NzbDrone.Core.Download.Clients.Deluge
                     case WebExceptionStatus.ConnectionClosed:
                         return new NzbDroneValidationFailure("UseSsl", "Verify SSL settings")
                         {
-                            DetailedDescription = "Please verify your SSL configuration on both Deluge and NzbDrone."
+                            DetailedDescription = "Please verify your SSL configuration on both Deluge and Sonarr."
                         };
                     case WebExceptionStatus.SecureChannelFailure:
                         return new NzbDroneValidationFailure("UseSsl", "Unable to connect through SSL")
                         {
-                            DetailedDescription = "Drone is unable to connect to Deluge using SSL. This problem could be computer related. Please try to configure both drone and Deluge to not use SSL."
+                            DetailedDescription = "Sonarr is unable to connect to Deluge using SSL. This problem could be computer related. Please try to configure both Sonarr and Deluge to not use SSL."
                         };
                     default:
                         return new NzbDroneValidationFailure(string.Empty, "Unknown exception: " + ex.Message);
