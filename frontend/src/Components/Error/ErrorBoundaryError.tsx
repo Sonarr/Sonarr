@@ -14,9 +14,6 @@ interface ErrorBoundaryErrorProps {
 }
 
 function ErrorBoundaryError(props: ErrorBoundaryErrorProps) {
-  const t1 = 1;
-  const t2 = 2;
-
   const {
     className = styles.container,
     messageClassName = styles.message,
