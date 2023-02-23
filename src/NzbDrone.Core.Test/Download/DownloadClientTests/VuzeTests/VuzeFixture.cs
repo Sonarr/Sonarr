@@ -271,7 +271,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.VuzeTests
 
         [TestCase(-1)] // Infinite/Unknown
         [TestCase(-2)] // Magnet Downloading
-        public void should_ignore_negative_eta(int eta)
+        public void should_ignore_negative_eta(long eta)
         {
             _completed.Eta = eta;
 
