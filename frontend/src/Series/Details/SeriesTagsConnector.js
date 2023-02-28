@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import createSeriesSelector from 'Store/Selectors/createSeriesSelector';
@@ -10,15 +9,11 @@ function createMapStateToProps() {
     createSeriesSelector(),
     createTagsSelector(),
     (series, tagList) => {
-      const tags = _.reduce(series.tags, (acc, tag) => {
-        const matchingTag = _.find(tagList, { id: tag });
-
-        if (matchingTag) {
-          acc.push(matchingTag.label);
-        }
-
-        return acc;
-      }, []);
+      const tags = series.tags
+        .map((tagId) => tagList.find((tag) => tag.id === tagId))
+        .filter((tag) => !!tag)
+        .map((tag) => tag.label)
+        .sort((a, b) => a.localeCompare(b));
 
       return {
         tags
