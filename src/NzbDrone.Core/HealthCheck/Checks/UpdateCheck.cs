@@ -16,16 +16,19 @@ namespace NzbDrone.Core.HealthCheck.Checks
         private readonly IAppFolderInfo _appFolderInfo;
         private readonly ICheckUpdateService _checkUpdateService;
         private readonly IConfigFileProvider _configFileProvider;
+        private readonly IOsInfo _osInfo;
 
         public UpdateCheck(IDiskProvider diskProvider,
                            IAppFolderInfo appFolderInfo,
                            ICheckUpdateService checkUpdateService,
-                           IConfigFileProvider configFileProvider)
+                           IConfigFileProvider configFileProvider,
+                           IOsInfo osInfo)
         {
             _diskProvider = diskProvider;
             _appFolderInfo = appFolderInfo;
             _checkUpdateService = checkUpdateService;
             _configFileProvider = configFileProvider;
+            _osInfo = osInfo;
         }
 
         public override HealthCheck Check()
@@ -34,7 +37,8 @@ namespace NzbDrone.Core.HealthCheck.Checks
             var uiFolder = Path.Combine(startupFolder, "UI");
 
             if ((OsInfo.IsWindows || _configFileProvider.UpdateAutomatically) &&
-                _configFileProvider.UpdateMechanism == UpdateMechanism.BuiltIn)
+                _configFileProvider.UpdateMechanism == UpdateMechanism.BuiltIn &&
+                !_osInfo.IsDocker)
             {
                 if (OsInfo.IsOsx && startupFolder.GetAncestorFolders().Contains("AppTranslocation"))
                 {

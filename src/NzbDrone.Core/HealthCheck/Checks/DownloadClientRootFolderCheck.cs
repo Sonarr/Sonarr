@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Net.Http;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Datastore.Events;
@@ -33,7 +34,9 @@ namespace NzbDrone.Core.HealthCheck.Checks
 
         public override HealthCheck Check()
         {
+            // Only check clients not in failure status, those get another message
             var clients = _downloadClientProvider.GetDownloadClients();
+
             var rootFolders = _rootFolderService.All();
 
             foreach (var client in clients)
@@ -42,7 +45,6 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 {
                     var status = client.GetStatus();
                     var folders = status.OutputRootFolders;
-
                     foreach (var folder in folders)
                     {
                         if (rootFolders.Any(r => r.Path.PathEquals(folder.FullPath)))
@@ -55,9 +57,13 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 {
                     _logger.Debug(ex, "Unable to communicate with {0}", client.Definition.Name);
                 }
+                catch (HttpRequestException ex)
+                {
+                    _logger.Debug(ex, "Unable to communicate with {0}", client.Definition.Name);
+                }
                 catch (Exception ex)
                 {
-                    _logger.Error(ex, "Unknown error occurred in DownloadClientRootFolderCheck HealthCheck");
+                    _logger.Error(ex, "Unknown error occured in DownloadClientRootFolderCheck HealthCheck");
                 }
             }
 
