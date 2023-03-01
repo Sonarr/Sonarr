@@ -55,7 +55,7 @@ namespace NzbDrone.Core.ImportLists.Custom
             catch (Exception ex)
             {
                 _logger.Error(ex, "Unable to connect to import list.");
-                return new ValidationFailure(string.Empty, "Unable to connect to import list: {ex.Message}. Check the log surrounding this error for details.");
+                return new ValidationFailure(string.Empty, $"Unable to connect to import list: {ex.Message}. Check the log surrounding this error for details.");
             }
 
             return null;
