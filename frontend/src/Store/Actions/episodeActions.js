@@ -60,6 +60,11 @@ export const defaultState = {
       isVisible: true
     },
     {
+      name: 'runtime',
+      label: 'Runtime',
+      isVisible: false
+    },
+    {
       name: 'languages',
       label: 'Languages',
       isVisible: false

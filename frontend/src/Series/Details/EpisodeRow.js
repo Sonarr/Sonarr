@@ -13,6 +13,7 @@ import EpisodeFileLanguageConnector from 'EpisodeFile/EpisodeFileLanguageConnect
 import MediaInfoConnector from 'EpisodeFile/MediaInfoConnector';
 import * as mediaInfoTypes from 'EpisodeFile/mediaInfoTypes';
 import formatBytes from 'Utilities/Number/formatBytes';
+import formatRuntime from 'Utilities/Number/formatRuntime';
 import styles from './EpisodeRow.css';
 
 class EpisodeRow extends Component {
@@ -59,6 +60,7 @@ class EpisodeRow extends Component {
       sceneEpisodeNumber,
       sceneAbsoluteEpisodeNumber,
       airDateUtc,
+      runtime,
       title,
       useSceneNumbering,
       unverifiedSceneNumbering,
@@ -167,6 +169,17 @@ class EpisodeRow extends Component {
                   key={name}
                   date={airDateUtc}
                 />
+              );
+            }
+
+            if (name === 'runtime') {
+              return (
+                <TableRowCell
+                  key={name}
+                  className={styles.runtime}
+                >
+                  { formatRuntime(runtime) }
+                </TableRowCell>
               );
             }
 
@@ -330,6 +343,7 @@ EpisodeRow.propTypes = {
   sceneEpisodeNumber: PropTypes.number,
   sceneAbsoluteEpisodeNumber: PropTypes.number,
   airDateUtc: PropTypes.string,
+  runtime: PropTypes.number,
   title: PropTypes.string.isRequired,
   isSaving: PropTypes.bool,
   useSceneNumbering: PropTypes.bool,

@@ -8,6 +8,7 @@ interface CssExports {
   'languages': string;
   'monitored': string;
   'releaseGroup': string;
+  'runtime': string;
   'size': string;
   'status': string;
   'subtitles': string;

@@ -36,6 +36,7 @@ namespace NzbDrone.Core.Tv
         public Ratings Ratings { get; set; }
         public List<MediaCover.MediaCover> Images { get; set; }
         public DateTime? LastSearchTime { get; set; }
+        public int Runtime { get; set; }
 
         public string SeriesTitle { get; private set; }
 
