@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Common.Disk;
-using NzbDrone.Common.Extensions;
 using NzbDrone.Core.ImportLists;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.RootFolders;
@@ -41,7 +40,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
                     continue;
                 }
 
-                if (rootFolderPath.IsNullOrWhiteSpace() || !_diskProvider.FolderExists(rootFolderPath))
+                if (!_diskProvider.FolderExists(rootFolderPath))
                 {
                     missingRootFolders.Add(rootFolderPath, new List<ImportListDefinition> { importList });
                 }

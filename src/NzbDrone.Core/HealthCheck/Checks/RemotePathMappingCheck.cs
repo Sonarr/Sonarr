@@ -130,7 +130,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
                     var episodePath = failureMessage.EpisodeInfo.Path;
                     if (_diskProvider.FileExists(episodePath))
                     {
-                        return new HealthCheck(GetType(), HealthCheckResult.Error, string.Format("Sonarr can see but not access downloaded episode {0}.Likely permissions error.", episodePath), "#permissions-error");
+                        return new HealthCheck(GetType(), HealthCheckResult.Error, string.Format("Sonarr can see but not access downloaded episode {0}. Likely permissions error.", episodePath), "#permissions-error");
                     }
                     else
                     {
@@ -159,43 +159,43 @@ namespace NzbDrone.Core.HealthCheck.Checks
                     // that the user realises something is wrong.
                     if (dlpath.IsNullOrWhiteSpace())
                     {
-                        return new HealthCheck(GetType(), HealthCheckResult.Error, "Sonarr failed to import (an) episode(s).  Check your logs for details.", "#remote-path-import-failed");
+                        return new HealthCheck(GetType(), HealthCheckResult.Error, "Sonarr failed to import (an) episode(s). Check your logs for details.", "#remote-path-import-failed");
                     }
 
                     if (!dlpath.IsPathValid())
                     {
                         if (!status.IsLocalhost)
                         {
-                            return new HealthCheck(GetType(), HealthCheckResult.Error, string.Format("Remote download client {0} reported files in {1} but this is not a valid {2} path.  Review your remote path mappings and download client settings.", client.Definition.Name, dlpath, _osInfo.Name), "#bad-remote-path-mapping");
+                            return new HealthCheck(GetType(), HealthCheckResult.Error, string.Format("Remote download client {0} reported files in {1} but this is not a valid {2} path. Review your remote path mappings and download client settings.", client.Definition.Name, dlpath, _osInfo.Name), "#bad-remote-path-mapping");
                         }
                         else if (_osInfo.IsDocker)
                         {
-                            return new HealthCheck(GetType(), HealthCheckResult.Error, string.Format("You are using docker; download client {0} reported files in {1} but this is not a valid {2} path.  Review your remote path mappings and download client settings.", client.Definition.Name, dlpath, _osInfo.Name), "#docker-bad-remote-path-mapping");
+                            return new HealthCheck(GetType(), HealthCheckResult.Error, string.Format("You are using docker; download client {0} reported files in {1} but this is not a valid {2} path. Review your remote path mappings and download client settings.", client.Definition.Name, dlpath, _osInfo.Name), "#docker-bad-remote-path-mapping");
                         }
                         else
                         {
-                            return new HealthCheck(GetType(), HealthCheckResult.Error, string.Format("Local download client {0} reported files in {1} but this is not a valid {2} path.  Review your download client settings.", client.Definition.Name, dlpath, _osInfo.Name), "#bad-download-client-settings");
+                            return new HealthCheck(GetType(), HealthCheckResult.Error, string.Format("Local download client {0} reported files in {1} but this is not a valid {2} path. Review your download client settings.", client.Definition.Name, dlpath, _osInfo.Name), "#bad-download-client-settings");
                         }
                     }
 
                     if (_diskProvider.FolderExists(dlpath))
                     {
-                        return new HealthCheck(GetType(), HealthCheckResult.Error, string.Format("Sonarr can see but not access download directory {0}.  Likely permissions error.", dlpath), "#permissions-error");
+                        return new HealthCheck(GetType(), HealthCheckResult.Error, string.Format("Sonarr can see but not access download directory {0}. Likely permissions error.", dlpath), "#permissions-error");
                     }
 
                     // if it's a remote client/docker, likely missing path mappings
                     if (_osInfo.IsDocker)
                     {
-                        return new HealthCheck(GetType(), HealthCheckResult.Error, string.Format("Sonarr can see but not access download directory {0}.  Likely permissions error.", client.Definition.Name, dlpath), "#docker-bad-remote-path-mapping");
+                        return new HealthCheck(GetType(), HealthCheckResult.Error, string.Format("Sonarr can see but not access download directory {0}. Likely permissions error.", client.Definition.Name, dlpath), "#docker-bad-remote-path-mapping");
                     }
                     else if (!status.IsLocalhost)
                     {
-                        return new HealthCheck(GetType(), HealthCheckResult.Error, string.Format("Remote download client {0} reported files in {1} but this directory does not appear to exist.  Likely missing remote path mapping.", client.Definition.Name, dlpath), "#bad-remote-path-mapping");
+                        return new HealthCheck(GetType(), HealthCheckResult.Error, string.Format("Remote download client {0} reported files in {1} but this directory does not appear to exist. Likely missing remote path mapping.", client.Definition.Name, dlpath), "#bad-remote-path-mapping");
                     }
                     else
                     {
                         // path mappings shouldn't be needed locally so probably a permissions issue
-                        return new HealthCheck(GetType(), HealthCheckResult.Error, string.Format("Download client {0} reported files in {1} but Sonarr cannot see this directory.  You may need to adjust the folder's permissions.", client.Definition.Name, dlpath), "#permissions-error");
+                        return new HealthCheck(GetType(), HealthCheckResult.Error, string.Format("Download client {0} reported files in {1} but Sonarr cannot see this directory. You may need to adjust the folder's permissions.", client.Definition.Name, dlpath), "#permissions-error");
                     }
                 }
                 catch (DownloadClientException ex)
