@@ -93,13 +93,13 @@ namespace NzbDrone.Core.Parser
                 if (!tvdbId.HasValue)
                 {
                     _logger.Trace("Title {0} not matching any series.", title);
-                    return null;
+                    continue;
                 }
 
                 if (foundTvdbId.HasValue && tvdbId != foundTvdbId)
                 {
                     _logger.Trace("Title {0} both matches tvdbid {1} and {2}, no series selected.", parsedEpisodeInfo.SeriesTitle, foundTvdbId, tvdbId);
-                    return null;
+                    continue;
                 }
 
                 if (foundSeries == null)
