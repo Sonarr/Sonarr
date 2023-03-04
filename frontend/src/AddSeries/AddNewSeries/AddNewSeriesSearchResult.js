@@ -94,6 +94,7 @@ class AddNewSeriesSearchResult extends Component {
                 images={images}
                 size={250}
                 overflow={true}
+                lazy={false}
               />
           }
 
