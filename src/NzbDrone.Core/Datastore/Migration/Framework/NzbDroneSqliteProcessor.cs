@@ -23,6 +23,11 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
 
         public override bool SupportsTransactions => true;
 
+        public override bool TableExists(string schemaName, string tableName)
+        {
+            return Exists("select count(*) from sqlite_master where name='{0}' and type='table'", tableName);
+        }
+
         public override void Process(AlterColumnExpression expression)
         {
             var tableDefinition = GetTableSchema(expression.TableName);
