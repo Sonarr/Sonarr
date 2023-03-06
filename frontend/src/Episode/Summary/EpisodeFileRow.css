@@ -20,7 +20,5 @@
 .actions {
   composes: cell from '~Components/Table/Cells/TableRowCell.css';
 
-  display: flex;
-  justify-content: flex-end;
   width: 55px;
 }

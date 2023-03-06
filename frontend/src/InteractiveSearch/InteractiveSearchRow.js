@@ -152,22 +152,24 @@ class InteractiveSearchRow extends Component {
           {formatAge(age, ageHours, ageMinutes)}
         </TableRowCell>
 
-        <TableRowCell className={styles.title}>
-          <Link to={infoUrl}>
-            {title}
-          </Link>
-          <ReleaseSceneIndicator
-            className={styles.sceneMapping}
-            seasonNumber={mappedSeasonNumber}
-            episodeNumbers={mappedEpisodeNumbers}
-            absoluteEpisodeNumbers={mappedAbsoluteEpisodeNumbers}
-            sceneSeasonNumber={seasonNumber}
-            sceneEpisodeNumbers={episodeNumbers}
-            sceneAbsoluteEpisodeNumbers={absoluteEpisodeNumbers}
-            sceneMapping={sceneMapping}
-            episodeRequested={episodeRequested}
-            isDaily={isDaily}
-          />
+        <TableRowCell>
+          <div className={styles.titleContent}>
+            <Link to={infoUrl}>
+              {title}
+            </Link>
+            <ReleaseSceneIndicator
+              className={styles.sceneMapping}
+              seasonNumber={mappedSeasonNumber}
+              episodeNumbers={mappedEpisodeNumbers}
+              absoluteEpisodeNumbers={mappedAbsoluteEpisodeNumbers}
+              sceneSeasonNumber={seasonNumber}
+              sceneEpisodeNumbers={episodeNumbers}
+              sceneAbsoluteEpisodeNumbers={absoluteEpisodeNumbers}
+              sceneMapping={sceneMapping}
+              episodeRequested={episodeRequested}
+              isDaily={isDaily}
+            />
+          </div>
         </TableRowCell>
 
         <TableRowCell className={styles.indexer}>

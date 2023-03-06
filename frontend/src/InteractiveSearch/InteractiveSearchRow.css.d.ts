@@ -12,7 +12,7 @@ interface CssExports {
   'rejected': string;
   'sceneMapping': string;
   'size': string;
-  'title': string;
+  'titleContent': string;
 }
 export const cssExports: CssExports;
 export default cssExports;

@@ -4,9 +4,7 @@
   width: 80px;
 }
 
-.title {
-  composes: cell from '~Components/Table/Cells/TableRowCell.css';
-
+.titleContent {
   display: flex;
   align-items: center;
   justify-content: space-between;
