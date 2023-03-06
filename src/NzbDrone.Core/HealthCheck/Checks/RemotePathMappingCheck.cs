@@ -66,15 +66,15 @@ namespace NzbDrone.Core.HealthCheck.Checks
                         {
                             if (!status.IsLocalhost)
                             {
-                                return new HealthCheck(GetType(), HealthCheckResult.Error, string.Format("Remote download client {0} places downloads in {1} but this is not a valid {2} path.  Review your remote path mappings and download client settings.", client.Definition.Name, folder.FullPath, _osInfo.Name), "#bad-remote-path-mapping");
+                                return new HealthCheck(GetType(), HealthCheckResult.Error, string.Format("Remote download client {0} places downloads in {1} but this is not a valid {2} path. Review your remote path mappings and download client settings.", client.Definition.Name, folder.FullPath, _osInfo.Name), "#bad-remote-path-mapping");
                             }
                             else if (_osInfo.IsDocker)
                             {
-                                return new HealthCheck(GetType(), HealthCheckResult.Error, string.Format("You are using docker; download client {0} reported files in {1} but this is not a valid {2} path.  Review your remote path mappings and download client settings.", client.Definition.Name, folder.FullPath, _osInfo.Name), "#docker-bad-remote-path-mapping");
+                                return new HealthCheck(GetType(), HealthCheckResult.Error, string.Format("You are using docker; download client {0} reported files in {1} but this is not a valid {2} path. Review your remote path mappings and download client settings.", client.Definition.Name, folder.FullPath, _osInfo.Name), "#docker-bad-remote-path-mapping");
                             }
                             else
                             {
-                                return new HealthCheck(GetType(), HealthCheckResult.Error, string.Format("Local download client {0} places downloads in {1} but this is not a valid {2} path.  Review your download client settings.", client.Definition.Name, folder.FullPath, _osInfo.Name), "#bad-download-client-settings");
+                                return new HealthCheck(GetType(), HealthCheckResult.Error, string.Format("Local download client {0} places downloads in {1} but this is not a valid {2} path. Review your download client settings.", client.Definition.Name, folder.FullPath, _osInfo.Name), "#bad-download-client-settings");
                             }
                         }
 
@@ -82,15 +82,15 @@ namespace NzbDrone.Core.HealthCheck.Checks
                         {
                             if (_osInfo.IsDocker)
                             {
-                                return new HealthCheck(GetType(), HealthCheckResult.Error, string.Format("You are using docker; download client {0} places downloads in {1} but this directory does not appear to exist inside the container.  Review your remote path mappings and container volume settings.", client.Definition.Name, folder.FullPath), "#docker-bad-remote-path-mapping");
+                                return new HealthCheck(GetType(), HealthCheckResult.Error, string.Format("You are using docker; download client {0} places downloads in {1} but this directory does not appear to exist inside the container. Review your remote path mappings and container volume settings.", client.Definition.Name, folder.FullPath), "#docker-bad-remote-path-mapping");
                             }
                             else if (!status.IsLocalhost)
                             {
-                                return new HealthCheck(GetType(), HealthCheckResult.Error, string.Format("Remote download client {0} places downloads in {1} but this directory does not appear to exist.  Likely missing or incorrect remote path mapping.", client.Definition.Name, folder.FullPath), "#bad-remote-path-mapping");
+                                return new HealthCheck(GetType(), HealthCheckResult.Error, string.Format("Remote download client {0} places downloads in {1} but this directory does not appear to exist. Likely missing or incorrect remote path mapping.", client.Definition.Name, folder.FullPath), "#bad-remote-path-mapping");
                             }
                             else
                             {
-                                return new HealthCheck(GetType(), HealthCheckResult.Error, string.Format("Download client {0} places downloads in {1} but Sonarr cannot see this directory.  You may need to adjust the folder's permissions.", client.Definition.Name, folder.FullPath), "#permissions-error");
+                                return new HealthCheck(GetType(), HealthCheckResult.Error, string.Format("Download client {0} places downloads in {1} but Sonarr cannot see this directory. You may need to adjust the folder's permissions.", client.Definition.Name, folder.FullPath), "#permissions-error");
                             }
                         }
                     }
@@ -155,7 +155,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
                     var status = client.GetStatus();
                     var dlpath = client?.GetItems().FirstOrDefault(x => x.DownloadId == failureMessage.DownloadId)?.OutputPath.FullPath;
 
-                    // If dlpath is null then there's not much useful we can report.  Give a generic message so
+                    // If dlpath is null then there's not much useful we can report. Give a generic message so
                     // that the user realises something is wrong.
                     if (dlpath.IsNullOrWhiteSpace())
                     {
