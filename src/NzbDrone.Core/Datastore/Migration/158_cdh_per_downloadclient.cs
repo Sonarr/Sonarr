@@ -36,7 +36,7 @@ namespace NzbDrone.Core.Datastore.Migration
                     removeFailedDownloads = false;
             }
                         
-            using (var updateClientCmd = conn.CreateCommand(tran, $"UPDATE DownloadClients SET RemoveCompletedDownloads = (CASE WHEN Implementation IN (\"RTorrent\", \"Flood\") THEN 0 ELSE ? END), RemoveFailedDownloads = ?"))
+            using (var updateClientCmd = conn.CreateCommand(tran, $"UPDATE DownloadClients SET RemoveCompletedDownloads = (CASE WHEN Implementation IN ('RTorrent', 'Flood') THEN 0 ELSE ? END), RemoveFailedDownloads = ?"))
             {
                 updateClientCmd.AddParameter(removeCompletedDownloads ? 1 : 0);
                 updateClientCmd.AddParameter(removeFailedDownloads ? 1 : 0);
