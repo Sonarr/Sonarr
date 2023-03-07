@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
@@ -282,6 +283,18 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
             PrepareClientToReturnCompletedItem();
             var item = Subject.GetItems().Single();
             item.RemainingTime.Should().NotHaveValue();
+        }
+
+        [TestCase(2147483648)] // 2038-01-19T03:14:23Z > int.MaxValue as unix timestamp can be either an int or a long
+        public void should_support_long_values_for_eta(long eta)
+        {
+            _downloading.Eta = eta;
+
+            PrepareClientToReturnDownloadingItem();
+            var item = Subject.GetItems().Single();
+            item.RemainingTime.Should().Be(
+                new DateTimeOffset(eta, new TimeSpan(0)) -
+                DateTimeOffset.UtcNow);
         }
 
         [Test]
