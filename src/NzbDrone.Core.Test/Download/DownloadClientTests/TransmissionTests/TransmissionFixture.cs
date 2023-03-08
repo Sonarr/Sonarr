@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
@@ -275,13 +276,33 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
 
         [TestCase(-1)] // Infinite/Unknown
         [TestCase(-2)] // Magnet Downloading
-        public void should_ignore_negative_eta(int eta)
+        public void should_ignore_negative_eta(long eta)
         {
             _completed.Eta = eta;
 
             PrepareClientToReturnCompletedItem();
             var item = Subject.GetItems().Single();
             item.RemainingTime.Should().NotHaveValue();
+        }
+
+        [TestCase(2147483648)] // 2038-01-19T03:14:08Z > int.MaxValue as unix timestamp can be either an int or a long
+        public void should_support_long_values_for_eta_in_seconds(long eta)
+        {
+            _downloading.Eta = eta;
+
+            PrepareClientToReturnDownloadingItem();
+            var item = Subject.GetItems().Single();
+            item.RemainingTime.Should().Be(TimeSpan.FromSeconds(eta));
+        }
+
+        [TestCase(2147483648000)] // works with milliseconds format too
+        public void should_support_long_values_for_eta_in_milliseconds(long eta)
+        {
+            _downloading.Eta = eta;
+
+            PrepareClientToReturnDownloadingItem();
+            var item = Subject.GetItems().Single();
+            item.RemainingTime.Should().Be(TimeSpan.FromMilliseconds(eta));
         }
 
         [Test]
