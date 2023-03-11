@@ -17,6 +17,7 @@ interface CssExports {
   'seriesTitle': string;
   'statusIcon': string;
   'time': string;
+  'unaired': string;
   'underlay': string;
   'unmonitored': string;
 }
