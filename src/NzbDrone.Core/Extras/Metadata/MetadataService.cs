@@ -136,7 +136,7 @@ namespace NzbDrone.Core.Extras.Metadata
 
             if (seriesFolder.IsNullOrWhiteSpace() && seasonFolder.IsNullOrWhiteSpace())
             {
-                return new List<MetadataFile>();
+                return Array.Empty<MetadataFile>();
             }
 
             var files = new List<MetadataFile>();

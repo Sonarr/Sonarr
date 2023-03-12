@@ -51,7 +51,7 @@ namespace NzbDrone.Core.ImportLists.Simkl
             // Check to see if user has any activity since last sync, if not return empty to avoid work
             if (lastFetch.HasValue && lastActivity < lastFetch.Value.AddHours(-2))
             {
-                return new List<ImportListItemInfo>();
+                return Array.Empty<ImportListItemInfo>();
             }
 
             var generator = GetRequestGenerator();
