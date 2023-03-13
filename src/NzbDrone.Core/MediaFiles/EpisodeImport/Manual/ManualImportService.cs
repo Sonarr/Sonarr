@@ -81,8 +81,9 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
             var series = _seriesService.GetSeries(seriesId);
             var directoryInfo = new DirectoryInfo(series.Path);
             var seriesFiles = seasonNumber.HasValue ? _mediaFileService.GetFilesBySeason(seriesId, seasonNumber.Value) : _mediaFileService.GetFilesBySeries(seriesId);
+            var episodes = _episodeService.GetEpisodeBySeries(series.Id);
 
-            var items = seriesFiles.Select(episodeFile => MapItem(episodeFile, series, directoryInfo.Name)).ToList();
+            var items = seriesFiles.Select(episodeFile => MapItem(episodeFile, series, directoryInfo.Name, episodes)).ToList();
 
             if (!seasonNumber.HasValue)
             {
@@ -420,7 +421,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
             return item;
         }
 
-        private ManualImportItem MapItem(EpisodeFile episodeFile, Series series, string folderName)
+        private ManualImportItem MapItem(EpisodeFile episodeFile, Series series, string folderName, List<Episode> episodes)
         {
             var item = new ManualImportItem();
 
@@ -430,7 +431,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
             item.Name = Path.GetFileNameWithoutExtension(episodeFile.Path);
             item.Series = series;
             item.SeasonNumber = episodeFile.SeasonNumber;
-            item.Episodes = episodeFile.Episodes.Value;
+            item.Episodes = episodes.Where(e => e.EpisodeFileId == episodeFile.Id).ToList();
             item.ReleaseGroup = episodeFile.ReleaseGroup;
             item.Quality = episodeFile.Quality;
             item.Languages = episodeFile.Languages;
