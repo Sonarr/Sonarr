@@ -2,6 +2,7 @@
 // Please do not change this file!
 interface CssExports {
   'continuing': string;
+  'downloading': string;
   'ended': string;
   'footer': string;
   'legendItem': string;

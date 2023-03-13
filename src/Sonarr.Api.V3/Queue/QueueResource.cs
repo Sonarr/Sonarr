@@ -17,6 +17,7 @@ namespace Sonarr.Api.V3.Queue
     {
         public int? SeriesId { get; set; }
         public int? EpisodeId { get; set; }
+        public int? SeasonNumber { get; set; }
         public SeriesResource Series { get; set; }
         public EpisodeResource Episode { get; set; }
         public List<Language> Languages { get; set; }
@@ -37,6 +38,7 @@ namespace Sonarr.Api.V3.Queue
         public string DownloadClient { get; set; }
         public string Indexer { get; set; }
         public string OutputPath { get; set; }
+        public bool EpisodeHasFile { get; set; }
     }
 
     public static class QueueResourceMapper
@@ -53,6 +55,7 @@ namespace Sonarr.Api.V3.Queue
                 Id = model.Id,
                 SeriesId = model.Series?.Id,
                 EpisodeId = model.Episode?.Id,
+                SeasonNumber = model.Episode?.SeasonNumber,
                 Series = includeSeries && model.Series != null ? model.Series.ToResource() : null,
                 Episode = includeEpisode && model.Episode != null ? model.Episode.ToResource() : null,
                 Languages = model.Languages,
@@ -72,7 +75,8 @@ namespace Sonarr.Api.V3.Queue
                 Protocol = model.Protocol,
                 DownloadClient = model.DownloadClient,
                 Indexer = model.Indexer,
-                OutputPath = model.OutputPath
+                OutputPath = model.OutputPath,
+                EpisodeHasFile = model.Episode?.HasFile ?? false
             };
         }
 

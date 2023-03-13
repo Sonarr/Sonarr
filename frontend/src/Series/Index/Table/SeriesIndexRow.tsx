@@ -24,6 +24,7 @@ import { executeCommand } from 'Store/Actions/commandActions';
 import formatBytes from 'Utilities/Number/formatBytes';
 import getProgressBarKind from 'Utilities/Series/getProgressBarKind';
 import titleCase from 'Utilities/String/titleCase';
+import SeriesIndexProgressBar from '../ProgressBar/SeriesIndexProgressBar';
 import hasGrowableColumns from './hasGrowableColumns';
 import SeasonsCell from './SeasonsCell';
 import selectTableOptions from './selectTableOptions';
@@ -306,19 +307,18 @@ function SeriesIndexRow(props: SeriesIndexRowProps) {
         }
 
         if (name === 'episodeProgress') {
-          const progress = episodeCount
-            ? (episodeFileCount / episodeCount) * 100
-            : 100;
-
           return (
             <VirtualTableRowCell key={name} className={styles[name]}>
-              <ProgressBar
-                progress={progress}
-                kind={getProgressBarKind(status, monitored, progress)}
-                showText={true}
-                text={`${episodeFileCount} / ${episodeCount}`}
-                title={`${episodeFileCount} / ${episodeCount} (Total: ${totalEpisodeCount})`}
+              <SeriesIndexProgressBar
+                seriesId={seriesId}
+                monitored={monitored}
+                status={status}
+                episodeCount={episodeCount}
+                episodeFileCount={episodeFileCount}
+                totalEpisodeCount={totalEpisodeCount}
                 width={125}
+                detailedProgressBar={true}
+                isStandalone={true}
               />
             </VirtualTableRowCell>
           );
@@ -330,21 +330,20 @@ function SeriesIndexRow(props: SeriesIndexRowProps) {
           }
 
           const seasonStatistics = latestSeason.statistics || {};
-          const progress = seasonStatistics.episodeCount
-            ? (seasonStatistics.episodeFileCount /
-                seasonStatistics.episodeCount) *
-              100
-            : 100;
 
           return (
             <VirtualTableRowCell key={name} className={styles[name]}>
-              <ProgressBar
-                progress={progress}
-                kind={getProgressBarKind(status, monitored, progress)}
-                showText={true}
-                text={`${seasonStatistics.episodeFileCount} / ${seasonStatistics.episodeCount}`}
-                title={`${seasonStatistics.episodeFileCount} / ${seasonStatistics.episodeCount} (Total: ${seasonStatistics.totalEpisodeCount})`}
+              <SeriesIndexProgressBar
+                seriesId={seriesId}
+                seasonNumber={latestSeason.seasonNumber}
+                monitored={monitored}
+                status={status}
+                episodeCount={seasonStatistics.episodeCount}
+                episodeFileCount={seasonStatistics.episodeFileCount}
+                totalEpisodeCount={seasonStatistics.totalEpisodeCount}
                 width={125}
+                detailedProgressBar={true}
+                isStandalone={true}
               />
             </VirtualTableRowCell>
           );

@@ -114,6 +114,16 @@ export default function SeriesIndexFooter() {
                 />
                 <div>Missing Episodes (Series not monitored)</div>
               </div>
+
+              <div className={styles.legendItem}>
+                <div
+                  className={classNames(
+                    styles.downloading,
+                    enableColorImpairedMode && 'colorImpaired'
+                  )}
+                />
+                <div>Downloading (One or more episodes)</div>
+              </div>
             </div>
 
             <div className={styles.statistics}>

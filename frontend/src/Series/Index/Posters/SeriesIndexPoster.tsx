@@ -173,13 +173,15 @@ function SeriesIndexPoster(props: SeriesIndexPosterProps) {
       </div>
 
       <SeriesIndexProgressBar
+        seriesId={seriesId}
         monitored={monitored}
         status={status}
         episodeCount={episodeCount}
         episodeFileCount={episodeFileCount}
         totalEpisodeCount={totalEpisodeCount}
-        posterWidth={posterWidth}
+        width={posterWidth}
         detailedProgressBar={detailedProgressBar}
+        isStandalone={false}
       />
 
       {showTitle ? <div className={styles.title}>{title}</div> : null}

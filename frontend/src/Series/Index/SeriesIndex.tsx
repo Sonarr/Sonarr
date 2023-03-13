@@ -1,4 +1,10 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { SelectProvider } from 'App/SelectContext';
 import { REFRESH_SERIES, RSS_SYNC } from 'Commands/commandNames';
@@ -16,6 +22,8 @@ import { align, icons } from 'Helpers/Props';
 import SortDirection from 'Helpers/Props/SortDirection';
 import NoSeries from 'Series/NoSeries';
 import { executeCommand } from 'Store/Actions/commandActions';
+import { fetchQueueDetails } from 'Store/Actions/queueActions';
+import { fetchSeries } from 'Store/Actions/seriesActions';
 import {
   setSeriesFilter,
   setSeriesSort,
@@ -87,6 +95,11 @@ const SeriesIndex = withScrollPosition((props: SeriesIndexProps) => {
   const [isOptionsModalOpen, setIsOptionsModalOpen] = useState(false);
   const [jumpToCharacter, setJumpToCharacter] = useState<string | null>(null);
   const [isSelectMode, setIsSelectMode] = useState(false);
+
+  useEffect(() => {
+    dispatch(fetchSeries());
+    dispatch(fetchQueueDetails({ all: true }));
+  }, [dispatch]);
 
   const onRefreshSeriesPress = useCallback(() => {
     dispatch(

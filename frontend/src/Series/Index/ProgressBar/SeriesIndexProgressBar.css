@@ -4,7 +4,6 @@
   border-radius: 0;
   background-color: #5b5b5b;
   color: var(--white);
-  transition: width 200ms ease;
 }
 
 .progressBar {

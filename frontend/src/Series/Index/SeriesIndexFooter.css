@@ -50,6 +50,12 @@
   }
 }
 
+.downloading {
+  composes: legendItemColor;
+
+  background-color: var(--purple);
+}
+
 .statistics {
   display: flex;
   justify-content: space-between;
