@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import Modal from 'Components/Modal/Modal';
+import { sizes } from 'Helpers/Props';
 import SeasonInteractiveSearchModalContent from './SeasonInteractiveSearchModalContent';
 
 function SeasonInteractiveSearchModal(props) {
@@ -14,6 +15,7 @@ function SeasonInteractiveSearchModal(props) {
   return (
     <Modal
       isOpen={isOpen}
+      size={sizes.EXTRA_LARGE}
       closeOnBackgroundClick={false}
       onModalClose={onModalClose}
     >
