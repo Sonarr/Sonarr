@@ -9,5 +9,7 @@ namespace NzbDrone.Core.MediaFiles.Commands
         public string Path { get; set; }
         public string DownloadClientId { get; set; }
         public ImportMode ImportMode { get; set; }
+        public override bool RequiresDiskAccess => true;
+        public override bool IsLongRunning => true;
     }
 }
