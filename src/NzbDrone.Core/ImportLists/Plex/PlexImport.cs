@@ -31,6 +31,7 @@ namespace NzbDrone.Core.ImportLists.Plex
         }
 
         public override string Name => "Plex Watchlist";
+        public override int PageSize => 50;
 
         public override IList<ImportListItemInfo> Fetch()
         {
@@ -48,7 +49,7 @@ namespace NzbDrone.Core.ImportLists.Plex
 
         public override IImportListRequestGenerator GetRequestGenerator()
         {
-            return new PlexListRequestGenerator(_plexTvService)
+            return new PlexListRequestGenerator(_plexTvService, PageSize)
             {
                 Settings = Settings
             };

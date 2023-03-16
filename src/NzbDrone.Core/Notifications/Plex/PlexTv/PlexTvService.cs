@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 using NzbDrone.Common.Cache;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Http;
@@ -15,7 +14,7 @@ namespace NzbDrone.Core.Notifications.Plex.PlexTv
         PlexTvSignInUrlResponse GetSignInUrl(string callbackUrl, int pinId, string pinCode);
         string GetAuthToken(int pinId);
         void Ping(string authToken);
-        HttpRequest GetWatchlist(string authToken);
+        HttpRequest GetWatchlist(string authToken, int pageSize, int pageOffset);
     }
 
     public class PlexTvService : IPlexTvService
@@ -94,7 +93,7 @@ namespace NzbDrone.Core.Notifications.Plex.PlexTv
             _cache.Get(authToken, () => _proxy.Ping(_configService.PlexClientIdentifier, authToken), TimeSpan.FromHours(24));
         }
 
-        public HttpRequest GetWatchlist(string authToken)
+        public HttpRequest GetWatchlist(string authToken, int pageSize, int pageOffset)
         {
             Ping(authToken);
 
@@ -110,7 +109,9 @@ namespace NzbDrone.Core.Notifications.Plex.PlexTv
                                  .AddQueryParam("includeFields", "title,type,year,ratingKey")
                                  .AddQueryParam("includeElements", "Guid")
                                  .AddQueryParam("sort", "watchlistedAt:desc")
-                                 .AddQueryParam("type", (int)PlexMediaType.Show);
+                                 .AddQueryParam("type", (int)PlexMediaType.Show)
+                                 .AddQueryParam("X-Plex-Container-Size", pageSize)
+                                 .AddQueryParam("X-Plex-Container-Start", pageOffset);
 
             if (!string.IsNullOrWhiteSpace(authToken))
             {
