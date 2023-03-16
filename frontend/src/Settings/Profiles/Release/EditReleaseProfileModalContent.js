@@ -76,6 +76,7 @@ function EditReleaseProfileModalContent(props) {
 
             <FormInputGroup
               {...required}
+              inputClassName={styles.tagInternalInput}
               type={inputTypes.TEXT_TAG}
               name="required"
               helpText="The release must contain at least one of these terms (case insensitive)"
@@ -92,6 +93,7 @@ function EditReleaseProfileModalContent(props) {
 
             <FormInputGroup
               {...ignored}
+              inputClassName={styles.tagInternalInput}
               type={inputTypes.TEXT_TAG}
               name="ignored"
               helpText="The release will be rejected if it contains one or more of terms (case insensitive)"

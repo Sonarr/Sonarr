@@ -138,6 +138,7 @@ class TagInputConnector extends Component {
       <TagInput
         onTagAdd={this.onTagAdd}
         onTagDelete={this.onTagDelete}
+        onTagReplace={this.onTagReplace}
         {...this.props}
       />
     );
