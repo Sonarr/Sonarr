@@ -1,4 +1,4 @@
-﻿using NzbDrone.Core.Tv;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Notifications.Webhook
 {
@@ -12,6 +12,7 @@ namespace NzbDrone.Core.Notifications.Webhook
         public int TvMazeId { get; set; }
         public string ImdbId { get; set; }
         public SeriesTypes Type { get; set; }
+        public int Year { get; set; }
 
         public WebhookSeries()
         {
@@ -27,6 +28,7 @@ namespace NzbDrone.Core.Notifications.Webhook
             TvMazeId = series.TvMazeId;
             ImdbId = series.ImdbId;
             Type = series.SeriesType;
+            Year = series.Year;
         }
     }
 }
