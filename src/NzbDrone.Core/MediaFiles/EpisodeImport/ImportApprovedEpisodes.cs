@@ -8,7 +8,9 @@ using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Extras;
 using NzbDrone.Core.Languages;
+using NzbDrone.Core.MediaFiles.Commands;
 using NzbDrone.Core.MediaFiles.Events;
+using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
@@ -27,6 +29,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
         private readonly IExtraService _extraService;
         private readonly IDiskProvider _diskProvider;
         private readonly IEventAggregator _eventAggregator;
+        private readonly IManageCommandQueue _commandQueueManager;
         private readonly Logger _logger;
 
         public ImportApprovedEpisodes(IUpgradeMediaFiles episodeFileUpgrader,
@@ -34,6 +37,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                                       IExtraService extraService,
                                       IDiskProvider diskProvider,
                                       IEventAggregator eventAggregator,
+                                      IManageCommandQueue commandQueueManager,
                                       Logger logger)
         {
             _episodeFileUpgrader = episodeFileUpgrader;
@@ -41,6 +45,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
             _extraService = extraService;
             _diskProvider = diskProvider;
             _eventAggregator = eventAggregator;
+            _commandQueueManager = commandQueueManager;
             _logger = logger;
         }
 
@@ -142,6 +147,8 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                 {
                     _logger.Warn(e, "Couldn't import episode " + localEpisode);
                     importResults.Add(new ImportResult(importDecision, "Failed to import episode, Destination already exists."));
+
+                    _commandQueueManager.Push(new RescanSeriesCommand(localEpisode.Series.Id));
                 }
                 catch (Exception e)
                 {
