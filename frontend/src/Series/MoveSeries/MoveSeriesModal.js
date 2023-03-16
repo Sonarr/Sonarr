@@ -15,6 +15,7 @@ function MoveSeriesModal(props) {
     destinationPath,
     destinationRootFolder,
     isOpen,
+    onModalClose,
     onSavePress,
     onMoveSeriesPress
   } = props;
@@ -33,11 +34,11 @@ function MoveSeriesModal(props) {
       isOpen={isOpen}
       size={sizes.MEDIUM}
       closeOnBackgroundClick={false}
-      onModalClose={onSavePress}
+      onModalClose={onModalClose}
     >
       <ModalContent
         showCloseButton={true}
-        onModalClose={onSavePress}
+        onModalClose={onModalClose}
       >
         <ModalHeader>
           Move Files
@@ -76,6 +77,7 @@ MoveSeriesModal.propTypes = {
   destinationPath: PropTypes.string,
   destinationRootFolder: PropTypes.string,
   isOpen: PropTypes.bool.isRequired,
+  onModalClose: PropTypes.func.isRequired,
   onSavePress: PropTypes.func.isRequired,
   onMoveSeriesPress: PropTypes.func.isRequired
 };
