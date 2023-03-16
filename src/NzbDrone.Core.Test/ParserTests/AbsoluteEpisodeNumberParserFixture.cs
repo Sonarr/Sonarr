@@ -1,7 +1,9 @@
+using System.IO;
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.ParserTests
 {
@@ -199,6 +201,18 @@ namespace NzbDrone.Core.Test.ParserTests
             result.AbsoluteEpisodeNumbers.Should().BeEmpty();
             result.SpecialAbsoluteEpisodeNumbers.Should().NotBeEmpty();
             result.SpecialAbsoluteEpisodeNumbers.Should().BeEquivalentTo(new[] { (decimal)specialEpisodeNumber });
+            result.FullSeason.Should().BeFalse();
+        }
+
+        [TestCase("Series Title 921-928 [English Dub][1080p][onepiecedubb]", "921.mkv", "Series Title", 921)]
+        public void should_handle_ambiguously_named_anime_files_in_batch_release(string releaseName, string filename, string title, int absoluteEpisodeNumber)
+        {
+            var result = Parser.Parser.ParsePath(Path.Combine(@"C:\Test".AsOsAgnostic(), releaseName, filename));
+            result.Should().NotBeNull();
+            result.AbsoluteEpisodeNumbers.Single().Should().Be(absoluteEpisodeNumber);
+            result.SeasonNumber.Should().Be(0);
+            result.EpisodeNumbers.Should().BeEmpty();
+            result.SeriesTitle.Should().Be(title);
             result.FullSeason.Should().BeFalse();
         }
     }

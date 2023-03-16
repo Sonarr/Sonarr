@@ -516,6 +516,31 @@ namespace NzbDrone.Core.Parser
 
             var result = ParseTitle(fileInfo.Name);
 
+            if (result == null && int.TryParse(Path.GetFileNameWithoutExtension(fileInfo.Name), out var number))
+            {
+                Logger.Debug("Attempting to parse episode info using directory and file names. {0}", fileInfo.Directory.Name);
+                result = ParseTitle(fileInfo.Directory.Name);
+
+                if (result != null && result.AbsoluteEpisodeNumbers.Contains(number))
+                {
+                    result.AbsoluteEpisodeNumbers = new[] { number };
+                }
+                else if (result != null && result.EpisodeNumbers.Contains(number))
+                {
+                    result.EpisodeNumbers = new[] { number };
+                }
+                else
+                {
+                    result = null;
+                }
+            }
+
+            if (result == null)
+            {
+                Logger.Debug("Attempting to parse episode info using combined directory and file names. {0}", fileInfo.Directory.Name);
+                result = ParseTitle(fileInfo.Directory.Name + " " + fileInfo.Name);
+            }
+
             if (result == null)
             {
                 Logger.Debug("Attempting to parse episode info using directory and file names. {0}", fileInfo.Directory.Name);
