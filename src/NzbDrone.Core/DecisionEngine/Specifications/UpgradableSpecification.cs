@@ -36,13 +36,13 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
             if (qualityCompare > 0)
             {
-                _logger.Debug("New item has a better quality");
+                _logger.Debug("New item has a better quality. Existing: {0}. New: {1}", currentQuality, newQuality);
                 return true;
             }
 
             if (qualityCompare < 0)
             {
-                _logger.Debug("Existing item has better quality, skipping");
+                _logger.Debug("Existing item has better quality, skipping. Existing: {0}. New: {1}", currentQuality, newQuality);
                 return false;
             }
 
@@ -53,7 +53,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             if (downloadPropersAndRepacks != ProperDownloadTypes.DoNotPrefer &&
                 qualityRevisionComapre > 0)
             {
-                _logger.Debug("New item has a better quality revision");
+                _logger.Debug("New item has a better quality revision", currentQuality, newQuality);
                 return true;
             }
 
@@ -64,15 +64,17 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             if (downloadPropersAndRepacks != ProperDownloadTypes.DoNotPrefer &&
                 qualityRevisionComapre < 0)
             {
-                _logger.Debug("Existing item has a better quality revision, skipping");
+                _logger.Debug("Existing item has a better quality revision, skipping. Existing: {0}. New: {1}", currentQuality, newQuality);
                 return false;
             }
 
             if (newFormatScore <= currentFormatScore)
             {
-                _logger.Debug("New item's custom formats [{0}] do not improve on [{1}], skipping",
+                _logger.Debug("New item's custom formats [{0}] ({1}) do not improve on [{2}] ({3}, skipping",
                               newCustomFormats.ConcatToString(),
-                              currentCustomFormats.ConcatToString());
+                              newFormatScore,
+                              currentCustomFormats.ConcatToString(),
+                              currentFormatScore);
                 return false;
             }
 
@@ -117,7 +119,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 return true;
             }
 
-            _logger.Debug("Existing item meets cut-off. skipping.");
+            _logger.Debug("Existing item meets cut-off. skipping. Existing: {0}", currentQuality);
 
             return false;
         }
@@ -129,7 +131,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             // Comparing the quality directly because we don't want to upgrade to a proper for a webrip from a webdl or vice versa
             if (currentQuality.Quality == newQuality.Quality && compare > 0)
             {
-                _logger.Debug("New quality is a better revision for existing quality");
+                _logger.Debug("New quality is a better revision for existing quality. Existing: {0}. New: {1}", currentQuality, newQuality);
                 return true;
             }
 

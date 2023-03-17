@@ -178,11 +178,11 @@ namespace NzbDrone.Core.DecisionEngine
 
                     if (decision.Rejections.Any())
                     {
-                        _logger.Debug("Release rejected for the following reasons: {0}", string.Join(", ", decision.Rejections));
+                        _logger.Debug("Release '{0}' from '{1}' rejected for the following reasons: {2}", report.Title, report.Indexer, string.Join(", ", decision.Rejections));
                     }
                     else
                     {
-                        _logger.Debug("Release accepted");
+                        _logger.Debug("Release '{0}' from '{1}' accepted", report.Title, report.Indexer);
                     }
 
                     yield return decision;
