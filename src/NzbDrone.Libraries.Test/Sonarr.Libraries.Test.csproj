@@ -5,10 +5,4 @@
   <ItemGroup>
     <ProjectReference Include="..\NzbDrone.Test.Common\Sonarr.Test.Common.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Update="NUnit" Version="3.13.3" />
-    <PackageReference Update="NUnit3TestAdapter" Version="4.4.2" />
-    <PackageReference Update="Microsoft.NET.Test.Sdk" Version="17.5.0" />
-    <PackageReference Update="NunitXml.TestLogger" Version="3.0.131" />
-  </ItemGroup>
 </Project>
