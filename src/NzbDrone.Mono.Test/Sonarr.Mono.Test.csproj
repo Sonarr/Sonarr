@@ -8,10 +8,6 @@
   -->
   <ItemGroup>
     <PackageReference Include="Mono.Posix.NETStandard" Version="5.20.1.34-servarr24" />
-    <PackageReference Update="NUnit" Version="3.13.3" />
-    <PackageReference Update="NUnit3TestAdapter" Version="4.4.2" />
-    <PackageReference Update="Microsoft.NET.Test.Sdk" Version="17.5.0" />
-    <PackageReference Update="NunitXml.TestLogger" Version="3.0.131" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NzbDrone.Common.Test\Sonarr.Common.Test.csproj" />
