@@ -12,6 +12,7 @@ import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import { inputTypes, kinds } from 'Helpers/Props';
 import MoveSeriesModal from 'Series/MoveSeries/MoveSeriesModal';
+import translate from 'Utilities/String/translate';
 import styles from './EditSeriesModalContent.css';
 
 class EditSeriesModalContent extends Component {
@@ -129,6 +130,9 @@ class EditSeriesModalContent extends Component {
                 type={inputTypes.SERIES_TYPE_SELECT}
                 name="seriesType"
                 {...seriesType}
+                helpText={translate(
+                  'Series type is used for renaming, parsing and searching'
+                )}
                 onChange={onInputChange}
               />
             </FormGroup>

@@ -17,6 +17,7 @@ import Popover from 'Components/Tooltip/Popover';
 import { icons, inputTypes, kinds, tooltipPositions } from 'Helpers/Props';
 import SeriesPoster from 'Series/SeriesPoster';
 import * as seriesTypes from 'Utilities/Series/seriesTypes';
+import translate from 'Utilities/String/translate';
 import styles from './AddNewSeriesModalContent.css';
 
 class AddNewSeriesModalContent extends Component {
@@ -197,6 +198,9 @@ class AddNewSeriesModalContent extends Component {
                     onChange={onInputChange}
                     {...seriesType}
                     value={this.state.seriesType}
+                    helpText={translate(
+                      'Series type is used for renaming, parsing and searching'
+                    )}
                   />
                 </FormGroup>
 
