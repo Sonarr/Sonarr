@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Web;
 using NLog;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
@@ -14,11 +15,8 @@ namespace NzbDrone.Core.Notifications.Plex.Server
     public interface IPlexServerProxy
     {
         List<PlexSection> GetTvSections(PlexServerSettings settings);
-        void Update(int sectionId, PlexServerSettings settings);
-        void UpdateSeries(string metadataId, PlexServerSettings settings);
         string Version(PlexServerSettings settings);
-        List<PlexPreference> Preferences(PlexServerSettings settings);
-        string GetMetadataId(int sectionId, int tvdbId, string language, PlexServerSettings settings);
+        void Update(int sectionId, string path, PlexServerSettings settings);
     }
 
     public class PlexServerProxy : IPlexServerProxy
@@ -63,19 +61,13 @@ namespace NzbDrone.Core.Notifications.Plex.Server
                        .ToList();
         }
 
-        public void Update(int sectionId, PlexServerSettings settings)
+        public void Update(int sectionId, string path, PlexServerSettings settings)
         {
             var resource = $"library/sections/{sectionId}/refresh";
             var request = BuildRequest(resource, HttpMethod.Get, settings);
-            var response = ProcessRequest(request);
 
-            CheckForError(response);
-        }
+            request.AddQueryParam("path", path);
 
-        public void UpdateSeries(string metadataId, PlexServerSettings settings)
-        {
-            var resource = $"library/metadata/{metadataId}/refresh";
-            var request = BuildRequest(resource, HttpMethod.Put, settings);
             var response = ProcessRequest(request);
 
             CheckForError(response);
@@ -97,55 +89,6 @@ namespace NzbDrone.Core.Notifications.Plex.Server
             return Json.Deserialize<PlexResponse<PlexIdentity>>(response)
                        .MediaContainer
                        .Version;
-        }
-
-        public List<PlexPreference> Preferences(PlexServerSettings settings)
-        {
-            var request = BuildRequest(":/prefs", HttpMethod.Get, settings);
-            var response = ProcessRequest(request);
-
-            CheckForError(response);
-
-            if (response.Contains("_children"))
-            {
-                return Json.Deserialize<PlexPreferencesLegacy>(response)
-                           .Preferences;
-            }
-
-            return Json.Deserialize<PlexResponse<PlexPreferences>>(response)
-                       .MediaContainer
-                       .Preferences;
-        }
-
-        public string GetMetadataId(int sectionId, int tvdbId, string language, PlexServerSettings settings)
-        {
-            var guid = $"com.plexapp.agents.thetvdb://{tvdbId}?lang={language}";
-            var resource = $"library/sections/{sectionId}/all?guid={System.Web.HttpUtility.UrlEncode(guid)}";
-            var request = BuildRequest(resource, HttpMethod.Get, settings);
-            var response = ProcessRequest(request);
-
-            CheckForError(response);
-
-            List<PlexSectionItem> items;
-
-            if (response.Contains("_children"))
-            {
-                items = Json.Deserialize<PlexSectionResponseLegacy>(response)
-                            .Items;
-            }
-            else
-            {
-                items = Json.Deserialize<PlexResponse<PlexSectionResponse>>(response)
-                            .MediaContainer
-                            .Items;
-            }
-
-            if (items == null || items.Empty())
-            {
-                return null;
-            }
-
-            return items.First().Id;
         }
 
         private HttpRequestBuilder BuildRequest(string resource, HttpMethod method, PlexServerSettings settings)
