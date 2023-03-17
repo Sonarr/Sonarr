@@ -53,7 +53,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             if (downloadPropersAndRepacks != ProperDownloadTypes.DoNotPrefer &&
                 qualityRevisionComapre > 0)
             {
-                _logger.Debug("New item has a better quality revision", currentQuality, newQuality);
+                _logger.Debug("New item has a better quality revision, skipping. Existing: {0}. New: {1}", currentQuality, newQuality);
                 return true;
             }
 
