@@ -3,7 +3,7 @@
     <TargetFrameworks>net6.0</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Selenium.Support" Version="3.141.0" />
+    <PackageReference Include="Selenium.Support" Version="4.8.1" />
     <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="92.0.4515.10700" />
   </ItemGroup>
   <ItemGroup>
