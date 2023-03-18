@@ -11,7 +11,6 @@ using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Test.Common;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Remote;
 
 namespace NzbDrone.Automation.Test
 {
@@ -20,7 +19,7 @@ namespace NzbDrone.Automation.Test
     public abstract class AutomationTest
     {
         private NzbDroneRunner _runner;
-        protected RemoteWebDriver driver;
+        protected ChromeDriver driver;
 
         public AutomationTest()
         {
@@ -40,7 +39,7 @@ namespace NzbDrone.Automation.Test
             var service = ChromeDriverService.CreateDefaultService();
 
             // Timeout as windows automation tests seem to take alot longer to get going
-            driver = new ChromeDriver(service, options, new TimeSpan(0, 3, 0));
+            driver = new ChromeDriver(service, options, TimeSpan.FromMinutes(3));
 
             driver.Manage().Window.Size = new System.Drawing.Size(1920, 1080);
 
