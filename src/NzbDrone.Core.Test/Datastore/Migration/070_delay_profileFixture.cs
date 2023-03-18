@@ -96,7 +96,10 @@ namespace NzbDrone.Core.Test.Datastore.Migration
             var series = db.Query<Series69>("SELECT Tags FROM Series");
 
             series.Should().HaveCount(1);
-            series.First().Tags.Should().BeEquivalentTo(tag.Id);
+
+            var actualTags = series.First().Tags;
+            var expectedTags = Enumerable.Repeat(tag.Id, actualTags.Count);
+            actualTags.Should().Equal(expectedTags);
         }
     }
 }

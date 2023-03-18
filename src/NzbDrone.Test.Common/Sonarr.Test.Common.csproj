@@ -3,7 +3,7 @@
     <TargetFrameworks>net6.0</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="FluentAssertions" Version="5.10.3" />
+    <PackageReference Include="FluentAssertions" Version="6.10.0" />
     <PackageReference Include="FluentValidation" Version="8.6.2" />
     <PackageReference Include="Moq" Version="4.18.4" />
     <PackageReference Include="NLog" Version="4.7.14" />

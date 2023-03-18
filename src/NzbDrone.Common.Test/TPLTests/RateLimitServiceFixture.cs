@@ -120,7 +120,7 @@ namespace NzbDrone.Common.Test.TPLTests
 
             Subject.WaitAndPulse("me", "sub", TimeSpan.FromMilliseconds(100));
 
-            (GetRateLimitStore()["me"] - _epoch).Should().BeCloseTo(TimeSpan.FromMilliseconds(200));
+            (GetRateLimitStore()["me"] - _epoch).Should().BeCloseTo(TimeSpan.FromMilliseconds(200), TimeSpan.FromMilliseconds(20));
         }
     }
 }

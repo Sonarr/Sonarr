@@ -28,8 +28,8 @@ namespace NzbDrone.Core.Test.Datastore.Migration
 
             var items = profiles.First().Items;
             items.Should().HaveCount(4);
-            items.Select(v => v.Quality).Should().BeEquivalentTo(1, 16, 18, 19);
-            items.Select(v => v.Allowed).Should().BeEquivalentTo(true, false, false, false);
+            items.Select(v => v.Quality).Should().Equal(1, 16, 18, 19);
+            items.Select(v => v.Allowed).Should().Equal(true, false, false, false);
         }
     }
 }

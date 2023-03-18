@@ -34,6 +34,7 @@ namespace NzbDrone.Core.Test.ThingiProviderTests
 
     public class ProviderStatusServiceFixture : CoreTest<MockProviderStatusService>
     {
+        private readonly TimeSpan _disabledTillPrecision = TimeSpan.FromMilliseconds(500);
         private DateTime _epoch;
 
         [SetUp]
@@ -90,7 +91,7 @@ namespace NzbDrone.Core.Test.ThingiProviderTests
             var status = Subject.GetBlockedProviders().FirstOrDefault();
             status.Should().NotBeNull();
             status.DisabledTill.Should().HaveValue();
-            status.DisabledTill.Value.Should().BeCloseTo(_epoch + TimeSpan.FromMinutes(5), 500);
+            status.DisabledTill.Value.Should().BeCloseTo(_epoch + TimeSpan.FromMinutes(5), _disabledTillPrecision);
         }
 
         [Test]
@@ -133,7 +134,7 @@ namespace NzbDrone.Core.Test.ThingiProviderTests
             var status = Subject.GetBlockedProviders().FirstOrDefault();
             status.Should().NotBeNull();
             status.DisabledTill.Should().HaveValue();
-            status.DisabledTill.Value.Should().BeCloseTo(_epoch + TimeSpan.FromMinutes(15), 500);
+            status.DisabledTill.Value.Should().BeCloseTo(_epoch + TimeSpan.FromMinutes(15), _disabledTillPrecision);
         }
 
         [Test]
@@ -160,7 +161,7 @@ namespace NzbDrone.Core.Test.ThingiProviderTests
             status.Should().NotBeNull();
 
             origStatus.EscalationLevel.Should().Be(3);
-            status.DisabledTill.Should().BeCloseTo(_epoch + TimeSpan.FromMinutes(5), 500);
+            status.DisabledTill.Should().BeCloseTo(_epoch + TimeSpan.FromMinutes(5), _disabledTillPrecision);
         }
     }
 }
