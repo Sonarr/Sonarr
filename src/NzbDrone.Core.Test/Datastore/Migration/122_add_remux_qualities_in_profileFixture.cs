@@ -27,9 +27,9 @@ namespace NzbDrone.Core.Test.Datastore.Migration
 
             var items = profiles.First().Items;
             items.Should().HaveCount(4);
-            items.Select(v => v.Quality).Should().BeEquivalentTo(7, 20, 19, 21);
-            items.Select(v => v.Allowed).Should().BeEquivalentTo(true, false, true, false);
-            items.Select(v => v.Name).Should().BeEquivalentTo(null, null, null, (string)null);
+            items.Select(v => v.Quality).Should().Equal(7, 20, 19, 21);
+            items.Select(v => v.Allowed).Should().Equal(true, false, true, false);
+            items.Select(v => v.Name).Should().Equal(null, null, null, null);
         }
 
         [Test]
@@ -50,9 +50,9 @@ namespace NzbDrone.Core.Test.Datastore.Migration
 
             var items = profiles.First().Items;
             items.Should().HaveCount(4);
-            items.Select(v => v.Quality).Should().BeEquivalentTo(null, 20, 19, 21);
-            items.Select(v => v.Allowed).Should().BeEquivalentTo(true, false, true, false);
-            items.Select(v => v.Name).Should().BeEquivalentTo("Why?!", null, null, null);
+            items.Select(v => v.Quality).Should().Equal(null, 20, 19, 21);
+            items.Select(v => v.Allowed).Should().Equal(true, false, true, false);
+            items.Select(v => v.Name).Should().Equal("Why?!", null, null, null);
         }
     }
 }

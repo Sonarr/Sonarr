@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -584,7 +583,7 @@ namespace NzbDrone.Common.Test.DiskTests
 
             var count = Subject.MirrorFolder(source.FullName, destination.FullName);
 
-            count.Should().Equals(0);
+            count.Should().Be(0);
             destination.GetFileSystemInfos().Should().BeEmpty();
         }
 
@@ -604,7 +603,7 @@ namespace NzbDrone.Common.Test.DiskTests
 
             var count = Subject.MirrorFolder(source.FullName, destination.FullName);
 
-            count.Should().Equals(0);
+            count.Should().Be(0);
             destination.GetFileSystemInfos().Should().HaveCount(1);
         }
 
@@ -621,7 +620,7 @@ namespace NzbDrone.Common.Test.DiskTests
 
             var count = Subject.MirrorFolder(source.FullName, destination.FullName);
 
-            count.Should().Equals(3);
+            count.Should().Be(3);
             VerifyCopyFolder(original.FullName, destination.FullName);
         }
 
@@ -638,7 +637,7 @@ namespace NzbDrone.Common.Test.DiskTests
 
             var count = Subject.MirrorFolder(source.FullName, destination.FullName);
 
-            count.Should().Equals(3);
+            count.Should().Be(3);
 
             File.Exists(Path.Combine(destination.FullName, _nfsFile)).Should().BeFalse();
         }
@@ -658,7 +657,7 @@ namespace NzbDrone.Common.Test.DiskTests
 
             var count = Subject.MirrorFolder(source.FullName, destination.FullName);
 
-            count.Should().Equals(0);
+            count.Should().Be(0);
             VerifyCopyFolder(original.FullName, destination.FullName);
         }
 
@@ -675,7 +674,7 @@ namespace NzbDrone.Common.Test.DiskTests
 
             var count = Subject.MirrorFolder(source.FullName + Path.DirectorySeparatorChar, destination.FullName);
 
-            count.Should().Equals(3);
+            count.Should().Be(3);
             VerifyCopyFolder(original.FullName, destination.FullName);
         }
 

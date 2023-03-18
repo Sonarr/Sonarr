@@ -13,6 +13,7 @@ namespace NzbDrone.Core.Test.Datastore
     [TestFixture]
     public class BasicRepositoryFixture : DbTest<BasicRepository<ScheduledTask>, ScheduledTask>
     {
+        private readonly TimeSpan _dateTimePrecision = TimeSpan.FromMilliseconds(20);
         private List<ScheduledTask> _basicList;
 
         [SetUp]
@@ -20,7 +21,7 @@ namespace NzbDrone.Core.Test.Datastore
         {
             AssertionOptions.AssertEquivalencyUsing(options =>
             {
-                options.Using<DateTime>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation.ToUniversalTime())).WhenTypeIs<DateTime>();
+                options.Using<DateTime>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation.ToUniversalTime(), _dateTimePrecision)).WhenTypeIs<DateTime>();
                 return options;
             });
 

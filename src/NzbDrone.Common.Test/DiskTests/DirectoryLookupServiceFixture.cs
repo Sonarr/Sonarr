@@ -49,7 +49,7 @@ namespace NzbDrone.Common.Test.DiskTests
                 .Setup(s => s.GetDirectoryInfos(It.IsAny<string>()))
                 .Returns(_folders);
 
-            Subject.LookupContents(root, false, false).Directories.Should().NotContain(Path.Combine(root, RECYCLING_BIN));
+            Subject.LookupContents(root, false, false).Directories.Should().NotContain(dir => dir.Path == Path.Combine(root, RECYCLING_BIN));
         }
 
         [Test]
@@ -62,7 +62,7 @@ namespace NzbDrone.Common.Test.DiskTests
                 .Setup(s => s.GetDirectoryInfos(It.IsAny<string>()))
                 .Returns(_folders);
 
-            Subject.LookupContents(root, false, false).Directories.Should().NotContain(Path.Combine(root, SYSTEM_VOLUME_INFORMATION));
+            Subject.LookupContents(root, false, false).Directories.Should().NotContain(dir => dir.Path == Path.Combine(root, SYSTEM_VOLUME_INFORMATION));
         }
 
         [Test]
