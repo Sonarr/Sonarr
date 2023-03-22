@@ -9150,7 +9150,7 @@
           "firstSeason",
           "latestSeason",
           "pilot",
-          "specials",
+          "monitorSpecials",
           "none"
         ],
         "type": "string"

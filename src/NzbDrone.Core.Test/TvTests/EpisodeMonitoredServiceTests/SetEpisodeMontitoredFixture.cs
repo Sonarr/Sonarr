@@ -156,7 +156,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeMonitoredServiceTests
 
             var monitoringOptions = new MonitoringOptions
             {
-                Monitor = MonitorTypes.Specials
+                Monitor = MonitorTypes.MonitorSpecials
             };
 
             Subject.SetEpisodeMonitoredStatus(_series, monitoringOptions);
