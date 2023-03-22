@@ -30,7 +30,7 @@ namespace NzbDrone.Common.Composition
 
             return toLoad
                 .Select(x => AssemblyLoadContext.Default.LoadFromAssemblyPath(Path.Combine(startupPath, $"{x}.dll")))
-                .ToArray();
+                .ToList();
         }
 
         private static Assembly ContainerResolveEventHandler(object sender, ResolveEventArgs args)
