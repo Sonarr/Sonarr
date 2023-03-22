@@ -489,6 +489,45 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
         }
 
         [Test]
+        public void should_return_true_if_not_upgrade_to_custom_format_score_but_is_upgrade_to_quality()
+        {
+            var episodeFileCustomFormats = Builder<CustomFormat>.CreateListOfSize(1).Build().ToList();
+
+            var episodeFile = new EpisodeFile
+            {
+                Quality = new QualityModel(Quality.Bluray720p)
+            };
+
+            _series.QualityProfile.Value.FormatItems = episodeFileCustomFormats.Select(c => new ProfileFormatItem
+                {
+                    Format = c,
+                    Score = 50
+                })
+                .ToList();
+
+            Mocker.GetMock<IConfigService>()
+                .Setup(s => s.DownloadPropersAndRepacks)
+                .Returns(ProperDownloadTypes.DoNotPrefer);
+
+            Mocker.GetMock<ICustomFormatCalculationService>()
+                .Setup(s => s.ParseCustomFormat(episodeFile))
+                .Returns(episodeFileCustomFormats);
+
+            _localEpisode.Quality = new QualityModel(Quality.Bluray1080p);
+            _localEpisode.CustomFormats = Builder<CustomFormat>.CreateListOfSize(1).Build().ToList();
+            _localEpisode.CustomFormatScore = 20;
+
+            _localEpisode.Episodes = Builder<Episode>.CreateListOfSize(1)
+                .All()
+                .With(e => e.EpisodeFileId = 1)
+                .With(e => e.EpisodeFile = new LazyLoaded<EpisodeFile>(episodeFile))
+                .Build()
+                .ToList();
+
+            Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeTrue();
+        }
+
+        [Test]
         public void should_return_false_if_not_upgrade_to_custom_format_score()
         {
             var episodeFileCustomFormats = Builder<CustomFormat>.CreateListOfSize(1).Build().ToList();

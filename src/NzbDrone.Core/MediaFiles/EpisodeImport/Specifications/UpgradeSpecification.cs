@@ -62,7 +62,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                 var currentFormats = _formatService.ParseCustomFormat(episodeFile);
                 var currentScore = qualityProfile.CalculateCustomFormatScore(currentFormats);
 
-                if (localEpisode.CustomFormatScore < currentScore)
+                if (qualityCompare == 0 && localEpisode.CustomFormatScore < currentScore)
                 {
                     _logger.Debug("New file's custom formats [{0}] do not improve on [{1}], skipping",
                         localEpisode.CustomFormats.ConcatToString(),
