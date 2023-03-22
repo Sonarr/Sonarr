@@ -7,6 +7,7 @@ const monitorOptions = [
   { key: 'firstSeason', value: 'Only First Season' },
   { key: 'latestSeason', value: 'Only Latest Season' },
   { key: 'monitorSpecials', value: 'Monitor Specials' },
+  { key: 'unmonitorSpecials', value: 'Unmonitor Specials' },
   { key: 'none', value: 'None' }
 ];
 

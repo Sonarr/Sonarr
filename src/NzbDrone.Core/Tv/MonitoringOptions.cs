@@ -20,6 +20,7 @@ namespace NzbDrone.Core.Tv
         LatestSeason,
         Pilot,
         MonitorSpecials,
+        UnmonitorSpecials,
         None
     }
 }
