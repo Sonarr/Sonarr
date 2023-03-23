@@ -56,7 +56,7 @@ function ChangeMonitoringModalContent(
 
               <Popover
                 anchor={<Icon className={styles.labelIcon} name={icons.INFO} />}
-                title="Monitoring Options"
+                title={translate('Monitoring Options')}
                 body={<SeriesMonitoringOptionsPopoverContent />}
                 position={tooltipPositions.RIGHT}
               />
