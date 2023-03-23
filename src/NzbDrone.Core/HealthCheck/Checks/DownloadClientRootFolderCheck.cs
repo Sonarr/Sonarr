@@ -36,7 +36,6 @@ namespace NzbDrone.Core.HealthCheck.Checks
         {
             // Only check clients not in failure status, those get another message
             var clients = _downloadClientProvider.GetDownloadClients();
-
             var rootFolders = _rootFolderService.All();
 
             foreach (var client in clients)
@@ -63,7 +62,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 }
                 catch (Exception ex)
                 {
-                    _logger.Error(ex, "Unknown error occured in DownloadClientRootFolderCheck HealthCheck");
+                    _logger.Error(ex, "Unknown error occurred in DownloadClientRootFolderCheck HealthCheck");
                 }
             }
 

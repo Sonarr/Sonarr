@@ -60,6 +60,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 {
                     var status = client.GetStatus();
                     var folders = status.OutputRootFolders;
+
                     foreach (var folder in folders)
                     {
                         if (!folder.IsValid)
@@ -128,6 +129,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 if (failureMessage.EpisodeInfo != null)
                 {
                     var episodePath = failureMessage.EpisodeInfo.Path;
+
                     if (_diskProvider.FileExists(episodePath))
                     {
                         return new HealthCheck(GetType(), HealthCheckResult.Error, string.Format("Sonarr can see but not access downloaded episode {0}. Likely permissions error.", episodePath), "#permissions-error");
