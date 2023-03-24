@@ -162,7 +162,7 @@ namespace NzbDrone.Common.Disk
             }
         }
 
-        public bool IsValid => _path.IsPathValid();
+        public bool IsValid => _path.IsPathValid(PathValidationType.CurrentOs);
 
         private int GetFileNameIndex()
         {

@@ -71,7 +71,7 @@ namespace NzbDrone.Common.Disk
 
             if (
                 allowFoldersWithoutTrailingSlashes &&
-                query.IsPathValid() &&
+                query.IsPathValid(PathValidationType.CurrentOs) &&
                 _diskProvider.FolderExists(query))
             {
                 return GetResult(query, includeFiles);

@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Test.Common;
 
@@ -12,14 +13,14 @@ namespace NzbDrone.Common.Test.EnsureTest
         public void EnsureWindowsPath(string path)
         {
             WindowsOnly();
-            Ensure.That(path, () => path).IsValidPath();
+            Ensure.That(path, () => path).IsValidPath(PathValidationType.CurrentOs);
         }
 
         [TestCase(@"/var/user/file with, comma.mkv")]
         public void EnsureLinuxPath(string path)
         {
             PosixOnly();
-            Ensure.That(path, () => path).IsValidPath();
+            Ensure.That(path, () => path).IsValidPath(PathValidationType.CurrentOs);
         }
     }
 }

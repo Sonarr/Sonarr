@@ -35,6 +35,7 @@ namespace NzbDrone.Common.Test
         [TestCase(@"\\Testserver\Test\file.ext", @"\\Testserver\Test\file.ext")]
         [TestCase(@"\\Testserver\Test\file.ext\\", @"\\Testserver\Test\file.ext")]
         [TestCase(@"\\Testserver\Test\file.ext   \\", @"\\Testserver\Test\file.ext")]
+        [TestCase(@"//CAPITAL//lower// ", @"\\CAPITAL\lower")]
         public void Clean_Path_Windows(string dirty, string clean)
         {
             WindowsOnly();

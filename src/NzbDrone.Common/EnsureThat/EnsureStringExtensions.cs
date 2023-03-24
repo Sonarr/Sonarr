@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnsureThat.Resources;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
@@ -111,14 +112,14 @@ namespace NzbDrone.Common.EnsureThat
         }
 
         [DebuggerStepThrough]
-        public static Param<string> IsValidPath(this Param<string> param)
+        public static Param<string> IsValidPath(this Param<string> param, PathValidationType validationType)
         {
             if (string.IsNullOrWhiteSpace(param.Value))
             {
                 throw ExceptionFactory.CreateForParamValidation(param.Name, ExceptionMessages.EnsureExtensions_IsNotNullOrWhiteSpace);
             }
 
-            if (param.Value.IsPathValid())
+            if (param.Value.IsPathValid(validationType))
             {
                 return param;
             }

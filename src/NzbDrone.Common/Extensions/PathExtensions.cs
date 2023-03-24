@@ -30,12 +30,12 @@ namespace NzbDrone.Common.Extensions
         public static string CleanFilePath(this string path)
         {
             Ensure.That(path, () => path).IsNotNullOrWhiteSpace();
-            Ensure.That(path, () => path).IsValidPath();
+            Ensure.That(path, () => path).IsValidPath(PathValidationType.AnyOs);
 
             var info = new FileInfo(path.Trim());
 
             // UNC
-            if (OsInfo.IsWindows && info.FullName.StartsWith(@"\\"))
+            if (!info.FullName.Contains('/') && info.FullName.StartsWith(@"\\"))
             {
                 return info.FullName.TrimEnd('/', '\\', ' ');
             }
@@ -147,24 +147,24 @@ namespace NzbDrone.Common.Extensions
 
         private static readonly Regex WindowsPathWithDriveRegex = new Regex(@"^[a-zA-Z]:\\", RegexOptions.Compiled);
 
-        public static bool IsPathValid(this string path)
+        public static bool IsPathValid(this string path, PathValidationType validationType)
         {
             if (path.ContainsInvalidPathChars() || string.IsNullOrWhiteSpace(path))
             {
                 return false;
             }
 
+            if (validationType == PathValidationType.AnyOs)
+            {
+                return IsPathValidForWindows(path) || IsPathValidForNonWindows(path);
+            }
+
             if (OsInfo.IsNotWindows)
             {
-                return path.StartsWith(Path.DirectorySeparatorChar.ToString());
+                return IsPathValidForNonWindows(path);
             }
 
-            if (path.StartsWith("\\") || WindowsPathWithDriveRegex.IsMatch(path))
-            {
-                return true;
-            }
-
-            return false;
+            return IsPathValidForWindows(path);
         }
 
         public static bool ContainsInvalidPathChars(this string text)
@@ -374,6 +374,16 @@ namespace NzbDrone.Common.Extensions
         public static string GetNlogConfigPath(this IAppFolderInfo appFolderInfo)
         {
             return Path.Combine(appFolderInfo.StartUpFolder, NLOG_CONFIG_FILE);
+        }
+
+        private static bool IsPathValidForWindows(string path)
+        {
+            return path.StartsWith("\\") || WindowsPathWithDriveRegex.IsMatch(path);
+        }
+
+        private static bool IsPathValidForNonWindows(string path)
+        {
+            return path.StartsWith("/");
         }
     }
 }

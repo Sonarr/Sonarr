@@ -43,8 +43,8 @@ namespace NzbDrone.Common.Disk
 
         public TransferMode TransferFolder(string sourcePath, string targetPath, TransferMode mode)
         {
-            Ensure.That(sourcePath, () => sourcePath).IsValidPath();
-            Ensure.That(targetPath, () => targetPath).IsValidPath();
+            Ensure.That(sourcePath, () => sourcePath).IsValidPath(PathValidationType.CurrentOs);
+            Ensure.That(targetPath, () => targetPath).IsValidPath(PathValidationType.CurrentOs);
 
             sourcePath = ResolveRealParentPath(sourcePath);
             targetPath = ResolveRealParentPath(targetPath);
@@ -140,8 +140,8 @@ namespace NzbDrone.Common.Disk
         {
             var filesCopied = 0;
 
-            Ensure.That(sourcePath, () => sourcePath).IsValidPath();
-            Ensure.That(targetPath, () => targetPath).IsValidPath();
+            Ensure.That(sourcePath, () => sourcePath).IsValidPath(PathValidationType.CurrentOs);
+            Ensure.That(targetPath, () => targetPath).IsValidPath(PathValidationType.CurrentOs);
 
             sourcePath = ResolveRealParentPath(sourcePath);
             targetPath = ResolveRealParentPath(targetPath);
@@ -255,8 +255,8 @@ namespace NzbDrone.Common.Disk
 
         public TransferMode TransferFile(string sourcePath, string targetPath, TransferMode mode, bool overwrite = false)
         {
-            Ensure.That(sourcePath, () => sourcePath).IsValidPath();
-            Ensure.That(targetPath, () => targetPath).IsValidPath();
+            Ensure.That(sourcePath, () => sourcePath).IsValidPath(PathValidationType.CurrentOs);
+            Ensure.That(targetPath, () => targetPath).IsValidPath(PathValidationType.CurrentOs);
 
             sourcePath = ResolveRealParentPath(sourcePath);
             targetPath = ResolveRealParentPath(targetPath);
