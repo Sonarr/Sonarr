@@ -35,6 +35,7 @@ namespace NzbDrone.Common.Test
         [TestCase(@"\\Testserver\Test\file.ext", @"\\Testserver\Test\file.ext")]
         [TestCase(@"\\Testserver\Test\file.ext\\", @"\\Testserver\Test\file.ext")]
         [TestCase(@"\\Testserver\Test\file.ext   \\", @"\\Testserver\Test\file.ext")]
+        [TestCase(@"//CAPITAL//lower// ", @"\\CAPITAL\lower")]
         public void Clean_Path_Windows(string dirty, string clean)
         {
             WindowsOnly();
@@ -50,6 +51,7 @@ namespace NzbDrone.Common.Test
         [TestCase(@"//test//other// ", @"/test/other")]
         [TestCase(@"//test//other//file.ext ", @"/test/other/file.ext")]
         [TestCase(@"//CAPITAL//lower// ", @"/CAPITAL/lower")]
+        [TestCase(@"\\Testserver\Test\file.ext   \\", @"/Testserver/Test/file.ext")]
         public void Clean_Path_Linux(string dirty, string clean)
         {
             PosixOnly();

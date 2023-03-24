@@ -99,7 +99,7 @@ namespace NzbDrone.Core.MediaFiles
         {
             Ensure.That(episodeFile, () => episodeFile).IsNotNull();
             Ensure.That(series, () => series).IsNotNull();
-            Ensure.That(destinationFilePath, () => destinationFilePath).IsValidPath();
+            Ensure.That(destinationFilePath, () => destinationFilePath).IsValidPath(PathValidationType.CurrentOs);
 
             var episodeFilePath = episodeFile.Path ?? Path.Combine(series.Path, episodeFile.RelativePath);
 

@@ -1,5 +1,6 @@
-﻿using FluentValidation;
+using FluentValidation;
 using FluentValidation.Validators;
+using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 
 namespace NzbDrone.Core.Validation.Paths
@@ -26,7 +27,7 @@ namespace NzbDrone.Core.Validation.Paths
                 return false;
             }
 
-            return context.PropertyValue.ToString().IsPathValid();
+            return context.PropertyValue.ToString().IsPathValid(PathValidationType.CurrentOs);
         }
     }
 }

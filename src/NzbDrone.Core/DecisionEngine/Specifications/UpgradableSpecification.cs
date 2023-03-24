@@ -70,7 +70,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
             if (newFormatScore <= currentFormatScore)
             {
-                _logger.Debug("New item's custom formats [{0}] ({1}) do not improve on [{2}] ({3}, skipping",
+                _logger.Debug("New item's custom formats [{0}] ({1}) do not improve on [{2}] ({3}), skipping",
                               newCustomFormats.ConcatToString(),
                               newFormatScore,
                               currentCustomFormats.ConcatToString(),
