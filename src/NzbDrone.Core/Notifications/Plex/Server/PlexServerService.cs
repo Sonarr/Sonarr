@@ -102,19 +102,12 @@ namespace NzbDrone.Core.Notifications.Plex.Server
             {
                 foreach (var location in section.Locations)
                 {
-                    try
+                    if (location.Path.PathEquals(rootFolderPath))
                     {
-                        if (location.Path.PathEquals(rootFolderPath))
-                        {
-                            _logger.Debug("Updating matching section location, {0}", location.Path);
-                            UpdateSectionPath(seriesRelativePath, section, location, settings);
+                        _logger.Debug("Updating matching section location, {0}", location.Path);
+                        UpdateSectionPath(seriesRelativePath, section, location, settings);
 
-                            return;
-                        }
-                    }
-                    catch (ArgumentException)
-                    {
-                        // Swallow argument exception that is thrown by path comparison when comparing paths from different OSes
+                        return;
                     }
                 }
             }
