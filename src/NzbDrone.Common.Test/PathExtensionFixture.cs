@@ -52,6 +52,7 @@ namespace NzbDrone.Common.Test
         [TestCase(@"//test//other//file.ext ", @"/test/other/file.ext")]
         [TestCase(@"//CAPITAL//lower// ", @"/CAPITAL/lower")]
         [TestCase(@"\\Testserver\Test\file.ext   \\", @"/Testserver/Test/file.ext")]
+        [TestCase(@"C:\\Test\\", @"C:/Test")]
         public void Clean_Path_Linux(string dirty, string clean)
         {
             PosixOnly();
