@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { SelectActionType, useSelect } from 'App/SelectContext';
+import { useSelect } from 'App/SelectContext';
 import PageToolbarOverflowMenuItem from 'Components/Page/Toolbar/PageToolbarOverflowMenuItem';
 import { icons } from 'Helpers/Props';
 
@@ -25,9 +25,7 @@ function SeriesIndexSelectAllMenuItem(
 
   const onPressWrapper = useCallback(() => {
     selectDispatch({
-      type: allSelected
-        ? SelectActionType.UnselectAll
-        : SelectActionType.SelectAll,
+      type: allSelected ? 'unselectAll' : 'selectAll',
     });
   }, [allSelected, selectDispatch]);
 

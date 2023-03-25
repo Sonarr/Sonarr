@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { SelectActionType, useSelect } from 'App/SelectContext';
+import { useSelect } from 'App/SelectContext';
 import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
 import { icons } from 'Helpers/Props';
@@ -19,7 +19,7 @@ function SeriesIndexPosterSelect(props: SeriesIndexPosterSelectProps) {
       const shiftKey = event.nativeEvent.shiftKey;
 
       selectDispatch({
-        type: SelectActionType.ToggleSelected,
+        type: 'toggleSelected',
         id: seriesId,
         isSelected: !isSelected,
         shiftKey,

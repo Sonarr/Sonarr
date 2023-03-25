@@ -1,6 +1,6 @@
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import React, { useCallback } from 'react';
-import { SelectActionType, useSelect } from 'App/SelectContext';
+import { useSelect } from 'App/SelectContext';
 import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
 
 interface SeriesIndexSelectModeButtonProps {
@@ -18,7 +18,7 @@ function SeriesIndexSelectModeButton(props: SeriesIndexSelectModeButtonProps) {
   const onPressWrapper = useCallback(() => {
     if (isSelectMode) {
       selectDispatch({
-        type: SelectActionType.Reset,
+        type: 'reset',
       });
     }
 

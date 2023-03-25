@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import React, { useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { SelectActionType, useSelect } from 'App/SelectContext';
+import { useSelect } from 'App/SelectContext';
 import { REFRESH_SERIES, SERIES_SEARCH } from 'Commands/commandNames';
 import CheckInput from 'Components/Form/CheckInput';
 import HeartRating from 'Components/HeartRating';
@@ -139,7 +139,7 @@ function SeriesIndexRow(props: SeriesIndexRowProps) {
   const onSelectedChange = useCallback(
     ({ id, value, shiftKey }) => {
       selectDispatch({
-        type: SelectActionType.ToggleSelected,
+        type: 'toggleSelected',
         id,
         isSelected: value,
         shiftKey,
