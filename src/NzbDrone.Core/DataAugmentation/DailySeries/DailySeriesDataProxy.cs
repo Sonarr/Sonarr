@@ -39,7 +39,7 @@ namespace NzbDrone.Core.DataAugmentation.DailySeries
             catch (Exception ex)
             {
                 _logger.Warn(ex, "Failed to get Daily Series");
-                return new List<int>();
+                return Array.Empty<int>();
             }
         }
     }

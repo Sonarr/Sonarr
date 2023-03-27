@@ -16,7 +16,7 @@ namespace NzbDrone.Common.Composition
             AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(ContainerResolveEventHandler);
         }
 
-        public static IEnumerable<Assembly> Load(IEnumerable<string> assemblyNames)
+        public static IList<Assembly> Load(IList<string> assemblyNames)
         {
             var toLoad = assemblyNames.ToList();
             toLoad.Add("Sonarr.Common");
@@ -28,8 +28,9 @@ namespace NzbDrone.Common.Composition
 
             var startupPath = AppDomain.CurrentDomain.BaseDirectory;
 
-            return toLoad.Select(x =>
-                AssemblyLoadContext.Default.LoadFromAssemblyPath(Path.Combine(startupPath, $"{x}.dll")));
+            return toLoad
+                .Select(x => AssemblyLoadContext.Default.LoadFromAssemblyPath(Path.Combine(startupPath, $"{x}.dll")))
+                .ToList();
         }
 
         private static Assembly ContainerResolveEventHandler(object sender, ResolveEventArgs args)

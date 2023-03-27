@@ -51,12 +51,13 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
         public List<ImportResult> Import(List<ImportDecision> decisions, bool newDownload, DownloadClientItem downloadClientItem = null, ImportMode importMode = ImportMode.Auto)
         {
-            var qualifiedImports = decisions.Where(c => c.Approved)
-               .GroupBy(c => c.LocalEpisode.Series.Id, (i, s) => s
-                   .OrderByDescending(c => c.LocalEpisode.Quality, new QualityModelComparer(s.First().LocalEpisode.Series.QualityProfile))
-                   .ThenByDescending(c => c.LocalEpisode.Size))
-               .SelectMany(c => c)
-               .ToList();
+            var qualifiedImports = decisions
+                .Where(decision => decision.Approved)
+                .GroupBy(decision => decision.LocalEpisode.Series.Id)
+                .SelectMany(group => group
+                    .OrderByDescending(decision => decision.LocalEpisode.Quality, new QualityModelComparer(group.First().LocalEpisode.Series.QualityProfile))
+                    .ThenByDescending(decision => decision.LocalEpisode.Size))
+                .ToList();
 
             var importResults = new List<ImportResult>();
 

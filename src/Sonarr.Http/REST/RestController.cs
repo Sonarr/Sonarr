@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
@@ -87,7 +88,8 @@ namespace Sonarr.Http.REST
                 }
             }
 
-            var attributes = descriptor.MethodInfo.CustomAttributes;
+            var attributes = descriptor.MethodInfo.CustomAttributes as IReadOnlyCollection<CustomAttributeData> ??
+                             descriptor.MethodInfo.CustomAttributes.ToArray();
             if (attributes.Any(x => VALIDATE_ID_ATTRIBUTES.Contains(x.AttributeType)) && !skipValidate)
             {
                 if (context.ActionArguments.TryGetValue("id", out var idObj))
