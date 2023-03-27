@@ -121,6 +121,7 @@ function Table(props) {
 }
 
 Table.propTypes = {
+  ...TableHeaderCell.props,
   className: PropTypes.string,
   horizontalScroll: PropTypes.bool.isRequired,
   selectAll: PropTypes.bool.isRequired,

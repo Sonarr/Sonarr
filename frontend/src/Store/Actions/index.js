@@ -8,6 +8,7 @@ import * as customFilters from './customFilterActions';
 import * as episodes from './episodeActions';
 import * as episodeFiles from './episodeFileActions';
 import * as episodeHistory from './episodeHistoryActions';
+import * as episodeSelection from './episodeSelectionActions';
 import * as history from './historyActions';
 import * as importSeries from './importSeriesActions';
 import * as interactiveImportActions from './interactiveImportActions';
@@ -37,6 +38,7 @@ export default [
   episodes,
   episodeFiles,
   episodeHistory,
+  episodeSelection,
   history,
   importSeries,
   interactiveImportActions,

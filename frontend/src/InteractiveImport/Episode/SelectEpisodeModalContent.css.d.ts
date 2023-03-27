@@ -2,10 +2,10 @@
 // Please do not change this file!
 interface CssExports {
   'buttons': string;
+  'details': string;
   'filterInput': string;
   'footer': string;
   'modalBody': string;
-  'path': string;
   'scroller': string;
 }
 export const cssExports: CssExports;
