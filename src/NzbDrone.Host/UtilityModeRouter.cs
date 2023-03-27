@@ -18,18 +18,21 @@ namespace NzbDrone.Host
         private readonly IConsoleService _consoleService;
         private readonly IProcessProvider _processProvider;
         private readonly IRemoteAccessAdapter _remoteAccessAdapter;
+        private readonly IAppFolderFactory _appFolderFactory;
         private readonly Logger _logger;
 
         public UtilityModeRouter(IServiceProvider serviceProvider,
                       IConsoleService consoleService,
                       IProcessProvider processProvider,
                       IRemoteAccessAdapter remoteAccessAdapter,
+                      IAppFolderFactory appFolderFactory,
                       Logger logger)
         {
             _serviceProvider = serviceProvider;
             _consoleService = consoleService;
             _processProvider = processProvider;
             _remoteAccessAdapter = remoteAccessAdapter;
+            _appFolderFactory = appFolderFactory;
             _logger = logger;
         }
 
@@ -79,6 +82,7 @@ namespace NzbDrone.Host
                     {
                         _logger.Debug("Register URL selected");
                         _remoteAccessAdapter.MakeAccessible(false);
+                        _appFolderFactory.SetPermissions();
 
                         break;
                     }
