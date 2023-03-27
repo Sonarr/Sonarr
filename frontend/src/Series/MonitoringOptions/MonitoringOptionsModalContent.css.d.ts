@@ -2,8 +2,6 @@
 // Please do not change this file!
 interface CssExports {
   'labelIcon': string;
-  'modalFooter': string;
-  'selected': string;
 }
 export const cssExports: CssExports;
 export default cssExports;

@@ -19,6 +19,8 @@ namespace NzbDrone.Core.Tv
         FirstSeason,
         LatestSeason,
         Pilot,
+        MonitorSpecials,
+        UnmonitorSpecials,
         None
     }
 }

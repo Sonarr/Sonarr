@@ -36,6 +36,16 @@ function SeriesMonitoringOptionsPopoverContent() {
       />
 
       <DescriptionListItem
+        title="Monitor Specials"
+        data="Monitor all special episodes without changing the monitored status of other episodes"
+      />
+
+      <DescriptionListItem
+        title="Unmonitor Specials"
+        data="Unmonitor all special episodes without changing the monitored status of other episodes"
+      />
+
+      <DescriptionListItem
         title="None"
         data="No episodes will be monitored"
       />

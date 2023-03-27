@@ -1,14 +1,17 @@
 import React, { useCallback, useState } from 'react';
+import SeriesMonitoringOptionsPopoverContent from 'AddSeries/SeriesMonitoringOptionsPopoverContent';
 import Form from 'Components/Form/Form';
 import FormGroup from 'Components/Form/FormGroup';
 import FormInputGroup from 'Components/Form/FormInputGroup';
 import FormLabel from 'Components/Form/FormLabel';
+import Icon from 'Components/Icon';
 import Button from 'Components/Link/Button';
 import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
-import { inputTypes } from 'Helpers/Props';
+import Popover from 'Components/Tooltip/Popover';
+import { icons, inputTypes, tooltipPositions } from 'Helpers/Props';
 import translate from 'Utilities/String/translate';
 import styles from './ChangeMonitoringModalContent.css';
 
@@ -48,7 +51,16 @@ function ChangeMonitoringModalContent(
       <ModalBody>
         <Form {...otherProps}>
           <FormGroup>
-            <FormLabel>{translate('Monitoring')}</FormLabel>
+            <FormLabel>
+              {translate('Monitoring')}
+
+              <Popover
+                anchor={<Icon className={styles.labelIcon} name={icons.INFO} />}
+                title={translate('Monitoring Options')}
+                body={<SeriesMonitoringOptionsPopoverContent />}
+                position={tooltipPositions.RIGHT}
+              />
+            </FormLabel>
 
             <FormInputGroup
               type={inputTypes.MONITOR_EPISODES_SELECT}

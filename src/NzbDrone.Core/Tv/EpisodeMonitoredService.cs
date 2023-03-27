@@ -100,6 +100,18 @@ namespace NzbDrone.Core.Tv
 
                     break;
 
+                case MonitorTypes.MonitorSpecials:
+                    _logger.Debug("[{0}] Monitoring special episodes", series.Title);
+                    ToggleEpisodesMonitoredState(episodes.Where(e => e.SeasonNumber == 0), true);
+
+                    break;
+
+                case MonitorTypes.UnmonitorSpecials:
+                    _logger.Debug("[{0}] Unmonitoring special episodes", series.Title);
+                    ToggleEpisodesMonitoredState(episodes.Where(e => e.SeasonNumber == 0), false);
+
+                    break;
+
                 case MonitorTypes.None:
                     _logger.Debug("[{0}] Unmonitoring all episodes", series.Title);
                     ToggleEpisodesMonitoredState(episodes, e => false);

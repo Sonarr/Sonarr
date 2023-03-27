@@ -150,6 +150,58 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeMonitoredServiceTests
         }
 
         [Test]
+        public void should_monitor_specials()
+        {
+            GivenSpecials();
+
+            var monitoringOptions = new MonitoringOptions
+            {
+                Monitor = MonitorTypes.MonitorSpecials
+            };
+
+            Subject.SetEpisodeMonitoredStatus(_series, monitoringOptions);
+
+            VerifyMonitored(e => e.SeasonNumber == 0);
+        }
+
+        [Test]
+        public void should_unmonitor_specials()
+        {
+            GivenSpecials();
+
+            var monitoringOptions = new MonitoringOptions
+            {
+                Monitor = MonitorTypes.UnmonitorSpecials
+            };
+
+            Subject.SetEpisodeMonitoredStatus(_series, monitoringOptions);
+
+            VerifyNotMonitored(e => e.SeasonNumber == 0);
+        }
+
+        [Test]
+        public void should_unmonitor_specials_after_monitoring()
+        {
+            GivenSpecials();
+
+            var monitoringOptions = new MonitoringOptions
+            {
+                Monitor = MonitorTypes.MonitorSpecials
+            };
+
+            Subject.SetEpisodeMonitoredStatus(_series, monitoringOptions);
+
+            monitoringOptions = new MonitoringOptions
+            {
+                Monitor = MonitorTypes.UnmonitorSpecials
+            };
+
+            Subject.SetEpisodeMonitoredStatus(_series, monitoringOptions);
+
+            VerifyNotMonitored(e => e.SeasonNumber == 0);
+        }
+
+        [Test]
         public void should_not_monitor_season_when_all_episodes_are_monitored_except_latest_season()
         {
             _series.Seasons = Builder<Season>.CreateListOfSize(2)
