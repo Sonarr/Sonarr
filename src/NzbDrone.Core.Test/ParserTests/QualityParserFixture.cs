@@ -93,6 +93,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("The.Series.S01E08.Das.geloeschte.Ich.German.Dubbed.DL.AmazonHD.x264-TVS", false)]
         [TestCase("The.Series.S01E04.Rod.Trip.mit.meinem.Onkel.German.DL.NetflixUHD.x264", false)]
         [TestCase("[HorribleSubs] Series Title! S01 [Web][MKV][h264][480p][AAC 2.0][Softsubs (HorribleSubs)]", false)]
+        [TestCase("Series.Title.S13E11.Ausgebacken.German.AmazonSD.h264-4SF", false)]
         public void should_parse_webdl480p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.WEBDL480p, proper);
@@ -205,6 +206,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series.Title.S04E13.960p.WEB-DL.AAC2.0.H.264-squalor", false)]
         [TestCase("Series.Title.S16.DP.WEB.720p.DDP.5.1.H.264.PLEX", false)]
         [TestCase("Series.Title.S01E01.Erste.Begegnungen.German.DD51.Synced.DL.720p.HBOMaxHD.AVC-TVS", false)]
+        [TestCase("Series.Title.S01E05.Tavora.greift.an.German.DL.720p.DisneyHD.h264-4SF", false)]
         public void should_parse_webdl720p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.WEBDL720p, proper);
@@ -249,6 +251,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series Title Season 2 [WEB 1080p HEVC Opus] [Netaro]", false)]
         [TestCase("Series Title Season 2 (WEB 1080p HEVC Opus) [Netaro]", false)]
         [TestCase("Series.Title.S01E01.Erste.Begegnungen.German.DD51.Synced.DL.1080p.HBOMaxHD.AVC-TVS", false)]
+        [TestCase("Series.Title.S01E05.Tavora.greift.an.German.DL.1080p.DisneyHD.h264-4SF", false)]
         public void should_parse_webdl1080p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.WEBDL1080p, proper);
