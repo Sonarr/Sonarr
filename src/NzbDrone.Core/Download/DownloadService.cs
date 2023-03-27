@@ -15,7 +15,7 @@ namespace NzbDrone.Core.Download
 {
     public interface IDownloadService
     {
-        void DownloadReport(RemoteEpisode remoteEpisode);
+        void DownloadReport(RemoteEpisode remoteEpisode, int? downloadClientId);
     }
 
     public class DownloadService : IDownloadService
@@ -45,13 +45,21 @@ namespace NzbDrone.Core.Download
             _logger = logger;
         }
 
-        public void DownloadReport(RemoteEpisode remoteEpisode)
+        public void DownloadReport(RemoteEpisode remoteEpisode, int? downloadClientId)
+        {
+            var downloadClient = downloadClientId.HasValue
+                ? _downloadClientProvider.Get(downloadClientId.Value)
+                : _downloadClientProvider.GetDownloadClient(remoteEpisode.Release.DownloadProtocol, remoteEpisode.Release.IndexerId);
+
+            DownloadReport(remoteEpisode, downloadClient);
+        }
+
+        private void DownloadReport(RemoteEpisode remoteEpisode, IDownloadClient downloadClient)
         {
             Ensure.That(remoteEpisode.Series, () => remoteEpisode.Series).IsNotNull();
             Ensure.That(remoteEpisode.Episodes, () => remoteEpisode.Episodes).HasItems();
 
             var downloadTitle = remoteEpisode.Release.Title;
-            var downloadClient = _downloadClientProvider.GetDownloadClient(remoteEpisode.Release.DownloadProtocol, remoteEpisode.Release.IndexerId);
 
             if (downloadClient == null)
             {

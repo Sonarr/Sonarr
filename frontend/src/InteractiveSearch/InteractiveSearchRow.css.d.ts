@@ -4,8 +4,11 @@ interface CssExports {
   'age': string;
   'customFormatScore': string;
   'download': string;
+  'downloadIcon': string;
   'indexer': string;
+  'interactiveIcon': string;
   'languages': string;
+  'manualDownloadContent': string;
   'peers': string;
   'protocol': string;
   'quality': string;

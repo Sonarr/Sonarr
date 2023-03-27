@@ -10,6 +10,7 @@ class DescriptionListItem extends Component {
 
   render() {
     const {
+      className,
       titleClassName,
       descriptionClassName,
       title,
@@ -17,7 +18,7 @@ class DescriptionListItem extends Component {
     } = this.props;
 
     return (
-      <span>
+      <span className={className}>
         <DescriptionListItemTitle
           className={titleClassName}
         >
@@ -35,6 +36,7 @@ class DescriptionListItem extends Component {
 }
 
 DescriptionListItem.propTypes = {
+  className: PropTypes.string,
   titleClassName: PropTypes.string,
   descriptionClassName: PropTypes.string,
   title: PropTypes.string,

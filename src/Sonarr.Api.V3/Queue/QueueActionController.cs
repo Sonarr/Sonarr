@@ -29,7 +29,7 @@ namespace Sonarr.Api.V3.Queue
                 throw new NotFoundException();
             }
 
-            _downloadService.DownloadReport(pendingRelease.RemoteEpisode);
+            _downloadService.DownloadReport(pendingRelease.RemoteEpisode, null);
 
             return new { };
         }
@@ -47,7 +47,7 @@ namespace Sonarr.Api.V3.Queue
                     throw new NotFoundException();
                 }
 
-                _downloadService.DownloadReport(pendingRelease.RemoteEpisode);
+                _downloadService.DownloadReport(pendingRelease.RemoteEpisode, null);
             }
 
             return new { };

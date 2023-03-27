@@ -1,0 +1,49 @@
+.label {
+  composes: label from '~Components/Label.css';
+
+  cursor: pointer;
+}
+
+.item {
+  display: block;
+  margin-bottom: 5px;
+  margin-left: 50px;
+}
+
+.footer {
+  composes: modalFooter from '~Components/Modal/ModalFooter.css';
+
+  display: flex;
+  justify-content: space-between;
+  overflow: hidden;
+}
+
+.error {
+  margin-right: 20px;
+  color: var(--dangerColor);
+  word-break: break-word;
+}
+
+.buttons {
+  display: flex;
+}
+
+@media only screen and (max-width: $breakpointSmall) {
+  .item {
+    margin-left: 0;
+  }
+
+  .footer {
+    display: block;
+  }
+
+  .error {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+
+  .buttons {
+    justify-content: space-between;
+    flex-grow: 1;
+  }
+}
