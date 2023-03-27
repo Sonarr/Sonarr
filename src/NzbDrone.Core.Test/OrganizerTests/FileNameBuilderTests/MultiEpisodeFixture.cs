@@ -270,5 +270,15 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
             Subject.BuildFileName(new List<Episode> { _episode1, _episode2, _episode3 }, _series, _episodeFile)
                 .Should().Be("South Park - 15x06-x08 - City Sushi");
         }
+
+        [Test]
+        public void should_format_range_multi_episode_wrapped_in_brackets()
+        {
+            _namingConfig.StandardEpisodeFormat = "{Series Title} (S{season:00}E{episode:00}) {Episode Title}";
+            _namingConfig.MultiEpisodeStyle = 4;
+
+            Subject.BuildFileName(new List<Episode> { _episode1, _episode2, _episode3 }, _series, _episodeFile)
+                .Should().Be("South Park (S15E06-08) City Sushi");
+        }
     }
 }

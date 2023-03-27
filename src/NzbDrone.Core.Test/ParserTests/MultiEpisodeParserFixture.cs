@@ -74,6 +74,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series Title! (2013) - S04E44-E45 - Il 200 spettacolare episodio da narcisisti! [NetflixHD 720p HEVC] [ITA+ENG].mkv", "Series Title! (2013)", 4, new[] { 44, 45 })]
         [TestCase("13 Series Se.1 afl.2-3-4 [VTM]", "13 Series", 1, new[] { 2, 3, 4 })]
         [TestCase("Series T Se.3 afl.3 en 4", "Series T", 3, new[] { 3, 4 })]
+        [TestCase("Series Title (S15E06-08) City Sushi", "Series Title", 15, new[] { 6, 7, 8 })]
 
         // [TestCase("", "", , new [] {  })]
         public void should_parse_multiple_episodes(string postTitle, string title, int season, int[] episodes)
