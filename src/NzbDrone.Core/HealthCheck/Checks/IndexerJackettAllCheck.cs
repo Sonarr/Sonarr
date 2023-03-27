@@ -23,10 +23,10 @@ namespace NzbDrone.Core.HealthCheck.Checks
         {
             var jackettAllProviders = _providerFactory.All().Where(
                 i => i.ConfigContract.Equals("TorznabSettings") &&
-                ((i.Settings as TorznabSettings).BaseUrl.Contains("/torznab/all/api") ||
-                (i.Settings as TorznabSettings).BaseUrl.Contains("/api/v2.0/indexers/all/results/torznab") ||
-                (i.Settings as TorznabSettings).ApiPath.Contains("/torznab/all/api") ||
-                (i.Settings as TorznabSettings).ApiPath.Contains("/api/v2.0/indexers/all/results/torznab")));
+                ((i.Settings as TorznabSettings).BaseUrl.Contains("/torznab/all/api", StringComparison.InvariantCultureIgnoreCase) ||
+                (i.Settings as TorznabSettings).BaseUrl.Contains("/api/v2.0/indexers/all/results/torznab", StringComparison.InvariantCultureIgnoreCase) ||
+                (i.Settings as TorznabSettings).ApiPath.Contains("/torznab/all/api", StringComparison.InvariantCultureIgnoreCase) ||
+                (i.Settings as TorznabSettings).ApiPath.Contains("/api/v2.0/indexers/all/results/torznab", StringComparison.InvariantCultureIgnoreCase)));
 
             if (jackettAllProviders.Empty())
             {
