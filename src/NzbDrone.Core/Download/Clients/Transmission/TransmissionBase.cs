@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using FluentValidation.Results;
@@ -176,7 +176,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
 
             if (Settings.TvCategory.IsNotNullOrWhiteSpace())
             {
-                destDir = string.Format("{0}/.{1}", destDir, Settings.TvCategory);
+                destDir = string.Format("{0}/{1}", destDir, Settings.TvCategory);
             }
 
             return new DownloadClientInfo
