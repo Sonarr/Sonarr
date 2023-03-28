@@ -8,7 +8,6 @@ using MimeKit;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http.Dispatchers;
-using NzbDrone.Core.Security;
 
 namespace NzbDrone.Core.Notifications.Email
 {
@@ -110,47 +109,45 @@ namespace NzbDrone.Core.Notifications.Email
 
         private void Send(MimeMessage email, EmailSettings settings)
         {
-            using (var client = new SmtpClient())
+            using var client = new SmtpClient();
+            client.Timeout = 10000;
+
+            var serverOption = SecureSocketOptions.Auto;
+
+            if (settings.RequireEncryption)
             {
-                client.Timeout = 10000;
-
-                var serverOption = SecureSocketOptions.Auto;
-
-                if (settings.RequireEncryption)
+                if (settings.Port == 465)
                 {
-                    if (settings.Port == 465)
-                    {
-                        serverOption = SecureSocketOptions.SslOnConnect;
-                    }
-                    else
-                    {
-                        serverOption = SecureSocketOptions.StartTls;
-                    }
+                    serverOption = SecureSocketOptions.SslOnConnect;
                 }
-
-                client.ServerCertificateValidationCallback = _certificateValidationService.ShouldByPassValidationError;
-
-                _logger.Debug("Connecting to mail server");
-
-                client.Connect(settings.Server, settings.Port, serverOption);
-
-                if (!string.IsNullOrWhiteSpace(settings.Username))
+                else
                 {
-                    _logger.Debug("Authenticating to mail server");
-
-                    client.Authenticate(settings.Username, settings.Password);
+                    serverOption = SecureSocketOptions.StartTls;
                 }
-
-                _logger.Debug("Sending to mail server");
-
-                client.Send(email);
-
-                _logger.Debug("Sent to mail server, disconnecting");
-
-                client.Disconnect(true);
-
-                _logger.Debug("Disconnecting from mail server");
             }
+
+            client.ServerCertificateValidationCallback = _certificateValidationService.ShouldByPassValidationError;
+
+            _logger.Debug("Connecting to mail server");
+
+            client.Connect(settings.Server, settings.Port, serverOption);
+
+            if (!string.IsNullOrWhiteSpace(settings.Username))
+            {
+                _logger.Debug("Authenticating to mail server");
+
+                client.Authenticate(settings.Username, settings.Password);
+            }
+
+            _logger.Debug("Sending to mail server");
+
+            client.Send(email);
+
+            _logger.Debug("Sent to mail server, disconnecting");
+
+            client.Disconnect(true);
+
+            _logger.Debug("Disconnecting from mail server");
         }
 
         public ValidationFailure Test(EmailSettings settings)
