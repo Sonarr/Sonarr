@@ -42,11 +42,9 @@ namespace NzbDrone.Core.MediaCover
 
             try
             {
-                using (var image = Image.Load(source))
-                {
-                    image.Mutate(x => x.Resize(0, height));
-                    image.Save(destination);
-                }
+                using var image = Image.Load(source);
+                image.Mutate(x => x.Resize(0, height));
+                image.Save(destination);
             }
             catch
             {
