@@ -308,6 +308,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("The.Series.S01E07.RERIP.720p.BluRay.x264-DEMAND", true)]
         [TestCase("Sans.Series.De.Traces.FRENCH.720p.BluRay.x264-FHD", false)]
         [TestCase("Series.Black.1x01.Selezione.Naturale.ITA.720p.BDMux.x264-NovaRip", false)]
+        [TestCase("Series.Hunter.S02.720p.Blu-ray.Remux.AVC.FLAC.2.0-SiCFoI", false)]
         public void should_parse_bluray720p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.Bluray720p, proper);
