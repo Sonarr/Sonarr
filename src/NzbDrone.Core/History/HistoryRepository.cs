@@ -30,9 +30,7 @@ namespace NzbDrone.Core.History
 
         public EpisodeHistory MostRecentForEpisode(int episodeId)
         {
-            return Query(h => h.EpisodeId == episodeId)
-                        .OrderByDescending(h => h.Date)
-                        .FirstOrDefault();
+            return Query(h => h.EpisodeId == episodeId).MaxBy(h => h.Date);
         }
 
         public List<EpisodeHistory> FindByEpisodeId(int episodeId)
@@ -44,9 +42,7 @@ namespace NzbDrone.Core.History
 
         public EpisodeHistory MostRecentForDownloadId(string downloadId)
         {
-            return Query(h => h.DownloadId == downloadId)
-             .OrderByDescending(h => h.Date)
-             .FirstOrDefault();
+            return Query(h => h.DownloadId == downloadId).MaxBy(h => h.Date);
         }
 
         public List<EpisodeHistory> FindByDownloadId(string downloadId)

@@ -450,12 +450,11 @@ namespace NzbDrone.Common.Disk
 
                 return mounts.Where(drive => drive.RootDirectory.PathEquals(path) ||
                                              drive.RootDirectory.IsParentPath(path))
-                          .OrderByDescending(drive => drive.RootDirectory.Length)
-                          .FirstOrDefault();
+                          .MaxBy(drive => drive.RootDirectory.Length);
             }
             catch (Exception ex)
             {
-                Logger.Debug(ex, string.Format("Failed to get mount for path {0}", path));
+                Logger.Debug(ex, $"Failed to get mount for path {path}");
                 return null;
             }
         }
