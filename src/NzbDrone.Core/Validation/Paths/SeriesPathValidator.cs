@@ -9,10 +9,11 @@ namespace NzbDrone.Core.Validation.Paths
         private readonly ISeriesService _seriesService;
 
         public SeriesPathValidator(ISeriesService seriesService)
-            : base("Path is already configured for another series")
         {
             _seriesService = seriesService;
         }
+
+        protected override string GetDefaultMessageTemplate() => "Path is already configured for another series";
 
         protected override bool IsValid(PropertyValidatorContext context)
         {

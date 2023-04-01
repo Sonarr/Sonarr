@@ -14,11 +14,12 @@ namespace NzbDrone.Core.Validation.Paths
         private static readonly Regex DriveRegex = new Regex(@"[a-z]\:\\", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public MappedNetworkDriveValidator(IRuntimeInfo runtimeInfo, IDiskProvider diskProvider)
-            : base("Mapped Network Drive and Windows Service")
         {
             _runtimeInfo = runtimeInfo;
             _diskProvider = diskProvider;
         }
+
+        protected override string GetDefaultMessageTemplate() => "Mapped Network Drive and Windows Service";
 
         protected override bool IsValid(PropertyValidatorContext context)
         {
@@ -46,12 +47,7 @@ namespace NzbDrone.Core.Validation.Paths
 
             var mount = _diskProvider.GetMount(path);
 
-            if (mount != null && mount.DriveType == DriveType.Network)
-            {
-                return false;
-            }
-
-            return true;
+            return mount is not { DriveType: DriveType.Network };
         }
     }
 }

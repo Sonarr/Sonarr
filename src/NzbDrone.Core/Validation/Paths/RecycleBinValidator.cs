@@ -9,10 +9,11 @@ namespace NzbDrone.Core.Validation.Paths
         private readonly IConfigService _configService;
 
         public RecycleBinValidator(IConfigService configService)
-            : base("Path is {relationship} configured recycle bin folder")
         {
             _configService = configService;
         }
+
+        protected override string GetDefaultMessageTemplate() => "Path is {relationship} configured recycle bin folder";
 
         protected override bool IsValid(PropertyValidatorContext context)
         {

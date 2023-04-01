@@ -3,7 +3,7 @@
     <TargetFrameworks>net6.0</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="FluentValidation" Version="8.6.2" />
+    <PackageReference Include="FluentValidation" Version="9.5.4" />
     <PackageReference Include="ImpromptuInterface" Version="7.0.1" />
     <PackageReference Include="NLog" Version="4.7.14" />
   </ItemGroup>

@@ -9,10 +9,11 @@ namespace NzbDrone.Core.Validation.Paths
         private readonly IDiskProvider _diskProvider;
 
         public FolderWritableValidator(IDiskProvider diskProvider)
-            : base($"Folder is not writable by user {Environment.UserName}")
         {
             _diskProvider = diskProvider;
         }
+
+        protected override string GetDefaultMessageTemplate() => $"Folder is not writable by user {Environment.UserName}";
 
         protected override bool IsValid(PropertyValidatorContext context)
         {

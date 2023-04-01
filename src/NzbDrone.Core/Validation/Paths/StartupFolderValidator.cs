@@ -9,10 +9,11 @@ namespace NzbDrone.Core.Validation.Paths
         private readonly IAppFolderInfo _appFolderInfo;
 
         public StartupFolderValidator(IAppFolderInfo appFolderInfo)
-            : base("Path cannot be {relationship} the start up folder")
         {
             _appFolderInfo = appFolderInfo;
         }
+
+        protected override string GetDefaultMessageTemplate() => "Path cannot be {relationship} the start up folder";
 
         protected override bool IsValid(PropertyValidatorContext context)
         {

@@ -15,10 +15,7 @@ namespace NzbDrone.Core.Validation.Paths
 
     public class PathValidator : PropertyValidator
     {
-        public PathValidator()
-            : base("Invalid Path")
-        {
-        }
+        protected override string GetDefaultMessageTemplate() => "Invalid Path";
 
         protected override bool IsValid(PropertyValidatorContext context)
         {

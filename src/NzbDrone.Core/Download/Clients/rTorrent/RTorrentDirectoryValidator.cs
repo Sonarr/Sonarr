@@ -17,8 +17,10 @@ namespace NzbDrone.Core.Download.Clients.rTorrent
                                           PathExistsValidator pathExistsValidator,
                                           MappedNetworkDriveValidator mappedNetworkDriveValidator)
         {
+#pragma warning disable CS0618
             RuleFor(c => c.TvDirectory).Cascade(CascadeMode.StopOnFirstFailure)
-                                       .IsValidPath()
+#pragma warning restore CS0618
+                .IsValidPath()
                                        .SetValidator(rootFolderValidator)
                                        .SetValidator(mappedNetworkDriveValidator)
                                        .SetValidator(pathExistsValidator)

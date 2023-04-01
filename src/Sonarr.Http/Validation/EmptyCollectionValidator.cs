@@ -6,10 +6,7 @@ namespace Sonarr.Http.Validation
 {
     public class EmptyCollectionValidator<T> : PropertyValidator
     {
-        public EmptyCollectionValidator()
-            : base("Collection Must Be Empty")
-        {
-        }
+        protected override string GetDefaultMessageTemplate() => "Collection Must Be Empty";
 
         protected override bool IsValid(PropertyValidatorContext context)
         {

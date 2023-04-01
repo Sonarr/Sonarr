@@ -8,10 +8,11 @@ namespace NzbDrone.Core.Validation.Paths
         private readonly IDiskProvider _diskProvider;
 
         public FileExistsValidator(IDiskProvider diskProvider)
-            : base("File does not exist")
         {
             _diskProvider = diskProvider;
         }
+
+        protected override string GetDefaultMessageTemplate() => "File does not exist";
 
         protected override bool IsValid(PropertyValidatorContext context)
         {
