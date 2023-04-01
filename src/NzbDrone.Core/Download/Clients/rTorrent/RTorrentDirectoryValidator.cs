@@ -17,8 +17,8 @@ namespace NzbDrone.Core.Download.Clients.rTorrent
                                           PathExistsValidator pathExistsValidator,
                                           MappedNetworkDriveValidator mappedNetworkDriveValidator)
         {
-            RuleFor(c => c.TvDirectory).Cascade(CascadeMode.StopOnFirstFailure)
-                                       .IsValidPath()
+            RuleFor(c => c.TvDirectory).Cascade(CascadeMode.Stop)
+                .IsValidPath()
                                        .SetValidator(rootFolderValidator)
                                        .SetValidator(mappedNetworkDriveValidator)
                                        .SetValidator(pathExistsValidator)

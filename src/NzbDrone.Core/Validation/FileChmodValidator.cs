@@ -8,10 +8,11 @@ namespace NzbDrone.Core.Validation
         private readonly IDiskProvider _diskProvider;
 
         public FolderChmodValidator(IDiskProvider diskProvider)
-            : base("Must contain a valid Unix permissions octal")
         {
             _diskProvider = diskProvider;
         }
+
+        protected override string GetDefaultMessageTemplate() => "Must contain a valid Unix permissions octal";
 
         protected override bool IsValid(PropertyValidatorContext context)
         {

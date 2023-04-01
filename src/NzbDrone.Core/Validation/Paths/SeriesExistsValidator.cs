@@ -9,10 +9,11 @@ namespace NzbDrone.Core.Validation.Paths
         private readonly ISeriesService _seriesService;
 
         public SeriesExistsValidator(ISeriesService seriesService)
-            : base("This series has already been added")
         {
             _seriesService = seriesService;
         }
+
+        protected override string GetDefaultMessageTemplate() => "This series has already been added";
 
         protected override bool IsValid(PropertyValidatorContext context)
         {

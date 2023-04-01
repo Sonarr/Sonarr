@@ -30,8 +30,8 @@ namespace Sonarr.Api.V3.RootFolders
             _rootFolderService = rootFolderService;
 
             SharedValidator.RuleFor(c => c.Path)
-                           .Cascade(CascadeMode.StopOnFirstFailure)
-                           .IsValidPath()
+                .Cascade(CascadeMode.Stop)
+                .IsValidPath()
                            .SetValidator(rootFolderValidator)
                            .SetValidator(mappedNetworkDriveValidator)
                            .SetValidator(startupFolderValidator)

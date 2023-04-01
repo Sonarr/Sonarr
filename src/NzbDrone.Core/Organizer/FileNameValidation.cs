@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -66,96 +65,70 @@ namespace NzbDrone.Core.Organizer
 
     public class ValidStandardEpisodeFormatValidator : PropertyValidator
     {
-        public ValidStandardEpisodeFormatValidator()
-            : base("Must contain season and episode numbers OR Original Title")
-        {
-        }
+        protected override string GetDefaultMessageTemplate() => "Must contain season and episode numbers OR Original Title";
 
         protected override bool IsValid(PropertyValidatorContext context)
         {
-            var value = context.PropertyValue as string;
-
-            if (!FileNameBuilder.SeasonEpisodePatternRegex.IsMatch(value) &&
-                !FileNameValidation.OriginalTokenRegex.IsMatch(value))
+            if (context.PropertyValue is not string value)
             {
                 return false;
             }
 
-            return true;
+            return FileNameBuilder.SeasonEpisodePatternRegex.IsMatch(value) ||
+                   FileNameValidation.OriginalTokenRegex.IsMatch(value);
         }
     }
 
     public class ValidDailyEpisodeFormatValidator : PropertyValidator
     {
-        public ValidDailyEpisodeFormatValidator()
-            : base("Must contain Air Date OR Season and Episode OR Original Title")
-        {
-        }
+        protected override string GetDefaultMessageTemplate() => "Must contain Air Date OR Season and Episode OR Original Title";
 
         protected override bool IsValid(PropertyValidatorContext context)
         {
-            var value = context.PropertyValue as string;
-
-            if (!FileNameBuilder.SeasonEpisodePatternRegex.IsMatch(value) &&
-                !FileNameBuilder.AirDateRegex.IsMatch(value) &&
-                !FileNameValidation.OriginalTokenRegex.IsMatch(value))
+            if (context.PropertyValue is not string value)
             {
                 return false;
             }
 
-            return true;
+            return FileNameBuilder.SeasonEpisodePatternRegex.IsMatch(value) ||
+                   FileNameBuilder.AirDateRegex.IsMatch(value) ||
+                   FileNameValidation.OriginalTokenRegex.IsMatch(value);
         }
     }
 
     public class ValidAnimeEpisodeFormatValidator : PropertyValidator
     {
-        public ValidAnimeEpisodeFormatValidator()
-            : base("Must contain Absolute Episode number OR Season and Episode OR Original Title")
-        {
-        }
+        protected override string GetDefaultMessageTemplate() =>
+            "Must contain Absolute Episode number OR Season and Episode OR Original Title";
 
         protected override bool IsValid(PropertyValidatorContext context)
         {
-            var value = context.PropertyValue as string;
-
-            if (!FileNameBuilder.SeasonEpisodePatternRegex.IsMatch(value) &&
-                !FileNameBuilder.AbsoluteEpisodePatternRegex.IsMatch(value) &&
-                !FileNameValidation.OriginalTokenRegex.IsMatch(value))
+            if (context.PropertyValue is not string value)
             {
                 return false;
             }
 
-            return true;
+            return FileNameBuilder.SeasonEpisodePatternRegex.IsMatch(value) ||
+                   FileNameBuilder.AbsoluteEpisodePatternRegex.IsMatch(value) ||
+                   FileNameValidation.OriginalTokenRegex.IsMatch(value);
         }
     }
 
     public class IllegalCharactersValidator : PropertyValidator
     {
-        private readonly char[] _invalidPathChars = Path.GetInvalidPathChars();
+        private static readonly char[] InvalidPathChars = Path.GetInvalidPathChars();
 
-        public IllegalCharactersValidator()
-            : base("Contains illegal characters: {InvalidCharacters}")
-        {
-        }
+        protected override string GetDefaultMessageTemplate() => "Contains illegal characters: {InvalidCharacters}";
 
         protected override bool IsValid(PropertyValidatorContext context)
         {
             var value = context.PropertyValue as string;
-            var invalidCharacters = new List<char>();
-
             if (value.IsNullOrWhiteSpace())
             {
                 return true;
             }
 
-            foreach (var i in _invalidPathChars)
-            {
-                if (value.IndexOf(i) >= 0)
-                {
-                    invalidCharacters.Add(i);
-                }
-            }
-
+            var invalidCharacters = InvalidPathChars.Where(i => value!.IndexOf(i) >= 0).ToList();
             if (invalidCharacters.Any())
             {
                 context.MessageFormatter.AppendArgument("InvalidCharacters", string.Join("", invalidCharacters));

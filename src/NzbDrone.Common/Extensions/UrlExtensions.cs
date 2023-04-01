@@ -16,18 +16,7 @@ namespace NzbDrone.Common.Extensions
                 return false;
             }
 
-            Uri uri;
-            if (!Uri.TryCreate(path, UriKind.Absolute, out uri))
-            {
-                return false;
-            }
-
-            if (!uri.IsWellFormedOriginalString())
-            {
-                return false;
-            }
-
-            return true;
+            return Uri.TryCreate(path, UriKind.Absolute, out var uri) && uri.IsWellFormedOriginalString();
         }
     }
 }

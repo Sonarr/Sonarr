@@ -14,10 +14,7 @@ namespace NzbDrone.Core.Validation
 
     public class UrlValidator : PropertyValidator
     {
-        public UrlValidator()
-            : base("Invalid Url")
-        {
-        }
+        protected override string GetDefaultMessageTemplate() => "Invalid Url";
 
         protected override bool IsValid(PropertyValidatorContext context)
         {

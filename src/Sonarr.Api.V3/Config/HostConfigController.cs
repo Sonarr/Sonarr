@@ -51,7 +51,7 @@ namespace Sonarr.Api.V3.Config
             SharedValidator.RuleFor(c => c.SslPort).NotEqual(c => c.Port).When(c => c.EnableSsl);
 
             SharedValidator.RuleFor(c => c.SslCertPath)
-                .Cascade(CascadeMode.StopOnFirstFailure)
+                .Cascade(CascadeMode.Stop)
                 .NotEmpty()
                 .IsValidPath()
                 .SetValidator(fileExistsValidator)

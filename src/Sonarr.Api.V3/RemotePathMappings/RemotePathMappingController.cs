@@ -28,8 +28,8 @@ namespace Sonarr.Api.V3.RemotePathMappings
                            .NotEmpty();
 
             SharedValidator.RuleFor(c => c.LocalPath)
-                           .Cascade(CascadeMode.StopOnFirstFailure)
-                           .IsValidPath()
+                .Cascade(CascadeMode.Stop)
+                .IsValidPath()
                            .SetValidator(mappedNetworkDriveValidator)
                            .SetValidator(pathExistsValidator);
         }

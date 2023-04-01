@@ -6,10 +6,7 @@ namespace NzbDrone.Core.Validation.Paths
 {
     public class SystemFolderValidator : PropertyValidator
     {
-        public SystemFolderValidator()
-            : base("Is {relationship} system folder {systemFolder}")
-        {
-        }
+        protected override string GetDefaultMessageTemplate() => "Is {relationship} system folder {systemFolder}";
 
         protected override bool IsValid(PropertyValidatorContext context)
         {

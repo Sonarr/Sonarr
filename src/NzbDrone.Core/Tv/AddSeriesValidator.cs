@@ -16,8 +16,8 @@ namespace NzbDrone.Core.Tv
                                   SeriesAncestorValidator seriesAncestorValidator,
                                   SeriesTitleSlugValidator seriesTitleSlugValidator)
         {
-            RuleFor(c => c.Path).Cascade(CascadeMode.StopOnFirstFailure)
-                                .IsValidPath()
+            RuleFor(c => c.Path).Cascade(CascadeMode.Stop)
+                .IsValidPath()
                                 .SetValidator(rootFolderValidator)
                                 .SetValidator(seriesPathValidator)
                                 .SetValidator(seriesAncestorValidator);

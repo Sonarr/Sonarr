@@ -4,10 +4,7 @@ namespace Sonarr.Http.Validation
 {
     public class RssSyncIntervalValidator : PropertyValidator
     {
-        public RssSyncIntervalValidator()
-            : base("Must be between 10 and 120 or 0 to disable")
-        {
-        }
+        protected override string GetDefaultMessageTemplate() => "Must be between 10 and 120 or 0 to disable";
 
         protected override bool IsValid(PropertyValidatorContext context)
         {
@@ -23,12 +20,7 @@ namespace Sonarr.Http.Validation
                 return true;
             }
 
-            if (value >= 10 && value <= 120)
-            {
-                return true;
-            }
-
-            return false;
+            return value is >= 10 and <= 120;
         }
     }
 }
