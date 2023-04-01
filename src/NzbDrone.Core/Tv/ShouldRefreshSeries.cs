@@ -40,7 +40,7 @@ namespace NzbDrone.Core.Tv
                 return true;
             }
 
-            var lastEpisode = _episodeService.GetEpisodeBySeries(series.Id).OrderByDescending(e => e.AirDateUtc).FirstOrDefault();
+            var lastEpisode = _episodeService.GetEpisodeBySeries(series.Id).MaxBy(e => e.AirDateUtc);
 
             if (lastEpisode != null && lastEpisode.AirDateUtc > DateTime.UtcNow.AddDays(-30))
             {

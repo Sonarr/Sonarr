@@ -50,16 +50,11 @@ namespace NzbDrone.Core.SeriesStats
                                        ReleaseGroups = seasonStatistics.SelectMany(s => s.ReleaseGroups).Distinct().ToList()
                                    };
 
-            var nextAiring = seasonStatistics.Where(s => s.NextAiring != null)
-                                             .OrderBy(s => s.NextAiring)
-                                             .FirstOrDefault();
+            var nextAiring = seasonStatistics.Where(s => s.NextAiring != null).MinBy(s => s.NextAiring);
+            var previousAiring = seasonStatistics.Where(s => s.PreviousAiring != null).MaxBy(s => s.PreviousAiring);
 
-            var previousAiring = seasonStatistics.Where(s => s.PreviousAiring != null)
-                                                 .OrderBy(s => s.PreviousAiring)
-                                                 .LastOrDefault();
-
-            seriesStatistics.NextAiringString = nextAiring != null ? nextAiring.NextAiringString : null;
-            seriesStatistics.PreviousAiringString = previousAiring != null ? previousAiring.PreviousAiringString : null;
+            seriesStatistics.NextAiringString = nextAiring?.NextAiringString;
+            seriesStatistics.PreviousAiringString = previousAiring?.PreviousAiringString;
 
             return seriesStatistics;
         }
