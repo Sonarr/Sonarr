@@ -107,7 +107,7 @@ namespace NzbDrone.Core.CustomFormats
             var episodeInfo = new ParsedEpisodeInfo
             {
                 SeriesTitle = localEpisode.Series.Title,
-                ReleaseTitle = localEpisode.SceneName,
+                ReleaseTitle = localEpisode.SceneName.IsNotNullOrWhiteSpace() ? localEpisode.SceneName : Path.GetFileName(localEpisode.Path),
                 Quality = localEpisode.Quality,
                 Languages = localEpisode.Languages,
                 ReleaseGroup = localEpisode.ReleaseGroup
@@ -118,7 +118,8 @@ namespace NzbDrone.Core.CustomFormats
                 EpisodeInfo = episodeInfo,
                 Series = localEpisode.Series,
                 Size = localEpisode.Size,
-                Languages = localEpisode.Languages
+                Languages = localEpisode.Languages,
+                Filename = Path.GetFileName(localEpisode.Path)
             };
 
             return ParseCustomFormat(input);
@@ -154,25 +155,25 @@ namespace NzbDrone.Core.CustomFormats
 
         private static List<CustomFormat> ParseCustomFormat(EpisodeFile episodeFile, Series series, List<CustomFormat> allCustomFormats)
         {
-            var sceneName = string.Empty;
+            var releaseTitle = string.Empty;
 
             if (episodeFile.SceneName.IsNotNullOrWhiteSpace())
             {
-                sceneName = episodeFile.SceneName;
+                releaseTitle = episodeFile.SceneName;
             }
             else if (episodeFile.OriginalFilePath.IsNotNullOrWhiteSpace())
             {
-                sceneName = Path.GetFileName(episodeFile.OriginalFilePath);
+                releaseTitle = Path.GetFileName(episodeFile.OriginalFilePath);
             }
             else if (episodeFile.RelativePath.IsNotNullOrWhiteSpace())
             {
-                sceneName = Path.GetFileName(episodeFile.RelativePath);
+                releaseTitle = Path.GetFileName(episodeFile.RelativePath);
             }
 
             var episodeInfo = new ParsedEpisodeInfo
             {
                 SeriesTitle = series.Title,
-                ReleaseTitle = sceneName,
+                ReleaseTitle = releaseTitle,
                 Quality = episodeFile.Quality,
                 Languages = episodeFile.Languages,
                 ReleaseGroup = episodeFile.ReleaseGroup
