@@ -112,6 +112,12 @@ class TextInput extends Component {
     this._isMouseTarget = false;
   };
 
+  onWheel = () => {
+    if (this.props.type === 'number') {
+      this._input.blur();
+    }
+  };
+
   //
   // Render
 
@@ -161,6 +167,7 @@ class TextInput extends Component {
         onKeyUp={this.onKeyUp}
         onMouseDown={this.onMouseDown}
         onMouseUp={this.onMouseUp}
+        onWheel={this.onWheel}
       />
     );
   }
