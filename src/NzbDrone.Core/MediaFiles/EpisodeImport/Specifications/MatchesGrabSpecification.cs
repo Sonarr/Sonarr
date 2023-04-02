@@ -4,8 +4,6 @@ using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
-using NzbDrone.Core.History;
-using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
 
@@ -14,14 +12,10 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
     public class MatchesGrabSpecification : IImportDecisionEngineSpecification
     {
         private readonly Logger _logger;
-        private readonly IParsingService _parsingService;
-        private readonly IHistoryService _historyService;
 
-        public MatchesGrabSpecification(IParsingService parsingService, IHistoryService historyService, Logger logger)
+        public MatchesGrabSpecification(Logger logger)
         {
             _logger = logger;
-            _parsingService = parsingService;
-            _historyService = historyService;
         }
 
         public Decision IsSatisfiedBy(LocalEpisode localEpisode, DownloadClientItem downloadClientItem)
@@ -31,21 +25,14 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                 return Decision.Accept();
             }
 
-            if (downloadClientItem == null)
+            var releaseInfo = localEpisode.Release;
+
+            if (releaseInfo == null || releaseInfo.EpisodeIds.Empty())
             {
                 return Decision.Accept();
             }
 
-            var grabbedHistory = _historyService.FindByDownloadId(downloadClientItem.DownloadId)
-                .Where(h => h.EventType == EpisodeHistoryEventType.Grabbed)
-                .ToList();
-
-            if (grabbedHistory.Empty())
-            {
-                return Decision.Accept();
-            }
-
-            var unexpected = localEpisode.Episodes.Where(e => grabbedHistory.All(o => o.EpisodeId != e.Id)).ToList();
+            var unexpected = localEpisode.Episodes.Where(e => releaseInfo.EpisodeIds.All(o => o != e.Id)).ToList();
 
             if (unexpected.Any())
             {
@@ -53,10 +40,10 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
 
                 if (unexpected.Count == 1)
                 {
-                    return Decision.Reject("Episode {0} was not found in the grabbed release: {1}", FormatEpisode(unexpected), grabbedHistory.First().SourceTitle);
+                    return Decision.Reject("Episode {0} was not found in the grabbed release: {1}", FormatEpisode(unexpected), releaseInfo.Title);
                 }
 
-                return Decision.Reject("Episodes {0} were not found in the grabbed release: {1}", FormatEpisode(unexpected), grabbedHistory.First().SourceTitle);
+                return Decision.Reject("Episodes {0} were not found in the grabbed release: {1}", FormatEpisode(unexpected), releaseInfo.Title);
             }
 
             return Decision.Accept();

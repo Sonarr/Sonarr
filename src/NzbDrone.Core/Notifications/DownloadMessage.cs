@@ -16,6 +16,7 @@ namespace NzbDrone.Core.Notifications
         public string SourcePath { get; set; }
         public DownloadClientItemClientInfo DownloadClientInfo { get; set; }
         public string DownloadId { get; set; }
+        public GrabbedReleaseInfo Release { get; set; }
 
         public override string ToString()
         {

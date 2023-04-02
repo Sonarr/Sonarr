@@ -13,5 +13,6 @@ namespace NzbDrone.Core.Notifications.Webhook
         public string DownloadId { get; set; }
         public List<WebhookEpisodeFile> DeletedFiles { get; set; }
         public WebhookCustomFormatInfo CustomFormatInfo { get; set; }
+        public WebhookGrabbedRelease Release { get; set; }
     }
 }

@@ -157,7 +157,8 @@ namespace NzbDrone.Core.Notifications
                 OldFiles = message.OldFiles,
                 SourcePath = message.EpisodeInfo.Path,
                 DownloadClientInfo = message.DownloadClientInfo,
-                DownloadId = message.DownloadId
+                DownloadId = message.DownloadId,
+                Release = message.EpisodeInfo.Release
             };
 
             foreach (var notification in _notificationFactory.OnDownloadEnabled())

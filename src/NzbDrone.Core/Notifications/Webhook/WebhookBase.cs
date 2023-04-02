@@ -36,7 +36,7 @@ namespace NzbDrone.Core.Notifications.Webhook
                 DownloadClient = message.DownloadClientName,
                 DownloadClientType = message.DownloadClientType,
                 DownloadId = message.DownloadId,
-                CustomFormatInfo = new WebhookCustomFormatInfo(remoteEpisode.CustomFormats, remoteEpisode.CustomFormatScore)
+                CustomFormatInfo = new WebhookCustomFormatInfo(remoteEpisode.CustomFormats, remoteEpisode.CustomFormatScore),
             };
         }
 
@@ -52,6 +52,7 @@ namespace NzbDrone.Core.Notifications.Webhook
                 Series = new WebhookSeries(message.Series),
                 Episodes = episodeFile.Episodes.Value.ConvertAll(x => new WebhookEpisode(x)),
                 EpisodeFile = new WebhookEpisodeFile(episodeFile),
+                Release = new WebhookGrabbedRelease(message.Release),
                 IsUpgrade = message.OldFiles.Any(),
                 DownloadClient = message.DownloadClientInfo?.Name,
                 DownloadClientType = message.DownloadClientInfo?.Type,
