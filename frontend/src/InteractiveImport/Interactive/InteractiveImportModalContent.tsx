@@ -490,7 +490,7 @@ function InteractiveImportModalContent(
         executeCommand({
           name: commandNames.INTERACTIVE_IMPORT,
           files,
-          importMode,
+          importMode: finalImportMode,
         })
       );
 
