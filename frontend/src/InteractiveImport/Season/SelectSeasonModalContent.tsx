@@ -5,7 +5,7 @@ import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
-import createSeriesSelector from 'Store/Selectors/createSeriesSelector';
+import { createSeriesSelectorForHook } from 'Store/Selectors/createSeriesSelector';
 import SelectSeasonRow from './SelectSeasonRow';
 
 interface SelectSeasonModalContentProps {
@@ -17,7 +17,7 @@ interface SelectSeasonModalContentProps {
 
 function SelectSeasonModalContent(props: SelectSeasonModalContentProps) {
   const { seriesId, modalTitle, onSeasonSelect, onModalClose } = props;
-  const series = useSelector(createSeriesSelector(seriesId));
+  const series = useSelector(createSeriesSelectorForHook(seriesId));
   const seasons = useMemo(() => {
     return series.seasons.slice(0).reverse();
   }, [series]);

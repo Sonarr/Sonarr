@@ -3,11 +3,11 @@ import { createSelector } from 'reselect';
 import { REFRESH_SERIES, SERIES_SEARCH } from 'Commands/commandNames';
 import createExecutingCommandsSelector from 'Store/Selectors/createExecutingCommandsSelector';
 import createSeriesQualityProfileSelector from 'Store/Selectors/createSeriesQualityProfileSelector';
-import createSeriesSelector from 'Store/Selectors/createSeriesSelector';
+import { createSeriesSelectorForHook } from 'Store/Selectors/createSeriesSelector';
 
 function createSeriesIndexItemSelector(seriesId: number) {
   return createSelector(
-    createSeriesSelector(seriesId),
+    createSeriesSelectorForHook(seriesId),
     createSeriesQualityProfileSelector(seriesId),
     createExecutingCommandsSelector(),
     (series, qualityProfile, executingCommands) => {

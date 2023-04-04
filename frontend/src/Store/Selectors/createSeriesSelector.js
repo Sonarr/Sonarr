@@ -1,22 +1,22 @@
 import { createSelector } from 'reselect';
 
-function createSeriesSelector(id) {
-  if (id == null) {
-    return createSelector(
-      (state, { seriesId }) => seriesId,
-      (state) => state.series.itemMap,
-      (state) => state.series.items,
-      (seriesId, itemMap, allSeries) => {
-        return allSeries[itemMap[seriesId]];
-      }
-    );
-  }
-
+export function createSeriesSelectorForHook(seriesId) {
   return createSelector(
     (state) => state.series.itemMap,
     (state) => state.series.items,
     (itemMap, allSeries) => {
-      return allSeries[itemMap[id]];
+      return seriesId ? allSeries[itemMap[seriesId]]: undefined;
+    }
+  );
+}
+
+function createSeriesSelector() {
+  return createSelector(
+    (state, { seriesId }) => seriesId,
+    (state) => state.series.itemMap,
+    (state) => state.series.items,
+    (seriesId, itemMap, allSeries) => {
+      return allSeries[itemMap[seriesId]];
     }
   );
 }

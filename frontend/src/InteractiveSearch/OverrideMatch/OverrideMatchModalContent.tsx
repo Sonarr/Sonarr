@@ -23,7 +23,7 @@ import Series from 'Series/Series';
 import { grabRelease } from 'Store/Actions/releaseActions';
 import { fetchDownloadClients } from 'Store/Actions/settingsActions';
 import createEnabledDownloadClientsSelector from 'Store/Selectors/createEnabledDownloadClientsSelector';
-import createSeriesSelector from 'Store/Selectors/createSeriesSelector';
+import { createSeriesSelectorForHook } from 'Store/Selectors/createSeriesSelector';
 import translate from 'Utilities/String/translate';
 import SelectDownloadClientModal from './DownloadClient/SelectDownloadClientModal';
 import OverrideMatchData from './OverrideMatchData';
@@ -77,7 +77,9 @@ function OverrideMatchModalContent(props: OverrideMatchModalContentProps) {
   );
 
   const dispatch = useDispatch();
-  const series: Series = useSelector(createSeriesSelector(seriesId));
+  const series: Series | undefined = useSelector(
+    createSeriesSelectorForHook(seriesId)
+  );
   const { items: downloadClients } = useSelector(
     createEnabledDownloadClientsSelector(protocol)
   );
@@ -88,7 +90,7 @@ function OverrideMatchModalContent(props: OverrideMatchModalContentProps) {
         <div key={episode.id}>
           {episode.episodeNumber}
 
-          {series.seriesType === 'anime' &&
+          {series?.seriesType === 'anime' &&
           episode.absoluteEpisodeNumber != null
             ? ` (${episode.absoluteEpisodeNumber})`
             : ''}
@@ -351,7 +353,7 @@ function OverrideMatchModalContent(props: OverrideMatchModalContentProps) {
         isOpen={selectModalOpen === 'episode'}
         selectedIds={[guid]}
         seriesId={seriesId}
-        isAnime={series.seriesType === 'anime'}
+        isAnime={series?.seriesType === 'anime'}
         seasonNumber={seasonNumber}
         selectedDetails={title}
         modalTitle={modalTitle}
