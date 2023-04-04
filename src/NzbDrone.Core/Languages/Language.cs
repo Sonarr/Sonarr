@@ -170,6 +170,8 @@ namespace NzbDrone.Core.Languages
                     Estonian,
                     Tamil,
                     Indonesian,
+                    Macedonian,
+                    Slovenian,
                     Original
                 };
             }
