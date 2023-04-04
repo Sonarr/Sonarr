@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
+import EpisodesAppState from 'App/State/EpisodesAppState';
 import TextInput from 'Components/Form/TextInput';
 import Button from 'Components/Link/Button';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
@@ -14,12 +15,15 @@ import TableBody from 'Components/Table/TableBody';
 import Episode from 'Episode/Episode';
 import useSelectState from 'Helpers/Hooks/useSelectState';
 import { kinds, scrollDirections } from 'Helpers/Props';
+import SortDirection from 'Helpers/Props/SortDirection';
 import {
   clearEpisodes,
   fetchEpisodes,
   setEpisodesSort,
 } from 'Store/Actions/episodeSelectionActions';
 import createClientSideCollectionSelector from 'Store/Selectors/createClientSideCollectionSelector';
+import { CheckInputChanged } from 'typings/inputs';
+import { SelectStateInputProps } from 'typings/props';
 import getErrorMessage from 'Utilities/Object/getErrorMessage';
 import getSelectedIds from 'Utilities/Table/getSelectedIds';
 import SelectEpisodeRow from './SelectEpisodeRow';
@@ -47,7 +51,7 @@ const columns = [
 function episodesSelector() {
   return createSelector(
     createClientSideCollectionSelector('episodeSelection'),
-    (episodes) => {
+    (episodes: EpisodesAppState) => {
       return episodes;
     }
   );
@@ -60,8 +64,8 @@ export interface SelectedEpisode {
 
 interface SelectEpisodeModalContentProps {
   selectedIds: number[] | string[];
-  seriesId: number;
-  seasonNumber: number;
+  seriesId?: number;
+  seasonNumber?: number;
   selectedDetails?: string;
   isAnime: boolean;
   sortKey?: string;
@@ -100,26 +104,26 @@ function SelectEpisodeModalContent(props: SelectEpisodeModalContentProps) {
   const filterEpisodeNumber = parseInt(filter);
   const errorMessage = getErrorMessage(error, 'Unable to load episodes');
   const selectedCount = selectedIds.length;
-  const selectedEpisodesCount = getSelectedIds(selectState).length;
+  const selectedEpisodesCount = getSelectedIds(selectedState).length;
   const selectionIsValid =
     selectedEpisodesCount > 0 && selectedEpisodesCount % selectedCount === 0;
 
   const onFilterChange = useCallback(
-    ({ value }) => {
+    ({ value }: { value: string }) => {
       setFilter(value.toLowerCase());
     },
     [setFilter]
   );
 
   const onSelectAllChange = useCallback(
-    ({ value }) => {
+    ({ value }: CheckInputChanged) => {
       setSelectState({ type: value ? 'selectAll' : 'unselectAll', items });
     },
     [items, setSelectState]
   );
 
   const onSelectedChange = useCallback(
-    ({ id, value, shiftKey = false }) => {
+    ({ id, value, shiftKey = false }: SelectStateInputProps) => {
       setSelectState({
         type: 'toggleSelected',
         items,
@@ -132,7 +136,7 @@ function SelectEpisodeModalContent(props: SelectEpisodeModalContentProps) {
   );
 
   const onSortPress = useCallback(
-    (newSortKey, newSortDirection) => {
+    (newSortKey: string, newSortDirection: SortDirection) => {
       dispatch(
         setEpisodesSort({
           sortKey: newSortKey,
@@ -144,9 +148,9 @@ function SelectEpisodeModalContent(props: SelectEpisodeModalContentProps) {
   );
 
   const onEpisodesSelectWrapper = useCallback(() => {
-    const episodeIds = getSelectedIds(selectedState);
+    const episodeIds: number[] = getSelectedIds(selectedState);
 
-    const selectedEpisodes = items.reduce((acc, item) => {
+    const selectedEpisodes = items.reduce((acc: Episode[], item) => {
       if (episodeIds.indexOf(item.id) > -1) {
         acc.push(item);
       }
@@ -167,7 +171,7 @@ function SelectEpisodeModalContent(props: SelectEpisodeModalContentProps) {
       );
 
       return {
-        fileId,
+        fileId: fileId as number,
         episodes,
       };
     });

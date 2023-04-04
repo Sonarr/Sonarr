@@ -6,7 +6,7 @@ import { icons } from 'Helpers/Props';
 interface SeriesIndexSelectAllButtonProps {
   label: string;
   isSelectMode: boolean;
-  overflowComponent: React.FunctionComponent;
+  overflowComponent: React.FunctionComponent<never>;
 }
 
 function SeriesIndexSelectAllButton(props: SeriesIndexSelectAllButtonProps) {

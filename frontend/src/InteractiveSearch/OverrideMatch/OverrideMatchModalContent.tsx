@@ -12,6 +12,7 @@ import DownloadProtocol from 'DownloadClient/DownloadProtocol';
 import EpisodeLanguages from 'Episode/EpisodeLanguages';
 import EpisodeQuality from 'Episode/EpisodeQuality';
 import SelectEpisodeModal from 'InteractiveImport/Episode/SelectEpisodeModal';
+import { SelectedEpisode } from 'InteractiveImport/Episode/SelectEpisodeModalContent';
 import SelectLanguageModal from 'InteractiveImport/Language/SelectLanguageModal';
 import SelectQualityModal from 'InteractiveImport/Quality/SelectQualityModal';
 import SelectSeasonModal from 'InteractiveImport/Season/SelectSeasonModal';
@@ -49,7 +50,7 @@ interface OverrideMatchModalContentProps {
   quality: QualityModel;
   protocol: DownloadProtocol;
   isGrabbing: boolean;
-  grabError: string;
+  grabError?: string;
   onModalClose(): void;
 }
 
@@ -70,7 +71,7 @@ function OverrideMatchModalContent(props: OverrideMatchModalContentProps) {
   const [episodes, setEpisodes] = useState(props.episodes);
   const [languages, setLanguages] = useState(props.languages);
   const [quality, setQuality] = useState(props.quality);
-  const [downloadClientId, setDownloadClientId] = useState(null);
+  const [downloadClientId, setDownloadClientId] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [selectModalOpen, setSelectModalOpen] = useState<SelectType | null>(
     null
@@ -137,7 +138,7 @@ function OverrideMatchModalContent(props: OverrideMatchModalContentProps) {
   }, [setSelectModalOpen]);
 
   const onEpisodesSelect = useCallback(
-    (episodeMap) => {
+    (episodeMap: SelectedEpisode[]) => {
       setEpisodes(episodeMap[0].episodes);
       setSelectModalOpen(null);
     },
@@ -149,7 +150,7 @@ function OverrideMatchModalContent(props: OverrideMatchModalContentProps) {
   }, [setSelectModalOpen]);
 
   const onQualitySelect = useCallback(
-    (quality) => {
+    (quality: QualityModel) => {
       setQuality(quality);
       setSelectModalOpen(null);
     },
@@ -161,7 +162,7 @@ function OverrideMatchModalContent(props: OverrideMatchModalContentProps) {
   }, [setSelectModalOpen]);
 
   const onLanguagesSelect = useCallback(
-    (languages) => {
+    (languages: Language[]) => {
       setLanguages(languages);
       setSelectModalOpen(null);
     },
@@ -173,7 +174,7 @@ function OverrideMatchModalContent(props: OverrideMatchModalContentProps) {
   }, [setSelectModalOpen]);
 
   const onDownloadClientSelect = useCallback(
-    (downloadClientId) => {
+    (downloadClientId: number) => {
       setDownloadClientId(downloadClientId);
       setSelectModalOpen(null);
     },
@@ -264,7 +265,7 @@ function OverrideMatchModalContent(props: OverrideMatchModalContentProps) {
             data={
               <OverrideMatchData
                 value={episodeInfo}
-                isDisabled={!series || isNaN(seasonNumber)}
+                isDisabled={!series || isNaN(Number(seasonNumber))}
                 onPress={onSelectEpisodePress}
               />
             }

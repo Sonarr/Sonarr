@@ -4,7 +4,7 @@ import styles from './SelectDownloadClientRow.css';
 
 interface SelectSeasonRowProps {
   id: number;
-  name: number;
+  name: string;
   priority: number;
   onDownloadClientSelect(downloadClientId: number): unknown;
 }

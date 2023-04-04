@@ -7,8 +7,8 @@ import SelectEpisodeModalContent, {
 interface SelectEpisodeModalProps {
   isOpen: boolean;
   selectedIds: number[] | string[];
-  seriesId: number;
-  seasonNumber: number;
+  seriesId?: number;
+  seasonNumber?: number;
   selectedDetails?: string;
   isAnime: boolean;
   modalTitle: string;

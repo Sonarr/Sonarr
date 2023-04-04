@@ -54,7 +54,7 @@ function EditSeriesModalContent(props: EditSeriesModalContentProps) {
   const [isConfirmMoveModalOpen, setIsConfirmMoveModalOpen] = useState(false);
 
   const save = useCallback(
-    (moveFiles) => {
+    (moveFiles: boolean) => {
       let hasChanges = false;
       const payload: SavePayload = {};
 
@@ -102,7 +102,7 @@ function EditSeriesModalContent(props: EditSeriesModalContentProps) {
   );
 
   const onInputChange = useCallback(
-    ({ name, value }) => {
+    ({ name, value }: { name: string; value: string }) => {
       switch (name) {
         case 'monitored':
           setMonitored(value);

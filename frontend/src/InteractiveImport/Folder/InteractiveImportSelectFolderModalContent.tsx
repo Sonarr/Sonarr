@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
+import AppState from 'App/State/AppState';
 import * as commandNames from 'Commands/commandNames';
 import PathInputConnector from 'Components/Form/PathInputConnector';
 import Icon from 'Components/Icon';
@@ -18,7 +19,6 @@ import {
   removeRecentFolder,
 } from 'Store/Actions/interactiveImportActions';
 import translate from 'Utilities/String/translate';
-import RecentFolder from './RecentFolder';
 import RecentFolderRow from './RecentFolderRow';
 import styles from './InteractiveImportSelectFolderModalContent.css';
 
@@ -49,9 +49,9 @@ function InteractiveImportSelectFolderModalContent(
   const { modalTitle, onFolderSelect, onModalClose } = props;
   const [folder, setFolder] = useState('');
   const dispatch = useDispatch();
-  const recentFolders: RecentFolder[] = useSelector(
+  const recentFolders = useSelector(
     createSelector(
-      (state) => state.interactiveImport.recentFolders,
+      (state: AppState) => state.interactiveImport.recentFolders,
       (recentFolders) => {
         return recentFolders;
       }
@@ -59,14 +59,14 @@ function InteractiveImportSelectFolderModalContent(
   );
 
   const onPathChange = useCallback(
-    ({ value }) => {
+    ({ value }: { value: string }) => {
       setFolder(value);
     },
     [setFolder]
   );
 
   const onRecentPathPress = useCallback(
-    (value) => {
+    (value: string) => {
       setFolder(value);
     },
     [setFolder]
@@ -91,8 +91,8 @@ function InteractiveImportSelectFolderModalContent(
   }, [folder, onFolderSelect, dispatch]);
 
   const onRemoveRecentFolderPress = useCallback(
-    (f) => {
-      dispatch(removeRecentFolder({ folder: f }));
+    (folderToRemove: string) => {
+      dispatch(removeRecentFolder({ folder: folderToRemove }));
     },
     [dispatch]
   );

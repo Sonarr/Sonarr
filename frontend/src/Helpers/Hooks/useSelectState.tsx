@@ -5,7 +5,7 @@ import areAllSelected from 'Utilities/Table/areAllSelected';
 import selectAll from 'Utilities/Table/selectAll';
 import toggleSelected from 'Utilities/Table/toggleSelected';
 
-type SelectedState = Record<number, boolean>;
+export type SelectedState = Record<number, boolean>;
 
 export interface SelectState {
   selectedState: SelectedState;

@@ -22,11 +22,11 @@ interface SelectSeriesModalContentProps {
 function SelectSeriesModalContent(props: SelectSeriesModalContentProps) {
   const { modalTitle, onSeriesSelect, onModalClose } = props;
 
-  const allSeries = useSelector(createAllSeriesSelector());
+  const allSeries: Series[] = useSelector(createAllSeriesSelector());
   const [filter, setFilter] = useState('');
 
   const onFilterChange = useCallback(
-    ({ value }) => {
+    ({ value }: { value: string }) => {
       setFilter(value);
     },
     [setFilter]
@@ -34,7 +34,7 @@ function SelectSeriesModalContent(props: SelectSeriesModalContentProps) {
 
   const onSeriesSelectWrapper = useCallback(
     (seriesId: number) => {
-      const series = allSeries.find((s) => s.id === seriesId);
+      const series = allSeries.find((s) => s.id === seriesId) as Series;
 
       onSeriesSelect(series);
     },

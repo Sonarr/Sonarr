@@ -1,5 +1,10 @@
 import classNames from 'classnames';
-import React, { ComponentClass, FunctionComponent, useCallback } from 'react';
+import React, {
+  ComponentClass,
+  FunctionComponent,
+  SyntheticEvent,
+  useCallback,
+} from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import styles from './Link.css';
 
@@ -17,7 +22,7 @@ export interface LinkProps extends React.HTMLProps<HTMLAnchorElement> {
   target?: string;
   isDisabled?: boolean;
   noRouter?: boolean;
-  onPress?(event: Event): void;
+  onPress?(event: SyntheticEvent): void;
 }
 function Link(props: LinkProps) {
   const {
@@ -33,7 +38,7 @@ function Link(props: LinkProps) {
   } = props;
 
   const onClick = useCallback(
-    (event) => {
+    (event: SyntheticEvent) => {
       if (!isDisabled && onPress) {
         onPress(event);
       }
@@ -57,6 +62,8 @@ function Link(props: LinkProps) {
       linkProps.href = to;
       linkProps.target = target || '_self';
     } else {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       el = RouterLink;
       linkProps.to = `${window.Sonarr.urlBase}/${to.replace(/^\//, '')}`;
       linkProps.target = target;

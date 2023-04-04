@@ -23,7 +23,9 @@ function ErrorBoundaryError(props: ErrorBoundaryErrorProps) {
     info,
   } = props;
 
-  const [detailedError, setDetailedError] = useState(null);
+  const [detailedError, setDetailedError] = useState<
+    StackTrace.StackFrame[] | null
+  >(null);
 
   useEffect(() => {
     if (error) {

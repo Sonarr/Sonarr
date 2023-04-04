@@ -9,9 +9,9 @@ import { icons, tooltipPositions } from 'Helpers/Props';
 import styles from './ReleaseSceneIndicator.css';
 
 function formatReleaseNumber(
-  seasonNumber,
-  episodeNumbers,
-  absoluteEpisodeNumbers
+  seasonNumber: number | undefined,
+  episodeNumbers: number[] | undefined,
+  absoluteEpisodeNumbers: number[] | undefined
 ) {
   if (episodeNumbers && episodeNumbers.length) {
     if (episodeNumbers.length > 1) {

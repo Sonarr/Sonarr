@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { SyntheticEvent, useCallback } from 'react';
 import { useSelect } from 'App/SelectContext';
 import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
@@ -15,8 +15,9 @@ function SeriesIndexPosterSelect(props: SeriesIndexPosterSelectProps) {
   const isSelected = selectState.selectedState[seriesId];
 
   const onSelectPress = useCallback(
-    (event) => {
-      const shiftKey = event.nativeEvent.shiftKey;
+    (event: SyntheticEvent) => {
+      const nativeEvent = event.nativeEvent as PointerEvent;
+      const shiftKey = nativeEvent.shiftKey;
 
       selectDispatch({
         type: 'toggleSelected',

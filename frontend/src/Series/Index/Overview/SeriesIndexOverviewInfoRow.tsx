@@ -1,11 +1,12 @@
+import { IconDefinition } from '@fortawesome/free-regular-svg-icons';
 import React from 'react';
 import Icon from 'Components/Icon';
 import styles from './SeriesIndexOverviewInfoRow.css';
 
 interface SeriesIndexOverviewInfoRowProps {
   title?: string;
-  iconName: object;
-  label: string;
+  iconName?: IconDefinition;
+  label: string | null;
 }
 
 function SeriesIndexOverviewInfoRow(props: SeriesIndexOverviewInfoRowProps) {

@@ -7,7 +7,7 @@ interface SeriesIndexSelectModeButtonProps {
   label: string;
   iconName: IconDefinition;
   isSelectMode: boolean;
-  overflowComponent: React.FunctionComponent;
+  overflowComponent: React.FunctionComponent<never>;
   onPress: () => void;
 }
 

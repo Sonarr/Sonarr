@@ -1,8 +1,9 @@
 import { throttle } from 'lodash';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { RefObject, useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { FixedSizeGrid as Grid, GridChildComponentProps } from 'react-window';
 import { createSelector } from 'reselect';
+import AppState from 'App/State/AppState';
 import useMeasure from 'Helpers/Hooks/useMeasure';
 import SortDirection from 'Helpers/Props/SortDirection';
 import SeriesIndexPoster from 'Series/Index/Posters/SeriesIndexPoster';
@@ -21,7 +22,7 @@ const columnPaddingSmallScreen = parseInt(
 const progressBarHeight = parseInt(dimensions.progressBarSmallHeight);
 const detailedProgressBarHeight = parseInt(dimensions.progressBarMediumHeight);
 
-const ADDITIONAL_COLUMN_COUNT = {
+const ADDITIONAL_COLUMN_COUNT: Record<string, number> = {
   small: 3,
   medium: 2,
   large: 1,
@@ -41,17 +42,17 @@ interface CellItemData {
 
 interface SeriesIndexPostersProps {
   items: Series[];
-  sortKey?: string;
+  sortKey: string;
   sortDirection?: SortDirection;
   jumpToCharacter?: string;
   scrollTop?: number;
-  scrollerRef: React.MutableRefObject<HTMLElement>;
+  scrollerRef: RefObject<HTMLElement>;
   isSelectMode: boolean;
   isSmallScreen: boolean;
 }
 
 const seriesIndexSelector = createSelector(
-  (state) => state.seriesIndex.posterOptions,
+  (state: AppState) => state.seriesIndex.posterOptions,
   (posterOptions) => {
     return {
       posterOptions,
@@ -108,7 +109,7 @@ export default function SeriesIndexPosters(props: SeriesIndexPostersProps) {
   } = props;
 
   const { posterOptions } = useSelector(seriesIndexSelector);
-  const ref: React.MutableRefObject<Grid> = useRef();
+  const ref = useRef<Grid>(null);
   const [measureRef, bounds] = useMeasure();
   const [size, setSize] = useState({ width: 0, height: 0 });
 
@@ -210,8 +211,8 @@ export default function SeriesIndexPosters(props: SeriesIndexPostersProps) {
   }, [isSmallScreen, scrollerRef, bounds]);
 
   useEffect(() => {
-    const currentScrollListener = isSmallScreen ? window : scrollerRef.current;
-    const currentScrollerRef = scrollerRef.current;
+    const currentScrollerRef = scrollerRef.current as HTMLElement;
+    const currentScrollListener = isSmallScreen ? window : currentScrollerRef;
 
     const handleScroll = throttle(() => {
       const { offsetTop = 0 } = currentScrollerRef;
@@ -220,7 +221,7 @@ export default function SeriesIndexPosters(props: SeriesIndexPostersProps) {
           ? getWindowScrollTopPosition()
           : currentScrollerRef.scrollTop) - offsetTop;
 
-      ref.current.scrollTo({ scrollLeft: 0, scrollTop });
+      ref.current?.scrollTo({ scrollLeft: 0, scrollTop });
     }, 10);
 
     currentScrollListener.addEventListener('scroll', handleScroll);
@@ -243,8 +244,8 @@ export default function SeriesIndexPosters(props: SeriesIndexPostersProps) {
 
         const scrollTop = rowIndex * rowHeight + padding;
 
-        ref.current.scrollTo({ scrollLeft: 0, scrollTop });
-        scrollerRef.current.scrollTo(0, scrollTop);
+        ref.current?.scrollTo({ scrollLeft: 0, scrollTop });
+        scrollerRef.current?.scrollTo(0, scrollTop);
       }
     }
   }, [

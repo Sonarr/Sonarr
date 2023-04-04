@@ -42,7 +42,7 @@ function SeriesIndexPosterOptionsModalContent(
   const dispatch = useDispatch();
 
   const onPosterOptionChange = useCallback(
-    ({ name, value }) => {
+    ({ name, value }: { name: string; value: unknown }) => {
       dispatch(setSeriesPosterOption({ [name]: value }));
     },
     [dispatch]

@@ -5,8 +5,8 @@ import SelectSeasonModalContent from './SelectSeasonModalContent';
 interface SelectSeasonModalProps {
   isOpen: boolean;
   modalTitle: string;
-  seriesId: number;
-  onSeasonSelect(seasonNumber): void;
+  seriesId?: number;
+  onSeasonSelect(seasonNumber: number): void;
   onModalClose(): void;
 }
 

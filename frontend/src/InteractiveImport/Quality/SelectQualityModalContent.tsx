@@ -1,6 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
+import { Error } from 'App/State/AppSectionState';
+import AppState from 'App/State/AppState';
 import Form from 'Components/Form/Form';
 import FormGroup from 'Components/Form/FormGroup';
 import FormInputGroup from 'Components/Form/FormInputGroup';
@@ -12,22 +14,32 @@ import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import { inputTypes, kinds } from 'Helpers/Props';
-import { QualityModel } from 'Quality/Quality';
+import Quality, { QualityModel } from 'Quality/Quality';
 import { fetchQualityProfileSchema } from 'Store/Actions/settingsActions';
+import { CheckInputChanged } from 'typings/inputs';
 import getQualities from 'Utilities/Quality/getQualities';
 
-function createQualitySchemeSelctor() {
+interface QualitySchemaState {
+  isFetching: boolean;
+  isPopulated: boolean;
+  error: Error;
+  items: Quality[];
+}
+
+function createQualitySchemaSelector() {
   return createSelector(
-    (state) => state.settings.qualityProfiles,
-    (qualityProfiles) => {
+    (state: AppState) => state.settings.qualityProfiles,
+    (qualityProfiles): QualitySchemaState => {
       const { isSchemaFetching, isSchemaPopulated, schemaError, schema } =
         qualityProfiles;
+
+      const items = getQualities(schema.items) as Quality[];
 
       return {
         isFetching: isSchemaFetching,
         isPopulated: isSchemaPopulated,
         error: schemaError,
-        items: getQualities(schema.items),
+        items,
       };
     }
   );
@@ -50,7 +62,7 @@ function SelectQualityModalContent(props: SelectQualityModalContentProps) {
   const [real, setReal] = useState(props.real);
 
   const { isFetching, isPopulated, error, items } = useSelector(
-    createQualitySchemeSelctor()
+    createQualitySchemaSelector()
   );
   const dispatch = useDispatch();
 
@@ -72,28 +84,28 @@ function SelectQualityModalContent(props: SelectQualityModalContentProps) {
   }, [items]);
 
   const onQualityChange = useCallback(
-    ({ value }) => {
+    ({ value }: { value: string }) => {
       setQualityId(parseInt(value));
     },
     [setQualityId]
   );
 
   const onProperChange = useCallback(
-    ({ value }) => {
+    ({ value }: CheckInputChanged) => {
       setProper(value);
     },
     [setProper]
   );
 
   const onRealChange = useCallback(
-    ({ value }) => {
+    ({ value }: CheckInputChanged) => {
       setReal(value);
     },
     [setReal]
   );
 
   const onQualitySelectWrapper = useCallback(() => {
-    const quality = items.find((item) => item.id === qualityId);
+    const quality = items.find((item) => item.id === qualityId) as Quality;
 
     const revision = {
       version: proper ? 2 : 1,

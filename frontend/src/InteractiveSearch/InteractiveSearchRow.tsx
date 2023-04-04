@@ -15,6 +15,7 @@ import EpisodeQuality from 'Episode/EpisodeQuality';
 import { icons, kinds, tooltipPositions } from 'Helpers/Props';
 import Language from 'Language/Language';
 import { QualityModel } from 'Quality/Quality';
+import CustomFormat from 'typings/CustomFormat';
 import formatDateTime from 'Utilities/Date/formatDateTime';
 import formatAge from 'Utilities/Number/formatAge';
 import formatBytes from 'Utilities/Number/formatBytes';
@@ -25,7 +26,11 @@ import ReleaseEpisode from './ReleaseEpisode';
 import ReleaseSceneIndicator from './ReleaseSceneIndicator';
 import styles from './InteractiveSearchRow.css';
 
-function getDownloadIcon(isGrabbing, isGrabbed, grabError) {
+function getDownloadIcon(
+  isGrabbing: boolean,
+  isGrabbed: boolean,
+  grabError?: string
+) {
   if (isGrabbing) {
     return icons.SPINNER;
   } else if (isGrabbed) {
@@ -37,7 +42,11 @@ function getDownloadIcon(isGrabbing, isGrabbed, grabError) {
   return icons.DOWNLOAD;
 }
 
-function getDownloadTooltip(isGrabbing, isGrabbed, grabError) {
+function getDownloadTooltip(
+  isGrabbing: boolean,
+  isGrabbed: boolean,
+  grabError?: string
+) {
   if (isGrabbing) {
     return '';
   } else if (isGrabbed) {
@@ -65,7 +74,7 @@ interface InteractiveSearchRowProps {
   leechers?: number;
   quality: QualityModel;
   languages: Language[];
-  customFormats?: object[];
+  customFormats: CustomFormat[];
   customFormatScore: number;
   sceneMapping?: object;
   seasonNumber?: number;

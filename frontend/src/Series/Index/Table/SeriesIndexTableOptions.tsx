@@ -4,6 +4,7 @@ import FormGroup from 'Components/Form/FormGroup';
 import FormInputGroup from 'Components/Form/FormInputGroup';
 import FormLabel from 'Components/Form/FormLabel';
 import { inputTypes } from 'Helpers/Props';
+import { CheckInputChanged } from 'typings/inputs';
 import selectTableOptions from './selectTableOptions';
 
 interface SeriesIndexTableOptionsProps {
@@ -18,7 +19,7 @@ function SeriesIndexTableOptions(props: SeriesIndexTableOptionsProps) {
   const { showBanners, showSearchAction } = tableOptions;
 
   const onTableOptionChangeWrapper = useCallback(
-    ({ name, value }) => {
+    ({ name, value }: CheckInputChanged) => {
       onTableOptionChange({
         tableOptions: {
           ...tableOptions,

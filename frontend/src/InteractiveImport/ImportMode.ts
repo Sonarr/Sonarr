@@ -1,7 +1,3 @@
-enum ImportMode {
-  Auto = 'auto',
-  Move = 'move',
-  Copy = 'copy',
-}
+type ImportMode = 'auto' | 'move' | 'copy' | 'chooseImportMode';
 
 export default ImportMode;

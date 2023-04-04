@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect';
+import AppState from 'App/State/AppState';
 
 export interface SeriesQueueDetails {
   count: number;
@@ -10,7 +11,7 @@ function createSeriesQueueDetailsSelector(
   seasonNumber?: number
 ) {
   return createSelector(
-    (state) => state.queue.details.items,
+    (state: AppState) => state.queue.details.items,
     (queueItems) => {
       return queueItems.reduce(
         (acc: SeriesQueueDetails, item) => {

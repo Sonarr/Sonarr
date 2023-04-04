@@ -1,8 +1,9 @@
 import { throttle } from 'lodash';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { RefObject, useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { FixedSizeList as List, ListChildComponentProps } from 'react-window';
 import { createSelector } from 'reselect';
+import AppState from 'App/State/AppState';
 import Scroller from 'Components/Scroller/Scroller';
 import Column from 'Components/Table/Column';
 import useMeasure from 'Helpers/Hooks/useMeasure';
@@ -30,17 +31,17 @@ interface RowItemData {
 
 interface SeriesIndexTableProps {
   items: Series[];
-  sortKey?: string;
+  sortKey: string;
   sortDirection?: SortDirection;
   jumpToCharacter?: string;
   scrollTop?: number;
-  scrollerRef: React.MutableRefObject<HTMLElement>;
+  scrollerRef: RefObject<HTMLElement>;
   isSelectMode: boolean;
   isSmallScreen: boolean;
 }
 
 const columnsSelector = createSelector(
-  (state) => state.seriesIndex.columns,
+  (state: AppState) => state.seriesIndex.columns,
   (columns) => columns
 );
 
@@ -92,7 +93,7 @@ function SeriesIndexTable(props: SeriesIndexTableProps) {
 
   const columns = useSelector(columnsSelector);
   const { showBanners } = useSelector(selectTableOptions);
-  const listRef: React.MutableRefObject<List> = useRef();
+  const listRef = useRef<List<RowItemData>>(null);
   const [measureRef, bounds] = useMeasure();
   const [size, setSize] = useState({ width: 0, height: 0 });
   const windowWidth = window.innerWidth;
@@ -103,7 +104,7 @@ function SeriesIndexTable(props: SeriesIndexTableProps) {
   }, [showBanners]);
 
   useEffect(() => {
-    const current = scrollerRef.current as HTMLElement;
+    const current = scrollerRef?.current as HTMLElement;
 
     if (isSmallScreen) {
       setSize({
@@ -127,8 +128,8 @@ function SeriesIndexTable(props: SeriesIndexTableProps) {
   }, [isSmallScreen, windowWidth, windowHeight, scrollerRef, bounds]);
 
   useEffect(() => {
-    const currentScrollListener = isSmallScreen ? window : scrollerRef.current;
-    const currentScrollerRef = scrollerRef.current;
+    const currentScrollerRef = scrollerRef.current as HTMLElement;
+    const currentScrollListener = isSmallScreen ? window : currentScrollerRef;
 
     const handleScroll = throttle(() => {
       const { offsetTop = 0 } = currentScrollerRef;
@@ -137,7 +138,7 @@ function SeriesIndexTable(props: SeriesIndexTableProps) {
           ? getWindowScrollTopPosition()
           : currentScrollerRef.scrollTop) - offsetTop;
 
-      listRef.current.scrollTo(scrollTop);
+      listRef.current?.scrollTo(scrollTop);
     }, 10);
 
     currentScrollListener.addEventListener('scroll', handleScroll);
@@ -166,8 +167,8 @@ function SeriesIndexTable(props: SeriesIndexTableProps) {
           scrollTop += offset;
         }
 
-        listRef.current.scrollTo(scrollTop);
-        scrollerRef.current.scrollTo(0, scrollTop);
+        listRef.current?.scrollTo(scrollTop);
+        scrollerRef?.current?.scrollTo(0, scrollTop);
       }
     }
   }, [jumpToCharacter, rowHeight, items, scrollerRef, listRef]);

@@ -25,7 +25,7 @@ function SelectReleaseGroupModalContent(
   const [releaseGroup, setReleaseGroup] = useState(props.releaseGroup);
 
   const onReleaseGroupChange = useCallback(
-    ({ value }) => {
+    ({ value }: { value: string }) => {
       setReleaseGroup(value);
     },
     [setReleaseGroup]

@@ -27,8 +27,8 @@ function InteractiveImportModal(props: InteractiveImportModalProps) {
   const previousIsOpen = usePrevious(isOpen);
 
   const onFolderSelect = useCallback(
-    (f) => {
-      setFolderPath(f);
+    (path: string) => {
+      setFolderPath(path);
     },
     [setFolderPath]
   );

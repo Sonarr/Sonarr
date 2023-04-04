@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
+import { LanguageSettingsAppState } from 'App/State/SettingsAppState';
 import Form from 'Components/Form/Form';
 import FormGroup from 'Components/Form/FormGroup';
 import FormInputGroup from 'Components/Form/FormInputGroup';
@@ -25,11 +26,12 @@ interface SelectLanguageModalContentProps {
 
 function createFilteredLanguagesSelector() {
   return createSelector(createLanguagesSelector(), (languages) => {
-    const { isFetching, isPopulated, error, items } = languages;
+    const { isFetching, isPopulated, error, items } =
+      languages as LanguageSettingsAppState;
 
     const filterItems = ['Any', 'Original'];
     const filteredLanguages = items.filter(
-      (lang) => !filterItems.includes(lang.name)
+      (lang: Language) => !filterItems.includes(lang.name)
     );
 
     return {
@@ -51,7 +53,7 @@ function SelectLanguageModalContent(props: SelectLanguageModalContentProps) {
   const [languageIds, setLanguageIds] = useState(props.languageIds);
 
   const onLanguageChange = useCallback(
-    ({ value, name }) => {
+    ({ name, value }: { name: string; value: boolean }) => {
       const changedId = parseInt(name);
 
       let newLanguages = [...languageIds];

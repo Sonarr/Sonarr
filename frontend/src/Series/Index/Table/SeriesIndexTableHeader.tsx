@@ -14,6 +14,7 @@ import {
   setSeriesSort,
   setSeriesTableOption,
 } from 'Store/Actions/seriesIndexActions';
+import { CheckInputChanged } from 'typings/inputs';
 import hasGrowableColumns from './hasGrowableColumns';
 import SeriesIndexTableOptions from './SeriesIndexTableOptions';
 import styles from './SeriesIndexTableHeader.css';
@@ -32,21 +33,21 @@ function SeriesIndexTableHeader(props: SeriesIndexTableHeaderProps) {
   const [selectState, selectDispatch] = useSelect();
 
   const onSortPress = useCallback(
-    (value) => {
+    (value: string) => {
       dispatch(setSeriesSort({ sortKey: value }));
     },
     [dispatch]
   );
 
   const onTableOptionChange = useCallback(
-    (payload) => {
+    (payload: unknown) => {
       dispatch(setSeriesTableOption(payload));
     },
     [dispatch]
   );
 
   const onSelectAllChange = useCallback(
-    ({ value }) => {
+    ({ value }: CheckInputChanged) => {
       selectDispatch({
         type: value ? 'selectAll' : 'unselectAll',
       });
@@ -94,6 +95,8 @@ function SeriesIndexTableHeader(props: SeriesIndexTableHeaderProps) {
           <VirtualTableHeaderCell
             key={name}
             className={classNames(
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore
               styles[name],
               name === 'sortTitle' && showBanners && styles.banner,
               name === 'sortTitle' &&

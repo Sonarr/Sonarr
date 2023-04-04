@@ -1,5 +1,5 @@
-import React, { forwardRef, ReactNode, useCallback } from 'react';
-import Scroller from 'Components/Scroller/Scroller';
+import React, { ForwardedRef, forwardRef, ReactNode, useCallback } from 'react';
+import Scroller, { OnScroll } from 'Components/Scroller/Scroller';
 import ScrollDirection from 'Helpers/Props/ScrollDirection';
 import { isLocked } from 'Utilities/scrollLock';
 import styles from './PageContentBody.css';
@@ -9,14 +9,11 @@ interface PageContentBodyProps {
   innerClassName: string;
   children: ReactNode;
   initialScrollTop?: number;
-  onScroll?: (payload) => void;
+  onScroll?: (payload: OnScroll) => void;
 }
 
 const PageContentBody = forwardRef(
-  (
-    props: PageContentBodyProps,
-    ref: React.MutableRefObject<HTMLDivElement>
-  ) => {
+  (props: PageContentBodyProps, ref: ForwardedRef<HTMLDivElement>) => {
     const {
       className = styles.contentBody,
       innerClassName = styles.innerContentBody,
@@ -26,7 +23,7 @@ const PageContentBody = forwardRef(
     } = props;
 
     const onScrollWrapper = useCallback(
-      (payload) => {
+      (payload: OnScroll) => {
         if (onScroll && !isLocked()) {
           onScroll(payload);
         }

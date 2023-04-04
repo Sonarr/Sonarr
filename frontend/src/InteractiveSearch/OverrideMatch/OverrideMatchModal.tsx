@@ -19,7 +19,7 @@ interface OverrideMatchModalProps {
   quality: QualityModel;
   protocol: DownloadProtocol;
   isGrabbing: boolean;
-  grabError: string;
+  grabError?: string;
   onModalClose(): void;
 }
 
