@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Parser
                 new RegexReplace(@".*?[_. ](S\d{2}(?:E\d{2,4})*[_. ].*)", "$1", RegexOptions.Compiled | RegexOptions.IgnoreCase)
             };
 
-        private static readonly Regex LanguageRegex = new Regex(@"(?:\W|_)(?<italian>\b(?:ita|italian)\b)|(?<german>german\b|videomann|ger[. ]dub)|(?<flemish>flemish)|(?<greek>greek)|(?<french>(?:\W|_)(?:FR|VF|VF2|VFF|VFQ|TRUEFRENCH)(?:\W|_))|(?<russian>\brus\b)|(?<hungarian>\b(?:HUNDUB|HUN)\b)|(?<hebrew>\bHebDub\b)|(?<polish>\b(?:PL\W?DUB|DUB\W?PL|LEK\W?PL|PL\W?LEK)\b)|(?<chinese>\[(?:CH[ST]|BIG5|GB)\]|简|繁|字幕)|(?<bulgarian>\bbgaudio\b)|(?<spanish>\b(?:español|castellano)\b)|(?<ukrainian>\b(?:ukr)\b)|(?<thai>\b(?:THAI)\b)",
+        private static readonly Regex LanguageRegex = new Regex(@"(?:\W|_)(?<english>\b(?:ing|eng)\b)|(?<italian>\b(?:ita|italian)\b)|(?<german>german\b|videomann|ger[. ]dub)|(?<flemish>flemish)|(?<greek>greek)|(?<french>(?:\W|_)(?:FR|VF|VF2|VFF|VFQ|TRUEFRENCH)(?:\W|_))|(?<russian>\brus\b)|(?<hungarian>\b(?:HUNDUB|HUN)\b)|(?<hebrew>\bHebDub\b)|(?<polish>\b(?:PL\W?DUB|DUB\W?PL|LEK\W?PL|PL\W?LEK)\b)|(?<chinese>\[(?:CH[ST]|BIG5|GB)\]|简|繁|字幕)|(?<bulgarian>\bbgaudio\b)|(?<spanish>\b(?:español|castellano|esp|spa(?!\(Latino\)))\b)|(?<ukrainian>\b(?:ukr)\b)|(?<thai>\b(?:THAI)\b)|(?<romainian>\b(?:RoDubbed|ROMANIAN)\b)|(?<catalan>[-,. ]cat[. ](?:DD|subs)|\b(?:catalan|catalán)\b)",
                                                                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         private static readonly Regex CaseSensitiveLanguageRegex = new Regex(@"(?:(?i)(?<!SUB[\W|_|^]))(?:(?<lithuanian>\bLT\b)|(?<czech>\bCZ\b)|(?<polish>\bPL\b)|(?<bulgarian>\bBG\b)|(?<slovak>\bSK\b))(?:(?i)(?![\W|_|^]SUB))",
@@ -278,81 +278,99 @@ namespace NzbDrone.Core.Parser
             }
 
             // Case insensitive
-            var match = LanguageRegex.Match(title);
+            var matches = LanguageRegex.Matches(title);
 
-            if (match.Groups["italian"].Captures.Cast<Capture>().Any())
+            foreach (Match match in matches)
             {
-                languages.Add(Language.Italian);
-            }
+                if (match.Groups["english"].Success)
+                {
+                    languages.Add(Language.English);
+                }
 
-            if (match.Groups["german"].Captures.Cast<Capture>().Any())
-            {
-                languages.Add(Language.German);
-            }
+                if (match.Groups["italian"].Captures.Cast<Capture>().Any())
+                {
+                    languages.Add(Language.Italian);
+                }
 
-            if (match.Groups["flemish"].Captures.Cast<Capture>().Any())
-            {
-                languages.Add(Language.Flemish);
-            }
+                if (match.Groups["german"].Captures.Cast<Capture>().Any())
+                {
+                    languages.Add(Language.German);
+                }
 
-            if (match.Groups["greek"].Captures.Cast<Capture>().Any())
-            {
-                languages.Add(Language.Greek);
-            }
+                if (match.Groups["flemish"].Captures.Cast<Capture>().Any())
+                {
+                    languages.Add(Language.Flemish);
+                }
 
-            if (match.Groups["french"].Success)
-            {
-                languages.Add(Language.French);
-            }
+                if (match.Groups["greek"].Captures.Cast<Capture>().Any())
+                {
+                    languages.Add(Language.Greek);
+                }
 
-            if (match.Groups["russian"].Success)
-            {
-                languages.Add(Language.Russian);
-            }
+                if (match.Groups["french"].Success)
+                {
+                    languages.Add(Language.French);
+                }
 
-            if (match.Groups["dutch"].Success)
-            {
-                languages.Add(Language.Dutch);
-            }
+                if (match.Groups["russian"].Success)
+                {
+                    languages.Add(Language.Russian);
+                }
 
-            if (match.Groups["hungarian"].Success)
-            {
-                languages.Add(Language.Hungarian);
-            }
+                if (match.Groups["dutch"].Success)
+                {
+                    languages.Add(Language.Dutch);
+                }
 
-            if (match.Groups["hebrew"].Success)
-            {
-                languages.Add(Language.Hebrew);
-            }
+                if (match.Groups["hungarian"].Success)
+                {
+                    languages.Add(Language.Hungarian);
+                }
 
-            if (match.Groups["polish"].Success)
-            {
-                languages.Add(Language.Polish);
-            }
+                if (match.Groups["hebrew"].Success)
+                {
+                    languages.Add(Language.Hebrew);
+                }
 
-            if (match.Groups["chinese"].Success)
-            {
-                languages.Add(Language.Chinese);
-            }
+                if (match.Groups["polish"].Success)
+                {
+                    languages.Add(Language.Polish);
+                }
 
-            if (match.Groups["bulgarian"].Success)
-            {
-                languages.Add(Language.Bulgarian);
-            }
+                if (match.Groups["chinese"].Success)
+                {
+                    languages.Add(Language.Chinese);
+                }
 
-            if (match.Groups["ukrainian"].Success)
-            {
-                languages.Add(Language.Ukrainian);
-            }
+                if (match.Groups["bulgarian"].Success)
+                {
+                    languages.Add(Language.Bulgarian);
+                }
 
-            if (match.Groups["spanish"].Success)
-            {
-                languages.Add(Language.Spanish);
-            }
+                if (match.Groups["ukrainian"].Success)
+                {
+                    languages.Add(Language.Ukrainian);
+                }
 
-            if (match.Groups["thai"].Success)
-            {
-                languages.Add(Language.Thai);
+                if (match.Groups["spanish"].Success)
+                {
+                    languages.Add(Language.Spanish);
+                }
+
+                if (match.Groups["thai"].Success)
+                {
+                    languages.Add(Language.Thai);
+                }
+
+                if (match.Groups["romainian"].Success)
+                {
+                    languages.Add(Language.Romanian);
+                }
+
+                if (match.Groups["catalan"].Success)
+                {
+                    languages.Add(Language.Catalan);
+                }
             }
 
             return languages;

@@ -105,6 +105,18 @@ namespace NzbDrone.Core.Languages
         public static Language Thai => new Language(32, "Thai");
         public static Language PortugueseBrazil => new Language(33, "Portuguese (Brazil)");
         public static Language SpanishLatino => new Language(34, "Spanish (Latino)");
+        public static Language Romanian => new Language(35, "Romanian");
+        public static Language Latvian => new Language(36, "Latvian");
+        public static Language Persian => new Language(37, "Persian");
+        public static Language Catalan => new Language(38, "Catalan");
+        public static Language Croatian => new Language(39, "Croatian");
+        public static Language Serbian => new Language(40, "Serbian");
+        public static Language Bosnian => new Language(41, "Bosnian");
+        public static Language Estonian => new Language(42, "Estonian");
+        public static Language Tamil => new Language(43, "Tamil");
+        public static Language Indonesian => new Language(44, "Indonesian");
+        public static Language Macedonian => new Language(45, "Macedonian");
+        public static Language Slovenian => new Language(46, "Slovenian");
         public static Language Original => new Language(-2, "Original");
 
         public static List<Language> All
@@ -148,6 +160,16 @@ namespace NzbDrone.Core.Languages
                     Thai,
                     PortugueseBrazil,
                     SpanishLatino,
+                    Romanian,
+                    Latvian,
+                    Persian,
+                    Catalan,
+                    Croatian,
+                    Serbian,
+                    Bosnian,
+                    Estonian,
+                    Tamil,
+                    Indonesian,
                     Original
                 };
             }
