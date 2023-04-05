@@ -30,16 +30,19 @@ namespace NzbDrone.Core.Extras.Files
         private readonly IConfigService _configService;
         private readonly IDiskProvider _diskProvider;
         private readonly IDiskTransferService _diskTransferService;
+        private readonly IScriptImportDecider _scriptImportDecider;
         private readonly Logger _logger;
 
         public ExtraFileManager(IConfigService configService,
                                 IDiskProvider diskProvider,
                                 IDiskTransferService diskTransferService,
+                                IScriptImportDecider scriptImportDecider,
                                 Logger logger)
         {
             _configService = configService;
             _diskProvider = diskProvider;
             _diskTransferService = diskTransferService;
+            _scriptImportDecider = scriptImportDecider;
             _logger = logger;
         }
 
@@ -72,7 +75,10 @@ namespace NzbDrone.Core.Extras.Files
                 transferMode = _configService.CopyUsingHardlinks ? TransferMode.HardLinkOrCopy : TransferMode.Copy;
             }
 
-            _diskTransferService.TransferFile(path, newFileName, transferMode, true);
+            if (_scriptImportDecider.TryImport(episodeFile, series, path, newFileName, transferMode))
+            {
+                _diskTransferService.TransferFile(path, newFileName, transferMode);
+            }
 
             return new TExtraFile
             {

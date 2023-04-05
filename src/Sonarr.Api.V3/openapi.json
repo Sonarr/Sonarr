@@ -9068,6 +9068,12 @@
           "copyUsingHardlinks": {
             "type": "boolean"
           },
+          "scriptImport": {
+            "type": "boolean"
+          },
+          "scriptImportPath": {
+            "type": "string"
+          },
           "importExtraFiles": {
             "type": "boolean"
           },

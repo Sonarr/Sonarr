@@ -31,6 +31,7 @@ namespace NzbDrone.Core.MediaFiles
         private readonly IDiskTransferService _diskTransferService;
         private readonly IDiskProvider _diskProvider;
         private readonly IMediaFileAttributeService _mediaFileAttributeService;
+        private readonly IScriptImportDecider _scriptImportDecider;
         private readonly IEventAggregator _eventAggregator;
         private readonly IConfigService _configService;
         private readonly Logger _logger;
@@ -41,6 +42,7 @@ namespace NzbDrone.Core.MediaFiles
                                 IDiskTransferService diskTransferService,
                                 IDiskProvider diskProvider,
                                 IMediaFileAttributeService mediaFileAttributeService,
+                                IScriptImportDecider scriptImportDecider,
                                 IEventAggregator eventAggregator,
                                 IConfigService configService,
                                 Logger logger)
@@ -51,6 +53,7 @@ namespace NzbDrone.Core.MediaFiles
             _diskTransferService = diskTransferService;
             _diskProvider = diskProvider;
             _mediaFileAttributeService = mediaFileAttributeService;
+            _scriptImportDecider = scriptImportDecider;
             _eventAggregator = eventAggregator;
             _configService = configService;
             _logger = logger;
@@ -113,7 +116,10 @@ namespace NzbDrone.Core.MediaFiles
                 throw new SameFilenameException("File not moved, source and destination are the same", episodeFilePath);
             }
 
-            _diskTransferService.TransferFile(episodeFilePath, destinationFilePath, mode);
+            if (_scriptImportDecider.TryImport(episodeFile, series, episodeFilePath, destinationFilePath, mode))
+            {
+                _diskTransferService.TransferFile(episodeFilePath, destinationFilePath, mode);
+            }
 
             episodeFile.RelativePath = series.Path.GetRelativePath(destinationFilePath);
 

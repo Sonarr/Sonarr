@@ -200,6 +200,40 @@ class MediaManagement extends Component {
                         />
                       </FormGroup>
 
+                      <FormGroup 
+                        advancedSettings={advancedSettings}
+                        isAdvanced={true}
+                        size={sizes.MEDIUM}
+                      >
+                        <FormLabel>Import Using Script</FormLabel>
+
+                        <FormInputGroup
+                          type={inputTypes.CHECK}
+                          name="scriptImport"
+                          helpText="Copy files for importing using a script, say for transcoding"
+                          onChange={onInputChange}
+                          {...settings.scriptImport}
+                        />
+                      </FormGroup>
+
+                      {
+                        settings.scriptImport.value &&
+                          <FormGroup
+                            advancedSettings={advancedSettings}
+                            isAdvanced={true}
+                          >
+                            <FormLabel>Import Script Path</FormLabel>
+
+                            <FormInputGroup
+                              type={inputTypes.TEXT}
+                              name="scriptImportPath"
+                              helpText="The path to the script to use for importing"
+                              onChange={onInputChange}
+                              {...settings.scriptImportPath}
+                            />
+                          </FormGroup>
+                      }
+
                       <FormGroup size={sizes.MEDIUM}>
                         <FormLabel>Import Extra Files</FormLabel>
 

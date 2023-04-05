@@ -33,6 +33,7 @@ namespace NzbDrone.Core.Extras.Metadata
         public MetadataService(IConfigService configService,
                                IDiskProvider diskProvider,
                                IDiskTransferService diskTransferService,
+                               IScriptImportDecider scriptImportDecider,
                                IRecycleBinProvider recycleBinProvider,
                                IOtherExtraFileRenamer otherExtraFileRenamer,
                                IMetadataFactory metadataFactory,
@@ -41,7 +42,7 @@ namespace NzbDrone.Core.Extras.Metadata
                                IMediaFileAttributeService mediaFileAttributeService,
                                IMetadataFileService metadataFileService,
                                Logger logger)
-            : base(configService, diskProvider, diskTransferService, logger)
+            : base(configService, diskProvider, diskTransferService, scriptImportDecider, logger)
         {
             _metadataFactory = metadataFactory;
             _cleanMetadataService = cleanMetadataService;

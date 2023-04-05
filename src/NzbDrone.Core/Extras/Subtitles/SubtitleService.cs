@@ -28,11 +28,12 @@ namespace NzbDrone.Core.Extras.Subtitles
         public SubtitleService(IConfigService configService,
                                IDiskProvider diskProvider,
                                IDiskTransferService diskTransferService,
+                               IScriptImportDecider scriptImportDecider,
                                IDetectSample detectSample,
                                ISubtitleFileService subtitleFileService,
                                IMediaFileAttributeService mediaFileAttributeService,
                                Logger logger)
-            : base(configService, diskProvider, diskTransferService, logger)
+            : base(configService, diskProvider, diskTransferService, scriptImportDecider, logger)
         {
             _diskProvider = diskProvider;
             _detectSample = detectSample;

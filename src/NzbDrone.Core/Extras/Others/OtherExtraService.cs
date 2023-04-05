@@ -23,10 +23,11 @@ namespace NzbDrone.Core.Extras.Others
         public OtherExtraService(IConfigService configService,
                                  IDiskProvider diskProvider,
                                  IDiskTransferService diskTransferService,
+                                 IScriptImportDecider scriptImportDecider,
                                  IOtherExtraFileService otherExtraFileService,
                                  IMediaFileAttributeService mediaFileAttributeService,
                                  Logger logger)
-            : base(configService, diskProvider, diskTransferService, logger)
+            : base(configService, diskProvider, diskTransferService, scriptImportDecider, logger)
         {
             _diskProvider = diskProvider;
             _otherExtraFileService = otherExtraFileService;
