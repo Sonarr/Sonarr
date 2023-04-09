@@ -76,6 +76,8 @@
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
 
     <Deterministic Condition="$(AssemblyVersion.EndsWith('*'))">False</Deterministic>
+
+    <PathMap>$(MSBuildProjectDirectory)=./$(MSBuildProjectName)/</PathMap>
   </PropertyGroup>
   <!-- Set the AssemblyConfiguration attribute for projects -->
   <ItemGroup Condition="'$(SonarrProject)'=='true'">
