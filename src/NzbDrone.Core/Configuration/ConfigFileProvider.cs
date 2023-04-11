@@ -255,7 +255,7 @@ namespace NzbDrone.Core.Configuration
 
         public T GetValueEnum<T>(string key, T defaultValue, bool persist = true)
         {
-            return (T)Enum.Parse(typeof(T), GetValue(key, defaultValue, persist));
+            return (T)Enum.Parse(typeof(T), GetValue(key, defaultValue, persist), true);
         }
 
         public string GetValue(string key, object defaultValue, bool persist = true)
