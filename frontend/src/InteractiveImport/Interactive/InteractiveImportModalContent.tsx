@@ -51,6 +51,7 @@ import {
   reprocessInteractiveImportItems,
   setInteractiveImportMode,
   setInteractiveImportSort,
+  updateInteractiveImportItem,
   updateInteractiveImportItems,
 } from 'Store/Actions/interactiveImportActions';
 import createClientSideCollectionSelector from 'Store/Selectors/createClientSideCollectionSelector';
@@ -616,13 +617,17 @@ function InteractiveImportModalContent(
   );
 
   const onEpisodesSelect = useCallback(
-    (episodes: SelectedEpisode[]) => {
-      dispatch(
-        updateInteractiveImportItems({
-          ids: selectedIds,
-          episodes,
-        })
-      );
+    (selectedEpisodes: SelectedEpisode[]) => {
+      selectedEpisodes.forEach((selectedEpisode) => {
+        const { id, episodes } = selectedEpisode;
+
+        dispatch(
+          updateInteractiveImportItem({
+            id,
+            episodes,
+          })
+        );
+      });
 
       dispatch(reprocessInteractiveImportItems({ ids: selectedIds }));
 
