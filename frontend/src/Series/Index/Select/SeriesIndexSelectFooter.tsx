@@ -6,6 +6,7 @@ import AppState from 'App/State/AppState';
 import { RENAME_SERIES } from 'Commands/commandNames';
 import SpinnerButton from 'Components/Link/SpinnerButton';
 import PageContentFooter from 'Components/Page/PageContentFooter';
+import usePrevious from 'Helpers/Hooks/usePrevious';
 import { kinds } from 'Helpers/Props';
 import { fetchRootFolders } from 'Store/Actions/rootFolderActions';
 import {
@@ -53,6 +54,7 @@ function SeriesIndexSelectFooter() {
   const [isSavingSeries, setIsSavingSeries] = useState(false);
   const [isSavingTags, setIsSavingTags] = useState(false);
   const [isSavingMonitoring, setIsSavingMonitoring] = useState(false);
+  const previousIsDeleting = usePrevious(isDeleting);
 
   const [selectState, selectDispatch] = useSelect();
   const { selectedState } = selectState;
@@ -158,10 +160,11 @@ function SeriesIndexSelectFooter() {
   }, [isSaving]);
 
   useEffect(() => {
-    if (!isDeleting && !deleteError) {
+    if (previousIsDeleting && !isDeleting && !deleteError) {
+
       selectDispatch({ type: 'unselectAll' });
     }
-  }, [isDeleting, deleteError, selectDispatch]);
+  }, [previousIsDeleting, isDeleting, deleteError, selectDispatch]);
 
   useEffect(() => {
     dispatch(fetchRootFolders());
