@@ -1,9 +1,9 @@
+import { reduce } from 'lodash';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
-import getSelectedIds from 'Utilities/Table/getSelectedIds';
 import selectAll from 'Utilities/Table/selectAll';
 import toggleSelected from 'Utilities/Table/toggleSelected';
 import ImportSeriesFooterConnector from './ImportSeriesFooterConnector';
@@ -31,7 +31,17 @@ class ImportSeries extends Component {
   // Listeners
 
   getSelectedIds = () => {
-    return getSelectedIds(this.state.selectedState, { parseIds: false });
+    return reduce(
+      this.state.selectedState,
+      (result, value, id) => {
+        if (value) {
+          result.push(id);
+        }
+
+        return result;
+      },
+      []
+    );
   };
 
   onSelectAllChange = ({ value }) => {

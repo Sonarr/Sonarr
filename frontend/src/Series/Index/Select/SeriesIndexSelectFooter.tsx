@@ -23,6 +23,15 @@ import ChangeMonitoringModal from './SeasonPass/ChangeMonitoringModal';
 import TagsModal from './Tags/TagsModal';
 import styles from './SeriesIndexSelectFooter.css';
 
+interface SavePayload {
+  monitored?: boolean;
+  qualityProfileId?: number;
+  seriesType?: string;
+  seasonFolder?: boolean;
+  rootFolderPath?: string;
+  moveFiles?: boolean;
+}
+
 const seriesEditorSelector = createSelector(
   (state: AppState) => state.series,
   (series) => {
@@ -74,7 +83,7 @@ function SeriesIndexSelectFooter() {
   }, [setIsEditModalOpen]);
 
   const onSavePress = useCallback(
-    (payload: any) => {
+    (payload: SavePayload) => {
       setIsSavingSeries(true);
       setIsEditModalOpen(false);
 
@@ -161,7 +170,6 @@ function SeriesIndexSelectFooter() {
 
   useEffect(() => {
     if (previousIsDeleting && !isDeleting && !deleteError) {
-
       selectDispatch({ type: 'unselectAll' });
     }
   }, [previousIsDeleting, isDeleting, deleteError, selectDispatch]);
