@@ -40,6 +40,7 @@ namespace NzbDrone.Core.Notifications.Telegram
                                         .AddFormParameter("parse_mode", "HTML")
                                         .AddFormParameter("text", text)
                                         .AddFormParameter("disable_notification", settings.SendSilently)
+                                        .AddFormParameter("message_thread_id", settings.TopicID)
                                         .Build();
 
             _httpClient.Post(request);
@@ -47,6 +48,11 @@ namespace NzbDrone.Core.Notifications.Telegram
 
         public ValidationFailure Test(TelegramSettings settings)
         {
+            if (!int.TryParse(settings.TopicID, out int topicID) || string.IsNullOrWhiteSpace(settings.TopicID) || (topicID < 0))
+            {
+                return new ValidationFailure("TopicId", "Topic ID must be a positive integer");
+            }
+
             try
             {
                 const string title = "Test Notification";
@@ -65,7 +71,16 @@ namespace NzbDrone.Core.Notifications.Telegram
                 else if (ex is Common.Http.HttpException restException && restException.Response.StatusCode == HttpStatusCode.BadRequest)
                 {
                     var error = Json.Deserialize<TelegramError>(restException.Response.Content);
-                    var property = error.Description.ContainsIgnoreCase("chat not found") ? "ChatId" : "BotToken";
+                    var property = "BotToken";
+
+                    if (error.Description.ContainsIgnoreCase("chat not found") || error.Description.ContainsIgnoreCase("group chat was upgrade to a supergroup chat"))
+                    {
+                        property = "ChatId";
+                    }
+                    else if (error.Description.ContainsIgnoreCase("message thread not found"))
+                    {
+                        property = "TopicId";
+                    }
 
                     return new ValidationFailure(property, error.Description);
                 }
