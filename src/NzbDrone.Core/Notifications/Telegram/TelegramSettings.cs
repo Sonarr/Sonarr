@@ -26,8 +26,8 @@ namespace NzbDrone.Core.Notifications.Telegram
         [FieldDefinition(1, Label = "Chat ID", HelpLink = "http://stackoverflow.com/a/37396871/882971", HelpText = "You must start a conversation with the bot or add it to your group to receive messages")]
         public string ChatId { get; set; }
 
-        [FieldDefinition(2, Label = "Topic ID", HelpLink = "https://stackoverflow.com/a/75178418", HelpText = "Specify a Topic ID to send notifications to that topic (Supergroups only)")]
-        public string TopicID { get; set; }
+        [FieldDefinition(2, Label = "Topic ID", HelpLink = "https://stackoverflow.com/a/75178418", HelpText = "Specify a Topic ID to send notifications to that topic. Leave blank to use the general topic (Supergroups only)")]
+        public int? TopicID { get; set; }
 
         [FieldDefinition(3, Label = "Send Silently", Type = FieldType.Checkbox, HelpText = "Sends the message silently. Users will receive a notification with no sound")]
         public bool SendSilently { get; set; }
