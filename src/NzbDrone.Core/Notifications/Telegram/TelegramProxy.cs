@@ -68,7 +68,7 @@ namespace NzbDrone.Core.Notifications.Telegram
                     var error = Json.Deserialize<TelegramError>(restException.Response.Content);
                     var property = "BotToken";
 
-                    if (error.Description.ContainsIgnoreCase("chat not found") || error.Description.ContainsIgnoreCase("group chat was upgrade to a supergroup chat"))
+                    if (error.Description.ContainsIgnoreCase("chat not found") || error.Description.ContainsIgnoreCase("group chat was upgraded to a supergroup chat"))
                     {
                         property = "ChatId";
                     }
