@@ -11,6 +11,8 @@ namespace NzbDrone.Core.Notifications.Telegram
         {
             RuleFor(c => c.BotToken).NotEmpty();
             RuleFor(c => c.ChatId).NotEmpty();
+            RuleFor(c => c.TopicID).Must(topicID => !topicID.HasValue || topicID > 1)
+                                   .WithMessage("Topic ID must be greater than 1 or empty");
         }
     }
 

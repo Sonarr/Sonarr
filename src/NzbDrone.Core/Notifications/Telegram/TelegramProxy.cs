@@ -48,11 +48,6 @@ namespace NzbDrone.Core.Notifications.Telegram
 
         public ValidationFailure Test(TelegramSettings settings)
         {
-            if (!int.TryParse(settings.TopicID, out int topicID) || string.IsNullOrWhiteSpace(settings.TopicID) || (topicID < 0))
-            {
-                return new ValidationFailure("TopicId", "Topic ID must be a positive integer");
-            }
-
             try
             {
                 const string title = "Test Notification";
