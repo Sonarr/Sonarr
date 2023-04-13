@@ -7,6 +7,7 @@ using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
+using NzbDrone.Core.Tv;
 using Sonarr.Api.V3.CustomFormats;
 using Sonarr.Api.V3.Series;
 using Sonarr.Http.REST;
@@ -40,6 +41,8 @@ namespace Sonarr.Api.V3.Indexers
         public int? MappedSeasonNumber { get; set; }
         public int[] MappedEpisodeNumbers { get; set; }
         public int[] MappedAbsoluteEpisodeNumbers { get; set; }
+        public int? MappedSeriesId { get; set; }
+        public IEnumerable<ReleaseEpisodeResource> MappedEpisodeInfo { get; set; }
         public bool Approved { get; set; }
         public bool TemporarilyRejected { get; set; }
         public bool Rejected { get; set; }
@@ -75,6 +78,15 @@ namespace Sonarr.Api.V3.Indexers
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public int? EpisodeId { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public List<int> EpisodeIds { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public int? DownloadClientId { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public bool? ShouldOverride { get; set; }
     }
 
     public static class ReleaseResourceMapper
@@ -109,9 +121,11 @@ namespace Sonarr.Api.V3.Indexers
                 SeriesTitle = parsedEpisodeInfo.SeriesTitle,
                 EpisodeNumbers = parsedEpisodeInfo.EpisodeNumbers,
                 AbsoluteEpisodeNumbers = parsedEpisodeInfo.AbsoluteEpisodeNumbers,
+                MappedSeriesId = remoteEpisode.Series?.Id,
                 MappedSeasonNumber = remoteEpisode.Episodes.FirstOrDefault()?.SeasonNumber,
                 MappedEpisodeNumbers = remoteEpisode.Episodes.Select(v => v.EpisodeNumber).ToArray(),
                 MappedAbsoluteEpisodeNumbers = remoteEpisode.Episodes.Where(v => v.AbsoluteEpisodeNumber.HasValue).Select(v => v.AbsoluteEpisodeNumber.Value).ToArray(),
+                MappedEpisodeInfo = remoteEpisode.Episodes.Select(v => new ReleaseEpisodeResource(v)),
                 Approved = model.Approved,
                 TemporarilyRejected = model.TemporarilyRejected,
                 Rejected = model.Rejected,
@@ -176,6 +190,28 @@ namespace Sonarr.Api.V3.Indexers
             model.PublishDate = resource.PublishDate.ToUniversalTime();
 
             return model;
+        }
+    }
+
+    public class ReleaseEpisodeResource
+    {
+        public int Id { get; set; }
+        public int SeasonNumber { get; set; }
+        public int EpisodeNumber { get; set; }
+        public int? AbsoluteEpisodeNumber { get; set; }
+        public string Title { get; set; }
+
+        public ReleaseEpisodeResource()
+        {
+        }
+
+        public ReleaseEpisodeResource(Episode episode)
+        {
+            Id = episode.Id;
+            SeasonNumber = episode.SeasonNumber;
+            EpisodeNumber = episode.EpisodeNumber;
+            AbsoluteEpisodeNumber = episode.AbsoluteEpisodeNumber;
+            Title = episode.Title;
         }
     }
 }

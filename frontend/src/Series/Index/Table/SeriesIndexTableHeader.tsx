@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import React, { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
-import { SelectActionType, useSelect } from 'App/SelectContext';
+import { useSelect } from 'App/SelectContext';
 import IconButton from 'Components/Link/IconButton';
 import Column from 'Components/Table/Column';
 import TableOptionsModalWrapper from 'Components/Table/TableOptions/TableOptionsModalWrapper';
@@ -14,6 +14,7 @@ import {
   setSeriesSort,
   setSeriesTableOption,
 } from 'Store/Actions/seriesIndexActions';
+import { CheckInputChanged } from 'typings/inputs';
 import hasGrowableColumns from './hasGrowableColumns';
 import SeriesIndexTableOptions from './SeriesIndexTableOptions';
 import styles from './SeriesIndexTableHeader.css';
@@ -32,23 +33,23 @@ function SeriesIndexTableHeader(props: SeriesIndexTableHeaderProps) {
   const [selectState, selectDispatch] = useSelect();
 
   const onSortPress = useCallback(
-    (value) => {
+    (value: string) => {
       dispatch(setSeriesSort({ sortKey: value }));
     },
     [dispatch]
   );
 
   const onTableOptionChange = useCallback(
-    (payload) => {
+    (payload: unknown) => {
       dispatch(setSeriesTableOption(payload));
     },
     [dispatch]
   );
 
   const onSelectAllChange = useCallback(
-    ({ value }) => {
+    ({ value }: CheckInputChanged) => {
       selectDispatch({
-        type: value ? SelectActionType.SelectAll : SelectActionType.UnselectAll,
+        type: value ? 'selectAll' : 'unselectAll',
       });
     },
     [selectDispatch]
@@ -94,6 +95,8 @@ function SeriesIndexTableHeader(props: SeriesIndexTableHeaderProps) {
           <VirtualTableHeaderCell
             key={name}
             className={classNames(
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore
               styles[name],
               name === 'sortTitle' && showBanners && styles.banner,
               name === 'sortTitle' &&

@@ -17,6 +17,7 @@ namespace Sonarr.Api.V3.Commands
         public Command Body { get; set; }
         public CommandPriority Priority { get; set; }
         public CommandStatus Status { get; set; }
+        public CommandResult Result { get; set; }
         public DateTime Queued { get; set; }
         public DateTime? Started { get; set; }
         public DateTime? Ended { get; set; }
@@ -102,6 +103,7 @@ namespace Sonarr.Api.V3.Commands
                 Body = model.Body,
                 Priority = model.Priority,
                 Status = model.Status,
+                Result = model.Result,
                 Queued = model.QueuedAt,
                 Started = model.StartedAt,
                 Ended = model.EndedAt,

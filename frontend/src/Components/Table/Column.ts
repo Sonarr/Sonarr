@@ -1,8 +1,10 @@
+import React from 'react';
+
 interface Column {
   name: string;
-  label: string;
-  columnLabel: string;
-  isSortable: boolean;
+  label: string | React.ReactNode;
+  columnLabel?: string;
+  isSortable?: boolean;
   isVisible: boolean;
   isModifiable?: boolean;
 }

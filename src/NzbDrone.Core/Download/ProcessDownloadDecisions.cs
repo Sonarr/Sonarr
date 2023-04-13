@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -74,7 +74,7 @@ namespace NzbDrone.Core.Download
                 try
                 {
                     _logger.Trace("Grabbing from Indexer {0} at priority {1}.", remoteEpisode.Release.Indexer, remoteEpisode.Release.IndexerPriority);
-                    _downloadService.DownloadReport(remoteEpisode);
+                    _downloadService.DownloadReport(remoteEpisode, null);
                     grabbed.Add(report);
                 }
                 catch (ReleaseUnavailableException)

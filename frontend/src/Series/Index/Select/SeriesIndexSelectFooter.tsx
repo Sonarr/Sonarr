@@ -1,10 +1,12 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
-import { SelectActionType, useSelect } from 'App/SelectContext';
+import { useSelect } from 'App/SelectContext';
+import AppState from 'App/State/AppState';
 import { RENAME_SERIES } from 'Commands/commandNames';
 import SpinnerButton from 'Components/Link/SpinnerButton';
 import PageContentFooter from 'Components/Page/PageContentFooter';
+import usePrevious from 'Helpers/Hooks/usePrevious';
 import { kinds } from 'Helpers/Props';
 import { fetchRootFolders } from 'Store/Actions/rootFolderActions';
 import {
@@ -21,8 +23,17 @@ import ChangeMonitoringModal from './SeasonPass/ChangeMonitoringModal';
 import TagsModal from './Tags/TagsModal';
 import styles from './SeriesIndexSelectFooter.css';
 
+interface SavePayload {
+  monitored?: boolean;
+  qualityProfileId?: number;
+  seriesType?: string;
+  seasonFolder?: boolean;
+  rootFolderPath?: string;
+  moveFiles?: boolean;
+}
+
 const seriesEditorSelector = createSelector(
-  (state) => state.series,
+  (state: AppState) => state.series,
   (series) => {
     const { isSaving, isDeleting, deleteError } = series;
 
@@ -52,6 +63,7 @@ function SeriesIndexSelectFooter() {
   const [isSavingSeries, setIsSavingSeries] = useState(false);
   const [isSavingTags, setIsSavingTags] = useState(false);
   const [isSavingMonitoring, setIsSavingMonitoring] = useState(false);
+  const previousIsDeleting = usePrevious(isDeleting);
 
   const [selectState, selectDispatch] = useSelect();
   const { selectedState } = selectState;
@@ -71,7 +83,7 @@ function SeriesIndexSelectFooter() {
   }, [setIsEditModalOpen]);
 
   const onSavePress = useCallback(
-    (payload) => {
+    (payload: SavePayload) => {
       setIsSavingSeries(true);
       setIsEditModalOpen(false);
 
@@ -102,7 +114,7 @@ function SeriesIndexSelectFooter() {
   }, [setIsTagsModalOpen]);
 
   const onApplyTagsPress = useCallback(
-    (tags, applyTags) => {
+    (tags: number[], applyTags: string) => {
       setIsSavingTags(true);
       setIsTagsModalOpen(false);
 
@@ -126,7 +138,7 @@ function SeriesIndexSelectFooter() {
   }, [setIsMonitoringModalOpen]);
 
   const onMonitoringSavePress = useCallback(
-    (monitor) => {
+    (monitor: string) => {
       setIsSavingMonitoring(true);
       setIsMonitoringModalOpen(false);
 
@@ -157,10 +169,10 @@ function SeriesIndexSelectFooter() {
   }, [isSaving]);
 
   useEffect(() => {
-    if (!isDeleting && !deleteError) {
-      selectDispatch({ type: SelectActionType.UnselectAll });
+    if (previousIsDeleting && !isDeleting && !deleteError) {
+      selectDispatch({ type: 'unselectAll' });
     }
-  }, [isDeleting, deleteError, selectDispatch]);
+  }, [previousIsDeleting, isDeleting, deleteError, selectDispatch]);
 
   useEffect(() => {
     dispatch(fetchRootFolders());

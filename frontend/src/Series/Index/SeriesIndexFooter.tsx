@@ -3,6 +3,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
 import { ColorImpairedConsumer } from 'App/ColorImpairedContext';
+import SeriesAppState from 'App/State/SeriesAppState';
 import DescriptionList from 'Components/DescriptionList/DescriptionList';
 import DescriptionListItem from 'Components/DescriptionList/DescriptionListItem';
 import createClientSideCollectionSelector from 'Store/Selectors/createClientSideCollectionSelector';
@@ -13,7 +14,7 @@ import styles from './SeriesIndexFooter.css';
 function createUnoptimizedSelector() {
   return createSelector(
     createClientSideCollectionSelector('series', 'seriesIndex'),
-    (series) => {
+    (series: SeriesAppState) => {
       return series.items.map((s) => {
         const { monitored, status, statistics } = s;
 
@@ -45,7 +46,9 @@ export default function SeriesIndexFooter() {
   let totalFileSize = 0;
 
   series.forEach((s) => {
-    const { statistics = {} } = s;
+    const {
+      statistics = { episodeCount: 0, episodeFileCount: 0, sizeOnDisk: 0 },
+    } = s;
 
     const {
       episodeCount = 0,

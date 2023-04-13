@@ -1,13 +1,49 @@
+import { IconDefinition } from '@fortawesome/free-regular-svg-icons';
 import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { icons } from 'Helpers/Props';
 import createUISettingsSelector from 'Store/Selectors/createUISettingsSelector';
 import dimensions from 'Styles/Variables/dimensions';
+import { UiSettings } from 'typings/UiSettings';
 import formatDateTime from 'Utilities/Date/formatDateTime';
 import getRelativeDate from 'Utilities/Date/getRelativeDate';
 import formatBytes from 'Utilities/Number/formatBytes';
 import SeriesIndexOverviewInfoRow from './SeriesIndexOverviewInfoRow';
 import styles from './SeriesIndexOverviewInfo.css';
+
+interface RowProps {
+  name: string;
+  showProp: string;
+  valueProp: string;
+}
+
+interface RowInfoProps {
+  title: string;
+  iconName: IconDefinition;
+  label: string;
+}
+
+interface SeriesIndexOverviewInfoProps {
+  height: number;
+  showNetwork: boolean;
+  showMonitored: boolean;
+  showQualityProfile: boolean;
+  showPreviousAiring: boolean;
+  showAdded: boolean;
+  showSeasonCount: boolean;
+  showPath: boolean;
+  showSizeOnDisk: boolean;
+  monitored: boolean;
+  nextAiring?: string;
+  network?: string;
+  qualityProfile: object;
+  previousAiring?: string;
+  added?: string;
+  seasonCount: number;
+  path: string;
+  sizeOnDisk?: number;
+  sortKey: string;
+}
 
 const infoRowHeight = parseInt(dimensions.seriesIndexOverviewInfoRowHeight);
 
@@ -54,7 +90,11 @@ const rows = [
   },
 ];
 
-function getInfoRowProps(row, props, uiSettings) {
+function getInfoRowProps(
+  row: RowProps,
+  props: SeriesIndexOverviewInfoProps,
+  uiSettings: UiSettings
+): RowInfoProps | null {
   const { name } = row;
 
   if (name === 'monitored') {
@@ -71,7 +111,7 @@ function getInfoRowProps(row, props, uiSettings) {
     return {
       title: 'Network',
       iconName: icons.NETWORK,
-      label: props.network,
+      label: props.network ?? '',
     };
   }
 
@@ -79,6 +119,9 @@ function getInfoRowProps(row, props, uiSettings) {
     return {
       title: 'Quality Profile',
       iconName: icons.PROFILE,
+      // TODO: Type QualityProfile
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore ts(2339)
       label: props.qualityProfile.name,
     };
   }
@@ -95,15 +138,11 @@ function getInfoRowProps(row, props, uiSettings) {
         timeFormat
       )}`,
       iconName: icons.CALENDAR,
-      label: getRelativeDate(
-        previousAiring,
-        shortDateFormat,
-        showRelativeDates,
-        {
+      label:
+        getRelativeDate(previousAiring, shortDateFormat, showRelativeDates, {
           timeFormat,
           timeForToday: true,
-        }
-      ),
+        }) ?? '',
     };
   }
 
@@ -115,10 +154,11 @@ function getInfoRowProps(row, props, uiSettings) {
     return {
       title: `Added: ${formatDateTime(added, longDateFormat, timeFormat)}`,
       iconName: icons.ADD,
-      label: getRelativeDate(added, shortDateFormat, showRelativeDates, {
-        timeFormat,
-        timeForToday: true,
-      }),
+      label:
+        getRelativeDate(added, shortDateFormat, showRelativeDates, {
+          timeFormat,
+          timeForToday: true,
+        }) ?? '',
     };
   }
 
@@ -154,28 +194,8 @@ function getInfoRowProps(row, props, uiSettings) {
       label: formatBytes(props.sizeOnDisk),
     };
   }
-}
 
-interface SeriesIndexOverviewInfoProps {
-  height: number;
-  showNetwork: boolean;
-  showMonitored: boolean;
-  showQualityProfile: boolean;
-  showPreviousAiring: boolean;
-  showAdded: boolean;
-  showSeasonCount: boolean;
-  showPath: boolean;
-  showSizeOnDisk: boolean;
-  monitored: boolean;
-  nextAiring?: string;
-  network?: string;
-  qualityProfile: object;
-  previousAiring?: string;
-  added?: string;
-  seasonCount: number;
-  path: string;
-  sizeOnDisk?: number;
-  sortKey: string;
+  return null;
 }
 
 function SeriesIndexOverviewInfo(props: SeriesIndexOverviewInfoProps) {
@@ -194,6 +214,8 @@ function SeriesIndexOverviewInfo(props: SeriesIndexOverviewInfoProps) {
       const { name, showProp, valueProp } = row;
 
       const isVisible =
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore ts(7053)
         props[valueProp] != null && (props[showProp] || props.sortKey === name);
 
       return {
@@ -233,6 +255,10 @@ function SeriesIndexOverviewInfo(props: SeriesIndexOverviewInfoProps) {
         shownRows++;
 
         const infoRowProps = getInfoRowProps(row, props, uiSettings);
+
+        if (infoRowProps == null) {
+          return null;
+        }
 
         return <SeriesIndexOverviewInfoRow key={row.name} {...infoRowProps} />;
       })}

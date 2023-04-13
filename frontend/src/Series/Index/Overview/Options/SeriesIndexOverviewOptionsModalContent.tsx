@@ -45,7 +45,7 @@ function SeriesIndexOverviewOptionsModalContent(
   const dispatch = useDispatch();
 
   const onOverviewOptionChange = useCallback(
-    ({ name, value }) => {
+    ({ name, value }: { name: string; value: unknown }) => {
       dispatch(setSeriesOverviewOption({ [name]: value }));
     },
     [dispatch]

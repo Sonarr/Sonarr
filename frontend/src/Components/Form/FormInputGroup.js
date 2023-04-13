@@ -267,6 +267,7 @@ FormInputGroup.propTypes = {
   helpTexts: PropTypes.arrayOf(PropTypes.string),
   helpTextWarning: PropTypes.string,
   helpLink: PropTypes.string,
+  autoFocus: PropTypes.bool,
   includeNoChange: PropTypes.bool,
   includeNoChangeDisabled: PropTypes.bool,
   selectedValueOptions: PropTypes.object,

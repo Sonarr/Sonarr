@@ -652,7 +652,6 @@ class SeriesDetails extends Component {
             initialSortDirection={sortDirections.DESCENDING}
             showSeries={false}
             allowSeriesChange={false}
-            autoSelectRow={false}
             showDelete={true}
             showImportMode={false}
             modalTitle={'Manage Episodes'}

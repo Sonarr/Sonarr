@@ -68,6 +68,7 @@ class PathInputConnector extends Component {
 }
 
 PathInputConnector.propTypes = {
+  ...PathInput.props,
   includeFiles: PropTypes.bool.isRequired,
   dispatchFetchPaths: PropTypes.func.isRequired,
   dispatchClearPaths: PropTypes.func.isRequired

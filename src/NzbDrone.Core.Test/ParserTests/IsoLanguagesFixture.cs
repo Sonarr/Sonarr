@@ -22,7 +22,6 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("enus")]
         [TestCase("enusa")]
         [TestCase("wo")]
-        [TestCase("ca-IT")]
         [TestCase("fr-CA")]
         public void unknown_or_invalid_code_should_return_null(string isoCode)
         {
@@ -44,6 +43,13 @@ namespace NzbDrone.Core.Test.ParserTests
         {
             var result = IsoLanguages.Find(isoCode);
             result.Should().Be(null);
+        }
+
+        [TestCase("cze")]
+        public void should_lookup_cze_via_alternate_iso_code_mapping(string isoCode)
+        {
+            var result = IsoLanguages.Find(isoCode);
+            result.Language.Should().Be(Language.Czech);
         }
     }
 }

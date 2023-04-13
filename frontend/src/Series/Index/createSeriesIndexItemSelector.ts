@@ -1,34 +1,27 @@
 import { maxBy } from 'lodash';
 import { createSelector } from 'reselect';
+import Command from 'Commands/Command';
 import { REFRESH_SERIES, SERIES_SEARCH } from 'Commands/commandNames';
+import Series from 'Series/Series';
 import createExecutingCommandsSelector from 'Store/Selectors/createExecutingCommandsSelector';
 import createSeriesQualityProfileSelector from 'Store/Selectors/createSeriesQualityProfileSelector';
-import createSeriesSelector from 'Store/Selectors/createSeriesSelector';
+import { createSeriesSelectorForHook } from 'Store/Selectors/createSeriesSelector';
 
 function createSeriesIndexItemSelector(seriesId: number) {
   return createSelector(
-    createSeriesSelector(seriesId),
+    createSeriesSelectorForHook(seriesId),
     createSeriesQualityProfileSelector(seriesId),
     createExecutingCommandsSelector(),
-    (series, qualityProfile, executingCommands) => {
-      // If a series is deleted this selector may fire before the parent
-      // selectors, which will result in an undefined series, if that happens
-      // we want to return early here and again in the render function to avoid
-      // trying to show a series that has no information available.
-
-      if (!series) {
-        return {};
-      }
-
+    (series: Series, qualityProfile, executingCommands: Command[]) => {
       const isRefreshingSeries = executingCommands.some((command) => {
         return (
-          command.name === REFRESH_SERIES && command.body.seriesId === series.id
+          command.name === REFRESH_SERIES && command.body.seriesId === seriesId
         );
       });
 
       const isSearchingSeries = executingCommands.some((command) => {
         return (
-          command.name === SERIES_SEARCH && command.body.seriesId === series.id
+          command.name === SERIES_SEARCH && command.body.seriesId === seriesId
         );
       });
 

@@ -25,7 +25,7 @@
   overflow: hidden;
 }
 
-.path {
+.details {
   margin-right: 20px;
   color: var(--dimColor);
   word-break: break-word;
@@ -40,7 +40,7 @@
     display: block;
   }
 
-  .path {
+  .details {
     margin-right: 0;
     margin-bottom: 10px;
   }

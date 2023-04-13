@@ -1,8 +1,20 @@
 import classNames from 'classnames';
 import { throttle } from 'lodash';
-import React, { forwardRef, ReactNode, useEffect, useRef } from 'react';
+import React, {
+  ForwardedRef,
+  forwardRef,
+  MutableRefObject,
+  ReactNode,
+  useEffect,
+  useRef,
+} from 'react';
 import ScrollDirection from 'Helpers/Props/ScrollDirection';
 import styles from './Scroller.css';
+
+export interface OnScroll {
+  scrollLeft: number;
+  scrollTop: number;
+}
 
 interface ScrollerProps {
   className?: string;
@@ -12,11 +24,11 @@ interface ScrollerProps {
   scrollTop?: number;
   initialScrollTop?: number;
   children?: ReactNode;
-  onScroll?: (payload) => void;
+  onScroll?: (payload: OnScroll) => void;
 }
 
 const Scroller = forwardRef(
-  (props: ScrollerProps, ref: React.MutableRefObject<HTMLDivElement>) => {
+  (props: ScrollerProps, ref: ForwardedRef<HTMLDivElement>) => {
     const {
       className,
       autoFocus = false,
@@ -30,7 +42,7 @@ const Scroller = forwardRef(
     } = props;
 
     const internalRef = useRef();
-    const currentRef = ref ?? internalRef;
+    const currentRef = (ref as MutableRefObject<HTMLDivElement>) ?? internalRef;
 
     useEffect(
       () => {

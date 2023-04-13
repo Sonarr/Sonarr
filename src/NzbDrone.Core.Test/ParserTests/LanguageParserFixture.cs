@@ -1,4 +1,3 @@
-using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Languages;
@@ -10,30 +9,6 @@ namespace NzbDrone.Core.Test.ParserTests
     [TestFixture]
     public class LanguageParserFixture : CoreTest
     {
-        [TestCase("Title.the.Series.2009.S01E14.English.HDTV.XviD-LOL")]
-        [TestCase("Series Title - S01E01 - Pilot.English.sub")]
-        [TestCase("Series Title - S01E01 - Pilot.english.sub")]
-        public void should_parse_language_english(string postTitle)
-        {
-            var result = LanguageParser.ParseLanguages(postTitle);
-            result.First().Should().Be(Language.English);
-        }
-
-        [TestCase("Spanish Killroy was Here S02E02 Flodden 720p AMZN WEB-DL DDP5 1 H 264-NTb")]
-        [TestCase("Title.the.Spanish.Series.S02E02.1080p.WEB.H264-CAKES")]
-        [TestCase("Title.the.Spanish.Series.S02E06.Field.of.Cloth.of.Gold.1080p.AMZN.WEBRip.DDP5.1.x264-NTb")]
-        [TestCase("Title.the.Series.2009.S01E14.Germany.HDTV.XviD-LOL")]
-        [TestCase("Title.the.Series.2009.S01E14.HDTV.XviD-LOL")]
-        [TestCase("Title.the.Italian.Series.S01E01.The.Family.720p.HDTV.x264-FTP")]
-        [TestCase("Title.the.Italy.Series.S02E01.720p.HDTV.x264-TLA")]
-        [TestCase("Series Title - S01E01 - Pilot.en.sub")]
-        [TestCase("Series Title - S01E01 - Pilot.eng.sub")]
-        public void should_parse_language_unknown(string postTitle)
-        {
-            var result = LanguageParser.ParseLanguages(postTitle);
-            result.First().Should().Be(Language.Unknown);
-        }
-
         [TestCase("Series Title - S01E01 - Pilot.sub")]
         public void should_parse_subtitle_language_unknown(string fileName)
         {
@@ -51,10 +26,35 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series Title - S01E01 - Pilot.en.sdh.sub")]
         [TestCase("Series Title - S01E01 - Pilot.en.forced.sub")]
         [TestCase("Series Title - S01E01 - Pilot.en.sdh.forced.sub")]
+        [TestCase("Series Title - S01E01 - Pilot.eng.sub")]
         public void should_parse_subtitle_language_english(string fileName)
         {
             var result = LanguageParser.ParseSubtitleLanguage(fileName);
             result.Should().Be(Language.English);
+        }
+
+        [TestCase("Spanish Killroy was Here S02E02 Flodden 720p AMZN WEB-DL DDP5 1 H 264-NTb")]
+        [TestCase("Title.the.Spanish.Series.S02E02.1080p.WEB.H264-CAKES")]
+        [TestCase("Title.the.Spanish.Series.S02E06.Field.of.Cloth.of.Gold.1080p.AMZN.WEBRip.DDP5.1.x264-NTb")]
+        [TestCase("Title.the.Series.2009.S01E14.Germany.HDTV.XviD-LOL")]
+        [TestCase("Title.the.Series.2009.S01E14.HDTV.XviD-LOL")]
+        [TestCase("Title.the.Italian.Series.S01E01.The.Family.720p.HDTV.x264-FTP")]
+        [TestCase("Title.the.Italy.Series.S02E01.720p.HDTV.x264-TLA")]
+        [TestCase("Series Title - S01E01 - Pilot.en.sub")]
+        public void should_parse_language_unknown(string postTitle)
+        {
+            var result = LanguageParser.ParseLanguages(postTitle);
+            result.Should().Contain(Language.Unknown);
+        }
+
+        [TestCase("Title.the.Series.2009.S01E14.English.HDTV.XviD-LOL")]
+        [TestCase("Series Title - S01E01 - Pilot.English.sub")]
+        [TestCase("Series Title - S01E01 - Pilot.english.sub")]
+        [TestCase("Series S02 (1999–2003)[BDRemux 1080p AVC Esp DD2.0,Ing DTS-HD5.1,Cat DD2.0 Subs][HD-Olimpo][PACK]")]
+        public void should_parse_language_english(string postTitle)
+        {
+            var result = LanguageParser.ParseLanguages(postTitle);
+            result.Should().Contain(Language.English);
         }
 
         [TestCase("Title.the.Series.2009.S01E14.French.HDTV.XviD-LOL")]
@@ -67,7 +67,7 @@ namespace NzbDrone.Core.Test.ParserTests
         public void should_parse_language_french(string postTitle)
         {
             var result = LanguageParser.ParseLanguages(postTitle);
-            result.First().Id.Should().Be(Language.French.Id);
+            result.Should().Contain(Language.French);
         }
 
         [TestCase("Title.the.Series.2009.S01E14.Spanish.HDTV.XviD-LOL")]
@@ -76,7 +76,7 @@ namespace NzbDrone.Core.Test.ParserTests
         public void should_parse_language_spanish(string postTitle)
         {
             var result = LanguageParser.ParseLanguages(postTitle);
-            result.First().Id.Should().Be(Language.Spanish.Id);
+            result.Should().Contain(Language.Spanish);
         }
 
         [TestCase("Title.the.Series.2009.S01E14.German.HDTV.XviD-LOL")]
@@ -86,7 +86,7 @@ namespace NzbDrone.Core.Test.ParserTests
         public void should_parse_language_german(string postTitle)
         {
             var result = LanguageParser.ParseLanguages(postTitle);
-            result.First().Id.Should().Be(Language.German.Id);
+            result.Should().Contain(Language.German);
         }
 
         [TestCase("Title.the.Series.2009.S01E14.Italian.HDTV.XviD-LOL")]
@@ -94,28 +94,28 @@ namespace NzbDrone.Core.Test.ParserTests
         public void should_parse_language_italian(string postTitle)
         {
             var result = LanguageParser.ParseLanguages(postTitle);
-            result.First().Id.Should().Be(Language.Italian.Id);
+            result.Should().Contain(Language.Italian);
         }
 
         [TestCase("Title.the.Series.2009.S01E14.Danish.HDTV.XviD-LOL")]
         public void should_parse_language_danish(string postTitle)
         {
             var result = LanguageParser.ParseLanguages(postTitle);
-            result.First().Id.Should().Be(Language.Danish.Id);
+            result.Should().Contain(Language.Danish);
         }
 
         [TestCase("Title.the.Series.2009.S01E14.Dutch.HDTV.XviD-LOL")]
         public void should_parse_language_dutch(string postTitle)
         {
             var result = LanguageParser.ParseLanguages(postTitle);
-            result.First().Id.Should().Be(Language.Dutch.Id);
+            result.Should().Contain(Language.Dutch);
         }
 
         [TestCase("Title.the.Series.2009.S01E14.Japanese.HDTV.XviD-LOL")]
         public void should_parse_language_japanese(string postTitle)
         {
             var result = LanguageParser.ParseLanguages(postTitle);
-            result.First().Id.Should().Be(Language.Japanese.Id);
+            result.Should().Contain(Language.Japanese);
         }
 
         [TestCase("Title.the.Series.2009.S01E14.Icelandic.HDTV.XviD-LOL")]
@@ -123,7 +123,7 @@ namespace NzbDrone.Core.Test.ParserTests
         public void should_parse_language_icelandic(string postTitle)
         {
             var result = LanguageParser.ParseLanguages(postTitle);
-            result.First().Id.Should().Be(Language.Icelandic.Id);
+            result.Should().Contain(Language.Icelandic);
         }
 
         [TestCase("Title.the.Series.2009.S01E14.Chinese.HDTV.XviD-LOL")]
@@ -142,14 +142,14 @@ namespace NzbDrone.Core.Test.ParserTests
         public void should_parse_language_chinese(string postTitle)
         {
             var result = LanguageParser.ParseLanguages(postTitle);
-            result.First().Id.Should().Be(Language.Chinese.Id);
+            result.Should().Contain(Language.Chinese);
         }
 
         [TestCase("Title.the.Series.2009.S01E14.Korean.HDTV.XviD-LOL")]
         public void should_parse_language_korean(string postTitle)
         {
             var result = LanguageParser.ParseLanguages(postTitle);
-            result.First().Id.Should().Be(Language.Korean.Id);
+            result.Should().Contain(Language.Korean);
         }
 
         [TestCase("Title.the.Series.2009.S01E14.Russian.HDTV.XviD-LOL")]
@@ -157,7 +157,7 @@ namespace NzbDrone.Core.Test.ParserTests
         public void should_parse_language_russian(string postTitle)
         {
             var result = LanguageParser.ParseLanguages(postTitle);
-            result.First().Id.Should().Be(Language.Russian.Id);
+            result.Should().Contain(Language.Russian);
         }
 
         [TestCase("Title.the.Series.2009.S01E14.Polish.HDTV.XviD-LOL")]
@@ -173,63 +173,63 @@ namespace NzbDrone.Core.Test.ParserTests
         public void should_parse_language_polish(string postTitle)
         {
             var result = LanguageParser.ParseLanguages(postTitle);
-            result.First().Id.Should().Be(Language.Polish.Id);
+            result.Should().Contain(Language.Polish);
         }
 
         [TestCase("Title.the.Series.2009.S01E14.Vietnamese.HDTV.XviD-LOL")]
         public void should_parse_language_vietnamese(string postTitle)
         {
             var result = LanguageParser.ParseLanguages(postTitle);
-            result.First().Id.Should().Be(Language.Vietnamese.Id);
+            result.Should().Contain(Language.Vietnamese);
         }
 
         [TestCase("Title.the.Series.2009.S01E14.Swedish.HDTV.XviD-LOL")]
         public void should_parse_language_swedish(string postTitle)
         {
             var result = LanguageParser.ParseLanguages(postTitle);
-            result.First().Id.Should().Be(Language.Swedish.Id);
+            result.Should().Contain(Language.Swedish);
         }
 
         [TestCase("Title.the.Series.2009.S01E14.Norwegian.HDTV.XviD-LOL")]
         public void should_parse_language_norwegian(string postTitle)
         {
             var result = LanguageParser.ParseLanguages(postTitle);
-            result.First().Id.Should().Be(Language.Norwegian.Id);
+            result.Should().Contain(Language.Norwegian);
         }
 
         [TestCase("Title.the.Series.2009.S01E14.Finnish.HDTV.XviD-LOL")]
         public void should_parse_language_finnish(string postTitle)
         {
             var result = LanguageParser.ParseLanguages(postTitle);
-            result.First().Id.Should().Be(Language.Finnish.Id);
+            result.Should().Contain(Language.Finnish);
         }
 
         [TestCase("Title.the.Series.2009.S01E14.Turkish.HDTV.XviD-LOL")]
         public void should_parse_language_turkish(string postTitle)
         {
             var result = LanguageParser.ParseLanguages(postTitle);
-            result.First().Id.Should().Be(Language.Turkish.Id);
+            result.Should().Contain(Language.Turkish);
         }
 
         [TestCase("Title.the.Series.2009.S01E14.Portuguese.HDTV.XviD-LOL")]
         public void should_parse_language_portuguese(string postTitle)
         {
             var result = LanguageParser.ParseLanguages(postTitle);
-            result.First().Id.Should().Be(Language.Portuguese.Id);
+            result.Should().Contain(Language.Portuguese);
         }
 
         [TestCase("Title.the.Series.S01E01.FLEMISH.HDTV.x264-BRiGAND")]
         public void should_parse_language_flemish(string postTitle)
         {
             var result = LanguageParser.ParseLanguages(postTitle);
-            result.First().Id.Should().Be(Language.Flemish.Id);
+            result.Should().Contain(Language.Flemish);
         }
 
         [TestCase("Title.the.Series.S03E13.Greek.PDTV.XviD-Ouzo")]
         public void should_parse_language_greek(string postTitle)
         {
             var result = LanguageParser.ParseLanguages(postTitle);
-            result.First().Id.Should().Be(Language.Greek.Id);
+            result.Should().Contain(Language.Greek);
         }
 
         [TestCase("Title.the.Series.2009.S01E14.HDTV.XviD.HUNDUB-LOL")]
@@ -238,43 +238,43 @@ namespace NzbDrone.Core.Test.ParserTests
         public void should_parse_language_hungarian(string postTitle)
         {
             var result = LanguageParser.ParseLanguages(postTitle);
-            result.First().Id.Should().Be(Language.Hungarian.Id);
+            result.Should().Contain(Language.Hungarian);
         }
 
         [TestCase("Title.the.Series.S01-03.DVDRip.HebDub")]
         public void should_parse_language_hebrew(string postTitle)
         {
             var result = LanguageParser.ParseLanguages(postTitle);
-            result.First().Id.Should().Be(Language.Hebrew.Id);
+            result.Should().Contain(Language.Hebrew);
         }
 
         [TestCase("Title.the.Series.S05E01.WEBRip.x264.AC3.LT.EN-CNN")]
         public void should_parse_language_lithuanian(string postTitle)
         {
             var result = LanguageParser.ParseLanguages(postTitle);
-            result.First().Id.Should().Be(Language.Lithuanian.Id);
+            result.Should().Contain(Language.Lithuanian);
         }
 
         [TestCase("Title.the.Series.​S07E11.​WEB Rip.​XviD.​Louige-​CZ.​EN.​5.​1")]
         public void should_parse_language_czech(string postTitle)
         {
             var result = LanguageParser.ParseLanguages(postTitle);
-            result.First().Id.Should().Be(Language.Czech.Id);
+            result.Should().Contain(Language.Czech);
         }
 
         [TestCase("Series Title.S01.ARABIC.COMPLETE.720p.NF.WEBRip.x264-PTV")]
         public void should_parse_language_arabic(string postTitle)
         {
             var result = LanguageParser.ParseLanguages(postTitle);
-            result.First().Id.Should().Be(Language.Arabic.Id);
+            result.Should().Contain(Language.Arabic);
         }
 
-        [TestCase("The Shadow Series S01 E01-08 WebRip Dual Audio [Hindi 5.1 + English 5.1] 720p x264 AAC ESub")]
-        [TestCase("The Final Sonarr (2020) S04 Complete 720p NF WEBRip [Hindi+English] Dual audio")]
+        [TestCase("The Shadow Series S01 E01-08 WebRip Dual Audio [Hindi 5.1] 720p x264 AAC ESub")]
+        [TestCase("The Final Sonarr (2020) S04 Complete 720p NF WEBRip [Hindi] Dual audio")]
         public void should_parse_language_hindi(string postTitle)
         {
             var result = LanguageParser.ParseLanguages(postTitle);
-            result.First().Id.Should().Be(Language.Hindi.Id);
+            result.Should().Contain(Language.Hindi);
         }
 
         [TestCase("Title.the.Series.2009.S01E14.Bulgarian.HDTV.XviD-LOL")]
@@ -283,7 +283,7 @@ namespace NzbDrone.Core.Test.ParserTests
         public void should_parse_language_bulgarian(string postTitle)
         {
             var result = LanguageParser.ParseLanguages(postTitle);
-            result.First().Id.Should().Be(Language.Bulgarian.Id);
+            result.Should().Contain(Language.Bulgarian);
         }
 
         [TestCase("Series Title S01E01 Malayalam.1080p.WebRip.AVC.5.1-Rjaa")]
@@ -292,7 +292,7 @@ namespace NzbDrone.Core.Test.ParserTests
         public void should_parse_language_malayalam(string postTitle)
         {
             var result = LanguageParser.ParseLanguages(postTitle);
-            result.First().Id.Should().Be(Language.Malayalam.Id);
+            result.Should().Contain(Language.Malayalam);
         }
 
         [TestCase("Гало(Сезон 1, серії 1-5) / SeriesTitle(Season 1, episodes 1-5) (2022) WEBRip-AVC Ukr/Eng")]
@@ -301,7 +301,7 @@ namespace NzbDrone.Core.Test.ParserTests
         public void should_parse_language_ukrainian(string postTitle)
         {
             var result = LanguageParser.ParseLanguages(postTitle);
-            result.First().Id.Should().Be(Language.Ukrainian.Id);
+            result.Should().Contain(Language.Ukrainian);
         }
 
         [TestCase("Title.the.Series.2022.S02E22.Slovak.HDTV.XviD-LOL")]
@@ -309,7 +309,7 @@ namespace NzbDrone.Core.Test.ParserTests
         public void should_parse_language_slovak(string postTitle)
         {
             var result = LanguageParser.ParseLanguages(postTitle);
-            result.First().Id.Should().Be(Language.Slovak.Id);
+            result.Should().Contain(Language.Slovak);
         }
 
         [TestCase("Thai.Series.Title.S01.THAI.1080p.WEBRip.x265-RARBG")]
@@ -318,7 +318,7 @@ namespace NzbDrone.Core.Test.ParserTests
         public void should_parse_language_thai(string postTitle)
         {
             var result = LanguageParser.ParseLanguages(postTitle);
-            result.First().Id.Should().Be(Language.Thai.Id);
+            result.Should().Contain(Language.Thai);
         }
 
         [TestCase("Title.the.Series.2009.S01E14.Brazilian.HDTV.XviD-LOL")]
@@ -326,7 +326,7 @@ namespace NzbDrone.Core.Test.ParserTests
         public void should_parse_language_portuguese_brazil(string postTitle)
         {
             var result = LanguageParser.ParseLanguages(postTitle);
-            result.First().Id.Should().Be(Language.PortugueseBrazil.Id);
+            result.Should().Contain(Language.PortugueseBrazil);
         }
 
         [TestCase("Series.Title.S01.2019.720p_Eng-Spa(Latino)_MovieClubMx")]
@@ -338,7 +338,52 @@ namespace NzbDrone.Core.Test.ParserTests
         public void should_parse_language_spanish_latino(string postTitle)
         {
             var result = LanguageParser.ParseLanguages(postTitle);
-            result.First().Id.Should().Be(Language.SpanishLatino.Id);
+            result.Should().Contain(Language.SpanishLatino);
+        }
+
+        [TestCase("TV.Series.S01.720p.WEB-DL.RoDubbed-RLSGRP")]
+        [TestCase("TV Series S22E36 ROMANIAN 1080p WEB-DL AAC 2.0 H.264-RLSGRP")]
+        public void should_parse_language_romanian(string postTitle)
+        {
+            var result = LanguageParser.ParseLanguages(postTitle);
+            result.Should().Contain(Language.Romanian);
+        }
+
+        [TestCase("Series S02 (2009–2013)[BDRemux 1080p AVC Cat.DD2.0,Subs][HD-Olimpo][PACK]")]
+        [TestCase("Series S02 (2009–2013)[BDRemux 1080p AVC Esp.DD2.0,Ing.DD2.0,Cat.DD2.0,Subs][HD-Olimpo][PACK]")]
+        [TestCase("Series S02 (1999–2003)[BDRemux 1080p AVC Esp DD2.0,Ing DTS-HD5.1,Cat DD2.0 Subs][HD-Olimpo][PACK]")]
+        [TestCase("Series S01 [WEB-DL NF 1080p EAC3 2.0 esp cat Subs][HDOlimpo]")]
+        [TestCase("Series S02E08 M+ WEBDL 1080p SPA-CAT DD5.1 SUBS x264")]
+        [TestCase("Series Title S02 (2021) [WEB-DL 1080p Castellano DD 5.1 - Catalán DD 5.1 Subs] [HDOlimpo]")]
+        public void should_parse_language_catalan(string postTitle)
+        {
+            var result = LanguageParser.ParseLanguages(postTitle);
+            result.Should().Contain(Language.Catalan);
+        }
+
+        [TestCase("The Shadow Series S01 E01-08 WebRip Dual Audio [Hindi 5.1 + English 5.1] 720p x264 AAC ESub")]
+        [TestCase("The Final Sonarr (2020) S04 Complete 720p NF WEBRip [Hindi+English] Dual audio")]
+        public void should_parse_hindi_and_english(string postTitle)
+        {
+            var result = LanguageParser.ParseLanguages(postTitle);
+            result.Should().BeEquivalentTo(new[] { Language.Hindi, Language.English });
+    }
+
+        [TestCase("Series S01 [WEB-DL NF 1080p EAC3 2.0 esp cat Subs][HDOlimpo]")]
+        [TestCase("Series S02E08 M+ WEBDL 1080p SPA-CAT DD5.1 SUBS x264")]
+        [TestCase("Series Title S02 (2021) [WEB-DL 1080p Castellano DD 5.1 - Catalán DD 5.1 Subs] [HDOlimpo]")]
+        public void should_parse_spanish_and_catalan(string postTitle)
+        {
+            var result = LanguageParser.ParseLanguages(postTitle);
+            result.Should().BeEquivalentTo(new[] { Language.Spanish, Language.Catalan });
+        }
+
+        [TestCase("Series S02 (2009–2013)[BDRemux 1080p AVC Esp.DD2.0,Ing.DD2.0,Cat.DD2.0,Subs][HD-Olimpo][PACK]")]
+        [TestCase("Series S02 (1999–2003)[BDRemux 1080p AVC Esp DD2.0,Ing DTS-HD5.1,Cat DD2.0 Subs][HD-Olimpo][PACK]")]
+        public void should_parse_english_spanish_and_catalan(string postTitle)
+        {
+            var result = LanguageParser.ParseLanguages(postTitle);
+            result.Should().BeEquivalentTo(new[] { Language.English, Language.Spanish, Language.Catalan });
         }
     }
 }

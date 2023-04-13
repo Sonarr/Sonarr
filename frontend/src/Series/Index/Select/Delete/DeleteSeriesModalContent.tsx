@@ -2,6 +2,7 @@ import { orderBy } from 'lodash';
 import React, { useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
+import AppState from 'App/State/AppState';
 import FormGroup from 'Components/Form/FormGroup';
 import FormInputGroup from 'Components/Form/FormInputGroup';
 import FormLabel from 'Components/Form/FormLabel';
@@ -11,8 +12,10 @@ import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import { inputTypes, kinds } from 'Helpers/Props';
+import Series from 'Series/Series';
 import { bulkDeleteSeries, setDeleteOption } from 'Store/Actions/seriesActions';
 import createAllSeriesSelector from 'Store/Selectors/createAllSeriesSelector';
+import { CheckInputChanged } from 'typings/inputs';
 import styles from './DeleteSeriesModalContent.css';
 
 interface DeleteSeriesModalContentProps {
@@ -21,7 +24,7 @@ interface DeleteSeriesModalContentProps {
 }
 
 const selectDeleteOptions = createSelector(
-  (state) => state.series.deleteOptions,
+  (state: AppState) => state.series.deleteOptions,
   (deleteOptions) => deleteOptions
 );
 
@@ -29,28 +32,28 @@ function DeleteSeriesModalContent(props: DeleteSeriesModalContentProps) {
   const { seriesIds, onModalClose } = props;
 
   const { addImportListExclusion } = useSelector(selectDeleteOptions);
-  const allSeries = useSelector(createAllSeriesSelector());
+  const allSeries: Series[] = useSelector(createAllSeriesSelector());
   const dispatch = useDispatch();
 
   const [deleteFiles, setDeleteFiles] = useState(false);
 
-  const series = useMemo(() => {
-    const series = seriesIds.map((id) => {
+  const series = useMemo((): Series[] => {
+    const seriesList = seriesIds.map((id) => {
       return allSeries.find((s) => s.id === id);
-    });
+    }) as Series[];
 
-    return orderBy(series, ['sortTitle']);
+    return orderBy(seriesList, ['sortTitle']);
   }, [seriesIds, allSeries]);
 
   const onDeleteFilesChange = useCallback(
-    ({ value }) => {
+    ({ value }: CheckInputChanged) => {
       setDeleteFiles(value);
     },
     [setDeleteFiles]
   );
 
   const onDeleteOptionChange = useCallback(
-    ({ name, value }) => {
+    ({ name, value }: { name: string; value: boolean }) => {
       dispatch(
         setDeleteOption({
           [name]: value,

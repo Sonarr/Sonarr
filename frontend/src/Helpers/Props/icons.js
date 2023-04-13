@@ -39,6 +39,7 @@ import {
   faChevronCircleRight as fasChevronCircleRight,
   faChevronCircleUp as fasChevronCircleUp,
   faCircle as fasCircle,
+  faCircleDown as fasCircleDown,
   faCloud as fasCloud,
   faCloudDownloadAlt as fasCloudDownloadAlt,
   faCog as fasCog,
@@ -121,6 +122,7 @@ export const CHECK_INDETERMINATE = fasMinus;
 export const CHECK_CIRCLE = fasCheckCircle;
 export const CHECK_SQUARE = fasSquareCheck;
 export const CIRCLE = fasCircle;
+export const CIRCLE_DOWN = fasCircleDown;
 export const CIRCLE_OUTLINE = farCircle;
 export const CLEAR = fasTrashAlt;
 export const CLIPBOARD = fasCopy;

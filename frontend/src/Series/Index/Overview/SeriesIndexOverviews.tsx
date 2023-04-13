@@ -1,5 +1,5 @@
 import { throttle } from 'lodash';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { RefObject, useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { FixedSizeList as List, ListChildComponentProps } from 'react-window';
 import useMeasure from 'Helpers/Hooks/useMeasure';
@@ -33,11 +33,11 @@ interface RowItemData {
 
 interface SeriesIndexOverviewsProps {
   items: Series[];
-  sortKey?: string;
+  sortKey: string;
   sortDirection?: string;
   jumpToCharacter?: string;
   scrollTop?: number;
-  scrollerRef: React.MutableRefObject<HTMLElement>;
+  scrollerRef: RefObject<HTMLElement>;
   isSelectMode: boolean;
   isSmallScreen: boolean;
 }
@@ -79,7 +79,7 @@ function SeriesIndexOverviews(props: SeriesIndexOverviewsProps) {
   const { size: posterSize, detailedProgressBar } = useSelector(
     selectOverviewOptions
   );
-  const listRef: React.MutableRefObject<List> = useRef();
+  const listRef = useRef<List>(null);
   const [measureRef, bounds] = useMeasure();
   const [size, setSize] = useState({ width: 0, height: 0 });
 
@@ -136,8 +136,8 @@ function SeriesIndexOverviews(props: SeriesIndexOverviewsProps) {
   }, [isSmallScreen, scrollerRef, bounds]);
 
   useEffect(() => {
-    const currentScrollListener = isSmallScreen ? window : scrollerRef.current;
-    const currentScrollerRef = scrollerRef.current;
+    const currentScrollerRef = scrollerRef.current as HTMLElement;
+    const currentScrollListener = isSmallScreen ? window : currentScrollerRef;
 
     const handleScroll = throttle(() => {
       const { offsetTop = 0 } = currentScrollerRef;
@@ -146,7 +146,7 @@ function SeriesIndexOverviews(props: SeriesIndexOverviewsProps) {
           ? getWindowScrollTopPosition()
           : currentScrollerRef.scrollTop) - offsetTop;
 
-      listRef.current.scrollTo(scrollTop);
+      listRef.current?.scrollTo(scrollTop);
     }, 10);
 
     currentScrollListener.addEventListener('scroll', handleScroll);
@@ -175,8 +175,8 @@ function SeriesIndexOverviews(props: SeriesIndexOverviewsProps) {
           scrollTop += offset;
         }
 
-        listRef.current.scrollTo(scrollTop);
-        scrollerRef.current.scrollTo(0, scrollTop);
+        listRef.current?.scrollTo(scrollTop);
+        scrollerRef.current?.scrollTo(0, scrollTop);
       }
     }
   }, [jumpToCharacter, rowHeight, items, scrollerRef, listRef]);

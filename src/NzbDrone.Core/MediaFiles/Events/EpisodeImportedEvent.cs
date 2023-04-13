@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Parser.Model;

@@ -40,8 +40,7 @@
   cursor: default;
 }
 
-.rejected,
-.download {
+.rejected {
   composes: cell from '~Components/Table/Cells/TableRowCell.css';
 
   width: 50px;
@@ -58,4 +57,35 @@
   composes: cell from '~Components/Table/Cells/TableRowCell.css';
 
   width: 75px;
+}
+
+.download {
+  composes: cell from '~Components/Table/Cells/TableRowCell.css';
+
+  width: 80px;
+}
+
+.manualDownloadContent {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  height: 20.39px;
+  vertical-align: middle;
+  line-height: 20.39px;
+}
+
+.interactiveIcon {
+  position: absolute;
+  top: 4px;
+  left: 0;
+  /* width: 100%; */
+  text-align: center;
+}
+
+.downloadIcon {
+  position: absolute;
+  top: 7px;
+  left: 8px;
+  /* width: 100%; */
+  text-align: center;
 }

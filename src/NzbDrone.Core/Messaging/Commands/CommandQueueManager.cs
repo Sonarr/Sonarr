@@ -26,6 +26,7 @@ namespace NzbDrone.Core.Messaging.Commands
         CommandModel Get(int id);
         List<CommandModel> GetStarted();
         void SetMessage(CommandModel command, string message);
+        void SetResult(CommandModel command, CommandResult result);
         void Start(CommandModel command);
         void Complete(CommandModel command, string message);
         void Fail(CommandModel command, string message, Exception e);
@@ -180,6 +181,11 @@ namespace NzbDrone.Core.Messaging.Commands
             command.Message = message;
         }
 
+        public void SetResult(CommandModel command, CommandResult result)
+        {
+            command.Result = result;
+        }
+
         public void Start(CommandModel command)
         {
             // Marks the command as started in the DB, the queue takes care of marking it as started on it's own
@@ -189,6 +195,12 @@ namespace NzbDrone.Core.Messaging.Commands
 
         public void Complete(CommandModel command, string message)
         {
+            // If the result hasn't been set yet then set it to successful
+            if (command.Result == CommandResult.Unknown)
+            {
+                command.Result = CommandResult.Successful;
+            }
+
             Update(command, CommandStatus.Completed, message);
 
             _commandQueue.PulseAllConsumers();

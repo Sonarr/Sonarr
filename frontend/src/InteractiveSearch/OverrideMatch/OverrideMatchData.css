@@ -1,0 +1,17 @@
+.link {
+  composes: link from '~Components/Link/Link.css';
+
+  width: 100%;
+}
+
+.placeholder {
+  display: inline-block;
+  margin: -2px 0;
+  width: 100%;
+  outline: 2px dashed var(--dangerColor);
+  outline-offset: -2px;
+}
+
+.optional {
+  outline: 2px dashed var(--gray);
+}

@@ -193,7 +193,7 @@ class MediaManagement extends Component {
                         <FormInputGroup
                           type={inputTypes.CHECK}
                           name="copyUsingHardlinks"
-                          helpText="Use Hardlinks when trying to copy files from torrents that are still being seeded"
+                          helpText="Hardlinks allow Sonarr to import seeding torrents to the the series folder without taking extra disk space or copying the entire contents of the file. Hardlinks will only work if the source and destination are on the same volume"
                           helpTextWarning="Occasionally, file locks may prevent renaming files that are being seeded. You may temporarily disable seeding and use Sonarr's rename function as a work around."
                           onChange={onInputChange}
                           {...settings.copyUsingHardlinks}

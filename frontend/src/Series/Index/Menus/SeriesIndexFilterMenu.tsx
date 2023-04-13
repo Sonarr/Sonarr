@@ -1,10 +1,18 @@
-import PropTypes from 'prop-types';
 import React from 'react';
+import { CustomFilter } from 'App/State/AppState';
 import FilterMenu from 'Components/Menu/FilterMenu';
 import { align } from 'Helpers/Props';
 import SeriesIndexFilterModal from 'Series/Index/SeriesIndexFilterModal';
 
-function SeriesIndexFilterMenu(props) {
+interface SeriesIndexFilterMenuProps {
+  selectedFilterKey: string | number;
+  filters: object[];
+  customFilters: CustomFilter[];
+  isDisabled: boolean;
+  onFilterSelect(filterName: string): unknown;
+}
+
+function SeriesIndexFilterMenu(props: SeriesIndexFilterMenuProps) {
   const {
     selectedFilterKey,
     filters,
@@ -25,15 +33,6 @@ function SeriesIndexFilterMenu(props) {
     />
   );
 }
-
-SeriesIndexFilterMenu.propTypes = {
-  selectedFilterKey: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
-    .isRequired,
-  filters: PropTypes.arrayOf(PropTypes.object).isRequired,
-  customFilters: PropTypes.arrayOf(PropTypes.object).isRequired,
-  isDisabled: PropTypes.bool.isRequired,
-  onFilterSelect: PropTypes.func.isRequired,
-};
 
 SeriesIndexFilterMenu.defaultProps = {
   showCustomFilters: false,

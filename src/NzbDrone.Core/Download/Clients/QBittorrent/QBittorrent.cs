@@ -360,9 +360,27 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
         public override DownloadClientInfo GetStatus()
         {
+            var version = Proxy.GetApiVersion(Settings);
             var config = Proxy.GetConfig(Settings);
 
             var destDir = new OsPath(config.SavePath);
+
+            if (Settings.TvCategory.IsNotNullOrWhiteSpace() && version >= Version.Parse("2.0"))
+            {
+                if (Proxy.GetLabels(Settings).TryGetValue(Settings.TvCategory, out var label) && label.SavePath.IsNotNullOrWhiteSpace())
+                {
+                    var labelDir = new OsPath(label.SavePath);
+
+                    if (labelDir.IsRooted)
+                    {
+                        destDir = labelDir;
+                    }
+                    else
+                    {
+                        destDir = destDir + labelDir;
+                    }
+                }
+            }
 
             return new DownloadClientInfo
             {
@@ -454,9 +472,9 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                 _logger.Error(ex, "Unable to test qBittorrent");
 
                 return new NzbDroneValidationFailure("Host", "Unable to connect to qBittorrent")
-                       {
-                           DetailedDescription = ex.Message
-                       };
+                {
+                    DetailedDescription = ex.Message
+                };
             }
 
             return null;

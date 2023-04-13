@@ -138,6 +138,9 @@ namespace NzbDrone.Core.Notifications.CustomScript
             environmentVariables.Add("Sonarr_EpisodeFile_MediaInfo_VideoDynamicRangeType", MediaInfoFormatter.FormatVideoDynamicRangeType(episodeFile.MediaInfo));
             environmentVariables.Add("Sonarr_EpisodeFile_CustomFormat", string.Join("|", message.EpisodeInfo.CustomFormats));
             environmentVariables.Add("Sonarr_EpisodeFile_CustomFormatScore", message.EpisodeInfo.CustomFormatScore.ToString());
+            environmentVariables.Add("Sonarr_Release_Indexer", message.Release?.Indexer);
+            environmentVariables.Add("Sonarr_Release_Size", message.Release?.Size.ToString());
+            environmentVariables.Add("Sonarr_Release_Title", message.Release?.Title);
 
             if (message.OldFiles.Any())
             {
