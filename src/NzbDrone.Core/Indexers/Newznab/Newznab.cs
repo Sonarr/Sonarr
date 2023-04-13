@@ -42,7 +42,7 @@ namespace NzbDrone.Core.Indexers.Newznab
             get
             {
                 yield return GetDefinition("DOGnzb", GetSettings("https://api.dognzb.cr"));
-                yield return GetDefinition("DrunkenSlug", GetSettings("https://api.drunkenslug.com"));
+                yield return GetDefinition("DrunkenSlug", GetSettings("https://drunkenslug.com"));
                 yield return GetDefinition("Nzb.su", GetSettings("https://api.nzb.su"));
                 yield return GetDefinition("NZBCat", GetSettings("https://nzb.cat"));
                 yield return GetDefinition("NZBFinder.ws", GetSettings("https://nzbfinder.ws", categories: new[] { 5010, 5030, 5040, 5045, 5090 }));
