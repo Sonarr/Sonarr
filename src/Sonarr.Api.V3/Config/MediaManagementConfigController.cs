@@ -34,7 +34,7 @@ namespace Sonarr.Api.V3.Config
                                                       .SetValidator(seriesPathValidator)
                                                       .When(c => !string.IsNullOrWhiteSpace(c.RecycleBin));
 
-            SharedValidator.RuleFor(c => c.ScriptImportPath).IsValidPath().When(c => c.ScriptImport);
+            SharedValidator.RuleFor(c => c.ScriptImportPath).IsValidPath().When(c => c.UseScriptImport);
 
             SharedValidator.RuleFor(c => c.MinimumFreeSpaceWhenImporting).GreaterThanOrEqualTo(100);
         }

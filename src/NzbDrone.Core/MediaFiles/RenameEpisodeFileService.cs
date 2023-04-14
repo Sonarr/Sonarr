@@ -19,6 +19,9 @@ namespace NzbDrone.Core.MediaFiles
     {
         List<RenameEpisodeFilePreview> GetRenamePreviews(int seriesId);
         List<RenameEpisodeFilePreview> GetRenamePreviews(int seriesId, int seasonNumber);
+        #nullable enable
+        RenamedEpisodeFile? RenameFile(EpisodeFile episodeFile, Series series);
+        #nullable disable
     }
 
     public class RenameEpisodeFileService : IRenameEpisodeFileService,
@@ -107,44 +110,58 @@ namespace NzbDrone.Core.MediaFiles
             }
         }
 
+        #nullable enable
+        public RenamedEpisodeFile? RenameFile(EpisodeFile episodeFile, Series series)
+        {
+            var previousRelativePath = episodeFile.RelativePath;
+            var previousPath = Path.Combine(series.Path, episodeFile.RelativePath);
+
+            RenamedEpisodeFile? renamed = null;
+
+            try
+            {
+                _logger.Debug("Renaming episode file: {0}", episodeFile);
+                _episodeFileMover.MoveEpisodeFile(episodeFile, series);
+
+                _mediaFileService.Update(episodeFile);
+
+                renamed = new RenamedEpisodeFile
+                          {
+                              EpisodeFile = episodeFile,
+                              PreviousRelativePath = previousRelativePath,
+                              PreviousPath = previousPath
+                          };
+
+                _logger.Debug("Renamed episode file: {0}", episodeFile);
+
+                _eventAggregator.PublishEvent(new EpisodeFileRenamedEvent(series, episodeFile, previousPath));
+            }
+            catch (FileAlreadyExistsException ex)
+            {
+                _logger.Warn("File not renamed, there is already a file at the destination: {0}", ex.Filename);
+            }
+            catch (SameFilenameException ex)
+            {
+                _logger.Debug("File not renamed, source and destination are the same: {0}", ex.Filename);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Failed to rename file {0}", previousPath);
+            }
+
+            return renamed;
+        }
+        #nullable disable
+
         private List<RenamedEpisodeFile> RenameFiles(List<EpisodeFile> episodeFiles, Series series)
         {
             var renamed = new List<RenamedEpisodeFile>();
 
             foreach (var episodeFile in episodeFiles)
             {
-                var previousRelativePath = episodeFile.RelativePath;
-                var previousPath = Path.Combine(series.Path, episodeFile.RelativePath);
-
-                try
+                if (RenameFile(episodeFile, series) is RenamedEpisodeFile renamedFile)
                 {
-                    _logger.Debug("Renaming episode file: {0}", episodeFile);
-                    _episodeFileMover.MoveEpisodeFile(episodeFile, series);
-
-                    _mediaFileService.Update(episodeFile);
-
-                    renamed.Add(new RenamedEpisodeFile
-                                {
-                                    EpisodeFile = episodeFile,
-                                    PreviousRelativePath = previousRelativePath,
-                                    PreviousPath = previousPath
-                                });
-
-                    _logger.Debug("Renamed episode file: {0}", episodeFile);
-
-                    _eventAggregator.PublishEvent(new EpisodeFileRenamedEvent(series, episodeFile, previousPath));
-                }
-                catch (FileAlreadyExistsException ex)
-                {
-                    _logger.Warn("File not renamed, there is already a file at the destination: {0}", ex.Filename);
-                }
-                catch (SameFilenameException ex)
-                {
-                    _logger.Debug("File not renamed, source and destination are the same: {0}", ex.Filename);
-                }
-                catch (Exception ex)
-                {
-                    _logger.Error(ex, "Failed to rename file {0}", previousPath);
+                    renamed.Add(renamedFile);
                 }
             }
 

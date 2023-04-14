@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Extras.Files
         IEnumerable<ExtraFile> CreateAfterEpisodeFolder(Series series, string seriesFolder, string seasonFolder);
         IEnumerable<ExtraFile> MoveFilesAfterRename(Series series, List<EpisodeFile> episodeFiles);
         bool CanImportFile(LocalEpisode localEpisode, EpisodeFile episodeFile, string path, string extension, bool readOnly);
-        IEnumerable<ExtraFile> ImportFiles(LocalEpisode localEpisode, EpisodeFile episodeFile, List<string> files, bool isReadOnly);
+        IEnumerable<ExtraFile> ImportFiles(LocalEpisode localEpisode, EpisodeFile episodeFile, ScriptImportDecisionInfo scriptImportDecisionInfo, List<string> files, bool isReadOnly);
     }
 
     public abstract class ExtraFileManager<TExtraFile> : IManageExtraFiles
@@ -53,9 +53,9 @@ namespace NzbDrone.Core.Extras.Files
         public abstract IEnumerable<ExtraFile> CreateAfterEpisodeFolder(Series series, string seriesFolder, string seasonFolder);
         public abstract IEnumerable<ExtraFile> MoveFilesAfterRename(Series series, List<EpisodeFile> episodeFiles);
         public abstract bool CanImportFile(LocalEpisode localEpisode, EpisodeFile episodeFile, string path, string extension, bool readOnly);
-        public abstract IEnumerable<ExtraFile> ImportFiles(LocalEpisode localEpisode, EpisodeFile episodeFile, List<string> files, bool isReadOnly);
+        public abstract IEnumerable<ExtraFile> ImportFiles(LocalEpisode localEpisode, EpisodeFile episodeFile, ScriptImportDecisionInfo scriptImportDecisionInfo, List<string> files, bool isReadOnly);
 
-        protected TExtraFile ImportFile(Series series, EpisodeFile episodeFile, string path, bool readOnly, string extension, string fileNameSuffix = null)
+        protected TExtraFile ImportFile(Series series, EpisodeFile episodeFile, ScriptImportDecisionInfo scriptImportDecisionInfo, string path, bool readOnly, string extension, string fileNameSuffix = null)
         {
             var newFolder = Path.GetDirectoryName(Path.Combine(series.Path, episodeFile.RelativePath));
             var filenameBuilder = new StringBuilder(Path.GetFileNameWithoutExtension(episodeFile.RelativePath));
@@ -75,7 +75,7 @@ namespace NzbDrone.Core.Extras.Files
                 transferMode = _configService.CopyUsingHardlinks ? TransferMode.HardLinkOrCopy : TransferMode.Copy;
             }
 
-            if (_scriptImportDecider.TryImport(episodeFile, series, path, newFileName, transferMode))
+            if (_scriptImportDecider.TryImport(path, newFileName, scriptImportDecisionInfo) == ScriptImportDecision.DeferMove)
             {
                 _diskTransferService.TransferFile(path, newFileName, transferMode);
             }

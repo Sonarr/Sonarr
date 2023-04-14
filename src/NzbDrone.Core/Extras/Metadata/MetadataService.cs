@@ -209,7 +209,7 @@ namespace NzbDrone.Core.Extras.Metadata
             return false;
         }
 
-        public override IEnumerable<ExtraFile> ImportFiles(LocalEpisode localEpisode, EpisodeFile episodeFile, List<string> files, bool isReadOnly)
+        public override IEnumerable<ExtraFile> ImportFiles(LocalEpisode localEpisode, EpisodeFile episodeFile, ScriptImportDecisionInfo scriptImportDecisionInfo, List<string> files, bool isReadOnly)
         {
             return Enumerable.Empty<ExtraFile>();
         }

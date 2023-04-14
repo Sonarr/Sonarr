@@ -4,13 +4,14 @@ using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
+using NzbDrone.Core.MediaFiles.MediaInfo;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.MediaFiles
 {
     public interface IUpgradeMediaFiles
     {
-        EpisodeFileMoveResult UpgradeEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode, bool copyOnly = false);
+        (EpisodeFileMoveResult, bool) UpgradeEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode, ScriptImportDecisionInfo scriptImportDecisionInfo, bool copyOnly = false);
     }
 
     public class UpgradeMediaFileService : IUpgradeMediaFiles
@@ -34,7 +35,7 @@ namespace NzbDrone.Core.MediaFiles
             _logger = logger;
         }
 
-        public EpisodeFileMoveResult UpgradeEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode, bool copyOnly = false)
+        public (EpisodeFileMoveResult, bool) UpgradeEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode, ScriptImportDecisionInfo scriptImportDecisionInfo, bool copyOnly = false)
         {
             var moveFileResult = new EpisodeFileMoveResult();
             var existingFiles = localEpisode.Episodes
@@ -68,16 +69,22 @@ namespace NzbDrone.Core.MediaFiles
                 _mediaFileService.Delete(file, DeleteMediaFileReason.Upgrade);
             }
 
+            scriptImportDecisionInfo.OldFiles = moveFileResult.OldFiles;
+
+            (EpisodeFile episodeFile, bool needsRename) result;
+
             if (copyOnly)
             {
-                moveFileResult.EpisodeFile = _episodeFileMover.CopyEpisodeFile(episodeFile, localEpisode);
+                result = _episodeFileMover.CopyEpisodeFile(episodeFile, localEpisode, scriptImportDecisionInfo);
             }
             else
             {
-                moveFileResult.EpisodeFile = _episodeFileMover.MoveEpisodeFile(episodeFile, localEpisode);
+                result = _episodeFileMover.MoveEpisodeFile(episodeFile, localEpisode, scriptImportDecisionInfo);
             }
 
-            return moveFileResult;
+            moveFileResult.EpisodeFile = result.episodeFile;
+
+            return (moveFileResult, result.needsRename);
         }
     }
 }

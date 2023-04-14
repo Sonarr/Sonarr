@@ -82,7 +82,7 @@ namespace NzbDrone.Core.Extras.Others
             return true;
         }
 
-        public override IEnumerable<ExtraFile> ImportFiles(LocalEpisode localEpisode, EpisodeFile episodeFile, List<string> files, bool isReadOnly)
+        public override IEnumerable<ExtraFile> ImportFiles(LocalEpisode localEpisode, EpisodeFile episodeFile, ScriptImportDecisionInfo scriptImportDecisionInfo, List<string> files, bool isReadOnly)
         {
             var importedFiles = new List<ExtraFile>();
             var filteredFiles = files.Where(f => CanImportFile(localEpisode, episodeFile, f, Path.GetExtension(f), isReadOnly)).ToList();
@@ -138,7 +138,7 @@ namespace NzbDrone.Core.Extras.Others
             {
                 try
                 {
-                    var extraFile = ImportFile(localEpisode.Series, episodeFile, file, isReadOnly, Path.GetExtension(file), null);
+                    var extraFile = ImportFile(localEpisode.Series, episodeFile, scriptImportDecisionInfo, file, isReadOnly, Path.GetExtension(file), null);
                     _mediaFileAttributeService.SetFilePermissions(file);
                     _otherExtraFileService.Upsert(extraFile);
                     importedFiles.Add(extraFile);

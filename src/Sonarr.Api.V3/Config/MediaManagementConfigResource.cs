@@ -25,7 +25,7 @@ namespace Sonarr.Api.V3.Config
         public bool SkipFreeSpaceCheckWhenImporting { get; set; }
         public int MinimumFreeSpaceWhenImporting { get; set; }
         public bool CopyUsingHardlinks { get; set; }
-        public bool ScriptImport { get; set; }
+        public bool UseScriptImport { get; set; }
         public string ScriptImportPath { get; set; }
         public bool ImportExtraFiles { get; set; }
         public string ExtraFileExtensions { get; set; }
@@ -55,7 +55,7 @@ namespace Sonarr.Api.V3.Config
                 SkipFreeSpaceCheckWhenImporting = model.SkipFreeSpaceCheckWhenImporting,
                 MinimumFreeSpaceWhenImporting = model.MinimumFreeSpaceWhenImporting,
                 CopyUsingHardlinks = model.CopyUsingHardlinks,
-                ScriptImport = model.ScriptImport,
+                UseScriptImport = model.UseScriptImport,
                 ScriptImportPath = model.ScriptImportPath,
                 ImportExtraFiles = model.ImportExtraFiles,
                 ExtraFileExtensions = model.ExtraFileExtensions,

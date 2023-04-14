@@ -100,7 +100,7 @@ namespace NzbDrone.Core.Extras.Subtitles
             return SubtitleFileExtensions.Extensions.Contains(extension.ToLowerInvariant());
         }
 
-        public override IEnumerable<ExtraFile> ImportFiles(LocalEpisode localEpisode, EpisodeFile episodeFile, List<string> files, bool isReadOnly)
+        public override IEnumerable<ExtraFile> ImportFiles(LocalEpisode localEpisode, EpisodeFile episodeFile, ScriptImportDecisionInfo scriptImportDecisionInfo, List<string> files, bool isReadOnly)
         {
             var importedFiles = new List<SubtitleFile>();
 
@@ -208,7 +208,7 @@ namespace NzbDrone.Core.Extras.Subtitles
                     var suffix = GetSuffix(language, copy, file.LanguageTags, groupCount > 1);
                     try
                     {
-                        var subtitleFile = ImportFile(localEpisode.Series, episodeFile, path, isReadOnly, extension, suffix);
+                        var subtitleFile = ImportFile(localEpisode.Series, episodeFile, scriptImportDecisionInfo, path, isReadOnly, extension, suffix);
                         subtitleFile.Language = language;
                         subtitleFile.LanguageTags = file.LanguageTags;
 

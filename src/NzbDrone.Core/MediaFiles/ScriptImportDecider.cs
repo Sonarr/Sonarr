@@ -8,14 +8,16 @@ using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Processes;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Download;
 using NzbDrone.Core.MediaFiles.MediaInfo;
+using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.MediaFiles
 {
     public interface IScriptImportDecider
     {
-        public bool TryImport(EpisodeFile episodeFile, Series series, string sourcePath, string destinationFilePath, TransferMode mode);
+        public ScriptImportDecision TryImport(string sourcePath, string destinationFilePath, ScriptImportDecisionInfo scriptImportDecisionInfo);
     }
 
     public class ScriptImportDecider : IScriptImportDecider
@@ -36,11 +38,19 @@ namespace NzbDrone.Core.MediaFiles
             _logger = logger;
         }
 
-        public bool TryImport(EpisodeFile episodeFile, Series series, string sourcePath, string destinationFilePath, TransferMode mode)
+        public ScriptImportDecision TryImport(string sourcePath, string destinationFilePath, ScriptImportDecisionInfo scriptImportDecisionInfo)
         {
-            if (!_configService.ScriptImport)
+            EpisodeFile episodeFile = scriptImportDecisionInfo.episodeFile;
+            Series series = scriptImportDecisionInfo.localEpisode.Series;
+            TransferMode mode = scriptImportDecisionInfo.mode;
+            LocalEpisode localEpisode = scriptImportDecisionInfo.localEpisode;
+            List<EpisodeFile> oldFiles = scriptImportDecisionInfo.OldFiles;
+            DownloadClientItemClientInfo downloadClientInfo = scriptImportDecisionInfo.downloadClientItemInfo;
+            string downloadId = scriptImportDecisionInfo.downloadId;
+
+            if (!_configService.UseScriptImport)
             {
-                return true;
+                return ScriptImportDecision.DeferMove;
             }
 
             var environmentVariables = new StringDictionary();
@@ -50,6 +60,7 @@ namespace NzbDrone.Core.MediaFiles
             environmentVariables.Add("Sonarr_ApplicationUrl", _configService.ApplicationUrl);
             environmentVariables.Add("Sonarr_TransferMode", mode.ToString());
 
+            // always true
             // environmentVariables.Add("Sonarr_IsUpgrade", message.OldFiles.Any().ToString());
             environmentVariables.Add("Sonarr_Series_Id", series.Id.ToString());
             environmentVariables.Add("Sonarr_Series_Title", series.Title);
@@ -62,6 +73,7 @@ namespace NzbDrone.Core.MediaFiles
             environmentVariables.Add("Sonarr_EpisodeFile_Id", episodeFile.Id.ToString());
             environmentVariables.Add("Sonarr_EpisodeFile_EpisodeCount", episodeFile.Episodes.Value.Count.ToString());
 
+            // not yet known
             // environmentVariables.Add("Sonarr_EpisodeFile_RelativePath", episodeFile.RelativePath);
             // environmentVariables.Add("Sonarr_EpisodeFile_Path", Path.Combine(series.Path, episodeFile.RelativePath));
             environmentVariables.Add("Sonarr_EpisodeFile_EpisodeIds", string.Join(",", episodeFile.Episodes.Value.Select(e => e.Id)));
@@ -76,9 +88,9 @@ namespace NzbDrone.Core.MediaFiles
             environmentVariables.Add("Sonarr_EpisodeFile_ReleaseGroup", episodeFile.ReleaseGroup ?? string.Empty);
             environmentVariables.Add("Sonarr_EpisodeFile_SceneName", episodeFile.SceneName ?? string.Empty);
 
-            // environmentVariables.Add("Sonarr_Download_Client", message.DownloadClientInfo?.Name ?? string.Empty);
-            // environmentVariables.Add("Sonarr_Download_Client_Type", message.DownloadClientInfo?.Type ?? string.Empty);
-            // environmentVariables.Add("Sonarr_Download_Id", message.DownloadId ?? string.Empty);
+            environmentVariables.Add("Sonarr_Download_Client", downloadClientInfo?.Name ?? string.Empty);
+            environmentVariables.Add("Sonarr_Download_Client_Type", downloadClientInfo?.Type ?? string.Empty);
+            environmentVariables.Add("Sonarr_Download_Id", downloadId ?? string.Empty);
             environmentVariables.Add("Sonarr_EpisodeFile_MediaInfo_AudioChannels", MediaInfoFormatter.FormatAudioChannels(episodeFile.MediaInfo).ToString());
             environmentVariables.Add("Sonarr_EpisodeFile_MediaInfo_AudioCodec", MediaInfoFormatter.FormatAudioCodec(episodeFile.MediaInfo, null));
             environmentVariables.Add("Sonarr_EpisodeFile_MediaInfo_AudioLanguages", episodeFile.MediaInfo.AudioLanguages.Distinct().ConcatToString(" / "));
@@ -89,15 +101,15 @@ namespace NzbDrone.Core.MediaFiles
             environmentVariables.Add("Sonarr_EpisodeFile_MediaInfo_VideoCodec", MediaInfoFormatter.FormatVideoCodec(episodeFile.MediaInfo, null));
             environmentVariables.Add("Sonarr_EpisodeFile_MediaInfo_VideoDynamicRangeType", MediaInfoFormatter.FormatVideoDynamicRangeType(episodeFile.MediaInfo));
 
-            // environmentVariables.Add("Sonarr_EpisodeFile_CustomFormat", string.Join("|", message.EpisodeInfo.CustomFormats));
-            // environmentVariables.Add("Sonarr_EpisodeFile_CustomFormatScore", message.EpisodeInfo.CustomFormatScore.ToString());
+            environmentVariables.Add("Sonarr_EpisodeFile_CustomFormat", string.Join("|", localEpisode.CustomFormats));
+            environmentVariables.Add("Sonarr_EpisodeFile_CustomFormatScore", localEpisode.CustomFormatScore.ToString());
 
-            // if (message.OldFiles.Any())
-            // {
-                // environmentVariables.Add("Sonarr_DeletedRelativePaths", string.Join("|", message.OldFiles.Select(e => e.RelativePath)));
-                // environmentVariables.Add("Sonarr_DeletedPaths", string.Join("|", message.OldFiles.Select(e => Path.Combine(series.Path, e.RelativePath))));
-                // environmentVariables.Add("Sonarr_DeletedDateAdded", string.Join("|", message.OldFiles.Select(e => e.DateAdded)));
-            // }
+            if (oldFiles.Any())
+            {
+                environmentVariables.Add("Sonarr_DeletedRelativePaths", string.Join("|", oldFiles.Select(e => e.RelativePath)));
+                environmentVariables.Add("Sonarr_DeletedPaths", string.Join("|", oldFiles.Select(e => Path.Combine(series.Path, e.RelativePath))));
+                environmentVariables.Add("Sonarr_DeletedDateAdded", string.Join("|", oldFiles.Select(e => e.DateAdded)));
+            }
 
             _logger.Debug("Executing external script: {0}", _configService.ScriptImportPath);
 
@@ -106,12 +118,26 @@ namespace NzbDrone.Core.MediaFiles
             _logger.Debug("Executed external script: {0} - Status: {1}", _configService.ScriptImportPath, processOutput.ExitCode);
             _logger.Debug("Script Output: \r\n{0}", string.Join("\r\n", processOutput.Lines));
 
-            if (processOutput.ExitCode == 1)
+            switch (processOutput.ExitCode)
             {
-                throw new IOException("Moving with script failed!");
-            }
+            case 0: // Copy complete
+                return ScriptImportDecision.MoveComplete;
+            case 2: // Copy complete, file potentially changed, should try renaming again
+                if (scriptImportDecisionInfo.isEpisodeFile)
+                {
+                    // TODO: verify extras get renamed fine
+                    return ScriptImportDecision.RenameRequested;
+                }
+                else
+                {
+                    return ScriptImportDecision.MoveComplete;
+                }
 
-            return processOutput.ExitCode == 2;
+            case 3: // Let Sonarr handle it
+                return ScriptImportDecision.DeferMove;
+            default: // Error, fail to import
+                throw new ScriptImportException("Moving with script failed! Exit code {0}", processOutput.ExitCode);
+            }
         }
     }
 }

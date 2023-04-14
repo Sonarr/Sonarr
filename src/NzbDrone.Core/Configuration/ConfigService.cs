@@ -207,11 +207,11 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("EnableMediaInfo", value); }
         }
 
-        public bool ScriptImport
+        public bool UseScriptImport
         {
-            get { return GetValueBoolean("ScriptImport", false); }
+            get { return GetValueBoolean("UseScriptImport", false); }
 
-            set { SetValue("ScriptImport", value); }
+            set { SetValue("UseScriptImport", value); }
         }
 
         public string ScriptImportPath

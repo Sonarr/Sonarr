@@ -68,27 +68,27 @@ class MediaManagement extends Component {
           <NamingConnector />
 
           {
-            isFetching &&
+            isFetching ?
               <FieldSet legend="Naming Settings">
                 <LoadingIndicator />
-              </FieldSet>
+              </FieldSet> : null
           }
 
           {
-            !isFetching && error &&
+            !isFetching && error ?
               <FieldSet legend="Naming Settings">
                 <div>Unable to load Media Management settings</div>
-              </FieldSet>
+              </FieldSet> : null
           }
 
           {
-            hasSettings && !isFetching && !error &&
+            hasSettings && !isFetching && !error ?
               <Form
                 id="mediaManagementSettings"
                 {...otherProps}
               >
                 {
-                  advancedSettings &&
+                  advancedSettings ?
                     <FieldSet legend="Folders">
                       <FormGroup
                         advancedSettings={advancedSettings}
@@ -121,11 +121,11 @@ class MediaManagement extends Component {
                           {...settings.deleteEmptyFolders}
                         />
                       </FormGroup>
-                    </FieldSet>
+                    </FieldSet> : null
                 }
 
                 {
-                  advancedSettings &&
+                  advancedSettings ?
                     <FieldSet
                       legend="Importing"
                     >
@@ -200,7 +200,7 @@ class MediaManagement extends Component {
                         />
                       </FormGroup>
 
-                      <FormGroup 
+                      <FormGroup
                         advancedSettings={advancedSettings}
                         isAdvanced={true}
                         size={sizes.MEDIUM}
@@ -209,15 +209,15 @@ class MediaManagement extends Component {
 
                         <FormInputGroup
                           type={inputTypes.CHECK}
-                          name="scriptImport"
+                          name="useScriptImport"
                           helpText="Copy files for importing using a script, say for transcoding"
                           onChange={onInputChange}
-                          {...settings.scriptImport}
+                          {...settings.useScriptImport}
                         />
                       </FormGroup>
 
                       {
-                        settings.scriptImport.value &&
+                        settings.useScriptImport.value ?
                           <FormGroup
                             advancedSettings={advancedSettings}
                             isAdvanced={true}
@@ -231,7 +231,7 @@ class MediaManagement extends Component {
                               onChange={onInputChange}
                               {...settings.scriptImportPath}
                             />
-                          </FormGroup>
+                          </FormGroup> : null
                       }
 
                       <FormGroup size={sizes.MEDIUM}>
@@ -247,7 +247,7 @@ class MediaManagement extends Component {
                       </FormGroup>
 
                       {
-                        settings.importExtraFiles.value &&
+                        settings.importExtraFiles.value ?
                           <FormGroup
                             advancedSettings={advancedSettings}
                             isAdvanced={true}
@@ -264,9 +264,9 @@ class MediaManagement extends Component {
                               onChange={onInputChange}
                               {...settings.extraFileExtensions}
                             />
-                          </FormGroup>
+                          </FormGroup> : null
                       }
-                    </FieldSet>
+                    </FieldSet> : null
                 }
 
                 <FieldSet
@@ -392,7 +392,7 @@ class MediaManagement extends Component {
                 </FieldSet>
 
                 {
-                  advancedSettings && !isWindows &&
+                  advancedSettings && !isWindows ?
                     <FieldSet
                       legend="Permissions"
                     >
@@ -445,9 +445,9 @@ class MediaManagement extends Component {
                           {...settings.chownGroup}
                         />
                       </FormGroup>
-                    </FieldSet>
+                    </FieldSet> : null
                 }
-              </Form>
+              </Form> : null
           }
 
           <FieldSet legend="Root Folders">

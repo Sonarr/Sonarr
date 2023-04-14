@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Configuration
         int MinimumFreeSpaceWhenImporting { get; set; }
         bool CopyUsingHardlinks { get; set; }
         bool EnableMediaInfo { get; set; }
-        bool ScriptImport { get; set; }
+        bool UseScriptImport { get; set; }
         string ScriptImportPath { get; set; }
         bool ImportExtraFiles { get; set; }
         string ExtraFileExtensions { get; set; }

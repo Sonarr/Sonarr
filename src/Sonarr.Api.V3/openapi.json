@@ -9068,7 +9068,7 @@
           "copyUsingHardlinks": {
             "type": "boolean"
           },
-          "scriptImport": {
+          "useScriptImport": {
             "type": "boolean"
           },
           "scriptImportPath": {
