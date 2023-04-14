@@ -21,11 +21,11 @@ namespace NzbDrone.Core.Indexers.Rarbg
                 case HttpStatusCode.TooManyRequests:
                     throw new RequestLimitReachedException("Indexer API limit reached", TimeSpan.FromMinutes(2));
                 case (HttpStatusCode)520:
-                    throw new RequestLimitReachedException("Indexer API returned unknown error", TimeSpan.FromMinutes(3));
+                    throw new RequestLimitReachedException("Indexer API error. Likely rate limited by origin server", TimeSpan.FromMinutes(3));
                 default:
                     if (indexerResponse.HttpResponse.StatusCode != HttpStatusCode.OK)
                     {
-                        throw new IndexerException(indexerResponse, "Indexer API call returned an unexpected StatusCode [{0}]", indexerResponse.HttpResponse.StatusCode);
+                        throw new IndexerException(indexerResponse, "Indexer API call returned an unexpected status code [{0}]", indexerResponse.HttpResponse.StatusCode);
                     }
 
                     break;
