@@ -28,9 +28,7 @@ namespace Sonarr.Api.V3.RemotePathMappings
                            .NotEmpty();
 
             SharedValidator.RuleFor(c => c.LocalPath)
-#pragma warning disable CS0618
-                .Cascade(CascadeMode.StopOnFirstFailure)
-#pragma warning restore CS0618
+                .Cascade(CascadeMode.Stop)
                 .IsValidPath()
                            .SetValidator(mappedNetworkDriveValidator)
                            .SetValidator(pathExistsValidator);

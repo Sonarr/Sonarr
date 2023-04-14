@@ -73,9 +73,7 @@ namespace Sonarr.Api.V3.Series
             Http.Validation.RuleBuilderExtensions.ValidId(SharedValidator.RuleFor(s => s.QualityProfileId));
 
             SharedValidator.RuleFor(s => s.Path)
-#pragma warning disable CS0618
-                .Cascade(CascadeMode.StopOnFirstFailure)
-#pragma warning restore CS0618
+                .Cascade(CascadeMode.Stop)
                 .IsValidPath()
                            .SetValidator(rootFolderValidator)
                            .SetValidator(mappedNetworkDriveValidator)
