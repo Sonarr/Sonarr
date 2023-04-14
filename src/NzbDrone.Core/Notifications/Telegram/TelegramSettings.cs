@@ -11,7 +11,7 @@ namespace NzbDrone.Core.Notifications.Telegram
         {
             RuleFor(c => c.BotToken).NotEmpty();
             RuleFor(c => c.ChatId).NotEmpty();
-            RuleFor(c => c.TopicID).Must(topicID => !topicID.HasValue || topicID > 1)
+            RuleFor(c => c.TopicId).Must(topicId => !topicId.HasValue || topicId > 1)
                                    .WithMessage("Topic ID must be greater than 1 or empty");
         }
     }
@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Notifications.Telegram
         public string ChatId { get; set; }
 
         [FieldDefinition(2, Label = "Topic ID", HelpLink = "https://stackoverflow.com/a/75178418", HelpText = "Specify a Topic ID to send notifications to that topic. Leave blank to use the general topic (Supergroups only)")]
-        public int? TopicID { get; set; }
+        public int? TopicId { get; set; }
 
         [FieldDefinition(3, Label = "Send Silently", Type = FieldType.Checkbox, HelpText = "Sends the message silently. Users will receive a notification with no sound")]
         public bool SendSilently { get; set; }
