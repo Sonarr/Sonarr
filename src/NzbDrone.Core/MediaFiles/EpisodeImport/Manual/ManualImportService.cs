@@ -464,7 +464,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
 
                 var localEpisode = new LocalEpisode
                 {
-                    ExistingFile = false,
+                    ExistingFile = existingFile,
                     Episodes = episodes,
                     FileEpisodeInfo = fileEpisodeInfo,
                     Path = file.Path,
