@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.IO;
 using FluentValidation.Results;
 using NzbDrone.Common.EnvironmentInfo;
@@ -53,6 +53,14 @@ namespace NzbDrone.Core.Notifications.Synology
             {
                 var fullPath = Path.Combine(deleteMessage.Series.Path, deleteMessage.EpisodeFile.RelativePath);
                 _indexerProxy.DeleteFile(fullPath);
+            }
+        }
+
+        public override void OnSeriesAdd(SeriesAddMessage message)
+        {
+            if (Settings.UpdateLibrary)
+            {
+                _indexerProxy.UpdateFolder(message.Series.Path);
             }
         }
 

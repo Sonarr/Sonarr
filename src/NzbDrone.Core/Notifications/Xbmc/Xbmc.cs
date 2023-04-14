@@ -50,6 +50,14 @@ namespace NzbDrone.Core.Notifications.Xbmc
             UpdateAndClean(deleteMessage.Series, true);
         }
 
+        public override void OnSeriesAdd(SeriesAddMessage message)
+        {
+            const string header = "Sonarr - Added";
+
+            Notify(Settings, header, message.Message);
+            UpdateAndClean(message.Series, true);
+        }
+
         public override void OnSeriesDelete(SeriesDeleteMessage deleteMessage)
         {
             if (deleteMessage.DeletedFiles)

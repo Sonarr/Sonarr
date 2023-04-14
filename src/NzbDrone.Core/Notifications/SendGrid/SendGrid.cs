@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using FluentValidation.Results;
 using NLog;
@@ -32,6 +32,11 @@ namespace NzbDrone.Core.Notifications.SendGrid
         public override void OnEpisodeFileDelete(EpisodeDeleteMessage deleteMessage)
         {
             _proxy.SendNotification(EPISODE_DELETED_TITLE, deleteMessage.Message, Settings);
+        }
+
+        public override void OnSeriesAdd(SeriesAddMessage message)
+        {
+            _proxy.SendNotification(SERIES_ADDED_TITLE, message.Message, Settings);
         }
 
         public override void OnSeriesDelete(SeriesDeleteMessage deleteMessage)

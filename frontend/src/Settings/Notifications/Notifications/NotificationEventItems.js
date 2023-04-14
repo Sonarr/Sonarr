@@ -18,6 +18,7 @@ function NotificationEventItems(props) {
     onDownload,
     onUpgrade,
     onRename,
+    onSeriesAdd,
     onSeriesDelete,
     onEpisodeFileDelete,
     onEpisodeFileDeleteForUpgrade,
@@ -27,6 +28,7 @@ function NotificationEventItems(props) {
     supportsOnDownload,
     supportsOnUpgrade,
     supportsOnRename,
+    supportsOnSeriesAdd,
     supportsOnSeriesDelete,
     supportsOnEpisodeFileDelete,
     supportsOnEpisodeFileDeleteForUpgrade,
@@ -87,6 +89,17 @@ function NotificationEventItems(props) {
               helpText="On Rename"
               isDisabled={!supportsOnRename.value}
               {...onRename}
+              onChange={onInputChange}
+            />
+          </div>
+
+          <div>
+            <FormInputGroup
+              type={inputTypes.CHECK}
+              name="onSeriesAdd"
+              helpText="On Series Add"
+              isDisabled={!supportsOnSeriesAdd.value}
+              {...onSeriesAdd}
               onChange={onInputChange}
             />
           </div>

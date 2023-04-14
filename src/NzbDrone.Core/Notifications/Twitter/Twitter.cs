@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using FluentValidation.Results;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Exceptions;
@@ -31,6 +31,11 @@ namespace NzbDrone.Core.Notifications.Twitter
         public override void OnEpisodeFileDelete(EpisodeDeleteMessage deleteMessage)
         {
             _twitterService.SendNotification($"Episode Deleted: {deleteMessage.Message}", Settings);
+        }
+
+        public override void OnSeriesAdd(SeriesAddMessage message)
+        {
+            _twitterService.SendNotification($"Series Added: {message.Message}", Settings);
         }
 
         public override void OnSeriesDelete(SeriesDeleteMessage deleteMessage)

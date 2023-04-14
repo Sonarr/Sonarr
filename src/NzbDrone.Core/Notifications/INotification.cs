@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Tv;
@@ -13,6 +13,7 @@ namespace NzbDrone.Core.Notifications
         void OnDownload(DownloadMessage message);
         void OnRename(Series series, List<RenamedEpisodeFile> renamedFiles);
         void OnEpisodeFileDelete(EpisodeDeleteMessage deleteMessage);
+        void OnSeriesAdd(SeriesAddMessage message);
         void OnSeriesDelete(SeriesDeleteMessage deleteMessage);
         void OnHealthIssue(HealthCheck.HealthCheck healthCheck);
         void OnApplicationUpdate(ApplicationUpdateMessage updateMessage);
@@ -21,6 +22,7 @@ namespace NzbDrone.Core.Notifications
         bool SupportsOnDownload { get; }
         bool SupportsOnUpgrade { get; }
         bool SupportsOnRename { get; }
+        bool SupportsOnSeriesAdd { get; }
         bool SupportsOnSeriesDelete { get; }
         bool SupportsOnEpisodeFileDelete { get; }
         bool SupportsOnEpisodeFileDeleteForUpgrade { get; }

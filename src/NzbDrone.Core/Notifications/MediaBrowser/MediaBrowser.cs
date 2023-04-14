@@ -60,6 +60,19 @@ namespace NzbDrone.Core.Notifications.Emby
             }
         }
 
+        public override void OnSeriesAdd(SeriesAddMessage message)
+        {
+            if (Settings.Notify)
+            {
+                _mediaBrowserService.Notify(Settings, SERIES_ADDED_TITLE_BRANDED, message.Message);
+            }
+
+            if (Settings.UpdateLibrary)
+            {
+                _mediaBrowserService.Update(Settings, message.Series, "Created");
+            }
+        }
+
         public override void OnSeriesDelete(SeriesDeleteMessage deleteMessage)
         {
             if (Settings.Notify)

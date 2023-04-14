@@ -106,6 +106,7 @@ export default {
         selectedSchema.onDownload = selectedSchema.supportsOnDownload;
         selectedSchema.onUpgrade = selectedSchema.supportsOnUpgrade;
         selectedSchema.onRename = selectedSchema.supportsOnRename;
+        selectedSchema.onSeriesAdd = selectedSchema.supportsOnSeriesAdd;
         selectedSchema.onSeriesDelete = selectedSchema.supportsOnSeriesDelete;
         selectedSchema.onEpisodeFileDelete = selectedSchema.supportsOnEpisodeFileDelete;
         selectedSchema.onEpisodeFileDeleteForUpgrade = selectedSchema.supportsOnEpisodeFileDeleteForUpgrade;

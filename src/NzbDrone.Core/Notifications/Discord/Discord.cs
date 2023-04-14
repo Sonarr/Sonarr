@@ -258,6 +258,24 @@ namespace NzbDrone.Core.Notifications.Discord
             _proxy.SendPayload(payload, Settings);
         }
 
+        public override void OnSeriesAdd(SeriesAddMessage message)
+        {
+            var series = message.Series;
+
+            var attachments = new List<Embed>
+                              {
+                                  new Embed
+                                  {
+                                      Title = series.Title,
+                                      Description = message.Message
+                                  }
+                              };
+
+            var payload = CreatePayload("Series Added", attachments);
+
+            _proxy.SendPayload(payload, Settings);
+        }
+
         public override void OnSeriesDelete(SeriesDeleteMessage deleteMessage)
         {
             var series = deleteMessage.Series;

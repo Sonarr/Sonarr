@@ -31,6 +31,11 @@ namespace NzbDrone.Core.Notifications.Boxcar
             _proxy.SendNotification(EPISODE_DELETED_TITLE, deleteMessage.Message, Settings);
         }
 
+        public override void OnSeriesAdd(SeriesAddMessage message)
+        {
+            _proxy.SendNotification(SERIES_ADDED_TITLE, message.Message, Settings);
+        }
+
         public override void OnSeriesDelete(SeriesDeleteMessage deleteMessage)
         {
             _proxy.SendNotification(SERIES_DELETED_TITLE, deleteMessage.Message, Settings);

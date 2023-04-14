@@ -42,6 +42,11 @@ namespace NzbDrone.Core.Notifications.Notifiarr
             _proxy.SendNotification(BuildOnEpisodeFileDelete(deleteMessage), Settings);
         }
 
+        public override void OnSeriesAdd(SeriesAddMessage message)
+        {
+            _proxy.SendNotification(BuildOnSeriesAdd(message), Settings);
+        }
+
         public override void OnSeriesDelete(SeriesDeleteMessage deleteMessage)
         {
             _proxy.SendNotification(BuildOnSeriesDelete(deleteMessage), Settings);

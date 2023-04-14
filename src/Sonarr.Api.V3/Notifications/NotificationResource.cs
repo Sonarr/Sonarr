@@ -9,6 +9,7 @@ namespace Sonarr.Api.V3.Notifications
         public bool OnDownload { get; set; }
         public bool OnUpgrade { get; set; }
         public bool OnRename { get; set; }
+        public bool OnSeriesAdd { get; set; }
         public bool OnSeriesDelete { get; set; }
         public bool OnEpisodeFileDelete { get; set; }
         public bool OnEpisodeFileDeleteForUpgrade { get; set; }
@@ -18,6 +19,7 @@ namespace Sonarr.Api.V3.Notifications
         public bool SupportsOnDownload { get; set; }
         public bool SupportsOnUpgrade { get; set; }
         public bool SupportsOnRename { get; set; }
+        public bool SupportsOnSeriesAdd { get; set; }
         public bool SupportsOnSeriesDelete { get; set; }
         public bool SupportsOnEpisodeFileDelete { get; set; }
         public bool SupportsOnEpisodeFileDeleteForUpgrade { get; set; }
@@ -42,6 +44,7 @@ namespace Sonarr.Api.V3.Notifications
             resource.OnDownload = definition.OnDownload;
             resource.OnUpgrade = definition.OnUpgrade;
             resource.OnRename = definition.OnRename;
+            resource.OnSeriesAdd = definition.OnSeriesAdd;
             resource.OnSeriesDelete = definition.OnSeriesDelete;
             resource.OnEpisodeFileDelete = definition.OnEpisodeFileDelete;
             resource.OnEpisodeFileDeleteForUpgrade = definition.OnEpisodeFileDeleteForUpgrade;
@@ -51,6 +54,7 @@ namespace Sonarr.Api.V3.Notifications
             resource.SupportsOnDownload = definition.SupportsOnDownload;
             resource.SupportsOnUpgrade = definition.SupportsOnUpgrade;
             resource.SupportsOnRename = definition.SupportsOnRename;
+            resource.SupportsOnSeriesAdd = definition.SupportsOnSeriesAdd;
             resource.SupportsOnSeriesDelete = definition.SupportsOnSeriesDelete;
             resource.SupportsOnEpisodeFileDelete = definition.SupportsOnEpisodeFileDelete;
             resource.SupportsOnEpisodeFileDeleteForUpgrade = definition.SupportsOnEpisodeFileDeleteForUpgrade;
@@ -74,6 +78,7 @@ namespace Sonarr.Api.V3.Notifications
             definition.OnDownload = resource.OnDownload;
             definition.OnUpgrade = resource.OnUpgrade;
             definition.OnRename = resource.OnRename;
+            definition.OnSeriesAdd = resource.OnSeriesAdd;
             definition.OnSeriesDelete = resource.OnSeriesDelete;
             definition.OnEpisodeFileDelete = resource.OnEpisodeFileDelete;
             definition.OnEpisodeFileDeleteForUpgrade = resource.OnEpisodeFileDeleteForUpgrade;
@@ -83,6 +88,7 @@ namespace Sonarr.Api.V3.Notifications
             definition.SupportsOnDownload = resource.SupportsOnDownload;
             definition.SupportsOnUpgrade = resource.SupportsOnUpgrade;
             definition.SupportsOnRename = resource.SupportsOnRename;
+            definition.SupportsOnSeriesAdd = resource.SupportsOnSeriesAdd;
             definition.SupportsOnSeriesDelete = resource.SupportsOnSeriesDelete;
             definition.SupportsOnEpisodeFileDelete = resource.SupportsOnEpisodeFileDelete;
             definition.SupportsOnEpisodeFileDeleteForUpgrade = resource.SupportsOnEpisodeFileDeleteForUpgrade;

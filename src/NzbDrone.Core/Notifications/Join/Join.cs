@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using FluentValidation.Results;
 using NzbDrone.Common.Extensions;
 
@@ -30,6 +30,11 @@ namespace NzbDrone.Core.Notifications.Join
         public override void OnEpisodeFileDelete(EpisodeDeleteMessage deleteMessage)
         {
             _proxy.SendNotification(EPISODE_DELETED_TITLE_BRANDED, deleteMessage.Message, Settings);
+        }
+
+        public override void OnSeriesAdd(SeriesAddMessage message)
+        {
+            _proxy.SendNotification(SERIES_ADDED_TITLE_BRANDED, message.Message, Settings);
         }
 
         public override void OnSeriesDelete(SeriesDeleteMessage deleteMessage)

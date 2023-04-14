@@ -1,6 +1,5 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using FluentValidation.Results;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.ThingiProvider;
@@ -14,6 +13,7 @@ namespace NzbDrone.Core.Notifications
         protected const string EPISODE_GRABBED_TITLE = "Episode Grabbed";
         protected const string EPISODE_DOWNLOADED_TITLE = "Episode Downloaded";
         protected const string EPISODE_DELETED_TITLE = "Episode Deleted";
+        protected const string SERIES_ADDED_TITLE = "Series Added";
         protected const string SERIES_DELETED_TITLE = "Series Deleted";
         protected const string HEALTH_ISSUE_TITLE = "Health Check Failure";
         protected const string APPLICATION_UPDATE_TITLE = "Application Updated";
@@ -21,6 +21,7 @@ namespace NzbDrone.Core.Notifications
         protected const string EPISODE_GRABBED_TITLE_BRANDED = "Sonarr - " + EPISODE_GRABBED_TITLE;
         protected const string EPISODE_DOWNLOADED_TITLE_BRANDED = "Sonarr - " + EPISODE_DOWNLOADED_TITLE;
         protected const string EPISODE_DELETED_TITLE_BRANDED = "Sonarr - " + EPISODE_DELETED_TITLE;
+        protected const string SERIES_ADDED_TITLE_BRANDED = "Sonarr - " + SERIES_DELETED_TITLE;
         protected const string SERIES_DELETED_TITLE_BRANDED = "Sonarr - " + SERIES_DELETED_TITLE;
         protected const string HEALTH_ISSUE_TITLE_BRANDED = "Sonarr - " + HEALTH_ISSUE_TITLE;
         protected const string APPLICATION_UPDATE_TITLE_BRANDED = "Sonarr - " + APPLICATION_UPDATE_TITLE;
@@ -54,6 +55,10 @@ namespace NzbDrone.Core.Notifications
         {
         }
 
+        public virtual void OnSeriesAdd(SeriesAddMessage message)
+        {
+        }
+
         public virtual void OnSeriesDelete(SeriesDeleteMessage deleteMessage)
         {
         }
@@ -74,6 +79,7 @@ namespace NzbDrone.Core.Notifications
         public bool SupportsOnRename => HasConcreteImplementation("OnRename");
         public bool SupportsOnDownload => HasConcreteImplementation("OnDownload");
         public bool SupportsOnUpgrade => SupportsOnDownload;
+        public bool SupportsOnSeriesAdd => HasConcreteImplementation("OnSeriesAdd");
         public bool SupportsOnSeriesDelete => HasConcreteImplementation("OnSeriesDelete");
         public bool SupportsOnEpisodeFileDelete => HasConcreteImplementation("OnEpisodeFileDelete");
         public bool SupportsOnEpisodeFileDeleteForUpgrade => SupportsOnEpisodeFileDelete;

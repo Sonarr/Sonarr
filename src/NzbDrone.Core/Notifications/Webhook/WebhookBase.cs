@@ -85,6 +85,17 @@ namespace NzbDrone.Core.Notifications.Webhook
             };
         }
 
+        protected WebhookSeriesAddPayload BuildOnSeriesAdd(SeriesAddMessage addMessage)
+        {
+            return new WebhookSeriesAddPayload
+            {
+                EventType = WebhookEventType.SeriesAdd,
+                InstanceName = _configFileProvider.InstanceName,
+                ApplicationUrl = _configService.ApplicationUrl,
+                Series = new WebhookSeries(addMessage.Series),
+            };
+        }
+
         protected WebhookSeriesDeletePayload BuildOnSeriesDelete(SeriesDeleteMessage deleteMessage)
         {
             return new WebhookSeriesDeletePayload

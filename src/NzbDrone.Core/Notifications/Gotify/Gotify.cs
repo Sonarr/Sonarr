@@ -38,6 +38,11 @@ namespace NzbDrone.Core.Notifications.Gotify
             SendNotification(EPISODE_DELETED_TITLE, message.Message, message.Series);
         }
 
+        public override void OnSeriesAdd(SeriesAddMessage message)
+        {
+            SendNotification(SERIES_ADDED_TITLE, message.Message, message.Series);
+        }
+
         public override void OnSeriesDelete(SeriesDeleteMessage message)
         {
             SendNotification(SERIES_DELETED_TITLE, message.Message, message.Series);

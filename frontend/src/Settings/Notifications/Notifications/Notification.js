@@ -58,6 +58,7 @@ class Notification extends Component {
       onDownload,
       onUpgrade,
       onRename,
+      onSeriesAdd,
       onSeriesDelete,
       onEpisodeFileDelete,
       onEpisodeFileDeleteForUpgrade,
@@ -67,6 +68,7 @@ class Notification extends Component {
       supportsOnDownload,
       supportsOnUpgrade,
       supportsOnRename,
+      supportsOnSeriesAdd,
       supportsOnSeriesDelete,
       supportsOnEpisodeFileDelete,
       supportsOnEpisodeFileDeleteForUpgrade,
@@ -128,6 +130,14 @@ class Notification extends Component {
           supportsOnApplicationUpdate && onApplicationUpdate ?
             <Label kind={kinds.SUCCESS}>
               On Application Update
+            </Label> :
+            null
+        }
+
+        {
+          supportsOnSeriesAdd && onSeriesAdd ?
+            <Label kind={kinds.SUCCESS}>
+              On Series Add
             </Label> :
             null
         }
@@ -195,6 +205,7 @@ Notification.propTypes = {
   onDownload: PropTypes.bool.isRequired,
   onUpgrade: PropTypes.bool.isRequired,
   onRename: PropTypes.bool.isRequired,
+  onSeriesAdd: PropTypes.bool.isRequired,
   onSeriesDelete: PropTypes.bool.isRequired,
   onEpisodeFileDelete: PropTypes.bool.isRequired,
   onEpisodeFileDeleteForUpgrade: PropTypes.bool.isRequired,
@@ -202,6 +213,7 @@ Notification.propTypes = {
   onApplicationUpdate: PropTypes.bool.isRequired,
   supportsOnGrab: PropTypes.bool.isRequired,
   supportsOnDownload: PropTypes.bool.isRequired,
+  supportsOnSeriesAdd: PropTypes.bool.isRequired,
   supportsOnSeriesDelete: PropTypes.bool.isRequired,
   supportsOnEpisodeFileDelete: PropTypes.bool.isRequired,
   supportsOnEpisodeFileDeleteForUpgrade: PropTypes.bool.isRequired,

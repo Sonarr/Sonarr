@@ -40,6 +40,11 @@ namespace NzbDrone.Core.Notifications.Webhook
             _proxy.SendWebhook(BuildOnEpisodeFileDelete(deleteMessage), Settings);
         }
 
+        public override void OnSeriesAdd(SeriesAddMessage message)
+        {
+            _proxy.SendWebhook(BuildOnSeriesAdd(message), Settings);
+        }
+
         public override void OnSeriesDelete(SeriesDeleteMessage deleteMessage)
         {
             _proxy.SendWebhook(BuildOnSeriesDelete(deleteMessage), Settings);

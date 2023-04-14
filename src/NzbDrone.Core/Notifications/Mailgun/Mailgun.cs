@@ -36,6 +36,13 @@ namespace NzbDrone.Core.Notifications.Mailgun
             _proxy.SendNotification(EPISODE_DELETED_TITLE, body, Settings);
         }
 
+        public override void OnSeriesAdd(SeriesAddMessage message)
+        {
+            var body = $"{message.Message}";
+
+            _proxy.SendNotification(SERIES_ADDED_TITLE, body, Settings);
+        }
+
         public override void OnSeriesDelete(SeriesDeleteMessage deleteMessage)
         {
             var body = $"{deleteMessage.Message}";

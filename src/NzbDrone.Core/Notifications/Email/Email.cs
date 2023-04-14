@@ -47,6 +47,13 @@ namespace NzbDrone.Core.Notifications.Email
             SendEmail(Settings, EPISODE_DELETED_TITLE_BRANDED, body);
         }
 
+        public override void OnSeriesAdd(SeriesAddMessage message)
+        {
+            var body = $"{message.Message}";
+
+            SendEmail(Settings, SERIES_ADDED_TITLE_BRANDED, body);
+        }
+
         public override void OnSeriesDelete(SeriesDeleteMessage deleteMessage)
         {
             var body = $"{deleteMessage.Message}";

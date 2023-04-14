@@ -86,6 +86,21 @@ namespace NzbDrone.Core.Notifications.Slack
             _proxy.SendPayload(payload, Settings);
         }
 
+        public override void OnSeriesAdd(SeriesAddMessage message)
+        {
+            var attachments = new List<Attachment>
+                              {
+                                  new Attachment
+                                  {
+                                      Title = message.Series.Title,
+                                  }
+                              };
+
+            var payload = CreatePayload("Series Added", attachments);
+
+            _proxy.SendPayload(payload, Settings);
+        }
+
         public override void OnSeriesDelete(SeriesDeleteMessage deleteMessage)
         {
             var attachments = new List<Attachment>
