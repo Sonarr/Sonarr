@@ -154,7 +154,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
             }
 
             Logger.Debug()
-                  .Message("Unknown audio format: '{0}' in '{1}'.", mediaInfo.RawStreamData, sceneName)
+                  .Message("Unknown audio format: '{0}' in '{1}'. Streams: {2}", audioFormat, sceneName, mediaInfo.RawStreamData)
                   .WriteSentryWarn("UnknownAudioFormatFFProbe", mediaInfo.ContainerFormat, mediaInfo.AudioFormat, audioCodecID)
                   .Write();
 
@@ -236,8 +236,12 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                 return "AV1";
             }
 
-            if (videoFormat == "vp6" ||
-                videoFormat == "vp7" ||
+            if (videoFormat.Contains("vp6"))
+            {
+                return "VP6";
+            }
+
+            if (videoFormat == "vp7" ||
                 videoFormat == "vp8" ||
                 videoFormat == "vp9")
             {
@@ -257,13 +261,15 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                 videoFormat == "rv20" ||
                 videoFormat == "rv30" ||
                 videoFormat == "rv40" ||
-                videoFormat == "cinepak")
+                videoFormat == "cinepak" ||
+                videoFormat == "rawvideo" ||
+                videoFormat == "msvideo1")
             {
                 return "";
             }
 
             Logger.Debug()
-                  .Message("Unknown video format: '{0}' in '{1}'.", mediaInfo.RawStreamData, sceneName)
+                  .Message("Unknown video format: '{0}' in '{1}'. Streams: {2}", videoFormat, sceneName, mediaInfo.RawStreamData)
                   .WriteSentryWarn("UnknownVideoFormatFFProbe", mediaInfo.ContainerFormat, videoFormat, videoCodecID)
                   .Write();
 

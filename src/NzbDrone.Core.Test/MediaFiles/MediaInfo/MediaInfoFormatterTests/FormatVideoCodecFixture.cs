@@ -25,6 +25,7 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo.MediaInfoFormatterTests
         [TestCase("msmpeg4, DIV3", "Exit the Dragon, Enter the Tiger (1976) 360p MPEG Audio.avi", "DivX")]
         [TestCase("msmpeg4v2, DIV3", "Exit the Dragon, Enter the Tiger (1976) 360p MPEG Audio.avi", "DivX")]
         [TestCase("msmpeg4v3, DIV3", "Exit the Dragon, Enter the Tiger (1976) 360p MPEG Audio.avi", "DivX")]
+        [TestCase("vp6f, 4", "Top Gear - S12E01 - Lorries - SD TV.flv", "VP6")]
         [TestCase("vp6, 4", "Top Gear - S12E01 - Lorries - SD TV.flv", "VP6")]
         [TestCase("vp7, VP70", "Sweet Seymour.avi", "VP7")]
         [TestCase("vp8, V_VP8", "Dick.mkv", "VP8")]
