@@ -63,6 +63,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                 var ffprobeOutput = FFProbe.GetStreamJson(filename, ffOptions: new FFOptions { ExtraArguments = "-probesize 50000000" });
 
                 var analysis = FFProbe.AnalyseStreamJson(ffprobeOutput);
+                var primaryVideoStream = GetPrimaryVideoStream(analysis);
 
                 if (analysis.PrimaryAudioStream?.ChannelLayout.IsNullOrWhiteSpace() ?? true)
                 {
@@ -72,25 +73,25 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
 
                 var mediaInfoModel = new MediaInfoModel();
                 mediaInfoModel.ContainerFormat = analysis.Format.FormatName;
-                mediaInfoModel.VideoFormat = analysis.PrimaryVideoStream?.CodecName;
-                mediaInfoModel.VideoCodecID = analysis.PrimaryVideoStream?.CodecTagString;
-                mediaInfoModel.VideoProfile = analysis.PrimaryVideoStream?.Profile;
-                mediaInfoModel.VideoBitrate = analysis.PrimaryVideoStream?.BitRate ?? 0;
-                mediaInfoModel.VideoBitDepth = GetPixelFormat(analysis.PrimaryVideoStream?.PixelFormat)?.Components.Min(x => x.BitDepth) ?? 8;
-                mediaInfoModel.VideoColourPrimaries = analysis.PrimaryVideoStream?.ColorPrimaries;
-                mediaInfoModel.VideoTransferCharacteristics = analysis.PrimaryVideoStream?.ColorTransfer;
-                mediaInfoModel.DoviConfigurationRecord = analysis.PrimaryVideoStream?.SideDataList?.Find(x => x.GetType().Name == nameof(DoviConfigurationRecordSideData)) as DoviConfigurationRecordSideData;
-                mediaInfoModel.Height = analysis.PrimaryVideoStream?.Height ?? 0;
-                mediaInfoModel.Width = analysis.PrimaryVideoStream?.Width ?? 0;
+                mediaInfoModel.VideoFormat = primaryVideoStream?.CodecName;
+                mediaInfoModel.VideoCodecID = primaryVideoStream?.CodecTagString;
+                mediaInfoModel.VideoProfile = primaryVideoStream?.Profile;
+                mediaInfoModel.VideoBitrate = primaryVideoStream?.BitRate ?? 0;
+                mediaInfoModel.VideoBitDepth = GetPixelFormat(primaryVideoStream?.PixelFormat)?.Components.Min(x => x.BitDepth) ?? 8;
+                mediaInfoModel.VideoColourPrimaries = primaryVideoStream?.ColorPrimaries;
+                mediaInfoModel.VideoTransferCharacteristics = primaryVideoStream?.ColorTransfer;
+                mediaInfoModel.DoviConfigurationRecord = primaryVideoStream?.SideDataList?.Find(x => x.GetType().Name == nameof(DoviConfigurationRecordSideData)) as DoviConfigurationRecordSideData;
+                mediaInfoModel.Height = primaryVideoStream?.Height ?? 0;
+                mediaInfoModel.Width = primaryVideoStream?.Width ?? 0;
                 mediaInfoModel.AudioFormat = analysis.PrimaryAudioStream?.CodecName;
                 mediaInfoModel.AudioCodecID = analysis.PrimaryAudioStream?.CodecTagString;
                 mediaInfoModel.AudioProfile = analysis.PrimaryAudioStream?.Profile;
                 mediaInfoModel.AudioBitrate = analysis.PrimaryAudioStream?.BitRate ?? 0;
-                mediaInfoModel.RunTime = GetBestRuntime(analysis.PrimaryAudioStream?.Duration, analysis.PrimaryVideoStream?.Duration, analysis.Format.Duration);
+                mediaInfoModel.RunTime = GetBestRuntime(analysis.PrimaryAudioStream?.Duration, primaryVideoStream?.Duration, analysis.Format.Duration);
                 mediaInfoModel.AudioStreamCount = analysis.AudioStreams.Count;
                 mediaInfoModel.AudioChannels = analysis.PrimaryAudioStream?.Channels ?? 0;
                 mediaInfoModel.AudioChannelPositions = analysis.PrimaryAudioStream?.ChannelLayout;
-                mediaInfoModel.VideoFps = analysis.PrimaryVideoStream?.FrameRate ?? 0;
+                mediaInfoModel.VideoFps = primaryVideoStream?.FrameRate ?? 0;
                 mediaInfoModel.AudioLanguages = analysis.AudioStreams?.Select(x => x.Language)
                     .Where(l => l.IsNotNullOrWhiteSpace())
                     .ToList();
@@ -117,7 +118,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                     frames = FFProbe.AnalyseFrameJson(frameOutput);
                 }
 
-                var streamSideData = analysis.PrimaryVideoStream?.SideDataList ?? new ();
+                var streamSideData = primaryVideoStream?.SideDataList ?? new ();
                 var framesSideData = frames?.Frames?.Count > 0 ? frames?.Frames[0]?.SideDataList ?? new () : new ();
 
                 var sideData = streamSideData.Concat(framesSideData).ToList();
@@ -153,6 +154,19 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
             }
 
             return video.Value;
+        }
+
+        private VideoStream GetPrimaryVideoStream(IMediaAnalysis mediaAnalysis)
+        {
+            if (mediaAnalysis.VideoStreams.Count <= 1)
+            {
+                return mediaAnalysis.PrimaryVideoStream;
+            }
+
+            // motion image codec streams are often in front of the main video stream
+            var codecFilter = new[] { "mjpeg", "png" };
+
+            return mediaAnalysis.VideoStreams.FirstOrDefault(s => !codecFilter.Contains(s.CodecName)) ?? mediaAnalysis.PrimaryVideoStream;
         }
 
         private FFProbePixelFormat GetPixelFormat(string format)
