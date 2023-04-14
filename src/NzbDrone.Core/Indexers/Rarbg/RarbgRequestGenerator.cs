@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
+using System.Net;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
@@ -87,6 +88,8 @@ namespace NzbDrone.Core.Indexers.Rarbg
             var requestBuilder = new HttpRequestBuilder(Settings.BaseUrl)
                 .Resource("/pubapi_v2.php")
                 .Accept(HttpAccept.Json);
+
+            requestBuilder.SuppressHttpErrorStatusCodes = new[] { HttpStatusCode.TooManyRequests, (HttpStatusCode)520 };
 
             if (Settings.CaptchaToken.IsNotNullOrWhiteSpace())
             {

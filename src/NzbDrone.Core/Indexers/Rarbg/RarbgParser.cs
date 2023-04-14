@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Text.RegularExpressions;
 using NzbDrone.Common.Http;
@@ -17,10 +18,14 @@ namespace NzbDrone.Core.Indexers.Rarbg
 
             switch (indexerResponse.HttpResponse.StatusCode)
             {
+                case HttpStatusCode.TooManyRequests:
+                    throw new RequestLimitReachedException("Indexer API limit reached", TimeSpan.FromMinutes(2));
+                case (HttpStatusCode)520:
+                    throw new RequestLimitReachedException("Indexer API error. Likely rate limited by origin server", TimeSpan.FromMinutes(3));
                 default:
                     if (indexerResponse.HttpResponse.StatusCode != HttpStatusCode.OK)
                     {
-                        throw new IndexerException(indexerResponse, "Indexer API call returned an unexpected StatusCode [{0}]", indexerResponse.HttpResponse.StatusCode);
+                        throw new IndexerException(indexerResponse, "Indexer API call returned an unexpected status code [{0}]", indexerResponse.HttpResponse.StatusCode);
                     }
 
                     break;
@@ -44,6 +49,12 @@ namespace NzbDrone.Core.Indexers.Rarbg
 
             if (jsonResponse.Resource.torrent_results == null)
             {
+                // Despite this being the requested behaviour it appears to be problematic, commenting it out for now
+                // if (jsonResponse.Resource.rate_limit == 1)
+                // {
+                //     throw new RequestLimitReachedException("Indexer API limit reached", TimeSpan.FromMinutes(5));
+                // }
+
                 return results;
             }
 
