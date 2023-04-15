@@ -1,17 +1,11 @@
-using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using NLog;
-using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Processes;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Download;
 using NzbDrone.Core.MediaFiles.MediaInfo;
-using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.MediaFiles
 {
@@ -40,13 +34,14 @@ namespace NzbDrone.Core.MediaFiles
 
         public ScriptImportDecision TryImport(string sourcePath, string destinationFilePath, ScriptImportDecisionInfo scriptImportDecisionInfo)
         {
-            EpisodeFile episodeFile = scriptImportDecisionInfo.episodeFile;
-            Series series = scriptImportDecisionInfo.localEpisode.Series;
-            TransferMode mode = scriptImportDecisionInfo.mode;
-            LocalEpisode localEpisode = scriptImportDecisionInfo.localEpisode;
-            List<EpisodeFile> oldFiles = scriptImportDecisionInfo.OldFiles;
-            DownloadClientItemClientInfo downloadClientInfo = scriptImportDecisionInfo.downloadClientItemInfo;
-            string downloadId = scriptImportDecisionInfo.downloadId;
+            var episodeFile = scriptImportDecisionInfo.episodeFile;
+            var series = scriptImportDecisionInfo.localEpisode.Series;
+            var mode = scriptImportDecisionInfo.mode;
+            var localEpisode = scriptImportDecisionInfo.localEpisode;
+            var oldFiles = scriptImportDecisionInfo.OldFiles;
+            var downloadClientInfo = scriptImportDecisionInfo.downloadClientItemInfo;
+            var downloadId = scriptImportDecisionInfo.downloadId;
+            var subtitleFile = scriptImportDecisionInfo.subtitleFile;
 
             if (!_configService.UseScriptImport)
             {
@@ -109,6 +104,12 @@ namespace NzbDrone.Core.MediaFiles
                 environmentVariables.Add("Sonarr_DeletedRelativePaths", string.Join("|", oldFiles.Select(e => e.RelativePath)));
                 environmentVariables.Add("Sonarr_DeletedPaths", string.Join("|", oldFiles.Select(e => Path.Combine(series.Path, e.RelativePath))));
                 environmentVariables.Add("Sonarr_DeletedDateAdded", string.Join("|", oldFiles.Select(e => e.DateAdded)));
+            }
+
+            if (subtitleFile is not null)
+            {
+                environmentVariables.Add("Sonarr_SubtitleFile_LanguageTags", string.Join("|", subtitleFile.LanguageTags));
+                environmentVariables.Add("Sonarr_SubtitleFile_Language", subtitleFile.Language.ToString());
             }
 
             _logger.Debug("Executing external script: {0}", _configService.ScriptImportPath);

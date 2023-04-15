@@ -208,7 +208,9 @@ namespace NzbDrone.Core.Extras.Subtitles
                     var suffix = GetSuffix(language, copy, file.LanguageTags, groupCount > 1);
                     try
                     {
+                        scriptImportDecisionInfo.subtitleFile = file;
                         var subtitleFile = ImportFile(localEpisode.Series, episodeFile, scriptImportDecisionInfo, path, isReadOnly, extension, suffix);
+                        scriptImportDecisionInfo.subtitleFile = null;
                         if (subtitleFile is not null)
                         {
                             subtitleFile.Language = language;
