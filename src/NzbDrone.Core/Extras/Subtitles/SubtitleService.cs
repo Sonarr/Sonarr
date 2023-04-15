@@ -209,15 +209,18 @@ namespace NzbDrone.Core.Extras.Subtitles
                     try
                     {
                         var subtitleFile = ImportFile(localEpisode.Series, episodeFile, scriptImportDecisionInfo, path, isReadOnly, extension, suffix);
-                        subtitleFile.Language = language;
-                        subtitleFile.LanguageTags = file.LanguageTags;
+                        if (subtitleFile is not null)
+                        {
+                            subtitleFile.Language = language;
+                            subtitleFile.LanguageTags = file.LanguageTags;
 
-                        _mediaFileAttributeService.SetFilePermissions(path);
-                        _subtitleFileService.Upsert(subtitleFile);
+                            _mediaFileAttributeService.SetFilePermissions(path);
+                            _subtitleFileService.Upsert(subtitleFile);
 
-                        importedFiles.Add(subtitleFile);
+                            importedFiles.Add(subtitleFile);
 
-                        copy++;
+                            copy++;
+                        }
                     }
                     catch (Exception ex)
                     {

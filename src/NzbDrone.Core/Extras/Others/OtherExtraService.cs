@@ -139,9 +139,12 @@ namespace NzbDrone.Core.Extras.Others
                 try
                 {
                     var extraFile = ImportFile(localEpisode.Series, episodeFile, scriptImportDecisionInfo, file, isReadOnly, Path.GetExtension(file), null);
-                    _mediaFileAttributeService.SetFilePermissions(file);
-                    _otherExtraFileService.Upsert(extraFile);
-                    importedFiles.Add(extraFile);
+                    if (extraFile is not null)
+                    {
+                        _mediaFileAttributeService.SetFilePermissions(file);
+                        _otherExtraFileService.Upsert(extraFile);
+                        importedFiles.Add(extraFile);
+                    }
                 }
                 catch (Exception ex)
                 {

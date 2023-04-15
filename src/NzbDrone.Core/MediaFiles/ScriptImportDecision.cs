@@ -4,6 +4,7 @@ namespace NzbDrone.Core.MediaFiles
     {
         MoveComplete,
         RenameRequested,
+        RejectExtra,
         DeferMove
     }
 }

@@ -75,9 +75,16 @@ namespace NzbDrone.Core.Extras.Files
                 transferMode = _configService.CopyUsingHardlinks ? TransferMode.HardLinkOrCopy : TransferMode.Copy;
             }
 
-            if (_scriptImportDecider.TryImport(path, newFileName, scriptImportDecisionInfo) == ScriptImportDecision.DeferMove)
+            scriptImportDecisionInfo.mode = transferMode;
+
+            var scriptImportDecision = _scriptImportDecider.TryImport(path, newFileName, scriptImportDecisionInfo);
+            switch (scriptImportDecision)
             {
-                _diskTransferService.TransferFile(path, newFileName, transferMode);
+                case ScriptImportDecision.DeferMove:
+                    _diskTransferService.TransferFile(path, newFileName, transferMode);
+                    break;
+                case ScriptImportDecision.RejectExtra:
+                    return null;
             }
 
             return new TExtraFile

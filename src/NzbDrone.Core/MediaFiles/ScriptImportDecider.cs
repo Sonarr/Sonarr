@@ -130,7 +130,7 @@ namespace NzbDrone.Core.MediaFiles
                 }
                 else
                 {
-                    return ScriptImportDecision.MoveComplete;
+                    return ScriptImportDecision.RejectExtra;
                 }
 
             case 3: // Let Sonarr handle it
