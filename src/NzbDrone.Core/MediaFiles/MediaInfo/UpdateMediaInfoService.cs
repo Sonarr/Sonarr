@@ -12,7 +12,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
 {
     public interface IUpdateMediaInfo
     {
-        bool Update(EpisodeFile episodeFile, Series series);
+        bool Update(EpisodeFile episodeFile, Series series, bool update = true);
     }
 
     public class UpdateMediaInfoService : IUpdateMediaInfo, IHandle<SeriesScannedEvent>
@@ -55,7 +55,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
             }
         }
 
-        public bool Update(EpisodeFile episodeFile, Series series)
+        public bool Update(EpisodeFile episodeFile, Series series, bool update = true)
         {
             if (!_configService.EnableMediaInfo)
             {
@@ -63,10 +63,10 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                 return false;
             }
 
-            return UpdateMediaInfo(episodeFile, series);
+            return UpdateMediaInfo(episodeFile, series, update);
         }
 
-        private bool UpdateMediaInfo(EpisodeFile episodeFile, Series series)
+        private bool UpdateMediaInfo(EpisodeFile episodeFile, Series series, bool update = true)
         {
             var path = Path.Combine(series.Path, episodeFile.RelativePath);
 
@@ -84,7 +84,11 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
             }
 
             episodeFile.MediaInfo = updatedMediaInfo;
-            _mediaFileService.Update(episodeFile);
+            if (update)
+            {
+                _mediaFileService.Update(episodeFile);
+            }
+
             _logger.Debug("Updated MediaInfo for '{0}'", path);
 
             return true;

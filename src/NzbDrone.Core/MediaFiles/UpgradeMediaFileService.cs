@@ -11,7 +11,7 @@ namespace NzbDrone.Core.MediaFiles
 {
     public interface IUpgradeMediaFiles
     {
-        (EpisodeFileMoveResult, bool) UpgradeEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode, ScriptImportDecisionInfo scriptImportDecisionInfo, bool copyOnly = false);
+        EpisodeFileMoveResult UpgradeEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode, ScriptImportDecisionInfo scriptImportDecisionInfo, bool copyOnly = false);
     }
 
     public class UpgradeMediaFileService : IUpgradeMediaFiles
@@ -35,7 +35,7 @@ namespace NzbDrone.Core.MediaFiles
             _logger = logger;
         }
 
-        public (EpisodeFileMoveResult, bool) UpgradeEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode, ScriptImportDecisionInfo scriptImportDecisionInfo, bool copyOnly = false)
+        public EpisodeFileMoveResult UpgradeEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode, ScriptImportDecisionInfo scriptImportDecisionInfo, bool copyOnly = false)
         {
             var moveFileResult = new EpisodeFileMoveResult();
             var existingFiles = localEpisode.Episodes
@@ -71,20 +71,16 @@ namespace NzbDrone.Core.MediaFiles
 
             scriptImportDecisionInfo.OldFiles = moveFileResult.OldFiles;
 
-            (EpisodeFile episodeFile, bool needsRename) result;
-
             if (copyOnly)
             {
-                result = _episodeFileMover.CopyEpisodeFile(episodeFile, localEpisode, scriptImportDecisionInfo);
+                moveFileResult.EpisodeFile = _episodeFileMover.CopyEpisodeFile(episodeFile, localEpisode, scriptImportDecisionInfo);
             }
             else
             {
-                result = _episodeFileMover.MoveEpisodeFile(episodeFile, localEpisode, scriptImportDecisionInfo);
+                moveFileResult.EpisodeFile = _episodeFileMover.MoveEpisodeFile(episodeFile, localEpisode, scriptImportDecisionInfo);
             }
 
-            moveFileResult.EpisodeFile = result.episodeFile;
-
-            return (moveFileResult, result.needsRename);
+            return moveFileResult;
         }
     }
 }

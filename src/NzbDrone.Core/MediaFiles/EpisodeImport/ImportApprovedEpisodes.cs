@@ -28,8 +28,6 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
         private readonly IUpgradeMediaFiles _episodeFileUpgrader;
         private readonly IMediaFileService _mediaFileService;
         private readonly IExtraService _extraService;
-        private readonly IUpdateMediaInfo _updateMediaInfo;
-        private readonly IRenameEpisodeFileService _renameEpisodeFileService;
         private readonly IDiskProvider _diskProvider;
         private readonly IEventAggregator _eventAggregator;
         private readonly IManageCommandQueue _commandQueueManager;
@@ -38,8 +36,6 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
         public ImportApprovedEpisodes(IUpgradeMediaFiles episodeFileUpgrader,
                                       IMediaFileService mediaFileService,
                                       IExtraService extraService,
-                                      IUpdateMediaInfo updateMediaInfo,
-                                      IRenameEpisodeFileService renameEpisodeFileService,
                                       IDiskProvider diskProvider,
                                       IEventAggregator eventAggregator,
                                       IManageCommandQueue commandQueueManager,
@@ -48,8 +44,6 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
             _episodeFileUpgrader = episodeFileUpgrader;
             _mediaFileService = mediaFileService;
             _extraService = extraService;
-            _updateMediaInfo = updateMediaInfo;
-            _renameEpisodeFileService = renameEpisodeFileService;
             _diskProvider = diskProvider;
             _eventAggregator = eventAggregator;
             _commandQueueManager = commandQueueManager;
@@ -122,16 +116,12 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                         isEpisodeFile = true,
                     };
 
-                    bool rename = false;
-
                     if (newDownload)
                     {
                         episodeFile.SceneName = localEpisode.SceneName;
                         episodeFile.OriginalFilePath = GetOriginalFilePath(downloadClientItem, localEpisode);
 
-                        var (moveResult, needsRename) = _episodeFileUpgrader.UpgradeEpisodeFile(episodeFile, localEpisode, scriptImportDecisionInfo, copyOnly);
-                        rename = needsRename;
-                        oldFiles = moveResult.OldFiles;
+                        oldFiles = _episodeFileUpgrader.UpgradeEpisodeFile(episodeFile, localEpisode, scriptImportDecisionInfo, copyOnly).OldFiles;
                     }
                     else
                     {
@@ -148,15 +138,6 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
                     episodeFile = _mediaFileService.Add(episodeFile);
                     importResults.Add(new ImportResult(importDecision));
-
-                    if (rename)
-                    {
-                        _logger.Debug("Rename requested, renaming...");
-                        _updateMediaInfo.Update(episodeFile, localEpisode.Series);
-
-                        episodeFile.Path = null;
-                        _renameEpisodeFileService.RenameFile(episodeFile, localEpisode.Series);
-                    }
 
                     if (newDownload)
                     {
