@@ -309,7 +309,7 @@ namespace NzbDrone.Common.Processes
                 processInfo = new ProcessInfo();
                 processInfo.Id = process.Id;
                 processInfo.Name = process.ProcessName;
-                processInfo.StartPath = GetExeFileName(process);
+                processInfo.StartPath = process.MainModule.FileName;
 
                 if (process.Id != GetCurrentProcessId() && process.HasExited)
                 {
@@ -322,16 +322,6 @@ namespace NzbDrone.Common.Processes
             }
 
             return processInfo;
-        }
-
-        private static string GetExeFileName(Process process)
-        {
-            if (process.MainModule.FileName != "mono.exe")
-            {
-                return process.MainModule.FileName;
-            }
-
-            return process.Modules.Cast<ProcessModule>().FirstOrDefault(module => module.ModuleName.ToLower().EndsWith(".exe")).FileName;
         }
 
         private List<Process> GetProcessesByName(string name)
