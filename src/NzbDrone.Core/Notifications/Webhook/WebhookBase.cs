@@ -80,7 +80,7 @@ namespace NzbDrone.Core.Notifications.Webhook
                 ApplicationUrl = _configService.ApplicationUrl,
                 Series = new WebhookSeries(deleteMessage.Series),
                 Episodes = deleteMessage.EpisodeFile.Episodes.Value.ConvertAll(x => new WebhookEpisode(x)),
-                EpisodeFile = deleteMessage.EpisodeFile,
+                EpisodeFile = new WebhookEpisodeFile(deleteMessage.EpisodeFile),
                 DeleteReason = deleteMessage.Reason
             };
         }
