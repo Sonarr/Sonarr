@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Extras
 {
     public interface IExtraService
     {
-        void ImportEpisode(LocalEpisode localEpisode, EpisodeFile episodeFile, ScriptImportDecisionInfo scriptImportDecisionInfo, bool isReadOnly);
+        void ImportEpisode(LocalEpisode localEpisode, EpisodeFile episodeFile, bool isReadOnly);
     }
 
     public class ExtraService : IExtraService,
@@ -47,14 +47,14 @@ namespace NzbDrone.Core.Extras
             _extraFileManagers = extraFileManagers.OrderBy(e => e.Order).ToList();
         }
 
-        public void ImportEpisode(LocalEpisode localEpisode, EpisodeFile episodeFile, ScriptImportDecisionInfo scriptImportDecisionInfo, bool isReadOnly)
+        public void ImportEpisode(LocalEpisode localEpisode, EpisodeFile episodeFile, bool isReadOnly)
         {
-            ImportExtraFiles(localEpisode, episodeFile, scriptImportDecisionInfo, isReadOnly);
+            ImportExtraFiles(localEpisode, episodeFile, isReadOnly);
 
             CreateAfterEpisodeImport(localEpisode.Series, episodeFile);
         }
 
-        private void ImportExtraFiles(LocalEpisode localEpisode, EpisodeFile episodeFile, ScriptImportDecisionInfo scriptImportDecisionInfo, bool isReadOnly)
+        private void ImportExtraFiles(LocalEpisode localEpisode, EpisodeFile episodeFile, bool isReadOnly)
         {
             if (!_configService.ImportExtraFiles)
             {
@@ -96,7 +96,7 @@ namespace NzbDrone.Core.Extras
 
             for (int i = 0; i < _extraFileManagers.Count; i++)
             {
-                _extraFileManagers[i].ImportFiles(localEpisode, episodeFile, scriptImportDecisionInfo, managedFiles[i], isReadOnly);
+                _extraFileManagers[i].ImportFiles(localEpisode, episodeFile, managedFiles[i], isReadOnly);
             }
         }
 

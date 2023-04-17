@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Extras.Files
         IEnumerable<ExtraFile> CreateAfterEpisodeFolder(Series series, string seriesFolder, string seasonFolder);
         IEnumerable<ExtraFile> MoveFilesAfterRename(Series series, List<EpisodeFile> episodeFiles);
         bool CanImportFile(LocalEpisode localEpisode, EpisodeFile episodeFile, string path, string extension, bool readOnly);
-        IEnumerable<ExtraFile> ImportFiles(LocalEpisode localEpisode, EpisodeFile episodeFile, ScriptImportDecisionInfo scriptImportDecisionInfo, List<string> files, bool isReadOnly);
+        IEnumerable<ExtraFile> ImportFiles(LocalEpisode localEpisode, EpisodeFile episodeFile, List<string> files, bool isReadOnly);
     }
 
     public abstract class ExtraFileManager<TExtraFile> : IManageExtraFiles
@@ -30,19 +30,16 @@ namespace NzbDrone.Core.Extras.Files
         private readonly IConfigService _configService;
         private readonly IDiskProvider _diskProvider;
         private readonly IDiskTransferService _diskTransferService;
-        private readonly IScriptImportDecider _scriptImportDecider;
         private readonly Logger _logger;
 
         public ExtraFileManager(IConfigService configService,
                                 IDiskProvider diskProvider,
                                 IDiskTransferService diskTransferService,
-                                IScriptImportDecider scriptImportDecider,
                                 Logger logger)
         {
             _configService = configService;
             _diskProvider = diskProvider;
             _diskTransferService = diskTransferService;
-            _scriptImportDecider = scriptImportDecider;
             _logger = logger;
         }
 
@@ -53,9 +50,9 @@ namespace NzbDrone.Core.Extras.Files
         public abstract IEnumerable<ExtraFile> CreateAfterEpisodeFolder(Series series, string seriesFolder, string seasonFolder);
         public abstract IEnumerable<ExtraFile> MoveFilesAfterRename(Series series, List<EpisodeFile> episodeFiles);
         public abstract bool CanImportFile(LocalEpisode localEpisode, EpisodeFile episodeFile, string path, string extension, bool readOnly);
-        public abstract IEnumerable<ExtraFile> ImportFiles(LocalEpisode localEpisode, EpisodeFile episodeFile, ScriptImportDecisionInfo scriptImportDecisionInfo, List<string> files, bool isReadOnly);
+        public abstract IEnumerable<ExtraFile> ImportFiles(LocalEpisode localEpisode, EpisodeFile episodeFile, List<string> files, bool isReadOnly);
 
-        protected TExtraFile ImportFile(Series series, EpisodeFile episodeFile, ScriptImportDecisionInfo scriptImportDecisionInfo, string path, bool readOnly, string extension, string fileNameSuffix = null)
+        protected TExtraFile ImportFile(Series series, EpisodeFile episodeFile, string path, bool readOnly, string extension, string fileNameSuffix = null)
         {
             var newFolder = Path.GetDirectoryName(Path.Combine(series.Path, episodeFile.RelativePath));
             var filenameBuilder = new StringBuilder(Path.GetFileNameWithoutExtension(episodeFile.RelativePath));
@@ -75,17 +72,7 @@ namespace NzbDrone.Core.Extras.Files
                 transferMode = _configService.CopyUsingHardlinks ? TransferMode.HardLinkOrCopy : TransferMode.Copy;
             }
 
-            scriptImportDecisionInfo.mode = transferMode;
-
-            var scriptImportDecision = _scriptImportDecider.TryImport(path, newFileName, scriptImportDecisionInfo);
-            switch (scriptImportDecision)
-            {
-                case ScriptImportDecision.DeferMove:
-                    _diskTransferService.TransferFile(path, newFileName, transferMode);
-                    break;
-                case ScriptImportDecision.RejectExtra:
-                    return null;
-            }
+            _diskTransferService.TransferFile(path, newFileName, transferMode, true);
 
             return new TExtraFile
             {

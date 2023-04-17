@@ -23,11 +23,10 @@ namespace NzbDrone.Core.Extras.Others
         public OtherExtraService(IConfigService configService,
                                  IDiskProvider diskProvider,
                                  IDiskTransferService diskTransferService,
-                                 IScriptImportDecider scriptImportDecider,
                                  IOtherExtraFileService otherExtraFileService,
                                  IMediaFileAttributeService mediaFileAttributeService,
                                  Logger logger)
-            : base(configService, diskProvider, diskTransferService, scriptImportDecider, logger)
+            : base(configService, diskProvider, diskTransferService, logger)
         {
             _diskProvider = diskProvider;
             _otherExtraFileService = otherExtraFileService;
@@ -82,7 +81,7 @@ namespace NzbDrone.Core.Extras.Others
             return true;
         }
 
-        public override IEnumerable<ExtraFile> ImportFiles(LocalEpisode localEpisode, EpisodeFile episodeFile, ScriptImportDecisionInfo scriptImportDecisionInfo, List<string> files, bool isReadOnly)
+        public override IEnumerable<ExtraFile> ImportFiles(LocalEpisode localEpisode, EpisodeFile episodeFile, List<string> files, bool isReadOnly)
         {
             var importedFiles = new List<ExtraFile>();
             var filteredFiles = files.Where(f => CanImportFile(localEpisode, episodeFile, f, Path.GetExtension(f), isReadOnly)).ToList();
@@ -138,13 +137,10 @@ namespace NzbDrone.Core.Extras.Others
             {
                 try
                 {
-                    var extraFile = ImportFile(localEpisode.Series, episodeFile, scriptImportDecisionInfo, file, isReadOnly, Path.GetExtension(file), null);
-                    if (extraFile is not null)
-                    {
-                        _mediaFileAttributeService.SetFilePermissions(file);
-                        _otherExtraFileService.Upsert(extraFile);
-                        importedFiles.Add(extraFile);
-                    }
+                    var extraFile = ImportFile(localEpisode.Series, episodeFile, file, isReadOnly, Path.GetExtension(file), null);
+                    _mediaFileAttributeService.SetFilePermissions(file);
+                    _otherExtraFileService.Upsert(extraFile);
+                    importedFiles.Add(extraFile);
                 }
                 catch (Exception ex)
                 {

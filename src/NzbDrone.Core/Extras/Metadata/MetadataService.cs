@@ -33,7 +33,6 @@ namespace NzbDrone.Core.Extras.Metadata
         public MetadataService(IConfigService configService,
                                IDiskProvider diskProvider,
                                IDiskTransferService diskTransferService,
-                               IScriptImportDecider scriptImportDecider,
                                IRecycleBinProvider recycleBinProvider,
                                IOtherExtraFileRenamer otherExtraFileRenamer,
                                IMetadataFactory metadataFactory,
@@ -42,7 +41,7 @@ namespace NzbDrone.Core.Extras.Metadata
                                IMediaFileAttributeService mediaFileAttributeService,
                                IMetadataFileService metadataFileService,
                                Logger logger)
-            : base(configService, diskProvider, diskTransferService, scriptImportDecider, logger)
+            : base(configService, diskProvider, diskTransferService, logger)
         {
             _metadataFactory = metadataFactory;
             _cleanMetadataService = cleanMetadataService;
@@ -209,7 +208,7 @@ namespace NzbDrone.Core.Extras.Metadata
             return false;
         }
 
-        public override IEnumerable<ExtraFile> ImportFiles(LocalEpisode localEpisode, EpisodeFile episodeFile, ScriptImportDecisionInfo scriptImportDecisionInfo, List<string> files, bool isReadOnly)
+        public override IEnumerable<ExtraFile> ImportFiles(LocalEpisode localEpisode, EpisodeFile episodeFile, List<string> files, bool isReadOnly)
         {
             return Enumerable.Empty<ExtraFile>();
         }

@@ -28,12 +28,11 @@ namespace NzbDrone.Core.Extras.Subtitles
         public SubtitleService(IConfigService configService,
                                IDiskProvider diskProvider,
                                IDiskTransferService diskTransferService,
-                               IScriptImportDecider scriptImportDecider,
                                IDetectSample detectSample,
                                ISubtitleFileService subtitleFileService,
                                IMediaFileAttributeService mediaFileAttributeService,
                                Logger logger)
-            : base(configService, diskProvider, diskTransferService, scriptImportDecider, logger)
+            : base(configService, diskProvider, diskTransferService, logger)
         {
             _diskProvider = diskProvider;
             _detectSample = detectSample;
@@ -100,7 +99,7 @@ namespace NzbDrone.Core.Extras.Subtitles
             return SubtitleFileExtensions.Extensions.Contains(extension.ToLowerInvariant());
         }
 
-        public override IEnumerable<ExtraFile> ImportFiles(LocalEpisode localEpisode, EpisodeFile episodeFile, ScriptImportDecisionInfo scriptImportDecisionInfo, List<string> files, bool isReadOnly)
+        public override IEnumerable<ExtraFile> ImportFiles(LocalEpisode localEpisode, EpisodeFile episodeFile, List<string> files, bool isReadOnly)
         {
             var importedFiles = new List<SubtitleFile>();
 
@@ -208,21 +207,16 @@ namespace NzbDrone.Core.Extras.Subtitles
                     var suffix = GetSuffix(language, copy, file.LanguageTags, groupCount > 1);
                     try
                     {
-                        scriptImportDecisionInfo.subtitleFile = file;
-                        var subtitleFile = ImportFile(localEpisode.Series, episodeFile, scriptImportDecisionInfo, path, isReadOnly, extension, suffix);
-                        scriptImportDecisionInfo.subtitleFile = null;
-                        if (subtitleFile is not null)
-                        {
-                            subtitleFile.Language = language;
-                            subtitleFile.LanguageTags = file.LanguageTags;
+                        var subtitleFile = ImportFile(localEpisode.Series, episodeFile, path, isReadOnly, extension, suffix);
+                        subtitleFile.Language = language;
+                        subtitleFile.LanguageTags = file.LanguageTags;
 
-                            _mediaFileAttributeService.SetFilePermissions(path);
-                            _subtitleFileService.Upsert(subtitleFile);
+                        _mediaFileAttributeService.SetFilePermissions(path);
+                        _subtitleFileService.Upsert(subtitleFile);
 
-                            importedFiles.Add(subtitleFile);
+                        importedFiles.Add(subtitleFile);
 
-                            copy++;
-                        }
+                        copy++;
                     }
                     catch (Exception ex)
                     {

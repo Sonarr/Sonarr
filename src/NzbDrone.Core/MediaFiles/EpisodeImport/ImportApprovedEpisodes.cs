@@ -107,21 +107,12 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                             break;
                     }
 
-                    var scriptImportDecisionInfo = new ScriptImportDecisionInfo
-                    {
-                        downloadClientItemInfo = downloadClientItem?.DownloadClientInfo,
-                        downloadId = downloadClientItem?.DownloadId,
-                        episodeFile = episodeFile,
-                        localEpisode = localEpisode,
-                        isEpisodeFile = true,
-                    };
-
                     if (newDownload)
                     {
                         episodeFile.SceneName = localEpisode.SceneName;
                         episodeFile.OriginalFilePath = GetOriginalFilePath(downloadClientItem, localEpisode);
 
-                        oldFiles = _episodeFileUpgrader.UpgradeEpisodeFile(episodeFile, localEpisode, scriptImportDecisionInfo, copyOnly).OldFiles;
+                        oldFiles = _episodeFileUpgrader.UpgradeEpisodeFile(episodeFile, localEpisode, copyOnly).OldFiles;
                     }
                     else
                     {
@@ -141,8 +132,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
                     if (newDownload)
                     {
-                        scriptImportDecisionInfo.isEpisodeFile = false;
-                        _extraService.ImportEpisode(localEpisode, episodeFile, scriptImportDecisionInfo, copyOnly);
+                        _extraService.ImportEpisode(localEpisode, episodeFile, copyOnly);
                     }
 
                     _eventAggregator.PublishEvent(new EpisodeImportedEvent(localEpisode, episodeFile, oldFiles, newDownload, downloadClientItem));

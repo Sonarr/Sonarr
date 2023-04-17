@@ -21,8 +21,8 @@ namespace NzbDrone.Core.MediaFiles
     {
         EpisodeFile MoveEpisodeFile(EpisodeFile episodeFile, Series series);
         EpisodeFile MoveEpisodeFile(EpisodeFile episodeFile, Series series, List<Episode> episodes);
-        EpisodeFile MoveEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode, ScriptImportDecisionInfo scriptImportDecisionInfo);
-        EpisodeFile CopyEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode, ScriptImportDecisionInfo scriptImportDecisionInfo);
+        EpisodeFile MoveEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode);
+        EpisodeFile CopyEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode);
     }
 
     public class EpisodeFileMovingService : IMoveEpisodeFiles
@@ -81,7 +81,7 @@ namespace NzbDrone.Core.MediaFiles
             return TransferFile(episodeFile, series, episodes, filePath, TransferMode.Move);
         }
 
-        public EpisodeFile MoveEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode, ScriptImportDecisionInfo scriptImportDecisionInfo)
+        public EpisodeFile MoveEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode)
         {
             var filePath = _buildFileNames.BuildFilePath(localEpisode.Episodes, localEpisode.Series, episodeFile, Path.GetExtension(localEpisode.Path));
 
@@ -89,10 +89,10 @@ namespace NzbDrone.Core.MediaFiles
 
             _logger.Debug("Moving episode file: {0} to {1}", episodeFile.Path, filePath);
 
-            return TransferFile(episodeFile, localEpisode.Series, localEpisode.Episodes, filePath, TransferMode.Move, scriptImportDecisionInfo);
+            return TransferFile(episodeFile, localEpisode.Series, localEpisode.Episodes, filePath, TransferMode.Move, localEpisode);
         }
 
-        public EpisodeFile CopyEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode, ScriptImportDecisionInfo scriptImportDecisionInfo)
+        public EpisodeFile CopyEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode)
         {
             var filePath = _buildFileNames.BuildFilePath(localEpisode.Episodes, localEpisode.Series, episodeFile, Path.GetExtension(localEpisode.Path));
 
@@ -101,15 +101,14 @@ namespace NzbDrone.Core.MediaFiles
             if (_configService.CopyUsingHardlinks)
             {
                 _logger.Debug("Hardlinking episode file: {0} to {1}", episodeFile.Path, filePath);
-                return TransferFile(episodeFile, localEpisode.Series, localEpisode.Episodes, filePath, TransferMode.HardLinkOrCopy, scriptImportDecisionInfo);
+                return TransferFile(episodeFile, localEpisode.Series, localEpisode.Episodes, filePath, TransferMode.HardLinkOrCopy, localEpisode);
             }
 
             _logger.Debug("Copying episode file: {0} to {1}", episodeFile.Path, filePath);
-            return TransferFile(episodeFile, localEpisode.Series, localEpisode.Episodes, filePath, TransferMode.Copy, scriptImportDecisionInfo);
+            return TransferFile(episodeFile, localEpisode.Series, localEpisode.Episodes, filePath, TransferMode.Copy, localEpisode);
         }
 
-        #nullable enable
-        private EpisodeFile TransferFile(EpisodeFile episodeFile, Series series, List<Episode> episodes, string destinationFilePath, TransferMode mode, ScriptImportDecisionInfo? scriptImportDecisionInfo = null)
+        private EpisodeFile TransferFile(EpisodeFile episodeFile, Series series, List<Episode> episodes, string destinationFilePath, TransferMode mode, LocalEpisode localEpisode = null)
         {
             Ensure.That(episodeFile, () => episodeFile).IsNotNull();
             Ensure.That(series, () => series).IsNotNull();
@@ -131,18 +130,16 @@ namespace NzbDrone.Core.MediaFiles
 
             episodeFile.RelativePath = series.Path.GetRelativePath(destinationFilePath);
 
-            if (scriptImportDecisionInfo is not null)
+            if (localEpisode is not null)
             {
-                scriptImportDecisionInfo.mode = mode;
-
-                var scriptImportDecision = _scriptImportDecider.TryImport(episodeFilePath, destinationFilePath, scriptImportDecisionInfo);
+                var scriptImportDecision = _scriptImportDecider.TryImport(episodeFilePath, destinationFilePath, localEpisode, mode);
 
                 switch (scriptImportDecision)
                 {
                     case ScriptImportDecision.DeferMove:
                         break;
                     case ScriptImportDecision.RenameRequested:
-                        _updateMediaInfo.Update(episodeFile, series, false);
+                        _updateMediaInfo.UpdateData(episodeFile, series);
                         episodeFile.Path = null;
                         MoveEpisodeFile(episodeFile, series, episodeFile.Episodes);
                         transfer = false;
@@ -180,7 +177,6 @@ namespace NzbDrone.Core.MediaFiles
 
             return episodeFile;
         }
-        #nullable disable
 
         private void EnsureEpisodeFolder(EpisodeFile episodeFile, LocalEpisode localEpisode, string filePath)
         {

@@ -11,7 +11,7 @@ namespace NzbDrone.Core.MediaFiles
 {
     public interface IUpgradeMediaFiles
     {
-        EpisodeFileMoveResult UpgradeEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode, ScriptImportDecisionInfo scriptImportDecisionInfo, bool copyOnly = false);
+        EpisodeFileMoveResult UpgradeEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode, bool copyOnly = false);
     }
 
     public class UpgradeMediaFileService : IUpgradeMediaFiles
@@ -35,7 +35,7 @@ namespace NzbDrone.Core.MediaFiles
             _logger = logger;
         }
 
-        public EpisodeFileMoveResult UpgradeEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode, ScriptImportDecisionInfo scriptImportDecisionInfo, bool copyOnly = false)
+        public EpisodeFileMoveResult UpgradeEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode, bool copyOnly = false)
         {
             var moveFileResult = new EpisodeFileMoveResult();
             var existingFiles = localEpisode.Episodes
@@ -69,15 +69,15 @@ namespace NzbDrone.Core.MediaFiles
                 _mediaFileService.Delete(file, DeleteMediaFileReason.Upgrade);
             }
 
-            scriptImportDecisionInfo.OldFiles = moveFileResult.OldFiles;
+            localEpisode.OldFiles = moveFileResult.OldFiles;
 
             if (copyOnly)
             {
-                moveFileResult.EpisodeFile = _episodeFileMover.CopyEpisodeFile(episodeFile, localEpisode, scriptImportDecisionInfo);
+                moveFileResult.EpisodeFile = _episodeFileMover.CopyEpisodeFile(episodeFile, localEpisode);
             }
             else
             {
-                moveFileResult.EpisodeFile = _episodeFileMover.MoveEpisodeFile(episodeFile, localEpisode, scriptImportDecisionInfo);
+                moveFileResult.EpisodeFile = _episodeFileMover.MoveEpisodeFile(episodeFile, localEpisode);
             }
 
             return moveFileResult;
