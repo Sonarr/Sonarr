@@ -69,19 +69,19 @@ namespace NzbDrone.Core.Blocklisting
         public void Block(RemoteEpisode remoteEpisode, string message)
         {
             var blocklist = new Blocklist
-                            {
-                                SeriesId = remoteEpisode.Series.Id,
-                                EpisodeIds = remoteEpisode.Episodes.Select(e => e.Id).ToList(),
-                                SourceTitle =  remoteEpisode.Release.Title,
-                                Quality = remoteEpisode.ParsedEpisodeInfo.Quality,
-                                Date = DateTime.UtcNow,
-                                PublishedDate = remoteEpisode.Release.PublishDate,
-                                Size = remoteEpisode.Release.Size,
-                                Indexer = remoteEpisode.Release.Indexer,
-                                Protocol = remoteEpisode.Release.DownloadProtocol,
-                                Message = message,
-                                Languages = remoteEpisode.ParsedEpisodeInfo.Languages
-                            };
+            {
+                SeriesId = remoteEpisode.Series.Id,
+                EpisodeIds = remoteEpisode.Episodes.Select(e => e.Id).ToList(),
+                SourceTitle = remoteEpisode.Release.Title,
+                Quality = remoteEpisode.ParsedEpisodeInfo.Quality,
+                Date = DateTime.UtcNow,
+                PublishedDate = remoteEpisode.Release.PublishDate,
+                Size = remoteEpisode.Release.Size,
+                Indexer = remoteEpisode.Release.Indexer,
+                Protocol = remoteEpisode.Release.DownloadProtocol,
+                Message = message,
+                Languages = remoteEpisode.ParsedEpisodeInfo.Languages
+            };
 
             if (remoteEpisode.Release is TorrentInfo torrentRelease)
             {
@@ -108,9 +108,7 @@ namespace NzbDrone.Core.Blocklisting
                 return true;
             }
 
-            if (!HasSameIndexer(item, release.Indexer) &&
-                HasSamePublishedDate(item, release.PublishDate) &&
-                HasSameSize(item, release.Size))
+            if (HasSameIndexer(item, release.Indexer) && HasSameSize(item, release.Size))
             {
                 return true;
             }
@@ -120,12 +118,12 @@ namespace NzbDrone.Core.Blocklisting
 
         private bool SameTorrent(Blocklist item, TorrentInfo release)
         {
-            if (release.InfoHash.IsNotNullOrWhiteSpace())
+            if (release.InfoHash.IsNotNullOrWhiteSpace() && !release.InfoHash.Equals(item.TorrentInfoHash))
             {
-                return release.InfoHash.Equals(item.TorrentInfoHash);
+                return false;
             }
 
-            return item.Indexer.Equals(release.Indexer, StringComparison.InvariantCultureIgnoreCase);
+            return HasSameIndexer(item, release.Indexer);
         }
 
         private bool HasSameIndexer(Blocklist item, string indexer)
@@ -169,20 +167,20 @@ namespace NzbDrone.Core.Blocklisting
         public void Handle(DownloadFailedEvent message)
         {
             var blocklist = new Blocklist
-                            {
-                                SeriesId = message.SeriesId,
-                                EpisodeIds = message.EpisodeIds,
-                                SourceTitle = message.SourceTitle,
-                                Quality = message.Quality,
-                                Date = DateTime.UtcNow,
-                                PublishedDate = DateTime.Parse(message.Data.GetValueOrDefault("publishedDate")),
-                                Size = long.Parse(message.Data.GetValueOrDefault("size", "0")),
-                                Indexer = message.Data.GetValueOrDefault("indexer"),
-                                Protocol = (DownloadProtocol)Convert.ToInt32(message.Data.GetValueOrDefault("protocol")),
-                                Message = message.Message,
-                                TorrentInfoHash = message.Data.GetValueOrDefault("torrentInfoHash"),
-                                Languages = message.Languages
-                            };
+            {
+                SeriesId = message.SeriesId,
+                EpisodeIds = message.EpisodeIds,
+                SourceTitle = message.SourceTitle,
+                Quality = message.Quality,
+                Date = DateTime.UtcNow,
+                PublishedDate = DateTime.Parse(message.Data.GetValueOrDefault("publishedDate")),
+                Size = long.Parse(message.Data.GetValueOrDefault("size", "0")),
+                Indexer = message.Data.GetValueOrDefault("indexer"),
+                Protocol = (DownloadProtocol)Convert.ToInt32(message.Data.GetValueOrDefault("protocol")),
+                Message = message.Message,
+                TorrentInfoHash = message.Data.GetValueOrDefault("torrentInfoHash"),
+                Languages = message.Languages
+            };
 
             _blocklistRepository.Insert(blocklist);
         }
