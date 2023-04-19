@@ -72,6 +72,10 @@
   height: 20.39px;
   vertical-align: middle;
   line-height: 20.39px;
+
+  &:hover {
+    color: var(--iconButtonHoverColor);
+  }
 }
 
 .interactiveIcon {
