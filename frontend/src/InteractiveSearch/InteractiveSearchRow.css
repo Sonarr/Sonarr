@@ -68,7 +68,8 @@
 .manualDownloadContent {
   position: relative;
   display: inline-block;
-  width: 100%;
+  margin: 0 2px;
+  width: 22px;
   height: 20.39px;
   vertical-align: middle;
   line-height: 20.39px;
