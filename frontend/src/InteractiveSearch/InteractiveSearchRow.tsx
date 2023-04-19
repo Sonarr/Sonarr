@@ -272,6 +272,7 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
         />
 
         <Link
+          className={styles.manualDownloadContent}
           title="Override and add to download queue"
           onPress={onOverridePress}
         >
