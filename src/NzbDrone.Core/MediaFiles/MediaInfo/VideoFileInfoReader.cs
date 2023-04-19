@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using FFMpegCore;
+using FFMpegCore.Enums;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
@@ -53,6 +54,11 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
             if (!_diskProvider.FileExists(filename))
             {
                 throw new FileNotFoundException("Media file does not exist: " + filename);
+            }
+
+            if (MediaFileExtensions.DiskExtensions.Contains(Path.GetExtension(filename)))
+            {
+                return null;
             }
 
             // TODO: Cache media info by path, mtime and length so we don't need to read files multiple times
