@@ -12,6 +12,7 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
     public class NewznabRequestGeneratorFixture : CoreTest<NewznabRequestGenerator>
     {
         private SingleEpisodeSearchCriteria _singleEpisodeSearchCriteria;
+        private SeasonSearchCriteria _seasonSearchCriteria;
         private AnimeEpisodeSearchCriteria _animeSearchCriteria;
         private NewznabCapabilities _capabilities;
 
@@ -32,6 +33,13 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
                 SceneTitles = new List<string> { "Monkey Island" },
                 SeasonNumber = 1,
                 EpisodeNumber = 2
+            };
+
+            _seasonSearchCriteria = new SeasonSearchCriteria
+            {
+                Series = new Tv.Series { TvRageId = 10, TvdbId = 20, TvMazeId = 30, ImdbId = "t40" },
+                SceneTitles = new List<string> { "Monkey Island" },
+                SeasonNumber = 1,
             };
 
             _animeSearchCriteria = new AnimeEpisodeSearchCriteria()
@@ -377,6 +385,28 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
             pageTier.Url.Query.Should().Contain("and");
             pageTier.Url.Query.Should().NotContain(" & ");
             pageTier.Url.Query.Should().NotContain("%26");
+        }
+
+        [Test]
+        public void should_allow_season_search_even_if_episode_search_is_not_allowed()
+        {
+            _capabilities.SupportedTvSearchParameters = new[] { "q", "tvdbid", "season" };
+
+            var results = Subject.GetSearchRequests(_seasonSearchCriteria);
+            results.GetTier(0).Should().HaveCount(1);
+
+            var page = results.GetAllTiers().First().First();
+
+            page.Url.Query.Should().Contain("tvdbid=20");
+        }
+
+        [Test]
+        public void should_not_allow_season_search_if_season_param_is_not_allowed()
+        {
+            _capabilities.SupportedTvSearchParameters = new[] { "q", "tvdbid" };
+
+            var results = Subject.GetSearchRequests(_seasonSearchCriteria);
+            results.GetTier(0).Should().HaveCount(0);
         }
     }
 }

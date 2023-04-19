@@ -28,6 +28,7 @@ namespace NzbDrone.Core.Indexers.Newznab
             PageSize = 100;
         }
 
+        // Used for anime
         private bool SupportsSearch
         {
             get
@@ -39,19 +40,19 @@ namespace NzbDrone.Core.Indexers.Newznab
             }
         }
 
-        private bool SupportsTvSearch
+        // Used for standard/daily
+        private bool SupportsTvQuerySearch
         {
             get
             {
                 var capabilities = _capabilitiesProvider.GetCapabilities(Settings);
 
                 return capabilities.SupportedTvSearchParameters != null &&
-                       capabilities.SupportedTvSearchParameters.Contains("q") &&
-                       capabilities.SupportedTvSearchParameters.Contains("season") &&
-                       capabilities.SupportedTvSearchParameters.Contains("ep");
+                       capabilities.SupportedTvSearchParameters.Contains("q");
             }
         }
 
+        // Used for standard/daily
         private bool SupportsTvTitleSearch
         {
             get
@@ -59,9 +60,16 @@ namespace NzbDrone.Core.Indexers.Newznab
                 var capabilities = _capabilitiesProvider.GetCapabilities(Settings);
 
                 return capabilities.SupportedTvSearchParameters != null &&
-                       capabilities.SupportedTvSearchParameters.Contains("title") &&
-                       capabilities.SupportedTvSearchParameters.Contains("season") &&
-                       capabilities.SupportedTvSearchParameters.Contains("ep");
+                       capabilities.SupportedTvSearchParameters.Contains("title");
+            }
+        }
+
+        // Combines 'SupportsTvQuerySearch' and 'SupportsTvTitleSearch'
+        private bool SupportsTvTextSearches
+        {
+            get
+            {
+                return SupportsTvQuerySearch || SupportsTvTitleSearch;
             }
         }
 
@@ -72,9 +80,7 @@ namespace NzbDrone.Core.Indexers.Newznab
                 var capabilities = _capabilitiesProvider.GetCapabilities(Settings);
 
                 return capabilities.SupportedTvSearchParameters != null &&
-                       capabilities.SupportedTvSearchParameters.Contains("tvdbid") &&
-                       capabilities.SupportedTvSearchParameters.Contains("season") &&
-                       capabilities.SupportedTvSearchParameters.Contains("ep");
+                       capabilities.SupportedTvSearchParameters.Contains("tvdbid");
             }
         }
 
@@ -85,9 +91,7 @@ namespace NzbDrone.Core.Indexers.Newznab
                 var capabilities = _capabilitiesProvider.GetCapabilities(Settings);
 
                 return capabilities.SupportedTvSearchParameters != null &&
-                       capabilities.SupportedTvSearchParameters.Contains("imdbid") &&
-                       capabilities.SupportedTvSearchParameters.Contains("season") &&
-                       capabilities.SupportedTvSearchParameters.Contains("ep");
+                       capabilities.SupportedTvSearchParameters.Contains("imdbid");
             }
         }
 
@@ -98,9 +102,7 @@ namespace NzbDrone.Core.Indexers.Newznab
                 var capabilities = _capabilitiesProvider.GetCapabilities(Settings);
 
                 return capabilities.SupportedTvSearchParameters != null &&
-                       capabilities.SupportedTvSearchParameters.Contains("rid") &&
-                       capabilities.SupportedTvSearchParameters.Contains("season") &&
-                       capabilities.SupportedTvSearchParameters.Contains("ep");
+                       capabilities.SupportedTvSearchParameters.Contains("rid");
             }
         }
 
@@ -111,7 +113,37 @@ namespace NzbDrone.Core.Indexers.Newznab
                 var capabilities = _capabilitiesProvider.GetCapabilities(Settings);
 
                 return capabilities.SupportedTvSearchParameters != null &&
-                       capabilities.SupportedTvSearchParameters.Contains("tvmazeid") &&
+                       capabilities.SupportedTvSearchParameters.Contains("tvmazeid");
+            }
+        }
+
+        // Combines all ID based searches
+        private bool SupportsTvIdSearches
+        {
+            get
+            {
+                return SupportsTvdbSearch || SupportsImdbSearch || SupportsTvRageSearch || SupportsTvMazeSearch;
+            }
+        }
+
+        private bool SupportsSeasonSearch
+        {
+            get
+            {
+                var capabilities = _capabilitiesProvider.GetCapabilities(Settings);
+
+                return capabilities.SupportedTvSearchParameters != null &&
+                       capabilities.SupportedTvSearchParameters.Contains("season");
+            }
+        }
+
+        private bool SupportsEpisodeSearch
+        {
+            get
+            {
+                var capabilities = _capabilitiesProvider.GetCapabilities(Settings);
+
+                return capabilities.SupportedTvSearchParameters != null &&
                        capabilities.SupportedTvSearchParameters.Contains("season") &&
                        capabilities.SupportedTvSearchParameters.Contains("ep");
             }
@@ -167,12 +199,21 @@ namespace NzbDrone.Core.Indexers.Newznab
 
         public virtual IndexerPageableRequestChain GetSearchRequests(SingleEpisodeSearchCriteria searchCriteria)
         {
-            if (!SupportsTvdbSearch && !SupportsTvSearch && !SupportsTvTitleSearch)
+            var pageableRequests = new IndexerPageableRequestChain();
+
+            if (!SupportsEpisodeSearch)
             {
                 _logger.Debug("Indexer capabilities lacking season & ep query parameters, no Standard series search possible.");
+
+                return pageableRequests;
             }
 
-            var pageableRequests = new IndexerPageableRequestChain();
+            if (!SupportsTvTextSearches && !SupportsTvIdSearches)
+            {
+                _logger.Debug("Indexer capabilities lacking q, title, tvdbid, imdbid, rid and tvmazeid parameters, no Standard series search possible.");
+
+                return pageableRequests;
+            }
 
             if (searchCriteria.SearchMode.HasFlag(SearchMode.SearchID) || searchCriteria.SearchMode == SearchMode.Default)
             {
@@ -205,12 +246,21 @@ namespace NzbDrone.Core.Indexers.Newznab
 
         public virtual IndexerPageableRequestChain GetSearchRequests(SeasonSearchCriteria searchCriteria)
         {
-            if (!SupportsTvdbSearch && !SupportsTvSearch && !SupportsTvTitleSearch)
+            var pageableRequests = new IndexerPageableRequestChain();
+
+            if (!SupportsSeasonSearch)
             {
-                _logger.Debug("Indexer capabilities lacking season & ep query parameters, no Standard series search possible.");
+                _logger.Debug("Indexer capabilities lacking season query parameter, no Standard series search possible.");
+
+                return pageableRequests;
             }
 
-            var pageableRequests = new IndexerPageableRequestChain();
+            if (!SupportsTvTextSearches && !SupportsTvIdSearches)
+            {
+                _logger.Debug("Indexer capabilities lacking q, title, tvdbid, imdbid, rid and tvmazeid parameters, no Standard series search possible.");
+
+                return pageableRequests;
+            }
 
             if (searchCriteria.SearchMode.HasFlag(SearchMode.SearchID) || searchCriteria.SearchMode == SearchMode.Default)
             {
@@ -243,12 +293,21 @@ namespace NzbDrone.Core.Indexers.Newznab
 
         public virtual IndexerPageableRequestChain GetSearchRequests(DailyEpisodeSearchCriteria searchCriteria)
         {
-            if (!SupportsTvdbSearch && !SupportsTvSearch && !SupportsTvTitleSearch)
+            var pageableRequests = new IndexerPageableRequestChain();
+
+            if (!SupportsEpisodeSearch)
             {
                 _logger.Debug("Indexer capabilities lacking season & ep query parameters, no Daily series search possible.");
+
+                return pageableRequests;
             }
 
-            var pageableRequests = new IndexerPageableRequestChain();
+            if (!SupportsTvTextSearches && !SupportsTvIdSearches)
+            {
+                _logger.Debug("Indexer capabilities lacking q, title, tvdbid, imdbid, rid and tvmazeid parameters, no Daily series search possible.");
+
+                return pageableRequests;
+            }
 
             if (searchCriteria.SearchMode.HasFlag(SearchMode.SearchID) || searchCriteria.SearchMode == SearchMode.Default)
             {
@@ -281,12 +340,21 @@ namespace NzbDrone.Core.Indexers.Newznab
 
         public virtual IndexerPageableRequestChain GetSearchRequests(DailySeasonSearchCriteria searchCriteria)
         {
-            if (!SupportsTvdbSearch && !SupportsTvSearch && !SupportsTvTitleSearch)
+            var pageableRequests = new IndexerPageableRequestChain();
+
+            if (!SupportsEpisodeSearch)
             {
-                _logger.Debug("Indexer capabilities lacking season & ep query parameters, no Daily series search possible.");
+                _logger.Debug("Indexer capabilities lacking season query parameter, no Daily series search possible.");
+
+                return pageableRequests;
             }
 
-            var pageableRequests = new IndexerPageableRequestChain();
+            if (!SupportsTvTextSearches && !SupportsTvIdSearches)
+            {
+                _logger.Debug("Indexer capabilities lacking q, title, tvdbid, imdbid, rid and tvmazeid parameters, no Daily series search possible.");
+
+                return pageableRequests;
+            }
 
             if (searchCriteria.SearchMode.HasFlag(SearchMode.SearchID) || searchCriteria.SearchMode == SearchMode.Default)
             {
@@ -453,7 +521,7 @@ namespace NzbDrone.Core.Indexers.Newznab
                         $"&title={Uri.EscapeDataString(searchTerm)}{parameters}"));
                 }
             }
-            else if (SupportsTvSearch)
+            else if (SupportsTvQuerySearch)
             {
                 var queryTitles = TvTextSearchEngine == "raw" ? searchCriteria.SceneTitles : searchCriteria.CleanSceneTitles;
                 foreach (var queryTitle in queryTitles)
