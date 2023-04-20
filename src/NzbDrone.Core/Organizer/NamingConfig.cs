@@ -8,7 +8,7 @@ namespace NzbDrone.Core.Organizer
         {
             RenameEpisodes = false,
             ReplaceIllegalCharacters = true,
-            MultiEpisodeStyle = 0,
+            MultiEpisodeStyle = 5,
             StandardEpisodeFormat = "{Series Title} - S{season:00}E{episode:00} - {Episode Title} {Quality Full}",
             DailyEpisodeFormat = "{Series Title} - {Air-Date} - {Episode Title} {Quality Full}",
             AnimeEpisodeFormat = "{Series Title} - S{season:00}E{episode:00} - {Episode Title} {Quality Full}",
