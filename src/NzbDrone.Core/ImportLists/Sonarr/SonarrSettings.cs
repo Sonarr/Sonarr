@@ -29,10 +29,10 @@ namespace NzbDrone.Core.ImportLists.Sonarr
             RootFolderPaths = Array.Empty<string>();
         }
 
-        [FieldDefinition(0, Label = "Full URL", HelpText = "URL, including port, of the Sonarr V3 instance to import from")]
+        [FieldDefinition(0, Label = "Full URL", HelpText = "URL, including port, of the Sonarr instance to import from")]
         public string BaseUrl { get; set; }
 
-        [FieldDefinition(1, Label = "API Key", HelpText = "Apikey of the Sonarr V3 instance to import from")]
+        [FieldDefinition(1, Label = "API Key", HelpText = "Apikey of the Sonarr instance to import from")]
         public string ApiKey { get; set; }
 
         [FieldDefinition(2, Type = FieldType.Select, SelectOptionsProviderAction = "getProfiles", Label = "Quality Profiles", HelpText = "Quality Profiles from the source instance to import from")]
