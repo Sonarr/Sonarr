@@ -26,6 +26,7 @@ namespace NzbDrone.Core.ImportLists.Sonarr
             ProfileIds = Array.Empty<int>();
             LanguageProfileIds = Array.Empty<int>();
             TagIds = Array.Empty<int>();
+            RootFolderPaths = Array.Empty<string>();
         }
 
         [FieldDefinition(0, Label = "Full URL", HelpText = "URL, including port, of the Sonarr V3 instance to import from")]
@@ -39,6 +40,9 @@ namespace NzbDrone.Core.ImportLists.Sonarr
 
         [FieldDefinition(3, Type = FieldType.Select, SelectOptionsProviderAction = "getLanguageProfiles", Label = "Language Profiles", HelpText = "Language Profiles from the source instance to import from")]
         public IEnumerable<int> LanguageProfileIds { get; set; }
+
+        [FieldDefinition(3, Type = FieldType.Select, SelectOptionsProviderAction = "getRootFolders", Label = "Root Folders", HelpText = "Root Folders from the source instance to import from")]
+        public IEnumerable<string> RootFolderPaths { get; set; }
 
         [FieldDefinition(4, Type = FieldType.Select, SelectOptionsProviderAction = "getTags", Label = "Tags", HelpText = "Tags from the source instance to import from")]
         public IEnumerable<int> TagIds { get; set; }

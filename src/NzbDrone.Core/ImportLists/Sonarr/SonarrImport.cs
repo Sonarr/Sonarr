@@ -41,7 +41,8 @@ namespace NzbDrone.Core.ImportLists.Sonarr
                 {
                     if ((!Settings.ProfileIds.Any() || Settings.ProfileIds.Contains(item.QualityProfileId)) &&
                         (!Settings.LanguageProfileIds.Any() || Settings.LanguageProfileIds.Contains(item.LanguageProfileId)) &&
-                        (!Settings.TagIds.Any() || Settings.TagIds.Any(tagId => item.Tags.Any(itemTagId => itemTagId == tagId))))
+                        (!Settings.TagIds.Any() || Settings.TagIds.Any(tagId => item.Tags.Any(itemTagId => itemTagId == tagId))) &&
+                        (!Settings.RootFolderPaths.Any() || Settings.RootFolderPaths.Any(rootFolderPath => item.RootFolderPath.ContainsIgnoreCase(rootFolderPath))))
                     {
                         series.Add(new ImportListItemInfo
                         {
@@ -118,6 +119,23 @@ namespace NzbDrone.Core.ImportLists.Sonarr
                             value = d.Id,
                             name = d.Label
                         })
+                };
+            }
+
+            if (action == "getRootFolders")
+            {
+                Settings.Validate().Filter("ApiKey").ThrowOnError();
+
+                var remoteRootfolders = _sonarrV3Proxy.GetRootFolders(Settings);
+
+                return new
+                {
+                    options = remoteRootfolders.OrderBy(d => d.Path, StringComparer.InvariantCultureIgnoreCase)
+                                               .Select(d => new
+                                               {
+                                                   value = d.Path,
+                                                   name = d.Path
+                                               })
                 };
             }
 
