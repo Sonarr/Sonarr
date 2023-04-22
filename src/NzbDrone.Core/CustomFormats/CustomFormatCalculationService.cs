@@ -107,7 +107,7 @@ namespace NzbDrone.Core.CustomFormats
             var episodeInfo = new ParsedEpisodeInfo
             {
                 SeriesTitle = localEpisode.Series.Title,
-                ReleaseTitle = Path.GetFileName(localEpisode.Path),
+                ReleaseTitle = localEpisode.SceneName.IsNotNullOrWhiteSpace() ? localEpisode.SceneName : Path.GetFileName(localEpisode.Path),,
                 Quality = localEpisode.Quality,
                 Languages = localEpisode.Languages,
                 ReleaseGroup = localEpisode.ReleaseGroup
@@ -157,17 +157,17 @@ namespace NzbDrone.Core.CustomFormats
         {
             var releaseTitle = string.Empty;
 
-            if (episodeFile.SceneName.IsNotNullOrWhiteSpace())
+            if (episodeFile.RelativePath.IsNotNullOrWhiteSpace())
+            {
+                releaseTitle = Path.GetFileName(episodeFile.RelativePath);
+            }
+            else if (episodeFile.SceneName.IsNotNullOrWhiteSpace())
             {
                 releaseTitle = episodeFile.SceneName;
             }
             else if (episodeFile.OriginalFilePath.IsNotNullOrWhiteSpace())
             {
                 releaseTitle = Path.GetFileName(episodeFile.OriginalFilePath);
-            }
-            else if (episodeFile.RelativePath.IsNotNullOrWhiteSpace())
-            {
-                releaseTitle = Path.GetFileName(episodeFile.RelativePath);
             }
 
             var episodeInfo = new ParsedEpisodeInfo
