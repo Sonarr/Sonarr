@@ -39,17 +39,31 @@ namespace NzbDrone.Core.ImportLists.Sonarr
 
                 foreach (var item in remoteSeries)
                 {
-                    if ((!Settings.ProfileIds.Any() || Settings.ProfileIds.Contains(item.QualityProfileId)) &&
-                        (!Settings.LanguageProfileIds.Any() || Settings.LanguageProfileIds.Contains(item.LanguageProfileId)) &&
-                        (!Settings.TagIds.Any() || Settings.TagIds.Any(tagId => item.Tags.Any(itemTagId => itemTagId == tagId))) &&
-                        (!Settings.RootFolderPaths.Any() || Settings.RootFolderPaths.Any(rootFolderPath => item.RootFolderPath.ContainsIgnoreCase(rootFolderPath))))
+                    if (Settings.ProfileIds.Any() && !Settings.ProfileIds.Contains(item.QualityProfileId))
                     {
-                        series.Add(new ImportListItemInfo
-                        {
-                            TvdbId = item.TvdbId,
-                            Title = item.Title
-                        });
+                        continue;
                     }
+
+                    if (Settings.LanguageProfileIds.Any() && !Settings.LanguageProfileIds.Contains(item.LanguageProfileId))
+                    {
+                        continue;
+                    }
+
+                    if (Settings.TagIds.Any() && !Settings.TagIds.Any(tagId => item.Tags.Any(itemTagId => itemTagId == tagId)))
+                    {
+                        continue;
+                    }
+
+                    if (Settings.RootFolderPaths.Any() && !Settings.RootFolderPaths.Any(rootFolderPath => item.RootFolderPath.ContainsIgnoreCase(rootFolderPath)))
+                    {
+                        continue;
+                    }
+
+                    series.Add(new ImportListItemInfo
+                    {
+                        TvdbId = item.TvdbId,
+                        Title = item.Title
+                    });
                 }
 
                 _importListStatusService.RecordSuccess(Definition.Id);
