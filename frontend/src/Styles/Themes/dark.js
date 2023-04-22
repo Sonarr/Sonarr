@@ -96,27 +96,27 @@ module.exports = {
   defaultBackgroundColor: '#333',
   defaultBorderColor: '#eaeaea',
   defaultHoverBackgroundColor: '#444',
-  defaultHoverBorderColor: '#d6d6d6;',
+  defaultHoverBorderColor: '#d6d6d6',
 
   primaryBackgroundColor: '#5d9cec',
   primaryBorderColor: '#5899eb',
   primaryHoverBackgroundColor: '#4b91ea',
-  primaryHoverBorderColor: '#3483e7;',
+  primaryHoverBorderColor: '#3483e7',
 
   successBackgroundColor: '#27c24c',
   successBorderColor: '#26be4a',
   successHoverBackgroundColor: '#24b145',
-  successHoverBorderColor: '#1f9c3d;',
+  successHoverBorderColor: '#1f9c3d',
 
   warningBackgroundColor: '#ff902b',
   warningBorderColor: '#ff8d26',
   warningHoverBackgroundColor: '#ff8517',
-  warningHoverBorderColor: '#fc7800;',
+  warningHoverBorderColor: '#fc7800',
 
   dangerBackgroundColor: '#f05050',
   dangerBorderColor: '#f04b4b',
   dangerHoverBackgroundColor: '#ee3d3d',
-  dangerHoverBorderColor: '#ec2626;',
+  dangerHoverBorderColor: '#ec2626',
 
   iconButtonDisabledColor: '#7a7a7a',
   iconButtonHoverColor: '#666',
