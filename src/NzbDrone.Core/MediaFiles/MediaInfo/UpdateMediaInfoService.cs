@@ -12,8 +12,8 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
 {
     public interface IUpdateMediaInfo
     {
-        bool UpdateData(EpisodeFile episodeFile, Series series);
         bool Update(EpisodeFile episodeFile, Series series);
+        bool UpdateMediaInfo(EpisodeFile episodeFile, Series series);
     }
 
     public class UpdateMediaInfoService : IUpdateMediaInfo, IHandle<SeriesScannedEvent>
@@ -52,46 +52,25 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
 
             foreach (var mediaFile in filteredMediaFiles)
             {
-                UpdateData(mediaFile, message.Series);
+                UpdateMediaInfo(mediaFile, message.Series);
             }
-        }
-
-        public bool UpdateData(EpisodeFile episodeFile, Series series)
-        {
-            var path = Path.Combine(series.Path, episodeFile.RelativePath);
-
-            if (!_configService.EnableMediaInfo)
-            {
-                _logger.Debug("MediaInfo is disabled");
-                return false;
-            }
-
-            return UpdateMediaInfo(episodeFile, series, path);
         }
 
         public bool Update(EpisodeFile episodeFile, Series series)
         {
-            var path = Path.Combine(series.Path, episodeFile.RelativePath);
-
             if (!_configService.EnableMediaInfo)
             {
                 _logger.Debug("MediaInfo is disabled");
                 return false;
             }
 
-            bool result = UpdateMediaInfo(episodeFile, series, path);
-
-            if (result)
-            {
-                _mediaFileService.Update(episodeFile);
-                _logger.Debug("Updated MediaInfo for '{0}'", path);
-            }
-
-            return result;
+            return UpdateMediaInfo(episodeFile, series);
         }
 
-        private bool UpdateMediaInfo(EpisodeFile episodeFile, Series series, string path)
+        public bool UpdateMediaInfo(EpisodeFile episodeFile, Series series)
         {
+            var path = Path.Combine(series.Path, episodeFile.RelativePath);
+
             if (!_diskProvider.FileExists(path))
             {
                 _logger.Debug("Can't update MediaInfo because '{0}' does not exist", path);
@@ -106,6 +85,8 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
             }
 
             episodeFile.MediaInfo = updatedMediaInfo;
+            _mediaFileService.Update(episodeFile);
+            _logger.Debug("Updated MediaInfo for '{0}'", path);
 
             return true;
         }

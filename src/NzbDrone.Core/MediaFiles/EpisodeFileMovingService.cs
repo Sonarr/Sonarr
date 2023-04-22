@@ -29,7 +29,6 @@ namespace NzbDrone.Core.MediaFiles
     {
         private readonly IEpisodeService _episodeService;
         private readonly IUpdateEpisodeFileService _updateEpisodeFileService;
-        private readonly IUpdateMediaInfo _updateMediaInfo;
         private readonly IBuildFileNames _buildFileNames;
         private readonly IDiskTransferService _diskTransferService;
         private readonly IDiskProvider _diskProvider;
@@ -41,7 +40,6 @@ namespace NzbDrone.Core.MediaFiles
 
         public EpisodeFileMovingService(IEpisodeService episodeService,
                                 IUpdateEpisodeFileService updateEpisodeFileService,
-                                IUpdateMediaInfo updateMediaInfo,
                                 IBuildFileNames buildFileNames,
                                 IDiskTransferService diskTransferService,
                                 IDiskProvider diskProvider,
@@ -53,7 +51,6 @@ namespace NzbDrone.Core.MediaFiles
         {
             _episodeService = episodeService;
             _updateEpisodeFileService = updateEpisodeFileService;
-            _updateMediaInfo = updateMediaInfo;
             _buildFileNames = buildFileNames;
             _diskTransferService = diskTransferService;
             _diskProvider = diskProvider;
@@ -126,20 +123,19 @@ namespace NzbDrone.Core.MediaFiles
                 throw new SameFilenameException("File not moved, source and destination are the same", episodeFilePath);
             }
 
-            bool transfer = true;
+            var transfer = true;
 
             episodeFile.RelativePath = series.Path.GetRelativePath(destinationFilePath);
 
             if (localEpisode is not null)
             {
-                var scriptImportDecision = _scriptImportDecider.TryImport(episodeFilePath, destinationFilePath, localEpisode, mode);
+                var scriptImportDecision = _scriptImportDecider.TryImport(episodeFilePath, destinationFilePath, localEpisode, episodeFile, mode);
 
                 switch (scriptImportDecision)
                 {
                     case ScriptImportDecision.DeferMove:
                         break;
                     case ScriptImportDecision.RenameRequested:
-                        _updateMediaInfo.UpdateData(episodeFile, series);
                         episodeFile.Path = null;
                         MoveEpisodeFile(episodeFile, series, episodeFile.Episodes);
                         transfer = false;

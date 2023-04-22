@@ -15,38 +15,31 @@ namespace NzbDrone.Core.MediaFiles
 {
     public interface IScriptImportDecider
     {
-        public ScriptImportDecision TryImport(string sourcePath, string destinationFilePath, LocalEpisode localEpisode, TransferMode mode);
+        public ScriptImportDecision TryImport(string sourcePath, string destinationFilePath, LocalEpisode localEpisode, EpisodeFile episodeFile, TransferMode mode);
     }
 
     public class ScriptImportDecider : IScriptImportDecider
     {
         private readonly IConfigFileProvider _configFileProvider;
+        private readonly IUpdateMediaInfo _updateMediaInfo;
         private readonly IProcessProvider _processProvider;
         private readonly IConfigService _configService;
         private readonly Logger _logger;
 
         public ScriptImportDecider(IProcessProvider processProvider,
+                                   IUpdateMediaInfo updateMediaInfo,
                                    IConfigService configService,
                                    IConfigFileProvider configFileProvider,
                                    Logger logger)
         {
             _processProvider = processProvider;
+            _updateMediaInfo = updateMediaInfo;
             _configService = configService;
             _configFileProvider = configFileProvider;
             _logger = logger;
         }
 
-        private void oldFilesInfo(StringDictionary environmentVariables, List<EpisodeFile> oldFiles, Series series)
-        {
-            if (oldFiles.Any())
-            {
-                environmentVariables.Add("Sonarr_DeletedRelativePaths", string.Join("|", oldFiles.Select(e => e.RelativePath)));
-                environmentVariables.Add("Sonarr_DeletedPaths", string.Join("|", oldFiles.Select(e => Path.Combine(series.Path, e.RelativePath))));
-                environmentVariables.Add("Sonarr_DeletedDateAdded", string.Join("|", oldFiles.Select(e => e.DateAdded)));
-            }
-        }
-
-        public ScriptImportDecision TryImport(string sourcePath, string destinationFilePath, LocalEpisode localEpisode, TransferMode mode)
+        public ScriptImportDecision TryImport(string sourcePath, string destinationFilePath, LocalEpisode localEpisode, EpisodeFile episodeFile, TransferMode mode)
         {
             var series = localEpisode.Series;
             var oldFiles = localEpisode.OldFiles;
@@ -103,7 +96,12 @@ namespace NzbDrone.Core.MediaFiles
             environmentVariables.Add("Sonarr_EpisodeFile_CustomFormat", string.Join("|", localEpisode.CustomFormats));
             environmentVariables.Add("Sonarr_EpisodeFile_CustomFormatScore", localEpisode.CustomFormatScore.ToString());
 
-            oldFilesInfo(environmentVariables, oldFiles, series);
+            if (oldFiles.Any())
+            {
+                environmentVariables.Add("Sonarr_DeletedRelativePaths", string.Join("|", oldFiles.Select(e => e.RelativePath)));
+                environmentVariables.Add("Sonarr_DeletedPaths", string.Join("|", oldFiles.Select(e => Path.Combine(series.Path, e.RelativePath))));
+                environmentVariables.Add("Sonarr_DeletedDateAdded", string.Join("|", oldFiles.Select(e => e.DateAdded)));
+            }
 
             _logger.Debug("Executing external script: {0}", _configService.ScriptImportPath);
 
@@ -114,14 +112,15 @@ namespace NzbDrone.Core.MediaFiles
 
             switch (processOutput.ExitCode)
             {
-            case 0: // Copy complete
-                return ScriptImportDecision.MoveComplete;
-            case 2: // Copy complete, file potentially changed, should try renaming again
-                return ScriptImportDecision.RenameRequested;
-            case 3: // Let Sonarr handle it
-                return ScriptImportDecision.DeferMove;
-            default: // Error, fail to import
-                throw new ScriptImportException("Moving with script failed! Exit code {0}", processOutput.ExitCode);
+                case 0: // Copy complete
+                    return ScriptImportDecision.MoveComplete;
+                case 2: // Copy complete, file potentially changed, should try renaming again
+                    _updateMediaInfo.UpdateMediaInfo(episodeFile, series);
+                    return ScriptImportDecision.RenameRequested;
+                case 3: // Let Sonarr handle it
+                    return ScriptImportDecision.DeferMove;
+                default: // Error, fail to import
+                    throw new ScriptImportException("Moving with script failed! Exit code {0}", processOutput.ExitCode);
             }
         }
     }
