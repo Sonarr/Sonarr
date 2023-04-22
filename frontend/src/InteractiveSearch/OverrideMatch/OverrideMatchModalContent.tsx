@@ -11,6 +11,7 @@ import ModalHeader from 'Components/Modal/ModalHeader';
 import DownloadProtocol from 'DownloadClient/DownloadProtocol';
 import EpisodeLanguages from 'Episode/EpisodeLanguages';
 import EpisodeQuality from 'Episode/EpisodeQuality';
+import usePrevious from 'Helpers/Hooks/usePrevious';
 import SelectEpisodeModal from 'InteractiveImport/Episode/SelectEpisodeModal';
 import { SelectedEpisode } from 'InteractiveImport/Episode/SelectEpisodeModalContent';
 import SelectLanguageModal from 'InteractiveImport/Language/SelectLanguageModal';
@@ -76,6 +77,7 @@ function OverrideMatchModalContent(props: OverrideMatchModalContentProps) {
   const [selectModalOpen, setSelectModalOpen] = useState<SelectType | null>(
     null
   );
+  const previousIsGrabbing = usePrevious(isGrabbing);
 
   const dispatch = useDispatch();
   const series: Series | undefined = useSelector(
@@ -219,6 +221,12 @@ function OverrideMatchModalContent(props: OverrideMatchModalContentProps) {
     setError,
     dispatch,
   ]);
+
+  useEffect(() => {
+    if (!isGrabbing && previousIsGrabbing) {
+      onModalClose();
+    }
+  }, [isGrabbing, previousIsGrabbing, onModalClose]);
 
   useEffect(
     () => {
