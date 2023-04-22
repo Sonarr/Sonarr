@@ -161,13 +161,13 @@ namespace NzbDrone.Core.CustomFormats
             {
                 releaseTitle = Path.GetFileName(episodeFile.RelativePath);
             }
-            else if (episodeFile.SceneName.IsNotNullOrWhiteSpace())
-            {
-                releaseTitle = episodeFile.SceneName;
-            }
             else if (episodeFile.OriginalFilePath.IsNotNullOrWhiteSpace())
             {
                 releaseTitle = Path.GetFileName(episodeFile.OriginalFilePath);
+            }
+            else if (episodeFile.SceneName.IsNotNullOrWhiteSpace())
+            {
+                releaseTitle = episodeFile.SceneName;
             }
 
             var episodeInfo = new ParsedEpisodeInfo
