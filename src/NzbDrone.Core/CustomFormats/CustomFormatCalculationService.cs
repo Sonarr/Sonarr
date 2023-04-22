@@ -107,7 +107,7 @@ namespace NzbDrone.Core.CustomFormats
             var episodeInfo = new ParsedEpisodeInfo
             {
                 SeriesTitle = localEpisode.Series.Title,
-                ReleaseTitle = localEpisode.SceneName.IsNotNullOrWhiteSpace() ? localEpisode.SceneName : Path.GetFileName(localEpisode.Path),
+                ReleaseTitle = Path.GetFileName(localEpisode.Path),
                 Quality = localEpisode.Quality,
                 Languages = localEpisode.Languages,
                 ReleaseGroup = localEpisode.ReleaseGroup
