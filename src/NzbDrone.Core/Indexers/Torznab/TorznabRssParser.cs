@@ -4,6 +4,8 @@ using System.Linq;
 using System.Xml.Linq;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Indexers.Exceptions;
+using NzbDrone.Core.Languages;
+using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Indexers.Torznab
@@ -90,6 +92,30 @@ namespace NzbDrone.Core.Indexers.Torznab
         protected override string GetCommentUrl(XElement item)
         {
             return ParseUrl(item.TryGetValue("comments"));
+        }
+
+        protected override List<Language> GetLanguages(XElement item)
+        {
+            var languges = TryGetMultipleTorznabAttributes(item, "language");
+            var results = new List<Language>();
+
+            // Try to find <language> elements for some indexers that suck at following the rules.
+            if (languges.Count == 0)
+            {
+                languges = item.Elements("language").Select(e => e.Value).ToList();
+            }
+
+            foreach (var language in languges)
+            {
+                var mappedLanguage = IsoLanguages.FindByName(language)?.Language ?? null;
+
+                if (mappedLanguage != null)
+                {
+                    results.Add(mappedLanguage);
+                }
+            }
+
+            return results;
         }
 
         protected override long GetSize(XElement item)
@@ -205,6 +231,23 @@ namespace NzbDrone.Core.Indexers.Torznab
             }
 
             return defaultValue;
+        }
+
+        protected List<string> TryGetMultipleTorznabAttributes(XElement item, string key)
+        {
+            var attrElements = item.Elements(ns + "attr").Where(e => e.Attribute("name").Value.Equals(key, StringComparison.OrdinalIgnoreCase));
+            var results = new List<string>();
+
+            foreach (var element in attrElements)
+            {
+                var attrValue = element.Attribute("value");
+                if (attrValue != null)
+                {
+                    results.Add(attrValue.Value);
+                }
+            }
+
+            return results;
         }
     }
 }

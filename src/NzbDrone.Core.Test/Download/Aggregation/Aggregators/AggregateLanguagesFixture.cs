@@ -32,6 +32,7 @@ namespace NzbDrone.Core.Test.Download.Aggregation.Aggregators
                                                  .With(l => l.ParsedEpisodeInfo = null)
                                                  .With(l => l.Episodes = episodes)
                                                  .With(l => l.Series = _series)
+                                                 .With(l => l.Release = new ReleaseInfo())
                                                  .Build();
         }
 

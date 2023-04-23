@@ -20,6 +20,7 @@ namespace NzbDrone.Core.Download.Aggregation.Aggregators
         public RemoteEpisode Aggregate(RemoteEpisode remoteEpisode)
         {
             var parsedEpisodeInfo = remoteEpisode.ParsedEpisodeInfo;
+            var releaseInfo = remoteEpisode.Release;
             var languages = parsedEpisodeInfo.Languages;
             var series = remoteEpisode.Series;
             var releaseTokens = parsedEpisodeInfo.ReleaseTokens ?? parsedEpisodeInfo.ReleaseTitle;
@@ -31,33 +32,45 @@ namespace NzbDrone.Core.Download.Aggregation.Aggregators
                 _logger.Debug("Unable to aggregate languages, using parsed values: {0}", string.Join(", ", languages.ToList()));
 
                 remoteEpisode.Languages = languages;
+                remoteEpisode.Languages = releaseInfo != null && releaseInfo.Languages.Any() ? releaseInfo.Languages : languages;
 
                 return remoteEpisode;
             }
 
-            // Exclude any languages that are part of the episode title, if the episode title is in the release tokens (falls back to release title)
-            foreach (var episode in remoteEpisode.Episodes)
+            if (releaseInfo != null && releaseInfo.Languages.Any())
             {
-                var episodeTitleLanguage = LanguageParser.ParseLanguages(episode.Title);
+                _logger.Debug("Languages provided by indexer, using release values: {0}", string.Join(", ", releaseInfo.Languages));
 
-                if (!episodeTitleLanguage.Contains(Language.Unknown))
+                // Use languages from release (given by indexer or user) if available
+                languages = releaseInfo.Languages;
+            }
+            else
+            {
+                // Exclude any languages that are part of the episode title, if the episode title is in the release tokens (falls back to release title)
+                foreach (var episode in remoteEpisode.Episodes)
                 {
-                    var normalizedEpisodeTitle = Parser.Parser.NormalizeEpisodeTitle(episode.Title);
-                    var episodeTitleIndex = normalizedReleaseTokens.IndexOf(normalizedEpisodeTitle, StringComparison.CurrentCultureIgnoreCase);
+                    var episodeTitleLanguage = LanguageParser.ParseLanguages(episode.Title);
 
-                    if (episodeTitleIndex >= 0)
+                    if (!episodeTitleLanguage.Contains(Language.Unknown))
                     {
-                        releaseTokens = releaseTokens.Remove(episodeTitleIndex, normalizedEpisodeTitle.Length);
-                        languagesToRemove.AddRange(episodeTitleLanguage);
+                        var normalizedEpisodeTitle = Parser.Parser.NormalizeEpisodeTitle(episode.Title);
+                        var episodeTitleIndex = normalizedReleaseTokens.IndexOf(normalizedEpisodeTitle,
+                            StringComparison.CurrentCultureIgnoreCase);
+
+                        if (episodeTitleIndex >= 0)
+                        {
+                            releaseTokens = releaseTokens.Remove(episodeTitleIndex, normalizedEpisodeTitle.Length);
+                            languagesToRemove.AddRange(episodeTitleLanguage);
+                        }
                     }
                 }
+
+                // Remove any languages still in the title that would normally be removed
+                languagesToRemove = languagesToRemove.Except(LanguageParser.ParseLanguages(releaseTokens)).ToList();
+
+                // Remove all languages that aren't part of the updated releaseTokens
+                languages = languages.Except(languagesToRemove).ToList();
             }
-
-            // Remove any languages still in the title that would normally be removed
-            languagesToRemove = languagesToRemove.Except(LanguageParser.ParseLanguages(releaseTokens)).ToList();
-
-            // Remove all languages that aren't part of the updated releaseTokens
-            languages = languages.Except(languagesToRemove).ToList();
 
             // Use series language as fallback if we couldn't parse a language
             if (languages.Count == 0 || (languages.Count == 1 && languages.First() == Language.Unknown))
