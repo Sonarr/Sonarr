@@ -30,6 +30,7 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
                     .Build();
 
             _namingConfig = NamingConfig.Default;
+            _namingConfig.MultiEpisodeStyle = 0;
             _namingConfig.RenameEpisodes = true;
 
             Mocker.GetMock<INamingConfigService>()
