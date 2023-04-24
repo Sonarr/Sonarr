@@ -120,6 +120,7 @@ class Naming extends Component {
     } = this.state;
 
     const renameEpisodes = hasSettings && settings.renameEpisodes.value;
+    const replaceIllegalCharacters = hasSettings && settings.replaceIllegalCharacters.value;
 
     const multiEpisodeStyleOptions = [
       { key: 0, value: 'Extend', hint: 'S01E01-02-03' },
@@ -128,6 +129,14 @@ class Naming extends Component {
       { key: 3, value: 'Scene', hint: 'S01E01-E02-E03' },
       { key: 4, value: 'Range', hint: 'S01E01-03' },
       { key: 5, value: 'Prefixed Range', hint: 'S01E01-E03' }
+    ];
+
+    const colonReplacementOptions = [
+      { key: 0, value: 'Delete' },
+      { key: 1, value: 'Replace with Dash' },
+      { key: 2, value: 'Replace with Space Dash' },
+      { key: 3, value: 'Replace with Space Dash Space' },
+      { key: 4, value: 'Smart Replace', hint: 'Dash or Space Dash depending on name' }
     ];
 
     const standardEpisodeFormatHelpTexts = [];
@@ -231,6 +240,22 @@ class Naming extends Component {
                   {...settings.replaceIllegalCharacters}
                 />
               </FormGroup>
+
+              {
+                replaceIllegalCharacters ?
+                  <FormGroup>
+                    <FormLabel>Colon Replacement</FormLabel>
+
+                    <FormInputGroup
+                      type={inputTypes.SELECT}
+                      name="colonReplacementFormat"
+                      values={colonReplacementOptions}
+                      onChange={onInputChange}
+                      {...settings.colonReplacementFormat}
+                    />
+                  </FormGroup> :
+                  null
+              }
 
               {
                 renameEpisodes &&

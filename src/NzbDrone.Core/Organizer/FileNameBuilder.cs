@@ -377,30 +377,17 @@ namespace NzbDrone.Core.Organizer
             return title;
         }
 
-        public static string CleanFileName(string name, bool replace = true)
+        public static string CleanFileName(string name)
         {
-            string result = name;
-            string[] badCharacters = { "\\", "/", "<", ">", "?", "*", ":", "|", "\"" };
-            string[] goodCharacters = { "+", "+", "", "", "!", "-", "-", "", "" };
-
-            // Replace a colon followed by a space with space dash space for a better appearance
-            if (replace)
-            {
-                result = result.Replace(": ", " - ");
-            }
-
-            for (int i = 0; i < badCharacters.Length; i++)
-            {
-                result = result.Replace(badCharacters[i], replace ? goodCharacters[i] : string.Empty);
-            }
-
-            return result.TrimStart(' ', '.').TrimEnd(' ');
+            return CleanFileName(name, NamingConfig.Default);
         }
 
         public static string CleanFolderName(string name)
         {
             name = FileNameCleanupRegex.Replace(name, match => match.Captures[0].Value[0].ToString());
-            return name.Trim(' ', '.');
+            name = name.Trim(' ', '.');
+
+            return CleanFileName(name);
         }
 
         public bool RequiresEpisodeTitle(Series series, List<Episode> episodes)
@@ -867,7 +854,7 @@ namespace NzbDrone.Core.Organizer
                 replacementText = replacementText.Replace(" ", tokenMatch.Separator);
             }
 
-            replacementText = CleanFileName(replacementText, namingConfig.ReplaceIllegalCharacters);
+            replacementText = CleanFileName(replacementText, namingConfig);
 
             if (!replacementText.IsNullOrWhiteSpace())
             {
@@ -1117,6 +1104,53 @@ namespace NzbDrone.Core.Organizer
             // Replace reserved windows device names with an alternative
             return ReservedDeviceNamesRegex.Replace(input, match => match.Value.Replace(".", "_"));
         }
+
+        private static string CleanFileName(string name, NamingConfig namingConfig)
+        {
+            var result = name;
+            string[] badCharacters = { "\\", "/", "<", ">", "?", "*", "|", "\"" };
+            string[] goodCharacters = { "+", "+", "", "", "!", "-", "", "" };
+
+            if (namingConfig.ReplaceIllegalCharacters)
+            {
+                // Smart replaces a colon followed by a space with space dash space for a better appearance
+                if (namingConfig.ColonReplacementFormat == ColonReplacementFormat.Smart)
+                {
+                    result = result.Replace(": ", " - ");
+                    result = result.Replace(":", "-");
+                }
+                else
+                {
+                    var replacement = string.Empty;
+
+                    switch (namingConfig.ColonReplacementFormat)
+                    {
+                        case ColonReplacementFormat.Dash:
+                            replacement = "-";
+                            break;
+                        case ColonReplacementFormat.SpaceDash:
+                            replacement = " -";
+                            break;
+                        case ColonReplacementFormat.SpaceDashSpace:
+                            replacement = " - ";
+                            break;
+                    }
+
+                    result = result.Replace(":", replacement);
+                }
+            }
+            else
+            {
+                result = result.Replace(":", string.Empty);
+            }
+
+            for (var i = 0; i < badCharacters.Length; i++)
+            {
+                result = result.Replace(badCharacters[i], namingConfig.ReplaceIllegalCharacters ? goodCharacters[i] : string.Empty);
+            }
+
+            return result.TrimStart(' ', '.').TrimEnd(' ');
+        }
     }
 
     internal sealed class TokenMatch
@@ -1149,5 +1183,14 @@ namespace NzbDrone.Core.Organizer
         Scene = 3,
         Range = 4,
         PrefixedRange = 5
+    }
+
+    public enum ColonReplacementFormat
+    {
+        Delete = 0,
+        Dash = 1,
+        SpaceDash = 2,
+        SpaceDashSpace = 3,
+        Smart = 4
     }
 }

@@ -1,4 +1,4 @@
-﻿using Sonarr.Http.REST;
+using Sonarr.Http.REST;
 
 namespace Sonarr.Api.V3.Config
 {
@@ -6,6 +6,7 @@ namespace Sonarr.Api.V3.Config
     {
         public bool RenameEpisodes { get; set; }
         public bool ReplaceIllegalCharacters { get; set; }
+        public int ColonReplacementFormat { get; set; }
         public int MultiEpisodeStyle { get; set; }
         public string StandardEpisodeFormat { get; set; }
         public string DailyEpisodeFormat { get; set; }

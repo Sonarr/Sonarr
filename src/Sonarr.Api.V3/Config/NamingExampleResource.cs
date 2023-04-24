@@ -24,6 +24,7 @@ namespace Sonarr.Api.V3.Config
 
                 RenameEpisodes = model.RenameEpisodes,
                 ReplaceIllegalCharacters = model.ReplaceIllegalCharacters,
+                ColonReplacementFormat = (int)model.ColonReplacementFormat,
                 MultiEpisodeStyle = (int)model.MultiEpisodeStyle,
                 StandardEpisodeFormat = model.StandardEpisodeFormat,
                 DailyEpisodeFormat = model.DailyEpisodeFormat,
@@ -60,6 +61,7 @@ namespace Sonarr.Api.V3.Config
                 RenameEpisodes = resource.RenameEpisodes,
                 ReplaceIllegalCharacters = resource.ReplaceIllegalCharacters,
                 MultiEpisodeStyle = (MultiEpisodeStyle)resource.MultiEpisodeStyle,
+                ColonReplacementFormat = (ColonReplacementFormat)resource.ColonReplacementFormat,
                 StandardEpisodeFormat = resource.StandardEpisodeFormat,
                 DailyEpisodeFormat = resource.DailyEpisodeFormat,
                 AnimeEpisodeFormat = resource.AnimeEpisodeFormat,
