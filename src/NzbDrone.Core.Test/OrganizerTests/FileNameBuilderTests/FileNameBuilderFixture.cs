@@ -386,7 +386,7 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
         public void should_trim_periods_from_end_of_episode_title()
         {
             _namingConfig.StandardEpisodeFormat = "{Series Title} - S{season:00}E{episode:00} - {Episode Title}";
-            _namingConfig.MultiEpisodeStyle = 3;
+            _namingConfig.MultiEpisodeStyle = MultiEpisodeStyle.Scene;
 
             var episode = Builder<Episode>.CreateNew()
                             .With(e => e.Title = "Part 1.")
@@ -402,7 +402,7 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
         public void should_trim_question_marks_from_end_of_episode_title()
         {
             _namingConfig.StandardEpisodeFormat = "{Series Title} - S{season:00}E{episode:00} - {Episode Title}";
-            _namingConfig.MultiEpisodeStyle = 3;
+            _namingConfig.MultiEpisodeStyle = MultiEpisodeStyle.Scene;
 
             var episode = Builder<Episode>.CreateNew()
                             .With(e => e.Title = "Part 1?")
