@@ -385,9 +385,8 @@ namespace NzbDrone.Core.Organizer
         public static string CleanFolderName(string name)
         {
             name = FileNameCleanupRegex.Replace(name, match => match.Captures[0].Value[0].ToString());
-            name = name.Trim(' ', '.');
 
-            return CleanFileName(name);
+            return name.Trim(' ', '.');
         }
 
         public bool RequiresEpisodeTitle(Series series, List<Episode> episodes)
