@@ -234,7 +234,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.UTorrentTests
 
             var remoteEpisode = CreateRemoteEpisode();
 
-            var id = Subject.Download(remoteEpisode);
+            var id = Subject.Download(remoteEpisode, CreateIndexer());
 
             id.Should().NotBeNullOrEmpty();
         }
@@ -259,7 +259,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.UTorrentTests
             var remoteEpisode = CreateRemoteEpisode();
             remoteEpisode.Release.DownloadUrl = magnetUrl;
 
-            var id = Subject.Download(remoteEpisode);
+            var id = Subject.Download(remoteEpisode, CreateIndexer());
 
             id.Should().Be(expectedHash);
         }
@@ -357,7 +357,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.UTorrentTests
 
             var remoteEpisode = CreateRemoteEpisode();
 
-            var id = Subject.Download(remoteEpisode);
+            var id = Subject.Download(remoteEpisode, CreateIndexer());
 
             id.Should().NotBeNullOrEmpty();
         }
@@ -370,7 +370,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.UTorrentTests
 
             var remoteEpisode = CreateRemoteEpisode();
 
-            var id = Subject.Download(remoteEpisode);
+            var id = Subject.Download(remoteEpisode, CreateIndexer());
 
             id.Should().NotBeNullOrEmpty();
         }

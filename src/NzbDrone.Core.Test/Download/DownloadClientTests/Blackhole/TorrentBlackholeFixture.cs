@@ -147,7 +147,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
         {
             var remoteEpisode = CreateRemoteEpisode();
 
-            Subject.Download(remoteEpisode);
+            Subject.Download(remoteEpisode, CreateIndexer());
 
             Mocker.GetMock<IHttpClient>().Verify(c => c.Get(It.Is<HttpRequest>(v => v.Url.FullUri == _downloadUrl)), Times.Once());
             Mocker.GetMock<IDiskProvider>().Verify(c => c.OpenWriteStream(_filePath), Times.Once());
@@ -163,7 +163,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
             var remoteEpisode = CreateRemoteEpisode();
             remoteEpisode.Release.DownloadUrl = null;
 
-            Subject.Download(remoteEpisode);
+            Subject.Download(remoteEpisode, CreateIndexer());
 
             Mocker.GetMock<IHttpClient>().Verify(c => c.Get(It.Is<HttpRequest>(v => v.Url.FullUri == _downloadUrl)), Times.Never());
             Mocker.GetMock<IDiskProvider>().Verify(c => c.OpenWriteStream(_filePath), Times.Never());
@@ -182,7 +182,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
             var remoteEpisode = CreateRemoteEpisode();
             remoteEpisode.Release.DownloadUrl = null;
 
-            Subject.Download(remoteEpisode);
+            Subject.Download(remoteEpisode, CreateIndexer());
 
             Mocker.GetMock<IHttpClient>().Verify(c => c.Get(It.Is<HttpRequest>(v => v.Url.FullUri == _downloadUrl)), Times.Never());
             Mocker.GetMock<IDiskProvider>().Verify(c => c.OpenWriteStream(_filePath), Times.Never());
@@ -197,7 +197,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
             var remoteEpisode = CreateRemoteEpisode();
             remoteEpisode.Release.DownloadUrl = null;
 
-            Assert.Throws<ReleaseDownloadException>(() => Subject.Download(remoteEpisode));
+            Assert.Throws<ReleaseDownloadException>(() => Subject.Download(remoteEpisode, CreateIndexer()));
 
             Mocker.GetMock<IHttpClient>().Verify(c => c.Get(It.Is<HttpRequest>(v => v.Url.FullUri == _downloadUrl)), Times.Never());
             Mocker.GetMock<IDiskProvider>().Verify(c => c.OpenWriteStream(_filePath), Times.Never());
@@ -212,7 +212,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
 
             var remoteEpisode = CreateRemoteEpisode();
 
-            Subject.Download(remoteEpisode);
+            Subject.Download(remoteEpisode, CreateIndexer());
 
             Mocker.GetMock<IHttpClient>().Verify(c => c.Get(It.Is<HttpRequest>(v => v.Url.FullUri == _downloadUrl)), Times.Once());
             Mocker.GetMock<IDiskProvider>().Verify(c => c.OpenWriteStream(_filePath), Times.Once());
@@ -229,7 +229,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
             var remoteEpisode = CreateRemoteEpisode();
             remoteEpisode.Release.Title = illegalTitle;
 
-            Subject.Download(remoteEpisode);
+            Subject.Download(remoteEpisode, CreateIndexer());
 
             Mocker.GetMock<IHttpClient>().Verify(c => c.Get(It.Is<HttpRequest>(v => v.Url.FullUri == _downloadUrl)), Times.Once());
             Mocker.GetMock<IDiskProvider>().Verify(c => c.OpenWriteStream(expectedFilename), Times.Once());
@@ -242,7 +242,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
             var remoteEpisode = CreateRemoteEpisode();
             remoteEpisode.Release.DownloadUrl = null;
 
-            Assert.Throws<ReleaseDownloadException>(() => Subject.Download(remoteEpisode));
+            Assert.Throws<ReleaseDownloadException>(() => Subject.Download(remoteEpisode, CreateIndexer()));
         }
 
         [Test]
@@ -316,7 +316,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
         {
             var remoteEpisode = CreateRemoteEpisode();
 
-            Subject.Download(remoteEpisode).Should().BeNull();
+            Subject.Download(remoteEpisode, CreateIndexer()).Should().BeNull();
         }
     }
 }

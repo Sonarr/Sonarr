@@ -58,7 +58,7 @@ namespace NzbDrone.Core.Download
             get;
         }
 
-        public abstract string Download(RemoteEpisode remoteEpisode);
+        public abstract string Download(RemoteEpisode remoteEpisode, IIndexer indexer);
         public abstract IEnumerable<DownloadClientItem> GetItems();
 
         public virtual DownloadClientItem GetImportItem(DownloadClientItem item, DownloadClientItem previousImportAttempt)

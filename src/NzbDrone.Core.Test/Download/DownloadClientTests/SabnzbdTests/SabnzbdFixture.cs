@@ -308,7 +308,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
             var remoteEpisode = CreateRemoteEpisode();
             remoteEpisode.Release.Title = title;
 
-            var id = Subject.Download(remoteEpisode);
+            var id = Subject.Download(remoteEpisode, CreateIndexer());
 
             Mocker.GetMock<ISabnzbdProxy>()
                 .Verify(v => v.DownloadNzb(It.IsAny<byte[]>(), filename, It.IsAny<string>(), It.IsAny<int>(), It.IsAny<SabnzbdSettings>()), Times.Once());
@@ -321,7 +321,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
 
             var remoteEpisode = CreateRemoteEpisode();
 
-            var id = Subject.Download(remoteEpisode);
+            var id = Subject.Download(remoteEpisode, CreateIndexer());
 
             id.Should().NotBeNullOrEmpty();
         }
@@ -367,7 +367,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
                                                       .Build()
                                                       .ToList();
 
-            Subject.Download(remoteEpisode);
+            Subject.Download(remoteEpisode, CreateIndexer());
 
             Mocker.GetMock<ISabnzbdProxy>()
                   .Verify(v => v.DownloadNzb(It.IsAny<byte[]>(), It.IsAny<string>(), It.IsAny<string>(), (int)SabnzbdPriority.High, It.IsAny<SabnzbdSettings>()), Times.Once());

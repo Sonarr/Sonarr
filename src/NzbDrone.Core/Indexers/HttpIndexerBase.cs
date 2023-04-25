@@ -12,7 +12,6 @@ using NzbDrone.Core.Indexers.Exceptions;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.ThingiProvider;
 
 namespace NzbDrone.Core.Indexers
 {
@@ -107,6 +106,11 @@ namespace NzbDrone.Core.Indexers
             }
 
             return FetchReleases(g => g.GetSearchRequests(searchCriteria));
+        }
+
+        public override HttpRequest GetDownloadRequest(string link)
+        {
+            return new HttpRequest(link);
         }
 
         protected virtual IList<ReleaseInfo> FetchReleases(Func<IIndexerRequestGenerator, IndexerPageableRequestChain> pageableRequestChainSelector, bool isRecent = false)

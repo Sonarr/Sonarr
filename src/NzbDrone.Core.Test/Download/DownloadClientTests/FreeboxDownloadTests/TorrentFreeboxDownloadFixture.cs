@@ -153,7 +153,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.FreeboxDownloadTests
 
             var remoteEpisode = CreateRemoteEpisode();
 
-            Subject.Download(remoteEpisode);
+            Subject.Download(remoteEpisode, CreateIndexer());
 
             Mocker.GetMock<IFreeboxDownloadProxy>()
                   .Verify(v => v.AddTaskFromUrl(It.IsAny<string>(), _encodedDestinationDirectory, It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<double?>(), It.IsAny<FreeboxDownloadSettings>()), Times.Once());
@@ -168,7 +168,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.FreeboxDownloadTests
 
             var remoteEpisode = CreateRemoteEpisode();
 
-            Subject.Download(remoteEpisode);
+            Subject.Download(remoteEpisode, CreateIndexer());
 
             Mocker.GetMock<IFreeboxDownloadProxy>()
                   .Verify(v => v.AddTaskFromUrl(It.IsAny<string>(), _encodedDefaultDestinationAndCategory, It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<double?>(), It.IsAny<FreeboxDownloadSettings>()), Times.Once());
@@ -182,7 +182,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.FreeboxDownloadTests
 
             var remoteEpisode = CreateRemoteEpisode();
 
-            Subject.Download(remoteEpisode);
+            Subject.Download(remoteEpisode, CreateIndexer());
 
             Mocker.GetMock<IFreeboxDownloadProxy>()
                   .Verify(v => v.AddTaskFromUrl(It.IsAny<string>(), _encodedDefaultDestination, It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<double?>(), It.IsAny<FreeboxDownloadSettings>()), Times.Once());
@@ -199,7 +199,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.FreeboxDownloadTests
 
             var remoteEpisode = CreateRemoteEpisode();
 
-            Subject.Download(remoteEpisode);
+            Subject.Download(remoteEpisode, CreateIndexer());
 
             Mocker.GetMock<IFreeboxDownloadProxy>()
                   .Verify(v => v.AddTaskFromUrl(It.IsAny<string>(), It.IsAny<string>(), toBePausedFlag, It.IsAny<bool>(), It.IsAny<double?>(), It.IsAny<FreeboxDownloadSettings>()), Times.Once());
@@ -230,7 +230,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.FreeboxDownloadTests
 
             remoteEpisode.Episodes.Add(episode);
 
-            Subject.Download(remoteEpisode);
+            Subject.Download(remoteEpisode, CreateIndexer());
 
             Mocker.GetMock<IFreeboxDownloadProxy>()
                   .Verify(v => v.AddTaskFromUrl(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), toBeQueuedFirstFlag, It.IsAny<double?>(), It.IsAny<FreeboxDownloadSettings>()), Times.Once());
@@ -248,7 +248,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.FreeboxDownloadTests
             remoteEpisode.SeedConfiguration = new TorrentSeedConfiguration();
             remoteEpisode.SeedConfiguration.Ratio = providerSeedRatio;
 
-            Subject.Download(remoteEpisode);
+            Subject.Download(remoteEpisode, CreateIndexer());
 
             Mocker.GetMock<IFreeboxDownloadProxy>()
                   .Verify(v => v.AddTaskFromUrl(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), expectedSeedRatio, It.IsAny<FreeboxDownloadSettings>()), Times.Once());

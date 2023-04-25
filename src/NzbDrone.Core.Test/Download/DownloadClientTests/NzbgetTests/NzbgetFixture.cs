@@ -346,7 +346,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
 
             var remoteEpisode = CreateRemoteEpisode();
 
-            var id = Subject.Download(remoteEpisode);
+            var id = Subject.Download(remoteEpisode, CreateIndexer());
 
             id.Should().NotBeNullOrEmpty();
         }
@@ -358,7 +358,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
 
             var remoteEpisode = CreateRemoteEpisode();
 
-            Assert.Throws<DownloadClientRejectedReleaseException>(() => Subject.Download(remoteEpisode));
+            Assert.Throws<DownloadClientRejectedReleaseException>(() => Subject.Download(remoteEpisode, CreateIndexer()));
         }
 
         [Test]

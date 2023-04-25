@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Download
 
         protected abstract string AddFromNzbFile(RemoteEpisode remoteEpisode, string filename, byte[] fileContent);
 
-        public override string Download(RemoteEpisode remoteEpisode)
+        public override string Download(RemoteEpisode remoteEpisode, IIndexer indexer)
         {
             var url = remoteEpisode.Release.DownloadUrl;
             var filename =  FileNameBuilder.CleanFileName(remoteEpisode.Release.Title) + ".nzb";
@@ -43,7 +43,7 @@ namespace NzbDrone.Core.Download
 
             try
             {
-                var request = new HttpRequest(url);
+                var request = indexer.GetDownloadRequest(url);
                 request.RateLimitKey = remoteEpisode?.Release?.IndexerId.ToString();
                 nzbData = _httpClient.Get(request).ResponseData;
 
