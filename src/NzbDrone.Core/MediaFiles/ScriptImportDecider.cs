@@ -9,31 +9,30 @@ using NzbDrone.Common.Processes;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.MediaFiles.MediaInfo;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.MediaFiles
 {
-    public interface IScriptImportDecider
+    public interface IImportScript
     {
         public ScriptImportDecision TryImport(string sourcePath, string destinationFilePath, LocalEpisode localEpisode, EpisodeFile episodeFile, TransferMode mode);
     }
 
-    public class ScriptImportDecider : IScriptImportDecider
+    public class ImportScriptService : IImportScript
     {
         private readonly IConfigFileProvider _configFileProvider;
-        private readonly IUpdateMediaInfo _updateMediaInfo;
+        private readonly IVideoFileInfoReader _videoFileInfoReader;
         private readonly IProcessProvider _processProvider;
         private readonly IConfigService _configService;
         private readonly Logger _logger;
 
-        public ScriptImportDecider(IProcessProvider processProvider,
-                                   IUpdateMediaInfo updateMediaInfo,
+        public ImportScriptService(IProcessProvider processProvider,
+                                   IVideoFileInfoReader videoFileInfoReader,
                                    IConfigService configService,
                                    IConfigFileProvider configFileProvider,
                                    Logger logger)
         {
             _processProvider = processProvider;
-            _updateMediaInfo = updateMediaInfo;
+            _videoFileInfoReader = videoFileInfoReader;
             _configService = configService;
             _configFileProvider = configFileProvider;
             _logger = logger;
@@ -53,7 +52,9 @@ namespace NzbDrone.Core.MediaFiles
 
             var environmentVariables = new StringDictionary();
 
-            environmentVariables.Add("Sonarr_EventType", "Download");
+            environmentVariables.Add("Sonarr_SourcePath", sourcePath);
+            environmentVariables.Add("Sonarr_DestinationPath", destinationFilePath);
+
             environmentVariables.Add("Sonarr_InstanceName", _configFileProvider.InstanceName);
             environmentVariables.Add("Sonarr_ApplicationUrl", _configService.ApplicationUrl);
             environmentVariables.Add("Sonarr_TransferMode", mode.ToString());
@@ -115,7 +116,8 @@ namespace NzbDrone.Core.MediaFiles
                 case 0: // Copy complete
                     return ScriptImportDecision.MoveComplete;
                 case 2: // Copy complete, file potentially changed, should try renaming again
-                    _updateMediaInfo.UpdateMediaInfo(episodeFile, series);
+                    episodeFile.MediaInfo = _videoFileInfoReader.GetMediaInfo(destinationFilePath);
+                    episodeFile.Path = null;
                     return ScriptImportDecision.RenameRequested;
                 case 3: // Let Sonarr handle it
                     return ScriptImportDecision.DeferMove;
