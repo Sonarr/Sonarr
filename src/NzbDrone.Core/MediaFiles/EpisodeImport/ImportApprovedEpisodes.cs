@@ -151,6 +151,13 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
                     _commandQueueManager.Push(new RescanSeriesCommand(localEpisode.Series.Id));
                 }
+                catch (RecycleBinException e)
+                {
+                    _logger.Warn(e, "Couldn't import episode " + localEpisode);
+                    _eventAggregator.PublishEvent(new EpisodeImportFailedEvent(e, localEpisode, newDownload, downloadClientItem));
+
+                    importResults.Add(new ImportResult(importDecision, "Failed to import episode, unable to move existing file to the Recycle Bin."));
+                }
                 catch (Exception e)
                 {
                     _logger.Warn(e, "Couldn't import episode " + localEpisode);
