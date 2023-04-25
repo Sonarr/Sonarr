@@ -14,6 +14,7 @@ namespace NzbDrone.Core.ImportLists.Sonarr
         List<SonarrSeries> GetSeries(SonarrSettings settings);
         List<SonarrProfile> GetQualityProfiles(SonarrSettings settings);
         List<SonarrProfile> GetLanguageProfiles(SonarrSettings settings);
+        List<SonarrRootFolder> GetRootFolders(SonarrSettings settings);
         List<SonarrTag> GetTags(SonarrSettings settings);
         ValidationFailure Test(SonarrSettings settings);
     }
@@ -42,6 +43,11 @@ namespace NzbDrone.Core.ImportLists.Sonarr
         public List<SonarrProfile> GetLanguageProfiles(SonarrSettings settings)
         {
             return Execute<SonarrProfile>("/api/v3/languageprofile", settings);
+        }
+
+        public List<SonarrRootFolder> GetRootFolders(SonarrSettings settings)
+        {
+            return Execute<SonarrRootFolder>("api/v3/rootfolder", settings);
         }
 
         public List<SonarrTag> GetTags(SonarrSettings settings)
