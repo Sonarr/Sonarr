@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Text.RegularExpressions;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Indexers.Exceptions;
 using NzbDrone.Core.Parser.Model;
@@ -66,7 +67,7 @@ namespace NzbDrone.Core.Indexers.Rarbg
                 torrentInfo.Title = torrent.title;
                 torrentInfo.Size = torrent.size;
                 torrentInfo.DownloadUrl = torrent.download;
-                torrentInfo.InfoUrl = torrent.info_page + "&app_id=Sonarr";
+                torrentInfo.InfoUrl = $"{torrent.info_page}&app_id={BuildInfo.AppName}";
                 torrentInfo.PublishDate = torrent.pubdate.ToUniversalTime();
                 torrentInfo.Seeders = torrent.seeders;
                 torrentInfo.Peers = torrent.leechers + torrent.seeders;

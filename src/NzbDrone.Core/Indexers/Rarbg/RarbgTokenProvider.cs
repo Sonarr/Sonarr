@@ -2,6 +2,7 @@ using System;
 using Newtonsoft.Json.Linq;
 using NLog;
 using NzbDrone.Common.Cache;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 
@@ -32,7 +33,7 @@ namespace NzbDrone.Core.Indexers.Rarbg
                 {
                     var requestBuilder = new HttpRequestBuilder(settings.BaseUrl.Trim('/'))
                         .WithRateLimit(3.0)
-                        .Resource("/pubapi_v2.php?get_token=get_token&app_id=Sonarr")
+                        .Resource($"/pubapi_v2.php?get_token=get_token&app_id={BuildInfo.AppName}")
                         .Accept(HttpAccept.Json);
 
                     if (settings.CaptchaToken.IsNotNullOrWhiteSpace())

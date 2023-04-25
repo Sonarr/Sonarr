@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using NLog;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
@@ -47,7 +48,7 @@ namespace NzbDrone.Core.Indexers.Rarbg
                 try
                 {
                     var request = new HttpRequestBuilder(Settings.BaseUrl.Trim('/'))
-                           .Resource("/pubapi_v2.php?get_token=get_token")
+                           .Resource($"/pubapi_v2.php?get_token=get_token&app_id={BuildInfo.AppName}")
                            .Accept(HttpAccept.Json)
                            .Build();
 
