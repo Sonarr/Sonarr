@@ -226,7 +226,7 @@ namespace NzbDrone.Core.Parser
             return Language.Unknown;
         }
 
-        public static IEnumerable<string> ParseLanguageTags(string fileName)
+        public static List<string> ParseLanguageTags(string fileName)
         {
             try
             {
@@ -235,14 +235,14 @@ namespace NzbDrone.Core.Parser
                 var languageTags = match.Groups["tags"].Captures.Cast<Capture>()
                     .Where(tag => !tag.Value.Empty())
                     .Select(tag => tag.Value.ToLower());
-                return languageTags;
+                return languageTags.ToList();
             }
             catch (Exception ex)
             {
                 Logger.Debug(ex, "Failed parsing language tags from subtitle file: {0}", fileName);
             }
 
-            return Enumerable.Empty<string>();
+            return new List<string>();
         }
 
         private static List<Language> RegexLanguage(string title)

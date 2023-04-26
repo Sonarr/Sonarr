@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NLog;
@@ -78,6 +78,7 @@ namespace NzbDrone.Core.Extras.Subtitles
                                            EpisodeFileId = localEpisode.Episodes.First().EpisodeFileId,
                                            RelativePath = series.Path.GetRelativePath(possibleSubtitleFile),
                                            Language = LanguageParser.ParseSubtitleLanguage(possibleSubtitleFile),
+                                           LanguageTags = LanguageParser.ParseLanguageTags(possibleSubtitleFile),
                                            Extension = extension
                                        };
 
