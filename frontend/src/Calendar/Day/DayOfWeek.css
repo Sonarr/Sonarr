@@ -1,6 +1,6 @@
 .dayOfWeek {
   flex: 1 0 14.28%;
-  background-color: var(--calendarBackgroudColor);
+  background-color: var(--calendarBackgroundColor);
   text-align: center;
 }
 

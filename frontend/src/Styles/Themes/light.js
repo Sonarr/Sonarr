@@ -210,7 +210,7 @@ module.exports = {
   // Calendar
 
   calendarTodayBackgroundColor: '#c5c5c5',
-  calendarBackgroudColor: '#e4eaec',
+  calendarBackgroundColor: '#e4eaec',
   calendarBorderColor: '#cecece',
   calendarTextDim: '#666',
   calendarTextDimAlternate: '#242424',
