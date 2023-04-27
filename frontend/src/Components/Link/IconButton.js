@@ -23,6 +23,7 @@ function IconButton(props) {
         className,
         isDisabled && styles.isDisabled
       )}
+      aria-label="Table Options Button"
       isDisabled={isDisabled}
       {...otherProps}
     >

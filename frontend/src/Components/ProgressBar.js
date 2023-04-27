@@ -56,7 +56,9 @@ function ProgressBar(props) {
                 styles[kind],
                 enableColorImpairedMode && 'colorImpaired'
               )}
-              aria-valuenow={progress}
+              role="meter"
+              aria-label={`Progress Bar at ${progress.toFixed(0)}%`}
+              aria-valuenow={progress.toFixed(0)}
               aria-valuemin="0"
               aria-valuemax="100"
               style={{ width: progressPercent }}
