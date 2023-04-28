@@ -18,10 +18,7 @@
   "readmeFilename": "readme.md",
   "main": "index.js",
   "browserslist": [
-    ">0.25%",
-    "not ie 11",
-    "not op_mini all",
-    "not chrome < 60"
+    "defaults"
   ],
   "dependencies": {
     "@fortawesome/fontawesome-free": "6.1.1",
@@ -115,7 +112,7 @@
     "babel-loader": "8.2.5",
     "babel-plugin-inline-classnames": "2.0.1",
     "babel-plugin-transform-react-remove-prop-types": "0.4.24",
-    "core-js": "3.22.5",
+    "core-js": "3.30.1",
     "css-loader": "6.7.1",
     "css-modules-typescript-loader": "4.0.1",
     "esformatter": "0.11.3",
