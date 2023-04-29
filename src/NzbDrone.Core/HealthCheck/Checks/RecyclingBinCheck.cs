@@ -29,7 +29,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
 
             if (!_diskProvider.FolderWritable(recycleBin))
             {
-                return new HealthCheck(GetType(), HealthCheckResult.Error, $"Unable to write to configured recycling bin folder: {recycleBin}. Ensure this path exists and is writable by the user running Sonarr");
+                return new HealthCheck(GetType(), HealthCheckResult.Error, $"Unable to write to configured recycling bin folder: {recycleBin}. Ensure this path exists and is writable by the user running Sonarr", "#cannot-write-recycle-bin");
             }
 
             return new HealthCheck(GetType());

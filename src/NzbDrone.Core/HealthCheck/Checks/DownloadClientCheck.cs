@@ -6,6 +6,7 @@ using NzbDrone.Core.ThingiProvider.Events;
 
 namespace NzbDrone.Core.HealthCheck.Checks
 {
+    [CheckOn(typeof(ProviderAddedEvent<IDownloadClient>))]
     [CheckOn(typeof(ProviderUpdatedEvent<IDownloadClient>))]
     [CheckOn(typeof(ProviderDeletedEvent<IDownloadClient>))]
     [CheckOn(typeof(ProviderStatusChangedEvent<IDownloadClient>))]
@@ -26,7 +27,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
 
             if (!downloadClients.Any())
             {
-                return new HealthCheck(GetType(), HealthCheckResult.Warning, "No download client is available");
+                return new HealthCheck(GetType(), HealthCheckResult.Warning, "No download client is available", "#no-download-client-is-available");
             }
 
             foreach (var downloadClient in downloadClients)

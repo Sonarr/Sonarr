@@ -13,13 +13,16 @@ using NzbDrone.Core.Download.Clients;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.RemotePathMappings;
 using NzbDrone.Core.ThingiProvider.Events;
+using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.HealthCheck.Checks
 {
+    [CheckOn(typeof(ProviderAddedEvent<IDownloadClient>))]
     [CheckOn(typeof(ProviderUpdatedEvent<IDownloadClient>))]
     [CheckOn(typeof(ProviderDeletedEvent<IDownloadClient>))]
     [CheckOn(typeof(ModelEvent<RemotePathMapping>))]
     [CheckOn(typeof(EpisodeImportFailedEvent), CheckOnCondition.SuccessfulOnly)]
+    [CheckOn(typeof(SeriesImportedEvent), CheckOnCondition.SuccessfulOnly)]
     public class RemotePathMappingCheck : HealthCheckBase, IProvideHealthCheck
     {
         private readonly IDiskProvider _diskProvider;
@@ -143,7 +146,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 // If the previous case did not match then the failure occured in DownloadedEpisodeImportService,
                 // while trying to locate the files reported by the download client
                 // Only check clients not in failure status, those get another message
-                var client = _downloadClientProvider.GetDownloadClients().FirstOrDefault(x => x.Definition.Name == failureMessage.DownloadClientInfo.Name);
+                var client = _downloadClientProvider.GetDownloadClients(true).FirstOrDefault(x => x.Definition.Name == failureMessage.DownloadClientInfo.Name);
 
                 if (client == null)
                 {

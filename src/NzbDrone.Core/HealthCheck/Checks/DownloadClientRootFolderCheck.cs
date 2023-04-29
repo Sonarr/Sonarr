@@ -12,6 +12,7 @@ using NzbDrone.Core.ThingiProvider.Events;
 
 namespace NzbDrone.Core.HealthCheck.Checks
 {
+    [CheckOn(typeof(ProviderAddedEvent<IDownloadClient>))]
     [CheckOn(typeof(ProviderUpdatedEvent<IDownloadClient>))]
     [CheckOn(typeof(ProviderDeletedEvent<IDownloadClient>))]
     [CheckOn(typeof(ModelEvent<RootFolder>))]
@@ -35,7 +36,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
         public override HealthCheck Check()
         {
             // Only check clients not in failure status, those get another message
-            var clients = _downloadClientProvider.GetDownloadClients();
+            var clients = _downloadClientProvider.GetDownloadClients(true);
             var rootFolders = _rootFolderService.All();
 
             foreach (var client in clients)
