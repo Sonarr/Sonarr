@@ -63,7 +63,7 @@ namespace NzbDrone.Core.Queue
             {
                 Series = trackedDownload.RemoteEpisode?.Series,
                 Episode = episode,
-                Languages = trackedDownload.RemoteEpisode?.ParsedEpisodeInfo.Languages ?? new List<Language> { Language.Unknown },
+                Languages = trackedDownload.RemoteEpisode?.Languages ?? new List<Language> { Language.Unknown },
                 Quality = trackedDownload.RemoteEpisode?.ParsedEpisodeInfo.Quality ?? new QualityModel(Quality.Unknown),
                 Title = Parser.Parser.RemoveFileExtension(trackedDownload.DownloadItem.Title),
                 Size = trackedDownload.DownloadItem.TotalSize,
