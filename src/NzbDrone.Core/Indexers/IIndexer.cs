@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using NzbDrone.Common.Http;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.ThingiProvider;
@@ -18,5 +19,6 @@ namespace NzbDrone.Core.Indexers
         IList<ReleaseInfo> Fetch(DailySeasonSearchCriteria searchCriteria);
         IList<ReleaseInfo> Fetch(AnimeEpisodeSearchCriteria searchCriteria);
         IList<ReleaseInfo> Fetch(SpecialEpisodeSearchCriteria searchCriteria);
+        HttpRequest GetDownloadRequest(string link);
     }
 }

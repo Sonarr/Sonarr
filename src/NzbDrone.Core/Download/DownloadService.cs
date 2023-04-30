@@ -22,6 +22,7 @@ namespace NzbDrone.Core.Download
     {
         private readonly IProvideDownloadClient _downloadClientProvider;
         private readonly IDownloadClientStatusService _downloadClientStatusService;
+        private readonly IIndexerFactory _indexerFactory;
         private readonly IIndexerStatusService _indexerStatusService;
         private readonly IRateLimitService _rateLimitService;
         private readonly IEventAggregator _eventAggregator;
@@ -30,6 +31,7 @@ namespace NzbDrone.Core.Download
 
         public DownloadService(IProvideDownloadClient downloadClientProvider,
                                IDownloadClientStatusService downloadClientStatusService,
+                               IIndexerFactory indexerFactory,
                                IIndexerStatusService indexerStatusService,
                                IRateLimitService rateLimitService,
                                IEventAggregator eventAggregator,
@@ -38,6 +40,7 @@ namespace NzbDrone.Core.Download
         {
             _downloadClientProvider = downloadClientProvider;
             _downloadClientStatusService = downloadClientStatusService;
+            _indexerFactory = indexerFactory;
             _indexerStatusService = indexerStatusService;
             _rateLimitService = rateLimitService;
             _eventAggregator = eventAggregator;
@@ -68,6 +71,7 @@ namespace NzbDrone.Core.Download
 
             // Get the seed configuration for this release.
             remoteEpisode.SeedConfiguration = _seedConfigProvider.GetSeedConfiguration(remoteEpisode);
+            var indexer = _indexerFactory.GetInstance(_indexerFactory.Get(remoteEpisode.Release.IndexerId));
 
             // Limit grabs to 2 per second.
             if (remoteEpisode.Release.DownloadUrl.IsNotNullOrWhiteSpace() && !remoteEpisode.Release.DownloadUrl.StartsWith("magnet:"))
@@ -79,7 +83,7 @@ namespace NzbDrone.Core.Download
             string downloadClientId;
             try
             {
-                downloadClientId = downloadClient.Download(remoteEpisode);
+                downloadClientId = downloadClient.Download(remoteEpisode, indexer);
                 _downloadClientStatusService.RecordSuccess(downloadClient.Definition.Id);
                 _indexerStatusService.RecordSuccess(remoteEpisode.Release.IndexerId);
             }

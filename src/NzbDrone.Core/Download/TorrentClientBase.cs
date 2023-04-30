@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Download
         protected abstract string AddFromMagnetLink(RemoteEpisode remoteEpisode, string hash, string magnetLink);
         protected abstract string AddFromTorrentFile(RemoteEpisode remoteEpisode, string hash, string filename, byte[] fileContent);
 
-        public override string Download(RemoteEpisode remoteEpisode)
+        public override string Download(RemoteEpisode remoteEpisode, IIndexer indexer)
         {
             var torrentInfo = remoteEpisode.Release as TorrentInfo;
 
@@ -68,7 +68,7 @@ namespace NzbDrone.Core.Download
                 {
                     try
                     {
-                        return DownloadFromWebUrl(remoteEpisode, torrentUrl);
+                        return DownloadFromWebUrl(remoteEpisode, indexer, torrentUrl);
                     }
                     catch (Exception ex)
                     {
@@ -114,20 +114,20 @@ namespace NzbDrone.Core.Download
 
                 if (torrentUrl.IsNotNullOrWhiteSpace())
                 {
-                    return DownloadFromWebUrl(remoteEpisode, torrentUrl);
+                    return DownloadFromWebUrl(remoteEpisode, indexer, torrentUrl);
                 }
             }
 
             return null;
         }
 
-        private string DownloadFromWebUrl(RemoteEpisode remoteEpisode, string torrentUrl)
+        private string DownloadFromWebUrl(RemoteEpisode remoteEpisode, IIndexer indexer, string torrentUrl)
         {
             byte[] torrentFile = null;
 
             try
             {
-                var request = new HttpRequest(torrentUrl);
+                var request = indexer.GetDownloadRequest(torrentUrl);
                 request.RateLimitKey = remoteEpisode?.Release?.IndexerId.ToString();
                 request.Headers.Accept = "application/x-bittorrent";
                 request.AllowAutoRedirect = false;
@@ -149,7 +149,9 @@ namespace NzbDrone.Core.Download
                             return DownloadFromMagnetUrl(remoteEpisode, locationHeader);
                         }
 
-                        return DownloadFromWebUrl(remoteEpisode, locationHeader);
+                        request.Url += new HttpUri(locationHeader);
+
+                        return DownloadFromWebUrl(remoteEpisode, indexer, request.Url.ToString());
                     }
 
                     throw new WebException("Remote website tried to redirect without providing a location.");

@@ -381,7 +381,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
 
             var remoteEpisode = CreateRemoteEpisode();
 
-            var id = Subject.Download(remoteEpisode);
+            var id = Subject.Download(remoteEpisode, CreateIndexer());
 
             id.Should().NotBeNullOrEmpty();
 
@@ -398,7 +398,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
 
             var remoteEpisode = CreateRemoteEpisode();
 
-            var id = Subject.Download(remoteEpisode);
+            var id = Subject.Download(remoteEpisode, CreateIndexer());
 
             id.Should().NotBeNullOrEmpty();
 
@@ -414,7 +414,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
 
             var remoteEpisode = CreateRemoteEpisode();
 
-            var id = Subject.Download(remoteEpisode);
+            var id = Subject.Download(remoteEpisode, CreateIndexer());
 
             id.Should().NotBeNullOrEmpty();
 
@@ -493,7 +493,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
                   .Setup(s => s.GetSerialNumber(_settings))
                   .Throws(new ApplicationException("Some unknown exception, HttpException or DownloadClientException"));
 
-            Assert.Throws(Is.InstanceOf<Exception>(), () => Subject.Download(remoteEpisode));
+            Assert.Throws(Is.InstanceOf<Exception>(), () => Subject.Download(remoteEpisode, CreateIndexer()));
 
             Mocker.GetMock<IDownloadStationTaskProxy>()
                   .Verify(v => v.AddTaskFromUrl(It.IsAny<string>(), null, _settings), Times.Never());
