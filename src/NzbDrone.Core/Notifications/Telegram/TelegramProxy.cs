@@ -36,14 +36,18 @@ namespace NzbDrone.Core.Notifications.Telegram
             var requestBuilder = new HttpRequestBuilder(URL).Resource("bot{token}/sendmessage").Post();
 
             var request = requestBuilder.SetSegment("token", settings.BotToken)
-                                        .AddFormParameter("chat_id", settings.ChatId)
                                         .AddFormParameter("parse_mode", "HTML")
                                         .AddFormParameter("text", text)
                                         .AddFormParameter("disable_notification", settings.SendSilently)
-                                        .AddFormParameter("message_thread_id", settings.TopicId)
-                                        .Build();
+                                        .AddFormParameter("message_thread_id", settings.TopicId);
 
-            _httpClient.Post(request);
+            var parts = settings.ChatId.Split(new char[]{'/'}, 2);
+            request = request.AddFormParameter("chat_id", parts[0]);
+            if (parts.Length > 1) {
+                request = request.AddFormParameter("message_thread_id", parts[1]);
+            }
+
+            _httpClient.Post(request.Build());
         }
 
         public ValidationFailure Test(TelegramSettings settings)
