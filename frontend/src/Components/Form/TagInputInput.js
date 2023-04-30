@@ -38,7 +38,6 @@ class TagInputInput extends Component {
       <div
         ref={forwardedRef}
         className={className}
-        component="div"
         onMouseDown={this.onMouseDown}
       >
         {

@@ -1,12 +1,9 @@
 .inputContainer {
-  top: -1px;
-  right: -1px;
-  bottom: -1px;
-  left: -1px;
   display: flex;
   align-items: start;
   flex-wrap: wrap;
   padding: 1px 16px;
   min-height: 33px;
   cursor: default;
+  inset: -1px;
 }
