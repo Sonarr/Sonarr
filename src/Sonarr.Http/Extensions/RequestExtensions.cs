@@ -55,9 +55,9 @@ namespace Sonarr.Http.Extensions
         {
             var parameterValue = request.Query[parameter];
 
-            if (parameterValue.Any())
+            if (parameterValue.Any() && bool.TryParse(parameterValue.ToString(), out var value))
             {
-                return bool.Parse(parameterValue.ToString());
+                return value;
             }
 
             return defaultValue;
