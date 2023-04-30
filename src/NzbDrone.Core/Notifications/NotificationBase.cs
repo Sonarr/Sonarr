@@ -16,6 +16,7 @@ namespace NzbDrone.Core.Notifications
         protected const string SERIES_ADDED_TITLE = "Series Added";
         protected const string SERIES_DELETED_TITLE = "Series Deleted";
         protected const string HEALTH_ISSUE_TITLE = "Health Check Failure";
+        protected const string HEALTH_RESTORED_TITLE = "Health Check Restored";
         protected const string APPLICATION_UPDATE_TITLE = "Application Updated";
 
         protected const string EPISODE_GRABBED_TITLE_BRANDED = "Sonarr - " + EPISODE_GRABBED_TITLE;
@@ -24,6 +25,7 @@ namespace NzbDrone.Core.Notifications
         protected const string SERIES_ADDED_TITLE_BRANDED = "Sonarr - " + SERIES_DELETED_TITLE;
         protected const string SERIES_DELETED_TITLE_BRANDED = "Sonarr - " + SERIES_DELETED_TITLE;
         protected const string HEALTH_ISSUE_TITLE_BRANDED = "Sonarr - " + HEALTH_ISSUE_TITLE;
+        protected const string HEALTH_RESTORED_TITLE_BRANDED = "Sonarr - " + HEALTH_RESTORED_TITLE;
         protected const string APPLICATION_UPDATE_TITLE_BRANDED = "Sonarr - " + APPLICATION_UPDATE_TITLE;
 
         public abstract string Name { get; }
@@ -67,6 +69,10 @@ namespace NzbDrone.Core.Notifications
         {
         }
 
+        public virtual void OnHealthRestored(HealthCheck.HealthCheck previousCheck)
+        {
+        }
+
         public virtual void OnApplicationUpdate(ApplicationUpdateMessage updateMessage)
         {
         }
@@ -84,6 +90,7 @@ namespace NzbDrone.Core.Notifications
         public bool SupportsOnEpisodeFileDelete => HasConcreteImplementation("OnEpisodeFileDelete");
         public bool SupportsOnEpisodeFileDeleteForUpgrade => SupportsOnEpisodeFileDelete;
         public bool SupportsOnHealthIssue => HasConcreteImplementation("OnHealthIssue");
+        public bool SupportsOnHealthRestored => HasConcreteImplementation("OnHealthRestored");
         public bool SupportsOnApplicationUpdate => HasConcreteImplementation("OnApplicationUpdate");
 
         protected TSettings Settings => (TSettings)Definition.Settings;

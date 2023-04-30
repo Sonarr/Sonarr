@@ -134,6 +134,23 @@ namespace NzbDrone.Core.Notifications.Slack
             _proxy.SendPayload(payload, Settings);
         }
 
+        public override void OnHealthRestored(HealthCheck.HealthCheck previousCheck)
+        {
+            var attachments = new List<Attachment>
+                              {
+                                  new Attachment
+                                  {
+                                      Title = previousCheck.Source.Name,
+                                      Text = $"The following issue is now resolved: {previousCheck.Message}",
+                                      Color = "good"
+                                  }
+                              };
+
+            var payload = CreatePayload("Health Issue Resolved", attachments);
+
+            _proxy.SendPayload(payload, Settings);
+        }
+
         public override void OnApplicationUpdate(ApplicationUpdateMessage updateMessage)
         {
             var attachments = new List<Attachment>

@@ -14,6 +14,7 @@ namespace Sonarr.Api.V3.Notifications
         public bool OnEpisodeFileDelete { get; set; }
         public bool OnEpisodeFileDeleteForUpgrade { get; set; }
         public bool OnHealthIssue { get; set; }
+        public bool OnHealthRestored { get; set; }
         public bool OnApplicationUpdate { get; set; }
         public bool SupportsOnGrab { get; set; }
         public bool SupportsOnDownload { get; set; }
@@ -24,6 +25,7 @@ namespace Sonarr.Api.V3.Notifications
         public bool SupportsOnEpisodeFileDelete { get; set; }
         public bool SupportsOnEpisodeFileDeleteForUpgrade { get; set; }
         public bool SupportsOnHealthIssue { get; set; }
+        public bool SupportsOnHealthRestored { get; set; }
         public bool SupportsOnApplicationUpdate { get; set; }
         public bool IncludeHealthWarnings { get; set; }
         public string TestCommand { get; set; }
@@ -49,6 +51,7 @@ namespace Sonarr.Api.V3.Notifications
             resource.OnEpisodeFileDelete = definition.OnEpisodeFileDelete;
             resource.OnEpisodeFileDeleteForUpgrade = definition.OnEpisodeFileDeleteForUpgrade;
             resource.OnHealthIssue = definition.OnHealthIssue;
+            resource.OnHealthRestored = definition.OnHealthRestored;
             resource.OnApplicationUpdate = definition.OnApplicationUpdate;
             resource.SupportsOnGrab = definition.SupportsOnGrab;
             resource.SupportsOnDownload = definition.SupportsOnDownload;
@@ -59,6 +62,7 @@ namespace Sonarr.Api.V3.Notifications
             resource.SupportsOnEpisodeFileDelete = definition.SupportsOnEpisodeFileDelete;
             resource.SupportsOnEpisodeFileDeleteForUpgrade = definition.SupportsOnEpisodeFileDeleteForUpgrade;
             resource.SupportsOnHealthIssue = definition.SupportsOnHealthIssue;
+            resource.SupportsOnHealthRestored = definition.SupportsOnHealthRestored;
             resource.IncludeHealthWarnings = definition.IncludeHealthWarnings;
             resource.SupportsOnApplicationUpdate = definition.SupportsOnApplicationUpdate;
 
@@ -83,6 +87,7 @@ namespace Sonarr.Api.V3.Notifications
             definition.OnEpisodeFileDelete = resource.OnEpisodeFileDelete;
             definition.OnEpisodeFileDeleteForUpgrade = resource.OnEpisodeFileDeleteForUpgrade;
             definition.OnHealthIssue = resource.OnHealthIssue;
+            definition.OnHealthRestored = resource.OnHealthRestored;
             definition.OnApplicationUpdate = resource.OnApplicationUpdate;
             definition.SupportsOnGrab = resource.SupportsOnGrab;
             definition.SupportsOnDownload = resource.SupportsOnDownload;
@@ -93,6 +98,7 @@ namespace Sonarr.Api.V3.Notifications
             definition.SupportsOnEpisodeFileDelete = resource.SupportsOnEpisodeFileDelete;
             definition.SupportsOnEpisodeFileDeleteForUpgrade = resource.SupportsOnEpisodeFileDeleteForUpgrade;
             definition.SupportsOnHealthIssue = resource.SupportsOnHealthIssue;
+            definition.SupportsOnHealthRestored = resource.SupportsOnHealthRestored;
             definition.IncludeHealthWarnings = resource.IncludeHealthWarnings;
             definition.SupportsOnApplicationUpdate = resource.SupportsOnApplicationUpdate;
 
