@@ -58,6 +58,7 @@ class PageHeader extends Component {
             <img
               className={styles.logo}
               src={`${window.Sonarr.urlBase}/Content/Images/logo.svg`}
+              alt="Sonarr Logo"
             />
           </Link>
         </div>
@@ -76,6 +77,7 @@ class PageHeader extends Component {
           <IconButton
             className={styles.donate}
             name={icons.HEART}
+            aria-label="Donate"
             to="https://sonarr.tv/donate.html"
             size={14}
           />

@@ -20,7 +20,7 @@ function PageHeaderActionsMenu(props) {
   return (
     <div>
       <Menu alignMenu={align.RIGHT}>
-        <MenuButton className={styles.menuButton}>
+        <MenuButton className={styles.menuButton} aria-label="Menu Button">
           <Icon
             name={icons.INTERACTIVE}
           />

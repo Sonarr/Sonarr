@@ -18,7 +18,7 @@ class DescriptionListItem extends Component {
     } = this.props;
 
     return (
-      <span className={className}>
+      <div className={className}>
         <DescriptionListItemTitle
           className={titleClassName}
         >
@@ -30,7 +30,7 @@ class DescriptionListItem extends Component {
         >
           {data}
         </DescriptionListItemDescription>
-      </span>
+      </div>
     );
   }
 }
