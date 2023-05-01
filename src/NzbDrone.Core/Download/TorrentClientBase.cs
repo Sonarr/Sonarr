@@ -127,7 +127,7 @@ namespace NzbDrone.Core.Download
 
             try
             {
-                var request = indexer.GetDownloadRequest(torrentUrl);
+                var request = indexer?.GetDownloadRequest(torrentUrl) ?? new HttpRequest(torrentUrl);
                 request.RateLimitKey = remoteEpisode?.Release?.IndexerId.ToString();
                 request.Headers.Accept = "application/x-bittorrent";
                 request.AllowAutoRedirect = false;
