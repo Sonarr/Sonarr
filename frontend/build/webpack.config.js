@@ -263,18 +263,19 @@ module.exports = (env) => {
     config.resolve.alias['react-dom$'] = 'react-dom/profiling';
     config.resolve.alias['scheduler/tracing'] = 'scheduler/tracing-profiling';
 
-    config.optimization.minimizer = [
-      new TerserPlugin({
-        cache: true,
-        parallel: true,
-        sourceMap: true, // Must be set to true if using source-maps in production
-        terserOptions: {
-          mangle: false,
-          keep_classnames: true,
-          keep_fnames: true
-        }
-      })
-    ];
+    config.optimization = {
+      minimize: true,
+      minimizer: [
+        new TerserPlugin({
+          terserOptions: {
+            sourceMap: true, // Must be set to true if using source-maps in production
+            mangle: false,
+            keep_classnames: true,
+            keep_fnames: true
+          }
+        })
+      ]
+    };
   }
 
   return config;
