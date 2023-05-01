@@ -147,6 +147,9 @@
     "webpack-livereload-plugin": "3.0.2",
     "worker-loader": "3.0.8"
   },
+  "resolutions": {
+    "string-width": "4.2.3"
+  },
   "volta": {
     "node": "16.17.0",
     "yarn": "1.22.19"
