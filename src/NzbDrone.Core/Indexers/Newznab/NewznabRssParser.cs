@@ -1,10 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
-using MonoTorrent;
 using NzbDrone.Common.Extensions;
-using NzbDrone.Common.Http;
 using NzbDrone.Core.Indexers.Exceptions;
 using NzbDrone.Core.Parser.Model;
 
@@ -52,6 +50,11 @@ namespace NzbDrone.Core.Indexers.Newznab
 
         protected override bool PreProcess(IndexerResponse indexerResponse)
         {
+            if (indexerResponse.HttpResponse.HasHttpError)
+            {
+                base.PreProcess(indexerResponse);
+            }
+
             var xdoc = LoadXmlDocument(indexerResponse);
 
             CheckError(xdoc, indexerResponse);
