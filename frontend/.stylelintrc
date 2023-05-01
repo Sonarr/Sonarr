@@ -82,6 +82,7 @@
           "right",
           "bottom",
           "left",
+          "inset",
           "z-index",
           "display",
           "visibility",
