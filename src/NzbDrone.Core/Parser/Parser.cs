@@ -462,11 +462,12 @@ namespace NzbDrone.Core.Parser
                                                                 string.Empty,
                                                                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-        private static readonly RegexReplace WebsitePrefixRegex = new RegexReplace(@"^\[\s*[-a-z]+(\.[a-z]+)+\s*\][- ]*|^www\.[a-z]+\.(?:com|net|org)[ -]*",
+        private static readonly Regex WebsiteRegex = new Regex(@"\[\s*[-a-z]+(\.[a-z]+)+\s*\][- ]*|^www\.[a-z]+(\.(?![0-9]*$)[a-z0-9]{2,24})[ -]*", RegexOptions.Compiled);
+        private static readonly RegexReplace WebsitePrefixRegex = new RegexReplace(@"^" + WebsiteRegex,
                                                                 string.Empty,
                                                                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-        private static readonly RegexReplace WebsitePostfixRegex = new RegexReplace(@"\[\s*[-a-z]+(\.[a-z0-9]+)+\s*\]$",
+        private static readonly RegexReplace WebsitePostfixRegex = new RegexReplace(WebsiteRegex + @"$",
                                                                 string.Empty,
                                                                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
