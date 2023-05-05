@@ -40,7 +40,7 @@ function getUrls(state) {
     icalUrl += `tags=${tags.toString()}&`;
   }
 
-  icalUrl += `apikey=${window.Sonarr.apiKey}`;
+  icalUrl += `apikey=${encodeURIComponent(window.Sonarr.apiKey)}`;
 
   const iCalHttpUrl = `${window.location.protocol}//${icalUrl}`;
   const iCalWebCalUrl = `webcal://${icalUrl}`;
