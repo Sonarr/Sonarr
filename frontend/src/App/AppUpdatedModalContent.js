@@ -76,7 +76,7 @@ function AppUpdatedModalContent(props) {
             <div>
               {
                 !update.changes &&
-                  <div className={styles.maintenance}>Maintenance Release: See Github Commit History for the technical details.</div>
+                  <div className={styles.maintenance}>Maintenance Release: See GitHub commit history for details.</div>
               }
 
               {
