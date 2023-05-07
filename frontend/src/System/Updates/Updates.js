@@ -181,7 +181,7 @@ class Updates extends Component {
 
                         {
                           !hasChanges &&
-                            <div>Maintenance Release: See Github Commit History for the technical details.</div>
+                            <div>Maintenance Release: See GitHub commit history for details.</div>
                         }
 
                         {
