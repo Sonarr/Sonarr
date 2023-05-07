@@ -198,8 +198,8 @@ namespace NzbDrone.Core.RootFolders
 
         private void GetDetails(RootFolder rootFolder, Dictionary<int, string> seriesPaths, bool timeout)
         {
-            // Task.Run(() =>
-            // {
+            Task.Run(() =>
+            {
                 if (_diskProvider.FolderExists(rootFolder.Path))
                 {
                     rootFolder.Accessible = true;
@@ -207,8 +207,7 @@ namespace NzbDrone.Core.RootFolders
                     rootFolder.TotalSpace = _diskProvider.GetTotalSize(rootFolder.Path);
                     rootFolder.UnmappedFolders = GetUnmappedFolders(rootFolder.Path, seriesPaths);
                 }
-
-            // }).Wait(timeout ? 5000 : -1);
+            }).Wait(timeout ? 5000 : -1);
         }
     }
 }
