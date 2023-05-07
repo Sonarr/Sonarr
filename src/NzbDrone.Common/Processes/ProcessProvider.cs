@@ -127,7 +127,11 @@ namespace NzbDrone.Common.Processes
                     try
                     {
                         _logger.Trace("Setting environment variable '{0}' to '{1}'", environmentVariable.Key, environmentVariable.Value);
-                        startInfo.EnvironmentVariables.Add(environmentVariable.Key.ToString(), environmentVariable.Value.ToString());
+
+                        var key = environmentVariable.Key.ToString();
+                        var value = environmentVariable.Value?.ToString();
+
+                        startInfo.EnvironmentVariables[key] = value;
                     }
                     catch (Exception e)
                     {
