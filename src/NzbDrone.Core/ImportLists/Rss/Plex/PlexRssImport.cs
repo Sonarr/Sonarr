@@ -8,6 +8,10 @@ namespace NzbDrone.Core.ImportLists.Rss.Plex
 {
     public class PlexRssImport : RssImportBase<PlexRssImportSettings>
     {
+        public override string Name => "Plex Watchlist RSS";
+        public override ImportListType ListType => ImportListType.Plex;
+        public override TimeSpan MinRefreshInterval => TimeSpan.FromHours(6);
+
         public PlexRssImport(IHttpClient httpClient,
             IImportListStatusService importListStatusService,
             IConfigService configService,
@@ -16,10 +20,6 @@ namespace NzbDrone.Core.ImportLists.Rss.Plex
             : base(httpClient, importListStatusService, configService, parsingService, logger)
         {
         }
-
-        public override ImportListType ListType => ImportListType.Plex;
-        public override TimeSpan MinRefreshInterval => TimeSpan.FromHours(6);
-        public override string Name => "Plex Watchlist RSS";
 
         public override IParseImportListResponse GetParser()
         {

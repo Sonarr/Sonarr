@@ -8,18 +8,13 @@ namespace NzbDrone.Core.ImportLists.Rss.Plex
 {
     public class PlexRssImportParser : RssImportBaseParser
     {
-        private readonly Logger _logger;
-
         public PlexRssImportParser(Logger logger)
-        : base(logger)
+            : base(logger)
         {
-            _logger = logger;
         }
 
         protected override ImportListItemInfo ProcessItem(XElement item)
         {
-            var info = new ImportListItemInfo();
-            var guid = item.TryGetValue("guid", string.Empty);
             var category = item.TryGetValue("category");
 
             if (category != "show")
@@ -27,7 +22,12 @@ namespace NzbDrone.Core.ImportLists.Rss.Plex
                 return null;
             }
 
-            info.Title = item.TryGetValue("title", "Unknown");
+            var info = new ImportListItemInfo
+            {
+                Title = item.TryGetValue("title", "Unknown")
+            };
+
+            var guid = item.TryGetValue("guid", string.Empty);
 
             if (int.TryParse(guid.Replace("tvdb://", ""), out var tvdbId))
             {

@@ -14,7 +14,7 @@ namespace NzbDrone.Core.ImportLists.Rss
 
     public class RssImportBaseSettings : IImportListSettings
     {
-        private RssImportSettingsValidator Validator => new RssImportSettingsValidator();
+        private RssImportSettingsValidator Validator => new ();
 
         public string BaseUrl { get; set; }
 

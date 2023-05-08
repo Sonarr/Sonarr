@@ -11,6 +11,10 @@ namespace NzbDrone.Core.ImportLists.Rss
     public class RssImportBase<TSettings> : HttpImportListBase<TSettings>
         where TSettings : RssImportBaseSettings, new()
     {
+        public override string Name => "RSS List Base";
+        public override ImportListType ListType => ImportListType.Advanced;
+        public override TimeSpan MinRefreshInterval => TimeSpan.FromHours(6);
+
         public RssImportBase(IHttpClient httpClient,
             IImportListStatusService importListStatusService,
             IConfigService configService,
@@ -19,10 +23,6 @@ namespace NzbDrone.Core.ImportLists.Rss
             : base(httpClient, importListStatusService, configService, parsingService, logger)
         {
         }
-
-        public override ImportListType ListType => ImportListType.Advanced;
-        public override TimeSpan MinRefreshInterval => TimeSpan.FromHours(6);
-        public override string Name => "RSS List Base";
 
         public override IList<ImportListItemInfo> Fetch()
         {
@@ -36,7 +36,7 @@ namespace NzbDrone.Core.ImportLists.Rss
 
         public override IImportListRequestGenerator GetRequestGenerator()
         {
-            return new RssImportRequestGenerator()
+            return new RssImportRequestGenerator
             {
                 Settings = Settings
             };
