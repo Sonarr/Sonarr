@@ -11,7 +11,7 @@ import NotFound from 'Components/NotFound';
 import Switch from 'Components/Router/Switch';
 import SeriesDetailsPageConnector from 'Series/Details/SeriesDetailsPageConnector';
 import SeriesIndex from 'Series/Index/SeriesIndex';
-import CustomFormatSettingsConnector from 'Settings/CustomFormats/CustomFormatSettingsConnector';
+import CustomFormatSettingsPage from 'Settings/CustomFormats/CustomFormatSettingsPage';
 import DownloadClientSettingsConnector from 'Settings/DownloadClients/DownloadClientSettingsConnector';
 import GeneralSettingsConnector from 'Settings/General/GeneralSettingsConnector';
 import ImportListSettingsConnector from 'Settings/ImportLists/ImportListSettingsConnector';
@@ -179,7 +179,7 @@ function AppRoutes(props) {
 
       <Route
         path="/settings/customformats"
-        component={CustomFormatSettingsConnector}
+        component={CustomFormatSettingsPage}
       />
 
       <Route

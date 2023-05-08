@@ -167,6 +167,10 @@ const links = [
       {
         title: 'Log Files',
         to: '/system/logs/files'
+      },
+      {
+        title: 'Parse Testing',
+        to: '/system/parse'
       }
     ]
   }

@@ -134,6 +134,7 @@ const historyShape = {
 };
 
 SettingsToolbarConnector.propTypes = {
+  showSave: PropTypes.bool,
   hasPendingChanges: PropTypes.bool.isRequired,
   history: PropTypes.shape(historyShape).isRequired,
   onSavePress: PropTypes.func,

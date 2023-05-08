@@ -1,0 +1,41 @@
+import React, { Fragment } from 'react';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import PageContent from 'Components/Page/PageContent';
+import PageContentBody from 'Components/Page/PageContentBody';
+import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
+import ParseToolbarButton from 'Parse/ParseToolbarButton';
+import SettingsToolbarConnector from 'Settings/SettingsToolbarConnector';
+import CustomFormatsConnector from './CustomFormats/CustomFormatsConnector';
+
+function CustomFormatSettingsPage() {
+  return (
+    <PageContent title="Custom Format Settings">
+      <SettingsToolbarConnector
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        showSave={false}
+        additionalButtons={
+          <Fragment>
+            <PageToolbarSeparator />
+
+            <ParseToolbarButton />
+          </Fragment>
+        }
+      />
+
+      <PageContentBody>
+        {/* TODO: Upgrade react-dnd to get typings, we're 2 major versions behind */}
+        {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+        {/* @ts-ignore */}
+        <DndProvider backend={HTML5Backend}>
+          {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+          {/* @ts-ignore */}
+          <CustomFormatsConnector />
+        </DndProvider>
+      </PageContentBody>
+    </PageContent>
+  );
+}
+
+export default CustomFormatSettingsPage;
