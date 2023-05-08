@@ -1,6 +1,4 @@
-using System.Diagnostics;
 using System.Linq;
-using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.RootFolders;

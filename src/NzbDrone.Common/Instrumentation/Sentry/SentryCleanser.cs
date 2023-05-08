@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using Sentry;
-using Sentry.Protocol;
 
 namespace NzbDrone.Common.Instrumentation.Sentry
 {

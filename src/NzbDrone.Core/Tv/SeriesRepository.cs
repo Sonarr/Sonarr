@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Dapper;
 using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Exceptions;
 using NzbDrone.Core.Messaging.Events;
 
 namespace NzbDrone.Core.Tv

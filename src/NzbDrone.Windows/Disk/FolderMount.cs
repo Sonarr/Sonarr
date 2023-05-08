@@ -1,6 +1,5 @@
 using System.IO;
 using NzbDrone.Common.Disk;
-using NzbDrone.Common.Extensions;
 
 namespace NzbDrone.Windows.Disk
 {

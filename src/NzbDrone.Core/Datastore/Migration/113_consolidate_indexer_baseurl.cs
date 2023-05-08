@@ -1,4 +1,3 @@
-﻿using System.Collections.Generic;
 using System.Data;
 using FluentMigrator;
 using Newtonsoft.Json.Linq;

@@ -1,6 +1,5 @@
 using System.Linq;
 using NzbDrone.Common.Disk;
-using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.HealthCheck.Checks

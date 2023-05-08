@@ -3,8 +3,6 @@ using System.Linq;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.ImportLists;
 using NzbDrone.Core.MediaFiles.Events;
-using NzbDrone.Core.RootFolders;
-using NzbDrone.Core.Tv;
 using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.HealthCheck.Checks

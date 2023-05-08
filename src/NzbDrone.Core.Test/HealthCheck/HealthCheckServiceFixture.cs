@@ -1,15 +1,10 @@
-﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Common.Cache;
 using NzbDrone.Common.Messaging;
 using NzbDrone.Core.HealthCheck;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.Test.HealthCheck
 {

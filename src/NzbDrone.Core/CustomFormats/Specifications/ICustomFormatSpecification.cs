@@ -1,4 +1,3 @@
-using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.CustomFormats

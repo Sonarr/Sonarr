@@ -1,11 +1,5 @@
-﻿using System;
-using System.Linq;
-using System.Text.RegularExpressions;
-using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Download;
-using NzbDrone.Core.ThingiProvider.Events;
 
 namespace NzbDrone.Core.HealthCheck.Checks
 {
