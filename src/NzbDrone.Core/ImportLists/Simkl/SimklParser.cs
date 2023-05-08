@@ -11,10 +11,6 @@ namespace NzbDrone.Core.ImportLists.Simkl
     {
         private ImportListResponse _importResponse;
 
-        public SimklParser()
-        {
-        }
-
         public virtual IList<ImportListItemInfo> ParseResponse(ImportListResponse importResponse)
         {
             _importResponse = importResponse;

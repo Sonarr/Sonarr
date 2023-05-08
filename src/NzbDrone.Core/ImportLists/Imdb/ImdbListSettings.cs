@@ -18,10 +18,6 @@ namespace NzbDrone.Core.ImportLists.Imdb
     {
         private static readonly ImdbSettingsValidator Validator = new ImdbSettingsValidator();
 
-        public ImdbListSettings()
-        {
-        }
-
         public string BaseUrl { get; set; }
 
         [FieldDefinition(1, Label = "List ID", HelpText = "IMDb list ID (e.g ls12345678)")]

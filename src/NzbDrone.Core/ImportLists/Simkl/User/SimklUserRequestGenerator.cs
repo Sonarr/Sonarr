@@ -10,10 +10,6 @@ namespace NzbDrone.Core.ImportLists.Simkl.User
 
         public string ClientId { get; set; }
 
-        public SimklUserRequestGenerator()
-        {
-        }
-
         public virtual ImportListPageableRequestChain GetListItems()
         {
             var pageableRequests = new ImportListPageableRequestChain();

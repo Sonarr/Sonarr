@@ -7,9 +7,6 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
 {
     public class XbmcSettingsValidator : AbstractValidator<XbmcMetadataSettings>
     {
-        public XbmcSettingsValidator()
-        {
-        }
     }
 
     public class XbmcMetadataSettings : IProviderConfig

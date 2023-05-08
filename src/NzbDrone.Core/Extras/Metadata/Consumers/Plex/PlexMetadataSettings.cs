@@ -7,9 +7,6 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Plex
 {
     public class PlexMetadataSettingsValidator : AbstractValidator<PlexMetadataSettings>
     {
-        public PlexMetadataSettingsValidator()
-        {
-        }
     }
 
     public class PlexMetadataSettings : IProviderConfig

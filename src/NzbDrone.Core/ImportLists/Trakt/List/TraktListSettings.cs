@@ -17,10 +17,6 @@ namespace NzbDrone.Core.ImportLists.Trakt.List
     {
         protected override AbstractValidator<TraktListSettings> Validator => new TraktListSettingsValidator();
 
-        public TraktListSettings()
-        {
-        }
-
         [FieldDefinition(1, Label = "Username", HelpText = "Username for the List to import from")]
         public string Username { get; set; }
 
