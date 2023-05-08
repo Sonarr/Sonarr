@@ -5,8 +5,8 @@ import { isLocked } from 'Utilities/scrollLock';
 import styles from './PageContentBody.css';
 
 interface PageContentBodyProps {
-  className: string;
-  innerClassName: string;
+  className?: string;
+  innerClassName?: string;
   children: ReactNode;
   initialScrollTop?: number;
   onScroll?: (payload: OnScroll) => void;

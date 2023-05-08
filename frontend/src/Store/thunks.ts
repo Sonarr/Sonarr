@@ -4,23 +4,25 @@ import AppState from 'App/State/AppState';
 type GetState = () => AppState;
 type Thunk = (
   getState: GetState,
-  identity: unknown,
+  identityFn: never,
   dispatch: Dispatch
 ) => unknown;
 
 const thunks: Record<string, Thunk> = {};
 
-function identity(payload: unknown) {
-  return payload;
+function identity<T, TResult>(payload: T): TResult {
+  return payload as unknown as TResult;
 }
 
 export function createThunk(type: string, identityFunction = identity) {
-  return function (payload: unknown = {}) {
+  return function <T>(payload?: T) {
     return function (dispatch: Dispatch, getState: GetState) {
       const thunk = thunks[type];
 
       if (thunk) {
-        return thunk(getState, identityFunction(payload), dispatch);
+        const finalPayload = payload ?? {};
+
+        return thunk(getState, identityFunction(finalPayload), dispatch);
       }
 
       throw Error(`Thunk handler has not been registered for ${type}`);

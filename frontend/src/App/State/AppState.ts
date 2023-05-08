@@ -2,6 +2,7 @@ import InteractiveImportAppState from 'App/State/InteractiveImportAppState';
 import CalendarAppState from './CalendarAppState';
 import EpisodeFilesAppState from './EpisodeFilesAppState';
 import EpisodesAppState from './EpisodesAppState';
+import ParseAppState from './ParseAppState';
 import QueueAppState from './QueueAppState';
 import SeriesAppState, { SeriesIndexAppState } from './SeriesAppState';
 import SettingsAppState from './SettingsAppState';
@@ -44,6 +45,7 @@ interface AppState {
   episodesSelection: EpisodesAppState;
   episodeFiles: EpisodeFilesAppState;
   interactiveImport: InteractiveImportAppState;
+  parse: ParseAppState;
   seriesIndex: SeriesIndexAppState;
   settings: SettingsAppState;
   series: SeriesAppState;

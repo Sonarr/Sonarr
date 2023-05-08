@@ -1,0 +1,21 @@
+.item {
+  display: flex;
+}
+
+.title {
+  margin-right: 20px;
+  width: 250px;
+  text-align: right;
+  font-weight: bold;
+}
+
+@media (max-width: $breakpointSmall) {
+  .item {
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  .title {
+    text-align: left;
+  }
+}
