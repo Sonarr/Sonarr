@@ -1,5 +1,4 @@
-﻿using NLog;
-using NLog.Fluent;
+using NLog;
 
 namespace NzbDrone.Common.Instrumentation.Extensions
 {

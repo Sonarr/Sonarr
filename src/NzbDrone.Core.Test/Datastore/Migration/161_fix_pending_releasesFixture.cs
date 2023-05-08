@@ -4,12 +4,10 @@ using System.Linq;
 using Dapper;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Datastore.Converters;
 using NzbDrone.Core.Datastore.Migration;
 using NzbDrone.Core.Download.Pending;
 using NzbDrone.Core.Languages;
-using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
 

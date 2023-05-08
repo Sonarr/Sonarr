@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using NzbDrone.Common;
 using NzbDrone.Common.Composition;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Common.TPL;

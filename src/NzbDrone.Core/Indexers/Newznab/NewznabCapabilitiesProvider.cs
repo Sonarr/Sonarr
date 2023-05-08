@@ -1,6 +1,5 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Xml;
 using System.Xml.Linq;
 using NLog;
@@ -8,7 +7,6 @@ using NzbDrone.Common.Cache;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Common.Serializer;
-using NzbDrone.Core.Annotations;
 
 namespace NzbDrone.Core.Indexers.Newznab
 {

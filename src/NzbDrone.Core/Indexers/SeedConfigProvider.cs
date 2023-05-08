@@ -1,7 +1,5 @@
-﻿using System;
-using System.Linq;
+using System;
 using NzbDrone.Common.Cache;
-using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Download.Clients;
 using NzbDrone.Core.Messaging.Events;

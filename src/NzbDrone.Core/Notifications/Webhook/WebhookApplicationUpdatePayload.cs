@@ -1,5 +1,3 @@
-using NzbDrone.Core.HealthCheck;
-
 namespace NzbDrone.Core.Notifications.Webhook
 {
     public class WebhookApplicationUpdatePayload : WebhookPayload

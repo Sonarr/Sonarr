@@ -1,5 +1,3 @@
-using System;
-
 namespace NzbDrone.Core.IndexerSearch.Definitions
 {
     public class DailySeasonSearchCriteria : SearchCriteriaBase

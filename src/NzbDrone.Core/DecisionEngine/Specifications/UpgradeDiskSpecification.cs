@@ -2,9 +2,7 @@ using System.Linq;
 using NLog;
 using NzbDrone.Core.CustomFormats;
 using NzbDrone.Core.IndexerSearch.Definitions;
-using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Profiles.Releases;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications
 {

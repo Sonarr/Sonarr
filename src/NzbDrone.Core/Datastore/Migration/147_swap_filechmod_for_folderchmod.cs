@@ -1,7 +1,6 @@
 using System;
 using System.Data;
 using FluentMigrator;
-using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Datastore.Migration.Framework;
 

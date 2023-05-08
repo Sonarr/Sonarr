@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using NLog;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download.Clients;

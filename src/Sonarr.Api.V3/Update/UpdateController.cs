@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Update;
 using NzbDrone.Core.Update.History;
 using Sonarr.Http;

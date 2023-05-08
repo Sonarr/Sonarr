@@ -1,4 +1,3 @@
-using System;
 using NLog;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;

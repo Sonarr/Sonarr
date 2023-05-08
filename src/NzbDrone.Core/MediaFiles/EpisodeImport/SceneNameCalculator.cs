@@ -1,5 +1,4 @@
 using System.IO;
-using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;

@@ -1,10 +1,9 @@
-﻿using System.Threading;
+using System.Threading;
 using NLog;
 using NUnit.Framework;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Indexers.Newznab;
 using NzbDrone.Test.Common;
-using Sonarr.Api.V3.Indexers;
 using Sonarr.Http.ClientSchema;
 
 namespace NzbDrone.Integration.Test

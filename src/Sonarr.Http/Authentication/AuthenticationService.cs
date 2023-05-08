@@ -1,8 +1,5 @@
-using System;
-using System.Net;
 using Microsoft.AspNetCore.Http;
 using NLog;
-using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Authentication;
 using NzbDrone.Core.Configuration;
 using Sonarr.Http.Extensions;

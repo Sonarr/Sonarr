@@ -1,7 +1,6 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 using FluentValidation;
-using FluentValidation.Results;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.Indexers.Newznab;

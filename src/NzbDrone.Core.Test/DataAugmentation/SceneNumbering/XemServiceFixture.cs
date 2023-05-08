@@ -1,11 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common.Extensions;
 using NzbDrone.Core.DataAugmentation.Xem;
 using NzbDrone.Core.DataAugmentation.Xem.Model;
 using NzbDrone.Core.Test.Framework;

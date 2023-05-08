@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
 
