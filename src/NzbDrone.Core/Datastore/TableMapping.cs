@@ -93,6 +93,7 @@ namespace NzbDrone.Core.Datastore
                   .Ignore(i => i.SupportsOnEpisodeFileDelete)
                   .Ignore(i => i.SupportsOnEpisodeFileDeleteForUpgrade)
                   .Ignore(i => i.SupportsOnHealthIssue)
+                  .Ignore(i => i.SupportsOnHealthRestored)
                   .Ignore(i => i.SupportsOnApplicationUpdate);
 
             Mapper.Entity<MetadataDefinition>("Metadata").RegisterModel()

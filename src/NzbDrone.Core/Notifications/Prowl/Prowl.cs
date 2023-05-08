@@ -46,6 +46,11 @@ namespace NzbDrone.Core.Notifications.Prowl
             _prowlProxy.SendNotification(HEALTH_ISSUE_TITLE, message.Message, Settings);
         }
 
+        public override void OnHealthRestored(HealthCheck.HealthCheck previousMessage)
+        {
+            _prowlProxy.SendNotification(HEALTH_RESTORED_TITLE, $"The following issue is now resolved: {previousMessage.Message}", Settings);
+        }
+
         public override void OnApplicationUpdate(ApplicationUpdateMessage updateMessage)
         {
             _prowlProxy.SendNotification(APPLICATION_UPDATE_TITLE, updateMessage.Message, Settings);

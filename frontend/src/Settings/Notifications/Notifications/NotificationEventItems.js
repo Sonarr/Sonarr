@@ -23,6 +23,7 @@ function NotificationEventItems(props) {
     onEpisodeFileDelete,
     onEpisodeFileDeleteForUpgrade,
     onHealthIssue,
+    onHealthRestored,
     onApplicationUpdate,
     supportsOnGrab,
     supportsOnDownload,
@@ -34,6 +35,7 @@ function NotificationEventItems(props) {
     supportsOnEpisodeFileDeleteForUpgrade,
     supportsOnApplicationUpdate,
     supportsOnHealthIssue,
+    supportsOnHealthRestored,
     includeHealthWarnings
   } = item;
 
@@ -151,8 +153,19 @@ function NotificationEventItems(props) {
             />
           </div>
 
+          <div>
+            <FormInputGroup
+              type={inputTypes.CHECK}
+              name="onHealthRestored"
+              helpText="On Health Restored"
+              isDisabled={!supportsOnHealthRestored.value}
+              {...onHealthRestored}
+              onChange={onInputChange}
+            />
+          </div>
+
           {
-            onHealthIssue.value &&
+            (onHealthIssue.value || onHealthRestored.value) &&
               <div>
                 <FormInputGroup
                   type={inputTypes.CHECK}

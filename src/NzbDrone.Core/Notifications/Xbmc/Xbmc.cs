@@ -74,6 +74,11 @@ namespace NzbDrone.Core.Notifications.Xbmc
             Notify(Settings, HEALTH_ISSUE_TITLE_BRANDED, healthCheck.Message);
         }
 
+        public override void OnHealthRestored(HealthCheck.HealthCheck previousCheck)
+        {
+            Notify(Settings, HEALTH_RESTORED_TITLE_BRANDED, $"The following issue is now resolved: {previousCheck.Message}");
+        }
+
         public override void OnApplicationUpdate(ApplicationUpdateMessage updateMessage)
         {
             Notify(Settings, APPLICATION_UPDATE_TITLE_BRANDED, updateMessage.Message);

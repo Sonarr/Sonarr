@@ -274,6 +274,21 @@ namespace NzbDrone.Core.Notifications.CustomScript
             ExecuteScript(environmentVariables);
         }
 
+        public override void OnHealthRestored(HealthCheck.HealthCheck previousCheck)
+        {
+            var environmentVariables = new StringDictionary();
+
+            environmentVariables.Add("Sonarr_EventType", "HealthRestored");
+            environmentVariables.Add("Sonarr_InstanceName", _configFileProvider.InstanceName);
+            environmentVariables.Add("Sonarr_ApplicationUrl", _configService.ApplicationUrl);
+            environmentVariables.Add("Sonarr_Health_Restored_Level", Enum.GetName(typeof(HealthCheckResult), previousCheck.Type));
+            environmentVariables.Add("Sonarr_Health_Restored_Message", previousCheck.Message);
+            environmentVariables.Add("Sonarr_Health_Restored_Type", previousCheck.Source.Name);
+            environmentVariables.Add("Sonarr_Health_Restored_Wiki", previousCheck.WikiUrl.ToString() ?? string.Empty);
+
+            ExecuteScript(environmentVariables);
+        }
+
         public override void OnApplicationUpdate(ApplicationUpdateMessage updateMessage)
         {
             var environmentVariables = new StringDictionary();

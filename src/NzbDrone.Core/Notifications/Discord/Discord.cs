@@ -317,6 +317,29 @@ namespace NzbDrone.Core.Notifications.Discord
             _proxy.SendPayload(payload, Settings);
         }
 
+        public override void OnHealthRestored(HealthCheck.HealthCheck previousCheck)
+        {
+            var attachments = new List<Embed>
+                              {
+                                  new Embed
+                                  {
+                                      Author = new DiscordAuthor
+                                      {
+                                          Name = Settings.Author.IsNullOrWhiteSpace() ? Environment.MachineName : Settings.Author,
+                                          IconUrl = "https://raw.githubusercontent.com/Sonarr/Sonarr/develop/Logo/256.png"
+                                      },
+                                      Title = "Health Issue Resolved: " + previousCheck.Source.Name,
+                                      Description = $"The following issue is now resolved: {previousCheck.Message}",
+                                      Timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffZ"),
+                                      Color = (int)DiscordColors.Success
+                                  }
+                              };
+
+            var payload = CreatePayload(null, attachments);
+
+            _proxy.SendPayload(payload, Settings);
+        }
+
         public override void OnApplicationUpdate(ApplicationUpdateMessage updateMessage)
         {
             var attachments = new List<Embed>

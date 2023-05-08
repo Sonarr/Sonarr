@@ -83,6 +83,13 @@ namespace NzbDrone.Core.HealthCheck
             {
                 if (result.Type == HealthCheckResult.Ok)
                 {
+                    var previous = _healthCheckResults.Find(result.Source.Name);
+
+                    if (previous != null)
+                    {
+                        _eventAggregator.PublishEvent(new HealthCheckRestoredEvent(previous, !_hasRunHealthChecksAfterGracePeriod));
+                    }
+
                     _healthCheckResults.Remove(result.Source.Name);
                 }
                 else
