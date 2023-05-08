@@ -7,9 +7,6 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Roksbox
 {
     public class RoksboxSettingsValidator : AbstractValidator<RoksboxMetadataSettings>
     {
-        public RoksboxSettingsValidator()
-        {
-        }
     }
 
     public class RoksboxMetadataSettings : IProviderConfig

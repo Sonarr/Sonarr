@@ -10,10 +10,6 @@ namespace NzbDrone.Core.ImportLists.Trakt.Popular
 
         public string ClientId { get; set; }
 
-        public TraktPopularRequestGenerator()
-        {
-        }
-
         public virtual ImportListPageableRequestChain GetListItems()
         {
             var pageableRequests = new ImportListPageableRequestChain();

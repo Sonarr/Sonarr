@@ -9,10 +9,6 @@ namespace NzbDrone.Core.ImportLists.Trakt.List
         public TraktListSettings Settings { get; set; }
         public string ClientId { get; set; }
 
-        public TraktListRequestGenerator()
-        {
-        }
-
         public virtual ImportListPageableRequestChain GetListItems()
         {
             var pageableRequests = new ImportListPageableRequestChain();

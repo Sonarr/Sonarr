@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+using FluentValidation;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
@@ -7,9 +7,6 @@ namespace NzbDrone.Core.Notifications.Synology
 {
     public class SynologyIndexerSettingsValidator : AbstractValidator<SynologyIndexerSettings>
     {
-        public SynologyIndexerSettingsValidator()
-        {
-        }
     }
 
     public class SynologyIndexerSettings : IProviderConfig

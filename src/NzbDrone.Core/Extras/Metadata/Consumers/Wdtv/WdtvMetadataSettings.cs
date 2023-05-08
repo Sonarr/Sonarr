@@ -7,9 +7,6 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Wdtv
 {
     public class WdtvSettingsValidator : AbstractValidator<WdtvMetadataSettings>
     {
-        public WdtvSettingsValidator()
-        {
-        }
     }
 
     public class WdtvMetadataSettings : IProviderConfig
