@@ -83,10 +83,9 @@ namespace NzbDrone.Core.ImportLists.Rss
                 var content = XmlCleaner.ReplaceEntities(importListResponse.Content);
                 content = XmlCleaner.ReplaceUnicode(content);
 
-                using (var xmlTextReader = XmlReader.Create(new StringReader(content), new XmlReaderSettings { DtdProcessing = DtdProcessing.Ignore, IgnoreComments = true }))
-                {
-                    return XDocument.Load(xmlTextReader);
-                }
+                using var xmlTextReader = XmlReader.Create(new StringReader(content), new XmlReaderSettings { DtdProcessing = DtdProcessing.Ignore, IgnoreComments = true });
+
+                return XDocument.Load(xmlTextReader);
             }
             catch (XmlException ex)
             {
@@ -120,18 +119,17 @@ namespace NzbDrone.Core.ImportLists.Rss
 
         protected virtual ImportListItemInfo ProcessItem(XElement item)
         {
-            var info = new ImportListItemInfo();
+            var info = new ImportListItemInfo
+            {
+                Title = item.TryGetValue("title", "Unknown")
+            };
+
             var guid = item.TryGetValue("guid");
 
-            if (guid != null)
+            if (guid != null && int.TryParse(guid, out var tvdbId))
             {
-                if (int.TryParse(guid, out var tvdbId))
-                {
-                    info.TvdbId = tvdbId;
-                }
+                info.TvdbId = tvdbId;
             }
-
-            info.Title = item.TryGetValue("title", "Unknown");
 
             if (info.TvdbId == 0)
             {
