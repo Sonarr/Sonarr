@@ -70,8 +70,8 @@ namespace NzbDrone.Core.Download
                 return;
             }
 
-            var grabbedHistories = _historyService.FindByDownloadId(trackedDownload.DownloadItem.DownloadId).Where(h => h.EventType == EpisodeHistoryEventType.Grabbed).ToList();
-            var historyItem = grabbedHistories.MaxBy(h => h.Date);
+            var grabbedHistories = _historyService.FindByDownloadId(trackedDownload.DownloadItem.DownloadId)?.Where(h => h.EventType == EpisodeHistoryEventType.Grabbed).ToList();
+            var historyItem = grabbedHistories?.MaxBy(h => h.Date);
 
             if (historyItem == null && trackedDownload.DownloadItem.Category.IsNullOrWhiteSpace())
             {
