@@ -10,5 +10,7 @@ namespace NzbDrone.Core.Notifications.Webhook
         public string DownloadClient { get; set; }
         public string DownloadClientType { get; set; }
         public string DownloadId { get; set; }
+        public WebhookCustomFormatInfo CustomFormatInfo { get; set; }
+        public WebhookGrabbedRelease Release { get; set; }
     }
 }

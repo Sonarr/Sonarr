@@ -233,7 +233,8 @@ namespace NzbDrone.Core.Notifications
                 TrackedDownload = message.TrackedDownload,
                 DownloadClientType = message.TrackedDownload.DownloadItem.DownloadClientInfo.Type,
                 DownloadClientName = message.TrackedDownload.DownloadItem.DownloadClientInfo.Name,
-                DownloadId = message.TrackedDownload.DownloadItem.DownloadId
+                DownloadId = message.TrackedDownload.DownloadItem.DownloadId,
+                Release = message.Release
             };
 
             foreach (var notification in _notificationFactory.OnManualInteractionEnabled())

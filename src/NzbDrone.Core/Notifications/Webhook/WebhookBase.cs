@@ -165,13 +165,17 @@ namespace NzbDrone.Core.Notifications.Webhook
 
             return new WebhookManualInteractionPayload
             {
-                EventType = WebhookEventType.Grab,
+                EventType = WebhookEventType.ManualInteractionRequired,
+                InstanceName = _configFileProvider.InstanceName,
+                ApplicationUrl = _configService.ApplicationUrl,
                 Series = new WebhookSeries(message.Series),
                 Episodes = remoteEpisode.Episodes.ConvertAll(x => new WebhookEpisode(x)),
                 DownloadInfo = new WebhookDownloadClientItem(quality, message.TrackedDownload.DownloadItem),
                 DownloadClient = message.DownloadClientName,
                 DownloadClientType = message.DownloadClientType,
-                DownloadId = message.DownloadId
+                DownloadId = message.DownloadId,
+                CustomFormatInfo = new WebhookCustomFormatInfo(remoteEpisode.CustomFormats, remoteEpisode.CustomFormatScore),
+                Release = new WebhookGrabbedRelease(message.Release)
             };
         }
 

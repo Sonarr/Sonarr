@@ -8,11 +8,13 @@ namespace NzbDrone.Core.Download
     {
         public RemoteEpisode Episode { get; private set; }
         public TrackedDownload TrackedDownload { get; private set; }
+        public GrabbedReleaseInfo Release { get; private set; }
 
-        public ManualInteractionRequiredEvent(TrackedDownload trackedDownload)
+        public ManualInteractionRequiredEvent(TrackedDownload trackedDownload, GrabbedReleaseInfo release)
         {
             TrackedDownload = trackedDownload;
             Episode = trackedDownload.RemoteEpisode;
+            Release = release;
         }
     }
 }

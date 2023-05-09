@@ -70,7 +70,8 @@ namespace NzbDrone.Core.Download
                 return;
             }
 
-            var historyItem = _historyService.MostRecentForDownloadId(trackedDownload.DownloadItem.DownloadId);
+            var grabbedHistories = _historyService.FindByDownloadId(trackedDownload.DownloadItem.DownloadId).Where(h => h.EventType == EpisodeHistoryEventType.Grabbed).ToList();
+            var historyItem = grabbedHistories.MaxBy(h => h.Date);
 
             if (historyItem == null && trackedDownload.DownloadItem.Category.IsNullOrWhiteSpace())
             {
@@ -110,7 +111,9 @@ namespace NzbDrone.Core.Download
                     {
                         trackedDownload.HasNotifiedManualInteractionRequired = true;
 
-                        var manualInteractionEvent = new ManualInteractionRequiredEvent(trackedDownload);
+                        var releaseInfo = new GrabbedReleaseInfo(grabbedHistories);
+                        var manualInteractionEvent = new ManualInteractionRequiredEvent(trackedDownload, releaseInfo);
+
                         _eventAggregator.PublishEvent(manualInteractionEvent);
                     }
 

@@ -308,7 +308,7 @@ namespace NzbDrone.Core.Notifications.CustomScript
             var series = message.Series;
             var environmentVariables = new StringDictionary();
 
-            environmentVariables.Add("Sonarr_EventType", "Download");
+            environmentVariables.Add("Sonarr_EventType", "ManualInteractionRequired");
             environmentVariables.Add("Sonarr_InstanceName", _configFileProvider.InstanceName);
             environmentVariables.Add("Sonarr_ApplicationUrl", _configService.ApplicationUrl);
             environmentVariables.Add("Sonarr_Series_Id", series.Id.ToString());

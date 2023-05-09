@@ -1,4 +1,5 @@
-﻿using System.Linq;
+using System.Collections.Generic;
+using System.Linq;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.History;
@@ -31,20 +32,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators
                 return localEpisode;
             }
 
-            var episodeIds = grabbedHistories.Select(h => h.EpisodeId).Distinct().ToList();
-            var grabbedHistory = grabbedHistories.First();
-            var releaseInfo = new GrabbedReleaseInfo();
-
-            grabbedHistory.Data.TryGetValue("indexer", out var indexer);
-            grabbedHistory.Data.TryGetValue("size", out var sizeString);
-            long.TryParse(sizeString, out var size);
-
-            releaseInfo.Title = grabbedHistory.SourceTitle;
-            releaseInfo.Indexer = indexer;
-            releaseInfo.Size = size;
-            releaseInfo.EpisodeIds = episodeIds;
-
-            localEpisode.Release = releaseInfo;
+            localEpisode.Release = new GrabbedReleaseInfo(grabbedHistories);
 
             return localEpisode;
         }
