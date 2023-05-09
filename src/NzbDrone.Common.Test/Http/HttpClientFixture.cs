@@ -459,7 +459,7 @@ namespace NzbDrone.Common.Test.Http
             var oldRequest = new HttpRequest($"https://{_httpBinHost2}/get");
             oldRequest.Cookies["my"] = "cookie";
 
-            var oldClient = new HttpClient(Array.Empty<IHttpRequestInterceptor>(), Mocker.Resolve<ICacheManager>(), Mocker.Resolve<IRateLimitService>(), Mocker.Resolve<IHttpDispatcher>(), Mocker.GetMock<IUserAgentBuilder>().Object, Mocker.Resolve<Logger>());
+            var oldClient = new HttpClient(Array.Empty<IHttpRequestInterceptor>(), Mocker.Resolve<ICacheManager>(), Mocker.Resolve<IRateLimitService>(), Mocker.Resolve<IHttpDispatcher>(), Mocker.Resolve<Logger>());
 
             oldClient.Should().NotBeSameAs(Subject);
 
