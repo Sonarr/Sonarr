@@ -41,7 +41,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
                     continue;
                 }
 
-                if (rootFolderPath.IsNullOrWhiteSpace() || !_diskProvider.FolderExists(rootFolderPath))
+                if (!_diskProvider.FolderExists(rootFolderPath))
                 {
                     missingRootFolders.Add(rootFolderPath, new List<ImportListDefinition> { importList });
                 }
