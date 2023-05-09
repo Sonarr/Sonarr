@@ -4,7 +4,9 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Download;
+using NzbDrone.Core.History;
 using NzbDrone.Core.MediaFiles.EpisodeImport.Specifications;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
@@ -48,8 +50,22 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
 
         private void GivenHistoryForEpisodes(params Episode[] episodes)
         {
-            _localEpisode.Release = new GrabbedReleaseInfo();
-            _localEpisode.Release.EpisodeIds = episodes.Select(e => e.Id).ToList();
+            if (episodes.Empty())
+            {
+                return;
+            }
+
+            var grabbedHistories = Builder<EpisodeHistory>.CreateListOfSize(episodes.Length)
+                .All()
+                .With(h => h.EventType == EpisodeHistoryEventType.Grabbed)
+                .BuildList();
+
+            for (var i = 0; i < grabbedHistories.Count; i++)
+            {
+                grabbedHistories[i].EpisodeId = episodes[i].Id;
+            }
+
+            _localEpisode.Release = new GrabbedReleaseInfo(grabbedHistories);
         }
 
         [Test]
