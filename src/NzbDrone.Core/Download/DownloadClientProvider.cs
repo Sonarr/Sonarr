@@ -111,7 +111,7 @@ namespace NzbDrone.Core.Download
             {
                 if (blockedClients.TryGetValue(client.Definition.Id, out var blockedClientStatus))
                 {
-                    _logger.Debug("Temporarily ignoring client {0} till {1} due to recent failures.", client.Definition.Name, blockedClientStatus.DisabledTill.Value.ToLocalTime());
+                    _logger.Debug("Temporarily ignoring client {0} until {1} due to recent failures.", client.Definition.Name, blockedClientStatus.DisabledTill.Value.ToLocalTime());
                     continue;
                 }
 
