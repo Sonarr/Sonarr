@@ -1,16 +1,14 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Disk;
-using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.TrackedDownloads;
 using NzbDrone.Core.History;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
-using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
@@ -54,8 +52,8 @@ namespace NzbDrone.Core.Test.Download.CompletedDownloadServiceTests
                   .Returns((DownloadClientItem item, DownloadClientItem previous) => item);
 
             Mocker.GetMock<IHistoryService>()
-                  .Setup(s => s.MostRecentForDownloadId(_trackedDownload.DownloadItem.DownloadId))
-                  .Returns(new EpisodeHistory());
+                  .Setup(s => s.FindByDownloadId(_trackedDownload.DownloadItem.DownloadId))
+                  .Returns(new List<EpisodeHistory>());
 
             Mocker.GetMock<IParsingService>()
                   .Setup(s => s.GetSeries("Drone.S01E01.HDTV"))
@@ -74,8 +72,8 @@ namespace NzbDrone.Core.Test.Download.CompletedDownloadServiceTests
         private void GivenNoGrabbedHistory()
         {
             Mocker.GetMock<IHistoryService>()
-                .Setup(s => s.MostRecentForDownloadId(_trackedDownload.DownloadItem.DownloadId))
-                .Returns((EpisodeHistory)null);
+                .Setup(s => s.FindByDownloadId(_trackedDownload.DownloadItem.DownloadId))
+                .Returns(new List<EpisodeHistory>());
         }
 
         private void GivenSeriesMatch()
@@ -90,8 +88,11 @@ namespace NzbDrone.Core.Test.Download.CompletedDownloadServiceTests
             _trackedDownload.DownloadItem.DownloadId = "1234";
             _trackedDownload.DownloadItem.Title = "Droned Pilot"; // Set a badly named download
             Mocker.GetMock<IHistoryService>()
-                  .Setup(s => s.MostRecentForDownloadId(It.Is<string>(i => i == "1234")))
-                  .Returns(new EpisodeHistory() { SourceTitle = "Droned S01E01" });
+                  .Setup(s => s.FindByDownloadId(It.Is<string>(i => i == "1234")))
+                  .Returns(new List<EpisodeHistory>
+                  {
+                      new EpisodeHistory() { SourceTitle = "Droned S01E01", EventType = EpisodeHistoryEventType.Grabbed }
+                  });
 
             Mocker.GetMock<IParsingService>()
                   .Setup(s => s.GetSeries(It.IsAny<string>()))
@@ -160,9 +161,6 @@ namespace NzbDrone.Core.Test.Download.CompletedDownloadServiceTests
                            {
                                new ImportResult(new ImportDecision(new LocalEpisode { Path = @"C:\TestPath\Droned.S01E01.mkv" }))
                            });
-
-            Mocker.GetMock<IHistoryService>()
-                  .Setup(s => s.MostRecentForDownloadId(It.Is<string>(i => i == "1234")));
 
             Subject.Check(_trackedDownload);
 
