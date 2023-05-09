@@ -36,19 +36,16 @@ namespace NzbDrone.Common.Http
         private readonly ICached<CookieContainer> _cookieContainerCache;
         private readonly List<IHttpRequestInterceptor> _requestInterceptors;
         private readonly IHttpDispatcher _httpDispatcher;
-        private readonly IUserAgentBuilder _userAgentBuilder;
 
         public HttpClient(IEnumerable<IHttpRequestInterceptor> requestInterceptors,
             ICacheManager cacheManager,
             IRateLimitService rateLimitService,
             IHttpDispatcher httpDispatcher,
-            IUserAgentBuilder userAgentBuilder,
             Logger logger)
         {
             _requestInterceptors = requestInterceptors.ToList();
             _rateLimitService = rateLimitService;
             _httpDispatcher = httpDispatcher;
-            _userAgentBuilder = userAgentBuilder;
             _logger = logger;
 
             ServicePointManager.DefaultConnectionLimit = 12;
