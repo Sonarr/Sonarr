@@ -1,4 +1,5 @@
 import React from 'react';
+import QualityProfile from 'typings/QualityProfile';
 import getRelativeDate from 'Utilities/Date/getRelativeDate';
 import formatBytes from 'Utilities/Number/formatBytes';
 import styles from './SeriesIndexPosterInfo.css';
@@ -6,8 +7,7 @@ import styles from './SeriesIndexPosterInfo.css';
 interface SeriesIndexPosterInfoProps {
   network?: string;
   showQualityProfile: boolean;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  qualityProfile: any;
+  qualityProfile: QualityProfile;
   previousAiring?: string;
   added?: string;
   seasonCount: number;
