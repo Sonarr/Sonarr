@@ -27,7 +27,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
 
             if (!downloadClients.Any())
             {
-                return new HealthCheck(GetType(), HealthCheckResult.Warning, "No download client is available");
+                return new HealthCheck(GetType(), HealthCheckResult.Warning, "No download client is available", "#no-download-client-is-available");
             }
 
             foreach (var downloadClient in downloadClients)

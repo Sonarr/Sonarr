@@ -17,7 +17,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
             if (_appFolderInfo.StartUpFolder.IsParentPath(_appFolderInfo.AppDataFolder) ||
                 _appFolderInfo.StartUpFolder.PathEquals(_appFolderInfo.AppDataFolder))
             {
-                return new HealthCheck(GetType(), HealthCheckResult.Warning, "Updating will not be possible to prevent deleting AppData on Update");
+                return new HealthCheck(GetType(), HealthCheckResult.Warning, "Updating will not be possible to prevent deleting AppData on Update", "#updating-will-not-be-possible-to-prevent-deleting-appdata-on-update");
             }
 
             return new HealthCheck(GetType());
