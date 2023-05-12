@@ -235,14 +235,15 @@ class CalendarEventGroup extends Component {
 }
 
 CalendarEventGroup.propTypes = {
-  series: PropTypes.object.isRequired,
+  // Most of these props come from the connector and are required, but TS is confused.
+  series: PropTypes.object,
   events: PropTypes.arrayOf(PropTypes.object).isRequired,
-  isDownloading: PropTypes.bool.isRequired,
-  showEpisodeInformation: PropTypes.bool.isRequired,
-  showFinaleIcon: PropTypes.bool.isRequired,
-  fullColorEvents: PropTypes.bool.isRequired,
-  timeFormat: PropTypes.string.isRequired,
-  colorImpairedMode: PropTypes.bool.isRequired,
+  isDownloading: PropTypes.bool,
+  showEpisodeInformation: PropTypes.bool,
+  showFinaleIcon: PropTypes.bool,
+  fullColorEvents: PropTypes.bool,
+  timeFormat: PropTypes.string,
+  colorImpairedMode: PropTypes.bool,
   onEventModalOpenToggle: PropTypes.func.isRequired
 };
 

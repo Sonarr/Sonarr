@@ -236,6 +236,7 @@ class CalendarEvent extends Component {
 
 CalendarEvent.propTypes = {
   id: PropTypes.number.isRequired,
+  episodeId: PropTypes.number.isRequired,
   series: PropTypes.object.isRequired,
   episodeFile: PropTypes.object,
   title: PropTypes.string.isRequired,
@@ -248,14 +249,15 @@ CalendarEvent.propTypes = {
   hasFile: PropTypes.bool.isRequired,
   grabbed: PropTypes.bool,
   queueItem: PropTypes.object,
-  showEpisodeInformation: PropTypes.bool.isRequired,
-  showFinaleIcon: PropTypes.bool.isRequired,
-  showSpecialIcon: PropTypes.bool.isRequired,
-  showCutoffUnmetIcon: PropTypes.bool.isRequired,
-  fullColorEvents: PropTypes.bool.isRequired,
-  timeFormat: PropTypes.string.isRequired,
-  colorImpairedMode: PropTypes.bool.isRequired,
-  onEventModalOpenToggle: PropTypes.func.isRequired
+  // These props come from the connector, not marked as required to apease TS for now.
+  showEpisodeInformation: PropTypes.bool,
+  showFinaleIcon: PropTypes.bool,
+  showSpecialIcon: PropTypes.bool,
+  showCutoffUnmetIcon: PropTypes.bool,
+  fullColorEvents: PropTypes.bool,
+  timeFormat: PropTypes.string,
+  colorImpairedMode: PropTypes.bool,
+  onEventModalOpenToggle: PropTypes.func
 };
 
 export default CalendarEvent;
