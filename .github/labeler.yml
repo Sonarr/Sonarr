@@ -1,0 +1,17 @@
+'connection':
+  - src/NzbDrone.Core/Notifications/**/*
+
+'db-migration':
+  - src/NzbDrone.Core/Datastore/Migration/*
+
+'download-client':
+  - src/NzbDrone.Core/Download/Clients/**/*
+
+'indexer':
+  - src/NzbDrone.Core/Indexers/**/*
+
+'parsing':
+  - src/NzbDrone.Core/Parser/**/*
+
+'ui-only':
+  - all: ['frontend/**/*']
