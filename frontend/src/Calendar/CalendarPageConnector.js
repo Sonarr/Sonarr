@@ -5,6 +5,7 @@ import * as commandNames from 'Commands/commandNames';
 import withCurrentPage from 'Components/withCurrentPage';
 import { searchMissing, setCalendarDaysCount, setCalendarFilter } from 'Store/Actions/calendarActions';
 import { executeCommand } from 'Store/Actions/commandActions';
+import { createCustomFiltersSelector } from 'Store/Selectors/createClientSideCollectionSelector';
 import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
 import createCommandsSelector from 'Store/Selectors/createCommandsSelector';
 import createSeriesCountSelector from 'Store/Selectors/createSeriesCountSelector';
@@ -59,6 +60,7 @@ function createMapStateToProps() {
   return createSelector(
     (state) => state.calendar.selectedFilterKey,
     (state) => state.calendar.filters,
+    createCustomFiltersSelector('calendar'),
     createSeriesCountSelector(),
     createUISettingsSelector(),
     createMissingEpisodeIdsSelector(),
@@ -67,6 +69,7 @@ function createMapStateToProps() {
     (
       selectedFilterKey,
       filters,
+      customFilters,
       seriesCount,
       uiSettings,
       missingEpisodeIds,
@@ -76,6 +79,7 @@ function createMapStateToProps() {
       return {
         selectedFilterKey,
         filters,
+        customFilters,
         colorImpairedMode: uiSettings.enableColorImpairedMode,
         hasSeries: !!seriesCount,
         missingEpisodeIds,

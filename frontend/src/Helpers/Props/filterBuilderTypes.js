@@ -1,14 +1,18 @@
 import * as filterTypes from './filterTypes';
 
 export const ARRAY = 'array';
+export const CONTAINS = 'contains';
 export const DATE = 'date';
+export const EQUAL = 'equal';
 export const EXACT = 'exact';
 export const NUMBER = 'number';
 export const STRING = 'string';
 
 export const all = [
   ARRAY,
+  CONTAINS,
   DATE,
+  EQUAL,
   EXACT,
   NUMBER,
   STRING
@@ -20,6 +24,10 @@ export const possibleFilterTypes = {
     { key: filterTypes.NOT_CONTAINS, value: 'does not contain' }
   ],
 
+  [CONTAINS]: [
+    { key: filterTypes.CONTAINS, value: 'contains' }
+  ],
+
   [DATE]: [
     { key: filterTypes.LESS_THAN, value: 'is before' },
     { key: filterTypes.GREATER_THAN, value: 'is after' },
@@ -27,6 +35,10 @@ export const possibleFilterTypes = {
     { key: filterTypes.NOT_IN_LAST, value: 'not in the last' },
     { key: filterTypes.IN_NEXT, value: 'in the next' },
     { key: filterTypes.NOT_IN_NEXT, value: 'not in the next' }
+  ],
+
+  [EQUAL]: [
+    { key: filterTypes.EQUAL, value: 'is' }
   ],
 
   [EXACT]: [

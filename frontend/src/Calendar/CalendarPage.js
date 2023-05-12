@@ -11,6 +11,7 @@ import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
 import { align, icons } from 'Helpers/Props';
 import NoSeries from 'Series/NoSeries';
 import CalendarConnector from './CalendarConnector';
+import CalendarFilterModal from './CalendarFilterModal';
 import CalendarLinkModal from './iCal/CalendarLinkModal';
 import LegendConnector from './Legend/LegendConnector';
 import CalendarOptionsModal from './Options/CalendarOptionsModal';
@@ -75,6 +76,7 @@ class CalendarPage extends Component {
     const {
       selectedFilterKey,
       filters,
+      customFilters,
       hasSeries,
       missingEpisodeIds,
       isRssSyncExecuting,
@@ -132,7 +134,8 @@ class CalendarPage extends Component {
               isDisabled={!hasSeries}
               selectedFilterKey={selectedFilterKey}
               filters={filters}
-              customFilters={[]}
+              customFilters={customFilters}
+              filterModalConnectorComponent={CalendarFilterModal}
               onFilterSelect={onFilterSelect}
             />
           </PageToolbarSection>
@@ -178,6 +181,7 @@ class CalendarPage extends Component {
 CalendarPage.propTypes = {
   selectedFilterKey: PropTypes.string.isRequired,
   filters: PropTypes.arrayOf(PropTypes.object).isRequired,
+  customFilters: PropTypes.arrayOf(PropTypes.object).isRequired,
   hasSeries: PropTypes.bool.isRequired,
   missingEpisodeIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   isRssSyncExecuting: PropTypes.bool.isRequired,

@@ -1,4 +1,5 @@
 import InteractiveImportAppState from 'App/State/InteractiveImportAppState';
+import CalendarAppState from './CalendarAppState';
 import EpisodeFilesAppState from './EpisodeFilesAppState';
 import EpisodesAppState from './EpisodesAppState';
 import QueueAppState from './QueueAppState';
@@ -39,6 +40,7 @@ export interface CustomFilter {
 }
 
 interface AppState {
+  calendar: CalendarAppState;
   episodesSelection: EpisodesAppState;
   episodeFiles: EpisodeFilesAppState;
   interactiveImport: InteractiveImportAppState;
