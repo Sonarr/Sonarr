@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.Json;
 using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Common.Cache;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
-using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Configuration.Events;
 using NzbDrone.Core.Languages;
@@ -152,9 +152,8 @@ namespace NzbDrone.Core.Localization
                 return;
             }
 
-            using var fs = File.OpenText(resourcePath);
-            var json = await fs.ReadToEndAsync();
-            var dict = Json.Deserialize<Dictionary<string, string>>(json);
+            await using var fs = File.OpenRead(resourcePath);
+            var dict = await JsonSerializer.DeserializeAsync<Dictionary<string, string>>(fs);
 
             foreach (var key in dict.Keys)
             {
