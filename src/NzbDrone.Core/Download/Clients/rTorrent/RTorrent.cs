@@ -179,12 +179,28 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
                 // Grab cached seedConfig
                 var seedConfig = _downloadSeedConfigProvider.GetSeedConfiguration(torrent.Hash);
 
-                // Check if torrent is finished and if it exceeds cached seedConfig
-                item.CanMoveFiles = item.CanBeRemoved =
-                    torrent.IsFinished && seedConfig != null &&
-                    (
-                        (torrent.Ratio / 1000.0) >= seedConfig.Ratio ||
-                        (DateTimeOffset.Now - DateTimeOffset.FromUnixTimeSeconds(torrent.FinishedTime)) >= seedConfig.SeedTime);
+                if (torrent.IsFinished && seedConfig != null)
+                {
+                    var canRemove = false;
+
+                    if (torrent.Ratio / 1000.0 >= seedConfig.Ratio)
+                    {
+                        _logger.Trace($"{item} has met seed ratio goal of {seedConfig.Ratio}");
+                        canRemove = true;
+                    }
+                    else if (DateTimeOffset.Now - DateTimeOffset.FromUnixTimeSeconds(torrent.FinishedTime) >= seedConfig.SeedTime)
+                    {
+                        _logger.Trace($"{item} has met seed time goal of {seedConfig.SeedTime} minutes");
+                        canRemove = true;
+                    }
+                    else
+                    {
+                        _logger.Trace($"{item} seeding goals have not yet been reached");
+                    }
+
+                    // Check if torrent is finished and if it exceeds cached seedConfig
+                    item.CanMoveFiles = item.CanBeRemoved = canRemove;
+                }
 
                 items.Add(item);
             }
