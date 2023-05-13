@@ -1,4 +1,5 @@
 using System.Data;
+using Dapper;
 using FluentMigrator;
 using NzbDrone.Core.Datastore.Migration.Framework;
 
@@ -37,28 +38,11 @@ namespace NzbDrone.Core.Datastore.Migration
                 }
             }
 
-            string commandText;
+            var parameters = new { RemoveFailedDownloads = removeFailedDownloads, RemoveCompletedDownloads = removeCompletedDownloads };
+            var updateSql = $"UPDATE \"DownloadClients\" SET \"RemoveCompletedDownloads\" = (CASE WHEN \"Implementation\" IN ('RTorrent', 'Flood') THEN 'false' ELSE @RemoveCompletedDownloads END), \"RemoveFailedDownloads\" = @RemoveFailedDownloads";
+            conn.Execute(updateSql, parameters, transaction: tran);
 
-            if (conn.GetType().FullName == "Npgsql.NpgsqlConnection")
-            {
-                commandText = $"UPDATE \"DownloadClients\" SET \"RemoveCompletedDownloads\" = (CASE WHEN \"Implementation\" IN ('RTorrent', 'Flood') THEN 'false' ELSE $1 END), \"RemoveFailedDownloads\" = $2";
-            }
-            else
-            {
-                commandText = $"UPDATE \"DownloadClients\" SET \"RemoveCompletedDownloads\" = (CASE WHEN \"Implementation\" IN ('RTorrent', 'Flood') THEN 'false' ELSE ? END), \"RemoveFailedDownloads\" = ?";
-            }
-
-            using (var updateClientCmd = conn.CreateCommand(tran, commandText))
-            {
-                updateClientCmd.AddParameter(removeCompletedDownloads);
-                updateClientCmd.AddParameter(removeFailedDownloads);
-                updateClientCmd.ExecuteNonQuery();
-            }
-
-            using (var removeConfigCmd = conn.CreateCommand(tran, $"DELETE FROM \"Config\" WHERE \"Key\" IN ('removecompleteddownloads', 'removefaileddownloads')"))
-            {
-                removeConfigCmd.ExecuteNonQuery();
-            }
+            conn.Execute("DELETE FROM \"Config\" WHERE \"Key\" IN ('removecompleteddownloads', 'removefaileddownloads')");
         }
     }
 }
