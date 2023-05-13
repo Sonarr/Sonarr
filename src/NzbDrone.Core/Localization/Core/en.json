@@ -1,6 +1,6 @@
 {
   "Added": "Added",
-  "ApiKeyValidationHealthCheckMessage": "Please update your API key to be at least 20 characters long. You can do this via settings or the config file",
+  "ApiKeyValidationHealthCheckMessage": "Please update your API key to be at least {0} characters long. You can do this via settings or the config file",
   "AppDataLocationHealthCheckMessage": "Updating will not be possible to prevent deleting AppData on Update",
   "ApplyChanges": "Apply Changes",
   "AutomaticAdd": "Automatic Add",
