@@ -28,7 +28,7 @@ namespace NzbDrone.Core.Datastore.Migration
             using (var getHistory = conn.CreateCommand())
             {
                 getHistory.Transaction = tran;
-                getHistory.CommandText = @"SELECT ""Id"", ""Data"" FROM ""History"" WHERE ""Data"" LIKE '%downloadClientId%'";
+                getHistory.CommandText = "SELECT \"Id\", \"Data\" FROM \"History\" WHERE \"Data\" LIKE '%downloadClientId%'";
 
                 using (var historyReader = getHistory.ExecuteReader())
                 {

@@ -49,7 +49,7 @@ namespace NzbDrone.Core.Datastore.Migration
             using (var tagCmd = conn.CreateCommand())
             {
                 tagCmd.Transaction = tran;
-                tagCmd.CommandText = @"SELECT ""Id"", ""Label"" FROM ""Tags""";
+                tagCmd.CommandText = "SELECT \"Id\", \"Label\" FROM \"Tags\"";
 
                 using (var tagReader = tagCmd.ExecuteReader())
                 {
@@ -116,7 +116,7 @@ namespace NzbDrone.Core.Datastore.Migration
                 Id = t.Id
             });
 
-            var updateTagsSql = string.Format(@"UPDATE ""{0}"" SET ""Tags"" = @Tags WHERE ""Id"" = @Id", table);
+            var updateTagsSql = $"UPDATE \"{table}\" SET \"Tags\" = @Tags WHERE \"Id\" = @Id";
             conn.Execute(updateTagsSql, updatedTags, transaction: tran);
         }
 
@@ -129,7 +129,7 @@ namespace NzbDrone.Core.Datastore.Migration
                 using (var removeCmd = conn.CreateCommand())
                 {
                     removeCmd.Transaction = tran;
-                    removeCmd.CommandText = string.Format("DELETE FROM \"Tags\" WHERE \"Id\" IN ({0})", string.Join(", ", idsToRemove));
+                    removeCmd.CommandText = $"DELETE FROM \"Tags\" WHERE \"Id\" IN ({string.Join(", ", idsToRemove)})";
                     removeCmd.ExecuteNonQuery();
                 }
             }

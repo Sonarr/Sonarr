@@ -115,7 +115,7 @@ namespace NzbDrone.Core.Datastore.Migration
             using (var getProfilesCmd = _connection.CreateCommand())
             {
                 getProfilesCmd.Transaction = _transaction;
-                getProfilesCmd.CommandText = @"SELECT ""Id"", ""Name"", ""Cutoff"", ""Items"" FROM ""Profiles""";
+                getProfilesCmd.CommandText = "SELECT \"Id\", \"Name\", \"Cutoff\", \"Items\" FROM \"Profiles\"";
 
                 using (var profileReader = getProfilesCmd.ExecuteReader())
                 {

@@ -35,7 +35,7 @@ namespace NzbDrone.Core.Datastore.Migration
             using (var getProfileCmd = conn.CreateCommand())
             {
                 getProfileCmd.Transaction = tran;
-                getProfileCmd.CommandText = @"SELECT ""Id"", ""Language"" FROM ""Profiles""";
+                getProfileCmd.CommandText = "SELECT \"Id\", \"Language\" FROM \"Profiles\"";
 
                 using (var profilesReader = getProfileCmd.ExecuteReader())
                 {
@@ -61,7 +61,7 @@ namespace NzbDrone.Core.Datastore.Migration
             using (var getSeriesCmd = conn.CreateCommand())
             {
                 getSeriesCmd.Transaction = tran;
-                getSeriesCmd.CommandText = @"SELECT ""Id"", ""ProfileId"" FROM ""Series""";
+                getSeriesCmd.CommandText = "SELECT \"Id\", \"ProfileId\" FROM \"Series\"";
                 using (var seriesReader = getSeriesCmd.ExecuteReader())
                 {
                     while (seriesReader.Read())

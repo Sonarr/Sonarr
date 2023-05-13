@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Datastore.Migration
             using (var getFileChmodCmd = conn.CreateCommand())
             {
                 getFileChmodCmd.Transaction = tran;
-                getFileChmodCmd.CommandText = @"SELECT ""Value"" FROM ""Config"" WHERE ""Key"" = 'filechmod'";
+                getFileChmodCmd.CommandText = "SELECT \"Value\" FROM \"Config\" WHERE \"Key\" = 'filechmod'";
 
                 if (getFileChmodCmd.ExecuteScalar() is string fileChmod)
                 {

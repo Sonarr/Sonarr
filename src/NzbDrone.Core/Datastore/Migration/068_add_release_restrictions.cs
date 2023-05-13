@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Datastore.Migration
             using (var getRestictionsCmd = conn.CreateCommand())
             {
                 getRestictionsCmd.Transaction = tran;
-                getRestictionsCmd.CommandText = @"SELECT ""Value"" FROM ""Config"" WHERE ""Key"" = 'releaserestrictions'";
+                getRestictionsCmd.CommandText = "SELECT \"Value\" FROM \"Config\" WHERE \"Key\" = 'releaserestrictions'";
 
                 using (var configReader = getRestictionsCmd.ExecuteReader())
                 {

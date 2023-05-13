@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Datastore.Migration
             using (var qualitySizeCmd = conn.CreateCommand())
             {
                 qualitySizeCmd.Transaction = tran;
-                qualitySizeCmd.CommandText = @"SELECT ""QualityId"", ""MinSize"", ""MaxSize"" FROM ""QualitySizes""";
+                qualitySizeCmd.CommandText = "SELECT \"QualityId\", \"MinSize\", \"MaxSize\" FROM \"QualitySizes\"";
                 using (var qualitySizeReader = qualitySizeCmd.ExecuteReader())
                 {
                     while (qualitySizeReader.Read())

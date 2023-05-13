@@ -22,7 +22,7 @@ namespace NzbDrone.Core.Datastore.Migration
             using (var namingConfigCmd = conn.CreateCommand())
             {
                 namingConfigCmd.Transaction = tran;
-                namingConfigCmd.CommandText = @"SELECT ""StandardEpisodeFormat"", ""DailyEpisodeFormat"", ""AnimeEpisodeFormat"" FROM ""NamingConfig"" LIMIT 1";
+                namingConfigCmd.CommandText = "SELECT \"StandardEpisodeFormat\", \"DailyEpisodeFormat\", \"AnimeEpisodeFormat\" FROM \"NamingConfig\" LIMIT 1";
 
                 using (var configReader = namingConfigCmd.ExecuteReader())
                 {

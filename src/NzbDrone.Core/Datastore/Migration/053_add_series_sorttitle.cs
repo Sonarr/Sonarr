@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Datastore.Migration
             using (var getSeriesCmd = conn.CreateCommand())
             {
                 getSeriesCmd.Transaction = tran;
-                getSeriesCmd.CommandText = @"SELECT ""Id"", ""Title"" FROM ""Series""";
+                getSeriesCmd.CommandText = "SELECT \"Id\", \"Title\" FROM \"Series\"";
                 using (var seriesReader = getSeriesCmd.ExecuteReader())
                 {
                     while (seriesReader.Read())

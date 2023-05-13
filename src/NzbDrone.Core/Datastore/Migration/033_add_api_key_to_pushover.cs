@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Datastore.Migration
             using (var selectCommand = conn.CreateCommand())
             {
                 selectCommand.Transaction = tran;
-                selectCommand.CommandText = @"SELECT * FROM ""Notifications"" WHERE ""ConfigContract"" = 'PushoverSettings'";
+                selectCommand.CommandText = "SELECT * FROM \"Notifications\" WHERE \"ConfigContract\" = 'PushoverSettings'";
 
                 using (var reader = selectCommand.ExecuteReader())
                 {

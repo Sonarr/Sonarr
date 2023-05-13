@@ -27,13 +27,13 @@ namespace NzbDrone.Core.Datastore.Migration
             using (var cmd = conn.CreateCommand())
             {
                 cmd.Transaction = tran;
-                cmd.CommandText = @"SELECT ""Value"" FROM ""Config"" WHERE ""Key"" = 'downloadedepisodesfolder'";
+                cmd.CommandText = "SELECT \"Value\" FROM \"Config\" WHERE \"Key\" = 'downloadedepisodesfolder'";
 
                 var result = cmd.ExecuteScalar();
 
                 if (result == null)
                 {
-                    cmd.CommandText = @"INSERT INTO ""Config"" (""Key"", ""Value"") VALUES ('enablecompleteddownloadhandling', 'True')";
+                    cmd.CommandText = "INSERT INTO \"Config\" (\"Key\", \"Value\") VALUES ('enablecompleteddownloadhandling', 'True')";
                     cmd.ExecuteNonQuery();
                 }
             }
@@ -44,11 +44,11 @@ namespace NzbDrone.Core.Datastore.Migration
             using (var downloadClientsCmd = conn.CreateCommand())
             {
                 downloadClientsCmd.Transaction = tran;
-                downloadClientsCmd.CommandText = @"SELECT ""Value"" FROM ""Config"" WHERE ""Key"" = 'downloadedepisodesfolder'";
+                downloadClientsCmd.CommandText = "SELECT \"Value\" FROM \"Config\" WHERE \"Key\" = 'downloadedepisodesfolder'";
                 var downloadedEpisodesFolder = downloadClientsCmd.ExecuteScalar() as string;
 
                 downloadClientsCmd.Transaction = tran;
-                downloadClientsCmd.CommandText = @"SELECT ""Id"", ""Implementation"", ""Settings"", ""ConfigContract"" FROM ""DownloadClients"" WHERE ""ConfigContract"" = 'FolderSettings'";
+                downloadClientsCmd.CommandText = "SELECT \"Id\", \"Implementation\", \"Settings\", \"ConfigContract\" FROM \"DownloadClients\" WHERE \"ConfigContract\" = 'FolderSettings'";
                 using (var downloadClientReader = downloadClientsCmd.ExecuteReader())
                 {
                     while (downloadClientReader.Read())
@@ -141,7 +141,7 @@ namespace NzbDrone.Core.Datastore.Migration
             using (var historyCmd = conn.CreateCommand())
             {
                 historyCmd.Transaction = tran;
-                historyCmd.CommandText = @"SELECT ""Id"", ""EpisodeId"", ""SeriesId"", ""SourceTitle"", ""Date"", ""Data"", ""EventType"" FROM ""History"" WHERE ""EventType"" IS NOT NULL";
+                historyCmd.CommandText = "SELECT \"Id\", \"EpisodeId\", \"SeriesId\", \"SourceTitle\", \"Date\", \"Data\", \"EventType\" FROM \"History\" WHERE \"EventType\" IS NOT NULL";
                 using (var historyRead = historyCmd.ExecuteReader())
                 {
                     while (historyRead.Read())
