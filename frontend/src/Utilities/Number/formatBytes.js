@@ -1,4 +1,4 @@
-import filesize from 'filesize';
+import { filesize } from 'filesize';
 
 function formatBytes(input) {
   const size = Number(input);
@@ -7,10 +7,10 @@ function formatBytes(input) {
     return '';
   }
 
-  return filesize(size, {
+  return `${filesize(size, {
     base: 2,
     round: 1
-  });
+  })}`;
 }
 
 export default formatBytes;
