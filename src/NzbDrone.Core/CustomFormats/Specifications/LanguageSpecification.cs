@@ -33,7 +33,7 @@ namespace NzbDrone.Core.CustomFormats
 
         protected override bool IsSatisfiedByWithoutNegate(CustomFormatInput input)
         {
-            var comparedLanguage = input.EpisodeInfo != null && Value == Language.Original.Id && input.Series.OriginalLanguage != Language.Unknown
+            var comparedLanguage = input.EpisodeInfo != null && input.Series != null && Value == Language.Original.Id && input.Series.OriginalLanguage != Language.Unknown
                 ? input.Series.OriginalLanguage
                 : (Language)Value;
 
