@@ -1,5 +1,4 @@
 using System.Linq;
-using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Tv.Events;
@@ -12,12 +11,10 @@ namespace NzbDrone.Core.HealthCheck.Checks
     public class RemovedSeriesCheck : HealthCheckBase, ICheckOnCondition<SeriesUpdatedEvent>, ICheckOnCondition<SeriesDeletedEvent>
     {
         private readonly ISeriesService _seriesService;
-        private readonly Logger _logger;
 
-        public RemovedSeriesCheck(ISeriesService seriesService, Logger logger)
+        public RemovedSeriesCheck(ISeriesService seriesService)
         {
             _seriesService = seriesService;
-            _logger = logger;
         }
 
         public override HealthCheck Check()

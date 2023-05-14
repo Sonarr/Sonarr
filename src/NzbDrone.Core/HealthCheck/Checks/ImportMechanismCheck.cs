@@ -42,10 +42,10 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 return new HealthCheck(GetType());
             }
 
-            var downloadClientIsLocalHost = downloadClients.All(v => v.Status.IsLocalhost);
-
             if (!_configService.IsDefined("EnableCompletedDownloadHandling"))
             {
+                var downloadClientIsLocalHost = downloadClients.All(v => v.Status.IsLocalhost);
+
                 // Migration helper logic
                 if (!downloadClientIsLocalHost)
                 {

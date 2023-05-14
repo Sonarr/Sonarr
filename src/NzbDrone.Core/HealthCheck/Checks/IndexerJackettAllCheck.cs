@@ -21,12 +21,14 @@ namespace NzbDrone.Core.HealthCheck.Checks
 
         public override HealthCheck Check()
         {
-            var jackettAllProviders = _providerFactory.All().Where(
-                i => i.ConfigContract.Equals("TorznabSettings") &&
-                ((i.Settings as TorznabSettings).BaseUrl.Contains("/torznab/all/api", StringComparison.InvariantCultureIgnoreCase) ||
-                (i.Settings as TorznabSettings).BaseUrl.Contains("/api/v2.0/indexers/all/results/torznab", StringComparison.InvariantCultureIgnoreCase) ||
-                (i.Settings as TorznabSettings).ApiPath.Contains("/torznab/all/api", StringComparison.InvariantCultureIgnoreCase) ||
-                (i.Settings as TorznabSettings).ApiPath.Contains("/api/v2.0/indexers/all/results/torznab", StringComparison.InvariantCultureIgnoreCase)));
+            var jackettAllProviders = _providerFactory.All()
+                .Where(
+                    i => i.ConfigContract.Equals("TorznabSettings") &&
+                         (((TorznabSettings)i.Settings).BaseUrl.Contains("/torznab/all/api", StringComparison.InvariantCultureIgnoreCase) ||
+                          ((TorznabSettings)i.Settings).BaseUrl.Contains("/api/v2.0/indexers/all/results/torznab", StringComparison.InvariantCultureIgnoreCase) ||
+                          ((TorznabSettings)i.Settings).ApiPath.Contains("/torznab/all/api", StringComparison.InvariantCultureIgnoreCase) ||
+                          ((TorznabSettings)i.Settings).ApiPath.Contains("/api/v2.0/indexers/all/results/torznab", StringComparison.InvariantCultureIgnoreCase)))
+                .ToArray();
 
             if (jackettAllProviders.Empty())
             {

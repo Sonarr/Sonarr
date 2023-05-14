@@ -19,10 +19,10 @@ namespace NzbDrone.Core.HealthCheck.Checks
         {
             // Not best for optimization but due to possible symlinks and junctions, we get mounts based on series path so internals can handle mount resolution.
             var mounts = _seriesService.GetAllSeriesPaths()
-                                       .Select(s => _diskProvider.GetMount(s.Value))
-                                       .Where(m => m != null && m.MountOptions != null && m.MountOptions.IsReadOnly)
-                                       .DistinctBy(m => m.RootDirectory)
-                                       .ToList();
+                .Select(s => _diskProvider.GetMount(s.Value))
+                .Where(m => m is { MountOptions.IsReadOnly: true })
+                .DistinctBy(m => m.RootDirectory)
+                .ToList();
 
             if (mounts.Any())
             {
