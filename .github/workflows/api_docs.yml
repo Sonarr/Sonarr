@@ -1,0 +1,57 @@
+name: 'API Docs'
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * 1'
+  push:
+    branches:
+      - develop
+    paths:
+      - ".github/workflows/api_docs.yml"
+      - "docs.sh"
+      - "src/Sonarr.Api.*/**"
+      - "src/**/*.csproj"
+      - "src/*"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  api_docs:
+    runs-on: ubuntu-latest
+    if: github.repository == 'Sonarr/Sonarr'
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v3
+        id: setup-dotnet
+        with:
+          dotnet-version: '6.0.x'
+
+      - name: Create temporary global.json
+        run: |
+          echo '{"sdk":{"version": "${{ steps.setup-dotnet.outputs.dotnet-version }}" } }' > ./global.json
+
+      - name: Create openapi.json
+        run: ./docs.sh Linux
+
+      - name: Commit API Docs Change
+        continue-on-error: true
+        run: |
+          git config --global user.email "development@sonarr.tv"
+          git config --global user.name "Sonarr"
+          git checkout -b api-docs
+          git add src
+          if git status | grep -q modified
+          then
+            git commit -am 'Automated API Docs update'
+            git push -f --set-upstream origin api-docs
+            curl -X POST -H "Authorization: Bearer ${{ secrets.OPENAPI_PAT }}" -H "Accept: application/vnd.github+json" https://api.github.com/repos/sonarr/sonarr/pulls -d '{"head":"api-docs","base":"develop","title":"Update API docs"}'
+          else
+            echo "No changes since last run"
+          fi
