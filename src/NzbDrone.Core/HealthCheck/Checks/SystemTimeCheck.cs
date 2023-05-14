@@ -22,8 +22,8 @@ namespace NzbDrone.Core.HealthCheck.Checks
         public override HealthCheck Check()
         {
             var request = _cloudRequestBuilder.Create()
-                                              .Resource("/time")
-                                              .Build();
+                .Resource("/time")
+                .Build();
 
             var response = _client.Execute(request);
             var result = Json.Deserialize<ServiceTimeResponse>(response.Content);

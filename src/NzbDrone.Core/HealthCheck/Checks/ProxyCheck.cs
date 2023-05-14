@@ -29,34 +29,37 @@ namespace NzbDrone.Core.HealthCheck.Checks
 
         public override HealthCheck Check()
         {
-            if (_configService.ProxyEnabled)
+            if (!_configService.ProxyEnabled)
             {
-                var addresses = Dns.GetHostAddresses(_configService.ProxyHostname);
-                if (!addresses.Any())
-                {
-                    return new HealthCheck(GetType(), HealthCheckResult.Error, string.Format("Failed to resolve the IP Address for the Configured Proxy Host {0}", _configService.ProxyHostname), "#proxy-failed-resolve-ip");
-                }
+                return new HealthCheck(GetType());
+            }
 
-                var request = _cloudRequestBuilder.Create()
-                                                  .Resource("/ping")
-                                                  .Build();
+            var addresses = Dns.GetHostAddresses(_configService.ProxyHostname);
 
-                try
-                {
-                    var response = _client.Execute(request);
+            if (!addresses.Any())
+            {
+                return new HealthCheck(GetType(), HealthCheckResult.Error, string.Format("Failed to resolve the IP Address for the Configured Proxy Host {0}", _configService.ProxyHostname), "#proxy-failed-resolve-ip");
+            }
 
-                    // We only care about 400 responses, other error codes can be ignored
-                    if (response.StatusCode == HttpStatusCode.BadRequest)
-                    {
-                        _logger.Error("Proxy Health Check failed: {0}", response.StatusCode);
-                        return new HealthCheck(GetType(), HealthCheckResult.Error, $"Failed to test proxy. StatusCode: {response.StatusCode}", "#proxy-failed-test");
-                    }
-                }
-                catch (Exception ex)
+            var request = _cloudRequestBuilder.Create()
+                .Resource("/ping")
+                .Build();
+
+            try
+            {
+                var response = _client.Execute(request);
+
+                // We only care about 400 responses, other error codes can be ignored
+                if (response.StatusCode == HttpStatusCode.BadRequest)
                 {
-                    _logger.Error(ex, "Proxy Health Check failed");
-                    return new HealthCheck(GetType(), HealthCheckResult.Error, $"Failed to test proxy: {request.Url}", "#proxy-failed-test");
+                    _logger.Error("Proxy Health Check failed: {0}", response.StatusCode);
+                    return new HealthCheck(GetType(), HealthCheckResult.Error, $"Failed to test proxy. StatusCode: {response.StatusCode}", "#proxy-failed-test");
                 }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Proxy Health Check failed");
+                return new HealthCheck(GetType(), HealthCheckResult.Error, $"Failed to test proxy: {request.Url}", "#proxy-failed-test");
             }
 
             return new HealthCheck(GetType());

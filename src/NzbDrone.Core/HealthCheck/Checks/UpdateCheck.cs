@@ -65,12 +65,9 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 }
             }
 
-            if (BuildInfo.BuildDateTime < DateTime.UtcNow.AddDays(-14))
+            if (BuildInfo.BuildDateTime < DateTime.UtcNow.AddDays(-14) && _checkUpdateService.AvailableUpdate() != null)
             {
-                if (_checkUpdateService.AvailableUpdate() != null)
-                {
-                    return new HealthCheck(GetType(), HealthCheckResult.Warning, "New update is available");
-                }
+                return new HealthCheck(GetType(), HealthCheckResult.Warning, "New update is available");
             }
 
             return new HealthCheck(GetType());

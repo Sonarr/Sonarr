@@ -67,14 +67,13 @@ namespace NzbDrone.Core.HealthCheck.Checks
                             {
                                 return new HealthCheck(GetType(), HealthCheckResult.Error, string.Format("Remote download client {0} places downloads in {1} but this is not a valid {2} path. Review your remote path mappings and download client settings.", client.Definition.Name, folder.FullPath, _osInfo.Name), "#bad-remote-path-mapping");
                             }
-                            else if (_osInfo.IsDocker)
+
+                            if (_osInfo.IsDocker)
                             {
                                 return new HealthCheck(GetType(), HealthCheckResult.Error, string.Format("You are using docker; download client {0} reported files in {1} but this is not a valid {2} path. Review your remote path mappings and download client settings.", client.Definition.Name, folder.FullPath, _osInfo.Name), "#docker-bad-remote-path-mapping");
                             }
-                            else
-                            {
-                                return new HealthCheck(GetType(), HealthCheckResult.Error, string.Format("Local download client {0} places downloads in {1} but this is not a valid {2} path. Review your download client settings.", client.Definition.Name, folder.FullPath, _osInfo.Name), "#bad-download-client-settings");
-                            }
+
+                            return new HealthCheck(GetType(), HealthCheckResult.Error, string.Format("Local download client {0} places downloads in {1} but this is not a valid {2} path. Review your download client settings.", client.Definition.Name, folder.FullPath, _osInfo.Name), "#bad-download-client-settings");
                         }
 
                         if (!_diskProvider.FolderExists(folder.FullPath))
@@ -83,14 +82,13 @@ namespace NzbDrone.Core.HealthCheck.Checks
                             {
                                 return new HealthCheck(GetType(), HealthCheckResult.Error, string.Format("You are using docker; download client {0} places downloads in {1} but this directory does not appear to exist inside the container. Review your remote path mappings and container volume settings.", client.Definition.Name, folder.FullPath), "#docker-bad-remote-path-mapping");
                             }
-                            else if (!status.IsLocalhost)
+
+                            if (!status.IsLocalhost)
                             {
                                 return new HealthCheck(GetType(), HealthCheckResult.Error, string.Format("Remote download client {0} places downloads in {1} but this directory does not appear to exist. Likely missing or incorrect remote path mapping.", client.Definition.Name, folder.FullPath), "#bad-remote-path-mapping");
                             }
-                            else
-                            {
-                                return new HealthCheck(GetType(), HealthCheckResult.Error, string.Format("Download client {0} places downloads in {1} but Sonarr cannot see this directory. You may need to adjust the folder's permissions.", client.Definition.Name, folder.FullPath), "#permissions-error");
-                            }
+
+                            return new HealthCheck(GetType(), HealthCheckResult.Error, string.Format("Download client {0} places downloads in {1} but Sonarr cannot see this directory. You may need to adjust the folder's permissions.", client.Definition.Name, folder.FullPath), "#permissions-error");
                         }
                     }
                 }
@@ -119,10 +117,8 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 return new HealthCheck(GetType());
             }
 
-            if (typeof(EpisodeImportFailedEvent).IsAssignableFrom(message.GetType()))
+            if (message is EpisodeImportFailedEvent failureMessage)
             {
-                var failureMessage = (EpisodeImportFailedEvent)message;
-
                 // if we can see the file exists but the import failed then likely a permissions issue
                 if (failureMessage.EpisodeInfo != null)
                 {
@@ -132,12 +128,10 @@ namespace NzbDrone.Core.HealthCheck.Checks
                     {
                         return new HealthCheck(GetType(), HealthCheckResult.Error, string.Format("Sonarr can see but not access downloaded episode {0}. Likely permissions error.", episodePath), "#permissions-error");
                     }
-                    else
-                    {
-                        // If the file doesn't exist but EpisodeInfo is not null then the message is coming from
-                        // ImportApprovedEpisodes and the file must have been removed part way through processing
-                        return new HealthCheck(GetType(), HealthCheckResult.Error, string.Format("File {0} was removed part way through processing.", episodePath), "#remote-path-file-removed");
-                    }
+
+                    // If the file doesn't exist but EpisodeInfo is not null then the message is coming from
+                    // ImportApprovedEpisodes and the file must have been removed part way through processing
+                    return new HealthCheck(GetType(), HealthCheckResult.Error, string.Format("File {0} was removed part way through processing.", episodePath), "#remote-path-file-removed");
                 }
 
                 // If the previous case did not match then the failure occured in DownloadedEpisodeImportService,
@@ -168,14 +162,13 @@ namespace NzbDrone.Core.HealthCheck.Checks
                         {
                             return new HealthCheck(GetType(), HealthCheckResult.Error, string.Format("Remote download client {0} reported files in {1} but this is not a valid {2} path. Review your remote path mappings and download client settings.", client.Definition.Name, dlpath, _osInfo.Name), "#bad-remote-path-mapping");
                         }
-                        else if (_osInfo.IsDocker)
+
+                        if (_osInfo.IsDocker)
                         {
                             return new HealthCheck(GetType(), HealthCheckResult.Error, string.Format("You are using docker; download client {0} reported files in {1} but this is not a valid {2} path. Review your remote path mappings and download client settings.", client.Definition.Name, dlpath, _osInfo.Name), "#docker-bad-remote-path-mapping");
                         }
-                        else
-                        {
-                            return new HealthCheck(GetType(), HealthCheckResult.Error, string.Format("Local download client {0} reported files in {1} but this is not a valid {2} path. Review your download client settings.", client.Definition.Name, dlpath, _osInfo.Name), "#bad-download-client-settings");
-                        }
+
+                        return new HealthCheck(GetType(), HealthCheckResult.Error, string.Format("Local download client {0} reported files in {1} but this is not a valid {2} path. Review your download client settings.", client.Definition.Name, dlpath, _osInfo.Name), "#bad-download-client-settings");
                     }
 
                     if (_diskProvider.FolderExists(dlpath))
@@ -188,15 +181,14 @@ namespace NzbDrone.Core.HealthCheck.Checks
                     {
                         return new HealthCheck(GetType(), HealthCheckResult.Error, string.Format("Sonarr can see but not access download directory {0}. Likely permissions error.", client.Definition.Name, dlpath), "#docker-bad-remote-path-mapping");
                     }
-                    else if (!status.IsLocalhost)
+
+                    if (!status.IsLocalhost)
                     {
                         return new HealthCheck(GetType(), HealthCheckResult.Error, string.Format("Remote download client {0} reported files in {1} but this directory does not appear to exist. Likely missing remote path mapping.", client.Definition.Name, dlpath), "#bad-remote-path-mapping");
                     }
-                    else
-                    {
-                        // path mappings shouldn't be needed locally so probably a permissions issue
-                        return new HealthCheck(GetType(), HealthCheckResult.Error, string.Format("Download client {0} reported files in {1} but Sonarr cannot see this directory. You may need to adjust the folder's permissions.", client.Definition.Name, dlpath), "#permissions-error");
-                    }
+
+                    // path mappings shouldn't be needed locally so probably a permissions issue
+                    return new HealthCheck(GetType(), HealthCheckResult.Error, string.Format("Download client {0} reported files in {1} but Sonarr cannot see this directory. You may need to adjust the folder's permissions.", client.Definition.Name, dlpath), "#permissions-error");
                 }
                 catch (DownloadClientException ex)
                 {
@@ -213,10 +205,8 @@ namespace NzbDrone.Core.HealthCheck.Checks
 
                 return new HealthCheck(GetType());
             }
-            else
-            {
-                return Check();
-            }
+
+            return Check();
         }
     }
 }
