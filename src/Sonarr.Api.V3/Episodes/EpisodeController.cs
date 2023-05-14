@@ -62,10 +62,8 @@ namespace Sonarr.Api.V3.Episodes
 
         [HttpPut("monitor")]
         [Consumes("application/json")]
-        public IActionResult SetEpisodesMonitored([FromBody] EpisodesMonitoredResource resource)
+        public IActionResult SetEpisodesMonitored([FromBody] EpisodesMonitoredResource resource, [FromQuery] bool includeImages = false)
         {
-            var includeImages = Request.GetBooleanQueryParameter("includeImages", false);
-
             if (resource.EpisodeIds.Count == 1)
             {
                 _episodeService.SetEpisodeMonitored(resource.EpisodeIds.First(), resource.Monitored);
