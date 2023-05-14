@@ -54,7 +54,7 @@ namespace NzbDrone.Core.ThingiProvider
                     var item = parser(reader);
                     var impType = typeof(IProviderConfig).Assembly.FindTypeByName(item.ConfigContract);
 
-                    if (body.IsNullOrWhiteSpace())
+                    if (body.IsNullOrWhiteSpace() || impType == null)
                     {
                         item.Settings = NullConfig.Instance;
                     }
