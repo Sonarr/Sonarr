@@ -502,6 +502,14 @@
               "type": "boolean",
               "default": false
             }
+          },
+          {
+            "name": "tags",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "default": ""
+            }
           }
         ],
         "responses": {
@@ -576,7 +584,7 @@
             }
           },
           {
-            "name": "tagList",
+            "name": "tags",
             "in": "query",
             "schema": {
               "type": "string",
@@ -1829,6 +1837,16 @@
       "put": {
         "tags": [
           "Episode"
+        ],
+        "parameters": [
+          {
+            "name": "includeImages",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
         ],
         "requestBody": {
           "content": {
@@ -4260,6 +4278,14 @@
             }
           },
           {
+            "name": "ColonReplacementFormat",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
             "name": "MultiEpisodeStyle",
             "in": "query",
             "schema": {
@@ -6143,6 +6169,14 @@
         ],
         "parameters": [
           {
+            "name": "moveFiles",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
             "name": "id",
             "in": "path",
             "required": true,
@@ -6195,6 +6229,22 @@
             "schema": {
               "type": "integer",
               "format": "int32"
+            }
+          },
+          {
+            "name": "deleteFiles",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "addImportListExclusion",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
             }
           }
         ],
@@ -7320,6 +7370,9 @@
           "status": {
             "$ref": "#/components/schemas/CommandStatus"
           },
+          "result": {
+            "$ref": "#/components/schemas/CommandResult"
+          },
           "queued": {
             "type": "string",
             "format": "date-time"
@@ -7366,6 +7419,14 @@
           }
         },
         "additionalProperties": false
+      },
+      "CommandResult": {
+        "enum": [
+          "unknown",
+          "successful",
+          "unsuccessful"
+        ],
+        "type": "string"
       },
       "CommandStatus": {
         "enum": [
@@ -7810,6 +7871,10 @@
             "format": "date-time",
             "nullable": true
           },
+          "runtime": {
+            "type": "integer",
+            "format": "int32"
+          },
           "overview": {
             "type": "string",
             "nullable": true
@@ -7998,6 +8063,10 @@
           },
           "privacy": {
             "$ref": "#/components/schemas/PrivacyLevel"
+          },
+          "placeholder": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -9151,7 +9220,7 @@
           "latestSeason",
           "pilot",
           "monitorSpecials",
-          "UnmonitorSpecials",
+          "unmonitorSpecials",
           "none"
         ],
         "type": "string"
@@ -9183,6 +9252,10 @@
           },
           "replaceIllegalCharacters": {
             "type": "boolean"
+          },
+          "colonReplacementFormat": {
+            "type": "integer",
+            "format": "int32"
           },
           "multiEpisodeStyle": {
             "type": "integer",
@@ -9304,6 +9377,9 @@
           "onRename": {
             "type": "boolean"
           },
+          "onSeriesAdd": {
+            "type": "boolean"
+          },
           "onSeriesDelete": {
             "type": "boolean"
           },
@@ -9316,7 +9392,13 @@
           "onHealthIssue": {
             "type": "boolean"
           },
+          "onHealthRestored": {
+            "type": "boolean"
+          },
           "onApplicationUpdate": {
+            "type": "boolean"
+          },
+          "onManualInteractionRequired": {
             "type": "boolean"
           },
           "supportsOnGrab": {
@@ -9331,6 +9413,9 @@
           "supportsOnRename": {
             "type": "boolean"
           },
+          "supportsOnSeriesAdd": {
+            "type": "boolean"
+          },
           "supportsOnSeriesDelete": {
             "type": "boolean"
           },
@@ -9343,7 +9428,13 @@
           "supportsOnHealthIssue": {
             "type": "boolean"
           },
+          "supportsOnHealthRestored": {
+            "type": "boolean"
+          },
           "supportsOnApplicationUpdate": {
+            "type": "boolean"
+          },
+          "supportsOnManualInteractionRequired": {
             "type": "boolean"
           },
           "includeHealthWarnings": {
@@ -9769,6 +9860,11 @@
             "format": "int32",
             "nullable": true
           },
+          "seasonNumber": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
           "series": {
             "$ref": "#/components/schemas/SeriesResource"
           },
@@ -9851,6 +9947,9 @@
           "outputPath": {
             "type": "string",
             "nullable": true
+          },
+          "episodeHasFile": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -9961,6 +10060,33 @@
           "temporary"
         ],
         "type": "string"
+      },
+      "ReleaseEpisodeResource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "seasonNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "episodeNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "absoluteEpisodeNumber": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
       },
       "ReleaseProfileResource": {
         "type": "object",
@@ -10122,6 +10248,18 @@
             },
             "nullable": true
           },
+          "mappedSeriesId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "mappedEpisodeInfo": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ReleaseEpisodeResource"
+            },
+            "nullable": true
+          },
           "approved": {
             "type": "boolean"
           },
@@ -10227,6 +10365,23 @@
           "episodeId": {
             "type": "integer",
             "format": "int32",
+            "nullable": true
+          },
+          "episodeIds": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          },
+          "downloadClientId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "shouldOverride": {
+            "type": "boolean",
             "nullable": true
           }
         },
