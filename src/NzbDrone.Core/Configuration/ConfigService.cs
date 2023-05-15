@@ -6,6 +6,7 @@ using NLog;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.Http.Proxy;
 using NzbDrone.Core.Configuration.Events;
+using NzbDrone.Core.ImportLists;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
@@ -274,6 +275,18 @@ namespace NzbDrone.Core.Configuration
             get { return GetValue("ChownGroup", ""); }
 
             set { SetValue("ChownGroup", value); }
+        }
+
+        public ListSyncLevelType ListSyncLevel
+        {
+            get { return GetValueEnum("ListSyncLevel", ListSyncLevelType.Disabled); }
+            set { SetValue("ListSyncLevel", value); }
+        }
+
+        public int ListSyncTag
+        {
+            get { return GetValueInt("ListSyncTag"); }
+            set { SetValue("ListSyncTag", value); }
         }
 
         public int FirstDayOfWeek

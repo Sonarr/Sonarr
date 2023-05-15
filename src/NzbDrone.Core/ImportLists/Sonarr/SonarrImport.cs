@@ -31,10 +31,10 @@ namespace NzbDrone.Core.ImportLists.Sonarr
             _sonarrV3Proxy = sonarrV3Proxy;
         }
 
-        public override IList<ImportListItemInfo> Fetch()
+        public override ImportListFetchResult Fetch()
         {
             var series = new List<ImportListItemInfo>();
-
+            var anyFailure = false;
             try
             {
                 var remoteSeries = _sonarrV3Proxy.GetSeries(Settings);
@@ -75,9 +75,10 @@ namespace NzbDrone.Core.ImportLists.Sonarr
                 _logger.Debug(ex, "Failed to fetch data for list {0} ({1})", Definition.Name, Name);
 
                 _importListStatusService.RecordFailure(Definition.Id);
+                anyFailure = true;
             }
 
-            return CleanupListItems(series);
+            return new ImportListFetchResult(CleanupListItems(series), anyFailure);
         }
 
         public override object RequestAction(string action, IDictionary<string, string> query)

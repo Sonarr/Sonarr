@@ -7,6 +7,7 @@ import AppSectionState, {
 import Language from 'Language/Language';
 import DownloadClient from 'typings/DownloadClient';
 import ImportList from 'typings/ImportList';
+import ImportListOptionsSettings from 'typings/ImportListOptionsSettings';
 import Indexer from 'typings/Indexer';
 import Notification from 'typings/Notification';
 import QualityProfile from 'typings/QualityProfile';
@@ -35,10 +36,15 @@ export interface QualityProfilesAppState
   extends AppSectionState<QualityProfile>,
     AppSectionSchemaState<QualityProfile> {}
 
+export interface ImportListOptionsSettingsAppState
+  extends AppSectionItemState<ImportListOptionsSettings>,
+    AppSectionSaveState {}
+
 export type LanguageSettingsAppState = AppSectionState<Language>;
 export type UiSettingsAppState = AppSectionItemState<UiSettings>;
 
 interface SettingsAppState {
+  advancedSettings: boolean;
   downloadClients: DownloadClientAppState;
   importLists: ImportListAppState;
   indexers: IndexerAppState;
@@ -46,6 +52,7 @@ interface SettingsAppState {
   notifications: NotificationAppState;
   qualityProfiles: QualityProfilesAppState;
   ui: UiSettingsAppState;
+  importListOptions: ImportListOptionsSettingsAppState;
 }
 
 export default SettingsAppState;

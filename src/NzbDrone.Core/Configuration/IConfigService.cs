@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using NzbDrone.Common.Http.Proxy;
+using NzbDrone.Core.ImportLists;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
 using NzbDrone.Core.Qualities;
@@ -51,6 +52,9 @@ namespace NzbDrone.Core.Configuration
         int RssSyncInterval { get; set; }
         int MaximumSize { get; set; }
         int MinimumAge { get; set; }
+
+        ListSyncLevelType ListSyncLevel { get; set; }
+        int ListSyncTag { get; set; }
 
         // UI
         int FirstDayOfWeek { get; set; }

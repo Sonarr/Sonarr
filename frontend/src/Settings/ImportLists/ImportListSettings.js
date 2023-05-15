@@ -10,6 +10,7 @@ import translate from 'Utilities/String/translate';
 import ImportListsExclusionsConnector from './ImportListExclusions/ImportListExclusionsConnector';
 import ImportListsConnector from './ImportLists/ImportListsConnector';
 import ManageImportListsModal from './ImportLists/Manage/ManageImportListsModal';
+import ImportListOptions from './Options/ImportListOptions';
 
 class ImportListSettings extends Component {
 
@@ -19,7 +20,10 @@ class ImportListSettings extends Component {
   constructor(props, context) {
     super(props, context);
 
+    this._saveCallback = null;
+
     this.state = {
+      isSaving: false,
       hasPendingChanges: false,
       isManageImportListsOpen: false
     };
@@ -27,6 +31,14 @@ class ImportListSettings extends Component {
 
   //
   // Listeners
+
+  setChildSave = (saveCallback) => {
+    this._saveCallback = saveCallback;
+  };
+
+  onChildStateChange = (payload) => {
+    this.setState(payload);
+  };
 
   setListOptionsRef = (ref) => {
     this._listOptions = ref;
@@ -47,7 +59,9 @@ class ImportListSettings extends Component {
   };
 
   onSavePress = () => {
-    this._listOptions.getWrappedInstance().save();
+    if (this._saveCallback) {
+      this._saveCallback();
+    }
   };
 
   //
@@ -93,6 +107,12 @@ class ImportListSettings extends Component {
 
         <PageContentBody>
           <ImportListsConnector />
+
+          <ImportListOptions
+            setChildSave={this.setChildSave}
+            onChildStateChange={this.onChildStateChange}
+          />
+
           <ImportListsExclusionsConnector />
           <ManageImportListsModal
             isOpen={isManageImportListsOpen}

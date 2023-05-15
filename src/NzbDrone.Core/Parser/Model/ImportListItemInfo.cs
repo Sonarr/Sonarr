@@ -1,8 +1,9 @@
 using System;
+using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Core.Parser.Model
 {
-    public class ImportListItemInfo
+    public class ImportListItemInfo : ModelBase
     {
         public int ImportListId { get; set; }
         public string ImportList { get; set; }

@@ -6,7 +6,6 @@ using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Localization;
 using NzbDrone.Core.Parser;
-using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.ImportLists.Trakt
@@ -36,7 +35,7 @@ namespace NzbDrone.Core.ImportLists.Trakt
             _importListRepository = netImportRepository;
         }
 
-        public override IList<ImportListItemInfo> Fetch()
+        public override ImportListFetchResult Fetch()
         {
             Settings.Validate().Filter("AccessToken", "RefreshToken").ThrowOnError();
             _logger.Trace($"Access token expires at {Settings.Expires}");

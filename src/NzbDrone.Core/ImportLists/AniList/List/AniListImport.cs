@@ -44,10 +44,11 @@ namespace NzbDrone.Core.ImportLists.AniList.List
             return new AniListParser(Settings);
         }
 
-        protected override IList<ImportListItemInfo> FetchItems(Func<IImportListRequestGenerator, ImportListPageableRequestChain> pageableRequestChainSelector, bool isRecent = false)
+        protected override ImportListFetchResult FetchItems(Func<IImportListRequestGenerator, ImportListPageableRequestChain> pageableRequestChainSelector, bool isRecent = false)
         {
             var releases = new List<ImportListItemInfo>();
             var url = string.Empty;
+            var anyFailure = true;
 
             try
             {
@@ -77,6 +78,7 @@ namespace NzbDrone.Core.ImportLists.AniList.List
                 while (hasNextPage);
 
                 _importListStatusService.RecordSuccess(Definition.Id);
+                anyFailure = false;
             }
             catch (WebException webException)
             {
@@ -149,7 +151,7 @@ namespace NzbDrone.Core.ImportLists.AniList.List
                 _logger.Error(ex, "An error occurred while processing feed. {0}", url);
             }
 
-            return CleanupListItems(releases);
+            return new ImportListFetchResult(CleanupListItems(releases), anyFailure);
         }
     }
 }
