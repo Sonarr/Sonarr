@@ -182,10 +182,18 @@ namespace NzbDrone.Mono.Disk
             try
             {
                 mounts.AddRange(GetDriveInfoMounts()
-                        .Select(d => new DriveInfoMount(d, FindDriveType.Find(d.DriveFormat)))
-                        .Where(d => d.DriveType == DriveType.Fixed ||
-                                d.DriveType == DriveType.Network ||
-                                d.DriveType == DriveType.Removable));
+                    .Select(d =>
+                    {
+                        try
+                        {
+                            return new DriveInfoMount(d, FindDriveType.Find(d.DriveFormat));
+                        }
+                        catch (Exception ex)
+                        {
+                            throw new Exception($"Failed to fetch drive info for mount point: {d.Name}", ex);
+                        }
+                    })
+                    .Where(d => d.DriveType is DriveType.Fixed or DriveType.Network or DriveType.Removable));
             }
             catch (Exception e)
             {
