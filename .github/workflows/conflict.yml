@@ -1,0 +1,25 @@
+name: "Label Conflicts"
+on:
+  push:
+    branches: [develop]
+  pull_request:
+    branches: [develop]
+
+jobs:
+  auto-label:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: prince-chrismc/label-merge-conflicts-action@v3
+        with:
+          conflict_label_name: "conflict"
+          github_token: ${{ github.token }}
+
+          # --- Optional Inputs ---
+          # To make sure the merge commit exactly matches the branch
+          detect_merge_changes: false # or true to handle as conflicts
+          # By default a comment will be left, adding `conflict_comment: ''` will disable comments
+          # The optional `${author}` will be replaced with the username of the pull request
+          # conflict_comment: |
+          #  :wave: Hi, @${author},
+          #  I detected conflicts against the base branch :speak_no_evil:
+          #  You'll want to sync :arrows_counterclockwise: your branch with upstream!
