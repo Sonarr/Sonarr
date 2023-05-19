@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import Card from 'Components/Card';
 import Label from 'Components/Label';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
+import TagList from 'Components/TagList';
 import { kinds } from 'Helpers/Props';
 import EditNotificationModalConnector from './EditNotificationModalConnector';
 import styles from './Notification.css';
@@ -77,7 +78,9 @@ class Notification extends Component {
       supportsOnHealthIssue,
       supportsOnHealthRestored,
       supportsOnApplicationUpdate,
-      supportsOnManualInteractionRequired
+      supportsOnManualInteractionRequired,
+      tags,
+      tagList
     } = this.props;
 
     return (
@@ -197,6 +200,11 @@ class Notification extends Component {
             null
         }
 
+        <TagList
+          tags={tags}
+          tagList={tagList}
+        />
+
         <EditNotificationModalConnector
           id={id}
           isOpen={this.state.isEditNotificationModalOpen}
@@ -245,6 +253,8 @@ Notification.propTypes = {
   supportsOnHealthRestored: PropTypes.bool.isRequired,
   supportsOnApplicationUpdate: PropTypes.bool.isRequired,
   supportsOnManualInteractionRequired: PropTypes.bool.isRequired,
+  tags: PropTypes.arrayOf(PropTypes.number).isRequired,
+  tagList: PropTypes.arrayOf(PropTypes.object).isRequired,
   onConfirmDeleteNotification: PropTypes.func.isRequired
 };
 
