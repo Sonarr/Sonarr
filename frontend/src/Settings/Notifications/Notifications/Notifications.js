@@ -48,6 +48,7 @@ class Notifications extends Component {
   render() {
     const {
       items,
+      tagList,
       onConfirmDeleteNotification,
       ...otherProps
     } = this.props;
@@ -70,6 +71,7 @@ class Notifications extends Component {
                   <Notification
                     key={item.id}
                     {...item}
+                    tagList={tagList}
                     onConfirmDeleteNotification={onConfirmDeleteNotification}
                   />
                 );
@@ -108,6 +110,7 @@ Notifications.propTypes = {
   isFetching: PropTypes.bool.isRequired,
   error: PropTypes.object,
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
+  tagList: PropTypes.arrayOf(PropTypes.object).isRequired,
   onConfirmDeleteNotification: PropTypes.func.isRequired
 };
 
