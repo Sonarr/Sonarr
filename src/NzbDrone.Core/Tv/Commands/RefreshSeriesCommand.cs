@@ -1,23 +1,32 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Messaging.Commands;
 
 namespace NzbDrone.Core.Tv.Commands
 {
     public class RefreshSeriesCommand : Command
     {
-        public int? SeriesId { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public int SeriesId
+        {
+            get => 0;
+            set
+            {
+                if (SeriesIds.Empty())
+                {
+                    SeriesIds.Add(value);
+                }
+            }
+        }
+
         public List<int> SeriesIds { get; set; }
         public bool IsNewSeries { get; set; }
 
         public RefreshSeriesCommand()
         {
             SeriesIds = new List<int>();
-        }
-
-        public RefreshSeriesCommand(int seriesId, bool isNewSeries = false)
-        {
-            SeriesIds = new List<int> { seriesId };
         }
 
         public RefreshSeriesCommand(List<int> seriesIds, bool isNewSeries = false)

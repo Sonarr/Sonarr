@@ -75,23 +75,6 @@ namespace NzbDrone.Core.Test.TvTests
         }
 
         [Test]
-        public void should_monitor_new_seasons_automatically_if_series_is_monitored_single_seriesId()
-        {
-            _series.Monitored = true;
-            var newSeriesInfo = _series.JsonClone();
-            newSeriesInfo.Seasons.Add(Builder<Season>.CreateNew()
-                                         .With(s => s.SeasonNumber = 2)
-                                         .Build());
-
-            GivenNewSeriesInfo(newSeriesInfo);
-
-            Subject.Execute(new RefreshSeriesCommand(_series.Id));
-
-            Mocker.GetMock<ISeriesService>()
-                .Verify(v => v.UpdateSeries(It.Is<Series>(s => s.Seasons.Count == 2 && s.Seasons.Single(season => season.SeasonNumber == 2).Monitored == true), It.IsAny<bool>(), It.IsAny<bool>()));
-        }
-
-        [Test]
         public void should_not_monitor_new_seasons_automatically_if_series_is_not_monitored()
         {
             _series.Monitored = false;
