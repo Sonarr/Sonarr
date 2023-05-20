@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Net;
+using System.Net.Http;
 using Newtonsoft.Json.Linq;
 using NLog;
 using NzbDrone.Common.Extensions;
@@ -187,6 +188,10 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             catch (HttpException ex)
             {
                 throw new DownloadClientException("Unable to connect to SABnzbd, {0}", ex, ex.Message);
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new DownloadClientUnavailableException("Unable to connect to SABnzbd, {0}", ex, ex.Message);
             }
             catch (WebException ex)
             {
