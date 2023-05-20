@@ -71,6 +71,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[NC-Raws] ANIME-SERIES TITLE－影宅－ / Anime-Series Title - 07 [Baha][WEB-DL][1080p][AVC AAC][CHT][MP4]", "Anime-Series Title", "NC-Raws", 7)]
         [TestCase("[OPFans楓雪動漫][ANIME SERIES 海賊王][第1008話][典藏版][1080P][MKV][簡繁]", "ANIME SERIES", "OPFans", 1008)]
         [TestCase("[Skymoon-Raws][Anime Series 海賊王][1008][ViuTV][WEB-RIP][CHT][SRTx2][1080p][MKV]", "Anime Series", "Skymoon-Raws", 1008)]
+        [TestCase("[银光字幕组][名侦探柯南·Series Title][871][信长四五〇事件][繁日][HDrip][X264-AAC][720P][MP4]", "Series Title", "银光字幕组", 871)]
         public void should_parse_unbracketed_chinese_anime_releases(string postTitle, string title, string subgroup, int absoluteEpisodeNumber)
         {
             postTitle = XmlCleaner.ReplaceUnicode(postTitle);
