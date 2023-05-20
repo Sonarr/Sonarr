@@ -42,11 +42,19 @@ function SeriesIndexRefreshSeriesButton(
       ? selectedSeriesIds
       : items.map((m) => m.id);
 
-  const refreshIndexLabel =
-    selectedFilterKey === 'all' ? 'Update All' : 'Update Filtered';
+  let refreshLabel = 'Update All';
 
-  const refreshSelectLabel =
-    selectedSeriesIds.length > 0 ? 'Update Selected' : 'Update All';
+  if (selectedSeriesIds.length > 0) {
+    refreshLabel = 'Update Selected';
+  } else if (selectedFilterKey !== 'all') {
+    refreshLabel = 'Update Filtered';
+  }
+
+  //  const refreshIndexLabel =
+  //  selectedFilterKey === 'all' ? 'Update All' : 'Update Filtered';
+  //
+  // const refreshSelectLabel =
+  //  selectedSeriesIds.length > 0 ? 'Update Selected' : 'Update All';
 
   const onPress = useCallback(() => {
     dispatch(
@@ -59,7 +67,7 @@ function SeriesIndexRefreshSeriesButton(
 
   return (
     <PageToolbarButton
-      label={isSelectMode ? refreshSelectLabel : refreshIndexLabel}
+      label={refreshLabel}
       isSpinning={isRefreshing}
       isDisabled={!totalItems}
       iconName={icons.REFRESH}
