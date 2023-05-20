@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Validation.Paths
             _seriesService = seriesService;
         }
 
-        protected override string GetDefaultMessageTemplate() => "Path is already configured for another series";
+        protected override string GetDefaultMessageTemplate() => "Path '{path}' is already configured for another series";
 
         protected override bool IsValid(PropertyValidatorContext context)
         {
@@ -21,6 +21,8 @@ namespace NzbDrone.Core.Validation.Paths
             {
                 return true;
             }
+
+            context.MessageFormatter.AppendArgument("path", context.PropertyValue.ToString());
 
             dynamic instance = context.ParentContext.InstanceToValidate;
             var instanceId = (int)instance.Id;

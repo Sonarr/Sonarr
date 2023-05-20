@@ -13,17 +13,19 @@ namespace NzbDrone.Core.Validation.Paths
             _configService = configService;
         }
 
-        protected override string GetDefaultMessageTemplate() => "Path is {relationship} configured recycle bin folder";
+        protected override string GetDefaultMessageTemplate() => "Path '{path}' is {relationship} configured recycle bin folder";
 
         protected override bool IsValid(PropertyValidatorContext context)
         {
             var recycleBin = _configService.RecycleBin;
-            var folder = context.PropertyValue.ToString();
 
             if (context.PropertyValue == null || recycleBin.IsNullOrWhiteSpace())
             {
                 return true;
             }
+
+            var folder = context.PropertyValue.ToString();
+            context.MessageFormatter.AppendArgument("path", folder);
 
             if (recycleBin.PathEquals(folder))
             {

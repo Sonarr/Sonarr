@@ -6,11 +6,12 @@ namespace NzbDrone.Core.Validation.Paths
 {
     public class SystemFolderValidator : PropertyValidator
     {
-        protected override string GetDefaultMessageTemplate() => "Is {relationship} system folder {systemFolder}";
+        protected override string GetDefaultMessageTemplate() => "Path '{path}' is {relationship} system folder {systemFolder}";
 
         protected override bool IsValid(PropertyValidatorContext context)
         {
             var folder = context.PropertyValue.ToString();
+            context.MessageFormatter.AppendArgument("path", folder);
 
             foreach (var systemFolder in SystemFolders.GetSystemFolders())
             {

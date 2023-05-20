@@ -15,7 +15,7 @@ namespace Sonarr.Api.V3.Series
             _fileNameBuilder = fileNameBuilder;
         }
 
-        protected override string GetDefaultMessageTemplate() => "Root folder path contains series folder";
+        protected override string GetDefaultMessageTemplate() => "Root folder path '{rootFolderPath}' contains series folder '{seriesFolder}'";
 
         protected override bool IsValid(PropertyValidatorContext context)
         {
@@ -24,9 +24,7 @@ namespace Sonarr.Api.V3.Series
                 return true;
             }
 
-            var seriesResource = context.InstanceToValidate as SeriesResource;
-
-            if (seriesResource == null)
+            if (context.InstanceToValidate is not SeriesResource seriesResource)
             {
                 return true;
             }
@@ -41,6 +39,9 @@ namespace Sonarr.Api.V3.Series
             var rootFolder = new DirectoryInfo(rootFolderPath!).Name;
             var series = seriesResource.ToModel();
             var seriesFolder = _fileNameBuilder.GetSeriesFolder(series);
+
+            context.MessageFormatter.AppendArgument("rootFolderPath", rootFolderPath);
+            context.MessageFormatter.AppendArgument("seriesFolder", seriesFolder);
 
             if (seriesFolder == rootFolder)
             {

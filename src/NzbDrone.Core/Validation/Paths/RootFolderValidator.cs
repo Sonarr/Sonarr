@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Validation.Paths
             _rootFolderService = rootFolderService;
         }
 
-        protected override string GetDefaultMessageTemplate() => "Path is already configured as a root folder";
+        protected override string GetDefaultMessageTemplate() => "Path '{path}' is already configured as a root folder";
 
         protected override bool IsValid(PropertyValidatorContext context)
         {
@@ -21,6 +21,8 @@ namespace NzbDrone.Core.Validation.Paths
             {
                 return true;
             }
+
+            context.MessageFormatter.AppendArgument("path", context.PropertyValue.ToString());
 
             return !_rootFolderService.All().Exists(r => r.Path.PathEquals(context.PropertyValue.ToString()));
         }

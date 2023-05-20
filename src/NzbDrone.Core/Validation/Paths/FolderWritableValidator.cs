@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Validation.Paths
             _diskProvider = diskProvider;
         }
 
-        protected override string GetDefaultMessageTemplate() => $"Folder is not writable by user {Environment.UserName}";
+        protected override string GetDefaultMessageTemplate() => "Folder '{path}' is not writable by user '{user}'";
 
         protected override bool IsValid(PropertyValidatorContext context)
         {
@@ -21,6 +21,9 @@ namespace NzbDrone.Core.Validation.Paths
             {
                 return false;
             }
+
+            context.MessageFormatter.AppendArgument("path", context.PropertyValue.ToString());
+            context.MessageFormatter.AppendArgument("user", Environment.UserName);
 
             return _diskProvider.FolderWritable(context.PropertyValue.ToString());
         }
