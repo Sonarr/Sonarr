@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Core.Languages;
@@ -106,6 +107,11 @@ namespace NzbDrone.Core.Parser
         public static IsoLanguage Get(Language language)
         {
             return All.FirstOrDefault(l => l.Language == language);
+        }
+
+        public static IsoLanguage FindByName(string name)
+        {
+            return All.FirstOrDefault(l => l.Language.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
         }
     }
 }
