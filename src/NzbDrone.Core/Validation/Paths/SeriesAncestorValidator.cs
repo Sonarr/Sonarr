@@ -14,7 +14,7 @@ namespace NzbDrone.Core.Validation.Paths
             _seriesService = seriesService;
         }
 
-        protected override string GetDefaultMessageTemplate() => "Path is an ancestor of an existing series";
+        protected override string GetDefaultMessageTemplate() => "Path '{path}' is an ancestor of an existing series";
 
         protected override bool IsValid(PropertyValidatorContext context)
         {
@@ -22,6 +22,8 @@ namespace NzbDrone.Core.Validation.Paths
             {
                 return true;
             }
+
+            context.MessageFormatter.AppendArgument("path", context.PropertyValue.ToString());
 
             return !_seriesService.GetAllSeriesPaths().Any(s => context.PropertyValue.ToString().IsParentPath(s.Value));
         }

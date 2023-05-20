@@ -12,7 +12,7 @@ namespace NzbDrone.Core.Validation.Paths
             _diskProvider = diskProvider;
         }
 
-        protected override string GetDefaultMessageTemplate() => "File does not exist";
+        protected override string GetDefaultMessageTemplate() => "File '{file}' does not exist";
 
         protected override bool IsValid(PropertyValidatorContext context)
         {
@@ -20,6 +20,8 @@ namespace NzbDrone.Core.Validation.Paths
             {
                 return false;
             }
+
+            context.MessageFormatter.AppendArgument("file", context.PropertyValue.ToString());
 
             return _diskProvider.FileExists(context.PropertyValue.ToString());
         }

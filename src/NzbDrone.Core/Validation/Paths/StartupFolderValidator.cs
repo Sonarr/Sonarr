@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Validation.Paths
             _appFolderInfo = appFolderInfo;
         }
 
-        protected override string GetDefaultMessageTemplate() => "Path cannot be {relationship} the start up folder";
+        protected override string GetDefaultMessageTemplate() => "Path '{path}' cannot be {relationship} the start up folder";
 
         protected override bool IsValid(PropertyValidatorContext context)
         {
@@ -24,6 +24,7 @@ namespace NzbDrone.Core.Validation.Paths
 
             var startupFolder = _appFolderInfo.StartUpFolder;
             var folder = context.PropertyValue.ToString();
+            context.MessageFormatter.AppendArgument("path", folder);
 
             if (startupFolder.PathEquals(folder))
             {
