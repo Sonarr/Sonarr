@@ -2,13 +2,13 @@
 
 namespace NzbDrone.Core.Notifications.Signal
 {
-    public class InvalidResponseException : Exception
+    public class SignalInvalidResponseException : Exception
     {
-        public InvalidResponseException()
+        public SignalInvalidResponseException()
         {
         }
 
-        public InvalidResponseException(string message)
+        public SignalInvalidResponseException(string message)
             : base(message)
         {
         }
