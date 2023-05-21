@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Text.Json.Serialization;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Messaging.Commands;
@@ -37,7 +36,7 @@ namespace NzbDrone.Core.Tv.Commands
 
         public override bool SendUpdatesToClient => true;
 
-        public override bool UpdateScheduledTask => !SeriesIds.Any();
+        public override bool UpdateScheduledTask => SeriesIds.Empty();
 
         public override bool IsLongRunning => true;
     }

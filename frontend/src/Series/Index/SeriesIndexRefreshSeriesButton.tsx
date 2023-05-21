@@ -50,12 +50,6 @@ function SeriesIndexRefreshSeriesButton(
     refreshLabel = 'Update Filtered';
   }
 
-  //  const refreshIndexLabel =
-  //  selectedFilterKey === 'all' ? 'Update All' : 'Update Filtered';
-  //
-  // const refreshSelectLabel =
-  //  selectedSeriesIds.length > 0 ? 'Update Selected' : 'Update All';
-
   const onPress = useCallback(() => {
     dispatch(
       executeCommand({
