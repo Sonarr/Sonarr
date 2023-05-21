@@ -210,7 +210,7 @@ class MediaManagement extends Component {
                         <FormInputGroup
                           type={inputTypes.CHECK}
                           name="useScriptImport"
-                          helpText="Copy files for importing using a script, say for transcoding"
+                          helpText="Copy files for importing using a script (ex. for transcoding)"
                           onChange={onInputChange}
                           {...settings.useScriptImport}
                         />
@@ -225,7 +225,8 @@ class MediaManagement extends Component {
                             <FormLabel>Import Script Path</FormLabel>
 
                             <FormInputGroup
-                              type={inputTypes.TEXT}
+                              type={inputTypes.PATH}
+                              includeFiles={true}
                               name="scriptImportPath"
                               helpText="The path to the script to use for importing"
                               onChange={onInputChange}
