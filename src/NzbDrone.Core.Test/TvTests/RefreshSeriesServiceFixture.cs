@@ -68,7 +68,7 @@ namespace NzbDrone.Core.Test.TvTests
 
             GivenNewSeriesInfo(newSeriesInfo);
 
-            Subject.Execute(new RefreshSeriesCommand(_series.Id));
+            Subject.Execute(new RefreshSeriesCommand(new List<int> { _series.Id }));
 
             Mocker.GetMock<ISeriesService>()
                 .Verify(v => v.UpdateSeries(It.Is<Series>(s => s.Seasons.Count == 2 && s.Seasons.Single(season => season.SeasonNumber == 2).Monitored == true), It.IsAny<bool>(), It.IsAny<bool>()));
@@ -85,7 +85,7 @@ namespace NzbDrone.Core.Test.TvTests
 
             GivenNewSeriesInfo(newSeriesInfo);
 
-            Subject.Execute(new RefreshSeriesCommand(_series.Id));
+            Subject.Execute(new RefreshSeriesCommand(new List<int> { _series.Id }));
 
             Mocker.GetMock<ISeriesService>()
                 .Verify(v => v.UpdateSeries(It.Is<Series>(s => s.Seasons.Count == 2 && s.Seasons.Single(season => season.SeasonNumber == 2).Monitored == false), It.IsAny<bool>(), It.IsAny<bool>()));
@@ -101,7 +101,7 @@ namespace NzbDrone.Core.Test.TvTests
 
             GivenNewSeriesInfo(series);
 
-            Subject.Execute(new RefreshSeriesCommand(_series.Id));
+            Subject.Execute(new RefreshSeriesCommand(new List<int> { _series.Id }));
 
             Mocker.GetMock<ISeriesService>()
                 .Verify(v => v.UpdateSeries(It.Is<Series>(s => s.Seasons.Count == 2 && s.Seasons.Single(season => season.SeasonNumber == 0).Monitored == false), It.IsAny<bool>(), It.IsAny<bool>()));
@@ -115,7 +115,7 @@ namespace NzbDrone.Core.Test.TvTests
 
             GivenNewSeriesInfo(newSeriesInfo);
 
-            Subject.Execute(new RefreshSeriesCommand(_series.Id));
+            Subject.Execute(new RefreshSeriesCommand(new List<int> { _series.Id }));
 
             Mocker.GetMock<ISeriesService>()
                 .Verify(v => v.UpdateSeries(It.Is<Series>(s => s.TvRageId == newSeriesInfo.TvRageId), It.IsAny<bool>(), It.IsAny<bool>()));
@@ -129,7 +129,7 @@ namespace NzbDrone.Core.Test.TvTests
 
             GivenNewSeriesInfo(newSeriesInfo);
 
-            Subject.Execute(new RefreshSeriesCommand(_series.Id));
+            Subject.Execute(new RefreshSeriesCommand(new List<int> { _series.Id }));
 
             Mocker.GetMock<ISeriesService>()
                 .Verify(v => v.UpdateSeries(It.Is<Series>(s => s.TvMazeId == newSeriesInfo.TvMazeId), It.IsAny<bool>(), It.IsAny<bool>()));
@@ -138,7 +138,7 @@ namespace NzbDrone.Core.Test.TvTests
         [Test]
         public void should_log_error_if_tvdb_id_not_found()
         {
-            Subject.Execute(new RefreshSeriesCommand(_series.Id));
+            Subject.Execute(new RefreshSeriesCommand(new List<int> { _series.Id }));
 
             Mocker.GetMock<ISeriesService>()
                 .Verify(v => v.UpdateSeries(It.Is<Series>(s => s.Status == SeriesStatusType.Deleted), It.IsAny<bool>(), It.IsAny<bool>()), Times.Once());
@@ -149,7 +149,7 @@ namespace NzbDrone.Core.Test.TvTests
         [Test]
         public void should_mark_as_deleted_if_tvdb_id_not_found()
         {
-            Subject.Execute(new RefreshSeriesCommand(_series.Id));
+            Subject.Execute(new RefreshSeriesCommand(new List<int> { _series.Id }));
 
             Mocker.GetMock<ISeriesService>()
                 .Verify(v => v.UpdateSeries(It.Is<Series>(s => s.Status == SeriesStatusType.Deleted), It.IsAny<bool>(), It.IsAny<bool>()), Times.Once());
@@ -162,7 +162,7 @@ namespace NzbDrone.Core.Test.TvTests
         {
             _series.Status = SeriesStatusType.Deleted;
 
-            Subject.Execute(new RefreshSeriesCommand(_series.Id));
+            Subject.Execute(new RefreshSeriesCommand(new List<int> { _series.Id }));
 
             Mocker.GetMock<ISeriesService>()
                 .Verify(v => v.UpdateSeries(It.IsAny<Series>(), It.IsAny<bool>(), It.IsAny<bool>()), Times.Never());
@@ -178,7 +178,7 @@ namespace NzbDrone.Core.Test.TvTests
 
             GivenNewSeriesInfo(newSeriesInfo);
 
-            Subject.Execute(new RefreshSeriesCommand(_series.Id));
+            Subject.Execute(new RefreshSeriesCommand(new List<int> { _series.Id }));
 
             Mocker.GetMock<ISeriesService>()
                 .Verify(v => v.UpdateSeries(It.Is<Series>(s => s.TvdbId == newSeriesInfo.TvdbId), It.IsAny<bool>(), It.IsAny<bool>()));
@@ -204,7 +204,7 @@ namespace NzbDrone.Core.Test.TvTests
 
             GivenNewSeriesInfo(newSeriesInfo);
 
-            Subject.Execute(new RefreshSeriesCommand(_series.Id));
+            Subject.Execute(new RefreshSeriesCommand(new List<int> { _series.Id }));
 
             Mocker.GetMock<ISeriesService>()
                   .Verify(v => v.UpdateSeries(It.Is<Series>(s => s.Seasons.Count == 2), It.IsAny<bool>(), It.IsAny<bool>()));
@@ -224,7 +224,7 @@ namespace NzbDrone.Core.Test.TvTests
 
             GivenNewSeriesInfo(newSeriesInfo);
 
-            Subject.Execute(new RefreshSeriesCommand(_series.Id));
+            Subject.Execute(new RefreshSeriesCommand(new List<int> { _series.Id }));
 
             Mocker.GetMock<ISeriesService>()
                   .Verify(v => v.UpdateSeries(It.Is<Series>(s => s.Seasons.Count == 2), It.IsAny<bool>(), It.IsAny<bool>()));
@@ -237,7 +237,7 @@ namespace NzbDrone.Core.Test.TvTests
                   .Setup(s => s.GetSeriesInfo(_series.Id))
                   .Throws(new IOException());
 
-            Assert.Throws<IOException>(() => Subject.Execute(new RefreshSeriesCommand(_series.Id)));
+            Assert.Throws<IOException>(() => Subject.Execute(new RefreshSeriesCommand(new List<int> { _series.Id })));
 
             Mocker.GetMock<IDiskScanService>()
                   .Verify(v => v.Scan(_series), Times.Once());
@@ -252,7 +252,7 @@ namespace NzbDrone.Core.Test.TvTests
                   .Setup(s => s.GetSeriesInfo(_series.Id))
                   .Throws(new SeriesNotFoundException(_series.Id));
 
-            Subject.Execute(new RefreshSeriesCommand(_series.Id));
+            Subject.Execute(new RefreshSeriesCommand(new List<int> { _series.Id }));
 
             Mocker.GetMock<IDiskScanService>()
                   .Verify(v => v.Scan(_series), Times.Never());

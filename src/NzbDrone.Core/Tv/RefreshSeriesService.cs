@@ -232,26 +232,29 @@ namespace NzbDrone.Core.Tv
             var isNew = message.IsNewSeries;
             _eventAggregator.PublishEvent(new SeriesRefreshStartingEvent(trigger == CommandTrigger.Manual));
 
-            if (message.SeriesId.HasValue)
+            if (message.SeriesIds.Any())
             {
-                var series = _seriesService.GetSeries(message.SeriesId.Value);
+                foreach (var seriesId in message.SeriesIds)
+                {
+                    var series = _seriesService.GetSeries(seriesId);
 
-                try
-                {
-                    series = RefreshSeriesInfo(message.SeriesId.Value);
-                    UpdateTags(series);
-                    RescanSeries(series, isNew, trigger);
-                }
-                catch (SeriesNotFoundException)
-                {
-                    _logger.Error("Series '{0}' (tvdbid {1}) was not found, it may have been removed from TheTVDB.", series.Title, series.TvdbId);
-                }
-                catch (Exception e)
-                {
-                    _logger.Error(e, "Couldn't refresh info for {0}", series);
-                    UpdateTags(series);
-                    RescanSeries(series, isNew, trigger);
-                    throw;
+                    try
+                    {
+                        series = RefreshSeriesInfo(seriesId);
+                        UpdateTags(series);
+                        RescanSeries(series, isNew, trigger);
+                    }
+                    catch (SeriesNotFoundException)
+                    {
+                        _logger.Error("Series '{0}' (tvdbid {1}) was not found, it may have been removed from TheTVDB.", series.Title, series.TvdbId);
+                    }
+                    catch (Exception e)
+                    {
+                        _logger.Error(e, "Couldn't refresh info for {0}", series);
+                        UpdateTags(series);
+                        RescanSeries(series, isNew, trigger);
+                        throw;
+                    }
                 }
             }
             else

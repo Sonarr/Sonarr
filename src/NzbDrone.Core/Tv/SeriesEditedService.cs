@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tv.Commands;
@@ -18,7 +19,7 @@ namespace NzbDrone.Core.Tv
         {
             if (message.Series.SeriesType != message.OldSeries.SeriesType)
             {
-                _commandQueueManager.Push(new RefreshSeriesCommand(message.Series.Id, false));
+                _commandQueueManager.Push(new RefreshSeriesCommand(new List<int> { message.Series.Id }, false));
             }
         }
     }

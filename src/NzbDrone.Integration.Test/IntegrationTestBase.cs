@@ -305,7 +305,7 @@ namespace NzbDrone.Integration.Test
                 Directory.CreateDirectory(Path.GetDirectoryName(path));
                 File.WriteAllText(path, "Fake Episode");
 
-                Commands.PostAndWait(new RefreshSeriesCommand(series.Id));
+                Commands.PostAndWait(new RefreshSeriesCommand(new List<int> { series.Id }));
 
                 Commands.WaitAll();
 

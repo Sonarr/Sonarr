@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { SelectProvider } from 'App/SelectContext';
 import ClientSideCollectionAppState from 'App/State/ClientSideCollectionAppState';
 import SeriesAppState, { SeriesIndexAppState } from 'App/State/SeriesAppState';
-import { REFRESH_SERIES, RSS_SYNC } from 'Commands/commandNames';
+import { RSS_SYNC } from 'Commands/commandNames';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
@@ -49,6 +49,7 @@ import SeriesIndexSelectFooter from './Select/SeriesIndexSelectFooter';
 import SeriesIndexSelectModeButton from './Select/SeriesIndexSelectModeButton';
 import SeriesIndexSelectModeMenuItem from './Select/SeriesIndexSelectModeMenuItem';
 import SeriesIndexFooter from './SeriesIndexFooter';
+import SeriesIndexRefreshSeriesButton from './SeriesIndexRefreshSeriesButton';
 import SeriesIndexTable from './Table/SeriesIndexTable';
 import SeriesIndexTableOptions from './Table/SeriesIndexTableOptions';
 import styles from './SeriesIndex.css';
@@ -86,9 +87,6 @@ const SeriesIndex = withScrollPosition((props: SeriesIndexProps) => {
   }: SeriesAppState & SeriesIndexAppState & ClientSideCollectionAppState =
     useSelector(createSeriesClientSideCollectionItemsSelector('seriesIndex'));
 
-  const isRefreshingSeries = useSelector(
-    createCommandExecutingSelector(REFRESH_SERIES)
-  );
   const isRssSyncExecuting = useSelector(
     createCommandExecutingSelector(RSS_SYNC)
   );
@@ -104,14 +102,6 @@ const SeriesIndex = withScrollPosition((props: SeriesIndexProps) => {
   useEffect(() => {
     dispatch(fetchSeries());
     dispatch(fetchQueueDetails({ all: true }));
-  }, [dispatch]);
-
-  const onRefreshSeriesPress = useCallback(() => {
-    dispatch(
-      executeCommand({
-        name: REFRESH_SERIES,
-      })
-    );
   }, [dispatch]);
 
   const onRssSyncPress = useCallback(() => {
@@ -227,13 +217,9 @@ const SeriesIndex = withScrollPosition((props: SeriesIndexProps) => {
       <PageContent>
         <PageToolbar>
           <PageToolbarSection>
-            <PageToolbarButton
-              label="Update all"
-              iconName={icons.REFRESH}
-              spinningName={icons.REFRESH}
-              isSpinning={isRefreshingSeries}
-              isDisabled={hasNoSeries}
-              onPress={onRefreshSeriesPress}
+            <SeriesIndexRefreshSeriesButton
+              isSelectMode={isSelectMode}
+              selectedFilterKey={selectedFilterKey}
             />
 
             <PageToolbarButton
