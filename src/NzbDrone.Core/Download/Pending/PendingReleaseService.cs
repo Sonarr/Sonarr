@@ -139,7 +139,14 @@ namespace NzbDrone.Core.Download.Pending
 
         public List<ReleaseInfo> GetPending()
         {
-            var releases = _repository.All().Select(p => p.Release).ToList();
+            var releases = _repository.All().Select(p =>
+            {
+                var release = p.Release;
+
+                release.PendingReleaseReason = p.Reason;
+
+                return release;
+            }).ToList();
 
             if (releases.Any())
             {

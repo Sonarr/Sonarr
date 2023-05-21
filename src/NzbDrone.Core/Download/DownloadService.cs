@@ -6,6 +6,7 @@ using NzbDrone.Common.Http;
 using NzbDrone.Common.Instrumentation.Extensions;
 using NzbDrone.Common.TPL;
 using NzbDrone.Core.Download.Clients;
+using NzbDrone.Core.Download.Pending;
 using NzbDrone.Core.Exceptions;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Messaging.Events;
@@ -50,9 +51,11 @@ namespace NzbDrone.Core.Download
 
         public void DownloadReport(RemoteEpisode remoteEpisode, int? downloadClientId)
         {
+            var filterBlockedClients = remoteEpisode.Release.PendingReleaseReason == PendingReleaseReason.DownloadClientUnavailable;
+
             var downloadClient = downloadClientId.HasValue
                 ? _downloadClientProvider.Get(downloadClientId.Value)
-                : _downloadClientProvider.GetDownloadClient(remoteEpisode.Release.DownloadProtocol, remoteEpisode.Release.IndexerId);
+                : _downloadClientProvider.GetDownloadClient(remoteEpisode.Release.DownloadProtocol, remoteEpisode.Release.IndexerId, filterBlockedClients);
 
             DownloadReport(remoteEpisode, downloadClient);
         }
