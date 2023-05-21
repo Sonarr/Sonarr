@@ -7,6 +7,7 @@ using NzbDrone.Core.Indexers.FileList;
 using NzbDrone.Core.Indexers.Newznab;
 using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.IndexerTests
 {
@@ -33,13 +34,15 @@ namespace NzbDrone.Core.Test.IndexerTests
             Mocker.SetConstant<IIndexerRepository>(repo);
 
             var existingIndexers = Builder<IndexerDefinition>.CreateNew().BuildNew();
-            existingIndexers.ConfigContract = typeof(NewznabSettings).Name;
+            existingIndexers.ConfigContract = nameof(NewznabSettings);
 
             repo.Insert(existingIndexers);
 
             Subject.Handle(new ApplicationStartedEvent());
 
             AllStoredModels.Should().NotContain(c => c.Id == existingIndexers.Id);
+
+            ExceptionVerification.ExpectedWarns(1);
         }
     }
 }
