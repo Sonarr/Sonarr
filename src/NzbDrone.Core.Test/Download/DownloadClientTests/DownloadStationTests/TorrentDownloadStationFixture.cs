@@ -591,7 +591,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
 
         [TestCase(DownloadStationTaskStatus.Downloading, false, false)]
         [TestCase(DownloadStationTaskStatus.Finished, true, true)]
-        [TestCase(DownloadStationTaskStatus.Seeding,  true, false)]
+        [TestCase(DownloadStationTaskStatus.Seeding, false, false)]
         [TestCase(DownloadStationTaskStatus.Waiting, false, false)]
         public void GetItems_should_return_canBeMoved_and_canBeDeleted_as_expected(DownloadStationTaskStatus apiStatus, bool canMoveFilesExpected, bool canBeRemovedExpected)
         {
