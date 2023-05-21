@@ -31,7 +31,6 @@ namespace NzbDrone.Core.Download.Aggregation.Aggregators
             {
                 _logger.Debug("Unable to aggregate languages, using parsed values: {0}", string.Join(", ", languages.ToList()));
 
-                remoteEpisode.Languages = languages;
                 remoteEpisode.Languages = releaseInfo != null && releaseInfo.Languages.Any() ? releaseInfo.Languages : languages;
 
                 return remoteEpisode;

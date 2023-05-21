@@ -96,16 +96,16 @@ namespace NzbDrone.Core.Indexers.Torznab
 
         protected override List<Language> GetLanguages(XElement item)
         {
-            var languges = TryGetMultipleTorznabAttributes(item, "language");
+            var languages = TryGetMultipleTorznabAttributes(item, "language");
             var results = new List<Language>();
 
             // Try to find <language> elements for some indexers that suck at following the rules.
-            if (languges.Count == 0)
+            if (languages.Count == 0)
             {
-                languges = item.Elements("language").Select(e => e.Value).ToList();
+                languages = item.Elements("language").Select(e => e.Value).ToList();
             }
 
-            foreach (var language in languges)
+            foreach (var language in languages)
             {
                 var mappedLanguage = IsoLanguages.FindByName(language)?.Language ?? null;
 

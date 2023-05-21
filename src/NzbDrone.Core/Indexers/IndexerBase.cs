@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common.Http;
@@ -16,8 +15,6 @@ namespace NzbDrone.Core.Indexers
     public abstract class IndexerBase<TSettings> : IIndexer
         where TSettings : IIndexerSettings, new()
     {
-        private static readonly Regex MultiRegex = new (@"\b(?<multi>multi)\b", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-
         protected readonly IIndexerStatusService _indexerStatusService;
         protected readonly IConfigService _configService;
         protected readonly IParsingService _parsingService;
