@@ -26,8 +26,7 @@ namespace NzbDrone.Core.Validation
 
             foreach (var failureBase in failures)
             {
-                var failure = failureBase as NzbDroneValidationFailure;
-                if (failure == null)
+                if (failureBase is not NzbDroneValidationFailure failure)
                 {
                     failure = new NzbDroneValidationFailure(failureBase);
                 }

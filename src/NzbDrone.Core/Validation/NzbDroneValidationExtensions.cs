@@ -26,8 +26,7 @@ namespace NzbDrone.Core.Validation
         {
             foreach (var item in list)
             {
-                var extended = item as NzbDroneValidationFailure;
-                if (extended != null && extended.IsWarning)
+                if (item is NzbDroneValidationFailure { IsWarning: true })
                 {
                     continue;
                 }
