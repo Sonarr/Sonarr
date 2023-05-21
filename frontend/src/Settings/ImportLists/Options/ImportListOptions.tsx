@@ -16,8 +16,6 @@ import {
   setImportListOptionsValue,
 } from 'Store/Actions/settingsActions';
 import createSettingsSectionSelector from 'Store/Selectors/createSettingsSectionSelector';
-import ImportListOptionsSettings from 'typings/ImportListOptionsSettings';
-import { PendingSection } from 'typings/pending';
 import translate from 'Utilities/String/translate';
 
 const SECTION = 'importListOptions';
@@ -61,8 +59,7 @@ function ImportListOptions(props: ImportListOptionsPageProps) {
     hasSettings,
   } = selected;
 
-  const { listSyncLevel, listSyncTag } =
-    settings as PendingSection<ImportListOptionsSettings>;
+  const { listSyncLevel, listSyncTag } = settings;
 
   const dispatch = useDispatch();
 
