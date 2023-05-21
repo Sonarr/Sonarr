@@ -96,7 +96,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
                     SeedRatio = GetSeedRatio(torrent),
                     Status = GetStatus(torrent),
                     Message = GetMessage(torrent),
-                    CanMoveFiles = IsCompleted(torrent),
+                    CanMoveFiles = IsFinished(torrent),
                     CanBeRemoved = IsFinished(torrent)
                 };
 
@@ -214,11 +214,6 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
         protected bool IsFinished(DownloadStationTask torrent)
         {
             return torrent.Status == DownloadStationTaskStatus.Finished;
-        }
-
-        protected bool IsCompleted(DownloadStationTask torrent)
-        {
-            return torrent.Status == DownloadStationTaskStatus.Seeding || IsFinished(torrent) ||  (torrent.Status == DownloadStationTaskStatus.Waiting && torrent.Size != 0 && GetRemainingSize(torrent) <= 0);
         }
 
         protected string GetMessage(DownloadStationTask torrent)
