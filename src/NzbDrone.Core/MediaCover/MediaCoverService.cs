@@ -18,7 +18,7 @@ namespace NzbDrone.Core.MediaCover
     public interface IMapCoversToLocal
     {
         void ConvertToLocalUrls(int seriesId, IEnumerable<MediaCover> covers);
-        string GetCoverPath(int seriesId, MediaCoverTypes mediaCoverTypes, int? height = null);
+        string GetCoverPath(int seriesId, MediaCoverTypes coverType, int? height = null);
     }
 
     public class MediaCoverService :
@@ -63,11 +63,11 @@ namespace NzbDrone.Core.MediaCover
             _coverRootFolder = appFolderInfo.GetMediaCoverPath();
         }
 
-        public string GetCoverPath(int seriesId, MediaCoverTypes coverTypes, int? height = null)
+        public string GetCoverPath(int seriesId, MediaCoverTypes coverType, int? height = null)
         {
             var heightSuffix = height.HasValue ? "-" + height.ToString() : "";
 
-            return Path.Combine(GetSeriesCoverPath(seriesId), coverTypes.ToString().ToLower() + heightSuffix + ".jpg");
+            return Path.Combine(GetSeriesCoverPath(seriesId), coverType.ToString().ToLower() + heightSuffix + GetExtension(coverType));
         }
 
         public void ConvertToLocalUrls(int seriesId, IEnumerable<MediaCover> covers)
@@ -84,9 +84,14 @@ namespace NzbDrone.Core.MediaCover
             {
                 foreach (var mediaCover in covers)
                 {
+                    if (mediaCover.CoverType == MediaCoverTypes.Unknown)
+                    {
+                        continue;
+                    }
+
                     var filePath = GetCoverPath(seriesId, mediaCover.CoverType);
 
-                    mediaCover.Url = _configFileProvider.UrlBase + @"/MediaCover/" + seriesId + "/" + mediaCover.CoverType.ToString().ToLower() + ".jpg";
+                    mediaCover.Url = _configFileProvider.UrlBase + @"/MediaCover/" + seriesId + "/" + mediaCover.CoverType.ToString().ToLower() + GetExtension(mediaCover.CoverType);
 
                     if (_diskProvider.FileExists(filePath))
                     {
@@ -210,6 +215,18 @@ namespace NzbDrone.Core.MediaCover
                         _logger.Debug("Couldn't resize media cover {0}-{1} for {2}, using full size image instead.", cover.CoverType, height, series);
                     }
                 }
+            }
+        }
+
+        private string GetExtension(MediaCoverTypes coverType)
+        {
+            switch (coverType)
+            {
+                default:
+                    return ".jpg";
+
+                case MediaCoverTypes.Clearlogo:
+                    return ".png";
             }
         }
 
