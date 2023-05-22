@@ -23,13 +23,11 @@ function createFilterBuilderPropsSelector() {
   );
 }
 
-interface SeriesIndexFilterModalProps {
+interface CalendarFilterModalProps {
   isOpen: boolean;
 }
 
-export default function CalendarFilterModal(
-  props: SeriesIndexFilterModalProps
-) {
+export default function CalendarFilterModal(props: CalendarFilterModalProps) {
   const sectionItems = useSelector(createCalendarSelector());
   const filterBuilderProps = useSelector(createFilterBuilderPropsSelector());
   const customFilterType = 'calendar';
