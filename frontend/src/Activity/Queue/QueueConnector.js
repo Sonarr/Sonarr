@@ -7,6 +7,7 @@ import withCurrentPage from 'Components/withCurrentPage';
 import { executeCommand } from 'Store/Actions/commandActions';
 import { clearEpisodes, fetchEpisodes } from 'Store/Actions/episodeActions';
 import * as queueActions from 'Store/Actions/queueActions';
+import { createCustomFiltersSelector } from 'Store/Selectors/createClientSideCollectionSelector';
 import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
 import hasDifferentItems from 'Utilities/Object/hasDifferentItems';
 import selectUniqueIds from 'Utilities/Object/selectUniqueIds';
@@ -18,12 +19,16 @@ function createMapStateToProps() {
     (state) => state.episodes,
     (state) => state.queue.options,
     (state) => state.queue.paged,
+    (state) => state.queue.status.item,
+    createCustomFiltersSelector('queue'),
     createCommandExecutingSelector(commandNames.REFRESH_MONITORED_DOWNLOADS),
-    (episodes, options, queue, isRefreshMonitoredDownloadsExecuting) => {
+    (episodes, options, queue, status, customFilters, isRefreshMonitoredDownloadsExecuting) => {
       return {
+        count: options.includeUnknownSeriesItems ? status.totalCount : status.count,
         isEpisodesFetching: episodes.isFetching,
         isEpisodesPopulated: episodes.isPopulated,
         episodesError: episodes.error,
+        customFilters,
         isRefreshMonitoredDownloadsExecuting,
         ...options,
         ...queue
@@ -122,6 +127,10 @@ class QueueConnector extends Component {
     this.props.setQueueSort({ sortKey });
   };
 
+  onFilterSelect = (selectedFilterKey) => {
+    this.props.setQueueFilter({ selectedFilterKey });
+  };
+
   onTableOptionChange = (payload) => {
     this.props.setQueueTableOption(payload);
 
@@ -156,6 +165,7 @@ class QueueConnector extends Component {
         onLastPagePress={this.onLastPagePress}
         onPageSelect={this.onPageSelect}
         onSortPress={this.onSortPress}
+        onFilterSelect={this.onFilterSelect}
         onTableOptionChange={this.onTableOptionChange}
         onRefreshPress={this.onRefreshPress}
         onGrabSelectedPress={this.onGrabSelectedPress}
@@ -178,6 +188,7 @@ QueueConnector.propTypes = {
   gotoQueueLastPage: PropTypes.func.isRequired,
   gotoQueuePage: PropTypes.func.isRequired,
   setQueueSort: PropTypes.func.isRequired,
+  setQueueFilter: PropTypes.func.isRequired,
   setQueueTableOption: PropTypes.func.isRequired,
   clearQueue: PropTypes.func.isRequired,
   grabQueueItems: PropTypes.func.isRequired,

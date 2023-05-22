@@ -1,4 +1,5 @@
 import SortDirection from 'Helpers/Props/SortDirection';
+import { FilterBuilderProp } from './AppState';
 
 export interface Error {
   responseJSON: {
@@ -18,6 +19,10 @@ export interface AppSectionSaveState {
 
 export interface PagedAppSectionState {
   pageSize: number;
+}
+
+export interface AppSectionFilterState<T> {
+  filterBuilderProps: FilterBuilderProp<T>[];
 }
 
 export interface AppSectionSchemaState<T> {

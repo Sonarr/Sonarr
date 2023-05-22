@@ -2,7 +2,11 @@ import ModelBase from 'App/ModelBase';
 import Language from 'Language/Language';
 import { QualityModel } from 'Quality/Quality';
 import CustomFormat from 'typings/CustomFormat';
-import AppSectionState, { AppSectionItemState, Error } from './AppSectionState';
+import AppSectionState, {
+  AppSectionFilterState,
+  AppSectionItemState,
+  Error,
+} from './AppSectionState';
 
 export interface StatusMessage {
   title: string;
@@ -37,7 +41,9 @@ export interface QueueDetailsAppState extends AppSectionState<Queue> {
   params: unknown;
 }
 
-export interface QueuePagedAppState extends AppSectionState<Queue> {
+export interface QueuePagedAppState
+  extends AppSectionState<Queue>,
+    AppSectionFilterState<Queue> {
   isGrabbing: boolean;
   grabError: Error;
   isRemoving: boolean;

@@ -1008,6 +1008,7 @@
   "QualitySettings": "Quality Settings",
   "QualitySettingsSummary": "Quality sizes and naming",
   "Queue": "Queue",
+  "QueueFilterHasNoItems": "Selected queue filter has no items",
   "QueueIsEmpty": "Queue is empty",
   "QueueLoadError": "Failed to load Queue",
   "Queued": "Queued",
