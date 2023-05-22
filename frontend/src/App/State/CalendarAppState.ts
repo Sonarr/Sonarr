@@ -1,9 +1,10 @@
-import AppSectionState from 'App/State/AppSectionState';
+import AppSectionState, {
+  AppSectionFilterState,
+} from 'App/State/AppSectionState';
 import Episode from 'Episode/Episode';
-import { FilterBuilderProp } from './AppState';
 
-interface CalendarAppState extends AppSectionState<Episode> {
-  filterBuilderProps: FilterBuilderProp<Episode>[];
-}
+interface CalendarAppState
+  extends AppSectionState<Episode>,
+    AppSectionFilterState<Episode> {}
 
 export default CalendarAppState;
