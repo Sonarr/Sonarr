@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -86,9 +86,7 @@ namespace NzbDrone.Common.Cache
         {
             RefreshIfExpired();
 
-            TValue result;
-
-            if (!_items.TryGetValue(key, out result))
+            if (!_items.TryGetValue(key, out var result))
             {
                 throw new KeyNotFoundException(string.Format("Item {0} not found in cache.", key));
             }
@@ -100,9 +98,7 @@ namespace NzbDrone.Common.Cache
         {
             RefreshIfExpired();
 
-            TValue result;
-
-            _items.TryGetValue(key, out result);
+            _items.TryGetValue(key, out var result);
 
             return result;
         }
@@ -128,8 +124,7 @@ namespace NzbDrone.Common.Cache
 
         public void Remove(string key)
         {
-            TValue item;
-            _items.TryRemove(key, out item);
+            _items.TryRemove(key, out _);
         }
     }
 }

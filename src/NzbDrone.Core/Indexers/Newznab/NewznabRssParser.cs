@@ -129,10 +129,8 @@ namespace NzbDrone.Core.Indexers.Newznab
 
         protected override long GetSize(XElement item)
         {
-            long size;
-
             var sizeString = TryGetNewznabAttribute(item, "size");
-            if (!sizeString.IsNullOrWhiteSpace() && long.TryParse(sizeString, out size))
+            if (!sizeString.IsNullOrWhiteSpace() && long.TryParse(sizeString, out var size))
             {
                 return size;
             }
@@ -156,9 +154,8 @@ namespace NzbDrone.Core.Indexers.Newznab
         protected virtual int GetTvdbId(XElement item)
         {
             var tvdbIdString = TryGetNewznabAttribute(item, "tvdbid");
-            int tvdbId;
 
-            if (!tvdbIdString.IsNullOrWhiteSpace() && int.TryParse(tvdbIdString, out tvdbId))
+            if (!tvdbIdString.IsNullOrWhiteSpace() && int.TryParse(tvdbIdString, out var tvdbId))
             {
                 return tvdbId;
             }
@@ -169,9 +166,8 @@ namespace NzbDrone.Core.Indexers.Newznab
         protected virtual int GetTvRageId(XElement item)
         {
             var tvRageIdString = TryGetNewznabAttribute(item, "rageid");
-            int tvRageId;
 
-            if (!tvRageIdString.IsNullOrWhiteSpace() && int.TryParse(tvRageIdString, out tvRageId))
+            if (!tvRageIdString.IsNullOrWhiteSpace() && int.TryParse(tvRageIdString, out var tvRageId))
             {
                 return tvRageId;
             }

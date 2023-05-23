@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using FluentValidation.Results;
@@ -60,8 +60,7 @@ namespace NzbDrone.Core.Download
 
             foreach (var client in clients)
             {
-                DownloadClientStatus downloadClientStatus;
-                if (blockedIndexers.TryGetValue(client.Definition.Id, out downloadClientStatus))
+                if (blockedIndexers.TryGetValue(client.Definition.Id, out var downloadClientStatus))
                 {
                     _logger.Debug("Temporarily ignoring download client {0} till {1} due to recent failures.", client.Definition.Name, downloadClientStatus.DisabledTill.Value.ToLocalTime());
                     continue;

@@ -735,10 +735,8 @@ namespace NzbDrone.Core.Parser
 
         public static string CleanSeriesTitle(this string title)
         {
-            long number = 0;
-
             // If Title only contains numbers return it as is.
-            if (long.TryParse(title, out number))
+            if (long.TryParse(title, out _))
             {
                 return title;
             }
@@ -840,9 +838,8 @@ namespace NzbDrone.Core.Parser
             if (matches.Count != 0)
             {
                 var group = matches.OfType<Match>().Last().Groups["releasegroup"].Value;
-                int groupIsNumeric;
 
-                if (int.TryParse(group, out groupIsNumeric))
+                if (int.TryParse(group, out _))
                 {
                     return null;
                 }
@@ -906,8 +903,7 @@ namespace NzbDrone.Core.Parser
             var seriesName = matchCollection[0].Groups["title"].Value.Replace('.', ' ').Replace('_', ' ');
             seriesName = RequestInfoRegex.Replace(seriesName, "").Trim(' ');
 
-            int airYear;
-            int.TryParse(matchCollection[0].Groups["airyear"].Value, out airYear);
+            int.TryParse(matchCollection[0].Groups["airyear"].Value, out var airYear);
 
             int lastSeasonEpisodeStringIndex = matchCollection[0].Groups["title"].EndIndex();
 
@@ -1009,8 +1005,7 @@ namespace NzbDrone.Core.Parser
 
                 foreach (Capture seasonCapture in matchCollection[0].Groups["season"].Captures)
                 {
-                    int parsedSeason;
-                    if (int.TryParse(seasonCapture.Value, out parsedSeason))
+                    if (int.TryParse(seasonCapture.Value, out var parsedSeason))
                     {
                         seasons.Add(parsedSeason);
 
@@ -1170,11 +1165,9 @@ namespace NzbDrone.Core.Parser
 
         private static int ParseNumber(string value)
         {
-            int number;
-
             var normalized = value.Normalize(NormalizationForm.FormKC);
 
-            if (int.TryParse(normalized, out number))
+            if (int.TryParse(normalized, out var number))
             {
                 return number;
             }
@@ -1191,11 +1184,9 @@ namespace NzbDrone.Core.Parser
 
         private static decimal ParseDecimal(string value)
         {
-            decimal number;
-
             var normalized = value.Normalize(NormalizationForm.FormKC);
 
-            if (decimal.TryParse(normalized, NumberStyles.Float, CultureInfo.InvariantCulture, out number))
+            if (decimal.TryParse(normalized, NumberStyles.Float, CultureInfo.InvariantCulture, out var number))
             {
                 return number;
             }

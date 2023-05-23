@@ -51,9 +51,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
             request.AddFormUpload("name", filename, nzbData, "application/x-nzb");
 
-            SabnzbdAddResponse response;
-
-            if (!Json.TryDeserialize<SabnzbdAddResponse>(ProcessRequest(request, settings), out response))
+            if (!Json.TryDeserialize<SabnzbdAddResponse>(ProcessRequest(request, settings), out var response))
             {
                 response = new SabnzbdAddResponse();
                 response.Status = true;
@@ -76,9 +74,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         {
             var request = BuildRequest("version", settings);
 
-            SabnzbdVersionResponse response;
-
-            if (!Json.TryDeserialize<SabnzbdVersionResponse>(ProcessRequest(request, settings), out response))
+            if (!Json.TryDeserialize<SabnzbdVersionResponse>(ProcessRequest(request, settings), out var response))
             {
                 response = new SabnzbdVersionResponse();
             }
@@ -142,9 +138,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             var request = BuildRequest("retry", settings);
             request.AddQueryParam("value", id);
 
-            SabnzbdRetryResponse response;
-
-            if (!Json.TryDeserialize<SabnzbdRetryResponse>(ProcessRequest(request, settings), out response))
+            if (!Json.TryDeserialize<SabnzbdRetryResponse>(ProcessRequest(request, settings), out var response))
             {
                 response = new SabnzbdRetryResponse();
                 response.Status = true;
@@ -215,9 +209,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
         private void CheckForError(HttpResponse response)
         {
-            SabnzbdJsonError result;
-
-            if (!Json.TryDeserialize<SabnzbdJsonError>(response.Content, out result))
+            if (!Json.TryDeserialize<SabnzbdJsonError>(response.Content, out var result))
             {
                 // Handle plain text responses from SAB
                 result = new SabnzbdJsonError();

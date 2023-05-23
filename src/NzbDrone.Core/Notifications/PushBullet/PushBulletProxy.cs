@@ -152,14 +152,13 @@ namespace NzbDrone.Core.Notifications.PushBullet
         private HttpRequestBuilder BuildDeviceRequest(string deviceId)
         {
             var requestBuilder = new HttpRequestBuilder(PUSH_URL).Post();
-            long integerId;
 
             if (deviceId.IsNullOrWhiteSpace())
             {
                 return requestBuilder;
             }
 
-            if (long.TryParse(deviceId, out integerId))
+            if (long.TryParse(deviceId, out var integerId))
             {
                 requestBuilder.AddFormParameter("device_id", integerId);
             }

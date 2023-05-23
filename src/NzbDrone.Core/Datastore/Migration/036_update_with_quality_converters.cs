@@ -82,9 +82,7 @@ namespace NzbDrone.Core.Datastore.Migration
                     {
                         var qualityJson = qualityModelReader.GetString(0);
 
-                        SourceQualityModel036 sourceQuality;
-
-                        if (!Json.TryDeserialize<SourceQualityModel036>(qualityJson, out sourceQuality))
+                        if (!Json.TryDeserialize<SourceQualityModel036>(qualityJson, out var sourceQuality))
                         {
                             continue;
                         }

@@ -15,8 +15,7 @@ namespace NzbDrone.Core.Download.Clients.NzbVortex.JsonConverters
         {
             var result = reader.Value.ToString().Replace("_", string.Empty);
 
-            NzbVortexLoginResultType output;
-            Enum.TryParse(result, true, out output);
+            Enum.TryParse(result, true, out NzbVortexLoginResultType output);
 
             return output;
         }

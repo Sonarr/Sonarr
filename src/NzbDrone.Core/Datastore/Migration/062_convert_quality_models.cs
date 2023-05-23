@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Data;
 using FluentMigrator;
 using NzbDrone.Common.Serializer;
@@ -37,9 +37,7 @@ namespace NzbDrone.Core.Datastore.Migration
                     {
                         var qualityJson = qualityModelReader.GetString(0);
 
-                        LegacyQualityModel062 quality;
-
-                        if (!Json.TryDeserialize<LegacyQualityModel062>(qualityJson, out quality))
+                        if (!Json.TryDeserialize<LegacyQualityModel062>(qualityJson, out var quality))
                         {
                             continue;
                         }
