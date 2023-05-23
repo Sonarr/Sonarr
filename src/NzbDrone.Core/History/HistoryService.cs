@@ -16,7 +16,7 @@ namespace NzbDrone.Core.History
 {
     public interface IHistoryService
     {
-        PagingSpec<EpisodeHistory> Paged(PagingSpec<EpisodeHistory> pagingSpec);
+        PagingSpec<EpisodeHistory> Paged(PagingSpec<EpisodeHistory> pagingSpec, int[] languages, int[] qualities);
         EpisodeHistory MostRecentForEpisode(int episodeId);
         List<EpisodeHistory> FindByEpisodeId(int episodeId);
         EpisodeHistory MostRecentForDownloadId(string downloadId);
@@ -47,9 +47,9 @@ namespace NzbDrone.Core.History
             _logger = logger;
         }
 
-        public PagingSpec<EpisodeHistory> Paged(PagingSpec<EpisodeHistory> pagingSpec)
+        public PagingSpec<EpisodeHistory> Paged(PagingSpec<EpisodeHistory> pagingSpec, int[] languages, int[] qualities)
         {
-            return _historyRepository.GetPaged(pagingSpec);
+            return _historyRepository.GetPaged(pagingSpec, languages, qualities);
         }
 
         public EpisodeHistory MostRecentForEpisode(int episodeId)

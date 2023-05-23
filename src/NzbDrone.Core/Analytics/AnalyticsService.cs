@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Configuration;
@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Analytics
         {
             get
             {
-                var lastRecord = _historyService.Paged(new PagingSpec<EpisodeHistory>() { Page = 0, PageSize = 1, SortKey = "date", SortDirection = SortDirection.Descending });
+                var lastRecord = _historyService.Paged(new PagingSpec<EpisodeHistory>() { Page = 0, PageSize = 1, SortKey = "date", SortDirection = SortDirection.Descending }, null, null);
                 var monthAgo = DateTime.UtcNow.AddMonths(-1);
 
                 return lastRecord.Records.Any(v => v.Date > monthAgo);

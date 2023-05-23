@@ -2,6 +2,7 @@ export const BOOL = 'bool';
 export const BYTES = 'bytes';
 export const DATE = 'date';
 export const DEFAULT = 'default';
+export const HISTORY_EVENT_TYPE = 'historyEventType';
 export const INDEXER = 'indexer';
 export const LANGUAGE = 'language';
 export const PROTOCOL = 'protocol';

@@ -62,7 +62,7 @@ namespace Sonarr.Api.V3.History
 
         [HttpGet]
         [Produces("application/json")]
-        public PagingResource<HistoryResource> GetHistory([FromQuery] PagingRequestResource paging, bool includeSeries, bool includeEpisode, int? eventType, int? episodeId, string downloadId)
+        public PagingResource<HistoryResource> GetHistory([FromQuery] PagingRequestResource paging, bool includeSeries, bool includeEpisode, int? eventType, int? episodeId, string downloadId, [FromQuery] int[] seriesIds = null, [FromQuery] int[] languages = null, [FromQuery] int[] quality = null)
         {
             var pagingResource = new PagingResource<HistoryResource>(paging);
             var pagingSpec = pagingResource.MapToPagingSpec<HistoryResource, EpisodeHistory>("date", SortDirection.Descending);
@@ -83,7 +83,17 @@ namespace Sonarr.Api.V3.History
                 pagingSpec.FilterExpressions.Add(h => h.DownloadId == downloadId);
             }
 
-            return pagingSpec.ApplyToPage(_historyService.Paged, h => MapToResource(h, includeSeries, includeEpisode));
+            if (seriesIds != null && seriesIds.Any())
+            {
+                pagingSpec.FilterExpressions.Add(h => seriesIds.Contains(h.SeriesId));
+            }
+
+            if (seriesIds != null && seriesIds.Any())
+            {
+                pagingSpec.FilterExpressions.Add(h => seriesIds.Contains(h.SeriesId));
+            }
+
+            return pagingSpec.ApplyToPage(h => _historyService.Paged(pagingSpec, languages, quality), h => MapToResource(h, includeSeries, includeEpisode));
         }
 
         [HttpGet("since")]
