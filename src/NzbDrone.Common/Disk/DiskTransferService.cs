@@ -500,9 +500,13 @@ namespace NzbDrone.Common.Disk
                     throw new IOException(string.Format("File move incomplete, data loss may have occurred. [{0}] was {1} bytes long instead of the expected {2}.", targetPath, targetSize, originalSize));
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                RollbackPartialMove(sourcePath, targetPath);
+                if (ex is not FileAlreadyExistsException)
+                {
+                    RollbackPartialMove(sourcePath, targetPath);
+                }
+
                 throw;
             }
         }
