@@ -29,8 +29,8 @@ namespace NzbDrone.Core.Datastore.Migration
 
                 using (var reader = cmd.ExecuteReader())
                 {
-                    int nextUsenet = 1;
-                    int nextTorrent = 1;
+                    var nextUsenet = 1;
+                    var nextTorrent = 1;
                     while (reader.Read())
                     {
                         var id = reader.GetInt32(0);

@@ -32,12 +32,12 @@ namespace NzbDrone.Core.Datastore.Migration
             var languageConverter = new EmbeddedDocumentConverter<List<Language>>(new LanguageIntConverter());
 
             var profileLanguages = new Dictionary<int, int>();
-            using (IDbCommand getProfileCmd = conn.CreateCommand())
+            using (var getProfileCmd = conn.CreateCommand())
             {
                 getProfileCmd.Transaction = tran;
                 getProfileCmd.CommandText = "SELECT Id, Language FROM Profiles";
 
-                IDataReader profilesReader = getProfileCmd.ExecuteReader();
+                var profilesReader = getProfileCmd.ExecuteReader();
                 while (profilesReader.Read())
                 {
                     var profileId = profilesReader.GetInt32(0);
@@ -56,11 +56,11 @@ namespace NzbDrone.Core.Datastore.Migration
             }
 
             var seriesLanguages = new Dictionary<int, int>();
-            using (IDbCommand getSeriesCmd = conn.CreateCommand())
+            using (var getSeriesCmd = conn.CreateCommand())
             {
                 getSeriesCmd.Transaction = tran;
                 getSeriesCmd.CommandText = @"SELECT Id, ProfileId FROM Series";
-                using (IDataReader seriesReader = getSeriesCmd.ExecuteReader())
+                using (var seriesReader = getSeriesCmd.ExecuteReader())
                 {
                     while (seriesReader.Read())
                     {
@@ -78,7 +78,7 @@ namespace NzbDrone.Core.Datastore.Migration
 
                 var seriesIds = group.Select(v => v.ToString()).Join(",");
 
-                using (IDbCommand updateEpisodeFilesCmd = conn.CreateCommand())
+                using (var updateEpisodeFilesCmd = conn.CreateCommand())
                 {
                     updateEpisodeFilesCmd.Transaction = tran;
                     updateEpisodeFilesCmd.CommandText = $"UPDATE EpisodeFiles SET Language = ? WHERE SeriesId IN ({seriesIds})";
@@ -89,7 +89,7 @@ namespace NzbDrone.Core.Datastore.Migration
                     updateEpisodeFilesCmd.ExecuteNonQuery();
                 }
 
-                using (IDbCommand updateHistoryCmd = conn.CreateCommand())
+                using (var updateHistoryCmd = conn.CreateCommand())
                 {
                     updateHistoryCmd.Transaction = tran;
                     updateHistoryCmd.CommandText = $"UPDATE History SET Language = ? WHERE SeriesId IN ({seriesIds})";
@@ -100,7 +100,7 @@ namespace NzbDrone.Core.Datastore.Migration
                     updateHistoryCmd.ExecuteNonQuery();
                 }
 
-                using (IDbCommand updateBlacklistCmd = conn.CreateCommand())
+                using (var updateBlacklistCmd = conn.CreateCommand())
                 {
                     updateBlacklistCmd.Transaction = tran;
                     updateBlacklistCmd.CommandText = $"UPDATE Blacklist SET Language = ? WHERE SeriesId IN ({seriesIds})";

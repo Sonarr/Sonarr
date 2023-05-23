@@ -460,7 +460,7 @@ namespace NzbDrone.Core.Organizer
         {
             var episodeFormats = GetEpisodeFormat(pattern).DistinctBy(v => v.SeasonEpisodePattern).ToList();
 
-            int index = 1;
+            var index = 1;
             foreach (var episodeFormat in episodeFormats)
             {
                 var seasonEpisodePattern = episodeFormat.SeasonEpisodePattern;
@@ -523,7 +523,7 @@ namespace NzbDrone.Core.Organizer
         {
             var absoluteEpisodeFormats = GetAbsoluteFormat(pattern).DistinctBy(v => v.AbsoluteEpisodePattern).ToList();
 
-            int index = 1;
+            var index = 1;
             foreach (var absoluteEpisodeFormat in absoluteEpisodeFormats)
             {
                 if (series.SeriesType != SeriesTypes.Anime || episodes.Any(e => !e.AbsoluteEpisodeNumber.HasValue))
@@ -711,7 +711,7 @@ namespace NzbDrone.Core.Organizer
                 }
             }
 
-            for (int i = 0; i < tokens.Count; i++)
+            for (var i = 0; i < tokens.Count; i++)
             {
                 try
                 {
@@ -872,7 +872,7 @@ namespace NzbDrone.Core.Organizer
         {
             var pattern = string.Empty;
 
-            for (int i = 0; i < episodes.Count; i++)
+            for (var i = 0; i < episodes.Count; i++)
             {
                 var patternToReplace = i == 0 ? basePattern : formatPattern;
 
@@ -886,7 +886,7 @@ namespace NzbDrone.Core.Organizer
         {
             var pattern = string.Empty;
 
-            for (int i = 0; i < episodes.Count; i++)
+            for (var i = 0; i < episodes.Count; i++)
             {
                 var patternToReplace = i == 0 ? basePattern : formatPattern;
 

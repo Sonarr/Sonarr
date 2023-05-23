@@ -90,7 +90,7 @@ namespace NzbDrone.Common.Expansive
             return source.ExpandInternal(
                 name =>
                 {
-                    IDictionary<string, object> modelDict = model.ToDictionary();
+                    var modelDict = model.ToDictionary();
                     if (RequireAllExpansions && !modelDict.ContainsKey(name))
                     {
                         return "";

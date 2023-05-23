@@ -17,12 +17,12 @@ namespace NzbDrone.Core.Datastore.Migration
 
         private void UpdatePushoverSettings(IDbConnection conn, IDbTransaction tran)
         {
-            using (IDbCommand selectCommand = conn.CreateCommand())
+            using (var selectCommand = conn.CreateCommand())
             {
                 selectCommand.Transaction = tran;
                 selectCommand.CommandText = @"SELECT * FROM Notifications WHERE ConfigContract = 'PushoverSettings'";
 
-                using (IDataReader reader = selectCommand.ExecuteReader())
+                using (var reader = selectCommand.ExecuteReader())
                 {
                     while (reader.Read())
                     {
@@ -39,7 +39,7 @@ namespace NzbDrone.Core.Datastore.Migration
                             settings.Priority = 1;
                         }
 
-                        using (IDbCommand updateCmd = conn.CreateCommand())
+                        using (var updateCmd = conn.CreateCommand())
                         {
                             var text = string.Format("UPDATE Notifications " +
                                                      "SET Settings = '{0}'" +

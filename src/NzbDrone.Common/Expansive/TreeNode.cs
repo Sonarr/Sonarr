@@ -57,7 +57,7 @@ namespace NzbDrone.Common.Expansive
             {
                 // return (Parent == null) ? this : Parent.Root;
 
-                TreeNode<T> node = this;
+                var node = this;
                 while (node.Parent != null)
                 {
                     node = node.Parent;
@@ -74,7 +74,7 @@ namespace NzbDrone.Common.Expansive
             get
             {
                 _CallTree = new List<T>();
-                TreeNode<T> node = this;
+                var node = this;
                 while (node.Parent != null)
                 {
                     node = node.Parent;

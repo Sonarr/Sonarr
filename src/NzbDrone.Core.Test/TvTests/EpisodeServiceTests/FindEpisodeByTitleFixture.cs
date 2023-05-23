@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeServiceTests
 
         private void GivenEpisodesWithTitles(params string[] titles)
         {
-            for (int i = 0; i < titles.Length; i++)
+            for (var i = 0; i < titles.Length; i++)
             {
                 _episodes[i].Title = titles[i];
             }

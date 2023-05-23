@@ -126,9 +126,9 @@ namespace NzbDrone.Common.Extensions
 
         private static IEnumerable<T> InternalDropLast<T>(IEnumerable<T> source, int n)
         {
-            Queue<T> buffer = new Queue<T>(n + 1);
+            var buffer = new Queue<T>(n + 1);
 
-            foreach (T x in source)
+            foreach (var x in source)
             {
                 buffer.Enqueue(x);
 

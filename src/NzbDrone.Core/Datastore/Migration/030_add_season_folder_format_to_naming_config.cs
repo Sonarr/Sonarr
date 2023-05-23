@@ -1,4 +1,4 @@
-﻿using System.Data;
+using System.Data;
 using FluentMigrator;
 using NzbDrone.Core.Datastore.Migration.Framework;
 
@@ -17,13 +17,13 @@ namespace NzbDrone.Core.Datastore.Migration
 
         private void ConvertConfig(IDbConnection conn, IDbTransaction tran)
         {
-            using (IDbCommand namingConfigCmd = conn.CreateCommand())
+            using (var namingConfigCmd = conn.CreateCommand())
             {
                 namingConfigCmd.Transaction = tran;
                 namingConfigCmd.CommandText = @"SELECT [Value] FROM Config WHERE [Key] = 'seasonfolderformat'";
                 var seasonFormat = "Season {season}";
 
-                using (IDataReader namingConfigReader = namingConfigCmd.ExecuteReader())
+                using (var namingConfigReader = namingConfigCmd.ExecuteReader())
                 {
                     while (namingConfigReader.Read())
                     {
@@ -39,7 +39,7 @@ namespace NzbDrone.Core.Datastore.Migration
                     }
                 }
 
-                using (IDbCommand updateCmd = conn.CreateCommand())
+                using (var updateCmd = conn.CreateCommand())
                 {
                     var text = string.Format("UPDATE NamingConfig " +
                                              "SET SeasonFolderFormat = '{0}'",

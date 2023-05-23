@@ -22,7 +22,7 @@ namespace NzbDrone.Common.Http
 
         public HttpUri(string scheme, string host, int? port, string path, string query, string fragment)
         {
-            StringBuilder builder = new StringBuilder();
+            var builder = new StringBuilder();
 
             if (scheme.IsNotNullOrWhiteSpace())
             {

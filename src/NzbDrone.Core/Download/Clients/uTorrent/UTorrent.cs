@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -215,7 +215,7 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
         {
             var config = _proxy.GetConfig(Settings);
 
-            OsPath destDir = new OsPath(null);
+            var destDir = new OsPath(null);
 
             if (config.GetValueOrDefault("dir_active_download_flag") == "true")
             {

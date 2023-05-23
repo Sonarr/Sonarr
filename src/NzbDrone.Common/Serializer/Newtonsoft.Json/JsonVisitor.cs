@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Linq;
 
 namespace NzbDrone.Common.Serializer
 {
@@ -60,7 +60,7 @@ namespace NzbDrone.Common.Serializer
 
         public virtual void Visit(JArray json)
         {
-            foreach (JToken token in json)
+            foreach (var token in json)
             {
                 Visit(token);
             }
@@ -72,7 +72,7 @@ namespace NzbDrone.Common.Serializer
 
         public virtual void Visit(JObject json)
         {
-            foreach (JProperty property in json.Properties())
+            foreach (var property in json.Properties())
             {
                 Visit(property);
             }

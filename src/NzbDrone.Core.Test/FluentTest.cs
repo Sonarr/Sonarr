@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using FluentAssertions;
@@ -57,7 +57,7 @@ namespace NzbDrone.Core.Test
         [Test]
         public void ToBestDateTime_DayOfWeek()
         {
-            for (int i = 2; i < 7; i++)
+            for (var i = 2; i < 7; i++)
             {
                 var dateTime = DateTime.Today.AddDays(i);
 

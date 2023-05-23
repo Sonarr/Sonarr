@@ -222,7 +222,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
         protected IEnumerable<NzbgetCategory> GetCategories(Dictionary<string, string> config)
         {
-            for (int i = 1; i < 100; i++)
+            for (var i = 1; i < 100; i++)
             {
                 var name = config.GetValueOrDefault("Category" + i + ".Name");
 

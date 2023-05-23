@@ -54,7 +54,7 @@ namespace NzbDrone.Core.ImportLists
 
                 var pageableRequestChain = pageableRequestChainSelector(generator);
 
-                for (int i = 0; i < pageableRequestChain.Tiers; i++)
+                for (var i = 0; i < pageableRequestChain.Tiers; i++)
                 {
                     var pageableRequests = pageableRequestChain.GetTier(i);
 

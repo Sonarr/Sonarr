@@ -86,7 +86,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
             var qualityRawHDLanguageMet = new EpisodeFile { RelativePath = "h", Quality = new QualityModel { Quality = Quality.RAWHD }, Languages = new List<Language> { Language.Spanish } };
             var qualityRawHDLanguageExceed = new EpisodeFile { RelativePath = "i", Quality = new QualityModel { Quality = Quality.RAWHD }, Languages = new List<Language> { Language.French } };
 
-            MediaFileRepository fileRepository = Mocker.Resolve<MediaFileRepository>();
+            var fileRepository = Mocker.Resolve<MediaFileRepository>();
 
             qualityMetLanguageUnmet = fileRepository.Insert(qualityMetLanguageUnmet);
             qualityMetLanguageMet = fileRepository.Insert(qualityMetLanguageMet);

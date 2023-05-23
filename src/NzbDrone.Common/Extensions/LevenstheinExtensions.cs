@@ -21,7 +21,7 @@ namespace NzbDrone.Common.Extensions
                 return text.Length * costDelete;
             }
 
-            int[] matrix = new int[other.Length + 1];
+            var matrix = new int[other.Length + 1];
 
             for (var i = 1; i < matrix.Length; i++)
             {
@@ -30,13 +30,13 @@ namespace NzbDrone.Common.Extensions
 
             for (var i = 0; i < text.Length; i++)
             {
-                int topLeft = matrix[0];
+                var topLeft = matrix[0];
                 matrix[0] = matrix[0] + costDelete;
 
                 for (var j = 0; j < other.Length; j++)
                 {
-                    int top = matrix[j];
-                    int left = matrix[j + 1];
+                    var top = matrix[j];
+                    var left = matrix[j + 1];
 
                     var sumIns = top + costInsert;
                     var sumDel = left + costDelete;

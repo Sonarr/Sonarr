@@ -15,11 +15,11 @@ namespace NzbDrone.Core.Datastore.Migration
 
         private void UpdateSortTitles(IDbConnection conn, IDbTransaction tran)
         {
-            using (IDbCommand getSeriesCmd = conn.CreateCommand())
+            using (var getSeriesCmd = conn.CreateCommand())
             {
                 getSeriesCmd.Transaction = tran;
                 getSeriesCmd.CommandText = @"SELECT Id, TvdbId, Title FROM Series";
-                using (IDataReader seriesReader = getSeriesCmd.ExecuteReader())
+                using (var seriesReader = getSeriesCmd.ExecuteReader())
                 {
                     while (seriesReader.Read())
                     {
@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Datastore.Migration
 
                         var sortTitle = SeriesTitleNormalizer.Normalize(title, tvdbId);
 
-                        using (IDbCommand updateCmd = conn.CreateCommand())
+                        using (var updateCmd = conn.CreateCommand())
                         {
                             updateCmd.Transaction = tran;
                             updateCmd.CommandText = "UPDATE Series SET SortTitle = ? WHERE Id = ?";

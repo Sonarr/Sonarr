@@ -26,12 +26,12 @@ namespace NzbDrone.Core.Datastore.Migration
         {
             var qualitiesToUpdate = new Dictionary<string, string>();
 
-            using (IDbCommand qualityModelCmd = conn.CreateCommand())
+            using (var qualityModelCmd = conn.CreateCommand())
             {
                 qualityModelCmd.Transaction = tran;
                 qualityModelCmd.CommandText = @"SELECT Distinct Quality FROM " + tableName;
 
-                using (IDataReader qualityModelReader = qualityModelCmd.ExecuteReader())
+                using (var qualityModelReader = qualityModelCmd.ExecuteReader())
                 {
                     while (qualityModelReader.Read())
                     {
@@ -57,7 +57,7 @@ namespace NzbDrone.Core.Datastore.Migration
 
             foreach (var quality in qualitiesToUpdate)
             {
-                using (IDbCommand updateCmd = conn.CreateCommand())
+                using (var updateCmd = conn.CreateCommand())
                 {
                     updateCmd.Transaction = tran;
                     updateCmd.CommandText = "UPDATE " + tableName + " SET Quality = ? WHERE Quality = ?";

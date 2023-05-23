@@ -208,7 +208,7 @@ namespace NzbDrone.Core.Parser
                     return isoLanguage?.Language ?? Language.Unknown;
                 }
 
-                foreach (Language language in Language.All)
+                foreach (var language in Language.All)
                 {
                     if (simpleFilename.EndsWith(language.ToString(), StringComparison.OrdinalIgnoreCase))
                     {

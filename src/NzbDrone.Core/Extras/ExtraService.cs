@@ -83,7 +83,7 @@ namespace NzbDrone.Core.Extras
                     continue;
                 }
 
-                for (int i = 0; i < _extraFileManagers.Count; i++)
+                for (var i = 0; i < _extraFileManagers.Count; i++)
                 {
                     if (_extraFileManagers[i].CanImportFile(localEpisode, episodeFile, file, extension, isReadOnly))
                     {
@@ -93,7 +93,7 @@ namespace NzbDrone.Core.Extras
                 }
             }
 
-            for (int i = 0; i < _extraFileManagers.Count; i++)
+            for (var i = 0; i < _extraFileManagers.Count; i++)
             {
                 _extraFileManagers[i].ImportFiles(localEpisode, episodeFile, managedFiles[i], isReadOnly);
             }

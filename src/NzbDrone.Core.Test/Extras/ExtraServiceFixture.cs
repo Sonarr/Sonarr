@@ -116,7 +116,7 @@ namespace NzbDrone.Core.Test.Extras
 
         private void WithExistingFiles(List<string> files)
         {
-            foreach (string file in files)
+            foreach (var file in files)
             {
                 WithExistingFile(file);
             }

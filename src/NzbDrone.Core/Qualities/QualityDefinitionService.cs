@@ -66,8 +66,8 @@ namespace NzbDrone.Core.Qualities
 
         private void InsertMissingDefinitions()
         {
-            List<QualityDefinition> insertList = new List<QualityDefinition>();
-            List<QualityDefinition> updateList = new List<QualityDefinition>();
+            var insertList = new List<QualityDefinition>();
+            var updateList = new List<QualityDefinition>();
 
             var allDefinitions = Quality.DefaultQualityDefinitions.OrderBy(d => d.Weight).ToList();
             var existingDefinitions = _repo.All().ToList();
@@ -110,7 +110,7 @@ namespace NzbDrone.Core.Qualities
 
         public void Execute(ResetQualityDefinitionsCommand message)
         {
-            List<QualityDefinition> updateList = new List<QualityDefinition>();
+            var updateList = new List<QualityDefinition>();
 
             var allDefinitions = Quality.DefaultQualityDefinitions.OrderBy(d => d.Weight).ToList();
             var existingDefinitions = _repo.All().ToList();

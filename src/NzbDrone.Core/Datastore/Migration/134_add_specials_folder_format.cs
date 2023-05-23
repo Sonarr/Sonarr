@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Datastore.Migration
         {
             var defaultFormat = "Specials";
 
-            using (IDbCommand updateCmd = conn.CreateCommand())
+            using (var updateCmd = conn.CreateCommand())
             {
                 updateCmd.Transaction = tran;
                 updateCmd.CommandText = "UPDATE NamingConfig SET SpecialsFolderFormat = ?";

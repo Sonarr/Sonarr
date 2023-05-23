@@ -132,7 +132,7 @@ namespace NzbDrone.Core.Indexers
                     lastReleaseInfo = _indexerStatusService.GetLastRssSyncReleaseInfo(Definition.Id);
                 }
 
-                for (int i = 0; i < pageableRequestChain.Tiers; i++)
+                for (var i = 0; i < pageableRequestChain.Tiers; i++)
                 {
                     var pageableRequests = pageableRequestChain.GetTier(i);
 

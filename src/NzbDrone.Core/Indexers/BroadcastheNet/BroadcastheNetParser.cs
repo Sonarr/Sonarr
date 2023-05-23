@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Text.RegularExpressions;
@@ -43,7 +43,7 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
                 throw new IndexerException(indexerResponse, "Indexer API returned an internal server error");
             }
 
-            JsonRpcResponse<BroadcastheNetTorrents> jsonResponse = new HttpResponse<JsonRpcResponse<BroadcastheNetTorrents>>(indexerResponse.HttpResponse).Resource;
+            var jsonResponse = new HttpResponse<JsonRpcResponse<BroadcastheNetTorrents>>(indexerResponse.HttpResponse).Resource;
 
             if (jsonResponse.Error != null || jsonResponse.Result == null)
             {

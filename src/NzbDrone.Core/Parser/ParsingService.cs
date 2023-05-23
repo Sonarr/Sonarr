@@ -571,7 +571,7 @@ namespace NzbDrone.Core.Parser
             {
                 if (series.UseSceneNumbering && sceneSource)
                 {
-                    List<Episode> episodes = new List<Episode>();
+                    var episodes = new List<Episode>();
 
                     if (searchCriteria != null)
                     {

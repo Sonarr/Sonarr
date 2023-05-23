@@ -1,4 +1,4 @@
-﻿using System.Data;
+using System.Data;
 using FluentMigrator;
 using NzbDrone.Core.Datastore.Migration.Framework;
 
@@ -21,19 +21,19 @@ namespace NzbDrone.Core.Datastore.Migration
 
         private void ConvertRestrictions(IDbConnection conn, IDbTransaction tran)
         {
-            using (IDbCommand getRestictionsCmd = conn.CreateCommand())
+            using (var getRestictionsCmd = conn.CreateCommand())
             {
                 getRestictionsCmd.Transaction = tran;
                 getRestictionsCmd.CommandText = @"SELECT [Value] FROM Config WHERE [Key] = 'releaserestrictions'";
 
-                using (IDataReader configReader = getRestictionsCmd.ExecuteReader())
+                using (var configReader = getRestictionsCmd.ExecuteReader())
                 {
                     while (configReader.Read())
                     {
                         var restrictions = configReader.GetString(0);
                         restrictions = restrictions.Replace("\n", ",");
 
-                        using (IDbCommand insertCmd = conn.CreateCommand())
+                        using (var insertCmd = conn.CreateCommand())
                         {
                             insertCmd.Transaction = tran;
                             insertCmd.CommandText = "INSERT INTO Restrictions (Ignored, Tags) VALUES (?, '[]')";

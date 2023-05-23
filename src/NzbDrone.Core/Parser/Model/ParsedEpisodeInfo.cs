@@ -91,7 +91,7 @@ namespace NzbDrone.Core.Parser.Model
 
         public override string ToString()
         {
-            string episodeString = "[Unknown Episode]";
+            var episodeString = "[Unknown Episode]";
 
             if (IsDaily && EpisodeNumbers.Empty())
             {

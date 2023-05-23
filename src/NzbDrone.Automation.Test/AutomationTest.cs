@@ -67,7 +67,7 @@ namespace NzbDrone.Automation.Test
         {
             try
             {
-                Screenshot image = ((ITakesScreenshot)driver).GetScreenshot();
+                var image = ((ITakesScreenshot)driver).GetScreenshot();
                 image.SaveAsFile($"./{name}_test_screenshot.png", ScreenshotImageFormat.Png);
             }
             catch (Exception ex)

@@ -1,4 +1,4 @@
-﻿using System.Data;
+using System.Data;
 using System.Text.Json;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Reflection;
@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Datastore.Converters
             }
 
             string contract;
-            using (JsonDocument body = JsonDocument.Parse(stringValue))
+            using (var body = JsonDocument.Parse(stringValue))
             {
                 contract = body.RootElement.GetProperty("name").GetString();
             }

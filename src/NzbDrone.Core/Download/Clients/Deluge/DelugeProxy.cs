@@ -203,7 +203,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
 
         private JsonRpcRequestBuilder BuildRequest(DelugeSettings settings)
         {
-            string url = HttpRequestBuilder.BuildBaseUrl(settings.UseSsl, settings.Host, settings.Port, settings.UrlBase);
+            var url = HttpRequestBuilder.BuildBaseUrl(settings.UseSsl, settings.Host, settings.Port, settings.UrlBase);
 
             var requestBuilder = new JsonRpcRequestBuilder(url);
             requestBuilder.LogResponseContent = true;

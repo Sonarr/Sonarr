@@ -56,7 +56,7 @@ namespace NzbDrone.Core.Datastore.Migration
                 var tagId = InsertTag(conn, tran, tag);
                 var tags = string.Format("[{0}]", tagId);
 
-                using (IDbCommand insertDelayProfileCmd = conn.CreateCommand())
+                using (var insertDelayProfileCmd = conn.CreateCommand())
                 {
                     insertDelayProfileCmd.Transaction = tran;
                     insertDelayProfileCmd.CommandText = "INSERT INTO DelayProfiles (EnableUsenet, EnableTorrent, PreferredProtocol, TorrentDelay, UsenetDelay, [Order], Tags) VALUES (1, 1, 1, 0, ?, ?, ?)";
@@ -80,12 +80,12 @@ namespace NzbDrone.Core.Datastore.Migration
         {
             var profiles = new List<Profile69>();
 
-            using (IDbCommand getProfilesCmd = conn.CreateCommand())
+            using (var getProfilesCmd = conn.CreateCommand())
             {
                 getProfilesCmd.Transaction = tran;
                 getProfilesCmd.CommandText = @"SELECT Id, GrabDelay FROM Profiles";
 
-                using (IDataReader profileReader = getProfilesCmd.ExecuteReader())
+                using (var profileReader = getProfilesCmd.ExecuteReader())
                 {
                     while (profileReader.Read())
                     {
@@ -106,7 +106,7 @@ namespace NzbDrone.Core.Datastore.Migration
 
         private int InsertTag(IDbConnection conn, IDbTransaction tran, string tagLabel)
         {
-            using (IDbCommand insertCmd = conn.CreateCommand())
+            using (var insertCmd = conn.CreateCommand())
             {
                 insertCmd.Transaction = tran;
                 insertCmd.CommandText = @"INSERT INTO Tags (Label) VALUES (?); SELECT last_insert_rowid()";
@@ -120,13 +120,13 @@ namespace NzbDrone.Core.Datastore.Migration
 
         private void UpdateSeries(IDbConnection conn, IDbTransaction tran, IEnumerable<int> profileIds, int tagId)
         {
-            using (IDbCommand getSeriesCmd = conn.CreateCommand())
+            using (var getSeriesCmd = conn.CreateCommand())
             {
                 getSeriesCmd.Transaction = tran;
                 getSeriesCmd.CommandText = "SELECT Id, Tags FROM Series WHERE ProfileId IN (?)";
                 getSeriesCmd.AddParameter(string.Join(",", profileIds));
 
-                using (IDataReader seriesReader = getSeriesCmd.ExecuteReader())
+                using (var seriesReader = getSeriesCmd.ExecuteReader())
                 {
                     while (seriesReader.Read())
                     {
@@ -136,7 +136,7 @@ namespace NzbDrone.Core.Datastore.Migration
                         var tags = Json.Deserialize<List<int>>(tagString);
                         tags.Add(tagId);
 
-                        using (IDbCommand updateSeriesCmd = conn.CreateCommand())
+                        using (var updateSeriesCmd = conn.CreateCommand())
                         {
                             updateSeriesCmd.Transaction = tran;
                             updateSeriesCmd.CommandText = "UPDATE Series SET Tags = ? WHERE Id = ?";

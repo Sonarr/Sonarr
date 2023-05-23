@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Common.Cache;
@@ -53,7 +53,7 @@ namespace NzbDrone.Core.Profiles.Delay
 
             var all = All().OrderBy(d => d.Order).ToList();
 
-            for (int i = 0; i < all.Count; i++)
+            for (var i = 0; i < all.Count; i++)
             {
                 if (all[i].Id == 1)
                 {

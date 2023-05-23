@@ -100,17 +100,17 @@ namespace NzbDrone.Core
             }
 
             var cs = s.ToCharArray();
-            int length = 0;
-            int i = 0;
+            var length = 0;
+            var i = 0;
             while (i < cs.Length)
             {
-                int charSize = 1;
+                var charSize = 1;
                 if (i < (cs.Length - 1) && char.IsSurrogate(cs[i]))
                 {
                     charSize = 2;
                 }
 
-                int byteSize = Encoding.UTF8.GetByteCount(cs, i, charSize);
+                var byteSize = Encoding.UTF8.GetByteCount(cs, i, charSize);
                 if ((byteSize + length) <= maxLength)
                 {
                     i = i + charSize;

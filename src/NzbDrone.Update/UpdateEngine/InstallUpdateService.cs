@@ -151,7 +151,7 @@ namespace NzbDrone.Update.UpdateEngine
 
                     _logger.Info("Waiting for external auto-restart.");
                     var theDakoLimit = 10;
-                    for (int i = 0; i < theDakoLimit; i++)
+                    for (var i = 0; i < theDakoLimit; i++)
                     {
                         System.Threading.Thread.Sleep(1000);
 

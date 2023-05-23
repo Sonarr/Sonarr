@@ -177,7 +177,7 @@ namespace NzbDrone.Core.Extras.Subtitles
 
             var subtitleFiles = new List<SubtitleFile>();
 
-            foreach (string file in matchingFiles)
+            foreach (var file in matchingFiles)
             {
                 var language = LanguageParser.ParseSubtitleLanguage(file);
                 var extension = Path.GetExtension(file);

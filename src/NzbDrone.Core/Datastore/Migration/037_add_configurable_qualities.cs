@@ -1,4 +1,4 @@
-﻿using System.Data;
+using System.Data;
 using System.Linq;
 using FluentMigrator;
 using NzbDrone.Core.Datastore.Migration.Framework;
@@ -30,11 +30,11 @@ namespace NzbDrone.Core.Datastore.Migration
         private void ConvertQualities(IDbConnection conn, IDbTransaction tran)
         {
             // Convert QualitySizes to a more generic QualityDefinitions table.
-            using (IDbCommand qualitySizeCmd = conn.CreateCommand())
+            using (var qualitySizeCmd = conn.CreateCommand())
             {
                 qualitySizeCmd.Transaction = tran;
                 qualitySizeCmd.CommandText = @"SELECT QualityId, MinSize, MaxSize FROM QualitySizes";
-                using (IDataReader qualitySizeReader = qualitySizeCmd.ExecuteReader())
+                using (var qualitySizeReader = qualitySizeCmd.ExecuteReader())
                 {
                     while (qualitySizeReader.Read())
                     {
@@ -44,7 +44,7 @@ namespace NzbDrone.Core.Datastore.Migration
 
                         var defaultConfig = Quality.DefaultQualityDefinitions.Single(p => (int)p.Quality == qualityId);
 
-                        using (IDbCommand updateCmd = conn.CreateCommand())
+                        using (var updateCmd = conn.CreateCommand())
                         {
                             updateCmd.Transaction = tran;
                             updateCmd.CommandText = "INSERT INTO QualityDefinitions (Quality, Title, Weight, MinSize, MaxSize) VALUES (?, ?, ?, ?, ?)";

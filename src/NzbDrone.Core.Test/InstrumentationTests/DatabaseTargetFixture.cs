@@ -48,7 +48,7 @@ namespace NzbDrone.Core.Test.InstrumentationTests
         public void write_long_log()
         {
             var message = string.Empty;
-            for (int i = 0; i < 100; i++)
+            for (var i = 0; i < 100; i++)
             {
                 message += Guid.NewGuid();
             }

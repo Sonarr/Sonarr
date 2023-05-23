@@ -452,7 +452,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
             var imported = new List<ImportResult>();
             var importedTrackedDownload = new List<ManuallyImportedFile>();
 
-            for (int i = 0; i < message.Files.Count; i++)
+            for (var i = 0; i < message.Files.Count; i++)
             {
                 _logger.ProgressTrace("Processing file {0} of {1}", i + 1, message.Files.Count);
 

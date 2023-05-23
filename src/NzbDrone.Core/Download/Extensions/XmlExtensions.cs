@@ -32,13 +32,13 @@ namespace NzbDrone.Core.Download.Extensions
         public static long ElementAsLong(this XElement element, XName name)
         {
             var el = element.Element(name);
-            return long.TryParse(el?.Value, out long value) ? value : default;
+            return long.TryParse(el?.Value, out var value) ? value : default;
         }
 
         public static int ElementAsInt(this XElement element, XName name)
         {
             var el = element.Element(name);
-            return int.TryParse(el?.Value, out int value) ? value : default(int);
+            return int.TryParse(el?.Value, out var value) ? value : default(int);
         }
 
         public static int GetIntResponse(this XDocument document)

@@ -74,7 +74,7 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
         [Test]
         public void should_return_ok_if_not_downloading_to_root_folder()
         {
-            string rootFolderPath = "c:\\Test2".AsOsAgnostic();
+            var rootFolderPath = "c:\\Test2".AsOsAgnostic();
 
             GivenRootFolder(rootFolderPath);
 

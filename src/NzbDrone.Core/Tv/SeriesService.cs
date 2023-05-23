@@ -96,7 +96,7 @@ namespace NzbDrone.Core.Tv
         public Series FindByTitleInexact(string title)
         {
             // find any series clean title within the provided release title
-            string cleanTitle = title.CleanSeriesTitle();
+            var cleanTitle = title.CleanSeriesTitle();
             var list = _seriesRepository.FindByTitleInexact(cleanTitle);
             if (!list.Any())
             {

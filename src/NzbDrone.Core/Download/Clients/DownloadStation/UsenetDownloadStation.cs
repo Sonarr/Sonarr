@@ -63,7 +63,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
             var items = new List<DownloadClientItem>();
 
             long totalRemainingSize = 0;
-            long globalSpeed = nzbTasks.Where(t => t.Status == DownloadStationTaskStatus.Downloading)
+            var globalSpeed = nzbTasks.Where(t => t.Status == DownloadStationTaskStatus.Downloading)
                                        .Select(GetDownloadSpeed)
                                        .Sum();
 

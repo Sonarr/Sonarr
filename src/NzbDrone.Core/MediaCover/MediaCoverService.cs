@@ -109,7 +109,7 @@ namespace NzbDrone.Core.MediaCover
 
         private bool EnsureCovers(Series series)
         {
-            bool updated = false;
+            var updated = false;
             var toResize = new List<Tuple<MediaCover, bool>>();
 
             foreach (var cover in series.Images)

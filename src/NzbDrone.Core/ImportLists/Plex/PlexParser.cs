@@ -36,8 +36,8 @@ namespace NzbDrone.Core.ImportLists.Plex
                 var tmdbIdString = FindGuid(item.Guids, "tmdb");
                 var imdbId = FindGuid(item.Guids, "imdb");
 
-                int.TryParse(tvdbIdString, out int tvdbId);
-                int.TryParse(tmdbIdString, out int tmdbId);
+                int.TryParse(tvdbIdString, out var tvdbId);
+                int.TryParse(tmdbIdString, out var tmdbId);
 
                 series.Add(new ImportListItemInfo
                 {

@@ -139,7 +139,7 @@ namespace NzbDrone.Core.Messaging.Commands
 
         public CommandModel Push(string commandName, DateTime? lastExecutionTime, DateTime? lastStartTime, CommandPriority priority = CommandPriority.Normal, CommandTrigger trigger = CommandTrigger.Unspecified)
         {
-            dynamic command = GetCommand(commandName);
+            var command = GetCommand(commandName);
             command.LastExecutionTime = lastExecutionTime;
             command.LastStartTime = lastStartTime;
             command.Trigger = trigger;

@@ -28,7 +28,7 @@ namespace NzbDrone.Mono.EnvironmentInfo.VersionAdapters
             var fullName = "";
             var version = "";
 
-            bool success = false;
+            var success = false;
 
             foreach (var releaseFile in releaseFiles)
             {

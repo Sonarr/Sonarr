@@ -182,11 +182,11 @@ namespace NzbDrone.Core.Datastore.Migration
 
         private void MigrateNamingConfigs(IDbConnection conn, IDbTransaction tran)
         {
-            using (IDbCommand namingConfigCmd = conn.CreateCommand())
+            using (var namingConfigCmd = conn.CreateCommand())
             {
                 namingConfigCmd.Transaction = tran;
                 namingConfigCmd.CommandText = @"SELECT * FROM NamingConfig LIMIT 1";
-                using (IDataReader namingConfigReader = namingConfigCmd.ExecuteReader())
+                using (var namingConfigReader = namingConfigCmd.ExecuteReader())
                 {
                     var standardEpisodeFormatIndex = namingConfigReader.GetOrdinal("StandardEpisodeFormat");
                     var dailyEpisodeFormatIndex = namingConfigReader.GetOrdinal("DailyEpisodeFormat");
@@ -198,7 +198,7 @@ namespace NzbDrone.Core.Datastore.Migration
                         var dailyEpisodeFormat = NameReplace(namingConfigReader.GetString(dailyEpisodeFormatIndex));
                         var animeEpisodeFormat = NameReplace(namingConfigReader.GetString(animeEpisodeFormatIndex));
 
-                        using (IDbCommand updateCmd = conn.CreateCommand())
+                        using (var updateCmd = conn.CreateCommand())
                         {
                             var text = string.Format("UPDATE NamingConfig " +
                                                      "SET StandardEpisodeFormat = '{0}', " +
