@@ -40,12 +40,18 @@ dotnet_naming_style.instance_field_style.capitalization = camel_case
 dotnet_naming_style.instance_field_style.required_prefix = _
 
 # Prefer "var" everywhere
-csharp_style_var_for_built_in_types = true:suggestion
-csharp_style_var_when_type_is_apparent = true:suggestion
-csharp_style_var_elsewhere = true:suggestion
+csharp_style_var_for_built_in_types = true
+csharp_style_var_when_type_is_apparent = true
+csharp_style_var_elsewhere = true
+# Prefer "out" variables to be declared inline
+csharp_style_inlined_variable_declaration = true
 
 # Using directive is unnecessary.
 dotnet_diagnostic.IDE0005.severity = error
+# Use var instead of explicit type
+dotnet_diagnostic.IDE0007.severity = error
+# Inline variable declaration
+dotnet_diagnostic.IDE0018.severity = error
 
 # Stylecop Rules
 dotnet_diagnostic.SA0001.severity = none
