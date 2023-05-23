@@ -9046,7 +9046,8 @@
           "banner",
           "fanart",
           "screenshot",
-          "headshot"
+          "headshot",
+          "clearlogo"
         ],
         "type": "string"
       },
@@ -9181,7 +9182,8 @@
             "type": "boolean"
           },
           "scriptImportPath": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "importExtraFiles": {
             "type": "boolean"
