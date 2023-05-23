@@ -19,11 +19,11 @@ namespace NzbDrone.Core.Datastore.Migration
         {
             var config = new Dictionary<string, string>();
 
-            using (IDbCommand configCmd = conn.CreateCommand())
+            using (var configCmd = conn.CreateCommand())
             {
                 configCmd.Transaction = tran;
                 configCmd.CommandText = @"SELECT * FROM Config";
-                using (IDataReader configReader = configCmd.ExecuteReader())
+                using (var configReader = configCmd.ExecuteReader())
                 {
                     var keyIndex = configReader.GetOrdinal("Key");
                     var valueIndex = configReader.GetOrdinal("Value");
@@ -119,7 +119,7 @@ namespace NzbDrone.Core.Datastore.Migration
             string configContract,
             int protocol)
         {
-            using (IDbCommand updateCmd = conn.CreateCommand())
+            using (var updateCmd = conn.CreateCommand())
             {
                 var text = string.Format("INSERT INTO DownloadClients (Enable, Name, Implementation, Settings, ConfigContract, Protocol) VALUES (1, ?, ?, ?, ?, ?)");
                 updateCmd.AddParameter(name);
@@ -136,7 +136,7 @@ namespace NzbDrone.Core.Datastore.Migration
 
         private void DeleteOldConfigValues(IDbConnection conn, IDbTransaction tran)
         {
-            using (IDbCommand updateCmd = conn.CreateCommand())
+            using (var updateCmd = conn.CreateCommand())
             {
                 var text = "DELETE FROM Config WHERE [KEY] IN ('nzbgetusername', 'nzbgetpassword', 'nzbgethost', 'nzbgetport', " +
                            "'nzbgettvcategory', 'nzbgetrecenttvpriority', 'nzbgetoldertvpriority', 'sabhost', 'sabport', " +

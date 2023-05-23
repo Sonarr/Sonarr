@@ -36,7 +36,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
                                         .BuildListOfNew()
                                         .ToList();
 
-            for (int i = 0; i < _episodeFiles.Count; i++)
+            for (var i = 0; i < _episodeFiles.Count; i++)
             {
                 _episodes[i].EpisodeFileId = _episodeFiles[i].Id;
             }

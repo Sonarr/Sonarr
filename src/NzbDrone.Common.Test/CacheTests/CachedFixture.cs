@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading;
 using FluentAssertions;
 using NUnit.Framework;
@@ -65,9 +65,9 @@ namespace NzbDrone.Common.Test.CacheTests
         [Test]
         public void should_store_null()
         {
-            int hitCount = 0;
+            var hitCount = 0;
 
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
                 _cachedString.Get("key", () =>
                     {
@@ -83,10 +83,10 @@ namespace NzbDrone.Common.Test.CacheTests
         [Platform(Exclude = "MacOsX")]
         public void should_honor_ttl()
         {
-            int hitCount = 0;
+            var hitCount = 0;
             _cachedString = new Cached<string>();
 
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
                 _cachedString.Get("key",
                     () =>

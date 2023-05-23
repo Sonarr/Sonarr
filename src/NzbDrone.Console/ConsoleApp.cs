@@ -113,7 +113,7 @@ namespace NzbDrone.Console
                     }
 
                     System.Console.WriteLine("Non-recoverable failure, waiting for user intervention...");
-                    for (int i = 0; i < 3600; i++)
+                    for (var i = 0; i < 3600; i++)
                     {
                         System.Threading.Thread.Sleep(1000);
 

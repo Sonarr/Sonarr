@@ -748,7 +748,7 @@ namespace NzbDrone.Core.Datastore.Migration
             var tokens = mediaInfoLanguages.Split('/', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList();
 
             var cultures = CultureInfo.GetCultures(CultureTypes.NeutralCultures);
-            for (int i = 0; i < tokens.Count; i++)
+            for (var i = 0; i < tokens.Count; i++)
             {
                 if (tokens[i] == "Swedis")
                 {

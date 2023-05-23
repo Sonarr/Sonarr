@@ -148,7 +148,7 @@ namespace NzbDrone.Core.RootFolders
 
             if (subFolderDepth > 0)
             {
-                for (int i = 0; i < subFolderDepth; i++)
+                for (var i = 0; i < subFolderDepth; i++)
                 {
                     possibleSeriesFolders = possibleSeriesFolders.SelectMany(_diskProvider.GetDirectories).ToList();
                 }

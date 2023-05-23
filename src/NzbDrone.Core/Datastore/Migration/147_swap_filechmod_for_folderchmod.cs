@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Datastore.Migration
 
         private void ConvertFileChmodToFolderChmod(IDbConnection conn, IDbTransaction tran)
         {
-            using (IDbCommand getFileChmodCmd = conn.CreateCommand())
+            using (var getFileChmodCmd = conn.CreateCommand())
             {
                 getFileChmodCmd.Transaction = tran;
                 getFileChmodCmd.CommandText = @"SELECT Value FROM Config WHERE Key = 'filechmod'";
@@ -31,7 +31,7 @@ namespace NzbDrone.Core.Datastore.Migration
                         var folderChmodNum = fileChmodNum | ((fileChmodNum & 0x124) >> 2);
                         var folderChmod = Convert.ToString(folderChmodNum, 8).PadLeft(3, '0');
 
-                        using (IDbCommand insertCmd = conn.CreateCommand())
+                        using (var insertCmd = conn.CreateCommand())
                         {
                             insertCmd.Transaction = tran;
                             insertCmd.CommandText = "INSERT INTO Config (Key, Value) VALUES ('chmodfolder', ?)";
@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Datastore.Migration
                         }
                     }
 
-                    using (IDbCommand deleteCmd = conn.CreateCommand())
+                    using (var deleteCmd = conn.CreateCommand())
                     {
                         deleteCmd.Transaction = tran;
                         deleteCmd.CommandText = "DELETE FROM Config WHERE Key = 'filechmod'";

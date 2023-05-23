@@ -45,12 +45,12 @@ namespace NzbDrone.Core.Datastore.Migration
         {
             var tags = new List<Tag079>();
 
-            using (IDbCommand tagCmd = conn.CreateCommand())
+            using (var tagCmd = conn.CreateCommand())
             {
                 tagCmd.Transaction = tran;
                 tagCmd.CommandText = @"SELECT Id, Label FROM Tags";
 
-                using (IDataReader tagReader = tagCmd.ExecuteReader())
+                using (var tagReader = tagCmd.ExecuteReader())
                 {
                     while (tagReader.Read())
                     {
@@ -69,12 +69,12 @@ namespace NzbDrone.Core.Datastore.Migration
         {
             var tagged = new List<TaggedModel079>();
 
-            using (IDbCommand tagCmd = conn.CreateCommand())
+            using (var tagCmd = conn.CreateCommand())
             {
                 tagCmd.Transaction = tran;
                 tagCmd.CommandText = string.Format("SELECT Id, Tags FROM {0}", table);
 
-                using (IDataReader tagReader = tagCmd.ExecuteReader())
+                using (var tagReader = tagCmd.ExecuteReader())
                 {
                     while (tagReader.Read())
                     {
@@ -111,7 +111,7 @@ namespace NzbDrone.Core.Datastore.Migration
 
             foreach (var model in toUpdate.DistinctBy(m => m.Id))
             {
-                using (IDbCommand updateCmd = conn.CreateCommand())
+                using (var updateCmd = conn.CreateCommand())
                 {
                     updateCmd.Transaction = tran;
                     updateCmd.CommandText = string.Format(@"UPDATE {0} SET Tags = ? WHERE Id = ?", table);
@@ -127,7 +127,7 @@ namespace NzbDrone.Core.Datastore.Migration
         {
             var idsToRemove = replacements.Select(r => r.OldId).Distinct();
 
-            using (IDbCommand removeCmd = conn.CreateCommand())
+            using (var removeCmd = conn.CreateCommand())
             {
                 removeCmd.Transaction = tran;
                 removeCmd.CommandText = string.Format("DELETE FROM Tags WHERE Id IN ({0})", string.Join(",", idsToRemove));

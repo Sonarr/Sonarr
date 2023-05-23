@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -142,7 +142,7 @@ namespace NzbDrone.Common.Test
         [Test]
         public void SaveDictionary_should_save_proper_value()
         {
-            int port = 20555;
+            var port = 20555;
 
             var dic = Subject.GetConfigDictionary();
             dic["Port"] = 20555;
@@ -155,9 +155,9 @@ namespace NzbDrone.Common.Test
         [Test]
         public void SaveDictionary_should_only_save_specified_values()
         {
-            int port = 20555;
-            int origSslPort = 20551;
-            int sslPort = 20552;
+            var port = 20555;
+            var origSslPort = 20551;
+            var sslPort = 20552;
 
             var dic = Subject.GetConfigDictionary();
             dic["Port"] = port;

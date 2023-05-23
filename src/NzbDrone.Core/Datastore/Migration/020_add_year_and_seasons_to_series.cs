@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Data;
 using FluentMigrator;
 using NzbDrone.Common.Serializer;
@@ -19,28 +19,28 @@ namespace NzbDrone.Core.Datastore.Migration
 
         private void ConvertSeasons(IDbConnection conn, IDbTransaction tran)
         {
-            using (IDbCommand allSeriesCmd = conn.CreateCommand())
+            using (var allSeriesCmd = conn.CreateCommand())
             {
                 allSeriesCmd.Transaction = tran;
                 allSeriesCmd.CommandText = @"SELECT Id FROM Series";
-                using (IDataReader allSeriesReader = allSeriesCmd.ExecuteReader())
+                using (var allSeriesReader = allSeriesCmd.ExecuteReader())
                 {
                     while (allSeriesReader.Read())
                     {
-                        int seriesId = allSeriesReader.GetInt32(0);
+                        var seriesId = allSeriesReader.GetInt32(0);
                         var seasons = new List<dynamic>();
 
-                        using (IDbCommand seasonsCmd = conn.CreateCommand())
+                        using (var seasonsCmd = conn.CreateCommand())
                         {
                             seasonsCmd.Transaction = tran;
                             seasonsCmd.CommandText = string.Format(@"SELECT SeasonNumber, Monitored FROM Seasons WHERE SeriesId = {0}", seriesId);
 
-                            using (IDataReader seasonReader = seasonsCmd.ExecuteReader())
+                            using (var seasonReader = seasonsCmd.ExecuteReader())
                             {
                                 while (seasonReader.Read())
                                 {
-                                    int seasonNumber = seasonReader.GetInt32(0);
-                                    bool monitored = seasonReader.GetBoolean(1);
+                                    var seasonNumber = seasonReader.GetInt32(0);
+                                    var monitored = seasonReader.GetBoolean(1);
 
                                     if (seasonNumber == 0)
                                     {
@@ -52,7 +52,7 @@ namespace NzbDrone.Core.Datastore.Migration
                             }
                         }
 
-                        using (IDbCommand updateCmd = conn.CreateCommand())
+                        using (var updateCmd = conn.CreateCommand())
                         {
                             var text = string.Format("UPDATE Series SET Seasons = '{0}' WHERE Id = {1}", seasons.ToJson(), seriesId);
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using NzbDrone.Common.Extensions;
@@ -35,7 +35,7 @@ namespace NzbDrone.Core.MetadataSource
 
         public int Compare(Series x, Series y)
         {
-            int result = 0;
+            var result = 0;
 
             // Prefer exact matches
             result = Compare(x, y, s => CleanPunctuation(s.Title).Equals(CleanPunctuation(SearchQuery)));

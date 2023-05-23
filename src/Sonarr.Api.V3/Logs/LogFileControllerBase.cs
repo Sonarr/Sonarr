@@ -33,7 +33,7 @@ namespace Sonarr.Api.V3.Logs
 
             var files = GetLogFiles().ToList();
 
-            for (int i = 0; i < files.Count; i++)
+            for (var i = 0; i < files.Count; i++)
             {
                 var file = files[i];
                 var filename = Path.GetFileName(file);

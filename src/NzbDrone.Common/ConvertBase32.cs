@@ -1,4 +1,4 @@
-﻿namespace NzbDrone.Common
+namespace NzbDrone.Common
 {
     public static class ConvertBase32
     {
@@ -6,17 +6,17 @@
 
         public static byte[] FromBase32String(string str)
         {
-            int numBytes = str.Length * 5 / 8;
-            byte[] bytes = new byte[numBytes];
+            var numBytes = str.Length * 5 / 8;
+            var bytes = new byte[numBytes];
 
             // all UPPERCASE chars
             str = str.ToUpper();
 
-            int bitBuffer = 0;
-            int bitBufferCount = 0;
-            int index = 0;
+            var bitBuffer = 0;
+            var bitBufferCount = 0;
+            var index = 0;
 
-            for (int i = 0; i < str.Length; i++)
+            for (var i = 0; i < str.Length; i++)
             {
                 bitBuffer = (bitBuffer << 5) | ValidChars.IndexOf(str[i]);
                 bitBufferCount += 5;

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using NzbDrone.Common.Extensions;
 
 namespace NzbDrone.Common.Http.Proxy
@@ -31,7 +31,7 @@ namespace NzbDrone.Common.Http.Proxy
                 if (!string.IsNullOrWhiteSpace(BypassFilter))
                 {
                     var hostlist = BypassFilter.Split(',');
-                    for (int i = 0; i < hostlist.Length; i++)
+                    for (var i = 0; i < hostlist.Length; i++)
                     {
                         if (hostlist[i].StartsWith("*"))
                         {

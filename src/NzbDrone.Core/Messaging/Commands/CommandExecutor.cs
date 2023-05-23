@@ -127,7 +127,7 @@ namespace NzbDrone.Core.Messaging.Commands
         {
             _cancellationTokenSource = new CancellationTokenSource();
 
-            for (int i = 0; i < THREAD_LIMIT; i++)
+            for (var i = 0; i < THREAD_LIMIT; i++)
             {
                 var thread = new Thread(ExecuteCommands);
                 thread.Start();

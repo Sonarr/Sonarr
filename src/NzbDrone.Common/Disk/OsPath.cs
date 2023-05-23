@@ -255,7 +255,7 @@ namespace NzbDrone.Common.Disk
 
             var stringComparison = (Kind == OsPathKind.Windows || other.Kind == OsPathKind.Windows) ? StringComparison.InvariantCultureIgnoreCase : StringComparison.InvariantCulture;
 
-            for (int i = 0; i < leftFragments.Length; i++)
+            for (var i = 0; i < leftFragments.Length; i++)
             {
                 if (!string.Equals(leftFragments[i], rightFragments[i], stringComparison))
                 {
@@ -372,12 +372,12 @@ namespace NzbDrone.Common.Disk
 
             var newFragments = new List<string>();
 
-            for (int j = i; j < rightFragments.Length; j++)
+            for (var j = i; j < rightFragments.Length; j++)
             {
                 newFragments.Add("..");
             }
 
-            for (int j = i; j < leftFragments.Length; j++)
+            for (var j = i; j < leftFragments.Length; j++)
             {
                 newFragments.Add(leftFragments[j]);
             }

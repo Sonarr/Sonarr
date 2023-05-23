@@ -16,7 +16,7 @@ namespace NzbDrone.Common.Instrumentation
                 }
             }
 
-            foreach (JToken token in json)
+            foreach (var token in json)
             {
                 Visit(token);
             }

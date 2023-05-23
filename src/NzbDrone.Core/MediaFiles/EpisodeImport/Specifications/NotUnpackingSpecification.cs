@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using NLog;
 using NzbDrone.Common.Disk;
@@ -33,7 +33,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
 
             foreach (var workingFolder in _configService.DownloadClientWorkingFolders.Split('|'))
             {
-                DirectoryInfo parent = Directory.GetParent(localEpisode.Path);
+                var parent = Directory.GetParent(localEpisode.Path);
                 while (parent != null)
                 {
                     if (parent.Name.StartsWith(workingFolder))

@@ -14,7 +14,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd.JsonConverters
             var stringArray = (string[])value;
             writer.WriteStartArray();
 
-            for (int i = 0; i < stringArray.Length; i++)
+            for (var i = 0; i < stringArray.Length; i++)
             {
                 writer.WriteValue(stringArray[i]);
             }

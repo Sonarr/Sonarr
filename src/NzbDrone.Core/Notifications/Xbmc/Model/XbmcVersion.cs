@@ -107,7 +107,7 @@ namespace NzbDrone.Core.Notifications.Xbmc.Model
             unchecked
             {
                 // Overflow is fine, just wrap
-                int hash = 17;
+                var hash = 17;
                 hash = (hash * 23) + Major.GetHashCode();
                 hash = (hash * 23) + Minor.GetHashCode();
                 hash = (hash * 23) + Patch.GetHashCode();

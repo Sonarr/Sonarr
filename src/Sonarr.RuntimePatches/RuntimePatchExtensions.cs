@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -42,7 +42,7 @@ namespace NzbDrone.RuntimePatches
 
         public static string GetSimplifiedName(this Type t, bool includeNamespace = false)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             if (includeNamespace && string.IsNullOrEmpty(t.Namespace))
             {
@@ -55,7 +55,7 @@ namespace NzbDrone.RuntimePatches
                 sb.Append(t.Name, 0, t.Name.LastIndexOf('`'));
                 sb.Append('<');
                 var args = t.GetGenericArguments();
-                for (int i = 0; i < args.Length; i++)
+                for (var i = 0; i < args.Length; i++)
                 {
                     if (i != 0)
                     {

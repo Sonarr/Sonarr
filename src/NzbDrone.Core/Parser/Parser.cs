@@ -905,7 +905,7 @@ namespace NzbDrone.Core.Parser
 
             int.TryParse(matchCollection[0].Groups["airyear"].Value, out var airYear);
 
-            int lastSeasonEpisodeStringIndex = matchCollection[0].Groups["title"].EndIndex();
+            var lastSeasonEpisodeStringIndex = matchCollection[0].Groups["title"].EndIndex();
 
             ParsedEpisodeInfo result;
 

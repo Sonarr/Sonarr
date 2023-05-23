@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Text;
 using Newtonsoft.Json;
 
@@ -42,7 +42,7 @@ namespace NzbDrone.Common.Serializer
             var enumText = value.ToString();
             var builder = new StringBuilder(enumText.Length + 4);
             builder.Append(char.ToLower(enumText[0]));
-            for (int i = 1; i < enumText.Length; i++)
+            for (var i = 1; i < enumText.Length; i++)
             {
                 if (char.IsUpper(enumText[i]))
                 {

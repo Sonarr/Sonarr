@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using FluentMigrator;
@@ -22,7 +22,7 @@ namespace NzbDrone.Core.Datastore.Migration
 
         private void MoveToColumn(IDbConnection conn, IDbTransaction tran)
         {
-            using (IDbCommand getHistory = conn.CreateCommand())
+            using (var getHistory = conn.CreateCommand())
             {
                 getHistory.Transaction = tran;
                 getHistory.CommandText = @"SELECT Id, Data FROM History WHERE Data LIKE '%downloadClientId%'";

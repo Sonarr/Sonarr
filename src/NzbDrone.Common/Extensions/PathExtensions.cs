@@ -254,13 +254,13 @@ namespace NzbDrone.Common.Extensions
             var firstPath = paths.First();
             var length = firstPath.Length;
 
-            for (int i = 1; i < paths.Count; i++)
+            for (var i = 1; i < paths.Count; i++)
             {
                 var path = paths[i];
 
                 length = Math.Min(length, path.Length);
 
-                for (int characterIndex = 0; characterIndex < length; characterIndex++)
+                for (var characterIndex = 0; characterIndex < length; characterIndex++)
                 {
                     if (path[characterIndex] != firstPath[characterIndex])
                     {

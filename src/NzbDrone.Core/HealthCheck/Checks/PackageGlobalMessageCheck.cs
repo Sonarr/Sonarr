@@ -20,7 +20,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
             }
 
             var message = _deploymentInfoProvider.PackageGlobalMessage;
-            HealthCheckResult result = HealthCheckResult.Notice;
+            var result = HealthCheckResult.Notice;
 
             if (message.StartsWith("Error:"))
             {

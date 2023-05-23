@@ -18,7 +18,7 @@ namespace NzbDrone.Common.Serializer
                 {
                     try
                     {
-                        Version v = new Version(reader.GetString());
+                        var v = new Version(reader.GetString());
                         return v;
                     }
                     catch (Exception)

@@ -19,12 +19,12 @@ namespace NzbDrone.Core.Datastore.Migration
 
         private void ConvertQualityTitle(IDbConnection conn, IDbTransaction tran)
         {
-            using (IDbCommand namingConfigCmd = conn.CreateCommand())
+            using (var namingConfigCmd = conn.CreateCommand())
             {
                 namingConfigCmd.Transaction = tran;
                 namingConfigCmd.CommandText = @"SELECT StandardEpisodeFormat, DailyEpisodeFormat, AnimeEpisodeFormat FROM NamingConfig LIMIT 1";
 
-                using (IDataReader configReader = namingConfigCmd.ExecuteReader())
+                using (var configReader = namingConfigCmd.ExecuteReader())
                 {
                     while (configReader.Read())
                     {
@@ -36,7 +36,7 @@ namespace NzbDrone.Core.Datastore.Migration
                         var newDaily = GetNewFormat(currentDaily);
                         var newAnime = GetNewFormat(currentAnime);
 
-                        using (IDbCommand updateCmd = conn.CreateCommand())
+                        using (var updateCmd = conn.CreateCommand())
                         {
                             updateCmd.Transaction = tran;
 
