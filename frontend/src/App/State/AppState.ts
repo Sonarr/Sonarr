@@ -3,6 +3,7 @@ import CalendarAppState from './CalendarAppState';
 import CommandAppState from './CommandAppState';
 import EpisodeFilesAppState from './EpisodeFilesAppState';
 import EpisodesAppState from './EpisodesAppState';
+import HistoryAppState from './HistoryAppState';
 import ParseAppState from './ParseAppState';
 import QueueAppState from './QueueAppState';
 import RootFolderAppState from './RootFolderAppState';
@@ -48,6 +49,7 @@ interface AppState {
   commands: CommandAppState;
   episodeFiles: EpisodeFilesAppState;
   episodesSelection: EpisodesAppState;
+  history: HistoryAppState;
   interactiveImport: InteractiveImportAppState;
   parse: ParseAppState;
   queue: QueueAppState;
