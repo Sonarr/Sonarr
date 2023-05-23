@@ -257,9 +257,8 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
         protected long GetRemainingSize(DownloadStationTask torrent)
         {
             var downloadedString = torrent.Additional.Transfer["size_downloaded"];
-            long downloadedSize;
 
-            if (downloadedString.IsNullOrWhiteSpace() || !long.TryParse(downloadedString, out downloadedSize))
+            if (downloadedString.IsNullOrWhiteSpace() || !long.TryParse(downloadedString, out var downloadedSize))
             {
                 _logger.Debug("Torrent {0} has invalid size_downloaded: {1}", torrent.Title, downloadedString);
                 downloadedSize = 0;
@@ -271,9 +270,8 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
         protected TimeSpan? GetRemainingTime(DownloadStationTask torrent)
         {
             var speedString = torrent.Additional.Transfer["speed_download"];
-            long downloadSpeed;
 
-            if (speedString.IsNullOrWhiteSpace() || !long.TryParse(speedString, out downloadSpeed))
+            if (speedString.IsNullOrWhiteSpace() || !long.TryParse(speedString, out var downloadSpeed))
             {
                 _logger.Debug("Torrent {0} has invalid speed_download: {1}", torrent.Title, speedString);
                 downloadSpeed = 0;

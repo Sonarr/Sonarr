@@ -112,9 +112,8 @@ namespace NzbDrone.Core.Download.Clients.NzbVortex
         public override void RemoveItem(DownloadClientItem item, bool deleteData)
         {
             // Try to find the download by numerical ID, otherwise try by AddUUID
-            int id;
 
-            if (int.TryParse(item.DownloadId, out id))
+            if (int.TryParse(item.DownloadId, out var id))
             {
                 _proxy.Remove(id, deleteData, Settings);
             }

@@ -6,9 +6,7 @@ namespace NzbDrone.Common.Extensions
     {
         public static int? ParseInt32(this string source)
         {
-            int result;
-
-            if (int.TryParse(source, out result))
+            if (int.TryParse(source, out var result))
             {
                 return result;
             }
@@ -18,9 +16,7 @@ namespace NzbDrone.Common.Extensions
 
         public static long? ParseInt64(this string source)
         {
-            long result;
-
-            if (long.TryParse(source, out result))
+            if (long.TryParse(source, out var result))
             {
                 return result;
             }
@@ -30,9 +26,7 @@ namespace NzbDrone.Common.Extensions
 
         public static double? ParseDouble(this string source)
         {
-            double result;
-
-            if (double.TryParse(source.Replace(',', '.'), NumberStyles.Number, CultureInfo.InvariantCulture, out result))
+            if (double.TryParse(source.Replace(',', '.'), NumberStyles.Number, CultureInfo.InvariantCulture, out var result))
             {
                 return result;
             }

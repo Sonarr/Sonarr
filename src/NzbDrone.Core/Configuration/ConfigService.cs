@@ -57,8 +57,7 @@ namespace NzbDrone.Core.Configuration
 
             foreach (var configValue in configValues)
             {
-                object currentValue;
-                allWithDefaults.TryGetValue(configValue.Key, out currentValue);
+                allWithDefaults.TryGetValue(configValue.Key, out var currentValue);
                 if (currentValue == null || configValue.Value == null)
                 {
                     continue;
@@ -397,9 +396,7 @@ namespace NzbDrone.Core.Configuration
 
             EnsureCache();
 
-            string dbValue;
-
-            if (_cache.TryGetValue(key, out dbValue) && dbValue != null && !string.IsNullOrEmpty(dbValue))
+            if (_cache.TryGetValue(key, out var dbValue) && dbValue != null && !string.IsNullOrEmpty(dbValue))
             {
                 return dbValue;
             }

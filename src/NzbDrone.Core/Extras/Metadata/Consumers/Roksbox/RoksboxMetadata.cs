@@ -210,8 +210,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Roksbox
 
             var seasonFolders = GetSeasonFolders(series);
 
-            string seasonFolder;
-            if (!seasonFolders.TryGetValue(season.SeasonNumber, out seasonFolder))
+            if (!seasonFolders.TryGetValue(season.SeasonNumber, out var seasonFolder))
             {
                 _logger.Trace("Failed to find season folder for series {0}, season {1}.", series.Title, season.SeasonNumber);
                 return new List<ImageFileResult>();
@@ -278,8 +277,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Roksbox
                     }
                     else
                     {
-                        int matchedSeason;
-                        if (int.TryParse(seasonNumber, out matchedSeason))
+                        if (int.TryParse(seasonNumber, out var matchedSeason))
                         {
                             seasonFolderMap[matchedSeason] = folder;
                         }

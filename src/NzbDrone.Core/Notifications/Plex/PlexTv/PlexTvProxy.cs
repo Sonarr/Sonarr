@@ -30,9 +30,7 @@ namespace NzbDrone.Core.Notifications.Plex.PlexTv
             var request = BuildRequest(clientIdentifier);
             request.ResourceUrl = $"/api/v2/pins/{pinId}";
 
-            PlexTvPinResponse response;
-
-            if (!Json.TryDeserialize<PlexTvPinResponse>(ProcessRequest(request), out response))
+            if (!Json.TryDeserialize<PlexTvPinResponse>(ProcessRequest(request), out var response))
             {
                 response = new PlexTvPinResponse();
             }

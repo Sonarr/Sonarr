@@ -203,8 +203,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Wdtv
             var seasonFolders = GetSeasonFolders(series);
 
             // Work out the path to this season - if we don't have a matching path then skip this season.
-            string seasonFolder;
-            if (!seasonFolders.TryGetValue(season.SeasonNumber, out seasonFolder))
+            if (!seasonFolders.TryGetValue(season.SeasonNumber, out var seasonFolder))
             {
                 _logger.Trace("Failed to find season folder for series {0}, season {1}.", series.Title, season.SeasonNumber);
                 return new List<ImageFileResult>();
@@ -270,8 +269,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Wdtv
                     }
                     else
                     {
-                        int matchedSeason;
-                        if (int.TryParse(seasonNumber, out matchedSeason))
+                        if (int.TryParse(seasonNumber, out var matchedSeason))
                         {
                             seasonFolderMap[matchedSeason] = folder;
                         }

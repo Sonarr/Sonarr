@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text.RegularExpressions;
+using System;
 using NzbDrone.Common.Cache;
 using NzbDrone.Core.Profiles.Releases.TermMatchers;
 
@@ -37,8 +36,7 @@ namespace NzbDrone.Core.Profiles.Releases
 
         private ITermMatcher CreateMatcherInternal(string term)
         {
-            Regex regex;
-            if (PerlRegexFactory.TryCreateRegex(term, out regex))
+            if (PerlRegexFactory.TryCreateRegex(term, out var regex))
             {
                 return new RegexTermMatcher(regex);
             }

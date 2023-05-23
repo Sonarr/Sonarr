@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json.Linq;
@@ -49,8 +49,7 @@ namespace NzbDrone.Core.DataAugmentation.Xem
 
             return response.Data.Select(d =>
             {
-                int tvdbId = 0;
-                int.TryParse(d, out tvdbId);
+                int.TryParse(d, out var tvdbId);
 
                 return tvdbId;
             }).Where(t => t > 0).ToList();
@@ -89,8 +88,7 @@ namespace NzbDrone.Core.DataAugmentation.Xem
                 {
                     foreach (var n in name)
                     {
-                        int seasonNumber;
-                        if (!int.TryParse(n.Value.ToString(), out seasonNumber))
+                        if (!int.TryParse(n.Value.ToString(), out var seasonNumber))
                         {
                             continue;
                         }

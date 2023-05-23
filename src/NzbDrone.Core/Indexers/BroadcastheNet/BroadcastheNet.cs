@@ -26,10 +26,9 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
             var releaseInfo = _indexerStatusService.GetLastRssSyncReleaseInfo(Definition.Id);
             if (releaseInfo != null)
             {
-                int torrentID;
-                if (int.TryParse(releaseInfo.Guid.Replace("BTN-", string.Empty), out torrentID))
+                if (int.TryParse(releaseInfo.Guid.Replace("BTN-", string.Empty), out var torrentId))
                 {
-                    requestGenerator.LastRecentTorrentID = torrentID;
+                    requestGenerator.LastRecentTorrentID = torrentId;
                 }
             }
 

@@ -15,8 +15,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd.JsonConverters
         {
             var queuePriority = reader.Value.ToString();
 
-            SabnzbdPriority output;
-            Enum.TryParse(queuePriority, out output);
+            Enum.TryParse(queuePriority, out SabnzbdPriority output);
 
             return output;
         }

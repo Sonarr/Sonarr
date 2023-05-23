@@ -94,13 +94,12 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
                 metadata.Type = MetadataType.SeasonImage;
 
                 var seasonNumberMatch = seasonMatch.Groups["season"].Value;
-                int seasonNumber;
 
                 if (seasonNumberMatch.Contains("specials"))
                 {
                     metadata.SeasonNumber = 0;
                 }
-                else if (int.TryParse(seasonNumberMatch, out seasonNumber))
+                else if (int.TryParse(seasonNumberMatch, out var seasonNumber))
                 {
                     metadata.SeasonNumber = seasonNumber;
                 }

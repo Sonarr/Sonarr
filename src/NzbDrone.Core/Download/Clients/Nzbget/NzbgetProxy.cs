@@ -165,11 +165,10 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             var queue = GetQueue(settings);
             var history = GetHistory(settings);
 
-            int nzbId;
             NzbgetQueueItem queueItem;
             NzbgetHistoryItem historyItem;
 
-            if (id.Length < 10 && int.TryParse(id, out nzbId))
+            if (id.Length < 10 && int.TryParse(id, out var nzbId))
             {
                 // Download wasn't grabbed by Sonarr, so the id is the NzbId reported by nzbget.
                 queueItem = queue.SingleOrDefault(h => h.NzbId == nzbId);

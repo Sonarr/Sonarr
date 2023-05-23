@@ -61,8 +61,7 @@ namespace NzbDrone.Core.ImportLists
 
             foreach (var importList in importLists)
             {
-                ImportListStatus blockedImportListStatus;
-                if (blockedImportLists.TryGetValue(importList.Definition.Id, out blockedImportListStatus))
+                if (blockedImportLists.TryGetValue(importList.Definition.Id, out var blockedImportListStatus))
                 {
                     _logger.Debug("Temporarily ignoring import list {0} till {1} due to recent failures.", importList.Definition.Name, blockedImportListStatus.DisabledTill.Value.ToLocalTime());
                     continue;
