@@ -2,7 +2,9 @@ using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.CustomFormats;
+using NzbDrone.Core.Download;
 using NzbDrone.Core.Languages;
+using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.MediaInfo;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
@@ -22,9 +24,11 @@ namespace NzbDrone.Core.Parser.Model
         public long Size { get; set; }
         public ParsedEpisodeInfo FileEpisodeInfo { get; set; }
         public ParsedEpisodeInfo DownloadClientEpisodeInfo { get; set; }
+        public DownloadClientItem DownloadItem { get; set; }
         public ParsedEpisodeInfo FolderEpisodeInfo { get; set; }
         public Series Series { get; set; }
         public List<Episode> Episodes { get; set; }
+        public List<EpisodeFile> OldFiles { get; set; }
         public QualityModel Quality { get; set; }
         public List<Language> Languages { get; set; }
         public MediaInfoModel MediaInfo { get; set; }

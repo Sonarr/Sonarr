@@ -161,6 +161,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                 localEpisode.Episodes = _episodeService.GetEpisodes(episodeIds);
                 localEpisode.FileEpisodeInfo = Parser.Parser.ParsePath(path);
                 localEpisode.DownloadClientEpisodeInfo = downloadClientItem == null ? null : Parser.Parser.ParseTitle(downloadClientItem.Title);
+                localEpisode.DownloadItem = downloadClientItem;
                 localEpisode.Path = path;
                 localEpisode.SceneSource = SceneSource(series, rootFolder);
                 localEpisode.ExistingFile = series.Path.IsParentPath(path);
@@ -187,6 +188,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                                        DownloadClientEpisodeInfo = downloadClientItem == null
                                            ? null
                                            : Parser.Parser.ParseTitle(downloadClientItem.Title),
+                                       DownloadItem = downloadClientItem,
                                        Path = path,
                                        SceneSource = SceneSource(series, rootFolder),
                                        ExistingFile = series.Path.IsParentPath(path),
@@ -479,6 +481,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                 {
                     trackedDownload = _trackedDownloadService.Find(file.DownloadId);
                     localEpisode.DownloadClientEpisodeInfo = trackedDownload?.RemoteEpisode?.ParsedEpisodeInfo;
+                    localEpisode.DownloadItem = trackedDownload?.DownloadItem;
                 }
 
                 if (file.FolderName.IsNotNullOrWhiteSpace())

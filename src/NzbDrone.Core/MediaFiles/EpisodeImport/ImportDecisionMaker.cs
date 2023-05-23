@@ -89,6 +89,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                 {
                     Series = series,
                     DownloadClientEpisodeInfo = downloadClientItemInfo,
+                    DownloadItem = downloadClientItem,
                     FolderEpisodeInfo = folderInfo,
                     Path = file,
                     SceneSource = sceneSource,

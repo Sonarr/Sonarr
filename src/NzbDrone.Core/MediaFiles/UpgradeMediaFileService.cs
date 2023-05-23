@@ -4,6 +4,7 @@ using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
+using NzbDrone.Core.MediaFiles.MediaInfo;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.MediaFiles
@@ -67,6 +68,8 @@ namespace NzbDrone.Core.MediaFiles
                 moveFileResult.OldFiles.Add(file);
                 _mediaFileService.Delete(file, DeleteMediaFileReason.Upgrade);
             }
+
+            localEpisode.OldFiles = moveFileResult.OldFiles;
 
             if (copyOnly)
             {
