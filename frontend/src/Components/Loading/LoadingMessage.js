@@ -19,7 +19,7 @@ const messages = [
   'I\'ll be here all week',
   'Don\'t forget to tip your waitress',
   'Apply directly to the forehead',
-  'Loading Battlestations'
+  'Loading Battlestation'
 ];
 
 let message = null;
