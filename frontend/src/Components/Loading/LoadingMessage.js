@@ -13,13 +13,13 @@ const messages = [
   'Loading humorous message... Please Wait',
   'I could\'ve been faster in Python',
   'Don\'t forget to rewind your episodes',
-  'Congratulations! you are the 1000th visitor.',
+  'Congratulations! You are the 10,000th visitor.',
   'HELP! I\'m being held hostage and forced to write these stupid lines!',
   'RE-calibrating the internet...',
   'I\'ll be here all week',
   'Don\'t forget to tip your waitress',
   'Apply directly to the forehead',
-  'Loading Battlestation'
+  'Loading Battlestations'
 ];
 
 let message = null;
