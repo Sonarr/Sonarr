@@ -261,6 +261,8 @@ FormInputGroup.propTypes = {
   values: PropTypes.arrayOf(PropTypes.any),
   type: PropTypes.string.isRequired,
   kind: PropTypes.oneOf(kinds.all),
+  min: PropTypes.number,
+  max: PropTypes.number,
   unit: PropTypes.string,
   buttons: PropTypes.oneOfType([PropTypes.node, PropTypes.arrayOf(PropTypes.node)]),
   helpText: PropTypes.string,
