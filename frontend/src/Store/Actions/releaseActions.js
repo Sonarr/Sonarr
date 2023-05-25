@@ -44,7 +44,7 @@ export const defaultState = {
         return 10000;
       }
 
-      return item.languages[0].id;
+      return item.languages[0]?.id ?? 0;
     },
 
     rejections: function(item, direction) {
