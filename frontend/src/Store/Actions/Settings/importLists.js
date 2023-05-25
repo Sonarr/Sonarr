@@ -1,4 +1,6 @@
 import { createAction } from 'redux-actions';
+import createBulkEditItemHandler from 'Store/Actions/Creators/createBulkEditItemHandler';
+import createBulkRemoveItemHandler from 'Store/Actions/Creators/createBulkRemoveItemHandler';
 import createFetchHandler from 'Store/Actions/Creators/createFetchHandler';
 import createFetchSchemaHandler from 'Store/Actions/Creators/createFetchSchemaHandler';
 import createRemoveItemHandler from 'Store/Actions/Creators/createRemoveItemHandler';
@@ -30,6 +32,9 @@ export const TEST_IMPORT_LIST = 'settings/importlists/testImportList';
 export const CANCEL_TEST_IMPORT_LIST = 'settings/importlists/cancelTestImportList';
 export const TEST_ALL_IMPORT_LISTS = 'settings/importlists/testAllImportLists';
 
+export const BULK_DELETE_IMPORT_LISTS = 'settings/importlists/bulkDeleteImportLists';
+export const BULK_EDIT_IMPORT_LISTS = 'settings/importlists/bulkEditImportLists';
+
 //
 // Action Creators
 
@@ -43,6 +48,9 @@ export const deleteImportList = createThunk(DELETE_IMPORT_LIST);
 export const testImportList = createThunk(TEST_IMPORT_LIST);
 export const cancelTestImportList = createThunk(CANCEL_TEST_IMPORT_LIST);
 export const testAllImportLists = createThunk(TEST_ALL_IMPORT_LISTS);
+
+export const bulkDeleteImportLists = createThunk(BULK_DELETE_IMPORT_LISTS);
+export const bulkEditImportLists = createThunk(BULK_EDIT_IMPORT_LISTS);
 
 export const setImportListValue = createAction(SET_IMPORT_LIST_VALUE, (payload) => {
   return {
@@ -94,7 +102,9 @@ export default {
     [DELETE_IMPORT_LIST]: createRemoveItemHandler(section, '/importlist'),
     [TEST_IMPORT_LIST]: createTestProviderHandler(section, '/importlist'),
     [CANCEL_TEST_IMPORT_LIST]: createCancelTestProviderHandler(section),
-    [TEST_ALL_IMPORT_LISTS]: createTestAllProvidersHandler(section, '/importlist')
+    [TEST_ALL_IMPORT_LISTS]: createTestAllProvidersHandler(section, '/importlist'),
+    [BULK_DELETE_IMPORT_LISTS]: createBulkRemoveItemHandler(section, '/importlist/bulk'),
+    [BULK_EDIT_IMPORT_LISTS]: createBulkEditItemHandler(section, '/importlist/bulk')
   },
 
   //

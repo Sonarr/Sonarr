@@ -7,6 +7,7 @@ import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
 import { icons } from 'Helpers/Props';
 import SettingsToolbarConnector from 'Settings/SettingsToolbarConnector';
 import IndexersConnector from './Indexers/IndexersConnector';
+import ManageIndexersModal from './Indexers/Manage/ManageIndexersModal';
 import IndexerOptionsConnector from './Options/IndexerOptionsConnector';
 
 class IndexerSettings extends Component {
@@ -21,7 +22,8 @@ class IndexerSettings extends Component {
 
     this.state = {
       isSaving: false,
-      hasPendingChanges: false
+      hasPendingChanges: false,
+      isManageIndexersOpen: false
     };
   }
 
@@ -34,6 +36,14 @@ class IndexerSettings extends Component {
 
   onChildStateChange = (payload) => {
     this.setState(payload);
+  };
+
+  onManageIndexersPress = () => {
+    this.setState({ isManageIndexersOpen: true });
+  };
+
+  onManageIndexersModalClose = () => {
+    this.setState({ isManageIndexersOpen: false });
   };
 
   onSavePress = () => {
@@ -53,7 +63,8 @@ class IndexerSettings extends Component {
 
     const {
       isSaving,
-      hasPendingChanges
+      hasPendingChanges,
+      isManageIndexersOpen
     } = this.state;
 
     return (
@@ -71,6 +82,12 @@ class IndexerSettings extends Component {
                 isSpinning={isTestingAll}
                 onPress={dispatchTestAllIndexers}
               />
+
+              <PageToolbarButton
+                label="Manage Indexers"
+                iconName={icons.MANAGE}
+                onPress={this.onManageIndexersPress}
+              />
             </Fragment>
           }
           onSavePress={this.onSavePress}
@@ -82,6 +99,11 @@ class IndexerSettings extends Component {
           <IndexerOptionsConnector
             onChildMounted={this.onChildMounted}
             onChildStateChange={this.onChildStateChange}
+          />
+
+          <ManageIndexersModal
+            isOpen={isManageIndexersOpen}
+            onModalClose={this.onManageIndexersModalClose}
           />
         </PageContentBody>
       </PageContent>

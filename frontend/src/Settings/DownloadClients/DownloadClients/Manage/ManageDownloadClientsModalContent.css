@@ -1,0 +1,16 @@
+.leftButtons,
+.rightButtons {
+  display: flex;
+  flex: 1 0 50%;
+  flex-wrap: wrap;
+}
+
+.rightButtons {
+  justify-content: flex-end;
+}
+
+.deleteButton {
+  composes: button from '~Components/Link/Button.css';
+
+  margin-right: 10px;
+}
