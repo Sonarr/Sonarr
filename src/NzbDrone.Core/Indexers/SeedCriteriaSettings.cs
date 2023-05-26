@@ -48,8 +48,6 @@ namespace NzbDrone.Core.Indexers
 
     public class SeedCriteriaSettings
     {
-        private static readonly SeedCriteriaSettingsValidator Validator = new SeedCriteriaSettingsValidator();
-
         [FieldDefinition(0, Type = FieldType.Textbox, Label = "Seed Ratio", HelpText = "The ratio a torrent should reach before stopping, empty is download client's default. Ratio should be at least 1.0 and follow the indexers rules")]
         public double? SeedRatio { get; set; }
 
