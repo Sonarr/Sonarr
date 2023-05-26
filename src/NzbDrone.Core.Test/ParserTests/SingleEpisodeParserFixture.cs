@@ -1,7 +1,7 @@
-using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Test.Framework;
+using System.Linq;
 
 namespace NzbDrone.Core.Test.ParserTests
 {
@@ -151,6 +151,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Anime Title - S2010E994 [0994] [2010-02-28] - Episode Title [x264 720p][AAC 2ch][HS][Shion+GakiDave]", "Anime Title", 2010, 994)]
         [TestCase("Series Title - Temporada 2 [HDTV 720p][Cap.201][AC3 5.1 Castellano][www.pctnew.com]", "Series Title", 2, 1)]
         [TestCase("Series Title - Temporada 2 [HDTV 720p][Cap.1901][AC3 5.1 Castellano][www.pctnew.com]", "Series Title", 19, 1)]
+        [TestCase("Series Title - Temporada 2 [HDTV 720p][Cap.408]", "Series Title", 4, 8)]
         [TestCase("Series Title 1x1", "Series Title", 1, 1)]
         [TestCase("1x1", "", 1, 1)]
         [TestCase("Series Title [2022] [S25E13] [PL] [720p] [WEB-DL-CZRG] [x264] ", "Series Title [2022]", 25, 13)]

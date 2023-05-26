@@ -1,3 +1,8 @@
+using NLog;
+using NzbDrone.Common.Extensions;
+using NzbDrone.Common.Instrumentation;
+using NzbDrone.Core.Parser.Model;
+using NzbDrone.Core.Tv;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -469,7 +474,7 @@ namespace NzbDrone.Core.Parser
                                                                 string.Empty,
                                                                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-        private static readonly RegexReplace WebsitePostfixRegex = new RegexReplace(@"\[\s*[-a-z]+(\.[a-z0-9]+)+\s*\]$",
+        private static readonly RegexReplace WebsitePostfixRegex = new RegexReplace(@"\[\s*[-a-z]+(\.[a-z0-9]+)+\s*\]$(?<!\[Cap\.([0-9]{3})\])",
                                                                 string.Empty,
                                                                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
