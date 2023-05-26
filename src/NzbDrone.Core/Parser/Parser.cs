@@ -1,8 +1,3 @@
-using NLog;
-using NzbDrone.Common.Extensions;
-using NzbDrone.Common.Instrumentation;
-using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Tv;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
