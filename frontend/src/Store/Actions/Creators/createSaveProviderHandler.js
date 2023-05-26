@@ -32,9 +32,9 @@ function createSaveProviderHandler(section, url, options = {}) {
     const params = { ...queryParams };
 
     // If the user is re-saving the same provider without changes
-    // force it to be saved. Only applies to editing existing providers.
+    // force it to be saved.
 
-    if (id && _.isEqual(saveData, lastSaveData)) {
+    if (_.isEqual(saveData, lastSaveData)) {
       params.forceSave = true;
     }
 
