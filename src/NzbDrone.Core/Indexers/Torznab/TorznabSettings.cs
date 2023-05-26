@@ -17,12 +17,7 @@ namespace NzbDrone.Core.Indexers.Torznab
 
         private static bool ShouldHaveApiKey(TorznabSettings settings)
         {
-            if (settings.BaseUrl == null)
-            {
-                return false;
-            }
-
-            return ApiKeyWhiteList.Any(c => settings.BaseUrl.ToLowerInvariant().Contains(c));
+            return settings.BaseUrl != null && ApiKeyWhiteList.Any(c => settings.BaseUrl.ToLowerInvariant().Contains(c));
         }
 
         private static readonly Regex AdditionalParametersRegex = new Regex(@"(&.+?\=.+?)+", RegexOptions.Compiled);
