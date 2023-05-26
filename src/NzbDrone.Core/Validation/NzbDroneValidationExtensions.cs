@@ -24,17 +24,7 @@ namespace NzbDrone.Core.Validation
 
         public static bool HasErrors(this List<ValidationFailure> list)
         {
-            foreach (var item in list)
-            {
-                if (item is NzbDroneValidationFailure { IsWarning: true })
-                {
-                    continue;
-                }
-
-                return true;
-            }
-
-            return false;
+            return list.Any(item => item is not NzbDroneValidationFailure { IsWarning: true });
         }
     }
 }
