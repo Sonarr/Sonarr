@@ -17,6 +17,7 @@ namespace NzbDrone.Core.Tv
         Series FindByPath(string path);
         List<int> AllSeriesTvdbIds();
         Dictionary<int, string> AllSeriesPaths();
+        Dictionary<int, List<int>> AllSeriesTags();
     }
 
     public class SeriesRepository : BasicRepository<Series>, ISeriesRepository
@@ -87,6 +88,15 @@ namespace NzbDrone.Core.Tv
             {
                 var strSql = "SELECT Id AS [Key], Path AS [Value] FROM Series";
                 return conn.Query<KeyValuePair<int, string>>(strSql).ToDictionary(x => x.Key, x => x.Value);
+            }
+        }
+
+        public Dictionary<int, List<int>> AllSeriesTags()
+        {
+            using (var conn = _database.OpenConnection())
+            {
+                var strSql = "SELECT Id AS [Key], Tags AS [Value] FROM Series WHERE Tags IS NOT NULL";
+                return conn.Query<KeyValuePair<int, List<int>>>(strSql).ToDictionary(x => x.Key, x => x.Value);
             }
         }
 

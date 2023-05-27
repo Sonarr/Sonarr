@@ -112,7 +112,7 @@ namespace NzbDrone.Core.Tags
             var importLists = _importListFactory.All();
             var notifications = _notificationFactory.All();
             var restrictions = _releaseProfileService.All();
-            var series = _seriesService.GetAllSeries();
+            var series = _seriesService.GetAllSeriesTags();
             var indexers = _indexerService.All();
             var autotags = _autoTaggingService.All();
 
@@ -128,7 +128,7 @@ namespace NzbDrone.Core.Tags
                         ImportListIds = importLists.Where(c => c.Tags.Contains(tag.Id)).Select(c => c.Id).ToList(),
                         NotificationIds = notifications.Where(c => c.Tags.Contains(tag.Id)).Select(c => c.Id).ToList(),
                         RestrictionIds = restrictions.Where(c => c.Tags.Contains(tag.Id)).Select(c => c.Id).ToList(),
-                        SeriesIds = series.Where(c => c.Tags.Contains(tag.Id)).Select(c => c.Id).ToList(),
+                        SeriesIds = series.Where(c => c.Value.Contains(tag.Id)).Select(c => c.Key).ToList(),
                         IndexerIds = indexers.Where(c => c.Tags.Contains(tag.Id)).Select(c => c.Id).ToList(),
                         AutoTagIds = autotags.Where(c => c.Tags.Contains(tag.Id)).Select(c => c.Id).ToList(),
                     });
