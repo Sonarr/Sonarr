@@ -30,6 +30,13 @@
     <!-- A test project gets the test sdk packages automatically added -->
     <TestProject>false</TestProject>
     <TestProject Condition="$(MSBuildProjectName.EndsWith('.Test'))">true</TestProject>
+
+    <!-- XML documentation comments are needed to enforce rule IDE0005 on build -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <!--
+        CS1591: Missing XML comment for publicly visible type or member 'Type_or_Member'
+    -->
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup>

@@ -9,7 +9,6 @@ using NzbDrone.Core.Download;
 using NzbDrone.Core.Extras;
 using NzbDrone.Core.MediaFiles.Commands;
 using NzbDrone.Core.MediaFiles.Events;
-using NzbDrone.Core.MediaFiles.MediaInfo;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Parser.Model;

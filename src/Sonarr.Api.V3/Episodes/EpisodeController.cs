@@ -6,7 +6,6 @@ using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.Tv;
 using NzbDrone.SignalR;
 using Sonarr.Http;
-using Sonarr.Http.Extensions;
 using Sonarr.Http.REST;
 using Sonarr.Http.REST.Attributes;
 

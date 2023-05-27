@@ -1,7 +1,6 @@
 using System;
 using System.Net;
 using System.Text;
-using System.Web;
 using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common.Extensions;
