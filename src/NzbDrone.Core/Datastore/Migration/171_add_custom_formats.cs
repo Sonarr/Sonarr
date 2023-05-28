@@ -5,11 +5,9 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Dapper;
 using FluentMigrator;
-using Newtonsoft.Json;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Datastore.Migration.Framework;
-using NzbDrone.Core.Profiles.Qualities;
 
 namespace NzbDrone.Core.Datastore.Migration
 {

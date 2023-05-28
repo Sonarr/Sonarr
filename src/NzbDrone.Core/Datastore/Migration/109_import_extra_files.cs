@@ -1,6 +1,5 @@
 using System.Data;
 using FluentMigrator;
-using Newtonsoft.Json.Linq;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Datastore.Migration.Framework;
 

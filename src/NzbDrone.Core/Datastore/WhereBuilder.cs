@@ -1,5 +1,4 @@
-﻿using Dapper;
-using NzbDrone.Common.Extensions;
+using Dapper;
 
 namespace NzbDrone.Core.Datastore
 {

@@ -6,7 +6,6 @@ using FluentMigrator;
 using Newtonsoft.Json;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Datastore.Migration.Framework;
-using NzbDrone.Core.Update.History;
 
 namespace NzbDrone.Core.Datastore.Migration
 {

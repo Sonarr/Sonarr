@@ -1,4 +1,3 @@
-using System;
 using FluentMigrator;
 using NzbDrone.Core.Datastore.Migration.Framework;
 
