@@ -10,7 +10,7 @@ function parseValue(props, value) {
   } = props;
 
   if (value == null || value === '') {
-    return min;
+    return null;
   }
 
   let newValue = isFloat ? parseFloat(value) : parseInt(value);

@@ -41,7 +41,7 @@ function ManageIndexersEditModalContent(
   const [enableAutomaticSearch, setEnableAutomaticSearch] = useState(NO_CHANGE);
   const [enableInteractiveSearch, setEnableInteractiveSearch] =
     useState(NO_CHANGE);
-  const [priority, setPriority] = useState<string | number>(NO_CHANGE);
+  const [priority, setPriority] = useState<null | string | number>(null);
 
   const save = useCallback(() => {
     let hasChanges = false;
@@ -62,7 +62,7 @@ function ManageIndexersEditModalContent(
       payload.enableInteractiveSearch = enableInteractiveSearch === 'enabled';
     }
 
-    if (priority !== NO_CHANGE) {
+    if (priority !== null) {
       hasChanges = true;
       payload.priority = priority as number;
     }
