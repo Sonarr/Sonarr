@@ -52,37 +52,27 @@ function ManageIndexersModalRow(props: ManageIndexersModalRowProps) {
         onSelectedChange={onSelectedChangeWrapper}
       />
 
-      <TableRowCell className={styles.name} title={name}>
-        {name}
-      </TableRowCell>
+      <TableRowCell className={styles.name}>{name}</TableRowCell>
 
-      <TableRowCell className={styles.implementation} title={implementation}>
+      <TableRowCell className={styles.implementation}>
         {implementation}
       </TableRowCell>
 
-      <TableRowCell className={styles.enableRss} title={enableRss}>
+      <TableRowCell className={styles.enableRss}>
         {enableRss ? 'Yes' : 'No'}
       </TableRowCell>
 
-      <TableRowCell
-        className={styles.enableAutomaticSearch}
-        title={enableAutomaticSearch}
-      >
+      <TableRowCell className={styles.enableAutomaticSearch}>
         {enableAutomaticSearch ? 'Yes' : 'No'}
       </TableRowCell>
 
-      <TableRowCell
-        className={styles.enableInteractiveSearch}
-        title={enableInteractiveSearch}
-      >
+      <TableRowCell className={styles.enableInteractiveSearch}>
         {enableInteractiveSearch ? 'Yes' : 'No'}
       </TableRowCell>
 
-      <TableRowCell className={styles.priority} title={priority}>
-        {priority}
-      </TableRowCell>
+      <TableRowCell className={styles.priority}>{priority}</TableRowCell>
 
-      <TableRowCell className={styles.tags} title={tags}>
+      <TableRowCell className={styles.tags}>
         <TagListConnector tags={tags} />
       </TableRowCell>
     </TableRow>

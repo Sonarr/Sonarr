@@ -56,33 +56,25 @@ function ManageImportListsModalRow(props: ManageImportListsModalRowProps) {
         onSelectedChange={onSelectedChangeWrapper}
       />
 
-      <TableRowCell className={styles.name} title={name}>
-        {name}
-      </TableRowCell>
+      <TableRowCell className={styles.name}>{name}</TableRowCell>
 
-      <TableRowCell className={styles.implementation} title={implementation}>
+      <TableRowCell className={styles.implementation}>
         {implementation}
       </TableRowCell>
 
-      <TableRowCell
-        className={styles.qualityProfileId}
-        title={qualityProfileId}
-      >
+      <TableRowCell className={styles.qualityProfileId}>
         {qualityProfile?.name ?? 'None'}
       </TableRowCell>
 
-      <TableRowCell className={styles.rootFolderPath} title={rootFolderPath}>
+      <TableRowCell className={styles.rootFolderPath}>
         {rootFolderPath}
       </TableRowCell>
 
-      <TableRowCell
-        className={styles.enableAutomaticAdd}
-        title={enableAutomaticAdd}
-      >
+      <TableRowCell className={styles.enableAutomaticAdd}>
         {enableAutomaticAdd ? 'Yes' : 'No'}
       </TableRowCell>
 
-      <TableRowCell className={styles.tags} title={tags}>
+      <TableRowCell className={styles.tags}>
         <TagListConnector tags={tags} />
       </TableRowCell>
     </TableRow>
