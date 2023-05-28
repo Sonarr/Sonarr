@@ -41,7 +41,7 @@ function ManageDownloadClientsEditModalContent(
   const [removeCompletedDownloads, setRemoveCompletedDownloads] =
     useState(NO_CHANGE);
   const [removeFailedDownloads, setRemoveFailedDownloads] = useState(NO_CHANGE);
-  const [priority, setPriority] = useState<string | number>(NO_CHANGE);
+  const [priority, setPriority] = useState<null | string | number>(null);
 
   const save = useCallback(() => {
     let hasChanges = false;
@@ -62,7 +62,7 @@ function ManageDownloadClientsEditModalContent(
       payload.removeFailedDownloads = removeFailedDownloads === 'enabled';
     }
 
-    if (priority !== NO_CHANGE) {
+    if (priority !== null) {
       hasChanges = true;
       payload.priority = priority as number;
     }
