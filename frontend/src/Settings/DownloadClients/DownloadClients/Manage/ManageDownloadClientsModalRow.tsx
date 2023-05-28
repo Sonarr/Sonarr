@@ -51,33 +51,23 @@ function ManageDownloadClientsModalRow(
         onSelectedChange={onSelectedChangeWrapper}
       />
 
-      <TableRowCell className={styles.name} title={name}>
-        {name}
-      </TableRowCell>
+      <TableRowCell className={styles.name}>{name}</TableRowCell>
 
-      <TableRowCell className={styles.implementation} title={implementation}>
+      <TableRowCell className={styles.implementation}>
         {implementation}
       </TableRowCell>
 
-      <TableRowCell className={styles.enable} title={enable}>
+      <TableRowCell className={styles.enable}>
         {enable ? 'Yes' : 'No'}
       </TableRowCell>
 
-      <TableRowCell className={styles.priority} title={priority}>
-        {priority}
-      </TableRowCell>
+      <TableRowCell className={styles.priority}>{priority}</TableRowCell>
 
-      <TableRowCell
-        className={styles.removeCompletedDownloads}
-        title={removeCompletedDownloads}
-      >
+      <TableRowCell className={styles.removeCompletedDownloads}>
         {removeCompletedDownloads ? 'Yes' : 'No'}
       </TableRowCell>
 
-      <TableRowCell
-        className={styles.removeFailedDownloads}
-        title={removeFailedDownloads}
-      >
+      <TableRowCell className={styles.removeFailedDownloads}>
         {removeFailedDownloads ? 'Yes' : 'No'}
       </TableRowCell>
     </TableRow>
