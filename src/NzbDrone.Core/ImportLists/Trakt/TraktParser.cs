@@ -35,7 +35,8 @@ namespace NzbDrone.Core.ImportLists.Trakt
                 series.AddIfNotNull(new ImportListItemInfo()
                 {
                     Title = traktResponse.Show.Title,
-                    TvdbId = traktResponse.Show.Ids.Tvdb.GetValueOrDefault()
+                    TvdbId = traktResponse.Show.Ids.Tvdb.GetValueOrDefault(),
+                    ImdbId = traktResponse.Show.Ids.Imdb
                 });
             }
 
