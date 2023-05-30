@@ -58,6 +58,12 @@ namespace Sonarr.Api.V3.Queue
             _qualityComparer = new QualityModelComparer(qualityProfileService.GetDefaultProfile(string.Empty));
         }
 
+        [NonAction]
+        public override ActionResult<QueueResource> GetResourceByIdWithErrorHandler(int id)
+        {
+            return base.GetResourceByIdWithErrorHandler(id);
+        }
+
         protected override QueueResource GetResourceById(int id)
         {
             throw new NotImplementedException();
