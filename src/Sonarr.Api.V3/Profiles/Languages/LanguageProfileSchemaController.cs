@@ -32,9 +32,15 @@ namespace Sonarr.Api.V3.Profiles.Languages
             };
         }
 
+        [NonAction]
+        public override ActionResult<LanguageProfileResource> GetResourceByIdWithErrorHandler(int id)
+        {
+            return base.GetResourceByIdWithErrorHandler(id);
+        }
+
         protected override LanguageProfileResource GetResourceById(int id)
         {
-            throw new global::System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

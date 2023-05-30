@@ -68,6 +68,7 @@ namespace Sonarr.Api.V3
 
         [RestPostById]
         [Consumes("application/json")]
+        [Produces("application/json")]
         public ActionResult<TProviderResource> CreateProvider([FromBody] TProviderResource providerResource, [FromQuery] bool forceSave = false)
         {
             var providerDefinition = GetDefinition(providerResource, true, !forceSave, false);
@@ -84,6 +85,7 @@ namespace Sonarr.Api.V3
 
         [RestPutById]
         [Consumes("application/json")]
+        [Produces("application/json")]
         public ActionResult<TProviderResource> UpdateProvider([FromBody] TProviderResource providerResource, [FromQuery] bool forceSave = false)
         {
             var providerDefinition = GetDefinition(providerResource, true, !forceSave, false);
@@ -101,6 +103,7 @@ namespace Sonarr.Api.V3
 
         [HttpPut("bulk")]
         [Consumes("application/json")]
+        [Produces("application/json")]
         public ActionResult<TProviderResource> UpdateProvider([FromBody] TBulkProviderResource providerResource)
         {
             var definitionsToUpdate = _providerFactory.Get(providerResource.Ids).ToList();
@@ -198,6 +201,7 @@ namespace Sonarr.Api.V3
         }
 
         [HttpPost("testall")]
+        [Produces("application/json")]
         public IActionResult TestAll()
         {
             var providerDefinitions = _providerFactory.All()
@@ -225,6 +229,7 @@ namespace Sonarr.Api.V3
         [SkipValidation]
         [HttpPost("action/{name}")]
         [Consumes("application/json")]
+        [Produces("application/json")]
         public IActionResult RequestAction(string name, [FromBody] TProviderResource resource)
         {
             var providerDefinition = GetDefinition(resource, false, false, false);

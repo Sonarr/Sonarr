@@ -48,7 +48,7 @@ namespace Sonarr.Http.REST
 
         [RestGetById]
         [Produces("application/json")]
-        public ActionResult<TResource> GetResourceByIdWithErrorHandler(int id)
+        public virtual ActionResult<TResource> GetResourceByIdWithErrorHandler(int id)
         {
             try
             {

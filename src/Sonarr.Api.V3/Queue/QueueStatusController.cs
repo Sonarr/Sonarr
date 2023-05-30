@@ -30,6 +30,12 @@ namespace Sonarr.Api.V3.Queue
             _broadcastDebounce = new Debouncer(BroadcastChange, TimeSpan.FromSeconds(5));
         }
 
+        [NonAction]
+        public override ActionResult<QueueStatusResource> GetResourceByIdWithErrorHandler(int id)
+        {
+            return base.GetResourceByIdWithErrorHandler(id);
+        }
+
         protected override QueueStatusResource GetResourceById(int id)
         {
             throw new NotImplementedException();
