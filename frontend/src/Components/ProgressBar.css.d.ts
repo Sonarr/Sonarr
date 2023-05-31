@@ -5,6 +5,7 @@ interface CssExports {
   'backTextContainer': string;
   'container': string;
   'danger': string;
+  'default': string;
   'frontText': string;
   'frontTextContainer': string;
   'info': string;

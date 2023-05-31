@@ -45,6 +45,10 @@
   cursor: default;
 }
 
+.default {
+  background-color: var(--darkGray);
+}
+
 .primary {
   background-color: var(--primaryColor);
 }
