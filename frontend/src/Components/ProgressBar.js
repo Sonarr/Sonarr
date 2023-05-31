@@ -38,7 +38,7 @@ function ProgressBar(props) {
             {
               showText && width ?
                 <div
-                  className={styles.backTextContainer}
+                  className={classNames(styles.backTextContainer, styles[kind])}
                   style={{ width: actualWidth }}
                 >
                   <div className={styles.backText}>
@@ -67,7 +67,7 @@ function ProgressBar(props) {
             {
               showText ?
                 <div
-                  className={styles.frontTextContainer}
+                  className={classNames(styles.frontTextContainer, styles[kind])}
                   style={{ width: progressPercent }}
                 >
                   <div
