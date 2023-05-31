@@ -16,6 +16,38 @@
   box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
   color: var(--white);
   transition: width 0.6s ease;
+
+  &.primary {
+    background-color: var(--primaryColor);
+  }
+
+  &.danger {
+    background-color: var(--dangerColor);
+
+    &:global(.colorImpaired) {
+      background: repeating-linear-gradient(90deg, color(#f05050 shade(5%)), color(#f05050 shade(5%)) 5px, color(#f05050 shade(15%)) 5px, color(#f05050 shade(15%)) 10px);
+    }
+  }
+
+  &.success {
+    background-color: var(--successColor);
+  }
+
+  &.purple {
+    background-color: var(--purple);
+  }
+
+  &.warning {
+    background-color: var(--warningColor);
+
+    &:global(.colorImpaired) {
+      background: repeating-linear-gradient(45deg, #ffa500, #ffa500 5px, color(#ffa500 tint(15%)) 5px, color(#ffa500 tint(15%)) 10px);
+    }
+  }
+
+  &.info {
+    background-color: var(--infoColor);
+  }
 }
 
 .frontTextContainer {
@@ -43,38 +75,6 @@
   text-align: center;
   font-size: 12px;
   cursor: default;
-}
-
-.primary {
-  background-color: var(--primaryColor);
-}
-
-.danger {
-  background-color: var(--dangerColor);
-
-  &:global(.colorImpaired) {
-    background: repeating-linear-gradient(90deg, color(#f05050 shade(5%)), color(#f05050 shade(5%)) 5px, color(#f05050 shade(15%)) 5px, color(#f05050 shade(15%)) 10px);
-  }
-}
-
-.success {
-  background-color: var(--successColor);
-}
-
-.purple {
-  background-color: var(--purple);
-}
-
-.warning {
-  background-color: var(--warningColor);
-
-  &:global(.colorImpaired) {
-    background: repeating-linear-gradient(45deg, #ffa500, #ffa500 5px, color(#ffa500 tint(15%)) 5px, color(#ffa500 tint(15%)) 10px);
-  }
-}
-
-.info {
-  background-color: var(--infoColor);
 }
 
 .small {
