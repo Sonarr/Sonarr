@@ -375,6 +375,7 @@ namespace NzbDrone.Core.Indexers
             catch (RequestLimitReachedException ex)
             {
                 _logger.Warn("Request limit reached: " + ex.Message);
+
                 return new ValidationFailure(string.Empty, "Request limit reached: " + ex.Message);
             }
             catch (CloudFlareCaptchaException ex)
@@ -419,11 +420,13 @@ namespace NzbDrone.Core.Indexers
                 {
                     return new ValidationFailure(string.Empty, "Unable to connect to indexer, invalid credentials. " + ex.Message);
                 }
+
                 return new ValidationFailure(string.Empty, "Unable to connect to indexer, check the log above the ValidationFailure for more details. " + ex.Message);
             }
             catch (HttpRequestException ex)
             {
                 _logger.Warn(ex, "Unable to connect to indexer");
+
                 return new ValidationFailure(string.Empty, "Unable to connect to indexer, please check your DNS settings and ensure IPv6 is working or disabled. " + ex.Message);
             }
             catch (TaskCanceledException ex)
