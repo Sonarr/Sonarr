@@ -15,6 +15,7 @@ namespace NzbDrone.Core.Annotations
         public string Label { get; set; }
         public string Unit { get; set; }
         public string HelpText { get; set; }
+        public string HelpTextWarning { get; set; }
         public string HelpLink { get; set; }
         public FieldType Type { get; set; }
         public bool Advanced { get; set; }
