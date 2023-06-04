@@ -87,37 +87,35 @@ namespace NzbDrone.Core.ImportLists.Sonarr
                 };
             }
 
+            Settings.Validate().Filter("ApiKey").ThrowOnError();
+
             if (action == "getProfiles")
             {
-                Settings.Validate().Filter("ApiKey").ThrowOnError();
-
                 var profiles = _sonarrV3Proxy.GetQualityProfiles(Settings);
 
                 return new
                 {
                     options = profiles.OrderBy(d => d.Name, StringComparer.InvariantCultureIgnoreCase)
-                                      .Select(d => new
-                                      {
-                                          value = d.Id,
-                                          name = d.Name
-                                      })
+                        .Select(d => new
+                        {
+                            value = d.Id,
+                            name = d.Name
+                        })
                 };
             }
 
             if (action == "getLanguageProfiles")
             {
-                Settings.Validate().Filter("ApiKey").ThrowOnError();
-
                 var langProfiles = _sonarrV3Proxy.GetLanguageProfiles(Settings);
 
                 return new
                 {
                     options = langProfiles.OrderBy(d => d.Name, StringComparer.InvariantCultureIgnoreCase)
-                                          .Select(d => new
-                                          {
-                                              value = d.Id,
-                                              name = d.Name
-                                          })
+                        .Select(d => new
+                        {
+                            value = d.Id,
+                            name = d.Name
+                        })
                 };
             }
 
@@ -138,18 +136,16 @@ namespace NzbDrone.Core.ImportLists.Sonarr
 
             if (action == "getRootFolders")
             {
-                Settings.Validate().Filter("ApiKey").ThrowOnError();
-
-                var remoteRootfolders = _sonarrV3Proxy.GetRootFolders(Settings);
+                var remoteRootFolders = _sonarrV3Proxy.GetRootFolders(Settings);
 
                 return new
                 {
-                    options = remoteRootfolders.OrderBy(d => d.Path, StringComparer.InvariantCultureIgnoreCase)
-                                               .Select(d => new
-                                               {
-                                                   value = d.Path,
-                                                   name = d.Path
-                                               })
+                    options = remoteRootFolders.OrderBy(d => d.Path, StringComparer.InvariantCultureIgnoreCase)
+                        .Select(d => new
+                        {
+                            value = d.Path,
+                            name = d.Path
+                        })
                 };
             }
 
