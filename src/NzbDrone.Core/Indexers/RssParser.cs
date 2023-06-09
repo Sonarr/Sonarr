@@ -121,7 +121,8 @@ namespace NzbDrone.Core.Indexers
 
         protected virtual bool PreProcess(IndexerResponse indexerResponse)
         {
-            if (indexerResponse.HttpResponse.StatusCode != HttpStatusCode.OK)
+            // Server Down HTTP Errors are handled in HTTPIndexerBase so ignore them here
+            if (indexerResponse.HttpResponse.StatusCode != HttpStatusCode.OK && !indexerResponse.HttpResponse.HasHttpServerError)
             {
                 throw new IndexerException(indexerResponse, "Indexer API call resulted in an unexpected StatusCode [{0}]", indexerResponse.HttpResponse.StatusCode);
             }
@@ -266,11 +267,11 @@ namespace NzbDrone.Core.Indexers
                                      try
                                      {
                                          return new RssEnclosure
-                                                {
-                                                    Url = v.Attribute("url")?.Value,
-                                                    Type = v.Attribute("type")?.Value,
-                                                    Length = v.Attribute("length")?.Value?.ParseInt64() ?? 0
-                                                };
+                                         {
+                                             Url = v.Attribute("url")?.Value,
+                                             Type = v.Attribute("type")?.Value,
+                                             Length = v.Attribute("length")?.Value?.ParseInt64() ?? 0
+                                         };
                                      }
                                      catch (Exception e)
                                      {

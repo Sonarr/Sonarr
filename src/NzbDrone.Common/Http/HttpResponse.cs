@@ -50,6 +50,8 @@ namespace NzbDrone.Common.Http
 
         public bool HasHttpError => (int)StatusCode >= 400;
 
+        public bool HasHttpServerError => (int)StatusCode >= 500;
+
         public bool HasHttpRedirect => StatusCode == HttpStatusCode.Moved ||
                                        StatusCode == HttpStatusCode.MovedPermanently ||
                                        StatusCode == HttpStatusCode.Found ||
