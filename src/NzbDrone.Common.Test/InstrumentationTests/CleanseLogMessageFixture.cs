@@ -10,7 +10,9 @@ namespace NzbDrone.Common.Test.InstrumentationTests
         // Indexer Urls
         [TestCase(@"https://iptorrents.com/torrents/rss?u=mySecret;tp=mySecret;l5;download")]
         [TestCase(@"http://rss.torrentleech.org/mySecret")]
-        [TestCase(@"http://rss.torrentleech.org/rss/download/12345/01233210/filename.torrent")]
+        [TestCase(@"https://rss24h.torrentleech.org/mySecret")]
+        [TestCase(@"http://rss.torrentleech.org/rss/download/12345/01233210/file.name-RLSGRP.torrent")]
+        [TestCase(@"https://www.torrentleech.org/rss/download/12345/01233210/file.name-RLSGRP.torrent")]
         [TestCase(@"https://rss.omgwtfnzbs.org/rss-search.php?catid=19,20&user=sonarr&api=mySecret&eng=1")]
         [TestCase(@"https://dognzb.cr/fetch/2b51db35e1912ffc138825a12b9933d2/2b51db35e1910123321025a12b9933d2")]
         [TestCase(@"https://baconbits.org/feeds.php?feed=torrents_tv&user=12345&auth=2b51db35e1910123321025a12b9933d2&passkey=mySecret&authkey=2b51db35e1910123321025a12b9933d2")]
@@ -43,6 +45,7 @@ namespace NzbDrone.Common.Test.InstrumentationTests
         // Deluge
         [TestCase(@",{""download_location"": ""C:\Users\\mySecret mySecret\\Downloads""}")]
         [TestCase(@",{""download_location"": ""/home/mySecret/Downloads""}")]
+        [TestCase(@",{""download_location"": ""/Users/mySecret/Downloads""}")]
         [TestCase(@"auth.login(""mySecret"")")]
 
         // Download Station
@@ -58,8 +61,11 @@ namespace NzbDrone.Common.Test.InstrumentationTests
 
         // Internal
         [TestCase(@"OutputPath=/home/mySecret/Downloads")]
+        [TestCase(@"OutputPath=/Users/mySecret/Downloads")]
         [TestCase("Hardlinking episode file: /home/mySecret/Downloads to /media/abc.mkv")]
+        [TestCase("Hardlinking episode file: /Users/mySecret/Downloads to /media/abc.mkv")]
         [TestCase("Hardlink '/home/mySecret/Downloads/abs.mkv' to '/media/abc.mkv' failed.")]
+        [TestCase("Hardlink '/Users/mySecret/Downloads/abs.mkv' to '/media/abc.mkv' failed.")]
 
         // Announce URLs (passkeys) Magnet & Tracker
         [TestCase(@"magnet_uri"":""magnet:?xt=urn:btih:9pr04sgkillroyimaveql2tyu8xyui&dn=&tr=https%3a%2f%2fxxx.yyy%2f9pr04sg601233210imaveql2tyu8xyui%2fannounce""}")]
