@@ -32,7 +32,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
 
         public override HealthCheck Check()
         {
-            var clients = _downloadClientProvider.GetDownloadClients();
+            var clients = _downloadClientProvider.GetDownloadClients(true);
 
             foreach (var client in clients)
             {
