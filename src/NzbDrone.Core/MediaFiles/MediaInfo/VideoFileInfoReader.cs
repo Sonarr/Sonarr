@@ -179,12 +179,12 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
         private AudioStream GetPrimaryAudioStream(IMediaAnalysis mediaAnalysis)
         {
             var audioStreams = mediaAnalysis.AudioStreams;
-        
+
             if (audioStreams.Count <= 1 || audioStreams.Any(s => s.BitRate == 0))
             {
                 return mediaAnalysis.PrimaryAudioStream;
             }
-            
+
             return audioStreams.OrderByDescending(s => s.BitRate)
                                .ThenByDescending(s => s.SampleRateHz)
                                .FirstOrDefault();
