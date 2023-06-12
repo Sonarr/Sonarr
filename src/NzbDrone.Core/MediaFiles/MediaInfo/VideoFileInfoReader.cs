@@ -180,13 +180,13 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
         {
             var audioStreams = mediaAnalysis.AudioStreams;
         
-            if (audioStreams.Count <= 1 || audioStreams.Any(s => s.BitRate == null))
+            if (audioStreams.Count <= 1 || audioStreams.Any(s => s.BitRate == 0))
             {
                 return mediaAnalysis.PrimaryAudioStream;
             }
             
             return audioStreams.OrderByDescending(s => s.BitRate)
-                               .ThenByDescending(s => s.SampleRate)
+                               .ThenByDescending(s => s.SampleRateHz)
                                .FirstOrDefault();
         }
 
