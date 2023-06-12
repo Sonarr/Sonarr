@@ -5,6 +5,7 @@ import Label from 'Components/Label';
 import IconButton from 'Components/Link/IconButton';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import { icons, kinds } from 'Helpers/Props';
+import translate from 'Utilities/String/translate';
 import EditCustomFormatModalConnector from './EditCustomFormatModalConnector';
 import ExportCustomFormatModal from './ExportCustomFormatModal';
 import styles from './CustomFormat.css';
@@ -92,14 +93,14 @@ class CustomFormat extends Component {
           <div className={styles.buttons}>
             <IconButton
               className={styles.cloneButton}
-              title="Clone Custom Format"
+              title={translate('CloneCustomFormat')}
               name={icons.CLONE}
               onPress={this.onCloneCustomFormatPress}
             />
 
             <IconButton
               className={styles.cloneButton}
-              title="Export Custom Format"
+              title={translate('ExportCustomFormat')}
               name={icons.EXPORT}
               onPress={this.onExportCustomFormatPress}
             />
@@ -150,9 +151,9 @@ class CustomFormat extends Component {
         <ConfirmModal
           isOpen={this.state.isDeleteCustomFormatModalOpen}
           kind={kinds.DANGER}
-          title="Delete Custom Format"
-          message={`Are you sure you want to delete the custom format '${name}'?`}
-          confirmLabel="Delete"
+          title={translate('DeleteCustomFormat')}
+          message={translate('DeleteCustomFormatMessageText', [name])}
+          confirmLabel={translate('Delete')}
           isSpinning={isDeleting}
           onConfirm={this.onConfirmDeleteCustomFormat}
           onCancel={this.onDeleteCustomFormatModalClose}

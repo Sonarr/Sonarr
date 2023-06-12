@@ -9,6 +9,7 @@ import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import { inputTypes, kinds } from 'Helpers/Props';
+import translate from 'Utilities/String/translate';
 import styles from './ResetQualityDefinitionsModalContent.css';
 
 class ResetQualityDefinitionsModalContent extends Component {
@@ -54,22 +55,24 @@ class ResetQualityDefinitionsModalContent extends Component {
         onModalClose={onModalClose}
       >
         <ModalHeader>
-          Reset Quality Definitions
+          {translate('ResetQualityDefinitions')}
         </ModalHeader>
 
         <ModalBody>
           <div className={styles.messageContainer}>
-            Are you sure you want to reset quality definitions?
+            {translate('ResetQualityDefinitionsMessageText')}
           </div>
 
           <FormGroup>
-            <FormLabel>Reset Titles</FormLabel>
+            <FormLabel>
+              {translate('ResetTitles')}
+            </FormLabel>
 
             <FormInputGroup
               type={inputTypes.CHECK}
               name="resetDefinitionTitles"
               value={resetDefinitionTitles}
-              helpText="Reset definition titles as well as values"
+              helpText={translate('ResetDefinitionTitlesHelpText')}
               onChange={this.onResetDefinitionTitlesChange}
             />
           </FormGroup>
@@ -78,7 +81,7 @@ class ResetQualityDefinitionsModalContent extends Component {
 
         <ModalFooter>
           <Button onPress={onModalClose}>
-            Cancel
+            {translate('Cancel')}
           </Button>
 
           <Button
@@ -86,7 +89,7 @@ class ResetQualityDefinitionsModalContent extends Component {
             onPress={this.onResetQualityDefinitionsConfirmed}
             isDisabled={isResettingQualityDefinitions}
           >
-            Reset
+            {translate('Reset')}
           </Button>
         </ModalFooter>
       </ModalContent>

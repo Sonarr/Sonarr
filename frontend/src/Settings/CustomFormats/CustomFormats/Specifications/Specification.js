@@ -5,6 +5,7 @@ import Label from 'Components/Label';
 import IconButton from 'Components/Link/IconButton';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import { icons, kinds } from 'Helpers/Props';
+import translate from 'Utilities/String/translate';
 import EditSpecificationModalConnector from './EditSpecificationModal';
 import styles from './Specification.css';
 
@@ -77,7 +78,7 @@ class Specification extends Component {
 
           <IconButton
             className={styles.cloneButton}
-            title="Clone"
+            title={translate('CloneCondition')}
             name={icons.CLONE}
             onPress={this.onCloneSpecificationPress}
           />
@@ -91,14 +92,14 @@ class Specification extends Component {
           {
             negate &&
               <Label kind={kinds.DANGER}>
-                Negated
+                {translate('Negated')}
               </Label>
           }
 
           {
             required &&
               <Label kind={kinds.SUCCESS}>
-                Required
+                {translate('Required')}
               </Label>
           }
         </div>
@@ -113,9 +114,9 @@ class Specification extends Component {
         <ConfirmModal
           isOpen={this.state.isDeleteSpecificationModalOpen}
           kind={kinds.DANGER}
-          title="Delete Format"
-          message={`Are you sure you want to delete format tag ${name} ?`}
-          confirmLabel="Delete"
+          title={translate('DeleteCondition')}
+          message={translate('DeleteConditionMessageText', [name])}
+          confirmLabel={translate('Delete')}
           onConfirm={this.onConfirmDeleteSpecification}
           onCancel={this.onDeleteSpecificationModalClose}
         />
