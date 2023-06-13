@@ -67,7 +67,7 @@ class ImportSeriesSelectFolder extends Component {
 
           {
             !isFetching && error ?
-              <div>Unable to load root folders</div> :
+              <Alert kind={kinds.DANGER}>Unable to load root folders</Alert> :
               null
           }
 

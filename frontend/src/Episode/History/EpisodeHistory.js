@@ -1,10 +1,11 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import Alert from 'Components/Alert';
 import Icon from 'Components/Icon';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
-import { icons } from 'Helpers/Props';
+import { icons, kinds } from 'Helpers/Props';
 import EpisodeHistoryRow from './EpisodeHistoryRow';
 
 const columns = [
@@ -77,13 +78,13 @@ class EpisodeHistory extends Component {
 
     if (!isFetching && !!error) {
       return (
-        <div>Unable to load episode history.</div>
+        <Alert kind={kinds.DANGER}>Unable to load episode history.</Alert>
       );
     }
 
     if (isPopulated && !hasItems && !error) {
       return (
-        <div>No episode history.</div>
+        <Alert kind={kinds.INFO}>No episode history.</Alert>
       );
     }
 

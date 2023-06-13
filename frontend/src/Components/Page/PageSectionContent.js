@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import Alert from 'Components/Alert';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
+import { kinds } from 'Helpers/Props';
 
 function PageSectionContent(props) {
   const {
@@ -17,7 +19,7 @@ function PageSectionContent(props) {
     );
   } else if (!isFetching && !!error) {
     return (
-      <div>{errorMessage}</div>
+      <Alert kind={kinds.DANGER}>{errorMessage}</Alert>
     );
   } else if (isPopulated && !error) {
     return (

@@ -2,6 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
 import { LanguageSettingsAppState } from 'App/State/SettingsAppState';
+import Alert from 'Components/Alert';
 import Form from 'Components/Form/Form';
 import FormGroup from 'Components/Form/FormGroup';
 import FormInputGroup from 'Components/Form/FormInputGroup';
@@ -82,7 +83,9 @@ function SelectLanguageModalContent(props: SelectLanguageModalContentProps) {
       <ModalBody>
         {isFetching ? <LoadingIndicator /> : null}
 
-        {!isFetching && error ? <div>Unable To Load Languages</div> : null}
+        {!isFetching && error ? (
+          <Alert kind={kinds.DANGER}>Unable to load Languages</Alert>
+        ) : null}
 
         {isPopulated && !error ? (
           <Form>

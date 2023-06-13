@@ -10,6 +10,7 @@ import { SelectProvider } from 'App/SelectContext';
 import ClientSideCollectionAppState from 'App/State/ClientSideCollectionAppState';
 import SeriesAppState, { SeriesIndexAppState } from 'App/State/SeriesAppState';
 import { RSS_SYNC } from 'Commands/commandNames';
+import Alert from 'Components/Alert';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
@@ -20,7 +21,7 @@ import PageToolbarSection from 'Components/Page/Toolbar/PageToolbarSection';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
 import TableOptionsModalWrapper from 'Components/Table/TableOptions/TableOptionsModalWrapper';
 import withScrollPosition from 'Components/withScrollPosition';
-import { align, icons } from 'Helpers/Props';
+import { align, icons, kinds } from 'Helpers/Props';
 import SortDirection from 'Helpers/Props/SortDirection';
 import NoSeries from 'Series/NoSeries';
 import { executeCommand } from 'Store/Actions/commandActions';
@@ -304,7 +305,9 @@ const SeriesIndex = withScrollPosition((props: SeriesIndexProps) => {
           >
             {isFetching && !isPopulated ? <LoadingIndicator /> : null}
 
-            {!isFetching && !!error ? <div>Unable to load series</div> : null}
+            {!isFetching && !!error ? (
+              <Alert kind={kinds.DANGER}>Unable to load series</Alert>
+            ) : null}
 
             {isLoaded ? (
               <div className={styles.contentBodyContainer}>

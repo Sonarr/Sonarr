@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import Alert from 'Components/Alert';
 import FieldSet from 'Components/FieldSet';
 import Form from 'Components/Form/Form';
 import FormGroup from 'Components/Form/FormGroup';
@@ -8,7 +9,7 @@ import FormLabel from 'Components/Form/FormLabel';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
-import { inputTypes } from 'Helpers/Props';
+import { inputTypes, kinds } from 'Helpers/Props';
 import SettingsToolbarConnector from 'Settings/SettingsToolbarConnector';
 import themes from 'Styles/Themes';
 import titleCase from 'Utilities/String/titleCase';
@@ -81,7 +82,7 @@ class UISettings extends Component {
 
           {
             !isFetching && error ?
-              <div>Unable to load UI settings</div> :
+              <Alert kind={kinds.DANGER}>Unable to load UI settings</Alert> :
               null
           }
 

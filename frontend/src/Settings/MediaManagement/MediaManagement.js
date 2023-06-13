@@ -77,7 +77,7 @@ class MediaManagement extends Component {
           {
             !isFetching && error ?
               <FieldSet legend="Naming Settings">
-                <div>Unable to load Media Management settings</div>
+                <Alert kind={kinds.DANGER}>Unable to load Media Management settings</Alert>
               </FieldSet> : null
           }
 
