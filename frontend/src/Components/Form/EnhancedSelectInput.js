@@ -578,7 +578,7 @@ EnhancedSelectInput.propTypes = {
   className: PropTypes.string,
   disabledClassName: PropTypes.string,
   name: PropTypes.string.isRequired,
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.arrayOf(PropTypes.number)]).isRequired,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.arrayOf(PropTypes.string), PropTypes.arrayOf(PropTypes.number)]).isRequired,
   values: PropTypes.arrayOf(PropTypes.object).isRequired,
   isDisabled: PropTypes.bool.isRequired,
   isFetching: PropTypes.bool.isRequired,
