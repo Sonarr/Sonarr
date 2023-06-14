@@ -251,6 +251,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                     case "queuedDL": // queuing is enabled and torrent is queued for download
                     case "checkingDL": // same as checkingUP, but torrent has NOT finished downloading
                     case "checkingUP": // torrent has finished downloading and is being checked. Set when `recheck torrent on completion` is enabled. In the event the check fails we shouldn't treat it as completed.
+                    case "checkingResumeData": // torrent is checking resume data on load
                         item.Status = DownloadItemStatus.Queued;
                         break;
 

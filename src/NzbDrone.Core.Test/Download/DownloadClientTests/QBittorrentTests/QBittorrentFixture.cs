@@ -225,6 +225,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
         [TestCase("checkingDL")]
         [TestCase("checkingUP")]
         [TestCase("metaDL")]
+        [TestCase("checkingResumeData")]
         public void queued_item_should_have_required_properties(string state)
         {
             var torrent = new QBittorrentTorrent
