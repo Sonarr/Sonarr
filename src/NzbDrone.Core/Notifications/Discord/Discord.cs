@@ -558,7 +558,9 @@ namespace NzbDrone.Core.Notifications.Discord
 
             var episodeTitles = string.Join(" + ", episodes.Select(e => e.Title));
 
-            return $"{series.Title} - {episodes.First().SeasonNumber}{episodeNumbers} - {episodeTitles}";
+            var title = $"{series.Title} - {episodes.First().SeasonNumber}{episodeNumbers} - {episodeTitles}";
+
+            return title.Length > 256 ? $"{title.AsSpan(0, 253)}..." : title;
         }
     }
 }
