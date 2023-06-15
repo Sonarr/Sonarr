@@ -14,15 +14,13 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
 
         public void Clean()
         {
-            using (var mapper = _database.OpenConnection())
-            {
-                mapper.Execute(@"DELETE FROM Blocklist
-                                     WHERE Id IN (
-                                     SELECT Blocklist.Id FROM Blocklist
-                                     LEFT OUTER JOIN Series
-                                     ON Blocklist.SeriesId = Series.Id
-                                     WHERE Series.Id IS NULL)");
-            }
+            using var mapper = _database.OpenConnection();
+            mapper.Execute(@"DELETE FROM Blocklist
+                             WHERE Id IN (
+                             SELECT Blocklist.Id FROM Blocklist
+                             LEFT OUTER JOIN Series
+                             ON Blocklist.SeriesId = Series.Id
+                             WHERE Series.Id IS NULL)");
         }
     }
 }
