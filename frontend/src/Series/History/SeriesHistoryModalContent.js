@@ -97,7 +97,7 @@ class SeriesHistoryModalContent extends Component {
 
           {
             !isFetching && !!error &&
-              <div>Unable to load history.</div>
+              <Alert kind={kinds.DANGER}>Unable to load history.</Alert>
           }
 
           {

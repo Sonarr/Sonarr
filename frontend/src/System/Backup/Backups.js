@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import Alert from 'Components/Alert';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
@@ -8,7 +9,7 @@ import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
 import PageToolbarSection from 'Components/Page/Toolbar/PageToolbarSection';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
-import { icons } from 'Helpers/Props';
+import { icons, kinds } from 'Helpers/Props';
 import BackupRow from './BackupRow';
 import RestoreBackupModalConnector from './RestoreBackupModalConnector';
 
@@ -106,12 +107,16 @@ class Backups extends Component {
 
           {
             !isFetching && !!error &&
-              <div>Unable to load backups</div>
+              <Alert kind={kinds.DANGER}>
+                Unable to load backups
+              </Alert>
           }
 
           {
             noBackups &&
-              <div>No backups are available</div>
+              <Alert kind={kinds.INFO}>
+                No backups are available
+              </Alert>
           }
 
           {

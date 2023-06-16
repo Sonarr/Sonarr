@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import Alert from 'Components/Alert';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import FilterMenu from 'Components/Menu/FilterMenu';
 import PageContent from 'Components/Page/PageContent';
@@ -11,7 +12,7 @@ import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import TableOptionsModalWrapper from 'Components/Table/TableOptions/TableOptionsModalWrapper';
 import TablePager from 'Components/Table/TablePager';
-import { align, icons } from 'Helpers/Props';
+import { align, icons, kinds } from 'Helpers/Props';
 import hasDifferentItems from 'Utilities/Object/hasDifferentItems';
 import HistoryRowConnector from './HistoryRowConnector';
 
@@ -104,7 +105,7 @@ class History extends Component {
 
           {
             !isFetchingAny && hasError &&
-              <div>Unable to load history</div>
+              <Alert kind={kinds.DANGER}>Unable to load history</Alert>
           }
 
           {
@@ -112,9 +113,9 @@ class History extends Component {
             // wait for the episodes to populate because they are never coming.
 
             isPopulated && !hasError && !items.length &&
-              <div>
+              <Alert kind={kinds.INFO}>
                 No history found
-              </div>
+              </Alert>
           }
 
           {

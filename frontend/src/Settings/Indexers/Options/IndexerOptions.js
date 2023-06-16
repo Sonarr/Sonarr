@@ -27,7 +27,7 @@ function IndexerOptions(props) {
 
       {
         !isFetching && error &&
-          <div>Unable to load indexer options</div>
+          <Alert kind={kinds.DANGER}>Unable to load indexer options</Alert>
       }
 
       {

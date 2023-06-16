@@ -123,7 +123,7 @@ class GeneralSettings extends Component {
 
           {
             !isFetching && error &&
-              <div>Unable to load General settings</div>
+              <Alert kind={kinds.DANGER}>Unable to load General settings</Alert>
           }
 
           {
