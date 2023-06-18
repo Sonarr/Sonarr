@@ -11,6 +11,9 @@ function SeriesSearchResult(props) {
     title,
     images,
     alternateTitles,
+    tvdbId,
+    tvMazeId,
+    imdbId,
     tags
   } = props;
 
@@ -47,6 +50,30 @@ function SeriesSearchResult(props) {
         }
 
         {
+          match.key === 'tvdbId' && tvdbId ?
+            <div className={styles.alternateTitle}>
+              TvdbId: {tvdbId}
+            </div> :
+            null
+        }
+
+        {
+          match.key === 'tvMazeId' && tvMazeId ?
+            <div className={styles.alternateTitle}>
+              TvMazeId: {tvMazeId}
+            </div> :
+            null
+        }
+
+        {
+          match.key === 'imdbId' && imdbId ?
+            <div className={styles.alternateTitle}>
+              ImdbId: {imdbId}
+            </div> :
+            null
+        }
+
+        {
           tag ?
             <div className={styles.tagContainer}>
               <Label
@@ -67,6 +94,9 @@ SeriesSearchResult.propTypes = {
   title: PropTypes.string.isRequired,
   images: PropTypes.arrayOf(PropTypes.object).isRequired,
   alternateTitles: PropTypes.arrayOf(PropTypes.object).isRequired,
+  tvdbId: PropTypes.number,
+  tvMazeId: PropTypes.number,
+  imdbId: PropTypes.string,
   tags: PropTypes.arrayOf(PropTypes.object).isRequired,
   match: PropTypes.object.isRequired
 };
