@@ -1,8 +1,10 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import Alert from 'Components/Alert';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
+import { kinds } from 'Helpers/Props';
 import RootFolderRowConnector from './RootFolderRowConnector';
 
 const rootFolderColumns = [
