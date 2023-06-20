@@ -1,7 +1,9 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import Alert from 'Components/Alert';
 import FieldSet from 'Components/FieldSet';
 import PageSectionContent from 'Components/Page/PageSectionContent';
+import { kinds } from 'Helpers/Props';
 import TagConnector from './TagConnector';
 import styles from './Tags.css';
 
@@ -13,7 +15,9 @@ function Tags(props) {
 
   if (!items.length) {
     return (
-      <div>No tags have been added yet</div>
+      <Alert kind={kinds.INFO}>
+        No tags have been added yet
+      </Alert>
     );
   }
 
