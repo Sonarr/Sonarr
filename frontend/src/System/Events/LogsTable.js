@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import Alert from 'Components/Alert';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import FilterMenu from 'Components/Menu/FilterMenu';
 import PageContent from 'Components/Page/PageContent';
@@ -11,7 +12,7 @@ import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import TableOptionsModalWrapper from 'Components/Table/TableOptions/TableOptionsModalWrapper';
 import TablePager from 'Components/Table/TablePager';
-import { align, icons } from 'Helpers/Props';
+import { align, icons, kinds } from 'Helpers/Props';
 import LogsTableRow from './LogsTableRow';
 
 function LogsTable(props) {
@@ -81,9 +82,9 @@ function LogsTable(props) {
 
         {
           isPopulated && !error && !items.length &&
-            <div>
+            <Alert kind={kinds.INFO}>
               No events found
-            </div>
+            </Alert>
         }
 
         {
