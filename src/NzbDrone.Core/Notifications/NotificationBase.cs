@@ -23,7 +23,7 @@ namespace NzbDrone.Core.Notifications
         protected const string EPISODE_GRABBED_TITLE_BRANDED = "Sonarr - " + EPISODE_GRABBED_TITLE;
         protected const string EPISODE_DOWNLOADED_TITLE_BRANDED = "Sonarr - " + EPISODE_DOWNLOADED_TITLE;
         protected const string EPISODE_DELETED_TITLE_BRANDED = "Sonarr - " + EPISODE_DELETED_TITLE;
-        protected const string SERIES_ADDED_TITLE_BRANDED = "Sonarr - " + SERIES_DELETED_TITLE;
+        protected const string SERIES_ADDED_TITLE_BRANDED = "Sonarr - " + SERIES_ADDED_TITLE;
         protected const string SERIES_DELETED_TITLE_BRANDED = "Sonarr - " + SERIES_DELETED_TITLE;
         protected const string HEALTH_ISSUE_TITLE_BRANDED = "Sonarr - " + HEALTH_ISSUE_TITLE;
         protected const string HEALTH_RESTORED_TITLE_BRANDED = "Sonarr - " + HEALTH_RESTORED_TITLE;
