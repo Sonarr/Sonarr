@@ -11,6 +11,7 @@ namespace NzbDrone.Core.ImportLists.Simkl
         public string Imdb { get; set; }
         public string Tmdb { get; set; }
         public string Tvdb { get; set; }
+        public string Mal { get; set; }
     }
 
     public class SimklSeriesPropsResource
@@ -23,11 +24,15 @@ namespace NzbDrone.Core.ImportLists.Simkl
     public class SimklSeriesResource
     {
         public SimklSeriesPropsResource Show { get; set; }
+
+        [JsonProperty("anime_type")]
+        public SimklAnimeType AnimeType { get; set; }
     }
 
     public class SimklResponse
     {
         public List<SimklSeriesResource> Shows { get; set; }
+        public List<SimklSeriesResource> Anime { get; set; }
     }
 
     public class RefreshRequestResponse
@@ -65,5 +70,11 @@ namespace NzbDrone.Core.ImportLists.Simkl
     public class SimklTvSyncActivityResource
     {
         public DateTime All { get; set; }
+    }
+
+    public enum SimklAnimeType
+    {
+        Tv,
+        Movie
     }
 }
