@@ -2,6 +2,7 @@ using System.Data;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Dapper;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Serializer;
 
 namespace NzbDrone.Core.Datastore.Converters
@@ -19,7 +20,7 @@ namespace NzbDrone.Core.Datastore.Converters
                 PropertyNameCaseInsensitive = true,
                 DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                WriteIndented = true
+                WriteIndented = BuildInfo.IsDebug
             };
 
             serializerSettings.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase, true));

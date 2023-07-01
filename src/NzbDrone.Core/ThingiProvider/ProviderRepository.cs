@@ -24,8 +24,7 @@ namespace NzbDrone.Core.ThingiProvider
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
                 PropertyNameCaseInsensitive = true,
                 DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                WriteIndented = true
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             };
 
             serializerSettings.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase, true));
