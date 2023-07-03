@@ -1,4 +1,5 @@
-﻿using FluentValidation.Validators;
+using System.Linq;
+using FluentValidation.Validators;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Tv;
 
@@ -27,7 +28,7 @@ namespace NzbDrone.Core.Validation.Paths
             dynamic instance = context.ParentContext.InstanceToValidate;
             var instanceId = (int)instance.Id;
 
-            return !_seriesService.GetAllSeries().Exists(s => s.Path.PathEquals(context.PropertyValue.ToString()) && s.Id != instanceId);
+            return !_seriesService.GetAllSeriesPaths().Any(s => s.Value.PathEquals(context.PropertyValue.ToString()) && s.Key != instanceId);
         }
     }
 }
