@@ -36,13 +36,16 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
         [FieldDefinition(3, Label = "Episode Metadata", Type = FieldType.Checkbox, Section = MetadataSectionType.Metadata, HelpText = "<filename>.nfo")]
         public bool EpisodeMetadata { get; set; }
 
-        [FieldDefinition(4, Label = "Series Images", Type = FieldType.Checkbox, Section = MetadataSectionType.Image, HelpText = "fanart.jpg, poster.jpg, banner.jpg")]
+        [FieldDefinition(4, Label = "Episode Metadata Image Thumbs", Type = FieldType.Checkbox, Section = MetadataSectionType.Image, HelpText = "Include image thumb tags in <filename>.nfo (Requires 'Episode Metadata')", Advanced = true)]
+        public bool EpisodeImageThumb { get; set; }
+
+        [FieldDefinition(5, Label = "Series Images", Type = FieldType.Checkbox, Section = MetadataSectionType.Image, HelpText = "fanart.jpg, poster.jpg, banner.jpg")]
         public bool SeriesImages { get; set; }
 
-        [FieldDefinition(5, Label = "Season Images", Type = FieldType.Checkbox, Section = MetadataSectionType.Image, HelpText = "season##-poster.jpg, season##-banner.jpg, season-specials-poster.jpg, season-specials-banner.jpg")]
+        [FieldDefinition(6, Label = "Season Images", Type = FieldType.Checkbox, Section = MetadataSectionType.Image, HelpText = "season##-poster.jpg, season##-banner.jpg, season-specials-poster.jpg, season-specials-banner.jpg")]
         public bool SeasonImages { get; set; }
 
-        [FieldDefinition(6, Label = "Episode Images", Type = FieldType.Checkbox, Section = MetadataSectionType.Image, HelpText = "<filename>-thumb.jpg")]
+        [FieldDefinition(7, Label = "Episode Images", Type = FieldType.Checkbox, Section = MetadataSectionType.Image, HelpText = "<filename>-thumb.jpg")]
         public bool EpisodeImages { get; set; }
 
         public bool IsValid => true;
