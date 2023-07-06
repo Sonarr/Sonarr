@@ -23,6 +23,7 @@ namespace Sonarr.Api.V3.Queue
         public List<Language> Languages { get; set; }
         public QualityModel Quality { get; set; }
         public List<CustomFormatResource> CustomFormats { get; set; }
+        public int CustomFormatScore { get; set; }
         public decimal Size { get; set; }
         public string Title { get; set; }
         public decimal Sizeleft { get; set; }
@@ -50,6 +51,9 @@ namespace Sonarr.Api.V3.Queue
                 return null;
             }
 
+            var customFormats = model.RemoteEpisode?.CustomFormats;
+            var customFormatScore = model.Series.QualityProfile.Value.CalculateCustomFormatScore(customFormats);
+
             return new QueueResource
             {
                 Id = model.Id,
@@ -60,7 +64,8 @@ namespace Sonarr.Api.V3.Queue
                 Episode = includeEpisode && model.Episode != null ? model.Episode.ToResource() : null,
                 Languages = model.Languages,
                 Quality = model.Quality,
-                CustomFormats = model.RemoteEpisode?.CustomFormats?.ToResource(false),
+                CustomFormats = customFormats?.ToResource(false),
+                CustomFormatScore = customFormatScore,
                 Size = model.Size,
                 Title = model.Title,
                 Sizeleft = model.Sizeleft,
