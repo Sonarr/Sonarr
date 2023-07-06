@@ -103,11 +103,11 @@ namespace NzbDrone.Core.Notifications.Discord
                         break;
                     case DiscordGrabFieldType.CustomFormats:
                         discordField.Name = "Custom Formats";
-                        discordField.Value = string.Join("|", message.Episode.Release.CustomFormats);
+                        discordField.Value = string.Join("|", message.Episode.CustomFormats);
                         break;
                     case DiscordGrabFieldType.CustomFormatScore:
                         discordField.Name = "Custom Format Score";
-                        discordField.Value = message.Episode.Release.CustomFormatScore.ToString();
+                        discordField.Value = message.Episode.CustomFormatScore.ToString();
                         break;
                     case DiscordGrabFieldType.Indexer:
                         discordField.Name = "Indexer";
