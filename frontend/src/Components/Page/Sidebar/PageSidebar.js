@@ -13,6 +13,7 @@ import HealthStatusConnector from 'System/Status/Health/HealthStatusConnector';
 import MessagesConnector from './Messages/MessagesConnector';
 import PageSidebarItem from './PageSidebarItem';
 import styles from './PageSidebar.css';
+import translate from 'Utilities/String/translate';
 
 const HEADER_HEIGHT = parseInt(dimensions.headerHeight);
 const SIDEBAR_WIDTH = parseInt(dimensions.sidebarWidth);
@@ -25,11 +26,11 @@ const links = [
     alias: '/series',
     children: [
       {
-        title: 'Add New',
+        title: 'AddNew',
         to: '/add/new'
       },
       {
-        title: 'Library Import',
+        title: 'LibraryImport',
         to: '/add/import'
       }
     ]
@@ -72,7 +73,7 @@ const links = [
         to: '/wanted/missing'
       },
       {
-        title: 'Cutoff Unmet',
+        title: 'CutoffUnmet',
         to: '/wanted/cutoffunmet'
       }
     ]
@@ -84,7 +85,7 @@ const links = [
     to: '/settings',
     children: [
       {
-        title: 'Media Management',
+        title: 'MediaManagement',
         to: '/settings/mediamanagement'
       },
       {
@@ -96,7 +97,7 @@ const links = [
         to: '/settings/quality'
       },
       {
-        title: 'Custom Formats',
+        title: 'CustomFormats',
         to: '/settings/customformats'
       },
       {
@@ -104,11 +105,11 @@ const links = [
         to: '/settings/indexers'
       },
       {
-        title: 'Download Clients',
+        title: 'DownloadClients',
         to: '/settings/downloadclients'
       },
       {
-        title: 'Import Lists',
+        title: 'ImportLists',
         to: '/settings/importlists'
       },
       {
@@ -120,7 +121,7 @@ const links = [
         to: '/settings/metadata'
       },
       {
-        title: 'Metadata Source',
+        title: 'MetadataSource',
         to: '/settings/metadatasource'
       },
       {
@@ -165,7 +166,7 @@ const links = [
         to: '/system/events'
       },
       {
-        title: 'Log Files',
+        title: 'LogFiles',
         to: '/system/logs/files'
       }
     ]
@@ -481,7 +482,7 @@ class PageSidebar extends Component {
                   <PageSidebarItem
                     key={link.to}
                     iconName={link.iconName}
-                    title={link.title}
+                    title={translate(link.title)}
                     to={link.to}
                     statusComponent={isActiveParent || !childStatusComponent ? link.statusComponent : childStatusComponent}
                     isActive={pathname === link.to && !hasActiveChild}
@@ -495,7 +496,7 @@ class PageSidebar extends Component {
                           return (
                             <PageSidebarItem
                               key={child.to}
-                              title={child.title}
+                              title={translate(child.title)}
                               to={child.to}
                               isActive={pathname === child.to}
                               isParentItem={false}
