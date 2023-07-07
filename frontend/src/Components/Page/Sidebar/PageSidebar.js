@@ -21,16 +21,16 @@ const SIDEBAR_WIDTH = parseInt(dimensions.sidebarWidth);
 const links = [
   {
     iconName: icons.SERIES_CONTINUING,
-    title: 'Series',
+    title: translate('Series'),
     to: '/',
     alias: '/series',
     children: [
       {
-        title: 'AddNew',
+        title: translate('AddNew'),
         to: '/add/new'
       },
       {
-        title: 'LibraryImport',
+        title: translate('LibraryImport'),
         to: '/add/import'
       }
     ]
@@ -38,26 +38,26 @@ const links = [
 
   {
     iconName: icons.CALENDAR,
-    title: 'Calendar',
+    title: translate('Calendar'),
     to: '/calendar'
   },
 
   {
     iconName: icons.ACTIVITY,
-    title: 'Activity',
+    title: translate('Activity'),
     to: '/activity/queue',
     children: [
       {
-        title: 'Queue',
+        title: translate('Queue'),
         to: '/activity/queue',
         statusComponent: QueueStatusConnector
       },
       {
-        title: 'History',
+        title: translate('History'),
         to: '/activity/history'
       },
       {
-        title: 'Blocklist',
+        title: translate('Blocklist'),
         to: '/activity/blocklist'
       }
     ]
@@ -65,15 +65,15 @@ const links = [
 
   {
     iconName: icons.WARNING,
-    title: 'Wanted',
+    title: translate('Wanted'),
     to: '/wanted/missing',
     children: [
       {
-        title: 'Missing',
+        title: translate('Missing'),
         to: '/wanted/missing'
       },
       {
-        title: 'CutoffUnmet',
+        title: translate('CutoffUnmet'),
         to: '/wanted/cutoffunmet'
       }
     ]
@@ -81,59 +81,59 @@ const links = [
 
   {
     iconName: icons.SETTINGS,
-    title: 'Settings',
+    title: translate('Settings'),
     to: '/settings',
     children: [
       {
-        title: 'MediaManagement',
+        title: translate('MediaManagement'),
         to: '/settings/mediamanagement'
       },
       {
-        title: 'Profiles',
+        title: translate('Profiles'),
         to: '/settings/profiles'
       },
       {
-        title: 'Quality',
+        title: translate('Quality'),
         to: '/settings/quality'
       },
       {
-        title: 'CustomFormats',
+        title: translate('CustomFormats'),
         to: '/settings/customformats'
       },
       {
-        title: 'Indexers',
+        title: translate('Indexers'),
         to: '/settings/indexers'
       },
       {
-        title: 'DownloadClients',
+        title: translate('DownloadClients'),
         to: '/settings/downloadclients'
       },
       {
-        title: 'ImportLists',
+        title: translate('ImportLists'),
         to: '/settings/importlists'
       },
       {
-        title: 'Connect',
+        title: translate('Connect'),
         to: '/settings/connect'
       },
       {
-        title: 'Metadata',
+        title: translate('Metadata'),
         to: '/settings/metadata'
       },
       {
-        title: 'MetadataSource',
+        title: translate('MetadataSource'),
         to: '/settings/metadatasource'
       },
       {
-        title: 'Tags',
+        title: translate('Tags'),
         to: '/settings/tags'
       },
       {
-        title: 'General',
+        title: translate('General'),
         to: '/settings/general'
       },
       {
-        title: 'UI',
+        title: translate('UI'),
         to: '/settings/ui'
       }
     ]
@@ -141,32 +141,32 @@ const links = [
 
   {
     iconName: icons.SYSTEM,
-    title: 'System',
+    title: translate('System'),
     to: '/system/status',
     children: [
       {
-        title: 'Status',
+        title: translate('Status'),
         to: '/system/status',
         statusComponent: HealthStatusConnector
       },
       {
-        title: 'Tasks',
+        title: translate('Tasks'),
         to: '/system/tasks'
       },
       {
-        title: 'Backup',
+        title: translate('Backup'),
         to: '/system/backup'
       },
       {
-        title: 'Updates',
+        title: translate('Updates'),
         to: '/system/updates'
       },
       {
-        title: 'Events',
+        title: translate('Events'),
         to: '/system/events'
       },
       {
-        title: 'LogFiles',
+        title: translate('LogFiles'),
         to: '/system/logs/files'
       }
     ]
@@ -482,7 +482,7 @@ class PageSidebar extends Component {
                   <PageSidebarItem
                     key={link.to}
                     iconName={link.iconName}
-                    title={translate(link.title)}
+                    title={link.title}
                     to={link.to}
                     statusComponent={isActiveParent || !childStatusComponent ? link.statusComponent : childStatusComponent}
                     isActive={pathname === link.to && !hasActiveChild}
@@ -496,7 +496,7 @@ class PageSidebar extends Component {
                           return (
                             <PageSidebarItem
                               key={child.to}
-                              title={translate(child.title)}
+                              title={child.title}
                               to={child.to}
                               isActive={pathname === child.to}
                               isParentItem={false}
