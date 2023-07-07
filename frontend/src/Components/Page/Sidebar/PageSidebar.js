@@ -10,10 +10,10 @@ import { icons } from 'Helpers/Props';
 import locationShape from 'Helpers/Props/Shapes/locationShape';
 import dimensions from 'Styles/Variables/dimensions';
 import HealthStatusConnector from 'System/Status/Health/HealthStatusConnector';
+import translate from 'Utilities/String/translate';
 import MessagesConnector from './Messages/MessagesConnector';
 import PageSidebarItem from './PageSidebarItem';
 import styles from './PageSidebar.css';
-import translate from 'Utilities/String/translate';
 
 const HEADER_HEIGHT = parseInt(dimensions.headerHeight);
 const SIDEBAR_WIDTH = parseInt(dimensions.sidebarWidth);
