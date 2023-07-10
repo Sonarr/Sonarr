@@ -49,10 +49,15 @@ namespace NzbDrone.Core.ImportLists
                 var importListLocal = importList;
                 var importListStatus = _importListStatusService.GetLastSyncListInfo(importListLocal.Definition.Id);
 
-                if (importListStatus.HasValue && DateTime.UtcNow < (importListStatus + importListLocal.MinRefreshInterval))
+                if (importListStatus.HasValue)
                 {
-                    _logger.Trace("Skipping refresh of Import List {0} due to minimum refresh inverval", importListLocal.Definition.Name);
-                    continue;
+                    var importListNextSync = importListStatus.Value + importListLocal.MinRefreshInterval;
+
+                    if (DateTime.UtcNow < importListNextSync)
+                    {
+                        _logger.Trace("Skipping refresh of Import List {0} ({1}) due to minimum refresh interval. Next sync after {2}", importList.Name, importListLocal.Definition.Name, importListNextSync);
+                        continue;
+                    }
                 }
 
                 var task = taskFactory.StartNew(() =>
@@ -63,7 +68,7 @@ namespace NzbDrone.Core.ImportLists
 
                              lock (result)
                              {
-                                 _logger.Debug("Found {0} from {1}", importListReports.Count, importList.Name);
+                                 _logger.Debug("Found {0} reports from {1} ({2})", importListReports.Count, importList.Name, importListLocal.Definition.Name);
 
                                  result.AddRange(importListReports);
                              }
@@ -72,7 +77,7 @@ namespace NzbDrone.Core.ImportLists
                          }
                          catch (Exception e)
                          {
-                             _logger.Error(e, "Error during Import List Sync");
+                             _logger.Error(e, "Error during Import List Sync of {0} ({1})", importList.Name, importListLocal.Definition.Name);
                          }
                      }).LogExceptions();
 
@@ -83,7 +88,7 @@ namespace NzbDrone.Core.ImportLists
 
             result = result.DistinctBy(r => new { r.TvdbId, r.ImdbId, r.Title }).ToList();
 
-            _logger.Debug("Found {0} reports", result.Count);
+            _logger.Debug("Found {0} total reports from {1} lists", result.Count, importLists.Count);
 
             return result;
         }
@@ -96,7 +101,7 @@ namespace NzbDrone.Core.ImportLists
 
             if (importList == null || !definition.EnableAutomaticAdd)
             {
-                _logger.Debug("Import list not enabled, skipping.");
+                _logger.Debug("Import List {0} ({1}) is not enabled, skipping.", importList.Name, importList.Definition.Name);
                 return result;
             }
 
@@ -113,7 +118,7 @@ namespace NzbDrone.Core.ImportLists
 
                     lock (result)
                     {
-                        _logger.Debug("Found {0} from {1}", importListReports.Count, importList.Name);
+                        _logger.Debug("Found {0} reports from {1} ({2})", importListReports.Count, importList.Name, importListLocal.Definition.Name);
 
                         result.AddRange(importListReports);
                     }
@@ -122,7 +127,7 @@ namespace NzbDrone.Core.ImportLists
                 }
                 catch (Exception e)
                 {
-                    _logger.Error(e, "Error during Import List Sync");
+                    _logger.Error(e, "Error during Import List Sync of {0} ({1})", importList.Name, importListLocal.Definition.Name);
                 }
             }).LogExceptions();
 
