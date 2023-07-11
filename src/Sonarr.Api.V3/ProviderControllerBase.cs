@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
-using Sonarr.Api.V3.Series;
 using Sonarr.Http.REST;
 using Sonarr.Http.REST.Attributes;
 

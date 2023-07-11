@@ -17,11 +17,4 @@ namespace Sonarr.Api.V3.Series
         public bool DeleteFiles { get; set; }
         public bool AddImportListExclusion { get; set; }
     }
-
-    public enum ApplyTags
-    {
-        Add,
-        Remove,
-        Replace
-    }
 }
