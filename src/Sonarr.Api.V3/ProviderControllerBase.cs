@@ -110,6 +110,8 @@ namespace Sonarr.Api.V3
 
             foreach (var definition in definitionsToUpdate)
             {
+                _providerFactory.SetProviderCharacteristics(definition);
+
                 if (providerResource.Tags != null)
                 {
                     var newTags = providerResource.Tags;
