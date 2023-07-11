@@ -1,1 +1,7 @@
-{}
+{
+    "CloneCondition": "克隆条件",
+    "DeleteCondition": "删除条件",
+    "DeleteConditionMessageText": "是否确实要删除条件“{0}”？",
+    "DeleteCustomFormatMessageText": "是否确实要删除条件“{0}”？",
+    "ApiKeyValidationHealthCheckMessage": "请将API密钥更新为至少{0}个字符长。您可以通过设置或配置文件执行此操作"
+}
