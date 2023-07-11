@@ -36,7 +36,7 @@ function Parse() {
 
   const onClearPress = useCallback(() => {
     setTitle('');
-    dispatch(fetch({ title: '' }));
+    dispatch(clear());
   }, [setTitle, dispatch]);
 
   useEffect(

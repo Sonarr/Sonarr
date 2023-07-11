@@ -55,6 +55,8 @@ export const actionHandlers = handleThunks({
     }
 
     parseTimeout = window.setTimeout(async () => {
+      dispatch(set({ section, isFetching: true }));
+
       if (abortCurrentRequest) {
         abortCurrentRequest();
       }
