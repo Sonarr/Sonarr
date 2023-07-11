@@ -52,7 +52,7 @@ namespace Sonarr.Api.V3.Queue
             }
 
             var customFormats = model.RemoteEpisode?.CustomFormats;
-            var customFormatScore = model.Series.QualityProfile.Value.CalculateCustomFormatScore(customFormats);
+            var customFormatScore = model.Series?.QualityProfile?.Value?.CalculateCustomFormatScore(customFormats) ?? 0;
 
             return new QueueResource
             {
