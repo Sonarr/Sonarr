@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Test.Download
                   .Returns(_blockedProviders);
         }
 
-        private Mock<IDownloadClient> WithUsenetClient(int priority = 0)
+        private Mock<IDownloadClient> WithUsenetClient(int priority = 0, HashSet<int> tags = null)
         {
             var mock = new Mock<IDownloadClient>(MockBehavior.Default);
             mock.SetupGet(s => s.Definition)
@@ -42,6 +42,7 @@ namespace NzbDrone.Core.Test.Download
                     .CreateNew()
                     .With(v => v.Id = _nextId++)
                     .With(v => v.Priority = priority)
+                    .With(v => v.Tags = tags ?? new HashSet<int>())
                     .Build());
 
             _downloadClients.Add(mock.Object);
@@ -51,7 +52,7 @@ namespace NzbDrone.Core.Test.Download
             return mock;
         }
 
-        private Mock<IDownloadClient> WithTorrentClient(int priority = 0)
+        private Mock<IDownloadClient> WithTorrentClient(int priority = 0, HashSet<int> tags = null)
         {
             var mock = new Mock<IDownloadClient>(MockBehavior.Default);
             mock.SetupGet(s => s.Definition)
@@ -59,6 +60,7 @@ namespace NzbDrone.Core.Test.Download
                     .CreateNew()
                     .With(v => v.Id = _nextId++)
                     .With(v => v.Priority = priority)
+                    .With(v => v.Tags = tags ?? new HashSet<int>())
                     .Build());
 
             _downloadClients.Add(mock.Object);
@@ -149,6 +151,69 @@ namespace NzbDrone.Core.Test.Download
         }
 
         [Test]
+        public void should_roundrobin_over_clients_with_matching_tags()
+        {
+            var seriesTags = new HashSet<int> { 1 };
+            var clientTags = new HashSet<int> { 1 };
+
+            WithTorrentClient();
+            WithTorrentClient(0, clientTags);
+            WithTorrentClient();
+            WithTorrentClient(0, clientTags);
+
+            var client1 = Subject.GetDownloadClient(DownloadProtocol.Torrent, 0, false, seriesTags);
+            var client2 = Subject.GetDownloadClient(DownloadProtocol.Torrent, 0, false, seriesTags);
+            var client3 = Subject.GetDownloadClient(DownloadProtocol.Torrent, 0, false, seriesTags);
+            var client4 = Subject.GetDownloadClient(DownloadProtocol.Torrent, 0, false, seriesTags);
+
+            client1.Definition.Id.Should().Be(2);
+            client2.Definition.Id.Should().Be(4);
+            client3.Definition.Id.Should().Be(2);
+            client4.Definition.Id.Should().Be(4);
+        }
+
+        [Test]
+        public void should_roundrobin_over_non_tagged_when_no_matching_tags()
+        {
+            var seriesTags = new HashSet<int> { 2 };
+            var clientTags = new HashSet<int> { 1 };
+
+            WithTorrentClient();
+            WithTorrentClient(0, clientTags);
+            WithTorrentClient();
+            WithTorrentClient(0, clientTags);
+
+            var client1 = Subject.GetDownloadClient(DownloadProtocol.Torrent, 0, false, seriesTags);
+            var client2 = Subject.GetDownloadClient(DownloadProtocol.Torrent, 0, false, seriesTags);
+            var client3 = Subject.GetDownloadClient(DownloadProtocol.Torrent, 0, false, seriesTags);
+            var client4 = Subject.GetDownloadClient(DownloadProtocol.Torrent, 0, false, seriesTags);
+
+            client1.Definition.Id.Should().Be(1);
+            client2.Definition.Id.Should().Be(3);
+            client3.Definition.Id.Should().Be(1);
+            client4.Definition.Id.Should().Be(3);
+        }
+
+        [Test]
+        public void should_fail_to_choose_when_clients_have_tags_but_no_match()
+        {
+            var seriesTags = new HashSet<int> { 2 };
+            var clientTags = new HashSet<int> { 1 };
+
+            WithTorrentClient(0, clientTags);
+            WithTorrentClient(0, clientTags);
+            WithTorrentClient(0, clientTags);
+            WithTorrentClient(0, clientTags);
+
+            var client1 = Subject.GetDownloadClient(DownloadProtocol.Torrent, 0, false, seriesTags);
+            var client2 = Subject.GetDownloadClient(DownloadProtocol.Torrent, 0, false, seriesTags);
+            var client3 = Subject.GetDownloadClient(DownloadProtocol.Torrent, 0, false, seriesTags);
+            var client4 = Subject.GetDownloadClient(DownloadProtocol.Torrent, 0, false, seriesTags);
+
+            Subject.GetDownloadClient(DownloadProtocol.Torrent, 0, false, seriesTags).Should().BeNull();
+        }
+
+        [Test]
         public void should_skip_blocked_torrent_client()
         {
             WithUsenetClient();
@@ -162,7 +227,6 @@ namespace NzbDrone.Core.Test.Download
             var client2 = Subject.GetDownloadClient(DownloadProtocol.Torrent);
             var client3 = Subject.GetDownloadClient(DownloadProtocol.Torrent);
             var client4 = Subject.GetDownloadClient(DownloadProtocol.Torrent);
-            var client5 = Subject.GetDownloadClient(DownloadProtocol.Torrent);
 
             client1.Definition.Id.Should().Be(2);
             client2.Definition.Id.Should().Be(4);

@@ -53,9 +53,11 @@ namespace NzbDrone.Core.Download
         {
             var filterBlockedClients = remoteEpisode.Release.PendingReleaseReason == PendingReleaseReason.DownloadClientUnavailable;
 
+            var tags = remoteEpisode.Series?.Tags;
+
             var downloadClient = downloadClientId.HasValue
                 ? _downloadClientProvider.Get(downloadClientId.Value)
-                : _downloadClientProvider.GetDownloadClient(remoteEpisode.Release.DownloadProtocol, remoteEpisode.Release.IndexerId, filterBlockedClients);
+                : _downloadClientProvider.GetDownloadClient(remoteEpisode.Release.DownloadProtocol, remoteEpisode.Release.IndexerId, filterBlockedClients, tags);
 
             DownloadReport(remoteEpisode, downloadClient);
         }

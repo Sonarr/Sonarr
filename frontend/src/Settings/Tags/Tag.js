@@ -58,6 +58,7 @@ class Tag extends Component {
       notificationIds,
       restrictionIds,
       indexerIds,
+      downloadClientIds,
       autoTagIds,
       seriesIds
     } = this.props;
@@ -73,6 +74,7 @@ class Tag extends Component {
       notificationIds.length ||
       restrictionIds.length ||
       indexerIds.length ||
+      downloadClientIds.length ||
       autoTagIds.length ||
       seriesIds.length
     );
@@ -122,6 +124,11 @@ class Tag extends Component {
               />
 
               <TagInUse
+                label="download client"
+                count={downloadClientIds.length}
+              />
+
+              <TagInUse
                 label="auto tagging"
                 count={autoTagIds.length}
                 shouldPluralize={false}
@@ -146,6 +153,7 @@ class Tag extends Component {
           notificationIds={notificationIds}
           restrictionIds={restrictionIds}
           indexerIds={indexerIds}
+          downloadClientIds={downloadClientIds}
           autoTagIds={autoTagIds}
           isOpen={isDetailsModalOpen}
           onModalClose={this.onDetailsModalClose}
@@ -174,6 +182,7 @@ Tag.propTypes = {
   notificationIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   restrictionIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   indexerIds: PropTypes.arrayOf(PropTypes.number).isRequired,
+  downloadClientIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   autoTagIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   seriesIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   onConfirmDeleteTag: PropTypes.func.isRequired
@@ -185,6 +194,7 @@ Tag.defaultProps = {
   notificationIds: [],
   restrictionIds: [],
   indexerIds: [],
+  downloadClientIds: [],
   autoTagIds: [],
   seriesIds: []
 };

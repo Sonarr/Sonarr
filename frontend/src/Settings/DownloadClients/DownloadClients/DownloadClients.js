@@ -49,6 +49,7 @@ class DownloadClients extends Component {
     const {
       items,
       onConfirmDeleteDownloadClient,
+      tagList,
       ...otherProps
     } = this.props;
 
@@ -70,6 +71,7 @@ class DownloadClients extends Component {
                   <DownloadClient
                     key={item.id}
                     {...item}
+                    tagList={tagList}
                     onConfirmDeleteDownloadClient={onConfirmDeleteDownloadClient}
                   />
                 );
@@ -108,6 +110,7 @@ DownloadClients.propTypes = {
   isFetching: PropTypes.bool.isRequired,
   error: PropTypes.object,
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
+  tagList: PropTypes.arrayOf(PropTypes.object).isRequired,
   onConfirmDeleteDownloadClient: PropTypes.func.isRequired
 };
 

@@ -24,19 +24,19 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
     {
         private readonly Logger _logger;
         private readonly IMapCoversToLocal _mediaCoverService;
-        private readonly ITagService _tagService;
+        private readonly ITagRepository _tagRepo;
         private readonly IDetectXbmcNfo _detectNfo;
         private readonly IDiskProvider _diskProvider;
 
         public XbmcMetadata(IDetectXbmcNfo detectNfo,
                             IDiskProvider diskProvider,
                             IMapCoversToLocal mediaCoverService,
-                            ITagService tagService,
+                            ITagRepository tagRepo,
                             Logger logger)
         {
             _logger = logger;
             _mediaCoverService = mediaCoverService;
-            _tagService = tagService;
+            _tagRepo = tagRepo;
             _diskProvider = diskProvider;
             _detectNfo = detectNfo;
         }
@@ -183,7 +183,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
 
                     if (series.Tags.Any())
                     {
-                        var tags = _tagService.GetTags(series.Tags);
+                        var tags = _tagRepo.Get(series.Tags);
 
                         foreach (var tag in tags)
                         {

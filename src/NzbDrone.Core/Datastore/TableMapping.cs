@@ -102,8 +102,7 @@ namespace NzbDrone.Core.Datastore
 
             Mapper.Entity<DownloadClientDefinition>("DownloadClients").RegisterModel()
                   .Ignore(x => x.ImplementationName)
-                  .Ignore(d => d.Protocol)
-                  .Ignore(d => d.Tags);
+                  .Ignore(d => d.Protocol);
 
             Mapper.Entity<SceneMapping>("SceneMappings").RegisterModel();
 

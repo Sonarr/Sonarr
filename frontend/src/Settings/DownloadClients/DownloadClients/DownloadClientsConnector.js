@@ -4,13 +4,20 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { deleteDownloadClient, fetchDownloadClients } from 'Store/Actions/settingsActions';
 import createSortedSectionSelector from 'Store/Selectors/createSortedSectionSelector';
+import createTagsSelector from 'Store/Selectors/createTagsSelector';
 import sortByName from 'Utilities/Array/sortByName';
 import DownloadClients from './DownloadClients';
 
 function createMapStateToProps() {
   return createSelector(
     createSortedSectionSelector('settings.downloadClients', sortByName),
-    (downloadClients) => downloadClients
+    createTagsSelector(),
+    (downloadClients, tagList) => {
+      return {
+        ...downloadClients,
+        tagList
+      };
+    }
   );
 }
 
