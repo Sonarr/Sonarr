@@ -106,6 +106,11 @@ namespace Sonarr.Api.V3
         [Produces("application/json")]
         public ActionResult<TProviderResource> UpdateProvider([FromBody] TBulkProviderResource providerResource)
         {
+            if (!providerResource.Ids.Any())
+            {
+                throw new BadRequestException("ids must be provided");
+            }
+
             var definitionsToUpdate = _providerFactory.Get(providerResource.Ids).ToList();
 
             foreach (var definition in definitionsToUpdate)
