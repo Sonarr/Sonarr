@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ImportListAppState } from 'App/State/SettingsAppState';
+import Alert from 'Components/Alert';
 import Button from 'Components/Link/Button';
 import SpinnerButton from 'Components/Link/SpinnerButton';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
@@ -20,6 +21,7 @@ import {
 import createClientSideCollectionSelector from 'Store/Selectors/createClientSideCollectionSelector';
 import { SelectStateInputProps } from 'typings/props';
 import getErrorMessage from 'Utilities/Object/getErrorMessage';
+import translate from 'Utilities/String/translate';
 import getSelectedIds from 'Utilities/Table/getSelectedIds';
 import ManageImportListsEditModal from './Edit/ManageImportListsEditModal';
 import ManageImportListsModalRow from './ManageImportListsModalRow';
@@ -34,37 +36,37 @@ type OnSelectedChangeCallback = React.ComponentProps<
 const COLUMNS = [
   {
     name: 'name',
-    label: 'Name',
+    label: translate('Name'),
     isSortable: true,
     isVisible: true,
   },
   {
     name: 'implementation',
-    label: 'Implementation',
+    label: translate('Implementation'),
     isSortable: true,
     isVisible: true,
   },
   {
     name: 'qualityProfileId',
-    label: 'Quality Profile',
+    label: translate('QualityProfile'),
     isSortable: true,
     isVisible: true,
   },
   {
     name: 'rootFolderPath',
-    label: 'Root Folder',
+    label: translate('RootFolder'),
     isSortable: true,
     isVisible: true,
   },
   {
     name: 'enableAutomaticAdd',
-    label: 'Auto Add',
+    label: translate('AutoAdd'),
     isSortable: true,
     isVisible: true,
   },
   {
     name: 'tags',
-    label: 'Tags',
+    label: translate('Tags'),
     isSortable: true,
     isVisible: true,
   },
@@ -190,11 +192,15 @@ function ManageImportListsModalContent(
 
   return (
     <ModalContent onModalClose={onModalClose}>
-      <ModalHeader>Manage Import Lists</ModalHeader>
+      <ModalHeader>{translate('ManageImportLists')}</ModalHeader>
       <ModalBody>
         {isFetching ? <LoadingIndicator /> : null}
 
         {error ? <div>{errorMessage}</div> : null}
+
+        {isPopulated && !error && !items.length && (
+          <Alert kind={kinds.INFO}>{translate('NoImportListsFound')}</Alert>
+        )}
 
         {isPopulated && !!items.length && !isFetching && !isFetching ? (
           <Table
@@ -230,7 +236,7 @@ function ManageImportListsModalContent(
             isDisabled={!anySelected}
             onPress={onDeletePress}
           >
-            Delete
+            {translate('Delete')}
           </SpinnerButton>
 
           <SpinnerButton
@@ -238,7 +244,7 @@ function ManageImportListsModalContent(
             isDisabled={!anySelected}
             onPress={onEditPress}
           >
-            Edit
+            {translate('Edit')}
           </SpinnerButton>
 
           <SpinnerButton
@@ -246,11 +252,11 @@ function ManageImportListsModalContent(
             isDisabled={!anySelected}
             onPress={onTagsPress}
           >
-            Set Tags
+            {translate('SetTags')}
           </SpinnerButton>
         </div>
 
-        <Button onPress={onModalClose}>Close</Button>
+        <Button onPress={onModalClose}>{translate('Close')}</Button>
       </ModalFooter>
 
       <ManageImportListsEditModal
@@ -270,9 +276,11 @@ function ManageImportListsModalContent(
       <ConfirmModal
         isOpen={isDeleteModalOpen}
         kind={kinds.DANGER}
-        title="Delete Import List(s)"
-        message={`Are you sure you want to delete ${selectedIds.length} import list(s)?`}
-        confirmLabel="Delete"
+        title={translate('DeleteSelectedImportLists')}
+        message={translate('DeleteSelectedImportListsMessageText', {
+          count: selectedIds.length,
+        })}
+        confirmLabel={translate('Delete')}
         onConfirm={onConfirmDelete}
         onCancel={onDeleteModalClose}
       />

@@ -235,7 +235,7 @@ function EditSeriesModalContent(props: EditSeriesModalContentProps) {
           <Button onPress={onModalClose}>{translate('Cancel')}</Button>
 
           <Button onPress={onSavePressWrapper}>
-            {translate('Apply Changes')}
+            {translate('ApplyChanges')}
           </Button>
         </div>
       </ModalFooter>
