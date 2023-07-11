@@ -103,7 +103,7 @@ namespace Sonarr.Api.V3
         [HttpPut("bulk")]
         [Consumes("application/json")]
         [Produces("application/json")]
-        public ActionResult<TProviderResource> UpdateProvider([FromBody] TBulkProviderResource providerResource)
+        public virtual ActionResult<TProviderResource> UpdateProvider([FromBody] TBulkProviderResource providerResource)
         {
             if (!providerResource.Ids.Any())
             {
@@ -164,7 +164,7 @@ namespace Sonarr.Api.V3
 
         [HttpDelete("bulk")]
         [Consumes("application/json")]
-        public object DeleteProviders([FromBody] TBulkProviderResource resource)
+        public virtual object DeleteProviders([FromBody] TBulkProviderResource resource)
         {
             _providerFactory.Delete(resource.Ids);
 
