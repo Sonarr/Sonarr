@@ -17,6 +17,7 @@ import { icons, kinds } from 'Helpers/Props';
 import InteractiveImportModal from 'InteractiveImport/InteractiveImportModal';
 import SeriesTitleLink from 'Series/SeriesTitleLink';
 import formatBytes from 'Utilities/Number/formatBytes';
+import formatPreferredWordScore from 'Utilities/Number/formatPreferredWordScore';
 import QueueStatusCell from './QueueStatusCell';
 import RemoveQueueItemModal from './RemoveQueueItemModal';
 import TimeleftCell from './TimeleftCell';
@@ -91,6 +92,7 @@ class QueueRow extends Component {
       languages,
       quality,
       customFormats,
+      customFormatScore,
       protocol,
       indexer,
       outputPath,
@@ -259,6 +261,17 @@ class QueueRow extends Component {
               );
             }
 
+            if (name === 'customFormatScore') {
+              return (
+                <TableRowCell
+                  key={name}
+                  className={styles.customFormatScore}
+                >
+                  {formatPreferredWordScore(customFormatScore)}
+                </TableRowCell>
+              );
+            }
+
             if (name === 'protocol') {
               return (
                 <TableRowCell key={name}>
@@ -413,6 +426,7 @@ QueueRow.propTypes = {
   languages: PropTypes.arrayOf(PropTypes.object).isRequired,
   quality: PropTypes.object.isRequired,
   customFormats: PropTypes.arrayOf(PropTypes.object),
+  customFormatScore: PropTypes.number.isRequired,
   protocol: PropTypes.string.isRequired,
   indexer: PropTypes.string,
   outputPath: PropTypes.string,
