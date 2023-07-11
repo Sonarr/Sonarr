@@ -24,21 +24,21 @@ namespace NzbDrone.Core.MediaFiles
         private readonly IVideoFileInfoReader _videoFileInfoReader;
         private readonly IProcessProvider _processProvider;
         private readonly IConfigService _configService;
-        private readonly ITagService _tagService;
+        private readonly ITagRepository _tagRepository;
         private readonly Logger _logger;
 
         public ImportScriptService(IProcessProvider processProvider,
                                    IVideoFileInfoReader videoFileInfoReader,
                                    IConfigService configService,
                                    IConfigFileProvider configFileProvider,
-                                   ITagService tagService,
+                                   ITagRepository tagRepository,
                                    Logger logger)
         {
             _processProvider = processProvider;
             _videoFileInfoReader = videoFileInfoReader;
             _configService = configService;
             _configFileProvider = configFileProvider;
-            _tagService = tagService;
+            _tagRepository = tagRepository;
             _logger = logger;
         }
 
@@ -73,7 +73,7 @@ namespace NzbDrone.Core.MediaFiles
             environmentVariables.Add("Sonarr_Series_Type", series.SeriesType.ToString());
             environmentVariables.Add("Sonarr_Series_OriginalLanguage", IsoLanguages.Get(series.OriginalLanguage).ThreeLetterCode);
             environmentVariables.Add("Sonarr_Series_Genres", string.Join("|", series.Genres));
-            environmentVariables.Add("Sonarr_Series_Tags", string.Join("|", series.Tags.Select(t => _tagService.GetTag(t).Label)));
+            environmentVariables.Add("Sonarr_Series_Tags", string.Join("|", series.Tags.Select(t => _tagRepository.Get(t).Label)));
 
             environmentVariables.Add("Sonarr_EpisodeFile_EpisodeCount", localEpisode.Episodes.Count.ToString());
             environmentVariables.Add("Sonarr_EpisodeFile_EpisodeIds", string.Join(",", localEpisode.Episodes.Select(e => e.Id)));
