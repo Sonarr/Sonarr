@@ -1,10 +1,13 @@
 import React, { useCallback } from 'react';
+import Label from 'Components/Label';
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
 import TableSelectCell from 'Components/Table/Cells/TableSelectCell';
 import Column from 'Components/Table/Column';
 import TableRow from 'Components/Table/TableRow';
 import TagListConnector from 'Components/TagListConnector';
+import { kinds } from 'Helpers/Props';
 import { SelectStateInputProps } from 'typings/props';
+import translate from 'Utilities/String/translate';
 import styles from './ManageDownloadClientsModalRow.css';
 
 interface ManageDownloadClientsModalRowProps {
@@ -61,17 +64,19 @@ function ManageDownloadClientsModalRow(
       </TableRowCell>
 
       <TableRowCell className={styles.enable}>
-        {enable ? 'Yes' : 'No'}
+        <Label kind={enable ? kinds.SUCCESS : kinds.DISABLED} outline={!enable}>
+          {enable ? translate('Yes') : translate('No')}
+        </Label>
       </TableRowCell>
 
       <TableRowCell className={styles.priority}>{priority}</TableRowCell>
 
       <TableRowCell className={styles.removeCompletedDownloads}>
-        {removeCompletedDownloads ? 'Yes' : 'No'}
+        {removeCompletedDownloads ? translate('Yes') : translate('No')}
       </TableRowCell>
 
       <TableRowCell className={styles.removeFailedDownloads}>
-        {removeFailedDownloads ? 'Yes' : 'No'}
+        {removeFailedDownloads ? translate('Yes') : translate('No')}
       </TableRowCell>
 
       <TableRowCell className={styles.tags}>

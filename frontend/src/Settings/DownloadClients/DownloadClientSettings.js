@@ -6,6 +6,7 @@ import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
 import { icons } from 'Helpers/Props';
 import SettingsToolbarConnector from 'Settings/SettingsToolbarConnector';
+import translate from 'Utilities/String/translate';
 import DownloadClientsConnector from './DownloadClients/DownloadClientsConnector';
 import ManageDownloadClientsModal from './DownloadClients/Manage/ManageDownloadClientsModal';
 import DownloadClientOptionsConnector from './Options/DownloadClientOptionsConnector';
@@ -85,7 +86,7 @@ class DownloadClientSettings extends Component {
               />
 
               <PageToolbarButton
-                label="Manage Clients"
+                label={translate('ManageClients')}
                 iconName={icons.MANAGE}
                 onPress={this.onManageDownloadClientsPress}
               />
