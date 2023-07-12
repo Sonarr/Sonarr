@@ -13,6 +13,7 @@ import EpisodeFileLanguageConnector from 'EpisodeFile/EpisodeFileLanguageConnect
 import MediaInfoConnector from 'EpisodeFile/MediaInfoConnector';
 import * as mediaInfoTypes from 'EpisodeFile/mediaInfoTypes';
 import formatBytes from 'Utilities/Number/formatBytes';
+import formatPreferredWordScore from 'Utilities/Number/formatPreferredWordScore';
 import formatRuntime from 'Utilities/Number/formatRuntime';
 import styles from './EpisodeRow.css';
 
@@ -72,6 +73,7 @@ class EpisodeRow extends Component {
       episodeFileSize,
       releaseGroup,
       customFormats,
+      customFormatScore,
       alternateTitles,
       columns
     } = this.props;
@@ -189,6 +191,17 @@ class EpisodeRow extends Component {
                   <EpisodeFormats
                     formats={customFormats}
                   />
+                </TableRowCell>
+              );
+            }
+
+            if (name === 'customFormatScore') {
+              return (
+                <TableRowCell
+                  key={name}
+                  className={styles.customFormatScore}
+                >
+                  {formatPreferredWordScore(customFormatScore)}
                 </TableRowCell>
               );
             }
@@ -355,6 +368,7 @@ EpisodeRow.propTypes = {
   episodeFileSize: PropTypes.number,
   releaseGroup: PropTypes.string,
   customFormats: PropTypes.arrayOf(PropTypes.object),
+  customFormatScore: PropTypes.number.isRequired,
   mediaInfo: PropTypes.object,
   alternateTitles: PropTypes.arrayOf(PropTypes.object).isRequired,
   columns: PropTypes.arrayOf(PropTypes.object).isRequired,
