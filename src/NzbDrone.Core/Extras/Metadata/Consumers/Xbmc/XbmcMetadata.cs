@@ -295,7 +295,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
                     {
                         details.Add(new XElement("thumb"));
                     }
-                    else
+                    else if (Settings.EpisodeImageThumb)
                     {
                         details.Add(new XElement("thumb", image.RemoteUrl));
                     }
