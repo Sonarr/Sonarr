@@ -43,7 +43,7 @@ function ParseModalContent(props: ParseModalContentProps) {
 
   const onClearPress = useCallback(() => {
     setTitle('');
-    dispatch(fetch({ title: '' }));
+    dispatch(clear());
   }, [setTitle, dispatch]);
 
   useEffect(
