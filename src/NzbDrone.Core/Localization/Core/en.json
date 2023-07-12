@@ -25,6 +25,7 @@
   "CountImportListsSelected": "{count} import list(s) selected",
   "CountIndexersSelected": "{count} indexer(s) selected",
   "CountSeasons": "{count} seasons",
+  "CustomFormatScore": "Custom Format Score",
   "Delete": "Delete",
   "DeleteCondition": "Delete Condition",
   "DeleteConditionMessageText": "Are you sure you want to delete the condition '{0}'?",
