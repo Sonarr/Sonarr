@@ -51,8 +51,7 @@ class QueueRow extends Component {
     } = this.props;
 
     onQueueRowModalOpenOrClose(false);
-    onRemoveQueueItemPress(blocklist);
-    onRemoveQueueItemPress(skipredownload);
+    onRemoveQueueItemPress(blocklist, skipredownload);
 
     this.setState({ isRemoveQueueItemModalOpen: false });
   };
