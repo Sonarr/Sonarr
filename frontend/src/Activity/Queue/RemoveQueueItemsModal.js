@@ -23,7 +23,8 @@ class RemoveQueueItemsModal extends Component {
 
     this.state = {
       remove: true,
-      blocklist: false
+      blocklist: false,
+      skipRedownload: false
     };
   }
 
@@ -33,7 +34,8 @@ class RemoveQueueItemsModal extends Component {
   resetState = function() {
     this.setState({
       remove: true,
-      blocklist: false
+      blocklist: false,
+      skipRedownload: false
     });
   };
 
@@ -46,6 +48,10 @@ class RemoveQueueItemsModal extends Component {
 
   onBlocklistChange = ({ value }) => {
     this.setState({ blocklist: value });
+  };
+
+  onSkipRedownloadChange = ({ value }) => {
+    this.setState({ skipRedownload: value });
   };
 
   onRemoveConfirmed = () => {
@@ -71,7 +77,7 @@ class RemoveQueueItemsModal extends Component {
       allPending
     } = this.props;
 
-    const { remove, blocklist } = this.state;
+    const { remove, blocklist, skipRedownload } = this.state;
 
     return (
       <Modal
@@ -122,6 +128,20 @@ class RemoveQueueItemsModal extends Component {
               />
             </FormGroup>
 
+            {
+              blocklist ?
+                <FormGroup>
+                  <FormLabel>{translate('SkipRedownload')}</FormLabel>
+                  <FormInputGroup
+                    type={inputTypes.CHECK}
+                    name="skipRedownload"
+                    value={skipRedownload}
+                    helpText={translate('SkipRedownloadHelpText')}
+                    onChange={this.onSkipRedownloadChange}
+                  />
+                </FormGroup> :
+                null
+            }
           </ModalBody>
 
           <ModalFooter>
