@@ -5,6 +5,7 @@ import EpisodeFormats from 'Episode/EpisodeFormats';
 import SeriesTitleLink from 'Series/SeriesTitleLink';
 import translate from 'Utilities/String/translate';
 import ParseResultItem from './ParseResultItem';
+import styles from './ParseResult.css';
 
 interface ParseResultProps {
   item: ParseModel;
@@ -76,95 +77,112 @@ function ParseResult(props: ParseResultProps) {
         />
       </FieldSet>
 
-      {/* 
-      
+      {/*
+
       Year
       Secondary titles
       special episode
-      
+
       */}
 
       <FieldSet legend={translate('Episode Info')}>
-        <ParseResultItem
-          title={translate('Season Number')}
-          data={
-            seasonNumber === 0 && absoluteEpisodeNumbers.length
-              ? '-'
-              : seasonNumber
-          }
-        />
+        <div className={styles.container}>
+          <div className={styles.column}>
+            <ParseResultItem
+              title={translate('Season Number')}
+              data={
+                seasonNumber === 0 && absoluteEpisodeNumbers.length
+                  ? '-'
+                  : seasonNumber
+              }
+            />
 
-        <ParseResultItem
-          title={translate('Episode Number(s)')}
-          data={episodeNumbers.join(', ') || '-'}
-        />
+            <ParseResultItem
+              title={translate('Episode Number(s)')}
+              data={episodeNumbers.join(', ') || '-'}
+            />
 
-        <ParseResultItem
-          title={translate('Absolute Episode Number(s)')}
-          data={
-            absoluteEpisodeNumbers.length
-              ? absoluteEpisodeNumbers.join(', ')
-              : '-'
-          }
-        />
+            <ParseResultItem
+              title={translate('Absolute Episode Number(s)')}
+              data={
+                absoluteEpisodeNumbers.length
+                  ? absoluteEpisodeNumbers.join(', ')
+                  : '-'
+              }
+            />
 
-        <ParseResultItem
-          title={translate('Special')}
-          data={special ? 'True' : 'False'}
-        />
+            <ParseResultItem
+              title={translate('Daily')}
+              data={isDaily ? 'True' : 'False'}
+            />
 
-        <ParseResultItem
-          title={translate('Full Season')}
-          data={fullSeason ? 'True' : 'False'}
-        />
+            <ParseResultItem
+              title={translate('Air Date')}
+              data={airDate ?? '-'}
+            />
+          </div>
 
-        <ParseResultItem
-          title={translate('Multi-Season')}
-          data={isMultiSeason ? 'True' : 'False'}
-        />
+          <div className={styles.column}>
+            <ParseResultItem
+              title={translate('Special')}
+              data={special ? 'True' : 'False'}
+            />
 
-        <ParseResultItem
-          title={translate('Partial Season')}
-          data={isPartialSeason ? 'True' : 'False'}
-        />
+            <ParseResultItem
+              title={translate('Full Season')}
+              data={fullSeason ? 'True' : 'False'}
+            />
 
-        <ParseResultItem
-          title={translate('Daily')}
-          data={isDaily ? 'True' : 'False'}
-        />
+            <ParseResultItem
+              title={translate('Multi-Season')}
+              data={isMultiSeason ? 'True' : 'False'}
+            />
 
-        <ParseResultItem title={translate('Air Date')} data={airDate ?? '-'} />
+            <ParseResultItem
+              title={translate('Partial Season')}
+              data={isPartialSeason ? 'True' : 'False'}
+            />
+          </div>
+        </div>
       </FieldSet>
 
       <FieldSet legend={translate('Quality')}>
-        <ParseResultItem
-          title={translate('Quality')}
-          data={quality.quality.name}
-        />
+        <div className={styles.container}>
+          <div className={styles.column}>
+            <ParseResultItem
+              title={translate('Quality')}
+              data={quality.quality.name}
+            />
 
-        <ParseResultItem
-          title={translate('Version')}
-          data={quality.revision.version > 1 ? quality.revision.version : '-'}
-        />
+            <ParseResultItem
+              title={translate('Version')}
+              data={
+                quality.revision.version > 1 ? quality.revision.version : '-'
+              }
+            />
 
-        <ParseResultItem
-          title={translate('Real')}
-          data={quality.revision.real ? 'True' : '-'}
-        />
+            <ParseResultItem
+              title={translate('Real')}
+              data={quality.revision.real ? 'True' : '-'}
+            />
+          </div>
 
-        <ParseResultItem
-          title={translate('Proper')}
-          data={
-            quality.revision.version > 1 && !quality.revision.isRepack
-              ? 'True'
-              : '-'
-          }
-        />
+          <div className={styles.column}>
+            <ParseResultItem
+              title={translate('Proper')}
+              data={
+                quality.revision.version > 1 && !quality.revision.isRepack
+                  ? 'True'
+                  : '-'
+              }
+            />
 
-        <ParseResultItem
-          title={translate('Repack')}
-          data={quality.revision.isRepack ? 'True' : '-'}
-        />
+            <ParseResultItem
+              title={translate('Repack')}
+              data={quality.revision.isRepack ? 'True' : '-'}
+            />
+          </div>
+        </div>
       </FieldSet>
 
       <FieldSet legend={translate('Languages')}>

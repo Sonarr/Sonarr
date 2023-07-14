@@ -1,20 +1,8 @@
-.item {
+.container {
   display: flex;
+  flex-wrap: wrap;
 }
 
-.title {
-  margin-right: 20px;
-  width: 250px;
-  text-align: right;
-  font-weight: bold;
-}
-
-.description {
-  /* composes: description from '~Components/DescriptionList/DescriptionListItemTitle.css'; */
-}
-
-@media (max-width: $breakpointSmall) {
-  .item {
-    display: block;
-  }
+.column {
+  flex: 0 0 50%;
 }
