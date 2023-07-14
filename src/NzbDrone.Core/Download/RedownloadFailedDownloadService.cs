@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Download
         [EventHandleOrder(EventHandleOrder.Last)]
         public void Handle(DownloadFailedEvent message)
         {
-            if (message.SkipReDownload)
+            if (message.SkipRedownload)
             {
                 _logger.Debug("Skip redownloading requested by user");
                 return;

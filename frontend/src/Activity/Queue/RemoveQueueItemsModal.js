@@ -50,7 +50,7 @@ class RemoveQueueItemsModal extends Component {
     this.setState({ blocklist: value });
   };
 
-  onSkipReDownloadChange = ({ value }) => {
+  onSkipRedownloadChange = ({ value }) => {
     this.setState({ skipredownload: value });
   };
 

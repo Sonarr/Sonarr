@@ -9,8 +9,8 @@ namespace NzbDrone.Core.Download
 {
     public interface IFailedDownloadService
     {
-        void MarkAsFailed(int historyId, bool skipReDownload = false);
-        void MarkAsFailed(string downloadId, bool skipReDownload = false);
+        void MarkAsFailed(int historyId, bool skipRedownload = false);
+        void MarkAsFailed(string downloadId, bool skipRedownload = false);
         void Check(TrackedDownload trackedDownload);
         void ProcessFailed(TrackedDownload trackedDownload);
     }
@@ -30,14 +30,14 @@ namespace NzbDrone.Core.Download
             _eventAggregator = eventAggregator;
         }
 
-        public void MarkAsFailed(int historyId, bool skipReDownload = false)
+        public void MarkAsFailed(int historyId, bool skipRedownload = false)
         {
             var history = _historyService.Get(historyId);
 
             var downloadId = history.DownloadId;
             if (downloadId.IsNullOrWhiteSpace())
             {
-                PublishDownloadFailedEvent(new List<EpisodeHistory> { history }, "Manually marked as failed", skipReDownload: skipReDownload);
+                PublishDownloadFailedEvent(new List<EpisodeHistory> { history }, "Manually marked as failed", skipRedownload: skipRedownload);
 
                 return;
             }
@@ -57,7 +57,7 @@ namespace NzbDrone.Core.Download
             PublishDownloadFailedEvent(grabbedHistory, "Manually marked as failed");
         }
 
-        public void MarkAsFailed(string downloadId, bool skipReDownload = false)
+        public void MarkAsFailed(string downloadId, bool skipRedownload = false)
         {
             var history = _historyService.Find(downloadId, EpisodeHistoryEventType.Grabbed);
 
@@ -65,7 +65,7 @@ namespace NzbDrone.Core.Download
             {
                 var trackedDownload = _trackedDownloadService.Find(downloadId);
 
-                PublishDownloadFailedEvent(history, "Manually marked as failed", trackedDownload, skipReDownload: skipReDownload);
+                PublishDownloadFailedEvent(history, "Manually marked as failed", trackedDownload, skipRedownload: skipRedownload);
             }
         }
 
@@ -125,7 +125,7 @@ namespace NzbDrone.Core.Download
             PublishDownloadFailedEvent(grabbedItems, failure, trackedDownload);
         }
 
-        private void PublishDownloadFailedEvent(List<EpisodeHistory> historyItems, string message, TrackedDownload trackedDownload = null, bool skipReDownload = false)
+        private void PublishDownloadFailedEvent(List<EpisodeHistory> historyItems, string message, TrackedDownload trackedDownload = null, bool skipRedownload = false)
         {
             var historyItem = historyItems.First();
 
@@ -141,7 +141,7 @@ namespace NzbDrone.Core.Download
                 Data = historyItem.Data,
                 TrackedDownload = trackedDownload,
                 Languages = historyItem.Languages,
-                SkipReDownload = skipReDownload
+                SkipRedownload = skipRedownload
             };
 
             _eventAggregator.PublishEvent(downloadFailedEvent);
