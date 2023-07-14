@@ -10,9 +10,11 @@ function getTranslations() {
 
 let translations = {};
 
-getTranslations().then((data) => {
-  translations = data.strings;
-});
+export function fetchTranslations() {
+  return getTranslations().then((data) => {
+    translations = data.strings;
+  });
+}
 
 export default function translate(key, tokens) {
   const translation = translations[key] || key;
