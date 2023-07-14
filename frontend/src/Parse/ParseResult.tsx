@@ -46,11 +46,11 @@ function ParseResult(props: ParseResultProps) {
     <div>
       <FieldSet legend={translate('Release')}>
         <ParseResultItem
-          title={translate('Release Title')}
+          title={translate('ReleaseTitle')}
           data={releaseTitle}
         />
 
-        <ParseResultItem title={translate('Series Title')} data={seriesTitle} />
+        <ParseResultItem title={translate('SeriesTitle')} data={seriesTitle} />
 
         <ParseResultItem
           title={translate('Year')}
@@ -58,7 +58,7 @@ function ParseResult(props: ParseResultProps) {
         />
 
         <ParseResultItem
-          title={translate('All Titles')}
+          title={translate('AllTitles')}
           data={
             seriesTitleInfo.allTitles?.length > 0
               ? seriesTitleInfo.allTitles.join(', ')
@@ -67,12 +67,12 @@ function ParseResult(props: ParseResultProps) {
         />
 
         <ParseResultItem
-          title={translate('Release Group')}
+          title={translate('ReleaseGroup')}
           data={releaseGroup ?? '-'}
         />
 
         <ParseResultItem
-          title={translate('Release Hash')}
+          title={translate('ReleaseHash')}
           data={releaseHash ? releaseHash : '-'}
         />
       </FieldSet>
@@ -85,11 +85,11 @@ function ParseResult(props: ParseResultProps) {
 
       */}
 
-      <FieldSet legend={translate('Episode Info')}>
+      <FieldSet legend={translate('EpisodeInfo')}>
         <div className={styles.container}>
           <div className={styles.column}>
             <ParseResultItem
-              title={translate('Season Number')}
+              title={translate('SeasonNumber')}
               data={
                 seasonNumber === 0 && absoluteEpisodeNumbers.length
                   ? '-'
@@ -98,12 +98,12 @@ function ParseResult(props: ParseResultProps) {
             />
 
             <ParseResultItem
-              title={translate('Episode Number(s)')}
+              title={translate('EpisodeNumbers')}
               data={episodeNumbers.join(', ') || '-'}
             />
 
             <ParseResultItem
-              title={translate('Absolute Episode Number(s)')}
+              title={translate('AbsoluteEpisodeNumbers')}
               data={
                 absoluteEpisodeNumbers.length
                   ? absoluteEpisodeNumbers.join(', ')
@@ -117,7 +117,7 @@ function ParseResult(props: ParseResultProps) {
             />
 
             <ParseResultItem
-              title={translate('Air Date')}
+              title={translate('AirDate')}
               data={airDate ?? '-'}
             />
           </div>
@@ -129,17 +129,17 @@ function ParseResult(props: ParseResultProps) {
             />
 
             <ParseResultItem
-              title={translate('Full Season')}
+              title={translate('FullSeason')}
               data={fullSeason ? 'True' : 'False'}
             />
 
             <ParseResultItem
-              title={translate('Multi-Season')}
+              title={translate('MultiSeason')}
               data={isMultiSeason ? 'True' : 'False'}
             />
 
             <ParseResultItem
-              title={translate('Partial Season')}
+              title={translate('PartialSeason')}
               data={isPartialSeason ? 'True' : 'False'}
             />
           </div>
@@ -194,7 +194,7 @@ function ParseResult(props: ParseResultProps) {
 
       <FieldSet legend={translate('Details')}>
         <ParseResultItem
-          title={translate('Matched to Series')}
+          title={translate('MatchedToSeries')}
           data={
             series ? (
               <SeriesTitleLink
@@ -208,12 +208,12 @@ function ParseResult(props: ParseResultProps) {
         />
 
         <ParseResultItem
-          title={translate('Matched to Season')}
+          title={translate('MatchedToSeason')}
           data={episodes.length ? episodes[0].seasonNumber : '-'}
         />
 
         <ParseResultItem
-          title={translate('Matched to Episodes')}
+          title={translate('MatchedToEpisodes')}
           data={
             episodes.length ? (
               <div>
@@ -236,12 +236,12 @@ function ParseResult(props: ParseResultProps) {
         />
 
         <ParseResultItem
-          title={translate('Custom Formats')}
+          title={translate('CustomFormats')}
           data={<EpisodeFormats formats={customFormats} />}
         />
 
         <ParseResultItem
-          title={translate('Custom Format Score')}
+          title={translate('CustomFormatScore')}
           data={customFormatScore}
         />
       </FieldSet>
