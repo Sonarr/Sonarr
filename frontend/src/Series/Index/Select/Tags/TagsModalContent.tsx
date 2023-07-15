@@ -16,6 +16,7 @@ import { inputTypes, kinds, sizes } from 'Helpers/Props';
 import Series from 'Series/Series';
 import createAllSeriesSelector from 'Store/Selectors/createAllSeriesSelector';
 import createTagsSelector from 'Store/Selectors/createTagsSelector';
+import translate from 'Utilities/String/translate';
 import styles from './TagsModalContent.css';
 
 interface TagsModalContentProps {
@@ -97,10 +98,10 @@ function TagsModalContent(props: TagsModalContentProps) {
               value={applyTags}
               values={applyTagsOptions}
               helpTexts={[
-                'How to apply tags to the selected series',
-                'Add: Add the tags the existing list of tags',
-                'Remove: Remove the entered tags',
-                'Replace: Replace the tags with the entered tags (enter no tags to clear all tags)',
+                translate('ApplyTagsHelpTextHowToApplySeries'),
+                translate('ApplyTagsHelpTextAdd'),
+                translate('ApplyTagsHelpTextRemove'),
+                translate('ApplyTagsHelpTextReplace'),
               ]}
               onChange={onApplyTagsChange}
             />
