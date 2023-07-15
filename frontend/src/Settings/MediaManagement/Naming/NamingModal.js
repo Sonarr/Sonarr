@@ -89,8 +89,8 @@ const episodeTitleTokens = [
 ];
 
 const qualityTokens = [
-  { token: '{Quality Full}', example: 'HDTV-720p Proper' },
-  { token: '{Quality Title}', example: 'HDTV-720p' }
+  { token: '{Quality Full}', example: 'WEBDL-1080p Proper' },
+  { token: '{Quality Title}', example: 'WEBDL-1080p' }
 ];
 
 const mediaInfoTokens = [
