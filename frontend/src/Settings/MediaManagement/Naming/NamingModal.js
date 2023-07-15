@@ -114,8 +114,8 @@ const otherTokens = [
 ];
 
 const originalTokens = [
-  { token: '{Original Title}', example: 'Series.Title.S01E01.HDTV.x264-EVOLVE' },
-  { token: '{Original Filename}', example: 'series.title.s01e01.hdtv.x264-EVOLVE' }
+  { token: '{Original Title}', example: 'The.Series.Title\'s!.S01E01.WEBDL.1080p.x264-EVOLVE' },
+  { token: '{Original Filename}', example: 'the.series.title\'s!.s01e01.webdl.1080p.x264-EVOLVE' }
 ];
 
 class NamingModal extends Component {
