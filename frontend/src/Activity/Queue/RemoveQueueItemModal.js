@@ -126,7 +126,7 @@ class RemoveQueueItemModal extends Component {
             </FormGroup>
 
             {
-              blocklist &&
+              blocklist ?
                 <FormGroup>
                   <FormLabel>{translate('SkipRedownload')}</FormLabel>
                   <FormInputGroup
@@ -134,9 +134,10 @@ class RemoveQueueItemModal extends Component {
                     name="skipRedownload"
                     value={skipRedownload}
                     helpText={translate('SkipRedownloadHelpText')}
-                    onChange={this.onSkipReDownloadChange}
+                    onChange={this.onSkipRedownloadChange}
                   />
                 </FormGroup>
+				: null
             }
           </ModalBody>
 
