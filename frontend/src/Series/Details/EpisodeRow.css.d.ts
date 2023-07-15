@@ -3,6 +3,7 @@
 interface CssExports {
   'audio': string;
   'audioLanguages': string;
+  'customFormatScore': string;
   'episodeNumber': string;
   'episodeNumberAnime': string;
   'languages': string;
