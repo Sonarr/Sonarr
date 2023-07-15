@@ -4,13 +4,14 @@ import IconButton from 'Components/Link/IconButton';
 import RelativeDateCellConnector from 'Components/Table/Cells/RelativeDateCellConnector';
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
 import TableRow from 'Components/Table/TableRow';
+import Tooltip from 'Components/Tooltip/Tooltip';
 import episodeEntities from 'Episode/episodeEntities';
 import EpisodeFormats from 'Episode/EpisodeFormats';
 import EpisodeLanguages from 'Episode/EpisodeLanguages';
 import EpisodeQuality from 'Episode/EpisodeQuality';
 import EpisodeTitleLink from 'Episode/EpisodeTitleLink';
 import SeasonEpisodeNumber from 'Episode/SeasonEpisodeNumber';
-import { icons } from 'Helpers/Props';
+import { icons, tooltipPositions } from 'Helpers/Props';
 import SeriesTitleLink from 'Series/SeriesTitleLink';
 import formatPreferredWordScore from 'Utilities/Number/formatPreferredWordScore';
 import HistoryDetailsModal from './Details/HistoryDetailsModal';
@@ -210,7 +211,14 @@ class HistoryRow extends Component {
                   key={name}
                   className={styles.customFormatScore}
                 >
-                  {formatPreferredWordScore(customFormatScore)}
+                  <Tooltip
+                    anchor={formatPreferredWordScore(
+                      customFormatScore,
+                      customFormats.length
+                    )}
+                    tooltip={<EpisodeFormats formats={customFormats} />}
+                    position={tooltipPositions.BOTTOM}
+                  />
                 </TableRowCell>
               );
             }
@@ -292,6 +300,10 @@ HistoryRow.propTypes = {
   shortDateFormat: PropTypes.string.isRequired,
   timeFormat: PropTypes.string.isRequired,
   onMarkAsFailedPress: PropTypes.func.isRequired
+};
+
+HistoryRow.defaultProps = {
+  customFormats: []
 };
 
 export default HistoryRow;
