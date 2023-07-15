@@ -30,28 +30,28 @@ const caseOptions = [
 const fileNameTokens = [
   {
     token: '{Series Title} - S{season:00}E{episode:00} - {Episode Title} {Quality Full}',
-    example: 'Series Title (2010) - S01E01 - Episode Title HDTV-720p Proper'
+    example: 'The Series Title\'s! (2010) - S01E01 - Episode Title HDTV-720p Proper'
   },
   {
     token: '{Series Title} - {season:0}x{episode:00} - {Episode Title} {Quality Full}',
-    example: 'Series Title (2010) - 1x01 - Episode Title HDTV-720p Proper'
+    example: 'The Series Title\'s! (2010) - 1x01 - Episode Title HDTV-720p Proper'
   },
   {
     token: '{Series.Title}.S{season:00}E{episode:00}.{EpisodeClean.Title}.{Quality.Full}',
-    example: 'Series.Title.(2010).S01E01.Episode.Title.HDTV-720p'
+    example: 'The.Series.Title\'s!.(2010).S01E01.Episode.Title.HDTV-720p'
   }
 ];
 
 const seriesTokens = [
-  { token: '{Series Title}', example: 'Series Title\'s' },
-  { token: '{Series CleanTitle}', example: 'Series Titles' },
-  { token: '{Series CleanTitleYear}', example: 'Series Titles! 2010' },
-  { token: '{Series CleanTitleWithoutYear}', example: 'Series Titles!' },
-  { token: '{Series TitleThe}', example: 'Series Title\'s, The' },
-  { token: '{Series TitleTheYear}', example: 'Series Title\'s, The (2010)' },
-  { token: '{Series TitleTheWithoutYear}', example: 'Series Title\'s, The' },
-  { token: '{Series TitleYear}', example: 'Series Title\'s (2010)' },
-  { token: '{Series TitleWithoutYear}', example: 'Series Title\'s' },
+  { token: '{Series Title}', example: 'The Series Title\'s!' },
+  { token: '{Series CleanTitle}', example: 'The Series Titles!' },
+  { token: '{Series CleanTitleYear}', example: 'The Series Titles! 2010' },
+  { token: '{Series CleanTitleWithoutYear}', example: 'The Series Titles!' },
+  { token: '{Series TitleThe}', example: 'Series Title\'s!, The' },
+  { token: '{Series TitleTheYear}', example: 'Series Title\'s!, The (2010)' },
+  { token: '{Series TitleTheWithoutYear}', example: 'Series Title\'s!, The' },
+  { token: '{Series TitleYear}', example: 'The Series Title\'s! (2010)' },
+  { token: '{Series TitleWithoutYear}', example: 'Series Title\'s!' },
   { token: '{Series TitleFirstCharacter}', example: 'S' },
   { token: '{Series Year}', example: '2010' }
 ];
