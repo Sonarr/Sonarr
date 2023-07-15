@@ -3,8 +3,8 @@ import React from 'react';
 import { render } from 'react-dom';
 import createAppStore from 'Store/createAppStore';
 import { fetchTranslations } from 'Utilities/String/translate';
-import App from './App/App';
 
+// import App from './App/App';
 import './preload';
 import './polyfills';
 import 'Diag/ConsoleApi';
@@ -13,14 +13,8 @@ import './index.css';
 
 const history = createBrowserHistory();
 const store = createAppStore(history);
-let hasTranslationsError = false;
-
-try {
-  await fetchTranslations();
-
-} catch (error) {
-  hasTranslationsError = true;
-}
+const hasTranslationsError = !await fetchTranslations();
+const { default: App } = await import('./App/App');
 
 render(
   <App

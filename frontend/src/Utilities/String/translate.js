@@ -11,8 +11,15 @@ function getTranslations() {
 let translations = {};
 
 export function fetchTranslations() {
-  return getTranslations().then((data) => {
-    translations = data.strings;
+  return new Promise(async(resolve) => {
+    try {
+      const data = await getTranslations();
+      translations = data.strings;
+
+      resolve(true);
+    } catch (error) {
+      resolve(false);
+    }
   });
 }
 
