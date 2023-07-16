@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Threading.Tasks;
 using FizzWare.NBuilder;
 using Moq;
 using NLog;
@@ -66,15 +67,15 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
 
         private void WithFailedDownload()
         {
-            Mocker.GetMock<IHttpClient>().Setup(c => c.DownloadFile(It.IsAny<string>(), It.IsAny<string>())).Throws(new WebException());
+            Mocker.GetMock<IHttpClient>().Setup(c => c.DownloadFileAsync(It.IsAny<string>(), It.IsAny<string>())).Throws(new WebException());
         }
 
         [Test]
-        public void should_download_file_if_it_doesnt_exist()
+        public async Task should_download_file_if_it_doesnt_exist()
         {
-            Subject.Download(_remoteEpisode, _indexer);
+            await Subject.Download(_remoteEpisode, _indexer);
 
-            Mocker.GetMock<IHttpClient>().Verify(c => c.DownloadFile(_nzbUrl, _nzbPath), Times.Once());
+            Mocker.GetMock<IHttpClient>().Verify(c => c.DownloadFileAsync(_nzbUrl, _nzbPath), Times.Once());
         }
 
         [Test]
@@ -82,7 +83,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
         {
             WithFailedDownload();
 
-            Assert.Throws<WebException>(() => Subject.Download(_remoteEpisode, _indexer));
+            Assert.ThrowsAsync<WebException>(async () => await Subject.Download(_remoteEpisode, _indexer));
         }
 
         [Test]
@@ -91,7 +92,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
             _remoteEpisode.Release.Title = "30 Rock - Season 1";
             _remoteEpisode.ParsedEpisodeInfo.FullSeason = true;
 
-            Assert.Throws<NotSupportedException>(() => Subject.Download(_remoteEpisode, _indexer));
+            Assert.ThrowsAsync<NotSupportedException>(async () => await Subject.Download(_remoteEpisode, _indexer));
         }
 
         [Test]
@@ -101,15 +102,15 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
         }
 
         [Test]
-        public void should_replace_illegal_characters_in_title()
+        public async Task should_replace_illegal_characters_in_title()
         {
             var illegalTitle = "Saturday Night Live - S38E08 - Jeremy Renner/Maroon 5 [SDTV]";
             var expectedFilename = Path.Combine(_pneumaticFolder, "Saturday Night Live - S38E08 - Jeremy Renner+Maroon 5 [SDTV].nzb");
             _remoteEpisode.Release.Title = illegalTitle;
 
-            Subject.Download(_remoteEpisode, _indexer);
+            await Subject.Download(_remoteEpisode, _indexer);
 
-            Mocker.GetMock<IHttpClient>().Verify(c => c.DownloadFile(It.IsAny<string>(), expectedFilename), Times.Once());
+            Mocker.GetMock<IHttpClient>().Verify(c => c.DownloadFileAsync(It.IsAny<string>(), expectedFilename), Times.Once());
         }
     }
 }

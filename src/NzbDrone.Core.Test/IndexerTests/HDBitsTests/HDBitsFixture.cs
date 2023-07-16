@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -30,15 +31,15 @@ namespace NzbDrone.Core.Test.IndexerTests.HDBitsTests
 
         [TestCase("Files/Indexers/HdBits/RecentFeedLongIDs.json")]
         [TestCase("Files/Indexers/HdBits/RecentFeedStringIDs.json")]
-        public void should_parse_recent_feed_from_HDBits(string fileName)
+        public async Task should_parse_recent_feed_from_HDBits(string fileName)
         {
             var responseJson = ReadAllText(fileName);
 
             Mocker.GetMock<IHttpClient>()
-                .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.Post)))
-                .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), responseJson));
+                .Setup(o => o.ExecuteAsync(It.Is<HttpRequest>(v => v.Method == HttpMethod.Post)))
+                .Returns<HttpRequest>(r => Task.FromResult(new HttpResponse(r, new HttpHeader(), responseJson)));
 
-            var torrents = Subject.FetchRecent();
+            var torrents = await Subject.FetchRecent();
 
             torrents.Should().HaveCount(2);
             torrents.First().Should().BeOfType<TorrentInfo>();
@@ -59,15 +60,15 @@ namespace NzbDrone.Core.Test.IndexerTests.HDBitsTests
         }
 
         [Test]
-        public void should_warn_on_wrong_passkey()
+        public async Task should_warn_on_wrong_passkey()
         {
             var responseJson = new { status = 5, message = "Invalid authentication credentials" }.ToJson();
 
             Mocker.GetMock<IHttpClient>()
-                .Setup(v => v.Execute(It.IsAny<HttpRequest>()))
-                .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), Encoding.UTF8.GetBytes(responseJson)));
+                .Setup(v => v.ExecuteAsync(It.IsAny<HttpRequest>()))
+                .Returns<HttpRequest>(r => Task.FromResult(new HttpResponse(r, new HttpHeader(), Encoding.UTF8.GetBytes(responseJson))));
 
-            var torrents = Subject.FetchRecent();
+            var torrents = await Subject.FetchRecent();
 
             torrents.Should().BeEmpty();
 

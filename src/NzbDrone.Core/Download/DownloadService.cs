@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.Extensions;
@@ -16,7 +17,7 @@ namespace NzbDrone.Core.Download
 {
     public interface IDownloadService
     {
-        void DownloadReport(RemoteEpisode remoteEpisode, int? downloadClientId);
+        Task DownloadReport(RemoteEpisode remoteEpisode, int? downloadClientId);
     }
 
     public class DownloadService : IDownloadService
@@ -49,7 +50,7 @@ namespace NzbDrone.Core.Download
             _logger = logger;
         }
 
-        public void DownloadReport(RemoteEpisode remoteEpisode, int? downloadClientId)
+        public async Task DownloadReport(RemoteEpisode remoteEpisode, int? downloadClientId)
         {
             var filterBlockedClients = remoteEpisode.Release.PendingReleaseReason == PendingReleaseReason.DownloadClientUnavailable;
 
@@ -59,10 +60,10 @@ namespace NzbDrone.Core.Download
                 ? _downloadClientProvider.Get(downloadClientId.Value)
                 : _downloadClientProvider.GetDownloadClient(remoteEpisode.Release.DownloadProtocol, remoteEpisode.Release.IndexerId, filterBlockedClients, tags);
 
-            DownloadReport(remoteEpisode, downloadClient);
+            await DownloadReport(remoteEpisode, downloadClient);
         }
 
-        private void DownloadReport(RemoteEpisode remoteEpisode, IDownloadClient downloadClient)
+        private async Task DownloadReport(RemoteEpisode remoteEpisode, IDownloadClient downloadClient)
         {
             Ensure.That(remoteEpisode.Series, () => remoteEpisode.Series).IsNotNull();
             Ensure.That(remoteEpisode.Episodes, () => remoteEpisode.Episodes).HasItems();
@@ -81,7 +82,7 @@ namespace NzbDrone.Core.Download
             if (remoteEpisode.Release.DownloadUrl.IsNotNullOrWhiteSpace() && !remoteEpisode.Release.DownloadUrl.StartsWith("magnet:"))
             {
                 var url = new HttpUri(remoteEpisode.Release.DownloadUrl);
-                _rateLimitService.WaitAndPulse(url.Host, TimeSpan.FromSeconds(2));
+                await _rateLimitService.WaitAndPulseAsync(url.Host, TimeSpan.FromSeconds(2));
             }
 
             IIndexer indexer = null;
@@ -94,7 +95,7 @@ namespace NzbDrone.Core.Download
             string downloadClientId;
             try
             {
-                downloadClientId = downloadClient.Download(remoteEpisode, indexer);
+                downloadClientId = await downloadClient.Download(remoteEpisode, indexer);
                 _downloadClientStatusService.RecordSuccess(downloadClient.Definition.Id);
                 _indexerStatusService.RecordSuccess(remoteEpisode.Release.IndexerId);
             }

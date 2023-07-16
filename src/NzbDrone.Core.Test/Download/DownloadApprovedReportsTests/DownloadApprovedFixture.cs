@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
@@ -59,7 +60,7 @@ namespace NzbDrone.Core.Test.Download.DownloadApprovedReportsTests
         }
 
         [Test]
-        public void should_download_report_if_episode_was_not_already_downloaded()
+        public async Task should_download_report_if_episode_was_not_already_downloaded()
         {
             var episodes = new List<Episode> { GetEpisode(1) };
             var remoteEpisode = GetRemoteEpisode(episodes, new QualityModel(Quality.HDTV720p));
@@ -67,12 +68,12 @@ namespace NzbDrone.Core.Test.Download.DownloadApprovedReportsTests
             var decisions = new List<DownloadDecision>();
             decisions.Add(new DownloadDecision(remoteEpisode));
 
-            Subject.ProcessDecisions(decisions);
+            await Subject.ProcessDecisions(decisions);
             Mocker.GetMock<IDownloadService>().Verify(v => v.DownloadReport(It.IsAny<RemoteEpisode>(), null), Times.Once());
         }
 
         [Test]
-        public void should_only_download_episode_once()
+        public async Task should_only_download_episode_once()
         {
             var episodes = new List<Episode> { GetEpisode(1) };
             var remoteEpisode = GetRemoteEpisode(episodes, new QualityModel(Quality.HDTV720p));
@@ -81,12 +82,12 @@ namespace NzbDrone.Core.Test.Download.DownloadApprovedReportsTests
             decisions.Add(new DownloadDecision(remoteEpisode));
             decisions.Add(new DownloadDecision(remoteEpisode));
 
-            Subject.ProcessDecisions(decisions);
+            await Subject.ProcessDecisions(decisions);
             Mocker.GetMock<IDownloadService>().Verify(v => v.DownloadReport(It.IsAny<RemoteEpisode>(), null), Times.Once());
         }
 
         [Test]
-        public void should_not_download_if_any_episode_was_already_downloaded()
+        public async Task should_not_download_if_any_episode_was_already_downloaded()
         {
             var remoteEpisode1 = GetRemoteEpisode(
                                                     new List<Episode> { GetEpisode(1) },
@@ -100,12 +101,12 @@ namespace NzbDrone.Core.Test.Download.DownloadApprovedReportsTests
             decisions.Add(new DownloadDecision(remoteEpisode1));
             decisions.Add(new DownloadDecision(remoteEpisode2));
 
-            Subject.ProcessDecisions(decisions);
+            await Subject.ProcessDecisions(decisions);
             Mocker.GetMock<IDownloadService>().Verify(v => v.DownloadReport(It.IsAny<RemoteEpisode>(), null), Times.Once());
         }
 
         [Test]
-        public void should_return_downloaded_reports()
+        public async Task should_return_downloaded_reports()
         {
             var episodes = new List<Episode> { GetEpisode(1) };
             var remoteEpisode = GetRemoteEpisode(episodes, new QualityModel(Quality.HDTV720p));
@@ -113,11 +114,13 @@ namespace NzbDrone.Core.Test.Download.DownloadApprovedReportsTests
             var decisions = new List<DownloadDecision>();
             decisions.Add(new DownloadDecision(remoteEpisode));
 
-            Subject.ProcessDecisions(decisions).Grabbed.Should().HaveCount(1);
+            var result = await Subject.ProcessDecisions(decisions);
+
+            result.Grabbed.Should().HaveCount(1);
         }
 
         [Test]
-        public void should_return_all_downloaded_reports()
+        public async Task should_return_all_downloaded_reports()
         {
             var remoteEpisode1 = GetRemoteEpisode(
                                                     new List<Episode> { GetEpisode(1) },
@@ -131,11 +134,13 @@ namespace NzbDrone.Core.Test.Download.DownloadApprovedReportsTests
             decisions.Add(new DownloadDecision(remoteEpisode1));
             decisions.Add(new DownloadDecision(remoteEpisode2));
 
-            Subject.ProcessDecisions(decisions).Grabbed.Should().HaveCount(2);
+            var result = await Subject.ProcessDecisions(decisions);
+
+            result.Grabbed.Should().HaveCount(2);
         }
 
         [Test]
-        public void should_only_return_downloaded_reports()
+        public async Task should_only_return_downloaded_reports()
         {
             var remoteEpisode1 = GetRemoteEpisode(
                                                     new List<Episode> { GetEpisode(1) },
@@ -154,11 +159,13 @@ namespace NzbDrone.Core.Test.Download.DownloadApprovedReportsTests
             decisions.Add(new DownloadDecision(remoteEpisode2));
             decisions.Add(new DownloadDecision(remoteEpisode3));
 
-            Subject.ProcessDecisions(decisions).Grabbed.Should().HaveCount(2);
+            var result = await Subject.ProcessDecisions(decisions);
+
+            result.Grabbed.Should().HaveCount(2);
         }
 
         [Test]
-        public void should_not_add_to_downloaded_list_when_download_fails()
+        public async Task should_not_add_to_downloaded_list_when_download_fails()
         {
             var episodes = new List<Episode> { GetEpisode(1) };
             var remoteEpisode = GetRemoteEpisode(episodes, new QualityModel(Quality.HDTV720p));
@@ -167,7 +174,11 @@ namespace NzbDrone.Core.Test.Download.DownloadApprovedReportsTests
             decisions.Add(new DownloadDecision(remoteEpisode));
 
             Mocker.GetMock<IDownloadService>().Setup(s => s.DownloadReport(It.IsAny<RemoteEpisode>(), null)).Throws(new Exception());
-            Subject.ProcessDecisions(decisions).Grabbed.Should().BeEmpty();
+
+            var result = await Subject.ProcessDecisions(decisions);
+
+            result.Grabbed.Should().BeEmpty();
+
             ExceptionVerification.ExpectedWarns(1);
         }
 
@@ -182,7 +193,7 @@ namespace NzbDrone.Core.Test.Download.DownloadApprovedReportsTests
         }
 
         [Test]
-        public void should_not_grab_if_pending()
+        public async Task should_not_grab_if_pending()
         {
             var episodes = new List<Episode> { GetEpisode(1) };
             var remoteEpisode = GetRemoteEpisode(episodes, new QualityModel(Quality.HDTV720p));
@@ -190,12 +201,12 @@ namespace NzbDrone.Core.Test.Download.DownloadApprovedReportsTests
             var decisions = new List<DownloadDecision>();
             decisions.Add(new DownloadDecision(remoteEpisode, new Rejection("Failure!", RejectionType.Temporary)));
 
-            Subject.ProcessDecisions(decisions);
+            await Subject.ProcessDecisions(decisions);
             Mocker.GetMock<IDownloadService>().Verify(v => v.DownloadReport(It.IsAny<RemoteEpisode>(), null), Times.Never());
         }
 
         [Test]
-        public void should_not_add_to_pending_if_episode_was_grabbed()
+        public async Task should_not_add_to_pending_if_episode_was_grabbed()
         {
             var episodes = new List<Episode> { GetEpisode(1) };
             var remoteEpisode = GetRemoteEpisode(episodes, new QualityModel(Quality.HDTV720p));
@@ -204,12 +215,12 @@ namespace NzbDrone.Core.Test.Download.DownloadApprovedReportsTests
             decisions.Add(new DownloadDecision(remoteEpisode));
             decisions.Add(new DownloadDecision(remoteEpisode, new Rejection("Failure!", RejectionType.Temporary)));
 
-            Subject.ProcessDecisions(decisions);
+            await Subject.ProcessDecisions(decisions);
             Mocker.GetMock<IPendingReleaseService>().Verify(v => v.AddMany(It.IsAny<List<Tuple<DownloadDecision, PendingReleaseReason>>>()), Times.Never());
         }
 
         [Test]
-        public void should_add_to_pending_even_if_already_added_to_pending()
+        public async Task should_add_to_pending_even_if_already_added_to_pending()
         {
             var episodes = new List<Episode> { GetEpisode(1) };
             var remoteEpisode = GetRemoteEpisode(episodes, new QualityModel(Quality.HDTV720p));
@@ -218,12 +229,12 @@ namespace NzbDrone.Core.Test.Download.DownloadApprovedReportsTests
             decisions.Add(new DownloadDecision(remoteEpisode, new Rejection("Failure!", RejectionType.Temporary)));
             decisions.Add(new DownloadDecision(remoteEpisode, new Rejection("Failure!", RejectionType.Temporary)));
 
-            Subject.ProcessDecisions(decisions);
+            await Subject.ProcessDecisions(decisions);
             Mocker.GetMock<IPendingReleaseService>().Verify(v => v.AddMany(It.IsAny<List<Tuple<DownloadDecision, PendingReleaseReason>>>()), Times.Once());
         }
 
         [Test]
-        public void should_add_to_failed_if_already_failed_for_that_protocol()
+        public async Task should_add_to_failed_if_already_failed_for_that_protocol()
         {
             var episodes = new List<Episode> { GetEpisode(1) };
             var remoteEpisode = GetRemoteEpisode(episodes, new QualityModel(Quality.HDTV720p));
@@ -235,12 +246,12 @@ namespace NzbDrone.Core.Test.Download.DownloadApprovedReportsTests
             Mocker.GetMock<IDownloadService>().Setup(s => s.DownloadReport(It.IsAny<RemoteEpisode>(), null))
                   .Throws(new DownloadClientUnavailableException("Download client failed"));
 
-            Subject.ProcessDecisions(decisions);
+            await Subject.ProcessDecisions(decisions);
             Mocker.GetMock<IDownloadService>().Verify(v => v.DownloadReport(It.IsAny<RemoteEpisode>(), null), Times.Once());
         }
 
         [Test]
-        public void should_not_add_to_failed_if_failed_for_a_different_protocol()
+        public async Task should_not_add_to_failed_if_failed_for_a_different_protocol()
         {
             var episodes = new List<Episode> { GetEpisode(1) };
             var remoteEpisode = GetRemoteEpisode(episodes, new QualityModel(Quality.HDTV720p), DownloadProtocol.Usenet);
@@ -253,13 +264,13 @@ namespace NzbDrone.Core.Test.Download.DownloadApprovedReportsTests
             Mocker.GetMock<IDownloadService>().Setup(s => s.DownloadReport(It.Is<RemoteEpisode>(r => r.Release.DownloadProtocol == DownloadProtocol.Usenet), null))
                   .Throws(new DownloadClientUnavailableException("Download client failed"));
 
-            Subject.ProcessDecisions(decisions);
+            await Subject.ProcessDecisions(decisions);
             Mocker.GetMock<IDownloadService>().Verify(v => v.DownloadReport(It.Is<RemoteEpisode>(r => r.Release.DownloadProtocol == DownloadProtocol.Usenet), null), Times.Once());
             Mocker.GetMock<IDownloadService>().Verify(v => v.DownloadReport(It.Is<RemoteEpisode>(r => r.Release.DownloadProtocol == DownloadProtocol.Torrent), null), Times.Once());
         }
 
         [Test]
-        public void should_add_to_rejected_if_release_unavailable_on_indexer()
+        public async Task should_add_to_rejected_if_release_unavailable_on_indexer()
         {
             var episodes = new List<Episode> { GetEpisode(1) };
             var remoteEpisode = GetRemoteEpisode(episodes, new QualityModel(Quality.HDTV720p));
@@ -271,7 +282,7 @@ namespace NzbDrone.Core.Test.Download.DownloadApprovedReportsTests
                   .Setup(s => s.DownloadReport(It.IsAny<RemoteEpisode>(), null))
                   .Throws(new ReleaseUnavailableException(remoteEpisode.Release, "That 404 Error is not just a Quirk"));
 
-            var result = Subject.ProcessDecisions(decisions);
+            var result = await Subject.ProcessDecisions(decisions);
 
             result.Grabbed.Should().BeEmpty();
             result.Rejected.Should().NotBeEmpty();

@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Net.Http;
+using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -26,15 +27,15 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentleechTests
         }
 
         [Test]
-        public void should_parse_recent_feed_from_Torrentleech()
+        public async Task should_parse_recent_feed_from_Torrentleech()
         {
             var recentFeed = ReadAllText(@"Files/Indexers/Torrentleech/Torrentleech.xml");
 
             Mocker.GetMock<IHttpClient>()
-                .Setup(o => o.Execute(It.Is<HttpRequest>(v => v.Method == HttpMethod.Get)))
-                .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), recentFeed));
+                .Setup(o => o.ExecuteAsync(It.Is<HttpRequest>(v => v.Method == HttpMethod.Get)))
+                .Returns<HttpRequest>(r => Task.FromResult(new HttpResponse(r, new HttpHeader(), recentFeed)));
 
-            var releases = Subject.FetchRecent();
+            var releases = await Subject.FetchRecent();
 
             releases.Should().HaveCount(5);
             releases.First().Should().BeOfType<TorrentInfo>();

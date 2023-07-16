@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.Pending;
@@ -20,7 +21,7 @@ namespace Sonarr.Api.V3.Queue
         }
 
         [HttpPost("grab/{id:int}")]
-        public object Grab(int id)
+        public async Task<object> Grab(int id)
         {
             var pendingRelease = _pendingReleaseService.FindPendingQueueItem(id);
 
@@ -29,14 +30,14 @@ namespace Sonarr.Api.V3.Queue
                 throw new NotFoundException();
             }
 
-            _downloadService.DownloadReport(pendingRelease.RemoteEpisode, null);
+            await _downloadService.DownloadReport(pendingRelease.RemoteEpisode, null);
 
             return new { };
         }
 
         [HttpPost("grab/bulk")]
         [Consumes("application/json")]
-        public object Grab([FromBody] QueueBulkResource resource)
+        public async Task<object> Grab([FromBody] QueueBulkResource resource)
         {
             foreach (var id in resource.Ids)
             {
@@ -47,7 +48,7 @@ namespace Sonarr.Api.V3.Queue
                     throw new NotFoundException();
                 }
 
-                _downloadService.DownloadReport(pendingRelease.RemoteEpisode, null);
+                await _downloadService.DownloadReport(pendingRelease.RemoteEpisode, null);
             }
 
             return new { };

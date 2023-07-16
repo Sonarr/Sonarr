@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Common.Instrumentation.Extensions;
 using NzbDrone.Core.DecisionEngine;
@@ -39,16 +40,16 @@ namespace NzbDrone.Core.Indexers
             _logger = logger;
         }
 
-        private ProcessedDecisions Sync()
+        private async Task<ProcessedDecisions> Sync()
         {
             _logger.ProgressInfo("Starting RSS Sync");
 
-            var rssReleases = _rssFetcherAndParser.Fetch();
+            var rssReleases = await _rssFetcherAndParser.Fetch();
             var pendingReleases = _pendingReleaseService.GetPending();
 
             var reports = rssReleases.Concat(pendingReleases).ToList();
             var decisions = _downloadDecisionMaker.GetRssDecision(reports);
-            var processed = _processDownloadDecisions.ProcessDecisions(decisions);
+            var processed = await _processDownloadDecisions.ProcessDecisions(decisions);
 
             var message = string.Format("RSS Sync Completed. Reports found: {0}, Reports grabbed: {1}", reports.Count, processed.Grabbed.Count);
 
@@ -64,7 +65,7 @@ namespace NzbDrone.Core.Indexers
 
         public void Execute(RssSyncCommand message)
         {
-            var processed = Sync();
+            var processed = Sync().GetAwaiter().GetResult();
             var grabbedOrPending = processed.Grabbed.Concat(processed.Pending).ToList();
 
             _eventAggregator.PublishEvent(new RssSyncCompleteEvent(processed));

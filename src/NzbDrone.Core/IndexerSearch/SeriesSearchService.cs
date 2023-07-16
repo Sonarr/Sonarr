@@ -49,8 +49,9 @@ namespace NzbDrone.Core.IndexerSearch
 
                 foreach (var episode in episodes)
                 {
-                    var decisions = _releaseSearchService.EpisodeSearch(episode, userInvokedSearch, false);
-                    downloadedCount += _processDownloadDecisions.ProcessDecisions(decisions).Grabbed.Count;
+                    var decisions = _releaseSearchService.EpisodeSearch(episode, userInvokedSearch, false).GetAwaiter().GetResult();
+                    var processDecisions = _processDownloadDecisions.ProcessDecisions(decisions).GetAwaiter().GetResult();
+                    downloadedCount += processDecisions.Grabbed.Count;
                 }
             }
             else
@@ -63,8 +64,9 @@ namespace NzbDrone.Core.IndexerSearch
                         continue;
                     }
 
-                    var decisions = _releaseSearchService.SeasonSearch(message.SeriesId, season.SeasonNumber, false, true, userInvokedSearch, false);
-                    downloadedCount += _processDownloadDecisions.ProcessDecisions(decisions).Grabbed.Count;
+                    var decisions = _releaseSearchService.SeasonSearch(message.SeriesId, season.SeasonNumber, false, true, userInvokedSearch, false).GetAwaiter().GetResult();
+                    var processDecisions = _processDownloadDecisions.ProcessDecisions(decisions).GetAwaiter().GetResult();
+                    downloadedCount += processDecisions.Grabbed.Count;
                 }
             }
 
