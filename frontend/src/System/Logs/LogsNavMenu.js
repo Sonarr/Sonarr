@@ -51,13 +51,13 @@ class LogsNavMenu extends Component {
           <MenuItem
             to={'/system/logs/files'}
           >
-            {translate('Log Files')}
+            {translate('LogFiles')}
           </MenuItem>
 
           <MenuItem
             to={'/system/logs/files/update'}
           >
-            {translate('Updater Log Files')}
+            {translate('UpdaterLogFiles')}
           </MenuItem>
         </MenuContent>
       </Menu>
