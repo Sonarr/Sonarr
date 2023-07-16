@@ -4,6 +4,7 @@ import Link from 'Components/Link/Link';
 import RelativeDateCellConnector from 'Components/Table/Cells/RelativeDateCellConnector';
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
 import TableRow from 'Components/Table/TableRow';
+import translate from 'Utilities/String/translate';
 import styles from './LogFilesTableRow.css';
 
 class LogFilesTableRow extends Component {
@@ -32,7 +33,7 @@ class LogFilesTableRow extends Component {
             target="_blank"
             noRouter={true}
           >
-            Download
+            {translate('Download')}
           </Link>
         </TableRowCell>
       </TableRow>

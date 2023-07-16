@@ -4,6 +4,7 @@ import FieldSet from 'Components/FieldSet';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
+import translate from 'Utilities/String/translate';
 import QueuedTaskRowConnector from './QueuedTaskRowConnector';
 
 const columns = [
@@ -14,27 +15,27 @@ const columns = [
   },
   {
     name: 'commandName',
-    label: 'Name',
+    label: translate('Name'),
     isVisible: true
   },
   {
     name: 'queued',
-    label: 'Queued',
+    label: translate('Queued'),
     isVisible: true
   },
   {
     name: 'started',
-    label: 'Started',
+    label: translate('Started'),
     isVisible: true
   },
   {
     name: 'ended',
-    label: 'Ended',
+    label: translate('Ended'),
     isVisible: true
   },
   {
     name: 'duration',
-    label: 'Duration',
+    label: translate('Duration'),
     isVisible: true
   },
   {
@@ -51,7 +52,7 @@ function QueuedTasks(props) {
   } = props;
 
   return (
-    <FieldSet legend="Queue">
+    <FieldSet legend={translate('Queue')}>
       {
         isFetching && !isPopulated &&
           <LoadingIndicator />

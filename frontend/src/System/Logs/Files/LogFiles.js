@@ -12,18 +12,19 @@ import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import { icons, kinds } from 'Helpers/Props';
+import translate from 'Utilities/String/translate';
 import LogsNavMenu from '../LogsNavMenu';
 import LogFilesTableRow from './LogFilesTableRow';
 
 const columns = [
   {
     name: 'filename',
-    label: 'Filename',
+    label: translate('Filename'),
     isVisible: true
   },
   {
     name: 'lastWriteTime',
-    label: 'Last Write Time',
+    label: translate('LastWriteTime'),
     isVisible: true
   },
   {
@@ -50,7 +51,7 @@ class LogFiles extends Component {
     } = this.props;
 
     return (
-      <PageContent title="Log Files">
+      <PageContent title={translate('LogFiles')}>
         <PageToolbar>
           <PageToolbarSection>
             <LogsNavMenu current={currentLogView} />
@@ -58,7 +59,7 @@ class LogFiles extends Component {
             <PageToolbarSeparator />
 
             <PageToolbarButton
-              label="Refresh"
+              label={translate('Refresh')}
               iconName={icons.REFRESH}
               spinningName={icons.REFRESH}
               isSpinning={isFetching}
@@ -66,7 +67,7 @@ class LogFiles extends Component {
             />
 
             <PageToolbarButton
-              label="Clear"
+              label={translate('Clear')}
               iconName={icons.CLEAR}
               isSpinning={deleteFilesExecuting}
               onPress={onDeleteFilesPress}
@@ -76,13 +77,13 @@ class LogFiles extends Component {
         <PageContentBody>
           <Alert>
             <div>
-              Log files are located in: {location}
+              {translate('LogFilesLocation')}: {location}
             </div>
 
             {
               currentLogView === 'Log Files' &&
                 <div>
-                  The log level defaults to 'Info' and can be changed in <Link to="/settings/general">General Settings</Link>
+                  {translate('TheLogLevelDefault')}  <Link to="/settings/general">{translate('GeneralSettings')}</Link>
                 </div>
             }
           </Alert>
@@ -118,7 +119,7 @@ class LogFiles extends Component {
           {
             !isFetching && !items.length &&
               <Alert kind={kinds.INFO}>
-                No log files
+                {translate('NoLogFiles')}
               </Alert>
           }
         </PageContentBody>

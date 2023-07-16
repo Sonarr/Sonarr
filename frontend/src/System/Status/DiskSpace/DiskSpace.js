@@ -9,22 +9,23 @@ import TableBody from 'Components/Table/TableBody';
 import TableRow from 'Components/Table/TableRow';
 import { kinds, sizes } from 'Helpers/Props';
 import formatBytes from 'Utilities/Number/formatBytes';
+import translate from 'Utilities/String/translate';
 import styles from './DiskSpace.css';
 
 const columns = [
   {
     name: 'path',
-    label: 'Location',
+    label: translate('Location'),
     isVisible: true
   },
   {
     name: 'freeSpace',
-    label: 'Free Space',
+    label: translate('FreeSpace'),
     isVisible: true
   },
   {
     name: 'totalSpace',
-    label: 'Total Space',
+    label: translate('TotalSpace'),
     isVisible: true
   },
   {
@@ -45,7 +46,7 @@ class DiskSpace extends Component {
     } = this.props;
 
     return (
-      <FieldSet legend="Disk Space">
+      <FieldSet legend={translate('DiskSpace')}>
         {
           isFetching &&
             <LoadingIndicator />

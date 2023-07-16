@@ -13,6 +13,7 @@ import TableBody from 'Components/Table/TableBody';
 import TableOptionsModalWrapper from 'Components/Table/TableOptions/TableOptionsModalWrapper';
 import TablePager from 'Components/Table/TablePager';
 import { align, icons, kinds } from 'Helpers/Props';
+import translate from 'Utilities/String/translate';
 import LogsTableRow from './LogsTableRow';
 
 function LogsTable(props) {
@@ -33,11 +34,11 @@ function LogsTable(props) {
   } = props;
 
   return (
-    <PageContent title="Logs">
+    <PageContent title={translate('Logs')}>
       <PageToolbar>
         <PageToolbarSection>
           <PageToolbarButton
-            label="Refresh"
+            label={translate('Refresh')}
             iconName={icons.REFRESH}
             spinningName={icons.REFRESH}
             isSpinning={isFetching}
@@ -45,7 +46,7 @@ function LogsTable(props) {
           />
 
           <PageToolbarButton
-            label="Clear"
+            label={translate('Clear')}
             iconName={icons.CLEAR}
             isSpinning={clearLogExecuting}
             onPress={onClearLogsPress}
@@ -59,7 +60,7 @@ function LogsTable(props) {
             canModifyColumns={false}
           >
             <PageToolbarButton
-              label="Options"
+              label={translate('Options')}
               iconName={icons.TABLE}
             />
           </TableOptionsModalWrapper>
@@ -83,7 +84,7 @@ function LogsTable(props) {
         {
           isPopulated && !error && !items.length &&
             <Alert kind={kinds.INFO}>
-              No events found
+              {translate('NoEventsFound')}
             </Alert>
         }
 
