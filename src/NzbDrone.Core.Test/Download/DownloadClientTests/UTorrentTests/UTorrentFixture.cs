@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -228,13 +229,13 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.UTorrentTests
         }
 
         [Test]
-        public void Download_should_return_unique_id()
+        public async Task Download_should_return_unique_id()
         {
             GivenSuccessfulDownload();
 
             var remoteEpisode = CreateRemoteEpisode();
 
-            var id = Subject.Download(remoteEpisode, CreateIndexer());
+            var id = await Subject.Download(remoteEpisode, CreateIndexer());
 
             id.Should().NotBeNullOrEmpty();
         }
@@ -252,14 +253,14 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.UTorrentTests
 
         // Proxy.GetTorrents does not return original url. So item has to be found via magnet url.
         [TestCase("magnet:?xt=urn:btih:ZPBPA2P6ROZPKRHK44D5OW6NHXU5Z6KR&tr=udp", "CBC2F069FE8BB2F544EAE707D75BCD3DE9DCF951")]
-        public void Download_should_get_hash_from_magnet_url(string magnetUrl, string expectedHash)
+        public async Task Download_should_get_hash_from_magnet_url(string magnetUrl, string expectedHash)
         {
             GivenSuccessfulDownload();
 
             var remoteEpisode = CreateRemoteEpisode();
             remoteEpisode.Release.DownloadUrl = magnetUrl;
 
-            var id = Subject.Download(remoteEpisode, CreateIndexer());
+            var id = await Subject.Download(remoteEpisode, CreateIndexer());
 
             id.Should().Be(expectedHash);
         }
@@ -350,27 +351,27 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.UTorrentTests
         }
 
         [Test]
-        public void Download_should_handle_http_redirect_to_magnet()
+        public async Task Download_should_handle_http_redirect_to_magnet()
         {
             GivenRedirectToMagnet();
             GivenSuccessfulDownload();
 
             var remoteEpisode = CreateRemoteEpisode();
 
-            var id = Subject.Download(remoteEpisode, CreateIndexer());
+            var id = await Subject.Download(remoteEpisode, CreateIndexer());
 
             id.Should().NotBeNullOrEmpty();
         }
 
         [Test]
-        public void Download_should_handle_http_redirect_to_torrent()
+        public async Task Download_should_handle_http_redirect_to_torrent()
         {
             GivenRedirectToTorrent();
             GivenSuccessfulDownload();
 
             var remoteEpisode = CreateRemoteEpisode();
 
-            var id = Subject.Download(remoteEpisode, CreateIndexer());
+            var id = await Subject.Download(remoteEpisode, CreateIndexer());
 
             id.Should().NotBeNullOrEmpty();
         }

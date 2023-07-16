@@ -1,4 +1,5 @@
 using System.Net;
+using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Http;
@@ -34,7 +35,7 @@ namespace NzbDrone.Core.Download
 
         protected abstract string AddFromNzbFile(RemoteEpisode remoteEpisode, string filename, byte[] fileContent);
 
-        public override string Download(RemoteEpisode remoteEpisode, IIndexer indexer)
+        public override async Task<string> Download(RemoteEpisode remoteEpisode, IIndexer indexer)
         {
             var url = remoteEpisode.Release.DownloadUrl;
             var filename =  FileNameBuilder.CleanFileName(remoteEpisode.Release.Title) + ".nzb";
@@ -45,7 +46,10 @@ namespace NzbDrone.Core.Download
             {
                 var request = indexer?.GetDownloadRequest(url) ?? new HttpRequest(url);
                 request.RateLimitKey = remoteEpisode?.Release?.IndexerId.ToString();
-                nzbData = _httpClient.Get(request).ResponseData;
+
+                var response = await _httpClient.GetAsync(request);
+
+                nzbData = response.ResponseData;
 
                 _logger.Debug("Downloaded nzb for episode '{0}' finished ({1} bytes from {2})", remoteEpisode.Release.Title, nzbData.Length, url);
             }

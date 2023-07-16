@@ -40,81 +40,81 @@ namespace NzbDrone.Core.Indexers
             _httpClient = httpClient;
         }
 
-        public override IList<ReleaseInfo> FetchRecent()
+        public override Task<IList<ReleaseInfo>> FetchRecent()
         {
             if (!SupportsRss)
             {
-                return Array.Empty<ReleaseInfo>();
+                return Task.FromResult<IList<ReleaseInfo>>(Array.Empty<ReleaseInfo>());
             }
 
             return FetchReleases(g => g.GetRecentRequests(), true);
         }
 
-        public override IList<ReleaseInfo> Fetch(SingleEpisodeSearchCriteria searchCriteria)
+        public override Task<IList<ReleaseInfo>> Fetch(SingleEpisodeSearchCriteria searchCriteria)
         {
             if (!SupportsSearch)
             {
-                return Array.Empty<ReleaseInfo>();
+                return Task.FromResult<IList<ReleaseInfo>>(Array.Empty<ReleaseInfo>());
             }
 
             return FetchReleases(g => g.GetSearchRequests(searchCriteria));
         }
 
-        public override IList<ReleaseInfo> Fetch(SeasonSearchCriteria searchCriteria)
+        public override Task<IList<ReleaseInfo>> Fetch(SeasonSearchCriteria searchCriteria)
         {
             if (!SupportsSearch)
             {
-                return Array.Empty<ReleaseInfo>();
+                return Task.FromResult<IList<ReleaseInfo>>(Array.Empty<ReleaseInfo>());
             }
 
             return FetchReleases(g => g.GetSearchRequests(searchCriteria));
         }
 
-        public override IList<ReleaseInfo> Fetch(DailyEpisodeSearchCriteria searchCriteria)
+        public override Task<IList<ReleaseInfo>> Fetch(DailyEpisodeSearchCriteria searchCriteria)
         {
             if (!SupportsSearch)
             {
-                return Array.Empty<ReleaseInfo>();
+                return Task.FromResult<IList<ReleaseInfo>>(Array.Empty<ReleaseInfo>());
             }
 
             return FetchReleases(g => g.GetSearchRequests(searchCriteria));
         }
 
-        public override IList<ReleaseInfo> Fetch(DailySeasonSearchCriteria searchCriteria)
+        public override Task<IList<ReleaseInfo>> Fetch(DailySeasonSearchCriteria searchCriteria)
         {
             if (!SupportsSearch)
             {
-                return Array.Empty<ReleaseInfo>();
+                return Task.FromResult<IList<ReleaseInfo>>(Array.Empty<ReleaseInfo>());
             }
 
             return FetchReleases(g => g.GetSearchRequests(searchCriteria));
         }
 
-        public override IList<ReleaseInfo> Fetch(AnimeEpisodeSearchCriteria searchCriteria)
+        public override Task<IList<ReleaseInfo>> Fetch(AnimeEpisodeSearchCriteria searchCriteria)
         {
             if (!SupportsSearch)
             {
-                return Array.Empty<ReleaseInfo>();
+                return Task.FromResult<IList<ReleaseInfo>>(Array.Empty<ReleaseInfo>());
             }
 
             return FetchReleases(g => g.GetSearchRequests(searchCriteria));
         }
 
-        public override IList<ReleaseInfo> Fetch(AnimeSeasonSearchCriteria searchCriteria)
+        public override Task<IList<ReleaseInfo>> Fetch(AnimeSeasonSearchCriteria searchCriteria)
         {
             if (!SupportsSearch)
             {
-                return Array.Empty<ReleaseInfo>();
+                return Task.FromResult<IList<ReleaseInfo>>(Array.Empty<ReleaseInfo>());
             }
 
             return FetchReleases(g => g.GetSearchRequests(searchCriteria));
         }
 
-        public override IList<ReleaseInfo> Fetch(SpecialEpisodeSearchCriteria searchCriteria)
+        public override Task<IList<ReleaseInfo>> Fetch(SpecialEpisodeSearchCriteria searchCriteria)
         {
             if (!SupportsSearch)
             {
-                return Array.Empty<ReleaseInfo>();
+                return Task.FromResult<IList<ReleaseInfo>>(Array.Empty<ReleaseInfo>());
             }
 
             return FetchReleases(g => g.GetSearchRequests(searchCriteria));
@@ -125,7 +125,7 @@ namespace NzbDrone.Core.Indexers
             return new HttpRequest(link);
         }
 
-        protected virtual IList<ReleaseInfo> FetchReleases(Func<IIndexerRequestGenerator, IndexerPageableRequestChain> pageableRequestChainSelector, bool isRecent = false)
+        protected virtual async Task<IList<ReleaseInfo>> FetchReleases(Func<IIndexerRequestGenerator, IndexerPageableRequestChain> pageableRequestChainSelector, bool isRecent = false)
         {
             var releases = new List<ReleaseInfo>();
             var url = string.Empty;
@@ -157,7 +157,7 @@ namespace NzbDrone.Core.Indexers
                         {
                             url = request.Url.FullUri;
 
-                            var page = FetchPage(request, parser);
+                            var page = await FetchPage(request, parser);
 
                             pagedReleases.AddRange(page);
 
@@ -321,9 +321,9 @@ namespace NzbDrone.Core.Indexers
             return PageSize != 0 && page.Count >= PageSize;
         }
 
-        protected virtual IList<ReleaseInfo> FetchPage(IndexerRequest request, IParseIndexerResponse parser)
+        protected virtual async Task<IList<ReleaseInfo>> FetchPage(IndexerRequest request, IParseIndexerResponse parser)
         {
-            var response = FetchIndexerResponse(request);
+            var response = await FetchIndexerResponse(request);
 
             try
             {
@@ -337,7 +337,7 @@ namespace NzbDrone.Core.Indexers
             }
         }
 
-        protected virtual IndexerResponse FetchIndexerResponse(IndexerRequest request)
+        protected virtual async Task<IndexerResponse> FetchIndexerResponse(IndexerRequest request)
         {
             _logger.Debug("Downloading Feed " + request.HttpRequest.ToString(false));
 
@@ -348,15 +348,17 @@ namespace NzbDrone.Core.Indexers
 
             request.HttpRequest.RateLimitKey = Definition.Id.ToString();
 
-            return new IndexerResponse(request, _httpClient.Execute(request.HttpRequest));
+            var response = await _httpClient.ExecuteAsync(request.HttpRequest);
+
+            return new IndexerResponse(request, response);
         }
 
-        protected override void Test(List<ValidationFailure> failures)
+        protected override async Task Test(List<ValidationFailure> failures)
         {
-            failures.AddIfNotNull(TestConnection());
+            failures.AddIfNotNull(await TestConnection());
         }
 
-        protected virtual ValidationFailure TestConnection()
+        protected virtual async Task<ValidationFailure> TestConnection()
         {
             try
             {
@@ -369,7 +371,7 @@ namespace NzbDrone.Core.Indexers
                     return new ValidationFailure(string.Empty, "No rss feed query available. This may be an issue with the indexer or your indexer category settings.");
                 }
 
-                var releases = FetchPage(firstRequest, parser);
+                var releases = await FetchPage(firstRequest, parser);
 
                 if (releases.Empty())
                 {

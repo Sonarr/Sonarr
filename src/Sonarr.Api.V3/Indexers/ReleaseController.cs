@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using NLog;
@@ -67,7 +68,7 @@ namespace Sonarr.Api.V3.Indexers
 
         [HttpPost]
         [Consumes("application/json")]
-        public object DownloadRelease(ReleaseResource release)
+        public async Task<object> DownloadRelease(ReleaseResource release)
         {
             var remoteEpisode = _remoteEpisodeCache.Find(GetCacheKey(release));
 
@@ -156,7 +157,7 @@ namespace Sonarr.Api.V3.Indexers
                     throw new NzbDroneClientException(HttpStatusCode.NotFound, "Unable to parse episodes in the release");
                 }
 
-                _downloadService.DownloadReport(remoteEpisode, release.DownloadClientId);
+                await _downloadService.DownloadReport(remoteEpisode, release.DownloadClientId);
             }
             catch (ReleaseDownloadException ex)
             {
@@ -169,26 +170,26 @@ namespace Sonarr.Api.V3.Indexers
 
         [HttpGet]
         [Produces("application/json")]
-        public List<ReleaseResource> GetReleases(int? seriesId, int? episodeId, int? seasonNumber)
+        public async Task<List<ReleaseResource>> GetReleases(int? seriesId, int? episodeId, int? seasonNumber)
         {
             if (episodeId.HasValue)
             {
-                return GetEpisodeReleases(episodeId.Value);
+                return await GetEpisodeReleases(episodeId.Value);
             }
 
             if (seriesId.HasValue && seasonNumber.HasValue)
             {
-                return GetSeasonReleases(seriesId.Value, seasonNumber.Value);
+                return await GetSeasonReleases(seriesId.Value, seasonNumber.Value);
             }
 
-            return GetRss();
+            return await GetRss();
         }
 
-        private List<ReleaseResource> GetEpisodeReleases(int episodeId)
+        private async Task<List<ReleaseResource>> GetEpisodeReleases(int episodeId)
         {
             try
             {
-                var decisions = _releaseSearchService.EpisodeSearch(episodeId, true, true);
+                var decisions = await _releaseSearchService.EpisodeSearch(episodeId, true, true);
                 var prioritizedDecisions = _prioritizeDownloadDecision.PrioritizeDecisions(decisions);
 
                 return MapDecisions(prioritizedDecisions);
@@ -204,11 +205,11 @@ namespace Sonarr.Api.V3.Indexers
             }
         }
 
-        private List<ReleaseResource> GetSeasonReleases(int seriesId, int seasonNumber)
+        private async Task<List<ReleaseResource>> GetSeasonReleases(int seriesId, int seasonNumber)
         {
             try
             {
-                var decisions = _releaseSearchService.SeasonSearch(seriesId, seasonNumber, false, false, true, true);
+                var decisions = await _releaseSearchService.SeasonSearch(seriesId, seasonNumber, false, false, true, true);
                 var prioritizedDecisions = _prioritizeDownloadDecision.PrioritizeDecisions(decisions);
 
                 return MapDecisions(prioritizedDecisions);
@@ -224,9 +225,9 @@ namespace Sonarr.Api.V3.Indexers
             }
         }
 
-        private List<ReleaseResource> GetRss()
+        private async Task<List<ReleaseResource>> GetRss()
         {
-            var reports = _rssFetcherAndParser.Fetch();
+            var reports = await _rssFetcherAndParser.Fetch();
             var decisions = _downloadDecisionMaker.GetRssDecision(reports);
             var prioritizedDecisions = _prioritizeDownloadDecision.PrioritizeDecisions(decisions);
 

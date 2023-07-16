@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using NLog;
-using NzbDrone.Common.TPL;
 using NzbDrone.Core.Parser.Model;
 namespace NzbDrone.Core.Indexers
 {
     public interface IFetchAndParseRss
     {
-        List<ReleaseInfo> Fetch();
+        Task<List<ReleaseInfo>> Fetch();
     }
 
     public class FetchAndParseRssService : IFetchAndParseRss
@@ -23,54 +22,42 @@ namespace NzbDrone.Core.Indexers
             _logger = logger;
         }
 
-        public List<ReleaseInfo> Fetch()
+        public async Task<List<ReleaseInfo>> Fetch()
         {
-            var result = new List<ReleaseInfo>();
-
             var indexers = _indexerFactory.RssEnabled();
 
             if (!indexers.Any())
             {
                 _logger.Warn("No available indexers. check your configuration.");
-                return result;
+
+                return new List<ReleaseInfo>();
             }
 
             _logger.Debug("Available indexers {0}", indexers.Count);
 
-            var taskList = new List<Task>();
-            var taskFactory = new TaskFactory(TaskCreationOptions.LongRunning, TaskContinuationOptions.None);
+            var tasks = indexers.Select(FetchIndexer);
 
-            foreach (var indexer in indexers)
-            {
-                var indexerLocal = indexer;
+            var batch = await Task.WhenAll(tasks);
 
-                var task = taskFactory.StartNew(() =>
-                     {
-                         try
-                         {
-                             var indexerReports = indexerLocal.FetchRecent();
-
-                             lock (result)
-                             {
-                                 _logger.Debug("Found {0} from {1}", indexerReports.Count, indexer.Name);
-
-                                 result.AddRange(indexerReports);
-                             }
-                         }
-                         catch (Exception e)
-                         {
-                             _logger.Error(e, "Error during RSS Sync");
-                         }
-                     }).LogExceptions();
-
-                taskList.Add(task);
-            }
-
-            Task.WaitAll(taskList.ToArray());
+            var result = batch.SelectMany(x => x).ToList();
 
             _logger.Debug("Found {0} reports", result.Count);
 
             return result;
+        }
+
+        private async Task<IList<ReleaseInfo>> FetchIndexer(IIndexer indexer)
+        {
+            try
+            {
+                return await indexer.FetchRecent();
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error during RSS Sync");
+            }
+
+            return Array.Empty<ReleaseInfo>();
         }
     }
 }

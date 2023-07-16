@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Common.Cache;
 using NzbDrone.Common.Extensions;
@@ -10,6 +11,8 @@ namespace NzbDrone.Common.TPL
     {
         void WaitAndPulse(string key, TimeSpan interval);
         void WaitAndPulse(string key, string subKey, TimeSpan interval);
+        Task WaitAndPulseAsync(string key, TimeSpan interval);
+        Task WaitAndPulseAsync(string key, string subKey, TimeSpan interval);
     }
 
     public class RateLimitService : IRateLimitService
@@ -28,7 +31,34 @@ namespace NzbDrone.Common.TPL
             WaitAndPulse(key, null, interval);
         }
 
+        public async Task WaitAndPulseAsync(string key, TimeSpan interval)
+        {
+            await WaitAndPulseAsync(key, null, interval);
+        }
+
         public void WaitAndPulse(string key, string subKey, TimeSpan interval)
+        {
+            var delay = GetDelay(key, subKey, interval);
+
+            if (delay.TotalSeconds > 0.0)
+            {
+                _logger.Trace("Rate Limit triggered, delaying '{0}' for {1:0.000} sec", key, delay.TotalSeconds);
+                System.Threading.Thread.Sleep(delay);
+            }
+        }
+
+        public async Task WaitAndPulseAsync(string key, string subKey, TimeSpan interval)
+        {
+            var delay = GetDelay(key, subKey, interval);
+
+            if (delay.TotalSeconds > 0.0)
+            {
+                _logger.Trace("Rate Limit triggered, delaying '{0}' for {1:0.000} sec", key, delay.TotalSeconds);
+                await Task.Delay(delay);
+            }
+        }
+
+        private TimeSpan GetDelay(string key, string subKey, TimeSpan interval)
         {
             var waitUntil = DateTime.UtcNow.Add(interval);
 
@@ -59,13 +89,7 @@ namespace NzbDrone.Common.TPL
 
             waitUntil -= interval;
 
-            var delay = waitUntil - DateTime.UtcNow;
-
-            if (delay.TotalSeconds > 0.0)
-            {
-                _logger.Trace("Rate Limit triggered, delaying '{0}' for {1:0.000} sec", key, delay.TotalSeconds);
-                System.Threading.Thread.Sleep(delay);
-            }
+            return waitUntil - DateTime.UtcNow;
         }
     }
 }

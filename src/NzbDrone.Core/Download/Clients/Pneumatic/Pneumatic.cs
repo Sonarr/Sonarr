@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common.Disk;
@@ -32,7 +33,7 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
 
         public override DownloadProtocol Protocol => DownloadProtocol.Usenet;
 
-        public override string Download(RemoteEpisode remoteEpisode, IIndexer indexer)
+        public override async Task<string> Download(RemoteEpisode remoteEpisode, IIndexer indexer)
         {
             var url = remoteEpisode.Release.DownloadUrl;
             var title = remoteEpisode.Release.Title;
@@ -48,7 +49,7 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
             var nzbFile = Path.Combine(Settings.NzbFolder, title + ".nzb");
 
             _logger.Debug("Downloading NZB from: {0} to: {1}", url, nzbFile);
-            _httpClient.DownloadFile(url, nzbFile);
+            await _httpClient.DownloadFileAsync(url, nzbFile);
 
             _logger.Debug("NZB Download succeeded, saved to: {0}", nzbFile);
 

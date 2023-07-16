@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -146,21 +147,21 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.FreeboxDownloadTests
         }
 
         [Test]
-        public void Download_with_DestinationDirectory_should_force_directory()
+        public async Task Download_with_DestinationDirectory_should_force_directory()
         {
             GivenDestinationDirectory();
             GivenSuccessfulDownload();
 
             var remoteEpisode = CreateRemoteEpisode();
 
-            Subject.Download(remoteEpisode, CreateIndexer());
+            await Subject.Download(remoteEpisode, CreateIndexer());
 
             Mocker.GetMock<IFreeboxDownloadProxy>()
                   .Verify(v => v.AddTaskFromUrl(It.IsAny<string>(), _encodedDestinationDirectory, It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<double?>(), It.IsAny<FreeboxDownloadSettings>()), Times.Once());
         }
 
         [Test]
-        public void Download_with_Category_should_force_directory()
+        public async Task Download_with_Category_should_force_directory()
         {
             GivenDownloadConfiguration();
             GivenCategory();
@@ -168,21 +169,21 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.FreeboxDownloadTests
 
             var remoteEpisode = CreateRemoteEpisode();
 
-            Subject.Download(remoteEpisode, CreateIndexer());
+            await Subject.Download(remoteEpisode, CreateIndexer());
 
             Mocker.GetMock<IFreeboxDownloadProxy>()
                   .Verify(v => v.AddTaskFromUrl(It.IsAny<string>(), _encodedDefaultDestinationAndCategory, It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<double?>(), It.IsAny<FreeboxDownloadSettings>()), Times.Once());
         }
 
         [Test]
-        public void Download_without_DestinationDirectory_and_Category_should_use_default()
+        public async Task Download_without_DestinationDirectory_and_Category_should_use_default()
         {
             GivenDownloadConfiguration();
             GivenSuccessfulDownload();
 
             var remoteEpisode = CreateRemoteEpisode();
 
-            Subject.Download(remoteEpisode, CreateIndexer());
+            await Subject.Download(remoteEpisode, CreateIndexer());
 
             Mocker.GetMock<IFreeboxDownloadProxy>()
                   .Verify(v => v.AddTaskFromUrl(It.IsAny<string>(), _encodedDefaultDestination, It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<double?>(), It.IsAny<FreeboxDownloadSettings>()), Times.Once());
@@ -190,7 +191,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.FreeboxDownloadTests
 
         [TestCase(false, false)]
         [TestCase(true, true)]
-        public void Download_should_pause_torrent_as_expected(bool addPausedSetting, bool toBePausedFlag)
+        public async Task Download_should_pause_torrent_as_expected(bool addPausedSetting, bool toBePausedFlag)
         {
             _settings.AddPaused = addPausedSetting;
 
@@ -199,7 +200,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.FreeboxDownloadTests
 
             var remoteEpisode = CreateRemoteEpisode();
 
-            Subject.Download(remoteEpisode, CreateIndexer());
+            await Subject.Download(remoteEpisode, CreateIndexer());
 
             Mocker.GetMock<IFreeboxDownloadProxy>()
                   .Verify(v => v.AddTaskFromUrl(It.IsAny<string>(), It.IsAny<string>(), toBePausedFlag, It.IsAny<bool>(), It.IsAny<double?>(), It.IsAny<FreeboxDownloadSettings>()), Times.Once());
@@ -213,7 +214,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.FreeboxDownloadTests
         [TestCase(15, (int)FreeboxDownloadPriority.Last, (int)FreeboxDownloadPriority.First, false)]
         [TestCase(15, (int)FreeboxDownloadPriority.First, (int)FreeboxDownloadPriority.Last, true)]
         [TestCase(15, (int)FreeboxDownloadPriority.Last, (int)FreeboxDownloadPriority.Last, false)]
-        public void Download_should_queue_torrent_first_as_expected(int ageDay, int olderPriority, int recentPriority, bool toBeQueuedFirstFlag)
+        public async Task Download_should_queue_torrent_first_as_expected(int ageDay, int olderPriority, int recentPriority, bool toBeQueuedFirstFlag)
         {
             _settings.OlderPriority = olderPriority;
             _settings.RecentPriority = recentPriority;
@@ -230,7 +231,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.FreeboxDownloadTests
 
             remoteEpisode.Episodes.Add(episode);
 
-            Subject.Download(remoteEpisode, CreateIndexer());
+            await Subject.Download(remoteEpisode, CreateIndexer());
 
             Mocker.GetMock<IFreeboxDownloadProxy>()
                   .Verify(v => v.AddTaskFromUrl(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), toBeQueuedFirstFlag, It.IsAny<double?>(), It.IsAny<FreeboxDownloadSettings>()), Times.Once());
@@ -238,7 +239,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.FreeboxDownloadTests
 
         [TestCase(0, 0)]
         [TestCase(1.5, 150)]
-        public void Download_should_define_seed_ratio_as_expected(double? providerSeedRatio, double? expectedSeedRatio)
+        public async Task Download_should_define_seed_ratio_as_expected(double? providerSeedRatio, double? expectedSeedRatio)
         {
             GivenDownloadConfiguration();
             GivenSuccessfulDownload();
@@ -248,7 +249,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.FreeboxDownloadTests
             remoteEpisode.SeedConfiguration = new TorrentSeedConfiguration();
             remoteEpisode.SeedConfiguration.Ratio = providerSeedRatio;
 
-            Subject.Download(remoteEpisode, CreateIndexer());
+            await Subject.Download(remoteEpisode, CreateIndexer());
 
             Mocker.GetMock<IFreeboxDownloadProxy>()
                   .Verify(v => v.AddTaskFromUrl(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), expectedSeedRatio, It.IsAny<FreeboxDownloadSettings>()), Times.Once());
