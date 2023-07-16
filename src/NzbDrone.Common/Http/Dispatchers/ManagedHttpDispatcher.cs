@@ -43,7 +43,7 @@ namespace NzbDrone.Common.Http.Dispatchers
             _credentialCache = cacheManager.GetCache<CredentialCache>(typeof(ManagedHttpDispatcher), "credentialcache");
         }
 
-        public HttpResponse GetResponse(HttpRequest request, CookieContainer cookies)
+        public async Task<HttpResponse> GetResponseAsync(HttpRequest request, CookieContainer cookies)
         {
             var requestMessage = new HttpRequestMessage(request.Method, (Uri)request.Url);
             requestMessage.Headers.UserAgent.ParseAdd(_userAgentBuilder.GetUserAgent(request.UseSimplifiedUserAgent));
@@ -98,7 +98,7 @@ namespace NzbDrone.Common.Http.Dispatchers
 
             var httpClient = GetClient(request.Url);
 
-            using var responseMessage = httpClient.Send(requestMessage, HttpCompletionOption.ResponseHeadersRead, cts.Token);
+            using var responseMessage = await httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cts.Token);
             {
                 byte[] data = null;
 
@@ -106,7 +106,7 @@ namespace NzbDrone.Common.Http.Dispatchers
                 {
                     if (request.ResponseStream != null && responseMessage.StatusCode == HttpStatusCode.OK)
                     {
-                        responseMessage.Content.CopyTo(request.ResponseStream, null, cts.Token);
+                        await responseMessage.Content.CopyToAsync(request.ResponseStream, null, cts.Token);
                     }
                     else
                     {
