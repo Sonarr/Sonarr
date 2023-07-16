@@ -138,7 +138,9 @@ class BackupRow extends Component {
           isOpen={isConfirmDeleteModalOpen}
           kind={kinds.DANGER}
           title={translate('DeleteBackup')}
-          message={translate('DeleteBackupMessageText', [name])}
+          message={translate('DeleteBackupMessageText', {
+            backupName: name
+          })}
           confirmLabel={translate('Delete')}
           onConfirm={this.onConfirmDeletePress}
           onCancel={this.onConfirmDeleteModalClose}
