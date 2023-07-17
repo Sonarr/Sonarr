@@ -43,7 +43,7 @@ namespace Sonarr.Api.V3.ManualImport
             }
 
             var customFormats = model.CustomFormats;
-            var customFormatScore = model.Series?.QualityProfile.Value.CalculateCustomFormatScore(customFormats) ?? 0;
+            var customFormatScore = model.Series?.QualityProfile?.Value?.CalculateCustomFormatScore(customFormats) ?? 0;
 
             return new ManualImportResource
             {
