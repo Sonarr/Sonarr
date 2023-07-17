@@ -55,7 +55,7 @@
   "Daily": "Daily",
   "Delete": "Delete",
   "DeleteBackup": "Delete Backup",
-  "DeleteBackupMessageText": "Are you sure you want to delete the backup '{backupName}'?",
+  "DeleteBackupMessageText": "Are you sure you want to delete the backup '{name}'?",
   "DeleteCondition": "Delete Condition",
   "DeleteConditionMessageText": "Are you sure you want to delete the condition '{0}'?",
   "DeleteCustomFormat": "Delete Custom Format",
@@ -302,7 +302,7 @@
   "Version": "Version",
   "Wanted": "Wanted",
   "Wiki": "Wiki",
-  "WouldYouLikeToRestoreBackup": "Would you like to restore the backup '{backupName}'?",
+  "WouldYouLikeToRestoreBackup": "Would you like to restore the backup '{name}'?",
   "Yes": "Yes",
   "YesCancel": "Yes, Cancel"
 }
