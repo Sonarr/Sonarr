@@ -9,5 +9,6 @@ namespace NzbDrone.Core.MetadataSource
         List<Series> SearchForNewSeriesByImdbId(string imdbId);
         List<Series> SearchForNewSeriesByAniListId(int aniListId);
         List<Series> SearchForNewSeriesByTmdbId(int tmdbId);
+        List<Series> SearchForNewSeriesByMyAnimeListId(int malId);
     }
 }
