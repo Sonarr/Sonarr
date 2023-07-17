@@ -12,7 +12,7 @@ namespace NzbDrone.Core.ImportLists.MyAnimeList
     {
         public override string Name => "MyAnimeList";
         public override ImportListType ListType => ImportListType.Other;
-        public override TimeSpan MinRefreshInterval => throw new NotImplementedException();
+        public override TimeSpan MinRefreshInterval => TimeSpan.FromSeconds(10);  // change this later
 
         // This constructor the first thing that is called when sonarr creates a button
         public MalImport(IHttpClient httpClient, IImportListStatusService importListStatusService, IConfigService configService, IParsingService parsingService, Logger logger)
