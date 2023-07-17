@@ -131,7 +131,7 @@ const COLUMNS = [
       name: icons.INTERACTIVE,
       title: 'Custom Format',
     }),
-    isSortable: false,
+    isSortable: true,
     isVisible: true,
   },
   {
