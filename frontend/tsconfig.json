@@ -1,11 +1,11 @@
 {
   "compilerOptions": {
-      "target": "es6",
+      "target": "esnext",
       "allowJs": true,
       "checkJs": false,
       "baseUrl": "src",
       "jsx": "react",
-      "module": "commonjs",
+      "module": "esnext",
       "moduleResolution": "node",
       "allowSyntheticDefaultImports": true,
       "forceConsistentCasingInFileNames": true,

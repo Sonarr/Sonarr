@@ -37,7 +37,7 @@ namespace Sonarr.Http.Frontend.Mappers
             }
 
             return resourceUrl.StartsWith("/content") ||
-                   (resourceUrl.EndsWith(".js") && !resourceUrl.EndsWith("initialize.js")) ||
+                   resourceUrl.EndsWith(".js") ||
                    resourceUrl.EndsWith(".map") ||
                    resourceUrl.EndsWith(".css") ||
                    (resourceUrl.EndsWith(".ico") && !resourceUrl.Equals("/favicon.ico")) ||

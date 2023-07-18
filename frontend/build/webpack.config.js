@@ -36,7 +36,7 @@ module.exports = (env) => {
     },
 
     entry: {
-      index: 'index.js'
+      index: 'index.ts'
     },
 
     resolve: {
@@ -67,17 +67,13 @@ module.exports = (env) => {
     output: {
       path: distFolder,
       publicPath: '/',
-      filename: '[name].js',
-      sourceMapFilename: '[file].map'
+      filename: '[name].[contenthash].js',
+      sourceMapFilename: '[file]-[contenthash].map'
     },
 
     optimization: {
       moduleIds: 'deterministic',
-      chunkIds: 'named',
-      splitChunks: {
-        chunks: 'initial',
-        name: 'vendors'
-      }
+      chunkIds: 'named'
     },
 
     performance: {
@@ -101,7 +97,8 @@ module.exports = (env) => {
       new HtmlWebpackPlugin({
         template: 'frontend/src/index.ejs',
         filename: 'index.html',
-        publicPath: '/'
+        publicPath: '/',
+        inject: false
       }),
 
       new FileManagerPlugin({
