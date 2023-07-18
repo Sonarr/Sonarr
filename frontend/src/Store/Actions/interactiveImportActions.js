@@ -47,6 +47,10 @@ export const defaultState = {
 
     quality: function(item, direction) {
       return item.qualityWeight || 0;
+    },
+
+    customFormats: function(item, direction) {
+      return item.customFormatScore;
     }
   }
 };
