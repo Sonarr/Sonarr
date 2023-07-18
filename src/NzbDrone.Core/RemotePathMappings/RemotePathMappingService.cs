@@ -127,7 +127,7 @@ namespace NzbDrone.Core.RemotePathMappings
                 return remotePath;
             }
 
-            _logger.Trace("Evaluating remote path remote mappings for match to host [{0}] reporting remote path [{1}]", host, remotePath.FullPath);
+            _logger.Trace("Evaluating remote path remote mappings for match to host [{0}] and remote path [{1}]", host, remotePath.FullPath);
             foreach (var mapping in All())
             {
                 _logger.Trace("Checking configured remote path mapping: {0} - {1}", mapping.Host, mapping.RemotePath);
@@ -150,7 +150,7 @@ namespace NzbDrone.Core.RemotePathMappings
                 return localPath;
             }
 
-            _logger.Trace("Evaluating remote path local mappings for match to host [{0}] with local [{1}]", host, localPath.FullPath);
+            _logger.Trace("Evaluating remote path local mappings for match to host [{0}] and local path [{1}]", host, localPath.FullPath);
             foreach (var mapping in All())
             {
                 _logger.Trace("Checking configured remote path mapping {0} - {1}", mapping.Host, mapping.RemotePath);
