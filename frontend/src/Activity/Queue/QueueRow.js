@@ -8,12 +8,13 @@ import RelativeDateCellConnector from 'Components/Table/Cells/RelativeDateCellCo
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
 import TableSelectCell from 'Components/Table/Cells/TableSelectCell';
 import TableRow from 'Components/Table/TableRow';
+import Tooltip from 'Components/Tooltip/Tooltip';
 import EpisodeFormats from 'Episode/EpisodeFormats';
 import EpisodeLanguages from 'Episode/EpisodeLanguages';
 import EpisodeQuality from 'Episode/EpisodeQuality';
 import EpisodeTitleLink from 'Episode/EpisodeTitleLink';
 import SeasonEpisodeNumber from 'Episode/SeasonEpisodeNumber';
-import { icons, kinds } from 'Helpers/Props';
+import { icons, kinds, tooltipPositions } from 'Helpers/Props';
 import InteractiveImportModal from 'InteractiveImport/InteractiveImportModal';
 import SeriesTitleLink from 'Series/SeriesTitleLink';
 import formatBytes from 'Utilities/Number/formatBytes';
@@ -267,7 +268,14 @@ class QueueRow extends Component {
                   key={name}
                   className={styles.customFormatScore}
                 >
-                  {formatPreferredWordScore(customFormatScore)}
+                  <Tooltip
+                    anchor={formatPreferredWordScore(
+                      customFormatScore,
+                      customFormats.length
+                    )}
+                    tooltip={<EpisodeFormats formats={customFormats} />}
+                    position={tooltipPositions.BOTTOM}
+                  />
                 </TableRowCell>
               );
             }
@@ -450,6 +458,7 @@ QueueRow.propTypes = {
 };
 
 QueueRow.defaultProps = {
+  customFormats: [],
   isGrabbing: false,
   isRemoving: false
 };

@@ -24,6 +24,7 @@ namespace Sonarr.Api.V3.EpisodeFiles
         public List<Language> Languages { get; set; }
         public QualityModel Quality { get; set; }
         public List<CustomFormatResource> CustomFormats { get; set; }
+        public int CustomFormatScore { get; set; }
         public MediaInfoResource MediaInfo { get; set; }
 
         public bool QualityCutoffNotMet { get; set; }
@@ -67,6 +68,8 @@ namespace Sonarr.Api.V3.EpisodeFiles
             }
 
             model.Series = series;
+            var customFormats = formatCalculationService?.ParseCustomFormat(model, model.Series);
+            var customFormatScore = series?.QualityProfile?.Value?.CalculateCustomFormatScore(customFormats) ?? 0;
 
             return new EpisodeFileResource
             {
@@ -84,7 +87,8 @@ namespace Sonarr.Api.V3.EpisodeFiles
                 Quality = model.Quality,
                 MediaInfo = model.MediaInfo.ToResource(model.SceneName),
                 QualityCutoffNotMet = upgradableSpecification.QualityCutoffNotMet(series.QualityProfile.Value, model.Quality),
-                CustomFormats = formatCalculationService.ParseCustomFormat(model).ToResource(false)
+                CustomFormats = customFormats.ToResource(false),
+                CustomFormatScore = customFormatScore
             };
         }
     }

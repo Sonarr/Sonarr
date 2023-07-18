@@ -7,13 +7,13 @@ import PageConnector from 'Components/Page/PageConnector';
 import ApplyTheme from './ApplyTheme';
 import AppRoutes from './AppRoutes';
 
-function App({ store, history }) {
+function App({ store, history, hasTranslationsError }) {
   return (
     <DocumentTitle title={window.Sonarr.instanceName}>
       <Provider store={store}>
         <ConnectedRouter history={history}>
           <ApplyTheme>
-            <PageConnector>
+            <PageConnector hasTranslationsError={hasTranslationsError}>
               <AppRoutes app={App} />
             </PageConnector>
           </ApplyTheme>
@@ -25,7 +25,8 @@ function App({ store, history }) {
 
 App.propTypes = {
   store: PropTypes.object.isRequired,
-  history: PropTypes.object.isRequired
+  history: PropTypes.object.isRequired,
+  hasTranslationsError: PropTypes.bool.isRequired
 };
 
 export default App;
