@@ -103,7 +103,7 @@ function TagsModalContent(props: TagsModalContentProps) {
               value={applyTags}
               values={applyTagsOptions}
               helpTexts={[
-                translate('ApplyTagsHelpTextHowToApply'),
+                translate('ApplyTagsHelpTextHowToApplyDownloadClients'),
                 translate('ApplyTagsHelpTextAdd'),
                 translate('ApplyTagsHelpTextRemove'),
                 translate('ApplyTagsHelpTextReplace'),
