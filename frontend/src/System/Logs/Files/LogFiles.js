@@ -77,7 +77,9 @@ class LogFiles extends Component {
         <PageContentBody>
           <Alert>
             <div>
-              {translate('LogFilesLocation')}: {location}
+              {translate('LogFilesLocation', {
+                location
+              })}
             </div>
 
             {
