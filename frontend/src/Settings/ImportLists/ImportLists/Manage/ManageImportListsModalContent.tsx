@@ -36,37 +36,49 @@ type OnSelectedChangeCallback = React.ComponentProps<
 const COLUMNS = [
   {
     name: 'name',
-    label: translate('Name'),
+    get label() {
+      return translate('Name');
+    },
     isSortable: true,
     isVisible: true,
   },
   {
     name: 'implementation',
-    label: translate('Implementation'),
+    get label() {
+      return translate('Implementation');
+    },
     isSortable: true,
     isVisible: true,
   },
   {
     name: 'qualityProfileId',
-    label: translate('QualityProfile'),
+    get label() {
+      return translate('QualityProfile');
+    },
     isSortable: true,
     isVisible: true,
   },
   {
     name: 'rootFolderPath',
-    label: translate('RootFolder'),
+    get label() {
+      return translate('RootFolder');
+    },
     isSortable: true,
     isVisible: true,
   },
   {
     name: 'enableAutomaticAdd',
-    label: translate('AutoAdd'),
+    get label() {
+      return translate('AutoAdd');
+    },
     isSortable: true,
     isVisible: true,
   },
   {
     name: 'tags',
-    label: translate('Tags'),
+    get label() {
+      return translate('Tags');
+    },
     isSortable: true,
     isVisible: true,
   },
