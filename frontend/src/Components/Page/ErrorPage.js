@@ -7,6 +7,7 @@ function ErrorPage(props) {
   const {
     version,
     isLocalStorageSupported,
+    translationsError,
     seriesError,
     customFiltersError,
     tagsError,
@@ -19,6 +20,8 @@ function ErrorPage(props) {
 
   if (!isLocalStorageSupported) {
     errorMessage = 'Local Storage is not supported or disabled. A plugin or private browsing may have disabled it.';
+  } else if (translationsError) {
+    errorMessage = getErrorMessage(translationsError, 'Failed to load translations from API');
   } else if (seriesError) {
     errorMessage = getErrorMessage(seriesError, 'Failed to load series from API');
   } else if (customFiltersError) {
@@ -49,6 +52,7 @@ function ErrorPage(props) {
 ErrorPage.propTypes = {
   version: PropTypes.string.isRequired,
   isLocalStorageSupported: PropTypes.bool.isRequired,
+  translationsError: PropTypes.object,
   seriesError: PropTypes.object,
   customFiltersError: PropTypes.object,
   tagsError: PropTypes.object,

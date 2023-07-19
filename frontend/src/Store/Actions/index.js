@@ -14,6 +14,7 @@ import * as importSeries from './importSeriesActions';
 import * as interactiveImportActions from './interactiveImportActions';
 import * as oAuth from './oAuthActions';
 import * as organizePreview from './organizePreviewActions';
+import * as parse from './parseActions';
 import * as paths from './pathActions';
 import * as providerOptions from './providerOptionActions';
 import * as queue from './queueActions';
@@ -44,6 +45,7 @@ export default [
   interactiveImportActions,
   oAuth,
   organizePreview,
+  parse,
   paths,
   providerOptions,
   queue,

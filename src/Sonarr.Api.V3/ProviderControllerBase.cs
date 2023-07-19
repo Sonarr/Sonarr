@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
-using Sonarr.Api.V3.Series;
 using Sonarr.Http.REST;
 using Sonarr.Http.REST.Attributes;
 
@@ -104,12 +103,19 @@ namespace Sonarr.Api.V3
         [HttpPut("bulk")]
         [Consumes("application/json")]
         [Produces("application/json")]
-        public ActionResult<TProviderResource> UpdateProvider([FromBody] TBulkProviderResource providerResource)
+        public virtual ActionResult<TProviderResource> UpdateProvider([FromBody] TBulkProviderResource providerResource)
         {
+            if (!providerResource.Ids.Any())
+            {
+                throw new BadRequestException("ids must be provided");
+            }
+
             var definitionsToUpdate = _providerFactory.Get(providerResource.Ids).ToList();
 
             foreach (var definition in definitionsToUpdate)
             {
+                _providerFactory.SetProviderCharacteristics(definition);
+
                 if (providerResource.Tags != null)
                 {
                     var newTags = providerResource.Tags;
@@ -158,7 +164,7 @@ namespace Sonarr.Api.V3
 
         [HttpDelete("bulk")]
         [Consumes("application/json")]
-        public object DeleteProviders([FromBody] TBulkProviderResource resource)
+        public virtual object DeleteProviders([FromBody] TBulkProviderResource resource)
         {
             _providerFactory.Delete(resource.Ids);
 

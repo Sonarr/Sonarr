@@ -27,9 +27,25 @@ interface ManageIndexersEditModalContentProps {
 const NO_CHANGE = 'noChange';
 
 const enableOptions = [
-  { key: NO_CHANGE, value: 'No Change', disabled: true },
-  { key: 'enabled', value: 'Enabled' },
-  { key: 'disabled', value: 'Disabled' },
+  {
+    key: NO_CHANGE,
+    get value() {
+      return translate('NoChange');
+    },
+    disabled: true,
+  },
+  {
+    key: 'enabled',
+    get value() {
+      return translate('Enabled');
+    },
+  },
+  {
+    key: 'disabled',
+    get value() {
+      return translate('Disabled');
+    },
+  },
 ];
 
 function ManageIndexersEditModalContent(
@@ -97,7 +113,7 @@ function ManageIndexersEditModalContent(
           setPriority(value);
           break;
         default:
-          console.warn('EditIndexersModalContent Unknown Input');
+          console.warn(`EditIndexersModalContent Unknown Input: '${name}'`);
       }
     },
     []
@@ -111,7 +127,7 @@ function ManageIndexersEditModalContent(
 
       <ModalBody>
         <FormGroup>
-          <FormLabel>{translate('EnableRss')}</FormLabel>
+          <FormLabel>{translate('EnableRSS')}</FormLabel>
 
           <FormInputGroup
             type={inputTypes.SELECT}
@@ -162,13 +178,15 @@ function ManageIndexersEditModalContent(
 
       <ModalFooter className={styles.modalFooter}>
         <div className={styles.selected}>
-          {translate('{count} indexers selected', { count: selectedCount })}
+          {translate('CountIndexersSelected', {
+            count: selectedCount,
+          })}
         </div>
 
         <div>
           <Button onPress={onModalClose}>{translate('Cancel')}</Button>
 
-          <Button onPress={save}>{translate('Apply Changes')}</Button>
+          <Button onPress={save}>{translate('ApplyChanges')}</Button>
         </div>
       </ModalFooter>
     </ModalContent>

@@ -101,6 +101,14 @@ namespace NzbDrone.Core.Notifications.Discord
                         discordField.Name = "Links";
                         discordField.Value = GetLinksString(series);
                         break;
+                    case DiscordGrabFieldType.CustomFormats:
+                        discordField.Name = "Custom Formats";
+                        discordField.Value = string.Join("|", message.Episode.CustomFormats);
+                        break;
+                    case DiscordGrabFieldType.CustomFormatScore:
+                        discordField.Name = "Custom Format Score";
+                        discordField.Value = message.Episode.CustomFormatScore.ToString();
+                        break;
                     case DiscordGrabFieldType.Indexer:
                         discordField.Name = "Indexer";
                         discordField.Value = message.Episode.Release.Indexer;

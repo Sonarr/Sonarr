@@ -1,0 +1,8 @@
+.container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.column {
+  flex: 0 0 50%;
+}

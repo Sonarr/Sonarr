@@ -27,9 +27,25 @@ interface ManageDownloadClientsEditModalContentProps {
 const NO_CHANGE = 'noChange';
 
 const enableOptions = [
-  { key: NO_CHANGE, value: 'No Change', disabled: true },
-  { key: 'enabled', value: 'Enabled' },
-  { key: 'disabled', value: 'Disabled' },
+  {
+    key: NO_CHANGE,
+    get value() {
+      return translate('NoChange');
+    },
+    disabled: true,
+  },
+  {
+    key: 'enabled',
+    get value() {
+      return translate('Enabled');
+    },
+  },
+  {
+    key: 'disabled',
+    get value() {
+      return translate('Disabled');
+    },
+  },
 ];
 
 function ManageDownloadClientsEditModalContent(
@@ -97,7 +113,9 @@ function ManageDownloadClientsEditModalContent(
           setRemoveFailedDownloads(value);
           break;
         default:
-          console.warn('EditDownloadClientsModalContent Unknown Input');
+          console.warn(
+            `EditDownloadClientsModalContent Unknown Input: '${name}'`
+          );
       }
     },
     []
@@ -162,7 +180,7 @@ function ManageDownloadClientsEditModalContent(
 
       <ModalFooter className={styles.modalFooter}>
         <div className={styles.selected}>
-          {translate('{count} download clients selected', {
+          {translate('CountDownloadClientsSelected', {
             count: selectedCount,
           })}
         </div>
@@ -170,7 +188,7 @@ function ManageDownloadClientsEditModalContent(
         <div>
           <Button onPress={onModalClose}>{translate('Cancel')}</Button>
 
-          <Button onPress={save}>{translate('Apply Changes')}</Button>
+          <Button onPress={save}>{translate('ApplyChanges')}</Button>
         </div>
       </ModalFooter>
     </ModalContent>

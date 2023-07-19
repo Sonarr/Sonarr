@@ -248,6 +248,8 @@ class SeriesDetails extends Component {
       expandIcon = icons.EXPAND;
     }
 
+    const fanartUrl = getFanartUrl(images);
+
     return (
       <PageContent title={title}>
         <PageToolbar>
@@ -327,9 +329,11 @@ class SeriesDetails extends Component {
           <div className={styles.header}>
             <div
               className={styles.backdrop}
-              style={{
-                backgroundImage: `url(${getFanartUrl(images)})`
-              }}
+              style={
+                fanartUrl ?
+                  { backgroundImage: `url(${fanartUrl})` } :
+                  null
+              }
             >
               <div className={styles.backdropOverlay} />
             </div>

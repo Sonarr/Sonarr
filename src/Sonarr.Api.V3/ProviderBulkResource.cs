@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using NzbDrone.Core.ThingiProvider;
-using Sonarr.Api.V3.Series;
 
 namespace Sonarr.Api.V3
 {
@@ -9,6 +8,11 @@ namespace Sonarr.Api.V3
         public List<int> Ids { get; set; }
         public List<int> Tags { get; set; }
         public ApplyTags ApplyTags { get; set; }
+
+        public ProviderBulkResource()
+        {
+            Ids = new List<int>();
+        }
     }
 
     public class ProviderBulkResourceMapper<TProviderBulkResource, TProviderDefinition>

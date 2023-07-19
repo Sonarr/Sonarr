@@ -11,6 +11,7 @@ on:
       - ".github/workflows/api_docs.yml"
       - "docs.sh"
       - "src/Sonarr.Api.*/**"
+      - "src/Sonarr.Http/**"
       - "src/**/*.csproj"
       - "src/*"
 

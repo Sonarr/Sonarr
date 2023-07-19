@@ -6,6 +6,7 @@ import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
 import { icons } from 'Helpers/Props';
 import SettingsToolbarConnector from 'Settings/SettingsToolbarConnector';
+import translate from 'Utilities/String/translate';
 import ImportListsExclusionsConnector from './ImportListExclusions/ImportListExclusionsConnector';
 import ImportListsConnector from './ImportLists/ImportListsConnector';
 import ManageImportListsModal from './ImportLists/Manage/ManageImportListsModal';
@@ -81,7 +82,7 @@ class ImportListSettings extends Component {
               />
 
               <PageToolbarButton
-                label="Manage Lists"
+                label={translate('ManageLists')}
                 iconName={icons.MANAGE}
                 onPress={this.onManageImportListsPress}
               />

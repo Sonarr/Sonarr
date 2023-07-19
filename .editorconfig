@@ -268,7 +268,7 @@ dotnet_diagnostic.CA5397.severity = suggestion
 
 dotnet_diagnostic.SYSLIB0006.severity = none
 
-[*.{js,html,js,hbs,less,css}]
+[*.{js,html,hbs,less,css,ts,tsx}]
 charset = utf-8
 trim_trailing_whitespace = true
 insert_final_newline = true

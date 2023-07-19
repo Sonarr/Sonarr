@@ -8,8 +8,8 @@ namespace Sonarr.Api.V3.ImportLists
     [V3ApiController]
     public class ImportListController : ProviderControllerBase<ImportListResource, ImportListBulkResource, IImportList, ImportListDefinition>
     {
-        public static readonly ImportListResourceMapper ResourceMapper = new ImportListResourceMapper();
-        public static readonly ImportListBulkResourceMapper BulkResourceMapper = new ImportListBulkResourceMapper();
+        public static readonly ImportListResourceMapper ResourceMapper = new ();
+        public static readonly ImportListBulkResourceMapper BulkResourceMapper = new ();
 
         public ImportListController(IImportListFactory importListFactory, ProfileExistsValidator profileExistsValidator)
             : base(importListFactory, "importlist", ResourceMapper, BulkResourceMapper)

@@ -23,6 +23,7 @@ import TableOptionsModalWrapper from 'Components/Table/TableOptions/TableOptions
 import withScrollPosition from 'Components/withScrollPosition';
 import { align, icons, kinds } from 'Helpers/Props';
 import SortDirection from 'Helpers/Props/SortDirection';
+import ParseToolbarButton from 'Parse/ParseToolbarButton';
 import NoSeries from 'Series/NoSeries';
 import { executeCommand } from 'Store/Actions/commandActions';
 import { fetchQueueDetails } from 'Store/Actions/queueActions';
@@ -246,6 +247,9 @@ const SeriesIndex = withScrollPosition((props: SeriesIndexProps) => {
               isSelectMode={isSelectMode}
               overflowComponent={SeriesIndexSelectAllMenuItem}
             />
+
+            <PageToolbarSeparator />
+            <ParseToolbarButton />
           </PageToolbarSection>
 
           <PageToolbarSection

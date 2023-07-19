@@ -26,9 +26,25 @@ interface ManageImportListsEditModalContentProps {
 const NO_CHANGE = 'noChange';
 
 const autoAddOptions = [
-  { key: NO_CHANGE, value: 'No Change', disabled: true },
-  { key: 'enabled', value: 'Enabled' },
-  { key: 'disabled', value: 'Disabled' },
+  {
+    key: NO_CHANGE,
+    get value() {
+      return translate('NoChange');
+    },
+    disabled: true,
+  },
+  {
+    key: 'enabled',
+    get value() {
+      return translate('Enabled');
+    },
+  },
+  {
+    key: 'disabled',
+    get value() {
+      return translate('Disabled');
+    },
+  },
 ];
 
 function ManageImportListsEditModalContent(
@@ -87,7 +103,7 @@ function ManageImportListsEditModalContent(
           setRootFolderPath(value);
           break;
         default:
-          console.warn('EditImportListModalContent Unknown Input');
+          console.warn(`EditImportListModalContent Unknown Input: '${name}'`);
       }
     },
     []
@@ -142,7 +158,9 @@ function ManageImportListsEditModalContent(
 
       <ModalFooter className={styles.modalFooter}>
         <div className={styles.selected}>
-          {translate('{count} import lists selected', { count: selectedCount })}
+          {translate('CountImportListsSelected', {
+            count: selectedCount,
+          })}
         </div>
 
         <div>

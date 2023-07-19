@@ -50,7 +50,7 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
                 throw new IndexerException(indexerResponse, "Indexer API call returned an error [{0}]", jsonResponse.Error);
             }
 
-            if (jsonResponse.Result.Results == 0)
+            if (jsonResponse.Result.Results == 0 || jsonResponse.Result.Torrents?.Values == null)
             {
                 return results;
             }

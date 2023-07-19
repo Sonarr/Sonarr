@@ -17,6 +17,7 @@ import ModalHeader from 'Components/Modal/ModalHeader';
 import { inputTypes, kinds, sizes } from 'Helpers/Props';
 import createTagsSelector from 'Store/Selectors/createTagsSelector';
 import ImportList from 'typings/ImportList';
+import translate from 'Utilities/String/translate';
 import styles from './TagsModalContent.css';
 
 interface TagsModalContentProps {
@@ -36,7 +37,7 @@ function TagsModalContent(props: TagsModalContentProps) {
   const [tags, setTags] = useState<number[]>([]);
   const [applyTags, setApplyTags] = useState('add');
 
-  const seriesTags = useMemo(() => {
+  const importListsTags = useMemo(() => {
     const tags = ids.reduce((acc: number[], id) => {
       const s = allImportLists.items.find((s: ImportList) => s.id === id);
 
@@ -69,19 +70,34 @@ function TagsModalContent(props: TagsModalContentProps) {
   }, [tags, applyTags, onApplyTagsPress]);
 
   const applyTagsOptions = [
-    { key: 'add', value: 'Add' },
-    { key: 'remove', value: 'Remove' },
-    { key: 'replace', value: 'Replace' },
+    {
+      key: 'add',
+      get value() {
+        return translate('Add');
+      },
+    },
+    {
+      key: 'remove',
+      get value() {
+        return translate('Remove');
+      },
+    },
+    {
+      key: 'replace',
+      get value() {
+        return translate('Replace');
+      },
+    },
   ];
 
   return (
     <ModalContent onModalClose={onModalClose}>
-      <ModalHeader>Tags</ModalHeader>
+      <ModalHeader>{translate('Tags')}</ModalHeader>
 
       <ModalBody>
         <Form>
           <FormGroup>
-            <FormLabel>Tags</FormLabel>
+            <FormLabel>{translate('Tags')}</FormLabel>
 
             <FormInputGroup
               type={inputTypes.TAG}
@@ -92,7 +108,7 @@ function TagsModalContent(props: TagsModalContentProps) {
           </FormGroup>
 
           <FormGroup>
-            <FormLabel>Apply Tags</FormLabel>
+            <FormLabel>{translate('ApplyTags')}</FormLabel>
 
             <FormInputGroup
               type={inputTypes.SELECT}
@@ -100,20 +116,20 @@ function TagsModalContent(props: TagsModalContentProps) {
               value={applyTags}
               values={applyTagsOptions}
               helpTexts={[
-                'How to apply tags to the selected list',
-                'Add: Add the tags the existing list of tags',
-                'Remove: Remove the entered tags',
-                'Replace: Replace the tags with the entered tags (enter no tags to clear all tags)',
+                translate('ApplyTagsHelpTextHowToApplyImportLists'),
+                translate('ApplyTagsHelpTextAdd'),
+                translate('ApplyTagsHelpTextRemove'),
+                translate('ApplyTagsHelpTextReplace'),
               ]}
               onChange={onApplyTagsChange}
             />
           </FormGroup>
 
           <FormGroup>
-            <FormLabel>Result</FormLabel>
+            <FormLabel>{translate('Result')}</FormLabel>
 
             <div className={styles.result}>
-              {seriesTags.map((id) => {
+              {importListsTags.map((id) => {
                 const tag = tagList.find((t) => t.id === id);
 
                 if (!tag) {
@@ -127,7 +143,11 @@ function TagsModalContent(props: TagsModalContentProps) {
                 return (
                   <Label
                     key={tag.id}
-                    title={removeTag ? 'Removing tag' : 'Existing tag'}
+                    title={
+                      removeTag
+                        ? translate('RemovingTag')
+                        : translate('ExistingTag')
+                    }
                     kind={removeTag ? kinds.INVERSE : kinds.INFO}
                     size={sizes.LARGE}
                   >
@@ -144,14 +164,14 @@ function TagsModalContent(props: TagsModalContentProps) {
                     return null;
                   }
 
-                  if (seriesTags.indexOf(id) > -1) {
+                  if (importListsTags.indexOf(id) > -1) {
                     return null;
                   }
 
                   return (
                     <Label
                       key={tag.id}
-                      title={'Adding tag'}
+                      title={translate('AddingTag')}
                       kind={kinds.SUCCESS}
                       size={sizes.LARGE}
                     >
@@ -165,10 +185,10 @@ function TagsModalContent(props: TagsModalContentProps) {
       </ModalBody>
 
       <ModalFooter>
-        <Button onPress={onModalClose}>Cancel</Button>
+        <Button onPress={onModalClose}>{translate('Cancel')}</Button>
 
         <Button kind={kinds.PRIMARY} onPress={onApplyPress}>
-          Apply
+          {translate('Apply')}
         </Button>
       </ModalFooter>
     </ModalContent>

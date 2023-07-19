@@ -50,6 +50,7 @@ class EditDownloadClientModalContent extends Component {
       removeCompletedDownloads,
       removeFailedDownloads,
       fields,
+      tags,
       message
     } = item;
 
@@ -133,6 +134,18 @@ class EditDownloadClientModalContent extends Component {
                     min={1}
                     max={50}
                     {...priority}
+                    onChange={onInputChange}
+                  />
+                </FormGroup>
+
+                <FormGroup>
+                  <FormLabel>Tags</FormLabel>
+
+                  <FormInputGroup
+                    type={inputTypes.TAG}
+                    name="tags"
+                    helpText="Only use this download client for series with at least one matching tag. Leave blank to use with all series."
+                    {...tags}
                     onChange={onInputChange}
                   />
                 </FormGroup>

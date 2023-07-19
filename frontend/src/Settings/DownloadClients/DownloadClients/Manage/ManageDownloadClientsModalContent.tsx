@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { DownloadClientAppState } from 'App/State/SettingsAppState';
+import Alert from 'Components/Alert';
 import Button from 'Components/Link/Button';
 import SpinnerButton from 'Components/Link/SpinnerButton';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
@@ -20,9 +21,11 @@ import {
 import createClientSideCollectionSelector from 'Store/Selectors/createClientSideCollectionSelector';
 import { SelectStateInputProps } from 'typings/props';
 import getErrorMessage from 'Utilities/Object/getErrorMessage';
+import translate from 'Utilities/String/translate';
 import getSelectedIds from 'Utilities/Table/getSelectedIds';
 import ManageDownloadClientsEditModal from './Edit/ManageDownloadClientsEditModal';
 import ManageDownloadClientsModalRow from './ManageDownloadClientsModalRow';
+import TagsModal from './Tags/TagsModal';
 import styles from './ManageDownloadClientsModalContent.css';
 
 // TODO: This feels janky to do, but not sure of a better way currently
@@ -33,37 +36,55 @@ type OnSelectedChangeCallback = React.ComponentProps<
 const COLUMNS = [
   {
     name: 'name',
-    label: 'Name',
+    get label() {
+      return translate('Name');
+    },
     isSortable: true,
     isVisible: true,
   },
   {
     name: 'implementation',
-    label: 'Implementation',
+    get label() {
+      return translate('Implementation');
+    },
     isSortable: true,
     isVisible: true,
   },
   {
     name: 'enable',
-    label: 'Enabled',
+    get label() {
+      return translate('Enabled');
+    },
     isSortable: true,
     isVisible: true,
   },
   {
     name: 'priority',
-    label: 'Priority',
+    get label() {
+      return translate('Priority');
+    },
     isSortable: true,
     isVisible: true,
   },
   {
     name: 'removeCompletedDownloads',
-    label: 'Remove Completed',
+    get label() {
+      return translate('RemoveCompleted');
+    },
     isSortable: true,
     isVisible: true,
   },
   {
     name: 'removeFailedDownloads',
-    label: 'Remove Failed',
+    get label() {
+      return translate('RemoveFailed');
+    },
+    isSortable: true,
+    isVisible: true,
+  },
+  {
+    name: 'tags',
+    label: 'Tags',
     isSortable: true,
     isVisible: true,
   },
@@ -92,6 +113,8 @@ function ManageDownloadClientsModalContent(
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isTagsModalOpen, setIsTagsModalOpen] = useState(false);
+  const [isSavingTags, setIsSavingTags] = useState(false);
 
   const [selectState, setSelectState] = useSelectState();
 
@@ -138,6 +161,30 @@ function ManageDownloadClientsModalContent(
     [selectedIds, dispatch]
   );
 
+  const onTagsPress = useCallback(() => {
+    setIsTagsModalOpen(true);
+  }, [setIsTagsModalOpen]);
+
+  const onTagsModalClose = useCallback(() => {
+    setIsTagsModalOpen(false);
+  }, [setIsTagsModalOpen]);
+
+  const onApplyTagsPress = useCallback(
+    (tags: number[], applyTags: string) => {
+      setIsSavingTags(true);
+      setIsTagsModalOpen(false);
+
+      dispatch(
+        bulkEditDownloadClients({
+          ids: selectedIds,
+          tags,
+          applyTags,
+        })
+      );
+    },
+    [selectedIds, dispatch]
+  );
+
   const onSelectAllChange = useCallback(
     ({ value }: SelectStateInputProps) => {
       setSelectState({ type: value ? 'selectAll' : 'unselectAll', items });
@@ -158,16 +205,23 @@ function ManageDownloadClientsModalContent(
     [items, setSelectState]
   );
 
-  const errorMessage = getErrorMessage(error, 'Unable to load import lists.');
+  const errorMessage = getErrorMessage(
+    error,
+    'Unable to load download clients.'
+  );
   const anySelected = selectedCount > 0;
 
   return (
     <ModalContent onModalClose={onModalClose}>
-      <ModalHeader>Manage Import Lists</ModalHeader>
+      <ModalHeader>{translate('ManageDownloadClients')}</ModalHeader>
       <ModalBody>
         {isFetching ? <LoadingIndicator /> : null}
 
         {error ? <div>{errorMessage}</div> : null}
+
+        {isPopulated && !error && !items.length && (
+          <Alert kind={kinds.INFO}>{translate('NoDownloadClientsFound')}</Alert>
+        )}
 
         {isPopulated && !!items.length && !isFetching && !isFetching ? (
           <Table
@@ -203,7 +257,7 @@ function ManageDownloadClientsModalContent(
             isDisabled={!anySelected}
             onPress={onDeletePress}
           >
-            Delete
+            {translate('Delete')}
           </SpinnerButton>
 
           <SpinnerButton
@@ -211,11 +265,19 @@ function ManageDownloadClientsModalContent(
             isDisabled={!anySelected}
             onPress={onEditPress}
           >
-            Edit
+            {translate('Edit')}
+          </SpinnerButton>
+
+          <SpinnerButton
+            isSpinning={isSaving && isSavingTags}
+            isDisabled={!anySelected}
+            onPress={onTagsPress}
+          >
+            Set Tags
           </SpinnerButton>
         </div>
 
-        <Button onPress={onModalClose}>Close</Button>
+        <Button onPress={onModalClose}>{translate('Close')}</Button>
       </ModalFooter>
 
       <ManageDownloadClientsEditModal
@@ -225,12 +287,21 @@ function ManageDownloadClientsModalContent(
         downloadClientIds={selectedIds}
       />
 
+      <TagsModal
+        isOpen={isTagsModalOpen}
+        ids={selectedIds}
+        onApplyTagsPress={onApplyTagsPress}
+        onModalClose={onTagsModalClose}
+      />
+
       <ConfirmModal
         isOpen={isDeleteModalOpen}
         kind={kinds.DANGER}
-        title="Delete Download Clients(s)"
-        message={`Are you sure you want to delete ${selectedIds.length} download clients(s)?`}
-        confirmLabel="Delete"
+        title={translate('DeleteSelectedDownloadClients')}
+        message={translate('DeleteSelectedDownloadClientsMessageText', {
+          count: selectedIds.length,
+        })}
+        confirmLabel={translate('Delete')}
         onConfirm={onConfirmDelete}
         onCancel={onDeleteModalClose}
       />

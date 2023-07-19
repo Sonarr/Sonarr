@@ -6,6 +6,7 @@ import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
 import { icons } from 'Helpers/Props';
 import SettingsToolbarConnector from 'Settings/SettingsToolbarConnector';
+import translate from 'Utilities/String/translate';
 import IndexersConnector from './Indexers/IndexersConnector';
 import ManageIndexersModal from './Indexers/Manage/ManageIndexersModal';
 import IndexerOptionsConnector from './Options/IndexerOptionsConnector';
@@ -84,7 +85,7 @@ class IndexerSettings extends Component {
               />
 
               <PageToolbarButton
-                label="Manage Indexers"
+                label={translate('ManageIndexers')}
                 iconName={icons.MANAGE}
                 onPress={this.onManageIndexersPress}
               />

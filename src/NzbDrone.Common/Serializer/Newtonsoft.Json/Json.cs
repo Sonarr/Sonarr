@@ -121,6 +121,11 @@ namespace NzbDrone.Common.Serializer
             return JsonConvert.SerializeObject(obj, SerializerSettings);
         }
 
+        public static string ToJson(this object obj, Formatting formatting)
+        {
+            return JsonConvert.SerializeObject(obj, formatting, SerializerSettings);
+        }
+
         public static void Serialize<TModel>(TModel model, TextWriter outputStream)
         {
             var jsonTextWriter = new JsonTextWriter(outputStream);
