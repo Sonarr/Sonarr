@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import Alert from 'Components/Alert';
-import Link from 'Components/Link/Link';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
@@ -13,18 +12,23 @@ import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import { icons, kinds } from 'Helpers/Props';
 import translate from 'Utilities/String/translate';
+import InlineMarkdown from '../../../Components/Markdown/InlineMarkdown';
 import LogsNavMenu from '../LogsNavMenu';
 import LogFilesTableRow from './LogFilesTableRow';
 
 const columns = [
   {
     name: 'filename',
-    label: translate('Filename'),
+    get label() {
+      return translate('Filename');
+    },
     isVisible: true
   },
   {
     name: 'lastWriteTime',
-    label: translate('LastWriteTime'),
+    get label() {
+      return translate('LastWriteTime');
+    },
     isVisible: true
   },
   {
@@ -85,7 +89,7 @@ class LogFiles extends Component {
             {
               currentLogView === 'Log Files' &&
                 <div>
-                  {translate('TheLogLevelDefault')}  <Link to="/settings/general">{translate('GeneralSettings')}</Link>
+                  <InlineMarkdown data={translate('TheLogLevelDefault')} />
                 </div>
             }
           </Alert>
