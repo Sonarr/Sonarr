@@ -91,7 +91,8 @@ module.exports = (env) => {
       }),
 
       new MiniCssExtractPlugin({
-        filename: 'Content/styles.css'
+        filename: 'Content/styles.css',
+        chunkFilename: 'Content/[id]-[chunkhash].css'
       }),
 
       new HtmlWebpackPlugin({
