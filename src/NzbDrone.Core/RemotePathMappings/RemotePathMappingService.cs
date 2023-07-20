@@ -101,12 +101,12 @@ namespace NzbDrone.Core.RemotePathMappings
 
             if (remotePath.IsEmpty)
             {
-                throw new ArgumentException("Invalid RemotePath");
+                throw new ArgumentException("Invalid RemotePath. RemotePath cannot be empty.");
             }
 
             if (localPath.IsEmpty || !localPath.IsRooted)
             {
-                throw new ArgumentException("Invalid LocalPath");
+                throw new ArgumentException("Invalid LocalPath. LocalPath cannot be empty and must not be the root.");
             }
 
             if (!_diskProvider.FolderExists(localPath.FullPath))
@@ -116,7 +116,7 @@ namespace NzbDrone.Core.RemotePathMappings
 
             if (existing.Exists(r => r.Host == mapping.Host && r.RemotePath == mapping.RemotePath))
             {
-                throw new InvalidOperationException("RemotePath already mounted.");
+                throw new InvalidOperationException("RemotePath already configured.");
             }
         }
 
@@ -127,11 +127,14 @@ namespace NzbDrone.Core.RemotePathMappings
                 return remotePath;
             }
 
+            _logger.Trace("Evaluating remote path remote mappings for match to host [{0}] and remote path [{1}]", host, remotePath.FullPath);
             foreach (var mapping in All())
             {
+                _logger.Trace("Checking configured remote path mapping: {0} - {1}", mapping.Host, mapping.RemotePath);
                 if (host.Equals(mapping.Host, StringComparison.InvariantCultureIgnoreCase) && new OsPath(mapping.RemotePath).Contains(remotePath))
                 {
                     var localPath = new OsPath(mapping.LocalPath) + (remotePath - new OsPath(mapping.RemotePath));
+                    _logger.Debug("Remapped remote path [{0}] to local path [{1}] for host [{2}]", remotePath, localPath, host);
 
                     return localPath;
                 }
@@ -147,11 +150,14 @@ namespace NzbDrone.Core.RemotePathMappings
                 return localPath;
             }
 
+            _logger.Trace("Evaluating remote path local mappings for match to host [{0}] and local path [{1}]", host, localPath.FullPath);
             foreach (var mapping in All())
             {
+                _logger.Trace("Checking configured remote path mapping {0} - {1}", mapping.Host, mapping.RemotePath);
                 if (host.Equals(mapping.Host, StringComparison.InvariantCultureIgnoreCase) && new OsPath(mapping.LocalPath).Contains(localPath))
                 {
                     var remotePath = new OsPath(mapping.RemotePath) + (localPath - new OsPath(mapping.LocalPath));
+                    _logger.Debug("Remapped local path [{0}] to remote path [{1}] for host [{2}]", localPath, remotePath, host);
 
                     return remotePath;
                 }
