@@ -14,6 +14,7 @@ import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import { inputTypes, kinds } from 'Helpers/Props';
+import translate from 'Utilities/String/translate';
 import styles from './EditSpecificationModalContent.css';
 
 function EditSpecificationModalContent(props) {
@@ -40,7 +41,7 @@ function EditSpecificationModalContent(props) {
   return (
     <ModalContent onModalClose={onCancelPress}>
       <ModalHeader>
-        {`${id ? 'Edit' : 'Add'} Condition - ${implementationName}`}
+        {`${id ? translate('Edit') : translate('Add')} ${translate('Condition')} - ${implementationName}`}
       </ModalHeader>
 
       <ModalBody>
@@ -51,19 +52,25 @@ function EditSpecificationModalContent(props) {
             fields && fields.some((x) => x.label === 'Regular Expression') &&
               <Alert kind={kinds.INFO}>
                 <div>
-                  <div dangerouslySetInnerHTML={{ __html: 'This condition matches using Regular Expressions. Note that the characters <code>\\^$.|?*+()[{</code> have special meanings and need escaping with a <code>\\</code>' }} />
-                  {'More details'} <Link to="https://www.regular-expressions.info/tutorial.html">{'Here'}</Link>
+                  <div dangerouslySetInnerHTML={{
+                    __html: translate('ThisConditionMatchesUsingRegularExpressions', {
+                      specialChars: '<code>\\^$.|?*+()[{</code>',
+                      escapeChars: '<code>\\</code>'
+                    })
+                  }}
+                  />
+                  {translate('MoreDetails')} <Link to="https://www.regular-expressions.info/tutorial.html">{translate('Here')}</Link>
                 </div>
                 <div>
-                  {'Regular expressions can be tested '}
-                  <Link to="http://regexstorm.net/tester">Here</Link>
+                  {translate('RegularExpressionsCanBeTested')}
+                  <Link to="http://regexstorm.net/tester">{translate('Here')}</Link>
                 </div>
               </Alert>
           }
 
           <FormGroup>
             <FormLabel>
-              Name
+              {translate('Name')}
             </FormLabel>
 
             <FormInputGroup
@@ -91,28 +98,28 @@ function EditSpecificationModalContent(props) {
 
           <FormGroup>
             <FormLabel>
-              Negate
+              {translate('Negate')}
             </FormLabel>
 
             <FormInputGroup
               type={inputTypes.CHECK}
               name="negate"
               {...negate}
-              helpText={`If checked, the custom format will not apply if this ${implementationName} condition matches.`}
+              helpText={translate('NegateHelpText', { implementationName })}
               onChange={onInputChange}
             />
           </FormGroup>
 
           <FormGroup>
             <FormLabel>
-              Required
+              {translate('Required')}
             </FormLabel>
 
             <FormInputGroup
               type={inputTypes.CHECK}
               name="required"
               {...required}
-              helpText={`This ${implementationName} condition must match for the custom format to apply.  Otherwise a single ${implementationName} match is sufficient.`}
+              helpText={translate('RequiredHelpText', { implementationName })}
               onChange={onInputChange}
             />
           </FormGroup>
@@ -126,21 +133,21 @@ function EditSpecificationModalContent(props) {
               kind={kinds.DANGER}
               onPress={onDeleteSpecificationPress}
             >
-              Delete
+              {translate('Delete')}
             </Button>
         }
 
         <Button
           onPress={onCancelPress}
         >
-          Cancel
+          {translate('Cancel')}
         </Button>
 
         <SpinnerErrorButton
           isSpinning={false}
           onPress={onSavePress}
         >
-          Save
+          {translate('Save')}
         </SpinnerErrorButton>
       </ModalFooter>
     </ModalContent>

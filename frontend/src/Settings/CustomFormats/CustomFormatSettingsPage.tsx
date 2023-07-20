@@ -6,11 +6,12 @@ import PageContentBody from 'Components/Page/PageContentBody';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
 import ParseToolbarButton from 'Parse/ParseToolbarButton';
 import SettingsToolbarConnector from 'Settings/SettingsToolbarConnector';
+import translate from 'Utilities/String/translate';
 import CustomFormatsConnector from './CustomFormats/CustomFormatsConnector';
 
 function CustomFormatSettingsPage() {
   return (
-    <PageContent title="Custom Format Settings">
+    <PageContent title={translate('CustomFormatsSettings')}>
       <SettingsToolbarConnector
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore

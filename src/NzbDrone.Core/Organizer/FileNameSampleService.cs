@@ -44,7 +44,7 @@ namespace NzbDrone.Core.Organizer
             _standardSeries = new Series
             {
                 SeriesType = SeriesTypes.Standard,
-                Title = "The Series Title!",
+                Title = "The Series Title's!",
                 Year = 2010,
                 ImdbId = "tt12345",
                 TvdbId = 12345,
@@ -54,7 +54,7 @@ namespace NzbDrone.Core.Organizer
             _dailySeries = new Series
             {
                 SeriesType = SeriesTypes.Daily,
-                Title = "The Series Title!",
+                Title = "The Series Title's!",
                 Year = 2010,
                 ImdbId = "tt12345",
                 TvdbId = 12345,
@@ -64,7 +64,7 @@ namespace NzbDrone.Core.Organizer
             _animeSeries = new Series
             {
                 SeriesType = SeriesTypes.Anime,
-                Title = "The Series Title!",
+                Title = "The Series Title's!",
                 Year = 2010,
                 ImdbId = "tt12345",
                 TvdbId = 12345,
@@ -141,45 +141,45 @@ namespace NzbDrone.Core.Organizer
 
             _singleEpisodeFile = new EpisodeFile
             {
-                Quality = new QualityModel(Quality.HDTV720p, new Revision(2)),
-                RelativePath = "Series.Title.S01E01.720p.HDTV.x264-EVOLVE.mkv",
-                SceneName = "Series.Title.S01E01.720p.HDTV.x264-EVOLVE",
+                Quality = new QualityModel(Quality.WEBDL1080p, new Revision(2)),
+                RelativePath = "The.Series.Title's!.S01E01.1080p.WEBDL.x264-EVOLVE.mkv",
+                SceneName = "The.Series.Title's!.S01E01.1080p.WEBDL.x264-EVOLVE",
                 ReleaseGroup = "RlsGrp",
                 MediaInfo = mediaInfo
             };
 
             _multiEpisodeFile = new EpisodeFile
             {
-                Quality = new QualityModel(Quality.HDTV720p, new Revision(2)),
-                RelativePath = "Series.Title.S01E01-E03.720p.HDTV.x264-EVOLVE.mkv",
-                SceneName = "Series.Title.S01E01-E03.720p.HDTV.x264-EVOLVE",
+                Quality = new QualityModel(Quality.WEBDL1080p, new Revision(2)),
+                RelativePath = "The.Series.Title's!.S01E01-E03.1080p.WEBDL.x264-EVOLVE.mkv",
+                SceneName = "The.Series.Title's!.S01E01-E03.1080p.WEBDL.x264-EVOLVE",
                 ReleaseGroup = "RlsGrp",
                 MediaInfo = mediaInfo,
             };
 
             _dailyEpisodeFile = new EpisodeFile
             {
-                Quality = new QualityModel(Quality.HDTV720p, new Revision(2)),
-                RelativePath = "Series.Title.2013.10.30.HDTV.x264-EVOLVE.mkv",
-                SceneName = "Series.Title.2013.10.30.HDTV.x264-EVOLVE",
+                Quality = new QualityModel(Quality.WEBDL1080p, new Revision(2)),
+                RelativePath = "The.Series.Title's!.2013.10.30.1080p.WEBDL.x264-EVOLVE.mkv",
+                SceneName = "The.Series.Title's!.2013.10.30.1080p.WEBDL.x264-EVOLVE",
                 ReleaseGroup = "RlsGrp",
                 MediaInfo = mediaInfo
             };
 
             _animeEpisodeFile = new EpisodeFile
             {
-                Quality = new QualityModel(Quality.HDTV720p, new Revision(2)),
-                RelativePath = "[RlsGroup] Series Title - 001 [720p].mkv",
-                SceneName = "[RlsGroup] Series Title - 001 [720p]",
+                Quality = new QualityModel(Quality.WEBDL1080p, new Revision(2)),
+                RelativePath = "[RlsGroup] The Series Title's! - 001 [1080P].mkv",
+                SceneName = "[RlsGroup] The Series Title's! - 001 [1080P]",
                 ReleaseGroup = "RlsGrp",
                 MediaInfo = mediaInfoAnime
             };
 
             _animeMultiEpisodeFile = new EpisodeFile
             {
-                Quality = new QualityModel(Quality.HDTV720p, new Revision(2)),
-                RelativePath = "[RlsGroup] Series Title - 001 - 103 [720p].mkv",
-                SceneName = "[RlsGroup] Series Title - 001 - 103 [720p]",
+                Quality = new QualityModel(Quality.WEBDL1080p, new Revision(2)),
+                RelativePath = "[RlsGroup] The Series Title's! - 001 - 103 [1080p].mkv",
+                SceneName = "[RlsGroup] The Series Title's! - 001 - 103 [1080p]",
                 ReleaseGroup = "RlsGrp",
                 MediaInfo = mediaInfoAnime
             };

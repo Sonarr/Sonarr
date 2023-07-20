@@ -123,7 +123,7 @@ namespace Sonarr.Http.ClientSchema
                         Placeholder = fieldAttribute.Placeholder
                     };
 
-                    if (fieldAttribute.Type == FieldType.Select || fieldAttribute.Type == FieldType.TagSelect)
+                    if (fieldAttribute.Type is FieldType.Select or FieldType.TagSelect)
                     {
                         if (fieldAttribute.SelectOptionsProviderAction.IsNotNullOrWhiteSpace())
                         {
@@ -172,31 +172,33 @@ namespace Sonarr.Http.ClientSchema
         {
             if (selectOptions.IsEnum)
             {
-                var options = selectOptions.GetFields().Where(v => v.IsStatic).Select(v =>
-                {
-                    var name = v.Name.Replace('_', ' ');
-                    var value = Convert.ToInt32(v.GetRawConstantValue());
-                    var attrib = v.GetCustomAttribute<FieldOptionAttribute>();
-                    if (attrib != null)
+                var options = selectOptions
+                    .GetFields()
+                    .Where(v => v.IsStatic && !v.GetCustomAttributes(false).OfType<ObsoleteAttribute>().Any())
+                    .Select(v =>
                     {
-                        return new SelectOption
+                        var name = v.Name.Replace('_', ' ');
+                        var value = Convert.ToInt32(v.GetRawConstantValue());
+                        var attrib = v.GetCustomAttribute<FieldOptionAttribute>();
+
+                        if (attrib != null)
                         {
-                            Value = value,
-                            Name = attrib.Label ?? name,
-                            Order = attrib.Order,
-                            Hint = attrib.Hint ?? $"({value})"
-                        };
-                    }
-                    else
-                    {
+                            return new SelectOption
+                            {
+                                Value = value,
+                                Name = attrib.Label ?? name,
+                                Order = attrib.Order,
+                                Hint = attrib.Hint ?? $"({value})"
+                            };
+                        }
+
                         return new SelectOption
                         {
                             Value = value,
                             Name = name,
                             Order = value
                         };
-                    }
-                });
+                    });
 
                 return options.OrderBy(o => o.Order).ToList();
             }

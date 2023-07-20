@@ -54,10 +54,14 @@ class MoreInfo extends Component {
             {translate('IRC')}
           </DescriptionListItemTitle>
           <DescriptionListItemDescription>
-            <Link to="irc://irc.libera.chat/#sonarr">#sonarr on Libera</Link>
+            <Link to="irc://irc.libera.chat/#sonarr">
+              {translate('IRCLinkText')}
+            </Link>
           </DescriptionListItemDescription>
           <DescriptionListItemDescription>
-            <Link to="https://web.libera.chat/?channels=#sonarr">Libera webchat</Link>
+            <Link to="https://web.libera.chat/?channels=#sonarr">
+              {translate('LiberaWebchat')}
+            </Link>
           </DescriptionListItemDescription>
 
           <DescriptionListItemTitle>
