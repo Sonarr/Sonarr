@@ -10,6 +10,7 @@ import PageToolbarSection from 'Components/Page/Toolbar/PageToolbarSection';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import { icons, kinds } from 'Helpers/Props';
+import translate from 'Utilities/String/translate';
 import BackupRow from './BackupRow';
 import RestoreBackupModalConnector from './RestoreBackupModalConnector';
 
@@ -20,17 +21,23 @@ const columns = [
   },
   {
     name: 'name',
-    label: 'Name',
+    get label() {
+      return translate('Name');
+    },
     isVisible: true
   },
   {
     name: 'size',
-    label: 'Size',
+    get label() {
+      return translate('Size');
+    },
     isVisible: true
   },
   {
     name: 'time',
-    label: 'Time',
+    get label() {
+      return translate('Time');
+    },
     isVisible: true
   },
   {
@@ -81,18 +88,18 @@ class Backups extends Component {
     const noBackups = isPopulated && !items.length;
 
     return (
-      <PageContent title="Backups">
+      <PageContent title={translate('Backups')}>
         <PageToolbar>
           <PageToolbarSection>
             <PageToolbarButton
-              label="Backup Now"
+              label={translate('BackupNow')}
               iconName={icons.BACKUP}
               isSpinning={backupExecuting}
               onPress={onBackupPress}
             />
 
             <PageToolbarButton
-              label="Restore Backup"
+              label={translate('RestoreBackup')}
               iconName={icons.RESTORE}
               onPress={this.onRestorePress}
             />
@@ -108,14 +115,14 @@ class Backups extends Component {
           {
             !isFetching && !!error &&
               <Alert kind={kinds.DANGER}>
-                Unable to load backups
+                {translate('UnableToLoadBackups')}
               </Alert>
           }
 
           {
             noBackups &&
               <Alert kind={kinds.INFO}>
-                No backups are available
+                {translate('NoBackupsAreAvailable')}
               </Alert>
           }
 

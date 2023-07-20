@@ -11,6 +11,7 @@ import formatDate from 'Utilities/Date/formatDate';
 import formatDateTime from 'Utilities/Date/formatDateTime';
 import formatTimeSpan from 'Utilities/Date/formatTimeSpan';
 import titleCase from 'Utilities/String/titleCase';
+import translate from 'Utilities/String/translate';
 import styles from './QueuedTaskRow.css';
 
 function getStatusIconProps(status, message) {
@@ -198,8 +199,8 @@ class QueuedTaskRow extends Component {
           </span>
           {
             clientUserAgent ?
-              <span className={styles.userAgent} title="User-Agent provided by the app that called the API">
-                from: {clientUserAgent}
+              <span className={styles.userAgent} title={translate('TaskUserAgentTooltip')}>
+                {translate('From')}: {clientUserAgent}
               </span> :
               null
           }
@@ -236,7 +237,7 @@ class QueuedTaskRow extends Component {
           {
             status === 'queued' &&
               <IconButton
-                title="Removed from task queue"
+                title={translate('RemovedFromTaskQueue')}
                 name={icons.REMOVE}
                 onPress={this.onCancelPress}
               />
@@ -246,10 +247,10 @@ class QueuedTaskRow extends Component {
         <ConfirmModal
           isOpen={isCancelConfirmModalOpen}
           kind={kinds.DANGER}
-          title="Cancel"
-          message={'Are you sure you want to cancel this pending task?'}
-          confirmLabel="Yes, Cancel"
-          cancelLabel="No, Leave It"
+          title={translate('Cancel')}
+          message={translate('CancelPendingTask')}
+          confirmLabel={translate('YesCancel')}
+          cancelLabel={translate('NoLeaveIt')}
           onConfirm={onCancelPress}
           onCancel={this.onAbortCancel}
         />
