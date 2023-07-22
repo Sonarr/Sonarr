@@ -30,6 +30,8 @@ import {
 import { SelectStateInputProps } from 'typings/props';
 import Rejection from 'typings/Rejection';
 import formatBytes from 'Utilities/Number/formatBytes';
+import formatPreferredWordScore from 'Utilities/Number/formatPreferredWordScore';
+import translate from 'Utilities/String/translate';
 import InteractiveImportRowCellPlaceholder from './InteractiveImportRowCellPlaceholder';
 import styles from './InteractiveImportRow.css';
 
@@ -57,6 +59,7 @@ interface InteractiveImportRowProps {
   languages?: Language[];
   size: number;
   customFormats?: object[];
+  customFormatScore?: number;
   rejections: Rejection[];
   columns: Column[];
   episodeFileId?: number;
@@ -80,6 +83,7 @@ function InteractiveImportRow(props: InteractiveImportRowProps) {
     releaseGroup,
     size,
     customFormats,
+    customFormatScore,
     rejections,
     isReprocessing,
     isSelected,
@@ -427,8 +431,8 @@ function InteractiveImportRow(props: InteractiveImportRowProps) {
       <TableRowCell>
         {customFormats?.length ? (
           <Popover
-            anchor={<Icon name={icons.INTERACTIVE} />}
-            title="Formats"
+            anchor={formatPreferredWordScore(customFormatScore)}
+            title={translate('CustomFormats')}
             body={
               <div className={styles.customFormatTooltip}>
                 <EpisodeFormats formats={customFormats} />

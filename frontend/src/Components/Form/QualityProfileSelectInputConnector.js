@@ -69,7 +69,7 @@ class QualityProfileSelectInputConnector extends Component {
   // Listeners
 
   onChange = ({ name, value }) => {
-    this.props.onChange({ name, value: parseInt(value) });
+    this.props.onChange({ name, value: value === 'noChange' ? value : parseInt(value) });
   };
 
   //

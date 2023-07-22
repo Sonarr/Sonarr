@@ -1,10 +1,13 @@
 import _ from 'lodash';
+import React from 'react';
 import { createAction } from 'redux-actions';
 import { batchActions } from 'redux-batched-actions';
+import Icon from 'Components/Icon';
 import episodeEntities from 'Episode/episodeEntities';
-import { sortDirections } from 'Helpers/Props';
+import { icons, sortDirections } from 'Helpers/Props';
 import { createThunk, handleThunks } from 'Store/thunks';
 import createAjaxRequest from 'Utilities/createAjaxRequest';
+import translate from 'Utilities/String/translate';
 import { updateItem } from './baseActions';
 import createFetchHandler from './Creators/createFetchHandler';
 import createHandleActions from './Creators/createHandleActions';
@@ -107,6 +110,15 @@ export const defaultState = {
     {
       name: 'customFormats',
       label: 'Formats',
+      isVisible: false
+    },
+    {
+      name: 'customFormatScore',
+      columnLabel: translate('CustomFormatScore'),
+      label: React.createElement(Icon, {
+        name: icons.SCORE,
+        title: translate('CustomFormatScore')
+      }),
       isVisible: false
     },
     {

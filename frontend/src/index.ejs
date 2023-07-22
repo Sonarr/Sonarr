@@ -48,7 +48,15 @@
     />
 
     <link rel="stylesheet" type="text/css" href="/Content/Fonts/fonts.css">
-    <!-- webpack bundles head -->
+
+    <script>
+      window.Sonarr = {
+        urlBase: '__URL_BASE__'
+      };
+    </script>
+
+    <% for (key in htmlWebpackPlugin.files.js) { %><script type="text/javascript" src="<%= htmlWebpackPlugin.files.js[key] %>" data-no-hash></script><% } %>
+    <% for (key in htmlWebpackPlugin.files.css) { %><link href="<%= htmlWebpackPlugin.files.css[key] %>" rel="stylesheet"></link><% } %>
 
     <title>Sonarr</title>
 
@@ -77,7 +85,4 @@
     <div id="portal-root"></div>
     <div id="root" class="root"></div>
   </body>
-
-  <script src="/initialize.js" data-no-hash></script>
-  <!-- webpack bundles body -->
 </html>
