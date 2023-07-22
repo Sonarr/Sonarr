@@ -13,6 +13,7 @@ namespace Sonarr.Http.ClientSchema
         public string HelpTextWarning { get; set; }
         public string HelpLink { get; set; }
         public object Value { get; set; }
+        public string ValueHash { get; set; }
         public string Type { get; set; }
         public bool Advanced { get; set; }
         public List<SelectOption> SelectOptions { get; set; }

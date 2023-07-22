@@ -7,6 +7,7 @@ using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Reflection;
 using NzbDrone.Common.Serializer;
+using NzbDrone.Core;
 using NzbDrone.Core.Annotations;
 
 namespace Sonarr.Http.ClientSchema
@@ -30,8 +31,13 @@ namespace Sonarr.Http.ClientSchema
                 field.Value = mapping.GetterFunc(model);
 
                 if (field.Value != null && !field.Value.Equals(string.Empty) &&
-                    (field.Privacy == PrivacyLevel.ApiKey || field.Privacy == PrivacyLevel.Password))
+                    field.Privacy is PrivacyLevel.ApiKey or PrivacyLevel.Password)
                 {
+                    if (field.Privacy == PrivacyLevel.ApiKey)
+                    {
+                        field.ValueHash = field.Value.ToString()?.SHA256Hash()?.AsSpan(0, 6).ToString();
+                    }
+
                     field.Value = PRIVATE_VALUE;
                 }
 
