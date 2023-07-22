@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using FluentValidation.Results;
 using NLog;
@@ -32,7 +33,21 @@ namespace NzbDrone.Core.Notifications.Emby
 
         public void Update(MediaBrowserSettings settings, Series series, string updateType)
         {
-            _proxy.Update(settings, series.Path, updateType);
+            List<string> paths;
+
+            if (settings.UpdateLibraryByName)
+            {
+                paths = _proxy.GetPaths(settings, series);
+            }
+            else
+            {
+                paths = new List<string> { series.Path };
+            }
+
+            foreach (var path in paths)
+            {
+                _proxy.Update(settings, path, updateType);
+            }
         }
 
         public ValidationFailure Test(MediaBrowserSettings settings)

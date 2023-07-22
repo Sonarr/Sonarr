@@ -43,6 +43,9 @@ namespace NzbDrone.Core.Notifications.Emby
         [FieldDefinition(5, Label = "Update Library", HelpText = "Update Library on Import, Rename, or Delete?", Type = FieldType.Checkbox)]
         public bool UpdateLibrary { get; set; }
 
+        [FieldDefinition(5, Label = "Update Library By Name", HelpText = "Update Library by name rather than path(Requires 'UpdateLibrary')", Type = FieldType.Checkbox, Advanced = true)]
+        public bool UpdateLibraryByName { get; set; }
+
         [JsonIgnore]
         public string Address => $"{Host.ToUrlHost()}:{Port}";
 
