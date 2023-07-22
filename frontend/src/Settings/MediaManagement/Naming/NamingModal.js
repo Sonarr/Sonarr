@@ -11,20 +11,57 @@ import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import { icons, sizes } from 'Helpers/Props';
+import translate from 'Utilities/String/translate';
+import InlineMarkdown from '../../../Components/Markdown/InlineMarkdown';
 import NamingOption from './NamingOption';
 import styles from './NamingModal.css';
 
 const separatorOptions = [
-  { key: ' ', value: 'Space ( )' },
-  { key: '.', value: 'Period (.)' },
-  { key: '_', value: 'Underscore (_)' },
-  { key: '-', value: 'Dash (-)' }
+  {
+    key: ' ',
+    get value() {
+      return `${translate('Space')} ( )`;
+    }
+  },
+  {
+    key: '.',
+    get value() {
+      return `${translate('Period')} (.)`;
+    }
+  },
+  {
+    key: '_',
+    get value() {
+      return `${translate('Underscore')} (_)`;
+    }
+  },
+  {
+    key: '-',
+    get value() {
+      return `${translate('Dash')} (-)`;
+    }
+  }
 ];
 
 const caseOptions = [
-  { key: 'title', value: 'Default Case' },
-  { key: 'lower', value: 'Lowercase' },
-  { key: 'upper', value: 'Uppercase' }
+  {
+    key: 'title',
+    get value() {
+      return translate('DefaultCase');
+    }
+  },
+  {
+    key: 'lower',
+    get value() {
+      return translate('Lowercase');
+    }
+  },
+  {
+    key: 'upper',
+    get value() {
+      return translate('Uppercase');
+    }
+  }
 ];
 
 const fileNameTokens = [
@@ -208,7 +245,7 @@ class NamingModal extends Component {
       >
         <ModalContent onModalClose={onModalClose}>
           <ModalHeader>
-            File Name Tokens
+            {translate('FileNameTokens')}
           </ModalHeader>
 
           <ModalBody>
@@ -232,7 +269,7 @@ class NamingModal extends Component {
 
             {
               !advancedSettings &&
-                <FieldSet legend="File Names">
+                <FieldSet legend={translate('FileNames')}>
                   <div className={styles.groups}>
                     {
                       fileNameTokens.map(({ token, example }) => {
@@ -257,7 +294,7 @@ class NamingModal extends Component {
                 </FieldSet>
             }
 
-            <FieldSet legend="Series">
+            <FieldSet legend={translate('Series')}>
               <div className={styles.groups}>
                 {
                   seriesTokens.map(({ token, example }) => {
@@ -279,7 +316,7 @@ class NamingModal extends Component {
               </div>
             </FieldSet>
 
-            <FieldSet legend="Series ID">
+            <FieldSet legend={translate('SeriesID')}>
               <div className={styles.groups}>
                 {
                   seriesIdTokens.map(({ token, example }) => {
@@ -303,7 +340,7 @@ class NamingModal extends Component {
 
             {
               season &&
-                <FieldSet legend="Season">
+                <FieldSet legend={translate('Season')}>
                   <div className={styles.groups}>
                     {
                       seasonTokens.map(({ token, example }) => {
@@ -329,7 +366,7 @@ class NamingModal extends Component {
             {
               episode &&
                 <div>
-                  <FieldSet legend="Episode">
+                  <FieldSet legend={translate('Episode')}>
                     <div className={styles.groups}>
                       {
                         episodeTokens.map(({ token, example }) => {
@@ -351,7 +388,7 @@ class NamingModal extends Component {
                     </div>
                   </FieldSet>
 
-                  <FieldSet legend="Air-Date">
+                  <FieldSet legend={translate('AirDate')}>
                     <div className={styles.groups}>
                       {
                         airDateTokens.map(({ token, example }) => {
@@ -375,7 +412,7 @@ class NamingModal extends Component {
 
                   {
                     anime &&
-                      <FieldSet legend="Absolute Episode Number">
+                      <FieldSet legend={translate('AbsoluteEpisodeNumber')}>
                         <div className={styles.groups}>
                           {
                             absoluteTokens.map(({ token, example }) => {
@@ -403,7 +440,7 @@ class NamingModal extends Component {
             {
               additional &&
                 <div>
-                  <FieldSet legend="Episode Title">
+                  <FieldSet legend={translate('EpisodeTitle')}>
                     <div className={styles.groups}>
                       {
                         episodeTitleTokens.map(({ token, example }) => {
@@ -425,7 +462,7 @@ class NamingModal extends Component {
                     </div>
                   </FieldSet>
 
-                  <FieldSet legend="Quality">
+                  <FieldSet legend={translate('Quality')}>
                     <div className={styles.groups}>
                       {
                         qualityTokens.map(({ token, example }) => {
@@ -447,7 +484,7 @@ class NamingModal extends Component {
                     </div>
                   </FieldSet>
 
-                  <FieldSet legend="Media Info">
+                  <FieldSet legend={translate('MediaInfo')}>
                     <div className={styles.groups}>
                       {
                         mediaInfoTokens.map(({ token, example, footNote }) => {
@@ -471,14 +508,11 @@ class NamingModal extends Component {
 
                     <div className={styles.footNote}>
                       <Icon className={styles.icon} name={icons.FOOTNOTE} />
-                      <div>
-                        MediaInfo Full/AudioLanguages/SubtitleLanguages support a <code>:EN+DE</code> suffix allowing you to filter the languages included in the filename. Use <code>-DE</code> to exclude specific languages.
-                        Appending <code>+</code> (eg <code>:EN+</code>) will output <code>[EN]</code>/<code>[EN+--]</code>/<code>[--]</code> depending on excluded languages. For example <code>{'{'}MediaInfo Full:EN+DE{'}'}</code>.
-                      </div>
+                      <InlineMarkdown data={translate('MediaInfoFootNote')} />
                     </div>
                   </FieldSet>
 
-                  <FieldSet legend="Other">
+                  <FieldSet legend={translate('Other')}>
                     <div className={styles.groups}>
                       {
                         otherTokens.map(({ token, example }) => {
@@ -500,7 +534,7 @@ class NamingModal extends Component {
                     </div>
                   </FieldSet>
 
-                  <FieldSet legend="Original">
+                  <FieldSet legend={translate('Original')}>
                     <div className={styles.groups}>
                       {
                         originalTokens.map(({ token, example }) => {
@@ -534,7 +568,7 @@ class NamingModal extends Component {
               onSelectionChange={this.onInputSelectionChange}
             />
             <Button onPress={onModalClose}>
-              Close
+              {translate('Close')}
             </Button>
           </ModalFooter>
         </ModalContent>

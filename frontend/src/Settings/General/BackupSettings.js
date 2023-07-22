@@ -5,6 +5,7 @@ import FormGroup from 'Components/Form/FormGroup';
 import FormInputGroup from 'Components/Form/FormInputGroup';
 import FormLabel from 'Components/Form/FormLabel';
 import { inputTypes } from 'Helpers/Props';
+import translate from 'Utilities/String/translate';
 
 function BackupSettings(props) {
   const {
@@ -24,17 +25,17 @@ function BackupSettings(props) {
   }
 
   return (
-    <FieldSet legend="Backups">
+    <FieldSet legend={translate('Backups')}>
       <FormGroup
         advancedSettings={advancedSettings}
         isAdvanced={true}
       >
-        <FormLabel>Folder</FormLabel>
+        <FormLabel>{translate('Folder')}</FormLabel>
 
         <FormInputGroup
           type={inputTypes.PATH}
           name="backupFolder"
-          helpText="Relative paths will be under Sonarr's AppData directory"
+          helpText={translate('BackupFolderHelpText')}
           onChange={onInputChange}
           {...backupFolder}
         />
@@ -44,13 +45,13 @@ function BackupSettings(props) {
         advancedSettings={advancedSettings}
         isAdvanced={true}
       >
-        <FormLabel>Interval</FormLabel>
+        <FormLabel>{translate('Interval')}</FormLabel>
 
         <FormInputGroup
           type={inputTypes.NUMBER}
           name="backupInterval"
           unit="days"
-          helpText="Interval between automatic backups"
+          helpText={translate('BackupIntervalHelpText')}
           onChange={onInputChange}
           {...backupInterval}
         />
@@ -60,13 +61,13 @@ function BackupSettings(props) {
         advancedSettings={advancedSettings}
         isAdvanced={true}
       >
-        <FormLabel>Retention</FormLabel>
+        <FormLabel>{translate('Retention')}</FormLabel>
 
         <FormInputGroup
           type={inputTypes.NUMBER}
           name="backupRetention"
           unit="days"
-          helpText="Automatic backups older than the retention period will be cleaned up automatically"
+          helpText={translate('BackupRetentionHelpText')}
           onChange={onInputChange}
           {...backupRetention}
         />

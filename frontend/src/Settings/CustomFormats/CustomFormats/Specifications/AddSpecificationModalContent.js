@@ -9,6 +9,7 @@ import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import { kinds } from 'Helpers/Props';
+import translate from 'Utilities/String/translate';
 import AddSpecificationItem from './AddSpecificationItem';
 import styles from './AddSpecificationModalContent.css';
 
@@ -42,7 +43,7 @@ class AddSpecificationModalContent extends Component {
           {
             !isSchemaFetching && !!schemaError &&
               <div>
-                {'Unable to add a new condition, please try again.'}
+                {translate('AddConditionError')}
               </div>
           }
 
@@ -52,11 +53,11 @@ class AddSpecificationModalContent extends Component {
 
                 <Alert kind={kinds.INFO}>
                   <div>
-                    {'Sonarr supports custom conditions against the release properties below.'}
+                    {translate('SupportedCustomConditions')}
                   </div>
                   <div>
-                    {'Visit the wiki for more details: '}
-                    <Link to="https://wiki.servarr.com/sonarr/settings#custom-formats-2">{'Wiki'}</Link>
+                    {translate('VisitTheWikiForMoreDetails')}
+                    <Link to="https://wiki.servarr.com/sonarr/settings#custom-formats-2">{translate('Wiki')}</Link>
                   </div>
                 </Alert>
 
@@ -81,7 +82,7 @@ class AddSpecificationModalContent extends Component {
           <Button
             onPress={onModalClose}
           >
-            Close
+            {translate('Close')}
           </Button>
         </ModalFooter>
       </ModalContent>

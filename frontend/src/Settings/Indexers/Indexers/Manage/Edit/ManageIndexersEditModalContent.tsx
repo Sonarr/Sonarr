@@ -127,7 +127,7 @@ function ManageIndexersEditModalContent(
 
       <ModalBody>
         <FormGroup>
-          <FormLabel>{translate('EnableRSS')}</FormLabel>
+          <FormLabel>{translate('EnableRss')}</FormLabel>
 
           <FormInputGroup
             type={inputTypes.SELECT}

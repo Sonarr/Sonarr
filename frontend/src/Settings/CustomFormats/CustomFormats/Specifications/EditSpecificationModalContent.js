@@ -7,13 +7,14 @@ import FormInputGroup from 'Components/Form/FormInputGroup';
 import FormLabel from 'Components/Form/FormLabel';
 import ProviderFieldFormGroup from 'Components/Form/ProviderFieldFormGroup';
 import Button from 'Components/Link/Button';
-import Link from 'Components/Link/Link';
 import SpinnerErrorButton from 'Components/Link/SpinnerErrorButton';
 import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import { inputTypes, kinds } from 'Helpers/Props';
+import translate from 'Utilities/String/translate';
+import InlineMarkdown from '../../../../Components/Markdown/InlineMarkdown';
 import styles from './EditSpecificationModalContent.css';
 
 function EditSpecificationModalContent(props) {
@@ -40,7 +41,7 @@ function EditSpecificationModalContent(props) {
   return (
     <ModalContent onModalClose={onCancelPress}>
       <ModalHeader>
-        {`${id ? 'Edit' : 'Add'} Condition - ${implementationName}`}
+        {`${id ? translate('EditCondition') : translate('AddCondition')} - ${implementationName}`}
       </ModalHeader>
 
       <ModalBody>
@@ -48,22 +49,23 @@ function EditSpecificationModalContent(props) {
           {...otherProps}
         >
           {
-            fields && fields.some((x) => x.label === 'Regular Expression') &&
+            fields && fields.some((x) => x.label === translate('RegularExpression')) &&
               <Alert kind={kinds.INFO}>
                 <div>
-                  <div dangerouslySetInnerHTML={{ __html: 'This condition matches using Regular Expressions. Note that the characters <code>\\^$.|?*+()[{</code> have special meanings and need escaping with a <code>\\</code>' }} />
-                  {'More details'} <Link to="https://www.regular-expressions.info/tutorial.html">{'Here'}</Link>
+                  <InlineMarkdown data={translate('ConditionUsingRegularExpressions')} />
                 </div>
                 <div>
-                  {'Regular expressions can be tested '}
-                  <Link to="http://regexstorm.net/tester">Here</Link>
+                  <InlineMarkdown data={translate('RegularExpressionsTutorialLink')} />
+                </div>
+                <div>
+                  <InlineMarkdown data={translate('RegularExpressionsCanBeTested')} />
                 </div>
               </Alert>
           }
 
           <FormGroup>
             <FormLabel>
-              Name
+              {translate('Name')}
             </FormLabel>
 
             <FormInputGroup
@@ -91,28 +93,28 @@ function EditSpecificationModalContent(props) {
 
           <FormGroup>
             <FormLabel>
-              Negate
+              {translate('Negate')}
             </FormLabel>
 
             <FormInputGroup
               type={inputTypes.CHECK}
               name="negate"
               {...negate}
-              helpText={`If checked, the custom format will not apply if this ${implementationName} condition matches.`}
+              helpText={translate('NegateHelpText', { implementationName })}
               onChange={onInputChange}
             />
           </FormGroup>
 
           <FormGroup>
             <FormLabel>
-              Required
+              {translate('Required')}
             </FormLabel>
 
             <FormInputGroup
               type={inputTypes.CHECK}
               name="required"
               {...required}
-              helpText={`This ${implementationName} condition must match for the custom format to apply.  Otherwise a single ${implementationName} match is sufficient.`}
+              helpText={translate('RequiredHelpText', { implementationName })}
               onChange={onInputChange}
             />
           </FormGroup>
@@ -126,21 +128,21 @@ function EditSpecificationModalContent(props) {
               kind={kinds.DANGER}
               onPress={onDeleteSpecificationPress}
             >
-              Delete
+              {translate('Delete')}
             </Button>
         }
 
         <Button
           onPress={onCancelPress}
         >
-          Cancel
+          {translate('Cancel')}
         </Button>
 
         <SpinnerErrorButton
           isSpinning={false}
           onPress={onSavePress}
         >
-          Save
+          {translate('Save')}
         </SpinnerErrorButton>
       </ModalFooter>
     </ModalContent>

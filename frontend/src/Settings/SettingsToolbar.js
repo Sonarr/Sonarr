@@ -5,6 +5,7 @@ import PageToolbar from 'Components/Page/Toolbar/PageToolbar';
 import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
 import PageToolbarSection from 'Components/Page/Toolbar/PageToolbarSection';
 import { icons } from 'Helpers/Props';
+import translate from 'Utilities/String/translate';
 import AdvancedSettingsButton from './AdvancedSettingsButton';
 import PendingChangesModal from './PendingChangesModal';
 
@@ -61,7 +62,7 @@ class SettingsToolbar extends Component {
           {
             showSave &&
               <PageToolbarButton
-                label={hasPendingChanges ? 'Save Changes' : 'No Changes'}
+                label={hasPendingChanges ? translate('SaveChanges') : translate('NoChanges')}
                 iconName={icons.SAVE}
                 isSpinning={isSaving}
                 isDisabled={!hasPendingChanges}

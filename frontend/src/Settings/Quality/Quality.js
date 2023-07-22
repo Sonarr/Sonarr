@@ -6,6 +6,7 @@ import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
 import { icons } from 'Helpers/Props';
 import SettingsToolbarConnector from 'Settings/SettingsToolbarConnector';
+import translate from 'Utilities/String/translate';
 import QualityDefinitionsConnector from './Definition/QualityDefinitionsConnector';
 import ResetQualityDefinitionsModal from './Reset/ResetQualityDefinitionsModal';
 
@@ -62,7 +63,7 @@ class Quality extends Component {
     } = this.state;
 
     return (
-      <PageContent title="Quality Settings">
+      <PageContent title={translate('QualitySettings')}>
         <SettingsToolbarConnector
           isSaving={isSaving}
           hasPendingChanges={hasPendingChanges}
@@ -71,7 +72,7 @@ class Quality extends Component {
               <PageToolbarSeparator />
 
               <PageToolbarButton
-                label="Reset Definitions"
+                label={translate('ResetDefinitions')}
                 iconName={icons.REFRESH}
                 isSpinning={isResettingQualityDefinitions}
                 onPress={this.onResetQualityDefinitionsPress}

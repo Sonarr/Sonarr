@@ -8,6 +8,7 @@ import FormInputGroup from 'Components/Form/FormInputGroup';
 import FormLabel from 'Components/Form/FormLabel';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import { inputTypes, kinds, sizes } from 'Helpers/Props';
+import translate from 'Utilities/String/translate';
 
 function DownloadClientOptions(props) {
   const {
@@ -28,13 +29,15 @@ function DownloadClientOptions(props) {
 
       {
         !isFetching && error &&
-          <Alert kind={kinds.DANGER}>Unable to load download client options</Alert>
+          <Alert kind={kinds.DANGER}>
+            {translate('DownloadClientOptionsLoadError')}
+          </Alert>
       }
 
       {
         hasSettings && !isFetching && !error && advancedSettings &&
           <div>
-            <FieldSet legend="Completed Download Handling">
+            <FieldSet legend={translate('CompletedDownloadHandling')}>
 
               <Form>
                 <FormGroup
@@ -42,12 +45,12 @@ function DownloadClientOptions(props) {
                   isAdvanced={true}
                   size={sizes.MEDIUM}
                 >
-                  <FormLabel>Enable</FormLabel>
+                  <FormLabel>{translate('Enable')}</FormLabel>
 
                   <FormInputGroup
                     type={inputTypes.CHECK}
                     name="enableCompletedDownloadHandling"
-                    helpText="Automatically import completed downloads from download client"
+                    helpText={translate('EnableCompletedDownloadHandlingHelpText')}
                     onChange={onInputChange}
                     {...settings.enableCompletedDownloadHandling}
                   />
@@ -58,12 +61,12 @@ function DownloadClientOptions(props) {
                   isAdvanced={true}
                   size={sizes.MEDIUM}
                 >
-                  <FormLabel>Redownload Failed</FormLabel>
+                  <FormLabel>{translate('RedownloadFailed')}</FormLabel>
 
                   <FormInputGroup
                     type={inputTypes.CHECK}
                     name="autoRedownloadFailed"
-                    helpText="Automatically search for and attempt to download a different release"
+                    helpText={translate('AutoRedownloadFailedHelpText')}
                     onChange={onInputChange}
                     {...settings.autoRedownloadFailed}
                   />
@@ -71,7 +74,7 @@ function DownloadClientOptions(props) {
               </Form>
 
               <Alert kind={kinds.INFO}>
-                The Remove settings were moved to the individual Download Client settings in the table above.
+                {translate('RemoveDownloadsAlert')}
               </Alert>
             </FieldSet>
           </div>
