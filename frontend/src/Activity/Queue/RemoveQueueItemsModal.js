@@ -139,8 +139,8 @@ class RemoveQueueItemsModal extends Component {
                     helpText={translate('SkipRedownloadHelpText')}
                     onChange={this.onSkipRedownloadChange}
                   />
-                </FormGroup>
-				: null
+                </FormGroup> :
+                null
             }
           </ModalBody>
 
