@@ -3327,18 +3327,6 @@
         }
       }
     },
-    "/initialize.js": {
-      "get": {
-        "tags": [
-          "InitializeJs"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success"
-          }
-        }
-      }
-    },
     "/api/v3/language": {
       "get": {
         "tags": [
@@ -9024,6 +9012,10 @@
               "$ref": "#/components/schemas/CustomFormatResource"
             },
             "nullable": true
+          },
+          "customFormatScore": {
+            "type": "integer",
+            "format": "int32"
           },
           "rejections": {
             "type": "array",

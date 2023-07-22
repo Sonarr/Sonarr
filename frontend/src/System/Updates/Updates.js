@@ -12,6 +12,7 @@ import PageContentBody from 'Components/Page/PageContentBody';
 import { icons, kinds } from 'Helpers/Props';
 import formatDate from 'Utilities/Date/formatDate';
 import formatDateTime from 'Utilities/Date/formatDateTime';
+import translate from 'Utilities/String/translate';
 import UpdateChanges from './UpdateChanges';
 import styles from './Updates.css';
 
@@ -43,15 +44,15 @@ class Updates extends Component {
     const hasUpdateToInstall = hasUpdates && _.some(items, { installable: true, latest: true });
     const noUpdateToInstall = hasUpdates && !hasUpdateToInstall;
 
-    const externalUpdaterPrefix = 'Unable to update Sonarr directly,';
+    const externalUpdaterPrefix = translate('UnableToUpdateSonarrDirectly');
     const externalUpdaterMessages = {
-      external: 'Sonarr is configured to use an external update mechanism',
-      apt: 'use apt to install the update',
-      docker: 'update the docker container to receive the update'
+      external: translate('ExternalUpdater'),
+      apt: translate('AptUpdater'),
+      docker: translate('DockerUpdater')
     };
 
     return (
-      <PageContent title="Updates">
+      <PageContent title={translate('Updates')}>
         <PageContentBody>
           {
             !isPopulated && !hasError &&
@@ -61,7 +62,7 @@ class Updates extends Component {
           {
             noUpdates &&
               <Alert kind={kinds.INFO}>
-                No updates are available
+                {translate('NoUpdatesAreAvailable')}
               </Alert>
           }
 
@@ -76,7 +77,7 @@ class Updates extends Component {
                       isSpinning={isInstallingUpdate}
                       onPress={onInstallLatestPress}
                     >
-                      Install Latest
+                      {translate('InstallLatest')}
                     </SpinnerButton> :
 
                     <Fragment>
@@ -112,7 +113,7 @@ class Updates extends Component {
                 />
 
                 <div className={styles.message}>
-                  The latest version of Sonarr is already installed
+                  {translate('OnLatestVersion')}
                 </div>
 
                 {
@@ -164,7 +165,7 @@ class Updates extends Component {
                                 kind={kinds.SUCCESS}
                                 title={formatDateTime(update.installedOn, longDateFormat, timeFormat)}
                               >
-                                Currently Installed
+                                {translate('CurrentlyInstalled')}
                               </Label> :
                               null
                           }
@@ -176,7 +177,7 @@ class Updates extends Component {
                                 kind={kinds.INVERSE}
                                 title={formatDateTime(update.installedOn, longDateFormat, timeFormat)}
                               >
-                                Previously Installed
+                                {translate('PreviouslyInstalled')}
                               </Label> :
                               null
                           }
@@ -184,19 +185,21 @@ class Updates extends Component {
 
                         {
                           !hasChanges &&
-                            <div>Maintenance Release: See GitHub commit history for details.</div>
+                            <div>
+                              {translate('MaintenanceRelease')}
+                            </div>
                         }
 
                         {
                           hasChanges &&
                             <div className={styles.changes}>
                               <UpdateChanges
-                                title="New"
+                                title={translate('New')}
                                 changes={update.changes.new}
                               />
 
                               <UpdateChanges
-                                title="Fixed"
+                                title={translate('Fixed')}
                                 changes={update.changes.fixed}
                               />
                             </div>
@@ -211,14 +214,14 @@ class Updates extends Component {
           {
             !!updatesError &&
               <div>
-                Failed to fetch updates
+                {translate('FailedToFetchUpdates')}
               </div>
           }
 
           {
             !!generalSettingsError &&
               <div>
-                Failed to update settings
+                {translate('FailedToUpdateSettings')}
               </div>
           }
         </PageContentBody>

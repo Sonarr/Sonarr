@@ -36,43 +36,57 @@ type OnSelectedChangeCallback = React.ComponentProps<
 const COLUMNS = [
   {
     name: 'name',
-    label: translate('Name'),
+    get label() {
+      return translate('Name');
+    },
     isSortable: true,
     isVisible: true,
   },
   {
     name: 'implementation',
-    label: translate('Implementation'),
+    get label() {
+      return translate('Implementation');
+    },
     isSortable: true,
     isVisible: true,
   },
   {
     name: 'enableRss',
-    label: translate('EnableRSS'),
+    get label() {
+      return translate('EnableRSS');
+    },
     isSortable: true,
     isVisible: true,
   },
   {
     name: 'enableAutomaticSearch',
-    label: translate('EnableAutomaticSearch'),
+    get label() {
+      return translate('EnableAutomaticSearch');
+    },
     isSortable: true,
     isVisible: true,
   },
   {
     name: 'enableInteractiveSearch',
-    label: translate('EnableInteractiveSearch'),
+    get label() {
+      return translate('EnableInteractiveSearch');
+    },
     isSortable: true,
     isVisible: true,
   },
   {
     name: 'priority',
-    label: translate('Priority'),
+    get label() {
+      return translate('Priority');
+    },
     isSortable: true,
     isVisible: true,
   },
   {
     name: 'tags',
-    label: translate('Tags'),
+    get label() {
+      return translate('Tags');
+    },
     isSortable: true,
     isVisible: true,
   },

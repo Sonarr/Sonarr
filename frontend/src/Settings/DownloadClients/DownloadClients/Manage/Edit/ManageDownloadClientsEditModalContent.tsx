@@ -27,9 +27,25 @@ interface ManageDownloadClientsEditModalContentProps {
 const NO_CHANGE = 'noChange';
 
 const enableOptions = [
-  { key: NO_CHANGE, value: translate('NoChange'), disabled: true },
-  { key: 'enabled', value: translate('Enabled') },
-  { key: 'disabled', value: translate('Disabled') },
+  {
+    key: NO_CHANGE,
+    get value() {
+      return translate('NoChange');
+    },
+    disabled: true,
+  },
+  {
+    key: 'enabled',
+    get value() {
+      return translate('Enabled');
+    },
+  },
+  {
+    key: 'disabled',
+    get value() {
+      return translate('Disabled');
+    },
+  },
 ];
 
 function ManageDownloadClientsEditModalContent(

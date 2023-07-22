@@ -21,16 +21,22 @@ const SIDEBAR_WIDTH = parseInt(dimensions.sidebarWidth);
 const links = [
   {
     iconName: icons.SERIES_CONTINUING,
-    title: translate('Series'),
+    get title() {
+      return translate('Series');
+    },
     to: '/',
     alias: '/series',
     children: [
       {
-        title: translate('AddNew'),
+        get title() {
+          return translate('AddNew');
+        },
         to: '/add/new'
       },
       {
-        title: translate('LibraryImport'),
+        get title() {
+          return translate('LibraryImport');
+        },
         to: '/add/import'
       }
     ]
@@ -38,26 +44,36 @@ const links = [
 
   {
     iconName: icons.CALENDAR,
-    title: translate('Calendar'),
+    get title() {
+      return translate('Calendar');
+    },
     to: '/calendar'
   },
 
   {
     iconName: icons.ACTIVITY,
-    title: translate('Activity'),
+    get title() {
+      return translate('Activity');
+    },
     to: '/activity/queue',
     children: [
       {
-        title: translate('Queue'),
+        get title() {
+          return translate('Queue');
+        },
         to: '/activity/queue',
         statusComponent: QueueStatusConnector
       },
       {
-        title: translate('History'),
+        get title() {
+          return translate('History');
+        },
         to: '/activity/history'
       },
       {
-        title: translate('Blocklist'),
+        get title() {
+          return translate('Blocklist');
+        },
         to: '/activity/blocklist'
       }
     ]
@@ -65,15 +81,21 @@ const links = [
 
   {
     iconName: icons.WARNING,
-    title: translate('Wanted'),
+    get title() {
+      return translate('Wanted');
+    },
     to: '/wanted/missing',
     children: [
       {
-        title: translate('Missing'),
+        get title() {
+          return translate('Missing');
+        },
         to: '/wanted/missing'
       },
       {
-        title: translate('CutoffUnmet'),
+        get title() {
+          return translate('CutoffUnmet');
+        },
         to: '/wanted/cutoffunmet'
       }
     ]
@@ -81,59 +103,87 @@ const links = [
 
   {
     iconName: icons.SETTINGS,
-    title: translate('Settings'),
+    get title() {
+      return translate('Settings');
+    },
     to: '/settings',
     children: [
       {
-        title: translate('MediaManagement'),
+        get title() {
+          return translate('MediaManagement');
+        },
         to: '/settings/mediamanagement'
       },
       {
-        title: translate('Profiles'),
+        get title() {
+          return translate('Profiles');
+        },
         to: '/settings/profiles'
       },
       {
-        title: translate('Quality'),
+        get title() {
+          return translate('Quality');
+        },
         to: '/settings/quality'
       },
       {
-        title: translate('CustomFormats'),
+        get title() {
+          return translate('CustomFormats');
+        },
         to: '/settings/customformats'
       },
       {
-        title: translate('Indexers'),
+        get title() {
+          return translate('Indexers');
+        },
         to: '/settings/indexers'
       },
       {
-        title: translate('DownloadClients'),
+        get title() {
+          return translate('DownloadClients');
+        },
         to: '/settings/downloadclients'
       },
       {
-        title: translate('ImportLists'),
+        get title() {
+          return translate('ImportLists');
+        },
         to: '/settings/importlists'
       },
       {
-        title: translate('Connect'),
+        get title() {
+          return translate('Connect');
+        },
         to: '/settings/connect'
       },
       {
-        title: translate('Metadata'),
+        get title() {
+          return translate('Metadata');
+        },
         to: '/settings/metadata'
       },
       {
-        title: translate('MetadataSource'),
+        get title() {
+          return translate('MetadataSource');
+        },
         to: '/settings/metadatasource'
       },
       {
-        title: translate('Tags'),
+        get title() {
+          return translate('Tags');
+        },
         to: '/settings/tags'
       },
       {
-        title: translate('General'),
+        get title() {
+          return translate('General');
+        },
         to: '/settings/general'
       },
       {
-        title: translate('UI'),
+        get title() {
+          return translate('UI');
+        },
         to: '/settings/ui'
       }
     ]
@@ -141,32 +191,46 @@ const links = [
 
   {
     iconName: icons.SYSTEM,
-    title: translate('System'),
+    get title() {
+      return translate('System');
+    },
     to: '/system/status',
     children: [
       {
-        title: translate('Status'),
+        get title() {
+          return translate('Status');
+        },
         to: '/system/status',
         statusComponent: HealthStatusConnector
       },
       {
-        title: translate('Tasks'),
+        get title() {
+          return translate('Tasks');
+        },
         to: '/system/tasks'
       },
       {
-        title: translate('Backup'),
+        get title() {
+          return translate('Backup');
+        },
         to: '/system/backup'
       },
       {
-        title: translate('Updates'),
+        get title() {
+          return translate('Updates');
+        },
         to: '/system/updates'
       },
       {
-        title: translate('Events'),
+        get title() {
+          return translate('Events');
+        },
         to: '/system/events'
       },
       {
-        title: translate('LogFiles'),
+        get title() {
+          return translate('LogFiles');
+        },
         to: '/system/logs/files'
       }
     ]

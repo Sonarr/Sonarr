@@ -11,6 +11,7 @@ import TableBody from 'Components/Table/TableBody';
 import TableRow from 'Components/Table/TableRow';
 import { icons, kinds } from 'Helpers/Props';
 import titleCase from 'Utilities/String/titleCase';
+import translate from 'Utilities/String/translate';
 import styles from './Health.css';
 
 function getInternalLink(source) {
@@ -23,7 +24,7 @@ function getInternalLink(source) {
       return (
         <IconButton
           name={icons.SETTINGS}
-          title="Settings"
+          title={translate('Settings')}
           to="/settings/indexers"
         />
       );
@@ -33,7 +34,7 @@ function getInternalLink(source) {
       return (
         <IconButton
           name={icons.SETTINGS}
-          title="Settings"
+          title={translate('Settings')}
           to="/settings/downloadclients"
         />
       );
@@ -41,7 +42,7 @@ function getInternalLink(source) {
       return (
         <IconButton
           name={icons.SERIES_CONTINUING}
-          title="Series Editor"
+          title={translate('SeriesEditor')}
           to="/serieseditor"
         />
       );
@@ -49,7 +50,7 @@ function getInternalLink(source) {
       return (
         <IconButton
           name={icons.UPDATE}
-          title="Updates"
+          title={translate('Updates')}
           to="/system/updates"
         />
       );
@@ -64,7 +65,7 @@ function getTestLink(source, props) {
       return (
         <SpinnerIconButton
           name={icons.TEST}
-          title="Test All"
+          title={translate('TestAll')}
           isSpinning={props.isTestingAllIndexers}
           onPress={props.dispatchTestAllIndexers}
         />
@@ -74,7 +75,7 @@ function getTestLink(source, props) {
       return (
         <SpinnerIconButton
           name={icons.TEST}
-          title="Test All"
+          title={translate('TestAll')}
           isSpinning={props.isTestingAllDownloadClients}
           onPress={props.dispatchTestAllDownloadClients}
         />
@@ -93,12 +94,16 @@ const columns = [
   },
   {
     name: 'message',
-    label: 'Message',
+    get label() {
+      return translate('Message');
+    },
     isVisible: true
   },
   {
     name: 'actions',
-    label: 'Actions',
+    get label() {
+      return translate('Actions');
+    },
     isVisible: true
   }
 ];
@@ -121,7 +126,7 @@ class Health extends Component {
       <FieldSet
         legend={
           <div className={styles.legend}>
-            Health
+            {translate('Health')}
 
             {
               isFetching && isPopulated &&
@@ -141,7 +146,7 @@ class Health extends Component {
         {
           !healthIssues &&
             <div className={styles.healthOk}>
-              No issues with your configuration
+              {translate('NoIssuesWithYourConfiguration')}
             </div>
         }
 
@@ -186,7 +191,7 @@ class Health extends Component {
                           <IconButton
                             name={icons.WIKI}
                             to={item.wikiUrl}
-                            title="Read the Wiki for more information"
+                            title={translate('ReadTheWikiForMoreInformation')}
                           />
 
                           {

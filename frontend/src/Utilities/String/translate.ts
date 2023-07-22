@@ -4,14 +4,14 @@ function getTranslations() {
   return createAjaxRequest({
     global: false,
     dataType: 'json',
-    url: '/localization'
+    url: '/localization',
   }).request;
 }
 
-let translations = {};
+let translations: Record<string, string> = {};
 
-export function fetchTranslations() {
-  return new Promise(async(resolve) => {
+export async function fetchTranslations(): Promise<boolean> {
+  return new Promise(async (resolve) => {
     try {
       const data = await getTranslations();
       translations = data.strings;
@@ -23,7 +23,10 @@ export function fetchTranslations() {
   });
 }
 
-export default function translate(key, tokens) {
+export default function translate(
+  key: string,
+  tokens?: Record<string, string | number | boolean>
+) {
   const translation = translations[key] || key;
 
   if (tokens) {
