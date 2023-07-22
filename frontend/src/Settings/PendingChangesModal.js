@@ -8,6 +8,7 @@ import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import { kinds } from 'Helpers/Props';
+import translate from 'Utilities/String/translate';
 
 function PendingChangesModal(props) {
   const {
@@ -27,10 +28,10 @@ function PendingChangesModal(props) {
       onModalClose={onCancel}
     >
       <ModalContent onModalClose={onCancel}>
-        <ModalHeader>Unsaved Changes</ModalHeader>
+        <ModalHeader>{translate('UnsavedChanges')}</ModalHeader>
 
         <ModalBody>
-          You have unsaved changes, are you sure you want to leave this page?
+          {translate('PendingChangesMessage')}
         </ModalBody>
 
         <ModalFooter>
@@ -38,7 +39,7 @@ function PendingChangesModal(props) {
             kind={kinds.DEFAULT}
             onPress={onCancel}
           >
-            Stay and review changes
+            {translate('PendingChangesStayReview')}
           </Button>
 
           <Button
@@ -46,7 +47,7 @@ function PendingChangesModal(props) {
             kind={kinds.DANGER}
             onPress={onConfirm}
           >
-            Discard changes and leave
+            {translate('PendingChangesDiscardChanges')}
           </Button>
         </ModalFooter>
       </ModalContent>

@@ -123,7 +123,7 @@ export default function EditAutoTaggingModalContent(props) {
           {
             !isFetching && !!error ?
               <div>
-                {'Unable to add a new auto tag, please try again.'}
+                {translate('AddAutoTagError')}
               </div> :
               null
           }

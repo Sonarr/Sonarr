@@ -15,6 +15,7 @@ import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import { inputTypes, kinds, sizes } from 'Helpers/Props';
+import translate from 'Utilities/String/translate';
 import styles from './EditDownloadClientModalContent.css';
 
 class EditDownloadClientModalContent extends Component {
@@ -57,7 +58,7 @@ class EditDownloadClientModalContent extends Component {
     return (
       <ModalContent onModalClose={onModalClose}>
         <ModalHeader>
-          {`${id ? 'Edit' : 'Add'} Download Client - ${implementationName}`}
+          {`${id ? translate('Edit') : translate('Add')} ${translate('DownloadClient')} - ${implementationName}`}
         </ModalHeader>
 
         <ModalBody>
@@ -68,7 +69,9 @@ class EditDownloadClientModalContent extends Component {
 
           {
             !isFetching && !!error &&
-              <div>Unable to add a new download client, please try again.</div>
+              <div>
+                {translate('AddDownloadClientError')}
+              </div>
           }
 
           {
@@ -85,7 +88,7 @@ class EditDownloadClientModalContent extends Component {
                 }
 
                 <FormGroup>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>{translate('Name')}</FormLabel>
 
                   <FormInputGroup
                     type={inputTypes.TEXT}
@@ -96,7 +99,7 @@ class EditDownloadClientModalContent extends Component {
                 </FormGroup>
 
                 <FormGroup>
-                  <FormLabel>Enable</FormLabel>
+                  <FormLabel>{translate('Enable')}</FormLabel>
 
                   <FormInputGroup
                     type={inputTypes.CHECK}
@@ -125,12 +128,12 @@ class EditDownloadClientModalContent extends Component {
                   advancedSettings={advancedSettings}
                   isAdvanced={true}
                 >
-                  <FormLabel>Client Priority</FormLabel>
+                  <FormLabel>{translate('ClientPriority')}</FormLabel>
 
                   <FormInputGroup
                     type={inputTypes.NUMBER}
                     name="priority"
-                    helpText="Prioritize multiple Download Clients. Round-Robin is used for clients with the same priority."
+                    helpText={translate('PriorityHelpText')}
                     min={1}
                     max={50}
                     {...priority}
@@ -139,12 +142,12 @@ class EditDownloadClientModalContent extends Component {
                 </FormGroup>
 
                 <FormGroup>
-                  <FormLabel>Tags</FormLabel>
+                  <FormLabel>{translate('Tags')}</FormLabel>
 
                   <FormInputGroup
                     type={inputTypes.TAG}
                     name="tags"
-                    helpText="Only use this download client for series with at least one matching tag. Leave blank to use with all series."
+                    helpText={translate('DownloadClientTagHelpText')}
                     {...tags}
                     onChange={onInputChange}
                   />
@@ -152,15 +155,15 @@ class EditDownloadClientModalContent extends Component {
 
                 <FieldSet
                   size={sizes.SMALL}
-                  legend="Completed Download Handling"
+                  legend={translate('CompletedDownloadHandling')}
                 >
                   <FormGroup>
-                    <FormLabel>Remove Completed</FormLabel>
+                    <FormLabel>{translate('RemoveCompleted')}</FormLabel>
 
                     <FormInputGroup
                       type={inputTypes.CHECK}
                       name="removeCompletedDownloads"
-                      helpText="Remove imported downloads from download client history (when finished seeding for torrents)"
+                      helpText={translate('RemoveCompletedDownloadsHelpText')}
                       {...removeCompletedDownloads}
                       onChange={onInputChange}
                     />
@@ -169,12 +172,12 @@ class EditDownloadClientModalContent extends Component {
                   {
                     protocol.value !== 'torrent' &&
                       <FormGroup>
-                        <FormLabel>Remove Failed</FormLabel>
+                        <FormLabel>{translate('RemoveFailed')}</FormLabel>
 
                         <FormInputGroup
                           type={inputTypes.CHECK}
                           name="removeFailedDownloads"
-                          helpText="Remove failed downloads from download client history"
+                          helpText={translate('RemoveFailedDownloadsHelpText')}
                           {...removeFailedDownloads}
                           onChange={onInputChange}
                         />
@@ -192,7 +195,7 @@ class EditDownloadClientModalContent extends Component {
                 kind={kinds.DANGER}
                 onPress={onDeleteDownloadClientPress}
               >
-                Delete
+                {translate('Delete')}
               </Button>
           }
 
@@ -201,13 +204,13 @@ class EditDownloadClientModalContent extends Component {
             error={saveError}
             onPress={onTestPress}
           >
-            Test
+            {translate('Test')}
           </SpinnerErrorButton>
 
           <Button
             onPress={onModalClose}
           >
-            Cancel
+            {translate('Cancel')}
           </Button>
 
           <SpinnerErrorButton
@@ -215,7 +218,7 @@ class EditDownloadClientModalContent extends Component {
             error={saveError}
             onPress={onSavePress}
           >
-            Save
+            {translate('Save')}
           </SpinnerErrorButton>
         </ModalFooter>
       </ModalContent>

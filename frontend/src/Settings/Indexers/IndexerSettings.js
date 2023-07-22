@@ -69,7 +69,7 @@ class IndexerSettings extends Component {
     } = this.state;
 
     return (
-      <PageContent title="Indexer Settings">
+      <PageContent title={translate('IndexerSettings')}>
         <SettingsToolbarConnector
           isSaving={isSaving}
           hasPendingChanges={hasPendingChanges}
@@ -78,7 +78,7 @@ class IndexerSettings extends Component {
               <PageToolbarSeparator />
 
               <PageToolbarButton
-                label="Test All Indexers"
+                label={translate('TestAllIndexers')}
                 iconName={icons.TEST}
                 isSpinning={isTestingAll}
                 onPress={dispatchTestAllIndexers}

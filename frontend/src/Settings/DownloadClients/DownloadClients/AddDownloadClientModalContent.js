@@ -9,6 +9,7 @@ import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import { kinds } from 'Helpers/Props';
+import translate from 'Utilities/String/translate';
 import AddDownloadClientItem from './AddDownloadClientItem';
 import styles from './AddDownloadClientModalContent.css';
 
@@ -31,7 +32,7 @@ class AddDownloadClientModalContent extends Component {
     return (
       <ModalContent onModalClose={onModalClose}>
         <ModalHeader>
-          Add Download Client
+          {translate('AddDownloadClient')}
         </ModalHeader>
 
         <ModalBody>
@@ -42,7 +43,9 @@ class AddDownloadClientModalContent extends Component {
 
           {
             !isSchemaFetching && !!schemaError &&
-              <div>Unable to add a new downloadClient, please try again.</div>
+              <div>
+                {translate('AddDownloadClientError')}
+              </div>
           }
 
           {
@@ -50,11 +53,15 @@ class AddDownloadClientModalContent extends Component {
               <div>
 
                 <Alert kind={kinds.INFO}>
-                  <div>Sonarr supports many popular torrent and usenet download clients.</div>
-                  <div>For more information on the individual download clients, click the more info buttons.</div>
+                  <div>
+                    {translate('SupportedDownloadClients')}
+                  </div>
+                  <div>
+                    {translate('SupportedDownloadClientsMoreInfo')}
+                  </div>
                 </Alert>
 
-                <FieldSet legend="Usenet">
+                <FieldSet legend={translate('Usenet')}>
                   <div className={styles.downloadClients}>
                     {
                       usenetDownloadClients.map((downloadClient) => {
@@ -71,7 +78,7 @@ class AddDownloadClientModalContent extends Component {
                   </div>
                 </FieldSet>
 
-                <FieldSet legend="Torrents">
+                <FieldSet legend={translate('Torrents')}>
                   <div className={styles.downloadClients}>
                     {
                       torrentDownloadClients.map((downloadClient) => {
@@ -94,7 +101,7 @@ class AddDownloadClientModalContent extends Component {
           <Button
             onPress={onModalClose}
           >
-            Close
+            {translate('Close')}
           </Button>
         </ModalFooter>
       </ModalContent>

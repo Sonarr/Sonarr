@@ -7,6 +7,7 @@ import ConfirmModal from 'Components/Modal/ConfirmModal';
 import TagList from 'Components/TagList';
 import { icons, kinds } from 'Helpers/Props';
 import titleCase from 'Utilities/String/titleCase';
+import translate from 'Utilities/String/translate';
 import EditDelayProfileModalConnector from './EditDelayProfileModalConnector';
 import styles from './DelayProfile.css';
 
@@ -16,15 +17,15 @@ function getDelay(enabled, delay) {
   }
 
   if (!delay) {
-    return 'No Delay';
+    return translate('NoDelay');
   }
 
   if (delay === 1) {
-    return '1 Minute';
+    return translate('OneMinute');
   }
 
   // TODO: use better units of time than just minutes
-  return `${delay} Minutes`;
+  return translate('DelayMinutes', { delay });
 }
 
 class DelayProfile extends Component {
@@ -84,12 +85,12 @@ class DelayProfile extends Component {
       connectDragSource
     } = this.props;
 
-    let preferred = `Prefer ${titleCase(preferredProtocol)}`;
+    let preferred = titleCase(translate('PreferProtocol', { preferredProtocol }));
 
     if (!enableUsenet) {
-      preferred = 'Only Torrent';
+      preferred = translate('OnlyTorrent');
     } else if (!enableTorrent) {
-      preferred = 'Only Usenet';
+      preferred = translate('OnlyUsenet');
     }
 
     return (
@@ -139,9 +140,9 @@ class DelayProfile extends Component {
         <ConfirmModal
           isOpen={this.state.isDeleteDelayProfileModalOpen}
           kind={kinds.DANGER}
-          title="Delete Delay Profile"
-          message="Are you sure you want to delete this delay profile?"
-          confirmLabel="Delete"
+          title={translate('DeleteDelayProfile')}
+          message={translate('DeleteDelayProfileMessageText')}
+          confirmLabel={translate('Delete')}
           onConfirm={this.onConfirmDeleteDelayProfile}
           onCancel={this.onDeleteDelayProfileModalClose}
         />

@@ -12,6 +12,7 @@ import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import { inputTypes } from 'Helpers/Props';
+import translate from 'Utilities/String/translate';
 
 function EditMetadataModalContent(props) {
   const {
@@ -35,18 +36,18 @@ function EditMetadataModalContent(props) {
   return (
     <ModalContent onModalClose={onModalClose}>
       <ModalHeader>
-        Edit {name.value} Metadata
+        {translate('EditMetadata', { metadataType: name.value })}
       </ModalHeader>
 
       <ModalBody>
         <Form {...otherProps}>
           <FormGroup>
-            <FormLabel>Enable</FormLabel>
+            <FormLabel>{translate('Enable')}</FormLabel>
 
             <FormInputGroup
               type={inputTypes.CHECK}
               name="enable"
-              helpText="Enable metadata file creation for this metadata type"
+              helpText={translate('EnableMetadataHelpText')}
               {...enable}
               onChange={onInputChange}
             />
@@ -74,7 +75,7 @@ function EditMetadataModalContent(props) {
         <Button
           onPress={onModalClose}
         >
-          Cancel
+          {translate('Cancel')}
         </Button>
 
         <SpinnerErrorButton
@@ -82,7 +83,7 @@ function EditMetadataModalContent(props) {
           error={saveError}
           onPress={onSavePress}
         >
-          Save
+          {translate('Save')}
         </SpinnerErrorButton>
       </ModalFooter>
     </ModalContent>

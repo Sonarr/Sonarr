@@ -1,5 +1,6 @@
 import React from 'react';
-import Link from 'Components/Link/Link';
+import translate from 'Utilities/String/translate';
+import InlineMarkdown from '../../Components/Markdown/InlineMarkdown';
 import styles from './TheTvdb.css';
 
 function TheTvdb(props) {
@@ -12,12 +13,10 @@ function TheTvdb(props) {
 
       <div className={styles.info}>
         <div className={styles.title}>
-          TheTVDB
+          {translate('TheTvdb')}
         </div>
 
-        <div>
-          Series and episode information is provided by TheTVDB.com. <Link to="https://www.thetvdb.com/subscribe">Please consider supporting them.</Link>
-        </div>
+        <InlineMarkdown data={translate('SeriesAndEpisodeInformationIsProvidedByTheTVDB')} />
       </div>
 
     </div>

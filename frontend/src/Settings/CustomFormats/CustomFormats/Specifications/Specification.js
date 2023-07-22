@@ -115,7 +115,7 @@ class Specification extends Component {
           isOpen={this.state.isDeleteSpecificationModalOpen}
           kind={kinds.DANGER}
           title={translate('DeleteCondition')}
-          message={translate('DeleteConditionMessageText', [name])}
+          message={translate('DeleteConditionMessageText', { name })}
           confirmLabel={translate('Delete')}
           onConfirm={this.onConfirmDeleteSpecification}
           onCancel={this.onDeleteSpecificationModalClose}

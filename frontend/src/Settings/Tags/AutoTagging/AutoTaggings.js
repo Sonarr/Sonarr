@@ -58,7 +58,7 @@ export default function AutoTaggings() {
   return (
     <FieldSet legend={translate('AutoTagging')}>
       <PageSectionContent
-        errorMessage={translate('UnableToLoadAutoTagging')}
+        errorMessage={translate('AutoTaggingLoadError')}
         error={error}
         isFetching={isFetching}
         isPopulated={isPopulated}
