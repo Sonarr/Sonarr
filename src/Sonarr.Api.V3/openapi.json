@@ -5132,6 +5132,14 @@
               "type": "boolean",
               "default": false
             }
+          },
+          {
+            "name": "skipRedownload",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
           }
         ],
         "responses": {
@@ -5157,6 +5165,14 @@
           },
           {
             "name": "blocklist",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "skipRedownload",
             "in": "query",
             "schema": {
               "type": "boolean",
