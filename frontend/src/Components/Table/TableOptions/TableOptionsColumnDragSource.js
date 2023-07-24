@@ -112,7 +112,7 @@ class TableOptionsColumnDragSource extends Component {
 
         <TableOptionsColumn
           name={name}
-          label={label}
+          label={typeof label === 'function' ? label() : label}
           isVisible={isVisible}
           isModifiable={isModifiable}
           index={index}
@@ -138,7 +138,7 @@ class TableOptionsColumnDragSource extends Component {
 
 TableOptionsColumnDragSource.propTypes = {
   name: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
+  label: PropTypes.oneOfType([PropTypes.string, PropTypes.func]).isRequired,
   isVisible: PropTypes.bool.isRequired,
   isModifiable: PropTypes.bool.isRequired,
   index: PropTypes.number.isRequired,

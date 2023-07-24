@@ -30,6 +30,7 @@ class TableHeaderCell extends Component {
     const {
       className,
       name,
+      label,
       columnLabel,
       isSortable,
       isVisible,
@@ -53,7 +54,8 @@ class TableHeaderCell extends Component {
           {...otherProps}
           component="th"
           className={className}
-          title={columnLabel}
+          label={typeof label === 'function' ? label() : label}
+          title={typeof columnLabel === 'function' ? columnLabel() : columnLabel}
           onPress={this.onPress}
         >
           {children}
@@ -77,7 +79,8 @@ class TableHeaderCell extends Component {
 TableHeaderCell.propTypes = {
   className: PropTypes.string,
   name: PropTypes.string.isRequired,
-  columnLabel: PropTypes.string,
+  label: PropTypes.oneOfType([PropTypes.string, PropTypes.func, PropTypes.node]),
+  columnLabel: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
   isSortable: PropTypes.bool,
   isVisible: PropTypes.bool,
   isModifiable: PropTypes.bool,
