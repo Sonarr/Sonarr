@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using NLog;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.IndexerSearch;
@@ -30,6 +30,12 @@ namespace NzbDrone.Core.Download
         [EventHandleOrder(EventHandleOrder.Last)]
         public void Handle(DownloadFailedEvent message)
         {
+            if (message.SkipRedownload)
+            {
+                _logger.Debug("Skip redownloading requested by user");
+                return;
+            }
+
             if (!_configService.AutoRedownloadFailed)
             {
                 _logger.Debug("Auto redownloading failed episodes is disabled");

@@ -11,6 +11,7 @@ namespace NzbDrone.Core.Parser.Model
         public int TvdbId { get; set; }
         public int TmdbId { get; set; }
         public string ImdbId { get; set; }
+        public int MalId { get; set; }
         public DateTime ReleaseDate { get; set; }
 
         public override string ToString()

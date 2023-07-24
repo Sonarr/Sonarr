@@ -21,7 +21,7 @@ namespace NzbDrone.Core.ImportLists.Simkl.User
 
         private IEnumerable<ImportListRequest> GetSeriesRequest()
         {
-            var link = $"{Settings.BaseUrl.Trim()}/sync/all-items/shows/{((SimklUserListType)Settings.ListType).ToString().ToLowerInvariant()}";
+            var link = $"{Settings.BaseUrl.Trim()}/sync/all-items/{((SimklUserShowType)Settings.ShowType).ToString().ToLowerInvariant()}/{((SimklUserListType)Settings.ListType).ToString().ToLowerInvariant()}";
 
             var request = new ImportListRequest(link, HttpAccept.Json);
 
