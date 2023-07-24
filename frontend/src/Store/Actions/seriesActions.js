@@ -6,6 +6,7 @@ import { createThunk, handleThunks } from 'Store/thunks';
 import sortByName from 'Utilities/Array/sortByName';
 import createAjaxRequest from 'Utilities/createAjaxRequest';
 import dateFilterPredicate from 'Utilities/Date/dateFilterPredicate';
+import translate from 'Utilities/String/translate';
 import { set, updateItem } from './baseActions';
 import createFetchHandler from './Creators/createFetchHandler';
 import createHandleActions from './Creators/createHandleActions';
@@ -29,12 +30,12 @@ export const section = 'series';
 export const filters = [
   {
     key: 'all',
-    label: 'All',
+    label: () => translate('All'),
     filters: []
   },
   {
     key: 'monitored',
-    label: 'Monitored Only',
+    label: () => translate('MonitoredOnly'),
     filters: [
       {
         key: 'monitored',
@@ -45,7 +46,7 @@ export const filters = [
   },
   {
     key: 'unmonitored',
-    label: 'Unmonitored Only',
+    label: () => translate('UnmonitoredOnly'),
     filters: [
       {
         key: 'monitored',
@@ -56,7 +57,7 @@ export const filters = [
   },
   {
     key: 'continuing',
-    label: 'Continuing Only',
+    label: () => translate('ContinuingOnly'),
     filters: [
       {
         key: 'status',
@@ -67,7 +68,7 @@ export const filters = [
   },
   {
     key: 'ended',
-    label: 'Ended Only',
+    label: () => translate('EndedOnly'),
     filters: [
       {
         key: 'status',
@@ -78,7 +79,7 @@ export const filters = [
   },
   {
     key: 'missing',
-    label: 'Missing Episodes',
+    label: () => translate('MissingEpisodes'),
     filters: [
       {
         key: 'missing',
@@ -194,25 +195,25 @@ export const filterPredicates = {
 export const filterBuilderProps = [
   {
     name: 'monitored',
-    label: 'Monitored',
+    label: () => translate('Monitored'),
     type: filterBuilderTypes.EXACT,
     valueType: filterBuilderValueTypes.BOOL
   },
   {
     name: 'status',
-    label: 'Status',
+    label: () => translate('Status'),
     type: filterBuilderTypes.EXACT,
     valueType: filterBuilderValueTypes.SERIES_STATUS
   },
   {
     name: 'seriesType',
-    label: 'Type',
+    label: () => translate('Type'),
     type: filterBuilderTypes.EXACT,
     valueType: filterBuilderValueTypes.SERIES_TYPES
   },
   {
     name: 'network',
-    label: 'Network',
+    label: () => translate('Network'),
     type: filterBuilderTypes.STRING,
     optionsSelector: function(items) {
       const tagList = items.reduce((acc, series) => {
@@ -231,57 +232,57 @@ export const filterBuilderProps = [
   },
   {
     name: 'qualityProfileId',
-    label: 'Quality Profile',
+    label: () => translate('QualityProfile'),
     type: filterBuilderTypes.EXACT,
     valueType: filterBuilderValueTypes.QUALITY_PROFILE
   },
   {
     name: 'nextAiring',
-    label: 'Next Airing',
+    label: () => translate('NextAiring'),
     type: filterBuilderTypes.DATE,
     valueType: filterBuilderValueTypes.DATE
   },
   {
     name: 'previousAiring',
-    label: 'Previous Airing',
+    label: () => translate('PreviousAiring'),
     type: filterBuilderTypes.DATE,
     valueType: filterBuilderValueTypes.DATE
   },
   {
     name: 'added',
-    label: 'Added',
+    label: () => translate('Added'),
     type: filterBuilderTypes.DATE,
     valueType: filterBuilderValueTypes.DATE
   },
   {
     name: 'seasonCount',
-    label: 'Season Count',
+    label: () => translate('SeasonCount'),
     type: filterBuilderTypes.NUMBER
   },
   {
     name: 'episodeProgress',
-    label: 'Episode Progress',
+    label: () => translate('EpisodeProgress'),
     type: filterBuilderTypes.NUMBER
   },
   {
     name: 'path',
-    label: 'Path',
+    label: () => translate('Path'),
     type: filterBuilderTypes.STRING
   },
   {
     name: 'rootFolderPath',
-    label: 'Root Folder Path',
+    label: () => translate('RootFolderPath'),
     type: filterBuilderTypes.EXACT
   },
   {
     name: 'sizeOnDisk',
-    label: 'Size on Disk',
+    label: () => translate('SizeOnDisk'),
     type: filterBuilderTypes.NUMBER,
     valueType: filterBuilderValueTypes.BYTES
   },
   {
     name: 'genres',
-    label: 'Genres',
+    label: () => translate('Genres'),
     type: filterBuilderTypes.ARRAY,
     optionsSelector: function(items) {
       const tagList = items.reduce((acc, series) => {
@@ -300,7 +301,7 @@ export const filterBuilderProps = [
   },
   {
     name: 'originalLanguage',
-    label: 'Original Language',
+    label: () => translate('OriginalLanguage'),
     type: filterBuilderTypes.EXACT,
     optionsSelector: function(items) {
       const languageList = items.reduce((acc, series) => {
@@ -319,33 +320,33 @@ export const filterBuilderProps = [
   },
   {
     name: 'releaseGroups',
-    label: 'Release Groups',
+    label: () => translate('ReleaseGroups'),
     type: filterBuilderTypes.ARRAY
   },
   {
     name: 'ratings',
-    label: 'Rating',
+    label: () => translate('Rating'),
     type: filterBuilderTypes.NUMBER
   },
   {
     name: 'certification',
-    label: 'Certification',
+    label: () => translate('Certification'),
     type: filterBuilderTypes.EXACT
   },
   {
     name: 'tags',
-    label: 'Tags',
+    label: () => translate('Tags'),
     type: filterBuilderTypes.ARRAY,
     valueType: filterBuilderValueTypes.TAG
   },
   {
     name: 'useSceneNumbering',
-    label: 'Scene Numbering',
+    label: () => translate('SceneNumbering'),
     type: filterBuilderTypes.EXACT
   },
   {
     name: 'hasMissingSeason',
-    label: 'Has Missing Season',
+    label: () => translate('HasMissingSeason'),
     type: filterBuilderTypes.EXACT
   }
 ];
