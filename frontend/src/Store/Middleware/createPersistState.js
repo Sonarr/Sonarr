@@ -36,10 +36,17 @@ function mergeColumns(path, initialState, persistedState, computedState) {
     const column = initialColumns.find((i) => i.name === persistedColumn.name);
 
     if (column) {
-      columns.push({
-        ...column,
-        isVisible: persistedColumn.isVisible
-      });
+      const newColumn = {};
+
+      // We can't use a spread operator or Object.assign to clone the column
+      // or any accessors are lost and can break translations.
+      for (const prop of Object.keys(column)) {
+        Object.defineProperty(newColumn, prop, Object.getOwnPropertyDescriptor(column, prop));
+      }
+
+      newColumn.isVisible = persistedColumn.isVisible;
+
+      columns.push(newColumn);
     }
   });
 

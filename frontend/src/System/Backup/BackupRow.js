@@ -9,6 +9,7 @@ import TableRowCell from 'Components/Table/Cells/TableRowCell';
 import TableRow from 'Components/Table/TableRow';
 import { icons, kinds } from 'Helpers/Props';
 import formatBytes from 'Utilities/Number/formatBytes';
+import translate from 'Utilities/String/translate';
 import RestoreBackupModalConnector from './RestoreBackupModalConnector';
 import styles from './BackupRow.css';
 
@@ -75,14 +76,14 @@ class BackupRow extends Component {
     } = this.state;
 
     let iconClassName = icons.SCHEDULED;
-    let iconTooltip = 'Scheduled';
+    let iconTooltip = translate('Scheduled');
 
     if (type === 'manual') {
       iconClassName = icons.INTERACTIVE;
-      iconTooltip = 'Manual';
+      iconTooltip = translate('Manual');
     } else if (type === 'update') {
       iconClassName = icons.UPDATE;
-      iconTooltip = 'Before update';
+      iconTooltip = translate('BeforeUpdate');
     }
 
     return (
@@ -115,12 +116,13 @@ class BackupRow extends Component {
 
         <TableRowCell className={styles.actions}>
           <IconButton
+            title={translate('RestoreBackup')}
             name={icons.RESTORE}
             onPress={this.onRestorePress}
           />
 
           <IconButton
-            title="Delete backup"
+            title={translate('DeleteBackup')}
             name={icons.DELETE}
             onPress={this.onDeletePress}
           />
@@ -136,9 +138,11 @@ class BackupRow extends Component {
         <ConfirmModal
           isOpen={isConfirmDeleteModalOpen}
           kind={kinds.DANGER}
-          title="Delete Backup"
-          message={`Are you sure you want to delete the backup '${name}'?`}
-          confirmLabel="Delete"
+          title={translate('DeleteBackup')}
+          message={translate('DeleteBackupMessageText', {
+            name
+          })}
+          confirmLabel={translate('Delete')}
           onConfirm={this.onConfirmDeletePress}
           onCancel={this.onConfirmDeleteModalClose}
         />

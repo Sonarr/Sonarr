@@ -3,11 +3,15 @@
     "UI Language": "UI Langue",
     "Language that Sonarr will use for UI": "Langue que Sonarr utilisera pour l'interface utilisateur",
     "Browser Reload Required": "Rechargement du navigateur requis",
-    "Added": "Ajouter",
+    "Added": "Ajouté",
     "ApiKeyValidationHealthCheckMessage": "Veuillez mettre à jour votre clé API pour qu'elle contienne au moins {0} caractères. Vous pouvez le faire via les paramètres ou le fichier de configuration",
     "AppDataLocationHealthCheckMessage": "La mise à jour ne sera pas possible pour empêcher la suppression de AppData lors de la mise à jour",
     "ApplyChanges": "Appliquer les modifications",
     "AutomaticAdd": "Ajout automatique",
     "CountSeasons": "{count} saisons",
-    "DownloadClientCheckNoneAvailableHealthCheckMessage": "Aucun client de téléchargement disponible"
+    "DownloadClientCheckNoneAvailableHealthCheckMessage": "Aucun client de téléchargement disponible",
+    "Add": "Ajouter",
+    "AddingTag": "Ajout d'un tag",
+    "Apply": "Appliquer",
+    "ApplyTags": "Appliquer les tags"
 }

@@ -43,7 +43,7 @@ class Icon extends PureComponent {
       return (
         <span
           className={containerClassName}
-          title={title}
+          title={typeof title === 'function' ? title() : title}
         >
           {icon}
         </span>
@@ -60,7 +60,7 @@ Icon.propTypes = {
   name: PropTypes.object.isRequired,
   kind: PropTypes.string.isRequired,
   size: PropTypes.number.isRequired,
-  title: PropTypes.string,
+  title: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
   darken: PropTypes.bool.isRequired,
   isSpinning: PropTypes.bool.isRequired,
   fixedWidth: PropTypes.bool.isRequired

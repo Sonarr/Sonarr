@@ -119,9 +119,8 @@ export const defaultState = {
       },
       label: React.createElement(Icon, {
         name: icons.SCORE,
-        get title() {
-          return translate('CustomFormatScore');
-        }
+        title: () => translate('CustomFormatScore')
+
       }),
       isVisible: false
     },

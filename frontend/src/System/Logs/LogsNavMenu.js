@@ -4,6 +4,7 @@ import Menu from 'Components/Menu/Menu';
 import MenuButton from 'Components/Menu/MenuButton';
 import MenuContent from 'Components/Menu/MenuContent';
 import MenuItem from 'Components/Menu/MenuItem';
+import translate from 'Utilities/String/translate';
 
 class LogsNavMenu extends Component {
 
@@ -50,13 +51,13 @@ class LogsNavMenu extends Component {
           <MenuItem
             to={'/system/logs/files'}
           >
-            Log Files
+            {translate('LogFiles')}
           </MenuItem>
 
           <MenuItem
             to={'/system/logs/files/update'}
           >
-            Updater Log Files
+            {translate('UpdaterLogFiles')}
           </MenuItem>
         </MenuContent>
       </Menu>
