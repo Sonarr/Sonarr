@@ -5,6 +5,7 @@ using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.MediaFiles.EpisodeImport.Manual;
 using NzbDrone.Core.Qualities;
+using Sonarr.Api.V3.CustomFormats;
 using Sonarr.Api.V3.Episodes;
 using Sonarr.Http;
 
@@ -43,6 +44,8 @@ namespace Sonarr.Api.V3.ManualImport
                 item.SeasonNumber = processedItem.SeasonNumber;
                 item.Episodes = processedItem.Episodes.ToResource();
                 item.Rejections = processedItem.Rejections;
+                item.CustomFormats = processedItem.CustomFormats.ToResource(false);
+                item.CustomFormatScore = processedItem.CustomFormatScore;
 
                 // Only set the language/quality if they're unknown and languages were returned.
                 // Languages won't be returned when reprocessing if the season/episode isn't filled in yet and we don't want to return no languages to the client.
