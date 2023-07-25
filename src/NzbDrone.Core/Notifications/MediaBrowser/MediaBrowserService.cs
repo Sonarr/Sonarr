@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Net;
 using FluentValidation.Results;
 using NLog;
+using NzbDrone.Common.Disk;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Tv;
 
@@ -46,7 +48,14 @@ namespace NzbDrone.Core.Notifications.Emby
 
             foreach (var path in paths)
             {
-                _proxy.Update(settings, path, updateType);
+                var mappedPath = new OsPath(path);
+
+                if (settings.MapTo.IsNotNullOrWhiteSpace())
+                {
+                    mappedPath = new OsPath(settings.MapTo) + (mappedPath - new OsPath(settings.MapFrom));
+                }
+
+                _proxy.Update(settings, mappedPath.ToString(), updateType);
             }
         }
 
