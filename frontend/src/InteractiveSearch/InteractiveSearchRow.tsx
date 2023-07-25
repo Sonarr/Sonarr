@@ -19,7 +19,7 @@ import CustomFormat from 'typings/CustomFormat';
 import formatDateTime from 'Utilities/Date/formatDateTime';
 import formatAge from 'Utilities/Number/formatAge';
 import formatBytes from 'Utilities/Number/formatBytes';
-import formatPreferredWordScore from 'Utilities/Number/formatPreferredWordScore';
+import formatCustomFormatScore from 'Utilities/Number/formatCustomFormatScore';
 import OverrideMatchModal from './OverrideMatch/OverrideMatchModal';
 import Peers from './Peers';
 import ReleaseEpisode from './ReleaseEpisode';
@@ -236,7 +236,7 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
 
       <TableRowCell className={styles.customFormatScore}>
         <Tooltip
-          anchor={formatPreferredWordScore(
+          anchor={formatCustomFormatScore(
             customFormatScore,
             customFormats.length
           )}
