@@ -431,7 +431,10 @@ function InteractiveImportRow(props: InteractiveImportRowProps) {
       <TableRowCell>
         {customFormats?.length ? (
           <Popover
-            anchor={formatCustomFormatScore(customFormatScore)}
+            anchor={formatCustomFormatScore(
+              customFormatScore,
+              customFormats.length
+            )}
             title={translate('CustomFormats')}
             body={
               <div className={styles.customFormatTooltip}>
