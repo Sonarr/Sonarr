@@ -30,7 +30,7 @@ import {
 import { SelectStateInputProps } from 'typings/props';
 import Rejection from 'typings/Rejection';
 import formatBytes from 'Utilities/Number/formatBytes';
-import formatPreferredWordScore from 'Utilities/Number/formatPreferredWordScore';
+import formatCustomFormatScore from 'Utilities/Number/formatCustomFormatScore';
 import translate from 'Utilities/String/translate';
 import InteractiveImportRowCellPlaceholder from './InteractiveImportRowCellPlaceholder';
 import styles from './InteractiveImportRow.css';
@@ -431,7 +431,7 @@ function InteractiveImportRow(props: InteractiveImportRowProps) {
       <TableRowCell>
         {customFormats?.length ? (
           <Popover
-            anchor={formatPreferredWordScore(customFormatScore)}
+            anchor={formatCustomFormatScore(customFormatScore)}
             title={translate('CustomFormats')}
             body={
               <div className={styles.customFormatTooltip}>

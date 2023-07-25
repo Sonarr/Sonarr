@@ -1,5 +1,7 @@
-
-function formatPreferredWordScore(input, customFormatsLength = 0) {
+function formatCustomFormatScore(
+  input?: number,
+  customFormatsLength = 0
+): string {
   const score = Number(input);
 
   if (score > 0) {
@@ -7,10 +9,10 @@ function formatPreferredWordScore(input, customFormatsLength = 0) {
   }
 
   if (score < 0) {
-    return score;
+    return `${score}`;
   }
 
   return customFormatsLength > 0 ? '+0' : '';
 }
 
-export default formatPreferredWordScore;
+export default formatCustomFormatScore;

@@ -7,7 +7,7 @@ import DescriptionListItemTitle from 'Components/DescriptionList/DescriptionList
 import Link from 'Components/Link/Link';
 import formatDateTime from 'Utilities/Date/formatDateTime';
 import formatAge from 'Utilities/Number/formatAge';
-import formatPreferredWordScore from 'Utilities/Number/formatPreferredWordScore';
+import formatCustomFormatScore from 'Utilities/Number/formatCustomFormatScore';
 import styles from './HistoryDetails.css';
 
 function HistoryDetails(props) {
@@ -68,7 +68,7 @@ function HistoryDetails(props) {
           customFormatScore && customFormatScore !== '0' ?
             <DescriptionListItem
               title="Custom Format Score"
-              data={formatPreferredWordScore(customFormatScore)}
+              data={formatCustomFormatScore(customFormatScore)}
             /> :
             null
         }
@@ -200,7 +200,7 @@ function HistoryDetails(props) {
           customFormatScore && customFormatScore !== '0' ?
             <DescriptionListItem
               title="Custom Format Score"
-              data={formatPreferredWordScore(customFormatScore)}
+              data={formatCustomFormatScore(customFormatScore)}
             /> :
             null
         }
@@ -246,7 +246,7 @@ function HistoryDetails(props) {
           customFormatScore && customFormatScore !== '0' ?
             <DescriptionListItem
               title="Custom Format Score"
-              data={formatPreferredWordScore(customFormatScore)}
+              data={formatCustomFormatScore(customFormatScore)}
             /> :
             null
         }
