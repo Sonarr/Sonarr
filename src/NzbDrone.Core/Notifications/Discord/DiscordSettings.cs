@@ -35,7 +35,7 @@ namespace NzbDrone.Core.Notifications.Discord
         [FieldDefinition(2, Label = "Avatar", HelpText = "Change the avatar that is used for messages from this integration", Type = FieldType.Textbox)]
         public string Avatar { get; set; }
 
-        [FieldDefinition(3, Label = "Host", Advanced = true, HelpText = "Override the Host that shows for this notification, Blank is machine name", Type = FieldType.Textbox)]
+        [FieldDefinition(3, Label = "Author", Advanced = true, HelpText = "Override the embed author that shows for this notification, Blank is instance name", Type = FieldType.Textbox)]
         public string Author { get; set; }
 
         [FieldDefinition(4, Label = "On Grab Fields", Advanced = true, SelectOptions = typeof(DiscordGrabFieldType), HelpText = "Change the fields that are passed in for this 'on grab' notification", Type = FieldType.TagSelect)]

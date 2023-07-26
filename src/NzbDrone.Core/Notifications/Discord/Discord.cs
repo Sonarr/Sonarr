@@ -214,7 +214,7 @@ namespace NzbDrone.Core.Notifications.Discord
                         break;
                     case DiscordImportFieldType.Release:
                         discordField.Name = "Release";
-                        discordField.Value = message.EpisodeFile.SceneName;
+                        discordField.Value = string.Format("```{0}```", message.EpisodeFile.SceneName);
                         break;
                     case DiscordImportFieldType.Links:
                         discordField.Name = "Links";
@@ -358,81 +358,72 @@ namespace NzbDrone.Core.Notifications.Discord
 
         public override void OnHealthIssue(HealthCheck.HealthCheck healthCheck)
         {
-            var attachments = new List<Embed>
-                              {
-                                  new Embed
-                                  {
-                                      Author = new DiscordAuthor
-                                      {
-                                          Name = Settings.Author.IsNullOrWhiteSpace() ? Environment.MachineName : Settings.Author,
-                                          IconUrl = "https://raw.githubusercontent.com/Sonarr/Sonarr/develop/Logo/256.png"
-                                      },
-                                      Title = healthCheck.Source.Name,
-                                      Description = healthCheck.Message,
-                                      Timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffZ"),
-                                      Color = healthCheck.Type == HealthCheck.HealthCheckResult.Warning ? (int)DiscordColors.Warning : (int)DiscordColors.Danger
-                                  }
-                              };
+            var embed = new Embed
+            {
+                Author = new DiscordAuthor
+                {
+                    Name = Settings.Author.IsNullOrWhiteSpace() ? Environment.MachineName : Settings.Author,
+                    IconUrl = "https://raw.githubusercontent.com/Sonarr/Sonarr/develop/Logo/256.png"
+                },
+                Title = healthCheck.Source.Name,
+                Description = healthCheck.Message,
+                Timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffZ"),
+                Color = healthCheck.Type == HealthCheck.HealthCheckResult.Warning ? (int)DiscordColors.Warning : (int)DiscordColors.Danger
+            };
 
-            var payload = CreatePayload(null, attachments);
+            var payload = CreatePayload(null, new List<Embed> { embed });
 
             _proxy.SendPayload(payload, Settings);
         }
 
         public override void OnHealthRestored(HealthCheck.HealthCheck previousCheck)
         {
-            var attachments = new List<Embed>
-                              {
-                                  new Embed
-                                  {
-                                      Author = new DiscordAuthor
-                                      {
-                                          Name = Settings.Author.IsNullOrWhiteSpace() ? Environment.MachineName : Settings.Author,
-                                          IconUrl = "https://raw.githubusercontent.com/Sonarr/Sonarr/develop/Logo/256.png"
-                                      },
-                                      Title = "Health Issue Resolved: " + previousCheck.Source.Name,
-                                      Description = $"The following issue is now resolved: {previousCheck.Message}",
-                                      Timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffZ"),
-                                      Color = (int)DiscordColors.Success
-                                  }
-                              };
+            var embed = new Embed
+            {
+                Author = new DiscordAuthor
+                {
+                    Name = Settings.Author.IsNullOrWhiteSpace() ? Environment.MachineName : Settings.Author,
+                    IconUrl = "https://raw.githubusercontent.com/Sonarr/Sonarr/develop/Logo/256.png"
+                },
+                Title = "Health Issue Resolved: " + previousCheck.Source.Name,
+                Description = $"The following issue is now resolved: {previousCheck.Message}",
+                Timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffZ"),
+                Color = (int)DiscordColors.Success
+            };
 
-            var payload = CreatePayload(null, attachments);
+            var payload = CreatePayload(null, new List<Embed> { embed });
 
             _proxy.SendPayload(payload, Settings);
         }
 
         public override void OnApplicationUpdate(ApplicationUpdateMessage updateMessage)
         {
-            var attachments = new List<Embed>
-                              {
-                                  new Embed
-                                  {
-                                      Author = new DiscordAuthor
-                                      {
-                                          Name = Settings.Author.IsNullOrWhiteSpace() ? Environment.MachineName : Settings.Author,
-                                          IconUrl = "https://raw.githubusercontent.com/Sonarr/Sonarr/develop/Logo/256.png"
-                                      },
-                                      Title = APPLICATION_UPDATE_TITLE,
-                                      Timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffZ"),
-                                      Color = (int)DiscordColors.Standard,
-                                      Fields = new List<DiscordField>()
-                                      {
-                                          new DiscordField()
-                                          {
-                                              Name = "Previous Version",
-                                              Value = updateMessage.PreviousVersion.ToString()
-                                          },
-                                          new DiscordField()
-                                          {
-                                              Name = "New Version",
-                                              Value = updateMessage.NewVersion.ToString()
-                                          }
-                                      },
-                                  }
-                              };
+            var embed = new Embed
+            {
+                Author = new DiscordAuthor
+                {
+                    Name = Settings.Author.IsNullOrWhiteSpace() ? Environment.MachineName : Settings.Author,
+                    IconUrl = "https://raw.githubusercontent.com/Sonarr/Sonarr/develop/Logo/256.png"
+                },
+                Title = APPLICATION_UPDATE_TITLE,
+                Timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffZ"),
+                Color = (int)DiscordColors.Standard,
+                Fields = new List<DiscordField>()
+                {
+                    new DiscordField()
+                    {
+                        Name = "Previous Version",
+                        Value = updateMessage.PreviousVersion.ToString()
+                    },
+                    new DiscordField()
+                    {
+                        Name = "New Version",
+                        Value = updateMessage.NewVersion.ToString()
+                    }
+                },
+            };
 
-            var payload = CreatePayload(null, attachments);
+            var payload = CreatePayload(null, new List<Embed> { embed });
 
             _proxy.SendPayload(payload, Settings);
         }
