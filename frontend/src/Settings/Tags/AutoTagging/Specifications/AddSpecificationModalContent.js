@@ -13,6 +13,7 @@ import {
   fetchAutoTaggingSpecificationSchema,
   selectAutoTaggingSpecificationSchema
 } from 'Store/Actions/settingsActions';
+import translate from 'Utilities/String/translate';
 import AddSpecificationItem from './AddSpecificationItem';
 import styles from './AddSpecificationModalContent.css';
 
@@ -44,7 +45,7 @@ export default function AddSpecificationModalContent(props) {
   return (
     <ModalContent onModalClose={onModalClose}>
       <ModalHeader>
-        Add Condition
+        {translate('AddCondition')}
       </ModalHeader>
 
       <ModalBody>
@@ -93,7 +94,7 @@ export default function AddSpecificationModalContent(props) {
         <Button
           onPress={onModalClose}
         >
-          Close
+          {translate('Close')}
         </Button>
       </ModalFooter>
     </ModalContent>
