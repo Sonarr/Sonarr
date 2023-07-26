@@ -24,19 +24,22 @@ namespace NzbDrone.Core.ImportLists.MyAnimeList
             BaseUrl = "https://api.myanimelist.net/v2";
         }
 
-        [FieldDefinition(0, Label = "Access Token", Type = FieldType.Textbox)]
+        [FieldDefinition(0, Label = "Client ID", Type = FieldType.Textbox)]
+        public string ClientId { get; set; }
+
+        [FieldDefinition(0, Label = "Client Secret", Type = FieldType.Textbox)]
+        public string ClientSecret { get; set; }
+
+        [FieldDefinition(0, Label = "Access Token", Type = FieldType.Textbox, Hidden = HiddenType.Hidden)]
         public string AccessToken { get; set; }
 
-        [FieldDefinition(0, Label = "Refresh Token", Type = FieldType.Textbox)]
+        [FieldDefinition(0, Label = "Refresh Token", Type = FieldType.Textbox, Hidden = HiddenType.Hidden)]
         public string RefreshToken { get; set; }
 
-        [FieldDefinition(0, Label = "Expires", Type = FieldType.Textbox)]
+        [FieldDefinition(0, Label = "Expires", Type = FieldType.Textbox, Hidden = HiddenType.Hidden)]
         public DateTime Expires { get; set; }
 
-        [FieldDefinition(0, Label = "Auth User", Type = FieldType.Textbox)]
-        public string AuthUser { get; set; }
-
-        [FieldDefinition(99, Label = "Auth With MAL", Type = FieldType.OAuth)]
+        [FieldDefinition(99, Label = "Authenticate With MyAnimeList", Type = FieldType.OAuth, HelpTextWarning = "Client ID and Client Secret must be filled out before authenticating with MAL")]
         public string SignIn { get; set; }
 
         public NzbDroneValidationResult Validate()

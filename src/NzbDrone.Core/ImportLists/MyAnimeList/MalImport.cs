@@ -9,7 +9,6 @@ using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
-using HttpClient = System.Net.Http.HttpClient;
 
 namespace NzbDrone.Core.ImportLists.MyAnimeList
 {
@@ -17,14 +16,11 @@ namespace NzbDrone.Core.ImportLists.MyAnimeList
     {
         public const string OAuthUrl = "https://myanimelist.net/v1/oauth2/authorize";
         public const string OAuthTokenUrl = "https://myanimelist.net/v1/oauth2/token";
-        public const string ClientId = "4d057302cee543511828cac37864235a";
-        public const string ClientSecret = "756e293edefff82edf6245fb02e23aacfa58c602e4c49f51acf5aa9161685f6f";
         public const string RedirectUri = "http://localhost:8989/oauth.html";
 
-        public static string MalIdConversions = "";
-        public static Dictionary<int, int> Maltotvdb = new Dictionary<int, int>();
+        public static Dictionary<int, int> MalTvdbIds = new Dictionary<int, int>();
 
-        private string _Codechallenge = "";
+        private static string _Codechallenge = "";
 
         public override string Name => "MyAnimeList";
         public override ImportListType ListType => ImportListType.Other;
@@ -34,8 +30,10 @@ namespace NzbDrone.Core.ImportLists.MyAnimeList
         public MalImport(IHttpClient httpClient, IImportListStatusService importListStatusService, IConfigService configService, IParsingService parsingService, Logger logger)
             : base(httpClient, importListStatusService, configService, parsingService, logger)
         {
-            _Codechallenge = GeneratePKCEforMal();
-            LoadMalIDConversionJson();
+            if (MalTvdbIds.Count == 0)
+            {
+                MalTvdbIds = GetMalToTvdbIds();
+            }
         }
 
         // This method should refresh (dunno what that means) the token
@@ -48,8 +46,7 @@ namespace NzbDrone.Core.ImportLists.MyAnimeList
 
         // This method is used for generating the access token.
         // In the MAL API instructions (https://myanimelist.net/blog.php?eid=835707)
-        // we need to create an app entry for this.
-        // This doesn't work. 2 requests need to be made, one to get the auth code, then the second to get the json response
+        // How can I call this function 3 times so I don't have to use helper functions?
         public override object RequestAction(string action, IDictionary<string, string> query)
         {
             if (action == "startOAuth")
@@ -57,12 +54,13 @@ namespace NzbDrone.Core.ImportLists.MyAnimeList
                 // The workaround
                 // Have mal redirect, then make copy and paste the returned stuff into a text box for sonarr to use.
                 // Create those boxes in MalListSettings
+                _Codechallenge = GenCodeChallenge();
                 var request = new HttpRequestBuilder(OAuthUrl)
                     .AddQueryParam("response_type", "code")
-                    .AddQueryParam("client_id", ClientId)
+                    .AddQueryParam("client_id", Settings.ClientId)
                     .AddQueryParam("code_challenge", _Codechallenge)
                     .AddQueryParam("state", query["callbackUrl"])
-                    .AddQueryParam("redirect_uri", "http://localhost:8989/api/v3/importlist/action/ligma")
+                    .AddQueryParam("redirect_uri", RedirectUri)
                     .Build();
 
                 return new
@@ -72,18 +70,13 @@ namespace NzbDrone.Core.ImportLists.MyAnimeList
             }
             else if (action == "getOAuthToken")
             {
-                var request = new HttpRequestBuilder(OAuthTokenUrl)
-                    .AddQueryParam("response_type", "code")
-                    .AddQueryParam("client_id", ClientId)
-                    .AddQueryParam("client_secret", ClientSecret)
-                    .AddQueryParam("code", query["code"])
-                    .AddQueryParam("code_challenge", _Codechallenge)
-                    .AddQueryParam("grant_type", "authorization_code")
-                    //.AddQueryParam("redirect_uri", "http://localhost:8989/api/v3/importlist/action/ligma")
-                    .Build();
-                request.Method = HttpMethod.Post;
-
-                return new { };
+                var jsonResult = Json.Deserialize<MalAuthToken>(GetAuthToken(query["code"]));
+                return new
+                {
+                    accessToken = jsonResult.AccessToken,
+                    refreshToken = jsonResult.RefreshToken,
+                    expires = DateTime.UtcNow.AddSeconds(int.Parse(jsonResult.ExpiresIn))
+                };
             }
 
             return new { };
@@ -102,9 +95,33 @@ namespace NzbDrone.Core.ImportLists.MyAnimeList
             };
         }
 
-        private string GeneratePKCEforMal()
+        private class IDS
         {
-            // For the sake of MAL, the code challenge is the same as the code verifie
+            [JsonProperty("mal_id")]
+            public int MalId { get; set; }
+
+            [JsonProperty("thetvdb_id")]
+            public int TvdbId { get; set; }
+        }
+
+        private class MalAuthToken
+        {
+            [JsonProperty("token_type")]
+            public string TokenType { get; set; }
+
+            [JsonProperty("expires_in")]
+            public string ExpiresIn { get; set; }
+
+            [JsonProperty("access_token")]
+            public string AccessToken { get; set; }
+
+            [JsonProperty("refresh_token")]
+            public string RefreshToken { get; set; }
+        }
+
+        private string GenCodeChallenge()
+        {
+            // For the sake of MAL, the code challenge is the same as the code verifier
             var validChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-~._";
 
             var code = new char[128];
@@ -116,43 +133,53 @@ namespace NzbDrone.Core.ImportLists.MyAnimeList
             }
 
             var codeChallenge = new string(code);
-            _logger.Info($"MAL Code Challenge: {codeChallenge}");
 
             return codeChallenge;
         }
 
-        private class IDS
-        {
-            [JsonProperty("mal_id")]
-            public int MalId { get; set; }
-
-            [JsonProperty("thetvdb_id")]
-            public int TvdbId { get; set; }
-        }
-
-        private void generateDictionary(string jsonfile)
-        {
-            var ids = Json.Deserialize<List<IDS>>(jsonfile);
-
-            foreach (var id in ids)
-            {
-                Maltotvdb.Add(id.MalId, id.TvdbId);
-            }
-        }
-
-        private async void LoadMalIDConversionJson()
+        private Dictionary<int, int> GetMalToTvdbIds()
         {
             try
             {
-                var httpClient = new HttpClient();
-                var response = await httpClient.GetAsync("https://github.com/Fribb/anime-lists/blob/master/anime-list-mini.json");
-                var result = await response.Content.ReadAsStringAsync();
-                generateDictionary(result);
+                var request = new HttpRequestBuilder("https://raw.githubusercontent.com/Fribb/anime-lists/master/anime-list-mini.json")
+                    .Build();
+                var response = _httpClient.Get(request);
+                var ids = Json.Deserialize<List<IDS>>(response.Content);
+                var resultDict = new Dictionary<int, int>();
+
+                foreach (var id in ids)
+                {
+                    resultDict.TryAdd(id.MalId, id.TvdbId);
+                }
+
+                return resultDict;
             }
             catch (HttpRequestException ex)
             {
                 _logger.Error(ex.Message);
-                MalIdConversions = "";
+                return null;
+            }
+        }
+
+        private string GetAuthToken(string authcode)
+        {
+            try
+            {
+                var req = new HttpRequestBuilder(OAuthTokenUrl).Post()
+                    .AddFormParameter("client_id", Settings.ClientId)
+                    .AddFormParameter("client_secret", Settings.ClientSecret)
+                    .AddFormParameter("code", authcode)
+                    .AddFormParameter("code_verifier", _Codechallenge)
+                    .AddFormParameter("grant_type", "authorization_code")
+                    .AddFormParameter("redirect_uri", "http://localhost:8989/oauth.html")
+                    .Build();
+                var response = _httpClient.Post(req);
+                return response.Content;
+            }
+            catch (HttpRequestException ex)
+            {
+                _logger.Error(ex.Message);
+                return null;
             }
         }
     }
