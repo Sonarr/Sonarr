@@ -10,6 +10,7 @@ import { cloneAutoTagging, deleteAutoTagging, fetchAutoTaggings } from 'Store/Ac
 import createSortedSectionSelector from 'Store/Selectors/createSortedSectionSelector';
 import createTagsSelector from 'Store/Selectors/createTagsSelector';
 import sortByName from 'Utilities/Array/sortByName';
+import translate from 'Utilities/String/translate';
 import AutoTagging from './AutoTagging';
 import EditAutoTaggingModal from './EditAutoTaggingModal';
 import styles from './AutoTaggings.css';
@@ -55,9 +56,9 @@ export default function AutoTaggings() {
   }, [dispatch]);
 
   return (
-    <FieldSet legend="Auto Tagging">
+    <FieldSet legend={translate('AutoTagging')}>
       <PageSectionContent
-        errorMessage="Unable to load auto taggimg"
+        errorMessage={translate('UnableToLoadAutoTagging')}
         error={error}
         isFetching={isFetching}
         isPopulated={isPopulated}

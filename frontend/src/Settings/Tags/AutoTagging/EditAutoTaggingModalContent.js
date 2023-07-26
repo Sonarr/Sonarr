@@ -24,6 +24,7 @@ import {
   setAutoTaggingValue
 } from 'Store/Actions/settingsActions';
 import { createProviderSettingsSelectorHook } from 'Store/Selectors/createProviderSettingsSelector';
+import translate from 'Utilities/String/translate';
 import AddSpecificationModal from './Specifications/AddSpecificationModal';
 import EditSpecificationModal from './Specifications/EditSpecificationModal';
 import Specification from './Specifications/Specification';
@@ -110,7 +111,7 @@ export default function EditAutoTaggingModalContent(props) {
     <ModalContent onModalClose={onModalClose}>
 
       <ModalHeader>
-        {id ? 'Edit Auto Tag' : 'Add Auto Tag'}
+        {id ? translate('EditAutoTag') : translate('AddAutoTag')}
       </ModalHeader>
 
       <ModalBody>
@@ -136,7 +137,7 @@ export default function EditAutoTaggingModalContent(props) {
                 >
                   <FormGroup>
                     <FormLabel>
-                      Name
+                      {translate('Name')}
                     </FormLabel>
 
                     <FormInputGroup
@@ -148,19 +149,19 @@ export default function EditAutoTaggingModalContent(props) {
                   </FormGroup>
 
                   <FormGroup>
-                    <FormLabel>{'Remove Tags Automatically'}</FormLabel>
+                    <FormLabel>{translate('RemoveTagsAutomatically')}</FormLabel>
 
                     <FormInputGroup
                       type={inputTypes.CHECK}
                       name="removeTagsAutomatically"
-                      helpText={'Remove tags automatically if conditions are not met'}
+                      helpText={translate('RemoveTagsAutomaticallyHelpText')}
                       {...removeTagsAutomatically}
                       onChange={onInputChange}
                     />
                   </FormGroup>
 
                   <FormGroup>
-                    <FormLabel>Tags</FormLabel>
+                    <FormLabel>{translate('Tags')}</FormLabel>
 
                     <FormInputGroup
                       type={inputTypes.TAG}
@@ -171,7 +172,7 @@ export default function EditAutoTaggingModalContent(props) {
                   </FormGroup>
                 </Form>
 
-                <FieldSet legend={'Conditions'}>
+                <FieldSet legend={translate('Conditions')}>
                   <div className={styles.autoTaggings}>
                     {
                       specifications.map((tag) => {
@@ -229,7 +230,7 @@ export default function EditAutoTaggingModalContent(props) {
                 kind={kinds.DANGER}
                 onPress={onDeleteAutoTaggingPress}
               >
-                Delete
+                {translate('Delete')}
               </Button> :
               null
           }
@@ -245,7 +246,7 @@ export default function EditAutoTaggingModalContent(props) {
         <Button
           onPress={onModalClose}
         >
-          Cancel
+          {translate('Cancel')}
         </Button>
 
         <SpinnerErrorButton
@@ -253,7 +254,7 @@ export default function EditAutoTaggingModalContent(props) {
           error={saveError}
           onPress={onSavePress}
         >
-          Save
+          {translate('Save')}
         </SpinnerErrorButton>
       </ModalFooter>
     </ModalContent>

@@ -6,6 +6,7 @@ import IconButton from 'Components/Link/IconButton';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import TagList from 'Components/TagList';
 import { icons, kinds } from 'Helpers/Props';
+import translate from 'Utilities/String/translate';
 import EditAutoTaggingModal from './EditAutoTaggingModal';
 import styles from './AutoTagging.css';
 
@@ -63,7 +64,7 @@ export default function AutoTagging(props) {
         <div>
           <IconButton
             className={styles.cloneButton}
-            title="Clone Auto Tag"
+            title={translate('CloneAutoTag')}
             name={icons.CLONE}
             onPress={onClonePress}
           />
@@ -112,9 +113,9 @@ export default function AutoTagging(props) {
       <ConfirmModal
         isOpen={isDeleteModalOpen}
         kind={kinds.DANGER}
-        title="Delete Auto Tag"
-        message={`Are you sure you want to delete the auto tag '${name}'?`}
-        confirmLabel="Delete"
+        title={translate('DeleteAutoTag')}
+        message={translate('DeleteAutoTagHelpText', { name })}
+        confirmLabel={translate('Delete')}
         isSpinning={isDeleting}
         onConfirm={onConfirmDelete}
         onCancel={onDeleteModalClose}

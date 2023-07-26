@@ -5,6 +5,7 @@ import Link from 'Components/Link/Link';
 import Menu from 'Components/Menu/Menu';
 import MenuContent from 'Components/Menu/MenuContent';
 import { sizes } from 'Helpers/Props';
+import translate from 'Utilities/String/translate';
 import AddSpecificationPresetMenuItem from './AddSpecificationPresetMenuItem';
 import styles from './AddSpecificationItem.css';
 
@@ -45,7 +46,7 @@ export default function AddSpecificationItem(props) {
                   size={sizes.SMALL}
                   onPress={onWrappedSpecificationSelect}
                 >
-                  Custom
+                  {translate('Custom')}
                 </Button>
 
                 <Menu className={styles.presetsMenu}>
@@ -53,7 +54,7 @@ export default function AddSpecificationItem(props) {
                     className={styles.presetsMenuButton}
                     size={sizes.SMALL}
                   >
-                    Presets
+                    {translate('Presets')}
                   </Button>
 
                   <MenuContent>
@@ -81,7 +82,7 @@ export default function AddSpecificationItem(props) {
                 to={infoLink}
                 size={sizes.SMALL}
               >
-                More Info
+                {translate('MoreInfo')}
               </Button> :
               null
           }

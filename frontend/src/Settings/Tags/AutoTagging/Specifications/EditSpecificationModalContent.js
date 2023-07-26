@@ -22,6 +22,7 @@ import {
   setAutoTaggingSpecificationValue
 } from 'Store/Actions/settingsActions';
 import { createProviderSettingsSelectorHook } from 'Store/Selectors/createProviderSettingsSelector';
+import translate from 'Utilities/String/translate';
 import styles from './EditSpecificationModalContent.css';
 
 function EditSpecificationModalContent(props) {
@@ -71,7 +72,7 @@ function EditSpecificationModalContent(props) {
   return (
     <ModalContent onModalClose={onCancelPress}>
       <ModalHeader>
-        {`${id ? 'Edit' : 'Add'} Condition - ${implementationName}`}
+        {`${id ? translate('EditCondition') : translate('AddCondition')} - ${implementationName}`}
       </ModalHeader>
 
       <ModalBody>
@@ -94,7 +95,7 @@ function EditSpecificationModalContent(props) {
 
           <FormGroup>
             <FormLabel>
-              Name
+              {translate('Name')}
             </FormLabel>
 
             <FormInputGroup
@@ -122,28 +123,28 @@ function EditSpecificationModalContent(props) {
 
           <FormGroup>
             <FormLabel>
-              Negate
+              {translate('Negate')}
             </FormLabel>
 
             <FormInputGroup
               type={inputTypes.CHECK}
               name="negate"
               {...negate}
-              helpText={`If checked, the auto tagging rule will not apply if this ${implementationName} condition matches.`}
+              helpText={translate('AutoTaggingNegateHelpText', { name: implementationName })}
               onChange={onInputChange}
             />
           </FormGroup>
 
           <FormGroup>
             <FormLabel>
-              Required
+              {translate('Required')}
             </FormLabel>
 
             <FormInputGroup
               type={inputTypes.CHECK}
               name="required"
               {...required}
-              helpText={`This ${implementationName} condition must match for the auto tagging rule to apply.  Otherwise a single ${implementationName} match is sufficient.`}
+              helpText={translate('AutoTaggingRequiredHelpText', { name: implementationName })}
               onChange={onInputChange}
             />
           </FormGroup>
@@ -157,7 +158,7 @@ function EditSpecificationModalContent(props) {
               kind={kinds.DANGER}
               onPress={onDeleteSpecificationPress}
             >
-              Delete
+              {translate('Delete')}
             </Button> :
             null
         }
@@ -165,14 +166,14 @@ function EditSpecificationModalContent(props) {
         <Button
           onPress={onCancelPress}
         >
-          Cancel
+          {translate('Cancel')}
         </Button>
 
         <SpinnerErrorButton
           isSpinning={false}
           onPress={onSavePress}
         >
-          Save
+          {translate('Save')}
         </SpinnerErrorButton>
       </ModalFooter>
     </ModalContent>
