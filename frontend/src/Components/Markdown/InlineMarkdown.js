@@ -10,7 +10,8 @@ class InlineMarkdown extends Component {
   render() {
     const {
       className,
-      data
+      data,
+      code
     } = this.props;
 
     // For now only replace links
@@ -33,13 +34,28 @@ class InlineMarkdown extends Component {
       }
     }
 
+    // replace blocks in the string surrounded in backticks with <code>
+    // if the first character is a backtick then we ignore the first split and start directly with a code block
+    if (code) {
+      const codeSplit = code.split('`');
+      const startIndex = (code.startsWith('`') === true) ? 1 : 0;
+
+      for (let index = startIndex; index < codeSplit.length; index++) {
+        if (index % 2 === 1) {
+          markdownBlocks.push(<code>{codeSplit[index]}</code>);
+        } else {
+          markdownBlocks.push(codeSplit[index]);
+        }
+      }
+    }
     return <span className={className}>{markdownBlocks}</span>;
   }
 }
 
 InlineMarkdown.propTypes = {
   className: PropTypes.string,
-  data: PropTypes.string
+  data: PropTypes.string,
+  code: PropTypes.string
 };
 
 export default InlineMarkdown;
