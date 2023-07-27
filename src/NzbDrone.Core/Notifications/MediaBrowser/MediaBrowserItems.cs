@@ -22,4 +22,11 @@ namespace NzbDrone.Core.Notifications.Emby
         public int TvMaze { get; set; }
         public int TvRage { get; set; }
     }
+
+    public enum MediaBrowserMatchQuality
+    {
+        Id = 0,
+        Name = 1,
+        None = 2
+    }
 }

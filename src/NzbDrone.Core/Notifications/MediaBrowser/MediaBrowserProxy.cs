@@ -35,7 +35,7 @@ namespace NzbDrone.Core.Notifications.Emby
             ProcessRequest(request, settings);
         }
 
-        public List<string> GetPaths(MediaBrowserSettings settings, Series series)
+        public HashSet<string> GetPaths(MediaBrowserSettings settings, Series series)
         {
             var path = "/Items";
             var url = GetUrl(settings);
@@ -53,46 +53,44 @@ namespace NzbDrone.Core.Notifications.Emby
             {
                 var paths = ProcessGetRequest<MediaBrowserItems>(request, settings).Items.GroupBy(item =>
                 {
-                    var accumulator = 0;
-
                     if (item is { ProviderIds.Tvdb: int tvdbid } && tvdbid != 0 && tvdbid == series.TvdbId)
                     {
-                        accumulator |= 1 << 4;
+                        return MediaBrowserMatchQuality.Id;
                     }
 
                     if (item is { ProviderIds.Imdb: string imdbid } && imdbid == series.ImdbId)
                     {
-                        accumulator |= 1 << 3;
+                        return MediaBrowserMatchQuality.Id;
                     }
 
                     if (item is { ProviderIds.TvMaze: int tvmazeid } && tvmazeid != 0 && tvmazeid == series.TvMazeId)
                     {
-                        accumulator |= 1 << 2;
+                        return MediaBrowserMatchQuality.Id;
                     }
 
                     if (item is { ProviderIds.TvRage: int tvrageid } && tvrageid != 0 && tvrageid == series.TvRageId)
                     {
-                        accumulator |= 1 << 1;
+                        return MediaBrowserMatchQuality.Id;
                     }
 
                     if (item is { Name: var name } && name == series.Title)
                     {
-                        accumulator |= 1 << 0;
+                        return MediaBrowserMatchQuality.Name;
                     }
 
-                    _logger.Trace($"{item.Path} {accumulator} {item.ProviderIds.TvRage} {series.TvRageId}");
+                    return MediaBrowserMatchQuality.None;
+                }, item => item.Path).OrderBy(group => (int)group.Key).First();
 
-                    return -accumulator;
-                }, item => item.Path).OrderBy(group => group.Key).First();
-
-                if (paths.Key == 0)
+                if (paths.Key == MediaBrowserMatchQuality.None)
                 {
-                    throw new MediaBrowserException("Could not find series by name");
+                    _logger.Trace("Could not find series by name");
+
+                    return new HashSet<string>();
                 }
 
-                _logger.Trace("Found series by name: {0}", string.Join(" ", paths));
+                _logger.Trace("Found series by name/id: {0}", string.Join(" ", paths));
 
-                return paths.ToList();
+                return paths.ToHashSet();
             }
             catch (InvalidOperationException ex)
             {

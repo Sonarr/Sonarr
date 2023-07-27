@@ -35,27 +35,22 @@ namespace NzbDrone.Core.Notifications.Emby
 
         public void Update(MediaBrowserSettings settings, Series series, string updateType)
         {
-            List<string> paths;
+            HashSet<string> paths;
 
-            if (settings.UpdateLibraryByName)
+            paths = _proxy.GetPaths(settings, series);
+
+            var mappedPath = new OsPath(series.Path);
+
+            if (settings.MapTo.IsNotNullOrWhiteSpace())
             {
-                paths = _proxy.GetPaths(settings, series);
+                mappedPath = new OsPath(settings.MapTo) + (mappedPath - new OsPath(settings.MapFrom));
             }
-            else
-            {
-                paths = new List<string> { series.Path };
-            }
+
+            paths.Add(mappedPath.ToString());
 
             foreach (var path in paths)
             {
-                var mappedPath = new OsPath(path);
-
-                if (settings.MapTo.IsNotNullOrWhiteSpace())
-                {
-                    mappedPath = new OsPath(settings.MapTo) + (mappedPath - new OsPath(settings.MapFrom));
-                }
-
-                _proxy.Update(settings, mappedPath.ToString(), updateType);
+                _proxy.Update(settings, path, updateType);
             }
         }
 

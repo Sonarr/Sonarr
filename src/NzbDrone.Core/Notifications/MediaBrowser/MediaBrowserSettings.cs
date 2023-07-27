@@ -45,13 +45,10 @@ namespace NzbDrone.Core.Notifications.Emby
         [FieldDefinition(5, Label = "Update Library", HelpText = "Update Library on Import, Rename, or Delete?", Type = FieldType.Checkbox)]
         public bool UpdateLibrary { get; set; }
 
-        [FieldDefinition(5, Label = "Update Library By Name", HelpText = "Update Library by name rather than path(Requires 'UpdateLibrary')", Type = FieldType.Checkbox, Advanced = true)]
-        public bool UpdateLibraryByName { get; set; }
-
-        [FieldDefinition(5, Label = "Map Paths From", HelpText = "Sonarr path, used to modify series paths when Emby/Jellyfin sees library path location differently from Sonarr(Requires 'UpdateLibrary')", Type = FieldType.Textbox, Advanced = true)]
+        [FieldDefinition(6, Label = "Map Paths From", HelpText = "Sonarr path, used to modify series paths when Emby/Jellyfin sees library path location differently from Sonarr(Requires 'UpdateLibrary')", Type = FieldType.Textbox, Advanced = true)]
         public string MapFrom { get; set; }
 
-        [FieldDefinition(5, Label = "Map Paths To", HelpText = "Emby/Jellyfin path, used to modify series paths when Emby/Jellyfin sees library path location differently from Sonarr(Requires 'UpdateLibrary')", Type = FieldType.Textbox, Advanced = true)]
+        [FieldDefinition(7, Label = "Map Paths To", HelpText = "Emby/Jellyfin path, used to modify series paths when Emby/Jellyfin sees library path location differently from Sonarr(Requires 'UpdateLibrary')", Type = FieldType.Textbox, Advanced = true)]
         public string MapTo { get; set; }
 
         [JsonIgnore]
