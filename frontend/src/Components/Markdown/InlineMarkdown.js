@@ -20,10 +20,12 @@ class InlineMarkdown extends Component {
 
       let endIndex = 0;
       let match = null;
+
       while ((match = linkRegex.exec(data)) !== null) {
         if (match.index > endIndex) {
           markdownBlocks.push(data.substr(endIndex, match.index - endIndex));
         }
+
         markdownBlocks.push(<Link key={match.index} to={match[2]}>{match[1]}</Link>);
         endIndex = match.index + match[0].length;
       }
@@ -37,12 +39,15 @@ class InlineMarkdown extends Component {
       endIndex = 0;
       match = null;
       let matchedCode = false;
+
       while ((match = codeRegex.exec(data)) !== null) {
         matchedCode = true;
+
         if (match.index > endIndex) {
           markdownBlocks.push(data.substr(endIndex, match.index - endIndex));
         }
-        markdownBlocks.push(<code key={match.index}>{match[0].substring(1, match[0].length - 1)}</code>);
+
+        markdownBlocks.push(<code key={`code-${match.index}`}>{match[0].substring(1, match[0].length - 1)}</code>);
         endIndex = match.index + match[0].length;
       }
 
