@@ -10,18 +10,17 @@ class InlineMarkdown extends Component {
   render() {
     const {
       className,
-      data,
-      code
+      data
     } = this.props;
 
-    // For now only replace links
+    // For now only replace links or code blocks (not both)
     const markdownBlocks = [];
     if (data) {
-      const regex = RegExp(/\[(.+?)\]\((.+?)\)/g);
+      const linkRegex = RegExp(/\[(.+?)\]\((.+?)\)/g);
 
       let endIndex = 0;
       let match = null;
-      while ((match = regex.exec(data)) !== null) {
+      while ((match = linkRegex.exec(data)) !== null) {
         if (match.index > endIndex) {
           markdownBlocks.push(data.substr(endIndex, match.index - endIndex));
         }
@@ -29,33 +28,36 @@ class InlineMarkdown extends Component {
         endIndex = match.index + match[0].length;
       }
 
-      if (endIndex !== data.length) {
+      if (endIndex !== data.length && markdownBlocks.length > 0) {
+        markdownBlocks.push(data.substr(endIndex, data.length - endIndex));
+      }
+
+      const codeRegex = RegExp(/(?=`)`(?!`)[^`]*(?=`)`(?!`)/g);
+
+      endIndex = 0;
+      match = null;
+      let matchedCode = false;
+      while ((match = codeRegex.exec(data)) !== null) {
+        matchedCode = true;
+        if (match.index > endIndex) {
+          markdownBlocks.push(data.substr(endIndex, match.index - endIndex));
+        }
+        markdownBlocks.push(<code key={match.index}>{match[0].substring(1, match[0].length - 1)}</code>);
+        endIndex = match.index + match[0].length;
+      }
+
+      if (endIndex !== data.length && markdownBlocks.length > 0 && matchedCode) {
         markdownBlocks.push(data.substr(endIndex, data.length - endIndex));
       }
     }
 
-    // replace blocks in the string surrounded in backticks with <code>
-    // if the first character is a backtick then we ignore the first split and start directly with a code block
-    if (code) {
-      const codeSplit = code.split('`');
-      const startIndex = (code.startsWith('`') === true) ? 1 : 0;
-
-      for (let index = startIndex; index < codeSplit.length; index++) {
-        if (index % 2 === 1) {
-          markdownBlocks.push(<code>{codeSplit[index]}</code>);
-        } else {
-          markdownBlocks.push(codeSplit[index]);
-        }
-      }
-    }
     return <span className={className}>{markdownBlocks}</span>;
   }
 }
 
 InlineMarkdown.propTypes = {
   className: PropTypes.string,
-  data: PropTypes.string,
-  code: PropTypes.string
+  data: PropTypes.string
 };
 
 export default InlineMarkdown;
