@@ -22,7 +22,11 @@ namespace NzbDrone.Core.ImportLists.MyAnimeList
         public MalListSettings()
         {
             BaseUrl = "https://api.myanimelist.net/v2";
+            ListStatus = MalAnimeStatus.Watching;
         }
+
+        [FieldDefinition(0, Label = "List Status", Type = FieldType.Select, SelectOptions = typeof(MalAnimeStatus), HelpText = "Type of list status you're seeking to import from")]
+        public MalAnimeStatus ListStatus { get; set; }
 
         [FieldDefinition(0, Label = "Client ID", Type = FieldType.Textbox)]
         public string ClientId { get; set; }

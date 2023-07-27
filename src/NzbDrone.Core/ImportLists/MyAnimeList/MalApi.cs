@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using Newtonsoft.Json;
 
 namespace NzbDrone.Core.ImportLists.MyAnimeList
@@ -26,6 +27,20 @@ namespace NzbDrone.Core.ImportLists.MyAnimeList
 
     public class MalAnimeListStatus
     {
-        public string Status { get; set; }
+        public MalAnimeStatus Status { get; set; }
+    }
+
+    public enum MalAnimeStatus
+    {
+        [EnumMember(Value = "watching")]
+        Watching,
+        [EnumMember(Value = "completed")]
+        Completed,
+        [EnumMember(Value = "on_hold")]
+        OnHold,
+        [EnumMember(Value = "dropped")]
+        Dropped,
+        [EnumMember(Value = "plan_to_watch")]
+        PlanToWatch
     }
 }
