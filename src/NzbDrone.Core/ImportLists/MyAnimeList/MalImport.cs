@@ -22,24 +22,35 @@ namespace NzbDrone.Core.ImportLists.MyAnimeList
 
         private static string _Codechallenge = "";
 
+        private IImportListRepository _importListRepository;
+
         public override string Name => "MyAnimeList";
         public override ImportListType ListType => ImportListType.Other;
         public override TimeSpan MinRefreshInterval => TimeSpan.FromSeconds(10);  // change this later
 
         // This constructor the first thing that is called when sonarr creates a button
-        public MalImport(IHttpClient httpClient, IImportListStatusService importListStatusService, IConfigService configService, IParsingService parsingService, Logger logger)
+        public MalImport(IImportListRepository netImportRepository, IHttpClient httpClient, IImportListStatusService importListStatusService, IConfigService configService, IParsingService parsingService, Logger logger)
             : base(httpClient, importListStatusService, configService, parsingService, logger)
         {
             if (MalTvdbIds.Count == 0)
             {
                 MalTvdbIds = GetMalToTvdbIds();
             }
+
+            _importListRepository = netImportRepository;
         }
 
         // This method should refresh (dunno what that means) the token
         // This method also fetches the anime from mal?
         public override IList<ImportListItemInfo> Fetch()
         {
+            if (Settings.Expires < DateTime.UtcNow.AddMinutes(5))
+            {
+                _logger.Info($"current token: {Settings.AccessToken}");
+                RefreshToken();
+                _logger.Info($"new token: {Settings.AccessToken}");
+            }
+
             //_importListStatusService;
             return FetchItems(g => g.GetListItems());
         }
@@ -76,6 +87,7 @@ namespace NzbDrone.Core.ImportLists.MyAnimeList
                     accessToken = jsonResult.AccessToken,
                     refreshToken = jsonResult.RefreshToken,
                     expires = DateTime.UtcNow.AddSeconds(int.Parse(jsonResult.ExpiresIn))
+                    //expires = DateTime.UtcNow.AddSeconds(5)
                 };
             }
 
@@ -180,6 +192,35 @@ namespace NzbDrone.Core.ImportLists.MyAnimeList
             {
                 _logger.Error(ex.Message);
                 return null;
+            }
+        }
+
+        private void RefreshToken()
+        {
+            var httpReq = new HttpRequestBuilder(OAuthTokenUrl)
+                .Post()
+                .AddFormParameter("client_id", Settings.ClientId)
+                .AddFormParameter("client_secret", Settings.ClientSecret)
+                .AddFormParameter("grant_type", "refresh_token")
+                .AddFormParameter("refresh_token", Settings.RefreshToken)
+                .Build();
+            try
+            {
+                var httpResp = _httpClient.Post(httpReq);
+                var jsonResp = Json.Deserialize<MalAuthToken>(httpResp.Content);
+                Settings.AccessToken = jsonResp.AccessToken;
+                Settings.RefreshToken = jsonResp.RefreshToken;
+                Settings.Expires = DateTime.UtcNow.AddSeconds(int.Parse(jsonResp.ExpiresIn));
+                //Settings.Expires = DateTime.UtcNow.AddSeconds(5);
+
+                if (Definition.Id > 0)
+                {
+                    _importListRepository.UpdateSettings((ImportListDefinition)Definition);
+                }
+            }
+            catch (HttpRequestException)
+            {
+                _logger.Error("Error trying to refresh MAL access token.");
             }
         }
     }
