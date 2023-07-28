@@ -92,9 +92,11 @@ namespace NzbDrone.Core.Notifications.Emby
 
                 return paths.ToHashSet();
             }
-            catch (InvalidOperationException ex)
+            catch (InvalidOperationException)
             {
-                throw new MediaBrowserException("Could not find series by name", ex);
+                _logger.Trace("Could not find series by name.");
+
+                return new HashSet<string>();
             }
         }
 
