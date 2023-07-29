@@ -1,6 +1,10 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using NLog;
 using NzbDrone.Common.Http;
 using NzbDrone.Common.Serializer;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Notifications.Emby
 {
@@ -31,6 +35,71 @@ namespace NzbDrone.Core.Notifications.Emby
             ProcessRequest(request, settings);
         }
 
+        public HashSet<string> GetPaths(MediaBrowserSettings settings, Series series)
+        {
+            var path = "/Items";
+            var url = GetUrl(settings);
+
+            // NameStartsWith uses the sort title, which is not the series title
+            var request = new HttpRequestBuilder(url)
+                .Resource(path)
+                .AddQueryParam("recursive", "true")
+                .AddQueryParam("includeItemTypes", "Series")
+                .AddQueryParam("fields", "Path,ProviderIds")
+                .AddQueryParam("years", series.Year)
+                .Build();
+
+            try
+            {
+                var paths = ProcessGetRequest<MediaBrowserItems>(request, settings).Items.GroupBy(item =>
+                {
+                    if (item is { ProviderIds.Tvdb: int tvdbid } && tvdbid != 0 && tvdbid == series.TvdbId)
+                    {
+                        return MediaBrowserMatchQuality.Id;
+                    }
+
+                    if (item is { ProviderIds.Imdb: string imdbid } && imdbid == series.ImdbId)
+                    {
+                        return MediaBrowserMatchQuality.Id;
+                    }
+
+                    if (item is { ProviderIds.TvMaze: int tvmazeid } && tvmazeid != 0 && tvmazeid == series.TvMazeId)
+                    {
+                        return MediaBrowserMatchQuality.Id;
+                    }
+
+                    if (item is { ProviderIds.TvRage: int tvrageid } && tvrageid != 0 && tvrageid == series.TvRageId)
+                    {
+                        return MediaBrowserMatchQuality.Id;
+                    }
+
+                    if (item is { Name: var name } && name == series.Title)
+                    {
+                        return MediaBrowserMatchQuality.Name;
+                    }
+
+                    return MediaBrowserMatchQuality.None;
+                }, item => item.Path).OrderBy(group => (int)group.Key).First();
+
+                if (paths.Key == MediaBrowserMatchQuality.None)
+                {
+                    _logger.Trace("Could not find series by name");
+
+                    return new HashSet<string>();
+                }
+
+                _logger.Trace("Found series by name/id: {0}", string.Join(" ", paths));
+
+                return paths.ToHashSet();
+            }
+            catch (InvalidOperationException)
+            {
+                _logger.Trace("Could not find series by name.");
+
+                return new HashSet<string>();
+            }
+        }
+
         public void Update(MediaBrowserSettings settings, string seriesPath, string updateType)
         {
             var path = "/Library/Media/Updated";
@@ -52,6 +121,19 @@ namespace NzbDrone.Core.Notifications.Emby
             ProcessRequest(request, settings);
         }
 
+        private T ProcessGetRequest<T>(HttpRequest request, MediaBrowserSettings settings)
+            where T : new()
+        {
+            request.Headers.Add("X-MediaBrowser-Token", settings.ApiKey);
+
+            var response = _httpClient.Get<T>(request);
+            _logger.Trace("Response: {0}", response.Content);
+
+            CheckForError(response);
+
+            return response.Resource;
+        }
+
         private string ProcessRequest(HttpRequest request, MediaBrowserSettings settings)
         {
             request.Headers.Add("X-MediaBrowser-Token", settings.ApiKey);
@@ -64,10 +146,15 @@ namespace NzbDrone.Core.Notifications.Emby
             return response.Content;
         }
 
-        private HttpRequest BuildRequest(string path, MediaBrowserSettings settings)
+        private string GetUrl(MediaBrowserSettings settings)
         {
             var scheme = settings.UseSsl ? "https" : "http";
-            var url = $@"{scheme}://{settings.Address}/mediabrowser";
+            return $@"{scheme}://{settings.Address}";
+        }
+
+        private HttpRequest BuildRequest(string path, MediaBrowserSettings settings)
+        {
+            var url = GetUrl(settings);
 
             return new HttpRequestBuilder(url).Resource(path).Build();
         }
