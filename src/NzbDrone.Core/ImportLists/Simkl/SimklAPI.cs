@@ -73,8 +73,10 @@ namespace NzbDrone.Core.ImportLists.Simkl
         public DateTime All { get; set; }
     }
 
+    [JsonConverter(typeof(TolerantEnumConverter))]
     public enum SimklAnimeType
     {
+        Unknown,
         Tv,
         Movie,
         Ova,
