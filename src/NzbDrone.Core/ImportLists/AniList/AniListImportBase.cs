@@ -47,11 +47,6 @@ namespace NzbDrone.Core.ImportLists.AniList
 
         public Dictionary<int, MediaMapping> Mappings => _cache.Get(_cacheKey, GetMappingData, _cacheInterval);
 
-        public override AniListParser GetParser()
-        {
-            return new AniListParser(_logger, Mappings);
-        }
-
         public override object RequestAction(string action, IDictionary<string, string> query)
         {
             if (action == "startOAuth")

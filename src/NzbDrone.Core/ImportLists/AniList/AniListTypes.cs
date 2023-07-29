@@ -39,6 +39,34 @@ namespace NzbDrone.Core.ImportLists.AniList
         public const string Repeating = "REPEATING";
     }
 
+    public static class MediaStatus
+    {
+        /// <summary>
+        /// Anime series has finished airing
+        /// </summary>
+        public const string Finished = "FINISHED";
+
+        /// <summary>
+        /// Anime series is currently airing
+        /// </summary>
+        public const string Releasing = "RELEASING";
+
+        /// <summary>
+        /// Anime series had not yet begun airing
+        /// </summary>
+        public const string Unreleased = "NOT_YET_RELEASED";
+
+        /// <summary>
+        /// Anime series was cancelled
+        /// </summary>
+        public const string Cancelled = "CANCELLED";
+
+        /// <summary>
+        /// Anime series is currently on hiatus
+        /// </summary>
+        public const string Hiatus = "HIATUS";
+    }
+
     /// <summary>
     /// Data during token refresh cycles
     /// </summary>

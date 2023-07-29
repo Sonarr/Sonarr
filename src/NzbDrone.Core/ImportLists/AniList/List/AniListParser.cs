@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using NLog;
 using NzbDrone.Common.Extensions;
@@ -6,17 +7,19 @@ using NzbDrone.Common.Serializer;
 using NzbDrone.Core.ImportLists.Exceptions;
 using NzbDrone.Core.Parser.Model;
 
-namespace NzbDrone.Core.ImportLists.AniList
+namespace NzbDrone.Core.ImportLists.AniList.List
 {
     public class AniListParser : IParseImportListResponse
     {
         private readonly Dictionary<int, MediaMapping> _mappings;
         private readonly Logger _logger;
+        private readonly AniListSettings _settings;
 
-        public AniListParser(Logger logger, Dictionary<int, MediaMapping> mappings)
+        public AniListParser(Logger logger, AniListSettings settings, Dictionary<int, MediaMapping> mappings)
         {
             _mappings = mappings;
             _logger = logger;
+            _settings = settings;
         }
 
         public virtual IList<ImportListItemInfo> ParseResponse(ImportListResponse importListResponse)
@@ -42,7 +45,11 @@ namespace NzbDrone.Core.ImportLists.AniList
                 return result;
             }
 
-            foreach (var item in jsonResponse.Data.Page.MediaList)
+            // Filter out unwanted series status types
+            var filtered = jsonResponse.Data.Page.MediaList
+                .Where(x => ValidateMediaStatus(x.Media));
+
+            foreach (var item in filtered)
             {
                 var media = item.Media;
 
@@ -83,6 +90,41 @@ namespace NzbDrone.Core.ImportLists.AniList
 
             pageInfo = jsonResponse.Data.Page.PageInfo;
             return result;
+        }
+
+        /// <summary>
+        /// Filter by media status, based on user settings.
+        ///
+        /// Anilist currently does not support filtering this at the query level, so it must be done in post.
+        /// </summary>
+        private bool ValidateMediaStatus(MediaInfo media)
+        {
+            if (media.Status == MediaStatus.Finished && _settings.ImportFinished)
+            {
+                return true;
+            }
+
+            if (media.Status == MediaStatus.Releasing && _settings.ImportReleasing)
+            {
+                return true;
+            }
+
+            if (media.Status == MediaStatus.Unreleased && _settings.ImportUnreleased)
+            {
+                return true;
+            }
+
+            if (media.Status == MediaStatus.Cancelled && _settings.ImportCancelled)
+            {
+                return true;
+            }
+
+            if (media.Status == MediaStatus.Hiatus && _settings.ImportHiatus)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         protected virtual bool PreProcess(ImportListResponse netImportResponse)

@@ -39,6 +39,11 @@ namespace NzbDrone.Core.ImportLists.AniList.List
             };
         }
 
+        public override AniListParser GetParser()
+        {
+            return new AniListParser(_logger, Settings, Mappings);
+        }
+
         /// <summary>
         /// Anilist caps the result list to 50 items at maximum per query, so the data must be pulled in batches.
         ///
