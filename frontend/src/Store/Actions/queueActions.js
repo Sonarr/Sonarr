@@ -7,6 +7,7 @@ import { icons, sortDirections } from 'Helpers/Props';
 import { createThunk, handleThunks } from 'Store/thunks';
 import createAjaxRequest from 'Utilities/createAjaxRequest';
 import serverSideCollectionHandlers from 'Utilities/serverSideCollectionHandlers';
+import translate from 'Utilities/String/translate';
 import { set, updateItem } from './baseActions';
 import createFetchHandler from './Creators/createFetchHandler';
 import createHandleActions from './Creators/createHandleActions';
@@ -59,113 +60,113 @@ export const defaultState = {
     columns: [
       {
         name: 'status',
-        columnLabel: 'Status',
+        columnLabel: () => translate('Status'),
         isSortable: true,
         isVisible: true,
         isModifiable: false
       },
       {
         name: 'series.sortTitle',
-        label: 'Series',
+        label: () => translate('Series'),
         isSortable: true,
         isVisible: true
       },
       {
         name: 'episode',
-        label: 'Episode',
+        label: () => translate('Episode'),
         isSortable: true,
         isVisible: true
       },
       {
         name: 'episodes.title',
-        label: 'Episode Title',
+        label: () => translate('EpisodeTitle'),
         isSortable: true,
         isVisible: true
       },
       {
         name: 'episodes.airDateUtc',
-        label: 'Episode Air Date',
+        label: () => translate('EpisodeAirDate'),
         isSortable: true,
         isVisible: false
       },
       {
         name: 'languages',
-        label: 'Languages',
+        label: () => translate('Languages'),
         isSortable: true,
         isVisible: false
       },
       {
         name: 'quality',
-        label: 'Quality',
+        label: () => translate('Quality'),
         isSortable: true,
         isVisible: true
       },
       {
         name: 'customFormats',
-        label: 'Formats',
+        label: () => translate('Formats'),
         isSortable: false,
         isVisible: true
       },
       {
         name: 'customFormatScore',
-        columnLabel: 'Custom Format Score',
+        columnLabel: () => translate('CustomFormatScore'),
         label: React.createElement(Icon, {
           name: icons.SCORE,
-          title: 'Custom format score'
+          title: () => translate('CustomFormatScore')
         }),
         isVisible: false
       },
       {
         name: 'protocol',
-        label: 'Protocol',
+        label: () => translate('Protocol'),
         isSortable: true,
         isVisible: false
       },
       {
         name: 'indexer',
-        label: 'Indexer',
+        label: () => translate('Indexer'),
         isSortable: true,
         isVisible: false
       },
       {
         name: 'downloadClient',
-        label: 'Download Client',
+        label: () => translate('DownloadClient'),
         isSortable: true,
         isVisible: false
       },
       {
         name: 'title',
-        label: 'Release Title',
+        label: () => translate('ReleaseTitle'),
         isSortable: true,
         isVisible: false
       },
       {
         name: 'size',
-        label: 'Size',
+        label: () => translate('Size'),
         isSortable: true,
         isVisibile: false
       },
       {
         name: 'outputPath',
-        label: 'Output Path',
+        label: () => translate('OutputPath'),
         isSortable: false,
         isVisible: false
       },
       {
         name: 'estimatedCompletionTime',
-        label: 'Time Left',
+        label: () => translate('TimeLeft'),
         isSortable: true,
         isVisible: true
       },
       {
         name: 'progress',
-        label: 'Progress',
+        label: () => translate('Progress'),
         isSortable: true,
         isVisible: true
       },
       {
         name: 'actions',
-        columnLabel: 'Actions',
+        columnLabel: () => translate('Actions'),
         isVisible: true,
         isModifiable: false
       }

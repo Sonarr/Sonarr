@@ -61,7 +61,7 @@ class SelectInput extends Component {
                 value={key}
                 {...otherOptionProps}
               >
-                {optionValue}
+                {typeof optionValue === 'function' ? optionValue() : optionValue}
               </option>
             );
           })
@@ -75,7 +75,7 @@ SelectInput.propTypes = {
   className: PropTypes.string,
   disabledClassName: PropTypes.string,
   name: PropTypes.string.isRequired,
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.func]).isRequired,
   values: PropTypes.arrayOf(PropTypes.object).isRequired,
   isDisabled: PropTypes.bool,
   hasError: PropTypes.bool,

@@ -35,7 +35,7 @@ function TableOptionsColumn(props) {
             isDisabled={isModifiable === false}
             onChange={onVisibleChange}
           />
-          {label}
+          {typeof label === 'function' ? label() : label}
         </label>
 
         {
@@ -56,7 +56,7 @@ function TableOptionsColumn(props) {
 
 TableOptionsColumn.propTypes = {
   name: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
+  label: PropTypes.oneOfType([PropTypes.string, PropTypes.func]).isRequired,
   isVisible: PropTypes.bool.isRequired,
   isModifiable: PropTypes.bool.isRequired,
   index: PropTypes.number.isRequired,

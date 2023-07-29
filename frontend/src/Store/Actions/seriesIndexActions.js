@@ -1,6 +1,7 @@
 import moment from 'moment';
 import { createAction } from 'redux-actions';
 import { sortDirections } from 'Helpers/Props';
+import translate from 'Utilities/String/translate';
 import createHandleActions from './Creators/createHandleActions';
 import createSetClientSideCollectionFilterReducer from './Creators/Reducers/createSetClientSideCollectionFilterReducer';
 import createSetClientSideCollectionSortReducer from './Creators/Reducers/createSetClientSideCollectionSortReducer';
@@ -53,147 +54,147 @@ export const defaultState = {
   columns: [
     {
       name: 'status',
-      columnLabel: 'Status',
+      columnLabel: () => translate('Status'),
       isSortable: true,
       isVisible: true,
       isModifiable: false
     },
     {
       name: 'sortTitle',
-      label: 'Series Title',
+      label: () => translate('SeriesTitle'),
       isSortable: true,
       isVisible: true,
       isModifiable: false
     },
     {
       name: 'seriesType',
-      label: 'Type',
+      label: () => translate('Type'),
       isSortable: true,
       isVisible: false
     },
     {
       name: 'network',
-      label: 'Network',
+      label: () => translate('Network'),
       isSortable: true,
       isVisible: true
     },
     {
       name: 'qualityProfileId',
-      label: 'Quality Profile',
+      label: () => translate('QualityProfile'),
       isSortable: true,
       isVisible: true
     },
     {
       name: 'nextAiring',
-      label: 'Next Airing',
+      label: () => translate('NextAiring'),
       isSortable: true,
       isVisible: true
     },
     {
       name: 'previousAiring',
-      label: 'Previous Airing',
+      label: () => translate('PreviousAiring'),
       isSortable: true,
       isVisible: false
     },
     {
       name: 'originalLanguage',
-      label: 'Original Language',
+      label: () => translate('OriginalLanguage'),
       isSortable: true,
       isVisible: false
     },
     {
       name: 'added',
-      label: 'Added',
+      label: () => translate('Added'),
       isSortable: true,
       isVisible: false
     },
     {
       name: 'seasonCount',
-      label: 'Seasons',
+      label: () => translate('Seasons'),
       isSortable: true,
       isVisible: true
     },
     {
       name: 'seasonFolder',
-      label: 'Season Folder',
+      label: () => translate('SeasonFolder'),
       isSortable: true,
       isVisible: false
     },
     {
       name: 'episodeProgress',
-      label: 'Episodes',
+      label: () => translate('Episodes'),
       isSortable: true,
       isVisible: true
     },
     {
       name: 'episodeCount',
-      label: 'Episode Count',
+      label: () => translate('EpisodeCount'),
       isSortable: true,
       isVisible: false
     },
     {
       name: 'latestSeason',
-      label: 'Latest Season',
+      label: () => translate('LatestSeason'),
       isSortable: true,
       isVisible: false
     },
     {
       name: 'year',
-      label: 'Year',
+      label: () => translate('Year'),
       isSortable: true,
       isVisible: false
     },
     {
       name: 'path',
-      label: 'Path',
+      label: () => translate('Path'),
       isSortable: true,
       isVisible: false
     },
     {
       name: 'sizeOnDisk',
-      label: 'Size on Disk',
+      label: () => translate('SizeOnDisk'),
       isSortable: true,
       isVisible: false
     },
     {
       name: 'genres',
-      label: 'Genres',
+      label: () => translate('Genres'),
       isSortable: false,
       isVisible: false
     },
     {
       name: 'ratings',
-      label: 'Rating',
+      label: () => translate('Rating'),
       isSortable: true,
       isVisible: false
     },
     {
       name: 'certification',
-      label: 'Certification',
+      label: () => translate('Certification'),
       isSortable: false,
       isVisible: false
     },
     {
       name: 'releaseGroups',
-      label: 'Release Groups',
+      label: () => translate('ReleaseGroups'),
       isSortable: false,
       isVisible: false
     },
     {
       name: 'tags',
-      label: 'Tags',
+      label: () => translate('Tags'),
       isSortable: true,
       isVisible: false
     },
     {
       name: 'useSceneNumbering',
-      label: 'Scene Numbering',
+      label: () => translate('SceneNumbering'),
       isSortable: true,
       isVisible: false
     },
     {
       name: 'actions',
-      columnLabel: 'Actions',
+      columnLabel: () => translate('Actions'),
       isVisible: true,
       isModifiable: false
     }
