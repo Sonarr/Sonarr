@@ -10,6 +10,7 @@ import ImportList from 'typings/ImportList';
 import Indexer from 'typings/Indexer';
 import Notification from 'typings/Notification';
 import QualityProfile from 'typings/QualityProfile';
+import RootFolder from 'typings/RootFolder';
 import { UiSettings } from 'typings/UiSettings';
 
 export interface DownloadClientAppState
@@ -35,6 +36,11 @@ export interface QualityProfilesAppState
   extends AppSectionState<QualityProfile>,
     AppSectionSchemaState<QualityProfile> {}
 
+export interface RootFolderAppState
+  extends AppSectionState<RootFolder>,
+    AppSectionDeleteState,
+    AppSectionSaveState {}
+
 export type LanguageSettingsAppState = AppSectionState<Language>;
 export type UiSettingsAppState = AppSectionItemState<UiSettings>;
 
@@ -45,6 +51,7 @@ interface SettingsAppState {
   languages: LanguageSettingsAppState;
   notifications: NotificationAppState;
   qualityProfiles: QualityProfilesAppState;
+  rootFolders: RootFolderAppState;
   ui: UiSettingsAppState;
 }
 
