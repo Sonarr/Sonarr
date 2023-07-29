@@ -54,6 +54,10 @@ class InlineMarkdown extends Component {
       if (endIndex !== data.length && markdownBlocks.length > 0 && matchedCode) {
         markdownBlocks.push(data.substr(endIndex, data.length - endIndex));
       }
+
+      if (markdownBlocks.length === 0) {
+        markdownBlocks.push(data);
+      }
     }
 
     return <span className={className}>{markdownBlocks}</span>;
