@@ -102,9 +102,18 @@ namespace NzbDrone.Core.Indexers
         {
             var result = base.Test(definition);
 
-            if ((result == null || result.IsValid) && definition.Id != 0)
+            if (definition.Id == 0)
+            {
+                return result;
+            }
+
+            if (result == null || result.IsValid)
             {
                 _indexerStatusService.RecordSuccess(definition.Id);
+            }
+            else
+            {
+                _indexerStatusService.RecordFailure(definition.Id);
             }
 
             return result;
