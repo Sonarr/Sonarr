@@ -1,13 +1,14 @@
-import _ from 'lodash';
+import { some } from 'lodash';
 import { createSelector } from 'reselect';
+import AppState from 'App/State/AppState';
 import createAllSeriesSelector from './createAllSeriesSelector';
 
 function createExistingSeriesSelector() {
   return createSelector(
-    (state, { tvdbId }) => tvdbId,
+    (_: AppState, { tvdbId }: { tvdbId: number }) => tvdbId,
     createAllSeriesSelector(),
     (tvdbId, series) => {
-      return _.some(series, { tvdbId });
+      return some(series, { tvdbId });
     }
   );
 }

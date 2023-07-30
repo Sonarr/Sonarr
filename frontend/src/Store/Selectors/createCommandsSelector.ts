@@ -1,8 +1,9 @@
 import { createSelector } from 'reselect';
+import AppState from 'App/State/AppState';
 
 function createCommandsSelector() {
   return createSelector(
-    (state) => state.commands,
+    (state: AppState) => state.commands,
     (commands) => {
       return commands.items;
     }
