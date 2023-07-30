@@ -1,9 +1,10 @@
 import { createSelector } from 'reselect';
+import AppState from 'App/State/AppState';
 import { isCommandExecuting } from 'Utilities/Command';
 
 function createExecutingCommandsSelector() {
   return createSelector(
-    (state) => state.commands.items,
+    (state: AppState) => state.commands.items,
     (commands) => {
       return commands.filter((command) => isCommandExecuting(command));
     }

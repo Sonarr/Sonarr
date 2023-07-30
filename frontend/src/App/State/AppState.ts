@@ -1,11 +1,13 @@
 import InteractiveImportAppState from 'App/State/InteractiveImportAppState';
 import CalendarAppState from './CalendarAppState';
+import CommandAppState from './CommandAppState';
 import EpisodeFilesAppState from './EpisodeFilesAppState';
 import EpisodesAppState from './EpisodesAppState';
 import ParseAppState from './ParseAppState';
 import QueueAppState from './QueueAppState';
 import SeriesAppState, { SeriesIndexAppState } from './SeriesAppState';
 import SettingsAppState from './SettingsAppState';
+import SystemAppState from './SystemAppState';
 import TagsAppState from './TagsAppState';
 
 interface FilterBuilderPropOption {
@@ -42,15 +44,17 @@ export interface CustomFilter {
 
 interface AppState {
   calendar: CalendarAppState;
-  episodesSelection: EpisodesAppState;
+  commands: CommandAppState;
   episodeFiles: EpisodeFilesAppState;
+  episodesSelection: EpisodesAppState;
   interactiveImport: InteractiveImportAppState;
   parse: ParseAppState;
+  queue: QueueAppState;
+  series: SeriesAppState;
   seriesIndex: SeriesIndexAppState;
   settings: SettingsAppState;
-  series: SeriesAppState;
+  system: SystemAppState;
   tags: TagsAppState;
-  queue: QueueAppState;
 }
 
 export default AppState;

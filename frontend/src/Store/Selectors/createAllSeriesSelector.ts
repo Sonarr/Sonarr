@@ -1,8 +1,9 @@
 import { createSelector } from 'reselect';
+import AppState from 'App/State/AppState';
 
 function createAllSeriesSelector() {
   return createSelector(
-    (state) => state.series,
+    (state: AppState) => state.series,
     (series) => {
       return series.items;
     }
