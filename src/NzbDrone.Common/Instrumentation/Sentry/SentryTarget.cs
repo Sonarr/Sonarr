@@ -40,7 +40,10 @@ namespace NzbDrone.Common.Instrumentation.Sentry
             "UnauthorizedAccessException",
 
             // Filter out people stuck in boot loops
-            "CorruptDatabaseException"
+            "CorruptDatabaseException",
+
+            // Filter SingleInstance Termination Exceptions
+            "TerminateApplicationException"
         };
 
         public static readonly List<string> FilteredExceptionMessages = new List<string>
