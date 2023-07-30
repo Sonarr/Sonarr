@@ -121,6 +121,7 @@ namespace NzbDrone.Core.Qualities
 
                 existing.MinSize = definition.MinSize;
                 existing.MaxSize = definition.MaxSize;
+                existing.PreferredSize = definition.PreferredSize;
                 existing.Title = message.ResetTitles ? definition.Title : existing.Title;
 
                 updateList.Add(existing);
