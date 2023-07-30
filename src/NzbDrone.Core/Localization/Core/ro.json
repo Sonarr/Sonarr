@@ -1,1 +1,14 @@
-{}
+{
+    "Backup": "Copie de rezervă",
+    "CloneCondition": "Clonați condiție",
+    "ApplyChanges": "Aplicați modificări",
+    "AutomaticAdd": "Adăugare automată",
+    "AllTitles": "Toate titlurile",
+    "ApplyTagsHelpTextHowToApplyImportLists": "Cum se aplică etichete listelor de import selectate",
+    "Backups": "Copii de rezervă",
+    "BackupNow": "Fă o copie de rezervă",
+    "InstallLatest": "Instalați cel mai recent",
+    "MoreInfo": "Mai multe informații",
+    "Implementation": "Implementarea",
+    "Yes": "Da"
+}
