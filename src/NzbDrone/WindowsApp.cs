@@ -32,7 +32,11 @@ namespace NzbDrone
             {
                 Logger.Fatal(e, "EPIC FAIL");
                 var message = string.Format("{0}: {1}", e.GetType().Name, e.ToString());
-                MessageBox.Show($"{e.GetType().Name}: {e.Message}", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Error, caption: "Epic Fail!");
+
+                if (RuntimeInfo.IsUserInteractive)
+                {
+                    MessageBox.Show($"{e.GetType().Name}: {e.Message}", buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Error, caption: "Epic Fail!");
+                }
             }
         }
     }
