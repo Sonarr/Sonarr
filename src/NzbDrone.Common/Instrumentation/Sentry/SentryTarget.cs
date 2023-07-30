@@ -43,7 +43,10 @@ namespace NzbDrone.Common.Instrumentation.Sentry
             "CorruptDatabaseException",
 
             // Filter SingleInstance Termination Exceptions
-            "TerminateApplicationException"
+            "TerminateApplicationException",
+
+            // User config issue, root folder missing, etc.
+            "DirectoryNotFoundException"
         };
 
         public static readonly List<string> FilteredExceptionMessages = new List<string>
