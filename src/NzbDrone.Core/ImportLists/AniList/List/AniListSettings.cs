@@ -19,8 +19,6 @@ namespace NzbDrone.Core.ImportLists.AniList.List
     public class AniListSettings : AniListSettingsBase<AniListSettings>
     {
         public const string sectionImport = "Import List Status";
-        public const string unitListStatus = "List Status";
-        public const string unitMediaStatus = "Media Status";
 
         public AniListSettings()
         : base()
@@ -36,37 +34,37 @@ namespace NzbDrone.Core.ImportLists.AniList.List
         [FieldDefinition(1, Label = "Username", HelpText = "Username for the List to import from")]
         public string Username { get; set; }
 
-        [FieldDefinition(0, Label = "Import Watching", Type = FieldType.Checkbox, Section = sectionImport, Unit = unitListStatus)]
+        [FieldDefinition(2, Label = "Import Watching", Type = FieldType.Checkbox, Section = sectionImport, HelpText = "List: Currently Watching")]
         public bool ImportCurrent { get; set; }
 
-        [FieldDefinition(0, Label = "Import Planning", Type = FieldType.Checkbox, Section = sectionImport, Unit = unitListStatus)]
+        [FieldDefinition(3, Label = "Import Planning", Type = FieldType.Checkbox, Section = sectionImport, HelpText = "List: Planning to Watch")]
         public bool ImportPlanning { get; set; }
 
-        [FieldDefinition(0, Label = "Import Completed", Type = FieldType.Checkbox, Section = sectionImport, Unit = unitListStatus)]
+        [FieldDefinition(4, Label = "Import Completed", Type = FieldType.Checkbox, Section = sectionImport, HelpText = "List: Completed Watching")]
         public bool ImportCompleted { get; set; }
 
-        [FieldDefinition(0, Label = "Import Dropped", Type = FieldType.Checkbox, Section = sectionImport, Unit = unitListStatus)]
+        [FieldDefinition(5, Label = "Import Dropped", Type = FieldType.Checkbox, Section = sectionImport, HelpText = "List: Dropped")]
         public bool ImportDropped { get; set; }
 
-        [FieldDefinition(0, Label = "Import Paused", Type = FieldType.Checkbox, Section = sectionImport, Unit = unitListStatus)]
+        [FieldDefinition(6, Label = "Import Paused", Type = FieldType.Checkbox, Section = sectionImport, HelpText = "List: On Hold")]
         public bool ImportPaused { get; set; }
 
-        [FieldDefinition(0, Label = "Import Repeating", Type = FieldType.Checkbox, Section = sectionImport, Unit = unitListStatus)]
+        [FieldDefinition(7, Label = "Import Repeating", Type = FieldType.Checkbox, Section = sectionImport, HelpText = "List: Currently Rewatching")]
         public bool ImportRepeating { get; set; }
 
-        [FieldDefinition(0, Label = "Import Finished Airing Series", Type = FieldType.Checkbox, Section = sectionImport, Unit = unitMediaStatus)]
+        [FieldDefinition(8, Label = "Import Finished", Type = FieldType.Checkbox, Section = sectionImport, HelpText = "Media: All episodes have aired")]
         public bool ImportFinished { get; set; }
 
-        [FieldDefinition(0, Label = "Import Currently Airing Series", Type = FieldType.Checkbox, Section = sectionImport, Unit = unitMediaStatus)]
+        [FieldDefinition(9, Label = "Import Releasing", Type = FieldType.Checkbox, Section = sectionImport, HelpText = "Media: Currently airing new episodes")]
         public bool ImportReleasing { get; set; }
 
-        [FieldDefinition(0, Label = "Import Not Yet Airing Series", Type = FieldType.Checkbox, Section = sectionImport, Unit = unitMediaStatus)]
+        [FieldDefinition(10, Label = "Import Not Yet Released", Type = FieldType.Checkbox, Section = sectionImport, HelpText = "Media: Airing has not yet started")]
         public bool ImportUnreleased { get; set; }
 
-        [FieldDefinition(0, Label = "Import Cancelled Series", Type = FieldType.Checkbox, Section = sectionImport, Unit = unitMediaStatus)]
+        [FieldDefinition(11, Label = "Import Cancelled", Type = FieldType.Checkbox, Section = sectionImport, HelpText = "Media: Series is cancelled")]
         public bool ImportCancelled { get; set; }
 
-        [FieldDefinition(0, Label = "Import Series on Hiatus", Type = FieldType.Checkbox, Section = sectionImport, Unit = unitMediaStatus)]
+        [FieldDefinition(12, Label = "Import Hiatus", Type = FieldType.Checkbox, Section = sectionImport, HelpText = "Media: Series on Hiatus")]
         public bool ImportHiatus { get; set; }
     }
 }

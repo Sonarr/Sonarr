@@ -26,9 +26,9 @@ namespace NzbDrone.Core.ImportLists.AniList
         private readonly ICached<Dictionary<int, MediaMapping>> _cache;
 
         public const string OAuthUrl = "https://anilist.co/api/v2/oauth/authorize";
-        public const string RedirectUri = "http://localhost:5000/anilist/auth";
-        public const string RenewUri = "http://localhost:5000/anilist/renew";
-        public const string ClientId = "13737";
+        public const string RedirectUri = "https://auth.servarr.com/v1/anilist_sonarr/auth";
+        public const string RenewUri = "https://auth.servarr.com/v1/anilist_sonarr/renew";
+        public const string ClientId = "13780";
 
         private IImportListRepository _importListRepository;
 
@@ -99,9 +99,10 @@ namespace NzbDrone.Core.ImportLists.AniList
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
                     var mappingList = STJson.Deserialize<List<MediaMapping>>(response.Content);
+
                     foreach (var item in mappingList)
                     {
-                        if (item.Anilist.HasValue && item.Anilist > 0 && item.TVDB.HasValue && item.TVDB > 0)
+                        if (item.Anilist.HasValue && item.Anilist > 0 && item.Tvdb.HasValue && item.Tvdb > 0)
                         {
                             result.Add((int)item.Anilist, item);
                         }

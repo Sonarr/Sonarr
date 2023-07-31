@@ -37,7 +37,7 @@ namespace NzbDrone.Core.ImportLists.Trakt
         public override IList<ImportListItemInfo> Fetch()
         {
             Settings.Validate().Filter("AccessToken", "RefreshToken").ThrowOnError();
-            _logger.Trace($"Access token expires at {Settings.Expires}");
+            _logger.Trace("Access token expires at {0}", Settings.Expires);
 
             if (Settings.Expires < DateTime.UtcNow.AddMinutes(5))
             {

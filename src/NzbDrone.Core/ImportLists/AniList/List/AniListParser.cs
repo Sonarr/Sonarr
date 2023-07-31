@@ -45,7 +45,7 @@ namespace NzbDrone.Core.ImportLists.AniList.List
                 return result;
             }
 
-            // Filter out unwanted series status types
+            // Anilist currently does not support filtering this at the query level, they will get filtered out here.
             var filtered = jsonResponse.Data.Page.MediaList
                 .Where(x => ValidateMediaStatus(x.Media));
 
@@ -58,7 +58,7 @@ namespace NzbDrone.Core.ImportLists.AniList.List
                     // Base required data
                     var entry = new ImportListItemInfo()
                     {
-                        TvdbId = mapping.TVDB.Value,
+                        TvdbId = mapping.Tvdb.Value,
                         Title = media.Title.UserPreferred ?? media.Title.UserRomaji ?? default
                     };
 
@@ -68,9 +68,9 @@ namespace NzbDrone.Core.ImportLists.AniList.List
                         entry.MalId = mapping.MyAnimeList.Value;
                     }
 
-                    if (!string.IsNullOrEmpty(mapping.IMDB))
+                    if (!string.IsNullOrEmpty(mapping.Imdb))
                     {
-                        entry.ImdbId = mapping.IMDB;
+                        entry.ImdbId = mapping.Imdb;
                     }
 
                     // Optional Year/ReleaseDate data
@@ -92,11 +92,6 @@ namespace NzbDrone.Core.ImportLists.AniList.List
             return result;
         }
 
-        /// <summary>
-        /// Filter by media status, based on user settings.
-        ///
-        /// Anilist currently does not support filtering this at the query level, so it must be done in post.
-        /// </summary>
         private bool ValidateMediaStatus(MediaInfo media)
         {
             if (media.Status == MediaStatus.Finished && _settings.ImportFinished)

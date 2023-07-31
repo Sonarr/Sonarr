@@ -44,11 +44,6 @@ namespace NzbDrone.Core.ImportLists.AniList.List
             return new AniListParser(_logger, Settings, Mappings);
         }
 
-        /// <summary>
-        /// Anilist caps the result list to 50 items at maximum per query, so the data must be pulled in batches.
-        ///
-        /// The number of pages are not known upfront, so the fetch logic must be changed to look at the returned page data.
-        /// </summary>
         protected override IList<ImportListItemInfo> FetchItems(Func<IImportListRequestGenerator, ImportListPageableRequestChain> pageableRequestChainSelector, bool isRecent = false)
         {
             var releases = new List<ImportListItemInfo>();
@@ -62,6 +57,8 @@ namespace NzbDrone.Core.ImportLists.AniList.List
                 var hasNextPage = false;
                 ImportListRequest currentRequest = null;
 
+                // Anilist caps the result list to 50 items at maximum per query, so the data must be pulled in batches.
+                // The number of pages are not known upfront, so the fetch logic must be changed to look at the returned page data.
                 do
                 {
                     // Build the query for the current page
