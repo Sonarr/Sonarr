@@ -167,7 +167,7 @@ namespace NzbDrone.Core.ImportLists.AniList
         protected void CheckToken()
         {
             Settings.Validate().Filter("AccessToken", "RefreshToken").ThrowOnError();
-            _logger.Trace($"Access token expires at {Settings.Expires}");
+            _logger.Trace("Access token expires at {0}", Settings.Expires);
 
             if (Settings.Expires < DateTime.UtcNow.AddMinutes(5))
             {
