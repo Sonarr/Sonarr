@@ -12,6 +12,7 @@ import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import { icons, kinds } from 'Helpers/Props';
 import SeasonNumber from 'Season/SeasonNumber';
+import translate from 'Utilities/String/translate';
 import SeriesHistoryRowConnector from './SeriesHistoryRowConnector';
 
 const columns = [
@@ -21,46 +22,46 @@ const columns = [
   },
   {
     name: 'episode',
-    label: 'Episode',
+    label: () => translate('Episode'),
     isVisible: true
   },
   {
     name: 'sourceTitle',
-    label: 'Source Title',
+    label: () => translate('SourceTitle'),
     isVisible: true
   },
   {
     name: 'languages',
-    label: 'Languages',
+    label: () => translate('Languages'),
     isVisible: true
   },
   {
     name: 'quality',
-    label: 'Quality',
+    label: () => translate('Quality'),
     isVisible: true
   },
   {
     name: 'date',
-    label: 'Date',
+    label: () => translate('Date'),
     isVisible: true
   },
   {
     name: 'details',
-    label: 'Details',
+    label: () => translate('Details'),
     isVisible: true
   },
   {
     name: 'customFormatScore',
     label: React.createElement(Icon, {
       name: icons.SCORE,
-      title: 'Custom format score'
+      title: () => translate('CustomFormatScore')
     }),
     isSortable: true,
     isVisible: true
   },
   {
     name: 'actions',
-    label: 'Actions',
+    label: () => translate('Actions'),
     isVisible: true
   }
 ];

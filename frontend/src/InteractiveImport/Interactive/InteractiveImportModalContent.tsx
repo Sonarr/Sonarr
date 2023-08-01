@@ -59,6 +59,7 @@ import { SortCallback } from 'typings/callbacks';
 import { SelectStateInputProps } from 'typings/props';
 import getErrorMessage from 'Utilities/Object/getErrorMessage';
 import hasDifferentItems from 'Utilities/Object/hasDifferentItems';
+import translate from 'Utilities/String/translate';
 import getSelectedIds from 'Utilities/Table/getSelectedIds';
 import InteractiveImportRow from './InteractiveImportRow';
 import styles from './InteractiveImportModalContent.css';
@@ -82,46 +83,46 @@ type OnSelectedChangeCallback = React.ComponentProps<
 const COLUMNS = [
   {
     name: 'relativePath',
-    label: 'Relative Path',
+    label: () => translate('RelativePath'),
     isSortable: true,
     isVisible: true,
   },
   {
     name: 'series',
-    label: 'Series',
+    label: () => translate('Series'),
     isSortable: true,
     isVisible: true,
   },
   {
     name: 'season',
-    label: 'Season',
+    label: () => translate('Season'),
     isVisible: true,
   },
   {
     name: 'episodes',
-    label: 'Episode(s)',
+    label: () => translate('Episodes'),
     isVisible: true,
   },
   {
     name: 'releaseGroup',
-    label: 'Release Group',
+    label: () => translate('ReleaseGroup'),
     isVisible: true,
   },
   {
     name: 'quality',
-    label: 'Quality',
+    label: () => translate('Quality'),
     isSortable: true,
     isVisible: true,
   },
   {
     name: 'languages',
-    label: 'Languages',
+    label: () => translate('Languages'),
     isSortable: true,
     isVisible: true,
   },
   {
     name: 'size',
-    label: 'Size',
+    label: () => translate('Size'),
     isSortable: true,
     isVisible: true,
   },
@@ -129,7 +130,7 @@ const COLUMNS = [
     name: 'customFormats',
     label: React.createElement(Icon, {
       name: icons.INTERACTIVE,
-      title: 'Custom Format',
+      title: () => translate('CustomFormatScore'),
     }),
     isSortable: true,
     isVisible: true,
