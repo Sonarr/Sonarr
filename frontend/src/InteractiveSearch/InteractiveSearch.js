@@ -1,12 +1,13 @@
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
+import Alert from 'Components/Alert';
 import Icon from 'Components/Icon';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import FilterMenu from 'Components/Menu/FilterMenu';
 import PageMenuButton from 'Components/Menu/PageMenuButton';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
-import { align, icons, sortDirections } from 'Helpers/Props';
+import { align, icons, kinds, sortDirections } from 'Helpers/Props';
 import getErrorMessage from 'Utilities/Object/getErrorMessage';
 import translate from 'Utilities/String/translate';
 import InteractiveSearchFilterModalConnector from './InteractiveSearchFilterModalConnector';
@@ -149,17 +150,17 @@ function InteractiveSearch(props) {
 
       {
         !isFetching && isPopulated && !totalReleasesCount ?
-          <div>
-            No results found
-          </div> :
+          <Alert kind={kinds.INFO}>
+            {translate('NoResultsFound')}
+          </Alert> :
           null
       }
 
       {
         !!totalReleasesCount && isPopulated && !items.length ?
-          <div>
-            All results are hidden by the applied filter
-          </div> :
+          <Alert kind={kinds.WARNING}>
+            {translate('AllResultsAreHiddenByTheAppliedFilter')}
+          </Alert> :
           null
       }
 
@@ -194,7 +195,7 @@ function InteractiveSearch(props) {
       {
         totalReleasesCount !== items.length && !!items.length ?
           <div className={styles.filteredMessage}>
-            Some results are hidden by the applied filter
+            {translate('SomeResultsAreHiddenByTheAppliedFilter')}
           </div> :
           null
       }
