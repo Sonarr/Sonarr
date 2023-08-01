@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using Newtonsoft.Json;
 
 namespace NzbDrone.Core.ImportLists.Simkl
@@ -72,9 +73,17 @@ namespace NzbDrone.Core.ImportLists.Simkl
         public DateTime All { get; set; }
     }
 
+    [JsonConverter(typeof(TolerantEnumConverter))]
     public enum SimklAnimeType
     {
+        Unknown,
         Tv,
-        Movie
+        Movie,
+        Ova,
+        Ona,
+        Special,
+
+        [EnumMember(Value = "music video")]
+        Music
     }
 }
