@@ -6,6 +6,7 @@ interface CssExports {
   'download': string;
   'downloadIcon': string;
   'indexer': string;
+  'indexerFlags': string;
   'interactiveIcon': string;
   'languages': string;
   'manualDownloadContent': string;

@@ -25,6 +25,7 @@ namespace Sonarr.Api.V3.EpisodeFiles
         public QualityModel Quality { get; set; }
         public List<CustomFormatResource> CustomFormats { get; set; }
         public int CustomFormatScore { get; set; }
+        public int? IndexerFlags { get; set; }
         public MediaInfoResource MediaInfo { get; set; }
 
         public bool QualityCutoffNotMet { get; set; }
@@ -88,7 +89,8 @@ namespace Sonarr.Api.V3.EpisodeFiles
                 MediaInfo = model.MediaInfo.ToResource(model.SceneName),
                 QualityCutoffNotMet = upgradableSpecification.QualityCutoffNotMet(series.QualityProfile.Value, model.Quality),
                 CustomFormats = customFormats.ToResource(false),
-                CustomFormatScore = customFormatScore
+                CustomFormatScore = customFormatScore,
+                IndexerFlags = (int)model.IndexerFlags
             };
         }
     }

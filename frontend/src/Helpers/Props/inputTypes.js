@@ -12,6 +12,7 @@ export const PASSWORD = 'password';
 export const PATH = 'path';
 export const QUALITY_PROFILE_SELECT = 'qualityProfileSelect';
 export const INDEXER_SELECT = 'indexerSelect';
+export const INDEXER_FLAGS_SELECT = 'indexerFlagsSelect';
 export const LANGUAGE_SELECT = 'languageSelect';
 export const DOWNLOAD_CLIENT_SELECT = 'downloadClientSelect';
 export const ROOT_FOLDER_SELECT = 'rootFolderSelect';

@@ -11,6 +11,7 @@ import DownloadClientSelectInputConnector from './DownloadClientSelectInputConne
 import EnhancedSelectInput from './EnhancedSelectInput';
 import EnhancedSelectInputConnector from './EnhancedSelectInputConnector';
 import FormInputHelpText from './FormInputHelpText';
+import IndexerFlagsSelectInput from './IndexerFlagsSelectInput';
 import IndexerSelectInputConnector from './IndexerSelectInputConnector';
 import KeyValueListInput from './KeyValueListInput';
 import MonitorEpisodesSelectInput from './MonitorEpisodesSelectInput';
@@ -70,6 +71,9 @@ function getComponent(type) {
 
     case inputTypes.INDEXER_SELECT:
       return IndexerSelectInputConnector;
+
+    case inputTypes.INDEXER_FLAGS_SELECT:
+      return IndexerFlagsSelectInput;
 
     case inputTypes.DOWNLOAD_CLIENT_SELECT:
       return DownloadClientSelectInputConnector;
@@ -279,6 +283,7 @@ FormInputGroup.propTypes = {
   includeNoChange: PropTypes.bool,
   includeNoChangeDisabled: PropTypes.bool,
   selectedValueOptions: PropTypes.object,
+  indexerFlags: PropTypes.number,
   pending: PropTypes.bool,
   errors: PropTypes.arrayOf(PropTypes.object),
   warnings: PropTypes.arrayOf(PropTypes.object),

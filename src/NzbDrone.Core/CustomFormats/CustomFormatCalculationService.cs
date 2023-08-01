@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -39,7 +40,8 @@ namespace NzbDrone.Core.CustomFormats
                 EpisodeInfo = remoteEpisode.ParsedEpisodeInfo,
                 Series = remoteEpisode.Series,
                 Size = size,
-                Languages = remoteEpisode.Languages
+                Languages = remoteEpisode.Languages,
+                IndexerFlags = remoteEpisode.Release?.IndexerFlags ?? 0
             };
 
             return ParseCustomFormat(input);
@@ -73,7 +75,8 @@ namespace NzbDrone.Core.CustomFormats
                 EpisodeInfo = episodeInfo,
                 Series = series,
                 Size = blocklist.Size ?? 0,
-                Languages = blocklist.Languages
+                Languages = blocklist.Languages,
+                IndexerFlags = blocklist.IndexerFlags
             };
 
             return ParseCustomFormat(input);
@@ -84,6 +87,7 @@ namespace NzbDrone.Core.CustomFormats
             var parsed = Parser.Parser.ParseTitle(history.SourceTitle);
 
             long.TryParse(history.Data.GetValueOrDefault("size"), out var size);
+            Enum.TryParse(history.Data.GetValueOrDefault("indexerFlags"), true, out IndexerFlags indexerFlags);
 
             var episodeInfo = new ParsedEpisodeInfo
             {
@@ -99,7 +103,8 @@ namespace NzbDrone.Core.CustomFormats
                 EpisodeInfo = episodeInfo,
                 Series = series,
                 Size = size,
-                Languages = history.Languages
+                Languages = history.Languages,
+                IndexerFlags = indexerFlags
             };
 
             return ParseCustomFormat(input);
@@ -122,6 +127,7 @@ namespace NzbDrone.Core.CustomFormats
                 Series = localEpisode.Series,
                 Size = localEpisode.Size,
                 Languages = localEpisode.Languages,
+                IndexerFlags = localEpisode.IndexerFlags,
                 Filename = Path.GetFileName(localEpisode.Path)
             };
 
@@ -191,6 +197,7 @@ namespace NzbDrone.Core.CustomFormats
                 Series = series,
                 Size = episodeFile.Size,
                 Languages = episodeFile.Languages,
+                IndexerFlags = episodeFile.IndexerFlags,
                 Filename = Path.GetFileName(episodeFile.RelativePath)
             };
 

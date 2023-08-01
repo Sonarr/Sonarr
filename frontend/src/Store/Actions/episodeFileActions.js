@@ -161,9 +161,12 @@ export const actionHandlers = handleThunks({
           const episodeFile = data.find((f) => f.id === id);
 
           props.qualityCutoffNotMet = episodeFile.qualityCutoffNotMet;
+          props.customFormats = episodeFile.customFormats;
+          props.customFormatScore = episodeFile.customFormatScore;
           props.languages = file.languages;
           props.quality = file.quality;
           props.releaseGroup = file.releaseGroup;
+          props.indexerFlags = file.indexerFlags;
 
           return updateItem({
             section,

@@ -49,6 +49,7 @@ namespace NzbDrone.Core.Indexers.HDBits
             foreach (var result in queryResults)
             {
                 var id = result.Id;
+
                 torrentInfos.Add(new TorrentInfo
                 {
                     Guid = $"HDBits-{id}",
@@ -59,11 +60,29 @@ namespace NzbDrone.Core.Indexers.HDBits
                     InfoUrl = GetInfoUrl(id),
                     Seeders = result.Seeders,
                     Peers = result.Leechers + result.Seeders,
-                    PublishDate = result.Added.ToUniversalTime()
+                    PublishDate = result.Added.ToUniversalTime(),
+                    IndexerFlags = GetIndexerFlags(result)
                 });
             }
 
             return torrentInfos.ToArray();
+        }
+
+        private static IndexerFlags GetIndexerFlags(TorrentQueryResponse item)
+        {
+            IndexerFlags flags = 0;
+
+            if (item.FreeLeech == "yes")
+            {
+                flags |= IndexerFlags.Freeleech;
+            }
+
+            if (item.TypeOrigin == 1)
+            {
+                flags |= IndexerFlags.Internal;
+            }
+
+            return flags;
         }
 
         private string GetDownloadUrl(string torrentId)

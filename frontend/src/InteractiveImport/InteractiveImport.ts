@@ -13,6 +13,7 @@ export interface InteractiveImportCommandOptions {
   releaseGroup?: string;
   quality: QualityModel;
   languages: Language[];
+  indexerFlags: number;
   downloadId?: string;
   episodeFileId?: number;
 }
@@ -31,6 +32,7 @@ interface InteractiveImport extends ModelBase {
   episodes: Episode[];
   qualityWeight: number;
   customFormats: object[];
+  indexerFlags: number;
   rejections: Rejection[];
   episodeFileId?: number;
 }
