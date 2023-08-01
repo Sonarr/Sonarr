@@ -25,11 +25,11 @@ import styles from './InteractiveImportSelectFolderModalContent.css';
 const recentFoldersColumns = [
   {
     name: 'folder',
-    label: 'Folder',
+    label: () => translate('Folder'),
   },
   {
     name: 'lastUsed',
-    label: 'Last Used',
+    label: () => translate('LastUsed'),
   },
   {
     name: 'actions',
@@ -100,7 +100,7 @@ function InteractiveImportSelectFolderModalContent(
   return (
     <ModalContent onModalClose={onModalClose}>
       <ModalHeader>
-        {modalTitle} - {translate('Select Folder')}
+        {modalTitle} - {translate('SelectFolder')}
       </ModalHeader>
 
       <ModalBody>
@@ -143,7 +143,7 @@ function InteractiveImportSelectFolderModalContent(
               onPress={onQuickImportPress}
             >
               <Icon className={styles.buttonIcon} name={icons.QUICK} />
-              {translate('Move Automatically')}
+              {translate('MoveAutomatically')}
             </Button>
           </div>
 
@@ -156,7 +156,7 @@ function InteractiveImportSelectFolderModalContent(
               onPress={onInteractiveImportPress}
             >
               <Icon className={styles.buttonIcon} name={icons.INTERACTIVE} />
-              {translate('Interactive Import')}
+              {translate('InteractiveImport')}
             </Button>
           </div>
         </div>

@@ -182,7 +182,7 @@ SeriesHistoryRow.propTypes = {
   id: PropTypes.number.isRequired,
   eventType: PropTypes.string.isRequired,
   sourceTitle: PropTypes.string.isRequired,
-  languages: PropTypes.object.isRequired,
+  languages: PropTypes.arrayOf(PropTypes.object),
   quality: PropTypes.object.isRequired,
   qualityCutoffNotMet: PropTypes.bool.isRequired,
   customFormats: PropTypes.arrayOf(PropTypes.object),
