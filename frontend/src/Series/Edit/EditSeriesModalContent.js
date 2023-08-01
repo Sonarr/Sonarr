@@ -77,6 +77,7 @@ class EditSeriesModalContent extends Component {
       qualityProfileId,
       seriesType,
       path,
+      rootFolderPath,
       tags
     } = item;
 
@@ -144,6 +145,23 @@ class EditSeriesModalContent extends Component {
                 type={inputTypes.PATH}
                 name="path"
                 {...path}
+                onChange={onInputChange}
+              />
+            </FormGroup>
+
+            <FormGroup>
+              <FormLabel>{translate('Root Folder')}</FormLabel>
+
+              <FormInputGroup
+                type={inputTypes.ROOT_FOLDER_SELECT}
+                name="rootFolderPath"
+                {...rootFolderPath}
+                includeNoChange={true}
+                includeNoChangeDisabled={false}
+                selectedValueOptions={{ includeFreeSpace: false }}
+                helpText={translate(
+                  'Moving series to the same root folder can be used to rename series folders to match updated title or naming format'
+                )}
                 onChange={onInputChange}
               />
             </FormGroup>

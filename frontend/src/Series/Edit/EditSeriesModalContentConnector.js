@@ -6,6 +6,7 @@ import { createSelector } from 'reselect';
 import { saveSeries, setSeriesValue } from 'Store/Actions/seriesActions';
 import createSeriesSelector from 'Store/Selectors/createSeriesSelector';
 import selectSettings from 'Store/Selectors/selectSettings';
+import combinePath from 'Utilities/String/combinePath';
 import EditSeriesModalContent from './EditSeriesModalContent';
 
 function createIsPathChangingSelector() {
@@ -27,9 +28,10 @@ function createIsPathChangingSelector() {
 function createMapStateToProps() {
   return createSelector(
     (state) => state.series,
+    (state) => state.system.status.item.isWindows,
     createSeriesSelector(),
     createIsPathChangingSelector(),
-    (seriesState, series, isPathChanging) => {
+    (seriesState, isWindows, series, isPathChanging) => {
       const {
         isSaving,
         saveError,
@@ -42,6 +44,7 @@ function createMapStateToProps() {
         'qualityProfileId',
         'seriesType',
         'path',
+        'rootFolderPath',
         'tags'
       ]);
 
@@ -49,6 +52,7 @@ function createMapStateToProps() {
 
       return {
         title: series.title,
+        isWindows,
         isSaving,
         saveError,
         isPathChanging,
@@ -80,7 +84,20 @@ class EditSeriesModalContentConnector extends Component {
   // Listeners
 
   onInputChange = ({ name, value }) => {
-    this.props.dispatchSetSeriesValue({ name, value });
+    const {
+      dispatchSetSeriesValue,
+      isWindows,
+      title,
+      item: { path }
+    } = this.props;
+
+    dispatchSetSeriesValue({ name, value });
+
+    // Also update the path if the root folder path changes
+    if (name === 'rootFolderPath' && value !== 'noChange' && path.value.indexOf(value) === -1) {
+      const newPath = combinePath(isWindows, value, [title]);
+      dispatchSetSeriesValue({ name: 'path', value: newPath });
+    }
   };
 
   onSavePress = (moveFiles) => {
@@ -106,7 +123,10 @@ class EditSeriesModalContentConnector extends Component {
 }
 
 EditSeriesModalContentConnector.propTypes = {
+  title: PropTypes.string.isRequired,
+  item: PropTypes.object.isRequired,
   seriesId: PropTypes.number,
+  isWindows: PropTypes.bool.isRequired,
   isSaving: PropTypes.bool.isRequired,
   saveError: PropTypes.object,
   dispatchSetSeriesValue: PropTypes.func.isRequired,
