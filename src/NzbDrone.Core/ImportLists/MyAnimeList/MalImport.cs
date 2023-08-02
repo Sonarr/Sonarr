@@ -9,14 +9,16 @@ using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
+using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.ImportLists.MyAnimeList
 {
     public class MalImport : HttpImportListBase<MalListSettings>
     {
         public const string OAuthUrl = "https://myanimelist.net/v1/oauth2/authorize";
-        public const string OAuthTokenUrl = "https://myanimelist.net/v1/oauth2/token";
-        public const string RedirectUri = "http://localhost:8989/oauth.html";
+        public const string RedirectUri = "https://auth.servarr.com/v1/mal_sonarr/auth";
+        public const string RenewUri = "https://auth.servarr.com/v1/mal_sonarr/renew";
+        public string ClientId = "402de1a90f8eb545f625739fa69ddb98";
 
         public static Dictionary<int, int> MalTvdbIds = new Dictionary<int, int>();
 
@@ -68,7 +70,7 @@ namespace NzbDrone.Core.ImportLists.MyAnimeList
                 _Codechallenge = GenCodeChallenge();
                 var request = new HttpRequestBuilder(OAuthUrl)
                     .AddQueryParam("response_type", "code")
-                    .AddQueryParam("client_id", Settings.ClientId)
+                    .AddQueryParam("client_id", ClientId)
                     .AddQueryParam("code_challenge", _Codechallenge)
                     .AddQueryParam("state", query["callbackUrl"])
                     .AddQueryParam("redirect_uri", RedirectUri)
@@ -81,13 +83,11 @@ namespace NzbDrone.Core.ImportLists.MyAnimeList
             }
             else if (action == "getOAuthToken")
             {
-                var jsonResult = Json.Deserialize<MalAuthToken>(GetAuthToken(query["code"]));
                 return new
                 {
-                    accessToken = jsonResult.AccessToken,
-                    refreshToken = jsonResult.RefreshToken,
-                    expires = DateTime.UtcNow.AddSeconds(int.Parse(jsonResult.ExpiresIn))
-                    //expires = DateTime.UtcNow.AddSeconds(5)
+                    accessToken = query["access_token"],
+                    expires = DateTime.UtcNow.AddSeconds(int.Parse(query["expires_in"])),
+                    refreshToken = query["refresh_token"]
                 };
             }
 
@@ -122,7 +122,7 @@ namespace NzbDrone.Core.ImportLists.MyAnimeList
             public string TokenType { get; set; }
 
             [JsonProperty("expires_in")]
-            public string ExpiresIn { get; set; }
+            public int ExpiresIn { get; set; }
 
             [JsonProperty("access_token")]
             public string AccessToken { get; set; }
@@ -173,49 +173,30 @@ namespace NzbDrone.Core.ImportLists.MyAnimeList
             }
         }
 
-        private string GetAuthToken(string authcode)
-        {
-            try
-            {
-                var req = new HttpRequestBuilder(OAuthTokenUrl).Post()
-                    .AddFormParameter("client_id", Settings.ClientId)
-                    .AddFormParameter("client_secret", Settings.ClientSecret)
-                    .AddFormParameter("code", authcode)
-                    .AddFormParameter("code_verifier", _Codechallenge)
-                    .AddFormParameter("grant_type", "authorization_code")
-                    .AddFormParameter("redirect_uri", "http://localhost:8989/oauth.html")
-                    .Build();
-                var response = _httpClient.Post(req);
-                return response.Content;
-            }
-            catch (HttpRequestException ex)
-            {
-                _logger.Error(ex.Message);
-                return null;
-            }
-        }
-
         private void RefreshToken()
         {
-            var httpReq = new HttpRequestBuilder(OAuthTokenUrl)
-                .Post()
-                .AddFormParameter("client_id", Settings.ClientId)
-                .AddFormParameter("client_secret", Settings.ClientSecret)
-                .AddFormParameter("grant_type", "refresh_token")
-                .AddFormParameter("refresh_token", Settings.RefreshToken)
+            _logger.Trace("Refreshing Token");
+
+            Settings.Validate().Filter("RefreshToken").ThrowOnError();
+
+            var httpReq = new HttpRequestBuilder(RenewUri)
+                .AddQueryParam("refresh_token", Settings.RefreshToken)
                 .Build();
             try
             {
-                var httpResp = _httpClient.Post(httpReq);
-                var jsonResp = Json.Deserialize<MalAuthToken>(httpResp.Content);
-                Settings.AccessToken = jsonResp.AccessToken;
-                Settings.RefreshToken = jsonResp.RefreshToken;
-                Settings.Expires = DateTime.UtcNow.AddSeconds(int.Parse(jsonResp.ExpiresIn));
-                //Settings.Expires = DateTime.UtcNow.AddSeconds(5);
+                var httpResp = _httpClient.Get<MalAuthToken>(httpReq);
 
-                if (Definition.Id > 0)
+                if (httpResp?.Resource != null)
                 {
-                    _importListRepository.UpdateSettings((ImportListDefinition)Definition);
+                    var token = httpResp.Resource;
+                    Settings.AccessToken = token.AccessToken;
+                    Settings.Expires = DateTime.UtcNow.AddSeconds(token.ExpiresIn);
+                    Settings.RefreshToken = token.RefreshToken ?? Settings.RefreshToken;
+
+                    if (Definition.Id > 0)
+                    {
+                        _importListRepository.UpdateSettings((ImportListDefinition)Definition);
+                    }
                 }
             }
             catch (HttpRequestException)
