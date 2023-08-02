@@ -10,12 +10,12 @@ namespace NzbDrone.Core.ImportLists.MyAnimeList
         public MalSettingsValidator()
         {
             RuleFor(c => c.BaseUrl).ValidRootUrl();
-            RuleFor(c => c.ClientId).NotEmpty()
-                           .OverridePropertyName("ClientId")
-                           .WithMessage("Must input Client ID from MAL, created in the API section of your account");
-            RuleFor(c => c.ClientSecret).NotEmpty()
-                           .OverridePropertyName("ClientSecret")
-                           .WithMessage("Must input Client Secret from MAL, created in the API section of your account");
+            //RuleFor(c => c.ClientId).NotEmpty()
+            //               .OverridePropertyName("ClientId")
+            //               .WithMessage("Must input Client ID from MAL, created in the API section of your account");
+            //RuleFor(c => c.ClientSecret).NotEmpty()
+            //               .OverridePropertyName("ClientSecret")
+            //               .WithMessage("Must input Client Secret from MAL, created in the API section of your account");
             RuleFor(c => c.AccessToken).NotEmpty()
                                        .OverridePropertyName("SignIn")
                                        .WithMessage("Must authenticate with MyAnimeList");
