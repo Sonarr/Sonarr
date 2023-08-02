@@ -63,7 +63,7 @@ class EpisodeDetailsModalContentConnector extends Component {
   // Lifecycle
 
   componentWillUnmount() {
-    // Clear pending releases here so we can reshow the search
+    // Clear pending releases here, so we can reshow the search
     // results even after switching tabs.
 
     this.props.dispatchCancelFetchReleases();
@@ -75,6 +75,7 @@ class EpisodeDetailsModalContentConnector extends Component {
 
   render() {
     const {
+      dispatchCancelFetchReleases,
       dispatchClearReleases,
       ...otherProps
     } = this.props;
