@@ -41,7 +41,7 @@ namespace NzbDrone.Core.ImportLists.AniList.List
 
         public override AniListParser GetParser()
         {
-            return new AniListParser(_logger, Settings, Mappings);
+            return new AniListParser(Settings, Mappings);
         }
 
         protected override IList<ImportListItemInfo> FetchItems(Func<IImportListRequestGenerator, ImportListPageableRequestChain> pageableRequestChainSelector, bool isRecent = false)

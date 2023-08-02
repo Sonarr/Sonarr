@@ -28,6 +28,8 @@ namespace NzbDrone.Core.ImportLists.AniList
         public const string OAuthUrl = "https://anilist.co/api/v2/oauth/authorize";
         public const string RedirectUri = "https://auth.servarr.com/v1/anilist_sonarr/auth";
         public const string RenewUri = "https://auth.servarr.com/v1/anilist_sonarr/renew";
+        public const string MapSourceUrl = "https://raw.githubusercontent.com/Fribb/anime-lists/master/anime-list-full.json";
+
         public const string ClientId = "13780";
 
         private IImportListRepository _importListRepository;
@@ -93,7 +95,7 @@ namespace NzbDrone.Core.ImportLists.AniList
             var result = new Dictionary<int, MediaMapping>();
             try
             {
-                var request = new HttpRequest(Settings.MapSourceUrl, HttpAccept.Json);
+                var request = new HttpRequest(MapSourceUrl, HttpAccept.Json);
                 var response = _httpClient.Execute(request);
 
                 if (response.StatusCode == HttpStatusCode.OK)
@@ -124,11 +126,11 @@ namespace NzbDrone.Core.ImportLists.AniList
                 if (webException.Message.Contains("502") || webException.Message.Contains("503") ||
                     webException.Message.Contains("timed out"))
                 {
-                    _logger.Warn("{0} server is currently unavailable. {1} {2}", this, Settings.MapSourceUrl, webException.Message);
+                    _logger.Warn("{0} server is currently unavailable. {1} {2}", this, MapSourceUrl, webException.Message);
                 }
                 else
                 {
-                    _logger.Warn("{0} {1} {2}", this, Settings.MapSourceUrl, webException.Message);
+                    _logger.Warn("{0} {1} {2}", this, MapSourceUrl, webException.Message);
                 }
             }
             catch (HttpException ex)
@@ -139,14 +141,14 @@ namespace NzbDrone.Core.ImportLists.AniList
             catch (JsonSerializationException ex)
             {
                 _importListStatusService.RecordFailure(Definition.Id);
-                ex.WithData("MappingUrl", Settings.MapSourceUrl);
-                _logger.Error(ex, "Mapping source data is invalid. {0}", Settings.MapSourceUrl);
+                ex.WithData("MappingUrl", MapSourceUrl);
+                _logger.Error(ex, "Mapping source data is invalid. {0}", MapSourceUrl);
             }
             catch (Exception ex)
             {
                 _importListStatusService.RecordFailure(Definition.Id);
-                ex.WithData("MappingUrl", Settings.MapSourceUrl);
-                _logger.Error(ex, "An error occurred while downloading mapping file. {0}", Settings.MapSourceUrl);
+                ex.WithData("MappingUrl", MapSourceUrl);
+                _logger.Error(ex, "An error occurred while downloading mapping file. {0}", MapSourceUrl);
             }
 
             return result;

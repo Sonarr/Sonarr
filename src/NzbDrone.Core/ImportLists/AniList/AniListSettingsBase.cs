@@ -38,12 +38,9 @@ namespace NzbDrone.Core.ImportLists.AniList
         {
             BaseUrl = "https://graphql.anilist.co";
             SignIn = "startOAuth";
-            MapSourceUrl = "https://raw.githubusercontent.com/Fribb/anime-lists/master/anime-list-full.json";
         }
 
         public string BaseUrl { get; set; }
-
-        public string MapSourceUrl { get; set; }
 
         [FieldDefinition(0, Label = "Access Token", Type = FieldType.Textbox, Hidden = HiddenType.Hidden)]
         public string AccessToken { get; set; }
