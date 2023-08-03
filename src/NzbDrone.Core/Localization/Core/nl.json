@@ -23,7 +23,6 @@
     "ApplyTagsHelpTextHowToApplySeries": "Hoe tags toepassen op de geselecteerde series",
     "BlocklistReleaseHelpText": "Verbied Sonarr om deze release opnieuw automatisch te downloaden",
     "Delete": "Verwijder",
-    "ApplyTagsHelpTextHowToApply": "Hoe tags toepassen op de geselecteerde indexeerders",
     "ApplyTagsHelpTextRemove": "Verwijderen: Verwijder de ingevoerde tags",
     "ApplyTagsHelpTextReplace": "Vervangen: Vervang de tags met de ingevoerde tags (vul geen tags in om alle tags te wissen)",
     "ApplyTagsHelpTextAdd": "Toevoegen: Voeg de tags toe aan de bestaande tag lijst",
