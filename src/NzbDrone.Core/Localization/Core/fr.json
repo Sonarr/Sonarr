@@ -11,10 +11,12 @@
     "CountSeasons": "{count} saisons",
     "DownloadClientCheckNoneAvailableHealthCheckMessage": "Aucun client de téléchargement disponible",
     "Add": "Ajouter",
-    "AddingTag": "Ajout d'un tag",
+    "AddingTag": "Ajouter un tag",
     "Apply": "Appliquer",
     "ApplyTags": "Appliquer les tags",
     "Activity": "Activité",
     "About": "À propos",
-    "Actions": "Actions"
+    "Actions": "Actions",
+    "EditSelectedDownloadClients": "Modifier les clients de téléchargement sélectionnés",
+    "EditSelectedIndexers": "Modifier les indexeurs sélectionnés"
 }

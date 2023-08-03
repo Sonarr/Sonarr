@@ -1,1 +1,5 @@
-{}
+{
+    "ApiKeyValidationHealthCheckMessage": "Vennligst oppdater din API-nøkkel til å være minst {0} tegn lang. Du kan gjøre dette via innstillinger eller konfigurasjonsfilen",
+    "ApplyChanges": "Bekreft endringer",
+    "AllTitles": "Alle titler"
+}

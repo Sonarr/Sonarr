@@ -151,7 +151,6 @@
     "Queue": "队列",
     "Real": "真的",
     "Release": "发布",
-    "ApplyTagsHelpTextHowToApply": "如何将标记应用于选定的索引器",
     "Language that Sonarr will use for UI": "用于UI的语言",
     "CustomFormatScore": "自定义格式分数",
     "ExportCustomFormat": "已有自定义格式",
