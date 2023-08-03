@@ -21,23 +21,17 @@ const columns = [
   },
   {
     name: 'name',
-    get label() {
-      return translate('Name');
-    },
+    label: () => translate('Name'),
     isVisible: true
   },
   {
     name: 'size',
-    get label() {
-      return translate('Size');
-    },
+    label: () => translate('Size'),
     isVisible: true
   },
   {
     name: 'time',
-    get label() {
-      return translate('Time');
-    },
+    label: () => translate('Time'),
     isVisible: true
   },
   {

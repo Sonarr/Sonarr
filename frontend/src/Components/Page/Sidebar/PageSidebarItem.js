@@ -64,7 +64,7 @@ class PageSidebarItem extends Component {
           }
 
           <span className={isChildItem ? styles.noIcon : null}>
-            {title}
+            {typeof title === 'function' ? title() : title}
           </span>
 
           {
@@ -88,7 +88,7 @@ class PageSidebarItem extends Component {
 
 PageSidebarItem.propTypes = {
   iconName: PropTypes.object,
-  title: PropTypes.string.isRequired,
+  title: PropTypes.oneOfType([PropTypes.string, PropTypes.func]).isRequired,
   to: PropTypes.string.isRequired,
   isActive: PropTypes.bool,
   isActiveParent: PropTypes.bool,

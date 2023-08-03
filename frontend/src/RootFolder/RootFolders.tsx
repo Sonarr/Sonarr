@@ -13,23 +13,17 @@ import RootFolderRow from './RootFolderRow';
 const rootFolderColumns = [
   {
     name: 'path',
-    get label() {
-      return translate('Path');
-    },
+    label: () => translate('Path'),
     isVisible: true,
   },
   {
     name: 'freeSpace',
-    get label() {
-      return translate('FreeSpace');
-    },
+    label: () => translate('FreeSpace'),
     isVisible: true,
   },
   {
     name: 'unmappedFolders',
-    get label() {
-      return translate('UnmappedFolders');
-    },
+    label: () => translate('UnmappedFolders'),
     isVisible: true,
   },
   {
