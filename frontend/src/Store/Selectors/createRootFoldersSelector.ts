@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { RootFolderAppState } from 'App/State/SettingsAppState';
+import RootFolderAppState from 'App/State/RootFolderAppState';
 import createSortedSectionSelector from 'Store/Selectors/createSortedSectionSelector';
 import RootFolder from 'typings/RootFolder';
 
