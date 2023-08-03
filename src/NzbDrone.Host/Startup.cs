@@ -99,7 +99,7 @@ namespace NzbDrone.Host
                 {
                     Version = "3.0.0",
                     Title = "Sonarr",
-                    Description = "Sonarr API docs",
+                    Description = "Sonarr API docs - The v3 API docs apply to both v3 and v4 versions of Sonarr. Some functionality may only be available in v4 of the Sonarr application.",
                     License = new OpenApiLicense
                     {
                         Name = "GPL-3.0",
