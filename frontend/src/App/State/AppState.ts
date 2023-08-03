@@ -5,6 +5,7 @@ import EpisodeFilesAppState from './EpisodeFilesAppState';
 import EpisodesAppState from './EpisodesAppState';
 import ParseAppState from './ParseAppState';
 import QueueAppState from './QueueAppState';
+import RootFolderAppState from './RootFolderAppState';
 import SeriesAppState, { SeriesIndexAppState } from './SeriesAppState';
 import SettingsAppState from './SettingsAppState';
 import SystemAppState from './SystemAppState';
@@ -50,6 +51,7 @@ interface AppState {
   interactiveImport: InteractiveImportAppState;
   parse: ParseAppState;
   queue: QueueAppState;
+  rootFolders: RootFolderAppState;
   series: SeriesAppState;
   seriesIndex: SeriesIndexAppState;
   settings: SettingsAppState;
