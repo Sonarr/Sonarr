@@ -1,4 +1,3 @@
-using System.IO;
 using System.Linq;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
@@ -21,7 +20,7 @@ namespace NzbDrone.Mono.EnvironmentInfo.VersionAdapters
                 return null;
             }
 
-            var issueFile = _diskProvider.GetFiles("/etc/", SearchOption.TopDirectoryOnly).SingleOrDefault(c => c.EndsWith("/issue"));
+            var issueFile = _diskProvider.GetFiles("/etc/", false).SingleOrDefault(c => c.EndsWith("/issue"));
 
             if (issueFile == null)
             {

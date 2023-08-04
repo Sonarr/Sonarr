@@ -60,9 +60,7 @@ namespace NzbDrone.Core.Extras
                 return;
             }
 
-            var folderSearchOption = localEpisode.FolderEpisodeInfo == null
-                ? SearchOption.TopDirectoryOnly
-                : SearchOption.AllDirectories;
+            var folderSearchOption = localEpisode.FolderEpisodeInfo != null;
 
             var wantedExtensions = _configService.ExtraFileExtensions.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
                                                                      .Select(e => e.Trim(' ', '.')

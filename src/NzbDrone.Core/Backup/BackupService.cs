@@ -89,7 +89,7 @@ namespace NzbDrone.Core.Backup
             // Delete journal file created during database backup
             _diskProvider.DeleteFile(Path.Combine(_backupTempFolder, "sonarr.db-journal"));
 
-            _archiveService.CreateZip(backupPath, _diskProvider.GetFiles(_backupTempFolder, SearchOption.TopDirectoryOnly));
+            _archiveService.CreateZip(backupPath, _diskProvider.GetFiles(_backupTempFolder, false));
 
             _logger.ProgressDebug("Backup zip created");
         }
@@ -126,7 +126,7 @@ namespace NzbDrone.Core.Backup
 
                 _archiveService.Extract(backupFileName, temporaryPath);
 
-                foreach (var file in _diskProvider.GetFiles(temporaryPath, SearchOption.TopDirectoryOnly))
+                foreach (var file in _diskProvider.GetFiles(temporaryPath, false))
                 {
                     var fileName = Path.GetFileName(file);
 
@@ -238,7 +238,7 @@ namespace NzbDrone.Core.Backup
 
         private IEnumerable<string> GetBackupFiles(string path)
         {
-            var files = _diskProvider.GetFiles(path, SearchOption.TopDirectoryOnly);
+            var files = _diskProvider.GetFiles(path, false);
 
             return files.Where(f => BackupFileRegex.IsMatch(f));
         }

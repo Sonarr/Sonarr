@@ -145,7 +145,7 @@ namespace NzbDrone.Core.Extras.Subtitles
             // Use any sub if only episode in folder
             if (matchingFiles.Count == 0 && filteredFiles.Count > 0)
             {
-                var videoFiles = _diskProvider.GetFiles(sourceFolder, SearchOption.AllDirectories)
+                var videoFiles = _diskProvider.GetFiles(sourceFolder, true)
                                               .Where(file => MediaFileExtensions.Extensions.Contains(Path.GetExtension(file)))
                                               .ToList();
 

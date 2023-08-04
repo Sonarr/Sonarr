@@ -32,7 +32,7 @@ namespace Sonarr.Api.V3.Logs
                 return Enumerable.Empty<string>();
             }
 
-            return _diskProvider.GetFiles(_appFolderInfo.GetUpdateLogFolder(), SearchOption.TopDirectoryOnly)
+            return _diskProvider.GetFiles(_appFolderInfo.GetUpdateLogFolder(), false)
                                      .Where(f => Regex.IsMatch(Path.GetFileName(f), LOGFILE_ROUTE.TrimStart('/'), RegexOptions.IgnoreCase))
                                      .ToList();
         }

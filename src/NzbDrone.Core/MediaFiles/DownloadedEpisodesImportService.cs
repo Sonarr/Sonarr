@@ -111,7 +111,7 @@ namespace NzbDrone.Core.MediaFiles
             try
             {
                 var videoFiles = _diskScanService.GetVideoFiles(directoryInfo.FullName);
-                var rarFiles = _diskProvider.GetFiles(directoryInfo.FullName, SearchOption.AllDirectories).Where(f =>
+                var rarFiles = _diskProvider.GetFiles(directoryInfo.FullName, true).Where(f =>
                     Path.GetExtension(f).Equals(".rar",
                         StringComparison.OrdinalIgnoreCase));
 
@@ -309,7 +309,7 @@ namespace NzbDrone.Core.MediaFiles
 
         private ImportResult CheckEmptyResultForIssue(string folder)
         {
-            var files = _diskProvider.GetFiles(folder, SearchOption.AllDirectories);
+            var files = _diskProvider.GetFiles(folder, true);
 
             if (files.Any(file => FileExtensions.ExecutableExtensions.Contains(Path.GetExtension(file))))
             {

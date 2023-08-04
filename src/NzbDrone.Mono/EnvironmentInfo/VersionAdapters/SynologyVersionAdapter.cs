@@ -1,4 +1,3 @@
-using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using NzbDrone.Common.Disk;
@@ -24,7 +23,7 @@ namespace NzbDrone.Mono.EnvironmentInfo.VersionAdapters
                 return null;
             }
 
-            var versionFile = _diskProvider.GetFiles("/etc.defaults/", SearchOption.TopDirectoryOnly).SingleOrDefault(c => c.EndsWith("VERSION"));
+            var versionFile = _diskProvider.GetFiles("/etc.defaults/", false).SingleOrDefault(c => c.EndsWith("VERSION"));
 
             if (versionFile == null)
             {

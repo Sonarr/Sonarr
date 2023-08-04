@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -25,7 +25,7 @@ namespace NzbDrone.Mono.Test.EnvironmentInfo.VersionAdapters
                 .Setup(c => c.FolderExists("/System/Library/CoreServices/")).Returns(true);
 
             Mocker.GetMock<IDiskProvider>()
-                .Setup(c => c.GetFiles("/System/Library/CoreServices/", SearchOption.TopDirectoryOnly))
+                .Setup(c => c.GetFiles("/System/Library/CoreServices/", false))
                 .Returns(new[] { plistPath });
 
             Mocker.GetMock<IDiskProvider>()
@@ -49,7 +49,7 @@ namespace NzbDrone.Mono.Test.EnvironmentInfo.VersionAdapters
                .Setup(c => c.FolderExists("/System/Library/CoreServices/")).Returns(true);
 
             Mocker.GetMock<IDiskProvider>()
-                .Setup(c => c.GetFiles("/System/Library/CoreServices/", SearchOption.TopDirectoryOnly))
+                .Setup(c => c.GetFiles("/System/Library/CoreServices/", false))
                 .Returns(new[] { plistPath });
 
             Mocker.GetMock<IDiskProvider>()
@@ -69,7 +69,7 @@ namespace NzbDrone.Mono.Test.EnvironmentInfo.VersionAdapters
             Subject.Read().Should().BeNull();
 
             Mocker.GetMock<IDiskProvider>()
-                .Verify(c => c.GetFiles(It.IsAny<string>(), SearchOption.TopDirectoryOnly), Times.Never());
+                .Verify(c => c.GetFiles(It.IsAny<string>(), false), Times.Never());
         }
     }
 }

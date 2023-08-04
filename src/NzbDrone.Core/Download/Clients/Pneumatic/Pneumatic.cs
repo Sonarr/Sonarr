@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using FluentValidation.Results;
@@ -61,7 +61,7 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
 
         public override IEnumerable<DownloadClientItem> GetItems()
         {
-            foreach (var file in _diskProvider.GetFiles(Settings.StrmFolder, SearchOption.TopDirectoryOnly))
+            foreach (var file in _diskProvider.GetFiles(Settings.StrmFolder, false))
             {
                 if (Path.GetExtension(file) != ".strm")
                 {

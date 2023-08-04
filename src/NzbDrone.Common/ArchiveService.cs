@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.GZip;
@@ -11,7 +12,7 @@ namespace NzbDrone.Common
     public interface IArchiveService
     {
         void Extract(string compressedFile, string destination);
-        void CreateZip(string path, params string[] files);
+        void CreateZip(string path, IEnumerable<string> files);
     }
 
     public class ArchiveService : IArchiveService
@@ -39,7 +40,7 @@ namespace NzbDrone.Common
             _logger.Debug("Extraction complete.");
         }
 
-        public void CreateZip(string path, params string[] files)
+        public void CreateZip(string path, IEnumerable<string> files)
         {
             using (var zipFile = ZipFile.Create(path))
             {

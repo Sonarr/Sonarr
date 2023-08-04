@@ -25,7 +25,7 @@ namespace Sonarr.Api.V3.Logs
 
         protected override IEnumerable<string> GetLogFiles()
         {
-            return _diskProvider.GetFiles(_appFolderInfo.GetLogFolder(), SearchOption.TopDirectoryOnly);
+            return _diskProvider.GetFiles(_appFolderInfo.GetLogFolder(), false);
         }
 
         protected override string GetLogFilePath(string filename)
