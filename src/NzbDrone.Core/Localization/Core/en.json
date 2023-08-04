@@ -170,6 +170,7 @@
   "Imported": "Imported",
   "IncludeUnmonitored": "Include Unmonitored",
   "Indexer": "Indexer",
+  "IndexerDownloadClientHealthCheckMessage": "Indexers with invalid download clients: {0}.",
   "IndexerJackettAllHealthCheckMessage": "Indexers using the unsupported Jackett 'all' endpoint: {0}",
   "IndexerLongTermStatusAllUnavailableHealthCheckMessage": "All indexers are unavailable due to failures for more than 6 hours",
   "IndexerLongTermStatusUnavailableHealthCheckMessage": "Indexers unavailable due to failures for more than 6 hours: {0}",
