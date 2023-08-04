@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Label from 'Components/Label';
 import { kinds } from 'Helpers/Props';
+import translate from 'Utilities/String/translate';
 import styles from './ImportSeriesTitle.css';
 
 function ImportSeriesTitle(props) {
@@ -38,7 +39,7 @@ function ImportSeriesTitle(props) {
           <Label
             kind={kinds.WARNING}
           >
-            Existing
+            {translate('Existing')}
           </Label> :
           null
       }

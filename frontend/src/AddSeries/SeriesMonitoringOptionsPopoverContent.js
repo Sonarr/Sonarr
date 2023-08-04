@@ -1,53 +1,54 @@
 import React from 'react';
 import DescriptionList from 'Components/DescriptionList/DescriptionList';
 import DescriptionListItem from 'Components/DescriptionList/DescriptionListItem';
+import translate from 'Utilities/String/translate';
 
 function SeriesMonitoringOptionsPopoverContent() {
   return (
     <DescriptionList>
       <DescriptionListItem
-        title="All Episodes"
-        data="Monitor all episodes except specials"
+        title={translate('MonitorAllEpisodes')}
+        data={translate('MonitorAllEpisodesDescription')}
       />
 
       <DescriptionListItem
-        title="Future Episodes"
-        data="Monitor episodes that have not aired yet"
+        title={translate('MonitorFutureEpisodes')}
+        data={translate('MonitorFutureEpisodesDescription')}
       />
 
       <DescriptionListItem
-        title="Missing Episodes"
-        data="Monitor episodes that do not have files or have not aired yet"
+        title={translate('MonitorMissingEpisodes')}
+        data={translate('MonitorMissingEpisodesDescription')}
       />
 
       <DescriptionListItem
-        title="Existing Episodes"
-        data="Monitor episodes that have files or have not aired yet"
+        title={translate('MonitorExistingEpisodes')}
+        data={translate('MonitorExistingEpisodesDescription')}
       />
 
       <DescriptionListItem
-        title="First Season"
-        data="Monitor all episodes of the first season. All other seasons will be ignored"
+        title={translate('MonitorFirstSeason')}
+        data={translate('MonitorFirstSeasonDescription')}
       />
 
       <DescriptionListItem
-        title="Latest Season"
-        data="Monitor all episodes of the latest season and future seasons"
+        title={translate('MonitorLatestSeason')}
+        data={translate('MonitorLatestSeasonDescription')}
       />
 
       <DescriptionListItem
-        title="Monitor Specials"
-        data="Monitor all special episodes without changing the monitored status of other episodes"
+        title={translate('MonitorSpecials')}
+        data={translate('MonitorSpecialsDescription')}
       />
 
       <DescriptionListItem
-        title="Unmonitor Specials"
-        data="Unmonitor all special episodes without changing the monitored status of other episodes"
+        title={translate('UnmonitorSpecials')}
+        data={translate('UnmonitorSpecialsDescription')}
       />
 
       <DescriptionListItem
-        title="None"
-        data="No episodes will be monitored"
+        title={translate('MonitorNone')}
+        data={translate('MonitorNoneDescription')}
       />
     </DescriptionList>
   );
