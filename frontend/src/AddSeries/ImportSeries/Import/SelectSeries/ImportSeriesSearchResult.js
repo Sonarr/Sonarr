@@ -34,7 +34,7 @@ function ImportSeriesSearchResult(props) {
 
       <Link
         className={styles.tvdbLink}
-        to={`http://www.thetvdb.com/?tab=series&id=${tvdbId}`}
+        to={`https://www.thetvdb.com/?tab=series&id=${tvdbId}`}
       >
         <Icon
           className={styles.tvdbLinkIcon}

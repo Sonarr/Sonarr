@@ -6,10 +6,12 @@ import FileBrowserModal from 'Components/FileBrowser/FileBrowserModal';
 import Icon from 'Components/Icon';
 import Button from 'Components/Link/Button';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
+import InlineMarkdown from 'Components/Markdown/InlineMarkdown';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
 import { icons, kinds, sizes } from 'Helpers/Props';
 import RootFolders from 'RootFolder/RootFolders';
+import translate from 'Utilities/String/translate';
 import styles from './ImportSeriesSelectFolder.css';
 
 class ImportSeriesSelectFolder extends Component {
@@ -55,9 +57,11 @@ class ImportSeriesSelectFolder extends Component {
     } = this.props;
 
     const hasRootFolders = items.length > 0;
+    const goodFolderExample = (isWindows) ? 'C:\\tv shows' : '/tv shows';
+    const badFolderExample = (isWindows) ? 'C:\\tv shows\\the simpsons' : '/tv shows/the simpsons';
 
     return (
-      <PageContent title="Import Series">
+      <PageContent title={translate('ImportSeries')}>
         <PageContentBody>
           {
             isFetching && !isPopulated ?
@@ -67,7 +71,7 @@ class ImportSeriesSelectFolder extends Component {
 
           {
             !isFetching && error ?
-              <Alert kind={kinds.DANGER}>Unable to load root folders</Alert> :
+              <Alert kind={kinds.DANGER}>{translate('RootFoldersLoadError')}</Alert> :
               null
           }
 
@@ -75,20 +79,20 @@ class ImportSeriesSelectFolder extends Component {
             !error && isPopulated &&
               <div>
                 <div className={styles.header}>
-                  Import series you already have
+                  {translate('LibraryImportHeader')}
                 </div>
 
                 <div className={styles.tips}>
-                  Some tips to ensure the import goes smoothly:
+                  {translate('LibraryImportTips')}
                   <ul>
                     <li className={styles.tip}>
-                      Make sure that your files include the quality in their filenames. eg. <span className={styles.code}>episode.s02e15.bluray.mkv</span>
+                      <InlineMarkdown data={translate('LibraryImportTipsQualityInFilename')} />
                     </li>
                     <li className={styles.tip}>
-                      Point Sonarr to the folder containing all of your tv shows, not a specific one. eg. <span className={styles.code}>"{isWindows ? 'C:\\tv shows' : '/tv shows'}"</span> and not <span className={styles.code}>"{isWindows ? 'C:\\tv shows\\the simpsons' : '/tv shows/the simpsons'}"</span> Additionally, each series must be in its own folder within the root/library folder.
+                      <InlineMarkdown data={translate('LibraryImportTipsUseRootFolder', { goodFolderExample, badFolderExample })} />
                     </li>
                     <li className={styles.tip}>
-                      Do not use for importing downloads from your download client, this is only for existing organized libraries, not unsorted files.
+                      {translate('LibraryImportTipsDontUseDownloadsFolder')}
                     </li>
                   </ul>
                 </div>
@@ -96,7 +100,7 @@ class ImportSeriesSelectFolder extends Component {
                 {
                   hasRootFolders ?
                     <div className={styles.recentFolders}>
-                      <FieldSet legend="Root Folders">
+                      <FieldSet legend={translate('RootFolders')}>
                         <RootFolders
                           isFetching={isFetching}
                           isPopulated={isPopulated}
@@ -114,7 +118,7 @@ class ImportSeriesSelectFolder extends Component {
                       className={styles.addErrorAlert}
                       kind={kinds.DANGER}
                     >
-                      Unable to add root folder
+                      {translate('RootFolderLoadError')}
 
                       <ul>
                         {
@@ -149,8 +153,8 @@ class ImportSeriesSelectFolder extends Component {
                     />
                     {
                       hasRootFolders ?
-                        'Choose another folder' :
-                        'Start Import'
+                        translate('ChooseAnotherFolder') :
+                        translate('StartImport')
                     }
                   </Button>
                 </div>
