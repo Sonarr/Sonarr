@@ -48,7 +48,7 @@ namespace NzbDrone.Core.Test.RootFolderTests
             var seriesPath = "/mnt/tv/Series Title";
 
             GivenRootFolders(@"C:\Test\TV".AsOsAgnostic(), @"D:\Test\TV".AsOsAgnostic());
-            Subject.GetBestRootFolderPath(seriesPath).Should().Be(@"/mnt/tv".AsOsAgnostic());
+            Subject.GetBestRootFolderPath(seriesPath).Should().Be(@"/mnt/tv");
         }
 
         [Test]
@@ -59,7 +59,7 @@ namespace NzbDrone.Core.Test.RootFolderTests
             var seriesPath = @"T:\Test\TV\Series Title";
 
             GivenRootFolders(@"C:\Test\TV".AsOsAgnostic(), @"D:\Test\TV".AsOsAgnostic());
-            Subject.GetBestRootFolderPath(seriesPath).Should().Be(@"T:\Test\TV".AsOsAgnostic());
+            Subject.GetBestRootFolderPath(seriesPath).Should().Be(@"T:\Test\TV");
         }
     }
 }
