@@ -391,26 +391,34 @@ namespace NzbDrone.Core.Indexers.Newznab
 
             if (SupportsSearch)
             {
-                var queryTitles = TextSearchEngine == "raw" ? searchCriteria.SceneTitles : searchCriteria.CleanSceneTitles;
-                foreach (var queryTitle in queryTitles)
+                AddTvIdPageableRequests(pageableRequests,
+                    Settings.AnimeCategories,
+                    searchCriteria,
+                    $"&q={searchCriteria.AbsoluteEpisodeNumber:00}");
+
+                var includeAnimeStandardFormatSearch = Settings.AnimeStandardFormatSearch &&
+                                                       searchCriteria.SeasonNumber > 0 &&
+                                                       searchCriteria.EpisodeNumber > 0;
+
+                if (includeAnimeStandardFormatSearch)
                 {
                     AddTvIdPageableRequests(pageableRequests,
                         Settings.AnimeCategories,
                         searchCriteria,
-                        $"&q={searchCriteria.AbsoluteEpisodeNumber:00}");
+                        $"&season={NewznabifySeasonNumber(searchCriteria.SeasonNumber)}&ep={searchCriteria.EpisodeNumber}");
+                }
 
+                var queryTitles = TextSearchEngine == "raw" ? searchCriteria.SceneTitles : searchCriteria.CleanSceneTitles;
+
+                foreach (var queryTitle in queryTitles)
+                {
                     pageableRequests.Add(GetPagedRequests(MaxPages,
                         Settings.AnimeCategories,
                         "search",
                         $"&q={NewsnabifyTitle(queryTitle)}+{searchCriteria.AbsoluteEpisodeNumber:00}"));
 
-                    if (Settings.AnimeStandardFormatSearch && searchCriteria.SeasonNumber > 0 && searchCriteria.EpisodeNumber > 0)
+                    if (includeAnimeStandardFormatSearch)
                     {
-                        AddTvIdPageableRequests(pageableRequests,
-                            Settings.AnimeCategories,
-                            searchCriteria,
-                            $"&season={NewznabifySeasonNumber(searchCriteria.SeasonNumber)}&ep={searchCriteria.EpisodeNumber}");
-
                         pageableRequests.Add(GetPagedRequests(MaxPages,
                             Settings.AnimeCategories,
                             "tvsearch",
