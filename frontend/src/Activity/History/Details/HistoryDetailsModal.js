@@ -8,25 +8,26 @@ import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import { kinds } from 'Helpers/Props';
+import translate from 'Utilities/String/translate';
 import HistoryDetails from './HistoryDetails';
 import styles from './HistoryDetailsModal.css';
 
 function getHeaderTitle(eventType) {
   switch (eventType) {
     case 'grabbed':
-      return 'Grabbed';
+      return translate('Grabbed');
     case 'downloadFailed':
-      return 'Download Failed';
+      return translate('DownloadFailed');
     case 'downloadFolderImported':
-      return 'Episode Imported';
+      return translate('EpisodeImported');
     case 'episodeFileDeleted':
-      return 'Episode File Deleted';
+      return translate('EpisodeFileDeleted');
     case 'episodeFileRenamed':
-      return 'Episode File Renamed';
+      return translate('EpisodeFileRenamed');
     case 'downloadIgnored':
-      return 'Download Ignored';
+      return translate('DownloadIgnored');
     default:
-      return 'Unknown';
+      return translate('Unknown');
   }
 }
 
@@ -72,14 +73,14 @@ function HistoryDetailsModal(props) {
                 isSpinning={isMarkingAsFailed}
                 onPress={onMarkAsFailedPress}
               >
-                Mark as Failed
+                {translate('MarkAsFailed')}
               </SpinnerButton>
           }
 
           <Button
             onPress={onModalClose}
           >
-            Close
+            {translate('Close')}
           </Button>
         </ModalFooter>
       </ModalContent>

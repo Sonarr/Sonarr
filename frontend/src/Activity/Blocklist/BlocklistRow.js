@@ -10,6 +10,7 @@ import EpisodeLanguages from 'Episode/EpisodeLanguages';
 import EpisodeQuality from 'Episode/EpisodeQuality';
 import { icons, kinds } from 'Helpers/Props';
 import SeriesTitleLink from 'Series/SeriesTitleLink';
+import translate from 'Utilities/String/translate';
 import BlocklistDetailsModal from './BlocklistDetailsModal';
 import styles from './BlocklistRow.css';
 
@@ -164,7 +165,7 @@ class BlocklistRow extends Component {
                   />
 
                   <IconButton
-                    title="Remove from blocklist"
+                    title={translate('RemoveFromBlocklist')}
                     name={icons.REMOVE}
                     kind={kinds.DANGER}
                     onPress={onRemovePress}

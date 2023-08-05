@@ -16,6 +16,7 @@ import TablePager from 'Components/Table/TablePager';
 import { align, icons, kinds } from 'Helpers/Props';
 import getRemovedItems from 'Utilities/Object/getRemovedItems';
 import hasDifferentItems from 'Utilities/Object/hasDifferentItems';
+import translate from 'Utilities/String/translate';
 import getSelectedIds from 'Utilities/Table/getSelectedIds';
 import removeOldSelectedState from 'Utilities/Table/removeOldSelectedState';
 import selectAll from 'Utilities/Table/selectAll';
@@ -175,7 +176,7 @@ class Queue extends Component {
     const disableSelectedActions = selectedCount === 0;
 
     return (
-      <PageContent title="Queue">
+      <PageContent title={translate('Queue')}>
         <PageToolbar>
           <PageToolbarSection>
             <PageToolbarButton
@@ -188,7 +189,7 @@ class Queue extends Component {
             <PageToolbarSeparator />
 
             <PageToolbarButton
-              label="Grab Selected"
+              label={translate('GrabSelected')}
               iconName={icons.DOWNLOAD}
               isDisabled={disableSelectedActions || !isPendingSelected}
               isSpinning={isGrabbing}
@@ -196,7 +197,7 @@ class Queue extends Component {
             />
 
             <PageToolbarButton
-              label="Remove Selected"
+              label={translate('RemoveSelected')}
               iconName={icons.REMOVE}
               isDisabled={disableSelectedActions}
               isSpinning={isRemoving}
@@ -213,7 +214,7 @@ class Queue extends Component {
               optionsComponent={QueueOptionsConnector}
             >
               <PageToolbarButton
-                label="Options"
+                label={translate('Options')}
                 iconName={icons.TABLE}
               />
             </TableOptionsModalWrapper>
@@ -230,7 +231,7 @@ class Queue extends Component {
           {
             !isRefreshing && hasError ?
               <Alert kind={kinds.DANGER}>
-                Failed to load Queue
+                {translate('QueueLoadError')}
               </Alert> :
               null
           }
@@ -238,7 +239,7 @@ class Queue extends Component {
           {
             isAllPopulated && !hasError && !items.length ?
               <Alert kind={kinds.INFO}>
-                Queue is empty
+                {translate('QueueIsEmpty')}
               </Alert> :
               null
           }

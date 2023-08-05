@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
 import { tooltipPositions } from 'Helpers/Props';
+import translate from 'Utilities/String/translate';
 import QueueStatus from './QueueStatus';
 import styles from './QueueStatusCell.css';
 
@@ -40,8 +41,8 @@ QueueStatusCell.propTypes = {
 };
 
 QueueStatusCell.defaultProps = {
-  trackedDownloadStatus: 'Ok',
-  trackedDownloadState: 'Downloading'
+  trackedDownloadStatus: translate('Ok'),
+  trackedDownloadState: translate('Downloading')
 };
 
 export default QueueStatusCell;

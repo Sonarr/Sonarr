@@ -3,6 +3,7 @@ import React from 'react';
 import Icon from 'Components/Icon';
 import Popover from 'Components/Tooltip/Popover';
 import { icons, tooltipPositions } from 'Helpers/Props';
+import translate from 'Utilities/String/translate';
 import QueueStatus from './QueueStatus';
 import styles from './QueueDetails.css';
 
@@ -30,7 +31,7 @@ function QueueDetails(props) {
     !hasWarning &&
     !hasError
   ) {
-    const state = isPaused ? 'Paused' : 'Downloading';
+    const state = isPaused ? translate('Paused') : translate('Downloading');
 
     if (progress < 5) {
       return (

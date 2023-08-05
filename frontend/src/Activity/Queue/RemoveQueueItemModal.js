@@ -88,25 +88,25 @@ class RemoveQueueItemModal extends Component {
           onModalClose={this.onModalClose}
         >
           <ModalHeader>
-            Remove - {sourceTitle}
+            {translate('RemoveQueueItem', { sourceTitle })}
           </ModalHeader>
 
           <ModalBody>
             <div>
-              Are you sure you want to remove '{sourceTitle}' from the queue?
+              {translate('RemoveQueueItemConfirmation', { sourceTitle })}
             </div>
 
             {
               isPending ?
                 null :
                 <FormGroup>
-                  <FormLabel>Remove From Download Client</FormLabel>
+                  <FormLabel>{translate('RemoveFromDownloadClient')}</FormLabel>
 
                   <FormInputGroup
                     type={inputTypes.CHECK}
                     name="remove"
                     value={remove}
-                    helpTextWarning="Removing will remove the download and the file(s) from the download client."
+                    helpTextWarning={translate('RemoveHelpTextWarning')}
                     isDisabled={!canIgnore}
                     onChange={this.onRemoveChange}
                   />
@@ -114,13 +114,13 @@ class RemoveQueueItemModal extends Component {
             }
 
             <FormGroup>
-              <FormLabel>Add Release To Blocklist</FormLabel>
+              <FormLabel>{translate('BlocklistRelease')}</FormLabel>
 
               <FormInputGroup
                 type={inputTypes.CHECK}
                 name="blocklist"
                 value={blocklist}
-                helpText="Starts a search for this episode again and prevents this release from being grabbed again"
+                helpText={translate('BlocklistReleaseHelpText')}
                 onChange={this.onBlocklistChange}
               />
             </FormGroup>
@@ -143,14 +143,14 @@ class RemoveQueueItemModal extends Component {
 
           <ModalFooter>
             <Button onPress={this.onModalClose}>
-              Close
+              {translate('Close')}
             </Button>
 
             <Button
               kind={kinds.DANGER}
               onPress={this.onRemoveConfirmed}
             >
-              Remove
+              {translate('Remove')}
             </Button>
           </ModalFooter>
         </ModalContent>
