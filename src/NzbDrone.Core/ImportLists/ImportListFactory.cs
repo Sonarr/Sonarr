@@ -75,9 +75,18 @@ namespace NzbDrone.Core.ImportLists
         {
             var result = base.Test(definition);
 
-            if ((result == null || result.IsValid) && definition.Id != 0)
+            if (definition.Id == 0)
+            {
+                return result;
+            }
+
+            if (result == null || result.IsValid)
             {
                 _importListStatusService.RecordSuccess(definition.Id);
+            }
+            else
+            {
+                _importListStatusService.RecordFailure(definition.Id);
             }
 
             return result;

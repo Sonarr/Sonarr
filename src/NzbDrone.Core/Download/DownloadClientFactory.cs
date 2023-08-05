@@ -74,9 +74,18 @@ namespace NzbDrone.Core.Download
         {
             var result = base.Test(definition);
 
-            if ((result == null || result.IsValid) && definition.Id != 0)
+            if (definition.Id == 0)
+            {
+                return result;
+            }
+
+            if (result == null || result.IsValid)
             {
                 _downloadClientStatusService.RecordSuccess(definition.Id);
+            }
+            else
+            {
+                _downloadClientStatusService.RecordFailure(definition.Id);
             }
 
             return result;
