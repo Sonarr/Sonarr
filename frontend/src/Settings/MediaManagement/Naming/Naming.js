@@ -296,7 +296,7 @@ class Naming extends Component {
                     </FormGroup>
 
                     <FormGroup size={sizes.LARGE}>
-                      <FormLabel>{translate('DailyEpisodeFormat')}</FormLabel>
+                      <FormLabel>{translate('AnimeEpisodeFormat')}</FormLabel>
 
                       <FormInputGroup
                         inputClassName={styles.namingInput}
