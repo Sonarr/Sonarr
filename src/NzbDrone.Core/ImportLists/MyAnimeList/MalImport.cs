@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Security.Cryptography;
-using Newtonsoft.Json;
 using NLog;
 using NzbDrone.Common.Http;
 using NzbDrone.Common.Serializer;
@@ -18,17 +17,16 @@ namespace NzbDrone.Core.ImportLists.MyAnimeList
         public const string OAuthUrl = "https://myanimelist.net/v1/oauth2/authorize";
         public const string RedirectUri = "https://auth.servarr.com/v1/mal_sonarr/auth";
         public const string RenewUri = "https://auth.servarr.com/v1/mal_sonarr/renew";
-        public string ClientId = "402de1a90f8eb545f625739fa69ddb98";
+        public const string ClientId = "402de1a90f8eb545f625739fa69ddb98";
 
         public static Dictionary<int, int> MalTvdbIds = new Dictionary<int, int>();
 
-        private static string _Codechallenge = "";
-
-        private IImportListRepository _importListRepository;
-
         public override string Name => "MyAnimeList";
         public override ImportListType ListType => ImportListType.Other;
-        public override TimeSpan MinRefreshInterval => TimeSpan.FromSeconds(10);  // change this later
+        public override TimeSpan MinRefreshInterval => TimeSpan.FromHours(6);
+
+        private static string _Codechallenge = "";
+        private readonly IImportListRepository _importListRepository;
 
         // This constructor the first thing that is called when sonarr creates a button
         public MalImport(IImportListRepository netImportRepository, IHttpClient httpClient, IImportListStatusService importListStatusService, IConfigService configService, IParsingService parsingService, Logger logger)
@@ -42,31 +40,22 @@ namespace NzbDrone.Core.ImportLists.MyAnimeList
             _importListRepository = netImportRepository;
         }
 
-        // This method should refresh (dunno what that means) the token
-        // This method also fetches the anime from mal?
         public override IList<ImportListItemInfo> Fetch()
         {
             if (Settings.Expires < DateTime.UtcNow.AddMinutes(5))
             {
-                _logger.Info($"current token: {Settings.AccessToken}");
                 RefreshToken();
-                _logger.Info($"new token: {Settings.AccessToken}");
             }
 
-            //_importListStatusService;
             return FetchItems(g => g.GetListItems());
         }
 
         // This method is used for generating the access token.
         // In the MAL API instructions (https://myanimelist.net/blog.php?eid=835707)
-        // How can I call this function 3 times so I don't have to use helper functions?
         public override object RequestAction(string action, IDictionary<string, string> query)
         {
             if (action == "startOAuth")
             {
-                // The workaround
-                // Have mal redirect, then make copy and paste the returned stuff into a text box for sonarr to use.
-                // Create those boxes in MalListSettings
                 _Codechallenge = GenCodeChallenge();
                 var request = new HttpRequestBuilder(OAuthUrl)
                     .AddQueryParam("response_type", "code")
@@ -105,30 +94,6 @@ namespace NzbDrone.Core.ImportLists.MyAnimeList
             {
                 Settings = Settings,
             };
-        }
-
-        private class IDS
-        {
-            [JsonProperty("mal_id")]
-            public int MalId { get; set; }
-
-            [JsonProperty("thetvdb_id")]
-            public int TvdbId { get; set; }
-        }
-
-        private class MalAuthToken
-        {
-            [JsonProperty("token_type")]
-            public string TokenType { get; set; }
-
-            [JsonProperty("expires_in")]
-            public int ExpiresIn { get; set; }
-
-            [JsonProperty("access_token")]
-            public string AccessToken { get; set; }
-
-            [JsonProperty("refresh_token")]
-            public string RefreshToken { get; set; }
         }
 
         private string GenCodeChallenge()

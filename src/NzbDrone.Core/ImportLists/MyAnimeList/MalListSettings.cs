@@ -10,12 +10,6 @@ namespace NzbDrone.Core.ImportLists.MyAnimeList
         public MalSettingsValidator()
         {
             RuleFor(c => c.BaseUrl).ValidRootUrl();
-            //RuleFor(c => c.ClientId).NotEmpty()
-            //               .OverridePropertyName("ClientId")
-            //               .WithMessage("Must input Client ID from MAL, created in the API section of your account");
-            //RuleFor(c => c.ClientSecret).NotEmpty()
-            //               .OverridePropertyName("ClientSecret")
-            //               .WithMessage("Must input Client Secret from MAL, created in the API section of your account");
             RuleFor(c => c.AccessToken).NotEmpty()
                                        .OverridePropertyName("SignIn")
                                        .WithMessage("Must authenticate with MyAnimeList");
@@ -47,7 +41,7 @@ namespace NzbDrone.Core.ImportLists.MyAnimeList
         [FieldDefinition(0, Label = "Expires", Type = FieldType.Textbox, Hidden = HiddenType.Hidden)]
         public DateTime Expires { get; set; }
 
-        [FieldDefinition(99, Label = "Authenticate With MyAnimeList", Type = FieldType.OAuth, HelpTextWarning = "Client ID and Client Secret must be filled out before authenticating with MAL")]
+        [FieldDefinition(99, Label = "Authenticate With MyAnimeList", Type = FieldType.OAuth)]
         public string SignIn { get; set; }
 
         public NzbDroneValidationResult Validate()
