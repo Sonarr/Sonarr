@@ -27,7 +27,7 @@
     "@fortawesome/free-solid-svg-icons": "6.4.0",
     "@fortawesome/react-fontawesome": "0.2.0",
     "@juggle/resize-observer": "3.4.0",
-    "@microsoft/signalr": "6.0.16",
+    "@microsoft/signalr": "6.0.21",
     "@sentry/browser": "7.51.2",
     "@sentry/integrations": "7.51.2",
     "@types/node": "18.16.8",
