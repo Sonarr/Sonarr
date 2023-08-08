@@ -10,7 +10,7 @@ namespace NzbDrone.Core.CustomFormats
     {
         public LanguageSpecificationValidator()
         {
-            RuleFor(c => c.Value).NotEmpty();
+            RuleFor(c => c.Value).GreaterThanOrEqualTo(0);
             RuleFor(c => c.Value).Custom((value, context) =>
             {
                 if (!Language.All.Any(o => o.Id == value))
