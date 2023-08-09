@@ -42,6 +42,18 @@ function getDownloadIcon(
   return icons.DOWNLOAD;
 }
 
+function getDownloadKind(isGrabbed: boolean, grabError?: string) {
+  if (isGrabbed) {
+    return kinds.SUCCESS;
+  }
+
+  if (grabError) {
+    return kinds.DANGER;
+  }
+
+  return kinds.DEFAULT;
+}
+
 function getDownloadTooltip(
   isGrabbing: boolean,
   isGrabbed: boolean,
@@ -265,7 +277,7 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
       <TableRowCell className={styles.download}>
         <SpinnerIconButton
           name={getDownloadIcon(isGrabbing, isGrabbed, grabError)}
-          kind={grabError ? kinds.DANGER : kinds.DEFAULT}
+          kind={getDownloadKind(isGrabbed, grabError)}
           title={getDownloadTooltip(isGrabbing, isGrabbed, grabError)}
           isSpinning={isGrabbing}
           onPress={onGrabPressWrapper}
