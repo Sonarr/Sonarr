@@ -111,7 +111,6 @@ class Updates extends Component {
                   name={icons.CHECK_CIRCLE}
                   size={30}
                 />
-
                 <div className={styles.message}>
                   {translate('OnLatestVersion')}
                 </div>
@@ -149,8 +148,8 @@ class Updates extends Component {
                           </div>
 
                           {
-                            update.branch === 'master' ?
-                              null:
+                            update.branch === 'main' ?
+                              null :
                               <Label
                                 className={styles.label}
                               >

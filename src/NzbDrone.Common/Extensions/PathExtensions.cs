@@ -149,7 +149,7 @@ namespace NzbDrone.Common.Extensions
 
         public static bool IsPathValid(this string path, PathValidationType validationType)
         {
-            if (path.ContainsInvalidPathChars() || string.IsNullOrWhiteSpace(path))
+            if (string.IsNullOrWhiteSpace(path) || path.ContainsInvalidPathChars())
             {
                 return false;
             }
