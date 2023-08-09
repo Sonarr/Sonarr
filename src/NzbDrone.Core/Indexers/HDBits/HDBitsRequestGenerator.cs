@@ -24,8 +24,8 @@ namespace NzbDrone.Core.Indexers.HDBits
         public virtual IndexerPageableRequestChain GetSearchRequests(AnimeEpisodeSearchCriteria searchCriteria)
         {
             var pageableRequests = new IndexerPageableRequestChain();
-
             var queryBase = new TorrentQuery();
+
             if (TryAddSearchParameters(queryBase, searchCriteria))
             {
                 foreach (var episode in searchCriteria.Episodes)
@@ -40,6 +40,26 @@ namespace NzbDrone.Core.Indexers.HDBits
             return pageableRequests;
         }
 
+        public virtual IndexerPageableRequestChain GetSearchRequests(AnimeSeasonSearchCriteria searchCriteria)
+        {
+            var pageableRequests = new IndexerPageableRequestChain();
+            var queryBase = new TorrentQuery();
+
+            if (TryAddSearchParameters(queryBase, searchCriteria))
+            {
+                foreach (var seasonNumber in searchCriteria.Episodes.Select(e => e.SeasonNumber).Distinct())
+                {
+                    var query = queryBase.Clone();
+
+                    query.TvdbInfo.Season = seasonNumber;
+
+                    pageableRequests.Add(GetRequest(query));
+                }
+            }
+
+            return pageableRequests;
+        }
+
         public virtual IndexerPageableRequestChain GetSearchRequests(SpecialEpisodeSearchCriteria searchCriteria)
         {
             return new IndexerPageableRequestChain();
@@ -48,8 +68,8 @@ namespace NzbDrone.Core.Indexers.HDBits
         public virtual IndexerPageableRequestChain GetSearchRequests(DailyEpisodeSearchCriteria searchCriteria)
         {
             var pageableRequests = new IndexerPageableRequestChain();
-
             var query = new TorrentQuery();
+
             if (TryAddSearchParameters(query, searchCriteria))
             {
                 query.Search = string.Format("{0:yyyy}-{0:MM}-{0:dd}", searchCriteria.AirDate);
@@ -63,8 +83,8 @@ namespace NzbDrone.Core.Indexers.HDBits
         public virtual IndexerPageableRequestChain GetSearchRequests(DailySeasonSearchCriteria searchCriteria)
         {
             var pageableRequests = new IndexerPageableRequestChain();
-
             var query = new TorrentQuery();
+
             if (TryAddSearchParameters(query, searchCriteria))
             {
                 query.Search = string.Format("{0}-", searchCriteria.Year);
@@ -78,8 +98,8 @@ namespace NzbDrone.Core.Indexers.HDBits
         public virtual IndexerPageableRequestChain GetSearchRequests(SeasonSearchCriteria searchCriteria)
         {
             var pageableRequests = new IndexerPageableRequestChain();
-
             var queryBase = new TorrentQuery();
+
             if (TryAddSearchParameters(queryBase, searchCriteria))
             {
                 foreach (var seasonNumber in searchCriteria.Episodes.Select(e => e.SeasonNumber).Distinct())
@@ -98,8 +118,8 @@ namespace NzbDrone.Core.Indexers.HDBits
         public virtual IndexerPageableRequestChain GetSearchRequests(SingleEpisodeSearchCriteria searchCriteria)
         {
             var pageableRequests = new IndexerPageableRequestChain();
-
             var queryBase = new TorrentQuery();
+
             if (TryAddSearchParameters(queryBase, searchCriteria))
             {
                 foreach (var episode in searchCriteria.Episodes)

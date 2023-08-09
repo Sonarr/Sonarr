@@ -42,8 +42,8 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
         public virtual IndexerPageableRequestChain GetSearchRequests(SingleEpisodeSearchCriteria searchCriteria)
         {
             var pageableRequests = new IndexerPageableRequestChain();
-
             var parameters = new BroadcastheNetTorrentQuery();
+
             if (AddSeriesSearchParameters(parameters, searchCriteria))
             {
                 foreach (var episode in searchCriteria.Episodes)
@@ -63,8 +63,8 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
         public virtual IndexerPageableRequestChain GetSearchRequests(SeasonSearchCriteria searchCriteria)
         {
             var pageableRequests = new IndexerPageableRequestChain();
-
             var parameters = new BroadcastheNetTorrentQuery();
+
             if (AddSeriesSearchParameters(parameters, searchCriteria))
             {
                 foreach (var seasonNumber in searchCriteria.Episodes.Select(v => v.SeasonNumber).Distinct())
@@ -89,8 +89,8 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
         public virtual IndexerPageableRequestChain GetSearchRequests(DailyEpisodeSearchCriteria searchCriteria)
         {
             var pageableRequests = new IndexerPageableRequestChain();
-
             var parameters = new BroadcastheNetTorrentQuery();
+
             if (AddSeriesSearchParameters(parameters, searchCriteria))
             {
                 parameters.Category = "Episode";
@@ -117,8 +117,8 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
         public virtual IndexerPageableRequestChain GetSearchRequests(DailySeasonSearchCriteria searchCriteria)
         {
             var pageableRequests = new IndexerPageableRequestChain();
-
             var parameters = new BroadcastheNetTorrentQuery();
+
             if (AddSeriesSearchParameters(parameters, searchCriteria))
             {
                 parameters.Category = "Episode";
@@ -145,8 +145,8 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
         public virtual IndexerPageableRequestChain GetSearchRequests(AnimeEpisodeSearchCriteria searchCriteria)
         {
             var pageableRequests = new IndexerPageableRequestChain();
-
             var parameters = new BroadcastheNetTorrentQuery();
+
             if (AddSeriesSearchParameters(parameters, searchCriteria))
             {
                 foreach (var episode in searchCriteria.Episodes)
@@ -173,11 +173,37 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
             return pageableRequests;
         }
 
+        public virtual IndexerPageableRequestChain GetSearchRequests(AnimeSeasonSearchCriteria searchCriteria)
+        {
+            var pageableRequests = new IndexerPageableRequestChain();
+            var parameters = new BroadcastheNetTorrentQuery();
+
+            if (AddSeriesSearchParameters(parameters, searchCriteria))
+            {
+                foreach (var seasonNumber in searchCriteria.Episodes.Select(v => v.SeasonNumber).Distinct())
+                {
+                    parameters.Category = "Season";
+                    parameters.Name = string.Format("Season {0}%", seasonNumber);
+
+                    pageableRequests.Add(GetPagedRequests(MaxPages, parameters));
+
+                    parameters = parameters.Clone();
+
+                    parameters.Category = "Episode";
+                    parameters.Name = string.Format("S{0:00}E%", seasonNumber);
+
+                    pageableRequests.Add(GetPagedRequests(MaxPages, parameters));
+                }
+            }
+
+            return pageableRequests;
+        }
+
         public virtual IndexerPageableRequestChain GetSearchRequests(SpecialEpisodeSearchCriteria searchCriteria)
         {
             var pageableRequests = new IndexerPageableRequestChain();
-
             var parameters = new BroadcastheNetTorrentQuery();
+
             if (AddSeriesSearchParameters(parameters, searchCriteria))
             {
                 var episodeQueryTitle = searchCriteria.Episodes.Where(e => !string.IsNullOrWhiteSpace(e.Title))

@@ -388,12 +388,27 @@ namespace NzbDrone.Core.IndexerSearch
         {
             var downloadDecisions = new List<DownloadDecision>();
 
+            var searchSpec = Get<AnimeSeasonSearchCriteria>(series, episodes, monitoredOnly, userInvokedSearch, interactiveSearch);
+
             // Episode needs to be monitored if it's not an interactive search
             // and Ensure episode has an airdate and has already aired
             var episodesToSearch = episodes
                 .Where(ep => interactiveSearch || !monitoredOnly || ep.Monitored)
                 .Where(ep => ep.AirDateUtc.HasValue && ep.AirDateUtc.Value.Before(DateTime.UtcNow))
                 .ToList();
+
+            var seasonsToSearch = GetSceneSeasonMappings(series, episodesToSearch)
+                .GroupBy(ep => ep.SeasonNumber)
+                .Select(epList => epList.First())
+                .ToList();
+
+            foreach (var season in seasonsToSearch)
+            {
+                searchSpec.SeasonNumber = season.SeasonNumber;
+
+                var decisions = Dispatch(indexer => indexer.Fetch(searchSpec), searchSpec);
+                downloadDecisions.AddRange(decisions);
+            }
 
             foreach (var episode in episodesToSearch)
             {

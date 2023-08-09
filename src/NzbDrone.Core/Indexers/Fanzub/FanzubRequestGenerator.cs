@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -69,6 +69,19 @@ namespace NzbDrone.Core.Indexers.Fanzub
             }
 
             pageableRequests.Add(GetPagedRequests(string.Join("|", searchTitles)));
+
+            return pageableRequests;
+        }
+
+        public virtual IndexerPageableRequestChain GetSearchRequests(AnimeSeasonSearchCriteria searchCriteria)
+        {
+            var pageableRequests = new IndexerPageableRequestChain();
+
+            if (Settings.AnimeStandardFormatSearch && searchCriteria.SeasonNumber > 0)
+            {
+                var searchTitles = searchCriteria.CleanSceneTitles.SelectMany(v => GetSeasonSearchStrings(v, searchCriteria.SeasonNumber)).ToList();
+                pageableRequests.Add(GetPagedRequests(string.Join("|", searchTitles)));
+            }
 
             return pageableRequests;
         }

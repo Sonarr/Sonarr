@@ -103,6 +103,17 @@ namespace NzbDrone.Core.Indexers.FileList
             return pageableRequests;
         }
 
+        public IndexerPageableRequestChain GetSearchRequests(AnimeSeasonSearchCriteria searchCriteria)
+        {
+            var pageableRequests = new IndexerPageableRequestChain();
+
+            AddImdbRequests(pageableRequests, searchCriteria, "search-torrents", Settings.AnimeCategories, $"&season={searchCriteria.SeasonNumber}");
+            pageableRequests.AddTier();
+            AddNameRequests(pageableRequests, searchCriteria, "search-torrents", Settings.AnimeCategories, $"&season={searchCriteria.SeasonNumber}");
+
+            return pageableRequests;
+        }
+
         public IndexerPageableRequestChain GetSearchRequests(SpecialEpisodeSearchCriteria searchCriteria)
         {
             return new IndexerPageableRequestChain();
