@@ -3,6 +3,7 @@ using System.Linq;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Indexers.Newznab;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Test.Framework;
@@ -19,6 +20,11 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
         [SetUp]
         public void SetUp()
         {
+            Subject.Definition = new IndexerDefinition
+            {
+                Name = "Newznab"
+            };
+
             Subject.Settings = new NewznabSettings()
             {
                 BaseUrl = "http://127.0.0.1:1234/",
