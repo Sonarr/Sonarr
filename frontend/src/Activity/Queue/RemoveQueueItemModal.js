@@ -106,7 +106,7 @@ class RemoveQueueItemModal extends Component {
                     type={inputTypes.CHECK}
                     name="remove"
                     value={remove}
-                    helpTextWarning={translate('RemoveHelpTextWarning')}
+                    helpTextWarning={translate('RemoveFromDownloadClientHelpTextWarning')}
                     isDisabled={!canIgnore}
                     onChange={this.onRemoveChange}
                   />
