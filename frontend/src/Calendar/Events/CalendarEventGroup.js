@@ -9,6 +9,7 @@ import Link from 'Components/Link/Link';
 import { icons, kinds } from 'Helpers/Props';
 import formatTime from 'Utilities/Date/formatTime';
 import padNumber from 'Utilities/Number/padNumber';
+import translate from '../../Utilities/String/translate';
 import styles from './CalendarEventGroup.css';
 
 function getEventsInfo(series, events) {
@@ -148,7 +149,7 @@ class CalendarEventGroup extends Component {
               <Icon
                 containerClassName={styles.statusIcon}
                 name={icons.WARNING}
-                title="Episode does not have an absolute episode number"
+                title={translate('EpisodeMissingAbsoluteNumber')}
               />
           }
 
@@ -157,7 +158,7 @@ class CalendarEventGroup extends Component {
               <Icon
                 containerClassName={styles.statusIcon}
                 name={icons.DOWNLOADING}
-                title="An episode is downloading"
+                title={translate('AnEpisodeIsDownloading')}
               />
           }
 
@@ -168,7 +169,7 @@ class CalendarEventGroup extends Component {
                 name={icons.INFO}
                 kind={kinds.INFO}
                 darken={fullColorEvents}
-                title={seasonNumber === 1 ? 'Series Premiere' : 'Season Premiere'}
+                title={seasonNumber === 1 ? translate('SeriesPremiere') : translate('SeasonPremiere')}
               />
           }
 
@@ -181,7 +182,7 @@ class CalendarEventGroup extends Component {
                 containerClassName={styles.statusIcon}
                 name={icons.INFO}
                 kind={fullColorEvents ? kinds.DEFAULT : kinds.WARNING}
-                title={series.status === 'ended' ? 'Series finale' : 'Season finale'}
+                title={series.status === 'ended' ? translate('SeriesFinale') : translate('SeasonFinale')}
               />
           }
         </div>

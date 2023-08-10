@@ -10,6 +10,7 @@ import PageToolbarSection from 'Components/Page/Toolbar/PageToolbarSection';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
 import { align, icons } from 'Helpers/Props';
 import NoSeries from 'Series/NoSeries';
+import translate from 'Utilities/String/translate';
 import CalendarConnector from './CalendarConnector';
 import CalendarFilterModal from './CalendarFilterModal';
 import CalendarLinkModal from './iCal/CalendarLinkModal';
@@ -95,11 +96,11 @@ class CalendarPage extends Component {
     const PageComponent = hasSeries ? CalendarConnector : NoSeries;
 
     return (
-      <PageContent title="Calendar">
+      <PageContent title={translate('Calendar')}>
         <PageToolbar>
           <PageToolbarSection>
             <PageToolbarButton
-              label="iCal Link"
+              label={translate('ICalLink')}
               iconName={icons.CALENDAR}
               onPress={this.onGetCalendarLinkPress}
             />
@@ -107,14 +108,14 @@ class CalendarPage extends Component {
             <PageToolbarSeparator />
 
             <PageToolbarButton
-              label="RSS Sync"
+              label={translate('RssSync')}
               iconName={icons.RSS}
               isSpinning={isRssSyncExecuting}
               onPress={onRssSyncPress}
             />
 
             <PageToolbarButton
-              label="Search for Missing"
+              label={translate('SearchForMissing')}
               iconName={icons.SEARCH}
               isDisabled={!missingEpisodeIds.length}
               isSpinning={isSearchingForMissing}
@@ -124,7 +125,7 @@ class CalendarPage extends Component {
 
           <PageToolbarSection alignContent={align.RIGHT}>
             <PageToolbarButton
-              label="Options"
+              label={translate('Options')}
               iconName={icons.POSTER}
               onPress={this.onOptionsPress}
             />
