@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -86,6 +86,8 @@ namespace NzbDrone.Core.Extras.Files
 
         protected TExtraFile MoveFile(Series series, EpisodeFile episodeFile, TExtraFile extraFile, string fileNameSuffix = null)
         {
+            _logger.Trace("Renaming extra file: {0}", extraFile);
+
             var newFolder = Path.GetDirectoryName(Path.Combine(series.Path, episodeFile.RelativePath));
             var filenameBuilder = new StringBuilder(Path.GetFileNameWithoutExtension(episodeFile.RelativePath));
 
@@ -103,8 +105,12 @@ namespace NzbDrone.Core.Extras.Files
             {
                 try
                 {
+                    _logger.Trace("Renaming extra file: {0} to {1}", extraFile, newFileName);
+
                     _diskProvider.MoveFile(existingFileName, newFileName);
                     extraFile.RelativePath = series.Path.GetRelativePath(newFileName);
+
+                    _logger.Trace("Renamed extra file from: {0}", extraFile);
 
                     return extraFile;
                 }
