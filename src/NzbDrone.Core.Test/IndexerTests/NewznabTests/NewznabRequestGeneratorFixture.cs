@@ -15,6 +15,7 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
         private SingleEpisodeSearchCriteria _singleEpisodeSearchCriteria;
         private SeasonSearchCriteria _seasonSearchCriteria;
         private AnimeEpisodeSearchCriteria _animeSearchCriteria;
+        private AnimeSeasonSearchCriteria _animeSeasonSearchCriteria;
         private NewznabCapabilities _capabilities;
 
         [SetUp]
@@ -55,6 +56,13 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
                 AbsoluteEpisodeNumber = 100,
                 SeasonNumber = 5,
                 EpisodeNumber = 4
+            };
+
+            _animeSeasonSearchCriteria = new AnimeSeasonSearchCriteria()
+            {
+                Series = new Tv.Series { TvRageId = 10, TvdbId = 20, TvMazeId = 30, ImdbId = "t40" },
+                SceneTitles = new List<string> { "Monkey Island" },
+                SeasonNumber = 3,
             };
 
             _capabilities = new NewznabCapabilities();
@@ -166,6 +174,19 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
             pages[1].Url.FullUri.Should().Contain("rid=10&season=5&ep=4");
             pages[2].Url.FullUri.Should().Contain("q=Monkey%20Island+100");
             pages[3].Url.FullUri.Should().Contain("q=Monkey%20Island&season=5&ep=4");
+        }
+
+        [Test]
+        public void should_search_by_standard_season_number()
+        {
+            Subject.Settings.AnimeStandardFormatSearch = true;
+            var results = Subject.GetSearchRequests(_animeSeasonSearchCriteria);
+
+            results.GetTier(0).Should().HaveCount(2);
+            var pages = results.GetTier(0).Select(t => t.First()).ToList();
+
+            pages[0].Url.FullUri.Should().Contain("rid=10&season=3");
+            pages[1].Url.FullUri.Should().Contain("q=Monkey%20Island&season=3");
         }
 
         [Test]

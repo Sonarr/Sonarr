@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.IndexerSearch.Definitions;
@@ -86,6 +86,21 @@ namespace NzbDrone.Core.Indexers.Nyaa
                 if (Settings.AnimeStandardFormatSearch && searchCriteria.SeasonNumber > 0 && searchCriteria.EpisodeNumber > 0)
                 {
                     pageableRequests.Add(GetPagedRequests(MaxPages, $"{searchTitle}+s{searchCriteria.SeasonNumber:00}e{searchCriteria.EpisodeNumber:00}"));
+                }
+            }
+
+            return pageableRequests;
+        }
+
+        public virtual IndexerPageableRequestChain GetSearchRequests(AnimeSeasonSearchCriteria searchCriteria)
+        {
+            var pageableRequests = new IndexerPageableRequestChain();
+
+            foreach (var searchTitle in searchCriteria.SceneTitles.Select(PrepareQuery))
+            {
+                if (Settings.AnimeStandardFormatSearch && searchCriteria.SeasonNumber > 0)
+                {
+                    pageableRequests.Add(GetPagedRequests(MaxPages, $"{searchTitle}+s{searchCriteria.SeasonNumber:00}"));
                 }
             }
 
