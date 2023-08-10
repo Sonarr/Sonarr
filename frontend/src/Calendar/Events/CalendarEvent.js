@@ -10,6 +10,7 @@ import episodeEntities from 'Episode/episodeEntities';
 import { icons, kinds } from 'Helpers/Props';
 import formatTime from 'Utilities/Date/formatTime';
 import padNumber from 'Utilities/Number/padNumber';
+import translate from 'Utilities/String/translate';
 import CalendarEventQueueDetails from './CalendarEventQueueDetails';
 import styles from './CalendarEvent.css';
 
@@ -107,7 +108,7 @@ class CalendarEvent extends Component {
                   <Icon
                     className={styles.statusIcon}
                     name={icons.WARNING}
-                    title="Episode does not have an absolute episode number"
+                    title={translate('EpisodeMissingAbsoluteNumber')}
                   /> :
                   null
               }
@@ -117,7 +118,7 @@ class CalendarEvent extends Component {
                   <Icon
                     className={styles.statusIcon}
                     name={icons.WARNING}
-                    title="Scene number hasn't been verified yet"
+                    title={translate('SceneNumberNotVerified')}
                   /> :
                   null
               }
@@ -137,7 +138,7 @@ class CalendarEvent extends Component {
                   <Icon
                     className={styles.statusIcon}
                     name={icons.DOWNLOADING}
-                    title="Episode is downloading"
+                    title={translate('EpisodeIsDownloading')}
                   /> :
                   null
               }
@@ -150,7 +151,7 @@ class CalendarEvent extends Component {
                     className={styles.statusIcon}
                     name={icons.EPISODE_FILE}
                     kind={fullColorEvents ? kinds.DEFAULT : kinds.WARNING}
-                    title="Quality cutoff has not been met"
+                    title={translate('QualityCutoffNotMet')}
                   /> :
                   null
               }
@@ -162,7 +163,7 @@ class CalendarEvent extends Component {
                     name={icons.INFO}
                     kind={kinds.INFO}
                     darken={fullColorEvents}
-                    title={seasonNumber === 1 ? 'Series premiere' : 'Season premiere'}
+                    title={seasonNumber === 1 ? translate('SeriesPremiere') : translate('SeasonPremiere')}
                   /> :
                   null
               }
@@ -176,7 +177,7 @@ class CalendarEvent extends Component {
                     className={styles.statusIcon}
                     name={icons.INFO}
                     kind={fullColorEvents ? kinds.DEFAULT : kinds.WARNING}
-                    title={series.status === 'ended' ? 'Series finale' : 'Season finale'}
+                    title={series.status === 'ended' ? translate('SeriesFinale') : translate('SeasonFinale')}
                   /> :
                   null
               }
@@ -189,7 +190,7 @@ class CalendarEvent extends Component {
                     name={icons.INFO}
                     kind={kinds.PINK}
                     darken={fullColorEvents}
-                    title="Special"
+                    title={translate('Special')}
                   /> :
                   null
               }
@@ -249,7 +250,7 @@ CalendarEvent.propTypes = {
   hasFile: PropTypes.bool.isRequired,
   grabbed: PropTypes.bool,
   queueItem: PropTypes.object,
-  // These props come from the connector, not marked as required to apease TS for now.
+  // These props come from the connector, not marked as required to appease TS for now.
   showEpisodeInformation: PropTypes.bool,
   showFinaleIcon: PropTypes.bool,
   showSpecialIcon: PropTypes.bool,
