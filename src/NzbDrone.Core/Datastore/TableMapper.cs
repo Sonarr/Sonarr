@@ -91,33 +91,28 @@ namespace NzbDrone.Core.Datastore
             return true;
         }
 
-        public string GetSortKey(string sortKey)
+        public (string Table, string Column) GetSortKey(string sortKey)
         {
             string table = null;
 
             if (sortKey.Contains('.'))
             {
                 var split = sortKey.Split('.');
-                if (split.Length != 2)
+                if (split.Length == 2)
                 {
-                    return sortKey;
+                    table = split[0];
+                    sortKey = split[1];
                 }
-
-                table = split[0];
-                sortKey = split[1];
             }
 
-            if (table != null && !TableMap.Values.Contains(table, StringComparer.OrdinalIgnoreCase))
+            if (table != null)
             {
-                return sortKey;
+                table = TableMap.Values.FirstOrDefault(x => x.Equals(table, StringComparison.OrdinalIgnoreCase)) ?? table;
             }
 
-            if (!_allowedOrderBy.Contains(sortKey))
-            {
-                return sortKey;
-            }
+            sortKey = _allowedOrderBy.FirstOrDefault(x => x.Equals(sortKey, StringComparison.OrdinalIgnoreCase)) ?? sortKey;
 
-            return _allowedOrderBy.First(x => x.Equals(sortKey, StringComparison.OrdinalIgnoreCase));
+            return (table, sortKey);
         }
     }
 

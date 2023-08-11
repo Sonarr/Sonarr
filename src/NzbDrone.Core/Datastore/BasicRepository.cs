@@ -429,7 +429,7 @@ namespace NzbDrone.Core.Datastore
             var sortKey = TableMapping.Mapper.GetSortKey(pagingSpec.SortKey);
             var sortDirection = pagingSpec.SortDirection == SortDirection.Descending ? "DESC" : "ASC";
             var pagingOffset = Math.Max(pagingSpec.Page - 1, 0) * pagingSpec.PageSize;
-            builder.OrderBy($"\"{sortKey}\" {sortDirection} LIMIT {pagingSpec.PageSize} OFFSET {pagingOffset}");
+            builder.OrderBy($"\"{sortKey.Table ?? _table}\".\"{sortKey.Column}\" {sortDirection} LIMIT {pagingSpec.PageSize} OFFSET {pagingOffset}");
 
             return queryFunc(builder).ToList();
         }
