@@ -15,6 +15,7 @@ import EpisodeLanguages from 'Episode/EpisodeLanguages';
 import EpisodeQuality from 'Episode/EpisodeQuality';
 import { icons, kinds, tooltipPositions } from 'Helpers/Props';
 import formatCustomFormatScore from 'Utilities/Number/formatCustomFormatScore';
+import translate from 'Utilities/String/translate';
 import styles from './EpisodeHistoryRow.css';
 
 function getTitle(eventType) {
@@ -137,7 +138,7 @@ class EpisodeHistoryRow extends Component {
           {
             eventType === 'grabbed' &&
               <IconButton
-                title="Mark as failed"
+                title={translate('MarkAsFailed')}
                 name={icons.REMOVE}
                 onPress={this.onMarkAsFailedPress}
               />
@@ -147,9 +148,9 @@ class EpisodeHistoryRow extends Component {
         <ConfirmModal
           isOpen={isMarkAsFailedModalOpen}
           kind={kinds.DANGER}
-          title="Mark as Failed"
-          message={`Are you sure you want to mark '${sourceTitle}' as failed?`}
-          confirmLabel="Mark as Failed"
+          title={translate('MarkAsFailed')}
+          message={translate('MarkAsFailedConfirmation', { sourceTitle })}
+          confirmLabel={translate('MarkAsFailed')}
           onConfirm={this.onConfirmMarkAsFailed}
           onCancel={this.onMarkAsFailedModalClose}
         />

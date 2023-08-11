@@ -6,6 +6,7 @@ import Icon from 'Components/Icon';
 import keyboardShortcuts, { shortcuts } from 'Components/keyboardShortcuts';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import { icons } from 'Helpers/Props';
+import translate from 'Utilities/String/translate';
 import FuseWorker from './fuse.worker';
 import SeriesSearchResult from './SeriesSearchResult';
 import styles from './SeriesSearchInput.css';
@@ -91,7 +92,7 @@ class SeriesSearchInput extends Component {
     if (item.type === ADD_NEW_TYPE) {
       return (
         <div className={styles.addNewSeriesSuggestion}>
-          Search for {query}
+          {translate('SearchForQuery', { query })}
         </div>
       );
     }
@@ -271,14 +272,14 @@ class SeriesSearchInput extends Component {
 
     if (suggestions.length || loading) {
       suggestionGroups.push({
-        title: 'Existing Series',
+        title: translate('ExistingSeries'),
         loading,
         suggestions
       });
     }
 
     suggestionGroups.push({
-      title: 'Add New Series',
+      title: translate('AddNewSeries'),
       suggestions: [
         {
           type: ADD_NEW_TYPE,
@@ -292,7 +293,7 @@ class SeriesSearchInput extends Component {
       className: styles.input,
       name: 'seriesSearch',
       value,
-      placeholder: 'Search',
+      placeholder: translate('Search'),
       autoComplete: 'off',
       spellCheck: false,
       onChange: this.onChange,

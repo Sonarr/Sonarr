@@ -8,6 +8,7 @@ import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import MonitorToggleButton from 'Components/MonitorToggleButton';
 import episodeEntities from 'Episode/episodeEntities';
+import translate from 'Utilities/String/translate';
 import EpisodeHistoryConnector from './History/EpisodeHistoryConnector';
 import EpisodeSearchConnector from './Search/EpisodeSearchConnector';
 import SeasonEpisodeNumber from './SeasonEpisodeNumber';
@@ -117,21 +118,21 @@ class EpisodeDetailsModalContent extends Component {
                 className={styles.tab}
                 selectedClassName={styles.selectedTab}
               >
-                Details
+                {translate('Details')}
               </Tab>
 
               <Tab
                 className={styles.tab}
                 selectedClassName={styles.selectedTab}
               >
-                History
+                {translate('History')}
               </Tab>
 
               <Tab
                 className={styles.tab}
                 selectedClassName={styles.selectedTab}
               >
-                Search
+                {translate('Search')}
               </Tab>
             </TabList>
 
@@ -173,14 +174,14 @@ class EpisodeDetailsModalContent extends Component {
                 to={seriesLink}
                 onPress={onModalClose}
               >
-                Open Series
+                {translate('OpenSeries')}
               </Button>
           }
 
           <Button
             onPress={onModalClose}
           >
-            Close
+            {translate('Close')}
           </Button>
         </ModalFooter>
       </ModalContent>

@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import Alert from 'Components/Alert';
 import PathInput from 'Components/Form/PathInput';
 import Button from 'Components/Link/Button';
-import Link from 'Components/Link/Link';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
@@ -14,6 +13,7 @@ import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import { kinds, scrollDirections } from 'Helpers/Props';
 import translate from 'Utilities/String/translate';
+import InlineMarkdown from '../Markdown/InlineMarkdown';
 import FileBrowserRow from './FileBrowserRow';
 import styles from './FileBrowserModalContent.css';
 
@@ -104,7 +104,7 @@ class FileBrowserModalContent extends Component {
         onModalClose={onModalClose}
       >
         <ModalHeader>
-          File Browser
+          {translate('FileBrowser')}
         </ModalHeader>
 
         <ModalBody
@@ -117,13 +117,13 @@ class FileBrowserModalContent extends Component {
                 className={styles.mappedDrivesWarning}
                 kind={kinds.WARNING}
               >
-                Mapped network drives are not available when running as a Windows Service, see the <Link className={styles.faqLink} to="https://wiki.servarr.com/sonarr/faq#why-cant-sonarr-see-my-files-on-a-remote-server">FAQ</Link> for more information.
+                <InlineMarkdown data={translate('MappedNetworkDrivesWindowsService')} />
               </Alert>
           }
 
           <PathInput
             className={styles.pathInput}
-            placeholder="Start typing or select a path below"
+            placeholder={translate('FileBrowserPlaceholderText')}
             hasFileBrowser={false}
             {...otherProps}
             value={this.state.currentPath}
@@ -137,7 +137,7 @@ class FileBrowserModalContent extends Component {
           >
             {
               !!error &&
-                <div>Error loading contents</div>
+                <div>{translate('ErrorLoadingContents')}</div>
             }
 
             {
@@ -151,7 +151,7 @@ class FileBrowserModalContent extends Component {
                       emptyParent &&
                         <FileBrowserRow
                           type="computer"
-                          name="My Computer"
+                          name={translate('MyComputer')}
                           path={parent}
                           onPress={this.onRowPress}
                         />
@@ -212,13 +212,13 @@ class FileBrowserModalContent extends Component {
           <Button
             onPress={onModalClose}
           >
-            Cancel
+            {translate('Cancel')}
           </Button>
 
           <Button
             onPress={this.onOkPress}
           >
-            Ok
+            {translate('Ok')}
           </Button>
         </ModalFooter>
       </ModalContent>

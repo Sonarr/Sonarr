@@ -1,3 +1,4 @@
+import translate from 'Utilities/String/translate';
 import * as filterTypes from './filterTypes';
 
 export const ARRAY = 'array';
@@ -20,49 +21,127 @@ export const all = [
 
 export const possibleFilterTypes = {
   [ARRAY]: [
-    { key: filterTypes.CONTAINS, value: 'contains' },
-    { key: filterTypes.NOT_CONTAINS, value: 'does not contain' }
+    {
+      key: filterTypes.CONTAINS,
+      value: () => translate('FilterContains')
+    },
+    {
+      key: filterTypes.NOT_CONTAINS,
+      value: () => translate('FilterDoesNotContain')
+    }
   ],
 
   [CONTAINS]: [
-    { key: filterTypes.CONTAINS, value: 'contains' }
+    {
+      key: filterTypes.CONTAINS,
+      value: () => translate('FilterContains')
+    }
   ],
 
   [DATE]: [
-    { key: filterTypes.LESS_THAN, value: 'is before' },
-    { key: filterTypes.GREATER_THAN, value: 'is after' },
-    { key: filterTypes.IN_LAST, value: 'in the last' },
-    { key: filterTypes.NOT_IN_LAST, value: 'not in the last' },
-    { key: filterTypes.IN_NEXT, value: 'in the next' },
-    { key: filterTypes.NOT_IN_NEXT, value: 'not in the next' }
+    {
+      key: filterTypes.LESS_THAN,
+      value: () => translate('FilterIsBefore')
+    },
+    {
+      key: filterTypes.GREATER_THAN,
+      value: () => translate('FilterIsAfter')
+    },
+    {
+      key: filterTypes.IN_LAST,
+      value: () => translate('FilterInLast')
+    },
+    {
+      key: filterTypes.NOT_IN_LAST,
+      value: () => translate('FilterNotInLast')
+    },
+    {
+      key: filterTypes.IN_NEXT,
+      value: () => translate('FilterInNext')
+    },
+    {
+      key: filterTypes.NOT_IN_NEXT,
+      value: () => translate('FilterNotInNext')
+    }
   ],
 
   [EQUAL]: [
-    { key: filterTypes.EQUAL, value: 'is' }
+    {
+      key: filterTypes.EQUAL,
+      value: () => translate('FilterIs')
+    }
   ],
 
   [EXACT]: [
-    { key: filterTypes.EQUAL, value: 'is' },
-    { key: filterTypes.NOT_EQUAL, value: 'is not' }
+    {
+      key: filterTypes.EQUAL,
+      value: () => translate('FilterIs')
+    },
+    {
+      key: filterTypes.NOT_EQUAL,
+      value: () => translate('FilterIsNot')
+    }
   ],
 
   [NUMBER]: [
-    { key: filterTypes.EQUAL, value: 'equal' },
-    { key: filterTypes.GREATER_THAN, value: 'greater than' },
-    { key: filterTypes.GREATER_THAN_OR_EQUAL, value: 'greater than or equal' },
-    { key: filterTypes.LESS_THAN, value: 'less than' },
-    { key: filterTypes.LESS_THAN_OR_EQUAL, value: 'less than or equal' },
-    { key: filterTypes.NOT_EQUAL, value: 'not equal' }
+    {
+      key: filterTypes.EQUAL,
+      value: () => translate('FilterEqual')
+    },
+    {
+      key: filterTypes.GREATER_THAN,
+      value: () => translate('FilterGreaterThan')
+    },
+    {
+      key: filterTypes.GREATER_THAN_OR_EQUAL,
+      value: () => translate('FilterGreaterThanOrEqual')
+    },
+    {
+      key: filterTypes.LESS_THAN,
+      value: () => translate('FilterLessThan')
+    },
+    {
+      key: filterTypes.LESS_THAN_OR_EQUAL,
+      value: () => translate('FilterLessThanOrEqual')
+    },
+    {
+      key: filterTypes.NOT_EQUAL,
+      value: () => translate('FilterNotEqual')
+    }
   ],
 
   [STRING]: [
-    { key: filterTypes.CONTAINS, value: 'contains' },
-    { key: filterTypes.NOT_CONTAINS, value: 'does not contain' },
-    { key: filterTypes.EQUAL, value: 'equal' },
-    { key: filterTypes.NOT_EQUAL, value: 'not equal' },
-    { key: filterTypes.STARTS_WITH, value: 'starts with' },
-    { key: filterTypes.NOT_STARTS_WITH, value: 'does not start with' },
-    { key: filterTypes.ENDS_WITH, value: 'ends with' },
-    { key: filterTypes.NOT_ENDS_WITH, value: 'does not end with' }
+    {
+      key: filterTypes.CONTAINS,
+      value: () => translate('FilterContains')
+    },
+    {
+      key: filterTypes.NOT_CONTAINS,
+      value: () => translate('FilterDoesNotContain')
+    },
+    {
+      key: filterTypes.EQUAL,
+      value: () => translate('FilterEqual')
+    },
+    {
+      key: filterTypes.NOT_EQUAL,
+      value: () => translate('FilterNotEqual')
+    },
+    {
+      key: filterTypes.STARTS_WITH,
+      value: () => translate('FilterStartsWith')
+    },
+    {
+      key: filterTypes.NOT_STARTS_WITH,
+      value: () => translate('FilterDoesNotStartWith')
+    },
+    {
+      key: filterTypes.ENDS_WITH,
+      value: () => translate('FilterEndsWith')
+    },
+    {
+      key: filterTypes.NOT_ENDS_WITH,
+      value: () => translate('FilterDoesNotEndWith')
+    }
   ]
 };

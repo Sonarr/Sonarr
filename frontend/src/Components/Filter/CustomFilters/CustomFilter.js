@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import IconButton from 'Components/Link/IconButton';
 import SpinnerIconButton from 'Components/Link/SpinnerIconButton';
 import { icons } from 'Helpers/Props';
+import translate from 'Utilities/String/translate';
 import styles from './CustomFilter.css';
 
 class CustomFilter extends Component {
@@ -89,7 +90,7 @@ class CustomFilter extends Component {
           />
 
           <SpinnerIconButton
-            title="Remove filter"
+            title={translate('RemoveFilter')}
             name={icons.REMOVE}
             isSpinning={this.state.isDeleting}
             onPress={this.onRemovePress}

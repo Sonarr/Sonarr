@@ -1,9 +1,12 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import PageContent from 'Components/Page/PageContent';
+import translate from 'Utilities/String/translate';
 import styles from './NotFound.css';
 
-function NotFound({ message }) {
+function NotFound(props) {
+  const { message = translate('DefaultNotFoundMessage') } = props;
+
   return (
     <PageContent title="MIA">
       <div className={styles.container}>
@@ -21,11 +24,7 @@ function NotFound({ message }) {
 }
 
 NotFound.propTypes = {
-  message: PropTypes.string.isRequired
-};
-
-NotFound.defaultProps = {
-  message: 'You must be lost, nothing to see here.'
+  message: PropTypes.string
 };
 
 export default NotFound;

@@ -8,6 +8,7 @@ import ToolbarMenuButton from 'Components/Menu/ToolbarMenuButton';
 import { forEach } from 'Helpers/elementChildren';
 import { align, icons } from 'Helpers/Props';
 import dimensions from 'Styles/Variables/dimensions';
+import translate from 'Utilities/String/translate';
 import PageToolbarOverflowMenuItem from './PageToolbarOverflowMenuItem';
 import styles from './PageToolbarSection.css';
 
@@ -160,7 +161,7 @@ class PageToolbarSection extends Component {
                       <ToolbarMenuButton
                         className={styles.overflowMenuButton}
                         iconName={icons.OVERFLOW}
-                        text="More"
+                        text={translate('More')}
                       />
 
                       <MenuContent>

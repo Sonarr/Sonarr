@@ -7,6 +7,7 @@ import formatTime from 'Utilities/Date/formatTime';
 import isInNextWeek from 'Utilities/Date/isInNextWeek';
 import isToday from 'Utilities/Date/isToday';
 import isTomorrow from 'Utilities/Date/isTomorrow';
+import translate from '../../Utilities/String/translate';
 
 function EpisodeAiring(props) {
   const {
@@ -26,10 +27,11 @@ function EpisodeAiring(props) {
     </Label>
   );
 
+  // TODO: Update InlineMarkdown to accept tags and pass in networkLabel object, for now blank string passed into translation
   if (!airDateUtc) {
     return (
       <span>
-        TBA on {networkLabel}
+        {translate('AirsTbaOn', { networkLabel: '' })}networkLabel
       </span>
     );
   }
@@ -39,7 +41,7 @@ function EpisodeAiring(props) {
   if (!showRelativeDates) {
     return (
       <span>
-        {moment(airDateUtc).format(shortDateFormat)} at {time} on {networkLabel}
+        {translate('AirsDateAtTimeOn', { date: moment(airDateUtc).format(shortDateFormat), time, networkLabel: '' })}{networkLabel}
       </span>
     );
   }
@@ -47,7 +49,7 @@ function EpisodeAiring(props) {
   if (isToday(airDateUtc)) {
     return (
       <span>
-        {time} on {networkLabel}
+        {translate('AirsTimeOn', { time, networkLabel: '' })}{networkLabel}
       </span>
     );
   }
@@ -55,7 +57,7 @@ function EpisodeAiring(props) {
   if (isTomorrow(airDateUtc)) {
     return (
       <span>
-        Tomorrow at {time} on {networkLabel}
+        {translate('AirsTomorrowOn', { time, networkLabel: '' })}{networkLabel}
       </span>
     );
   }
@@ -63,14 +65,14 @@ function EpisodeAiring(props) {
   if (isInNextWeek(airDateUtc)) {
     return (
       <span>
-        {moment(airDateUtc).format('dddd')} at {time} on {networkLabel}
+        {translate('AirsDateAtTimeOn', { date: moment(airDateUtc).format('dddd'), time, networkLabel: '' })}{networkLabel}
       </span>
     );
   }
 
   return (
     <span>
-      {moment(airDateUtc).format(shortDateFormat)} at {time} on {networkLabel}
+      {translate('AirsDateAtTimeOn', { date: moment(airDateUtc).format(shortDateFormat), time, networkLabel: '' })}{networkLabel}
     </span>
   );
 }

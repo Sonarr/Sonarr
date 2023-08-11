@@ -6,6 +6,7 @@ import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import { icons } from 'Helpers/Props';
+import translate from 'Utilities/String/translate';
 import styles from './TablePager.css';
 
 class TablePager extends Component {
@@ -156,7 +157,7 @@ class TablePager extends Component {
 
         <div className={styles.recordsContainer}>
           <div className={styles.records}>
-            Total records: {totalRecords}
+            {translate('TotalRecords', { totalRecords })}
           </div>
         </div>
       </div>

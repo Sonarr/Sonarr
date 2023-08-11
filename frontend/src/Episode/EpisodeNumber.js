@@ -5,6 +5,7 @@ import Popover from 'Components/Tooltip/Popover';
 import { icons, kinds, tooltipPositions } from 'Helpers/Props';
 import padNumber from 'Utilities/Number/padNumber';
 import filterAlternateTitles from 'Utilities/Series/filterAlternateTitles';
+import translate from 'Utilities/String/translate';
 import SceneInfo from './SceneInfo';
 import styles from './EpisodeNumber.css';
 
@@ -12,11 +13,11 @@ function getWarningMessage(unverifiedSceneNumbering, seriesType, absoluteEpisode
   const messages = [];
 
   if (unverifiedSceneNumbering) {
-    messages.push('Scene number hasn\'t been verified yet');
+    messages.push(translate('SceneNumberNotVerified'));
   }
 
   if (seriesType === 'anime' && !absoluteEpisodeNumber) {
-    messages.push('Episode does not have an absolute episode number');
+    messages.push(translate('EpisodeMissingAbsoluteNumber'));
   }
 
   return messages.join('\n');
@@ -70,7 +71,7 @@ function EpisodeNumber(props) {
                 }
               </span>
             }
-            title="Scene Information"
+            title={translate('SceneInformation')}
             body={
               <SceneInfo
                 seasonNumber={seasonNumber}

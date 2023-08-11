@@ -1,33 +1,44 @@
 /* eslint-disable no-bitwise */
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import translate from 'Utilities/String/translate';
 import EnhancedSelectInput from './EnhancedSelectInput';
 import styles from './UMaskInput.css';
 
 const umaskOptions = [
   {
     key: '755',
-    value: '755 - Owner write, Everyone else read',
+    get value() {
+      return translate('Umask755Description', { octal: '755' });
+    },
     hint: 'drwxr-xr-x'
   },
   {
     key: '775',
-    value: '775 - Owner & Group write, Other read',
+    get value() {
+      return translate('Umask775Description', { octal: '775' });
+    },
     hint: 'drwxrwxr-x'
   },
   {
     key: '770',
-    value: '770 - Owner & Group write',
+    get value() {
+      return translate('Umask770Description', { octal: '770' });
+    },
     hint: 'drwxrwx---'
   },
   {
     key: '750',
-    value: '750 - Owner write, Group read',
+    get value() {
+      return translate('Umask750Description', { octal: '750' });
+    },
     hint: 'drwxr-x---'
   },
   {
     key: '777',
-    value: '777 - Everyone write',
+    get value() {
+      return translate('Umask777Description', { octal: '777' });
+    },
     hint: 'drwxrwxrwx'
   }
 ];
@@ -101,16 +112,16 @@ class UMaskInput extends Component {
         </div>
         <div className={styles.details}>
           <div>
-            <label>UMask</label>
+            <label>{translate('UMask')}</label>
             <div className={styles.value}>{umask}</div>
           </div>
           <div>
-            <label>Folder</label>
+            <label>{translate('Folder')}</label>
             <div className={styles.value}>{folder}</div>
             <div className={styles.unit}>d{formatPermissions(folderNum)}</div>
           </div>
           <div>
-            <label>File</label>
+            <label>{translate('File')}</label>
             <div className={styles.value}>{file}</div>
             <div className={styles.unit}>{formatPermissions(fileNum)}</div>
           </div>
