@@ -36,6 +36,10 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
         [TestCase("The Mist", "M\\The Mist")]
         [TestCase("A", "A\\A")]
         [TestCase("30 Rock", "3\\30 Rock")]
+        [TestCase("¡García!", "#\\¡García!")]
+        [TestCase("좀비버스", "좀\\좀비버스")]
+        [TestCase("*batteries not included", "#\\-batteries not included")]
+        [TestCase("(500) Days of Summer", "#\\(500) Days of Summer")]
         public void should_get_expected_folder_name_back(string title, string expected)
         {
             _series.Title = title;

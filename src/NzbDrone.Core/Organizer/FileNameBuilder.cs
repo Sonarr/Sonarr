@@ -452,7 +452,7 @@ namespace NzbDrone.Core.Organizer
             tokenHandlers["{Series TitleWithoutYear}"] = m => TitleWithoutYear(series.Title);
             tokenHandlers["{Series TitleTheYear}"] = m => TitleYear(TitleThe(series.Title), series.Year);
             tokenHandlers["{Series TitleTheWithoutYear}"] = m => TitleWithoutYear(TitleThe(series.Title));
-            tokenHandlers["{Series TitleFirstCharacter}"] = m => TitleThe(series.Title).Substring(0, 1).FirstCharToUpper();
+            tokenHandlers["{Series TitleFirstCharacter}"] = m => GetFirstCharacter(TitleThe(series.Title));
             tokenHandlers["{Series Year}"] = m => series.Year.ToString();
         }
 
@@ -1149,6 +1149,13 @@ namespace NzbDrone.Core.Organizer
             }
 
             return result.TrimStart(' ', '.').TrimEnd(' ');
+        }
+
+        private static string GetFirstCharacter(string title)
+        {
+            var firstCharacter = title[..1].FirstCharToUpper();
+
+            return char.IsLetterOrDigit(firstCharacter, 0) ? firstCharacter : "#";
         }
     }
 
