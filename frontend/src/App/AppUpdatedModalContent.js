@@ -70,7 +70,7 @@ function AppUpdatedModalContent(props) {
 
       <ModalBody>
         <div>
-          <InlineMarkdown data={translate('AppUpdatedVersion', { appName: 'Sonarr', version })} />
+          <InlineMarkdown data={translate('AppUpdatedVersion', { appName: 'Sonarr', version })} blockClassName={styles.version} />
         </div>
 
         {

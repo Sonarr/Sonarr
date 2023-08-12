@@ -10,7 +10,8 @@ class InlineMarkdown extends Component {
   render() {
     const {
       className,
-      data
+      data,
+      blockClassName
     } = this.props;
 
     // For now only replace links or code blocks (not both)
@@ -47,7 +48,11 @@ class InlineMarkdown extends Component {
           markdownBlocks.push(data.substr(endIndex, match.index - endIndex));
         }
 
-        markdownBlocks.push(<code key={`code-${match.index}`}>{match[0].substring(1, match[0].length - 1)}</code>);
+        if (blockClassName) {
+          markdownBlocks.push(<code key={`code-${match.index}`} className={blockClassName}>{match[0].substring(1, match[0].length - 1)}</code>);
+        } else {
+          markdownBlocks.push(<code key={`code-${match.index}`}>{match[0].substring(1, match[0].length - 1)}</code>);
+        }
         endIndex = match.index + match[0].length;
       }
 
@@ -66,7 +71,8 @@ class InlineMarkdown extends Component {
 
 InlineMarkdown.propTypes = {
   className: PropTypes.string,
-  data: PropTypes.string
+  data: PropTypes.string,
+  blockClassName: PropTypes.string
 };
 
 export default InlineMarkdown;

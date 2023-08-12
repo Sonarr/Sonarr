@@ -3,6 +3,7 @@
 interface CssExports {
   'changes': string;
   'maintenance': string;
+  'version': string;
 }
 export const cssExports: CssExports;
 export default cssExports;
