@@ -1,1 +1,10 @@
-{}
+{
+    "DeleteConditionMessageText": "Sei sicuro di voler eliminare la condizione '{0}'?",
+    "ApplyTagsHelpTextReplace": "Sostituire: Sostituisce le etichette con quelle inserite (non inserire nessuna etichette per eliminarle tutte)",
+    "ApplyTagsHelpTextHowToApplyIndexers": "Come applicare etichette agli indicizzatori selezionati",
+    "MoveAutomatically": "Sposta Automaticamente",
+    "ApplyTagsHelpTextRemove": "Rimuovi: Rimuove le etichette inserite",
+    "ApplyTagsHelpTextAdd": "Aggiungi: Aggiunge le etichette alla lista esistente di etichette",
+    "DeleteCustomFormatMessageText": "Sei sicuro di voler eliminare il formato personalizzato '{0}'?",
+    "DeleteSelectedDownloadClients": "Cancella i Client di Download"
+}

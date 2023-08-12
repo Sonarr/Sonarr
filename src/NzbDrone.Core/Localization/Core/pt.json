@@ -1,10 +1,8 @@
 {
     "ApplyChanges": "Aplicar alterações",
-    "Browser Reload Required": "Necessário reiniciar o browser",
     "AutomaticAdd": "Adicionar automaticamente",
     "CountSeasons": "{count} temporadas",
     "Language": "Idioma",
-    "UI Language": "Idioma da interface",
     "Added": "Adicionado",
     "ApiKeyValidationHealthCheckMessage": "Por favor, actualize a sua API Key para ter no minimo {0} caracteres. Pode fazer através das definições ou do ficheiro de configuração",
     "AppDataLocationHealthCheckMessage": "Não foi possivél actualizar para prevenir apagar a AppData durante a actualização"

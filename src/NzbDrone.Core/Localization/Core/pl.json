@@ -1,1 +1,18 @@
-{}
+{
+    "BlocklistRelease": "Dodaj wersję do czarnej listy",
+    "ApplyChanges": "Zastosuj zmiany",
+    "AddAutoTag": "Dodaj automatyczne tagi",
+    "AddCondition": "Dodaj warunek",
+    "AutoTagging": "Automatyczne tagowanie",
+    "AllTitles": "Wszystkie tytuły",
+    "Apply": "Zastosuj",
+    "ApplyTagsHelpTextHowToApplyImportLists": "Jak zastosować tagi do wybranych list",
+    "ApplyTagsHelpTextHowToApplyDownloadClients": "Jak",
+    "ApplyTagsHelpTextRemove": "Usuń: usuń wprowadzone tagi",
+    "ApplicationUrlHelpText": "Zewnętrzny URL tej aplikacji zawierający http(s)://, port i adres URL",
+    "ApplyTagsHelpTextHowToApplyIndexers": "Jak zastosować tagi do wybranych indeksatorów",
+    "Authentication": "Autoryzacja",
+    "BlocklistReleases": "Dodaj wersje do czarnej listy",
+    "ApiKeyValidationHealthCheckMessage": "Zaktualizuj swój klucz API aby był długi na co najmniej {0} znaków. Możesz to zrobić poprzez ustawienia lub plik konfiguracyjny",
+    "AudioInfo": "Informacje o audio"
+}

@@ -6,7 +6,6 @@
     "Added": "Добавлено",
     "AppDataLocationHealthCheckMessage": "Обновление будет не возможно, во избежание удаления данных программы во время обновления",
     "ApplyChanges": "Применять изменения",
-    "Browser Reload Required": "Требуется перезагрузка браузера",
     "DownloadClientCheckNoneAvailableHealthCheckMessage": "Ни один загрузчик не доступен",
     "DownloadClientCheckUnableToCommunicateWithHealthCheckMessage": "Невозможно связаться с {0}.",
     "DownloadClientRootFolderHealthCheckMessage": "Клиент загрузки {0} помещает загрузки в корневую папку {1}. Вы не должны загружать в корневую папку.",

@@ -7,7 +7,6 @@
     "DownloadClientSortingHealthCheckMessage": "",
     "IndexerRssNoIndexersEnabledHealthCheckMessage": "RSS-synkronointia käyttäviä tietolähteitä määritetty, jonka vuoksi uusia julkaisuja ei siepata automaattisesti.",
     "IndexerSearchNoInteractiveHealthCheckMessage": "Manuaalista hakua varten ei ole määritetty tietolähteitä, jonka vuoksi haku ei löydä tuloksia.",
-    "Language that Sonarr will use for UI": "Käyttöliittymä näytetään tällä kielellä.",
     "RemotePathMappingFilesGenericPermissionsHealthCheckMessage": "Lataustyökalu \"{0}\" ilmoitti tiedostosijainniksi \"{1}\", mutta kansiota ei nähdä. Saatat joutua muokkaamaan kansion käyttöoikeuksia.",
     "RemotePathMappingFolderPermissionsHealthCheckMessage": "Ladatauskansio \"{0}\" näkyy, mutta sitä ei voida käyttää. Todennäköinen syy on sijainnin käyttöoikeusvirhe.",
     "RemotePathMappingImportFailedHealthCheckMessage": "Jaksojen tuonti epäonnistui. Katso tarkemmat tiedot lokista.",

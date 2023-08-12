@@ -44,5 +44,9 @@
     "BackupNow": "Nu backup nemen",
     "BeforeUpdate": "Voor Update",
     "CancelPendingTask": "Ben je zeker dat je deze onafgewerkte taak wil annuleren?",
-    "Clear": "Wis"
+    "Clear": "Wis",
+    "AutoTagging": "Automatisch Taggen",
+    "AddAutoTag": "Voeg Automatische Tag toe",
+    "AddCondition": "Voeg Conditie toe",
+    "CloneAutoTag": "Kopieer Automatische Tag"
 }
