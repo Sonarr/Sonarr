@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -14,31 +14,31 @@ using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
 
-namespace NzbDrone.Core.Test.HealthCheck.Checks
+namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
 {
     [TestFixture]
     public class DeleteBadMediaCoversFixture : CoreTest<DeleteBadMediaCovers>
     {
         private List<MetadataFile> _metadata;
-        private List<Series> _series;
+        private Dictionary<int, string> _series;
 
         [SetUp]
         public void Setup()
         {
-            _series = Builder<Series>.CreateListOfSize(1)
-                .All()
-                .With(c => c.Path = "C:\\TV\\".AsOsAgnostic())
-                .Build().ToList();
+            _series = new Dictionary<int, string>
+            {
+                { 1, "C:\\TV\\".AsOsAgnostic() }
+            };
 
             _metadata = Builder<MetadataFile>.CreateListOfSize(1)
                .Build().ToList();
 
             Mocker.GetMock<ISeriesService>()
-                .Setup(c => c.GetAllSeries())
+                .Setup(c => c.GetAllSeriesPaths())
                 .Returns(_series);
 
             Mocker.GetMock<IMetadataFileService>()
-                .Setup(c => c.GetFilesBySeries(_series.First().Id))
+                .Setup(c => c.GetFilesBySeries(_series.First().Key))
                 .Returns(_metadata);
 
             Mocker.GetMock<IConfigService>().SetupGet(c => c.CleanupMetadataImages).Returns(true);
