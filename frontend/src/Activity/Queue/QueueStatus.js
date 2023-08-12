@@ -154,8 +154,8 @@ QueueStatus.propTypes = {
 };
 
 QueueStatus.defaultProps = {
-  trackedDownloadStatus: 'Ok',
-  trackedDownloadState: 'Downloading',
+  trackedDownloadStatus: 'ok',
+  trackedDownloadState: 'downloading',
   canFlip: false
 };
 
