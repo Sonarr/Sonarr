@@ -2,11 +2,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using NLog;
-using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Instrumentation;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.ImportLists.Exceptions;
 using NzbDrone.Core.ImportLists.Simkl;
+using NzbDrone.Core.MetadataSource;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.ImportLists.AniList.List
@@ -15,12 +15,12 @@ namespace NzbDrone.Core.ImportLists.AniList.List
     {
         private static readonly Logger Logger = NzbDroneLogger.GetLogger(typeof(SimklParser));
 
-        private readonly Dictionary<int, MediaMapping> _mappings;
         private readonly AniListSettings _settings;
+        private readonly ISearchForNewSeries _seriesSearchService;
 
-        public AniListParser(AniListSettings settings, Dictionary<int, MediaMapping> mappings)
+        public AniListParser(AniListSettings settings, ISearchForNewSeries seriesSearchService)
         {
-            _mappings = mappings;
+            _seriesSearchService = seriesSearchService;
             _settings = settings;
         }
 
@@ -54,35 +54,20 @@ namespace NzbDrone.Core.ImportLists.AniList.List
             foreach (var item in filtered)
             {
                 var media = item.Media;
+                var mappedSeries = _seriesSearchService.SearchForNewSeriesByAniListId(media.Id.ToString())
+                    .FirstOrDefault();
 
-                if (_mappings.TryGetValue(media.Id, out var mapping))
+                if (mappedSeries != null)
                 {
-                    // Base required data
-                    var entry = new ImportListItemInfo()
+                    var entry = new ImportListItemInfo
                     {
-                        TvdbId = mapping.Tvdb.Value,
-                        Title = media.Title.UserPreferred ?? media.Title.UserRomaji ?? default
+                        TvdbId = mappedSeries.TvdbId,
+                        Title = mappedSeries.Title,
+                        Year = mappedSeries.Year,
+                        ImdbId = mappedSeries.ImdbId
                     };
 
-                    // Extra optional mappings
-                    if (mapping.MyAnimeList.HasValue)
-                    {
-                        entry.MalId = mapping.MyAnimeList.Value;
-                    }
-
-                    if (!string.IsNullOrEmpty(mapping.Imdb))
-                    {
-                        entry.ImdbId = mapping.Imdb;
-                    }
-
-                    // Optional Year/ReleaseDate data
-                    if (media.StartDate?.Year != null)
-                    {
-                        entry.Year = (int)media.StartDate.Year;
-                        entry.ReleaseDate = (System.DateTime)media.StartDate.Convert();
-                    }
-
-                    result.AddIfNotNull(entry);
+                    result.Add(entry);
                 }
                 else
                 {

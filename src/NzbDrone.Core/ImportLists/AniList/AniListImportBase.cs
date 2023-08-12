@@ -1,14 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Net;
-using FluentValidation.Results;
-using Newtonsoft.Json;
 using NLog;
-using NzbDrone.Common.Cache;
-using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
-using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.MetadataSource;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Validation;
@@ -21,33 +16,27 @@ namespace NzbDrone.Core.ImportLists.AniList
         public override ImportListType ListType => ImportListType.Other;
         public override TimeSpan MinRefreshInterval => TimeSpan.FromHours(12);
 
-        private const string _cacheKey = "animemappings";
-        private readonly TimeSpan _cacheInterval = TimeSpan.FromHours(20);
-        private readonly ICached<Dictionary<int, MediaMapping>> _cache;
-
         public const string OAuthUrl = "https://anilist.co/api/v2/oauth/authorize";
         public const string RedirectUri = "https://auth.servarr.com/v1/anilist_sonarr/auth";
         public const string RenewUri = "https://auth.servarr.com/v1/anilist_sonarr/renew";
-        public const string MapSourceUrl = "https://raw.githubusercontent.com/Fribb/anime-lists/master/anime-list-full.json";
 
         public const string ClientId = "13780";
 
-        private IImportListRepository _importListRepository;
+        protected IImportListRepository _importListRepository;
+        protected ISearchForNewSeries _seriesSearchService;
 
         protected AniListImportBase(IImportListRepository netImportRepository,
                             IHttpClient httpClient,
                             IImportListStatusService importListStatusService,
                             IConfigService configService,
                             IParsingService parsingService,
-                            Logger logger,
-                            ICacheManager cacheManager)
+                            ISearchForNewSeries seriesSearchService,
+                            Logger logger)
             : base(httpClient, importListStatusService, configService, parsingService, logger)
         {
             _importListRepository = netImportRepository;
-            _cache = cacheManager.GetCache<Dictionary<int, MediaMapping>>(GetType());
+            _seriesSearchService = seriesSearchService;
         }
-
-        public Dictionary<int, MediaMapping> Mappings => _cache.Get(_cacheKey, GetMappingData, _cacheInterval);
 
         public override object RequestAction(string action, IDictionary<string, string> query)
         {
@@ -78,92 +67,10 @@ namespace NzbDrone.Core.ImportLists.AniList
             return new { };
         }
 
-        public void RefreshMappings()
-        {
-            var mappings = GetMappingData();
-            _cache.Set(_cacheKey, mappings, _cacheInterval);
-        }
-
         public override IList<ImportListItemInfo> Fetch()
         {
             CheckToken();
             return base.Fetch();
-        }
-
-        protected virtual Dictionary<int, MediaMapping> GetMappingData()
-        {
-            var result = new Dictionary<int, MediaMapping>();
-            try
-            {
-                var request = new HttpRequest(MapSourceUrl, HttpAccept.Json);
-                var response = _httpClient.Execute(request);
-
-                if (response.StatusCode == HttpStatusCode.OK)
-                {
-                    var mappingList = STJson.Deserialize<List<MediaMapping>>(response.Content);
-
-                    foreach (var item in mappingList)
-                    {
-                        if (item.Anilist.HasValue && item.Anilist > 0 && item.Tvdb.HasValue && item.Tvdb > 0)
-                        {
-                            result.Add((int)item.Anilist, item);
-                        }
-                    }
-                }
-            }
-            catch (WebException webException)
-            {
-                if (webException.Status == WebExceptionStatus.NameResolutionFailure ||
-                    webException.Status == WebExceptionStatus.ConnectFailure)
-                {
-                    _importListStatusService.RecordConnectionFailure(Definition.Id);
-                }
-                else
-                {
-                    _importListStatusService.RecordFailure(Definition.Id);
-                }
-
-                if (webException.Message.Contains("502") || webException.Message.Contains("503") ||
-                    webException.Message.Contains("timed out"))
-                {
-                    _logger.Warn("{0} server is currently unavailable. {1} {2}", this, MapSourceUrl, webException.Message);
-                }
-                else
-                {
-                    _logger.Warn("{0} {1} {2}", this, MapSourceUrl, webException.Message);
-                }
-            }
-            catch (HttpException ex)
-            {
-                _importListStatusService.RecordFailure(Definition.Id);
-                _logger.Warn("{0} {1}", this, ex.Message);
-            }
-            catch (JsonSerializationException ex)
-            {
-                _importListStatusService.RecordFailure(Definition.Id);
-                ex.WithData("MappingUrl", MapSourceUrl);
-                _logger.Error(ex, "Mapping source data is invalid. {0}", MapSourceUrl);
-            }
-            catch (Exception ex)
-            {
-                _importListStatusService.RecordFailure(Definition.Id);
-                ex.WithData("MappingUrl", MapSourceUrl);
-                _logger.Error(ex, "An error occurred while downloading mapping file. {0}", MapSourceUrl);
-            }
-
-            return result;
-        }
-
-        protected override ValidationFailure TestConnection()
-        {
-            if (Mappings.Empty())
-            {
-                return new NzbDroneValidationFailure(string.Empty,
-                            "Mapping source is not available or is invalid.")
-                { IsWarning = true };
-            }
-
-            return base.TestConnection();
         }
 
         protected void CheckToken()
