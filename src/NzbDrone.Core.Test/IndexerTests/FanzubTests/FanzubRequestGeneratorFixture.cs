@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
@@ -12,6 +12,7 @@ namespace NzbDrone.Core.Test.IndexerTests.FanzubTests
     {
         private SeasonSearchCriteria _seasonSearchCriteria;
         private AnimeEpisodeSearchCriteria _animeSearchCriteria;
+        private AnimeSeasonSearchCriteria _animeSeasonSearchCriteria;
 
         [SetUp]
         public void SetUp()
@@ -33,6 +34,12 @@ namespace NzbDrone.Core.Test.IndexerTests.FanzubTests
                 AbsoluteEpisodeNumber = 9,
                 SeasonNumber = 1,
                 EpisodeNumber = 9
+            };
+
+            _animeSeasonSearchCriteria = new AnimeSeasonSearchCriteria()
+            {
+                SceneTitles = new List<string>() { "Naruto Shippuuden" },
+                SeasonNumber = 3,
             };
         }
 
@@ -80,6 +87,19 @@ namespace NzbDrone.Core.Test.IndexerTests.FanzubTests
             var page = results.GetAllTiers().First().First();
 
             page.Url.FullUri.Should().Contain("q=\"Naruto+Shippuuden%2009\"|\"Naruto+Shippuuden%20-%2009\"|\"Naruto+Shippuuden%20S01E09\"|\"Naruto+Shippuuden%20-%20S01E09\"");
+        }
+
+        [Test]
+        public void should_search_by_standard_season_number()
+        {
+            Subject.Settings.AnimeStandardFormatSearch = true;
+            var results = Subject.GetSearchRequests(_animeSeasonSearchCriteria);
+
+            results.GetAllTiers().Should().HaveCount(1);
+
+            var page = results.GetAllTiers().First().First();
+
+            page.Url.FullUri.Should().Contain("q=\"Naruto+Shippuuden%20S03\"|\"Naruto+Shippuuden%20-%20S03\"");
         }
     }
 }

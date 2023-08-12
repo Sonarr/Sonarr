@@ -10,7 +10,7 @@ namespace NzbDrone.Core.Datastore.Migration
         {
             Alter.Table("QualityDefinitions").AddColumn("PreferredSize").AsDouble().Nullable();
 
-            Execute.Sql("UPDATE QualityDefinitions SET PreferredSize = MaxSize - 5 WHERE MaxSize > 5");
+            Execute.Sql("UPDATE \"QualityDefinitions\" SET \"PreferredSize\" = \"MaxSize\" - 5 WHERE \"MaxSize\" > 5");
         }
     }
 }

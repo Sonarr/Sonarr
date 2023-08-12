@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Datastore.Migration;
@@ -14,7 +14,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
         {
             var db = WithMigrationTestDb();
 
-            var qualityDefinitions = db.Query<QualityDefinition84>("SELECT * FROM QualityDefinitions");
+            var qualityDefinitions = db.Query<QualityDefinition84>("SELECT * FROM \"QualityDefinitions\"");
 
             qualityDefinitions.Should().BeEmpty();
         }
@@ -40,7 +40,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var qualityDefinitions = db.Query<QualityDefinition84>("SELECT * FROM QualityDefinitions");
+            var qualityDefinitions = db.Query<QualityDefinition84>("SELECT * FROM \"QualityDefinitions\"");
 
             qualityDefinitions.Should().HaveCount(2);
             qualityDefinitions.First(v => v.Quality == 10).MaxSize.Should().NotHaveValue();
@@ -60,7 +60,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var qualityDefinitions = db.Query<QualityDefinition84>("SELECT * FROM QualityDefinitions");
+            var qualityDefinitions = db.Query<QualityDefinition84>("SELECT * FROM \"QualityDefinitions\"");
 
             qualityDefinitions.Should().HaveCount(1);
             qualityDefinitions.First(v => v.Quality == 1).MaxSize.Should().NotHaveValue();
@@ -87,7 +87,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var qualityDefinitions = db.Query<QualityDefinition84>("SELECT * FROM QualityDefinitions");
+            var qualityDefinitions = db.Query<QualityDefinition84>("SELECT * FROM \"QualityDefinitions\"");
 
             qualityDefinitions.Should().HaveCount(2);
             qualityDefinitions.First(v => v.Quality == 1).MaxSize.Should().Be(100);

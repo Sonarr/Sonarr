@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Datastore.Migration;
@@ -26,12 +26,12 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 {
                     GrabDelay = 2,
                     Name = "TwoHours",
-                    Cutoff = "{}",
+                    Cutoff = 0,
                     Items = "[]"
                 });
             });
 
-            var allProfiles = db.Query<DelayProfile70>("SELECT * FROM DelayProfiles");
+            var allProfiles = db.Query<DelayProfile70>("SELECT * FROM \"DelayProfiles\"");
 
             allProfiles.Should().HaveCount(3);
             allProfiles.Should().OnlyContain(c => c.PreferredProtocol == 1);
@@ -54,7 +54,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var tags = db.Query<Tag69>("SELECT * FROM Tags");
+            var tags = db.Query<Tag69>("SELECT * FROM \"Tags\"");
 
             tags.Should().HaveCount(1);
             tags.First().Label.Should().Be("delay-60");
@@ -83,17 +83,17 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                                                      Status = 0,
                                                      Images = "[]",
                                                      Path = @"C:\Test\Series",
-                                                     Monitored = 1,
-                                                     SeasonFolder = 1,
-                                                     RunTime = 0,
+                                                     Monitored = true,
+                                                     SeasonFolder = true,
+                                                     Runtime = 0,
                                                      SeriesType = 0,
-                                                     UseSceneNumbering = 0,
+                                                     UseSceneNumbering = false,
                                                      Tags = "[1]"
                                                  });
             });
 
-            var tag = db.Query<Tag69>("SELECT Id, Label FROM Tags").Single();
-            var series = db.Query<Series69>("SELECT Tags FROM Series");
+            var tag = db.Query<Tag69>("SELECT \"Id\", \"Label\" FROM \"Tags\"").Single();
+            var series = db.Query<Series69>("SELECT \"Tags\" FROM \"Series\"");
 
             series.Should().HaveCount(1);
 

@@ -12,7 +12,7 @@ namespace NzbDrone.Core.Datastore.Migration
         protected override void MainDbUpgrade()
         {
             // Reverts part of migration 140, note that the v1 of migration140 also removed chowngroup
-            Execute.WithConnection(ConvertFileChmodToFolderChmod);
+            IfDatabase("sqlite").Execute.WithConnection(ConvertFileChmodToFolderChmod);
         }
 
         private void ConvertFileChmodToFolderChmod(IDbConnection conn, IDbTransaction tran)
@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Datastore.Migration
             using (var getFileChmodCmd = conn.CreateCommand())
             {
                 getFileChmodCmd.Transaction = tran;
-                getFileChmodCmd.CommandText = @"SELECT Value FROM Config WHERE Key = 'filechmod'";
+                getFileChmodCmd.CommandText = "SELECT \"Value\" FROM \"Config\" WHERE \"Key\" = 'filechmod'";
 
                 if (getFileChmodCmd.ExecuteScalar() is string fileChmod)
                 {
@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Datastore.Migration
                         using (var insertCmd = conn.CreateCommand())
                         {
                             insertCmd.Transaction = tran;
-                            insertCmd.CommandText = "INSERT INTO Config (Key, Value) VALUES ('chmodfolder', ?)";
+                            insertCmd.CommandText = "INSERT INTO \"Config\" (\"Key\", \"Value\") VALUES ('chmodfolder', ?)";
                             insertCmd.AddParameter(folderChmod);
 
                             insertCmd.ExecuteNonQuery();
@@ -44,7 +44,7 @@ namespace NzbDrone.Core.Datastore.Migration
                     using (var deleteCmd = conn.CreateCommand())
                     {
                         deleteCmd.Transaction = tran;
-                        deleteCmd.CommandText = "DELETE FROM Config WHERE Key = 'filechmod'";
+                        deleteCmd.CommandText = "DELETE FROM \"Config\" WHERE \"Key\" = 'filechmod'";
 
                         deleteCmd.ExecuteNonQuery();
                     }

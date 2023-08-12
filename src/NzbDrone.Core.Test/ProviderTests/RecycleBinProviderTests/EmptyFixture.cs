@@ -1,4 +1,3 @@
-﻿using System.IO;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Disk;
@@ -22,7 +21,7 @@ namespace NzbDrone.Core.Test.ProviderTests.RecycleBinProviderTests
             Mocker.GetMock<IDiskProvider>().Setup(s => s.GetDirectories(RecycleBin))
                     .Returns(new[] { @"C:\Test\RecycleBin\Folder1", @"C:\Test\RecycleBin\Folder2", @"C:\Test\RecycleBin\Folder3" });
 
-            Mocker.GetMock<IDiskProvider>().Setup(s => s.GetFiles(RecycleBin, SearchOption.TopDirectoryOnly))
+            Mocker.GetMock<IDiskProvider>().Setup(s => s.GetFiles(RecycleBin, false))
                     .Returns(new[] { @"C:\Test\RecycleBin\File1.avi", @"C:\Test\RecycleBin\File2.mkv" });
         }
 

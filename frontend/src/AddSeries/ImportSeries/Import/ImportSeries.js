@@ -6,6 +6,7 @@ import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
 import { kinds } from 'Helpers/Props';
+import translate from 'Utilities/String/translate';
 import selectAll from 'Utilities/Table/selectAll';
 import toggleSelected from 'Utilities/Table/toggleSelected';
 import ImportSeriesFooterConnector from './ImportSeriesFooterConnector';
@@ -97,7 +98,7 @@ class ImportSeries extends Component {
     } = this.state;
 
     return (
-      <PageContent title="Import Series">
+      <PageContent title={translate('ImportSeries')}>
         <PageContentBody ref={this.scrollerRef} >
           {
             rootFoldersFetching ? <LoadingIndicator /> : null
@@ -106,7 +107,7 @@ class ImportSeries extends Component {
           {
             !rootFoldersFetching && !!rootFoldersError ?
               <Alert kind={kinds.DANGER}>
-                Unable to load root folders
+                {translate('RootFoldersLoadError')}
               </Alert> :
               null
           }
@@ -117,7 +118,7 @@ class ImportSeries extends Component {
             rootFoldersPopulated &&
             !unmappedFolders.length ?
               <Alert kind={kinds.INFO}>
-                All series in {path} have been imported
+                {translate('AllSeriesInRootFolderHaveBeenImported', { path })}
               </Alert> :
               null
           }

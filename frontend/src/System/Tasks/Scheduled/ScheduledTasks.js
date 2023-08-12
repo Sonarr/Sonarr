@@ -10,37 +10,27 @@ import ScheduledTaskRowConnector from './ScheduledTaskRowConnector';
 const columns = [
   {
     name: 'name',
-    get label() {
-      return translate('Name');
-    },
+    label: () => translate('Name'),
     isVisible: true
   },
   {
     name: 'interval',
-    get label() {
-      return translate('Interval');
-    },
+    label: () => translate('Interval'),
     isVisible: true
   },
   {
     name: 'lastExecution',
-    get label() {
-      return translate('LastExecution');
-    },
+    label: () => translate('LastExecution'),
     isVisible: true
   },
   {
     name: 'lastDuration',
-    get label() {
-      return translate('LastDuration');
-    },
+    label: () => translate('LastDuration'),
     isVisible: true
   },
   {
     name: 'nextExecution',
-    get label() {
-      return translate('NextExecution');
-    },
+    label: () => translate('NextExecution'),
     isVisible: true
   },
   {

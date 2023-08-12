@@ -2,7 +2,7 @@
   "openapi": "3.0.1",
   "info": {
     "title": "Sonarr",
-    "description": "Sonarr API docs",
+    "description": "Sonarr API docs - The v3 API docs apply to both v3 and v4 versions of Sonarr. Some functionality may only be available in v4 of the Sonarr application.",
     "license": {
       "name": "GPL-3.0",
       "url": "https://github.com/Sonarr/Sonarr/blob/develop/LICENSE"
@@ -7472,6 +7472,13 @@
         },
         "additionalProperties": false
       },
+      "DatabaseType": {
+        "enum": [
+          "sqLite",
+          "postgreSQL"
+        ],
+        "type": "string"
+      },
       "DelayProfileResource": {
         "type": "object",
         "properties": {
@@ -8942,6 +8949,17 @@
           "downloadId": {
             "type": "string",
             "nullable": true
+          },
+          "customFormats": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CustomFormatResource"
+            },
+            "nullable": true
+          },
+          "customFormatScore": {
+            "type": "integer",
+            "format": "int32"
           },
           "rejections": {
             "type": "array",
@@ -11163,6 +11181,12 @@
           "packageUpdateMechanismMessage": {
             "type": "string",
             "nullable": true
+          },
+          "databaseVersion": {
+            "$ref": "#/components/schemas/Version"
+          },
+          "databaseType": {
+            "$ref": "#/components/schemas/DatabaseType"
           }
         },
         "additionalProperties": false

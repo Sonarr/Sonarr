@@ -81,7 +81,7 @@ namespace NzbDrone.Core.Test.MediaFiles.DiskScanServiceTests
         private void GivenFiles(IEnumerable<string> files)
         {
             Mocker.GetMock<IDiskProvider>()
-                  .Setup(s => s.GetFiles(It.IsAny<string>(), SearchOption.AllDirectories))
+                  .Setup(s => s.GetFiles(It.IsAny<string>(), true))
                   .Returns(files.ToArray());
         }
 
@@ -93,7 +93,7 @@ namespace NzbDrone.Core.Test.MediaFiles.DiskScanServiceTests
             ExceptionVerification.ExpectedWarns(1);
 
             Mocker.GetMock<IDiskProvider>()
-                  .Verify(v => v.GetFiles(_series.Path, SearchOption.AllDirectories), Times.Never());
+                  .Verify(v => v.GetFiles(_series.Path, true), Times.Never());
 
             Mocker.GetMock<IDiskProvider>()
                   .Verify(v => v.CreateFolder(_series.Path), Times.Never());
@@ -112,7 +112,7 @@ namespace NzbDrone.Core.Test.MediaFiles.DiskScanServiceTests
             ExceptionVerification.ExpectedWarns(1);
 
             Mocker.GetMock<IDiskProvider>()
-                  .Verify(v => v.GetFiles(_series.Path, SearchOption.AllDirectories), Times.Never());
+                  .Verify(v => v.GetFiles(_series.Path, true), Times.Never());
 
             Mocker.GetMock<IDiskProvider>()
                   .Verify(v => v.CreateFolder(_series.Path), Times.Never());
@@ -267,7 +267,7 @@ namespace NzbDrone.Core.Test.MediaFiles.DiskScanServiceTests
             Subject.Scan(_series);
 
             Mocker.GetMock<IDiskProvider>()
-                  .Verify(v => v.GetFiles(It.IsAny<string>(), It.IsAny<SearchOption>()), Times.Once());
+                  .Verify(v => v.GetFiles(It.IsAny<string>(), It.IsAny<bool>()), Times.Once());
 
             Mocker.GetMock<IMakeImportDecision>()
                   .Verify(v => v.GetImportDecisions(It.Is<List<string>>(l => l.Count == 1), _series, false), Times.Once());

@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { icons } from 'Helpers/Props';
 import createUISettingsSelector from 'Store/Selectors/createUISettingsSelector';
 import dimensions from 'Styles/Variables/dimensions';
+import QualityProfile from 'typings/QualityProfile';
 import { UiSettings } from 'typings/UiSettings';
 import formatDateTime from 'Utilities/Date/formatDateTime';
 import getRelativeDate from 'Utilities/Date/getRelativeDate';
@@ -36,7 +37,7 @@ interface SeriesIndexOverviewInfoProps {
   monitored: boolean;
   nextAiring?: string;
   network?: string;
-  qualityProfile: object;
+  qualityProfile?: QualityProfile;
   previousAiring?: string;
   added?: string;
   seasonCount: number;
@@ -115,13 +116,10 @@ function getInfoRowProps(
     };
   }
 
-  if (name === 'qualityProfileId') {
+  if (name === 'qualityProfileId' && !!props.qualityProfile?.name) {
     return {
       title: 'Quality Profile',
       iconName: icons.PROFILE,
-      // TODO: Type QualityProfile
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore ts(2339)
       label: props.qualityProfile.name,
     };
   }

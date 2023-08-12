@@ -18,7 +18,8 @@ import { icons, kinds, tooltipPositions } from 'Helpers/Props';
 import InteractiveImportModal from 'InteractiveImport/InteractiveImportModal';
 import SeriesTitleLink from 'Series/SeriesTitleLink';
 import formatBytes from 'Utilities/Number/formatBytes';
-import formatPreferredWordScore from 'Utilities/Number/formatPreferredWordScore';
+import formatCustomFormatScore from 'Utilities/Number/formatCustomFormatScore';
+import translate from 'Utilities/String/translate';
 import QueueStatusCell from './QueueStatusCell';
 import RemoveQueueItemModal from './RemoveQueueItemModal';
 import TimeleftCell from './TimeleftCell';
@@ -269,7 +270,7 @@ class QueueRow extends Component {
                   className={styles.customFormatScore}
                 >
                   <Tooltip
-                    anchor={formatPreferredWordScore(
+                    anchor={formatCustomFormatScore(
                       customFormatScore,
                       customFormats.length
                     )}
@@ -386,7 +387,7 @@ class QueueRow extends Component {
                   }
 
                   <SpinnerIconButton
-                    title="Remove from queue"
+                    title={translate('RemoveFromQueue')}
                     name={icons.REMOVE}
                     isSpinning={isRemoving}
                     onPress={this.onRemoveQueueItemPress}

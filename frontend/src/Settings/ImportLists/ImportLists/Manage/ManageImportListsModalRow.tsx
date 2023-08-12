@@ -7,6 +7,7 @@ import TableRow from 'Components/Table/TableRow';
 import TagListConnector from 'Components/TagListConnector';
 import { createQualityProfileSelectorForHook } from 'Store/Selectors/createQualityProfileSelector';
 import { SelectStateInputProps } from 'typings/props';
+import translate from 'Utilities/String/translate';
 import styles from './ManageImportListsModalRow.css';
 
 interface ManageImportListsModalRowProps {
@@ -63,7 +64,7 @@ function ManageImportListsModalRow(props: ManageImportListsModalRowProps) {
       </TableRowCell>
 
       <TableRowCell className={styles.qualityProfileId}>
-        {qualityProfile?.name ?? 'None'}
+        {qualityProfile?.name ?? translate('None')}
       </TableRowCell>
 
       <TableRowCell className={styles.rootFolderPath}>
@@ -71,7 +72,7 @@ function ManageImportListsModalRow(props: ManageImportListsModalRowProps) {
       </TableRowCell>
 
       <TableRowCell className={styles.enableAutomaticAdd}>
-        {enableAutomaticAdd ? 'Yes' : 'No'}
+        {enableAutomaticAdd ? translate('Yes') : translate('No')}
       </TableRowCell>
 
       <TableRowCell className={styles.tags}>

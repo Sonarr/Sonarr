@@ -38,6 +38,7 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
             _definition = new IndexerDefinition
             {
                 Name = "Indexer",
+                EnableRss = true,
                 ConfigContract = "TorznabSettings",
                 Settings = torznabSettings
             };

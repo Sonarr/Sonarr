@@ -5,6 +5,7 @@ import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import { icons, kinds } from 'Helpers/Props';
+import translate from 'Utilities/String/translate';
 import EditImportListExclusionModalConnector from './EditImportListExclusionModalConnector';
 import styles from './ImportListExclusion.css';
 
@@ -85,9 +86,9 @@ class ImportListExclusion extends Component {
         <ConfirmModal
           isOpen={this.state.isDeleteImportListExclusionModalOpen}
           kind={kinds.DANGER}
-          title="Delete Import List Exclusion"
-          message="Are you sure you want to delete this import list exclusion?"
-          confirmLabel="Delete"
+          title={translate('DeleteImportListExclusion')}
+          message={translate('DeleteImportListExclusionMessageText')}
+          confirmLabel={translate('Delete')}
           onConfirm={this.onConfirmDeleteImportListExclusion}
           onCancel={this.onDeleteImportListExclusionModalClose}
         />

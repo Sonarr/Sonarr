@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+using System;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Disk;
@@ -68,7 +67,7 @@ namespace NzbDrone.Core.Test.ProviderTests.RecycleBinProviderTests
             WithRecycleBin();
             var path = @"C:\Test\TV\30 Rock".AsOsAgnostic();
 
-            Mocker.GetMock<IDiskProvider>().Setup(s => s.GetFiles(@"C:\Test\Recycle Bin\30 Rock".AsOsAgnostic(), SearchOption.AllDirectories))
+            Mocker.GetMock<IDiskProvider>().Setup(s => s.GetFiles(@"C:\Test\Recycle Bin\30 Rock".AsOsAgnostic(), true))
                                            .Returns(new[] { "File1", "File2", "File3" });
 
             Mocker.Resolve<RecycleBinProvider>().DeleteFolder(path);

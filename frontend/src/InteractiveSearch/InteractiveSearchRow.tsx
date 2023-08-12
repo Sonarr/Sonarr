@@ -19,7 +19,7 @@ import CustomFormat from 'typings/CustomFormat';
 import formatDateTime from 'Utilities/Date/formatDateTime';
 import formatAge from 'Utilities/Number/formatAge';
 import formatBytes from 'Utilities/Number/formatBytes';
-import formatPreferredWordScore from 'Utilities/Number/formatPreferredWordScore';
+import formatCustomFormatScore from 'Utilities/Number/formatCustomFormatScore';
 import OverrideMatchModal from './OverrideMatch/OverrideMatchModal';
 import Peers from './Peers';
 import ReleaseEpisode from './ReleaseEpisode';
@@ -40,6 +40,18 @@ function getDownloadIcon(
   }
 
   return icons.DOWNLOAD;
+}
+
+function getDownloadKind(isGrabbed: boolean, grabError?: string) {
+  if (isGrabbed) {
+    return kinds.SUCCESS;
+  }
+
+  if (grabError) {
+    return kinds.DANGER;
+  }
+
+  return kinds.DEFAULT;
 }
 
 function getDownloadTooltip(
@@ -236,7 +248,7 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
 
       <TableRowCell className={styles.customFormatScore}>
         <Tooltip
-          anchor={formatPreferredWordScore(
+          anchor={formatCustomFormatScore(
             customFormatScore,
             customFormats.length
           )}
@@ -265,7 +277,7 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
       <TableRowCell className={styles.download}>
         <SpinnerIconButton
           name={getDownloadIcon(isGrabbing, isGrabbed, grabError)}
-          kind={grabError ? kinds.DANGER : kinds.DEFAULT}
+          kind={getDownloadKind(isGrabbed, grabError)}
           title={getDownloadTooltip(isGrabbing, isGrabbed, grabError)}
           isSpinning={isGrabbing}
           onPress={onGrabPressWrapper}

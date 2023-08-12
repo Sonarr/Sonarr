@@ -13,18 +13,19 @@ import Scroller from 'Components/Scroller/Scroller';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import { kinds, scrollDirections } from 'Helpers/Props';
+import translate from 'Utilities/String/translate';
 import FileBrowserRow from './FileBrowserRow';
 import styles from './FileBrowserModalContent.css';
 
 const columns = [
   {
     name: 'type',
-    label: 'Type',
+    label: () => translate('Type'),
     isVisible: true
   },
   {
     name: 'name',
-    label: 'Name',
+    label: () => translate('Name'),
     isVisible: true
   }
 ];

@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Data;
+using Dapper;
 using FluentMigrator;
 using Newtonsoft.Json.Linq;
 using NzbDrone.Common.Extensions;
@@ -18,10 +19,12 @@ namespace NzbDrone.Core.Datastore.Migration
 
         private void UpdateTransmissionSettings(IDbConnection conn, IDbTransaction tran)
         {
+            var updatedClients = new List<object>();
+
             using (var cmd = conn.CreateCommand())
             {
                 cmd.Transaction = tran;
-                cmd.CommandText = "SELECT Id, Settings FROM DownloadClients WHERE Implementation = 'Transmission'";
+                cmd.CommandText = "SELECT \"Id\", \"Settings\" FROM \"DownloadClients\" WHERE \"Implementation\" = 'Transmission'";
 
                 using (var reader = cmd.ExecuteReader())
                 {
@@ -37,19 +40,18 @@ namespace NzbDrone.Core.Datastore.Migration
                         {
                             settings["tvCategory"] = "." + tvCategory;
 
-                            using (var updateCmd = conn.CreateCommand())
+                            updatedClients.Add(new
                             {
-                                updateCmd.Transaction = tran;
-                                updateCmd.CommandText = "UPDATE DownloadClients SET Settings = ? WHERE Id = ?";
-                                updateCmd.AddParameter(settings.ToJson());
-                                updateCmd.AddParameter(id);
-
-                                updateCmd.ExecuteNonQuery();
-                            }
+                                Settings = settings.ToJson(),
+                                Id = id
+                            });
                         }
                     }
                 }
             }
+
+            var updateClientsSql = "UPDATE \"DownloadClients\" SET \"Settings\" = @Settings WHERE \"Id\" = @Id";
+            conn.Execute(updateClientsSql, updatedClients, transaction: tran);
         }
     }
 

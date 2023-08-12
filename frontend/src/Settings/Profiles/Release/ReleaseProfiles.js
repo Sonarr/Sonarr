@@ -5,6 +5,7 @@ import FieldSet from 'Components/FieldSet';
 import Icon from 'Components/Icon';
 import PageSectionContent from 'Components/Page/PageSectionContent';
 import { icons } from 'Helpers/Props';
+import translate from 'Utilities/String/translate';
 import EditReleaseProfileModalConnector from './EditReleaseProfileModalConnector';
 import ReleaseProfile from './ReleaseProfile';
 import styles from './ReleaseProfiles.css';
@@ -46,9 +47,9 @@ class ReleaseProfiles extends Component {
     } = this.props;
 
     return (
-      <FieldSet legend="Release Profiles">
+      <FieldSet legend={translate('Release Profiles')}>
         <PageSectionContent
-          errorMessage="Unable to load ReleaseProfiles"
+          errorMessage={translate('ReleaseProfilesLoadError')}
           {...otherProps}
         >
           <div className={styles.releaseProfiles}>

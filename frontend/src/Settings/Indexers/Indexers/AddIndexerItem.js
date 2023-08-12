@@ -5,6 +5,7 @@ import Link from 'Components/Link/Link';
 import Menu from 'Components/Menu/Menu';
 import MenuContent from 'Components/Menu/MenuContent';
 import { sizes } from 'Helpers/Props';
+import translate from 'Utilities/String/translate';
 import AddIndexerPresetMenuItem from './AddIndexerPresetMenuItem';
 import styles from './AddIndexerItem.css';
 
@@ -57,7 +58,7 @@ class AddIndexerItem extends Component {
                     size={sizes.SMALL}
                     onPress={this.onIndexerSelect}
                   >
-                    Custom
+                    {translate('Custom')}
                   </Button>
 
                   <Menu className={styles.presetsMenu}>
@@ -65,7 +66,7 @@ class AddIndexerItem extends Component {
                       className={styles.presetsMenuButton}
                       size={sizes.SMALL}
                     >
-                      Presets
+                      {translate('Presets')}
                     </Button>
 
                     <MenuContent>
@@ -90,7 +91,7 @@ class AddIndexerItem extends Component {
               to={infoLink}
               size={sizes.SMALL}
             >
-              More info
+              {translate('MoreInfo')}
             </Button>
           </div>
         </div>

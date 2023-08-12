@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using Dapper;
 using FluentMigrator;
 using Newtonsoft.Json.Linq;
 using NzbDrone.Common.Serializer;
@@ -17,10 +19,11 @@ namespace NzbDrone.Core.Datastore.Migration
 
         private void ChangeEmailAddressType(IDbConnection conn, IDbTransaction tran)
         {
+            var updatedEmails = new List<object>();
             using (var getEmailCmd = conn.CreateCommand())
             {
                 getEmailCmd.Transaction = tran;
-                getEmailCmd.CommandText = "SELECT Id, Settings FROM Notifications WHERE Implementation = 'Email'";
+                getEmailCmd.CommandText = "SELECT \"Id\", \"Settings\" FROM \"Notifications\" WHERE \"Implementation\" = 'Email'";
 
                 using (var reader = getEmailCmd.ExecuteReader())
                 {
@@ -32,18 +35,17 @@ namespace NzbDrone.Core.Datastore.Migration
                         // "To" was changed from string to array
                         settings["to"] = new JArray(settings["to"].ToObject<string>().Split(',').Select(v => v.Trim()).ToArray());
 
-                        using (var updateCmd = conn.CreateCommand())
+                        updatedEmails.Add(new
                         {
-                            updateCmd.Transaction = tran;
-                            updateCmd.CommandText = "UPDATE Notifications SET Settings = ? WHERE Id = ?";
-                            updateCmd.AddParameter(settings.ToJson());
-                            updateCmd.AddParameter(id);
-
-                            updateCmd.ExecuteNonQuery();
-                        }
+                            Settings = settings.ToJson(),
+                            Id = id
+                        });
                     }
                 }
             }
+
+            var updateSql = $"UPDATE \"Notifications\" SET \"Settings\" = @Settings WHERE \"Id\" = @Id";
+            conn.Execute(updateSql, updatedEmails, transaction: tran);
         }
     }
 }

@@ -14,6 +14,7 @@ import TableOptionsModalWrapper from 'Components/Table/TableOptions/TableOptions
 import TablePager from 'Components/Table/TablePager';
 import { align, icons, kinds } from 'Helpers/Props';
 import hasDifferentItems from 'Utilities/Object/hasDifferentItems';
+import translate from 'Utilities/String/translate';
 import HistoryRowConnector from './HistoryRowConnector';
 
 class History extends Component {
@@ -65,11 +66,11 @@ class History extends Component {
     const hasError = error || episodesError;
 
     return (
-      <PageContent title="History">
+      <PageContent title={translate('History')}>
         <PageToolbar>
           <PageToolbarSection>
             <PageToolbarButton
-              label="Refresh"
+              label={translate('Refresh')}
               iconName={icons.REFRESH}
               isSpinning={isFetching}
               onPress={onFirstPagePress}
@@ -82,7 +83,7 @@ class History extends Component {
               columns={columns}
             >
               <PageToolbarButton
-                label="Options"
+                label={translate('Options')}
                 iconName={icons.TABLE}
               />
             </TableOptionsModalWrapper>
@@ -105,7 +106,9 @@ class History extends Component {
 
           {
             !isFetchingAny && hasError &&
-              <Alert kind={kinds.DANGER}>Unable to load history</Alert>
+              <Alert kind={kinds.DANGER}>
+                {translate('HistoryLoadError')}
+              </Alert>
           }
 
           {
@@ -114,7 +117,7 @@ class History extends Component {
 
             isPopulated && !hasError && !items.length &&
               <Alert kind={kinds.INFO}>
-                No history found
+                {translate('NoHistoryFound')}
               </Alert>
           }
 

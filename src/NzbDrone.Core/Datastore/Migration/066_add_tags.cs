@@ -1,4 +1,4 @@
-﻿using FluentMigrator;
+using FluentMigrator;
 using NzbDrone.Core.Datastore.Migration.Framework;
 
 namespace NzbDrone.Core.Datastore.Migration
@@ -17,8 +17,8 @@ namespace NzbDrone.Core.Datastore.Migration
             Alter.Table("Notifications")
                  .AddColumn("Tags").AsString().Nullable();
 
-            Execute.Sql("UPDATE Series SET Tags = '[]'");
-            Execute.Sql("UPDATE Notifications SET Tags = '[]'");
+            Update.Table("Series").Set(new { Tags = "[]" }).AllRows();
+            Update.Table("Notifications").Set(new { Tags = "[]" }).AllRows();
         }
     }
 }

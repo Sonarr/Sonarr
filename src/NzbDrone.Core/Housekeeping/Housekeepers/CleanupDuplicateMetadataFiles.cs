@@ -22,37 +22,37 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
         private void DeleteDuplicateSeriesMetadata()
         {
             using var mapper = _database.OpenConnection();
-            mapper.Execute(@"DELETE FROM MetadataFiles
-                             WHERE Id IN (
-                                 SELECT Id FROM MetadataFiles
-                                 WHERE Type = 1
-                                 GROUP BY SeriesId, Consumer
-                                 HAVING COUNT(SeriesId) > 1
-                             )");
+            mapper.Execute(@"DELETE FROM ""MetadataFiles""
+                                     WHERE ""Id"" IN (
+                                         SELECT MIN(""Id"") FROM ""MetadataFiles""
+                                         WHERE ""Type"" = 1
+                                         GROUP BY ""SeriesId"", ""Consumer""
+                                         HAVING COUNT(""SeriesId"") > 1
+                                     )");
         }
 
         private void DeleteDuplicateEpisodeMetadata()
         {
             using var mapper = _database.OpenConnection();
-            mapper.Execute(@"DELETE FROM MetadataFiles
-                             WHERE Id IN (
-                                 SELECT Id FROM MetadataFiles
-                                 WHERE Type = 2
-                                 GROUP BY EpisodeFileId, Consumer
-                                 HAVING COUNT(EpisodeFileId) > 1
-                             )");
+            mapper.Execute(@"DELETE FROM ""MetadataFiles""
+                                     WHERE ""Id"" IN (
+                                         SELECT MIN(""Id"") FROM ""MetadataFiles""
+                                         WHERE ""Type"" = 2
+                                         GROUP BY ""EpisodeFileId"", ""Consumer""
+                                         HAVING COUNT(""EpisodeFileId"") > 1
+                                     )");
         }
 
         private void DeleteDuplicateEpisodeImages()
         {
             using var mapper = _database.OpenConnection();
-            mapper.Execute(@"DELETE FROM MetadataFiles
-                             WHERE Id IN (
-                                 SELECT Id FROM MetadataFiles
-                                 WHERE Type = 5
-                                 GROUP BY EpisodeFileId, Consumer
-                                 HAVING COUNT(EpisodeFileId) > 1
-                             )");
+            mapper.Execute(@"DELETE FROM ""MetadataFiles""
+                                     WHERE ""Id"" IN (
+                                         SELECT MIN(""Id"") FROM ""MetadataFiles""
+                                         WHERE ""Type"" = 5
+                                         GROUP BY ""EpisodeFileId"", ""Consumer""
+                                         HAVING COUNT(""EpisodeFileId"") > 1
+                                     )");
         }
     }
 }

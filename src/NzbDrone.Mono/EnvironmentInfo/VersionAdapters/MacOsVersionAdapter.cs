@@ -1,4 +1,3 @@
-using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using NLog;
@@ -33,7 +32,7 @@ namespace NzbDrone.Mono.EnvironmentInfo.VersionAdapters
                 return null;
             }
 
-            var allFiles = _diskProvider.GetFiles(PLIST_DIR, SearchOption.TopDirectoryOnly);
+            var allFiles = _diskProvider.GetFiles(PLIST_DIR, false);
 
             var versionFile = allFiles.SingleOrDefault(c =>
                 c.EndsWith("/SystemVersion.plist") ||

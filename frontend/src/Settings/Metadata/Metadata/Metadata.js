@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import Card from 'Components/Card';
 import Label from 'Components/Label';
 import { kinds } from 'Helpers/Props';
+import translate from 'Utilities/String/translate';
 import EditMetadataModalConnector from './EditMetadataModalConnector';
 import styles from './Metadata.css';
 
@@ -66,13 +67,13 @@ class Metadata extends Component {
           {
             enable ?
               <Label kind={kinds.SUCCESS}>
-                Enabled
+                {translate('Enabled')}
               </Label> :
               <Label
                 kind={kinds.DISABLED}
                 outline={true}
               >
-                Disabled
+                {translate('Disabled')}
               </Label>
           }
         </div>
@@ -81,7 +82,7 @@ class Metadata extends Component {
           enable && !!metadataFields.length &&
             <div>
               <div className={styles.section}>
-                Metadata
+                {translate('Metadata')}
               </div>
 
               {
@@ -107,7 +108,7 @@ class Metadata extends Component {
           enable && !!imageFields.length &&
             <div>
               <div className={styles.section}>
-                Images
+                {translate('Images')}
               </div>
 
               {

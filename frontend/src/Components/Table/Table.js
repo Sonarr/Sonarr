@@ -107,7 +107,7 @@ function Table(props) {
                   {...getTableHeaderCellProps(otherProps)}
                   {...column}
                 >
-                  {column.label}
+                  {typeof column.label === 'function' ? column.label() : column.label}
                 </TableHeaderCell>
               );
             })

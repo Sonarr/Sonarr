@@ -1,8 +1,10 @@
 import React from 'react';
 
+type PropertyFunction<T> = () => T;
+
 interface Column {
   name: string;
-  label: string | React.ReactNode;
+  label: string | PropertyFunction<string> | React.ReactNode;
   columnLabel?: string;
   isSortable?: boolean;
   isVisible: boolean;

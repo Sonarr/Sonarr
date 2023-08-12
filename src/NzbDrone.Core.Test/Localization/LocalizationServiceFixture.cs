@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Test.Localization
         [Test]
         public void should_get_string_in_dictionary_if_lang_exists_and_string_exists()
         {
-            var localizedString = Subject.GetLocalizedString("UI Language");
+            var localizedString = Subject.GetLocalizedString("UiLanguage");
 
             localizedString.Should().Be("UI Language");
         }
@@ -32,7 +32,7 @@ namespace NzbDrone.Core.Test.Localization
         [Test]
         public void should_get_string_in_default_language_dictionary_if_no_lang_country_code_exists_and_string_exists()
         {
-            var localizedString = Subject.GetLocalizedString("UI Language", "fr_fr");
+            var localizedString = Subject.GetLocalizedString("UiLanguage", "fr_fr");
 
             localizedString.Should().Be("UI Langue");
 
@@ -42,7 +42,7 @@ namespace NzbDrone.Core.Test.Localization
         [Test]
         public void should_get_string_in_default_dictionary_if_no_lang_exists_and_string_exists()
         {
-            var localizedString = Subject.GetLocalizedString("UI Language", "an");
+            var localizedString = Subject.GetLocalizedString("UiLanguage", "an");
 
             localizedString.Should().Be("UI Language");
 
@@ -52,7 +52,7 @@ namespace NzbDrone.Core.Test.Localization
         [Test]
         public void should_get_string_in_default_dictionary_if_lang_empty_and_string_exists()
         {
-            var localizedString = Subject.GetLocalizedString("UI Language", "");
+            var localizedString = Subject.GetLocalizedString("UiLanguage", "");
 
             localizedString.Should().Be("UI Language");
         }

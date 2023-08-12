@@ -44,7 +44,7 @@ class Updates extends Component {
     const hasUpdateToInstall = hasUpdates && _.some(items, { installable: true, latest: true });
     const noUpdateToInstall = hasUpdates && !hasUpdateToInstall;
 
-    const externalUpdaterPrefix = translate('UnableToUpdateSonarrDirectly');
+    const externalUpdaterPrefix = translate('UpdateSonarrDirectlyLoadError');
     const externalUpdaterMessages = {
       external: translate('ExternalUpdater'),
       apt: translate('AptUpdater'),

@@ -6,8 +6,10 @@ using NUnit.Framework;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.HealthCheck.Checks;
 using NzbDrone.Core.Localization;
+using NzbDrone.Core.RootFolders;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.HealthCheck.Checks
 {
@@ -22,7 +24,7 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
                   .Returns("Some Warning Message");
         }
 
-        private void GivenMissingRootFolder()
+        private void GivenMissingRootFolder(string rootFolderPath)
         {
             var series = Builder<Series>.CreateListOfSize(1)
                                         .Build()
@@ -32,9 +34,9 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
                   .Setup(s => s.GetAllSeriesPaths())
                   .Returns(series.ToDictionary(s => s.Id, s => s.Path));
 
-            Mocker.GetMock<IDiskProvider>()
-                  .Setup(s => s.GetParentFolder(series.First().Path))
-                  .Returns(@"C:\TV");
+            Mocker.GetMock<IRootFolderService>()
+                  .Setup(s => s.GetBestRootFolderPath(It.IsAny<string>()))
+                  .Returns(rootFolderPath);
 
             Mocker.GetMock<IDiskProvider>()
                   .Setup(s => s.FolderExists(It.IsAny<string>()))
@@ -54,7 +56,25 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
         [Test]
         public void should_return_error_if_series_parent_is_missing()
         {
-            GivenMissingRootFolder();
+            GivenMissingRootFolder(@"C:\TV".AsOsAgnostic());
+
+            Subject.Check().ShouldBeError();
+        }
+
+        [Test]
+        public void should_return_error_if_series_path_is_for_posix_os()
+        {
+            WindowsOnly();
+            GivenMissingRootFolder("/mnt/tv");
+
+            Subject.Check().ShouldBeError();
+        }
+
+        [Test]
+        public void should_return_error_if_series_path_is_for_windows()
+        {
+            PosixOnly();
+            GivenMissingRootFolder(@"C:\TV");
 
             Subject.Check().ShouldBeError();
         }

@@ -15,7 +15,7 @@ import MediaInfoConnector from 'EpisodeFile/MediaInfoConnector';
 import * as mediaInfoTypes from 'EpisodeFile/mediaInfoTypes';
 import { tooltipPositions } from 'Helpers/Props';
 import formatBytes from 'Utilities/Number/formatBytes';
-import formatPreferredWordScore from 'Utilities/Number/formatPreferredWordScore';
+import formatCustomFormatScore from 'Utilities/Number/formatCustomFormatScore';
 import formatRuntime from 'Utilities/Number/formatRuntime';
 import styles from './EpisodeRow.css';
 
@@ -204,7 +204,7 @@ class EpisodeRow extends Component {
                   className={styles.customFormatScore}
                 >
                   <Tooltip
-                    anchor={formatPreferredWordScore(
+                    anchor={formatCustomFormatScore(
                       customFormatScore,
                       customFormats.length
                     )}

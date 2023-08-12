@@ -116,7 +116,7 @@ namespace NzbDrone.Core.ThingiProvider.Status
 
                 if (inStartupGracePeriod && minimumBackOff == TimeSpan.Zero && status.DisabledTill.HasValue)
                 {
-                    var maximumDisabledTill = now + TimeSpan.FromSeconds(EscalationBackOff.Periods[1]);
+                    var maximumDisabledTill = now + TimeSpan.FromSeconds(EscalationBackOff.Periods[2]);
                     if (maximumDisabledTill < status.DisabledTill)
                     {
                         status.DisabledTill = maximumDisabledTill;

@@ -4,6 +4,13 @@ namespace NzbDrone.Core.Indexers
 {
     public class IndexerDefinition : ProviderDefinition
     {
+        public const int DefaultPriority = 25;
+
+        public IndexerDefinition()
+        {
+            Priority = DefaultPriority;
+        }
+
         public bool EnableRss { get; set; }
         public bool EnableAutomaticSearch { get; set; }
         public bool EnableInteractiveSearch { get; set; }
@@ -11,7 +18,7 @@ namespace NzbDrone.Core.Indexers
         public DownloadProtocol Protocol { get; set; }
         public bool SupportsRss { get; set; }
         public bool SupportsSearch { get; set; }
-        public int Priority { get; set; } = 25;
+        public int Priority { get; set; }
         public int SeasonSearchMaximumSingleEpisodeAge { get; set; }
 
         public override bool Enable => EnableRss || EnableAutomaticSearch || EnableInteractiveSearch;

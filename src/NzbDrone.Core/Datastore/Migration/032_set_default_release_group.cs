@@ -1,4 +1,5 @@
-﻿using FluentMigrator;
+using System;
+using FluentMigrator;
 using NzbDrone.Core.Datastore.Migration.Framework;
 
 namespace NzbDrone.Core.Datastore.Migration
@@ -8,7 +9,7 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
-            Execute.Sql("UPDATE EpisodeFiles SET ReleaseGroup = 'DRONE' WHERE ReleaseGroup IS NULL");
+            Update.Table("EpisodeFiles").Set(new { ReleaseGroup = "DRONE" }).Where(new { ReleaseGroup = DBNull.Value });
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Dapper;
 using NLog;
 using NzbDrone.Common.EnvironmentInfo;
@@ -25,10 +25,10 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
             }
 
             using var mapper = _database.OpenConnection();
-            mapper.Execute(@"UPDATE ScheduledTasks
-                             SET LastExecution = @time
-                             WHERE LastExecution > @time",
-                new { time = DateTime.UtcNow });
+            mapper.Execute(@"UPDATE ""ScheduledTasks""
+                                 SET ""LastExecution"" = @time
+                                 WHERE ""LastExecution"" > @time",
+                           new { time = DateTime.UtcNow });
         }
     }
 }

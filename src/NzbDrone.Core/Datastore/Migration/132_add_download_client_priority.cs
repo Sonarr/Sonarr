@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
+using Dapper;
 using FluentMigrator;
 using NzbDrone.Core.Datastore.Migration.Framework;
 
@@ -22,34 +24,43 @@ namespace NzbDrone.Core.Datastore.Migration
 
         private void InitPriorityForBackwardCompatibility(IDbConnection conn, IDbTransaction tran)
         {
-            using (var cmd = conn.CreateCommand())
+            var downloadClients = conn.Query<DownloadClients036>($"SELECT \"Id\", \"Implementation\" FROM \"DownloadClients\" WHERE \"Enable\"");
+
+            if (!downloadClients.Any())
             {
-                cmd.Transaction = tran;
-                cmd.CommandText = "SELECT Id, Implementation FROM DownloadClients WHERE Enable = 1";
+                return;
+            }
 
-                using (var reader = cmd.ExecuteReader())
+            var nextUsenet = 1;
+            var nextTorrent = 1;
+
+            foreach (var downloadClient in downloadClients)
+            {
+                var isUsenet = _usenetImplementations.Contains(downloadClient.Implementation);
+                using (var updateCmd = conn.CreateCommand())
                 {
-                    var nextUsenet = 1;
-                    var nextTorrent = 1;
-                    while (reader.Read())
+                    updateCmd.Transaction = tran;
+                    if (conn.GetType().FullName == "Npgsql.NpgsqlConnection")
                     {
-                        var id = reader.GetInt32(0);
-                        var implName = reader.GetString(1);
-
-                        var isUsenet = _usenetImplementations.Contains(implName);
-
-                        using (var updateCmd = conn.CreateCommand())
-                        {
-                            updateCmd.Transaction = tran;
-                            updateCmd.CommandText = "UPDATE DownloadClients SET Priority = ? WHERE Id = ?";
-                            updateCmd.AddParameter(isUsenet ? nextUsenet++ : nextTorrent++);
-                            updateCmd.AddParameter(id);
-
-                            updateCmd.ExecuteNonQuery();
-                        }
+                        updateCmd.CommandText = "UPDATE \"DownloadClients\" SET \"Priority\" = $1 WHERE \"Id\" = $2";
                     }
+                    else
+                    {
+                        updateCmd.CommandText = "UPDATE \"DownloadClients\" SET \"Priority\" = ? WHERE \"Id\" = ?";
+                    }
+
+                    updateCmd.AddParameter(isUsenet ? nextUsenet++ : nextTorrent++);
+                    updateCmd.AddParameter(downloadClient.Id);
+
+                    updateCmd.ExecuteNonQuery();
                 }
             }
         }
+    }
+
+    public class DownloadClients036
+    {
+        public int Id { get; set; }
+        public string Implementation { get; set; }
     }
 }

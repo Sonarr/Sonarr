@@ -4,31 +4,31 @@ import React from 'react';
 export default function TagInUse(props) {
   const {
     label,
-    count,
-    shouldPluralize = true
+    labelPlural,
+    count
   } = props;
 
   if (count === 0) {
     return null;
   }
 
-  if (count > 1 && shouldPluralize) {
+  if (count > 1 && labelPlural ) {
     return (
       <div>
-        {count} {label}s
+        {count} {labelPlural.toLowerCase()}
       </div>
     );
   }
 
   return (
     <div>
-      {count} {label}
+      {count} {label.toLowerCase()}
     </div>
   );
 }
 
 TagInUse.propTypes = {
   label: PropTypes.string.isRequired,
-  count: PropTypes.number.isRequired,
-  shouldPluralize: PropTypes.bool
+  labelPlural: PropTypes.string,
+  count: PropTypes.number.isRequired
 };

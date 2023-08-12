@@ -16,7 +16,7 @@ import EpisodeNumber from 'Episode/EpisodeNumber';
 import EpisodeQuality from 'Episode/EpisodeQuality';
 import SeasonEpisodeNumber from 'Episode/SeasonEpisodeNumber';
 import { icons, kinds, tooltipPositions } from 'Helpers/Props';
-import formatPreferredWordScore from 'Utilities/Number/formatPreferredWordScore';
+import formatCustomFormatScore from 'Utilities/Number/formatCustomFormatScore';
 import styles from './SeriesHistoryRow.css';
 
 function getTitle(eventType) {
@@ -146,7 +146,7 @@ class SeriesHistoryRow extends Component {
         <TableRowCell className={styles.customFormatScore}>
           <Tooltip
             anchor={
-              formatPreferredWordScore(customFormatScore, customFormats.length)
+              formatCustomFormatScore(customFormatScore, customFormats.length)
             }
             tooltip={<EpisodeFormats formats={customFormats} />}
             position={tooltipPositions.BOTTOM}
@@ -182,7 +182,7 @@ SeriesHistoryRow.propTypes = {
   id: PropTypes.number.isRequired,
   eventType: PropTypes.string.isRequired,
   sourceTitle: PropTypes.string.isRequired,
-  languages: PropTypes.object.isRequired,
+  languages: PropTypes.arrayOf(PropTypes.object),
   quality: PropTypes.object.isRequired,
   qualityCutoffNotMet: PropTypes.bool.isRequired,
   customFormats: PropTypes.arrayOf(PropTypes.object),

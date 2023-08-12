@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using FluentValidation.Results;
 using NLog;
+using NzbDrone.Common.Disk;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Tv;
 
@@ -32,7 +35,23 @@ namespace NzbDrone.Core.Notifications.Emby
 
         public void Update(MediaBrowserSettings settings, Series series, string updateType)
         {
-            _proxy.Update(settings, series.Path, updateType);
+            HashSet<string> paths;
+
+            paths = _proxy.GetPaths(settings, series);
+
+            var mappedPath = new OsPath(series.Path);
+
+            if (settings.MapTo.IsNotNullOrWhiteSpace())
+            {
+                mappedPath = new OsPath(settings.MapTo) + (mappedPath - new OsPath(settings.MapFrom));
+            }
+
+            paths.Add(mappedPath.ToString());
+
+            foreach (var path in paths)
+            {
+                _proxy.Update(settings, path, updateType);
+            }
         }
 
         public ValidationFailure Test(MediaBrowserSettings settings)

@@ -8,7 +8,8 @@ import Link from 'Components/Link/Link';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import Portal from 'Components/Portal';
 import { icons, kinds } from 'Helpers/Props';
-import getUniqueElememtId from 'Utilities/getUniqueElementId';
+import getUniqueElementId from 'Utilities/getUniqueElementId';
+import translate from 'Utilities/String/translate';
 import ImportSeriesSearchResultConnector from './ImportSeriesSearchResultConnector';
 import ImportSeriesTitle from './ImportSeriesTitle';
 import styles from './ImportSeriesSelectSeries.css';
@@ -23,8 +24,8 @@ class ImportSeriesSelectSeries extends Component {
 
     this._seriesLookupTimeout = null;
     this._scheduleUpdate = null;
-    this._buttonId = getUniqueElememtId();
-    this._contentId = getUniqueElememtId();
+    this._buttonId = getUniqueElementId();
+    this._contentId = getUniqueElementId();
 
     this.state = {
       term: props.id,
@@ -174,7 +175,7 @@ class ImportSeriesSelectSeries extends Component {
                         kind={kinds.WARNING}
                       />
 
-                      No match found!
+                      {translate('NoMatchFound')}
                     </div> :
                     null
                 }
@@ -189,7 +190,7 @@ class ImportSeriesSelectSeries extends Component {
                         kind={kinds.WARNING}
                       />
 
-                      Search failed, please try again later.
+                      {translate('SearchFailedError')}
                     </div> :
                     null
                 }

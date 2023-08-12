@@ -32,7 +32,7 @@ class FilterMenuContent extends Component {
                 selectedFilterKey={selectedFilterKey}
                 onPress={onFilterSelect}
               >
-                {filter.label}
+                {typeof filter.label === 'function' ? filter.label() : filter.label}
               </FilterMenuItem>
             );
           })

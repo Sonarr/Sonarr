@@ -11,8 +11,8 @@ namespace NzbDrone.Core.Datastore.Migration
         {
             Alter.Table("NamingConfig").AddColumn("SeasonFolderFormat").AsString().Nullable();
             Execute.WithConnection(ConvertConfig);
-            Execute.Sql("DELETE FROM Config WHERE [Key] = 'seasonfolderformat'");
-            Execute.Sql("DELETE FROM Config WHERE [Key] = 'useseasonfolder'");
+            Execute.Sql("DELETE FROM \"Config\" WHERE \"Key\" = 'seasonfolderformat'");
+            Execute.Sql("DELETE FROM \"Config\" WHERE \"Key\" = 'useseasonfolder'");
         }
 
         private void ConvertConfig(IDbConnection conn, IDbTransaction tran)
@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Datastore.Migration
             using (var namingConfigCmd = conn.CreateCommand())
             {
                 namingConfigCmd.Transaction = tran;
-                namingConfigCmd.CommandText = @"SELECT [Value] FROM Config WHERE [Key] = 'seasonfolderformat'";
+                namingConfigCmd.CommandText = "SELECT \"Value\" FROM \"Config\" WHERE \"Key\" = 'seasonfolderformat'";
                 var seasonFormat = "Season {season}";
 
                 using (var namingConfigReader = namingConfigCmd.ExecuteReader())
@@ -41,8 +41,8 @@ namespace NzbDrone.Core.Datastore.Migration
 
                 using (var updateCmd = conn.CreateCommand())
                 {
-                    var text = string.Format("UPDATE NamingConfig " +
-                                             "SET SeasonFolderFormat = '{0}'",
+                    var text = string.Format("UPDATE \"NamingConfig\" " +
+                                             "SET \"SeasonFolderFormat\" = '{0}'",
                                              seasonFormat);
 
                     updateCmd.Transaction = tran;

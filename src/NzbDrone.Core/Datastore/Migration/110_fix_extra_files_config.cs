@@ -1,4 +1,4 @@
-﻿using System.Data;
+using System.Data;
 using FluentMigrator;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Datastore.Migration.Framework;
@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Datastore.Migration
             using (var cmd = conn.CreateCommand())
             {
                 cmd.Transaction = tran;
-                cmd.CommandText = "SELECT Value FROM Config WHERE Key = 'extrafileextensions'";
+                cmd.CommandText = "SELECT \"Value\" FROM \"Config\" WHERE \"Key\" = 'extrafileextensions'";
 
                 extraFileExtensions = (string)cmd.ExecuteScalar();
             }
@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Datastore.Migration
             using (var cmd = conn.CreateCommand())
             {
                 cmd.Transaction = tran;
-                cmd.CommandText = "SELECT Value FROM Config WHERE Key = 'importextrafiles'";
+                cmd.CommandText = "SELECT \"Value\" FROM \"Config\" WHERE \"Key\" = 'importextrafiles'";
 
                 importExtraFiles = (string)cmd.ExecuteScalar();
             }
@@ -39,7 +39,7 @@ namespace NzbDrone.Core.Datastore.Migration
                 using (var insertCmd = conn.CreateCommand())
                 {
                     insertCmd.Transaction = tran;
-                    insertCmd.CommandText = "UPDATE Config SET Value = 'True' WHERE Key = 'importextrafiles'";
+                    insertCmd.CommandText = "UPDATE \"Config\" SET \"Value\" = 'True' WHERE \"Key\" = 'importextrafiles'";
                     insertCmd.ExecuteNonQuery();
                 }
             }
@@ -48,7 +48,7 @@ namespace NzbDrone.Core.Datastore.Migration
                 using (var insertCmd = conn.CreateCommand())
                 {
                     insertCmd.Transaction = tran;
-                    insertCmd.CommandText = "UPDATE Config SET Value = 'srt' WHERE Key = 'extrafileextensions'";
+                    insertCmd.CommandText = "UPDATE \"Config\" SET \"Value\" = 'srt' WHERE \"Key\" = 'extrafileextensions'";
                     insertCmd.ExecuteNonQuery();
                 }
             }

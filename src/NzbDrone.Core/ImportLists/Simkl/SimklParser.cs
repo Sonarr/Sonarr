@@ -43,7 +43,7 @@ namespace NzbDrone.Core.ImportLists.Simkl
                 {
                     var tentativeTvdbId = int.TryParse(show.Show.Ids.Tvdb, out var tvdbId) ? tvdbId : 0;
 
-                    if (tentativeTvdbId > 0 && show.AnimeType == SimklAnimeType.Tv)
+                    if (tentativeTvdbId > 0 && (show.AnimeType is SimklAnimeType.Tv or SimklAnimeType.Ona or SimklAnimeType.Ova or SimklAnimeType.Special))
                     {
                         series.AddIfNotNull(new ImportListItemInfo()
                         {
@@ -55,7 +55,7 @@ namespace NzbDrone.Core.ImportLists.Simkl
                     }
                     else
                     {
-                        Logger.Warn("Skipping info grabbing for '{0}' because it is a movie or it is not the first season of the show", show.Show.Title);
+                        Logger.Warn("Skipping info grabbing for '{0}' because it is an unsupported content type.", show.Show.Title);
                     }
                 }
             }

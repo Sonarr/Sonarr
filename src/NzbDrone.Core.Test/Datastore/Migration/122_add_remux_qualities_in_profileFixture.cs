@@ -23,7 +23,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var profiles = db.Query<Profile122>("SELECT Items FROM Profiles LIMIT 1");
+            var profiles = db.Query<Profile122>("SELECT \"Items\" FROM \"Profiles\" LIMIT 1");
 
             var items = profiles.First().Items;
             items.Should().HaveCount(4);
@@ -46,7 +46,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                                                    });
             });
 
-            var profiles = db.Query<Profile122>("SELECT Items FROM Profiles LIMIT 1");
+            var profiles = db.Query<Profile122>("SELECT \"Items\" FROM \"Profiles\" LIMIT 1");
 
             var items = profiles.First().Items;
             items.Should().HaveCount(4);

@@ -66,7 +66,7 @@ class ImportListSettings extends Component {
     } = this.state;
 
     return (
-      <PageContent title="Import List Settings">
+      <PageContent title={translate('ImportListSettings')}>
         <SettingsToolbarConnector
           isSaving={isSaving}
           hasPendingChanges={hasPendingChanges}
@@ -75,7 +75,7 @@ class ImportListSettings extends Component {
               <PageToolbarSeparator />
 
               <PageToolbarButton
-                label="Test All Lists"
+                label={translate('TestAllLists')}
                 iconName={icons.TEST}
                 isSpinning={isTestingAll}
                 onPress={dispatchTestAllImportLists}

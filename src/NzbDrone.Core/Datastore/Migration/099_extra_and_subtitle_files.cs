@@ -1,5 +1,7 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 using System.Data;
+using Dapper;
 using FluentMigrator;
 using NzbDrone.Core.Datastore.Migration.Framework;
 
@@ -34,7 +36,7 @@ namespace NzbDrone.Core.Datastore.Migration
                  .AddColumn("Extension").AsString().Nullable();
 
             // Remove Metadata files that don't have an extension
-            Execute.Sql("DELETE FROM MetadataFiles WHERE RelativePath NOT LIKE '%.%'");
+            Execute.Sql("DELETE FROM \"MetadataFiles\" WHERE \"RelativePath\" NOT LIKE '%.%'");
 
             // Set Extension using the extension from RelativePath
             Execute.WithConnection(SetMetadataFileExtension);
@@ -44,10 +46,12 @@ namespace NzbDrone.Core.Datastore.Migration
 
         private void SetMetadataFileExtension(IDbConnection conn, IDbTransaction tran)
         {
+            var updatedMetadataFiles = new List<object>();
+
             using (var cmd = conn.CreateCommand())
             {
                 cmd.Transaction = tran;
-                cmd.CommandText = "SELECT Id, RelativePath FROM MetadataFiles";
+                cmd.CommandText = "SELECT \"Id\", \"RelativePath\" FROM \"MetadataFiles\"";
 
                 using (var reader = cmd.ExecuteReader())
                 {
@@ -57,18 +61,17 @@ namespace NzbDrone.Core.Datastore.Migration
                         var relativePath = reader.GetString(1);
                         var extension = relativePath.Substring(relativePath.LastIndexOf(".", StringComparison.InvariantCultureIgnoreCase));
 
-                        using (var updateCmd = conn.CreateCommand())
+                        updatedMetadataFiles.Add(new
                         {
-                            updateCmd.Transaction = tran;
-                            updateCmd.CommandText = "UPDATE MetadataFiles SET Extension = ? WHERE Id = ?";
-                            updateCmd.AddParameter(extension);
-                            updateCmd.AddParameter(id);
-
-                            updateCmd.ExecuteNonQuery();
-                        }
+                            Id = id,
+                            Extension = extension
+                        });
                     }
                 }
             }
+
+            var updateSql = $"UPDATE \"MetadataFiles\" SET \"Extension\" = @Extension WHERE \"Id\" = @Id";
+            conn.Execute(updateSql, updatedMetadataFiles, transaction: tran);
         }
     }
 

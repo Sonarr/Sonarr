@@ -2,6 +2,7 @@ import { createAction } from 'redux-actions';
 import { filterTypes, sortDirections } from 'Helpers/Props';
 import { createThunk, handleThunks } from 'Store/thunks';
 import serverSideCollectionHandlers from 'Utilities/serverSideCollectionHandlers';
+import translate from 'Utilities/String/translate';
 import createBatchToggleEpisodeMonitoredHandler from './Creators/createBatchToggleEpisodeMonitoredHandler';
 import createHandleActions from './Creators/createHandleActions';
 import createServerSideCollectionHandlers from './Creators/createServerSideCollectionHandlers';
@@ -29,34 +30,34 @@ export const defaultState = {
     columns: [
       {
         name: 'series.sortTitle',
-        label: 'Series Title',
+        label: () => translate('SeriesTitle'),
         isSortable: true,
         isVisible: true
       },
       {
         name: 'episode',
-        label: 'Episode',
+        label: () => translate('Episode'),
         isVisible: true
       },
       {
         name: 'episodes.title',
-        label: 'Episode Title',
+        label: () => translate('EpisodeTitle'),
         isVisible: true
       },
       {
         name: 'episodes.airDateUtc',
-        label: 'Air Date',
+        label: () => translate('AirDate'),
         isSortable: true,
         isVisible: true
       },
       {
         name: 'status',
-        label: 'Status',
+        label: () => translate('Status'),
         isVisible: true
       },
       {
         name: 'actions',
-        columnLabel: 'Actions',
+        columnLabel: () => translate('Actions'),
         isVisible: true,
         isModifiable: false
       }
@@ -67,7 +68,7 @@ export const defaultState = {
     filters: [
       {
         key: 'monitored',
-        label: 'Monitored',
+        label: () => translate('Monitored'),
         filters: [
           {
             key: 'monitored',
@@ -78,7 +79,7 @@ export const defaultState = {
       },
       {
         key: 'unmonitored',
-        label: 'Unmonitored',
+        label: () => translate('Unmonitored'),
         filters: [
           {
             key: 'monitored',
@@ -101,39 +102,39 @@ export const defaultState = {
     columns: [
       {
         name: 'series.sortTitle',
-        label: 'Series Title',
+        label: () => translate('SeriesTitle'),
         isSortable: true,
         isVisible: true
       },
       {
         name: 'episode',
-        label: 'Episode',
+        label: () => translate('Episode'),
         isVisible: true
       },
       {
         name: 'episodes.title',
-        label: 'Episode Title',
+        label: () => translate('EpisodeTitle'),
         isVisible: true
       },
       {
         name: 'episodes.airDateUtc',
-        label: 'Air Date',
+        label: () => translate('AirDate'),
         isSortable: true,
         isVisible: true
       },
       {
         name: 'languages',
-        label: 'Languages',
+        label: () => translate('Languages'),
         isVisible: false
       },
       {
         name: 'status',
-        label: 'Status',
+        label: () => translate('Status'),
         isVisible: true
       },
       {
         name: 'actions',
-        columnLabel: 'Actions',
+        columnLabel: () => translate('Actions'),
         isVisible: true,
         isModifiable: false
       }
@@ -144,7 +145,7 @@ export const defaultState = {
     filters: [
       {
         key: 'monitored',
-        label: 'Monitored',
+        label: () => translate('Monitored'),
         filters: [
           {
             key: 'monitored',
@@ -155,7 +156,7 @@ export const defaultState = {
       },
       {
         key: 'unmonitored',
-        label: 'Unmonitored',
+        label: () => translate('Unmonitored'),
         filters: [
           {
             key: 'monitored',

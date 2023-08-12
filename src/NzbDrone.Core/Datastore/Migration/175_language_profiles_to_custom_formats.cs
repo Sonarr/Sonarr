@@ -18,9 +18,9 @@ namespace NzbDrone.Core.Datastore.Migration
                  .AddColumn("Languages").AsString().NotNullable().WithDefaultValue("[]");
 
             // Migrate Language to Languages in all tables
-            Execute.Sql("UPDATE EpisodeFiles SET Languages = '[' || Language || ']'");
-            Execute.Sql("UPDATE History SET Languages = '[' || Language || ']'");
-            Execute.Sql("UPDATE Blocklist SET Languages = '[' || Language || ']'");
+            Execute.Sql("UPDATE \"EpisodeFiles\" SET \"Languages\" = '[' || \"Language\" || ']'");
+            Execute.Sql("UPDATE \"History\" SET \"Languages\" = '[' || \"Language\" || ']'");
+            Execute.Sql("UPDATE \"Blocklist\" SET \"Languages\" = '[' || \"Language\" || ']'");
 
             // Migrate Language Profiles to CFs
 

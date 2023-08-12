@@ -73,6 +73,7 @@ namespace NzbDrone.Core.Indexers
         public abstract IList<ReleaseInfo> Fetch(DailyEpisodeSearchCriteria searchCriteria);
         public abstract IList<ReleaseInfo> Fetch(DailySeasonSearchCriteria searchCriteria);
         public abstract IList<ReleaseInfo> Fetch(AnimeEpisodeSearchCriteria searchCriteria);
+        public abstract IList<ReleaseInfo> Fetch(AnimeSeasonSearchCriteria searchCriteria);
         public abstract IList<ReleaseInfo> Fetch(SpecialEpisodeSearchCriteria searchCriteria);
         public abstract HttpRequest GetDownloadRequest(string link);
 

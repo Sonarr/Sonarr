@@ -194,8 +194,7 @@ namespace NzbDrone.Core.MediaFiles
         {
             _logger.Debug("Scanning '{0}' for video files", path);
 
-            var searchOption = allDirectories ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
-            var filesOnDisk = _diskProvider.GetFiles(path, searchOption).ToList();
+            var filesOnDisk = _diskProvider.GetFiles(path, allDirectories).ToList();
 
             var mediaFileList = filesOnDisk.Where(file => MediaFileExtensions.Extensions.Contains(Path.GetExtension(file)))
                                            .ToList();
@@ -210,8 +209,7 @@ namespace NzbDrone.Core.MediaFiles
         {
             _logger.Debug("Scanning '{0}' for non-video files", path);
 
-            var searchOption = allDirectories ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
-            var filesOnDisk = _diskProvider.GetFiles(path, searchOption).ToList();
+            var filesOnDisk = _diskProvider.GetFiles(path, allDirectories).ToList();
 
             var mediaFileList = filesOnDisk.Where(file => !MediaFileExtensions.Extensions.Contains(Path.GetExtension(file)))
                                            .ToList();

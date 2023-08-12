@@ -23,7 +23,7 @@ namespace NzbDrone.Core.Datastore.Migration
         {
             SqlMapper.AddTypeHandler(new EmbeddedDocumentConverter<ParsedEpisodeInfo161>());
             SqlMapper.AddTypeHandler(new EmbeddedDocumentConverter<ParsedEpisodeInfo162>());
-            var rows = conn.Query<ParsedEpisodeInfoData161>("SELECT Id, ParsedEpisodeInfo from PendingReleases");
+            var rows = conn.Query<ParsedEpisodeInfoData161>("SELECT \"Id\", \"ParsedEpisodeInfo\" from \"PendingReleases\"");
 
             var newRows = new List<ParsedEpisodeInfoData162>();
 
@@ -69,7 +69,7 @@ namespace NzbDrone.Core.Datastore.Migration
                 });
             }
 
-            var sql = $"UPDATE PendingReleases SET ParsedEpisodeInfo = @ParsedEpisodeInfo WHERE Id = @Id";
+            var sql = $"UPDATE \"PendingReleases\" SET \"ParsedEpisodeInfo\" = @ParsedEpisodeInfo WHERE \"Id\" = @Id";
 
             conn.Execute(sql, newRows, transaction: tran);
         }

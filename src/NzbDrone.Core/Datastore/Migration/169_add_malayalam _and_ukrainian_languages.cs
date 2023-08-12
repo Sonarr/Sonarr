@@ -63,7 +63,7 @@ namespace NzbDrone.Core.Datastore.Migration
                 using (var updateProfileCmd = _connection.CreateCommand())
                 {
                     updateProfileCmd.Transaction = _transaction;
-                    updateProfileCmd.CommandText = "UPDATE LanguageProfiles SET Languages = ? WHERE Id = ?";
+                    updateProfileCmd.CommandText = "UPDATE \"LanguageProfiles\" SET \"Languages\" = ? WHERE \"Id\" = ?";
                     updateProfileCmd.AddParameter(profile.Languages.ToJson());
                     updateProfileCmd.AddParameter(profile.Id);
 
@@ -100,7 +100,7 @@ namespace NzbDrone.Core.Datastore.Migration
             using (var getProfilesCmd = _connection.CreateCommand())
             {
                 getProfilesCmd.Transaction = _transaction;
-                getProfilesCmd.CommandText = @"SELECT Id, Name, Languages, UpgradeAllowed, Cutoff FROM LanguageProfiles";
+                getProfilesCmd.CommandText = "SELECT \"Id\", \"Name\", \"Languages\", \"UpgradeAllowed\", \"Cutoff\" FROM \"LanguageProfiles\"";
 
                 using (var profileReader = getProfilesCmd.ExecuteReader())
                 {

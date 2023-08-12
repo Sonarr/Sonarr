@@ -5,6 +5,7 @@ import Label from 'Components/Label';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import { kinds } from 'Helpers/Props';
 import formatShortTimeSpan from 'Utilities/Date/formatShortTimeSpan';
+import translate from 'Utilities/String/translate';
 import EditImportListModalConnector from './EditImportListModalConnector';
 import styles from './ImportList.css';
 
@@ -73,7 +74,7 @@ class ImportList extends Component {
           {
             enableAutomaticAdd &&
               <Label kind={kinds.SUCCESS}>
-                Automatic Add
+                {translate('AutomaticAdd')}
               </Label>
           }
 
@@ -81,7 +82,7 @@ class ImportList extends Component {
 
         <div className={styles.enabled}>
           <Label kind={kinds.INFO} title='List Refresh Interval'>
-            {`Refresh: ${formatShortTimeSpan(minRefreshInterval)}`}
+            {`${translate('Refresh')}: ${formatShortTimeSpan(minRefreshInterval)}`}
           </Label>
         </div>
 
@@ -95,9 +96,9 @@ class ImportList extends Component {
         <ConfirmModal
           isOpen={this.state.isDeleteImportListModalOpen}
           kind={kinds.DANGER}
-          title="Delete Import List"
-          message={`Are you sure you want to delete the list '${name}'?`}
-          confirmLabel="Delete"
+          title={translate('DeleteImportList')}
+          message={translate('DeleteImportListMessageText', { name })}
+          confirmLabel={translate('Delete')}
           onConfirm={this.onConfirmDeleteImportList}
           onCancel={this.onDeleteImportListModalClose}
         />

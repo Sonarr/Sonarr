@@ -1,4 +1,4 @@
-﻿using FluentMigrator;
+using FluentMigrator;
 using NzbDrone.Core.Datastore.Migration.Framework;
 
 namespace NzbDrone.Core.Datastore.Migration
@@ -10,7 +10,7 @@ namespace NzbDrone.Core.Datastore.Migration
         {
             Alter.Table("Notifications").AddColumn("OnUpgrade").AsBoolean().Nullable();
 
-            Execute.Sql("UPDATE Notifications SET OnUpgrade = OnDownload");
+            Execute.Sql("UPDATE \"Notifications\" SET \"OnUpgrade\" = \"OnDownload\"");
         }
     }
 }

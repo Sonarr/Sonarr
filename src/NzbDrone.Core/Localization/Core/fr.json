@@ -1,6 +1,6 @@
 {
     "Language": "Langue",
-    "UI Language": "UI Langue",
+    "UiLanguage": "UI Langue",
     "Language that Sonarr will use for UI": "Langue que Sonarr utilisera pour l'interface utilisateur",
     "Browser Reload Required": "Rechargement du navigateur requis",
     "Added": "Ajouté",
@@ -11,7 +11,12 @@
     "CountSeasons": "{count} saisons",
     "DownloadClientCheckNoneAvailableHealthCheckMessage": "Aucun client de téléchargement disponible",
     "Add": "Ajouter",
-    "AddingTag": "Ajout d'un tag",
+    "AddingTag": "Ajouter un tag",
     "Apply": "Appliquer",
-    "ApplyTags": "Appliquer les tags"
+    "ApplyTags": "Appliquer les tags",
+    "Activity": "Activité",
+    "About": "À propos",
+    "Actions": "Actions",
+    "EditSelectedDownloadClients": "Modifier les clients de téléchargement sélectionnés",
+    "EditSelectedIndexers": "Modifier les indexeurs sélectionnés"
 }

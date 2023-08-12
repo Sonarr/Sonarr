@@ -57,7 +57,7 @@ namespace NzbDrone.Core.MediaFiles
 
                 _logger.Debug("Setting last accessed: {0}", path);
                 _diskProvider.FolderSetLastWriteTime(destination, DateTime.UtcNow);
-                foreach (var file in _diskProvider.GetFiles(destination, SearchOption.AllDirectories))
+                foreach (var file in _diskProvider.GetFiles(destination, true))
                 {
                     SetLastWriteTime(file, DateTime.UtcNow);
                 }
@@ -146,7 +146,7 @@ namespace NzbDrone.Core.MediaFiles
                 _diskProvider.DeleteFolder(folder, true);
             }
 
-            foreach (var file in _diskProvider.GetFiles(_configService.RecycleBin, SearchOption.TopDirectoryOnly))
+            foreach (var file in _diskProvider.GetFiles(_configService.RecycleBin, false))
             {
                 _diskProvider.DeleteFile(file);
             }
@@ -172,7 +172,7 @@ namespace NzbDrone.Core.MediaFiles
 
             _logger.Info("Removing items older than {0} days from the recycling bin", cleanupDays);
 
-            foreach (var file in _diskProvider.GetFiles(_configService.RecycleBin, SearchOption.AllDirectories))
+            foreach (var file in _diskProvider.GetFiles(_configService.RecycleBin, true))
             {
                 if (_diskProvider.FileGetLastWrite(file).AddDays(cleanupDays) > DateTime.UtcNow)
                 {

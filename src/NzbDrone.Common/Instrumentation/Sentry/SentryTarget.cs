@@ -40,7 +40,13 @@ namespace NzbDrone.Common.Instrumentation.Sentry
             "UnauthorizedAccessException",
 
             // Filter out people stuck in boot loops
-            "CorruptDatabaseException"
+            "CorruptDatabaseException",
+
+            // Filter SingleInstance Termination Exceptions
+            "TerminateApplicationException",
+
+            // User config issue, root folder missing, etc.
+            "DirectoryNotFoundException"
         };
 
         public static readonly List<string> FilteredExceptionMessages = new List<string>
@@ -139,6 +145,7 @@ namespace NzbDrone.Common.Instrumentation.Sentry
         {
             SentrySdk.ConfigureScope(scope =>
             {
+                scope.SetTag("is_docker", $"{osInfo.IsDocker}");
             });
         }
 

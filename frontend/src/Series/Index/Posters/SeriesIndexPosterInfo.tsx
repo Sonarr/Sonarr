@@ -11,7 +11,7 @@ interface SeriesIndexPosterInfoProps {
   originalLanguage?: Language;
   network?: string;
   showQualityProfile: boolean;
-  qualityProfile: QualityProfile;
+  qualityProfile?: QualityProfile;
   previousAiring?: string;
   added?: string;
   seasonCount: number;
@@ -58,7 +58,11 @@ function SeriesIndexPosterInfo(props: SeriesIndexPosterInfoProps) {
     );
   }
 
-  if (sortKey === 'qualityProfileId' && !showQualityProfile) {
+  if (
+    sortKey === 'qualityProfileId' &&
+    !showQualityProfile &&
+    !!qualityProfile?.name
+  ) {
     return (
       <div className={styles.info} title={translate('QualityProfile')}>
         {qualityProfile.name}

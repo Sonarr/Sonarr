@@ -393,6 +393,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                 item.Series = decision.LocalEpisode.Series;
 
                 item.CustomFormats = _formatCalculator.ParseCustomFormat(decision.LocalEpisode);
+                item.CustomFormatScore = item.Series.QualityProfile?.Value.CalculateCustomFormatScore(item.CustomFormats) ?? 0;
             }
 
             if (decision.LocalEpisode.Episodes.Any() && decision.LocalEpisode.Episodes.Select(c => c.SeasonNumber).Distinct().Count() == 1)

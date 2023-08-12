@@ -94,7 +94,7 @@ class RemoveQueueItemsModal extends Component {
 
           <ModalBody>
             <div className={styles.message}>
-              {selectedCount > 1 ? translate('RemoveSelectedItemsQueueMessageText', selectedCount) : translate('RemoveSelectedItemQueueMessageText')}
+              {selectedCount > 1 ? translate('RemoveSelectedItemsQueueMessageText', { selectedCount }) : translate('RemoveSelectedItemQueueMessageText')}
             </div>
 
             {

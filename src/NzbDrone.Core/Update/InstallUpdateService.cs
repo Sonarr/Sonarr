@@ -237,15 +237,15 @@ namespace NzbDrone.Core.Update
                 return null;
             }
 
-            if (_osInfo.IsDocker)
-            {
-                _logger.ProgressDebug("Updating is disabled inside a docker container.  Please update the container image.");
-                return null;
-            }
-
             if (OsInfo.IsNotWindows && !_configFileProvider.UpdateAutomatically && updateTrigger != CommandTrigger.Manual)
             {
                 _logger.ProgressDebug("Auto-update not enabled, not installing available update.");
+                return null;
+            }
+
+            if (_configFileProvider.UpdateMechanism == UpdateMechanism.BuiltIn && _deploymentInfoProvider.PackageUpdateMechanism == UpdateMechanism.Docker)
+            {
+                _logger.ProgressDebug("Built-In updater disabled inside a docker container. Please update the container image.");
                 return null;
             }
 
