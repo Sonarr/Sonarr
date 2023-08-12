@@ -7472,6 +7472,13 @@
         },
         "additionalProperties": false
       },
+      "DatabaseType": {
+        "enum": [
+          "sqLite",
+          "postgreSQL"
+        ],
+        "type": "string"
+      },
       "DelayProfileResource": {
         "type": "object",
         "properties": {
@@ -11174,6 +11181,12 @@
           "packageUpdateMechanismMessage": {
             "type": "string",
             "nullable": true
+          },
+          "databaseVersion": {
+            "$ref": "#/components/schemas/Version"
+          },
+          "databaseType": {
+            "$ref": "#/components/schemas/DatabaseType"
           }
         },
         "additionalProperties": false
