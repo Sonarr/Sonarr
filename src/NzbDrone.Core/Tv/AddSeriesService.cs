@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -58,7 +58,7 @@ namespace NzbDrone.Core.Tv
         {
             var added = DateTime.UtcNow;
             var seriesToAdd = new List<Series>();
-            var existingSeries = _seriesService.GetAllSeries();
+            var existingSeriesTvdbIds = _seriesService.AllSeriesTvdbIds();
 
             foreach (var s in newSeries)
             {
@@ -76,7 +76,7 @@ namespace NzbDrone.Core.Tv
                     var series = AddSkyhookData(s);
                     series = SetPropertiesAndValidate(series);
                     series.Added = added;
-                    if (existingSeries.Any(f => f.TvdbId == series.TvdbId))
+                    if (existingSeriesTvdbIds.Any(f => f == series.TvdbId))
                     {
                         _logger.Debug("TVDB ID {0} was not added due to validation failure: Series already exists in database", s.TvdbId);
                         continue;
