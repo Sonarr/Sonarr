@@ -91,7 +91,7 @@ namespace NzbDrone.Core.Test.ThingiProviderTests
             var status = Subject.GetBlockedProviders().FirstOrDefault();
             status.Should().NotBeNull();
             status.DisabledTill.Should().HaveValue();
-            status.DisabledTill.Value.Should().BeCloseTo(_epoch + TimeSpan.FromMinutes(5), _disabledTillPrecision);
+            status.DisabledTill.Value.Should().BeCloseTo(_epoch + TimeSpan.FromMinutes(1), _disabledTillPrecision);
         }
 
         [Test]
@@ -134,7 +134,7 @@ namespace NzbDrone.Core.Test.ThingiProviderTests
             var status = Subject.GetBlockedProviders().FirstOrDefault();
             status.Should().NotBeNull();
             status.DisabledTill.Should().HaveValue();
-            status.DisabledTill.Value.Should().BeCloseTo(_epoch + TimeSpan.FromMinutes(15), _disabledTillPrecision);
+            status.DisabledTill.Value.Should().BeCloseTo(_epoch + TimeSpan.FromMinutes(5), _disabledTillPrecision);
         }
 
         [Test]
