@@ -71,7 +71,7 @@ interface SelectEpisodeModalContentProps {
   isAnime: boolean;
   sortKey?: string;
   sortDirection?: string;
-  modalTitle?: string;
+  modalTitle: string;
   onEpisodesSelect(selectedEpisodes: SelectedEpisode[]): unknown;
   onModalClose(): unknown;
 }
