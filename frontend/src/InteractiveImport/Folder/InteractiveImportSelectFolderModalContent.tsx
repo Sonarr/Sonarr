@@ -100,7 +100,7 @@ function InteractiveImportSelectFolderModalContent(
   return (
     <ModalContent onModalClose={onModalClose}>
       <ModalHeader>
-        {modalTitle} - {translate('SelectFolder')}
+        {translate('SelectFolderModalTitle', { modalTitle })}
       </ModalHeader>
 
       <ModalBody>

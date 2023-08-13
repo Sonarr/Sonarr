@@ -10,6 +10,7 @@ import Scroller from 'Components/Scroller/Scroller';
 import { scrollDirections } from 'Helpers/Props';
 import Series from 'Series/Series';
 import createAllSeriesSelector from 'Store/Selectors/createAllSeriesSelector';
+import translate from 'Utilities/String/translate';
 import SelectSeriesRow from './SelectSeriesRow';
 import styles from './SelectSeriesModalContent.css';
 
@@ -61,7 +62,7 @@ function SelectSeriesModalContent(props: SelectSeriesModalContentProps) {
       >
         <TextInput
           className={styles.filterInput}
-          placeholder="Filter series"
+          placeholder={translate('FilterSeriesPlaceholder')}
           name="filter"
           value={filter}
           autoFocus={true}
@@ -83,7 +84,7 @@ function SelectSeriesModalContent(props: SelectSeriesModalContentProps) {
       </ModalBody>
 
       <ModalFooter>
-        <Button onPress={onModalClose}>Cancel</Button>
+        <Button onPress={onModalClose}>{translate('Cancel')}</Button>
       </ModalFooter>
     </ModalContent>
   );

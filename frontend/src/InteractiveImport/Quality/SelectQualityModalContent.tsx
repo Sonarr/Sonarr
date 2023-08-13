@@ -19,6 +19,7 @@ import Quality, { QualityModel } from 'Quality/Quality';
 import { fetchQualityProfileSchema } from 'Store/Actions/settingsActions';
 import { CheckInputChanged } from 'typings/inputs';
 import getQualities from 'Utilities/Quality/getQualities';
+import translate from 'Utilities/String/translate';
 
 interface QualitySchemaState {
   isFetching: boolean;
@@ -128,13 +129,13 @@ function SelectQualityModalContent(props: SelectQualityModalContentProps) {
         {isFetching && <LoadingIndicator />}
 
         {!isFetching && error ? (
-          <Alert kind={kinds.DANGER}>Unable to load qualities</Alert>
+          <Alert kind={kinds.DANGER}>{translate('QualitiesLoadError')}</Alert>
         ) : null}
 
         {isPopulated && !error ? (
           <Form>
             <FormGroup>
-              <FormLabel>Quality</FormLabel>
+              <FormLabel>{translate('Quality')}</FormLabel>
 
               <FormInputGroup
                 type={inputTypes.SELECT}
@@ -146,7 +147,7 @@ function SelectQualityModalContent(props: SelectQualityModalContentProps) {
             </FormGroup>
 
             <FormGroup>
-              <FormLabel>Proper</FormLabel>
+              <FormLabel>{translate('Proper')}</FormLabel>
 
               <FormInputGroup
                 type={inputTypes.CHECK}
@@ -157,7 +158,7 @@ function SelectQualityModalContent(props: SelectQualityModalContentProps) {
             </FormGroup>
 
             <FormGroup>
-              <FormLabel>Real</FormLabel>
+              <FormLabel>{translate('Real')}</FormLabel>
 
               <FormInputGroup
                 type={inputTypes.CHECK}
@@ -174,7 +175,7 @@ function SelectQualityModalContent(props: SelectQualityModalContentProps) {
         <Button onPress={onModalClose}>Cancel</Button>
 
         <Button kind={kinds.SUCCESS} onPress={onQualitySelectWrapper}>
-          Select Quality
+          {translate('SelectQuality')}
         </Button>
       </ModalFooter>
     </ModalContent>

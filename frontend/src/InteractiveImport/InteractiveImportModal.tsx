@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import Modal from 'Components/Modal/Modal';
 import usePrevious from 'Helpers/Hooks/usePrevious';
 import { sizes } from 'Helpers/Props';
+import translate from 'Utilities/String/translate';
 import InteractiveImportSelectFolderModalContent from './Folder/InteractiveImportSelectFolderModalContent';
 import InteractiveImportModalContent from './Interactive/InteractiveImportModalContent';
 
@@ -18,7 +19,7 @@ function InteractiveImportModal(props: InteractiveImportModalProps) {
     isOpen,
     folder,
     downloadId,
-    modalTitle = 'Manual Import',
+    modalTitle = translate('ManualImport'),
     onModalClose,
     ...otherProps
   } = props;

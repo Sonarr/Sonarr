@@ -9,6 +9,7 @@ import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import { inputTypes, kinds, scrollDirections } from 'Helpers/Props';
+import translate from 'Utilities/String/translate';
 import styles from './SelectReleaseGroupModalContent.css';
 
 interface SelectReleaseGroupModalContentProps {
@@ -37,7 +38,9 @@ function SelectReleaseGroupModalContent(
 
   return (
     <ModalContent onModalClose={onModalClose}>
-      <ModalHeader>{modalTitle} - Set Release Group</ModalHeader>
+      <ModalHeader>
+        {translate('SetReleaseGroupModalTitle', { modalTitle })}
+      </ModalHeader>
 
       <ModalBody
         className={styles.modalBody}
@@ -45,7 +48,7 @@ function SelectReleaseGroupModalContent(
       >
         <Form>
           <FormGroup>
-            <FormLabel>Release Group</FormLabel>
+            <FormLabel>{translate('ReleaseGroup')}</FormLabel>
 
             <FormInputGroup
               type={inputTypes.TEXT}
@@ -59,10 +62,10 @@ function SelectReleaseGroupModalContent(
       </ModalBody>
 
       <ModalFooter>
-        <Button onPress={onModalClose}>Cancel</Button>
+        <Button onPress={onModalClose}>{translate('Cancel')}</Button>
 
         <Button kind={kinds.SUCCESS} onPress={onReleaseGroupSelectWrapper}>
-          Set Release Group
+          {translate('SetReleaseGroup')}
         </Button>
       </ModalFooter>
     </ModalContent>

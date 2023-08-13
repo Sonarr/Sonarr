@@ -7,6 +7,7 @@ import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import { Season } from 'Series/Series';
 import { createSeriesSelectorForHook } from 'Store/Selectors/createSeriesSelector';
+import translate from 'Utilities/String/translate';
 import SelectSeasonRow from './SelectSeasonRow';
 
 interface SelectSeasonModalContentProps {
@@ -25,7 +26,9 @@ function SelectSeasonModalContent(props: SelectSeasonModalContentProps) {
 
   return (
     <ModalContent onModalClose={onModalClose}>
-      <ModalHeader>{modalTitle} - Select Season</ModalHeader>
+      <ModalHeader>
+        {translate('SelectSeasonModalTitle', { modalTitle })}
+      </ModalHeader>
 
       <ModalBody>
         {seasons.map((item) => {
@@ -40,7 +43,7 @@ function SelectSeasonModalContent(props: SelectSeasonModalContentProps) {
       </ModalBody>
 
       <ModalFooter>
-        <Button onPress={onModalClose}>Cancel</Button>
+        <Button onPress={onModalClose}>{translate('Cancel')}</Button>
       </ModalFooter>
     </ModalContent>
   );
