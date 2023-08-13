@@ -48,11 +48,7 @@ class InlineMarkdown extends Component {
           markdownBlocks.push(data.substr(endIndex, match.index - endIndex));
         }
 
-        if (blockClassName) {
-          markdownBlocks.push(<code key={`code-${match.index}`} className={blockClassName}>{match[0].substring(1, match[0].length - 1)}</code>);
-        } else {
-          markdownBlocks.push(<code key={`code-${match.index}`}>{match[0].substring(1, match[0].length - 1)}</code>);
-        }
+        markdownBlocks.push(<code key={`code-${match.index}`} className={blockClassName ?? null}>{match[0].substring(1, match[0].length - 1)}</code>);
         endIndex = match.index + match[0].length;
       }
 
