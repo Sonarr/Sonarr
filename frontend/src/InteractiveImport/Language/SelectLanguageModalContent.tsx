@@ -16,6 +16,7 @@ import ModalHeader from 'Components/Modal/ModalHeader';
 import { inputTypes, kinds, sizes } from 'Helpers/Props';
 import Language from 'Language/Language';
 import createLanguagesSelector from 'Store/Selectors/createLanguagesSelector';
+import translate from 'Utilities/String/translate';
 import styles from './SelectLanguageModalContent.css';
 
 interface SelectLanguageModalContentProps {
@@ -78,13 +79,15 @@ function SelectLanguageModalContent(props: SelectLanguageModalContentProps) {
 
   return (
     <ModalContent onModalClose={onModalClose}>
-      <ModalHeader>{modalTitle} - Select Language</ModalHeader>
+      <ModalHeader>
+        {translate('SelectLanguageModalTitle', { modalTitle })}
+      </ModalHeader>
 
       <ModalBody>
         {isFetching ? <LoadingIndicator /> : null}
 
         {!isFetching && error ? (
-          <Alert kind={kinds.DANGER}>Unable to load Languages</Alert>
+          <Alert kind={kinds.DANGER}>{translate('LanguagesLoadError')}</Alert>
         ) : null}
 
         {isPopulated && !error ? (
@@ -111,10 +114,10 @@ function SelectLanguageModalContent(props: SelectLanguageModalContentProps) {
       </ModalBody>
 
       <ModalFooter>
-        <Button onPress={onModalClose}>Cancel</Button>
+        <Button onPress={onModalClose}>{translate('Cancel')}</Button>
 
         <Button kind={kinds.SUCCESS} onPress={onLanguagesSelectWrapper}>
-          Select Languages
+          {translate('SelectLanguages')}
         </Button>
       </ModalFooter>
     </ModalContent>

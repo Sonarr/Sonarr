@@ -147,9 +147,19 @@ const COLUMNS = [
 ];
 
 const importModeOptions = [
-  { key: 'chooseImportMode', value: 'Choose Import Mode', disabled: true },
-  { key: 'move', value: 'Move Files' },
-  { key: 'copy', value: 'Hardlink/Copy Files' },
+  {
+    key: 'chooseImportMode',
+    value: () => translate('ChooseImportMode'),
+    disabled: true,
+  },
+  {
+    key: 'move',
+    value: () => translate('MoveFiles'),
+  },
+  {
+    key: 'copy',
+    value: () => translate('HardlinkCopyFiles'),
+  },
 ];
 
 function isSameEpisodeFile(
@@ -260,12 +270,31 @@ function InteractiveImportModalContent(
     useState<string | null>(null);
   const [selectState, setSelectState] = useSelectState();
   const [bulkSelectOptions, setBulkSelectOptions] = useState([
-    { key: 'select', value: 'Select...', disabled: true },
-    { key: 'season', value: 'Select Season' },
-    { key: 'episode', value: 'Select Episode(s)' },
-    { key: 'quality', value: 'Select Quality' },
-    { key: 'releaseGroup', value: 'Select Release Group' },
-    { key: 'language', value: 'Select Language' },
+    {
+      key: 'select',
+      value: translate('SelectDropdown'),
+      disabled: true,
+    },
+    {
+      key: 'season',
+      value: translate('SelectSeason'),
+    },
+    {
+      key: 'episode',
+      value: translate('SelectEpisodes'),
+    },
+    {
+      key: 'quality',
+      value: translate('SelectQuality'),
+    },
+    {
+      key: 'releaseGroup',
+      value: translate('SelectReleaseGroup'),
+    },
+    {
+      key: 'language',
+      value: translate('SelectLanguage'),
+    },
   ]);
   const { allSelected, allUnselected, selectedState } = selectState;
   const previousIsDeleting = usePrevious(isDeleting);
@@ -296,7 +325,7 @@ function InteractiveImportModalContent(
 
         newBulkSelectOptions.splice(1, 0, {
           key: 'series',
-          value: 'Select Series',
+          value: translate('SelectSeries'),
         });
 
         setBulkSelectOptions(newBulkSelectOptions);
@@ -410,7 +439,9 @@ function InteractiveImportModalContent(
     const files: InteractiveImportCommandOptions[] = [];
 
     if (finalImportMode === 'chooseImportMode') {
-      setInteractiveImportErrorMessage('An import mode must be selected');
+      setInteractiveImportErrorMessage(
+        translate('InteractiveImportNoImportMode')
+      );
 
       return;
     }
@@ -431,35 +462,35 @@ function InteractiveImportModalContent(
 
         if (!series) {
           setInteractiveImportErrorMessage(
-            'Series must be chosen for each selected file'
+            translate('InteractiveImportNoSeries')
           );
           return;
         }
 
         if (isNaN(seasonNumber)) {
           setInteractiveImportErrorMessage(
-            'Season must be chosen for each selected file'
+            translate('InteractiveImportNoSeason')
           );
           return;
         }
 
         if (!episodes || !episodes.length) {
           setInteractiveImportErrorMessage(
-            'One or more episodes must be chosen for each selected file'
+            translate('InteractiveImportNoEpisode')
           );
           return;
         }
 
         if (!quality) {
           setInteractiveImportErrorMessage(
-            'Quality must be chosen for each selected file'
+            translate('InteractiveImportNoQuality')
           );
           return;
         }
 
         if (!languages) {
           setInteractiveImportErrorMessage(
-            'Language(s) must be chosen for each selected file'
+            translate('InteractiveImportNoLanguage')
           );
           return;
         }
@@ -699,7 +730,7 @@ function InteractiveImportModalContent(
 
   const errorMessage = getErrorMessage(
     error,
-    'Unable to load manual import items'
+    translate('InteractiveImportLoadError')
   );
 
   return (
@@ -716,7 +747,9 @@ function InteractiveImportModalContent(
                 <Icon name={icons.FILTER} size={22} />
 
                 <div className={styles.filterText}>
-                  {filterExistingFiles ? 'Unmapped Files Only' : 'All Files'}
+                  {filterExistingFiles
+                    ? translate('UnmappedFilesOnly')
+                    : translate('AllFiles')}
                 </div>
               </MenuButton>
 
@@ -726,7 +759,7 @@ function InteractiveImportModalContent(
                   isSelected={!filterExistingFiles}
                   onPress={onFilterExistingFilesChange}
                 >
-                  All Files
+                  {translate('AllFiles')}
                 </SelectedMenuItem>
 
                 <SelectedMenuItem
@@ -734,7 +767,7 @@ function InteractiveImportModalContent(
                   isSelected={filterExistingFiles}
                   onPress={onFilterExistingFilesChange}
                 >
-                  Unmapped Files Only
+                  {translate('UnmappedFilesOnly')}
                 </SelectedMenuItem>
               </MenuContent>
             </Menu>
@@ -777,7 +810,7 @@ function InteractiveImportModalContent(
         ) : null}
 
         {isPopulated && !items.length && !isFetching
-          ? 'No video files were found in the selected folder'
+          ? translate('InteractiveImportNoFilesFound')
           : null}
       </ModalBody>
 
@@ -793,7 +826,7 @@ function InteractiveImportModalContent(
               }
               onPress={onDeleteSelectedPress}
             >
-              Delete
+              {translate('Delete')}
             </SpinnerButton>
           ) : null}
 
@@ -831,7 +864,7 @@ function InteractiveImportModalContent(
             isDisabled={!selectedIds.length || !!invalidRowsSelected.length}
             onPress={onImportSelectedPress}
           >
-            Import
+            {translate('Import')}
           </Button>
         </div>
       </ModalFooter>
@@ -891,9 +924,9 @@ function InteractiveImportModalContent(
       <ConfirmModal
         isOpen={isConfirmDeleteModalOpen}
         kind={kinds.DANGER}
-        title="Delete Selected Episode Files"
-        message={'Are you sure you want to delete the selected episode files?'}
-        confirmLabel="Delete"
+        title={translate('DeleteSelectedEpisodeFiles')}
+        message={translate('DeleteSelectedEpisodeFilesHelpText')}
+        confirmLabel={translate('Delete')}
         onConfirm={onConfirmDelete}
         onCancel={onConfirmDeleteModalClose}
       />
