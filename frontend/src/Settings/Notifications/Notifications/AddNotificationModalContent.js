@@ -28,7 +28,7 @@ class AddNotificationModalContent extends Component {
     return (
       <ModalContent onModalClose={onModalClose}>
         <ModalHeader>
-          {translate('AddNotification')}
+          {translate('AddConnection')}
         </ModalHeader>
 
         <ModalBody>

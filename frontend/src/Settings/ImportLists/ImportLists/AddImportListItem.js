@@ -16,10 +16,12 @@ class AddImportListItem extends Component {
 
   onImportListSelect = () => {
     const {
-      implementation
+      implementation,
+      implementationName,
+      minRefreshInterval
     } = this.props;
 
-    this.props.onImportListSelect({ implementation });
+    this.props.onImportListSelect({ implementation, implementationName, minRefreshInterval });
   };
 
   //
@@ -29,6 +31,7 @@ class AddImportListItem extends Component {
     const {
       implementation,
       implementationName,
+      minRefreshInterval,
       infoLink,
       presets,
       onImportListSelect
@@ -56,7 +59,7 @@ class AddImportListItem extends Component {
                 <span>
                   <Button
                     size={sizes.SMALL}
-                    onPress={this.onListSelect}
+                    onPress={this.onImportListSelect}
                   >
                     {translate('Custom')}
                   </Button>
@@ -77,6 +80,8 @@ class AddImportListItem extends Component {
                               key={preset.name}
                               name={preset.name}
                               implementation={implementation}
+                              implementationName={implementationName}
+                              minRefreshInterval={minRefreshInterval}
                               onPress={onImportListSelect}
                             />
                           );
@@ -103,6 +108,7 @@ class AddImportListItem extends Component {
 AddImportListItem.propTypes = {
   implementation: PropTypes.string.isRequired,
   implementationName: PropTypes.string.isRequired,
+  minRefreshInterval: PropTypes.string.isRequired,
   infoLink: PropTypes.string.isRequired,
   presets: PropTypes.arrayOf(PropTypes.object),
   onImportListSelect: PropTypes.func.isRequired

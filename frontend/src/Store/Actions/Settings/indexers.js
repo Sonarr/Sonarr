@@ -121,6 +121,8 @@ export default {
 
     [SELECT_INDEXER_SCHEMA]: (state, { payload }) => {
       return selectProviderSchema(state, section, payload, (selectedSchema) => {
+        selectedSchema.name = payload.presetName ?? payload.implementationName;
+        selectedSchema.implementationName = payload.implementationName;
         selectedSchema.enableRss = selectedSchema.supportsRss;
         selectedSchema.enableAutomaticSearch = selectedSchema.supportsSearch;
         selectedSchema.enableInteractiveSearch = selectedSchema.supportsSearch;
