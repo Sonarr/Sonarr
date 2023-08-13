@@ -93,6 +93,19 @@ namespace NzbDrone.Core.ImportLists
                     }
                 }
 
+                // Map by AniListId if we have it
+                if (report.TvdbId <= 0 && report.AniListId > 0)
+                {
+                    var mappedSeries = _seriesSearchService.SearchForNewSeriesByAniListId(report.AniListId)
+                        .FirstOrDefault();
+
+                    if (mappedSeries != null)
+                    {
+                        report.TvdbId = mappedSeries.TvdbId;
+                        report.Title = mappedSeries.Title;
+                    }
+                }
+
                 // Map TVDb if we only have a series name
                 if (report.TvdbId <= 0 && report.Title.IsNotNullOrWhiteSpace())
                 {

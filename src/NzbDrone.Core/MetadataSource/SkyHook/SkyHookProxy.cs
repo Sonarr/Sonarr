@@ -83,6 +83,13 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
             return results;
         }
 
+        public List<Series> SearchForNewSeriesByAniListId(int aniListId)
+        {
+            var results = SearchForNewSeries($"anilist:{aniListId}");
+
+            return results;
+        }
+
         public List<Series> SearchForNewSeries(string title)
         {
             try
