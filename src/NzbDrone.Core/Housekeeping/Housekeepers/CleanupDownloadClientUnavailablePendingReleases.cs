@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
 
         public void Clean()
         {
-            var mapper = _database.OpenConnection();
+            using var mapper = _database.OpenConnection();
 
             if (_database.DatabaseType == DatabaseType.PostgreSQL)
             {
