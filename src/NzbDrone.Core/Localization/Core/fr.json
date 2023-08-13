@@ -1,8 +1,6 @@
 {
     "Language": "Langue",
     "UiLanguage": "UI Langue",
-    "Language that Sonarr will use for UI": "Langue que Sonarr utilisera pour l'interface utilisateur",
-    "Browser Reload Required": "Rechargement du navigateur requis",
     "Added": "Ajouté",
     "ApiKeyValidationHealthCheckMessage": "Veuillez mettre à jour votre clé API pour qu'elle contienne au moins {0} caractères. Vous pouvez le faire via les paramètres ou le fichier de configuration",
     "AppDataLocationHealthCheckMessage": "La mise à jour ne sera pas possible afin empêcher la suppression de AppData lors de la mise à jour",
@@ -73,5 +71,14 @@
     "AddAutoTagError": "Impossible d'ajouter un tag automatique, réessayer.",
     "AddConditionError": "Impossible d'ajouter une nouvelle condition, Réessayer.",
     "AddCondition": "Ajouter une condition",
-    "AddAutoTag": "Ajouter un tag automatique"
+    "AddAutoTag": "Ajouter un tag automatique",
+    "AddCustomFormatError": "Impossible d'ajouter un nouveau format personnalisé, veuillez réessayer.",
+    "AddIndexerError": "Impossible d'ajouter un nouvelle indexeur, veuillez réessayer.",
+    "AddNewRestriction": "Ajouter une nouvelle restriction",
+    "AddListError": "Impossible d'ajouter une nouvelle liste",
+    "AddDownloadClientError": "Impossible d'ajouter un nouveau client de téléchargement, veuillez réessayer.",
+    "AddRemotePathMapping": "Ajouter un mappage des chemins d'accès",
+    "AddNewSeries": "Ajouter une nouvelle série",
+    "AddNewSeriesError": "Échec du chargement des résultats de recherche, veuillez réessayer.",
+    "AddNewSeriesSearchForMissingEpisodes": "Démarrer la recherche des épisodes manquants"
 }
