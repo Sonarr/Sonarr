@@ -100,7 +100,7 @@ namespace NzbDrone.Core.Tv
         {
             using (var conn = _database.OpenConnection())
             {
-                var strSql = "SELECT Id AS [Key], Tags AS [Value] FROM Series WHERE Tags IS NOT NULL";
+                var strSql = "SELECT \"Id\" AS Key, \"Tags\" AS Value FROM \"Series\" WHERE \"Tags\" IS NOT NULL";
                 return conn.Query<KeyValuePair<int, List<int>>>(strSql).ToDictionary(x => x.Key, x => x.Value);
             }
         }
