@@ -237,7 +237,7 @@
   "DeleteImportListExclusionMessageText": "Are you sure you want to delete this import list exclusion?",
   "DeleteImportListMessageText": "Are you sure you want to delete the list {name}",
   "DeleteIndexer": "Delete Indexer",
-  "DeleteIndexerMessageText": "Delete Indexer",
+  "DeleteIndexerMessageText": "Are you sure you want to delete the indexer {name}",
   "DeleteNotification": "Delete Notification",
   "DeleteNotificationMessageText": "Are you sure you want to delete the notification {name}",
   "DeleteQualityProfile": "Delete Quality Profile",
