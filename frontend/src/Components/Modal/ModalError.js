@@ -6,6 +6,7 @@ import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
+import translate from 'Utilities/String/translate';
 import styles from './ModalError.css';
 
 function ModalError(props) {
@@ -17,7 +18,7 @@ function ModalError(props) {
   return (
     <ModalContent onModalClose={onModalClose}>
       <ModalHeader>
-        Error
+        {translate('Error')}
       </ModalHeader>
 
       <ModalBody>
@@ -25,7 +26,7 @@ function ModalError(props) {
           messageClassName={styles.message}
           detailsClassName={styles.details}
           {...otherProps}
-          message='There was an error loading this item'
+          message={translate('ErrorLoadingItem')}
         />
       </ModalBody>
 
@@ -33,7 +34,7 @@ function ModalError(props) {
         <Button
           onPress={onModalClose}
         >
-          Close
+          {translate('Close')}
         </Button>
       </ModalFooter>
     </ModalContent>

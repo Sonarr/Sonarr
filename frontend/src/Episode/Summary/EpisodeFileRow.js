@@ -11,6 +11,7 @@ import EpisodeLanguages from 'Episode/EpisodeLanguages';
 import EpisodeQuality from 'Episode/EpisodeQuality';
 import { icons, kinds, tooltipPositions } from 'Helpers/Props';
 import formatBytes from 'Utilities/Number/formatBytes';
+import translate from 'Utilities/String/translate';
 import MediaInfo from './MediaInfo';
 import styles from './EpisodeFileRow.css';
 
@@ -140,7 +141,7 @@ class EpisodeFileRow extends Component {
                             name={icons.MEDIA_INFO}
                           />
                         }
-                        title="Media Info"
+                        title={translate('MediaInfo')}
                         body={<MediaInfo {...mediaInfo} />}
                         position={tooltipPositions.LEFT}
                       /> :
@@ -148,7 +149,7 @@ class EpisodeFileRow extends Component {
                   }
 
                   <IconButton
-                    title="Delete episode from disk"
+                    title={translate('DeleteEpisodeFromDisk')}
                     name={icons.REMOVE}
                     onPress={this.onRemoveEpisodeFilePress}
                   />
@@ -163,9 +164,9 @@ class EpisodeFileRow extends Component {
         <ConfirmModal
           isOpen={this.state.isRemoveEpisodeFileModalOpen}
           kind={kinds.DANGER}
-          title="Delete Episode File"
-          message={`Are you sure you want to delete '${path}'?`}
-          confirmLabel="Delete"
+          title={translate('DeleteEpisodeFile')}
+          message={translate('DeleteEpisodeFileMessage', { path })}
+          confirmLabel={translate('Delete')}
           onConfirm={this.onConfirmRemoveEpisodeFile}
           onCancel={this.onRemoveEpisodeFileModalClose}
         />

@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Manager, Popper, Reference } from 'react-popper';
 import Portal from 'Components/Portal';
 import { align } from 'Helpers/Props';
-import getUniqueElememtId from 'Utilities/getUniqueElementId';
+import getUniqueElementId from 'Utilities/getUniqueElementId';
 import styles from './Menu.css';
 
 const sharedPopperOptions = {
@@ -38,8 +38,8 @@ class Menu extends Component {
     super(props, context);
 
     this._scheduleUpdate = null;
-    this._menuButtonId = getUniqueElememtId();
-    this._menuContentId = getUniqueElememtId();
+    this._menuButtonId = getUniqueElementId();
+    this._menuContentId = getUniqueElementId();
 
     this.state = {
       isMenuOpen: false,

@@ -7,6 +7,7 @@ import MenuContent from 'Components/Menu/MenuContent';
 import MenuItem from 'Components/Menu/MenuItem';
 import MenuItemSeparator from 'Components/Menu/MenuItemSeparator';
 import { align, icons, kinds } from 'Helpers/Props';
+import translate from 'Utilities/String/translate';
 import styles from './PageHeaderActionsMenu.css';
 
 function PageHeaderActionsMenu(props) {
@@ -32,7 +33,7 @@ function PageHeaderActionsMenu(props) {
               className={styles.itemIcon}
               name={icons.KEYBOARD}
             />
-            Keyboard Shortcuts
+            {translate('KeyboardShortcuts')}
           </MenuItem>
 
           <MenuItemSeparator />
@@ -42,7 +43,7 @@ function PageHeaderActionsMenu(props) {
               className={styles.itemIcon}
               name={icons.RESTART}
             />
-            Restart
+            {translate('Restart')}
           </MenuItem>
 
           <MenuItem onPress={onShutdownPress}>
@@ -51,7 +52,7 @@ function PageHeaderActionsMenu(props) {
               name={icons.SHUTDOWN}
               kind={kinds.DANGER}
             />
-            Shutdown
+            {translate('Shutdown')}
           </MenuItem>
 
           {
@@ -69,7 +70,7 @@ function PageHeaderActionsMenu(props) {
                   className={styles.itemIcon}
                   name={icons.LOGOUT}
                 />
-                Logout
+                {translate('Logout')}
               </MenuItem>
           }
         </MenuContent>

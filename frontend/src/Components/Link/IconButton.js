@@ -2,6 +2,7 @@ import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Icon from 'Components/Icon';
+import translate from 'Utilities/String/translate';
 import Link from './Link';
 import styles from './IconButton.css';
 
@@ -23,7 +24,7 @@ function IconButton(props) {
         className,
         isDisabled && styles.isDisabled
       )}
-      aria-label="Table Options Button"
+      aria-label={translate('TableOptionsButton')}
       isDisabled={isDisabled}
       {...otherProps}
     >

@@ -3,6 +3,7 @@ import React from 'react';
 import Label from 'Components/Label';
 import Popover from 'Components/Tooltip/Popover';
 import { kinds, tooltipPositions } from 'Helpers/Props';
+import translate from 'Utilities/String/translate';
 
 function EpisodeLanguages(props) {
   const {
@@ -34,10 +35,10 @@ function EpisodeLanguages(props) {
           className={className}
           kind={isCutoffNotMet ? kinds.INVERSE : kinds.DEFAULT}
         >
-          Multi-Languages
+          {translate('MultiLanguages')}
         </Label>
       }
-      title={'Languages'}
+      title={translate('Languages')}
       body={
         <ul>
           {

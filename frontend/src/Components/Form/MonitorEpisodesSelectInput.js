@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import monitorOptions from 'Utilities/Series/monitorOptions';
+import translate from 'Utilities/String/translate';
 import SelectInput from './SelectInput';
 
 function MonitorEpisodesSelectInput(props) {
@@ -15,7 +16,9 @@ function MonitorEpisodesSelectInput(props) {
   if (includeNoChange) {
     values.unshift({
       key: 'noChange',
-      value: 'No Change',
+      get value() {
+        return translate('NoChange');
+      },
       disabled: true
     });
   }
@@ -23,7 +26,9 @@ function MonitorEpisodesSelectInput(props) {
   if (includeMixed) {
     values.unshift({
       key: 'mixed',
-      value: '(Mixed)',
+      get value() {
+        return `(${translate('Mixed')})`;
+      },
       disabled: true
     });
   }

@@ -3,6 +3,7 @@ import React from 'react';
 import Icon from 'Components/Icon';
 import Button from 'Components/Link/Button';
 import { icons, kinds, sizes } from 'Helpers/Props';
+import translate from 'Utilities/String/translate';
 import styles from './EpisodeSearch.css';
 
 function EpisodeSearch(props) {
@@ -24,7 +25,7 @@ function EpisodeSearch(props) {
             name={icons.QUICK}
           />
 
-          Quick Search
+          {translate('QuickSearch')}
         </Button>
       </div>
 
@@ -40,7 +41,7 @@ function EpisodeSearch(props) {
             name={icons.INTERACTIVE}
           />
 
-          Interactive Search
+          {translate('InteractiveSearch')}
         </Button>
       </div>
     </div>

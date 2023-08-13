@@ -4,6 +4,7 @@ import React from 'react';
 import DescriptionList from 'Components/DescriptionList/DescriptionList';
 import DescriptionListItem from 'Components/DescriptionList/DescriptionListItem';
 import padNumber from 'Utilities/Number/padNumber';
+import translate from 'Utilities/String/translate';
 import styles from './SceneInfo.css';
 
 function SceneInfo(props) {
@@ -56,7 +57,7 @@ function SceneInfo(props) {
           <DescriptionListItem
             titleClassName={styles.title}
             descriptionClassName={styles.description}
-            title="Season"
+            title={translate('Season')}
             data={sceneSeasonNumber}
           />
       }
@@ -66,7 +67,7 @@ function SceneInfo(props) {
           <DescriptionListItem
             titleClassName={styles.title}
             descriptionClassName={styles.description}
-            title="Episode"
+            title={translate('Episode')}
             data={sceneEpisodeNumber}
           />
       }
@@ -76,7 +77,7 @@ function SceneInfo(props) {
           <DescriptionListItem
             titleClassName={styles.title}
             descriptionClassName={styles.description}
-            title="Absolute"
+            title={translate('Absolute')}
             data={sceneAbsoluteEpisodeNumber}
           />
       }
@@ -86,7 +87,7 @@ function SceneInfo(props) {
           <DescriptionListItem
             titleClassName={styles.title}
             descriptionClassName={styles.description}
-            title={groupedAlternateTitles.length === 1 ? 'Title' : 'Titles'}
+            title={groupedAlternateTitles.length === 1 ? translate('Title') : translate('Titles')}
             data={
               <div>
                 {

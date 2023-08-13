@@ -5,6 +5,7 @@ import Icon from 'Components/Icon';
 import ProgressBar from 'Components/ProgressBar';
 import { icons, kinds, sizes } from 'Helpers/Props';
 import isBefore from 'Utilities/Date/isBefore';
+import translate from 'Utilities/String/translate';
 import EpisodeQuality from './EpisodeQuality';
 import styles from './EpisodeStatus.css';
 
@@ -50,7 +51,7 @@ function EpisodeStatus(props) {
       <div className={styles.center}>
         <Icon
           name={icons.DOWNLOADING}
-          title="Episode is downloading"
+          title={translate('EpisodeIsDownloading')}
         />
       </div>
     );
@@ -66,7 +67,7 @@ function EpisodeStatus(props) {
           quality={quality}
           size={episodeFile.size}
           isCutoffNotMet={isCutoffNotMet}
-          title="Episode Downloaded"
+          title={translate('EpisodeDownloaded')}
         />
       </div>
     );
@@ -77,7 +78,7 @@ function EpisodeStatus(props) {
       <div className={styles.center}>
         <Icon
           name={icons.TBA}
-          title="TBA"
+          title={translate('Tba')}
         />
       </div>
     );
@@ -89,7 +90,7 @@ function EpisodeStatus(props) {
         <Icon
           name={icons.UNMONITORED}
           kind={kinds.DISABLED}
-          title="Episode is not monitored"
+          title={translate('EpisodeIsNotMonitored')}
         />
       </div>
     );
@@ -100,7 +101,7 @@ function EpisodeStatus(props) {
       <div className={styles.center}>
         <Icon
           name={icons.MISSING}
-          title="Episode missing from disk"
+          title={translate('EpisodeMissingFromDisk')}
         />
       </div>
     );
@@ -110,7 +111,7 @@ function EpisodeStatus(props) {
     <div className={styles.center}>
       <Icon
         name={icons.NOT_AIRED}
-        title="Episode has not aired"
+        title={translate('EpisodeHasNotAired')}
       />
     </div>
   );

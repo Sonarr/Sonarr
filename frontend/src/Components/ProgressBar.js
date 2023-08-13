@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { ColorImpairedConsumer } from 'App/ColorImpairedContext';
 import { kinds, sizes } from 'Helpers/Props';
+import translate from 'Utilities/String/translate';
 import styles from './ProgressBar.css';
 
 function ProgressBar(props) {
@@ -57,7 +58,7 @@ function ProgressBar(props) {
                 enableColorImpairedMode && 'colorImpaired'
               )}
               role="meter"
-              aria-label={`Progress Bar at ${progress.toFixed(0)}%`}
+              aria-label={translate('ProgressBarProgress', { progress: progress.toFixed(0) })}
               aria-valuenow={progress.toFixed(0)}
               aria-valuemin="0"
               aria-valuemax="100"

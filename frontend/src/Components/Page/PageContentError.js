@@ -1,5 +1,6 @@
 import React from 'react';
 import ErrorBoundaryError from 'Components/Error/ErrorBoundaryError';
+import translate from 'Utilities/String/translate';
 import PageContentBody from './PageContentBody';
 import styles from './PageContentError.css';
 
@@ -9,7 +10,7 @@ function PageContentError(props) {
       <PageContentBody>
         <ErrorBoundaryError
           {...props}
-          message='There was an error loading this page'
+          message={translate('ErrorLoadingPage')}
         />
       </PageContentBody>
     </div>

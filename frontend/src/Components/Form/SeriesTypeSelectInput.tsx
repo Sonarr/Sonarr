@@ -1,5 +1,6 @@
 import React from 'react';
 import * as seriesTypes from 'Utilities/Series/seriesTypes';
+import translate from 'Utilities/String/translate';
 import EnhancedSelectInput from './EnhancedSelectInput';
 import SeriesTypeSelectInputOption from './SeriesTypeSelectInputOption';
 import SeriesTypeSelectInputSelectedValue from './SeriesTypeSelectInputSelectedValue';
@@ -21,17 +22,23 @@ const seriesTypeOptions: ISeriesTypeOption[] = [
   {
     key: seriesTypes.STANDARD,
     value: 'Standard',
-    format: 'Season and episode numbers (S01E05)',
+    get format() {
+      return translate('StandardTypeFormat', { format: 'S01E05' });
+    },
   },
   {
     key: seriesTypes.DAILY,
     value: 'Daily / Date',
-    format: 'Date (2020-05-25)',
+    get format() {
+      return translate('DailyTypeFormat', { format: '2020-05-25' });
+    },
   },
   {
     key: seriesTypes.ANIME,
     value: 'Anime / Absolute',
-    format: 'Absolute episode Number (005)',
+    get format() {
+      return translate('AnimeTypeFormat', { format: '005' });
+    },
   },
 ];
 
@@ -47,7 +54,7 @@ function SeriesTypeSelectInput(props: SeriesTypeSelectInputProps) {
   if (includeNoChange) {
     values.unshift({
       key: 'noChange',
-      value: 'No Change',
+      value: translate('NoChange'),
       disabled: includeNoChangeDisabled,
     });
   }
@@ -55,7 +62,7 @@ function SeriesTypeSelectInput(props: SeriesTypeSelectInputProps) {
   if (includeMixed) {
     values.unshift({
       key: 'mixed',
-      value: '(Mixed)',
+      value: `(${translate('Mixed')})`,
       disabled: true,
     });
   }

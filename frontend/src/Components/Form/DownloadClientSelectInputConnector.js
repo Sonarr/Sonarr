@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { fetchDownloadClients } from 'Store/Actions/settingsActions';
 import sortByName from 'Utilities/Array/sortByName';
+import translate from 'Utilities/String/translate';
 import EnhancedSelectInput from './EnhancedSelectInput';
 
 function createMapStateToProps() {
@@ -32,7 +33,7 @@ function createMapStateToProps() {
       if (includeAny) {
         values.unshift({
           key: 0,
-          value: '(Any)'
+          value: `(${translate('Any')})`
         });
       }
 

@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import formatBytes from 'Utilities/Number/formatBytes';
+import translate from 'Utilities/String/translate';
 import EnhancedSelectInputSelectedValue from './EnhancedSelectInputSelectedValue';
 import styles from './RootFolderSelectInputSelectedValue.css';
 
@@ -39,7 +40,7 @@ function RootFolderSelectInputSelectedValue(props) {
       {
         freeSpace != null && includeFreeSpace &&
           <div className={styles.freeSpace}>
-            {formatBytes(freeSpace)} Free
+            {translate('RootFolderSelectFreeSpace', { freeSpace: formatBytes(freeSpace) })}
           </div>
       }
     </EnhancedSelectInputSelectedValue>

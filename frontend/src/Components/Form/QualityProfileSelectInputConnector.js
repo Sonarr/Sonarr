@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import createSortedSectionSelector from 'Store/Selectors/createSortedSectionSelector';
 import sortByName from 'Utilities/Array/sortByName';
+import translate from 'Utilities/String/translate';
 import EnhancedSelectInput from './EnhancedSelectInput';
 
 function createMapStateToProps() {
@@ -24,7 +25,9 @@ function createMapStateToProps() {
       if (includeNoChange) {
         values.unshift({
           key: 'noChange',
-          value: 'No Change',
+          get value() {
+            return translate('NoChange');
+          },
           disabled: includeNoChangeDisabled
         });
       }
@@ -32,7 +35,9 @@ function createMapStateToProps() {
       if (includeMixed) {
         values.unshift({
           key: 'mixed',
-          value: '(Mixed)',
+          get value() {
+            return `(${translate('Mixed')})`;
+          },
           disabled: true
         });
       }

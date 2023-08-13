@@ -79,13 +79,13 @@ class EpisodeHistory extends Component {
 
     if (!isFetching && !!error) {
       return (
-        <Alert kind={kinds.DANGER}>Unable to load episode history.</Alert>
+        <Alert kind={kinds.DANGER}>{translate('EpisodeHistoryLoadError')}</Alert>
       );
     }
 
     if (isPopulated && !hasItems && !error) {
       return (
-        <Alert kind={kinds.INFO}>No episode history.</Alert>
+        <Alert kind={kinds.INFO}>{translate('NoEpisodeHistory')}</Alert>
       );
     }
 

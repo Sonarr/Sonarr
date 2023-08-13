@@ -103,7 +103,7 @@ class EpisodeSummary extends Component {
     return (
       <div>
         <div>
-          <span className={styles.infoTitle}>Airs</span>
+          <span className={styles.infoTitle}>{translate('Airs')}</span>
 
           <EpisodeAiringConnector
             airDateUtc={airDateUtc}
@@ -112,7 +112,7 @@ class EpisodeSummary extends Component {
         </div>
 
         <div>
-          <span className={styles.infoTitle}>Quality Profile</span>
+          <span className={styles.infoTitle}>{translate('QualityProfile')}</span>
 
           <Label
             kind={kinds.PRIMARY}
@@ -128,7 +128,7 @@ class EpisodeSummary extends Component {
           {
             hasOverview ?
               overview :
-              'No episode overview.'
+              translate('NoEpisodeOverview')
           }
         </div>
 
@@ -155,9 +155,9 @@ class EpisodeSummary extends Component {
         <ConfirmModal
           isOpen={this.state.isRemoveEpisodeFileModalOpen}
           kind={kinds.DANGER}
-          title="Delete Episode File"
-          message={`Are you sure you want to delete '${path}'?`}
-          confirmLabel="Delete"
+          title={translate('DeleteEpisodeFile')}
+          message={translate('DeleteEpisodeFileMessage', { path })}
+          confirmLabel={translate('Delete')}
           onConfirm={this.onConfirmRemoveEpisodeFile}
           onCancel={this.onRemoveEpisodeFileModalClose}
         />
