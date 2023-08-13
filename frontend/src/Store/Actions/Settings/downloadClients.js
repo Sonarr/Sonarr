@@ -117,6 +117,7 @@ export default {
 
     [SELECT_DOWNLOAD_CLIENT_SCHEMA]: (state, { payload }) => {
       return selectProviderSchema(state, section, payload, (selectedSchema) => {
+        selectedSchema.name = selectedSchema.implementationName;
         selectedSchema.enable = true;
 
         return selectedSchema;

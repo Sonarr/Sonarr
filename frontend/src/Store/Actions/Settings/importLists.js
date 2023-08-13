@@ -116,10 +116,14 @@ export default {
 
     [SELECT_IMPORT_LIST_SCHEMA]: (state, { payload }) => {
       return selectProviderSchema(state, section, payload, (selectedSchema) => {
+        selectedSchema.name = payload.presetName ?? payload.implementationName;
+        selectedSchema.implementationName = payload.implementationName;
+        selectedSchema.minRefreshInterval = payload.minRefreshInterval;
         selectedSchema.enableAutomaticAdd = true;
         selectedSchema.shouldMonitor = 'all';
         selectedSchema.seriesType = 'standard';
         selectedSchema.seasonFolder = true;
+        selectedSchema.rootFolderPath = '';
 
         return selectedSchema;
       });

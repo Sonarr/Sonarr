@@ -44,7 +44,6 @@ namespace NzbDrone.Core.ImportLists
 
                 yield return new ImportListDefinition
                 {
-                    Name = GetType().Name,
                     EnableAutomaticAdd = config.Validate().IsValid,
                     Implementation = GetType().Name,
                     Settings = config

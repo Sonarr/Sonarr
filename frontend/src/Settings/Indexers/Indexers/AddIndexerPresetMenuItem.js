@@ -10,12 +10,14 @@ class AddIndexerPresetMenuItem extends Component {
   onPress = () => {
     const {
       name,
-      implementation
+      implementation,
+      implementationName
     } = this.props;
 
     this.props.onPress({
       name,
-      implementation
+      implementation,
+      implementationName
     });
   };
 
@@ -26,6 +28,7 @@ class AddIndexerPresetMenuItem extends Component {
     const {
       name,
       implementation,
+      implementationName,
       ...otherProps
     } = this.props;
 
@@ -43,6 +46,7 @@ class AddIndexerPresetMenuItem extends Component {
 AddIndexerPresetMenuItem.propTypes = {
   name: PropTypes.string.isRequired,
   implementation: PropTypes.string.isRequired,
+  implementationName: PropTypes.string.isRequired,
   onPress: PropTypes.func.isRequired
 };
 

@@ -10,12 +10,16 @@ class AddImportListPresetMenuItem extends Component {
   onPress = () => {
     const {
       name,
-      implementation
+      implementation,
+      implementationName,
+      minRefreshInterval
     } = this.props;
 
     this.props.onPress({
       name,
-      implementation
+      implementation,
+      implementationName,
+      minRefreshInterval
     });
   };
 
@@ -26,6 +30,8 @@ class AddImportListPresetMenuItem extends Component {
     const {
       name,
       implementation,
+      implementationName,
+      minRefreshInterval,
       ...otherProps
     } = this.props;
 
@@ -43,6 +49,8 @@ class AddImportListPresetMenuItem extends Component {
 AddImportListPresetMenuItem.propTypes = {
   name: PropTypes.string.isRequired,
   implementation: PropTypes.string.isRequired,
+  implementationName: PropTypes.string.isRequired,
+  minRefreshInterval: PropTypes.string.isRequired,
   onPress: PropTypes.func.isRequired
 };
 
