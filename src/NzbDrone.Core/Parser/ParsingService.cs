@@ -265,6 +265,11 @@ namespace NzbDrone.Core.Parser
                 }
             }
 
+            if (parsedEpisodeInfo.Special && mappedSeasonNumber != 0)
+            {
+                return new List<Episode>();
+            }
+
             return GetStandardEpisodes(series, parsedEpisodeInfo, mappedSeasonNumber, sceneSource, searchCriteria);
         }
 

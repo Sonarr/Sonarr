@@ -194,6 +194,8 @@ namespace NzbDrone.Core.Test.ParserTests
             result.SeasonNumber.Should().Be(seasonNumber);
         }
 
+        [TestCase("[Anime Time] Series no Mayo - 12.5.mkv", "Series no Mayo", 12.5)]
+        [TestCase("[SubsPlease] Series Title - 26.5.1 (1080p) [29AF1C23].mkv", "Series Title", 26.5)]
         [TestCase("[HorribleSubs] Show Slayer - 10.5 [1080p].mkv", "Show Slayer", 10.5)]
         public void should_handle_anime_recap_numbering(string postTitle, string title, double specialEpisodeNumber)
         {

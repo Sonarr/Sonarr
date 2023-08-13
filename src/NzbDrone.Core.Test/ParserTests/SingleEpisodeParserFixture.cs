@@ -193,5 +193,19 @@ namespace NzbDrone.Core.Test.ParserTests
             result.AbsoluteEpisodeNumbers.Should().BeEmpty();
             result.FullSeason.Should().BeFalse();
         }
+
+        [TestCase("Series Title S01E11.5 [SP]-The Poppies Bloom Red on the Battlefield", "Series Title", 1, 11)]
+        public void should_parse_decimal_number_as_special(string postTitle, string title, int seasonNumber, int episodeNumber)
+        {
+            var result = Parser.Parser.ParseTitle(postTitle);
+            result.Should().NotBeNull();
+            result.EpisodeNumbers.Should().HaveCount(1);
+            result.SeasonNumber.Should().Be(seasonNumber);
+            result.EpisodeNumbers.First().Should().Be(episodeNumber);
+            result.SeriesTitle.Should().Be(title);
+            result.AbsoluteEpisodeNumbers.Should().BeEmpty();
+            result.FullSeason.Should().BeFalse();
+            result.Special.Should().BeTrue();
+        }
     }
 }

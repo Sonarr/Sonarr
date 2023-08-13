@@ -134,6 +134,10 @@ namespace NzbDrone.Core.Parser
                 new Regex(@"^(?<title>.+?)(?:(?:[-_\W](?<![()\[!]))+(?<season>(?<!\d+)(?:\d{1,2}|\d{4})(?!\d+))(?:x{1,2}(?<episode>\d{1,3}(?!\d+)))+){2,}",
                     RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
+                // Single episodes with a title (S01E05, 1x05, etc) followed by ".5 [SP]"
+                new Regex(@"^(?<title>.+?)(?:(?:[-_\W](?<![()\[!]))+S?(?<season>(?<!\d+)(?:\d{1,2})(?!\d+))(?:[ex]|\W[ex]|_){1,2}(?<episode>\d{2,3}(?!\d+|(?:[ex]|\W[ex]|_|-){1,2}\d+))(?<special>\.5[ .]\[SP\]))",
+                    RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
                 // Single episodes with a title (S01E05, 1x05, etc) and trailing info in slashes
                 new Regex(@"^(?<title>.+?)(?:(?:[-_\W](?<![()\[!]))+S?(?<season>(?<!\d+)(?:\d{1,2})(?!\d+))(?:[ex]|\W[ex]|_){1,2}(?<episode>\d{2,3}(?!\d+|(?:[ex]|\W[ex]|_|-){1,2}\d+))).+?(?:\[.+?\])(?!\\)",
                     RegexOptions.IgnoreCase | RegexOptions.Compiled),
@@ -946,6 +950,11 @@ namespace NzbDrone.Core.Parser
                         result.EpisodeNumbers = Enumerable.Range(first, count).ToArray();
 
                         lastSeasonEpisodeStringIndex = Math.Max(lastSeasonEpisodeStringIndex, episodeCaptures.Last().EndIndex());
+
+                        if (matchGroup.Groups["special"].Success)
+                        {
+                            result.Special = true;
+                        }
                     }
 
                     if (absoluteEpisodeCaptures.Any())
