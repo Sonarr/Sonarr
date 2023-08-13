@@ -125,6 +125,7 @@ namespace NzbDrone.Core.ImportLists.AniList.List
             {
                 _importListStatusService.RecordFailure(Definition.Id);
                 ex.WithData("FeedUrl", url);
+
                 if (ex.IsExpired)
                 {
                     _logger.Error(ex, "Expired CAPTCHA token for {0}, please refresh in import list settings.", this);

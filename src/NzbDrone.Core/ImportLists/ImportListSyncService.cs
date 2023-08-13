@@ -96,7 +96,7 @@ namespace NzbDrone.Core.ImportLists
                 // Map by AniListId if we have it
                 if (report.TvdbId <= 0 && report.AniListId > 0)
                 {
-                    var mappedSeries = _seriesSearchService.SearchForNewSeriesByAniListId(report.AniListId.ToString())
+                    var mappedSeries = _seriesSearchService.SearchForNewSeriesByAniListId(report.AniListId)
                         .FirstOrDefault();
 
                     if (mappedSeries != null)
