@@ -9,7 +9,7 @@ import titleCase from 'Utilities/String/titleCase';
 import translate from 'Utilities/String/translate';
 
 const branchValues = [
-  'master',
+  'main',
   'develop'
 ];
 
@@ -83,6 +83,7 @@ function UpdateSettings(props) {
                 type={inputTypes.CHECK}
                 name="updateAutomatically"
                 helpText={translate('UpdateAutomaticallyHelpText')}
+                helpTextWarning={updateMechanism.value === 'docker' ? translate('AutomaticUpdatesDisabledDocker', { appName: 'Sonarr' }) : undefined}
                 onChange={onInputChange}
                 {...updateAutomatically}
               />

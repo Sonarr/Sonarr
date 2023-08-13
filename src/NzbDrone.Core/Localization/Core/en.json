@@ -97,6 +97,7 @@
   "Automatic": "Automatic",
   "AutomaticAdd": "Automatic Add",
   "AutomaticSearch": "Automatic Search",
+  "AutomaticUpdatesDisabledDocker": "Automatic updates are not directly supported when using the Docker update mechanism. You will need to update the container image outside of {appName} or use a script",
   "Backup": "Backup",
   "BackupFolderHelpText": "Relative paths will be under Sonarr's AppData directory",
   "BackupIntervalHelpText": "Interval between automatic backups",
