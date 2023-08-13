@@ -56,11 +56,11 @@ namespace NzbDrone.Core.Download
 
         private IEnumerable<IDownloadClient> FilterBlockedClients(IEnumerable<IDownloadClient> clients)
         {
-            var blockedIndexers = _downloadClientStatusService.GetBlockedProviders().ToDictionary(v => v.ProviderId, v => v);
+            var blockedClients = _downloadClientStatusService.GetBlockedProviders().ToDictionary(v => v.ProviderId, v => v);
 
             foreach (var client in clients)
             {
-                if (blockedIndexers.TryGetValue(client.Definition.Id, out var downloadClientStatus))
+                if (blockedClients.TryGetValue(client.Definition.Id, out var downloadClientStatus))
                 {
                     _logger.Debug("Temporarily ignoring download client {0} till {1} due to recent failures.", client.Definition.Name, downloadClientStatus.DisabledTill.Value.ToLocalTime());
                     continue;
