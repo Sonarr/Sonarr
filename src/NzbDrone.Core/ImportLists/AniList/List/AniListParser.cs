@@ -1,26 +1,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using NLog;
-using NzbDrone.Common.Instrumentation;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.ImportLists.Exceptions;
-using NzbDrone.Core.ImportLists.Simkl;
-using NzbDrone.Core.MetadataSource;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.ImportLists.AniList.List
 {
     public class AniListParser : IParseImportListResponse
     {
-        private static readonly Logger Logger = NzbDroneLogger.GetLogger(typeof(SimklParser));
-
         private readonly AniListSettings _settings;
-        private readonly ISearchForNewSeries _seriesSearchService;
 
-        public AniListParser(AniListSettings settings, ISearchForNewSeries seriesSearchService)
+        public AniListParser(AniListSettings settings)
         {
-            _seriesSearchService = seriesSearchService;
             _settings = settings;
         }
 
@@ -54,25 +46,14 @@ namespace NzbDrone.Core.ImportLists.AniList.List
             foreach (var item in filtered)
             {
                 var media = item.Media;
-                var mappedSeries = _seriesSearchService.SearchForNewSeriesByAniListId(media.Id.ToString())
-                    .FirstOrDefault();
 
-                if (mappedSeries != null)
+                var entry = new ImportListItemInfo
                 {
-                    var entry = new ImportListItemInfo
-                    {
-                        TvdbId = mappedSeries.TvdbId,
-                        Title = mappedSeries.Title,
-                        Year = mappedSeries.Year,
-                        ImdbId = mappedSeries.ImdbId
-                    };
+                    AniListId = media.Id,
+                    Title = media.Title.UserPreferred ?? media.Title.UserRomaji
+                };
 
-                    result.Add(entry);
-                }
-                else
-                {
-                    Logger.Warn("'{1}' (id:{0}) could not be imported, because there is no mapping available.", media.Id, media.Title.UserPreferred ?? media.Title.UserRomaji);
-                }
+                result.Add(entry);
             }
 
             pageInfo = jsonResponse.Data.Page.PageInfo;

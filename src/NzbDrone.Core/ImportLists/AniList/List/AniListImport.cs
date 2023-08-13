@@ -9,7 +9,6 @@ using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Http.CloudFlare;
 using NzbDrone.Core.ImportLists.Exceptions;
 using NzbDrone.Core.Indexers.Exceptions;
-using NzbDrone.Core.MetadataSource;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 
@@ -22,9 +21,8 @@ namespace NzbDrone.Core.ImportLists.AniList.List
                     IImportListStatusService importListStatusService,
                     IConfigService configService,
                     IParsingService parsingService,
-                    ISearchForNewSeries seriesSearchService,
                     Logger logger)
-        : base(netImportRepository, httpClient, importListStatusService, configService, parsingService, seriesSearchService, logger)
+        : base(netImportRepository, httpClient, importListStatusService, configService, parsingService, logger)
         {
         }
 
@@ -41,7 +39,7 @@ namespace NzbDrone.Core.ImportLists.AniList.List
 
         public override AniListParser GetParser()
         {
-            return new AniListParser(Settings, _seriesSearchService);
+            return new AniListParser(Settings);
         }
 
         protected override IList<ImportListItemInfo> FetchItems(Func<IImportListRequestGenerator, ImportListPageableRequestChain> pageableRequestChainSelector, bool isRecent = false)

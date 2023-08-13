@@ -1,4 +1,3 @@
-using System.Text.Json.Serialization;
 using Newtonsoft.Json;
 
 namespace NzbDrone.Core.ImportLists.AniList
@@ -39,23 +38,5 @@ namespace NzbDrone.Core.ImportLists.AniList
         public int ExpiresIn { get; set; }
         [JsonProperty("refresh_token")]
         public string RefreshToken { get; set; }
-    }
-
-    public class MediaMapping
-    {
-        [JsonPropertyName("anilist_id")]
-        public int? Anilist { get; set; }
-
-        [JsonPropertyName("thetvdb_id")]
-        public int? Tvdb { get; set; }
-
-        [JsonPropertyName("mal_id")]
-        public int? MyAnimeList { get; set; }
-
-        [JsonPropertyName("imdb_id")]
-        public string Imdb { get; set; }
-
-        [JsonPropertyName("type")]
-        public string ItemType { get; set; }
     }
 }

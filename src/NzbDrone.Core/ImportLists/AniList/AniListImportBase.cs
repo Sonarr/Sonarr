@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using NLog;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.MetadataSource;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Validation;
@@ -23,19 +22,16 @@ namespace NzbDrone.Core.ImportLists.AniList
         public const string ClientId = "13780";
 
         protected IImportListRepository _importListRepository;
-        protected ISearchForNewSeries _seriesSearchService;
 
         protected AniListImportBase(IImportListRepository netImportRepository,
                             IHttpClient httpClient,
                             IImportListStatusService importListStatusService,
                             IConfigService configService,
                             IParsingService parsingService,
-                            ISearchForNewSeries seriesSearchService,
                             Logger logger)
             : base(httpClient, importListStatusService, configService, parsingService, logger)
         {
             _importListRepository = netImportRepository;
-            _seriesSearchService = seriesSearchService;
         }
 
         public override object RequestAction(string action, IDictionary<string, string> query)
