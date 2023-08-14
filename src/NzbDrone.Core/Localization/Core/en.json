@@ -776,6 +776,8 @@
   "NoUpdatesAreAvailable": "No updates are available",
   "None": "None",
   "NotSeasonPack": "Not Season Pack",
+  "NotificationStatusAllClientHealthCheckMessage": "All notifications are unavailable due to failures",
+  "NotificationStatusSingleClientHealthCheckMessage": "Notifications unavailable due to failures: {0}",
   "NotificationTriggers": "Notification Triggers",
   "NotificationTriggersHelpText": "Select which events should trigger this notification",
   "NotificationsLoadError": "Unable to load Notifications",

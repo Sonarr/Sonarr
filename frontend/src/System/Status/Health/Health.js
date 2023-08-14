@@ -43,7 +43,7 @@ function getInternalLink(source) {
         <IconButton
           name={icons.SETTINGS}
           title={translate('Settings')}
-          to="/settings/notifications"
+          to="/settings/connect"
         />
       );
     case 'RootFolderCheck':
