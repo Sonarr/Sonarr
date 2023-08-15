@@ -20,6 +20,7 @@ import formatDateTime from 'Utilities/Date/formatDateTime';
 import formatAge from 'Utilities/Number/formatAge';
 import formatBytes from 'Utilities/Number/formatBytes';
 import formatCustomFormatScore from 'Utilities/Number/formatCustomFormatScore';
+import translate from 'Utilities/String/translate';
 import OverrideMatchModal from './OverrideMatch/OverrideMatchModal';
 import Peers from './Peers';
 import ReleaseEpisode from './ReleaseEpisode';
@@ -62,12 +63,12 @@ function getDownloadTooltip(
   if (isGrabbing) {
     return '';
   } else if (isGrabbed) {
-    return 'Added to download queue';
+    return translate('AddToDownloadQueue');
   } else if (grabError) {
     return grabError;
   }
 
-  return 'Add to download queue';
+  return translate('AddedToDownloadQueue');
 }
 
 interface InteractiveSearchRowProps {
@@ -261,7 +262,7 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
         {rejections.length ? (
           <Popover
             anchor={<Icon name={icons.DANGER} kind={kinds.DANGER} />}
-            title="Release Rejected"
+            title={translate('ReleaseRejected')}
             body={
               <ul>
                 {rejections.map((rejection, index) => {
@@ -285,7 +286,7 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
 
         <Link
           className={styles.manualDownloadContent}
-          title="Override and add to download queue"
+          title={translate('OverrideAndAddToDownloadQueue')}
           onPress={onOverridePress}
         >
           <div className={styles.manualDownloadContent}>
@@ -307,9 +308,9 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
       <ConfirmModal
         isOpen={isConfirmGrabModalOpen}
         kind={kinds.WARNING}
-        title="Grab Release"
-        message={`Sonarr was unable to determine which series and episode this release was for. Sonarr may be unable to automatically import this release. Do you want to grab '${title}'?`}
-        confirmLabel="Grab"
+        title={translate('GrabRelease')}
+        message={translate('GrabReleaseMessageText', { title })}
+        confirmLabel={translate('Grab')}
         onConfirm={onGrabConfirm}
         onCancel={onGrabCancel}
       />

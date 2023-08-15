@@ -32,13 +32,17 @@ function SelectDownloadClientModalContent(
 
   return (
     <ModalContent onModalClose={onModalClose}>
-      <ModalHeader>{modalTitle} - Select Download Client</ModalHeader>
+      <ModalHeader>
+        {translate('SelectDownloadClientModalTitle', { modalTitle })}
+      </ModalHeader>
 
       <ModalBody>
         {isFetching ? <LoadingIndicator /> : null}
 
         {!isFetching && error ? (
-          <Alert kind={kinds.DANGER}>Unable to load download clients</Alert>
+          <Alert kind={kinds.DANGER}>
+            {translate('DownloadClientsLoadError')}
+          </Alert>
         ) : null}
 
         {isPopulated && !error ? (

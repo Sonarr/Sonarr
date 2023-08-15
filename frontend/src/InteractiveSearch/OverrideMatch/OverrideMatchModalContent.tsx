@@ -56,7 +56,7 @@ interface OverrideMatchModalContentProps {
 }
 
 function OverrideMatchModalContent(props: OverrideMatchModalContentProps) {
-  const modalTitle = 'Manual Grab';
+  const modalTitle = translate('ManualGrab');
   const {
     indexerId,
     title,
@@ -185,16 +185,16 @@ function OverrideMatchModalContent(props: OverrideMatchModalContentProps) {
 
   const onGrabPress = useCallback(() => {
     if (!seriesId) {
-      setError('Series must be selected');
+      setError(translate('OverrideGrabNoSeries'));
       return;
     } else if (!episodes.length) {
-      setError('At least one episode must be selected');
+      setError(translate('OverrideGrabNoEpisode'));
       return;
     } else if (!quality) {
-      setError('Quality must be selected');
+      setError(translate('OverrideGrabNoQuality'));
       return;
     } else if (!languages.length) {
-      setError('At least one language must be selected');
+      setError(translate('OverrideGrabNoLanguage'));
       return;
     }
 
@@ -239,7 +239,7 @@ function OverrideMatchModalContent(props: OverrideMatchModalContentProps) {
   return (
     <ModalContent onModalClose={onModalClose}>
       <ModalHeader>
-        {translate('Override and Grab - {title}', { title })}
+        {translate('OverrideGrabModalTitle', { title })}
       </ModalHeader>
 
       <ModalBody>
@@ -257,7 +257,7 @@ function OverrideMatchModalContent(props: OverrideMatchModalContentProps) {
 
           <DescriptionListItem
             className={styles.item}
-            title={translate('Season Number')}
+            title={translate('SeasonNumber')}
             data={
               <OverrideMatchData
                 value={seasonNumber}
@@ -311,13 +311,13 @@ function OverrideMatchModalContent(props: OverrideMatchModalContentProps) {
           {downloadClients.length > 1 ? (
             <DescriptionListItem
               className={styles.item}
-              title={translate('Download Client')}
+              title={translate('DownloadClient')}
               data={
                 <OverrideMatchData
                   value={
                     downloadClients.find(
                       (downloadClient) => downloadClient.id === downloadClientId
-                    )?.name ?? 'Default'
+                    )?.name ?? translate('Default')
                   }
                   onPress={onSelectDownloadClientPress}
                 />
@@ -338,7 +338,7 @@ function OverrideMatchModalContent(props: OverrideMatchModalContentProps) {
             error={grabError}
             onPress={onGrabPress}
           >
-            {translate('Grab Release')}
+            {translate('GrabRelease')}
           </SpinnerErrorButton>
         </div>
       </ModalFooter>
