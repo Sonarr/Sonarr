@@ -121,29 +121,23 @@ namespace NzbDrone.Core.MediaFiles
                 throw new SameFilenameException("File not moved, source and destination are the same", episodeFilePath);
             }
 
-            var transfer = true;
-
             episodeFile.RelativePath = series.Path.GetRelativePath(destinationFilePath);
 
-            if (localEpisode is not null)
+            if (localEpisode is not null && _scriptImportDecider.TryImport(episodeFilePath, destinationFilePath, localEpisode, episodeFile, mode) is var scriptImportDecision && scriptImportDecision != ScriptImportDecision.DeferMove)
             {
-                var scriptImportDecision = _scriptImportDecider.TryImport(episodeFilePath, destinationFilePath, localEpisode, episodeFile, mode);
-
-                switch (scriptImportDecision)
+                if (scriptImportDecision == ScriptImportDecision.RenameRequested)
                 {
-                    case ScriptImportDecision.DeferMove:
-                        break;
-                    case ScriptImportDecision.RenameRequested:
+                    try
+                    {
                         MoveEpisodeFile(episodeFile, series, episodeFile.Episodes);
-                        transfer = false;
-                        break;
-                    case ScriptImportDecision.MoveComplete:
-                        transfer = false;
-                        break;
+                    }
+                    catch (SameFilenameException)
+                    {
+                        _logger.Debug("No rename was required. File already exists at destination.");
+                    }
                 }
             }
-
-            if (transfer)
+            else
             {
                 _diskTransferService.TransferFile(episodeFilePath, destinationFilePath, mode);
             }
