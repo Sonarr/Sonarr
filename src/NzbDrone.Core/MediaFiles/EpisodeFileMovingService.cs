@@ -129,17 +129,18 @@ namespace NzbDrone.Core.MediaFiles
             {
                 var scriptImportDecision = _scriptImportDecider.TryImport(episodeFilePath, destinationFilePath, localEpisode, episodeFile, mode);
 
-                switch (scriptImportDecision)
+                transfer = scriptImportDecision == ScriptImportDecision.DeferMove;
+
+                if (scriptImportDecision == ScriptImportDecision.RenameRequested)
                 {
-                    case ScriptImportDecision.DeferMove:
-                        break;
-                    case ScriptImportDecision.RenameRequested:
+                    try
+                    {
                         MoveEpisodeFile(episodeFile, series, episodeFile.Episodes);
-                        transfer = false;
-                        break;
-                    case ScriptImportDecision.MoveComplete:
-                        transfer = false;
-                        break;
+                    }
+                    catch (SameFilenameException)
+                    {
+                        _logger.Debug("No rename was required. File already exists at destination.");
+                    }
                 }
             }
 
