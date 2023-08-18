@@ -4,12 +4,14 @@ import Alert from 'Components/Alert';
 import CheckInput from 'Components/Form/CheckInput';
 import Button from 'Components/Link/Button';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
+import InlineMarkdown from 'Components/Markdown/InlineMarkdown';
 import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import { kinds } from 'Helpers/Props';
-import SeasonNumber from 'Season/SeasonNumber';
+import formatSeason from 'Season/formatSeason';
+import translate from 'Utilities/String/translate';
 import getSelectedIds from 'Utilities/Table/getSelectedIds';
 import selectAll from 'Utilities/Table/selectAll';
 import toggleSelected from 'Utilities/Table/toggleSelected';
@@ -93,7 +95,10 @@ class OrganizePreviewModalContent extends Component {
     return (
       <ModalContent onModalClose={onModalClose}>
         <ModalHeader>
-          Organize & Rename {seasonNumber != null && <SeasonNumber seasonNumber={seasonNumber} />}
+          { seasonNumber == null ?
+            translate('OrganizeModalHeader') :
+            translate('OrganizeModalHeaderSeason', { season: formatSeason(seasonNumber) })
+          }
         </ModalHeader>
 
         <ModalBody>
@@ -104,7 +109,7 @@ class OrganizePreviewModalContent extends Component {
 
           {
             !isFetching && error &&
-              <div>Error loading previews</div>
+              <div>{translate('OrganizeLoadError')}</div>
           }
 
           {
@@ -112,8 +117,8 @@ class OrganizePreviewModalContent extends Component {
               <div>
                 {
                   renameEpisodes ?
-                    <div>Success! My work is done, no files to rename.</div> :
-                    <div>Renaming is disabled, nothing to rename</div>
+                    <div>{translate('OrganizeNothingToRename')}</div> :
+                    <div>{translate('OrganizeRenamingDisabled')}</div>
                 }
               </div>
           }
@@ -123,17 +128,11 @@ class OrganizePreviewModalContent extends Component {
               <div>
                 <Alert>
                   <div>
-                    All paths are relative to:
-                    <span className={styles.path}>
-                      {path}
-                    </span>
+                    <InlineMarkdown data={translate('OrganizeRelativePaths', { path })} blockClassName={styles.path} />
                   </div>
 
                   <div>
-                    Naming pattern:
-                    <span className={styles.episodeFormat}>
-                      {episodeFormat}
-                    </span>
+                    <InlineMarkdown data={translate('OrganizeNamingPattern', { episodeFormat })} blockClassName={styles.episodeFormat} />
                   </div>
                 </Alert>
 
@@ -172,14 +171,14 @@ class OrganizePreviewModalContent extends Component {
           <Button
             onPress={onModalClose}
           >
-            Cancel
+            {translate('Cancel')}
           </Button>
 
           <Button
             kind={kinds.PRIMARY}
             onPress={this.onOrganizePress}
           >
-            Organize
+            {translate('Organize')}
           </Button>
         </ModalFooter>
       </ModalContent>

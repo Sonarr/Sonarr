@@ -7,7 +7,7 @@ import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import { scrollDirections } from 'Helpers/Props';
 import InteractiveSearchConnector from 'InteractiveSearch/InteractiveSearchConnector';
-import SeasonNumber from 'Season/SeasonNumber';
+import formatSeason from 'Season/formatSeason';
 
 function SeasonInteractiveSearchModalContent(props) {
   const {
@@ -19,7 +19,7 @@ function SeasonInteractiveSearchModalContent(props) {
   return (
     <ModalContent onModalClose={onModalClose}>
       <ModalHeader>
-        Interactive Search  {seasonNumber != null && <SeasonNumber seasonNumber={seasonNumber} />}
+        Interactive Search  {seasonNumber != null && formatSeason(seasonNumber)}
       </ModalHeader>
 
       <ModalBody scrollDirection={scrollDirections.BOTH}>
