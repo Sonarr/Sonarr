@@ -278,6 +278,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                         if (config.DhtEnabled)
                         {
                             item.Status = DownloadItemStatus.Queued;
+                            item.Message = "qBittorrent is downloading metadata";
                         }
                         else
                         {
