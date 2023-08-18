@@ -4,6 +4,7 @@ import Alert from 'Components/Alert';
 import FieldSet from 'Components/FieldSet';
 import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
+import InlineMarkdown from 'Components/Markdown/InlineMarkdown';
 import PageSectionContent from 'Components/Page/PageSectionContent';
 import { icons, kinds } from 'Helpers/Props';
 import translate from 'Utilities/String/translate';
@@ -53,7 +54,7 @@ class RemotePathMappings extends Component {
         >
 
           <Alert kind={kinds.INFO}>
-            {translate('RemotePathMappingsInfo')}
+            <InlineMarkdown data={translate('RemotePathMappingsInfo', { app: 'Sonarr', wikiLink: 'https://wiki.servarr.com/sonarr/settings#remote-path-mappings' })} />
           </Alert>
 
           <div className={styles.remotePathMappingsHeader}>
