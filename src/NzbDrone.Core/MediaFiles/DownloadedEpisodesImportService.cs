@@ -212,7 +212,15 @@ namespace NzbDrone.Core.MediaFiles
                 ShouldDeleteFolder(directoryInfo, series))
             {
                 _logger.Debug("Deleting folder after importing valid files");
-                _diskProvider.DeleteFolder(directoryInfo.FullName, true);
+
+                try
+                {
+                    _diskProvider.DeleteFolder(directoryInfo.FullName, true);
+                }
+                catch (IOException e)
+                {
+                    _logger.Debug(e, "Unable to delete folder after importing: {0}", e.Message);
+                }
             }
             else if (importResults.Empty())
             {
