@@ -162,6 +162,7 @@ namespace NzbDrone.Common.Disk
 
             return Directory.EnumerateFiles(path, "*", new EnumerationOptions
             {
+                AttributesToSkip = FileAttributes.System,
                 RecurseSubdirectories = recursive,
                 IgnoreInaccessible = true
             });
