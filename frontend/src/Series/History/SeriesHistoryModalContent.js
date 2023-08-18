@@ -11,7 +11,7 @@ import ModalHeader from 'Components/Modal/ModalHeader';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import { icons, kinds } from 'Helpers/Props';
-import SeasonNumber from 'Season/SeasonNumber';
+import formatSeason from 'Season/formatSeason';
 import translate from 'Utilities/String/translate';
 import SeriesHistoryRowConnector from './SeriesHistoryRowConnector';
 
@@ -88,7 +88,7 @@ class SeriesHistoryModalContent extends Component {
     return (
       <ModalContent onModalClose={onModalClose}>
         <ModalHeader>
-          History {seasonNumber != null && <SeasonNumber seasonNumber={seasonNumber} />}
+          History {seasonNumber != null && formatSeason(seasonNumber)}
         </ModalHeader>
 
         <ModalBody>
