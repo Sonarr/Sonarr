@@ -117,22 +117,22 @@ function ParseResult(props: ParseResultProps) {
           <div className={styles.column}>
             <ParseResultItem
               title={translate('Special')}
-              data={special ? 'True' : 'False'}
+              data={special ? translate('True') : translate('False')}
             />
 
             <ParseResultItem
               title={translate('FullSeason')}
-              data={fullSeason ? 'True' : 'False'}
+              data={fullSeason ? translate('True') : translate('False')}
             />
 
             <ParseResultItem
               title={translate('MultiSeason')}
-              data={isMultiSeason ? 'True' : 'False'}
+              data={isMultiSeason ? translate('True') : translate('False')}
             />
 
             <ParseResultItem
               title={translate('PartialSeason')}
-              data={isPartialSeason ? 'True' : 'False'}
+              data={isPartialSeason ? translate('True') : translate('False')}
             />
           </div>
         </div>
@@ -149,14 +149,14 @@ function ParseResult(props: ParseResultProps) {
               title={translate('Proper')}
               data={
                 quality.revision.version > 1 && !quality.revision.isRepack
-                  ? 'True'
+                  ? translate('True')
                   : '-'
               }
             />
 
             <ParseResultItem
               title={translate('Repack')}
-              data={quality.revision.isRepack ? 'True' : '-'}
+              data={quality.revision.isRepack ? translate('True') : '-'}
             />
           </div>
 
@@ -170,7 +170,7 @@ function ParseResult(props: ParseResultProps) {
 
             <ParseResultItem
               title={translate('Real')}
-              data={quality.revision.real ? 'True' : '-'}
+              data={quality.revision.real ? translate('True') : '-'}
             />
           </div>
         </div>
@@ -228,7 +228,13 @@ function ParseResult(props: ParseResultProps) {
 
         <ParseResultItem
           title={translate('CustomFormats')}
-          data={<EpisodeFormats formats={customFormats} />}
+          data={
+            customFormats && customFormats.length > 0 ? (
+              <EpisodeFormats formats={customFormats} />
+            ) : (
+              '-'
+            )
+          }
         />
 
         <ParseResultItem

@@ -9,6 +9,7 @@ import PageContentBody from 'Components/Page/PageContentBody';
 import { icons } from 'Helpers/Props';
 import { clear, fetch } from 'Store/Actions/parseActions';
 import getErrorMessage from 'Utilities/Object/getErrorMessage';
+import translate from 'Utilities/String/translate';
 import ParseResult from './ParseResult';
 import parseStateSelector from './parseStateSelector';
 import styles from './Parse.css';
@@ -50,7 +51,7 @@ function Parse() {
   );
 
   return (
-    <PageContent title="Parse">
+    <PageContent title={translate('Parse')}>
       <PageContentBody>
         <div className={styles.inputContainer}>
           <div className={styles.inputIconContainer}>
@@ -76,7 +77,7 @@ function Parse() {
         {!isFetching && !!error ? (
           <div className={styles.message}>
             <div className={styles.helpText}>
-              Error parsing, please try again.
+              {translate('ParseModalErrorParsing')}
             </div>
             <div>{getErrorMessage(error)}</div>
           </div>
@@ -84,7 +85,7 @@ function Parse() {
 
         {!isFetching && title && !error && !item.parsedEpisodeInfo ? (
           <div className={styles.message}>
-            Unable to parse the provided title, please try again.
+            {translate('ParseModalUnableToParse')}
           </div>
         ) : null}
 
@@ -95,12 +96,9 @@ function Parse() {
         {title ? null : (
           <div className={styles.message}>
             <div className={styles.helpText}>
-              Enter a release title in the input above
+              {translate('ParseModalHelpText')}
             </div>
-            <div>
-              Sonarr will attempt to parse the title and show you details about
-              it
-            </div>
+            <div>{translate('ParseModalHelpTextDetails')}</div>
           </div>
         )}
       </PageContentBody>

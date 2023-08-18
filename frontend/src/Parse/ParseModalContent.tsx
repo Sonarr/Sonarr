@@ -86,7 +86,7 @@ function ParseModalContent(props: ParseModalContentProps) {
         {!isFetching && !!error ? (
           <div className={styles.message}>
             <div className={styles.helpText}>
-              Error parsing, please try again.
+              {translate('ParseModalErrorParsing')}
             </div>
             <div>{getErrorMessage(error)}</div>
           </div>
@@ -94,7 +94,7 @@ function ParseModalContent(props: ParseModalContentProps) {
 
         {!isFetching && title && !error && !item.parsedEpisodeInfo ? (
           <div className={styles.message}>
-            Unable to parse the provided title, please try again.
+            {translate('ParseModalUnableToParse')}
           </div>
         ) : null}
 
@@ -105,12 +105,9 @@ function ParseModalContent(props: ParseModalContentProps) {
         {title ? null : (
           <div className={styles.message}>
             <div className={styles.helpText}>
-              Enter a release title in the input above
+              {translate('ParseModalHelpText')}
             </div>
-            <div>
-              Sonarr will attempt to parse the title and show you details about
-              it
-            </div>
+            <div>{translate('ParseModalHelpTextDetails')}</div>
           </div>
         )}
       </ModalBody>
