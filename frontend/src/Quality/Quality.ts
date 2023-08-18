@@ -1,5 +1,5 @@
 export enum QualitySource {
-  Unknown = 'unkonwn',
+  Unknown = 'unknown',
   Television = 'television',
   TelevisionRaw = 'televisionRaw',
   Web = 'web',
