@@ -62,11 +62,6 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                 return Decision.Accept();
             }
 
-            if (folderEpisodes.First().SeasonNumber != fileEpisodes.FirstOrDefault()?.SeasonNumber)
-            {
-                return Decision.Reject("Season number {0} was unexpected considering the folder name {1}", fileInfo.SeasonNumber, folderInfo.ReleaseTitle);
-            }
-
             var unexpected = fileEpisodes.Where(e => folderEpisodes.All(o => o.Id != e.Id)).ToList();
 
             if (unexpected.Any())
