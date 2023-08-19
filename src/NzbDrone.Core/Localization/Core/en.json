@@ -950,6 +950,7 @@
   "RemotePathMappingRemotePathHelpText": "Root path to the directory that the Download Client accesses",
   "RemotePathMappingWrongOSPathHealthCheckMessage": "Remote download client {0} places downloads in {1} but this is not a valid {2} path. Review your remote path mappings and download client settings.",
   "RemotePathMappings": "Remote Path Mappings",
+  "RemotePathMappingsInfo": "Remote Path Mappings are very rarely required, if {app} and your download client are on the same system it is better to match your paths. For more information see the [wiki]({wikiLink})",
   "RemotePathMappingsLoadError": "Unable to load Remote Path Mappings",
   "Remove": "Remove",
   "RemoveCompleted": "Remove Completed",
