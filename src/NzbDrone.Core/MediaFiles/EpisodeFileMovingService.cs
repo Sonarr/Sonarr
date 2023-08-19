@@ -121,16 +121,10 @@ namespace NzbDrone.Core.MediaFiles
                 throw new SameFilenameException("File not moved, source and destination are the same", episodeFilePath);
             }
 
-            var transfer = true;
-
             episodeFile.RelativePath = series.Path.GetRelativePath(destinationFilePath);
 
-            if (localEpisode is not null)
+            if (localEpisode is not null && _scriptImportDecider.TryImport(episodeFilePath, destinationFilePath, localEpisode, episodeFile, mode) is var scriptImportDecision && scriptImportDecision != ScriptImportDecision.DeferMove)
             {
-                var scriptImportDecision = _scriptImportDecider.TryImport(episodeFilePath, destinationFilePath, localEpisode, episodeFile, mode);
-
-                transfer = scriptImportDecision == ScriptImportDecision.DeferMove;
-
                 if (scriptImportDecision == ScriptImportDecision.RenameRequested)
                 {
                     try
@@ -143,8 +137,7 @@ namespace NzbDrone.Core.MediaFiles
                     }
                 }
             }
-
-            if (transfer)
+            else
             {
                 _diskTransferService.TransferFile(episodeFilePath, destinationFilePath, mode);
             }
