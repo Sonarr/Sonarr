@@ -25,6 +25,8 @@ namespace NzbDrone.Core.Test.ImportListTests
 
             _importListReports = new List<ImportListItemInfo> { importListItem1 };
 
+            var mockImportList = new Mock<IImportList>();
+
             Mocker.GetMock<ISeriesService>()
                   .Setup(v => v.AllSeriesTvdbIds())
                   .Returns(new List<int>());
@@ -40,6 +42,10 @@ namespace NzbDrone.Core.Test.ImportListTests
             Mocker.GetMock<IImportListFactory>()
                   .Setup(v => v.All())
                   .Returns(new List<ImportListDefinition> { new ImportListDefinition { ShouldMonitor = MonitorTypes.All } });
+
+            Mocker.GetMock<IImportListFactory>()
+                .Setup(v => v.AutomaticAddEnabled(It.IsAny<bool>()))
+                .Returns(new List<IImportList> { mockImportList.Object });
 
             Mocker.GetMock<IFetchAndParseImportList>()
                   .Setup(v => v.Fetch())
@@ -151,6 +157,32 @@ namespace NzbDrone.Core.Test.ImportListTests
 
             Mocker.GetMock<IAddSeriesService>()
                   .Verify(v => v.AddSeries(It.Is<List<Series>>(t => t.Count == 0), It.IsAny<bool>()));
+        }
+
+        [Test]
+        public void should_not_fetch_if_no_lists_are_enabled()
+        {
+            Mocker.GetMock<IImportListFactory>()
+                .Setup(v => v.AutomaticAddEnabled(It.IsAny<bool>()))
+                .Returns(new List<IImportList>());
+
+            Subject.Execute(new ImportListSyncCommand());
+
+            Mocker.GetMock<IFetchAndParseImportList>()
+                .Verify(v => v.Fetch(), Times.Never);
+        }
+
+        [Test]
+        public void should_not_process_if_no_items_are_returned()
+        {
+            Mocker.GetMock<IFetchAndParseImportList>()
+                .Setup(v => v.Fetch())
+                .Returns(new List<ImportListItemInfo>());
+
+            Subject.Execute(new ImportListSyncCommand());
+
+            Mocker.GetMock<IImportListExclusionService>()
+                .Verify(v => v.All(), Times.Never);
         }
     }
 }
