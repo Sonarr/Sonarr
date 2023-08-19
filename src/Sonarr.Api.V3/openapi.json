@@ -8051,6 +8051,9 @@
           "placeholder": {
             "type": "string",
             "nullable": true
+          },
+          "isFloat": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
