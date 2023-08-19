@@ -229,7 +229,7 @@ function ParseResult(props: ParseResultProps) {
         <ParseResultItem
           title={translate('CustomFormats')}
           data={
-            customFormats && customFormats.length > 0 ? (
+            customFormats?.length ? (
               <EpisodeFormats formats={customFormats} />
             ) : (
               '-'
