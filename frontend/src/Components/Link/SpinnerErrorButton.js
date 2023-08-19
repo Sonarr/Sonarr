@@ -97,6 +97,7 @@ class SpinnerErrorButton extends Component {
 
   render() {
     const {
+      kind,
       isSpinning,
       error,
       children,
@@ -112,7 +113,7 @@ class SpinnerErrorButton extends Component {
     const showIcon = wasSuccessful || hasWarning || hasError;
 
     let iconName = icons.CHECK;
-    let iconKind = kinds.SUCCESS;
+    let iconKind = kind === kinds.PRIMARY ? kinds.DEFAULT : kinds.SUCCESS;
 
     if (hasWarning) {
       iconName = icons.WARNING;
@@ -126,6 +127,7 @@ class SpinnerErrorButton extends Component {
 
     return (
       <SpinnerButton
+        kind={kind}
         isSpinning={isSpinning}
         {...otherProps}
       >
@@ -154,6 +156,7 @@ class SpinnerErrorButton extends Component {
 }
 
 SpinnerErrorButton.propTypes = {
+  kind: PropTypes.oneOf(kinds.all),
   isSpinning: PropTypes.bool.isRequired,
   error: PropTypes.object,
   children: PropTypes.node.isRequired
