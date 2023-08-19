@@ -21,6 +21,7 @@ namespace Sonarr.Api.V3.Episodes
         public string AirDate { get; set; }
         public DateTime? AirDateUtc { get; set; }
         public int Runtime { get; set; }
+        public string FinaleType { get; set; }
         public string Overview { get; set; }
         public EpisodeFileResource EpisodeFile { get; set; }
         public bool HasFile { get; set; }
@@ -64,6 +65,7 @@ namespace Sonarr.Api.V3.Episodes
                 AirDate = model.AirDate,
                 AirDateUtc = model.AirDateUtc,
                 Runtime = model.Runtime,
+                FinaleType = model.FinaleType,
                 Overview = model.Overview,
 
                 // EpisodeFile

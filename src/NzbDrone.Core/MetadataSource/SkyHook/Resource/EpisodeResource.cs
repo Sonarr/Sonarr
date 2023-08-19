@@ -15,6 +15,7 @@ namespace NzbDrone.Core.MetadataSource.SkyHook.Resource
         public string AirDate { get; set; }
         public DateTime? AirDateUtc { get; set; }
         public int Runtime { get; set; }
+        public string FinaleType { get; set; }
         public RatingResource Rating { get; set; }
         public string Overview { get; set; }
         public string Image { get; set; }

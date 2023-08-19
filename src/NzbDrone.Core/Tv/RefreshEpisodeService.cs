@@ -45,7 +45,10 @@ namespace NzbDrone.Core.Tv
                 dupeFreeRemoteEpisodes = MapAbsoluteEpisodeNumbers(dupeFreeRemoteEpisodes);
             }
 
-            foreach (var episode in OrderEpisodes(series, dupeFreeRemoteEpisodes))
+            var orderedEpisodes = OrderEpisodes(series, dupeFreeRemoteEpisodes).ToList();
+            var episodesPerSeason = orderedEpisodes.GroupBy(s => s.SeasonNumber).ToDictionary(g => g.Key, g => g.Count());
+
+            foreach (var episode in orderedEpisodes)
             {
                 try
                 {
@@ -76,8 +79,15 @@ namespace NzbDrone.Core.Tv
                     episodeToUpdate.AirDate = episode.AirDate;
                     episodeToUpdate.AirDateUtc = episode.AirDateUtc;
                     episodeToUpdate.Runtime = episode.Runtime;
+                    episodeToUpdate.FinaleType = episode.FinaleType;
                     episodeToUpdate.Ratings = episode.Ratings;
                     episodeToUpdate.Images = episode.Images;
+
+                    // TheTVDB has a severe lack of season/series finales, this helps smooth out that limitation so they can be displayed in the UI
+                    if (episodeToUpdate.FinaleType == null && episodeToUpdate.SeasonNumber > 0 && episodeToUpdate.EpisodeNumber > 1 && episodeToUpdate.EpisodeNumber == episodesPerSeason[episodeToUpdate.SeasonNumber])
+                    {
+                        episodeToUpdate.FinaleType = series.Status == SeriesStatusType.Ended ? "series" : "season";
+                    }
 
                     successCount++;
                 }

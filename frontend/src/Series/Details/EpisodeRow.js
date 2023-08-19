@@ -64,6 +64,7 @@ class EpisodeRow extends Component {
       sceneAbsoluteEpisodeNumber,
       airDateUtc,
       runtime,
+      finaleType,
       title,
       useSceneNumbering,
       unverifiedSceneNumbering,
@@ -141,6 +142,7 @@ class EpisodeRow extends Component {
                     episodeId={id}
                     seriesId={seriesId}
                     episodeTitle={title}
+                    finaleType={finaleType}
                     showOpenSeriesButton={false}
                   />
                 </TableRowCell>
@@ -366,6 +368,7 @@ EpisodeRow.propTypes = {
   sceneAbsoluteEpisodeNumber: PropTypes.number,
   airDateUtc: PropTypes.string,
   runtime: PropTypes.number,
+  finaleType: PropTypes.string,
   title: PropTypes.string.isRequired,
   isSaving: PropTypes.bool,
   useSceneNumbering: PropTypes.bool,

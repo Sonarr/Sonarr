@@ -1,3 +1,8 @@
+.container {
+  display: flex;
+  align-items: center;
+}
+
 .link {
   composes: link from '~Components/Link/Link.css';
 

@@ -6,6 +6,7 @@ import CalendarEventConnector from 'Calendar/Events/CalendarEventConnector';
 import getStatusStyle from 'Calendar/getStatusStyle';
 import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
+import getFinaleTypeName from 'Episode/getFinaleTypeName';
 import { icons, kinds } from 'Helpers/Props';
 import formatTime from 'Utilities/Date/formatTime';
 import padNumber from 'Utilities/Number/padNumber';
@@ -175,15 +176,13 @@ class CalendarEventGroup extends Component {
 
           {
             showFinaleIcon &&
-            lastEpisode.episodeNumber !== 1 &&
-            seasonNumber > 0 &&
-            lastEpisode.episodeNumber === series.seasons.find((season) => season.seasonNumber === seasonNumber).statistics.totalEpisodeCount &&
+            lastEpisode.finaleType ?
               <Icon
                 containerClassName={styles.statusIcon}
                 name={icons.INFO}
                 kind={fullColorEvents ? kinds.DEFAULT : kinds.WARNING}
-                title={series.status === 'ended' ? translate('SeriesFinale') : translate('SeasonFinale')}
-              />
+                title={getFinaleTypeName(lastEpisode.finaleType)}
+              /> : null
           }
         </div>
 

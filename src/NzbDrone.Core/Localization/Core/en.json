@@ -693,6 +693,7 @@
   "MetadataSource": "Metadata Source",
   "MetadataSourceSettings": "Metadata Source Settings",
   "MetadataSourceSettingsSummary": "Information on where Sonarr gets series and episode information",
+  "MidseasonFinale": "Midseason Finale",
   "Min": "Min",
   "MinimumAge": "Minimum Age",
   "MinimumAgeHelpText": "Usenet only: Minimum age in minutes of NZBs before they are grabbed. Use this to give new releases time to propagate to your usenet provider.",

@@ -261,6 +261,7 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
             episode.AirDate = oracleEpisode.AirDate;
             episode.AirDateUtc = oracleEpisode.AirDateUtc;
             episode.Runtime = oracleEpisode.Runtime;
+            episode.FinaleType = oracleEpisode.FinaleType;
 
             episode.Ratings = MapRatings(oracleEpisode.Rating);
 

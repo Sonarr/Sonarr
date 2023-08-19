@@ -8,6 +8,7 @@ import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
 import EpisodeDetailsModal from 'Episode/EpisodeDetailsModal';
 import episodeEntities from 'Episode/episodeEntities';
+import getFinaleTypeName from 'Episode/getFinaleTypeName';
 import { icons, kinds } from 'Helpers/Props';
 import formatTime from 'Utilities/Date/formatTime';
 import padNumber from 'Utilities/Number/padNumber';
@@ -52,6 +53,7 @@ class AgendaEvent extends Component {
       airDateUtc,
       monitored,
       unverifiedSceneNumbering,
+      finaleType,
       hasFile,
       grabbed,
       queueItem,
@@ -71,8 +73,6 @@ class AgendaEvent extends Component {
     const isMonitored = series.monitored && monitored;
     const statusStyle = getStatusStyle(hasFile, downloading, startTime, endTime, isMonitored);
     const missingAbsoluteNumber = series.seriesType === 'anime' && seasonNumber > 0 && !absoluteEpisodeNumber;
-    const season = series.seasons.find((s) => s.seasonNumber === seasonNumber);
-    const seasonStatistics = season?.statistics || {};
 
     return (
       <div className={styles.event}>
@@ -189,15 +189,14 @@ class AgendaEvent extends Component {
 
             {
               showFinaleIcon &&
-              episodeNumber !== 1 &&
-              seasonNumber > 0 &&
-              episodeNumber === seasonStatistics.totalEpisodeCount &&
+              finaleType ?
                 <Icon
                   className={styles.statusIcon}
                   name={icons.INFO}
                   kind={kinds.WARNING}
-                  title={series.status === 'ended' ? translate('SeriesFinale') : translate('SeasonFinale')}
-                />
+                  title={getFinaleTypeName(finaleType)}
+                /> :
+                null
             }
 
             {
@@ -238,6 +237,7 @@ AgendaEvent.propTypes = {
   airDateUtc: PropTypes.string.isRequired,
   monitored: PropTypes.bool.isRequired,
   unverifiedSceneNumbering: PropTypes.bool,
+  finaleType: PropTypes.string,
   hasFile: PropTypes.bool.isRequired,
   grabbed: PropTypes.bool,
   queueItem: PropTypes.object,
