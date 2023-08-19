@@ -40,31 +40,41 @@ namespace NzbDrone.Core.ImportLists
 
         private void SyncAll()
         {
+            if (_importListFactory.AutomaticAddEnabled().Empty())
+            {
+                _logger.Debug("No import lists with automatic add enabled");
+
+                return;
+            }
+
             _logger.ProgressInfo("Starting Import List Sync");
 
-            var rssReleases = _listFetcherAndParser.Fetch();
+            var listItems = _listFetcherAndParser.Fetch().ToList();
 
-            var reports = rssReleases.ToList();
-
-            ProcessReports(reports);
+            ProcessListItems(listItems);
         }
 
         private void SyncList(ImportListDefinition definition)
         {
             _logger.ProgressInfo(string.Format("Starting Import List Refresh for List {0}", definition.Name));
 
-            var rssReleases = _listFetcherAndParser.FetchSingleList(definition);
+            var listItems = _listFetcherAndParser.FetchSingleList(definition).ToList();
 
-            var reports = rssReleases.ToList();
-
-            ProcessReports(reports);
+            ProcessListItems(listItems);
         }
 
-        private void ProcessReports(List<ImportListItemInfo> reports)
+        private void ProcessListItems(List<ImportListItemInfo> items)
         {
             var seriesToAdd = new List<Series>();
 
-            _logger.ProgressInfo("Processing {0} list items", reports.Count);
+            if (items.Count == 0)
+            {
+                _logger.ProgressInfo("No list items to process");
+
+                return;
+            }
+
+            _logger.ProgressInfo("Processing {0} list items", items.Count);
 
             var reportNumber = 1;
 
@@ -72,79 +82,79 @@ namespace NzbDrone.Core.ImportLists
             var importLists = _importListFactory.All();
             var existingTvdbIds = _seriesService.AllSeriesTvdbIds();
 
-            foreach (var report in reports)
+            foreach (var item in items)
             {
-                _logger.ProgressTrace("Processing list item {0}/{1}", reportNumber, reports.Count);
+                _logger.ProgressTrace("Processing list item {0}/{1}", reportNumber, items.Count);
 
                 reportNumber++;
 
-                var importList = importLists.Single(x => x.Id == report.ImportListId);
+                var importList = importLists.Single(x => x.Id == item.ImportListId);
 
                 // Map by IMDbId if we have it
-                if (report.TvdbId <= 0 && report.ImdbId.IsNotNullOrWhiteSpace())
+                if (item.TvdbId <= 0 && item.ImdbId.IsNotNullOrWhiteSpace())
                 {
-                    var mappedSeries = _seriesSearchService.SearchForNewSeriesByImdbId(report.ImdbId)
+                    var mappedSeries = _seriesSearchService.SearchForNewSeriesByImdbId(item.ImdbId)
                         .FirstOrDefault();
 
                     if (mappedSeries != null)
                     {
-                        report.TvdbId = mappedSeries.TvdbId;
-                        report.Title = mappedSeries?.Title;
+                        item.TvdbId = mappedSeries.TvdbId;
+                        item.Title = mappedSeries?.Title;
                     }
                 }
 
                 // Map by AniListId if we have it
-                if (report.TvdbId <= 0 && report.AniListId > 0)
+                if (item.TvdbId <= 0 && item.AniListId > 0)
                 {
-                    var mappedSeries = _seriesSearchService.SearchForNewSeriesByAniListId(report.AniListId)
+                    var mappedSeries = _seriesSearchService.SearchForNewSeriesByAniListId(item.AniListId)
                         .FirstOrDefault();
 
                     if (mappedSeries != null)
                     {
-                        report.TvdbId = mappedSeries.TvdbId;
-                        report.Title = mappedSeries.Title;
+                        item.TvdbId = mappedSeries.TvdbId;
+                        item.Title = mappedSeries.Title;
                     }
                 }
 
                 // Map TVDb if we only have a series name
-                if (report.TvdbId <= 0 && report.Title.IsNotNullOrWhiteSpace())
+                if (item.TvdbId <= 0 && item.Title.IsNotNullOrWhiteSpace())
                 {
-                    var mappedSeries = _seriesSearchService.SearchForNewSeries(report.Title)
+                    var mappedSeries = _seriesSearchService.SearchForNewSeries(item.Title)
                         .FirstOrDefault();
 
                     if (mappedSeries != null)
                     {
-                        report.TvdbId = mappedSeries.TvdbId;
-                        report.Title = mappedSeries?.Title;
+                        item.TvdbId = mappedSeries.TvdbId;
+                        item.Title = mappedSeries?.Title;
                     }
                 }
 
                 // Check to see if series excluded
-                var excludedSeries = listExclusions.Where(s => s.TvdbId == report.TvdbId).SingleOrDefault();
+                var excludedSeries = listExclusions.Where(s => s.TvdbId == item.TvdbId).SingleOrDefault();
 
                 if (excludedSeries != null)
                 {
-                    _logger.Debug("{0} [{1}] Rejected due to list exclusion", report.TvdbId, report.Title);
+                    _logger.Debug("{0} [{1}] Rejected due to list exclusion", item.TvdbId, item.Title);
                     continue;
                 }
 
                 // Break if Series Exists in DB
-                if (existingTvdbIds.Any(x => x == report.TvdbId))
+                if (existingTvdbIds.Any(x => x == item.TvdbId))
                 {
-                    _logger.Debug("{0} [{1}] Rejected, Series Exists in DB", report.TvdbId, report.Title);
+                    _logger.Debug("{0} [{1}] Rejected, Series Exists in DB", item.TvdbId, item.Title);
                     continue;
                 }
 
                 // Append Series if not already in DB or already on add list
-                if (seriesToAdd.All(s => s.TvdbId != report.TvdbId))
+                if (seriesToAdd.All(s => s.TvdbId != item.TvdbId))
                 {
                     var monitored = importList.ShouldMonitor != MonitorTypes.None;
 
                     seriesToAdd.Add(new Series
                     {
-                        TvdbId = report.TvdbId,
-                        Title = report.Title,
-                        Year = report.Year,
+                        TvdbId = item.TvdbId,
+                        Title = item.Title,
+                        Year = item.Year,
                         Monitored = monitored,
                         RootFolderPath = importList.RootFolderPath,
                         QualityProfileId = importList.QualityProfileId,
@@ -162,7 +172,7 @@ namespace NzbDrone.Core.ImportLists
 
             _addSeriesService.AddSeries(seriesToAdd, true);
 
-            var message = string.Format("Import List Sync Completed. Items found: {0}, Series added: {1}", reports.Count, seriesToAdd.Count);
+            var message = string.Format("Import List Sync Completed. Items found: {0}, Series added: {1}", items.Count, seriesToAdd.Count);
 
             _logger.ProgressInfo(message);
         }
