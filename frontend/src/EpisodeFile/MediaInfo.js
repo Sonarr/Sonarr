@@ -2,6 +2,7 @@ import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React from 'react';
 import getLanguageName from 'Utilities/String/getLanguageName';
+import translate from 'Utilities/String/translate';
 import * as mediaInfoTypes from './mediaInfoTypes';
 
 function formatLanguages(languages) {
@@ -9,7 +10,16 @@ function formatLanguages(languages) {
     return null;
   }
 
-  const splitLanguages = _.uniq(languages.split('/')).map((l) => getLanguageName(l.split('_')[0]));
+  const splitLanguages = _.uniq(languages.split('/')).map((l) => {
+    const simpleLanguage = l.split('_')[0];
+
+    if (simpleLanguage === 'und') {
+      return translate('Unknown');
+    }
+
+    return getLanguageName(simpleLanguage);
+  }
+  );
 
   if (splitLanguages.length > 3) {
     return (
