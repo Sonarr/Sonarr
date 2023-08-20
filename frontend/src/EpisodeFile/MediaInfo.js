@@ -9,7 +9,7 @@ function formatLanguages(languages) {
     return null;
   }
 
-  const splitLanguages = _.uniq(languages.split('/')).map((l) => getLanguageName(l));
+  const splitLanguages = _.uniq(languages.split('/')).map((l) => getLanguageName(l.split('_')[0]));
 
   if (splitLanguages.length > 3) {
     return (
