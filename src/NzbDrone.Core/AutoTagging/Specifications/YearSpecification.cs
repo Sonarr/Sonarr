@@ -12,7 +12,7 @@ namespace NzbDrone.Core.AutoTagging.Specifications
             RuleFor(c => c.Min).NotEmpty();
             RuleFor(c => c.Min).GreaterThan(0);
             RuleFor(c => c.Max).NotEmpty();
-            RuleFor(c => c.Max).GreaterThan(c => c.Min);
+            RuleFor(c => c.Max).GreaterThanOrEqualTo(c => c.Min);
         }
     }
 
