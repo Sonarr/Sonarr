@@ -4,6 +4,7 @@ import SortMenu from 'Components/Menu/SortMenu';
 import SortMenuItem from 'Components/Menu/SortMenuItem';
 import { align } from 'Helpers/Props';
 import SortDirection from 'Helpers/Props/SortDirection';
+import translate from 'Utilities/String/translate';
 
 interface SeriesIndexSortMenuProps {
   sortKey?: string;
@@ -24,7 +25,7 @@ function SeriesIndexSortMenu(props: SeriesIndexSortMenuProps) {
           sortDirection={sortDirection}
           onPress={onSortSelect}
         >
-          Monitored/Status
+          {translate('MonitoredStatus')}
         </SortMenuItem>
 
         <SortMenuItem
@@ -33,7 +34,7 @@ function SeriesIndexSortMenu(props: SeriesIndexSortMenuProps) {
           sortDirection={sortDirection}
           onPress={onSortSelect}
         >
-          Title
+          {translate('Title')}
         </SortMenuItem>
 
         <SortMenuItem
@@ -42,7 +43,7 @@ function SeriesIndexSortMenu(props: SeriesIndexSortMenuProps) {
           sortDirection={sortDirection}
           onPress={onSortSelect}
         >
-          Network
+          {translate('Network')}
         </SortMenuItem>
 
         <SortMenuItem
@@ -51,7 +52,7 @@ function SeriesIndexSortMenu(props: SeriesIndexSortMenuProps) {
           sortDirection={sortDirection}
           onPress={onSortSelect}
         >
-          Original Language
+          {translate('OriginalLanguage')}
         </SortMenuItem>
 
         <SortMenuItem
@@ -60,7 +61,7 @@ function SeriesIndexSortMenu(props: SeriesIndexSortMenuProps) {
           sortDirection={sortDirection}
           onPress={onSortSelect}
         >
-          Quality Profile
+          {translate('QualityProfile')}
         </SortMenuItem>
 
         <SortMenuItem
@@ -69,7 +70,7 @@ function SeriesIndexSortMenu(props: SeriesIndexSortMenuProps) {
           sortDirection={sortDirection}
           onPress={onSortSelect}
         >
-          Next Airing
+          {translate('NextAiring')}
         </SortMenuItem>
 
         <SortMenuItem
@@ -78,7 +79,7 @@ function SeriesIndexSortMenu(props: SeriesIndexSortMenuProps) {
           sortDirection={sortDirection}
           onPress={onSortSelect}
         >
-          Previous Airing
+          {translate('PreviousAiring')}
         </SortMenuItem>
 
         <SortMenuItem
@@ -87,7 +88,7 @@ function SeriesIndexSortMenu(props: SeriesIndexSortMenuProps) {
           sortDirection={sortDirection}
           onPress={onSortSelect}
         >
-          Added
+          {translate('Added')}
         </SortMenuItem>
 
         <SortMenuItem
@@ -96,7 +97,7 @@ function SeriesIndexSortMenu(props: SeriesIndexSortMenuProps) {
           sortDirection={sortDirection}
           onPress={onSortSelect}
         >
-          Seasons
+          {translate('Seasons')}
         </SortMenuItem>
 
         <SortMenuItem
@@ -105,7 +106,7 @@ function SeriesIndexSortMenu(props: SeriesIndexSortMenuProps) {
           sortDirection={sortDirection}
           onPress={onSortSelect}
         >
-          Episodes
+          {translate('Episodes')}
         </SortMenuItem>
 
         <SortMenuItem
@@ -114,7 +115,7 @@ function SeriesIndexSortMenu(props: SeriesIndexSortMenuProps) {
           sortDirection={sortDirection}
           onPress={onSortSelect}
         >
-          Episode Count
+          {translate('EpisodeCount')}
         </SortMenuItem>
 
         <SortMenuItem
@@ -123,7 +124,7 @@ function SeriesIndexSortMenu(props: SeriesIndexSortMenuProps) {
           sortDirection={sortDirection}
           onPress={onSortSelect}
         >
-          Latest Season
+          {translate('LatestSeason')}
         </SortMenuItem>
 
         <SortMenuItem
@@ -132,7 +133,7 @@ function SeriesIndexSortMenu(props: SeriesIndexSortMenuProps) {
           sortDirection={sortDirection}
           onPress={onSortSelect}
         >
-          Path
+          {translate('Path')}
         </SortMenuItem>
 
         <SortMenuItem
@@ -141,7 +142,7 @@ function SeriesIndexSortMenu(props: SeriesIndexSortMenuProps) {
           sortDirection={sortDirection}
           onPress={onSortSelect}
         >
-          Size on Disk
+          {translate('SizeOnDisk')}
         </SortMenuItem>
 
         <SortMenuItem
@@ -150,7 +151,7 @@ function SeriesIndexSortMenu(props: SeriesIndexSortMenuProps) {
           sortDirection={sortDirection}
           onPress={onSortSelect}
         >
-          Tags
+          {translate('Tags')}
         </SortMenuItem>
       </MenuContent>
     </SortMenu>

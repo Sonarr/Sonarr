@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import { Season } from 'Series/Series';
+import translate from 'Utilities/String/translate';
 import SeasonPassSeason from './SeasonPassSeason';
 import styles from './SeasonDetails.css';
 
@@ -39,7 +40,7 @@ function SeasonDetails(props: SeasonDetailsProps) {
 
       {latestSeasons.length < seasons.length ? (
         <div className={styles.truncated}>
-          Only latest 25 seasons are shown, go to details to see all seasons
+          {translate('SeasonPassTruncated')}
         </div>
       ) : null}
     </div>

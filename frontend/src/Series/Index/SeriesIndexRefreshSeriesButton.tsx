@@ -9,6 +9,7 @@ import { icons } from 'Helpers/Props';
 import { executeCommand } from 'Store/Actions/commandActions';
 import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
 import createSeriesClientSideCollectionItemsSelector from 'Store/Selectors/createSeriesClientSideCollectionItemsSelector';
+import translate from 'Utilities/String/translate';
 import getSelectedIds from 'Utilities/Table/getSelectedIds';
 
 interface SeriesIndexRefreshSeriesButtonProps {
@@ -42,12 +43,12 @@ function SeriesIndexRefreshSeriesButton(
       ? selectedSeriesIds
       : items.map((m) => m.id);
 
-  let refreshLabel = 'Update All';
+  let refreshLabel = translate('UpdateAll');
 
   if (selectedSeriesIds.length > 0) {
-    refreshLabel = 'Update Selected';
+    refreshLabel = translate('UpdateSelected');
   } else if (selectedFilterKey !== 'all') {
-    refreshLabel = 'Update Filtered';
+    refreshLabel = translate('UpdateFiltered');
   }
 
   const onPress = useCallback(() => {

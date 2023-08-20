@@ -88,7 +88,10 @@ class SeriesHistoryModalContent extends Component {
     return (
       <ModalContent onModalClose={onModalClose}>
         <ModalHeader>
-          History {seasonNumber != null && formatSeason(seasonNumber)}
+          {seasonNumber == null ?
+            translate('History') :
+            translate('HistoryModalHeaderSeason', { season: formatSeason(seasonNumber) })
+          }
         </ModalHeader>
 
         <ModalBody>
@@ -99,12 +102,12 @@ class SeriesHistoryModalContent extends Component {
 
           {
             !isFetching && !!error &&
-              <Alert kind={kinds.DANGER}>Unable to load history.</Alert>
+              <Alert kind={kinds.DANGER}>{translate('HistoryLoadError')}</Alert>
           }
 
           {
             isPopulated && !hasItems && !error &&
-              <div>No history.</div>
+              <div>{translate('NoHistory')}</div>
           }
 
           {
@@ -130,7 +133,7 @@ class SeriesHistoryModalContent extends Component {
 
         <ModalFooter>
           <Button onPress={onModalClose}>
-            Close
+            {translate('Close')}
           </Button>
         </ModalFooter>
       </ModalContent>

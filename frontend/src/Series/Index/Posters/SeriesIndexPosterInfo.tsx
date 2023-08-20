@@ -52,7 +52,7 @@ function SeriesIndexPosterInfo(props: SeriesIndexPosterInfoProps) {
 
   if (sortKey === 'originalLanguage' && !!originalLanguage?.name) {
     return (
-      <div className={styles.info} title={translate('Original Language')}>
+      <div className={styles.info} title={translate('OriginalLanguage')}>
         {originalLanguage.name}
       </div>
     );

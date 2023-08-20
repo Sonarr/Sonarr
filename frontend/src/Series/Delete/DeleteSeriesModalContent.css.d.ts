@@ -2,6 +2,7 @@
 // Please do not change this file!
 interface CssExports {
   'deleteFilesMessage': string;
+  'folderPath': string;
   'pathContainer': string;
   'pathIcon': string;
 }

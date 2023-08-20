@@ -38,6 +38,7 @@ import scrollPositions from 'Store/scrollPositions';
 import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
 import createDimensionsSelector from 'Store/Selectors/createDimensionsSelector';
 import createSeriesClientSideCollectionItemsSelector from 'Store/Selectors/createSeriesClientSideCollectionItemsSelector';
+import translate from 'Utilities/String/translate';
 import SeriesIndexFilterMenu from './Menus/SeriesIndexFilterMenu';
 import SeriesIndexSortMenu from './Menus/SeriesIndexSortMenu';
 import SeriesIndexViewMenu from './Menus/SeriesIndexViewMenu';
@@ -225,7 +226,7 @@ const SeriesIndex = withScrollPosition((props: SeriesIndexProps) => {
             />
 
             <PageToolbarButton
-              label="RSS Sync"
+              label={translate('RssSync')}
               iconName={icons.RSS}
               isSpinning={isRssSyncExecuting}
               isDisabled={hasNoSeries}
@@ -235,7 +236,11 @@ const SeriesIndex = withScrollPosition((props: SeriesIndexProps) => {
             <PageToolbarSeparator />
 
             <SeriesIndexSelectModeButton
-              label={isSelectMode ? 'Stop Selecting' : 'Select Series'}
+              label={
+                isSelectMode
+                  ? translate('StopSelecting')
+                  : translate('SelectSeries')
+              }
               iconName={isSelectMode ? icons.SERIES_ENDED : icons.CHECK}
               isSelectMode={isSelectMode}
               overflowComponent={SeriesIndexSelectModeMenuItem}
@@ -262,11 +267,14 @@ const SeriesIndex = withScrollPosition((props: SeriesIndexProps) => {
                 optionsComponent={SeriesIndexTableOptions}
                 onTableOptionChange={onTableOptionChange}
               >
-                <PageToolbarButton label="Options" iconName={icons.TABLE} />
+                <PageToolbarButton
+                  label={translate('Options')}
+                  iconName={icons.TABLE}
+                />
               </TableOptionsModalWrapper>
             ) : (
               <PageToolbarButton
-                label="Options"
+                label={translate('Options')}
                 iconName={view === 'posters' ? icons.POSTER : icons.OVERVIEW}
                 isDisabled={hasNoSeries}
                 onPress={onOptionsPress}
@@ -310,7 +318,7 @@ const SeriesIndex = withScrollPosition((props: SeriesIndexProps) => {
             {isFetching && !isPopulated ? <LoadingIndicator /> : null}
 
             {!isFetching && !!error ? (
-              <Alert kind={kinds.DANGER}>Unable to load series</Alert>
+              <Alert kind={kinds.DANGER}>{translate('SeriesLoadError')}</Alert>
             ) : null}
 
             {isLoaded ? (

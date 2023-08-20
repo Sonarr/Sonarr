@@ -13,6 +13,7 @@ import { icons, kinds } from 'Helpers/Props';
 import Series from 'Series/Series';
 import { executeCommand } from 'Store/Actions/commandActions';
 import createAllSeriesSelector from 'Store/Selectors/createAllSeriesSelector';
+import translate from 'Utilities/String/translate';
 import styles from './OrganizeSeriesModalContent.css';
 
 interface OrganizeSeriesModalContentProps {
@@ -55,18 +56,20 @@ function OrganizeSeriesModalContent(props: OrganizeSeriesModalContentProps) {
 
   return (
     <ModalContent onModalClose={onModalClose}>
-      <ModalHeader>Organize Selected Series</ModalHeader>
+      <ModalHeader>
+        {translate('OrganizeSelectedSeriesModalHeader')}
+      </ModalHeader>
 
       <ModalBody>
         <Alert>
-          Tip: To preview a rename, select "Cancel", then select any series
-          title and use the
+          {translate('OrganizeSelectedSeriesModalAlert')}
           <Icon className={styles.renameIcon} name={icons.ORGANIZE} />
         </Alert>
 
         <div className={styles.message}>
-          Are you sure you want to organize all files in the{' '}
-          {seriesTitles.length} selected series?
+          {translate('OrganizeSelectedSeriesModalConfirmation', {
+            count: seriesTitles.length,
+          })}
         </div>
 
         <ul>
@@ -77,10 +80,10 @@ function OrganizeSeriesModalContent(props: OrganizeSeriesModalContentProps) {
       </ModalBody>
 
       <ModalFooter>
-        <Button onPress={onModalClose}>Cancel</Button>
+        <Button onPress={onModalClose}>{translate('Cancel')}</Button>
 
         <Button kind={kinds.DANGER} onPress={onOrganizePress}>
-          Organize
+          {translate('Organize')}
         </Button>
       </ModalFooter>
     </ModalContent>

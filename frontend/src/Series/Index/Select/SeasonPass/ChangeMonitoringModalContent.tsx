@@ -46,7 +46,7 @@ function ChangeMonitoringModalContent(
 
   return (
     <ModalContent onModalClose={onModalClose}>
-      <ModalHeader>{translate('Monitor Series')}</ModalHeader>
+      <ModalHeader>{translate('MonitorSeries')}</ModalHeader>
 
       <ModalBody>
         <Form {...otherProps}>
@@ -56,7 +56,7 @@ function ChangeMonitoringModalContent(
 
               <Popover
                 anchor={<Icon className={styles.labelIcon} name={icons.INFO} />}
-                title={translate('Monitoring Options')}
+                title={translate('MonitoringOptions')}
                 body={<SeriesMonitoringOptionsPopoverContent />}
                 position={tooltipPositions.RIGHT}
               />
@@ -75,7 +75,7 @@ function ChangeMonitoringModalContent(
 
       <ModalFooter className={styles.modalFooter}>
         <div className={styles.selected}>
-          {translate('{count} series selected', { count: selectedCount })}
+          {translate('CountSeriesSelected', { count: selectedCount })}
         </div>
 
         <div>

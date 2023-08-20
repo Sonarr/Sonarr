@@ -30,15 +30,47 @@ interface EditSeriesModalContentProps {
 const NO_CHANGE = 'noChange';
 
 const monitoredOptions = [
-  { key: NO_CHANGE, value: 'No Change', disabled: true },
-  { key: 'monitored', value: 'Monitored' },
-  { key: 'unmonitored', value: 'Unmonitored' },
+  {
+    key: NO_CHANGE,
+    get value() {
+      return translate('NoChange');
+    },
+    disabled: true,
+  },
+  {
+    key: 'monitored',
+    get value() {
+      return translate('Monitored');
+    },
+  },
+  {
+    key: 'unmonitored',
+    get value() {
+      return translate('Unmonitored');
+    },
+  },
 ];
 
 const seasonFolderOptions = [
-  { key: NO_CHANGE, value: 'No Change', disabled: true },
-  { key: 'yes', value: 'Yes' },
-  { key: 'no', value: 'No' },
+  {
+    key: NO_CHANGE,
+    get value() {
+      return translate('NoChange');
+    },
+    disabled: true,
+  },
+  {
+    key: 'yes',
+    get value() {
+      return translate('Yes');
+    },
+  },
+  {
+    key: 'no',
+    get value() {
+      return translate('No');
+    },
+  },
 ];
 
 function EditSeriesModalContent(props: EditSeriesModalContentProps) {
@@ -152,7 +184,7 @@ function EditSeriesModalContent(props: EditSeriesModalContentProps) {
 
   return (
     <ModalContent onModalClose={onModalClose}>
-      <ModalHeader>{translate('Edit Selected Series')}</ModalHeader>
+      <ModalHeader>{translate('EditSelectedSeries')}</ModalHeader>
 
       <ModalBody>
         <FormGroup>
@@ -168,7 +200,7 @@ function EditSeriesModalContent(props: EditSeriesModalContentProps) {
         </FormGroup>
 
         <FormGroup>
-          <FormLabel>{translate('Quality Profile')}</FormLabel>
+          <FormLabel>{translate('QualityProfile')}</FormLabel>
 
           <FormInputGroup
             type={inputTypes.QUALITY_PROFILE_SELECT}
@@ -181,7 +213,7 @@ function EditSeriesModalContent(props: EditSeriesModalContentProps) {
         </FormGroup>
 
         <FormGroup>
-          <FormLabel>{translate('Series Type')}</FormLabel>
+          <FormLabel>{translate('SeriesType')}</FormLabel>
 
           <FormInputGroup
             type={inputTypes.SERIES_TYPE_SELECT}
@@ -189,15 +221,13 @@ function EditSeriesModalContent(props: EditSeriesModalContentProps) {
             value={seriesType}
             includeNoChange={true}
             includeNoChangeDisabled={false}
-            helpText={translate(
-              'Series type is used for renaming, parsing and searching'
-            )}
+            helpText={translate('SeriesTypesHelpText')}
             onChange={onInputChange}
           />
         </FormGroup>
 
         <FormGroup>
-          <FormLabel>{translate('Season Folder')}</FormLabel>
+          <FormLabel>{translate('SeasonFolder')}</FormLabel>
 
           <FormInputGroup
             type={inputTypes.SELECT}
@@ -209,7 +239,7 @@ function EditSeriesModalContent(props: EditSeriesModalContentProps) {
         </FormGroup>
 
         <FormGroup>
-          <FormLabel>{translate('Root Folder')}</FormLabel>
+          <FormLabel>{translate('RootFolder')}</FormLabel>
 
           <FormInputGroup
             type={inputTypes.ROOT_FOLDER_SELECT}
@@ -218,9 +248,7 @@ function EditSeriesModalContent(props: EditSeriesModalContentProps) {
             includeNoChange={true}
             includeNoChangeDisabled={false}
             selectedValueOptions={{ includeFreeSpace: false }}
-            helpText={translate(
-              'Moving series to the same root folder can be used to rename series folders to match updated title or naming format'
-            )}
+            helpText={translate('SeriesEditRootFolderHelpText')}
             onChange={onInputChange}
           />
         </FormGroup>
@@ -228,7 +256,7 @@ function EditSeriesModalContent(props: EditSeriesModalContentProps) {
 
       <ModalFooter className={styles.modalFooter}>
         <div className={styles.selected}>
-          {translate('{count} series selected', { count: selectedCount })}
+          {translate('CountSeriesSelected', { count: selectedCount })}
         </div>
 
         <div>

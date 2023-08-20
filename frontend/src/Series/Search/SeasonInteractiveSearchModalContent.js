@@ -8,6 +8,7 @@ import ModalHeader from 'Components/Modal/ModalHeader';
 import { scrollDirections } from 'Helpers/Props';
 import InteractiveSearchConnector from 'InteractiveSearch/InteractiveSearchConnector';
 import formatSeason from 'Season/formatSeason';
+import translate from 'Utilities/String/translate';
 
 function SeasonInteractiveSearchModalContent(props) {
   const {
@@ -19,7 +20,10 @@ function SeasonInteractiveSearchModalContent(props) {
   return (
     <ModalContent onModalClose={onModalClose}>
       <ModalHeader>
-        Interactive Search  {seasonNumber != null && formatSeason(seasonNumber)}
+        {seasonNumber === null ?
+          translate('InteractiveSearchModalHeader') :
+          translate('InteractiveSearchModalHeaderSeason', { season: formatSeason(seasonNumber) })
+        }
       </ModalHeader>
 
       <ModalBody scrollDirection={scrollDirections.BOTH}>
@@ -34,7 +38,7 @@ function SeasonInteractiveSearchModalContent(props) {
 
       <ModalFooter>
         <Button onPress={onModalClose}>
-          Close
+          {translate('Close')}
         </Button>
       </ModalFooter>
     </ModalContent>

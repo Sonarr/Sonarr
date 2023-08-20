@@ -15,6 +15,7 @@ import SeriesPoster from 'Series/SeriesPoster';
 import { executeCommand } from 'Store/Actions/commandActions';
 import dimensions from 'Styles/Variables/dimensions';
 import fonts from 'Styles/Variables/fonts';
+import translate from 'Utilities/String/translate';
 import createSeriesIndexItemSelector from '../createSeriesIndexItemSelector';
 import selectOverviewOptions from './selectOverviewOptions';
 import SeriesIndexOverviewInfo from './SeriesIndexOverviewInfo';
@@ -27,7 +28,7 @@ const columnPaddingSmallScreen = parseInt(
 const defaultFontSize = parseInt(fonts.defaultFontSize);
 const lineHeight = parseFloat(fonts.lineHeight);
 
-// Hardcoded height beased on line-height of 32 + bottom margin of 10.
+// Hardcoded height based on line-height of 32 + bottom margin of 10.
 // Less side-effecty than using react-measure.
 const TITLE_HEIGHT = 42;
 
@@ -144,7 +145,7 @@ function SeriesIndexOverview(props: SeriesIndexOverviewProps) {
             ) : null}
 
             {status === 'ended' && (
-              <div className={styles.ended} title="Ended" />
+              <div className={styles.ended} title={translate('Ended')} />
             )}
 
             <Link className={styles.link} style={elementStyle} to={link}>
@@ -181,7 +182,7 @@ function SeriesIndexOverview(props: SeriesIndexOverviewProps) {
             <div className={styles.actions}>
               <SpinnerIconButton
                 name={icons.REFRESH}
-                title="Refresh series"
+                title={translate('RefreshSeries')}
                 isSpinning={isRefreshingSeries}
                 onPress={onRefreshPress}
               />
@@ -189,7 +190,7 @@ function SeriesIndexOverview(props: SeriesIndexOverviewProps) {
               {overviewOptions.showSearchAction ? (
                 <SpinnerIconButton
                   name={icons.SEARCH}
-                  title="Search for monitored episodes"
+                  title={translate('SearchForMonitoredEpisodes')}
                   isSpinning={isSearchingSeries}
                   onPress={onSearchPress}
                 />
@@ -197,7 +198,7 @@ function SeriesIndexOverview(props: SeriesIndexOverviewProps) {
 
               <IconButton
                 name={icons.EDIT}
-                title="Edit Series"
+                title={translate('EditSeries')}
                 onPress={onEditSeriesPress}
               />
             </div>

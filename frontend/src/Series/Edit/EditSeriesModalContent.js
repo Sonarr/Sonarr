@@ -83,37 +83,37 @@ class EditSeriesModalContent extends Component {
     return (
       <ModalContent onModalClose={onModalClose}>
         <ModalHeader>
-          Edit - {title}
+          {translate('EditSeriesModalHeader', { title })}
         </ModalHeader>
 
         <ModalBody>
           <Form {...otherProps}>
             <FormGroup>
-              <FormLabel>Monitored</FormLabel>
+              <FormLabel>{translate('Monitored')}</FormLabel>
 
               <FormInputGroup
                 type={inputTypes.CHECK}
                 name="monitored"
-                helpText="Download monitored episodes in this series"
+                helpText={translate('MonitoredHelpText')}
                 {...monitored}
                 onChange={onInputChange}
               />
             </FormGroup>
 
             <FormGroup>
-              <FormLabel>Use Season Folder</FormLabel>
+              <FormLabel>{translate('UseSeasonFolder')}</FormLabel>
 
               <FormInputGroup
                 type={inputTypes.CHECK}
                 name="seasonFolder"
-                helpText="Sort episodes into season folders"
+                helpText={translate('UseSeasonFolderHelpText')}
                 {...seasonFolder}
                 onChange={onInputChange}
               />
             </FormGroup>
 
             <FormGroup>
-              <FormLabel>Quality Profile</FormLabel>
+              <FormLabel>{translate('QualityProfile')}</FormLabel>
 
               <FormInputGroup
                 type={inputTypes.QUALITY_PROFILE_SELECT}
@@ -124,21 +124,19 @@ class EditSeriesModalContent extends Component {
             </FormGroup>
 
             <FormGroup>
-              <FormLabel>Series Type</FormLabel>
+              <FormLabel>{translate('SeriesType')}</FormLabel>
 
               <FormInputGroup
                 type={inputTypes.SERIES_TYPE_SELECT}
                 name="seriesType"
                 {...seriesType}
-                helpText={translate(
-                  'Series type is used for renaming, parsing and searching'
-                )}
+                helpText={translate('SeriesTypesHelpText')}
                 onChange={onInputChange}
               />
             </FormGroup>
 
             <FormGroup>
-              <FormLabel>Path</FormLabel>
+              <FormLabel>{translate('Path')}</FormLabel>
 
               <FormInputGroup
                 type={inputTypes.PATH}
@@ -149,7 +147,7 @@ class EditSeriesModalContent extends Component {
             </FormGroup>
 
             <FormGroup>
-              <FormLabel>Tags</FormLabel>
+              <FormLabel>{translate('Tags')}</FormLabel>
 
               <FormInputGroup
                 type={inputTypes.TAG}
@@ -167,20 +165,20 @@ class EditSeriesModalContent extends Component {
             kind={kinds.DANGER}
             onPress={onDeleteSeriesPress}
           >
-            Delete
+            {translate('Delete')}
           </Button>
 
           <Button
             onPress={onModalClose}
           >
-            Cancel
+            {translate('Cancel')}
           </Button>
 
           <SpinnerButton
             isSpinning={isSaving}
             onPress={this.onSavePress}
           >
-            Save
+            {translate('Save')}
           </SpinnerButton>
         </ModalFooter>
 
