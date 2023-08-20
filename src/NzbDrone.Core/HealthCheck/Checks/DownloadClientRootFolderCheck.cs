@@ -53,7 +53,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
                     {
                         return new HealthCheck(GetType(),
                             HealthCheckResult.Warning,
-                            string.Format(_localizationService.GetLocalizedString("DownloadClientRootFolderHealthCheckMessage"), client.Definition.Name, folder.FullPath),
+                            string.Format(_localizationService.GetLocalizedString("DownloadClientRootFolderHealthCheckMessage"), client.Definition.Name, folder.FullPath, "Sonarr"),
                             "#downloads-in-root-folder");
                     }
                 }
