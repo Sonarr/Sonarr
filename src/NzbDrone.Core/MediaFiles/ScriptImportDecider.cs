@@ -10,6 +10,7 @@ using NzbDrone.Core.MediaFiles.MediaInfo;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tags;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.MediaFiles
 {
@@ -40,6 +41,31 @@ namespace NzbDrone.Core.MediaFiles
             _configFileProvider = configFileProvider;
             _tagRepository = tagRepository;
             _logger = logger;
+        }
+
+        private bool CheckExtensions(ref string destinationFilePath, EpisodeFile episodeFile, Series series)
+        {
+            if (!File.Exists(destinationFilePath))
+            {
+                _logger.Debug("Destination file does not exist after script execution, checking for other extensions.");
+
+                foreach (var extension in MediaFileExtensions.Extensions)
+                {
+                    var pathWithExtension = Path.ChangeExtension(destinationFilePath, extension);
+
+                    if (File.Exists(pathWithExtension))
+                    {
+                        _logger.Debug("Found file with extension: {0}", extension);
+                        destinationFilePath = pathWithExtension;
+                        episodeFile.RelativePath = series.Path.GetRelativePath(destinationFilePath);
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+
+            return true;
         }
 
         public ScriptImportDecision TryImport(string sourcePath, string destinationFilePath, LocalEpisode localEpisode, EpisodeFile episodeFile, TransferMode mode)
@@ -123,6 +149,11 @@ namespace NzbDrone.Core.MediaFiles
                 case 0: // Copy complete
                     return ScriptImportDecision.MoveComplete;
                 case 2: // Copy complete, file potentially changed, should try renaming again
+                    if (!CheckExtensions(ref destinationFilePath, episodeFile, series))
+                    {
+                        throw new ScriptImportException("File not found at destination when moving with script.");
+                    }
+
                     episodeFile.MediaInfo = _videoFileInfoReader.GetMediaInfo(destinationFilePath);
                     episodeFile.Path = null;
                     return ScriptImportDecision.RenameRequested;
