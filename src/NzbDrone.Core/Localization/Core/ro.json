@@ -120,7 +120,6 @@
     "AddListError": "Nu se poate adăuga o nouă listă, vă rugăm să încercați din nou.",
     "AddListExclusionError": "Imposibil de adăugat o nouă listă de excludere, încercați din nou.",
     "AddNewRestriction": "Adăugați o restricție nouă",
-    "AddNotification": "Adăugați o notificare",
     "AddNotificationError": "Imposibil de adăugat o nouă notificare, încercați din nou.",
     "AddQualityProfile": "Adăugați un profil de calitate",
     "AddQualityProfileError": "Imposibil de adăugat un nou profil de calitate, încercați din nou.",
@@ -136,5 +135,9 @@
     "Authentication": "",
     "AddNewSeriesError": "Nu s-au putut încărca rezultatele căutării, încercați din nou.",
     "AddSeriesWithTitle": "Adăugați {title}",
-    "AlreadyInYourLibrary": "Deja în biblioteca dvs."
+    "AlreadyInYourLibrary": "Deja în biblioteca dvs.",
+    "DeleteSelectedDownloadClientsMessageText": "Sigur doriți să ștergeți {count} clienți de descărcare selectați?",
+    "DeleteSelectedDownloadClients": "Ștergeți clienții de descărcare selectați",
+    "DeleteSelectedIndexersMessageText": "Sigur doriți să ștergeți {count} indexatori selectați?",
+    "DeleteTagMessageText": "Sigur doriți să ștergeți eticheta '{label}'?"
 }
