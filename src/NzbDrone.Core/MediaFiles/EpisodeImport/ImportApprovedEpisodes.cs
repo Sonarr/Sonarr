@@ -26,6 +26,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
         private readonly IUpgradeMediaFiles _episodeFileUpgrader;
         private readonly IMediaFileService _mediaFileService;
         private readonly IExtraService _extraService;
+        private readonly IExistingExtraFiles _existingExtraFiles;
         private readonly IDiskProvider _diskProvider;
         private readonly IEventAggregator _eventAggregator;
         private readonly IManageCommandQueue _commandQueueManager;
@@ -34,6 +35,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
         public ImportApprovedEpisodes(IUpgradeMediaFiles episodeFileUpgrader,
                                       IMediaFileService mediaFileService,
                                       IExtraService extraService,
+                                      IExistingExtraFiles existingExtraFiles,
                                       IDiskProvider diskProvider,
                                       IEventAggregator eventAggregator,
                                       IManageCommandQueue commandQueueManager,
@@ -42,6 +44,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
             _episodeFileUpgrader = episodeFileUpgrader;
             _mediaFileService = mediaFileService;
             _extraService = extraService;
+            _existingExtraFiles = existingExtraFiles;
             _diskProvider = diskProvider;
             _eventAggregator = eventAggregator;
             _commandQueueManager = commandQueueManager;
@@ -130,7 +133,19 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
                     if (newDownload)
                     {
-                        _extraService.ImportEpisode(localEpisode, episodeFile, copyOnly);
+                        if (localEpisode.ScriptImported)
+                        {
+                            _existingExtraFiles.ImportFileList(localEpisode.Series, localEpisode.PossibleExtraFiles);
+
+                            if (localEpisode.ImportRenamed)
+                            {
+                                _extraService.MoveFilesAfterRename(localEpisode.Series, episodeFile);
+                            }
+                        }
+                        else
+                        {
+                            _extraService.ImportEpisode(localEpisode, episodeFile, copyOnly);
+                        }
                     }
 
                     _eventAggregator.PublishEvent(new EpisodeImportedEvent(localEpisode, episodeFile, oldFiles, newDownload, downloadClientItem));

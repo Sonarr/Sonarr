@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
@@ -6,6 +7,7 @@ using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Processes;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Extras;
 using NzbDrone.Core.MediaFiles.MediaInfo;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
@@ -25,6 +27,7 @@ namespace NzbDrone.Core.MediaFiles
         private readonly IProcessProvider _processProvider;
         private readonly IConfigService _configService;
         private readonly ITagRepository _tagRepository;
+        private readonly IExistingExtraFiles _existingExtraFiles;
         private readonly Logger _logger;
 
         public ImportScriptService(IProcessProvider processProvider,
@@ -32,6 +35,7 @@ namespace NzbDrone.Core.MediaFiles
                                    IConfigService configService,
                                    IConfigFileProvider configFileProvider,
                                    ITagRepository tagRepository,
+                                   IExistingExtraFiles existingExtraFiles,
                                    Logger logger)
         {
             _processProvider = processProvider;
@@ -39,7 +43,61 @@ namespace NzbDrone.Core.MediaFiles
             _configService = configService;
             _configFileProvider = configFileProvider;
             _tagRepository = tagRepository;
+            _existingExtraFiles = existingExtraFiles;
             _logger = logger;
+        }
+
+        private (List<string> possibleMediaFiles, string mediaFile) ProcessTemporaryFile(string temporaryPath)
+        {
+            var lines = File.ReadAllLines(temporaryPath);
+
+            if (lines.Length == 0 || string.IsNullOrWhiteSpace(lines[0]))
+            {
+                return (new List<string>(), null);
+            }
+
+            var possibleExtraFiles = new List<string>();
+            string mediaFile = null;
+
+            foreach (var line in lines)
+            {
+                if (MediaFileExtensions.Extensions.Contains(Path.GetExtension(line)))
+                {
+                    if (mediaFile is not null)
+                    {
+                        throw new ScriptImportException("Script output contains multiple media files. Only one media file can be returned.");
+                    }
+                    else
+                    {
+                        if (File.Exists(line))
+                        {
+                            mediaFile = line;
+                        }
+                        else
+                        {
+                            _logger.Warn("Script output contains invalid file: {0}", line);
+                        }
+                    }
+                }
+                else
+                {
+                    if (File.Exists(line))
+                    {
+                        possibleExtraFiles.Add(line);
+                    }
+                    else
+                    {
+                        _logger.Warn("Script output contains invalid file: {0}", line);
+                    }
+                }
+            }
+
+            if (mediaFile is not null)
+            {
+                throw new ScriptImportException("Script output does not contain a media file.");
+            }
+
+            return (possibleExtraFiles, mediaFile);
         }
 
         public ScriptImportDecision TryImport(string sourcePath, string destinationFilePath, LocalEpisode localEpisode, EpisodeFile episodeFile, TransferMode mode)
@@ -54,10 +112,13 @@ namespace NzbDrone.Core.MediaFiles
                 return ScriptImportDecision.DeferMove;
             }
 
+            var temporaryPath = Path.GetTempFileName();
+
             var environmentVariables = new StringDictionary();
 
             environmentVariables.Add("Sonarr_SourcePath", sourcePath);
             environmentVariables.Add("Sonarr_DestinationPath", destinationFilePath);
+            environmentVariables.Add("Sonarr_InfoFilePath", temporaryPath);
 
             environmentVariables.Add("Sonarr_InstanceName", _configFileProvider.InstanceName);
             environmentVariables.Add("Sonarr_ApplicationUrl", _configService.ApplicationUrl);
@@ -118,11 +179,21 @@ namespace NzbDrone.Core.MediaFiles
             _logger.Debug("Executed external script: {0} - Status: {1}", _configService.ScriptImportPath, processOutput.ExitCode);
             _logger.Debug("Script Output: \r\n{0}", string.Join("\r\n", processOutput.Lines));
 
+            var (possibleExtraFiles, mediaFile) = ProcessTemporaryFile(temporaryPath);
+
+            localEpisode.PossibleExtraFiles = possibleExtraFiles;
+
+            destinationFilePath = mediaFile ?? destinationFilePath;
+            episodeFile.RelativePath = series.Path.GetRelativePath(destinationFilePath);
+            episodeFile.Path = destinationFilePath;
+
             switch (processOutput.ExitCode)
             {
                 case 0: // Copy complete
+                    localEpisode.ScriptImported = true;
                     return ScriptImportDecision.MoveComplete;
                 case 2: // Copy complete, file potentially changed, should try renaming again
+                    localEpisode.ScriptImported = true;
                     episodeFile.MediaInfo = _videoFileInfoReader.GetMediaInfo(destinationFilePath);
                     episodeFile.Path = null;
                     return ScriptImportDecision.RenameRequested;

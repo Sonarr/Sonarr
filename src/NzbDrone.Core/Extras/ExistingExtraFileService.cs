@@ -6,10 +6,16 @@ using NzbDrone.Common.Disk;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Events;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Extras
 {
-    public class ExistingExtraFileService : IHandle<SeriesScannedEvent>
+    public interface IExistingExtraFiles : IHandle<SeriesScannedEvent>
+    {
+        List<string> ImportFileList(Series series, List<string> possibleExtraFiles);
+    }
+
+    public class ExistingExtraFileService : IExistingExtraFiles
     {
         private readonly IDiskProvider _diskProvider;
         private readonly IDiskScanService _diskScanService;
@@ -27,19 +33,9 @@ namespace NzbDrone.Core.Extras
             _logger = logger;
         }
 
-        public void Handle(SeriesScannedEvent message)
+        public List<string> ImportFileList(Series series, List<string> possibleExtraFiles)
         {
-            var series = message.Series;
-
-            if (!_diskProvider.FolderExists(series.Path))
-            {
-                return;
-            }
-
             _logger.Debug("Looking for existing extra files in {0}", series.Path);
-
-            var filesOnDisk = _diskScanService.GetNonVideoFiles(series.Path);
-            var possibleExtraFiles = _diskScanService.FilterPaths(series.Path, filesOnDisk);
 
             var importedFiles = new List<string>();
 
@@ -49,6 +45,23 @@ namespace NzbDrone.Core.Extras
 
                 importedFiles.AddRange(imported.Select(f => Path.Combine(series.Path, f.RelativePath)));
             }
+
+            return importedFiles;
+        }
+
+        public void Handle(SeriesScannedEvent message)
+        {
+            var series = message.Series;
+
+            if (!_diskProvider.FolderExists(series.Path))
+            {
+                return;
+            }
+
+            var filesOnDisk = _diskScanService.GetNonVideoFiles(series.Path);
+            var possibleExtraFiles = _diskScanService.FilterPaths(series.Path, filesOnDisk);
+
+            var importedFiles = ImportFileList(series, possibleExtraFiles);
 
             _logger.Info("Found {0} possible extra files, imported {1} files.", possibleExtraFiles.Count, importedFiles.Count);
         }
