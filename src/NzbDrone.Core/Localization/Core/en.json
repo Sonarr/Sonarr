@@ -509,6 +509,7 @@
   "HardlinkCopyFiles": "Hardlink/Copy Files",
   "HasMissingSeason": "Has Missing Season",
   "Health": "Health",
+  "HealthMessagesInfoBox": "You can find more information about the cause of these health check messages by clicking the wiki link at the end of the row, or by checking your [logs]({link}). If you have difficultly interpreting these messages then you can reach out to our support, at the links below.",
   "Here": "here",
   "HiddenClickToShow": "Hidden, click to show",
   "HideAdvanced": "Hide Advanced",
