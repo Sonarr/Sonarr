@@ -47,8 +47,11 @@ function SelectSeriesModalContent(props: SelectSeriesModalContentProps) {
       a.sortTitle.localeCompare(b.sortTitle)
     );
 
-    return sorted.filter((item) =>
-      item.title.toLowerCase().includes(filter.toLowerCase())
+    return sorted.filter(
+      (item) =>
+        item.title.toLowerCase().includes(filter.toLowerCase()) ||
+        item.tvdbId.toString().includes(filter) ||
+        item.imdbId?.includes(filter)
     );
   }, [allSeries, filter]);
 
