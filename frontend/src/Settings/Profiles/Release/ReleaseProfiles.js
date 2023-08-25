@@ -47,7 +47,7 @@ class ReleaseProfiles extends Component {
     } = this.props;
 
     return (
-      <FieldSet legend={translate('Release Profiles')}>
+      <FieldSet legend={translate('ReleaseProfiles')}>
         <PageSectionContent
           errorMessage={translate('ReleaseProfilesLoadError')}
           {...otherProps}

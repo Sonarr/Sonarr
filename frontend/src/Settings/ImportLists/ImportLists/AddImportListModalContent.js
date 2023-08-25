@@ -67,7 +67,7 @@ class AddImportListModalContent extends Component {
                     return (
                       <FieldSet key={key} legend={translate('TypeOfList', {
                         typeOfList: titleCase(key)
-                      })} // `${titleCase(key)} ${translate('List')}`}
+                      })}
                       >
                         <div className={styles.lists}>
                           {

@@ -112,7 +112,7 @@ class UMaskInput extends Component {
         </div>
         <div className={styles.details}>
           <div>
-            <label>{translate('UMask')}</label>
+            <label>{translate('Umask')}</label>
             <div className={styles.value}>{umask}</div>
           </div>
           <div>
