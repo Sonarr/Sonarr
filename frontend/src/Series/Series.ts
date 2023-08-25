@@ -1,4 +1,5 @@
 import ModelBase from 'App/ModelBase';
+import Language from 'Language/Language';
 
 export type SeriesType = 'anime' | 'daily' | 'standard';
 
@@ -6,11 +7,6 @@ export interface Image {
   coverType: string;
   url: string;
   remoteUrl: string;
-}
-
-export interface Language {
-  id: number;
-  name: string;
 }
 
 export interface Statistics {
