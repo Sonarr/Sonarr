@@ -1,4 +1,5 @@
 import ModelBase from 'App/ModelBase';
+import Language from 'Language/Language';
 import { QualityModel } from 'Quality/Quality';
 import CustomFormat from 'typings/CustomFormat';
 import MediaInfo from 'typings/MediaInfo';
@@ -12,7 +13,7 @@ export interface EpisodeFile extends ModelBase {
   dateAdded: string;
   sceneName: string;
   releaseGroup: string;
-  languages: CustomFormat[];
+  languages: Language[];
   quality: QualityModel;
   customFormats: CustomFormat[];
   mediaInfo: MediaInfo;
