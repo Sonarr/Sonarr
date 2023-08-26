@@ -142,7 +142,8 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                                 _extraService.MoveFilesAfterRename(localEpisode.Series, episodeFile);
                             }
                         }
-                        else
+
+                        if (!localEpisode.ScriptImported || localEpisode.ShouldImportExtras)
                         {
                             _extraService.ImportEpisode(localEpisode, episodeFile, copyOnly);
                         }

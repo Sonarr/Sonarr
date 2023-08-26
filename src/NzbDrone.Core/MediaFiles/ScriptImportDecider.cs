@@ -187,7 +187,12 @@ namespace NzbDrone.Core.MediaFiles
             episodeFile.RelativePath = series.Path.GetRelativePath(destinationFilePath);
             episodeFile.Path = destinationFilePath;
 
-            switch (processOutput.ExitCode)
+            if ((processOutput.ExitCode & 0x4) == 0x4)
+            {
+                localEpisode.ShouldImportExtras = true;
+            }
+
+            switch (processOutput.ExitCode & 0x3)
             {
                 case 0: // Copy complete
                     localEpisode.ScriptImported = true;

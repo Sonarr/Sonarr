@@ -42,6 +42,7 @@ namespace NzbDrone.Core.Parser.Model
         public GrabbedReleaseInfo Release { get; set; }
         public bool ScriptImported { get; set; }
         public bool ImportRenamed { get; set; }
+        public bool ShouldImportExtras { get; set; }
         public List<string> PossibleExtraFiles { get; set; }
 
         public int SeasonNumber
