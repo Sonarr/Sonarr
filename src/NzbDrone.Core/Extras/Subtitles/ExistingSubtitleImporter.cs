@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -71,14 +72,29 @@ namespace NzbDrone.Core.Extras.Subtitles
                         continue;
                     }
 
+                    var firstEpisode = localEpisode.Episodes.First();
+
+                    List<string> languageTags = null;
+                    string title = null;
+
+                    try
+                    {
+                        (languageTags, title) = LanguageParser.ParseLanguageTagsAndTitle(possibleSubtitleFile, firstEpisode);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.Debug(ex, "Failed parsing language tags with title from subtitle file: {0}", possibleSubtitleFile);
+                    }
+
                     var subtitleFile = new SubtitleFile
                                        {
                                            SeriesId = series.Id,
                                            SeasonNumber = localEpisode.SeasonNumber,
-                                           EpisodeFileId = localEpisode.Episodes.First().EpisodeFileId,
+                                           EpisodeFileId = firstEpisode.EpisodeFileId,
                                            RelativePath = series.Path.GetRelativePath(possibleSubtitleFile),
                                            Language = LanguageParser.ParseSubtitleLanguage(possibleSubtitleFile),
-                                           LanguageTags = LanguageParser.ParseLanguageTags(possibleSubtitleFile),
+                                           LanguageTags = languageTags ?? LanguageParser.ParseLanguageTags(possibleSubtitleFile),
+                                           Title = title,
                                            Extension = extension
                                        };
 

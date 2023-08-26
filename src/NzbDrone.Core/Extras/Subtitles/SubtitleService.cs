@@ -81,7 +81,7 @@ namespace NzbDrone.Core.Extras.Subtitles
 
                     foreach (var subtitleFile in group)
                     {
-                        var suffix = GetSuffix(subtitleFile.Language, copy, subtitleFile.LanguageTags, groupCount > 1);
+                        var suffix = GetSuffix(subtitleFile.Language, copy, subtitleFile.LanguageTags, groupCount > 1, subtitleFile.Title);
 
                         movedFiles.AddIfNotNull(MoveFile(series, episodeFile, subtitleFile, suffix));
 
@@ -229,11 +229,23 @@ namespace NzbDrone.Core.Extras.Subtitles
             return importedFiles;
         }
 
-        private string GetSuffix(Language language, int copy, List<string> languageTags, bool multipleCopies = false)
+        private string GetSuffix(Language language, int copy, List<string> languageTags, bool multipleCopies = false, string title = null)
         {
             var suffixBuilder = new StringBuilder();
 
-            if (multipleCopies)
+            if (title is not null)
+            {
+                suffixBuilder.Append('.');
+                suffixBuilder.Append(title);
+
+                if (multipleCopies)
+                {
+                    suffixBuilder.Append(" - ");
+                    suffixBuilder.Append(copy);
+                }
+
+            }
+            else if (multipleCopies)
             {
                 suffixBuilder.Append('.');
                 suffixBuilder.Append(copy);

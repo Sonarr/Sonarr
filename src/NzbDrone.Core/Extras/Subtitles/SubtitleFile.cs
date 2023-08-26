@@ -13,15 +13,17 @@ namespace NzbDrone.Core.Extras.Subtitles
 
         public Language Language { get; set; }
 
-        public string AggregateString => Language + LanguageTagsAsString + Extension;
+        public string AggregateString => Language + Title + LanguageTagsAsString + Extension;
 
         public List<string> LanguageTags { get; set; }
+
+        public string Title { get; set; }
 
         private string LanguageTagsAsString => string.Join(".", LanguageTags);
 
         public override string ToString()
         {
-            return $"[{Id}] {RelativePath} ({Language}{(LanguageTags.Count > 0 ? "." : "")}{LanguageTagsAsString}{Extension})";
+            return $"[{Id}] {RelativePath} ({Language}{(Title is not null ? "." : "")}{Title ?? ""}{(LanguageTags.Count > 0 ? "." : "")}{LanguageTagsAsString}{Extension})";
         }
     }
 }

@@ -7,6 +7,7 @@ using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Languages;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Parser
 {
@@ -28,7 +29,9 @@ namespace NzbDrone.Core.Parser
         private static readonly Regex GermanDualLanguageRegex = new (@"(?<!WEB[-_. ]?)\bDL\b", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static readonly Regex GermanMultiLanguageRegex = new (@"\bML\b", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        private static readonly Regex SubtitleLanguageRegex = new Regex(".+?[-_. ](?<iso_code>[a-z]{2,3})([-_. ](?<tags>full|forced|foreign|default|cc|psdh|sdh))*$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex SubtitleLanguageRegex = new Regex(".+?([-_. ]((?<iso_code>[a-z]{2,3})|(?<tags>full|forced|foreign|default|cc|psdh|sdh)))*$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        private static readonly Regex SubtitleLanguageTitleRegex = new Regex(".+?(\\.((?<iso_code>[a-z]{2,3})|(?<tags1>full|forced|foreign|default|cc|psdh|sdh)))*(\\.(?<title>[^.]*))??(\\.((?<iso_code>[a-z]{2,3})|(?<tags2>full|forced|foreign|default|cc|psdh|sdh)))*$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public static List<Language> ParseLanguages(string title)
         {
@@ -247,6 +250,31 @@ namespace NzbDrone.Core.Parser
             }
 
             return Language.Unknown;
+        }
+
+        public static (List<string> languageTags, string title) ParseLanguageTagsAndTitle(string fileName, Episode episode)
+        {
+            var simpleFilename = Path.GetFileNameWithoutExtension(fileName);
+            var matchTitle = SubtitleLanguageTitleRegex.Match(simpleFilename);
+            var languageTags = matchTitle.Groups["tags1"].Captures
+                .Union(matchTitle.Groups["tags2"].Captures)
+                .Cast<Capture>()
+                .Where(tag => !tag.Value.Empty())
+                .Select(tag => tag.Value.ToLower());
+            var title = matchTitle.Groups["title"].Captures.Cast<Capture>().First().ToString();
+
+            if (matchTitle.Groups["tags1"].Captures.Empty())
+            {
+                var episodeFile = episode.EpisodeFile.Value;
+                var episodeFileTitle = Path.GetFileNameWithoutExtension(episodeFile.RelativePath);
+
+                if (episodeFileTitle.Contains(title, StringComparison.OrdinalIgnoreCase))
+                {
+                    throw new ArgumentException("Subtitle file title probably parsed incorrectly, not using.");
+                }
+            }
+
+            return (languageTags.ToList(), title);
         }
 
         public static List<string> ParseLanguageTags(string fileName)
