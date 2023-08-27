@@ -436,6 +436,9 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Name (2020) - S01E20 - [AAC 2.0].testtitle.default.forced.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv")]
         [TestCase("Name (2020) - S01E20 - [AAC 2.0].default.testtitle.forced.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv")]
         [TestCase("Name (2020) - S01E20 - [AAC 2.0].default.testtitle.forced.ass", "Name (2020)/Season 1/Name (2020).mkv")]
+        [TestCase("Name (2020) - S01E20 - [AAC 2.0].testtitle.default.eng.forced.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv")]
+        [TestCase("Name (2020) - S01E20 - [AAC 2.0].eng.default.testtitle.forced.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv")]
+        [TestCase("Name (2020) - S01E20 - [AAC 2.0].default.eng.testtitle.forced.ass", "Name (2020)/Season 1/Name (2020).mkv")]
         public void should_parse_title_and_tags(string postTitle, string episodeFilePath)
         {
             var episode = new Episode
@@ -448,11 +451,15 @@ namespace NzbDrone.Core.Test.ParserTests
             var (languageTags, title) = LanguageParser.ParseLanguageTagsAndTitle(postTitle, episode);
             languageTags.Should().BeEquivalentTo(new[] { "default", "forced" });
             title.Should().BeEquivalentTo("testtitle");
+
+            var result = LanguageParser.ParseLanguages(postTitle);
+            result.Should().Contain(Language.English);
         }
 
         [TestCase("Name (2020) - S01E20 - [AAC 2.0].default.forced.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv")]
         [TestCase("Name (2020) - S01E20 - [AAC 2.0].default.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv")]
         [TestCase("Name (2020) - S01E20 - [AAC 2.0].ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv")]
+        [TestCase("Name (2020) - S01E20 - [AAC 2.0].testtitle.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv")]
         public void should_not_parse_false_title(string postTitle, string episodeFilePath)
         {
             var episode = new Episode

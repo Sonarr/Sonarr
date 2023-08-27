@@ -29,9 +29,9 @@ namespace NzbDrone.Core.Parser
         private static readonly Regex GermanDualLanguageRegex = new (@"(?<!WEB[-_. ]?)\bDL\b", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static readonly Regex GermanMultiLanguageRegex = new (@"\bML\b", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        private static readonly Regex SubtitleLanguageRegex = new Regex(".+?([-_. ]((?<iso_code>[a-z]{2,3})|(?<tags>full|forced|foreign|default|cc|psdh|sdh)))*$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex SubtitleLanguageRegex = new Regex(".+?([-_. ](?<tags>full|forced|foreign|default|cc|psdh|sdh))*[-_. ](?<iso_code>[a-z]{2,3})([-_. ](?<tags>full|forced|foreign|default|cc|psdh|sdh))*$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        private static readonly Regex SubtitleLanguageTitleRegex = new Regex(".+?(\\.((?<iso_code>[a-z]{2,3})|(?<tags1>full|forced|foreign|default|cc|psdh|sdh)))*\\.(?<title>[^.]*)(\\.((?<iso_code>[a-z]{2,3})|(?<tags2>full|forced|foreign|default|cc|psdh|sdh)))*$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex SubtitleLanguageTitleRegex = new Regex(".+?(\\.((?<tags1>full|forced|foreign|default|cc|psdh|sdh)|(?<iso_code>[a-z]{2,3})))*\\.(?<title>[^.]*)(\\.((?<tags2>full|forced|foreign|default|cc|psdh|sdh)|(?<iso_code>[a-z]{2,3})))*$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public static List<Language> ParseLanguages(string title)
         {
@@ -256,6 +256,12 @@ namespace NzbDrone.Core.Parser
         {
             var simpleFilename = Path.GetFileNameWithoutExtension(fileName);
             var matchTitle = SubtitleLanguageTitleRegex.Match(simpleFilename);
+
+            if (matchTitle.Groups["iso_code"].Captures.Count != 1)
+            {
+                throw new ArgumentException("Subtitle file title probably parsed incorrectly, not using.");
+            }
+
             var languageTags = matchTitle.Groups["tags1"].Captures
                 .Union(matchTitle.Groups["tags2"].Captures)
                 .Cast<Capture>()
