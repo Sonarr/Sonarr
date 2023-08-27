@@ -612,6 +612,7 @@
   "InteractiveSearchResultsFailedErrorMessage": "Search failed because its {message}. Try refreshing the series info and verify the necessary information is present before searching again.",
   "Interval": "Interval",
   "InvalidFormat": "Invalid Format",
+  "InvalidUILanguage": "Your UI is set to an invalid language, correct it and save your settings",
   "KeyboardShortcuts": "Keyboard Shortcuts",
   "KeyboardShortcutsCloseModal": "Close Current Modal",
   "KeyboardShortcutsConfirmModal": "Accept Confirmation Modal",
