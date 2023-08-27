@@ -31,7 +31,7 @@ namespace NzbDrone.Core.Parser
 
         private static readonly Regex SubtitleLanguageRegex = new Regex(".+?([-_. ]((?<iso_code>[a-z]{2,3})|(?<tags>full|forced|foreign|default|cc|psdh|sdh)))*$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        private static readonly Regex SubtitleLanguageTitleRegex = new Regex(".+?(\\.((?<iso_code>[a-z]{2,3})|(?<tags1>full|forced|foreign|default|cc|psdh|sdh)))*(\\.(?<title>[^.]*))??(\\.((?<iso_code>[a-z]{2,3})|(?<tags2>full|forced|foreign|default|cc|psdh|sdh)))*$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex SubtitleLanguageTitleRegex = new Regex(".+?(\\.((?<iso_code>[a-z]{2,3})|(?<tags1>full|forced|foreign|default|cc|psdh|sdh)))*\\.(?<title>[^.]*)(\\.((?<iso_code>[a-z]{2,3})|(?<tags2>full|forced|foreign|default|cc|psdh|sdh)))*$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public static List<Language> ParseLanguages(string title)
         {

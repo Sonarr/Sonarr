@@ -1,8 +1,12 @@
+using System;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Languages;
+using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Test.ParserTests
 {
@@ -427,6 +431,38 @@ namespace NzbDrone.Core.Test.ParserTests
             result.Languages.Should().Contain(Language.German);
             result.Languages.Should().Contain(Language.Original);
             result.Languages.Should().Contain(Language.English);
+        }
+
+        [TestCase("Name (2020) - S01E20 - [AAC 2.0].testtitle.default.forced.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv")]
+        [TestCase("Name (2020) - S01E20 - [AAC 2.0].default.testtitle.forced.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv")]
+        [TestCase("Name (2020) - S01E20 - [AAC 2.0].default.testtitle.forced.ass", "Name (2020)/Season 1/Name (2020).mkv")]
+        public void should_parse_title_and_tags(string postTitle, string episodeFilePath)
+        {
+            var episode = new Episode
+            {
+                EpisodeFile = new LazyLoaded<EpisodeFile>(new EpisodeFile
+                {
+                    RelativePath = episodeFilePath
+                })
+            };
+            var (languageTags, title) = LanguageParser.ParseLanguageTagsAndTitle(postTitle, episode);
+            languageTags.Should().BeEquivalentTo(new[] { "default", "forced" });
+            title.Should().BeEquivalentTo("testtitle");
+        }
+
+        [TestCase("Name (2020) - S01E20 - [AAC 2.0].default.forced.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv")]
+        [TestCase("Name (2020) - S01E20 - [AAC 2.0].default.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv")]
+        [TestCase("Name (2020) - S01E20 - [AAC 2.0].ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv")]
+        public void should_not_parse_false_title(string postTitle, string episodeFilePath)
+        {
+            var episode = new Episode
+            {
+                EpisodeFile = new LazyLoaded<EpisodeFile>(new EpisodeFile
+                {
+                    RelativePath = episodeFilePath
+                })
+            };
+            Assert.Throws<ArgumentException>(() => LanguageParser.ParseLanguageTagsAndTitle(postTitle, episode));
         }
     }
 }

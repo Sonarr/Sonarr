@@ -243,7 +243,6 @@ namespace NzbDrone.Core.Extras.Subtitles
                     suffixBuilder.Append(" - ");
                     suffixBuilder.Append(copy);
                 }
-
             }
             else if (multipleCopies)
             {
