@@ -30,9 +30,8 @@ export default function translate(
   const translation = translations[key] || key;
 
   if (tokens) {
-    return translation.replace(
-      /\{([a-z0-9]+?)\}/gi,
-      (match, tokenMatch) => String(tokens[tokenMatch]) ?? match
+    return translation.replace(/\{([a-z0-9]+?)\}/gi, (match, tokenMatch) =>
+      String(tokens[tokenMatch] ?? match)
     );
   }
 
