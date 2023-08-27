@@ -16,6 +16,7 @@ import TablePager from 'Components/Table/TablePager';
 import { align, icons, kinds } from 'Helpers/Props';
 import getFilterValue from 'Utilities/Filter/getFilterValue';
 import hasDifferentItems from 'Utilities/Object/hasDifferentItems';
+import translate from 'Utilities/String/translate';
 import getSelectedIds from 'Utilities/Table/getSelectedIds';
 import removeOldSelectedState from 'Utilities/Table/removeOldSelectedState';
 import selectAll from 'Utilities/Table/selectAll';
@@ -147,18 +148,18 @@ class CutoffUnmet extends Component {
     const isShowingMonitored = getMonitoredValue(this.props);
 
     return (
-      <PageContent title="Cutoff Unmet">
+      <PageContent title={translate('CutoffUnmet')}>
         <PageToolbar>
           <PageToolbarSection>
             <PageToolbarButton
-              label="Search Selected"
+              label={translate('SearchSelected')}
               iconName={icons.SEARCH}
               isDisabled={!itemsSelected || isSearchingForCutoffUnmetEpisodes}
               onPress={this.onSearchSelectedPress}
             />
 
             <PageToolbarButton
-              label={isShowingMonitored ? 'Unmonitor Selected' : 'Monitor Selected'}
+              label={isShowingMonitored ? translate('UnmonitorSelected') : translate('MonitorSelected')}
               iconName={icons.MONITORED}
               isDisabled={!itemsSelected}
               isSpinning={isSaving}
@@ -168,7 +169,7 @@ class CutoffUnmet extends Component {
             <PageToolbarSeparator />
 
             <PageToolbarButton
-              label="Search All"
+              label={translate('SearchAll')}
               iconName={icons.SEARCH}
               isDisabled={!items.length}
               isSpinning={isSearchingForCutoffUnmetEpisodes}
@@ -198,14 +199,14 @@ class CutoffUnmet extends Component {
           {
             !isFetching && error &&
               <Alert kind={kinds.DANGER}>
-                Error fetching cutoff unmet
+                {translate('CutoffUnmetLoadError')}
               </Alert>
           }
 
           {
             isPopulated && !error && !items.length &&
               <Alert kind={kinds.INFO}>
-                No cutoff unmet items
+                {translate('CutoffUnmetNoItems')}
               </Alert>
           }
 
@@ -246,18 +247,18 @@ class CutoffUnmet extends Component {
                 <ConfirmModal
                   isOpen={isConfirmSearchAllCutoffUnmetModalOpen}
                   kind={kinds.DANGER}
-                  title="Search for all Cutoff Unmet episodes"
+                  title={translate('SearchForCutoffUnmet')}
                   message={
                     <div>
                       <div>
-                        Are you sure you want to search for all {totalRecords} Cutoff Unmet episodes?
+                        {translate('SearchForCutoffUnmetConfirmationCount', { totalRecords })}
                       </div>
                       <div>
-                        This cannot be cancelled once started without restarting Sonarr or disabling all of your indexers.
+                        {translate('MassSearchCancelWarning')}
                       </div>
                     </div>
                   }
-                  confirmLabel="Search"
+                  confirmLabel={translate('Search')}
                   onConfirm={this.onSearchAllCutoffUnmetConfirmed}
                   onCancel={this.onConfirmSearchAllCutoffUnmetModalClose}
                 />

@@ -17,6 +17,7 @@ import { align, icons, kinds } from 'Helpers/Props';
 import InteractiveImportModal from 'InteractiveImport/InteractiveImportModal';
 import getFilterValue from 'Utilities/Filter/getFilterValue';
 import hasDifferentItems from 'Utilities/Object/hasDifferentItems';
+import translate from 'Utilities/String/translate';
 import getSelectedIds from 'Utilities/Table/getSelectedIds';
 import removeOldSelectedState from 'Utilities/Table/removeOldSelectedState';
 import selectAll from 'Utilities/Table/selectAll';
@@ -153,18 +154,18 @@ class Missing extends Component {
     const isShowingMonitored = getMonitoredValue(this.props);
 
     return (
-      <PageContent title="Missing">
+      <PageContent title={translate('Missing')}>
         <PageToolbar>
           <PageToolbarSection>
             <PageToolbarButton
-              label="Search Selected"
+              label={translate('SearchSelected')}
               iconName={icons.SEARCH}
               isDisabled={!itemsSelected || isSearchingForMissingEpisodes}
               onPress={this.onSearchSelectedPress}
             />
 
             <PageToolbarButton
-              label={isShowingMonitored ? 'Unmonitor Selected' : 'Monitor Selected'}
+              label={isShowingMonitored ? translate('UnmonitorSelected') : translate('MonitorSelected')}
               iconName={icons.MONITORED}
               isDisabled={!itemsSelected}
               isSpinning={isSaving}
@@ -174,7 +175,7 @@ class Missing extends Component {
             <PageToolbarSeparator />
 
             <PageToolbarButton
-              label="Search All"
+              label={translate('SearchAll')}
               iconName={icons.SEARCH}
               isDisabled={!items.length}
               isSpinning={isSearchingForMissingEpisodes}
@@ -184,7 +185,7 @@ class Missing extends Component {
             <PageToolbarSeparator />
 
             <PageToolbarButton
-              label="Manual Import"
+              label={translate('ManualImport')}
               iconName={icons.INTERACTIVE}
               onPress={this.onInteractiveImportPress}
             />
@@ -211,14 +212,14 @@ class Missing extends Component {
           {
             !isFetching && error &&
               <Alert kind={kinds.DANGER}>
-                Error fetching missing items
+                {translate('MissingLoadError')}
               </Alert>
           }
 
           {
             isPopulated && !error && !items.length &&
               <Alert kind={kinds.INFO}>
-                No missing items
+                {translate('MissingNoItems')}
               </Alert>
           }
 
@@ -259,18 +260,18 @@ class Missing extends Component {
                 <ConfirmModal
                   isOpen={isConfirmSearchAllMissingModalOpen}
                   kind={kinds.DANGER}
-                  title="Search for all missing episodes"
+                  title={translate('SearchForAllMissing')}
                   message={
                     <div>
                       <div>
-                        Are you sure you want to search for all {totalRecords} missing episodes?
+                        {translate('SearchForAllMissingConfirmationCount', { totalRecords })}
                       </div>
                       <div>
-                        This cannot be cancelled once started without restarting Sonarr or disabling all of your indexers.
+                        {translate('MassSearchCancelWarning')}
                       </div>
                     </div>
                   }
-                  confirmLabel="Search"
+                  confirmLabel={translate('Search')}
                   onConfirm={this.onSearchAllMissingConfirmed}
                   onCancel={this.onConfirmSearchAllMissingModalClose}
                 />
