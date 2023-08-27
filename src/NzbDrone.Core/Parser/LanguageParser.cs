@@ -273,8 +273,9 @@ namespace NzbDrone.Core.Parser
             {
                 var episodeFile = episode.EpisodeFile.Value;
                 var episodeFileTitle = Path.GetFileNameWithoutExtension(episodeFile.RelativePath);
+                var originalEpisodeFileTitle = Path.GetFileNameWithoutExtension(episodeFile.OriginalFilePath);
 
-                if (episodeFileTitle.Contains(title, StringComparison.OrdinalIgnoreCase))
+                if (episodeFileTitle.Contains(title, StringComparison.OrdinalIgnoreCase) || originalEpisodeFileTitle.Contains(title, StringComparison.OrdinalIgnoreCase))
                 {
                     throw new ArgumentException("Subtitle file title probably parsed incorrectly, not using.");
                 }
