@@ -76,12 +76,17 @@ namespace NzbDrone.Core.Extras.Subtitles
 
                 foreach (var group in groupedExtraFilesForEpisodeFile)
                 {
-                    var groupCount = group.Count();
-                    var copy = 1;
+                    var multipleCopies = group.Count() > 1;
+                    var copy = group.Select(s => s.Copy).Max() + 1;
 
                     foreach (var subtitleFile in group)
                     {
-                        var suffix = GetSuffix(subtitleFile.Language, copy, subtitleFile.LanguageTags, groupCount > 1, subtitleFile.Title);
+                        if (multipleCopies && subtitleFile.Copy == 0)
+                        {
+                            subtitleFile.Copy = copy;
+                        }
+
+                        var suffix = GetSuffix(subtitleFile.Language, subtitleFile.Copy, subtitleFile.LanguageTags, multipleCopies, subtitleFile.Title);
 
                         movedFiles.AddIfNotNull(MoveFile(series, episodeFile, subtitleFile, suffix));
 

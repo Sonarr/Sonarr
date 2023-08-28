@@ -15,6 +15,8 @@ namespace NzbDrone.Core.Extras.Subtitles
 
         public string AggregateString => Language + Title + LanguageTagsAsString + Extension;
 
+        public int Copy { get; set; }
+
         public List<string> LanguageTags { get; set; }
 
         public string Title { get; set; }
