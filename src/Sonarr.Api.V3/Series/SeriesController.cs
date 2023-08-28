@@ -4,6 +4,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.DataAugmentation.Scene;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.MediaFiles;
@@ -19,6 +20,7 @@ using NzbDrone.Core.Validation;
 using NzbDrone.Core.Validation.Paths;
 using NzbDrone.SignalR;
 using Sonarr.Http;
+using Sonarr.Http.Extensions;
 using Sonarr.Http.REST;
 using Sonarr.Http.REST.Attributes;
 
@@ -118,12 +120,40 @@ namespace Sonarr.Api.V3.Series
             return seriesResources;
         }
 
+        [NonAction]
+        public override ActionResult<SeriesResource> GetResourceByIdWithErrorHandler(int id)
+        {
+            return base.GetResourceByIdWithErrorHandler(id);
+        }
+
+        [RestGetById]
+        [Produces("application/json")]
+        public ActionResult<SeriesResource> GetResourceByIdWithErrorHandler(int id, [FromQuery] bool includeSeasonImages = false)
+        {
+            try
+            {
+                return GetSeriesResourceById(id, includeSeasonImages);
+            }
+            catch (ModelNotFoundException)
+            {
+                return NotFound();
+            }
+        }
+
         protected override SeriesResource GetResourceById(int id)
+        {
+            var includeSeasonImages = Request?.GetBooleanQueryParameter("includeSeasonImages", false) ?? false;
+
+            // Parse IncludeImages and use it
+            return GetSeriesResourceById(id, includeSeasonImages);
+        }
+
+        private SeriesResource GetSeriesResourceById(int id, bool includeSeasonImages = false)
         {
             var series = _seriesService.GetSeries(id);
 
             // Parse IncludeImages and use it
-            return GetSeriesResource(series, false);
+            return GetSeriesResource(series, includeSeasonImages);
         }
 
         [RestPostById]
