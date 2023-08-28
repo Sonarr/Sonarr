@@ -63,20 +63,22 @@ function AuthenticationRequiredModalContent(props) {
           className={styles.authRequiredAlert}
           kind={kinds.WARNING}
         >
-          {translate('AuthenticationRequiredWarning')}
+          {translate('AuthenticationRequiredWarning', { appName: 'Sonarr' })}
         </Alert>
 
         {
           isPopulated && !error ?
             <div>
               <FormGroup>
-                <FormLabel>{translate('Authentication')}</FormLabel>
+                <FormLabel>{translate('AuthenticationMethod')}</FormLabel>
 
                 <FormInputGroup
                   type={inputTypes.SELECT}
                   name="authenticationMethod"
                   values={authenticationMethodOptions}
-                  helpText={translate('AuthenticationMethodHelpText')}
+                  helpText={translate('AuthenticationMethodHelpText', { appName: 'Sonarr' })}
+                  helpTextWarning={authenticationMethod.value === 'none' ? translate('AuthenticationMethodHelpTextWarning') : undefined}
+                  helpLink="https://wiki.servarr.com/sonarr/faq#forced-authentication"
                   onChange={onInputChange}
                   {...authenticationMethod}
                 />
@@ -102,6 +104,7 @@ function AuthenticationRequiredModalContent(props) {
                   type={inputTypes.TEXT}
                   name="username"
                   onChange={onInputChange}
+                  helpTextWarning={username.value === '' ? translate('AuthenticationRequiredUsernameHelpTextWarning') : undefined}
                   {...username}
                 />
               </FormGroup>
@@ -113,6 +116,7 @@ function AuthenticationRequiredModalContent(props) {
                   type={inputTypes.PASSWORD}
                   name="password"
                   onChange={onInputChange}
+                  helpTextWarning={password.value === '' ? translate('AuthenticationRequiredPasswordHelpTextWarning') : undefined}
                   {...password}
                 />
               </FormGroup>
