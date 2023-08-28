@@ -63,12 +63,12 @@ function getDownloadTooltip(
   if (isGrabbing) {
     return '';
   } else if (isGrabbed) {
-    return translate('AddToDownloadQueue');
+    return translate('AddedToDownloadQueue');
   } else if (grabError) {
     return grabError;
   }
 
-  return translate('AddedToDownloadQueue');
+  return translate('AddToDownloadQueue');
 }
 
 interface InteractiveSearchRowProps {
