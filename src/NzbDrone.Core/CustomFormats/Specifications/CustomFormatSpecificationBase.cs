@@ -23,6 +23,7 @@ namespace NzbDrone.Core.CustomFormats
         public bool IsSatisfiedBy(CustomFormatInput input)
         {
             var match = IsSatisfiedByWithoutNegate(input);
+
             if (Negate)
             {
                 match = !match;

@@ -69,6 +69,7 @@ namespace Sonarr.Api.V3.AutoTagging
             var spec = (IAutoTaggingSpecification)SchemaBuilder.ReadFromSchema(resource.Fields, type, null);
             spec.Name = resource.Name;
             spec.Negate = resource.Negate;
+            spec.Required = resource.Required;
             return spec;
         }
     }
