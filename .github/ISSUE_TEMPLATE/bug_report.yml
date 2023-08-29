@@ -42,12 +42,14 @@ body:
         - **Docker Install**: Yes
         - **Using Reverse Proxy**: No
         - **Browser**: Firefox 90 (If UI related)
+        - **Database**: Sqlite 3.41.2
     value: |
         - OS: 
-        - Sonarr:
-        - Docker Install:
-        - Using Reverse Proxy:
-        - Browser:
+        - Sonarr: 
+        - Docker Install: 
+        - Using Reverse Proxy: 
+        - Browser: 
+        - Database: 
     render: markdown
   validations:
     required: true
