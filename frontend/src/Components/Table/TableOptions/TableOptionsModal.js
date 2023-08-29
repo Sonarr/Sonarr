@@ -145,7 +145,7 @@ class TableOptionsModal extends Component {
                     {
                       hasPageSize ?
                         <FormGroup>
-                          <FormLabel>{translate('PageSize')}</FormLabel>
+                          <FormLabel>{translate('TablePageSize')}</FormLabel>
 
                           <FormInputGroup
                             type={inputTypes.NUMBER}

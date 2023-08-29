@@ -19,7 +19,7 @@ function FilterBuilderRowValueTag(props) {
         props.isLastTag ?
           null :
           <div className={styles.or}>
-            {translate('or')}
+            {translate('Or')}
           </div>
       }
     </div>

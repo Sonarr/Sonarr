@@ -41,7 +41,7 @@ function TimeleftCell(props) {
     return (
       <TableRowCell
         className={styles.timeleft}
-        title={translate('RetryingDownload', { date, time })}
+        title={translate('RetryingDownloadOn', { date, time })}
       >
         -
       </TableRowCell>

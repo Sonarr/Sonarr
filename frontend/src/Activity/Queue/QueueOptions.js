@@ -61,7 +61,7 @@ class QueueOptions extends Component {
             type={inputTypes.CHECK}
             name="includeUnknownSeriesItems"
             value={includeUnknownSeriesItems}
-            helpText={translate('ShownUnknownSeriesItemsHelpText')}
+            helpText={translate('ShowUnknownSeriesItemsHelpText')}
             onChange={this.onOptionChange}
           />
         </FormGroup>

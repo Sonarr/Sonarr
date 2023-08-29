@@ -105,7 +105,7 @@ class ImportCustomFormatModalContent extends Component {
                 <Form>
                   <FormGroup size={sizes.MEDIUM}>
                     <FormLabel>
-                      {translate('CustomFormatJSON')}
+                      {translate('CustomFormatJson')}
                     </FormLabel>
                     <FormInputGroup
                       key={0}
