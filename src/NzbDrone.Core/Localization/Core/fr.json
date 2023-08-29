@@ -79,5 +79,9 @@
     "AddRemotePathMapping": "Ajouter un mappage des chemins d'accès",
     "AddNewSeries": "Ajouter une nouvelle série",
     "AddNewSeriesError": "Échec du chargement des résultats de recherche, veuillez réessayer.",
-    "AddNewSeriesSearchForMissingEpisodes": "Démarrer la recherche des épisodes manquants"
+    "AddNewSeriesSearchForMissingEpisodes": "Démarrer la recherche des épisodes manquants",
+    "AddConnection": "Ajouter une connexion",
+    "AddANewPath": "Ajouter un nouveau chemin",
+    "AddConditionImplementation": "Ajouter une condition - {implementationName}",
+    "AddConnectionImplementation": "Ajouter une connexion - {implementationName}"
 }
