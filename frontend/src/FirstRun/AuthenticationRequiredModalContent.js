@@ -104,7 +104,7 @@ function AuthenticationRequiredModalContent(props) {
                   type={inputTypes.TEXT}
                   name="username"
                   onChange={onInputChange}
-                  helpTextWarning={username.value === '' ? translate('AuthenticationRequiredUsernameHelpTextWarning') : undefined}
+                  helpTextWarning={username?.value ? undefined : translate('AuthenticationRequiredUsernameHelpTextWarning')}
                   {...username}
                 />
               </FormGroup>
@@ -116,7 +116,7 @@ function AuthenticationRequiredModalContent(props) {
                   type={inputTypes.PASSWORD}
                   name="password"
                   onChange={onInputChange}
-                  helpTextWarning={password.value === '' ? translate('AuthenticationRequiredPasswordHelpTextWarning') : undefined}
+                  helpTextWarning={password?.value ? undefined : translate('AuthenticationRequiredPasswordHelpTextWarning')}
                   {...password}
                 />
               </FormGroup>
