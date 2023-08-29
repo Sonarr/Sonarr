@@ -6090,6 +6090,42 @@
       }
     },
     "/api/v3/series/{id}": {
+      "get": {
+        "tags": [
+          "Series"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "includeSeasonImages",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SeriesResource"
+                }
+              }
+            }
+          }
+        }
+      },
       "put": {
         "tags": [
           "Series"
@@ -6178,34 +6214,6 @@
         "responses": {
           "200": {
             "description": "Success"
-          }
-        }
-      },
-      "get": {
-        "tags": [
-          "Series"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SeriesResource"
-                }
-              }
-            }
           }
         }
       }
