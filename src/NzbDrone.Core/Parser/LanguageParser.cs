@@ -33,6 +33,8 @@ namespace NzbDrone.Core.Parser
 
         private static readonly Regex SubtitleLanguageTitleRegex = new Regex(".+?(\\.((?<tags1>full|forced|foreign|default|cc|psdh|sdh)|(?<iso_code>[a-z]{2,3})))*\\.(?<title>[^.]*)(\\.((?<tags2>full|forced|foreign|default|cc|psdh|sdh)|(?<iso_code>[a-z]{2,3})))*$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
+        private static readonly Regex SubtitleTitleRegex = new Regex("(.+ - )?(?<copy>\\d+)", RegexOptions.Compiled);
+
         public static List<Language> ParseLanguages(string title)
         {
             foreach (var regex in CleanSeriesTitleRegex)
@@ -273,7 +275,7 @@ namespace NzbDrone.Core.Parser
             {
                 var episodeFile = episode.EpisodeFile.Value;
                 var episodeFileTitle = Path.GetFileNameWithoutExtension(episodeFile.RelativePath);
-                var originalEpisodeFileTitle = Path.GetFileNameWithoutExtension(episodeFile.OriginalFilePath);
+                var originalEpisodeFileTitle = Path.GetFileNameWithoutExtension(episodeFile.OriginalFilePath) ?? string.Empty;
 
                 if (episodeFileTitle.Contains(title, StringComparison.OrdinalIgnoreCase) || originalEpisodeFileTitle.Contains(title, StringComparison.OrdinalIgnoreCase))
                 {
@@ -282,6 +284,24 @@ namespace NzbDrone.Core.Parser
             }
 
             return (languageTags.ToList(), title);
+        }
+
+        public static int CopyFromTitle(string title)
+        {
+            if (title is null)
+            {
+                return 0;
+            }
+
+            var match = SubtitleTitleRegex.Match(title);
+
+            if (match.Success)
+            {
+                var copy = match.Groups["copy"].ToString();
+                return int.Parse(copy);
+            }
+
+            return 0;
         }
 
         public static List<string> ParseLanguageTags(string fileName)

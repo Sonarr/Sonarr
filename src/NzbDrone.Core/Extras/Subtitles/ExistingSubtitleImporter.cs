@@ -81,9 +81,9 @@ namespace NzbDrone.Core.Extras.Subtitles
                     {
                         (languageTags, title) = LanguageParser.ParseLanguageTagsAndTitle(possibleSubtitleFile, firstEpisode);
                     }
-                    catch (Exception ex)
+                    catch (ArgumentException)
                     {
-                        _logger.Debug(ex, "Failed parsing language tags with title from subtitle file: {0}", possibleSubtitleFile);
+                        _logger.Debug("Failed parsing language tags with title from subtitle file: {0}", possibleSubtitleFile);
                     }
 
                     var subtitleFile = new SubtitleFile
@@ -95,7 +95,8 @@ namespace NzbDrone.Core.Extras.Subtitles
                                            Language = LanguageParser.ParseSubtitleLanguage(possibleSubtitleFile),
                                            LanguageTags = languageTags ?? LanguageParser.ParseLanguageTags(possibleSubtitleFile),
                                            Title = title,
-                                           Extension = extension
+                                           Extension = extension,
+                                           Copy = LanguageParser.CopyFromTitle(title)
                                        };
 
                     subtitleFiles.Add(subtitleFile);
