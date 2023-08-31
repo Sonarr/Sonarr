@@ -13,6 +13,7 @@ import { createThunk } from 'Store/thunks';
 import getSectionState from 'Utilities/State/getSectionState';
 import selectProviderSchema from 'Utilities/State/selectProviderSchema';
 import updateSectionState from 'Utilities/State/updateSectionState';
+import translate from 'Utilities/String/translate';
 
 //
 // Variables
@@ -149,7 +150,7 @@ export default {
 
       // Set the name in pendingChanges
       newState.pendingChanges = {
-        name: `${item.name} - Copy`
+        name: translate('DefaultNameCopiedSpecification', { name: item.name })
       };
 
       return updateSectionState(state, section, newState);
