@@ -1313,5 +1313,16 @@
     "UnmappedFilesOnly": "Somente Arquivos Não Mapeados",
     "VersionNumber": "Versão {version}",
     "View": "Exibir",
-    "WhatsNew": "O que há de novo?"
+    "WhatsNew": "O que há de novo?",
+    "Rejections": "Rejeições",
+    "Connection": "Conexão",
+    "CustomFormatJson": "JSON do Formato Personalizado",
+    "Database": "Banco de dados",
+    "HealthMessagesInfoBox": "Você pode encontrar mais informações sobre a causa dessas mensagens de verificação de integridade clicando no link da wiki (ícone do livro) no final da linha ou verificando seus [logs]({link}). Se tiver dificuldade em interpretar essas mensagens, você pode entrar em contato com nosso suporte, nos links abaixo.",
+    "ImdbId": "ID do IMDb",
+    "Port": "Porta",
+    "ShowUnknownSeriesItems": "Mostrar Itens de Séries Desconhecidas",
+    "ShowUnknownSeriesItemsHelpText": "Mostrar itens sem uma série na fila, isso pode incluir séries, filmes removidos ou qualquer outra coisa na categoria do Sonarr",
+    "Test": "Teste",
+    "Level": "Nível"
 }
