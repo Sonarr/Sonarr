@@ -48,6 +48,9 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
         [JsonProperty(PropertyName = "seeding_time")]
         public long SeedingTime { get; set; } // Torrent seeding time (in seconds)
+
+        [JsonProperty(PropertyName = "content_path")]
+        public string ContentPath { get; set; } // Torrent save path
     }
 
     public class QBittorrentTorrentFile

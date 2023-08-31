@@ -137,7 +137,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
             {
                 Mocker.GetMock<IQBittorrentProxy>()
                     .Setup(s => s.GetTorrentProperties(torrent.Hash.ToLower(), It.IsAny<QBittorrentSettings>()))
-                    .Returns(new QBittorrentTorrentProperties { SavePath = torrent.SavePath });
+                    .Returns(new QBittorrentTorrentProperties { ContentPath = torrent.ContentPath, SavePath = torrent.SavePath });
 
                 Mocker.GetMock<IQBittorrentProxy>()
                     .Setup(s => s.GetTorrentFiles(torrent.Hash.ToLower(), It.IsAny<QBittorrentSettings>()))
@@ -426,7 +426,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
                 Size = 1000,
                 Progress = 0.7,
                 Eta = 8640000,
-                State = "stalledDL",
+                State = "pausedUP",
                 Label = "",
                 SavePath = @"C:\Torrents".AsOsAgnostic(),
                 ContentPath = @"C:\Torrents\Droned.S01.12".AsOsAgnostic()
