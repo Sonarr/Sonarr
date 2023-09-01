@@ -9,6 +9,7 @@ import { UiSettings } from 'typings/UiSettings';
 import formatDateTime from 'Utilities/Date/formatDateTime';
 import getRelativeDate from 'Utilities/Date/getRelativeDate';
 import formatBytes from 'Utilities/Number/formatBytes';
+import translate from 'Utilities/String/translate';
 import SeriesIndexOverviewInfoRow from './SeriesIndexOverviewInfoRow';
 import styles from './SeriesIndexOverviewInfo.css';
 
@@ -99,7 +100,9 @@ function getInfoRowProps(
   const { name } = row;
 
   if (name === 'monitored') {
-    const monitoredText = props.monitored ? 'Monitored' : 'Unmonitored';
+    const monitoredText = props.monitored
+      ? translate('Monitored')
+      : translate('Unmonitored');
 
     return {
       title: monitoredText,
@@ -110,7 +113,7 @@ function getInfoRowProps(
 
   if (name === 'network') {
     return {
-      title: 'Network',
+      title: translate('Network'),
       iconName: icons.NETWORK,
       label: props.network ?? '',
     };
@@ -118,7 +121,7 @@ function getInfoRowProps(
 
   if (name === 'qualityProfileId' && !!props.qualityProfile?.name) {
     return {
-      title: 'Quality Profile',
+      title: translate('QualityProfile'),
       iconName: icons.PROFILE,
       label: props.qualityProfile.name,
     };
@@ -130,11 +133,9 @@ function getInfoRowProps(
       uiSettings;
 
     return {
-      title: `Previous Airing: ${formatDateTime(
-        previousAiring,
-        longDateFormat,
-        timeFormat
-      )}`,
+      title: translate('PreviousAiringDate', {
+        date: formatDateTime(previousAiring, longDateFormat, timeFormat),
+      }),
       iconName: icons.CALENDAR,
       label:
         getRelativeDate(previousAiring, shortDateFormat, showRelativeDates, {
@@ -150,7 +151,9 @@ function getInfoRowProps(
       uiSettings;
 
     return {
-      title: `Added: ${formatDateTime(added, longDateFormat, timeFormat)}`,
+      title: translate('AddedDate', {
+        date: formatDateTime(added, longDateFormat, timeFormat),
+      }),
       iconName: icons.ADD,
       label:
         getRelativeDate(added, shortDateFormat, showRelativeDates, {
@@ -162,16 +165,16 @@ function getInfoRowProps(
 
   if (name === 'seasonCount') {
     const { seasonCount } = props;
-    let seasons = '1 season';
+    let seasons = translate('OneSeason');
 
     if (seasonCount === 0) {
-      seasons = 'No seasons';
+      seasons = translate('NoSeasons');
     } else if (seasonCount > 1) {
-      seasons = `${seasonCount} seasons`;
+      seasons = translate('CountSeasons', { count: seasonCount });
     }
 
     return {
-      title: 'Season Count',
+      title: translate('SeasonCount'),
       iconName: icons.CIRCLE,
       label: seasons,
     };
@@ -179,7 +182,7 @@ function getInfoRowProps(
 
   if (name === 'path') {
     return {
-      title: 'Path',
+      title: translate('Path'),
       iconName: icons.FOLDER,
       label: props.path,
     };
@@ -187,7 +190,7 @@ function getInfoRowProps(
 
   if (name === 'sizeOnDisk') {
     return {
-      title: 'Size on Disk',
+      title: translate('SizeOnDisk'),
       iconName: icons.DRIVE,
       label: formatBytes(props.sizeOnDisk),
     };

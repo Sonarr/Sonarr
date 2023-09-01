@@ -31,7 +31,7 @@ function SeasonsCell(props: SeriesStatusCellProps) {
         <Popover
           className={styles.seasonCount}
           anchor={seasonCount}
-          title={translate('Season Details')}
+          title={translate('SeasonDetails')}
           body={<SeasonDetails seriesId={seriesId} seasons={seasons} />}
           position={TooltipPosition.Left}
         />

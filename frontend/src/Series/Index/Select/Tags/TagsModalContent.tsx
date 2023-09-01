@@ -67,9 +67,18 @@ function TagsModalContent(props: TagsModalContentProps) {
   }, [tags, applyTags, onApplyTagsPress]);
 
   const applyTagsOptions = [
-    { key: 'add', value: 'Add' },
-    { key: 'remove', value: 'Remove' },
-    { key: 'replace', value: 'Replace' },
+    {
+      key: 'add',
+      value: translate('Add'),
+    },
+    {
+      key: 'remove',
+      value: translate('Remove'),
+    },
+    {
+      key: 'replace',
+      value: translate('Replace'),
+    },
   ];
 
   return (

@@ -53,8 +53,8 @@ function SeriesStatusCell(props: SeriesStatusCellProps) {
           name={monitored ? icons.MONITORED : icons.UNMONITORED}
           title={
             monitored
-              ? translate('Series is monitored')
-              : translate('Series is unmonitored')
+              ? translate('SeriesIsMonitored')
+              : translate('SeriesIsUnmonitored')
           }
         />
       )}

@@ -2,9 +2,10 @@ import classNames from 'classnames';
 import React, { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import MonitorToggleButton from 'Components/MonitorToggleButton';
+import formatSeason from 'Season/formatSeason';
 import { Statistics } from 'Series/Series';
 import { toggleSeasonMonitored } from 'Store/Actions/seriesActions';
-import padNumber from 'Utilities/Number/padNumber';
+import translate from 'Utilities/String/translate';
 import styles from './SeasonPassSeason.css';
 
 interface SeasonPassSeasonProps {
@@ -46,9 +47,7 @@ function SeasonPassSeason(props: SeasonPassSeasonProps) {
           onPress={onSeasonMonitoredPress}
         />
 
-        <span>
-          {seasonNumber === 0 ? 'Specials' : `S${padNumber(seasonNumber, 2)}`}
-        </span>
+        <span>{formatSeason(seasonNumber, true)}</span>
       </div>
 
       <div
@@ -56,7 +55,10 @@ function SeasonPassSeason(props: SeasonPassSeasonProps) {
           styles.episodes,
           percentOfEpisodes === 100 && styles.allEpisodes
         )}
-        title={`${episodeFileCount}/${totalEpisodeCount} episodes downloaded`}
+        title={translate('SeasonPassEpisodesDownloaded', {
+          episodeFileCount,
+          totalEpisodeCount,
+        })}
       >
         {totalEpisodeCount === 0
           ? '0/0'

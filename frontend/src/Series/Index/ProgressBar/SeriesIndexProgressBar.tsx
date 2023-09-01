@@ -6,6 +6,7 @@ import createSeriesQueueItemsDetailsSelector, {
   SeriesQueueDetails,
 } from 'Series/Index/createSeriesQueueDetailsSelector';
 import getProgressBarKind from 'Utilities/Series/getProgressBarKind';
+import translate from 'Utilities/String/translate';
 import styles from './SeriesIndexProgressBar.css';
 
 interface SeriesIndexProgressBarProps {
@@ -59,7 +60,12 @@ function SeriesIndexProgressBar(props: SeriesIndexProgressBarProps) {
       size={detailedProgressBar ? sizes.MEDIUM : sizes.SMALL}
       showText={detailedProgressBar}
       text={text}
-      title={`${episodeFileCount} / ${episodeCount} (Total: ${totalEpisodeCount}, Downloading: ${queueDetails.count})`}
+      title={translate('SeriesProgressBarText', {
+        episodeFileCount,
+        episodeCount,
+        totalEpisodeCount,
+        downloadingCount: queueDetails.count,
+      })}
       width={width}
     />
   );

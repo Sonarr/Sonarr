@@ -12,11 +12,27 @@ import ModalHeader from 'Components/Modal/ModalHeader';
 import { inputTypes } from 'Helpers/Props';
 import selectPosterOptions from 'Series/Index/Posters/selectPosterOptions';
 import { setSeriesPosterOption } from 'Store/Actions/seriesIndexActions';
+import translate from 'Utilities/String/translate';
 
 const posterSizeOptions = [
-  { key: 'small', value: 'Small' },
-  { key: 'medium', value: 'Medium' },
-  { key: 'large', value: 'Large' },
+  {
+    key: 'small',
+    get value() {
+      return translate('Small');
+    },
+  },
+  {
+    key: 'medium',
+    get value() {
+      return translate('Medium');
+    },
+  },
+  {
+    key: 'large',
+    get value() {
+      return translate('Large');
+    },
+  },
 ];
 
 interface SeriesIndexPosterOptionsModalContentProps {
@@ -50,12 +66,12 @@ function SeriesIndexPosterOptionsModalContent(
 
   return (
     <ModalContent onModalClose={onModalClose}>
-      <ModalHeader>Poster Options</ModalHeader>
+      <ModalHeader>{translate('PosterOptions')}</ModalHeader>
 
       <ModalBody>
         <Form>
           <FormGroup>
-            <FormLabel>Poster Size</FormLabel>
+            <FormLabel>{translate('PosterSize')}</FormLabel>
 
             <FormInputGroup
               type={inputTypes.SELECT}
@@ -67,61 +83,61 @@ function SeriesIndexPosterOptionsModalContent(
           </FormGroup>
 
           <FormGroup>
-            <FormLabel>Detailed Progress Bar</FormLabel>
+            <FormLabel>{translate('DetailedProgressBar')}</FormLabel>
 
             <FormInputGroup
               type={inputTypes.CHECK}
               name="detailedProgressBar"
               value={detailedProgressBar}
-              helpText="Show text on progress bar"
+              helpText={translate('DetailedProgressBarHelpText')}
               onChange={onPosterOptionChange}
             />
           </FormGroup>
 
           <FormGroup>
-            <FormLabel>Show Title</FormLabel>
+            <FormLabel>{translate('ShowTitle')}</FormLabel>
 
             <FormInputGroup
               type={inputTypes.CHECK}
               name="showTitle"
               value={showTitle}
-              helpText="Show series title under poster"
+              helpText={translate('ShowTitleHelpText')}
               onChange={onPosterOptionChange}
             />
           </FormGroup>
 
           <FormGroup>
-            <FormLabel>Show Monitored</FormLabel>
+            <FormLabel>{translate('ShowMonitored')}</FormLabel>
 
             <FormInputGroup
               type={inputTypes.CHECK}
               name="showMonitored"
               value={showMonitored}
-              helpText="Show monitored status under poster"
+              helpText={translate('ShowMonitoredHelpText')}
               onChange={onPosterOptionChange}
             />
           </FormGroup>
 
           <FormGroup>
-            <FormLabel>Show Quality Profile</FormLabel>
+            <FormLabel>{translate('ShowQualityProfile')}</FormLabel>
 
             <FormInputGroup
               type={inputTypes.CHECK}
               name="showQualityProfile"
               value={showQualityProfile}
-              helpText="Show quality profile under poster"
+              helpText={translate('ShowQualityProfileHelpText')}
               onChange={onPosterOptionChange}
             />
           </FormGroup>
 
           <FormGroup>
-            <FormLabel>Show Search</FormLabel>
+            <FormLabel>{translate('ShowSearch')}</FormLabel>
 
             <FormInputGroup
               type={inputTypes.CHECK}
               name="showSearchAction"
               value={showSearchAction}
-              helpText="Show search button on hover"
+              helpText={translate('ShowSearchHelpText')}
               onChange={onPosterOptionChange}
             />
           </FormGroup>
@@ -129,7 +145,7 @@ function SeriesIndexPosterOptionsModalContent(
       </ModalBody>
 
       <ModalFooter>
-        <Button onPress={onModalClose}>Close</Button>
+        <Button onPress={onModalClose}>{translate('Close')}</Button>
       </ModalFooter>
     </ModalContent>
   );

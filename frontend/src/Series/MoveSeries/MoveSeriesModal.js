@@ -7,6 +7,7 @@ import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import { kinds, sizes } from 'Helpers/Props';
+import translate from 'Utilities/String/translate';
 import styles from './MoveSeriesModal.css';
 
 function MoveSeriesModal(props) {
@@ -26,7 +27,7 @@ function MoveSeriesModal(props) {
     !destinationPath &&
     !destinationRootFolder
   ) {
-    console.error('orginalPath and destinationPath OR destinationRootFolder must be provided');
+    console.error('originalPath and destinationPath OR destinationRootFolder must be provided');
   }
 
   return (
@@ -41,14 +42,14 @@ function MoveSeriesModal(props) {
         onModalClose={onModalClose}
       >
         <ModalHeader>
-          Move Files
+          {translate('MoveFiles')}
         </ModalHeader>
 
         <ModalBody>
           {
             destinationRootFolder ?
-              `Would you like to move the series folders to '${destinationRootFolder}'?` :
-              `Would you like to move the series files from '${originalPath}' to '${destinationPath}'?`
+              translate('MoveSeriesFoldersToRootFolder', { destinationRootFolder }) :
+              translate('MoveSeriesFoldersToNewPath', { originalPath, destinationPath })
           }
         </ModalBody>
 
@@ -57,14 +58,14 @@ function MoveSeriesModal(props) {
             className={styles.doNotMoveButton}
             onPress={onSavePress}
           >
-            No, I'll Move the Files Myself
+            {translate('MoveSeriesFoldersDontMoveFiles')}
           </Button>
 
           <Button
             kind={kinds.DANGER}
             onPress={onMoveSeriesPress}
           >
-            Yes, Move the Files
+            {translate('MoveSeriesFoldersMoveFiles')}
           </Button>
         </ModalFooter>
       </ModalContent>

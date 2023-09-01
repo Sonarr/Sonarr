@@ -14,6 +14,7 @@ import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import Popover from 'Components/Tooltip/Popover';
 import { icons, inputTypes, tooltipPositions } from 'Helpers/Props';
+import translate from 'Utilities/String/translate';
 import styles from './MonitoringOptionsModalContent.css';
 
 const NO_CHANGE = 'noChange';
@@ -82,14 +83,14 @@ class MonitoringOptionsModalContent extends Component {
     return (
       <ModalContent onModalClose={onModalClose}>
         <ModalHeader>
-          Monitor Series
+          {translate('MonitorSeries')}
         </ModalHeader>
 
         <ModalBody>
           <Form {...otherProps}>
             <FormGroup>
               <FormLabel>
-                Monitoring
+                {translate('Monitoring')}
 
                 <Popover
                   anchor={
@@ -98,7 +99,7 @@ class MonitoringOptionsModalContent extends Component {
                       name={icons.INFO}
                     />
                   }
-                  title="Monitoring Options"
+                  title={translate('MonitoringOptions')}
                   body={<SeriesMonitoringOptionsPopoverContent />}
                   position={tooltipPositions.RIGHT}
                 />
@@ -119,14 +120,14 @@ class MonitoringOptionsModalContent extends Component {
           <Button
             onPress={onModalClose}
           >
-            Cancel
+            {translate('Cancel')}
           </Button>
 
           <SpinnerButton
             isSpinning={isSaving}
             onPress={this.onSavePress}
           >
-            Save
+            {translate('Save')}
           </SpinnerButton>
         </ModalFooter>
       </ModalContent>
