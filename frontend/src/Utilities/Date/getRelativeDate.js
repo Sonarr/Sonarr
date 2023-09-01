@@ -4,6 +4,7 @@ import isInNextWeek from 'Utilities/Date/isInNextWeek';
 import isToday from 'Utilities/Date/isToday';
 import isTomorrow from 'Utilities/Date/isTomorrow';
 import isYesterday from 'Utilities/Date/isYesterday';
+import translate from 'Utilities/String/translate';
 
 function getRelativeDate(date, shortDateFormat, showRelativeDates, { timeFormat, includeSeconds = false, timeForToday = false } = {}) {
   if (!date) {
@@ -21,15 +22,15 @@ function getRelativeDate(date, shortDateFormat, showRelativeDates, { timeFormat,
   }
 
   if (isYesterday(date)) {
-    return 'Yesterday';
+    return translate('Yesterday');
   }
 
   if (isTodayDate) {
-    return 'Today';
+    return translate('Today');
   }
 
   if (isTomorrow(date)) {
-    return 'Tomorrow';
+    return translate('Tomorrow');
   }
 
   if (isInNextWeek(date)) {

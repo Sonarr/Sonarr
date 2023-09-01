@@ -1,14 +1,66 @@
+import translate from 'Utilities/String/translate';
+
 const monitorOptions = [
-  { key: 'all', value: 'All Episodes' },
-  { key: 'future', value: 'Future Episodes' },
-  { key: 'missing', value: 'Missing Episodes' },
-  { key: 'existing', value: 'Existing Episodes' },
-  { key: 'pilot', value: 'Pilot Episode' },
-  { key: 'firstSeason', value: 'Only First Season' },
-  { key: 'latestSeason', value: 'Only Latest Season' },
-  { key: 'monitorSpecials', value: 'Monitor Specials' },
-  { key: 'unmonitorSpecials', value: 'Unmonitor Specials' },
-  { key: 'none', value: 'None' }
+  {
+    key: 'all',
+    get value() {
+      return translate('MonitorAllEpisodes');
+    }
+  },
+  {
+    key: 'future',
+    get value() {
+      return translate('MonitorFutureEpisodes');
+    }
+  },
+  {
+    key: 'missing',
+    get value() {
+      return translate('MonitorMissingEpisodes');
+    }
+  },
+  {
+    key: 'existing',
+    get value() {
+      return translate('MonitorExistingEpisodes');
+    }
+  },
+  {
+    key: 'pilot',
+    get value() {
+      return translate('MonitorPilotEpisode');
+    }
+  },
+  {
+    key: 'firstSeason',
+    get value() {
+      return translate('MonitorFirstSeason');
+    }
+  },
+  {
+    key: 'latestSeason',
+    get value() {
+      return translate('MonitorLatestSeason');
+    }
+  },
+  {
+    key: 'monitorSpecials',
+    get value() {
+      return translate('MonitorSpecials');
+    }
+  },
+  {
+    key: 'unmonitorSpecials',
+    get value() {
+      return translate('UnmonitorSpecials');
+    }
+  },
+  {
+    key: 'none',
+    get value() {
+      return translate('MonitorNone');
+    }
+  }
 ];
 
 export default monitorOptions;

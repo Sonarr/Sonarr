@@ -1,5 +1,6 @@
 import moment from 'moment';
 import padNumber from 'Utilities/Number/padNumber';
+import translate from 'Utilities/String/translate';
 
 function formatTimeSpan(timeSpan) {
   if (!timeSpan) {
@@ -16,7 +17,7 @@ function formatTimeSpan(timeSpan) {
   const time = `${hours}:${minutes}:${seconds}`;
 
   if (days > 0) {
-    return `${days}d ${time}`;
+    return translate('FormatTimeSpanDays', { days, time });
   }
 
   return time;

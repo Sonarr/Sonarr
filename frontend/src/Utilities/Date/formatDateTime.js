@@ -1,4 +1,5 @@
 import moment from 'moment';
+import translate from 'Utilities/String/translate';
 import formatTime from './formatTime';
 import isToday from './isToday';
 import isTomorrow from './isTomorrow';
@@ -10,15 +11,15 @@ function getRelativeDay(date, includeRelativeDate) {
   }
 
   if (isYesterday(date)) {
-    return 'Yesterday, ';
+    return `${translate('Yesterday')}, `;
   }
 
   if (isToday(date)) {
-    return 'Today, ';
+    return `${translate('Today')}, `;
   }
 
   if (isTomorrow(date)) {
-    return 'Tomorrow, ';
+    return `${translate('Tomorrow')}, `;
   }
 
   return '';

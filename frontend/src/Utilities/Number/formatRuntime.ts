@@ -1,3 +1,5 @@
+import translate from 'Utilities/String/translate';
+
 function formatRuntime(runtime: number) {
   if (!runtime) {
     return '';
@@ -8,11 +10,11 @@ function formatRuntime(runtime: number) {
   const result = [];
 
   if (hours) {
-    result.push(`${hours}h`);
+    result.push(translate('FormatRuntimeHours', { hours }));
   }
 
   if (minutes) {
-    result.push(`${minutes}m`);
+    result.push(translate('FormatRuntimeMinutes', { minutes }));
   }
 
   return result.join(' ');

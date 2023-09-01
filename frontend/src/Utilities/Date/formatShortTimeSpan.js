@@ -1,4 +1,5 @@
 import moment from 'moment';
+import translate from 'Utilities/String/translate';
 
 function formatShortTimeSpan(timeSpan) {
   if (!timeSpan) {
@@ -12,14 +13,14 @@ function formatShortTimeSpan(timeSpan) {
   const seconds = Math.floor(duration.asSeconds());
 
   if (hours > 0) {
-    return `${hours} hour(s)`;
+    return translate('FormatShortTimeSpanHours', { hours });
   }
 
   if (minutes > 0) {
-    return `${minutes} minute(s)`;
+    return translate('FormatShortTimeSpanMinutes', { minutes });
   }
 
-  return `${seconds} second(s)`;
+  return translate('FormatShortTimeSpanSeconds', { seconds });
 }
 
 export default formatShortTimeSpan;
