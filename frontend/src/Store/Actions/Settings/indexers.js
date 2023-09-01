@@ -150,7 +150,7 @@ export default {
 
       // Set the name in pendingChanges
       newState.pendingChanges = {
-        name: translate('DefaultNameCopiedSpecification', { name: item.name })
+        name: translate('DefaultNameCopiedProfile', { name: item.name })
       };
 
       return updateSectionState(state, section, newState);
