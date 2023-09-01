@@ -261,6 +261,8 @@
   "Default": "Default",
   "DefaultCase": "Default Case",
   "DefaultDelayProfile": "This is the default profile. It applies to all series that don't have an explicit profile.",
+  "DefaultNameCopiedProfile": "{name} - Copy",
+  "DefaultNameCopiedSpecification": "{name} - Copy",
   "DefaultNotFoundMessage": "You must be lost, nothing to see here.",
   "DelayMinutes": "{delay} Minutes",
   "DelayProfile": "Delay Profile",

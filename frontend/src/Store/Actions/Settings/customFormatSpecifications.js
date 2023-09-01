@@ -10,6 +10,7 @@ import getProviderState from 'Utilities/State/getProviderState';
 import getSectionState from 'Utilities/State/getSectionState';
 import selectProviderSchema from 'Utilities/State/selectProviderSchema';
 import updateSectionState from 'Utilities/State/updateSectionState';
+import translate from 'Utilities/String/translate';
 import { removeItem, set, update, updateItem } from '../baseActions';
 
 //
@@ -176,7 +177,7 @@ export default {
       const newItem = {
         ...item,
         id: newId,
-        name: `${item.name} - Copy`
+        name: translate('DefaultNameCopiedSpecification', { name: item.name })
       };
       newState.items = [...items, newItem];
       newState.itemMap[newId] = newState.items.length - 1;

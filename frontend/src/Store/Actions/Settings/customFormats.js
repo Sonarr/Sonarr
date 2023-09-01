@@ -6,6 +6,7 @@ import createSetSettingValueReducer from 'Store/Actions/Creators/Reducers/create
 import { createThunk } from 'Store/thunks';
 import getSectionState from 'Utilities/State/getSectionState';
 import updateSectionState from 'Utilities/State/updateSectionState';
+import translate from 'Utilities/String/translate';
 import { set } from '../baseActions';
 
 //
@@ -98,7 +99,7 @@ export default {
       const pendingChanges = { ...item, id: 0 };
       delete pendingChanges.id;
 
-      pendingChanges.name = `${pendingChanges.name} - Copy`;
+      pendingChanges.name = translate('DefaultNameCopiedProfile', { name: pendingChanges.name });
       newState.pendingChanges = pendingChanges;
 
       return updateSectionState(state, section, newState);
