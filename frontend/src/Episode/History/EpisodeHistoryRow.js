@@ -72,7 +72,8 @@ class EpisodeHistoryRow extends Component {
       customFormats,
       customFormatScore,
       date,
-      data
+      data,
+      downloadId
     } = this.props;
 
     const {
@@ -118,6 +119,7 @@ class EpisodeHistoryRow extends Component {
                 eventType={eventType}
                 sourceTitle={sourceTitle}
                 data={data}
+                downloadId={downloadId}
               />
             }
             position={tooltipPositions.LEFT}
@@ -170,6 +172,7 @@ EpisodeHistoryRow.propTypes = {
   customFormatScore: PropTypes.number.isRequired,
   date: PropTypes.string.isRequired,
   data: PropTypes.object.isRequired,
+  downloadId: PropTypes.string,
   onMarkAsFailedPress: PropTypes.func.isRequired
 };
 

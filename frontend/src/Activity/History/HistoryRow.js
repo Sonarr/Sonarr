@@ -69,6 +69,7 @@ class HistoryRow extends Component {
       sourceTitle,
       date,
       data,
+      downloadId,
       isMarkingAsFailed,
       columns,
       shortDateFormat,
@@ -269,6 +270,7 @@ class HistoryRow extends Component {
           eventType={eventType}
           sourceTitle={sourceTitle}
           data={data}
+          downloadId={downloadId}
           isMarkingAsFailed={isMarkingAsFailed}
           shortDateFormat={shortDateFormat}
           timeFormat={timeFormat}
@@ -294,6 +296,7 @@ HistoryRow.propTypes = {
   sourceTitle: PropTypes.string.isRequired,
   date: PropTypes.string.isRequired,
   data: PropTypes.object.isRequired,
+  downloadId: PropTypes.string,
   isMarkingAsFailed: PropTypes.bool,
   markAsFailedError: PropTypes.object,
   columns: PropTypes.arrayOf(PropTypes.object).isRequired,

@@ -16,6 +16,7 @@ function HistoryDetails(props) {
     eventType,
     sourceTitle,
     data,
+    downloadId,
     shortDateFormat,
     timeFormat
   } = props;
@@ -29,7 +30,6 @@ function HistoryDetails(props) {
       nzbInfoUrl,
       downloadClient,
       downloadClientName,
-      downloadId,
       age,
       ageHours,
       ageMinutes,
@@ -149,6 +149,15 @@ function HistoryDetails(props) {
           title={translate('Name')}
           data={sourceTitle}
         />
+
+        {
+          downloadId ?
+            <DescriptionListItem
+              title={translate('GrabId')}
+              data={downloadId}
+            /> :
+            null
+        }
 
         {
           message ?
@@ -302,6 +311,15 @@ function HistoryDetails(props) {
         />
 
         {
+          downloadId ?
+            <DescriptionListItem
+              title={translate('GrabId')}
+              data={downloadId}
+            /> :
+            null
+        }
+
+        {
           message ?
             <DescriptionListItem
               title={translate('Message')}
@@ -328,6 +346,7 @@ HistoryDetails.propTypes = {
   eventType: PropTypes.string.isRequired,
   sourceTitle: PropTypes.string.isRequired,
   data: PropTypes.object.isRequired,
+  downloadId: PropTypes.string,
   shortDateFormat: PropTypes.string.isRequired,
   timeFormat: PropTypes.string.isRequired
 };
