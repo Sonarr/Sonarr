@@ -191,6 +191,8 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
                         }
                     }
 
+                    tvShow.Add(new XElement("status", series.Status));
+
                     if (series.FirstAired.HasValue)
                     {
                         tvShow.Add(new XElement("premiered", series.FirstAired.Value.ToString("yyyy-MM-dd")));
