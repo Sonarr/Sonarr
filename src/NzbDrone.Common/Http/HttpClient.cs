@@ -282,6 +282,7 @@ namespace NzbDrone.Common.Http
                     var request = new HttpRequest(url);
                     request.AllowAutoRedirect = true;
                     request.ResponseStream = fileStream;
+                    request.RequestTimeout = TimeSpan.FromSeconds(300);
                     var response = await GetAsync(request);
 
                     if (response.Headers.ContentType != null && response.Headers.ContentType.Contains("text/html"))
