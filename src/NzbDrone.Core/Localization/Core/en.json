@@ -656,6 +656,7 @@
   "InteractiveSearchSeason": "Interactive search for all episodes in this season",
   "Interval": "Interval",
   "InvalidFormat": "Invalid Format",
+  "InvalidUILanguage": "Your UI is set to an invalid language, correct it and save your settings",
   "KeyboardShortcuts": "Keyboard Shortcuts",
   "KeyboardShortcutsCloseModal": "Close Current Modal",
   "KeyboardShortcutsConfirmModal": "Accept Confirmation Modal",

@@ -220,6 +220,13 @@ class UISettings extends Component {
                       helpTextWarning={translate('BrowserReloadRequired')}
                       onChange={onInputChange}
                       {...settings.uiLanguage}
+                      errors={
+                        languages.some((language) => language.key === settings.uiLanguage.value) ?
+                          settings.uiLanguage.errors :
+                          [
+                            ...settings.uiLanguage.errors,
+                            { message: translate('InvalidUILanguage') }
+                          ]}
                     />
                   </FormGroup>
                 </FieldSet>
