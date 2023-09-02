@@ -14,23 +14,31 @@ namespace NzbDrone.Core.Test.Datastore.Migration
     [TestFixture]
     public class parse_title_from_existing_subtitle_filesFixture : MigrationTest<parse_title_from_existing_subtitle_files>
     {
-        [TestCase("Name (2020) - S01E20 - [AAC 2.0].testtitle.default.eng.forced.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv", "testtitle")]
-        [TestCase("Name (2020) - S01E20 - [AAC 2.0].eng.default.testtitle.forced.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv", "testtitle")]
-        [TestCase("Name (2020) - S01E20 - [AAC 2.0].default.eng.testtitle.forced.ass", "Name (2020)/Season 1/Name (2020).mkv", "testtitle")]
-        [TestCase("Name (2020) - S01E20 - [AAC 2.0].testtitle.forced.eng.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv", "testtitle")]
-        [TestCase("Name (2020) - S01E20 - [AAC 2.0].eng.forced.testtitle.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv", "testtitle")]
-        [TestCase("Name (2020) - S01E20 - [AAC 2.0].forced.eng.testtitle.ass", "Name (2020)/Season 1/Name (2020).mkv", "testtitle")]
-        [TestCase("Name (2020) - S01E20 - [AAC 2.0].testtitle.default.fra.forced.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv", "testtitle")]
-        [TestCase("Name (2020) - S01E20 - [AAC 2.0].fra.default.testtitle.forced.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv", "testtitle")]
-        [TestCase("Name (2020) - S01E20 - [AAC 2.0].default.fra.testtitle.forced.ass", "Name (2020)/Season 1/Name (2020).mkv", "testtitle")]
-        [TestCase("Name (2020) - S01E20 - [AAC 2.0].testtitle.forced.fra.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv", "testtitle")]
-        [TestCase("Name (2020) - S01E20 - [AAC 2.0].fra.forced.testtitle.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv", "testtitle")]
-        [TestCase("Name (2020) - S01E20 - [AAC 2.0].forced.fra.testtitle.ass", "Name (2020)/Season 1/Name (2020).mkv", "testtitle")]
-        [TestCase("Name (2020) - S01E20 - [AAC 2.0].default.forced.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv", null)]
-        [TestCase("Name (2020) - S01E20 - [AAC 2.0].default.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv", null)]
-        [TestCase("Name (2020) - S01E20 - [AAC 2.0].ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv", null)]
-        [TestCase("Name (2020) - S01E20 - [AAC 2.0].testtitle.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv", null)]
-        public void should_process_file_with_missing_title(string subtitlePath, string episodePath, string title)
+        [TestCase("Name (2020) - S01E20 - [AAC 2.0].testtitle.default.eng.forced.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv", "testtitle", 0)]
+        [TestCase("Name (2020) - S01E20 - [AAC 2.0].eng.default.testtitle.forced.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv", "testtitle", 0)]
+        [TestCase("Name (2020) - S01E20 - [AAC 2.0].default.eng.testtitle.forced.ass", "Name (2020)/Season 1/Name (2020).mkv", "testtitle", 0)]
+        [TestCase("Name (2020) - S01E20 - [AAC 2.0].testtitle.forced.eng.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv", "testtitle", 0)]
+        [TestCase("Name (2020) - S01E20 - [AAC 2.0].eng.forced.testtitle.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv", "testtitle", 0)]
+        [TestCase("Name (2020) - S01E20 - [AAC 2.0].forced.eng.testtitle.ass", "Name (2020)/Season 1/Name (2020).mkv", "testtitle", 0)]
+        [TestCase("Name (2020) - S01E20 - [AAC 2.0].testtitle.default.fra.forced.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv", "testtitle", 0)]
+        [TestCase("Name (2020) - S01E20 - [AAC 2.0].fra.default.testtitle.forced.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv", "testtitle", 0)]
+        [TestCase("Name (2020) - S01E20 - [AAC 2.0].default.fra.testtitle.forced.ass", "Name (2020)/Season 1/Name (2020).mkv", "testtitle", 0)]
+        [TestCase("Name (2020) - S01E20 - [AAC 2.0].testtitle.forced.fra.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv", "testtitle", 0)]
+        [TestCase("Name (2020) - S01E20 - [AAC 2.0].fra.forced.testtitle.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv", "testtitle", 0)]
+        [TestCase("Name (2020) - S01E20 - [AAC 2.0].forced.fra.testtitle.ass", "Name (2020)/Season 1/Name (2020).mkv", "testtitle", 0)]
+        [TestCase("Name (2020) - S01E20 - [AAC 2.0].default.forced.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv", null, 0)]
+        [TestCase("Name (2020) - S01E20 - [AAC 2.0].default.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv", null, 0)]
+        [TestCase("Name (2020) - S01E20 - [AAC 2.0].ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv", null, 0)]
+        [TestCase("Name (2020) - S01E20 - [AAC 2.0].testtitle.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv", null, 0)]
+        [TestCase("Name (2020) - S01E20 - [AAC 2.0].testtitle - 3.default.eng.forced.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv", "testtitle", 3)]
+        [TestCase("Name (2020) - S01E20 - [AAC 2.0].testtitle - 3.forced.eng.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv", "testtitle", 3)]
+        [TestCase("Name (2020) - S01E20 - [AAC 2.0].eng.forced.testtitle - 3.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv", "testtitle", 3)]
+        [TestCase("Name (2020) - S01E20 - [AAC 2.0].fra.default.testtitle - 3.forced.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv", "testtitle", 3)]
+        [TestCase("Name (2020) - S01E20 - [AAC 2.0].3.default.eng.forced.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv", null, 3)]
+        [TestCase("Name (2020) - S01E20 - [AAC 2.0].3.forced.eng.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv", null, 3)]
+        [TestCase("Name (2020) - S01E20 - [AAC 2.0].eng.forced.3.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv", null, 3)]
+        [TestCase("Name (2020) - S01E20 - [AAC 2.0].fra.default.3.forced.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv", null, 3)]
+        public void should_process_file_with_missing_title(string subtitlePath, string episodePath, string title, int copy)
         {
             var now = DateTime.UtcNow;
 
@@ -66,7 +74,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
             files.Should().HaveCount(1);
 
             files.First().Title.Should().Be(title);
-            files.First().Copy.Should().Be(0);
+            files.First().Copy.Should().Be(copy);
         }
     }
 
