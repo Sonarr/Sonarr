@@ -7,13 +7,13 @@ function formatAge(age, ageHours, ageMinutes) {
 
   if (age < 2 && ageHours) {
     if (ageHours < 2 && !!ageMinutes) {
-      return `${ageMinutes.toFixed(0)} ${ageHours === 1 ? translate('Minute').toLowerCase() : translate('Minutes').toLowerCase()}`;
+      return `${ageMinutes.toFixed(0)} ${ageHours === 1 ? translate('FormatAgeMinute') : translate('FormatAgeMinutes')}`;
     }
 
-    return `${ageHours.toFixed(1)} ${ageHours === 1 ? translate('Hour').toLowerCase() : translate('Hours').toLowerCase()}`;
+    return `${ageHours.toFixed(1)} ${ageHours === 1 ? translate('FormatAgeHour') : translate('FormatAgeHours')}`;
   }
 
-  return `${age} ${age === 1 ? translate('Day').toLowerCase() : translate('Days').toLowerCase()}`;
+  return `${age} ${age === 1 ? translate('FormatAgeDay') : translate('FormatAgeDays')}`;
 }
 
 export default formatAge;

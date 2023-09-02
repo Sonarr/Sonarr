@@ -11,15 +11,15 @@ function getRelativeDay(date, includeRelativeDate) {
   }
 
   if (isYesterday(date)) {
-    return `${translate('Yesterday')}, `;
+    return translate('Yesterday');
   }
 
   if (isToday(date)) {
-    return `${translate('Today')}, `;
+    return translate('Today');
   }
 
   if (isTomorrow(date)) {
-    return `${translate('Tomorrow')}, `;
+    return translate('Tomorrow');
   }
 
   return '';
@@ -34,7 +34,10 @@ function formatDateTime(date, dateFormat, timeFormat, { includeSeconds = false, 
   const formattedDate = moment(date).format(dateFormat);
   const formattedTime = formatTime(date, timeFormat, { includeMinuteZero: true, includeSeconds });
 
-  return `${relativeDay}${formattedDate} ${formattedTime}`;
+  if (relativeDay) {
+    return translate('FormatDateTimeRelative', { relativeDay, formattedDate, formattedTime });
+  }
+  return translate('FormatDateTime', { formattedDate, formattedTime });
 }
 
 export default formatDateTime;
