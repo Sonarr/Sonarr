@@ -259,9 +259,9 @@ namespace NzbDrone.Core.Parser
             var simpleFilename = Path.GetFileNameWithoutExtension(fileName);
             var matchTitle = SubtitleLanguageTitleRegex.Match(simpleFilename);
 
-            if (matchTitle.Groups["iso_code"].Captures.Count != 1)
+            if (matchTitle.Groups["iso_code"].Captures.Count is var languageCodeNumber && languageCodeNumber != 1)
             {
-                throw new LanguageParsingException("Subtitle file title probably parsed incorrectly, no language code found, not using.");
+                throw new LanguageParsingException(string.Format("Subtitle file title probably parsed incorrectly, {0} language codes found, not using.", languageCodeNumber));
             }
 
             var isoCode = matchTitle.Groups["iso_code"].Value;
@@ -274,7 +274,7 @@ namespace NzbDrone.Core.Parser
                 .Cast<Capture>()
                 .Where(tag => !tag.Value.Empty())
                 .Select(tag => tag.Value.ToLower());
-            var title = matchTitle.Groups["title"].Captures.Cast<Capture>().First().Value;
+            var title = matchTitle.Groups["title"].Value;
 
             if (matchTitle.Groups["tags1"].Captures.Empty())
             {

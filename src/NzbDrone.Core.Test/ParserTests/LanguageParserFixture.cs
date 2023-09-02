@@ -464,6 +464,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Name (2020) - S01E20 - [AAC 2.0].default.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv")]
         [TestCase("Name (2020) - S01E20 - [AAC 2.0].ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv")]
         [TestCase("Name (2020) - S01E20 - [AAC 2.0].testtitle.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv")]
+        [TestCase("Name (2020) - S01E20 - [AAC 2.0].testtitle.eng.fra.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv")]
         public void should_not_parse_false_title(string postTitle, string episodeFilePath)
         {
             var episode = new Episode
