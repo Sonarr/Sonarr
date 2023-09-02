@@ -1,10 +1,10 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Extras.Files;
+using NzbDrone.Core.Languages;
 using NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
@@ -76,15 +76,20 @@ namespace NzbDrone.Core.Extras.Subtitles
 
                     List<string> languageTags = null;
                     string title = null;
+                    Language language = null;
 
                     try
                     {
-                        (languageTags, title) = LanguageParser.ParseLanguageTagsAndTitle(possibleSubtitleFile, firstEpisode);
+                        (languageTags, title, language) = LanguageParser.ParseLanguageTagsAndTitle(possibleSubtitleFile, firstEpisode);
                     }
-                    catch (ArgumentException)
+                    catch (LanguageParsingException)
                     {
+                        language = LanguageParser.ParseSubtitleLanguage(possibleSubtitleFile);
+                        languageTags = LanguageParser.ParseLanguageTags(possibleSubtitleFile);
                         _logger.Debug("Failed parsing language tags with title from subtitle file: {0}", possibleSubtitleFile);
                     }
+
+                    var (copy, newTitle) = LanguageParser.CopyFromTitle(title);
 
                     var subtitleFile = new SubtitleFile
                                        {
@@ -92,11 +97,11 @@ namespace NzbDrone.Core.Extras.Subtitles
                                            SeasonNumber = localEpisode.SeasonNumber,
                                            EpisodeFileId = firstEpisode.EpisodeFileId,
                                            RelativePath = series.Path.GetRelativePath(possibleSubtitleFile),
-                                           Language = LanguageParser.ParseSubtitleLanguage(possibleSubtitleFile),
-                                           LanguageTags = languageTags ?? LanguageParser.ParseLanguageTags(possibleSubtitleFile),
-                                           Title = title,
+                                           Language = language,
+                                           LanguageTags = languageTags,
+                                           Title = newTitle,
                                            Extension = extension,
-                                           Copy = LanguageParser.CopyFromTitle(title)
+                                           Copy = copy
                                        };
 
                     subtitleFiles.Add(subtitleFile);
