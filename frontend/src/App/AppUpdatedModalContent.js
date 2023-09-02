@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Button from 'Components/Link/Button';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
+import InlineMarkdown from 'Components/Markdown/InlineMarkdown';
 import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
@@ -9,7 +10,6 @@ import ModalHeader from 'Components/Modal/ModalHeader';
 import { kinds } from 'Helpers/Props';
 import UpdateChanges from 'System/Updates/UpdateChanges';
 import translate from 'Utilities/String/translate';
-import InlineMarkdown from '../Components/Markdown/InlineMarkdown';
 import styles from './AppUpdatedModalContent.css';
 
 function mergeUpdates(items, version, prevVersion) {

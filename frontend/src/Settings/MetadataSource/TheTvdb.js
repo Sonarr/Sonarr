@@ -1,6 +1,6 @@
 import React from 'react';
+import InlineMarkdown from 'Components/Markdown/InlineMarkdown';
 import translate from 'Utilities/String/translate';
-import InlineMarkdown from '../../Components/Markdown/InlineMarkdown';
 import styles from './TheTvdb.css';
 
 function TheTvdb(props) {

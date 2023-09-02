@@ -5,6 +5,7 @@ import SelectInput from 'Components/Form/SelectInput';
 import TextInput from 'Components/Form/TextInput';
 import Icon from 'Components/Icon';
 import Button from 'Components/Link/Button';
+import InlineMarkdown from 'Components/Markdown/InlineMarkdown';
 import Modal from 'Components/Modal/Modal';
 import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
@@ -12,7 +13,6 @@ import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import { icons, sizes } from 'Helpers/Props';
 import translate from 'Utilities/String/translate';
-import InlineMarkdown from '../../../Components/Markdown/InlineMarkdown';
 import NamingOption from './NamingOption';
 import styles from './NamingModal.css';
 

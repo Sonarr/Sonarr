@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import Alert from 'Components/Alert';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
+import InlineMarkdown from 'Components/Markdown/InlineMarkdown';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
 import PageToolbar from 'Components/Page/Toolbar/PageToolbar';
@@ -12,7 +13,6 @@ import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import { icons, kinds } from 'Helpers/Props';
 import translate from 'Utilities/String/translate';
-import InlineMarkdown from '../../../Components/Markdown/InlineMarkdown';
 import LogsNavMenu from '../LogsNavMenu';
 import LogFilesTableRow from './LogFilesTableRow';
 

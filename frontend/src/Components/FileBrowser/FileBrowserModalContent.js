@@ -4,6 +4,7 @@ import Alert from 'Components/Alert';
 import PathInput from 'Components/Form/PathInput';
 import Button from 'Components/Link/Button';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
+import InlineMarkdown from 'Components/Markdown/InlineMarkdown';
 import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
@@ -13,7 +14,6 @@ import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import { kinds, scrollDirections } from 'Helpers/Props';
 import translate from 'Utilities/String/translate';
-import InlineMarkdown from '../Markdown/InlineMarkdown';
 import FileBrowserRow from './FileBrowserRow';
 import styles from './FileBrowserModalContent.css';
 

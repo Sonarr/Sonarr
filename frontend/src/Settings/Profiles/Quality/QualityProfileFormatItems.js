@@ -4,9 +4,9 @@ import React, { Component } from 'react';
 import FormGroup from 'Components/Form/FormGroup';
 import FormInputHelpText from 'Components/Form/FormInputHelpText';
 import FormLabel from 'Components/Form/FormLabel';
+import InlineMarkdown from 'Components/Markdown/InlineMarkdown';
 import { sizes } from 'Helpers/Props';
 import translate from 'Utilities/String/translate';
-import InlineMarkdown from '../../../Components/Markdown/InlineMarkdown';
 import QualityProfileFormatItem from './QualityProfileFormatItem';
 import styles from './QualityProfileFormatItems.css';
 
