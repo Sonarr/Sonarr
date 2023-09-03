@@ -2,33 +2,25 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NLog;
-using NzbDrone.Common.Disk;
-using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Extras
 {
-    public interface IExistingExtraFiles : IHandle<SeriesScannedEvent>
+    public interface IExistingExtraFiles
     {
         List<string> ImportFileList(Series series, List<string> possibleExtraFiles);
     }
 
-    public class ExistingExtraFileService : IExistingExtraFiles
+    public class ExistingExtraFileService : IExistingExtraFiles, IHandle<SeriesScannedEvent>
     {
-        private readonly IDiskProvider _diskProvider;
-        private readonly IDiskScanService _diskScanService;
         private readonly List<IImportExistingExtraFiles> _existingExtraFileImporters;
         private readonly Logger _logger;
 
-        public ExistingExtraFileService(IDiskProvider diskProvider,
-                                        IDiskScanService diskScanService,
-                                        IEnumerable<IImportExistingExtraFiles> existingExtraFileImporters,
+        public ExistingExtraFileService(IEnumerable<IImportExistingExtraFiles> existingExtraFileImporters,
                                         Logger logger)
         {
-            _diskProvider = diskProvider;
-            _diskScanService = diskScanService;
             _existingExtraFileImporters = existingExtraFileImporters.OrderBy(e => e.Order).ToList();
             _logger = logger;
         }
@@ -53,13 +45,7 @@ namespace NzbDrone.Core.Extras
         {
             var series = message.Series;
 
-            if (!_diskProvider.FolderExists(series.Path))
-            {
-                return;
-            }
-
-            var filesOnDisk = _diskScanService.GetNonVideoFiles(series.Path);
-            var possibleExtraFiles = _diskScanService.FilterPaths(series.Path, filesOnDisk);
+            var possibleExtraFiles = message.PossibleExtraFiles;
 
             var importedFiles = ImportFileList(series, possibleExtraFiles);
 
