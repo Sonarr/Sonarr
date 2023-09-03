@@ -267,7 +267,7 @@ namespace NzbDrone.Core.Test.MediaFiles.DiskScanServiceTests
             Subject.Scan(_series);
 
             Mocker.GetMock<IDiskProvider>()
-                  .Verify(v => v.GetFiles(It.IsAny<string>(), It.IsAny<bool>()), Times.Once());
+                  .Verify(v => v.GetFiles(It.IsAny<string>(), It.IsAny<bool>()), Times.Exactly(2));
 
             Mocker.GetMock<IMakeImportDecision>()
                   .Verify(v => v.GetImportDecisions(It.Is<List<string>>(l => l.Count == 1), _series, false), Times.Once());
