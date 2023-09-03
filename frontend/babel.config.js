@@ -4,14 +4,14 @@ module.exports = {
   plugins: [
     // Stage 1
     '@babel/plugin-proposal-export-default-from',
-    ['@babel/plugin-proposal-optional-chaining', { loose }],
-    ['@babel/plugin-proposal-nullish-coalescing-operator', { loose }],
+    ['@babel/plugin-transform-optional-chaining', { loose }],
+    ['@babel/plugin-transform-nullish-coalescing-operator', { loose }],
 
     // Stage 2
-    '@babel/plugin-proposal-export-namespace-from',
+    '@babel/plugin-transform-export-namespace-from',
 
     // Stage 3
-    ['@babel/plugin-proposal-class-properties', { loose }],
+    ['@babel/plugin-transform-class-properties', { loose }],
     '@babel/plugin-syntax-dynamic-import'
   ],
   env: {
