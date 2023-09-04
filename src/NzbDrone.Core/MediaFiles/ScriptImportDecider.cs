@@ -8,7 +8,6 @@ using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Processes;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Extras.Subtitles;
 using NzbDrone.Core.MediaFiles.MediaInfo;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
@@ -48,25 +47,25 @@ namespace NzbDrone.Core.MediaFiles
             _logger = logger;
         }
 
-        private static readonly Regex MediaFileLine = new Regex(@"^\[SonarrMediaFile\]\s*(?<mediaFileName>.*)$", RegexOptions.Compiled);
+        private static readonly Regex OutputRegex = new Regex(@"^\[(?:(?<mediaFile>MediaFile)|(?<extraFile>ExtraFile))\]\s(?<fileName>.+)$", RegexOptions.Compiled);
 
-        private static readonly Regex ExtraFileLine = new Regex(@"^\[SonarrExtraFile\]\s*(?<extraFileName>.*)$", RegexOptions.Compiled);
-
-        private ScriptImportInfo ProcessStdout(List<ProcessOutputLine> processOutputLines, string defaultMediaFile)
+        private ScriptImportInfo ProcessOutput(List<ProcessOutputLine> processOutputLines)
         {
             var possibleExtraFiles = new List<string>();
             string mediaFile = null;
 
             foreach (var line in processOutputLines)
             {
-                if (MediaFileLine.Match(line.Content) is var match && match.Success)
+                var match = OutputRegex.Match(line.Content);
+
+                if (match.Groups["mediaFile"].Success)
                 {
                     if (mediaFile is not null)
                     {
                         throw new ScriptImportException("Script output contains multiple media files. Only one media file can be returned.");
                     }
 
-                    mediaFile = match.Groups["mediaFileName"].Value;
+                    mediaFile = match.Groups["fileName"].Value;
 
                     if (!MediaFileExtensions.Extensions.Contains(Path.GetExtension(mediaFile)))
                     {
@@ -77,24 +76,20 @@ namespace NzbDrone.Core.MediaFiles
                         throw new ScriptImportException("Script output contains non-existent media file: {0}", mediaFile);
                     }
                 }
-                else if (ExtraFileLine.Match(line.Content) is var match2 && match2.Success)
+                else if (match.Groups["extraFile"].Success)
                 {
-                    possibleExtraFiles.Add(match2.Groups["extraFileName"].Value);
+                    possibleExtraFiles.Add(match.Groups["fileName"].Value);
 
                     var lastAdded = possibleExtraFiles.Last();
 
-                    if (!SubtitleFileExtensions.Extensions.Contains(Path.GetExtension(lastAdded)))
+                    if (!_diskProvider.FileExists(lastAdded))
                     {
-                        throw new ScriptImportException("Script output contains invalid extra file: {0}", lastAdded);
-                    }
-                    else if (!_diskProvider.FileExists(lastAdded))
-                    {
-                        throw new ScriptImportException("Script output contains non-existent extra file: {0}", lastAdded);
+                        throw new ScriptImportException("Script output contains non-existent possible extra file: {0}", lastAdded);
                     }
                 }
             }
 
-            return new ScriptImportInfo(possibleExtraFiles, mediaFile ?? defaultMediaFile);
+            return new ScriptImportInfo(possibleExtraFiles, mediaFile);
         }
 
         public ScriptImportDecision TryImport(string sourcePath, string destinationFilePath, LocalEpisode localEpisode, EpisodeFile episodeFile, TransferMode mode)
@@ -173,20 +168,23 @@ namespace NzbDrone.Core.MediaFiles
             _logger.Debug("Executed external script: {0} - Status: {1}", _configService.ScriptImportPath, processOutput.ExitCode);
             _logger.Debug("Script Output: \r\n{0}", string.Join("\r\n", processOutput.Lines));
 
-            var scriptImportInfo = ProcessStdout(processOutput.Lines, destinationFilePath);
+            var scriptImportInfo = ProcessOutput(processOutput.Lines);
 
-            var mediaFile = scriptImportInfo.MediaFile;
+            var mediaFile = scriptImportInfo.MediaFile ?? destinationFilePath;
             localEpisode.PossibleExtraFiles = scriptImportInfo.PossibleExtraFiles;
 
             episodeFile.RelativePath = series.Path.GetRelativePath(mediaFile);
             episodeFile.Path = mediaFile;
 
-            if ((processOutput.ExitCode & 0x4) == 0x4)
+            var exitCode = processOutput.ExitCode;
+
+            if (exitCode >= 4)
             {
                 localEpisode.ShouldImportExtras = true;
+                exitCode -= 4;
             }
 
-            switch (processOutput.ExitCode & 0x3)
+            switch (exitCode)
             {
                 case 0: // Copy complete
                     localEpisode.ScriptImported = true;
