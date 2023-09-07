@@ -10,7 +10,7 @@ namespace NzbDrone.Mono.EnvironmentInfo.VersionAdapters
     {
         private const string PLIST_DIR = "/System/Library/CoreServices/";
 
-        private static readonly Regex DarwinVersionRegex = new Regex("<string>(?<version>10\\.\\d{1,2}\\.?\\d{0,2}?)<\\/string>",
+        private static readonly Regex DarwinVersionRegex = new ("<key>ProductVersion<\\/key>\\s*<string>(?<version>1\\d\\.\\d{1,2}\\.?\\d{0,2}?)<\\/string>",
             RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private readonly IDiskProvider _diskProvider;
