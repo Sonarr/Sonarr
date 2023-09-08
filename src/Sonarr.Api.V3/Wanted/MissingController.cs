@@ -25,9 +25,9 @@ namespace Sonarr.Api.V3.Wanted
 
         [HttpGet]
         [Produces("application/json")]
-        public PagingResource<EpisodeResource> GetMissingEpisodes(bool includeSeries = false, bool includeImages = false)
+        public PagingResource<EpisodeResource> GetMissingEpisodes([FromQuery] PagingRequestResource paging, bool includeSeries = false, bool includeImages = false)
         {
-            var pagingResource = Request.ReadPagingResourceFromRequest<EpisodeResource>();
+            var pagingResource = new PagingResource<EpisodeResource>(paging);
             var pagingSpec = new PagingSpec<Episode>
             {
                 Page = pagingResource.Page,

@@ -158,6 +158,8 @@ namespace NzbDrone.Host
                 {
                     { apikeyQuery, Array.Empty<string>() }
                 });
+
+                c.DescribeAllParametersInCamelCase();
             });
 
             services

@@ -18,9 +18,9 @@ namespace Sonarr.Api.V3.Logs
 
         [HttpGet]
         [Produces("application/json")]
-        public PagingResource<LogResource> GetLogs()
+        public PagingResource<LogResource> GetLogs([FromQuery] PagingRequestResource paging)
         {
-            var pagingResource = Request.ReadPagingResourceFromRequest<LogResource>();
+            var pagingResource = new PagingResource<LogResource>(paging);
             var pageSpec = pagingResource.MapToPagingSpec<LogResource, Log>();
 
             if (pageSpec.SortKey == "time")

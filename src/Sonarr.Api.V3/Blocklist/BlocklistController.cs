@@ -23,9 +23,9 @@ namespace Sonarr.Api.V3.Blocklist
 
         [HttpGet]
         [Produces("application/json")]
-        public PagingResource<BlocklistResource> GetBlocklist()
+        public PagingResource<BlocklistResource> GetBlocklist([FromQuery] PagingRequestResource paging)
         {
-            var pagingResource = Request.ReadPagingResourceFromRequest<BlocklistResource>();
+            var pagingResource = new PagingResource<BlocklistResource>(paging);
             var pagingSpec = pagingResource.MapToPagingSpec<BlocklistResource, NzbDrone.Core.Blocklisting.Blocklist>("date", SortDirection.Descending);
 
             return pagingSpec.ApplyToPage(_blocklistService.Paged, model => BlocklistResourceMapper.MapToResource(model, _formatCalculator));
