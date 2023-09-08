@@ -626,11 +626,11 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
             if (torrent.SeedingTimeLimit >= 0)
             {
-                seedingTimeLimit = torrent.SeedingTimeLimit;
+                seedingTimeLimit = torrent.SeedingTimeLimit * 60;
             }
             else if (torrent.SeedingTimeLimit == -2 && config.MaxSeedingTimeEnabled)
             {
-                seedingTimeLimit = config.MaxSeedingTime;
+                seedingTimeLimit = config.MaxSeedingTime * 60;
             }
             else
             {
