@@ -96,7 +96,7 @@ namespace NzbDrone.Host
                             })
                             .ConfigureServices(services =>
                             {
-                                services.Configure<PostgresOptions>(config.GetSection("Radarr:Postgres"));
+                                services.Configure<PostgresOptions>(config.GetSection("Sonarr:Postgres"));
                             }).Build();
 
                         break;
