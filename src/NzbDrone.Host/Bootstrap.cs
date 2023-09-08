@@ -54,6 +54,7 @@ namespace NzbDrone.Host
                 Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
                 var appMode = GetApplicationMode(startupContext);
+                var config = GetConfiguration(startupContext);
 
                 switch (appMode)
                 {
@@ -82,12 +83,22 @@ namespace NzbDrone.Host
                     // Utility mode
                     default:
                     {
-                        new Container(rules => rules.WithNzbDroneRules())
-                            .AutoAddServices(ASSEMBLIES)
-                            .AddNzbDroneLogger()
-                            .AddStartupContext(startupContext)
-                            .Resolve<UtilityModeRouter>()
-                            .Route(appMode);
+                        new HostBuilder()
+                            .UseServiceProviderFactory(new DryIocServiceProviderFactory(new Container(rules => rules.WithNzbDroneRules())))
+                            .ConfigureContainer<IContainer>(c =>
+                            {
+                                c.AutoAddServices(Bootstrap.ASSEMBLIES)
+                                    .AddNzbDroneLogger()
+                                    .AddDatabase()
+                                    .AddStartupContext(startupContext)
+                                    .Resolve<UtilityModeRouter>()
+                                    .Route(appMode);
+                            })
+                            .ConfigureServices(services =>
+                            {
+                                services.Configure<PostgresOptions>(config.GetSection("Radarr:Postgres"));
+                            }).Build();
+
                         break;
                     }
                 }
