@@ -15,6 +15,9 @@ namespace NzbDrone.Mono.Test.EnvironmentInfo.VersionAdapters
         [TestCase("10.8")]
         [TestCase("10.8.1")]
         [TestCase("10.11.20")]
+        [TestCase("11.7.9")]
+        [TestCase("12.6.8")]
+        [TestCase("13.5.1")]
         public void should_get_version_info(string versionString)
         {
             var fileContent = File.ReadAllText(GetTestPath("Files/macOS/SystemVersion.plist")).Replace("10.0.0", versionString);
