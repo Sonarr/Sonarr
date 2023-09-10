@@ -1,6 +1,6 @@
 {
     "Added": "Ditambahkan",
-    "BlocklistReleaseHelpText": "Mencegah Sonarr memperoleh rilis ini secara otomatis",
+    "BlocklistReleaseHelpText": "Mencegah {appName} memperoleh rilis ini secara otomatis",
     "Delete": "Hapus",
     "Close": "Tutup",
     "EnableAutomaticSearch": "Aktifkan Penelusuran Otomatis",

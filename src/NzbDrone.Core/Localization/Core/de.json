@@ -10,7 +10,7 @@
     "DownloadClientCheckNoneAvailableHealthCheckMessage": "Es ist kein Download-Client verfügbar",
     "DownloadClientCheckUnableToCommunicateWithHealthCheckMessage": "Kommunikation mit {0} nicht möglich.",
     "DownloadClientRootFolderHealthCheckMessage": "Der Download-Client {0} legt Downloads im Stammordner {1} ab. Sie sollten nicht in einen Stammordner herunterladen.",
-    "DownloadClientSortingHealthCheckMessage": "Im Download-Client {0} ist die Sortierung {1} für die Kategorie von Sonarr aktiviert. Sie sollten die Sortierung in Ihrem Download-Client deaktivieren, um Importprobleme zu vermeiden.",
+    "DownloadClientSortingHealthCheckMessage": "Im Download-Client {0} ist die Sortierung {1} für die Kategorie von {appName} aktiviert. Sie sollten die Sortierung in Ihrem Download-Client deaktivieren, um Importprobleme zu vermeiden.",
     "DownloadClientStatusSingleClientHealthCheckMessage": "Download-Clients sind aufgrund von Fehlern nicht verfügbar: {0}",
     "DownloadClientStatusAllClientHealthCheckMessage": "Alle Download-Clients sind aufgrund von Fehlern nicht verfügbar",
     "EditSelectedDownloadClients": "Ausgewählte Download Clienten bearbeiten",
