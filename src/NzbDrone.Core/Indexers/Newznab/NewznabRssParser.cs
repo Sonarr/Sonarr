@@ -105,22 +105,28 @@ namespace NzbDrone.Core.Indexers.Newznab
 
         protected override List<Language> GetLanguages(XElement item)
         {
-            var languages = TryGetMultipleNewznabAttributes(item, "language");
+            var languageElements = TryGetMultipleNewznabAttributes(item, "language");
             var results = new List<Language>();
 
             // Try to find <language> elements for some indexers that suck at following the rules.
-            if (languages.Count == 0)
+            if (languageElements.Count == 0)
             {
-                languages = item.Elements("language").Select(e => e.Value).ToList();
+                languageElements = item.Elements("language").Select(e => e.Value).ToList();
             }
 
-            foreach (var language in languages)
+            foreach (var languageElement in languageElements)
             {
-                var mappedLanguage = IsoLanguages.FindByName(language)?.Language ?? null;
+                var languages = languageElement.Split(',',
+                    StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
-                if (mappedLanguage != null)
+                foreach (var language in languages)
                 {
-                    results.Add(mappedLanguage);
+                    var mappedLanguage = IsoLanguages.FindByName(language)?.Language ?? null;
+
+                    if (mappedLanguage != null)
+                    {
+                        results.Add(mappedLanguage);
+                    }
                 }
             }
 

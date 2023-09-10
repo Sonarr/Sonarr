@@ -9,6 +9,7 @@ using NUnit.Framework;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Indexers.Newznab;
+using NzbDrone.Core.Languages;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
@@ -134,6 +135,24 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
                   .Verify(v => v.RecordFailure(It.IsAny<int>(), TimeSpan.FromMinutes(5.0)), Times.Once());
 
             ExceptionVerification.ExpectedWarns(1);
+        }
+
+        [Test]
+        public async Task should_parse_languages()
+        {
+            var recentFeed = ReadAllText(@"Files/Indexers/Newznab/newznab_language.xml");
+
+            Mocker.GetMock<IHttpClient>()
+                .Setup(o => o.ExecuteAsync(It.Is<HttpRequest>(v => v.Method == HttpMethod.Get)))
+                .Returns<HttpRequest>(r => Task.FromResult(new HttpResponse(r, new HttpHeader(), recentFeed)));
+
+            var releases = await Subject.FetchRecent();
+
+            releases.Should().HaveCount(100);
+
+            releases[0].Languages.Should().BeEquivalentTo(new[] { Language.English, Language.Japanese });
+            releases[1].Languages.Should().BeEquivalentTo(new[] { Language.English, Language.Spanish });
+            releases[2].Languages.Should().BeEquivalentTo(new[] { Language.French });
         }
     }
 }
