@@ -8,22 +8,19 @@ using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Http;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Localization;
 
 namespace NzbDrone.Core.HealthCheck
 {
-    public interface IServerSideNotificationService
-    {
-        public HealthCheck GetServerChecks();
-    }
-
-    public class ServerSideNotificationService : IServerSideNotificationService
+    public class ServerSideNotificationService : HealthCheckBase
     {
         private readonly IHttpClient _client;
         private readonly ISonarrCloudRequestBuilder _cloudRequestBuilder;
         private readonly IConfigFileProvider _configFileProvider;
         private readonly Logger _logger;
 
-        public ServerSideNotificationService(IHttpClient client, ISonarrCloudRequestBuilder cloudRequestBuilder, IConfigFileProvider configFileProvider, Logger logger)
+        public ServerSideNotificationService(IHttpClient client, ISonarrCloudRequestBuilder cloudRequestBuilder, IConfigFileProvider configFileProvider, ILocalizationService localizationService, Logger logger)
+            : base(localizationService)
         {
             _client = client;
             _cloudRequestBuilder = cloudRequestBuilder;
@@ -31,7 +28,7 @@ namespace NzbDrone.Core.HealthCheck
             _logger = logger;
         }
 
-        public HealthCheck GetServerChecks()
+        public override HealthCheck Check()
         {
             var request = _cloudRequestBuilder.Services.Create()
                 .Resource("/notification")
