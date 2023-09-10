@@ -25,7 +25,7 @@ export async function fetchTranslations(): Promise<boolean> {
 
 export default function translate(
   key: string,
-  tokens?: Record<string, string | number | boolean>
+  tokens: Record<string, string | number | boolean> = { appName: 'Sonarr' }
 ) {
   const translation = translations[key] || key;
 
