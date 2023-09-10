@@ -4,11 +4,11 @@ namespace NzbDrone.Common.TPL
 {
     public class Debouncer
     {
-        private readonly Action _action;
-        private readonly System.Timers.Timer _timer;
+        protected readonly Action _action;
+        protected readonly System.Timers.Timer _timer;
 
-        private volatile int _paused;
-        private volatile bool _triggered;
+        protected volatile int _paused;
+        protected volatile bool _triggered;
 
         public Debouncer(Action action, TimeSpan debounceDuration)
         {
@@ -27,7 +27,7 @@ namespace NzbDrone.Common.TPL
             }
         }
 
-        public void Execute()
+        public virtual void Execute()
         {
             lock (_timer)
             {
@@ -39,7 +39,7 @@ namespace NzbDrone.Common.TPL
             }
         }
 
-        public void Pause()
+        public virtual void Pause()
         {
             lock (_timer)
             {
@@ -48,7 +48,7 @@ namespace NzbDrone.Common.TPL
             }
         }
 
-        public void Resume()
+        public virtual void Resume()
         {
             lock (_timer)
             {

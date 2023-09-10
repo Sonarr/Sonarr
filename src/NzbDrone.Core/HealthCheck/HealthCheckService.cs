@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NLog;
 using NzbDrone.Common.Cache;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Messaging;
@@ -29,8 +28,6 @@ namespace NzbDrone.Core.HealthCheck
         private readonly IProvideHealthCheck[] _scheduledHealthChecks;
         private readonly Dictionary<Type, IEventDrivenHealthCheck[]> _eventDrivenHealthChecks;
         private readonly IEventAggregator _eventAggregator;
-        private readonly ICacheManager _cacheManager;
-        private readonly Logger _logger;
 
         private readonly ICached<HealthCheck> _healthCheckResults;
         private readonly HashSet<IProvideHealthCheck> _pendingHealthChecks;
@@ -42,17 +39,15 @@ namespace NzbDrone.Core.HealthCheck
         public HealthCheckService(IEnumerable<IProvideHealthCheck> healthChecks,
                                   IEventAggregator eventAggregator,
                                   ICacheManager cacheManager,
-                                  IRuntimeInfo runtimeInfo,
-                                  Logger logger)
+                                  IDebounceManager debounceManager,
+                                  IRuntimeInfo runtimeInfo)
         {
             _healthChecks = healthChecks.ToArray();
             _eventAggregator = eventAggregator;
-            _cacheManager = cacheManager;
-            _logger = logger;
 
-            _healthCheckResults = _cacheManager.GetCache<HealthCheck>(GetType());
+            _healthCheckResults = cacheManager.GetCache<HealthCheck>(GetType());
             _pendingHealthChecks = new HashSet<IProvideHealthCheck>();
-            _debounce = new Debouncer(ProcessHealthChecks, TimeSpan.FromSeconds(5));
+            _debounce = debounceManager.CreateDebouncer(ProcessHealthChecks, TimeSpan.FromSeconds(5));
 
             _startupHealthChecks = _healthChecks.Where(v => v.CheckOnStartup).ToArray();
             _scheduledHealthChecks = _healthChecks.Where(v => v.CheckOnSchedule).ToArray();
