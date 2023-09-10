@@ -332,6 +332,8 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
                     return MediaCoverTypes.Banner;
                 case "fanart":
                     return MediaCoverTypes.Fanart;
+                case "clearlogo":
+                    return MediaCoverTypes.Clearlogo;
                 default:
                     return MediaCoverTypes.Unknown;
             }
