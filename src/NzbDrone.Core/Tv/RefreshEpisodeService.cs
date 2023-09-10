@@ -47,6 +47,7 @@ namespace NzbDrone.Core.Tv
 
             var orderedEpisodes = OrderEpisodes(series, dupeFreeRemoteEpisodes).ToList();
             var episodesPerSeason = orderedEpisodes.GroupBy(s => s.SeasonNumber).ToDictionary(g => g.Key, g => g.Count());
+            var latestSeason = seasons.MaxBy(s => s.SeasonNumber);
 
             foreach (var episode in orderedEpisodes)
             {
@@ -84,9 +85,17 @@ namespace NzbDrone.Core.Tv
                     episodeToUpdate.Images = episode.Images;
 
                     // TheTVDB has a severe lack of season/series finales, this helps smooth out that limitation so they can be displayed in the UI
-                    if (episodeToUpdate.FinaleType == null && episodeToUpdate.SeasonNumber > 0 && episodeToUpdate.EpisodeNumber > 1 && episodeToUpdate.EpisodeNumber == episodesPerSeason[episodeToUpdate.SeasonNumber])
+                    if (series.Status == SeriesStatusType.Ended &&
+                        episodeToUpdate.FinaleType == null &&
+                        episodeToUpdate.SeasonNumber > 0 &&
+                        episodeToUpdate.SeasonNumber == latestSeason.SeasonNumber &&
+                        episodeToUpdate.EpisodeNumber > 1 &&
+                        episodeToUpdate.EpisodeNumber == episodesPerSeason[episodeToUpdate.SeasonNumber] &&
+                        episodeToUpdate.AirDateUtc.HasValue &&
+                        episodeToUpdate.AirDateUtc.Value.After(DateTime.UtcNow.AddDays(-14)) &&
+                        orderedEpisodes.None(e => e.SeasonNumber == latestSeason.SeasonNumber && e.FinaleType != null))
                     {
-                        episodeToUpdate.FinaleType = series.Status == SeriesStatusType.Ended ? "series" : "season";
+                        episodeToUpdate.FinaleType = "series";
                     }
 
                     successCount++;
