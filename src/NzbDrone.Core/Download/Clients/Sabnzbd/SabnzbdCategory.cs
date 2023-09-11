@@ -29,6 +29,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         public string[] date_categories { get; set; }
         public bool enable_date_sorting { get; set; }
         public bool pre_check { get; set; }
+        public string history_retention { get; set; }
     }
 
     public class SabnzbdCategory
