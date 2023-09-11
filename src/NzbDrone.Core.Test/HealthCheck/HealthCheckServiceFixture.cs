@@ -8,6 +8,7 @@ using NzbDrone.Common.Messaging;
 using NzbDrone.Common.TPL;
 using NzbDrone.Core.HealthCheck;
 using NzbDrone.Core.Test.Framework;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.HealthCheck
 {
