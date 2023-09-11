@@ -64,6 +64,7 @@ class AgendaEvent extends Component {
       showCutoffUnmetIcon,
       timeFormat,
       longDateFormat,
+      fullColorEvents,
       colorImpairedMode
     } = this.props;
 
@@ -93,7 +94,8 @@ class AgendaEvent extends Component {
             className={classNames(
               styles.eventWrapper,
               styles[statusStyle],
-              colorImpairedMode && 'colorImpaired'
+              colorImpairedMode && 'colorImpaired',
+              fullColorEvents && 'fullColor'
             )}
           >
             <div className={styles.time}>
@@ -248,6 +250,7 @@ AgendaEvent.propTypes = {
   showCutoffUnmetIcon: PropTypes.bool.isRequired,
   timeFormat: PropTypes.string.isRequired,
   longDateFormat: PropTypes.string.isRequired,
+  fullColorEvents: PropTypes.bool.isRequired,
   colorImpairedMode: PropTypes.bool.isRequired
 };
 
