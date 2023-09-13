@@ -216,7 +216,7 @@
     "ImportScriptPath": "Importar Ruta de Script",
     "Absolute": "Absoluto",
     "AddANewPath": "Añadir una nueva ruta",
-    "AddConditionImplementation": "Agregar Condición - { implementationName}",
+    "AddConditionImplementation": "",
     "AppUpdated": "{appName} Actualizado",
     "AutomaticUpdatesDisabledDocker": "Las actualizaciones automáticas no son compatibles directamente al usar el mecanismo de actualización de Docker. Deberás actualizar la imagen del contenedor fuera de {appName} o utilizar un script"
 }

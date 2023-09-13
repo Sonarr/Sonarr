@@ -4,6 +4,15 @@
     "CountSeasons": "{count} temporadas",
     "Language": "Idioma",
     "Added": "Adicionado",
-    "ApiKeyValidationHealthCheckMessage": "Por favor, actualize a sua API Key para ter no minimo {0} caracteres. Pode fazer através das definições ou do ficheiro de configuração",
-    "AppDataLocationHealthCheckMessage": "Não foi possivél actualizar para prevenir apagar a AppData durante a actualização"
+    "ApiKeyValidationHealthCheckMessage": "Por favor, atualize a sua API Key para ter no mínimo {0} caracteres. Pode fazer através das definições ou do ficheiro de configuração",
+    "AppDataLocationHealthCheckMessage": "Não foi possível atualizar para prevenir apagar a AppData durante a atualização",
+    "AddAutoTag": "Adicionar Etiqueta Automática",
+    "AbsoluteEpisodeNumbers": "Números de Episódios Absolutos",
+    "Add": "Adicionar",
+    "Activity": "Atividade",
+    "AbsoluteEpisodeNumber": "Número de Episódio Absoluto",
+    "About": "Sobre",
+    "Actions": "Ações",
+    "Absolute": "Absoluto",
+    "AddANewPath": "Adicionar novo caminho"
 }
