@@ -190,10 +190,12 @@ namespace NzbDrone.Mono.Disk
                         }
                         catch (Exception ex)
                         {
-                            throw new Exception($"Failed to fetch drive info for mount point: {d.Name}", ex);
+                            _logger.Debug(ex, "Failed to fetch drive info for mount point: {0}", d.Name);
+
+                            return null;
                         }
                     })
-                    .Where(d => d.DriveType is DriveType.Fixed or DriveType.Network or DriveType.Removable));
+                    .Where(d => d is { DriveType: DriveType.Fixed or DriveType.Network or DriveType.Removable }));
             }
             catch (Exception e)
             {
