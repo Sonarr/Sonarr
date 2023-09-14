@@ -41,19 +41,16 @@ namespace NzbDrone.Core.Datastore.Migration
                         EpisodeFile = new LazyLoaded<EpisodeFile>(episodeFile)
                     };
 
-                    try
-                    {
-                        var (copy, title) = LanguageParser.CopyFromTitle(LanguageParser.ParseLanguageTagsAndTitle(relativePath, episode).title);
+                    var subtitleTitleCopyInfo = LanguageParser.CopyFromTitle(LanguageParser.ParseSubtitleLanguageInformation(relativePath, episode)?.Title);
 
+                    if (subtitleTitleCopyInfo.Copy != 0)
+                    {
                         updatedTitles.Add(new
                         {
                             Id = id,
-                            Title = title,
-                            Copy = copy
+                            Title = subtitleTitleCopyInfo.Title,
+                            Copy = subtitleTitleCopyInfo.Copy
                         });
-                    }
-                    catch (LanguageParsingException)
-                    {
                     }
                 }
             }

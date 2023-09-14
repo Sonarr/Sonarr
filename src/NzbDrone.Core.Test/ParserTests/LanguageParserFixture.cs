@@ -454,7 +454,7 @@ namespace NzbDrone.Core.Test.ParserTests
                 })
             };
 
-            var (languageTags, title, language) = LanguageParser.ParseLanguageTagsAndTitle(postTitle, episode);
+            var (languageTags, title, language) = LanguageParser.ParseSubtitleLanguageInformation(postTitle, episode);
             languageTags.Should().BeEquivalentTo(expectedTags);
             title.Should().BeEquivalentTo(expectedTitle);
             language.Should().BeEquivalentTo((Language)expectedLanguage);
@@ -474,7 +474,7 @@ namespace NzbDrone.Core.Test.ParserTests
                     RelativePath = episodeFilePath
                 })
             };
-            Assert.Throws<LanguageParsingException>(() => LanguageParser.ParseLanguageTagsAndTitle(postTitle, episode));
+            LanguageParser.ParseSubtitleLanguageInformation(postTitle, episode).Should().BeNull();
         }
     }
 }

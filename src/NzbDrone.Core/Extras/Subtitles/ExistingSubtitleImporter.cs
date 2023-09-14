@@ -4,7 +4,6 @@ using System.Linq;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Extras.Files;
-using NzbDrone.Core.Languages;
 using NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
@@ -74,22 +73,13 @@ namespace NzbDrone.Core.Extras.Subtitles
 
                     var firstEpisode = localEpisode.Episodes.First();
 
-                    List<string> languageTags = null;
-                    string title = null;
-                    Language language = null;
+                    var subtitleTitleInfo = LanguageParser.ParseSubtitleLanguageInformation(possibleSubtitleFile, firstEpisode);
 
-                    try
-                    {
-                        (languageTags, title, language) = LanguageParser.ParseLanguageTagsAndTitle(possibleSubtitleFile, firstEpisode);
-                    }
-                    catch (LanguageParsingException)
-                    {
-                        language = LanguageParser.ParseSubtitleLanguage(possibleSubtitleFile);
-                        languageTags = LanguageParser.ParseLanguageTags(possibleSubtitleFile);
-                        _logger.Debug("Failed parsing language tags with title from subtitle file: {0}", possibleSubtitleFile);
-                    }
+                    var languageTags = subtitleTitleInfo?.LanguageTags ?? LanguageParser.ParseLanguageTags(possibleSubtitleFile);
+                    var title = subtitleTitleInfo?.Title;
+                    var language = subtitleTitleInfo?.Language ?? LanguageParser.ParseSubtitleLanguage(possibleSubtitleFile);
 
-                    var (copy, newTitle) = LanguageParser.CopyFromTitle(title);
+                    var subtitleTitleCopyInfo = LanguageParser.CopyFromTitle(title);
 
                     var subtitleFile = new SubtitleFile
                                        {
@@ -99,9 +89,9 @@ namespace NzbDrone.Core.Extras.Subtitles
                                            RelativePath = series.Path.GetRelativePath(possibleSubtitleFile),
                                            Language = language,
                                            LanguageTags = languageTags,
-                                           Title = newTitle,
+                                           Title = subtitleTitleCopyInfo.Title,
                                            Extension = extension,
-                                           Copy = copy
+                                           Copy = subtitleTitleCopyInfo.Copy
                                        };
 
                     subtitleFiles.Add(subtitleFile);
