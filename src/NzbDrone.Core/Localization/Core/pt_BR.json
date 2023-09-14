@@ -1272,7 +1272,7 @@
     "OverrideGrabNoQuality": "A qualidade deve ser selecionada",
     "OverrideGrabNoSeries": "A série deve ser selecionada",
     "Parse": "Analisar",
-    "ParseModalHelpTextDetails": "{appName} tentará analisar o título e mostrar detalhes sobre ele",
+    "ParseModalHelpTextDetails": "Sonarr tentará analisar o título e mostrar detalhes sobre ele",
     "RecentChanges": "Mudanças Recentes",
     "ReleaseRejected": "Lançamento Rejeitado",
     "ReleaseSceneIndicatorAssumingScene": "Assumindo a Numeração da Scene.",

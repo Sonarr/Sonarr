@@ -14,5 +14,9 @@
     "DeleteCustomFormatMessageText": "Είστε σίγουροι πως θέλετε να διαγράψετε τη προσαρμοσμένη μορφή '{0}';",
     "RemoveSelectedItemsQueueMessageText": "Είστε σίγουροι πως θέλετε να διαγράψετε {0} αντικείμενα από την ουρά;",
     "CloneCondition": "Κλωνοποίηση συνθήκης",
-    "RemoveSelectedItemQueueMessageText": "Είστε σίγουροι πως θέλετε να διαγράψετε 1 αντικείμενο από την ουρά;"
+    "RemoveSelectedItemQueueMessageText": "Είστε σίγουροι πως θέλετε να διαγράψετε 1 αντικείμενο από την ουρά;",
+    "AddConditionImplementation": "Προσθήκη",
+    "AppUpdated": "{appName} Ενημερώθηκε",
+    "AutoAdd": "Προσθήκη",
+    "AddConnectionImplementation": "Προσθήκη"
 }

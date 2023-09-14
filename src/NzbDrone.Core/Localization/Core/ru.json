@@ -146,5 +146,8 @@
     "LanguagesLoadError": "Невозможно загрузить языки",
     "RemoveQueueItem": "Удалить - {sourceTitle}",
     "ResetQualityDefinitionsMessageText": "Вы уверены, что хотите сбросить определения качества?",
-    "RemoveSelectedItemsQueueMessageText": "Вы действительно хотите удалить {selectedCount} элементов из очереди?"
+    "RemoveSelectedItemsQueueMessageText": "Вы действительно хотите удалить {selectedCount} элементов из очереди?",
+    "AuthenticationMethod": "Способ авторизации",
+    "AuthenticationRequiredPasswordHelpTextWarning": "Введите новый пароль",
+    "AuthenticationRequiredUsernameHelpTextWarning": "Введите новое имя пользователя"
 }
