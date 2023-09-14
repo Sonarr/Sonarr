@@ -130,7 +130,7 @@ namespace NzbDrone.Core.MediaFiles
                     try
                     {
                         MoveEpisodeFile(episodeFile, series, episodeFile.Episodes);
-                        localEpisode.ImportRenamed = true;
+                        localEpisode.FileRenamedAfterScriptImport = true;
                     }
                     catch (SameFilenameException)
                     {

@@ -47,12 +47,14 @@ namespace NzbDrone.Core.MediaFiles
             _logger = logger;
         }
 
-        private static readonly Regex OutputRegex = new Regex(@"^\[(?:(?<mediaFile>MediaFile)|(?<extraFile>ExtraFile))\]\s(?<fileName>.+)$", RegexOptions.Compiled);
+        private static readonly Regex OutputRegex = new Regex(@"^(?:\[(?:(?<mediaFile>MediaFile)|(?<extraFile>ExtraFile))\]\s?(?<fileName>.+)|(?<preventExtraImport>\[PreventExtraImport\])|\[MoveStatus\]\s?(?:(?<deferMove>DeferMove)|(?<moveComplete>MoveComplete)|(?<renameRequested>RenameRequested)))$", RegexOptions.Compiled);
 
         private ScriptImportInfo ProcessOutput(List<ProcessOutputLine> processOutputLines)
         {
             var possibleExtraFiles = new List<string>();
             string mediaFile = null;
+            var decision = ScriptImportDecision.MoveComplete;
+            var importExtraFiles = true;
 
             foreach (var line in processOutputLines)
             {
@@ -78,18 +80,34 @@ namespace NzbDrone.Core.MediaFiles
                 }
                 else if (match.Groups["extraFile"].Success)
                 {
-                    possibleExtraFiles.Add(match.Groups["fileName"].Value);
+                    var fileName = match.Groups["fileName"].Value;
 
-                    var lastAdded = possibleExtraFiles.Last();
-
-                    if (!_diskProvider.FileExists(lastAdded))
+                    if (!_diskProvider.FileExists(fileName))
                     {
-                        throw new ScriptImportException("Script output contains non-existent possible extra file: {0}", lastAdded);
+                        _logger.Warn("Script output contains non-existent possible extra file: {0}", fileName);
                     }
+
+                    possibleExtraFiles.Add(fileName);
+                }
+                else if (match.Groups["moveComplete"].Success)
+                {
+                    decision = ScriptImportDecision.MoveComplete;
+                }
+                else if (match.Groups["renameRequested"].Success)
+                {
+                    decision = ScriptImportDecision.RenameRequested;
+                }
+                else if (match.Groups["deferMove"].Success)
+                {
+                    decision = ScriptImportDecision.DeferMove;
+                }
+                else if (match.Groups["preventExtraImport"].Success)
+                {
+                    importExtraFiles = false;
                 }
             }
 
-            return new ScriptImportInfo(possibleExtraFiles, mediaFile);
+            return new ScriptImportInfo(possibleExtraFiles, mediaFile, decision, importExtraFiles);
         }
 
         public ScriptImportDecision TryImport(string sourcePath, string destinationFilePath, LocalEpisode localEpisode, EpisodeFile episodeFile, TransferMode mode)
@@ -165,8 +183,12 @@ namespace NzbDrone.Core.MediaFiles
 
             var processOutput = _processProvider.StartAndCapture(_configService.ScriptImportPath, $"\"{sourcePath}\" \"{destinationFilePath}\"", environmentVariables);
 
-            _logger.Debug("Executed external script: {0} - Status: {1}", _configService.ScriptImportPath, processOutput.ExitCode);
             _logger.Debug("Script Output: \r\n{0}", string.Join("\r\n", processOutput.Lines));
+
+            if (processOutput.ExitCode != 0)
+            {
+                throw new ScriptImportException("Script exited with non-zero exit code: {0}", processOutput.ExitCode);
+            }
 
             var scriptImportInfo = ProcessOutput(processOutput.Lines);
 
@@ -178,27 +200,20 @@ namespace NzbDrone.Core.MediaFiles
 
             var exitCode = processOutput.ExitCode;
 
-            if (exitCode >= 4)
+            localEpisode.ShouldImportExtras = scriptImportInfo.ImportExtraFiles;
+
+            if (scriptImportInfo.Decision != ScriptImportDecision.DeferMove)
             {
-                localEpisode.ShouldImportExtras = true;
-                exitCode -= 4;
+                localEpisode.ScriptImported = true;
             }
 
-            switch (exitCode)
+            if (scriptImportInfo.Decision == ScriptImportDecision.RenameRequested)
             {
-                case 0: // Copy complete
-                    localEpisode.ScriptImported = true;
-                    return ScriptImportDecision.MoveComplete;
-                case 2: // Copy complete, file potentially changed, should try renaming again
-                    localEpisode.ScriptImported = true;
-                    episodeFile.MediaInfo = _videoFileInfoReader.GetMediaInfo(mediaFile);
-                    episodeFile.Path = null;
-                    return ScriptImportDecision.RenameRequested;
-                case 3: // Let Sonarr handle it
-                    return ScriptImportDecision.DeferMove;
-                default: // Error, fail to import
-                    throw new ScriptImportException("Moving with script failed! Exit code {0}", processOutput.ExitCode);
+                episodeFile.MediaInfo = _videoFileInfoReader.GetMediaInfo(mediaFile);
+                episodeFile.Path = null;
             }
+
+            return scriptImportInfo.Decision;
         }
     }
 }
