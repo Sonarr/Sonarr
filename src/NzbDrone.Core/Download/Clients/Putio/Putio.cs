@@ -1,16 +1,16 @@
-﻿using System;
-using System.Linq;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using FluentValidation.Results;
+using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
-using NLog;
-using FluentValidation.Results;
 using NzbDrone.Core.MediaFiles.TorrentInfo;
-using NzbDrone.Core.Validation;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.RemotePathMappings;
+using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Download.Clients.Putio
 {
@@ -37,6 +37,7 @@ namespace NzbDrone.Core.Download.Clients.Putio
                 return "put.io";
             }
         }
+
         protected override string AddFromMagnetLink(RemoteEpisode remoteEpisode, string hash, string magnetLink)
         {
             _proxy.AddTorrentFromUrl(magnetLink, Settings);
@@ -69,14 +70,16 @@ namespace NzbDrone.Core.Download.Clients.Putio
             {
                 // If totalsize == 0 the torrent is a magnet downloading metadata
                 if (torrent.Size == 0)
+                {
                     continue;
+                }
 
                 var item = new DownloadClientItem();
                 item.DownloadId = "putio-" + torrent.Id;
                 item.Category = Settings.SaveParentId;
                 item.Title = torrent.Name;
 
-                item.DownloadClient = Definition.Name;
+                // item.DownloadClient = Definition.Name;
 
                 item.TotalSize = torrent.Size;
                 item.RemainingSize = torrent.Size - torrent.Downloaded;
@@ -93,7 +96,10 @@ namespace NzbDrone.Core.Download.Clients.Putio
                         if (Settings.SaveParentId.IsNotNullOrWhiteSpace())
                         {
                             var directories = outputPath.FullPath.Split('\\', '/');
-                            if (!directories.Contains(string.Format("{0}", Settings.SaveParentId))) continue;
+                            if (!directories.Contains(string.Format("{0}", Settings.SaveParentId)))
+                            {
+                                continue;
+                            }
                         }
 
                         item.OutputPath = outputPath; // + torrent.Name;
@@ -135,16 +141,11 @@ namespace NzbDrone.Core.Download.Clients.Putio
             return items;
         }
 
-        public override void RemoveItem(string downloadId, bool deleteData)
-        {
-            _proxy.RemoveTorrent(downloadId.ToLower(), Settings);
-        }
-
-        public override DownloadClientStatus GetStatus()
+        public override DownloadClientInfo GetStatus()
         {
             var destDir = string.Format("{0}", Settings.SaveParentId);
 
-            return new DownloadClientStatus
+            return new DownloadClientInfo
             {
                 IsLocalhost = false,
                 OutputRootFolders = new List<OsPath> { _remotePathMappingService.RemapRemoteToLocal(Settings.Url, new OsPath(destDir)) }
@@ -154,7 +155,11 @@ namespace NzbDrone.Core.Download.Clients.Putio
         protected override void Test(List<ValidationFailure> failures)
         {
             failures.AddIfNotNull(TestConnection());
-            if (failures.Any()) return;
+            if (failures.Any())
+            {
+                return;
+            }
+
             failures.AddIfNotNull(TestGetTorrents());
         }
 
@@ -186,6 +191,11 @@ namespace NzbDrone.Core.Download.Clients.Putio
             }
 
             return null;
+        }
+
+        public override void RemoveItem(DownloadClientItem item, bool deleteData)
+        {
+            throw new NotImplementedException();
         }
     }
 }

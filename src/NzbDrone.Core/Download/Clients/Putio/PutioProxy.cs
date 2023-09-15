@@ -1,10 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using NzbDrone.Core.Rest;
+using System.Net;
 using NLog;
-using RestSharp;
-using RestSharp.Deserializers;
-using Newtonsoft.Json;
+using NzbDrone.Common.Http;
+using NzbDrone.Common.Serializer;
 
 namespace NzbDrone.Core.Download.Clients.Putio
 {
@@ -18,90 +17,98 @@ namespace NzbDrone.Core.Download.Clients.Putio
         void GetAccountSettings(PutioSettings settings);
     }
 
-    public class PutioProxy: IPutioProxy
+    public class PutioProxy : IPutioProxy
     {
         private readonly Logger _logger;
+        private readonly IHttpClient _httpClient;
 
-        public PutioProxy(Logger logger)
+        public PutioProxy(Logger logger, IHttpClient client)
         {
             _logger = logger;
+            _httpClient = client;
         }
 
         public List<PutioTorrent> GetTorrents(PutioSettings settings)
         {
-            var result = ProcessRequest<PutioTransfersResponse>(Method.GET, "transfers/list", null, settings);
-            return result.Transfers;
+            // var result = ProcessRequest<PutioTransfersResponse>(Method.GET, "transfers/list", null, settings);
+            // return result.Transfers;
+            return new List<PutioTorrent>();
         }
 
         public PutioFile GetFile(long fileId, PutioSettings settings)
         {
-            var result = ProcessRequest<PutioFileResponse>(Method.GET, "files/" + fileId, null, settings);
-            return result.File;
+            // var result = ProcessRequest<PutioFileResponse>(Method.GET, "files/" + fileId, null, settings);
+            // return result.File;
+            return new PutioFile();
         }
 
         public void AddTorrentFromUrl(string torrentUrl, PutioSettings settings)
         {
-            var arguments = new Dictionary<string, object>();
-            arguments.Add("url", torrentUrl);
-            ProcessRequest<PutioGenericResponse>(Method.POST, "transfers/add", arguments, settings);
+            // var arguments = new Dictionary<string, object>();
+            // arguments.Add("url", torrentUrl);
+            // ProcessRequest<PutioGenericResponse>(Method.POST, "transfers/add", arguments, settings);
         }
 
         public void AddTorrentFromData(byte[] torrentData, PutioSettings settings)
         {
-            var arguments = new Dictionary<string, object>();
-            arguments.Add("metainfo", Convert.ToBase64String(torrentData));
-            ProcessRequest<PutioGenericResponse>(Method.POST, "transfers/add", arguments, settings);
+            // var arguments = new Dictionary<string, object>();
+            // arguments.Add("metainfo", Convert.ToBase64String(torrentData));
+            // ProcessRequest<PutioGenericResponse>(Method.POST, "transfers/add", arguments, settings);
         }
 
         public void RemoveTorrent(string hashString, PutioSettings settings)
         {
-            var arguments = new Dictionary<string, object>();
-            arguments.Add("transfer_ids", new string[] { hashString });
-            ProcessRequest<PutioGenericResponse>(Method.POST, "torrents/cancel", arguments, settings);
+            // var arguments = new Dictionary<string, object>();
+            // arguments.Add("transfer_ids", new string[] { hashString });
+            // ProcessRequest<PutioGenericResponse>(Method.POST, "torrents/cancel", arguments, settings);
         }
 
         public void GetAccountSettings(PutioSettings settings)
         {
-            ProcessRequest<PutioGenericResponse>(Method.GET, "account/settings", null, settings);
+            // ProcessRequest<PutioGenericResponse>(Method.GET, "account/settings", null, settings);
         }
 
-        public TResponseType ProcessRequest<TResponseType>(Method method, string resource, Dictionary<string, object> arguments, PutioSettings settings) where TResponseType : PutioGenericResponse
+        private HttpRequestBuilder BuildRequest(PutioSettings settings)
         {
-            var client = BuildClient(settings);
-
-            var request = new RestRequest(resource, method);
-            request.RequestFormat = DataFormat.Json;
-            request.AddQueryParameter("oauth_token", settings.OAuthToken);
-
-            if (arguments != null)
+            var requestBuilder = new HttpRequestBuilder("https://api.put.io/v2")
             {
-                foreach (KeyValuePair<string, object> e in arguments)
+                LogResponseContent = true
+            };
+            requestBuilder.SetHeader("Authorization", "Bearer " + settings.OAuthToken);
+            return requestBuilder;
+        }
+
+        private string ProcessRequest(HttpRequestBuilder requestBuilder)
+        {
+            var request = requestBuilder.Build();
+            request.LogResponseContent = true;
+            request.SuppressHttpErrorStatusCodes = new[] { HttpStatusCode.Forbidden };
+
+            HttpResponse response;
+            try
+            {
+                response = _httpClient.Execute(request);
+
+                if (response.StatusCode == HttpStatusCode.Forbidden)
                 {
-                    request.AddParameter(e.Key, e.Value);
+                    throw new DownloadClientException("Invalid credentials. Check your OAuthToken");
                 }
             }
-
-            _logger.Debug("Method: {0} Url: {1}", method, client.BuildUri(request));
-
-            var restResponse = client.Execute(request);
-
-            var json = new JsonDeserializer();
-
-            TResponseType output = json.Deserialize<TResponseType>(restResponse);
-
-            if (output.Status != "OK")
+            catch (Exception ex)
             {
-                throw new PutioException(output.ErrorMessage);
+                throw new DownloadClientException("Failed to connect to put.io.", ex);
             }
 
-            return output;
+            return response.Content;
         }
 
-        private IRestClient BuildClient(PutioSettings settings)
+        private TResult ProcessRequest<TResult>(HttpRequestBuilder requestBuilder)
+            where TResult : new()
         {
-            var restClient = RestClientFactory.BuildClient(settings.Url);
-            restClient.FollowRedirects = false;
-            return restClient;
+            var responseContent = ProcessRequest(requestBuilder);
+
+            return Json.Deserialize<TResult>(responseContent);
         }
+
     }
 }

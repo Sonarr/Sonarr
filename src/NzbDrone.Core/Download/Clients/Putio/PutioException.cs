@@ -1,5 +1,3 @@
-﻿using System;
-
 namespace NzbDrone.Core.Download.Clients.Putio
 {
     public class PutioException : DownloadClientException
@@ -7,7 +5,6 @@ namespace NzbDrone.Core.Download.Clients.Putio
         public PutioException(string message)
             : base(message)
         {
-
         }
     }
 }

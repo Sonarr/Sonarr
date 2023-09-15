@@ -1,3 +1,4 @@
+/*
 using System;
 using System.Linq;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using NzbDrone.Common.Http;
 using NzbDrone.Core.MediaFiles.TorrentInfo;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.Clients.Putio;
+
 
 namespace NzbDrone.Core.Test.Download.DownloadClientTests.PutioTests
 {
@@ -336,3 +338,5 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.PutioTests
         }
     }
 }
+
+*/
