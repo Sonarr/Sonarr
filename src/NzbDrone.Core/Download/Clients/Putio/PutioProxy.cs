@@ -109,6 +109,5 @@ namespace NzbDrone.Core.Download.Clients.Putio
 
             return Json.Deserialize<TResult>(responseContent);
         }
-
     }
 }

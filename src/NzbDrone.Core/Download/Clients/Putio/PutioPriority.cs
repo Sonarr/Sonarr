@@ -1,4 +1,4 @@
-﻿namespace NzbDrone.Core.Download.Clients.Putio
+namespace NzbDrone.Core.Download.Clients.Putio
 {
     public enum PutioPriority
     {
