@@ -68,8 +68,10 @@ namespace NzbDrone.Core.ImportLists.Sonarr
 
                 _importListStatusService.RecordSuccess(Definition.Id);
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.Debug(ex, "Failed to fetch data for list {0} ({1})", Definition.Name, Name);
+
                 _importListStatusService.RecordFailure(Definition.Id);
             }
 
