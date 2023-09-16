@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -25,27 +26,27 @@ namespace Sonarr.Http.Frontend
 
         [AllowAnonymous]
         [HttpGet("login")]
-        public IActionResult LoginPage()
+        public async Task<IActionResult> LoginPage()
         {
-            return MapResource("login");
+            return await MapResource("login");
         }
 
         [EnableCors("AllowGet")]
         [AllowAnonymous]
         [HttpGet("/content/{**path:regex(^(?!api/).*)}")]
-        public IActionResult IndexContent([FromRoute] string path)
+        public async Task<IActionResult> IndexContent([FromRoute] string path)
         {
-            return MapResource("Content/" + path);
+            return await MapResource("Content/" + path);
         }
 
         [HttpGet("")]
         [HttpGet("/{**path:regex(^(?!(api|feed)/).*)}")]
-        public IActionResult Index([FromRoute] string path)
+        public async Task<IActionResult> Index([FromRoute] string path)
         {
-            return MapResource(path);
+            return await MapResource(path);
         }
 
-        private IActionResult MapResource(string path)
+        private async Task<IActionResult> MapResource(string path)
         {
             path = "/" + (path ?? "");
 
@@ -53,7 +54,7 @@ namespace Sonarr.Http.Frontend
 
             if (mapper != null)
             {
-                var result = mapper.GetResponse(path);
+                var result = await mapper.GetResponse(path);
 
                 if (result != null)
                 {

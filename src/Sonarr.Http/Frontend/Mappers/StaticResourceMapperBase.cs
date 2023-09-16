@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Net.Http.Headers;
@@ -30,7 +31,7 @@ namespace Sonarr.Http.Frontend.Mappers
 
         public abstract bool CanHandle(string resourceUrl);
 
-        public IActionResult GetResponse(string resourceUrl)
+        public Task<IActionResult> GetResponse(string resourceUrl)
         {
             var filePath = Map(resourceUrl);
 
@@ -41,10 +42,10 @@ namespace Sonarr.Http.Frontend.Mappers
                     contentType = "application/octet-stream";
                 }
 
-                return new FileStreamResult(GetContentStream(filePath), new MediaTypeHeaderValue(contentType)
+                return Task.FromResult<IActionResult>(new FileStreamResult(GetContentStream(filePath), new MediaTypeHeaderValue(contentType)
                 {
                     Encoding = contentType == "text/plain" ? Encoding.UTF8 : null
-                });
+                }));
             }
 
             _logger.Warn("File {0} not found", filePath);

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Sonarr.Http.Frontend.Mappers
 {
@@ -6,6 +7,6 @@ namespace Sonarr.Http.Frontend.Mappers
     {
         string Map(string resourceUrl);
         bool CanHandle(string resourceUrl);
-        IActionResult GetResponse(string resourceUrl);
+        Task<IActionResult> GetResponse(string resourceUrl);
     }
 }
