@@ -227,5 +227,11 @@ namespace NzbDrone.Core.Download.Clients.Putio
         {
             throw new NotImplementedException();
         }
+
+        public override void MarkItemAsImported(DownloadClientItem downloadClientItem)
+        {
+            // What to do here? Maybe delete the file and transfer from put.io?
+            base.MarkItemAsImported(downloadClientItem);
+        }
     }
 }

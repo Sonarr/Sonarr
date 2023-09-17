@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using NLog;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 
 namespace NzbDrone.Core.Download.Clients.Putio
@@ -35,9 +36,15 @@ namespace NzbDrone.Core.Download.Clients.Putio
 
         public void AddTorrentFromUrl(string torrentUrl, PutioSettings settings)
         {
-            // var arguments = new Dictionary<string, object>();
-            // arguments.Add("url", torrentUrl);
-            // ProcessRequest<PutioGenericResponse>(Method.POST, "transfers/add", arguments, settings);
+            var request = BuildRequest(HttpMethod.Post, "transfers/add", settings);
+            request.AddFormParameter("url", torrentUrl);
+
+            if (settings.SaveParentId.IsNotNullOrWhiteSpace())
+            {
+                request.AddFormParameter("save_parent_id", settings.SaveParentId);
+            }
+
+            Execute<PutioGenericResponse>(request);
         }
 
         public void AddTorrentFromData(byte[] torrentData, PutioSettings settings)
@@ -79,7 +86,14 @@ namespace NzbDrone.Core.Download.Clients.Putio
 
             try
             {
-                return _httpClient.Get<TResult>(request);
+                if (requestBuilder.Method == HttpMethod.Post)
+                {
+                    return _httpClient.Post<TResult>(request);
+                }
+                else
+                {
+                    return _httpClient.Get<TResult>(request);
+                }
             }
             catch (HttpException ex)
             {
