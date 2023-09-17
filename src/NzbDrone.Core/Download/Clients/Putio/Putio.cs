@@ -74,6 +74,12 @@ namespace NzbDrone.Core.Download.Clients.Putio
                     continue;
                 }
 
+                if (Settings.SaveParentId.IsNotNullOrWhiteSpace() && torrent.SaveParentId != long.Parse(Settings.SaveParentId))
+                {
+                    // torrent is not related to our parent folder
+                    continue;
+                }
+
                 var item = new DownloadClientItem
                 {
                     DownloadId = torrent.Id.ToString(),
@@ -88,6 +94,8 @@ namespace NzbDrone.Core.Download.Clients.Putio
                 {
                     if (torrent.FileId != 0)
                     {
+                        // How needs the output path need to look if we have remote files?
+
                         /*
                         var file = _proxy.GetFile(torrent.FileId, Settings);
                         var torrentPath = "/completed/" + file.Name;

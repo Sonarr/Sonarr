@@ -24,10 +24,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.PutioTests
         [SetUp]
         public void Setup()
         {
-            _settings = new PutioSettings
-            {
-                SaveParentId = "1",
-            };
+            _settings = new PutioSettings();
 
             Subject.Definition = new DownloadClientDefinition();
             Subject.Definition.Settings = _settings;
@@ -74,8 +71,16 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.PutioTests
                     FileId = 1
                 };
 
-            _completed_different_parent = _completed;
-            _completed_different_parent.SaveParentId = 2;
+            _completed_different_parent = new PutioTorrent
+                {
+                    Hash = "HASH",
+                    Status = PutioTorrentStatus.Completed,
+                    Name = _title,
+                    Size = 1000,
+                    Downloaded = 1000,
+                    SaveParentId = 2,
+                    FileId = 1
+                };
 
             _seeding = new PutioTorrent
                 {
@@ -164,6 +169,26 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.PutioTests
             VerifyCompleted(items.ElementAt(5));
 
             items.Should().HaveCount(6);
+        }
+
+        [TestCase("1", 5)]
+        [TestCase("2", 1)]
+        [TestCase("3", 0)]
+        public void getItems_contains_only_items_with_matching_parent_id(string configuredParentId, int expectedCount)
+        {
+            GivenTorrents(new List<PutioTorrent>
+            {
+                    _queued,
+                    _downloading,
+                    _failed,
+                    _completed,
+                    _seeding,
+                    _completed_different_parent
+            });
+
+            _settings.SaveParentId = configuredParentId;
+
+            Subject.GetItems().Should().HaveCount(expectedCount);
         }
 
         [TestCase("WAITING", DownloadItemStatus.Queued)]
