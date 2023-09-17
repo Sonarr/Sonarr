@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace NzbDrone.Core.Download.Clients.Putio
 {
@@ -8,5 +9,10 @@ namespace NzbDrone.Core.Download.Clients.Putio
         public string ErrorMessage { get; set; }
 
         public string Status { get; set; }
+    }
+
+    public class PutioTransfersResponse : PutioGenericResponse
+    {
+        public List<PutioTorrent> Transfers { get; set; }
     }
 }

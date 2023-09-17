@@ -10,7 +10,6 @@ namespace NzbDrone.Core.Download.Clients.Putio
     public interface IPutioProxy
     {
         List<PutioTorrent> GetTorrents(PutioSettings settings);
-        PutioFile GetFile(long fileId, PutioSettings settings);
         void AddTorrentFromUrl(string torrentUrl, PutioSettings settings);
         void AddTorrentFromData(byte[] torrentData, PutioSettings settings);
         void RemoveTorrent(string hash, PutioSettings settings);
@@ -30,16 +29,8 @@ namespace NzbDrone.Core.Download.Clients.Putio
 
         public List<PutioTorrent> GetTorrents(PutioSettings settings)
         {
-            // var result = ProcessRequest<PutioTransfersResponse>(Method.GET, "transfers/list", null, settings);
-            // return result.Transfers;
-            return new List<PutioTorrent>();
-        }
-
-        public PutioFile GetFile(long fileId, PutioSettings settings)
-        {
-            // var result = ProcessRequest<PutioFileResponse>(Method.GET, "files/" + fileId, null, settings);
-            // return result.File;
-            return new PutioFile();
+            var result = Execute<PutioTransfersResponse>(BuildRequest(HttpMethod.Get, "transfers/list", settings));
+            return result.Resource.Transfers;
         }
 
         public void AddTorrentFromUrl(string torrentUrl, PutioSettings settings)
@@ -65,7 +56,6 @@ namespace NzbDrone.Core.Download.Clients.Putio
 
         public void GetAccountSettings(PutioSettings settings)
         {
-            // ProcessRequest<PutioGenericResponse>(Method.GET, "account/settings", null, settings);
             Execute<PutioGenericResponse>(BuildRequest(HttpMethod.Get, "account/settings", settings));
         }
 

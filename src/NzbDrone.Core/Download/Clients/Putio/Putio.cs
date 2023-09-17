@@ -18,13 +18,14 @@ namespace NzbDrone.Core.Download.Clients.Putio
     {
         private readonly IPutioProxy _proxy;
 
-        public Putio(IPutioProxy proxy,
-                            ITorrentFileInfoReader torrentFileInfoReader,
-                            IHttpClient httpClient,
-                            IConfigService configService,
-                            IDiskProvider diskProvider,
-                            IRemotePathMappingService remotePathMappingService,
-                            Logger logger)
+        public Putio(
+            IPutioProxy proxy,
+            ITorrentFileInfoReader torrentFileInfoReader,
+            IHttpClient httpClient,
+            IConfigService configService,
+            IDiskProvider diskProvider,
+            IRemotePathMappingService remotePathMappingService,
+            Logger logger)
             : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, logger)
         {
             _proxy = proxy;

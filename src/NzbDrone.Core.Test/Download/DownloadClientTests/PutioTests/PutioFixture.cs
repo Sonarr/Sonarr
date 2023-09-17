@@ -137,15 +137,6 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.PutioTests
                 .Returns(torrents);
         }
 
-        protected virtual void GivenFile(PutioFile file)
-        {
-            file ??= new PutioFile();
-
-            Mocker.GetMock<IPutioProxy>()
-                .Setup(s => s.GetFile(file.Id, It.IsAny<PutioSettings>()))
-                .Returns(file);
-        }
-
         [Test]
         public void getItems_contains_all_items()
         {
