@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Net.Http;
 using NLog;
 using NzbDrone.Common.Http;
-using NzbDrone.Common.Serializer;
 
 namespace NzbDrone.Core.Download.Clients.Putio
 {
@@ -66,48 +66,44 @@ namespace NzbDrone.Core.Download.Clients.Putio
         public void GetAccountSettings(PutioSettings settings)
         {
             // ProcessRequest<PutioGenericResponse>(Method.GET, "account/settings", null, settings);
+            Execute<PutioGenericResponse>(BuildRequest(HttpMethod.Get, "account/settings", settings));
         }
 
-        private HttpRequestBuilder BuildRequest(PutioSettings settings)
+        private HttpRequestBuilder BuildRequest(HttpMethod method, string endpoint, PutioSettings settings)
         {
             var requestBuilder = new HttpRequestBuilder("https://api.put.io/v2")
             {
                 LogResponseContent = true
             };
+            requestBuilder.Method = method;
+            requestBuilder.Resource(endpoint);
             requestBuilder.SetHeader("Authorization", "Bearer " + settings.OAuthToken);
             return requestBuilder;
         }
 
-        private string ProcessRequest(HttpRequestBuilder requestBuilder)
+        private HttpResponse<TResult> Execute<TResult>(HttpRequestBuilder requestBuilder)
+            where TResult : new()
         {
             var request = requestBuilder.Build();
             request.LogResponseContent = true;
-            request.SuppressHttpErrorStatusCodes = new[] { HttpStatusCode.Forbidden };
 
-            HttpResponse response;
             try
             {
-                response = _httpClient.Execute(request);
-
-                if (response.StatusCode == HttpStatusCode.Forbidden)
+                return _httpClient.Get<TResult>(request);
+            }
+            catch (HttpException ex)
+            {
+                if (ex.Response.StatusCode == HttpStatusCode.Unauthorized)
                 {
-                    throw new DownloadClientException("Invalid credentials. Check your OAuthToken");
+                    throw new DownloadClientAuthenticationException("Invalid credentials. Check your OAuthToken");
                 }
+
+                throw new DownloadClientException("Failed to connect to put.io API", ex);
             }
             catch (Exception ex)
             {
-                throw new DownloadClientException("Failed to connect to put.io.", ex);
+                throw new DownloadClientException("Failed to connect to put.io API", ex);
             }
-
-            return response.Content;
-        }
-
-        private TResult ProcessRequest<TResult>(HttpRequestBuilder requestBuilder)
-            where TResult : new()
-        {
-            var responseContent = ProcessRequest(requestBuilder);
-
-            return Json.Deserialize<TResult>(responseContent);
         }
     }
 }

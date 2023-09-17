@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 
 namespace NzbDrone.Core.Download.Clients.Putio
 {
@@ -28,5 +28,10 @@ namespace NzbDrone.Core.Download.Clients.Putio
         public long Size { get; set; }
 
         public string Status { get; set; }
+
+        [JsonProperty(PropertyName = "save_parent_id")]
+        public long SaveParentId { get; set; }
+
+        public string Hash { get; set; }
     }
 }

@@ -1,8 +1,8 @@
-﻿namespace NzbDrone.Core.Download.Clients.Putio
+namespace NzbDrone.Core.Download.Clients.Putio
 {
     public class PutioFile
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string Name { get; set; }
     }
 }

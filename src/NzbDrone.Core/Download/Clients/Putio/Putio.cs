@@ -74,20 +74,21 @@ namespace NzbDrone.Core.Download.Clients.Putio
                     continue;
                 }
 
-                var item = new DownloadClientItem();
-                item.DownloadId = "putio-" + torrent.Id;
-                item.Category = Settings.SaveParentId;
-                item.Title = torrent.Name;
-
-                // item.DownloadClient = Definition.Name;
-
-                item.TotalSize = torrent.Size;
-                item.RemainingSize = torrent.Size - torrent.Downloaded;
+                var item = new DownloadClientItem
+                {
+                    DownloadId = torrent.Id.ToString(),
+                    Category = Settings.SaveParentId,
+                    Title = torrent.Name,
+                    TotalSize = torrent.Size,
+                    RemainingSize = torrent.Size - torrent.Downloaded,
+                    DownloadClientInfo = DownloadClientItemClientInfo.FromDownloadClient(this)
+                };
 
                 try
                 {
                     if (torrent.FileId != 0)
                     {
+                        /*
                         var file = _proxy.GetFile(torrent.FileId, Settings);
                         var torrentPath = "/completed/" + file.Name;
 
@@ -103,6 +104,7 @@ namespace NzbDrone.Core.Download.Clients.Putio
                         }
 
                         item.OutputPath = outputPath; // + torrent.Name;
+                        */
                     }
                 }
                 catch (DownloadClientException ex)
@@ -115,30 +117,41 @@ namespace NzbDrone.Core.Download.Clients.Putio
                     item.RemainingTime = TimeSpan.FromSeconds(torrent.EstimatedTime);
                 }
 
+                item.Status = GetStatus(torrent);
+
                 if (!torrent.ErrorMessage.IsNullOrWhiteSpace())
                 {
                     item.Status = DownloadItemStatus.Warning;
                     item.Message = torrent.ErrorMessage;
                 }
-                else if (torrent.Status == PutioTorrentStatus.Completed)
-                {
-                    item.Status = DownloadItemStatus.Completed;
-                }
-                else if (torrent.Status == PutioTorrentStatus.InQueue)
-                {
-                    item.Status = DownloadItemStatus.Queued;
-                }
-                else
-                {
-                    item.Status = DownloadItemStatus.Downloading;
-                }
-
-                // item.IsReadOnly = torrent.Status != PutioTorrentStatus.Error;
 
                 items.Add(item);
             }
 
             return items;
+        }
+
+        private DownloadItemStatus GetStatus(PutioTorrent torrent)
+        {
+            if (torrent.Status == PutioTorrentStatus.Completed ||
+                torrent.Status == PutioTorrentStatus.Seeding)
+            {
+                return DownloadItemStatus.Completed;
+            }
+
+            if (torrent.Status == PutioTorrentStatus.InQueue ||
+                torrent.Status == PutioTorrentStatus.Waiting ||
+                torrent.Status == PutioTorrentStatus.PrepareDownload)
+            {
+                return DownloadItemStatus.Queued;
+            }
+
+            if (torrent.Status == PutioTorrentStatus.Error)
+            {
+                return DownloadItemStatus.Failed;
+            }
+
+            return DownloadItemStatus.Downloading;
         }
 
         public override DownloadClientInfo GetStatus()
@@ -168,6 +181,14 @@ namespace NzbDrone.Core.Download.Clients.Putio
             try
             {
                 _proxy.GetAccountSettings(Settings);
+            }
+            catch (DownloadClientAuthenticationException ex)
+            {
+                _logger.Error(ex, ex.Message);
+                return new NzbDroneValidationFailure("OAuthToken", "Authentication failed")
+                {
+                    DetailedDescription = "See the wiki for more details on how to obtain an OAuthToken"
+                };
             }
             catch (Exception ex)
             {

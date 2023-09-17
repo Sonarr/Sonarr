@@ -1,4 +1,4 @@
-﻿using System.Text.RegularExpressions;
+using System.Text.RegularExpressions;
 using FluentValidation;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
@@ -10,6 +10,7 @@ namespace NzbDrone.Core.Download.Clients.Putio
     {
         public PutioSettingsValidator()
         {
+            RuleFor(c => c.OAuthToken).NotEmpty().WithMessage("Please provide an OAuth token");
             RuleFor(c => c.SaveParentId).Matches(@"^\.?[0-9]*$", RegexOptions.IgnoreCase).WithMessage("Allowed characters 0-9");
         }
     }
@@ -25,11 +26,14 @@ namespace NzbDrone.Core.Download.Clients.Putio
 
         public string Url { get; }
 
-        [FieldDefinition(0, Label = "OAuth Token", Type = FieldType.Textbox)]
+        [FieldDefinition(0, Label = "OAuth Token", Type = FieldType.Password)]
         public string OAuthToken { get; set; }
 
-        [FieldDefinition(1, Label = "Save Parent ID", Type = FieldType.Textbox, HelpText = "Adding a save parent ID specific to Sonarr avoids conflicts with unrelated downloads, but it's optional. Creates a .[SaveParentId] subdirectory in the output directory.")]
+        [FieldDefinition(1, Label = "Save Parent ID", Type = FieldType.Textbox, HelpText = "If you provide a folder id here the torrents will be saved in that directory")]
         public string SaveParentId { get; set; }
+
+        [FieldDefinition(2, Label = "Disable Download", Type = FieldType.Checkbox, HelpText = "If enabled, Sonarr will not download completed files from Put.io. Useful if you manually sync with rclone or similar")]
+        public bool DisableDownload { get; set; }
 
         public NzbDroneValidationResult Validate()
         {
