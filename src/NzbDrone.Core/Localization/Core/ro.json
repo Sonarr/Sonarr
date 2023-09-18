@@ -183,7 +183,7 @@
     "AddConnectionImplementation": "Adăugați conexiune - {implementationName}",
     "AddDownloadClientImplementation": "Adăugați client de descărcare - {implementationName}",
     "AddIndexerImplementation": "Adăugați Indexator - {implementationName}",
-    "Umask": "",
+    "Umask": "Umask",
     "AuthenticationRequiredPasswordHelpTextWarning": "Introduceți o parolă nouă",
     "FormatAgeHours": "ore",
     "FormatAgeHour": "oră",
