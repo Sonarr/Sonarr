@@ -171,7 +171,7 @@ namespace NzbDrone.Common.Extensions
         {
             if (text.IsNullOrWhiteSpace())
             {
-                throw new ArgumentNullException("text");
+                throw new ArgumentNullException(nameof(text));
             }
 
             return text.IndexOfAny(Path.GetInvalidPathChars()) >= 0;
