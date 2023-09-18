@@ -15,4 +15,14 @@ namespace NzbDrone.Core.Download.Clients.Putio
     {
         public List<PutioTorrent> Transfers { get; set; }
     }
+
+    public class PutioConfigResponse : PutioGenericResponse
+    {
+        public PutioTorrentMetadata Value { get; set; }
+    }
+
+    public class PutioAllConfigResponse : PutioGenericResponse
+    {
+        public Dictionary<string, PutioTorrentMetadata> Config { get; set; }
+    }
 }

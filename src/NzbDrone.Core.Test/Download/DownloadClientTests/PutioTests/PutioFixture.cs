@@ -162,10 +162,10 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.PutioTests
             items.Should().HaveCount(6);
         }
 
-        [TestCase("1", 5)]
-        [TestCase("2", 1)]
-        [TestCase("3", 0)]
-        public void getItems_contains_only_items_with_matching_parent_id(string configuredParentId, int expectedCount)
+        [TestCase(1, 5)]
+        [TestCase(2, 1)]
+        [TestCase(3, 0)]
+        public void getItems_contains_only_items_with_matching_parent_id(long configuredParentId, int expectedCount)
         {
             GivenTorrents(new List<PutioTorrent>
             {
@@ -177,7 +177,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.PutioTests
                     _completed_different_parent
             });
 
-            _settings.SaveParentId = configuredParentId;
+            _settings.SaveParentId = configuredParentId.ToString();
 
             Subject.GetItems().Should().HaveCount(expectedCount);
         }

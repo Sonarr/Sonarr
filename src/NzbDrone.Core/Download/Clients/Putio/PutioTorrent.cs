@@ -34,4 +34,11 @@ namespace NzbDrone.Core.Download.Clients.Putio
 
         public string Hash { get; set; }
     }
+
+    public class PutioTorrentMetadata
+    {
+        public bool Downloaded { get; set; }
+
+        public long Id { get; set; }
+    }
 }

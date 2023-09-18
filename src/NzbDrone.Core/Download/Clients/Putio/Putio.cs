@@ -84,7 +84,7 @@ namespace NzbDrone.Core.Download.Clients.Putio
                 var item = new DownloadClientItem
                 {
                     DownloadId = torrent.Id.ToString(),
-                    Category = Settings.SaveParentId,
+                    Category = Settings.SaveParentId?.ToString(),
                     Title = torrent.Name,
                     TotalSize = torrent.Size,
                     RemainingSize = torrent.Size - torrent.Downloaded,
@@ -165,12 +165,12 @@ namespace NzbDrone.Core.Download.Clients.Putio
 
         public override DownloadClientInfo GetStatus()
         {
-            var destDir = string.Format("{0}", Settings.SaveParentId);
+            var destDir = new OsPath(Settings.DownloadPath);
 
             return new DownloadClientInfo
             {
                 IsLocalhost = false,
-                OutputRootFolders = new List<OsPath> { _remotePathMappingService.RemapRemoteToLocal(Settings.Url, new OsPath(destDir)) }
+                OutputRootFolders = new List<OsPath> { destDir }
             };
         }
 

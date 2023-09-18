@@ -19,6 +19,7 @@ namespace NzbDrone.Core.Download.Clients.Putio
 
     public class PutioProxy : IPutioProxy
     {
+        private const string _configPrefix = "sonarr_";
         private readonly Logger _logger;
         private readonly IHttpClient _httpClient;
 
@@ -64,6 +65,39 @@ namespace NzbDrone.Core.Download.Clients.Putio
         public void GetAccountSettings(PutioSettings settings)
         {
             Execute<PutioGenericResponse>(BuildRequest(HttpMethod.Get, "account/settings", settings));
+        }
+
+        public PutioTorrentMetadata GetTorrentMetadata(PutioTorrent torrent, PutioSettings settings)
+        {
+            var metadata = Execute<PutioConfigResponse>(BuildRequest(HttpMethod.Get, "config/" + _configPrefix + torrent.Id, settings));
+            if (metadata.Resource.Value != null)
+            {
+                _logger.Debug("Found metadata for torrent: {0} {1}", torrent.Id, metadata.Resource.Value);
+                return metadata.Resource.Value;
+            }
+
+            return new PutioTorrentMetadata
+            {
+                Id = torrent.Id,
+                Downloaded = false
+            };
+        }
+
+        public Dictionary<string, PutioTorrentMetadata> GetAllTorrentMetadata(PutioSettings settings)
+        {
+            var metadata = Execute<PutioAllConfigResponse>(BuildRequest(HttpMethod.Get, "config", settings));
+            var result = new Dictionary<string, PutioTorrentMetadata>();
+
+            foreach (var item in metadata.Resource.Config)
+            {
+                if (item.Key.StartsWith(_configPrefix))
+                {
+                    var torrentId = item.Key.Substring(_configPrefix.Length);
+                    result[torrentId] = item.Value;
+                }
+            }
+
+            return result;
         }
 
         private HttpRequestBuilder BuildRequest(HttpMethod method, string endpoint, PutioSettings settings)
