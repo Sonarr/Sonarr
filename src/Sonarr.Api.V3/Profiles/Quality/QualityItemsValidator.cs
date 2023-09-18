@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using FluentValidation;
 using FluentValidation.Validators;
@@ -17,6 +17,8 @@ namespace Sonarr.Api.V3.Profiles.Quality
             ruleBuilder.SetValidator(new ItemGroupIdValidator<T>());
             ruleBuilder.SetValidator(new UniqueIdValidator<T>());
             ruleBuilder.SetValidator(new UniqueQualityIdValidator<T>());
+            ruleBuilder.SetValidator(new AllQualitiesValidator<T>());
+
             return ruleBuilder.SetValidator(new ItemGroupNameValidator<T>());
         }
     }
@@ -145,6 +147,48 @@ namespace Sonarr.Api.V3.Profiles.Quality
                     }
 
                     qualityIds.Add(item.Quality.Id);
+                }
+            }
+
+            return true;
+        }
+    }
+
+    public class AllQualitiesValidator<T> : PropertyValidator
+    {
+        protected override string GetDefaultMessageTemplate() => "Must contain all qualities";
+
+        protected override bool IsValid(PropertyValidatorContext context)
+        {
+            if (context.PropertyValue is not IList<QualityProfileQualityItemResource> items)
+            {
+                return false;
+            }
+
+            var qualityIds = new HashSet<int>();
+
+            foreach (var item in items)
+            {
+                if (item.Id > 0)
+                {
+                    foreach (var quality in item.Items)
+                    {
+                        qualityIds.Add(quality.Quality.Id);
+                    }
+                }
+                else
+                {
+                    qualityIds.Add(item.Quality.Id);
+                }
+            }
+
+            var allQualityIds = NzbDrone.Core.Qualities.Quality.All;
+
+            foreach (var quality in allQualityIds)
+            {
+                if (!qualityIds.Contains(quality.Id))
+                {
+                    return false;
                 }
             }
 
