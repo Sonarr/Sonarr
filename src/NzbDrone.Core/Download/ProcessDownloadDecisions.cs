@@ -131,6 +131,11 @@ namespace NzbDrone.Core.Download
                 return ProcessedDecisionResult.Skipped;
             }
 
+            if (!IsQualifiedReport(decision))
+            {
+                return ProcessedDecisionResult.Rejected;
+            }
+
             if (decision.TemporarilyRejected)
             {
                 _pendingReleaseService.Add(decision, PendingReleaseReason.Delay);
@@ -150,8 +155,13 @@ namespace NzbDrone.Core.Download
 
         internal List<DownloadDecision> GetQualifiedReports(IEnumerable<DownloadDecision> decisions)
         {
+            return decisions.Where(IsQualifiedReport).ToList();
+        }
+
+        internal bool IsQualifiedReport(DownloadDecision decision)
+        {
             // Process both approved and temporarily rejected
-            return decisions.Where(c => (c.Approved || c.TemporarilyRejected) && c.RemoteEpisode.Episodes.Any()).ToList();
+            return (decision.Approved || decision.TemporarilyRejected) && decision.RemoteEpisode.Episodes.Any();
         }
 
         private bool IsEpisodeProcessed(List<DownloadDecision> decisions, DownloadDecision report)
