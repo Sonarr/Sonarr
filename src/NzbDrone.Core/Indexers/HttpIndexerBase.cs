@@ -307,9 +307,17 @@ namespace NzbDrone.Core.Indexers
 
         protected virtual bool IsValidRelease(ReleaseInfo release)
         {
+            if (release.Title.IsNullOrWhiteSpace())
+            {
+                _logger.Trace("Invalid Release: '{0}' from indexer: {1}. No title provided.", release.InfoUrl, Definition.Name);
+
+                return false;
+            }
+
             if (release.DownloadUrl.IsNullOrWhiteSpace())
             {
-                _logger.Trace("Invalid Release: '{0}' from indexer: {1}. No Download URL provided.", release.Title, release.Indexer);
+                _logger.Trace("Invalid Release: '{0}' from indexer: {1}. No Download URL provided.", release.Title, Definition.Name);
+
                 return false;
             }
 
