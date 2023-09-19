@@ -50,7 +50,7 @@ namespace Sonarr.Http.Frontend.Mappers
 
             _logger.Warn("File {0} not found", filePath);
 
-            return null;
+            return Task.FromResult<IActionResult>(null);
         }
 
         protected virtual Stream GetContentStream(string filePath)
