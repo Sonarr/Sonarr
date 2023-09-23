@@ -32,6 +32,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.PutioTests
             _queued = new PutioTorrent
                 {
                     Hash = "HASH",
+                    Id = 1,
                     Status = PutioTorrentStatus.InQueue,
                     Name = _title,
                     Size = 1000,
@@ -42,6 +43,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.PutioTests
             _downloading = new PutioTorrent
                 {
                     Hash = "HASH",
+                    Id = 2,
                     Status = PutioTorrentStatus.Downloading,
                     Name = _title,
                     Size = 1000,
@@ -52,6 +54,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.PutioTests
             _failed = new PutioTorrent
                 {
                     Hash = "HASH",
+                    Id = 3,
                     Status = PutioTorrentStatus.Error,
                     ErrorMessage = "Torrent has reached the maximum number of inactive days.",
                     Name = _title,
@@ -64,6 +67,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.PutioTests
                 {
                     Hash = "HASH",
                     Status = PutioTorrentStatus.Completed,
+                    Id = 4,
                     Name = _title,
                     Size = 1000,
                     Downloaded = 1000,
@@ -74,6 +78,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.PutioTests
             _completed_different_parent = new PutioTorrent
                 {
                     Hash = "HASH",
+                    Id = 5,
                     Status = PutioTorrentStatus.Completed,
                     Name = _title,
                     Size = 1000,
@@ -85,10 +90,12 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.PutioTests
             _seeding = new PutioTorrent
                 {
                     Hash = "HASH",
+                    Id = 6,
                     Status = PutioTorrentStatus.Seeding,
                     Name = _title,
                     Size = 1000,
                     Downloaded = 1000,
+                    Uploaded = 1300,
                     SaveParentId = 1,
                     FileId = 2
                 };
@@ -137,17 +144,37 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.PutioTests
                 .Returns(torrents);
         }
 
+        protected virtual void GivenMetadata(List<PutioTorrentMetadata> metadata)
+        {
+            metadata ??= new List<PutioTorrentMetadata>();
+            var result = new Dictionary<string, PutioTorrentMetadata>();
+            foreach (var item in metadata)
+            {
+                result.Add(item.Id.ToString(), item);
+            }
+
+            Mocker.GetMock<IPutioProxy>()
+                .Setup(s => s.GetAllTorrentMetadata(It.IsAny<PutioSettings>()))
+                .Returns(result);
+        }
+
         [Test]
         public void getItems_contains_all_items()
         {
             GivenTorrents(new List<PutioTorrent>
             {
-                    _queued,
-                    _downloading,
-                    _failed,
-                    _completed,
-                    _seeding,
-                    _completed_different_parent
+                _queued,
+                _downloading,
+                _failed,
+                _completed,
+                _seeding,
+                _completed_different_parent
+            });
+            GivenMetadata(new List<PutioTorrentMetadata>
+            {
+                PutioTorrentMetadata.fromTorrent(_completed, true),
+                PutioTorrentMetadata.fromTorrent(_seeding, true),
+                PutioTorrentMetadata.fromTorrent(_completed_different_parent, true),
             });
 
             var items = Subject.GetItems();
@@ -198,10 +225,21 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.PutioTests
             {
                     _queued
             });
+            GivenMetadata(new List<PutioTorrentMetadata> { PutioTorrentMetadata.fromTorrent(_queued, true) });
 
             var item = Subject.GetItems().Single();
 
             item.Status.Should().Be(expectedItemStatus);
+        }
+
+        [Test]
+        public void test_getItems_marks_non_existing_local_download_as_downloading()
+        {
+            GivenTorrents(new List<PutioTorrent> { _completed });
+            GivenMetadata(new List<PutioTorrentMetadata> { PutioTorrentMetadata.fromTorrent(_completed, false) });
+
+            var item = Subject.GetItems().Single();
+            VerifyDownloading(item);
         }
     }
 }

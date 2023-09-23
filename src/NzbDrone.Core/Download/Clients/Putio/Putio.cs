@@ -8,6 +8,7 @@ using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.MediaFiles.TorrentInfo;
+using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.RemotePathMappings;
 using NzbDrone.Core.Validation;
@@ -54,24 +55,24 @@ namespace NzbDrone.Core.Download.Clients.Putio
         public override IEnumerable<DownloadClientItem> GetItems()
         {
             List<PutioTorrent> torrents;
+            Dictionary<string, PutioTorrentMetadata> metadata;
 
             try
             {
                 torrents = _proxy.GetTorrents(Settings);
+                metadata = _proxy.GetAllTorrentMetadata(Settings);
             }
             catch (DownloadClientException ex)
             {
                 _logger.Error(ex, ex.Message);
-                return Enumerable.Empty<DownloadClientItem>();
+                yield break;
             }
-
-            var items = new List<DownloadClientItem>();
 
             foreach (var torrent in torrents)
             {
-                // If totalsize == 0 the torrent is a magnet downloading metadata
                 if (torrent.Size == 0)
                 {
+                    // If totalsize == 0 the torrent is a magnet downloading metadata
                     continue;
                 }
 
@@ -88,7 +89,11 @@ namespace NzbDrone.Core.Download.Clients.Putio
                     Title = torrent.Name,
                     TotalSize = torrent.Size,
                     RemainingSize = torrent.Size - torrent.Downloaded,
-                    DownloadClientInfo = DownloadClientItemClientInfo.FromDownloadClient(this)
+                    DownloadClientInfo = DownloadClientItemClientInfo.FromDownloadClient(this),
+                    SeedRatio = torrent.Ratio,
+
+                    // Initial status, might change later
+                    Status = GetDownloadItemStatus(torrent)
                 };
 
                 try
@@ -97,6 +102,10 @@ namespace NzbDrone.Core.Download.Clients.Putio
                     {
                         // How needs the output path need to look if we have remote files?
 
+                        // check if we need to download the torrent from the remote
+                        var title = FileNameBuilder.CleanFileName(torrent.Name);
+
+                        // _diskProvider.FileExists(new OsPath())
                         /*
                         var file = _proxy.GetFile(torrent.FileId, Settings);
                         var torrentPath = "/completed/" + file.Name;
@@ -126,21 +135,17 @@ namespace NzbDrone.Core.Download.Clients.Putio
                     item.RemainingTime = TimeSpan.FromSeconds(torrent.EstimatedTime);
                 }
 
-                item.Status = GetStatus(torrent);
-
                 if (!torrent.ErrorMessage.IsNullOrWhiteSpace())
                 {
                     item.Status = DownloadItemStatus.Warning;
                     item.Message = torrent.ErrorMessage;
                 }
 
-                items.Add(item);
+                yield return item;
             }
-
-            return items;
         }
 
-        private DownloadItemStatus GetStatus(PutioTorrent torrent)
+        private DownloadItemStatus GetDownloadItemStatus(PutioTorrent torrent)
         {
             if (torrent.Status == PutioTorrentStatus.Completed ||
                 torrent.Status == PutioTorrentStatus.Seeding)
@@ -176,6 +181,7 @@ namespace NzbDrone.Core.Download.Clients.Putio
 
         protected override void Test(List<ValidationFailure> failures)
         {
+            failures.AddIfNotNull(TestFolder(Settings.DownloadPath, "DownloadPath"));
             failures.AddIfNotNull(TestConnection());
             if (failures.Any())
             {

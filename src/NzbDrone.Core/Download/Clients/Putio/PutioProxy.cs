@@ -15,6 +15,8 @@ namespace NzbDrone.Core.Download.Clients.Putio
         void AddTorrentFromData(byte[] torrentData, PutioSettings settings);
         void RemoveTorrent(string hash, PutioSettings settings);
         void GetAccountSettings(PutioSettings settings);
+        public PutioTorrentMetadata GetTorrentMetadata(PutioTorrent torrent, PutioSettings settings);
+        public Dictionary<string, PutioTorrentMetadata> GetAllTorrentMetadata(PutioSettings settings);
     }
 
     public class PutioProxy : IPutioProxy

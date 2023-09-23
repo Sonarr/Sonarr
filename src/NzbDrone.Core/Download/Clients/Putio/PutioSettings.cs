@@ -24,6 +24,7 @@ namespace NzbDrone.Core.Download.Clients.Putio
         public PutioSettings()
         {
             Url = "https://api.put.io/v2";
+            DeleteImported = false;
         }
 
         public string Url { get; }
@@ -34,11 +35,11 @@ namespace NzbDrone.Core.Download.Clients.Putio
         [FieldDefinition(1, Label = "Save Parent Folder ID", Type = FieldType.Textbox, HelpText = "Adding a parent folder ID specific to Sonarr avoids conflicts with unrelated non-Sonarr downloads. Using a parent folder is optional, but strongly recommended.")]
         public string SaveParentId { get; set; }
 
-        [FieldDefinition(2, Label = "Download completed transfers", Type = FieldType.Checkbox, HelpText = "If enabled, Sonarr will download completed files from Put.io. If you manually sync with rclone or similar, disable this")]
-        public bool DownloadFiles { get; set; }
-
-        [FieldDefinition(3, Label = "Download Path", Type = FieldType.Path, HelpText = "Path were Put.io is downloading to or if downloading is disabled where the mounts are expected")]
+        [FieldDefinition(2, Label = "Download Path", Type = FieldType.Path, HelpText = "Path were Sonarr will expect the files to get downloaded to. Note: This client does not download finished transfers automatically. Instead make sure that you download them outside of Sonarr e.g. with rclone")]
         public string DownloadPath { get; set; }
+
+        [FieldDefinition(3, Label = "Delete imported files", Type = FieldType.Checkbox, HelpText = "Delete the files on put.io when Sonarr marks them as successfully imported")]
+        public bool DeleteImported { get; set; }
 
         public NzbDroneValidationResult Validate()
         {
