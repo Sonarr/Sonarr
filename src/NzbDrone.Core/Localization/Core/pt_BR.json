@@ -844,7 +844,7 @@
     "SingleEpisode": "Episódio Único",
     "SizeLimit": "Limite de Tamanho",
     "SkipFreeSpaceCheck": "Ignorar verificação de espaço livre",
-    "SkipFreeSpaceCheckWhenImportingHelpText": "Use quando o {appName} não conseguir detectar espaço livre na pasta raiz da série",
+    "SkipFreeSpaceCheckWhenImportingHelpText": "Use quando {appName} não consegue detectar espaço livre em sua pasta raiz durante a importação do arquivo",
     "SmartReplace": "Substituição Inteligente",
     "SmartReplaceHint": "Traço ou Espaço e Traço, dependendo do nome",
     "Socks4": "Socks4",
@@ -1272,7 +1272,7 @@
     "OverrideGrabNoQuality": "A qualidade deve ser selecionada",
     "OverrideGrabNoSeries": "A série deve ser selecionada",
     "Parse": "Analisar",
-    "ParseModalHelpTextDetails": "Sonarr tentará analisar o título e mostrar detalhes sobre ele",
+    "ParseModalHelpTextDetails": "{appName} tentará analisar o título e mostrar detalhes sobre ele",
     "RecentChanges": "Mudanças Recentes",
     "ReleaseRejected": "Lançamento Rejeitado",
     "ReleaseSceneIndicatorAssumingScene": "Assumindo a Numeração da Scene.",
@@ -1483,5 +1483,6 @@
     "FormatShortTimeSpanMinutes": "{minutes} minuto(s)",
     "FormatShortTimeSpanSeconds": "{seconds} segundo(s)",
     "FormatTimeSpanDays": "{days}d {time}",
-    "Yesterday": "Ontem"
+    "Yesterday": "Ontem",
+    "DownloadClientRemovesCompletedDownloadsHealthCheckMessage": "O cliente de download {0} está configurado para remover downloads concluídos. Isso pode resultar na remoção dos downloads do seu cliente antes que {1} possa importá-los."
 }

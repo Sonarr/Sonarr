@@ -1155,7 +1155,7 @@
     "ShowTitleHelpText": "在海报下显示剧集标题",
     "ShowUnknownSeriesItems": "实现未知剧集项目",
     "ShowUnknownSeriesItemsHelpText": "显示队列中没有剧集的项目，这可能包括已删除的剧集、电影或 {appName} 类别中的任何其他内容",
-    "SkipFreeSpaceCheckWhenImportingHelpText": "当 {appName} 无法从您的剧集根文件夹中检测到空闲空间时使用",
+    "SkipFreeSpaceCheckWhenImportingHelpText": "在文件导入期间，当{appName}无法检测根文件夹的空闲空间时使用",
     "Small": "小",
     "SingleEpisodeInvalidFormat": "单集：非法格式",
     "SkipFreeSpaceCheck": "跳过剩余空间检查",
@@ -1442,7 +1442,7 @@
     "Monitor": "是否监控",
     "NotificationTriggersHelpText": "选择触发此通知的事件",
     "ImportListsSettingsSummary": "从另一个{appName}或Trakt列表导入并管理排除列表",
-    "ParseModalHelpTextDetails": "{appName}将尝试解析标题并向您展示有关它的详细信息",
+    "ParseModalHelpTextDetails": "{appName}将尝试解析标题并显示有关标题的详细信息",
     "Proxy": "代理",
     "ImportScriptPath": "导入脚本路径",
     "IncludeCustomFormatWhenRenamingHelpText": "在 {Custom Formats} 中包含重命名格式",
@@ -1483,5 +1483,6 @@
     "EpisodeFilesLoadError": "无法加载集文件",
     "Files": "文件",
     "SeriesDetailsOneEpisodeFile": "1个集文件",
-    "UrlBase": "基本URL"
+    "UrlBase": "基本URL",
+    "DownloadClientRemovesCompletedDownloadsHealthCheckMessage": "下载客户端{0}设置为删除已完成的下载。这可能导致在{1}可以导入下载之前从您的客户端删除下载。"
 }
