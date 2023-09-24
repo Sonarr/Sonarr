@@ -48,5 +48,14 @@
     "AutoTagging": "Automatisch Taggen",
     "AddAutoTag": "Voeg Automatische Tag toe",
     "AddCondition": "Voeg Conditie toe",
-    "CloneAutoTag": "Kopieer Automatische Tag"
+    "CloneAutoTag": "Kopieer Automatische Tag",
+    "AbsoluteEpisodeNumbers": "Absolute Afleveringsnummer(s)",
+    "AbsoluteEpisodeNumber": "Absoluut Afleveringsnummer",
+    "AddAutoTagError": "Niet in staat een nieuw automatisch label toe te voegen, probeer het opnieuw.",
+    "AddConditionError": "Niet in staat een nieuwe voorwaarde toe te voegen, probeer het opnieuw.",
+    "AddConnection": "Voeg connectie toe",
+    "Absolute": "Absoluut",
+    "AddANewPath": "Voeg een nieuw pad toe",
+    "AddConditionImplementation": "Voeg voorwaarde toe - {implementationName}",
+    "AddConnectionImplementation": "Voeg connectie toe - {implementationName}"
 }
