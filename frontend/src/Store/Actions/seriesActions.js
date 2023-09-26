@@ -348,6 +348,11 @@ export const filterBuilderProps = [
     name: 'hasMissingSeason',
     label: () => translate('HasMissingSeason'),
     type: filterBuilderTypes.EXACT
+  },
+  {
+    name: 'year',
+    label: () => translate('Year'),
+    type: filterBuilderTypes.NUMBER
   }
 ];
 
