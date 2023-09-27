@@ -302,19 +302,6 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                         break;
                 }
 
-                if (version >= new Version("2.6.1"))
-                {
-                    if (torrent.ContentPath != torrent.SavePath)
-                    {
-                        item.OutputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(torrent.ContentPath));
-                    }
-                    else if (item.Status == DownloadItemStatus.Completed)
-                    {
-                        item.Status = DownloadItemStatus.Warning;
-                        item.Message = "Unable to Import. Path matches client base download directory, it's possible 'Keep top-level folder' is disabled for this torrent or 'Torrent Content Layout' is NOT set to 'Original' or 'Create Subfolder'?";
-                    }
-                }
-
                 queueItems.Add(item);
             }
 
@@ -328,9 +315,22 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
         public override DownloadClientItem GetImportItem(DownloadClientItem item, DownloadClientItem previousImportAttempt)
         {
-            // On API version >= 2.6.1 this is already set correctly
-            if (!item.OutputPath.IsEmpty)
+            var properties = Proxy.GetTorrentProperties(item.DownloadId.ToLower(), Settings);
+            var savePath = new OsPath(properties.SavePath);
+            var version = Proxy.GetApiVersion(Settings);
+
+            if (version >= new Version("2.6.1"))
             {
+                if (properties.ContentPath != savePath.ToString())
+                {
+                    item.OutputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(properties.ContentPath));
+                }
+                else
+                {
+                    item.Status = DownloadItemStatus.Warning;
+                    item.Message = "Unable to Import. Path matches client base download directory, it's possible 'Keep top-level folder' is disabled for this torrent or 'Torrent Content Layout' is NOT set to 'Original' or 'Create Subfolder'?";
+                }
+
                 return item;
             }
 
@@ -341,11 +341,6 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                 return item;
             }
 
-            var properties = Proxy.GetTorrentProperties(item.DownloadId.ToLower(), Settings);
-            var savePath = new OsPath(properties.SavePath);
-
-            var result = item.Clone();
-
             // get the first subdirectory - QBittorrent returns `/` path separators even on windows...
             var relativePath = new OsPath(files[0].Name);
             while (!relativePath.Directory.IsEmpty)
@@ -354,10 +349,9 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             }
 
             var outputPath = savePath + relativePath.FileName;
+            item.OutputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, outputPath);
 
-            result.OutputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, outputPath);
-
-            return result;
+            return item;
         }
 
         public override DownloadClientInfo GetStatus()
