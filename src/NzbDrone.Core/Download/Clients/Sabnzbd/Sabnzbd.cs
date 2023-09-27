@@ -276,7 +276,16 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                 status.OutputRootFolders = new List<OsPath> { _remotePathMappingService.RemapRemoteToLocal(Settings.Host, category.FullPath) };
             }
 
-            status.RemovesCompletedDownloads = config.Misc.history_retention != "0";
+            if (config.Misc.history_retention.IsNotNullOrWhiteSpace() && config.Misc.history_retention.EndsWith("d"))
+            {
+                int.TryParse(config.Misc.history_retention.AsSpan(0, config.Misc.history_retention.Length - 1),
+                    out var daysRetention);
+                status.RemovesCompletedDownloads = daysRetention < 14;
+            }
+            else
+            {
+                status.RemovesCompletedDownloads = config.Misc.history_retention != "0";
+            }
 
             return status;
         }
