@@ -137,7 +137,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
             {
                 Mocker.GetMock<IQBittorrentProxy>()
                     .Setup(s => s.GetTorrentProperties(torrent.Hash.ToLower(), It.IsAny<QBittorrentSettings>()))
-                    .Returns(new QBittorrentTorrentProperties { ContentPath = torrent.ContentPath, SavePath = torrent.SavePath });
+                    .Returns(new QBittorrentTorrentProperties { SavePath = torrent.SavePath });
 
                 Mocker.GetMock<IQBittorrentProxy>()
                     .Setup(s => s.GetTorrentFiles(torrent.Hash.ToLower(), It.IsAny<QBittorrentSettings>()))
