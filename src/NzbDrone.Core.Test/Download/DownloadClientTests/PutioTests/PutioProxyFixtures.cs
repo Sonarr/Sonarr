@@ -59,6 +59,68 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.PutioTests
             Assert.IsTrue(list["456"].Downloaded);
         }
 
+        [Test]
+        public void test_GetFileListingResponse()
+        {
+            var json = @"{
+                ""cursor"": null,
+                ""files"": [
+                    {
+                        ""file_type"": ""VIDEO"",
+                        ""id"": 111,
+                        ""name"": ""My.download.mkv"",
+                        ""parent_id"": 4711
+                    },
+                    {
+                        ""file_type"": ""FOLDER"",
+                        ""id"": 222,
+                        ""name"": ""Another-folder[dth]"",
+                        ""parent_id"": 4711
+                    }
+                ],
+                ""parent"": {
+                    ""file_type"": ""FOLDER"",
+                    ""id"": 4711,
+                    ""name"": ""Incoming"",
+                    ""parent_id"": 0
+                },
+                ""status"": ""OK"",
+                ""total"": 2
+            }";
+            ClientGetWillReturn<PutioFileListingResponse>(json);
+
+            var response = Subject.GetFileListingResponse(4711, new PutioSettings());
+
+            Assert.That(response, Is.Not.Null);
+            Assert.AreEqual(response.Files.Count, 2);
+            Assert.AreEqual(4711, response.Parent.Id);
+            Assert.AreEqual(111, response.Files[0].Id);
+            Assert.AreEqual(222, response.Files[1].Id);
+        }
+
+        [Test]
+        public void test_GetFileListingResponse_empty()
+        {
+            var json = @"{
+                ""cursor"": null,
+                ""files"": [],
+                ""parent"": {
+                    ""file_type"": ""FOLDER"",
+                    ""id"": 4711,
+                    ""name"": ""Incoming"",
+                    ""parent_id"": 0
+                },
+                ""status"": ""OK"",
+                ""total"": 0
+            }";
+            ClientGetWillReturn<PutioFileListingResponse>(json);
+
+            var response = Subject.GetFileListingResponse(4711, new PutioSettings());
+
+            Assert.That(response, Is.Not.Null);
+            Assert.AreEqual(response.Files.Count, 0);
+        }
+
         private void ClientGetWillReturn<TResult>(string obj)
             where TResult : new()
         {

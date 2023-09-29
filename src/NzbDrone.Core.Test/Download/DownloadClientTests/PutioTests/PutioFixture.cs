@@ -4,6 +4,7 @@ using System.Linq;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Common.Disk;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.Clients.Putio;
@@ -24,7 +25,10 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.PutioTests
         [SetUp]
         public void Setup()
         {
-            _settings = new PutioSettings();
+            _settings = new PutioSettings
+            {
+                SaveParentId = "1"
+            };
 
             Subject.Definition = new DownloadClientDefinition();
             Subject.Definition.Settings = _settings;
@@ -72,7 +76,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.PutioTests
                     Size = 1000,
                     Downloaded = 1000,
                     SaveParentId = 1,
-                    FileId = 1
+                    FileId = 2
                 };
 
             _completed_different_parent = new PutioTorrent
@@ -84,7 +88,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.PutioTests
                     Size = 1000,
                     Downloaded = 1000,
                     SaveParentId = 2,
-                    FileId = 1
+                    FileId = 3
                 };
 
             _seeding = new PutioTorrent
@@ -97,7 +101,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.PutioTests
                     Downloaded = 1000,
                     Uploaded = 1300,
                     SaveParentId = 1,
-                    FileId = 2
+                    FileId = 4
                 };
 
             Mocker.GetMock<ITorrentFileInfoReader>()
@@ -110,6 +114,10 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.PutioTests
 
             Mocker.GetMock<IPutioProxy>()
                 .Setup(v => v.GetAccountSettings(It.IsAny<PutioSettings>()));
+
+            Mocker.GetMock<IPutioProxy>()
+                .Setup(v => v.GetFileListingResponse(It.IsAny<long>(), It.IsAny<PutioSettings>()))
+                .Returns(PutioFileListingResponse.Empty());
         }
 
         protected void GivenFailedDownload()
@@ -121,18 +129,16 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.PutioTests
 
         protected void GivenSuccessfulDownload()
         {
-            Mocker.GetMock<IHttpClient>()
-                  .Setup(s => s.Get(It.IsAny<HttpRequest>()))
-                  .Returns<HttpRequest>(r => new HttpResponse(r, new HttpHeader(), new byte[1000]));
-            /*
-            Mocker.GetMock<IPutioProxy>()
-                .Setup(s => s.AddTorrentFromUrl(It.IsAny<string>(), It.IsAny<PutioSettings>()))
-                .Callback(PrepareClientToReturnQueuedItem);
+            GivenRemoteFileStructure(new List<PutioFile>
+            {
+                new PutioFile { Id = _completed.FileId, Name = _title, FileType = PutioFile.FILE_TYPE_VIDEO },
+                new PutioFile { Id = _seeding.FileId, Name = _title, FileType = PutioFile.FILE_TYPE_FOLDER },
+            }, new PutioFile { Id = 1, Name = "Downloads" });
 
-            Mocker.GetMock<IPutioProxy>()
-                .Setup(s => s.AddTorrentFromData(It.IsAny<byte[]>(), It.IsAny<PutioSettings>()))
-                .Callback(PrepareClientToReturnQueuedItem);
-            */
+            // GivenRemoteFileStructure(new List<PutioFile>
+            // {
+            //     new PutioFile { Id = _completed_different_parent.FileId, Name = _title, FileType = PutioFile.FILE_TYPE_VIDEO },
+            // }, new PutioFile { Id = 2, Name = "Downloads_new" });
         }
 
         protected virtual void GivenTorrents(List<PutioTorrent> torrents)
@@ -142,6 +148,20 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.PutioTests
             Mocker.GetMock<IPutioProxy>()
                 .Setup(s => s.GetTorrents(It.IsAny<PutioSettings>()))
                 .Returns(torrents);
+        }
+
+        protected virtual void GivenRemoteFileStructure(List<PutioFile> files, PutioFile parentFile)
+        {
+            files ??= new List<PutioFile>();
+            var list = new PutioFileListingResponse { Files = files, Parent = parentFile };
+
+            Mocker.GetMock<IPutioProxy>()
+                .Setup(s => s.GetFileListingResponse(parentFile.Id, It.IsAny<PutioSettings>()))
+                .Returns(list);
+
+            Mocker.GetMock<IDiskProvider>()
+                .Setup(s => s.FolderExists(It.IsAny<string>()))
+                .Returns(true);
         }
 
         protected virtual void GivenMetadata(List<PutioTorrentMetadata> metadata)
@@ -170,12 +190,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.PutioTests
                 _seeding,
                 _completed_different_parent
             });
-            GivenMetadata(new List<PutioTorrentMetadata>
-            {
-                PutioTorrentMetadata.fromTorrent(_completed, true),
-                PutioTorrentMetadata.fromTorrent(_seeding, true),
-                PutioTorrentMetadata.fromTorrent(_completed_different_parent, true),
-            });
+            GivenSuccessfulDownload();
 
             var items = Subject.GetItems();
 
@@ -184,9 +199,8 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.PutioTests
             VerifyWarning(items.ElementAt(2));
             VerifyCompleted(items.ElementAt(3));
             VerifyCompleted(items.ElementAt(4));
-            VerifyCompleted(items.ElementAt(5));
 
-            items.Should().HaveCount(6);
+            items.Should().HaveCount(5);
         }
 
         [TestCase(1, 5)]
@@ -203,6 +217,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.PutioTests
                     _seeding,
                     _completed_different_parent
             });
+            GivenSuccessfulDownload();
 
             _settings.SaveParentId = configuredParentId.ToString();
 
@@ -225,7 +240,6 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.PutioTests
             {
                     _queued
             });
-            GivenMetadata(new List<PutioTorrentMetadata> { PutioTorrentMetadata.fromTorrent(_queued, true) });
 
             var item = Subject.GetItems().Single();
 
@@ -233,13 +247,41 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.PutioTests
         }
 
         [Test]
-        public void test_getItems_marks_non_existing_local_download_as_downloading()
+        public void test_getItems_path_for_folders()
         {
             GivenTorrents(new List<PutioTorrent> { _completed });
-            GivenMetadata(new List<PutioTorrentMetadata> { PutioTorrentMetadata.fromTorrent(_completed, false) });
+            GivenRemoteFileStructure(new List<PutioFile>
+            {
+                new PutioFile { Id = _completed.FileId, Name = _title, FileType = PutioFile.FILE_TYPE_FOLDER },
+            }, new PutioFile { Id = 1, Name = "Downloads" });
 
             var item = Subject.GetItems().Single();
-            VerifyDownloading(item);
+
+            VerifyCompleted(item);
+            item.OutputPath.ToString().Should().ContainAll("Downloads", _title);
+
+            Mocker.GetMock<IPutioProxy>()
+                .Verify(s => s.GetFileListingResponse(1, It.IsAny<PutioSettings>()), Times.AtLeastOnce());
+        }
+
+        [Test]
+        public void test_getItems_path_for_files()
+        {
+            GivenTorrents(new List<PutioTorrent> { _completed });
+            GivenRemoteFileStructure(new List<PutioFile>
+            {
+                new PutioFile { Id = _completed.FileId, Name = _title, FileType = PutioFile.FILE_TYPE_VIDEO },
+            }, new PutioFile { Id = 1, Name = "Downloads" });
+
+            var item = Subject.GetItems().Single();
+
+            VerifyCompleted(item);
+
+            item.OutputPath.ToString().Should().Contain("Downloads");
+            item.OutputPath.ToString().Should().NotContain(_title);
+
+            Mocker.GetMock<IPutioProxy>()
+            .Verify(s => s.GetFileListingResponse(It.IsAny<long>(), It.IsAny<PutioSettings>()), Times.AtLeastOnce());
         }
     }
 }

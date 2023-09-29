@@ -8,7 +8,6 @@ using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.MediaFiles.TorrentInfo;
-using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.RemotePathMappings;
 using NzbDrone.Core.Validation;
@@ -55,12 +54,20 @@ namespace NzbDrone.Core.Download.Clients.Putio
         public override IEnumerable<DownloadClientItem> GetItems()
         {
             List<PutioTorrent> torrents;
-            Dictionary<string, PutioTorrentMetadata> metadata;
+            PutioFileListingResponse fileListingResponse;
 
             try
             {
                 torrents = _proxy.GetTorrents(Settings);
-                metadata = _proxy.GetAllTorrentMetadata(Settings);
+
+                if (Settings.SaveParentId.IsNotNullOrWhiteSpace())
+                {
+                    fileListingResponse = _proxy.GetFileListingResponse(long.Parse(Settings.SaveParentId), Settings);
+                }
+                else
+                {
+                    fileListingResponse = _proxy.GetFileListingResponse(0, Settings);
+                }
             }
             catch (DownloadClientException ex)
             {
@@ -100,29 +107,31 @@ namespace NzbDrone.Core.Download.Clients.Putio
                 {
                     if (torrent.FileId != 0)
                     {
-                        // How needs the output path need to look if we have remote files?
+                        // Todo: make configurable? Behaviour might be different for users (rclone mount, vs sync/mv)
+                        item.CanMoveFiles = false;
+                        item.CanBeRemoved = false;
 
-                        // check if we need to download the torrent from the remote
-                        var title = FileNameBuilder.CleanFileName(torrent.Name);
+                        var file = fileListingResponse.Files.FirstOrDefault(f => f.Id == torrent.FileId);
+                        var parent = fileListingResponse.Parent;
 
-                        // _diskProvider.FileExists(new OsPath())
-                        /*
-                        var file = _proxy.GetFile(torrent.FileId, Settings);
-                        var torrentPath = "/completed/" + file.Name;
-
-                        var outputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Url, new OsPath(torrentPath));
-
-                        if (Settings.SaveParentId.IsNotNullOrWhiteSpace())
+                        if (file == null || parent == null)
                         {
-                            var directories = outputPath.FullPath.Split('\\', '/');
-                            if (!directories.Contains(string.Format("{0}", Settings.SaveParentId)))
+                            item.Message = string.Format("Did not find file {0} in remote listing", torrent.FileId);
+                            item.Status = DownloadItemStatus.Warning;
+                        }
+                        else
+                        {
+                            var expectedPath = new OsPath(Settings.DownloadPath) + new OsPath(parent.Name);
+                            if (file.IsFolder())
                             {
-                                continue;
+                                expectedPath += new OsPath(file.Name);
+                            }
+
+                            if (_diskProvider.FolderExists(expectedPath.FullPath))
+                            {
+                                item.OutputPath = expectedPath;
                             }
                         }
-
-                        item.OutputPath = outputPath; // + torrent.Name;
-                        */
                     }
                 }
                 catch (DownloadClientException ex)
@@ -170,12 +179,9 @@ namespace NzbDrone.Core.Download.Clients.Putio
 
         public override DownloadClientInfo GetStatus()
         {
-            var destDir = new OsPath(Settings.DownloadPath);
-
             return new DownloadClientInfo
             {
-                IsLocalhost = false,
-                OutputRootFolders = new List<OsPath> { destDir }
+                IsLocalhost = false
             };
         }
 
@@ -183,6 +189,7 @@ namespace NzbDrone.Core.Download.Clients.Putio
         {
             failures.AddIfNotNull(TestFolder(Settings.DownloadPath, "DownloadPath"));
             failures.AddIfNotNull(TestConnection());
+            failures.AddIfNotNull(TestRemoteParentFolder());
             if (failures.Any())
             {
                 return;
@@ -224,6 +231,21 @@ namespace NzbDrone.Core.Download.Clients.Putio
             {
                 _logger.Error(ex, ex.Message);
                 return new NzbDroneValidationFailure(string.Empty, "Failed to get the list of torrents: " + ex.Message);
+            }
+
+            return null;
+        }
+
+        private ValidationFailure TestRemoteParentFolder()
+        {
+            try
+            {
+                _proxy.GetFileListingResponse(long.Parse(Settings.SaveParentId), Settings);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, ex.Message);
+                return new NzbDroneValidationFailure("SaveParentId", "This is not a valid folder in your account");
             }
 
             return null;

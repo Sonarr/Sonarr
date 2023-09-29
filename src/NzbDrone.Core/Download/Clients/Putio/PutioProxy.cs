@@ -13,10 +13,10 @@ namespace NzbDrone.Core.Download.Clients.Putio
         List<PutioTorrent> GetTorrents(PutioSettings settings);
         void AddTorrentFromUrl(string torrentUrl, PutioSettings settings);
         void AddTorrentFromData(byte[] torrentData, PutioSettings settings);
-        void RemoveTorrent(string hash, PutioSettings settings);
         void GetAccountSettings(PutioSettings settings);
         public PutioTorrentMetadata GetTorrentMetadata(PutioTorrent torrent, PutioSettings settings);
         public Dictionary<string, PutioTorrentMetadata> GetAllTorrentMetadata(PutioSettings settings);
+        public PutioFileListingResponse GetFileListingResponse(long parentId, PutioSettings settings);
     }
 
     public class PutioProxy : IPutioProxy
@@ -57,13 +57,6 @@ namespace NzbDrone.Core.Download.Clients.Putio
             // ProcessRequest<PutioGenericResponse>(Method.POST, "transfers/add", arguments, settings);
         }
 
-        public void RemoveTorrent(string hashString, PutioSettings settings)
-        {
-            // var arguments = new Dictionary<string, object>();
-            // arguments.Add("transfer_ids", new string[] { hashString });
-            // ProcessRequest<PutioGenericResponse>(Method.POST, "torrents/cancel", arguments, settings);
-        }
-
         public void GetAccountSettings(PutioSettings settings)
         {
             Execute<PutioGenericResponse>(BuildRequest(HttpMethod.Get, "account/settings", settings));
@@ -83,6 +76,24 @@ namespace NzbDrone.Core.Download.Clients.Putio
                 Id = torrent.Id,
                 Downloaded = false
             };
+        }
+
+        public PutioFileListingResponse GetFileListingResponse(long parentId, PutioSettings settings)
+        {
+            var request = BuildRequest(HttpMethod.Get, "files/list", settings);
+            request.AddQueryParam("parent_id", parentId);
+            request.AddQueryParam("per_page", 1000);
+
+            try
+            {
+                var response = Execute<PutioFileListingResponse>(request);
+                return response.Resource;
+            }
+            catch (DownloadClientException ex)
+            {
+                _logger.Error(ex, "Failed to get file listing response");
+                throw;
+            }
         }
 
         public Dictionary<string, PutioTorrentMetadata> GetAllTorrentMetadata(PutioSettings settings)
