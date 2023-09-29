@@ -1,4 +1,5 @@
-using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace NzbDrone.Core.ImportLists.Trakt
 {
@@ -16,6 +17,8 @@ namespace NzbDrone.Core.ImportLists.Trakt
         public string Title { get; set; }
         public int? Year { get; set; }
         public TraktSeriesIdsResource Ids { get; set; }
+        [JsonPropertyName("aired_episodes")]
+        public int AiredEpisodes { get; set; }
     }
 
     public class TraktResponse
@@ -23,13 +26,29 @@ namespace NzbDrone.Core.ImportLists.Trakt
         public TraktSeriesResource Show { get; set; }
     }
 
+    public class TraktWatchedEpisodeResource
+    {
+        public int? Plays { get; set; }
+    }
+
+    public class TraktWatchedSeasonResource
+    {
+        public int? Number { get; set; }
+        public List<TraktWatchedEpisodeResource> Episodes { get; set; }
+    }
+
+    public class TraktWatchedResponse : TraktResponse
+    {
+        public List<TraktWatchedSeasonResource> Seasons { get; set; }
+    }
+
     public class RefreshRequestResponse
     {
-        [JsonProperty("access_token")]
+        [JsonPropertyName("access_token")]
         public string AccessToken { get; set; }
-        [JsonProperty("expires_in")]
+        [JsonPropertyName("expires_in")]
         public int ExpiresIn { get; set; }
-        [JsonProperty("refresh_token")]
+        [JsonPropertyName("refresh_token")]
         public string RefreshToken { get; set; }
     }
 
