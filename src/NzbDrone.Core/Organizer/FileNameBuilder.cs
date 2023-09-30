@@ -377,6 +377,19 @@ namespace NzbDrone.Core.Organizer
             return title;
         }
 
+        public static string TitleFirstCharacter(string title)
+        {
+            title = ScenifyReplaceChars.Replace(title, " ");
+            title = ScenifyRemoveChars.Replace(title, string.Empty);
+
+            if (char.IsLetterOrDigit(title[0]))
+            {
+                return title.Substring(0, 1).FirstCharToUpper();
+            }
+
+            return "#";
+        }
+
         public static string CleanFileName(string name)
         {
             return CleanFileName(name, NamingConfig.Default);
@@ -452,7 +465,7 @@ namespace NzbDrone.Core.Organizer
             tokenHandlers["{Series TitleWithoutYear}"] = m => TitleWithoutYear(series.Title);
             tokenHandlers["{Series TitleTheYear}"] = m => TitleYear(TitleThe(series.Title), series.Year);
             tokenHandlers["{Series TitleTheWithoutYear}"] = m => TitleWithoutYear(TitleThe(series.Title));
-            tokenHandlers["{Series TitleFirstCharacter}"] = m => TitleThe(series.Title).Substring(0, 1).FirstCharToUpper();
+            tokenHandlers["{Series TitleFirstCharacter}"] = m => TitleFirstCharacter(TitleThe(series.Title));
             tokenHandlers["{Series Year}"] = m => series.Year.ToString();
         }
 
