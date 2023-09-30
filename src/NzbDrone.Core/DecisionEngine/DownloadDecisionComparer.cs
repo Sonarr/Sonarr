@@ -156,28 +156,43 @@ namespace NzbDrone.Core.DecisionEngine
                 return 0;
             }
 
-            return CompareBy(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode =>
+            var sanitizedTitleX = SanitizeReleaseName(x.RemoteEpisode.Release.Title);
+            var sanitizedTitleY = SanitizeReleaseName(y.RemoteEpisode.Release.Title);
+
+            var titlesMatch = string.Equals(sanitizedTitleX, sanitizedTitleY, StringComparison.OrdinalIgnoreCase);
+            var sizesMatch = GetRoundedSize(x.RemoteEpisode.Release.Size) == GetRoundedSize(y.RemoteEpisode.Release.Size);
+
+            if (titlesMatch && sizesMatch)
             {
-                var ageHours = remoteEpisode.Release.AgeHours;
-                var age = remoteEpisode.Release.Age;
-
-                if (ageHours < 1)
+                // Compare by age, as both releases have the same sanitized name and rounded size
+                return CompareByReverse(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode => remoteEpisode.Release.AgeHours);
+            }
+            else
+            {
+                // use original sorting logic if the releases are not equal
+                return CompareBy(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode =>
                 {
-                    return 1000;
-                }
+                    var ageHours = remoteEpisode.Release.AgeHours;
+                    var age = remoteEpisode.Release.Age;
 
-                if (ageHours <= 24)
-                {
-                    return 100;
-                }
+                    if (ageHours < 1)
+                    {
+                        return 1000;
+                    }
 
-                if (age <= 7)
-                {
-                    return 10;
-                }
+                    if (ageHours <= 24)
+                    {
+                        return 100;
+                    }
 
-                return 1;
-            });
+                    if (age <= 7)
+                    {
+                        return 10;
+                    }
+
+                    return 1;
+                });
+            }
         }
 
         private int CompareSize(DownloadDecision x, DownloadDecision y)
@@ -201,6 +216,43 @@ namespace NzbDrone.Core.DecisionEngine
             });
 
             return sizeCompare;
+        }
+
+        private long GetRoundedSize(long size)
+        {
+            if (size < 1.5.Gigabytes())
+            {
+                return size.Round(200.Megabytes());
+            }
+            else if (size < 2.5.Gigabytes())
+            {
+                return size.Round(300.Megabytes());
+            }
+            else if (size < 3.5.Gigabytes())
+            {
+                return size.Round(400.Megabytes());
+            }
+            else
+            {
+                return size.Round(550.Megabytes());
+            }
+        }
+
+        private string SanitizeReleaseName(string releaseName)
+        {
+            // some indexers add strings like -xpost to the release which can be ignored (it's not a release group)
+
+            var ignoredStrings = new string[] { "-xpost" };
+
+            foreach (var ignoredString in ignoredStrings)
+            {
+                if (releaseName.EndsWith(ignoredString, StringComparison.OrdinalIgnoreCase))
+                {
+                    return releaseName[..^ignoredString.Length].Trim();
+                }
+            }
+
+            return releaseName.Trim();
         }
     }
 }
