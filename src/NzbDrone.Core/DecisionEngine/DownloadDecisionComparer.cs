@@ -224,9 +224,7 @@ namespace NzbDrone.Core.DecisionEngine
         {
             var roundingRules = new List<(long threshold, long roundTo)>
                 {
-                    (1.5.Gigabytes(), 200.Megabytes()),
-                    (3.5.Gigabytes(), 300.Megabytes()),
-                    (6.Gigabytes(), 450.Megabytes()),
+                    (2.5.Gigabytes(), 300.Megabytes()),
                     (15.Gigabytes(), 800.Megabytes()),
                     (30.Gigabytes(), 1600.Megabytes())
                 };
