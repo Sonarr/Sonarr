@@ -379,15 +379,12 @@ namespace NzbDrone.Core.Organizer
 
         public static string TitleFirstCharacter(string title)
         {
-            title = ScenifyReplaceChars.Replace(title, " ");
-            title = ScenifyRemoveChars.Replace(title, string.Empty);
-
             if (char.IsLetterOrDigit(title[0]))
             {
                 return title.Substring(0, 1).FirstCharToUpper();
             }
 
-            return "#";
+            return "_";
         }
 
         public static string CleanFileName(string name)
