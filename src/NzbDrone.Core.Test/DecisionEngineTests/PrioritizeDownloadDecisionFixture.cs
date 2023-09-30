@@ -174,6 +174,26 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         }
 
         [Test]
+        public void should_order_by_age_for_equal_usenet_releases()
+        {
+            var remoteEpisode1 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.SDTV), Language.English, size: 100.Megabytes(), age: 1, releaseTitle: "Series.Title.S01E01.Pilot.1080p.WEB-DL-RLSGRP");
+            var remoteEpisode2 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p), Language.English, size: 3300.Megabytes(), age: 1000, releaseTitle: "Series.Title.S01E01.Pilot.1080p.WEB-DL-RLSGRP");
+            var remoteEpisode3 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p), Language.English, size: 2750.Megabytes(), age: 10, releaseTitle: "Series.Title.S01E01.Pilot.1080p.WEB-DL-RLSGRP");
+            var remoteEpisode4 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p), Language.English, size: 3000.Megabytes(), age: 1, releaseTitle: "Series.Title.S01E01.Pilot.1080p.WEB-DL-RLSGRP");
+            var remoteEpisode5 = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p), Language.English, size: 3000.Megabytes(), age: 2, releaseTitle: "Series.Title.S01E01.Pilot.1080p.WEB-DL-OTHERGRP");
+
+            var decisions = new List<DownloadDecision>();
+            decisions.Add(new DownloadDecision(remoteEpisode1));
+            decisions.Add(new DownloadDecision(remoteEpisode2));
+            decisions.Add(new DownloadDecision(remoteEpisode3));
+            decisions.Add(new DownloadDecision(remoteEpisode4));
+            decisions.Add(new DownloadDecision(remoteEpisode5));
+
+            var qualifiedReports = Subject.PrioritizeDecisions(decisions);
+            qualifiedReports.First().RemoteEpisode.Should().Be(remoteEpisode4);
+        }
+
+        [Test]
         public void should_order_by_closest_to_preferred_size_if_both_under()
         {
             // 200 MB/Min * 60 Min Runtime = 12000 MB
