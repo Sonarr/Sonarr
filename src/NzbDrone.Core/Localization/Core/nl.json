@@ -57,5 +57,20 @@
     "Absolute": "Absoluut",
     "AddANewPath": "Voeg een nieuw pad toe",
     "AddConditionImplementation": "Voeg voorwaarde toe - {implementationName}",
-    "AddConnectionImplementation": "Voeg connectie toe - {implementationName}"
+    "AddConnectionImplementation": "Voeg connectie toe - {implementationName}",
+    "AddCustomFormat": "Voeg aangepast formaat toe",
+    "AddDelayProfile": "Voeg vertragingsprofiel toe",
+    "AddCustomFormatError": "Kan geen nieuw aangepast formaat toevoegen. Probeer het opnieuw.",
+    "AddDownloadClientError": "Kan geen nieuwe downloadclient toevoegen. Probeer het opnieuw.",
+    "AddDownloadClient": "Download Client Toevoegen",
+    "AddIndexerError": "Kon geen nieuwe indexeerder toevoegen, Probeer het opnieuw.",
+    "AddList": "Lijst Toevoegen",
+    "AddListError": "Kon geen nieuwe lijst toevoegen, probeer het opnieuw.",
+    "AddNewRestriction": "Voeg nieuwe restrictie toe",
+    "AddCustomFilter": "Aangepaste Filter Toevoegen",
+    "AddDownloadClientImplementation": "Voeg Downloadclient toe - {implementationName}",
+    "AddIndexer": "Voeg Indexeerder Toe",
+    "AddIndexerImplementation": "Indexeerder toevoegen - {implementationName}",
+    "UpdateMechanismHelpText": "Gebruik de ingebouwde updater van {appName} of een script",
+    "CalendarOptions": "Kalender Opties"
 }

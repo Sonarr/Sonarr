@@ -37,5 +37,6 @@
     "ManageClients": "Verwalte Clienten",
     "ManageDownloadClients": "Verwalte Download Clienten",
     "ManageImportLists": "Verwalte Einspiel-Listen",
-    "NoDownloadClientsFound": "Keine Download Clienten gefunden"
+    "NoDownloadClientsFound": "Keine Download Clienten gefunden",
+    "SkipFreeSpaceCheck": "Prüfung des freien Speichers überspringen"
 }
