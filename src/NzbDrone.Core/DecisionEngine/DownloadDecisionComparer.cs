@@ -12,6 +12,8 @@ namespace NzbDrone.Core.DecisionEngine
 {
     public class DownloadDecisionComparer : IComparer<DownloadDecision>
     {
+        private static readonly string[] IgnoredStrings = new string[] { "-xpost" };
+
         private readonly IConfigService _configService;
         private readonly IDelayProfileService _delayProfileService;
         private readonly IQualityDefinitionService _qualityDefinitionService;
@@ -242,9 +244,7 @@ namespace NzbDrone.Core.DecisionEngine
         {
             // some indexers add strings like -xpost to the release which can be ignored (it's not a release group)
 
-            var ignoredStrings = new string[] { "-xpost" };
-
-            foreach (var ignoredString in ignoredStrings)
+            foreach (var ignoredString in IgnoredStrings)
             {
                 if (releaseName.EndsWith(ignoredString, StringComparison.OrdinalIgnoreCase))
                 {
