@@ -171,7 +171,7 @@ namespace NzbDrone.Core.DecisionEngine
             }
             else
             {
-                // use original sorting logic if the releases are not equal
+                // Use original sorting logic if the releases are not equal
                 return CompareBy(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode =>
                 {
                     var ageHours = remoteEpisode.Release.AgeHours;
@@ -242,7 +242,7 @@ namespace NzbDrone.Core.DecisionEngine
 
         private string SanitizeReleaseName(string releaseName)
         {
-            // some indexers add strings like -xpost to the release which can be ignored (it's not a release group)
+            // Some indexers add strings like -xpost to the release which can be ignored
 
             foreach (var ignoredString in IgnoredStrings)
             {
