@@ -158,10 +158,10 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void should_order_by_age_then_largest_rounded_to_200mb()
         {
-            var remoteEpisodeSd = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.SDTV), Language.English, size: 100.Megabytes(), age: 1, releaseTitle: "Series.Title.S01E01.Pilot.1080p.WEB-DL-RLSGRP");
-            var remoteEpisodeHdSmallOld = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p), Language.English, size: 1200.Megabytes(), age: 1000, releaseTitle: "Series.Title.S01E01.Pilot.1080p.WEB-DL-RLSGRP");
-            var remoteEpisodeSmallYoung = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p), Language.English, size: 1250.Megabytes(), age: 10, releaseTitle: "Series.Title.S01E01.Pilot.1080p.WEB-DL-RLSGRP");
-            var remoteEpisodeHdLargeYoung = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p), Language.English, size: 3000.Megabytes(), age: 1, releaseTitle: "Series.Title.S01E01.Pilot.1080p.WEB-DL-RLSGRP");
+            var remoteEpisodeSd = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.SDTV), Language.English, size: 100.Megabytes(), age: 1, downloadProtocol: DownloadProtocol.Torrent);
+            var remoteEpisodeHdSmallOld = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p), Language.English, size: 1200.Megabytes(), age: 1000, downloadProtocol: DownloadProtocol.Torrent);
+            var remoteEpisodeSmallYoung = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p), Language.English, size: 1250.Megabytes(), age: 10, downloadProtocol: DownloadProtocol.Usenet, releaseTitle: "Series.Title.S01E01.Pilot.1080p.WEB-DL-RLSGRP");
+            var remoteEpisodeHdLargeYoung = GivenRemoteEpisode(new List<Episode> { GivenEpisode(1) }, new QualityModel(Quality.HDTV720p), Language.English, size: 3000.Megabytes(), age: 1, downloadProtocol: DownloadProtocol.Torrent);
 
             var decisions = new List<DownloadDecision>();
             decisions.Add(new DownloadDecision(remoteEpisodeSd));
