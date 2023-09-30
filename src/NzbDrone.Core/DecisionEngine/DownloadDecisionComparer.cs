@@ -199,7 +199,7 @@ namespace NzbDrone.Core.DecisionEngine
 
         private int CompareSize(DownloadDecision x, DownloadDecision y)
         {
-            var sizeCompare =  CompareBy(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode =>
+            var sizeCompare = CompareBy(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode =>
             {
                 var preferredSize = _qualityDefinitionService.Get(remoteEpisode.ParsedEpisodeInfo.Quality.Quality).PreferredSize;
 
@@ -222,22 +222,24 @@ namespace NzbDrone.Core.DecisionEngine
 
         private long GetRoundedSize(long size)
         {
-            if (size < 1.5.Gigabytes())
+            var roundingRules = new List<(long threshold, long roundTo)>
+                {
+                    (1.5.Gigabytes(), 200.Megabytes()),
+                    (3.5.Gigabytes(), 300.Megabytes()),
+                    (6.Gigabytes(), 450.Megabytes()),
+                    (15.Gigabytes(), 800.Megabytes()),
+                    (30.Gigabytes(), 1600.Megabytes())
+                };
+
+            foreach (var (threshold, roundTo) in roundingRules)
             {
-                return size.Round(200.Megabytes());
+                if (size < threshold)
+                {
+                    return size.Round(roundTo);
+                }
             }
-            else if (size < 2.5.Gigabytes())
-            {
-                return size.Round(300.Megabytes());
-            }
-            else if (size < 3.5.Gigabytes())
-            {
-                return size.Round(400.Megabytes());
-            }
-            else
-            {
-                return size.Round(550.Megabytes());
-            }
+
+            return size.Round(4500.Megabytes()); // Default rounding for sizes >= 30GB
         }
 
         private string SanitizeReleaseName(string releaseName)
