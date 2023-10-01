@@ -381,13 +381,13 @@ namespace NzbDrone.Core.Organizer
         {
             if (char.IsLetterOrDigit(title[0]))
             {
-                return title.Substring(0, 1).ToUpper();
+                return title.Substring(0, 1).ToUpper().RemoveAccent();
             }
 
             // try the second character if the first was non alphanumeric
             if (char.IsLetterOrDigit(title[1]))
             {
-                return title.Substring(1, 1).ToUpper();
+                return title.Substring(1, 1).ToUpper().RemoveAccent();
             }
 
             // default to "_" if no alphanumeric character can be found in the first 2 positions

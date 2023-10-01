@@ -40,7 +40,7 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
         [TestCase("좀비버스", "좀\\좀비버스")]
         [TestCase("¡Mucha Lucha!", "M\\¡Mucha Lucha!")]
         [TestCase(".hack", "H\\hack")]
-        [TestCase("Ütopya", "Ü\\Ütopya")]
+        [TestCase("Ütopya", "U\\Ütopya")]
 
         public void should_get_expected_folder_name_back(string title, string expected)
         {
