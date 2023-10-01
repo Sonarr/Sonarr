@@ -27,36 +27,37 @@ namespace NzbDrone.Core.ImportLists.Trakt.User
                 return listItems;
             }
 
-            var jsonResponse = new List<TraktSeriesResource>();
+            var traktSeries = new List<TraktSeriesResource>();
 
             if (_settings.TraktListType == (int)TraktUserListType.UserWatchedList)
             {
                 var jsonWatchedResponse = STJson.Deserialize<List<TraktWatchedResponse>>(_importResponse.Content);
+
                 switch (_settings.TraktWatchedListType)
                 {
                     case (int)TraktUserWatchedListType.InProgress:
-                        jsonResponse = jsonWatchedResponse.Where(c => c.Seasons.Where(s => s.Number > 0).Sum(s => s.Episodes.Count) < c.Show.AiredEpisodes).SelectList(c => c.Show);
+                        traktSeries = jsonWatchedResponse.Where(c => c.Seasons.Where(s => s.Number > 0).Sum(s => s.Episodes.Count) < c.Show.AiredEpisodes).SelectList(c => c.Show);
                         break;
                     case (int)TraktUserWatchedListType.CompletelyWatched:
-                        jsonResponse = jsonWatchedResponse.Where(c => c.Seasons.Where(s => s.Number > 0).Sum(s => s.Episodes.Count) == c.Show.AiredEpisodes).SelectList(c => c.Show);
+                        traktSeries = jsonWatchedResponse.Where(c => c.Seasons.Where(s => s.Number > 0).Sum(s => s.Episodes.Count) == c.Show.AiredEpisodes).SelectList(c => c.Show);
                         break;
                     default:
-                        jsonResponse = jsonWatchedResponse.SelectList(c => c.Show);
+                        traktSeries = jsonWatchedResponse.SelectList(c => c.Show);
                         break;
                 }
             }
             else
             {
-                jsonResponse = STJson.Deserialize<List<TraktResponse>>(_importResponse.Content).SelectList(c => c.Show);
+                traktSeries = STJson.Deserialize<List<TraktResponse>>(_importResponse.Content).SelectList(c => c.Show);
             }
 
-            // no series were return
-            if (jsonResponse == null)
+            // no series were returned
+            if (traktSeries == null)
             {
                 return listItems;
             }
 
-            foreach (var series in jsonResponse)
+            foreach (var series in traktSeries)
             {
                 listItems.AddIfNotNull(new ImportListItemInfo()
                 {

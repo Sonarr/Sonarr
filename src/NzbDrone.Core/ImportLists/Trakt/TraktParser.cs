@@ -22,20 +22,20 @@ namespace NzbDrone.Core.ImportLists.Trakt
                 return series;
             }
 
-            var jsonResponse = STJson.Deserialize<List<TraktResponse>>(_importResponse.Content);
+            var traktResponses = STJson.Deserialize<List<TraktResponse>>(_importResponse.Content);
 
-            // no series were return
-            if (jsonResponse == null)
+            // no series were returned
+            if (traktResponses == null)
             {
                 return series;
             }
 
-            foreach (var show in jsonResponse)
+            foreach (var traktResponse in traktResponses)
             {
                 series.AddIfNotNull(new ImportListItemInfo()
                 {
-                    Title = show.Show.Title,
-                    TvdbId = show.Show.Ids.Tvdb.GetValueOrDefault()
+                    Title = traktResponse.Show.Title,
+                    TvdbId = traktResponse.Show.Ids.Tvdb.GetValueOrDefault()
                 });
             }
 
