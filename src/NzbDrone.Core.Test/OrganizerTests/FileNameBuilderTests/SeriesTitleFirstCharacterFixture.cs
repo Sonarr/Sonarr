@@ -36,8 +36,11 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
         [TestCase("The Mist", "M\\The Mist")]
         [TestCase("A", "A\\A")]
         [TestCase("30 Rock", "3\\30 Rock")]
-        [TestCase("The '80s Greatest", "_\\The '80s Greatest")]
+        [TestCase("The '80s Greatest", "8\\The '80s Greatest")]
         [TestCase("좀비버스", "좀\\좀비버스")]
+        [TestCase("¡Mucha Lucha!", "M\\¡Mucha Lucha!")]
+        [TestCase(".hack", "H\\hack")]
+        [TestCase("Ütopya", "Ü\\Ütopya")]
 
         public void should_get_expected_folder_name_back(string title, string expected)
         {
