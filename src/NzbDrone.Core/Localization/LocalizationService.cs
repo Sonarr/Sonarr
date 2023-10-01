@@ -19,7 +19,6 @@ namespace NzbDrone.Core.Localization
     {
         Dictionary<string, string> GetLocalizationDictionary();
         string GetLocalizedString(string phrase);
-        string GetLocalizedString(string phrase, string language);
         string GetLanguageIdentifier();
     }
 
@@ -58,16 +57,24 @@ namespace NzbDrone.Core.Localization
             return GetLocalizedString(phrase, language);
         }
 
-        public string GetLocalizedString(string phrase, string language)
+        public string GetLanguageIdentifier()
+        {
+            var isoLanguage = IsoLanguages.Get((Language)_configService.UILanguage) ?? IsoLanguages.Get(Language.English);
+            var language = isoLanguage.TwoLetterCode;
+
+            if (isoLanguage.CountryCode.IsNotNullOrWhiteSpace())
+            {
+                language = $"{language}-{isoLanguage.CountryCode.ToUpperInvariant()}";
+            }
+
+            return language;
+        }
+
+        private string GetLocalizedString(string phrase, string language)
         {
             if (string.IsNullOrEmpty(phrase))
             {
                 throw new ArgumentNullException(nameof(phrase));
-            }
-
-            if (language.IsNullOrWhiteSpace())
-            {
-                language = GetLanguageFileName();
             }
 
             if (language == null)
@@ -83,19 +90,6 @@ namespace NzbDrone.Core.Localization
             }
 
             return phrase;
-        }
-
-        public string GetLanguageIdentifier()
-        {
-            var isoLanguage = IsoLanguages.Get((Language)_configService.UILanguage) ?? IsoLanguages.Get(Language.English);
-            var language = isoLanguage.TwoLetterCode;
-
-            if (isoLanguage.CountryCode.IsNotNullOrWhiteSpace())
-            {
-                language = $"{language}-{isoLanguage.CountryCode.ToUpperInvariant()}";
-            }
-
-            return language;
         }
 
         private string GetLanguageFileName()
