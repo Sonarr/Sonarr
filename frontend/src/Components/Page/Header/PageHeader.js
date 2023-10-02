@@ -81,6 +81,7 @@ class PageHeader extends Component {
             aria-label={translate('Donate')}
             to="https://sonarr.tv/donate.html"
             size={14}
+            title={translate('Donate')}
           />
           <PageHeaderActionsMenuConnector
             onKeyboardShortcutsPress={this.onOpenKeyboardShortcutsModal}

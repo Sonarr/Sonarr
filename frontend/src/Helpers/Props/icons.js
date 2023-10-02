@@ -162,6 +162,7 @@ export const KEYBOARD = farKeyboard;
 export const LOGOUT = fasSignOutAlt;
 export const MANAGE = fasListCheck;
 export const MEDIA_INFO = farFileInvoice;
+export const MENU = fasBars;
 export const MISSING = fasExclamationTriangle;
 export const MONITORED = fasBookmark;
 export const NETWORK = fasBroadcastTower;
