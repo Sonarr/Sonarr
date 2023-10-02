@@ -161,6 +161,9 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series-S07E12-31st_Century_Fox-[Bluray-1080p].mkv", "Series", 7, 12)]
         [TestCase("TheTitle-S12E13-3_Acts_of_God.mkv", "TheTitle", 12, 13)]
         [TestCase("Series Title - Temporada 2 [HDTV 720p][Cap.408]", "Series Title", 4, 8)]
+        [TestCase("Ahsoka [HDTV][Cap.104](wolfmax4k.com).avi", "Ahsoka", 1, 4)]
+        [TestCase("Sex Education [HDTV][Cap.402](wolfmax4k.com).avi", "Sex Education", 4, 2)]
+        [TestCase("The Walking Dead Daryl Dixon [HDTV 720p][Cap.101](wolfmax4k.com).mkv", "The Walking Dead Daryl Dixon", 1, 1)]
 
         // [TestCase("", "", 0, 0)]
         public void should_parse_single_episode(string postTitle, string title, int seasonNumber, int episodeNumber)

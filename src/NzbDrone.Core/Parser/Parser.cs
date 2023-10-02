@@ -363,7 +363,7 @@ namespace NzbDrone.Core.Parser
                     RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 // Spanish tracker releases
-                new Regex(@"^(?<title>.+?)(?:[-_. ]+?Temporada.+?\[Cap[-_.])(?<season>(?<!\d+)\d{1,2})(?<episode>(?<!e|x)(?:[1-9][0-9]|[0][1-9]))(?:\])",
+                new Regex(@"^(?<title>.+?)(?:(?:[-_. ]+?Temporada.+?|\[.+?\])\[Cap[-_.])(?<season>(?<!\d+)\d{1,2})(?<episode>(?<!e|x)(?:[1-9][0-9]|[0][1-9]))(?:\])",
                     RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 // Anime Range - Title Absolute Episode Number (ep01-12)
