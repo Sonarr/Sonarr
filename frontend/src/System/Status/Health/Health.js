@@ -72,6 +72,7 @@ function getInternalLink(source) {
 function getTestLink(source, props) {
   switch (source) {
     case 'IndexerStatusCheck':
+    case 'IndexerLongTermStatusCheck':
       return (
         <SpinnerIconButton
           name={icons.TEST}
