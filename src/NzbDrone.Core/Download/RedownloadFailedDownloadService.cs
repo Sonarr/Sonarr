@@ -5,6 +5,7 @@ using NzbDrone.Core.IndexerSearch;
 using NzbDrone.Core.Messaging;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
+using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Download
@@ -39,6 +40,12 @@ namespace NzbDrone.Core.Download
             if (!_configService.AutoRedownloadFailed)
             {
                 _logger.Debug("Auto redownloading failed episodes is disabled");
+                return;
+            }
+
+            if (message.ReleaseSource == ReleaseSourceType.InteractiveSearch && !_configService.AutoRedownloadFailedFromInteractiveSearch)
+            {
+                _logger.Debug("Auto redownloading failed episodes from interactive search is disabled");
                 return;
             }
 
