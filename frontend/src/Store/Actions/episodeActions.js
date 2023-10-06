@@ -40,32 +40,38 @@ export const defaultState = {
     {
       name: 'episodeNumber',
       label: '#',
-      isVisible: true
+      isVisible: true,
+      isSortable: true
     },
     {
       name: 'title',
       label: () => translate('Title'),
-      isVisible: true
+      isVisible: true,
+      isSortable: true
     },
     {
       name: 'path',
       label: () => translate('Path'),
-      isVisible: false
+      isVisible: false,
+      isSortable: true
     },
     {
       name: 'relativePath',
       label: () => translate('RelativePath'),
-      isVisible: false
+      isVisible: false,
+      isSortable: true
     },
     {
       name: 'airDateUtc',
       label: () => translate('AirDate'),
-      isVisible: true
+      isVisible: true,
+      isSortable: true
     },
     {
       name: 'runtime',
       label: () => translate('Runtime'),
-      isVisible: false
+      isVisible: false,
+      isSortable: true
     },
     {
       name: 'languages',
@@ -100,7 +106,8 @@ export const defaultState = {
     {
       name: 'size',
       label: () => translate('Size'),
-      isVisible: false
+      isVisible: false,
+      isSortable: true
     },
     {
       name: 'releaseGroup',
@@ -119,7 +126,8 @@ export const defaultState = {
         name: icons.SCORE,
         title: () => translate('CustomFormatScore')
       }),
-      isVisible: false
+      isVisible: false,
+      isSortable: true
     },
     {
       name: 'status',
@@ -136,7 +144,9 @@ export const defaultState = {
 };
 
 export const persistState = [
-  'episodes.columns'
+  'episodes.columns',
+  'episodes.sortDirection',
+  'episodes.sortKey'
 ];
 
 //
