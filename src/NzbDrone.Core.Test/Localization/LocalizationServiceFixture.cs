@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Test.Localization
         }
 
         [Test]
-        public void should_get_string_in_default_language_dictionary_if_no_lang_country_code_exists_and_string_exists()
+        public void should_get_string_in_french()
         {
             Mocker.GetMock<IConfigService>().Setup(m => m.UILanguage).Returns((int)Language.French);
 
