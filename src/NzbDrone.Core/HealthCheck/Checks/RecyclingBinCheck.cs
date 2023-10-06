@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Configuration;
@@ -33,7 +34,10 @@ namespace NzbDrone.Core.HealthCheck.Checks
             {
                 return new HealthCheck(GetType(),
                     HealthCheckResult.Error,
-                    string.Format(_localizationService.GetLocalizedString("RecycleBinUnableToWriteHealthCheckMessage"), recycleBin),
+                    _localizationService.GetLocalizedString("RecycleBinUnableToWriteHealthCheckMessage", new Dictionary<string, object>
+                    {
+                        { "path", recycleBin }
+                    }),
                     "#cannot-write-recycle-bin");
             }
 

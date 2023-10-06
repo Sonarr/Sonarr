@@ -13,7 +13,7 @@
     "ApplyTagsHelpTextHowToApplyIndexers": "Jak zastosować tagi do wybranych indeksatorów",
     "Authentication": "Autoryzacja",
     "BlocklistReleases": "Dodaj wersje do czarnej listy",
-    "ApiKeyValidationHealthCheckMessage": "Zaktualizuj swój klucz API aby był długi na co najmniej {0} znaków. Możesz to zrobić poprzez ustawienia lub plik konfiguracyjny",
+    "ApiKeyValidationHealthCheckMessage": "Zaktualizuj swój klucz API aby był długi na co najmniej {length} znaków. Możesz to zrobić poprzez ustawienia lub plik konfiguracyjny",
     "AudioInfo": "Informacje o audio",
     "AddAutoTagError": "Nie można dodać nowego tagu automatycznego, spróbuj ponownie.",
     "AddConditionError": "Nie można dodać nowego warunku, spróbuj ponownie.",

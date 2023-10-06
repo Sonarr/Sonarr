@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using NLog;
 using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Core.Download;
@@ -44,7 +45,10 @@ namespace NzbDrone.Core.HealthCheck.Checks
                     {
                         return new HealthCheck(GetType(),
                             HealthCheckResult.Warning,
-                            string.Format(_localizationService.GetLocalizedString("DownloadClientRemovesCompletedDownloadsHealthCheckMessage"), clientName, "Sonarr"),
+                            _localizationService.GetLocalizedString("DownloadClientRemovesCompletedDownloadsHealthCheckMessage", new Dictionary<string, object>
+                            {
+                                { "downloadClientName", clientName }
+                            }),
                             "#download-client-removes-completed-downloads");
                     }
                 }

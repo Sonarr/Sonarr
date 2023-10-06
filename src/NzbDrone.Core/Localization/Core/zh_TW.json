@@ -1,6 +1,6 @@
 {
     "BlocklistRelease": "封鎖清單版本",
     "BlocklistReleases": "封鎖清單版本",
-    "ApiKeyValidationHealthCheckMessage": "請將您的API金鑰更新為至少{0}個字元長。您可以通過設定或配置文件進行此操作。",
+    "ApiKeyValidationHealthCheckMessage": "請將您的API金鑰更新為至少{length}個字元長。您可以通過設定或配置文件進行此操作。",
     "AppDataLocationHealthCheckMessage": "為了避免在更新過程中刪除AppData，將無法進行更新。"
 }

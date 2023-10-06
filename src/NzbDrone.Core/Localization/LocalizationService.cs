@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Common.Cache;
@@ -18,13 +19,17 @@ namespace NzbDrone.Core.Localization
     public interface ILocalizationService
     {
         Dictionary<string, string> GetLocalizationDictionary();
+
         string GetLocalizedString(string phrase);
+        string GetLocalizedString(string phrase, Dictionary<string, object> tokens);
         string GetLanguageIdentifier();
     }
 
     public class LocalizationService : ILocalizationService, IHandleAsync<ConfigSavedEvent>
     {
         private const string DefaultCulture = "en";
+        private static readonly Regex TokenRegex = new Regex(@"(?:\{)(?<token>[a-z0-9]+)(?:\})",
+            RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
 
         private readonly ICached<Dictionary<string, string>> _cache;
 
@@ -52,9 +57,31 @@ namespace NzbDrone.Core.Localization
 
         public string GetLocalizedString(string phrase)
         {
+            return GetLocalizedString(phrase, new Dictionary<string, object>());
+        }
+
+        public string GetLocalizedString(string phrase, Dictionary<string, object> tokens)
+        {
             var language = GetLanguageFileName();
 
-            return GetLocalizedString(phrase, language);
+            if (string.IsNullOrEmpty(phrase))
+            {
+                throw new ArgumentNullException(nameof(phrase));
+            }
+
+            if (language == null)
+            {
+                language = DefaultCulture;
+            }
+
+            var dictionary = GetLocalizationDictionary(language);
+
+            if (dictionary.TryGetValue(phrase, out var value))
+            {
+                return ReplaceTokens(value, tokens);
+            }
+
+            return phrase;
         }
 
         public string GetLanguageIdentifier()
@@ -70,26 +97,18 @@ namespace NzbDrone.Core.Localization
             return language;
         }
 
-        private string GetLocalizedString(string phrase, string language)
+        private string ReplaceTokens(string input, Dictionary<string, object> tokens)
         {
-            if (string.IsNullOrEmpty(phrase))
+            tokens.TryAdd("appName", "Sonarr");
+
+            return TokenRegex.Replace(input, (match) =>
             {
-                throw new ArgumentNullException(nameof(phrase));
-            }
+                var tokenName = match.Groups["token"].Value;
 
-            if (language == null)
-            {
-                language = DefaultCulture;
-            }
+                tokens.TryGetValue(tokenName, out var token);
 
-            var dictionary = GetLocalizationDictionary(language);
-
-            if (dictionary.TryGetValue(phrase, out var value))
-            {
-                return value;
-            }
-
-            return phrase;
+                return token?.ToString() ?? $"{{{tokenName}}}";
+            });
         }
 
         private string GetLanguageFileName()

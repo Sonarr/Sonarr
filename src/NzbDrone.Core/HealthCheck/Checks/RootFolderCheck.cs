@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
@@ -42,13 +43,23 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 {
                     return new HealthCheck(GetType(),
                         HealthCheckResult.Error,
-                        string.Format(_localizationService.GetLocalizedString("RootFolderMissingHealthCheckMessage"), missingRootFolders.First()),
+                        _localizationService.GetLocalizedString(
+                            "RootFolderMissingHealthCheckMessage",
+                            new Dictionary<string, object>
+                            {
+                                { "rootFolderPath", missingRootFolders.First() }
+                            }),
                         "#missing-root-folder");
                 }
 
                 return new HealthCheck(GetType(),
                     HealthCheckResult.Error,
-                    string.Format(_localizationService.GetLocalizedString("RootFolderMultipleMissingHealthCheckMessage"), string.Join(" | ", missingRootFolders)),
+                    _localizationService.GetLocalizedString(
+                        "RootFolderMultipleMissingHealthCheckMessage",
+                        new Dictionary<string, object>
+                        {
+                            { "rootFolderPaths", string.Join(" | ", missingRootFolders) }
+                        }),
                     "#missing-root-folder");
             }
 

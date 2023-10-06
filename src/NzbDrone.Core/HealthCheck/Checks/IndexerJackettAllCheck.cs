@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Indexers;
@@ -41,7 +42,10 @@ namespace NzbDrone.Core.HealthCheck.Checks
 
             return new HealthCheck(GetType(),
                 HealthCheckResult.Warning,
-                string.Format(_localizationService.GetLocalizedString("IndexerJackettAllHealthCheckMessage"), string.Join(", ", jackettAllProviders.Select(i => i.Name))),
+                _localizationService.GetLocalizedString("IndexerJackettAllHealthCheckMessage", new Dictionary<string, object>
+                {
+                    { "indexerNames", string.Join(", ", jackettAllProviders.Select(i => i.Name)) }
+                }),
                 "#jackett-all-endpoint-used");
         }
     }
