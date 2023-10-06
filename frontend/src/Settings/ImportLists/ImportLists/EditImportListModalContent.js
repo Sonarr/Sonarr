@@ -46,6 +46,7 @@ function EditImportListModalContent(props) {
     implementationName,
     name,
     enableAutomaticAdd,
+    searchForMissingEpisodes,
     minRefreshInterval,
     shouldMonitor,
     rootFolderPath,
@@ -109,6 +110,18 @@ function EditImportListModalContent(props) {
                   name="enableAutomaticAdd"
                   helpText={translate('EnableAutomaticAddHelpText')}
                   {...enableAutomaticAdd}
+                  onChange={onInputChange}
+                />
+              </FormGroup>
+
+              <FormGroup>
+                <FormLabel>{translate('ImportListSearchForMissingEpisodes')}</FormLabel>
+
+                <FormInputGroup
+                  type={inputTypes.CHECK}
+                  name="searchForMissingEpisodes"
+                  helpText={translate('EnableAutomaticAddHelpText')}
+                  {...searchForMissingEpisodes}
                   onChange={onInputChange}
                 />
               </FormGroup>

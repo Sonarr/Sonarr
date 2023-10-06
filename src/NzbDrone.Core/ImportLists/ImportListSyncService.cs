@@ -163,7 +163,7 @@ namespace NzbDrone.Core.ImportLists
                         Tags = importList.Tags,
                         AddOptions = new AddSeriesOptions
                                      {
-                                         SearchForMissingEpisodes = monitored,
+                                         SearchForMissingEpisodes = importList.SearchForMissingEpisodes,
                                          Monitor = importList.ShouldMonitor
                                      }
                     });

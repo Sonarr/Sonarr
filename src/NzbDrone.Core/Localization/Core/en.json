@@ -612,6 +612,8 @@
   "ImportListExclusionsLoadError": "Unable to load Import List Exclusions",
   "ImportListRootFolderMissingRootHealthCheckMessage": "Missing root folder for import list(s): {0}",
   "ImportListRootFolderMultipleMissingRootsHealthCheckMessage": "Multiple root folders are missing for import lists: {0}",
+  "ImportListSearchForMissingEpisodes": "Search for Missing Episodes",
+  "ImportListSearchForMissingEpisodesHelpText": "After series is added to {appName} automatically search for missing episodes",
   "ImportListSettings": "Import List Settings",
   "ImportListStatusAllUnavailableHealthCheckMessage": "All lists are unavailable due to failures",
   "ImportListStatusUnavailableHealthCheckMessage": "Lists unavailable due to failures: {0}",
