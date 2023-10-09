@@ -149,5 +149,21 @@
     "RemoveSelectedItemsQueueMessageText": "Вы действительно хотите удалить {selectedCount} элементов из очереди?",
     "AuthenticationMethod": "Способ авторизации",
     "AuthenticationRequiredPasswordHelpTextWarning": "Введите новый пароль",
-    "AuthenticationRequiredUsernameHelpTextWarning": "Введите новое имя пользователя"
+    "AuthenticationRequiredUsernameHelpTextWarning": "Введите новое имя пользователя",
+    "Activity": "Активность",
+    "Add": "Добавить",
+    "Actions": "Действия",
+    "About": "Об",
+    "AddConnection": "Добавить подключение",
+    "AddConditionError": "Невозможно добавить новое условие, попробуйте еще раз.",
+    "AddCustomFormat": "Добавить свой формат",
+    "AddCondition": "Добавить условие",
+    "AddCustomFormatError": "Невозможно добавить новый пользовательский формат, попробуйте ещё раз.",
+    "AddDelayProfile": "Добавить профиль задержки",
+    "AddDownloadClient": "Добавить программу для скачивания",
+    "AddDownloadClientError": "Не удалось добавить новый клиент загрузки, попробуйте еще раз.",
+    "AddConnectionImplementation": "Добавить подключение - {implementationName}",
+    "AddCustomFilter": "Добавить специальный фильтр",
+    "Absolute": "Абсолютный",
+    "AddConditionImplementation": "Добавить условие - {implementationName}"
 }

@@ -44,7 +44,7 @@
     "Authentication": "Autenticación",
     "AuthForm": "Formularios (página de inicio de sesión)",
     "AuthenticationMethodHelpText": "Requerir nombre de usuario y contraseña para acceder {appName}",
-    "AuthenticationRequired": "Autenticación Requerida",
+    "AuthenticationRequired": "Autenticación requerida",
     "AutoTaggingLoadError": "No se pudo cargar el etiquetado automático",
     "AutoRedownloadFailedHelpText": "Buscar e intentar descargar automáticamente una versión diferente",
     "Backup": "Copia de seguridad",
@@ -216,7 +216,16 @@
     "ImportScriptPath": "Importar Ruta de Script",
     "Absolute": "Absoluto",
     "AddANewPath": "Añadir una nueva ruta",
-    "AddConditionImplementation": "",
-    "AppUpdated": "{appName} Actualizado",
-    "AutomaticUpdatesDisabledDocker": "Las actualizaciones automáticas no son compatibles directamente al usar el mecanismo de actualización de Docker. Deberás actualizar la imagen del contenedor fuera de {appName} o utilizar un script"
+    "AddConditionImplementation": "Añadir Condición - {implementationName}",
+    "AppUpdated": "{appName} Actualizada",
+    "AutomaticUpdatesDisabledDocker": "Las actualizaciones automáticas no están soportadas directamente cuando se utiliza el mecanismo de actualización de Docker. Tendrá que actualizar la imagen del contenedor fuera de {appName} o utilizar un script",
+    "AuthenticationRequiredHelpText": "Cambiar para que las solicitudes requieran autenticación. No lo cambie a menos que entienda los riesgos.",
+    "AuthenticationRequiredWarning": "Para evitar el acceso remoto sin autenticación, {appName} ahora requiere que la autenticación esté habilitada. Opcionalmente puede desactivar la autenticación desde una dirección local.",
+    "AuthenticationRequiredPasswordHelpTextWarning": "Introduzca una nueva contraseña",
+    "AuthenticationRequiredUsernameHelpTextWarning": "Introduzca un nuevo nombre de usuario",
+    "AuthenticationMethod": "Método de autenticación",
+    "AddConnectionImplementation": "Añadir Conexión - {implementationName}",
+    "AddDownloadClientImplementation": "Añadir Cliente de Descarga - {implementationName}",
+    "VideoDynamicRange": "Video de Rango Dinámico",
+    "AuthenticationMethodHelpTextWarning": "Por favor selecciona un método válido de autenticación"
 }
