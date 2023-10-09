@@ -72,5 +72,6 @@
     "AddIndexer": "Voeg Indexeerder Toe",
     "AddIndexerImplementation": "Indexeerder toevoegen - {implementationName}",
     "UpdateMechanismHelpText": "Gebruik de ingebouwde updater van {appName} of een script",
-    "CalendarOptions": "Kalender Opties"
+    "CalendarOptions": "Kalender Opties",
+    "DeleteQualityProfileMessageText": "Bent u zeker dat u het kwaliteitsprofiel {name} wilt verwijderen?"
 }
