@@ -390,7 +390,7 @@ namespace NzbDrone.Core.Organizer
                 return title.Substring(1, 1).ToUpper().RemoveAccent();
             }
 
-            // default to "_" if no alphanumeric character can be found in the first 2 positions
+            // Default to "_" if no alphanumeric character can be found in the first 2 positions
             return "_";
         }
 
