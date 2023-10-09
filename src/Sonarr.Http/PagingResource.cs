@@ -12,7 +12,6 @@ namespace Sonarr.Http
         public int? PageSize { get; set; }
         public string SortKey { get; set; }
         public SortDirection? SortDirection { get; set; }
-        public List<PagingResourceFilter> Filters { get; set; }
     }
 
     public class PagingResource<TResource>
@@ -21,8 +20,6 @@ namespace Sonarr.Http
         public int PageSize { get; set; }
         public string SortKey { get; set; }
         public SortDirection SortDirection { get; set; }
-        public List<PagingResourceFilter> Filters { get; set; }
-
         public int TotalRecords { get; set; }
         public List<TResource> Records { get; set; }
 
@@ -36,7 +33,6 @@ namespace Sonarr.Http
             PageSize = requestResource.PageSize ?? 10;
             SortKey = requestResource.SortKey;
             SortDirection = requestResource.SortDirection ?? SortDirection.Descending;
-            Filters = requestResource.Filters ?? new List<PagingResourceFilter>();
         }
     }
 
