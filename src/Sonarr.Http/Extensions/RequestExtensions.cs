@@ -4,7 +4,6 @@ using System.Linq;
 using Microsoft.AspNetCore.Http;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Exceptions;
 
 namespace Sonarr.Http.Extensions
 {
