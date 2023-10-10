@@ -189,6 +189,11 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
                 series.Year = series.FirstAired.Value.Year;
             }
 
+            if (show.LastAired != null)
+            {
+                series.LastAired = DateTime.ParseExact(show.LastAired, "yyyy-MM-dd", DateTimeFormatInfo.InvariantInfo, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
+            }
+
             series.Overview = show.Overview;
 
             if (show.Runtime != null)

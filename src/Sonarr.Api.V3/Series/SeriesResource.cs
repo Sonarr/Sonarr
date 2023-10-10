@@ -51,6 +51,7 @@ namespace Sonarr.Api.V3.Series
         public int TvRageId { get; set; }
         public int TvMazeId { get; set; }
         public DateTime? FirstAired { get; set; }
+        public DateTime? LastAired { get; set; }
         public SeriesTypes SeriesType { get; set; }
         public string CleanTitle { get; set; }
         public string ImdbId { get; set; }
@@ -121,6 +122,7 @@ namespace Sonarr.Api.V3.Series
                        TvRageId = model.TvRageId,
                        TvMazeId = model.TvMazeId,
                        FirstAired = model.FirstAired,
+                       LastAired = model.LastAired,
                        SeriesType = model.SeriesType,
                        CleanTitle = model.CleanTitle,
                        ImdbId = model.ImdbId,

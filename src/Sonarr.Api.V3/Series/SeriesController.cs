@@ -245,6 +245,9 @@ namespace Sonarr.Api.V3.Series
 
         private void LinkSeriesStatistics(SeriesResource resource, SeriesStatistics seriesStatistics)
         {
+            // Only set last aired from statistics if it's missing from the series itself
+            resource.LastAired ??= seriesStatistics.LastAired;
+
             resource.PreviousAiring = seriesStatistics.PreviousAiring;
             resource.NextAiring = seriesStatistics.NextAiring;
             resource.Statistics = seriesStatistics.ToResource(resource.Seasons);

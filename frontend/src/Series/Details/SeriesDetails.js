@@ -190,7 +190,7 @@ class SeriesDetails extends Component {
       genres,
       tags,
       year,
-      previousAiring,
+      lastAired,
       isSaving,
       isRefreshing,
       isSearching,
@@ -227,7 +227,7 @@ class SeriesDetails extends Component {
     } = this.state;
 
     const statusDetails = getSeriesStatusDetails(status);
-    const runningYears = statusDetails.title === translate('Ended') ? `${year}-${getDateYear(previousAiring)}` : `${year}-`;
+    const runningYears = statusDetails.title === translate('Ended') ? `${year}-${getDateYear(lastAired)}` : `${year}-`;
 
     let episodeFilesCountMessage = translate('SeriesDetailsNoEpisodeFiles');
 
@@ -711,6 +711,7 @@ SeriesDetails.propTypes = {
   genres: PropTypes.arrayOf(PropTypes.string).isRequired,
   tags: PropTypes.arrayOf(PropTypes.number).isRequired,
   year: PropTypes.number.isRequired,
+  lastAired: PropTypes.string,
   previousAiring: PropTypes.string,
   isSaving: PropTypes.bool.isRequired,
   saveError: PropTypes.object,

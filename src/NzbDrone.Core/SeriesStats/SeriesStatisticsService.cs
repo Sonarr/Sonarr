@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace NzbDrone.Core.SeriesStats
@@ -52,9 +52,11 @@ namespace NzbDrone.Core.SeriesStats
 
             var nextAiring = seasonStatistics.Where(s => s.NextAiring != null).MinBy(s => s.NextAiring);
             var previousAiring = seasonStatistics.Where(s => s.PreviousAiring != null).MaxBy(s => s.PreviousAiring);
+            var lastAired = seasonStatistics.Where(s => s.SeasonNumber > 0 && s.LastAired != null).MaxBy(s => s.LastAired);
 
             seriesStatistics.NextAiringString = nextAiring?.NextAiringString;
             seriesStatistics.PreviousAiringString = previousAiring?.PreviousAiringString;
+            seriesStatistics.LastAiredString = lastAired?.LastAiredString;
 
             return seriesStatistics;
         }

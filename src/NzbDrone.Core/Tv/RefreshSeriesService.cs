@@ -104,6 +104,7 @@ namespace NzbDrone.Core.Tv
             series.Images = seriesInfo.Images;
             series.Network = seriesInfo.Network;
             series.FirstAired = seriesInfo.FirstAired;
+            series.LastAired = seriesInfo.LastAired;
             series.Ratings = seriesInfo.Ratings;
             series.Actors = seriesInfo.Actors;
             series.Genres = seriesInfo.Genres;

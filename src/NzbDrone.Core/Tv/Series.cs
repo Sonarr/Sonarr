@@ -48,6 +48,7 @@ namespace NzbDrone.Core.Tv
         public string RootFolderPath { get; set; }
         public DateTime Added { get; set; }
         public DateTime? FirstAired { get; set; }
+        public DateTime? LastAired { get; set; }
         public LazyLoaded<QualityProfile> QualityProfile { get; set; }
         public Language OriginalLanguage { get; set; }
 
