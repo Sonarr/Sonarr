@@ -39,7 +39,14 @@ namespace Sonarr.Api.V3.Wanted
                 SortDirection = pagingResource.SortDirection
             };
 
-            pagingSpec.FilterExpressions.Add(v => v.Monitored == monitored || v.Series.Monitored == monitored);
+            if (monitored)
+            {
+                pagingSpec.FilterExpressions.Add(v => v.Monitored == true && v.Series.Monitored == true);
+            }
+            else
+            {
+                pagingSpec.FilterExpressions.Add(v => v.Monitored == false || v.Series.Monitored == false);
+            }
 
             var resource = pagingSpec.ApplyToPage(_episodeCutoffService.EpisodesWhereCutoffUnmet, v => MapToResource(v, includeSeries, includeEpisodeFile, includeImages));
 
