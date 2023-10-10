@@ -7637,7 +7637,7 @@
             "type": "array",
             "items": {
               "type": "object",
-              "additionalProperties": {}
+              "additionalProperties": { }
             },
             "nullable": true
           }
@@ -7855,6 +7855,9 @@
             "type": "boolean"
           },
           "autoRedownloadFailed": {
+            "type": "boolean"
+          },
+          "autoRedownloadFailedFromInteractiveSearch": {
             "type": "boolean"
           }
         },
@@ -8729,6 +8732,9 @@
             "nullable": true
           },
           "enableAutomaticAdd": {
+            "type": "boolean"
+          },
+          "searchForMissingEpisodes": {
             "type": "boolean"
           },
           "shouldMonitor": {
@@ -11821,10 +11827,10 @@
   },
   "security": [
     {
-      "X-Api-Key": []
+      "X-Api-Key": [ ]
     },
     {
-      "apikey": []
+      "apikey": [ ]
     }
   ]
 }
