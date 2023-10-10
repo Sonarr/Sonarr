@@ -135,9 +135,9 @@ namespace Sonarr.Api.V3.Queue
 
         [HttpGet]
         [Produces("application/json")]
-        public PagingResource<QueueResource> GetQueue(bool includeUnknownSeriesItems = false, bool includeSeries = false, bool includeEpisode = false)
+        public PagingResource<QueueResource> GetQueue([FromQuery] PagingRequestResource paging, bool includeUnknownSeriesItems = false, bool includeSeries = false, bool includeEpisode = false)
         {
-            var pagingResource = Request.ReadPagingResourceFromRequest<QueueResource>();
+            var pagingResource = new PagingResource<QueueResource>(paging);
             var pagingSpec = pagingResource.MapToPagingSpec<QueueResource, NzbDrone.Core.Queue.Queue>("timeleft", SortDirection.Ascending);
 
             return pagingSpec.ApplyToPage((spec) => GetQueue(spec, includeUnknownSeriesItems), (q) => MapToResource(q, includeSeries, includeEpisode));

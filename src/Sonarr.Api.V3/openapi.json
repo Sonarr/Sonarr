@@ -59,25 +59,25 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "Username": {
+                  "username": {
                     "type": "string"
                   },
-                  "Password": {
+                  "password": {
                     "type": "string"
                   },
-                  "RememberMe": {
+                  "rememberMe": {
                     "type": "string"
                   }
                 }
               },
               "encoding": {
-                "Username": {
+                "username": {
                   "style": "form"
                 },
-                "Password": {
+                "password": {
                   "style": "form"
                 },
-                "RememberMe": {
+                "rememberMe": {
                   "style": "form"
                 }
               }
@@ -380,6 +380,40 @@
       "get": {
         "tags": [
           "Blocklist"
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          },
+          {
+            "name": "sortKey",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortDirection",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/SortDirection"
+            }
+          }
         ],
         "responses": {
           "200": {
@@ -1051,6 +1085,38 @@
         ],
         "parameters": [
           {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          },
+          {
+            "name": "sortKey",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortDirection",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/SortDirection"
+            }
+          },
+          {
             "name": "includeSeries",
             "in": "query",
             "schema": {
@@ -1072,6 +1138,14 @@
             "schema": {
               "type": "boolean",
               "default": false
+            }
+          },
+          {
+            "name": "monitored",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": true
             }
           }
         ],
@@ -2221,6 +2295,38 @@
         ],
         "parameters": [
           {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          },
+          {
+            "name": "sortKey",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortDirection",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/SortDirection"
+            }
+          },
+          {
             "name": "includeSeries",
             "in": "query",
             "schema": {
@@ -2232,6 +2338,29 @@
             "in": "query",
             "schema": {
               "type": "boolean"
+            }
+          },
+          {
+            "name": "eventType",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "episodeId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "downloadId",
+            "in": "query",
+            "schema": {
+              "type": "string"
             }
           }
         ],
@@ -3627,6 +3756,47 @@
         "tags": [
           "Log"
         ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          },
+          {
+            "name": "sortKey",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortDirection",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/SortDirection"
+            }
+          },
+          {
+            "name": "level",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Success",
@@ -4143,6 +4313,38 @@
         ],
         "parameters": [
           {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          },
+          {
+            "name": "sortKey",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortDirection",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/SortDirection"
+            }
+          },
+          {
             "name": "includeSeries",
             "in": "query",
             "schema": {
@@ -4156,6 +4358,14 @@
             "schema": {
               "type": "boolean",
               "default": false
+            }
+          },
+          {
+            "name": "monitored",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": true
             }
           }
         ],
@@ -4325,21 +4535,21 @@
         ],
         "parameters": [
           {
-            "name": "RenameEpisodes",
+            "name": "renameEpisodes",
             "in": "query",
             "schema": {
               "type": "boolean"
             }
           },
           {
-            "name": "ReplaceIllegalCharacters",
+            "name": "replaceIllegalCharacters",
             "in": "query",
             "schema": {
               "type": "boolean"
             }
           },
           {
-            "name": "ColonReplacementFormat",
+            "name": "colonReplacementFormat",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -4347,7 +4557,7 @@
             }
           },
           {
-            "name": "MultiEpisodeStyle",
+            "name": "multiEpisodeStyle",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -4355,91 +4565,91 @@
             }
           },
           {
-            "name": "StandardEpisodeFormat",
+            "name": "standardEpisodeFormat",
             "in": "query",
             "schema": {
               "type": "string"
             }
           },
           {
-            "name": "DailyEpisodeFormat",
+            "name": "dailyEpisodeFormat",
             "in": "query",
             "schema": {
               "type": "string"
             }
           },
           {
-            "name": "AnimeEpisodeFormat",
+            "name": "animeEpisodeFormat",
             "in": "query",
             "schema": {
               "type": "string"
             }
           },
           {
-            "name": "SeriesFolderFormat",
+            "name": "seriesFolderFormat",
             "in": "query",
             "schema": {
               "type": "string"
             }
           },
           {
-            "name": "SeasonFolderFormat",
+            "name": "seasonFolderFormat",
             "in": "query",
             "schema": {
               "type": "string"
             }
           },
           {
-            "name": "SpecialsFolderFormat",
+            "name": "specialsFolderFormat",
             "in": "query",
             "schema": {
               "type": "string"
             }
           },
           {
-            "name": "IncludeSeriesTitle",
+            "name": "includeSeriesTitle",
             "in": "query",
             "schema": {
               "type": "boolean"
             }
           },
           {
-            "name": "IncludeEpisodeTitle",
+            "name": "includeEpisodeTitle",
             "in": "query",
             "schema": {
               "type": "boolean"
             }
           },
           {
-            "name": "IncludeQuality",
+            "name": "includeQuality",
             "in": "query",
             "schema": {
               "type": "boolean"
             }
           },
           {
-            "name": "ReplaceSpaces",
+            "name": "replaceSpaces",
             "in": "query",
             "schema": {
               "type": "boolean"
             }
           },
           {
-            "name": "Separator",
+            "name": "separator",
             "in": "query",
             "schema": {
               "type": "string"
             }
           },
           {
-            "name": "NumberStyle",
+            "name": "numberStyle",
             "in": "query",
             "schema": {
               "type": "string"
             }
           },
           {
-            "name": "Id",
+            "name": "id",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -4447,7 +4657,7 @@
             }
           },
           {
-            "name": "ResourceName",
+            "name": "resourceName",
             "in": "query",
             "schema": {
               "type": "string"
@@ -5212,6 +5422,38 @@
           "Queue"
         ],
         "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          },
+          {
+            "name": "sortKey",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortDirection",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/SortDirection"
+            }
+          },
           {
             "name": "includeUnknownSeriesItems",
             "in": "query",
@@ -7185,13 +7427,6 @@
           "sortDirection": {
             "$ref": "#/components/schemas/SortDirection"
           },
-          "filters": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PagingResourceFilter"
-            },
-            "nullable": true
-          },
           "totalRecords": {
             "type": "integer",
             "format": "int32"
@@ -7402,7 +7637,7 @@
             "type": "array",
             "items": {
               "type": "object",
-              "additionalProperties": { }
+              "additionalProperties": {}
             },
             "nullable": true
           }
@@ -7951,13 +8186,6 @@
           "sortDirection": {
             "$ref": "#/components/schemas/SortDirection"
           },
-          "filters": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PagingResourceFilter"
-            },
-            "nullable": true
-          },
           "totalRecords": {
             "type": "integer",
             "format": "int32"
@@ -8199,13 +8427,6 @@
           },
           "sortDirection": {
             "$ref": "#/components/schemas/SortDirection"
-          },
-          "filters": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PagingResourceFilter"
-            },
-            "nullable": true
           },
           "totalRecords": {
             "type": "integer",
@@ -8891,13 +9112,6 @@
           "sortDirection": {
             "$ref": "#/components/schemas/SortDirection"
           },
-          "filters": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PagingResourceFilter"
-            },
-            "nullable": true
-          },
           "totalRecords": {
             "type": "integer",
             "format": "int32"
@@ -9549,20 +9763,6 @@
         },
         "additionalProperties": false
       },
-      "PagingResourceFilter": {
-        "type": "object",
-        "properties": {
-          "key": {
-            "type": "string",
-            "nullable": true
-          },
-          "value": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
       "ParseResource": {
         "type": "object",
         "properties": {
@@ -10095,13 +10295,6 @@
           },
           "sortDirection": {
             "$ref": "#/components/schemas/SortDirection"
-          },
-          "filters": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PagingResourceFilter"
-            },
-            "nullable": true
           },
           "totalRecords": {
             "type": "integer",
@@ -11628,10 +11821,10 @@
   },
   "security": [
     {
-      "X-Api-Key": [ ]
+      "X-Api-Key": []
     },
     {
-      "apikey": [ ]
+      "apikey": []
     }
   ]
 }

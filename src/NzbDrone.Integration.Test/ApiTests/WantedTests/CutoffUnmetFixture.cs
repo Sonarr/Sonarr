@@ -56,7 +56,7 @@ namespace NzbDrone.Integration.Test.ApiTests.WantedTests
             var series = EnsureSeries(266189, "The Blacklist", false);
             EnsureEpisodeFile(series, 1, 1, Quality.SDTV);
 
-            var result = WantedCutoffUnmet.GetPaged(0, 15, "airDateUtc", "desc", "monitored", "false");
+            var result = WantedCutoffUnmet.GetPaged(0, 15, "airDateUtc", "desc", "monitored", false);
 
             result.Records.Should().NotBeEmpty();
         }
