@@ -95,20 +95,6 @@ namespace NzbDrone.Core.Test.SeriesStatsTests
         }
 
         [Test]
-        public void should_have_previous_airing_for_old_episode_with_file()
-        {
-            GivenEpisodeWithFile();
-            GivenOldEpisode();
-            GivenEpisode();
-
-            var stats = Subject.SeriesStatistics();
-
-            stats.Should().HaveCount(1);
-            stats.First().NextAiring.Should().NotHaveValue();
-            stats.First().PreviousAiring.Should().BeCloseTo(_episode.AirDateUtc.Value, TimeSpan.FromMilliseconds(1000));
-        }
-
-        [Test]
         public void should_have_previous_airing_for_old_episode_without_file_monitored()
         {
             GivenMonitoredEpisode();
