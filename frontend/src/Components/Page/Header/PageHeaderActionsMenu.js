@@ -24,6 +24,7 @@ function PageHeaderActionsMenu(props) {
         <MenuButton className={styles.menuButton} aria-label="Menu Button">
           <Icon
             name={icons.INTERACTIVE}
+            title={translate('Menu')}
           />
         </MenuButton>
 
