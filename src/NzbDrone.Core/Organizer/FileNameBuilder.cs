@@ -377,6 +377,23 @@ namespace NzbDrone.Core.Organizer
             return title;
         }
 
+        public static string TitleFirstCharacter(string title)
+        {
+            if (char.IsLetterOrDigit(title[0]))
+            {
+                return title.Substring(0, 1).ToUpper().RemoveAccent();
+            }
+
+            // Try the second character if the first was non alphanumeric
+            if (char.IsLetterOrDigit(title[1]))
+            {
+                return title.Substring(1, 1).ToUpper().RemoveAccent();
+            }
+
+            // Default to "_" if no alphanumeric character can be found in the first 2 positions
+            return "_";
+        }
+
         public static string CleanFileName(string name)
         {
             return CleanFileName(name, NamingConfig.Default);
@@ -452,7 +469,7 @@ namespace NzbDrone.Core.Organizer
             tokenHandlers["{Series TitleWithoutYear}"] = m => TitleWithoutYear(series.Title);
             tokenHandlers["{Series TitleTheYear}"] = m => TitleYear(TitleThe(series.Title), series.Year);
             tokenHandlers["{Series TitleTheWithoutYear}"] = m => TitleWithoutYear(TitleThe(series.Title));
-            tokenHandlers["{Series TitleFirstCharacter}"] = m => TitleThe(series.Title).Substring(0, 1).FirstCharToUpper();
+            tokenHandlers["{Series TitleFirstCharacter}"] = m => TitleFirstCharacter(TitleThe(series.Title));
             tokenHandlers["{Series Year}"] = m => series.Year.ToString();
         }
 
