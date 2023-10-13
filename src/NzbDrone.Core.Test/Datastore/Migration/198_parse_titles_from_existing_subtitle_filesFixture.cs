@@ -69,7 +69,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                 });
             });
 
-            var files = db.Query<SubtitleFile197>("SELECT * FROM \"SubtitleFiles\"").ToList();
+            var files = db.Query<SubtitleFile198>("SELECT * FROM \"SubtitleFiles\"").ToList();
 
             files.Should().HaveCount(1);
 
@@ -78,7 +78,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
         }
     }
 
-    public class SubtitleFile197
+    public class SubtitleFile198
     {
         public int Id { get; set; }
         public int SeriesId { get; set; }

@@ -9,7 +9,7 @@ using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Datastore.Migration
 {
-    [Migration(197)]
+    [Migration(198)]
     public class parse_title_from_existing_subtitle_files : NzbDroneMigrationBase
     {
         protected override void MainDbUpgrade()
