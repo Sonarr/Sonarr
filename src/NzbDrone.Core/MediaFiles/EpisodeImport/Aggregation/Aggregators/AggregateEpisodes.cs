@@ -10,6 +10,8 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators
 {
     public class AggregateEpisodes : IAggregateLocalEpisode
     {
+        public int Order => 1;
+
         private readonly IParsingService _parsingService;
 
         public AggregateEpisodes(IParsingService parsingService)

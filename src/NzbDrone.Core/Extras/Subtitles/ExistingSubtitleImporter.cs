@@ -5,7 +5,6 @@ using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Extras.Files;
 using NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation;
-using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
 
@@ -73,25 +72,17 @@ namespace NzbDrone.Core.Extras.Subtitles
 
                     var firstEpisode = localEpisode.Episodes.First();
 
-                    var subtitleTitleInfo = LanguageParser.ParseSubtitleLanguageInformation(possibleSubtitleFile, firstEpisode);
-
-                    var languageTags = subtitleTitleInfo?.LanguageTags ?? LanguageParser.ParseLanguageTags(possibleSubtitleFile);
-                    var title = subtitleTitleInfo?.Title;
-                    var language = subtitleTitleInfo?.Language ?? LanguageParser.ParseSubtitleLanguage(possibleSubtitleFile);
-
-                    var subtitleTitleCopyInfo = LanguageParser.CopyFromTitle(title);
-
                     var subtitleFile = new SubtitleFile
                                        {
                                            SeriesId = series.Id,
                                            SeasonNumber = localEpisode.SeasonNumber,
                                            EpisodeFileId = firstEpisode.EpisodeFileId,
                                            RelativePath = series.Path.GetRelativePath(possibleSubtitleFile),
-                                           Language = language,
-                                           LanguageTags = languageTags,
-                                           Title = subtitleTitleCopyInfo.Title,
+                                           Language = localEpisode.SubtitleInfo.Language,
+                                           LanguageTags = localEpisode.SubtitleInfo.LanguageTags,
+                                           Title = localEpisode.SubtitleInfo.Title,
                                            Extension = extension,
-                                           Copy = subtitleTitleCopyInfo.Copy
+                                           Copy = localEpisode.SubtitleInfo.Copy
                                        };
 
                     subtitleFiles.Add(subtitleFile);

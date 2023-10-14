@@ -34,8 +34,6 @@ namespace NzbDrone.Core.Parser
 
         private static readonly Regex SubtitleLanguageTitleRegex = new Regex(".+?(\\.((?<tags1>full|forced|foreign|default|cc|psdh|sdh)|(?<iso_code>[a-z]{2,3})))*\\.(?<title>[^.]*)(\\.((?<tags2>full|forced|foreign|default|cc|psdh|sdh)|(?<iso_code>[a-z]{2,3})))*$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        private static readonly Regex SubtitleTitleRegex = new Regex("((?<title>.+) - )?(?<copy>\\d+)", RegexOptions.Compiled);
-
         public static List<Language> ParseLanguages(string title)
         {
             foreach (var regex in CleanSeriesTitleRegex)
@@ -262,7 +260,7 @@ namespace NzbDrone.Core.Parser
 
             if (matchTitle.Groups["iso_code"].Captures.Count is var languageCodeNumber && languageCodeNumber != 1)
             {
-                return null;
+                return new SubtitleTitleInfo();
             }
 
             var isoCode = matchTitle.Groups["iso_code"].Value;
@@ -285,36 +283,16 @@ namespace NzbDrone.Core.Parser
 
                 if (episodeFileTitle.Contains(title, StringComparison.OrdinalIgnoreCase) || originalEpisodeFileTitle.Contains(title, StringComparison.OrdinalIgnoreCase))
                 {
-                    return null;
+                    return new SubtitleTitleInfo();
                 }
             }
 
             return new SubtitleTitleInfo
             {
                 LanguageTags = languageTags.ToList(),
-                Title = title,
+                RawTitle = title,
                 Language = language
             };
-        }
-
-        public static SubtitleTitleCopyInfo CopyFromTitle(string title)
-        {
-            if (title is null)
-            {
-                return new SubtitleTitleCopyInfo(0, title);
-            }
-
-            var match = SubtitleTitleRegex.Match(title);
-
-            if (match.Success)
-            {
-                var copy = match.Groups["copy"].ToString();
-                var newTitle = match.Groups["title"].Success ? match.Groups["title"].ToString() : null;
-
-                return new SubtitleTitleCopyInfo(int.Parse(copy), newTitle);
-            }
-
-            return new SubtitleTitleCopyInfo(0, title);
         }
 
         public static List<string> ParseLanguageTags(string fileName)

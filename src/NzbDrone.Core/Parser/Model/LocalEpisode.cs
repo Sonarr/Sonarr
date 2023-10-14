@@ -44,6 +44,7 @@ namespace NzbDrone.Core.Parser.Model
         public bool FileRenamedAfterScriptImport { get; set; }
         public bool ShouldImportExtras { get; set; }
         public List<string> PossibleExtraFiles { get; set; }
+        public SubtitleTitleInfo SubtitleInfo { get; set; }
 
         public int SeasonNumber
         {

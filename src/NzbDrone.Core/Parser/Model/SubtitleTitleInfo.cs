@@ -1,24 +1,49 @@
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using NzbDrone.Core.Languages;
 
 namespace NzbDrone.Core.Parser.Model
 {
     public class SubtitleTitleInfo
     {
+        private static readonly Regex SubtitleTitleRegex = new Regex("((?<title>.+) - )?(?<copy>\\d+)", RegexOptions.Compiled);
         public List<string> LanguageTags { get; set; }
-        public string Title { get; set; }
+        public string RawTitle { get; set; }
+        public string Title {
+            get {
+                if (RawTitle is null)
+                {
+                    return null;
+                }
+
+                var match = SubtitleTitleRegex.Match(RawTitle);
+
+                if (match.Success)
+                {
+                    return match.Groups["title"].Success ? match.Groups["title"].ToString() : null;
+                }
+
+                return RawTitle;
+            }
+        }
+
         public Language Language { get; set; }
-    }
+        public int Copy {
+            get {
+                if (RawTitle is null)
+                {
+                    return 0;
+                }
 
-    public class SubtitleTitleCopyInfo
-    {
-        public int Copy { get; set; }
-        public string Title { get; set; }
+                var match = SubtitleTitleRegex.Match(RawTitle);
 
-        public SubtitleTitleCopyInfo(int copy, string title)
-        {
-            Copy = copy;
-            Title = title;
+                if (match.Success)
+                {
+                    return int.Parse(match.Groups["copy"].ToString());
+                }
+
+                return 0;
+            }
         }
     }
 }

@@ -454,10 +454,11 @@ namespace NzbDrone.Core.Test.ParserTests
                 })
             };
 
-            var (languageTags, title, language) = LanguageParser.ParseSubtitleLanguageInformation(postTitle, episode);
-            languageTags.Should().BeEquivalentTo(expectedTags);
-            title.Should().BeEquivalentTo(expectedTitle);
-            language.Should().BeEquivalentTo((Language)expectedLanguage);
+            var subtitleTitleInfo = LanguageParser.ParseSubtitleLanguageInformation(postTitle, episode);
+
+            subtitleTitleInfo.LanguageTags.Should().BeEquivalentTo(expectedTags);
+            subtitleTitleInfo.Title.Should().BeEquivalentTo(expectedTitle);
+            subtitleTitleInfo.Language.Should().BeEquivalentTo((Language)expectedLanguage);
         }
 
         [TestCase("Name (2020) - S01E20 - [AAC 2.0].default.forced.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv")]
@@ -474,7 +475,10 @@ namespace NzbDrone.Core.Test.ParserTests
                     RelativePath = episodeFilePath
                 })
             };
-            LanguageParser.ParseSubtitleLanguageInformation(postTitle, episode).Should().BeNull();
+            var subtitleTitleInfo = LanguageParser.ParseSubtitleLanguageInformation(postTitle, episode);
+            subtitleTitleInfo.Language.Should().BeNull();
+            subtitleTitleInfo.LanguageTags.Should().BeEmpty();
+            subtitleTitleInfo.RawTitle.Should().BeNull();
         }
     }
 }
