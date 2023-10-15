@@ -37,7 +37,7 @@ class EpisodeDetailsModal extends Component {
     return (
       <Modal
         isOpen={isOpen}
-        size={sizes.EXTRA_LARGE}
+        size={sizes.EXTRA_EXTRA_LARGE}
         closeOnBackgroundClick={this.state.closeOnBackgroundClick}
         onModalClose={onModalClose}
       >
