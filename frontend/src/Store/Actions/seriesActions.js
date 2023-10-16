@@ -168,9 +168,10 @@ export const filterPredicates = {
   },
 
   hasMissingSeason: function(item, filterValue, type) {
+    const predicate = filterTypePredicates[type];
     const { seasons = [] } = item;
 
-    return seasons.some((season) => {
+    const hasMissingSeason = seasons.some((season) => {
       const {
         seasonNumber,
         statistics = {}
@@ -189,6 +190,8 @@ export const filterPredicates = {
         episodeFileCount === 0
       );
     });
+
+    return predicate(hasMissingSeason, filterValue);
   }
 };
 
@@ -347,7 +350,8 @@ export const filterBuilderProps = [
   {
     name: 'hasMissingSeason',
     label: () => translate('HasMissingSeason'),
-    type: filterBuilderTypes.EXACT
+    type: filterBuilderTypes.EXACT,
+    valueType: filterBuilderValueTypes.BOOL
   },
   {
     name: 'year',
