@@ -1,31 +1,44 @@
 import React from 'react';
+import translate from 'Utilities/String/translate';
 import FilterBuilderRowValue from './FilterBuilderRowValue';
 import FilterBuilderRowValueProps from './FilterBuilderRowValueProps';
 
 const EVENT_TYPE_OPTIONS = [
   {
     id: 1,
-    name: 'Grabbed',
+    get name() {
+      return translate('Grabbed');
+    },
   },
   {
     id: 3,
-    name: 'Imported',
+    get name() {
+      return translate('Imported');
+    },
   },
   {
     id: 4,
-    name: 'Failed',
+    get name() {
+      return translate('Failed');
+    },
   },
   {
     id: 5,
-    name: 'Deleted',
+    get name() {
+      return translate('Deleted');
+    },
   },
   {
     id: 6,
-    name: 'Renamed',
+    get name() {
+      return translate('Renamed');
+    },
   },
   {
     id: 7,
-    name: 'Ignored',
+    get name() {
+      return translate('Ignored');
+    },
   },
 ];
 
