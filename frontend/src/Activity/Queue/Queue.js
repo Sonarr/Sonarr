@@ -357,4 +357,8 @@ Queue.propTypes = {
   onFilterSelect: PropTypes.func.isRequired
 };
 
+Queue.defaultProps = {
+  count: 0
+};
+
 export default Queue;
