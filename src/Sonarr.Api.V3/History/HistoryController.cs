@@ -88,11 +88,6 @@ namespace Sonarr.Api.V3.History
                 pagingSpec.FilterExpressions.Add(h => seriesIds.Contains(h.SeriesId));
             }
 
-            if (seriesIds != null && seriesIds.Any())
-            {
-                pagingSpec.FilterExpressions.Add(h => seriesIds.Contains(h.SeriesId));
-            }
-
             return pagingSpec.ApplyToPage(h => _historyService.Paged(pagingSpec, languages, quality), h => MapToResource(h, includeSeries, includeEpisode));
         }
 
