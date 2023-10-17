@@ -2,7 +2,7 @@
     "BlocklistRelease": "Chặn bản phát hành",
     "BlocklistReleases": "Phát hành danh sách đen",
     "Added": "Đã thêm",
-    "ApiKeyValidationHealthCheckMessage": "Hãy cập nhật mã API để dài ít nhất {0} kí tự. Bạn có thể làm điều này trong cài đặt hoặc trong tập config",
+    "ApiKeyValidationHealthCheckMessage": "Hãy cập nhật mã API để dài ít nhất {length} kí tự. Bạn có thể làm điều này trong cài đặt hoặc trong tập config",
     "AppDataLocationHealthCheckMessage": "Việc cập nhật sẽ không xảy ra để tránh xóa AppData khi cập nhật",
     "ApplyChanges": "Áp dụng thay đổi",
     "AutomaticAdd": "Tự động thêm"

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Indexers;
@@ -35,7 +36,10 @@ namespace NzbDrone.Core.HealthCheck.Checks
             {
                 return new HealthCheck(GetType(),
                     HealthCheckResult.Warning,
-                    string.Format(_localizationService.GetLocalizedString("IndexerDownloadClientHealthCheckMessage"), string.Join(", ", invalidIndexers.Select(v => v.Name).ToArray())),
+                    _localizationService.GetLocalizedString("IndexerDownloadClientHealthCheckMessage", new Dictionary<string, object>
+                    {
+                        { "indexerNames", string.Join(", ", invalidIndexers.Select(v => v.Name).ToArray()) }
+                    }),
                     "#invalid-indexer-download-client-setting");
             }
 

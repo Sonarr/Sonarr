@@ -1,6 +1,6 @@
 {
     "RemoveFailedDownloads": "Verwijder mislukte downloads",
-    "ApiKeyValidationHealthCheckMessage": "Maak je API sleutel alsjeblieft minimaal {0} karakters lang. Dit kan gedaan worden via de instellingen of het configuratiebestand",
+    "ApiKeyValidationHealthCheckMessage": "Maak je API sleutel alsjeblieft minimaal {length} karakters lang. Dit kan gedaan worden via de instellingen of het configuratiebestand",
     "RemoveCompletedDownloads": "Verwijder voltooide downloads",
     "AppDataLocationHealthCheckMessage": "Updaten zal niet mogelijk zijn om het verwijderen van AppData te voorkomen",
     "Added": "Toegevoegd",

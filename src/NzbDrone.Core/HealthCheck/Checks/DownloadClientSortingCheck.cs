@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Datastore.Events;
@@ -45,7 +46,11 @@ namespace NzbDrone.Core.HealthCheck.Checks
                     {
                         return new HealthCheck(GetType(),
                             HealthCheckResult.Warning,
-                            string.Format(_localizationService.GetLocalizedString("DownloadClientSortingHealthCheckMessage"), clientName, status.SortingMode),
+                            _localizationService.GetLocalizedString("DownloadClientSortingHealthCheckMessage", new Dictionary<string, object>
+                            {
+                                { "downloadClientName", clientName },
+                                { "sortingMode", status.SortingMode }
+                            }),
                             "#download-folder-and-library-folder-not-different-folders");
                     }
                 }

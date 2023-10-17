@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using NLog;
@@ -42,7 +43,10 @@ namespace NzbDrone.Core.HealthCheck.Checks
             {
                 return new HealthCheck(GetType(),
                     HealthCheckResult.Error,
-                    string.Format(_localizationService.GetLocalizedString("ProxyResolveIpHealthCheckMessage"), _configService.ProxyHostname),
+                    _localizationService.GetLocalizedString("ProxyResolveIpHealthCheckMessage", new Dictionary<string, object>
+                    {
+                        { "proxyHostName", _configService.ProxyHostname }
+                    }),
                     "#proxy-failed-resolve-ip");
             }
 
@@ -61,7 +65,10 @@ namespace NzbDrone.Core.HealthCheck.Checks
 
                     return new HealthCheck(GetType(),
                         HealthCheckResult.Error,
-                        string.Format(_localizationService.GetLocalizedString("ProxyBadRequestHealthCheckMessage"), response.StatusCode),
+                        _localizationService.GetLocalizedString("ProxyBadRequestHealthCheckMessage", new Dictionary<string, object>
+                        {
+                            { "statusCode", response.StatusCode }
+                        }),
                         "#proxy-failed-test");
                 }
             }
@@ -71,7 +78,10 @@ namespace NzbDrone.Core.HealthCheck.Checks
 
                 return new HealthCheck(GetType(),
                     HealthCheckResult.Error,
-                    string.Format(_localizationService.GetLocalizedString("ProxyFailedToTestHealthCheckMessage"), request.Url),
+                    _localizationService.GetLocalizedString("ProxyFailedToTestHealthCheckMessage", new Dictionary<string, object>
+                    {
+                        { "url", request.Url }
+                    }),
                     "#proxy-failed-test");
             }
 

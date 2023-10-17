@@ -4,7 +4,7 @@
     "CountSeasons": "{count} temporadas",
     "Language": "Idioma",
     "Added": "Adicionado",
-    "ApiKeyValidationHealthCheckMessage": "Por favor, atualize a sua API Key para ter no mínimo {0} caracteres. Pode fazer através das definições ou do ficheiro de configuração",
+    "ApiKeyValidationHealthCheckMessage": "Por favor, atualize a sua API Key para ter no mínimo {length} caracteres. Pode fazer através das definições ou do ficheiro de configuração",
     "AppDataLocationHealthCheckMessage": "Não foi possível atualizar para prevenir apagar a AppData durante a atualização",
     "AddAutoTag": "Adicionar Etiqueta Automática",
     "AbsoluteEpisodeNumbers": "Números de Episódios Absolutos",

@@ -1,6 +1,6 @@
 {
     "Added": "Přidáno",
-    "ApiKeyValidationHealthCheckMessage": "Aktualizujte svůj klíč API tak, aby měl alespoň {0} znaků. Můžete to provést prostřednictvím nastavení nebo konfiguračního souboru",
+    "ApiKeyValidationHealthCheckMessage": "Aktualizujte svůj klíč API tak, aby měl alespoň {length} znaků. Můžete to provést prostřednictvím nastavení nebo konfiguračního souboru",
     "BlocklistRelease": "Blocklist pro vydání",
     "AgeWhenGrabbed": "Stáří (kdy bylo získáno)",
     "Always": "Vždy",
@@ -246,7 +246,7 @@
     "CustomFormatJson": "Vlastní JSON formát",
     "Debug": "Ladit",
     "Day": "Den",
-    "DeleteCustomFormatMessageText": "Opravdu chcete odstranit vlastní formát '{0}'?",
+    "DeleteCustomFormatMessageText": "Opravdu chcete odstranit vlastní formát '{customFormatName}'?",
     "DefaultNameCopiedProfile": "{name} - Kopírovat",
     "DefaultNameCopiedSpecification": "{name} - Kopírovat",
     "DefaultNotFoundMessage": "Asi jsi se ztratil, není tu nic k vidění.",
