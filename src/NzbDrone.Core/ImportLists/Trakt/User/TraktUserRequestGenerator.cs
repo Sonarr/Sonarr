@@ -30,7 +30,7 @@ namespace NzbDrone.Core.ImportLists.Trakt.User
                     link += $"/users/{userName}/watchlist/shows?limit={Settings.Limit}";
                     break;
                 case (int)TraktUserListType.UserWatchedList:
-                    link += $"/users/{userName}/watched/shows?limit={Settings.Limit}";
+                    link += $"/users/{userName}/watched/shows?extended=full&limit={Settings.Limit}";
                     break;
                 case (int)TraktUserListType.UserCollectionList:
                     link += $"/users/{userName}/collection/shows?limit={Settings.Limit}";

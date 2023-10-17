@@ -1,16 +1,17 @@
 using System.Collections.Generic;
+using System.Linq;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Parser.Model;
 
-namespace NzbDrone.Core.ImportLists.Trakt.Popular
+namespace NzbDrone.Core.ImportLists.Trakt.User
 {
-    public class TraktPopularParser : TraktParser
+    public class TraktUserParser : TraktParser
     {
-        private readonly TraktPopularSettings _settings;
+        private readonly TraktUserSettings _settings;
         private ImportListResponse _importResponse;
 
-        public TraktPopularParser(TraktPopularSettings settings)
+        public TraktUserParser(TraktUserSettings settings)
         {
             _settings = settings;
         }
@@ -28,9 +29,22 @@ namespace NzbDrone.Core.ImportLists.Trakt.Popular
 
             var traktSeries = new List<TraktSeriesResource>();
 
-            if (_settings.TraktListType == (int)TraktPopularListType.Popular)
+            if (_settings.TraktListType == (int)TraktUserListType.UserWatchedList)
             {
-                traktSeries = STJson.Deserialize<List<TraktSeriesResource>>(_importResponse.Content);
+                var jsonWatchedResponse = STJson.Deserialize<List<TraktWatchedResponse>>(_importResponse.Content);
+
+                switch (_settings.TraktWatchedListType)
+                {
+                    case (int)TraktUserWatchedListType.InProgress:
+                        traktSeries = jsonWatchedResponse.Where(c => c.Seasons.Where(s => s.Number > 0).Sum(s => s.Episodes.Count) < c.Show.AiredEpisodes).SelectList(c => c.Show);
+                        break;
+                    case (int)TraktUserWatchedListType.CompletelyWatched:
+                        traktSeries = jsonWatchedResponse.Where(c => c.Seasons.Where(s => s.Number > 0).Sum(s => s.Episodes.Count) == c.Show.AiredEpisodes).SelectList(c => c.Show);
+                        break;
+                    default:
+                        traktSeries = jsonWatchedResponse.SelectList(c => c.Show);
+                        break;
+                }
             }
             else
             {
