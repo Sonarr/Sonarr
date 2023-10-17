@@ -199,7 +199,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
                     }
 
                     // Add support for Jellyfin's "enddate" tag
-                    if (series.Status.Equals(SeriesStatusType.Ended) && series.LastAired.HasValue)
+                    if (series.Status == SeriesStatusType.Ended && series.LastAired.HasValue)
                     {
                         tvShow.Add(new XElement("enddate", series.LastAired.Value.ToString("yyyy-MM-dd")));
                     }
