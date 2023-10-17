@@ -7,7 +7,7 @@ using NzbDrone.Core.Tv.Events;
 namespace NzbDrone.Core.HealthCheck.Checks
 {
     [CheckOn(typeof(SeriesUpdatedEvent))]
-    [CheckOn(typeof(SeriesDeletedEvent), CheckOnCondition.FailedOnly)]
+    [CheckOn(typeof(SeriesDeletedEvent))]
     [CheckOn(typeof(SeriesRefreshCompleteEvent))]
     public class RemovedSeriesCheck : HealthCheckBase, ICheckOnCondition<SeriesUpdatedEvent>, ICheckOnCondition<SeriesDeletedEvent>
     {
