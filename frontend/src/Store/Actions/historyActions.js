@@ -190,25 +190,25 @@ export const defaultState = {
   filterBuilderProps: [
     {
       name: 'eventType',
-      label: 'Event Type',
+      label: () => translate('EventType'),
       type: filterBuilderTypes.EQUAL,
       valueType: filterBuilderValueTypes.HISTORY_EVENT_TYPE
     },
     {
       name: 'seriesIds',
-      label: 'Series',
+      label: () => translate('Series'),
       type: filterBuilderTypes.EQUAL,
       valueType: filterBuilderValueTypes.SERIES
     },
     {
       name: 'quality',
-      label: 'Quality',
+      label: () => translate('Quality'),
       type: filterBuilderTypes.EQUAL,
       valueType: filterBuilderValueTypes.QUALITY
     },
     {
       name: 'languages',
-      label: 'Languages',
+      label: () => translate('Languages'),
       type: filterBuilderTypes.CONTAINS,
       valueType: filterBuilderValueTypes.LANGUAGE
     }
