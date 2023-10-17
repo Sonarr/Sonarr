@@ -740,7 +740,6 @@
     "RecyclingBinCleanupHelpText": "Defina como 0 para desativar a limpeza automática",
     "RecyclingBinCleanupHelpTextWarning": "Os arquivos na lixeira mais antigos do que o número de dias selecionado serão limpos automaticamente",
     "RecyclingBinHelpText": "Os arquivos do episódio irão para cá quando excluídos, em vez de serem excluídos permanentemente",
-    "RedownloadFailed": "Redownload falhou",
     "AbsoluteEpisodeNumber": "Número Absoluto do Episódio",
     "AddAutoTagError": "Não foi possível adicionar uma nova tag automática. Tente novamente.",
     "AnalyseVideoFilesHelpText": "Extraia informações de vídeo, como resolução, tempo de execução e informações de codec de arquivos. Isso requer que o {appName} leia partes do arquivo que podem causar alta atividade no disco ou na rede durante as varreduras.",
@@ -1483,5 +1482,10 @@
     "FormatShortTimeSpanSeconds": "{seconds} segundo(s)",
     "FormatTimeSpanDays": "{days}d {time}",
     "Yesterday": "Ontem",
-    "DownloadClientRemovesCompletedDownloadsHealthCheckMessage": "O cliente de download {downloadClientName} está configurado para remover downloads concluídos. Isso pode resultar na remoção dos downloads do seu cliente antes que {appName} possa importá-los."
+    "DownloadClientRemovesCompletedDownloadsHealthCheckMessage": "O cliente de download {downloadClientName} está configurado para remover downloads concluídos. Isso pode resultar na remoção dos downloads do seu cliente antes que {appName} possa importá-los.",
+    "AutoRedownloadFailedFromInteractiveSearchHelpText": "Procure e tente baixar automaticamente uma versão diferente quando a versão com falha for obtida pela pesquisa interativa",
+    "AutoRedownloadFailed": "Falha no Novo Download",
+    "AutoRedownloadFailedFromInteractiveSearch": "Falha no Novo Download pela Pesquisa Interativa",
+    "ImportListSearchForMissingEpisodes": "Pesquisar Episódios Ausentes",
+    "ImportListSearchForMissingEpisodesHelpText": "Depois que a série for adicionada ao {appName}, procure automaticamente episódios ausentes"
 }

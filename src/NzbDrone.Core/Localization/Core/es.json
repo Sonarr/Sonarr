@@ -227,5 +227,6 @@
     "AddConnectionImplementation": "Añadir Conexión - {implementationName}",
     "AddDownloadClientImplementation": "Añadir Cliente de Descarga - {implementationName}",
     "VideoDynamicRange": "Video de Rango Dinámico",
-    "AuthenticationMethodHelpTextWarning": "Por favor selecciona un método válido de autenticación"
+    "AuthenticationMethodHelpTextWarning": "Por favor selecciona un método válido de autenticación",
+    "AddCustomFilter": "Añadir filtro personalizado"
 }
