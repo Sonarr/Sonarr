@@ -7,6 +7,7 @@ using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Download.Clients.Hadouken.Models;
+using NzbDrone.Core.Localization;
 using NzbDrone.Core.MediaFiles.TorrentInfo;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.RemotePathMappings;
@@ -24,8 +25,9 @@ namespace NzbDrone.Core.Download.Clients.Hadouken
                         IConfigService configService,
                         IDiskProvider diskProvider,
                         IRemotePathMappingService remotePathMappingService,
-                        Logger logger)
-            : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, logger)
+                        Logger logger,
+                        ILocalizationService localizationService)
+            : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, logger, localizationService)
         {
             _proxy = proxy;
         }

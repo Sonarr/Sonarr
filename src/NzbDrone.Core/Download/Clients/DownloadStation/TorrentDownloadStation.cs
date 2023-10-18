@@ -10,6 +10,7 @@ using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Download.Clients.DownloadStation.Proxies;
+using NzbDrone.Core.Localization;
 using NzbDrone.Core.MediaFiles.TorrentInfo;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.RemotePathMappings;
@@ -36,8 +37,9 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
                                       IConfigService configService,
                                       IDiskProvider diskProvider,
                                       IRemotePathMappingService remotePathMappingService,
-                                      Logger logger)
-            : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, logger)
+                                      Logger logger,
+                                      ILocalizationService localizationService)
+            : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, logger, localizationService)
         {
             _dsInfoProxy = dsInfoProxy;
             _dsTaskProxySelector = dsTaskProxySelector;

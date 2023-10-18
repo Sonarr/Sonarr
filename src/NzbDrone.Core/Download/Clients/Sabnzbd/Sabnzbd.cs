@@ -10,6 +10,7 @@ using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Exceptions;
+using NzbDrone.Core.Localization;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.RemotePathMappings;
 using NzbDrone.Core.Validation;
@@ -26,8 +27,9 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                        IDiskProvider diskProvider,
                        IRemotePathMappingService remotePathMappingService,
                        IValidateNzbs nzbValidationService,
-                       Logger logger)
-            : base(httpClient, configService, diskProvider, remotePathMappingService, nzbValidationService, logger)
+                       Logger logger,
+                       ILocalizationService localizationService)
+            : base(httpClient, configService, diskProvider, remotePathMappingService, nzbValidationService, logger, localizationService)
         {
             _proxy = proxy;
         }
