@@ -81,4 +81,9 @@ QueueDetails.propTypes = {
   progressBar: PropTypes.node.isRequired
 };
 
+QueueDetails.defaultProps = {
+  trackedDownloadStatus: 'ok',
+  trackedDownloadState: 'downloading'
+};
+
 export default QueueDetails;
