@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.Json;
+using DryIoc;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Reflection;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Annotations;
+using NzbDrone.Core.Localization;
 
 namespace Sonarr.Http.ClientSchema
 {
@@ -15,6 +17,12 @@ namespace Sonarr.Http.ClientSchema
     {
         private const string PRIVATE_VALUE = "********";
         private static Dictionary<Type, FieldMapping[]> _mappings = new Dictionary<Type, FieldMapping[]>();
+        private static ILocalizationService _localizationService;
+
+        public static void Initialize(IContainer container)
+        {
+            _localizationService = container.Resolve<ILocalizationService>();
+        }
 
         public static List<Field> ToSchema(object model)
         {
@@ -110,10 +118,10 @@ namespace Sonarr.Http.ClientSchema
                     var field = new Field
                     {
                         Name = prefix + GetCamelCaseName(propertyInfo.Name),
-                        Label = fieldAttribute.Label,
+                        Label = fieldAttribute.Label.IsNotNullOrWhiteSpace() ? _localizationService.GetLocalizedString(fieldAttribute.Label) : fieldAttribute.Label,
                         Unit = fieldAttribute.Unit,
-                        HelpText = fieldAttribute.HelpText,
-                        HelpTextWarning = fieldAttribute.HelpTextWarning,
+                        HelpText = fieldAttribute.HelpText.IsNotNullOrWhiteSpace() ? _localizationService.GetLocalizedString(fieldAttribute.HelpText) : fieldAttribute.HelpText,
+                        HelpTextWarning = fieldAttribute.HelpTextWarning.IsNotNullOrWhiteSpace() ?  _localizationService.GetLocalizedString(fieldAttribute.HelpTextWarning) : fieldAttribute.HelpTextWarning,
                         HelpLink = fieldAttribute.HelpLink,
                         Order = fieldAttribute.Order,
                         Advanced = fieldAttribute.Advanced,
