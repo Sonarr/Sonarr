@@ -5,6 +5,8 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Diacritical;
+using DryIoc.ImTools;
 using NLog;
 using NzbDrone.Common.Cache;
 using NzbDrone.Common.Disk;
@@ -411,13 +413,13 @@ namespace NzbDrone.Core.Organizer
         {
             if (char.IsLetterOrDigit(title[0]))
             {
-                return title.Substring(0, 1).ToUpper().RemoveAccent();
+                return title.Substring(0, 1).ToUpper().RemoveDiacritics()[0].ToString();
             }
 
             // Try the second character if the first was non alphanumeric
             if (char.IsLetterOrDigit(title[1]))
             {
-                return title.Substring(1, 1).ToUpper().RemoveAccent();
+                return title.Substring(1, 1).ToUpper().RemoveDiacritics()[0].ToString();
             }
 
             // Default to "_" if no alphanumeric character can be found in the first 2 positions
