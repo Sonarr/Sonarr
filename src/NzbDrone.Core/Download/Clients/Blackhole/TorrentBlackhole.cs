@@ -81,7 +81,7 @@ namespace NzbDrone.Core.Download.Clients.Blackhole
             return null;
         }
 
-        public override string Name => "Torrent Blackhole";
+        public override string Name => _localizationService.GetLocalizedString("TorrentBlackhole");
 
         public override IEnumerable<DownloadClientItem> GetItems()
         {
