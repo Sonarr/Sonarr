@@ -150,7 +150,7 @@ namespace NzbDrone.Core.CustomFormats
                 }
             }
 
-            return matches;
+            return matches.OrderBy(x => x.Name).ToList();
         }
 
         private static List<CustomFormat> ParseCustomFormat(EpisodeFile episodeFile, Series series, List<CustomFormat> allCustomFormats)
