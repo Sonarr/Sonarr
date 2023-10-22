@@ -9,6 +9,7 @@ namespace NzbDrone.Core.ImportLists
         public bool EnableAutomaticAdd { get; set; }
         public bool SearchForMissingEpisodes { get; set; }
         public MonitorTypes ShouldMonitor { get; set; }
+        public NewItemMonitorTypes MonitorNewItems { get; set; }
         public int QualityProfileId { get; set; }
         public SeriesTypes SeriesType { get; set; }
         public bool SeasonFolder { get; set; }

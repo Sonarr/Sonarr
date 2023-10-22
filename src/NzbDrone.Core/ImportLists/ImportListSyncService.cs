@@ -173,6 +173,7 @@ namespace NzbDrone.Core.ImportLists
                         Title = item.Title,
                         Year = item.Year,
                         Monitored = monitored,
+                        MonitorNewItems = importList.MonitorNewItems,
                         RootFolderPath = importList.RootFolderPath,
                         QualityProfileId = importList.QualityProfileId,
                         SeriesType = importList.SeriesType,

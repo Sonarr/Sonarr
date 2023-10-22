@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import SeriesMonitoringOptionsPopoverContent from 'AddSeries/SeriesMonitoringOptionsPopoverContent';
+import SeriesMonitorNewItemsOptionsPopoverContent from 'AddSeries/SeriesMonitorNewItemsOptionsPopoverContent';
 import SeriesTypePopoverContent from 'AddSeries/SeriesTypePopoverContent';
 import Alert from 'Components/Alert';
 import Form from 'Components/Form/Form';
@@ -50,6 +51,7 @@ function EditImportListModalContent(props) {
     minRefreshInterval,
     shouldMonitor,
     rootFolderPath,
+    monitorNewItems,
     qualityProfileId,
     seriesType,
     seasonFolder,
@@ -148,6 +150,31 @@ function EditImportListModalContent(props) {
                   name="shouldMonitor"
                   onChange={onInputChange}
                   {...shouldMonitor}
+                />
+              </FormGroup>
+
+              <FormGroup>
+                <FormLabel>
+                  {translate('MonitorNewSeasons')}
+                  <Popover
+                    anchor={
+                      <Icon
+                        className={styles.labelIcon}
+                        name={icons.INFO}
+                      />
+                    }
+                    title={translate('MonitorNewSeasons')}
+                    body={<SeriesMonitorNewItemsOptionsPopoverContent />}
+                    position={tooltipPositions.RIGHT}
+                  />
+                </FormLabel>
+
+                <FormInputGroup
+                  type={inputTypes.MONITOR_NEW_ITEMS_SELECT}
+                  name="monitorNewItems"
+                  helpText={translate('MonitorNewSeasonsHelpText')}
+                  {...monitorNewItems}
+                  onChange={onInputChange}
                 />
               </FormGroup>
 

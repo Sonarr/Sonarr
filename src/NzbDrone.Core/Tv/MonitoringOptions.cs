@@ -23,4 +23,10 @@ namespace NzbDrone.Core.Tv
         UnmonitorSpecials,
         None
     }
+
+    public enum NewItemMonitorTypes
+    {
+        All,
+        None
+    }
 }

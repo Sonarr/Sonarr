@@ -2,6 +2,7 @@
 // Please do not change this file!
 interface CssExports {
   'deleteButton': string;
+  'labelIcon': string;
 }
 export const cssExports: CssExports;
 export default cssExports;

@@ -34,6 +34,11 @@ namespace Sonarr.Api.V3.Series
                     series.Monitored = resource.Monitored.Value;
                 }
 
+                if (resource.MonitorNewItems.HasValue)
+                {
+                    series.MonitorNewItems = resource.MonitorNewItems.Value;
+                }
+
                 if (resource.QualityProfileId.HasValue)
                 {
                     series.QualityProfileId = resource.QualityProfileId.Value;
