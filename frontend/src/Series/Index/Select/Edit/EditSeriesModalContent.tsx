@@ -14,6 +14,7 @@ import styles from './EditSeriesModalContent.css';
 
 interface SavePayload {
   monitored?: boolean;
+  monitorNewItems?: string;
   qualityProfileId?: number;
   seriesType?: string;
   seasonFolder?: boolean;
@@ -77,6 +78,7 @@ function EditSeriesModalContent(props: EditSeriesModalContentProps) {
   const { seriesIds, onSavePress, onModalClose } = props;
 
   const [monitored, setMonitored] = useState(NO_CHANGE);
+  const [monitorNewItems, setMonitorNewItems] = useState(NO_CHANGE);
   const [qualityProfileId, setQualityProfileId] = useState<string | number>(
     NO_CHANGE
   );
@@ -93,6 +95,11 @@ function EditSeriesModalContent(props: EditSeriesModalContentProps) {
       if (monitored !== NO_CHANGE) {
         hasChanges = true;
         payload.monitored = monitored === 'monitored';
+      }
+
+      if (monitorNewItems !== NO_CHANGE) {
+        hasChanges = true;
+        payload.monitorNewItems = monitorNewItems;
       }
 
       if (qualityProfileId !== NO_CHANGE) {
@@ -124,6 +131,7 @@ function EditSeriesModalContent(props: EditSeriesModalContentProps) {
     },
     [
       monitored,
+      monitorNewItems,
       qualityProfileId,
       seriesType,
       seasonFolder,
@@ -138,6 +146,9 @@ function EditSeriesModalContent(props: EditSeriesModalContentProps) {
       switch (name) {
         case 'monitored':
           setMonitored(value);
+          break;
+        case 'monitorNewItems':
+          setMonitorNewItems(value);
           break;
         case 'qualityProfileId':
           setQualityProfileId(value);
@@ -195,6 +206,19 @@ function EditSeriesModalContent(props: EditSeriesModalContentProps) {
             name="monitored"
             value={monitored}
             values={monitoredOptions}
+            onChange={onInputChange}
+          />
+        </FormGroup>
+
+        <FormGroup>
+          <FormLabel>{translate('MonitorNewItems')}</FormLabel>
+
+          <FormInputGroup
+            type={inputTypes.MONITOR_NEW_ITEMS_SELECT}
+            name="monitorNewItems"
+            value={monitorNewItems}
+            includeNoChange={true}
+            includeNoChangeDisabled={false}
             onChange={onInputChange}
           />
         </FormGroup>

@@ -58,9 +58,10 @@ namespace NzbDrone.Core.Test.TvTests
         }
 
         [Test]
-        public void should_monitor_new_seasons_automatically_if_series_is_monitored()
+        public void should_monitor_new_seasons_automatically_if_monitor_new_items_is_all()
         {
-            _series.Monitored = true;
+            _series.MonitorNewItems = NewItemMonitorTypes.All;
+
             var newSeriesInfo = _series.JsonClone();
             newSeriesInfo.Seasons.Add(Builder<Season>.CreateNew()
                                          .With(s => s.SeasonNumber = 2)
@@ -75,9 +76,10 @@ namespace NzbDrone.Core.Test.TvTests
         }
 
         [Test]
-        public void should_not_monitor_new_seasons_automatically_if_series_is_not_monitored()
+        public void should_not_monitor_new_seasons_automatically_if_monitor_new_items_is_none()
         {
-            _series.Monitored = false;
+            _series.MonitorNewItems = NewItemMonitorTypes.None;
+
             var newSeriesInfo = _series.JsonClone();
             newSeriesInfo.Seasons.Add(Builder<Season>.CreateNew()
                 .With(s => s.SeasonNumber = 2)

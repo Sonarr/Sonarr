@@ -30,6 +30,7 @@ namespace NzbDrone.Core.Tv
         public string Overview { get; set; }
         public string AirTime { get; set; }
         public bool Monitored { get; set; }
+        public NewItemMonitorTypes MonitorNewItems { get; set; }
         public int QualityProfileId { get; set; }
         public bool SeasonFolder { get; set; }
         public DateTime? LastInfoSync { get; set; }
@@ -71,6 +72,7 @@ namespace NzbDrone.Core.Tv
 
             SeasonFolder = otherSeries.SeasonFolder;
             Monitored = otherSeries.Monitored;
+            MonitorNewItems = otherSeries.MonitorNewItems;
 
             SeriesType = otherSeries.SeriesType;
             RootFolderPath = otherSeries.RootFolderPath;
