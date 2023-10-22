@@ -118,10 +118,10 @@ namespace Sonarr.Http.ClientSchema
                     var field = new Field
                     {
                         Name = prefix + GetCamelCaseName(propertyInfo.Name),
-                        Label = fieldAttribute.Label.IsNotNullOrWhiteSpace() ? _localizationService.GetLocalizedString(fieldAttribute.Label, GetTokens(type, "Label")) : fieldAttribute.Label,
+                        Label = fieldAttribute.Label.IsNotNullOrWhiteSpace() ? _localizationService.GetLocalizedString(fieldAttribute.Label, GetTokens(type, TokenField.Label)) : fieldAttribute.Label,
                         Unit = fieldAttribute.Unit,
-                        HelpText = fieldAttribute.HelpText.IsNotNullOrWhiteSpace() ? _localizationService.GetLocalizedString(fieldAttribute.HelpText, GetTokens(type, "HelpText")) : fieldAttribute.HelpText,
-                        HelpTextWarning = fieldAttribute.HelpTextWarning.IsNotNullOrWhiteSpace() ?  _localizationService.GetLocalizedString(fieldAttribute.HelpTextWarning, GetTokens(type, "HelpTextWarning")) : fieldAttribute.HelpTextWarning,
+                        HelpText = fieldAttribute.HelpText.IsNotNullOrWhiteSpace() ? _localizationService.GetLocalizedString(fieldAttribute.HelpText, GetTokens(type, TokenField.HelpText)) : fieldAttribute.HelpText,
+                        HelpTextWarning = fieldAttribute.HelpTextWarning.IsNotNullOrWhiteSpace() ?  _localizationService.GetLocalizedString(fieldAttribute.HelpTextWarning, GetTokens(type, TokenField.HelpTextWarning)) : fieldAttribute.HelpTextWarning,
                         HelpLink = fieldAttribute.HelpLink,
                         Order = fieldAttribute.Order,
                         Advanced = fieldAttribute.Advanced,
@@ -181,7 +181,7 @@ namespace Sonarr.Http.ClientSchema
                 .ToArray();
         }
 
-        private static Dictionary<string, object> GetTokens(Type type, string field)
+        private static Dictionary<string, object> GetTokens(Type type, TokenField field)
         {
             var tokens = new Dictionary<string, object>();
 

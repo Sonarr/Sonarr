@@ -45,14 +45,14 @@ namespace NzbDrone.Core.Annotations
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
     public class FieldTokenAttribute : Attribute
     {
-        public FieldTokenAttribute(string field = "", string token = "", object value = null)
+        public FieldTokenAttribute(TokenField field, string token = "", object value = null)
         {
             Field = field;
             Token = token;
             Value = value?.ToString();
         }
 
-        public string Field { get; set; }
+        public TokenField Field { get; set; }
         public string Token { get; set; }
         public string Value { get; set; }
     }
@@ -99,5 +99,12 @@ namespace NzbDrone.Core.Annotations
         Password,
         ApiKey,
         UserName
+    }
+
+    public enum TokenField
+    {
+        Label,
+        HelpText,
+        HelpTextWarning
     }
 }
