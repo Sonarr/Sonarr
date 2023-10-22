@@ -42,6 +42,19 @@ namespace NzbDrone.Core.Annotations
         public string RequestAction { get; set; }
     }
 
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
+    public class FieldTokenAttribute : Attribute
+    {
+        public FieldTokenAttribute(string token = "", object value = null)
+        {
+            Token = token;
+            Value = value?.ToString();
+        }
+
+        public string Token { get; set; }
+        public string Value { get; set; }
+    }
+
     public class FieldSelectOption
     {
         public int Value { get; set; }

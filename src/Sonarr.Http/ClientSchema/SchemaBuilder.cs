@@ -115,12 +115,14 @@ namespace Sonarr.Http.ClientSchema
                 if (propertyInfo.PropertyType.IsSimpleType())
                 {
                     var fieldAttribute = property.Item2;
+                    var fieldTokens = property.Item3 ?? new FieldTokenAttribute();
+
                     var field = new Field
                     {
                         Name = prefix + GetCamelCaseName(propertyInfo.Name),
                         Label = fieldAttribute.Label.IsNotNullOrWhiteSpace() ? _localizationService.GetLocalizedString(fieldAttribute.Label) : fieldAttribute.Label,
                         Unit = fieldAttribute.Unit,
-                        HelpText = fieldAttribute.HelpText.IsNotNullOrWhiteSpace() ? _localizationService.GetLocalizedString(fieldAttribute.HelpText) : fieldAttribute.HelpText,
+                        HelpText = fieldAttribute.HelpText.IsNotNullOrWhiteSpace() ? _localizationService.GetLocalizedString(fieldAttribute.HelpText, new Dictionary<string, object> { { fieldTokens.Token, fieldTokens.Value } }) : fieldAttribute.HelpText,
                         HelpTextWarning = fieldAttribute.HelpTextWarning.IsNotNullOrWhiteSpace() ?  _localizationService.GetLocalizedString(fieldAttribute.HelpTextWarning) : fieldAttribute.HelpTextWarning,
                         HelpLink = fieldAttribute.HelpLink,
                         Order = fieldAttribute.Order,
@@ -172,10 +174,10 @@ namespace Sonarr.Http.ClientSchema
             return result.ToArray();
         }
 
-        private static Tuple<PropertyInfo, FieldDefinitionAttribute>[] GetProperties(Type type)
+        private static Tuple<PropertyInfo, FieldDefinitionAttribute, FieldTokenAttribute>[] GetProperties(Type type)
         {
             return type.GetProperties()
-                .Select(v => Tuple.Create(v, v.GetAttribute<FieldDefinitionAttribute>(false)))
+                .Select(v => Tuple.Create(v, v.GetAttribute<FieldDefinitionAttribute>(false), v.GetAttribute<FieldTokenAttribute>(false)))
                 .Where(v => v.Item2 != null)
                 .OrderBy(v => v.Item2.Order)
                 .ToArray();
