@@ -3,16 +3,16 @@ using NzbDrone.Core.Profiles.Qualities;
 
 namespace NzbDrone.Core.Validation
 {
-    public class ProfileExistsValidator : PropertyValidator
+    public class QualityProfileExistsValidator : PropertyValidator
     {
         private readonly IQualityProfileService _qualityProfileService;
 
-        public ProfileExistsValidator(IQualityProfileService qualityProfileService)
+        public QualityProfileExistsValidator(IQualityProfileService qualityProfileService)
         {
             _qualityProfileService = qualityProfileService;
         }
 
-        protected override string GetDefaultMessageTemplate() => "QualityProfile does not exist";
+        protected override string GetDefaultMessageTemplate() => "Quality Profile does not exist";
 
         protected override bool IsValid(PropertyValidatorContext context)
         {
