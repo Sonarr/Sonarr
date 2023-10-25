@@ -32,7 +32,7 @@ namespace NzbDrone.Core.Test.Profiles
 
             Subject.Handle(new ApplicationStartedEvent());
 
-            Mocker.GetMock<IProfileRepository>()
+            Mocker.GetMock<IQualityProfileRepository>()
                 .Verify(v => v.Insert(It.IsAny<QualityProfile>()), Times.Exactly(6));
         }
 
@@ -42,13 +42,13 @@ namespace NzbDrone.Core.Test.Profiles
         // We don't want to keep adding them back if a user deleted them on purpose.
         public void Init_should_skip_if_any_profiles_already_exist()
         {
-            Mocker.GetMock<IProfileRepository>()
+            Mocker.GetMock<IQualityProfileRepository>()
                   .Setup(s => s.All())
                   .Returns(Builder<QualityProfile>.CreateListOfSize(2).Build().ToList());
 
             Subject.Handle(new ApplicationStartedEvent());
 
-            Mocker.GetMock<IProfileRepository>()
+            Mocker.GetMock<IQualityProfileRepository>()
                 .Verify(v => v.Insert(It.IsAny<QualityProfile>()), Times.Never());
         }
 
@@ -65,11 +65,11 @@ namespace NzbDrone.Core.Test.Profiles
                                             .Build().ToList();
 
             Mocker.GetMock<ISeriesService>().Setup(c => c.GetAllSeries()).Returns(seriesList);
-            Mocker.GetMock<IProfileRepository>().Setup(c => c.Get(profile.Id)).Returns(profile);
+            Mocker.GetMock<IQualityProfileRepository>().Setup(c => c.Get(profile.Id)).Returns(profile);
 
             Assert.Throws<QualityProfileInUseException>(() => Subject.Delete(profile.Id));
 
-            Mocker.GetMock<IProfileRepository>().Verify(c => c.Delete(It.IsAny<int>()), Times.Never());
+            Mocker.GetMock<IQualityProfileRepository>().Verify(c => c.Delete(It.IsAny<int>()), Times.Never());
         }
 
         [Test]
@@ -84,7 +84,7 @@ namespace NzbDrone.Core.Test.Profiles
 
             Subject.Delete(1);
 
-            Mocker.GetMock<IProfileRepository>().Verify(c => c.Delete(1), Times.Once());
+            Mocker.GetMock<IQualityProfileRepository>().Verify(c => c.Delete(1), Times.Once());
         }
 
         [Test]
@@ -103,7 +103,7 @@ namespace NzbDrone.Core.Test.Profiles
                                                            .Random(1)
                                                            .Build().ToList();
 
-            Mocker.GetMock<IProfileRepository>().Setup(c => c.Get(profile.Id)).Returns(profile);
+            Mocker.GetMock<IQualityProfileRepository>().Setup(c => c.Get(profile.Id)).Returns(profile);
             Mocker.GetMock<ISeriesService>().Setup(c => c.GetAllSeries()).Returns(seriesList);
 
             Mocker.GetMock<IImportListFactory>()
@@ -112,7 +112,7 @@ namespace NzbDrone.Core.Test.Profiles
 
             Assert.Throws<QualityProfileInUseException>(() => Subject.Delete(1));
 
-            Mocker.GetMock<IProfileRepository>().Verify(c => c.Delete(It.IsAny<int>()), Times.Never());
+            Mocker.GetMock<IQualityProfileRepository>().Verify(c => c.Delete(It.IsAny<int>()), Times.Never());
         }
     }
 }
