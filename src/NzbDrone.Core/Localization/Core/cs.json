@@ -270,5 +270,6 @@
     "Dates": "Termíny",
     "DefaultCase": "Výchozí případ",
     "DailyTypeFormat": "Datum ({format})",
-    "Default": "Výchozí"
+    "Default": "Výchozí",
+    "IndexerDownloadClientHelpText": "Zvolte, který klient pro stahování bude použit pro zachytávání z toho indexeru"
 }
