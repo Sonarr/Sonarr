@@ -5,7 +5,7 @@
     "Language": "Idioma",
     "Added": "Adicionado",
     "ApiKeyValidationHealthCheckMessage": "Por favor, atualize a sua API Key para ter no mínimo {length} caracteres. Pode fazer através das definições ou do ficheiro de configuração",
-    "AppDataLocationHealthCheckMessage": "Não foi possível atualizar para prevenir apagar a AppData durante a atualização",
+    "AppDataLocationHealthCheckMessage": "Não foi possível actualizar para prevenir apagar a AppData durante a actualização",
     "AddAutoTag": "Adicionar Etiqueta Automática",
     "AbsoluteEpisodeNumbers": "Números de Episódios Absolutos",
     "Add": "Adicionar",
@@ -23,7 +23,7 @@
     "AgeWhenGrabbed": "Idade (quando capturada)",
     "ApplyTags": "Aplicar etiquetas",
     "Authentication": "Autenticação",
-    "AuthenticationMethodHelpText": "Solicitar Nome de Usuário e Senha para acessar o {appName}",
+    "AuthenticationMethodHelpText": "Solicitar nome de utilizador e palavra-passe para acessar ao {appName}",
     "AuthenticationRequired": "Autenticação Necessária",
     "AutoAdd": "Adicionar automaticamente",
     "AddRootFolder": "Adicionar pasta raiz",
@@ -123,5 +123,14 @@
     "AllSeriesInRootFolderHaveBeenImported": "Todas as séries em {path} foram importadas",
     "AddNewSeries": "Adicionar Nova Série",
     "AddNewSeriesError": "Erro ao carregar resultados da busca. Por favor, tente novamente.",
-    "AddNewSeriesHelpText": "É fácil adicionar uma nova série, apenas comece a escrever o nome da série que quer adicionar."
+    "AddNewSeriesHelpText": "É fácil adicionar uma nova série, apenas comece a escrever o nome da série que quer adicionar.",
+    "DeleteTagMessageText": "Tem a certeza que quer eliminar a etiqueta \"{label}\"?",
+    "DeleteSelectedIndexersMessageText": "Tem a certeza que quer eliminar os {count} indexadores seleccionados?",
+    "DeleteDownloadClientMessageText": "Tem a certeza que quer eliminar o cliente de transferências \"{name}\"?",
+    "DeleteNotificationMessageText": "Tem a certeza que quer eliminar a notificação \"{name}\"?",
+    "EnableRss": "Activar RSS",
+    "DeleteSelectedDownloadClientsMessageText": "Tem a certeza que quer eliminar os {count} clientes de transferência seleccionados?",
+    "MaintenanceRelease": "Versão de manutenção: reparações de erros e outras melhorias. Consulte o Histórico de Commits do Github para saber mais",
+    "DeleteBackupMessageText": "Tem a certeza que quer eliminar a cópia de segurança \"{name}\"?",
+    "Exception": "Excepção"
 }

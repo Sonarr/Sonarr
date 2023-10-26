@@ -191,5 +191,13 @@
     "FormatAgeDay": "zi",
     "TablePageSizeHelpText": "Numărul de articole de afișat pe fiecare pagină",
     "RemoveSelectedBlocklistMessageText": "Sigur doriți să eliminați elementele selectate din lista neagră?",
-    "AuthenticationRequiredUsernameHelpTextWarning": "Introduceți un nou nume de utilizator"
+    "AuthenticationRequiredUsernameHelpTextWarning": "Introduceți un nou nume de utilizator",
+    "FirstDayOfWeek": "Prima zi a săptămânii",
+    "ShortDateFormat": "Format scurt de dată",
+    "ShowRelativeDates": "Afișați datele relative",
+    "LongDateFormat": "Format de dată lungă",
+    "AppUpdated": "{appName} actualizat",
+    "ShowRelativeDatesHelpText": "Afișați datele relative (Azi / Ieri / etc) sau absolute",
+    "WeekColumnHeader": "Antetul coloanei săptămânii",
+    "TimeFormat": "Format ora"
 }
