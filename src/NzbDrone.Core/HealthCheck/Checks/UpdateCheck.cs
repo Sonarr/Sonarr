@@ -79,7 +79,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
                             "UpdateUiNotWritableHealthCheckMessage",
                             new Dictionary<string, object>
                             {
-                                { "startupFolder", startupFolder },
+                                { "uiFolder", uiFolder },
                                 { "userName", Environment.UserName }
                             }),
                         "#cannot-install-update-because-ui-folder-is-not-writable-by-the-user");
