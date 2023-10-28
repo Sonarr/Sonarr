@@ -67,6 +67,11 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                         return Decision.Reject("Episode file already imported at {0}", lastImported.Date.ToLocalTime());
                     }
                 }
+                else
+                {
+                    _logger.Debug("Episode file previously imported at {0}", lastImported.Date);
+                    return Decision.Reject("Episode file already imported at {0}", lastImported.Date.ToLocalTime());
+                }
             }
 
             return Decision.Accept();
