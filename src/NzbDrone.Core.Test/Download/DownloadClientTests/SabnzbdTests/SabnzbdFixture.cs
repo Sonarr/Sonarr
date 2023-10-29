@@ -544,6 +544,52 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
         }
 
         [Test]
+        public void should_test_success_if_sorters_are_empty()
+        {
+            _config.Misc.enable_tv_sorting = false;
+            _config.Misc.tv_categories = null;
+            _config.Sorters = new List<SabnzbdSorter>();
+
+            var result = new NzbDroneValidationResult(Subject.Test());
+
+            result.IsValid.Should().BeTrue();
+        }
+
+        [Test]
+        public void should_test_failed_if_sorter_is_enabled_for_non_tv_category()
+        {
+            _config.Misc.enable_tv_sorting = false;
+            _config.Misc.tv_categories = null;
+            _config.Sorters = Builder<SabnzbdSorter>.CreateListOfSize(1)
+                .All()
+                .With(s => s.is_active = true)
+                .With(s => s.sort_cats = new List<string> { "tv-custom" })
+                .Build()
+                .ToList();
+
+            var result = new NzbDroneValidationResult(Subject.Test());
+
+            result.IsValid.Should().BeTrue();
+        }
+
+        [Test]
+        public void should_test_failed_if_sorter_is_enabled_for_tv_category()
+        {
+            _config.Misc.enable_tv_sorting = false;
+            _config.Misc.tv_categories = null;
+            _config.Sorters = Builder<SabnzbdSorter>.CreateListOfSize(1)
+                .All()
+                .With(s => s.is_active = true)
+                .With(s => s.sort_cats = new List<string> { "tv" })
+                .Build()
+                .ToList();
+
+            var result = new NzbDroneValidationResult(Subject.Test());
+
+            result.IsValid.Should().BeFalse();
+        }
+
+        [Test]
         public void should_test_success_if_tv_sorting_disabled()
         {
             _config.Misc.enable_tv_sorting = false;

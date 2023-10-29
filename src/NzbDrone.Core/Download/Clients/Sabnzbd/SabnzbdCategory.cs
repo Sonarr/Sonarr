@@ -11,11 +11,13 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         {
             Categories = new List<SabnzbdCategory>();
             Servers = new List<object>();
+            Sorters = new List<SabnzbdSorter>();
         }
 
         public SabnzbdConfigMisc Misc { get; set; }
         public List<SabnzbdCategory> Categories { get; set; }
         public List<object> Servers { get; set; }
+        public List<SabnzbdSorter> Sorters { get; set; }
     }
 
     public class SabnzbdConfigMisc
@@ -41,5 +43,23 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
         public string Dir { get; set; }
 
         public OsPath FullPath { get; set; }
+    }
+
+    public class SabnzbdSorter
+    {
+        public SabnzbdSorter()
+        {
+            sort_cats = new List<string>();
+            sort_type = new List<int>();
+        }
+
+        public string name { get; set; }
+        public int order { get; set; }
+        public string min_size { get; set; }
+        public string multipart_label { get; set; }
+        public string sort_string { get; set; }
+        public List<string> sort_cats { get; set; }
+        public List<int> sort_type { get; set; }
+        public bool is_active { get; set; }
     }
 }
