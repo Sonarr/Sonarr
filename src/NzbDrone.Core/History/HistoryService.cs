@@ -175,9 +175,7 @@ namespace NzbDrone.Core.History
                     history.Data.Add("ReleaseHash", message.Episode.ParsedEpisodeInfo.ReleaseHash);
                 }
 
-                var torrentRelease = message.Episode.Release as TorrentInfo;
-
-                if (torrentRelease != null)
+                if (message.Episode.Release is TorrentInfo torrentRelease)
                 {
                     history.Data.Add("TorrentInfoHash", torrentRelease.InfoHash);
                 }

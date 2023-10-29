@@ -104,6 +104,11 @@ namespace NzbDrone.Core.Download
                 _logger.Trace("Release {0} no longer available on indexer.", remoteEpisode);
                 throw;
             }
+            catch (ReleaseBlockedException)
+            {
+                _logger.Trace("Release {0} previously added to blocklist, not sending to download client again.", remoteEpisode);
+                throw;
+            }
             catch (DownloadClientRejectedReleaseException)
             {
                 _logger.Trace("Release {0} rejected by download client, possible duplicate.", remoteEpisode);
@@ -128,7 +133,7 @@ namespace NzbDrone.Core.Download
             episodeGrabbedEvent.DownloadClientId = downloadClient.Definition.Id;
             episodeGrabbedEvent.DownloadClientName = downloadClient.Definition.Name;
 
-            if (!string.IsNullOrWhiteSpace(downloadClientId))
+            if (downloadClientId.IsNotNullOrWhiteSpace())
             {
                 episodeGrabbedEvent.DownloadId = downloadClientId;
             }
