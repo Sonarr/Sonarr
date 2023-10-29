@@ -13,7 +13,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                                                     {
                                                         new Regex(@"(?:dis[ck])(?:[-_. ]\d+[-_. ])(?:(?:(?:480|720|1080|2160)[ip]|)[-_. ])?(?:Blu\-?ray)", RegexOptions.Compiled | RegexOptions.IgnoreCase),
                                                         new Regex(@"(?:(?:480|720|1080|2160)[ip]|)[-_. ](?:full)[-_. ](?:Blu\-?ray)", RegexOptions.Compiled | RegexOptions.IgnoreCase),
-                                                        new Regex(@"(?:\d?x?M?DVD-?[R59])[ ._]", RegexOptions.Compiled | RegexOptions.IgnoreCase)
+                                                        new Regex(@"(?:\d?x?M?DVD-?[R59])(?:[ ._]|$)", RegexOptions.Compiled | RegexOptions.IgnoreCase)
                                                     };
 
         private static readonly string[] _dvdContainerTypes = new[] { "vob", "iso" };
