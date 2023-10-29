@@ -57,16 +57,16 @@ namespace NzbDrone.Core.Download.Clients.Flood
         [FieldDefinition(6, Label = "Destination", Type = FieldType.Textbox, HelpText = "DownloadClientSettingsDestinationHelpText")]
         public string Destination { get; set; }
 
-        [FieldDefinition(7, Label = "Tags", Type = FieldType.Tag, HelpText = "DownloadClientSettingsFloodTagsHelpText")]
+        [FieldDefinition(7, Label = "Tags", Type = FieldType.Tag, HelpText = "DownloadClientFloodSettingsTagsHelpText")]
         public IEnumerable<string> Tags { get; set; }
 
-        [FieldDefinition(8, Label = "DownloadClientSettingsFloodPostImportTags", Type = FieldType.Tag, HelpText = "DownloadClientSettingsFloodPostImportTagsHelpText", Advanced = true)]
+        [FieldDefinition(8, Label = "DownloadClientFloodSettingsPostImportTags", Type = FieldType.Tag, HelpText = "DownloadClientFloodSettingsPostImportTagsHelpText", Advanced = true)]
         public IEnumerable<string> PostImportTags { get; set; }
 
-        [FieldDefinition(9, Label = "DownloadClientSettingsFloodAdditionalTags", Type = FieldType.Select, SelectOptions = typeof(AdditionalTags), HelpText = "DownloadClientSettingsFloodAdditionalTagsHelpText", Advanced = true)]
+        [FieldDefinition(9, Label = "DownloadClientFloodSettingsAdditionalTags", Type = FieldType.Select, SelectOptions = typeof(AdditionalTags), HelpText = "DownloadClientFloodSettingsAdditionalTagsHelpText", Advanced = true)]
         public IEnumerable<int> AdditionalTags { get; set; }
 
-        [FieldDefinition(10, Label = "DownloadClientSettingsFloodStartOnAdd", Type = FieldType.Checkbox)]
+        [FieldDefinition(10, Label = "DownloadClientFloodSettingsStartOnAdd", Type = FieldType.Checkbox)]
         public bool StartOnAdd { get; set; }
 
         public NzbDroneValidationResult Validate()
