@@ -110,8 +110,9 @@ namespace NzbDrone.Core.Download.Clients.FreeboxDownload
 
                     case FreeboxDownloadTaskStatus.Unknown:
                     default: // new status in API? default to downloading
-                        item.Message = "Unknown download state: " + torrent.Status;
-                        _logger.Info(item.Message);
+                        item.Message = _localizationService.GetLocalizedString("UnknownDownloadState",
+                            new Dictionary<string, object> { { "state", torrent.Status } });
+                        _logger.Info($"Unknown download state: {torrent.Status}");
                         item.Status = DownloadItemStatus.Downloading;
                         break;
                 }
