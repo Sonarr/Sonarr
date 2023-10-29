@@ -7,6 +7,7 @@ using NzbDrone.Common.Cache;
 using NzbDrone.Common.Http;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Download.Clients.Flood.Types;
+using NzbDrone.Core.Localization;
 
 namespace NzbDrone.Core.Download.Clients.Flood
 {
@@ -27,12 +28,14 @@ namespace NzbDrone.Core.Download.Clients.Flood
         private readonly IHttpClient _httpClient;
         private readonly Logger _logger;
         private readonly ICached<Dictionary<string, string>> _authCookieCache;
+        private readonly ILocalizationService _localizationService;
 
-        public FloodProxy(IHttpClient httpClient, ICacheManager cacheManager, Logger logger)
+        public FloodProxy(IHttpClient httpClient, ICacheManager cacheManager, Logger logger, ILocalizationService localizationService)
         {
             _httpClient = httpClient;
             _logger = logger;
             _authCookieCache = cacheManager.GetCache<Dictionary<string, string>>(GetType(), "authCookies");
+            _localizationService = localizationService;
         }
 
         private string BuildUrl(FloodSettings settings)
@@ -71,14 +74,14 @@ namespace NzbDrone.Core.Download.Clients.Flood
                     ex.Response.StatusCode == HttpStatusCode.Unauthorized)
                 {
                     _authCookieCache.Remove(BuildCachedCookieKey(settings));
-                    throw new DownloadClientAuthenticationException("Failed to authenticate with Flood.");
+                    throw new DownloadClientAuthenticationException(_localizationService.GetLocalizedString("DownloadClientValidationAuthenticationFailure"));
                 }
 
-                throw new DownloadClientException("Unable to connect to Flood, please check your settings");
+                throw new DownloadClientException(_localizationService.GetLocalizedString("DownloadClientValidationUnableToConnect", new Dictionary<string, object> { { "clientName", "Flood" } }));
             }
             catch
             {
-                throw new DownloadClientException("Unable to connect to Flood, please check your settings");
+                throw new DownloadClientException(_localizationService.GetLocalizedString("DownloadClientValidationUnableToConnect", new Dictionary<string, object> { { "clientName", "Flood" } }));
             }
         }
 
