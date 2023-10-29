@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Download.Clients.Blackhole
         private static readonly UsenetBlackholeSettingsValidator Validator = new UsenetBlackholeSettingsValidator();
 
         [FieldDefinition(0, Label = "UsenetBlackholeNzbFolder", Type = FieldType.Path, HelpText = "BlackholeFolderHelpText")]
-        [FieldToken(TokenField.HelpText, "extension", ".nzb")]
+        [FieldToken(TokenField.HelpText, "UsenetBlackholeNzbFolder", "extension", ".nzb")]
         public string NzbFolder { get; set; }
 
         [FieldDefinition(1, Label = "BlackholeWatchFolder", Type = FieldType.Path, HelpText = "BlackholeWatchFolderHelpText")]

@@ -41,11 +41,11 @@ namespace NzbDrone.Core.Download.Clients.Flood
         public int Port { get; set; }
 
         [FieldDefinition(2, Label = "UseSsl", Type = FieldType.Checkbox, HelpText = "DownloadClientSettingsUseSslHelpText")]
-        [FieldToken(TokenField.HelpText, "clientName", "Flood")]
+        [FieldToken(TokenField.HelpText, "UseSsl", "clientName", "Flood")]
         public bool UseSsl { get; set; }
 
         [FieldDefinition(3, Label = "UrlBase", Type = FieldType.Textbox, HelpText = "DownloadClientFloodSettingsUrlBaseHelpText")]
-        [FieldToken(TokenField.HelpText, "url", "[protocol]://[host]:[port]/[urlBase]/api")]
+        [FieldToken(TokenField.HelpText, "UrlBase", "url", "[protocol]://[host]:[port]/[urlBase]/api")]
         public string UrlBase { get; set; }
 
         [FieldDefinition(4, Label = "Username", Type = FieldType.Textbox, Privacy = PrivacyLevel.UserName)]

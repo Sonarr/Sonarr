@@ -36,11 +36,11 @@ namespace NzbDrone.Core.Download.Clients.Deluge
         public int Port { get; set; }
 
         [FieldDefinition(2, Label = "UseSsl", Type = FieldType.Checkbox, HelpText = "DownloadClientSettingsUseSslHelpText")]
-        [FieldToken(TokenField.HelpText, "clientName", "Deluge")]
+        [FieldToken(TokenField.HelpText, "UseSsl", "clientName", "Deluge")]
         public bool UseSsl { get; set; }
 
         [FieldDefinition(3, Label = "UrlBase", Type = FieldType.Textbox, Advanced = true, HelpText = "DownloadClientDelugeSettingsUrlBaseHelpText")]
-        [FieldToken(TokenField.HelpText, "url", "http://[host]:[port]/[urlBase]/json")]
+        [FieldToken(TokenField.HelpText, "UrlBase", "url", "http://[host]:[port]/[urlBase]/json")]
         public string UrlBase { get; set; }
 
         [FieldDefinition(4, Label = "Password", Type = FieldType.Password, Privacy = PrivacyLevel.Password)]

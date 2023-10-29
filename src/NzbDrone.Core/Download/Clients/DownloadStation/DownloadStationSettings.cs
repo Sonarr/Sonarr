@@ -37,7 +37,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
         public int Port { get; set; }
 
         [FieldDefinition(2, Label = "UseSsl", Type = FieldType.Checkbox, HelpText = "DownloadClientSettingsUseSslHelpText")]
-        [FieldToken(TokenField.HelpText, "clientName", "Download Station")]
+        [FieldToken(TokenField.HelpText, "UseSsl", "clientName", "Download Station")]
         public bool UseSsl { get; set; }
 
         [FieldDefinition(3, Label = "Username", Type = FieldType.Textbox, Privacy = PrivacyLevel.UserName)]

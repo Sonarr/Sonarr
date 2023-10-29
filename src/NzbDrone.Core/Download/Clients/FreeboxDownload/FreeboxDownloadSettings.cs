@@ -47,20 +47,20 @@ namespace NzbDrone.Core.Download.Clients.FreeboxDownload
         }
 
         [FieldDefinition(0, Label = "Host", Type = FieldType.Textbox, HelpText = "DownloadClientFreeboxSettingsHostHelpText")]
-        [FieldToken(TokenField.HelpText, "url", "mafreebox.freebox.fr")]
+        [FieldToken(TokenField.HelpText, "Host", "url", "mafreebox.freebox.fr")]
         public string Host { get; set; }
 
         [FieldDefinition(1, Label = "Port", Type = FieldType.Textbox, HelpText = "DownloadClientFreeboxSettingsPortHelpText")]
-        [FieldToken(TokenField.HelpText, "port", 443)]
+        [FieldToken(TokenField.HelpText, "Port", "port", 443)]
         public int Port { get; set; }
 
-        [FieldDefinition(2, Label = "Use SSL", Type = FieldType.Checkbox, HelpText = "DownloadClientSettingsUseSslHelpText")]
-        [FieldToken(TokenField.HelpText, "clientName", "Freebox API")]
+        [FieldDefinition(2, Label = "UseSsl", Type = FieldType.Checkbox, HelpText = "DownloadClientSettingsUseSslHelpText")]
+        [FieldToken(TokenField.HelpText, "UseSsl", "clientName", "Freebox API")]
         public bool UseSsl { get; set; }
 
         [FieldDefinition(3, Label = "DownloadClientFreeboxSettingsApiUrl", Type = FieldType.Textbox, Advanced = true, HelpText = "DownloadClientFreeboxSettingsApiUrlHelpText")]
-        [FieldToken(TokenField.HelpText, "apiUrl", "http://[host]:[port]/[api_base_url]/[api_version]/")]
-        [FieldToken(TokenField.HelpText, "defaultApiUrl", "/api/v1/")]
+        [FieldToken(TokenField.HelpText, "DownloadClientFreeboxSettingsApiUrl", "url", "http://[host]:[port]/[api_base_url]/[api_version]/")]
+        [FieldToken(TokenField.HelpText, "DownloadClientFreeboxSettingsApiUrl", "defaultApiUrl", "/api/v1/")]
         public string ApiUrl { get; set; }
 
         [FieldDefinition(4, Label = "DownloadClientFreeboxSettingsAppId", Type = FieldType.Textbox, HelpText = "DownloadClientFreeboxSettingsAppIdHelpText")]

@@ -393,7 +393,7 @@
   "DownloadClientFreeboxAuthenticationError": "Authentication to Freebox API failed. Reason: {errorDescription}",
   "DownloadClientFreeboxNotLoggedIn": "Not logged in",
   "DownloadClientFreeboxSettingsApiUrl": "API URL",
-  "DownloadClientFreeboxSettingsApiUrlHelpText": "Define Freebox API base URL with API version, eg '{apiUrl}', defaults to '{defaultApiUrl}'",
+  "DownloadClientFreeboxSettingsApiUrlHelpText": "Define Freebox API base URL with API version, eg '{url}', defaults to '{defaultApiUrl}'",
   "DownloadClientFreeboxSettingsAppId": "App ID",
   "DownloadClientFreeboxSettingsAppIdHelpText": "App ID given when creating access to Freebox API (ie 'app_id')",
   "DownloadClientFreeboxSettingsAppToken": "App Token",
