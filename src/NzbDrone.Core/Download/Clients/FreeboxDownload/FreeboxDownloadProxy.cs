@@ -8,7 +8,6 @@ using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Download.Clients.FreeboxDownload.Responses;
-using NzbDrone.Core.Localization;
 
 namespace NzbDrone.Core.Download.Clients.FreeboxDownload
 {
@@ -26,15 +25,13 @@ namespace NzbDrone.Core.Download.Clients.FreeboxDownload
     {
         private readonly IHttpClient _httpClient;
         private readonly Logger _logger;
-        private readonly ILocalizationService _localizationService;
         private ICached<string> _authSessionTokenCache;
 
-        public FreeboxDownloadProxy(ICacheManager cacheManager, IHttpClient httpClient, Logger logger, ILocalizationService localizationService)
+        public FreeboxDownloadProxy(ICacheManager cacheManager, IHttpClient httpClient, Logger logger)
         {
             _httpClient = httpClient;
             _logger = logger;
             _authSessionTokenCache = cacheManager.GetCache<string>(GetType(), "authSessionToken");
-            _localizationService = localizationService;
         }
 
         public void Authenticate(FreeboxDownloadSettings settings)
@@ -45,7 +42,7 @@ namespace NzbDrone.Core.Download.Clients.FreeboxDownload
 
             if (response.Result.LoggedIn == false)
             {
-                throw new DownloadClientAuthenticationException(_localizationService.GetLocalizedString("DownloadClientFreeboxNotLoggedIn"));
+                throw new DownloadClientAuthenticationException("Not logged");
             }
         }
 
@@ -235,11 +232,11 @@ namespace NzbDrone.Core.Download.Clients.FreeboxDownload
             }
             catch (HttpRequestException ex)
             {
-                throw new DownloadClientUnavailableException(_localizationService.GetLocalizedString("DownloadClientFreeboxUnableToReachFreebox", new Dictionary<string, object> { { "exceptionMessage", ex.Message } }), ex);
+                throw new DownloadClientUnavailableException($"Unable to reach Freebox API. Verify 'Host', 'Port' or 'Use SSL' settings. (Error: {ex.Message})", ex);
             }
             catch (WebException ex)
             {
-                throw new DownloadClientUnavailableException(_localizationService.GetLocalizedString("DownloadClientValidationUnableToConnect", new Dictionary<string, object> { { "clientName", "Freebox API" } }), ex);
+                throw new DownloadClientUnavailableException("Unable to connect to Freebox API, please check your settings", ex);
             }
 
             if (response.StatusCode == HttpStatusCode.Forbidden || response.StatusCode == HttpStatusCode.Unauthorized)
@@ -248,12 +245,13 @@ namespace NzbDrone.Core.Download.Clients.FreeboxDownload
 
                 var responseContent = Json.Deserialize<FreeboxResponse<FreeboxLogin>>(response.Content);
 
-                _logger.Error($"Authentication to Freebox API failed. Reason: {responseContent.GetErrorDescription()}");
-                throw new DownloadClientAuthenticationException(_localizationService.GetLocalizedString("DownloadClientFreeboxAuthenticationError", new Dictionary<string, object> { { "errorDescription", responseContent.GetErrorDescription() } }));
+                var msg = $"Authentication to Freebox API failed. Reason: {responseContent.GetErrorDescription()}";
+                _logger.Error(msg);
+                throw new DownloadClientAuthenticationException(msg);
             }
             else if (response.StatusCode == HttpStatusCode.NotFound)
             {
-                throw new FreeboxDownloadException(_localizationService.GetLocalizedString("DownloadClientFreeboxUnableToReachFreeboxApi"));
+                throw new FreeboxDownloadException("Unable to reach Freebox API. Verify 'API URL' setting for base URL and version.");
             }
             else if (response.StatusCode == HttpStatusCode.OK)
             {
@@ -265,13 +263,14 @@ namespace NzbDrone.Core.Download.Clients.FreeboxDownload
                 }
                 else
                 {
-                    _logger.Error($"Freebox API returned error: {responseContent.GetErrorDescription()}");
-                    throw new DownloadClientException(_localizationService.GetLocalizedString("DownloadClientFreeboxApiError", new Dictionary<string, object> { { "errorDescription", responseContent.GetErrorDescription() } }));
+                    var msg = $"Freebox API returned error: {responseContent.GetErrorDescription()}";
+                    _logger.Error(msg);
+                    throw new DownloadClientException(msg);
                 }
             }
             else
             {
-                throw new DownloadClientException(_localizationService.GetLocalizedString("DownloadClientValidationUnableToConnect", new Dictionary<string, object> { { "clientName", "Freebox" } }));
+                throw new DownloadClientException("Unable to connect to Freebox, please check your settings.");
             }
         }
     }
