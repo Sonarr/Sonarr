@@ -161,18 +161,20 @@ namespace NzbDrone.Core.Download.Clients.Hadouken
                 if (version < new Version("5.1"))
                 {
                     return new ValidationFailure(string.Empty,
-                        "Old Hadouken client with unsupported API, need 5.1 or higher");
+                        _localizationService.GetLocalizedString("DownloadClientValidationErrorVersion",
+                            new Dictionary<string, object>
+                                { { "clientName", Name }, { "requiredVersion", "5.1" }, { "reportedVersion", version } }));
                 }
             }
             catch (DownloadClientAuthenticationException ex)
             {
                 _logger.Error(ex, ex.Message);
 
-                return new NzbDroneValidationFailure("Password", "Authentication failed");
+                return new NzbDroneValidationFailure("Password", _localizationService.GetLocalizedString("DownloadClientValidationAuthenticationFailure"));
             }
             catch (Exception ex)
             {
-                return new NzbDroneValidationFailure("Host", "Unable to connect to Hadouken")
+                return new NzbDroneValidationFailure("Host", _localizationService.GetLocalizedString("DownloadClientValidationUnableToConnect"))
                        {
                            DetailedDescription = ex.Message
                        };
@@ -190,7 +192,7 @@ namespace NzbDrone.Core.Download.Clients.Hadouken
             catch (Exception ex)
             {
                 _logger.Error(ex, ex.Message);
-                return new NzbDroneValidationFailure(string.Empty, "Failed to get the list of torrents: " + ex.Message);
+                return new NzbDroneValidationFailure(string.Empty, _localizationService.GetLocalizedString("DownloadClientValidationTestTorrents", new Dictionary<string, object> { { "exceptionMessage", ex.Message } }));
             }
 
             return null;

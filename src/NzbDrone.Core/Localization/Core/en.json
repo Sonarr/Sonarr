@@ -415,6 +415,7 @@
   "DownloadClientSettingsPostImportCategoryHelpText": "Category for {appName} to set after it has imported the download. {appName} will not remove torrents in that category even if seeding finished. Leave blank to keep same category.",
   "DownloadClientSettingsRecentPriority": "Recent Priority",
   "DownloadClientSettingsRecentPriorityHelpText": "Priority to use when grabbing episodes that aired within the last 14 days",
+  "DownloadClientSettingsUrlBaseHelpText": "Adds a prefix to the {clientName} url, such as {url}",
   "DownloadClientSettingsUseSslHelpText": "Use secure connection when connection to {clientName}",
   "DownloadClientSortingHealthCheckMessage": "Download client {downloadClientName} has {sortingMode} sorting enabled for {appName}'s category. You should disable sorting in your download client to avoid import issues.",
   "DownloadClientStatusAllClientHealthCheckMessage": "All download clients are unavailable due to failures",
