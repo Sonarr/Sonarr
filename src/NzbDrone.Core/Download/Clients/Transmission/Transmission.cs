@@ -1,10 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Http;
+using NzbDrone.Core.Blocklisting;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Localization;
 using NzbDrone.Core.MediaFiles.TorrentInfo;
@@ -20,9 +21,10 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                             IConfigService configService,
                             IDiskProvider diskProvider,
                             IRemotePathMappingService remotePathMappingService,
-                            Logger logger,
-                            ILocalizationService localizationService)
-            : base(proxy, torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, logger, localizationService)
+                            ILocalizationService localizationService,
+                            IBlocklistService blocklistService,
+                            Logger logger)
+            : base(proxy, torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, localizationService, blocklistService, logger)
         {
         }
 

@@ -129,7 +129,7 @@ namespace NzbDrone.Core.Download
 
         private void PublishDownloadFailedEvent(List<EpisodeHistory> historyItems, string message, TrackedDownload trackedDownload = null, bool skipRedownload = false)
         {
-            var historyItem = historyItems.First();
+            var historyItem = historyItems.Last();
             Enum.TryParse(historyItem.Data.GetValueOrDefault(EpisodeHistory.RELEASE_SOURCE, ReleaseSourceType.Unknown.ToString()), out ReleaseSourceType releaseSource);
 
             var downloadFailedEvent = new DownloadFailedEvent
