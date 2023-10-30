@@ -21,6 +21,7 @@ namespace Sonarr.Api.V3.Indexers
         private readonly IMakeDownloadDecision _downloadDecisionMaker;
         private readonly IProcessDownloadDecisions _downloadDecisionProcessor;
         private readonly IIndexerFactory _indexerFactory;
+        private readonly IDownloadClientFactory _downloadClientFactory;
         private readonly Logger _logger;
 
         private static readonly object PushLock = new object();
@@ -28,6 +29,7 @@ namespace Sonarr.Api.V3.Indexers
         public ReleasePushController(IMakeDownloadDecision downloadDecisionMaker,
                                  IProcessDownloadDecisions downloadDecisionProcessor,
                                  IIndexerFactory indexerFactory,
+                                 IDownloadClientFactory downloadClientFactory,
                                  IQualityProfileService qualityProfileService,
                                  Logger logger)
             : base(qualityProfileService)
@@ -35,6 +37,7 @@ namespace Sonarr.Api.V3.Indexers
             _downloadDecisionMaker = downloadDecisionMaker;
             _downloadDecisionProcessor = downloadDecisionProcessor;
             _indexerFactory = indexerFactory;
+            _downloadClientFactory = downloadClientFactory;
             _logger = logger;
 
             PostValidator.RuleFor(s => s.Title).NotEmpty();
@@ -57,6 +60,8 @@ namespace Sonarr.Api.V3.Indexers
 
             ResolveIndexer(info);
 
+            var downloadClientId = ResolveDownloadClientId(release);
+
             DownloadDecision decision;
 
             lock (PushLock)
@@ -65,12 +70,12 @@ namespace Sonarr.Api.V3.Indexers
 
                 decision = decisions.FirstOrDefault();
 
-                _downloadDecisionProcessor.ProcessDecision(decision, release.DownloadClientId).GetAwaiter().GetResult();
+                _downloadDecisionProcessor.ProcessDecision(decision, downloadClientId).GetAwaiter().GetResult();
             }
 
             if (decision?.RemoteEpisode.ParsedEpisodeInfo == null)
             {
-                throw new ValidationException(new List<ValidationFailure> { new ValidationFailure("Title", "Unable to parse", release.Title) });
+                throw new ValidationException(new List<ValidationFailure> { new ("Title", "Unable to parse", release.Title) });
             }
 
             return MapDecisions(new[] { decision });
@@ -109,6 +114,27 @@ namespace Sonarr.Api.V3.Indexers
             {
                 _logger.Debug("Push Release {0} not associated with an indexer.", release.Title);
             }
+        }
+
+        private int? ResolveDownloadClientId(ReleaseResource release)
+        {
+            var downloadClientId = release.DownloadClientId.GetValueOrDefault();
+
+            if (downloadClientId == 0 && release.DownloadClient.IsNotNullOrWhiteSpace())
+            {
+                var downloadClient = _downloadClientFactory.All().FirstOrDefault(v => v.Name.EqualsIgnoreCase(release.DownloadClient));
+
+                if (downloadClient != null)
+                {
+                    _logger.Debug("Push Release {0} associated with download client {1} - {2}.", release.Title, downloadClientId, release.DownloadClient);
+
+                    return downloadClient.Id;
+                }
+
+                _logger.Debug("Push Release {0} not associated with known download client {1}.", release.Title, release.DownloadClient);
+            }
+
+            return release.DownloadClientId;
         }
     }
 }
