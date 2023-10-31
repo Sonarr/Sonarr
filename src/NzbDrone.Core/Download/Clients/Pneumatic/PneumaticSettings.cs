@@ -19,10 +19,10 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
     {
         private static readonly PneumaticSettingsValidator Validator = new PneumaticSettingsValidator();
 
-        [FieldDefinition(0, Label = "Nzb Folder", Type = FieldType.Path, HelpText = "This folder will need to be reachable from XBMC")]
+        [FieldDefinition(0, Label = "DownloadClientPneumaticSettingsNzbFolder", Type = FieldType.Path, HelpText = "DownloadClientPneumaticSettingsNzbFolderHelpText")]
         public string NzbFolder { get; set; }
 
-        [FieldDefinition(1, Label = "Strm Folder", Type = FieldType.Path, HelpText = ".strm files in this folder will be import by drone")]
+        [FieldDefinition(1, Label = "DownloadClientPneumaticSettingsStrmFolder", Type = FieldType.Path, HelpText = "DownloadClientPneumaticSettingsStrmFolderHelpText")]
         public string StrmFolder { get; set; }
 
         public NzbDroneValidationResult Validate()
