@@ -157,7 +157,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
                 if (torrent.State == DelugeTorrentStatus.Error)
                 {
                     item.Status = DownloadItemStatus.Warning;
-                    item.Message = _localizationService.GetLocalizedString("DelugeTorrentStatusError");
+                    item.Message = _localizationService.GetLocalizedString("DownloadClientDelugeTorrentStateError");
                 }
                 else if (torrent.IsFinished && torrent.State != DelugeTorrentStatus.Checking)
                 {
