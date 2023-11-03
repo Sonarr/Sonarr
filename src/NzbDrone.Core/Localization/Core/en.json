@@ -473,6 +473,8 @@
   "DownloadClientStatusAllClientHealthCheckMessage": "All download clients are unavailable due to failures",
   "DownloadClientStatusSingleClientHealthCheckMessage": "Download clients unavailable due to failures: {downloadClientNames}",
   "DownloadClientTagHelpText": "Only use this download client for series with at least one matching tag. Leave blank to use with all series.",
+  "DownloadClientTransmissionSettingsDirectoryHelpText": "Optional location to put downloads in, leave blank to use the default Transmission location",
+  "DownloadClientTransmissionSettingsUrlBaseHelpText": "Adds a prefix to the {clientName} rpc url, eg {url}, defaults to '{defaultUrl}'",
   "DownloadClientValidationApiKeyIncorrect": "API Key Incorrect",
   "DownloadClientValidationApiKeyRequired": "API Key Required",
   "DownloadClientValidationAuthenticationFailure": "Authentication Failure",
