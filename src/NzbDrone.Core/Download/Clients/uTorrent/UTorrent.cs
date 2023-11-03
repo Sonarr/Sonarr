@@ -143,7 +143,7 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
                 if (torrent.Status.HasFlag(UTorrentTorrentStatus.Error))
                 {
                     item.Status = DownloadItemStatus.Warning;
-                    item.Message = "uTorrent is reporting an error";
+                    item.Message = _localizationService.GetLocalizedString("DownloadClientUTorrentTorrentStateError");
                 }
                 else if (torrent.Status.HasFlag(UTorrentTorrentStatus.Loaded) &&
                          torrent.Status.HasFlag(UTorrentTorrentStatus.Checked) && torrent.Remaining == 0 && torrent.Progress == 1.0)
@@ -266,15 +266,20 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
 
                 if (version < 25406)
                 {
-                    return new ValidationFailure(string.Empty, "Old uTorrent client with unsupported API, need 3.0 or higher");
+                    return new ValidationFailure(string.Empty,
+                        _localizationService.GetLocalizedString("DownloadClientValidationErrorVersion",
+                            new Dictionary<string, object>
+                            {
+                                { "clientName", Name }, { "requiredVersion", "3.0" }, { "reportedVersion", version }
+                            }));
                 }
             }
             catch (DownloadClientAuthenticationException ex)
             {
                 _logger.Error(ex, ex.Message);
-                return new NzbDroneValidationFailure("Username", "Authentication failure")
+                return new NzbDroneValidationFailure("Username", _localizationService.GetLocalizedString("DownloadClientValidationAuthenticationFailure"))
                 {
-                    DetailedDescription = "Please verify your username and password."
+                    DetailedDescription = _localizationService.GetLocalizedString("DownloadClientValidationAuthenticationFailureDetail", new Dictionary<string, object> { { "clientName", Name } })
                 };
             }
             catch (WebException ex)
@@ -282,19 +287,19 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
                 _logger.Error(ex, "Unable to connect to uTorrent");
                 if (ex.Status == WebExceptionStatus.ConnectFailure)
                 {
-                    return new NzbDroneValidationFailure("Host", "Unable to connect")
+                    return new NzbDroneValidationFailure("Host", _localizationService.GetLocalizedString("DownloadClientValidationUnableToConnect", new Dictionary<string, object> { { "clientName", Name } }))
                     {
-                        DetailedDescription = "Please verify the hostname and port."
+                        DetailedDescription = _localizationService.GetLocalizedString("DownloadClientValidationUnableToConnectDetail")
                     };
                 }
 
-                return new NzbDroneValidationFailure(string.Empty, "Unknown exception: " + ex.Message);
+                return new NzbDroneValidationFailure(string.Empty, _localizationService.GetLocalizedString("DownloadClientValidationUnknownException", new Dictionary<string, object> { { "exception", ex.Message } }));
             }
             catch (Exception ex)
             {
                 _logger.Error(ex, "Failed to test uTorrent");
 
-                return new NzbDroneValidationFailure("Host", "Unable to connect to uTorrent")
+                return new NzbDroneValidationFailure("Host", _localizationService.GetLocalizedString("DownloadClientValidationUnableToConnect", new Dictionary<string, object> { { "clientName", Name } }))
                        {
                            DetailedDescription = ex.Message
                        };
@@ -312,7 +317,7 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
             catch (Exception ex)
             {
                 _logger.Error(ex, "Failed to get torrents");
-                return new NzbDroneValidationFailure(string.Empty, "Failed to get the list of torrents: " + ex.Message);
+                return new NzbDroneValidationFailure(string.Empty, _localizationService.GetLocalizedString("DownloadClientValidationTestTorrents", new Dictionary<string, object> { { "exceptionMessage", ex.Message } }));
             }
 
             return null;
