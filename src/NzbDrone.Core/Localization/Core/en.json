@@ -495,6 +495,7 @@
   "DownloadClientValidationUnknownException": "Unknown exception: {exception}",
   "DownloadClientValidationVerifySsl": "Verify SSL settings",
   "DownloadClientValidationVerifySslDetail": "Please verify your SSL configuration on both {clientName} and {appName}",
+  "DownloadClientVuzeValidationErrorVersion": "Protocol version not supported, use Vuze 5.0.0.0 or higher with Vuze Web Remote plugin.",
   "DownloadClients": "Download Clients",
   "DownloadClientsLoadError": "Unable to load download clients",
   "DownloadClientsSettingsSummary": "Download clients, download handling and remote path mappings",

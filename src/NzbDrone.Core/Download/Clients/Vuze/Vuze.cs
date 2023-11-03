@@ -59,7 +59,7 @@ namespace NzbDrone.Core.Download.Clients.Vuze
             if (!int.TryParse(versionString, out var version) || version < MINIMUM_SUPPORTED_PROTOCOL_VERSION)
             {
                 {
-                    return new ValidationFailure(string.Empty, "Protocol version not supported, use Vuze 5.0.0.0 or higher with Vuze Web Remote plugin.");
+                    return new ValidationFailure(string.Empty, _localizationService.GetLocalizedString("DownloadClientVuzeValidationErrorVersion"));
                 }
             }
 
