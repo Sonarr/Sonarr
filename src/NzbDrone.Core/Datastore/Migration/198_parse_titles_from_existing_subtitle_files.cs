@@ -4,8 +4,7 @@ using Dapper;
 using FluentMigrator;
 using NzbDrone.Core.Datastore.Migration.Framework;
 using NzbDrone.Core.MediaFiles;
-using NzbDrone.Core.Parser;
-using NzbDrone.Core.Tv;
+using NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators;
 
 namespace NzbDrone.Core.Datastore.Migration
 {
@@ -21,12 +20,12 @@ namespace NzbDrone.Core.Datastore.Migration
 
         private void UpdateTitles(IDbConnection conn, IDbTransaction tran)
         {
-            var updatedTitles = new List<object>();
+            var updates = new List<object>();
 
             using (var cmd = conn.CreateCommand())
             {
                 cmd.Transaction = tran;
-                cmd.CommandText = "SELECT \"Id\", \"RelativePath\", \"EpisodeFileId\" FROM \"SubtitleFiles\" WHERE \"LanguageTags\" IS NULL";
+                cmd.CommandText = "SELECT \"Id\", \"RelativePath\", \"EpisodeFileId\", \"Language\", \"LanguageTags\" FROM \"SubtitleFiles\"";
 
                 using var reader = cmd.ExecuteReader();
                 while (reader.Read())
@@ -36,27 +35,22 @@ namespace NzbDrone.Core.Datastore.Migration
                     var episodeFileId = reader.GetInt32(2);
 
                     var episodeFile = conn.QuerySingle<EpisodeFile>("SELECT * FROM \"EpisodeFiles\" WHERE \"Id\" = @Id", new { Id = episodeFileId });
-                    var episode = new Episode
-                    {
-                        EpisodeFile = new LazyLoaded<EpisodeFile>(episodeFile)
-                    };
 
-                    var subtitleTitleInfo = LanguageParser.ParseSubtitleLanguageInformation(relativePath, episode);
+                    var subtitleTitleInfo = AggregateSubtitleInfo.CleanSubtitleTitleInfo(episodeFile, relativePath);
 
-                    if (subtitleTitleInfo.Copy != 0)
+                    updates.Add(new
                     {
-                        updatedTitles.Add(new
-                        {
-                            Id = id,
-                            Title = subtitleTitleInfo.Title,
-                            Copy = subtitleTitleInfo.Copy
-                        });
-                    }
+                        Id = id,
+                        Title = subtitleTitleInfo.Title,
+                        Language = subtitleTitleInfo.Language,
+                        LanguageTags = subtitleTitleInfo.LanguageTags,
+                        Copy = subtitleTitleInfo.Copy
+                    });
                 }
             }
 
             var updateSubtitleFilesSql = "UPDATE \"SubtitleFiles\" SET \"Title\" = @Title, \"Copy\" = @Copy, \"LastUpdated\" = CURRENT_TIMESTAMP WHERE \"Id\" = @Id";
-            conn.Execute(updateSubtitleFilesSql, updatedTitles, transaction: tran);
+            conn.Execute(updateSubtitleFilesSql, updates, transaction: tran);
         }
     }
 }

@@ -1,11 +1,8 @@
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Languages;
-using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Test.ParserTests
 {
@@ -432,51 +429,35 @@ namespace NzbDrone.Core.Test.ParserTests
             result.Languages.Should().Contain(Language.English);
         }
 
-        [TestCase("Name (2020) - S01E20 - [AAC 2.0].testtitle.default.eng.forced.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv", new[] { "default", "forced" }, "testtitle", "English")]
-        [TestCase("Name (2020) - S01E20 - [AAC 2.0].eng.default.testtitle.forced.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv", new[] { "default", "forced" }, "testtitle", "English")]
-        [TestCase("Name (2020) - S01E20 - [AAC 2.0].default.eng.testtitle.forced.ass", "Name (2020)/Season 1/Name (2020).mkv", new[] { "default", "forced" }, "testtitle", "English")]
-        [TestCase("Name (2020) - S01E20 - [AAC 2.0].testtitle.forced.eng.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv", new[] { "forced" }, "testtitle", "English")]
-        [TestCase("Name (2020) - S01E20 - [AAC 2.0].eng.forced.testtitle.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv", new[] { "forced" }, "testtitle", "English")]
-        [TestCase("Name (2020) - S01E20 - [AAC 2.0].forced.eng.testtitle.ass", "Name (2020)/Season 1/Name (2020).mkv", new[] { "forced" }, "testtitle", "English")]
-        [TestCase("Name (2020) - S01E20 - [AAC 2.0].testtitle.default.fra.forced.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv", new[] { "default", "forced" }, "testtitle", "French")]
-        [TestCase("Name (2020) - S01E20 - [AAC 2.0].fra.default.testtitle.forced.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv", new[] { "default", "forced" }, "testtitle", "French")]
-        [TestCase("Name (2020) - S01E20 - [AAC 2.0].default.fra.testtitle.forced.ass", "Name (2020)/Season 1/Name (2020).mkv", new[] { "default", "forced" }, "testtitle", "French")]
-        [TestCase("Name (2020) - S01E20 - [AAC 2.0].testtitle.forced.fra.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv", new[] { "forced" }, "testtitle", "French")]
-        [TestCase("Name (2020) - S01E20 - [AAC 2.0].fra.forced.testtitle.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv", new[] { "forced" }, "testtitle", "French")]
-        [TestCase("Name (2020) - S01E20 - [AAC 2.0].forced.fra.testtitle.ass", "Name (2020)/Season 1/Name (2020).mkv", new[] { "forced" }, "testtitle", "French")]
-        public void should_parse_title_and_tags(string postTitle, string episodeFilePath, string[] expectedTags, string expectedTitle, string expectedLanguage)
+        [TestCase("Name (2020) - S01E20 - [AAC 2.0].testtitle.default.eng.forced.ass", new[] { "default", "forced" }, "testtitle", "English")]
+        [TestCase("Name (2020) - S01E20 - [AAC 2.0].eng.default.testtitle.forced.ass", new[] { "default", "forced" }, "testtitle", "English")]
+        [TestCase("Name (2020) - S01E20 - [AAC 2.0].default.eng.testtitle.forced.ass", new[] { "default", "forced" }, "testtitle", "English")]
+        [TestCase("Name (2020) - S01E20 - [AAC 2.0].testtitle.forced.eng.ass", new[] { "forced" }, "testtitle", "English")]
+        [TestCase("Name (2020) - S01E20 - [AAC 2.0].eng.forced.testtitle.ass", new[] { "forced" }, "testtitle", "English")]
+        [TestCase("Name (2020) - S01E20 - [AAC 2.0].forced.eng.testtitle.ass", new[] { "forced" }, "testtitle", "English")]
+        [TestCase("Name (2020) - S01E20 - [AAC 2.0].testtitle.default.fra.forced.ass", new[] { "default", "forced" }, "testtitle", "French")]
+        [TestCase("Name (2020) - S01E20 - [AAC 2.0].fra.default.testtitle.forced.ass", new[] { "default", "forced" }, "testtitle", "French")]
+        [TestCase("Name (2020) - S01E20 - [AAC 2.0].default.fra.testtitle.forced.ass", new[] { "default", "forced" }, "testtitle", "French")]
+        [TestCase("Name (2020) - S01E20 - [AAC 2.0].testtitle.forced.fra.ass", new[] { "forced" }, "testtitle", "French")]
+        [TestCase("Name (2020) - S01E20 - [AAC 2.0].fra.forced.testtitle.ass", new[] { "forced" }, "testtitle", "French")]
+        [TestCase("Name (2020) - S01E20 - [AAC 2.0].forced.fra.testtitle.ass", new[] { "forced" }, "testtitle", "French")]
+        public void should_parse_title_and_tags(string postTitle, string[] expectedTags, string expectedTitle, string expectedLanguage)
         {
-            var episode = new Episode
-            {
-                EpisodeFile = new LazyLoaded<EpisodeFile>(new EpisodeFile
-                {
-                    RelativePath = episodeFilePath
-                })
-            };
-
-            var subtitleTitleInfo = LanguageParser.ParseSubtitleLanguageInformation(postTitle, episode);
+            var subtitleTitleInfo = LanguageParser.ParseSubtitleLanguageInformation(postTitle);
 
             subtitleTitleInfo.LanguageTags.Should().BeEquivalentTo(expectedTags);
             subtitleTitleInfo.Title.Should().BeEquivalentTo(expectedTitle);
             subtitleTitleInfo.Language.Should().BeEquivalentTo((Language)expectedLanguage);
         }
 
-        [TestCase("Name (2020) - S01E20 - [AAC 2.0].default.forced.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv")]
-        [TestCase("Name (2020) - S01E20 - [AAC 2.0].default.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv")]
-        [TestCase("Name (2020) - S01E20 - [AAC 2.0].ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv")]
-        [TestCase("Name (2020) - S01E20 - [AAC 2.0].testtitle.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv")]
-        [TestCase("Name (2020) - S01E20 - [AAC 2.0].testtitle.eng.fra.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv")]
-        public void should_not_parse_false_title(string postTitle, string episodeFilePath)
+        [TestCase("Name (2020) - S01E20 - [AAC 2.0].default.forced.ass")]
+        [TestCase("Name (2020) - S01E20 - [AAC 2.0].default.ass")]
+        [TestCase("Name (2020) - S01E20 - [AAC 2.0].ass")]
+        [TestCase("Name (2020) - S01E20 - [AAC 2.0].testtitle.ass")]
+        public void should_not_parse_false_title(string postTitle)
         {
-            var episode = new Episode
-            {
-                EpisodeFile = new LazyLoaded<EpisodeFile>(new EpisodeFile
-                {
-                    RelativePath = episodeFilePath
-                })
-            };
-            var subtitleTitleInfo = LanguageParser.ParseSubtitleLanguageInformation(postTitle, episode);
-            subtitleTitleInfo.Language.Should().BeNull();
+            var subtitleTitleInfo = LanguageParser.ParseSubtitleLanguageInformation(postTitle);
+            subtitleTitleInfo.Language.Should().Be(Language.Unknown);
             subtitleTitleInfo.LanguageTags.Should().BeEmpty();
             subtitleTitleInfo.RawTitle.Should().BeNull();
         }

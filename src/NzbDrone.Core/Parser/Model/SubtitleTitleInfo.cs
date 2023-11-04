@@ -8,9 +8,12 @@ namespace NzbDrone.Core.Parser.Model
     {
         private static readonly Regex SubtitleTitleRegex = new Regex("((?<title>.+) - )?(?<copy>\\d+)", RegexOptions.Compiled);
         public List<string> LanguageTags { get; set; }
+        public Language Language { get; set; }
         public string RawTitle { get; set; }
-        public string Title {
-            get {
+        public string Title
+        {
+            get
+            {
                 if (RawTitle is null)
                 {
                     return null;
@@ -27,9 +30,10 @@ namespace NzbDrone.Core.Parser.Model
             }
         }
 
-        public Language Language { get; set; }
-        public int Copy {
-            get {
+        public int Copy
+        {
+            get
+            {
                 if (RawTitle is null)
                 {
                     return 0;
@@ -45,5 +49,7 @@ namespace NzbDrone.Core.Parser.Model
                 return 0;
             }
         }
+
+        public bool TitleFirst { get; set; }
     }
 }

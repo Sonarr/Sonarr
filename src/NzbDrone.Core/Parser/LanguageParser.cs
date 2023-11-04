@@ -8,7 +8,6 @@ using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Parser
 {
@@ -253,14 +252,26 @@ namespace NzbDrone.Core.Parser
             return Language.Unknown;
         }
 
-        public static SubtitleTitleInfo ParseSubtitleLanguageInformation(string fileName, Episode episode)
+        public static SubtitleTitleInfo ParseBasicSubtitle(string fileName)
+        {
+            return new SubtitleTitleInfo
+            {
+                TitleFirst = false,
+                LanguageTags = ParseLanguageTags(fileName),
+                Language = ParseSubtitleLanguage(fileName)
+            };
+        }
+
+        public static SubtitleTitleInfo ParseSubtitleLanguageInformation(string fileName)
         {
             var simpleFilename = Path.GetFileNameWithoutExtension(fileName);
             var matchTitle = SubtitleLanguageTitleRegex.Match(simpleFilename);
 
-            if (matchTitle.Groups["iso_code"].Captures.Count is var languageCodeNumber && languageCodeNumber != 1)
+            if (!matchTitle.Groups["title"].Success || (matchTitle.Groups["iso_code"].Captures.Count is var languageCodeNumber && languageCodeNumber != 1))
             {
-                return new SubtitleTitleInfo();
+                Logger.Debug("Could not parse a title from subtitle file: {0}. Falling back to parsing without title.", fileName);
+
+                return ParseBasicSubtitle(fileName);
             }
 
             var isoCode = matchTitle.Groups["iso_code"].Value;
@@ -275,20 +286,9 @@ namespace NzbDrone.Core.Parser
                 .Select(tag => tag.Value.ToLower());
             var title = matchTitle.Groups["title"].Value;
 
-            if (matchTitle.Groups["tags1"].Captures.Empty())
-            {
-                var episodeFile = episode.EpisodeFile.Value;
-                var episodeFileTitle = Path.GetFileNameWithoutExtension(episodeFile.RelativePath);
-                var originalEpisodeFileTitle = Path.GetFileNameWithoutExtension(episodeFile.OriginalFilePath) ?? string.Empty;
-
-                if (episodeFileTitle.Contains(title, StringComparison.OrdinalIgnoreCase) || originalEpisodeFileTitle.Contains(title, StringComparison.OrdinalIgnoreCase))
-                {
-                    return new SubtitleTitleInfo();
-                }
-            }
-
             return new SubtitleTitleInfo
             {
+                TitleFirst = matchTitle.Groups["tags1"].Captures.Empty(),
                 LanguageTags = languageTags.ToList(),
                 RawTitle = title,
                 Language = language
