@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Data;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Dapper;
 using FluentMigrator;
 using NzbDrone.Core.Datastore.Migration.Framework;
@@ -49,7 +51,17 @@ namespace NzbDrone.Core.Datastore.Migration
                 }
             }
 
-            var updateSubtitleFilesSql = "UPDATE \"SubtitleFiles\" SET \"Title\" = @Title, \"Copy\" = @Copy, \"LastUpdated\" = CURRENT_TIMESTAMP WHERE \"Id\" = @Id";
+            var serializerSettings = new JsonSerializerOptions
+            {
+                AllowTrailingCommas = true,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+                PropertyNameCaseInsensitive = true,
+                DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                WriteIndented = true
+            };
+
+            var updateSubtitleFilesSql = "UPDATE \"SubtitleFiles\" SET \"Title\" = @Title, \"Copy\" = @Copy, \"Language\" = @Language, \"LanguageTags\" = @LanguageTags, \"LastUpdated\" = CURRENT_TIMESTAMP WHERE \"Id\" = @Id";
             conn.Execute(updateSubtitleFilesSql, updates, transaction: tran);
         }
     }

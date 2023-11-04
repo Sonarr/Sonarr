@@ -53,7 +53,8 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                     Added = now,
                     LastUpdated = now,
                     Extension = Path.GetExtension(subtitlePath),
-                    Language = 1
+                    Language = 10,
+                    LanguageTags = new List<string> { "sdh" }.ToJson()
                 });
 
                 c.Insert.IntoTable("EpisodeFiles").Row(new
@@ -75,6 +76,8 @@ namespace NzbDrone.Core.Test.Datastore.Migration
 
             files.First().Title.Should().Be(title);
             files.First().Copy.Should().Be(copy);
+            files.First().LanguageTags.Should().NotContain("sdh");
+            files.First().Language.Should().NotBe(10);
         }
     }
 
