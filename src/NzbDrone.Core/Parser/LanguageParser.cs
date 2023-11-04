@@ -284,13 +284,13 @@ namespace NzbDrone.Core.Parser
                 .Cast<Capture>()
                 .Where(tag => !tag.Value.Empty())
                 .Select(tag => tag.Value.ToLower());
-            var title = matchTitle.Groups["title"].Value;
+            var rawTitle = matchTitle.Groups["title"].Value;
 
             return new SubtitleTitleInfo
             {
                 TitleFirst = matchTitle.Groups["tags1"].Captures.Empty(),
                 LanguageTags = languageTags.ToList(),
-                RawTitle = title,
+                RawTitle = rawTitle,
                 Language = language
             };
         }

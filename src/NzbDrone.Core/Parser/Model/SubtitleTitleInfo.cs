@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using NzbDrone.Core.Languages;
@@ -10,46 +11,24 @@ namespace NzbDrone.Core.Parser.Model
         public List<string> LanguageTags { get; set; }
         public Language Language { get; set; }
         public string RawTitle { get; set; }
-        public string Title
+        private Lazy<(string Title, int Copy)> TitleAndCopy => new Lazy<(string title, int copy)>(() =>
         {
-            get
+            if (RawTitle is null)
             {
-                if (RawTitle is null)
-                {
-                    return null;
-                }
-
-                var match = SubtitleTitleRegex.Match(RawTitle);
-
-                if (match.Success)
-                {
-                    return match.Groups["title"].Success ? match.Groups["title"].ToString() : null;
-                }
-
-                return RawTitle;
+                return (null, 0);
             }
-        }
 
-        public int Copy
-        {
-            get
+            var match = SubtitleTitleRegex.Match(RawTitle);
+
+            if (match.Success)
             {
-                if (RawTitle is null)
-                {
-                    return 0;
-                }
-
-                var match = SubtitleTitleRegex.Match(RawTitle);
-
-                if (match.Success)
-                {
-                    return int.Parse(match.Groups["copy"].ToString());
-                }
-
-                return 0;
+                return (match.Groups["title"].Success ? match.Groups["title"].ToString() : null, int.Parse(match.Groups["copy"].ToString()));
             }
-        }
 
+            return (RawTitle, 0);
+        });
+        public string Title => TitleAndCopy.Value.Title;
+        public int Copy => TitleAndCopy.Value.Copy;
         public bool TitleFirst { get; set; }
     }
 }
