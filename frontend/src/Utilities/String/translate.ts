@@ -25,15 +25,13 @@ export async function fetchTranslations(): Promise<boolean> {
 
 export default function translate(
   key: string,
-  tokens: Record<string, string | number | boolean> = { appName: 'Sonarr' }
+  tokens: Record<string, string | number | boolean> = {}
 ) {
   const translation = translations[key] || key;
 
-  if (tokens) {
-    return translation.replace(/\{([a-z0-9]+?)\}/gi, (match, tokenMatch) =>
-      String(tokens[tokenMatch] ?? match)
-    );
-  }
+  tokens.appName = 'Sonarr';
 
-  return translation;
+  return translation.replace(/\{([a-z0-9]+?)\}/gi, (match, tokenMatch) =>
+    String(tokens[tokenMatch] ?? match)
+  );
 }
