@@ -15,7 +15,10 @@ function createSeriesQueueDetailsSelector(
     (queueItems) => {
       return queueItems.reduce(
         (acc: SeriesQueueDetails, item) => {
-          if (item.seriesId !== seriesId) {
+          if (
+            item.trackedDownloadState === 'imported' ||
+            item.seriesId !== seriesId
+          ) {
             return acc;
           }
 
