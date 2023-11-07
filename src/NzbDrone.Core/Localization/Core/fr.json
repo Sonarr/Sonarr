@@ -1328,7 +1328,7 @@
     "EnableMetadataHelpText": "Activer la création de fichiers de métadonnées pour ce type de métadonnées",
     "DownloadClientSortingHealthCheckMessage": "Le client de téléchargement {0} a le tri {1} activé pour la catégorie de {appName}. Vous devez désactiver le tri dans votre client de téléchargement pour éviter les problèmes d'importation.",
     "EnableSsl": "Activer SSL/TLS",
-    "EnableProfile": "Activer le profil",
+    "EnableProfile": "Activer profil",
     "EpisodeProgress": "Progression de l'épisode",
     "FailedToLoadSeriesFromApi": "Échec du chargement de la série depuis l'API",
     "FailedToLoadTranslationsFromApi": "Échec du chargement des traductions depuis l'API",

@@ -1,4 +1,8 @@
 {
     "About": "Hakkında",
-    "Absolute": "Mutlak"
+    "Absolute": "Mutlak",
+    "AddCondition": "Koşul Ekle",
+    "AddAutoTag": "Otomatik Etiket Ekle",
+    "AddConnection": "Bağlantı Ekle",
+    "AddConditionImplementation": "Koşul Ekle - {uygulama Adı}"
 }
