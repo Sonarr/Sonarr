@@ -19,6 +19,7 @@ namespace NzbDrone.Core.Notifications.Webhook
             AirDate = episode.AirDate;
             AirDateUtc = episode.AirDateUtc;
             SeriesId = episode.SeriesId;
+            TvdbId = episode.TvdbId;
         }
 
         public int Id { get; set; }
@@ -29,5 +30,6 @@ namespace NzbDrone.Core.Notifications.Webhook
         public string AirDate { get; set; }
         public DateTime? AirDateUtc { get; set; }
         public int SeriesId { get; set; }
+        public int TvdbId { get; set; }
     }
 }
