@@ -5,12 +5,13 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { addRootFolder, fetchRootFolders } from 'Store/Actions/rootFolderActions';
+import createRootFoldersSelector from 'Store/Selectors/createRootFoldersSelector';
 import createSystemStatusSelector from 'Store/Selectors/createSystemStatusSelector';
 import ImportSeriesSelectFolder from './ImportSeriesSelectFolder';
 
 function createMapStateToProps() {
   return createSelector(
-    (state) => state.rootFolders,
+    createRootFoldersSelector(),
     createSystemStatusSelector(),
     (rootFolders, systemStatus) => {
       return {
