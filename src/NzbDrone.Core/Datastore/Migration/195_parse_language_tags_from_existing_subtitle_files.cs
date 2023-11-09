@@ -1,8 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using Dapper;
 using FluentMigrator;
 using NzbDrone.Core.Datastore.Migration.Framework;
@@ -21,7 +18,6 @@ namespace NzbDrone.Core.Datastore.Migration
         private void UpdateLanguageTags(IDbConnection conn, IDbTransaction tran)
         {
             var updatedLanguageTags = new List<object>();
-            var now = DateTime.Now;
 
             using (var cmd = conn.CreateCommand())
             {
@@ -42,16 +38,6 @@ namespace NzbDrone.Core.Datastore.Migration
                     });
                 }
             }
-
-            var serializerSettings = new JsonSerializerOptions
-            {
-                AllowTrailingCommas = true,
-                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-                PropertyNameCaseInsensitive = true,
-                DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                WriteIndented = true
-            };
 
             var updateSubtitleFilesSql = "UPDATE \"SubtitleFiles\" SET \"LanguageTags\" = @LanguageTags, \"LastUpdated\" = CURRENT_TIMESTAMP WHERE \"Id\" = @Id";
             conn.Execute(updateSubtitleFilesSql, updatedLanguageTags, transaction: tran);

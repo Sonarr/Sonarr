@@ -9,8 +9,6 @@ namespace NzbDrone.Core.Datastore.Migration
         protected override void MainDbUpgrade()
         {
             Alter.Table("Series").AddColumn("LastAired").AsDateTimeOffset().Nullable();
-
-            // Execute.Sql("UPDATE Series SET LastAired = ");
         }
     }
 }
