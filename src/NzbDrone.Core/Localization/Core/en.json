@@ -1056,7 +1056,7 @@
   "Reload": "Reload",
   "RemotePath": "Remote Path",
   "RemotePathMappingBadDockerPathHealthCheckMessage": "You are using docker; download client {downloadClientName} places downloads in {path} but this is not a valid {osName} path. Review your remote path mappings and download client settings.",
-  "RemotePathMappingDockerFolderMissingHealthCheckMessage": "You are using docker; download client $1{downloadClientName} places downloads in {path} but this directory does not appear to exist inside the container. Review your remote path mappings and container volume settings.",
+  "RemotePathMappingDockerFolderMissingHealthCheckMessage": "You are using docker; download client {downloadClientName} places downloads in {path} but this directory does not appear to exist inside the container. Review your remote path mappings and container volume settings.",
   "RemotePathMappingDownloadPermissionsHealthCheckMessage": "{appName} can see but not access downloaded episode {path}. Likely permissions error.",
   "RemotePathMappingFileRemovedHealthCheckMessage": "File {path} was removed part way through processing.",
   "RemotePathMappingFilesBadDockerPathHealthCheckMessage": "You are using docker; download client {downloadClientName} reported files in {path} but this is not a valid {osName} path. Review your remote path mappings and download client settings.",
