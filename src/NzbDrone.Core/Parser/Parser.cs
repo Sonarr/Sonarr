@@ -335,6 +335,9 @@ namespace NzbDrone.Core.Parser
                 new Regex(@"^(?<title>.+?)?\W*(?<airyear>\d{4})[-_. ]+(?<airmonth>[0-1][0-9])[-_. ]+(?<airday>[0-3][0-9])(?![-_. ]+[0-3][0-9])",
                     RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
+                // Turkish tracker releases (01 BLM, 3. Blm, 04.Bolum, etc)
+                new Regex(@"^(?<title>.+?)[_. ](?<absoluteepisode>\d{1,4})(?:[_. ]+)(?:BLM|B[oö]l[uü]m)", RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
                 // Episodes with airdate (04.28.2018)
                 new Regex(@"^(?<title>.+?)?\W*(?<airmonth>[0-1][0-9])[-_. ]+(?<airday>[0-3][0-9])[-_. ]+(?<airyear>\d{4})(?!\d+)",
                     RegexOptions.IgnoreCase | RegexOptions.Compiled),
