@@ -10773,6 +10773,10 @@
             "format": "int32",
             "nullable": true
           },
+          "downloadClient": {
+            "type": "string",
+            "nullable": true
+          },
           "shouldOverride": {
             "type": "boolean",
             "nullable": true
