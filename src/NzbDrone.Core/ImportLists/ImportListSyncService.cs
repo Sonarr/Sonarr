@@ -109,11 +109,15 @@ namespace NzbDrone.Core.ImportLists
                     var mappedSeries = _seriesSearchService.SearchForNewSeriesByAniListId(item.AniListId)
                         .FirstOrDefault();
 
-                    if (mappedSeries != null)
+                    if (mappedSeries == null)
                     {
-                        item.TvdbId = mappedSeries.TvdbId;
-                        item.Title = mappedSeries.Title;
+                        _logger.Debug("Rejected, unable to find matching TVDB ID for Anilist ID: {0} [{1}]", item.AniListId, item.Title);
+
+                        continue;
                     }
+
+                    item.TvdbId = mappedSeries.TvdbId;
+                    item.Title = mappedSeries.Title;
                 }
 
                 // Map TVDb if we only have a series name
