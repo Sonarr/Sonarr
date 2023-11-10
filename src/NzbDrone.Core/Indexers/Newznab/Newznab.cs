@@ -7,6 +7,7 @@ using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Localization;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
@@ -22,8 +23,8 @@ namespace NzbDrone.Core.Indexers.Newznab
         public override DownloadProtocol Protocol => DownloadProtocol.Usenet;
         public override int PageSize => GetProviderPageSize();
 
-        public Newznab(INewznabCapabilitiesProvider capabilitiesProvider, IHttpClient httpClient, IIndexerStatusService indexerStatusService, IConfigService configService, IParsingService parsingService, Logger logger)
-            : base(httpClient, indexerStatusService, configService, parsingService, logger)
+        public Newznab(INewznabCapabilitiesProvider capabilitiesProvider, IHttpClient httpClient, IIndexerStatusService indexerStatusService, IConfigService configService, IParsingService parsingService, Logger logger, ILocalizationService localizationService)
+            : base(httpClient, indexerStatusService, configService, parsingService, logger, localizationService)
         {
             _capabilitiesProvider = capabilitiesProvider;
         }
