@@ -21,10 +21,11 @@ namespace NzbDrone.Core.Indexers.Fanzub
             BaseUrl = "http://fanzub.com/rss/";
         }
 
-        [FieldDefinition(0, Label = "Rss URL", HelpText = "Enter to URL to an Fanzub compatible RSS feed")]
+        [FieldDefinition(0, Label = "IndexerSettingsRssUrl", HelpText = "IndexerSettingsRssUrlHelpText")]
+        [FieldToken(TokenField.HelpText, "IndexerSettingsRssUrl", "indexer", "Fanzub")]
         public string BaseUrl { get; set; }
 
-        [FieldDefinition(1, Label = "Anime Standard Format Search", Type = FieldType.Checkbox, HelpText = "Also search for anime using the standard numbering")]
+        [FieldDefinition(1, Label = "IndexerSettingsAnimeStandardFormatSearch", Type = FieldType.Checkbox, HelpText = "IndexerSettingsAnimeStandardFormatSearchHelpText")]
         public bool AnimeStandardFormatSearch { get; set; }
 
         public NzbDroneValidationResult Validate()

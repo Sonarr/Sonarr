@@ -124,13 +124,13 @@ namespace NzbDrone.Core.Indexers.Torznab
                     return null;
                 }
 
-                return new ValidationFailure(string.Empty, "Indexer does not support required search parameters");
+                return new ValidationFailure(string.Empty, _localizationService.GetLocalizedString("IndexerValidationSearchParametersNotSupported"));
             }
             catch (Exception ex)
             {
                 _logger.Warn(ex, "Unable to connect to indexer: " + ex.Message);
 
-                return new ValidationFailure(string.Empty, $"Unable to connect to indexer: {ex.Message}. Check the log surrounding this error for details");
+                return new ValidationFailure(string.Empty, _localizationService.GetLocalizedString("IndexerValidationUnableToConnect", new Dictionary<string, object> { { "exceptionMessage", ex.Message } }));
             }
         }
 
@@ -141,10 +141,10 @@ namespace NzbDrone.Core.Indexers.Torznab
                 Settings.BaseUrl.Contains("/torznab/all") ||
                 Settings.BaseUrl.Contains("/api/v2.0/indexers/all/results/torznab"))
             {
-                return new NzbDroneValidationFailure("ApiPath", "Jackett's all endpoint is not supported, please add indexers individually")
+                return new NzbDroneValidationFailure("ApiPath", _localizationService.GetLocalizedString("IndexerValidationJackettAllNotSupported"))
                 {
                     IsWarning = true,
-                    DetailedDescription = "Jackett's all endpoint is not supported, please add indexers individually"
+                    DetailedDescription = _localizationService.GetLocalizedString("IndexerValidationJackettAllNotSupportedHelpText")
                 };
             }
 

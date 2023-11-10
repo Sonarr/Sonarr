@@ -108,7 +108,7 @@ namespace NzbDrone.Core.Indexers
             catch (Exception ex)
             {
                 _logger.Error(ex, "Test aborted due to exception");
-                failures.Add(new ValidationFailure(string.Empty, "Test was aborted due to an error: " + ex.Message));
+                failures.Add(new ValidationFailure(string.Empty, _localizationService.GetLocalizedString("IndexerValidationTestAbortedDueToError", new Dictionary<string, object> { { "exceptionMessage", ex.Message } })));
             }
 
             return new ValidationResult(failures);
