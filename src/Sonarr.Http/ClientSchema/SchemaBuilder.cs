@@ -115,13 +115,27 @@ namespace Sonarr.Http.ClientSchema
                 if (propertyInfo.PropertyType.IsSimpleType())
                 {
                     var fieldAttribute = property.Item2;
+
+                    var label = fieldAttribute.Label.IsNotNullOrWhiteSpace()
+                        ? _localizationService.GetLocalizedString(fieldAttribute.Label,
+                            GetTokens(type, fieldAttribute.Label, TokenField.Label))
+                        : fieldAttribute.Label;
+                    var helpText = fieldAttribute.HelpText.IsNotNullOrWhiteSpace()
+                        ? _localizationService.GetLocalizedString(fieldAttribute.HelpText,
+                            GetTokens(type, fieldAttribute.Label, TokenField.HelpText))
+                        : fieldAttribute.HelpText;
+                    var helpTextWarning = fieldAttribute.HelpTextWarning.IsNotNullOrWhiteSpace()
+                        ? _localizationService.GetLocalizedString(fieldAttribute.HelpTextWarning,
+                            GetTokens(type, fieldAttribute.Label, TokenField.HelpTextWarning))
+                        : fieldAttribute.HelpTextWarning;
+
                     var field = new Field
                     {
                         Name = prefix + GetCamelCaseName(propertyInfo.Name),
-                        Label = (fieldAttribute.Label.IsNotNullOrWhiteSpace() && _localizationService != null) ? _localizationService.GetLocalizedString(fieldAttribute.Label, GetTokens(type, fieldAttribute.Label, TokenField.Label)) : fieldAttribute.Label,
+                        Label = label,
                         Unit = fieldAttribute.Unit,
-                        HelpText = (fieldAttribute.HelpText.IsNotNullOrWhiteSpace()  && _localizationService != null) ? _localizationService.GetLocalizedString(fieldAttribute.HelpText, GetTokens(type, fieldAttribute.Label, TokenField.HelpText)) : fieldAttribute.HelpText,
-                        HelpTextWarning = (fieldAttribute.HelpTextWarning.IsNotNullOrWhiteSpace()  && _localizationService != null) ?  _localizationService.GetLocalizedString(fieldAttribute.HelpTextWarning, GetTokens(type, fieldAttribute.Label, TokenField.HelpTextWarning)) : fieldAttribute.HelpTextWarning,
+                        HelpText = helpText,
+                        HelpTextWarning = helpTextWarning,
                         HelpLink = fieldAttribute.HelpLink,
                         Order = fieldAttribute.Order,
                         Advanced = fieldAttribute.Advanced,

@@ -23,6 +23,8 @@ namespace NzbDrone.Test.Common.AutoMoq
             SetupAutoMoqer(CreateTestContainer(new Container()));
         }
 
+        public IContainer Container => _container;
+
         public virtual T Resolve<T>()
         {
             var result = _container.Resolve<T>();
