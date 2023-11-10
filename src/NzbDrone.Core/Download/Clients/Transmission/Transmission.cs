@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Localization;
 using NzbDrone.Core.MediaFiles.TorrentInfo;
 using NzbDrone.Core.RemotePathMappings;
 
@@ -18,8 +20,9 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                             IConfigService configService,
                             IDiskProvider diskProvider,
                             IRemotePathMappingService remotePathMappingService,
-                            Logger logger)
-            : base(proxy, torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, logger)
+                            Logger logger,
+                            ILocalizationService localizationService)
+            : base(proxy, torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, logger, localizationService)
         {
         }
 
@@ -34,7 +37,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
 
             if (version < new Version(2, 40))
             {
-                return new ValidationFailure(string.Empty, "Transmission version not supported, should be 2.40 or higher.");
+                return new ValidationFailure(string.Empty, _localizationService.GetLocalizedString("DownloadClientValidationErrorVersion", new Dictionary<string, object> { { "clientName", Name }, { "requiredVersion", "2.40" }, { "reportedVersion", version } }));
             }
 
             return null;

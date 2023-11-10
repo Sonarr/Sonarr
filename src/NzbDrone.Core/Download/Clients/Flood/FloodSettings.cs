@@ -40,10 +40,12 @@ namespace NzbDrone.Core.Download.Clients.Flood
         [FieldDefinition(1, Label = "Port", Type = FieldType.Textbox)]
         public int Port { get; set; }
 
-        [FieldDefinition(2, Label = "Use SSL", Type = FieldType.Checkbox, HelpText = "Use secure connection when connecting to Flood")]
+        [FieldDefinition(2, Label = "UseSsl", Type = FieldType.Checkbox, HelpText = "DownloadClientSettingsUseSslHelpText")]
+        [FieldToken(TokenField.HelpText, "UseSsl", "clientName", "Flood")]
         public bool UseSsl { get; set; }
 
-        [FieldDefinition(3, Label = "Url Base", Type = FieldType.Textbox, HelpText = "Optionally adds a prefix to Flood API, such as [protocol]://[host]:[port]/[urlBase]api")]
+        [FieldDefinition(3, Label = "UrlBase", Type = FieldType.Textbox, HelpText = "DownloadClientFloodSettingsUrlBaseHelpText")]
+        [FieldToken(TokenField.HelpText, "UrlBase", "url", "[protocol]://[host]:[port]/[urlBase]/api")]
         public string UrlBase { get; set; }
 
         [FieldDefinition(4, Label = "Username", Type = FieldType.Textbox, Privacy = PrivacyLevel.UserName)]
@@ -52,19 +54,19 @@ namespace NzbDrone.Core.Download.Clients.Flood
         [FieldDefinition(5, Label = "Password", Type = FieldType.Password, Privacy = PrivacyLevel.Password)]
         public string Password { get; set; }
 
-        [FieldDefinition(6, Label = "Destination", Type = FieldType.Textbox, HelpText = "Manually specifies download destination")]
+        [FieldDefinition(6, Label = "Destination", Type = FieldType.Textbox, HelpText = "DownloadClientSettingsDestinationHelpText")]
         public string Destination { get; set; }
 
-        [FieldDefinition(7, Label = "Tags", Type = FieldType.Tag, HelpText = "Initial tags of a download. To be recognized, a download must have all initial tags. This avoids conflicts with unrelated downloads.")]
+        [FieldDefinition(7, Label = "Tags", Type = FieldType.Tag, HelpText = "DownloadClientFloodSettingsTagsHelpText")]
         public IEnumerable<string> Tags { get; set; }
 
-        [FieldDefinition(8, Label = "Post-Import Tags", Type = FieldType.Tag, HelpText = "Appends tags after a download is imported.", Advanced = true)]
+        [FieldDefinition(8, Label = "DownloadClientFloodSettingsPostImportTags", Type = FieldType.Tag, HelpText = "DownloadClientFloodSettingsPostImportTagsHelpText", Advanced = true)]
         public IEnumerable<string> PostImportTags { get; set; }
 
-        [FieldDefinition(9, Label = "Additional Tags", Type = FieldType.Select, SelectOptions = typeof(AdditionalTags), HelpText = "Adds properties of media as tags. Hints are examples.", Advanced = true)]
+        [FieldDefinition(9, Label = "DownloadClientFloodSettingsAdditionalTags", Type = FieldType.Select, SelectOptions = typeof(AdditionalTags), HelpText = "DownloadClientFloodSettingsAdditionalTagsHelpText", Advanced = true)]
         public IEnumerable<int> AdditionalTags { get; set; }
 
-        [FieldDefinition(10, Label = "Start on Add", Type = FieldType.Checkbox)]
+        [FieldDefinition(10, Label = "DownloadClientFloodSettingsStartOnAdd", Type = FieldType.Checkbox)]
         public bool StartOnAdd { get; set; }
 
         public NzbDroneValidationResult Validate()

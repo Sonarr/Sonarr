@@ -9,6 +9,7 @@ using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Localization;
 using NzbDrone.Core.MediaFiles.TorrentInfo;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.RemotePathMappings;
@@ -34,8 +35,9 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                            IDiskProvider diskProvider,
                            IRemotePathMappingService remotePathMappingService,
                            ICacheManager cacheManager,
-                           Logger logger)
-            : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, logger)
+                           Logger logger,
+                           ILocalizationService localizationService)
+            : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, logger, localizationService)
         {
             _proxySelector = proxySelector;
 
@@ -241,7 +243,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                 {
                     case "error": // some error occurred, applies to paused torrents, warning so failed download handling isn't triggered
                         item.Status = DownloadItemStatus.Warning;
-                        item.Message = "qBittorrent is reporting an error";
+                        item.Message = _localizationService.GetLocalizedString("DownloadClientQbittorrentTorrentStateError");
                         break;
 
                     case "pausedDL": // torrent is paused and has NOT finished downloading
@@ -266,24 +268,24 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
                     case "stalledDL": // torrent is being downloaded, but no connection were made
                         item.Status = DownloadItemStatus.Warning;
-                        item.Message = "The download is stalled with no connections";
+                        item.Message = _localizationService.GetLocalizedString("DownloadClientQbittorrentTorrentStateStalled");
                         break;
 
                     case "missingFiles": // torrent is missing files
                         item.Status = DownloadItemStatus.Warning;
-                        item.Message = "The download is missing files";
+                        item.Message = _localizationService.GetLocalizedString("DownloadClientQbittorrentTorrentStateMissingFiles");
                         break;
 
                     case "metaDL": // torrent magnet is being downloaded
                         if (config.DhtEnabled)
                         {
                             item.Status = DownloadItemStatus.Queued;
-                            item.Message = "qBittorrent is downloading metadata";
+                            item.Message = _localizationService.GetLocalizedString("DownloadClientQbittorrentTorrentStateMetadata");
                         }
                         else
                         {
                             item.Status = DownloadItemStatus.Warning;
-                            item.Message = "qBittorrent cannot resolve magnet link with DHT disabled";
+                            item.Message = _localizationService.GetLocalizedString("DownloadClientQbittorrentTorrentStateDhtDisabled");
                         }
 
                         break;
@@ -296,8 +298,8 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                         break;
 
                     default: // new status in API? default to downloading
-                        item.Message = "Unknown download state: " + torrent.State;
-                        _logger.Info(item.Message);
+                        item.Message = _localizationService.GetLocalizedString("DownloadClientQbittorrentTorrentStateUnknown", new Dictionary<string, object> { { "state", torrent.State } });
+                        _logger.Info($"Unknown download state: {torrent.State}");
                         item.Status = DownloadItemStatus.Downloading;
                         break;
                 }
@@ -311,7 +313,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                     else
                     {
                         item.Status = DownloadItemStatus.Warning;
-                        item.Message = "Unable to Import. Path matches client base download directory, it's possible 'Keep top-level folder' is disabled for this torrent or 'Torrent Content Layout' is NOT set to 'Original' or 'Create Subfolder'?";
+                        item.Message = _localizationService.GetLocalizedString("DownloadClientQbittorrentTorrentStatePathError");
                     }
                 }
 
@@ -415,29 +417,30 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                 if (version < Version.Parse("1.5"))
                 {
                     // API version 5 introduced the "save_path" property in /query/torrents
-                    return new NzbDroneValidationFailure("Host", "Unsupported client version")
-                    {
-                        DetailedDescription = "Please upgrade to qBittorrent version 3.2.4 or higher."
-                    };
+                    return new NzbDroneValidationFailure("Host", _localizationService.GetLocalizedString("DownloadClientValidationErrorVersion",
+                            new Dictionary<string, object>
+                            {
+                                { "clientName", Name }, { "requiredVersion", "3.2.4" }, { "reportedVersion", version }
+                            }));
                 }
                 else if (version < Version.Parse("1.6"))
                 {
                     // API version 6 introduced support for labels
                     if (Settings.TvCategory.IsNotNullOrWhiteSpace())
                     {
-                        return new NzbDroneValidationFailure("Category", "Category is not supported")
+                        return new NzbDroneValidationFailure("Category", _localizationService.GetLocalizedString("DownloadClientQbittorrentValidationCategoryUnsupported"))
                         {
-                            DetailedDescription = "Labels are not supported until qBittorrent version 3.3.0. Please upgrade or try again with an empty Category."
+                            DetailedDescription = _localizationService.GetLocalizedString("DownloadClientQbittorrentValidationCategoryUnsupportedDetail")
                         };
                     }
                 }
                 else if (Settings.TvCategory.IsNullOrWhiteSpace())
                 {
                     // warn if labels are supported, but category is not provided
-                    return new NzbDroneValidationFailure("TvCategory", "Category is recommended")
+                    return new NzbDroneValidationFailure("TvCategory", _localizationService.GetLocalizedString("DownloadClientQbittorrentValidationCategoryRecommended"))
                     {
                         IsWarning = true,
-                        DetailedDescription = "Sonarr will not attempt to import completed downloads without a category."
+                        DetailedDescription = _localizationService.GetLocalizedString("DownloadClientQbittorrentValidationCategoryRecommendedDetail")
                     };
                 }
 
@@ -445,18 +448,18 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                 var config = Proxy.GetConfig(Settings);
                 if ((config.MaxRatioEnabled || config.MaxSeedingTimeEnabled) && (config.MaxRatioAction == QBittorrentMaxRatioAction.Remove || config.MaxRatioAction == QBittorrentMaxRatioAction.DeleteFiles))
                 {
-                    return new NzbDroneValidationFailure(string.Empty, "qBittorrent is configured to remove torrents when they reach their Share Ratio Limit")
+                    return new NzbDroneValidationFailure(string.Empty, _localizationService.GetLocalizedString("DownloadClientQbittorrentValidationRemovesAtRatioLimit"))
                     {
-                        DetailedDescription = "Sonarr will be unable to perform Completed Download Handling as configured. You can fix this in qBittorrent ('Tools -> Options...' in the menu) by changing 'Options -> BitTorrent -> Share Ratio Limiting' from 'Remove them' to 'Pause them'."
+                        DetailedDescription = _localizationService.GetLocalizedString("DownloadClientQbittorrentValidationRemovesAtRatioLimitDetail")
                     };
                 }
             }
             catch (DownloadClientAuthenticationException ex)
             {
                 _logger.Error(ex, ex.Message);
-                return new NzbDroneValidationFailure("Username", "Authentication failure")
+                return new NzbDroneValidationFailure("Username", _localizationService.GetLocalizedString("DownloadClientValidationAuthenticationFailure"))
                 {
-                    DetailedDescription = "Please verify your username and password."
+                    DetailedDescription = _localizationService.GetLocalizedString("DownloadClientValidationAuthenticationFailureDetail", new Dictionary<string, object> { { "clientName", Name } })
                 };
             }
             catch (WebException ex)
@@ -464,19 +467,19 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                 _logger.Error(ex, "Unable to connect to qBittorrent");
                 if (ex.Status == WebExceptionStatus.ConnectFailure)
                 {
-                    return new NzbDroneValidationFailure("Host", "Unable to connect")
+                    return new NzbDroneValidationFailure("Host", _localizationService.GetLocalizedString("DownloadClientValidationUnableToConnect", new Dictionary<string, object> { { "clientName", Name } }))
                     {
-                        DetailedDescription = "Please verify the hostname and port."
+                        DetailedDescription = _localizationService.GetLocalizedString("DownloadClientValidationUnableToConnectDetail")
                     };
                 }
 
-                return new NzbDroneValidationFailure(string.Empty, "Unknown exception: " + ex.Message);
+                return new NzbDroneValidationFailure(string.Empty, _localizationService.GetLocalizedString("DownloadClientValidationUnknownException", new Dictionary<string, object> { { "exception", ex.Message } }));
             }
             catch (Exception ex)
             {
                 _logger.Error(ex, "Unable to test qBittorrent");
 
-                return new NzbDroneValidationFailure("Host", "Unable to connect to qBittorrent")
+                return new NzbDroneValidationFailure("Host", _localizationService.GetLocalizedString("DownloadClientValidationUnableToConnect", new Dictionary<string, object> { { "clientName", Name } }))
                 {
                     DetailedDescription = ex.Message
                 };
@@ -508,9 +511,9 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
                 if (!labels.ContainsKey(Settings.TvCategory))
                 {
-                    return new NzbDroneValidationFailure("TvCategory", "Configuration of label failed")
+                    return new NzbDroneValidationFailure("TvCategory", _localizationService.GetLocalizedString("DownloadClientQbittorrentValidationCategoryAddFailure"))
                     {
-                        DetailedDescription = "Sonarr was unable to add the label to qBittorrent."
+                        DetailedDescription = _localizationService.GetLocalizedString("DownloadClientQbittorrentValidationCategoryAddFailureDetail")
                     };
                 }
             }
@@ -522,9 +525,9 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
                 if (!labels.ContainsKey(Settings.TvImportedCategory))
                 {
-                    return new NzbDroneValidationFailure("TvImportedCategory", "Configuration of label failed")
+                    return new NzbDroneValidationFailure("TvImportedCategory", _localizationService.GetLocalizedString("DownloadClientQbittorrentValidationCategoryAddFailure"))
                     {
-                        DetailedDescription = "Sonarr was unable to add the label to qBittorrent."
+                        DetailedDescription = _localizationService.GetLocalizedString("DownloadClientQbittorrentValidationCategoryAddFailureDetail")
                     };
                 }
             }
@@ -550,18 +553,24 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                 {
                     if (!recentPriorityDefault)
                     {
-                        return new NzbDroneValidationFailure(nameof(Settings.RecentTvPriority), "Queueing not enabled") { DetailedDescription = "Torrent Queueing is not enabled in your qBittorrent settings. Enable it in qBittorrent or select 'Last' as priority." };
+                        return new NzbDroneValidationFailure(nameof(Settings.RecentTvPriority), _localizationService.GetLocalizedString("DownloadClientQbittorrentValidationQueueingNotEnabled"))
+                        {
+                            DetailedDescription = _localizationService.GetLocalizedString("DownloadClientQbittorrentValidationQueueingNotEnabledDetail")
+                        };
                     }
                     else if (!olderPriorityDefault)
                     {
-                        return new NzbDroneValidationFailure(nameof(Settings.OlderTvPriority), "Queueing not enabled") { DetailedDescription = "Torrent Queueing is not enabled in your qBittorrent settings. Enable it in qBittorrent or select 'Last' as priority." };
+                        return new NzbDroneValidationFailure(nameof(Settings.OlderTvPriority), _localizationService.GetLocalizedString("DownloadClientQbittorrentValidationQueueingNotEnabled"))
+                        {
+                            DetailedDescription = _localizationService.GetLocalizedString("DownloadClientQbittorrentValidationQueueingNotEnabledDetail")
+                        };
                     }
                 }
             }
             catch (Exception ex)
             {
                 _logger.Error(ex, "Failed to test qBittorrent");
-                return new NzbDroneValidationFailure(string.Empty, "Unknown exception: " + ex.Message);
+                return new NzbDroneValidationFailure(string.Empty, _localizationService.GetLocalizedString("DownloadClientValidationUnknownException", new Dictionary<string, object> { { "exception", ex.Message } }));
             }
 
             return null;
@@ -576,7 +585,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             catch (Exception ex)
             {
                 _logger.Error(ex, "Failed to get torrents");
-                return new NzbDroneValidationFailure(string.Empty, "Failed to get the list of torrents: " + ex.Message);
+                return new NzbDroneValidationFailure(string.Empty, _localizationService.GetLocalizedString("DownloadClientValidationTestTorrents", new Dictionary<string, object> { { "exceptionMessage", ex.Message } }));
             }
 
             return null;

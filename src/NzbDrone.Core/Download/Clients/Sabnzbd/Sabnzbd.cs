@@ -10,6 +10,7 @@ using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Exceptions;
+using NzbDrone.Core.Localization;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.RemotePathMappings;
 using NzbDrone.Core.Validation;
@@ -26,8 +27,9 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                        IDiskProvider diskProvider,
                        IRemotePathMappingService remotePathMappingService,
                        IValidateNzbs nzbValidationService,
-                       Logger logger)
-            : base(httpClient, configService, diskProvider, remotePathMappingService, nzbValidationService, logger)
+                       Logger logger,
+                       ILocalizationService localizationService)
+            : base(httpClient, configService, diskProvider, remotePathMappingService, nzbValidationService, logger, localizationService)
         {
             _proxy = proxy;
         }
@@ -381,15 +383,15 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
                 if (version == null)
                 {
-                    return new ValidationFailure("Version", "Unknown Version: " + rawVersion);
+                    return new ValidationFailure("Version", _localizationService.GetLocalizedString("DownloadClientSabnzbdValidationUnknownVersion", new Dictionary<string, object> { { "rawVersion", rawVersion ?? "" } }));
                 }
 
                 if (rawVersion.Equals("develop", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    return new NzbDroneValidationFailure("Version", "Sabnzbd develop version, assuming version 3.0.0 or higher.")
+                    return new NzbDroneValidationFailure("Version", _localizationService.GetLocalizedString("DownloadClientSabnzbdValidationDevelopVersion"))
                     {
                         IsWarning = true,
-                        DetailedDescription = "Sonarr may not be able to support new features added to SABnzbd when running develop versions."
+                        DetailedDescription = _localizationService.GetLocalizedString("DownloadClientSabnzbdValidationDevelopVersionDetail")
                     };
                 }
 
@@ -403,12 +405,17 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                     return null;
                 }
 
-                return new ValidationFailure("Version", "Version 0.7.0+ is required, but found: " + version);
+                return new ValidationFailure("Version",
+                    _localizationService.GetLocalizedString("DownloadClientValidationErrorVersion",
+                        new Dictionary<string, object>
+                        {
+                            { "clientName", Name }, { "requiredVersion", "0.7.0" }, { "reportedVersion", version }
+                        }));
             }
             catch (Exception ex)
             {
                 _logger.Error(ex, ex.Message);
-                return new NzbDroneValidationFailure("Host", "Unable to connect to SABnzbd")
+                return new NzbDroneValidationFailure("Host", _localizationService.GetLocalizedString("DownloadClientValidationUnableToConnect", new Dictionary<string, object> { { "clientName", Name } }))
                        {
                            DetailedDescription = ex.Message
                        };
@@ -425,12 +432,12 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             {
                 if (ex.Message.ContainsIgnoreCase("API Key Incorrect"))
                 {
-                    return new ValidationFailure("APIKey", "API Key Incorrect");
+                    return new ValidationFailure("APIKey", _localizationService.GetLocalizedString("DownloadClientValidationApiKeyIncorrect"));
                 }
 
                 if (ex.Message.ContainsIgnoreCase("API Key Required"))
                 {
-                    return new ValidationFailure("APIKey", "API Key Required");
+                    return new ValidationFailure("APIKey", _localizationService.GetLocalizedString("DownloadClientValidationApiKeyRequired"));
                 }
 
                 throw;
@@ -444,10 +451,10 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             var config = _proxy.GetConfig(Settings);
             if (config.Misc.pre_check && !HasVersion(1, 1))
             {
-                return new NzbDroneValidationFailure("", "Disable 'Check before download' option in Sabnbzd")
+                return new NzbDroneValidationFailure("", _localizationService.GetLocalizedString("DownloadClientSabnzbdValidationCheckBeforeDownload"))
                 {
                     InfoLink = _proxy.GetBaseUrl(Settings, "config/switches/"),
-                    DetailedDescription = "Using Check before download affects Sonarr ability to track new downloads. Also Sabnzbd recommends 'Abort jobs that cannot be completed' instead since it's more effective."
+                    DetailedDescription = _localizationService.GetLocalizedString("DownloadClientSabnzbdValidationCheckBeforeDownloadDetail")
                 };
             }
 
@@ -463,10 +470,10 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             {
                 if (category.Dir.EndsWith("*"))
                 {
-                    return new NzbDroneValidationFailure("TvCategory", "Enable Job folders")
+                    return new NzbDroneValidationFailure("TvCategory", _localizationService.GetLocalizedString("DownloadClientSabnzbdValidationEnableJobFolders"))
                     {
                         InfoLink = _proxy.GetBaseUrl(Settings, "config/categories/"),
-                        DetailedDescription = "Sonarr prefers each download to have a separate folder. With * appended to the Folder/Path Sabnzbd will not create these job folders. Go to Sabnzbd to fix it."
+                        DetailedDescription = _localizationService.GetLocalizedString("DownloadClientSabnzbdValidationEnableJobFoldersDetail")
                     };
                 }
             }
@@ -474,10 +481,10 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             {
                 if (!Settings.TvCategory.IsNullOrWhiteSpace())
                 {
-                    return new NzbDroneValidationFailure("TvCategory", "Category does not exist")
+                    return new NzbDroneValidationFailure("TvCategory", _localizationService.GetLocalizedString("DownloadClientValidationCategoryMissing"))
                     {
                         InfoLink = _proxy.GetBaseUrl(Settings, "config/categories/"),
-                        DetailedDescription = "The Category your entered doesn't exist in Sabnzbd. Go to Sabnzbd to create it."
+                        DetailedDescription = _localizationService.GetLocalizedString("DownloadClientValidationCategoryMissingDetail", new Dictionary<string, object> { { "clientName", Name } })
                     };
                 }
             }
@@ -485,37 +492,37 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             // New in SABnzbd 4.1, but on older versions this will be empty and not apply
             if (config.Sorters.Any(s => s.is_active && ContainsCategory(s.sort_cats, Settings.TvCategory)))
             {
-                return new NzbDroneValidationFailure("TvCategory", "Disable TV Sorting")
+                return new NzbDroneValidationFailure("TvCategory", _localizationService.GetLocalizedString("DownloadClientSabnzbdValidationEnableDisableTvSorting"))
                 {
                     InfoLink = _proxy.GetBaseUrl(Settings, "config/sorting/"),
-                    DetailedDescription = "You must disable sorting for the category Sonarr uses to prevent import issues. Go to Sabnzbd to fix it."
+                    DetailedDescription = _localizationService.GetLocalizedString("DownloadClientSabnzbdValidationEnableDisableTvSortingDetail")
                 };
             }
 
             if (config.Misc.enable_tv_sorting && ContainsCategory(config.Misc.tv_categories, Settings.TvCategory))
             {
-                return new NzbDroneValidationFailure("TvCategory", "Disable TV Sorting")
+                return new NzbDroneValidationFailure("TvCategory", _localizationService.GetLocalizedString("DownloadClientSabnzbdValidationEnableDisableTvSorting"))
                 {
                     InfoLink = _proxy.GetBaseUrl(Settings, "config/sorting/"),
-                    DetailedDescription = "You must disable Sabnzbd TV Sorting for the category Sonarr uses to prevent import issues. Go to Sabnzbd to fix it."
+                    DetailedDescription = _localizationService.GetLocalizedString("DownloadClientSabnzbdValidationEnableDisableTvSortingDetail")
                 };
             }
 
             if (config.Misc.enable_movie_sorting && ContainsCategory(config.Misc.movie_categories, Settings.TvCategory))
             {
-                return new NzbDroneValidationFailure("TvCategory", "Disable Movie Sorting")
+                return new NzbDroneValidationFailure("TvCategory", _localizationService.GetLocalizedString("DownloadClientSabnzbdValidationEnableDisableMovieSorting"))
                 {
                     InfoLink = _proxy.GetBaseUrl(Settings, "config/sorting/"),
-                    DetailedDescription = "You must disable Sabnzbd Movie Sorting for the category Sonarr uses to prevent import issues. Go to Sabnzbd to fix it."
+                    DetailedDescription = _localizationService.GetLocalizedString("DownloadClientSabnzbdValidationEnableDisableMovieSortingDetail")
                 };
             }
 
             if (config.Misc.enable_date_sorting && ContainsCategory(config.Misc.date_categories, Settings.TvCategory))
             {
-                return new NzbDroneValidationFailure("TvCategory", "Disable Date Sorting")
+                return new NzbDroneValidationFailure("TvCategory", _localizationService.GetLocalizedString("DownloadClientSabnzbdValidationEnableDisableDateSorting"))
                 {
                     InfoLink = _proxy.GetBaseUrl(Settings, "config/sorting/"),
-                    DetailedDescription = "You must disable Sabnzbd Date Sorting for the category Sonarr uses to prevent import issues. Go to Sabnzbd to fix it."
+                    DetailedDescription = _localizationService.GetLocalizedString("DownloadClientSabnzbdValidationEnableDisableDateSortingDetail")
                 };
             }
 
