@@ -74,7 +74,7 @@ namespace Sonarr.Api.V3
 
             if (providerDefinition.Enable)
             {
-                Test(providerDefinition, false);
+                Test(providerDefinition, !forceSave);
             }
 
             providerDefinition = _providerFactory.Create(providerDefinition);
@@ -92,7 +92,7 @@ namespace Sonarr.Api.V3
             // Only test existing definitions if it is enabled and forceSave isn't set.
             if (providerDefinition.Enable && !forceSave)
             {
-                Test(providerDefinition, false);
+                Test(providerDefinition, true);
             }
 
             _providerFactory.Update(providerDefinition);
