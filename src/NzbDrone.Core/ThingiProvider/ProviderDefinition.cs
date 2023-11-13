@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Core.ThingiProvider
@@ -13,7 +14,10 @@ namespace NzbDrone.Core.ThingiProvider
         private IProviderConfig _settings;
 
         public string Name { get; set; }
+
+        [JsonIgnore]
         public string ImplementationName { get; set; }
+
         public string Implementation { get; set; }
         public string ConfigContract { get; set; }
         public virtual bool Enable { get; set; }

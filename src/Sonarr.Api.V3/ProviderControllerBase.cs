@@ -70,7 +70,7 @@ namespace Sonarr.Api.V3
         [Produces("application/json")]
         public ActionResult<TProviderResource> CreateProvider([FromBody] TProviderResource providerResource, [FromQuery] bool forceSave = false)
         {
-            var providerDefinition = GetDefinition(providerResource, true, !forceSave, false);
+            var providerDefinition = GetDefinition(providerResource, null, true, !forceSave, false);
 
             if (providerDefinition.Enable)
             {
@@ -87,15 +87,22 @@ namespace Sonarr.Api.V3
         [Produces("application/json")]
         public ActionResult<TProviderResource> UpdateProvider([FromBody] TProviderResource providerResource, [FromQuery] bool forceSave = false)
         {
-            var providerDefinition = GetDefinition(providerResource, true, !forceSave, false);
+            var existingDefinition = _providerFactory.Find(providerResource.Id);
+            var providerDefinition = GetDefinition(providerResource, existingDefinition, true, !forceSave, false);
 
-            // Only test existing definitions if it is enabled and forceSave isn't set.
-            if (providerDefinition.Enable && !forceSave)
+            // Comparing via JSON string to eliminate the need for every provider implementation to implement equality checks.
+            var hasDefinitionChanged = STJson.ToJson(existingDefinition) != STJson.ToJson(providerDefinition);
+
+            // Only test existing definitions if it is enabled and forceSave isn't set or the definition has changed.
+            if (providerDefinition.Enable && (!forceSave || hasDefinitionChanged))
             {
                 Test(providerDefinition, true);
             }
 
-            _providerFactory.Update(providerDefinition);
+            if (hasDefinitionChanged)
+            {
+                _providerFactory.Update(providerDefinition);
+            }
 
             return Accepted(providerResource.Id);
         }
@@ -141,9 +148,8 @@ namespace Sonarr.Api.V3
             return Accepted(_providerFactory.Update(definitionsToUpdate).Select(x => _resourceMapper.ToResource(x)));
         }
 
-        private TProviderDefinition GetDefinition(TProviderResource providerResource, bool validate, bool includeWarnings, bool forceValidate)
+        private TProviderDefinition GetDefinition(TProviderResource providerResource, TProviderDefinition existingDefinition, bool validate, bool includeWarnings, bool forceValidate)
         {
-            var existingDefinition = providerResource.Id > 0 ? _providerFactory.Find(providerResource.Id) : null;
             var definition = _resourceMapper.ToModel(providerResource, existingDefinition);
 
             if (validate && (definition.Enable || forceValidate))
@@ -199,7 +205,8 @@ namespace Sonarr.Api.V3
         [Consumes("application/json")]
         public object Test([FromBody] TProviderResource providerResource)
         {
-            var providerDefinition = GetDefinition(providerResource, true, true, true);
+            var existingDefinition = providerResource.Id > 0 ? _providerFactory.Find(providerResource.Id) : null;
+            var providerDefinition = GetDefinition(providerResource, existingDefinition, true, true, true);
 
             Test(providerDefinition, true);
 
@@ -236,9 +243,10 @@ namespace Sonarr.Api.V3
         [HttpPost("action/{name}")]
         [Consumes("application/json")]
         [Produces("application/json")]
-        public IActionResult RequestAction(string name, [FromBody] TProviderResource resource)
+        public IActionResult RequestAction(string name, [FromBody] TProviderResource providerResource)
         {
-            var providerDefinition = GetDefinition(resource, false, false, false);
+            var existingDefinition = providerResource.Id > 0 ? _providerFactory.Find(providerResource.Id) : null;
+            var providerDefinition = GetDefinition(providerResource, existingDefinition, false, false, false);
 
             var query = Request.Query.ToDictionary(x => x.Key, x => x.Value.ToString());
 
