@@ -72,7 +72,7 @@ namespace NzbDrone.Core.Indexers.HDBits
 
             if (TryAddSearchParameters(query, searchCriteria))
             {
-                query.Search = string.Format("{0:yyyy}-{0:MM}-{0:dd}", searchCriteria.AirDate);
+                query.Search = searchCriteria.AirDate.ToString("yyyy-MM-dd");
 
                 pageableRequests.Add(GetRequest(query));
             }
@@ -87,7 +87,7 @@ namespace NzbDrone.Core.Indexers.HDBits
 
             if (TryAddSearchParameters(query, searchCriteria))
             {
-                query.Search = string.Format("{0}-", searchCriteria.Year);
+                query.Search = $"{searchCriteria.Year}-";
 
                 pageableRequests.Add(GetRequest(query));
             }
@@ -140,8 +140,9 @@ namespace NzbDrone.Core.Indexers.HDBits
         {
             if (searchCriteria.Series.TvdbId != 0)
             {
-                query.TvdbInfo = query.TvdbInfo ?? new TvdbInfo();
+                query.TvdbInfo ??= new TvdbInfo();
                 query.TvdbInfo.Id = searchCriteria.Series.TvdbId;
+
                 return true;
             }
 
@@ -161,6 +162,12 @@ namespace NzbDrone.Core.Indexers.HDBits
 
             query.Username = Settings.Username;
             query.Passkey = Settings.ApiKey;
+
+            query.Category = Settings.Categories.ToArray();
+            query.Codec = Settings.Codecs.ToArray();
+            query.Medium = Settings.Mediums.ToArray();
+
+            query.Limit = 100;
 
             request.SetContent(query.ToJson());
             request.ContentSummary = query.ToJson(Formatting.None);
