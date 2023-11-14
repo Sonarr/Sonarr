@@ -84,21 +84,35 @@ namespace NzbDrone.Core.Tv
                     break;
 
                 case MonitorTypes.LatestSeason:
+                // Check if the series has ended by checking the Status property of the series object.
+                    if (_series.Status == SeriesStatusType.Ended)
+                         {
+                    _logger.Debug("[{0}] Series has ended. Monitoring all episodes of the latest season regardless of air date.", _series.Title);
+                // Monitor all episodes of the latest season for a series that has ended.
+                    ToggleEpisodesMonitoredState(episodes, e => e.SeasonNumber == lastSeason);
+                        }
+                    else
+                        {
+                // For ongoing series, use the provided logic to unmonitor episodes of the latest season if they aired more than 90 days ago.
                     if (episodes.Where(e => e.SeasonNumber == lastSeason)
-                                .All(e => e.AirDateUtc.HasValue &&
-                                          e.AirDateUtc.Value.Before(DateTime.UtcNow) &&
-                                          !e.AirDateUtc.Value.InLastDays(90)))
-                    {
-                        _logger.Debug("[{0}] Unmonitoring all episodes because latest season aired more than 90 days ago", series.Title);
-                        ToggleEpisodesMonitoredState(episodes, e => false);
-                        break;
-                    }
+                    .All(e => e.AirDateUtc.HasValue &&
+                              e.AirDateUtc.Value.Before(DateTime.UtcNow) &&
+                              !e.AirDateUtc.Value.InLastDays(90)))
+                        {
+                    _logger.Debug("[{0}] Unmonitoring all episodes because the latest season aired more than 90 days ago.", _series.Title);
+                // Unmonitor all episodes of the latest season
+                    ToggleEpisodesMonitoredState(episodes, e => false);
+                        }
+                    else
+                        {
+                    _logger.Debug("[{0}] Monitoring latest season episodes.", _series.Title);
+                // Monitor episodes of the latest season that aired within the last 90 days
+                    ToggleEpisodesMonitoredState(episodes, e => e.SeasonNumber == lastSeason);
+                        }
+                }
 
-                    _logger.Debug("[{0}] Monitoring latest season episodes", series.Title);
+    break;
 
-                    ToggleEpisodesMonitoredState(episodes, e => e.SeasonNumber > 0 && e.SeasonNumber == lastSeason);
-
-                    break;
 
                 case MonitorTypes.MonitorSpecials:
                     _logger.Debug("[{0}] Monitoring special episodes", series.Title);
