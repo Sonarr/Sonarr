@@ -247,11 +247,11 @@ class CutoffUnmet extends Component {
                 <ConfirmModal
                   isOpen={isConfirmSearchAllCutoffUnmetModalOpen}
                   kind={kinds.DANGER}
-                  title={translate('SearchForCutoffUnmet')}
+                  title={translate('SearchForCutoffUnmetEpisodes')}
                   message={
                     <div>
                       <div>
-                        {translate('SearchForCutoffUnmetConfirmationCount', { totalRecords })}
+                        {translate('SearchForCutoffUnmetEpisodesConfirmationCount', { totalRecords })}
                       </div>
                       <div>
                         {translate('MassSearchCancelWarning')}

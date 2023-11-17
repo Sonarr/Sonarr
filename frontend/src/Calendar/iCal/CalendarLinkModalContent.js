@@ -128,7 +128,7 @@ class CalendarLinkModalContent extends Component {
                 type={inputTypes.CHECK}
                 name="unmonitored"
                 value={unmonitored}
-                helpText={translate('ICalIncludeUnmonitoredHelpText')}
+                helpText={translate('ICalIncludeUnmonitoredEpisodesHelpText')}
                 onChange={this.onInputChange}
               />
             </FormGroup>
@@ -140,7 +140,7 @@ class CalendarLinkModalContent extends Component {
                 type={inputTypes.CHECK}
                 name="premieresOnly"
                 value={premieresOnly}
-                helpText={translate('ICalSeasonPremieresOnlyHelpText')}
+                helpText={translate('ICalSeasonPremiereEpisodesOnlyHelpText')}
                 onChange={this.onInputChange}
               />
             </FormGroup>
@@ -164,7 +164,7 @@ class CalendarLinkModalContent extends Component {
                 type={inputTypes.TAG}
                 name="tags"
                 value={tags}
-                helpText={translate('ICalTagsHelpText')}
+                helpText={translate('ICalTagsSeriesHelpText')}
                 onChange={this.onInputChange}
               />
             </FormGroup>

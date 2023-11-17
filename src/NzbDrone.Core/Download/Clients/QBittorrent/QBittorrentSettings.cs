@@ -56,10 +56,10 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
         [FieldDefinition(7, Label = "PostImportCategory", Type = FieldType.Textbox, Advanced = true, HelpText = "DownloadClientSettingsPostImportCategoryHelpText")]
         public string TvImportedCategory { get; set; }
 
-        [FieldDefinition(8, Label = "DownloadClientSettingsRecentPriority", Type = FieldType.Select, SelectOptions = typeof(QBittorrentPriority), HelpText = "DownloadClientSettingsRecentPriorityHelpText")]
+        [FieldDefinition(8, Label = "DownloadClientSettingsRecentPriority", Type = FieldType.Select, SelectOptions = typeof(QBittorrentPriority), HelpText = "DownloadClientSettingsRecentPriorityEpisodeHelpText")]
         public int RecentTvPriority { get; set; }
 
-        [FieldDefinition(9, Label = "DownloadClientSettingsOlderPriority", Type = FieldType.Select, SelectOptions = typeof(QBittorrentPriority), HelpText = "DownloadClientSettingsOlderPriorityHelpText")]
+        [FieldDefinition(9, Label = "DownloadClientSettingsOlderPriority", Type = FieldType.Select, SelectOptions = typeof(QBittorrentPriority), HelpText = "DownloadClientSettingsOlderPriorityEpisodeHelpText")]
         public int OlderTvPriority { get; set; }
 
         [FieldDefinition(10, Label = "DownloadClientSettingsInitialState", Type = FieldType.Select, SelectOptions = typeof(QBittorrentState), HelpText = "DownloadClientQbittorrentSettingsInitialStateHelpText")]

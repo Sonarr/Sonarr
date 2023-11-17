@@ -60,7 +60,7 @@ class QualityDefinitions extends Component {
 
           <div className={styles.sizeLimitHelpTextContainer}>
             <div className={styles.sizeLimitHelpText}>
-              {translate('QualityLimitsHelpText')}
+              {translate('QualityLimitsSeriesRuntimeHelpText')}
             </div>
           </div>
         </PageSectionContent>

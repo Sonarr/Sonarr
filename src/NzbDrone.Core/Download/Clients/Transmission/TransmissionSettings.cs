@@ -64,10 +64,10 @@ namespace NzbDrone.Core.Download.Clients.Transmission
         [FieldDefinition(7, Label = "Directory", Type = FieldType.Textbox, Advanced = true, HelpText = "DownloadClientTransmissionSettingsDirectoryHelpText")]
         public string TvDirectory { get; set; }
 
-        [FieldDefinition(8, Label = "DownloadClientSettingsRecentPriority", Type = FieldType.Select, SelectOptions = typeof(TransmissionPriority), HelpText = "DownloadClientSettingsRecentPriorityHelpText")]
+        [FieldDefinition(8, Label = "DownloadClientSettingsRecentPriority", Type = FieldType.Select, SelectOptions = typeof(TransmissionPriority), HelpText = "DownloadClientSettingsRecentPriorityEpisodeHelpText")]
         public int RecentTvPriority { get; set; }
 
-        [FieldDefinition(9, Label = "DownloadClientSettingsOlderPriority", Type = FieldType.Select, SelectOptions = typeof(TransmissionPriority), HelpText = "DownloadClientSettingsOlderPriorityHelpText")]
+        [FieldDefinition(9, Label = "DownloadClientSettingsOlderPriority", Type = FieldType.Select, SelectOptions = typeof(TransmissionPriority), HelpText = "DownloadClientSettingsOlderPriorityEpisodeHelpText")]
         public int OlderTvPriority { get; set; }
 
         [FieldDefinition(10, Label = "DownloadClientSettingsAddPaused", Type = FieldType.Checkbox)]

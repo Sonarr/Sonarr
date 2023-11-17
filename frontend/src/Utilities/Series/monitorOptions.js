@@ -52,19 +52,19 @@ const monitorOptions = [
   {
     key: 'monitorSpecials',
     get value() {
-      return translate('MonitorSpecials');
+      return translate('MonitorSpecialEpisodes');
     }
   },
   {
     key: 'unmonitorSpecials',
     get value() {
-      return translate('UnmonitorSpecials');
+      return translate('UnmonitorSpecialEpisodes');
     }
   },
   {
     key: 'none',
     get value() {
-      return translate('MonitorNone');
+      return translate('MonitorNoEpisodes');
     }
   }
 ];

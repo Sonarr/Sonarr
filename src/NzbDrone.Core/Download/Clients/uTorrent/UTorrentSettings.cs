@@ -55,10 +55,10 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
         [FieldDefinition(7, Label = "PostImportCategory", Type = FieldType.Textbox, Advanced = true, HelpText = "DownloadClientSettingsPostImportCategoryHelpText")]
         public string TvImportedCategory { get; set; }
 
-        [FieldDefinition(8, Label = "DownloadClientSettingsRecentPriority", Type = FieldType.Select, SelectOptions = typeof(UTorrentPriority), HelpText = "DownloadClientSettingsRecentPriorityHelpText")]
+        [FieldDefinition(8, Label = "DownloadClientSettingsRecentPriority", Type = FieldType.Select, SelectOptions = typeof(UTorrentPriority), HelpText = "DownloadClientSettingsRecentPriorityEpisodeHelpText")]
         public int RecentTvPriority { get; set; }
 
-        [FieldDefinition(9, Label = "DownloadClientSettingsOlderPriority", Type = FieldType.Select, SelectOptions = typeof(UTorrentPriority), HelpText = "DownloadClientSettingsOlderPriorityHelpText")]
+        [FieldDefinition(9, Label = "DownloadClientSettingsOlderPriority", Type = FieldType.Select, SelectOptions = typeof(UTorrentPriority), HelpText = "DownloadClientSettingsOlderPriorityEpisodeHelpText")]
         public int OlderTvPriority { get; set; }
 
         [FieldDefinition(10, Label = "DownloadClientSettingsInitialState", Type = FieldType.Select, SelectOptions = typeof(UTorrentState), HelpText = "DownloadClientSettingsInitialStateHelpText")]

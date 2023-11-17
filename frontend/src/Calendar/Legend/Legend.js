@@ -25,7 +25,7 @@ function Legend(props) {
         name="Finale"
         icon={icons.INFO}
         kind={fullColorEvents ? kinds.DEFAULT : kinds.WARNING}
-        tooltip={translate('CalendarLegendFinaleTooltip')}
+        tooltip={translate('CalendarLegendSeriesFinaleTooltip')}
       />
     );
   }
@@ -58,7 +58,7 @@ function Legend(props) {
       <div>
         <LegendItem
           status="unaired"
-          tooltip={translate('CalendarLegendUnairedTooltip')}
+          tooltip={translate('CalendarLegendEpisodeUnairedTooltip')}
           isAgendaView={isAgendaView}
           fullColorEvents={fullColorEvents}
           colorImpairedMode={colorImpairedMode}
@@ -66,7 +66,7 @@ function Legend(props) {
 
         <LegendItem
           status="unmonitored"
-          tooltip={translate('CalendarLegendUnmonitoredTooltip')}
+          tooltip={translate('CalendarLegendEpisodeUnmonitoredTooltip')}
           isAgendaView={isAgendaView}
           fullColorEvents={fullColorEvents}
           colorImpairedMode={colorImpairedMode}
@@ -77,7 +77,7 @@ function Legend(props) {
         <LegendItem
           status="onAir"
           name="On Air"
-          tooltip={translate('CalendarLegendOnAirTooltip')}
+          tooltip={translate('CalendarLegendEpisodeOnAirTooltip')}
           isAgendaView={isAgendaView}
           fullColorEvents={fullColorEvents}
           colorImpairedMode={colorImpairedMode}
@@ -85,7 +85,7 @@ function Legend(props) {
 
         <LegendItem
           status="missing"
-          tooltip={translate('CalendarLegendMissingTooltip')}
+          tooltip={translate('CalendarLegendEpisodeMissingTooltip')}
           isAgendaView={isAgendaView}
           fullColorEvents={fullColorEvents}
           colorImpairedMode={colorImpairedMode}
@@ -95,7 +95,7 @@ function Legend(props) {
       <div>
         <LegendItem
           status="downloading"
-          tooltip={translate('CalendarLegendDownloadingTooltip')}
+          tooltip={translate('CalendarLegendEpisodeDownloadingTooltip')}
           isAgendaView={isAgendaView}
           fullColorEvents={fullColorEvents}
           colorImpairedMode={colorImpairedMode}
@@ -103,7 +103,7 @@ function Legend(props) {
 
         <LegendItem
           status="downloaded"
-          tooltip={translate('CalendarLegendDownloadedTooltip')}
+          tooltip={translate('CalendarLegendEpisodeDownloadedTooltip')}
           isAgendaView={isAgendaView}
           fullColorEvents={fullColorEvents}
           colorImpairedMode={colorImpairedMode}
@@ -116,7 +116,7 @@ function Legend(props) {
           icon={icons.INFO}
           kind={kinds.INFO}
           darken={true}
-          tooltip={translate('CalendarLegendPremiereTooltip')}
+          tooltip={translate('CalendarLegendSeriesPremiereTooltip')}
         />
 
         {iconsToShow[0]}

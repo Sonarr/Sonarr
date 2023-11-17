@@ -47,18 +47,18 @@ function SeriesMonitoringOptionsPopoverContent() {
       />
 
       <DescriptionListItem
-        title={translate('MonitorSpecials')}
-        data={translate('MonitorSpecialsDescription')}
+        title={translate('MonitorSpecialEpisodes')}
+        data={translate('MonitorSpecialEpisodesDescription')}
       />
 
       <DescriptionListItem
-        title={translate('UnmonitorSpecials')}
-        data={translate('UnmonitorSpecialsDescription')}
+        title={translate('UnmonitorSpecialEpisodes')}
+        data={translate('UnmonitorSpecialsEpisodesDescription')}
       />
 
       <DescriptionListItem
-        title={translate('MonitorNone')}
-        data={translate('MonitorNoneDescription')}
+        title={translate('MonitorNoEpisodes')}
+        data={translate('MonitorNoEpisodesDescription')}
       />
     </DescriptionList>
   );
