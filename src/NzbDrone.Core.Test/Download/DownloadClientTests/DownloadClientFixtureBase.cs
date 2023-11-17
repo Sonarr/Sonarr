@@ -11,6 +11,7 @@ using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.IndexerSearch.Definitions;
+using NzbDrone.Core.Localization;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.RemotePathMappings;
@@ -70,7 +71,8 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
                 Mocker.Resolve<IIndexerStatusService>(),
                 Mocker.Resolve<IConfigService>(),
                 Mocker.Resolve<IParsingService>(),
-                Mocker.Resolve<Logger>());
+                Mocker.Resolve<Logger>(),
+                Mocker.Resolve<ILocalizationService>());
         }
 
         protected void VerifyIdentifiable(DownloadClientItem downloadClientItem)

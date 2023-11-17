@@ -7,6 +7,7 @@ using NLog;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.IndexerSearch.Definitions;
+using NzbDrone.Core.Localization;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.ThingiProvider;
@@ -20,6 +21,7 @@ namespace NzbDrone.Core.Indexers
         protected readonly IConfigService _configService;
         protected readonly IParsingService _parsingService;
         protected readonly Logger _logger;
+        protected readonly ILocalizationService _localizationService;
 
         public abstract string Name { get; }
         public abstract DownloadProtocol Protocol { get; }
@@ -29,12 +31,13 @@ namespace NzbDrone.Core.Indexers
         public abstract bool SupportsRss { get; }
         public abstract bool SupportsSearch { get; }
 
-        public IndexerBase(IIndexerStatusService indexerStatusService, IConfigService configService, IParsingService parsingService, Logger logger)
+        public IndexerBase(IIndexerStatusService indexerStatusService, IConfigService configService, IParsingService parsingService, Logger logger, ILocalizationService localizationService)
         {
             _indexerStatusService = indexerStatusService;
             _configService = configService;
             _parsingService = parsingService;
             _logger = logger;
+            _localizationService = localizationService;
         }
 
         public Type ConfigContract => typeof(TSettings);
@@ -105,7 +108,7 @@ namespace NzbDrone.Core.Indexers
             catch (Exception ex)
             {
                 _logger.Error(ex, "Test aborted due to exception");
-                failures.Add(new ValidationFailure(string.Empty, "Test was aborted due to an error: " + ex.Message));
+                failures.Add(new ValidationFailure(string.Empty, _localizationService.GetLocalizedString("IndexerValidationTestAbortedDueToError", new Dictionary<string, object> { { "exceptionMessage", ex.Message } })));
             }
 
             return new ValidationResult(failures);

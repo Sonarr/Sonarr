@@ -7,14 +7,15 @@ using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Indexers.TorrentRss;
+using NzbDrone.Core.Localization;
 using NzbDrone.Core.Parser;
 
 namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
 {
     public class TestTorrentRssIndexer : TorrentRssIndexer
     {
-        public TestTorrentRssIndexer(ITorrentRssParserFactory torrentRssParserFactory, IHttpClient httpClient, IIndexerStatusService indexerStatusService, IConfigService configService, IParsingService parsingService, Logger logger)
-            : base(torrentRssParserFactory, httpClient, indexerStatusService, configService, parsingService, logger)
+        public TestTorrentRssIndexer(ITorrentRssParserFactory torrentRssParserFactory, IHttpClient httpClient, IIndexerStatusService indexerStatusService, IConfigService configService, IParsingService parsingService, Logger logger, ILocalizationService localizationService)
+            : base(torrentRssParserFactory, httpClient, indexerStatusService, configService, parsingService, logger, localizationService)
         {
         }
 

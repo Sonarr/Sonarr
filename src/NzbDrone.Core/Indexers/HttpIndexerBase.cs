@@ -12,6 +12,7 @@ using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Http.CloudFlare;
 using NzbDrone.Core.Indexers.Exceptions;
 using NzbDrone.Core.IndexerSearch.Definitions;
+using NzbDrone.Core.Localization;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 
@@ -34,8 +35,8 @@ namespace NzbDrone.Core.Indexers
         public abstract IIndexerRequestGenerator GetRequestGenerator();
         public abstract IParseIndexerResponse GetParser();
 
-        public HttpIndexerBase(IHttpClient httpClient, IIndexerStatusService indexerStatusService, IConfigService configService, IParsingService parsingService, Logger logger)
-            : base(indexerStatusService, configService, parsingService, logger)
+        public HttpIndexerBase(IHttpClient httpClient, IIndexerStatusService indexerStatusService, IConfigService configService, IParsingService parsingService, Logger logger, ILocalizationService localizationService)
+            : base(indexerStatusService, configService, parsingService, logger, localizationService)
         {
             _httpClient = httpClient;
         }
@@ -376,50 +377,50 @@ namespace NzbDrone.Core.Indexers
 
                 if (firstRequest == null)
                 {
-                    return new ValidationFailure(string.Empty, "No rss feed query available. This may be an issue with the indexer or your indexer category settings.");
+                    return new ValidationFailure(string.Empty, _localizationService.GetLocalizedString("IndexerValidationJackettNoRssFeedQueryAvailable"));
                 }
 
                 var releases = await FetchPage(firstRequest, parser);
 
                 if (releases.Empty())
                 {
-                    return new ValidationFailure(string.Empty, "Query successful, but no results in the configured categories were returned from your indexer. This may be an issue with the indexer or your indexer category settings.");
+                    return new ValidationFailure(string.Empty, _localizationService.GetLocalizedString("IndexerValidationJackettNoResultsInConfiguredCategories"));
                 }
             }
             catch (ApiKeyException ex)
             {
                 _logger.Warn("Indexer returned result for RSS URL, API Key appears to be invalid: " + ex.Message);
 
-                return new ValidationFailure("ApiKey", "Invalid API Key");
+                return new ValidationFailure("ApiKey", _localizationService.GetLocalizedString("IndexerValidationInvalidApiKey"));
             }
             catch (RequestLimitReachedException ex)
             {
                 _logger.Warn("Request limit reached: " + ex.Message);
 
-                return new ValidationFailure(string.Empty, "Request limit reached: " + ex.Message);
+                return new ValidationFailure(string.Empty, _localizationService.GetLocalizedString("IndexerValidationRequestLimitReached", new Dictionary<string, object> { { "exceptionMessage", ex.Message } }));
             }
             catch (CloudFlareCaptchaException ex)
             {
                 if (ex.IsExpired)
                 {
-                    return new ValidationFailure("CaptchaToken", "CloudFlare CAPTCHA token expired, please Refresh.");
+                    return new ValidationFailure("CaptchaToken", _localizationService.GetLocalizedString("IndexerValidationCloudFlareCaptchaExpired"));
                 }
                 else
                 {
-                    return new ValidationFailure("CaptchaToken", "Site protected by CloudFlare CAPTCHA. Valid CAPTCHA token required.");
+                    return new ValidationFailure("CaptchaToken", _localizationService.GetLocalizedString("IndexerValidationCloudFlareCaptchaRequired"));
                 }
             }
             catch (UnsupportedFeedException ex)
             {
                 _logger.Warn(ex, "Indexer feed is not supported");
 
-                return new ValidationFailure(string.Empty, "Indexer feed is not supported: " + ex.Message);
+                return new ValidationFailure(string.Empty, _localizationService.GetLocalizedString("IndexerValidationFeedNotSupported", new Dictionary<string, object> { { "exceptionMessage", ex.Message } }));
             }
             catch (IndexerException ex)
             {
                 _logger.Warn(ex, "Unable to connect to indexer");
 
-                return new ValidationFailure(string.Empty, "Unable to connect to indexer. " + ex.Message);
+                return new ValidationFailure(string.Empty, _localizationService.GetLocalizedString("IndexerValidationUnableToConnect", new Dictionary<string, object> { { "exceptionMessage", ex.Message } }));
             }
             catch (HttpException ex)
             {
@@ -427,33 +428,33 @@ namespace NzbDrone.Core.Indexers
                     ex.Response.Content.Contains("not support the requested query"))
                 {
                     _logger.Warn(ex, "Indexer does not support the query");
-                    return new ValidationFailure(string.Empty, "Indexer does not support the current query. Check if the categories and or searching for seasons/episodes are supported. Check the log for more details.");
+                    return new ValidationFailure(string.Empty, _localizationService.GetLocalizedString("IndexerValidationQueryNotSupported"));
                 }
 
                 _logger.Warn(ex, "Unable to connect to indexer");
                 if (ex.Response.HasHttpServerError)
                 {
-                    return new ValidationFailure(string.Empty, "Unable to connect to indexer, indexer's server is unavailable. Try again later. " + ex.Message);
+                    return new ValidationFailure(string.Empty, _localizationService.GetLocalizedString("IndexerValidationUnableToConnectServerUnavailable", new Dictionary<string, object> { { "exceptionMessage", ex.Message } }));
                 }
 
                 if (ex.Response.StatusCode is HttpStatusCode.Forbidden or HttpStatusCode.Unauthorized)
                 {
-                    return new ValidationFailure(string.Empty, "Unable to connect to indexer, invalid credentials. " + ex.Message);
+                    return new ValidationFailure(string.Empty, _localizationService.GetLocalizedString("IndexerValidationUnableToConnectInvalidCredentials", new Dictionary<string, object> { { "exceptionMessage", ex.Message } }));
                 }
 
-                return new ValidationFailure(string.Empty, "Unable to connect to indexer, check the log above the ValidationFailure for more details. " + ex.Message);
+                return new ValidationFailure(string.Empty, _localizationService.GetLocalizedString("IndexerValidationUnableToConnect", new Dictionary<string, object> { { "exceptionMessage", ex.Message } }));
             }
             catch (HttpRequestException ex)
             {
                 _logger.Warn(ex, "Unable to connect to indexer");
 
-                return new ValidationFailure(string.Empty, "Unable to connect to indexer, please check your DNS settings and ensure IPv6 is working or disabled. " + ex.Message);
+                return new ValidationFailure(string.Empty, _localizationService.GetLocalizedString("IndexerValidationUnableToConnectHttpError", new Dictionary<string, object> { { "exceptionMessage", ex.Message } }));
             }
             catch (TaskCanceledException ex)
             {
                 _logger.Warn(ex, "Unable to connect to indexer");
 
-                return new ValidationFailure(string.Empty, "Unable to connect to indexer, possibly due to a timeout. Try again or check your network settings. " + ex.Message);
+                return new ValidationFailure(string.Empty, _localizationService.GetLocalizedString("IndexerValidationUnableToConnectTimeout", new Dictionary<string, object> { { "exceptionMessage", ex.Message } }));
             }
             catch (WebException webException)
             {
@@ -461,20 +462,20 @@ namespace NzbDrone.Core.Indexers
 
                 if (webException.Status is WebExceptionStatus.NameResolutionFailure or WebExceptionStatus.ConnectFailure)
                 {
-                    return new ValidationFailure(string.Empty, "Unable to connect to indexer connection failure. Check your connection to the indexer's server and DNS." + webException.Message);
+                    return new ValidationFailure(string.Empty, _localizationService.GetLocalizedString("IndexerValidationUnableToConnectResolutionFailure", new Dictionary<string, object> { { "exceptionMessage", webException.Message } }));
                 }
 
                 if (webException.Message.Contains("502") || webException.Message.Contains("503") ||
                     webException.Message.Contains("504") || webException.Message.Contains("timed out"))
                 {
-                    return new ValidationFailure(string.Empty, "Unable to connect to indexer, indexer's server is unavailable. Try again later. " + webException.Message);
+                    return new ValidationFailure(string.Empty, _localizationService.GetLocalizedString("IndexerValidationUnableToConnectServerUnavailable", new Dictionary<string, object> { { "exceptionMessage", webException.Message } }));
                 }
             }
             catch (Exception ex)
             {
                 _logger.Warn(ex, "Unable to connect to indexer");
 
-                return new ValidationFailure(string.Empty, $"Unable to connect to indexer: {ex.Message}. Check the log surrounding this error for details");
+                return new ValidationFailure(string.Empty, _localizationService.GetLocalizedString("IndexerValidationUnableToConnect", new Dictionary<string, object> { { "exceptionMessage", ex.Message } }));
             }
 
             return null;

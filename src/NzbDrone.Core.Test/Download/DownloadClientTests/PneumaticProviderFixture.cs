@@ -11,6 +11,7 @@ using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.Clients.Pneumatic;
 using NzbDrone.Core.Indexers;
+using NzbDrone.Core.Localization;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
@@ -51,7 +52,8 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests
                 Mocker.Resolve<IIndexerStatusService>(),
                 Mocker.Resolve<IConfigService>(),
                 Mocker.Resolve<IParsingService>(),
-                Mocker.Resolve<Logger>());
+                Mocker.Resolve<Logger>(),
+                Mocker.Resolve<ILocalizationService>());
 
             _downloadClientItem = Builder<DownloadClientItem>
                                   .CreateNew().With(d => d.DownloadId = "_Droned.S01E01.Pilot.1080p.WEB-DL-DRONE_0")
