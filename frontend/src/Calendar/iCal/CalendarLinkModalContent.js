@@ -116,7 +116,7 @@ class CalendarLinkModalContent extends Component {
     return (
       <ModalContent onModalClose={onModalClose}>
         <ModalHeader>
-          {translate('CalendarFeed', { appName: 'Sonarr' })}
+          {translate('CalendarFeed')}
         </ModalHeader>
 
         <ModalBody>

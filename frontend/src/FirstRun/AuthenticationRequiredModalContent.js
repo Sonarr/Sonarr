@@ -63,7 +63,7 @@ function AuthenticationRequiredModalContent(props) {
           className={styles.authRequiredAlert}
           kind={kinds.WARNING}
         >
-          {translate('AuthenticationRequiredWarning', { appName: 'Sonarr' })}
+          {translate('AuthenticationRequiredWarning')}
         </Alert>
 
         {
@@ -76,7 +76,7 @@ function AuthenticationRequiredModalContent(props) {
                   type={inputTypes.SELECT}
                   name="authenticationMethod"
                   values={authenticationMethodOptions}
-                  helpText={translate('AuthenticationMethodHelpText', { appName: 'Sonarr' })}
+                  helpText={translate('AuthenticationMethodHelpText')}
                   helpTextWarning={authenticationMethod.value === 'none' ? translate('AuthenticationMethodHelpTextWarning') : undefined}
                   helpLink="https://wiki.servarr.com/sonarr/faq#forced-authentication"
                   onChange={onInputChange}

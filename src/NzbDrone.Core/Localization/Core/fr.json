@@ -671,7 +671,7 @@
     "RemotePathMappingRemoteDownloadClientHealthCheckMessage": "Le client de téléchargement à distance {0} a signalé des fichiers dans {1} mais ce répertoire ne semble pas exister. Il manque probablement un mappage de chemin distant.",
     "RemotePathMappingRemotePathHelpText": "Chemin racine du répertoire auquel accède le client de téléchargement",
     "RemotePathMappingWrongOSPathHealthCheckMessage": "Le client de téléchargement à distance {0} place les téléchargements dans {1} mais ce n'est pas un chemin {2} valide. Vérifiez vos mappages de chemins distants et téléchargez les paramètres client.",
-    "RemotePathMappingsInfo": "Les mappages de chemins distants sont très rarement requis. Si {app} et votre client de téléchargement sont sur le même système, il est préférable de faire correspondre vos chemins. Pour plus d'informations, consultez le [wiki]({wikiLink})",
+    "RemotePathMappingsInfo": "Les mappages de chemins distants sont très rarement requis. Si {appName} et votre client de téléchargement sont sur le même système, il est préférable de faire correspondre vos chemins. Pour plus d'informations, consultez le [wiki]({wikiLink})",
     "RemotePathMappingsLoadError": "Impossible de charger les mappages de chemin distant",
     "RemoveCompleted": "Supprimer terminé",
     "RemoveCompletedDownloadsHelpText": "Supprimer les téléchargements importés de l'historique du client de téléchargement",

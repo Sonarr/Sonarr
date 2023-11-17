@@ -814,7 +814,7 @@
     "HistorySeason": "查看本季历史记录",
     "ImportScriptPathHelpText": "用于导入的脚本的路径",
     "IncludeCustomFormatWhenRenaming": "重命名时包含自定义格式",
-    "RemotePathMappingsInfo": "很少需要远程路径映射，如果{app}和您的下载客户端在同一系统上，则最好匹配您的路径。更多信息，请参阅[wiki]({wikiLink})",
+    "RemotePathMappingsInfo": "很少需要远程路径映射，如果{appName}和您的下载客户端在同一系统上，则最好匹配您的路径。更多信息，请参阅[wiki]({wikiLink})",
     "IndexerPriorityHelpText": "索引器优先级从1(最高)到50(最低)，默认25。当资源连接中断时寻找同等资源时使用，否则{appName}将依旧使用已启用的索引器进行RSS同步并搜索",
     "IndexerTagHelpText": "仅对至少有一个匹配标记的剧集使用此索引器。留空则适用于所有剧集。",
     "InteractiveImportNoFilesFound": "在所选文件夹中找不到视频文件",

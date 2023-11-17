@@ -1233,7 +1233,7 @@
     "ReleaseSceneIndicatorSourceMessage": "Existem lançamentos de {message} com numeração ambígua, incapaz de identificar o episódio de forma confiável.",
     "ReleaseSceneIndicatorUnknownMessage": "A numeração varia para este episódio e o lançamento não corresponde a nenhum mapeamento conhecido.",
     "ReleaseSceneIndicatorUnknownSeries": "Episódio ou série desconhecida.",
-    "RemotePathMappingsInfo": "Raramente são necessários mapeamentos de caminho remoto, se {app} e seu cliente de download estiverem no mesmo sistema, é melhor combinar seus caminhos. Para mais informações, consulte o [wiki]({wikiLink})",
+    "RemotePathMappingsInfo": "Raramente são necessários mapeamentos de caminho remoto, se {appName} e seu cliente de download estiverem no mesmo sistema, é melhor combinar seus caminhos. Para mais informações, consulte o [wiki]({wikiLink})",
     "RemoveFilter": "Remover filtro",
     "RootFolderSelectFreeSpace": "{freeSpace} Livre",
     "Search": "Pesquisar",
