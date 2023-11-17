@@ -44,6 +44,11 @@ namespace NzbDrone.Core.ImportLists.Rss.Plex
                 {
                     info.TvdbId = tvdbId;
                 }
+
+                if (int.TryParse(guid.Replace("tmdb://", ""), out var tmdbId))
+                {
+                    info.TmdbId = tvdbId;
+                }
             }
 
             if (info.ImdbId.IsNullOrWhiteSpace() && info.TvdbId == 0)

@@ -90,7 +90,7 @@ namespace NzbDrone.Core.ImportLists
 
                 var importList = importLists.Single(x => x.Id == item.ImportListId);
 
-                // Map by IMDbId if we have it
+                // Map by IMDb ID if we have it
                 if (item.TvdbId <= 0 && item.ImdbId.IsNotNullOrWhiteSpace())
                 {
                     var mappedSeries = _seriesSearchService.SearchForNewSeriesByImdbId(item.ImdbId)
@@ -103,7 +103,20 @@ namespace NzbDrone.Core.ImportLists
                     }
                 }
 
-                // Map by AniListId if we have it
+                // Map by TMDb ID if we have it
+                if (item.TvdbId <= 0 && item.TmdbId > 0)
+                {
+                    var mappedSeries = _seriesSearchService.SearchForNewSeriesByTmdbId(item.TmdbId)
+                        .FirstOrDefault();
+
+                    if (mappedSeries != null)
+                    {
+                        item.TvdbId = mappedSeries.TvdbId;
+                        item.Title = mappedSeries?.Title;
+                    }
+                }
+
+                // Map by AniList ID if we have it
                 if (item.TvdbId <= 0 && item.AniListId > 0)
                 {
                     var mappedSeries = _seriesSearchService.SearchForNewSeriesByAniListId(item.AniListId)

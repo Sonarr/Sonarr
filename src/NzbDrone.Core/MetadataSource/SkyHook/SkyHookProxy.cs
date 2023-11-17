@@ -90,6 +90,13 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
             return results;
         }
 
+        public List<Series> SearchForNewSeriesByTmdbId(int tmdbId)
+        {
+            var results = SearchForNewSeries($"tmdb:{tmdbId}");
+
+            return results;
+        }
+
         public List<Series> SearchForNewSeries(string title)
         {
             try
