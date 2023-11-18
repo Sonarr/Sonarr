@@ -202,7 +202,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeMonitoredServiceTests
         }
 
         [Test]
-        public void should_not_monitor_season_when_all_episodes_are_monitored_except_latest_season()
+        public void should_not_monitor_season_when_all_episodes_are_monitored_except_last_season()
         {
             _series.Seasons = Builder<Season>.CreateListOfSize(2)
                                              .All()
@@ -226,7 +226,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeMonitoredServiceTests
 
             var monitoringOptions = new MonitoringOptions
             {
-                Monitor = MonitorTypes.LatestSeason
+                Monitor = MonitorTypes.LastSeason
             };
 
             Subject.SetEpisodeMonitoredStatus(_series, monitoringOptions);
@@ -264,19 +264,90 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeMonitoredServiceTests
         }
 
         [Test]
-        public void should_not_monitor_latest_season_if_all_episodes_aired_more_than_90_days_ago()
+        public void should_monitor_last_season_if_all_episodes_aired_more_than_90_days_ago()
+        {
+            _series.Seasons = Builder<Season>.CreateListOfSize(2)
+                .All()
+                .With(n => n.Monitored = true)
+                .Build()
+                .ToList();
+
+            _episodes = Builder<Episode>.CreateListOfSize(5)
+                .All()
+                .With(e => e.SeasonNumber = 1)
+                .With(e => e.EpisodeFileId = 0)
+                .With(e => e.AirDateUtc = DateTime.UtcNow.AddDays(-200))
+                .TheLast(2)
+                .With(e => e.SeasonNumber = 2)
+                .With(e => e.AirDateUtc = DateTime.UtcNow.AddDays(-100))
+                .Build()
+                .ToList();
+
+            var monitoringOptions = new MonitoringOptions
+            {
+                Monitor = MonitorTypes.LastSeason
+            };
+
+            Subject.SetEpisodeMonitoredStatus(_series, monitoringOptions);
+
+            VerifySeasonMonitored(n => n.SeasonNumber == 2);
+            VerifyMonitored(n => n.SeasonNumber == 2);
+
+            VerifySeasonNotMonitored(n => n.SeasonNumber == 1);
+            VerifyNotMonitored(n => n.SeasonNumber == 1);
+        }
+
+        [Test]
+        public void should_not_monitor_any_recent_episodes_if_all_episodes_aired_more_than_90_days_ago()
         {
             _episodes.ForEach(e => e.AirDateUtc = DateTime.UtcNow.AddDays(-100));
 
             var monitoringOptions = new MonitoringOptions
                                     {
-                                        Monitor = MonitorTypes.LatestSeason
+                                        Monitor = MonitorTypes.Recent
                                     };
 
             Subject.SetEpisodeMonitoredStatus(_series, monitoringOptions);
 
             Mocker.GetMock<IEpisodeService>()
                   .Verify(v => v.UpdateEpisodes(It.Is<List<Episode>>(l => l.All(e => !e.Monitored))));
+        }
+
+        [Test]
+        public void should_monitor_any_recent_and_future_episodes_if_all_episodes_aired_within_90_days()
+        {
+            _series.Seasons = Builder<Season>.CreateListOfSize(1)
+                .All()
+                .With(n => n.Monitored = true)
+                .Build()
+                .ToList();
+
+            _episodes = Builder<Episode>.CreateListOfSize(5)
+                .All()
+                .With(e => e.SeasonNumber = 1)
+                .With(e => e.EpisodeFileId = 0)
+                .With(e => e.AirDateUtc = DateTime.UtcNow.AddDays(-200))
+                .TheLast(3)
+                .With(e => e.AirDateUtc = DateTime.UtcNow.AddDays(-5))
+                .TheLast(1)
+                .With(e => e.AirDateUtc = DateTime.UtcNow.AddDays(30))
+                .Build()
+                .ToList();
+
+            Mocker.GetMock<IEpisodeService>()
+                .Setup(s => s.GetEpisodeBySeries(It.IsAny<int>()))
+                .Returns(_episodes);
+
+            var monitoringOptions = new MonitoringOptions
+            {
+                Monitor = MonitorTypes.Recent
+            };
+
+            Subject.SetEpisodeMonitoredStatus(_series, monitoringOptions);
+
+            VerifySeasonMonitored(n => n.SeasonNumber == 1);
+            VerifyNotMonitored(n => n.AirDateUtc.HasValue && n.AirDateUtc.Value.Before(DateTime.UtcNow.AddDays(-90)));
+            VerifyMonitored(n => n.AirDateUtc.HasValue && n.AirDateUtc.Value.After(DateTime.UtcNow.AddDays(-90)));
         }
 
         [Test]
@@ -302,7 +373,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeMonitoredServiceTests
 
             var monitoringOptions = new MonitoringOptions
                                     {
-                                        Monitor = MonitorTypes.LatestSeason
+                                        Monitor = MonitorTypes.LastSeason
                                     };
 
             Subject.SetEpisodeMonitoredStatus(_series, monitoringOptions);
