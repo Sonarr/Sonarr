@@ -44,9 +44,7 @@ namespace NzbDrone.Core.Extras
         public void Handle(SeriesScannedEvent message)
         {
             var series = message.Series;
-
             var possibleExtraFiles = message.PossibleExtraFiles;
-
             var importedFiles = ImportExtraFiles(series, possibleExtraFiles);
 
             _logger.Info("Found {0} possible extra files, imported {1} files.", possibleExtraFiles.Count, importedFiles.Count);
