@@ -717,7 +717,7 @@
   "ICalFeedHelpText": "Copy this URL to your client(s) or click to subscribe if your browser supports webcal",
   "ICalIncludeUnmonitoredEpisodesHelpText": "Include unmonitored episodes in the iCal feed",
   "ICalLink": "iCal Link",
-  "ICalSeasonPremiereEpisodesOnlyHelpText": "Only the first episode in a season will be in the feed",
+  "ICalSeasonPremieresOnlyHelpText": "Only the first episode in a season will be in the feed",
   "ICalShowAsAllDayEvents": "Show as All-Day Events",
   "ICalShowAsAllDayEventsHelpText": "Events will appear as all-day events in your calendar",
   "ICalTagsSeriesHelpText": "Feed will only contain series with at least one matching tag",

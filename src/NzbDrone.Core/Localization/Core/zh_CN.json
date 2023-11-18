@@ -689,7 +689,7 @@
     "ICalLink": "iCal链接",
     "ICalShowAsAllDayEvents": "作为全天事件显示",
     "ICalShowAsAllDayEventsHelpText": "事件将以全天事件的形式显示在日历中",
-    "ICalSeasonPremiereEpisodesOnlyHelpText": "每季中只有第一集会出现在订阅中",
+    "ICalSeasonPremieresOnlyHelpText": "每季中只有第一集会出现在订阅中",
     "IconForFinalesHelpText": "根据可用的集信息为完结的剧集或季显示图标",
     "IconForCutoffUnmet": "未达截止条件的图标",
     "IconForCutoffUnmetHelpText": "终止监控条件未满足前为文件显示图标",

@@ -140,7 +140,7 @@ class CalendarLinkModalContent extends Component {
                 type={inputTypes.CHECK}
                 name="premieresOnly"
                 value={premieresOnly}
-                helpText={translate('ICalSeasonPremiereEpisodesOnlyHelpText')}
+                helpText={translate('ICalSeasonPremieresOnlyHelpText')}
                 onChange={this.onInputChange}
               />
             </FormGroup>

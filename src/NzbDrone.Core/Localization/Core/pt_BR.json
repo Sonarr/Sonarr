@@ -1073,7 +1073,7 @@
     "Global": "Global",
     "ICalFeedHelpText": "Copie esta URL para seu(s) cliente(s) ou clique para se inscrever se seu navegador for compatível com webcal",
     "ICalIncludeUnmonitoredEpisodesHelpText": "Incluir episódios não monitorados no feed iCal",
-    "ICalSeasonPremiereEpisodesOnlyHelpText": "Apenas o primeiro episódio de uma temporada estará no feed",
+    "ICalSeasonPremieresOnlyHelpText": "Apenas o primeiro episódio de uma temporada estará no feed",
     "ICalShowAsAllDayEventsHelpText": "Os eventos aparecerão como eventos de dia inteiro em seu calendário",
     "IconForCutoffUnmet": "Ícone para Corte Não Atendido",
     "IconForCutoffUnmetHelpText": "Mostrar ícone para arquivos quando o limite não foi atingido",

@@ -348,7 +348,7 @@
     "FormatShortTimeSpanSeconds": "{seconds} seconde(s)",
     "FilterEqual": "égale",
     "Implementation": "Mise en œuvre",
-    "ICalSeasonPremiereEpisodesOnlyHelpText": "Seul le premier épisode d'une saison sera dans le flux",
+    "ICalSeasonPremieresOnlyHelpText": "Seul le premier épisode d'une saison sera dans le flux",
     "ICalFeed": "Flux iCal",
     "History": "Historique",
     "HideAdvanced": "Masquer param. av.",
