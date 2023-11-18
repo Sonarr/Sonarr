@@ -104,8 +104,8 @@ namespace NzbDrone.Common.Instrumentation.Sentry
                                       o.AttachStacktrace = true;
                                       o.MaxBreadcrumbs = 200;
                                       o.Release = BuildInfo.Release;
-                                      o.BeforeSend = x => SentryCleanser.CleanseEvent(x);
-                                      o.BeforeBreadcrumb = x => SentryCleanser.CleanseBreadcrumb(x);
+                                      o.SetBeforeSend(x => SentryCleanser.CleanseEvent(x));
+                                      o.SetBeforeBreadcrumb(x => SentryCleanser.CleanseBreadcrumb(x));
                                       o.Environment = BuildInfo.Branch;
                                   });
 

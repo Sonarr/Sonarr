@@ -11,7 +11,7 @@
     <PackageReference Include="NLog" Version="4.7.14" />
     <PackageReference Include="NLog.Targets.Syslog" Version="6.0.3" />
     <PackageReference Include="NLog.Extensions.Logging" Version="1.7.4" />
-    <PackageReference Include="Sentry" Version="3.23.1" />
+    <PackageReference Include="Sentry" Version="4.0.0-beta.0" />
     <PackageReference Include="SharpZipLib" Version="1.4.2" />
     <PackageReference Include="System.Text.Json" Version="6.0.8" />
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
