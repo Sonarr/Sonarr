@@ -1644,7 +1644,7 @@
   "UpdateSelected": "Update Selected",
   "UpdateSonarrDirectlyLoadError": "Unable to update {appName} directly,",
   "UpdateStartupNotWritableHealthCheckMessage": "Cannot install update because startup folder '{startupFolder}' is not writable by the user '{userName}'.",
-  "UpdateStartupTranslocationHealthCheckMessage": "Cannot install update because startup folder '{  }' is in an App Translocation folder.",
+  "UpdateStartupTranslocationHealthCheckMessage": "Cannot install update because startup folder '{startupFolder}' is in an App Translocation folder.",
   "UpdateUiNotWritableHealthCheckMessage": "Cannot install update because UI folder '{uiFolder}' is not writable by the  user '{userName}'.",
   "UpdaterLogFiles": "Updater Log Files",
   "Updates": "Updates",
