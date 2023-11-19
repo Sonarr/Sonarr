@@ -1063,7 +1063,7 @@
     "Location": "Emplacement",
     "LogFiles": "Fichiers journaux",
     "LogFilesLocation": "Les fichiers journaux se trouvent dans : {location}",
-    "SupportedLists": "{appName} prend en charge plusieurs listes pour importer des séries dans la base de données.",
+    "SupportedListsSeries": "{appName} prend en charge plusieurs listes pour importer des séries dans la base de données.",
     "MatchedToSeason": "Adapté à la saison",
     "MetadataSource": "Source des métadonnées",
     "MoveFiles": "Déplacer des fichiers",
