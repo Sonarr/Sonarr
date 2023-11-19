@@ -123,7 +123,7 @@ class RemoveQueueItemsModal extends Component {
                 type={inputTypes.CHECK}
                 name="blocklist"
                 value={blocklist}
-                helpText={translate('BlocklistReleaseHelpText')}
+                helpText={translate('BlocklistReleaseSearchEpisodeAgainHelpText')}
                 onChange={this.onBlocklistChange}
               />
             </FormGroup>

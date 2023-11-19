@@ -56,7 +56,7 @@ class AddImportListModalContent extends Component {
 
                 <Alert kind={kinds.INFO}>
                   <div>
-                    {translate('SupportedLists')}
+                    {translate('SupportedListsSeries')}
                   </div>
                   <div>
                     {translate('SupportedListsMoreInfo')}

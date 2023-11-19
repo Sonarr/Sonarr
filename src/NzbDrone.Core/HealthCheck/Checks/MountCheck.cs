@@ -30,7 +30,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
             {
                 return new HealthCheck(GetType(),
                     HealthCheckResult.Error,
-                    $"{_localizationService.GetLocalizedString("MountHealthCheckMessage")}{string.Join(", ", mounts.Select(m => m.Name))}",
+                    $"{_localizationService.GetLocalizedString("MountSeriesHealthCheckMessage")}{string.Join(", ", mounts.Select(m => m.Name))}",
                     "#series-mount-ro");
             }
 

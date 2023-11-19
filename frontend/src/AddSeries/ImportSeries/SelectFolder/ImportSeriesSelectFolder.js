@@ -79,17 +79,17 @@ class ImportSeriesSelectFolder extends Component {
             !error && isPopulated &&
               <div>
                 <div className={styles.header}>
-                  {translate('LibraryImportHeader')}
+                  {translate('LibraryImportSeriesHeader')}
                 </div>
 
                 <div className={styles.tips}>
                   {translate('LibraryImportTips')}
                   <ul>
                     <li className={styles.tip}>
-                      <InlineMarkdown data={translate('LibraryImportTipsQualityInFilename')} />
+                      <InlineMarkdown data={translate('LibraryImportTipsQualityInEpisodeFilename')} />
                     </li>
                     <li className={styles.tip}>
-                      <InlineMarkdown data={translate('LibraryImportTipsUseRootFolder', { goodFolderExample, badFolderExample })} />
+                      <InlineMarkdown data={translate('LibraryImportTipsSeriesUseRootFolder', { goodFolderExample, badFolderExample })} />
                     </li>
                     <li className={styles.tip}>
                       {translate('LibraryImportTipsDontUseDownloadsFolder')}

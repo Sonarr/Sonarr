@@ -101,7 +101,7 @@ function SeriesIndexPosterOptionsModalContent(
               type={inputTypes.CHECK}
               name="showTitle"
               value={showTitle}
-              helpText={translate('ShowTitleHelpText')}
+              helpText={translate('ShowSeriesTitleHelpText')}
               onChange={onPosterOptionChange}
             />
           </FormGroup>

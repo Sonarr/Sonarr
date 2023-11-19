@@ -110,7 +110,7 @@ function EditImportListModalContent(props) {
                 <FormInputGroup
                   type={inputTypes.CHECK}
                   name="enableAutomaticAdd"
-                  helpText={translate('EnableAutomaticAddHelpText')}
+                  helpText={translate('EnableAutomaticAddSeriesHelpText')}
                   {...enableAutomaticAdd}
                   onChange={onInputChange}
                 />

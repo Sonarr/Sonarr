@@ -139,7 +139,7 @@ function InteractiveSearch(props) {
             {
               errorMessage ?
                 <Fragment>
-                  {translate('InteractiveSearchResultsFailedErrorMessage', { message: errorMessage.charAt(0).toLowerCase() + errorMessage.slice(1) })}
+                  {translate('InteractiveSearchResultsSeriesFailedErrorMessage', { message: errorMessage.charAt(0).toLowerCase() + errorMessage.slice(1) })}
                 </Fragment> :
                 translate('EpisodeSearchResultsLoadError')
             }

@@ -23,21 +23,21 @@ const seriesTypeOptions: ISeriesTypeOption[] = [
     key: seriesTypes.STANDARD,
     value: 'Standard',
     get format() {
-      return translate('StandardTypeFormat', { format: 'S01E05' });
+      return translate('StandardEpisodeTypeFormat', { format: 'S01E05' });
     },
   },
   {
     key: seriesTypes.DAILY,
     value: 'Daily / Date',
     get format() {
-      return translate('DailyTypeFormat', { format: '2020-05-25' });
+      return translate('DailyEpisodeTypeFormat', { format: '2020-05-25' });
     },
   },
   {
     key: seriesTypes.ANIME,
     value: 'Anime / Absolute',
     get format() {
-      return translate('AnimeTypeFormat', { format: '005' });
+      return translate('AnimeEpisodeTypeFormat', { format: '005' });
     },
   },
 ];

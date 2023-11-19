@@ -180,7 +180,7 @@ class MediaManagement extends Component {
                         <FormInputGroup
                           type={inputTypes.CHECK}
                           name="deleteEmptyFolders"
-                          helpText={translate('DeleteEmptyFoldersHelpText')}
+                          helpText={translate('DeleteEmptySeriesFoldersHelpText')}
                           onChange={onInputChange}
                           {...settings.deleteEmptyFolders}
                         />
@@ -257,7 +257,7 @@ class MediaManagement extends Component {
                         <FormInputGroup
                           type={inputTypes.CHECK}
                           name="copyUsingHardlinks"
-                          helpText={translate('CopyUsingHardlinksHelpText')}
+                          helpText={translate('CopyUsingHardlinksSeriesHelpText')}
                           helpTextWarning={translate('CopyUsingHardlinksHelpTextWarning')}
                           onChange={onInputChange}
                           {...settings.copyUsingHardlinks}
@@ -305,7 +305,7 @@ class MediaManagement extends Component {
                         <FormInputGroup
                           type={inputTypes.CHECK}
                           name="importExtraFiles"
-                          helpText={translate('ImportExtraFilesHelpText')}
+                          helpText={translate('ImportExtraFilesEpisodeHelpText')}
                           onChange={onInputChange}
                           {...settings.importExtraFiles}
                         />
@@ -399,7 +399,7 @@ class MediaManagement extends Component {
                     <FormInputGroup
                       type={inputTypes.SELECT}
                       name="rescanAfterRefresh"
-                      helpText={translate('RescanAfterRefreshHelpText')}
+                      helpText={translate('RescanAfterRefreshSeriesHelpText')}
                       helpTextWarning={translate('RescanAfterRefreshHelpTextWarning')}
                       values={rescanAfterRefreshOptions}
                       onChange={onInputChange}

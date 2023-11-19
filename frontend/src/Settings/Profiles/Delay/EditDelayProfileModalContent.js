@@ -186,7 +186,7 @@ function EditDelayProfileModalContent(props) {
               {
                 id === 1 ?
                   <Alert>
-                    {translate('DefaultDelayProfile')}
+                    {translate('DefaultDelayProfileSeries')}
                   </Alert> :
 
                   <FormGroup>
@@ -196,7 +196,7 @@ function EditDelayProfileModalContent(props) {
                       type={inputTypes.TAG}
                       name="tags"
                       {...tags}
-                      helpText={translate('DelayProfileTagsHelpText')}
+                      helpText={translate('DelayProfileSeriesTagsHelpText')}
                       onChange={onInputChange}
                     />
                   </FormGroup>

@@ -428,7 +428,7 @@ namespace NzbDrone.Core.Indexers
                     ex.Response.Content.Contains("not support the requested query"))
                 {
                     _logger.Warn(ex, "Indexer does not support the query");
-                    return new ValidationFailure(string.Empty, _localizationService.GetLocalizedString("IndexerValidationQueryNotSupported"));
+                    return new ValidationFailure(string.Empty, _localizationService.GetLocalizedString("IndexerValidationQuerySeasonEpisodesNotSupported"));
                 }
 
                 _logger.Warn(ex, "Unable to connect to indexer");

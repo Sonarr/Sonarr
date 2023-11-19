@@ -8,17 +8,17 @@ function SeriesTypePopoverContent() {
     <DescriptionList>
       <DescriptionListItem
         title={translate('Anime')}
-        data={translate('AnimeTypeDescription')}
+        data={translate('AnimeEpisodeTypeDescription')}
       />
 
       <DescriptionListItem
         title={translate('Daily')}
-        data={translate('DailyTypeDescription')}
+        data={translate('DailyEpisodeTypeDescription')}
       />
 
       <DescriptionListItem
         title={translate('Standard')}
-        data={translate('StandardTypeDescription')}
+        data={translate('StandardEpisodeTypeDescription')}
       />
     </DescriptionList>
   );

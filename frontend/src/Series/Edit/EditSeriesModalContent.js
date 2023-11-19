@@ -98,7 +98,7 @@ class EditSeriesModalContent extends Component {
               <FormInputGroup
                 type={inputTypes.CHECK}
                 name="monitored"
-                helpText={translate('MonitoredHelpText')}
+                helpText={translate('MonitoredEpisodesHelpText')}
                 {...monitored}
                 onChange={onInputChange}
               />
