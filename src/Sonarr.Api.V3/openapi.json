@@ -8557,6 +8557,10 @@
             "type": "string",
             "nullable": true
           },
+          "passwordConfirmation": {
+            "type": "string",
+            "nullable": true
+          },
           "logLevel": {
             "type": "string",
             "nullable": true
@@ -8809,6 +8813,9 @@
           },
           "shouldMonitor": {
             "$ref": "#/components/schemas/MonitorTypes"
+          },
+          "monitorNewItems": {
+            "$ref": "#/components/schemas/NewItemMonitorTypes"
           },
           "rootFolderPath": {
             "type": "string",
@@ -9609,8 +9616,10 @@
           "missing",
           "existing",
           "firstSeason",
+          "lastSeason",
           "latestSeason",
           "pilot",
+          "recent",
           "monitorSpecials",
           "unmonitorSpecials",
           "none"
@@ -9699,6 +9708,13 @@
           }
         },
         "additionalProperties": false
+      },
+      "NewItemMonitorTypes": {
+        "enum": [
+          "all",
+          "none"
+        ],
+        "type": "string"
       },
       "NotificationResource": {
         "type": "object",
@@ -11047,6 +11063,9 @@
             "type": "boolean",
             "nullable": true
           },
+          "monitorNewItems": {
+            "$ref": "#/components/schemas/NewItemMonitorTypes"
+          },
           "qualityProfileId": {
             "type": "integer",
             "format": "int32",
@@ -11179,6 +11198,9 @@
           },
           "monitored": {
             "type": "boolean"
+          },
+          "monitorNewItems": {
+            "$ref": "#/components/schemas/NewItemMonitorTypes"
           },
           "useSceneNumbering": {
             "type": "boolean"
