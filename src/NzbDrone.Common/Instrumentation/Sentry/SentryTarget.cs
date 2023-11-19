@@ -112,8 +112,6 @@ namespace NzbDrone.Common.Instrumentation.Sentry
                                       // Crash free run statistics (sends a ping for healthy and for crashes sessions)
                                       o.AutoSessionTracking = true;
 
-                                      o.Debug = true;
-
                                       // Caches files in the event device is offline
                                       // Sentry creates a 'sentry' sub directory, no need to concat here
                                       o.CacheDirectoryPath = appFolderInfo.GetAppDataPath();
