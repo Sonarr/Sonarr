@@ -40,6 +40,10 @@ namespace NzbDrone.Core.Parser.Model
         public List<CustomFormat> CustomFormats { get; set; }
         public int CustomFormatScore { get; set; }
         public GrabbedReleaseInfo Release { get; set; }
+        public bool ScriptImported { get; set; }
+        public bool FileRenamedAfterScriptImport { get; set; }
+        public bool ShouldImportExtras { get; set; }
+        public List<string> PossibleExtraFiles { get; set; }
 
         public int SeasonNumber
         {

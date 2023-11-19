@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using FizzWare.NBuilder;
 using FluentAssertions;
@@ -71,7 +72,7 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo
             GivenFileExists();
             GivenSuccessfulScan();
 
-            Subject.Handle(new SeriesScannedEvent(_series));
+            Subject.Handle(new SeriesScannedEvent(_series, new List<string>()));
 
             Mocker.GetMock<IVideoFileInfoReader>()
                   .Verify(v => v.GetMediaInfo(Path.Combine(_series.Path, "media.mkv")), Times.Exactly(2));
@@ -97,7 +98,7 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo
             GivenFileExists();
             GivenSuccessfulScan();
 
-            Subject.Handle(new SeriesScannedEvent(_series));
+            Subject.Handle(new SeriesScannedEvent(_series, new List<string>()));
 
             Mocker.GetMock<IVideoFileInfoReader>()
                   .Verify(v => v.GetMediaInfo(Path.Combine(_series.Path, "media.mkv")), Times.Exactly(2));
@@ -123,7 +124,7 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo
             GivenFileExists();
             GivenSuccessfulScan();
 
-            Subject.Handle(new SeriesScannedEvent(_series));
+            Subject.Handle(new SeriesScannedEvent(_series, new List<string>()));
 
             Mocker.GetMock<IVideoFileInfoReader>()
                   .Verify(v => v.GetMediaInfo(Path.Combine(_series.Path, "media.mkv")), Times.Exactly(3));
@@ -146,7 +147,7 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo
 
             GivenSuccessfulScan();
 
-            Subject.Handle(new SeriesScannedEvent(_series));
+            Subject.Handle(new SeriesScannedEvent(_series, new List<string>()));
 
             Mocker.GetMock<IVideoFileInfoReader>()
                   .Verify(v => v.GetMediaInfo("media.mkv"), Times.Never());
@@ -173,7 +174,7 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo
             GivenSuccessfulScan();
             GivenFailedScan(Path.Combine(_series.Path, "media2.mkv"));
 
-            Subject.Handle(new SeriesScannedEvent(_series));
+            Subject.Handle(new SeriesScannedEvent(_series, new List<string>()));
 
             Mocker.GetMock<IVideoFileInfoReader>()
                   .Verify(v => v.GetMediaInfo(Path.Combine(_series.Path, "media.mkv")), Times.Exactly(1));
@@ -203,7 +204,7 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo
             GivenFileExists();
             GivenSuccessfulScan();
 
-            Subject.Handle(new SeriesScannedEvent(_series));
+            Subject.Handle(new SeriesScannedEvent(_series, new List<string>()));
 
             Mocker.GetMock<IVideoFileInfoReader>()
                 .Verify(v => v.GetMediaInfo(It.IsAny<string>()), Times.Never());
