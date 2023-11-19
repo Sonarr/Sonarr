@@ -859,8 +859,6 @@
     "MonitorFirstSeason": "Première saison",
     "MonitorFirstSeasonDescription": "Surveillez tous les épisodes de la première saison. Toutes les autres saisons seront ignorées",
     "MonitorFutureEpisodes": "Épisodes futurs",
-    "MonitorLatestSeason": "Dernière saison",
-    "MonitorLatestSeasonDescription": "Surveillez tous les épisodes de la dernière saison diffusés au cours des 90 derniers jours et toutes les saisons futures",
     "MonitorMissingEpisodes": "Épisodes manquants",
     "MonitorMissingEpisodesDescription": "Surveiller les épisodes qui n'ont pas de fichiers ou qui n'ont pas encore été diffusés",
     "MonitorNone": "Aucun",
