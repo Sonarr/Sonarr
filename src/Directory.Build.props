@@ -98,6 +98,35 @@
     <RootNamespace Condition="'$(SonarrProject)'=='true'">$(MSBuildProjectName.Replace('Sonarr','NzbDrone'))</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup Condition="'$(TestProject)'!='true'">
+    <!-- Annotates .NET assemblies with repository information including SHA -->
+    <!-- Sentry uses this to link directly to GitHub at the exact version/file/line -->
+    <!-- This is built-in on .NET 8 and can be removed once the project is updated -->
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
+  </ItemGroup>
+
+  <!-- Sentry specific configuration: Only in Release mode -->
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <!-- https://docs.sentry.io/platforms/dotnet/configuration/msbuild/ -->
+    <!-- OrgSlug, ProjectSlug and AuthToken are required. 
+    They can be set below, via argument to 'msbuild -p:' or environment variable -->
+    <SentryOrg></SentryOrg>
+    <SentryProject></SentryProject>
+    <SentryUrl></SentryUrl> <!--  If empty, assumed to be sentry.io -->
+    <SentryAuthToken></SentryAuthToken> <!-- Use env var instead: SENTRY_AUTH_TOKEN -->
+
+    <!-- Upload PDBs to Sentry, enabling stack traces with line numbers and file paths
+      without the need to deploy the application with PDBs -->
+    <SentryUploadSymbols>true</SentryUploadSymbols>
+
+    <!-- Source Link settings -->
+    <!-- https://github.com/dotnet/sourcelink/blob/main/docs/README.md#publishrepositoryurl -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <!--  Embeds all source code in the respective PDB. This can make it a bit bigger but since it'll be uploaded
+      to Sentry and not distributed to run on the server, it helps debug crashes while making releases smaller -->
+    <EmbedAllSources>true</EmbedAllSources>
+  </PropertyGroup>
+
   <!-- Standard testing packages -->
   <ItemGroup Condition="'$(TestProject)'=='true'">
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
