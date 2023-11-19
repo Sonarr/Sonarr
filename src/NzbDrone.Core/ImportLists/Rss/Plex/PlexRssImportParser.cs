@@ -53,7 +53,7 @@ namespace NzbDrone.Core.ImportLists.Rss.Plex
 
             if (info.ImdbId.IsNullOrWhiteSpace() && info.TvdbId == 0 && info.TmdbId == 0)
             {
-                throw new UnsupportedFeedException("Each item in the RSS feed must have a guid element with a IMDB ID or TVDB ID or TMDB ID");
+                throw new UnsupportedFeedException("Each item in the RSS feed must have a guid element with a IMDB ID, TVDB ID or TMDB ID");
             }
 
             return info;
