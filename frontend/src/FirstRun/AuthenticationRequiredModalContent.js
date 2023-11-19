@@ -34,7 +34,8 @@ function AuthenticationRequiredModalContent(props) {
     authenticationMethod,
     authenticationRequired,
     username,
-    password
+    password,
+    passwordConfirmation
   } = settings;
 
   const authenticationEnabled = authenticationMethod && authenticationMethod.value !== 'none';
@@ -118,6 +119,18 @@ function AuthenticationRequiredModalContent(props) {
                   onChange={onInputChange}
                   helpTextWarning={password?.value ? undefined : translate('AuthenticationRequiredPasswordHelpTextWarning')}
                   {...password}
+                />
+              </FormGroup>
+
+              <FormGroup>
+                <FormLabel>{translate('PasswordConfirmation')}</FormLabel>
+
+                <FormInputGroup
+                  type={inputTypes.PASSWORD}
+                  name="passwordConfirmation"
+                  onChange={onInputChange}
+                  helpTextWarning={passwordConfirmation?.value ? undefined : translate('AuthenticationRequiredPasswordConfirmationHelpTextWarning')}
+                  {...passwordConfirmation}
                 />
               </FormGroup>
             </div> :

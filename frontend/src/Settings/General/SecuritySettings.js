@@ -124,6 +124,7 @@ class SecuritySettings extends Component {
       authenticationRequired,
       username,
       password,
+      passwordConfirmation,
       apiKey,
       certificateValidation
     } = settings;
@@ -188,6 +189,21 @@ class SecuritySettings extends Component {
                 name="password"
                 onChange={onInputChange}
                 {...password}
+              />
+            </FormGroup> :
+            null
+        }
+
+        {
+          authenticationEnabled ?
+            <FormGroup>
+              <FormLabel>{translate('PasswordConfirmation')}</FormLabel>
+
+              <FormInputGroup
+                type={inputTypes.PASSWORD}
+                name="passwordConfirmation"
+                onChange={onInputChange}
+                {...passwordConfirmation}
               />
             </FormGroup> :
             null
