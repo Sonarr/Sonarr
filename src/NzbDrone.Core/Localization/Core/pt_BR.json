@@ -1675,7 +1675,7 @@
     "IndexerValidationCloudFlareCaptchaRequired": "Site protegido por CloudFlare CAPTCHA. É necessário um token CAPTCHA válido.",
     "IndexerValidationInvalidApiKey": "Chave de API inválida",
     "IndexerValidationJackettAllNotSupported": "Todos os endpoints de Jackett não são suportados. Adicione indexadores individualmente",
-    "IndexerValidationQueryNotSupported": "O indexador não oferece suporte à consulta atual. Verifique se as categorias e/ou busca por temporadas/episódios são suportadas. Verifique o registro para mais detalhes.",
+    "IndexerValidationQuerySeasonEpisodesNotSupported": "O indexador não oferece suporte à consulta atual. Verifique se as categorias e/ou busca por temporadas/episódios são suportadas. Verifique o registro para mais detalhes.",
     "IndexerValidationTestAbortedDueToError": "O teste foi abortado devido a um erro: {exceptionMessage}",
     "IndexerValidationUnableToConnect": "Não foi possível conectar-se ao indexador: {exceptionMessage}. Verifique o registro em torno deste erro para obter detalhes",
     "IndexerValidationUnableToConnectHttpError": "Não foi possível conectar-se ao indexador. Verifique suas configurações de DNS e certifique-se de que o IPv6 esteja funcionando ou desativado. {exceptionMessage}.",

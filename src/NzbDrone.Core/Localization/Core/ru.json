@@ -189,7 +189,7 @@
     "AddImportListImplementation": "Добавить список импорта - {implementationName}",
     "AddIndexerImplementation": "Добавить индексатор - {implementationName}",
     "AddNewSeriesError": "Не удалось загрузить результат поиска, попробуйте еще раз.",
-    "AddListExclusionHelpText": "Запретить добавление серий в {appName} по спискам",
+    "AddListExclusionSeriesHelpText": "Запретить добавление серий в {appName} по спискам",
     "AddToDownloadQueue": "Добавить в очередь загрузки",
     "AddedDate": "Добавлено: {date}",
     "AddedToDownloadQueue": "Добавлено в очередь на скачивание",
