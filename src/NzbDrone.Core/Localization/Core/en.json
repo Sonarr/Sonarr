@@ -191,6 +191,8 @@
   "ChownGroupHelpText": "Group name or gid. Use gid for remote file systems.",
   "ChownGroupHelpTextWarning": "This only works if the user running sonarr is the owner of the file. It's better to ensure the download client uses the same group as sonarr.",
   "Clear": "Clear",
+  "ClearBlocklist": "Clear blocklist",
+  "ClearBlocklistMessageText": "Are you sure you want to clear all items from the blocklist?",
   "ClickToChangeEpisode": "Click to change episode",
   "ClickToChangeLanguage": "Click to change language",
   "ClickToChangeQuality": "Click to change quality",
