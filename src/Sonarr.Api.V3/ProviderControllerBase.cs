@@ -95,8 +95,8 @@ namespace Sonarr.Api.V3
             var hasDefinitionChanged = STJson.ToJson(existingDefinition) != STJson.ToJson(providerDefinition) ||
                                        STJson.ToJson(existingDefinition.Settings) != STJson.ToJson(providerDefinition.Settings);
 
-            // Only test existing definitions if it is enabled and forceSave isn't set or the definition has changed.
-            if (providerDefinition.Enable && (!forceSave || hasDefinitionChanged))
+            // Only test existing definitions if it is enabled and forceSave isn't set and the definition has changed.
+            if (providerDefinition.Enable && !forceSave && hasDefinitionChanged)
             {
                 Test(providerDefinition, true);
             }
