@@ -1,9 +1,7 @@
 .description {
-  line-height: $lineHeight;
-}
-
-.description {
   margin-left: 0;
+  line-height: $lineHeight;
+  overflow-wrap: break-word;
 }
 
 @media (min-width: 768px) {
