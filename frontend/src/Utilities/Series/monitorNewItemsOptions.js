@@ -10,7 +10,7 @@ const monitorNewItemsOptions = [
   {
     key: 'none',
     get value() {
-      return translate('MonitorNone');
+      return translate('MonitorNoNewSeasons');
     }
   }
 ];
