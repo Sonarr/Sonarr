@@ -266,6 +266,15 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             {
                 request.AddFormParameter("firstLastPiecePrio", true);
             }
+
+            if ((QBittorrentContentLayout)settings.ContentLayout == QBittorrentContentLayout.Original)
+            {
+                request.AddFormParameter("contentLayout", "Original");
+            }
+            else if ((QBittorrentContentLayout)settings.ContentLayout == QBittorrentContentLayout.Subfolder)
+            {
+                request.AddFormParameter("contentLayout", "Subfolder");
+            }
         }
 
         public void SetTorrentSeedingConfiguration(string hash, TorrentSeedConfiguration seedConfiguration, QBittorrentSettings settings)
