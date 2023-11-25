@@ -33,6 +33,8 @@ namespace NzbDrone.Core.Parser
 
         private static readonly Regex SubtitleLanguageTitleRegex = new Regex(".+?(\\.((?<tags1>full|forced|foreign|default|cc|psdh|sdh)|(?<iso_code>[a-z]{2,3})))*\\.(?<title>[^.]*)(\\.((?<tags2>full|forced|foreign|default|cc|psdh|sdh)|(?<iso_code>[a-z]{2,3})))*$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
+        private static readonly Regex SubtitleTitleRegex = new Regex("((?<title>.+) - )?(?<copy>\\d+)", RegexOptions.Compiled);
+
         public static List<Language> ParseLanguages(string title)
         {
             foreach (var regex in CleanSeriesTitleRegex)
@@ -286,13 +288,36 @@ namespace NzbDrone.Core.Parser
                 .Select(tag => tag.Value.ToLower());
             var rawTitle = matchTitle.Groups["title"].Value;
 
-            return new SubtitleTitleInfo
+            var subtitleTitleInfo = new SubtitleTitleInfo
             {
                 TitleFirst = matchTitle.Groups["tags1"].Captures.Empty(),
                 LanguageTags = languageTags.ToList(),
                 RawTitle = rawTitle,
                 Language = language
             };
+
+            UpdateTitleAndCopyFromTitle(subtitleTitleInfo);
+
+            return subtitleTitleInfo;
+        }
+
+        public static void UpdateTitleAndCopyFromTitle(SubtitleTitleInfo subtitleTitleInfo)
+        {
+            if (subtitleTitleInfo.RawTitle is null)
+            {
+                subtitleTitleInfo.Title = null;
+                subtitleTitleInfo.Copy = 0;
+            }
+            else if (SubtitleTitleRegex.Match(subtitleTitleInfo.RawTitle) is var match && match.Success)
+            {
+                subtitleTitleInfo.Title = match.Groups["title"].Success ? match.Groups["title"].ToString() : null;
+                subtitleTitleInfo.Copy = int.Parse(match.Groups["copy"].ToString());
+            }
+            else
+            {
+                subtitleTitleInfo.Title = subtitleTitleInfo.RawTitle;
+                subtitleTitleInfo.Copy = 0;
+            }
         }
 
         public static List<string> ParseLanguageTags(string fileName)

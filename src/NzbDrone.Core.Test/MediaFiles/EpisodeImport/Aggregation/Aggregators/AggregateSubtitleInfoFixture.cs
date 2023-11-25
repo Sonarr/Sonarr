@@ -23,7 +23,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
                 OriginalFilePath = originalFilePath
             };
 
-            var subtitleTitleInfo = AggregateSubtitleInfo.CleanSubtitleTitleInfo(episodeFile, path);
+            var subtitleTitleInfo = Subject.CleanSubtitleTitleInfo(episodeFile, path);
 
             subtitleTitleInfo.Title.Should().BeNull();
             subtitleTitleInfo.Copy.Should().Be(0);
@@ -40,7 +40,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
                 RelativePath = relativePath
             };
 
-            var subtitleTitleInfo = AggregateSubtitleInfo.CleanSubtitleTitleInfo(episodeFile, path);
+            var subtitleTitleInfo = Subject.CleanSubtitleTitleInfo(episodeFile, path);
 
             subtitleTitleInfo.LanguageTags.Should().NotContain("default");
         }
