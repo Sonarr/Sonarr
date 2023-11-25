@@ -12,7 +12,7 @@ function SeriesMonitorNewItemsOptionsPopoverContent() {
       />
 
       <DescriptionListItem
-        title={translate('MonitorNone')}
+        title={translate('MonitorNoNewSeasons')}
         data={translate('MonitorNoNewSeasonsDescription')}
       />
     </DescriptionList>
