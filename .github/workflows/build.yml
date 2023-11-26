@@ -22,8 +22,6 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: ${{env.DOTNET_VERSION}}
-    - name: .net contents
-      run : dir "${{env.DOTNET_ROOT}}"
     - name: Enable Extra Platforms
       shell: bash
       run: |
@@ -36,4 +34,5 @@ jobs:
             sed -i.ORI 's/osx-x64/osx-x64;freebsd-x64;linux-x86/' "$BUNDLEDVERSIONS"
           fi
     - name: Build Backend
+      shell: bash
       run: ./build.sh --backend --enable-extra-platforms --packages
