@@ -4,19 +4,18 @@ set -e
 outputFolder='_output'
 testPackageFolder='_tests'
 artifactsFolder="_artifacts";
+framework="${FRAMEWORK:=net6.0}"
 
 ProgressStart()
 {
-    echo "##teamcity[blockOpened name='$1']"
-    echo "##teamcity[progressStart '$1']"
+    echo "::group::$1"
     echo "Start '$1'"
 }
 
 ProgressEnd()
 {
     echo "Finish '$1'"
-    echo "##teamcity[progressFinish '$1']"
-    echo "##teamcity[blockClosed name='$1']"
+    echo "::endgroup::"
 }
 
 UpdateVersionNumber()
@@ -140,7 +139,7 @@ PackageLinux()
 
     echo "Adding Sonarr.Mono to UpdatePackage"
     cp $folder/Sonarr.Mono.* $folder/Sonarr.Update
-    if [ "$framework" = "net6.0" ]; then
+    if [ "$framework" = "$framework" ]; then
         cp $folder/Mono.Posix.NETStandard.* $folder/Sonarr.Update
         cp $folder/libMonoPosixHelper.* $folder/Sonarr.Update
     fi
@@ -168,7 +167,7 @@ PackageMacOS()
 
     echo "Adding Sonarr.Mono to UpdatePackage"
     cp $folder/Sonarr.Mono.* $folder/Sonarr.Update
-    if [ "$framework" = "net6.0" ]; then
+    if [ "$framework" = "$framework" ]; then
         cp $folder/Mono.Posix.NETStandard.* $folder/Sonarr.Update
         cp $folder/libMonoPosixHelper.* $folder/Sonarr.Update
     fi
@@ -400,20 +399,20 @@ then
 
     if [[ -z "$RID" || -z "$FRAMEWORK" ]];
     then
-        PackageTests "net6.0" "win-x64"
-        PackageTests "net6.0" "win-x86"
-        PackageTests "net6.0" "linux-x64"
-        PackageTests "net6.0" "linux-musl-x64"
-        PackageTests "net6.0" "osx-x64"
+        PackageTests "$framework" "win-x64"
+        PackageTests "$framework" "win-x86"
+        PackageTests "$framework" "linux-x64"
+        PackageTests "$framework" "linux-musl-x64"
+        PackageTests "$framework" "osx-x64"
         if [ "$ENABLE_EXTRA_PLATFORMS" = "YES" ];
         then
-            PackageTests "net6.0" "freebsd-x64"
+            PackageTests "$framework" "freebsd-x64"
         fi
     else
         PackageTests "$FRAMEWORK" "$RID"
     fi
 
-    UploadTestArtifacts "net6.0"
+    UploadTestArtifacts "$framework"
 fi
 
 if [ "$FRONTEND" = "YES" ];
@@ -435,22 +434,22 @@ then
 
     if [[ -z "$RID" || -z "$FRAMEWORK" ]];
     then
-        Package "net6.0" "win-x64"
-        Package "net6.0" "win-x86"
-        Package "net6.0" "linux-x64"
-        Package "net6.0" "linux-musl-x64"
-        Package "net6.0" "linux-arm64"
-        Package "net6.0" "linux-musl-arm64"
-        Package "net6.0" "linux-arm"
-        Package "net6.0" "osx-x64"
-        Package "net6.0" "osx-arm64"
+        Package "$framework" "win-x64"
+        Package "$framework" "win-x86"
+        Package "$framework" "linux-x64"
+        Package "$framework" "linux-musl-x64"
+        Package "$framework" "linux-arm64"
+        Package "$framework" "linux-musl-arm64"
+        Package "$framework" "linux-arm"
+        Package "$framework" "osx-x64"
+        Package "$framework" "osx-arm64"
         if [ "$ENABLE_EXTRA_PLATFORMS" = "YES" ];
         then
-            Package "net6.0" "freebsd-x64"
+            Package "$framework" "freebsd-x64"
         fi
     else
         Package "$FRAMEWORK" "$RID"
     fi
 
-    UploadArtifacts "net6.0"
+    UploadArtifacts "$framework"
 fi

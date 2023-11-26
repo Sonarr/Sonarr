@@ -1,0 +1,219 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - develop
+      - main
+  pull_request:
+    branches:
+      - develop
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  FRAMEWORK: net6.0
+  BRANCH: ${{ github.head_ref || github.ref_name }}
+  SONARR_MAJOR_VERSION: 4
+  VERSION: 4.0.0
+
+jobs:
+  backend:
+    runs-on: windows-latest
+    outputs:
+      framework: ${{ steps.variables.outputs.framework }}
+      major_version: ${{ steps.variables.outputs.major_version }}
+      version: ${{ steps.variables.outputs.version }}
+    steps:
+    - name: Check out
+      uses: actions/checkout@v3
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+
+    - name: Setup Environment Variables
+      id: variables
+      shell: bash
+      run: |
+        # Add 800 to the build number because GitHub won't let us pick an arbitrary starting point
+        SONARR_VERSION="${{ env.VERSION }}.$((${{ github.run_number }}+800))"
+        DOTNET_VERSION=$(jq -r '.sdk.version' global.json)
+
+        echo "SDK_PATH=${{ env.DOTNET_ROOT }}/sdk/${DOTNET_VERSION}" >> "$GITHUB_ENV"
+        echo "SONARR_VERSION=$SONARR_VERSION" >> "$GITHUB_ENV"
+        echo "framework=${{ env.FRAMEWORK }}" >> "$GITHUB_OUTPUT"
+        echo "major_version=${{ env.SONARR_MAJOR_VERSION }}" >> "$GITHUB_OUTPUT"
+        echo "version=$SONARR_VERSION" >> "$GITHUB_OUTPUT"
+
+    - name: Enable Extra Platforms In SDK
+      shell: bash
+      run: ./build.sh --enable-extra-platforms-in-sdk
+
+    - name: Build Backend
+      shell: bash
+      run: ./build.sh --backend --enable-extra-platforms --packages
+
+    # Test Artifacts
+
+    - name: Publish win-x64 Test Artifact
+      uses: ./.github/actions/publish-test-artifact
+      with:
+        framework: ${{ env.FRAMEWORK }}
+        runtime: win-x64
+
+    - name: Publish linux-x64 Test Artifact
+      uses: ./.github/actions/publish-test-artifact
+      with:
+        framework: ${{ env.FRAMEWORK }}
+        runtime: linux-x64
+
+    - name: Publish osx-x64 Test Artifact
+      uses: ./.github/actions/publish-test-artifact
+      with:
+        framework: ${{ env.FRAMEWORK }}
+        runtime: osx-x64
+
+    # Build Artifacts (grouped by OS)
+    
+    - name: Publish FreeBSD Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: build_freebsd
+        path: _artifacts/freebsd-*/**/*
+    - name: Publish Linux Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: build_linux
+        path: _artifacts/linux-*/**/*
+    - name: Publish macOS Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: build_macos
+        path: _artifacts/osx-*/**/*
+    - name: Publish Windows Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: build_windows
+        path: _artifacts/win-*/**/*
+
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out
+      uses: actions/checkout@v3
+
+    - name: Volta
+      uses: volta-cli/action@v4
+
+    - name: Yarn Intsall
+      run: yarn install
+
+    - name: Lint
+      run: yarn lint
+
+    - name: Stylelint
+      run: yarn stylelint
+
+    - name: Build
+      run: yarn build --env production
+
+    - name: Publish UI Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: build_ui
+        path: _output/UI/**/*
+
+  unit_test:
+    needs: backend
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        include:
+          - os: ubuntu-latest
+            artifact: tests-linux-x64
+            filter: TestCategory!=ManualTest&TestCategory!=WINDOWS&TestCategory!=IntegrationTest&TestCategory!=AutomationTest
+          - os: macos-latest
+            artifact: tests-osx-x64
+            filter: TestCategory!=ManualTest&TestCategory!=WINDOWS&TestCategory!=IntegrationTest&TestCategory!=AutomationTest
+          - os: windows-latest
+            artifact: tests-win-x64
+            filter: TestCategory!=ManualTest&TestCategory!=LINUX&TestCategory!=IntegrationTest&TestCategory!=AutomationTest
+    runs-on: ${{ matrix.os }}
+    steps:
+    - name: Check out
+      uses: actions/checkout@v3
+
+    - name: Test
+      uses: ./.github/actions/test
+      with:
+        os: ${{ matrix.os }}
+        artifact: ${{ matrix.artifact }}
+        pattern: Sonarr.*.Test.dll
+        filter: ${{ matrix.filter }}
+
+  unit_test_postgres:
+    needs: backend
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out
+      uses: actions/checkout@v3
+
+    - name: Test
+      uses: ./.github/actions/test
+      with:
+        os: ubuntu-latest
+        artifact: tests-linux-x64
+        pattern: Sonarr.*.Test.dll
+        filter: TestCategory!=ManualTest&TestCategory!=WINDOWS&TestCategory!=IntegrationTest&TestCategory!=AutomationTest
+        use_postgres: true
+
+  integration_test:
+    needs: backend
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        include:
+          - os: ubuntu-latest
+            artifact: tests-linux-x64
+            filter: TestCategory!=ManualTest&TestCategory!=WINDOWS&TestCategory=IntegrationTest
+            binary_artifact: build_linux
+            binary_path: linux-x64/${{ needs.backend.outputs.framework }}/Sonarr
+          - os: macos-latest
+            artifact: tests-osx-x64
+            filter: TestCategory!=ManualTest&TestCategory!=WINDOWS&TestCategory=IntegrationTest
+            binary_artifact: build_macos
+            binary_path: osx-x64/${{ needs.backend.outputs.framework }}/Sonarr
+          - os: windows-latest
+            artifact: tests-win-x64
+            filter: TestCategory!=ManualTest&TestCategory=WINDOWS&TestCategory=IntegrationTest
+            binary_artifact: build_windows
+            binary_path: win-x64/${{ needs.backend.outputs.framework }}/Sonarr
+    runs-on: ${{ matrix.os }}
+    steps:
+    - name: Check out
+      uses: actions/checkout@v3
+
+    - name: Test
+      uses: ./.github/actions/test
+      with:
+        os: ${{ matrix.os }}
+        artifact: ${{ matrix.artifact }}
+        pattern: Sonarr.*.Test.dll
+        filter: ${{ matrix.filter }}
+        integration_tests: true
+        binary_artifact: ${{ matrix.binary_artifact }}
+        binary_path: ${{ matrix.binary_path }}
+
+  deploy:
+    if: ${{ github.ref_name == 'develop' || github.ref_name == 'main' }}
+    needs: [backend, unit_test, unit_test_postgres, integration_test]
+    secrets: inherit
+    uses: ./.github/workflows/deploy.yml
+    with:
+      framework: ${{ needs.backend.outputs.framework }}
+      branch: ${{ github.ref_name }}
+      major_version: ${{ needs.backend.outputs.major_version }}
+      version: ${{ needs.backend.outputs.version }}
