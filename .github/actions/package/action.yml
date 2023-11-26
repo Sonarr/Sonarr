@@ -1,0 +1,78 @@
+name: Package
+description: Packages binaries for deployment
+
+inputs:
+  platform:
+    description: 'Binary platform'
+    required: true
+  framework: 
+    description: '.net framework'
+    required: true
+  artifact:
+    description: 'Binary artifact'
+    required: true
+  branch:
+    description: 'Git branch used for this build'
+    required: true
+  major_version:
+    description: 'Sonarr major version'
+    required: true
+  version:
+    description: 'Sonarr version'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Download Artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: ${{ inputs.artifact }}
+        path: _output
+        
+    - name: Download UI Artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: build_ui
+        path: _output/UI
+
+    - name: Configure Environment Variables
+      shell: bash
+      run: |
+        echo "FRAMEWORK=${{ inputs.framework }}" >> "$GITHUB_ENV"
+        echo "BRANCH=${{ inputs.branch }}" >> "$GITHUB_ENV"
+        echo "SONARR_MAJOR_VERSION=${{ inputs.major_version }}" >> "$GITHUB_ENV"
+        echo "SONARR_VERSION=${{ inputs.version }}" >> "$GITHUB_ENV"
+
+    - name: Create Packages
+      shell: bash
+      run: $GITHUB_ACTION_PATH/package.sh
+
+    - name: Create Windows Installer (x64)
+      if: ${{ inputs.platform == 'windows' }}
+      working-directory: distribution/windows/setup
+      shell: cmd
+      run: |
+        SET RUNTIME=win-x64
+
+        build.bat
+
+    - name: Create Windows Installer (x86)
+      if: ${{ inputs.platform == 'windows' }}
+      working-directory: distribution/windows/setup
+      shell: cmd
+      run: |
+        SET RUNTIME=win-x86
+
+        build.bat
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: release_${{ inputs.platform }}
+        compression-level: 0
+        if-no-files-found: error
+        path: |
+          _artifacts/*.exe
+          _artifacts/*.tar.gz
+          _artifacts/*.zip

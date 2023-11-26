@@ -3,8 +3,5 @@
 @REM SET BRANCH=develop
 @REM SET FRAMEWORK=net6.0
 @REM SET RUNTIME=win-x64
-echo ##teamcity[progressStart 'Building setup file']
-inno\ISCC.exe sonarr.iss
-echo ##teamcity[progressFinish 'Building setup file']
 
-echo ##teamcity[publishArtifacts 'distribution\windows\setup\output\*%RUNTIME%*.exe']
+inno\ISCC.exe sonarr.iss

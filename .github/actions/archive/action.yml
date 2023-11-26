@@ -1,0 +1,29 @@
+name: Archive
+description: Archive binaries for deployment
+
+inputs:
+  os:
+    description: 'OS that the packaging is running on'
+    required: true
+  artifact:
+    description: 'Binary artifact'
+    required: true
+  archive_type:
+    description: 'File type to use for the final package'
+    required: true
+  branch:
+    description: 'Git branch used for this build'
+    required: true
+  major_version:
+    description: 'Sonarr major version'
+    required: true
+  version:
+    description: 'Sonarr version'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Archive Artifact
+      uses: thedoctor0/zip-release@0.7.5
+      

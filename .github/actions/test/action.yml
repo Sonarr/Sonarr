@@ -1,0 +1,88 @@
+name: Test
+description: Runs unit/integration tests
+
+inputs:
+  use_postgres:
+    description: 'Whether postgres should be used for the database'
+  os:
+    description: 'OS that the tests are running on'
+    required: true
+  artifact:
+    description: 'Test binary artifact'
+    required: true
+  pattern:
+    description: 'Pattern for DLLs'
+    required: true
+  filter:
+    description: 'Filter for tests'
+    required: true
+  integration_tests:
+    description: 'True if running integration tests'
+  binary_artifact:
+    description: 'Binary artifact for integration tests'
+  binary_path:
+    description: 'Path witin binary artifact for integration tests'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+
+    - name: Setup Postgres
+      if: ${{ inputs.use_postgres }}
+      uses: ikalnytskyi/action-setup-postgres@v4
+
+    - name: Setup Test Variables
+      shell: bash
+      run: |
+        echo "RESULTS_NAME=${{ inputs.integration_tests && 'integation-' || 'unit-' }}${{ inputs.artifact }}${{ inputs.use_postgres && '-postgres' }}" >> "$GITHUB_ENV"
+
+    - name: Setup Postgres Environment Variables
+      if: ${{ inputs.use_postgres }}
+      shell: bash
+      run: |
+        echo "Sonarr__Postgres__Host=localhost" >> "$GITHUB_ENV"
+        echo "Sonarr__Postgres__Port=5432" >> "$GITHUB_ENV"
+        echo "Sonarr__Postgres__User=postgres" >> "$GITHUB_ENV"
+        echo "Sonarr__Postgres__Password=postgres" >> "$GITHUB_ENV"
+
+    - name: Download Artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: ${{ inputs.artifact }}
+        path: _tests
+
+    - name: Download Binary Artifact
+      if: ${{ inputs.integration_tests }}
+      uses: actions/download-artifact@v4
+      with:
+        name: ${{ inputs.binary_artifact }}
+        path: _output
+
+    - name: Set up binary artifact
+      if: ${{ inputs.binary_path != '' }}
+      shell: bash
+      run: mv ./_output/${{inputs.binary_path}} _tests/bin
+
+    - name: Make executable
+      if: startsWith(inputs.os, 'windows') != true
+      shell: bash
+      run: chmod +x ./_tests/Sonarr.Test.Dummy && chmod +x ./_tests/ffprobe
+
+    - name: Make Sonarr binary executable
+      if: ${{ inputs.integration_tests && !startsWith(inputs.os, 'windows') }}
+      shell: bash
+      run: chmod +x ./_tests/bin/Sonarr
+
+    - name: Run tests
+      shell: bash
+      run: dotnet test ./_tests/Sonarr.*.Test.dll --filter "${{ inputs.filter }}" --logger trx --results-directory "${{ env.RESULTS_NAME }}"
+
+    - name: Publish Test Results
+      if: ${{ !cancelled() }}
+      uses: phoenix-actions/test-reporting@v12
+      with:
+        name: ${{ env.RESULTS_NAME }}
+        path: ${{ env.RESULTS_NAME }}/*.trx
+        reporter: dotnet-trx
