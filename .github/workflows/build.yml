@@ -23,7 +23,7 @@ jobs:
       with:
         dotnet-version: ${{env.DOTNET_VERSION}}
     - name: .net contents
-      run : dir ${{env.DOTNET_ROOT}}
+      run : dir "${{env.DOTNET_ROOT}}"
     - name: Enable Extra Platforms
       shell: bash
       run: |
