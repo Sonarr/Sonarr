@@ -12,6 +12,7 @@ on:
 env:
   DOTNET_VERSION: 6.0.405
   SOLUTION_FILE: src/Sonarr.sln
+  TBD: test
 
 jobs:
   build_backend:
@@ -27,7 +28,7 @@ jobs:
     - name: Enable Extra Platforms
       shell: bash
       run: |
-        BUNDLEDVERSIONS=${{TBD}}/dotnet/sdk/${DOTNET_VERSION}/Microsoft.NETCoreSdk.BundledVersions.props
+        BUNDLEDVERSIONS=${{env.TBD}}/dotnet/sdk/${DOTNET_VERSION}/Microsoft.NETCoreSdk.BundledVersions.props
           echo $BUNDLEDVERSIONS
           if grep -q freebsd-x64 $BUNDLEDVERSIONS; then
             echo "Extra platforms already enabled"
