@@ -22,12 +22,12 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: ${{env.DOTNET_VERSION}}
-    - name: Find dotnet executable
-      run : where dotnet
+    - name: .net contents
+      run : dir ${{env.DOTNET_ROOT}}
     - name: Enable Extra Platforms
       shell: bash
       run: |
-        BUNDLEDVERSIONS=${{env.DOTNET_ROOT}}/dotnet/sdk/${DOTNET_VERSION}/Microsoft.NETCoreSdk.BundledVersions.props
+        BUNDLEDVERSIONS="${{env.DOTNET_ROOT}}/dotnet/sdk/${DOTNET_VERSION}/Microsoft.NETCoreSdk.BundledVersions.props"
           echo $BUNDLEDVERSIONS
           if grep -q freebsd-x64 $BUNDLEDVERSIONS; then
             echo "Extra platforms already enabled"
