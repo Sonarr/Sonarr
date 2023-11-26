@@ -9,6 +9,10 @@ on:
   pull_request:
     branches: [ "develop" ]
 
+env:
+  DOTNET_VERSION: 6.0.405
+  SOLUTION_FILE: src/Sonarr.sln
+
 jobs:
   build_backend:
     runs-on: windows-latest
@@ -17,8 +21,19 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 6.0.405
-    - name: Restore dependencies
-      run: dotnet restore
+        dotnet-version: ${{env.DOTNET_VERSION}}
+    - name: Find dotnet executable
+      run : where dotnet
+    - name: Enable Extra Platforms
+      shell: bash
+      run: |
+        BUNDLEDVERSIONS=${{TBD}}/dotnet/sdk/${DOTNET_VERSION}/Microsoft.NETCoreSdk.BundledVersions.props
+          echo $BUNDLEDVERSIONS
+          if grep -q freebsd-x64 $BUNDLEDVERSIONS; then
+            echo "Extra platforms already enabled"
+          else
+            echo "Enabling extra platform support"
+            sed -i.ORI 's/osx-x64/osx-x64;freebsd-x64;linux-x86/' $BUNDLEDVERSIONS
+          fi
     - name: Build Backend
-      run: dotnet build --no-restore
+      run: ./build.sh --backend --enable-extra-platforms --packages
