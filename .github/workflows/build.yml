@@ -27,7 +27,7 @@ jobs:
     - name: Enable Extra Platforms
       shell: bash
       run: |
-        BUNDLEDVERSIONS="${{env.DOTNET_ROOT}}/dotnet/sdk/${DOTNET_VERSION}/Microsoft.NETCoreSdk.BundledVersions.props"
+        BUNDLEDVERSIONS="${{env.DOTNET_ROOT}}/sdk/${DOTNET_VERSION}/Microsoft.NETCoreSdk.BundledVersions.props"
           echo "$BUNDLEDVERSIONS"
           if grep -q freebsd-x64 "$BUNDLEDVERSIONS"; then
             echo "Extra platforms already enabled"
