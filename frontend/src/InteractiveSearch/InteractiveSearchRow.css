@@ -28,6 +28,10 @@
   text-align: center;
 }
 
+.quality {
+  white-space: nowrap;
+}
+
 .languages {
   width: 100px;
 }
