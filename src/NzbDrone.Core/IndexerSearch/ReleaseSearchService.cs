@@ -350,7 +350,7 @@ namespace NzbDrone.Core.IndexerSearch
 
             searchSpec.SeasonNumber = episode.SceneSeasonNumber ?? episode.SeasonNumber;
             searchSpec.EpisodeNumber = episode.SceneEpisodeNumber ?? episode.EpisodeNumber;
-            searchSpec.AbsoluteEpisodeNumber = episode.SceneAbsoluteEpisodeNumber ?? episode.AbsoluteEpisodeNumber ?? 0;
+            searchSpec.AbsoluteEpisodeNumber = episode.AbsoluteEpisodeNumber ?? episode.SceneAbsoluteEpisodeNumber ?? 0;
 
             return await Dispatch(indexer => indexer.Fetch(searchSpec), searchSpec);
         }
