@@ -3,7 +3,7 @@ import React from 'react';
 import { createAction } from 'redux-actions';
 import { batchActions } from 'redux-batched-actions';
 import Icon from 'Components/Icon';
-import { icons, sortDirections } from 'Helpers/Props';
+import { filterBuilderTypes, filterBuilderValueTypes, icons, sortDirections } from 'Helpers/Props';
 import { createThunk, handleThunks } from 'Store/thunks';
 import createAjaxRequest from 'Utilities/createAjaxRequest';
 import serverSideCollectionHandlers from 'Utilities/serverSideCollectionHandlers';
@@ -144,7 +144,7 @@ export const defaultState = {
         name: 'size',
         label: () => translate('Size'),
         isSortable: true,
-        isVisibile: false
+        isVisible: false
       },
       {
         name: 'outputPath',
@@ -170,6 +170,43 @@ export const defaultState = {
         isVisible: true,
         isModifiable: false
       }
+    ],
+
+    selectedFilterKey: 'all',
+
+    filters: [
+      {
+        key: 'all',
+        label: 'All',
+        filters: []
+      }
+    ],
+
+    filterBuilderProps: [
+      {
+        name: 'seriesIds',
+        label: () => translate('Series'),
+        type: filterBuilderTypes.EQUAL,
+        valueType: filterBuilderValueTypes.SERIES
+      },
+      {
+        name: 'quality',
+        label: () => translate('Quality'),
+        type: filterBuilderTypes.EQUAL,
+        valueType: filterBuilderValueTypes.QUALITY
+      },
+      {
+        name: 'languages',
+        label: () => translate('Languages'),
+        type: filterBuilderTypes.CONTAINS,
+        valueType: filterBuilderValueTypes.LANGUAGE
+      },
+      {
+        name: 'protocol',
+        label: () => translate('Protocol'),
+        type: filterBuilderTypes.EQUAL,
+        valueType: filterBuilderValueTypes.PROTOCOL
+      }
     ]
   }
 };
@@ -179,7 +216,8 @@ export const persistState = [
   'queue.paged.pageSize',
   'queue.paged.sortKey',
   'queue.paged.sortDirection',
-  'queue.paged.columns'
+  'queue.paged.columns',
+  'queue.paged.selectedFilterKey'
 ];
 
 //
@@ -204,6 +242,7 @@ export const GOTO_NEXT_QUEUE_PAGE = 'queue/gotoQueueNextPage';
 export const GOTO_LAST_QUEUE_PAGE = 'queue/gotoQueueLastPage';
 export const GOTO_QUEUE_PAGE = 'queue/gotoQueuePage';
 export const SET_QUEUE_SORT = 'queue/setQueueSort';
+export const SET_QUEUE_FILTER = 'queue/setQueueFilter';
 export const SET_QUEUE_TABLE_OPTION = 'queue/setQueueTableOption';
 export const SET_QUEUE_OPTION = 'queue/setQueueOption';
 export const CLEAR_QUEUE = 'queue/clearQueue';
@@ -228,6 +267,7 @@ export const gotoQueueNextPage = createThunk(GOTO_NEXT_QUEUE_PAGE);
 export const gotoQueueLastPage = createThunk(GOTO_LAST_QUEUE_PAGE);
 export const gotoQueuePage = createThunk(GOTO_QUEUE_PAGE);
 export const setQueueSort = createThunk(SET_QUEUE_SORT);
+export const setQueueFilter = createThunk(SET_QUEUE_FILTER);
 export const setQueueTableOption = createAction(SET_QUEUE_TABLE_OPTION);
 export const setQueueOption = createAction(SET_QUEUE_OPTION);
 export const clearQueue = createAction(CLEAR_QUEUE);
@@ -279,7 +319,8 @@ export const actionHandlers = handleThunks({
       [serverSideCollectionHandlers.NEXT_PAGE]: GOTO_NEXT_QUEUE_PAGE,
       [serverSideCollectionHandlers.LAST_PAGE]: GOTO_LAST_QUEUE_PAGE,
       [serverSideCollectionHandlers.EXACT_PAGE]: GOTO_QUEUE_PAGE,
-      [serverSideCollectionHandlers.SORT]: SET_QUEUE_SORT
+      [serverSideCollectionHandlers.SORT]: SET_QUEUE_SORT,
+      [serverSideCollectionHandlers.FILTER]: SET_QUEUE_FILTER
     },
     fetchDataAugmenter
   ),

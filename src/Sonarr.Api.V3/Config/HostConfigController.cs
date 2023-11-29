@@ -47,6 +47,9 @@ namespace Sonarr.Api.V3.Config
             SharedValidator.RuleFor(c => c.Password).NotEmpty().When(c => c.AuthenticationMethod == AuthenticationType.Basic ||
                                                                           c.AuthenticationMethod == AuthenticationType.Forms);
 
+            SharedValidator.RuleFor(c => c.PasswordConfirmation)
+                .Must((resource, p) => IsMatchingPassword(resource)).WithMessage("Must match Password");
+
             SharedValidator.RuleFor(c => c.SslPort).ValidPort().When(c => c.EnableSsl);
             SharedValidator.RuleFor(c => c.SslPort).NotEqual(c => c.Port).When(c => c.EnableSsl);
 
@@ -81,6 +84,23 @@ namespace Sonarr.Api.V3.Config
             return cert != null;
         }
 
+        private bool IsMatchingPassword(HostConfigResource resource)
+        {
+            var user = _userService.FindUser();
+
+            if (user != null && user.Password == resource.Password)
+            {
+                return true;
+            }
+
+            if (resource.Password == resource.PasswordConfirmation)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         protected override HostConfigResource GetResourceById(int id)
         {
             return GetHostConfig();
@@ -93,11 +113,10 @@ namespace Sonarr.Api.V3.Config
             resource.Id = 1;
 
             var user = _userService.FindUser();
-            if (user != null)
-            {
-                resource.Username = user.Username;
-                resource.Password = user.Password;
-            }
+
+            resource.Username = user?.Username ?? string.Empty;
+            resource.Password = user?.Password ?? string.Empty;
+            resource.PasswordConfirmation = string.Empty;
 
             return resource;
         }

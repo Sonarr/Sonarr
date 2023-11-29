@@ -72,6 +72,7 @@ namespace NzbDrone.Core.Test.ParserTests
         }
 
         [TestCase("The.Series.2016.S02.Part.1.1080p.NF.WEBRip.DD5.1.x264-NTb", "The Series 2016", 2, 1)]
+        [TestCase("The.Series.S07.Vol.1.1080p.NF.WEBRip.DD5.1.x264-NTb", "The Series", 7, 1)]
         public void should_parse_partial_season_release(string postTitle, string title, int season, int seasonPart)
         {
             var result = Parser.Parser.ParseTitle(postTitle);

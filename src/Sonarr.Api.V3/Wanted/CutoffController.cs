@@ -1,4 +1,3 @@
-using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Core.CustomFormats;
 using NzbDrone.Core.Datastore;
@@ -29,9 +28,9 @@ namespace Sonarr.Api.V3.Wanted
 
         [HttpGet]
         [Produces("application/json")]
-        public PagingResource<EpisodeResource> GetCutoffUnmetEpisodes(bool includeSeries = false, bool includeEpisodeFile = false, bool includeImages = false)
+        public PagingResource<EpisodeResource> GetCutoffUnmetEpisodes([FromQuery] PagingRequestResource paging, bool includeSeries = false, bool includeEpisodeFile = false, bool includeImages = false, bool monitored = true)
         {
-            var pagingResource = Request.ReadPagingResourceFromRequest<EpisodeResource>();
+            var pagingResource = new PagingResource<EpisodeResource>(paging);
             var pagingSpec = new PagingSpec<Episode>
             {
                 Page = pagingResource.Page,
@@ -40,15 +39,13 @@ namespace Sonarr.Api.V3.Wanted
                 SortDirection = pagingResource.SortDirection
             };
 
-            var filter = pagingResource.Filters.FirstOrDefault(f => f.Key == "monitored");
-
-            if (filter != null && filter.Value == "false")
+            if (monitored)
             {
-                pagingSpec.FilterExpressions.Add(v => v.Monitored == false || v.Series.Monitored == false);
+                pagingSpec.FilterExpressions.Add(v => v.Monitored == true && v.Series.Monitored == true);
             }
             else
             {
-                pagingSpec.FilterExpressions.Add(v => v.Monitored == true && v.Series.Monitored == true);
+                pagingSpec.FilterExpressions.Add(v => v.Monitored == false || v.Series.Monitored == false);
             }
 
             var resource = pagingSpec.ApplyToPage(_episodeCutoffService.EpisodesWhereCutoffUnmet, v => MapToResource(v, includeSeries, includeEpisodeFile, includeImages));

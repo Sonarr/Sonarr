@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Localization;
@@ -7,7 +8,7 @@ using NzbDrone.Core.Tv.Events;
 namespace NzbDrone.Core.HealthCheck.Checks
 {
     [CheckOn(typeof(SeriesUpdatedEvent))]
-    [CheckOn(typeof(SeriesDeletedEvent), CheckOnCondition.FailedOnly)]
+    [CheckOn(typeof(SeriesDeletedEvent))]
     [CheckOn(typeof(SeriesRefreshCompleteEvent))]
     public class RemovedSeriesCheck : HealthCheckBase, ICheckOnCondition<SeriesUpdatedEvent>, ICheckOnCondition<SeriesDeletedEvent>
     {
@@ -34,13 +35,19 @@ namespace NzbDrone.Core.HealthCheck.Checks
             {
                 return new HealthCheck(GetType(),
                     HealthCheckResult.Error,
-                    string.Format(_localizationService.GetLocalizedString("RemovedSeriesSingleRemovedHealthCheckMessage"), seriesText),
+                    _localizationService.GetLocalizedString("RemovedSeriesSingleRemovedHealthCheckMessage", new Dictionary<string, object>
+                    {
+                        { "series", seriesText }
+                    }),
                     "#series-removed-from-thetvdb");
             }
 
             return new HealthCheck(GetType(),
                 HealthCheckResult.Error,
-                string.Format(_localizationService.GetLocalizedString("RemovedSeriesMultipleRemovedHealthCheckMessage"), seriesText),
+                _localizationService.GetLocalizedString("RemovedSeriesMultipleRemovedHealthCheckMessage", new Dictionary<string, object>
+                {
+                    { "series", seriesText }
+                }),
                 "#series-removed-from-thetvdb");
         }
 

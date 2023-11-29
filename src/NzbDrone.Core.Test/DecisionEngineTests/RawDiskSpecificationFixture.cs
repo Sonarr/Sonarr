@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.Indexers;
@@ -72,15 +72,27 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
         }
 
-        [TestCase("How the Earth Was Made S02 Disc 1 1080i Blu-ray DTS-HD MA 2.0 AVC-TrollHD")]
-        [TestCase("The Universe S03 Disc 1 1080p Blu-ray LPCM 2.0 AVC-TrollHD")]
-        [TestCase("HELL ON WHEELS S02 1080P FULL BLURAY AVC DTS-HD MA 5 1")]
-        [TestCase("Game.of.Thrones.S06.2016.DISC.3.BluRay.1080p.AVC.Atmos.TrueHD7.1-MTeam")]
-        [TestCase("Game of Thrones S05 Disc 1 BluRay 1080p AVC Atmos TrueHD 7 1-MTeam")]
+        [TestCase("Series Title S02 Disc 1 1080i Blu-ray DTS-HD MA 2.0 AVC-TrollHD")]
+        [TestCase("Series Title S03 Disc 1 1080p Blu-ray LPCM 2.0 AVC-TrollHD")]
+        [TestCase("SERIES TITLE S02 1080P FULL BLURAY AVC DTS-HD MA 5 1")]
+        [TestCase("Series.Title.S06.2016.DISC.3.BluRay.1080p.AVC.Atmos.TrueHD7.1-MTeam")]
+        [TestCase("Series Title S05 Disc 1 BluRay 1080p AVC Atmos TrueHD 7 1-MTeam")]
+        [TestCase("Series Title S05 Disc 1 BluRay 1080p AVC Atmos TrueHD 7 1-MTeam")]
+        [TestCase("Someone.the.Entertainer.Presents.S01.NTSC.3xDVD9.MPEG-2.DD2.0")]
+        [TestCase("Series.Title.S00.The.Christmas.Special.2011.PAL.DVD5.DD2.0")]
+        [TestCase("Series.of.Desire.2000.S1_D01.NTSC.DVD5")]
         public void should_return_false_if_matches_disc_format(string title)
         {
             _remoteEpisode.Release.Title = title;
             Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
+        }
+
+        [TestCase("Series Title EP50 USLT NTSC DVDRemux DD2.0")]
+        [TestCase("Series.Title.S01.NTSC.DVDRip.DD2.0.x264-PLAiD")]
+        public void should_return_true_if_dvdrip(string title)
+        {
+            _remoteEpisode.Release.Title = title;
+            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
         }
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using NLog;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Configuration.Events;
@@ -28,7 +29,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
             {
                 _logger.Warn("Please update your API key to be at least {0} characters long. You can do this via settings or the config file", MinimumLength);
 
-                return new HealthCheck(GetType(), HealthCheckResult.Warning, string.Format(_localizationService.GetLocalizedString("ApiKeyValidationHealthCheckMessage"), MinimumLength), "#invalid-api-key");
+                return new HealthCheck(GetType(), HealthCheckResult.Warning, _localizationService.GetLocalizedString("ApiKeyValidationHealthCheckMessage", new Dictionary<string, object> { { "length", MinimumLength } }), "#invalid-api-key");
             }
 
             return new HealthCheck(GetType());

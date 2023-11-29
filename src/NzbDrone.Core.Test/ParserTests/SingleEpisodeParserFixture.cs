@@ -161,6 +161,10 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series-S07E12-31st_Century_Fox-[Bluray-1080p].mkv", "Series", 7, 12)]
         [TestCase("TheTitle-S12E13-3_Acts_of_God.mkv", "TheTitle", 12, 13)]
         [TestCase("Series Title - Temporada 2 [HDTV 720p][Cap.408]", "Series Title", 4, 8)]
+        [TestCase("Series Title [HDTV][Cap.104](website.com).avi", "Series Title", 1, 4)]
+        [TestCase("Series Title [HDTV][Cap.402](website.com).avi", "Series Title", 4, 2)]
+        [TestCase("Series Title [HDTV 720p][Cap.101](website.com).mkv", "Series Title", 1, 1)]
+        [TestCase("Босх: Спадок (S2E1) / Series: Legacy (S2E1) (2023) WEB-DL 1080p Ukr/Eng | sub Eng", "Series: Legacy", 2, 1)]
 
         // [TestCase("", "", 0, 0)]
         public void should_parse_single_episode(string postTitle, string title, int seasonNumber, int episodeNumber)

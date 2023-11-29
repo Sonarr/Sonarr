@@ -127,8 +127,16 @@ namespace NzbDrone.Core.RemotePathMappings
                 return remotePath;
             }
 
+            var mappings = All();
+
+            if (mappings.Empty())
+            {
+                return remotePath;
+            }
+
             _logger.Trace("Evaluating remote path remote mappings for match to host [{0}] and remote path [{1}]", host, remotePath.FullPath);
-            foreach (var mapping in All())
+
+            foreach (var mapping in mappings)
             {
                 _logger.Trace("Checking configured remote path mapping: {0} - {1}", mapping.Host, mapping.RemotePath);
                 if (host.Equals(mapping.Host, StringComparison.InvariantCultureIgnoreCase) && new OsPath(mapping.RemotePath).Contains(remotePath))
@@ -150,8 +158,16 @@ namespace NzbDrone.Core.RemotePathMappings
                 return localPath;
             }
 
+            var mappings = All();
+
+            if (mappings.Empty())
+            {
+                return localPath;
+            }
+
             _logger.Trace("Evaluating remote path local mappings for match to host [{0}] and local path [{1}]", host, localPath.FullPath);
-            foreach (var mapping in All())
+
+            foreach (var mapping in mappings)
             {
                 _logger.Trace("Checking configured remote path mapping {0} - {1}", mapping.Host, mapping.RemotePath);
                 if (host.Equals(mapping.Host, StringComparison.InvariantCultureIgnoreCase) && new OsPath(mapping.LocalPath).Contains(localPath))

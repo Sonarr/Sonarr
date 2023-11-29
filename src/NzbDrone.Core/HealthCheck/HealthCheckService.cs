@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using NLog;
 using NzbDrone.Common.Cache;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Messaging;
@@ -28,6 +29,7 @@ namespace NzbDrone.Core.HealthCheck
         private readonly IProvideHealthCheck[] _scheduledHealthChecks;
         private readonly Dictionary<Type, IEventDrivenHealthCheck[]> _eventDrivenHealthChecks;
         private readonly IEventAggregator _eventAggregator;
+        private readonly Logger _logger;
 
         private readonly ICached<HealthCheck> _healthCheckResults;
         private readonly HashSet<IProvideHealthCheck> _pendingHealthChecks;
@@ -40,10 +42,12 @@ namespace NzbDrone.Core.HealthCheck
                                   IEventAggregator eventAggregator,
                                   ICacheManager cacheManager,
                                   IDebounceManager debounceManager,
-                                  IRuntimeInfo runtimeInfo)
+                                  IRuntimeInfo runtimeInfo,
+                                  Logger logger)
         {
             _healthChecks = healthChecks.ToArray();
             _eventAggregator = eventAggregator;
+            _logger = logger;
 
             _healthCheckResults = cacheManager.GetCache<HealthCheck>(GetType());
             _pendingHealthChecks = new HashSet<IProvideHealthCheck>();
@@ -88,7 +92,14 @@ namespace NzbDrone.Core.HealthCheck
 
             try
             {
-                var results = healthChecks.Select(c => c.Check())
+                var results = healthChecks.Select(c =>
+                    {
+                        _logger.Trace("Check health -> {0}", c.GetType().Name);
+                        var result = c.Check();
+                        _logger.Trace("Check health <- {0}", c.GetType().Name);
+
+                        return result;
+                    })
                     .ToList();
 
                 foreach (var result in results)

@@ -6,10 +6,13 @@ import { filterBuilderTypes, filterBuilderValueTypes, icons } from 'Helpers/Prop
 import BoolFilterBuilderRowValue from './BoolFilterBuilderRowValue';
 import DateFilterBuilderRowValue from './DateFilterBuilderRowValue';
 import FilterBuilderRowValueConnector from './FilterBuilderRowValueConnector';
+import HistoryEventTypeFilterBuilderRowValue from './HistoryEventTypeFilterBuilderRowValue';
 import IndexerFilterBuilderRowValueConnector from './IndexerFilterBuilderRowValueConnector';
+import LanguageFilterBuilderRowValue from './LanguageFilterBuilderRowValue';
 import ProtocolFilterBuilderRowValue from './ProtocolFilterBuilderRowValue';
 import QualityFilterBuilderRowValueConnector from './QualityFilterBuilderRowValueConnector';
 import QualityProfileFilterBuilderRowValueConnector from './QualityProfileFilterBuilderRowValueConnector';
+import SeriesFilterBuilderRowValue from './SeriesFilterBuilderRowValue';
 import SeriesStatusFilterBuilderRowValue from './SeriesStatusFilterBuilderRowValue';
 import SeriesTypeFilterBuilderRowValue from './SeriesTypeFilterBuilderRowValue';
 import TagFilterBuilderRowValueConnector from './TagFilterBuilderRowValueConnector';
@@ -57,8 +60,14 @@ function getRowValueConnector(selectedFilterBuilderProp) {
     case filterBuilderValueTypes.DATE:
       return DateFilterBuilderRowValue;
 
+    case filterBuilderValueTypes.HISTORY_EVENT_TYPE:
+      return HistoryEventTypeFilterBuilderRowValue;
+
     case filterBuilderValueTypes.INDEXER:
       return IndexerFilterBuilderRowValueConnector;
+
+    case filterBuilderValueTypes.LANGUAGE:
+      return LanguageFilterBuilderRowValue;
 
     case filterBuilderValueTypes.PROTOCOL:
       return ProtocolFilterBuilderRowValue;
@@ -68,6 +77,9 @@ function getRowValueConnector(selectedFilterBuilderProp) {
 
     case filterBuilderValueTypes.QUALITY_PROFILE:
       return QualityProfileFilterBuilderRowValueConnector;
+
+    case filterBuilderValueTypes.SERIES:
+      return SeriesFilterBuilderRowValue;
 
     case filterBuilderValueTypes.SERIES_STATUS:
       return SeriesStatusFilterBuilderRowValue;

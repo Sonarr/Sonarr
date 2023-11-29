@@ -147,7 +147,7 @@ class EditDownloadClientModalContent extends Component {
                   <FormInputGroup
                     type={inputTypes.TAG}
                     name="tags"
-                    helpText={translate('DownloadClientTagHelpText')}
+                    helpText={translate('DownloadClientSeriesTagHelpText')}
                     {...tags}
                     onChange={onInputChange}
                   />

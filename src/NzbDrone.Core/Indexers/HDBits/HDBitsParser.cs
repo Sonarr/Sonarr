@@ -38,8 +38,7 @@ namespace NzbDrone.Core.Indexers.HDBits
                     jsonResponse.Message ?? string.Empty);
             }
 
-            var responseData = jsonResponse.Data as JArray;
-            if (responseData == null)
+            if (jsonResponse.Data is not JArray responseData)
             {
                 throw new IndexerException(indexerResponse,
                     "Indexer API call response missing result data");
@@ -50,9 +49,9 @@ namespace NzbDrone.Core.Indexers.HDBits
             foreach (var result in queryResults)
             {
                 var id = result.Id;
-                torrentInfos.Add(new TorrentInfo()
+                torrentInfos.Add(new TorrentInfo
                 {
-                    Guid = string.Format("HDBits-{0}", id),
+                    Guid = $"HDBits-{id}",
                     Title = result.Name,
                     Size = result.Size,
                     InfoHash = result.Hash,

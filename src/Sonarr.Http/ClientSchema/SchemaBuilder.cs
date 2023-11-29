@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.Json;
+using DryIoc;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Reflection;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Annotations;
+using NzbDrone.Core.Localization;
 
 namespace Sonarr.Http.ClientSchema
 {
@@ -15,6 +17,12 @@ namespace Sonarr.Http.ClientSchema
     {
         private const string PRIVATE_VALUE = "********";
         private static Dictionary<Type, FieldMapping[]> _mappings = new Dictionary<Type, FieldMapping[]>();
+        private static ILocalizationService _localizationService;
+
+        public static void Initialize(IContainer container)
+        {
+            _localizationService = container.Resolve<ILocalizationService>();
+        }
 
         public static List<Field> ToSchema(object model)
         {
@@ -107,13 +115,27 @@ namespace Sonarr.Http.ClientSchema
                 if (propertyInfo.PropertyType.IsSimpleType())
                 {
                     var fieldAttribute = property.Item2;
+
+                    var label = fieldAttribute.Label.IsNotNullOrWhiteSpace()
+                        ? _localizationService.GetLocalizedString(fieldAttribute.Label,
+                            GetTokens(type, fieldAttribute.Label, TokenField.Label))
+                        : fieldAttribute.Label;
+                    var helpText = fieldAttribute.HelpText.IsNotNullOrWhiteSpace()
+                        ? _localizationService.GetLocalizedString(fieldAttribute.HelpText,
+                            GetTokens(type, fieldAttribute.Label, TokenField.HelpText))
+                        : fieldAttribute.HelpText;
+                    var helpTextWarning = fieldAttribute.HelpTextWarning.IsNotNullOrWhiteSpace()
+                        ? _localizationService.GetLocalizedString(fieldAttribute.HelpTextWarning,
+                            GetTokens(type, fieldAttribute.Label, TokenField.HelpTextWarning))
+                        : fieldAttribute.HelpTextWarning;
+
                     var field = new Field
                     {
                         Name = prefix + GetCamelCaseName(propertyInfo.Name),
-                        Label = fieldAttribute.Label,
+                        Label = label,
                         Unit = fieldAttribute.Unit,
-                        HelpText = fieldAttribute.HelpText,
-                        HelpTextWarning = fieldAttribute.HelpTextWarning,
+                        HelpText = helpText,
+                        HelpTextWarning = helpTextWarning,
                         HelpLink = fieldAttribute.HelpLink,
                         Order = fieldAttribute.Order,
                         Advanced = fieldAttribute.Advanced,
@@ -171,6 +193,24 @@ namespace Sonarr.Http.ClientSchema
                 .Where(v => v.Item2 != null)
                 .OrderBy(v => v.Item2.Order)
                 .ToArray();
+        }
+
+        private static Dictionary<string, object> GetTokens(Type type, string label, TokenField field)
+        {
+            var tokens = new Dictionary<string, object>();
+
+            foreach (var propertyInfo in type.GetProperties())
+            {
+                foreach (var attribute in propertyInfo.GetCustomAttributes(true))
+                {
+                    if (attribute is FieldTokenAttribute fieldTokenAttribute && fieldTokenAttribute.Field == field && fieldTokenAttribute.Label == label)
+                    {
+                        tokens.Add(fieldTokenAttribute.Token, fieldTokenAttribute.Value);
+                    }
+                }
+            }
+
+            return tokens;
         }
 
         private static List<SelectOption> GetSelectOptions(Type selectOptions)

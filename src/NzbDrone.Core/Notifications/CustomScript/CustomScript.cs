@@ -363,14 +363,6 @@ namespace NzbDrone.Core.Notifications.CustomScript
                 failures.Add(new NzbDroneValidationFailure("Path", "File does not exist"));
             }
 
-            foreach (var systemFolder in SystemFolders.GetSystemFolders())
-            {
-                if (systemFolder.IsParentPath(Settings.Path))
-                {
-                    failures.Add(new NzbDroneValidationFailure("Path", $"Must not be a descendant of '{systemFolder}'"));
-                }
-            }
-
             if (failures.Empty())
             {
                 try

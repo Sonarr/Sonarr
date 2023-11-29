@@ -203,7 +203,7 @@ class EditQualityProfileModalContent extends Component {
                                 name="cutoff"
                                 {...cutoff}
                                 values={qualities}
-                                helpText={translate('UpgradeUntilHelpText')}
+                                helpText={translate('UpgradeUntilEpisodeHelpText')}
                                 onChange={onCutoffChange}
                               />
                             </FormGroup>
@@ -237,7 +237,7 @@ class EditQualityProfileModalContent extends Component {
                                 type={inputTypes.NUMBER}
                                 name="cutoffFormatScore"
                                 {...cutoffFormatScore}
-                                helpText={translate('UpgradeUntilCustomFormatScoreHelpText')}
+                                helpText={translate('UpgradeUntilCustomFormatScoreEpisodeHelpText')}
                                 onChange={onInputChange}
                               />
                             </FormGroup>
@@ -281,7 +281,7 @@ class EditQualityProfileModalContent extends Component {
                   className={styles.deleteButtonContainer}
                   title={
                     isInUse ?
-                      translate('QualityProfileInUse') :
+                      translate('QualityProfileInUseSeriesListCollection') :
                       undefined
                   }
                 >

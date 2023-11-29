@@ -1,16 +1,19 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import SeriesMonitorNewItemsOptionsPopoverContent from 'AddSeries/SeriesMonitorNewItemsOptionsPopoverContent';
 import Form from 'Components/Form/Form';
 import FormGroup from 'Components/Form/FormGroup';
 import FormInputGroup from 'Components/Form/FormInputGroup';
 import FormLabel from 'Components/Form/FormLabel';
+import Icon from 'Components/Icon';
 import Button from 'Components/Link/Button';
 import SpinnerButton from 'Components/Link/SpinnerButton';
 import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
-import { inputTypes, kinds } from 'Helpers/Props';
+import Popover from 'Components/Tooltip/Popover';
+import { icons, inputTypes, kinds, tooltipPositions } from 'Helpers/Props';
 import MoveSeriesModal from 'Series/MoveSeries/MoveSeriesModal';
 import translate from 'Utilities/String/translate';
 import styles from './EditSeriesModalContent.css';
@@ -73,6 +76,7 @@ class EditSeriesModalContent extends Component {
 
     const {
       monitored,
+      monitorNewItems,
       seasonFolder,
       qualityProfileId,
       seriesType,
@@ -94,8 +98,33 @@ class EditSeriesModalContent extends Component {
               <FormInputGroup
                 type={inputTypes.CHECK}
                 name="monitored"
-                helpText={translate('MonitoredHelpText')}
+                helpText={translate('MonitoredEpisodesHelpText')}
                 {...monitored}
+                onChange={onInputChange}
+              />
+            </FormGroup>
+
+            <FormGroup>
+              <FormLabel>
+                {translate('MonitorNewSeasons')}
+                <Popover
+                  anchor={
+                    <Icon
+                      className={styles.labelIcon}
+                      name={icons.INFO}
+                    />
+                  }
+                  title={translate('MonitorNewSeasons')}
+                  body={<SeriesMonitorNewItemsOptionsPopoverContent />}
+                  position={tooltipPositions.RIGHT}
+                />
+              </FormLabel>
+
+              <FormInputGroup
+                type={inputTypes.MONITOR_NEW_ITEMS_SELECT}
+                name="monitorNewItems"
+                helpText={translate('MonitorNewSeasonsHelpText')}
+                {...monitorNewItems}
                 onChange={onInputChange}
               />
             </FormGroup>

@@ -68,5 +68,16 @@ namespace NzbDrone.Core.Test.IndexerTests
 
             VerifyNoUpdate();
         }
+
+        [Test]
+        public void should_not_record_failure_for_unknown_provider()
+        {
+            Subject.RecordFailure(0);
+
+            Mocker.GetMock<IIndexerStatusRepository>()
+                .Verify(v => v.FindByProviderId(1), Times.Never);
+
+            VerifyNoUpdate();
+        }
     }
 }

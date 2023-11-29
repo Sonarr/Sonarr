@@ -90,6 +90,13 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
             return results;
         }
 
+        public List<Series> SearchForNewSeriesByTmdbId(int tmdbId)
+        {
+            var results = SearchForNewSeries($"tmdb:{tmdbId}");
+
+            return results;
+        }
+
         public List<Series> SearchForNewSeries(string title)
         {
             try
@@ -187,6 +194,11 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
             {
                 series.FirstAired = DateTime.ParseExact(show.FirstAired, "yyyy-MM-dd", DateTimeFormatInfo.InvariantInfo, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
                 series.Year = series.FirstAired.Value.Year;
+            }
+
+            if (show.LastAired != null)
+            {
+                series.LastAired = DateTime.ParseExact(show.LastAired, "yyyy-MM-dd", DateTimeFormatInfo.InvariantInfo, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
             }
 
             series.Overview = show.Overview;

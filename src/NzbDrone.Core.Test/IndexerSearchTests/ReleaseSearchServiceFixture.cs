@@ -568,5 +568,45 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
             allCriteria.First().Should().BeOfType<SeasonSearchCriteria>();
             allCriteria.First().As<SeasonSearchCriteria>().SeasonNumber.Should().Be(7);
         }
+
+        [Test]
+        public async Task episode_search_should_use_all_available_numbering_from_services_and_xem()
+        {
+            WithEpisode(1, 12, 2, 3);
+
+            Mocker.GetMock<ISceneMappingService>()
+                .Setup(s => s.FindByTvdbId(It.IsAny<int>()))
+                .Returns(new List<SceneMapping>
+                {
+                    new SceneMapping
+                    {
+                        TvdbId = _xemSeries.TvdbId,
+                        SearchTerm = _xemSeries.Title,
+                        ParseTerm = _xemSeries.Title,
+                        FilterRegex = "(?i)-(BTN)$",
+                        SeasonNumber = 1,
+                        SceneSeasonNumber = 1,
+                        SceneOrigin = "tvdb",
+                        Type = "ServicesProvider"
+                    }
+                });
+
+            var allCriteria = WatchForSearchCriteria();
+
+            await Subject.EpisodeSearch(_xemEpisodes.First(), false, false);
+
+            Mocker.GetMock<ISceneMappingService>()
+                .Verify(v => v.FindByTvdbId(_xemSeries.Id), Times.Once());
+
+            allCriteria.Should().HaveCount(2);
+
+            allCriteria.First().Should().BeOfType<SingleEpisodeSearchCriteria>();
+            allCriteria.First().As<SingleEpisodeSearchCriteria>().SeasonNumber.Should().Be(1);
+            allCriteria.First().As<SingleEpisodeSearchCriteria>().EpisodeNumber.Should().Be(12);
+
+            allCriteria.Last().Should().BeOfType<SingleEpisodeSearchCriteria>();
+            allCriteria.Last().As<SingleEpisodeSearchCriteria>().SeasonNumber.Should().Be(2);
+            allCriteria.Last().As<SingleEpisodeSearchCriteria>().EpisodeNumber.Should().Be(3);
+        }
     }
 }

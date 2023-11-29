@@ -34,7 +34,8 @@ function AuthenticationRequiredModalContent(props) {
     authenticationMethod,
     authenticationRequired,
     username,
-    password
+    password,
+    passwordConfirmation
   } = settings;
 
   const authenticationEnabled = authenticationMethod && authenticationMethod.value !== 'none';
@@ -63,7 +64,7 @@ function AuthenticationRequiredModalContent(props) {
           className={styles.authRequiredAlert}
           kind={kinds.WARNING}
         >
-          {translate('AuthenticationRequiredWarning', { appName: 'Sonarr' })}
+          {translate('AuthenticationRequiredWarning')}
         </Alert>
 
         {
@@ -76,7 +77,7 @@ function AuthenticationRequiredModalContent(props) {
                   type={inputTypes.SELECT}
                   name="authenticationMethod"
                   values={authenticationMethodOptions}
-                  helpText={translate('AuthenticationMethodHelpText', { appName: 'Sonarr' })}
+                  helpText={translate('AuthenticationMethodHelpText')}
                   helpTextWarning={authenticationMethod.value === 'none' ? translate('AuthenticationMethodHelpTextWarning') : undefined}
                   helpLink="https://wiki.servarr.com/sonarr/faq#forced-authentication"
                   onChange={onInputChange}
@@ -118,6 +119,18 @@ function AuthenticationRequiredModalContent(props) {
                   onChange={onInputChange}
                   helpTextWarning={password?.value ? undefined : translate('AuthenticationRequiredPasswordHelpTextWarning')}
                   {...password}
+                />
+              </FormGroup>
+
+              <FormGroup>
+                <FormLabel>{translate('PasswordConfirmation')}</FormLabel>
+
+                <FormInputGroup
+                  type={inputTypes.PASSWORD}
+                  name="passwordConfirmation"
+                  onChange={onInputChange}
+                  helpTextWarning={passwordConfirmation?.value ? undefined : translate('AuthenticationRequiredPasswordConfirmationHelpTextWarning')}
+                  {...passwordConfirmation}
                 />
               </FormGroup>
             </div> :

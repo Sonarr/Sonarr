@@ -39,19 +39,19 @@ function getIconKind(eventType) {
 function getTooltip(eventType, data) {
   switch (eventType) {
     case 'grabbed':
-      return translate('GrabbedHistoryTooltip', { indexer: data.indexer, downloadClient: data.downloadClient });
+      return translate('EpisodeGrabbedTooltip', { indexer: data.indexer, downloadClient: data.downloadClient });
     case 'seriesFolderImported':
       return translate('SeriesFolderImportedTooltip');
     case 'downloadFolderImported':
       return translate('EpisodeImportedTooltip');
     case 'downloadFailed':
-      return translate('DownloadFailedTooltip');
+      return translate('DownloadFailedEpisodeTooltip');
     case 'episodeFileDeleted':
       return translate('EpisodeFileDeletedTooltip');
     case 'episodeFileRenamed':
       return translate('EpisodeFileRenamedTooltip');
     case 'downloadIgnored':
-      return translate('DownloadIgnoredTooltip');
+      return translate('DownloadIgnoredEpisodeTooltip');
     default:
       return translate('UnknownEventTooltip');
   }

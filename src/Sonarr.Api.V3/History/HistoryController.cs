@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.CustomFormats;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.DecisionEngine.Specifications;
@@ -61,34 +62,33 @@ namespace Sonarr.Api.V3.History
 
         [HttpGet]
         [Produces("application/json")]
-        public PagingResource<HistoryResource> GetHistory(bool includeSeries, bool includeEpisode)
+        public PagingResource<HistoryResource> GetHistory([FromQuery] PagingRequestResource paging, bool includeSeries, bool includeEpisode, int? eventType, int? episodeId, string downloadId, [FromQuery] int[] seriesIds = null, [FromQuery] int[] languages = null, [FromQuery] int[] quality = null)
         {
-            var pagingResource = Request.ReadPagingResourceFromRequest<HistoryResource>();
+            var pagingResource = new PagingResource<HistoryResource>(paging);
             var pagingSpec = pagingResource.MapToPagingSpec<HistoryResource, EpisodeHistory>("date", SortDirection.Descending);
 
-            var eventTypeFilter = pagingResource.Filters.FirstOrDefault(f => f.Key == "eventType");
-            var episodeIdFilter = pagingResource.Filters.FirstOrDefault(f => f.Key == "episodeId");
-            var downloadIdFilter = pagingResource.Filters.FirstOrDefault(f => f.Key == "downloadId");
-
-            if (eventTypeFilter != null)
+            if (eventType.HasValue)
             {
-                var filterValue = (EpisodeHistoryEventType)Convert.ToInt32(eventTypeFilter.Value);
+                var filterValue = (EpisodeHistoryEventType)eventType.Value;
                 pagingSpec.FilterExpressions.Add(v => v.EventType == filterValue);
             }
 
-            if (episodeIdFilter != null)
+            if (episodeId.HasValue)
             {
-                var episodeId = Convert.ToInt32(episodeIdFilter.Value);
                 pagingSpec.FilterExpressions.Add(h => h.EpisodeId == episodeId);
             }
 
-            if (downloadIdFilter != null)
+            if (downloadId.IsNotNullOrWhiteSpace())
             {
-                var downloadId = downloadIdFilter.Value;
                 pagingSpec.FilterExpressions.Add(h => h.DownloadId == downloadId);
             }
 
-            return pagingSpec.ApplyToPage(_historyService.Paged, h => MapToResource(h, includeSeries, includeEpisode));
+            if (seriesIds != null && seriesIds.Any())
+            {
+                pagingSpec.FilterExpressions.Add(h => seriesIds.Contains(h.SeriesId));
+            }
+
+            return pagingSpec.ApplyToPage(h => _historyService.Paged(pagingSpec, languages, quality), h => MapToResource(h, includeSeries, includeEpisode));
         }
 
         [HttpGet("since")]

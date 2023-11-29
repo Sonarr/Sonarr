@@ -69,8 +69,6 @@ interface SelectEpisodeModalContentProps {
   seasonNumber?: number;
   selectedDetails?: string;
   isAnime: boolean;
-  sortKey?: string;
-  sortDirection?: string;
   modalTitle: string;
   onEpisodesSelect(selectedEpisodes: SelectedEpisode[]): unknown;
   onModalClose(): unknown;
@@ -86,8 +84,6 @@ function SelectEpisodeModalContent(props: SelectEpisodeModalContentProps) {
     seasonNumber,
     selectedDetails,
     isAnime,
-    sortKey,
-    sortDirection,
     modalTitle,
     onEpisodesSelect,
     onModalClose,
@@ -97,9 +93,8 @@ function SelectEpisodeModalContent(props: SelectEpisodeModalContentProps) {
   const [selectState, setSelectState] = useSelectState();
 
   const { allSelected, allUnselected, selectedState } = selectState;
-  const { isFetching, isPopulated, items, error } = useSelector(
-    episodesSelector()
-  );
+  const { isFetching, isPopulated, items, error, sortKey, sortDirection } =
+    useSelector(episodesSelector());
   const dispatch = useDispatch();
 
   const filterEpisodeNumber = parseInt(filter);

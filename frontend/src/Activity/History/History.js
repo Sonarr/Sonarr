@@ -15,6 +15,7 @@ import TablePager from 'Components/Table/TablePager';
 import { align, icons, kinds } from 'Helpers/Props';
 import hasDifferentItems from 'Utilities/Object/hasDifferentItems';
 import translate from 'Utilities/String/translate';
+import HistoryFilterModal from './HistoryFilterModal';
 import HistoryRowConnector from './HistoryRowConnector';
 
 class History extends Component {
@@ -52,6 +53,7 @@ class History extends Component {
       columns,
       selectedFilterKey,
       filters,
+      customFilters,
       totalRecords,
       isEpisodesFetching,
       isEpisodesPopulated,
@@ -92,7 +94,8 @@ class History extends Component {
               alignMenu={align.RIGHT}
               selectedFilterKey={selectedFilterKey}
               filters={filters}
-              customFilters={[]}
+              customFilters={customFilters}
+              filterModalConnectorComponent={HistoryFilterModal}
               onFilterSelect={onFilterSelect}
             />
           </PageToolbarSection>
@@ -163,8 +166,9 @@ History.propTypes = {
   error: PropTypes.object,
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
   columns: PropTypes.arrayOf(PropTypes.object).isRequired,
-  selectedFilterKey: PropTypes.string.isRequired,
+  selectedFilterKey: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   filters: PropTypes.arrayOf(PropTypes.object).isRequired,
+  customFilters: PropTypes.arrayOf(PropTypes.object).isRequired,
   totalRecords: PropTypes.number,
   isEpisodesFetching: PropTypes.bool.isRequired,
   isEpisodesPopulated: PropTypes.bool.isRequired,

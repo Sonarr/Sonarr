@@ -156,6 +156,12 @@
   .headerContent {
     padding: 15px;
   }
+
+  .title {
+    font-weight: 300;
+    font-size: 30px;
+    line-height: 30px;
+  }
 }
 
 @media only screen and (max-width: $breakpointLarge) {

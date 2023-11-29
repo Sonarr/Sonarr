@@ -8,9 +8,11 @@ using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
+using NzbDrone.Core.Blocklisting;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Download.Clients.rTorrent;
 using NzbDrone.Core.Exceptions;
+using NzbDrone.Core.Localization;
 using NzbDrone.Core.MediaFiles.TorrentInfo;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.RemotePathMappings;
@@ -34,8 +36,10 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
                         IRemotePathMappingService remotePathMappingService,
                         IDownloadSeedConfigProvider downloadSeedConfigProvider,
                         IRTorrentDirectoryValidator rTorrentDirectoryValidator,
+                        ILocalizationService localizationService,
+                        IBlocklistService blocklistService,
                         Logger logger)
-            : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, logger)
+            : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, localizationService, blocklistService, logger)
         {
             _proxy = proxy;
             _rTorrentDirectoryValidator = rTorrentDirectoryValidator;
@@ -115,7 +119,7 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
 
         public override string Name => "rTorrent";
 
-        public override ProviderMessage Message => new ProviderMessage($"rTorrent will not pause torrents when they meet the seed criteria. Sonarr will handle automatic removal of torrents based on the current seed criteria in Settings->Indexers only when Remove Completed is enabled.  After importing it will also set \"{_imported_view}\" as an rTorrent view, which can be used in rTorrent scripts to customize behavior.", ProviderMessageType.Info);
+        public override ProviderMessage Message => new ProviderMessage(_localizationService.GetLocalizedString("DownloadClientRTorrentProviderMessage", new Dictionary<string, object> { { "importedView", _imported_view } }), ProviderMessageType.Info);
 
         public override IEnumerable<DownloadClientItem> GetItems()
         {
@@ -250,14 +254,19 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
 
                 if (new Version(version) < new Version("0.9.0"))
                 {
-                    return new ValidationFailure(string.Empty, "rTorrent version should be at least 0.9.0. Version reported is {0}", version);
+                    return new ValidationFailure(string.Empty,
+                        _localizationService.GetLocalizedString("DownloadClientValidationErrorVersion",
+                            new Dictionary<string, object>
+                            {
+                                { "clientName", Name }, { "requiredVersion", "0.9.0" }, { "reportedVersion", version }
+                            }));
                 }
             }
             catch (Exception ex)
             {
                 _logger.Error(ex, "Failed to test rTorrent");
 
-                return new NzbDroneValidationFailure("Host", "Unable to connect to rTorrent")
+                return new NzbDroneValidationFailure("Host", _localizationService.GetLocalizedString("DownloadClientValidationUnableToConnect", new Dictionary<string, object> { { "clientName", Name } }))
                        {
                            DetailedDescription = ex.Message
                        };
@@ -275,7 +284,7 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
             catch (Exception ex)
             {
                 _logger.Error(ex, "Failed to get torrents");
-                return new NzbDroneValidationFailure(string.Empty, "Failed to get the list of torrents: " + ex.Message);
+                return new NzbDroneValidationFailure(string.Empty, _localizationService.GetLocalizedString("DownloadClientValidationTestTorrents", new Dictionary<string, object> { { "exceptionMessage", ex.Message } }));
             }
 
             return null;

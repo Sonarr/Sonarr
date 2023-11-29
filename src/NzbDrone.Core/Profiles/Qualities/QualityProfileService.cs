@@ -28,19 +28,19 @@ namespace NzbDrone.Core.Profiles.Qualities
                                          IHandle<CustomFormatAddedEvent>,
                                          IHandle<CustomFormatDeletedEvent>
     {
-        private readonly IProfileRepository _profileRepository;
+        private readonly IQualityProfileRepository _qualityProfileRepository;
         private readonly IImportListFactory _importListFactory;
         private readonly ICustomFormatService _formatService;
         private readonly ISeriesService _seriesService;
         private readonly Logger _logger;
 
-        public QualityProfileService(IProfileRepository profileRepository,
+        public QualityProfileService(IQualityProfileRepository qualityProfileRepository,
                                      IImportListFactory importListFactory,
                                      ICustomFormatService formatService,
                                      ISeriesService seriesService,
                                      Logger logger)
         {
-            _profileRepository = profileRepository;
+            _qualityProfileRepository = qualityProfileRepository;
             _importListFactory = importListFactory;
             _formatService = formatService;
             _seriesService = seriesService;
@@ -49,38 +49,38 @@ namespace NzbDrone.Core.Profiles.Qualities
 
         public QualityProfile Add(QualityProfile profile)
         {
-            return _profileRepository.Insert(profile);
+            return _qualityProfileRepository.Insert(profile);
         }
 
         public void Update(QualityProfile profile)
         {
-            _profileRepository.Update(profile);
+            _qualityProfileRepository.Update(profile);
         }
 
         public void Delete(int id)
         {
             if (_seriesService.GetAllSeries().Any(c => c.QualityProfileId == id) || _importListFactory.All().Any(c => c.QualityProfileId == id))
             {
-                var profile = _profileRepository.Get(id);
+                var profile = _qualityProfileRepository.Get(id);
                 throw new QualityProfileInUseException(profile.Name);
             }
 
-            _profileRepository.Delete(id);
+            _qualityProfileRepository.Delete(id);
         }
 
         public List<QualityProfile> All()
         {
-            return _profileRepository.All().ToList();
+            return _qualityProfileRepository.All().ToList();
         }
 
         public QualityProfile Get(int id)
         {
-            return _profileRepository.Get(id);
+            return _qualityProfileRepository.Get(id);
         }
 
         public bool Exists(int id)
         {
-            return _profileRepository.Exists(id);
+            return _qualityProfileRepository.Exists(id);
         }
 
         public void Handle(ApplicationStartedEvent message)

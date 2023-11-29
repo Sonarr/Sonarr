@@ -90,7 +90,7 @@ namespace NzbDrone.Core.ImportLists
 
                 var importList = importLists.Single(x => x.Id == item.ImportListId);
 
-                // Map by IMDbId if we have it
+                // Map by IMDb ID if we have it
                 if (item.TvdbId <= 0 && item.ImdbId.IsNotNullOrWhiteSpace())
                 {
                     var mappedSeries = _seriesSearchService.SearchForNewSeriesByImdbId(item.ImdbId)
@@ -103,17 +103,34 @@ namespace NzbDrone.Core.ImportLists
                     }
                 }
 
-                // Map by AniListId if we have it
-                if (item.TvdbId <= 0 && item.AniListId > 0)
+                // Map by TMDb ID if we have it
+                if (item.TvdbId <= 0 && item.TmdbId > 0)
                 {
-                    var mappedSeries = _seriesSearchService.SearchForNewSeriesByAniListId(item.AniListId)
+                    var mappedSeries = _seriesSearchService.SearchForNewSeriesByTmdbId(item.TmdbId)
                         .FirstOrDefault();
 
                     if (mappedSeries != null)
                     {
                         item.TvdbId = mappedSeries.TvdbId;
-                        item.Title = mappedSeries.Title;
+                        item.Title = mappedSeries?.Title;
                     }
+                }
+
+                // Map by AniList ID if we have it
+                if (item.TvdbId <= 0 && item.AniListId > 0)
+                {
+                    var mappedSeries = _seriesSearchService.SearchForNewSeriesByAniListId(item.AniListId)
+                        .FirstOrDefault();
+
+                    if (mappedSeries == null)
+                    {
+                        _logger.Debug("Rejected, unable to find matching TVDB ID for Anilist ID: {0} [{1}]", item.AniListId, item.Title);
+
+                        continue;
+                    }
+
+                    item.TvdbId = mappedSeries.TvdbId;
+                    item.Title = mappedSeries.Title;
                 }
 
                 // Map TVDb if we only have a series name
@@ -156,6 +173,7 @@ namespace NzbDrone.Core.ImportLists
                         Title = item.Title,
                         Year = item.Year,
                         Monitored = monitored,
+                        MonitorNewItems = importList.MonitorNewItems,
                         RootFolderPath = importList.RootFolderPath,
                         QualityProfileId = importList.QualityProfileId,
                         SeriesType = importList.SeriesType,
@@ -163,7 +181,7 @@ namespace NzbDrone.Core.ImportLists
                         Tags = importList.Tags,
                         AddOptions = new AddSeriesOptions
                                      {
-                                         SearchForMissingEpisodes = monitored,
+                                         SearchForMissingEpisodes = importList.SearchForMissingEpisodes,
                                          Monitor = importList.ShouldMonitor
                                      }
                     });

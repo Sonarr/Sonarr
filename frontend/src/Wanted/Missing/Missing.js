@@ -260,11 +260,11 @@ class Missing extends Component {
                 <ConfirmModal
                   isOpen={isConfirmSearchAllMissingModalOpen}
                   kind={kinds.DANGER}
-                  title={translate('SearchForAllMissing')}
+                  title={translate('SearchForAllMissingEpisodes')}
                   message={
                     <div>
                       <div>
-                        {translate('SearchForAllMissingConfirmationCount', { totalRecords })}
+                        {translate('SearchForAllMissingEpisodesConfirmationCount', { totalRecords })}
                       </div>
                       <div>
                         {translate('MassSearchCancelWarning')}

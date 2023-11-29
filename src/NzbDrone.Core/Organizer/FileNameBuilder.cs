@@ -5,6 +5,8 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Diacritical;
+using DryIoc.ImTools;
 using NLog;
 using NzbDrone.Common.Cache;
 using NzbDrone.Common.Disk;
@@ -353,6 +355,17 @@ namespace NzbDrone.Core.Organizer
             return TitlePrefixRegex.Replace(title, "$2, $1$3");
         }
 
+        public static string CleanTitleThe(string title)
+        {
+            if (TitlePrefixRegex.IsMatch(title))
+            {
+                var splitResult = TitlePrefixRegex.Split(title);
+                return $"{CleanTitle(splitResult[2]).Trim()}, {splitResult[1]}{CleanTitle(splitResult[3])}";
+            }
+
+            return CleanTitle(title);
+        }
+
         public static string TitleYear(string title, int year)
         {
             // Don't use 0 for the year.
@@ -370,11 +383,47 @@ namespace NzbDrone.Core.Organizer
             return $"{title} ({year})";
         }
 
+        public static string CleanTitleTheYear(string title, int year)
+        {
+            // Don't use 0 for the year.
+            if (year == 0)
+            {
+                return CleanTitleThe(title);
+            }
+
+            // Regex match incase the year in the title doesn't match the year, for whatever reason.
+            if (YearRegex.IsMatch(title))
+            {
+                var splitReturn = YearRegex.Split(title);
+                var yearMatch = YearRegex.Match(title);
+                return $"{CleanTitleThe(splitReturn[0].Trim())} {yearMatch.Value[1..5]}";
+            }
+
+            return $"{CleanTitleThe(title)} {year}";
+        }
+
         public static string TitleWithoutYear(string title)
         {
             title = YearRegex.Replace(title, "");
 
             return title;
+        }
+
+        public static string TitleFirstCharacter(string title)
+        {
+            if (char.IsLetterOrDigit(title[0]))
+            {
+                return title.Substring(0, 1).ToUpper().RemoveDiacritics()[0].ToString();
+            }
+
+            // Try the second character if the first was non alphanumeric
+            if (char.IsLetterOrDigit(title[1]))
+            {
+                return title.Substring(1, 1).ToUpper().RemoveDiacritics()[0].ToString();
+            }
+
+            // Default to "_" if no alphanumeric character can be found in the first 2 positions
+            return "_";
         }
 
         public static string CleanFileName(string name)
@@ -445,14 +494,17 @@ namespace NzbDrone.Core.Organizer
         {
             tokenHandlers["{Series Title}"] = m => series.Title;
             tokenHandlers["{Series CleanTitle}"] = m => CleanTitle(series.Title);
+            tokenHandlers["{Series TitleYear}"] = m => TitleYear(series.Title, series.Year);
             tokenHandlers["{Series CleanTitleYear}"] = m => CleanTitle(TitleYear(series.Title, series.Year));
+            tokenHandlers["{Series TitleWithoutYear}"] = m => TitleWithoutYear(series.Title);
             tokenHandlers["{Series CleanTitleWithoutYear}"] = m => CleanTitle(TitleWithoutYear(series.Title));
             tokenHandlers["{Series TitleThe}"] = m => TitleThe(series.Title);
-            tokenHandlers["{Series TitleYear}"] = m => TitleYear(series.Title, series.Year);
-            tokenHandlers["{Series TitleWithoutYear}"] = m => TitleWithoutYear(series.Title);
+            tokenHandlers["{Series CleanTitleThe}"] = m => CleanTitleThe(series.Title);
             tokenHandlers["{Series TitleTheYear}"] = m => TitleYear(TitleThe(series.Title), series.Year);
+            tokenHandlers["{Series CleanTitleTheYear}"] = m => CleanTitleTheYear(series.Title, series.Year);
             tokenHandlers["{Series TitleTheWithoutYear}"] = m => TitleWithoutYear(TitleThe(series.Title));
-            tokenHandlers["{Series TitleFirstCharacter}"] = m => TitleThe(series.Title).Substring(0, 1).FirstCharToUpper();
+            tokenHandlers["{Series CleanTitleTheWithoutYear}"] = m => CleanTitleThe(TitleWithoutYear(series.Title));
+            tokenHandlers["{Series TitleFirstCharacter}"] = m => TitleFirstCharacter(TitleThe(series.Title));
             tokenHandlers["{Series Year}"] = m => series.Year.ToString();
         }
 

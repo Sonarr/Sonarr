@@ -40,10 +40,13 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
         [FieldDefinition(1, Label = "Port", Type = FieldType.Textbox)]
         public int Port { get; set; }
 
-        [FieldDefinition(2, Label = "Use SSL", Type = FieldType.Checkbox, HelpText = "Use secure connection when connecting to NZBGet")]
+        [FieldDefinition(2, Label = "UseSsl", Type = FieldType.Checkbox, HelpText = "DownloadClientSettingsUseSslHelpText")]
+        [FieldToken(TokenField.HelpText, "UseSsl", "clientName", "NZBGet")]
         public bool UseSsl { get; set; }
 
-        [FieldDefinition(3, Label = "Url Base", Type = FieldType.Textbox, Advanced = true, HelpText = "Adds a prefix to the nzbget url, e.g. http://[host]:[port]/[urlBase]/jsonrpc")]
+        [FieldDefinition(3, Label = "UrlBase", Type = FieldType.Textbox, Advanced = true, HelpText = "DownloadClientSettingsUrlBaseHelpText")]
+        [FieldToken(TokenField.HelpText, "UrlBase", "clientName", "NZBGet")]
+        [FieldToken(TokenField.HelpText, "UrlBase", "url", "http://[host]:[port]/[urlBase]/jsonrpc")]
         public string UrlBase { get; set; }
 
         [FieldDefinition(4, Label = "Username", Type = FieldType.Textbox, Privacy = PrivacyLevel.UserName)]
@@ -52,16 +55,16 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
         [FieldDefinition(5, Label = "Password", Type = FieldType.Password, Privacy = PrivacyLevel.Password)]
         public string Password { get; set; }
 
-        [FieldDefinition(6, Label = "Category", Type = FieldType.Textbox, HelpText = "Adding a category specific to Sonarr avoids conflicts with unrelated non-Sonarr downloads. Using a category is optional, but strongly recommended.")]
+        [FieldDefinition(6, Label = "Category", Type = FieldType.Textbox, HelpText = "DownloadClientSettingsCategoryHelpText")]
         public string TvCategory { get; set; }
 
-        [FieldDefinition(7, Label = "Recent Priority", Type = FieldType.Select, SelectOptions = typeof(NzbgetPriority), HelpText = "Priority to use when grabbing episodes that aired within the last 14 days")]
+        [FieldDefinition(7, Label = "DownloadClientSettingsRecentPriority", Type = FieldType.Select, SelectOptions = typeof(NzbgetPriority), HelpText = "DownloadClientSettingsRecentPriorityEpisodeHelpText")]
         public int RecentTvPriority { get; set; }
 
-        [FieldDefinition(8, Label = "Older Priority", Type = FieldType.Select, SelectOptions = typeof(NzbgetPriority), HelpText = "Priority to use when grabbing episodes that aired over 14 days ago")]
+        [FieldDefinition(8, Label = "DownloadClientSettingsOlderPriority", Type = FieldType.Select, SelectOptions = typeof(NzbgetPriority), HelpText = "DownloadClientSettingsOlderPriorityEpisodeHelpText")]
         public int OlderTvPriority { get; set; }
 
-        [FieldDefinition(9, Label = "Add Paused", Type = FieldType.Checkbox, HelpText = "This option requires at least NzbGet version 16.0")]
+        [FieldDefinition(9, Label = "DownloadClientSettingsAddPaused", Type = FieldType.Checkbox, HelpText = "DownloadClientNzbgetSettingsAddPausedHelpText")]
         public bool AddPaused { get; set; }
 
         public NzbDroneValidationResult Validate()

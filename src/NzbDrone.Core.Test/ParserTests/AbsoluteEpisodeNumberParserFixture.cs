@@ -122,6 +122,12 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[SubsPlease] Anime Title 100 S3 - 01 (1080p) [5A493522]", "Anime Title 100 S3", 1, 0, 0)]
         [TestCase("[CameEsp] Another Anime 100 - Another 100 Anime - 01 [720p][ESP-ENG][mkv]", "Another Anime 100 - Another 100 Anime", 1, 0, 0)]
         [TestCase("[SubsPlease] Another Anime 100 - Another 100 Anime - 01 (1080p) [4E6B4518].mkv", "Another Anime 100 - Another 100 Anime", 1, 0, 0)]
+        [TestCase("Some show 69. Blm (29.10.2023) 1080p WebDL #turkseed", "Some show", 69, 0, 0)]
+        [TestCase("Soap opera 01 BLM(01.11.2023) 1080p HDTV AC3 x264 TURG", "Soap opera",  1, 0, 0)]
+        [TestCase("Turkish show 60.Bolum (31.01.2023) 720p WebDL AAC H.264 - TURG", "Turkish show",  60, 0, 0)]
+        [TestCase("Different show 1. Bölüm (23.10.2023) 720p WebDL AAC H.264 - TURG", "Different show",  1, 0, 0)]
+        [TestCase("Dubbed show 79.BLM Sezon Finali(25.06.2023) 720p WEB-DL AAC2.0 H.264-TURG", "Dubbed show", 79, 0, 0)]
+        [TestCase("Exclusive BLM Documentary with no false positives EP03.1080p.AAC.x264", "Exclusive BLM Documentary with no false positives", 3, 0, 0)]
 
         // [TestCase("", "", 0, 0, 0)]
         public void should_parse_absolute_numbers(string postTitle, string title, int absoluteEpisodeNumber, int seasonNumber, int episodeNumber)

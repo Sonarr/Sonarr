@@ -12,7 +12,7 @@ namespace NzbDrone.Integration.Test.ApiTests.WantedTests
         [Order(1)]
         public void cutoff_should_have_monitored_items()
         {
-            EnsureProfileCutoff(1, Quality.HDTV720p, true);
+            EnsureQualityProfileCutoff(1, Quality.HDTV720p, true);
             var series = EnsureSeries(266189, "The Blacklist", true);
             EnsureEpisodeFile(series, 1, 1, Quality.SDTV);
 
@@ -25,7 +25,7 @@ namespace NzbDrone.Integration.Test.ApiTests.WantedTests
         [Order(1)]
         public void cutoff_should_not_have_unmonitored_items()
         {
-            EnsureProfileCutoff(1, Quality.HDTV720p, true);
+            EnsureQualityProfileCutoff(1, Quality.HDTV720p, true);
             var series = EnsureSeries(266189, "The Blacklist", false);
             EnsureEpisodeFile(series, 1, 1, Quality.SDTV);
 
@@ -38,7 +38,7 @@ namespace NzbDrone.Integration.Test.ApiTests.WantedTests
         [Order(1)]
         public void cutoff_should_have_series()
         {
-            EnsureProfileCutoff(1, Quality.HDTV720p, true);
+            EnsureQualityProfileCutoff(1, Quality.HDTV720p, true);
             var series = EnsureSeries(266189, "The Blacklist", true);
             EnsureEpisodeFile(series, 1, 1, Quality.SDTV);
 
@@ -52,11 +52,11 @@ namespace NzbDrone.Integration.Test.ApiTests.WantedTests
         [Order(2)]
         public void cutoff_should_have_unmonitored_items()
         {
-            EnsureProfileCutoff(1, Quality.HDTV720p, true);
+            EnsureQualityProfileCutoff(1, Quality.HDTV720p, true);
             var series = EnsureSeries(266189, "The Blacklist", false);
             EnsureEpisodeFile(series, 1, 1, Quality.SDTV);
 
-            var result = WantedCutoffUnmet.GetPaged(0, 15, "airDateUtc", "desc", "monitored", "false");
+            var result = WantedCutoffUnmet.GetPaged(0, 15, "airDateUtc", "desc", "monitored", false);
 
             result.Records.Should().NotBeEmpty();
         }

@@ -1,17 +1,39 @@
 using System.Collections.Generic;
+using System.ComponentModel;
 using NzbDrone.Core.Datastore;
 
 namespace Sonarr.Http
 {
+    public class PagingRequestResource
+    {
+        [DefaultValue(1)]
+        public int? Page { get; set; }
+        [DefaultValue(10)]
+        public int? PageSize { get; set; }
+        public string SortKey { get; set; }
+        public SortDirection? SortDirection { get; set; }
+    }
+
     public class PagingResource<TResource>
     {
         public int Page { get; set; }
         public int PageSize { get; set; }
         public string SortKey { get; set; }
         public SortDirection SortDirection { get; set; }
-        public List<PagingResourceFilter> Filters { get; set; }
         public int TotalRecords { get; set; }
         public List<TResource> Records { get; set; }
+
+        public PagingResource()
+        {
+        }
+
+        public PagingResource(PagingRequestResource requestResource)
+        {
+            Page = requestResource.Page ?? 1;
+            PageSize = requestResource.PageSize ?? 10;
+            SortKey = requestResource.SortKey;
+            SortDirection = requestResource.SortDirection ?? SortDirection.Descending;
+        }
     }
 
     public static class PagingResourceMapper

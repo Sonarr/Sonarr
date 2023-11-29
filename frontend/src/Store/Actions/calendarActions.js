@@ -52,8 +52,6 @@ export const defaultState = {
 
   selectedFilterKey: 'monitored',
 
-  customFilters: [],
-
   filters: [
     {
       key: 'all',

@@ -116,7 +116,7 @@ class CalendarLinkModalContent extends Component {
     return (
       <ModalContent onModalClose={onModalClose}>
         <ModalHeader>
-          {translate('CalendarFeed', { appName: 'Sonarr' })}
+          {translate('CalendarFeed')}
         </ModalHeader>
 
         <ModalBody>
@@ -128,7 +128,7 @@ class CalendarLinkModalContent extends Component {
                 type={inputTypes.CHECK}
                 name="unmonitored"
                 value={unmonitored}
-                helpText={translate('ICalIncludeUnmonitoredHelpText')}
+                helpText={translate('ICalIncludeUnmonitoredEpisodesHelpText')}
                 onChange={this.onInputChange}
               />
             </FormGroup>
@@ -164,7 +164,7 @@ class CalendarLinkModalContent extends Component {
                 type={inputTypes.TAG}
                 name="tags"
                 value={tags}
-                helpText={translate('ICalTagsHelpText')}
+                helpText={translate('ICalTagsSeriesHelpText')}
                 onChange={this.onInputChange}
               />
             </FormGroup>

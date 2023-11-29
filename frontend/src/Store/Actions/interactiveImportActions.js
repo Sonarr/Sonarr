@@ -28,8 +28,8 @@ export const defaultState = {
   error: null,
   items: [],
   originalItems: [],
-  sortKey: 'quality',
-  sortDirection: sortDirections.DESCENDING,
+  sortKey: 'relativePath',
+  sortDirection: sortDirections.ASCENDING,
   recentFolders: [],
   importMode: 'chooseImportMode',
   sortPredicates: {

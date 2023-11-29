@@ -9,6 +9,7 @@ using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.Pending;
 using NzbDrone.Core.Download.TrackedDownloads;
+using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Profiles.Qualities;
@@ -135,15 +136,15 @@ namespace Sonarr.Api.V3.Queue
 
         [HttpGet]
         [Produces("application/json")]
-        public PagingResource<QueueResource> GetQueue(bool includeUnknownSeriesItems = false, bool includeSeries = false, bool includeEpisode = false)
+        public PagingResource<QueueResource> GetQueue([FromQuery] PagingRequestResource paging, bool includeUnknownSeriesItems = false, bool includeSeries = false, bool includeEpisode = false, [FromQuery] int[] seriesIds = null, DownloadProtocol? protocol = null, [FromQuery] int[] languages = null, int? quality = null)
         {
-            var pagingResource = Request.ReadPagingResourceFromRequest<QueueResource>();
+            var pagingResource = new PagingResource<QueueResource>(paging);
             var pagingSpec = pagingResource.MapToPagingSpec<QueueResource, NzbDrone.Core.Queue.Queue>("timeleft", SortDirection.Ascending);
 
-            return pagingSpec.ApplyToPage((spec) => GetQueue(spec, includeUnknownSeriesItems), (q) => MapToResource(q, includeSeries, includeEpisode));
+            return pagingSpec.ApplyToPage((spec) => GetQueue(spec, seriesIds?.ToHashSet(), protocol, languages?.ToHashSet(), quality, includeUnknownSeriesItems), (q) => MapToResource(q, includeSeries, includeEpisode));
         }
 
-        private PagingSpec<NzbDrone.Core.Queue.Queue> GetQueue(PagingSpec<NzbDrone.Core.Queue.Queue> pagingSpec, bool includeUnknownSeriesItems)
+        private PagingSpec<NzbDrone.Core.Queue.Queue> GetQueue(PagingSpec<NzbDrone.Core.Queue.Queue> pagingSpec, HashSet<int> seriesIds, DownloadProtocol? protocol, HashSet<int> languages, int? quality, bool includeUnknownSeriesItems)
         {
             var ascending = pagingSpec.SortDirection == SortDirection.Ascending;
             var orderByFunc = GetOrderByFunc(pagingSpec);
@@ -151,7 +152,36 @@ namespace Sonarr.Api.V3.Queue
             var queue = _queueService.GetQueue();
             var filteredQueue = includeUnknownSeriesItems ? queue : queue.Where(q => q.Series != null);
             var pending = _pendingReleaseService.GetPendingQueue();
-            var fullQueue = filteredQueue.Concat(pending).ToList();
+
+            var hasSeriesIdFilter = seriesIds.Any();
+            var hasLanguageFilter = languages.Any();
+            var fullQueue = filteredQueue.Concat(pending).Where(q =>
+            {
+                var include = true;
+
+                if (hasSeriesIdFilter)
+                {
+                    include &= q.Series != null && seriesIds.Contains(q.Series.Id);
+                }
+
+                if (include && protocol.HasValue)
+                {
+                    include &= q.Protocol == protocol.Value;
+                }
+
+                if (include && hasLanguageFilter)
+                {
+                    include &= q.Languages.Any(l => languages.Contains(l.Id));
+                }
+
+                if (include && quality.HasValue)
+                {
+                    include &= q.Quality.Quality.Id == quality.Value;
+                }
+
+                return include;
+            }).ToList();
+
             IOrderedEnumerable<NzbDrone.Core.Queue.Queue> ordered;
 
             if (pagingSpec.SortKey == "timeleft")

@@ -98,7 +98,7 @@ function DeleteSeriesModalContent(props: DeleteSeriesModalContentProps) {
               type={inputTypes.CHECK}
               name="addImportListExclusion"
               value={addImportListExclusion}
-              helpText={translate('AddListExclusionHelpText')}
+              helpText={translate('AddListExclusionSeriesHelpText')}
               onChange={onDeleteOptionChange}
             />
           </FormGroup>

@@ -210,12 +210,15 @@ class SeriesDetailsSeason extends Component {
       seasonNumber,
       items,
       columns,
+      sortKey,
+      sortDirection,
       statistics,
       isSaving,
       isExpanded,
       isSearching,
       seriesMonitored,
       isSmallScreen,
+      onSortPress,
       onTableOptionChange,
       onMonitorSeasonPress,
       onSearchPress
@@ -447,6 +450,9 @@ class SeriesDetailsSeason extends Component {
                   items.length ?
                     <Table
                       columns={columns}
+                      sortKey={sortKey}
+                      sortDirection={sortDirection}
+                      onSortPress={onSortPress}
                       onTableOptionChange={onTableOptionChange}
                     >
                       <TableBody>
@@ -530,6 +536,8 @@ SeriesDetailsSeason.propTypes = {
   seasonNumber: PropTypes.number.isRequired,
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
   columns: PropTypes.arrayOf(PropTypes.object).isRequired,
+  sortKey: PropTypes.string.isRequired,
+  sortDirection: PropTypes.oneOf(sortDirections.all),
   statistics: PropTypes.object.isRequired,
   isSaving: PropTypes.bool,
   isExpanded: PropTypes.bool,
@@ -537,6 +545,7 @@ SeriesDetailsSeason.propTypes = {
   seriesMonitored: PropTypes.bool.isRequired,
   isSmallScreen: PropTypes.bool.isRequired,
   onTableOptionChange: PropTypes.func.isRequired,
+  onSortPress: PropTypes.func.isRequired,
   onMonitorSeasonPress: PropTypes.func.isRequired,
   onExpandPress: PropTypes.func.isRequired,
   onMonitorEpisodePress: PropTypes.func.isRequired,

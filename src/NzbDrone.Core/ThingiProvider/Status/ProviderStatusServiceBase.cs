@@ -59,6 +59,11 @@ namespace NzbDrone.Core.ThingiProvider.Status
 
         public virtual void RecordSuccess(int providerId)
         {
+            if (providerId <= 0)
+            {
+                return;
+            }
+
             lock (_syncRoot)
             {
                 var status = GetProviderStatus(providerId);
@@ -79,6 +84,11 @@ namespace NzbDrone.Core.ThingiProvider.Status
 
         protected virtual void RecordFailure(int providerId, TimeSpan minimumBackOff, bool escalate)
         {
+            if (providerId <= 0)
+            {
+                return;
+            }
+
             lock (_syncRoot)
             {
                 var status = GetProviderStatus(providerId);

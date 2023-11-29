@@ -6,6 +6,7 @@ import withCurrentPage from 'Components/withCurrentPage';
 import { clearEpisodes, fetchEpisodes } from 'Store/Actions/episodeActions';
 import { clearEpisodeFiles } from 'Store/Actions/episodeFileActions';
 import * as historyActions from 'Store/Actions/historyActions';
+import { createCustomFiltersSelector } from 'Store/Selectors/createClientSideCollectionSelector';
 import hasDifferentItems from 'Utilities/Object/hasDifferentItems';
 import selectUniqueIds from 'Utilities/Object/selectUniqueIds';
 import { registerPagePopulator, unregisterPagePopulator } from 'Utilities/pagePopulator';
@@ -15,11 +16,13 @@ function createMapStateToProps() {
   return createSelector(
     (state) => state.history,
     (state) => state.episodes,
-    (history, episodes) => {
+    createCustomFiltersSelector('history'),
+    (history, episodes, customFilters) => {
       return {
         isEpisodesFetching: episodes.isFetching,
         isEpisodesPopulated: episodes.isPopulated,
         episodesError: episodes.error,
+        customFilters,
         ...history
       };
     }

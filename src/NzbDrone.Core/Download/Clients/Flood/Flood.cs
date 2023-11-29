@@ -7,8 +7,10 @@ using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
+using NzbDrone.Core.Blocklisting;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Download.Clients.Flood.Models;
+using NzbDrone.Core.Localization;
 using NzbDrone.Core.MediaFiles.TorrentInfo;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.RemotePathMappings;
@@ -28,8 +30,10 @@ namespace NzbDrone.Core.Download.Clients.Flood
                         IConfigService configService,
                         IDiskProvider diskProvider,
                         IRemotePathMappingService remotePathMappingService,
+                        ILocalizationService localizationService,
+                        IBlocklistService blocklistService,
                         Logger logger)
-            : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, logger)
+            : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, localizationService, blocklistService, logger)
         {
             _proxy = proxy;
             _downloadSeedConfigProvider = downloadSeedConfigProvider;
@@ -81,7 +85,7 @@ namespace NzbDrone.Core.Download.Clients.Flood
         }
 
         public override string Name => "Flood";
-        public override ProviderMessage Message => new ProviderMessage("Sonarr will handle automatic removal of torrents based on the current seed criteria in Settings -> Indexers", ProviderMessageType.Info);
+        public override ProviderMessage Message => new ProviderMessage(_localizationService.GetLocalizedString("DownloadClientFloodSettingsRemovalInfo"), ProviderMessageType.Info);
 
         protected override string AddFromTorrentFile(RemoteEpisode remoteEpisode, string hash, string filename, byte[] fileContent)
         {

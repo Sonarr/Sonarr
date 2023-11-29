@@ -54,13 +54,19 @@ namespace NzbDrone.Core.HealthCheck.Checks
 
                     return new HealthCheck(GetType(),
                         HealthCheckResult.Error,
-                        string.Format(_localizationService.GetLocalizedString("ImportListRootFolderMissingRootHealthCheckMessage"), FormatRootFolder(missingRootFolder.Key, missingRootFolder.Value)),
+                        _localizationService.GetLocalizedString("ImportListRootFolderMissingRootHealthCheckMessage", new Dictionary<string, object>
+                        {
+                            { "rootFolderInfo", FormatRootFolder(missingRootFolder.Key, missingRootFolder.Value) }
+                        }),
                         "#import-list-missing-root-folder");
                 }
 
                 return new HealthCheck(GetType(),
                     HealthCheckResult.Error,
-                    string.Format(_localizationService.GetLocalizedString("ImportListRootFolderMultipleMissingRootsHealthCheckMessage"), string.Join(" | ", missingRootFolders.Select(m => FormatRootFolder(m.Key, m.Value)))),
+                    _localizationService.GetLocalizedString("ImportListRootFolderMultipleMissingRootsHealthCheckMessage", new Dictionary<string, object>
+                    {
+                        { "rootFoldersInfo", string.Join(" | ", missingRootFolders.Select(m => FormatRootFolder(m.Key, m.Value))) }
+                    }),
                     "#import-list-missing-root-folder");
             }
 

@@ -9,6 +9,7 @@ using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Indexers;
+using NzbDrone.Core.Localization;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.RemotePathMappings;
@@ -23,8 +24,9 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
                          IConfigService configService,
                          IDiskProvider diskProvider,
                          IRemotePathMappingService remotePathMappingService,
-                         Logger logger)
-            : base(configService, diskProvider, remotePathMappingService, logger)
+                         Logger logger,
+                         ILocalizationService localizationService)
+            : base(configService, diskProvider, remotePathMappingService, logger, localizationService)
         {
             _httpClient = httpClient;
         }

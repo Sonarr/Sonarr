@@ -426,7 +426,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
                 Size = 1000,
                 Progress = 0.7,
                 Eta = 8640000,
-                State = "stalledDL",
+                State = "pausedUP",
                 Label = "",
                 SavePath = @"C:\Torrents".AsOsAgnostic(),
                 ContentPath = @"C:\Torrents\Droned.S01.12".AsOsAgnostic()

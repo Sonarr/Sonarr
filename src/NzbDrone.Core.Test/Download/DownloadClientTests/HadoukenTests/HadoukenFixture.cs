@@ -320,7 +320,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.HadoukenTests
 
             var result = Subject.Test();
 
-            result.Errors.First().ErrorMessage.Should().Be("Old Hadouken client with unsupported API, need 5.1 or higher");
+            result.Errors.Count.Should().Be(1);
         }
     }
 }

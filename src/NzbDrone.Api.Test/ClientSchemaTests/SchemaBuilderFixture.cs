@@ -1,6 +1,9 @@
+using System.Collections.Generic;
 using FluentAssertions;
+using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Annotations;
+using NzbDrone.Core.Localization;
 using NzbDrone.Test.Common;
 using Sonarr.Http.ClientSchema;
 
@@ -9,6 +12,16 @@ namespace NzbDrone.Api.Test.ClientSchemaTests
     [TestFixture]
     public class SchemaBuilderFixture : TestBase
     {
+        [SetUp]
+        public void Setup()
+        {
+            Mocker.GetMock<ILocalizationService>()
+                .Setup(s => s.GetLocalizedString(It.IsAny<string>(), It.IsAny<Dictionary<string, object>>()))
+                .Returns<string, Dictionary<string, object>>((s, d) => s);
+
+            SchemaBuilder.Initialize(Mocker.Container);
+        }
+
         [Test]
         public void should_return_field_for_every_property()
         {

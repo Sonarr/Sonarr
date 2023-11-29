@@ -1,7 +1,7 @@
 import React from 'react';
 import { createAction } from 'redux-actions';
 import Icon from 'Components/Icon';
-import { filterTypes, icons, sortDirections } from 'Helpers/Props';
+import { filterBuilderTypes, filterBuilderValueTypes, filterTypes, icons, sortDirections } from 'Helpers/Props';
 import { createThunk, handleThunks } from 'Store/thunks';
 import createAjaxRequest from 'Utilities/createAjaxRequest';
 import serverSideCollectionHandlers from 'Utilities/serverSideCollectionHandlers';
@@ -184,6 +184,33 @@ export const defaultState = {
           type: filterTypes.EQUAL
         }
       ]
+    }
+  ],
+
+  filterBuilderProps: [
+    {
+      name: 'eventType',
+      label: () => translate('EventType'),
+      type: filterBuilderTypes.EQUAL,
+      valueType: filterBuilderValueTypes.HISTORY_EVENT_TYPE
+    },
+    {
+      name: 'seriesIds',
+      label: () => translate('Series'),
+      type: filterBuilderTypes.EQUAL,
+      valueType: filterBuilderValueTypes.SERIES
+    },
+    {
+      name: 'quality',
+      label: () => translate('Quality'),
+      type: filterBuilderTypes.EQUAL,
+      valueType: filterBuilderValueTypes.QUALITY
+    },
+    {
+      name: 'languages',
+      label: () => translate('Languages'),
+      type: filterBuilderTypes.CONTAINS,
+      valueType: filterBuilderValueTypes.LANGUAGE
     }
   ]
 

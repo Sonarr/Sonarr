@@ -123,7 +123,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
 
             GivenHistory(history);
 
-            Subject.IsSatisfiedBy(_localEpisode, _downloadClientItem).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_localEpisode, _downloadClientItem).Accepted.Should().BeFalse();
         }
     }
 }

@@ -1,9 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Download.TrackedDownloads;
 using NzbDrone.Core.History;
 using NzbDrone.Core.Messaging.Events;
+using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Download
 {
@@ -127,7 +129,8 @@ namespace NzbDrone.Core.Download
 
         private void PublishDownloadFailedEvent(List<EpisodeHistory> historyItems, string message, TrackedDownload trackedDownload = null, bool skipRedownload = false)
         {
-            var historyItem = historyItems.First();
+            var historyItem = historyItems.Last();
+            Enum.TryParse(historyItem.Data.GetValueOrDefault(EpisodeHistory.RELEASE_SOURCE, ReleaseSourceType.Unknown.ToString()), out ReleaseSourceType releaseSource);
 
             var downloadFailedEvent = new DownloadFailedEvent
             {
@@ -141,7 +144,8 @@ namespace NzbDrone.Core.Download
                 Data = historyItem.Data,
                 TrackedDownload = trackedDownload,
                 Languages = historyItem.Languages,
-                SkipRedownload = skipRedownload
+                SkipRedownload = skipRedownload,
+                ReleaseSource = releaseSource
             };
 
             _eventAggregator.PublishEvent(downloadFailedEvent);

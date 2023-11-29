@@ -11,7 +11,7 @@ namespace NzbDrone.Integration.Test.ApiTests
     {
         private void GivenExistingSeries()
         {
-            WaitForCompletion(() => Profiles.All().Count > 0);
+            WaitForCompletion(() => QualityProfiles.All().Count > 0);
 
             foreach (var title in new[] { "90210", "Dexter" })
             {

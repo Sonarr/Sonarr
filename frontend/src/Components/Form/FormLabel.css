@@ -2,8 +2,10 @@
   display: flex;
   justify-content: flex-end;
   margin-right: $formLabelRightMarginWidth;
+  padding-top: 8px;
+  min-height: 35px;
+  text-align: end;
   font-weight: bold;
-  line-height: 35px;
 }
 
 .hasError {

@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using System.Threading;
 using NLog;
 using NUnit.Framework;
@@ -7,7 +9,6 @@ using NzbDrone.Core.Datastore.Migration.Framework;
 using NzbDrone.Core.Indexers.Newznab;
 using NzbDrone.Test.Common;
 using NzbDrone.Test.Common.Datastore;
-using Sonarr.Http.ClientSchema;
 
 namespace NzbDrone.Integration.Test
 {
@@ -50,17 +51,20 @@ namespace NzbDrone.Integration.Test
             // Make sure tasks have been initialized so the config put below doesn't cause errors
             WaitForCompletion(() => Tasks.All().SelectList(x => x.TaskName).Contains("RssSync"));
 
-            Indexers.Post(new Sonarr.Api.V3.Indexers.IndexerResource
+            var indexer = Indexers.Schema().FirstOrDefault(i => i.Implementation == nameof(Newznab));
+
+            if (indexer == null)
             {
-                EnableRss = false,
-                EnableInteractiveSearch = false,
-                EnableAutomaticSearch = false,
-                ConfigContract = nameof(NewznabSettings),
-                Implementation = nameof(Newznab),
-                Name = "NewznabTest",
-                Protocol = Core.Indexers.DownloadProtocol.Usenet,
-                Fields = SchemaBuilder.ToSchema(new NewznabSettings())
-            });
+                throw new NullReferenceException("Expected valid indexer schema, found null");
+            }
+
+            indexer.EnableRss = false;
+            indexer.EnableInteractiveSearch = false;
+            indexer.EnableAutomaticSearch = false;
+            indexer.ConfigContract = nameof(NewznabSettings);
+            indexer.Implementation = nameof(Newznab);
+            indexer.Name = "NewznabTest";
+            indexer.Protocol = Core.Indexers.DownloadProtocol.Usenet;
 
             // Change Console Log Level to Debug so we get more details.
             var config = HostConfig.Get(1);

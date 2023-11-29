@@ -19,6 +19,7 @@ namespace NzbDrone.Core.History
         List<EpisodeHistory> FindDownloadHistory(int idSeriesId, QualityModel quality);
         void DeleteForSeries(List<int> seriesIds);
         List<EpisodeHistory> Since(DateTime date, EpisodeHistoryEventType? eventType);
+        PagingSpec<EpisodeHistory> GetPaged(PagingSpec<EpisodeHistory> pagingSpec, int[] languages, int[] qualities);
     }
 
     public class HistoryRepository : BasicRepository<EpisodeHistory>, IHistoryRepository
@@ -101,18 +102,6 @@ namespace NzbDrone.Core.History
             Delete(c => seriesIds.Contains(c.SeriesId));
         }
 
-        protected override SqlBuilder PagedBuilder() => new SqlBuilder(_database.DatabaseType)
-            .Join<EpisodeHistory, Series>((h, a) => h.SeriesId == a.Id)
-            .Join<EpisodeHistory, Episode>((h, a) => h.EpisodeId == a.Id);
-
-        protected override IEnumerable<EpisodeHistory> PagedQuery(SqlBuilder builder) =>
-            _database.QueryJoined<EpisodeHistory, Series, Episode>(builder, (history, series, episode) =>
-            {
-                history.Series = series;
-                history.Episode = episode;
-                return history;
-            });
-
         public List<EpisodeHistory> Since(DateTime date, EpisodeHistoryEventType? eventType)
         {
             var builder = Builder()
@@ -131,6 +120,77 @@ namespace NzbDrone.Core.History
                 history.Episode = episode;
                 return history;
             }).OrderBy(h => h.Date).ToList();
+        }
+
+        public PagingSpec<EpisodeHistory> GetPaged(PagingSpec<EpisodeHistory> pagingSpec, int[] languages, int[] qualities)
+        {
+            pagingSpec.Records = GetPagedRecords(PagedBuilder(pagingSpec, languages, qualities), pagingSpec, PagedQuery);
+
+            var countTemplate = $"SELECT COUNT(*) FROM (SELECT /**select**/ FROM \"{TableMapping.Mapper.TableNameMapping(typeof(EpisodeHistory))}\" /**join**/ /**innerjoin**/ /**leftjoin**/ /**where**/ /**groupby**/ /**having**/) AS \"Inner\"";
+            pagingSpec.TotalRecords = GetPagedRecordCount(PagedBuilder(pagingSpec, languages, qualities).Select(typeof(EpisodeHistory)), pagingSpec, countTemplate);
+
+            return pagingSpec;
+        }
+
+        private SqlBuilder PagedBuilder(PagingSpec<EpisodeHistory> pagingSpec, int[] languages, int[] qualities)
+        {
+            var builder = Builder()
+                .Join<EpisodeHistory, Series>((h, a) => h.SeriesId == a.Id)
+                .Join<EpisodeHistory, Episode>((h, a) => h.EpisodeId == a.Id);
+
+            AddFilters(builder, pagingSpec);
+
+            if (languages is { Length: > 0 })
+            {
+                builder.Where($"({BuildLanguageWhereClause(languages)})");
+            }
+
+            if (qualities is { Length: > 0 })
+            {
+                builder.Where($"({BuildQualityWhereClause(qualities)})");
+            }
+
+            return builder;
+        }
+
+        protected override IEnumerable<EpisodeHistory> PagedQuery(SqlBuilder builder) =>
+            _database.QueryJoined<EpisodeHistory, Series, Episode>(builder, (history, series, episode) =>
+            {
+                history.Series = series;
+                history.Episode = episode;
+                return history;
+            });
+
+        private string BuildLanguageWhereClause(int[] languages)
+        {
+            var clauses = new List<string>();
+
+            foreach (var language in languages)
+            {
+                // There are 4 different types of values we should see:
+                // - Not the last value in the array
+                // - When it's the last value in the array and on different OSes
+                // - When it was converted from a single language
+
+                clauses.Add($"\"{TableMapping.Mapper.TableNameMapping(typeof(EpisodeHistory))}\".\"Languages\" LIKE '[% {language},%]'");
+                clauses.Add($"\"{TableMapping.Mapper.TableNameMapping(typeof(EpisodeHistory))}\".\"Languages\" LIKE '[% {language}' || CHAR(13) || '%]'");
+                clauses.Add($"\"{TableMapping.Mapper.TableNameMapping(typeof(EpisodeHistory))}\".\"Languages\" LIKE '[% {language}' || CHAR(10) || '%]'");
+                clauses.Add($"\"{TableMapping.Mapper.TableNameMapping(typeof(EpisodeHistory))}\".\"Languages\" LIKE '[{language}]'");
+            }
+
+            return $"({string.Join(" OR ", clauses)})";
+        }
+
+        private string BuildQualityWhereClause(int[] qualities)
+        {
+            var clauses = new List<string>();
+
+            foreach (var quality in qualities)
+            {
+                clauses.Add($"\"{TableMapping.Mapper.TableNameMapping(typeof(EpisodeHistory))}\".\"Quality\" LIKE '%_quality_: {quality},%'");
+            }
+
+            return $"({string.Join(" OR ", clauses)})";
         }
     }
 }

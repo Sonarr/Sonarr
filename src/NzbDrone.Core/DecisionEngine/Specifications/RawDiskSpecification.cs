@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Text.RegularExpressions;
 using NLog;
 using NzbDrone.Common.Extensions;
@@ -12,7 +12,8 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
         private static readonly Regex[] DiscRegex = new[]
                                                     {
                                                         new Regex(@"(?:dis[ck])(?:[-_. ]\d+[-_. ])(?:(?:(?:480|720|1080|2160)[ip]|)[-_. ])?(?:Blu\-?ray)", RegexOptions.Compiled | RegexOptions.IgnoreCase),
-                                                        new Regex(@"(?:(?:480|720|1080|2160)[ip]|)[-_. ](?:full)[-_. ](?:Blu\-?ray)", RegexOptions.Compiled | RegexOptions.IgnoreCase)
+                                                        new Regex(@"(?:(?:480|720|1080|2160)[ip]|)[-_. ](?:full)[-_. ](?:Blu\-?ray)", RegexOptions.Compiled | RegexOptions.IgnoreCase),
+                                                        new Regex(@"(?:\d?x?M?DVD-?[R59])(?:[ ._]|$)", RegexOptions.Compiled | RegexOptions.IgnoreCase)
                                                     };
 
         private static readonly string[] _dvdContainerTypes = new[] { "vob", "iso" };
@@ -39,8 +40,8 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             {
                 if (regex.IsMatch(subject.Release.Title))
                 {
-                    _logger.Debug("Release contains raw Bluray, rejecting.");
-                    return Decision.Reject("Raw Bluray release");
+                    _logger.Debug("Release contains raw Bluray/DVD, rejecting.");
+                    return Decision.Reject("Raw Bluray/DVD release");
                 }
             }
 

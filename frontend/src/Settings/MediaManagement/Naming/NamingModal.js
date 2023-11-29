@@ -82,13 +82,16 @@ const fileNameTokens = [
 const seriesTokens = [
   { token: '{Series Title}', example: 'The Series Title\'s!' },
   { token: '{Series CleanTitle}', example: 'The Series Title\'s!' },
-  { token: '{Series CleanTitleYear}', example: 'The Series Titles! 2010' },
+  { token: '{Series TitleYear}', example: 'The Series Title\'s! (2010)' },
+  { token: '{Series CleanTitleYear}', example: 'The Series Title\'s! 2010' },
+  { token: '{Series TitleWithoutYear}', example: 'The Series Title\'s!' },
   { token: '{Series CleanTitleWithoutYear}', example: 'The Series Title\'s!' },
   { token: '{Series TitleThe}', example: 'Series Title\'s!, The' },
+  { token: '{Series CleanTitleThe}', example: 'Series Title\'s!, The' },
   { token: '{Series TitleTheYear}', example: 'Series Title\'s!, The (2010)' },
+  { token: '{Series CleanTitleTheYear}', example: 'Series Title\'s!, The 2010' },
   { token: '{Series TitleTheWithoutYear}', example: 'Series Title\'s!, The' },
-  { token: '{Series TitleYear}', example: 'The Series Title\'s! (2010)' },
-  { token: '{Series TitleWithoutYear}', example: 'Series Title\'s!' },
+  { token: '{Series CleanTitleTheWithoutYear}', example: 'Series Title\'s!, The' },
   { token: '{Series TitleFirstCharacter}', example: 'S' },
   { token: '{Series Year}', example: '2010' }
 ];

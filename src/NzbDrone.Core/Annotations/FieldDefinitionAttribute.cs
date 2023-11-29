@@ -42,6 +42,23 @@ namespace NzbDrone.Core.Annotations
         public string RequestAction { get; set; }
     }
 
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
+    public class FieldTokenAttribute : Attribute
+    {
+        public FieldTokenAttribute(TokenField field, string label = "", string token = "", object value = null)
+        {
+            Label = label;
+            Field = field;
+            Token = token;
+            Value = value?.ToString();
+        }
+
+        public string Label { get; set; }
+        public TokenField Field { get; set; }
+        public string Token { get; set; }
+        public string Value { get; set; }
+    }
+
     public class FieldSelectOption
     {
         public int Value { get; set; }
@@ -67,7 +84,8 @@ namespace NzbDrone.Core.Annotations
         OAuth,
         Device,
         TagSelect,
-        RootFolder
+        RootFolder,
+        QualityProfile
     }
 
     public enum HiddenType
@@ -83,5 +101,12 @@ namespace NzbDrone.Core.Annotations
         Password,
         ApiKey,
         UserName
+    }
+
+    public enum TokenField
+    {
+        Label,
+        HelpText,
+        HelpTextWarning
     }
 }

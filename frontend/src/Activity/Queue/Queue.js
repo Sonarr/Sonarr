@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import Alert from 'Components/Alert';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
+import FilterMenu from 'Components/Menu/FilterMenu';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
 import PageToolbar from 'Components/Page/Toolbar/PageToolbar';
@@ -21,6 +22,7 @@ import getSelectedIds from 'Utilities/Table/getSelectedIds';
 import removeOldSelectedState from 'Utilities/Table/removeOldSelectedState';
 import selectAll from 'Utilities/Table/selectAll';
 import toggleSelected from 'Utilities/Table/toggleSelected';
+import QueueFilterModal from './QueueFilterModal';
 import QueueOptionsConnector from './QueueOptionsConnector';
 import QueueRowConnector from './QueueRowConnector';
 import RemoveQueueItemsModal from './RemoveQueueItemsModal';
@@ -151,11 +153,16 @@ class Queue extends Component {
       isEpisodesPopulated,
       episodesError,
       columns,
+      selectedFilterKey,
+      filters,
+      customFilters,
+      count,
       totalRecords,
       isGrabbing,
       isRemoving,
       isRefreshMonitoredDownloadsExecuting,
       onRefreshPress,
+      onFilterSelect,
       ...otherProps
     } = this.props;
 
@@ -218,6 +225,15 @@ class Queue extends Component {
                 iconName={icons.TABLE}
               />
             </TableOptionsModalWrapper>
+
+            <FilterMenu
+              alignMenu={align.RIGHT}
+              selectedFilterKey={selectedFilterKey}
+              filters={filters}
+              customFilters={customFilters}
+              filterModalConnectorComponent={QueueFilterModal}
+              onFilterSelect={onFilterSelect}
+            />
           </PageToolbarSection>
         </PageToolbar>
 
@@ -239,7 +255,11 @@ class Queue extends Component {
           {
             isAllPopulated && !hasError && !items.length ?
               <Alert kind={kinds.INFO}>
-                {translate('QueueIsEmpty')}
+                {
+                  selectedFilterKey !== 'all' && count > 0 ?
+                    translate('QueueFilterHasNoItems') :
+                    translate('QueueIsEmpty')
+                }
               </Alert> :
               null
           }
@@ -323,13 +343,22 @@ Queue.propTypes = {
   isEpisodesPopulated: PropTypes.bool.isRequired,
   episodesError: PropTypes.object,
   columns: PropTypes.arrayOf(PropTypes.object).isRequired,
+  selectedFilterKey: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  filters: PropTypes.arrayOf(PropTypes.object).isRequired,
+  customFilters: PropTypes.arrayOf(PropTypes.object).isRequired,
+  count: PropTypes.number.isRequired,
   totalRecords: PropTypes.number,
   isGrabbing: PropTypes.bool.isRequired,
   isRemoving: PropTypes.bool.isRequired,
   isRefreshMonitoredDownloadsExecuting: PropTypes.bool.isRequired,
   onRefreshPress: PropTypes.func.isRequired,
   onGrabSelectedPress: PropTypes.func.isRequired,
-  onRemoveSelectedPress: PropTypes.func.isRequired
+  onRemoveSelectedPress: PropTypes.func.isRequired,
+  onFilterSelect: PropTypes.func.isRequired
+};
+
+Queue.defaultProps = {
+  count: 0
 };
 
 export default Queue;

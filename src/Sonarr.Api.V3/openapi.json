@@ -59,25 +59,25 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "Username": {
+                  "username": {
                     "type": "string"
                   },
-                  "Password": {
+                  "password": {
                     "type": "string"
                   },
-                  "RememberMe": {
+                  "rememberMe": {
                     "type": "string"
                   }
                 }
               },
               "encoding": {
-                "Username": {
+                "username": {
                   "style": "form"
                 },
-                "Password": {
+                "password": {
                   "style": "form"
                 },
-                "RememberMe": {
+                "rememberMe": {
                   "style": "form"
                 }
               }
@@ -380,6 +380,40 @@
       "get": {
         "tags": [
           "Blocklist"
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          },
+          {
+            "name": "sortKey",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortDirection",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/SortDirection"
+            }
+          }
         ],
         "responses": {
           "200": {
@@ -1051,6 +1085,38 @@
         ],
         "parameters": [
           {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          },
+          {
+            "name": "sortKey",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortDirection",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/SortDirection"
+            }
+          },
+          {
             "name": "includeSeries",
             "in": "query",
             "schema": {
@@ -1072,6 +1138,14 @@
             "schema": {
               "type": "boolean",
               "default": false
+            }
+          },
+          {
+            "name": "monitored",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": true
             }
           }
         ],
@@ -2221,6 +2295,38 @@
         ],
         "parameters": [
           {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          },
+          {
+            "name": "sortKey",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortDirection",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/SortDirection"
+            }
+          },
+          {
             "name": "includeSeries",
             "in": "query",
             "schema": {
@@ -2232,6 +2338,62 @@
             "in": "query",
             "schema": {
               "type": "boolean"
+            }
+          },
+          {
+            "name": "eventType",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "episodeId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "downloadId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "seriesIds",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          },
+          {
+            "name": "languages",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          },
+          {
+            "name": "quality",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "format": "int32"
+              }
             }
           }
         ],
@@ -3627,6 +3789,47 @@
         "tags": [
           "Log"
         ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          },
+          {
+            "name": "sortKey",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortDirection",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/SortDirection"
+            }
+          },
+          {
+            "name": "level",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Success",
@@ -4143,6 +4346,38 @@
         ],
         "parameters": [
           {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          },
+          {
+            "name": "sortKey",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortDirection",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/SortDirection"
+            }
+          },
+          {
             "name": "includeSeries",
             "in": "query",
             "schema": {
@@ -4156,6 +4391,14 @@
             "schema": {
               "type": "boolean",
               "default": false
+            }
+          },
+          {
+            "name": "monitored",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": true
             }
           }
         ],
@@ -4325,21 +4568,21 @@
         ],
         "parameters": [
           {
-            "name": "RenameEpisodes",
+            "name": "renameEpisodes",
             "in": "query",
             "schema": {
               "type": "boolean"
             }
           },
           {
-            "name": "ReplaceIllegalCharacters",
+            "name": "replaceIllegalCharacters",
             "in": "query",
             "schema": {
               "type": "boolean"
             }
           },
           {
-            "name": "ColonReplacementFormat",
+            "name": "colonReplacementFormat",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -4347,7 +4590,7 @@
             }
           },
           {
-            "name": "MultiEpisodeStyle",
+            "name": "multiEpisodeStyle",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -4355,91 +4598,91 @@
             }
           },
           {
-            "name": "StandardEpisodeFormat",
+            "name": "standardEpisodeFormat",
             "in": "query",
             "schema": {
               "type": "string"
             }
           },
           {
-            "name": "DailyEpisodeFormat",
+            "name": "dailyEpisodeFormat",
             "in": "query",
             "schema": {
               "type": "string"
             }
           },
           {
-            "name": "AnimeEpisodeFormat",
+            "name": "animeEpisodeFormat",
             "in": "query",
             "schema": {
               "type": "string"
             }
           },
           {
-            "name": "SeriesFolderFormat",
+            "name": "seriesFolderFormat",
             "in": "query",
             "schema": {
               "type": "string"
             }
           },
           {
-            "name": "SeasonFolderFormat",
+            "name": "seasonFolderFormat",
             "in": "query",
             "schema": {
               "type": "string"
             }
           },
           {
-            "name": "SpecialsFolderFormat",
+            "name": "specialsFolderFormat",
             "in": "query",
             "schema": {
               "type": "string"
             }
           },
           {
-            "name": "IncludeSeriesTitle",
+            "name": "includeSeriesTitle",
             "in": "query",
             "schema": {
               "type": "boolean"
             }
           },
           {
-            "name": "IncludeEpisodeTitle",
+            "name": "includeEpisodeTitle",
             "in": "query",
             "schema": {
               "type": "boolean"
             }
           },
           {
-            "name": "IncludeQuality",
+            "name": "includeQuality",
             "in": "query",
             "schema": {
               "type": "boolean"
             }
           },
           {
-            "name": "ReplaceSpaces",
+            "name": "replaceSpaces",
             "in": "query",
             "schema": {
               "type": "boolean"
             }
           },
           {
-            "name": "Separator",
+            "name": "separator",
             "in": "query",
             "schema": {
               "type": "string"
             }
           },
           {
-            "name": "NumberStyle",
+            "name": "numberStyle",
             "in": "query",
             "schema": {
               "type": "string"
             }
           },
           {
-            "name": "Id",
+            "name": "id",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -4447,7 +4690,7 @@
             }
           },
           {
-            "name": "ResourceName",
+            "name": "resourceName",
             "in": "query",
             "schema": {
               "type": "string"
@@ -5213,6 +5456,38 @@
         ],
         "parameters": [
           {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          },
+          {
+            "name": "sortKey",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortDirection",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/SortDirection"
+            }
+          },
+          {
             "name": "includeUnknownSeriesItems",
             "in": "query",
             "schema": {
@@ -5234,6 +5509,43 @@
             "schema": {
               "type": "boolean",
               "default": false
+            }
+          },
+          {
+            "name": "seriesIds",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          },
+          {
+            "name": "protocol",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/DownloadProtocol"
+            }
+          },
+          {
+            "name": "languages",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          },
+          {
+            "name": "quality",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
             }
           }
         ],
@@ -7185,13 +7497,6 @@
           "sortDirection": {
             "$ref": "#/components/schemas/SortDirection"
           },
-          "filters": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PagingResourceFilter"
-            },
-            "nullable": true
-          },
           "totalRecords": {
             "type": "integer",
             "format": "int32"
@@ -7621,6 +7926,9 @@
           },
           "autoRedownloadFailed": {
             "type": "boolean"
+          },
+          "autoRedownloadFailedFromInteractiveSearch": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -7951,13 +8259,6 @@
           "sortDirection": {
             "$ref": "#/components/schemas/SortDirection"
           },
-          "filters": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PagingResourceFilter"
-            },
-            "nullable": true
-          },
           "totalRecords": {
             "type": "integer",
             "format": "int32"
@@ -8200,13 +8501,6 @@
           "sortDirection": {
             "$ref": "#/components/schemas/SortDirection"
           },
-          "filters": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PagingResourceFilter"
-            },
-            "nullable": true
-          },
           "totalRecords": {
             "type": "integer",
             "format": "int32"
@@ -8260,6 +8554,10 @@
             "nullable": true
           },
           "password": {
+            "type": "string",
+            "nullable": true
+          },
+          "passwordConfirmation": {
             "type": "string",
             "nullable": true
           },
@@ -8510,8 +8808,14 @@
           "enableAutomaticAdd": {
             "type": "boolean"
           },
+          "searchForMissingEpisodes": {
+            "type": "boolean"
+          },
           "shouldMonitor": {
             "$ref": "#/components/schemas/MonitorTypes"
+          },
+          "monitorNewItems": {
+            "$ref": "#/components/schemas/NewItemMonitorTypes"
           },
           "rootFolderPath": {
             "type": "string",
@@ -8890,13 +9194,6 @@
           },
           "sortDirection": {
             "$ref": "#/components/schemas/SortDirection"
-          },
-          "filters": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PagingResourceFilter"
-            },
-            "nullable": true
           },
           "totalRecords": {
             "type": "integer",
@@ -9319,8 +9616,10 @@
           "missing",
           "existing",
           "firstSeason",
+          "lastSeason",
           "latestSeason",
           "pilot",
+          "recent",
           "monitorSpecials",
           "unmonitorSpecials",
           "none"
@@ -9409,6 +9708,13 @@
           }
         },
         "additionalProperties": false
+      },
+      "NewItemMonitorTypes": {
+        "enum": [
+          "all",
+          "none"
+        ],
+        "type": "string"
       },
       "NotificationResource": {
         "type": "object",
@@ -9543,20 +9849,6 @@
             "type": "boolean"
           },
           "testCommand": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "PagingResourceFilter": {
-        "type": "object",
-        "properties": {
-          "key": {
-            "type": "string",
-            "nullable": true
-          },
-          "value": {
             "type": "string",
             "nullable": true
           }
@@ -10096,13 +10388,6 @@
           "sortDirection": {
             "$ref": "#/components/schemas/SortDirection"
           },
-          "filters": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PagingResourceFilter"
-            },
-            "nullable": true
-          },
           "totalRecords": {
             "type": "integer",
             "format": "int32"
@@ -10504,6 +10789,10 @@
             "format": "int32",
             "nullable": true
           },
+          "downloadClient": {
+            "type": "string",
+            "nullable": true
+          },
           "shouldOverride": {
             "type": "boolean",
             "nullable": true
@@ -10774,6 +11063,9 @@
             "type": "boolean",
             "nullable": true
           },
+          "monitorNewItems": {
+            "$ref": "#/components/schemas/NewItemMonitorTypes"
+          },
           "qualityProfileId": {
             "type": "integer",
             "format": "int32",
@@ -10907,6 +11199,9 @@
           "monitored": {
             "type": "boolean"
           },
+          "monitorNewItems": {
+            "$ref": "#/components/schemas/NewItemMonitorTypes"
+          },
           "useSceneNumbering": {
             "type": "boolean"
           },
@@ -10927,6 +11222,11 @@
             "format": "int32"
           },
           "firstAired": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "lastAired": {
             "type": "string",
             "format": "date-time",
             "nullable": true

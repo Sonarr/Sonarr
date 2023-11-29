@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using FluentValidation;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Validation;
@@ -17,7 +18,7 @@ namespace NzbDrone.Core.AutoTagging.Specifications
 
     public class GenreSpecification : AutoTaggingSpecificationBase
     {
-        private static readonly GenreSpecificationValidator Validator = new GenreSpecificationValidator();
+        private static readonly GenreSpecificationValidator Validator = new ();
 
         public override int Order => 1;
         public override string ImplementationName => "Genre";
@@ -27,7 +28,7 @@ namespace NzbDrone.Core.AutoTagging.Specifications
 
         protected override bool IsSatisfiedByWithoutNegate(Series series)
         {
-            return series.Genres.Any(genre => Value.Contains(genre));
+            return series.Genres.Any(genre => Value.ContainsIgnoreCase(genre));
         }
 
         public override NzbDroneValidationResult Validate()

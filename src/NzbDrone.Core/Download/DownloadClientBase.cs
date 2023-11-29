@@ -6,6 +6,7 @@ using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Indexers;
+using NzbDrone.Core.Localization;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.RemotePathMappings;
 using NzbDrone.Core.ThingiProvider;
@@ -20,6 +21,7 @@ namespace NzbDrone.Core.Download
         protected readonly IDiskProvider _diskProvider;
         protected readonly IRemotePathMappingService _remotePathMappingService;
         protected readonly Logger _logger;
+        protected readonly ILocalizationService _localizationService;
 
         public abstract string Name { get; }
 
@@ -41,12 +43,14 @@ namespace NzbDrone.Core.Download
         protected DownloadClientBase(IConfigService configService,
             IDiskProvider diskProvider,
             IRemotePathMappingService remotePathMappingService,
-            Logger logger)
+            Logger logger,
+            ILocalizationService localizationService)
         {
             _configService = configService;
             _diskProvider = diskProvider;
             _remotePathMappingService = remotePathMappingService;
             _logger = logger;
+            _localizationService = localizationService;
         }
 
         public override string ToString()

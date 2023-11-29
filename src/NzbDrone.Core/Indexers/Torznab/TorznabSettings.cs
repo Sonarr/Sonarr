@@ -51,11 +51,14 @@ namespace NzbDrone.Core.Indexers.Torznab
             MinimumSeeders = IndexerDefaults.MINIMUM_SEEDERS;
         }
 
-        [FieldDefinition(7, Type = FieldType.Number, Label = "Minimum Seeders", HelpText = "Minimum number of seeders required.", Advanced = true)]
+        [FieldDefinition(7, Type = FieldType.Number, Label = "IndexerSettingsMinimumSeeders", HelpText = "IndexerSettingsMinimumSeedersHelpText", Advanced = true)]
         public int MinimumSeeders { get; set; }
 
         [FieldDefinition(8)]
         public SeedCriteriaSettings SeedCriteria { get; set; } = new SeedCriteriaSettings();
+
+        [FieldDefinition(9, Type = FieldType.Checkbox, Label = "Reject Blocklisted Torrent Hashes While Grabbing", HelpText = "If a torrent is blocked by hash it may not properly be rejected during RSS/Search for some indexers, enabling this will allow it to be rejected after the torrent is grabbed, but before it is sent to the client.", Advanced = true)]
+        public bool RejectBlocklistedTorrentHashesWhileGrabbing { get; set; }
 
         public override NzbDroneValidationResult Validate()
         {

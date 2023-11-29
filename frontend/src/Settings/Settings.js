@@ -110,7 +110,7 @@ function Settings() {
         </Link>
 
         <div className={styles.summary}>
-          {translate('MetadataSettingsSummary')}
+          {translate('MetadataSettingsSeriesSummary')}
         </div>
 
         <Link
@@ -121,7 +121,7 @@ function Settings() {
         </Link>
 
         <div className={styles.summary}>
-          {translate('MetadataSourceSettingsSummary')}
+          {translate('MetadataSourceSettingsSeriesSummary')}
         </div>
 
         <Link

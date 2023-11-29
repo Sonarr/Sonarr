@@ -26,24 +26,24 @@ namespace NzbDrone.Core.ImportLists.Trakt.Popular
                 return listItems;
             }
 
-            var jsonResponse = new List<TraktSeriesResource>();
+            var traktSeries = new List<TraktSeriesResource>();
 
             if (_settings.TraktListType == (int)TraktPopularListType.Popular)
             {
-                jsonResponse = STJson.Deserialize<List<TraktSeriesResource>>(_importResponse.Content);
+                traktSeries = STJson.Deserialize<List<TraktSeriesResource>>(_importResponse.Content);
             }
             else
             {
-                jsonResponse = STJson.Deserialize<List<TraktResponse>>(_importResponse.Content).SelectList(c => c.Show);
+                traktSeries = STJson.Deserialize<List<TraktResponse>>(_importResponse.Content).SelectList(c => c.Show);
             }
 
-            // no movies were return
-            if (jsonResponse == null)
+            // no series were returned
+            if (traktSeries == null)
             {
                 return listItems;
             }
 
-            foreach (var series in jsonResponse)
+            foreach (var series in traktSeries)
             {
                 listItems.AddIfNotNull(new ImportListItemInfo()
                 {

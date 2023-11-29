@@ -6,12 +6,12 @@ using NzbDrone.Core.Messaging.Events;
 
 namespace NzbDrone.Core.Profiles.Qualities
 {
-    public interface IProfileRepository : IBasicRepository<QualityProfile>
+    public interface IQualityProfileRepository : IBasicRepository<QualityProfile>
     {
         bool Exists(int id);
     }
 
-    public class QualityProfileRepository : BasicRepository<QualityProfile>, IProfileRepository
+    public class QualityProfileRepository : BasicRepository<QualityProfile>, IQualityProfileRepository
     {
         private readonly ICustomFormatService _customFormatService;
 

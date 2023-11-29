@@ -19,6 +19,11 @@ namespace NzbDrone.Core.ImportLists.Trakt.User
 
         public override string Name => "Trakt User";
 
+        public override IParseImportListResponse GetParser()
+        {
+            return new TraktUserParser(Settings);
+        }
+
         public override IImportListRequestGenerator GetRequestGenerator()
         {
             return new TraktUserRequestGenerator()

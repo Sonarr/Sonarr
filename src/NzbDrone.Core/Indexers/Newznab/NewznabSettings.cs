@@ -60,22 +60,23 @@ namespace NzbDrone.Core.Indexers.Newznab
         [FieldDefinition(0, Label = "URL")]
         public string BaseUrl { get; set; }
 
-        [FieldDefinition(1, Label = "API Path", HelpText = "Path to the api, usually /api", Advanced = true)]
+        [FieldDefinition(1, Label = "IndexerSettingsApiPath", HelpText = "IndexerSettingsApiPathHelpText", Advanced = true)]
+        [FieldToken(TokenField.HelpText, "IndexerSettingsApiPath", "url", "/api")]
         public string ApiPath { get; set; }
 
-        [FieldDefinition(2, Label = "API Key", Privacy = PrivacyLevel.ApiKey)]
+        [FieldDefinition(2, Label = "ApiKey", Privacy = PrivacyLevel.ApiKey)]
         public string ApiKey { get; set; }
 
-        [FieldDefinition(3, Label = "Categories", Type = FieldType.Select, SelectOptionsProviderAction = "newznabCategories", HelpText = "Drop down list, leave blank to disable standard/daily shows")]
+        [FieldDefinition(3, Label = "IndexerSettingsCategories", Type = FieldType.Select, SelectOptionsProviderAction = "newznabCategories", HelpText = "IndexerSettingsCategoriesHelpText")]
         public IEnumerable<int> Categories { get; set; }
 
-        [FieldDefinition(4, Label = "Anime Categories", Type = FieldType.Select, SelectOptionsProviderAction = "newznabCategories", HelpText = "Drop down list, leave blank to disable anime")]
+        [FieldDefinition(4, Label = "IndexerSettingsAnimeCategories", Type = FieldType.Select, SelectOptionsProviderAction = "newznabCategories", HelpText = "IndexerSettingsAnimeCategoriesHelpText")]
         public IEnumerable<int> AnimeCategories { get; set; }
 
-        [FieldDefinition(5, Label = "Anime Standard Format Search", Type = FieldType.Checkbox, HelpText = "Also search for anime using the standard numbering")]
+        [FieldDefinition(5, Label = "IndexerSettingsAnimeStandardFormatSearch", Type = FieldType.Checkbox, HelpText = "IndexerSettingsAnimeStandardFormatSearchHelpText")]
         public bool AnimeStandardFormatSearch { get; set; }
 
-        [FieldDefinition(6, Label = "Additional Parameters", HelpText = "Additional Newznab parameters", Advanced = true)]
+        [FieldDefinition(6, Label = "IndexerSettingsAdditionalParameters", HelpText = "IndexerSettingsAdditionalNewznabParametersHelpText", Advanced = true)]
         public string AdditionalParameters { get; set; }
 
         // Field 7 is used by TorznabSettings MinimumSeeders

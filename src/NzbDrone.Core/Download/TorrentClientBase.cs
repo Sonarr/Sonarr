@@ -6,9 +6,11 @@ using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
+using NzbDrone.Core.Blocklisting;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Exceptions;
 using NzbDrone.Core.Indexers;
+using NzbDrone.Core.Localization;
 using NzbDrone.Core.MediaFiles.TorrentInfo;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Parser.Model;
@@ -21,17 +23,21 @@ namespace NzbDrone.Core.Download
         where TSettings : IProviderConfig, new()
     {
         protected readonly IHttpClient _httpClient;
+        private readonly IBlocklistService _blocklistService;
         protected readonly ITorrentFileInfoReader _torrentFileInfoReader;
 
         protected TorrentClientBase(ITorrentFileInfoReader torrentFileInfoReader,
-                                    IHttpClient httpClient,
-                                    IConfigService configService,
-                                    IDiskProvider diskProvider,
-                                    IRemotePathMappingService remotePathMappingService,
-                                    Logger logger)
-            : base(configService, diskProvider, remotePathMappingService, logger)
+            IHttpClient httpClient,
+            IConfigService configService,
+            IDiskProvider diskProvider,
+            IRemotePathMappingService remotePathMappingService,
+            ILocalizationService localizationService,
+            IBlocklistService blocklistService,
+            Logger logger)
+            : base(configService, diskProvider, remotePathMappingService, logger, localizationService)
         {
             _httpClient = httpClient;
+            _blocklistService = blocklistService;
             _torrentFileInfoReader = torrentFileInfoReader;
         }
 
@@ -86,7 +92,7 @@ namespace NzbDrone.Core.Download
                 {
                     try
                     {
-                        return DownloadFromMagnetUrl(remoteEpisode, magnetUrl);
+                        return DownloadFromMagnetUrl(remoteEpisode, indexer, magnetUrl);
                     }
                     catch (NotSupportedException ex)
                     {
@@ -100,7 +106,7 @@ namespace NzbDrone.Core.Download
                 {
                     try
                     {
-                        return DownloadFromMagnetUrl(remoteEpisode, magnetUrl);
+                        return DownloadFromMagnetUrl(remoteEpisode, indexer, magnetUrl);
                     }
                     catch (NotSupportedException ex)
                     {
@@ -147,7 +153,7 @@ namespace NzbDrone.Core.Download
                     {
                         if (locationHeader.StartsWith("magnet:"))
                         {
-                            return DownloadFromMagnetUrl(remoteEpisode, locationHeader);
+                            return DownloadFromMagnetUrl(remoteEpisode, indexer, locationHeader);
                         }
 
                         request.Url += new HttpUri(locationHeader);
@@ -190,6 +196,9 @@ namespace NzbDrone.Core.Download
 
             var filename = string.Format("{0}.torrent", FileNameBuilder.CleanFileName(remoteEpisode.Release.Title));
             var hash = _torrentFileInfoReader.GetHashFromTorrentFile(torrentFile);
+
+            EnsureReleaseIsNotBlocklisted(remoteEpisode, indexer, hash);
+
             var actualHash = AddFromTorrentFile(remoteEpisode, hash, filename, torrentFile);
 
             if (actualHash.IsNotNullOrWhiteSpace() && hash != actualHash)
@@ -203,7 +212,7 @@ namespace NzbDrone.Core.Download
             return actualHash;
         }
 
-        private string DownloadFromMagnetUrl(RemoteEpisode remoteEpisode, string magnetUrl)
+        private string DownloadFromMagnetUrl(RemoteEpisode remoteEpisode, IIndexer indexer, string magnetUrl)
         {
             string hash = null;
             string actualHash = null;
@@ -221,6 +230,8 @@ namespace NzbDrone.Core.Download
 
             if (hash != null)
             {
+                EnsureReleaseIsNotBlocklisted(remoteEpisode, indexer, hash);
+
                 actualHash = AddFromMagnetLink(remoteEpisode, hash, magnetUrl);
             }
 
@@ -233,6 +244,31 @@ namespace NzbDrone.Core.Download
             }
 
             return actualHash;
+        }
+
+        private void EnsureReleaseIsNotBlocklisted(RemoteEpisode remoteEpisode, IIndexer indexer, string hash)
+        {
+            var indexerSettings = indexer?.Definition?.Settings as ITorrentIndexerSettings;
+            var torrentInfo = remoteEpisode.Release as TorrentInfo;
+            var torrentInfoHash = torrentInfo?.InfoHash;
+
+            // If the release didn't come from an interactive search,
+            // the hash wasn't known during processing and the
+            // indexer is configured to reject blocklisted releases
+            // during grab check if it's already been blocklisted.
+
+            if (torrentInfo != null && torrentInfoHash.IsNullOrWhiteSpace())
+            {
+                // If the hash isn't known from parsing we set it here so it can be used for blocklisting.
+                torrentInfo.InfoHash = hash;
+
+                if (remoteEpisode.ReleaseSource != ReleaseSourceType.InteractiveSearch &&
+                    indexerSettings?.RejectBlocklistedTorrentHashesWhileGrabbing == true &&
+                    _blocklistService.BlocklistedTorrentHash(remoteEpisode.Series.Id, hash))
+                {
+                    throw new ReleaseBlockedException(remoteEpisode.Release, "Release previously added to blocklist");
+                }
+            }
         }
     }
 }

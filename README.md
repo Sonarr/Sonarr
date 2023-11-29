@@ -1,5 +1,10 @@
 # <img width="24px" src="./Logo/256.png" alt="Sonarr"></img> Sonarr 
 
+[![Translated](https://translate.servarr.com/widgets/servarr/-/sonarr/svg-badge.svg)](https://translate.servarr.com/engage/servarr/)
+[![Backers on Open Collective](https://opencollective.com/Sonarr/backers/badge.svg)](#backers)
+[![Sponsors on Open Collective](https://opencollective.com/Sonarr/sponsors/badge.svg)](#sponsors)
+[![Mega Sponsors on Open Collective](https://opencollective.com/Sonarr/megasponsors/badge.svg)](#mega-sponsors)
+
 Sonarr is a PVR for Usenet and BitTorrent users. It can monitor multiple RSS feeds for new episodes of your favorite shows and will grab, sort and rename them. It can also be configured to automatically upgrade the quality of files already downloaded when a better quality format becomes available.
 
 ## Getting Started

@@ -339,6 +339,20 @@ namespace NzbDrone.Core.Configuration
             }
         }
 
+        public void MigrateConfigFile()
+        {
+            if (!File.Exists(_configFile))
+            {
+                return;
+            }
+
+            // If SSL is enabled and a cert hash is still in the config file disable SSL
+            if (EnableSsl && GetValue("SslCertHash", null).IsNotNullOrWhiteSpace())
+            {
+                SetValue("EnableSsl", false);
+            }
+        }
+
         private void DeleteOldValues()
         {
             var xDoc = LoadConfigFile();
@@ -410,6 +424,7 @@ namespace NzbDrone.Core.Configuration
 
         public void HandleAsync(ApplicationStartedEvent message)
         {
+            MigrateConfigFile();
             EnsureDefaultConfigFile();
             DeleteOldValues();
         }
