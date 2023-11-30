@@ -991,6 +991,7 @@
   "MonitorLastSeasonDescription": "Monitor all episodes of the last season",
   "MonitorMissingEpisodes": "Missing Episodes",
   "MonitorMissingEpisodesDescription": "Monitor episodes that do not have files or have not aired yet",
+  "MonitorNewItems": "Monitor New Items",
   "MonitorNewSeasons": "Monitor New Seasons",
   "MonitorNewSeasonsHelpText": "Which new seasons should be monitored automatically",
   "MonitorNoEpisodes": "None",
