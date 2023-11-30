@@ -82,6 +82,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("The Bad Batch (2021) - S01E01 - Aftermath (1080p DSNP WEB-DL x265 YOGI).mkv", "YOGI")]
         [TestCase("Line of Duty (2012) - S01E01 - Episode 1 (1080p BluRay x265 r00t).mkv", "r00t")]
         [TestCase("Rich & Shameless - S01E01 - Girls Gone Wild Exposed (720p x265 EDGE2020).mkv", "EDGE2020")]
+        [TestCase("Tensei.Shitara.Ken.Deshita.S01E02.1080p.BluRay.Remux.AVC.FLAC.2.0-E.N.D", "E.N.D")]
         public void should_parse_exception_release_group(string title, string expected)
         {
             Parser.Parser.ParseReleaseGroup(title).Should().Be(expected);
