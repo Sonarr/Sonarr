@@ -321,6 +321,8 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                     return "DV";
                 case HdrFormat.DolbyVisionHdr10:
                     return "DV HDR10";
+                case HdrFormat.DolbyVisionHdr10Plus:
+                    return "DV HDR10Plus";
                 case HdrFormat.DolbyVisionHlg:
                     return "DV HLG";
                 case HdrFormat.DolbyVisionSdr:
