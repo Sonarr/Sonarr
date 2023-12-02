@@ -38,25 +38,25 @@ namespace NzbDrone.Core.Notifications.Twitter
             AuthorizeNotification = "startOAuth";
         }
 
-        [FieldDefinition(0, Label = "Consumer Key", Privacy = PrivacyLevel.ApiKey, HelpText = "Consumer key from a Twitter application", HelpLink = "https://wiki.servarr.com/useful-tools#twitter-connect")]
+        [FieldDefinition(0, Label = "NotificationsTwitterSettingsConsumerKey", Privacy = PrivacyLevel.ApiKey, HelpText = "NotificationsTwitterSettingsConsumerKeyHelpText", HelpLink = "https://wiki.servarr.com/useful-tools#twitter-connect")]
         public string ConsumerKey { get; set; }
 
-        [FieldDefinition(1, Label = "Consumer Secret", Privacy = PrivacyLevel.ApiKey, HelpText = "Consumer secret from a Twitter application", HelpLink = "https://wiki.servarr.com/useful-tools#twitter-connect")]
+        [FieldDefinition(1, Label = "NotificationsTwitterSettingsConsumerSecret", Privacy = PrivacyLevel.ApiKey, HelpText = "NotificationsTwitterSettingsConsumerSecretHelpText", HelpLink = "https://wiki.servarr.com/useful-tools#twitter-connect")]
         public string ConsumerSecret { get; set; }
 
-        [FieldDefinition(2, Label = "Access Token", Privacy = PrivacyLevel.ApiKey, Advanced = true)]
+        [FieldDefinition(2, Label = "NotificationsTwitterSettingsAccessToken", Privacy = PrivacyLevel.ApiKey, Advanced = true)]
         public string AccessToken { get; set; }
 
-        [FieldDefinition(3, Label = "Access Token Secret", Privacy = PrivacyLevel.ApiKey, Advanced = true)]
+        [FieldDefinition(3, Label = "NotificationsTwitterSettingsAccessTokenSecret", Privacy = PrivacyLevel.ApiKey, Advanced = true)]
         public string AccessTokenSecret { get; set; }
 
-        [FieldDefinition(4, Label = "Mention", HelpText = "Mention this user in sent tweets")]
+        [FieldDefinition(4, Label = "NotificationsTwitterSettingsMention", HelpText = "NotificationsTwitterSettingsMentionHelpText")]
         public string Mention { get; set; }
 
-        [FieldDefinition(5, Label = "Direct Message", Type = FieldType.Checkbox, HelpText = "Send a direct message instead of a public message")]
+        [FieldDefinition(5, Label = "NotificationsTwitterSettingsDirectMessage", Type = FieldType.Checkbox, HelpText = "NotificationsTwitterSettingsDirectMessageHelpText")]
         public bool DirectMessage { get; set; }
 
-        [FieldDefinition(6, Label = "Connect to Twitter", Type = FieldType.OAuth)]
+        [FieldDefinition(6, Label = "NotificationsTwitterSettingsConnectToTwitter", Type = FieldType.OAuth)]
         public string AuthorizeNotification { get; set; }
 
         public NzbDroneValidationResult Validate()

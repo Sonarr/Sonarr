@@ -5,6 +5,7 @@ using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
+using NzbDrone.Core.Localization;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.MediaInfo;
 using NzbDrone.Core.Notifications.Trakt.Resource;
@@ -18,12 +19,14 @@ namespace NzbDrone.Core.Notifications.Trakt
     {
         private readonly ITraktProxy _proxy;
         private readonly INotificationRepository _notificationRepository;
+        private readonly ILocalizationService _localizationService;
         private readonly Logger _logger;
 
-        public Trakt(ITraktProxy proxy, INotificationRepository notificationRepository, Logger logger)
+        public Trakt(ITraktProxy proxy, INotificationRepository notificationRepository, ILocalizationService localizationService, Logger logger)
         {
             _proxy = proxy;
             _notificationRepository = notificationRepository;
+            _localizationService = localizationService;
             _logger = logger;
         }
 
@@ -70,20 +73,20 @@ namespace NzbDrone.Core.Notifications.Trakt
                 {
                     _logger.Error(ex, "Access Token is invalid: " + ex.Message);
 
-                    failures.Add(new ValidationFailure("Token", "Access Token is invalid"));
+                    failures.Add(new ValidationFailure("Token", _localizationService.GetLocalizedString("NotificationsValidationInvalidAccessToken")));
                 }
                 else
                 {
                     _logger.Error(ex, "Unable to send test message: " + ex.Message);
 
-                    failures.Add(new ValidationFailure("Token", "Unable to send test message"));
+                    failures.Add(new ValidationFailure("Token", _localizationService.GetLocalizedString("NotificationsValidationUnableToSendTestMessage", new Dictionary<string, object> { { "exceptionMessage", ex.Message } })));
                 }
             }
             catch (Exception ex)
             {
                 _logger.Error(ex, "Unable to send test message: " + ex.Message);
 
-                failures.Add(new ValidationFailure("", "Unable to send test message"));
+                failures.Add(new ValidationFailure("", _localizationService.GetLocalizedString("NotificationsValidationUnableToSendTestMessage", new Dictionary<string, object> { { "exceptionMessage", ex.Message } })));
             }
 
             return new ValidationResult(failures);

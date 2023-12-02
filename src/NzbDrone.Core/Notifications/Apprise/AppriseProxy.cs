@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using FluentValidation.Results;
@@ -6,6 +7,7 @@ using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Common.Serializer;
+using NzbDrone.Core.Localization;
 
 namespace NzbDrone.Core.Notifications.Apprise
 {
@@ -18,11 +20,13 @@ namespace NzbDrone.Core.Notifications.Apprise
     public class AppriseProxy : IAppriseProxy
     {
         private readonly IHttpClient _httpClient;
+        private readonly ILocalizationService _localizationService;
         private readonly Logger _logger;
 
-        public AppriseProxy(IHttpClient httpClient, Logger logger)
+        public AppriseProxy(IHttpClient httpClient, ILocalizationService localizationService, Logger logger)
         {
             _httpClient = httpClient;
+            _localizationService = localizationService;
             _logger = logger;
         }
 
@@ -92,7 +96,7 @@ namespace NzbDrone.Core.Notifications.Apprise
                 if (httpException.Response.StatusCode == HttpStatusCode.Unauthorized)
                 {
                     _logger.Error(ex, $"HTTP Auth credentials are invalid: {0}", ex.Message);
-                    return new ValidationFailure("AuthUsername", $"HTTP Auth credentials are invalid: {ex.Message}");
+                    return new ValidationFailure("AuthUsername", _localizationService.GetLocalizedString("NotificationsValidationInvalidHttpCredentials", new Dictionary<string, object> { { "exceptionMessage", ex.Message } }));
                 }
 
                 if (httpException.Response.Content.IsNotNullOrWhiteSpace())
@@ -100,16 +104,16 @@ namespace NzbDrone.Core.Notifications.Apprise
                     var error = Json.Deserialize<AppriseError>(httpException.Response.Content);
 
                     _logger.Error(ex, $"Unable to send test message. Response from API: {0}", error.Error);
-                    return new ValidationFailure(string.Empty, $"Unable to send test message. Response from API: {error.Error}");
+                    return new ValidationFailure(string.Empty, _localizationService.GetLocalizedString("NotificationsValidationUnableToSendTestMessageApiResponse", new Dictionary<string, object> { { "error", error.Error } }));
                 }
 
                 _logger.Error(ex, "Unable to send test message. Server connection failed: ({0}) {1}", httpException.Response.StatusCode, ex.Message);
-                return new ValidationFailure("Url", $"Unable to connect to Apprise API. Server connection failed: ({httpException.Response.StatusCode}) {ex.Message}");
+                return new ValidationFailure("Url", _localizationService.GetLocalizedString("NotificationsValidationUnableToConnectToApi", new Dictionary<string, object> { { "service", "Apprise" }, { "responseCode", httpException.Response.StatusCode }, { "exceptionMessage", ex.Message } }));
             }
             catch (Exception ex)
             {
                 _logger.Error(ex, "Unable to send test message: {0}", ex.Message);
-                return new ValidationFailure("Url", $"Unable to send test message: {ex.Message}");
+                return new ValidationFailure("Url", _localizationService.GetLocalizedString("NotificationsValidationUnableToSendTestMessage", new Dictionary<string, object> { { "exceptionMessage", ex.Message } }));
             }
 
             return null;

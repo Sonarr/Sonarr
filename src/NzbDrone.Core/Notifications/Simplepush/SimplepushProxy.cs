@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common.Http;
+using NzbDrone.Core.Localization;
 
 namespace NzbDrone.Core.Notifications.Simplepush
 {
@@ -15,11 +17,13 @@ namespace NzbDrone.Core.Notifications.Simplepush
     {
         private const string URL = "https://api.simplepush.io/send";
         private readonly IHttpClient _httpClient;
+        private readonly ILocalizationService _localizationService;
         private readonly Logger _logger;
 
-        public SimplepushProxy(IHttpClient httpClient, Logger logger)
+        public SimplepushProxy(IHttpClient httpClient, ILocalizationService localizationService, Logger logger)
         {
             _httpClient = httpClient;
+            _localizationService = localizationService;
             _logger = logger;
         }
 
@@ -49,7 +53,7 @@ namespace NzbDrone.Core.Notifications.Simplepush
             catch (Exception ex)
             {
                 _logger.Error(ex, "Unable to send test message");
-                return new ValidationFailure("ApiKey", "Unable to send test message");
+                return new ValidationFailure("ApiKey", _localizationService.GetLocalizedString("NotificationsValidationUnableToSendTestMessage", new Dictionary<string, object> { { "exceptionMessage", ex.Message } }));
             }
 
             return null;

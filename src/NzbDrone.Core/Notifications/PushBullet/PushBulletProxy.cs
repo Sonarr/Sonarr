@@ -8,6 +8,7 @@ using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Common.Serializer;
+using NzbDrone.Core.Localization;
 
 namespace NzbDrone.Core.Notifications.PushBullet
 {
@@ -23,11 +24,13 @@ namespace NzbDrone.Core.Notifications.PushBullet
         private const string PUSH_URL = "https://api.pushbullet.com/v2/pushes";
         private const string DEVICE_URL = "https://api.pushbullet.com/v2/devices";
         private readonly IHttpClient _httpClient;
+        private readonly ILocalizationService _localizationService;
         private readonly Logger _logger;
 
-        public PushBulletProxy(IHttpClient httpClient, Logger logger)
+        public PushBulletProxy(IHttpClient httpClient, ILocalizationService localizationService, Logger logger)
         {
             _httpClient = httpClient;
+            _localizationService = localizationService;
             _logger = logger;
         }
 
@@ -134,16 +137,16 @@ namespace NzbDrone.Core.Notifications.PushBullet
                 if (ex.Response.StatusCode == HttpStatusCode.Unauthorized)
                 {
                     _logger.Error(ex, "API Key is invalid");
-                    return new ValidationFailure("ApiKey", "API Key is invalid");
+                    return new ValidationFailure("ApiKey", _localizationService.GetLocalizedString("NotificationsValidationInvalidApiKey"));
                 }
 
                 _logger.Error(ex, "Unable to send test message");
-                return new ValidationFailure("ApiKey", "Unable to send test message");
+                return new ValidationFailure("ApiKey", _localizationService.GetLocalizedString("NotificationsValidationUnableToSendTestMessage", new Dictionary<string, object> { { "exceptionMessage", ex.Message } }));
             }
             catch (Exception ex)
             {
                 _logger.Error(ex, "Unable to send test message");
-                return new ValidationFailure("", "Unable to send test message");
+                return new ValidationFailure("", _localizationService.GetLocalizedString("NotificationsValidationUnableToSendTestMessage", new Dictionary<string, object> { { "exceptionMessage", ex.Message } }));
             }
 
             return null;

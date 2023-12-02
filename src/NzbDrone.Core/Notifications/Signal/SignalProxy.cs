@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Text;
 using FluentValidation.Results;
@@ -6,6 +7,7 @@ using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Common.Serializer;
+using NzbDrone.Core.Localization;
 
 namespace NzbDrone.Core.Notifications.Signal
 {
@@ -18,11 +20,13 @@ namespace NzbDrone.Core.Notifications.Signal
     public class SignalProxy : ISignalProxy
     {
         private readonly IHttpClient _httpClient;
+        private readonly ILocalizationService _localizationService;
         private readonly Logger _logger;
 
-        public SignalProxy(IHttpClient httpClient, Logger logger)
+        public SignalProxy(IHttpClient httpClient, ILocalizationService localizationService, Logger logger)
         {
             _httpClient = httpClient;
+            _localizationService = localizationService;
             _logger = logger;
         }
 
@@ -71,7 +75,7 @@ namespace NzbDrone.Core.Notifications.Signal
             catch (WebException ex)
             {
                 _logger.Error(ex, "Unable to send test message: {0}", ex.Message);
-                return new ValidationFailure("Host", $"Unable to send test message: {ex.Message}");
+                return new ValidationFailure("Host", _localizationService.GetLocalizedString("NotificationsValidationUnableToSendTestMessage", new Dictionary<string, object> { { "exceptionMessage", ex.Message } }));
             }
             catch (HttpException ex)
             {
@@ -81,7 +85,7 @@ namespace NzbDrone.Core.Notifications.Signal
                 {
                     if (ex.Response.Content.ContainsIgnoreCase("400 The plain HTTP request was sent to HTTPS port"))
                     {
-                        return new ValidationFailure("UseSsl", "SSL seems to be required");
+                        return new ValidationFailure("UseSsl", _localizationService.GetLocalizedString("NotificationsSignalValidationSslRequired"));
                     }
 
                     var error = Json.Deserialize<SignalError>(ex.Response.Content);
@@ -97,20 +101,20 @@ namespace NzbDrone.Core.Notifications.Signal
                         property = "SenderNumber";
                     }
 
-                    return new ValidationFailure(property, $"Unable to send test message: {error.Error}");
+                    return new ValidationFailure(property, _localizationService.GetLocalizedString("NotificationsValidationUnableToSendTestMessage", new Dictionary<string, object> { { "exceptionMessage", error.Error } }));
                 }
 
                 if (ex.Response.StatusCode == HttpStatusCode.Unauthorized)
                 {
-                    return new ValidationFailure("AuthUsername", "Login/Password invalid");
+                    return new ValidationFailure("AuthUsername", _localizationService.GetLocalizedString("NotificationsValidationInvalidUsernamePassword"));
                 }
 
-                return new ValidationFailure("Host", $"Unable to send test message: {ex.Message}");
+                return new ValidationFailure("Host", _localizationService.GetLocalizedString("NotificationsValidationUnableToSendTestMessage", new Dictionary<string, object> { { "exceptionMessage", ex.Message } }));
             }
             catch (Exception ex)
             {
                 _logger.Error(ex, "Unable to send test message: {0}", ex.Message);
-                return new ValidationFailure("Host", $"Unable to send test message: {ex.Message}");
+                return new ValidationFailure("Host", _localizationService.GetLocalizedString("NotificationsValidationUnableToSendTestMessage", new Dictionary<string, object> { { "exceptionMessage", ex.Message } }));
             }
 
             return null;

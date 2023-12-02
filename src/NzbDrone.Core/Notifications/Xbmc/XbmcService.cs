@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using FluentValidation.Results;
 using NLog;
+using NzbDrone.Core.Localization;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Notifications.Xbmc
@@ -17,12 +19,13 @@ namespace NzbDrone.Core.Notifications.Xbmc
     public class XbmcService : IXbmcService
     {
         private readonly IXbmcJsonApiProxy _proxy;
+        private readonly ILocalizationService _localizationService;
         private readonly Logger _logger;
 
-        public XbmcService(IXbmcJsonApiProxy proxy,
-                           Logger logger)
+        public XbmcService(IXbmcJsonApiProxy proxy, ILocalizationService localizationService, Logger logger)
         {
             _proxy = proxy;
+            _localizationService = localizationService;
             _logger = logger;
         }
 
@@ -130,7 +133,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
             catch (Exception ex)
             {
                 _logger.Error(ex, "Unable to send test message");
-                return new ValidationFailure("Host", "Unable to send test message");
+                return new ValidationFailure("Host", _localizationService.GetLocalizedString("NotificationsValidationUnableToSendTestMessage", new Dictionary<string, object> { { "exceptionMessage", ex.Message } }));
             }
 
             return null;

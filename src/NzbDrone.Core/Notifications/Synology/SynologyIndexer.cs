@@ -3,6 +3,7 @@ using System.IO;
 using FluentValidation.Results;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Core.Localization;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Tv;
 
@@ -11,10 +12,12 @@ namespace NzbDrone.Core.Notifications.Synology
     public class SynologyIndexer : NotificationBase<SynologyIndexerSettings>
     {
         private readonly ISynologyIndexerProxy _indexerProxy;
+        private readonly ILocalizationService _localizationService;
 
-        public SynologyIndexer(ISynologyIndexerProxy indexerProxy)
+        public SynologyIndexer(ISynologyIndexerProxy indexerProxy, ILocalizationService localizationService)
         {
             _indexerProxy = indexerProxy;
+            _localizationService = localizationService;
         }
 
         public override string Link => "https://www.synology.com";
@@ -88,12 +91,12 @@ namespace NzbDrone.Core.Notifications.Synology
         {
             if (!OsInfo.IsLinux)
             {
-                return new ValidationFailure(null, "Must be a Synology");
+                return new ValidationFailure(string.Empty, _localizationService.GetLocalizedString("NotificationsSynologyValidationInvalidOs"));
             }
 
             if (!_indexerProxy.Test())
             {
-                return new ValidationFailure(null, "Not a Synology or synoindex not available");
+                return new ValidationFailure(string.Empty, _localizationService.GetLocalizedString("NotificationsSynologyValidationTestFailed"));
             }
 
             return null;

@@ -68,25 +68,25 @@ namespace NzbDrone.Core.Notifications.Discord
 
         private static readonly DiscordSettingsValidator Validator = new ();
 
-        [FieldDefinition(0, Label = "Webhook URL", HelpText = "Discord channel webhook url")]
+        [FieldDefinition(0, Label = "NotificationsSettingsWebhookUrl", HelpText = "NotificationsDiscordSettingsWebhookUrlHelpText")]
         public string WebHookUrl { get; set; }
 
-        [FieldDefinition(1, Label = "Username", Privacy = PrivacyLevel.UserName, HelpText = "The username to post as, defaults to Discord webhook default")]
+        [FieldDefinition(1, Label = "Username", Privacy = PrivacyLevel.UserName, HelpText = "NotificationsDiscordSettingsUsernameHelpText")]
         public string Username { get; set; }
 
-        [FieldDefinition(2, Label = "Avatar", HelpText = "Change the avatar that is used for messages from this integration", Type = FieldType.Textbox)]
+        [FieldDefinition(2, Label = "NotificationsDiscordSettingsAvatar", HelpText = "NotificationsDiscordSettingsAvatarHelpText", Type = FieldType.Textbox)]
         public string Avatar { get; set; }
 
-        [FieldDefinition(3, Label = "Author", Advanced = true, HelpText = "Override the embed author that shows for this notification, Blank is instance name", Type = FieldType.Textbox)]
+        [FieldDefinition(3, Label = "NotificationsDiscordSettingsAuthor", Advanced = true, HelpText = "NotificationsDiscordSettingsAuthorHelpText", Type = FieldType.Textbox)]
         public string Author { get; set; }
 
-        [FieldDefinition(4, Label = "On Grab Fields", Advanced = true, SelectOptions = typeof(DiscordGrabFieldType), HelpText = "Change the fields that are passed in for this 'on grab' notification", Type = FieldType.Select)]
+        [FieldDefinition(4, Label = "NotificationsDiscordSettingsOnGrabFields", Advanced = true, SelectOptions = typeof(DiscordGrabFieldType), HelpText = "NotificationsDiscordSettingsOnGrabFieldsHelpText", Type = FieldType.Select)]
         public IEnumerable<int> GrabFields { get; set; }
 
-        [FieldDefinition(5, Label = "On Import Fields", Advanced = true, SelectOptions = typeof(DiscordImportFieldType), HelpText = "Change the fields that are passed for this 'on import' notification", Type = FieldType.Select)]
+        [FieldDefinition(5, Label = "NotificationsDiscordSettingsOnImportFields", Advanced = true, SelectOptions = typeof(DiscordImportFieldType), HelpText = "NotificationsDiscordSettingsOnImportFieldsHelpText", Type = FieldType.Select)]
         public IEnumerable<int> ImportFields { get; set; }
 
-        [FieldDefinition(6, Label = "On Manual Interaction Fields", Advanced = true, SelectOptions = typeof(DiscordManualInteractionFieldType), HelpText = "Change the fields that are passed for this 'on manual interaction' notification", Type = FieldType.Select)]
+        [FieldDefinition(6, Label = "NotificationsDiscordSettingsOnManualInteractionFields", Advanced = true, SelectOptions = typeof(DiscordManualInteractionFieldType), HelpText = "NotificationsDiscordSettingsOnManualInteractionFieldsHelpText", Type = FieldType.Select)]
         public IEnumerable<int> ManualInteractionFields { get; set; }
 
         public NzbDroneValidationResult Validate()

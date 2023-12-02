@@ -33,22 +33,25 @@ namespace NzbDrone.Core.Notifications.Emby
         [FieldDefinition(1, Label = "Port")]
         public int Port { get; set; }
 
-        [FieldDefinition(2, Label = "Use SSL", Type = FieldType.Checkbox, HelpText = "Connect to Emby/Jellyfin over HTTPS instead of HTTP")]
+        [FieldDefinition(2, Label = "UseSsl", Type = FieldType.Checkbox, HelpText = "NotificationsSettingsUseSslHelpText")]
+        [FieldToken(TokenField.HelpText, "UseSsl", "serviceName", "Emby/Jellyfin")]
         public bool UseSsl { get; set; }
 
-        [FieldDefinition(3, Label = "API Key", Privacy = PrivacyLevel.ApiKey)]
+        [FieldDefinition(3, Label = "ApiKey", Privacy = PrivacyLevel.ApiKey)]
         public string ApiKey { get; set; }
 
-        [FieldDefinition(4, Label = "Send Notifications", HelpText = "Have MediaBrowser send notifications to configured providers", Type = FieldType.Checkbox)]
+        [FieldDefinition(4, Label = "NotificationsEmbySettingsSendNotifications", HelpText = "NotificationsEmbySettingsSendNotificationsHelpText", Type = FieldType.Checkbox)]
         public bool Notify { get; set; }
 
-        [FieldDefinition(5, Label = "Update Library", HelpText = "Update Library on Import, Rename, or Delete?", Type = FieldType.Checkbox)]
+        [FieldDefinition(5, Label = "NotificationsSettingsUpdateLibrary", HelpText = "NotificationsEmbySettingsUpdateLibraryHelpText", Type = FieldType.Checkbox)]
         public bool UpdateLibrary { get; set; }
 
-        [FieldDefinition(6, Label = "Map Paths From", HelpText = "Sonarr path, used to modify series paths when Emby/Jellyfin sees library path location differently from Sonarr(Requires 'UpdateLibrary')", Type = FieldType.Textbox, Advanced = true)]
+        [FieldDefinition(6, Label = "NotificationsSettingsUpdateMapPathsFrom", HelpText = "NotificationsSettingsUpdateMapPathsFromHelpText", Type = FieldType.Textbox, Advanced = true)]
+        [FieldToken(TokenField.HelpText, "NotificationsSettingsUpdateMapPathsFrom", "serviceName", "Emby/Jellyfin")]
         public string MapFrom { get; set; }
 
-        [FieldDefinition(7, Label = "Map Paths To", HelpText = "Emby/Jellyfin path, used to modify series paths when Emby/Jellyfin sees library path location differently from Sonarr(Requires 'UpdateLibrary')", Type = FieldType.Textbox, Advanced = true)]
+        [FieldDefinition(7, Label = "NotificationsSettingsUpdateMapPathsTo", HelpText = "NotificationsSettingsUpdateMapPathsToHelpText", Type = FieldType.Textbox, Advanced = true)]
+        [FieldToken(TokenField.HelpText, "NotificationsSettingsUpdateMapPathsTo", "serviceName", "Emby/Jellyfin")]
         public string MapTo { get; set; }
 
         [JsonIgnore]

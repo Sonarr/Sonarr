@@ -34,28 +34,29 @@ namespace NzbDrone.Core.Notifications.Ntfy
             Priority = 3;
         }
 
-        [FieldDefinition(0, Label = "Server Url", Type = FieldType.Url, HelpLink = "https://ntfy.sh/docs/install/", HelpText = "Leave blank to use public server (https://ntfy.sh)")]
+        [FieldDefinition(0, Label = "NotificationsNtfySettingsServerUrl", Type = FieldType.Url, HelpLink = "https://ntfy.sh/docs/install/", HelpText = "NotificationsNtfySettingsServerUrlHelpText")]
+        [FieldToken(TokenField.HelpText, "NotificationsNtfySettingsServerUrl", "url", "https://ntfy.sh")]
         public string ServerUrl { get; set; }
 
-        [FieldDefinition(1, Label = "Access Token", Type = FieldType.Password, Privacy = PrivacyLevel.ApiKey, HelpText = "Optional token-based authorization. Takes priority over username/password", HelpLink = "https://docs.ntfy.sh/config/#access-tokens")]
+        [FieldDefinition(1, Label = "NotificationsNtfySettingsAccessToken", Type = FieldType.Password, Privacy = PrivacyLevel.ApiKey, HelpText = "NotificationsNtfySettingsAccessTokenHelpText", HelpLink = "https://docs.ntfy.sh/config/#access-tokens")]
         public string AccessToken { get; set; }
 
-        [FieldDefinition(2, Label = "User Name", HelpText = "Optional Authorization", Privacy = PrivacyLevel.UserName)]
+        [FieldDefinition(2, Label = "Username", HelpText = "NotificationsNtfySettingsUsernameHelpText", Privacy = PrivacyLevel.UserName)]
         public string UserName { get; set; }
 
-        [FieldDefinition(3, Label = "Password", Type = FieldType.Password, HelpText = "Optional Password", Privacy = PrivacyLevel.Password)]
+        [FieldDefinition(3, Label = "Password", Type = FieldType.Password, HelpText = "NotificationsNtfySettingsPasswordHelpText", Privacy = PrivacyLevel.Password)]
         public string Password { get; set; }
 
         [FieldDefinition(4, Label = "Priority", Type = FieldType.Select, SelectOptions = typeof(NtfyPriority))]
         public int Priority { get; set; }
 
-        [FieldDefinition(5, Label = "Topics", HelpText = "List of Topics to send notifications to", Type = FieldType.Tag)]
+        [FieldDefinition(5, Label = "NotificationsNtfySettingsTopics", HelpText = "NotificationsNtfySettingsTopicsHelpText", Type = FieldType.Tag)]
         public IEnumerable<string> Topics { get; set; }
 
-        [FieldDefinition(6, Label = "Ntfy Tags and Emojis", Type = FieldType.Tag, HelpText = "Optional list of tags or emojis to use", HelpLink = "https://ntfy.sh/docs/emojis/")]
+        [FieldDefinition(6, Label = "NotificationsNtfySettingsTagsEmojis", Type = FieldType.Tag, HelpText = "", HelpLink = "https://ntfy.sh/docs/emojis/")]
         public IEnumerable<string> Tags { get; set; }
 
-        [FieldDefinition(7, Label = "Click URL", Type = FieldType.Url, HelpText = "Optional link when user clicks notification")]
+        [FieldDefinition(7, Label = "NotificationsNtfySettingsClickUrl", Type = FieldType.Url, HelpText = "NotificationsNtfySettingsClickUrlHelpText")]
         public string ClickUrl { get; set; }
 
         public NzbDroneValidationResult Validate()

@@ -23,10 +23,10 @@ namespace NzbDrone.Core.Notifications.Webhook
             Method = Convert.ToInt32(WebhookMethod.POST);
         }
 
-        [FieldDefinition(0, Label = "URL", Type = FieldType.Url)]
+        [FieldDefinition(0, Label = "NotificationsSettingsWebhookUrl", Type = FieldType.Url)]
         public string Url { get; set; }
 
-        [FieldDefinition(1, Label = "Method", Type = FieldType.Select, SelectOptions = typeof(WebhookMethod), HelpText = "Which HTTP method to use submit to the Webservice")]
+        [FieldDefinition(1, Label = "NotificationsSettingsWebhookMethod", Type = FieldType.Select, SelectOptions = typeof(WebhookMethod), HelpText = "NotificationsSettingsWebhookMethodHelpText")]
         public int Method { get; set; }
 
         [FieldDefinition(2, Label = "Username", Privacy = PrivacyLevel.UserName)]

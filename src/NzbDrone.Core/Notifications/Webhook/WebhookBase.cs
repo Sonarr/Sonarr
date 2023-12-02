@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Localization;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Tv;
@@ -13,11 +14,13 @@ namespace NzbDrone.Core.Notifications.Webhook
     {
         private readonly IConfigFileProvider _configFileProvider;
         private readonly IConfigService _configService;
+        protected readonly ILocalizationService _localizationService;
 
-        protected WebhookBase(IConfigFileProvider configFileProvider, IConfigService configService)
+        protected WebhookBase(IConfigFileProvider configFileProvider, IConfigService configService, ILocalizationService localizationService)
         {
             _configFileProvider = configFileProvider;
             _configService = configService;
+            _localizationService = localizationService;
         }
 
         protected WebhookGrabPayload BuildOnGrabPayload(GrabMessage message)

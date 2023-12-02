@@ -18,13 +18,13 @@ namespace NzbDrone.Core.Notifications.Pushcut
     {
         private static readonly PushcutSettingsValidator Validator = new ();
 
-        [FieldDefinition(0, Label = "Notification name", Type = FieldType.Textbox, HelpText = "Notification name from Notifications tab of the Pushcut app.")]
+        [FieldDefinition(0, Label = "NotificationsPushcutSettingsNotificationName", Type = FieldType.Textbox, HelpText = "")]
         public string NotificationName { get; set; }
 
-        [FieldDefinition(1, Label = "API Key", Type = FieldType.Textbox, Privacy = PrivacyLevel.ApiKey, HelpText = "API Keys can be managed in the Account view of the Pushcut app.")]
+        [FieldDefinition(1, Label = "ApiKey", Type = FieldType.Textbox, Privacy = PrivacyLevel.ApiKey, HelpText = "NotificationsPushcutSettingsApiKeyHelpText")]
         public string ApiKey { get; set; }
 
-        [FieldDefinition(2, Label = "Time sensitive", Type = FieldType.Checkbox, HelpText = "Check to mark the notification as \"Time-Sensitive\"")]
+        [FieldDefinition(2, Label = "NotificationsPushcutSettingsTimeSensitive", Type = FieldType.Checkbox, HelpText = "NotificationsPushcutSettingsTimeSensitiveHelpText")]
         public bool TimeSensitive { get; set; }
 
         public NzbDroneValidationResult Validate()

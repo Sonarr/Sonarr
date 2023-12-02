@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Core.Localization;
 
 namespace NzbDrone.Core.Notifications.Twitter
 {
@@ -18,11 +20,13 @@ namespace NzbDrone.Core.Notifications.Twitter
     public class TwitterService : ITwitterService
     {
         private readonly ITwitterProxy _twitterProxy;
+        private readonly ILocalizationService _localizationService;
         private readonly Logger _logger;
 
-        public TwitterService(ITwitterProxy twitterProxy, Logger logger)
+        public TwitterService(ITwitterProxy twitterProxy, ILocalizationService localizationService, Logger logger)
         {
             _twitterProxy = twitterProxy;
+            _localizationService = localizationService;
             _logger = logger;
         }
 
@@ -96,7 +100,7 @@ namespace NzbDrone.Core.Notifications.Twitter
             catch (Exception ex)
             {
                 _logger.Error(ex, "Unable to send test message");
-                return new ValidationFailure("Host", "Unable to send test message");
+                return new ValidationFailure("Host", _localizationService.GetLocalizedString("NotificationsValidationUnableToSendTestMessage", new Dictionary<string, object> { { "exceptionMessage", ex.Message } }));
             }
 
             return null;
