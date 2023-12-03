@@ -11,7 +11,7 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
         public int PageSize { get; set; }
         public BroadcastheNetSettings Settings { get; set; }
 
-        public int? LastRecentTorrentID { get; set; }
+        public int? LastRecentTorrentId { get; set; }
 
         public BroadcastheNetRequestGenerator()
         {
@@ -23,15 +23,15 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
         {
             var pageableRequests = new IndexerPageableRequestChain();
 
-            if (LastRecentTorrentID.HasValue)
+            if (LastRecentTorrentId is > 0)
             {
-                pageableRequests.Add(GetPagedRequests(MaxPages, new BroadcastheNetTorrentQuery()
+                pageableRequests.Add(GetPagedRequests(MaxPages, new BroadcastheNetTorrentQuery
                 {
-                    Id = ">=" + (LastRecentTorrentID.Value - 100)
+                    Id = ">=" + (LastRecentTorrentId.Value - 100)
                 }));
             }
 
-            pageableRequests.AddTier(GetPagedRequests(MaxPages, new BroadcastheNetTorrentQuery()
+            pageableRequests.AddTier(GetPagedRequests(MaxPages, new BroadcastheNetTorrentQuery
             {
                 Age = "<=86400"
             }));
@@ -51,7 +51,7 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
                     parameters = parameters.Clone();
 
                     parameters.Category = "Episode";
-                    parameters.Name = string.Format("S{0:00}%E{1:00}%", episode.SeasonNumber, episode.EpisodeNumber);
+                    parameters.Name = $"S{episode.SeasonNumber:00}%E{episode.EpisodeNumber:00}%";
 
                     pageableRequests.Add(GetPagedRequests(MaxPages, parameters));
                 }
@@ -70,14 +70,14 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
                 foreach (var seasonNumber in searchCriteria.Episodes.Select(v => v.SeasonNumber).Distinct())
                 {
                     parameters.Category = "Season";
-                    parameters.Name = string.Format("Season {0}%", seasonNumber);
+                    parameters.Name = $"Season {seasonNumber}%";
 
                     pageableRequests.Add(GetPagedRequests(MaxPages, parameters));
 
                     parameters = parameters.Clone();
 
                     parameters.Category = "Episode";
-                    parameters.Name = string.Format("S{0:00}E%", seasonNumber);
+                    parameters.Name = $"S{seasonNumber:00}E%";
 
                     pageableRequests.Add(GetPagedRequests(MaxPages, parameters));
                 }
@@ -94,7 +94,7 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
             if (AddSeriesSearchParameters(parameters, searchCriteria))
             {
                 parameters.Category = "Episode";
-                parameters.Name = string.Format("{0:yyyy}.{0:MM}.{0:dd}", searchCriteria.AirDate);
+                parameters.Name = searchCriteria.AirDate.ToString("yyyy.MM.dd");
 
                 pageableRequests.Add(GetPagedRequests(MaxPages, parameters));
 
@@ -105,7 +105,7 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
                     parameters = parameters.Clone();
 
                     parameters.Category = "Episode";
-                    parameters.Name = string.Format("S{0:00}E{1:00}", episode.SeasonNumber, episode.EpisodeNumber);
+                    parameters.Name = $"S{episode.SeasonNumber:00}E{episode.EpisodeNumber:00}";
 
                     pageableRequests.Add(GetPagedRequests(MaxPages, parameters));
                 }
@@ -122,7 +122,7 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
             if (AddSeriesSearchParameters(parameters, searchCriteria))
             {
                 parameters.Category = "Episode";
-                parameters.Name = string.Format("{0}%", searchCriteria.Year);
+                parameters.Name = $"{searchCriteria.Year}%";
 
                 pageableRequests.Add(GetPagedRequests(MaxPages, parameters));
 
@@ -133,7 +133,7 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
                     parameters = parameters.Clone();
 
                     parameters.Category = "Episode";
-                    parameters.Name = string.Format("S{0:00}E{1:00}", episode.SeasonNumber, episode.EpisodeNumber);
+                    parameters.Name = $"S{episode.SeasonNumber:00}E{episode.EpisodeNumber:00}";
 
                     pageableRequests.Add(GetPagedRequests(MaxPages, parameters));
                 }
@@ -154,7 +154,7 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
                     parameters = parameters.Clone();
 
                     parameters.Category = "Episode";
-                    parameters.Name = string.Format("S{0:00}E{1:00}", episode.SeasonNumber, episode.EpisodeNumber);
+                    parameters.Name = $"S{episode.SeasonNumber:00}E{episode.EpisodeNumber:00}";
 
                     pageableRequests.Add(GetPagedRequests(MaxPages, parameters));
                 }
@@ -164,7 +164,7 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
                     parameters = parameters.Clone();
 
                     parameters.Category = "Season";
-                    parameters.Name = string.Format("Season {0}%", seasonNumber);
+                    parameters.Name = $"Season {seasonNumber}%";
 
                     pageableRequests.Add(GetPagedRequests(MaxPages, parameters));
                 }
@@ -183,14 +183,14 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
                 foreach (var seasonNumber in searchCriteria.Episodes.Select(v => v.SeasonNumber).Distinct())
                 {
                     parameters.Category = "Season";
-                    parameters.Name = string.Format("Season {0}%", seasonNumber);
+                    parameters.Name = $"Season {seasonNumber}%";
 
                     pageableRequests.Add(GetPagedRequests(MaxPages, parameters));
 
                     parameters = parameters.Clone();
 
                     parameters.Category = "Episode";
-                    parameters.Name = string.Format("S{0:00}E%", seasonNumber);
+                    parameters.Name = $"S{seasonNumber:00}E%";
 
                     pageableRequests.Add(GetPagedRequests(MaxPages, parameters));
                 }
@@ -207,15 +207,15 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
             if (AddSeriesSearchParameters(parameters, searchCriteria))
             {
                 var episodeQueryTitle = searchCriteria.Episodes.Where(e => !string.IsNullOrWhiteSpace(e.Title))
-                                               .Select(e => SearchCriteriaBase.GetCleanSceneTitle(e.Title))
-                                               .ToArray();
+                    .Select(e => SearchCriteriaBase.GetCleanSceneTitle(e.Title))
+                    .ToArray();
 
                 foreach (var queryTitle in episodeQueryTitle)
                 {
                     parameters = parameters.Clone();
 
                     parameters.Category = "Episode";
-                    parameters.Name = "%" + queryTitle + "%";
+                    parameters.Name = $"%{queryTitle}%";
 
                     pageableRequests.Add(GetPagedRequests(MaxPages, parameters));
                 }
@@ -228,13 +228,13 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
         {
             if (searchCriteria.Series.TvdbId != 0)
             {
-                parameters.Tvdb = string.Format("{0}", searchCriteria.Series.TvdbId);
+                parameters.Tvdb = $"{searchCriteria.Series.TvdbId}";
                 return true;
             }
 
             if (searchCriteria.Series.TvRageId != 0)
             {
-                parameters.Tvrage = string.Format("{0}", searchCriteria.Series.TvRageId);
+                parameters.Tvrage = $"{searchCriteria.Series.TvRageId}";
                 return true;
             }
 

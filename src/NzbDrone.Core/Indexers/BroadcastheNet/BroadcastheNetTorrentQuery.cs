@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace NzbDrone.Core.Indexers.BroadcastheNet
 {
@@ -13,15 +14,15 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
         public string Search { get; set; }
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public string Codec { get; set; }
+        public IEnumerable<string> Codec { get; set; }
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public string Container { get; set; }
+        public IEnumerable<string> Container { get; set; }
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public string Source { get; set; }
+        public IEnumerable<string> Source { get; set; }
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public string Resolution { get; set; }
+        public IEnumerable<string> Resolution { get; set; }
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public string Origin { get; set; }
+        public IEnumerable<string> Origin { get; set; }
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
         public string Hash { get; set; }
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
