@@ -68,7 +68,7 @@ namespace NzbDrone.Core.Datastore
                 case MigrationType.Main:
                     {
                         connectionInfo = _connectionStringFactory.MainDbConnection;
-                        CreateMain(connectionInfo.ConnectionString, migrationContext);
+                        CreateMain(connectionInfo.ConnectionString, migrationContext, connectionInfo.DatabaseType);
 
                         break;
                     }
@@ -76,7 +76,7 @@ namespace NzbDrone.Core.Datastore
                 case MigrationType.Log:
                     {
                         connectionInfo = _connectionStringFactory.LogDbConnection;
-                        CreateLog(connectionInfo.ConnectionString, migrationContext);
+                        CreateLog(connectionInfo.ConnectionString, migrationContext, connectionInfo.DatabaseType);
 
                         break;
                     }
@@ -108,12 +108,12 @@ namespace NzbDrone.Core.Datastore
             return db;
         }
 
-        private void CreateMain(string connectionString, MigrationContext migrationContext)
+        private void CreateMain(string connectionString, MigrationContext migrationContext, DatabaseType databaseType)
         {
             try
             {
                 _restoreDatabaseService.Restore();
-                _migrationController.Migrate(connectionString, migrationContext);
+                _migrationController.Migrate(connectionString, migrationContext, databaseType);
             }
             catch (SQLiteException e)
             {
@@ -140,7 +140,7 @@ namespace NzbDrone.Core.Datastore
 
                         try
                         {
-                            _migrationController.Migrate(connectionString, migrationContext);
+                            _migrationController.Migrate(connectionString, migrationContext, databaseType);
                             return;
                         }
                         catch (Exception ex)
@@ -165,11 +165,11 @@ namespace NzbDrone.Core.Datastore
             }
         }
 
-        private void CreateLog(string connectionString, MigrationContext migrationContext)
+        private void CreateLog(string connectionString, MigrationContext migrationContext, DatabaseType databaseType)
         {
             try
             {
-                _migrationController.Migrate(connectionString, migrationContext);
+                _migrationController.Migrate(connectionString, migrationContext, databaseType);
             }
             catch (SQLiteException e)
             {
@@ -189,7 +189,7 @@ namespace NzbDrone.Core.Datastore
                     Logger.Error("Unable to recreate logging database automatically. It will need to be removed manually.");
                 }
 
-                _migrationController.Migrate(connectionString, migrationContext);
+                _migrationController.Migrate(connectionString, migrationContext, databaseType);
             }
             catch (Exception e)
             {
