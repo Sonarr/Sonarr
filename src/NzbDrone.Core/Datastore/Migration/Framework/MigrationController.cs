@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Reflection;
 using FluentMigrator.Runner;
@@ -14,7 +14,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
 {
     public interface IMigrationController
     {
-        void Migrate(string connectionString, MigrationContext migrationContext);
+        void Migrate(string connectionString, MigrationContext migrationContext, DatabaseType databaseType);
     }
 
     public class MigrationController : IMigrationController
@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
             _migrationLoggerProvider = migrationLoggerProvider;
         }
 
-        public void Migrate(string connectionString, MigrationContext migrationContext)
+        public void Migrate(string connectionString, MigrationContext migrationContext, DatabaseType databaseType)
         {
             var sw = Stopwatch.StartNew();
 
@@ -37,7 +37,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
 
             ServiceProvider serviceProvider;
 
-            var db = connectionString.Contains(".db") ? "sqlite" : "postgres";
+            var db = databaseType == DatabaseType.SQLite ? "sqlite" : "postgres";
 
             serviceProvider = new ServiceCollection()
                 .AddLogging(b => b.AddNLog())
