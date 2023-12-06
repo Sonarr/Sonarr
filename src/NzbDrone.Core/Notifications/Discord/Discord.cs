@@ -448,7 +448,7 @@ namespace NzbDrone.Core.Notifications.Discord
                 Timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffZ")
             };
 
-            if (Settings.ManualInteractionFields.Contains((int)DiscordGrabFieldType.Poster))
+            if (Settings.ManualInteractionFields.Contains((int)DiscordManualInteractionFieldType.Poster))
             {
                 embed.Thumbnail = new DiscordImage
                 {
@@ -456,7 +456,7 @@ namespace NzbDrone.Core.Notifications.Discord
                 };
             }
 
-            if (Settings.ManualInteractionFields.Contains((int)DiscordGrabFieldType.Fanart))
+            if (Settings.ManualInteractionFields.Contains((int)DiscordManualInteractionFieldType.Fanart))
             {
                 embed.Image = new DiscordImage
                 {
