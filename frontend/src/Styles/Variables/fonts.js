@@ -2,7 +2,6 @@ module.exports = {
   // Families
   defaultFontFamily: 'Roboto, "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif',
   monoSpaceFontFamily: '"Ubuntu Mono", Menlo, Monaco, Consolas, "Courier New", monospace;',
-  passwordFamily: 'text-security-disc',
 
   // Sizes
   extraSmallFontSize: '11px',
