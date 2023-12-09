@@ -7,6 +7,7 @@
     <PackageReference Include="Diacritical.Net" Version="1.0.4" />
     <PackageReference Include="MailKit" Version="3.6.0" />
     <PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="6.0.21" />
+    <PackageReference Include="Polly" Version="8.2.0" />
     <PackageReference Include="Servarr.FFMpegCore" Version="4.7.0-26" />
     <PackageReference Include="Servarr.FFprobe" Version="5.1.4.112" />
     <PackageReference Include="System.Memory" Version="4.5.5" />
