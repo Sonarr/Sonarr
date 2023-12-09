@@ -139,7 +139,9 @@ namespace NzbDrone.Core.Download
                 request.Headers.Accept = "application/x-bittorrent";
                 request.AllowAutoRedirect = false;
 
-                var response = await _httpClient.GetAsync(request);
+                var response = await RetryStrategy
+                    .ExecuteAsync(static async (state, _) => await state._httpClient.GetAsync(state.request), (_httpClient, request))
+                    .ConfigureAwait(false);
 
                 if (response.StatusCode == HttpStatusCode.MovedPermanently ||
                     response.StatusCode == HttpStatusCode.Found ||
