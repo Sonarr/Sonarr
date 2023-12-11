@@ -5,16 +5,9 @@ namespace NzbDrone.Core.Notifications.Trakt
 {
     public static class TraktInterlacedTypes
     {
-        private static HashSet<string> _interlacedTypes;
-
-        static TraktInterlacedTypes()
+        public static readonly HashSet<string> InterlacedTypes = new (StringComparer.OrdinalIgnoreCase)
         {
-            _interlacedTypes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-                              {
-                                  "Interlaced", "MBAFF", "PAFF"
-                              };
-        }
-
-        public static HashSet<string> interlacedTypes => _interlacedTypes;
+            "Interlaced", "MBAFF", "PAFF"
+        };
     }
 }
