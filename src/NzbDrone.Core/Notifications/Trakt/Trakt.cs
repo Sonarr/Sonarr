@@ -160,6 +160,7 @@ namespace NzbDrone.Core.Notifications.Trakt
             };
 
             var traktResolution = MapResolution(episodeFile.Quality.Quality.Resolution, episodeFile.MediaInfo?.ScanType);
+            var hdr = MapHdr(episodeFile);
             var mediaType = MapMediaType(episodeFile.Quality.Quality.Source);
             var audio = MapAudio(episodeFile);
             var audioChannels = MapAudioChannels(episodeFile, audio);
@@ -173,6 +174,7 @@ namespace NzbDrone.Core.Notifications.Trakt
                     Number = episode.EpisodeNumber,
                     CollectedAt = DateTime.Now,
                     Resolution = traktResolution,
+                    Hdr = hdr,
                     MediaType = mediaType,
                     AudioChannels = audioChannels,
                     Audio = audio,
@@ -314,6 +316,20 @@ namespace NzbDrone.Core.Notifications.Trakt
             };
 
             return traktResolution;
+        }
+
+        private string MapHdr(EpisodeFile episodeFile)
+        {
+            var traktHdr = episodeFile.MediaInfo?.VideoHdrFormat switch
+            {
+                HdrFormat.DolbyVision or HdrFormat.DolbyVisionSdr => "dolby_vision",
+                HdrFormat.Hdr10 or HdrFormat.DolbyVisionHdr10 => "hdr10",
+                HdrFormat.Hdr10Plus or HdrFormat.DolbyVisionHdr10Plus => "hdr10_plus",
+                HdrFormat.Hlg10 or HdrFormat.DolbyVisionHlg => "hlg",
+                _ => null
+            };
+
+            return traktHdr;
         }
 
         private string MapAudio(EpisodeFile episodeFile)
