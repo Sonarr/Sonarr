@@ -1,4 +1,5 @@
 import { createAction } from 'redux-actions';
+import { sortDirections } from 'Helpers/Props';
 import createBulkEditItemHandler from 'Store/Actions/Creators/createBulkEditItemHandler';
 import createBulkRemoveItemHandler from 'Store/Actions/Creators/createBulkRemoveItemHandler';
 import createFetchHandler from 'Store/Actions/Creators/createFetchHandler';
@@ -7,6 +8,7 @@ import createRemoveItemHandler from 'Store/Actions/Creators/createRemoveItemHand
 import createSaveProviderHandler, { createCancelSaveProviderHandler } from 'Store/Actions/Creators/createSaveProviderHandler';
 import createTestAllProvidersHandler from 'Store/Actions/Creators/createTestAllProvidersHandler';
 import createTestProviderHandler, { createCancelTestProviderHandler } from 'Store/Actions/Creators/createTestProviderHandler';
+import createSetClientSideCollectionSortReducer from 'Store/Actions/Creators/Reducers/createSetClientSideCollectionSortReducer';
 import createSetProviderFieldValueReducer from 'Store/Actions/Creators/Reducers/createSetProviderFieldValueReducer';
 import createSetSettingValueReducer from 'Store/Actions/Creators/Reducers/createSetSettingValueReducer';
 import { createThunk } from 'Store/thunks';
@@ -37,6 +39,7 @@ export const CANCEL_TEST_INDEXER = 'settings/indexers/cancelTestIndexer';
 export const TEST_ALL_INDEXERS = 'settings/indexers/testAllIndexers';
 export const BULK_EDIT_INDEXERS = 'settings/indexers/bulkEditIndexers';
 export const BULK_DELETE_INDEXERS = 'settings/indexers/bulkDeleteIndexers';
+export const SET_MANAGE_INDEXERS_SORT = 'settings/indexers/setManageIndexersSort';
 
 //
 // Action Creators
@@ -54,6 +57,7 @@ export const cancelTestIndexer = createThunk(CANCEL_TEST_INDEXER);
 export const testAllIndexers = createThunk(TEST_ALL_INDEXERS);
 export const bulkEditIndexers = createThunk(BULK_EDIT_INDEXERS);
 export const bulkDeleteIndexers = createThunk(BULK_DELETE_INDEXERS);
+export const setManageIndexersSort = createAction(SET_MANAGE_INDEXERS_SORT);
 
 export const setIndexerValue = createAction(SET_INDEXER_VALUE, (payload) => {
   return {
@@ -93,7 +97,9 @@ export default {
     isTesting: false,
     isTestingAll: false,
     items: [],
-    pendingChanges: {}
+    pendingChanges: {},
+    sortKey: 'name',
+    sortDirection: sortDirections.DESCENDING
   },
 
   //
@@ -154,7 +160,10 @@ export default {
       };
 
       return updateSectionState(state, section, newState);
-    }
+    },
+
+    [SET_MANAGE_INDEXERS_SORT]: createSetClientSideCollectionSortReducer(section)
+
   }
 
 };
