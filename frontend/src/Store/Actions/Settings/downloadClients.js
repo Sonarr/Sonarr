@@ -35,7 +35,7 @@ export const CANCEL_TEST_DOWNLOAD_CLIENT = 'settings/downloadClients/cancelTestD
 export const TEST_ALL_DOWNLOAD_CLIENTS = 'settings/downloadClients/testAllDownloadClients';
 export const BULK_EDIT_DOWNLOAD_CLIENTS = 'settings/downloadClients/bulkEditDownloadClients';
 export const BULK_DELETE_DOWNLOAD_CLIENTS = 'settings/downloadClients/bulkDeleteDownloadClients';
-export const SET_MANAGE_DOWNLOAD_CLIENT_SORT = 'settings/downloadClients/setManageDownloadClientsSort';
+export const SET_MANAGE_DOWNLOAD_CLIENTS_SORT = 'settings/downloadClients/setManageDownloadClientsSort';
 
 //
 // Action Creators
@@ -52,7 +52,7 @@ export const cancelTestDownloadClient = createThunk(CANCEL_TEST_DOWNLOAD_CLIENT)
 export const testAllDownloadClients = createThunk(TEST_ALL_DOWNLOAD_CLIENTS);
 export const bulkEditDownloadClients = createThunk(BULK_EDIT_DOWNLOAD_CLIENTS);
 export const bulkDeleteDownloadClients = createThunk(BULK_DELETE_DOWNLOAD_CLIENTS);
-export const setManageDownloadClientsSort = createAction(SET_MANAGE_DOWNLOAD_CLIENT_SORT);
+export const setManageDownloadClientsSort = createAction(SET_MANAGE_DOWNLOAD_CLIENTS_SORT);
 
 export const setDownloadClientValue = createAction(SET_DOWNLOAD_CLIENT_VALUE, (payload) => {
   return {
@@ -130,7 +130,7 @@ export default {
       });
     },
 
-    [SET_MANAGE_DOWNLOAD_CLIENT_SORT]: createSetClientSideCollectionSortReducer(section)
+    [SET_MANAGE_DOWNLOAD_CLIENTS_SORT]: createSetClientSideCollectionSortReducer(section)
 
   }
 
