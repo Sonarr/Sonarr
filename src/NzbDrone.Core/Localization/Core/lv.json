@@ -1,1 +1,14 @@
-{}
+{
+    "AddAutoTag": "Pievienot Automātisko Tagu",
+    "AddCondition": "Pievienot Nosacījumu",
+    "Add": "Pievienot",
+    "AddConditionImplementation": "Pievienot Nosacījumu - {implementationName}",
+    "AddConnectionImplementation": "Pievienot Savienojumu - {implementationName}",
+    "AddConnection": "Pievienot Savienojumu",
+    "AddDelayProfile": "Pievienot Aizkaves Profilu",
+    "AddCustomFormat": "Pievienot Pielāgotu Formātu",
+    "AddDownloadClient": "Pievienot Lejupielādes Klientu",
+    "Activity": "Aktivitāte",
+    "About": "Par",
+    "Actions": "Darbības"
+}

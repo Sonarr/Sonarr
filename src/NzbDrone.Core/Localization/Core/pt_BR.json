@@ -1368,7 +1368,7 @@
     "InteractiveSearchModalHeader": "Pesquisa Interativa",
     "InteractiveSearchModalHeaderSeason": "Pesquisa interativa - {season}",
     "InteractiveSearchSeason": "Pesquisa interativa para todos os episódios desta temporada",
-    "InvalidUILanguage": "A interface está configurada com um idioma inválido, corrija-o e salve as configurações",
+    "InvalidUILanguage": "Sua UI está definida com um idioma inválido, corrija-a e salve suas configurações",
     "Large": "Grande",
     "Links": "Links",
     "ManageEpisodes": "Gerenciar episódios",
@@ -1700,5 +1700,7 @@
     "MonitorNewSeasons": "Monitorar Novas Temporadas",
     "MonitorNewSeasonsHelpText": "Quais novas temporadas devem ser monitoradas automaticamente",
     "MonitorRecentEpisodes": "Episódios Recentes",
-    "AuthenticationRequiredPasswordConfirmationHelpTextWarning": "Confirme a nova senha"
+    "AuthenticationRequiredPasswordConfirmationHelpTextWarning": "Confirme a nova senha",
+    "MonitorNoNewSeasons": "Sem Novas Temporadas",
+    "MonitorNewItems": "Monitorar Novos Itens"
 }
