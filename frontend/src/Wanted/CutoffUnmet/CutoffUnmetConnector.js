@@ -49,7 +49,7 @@ class CutoffUnmetConnector extends Component {
       gotoCutoffUnmetFirstPage
     } = this.props;
 
-    registerPagePopulator(this.repopulate, ['episodeFileUpdated']);
+    registerPagePopulator(this.repopulate, ['episodeFileUpdated', 'episodeFileDeleted']);
 
     if (useCurrentPage) {
       fetchCutoffUnmet();

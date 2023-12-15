@@ -46,7 +46,7 @@ class MissingConnector extends Component {
       gotoMissingFirstPage
     } = this.props;
 
-    registerPagePopulator(this.repopulate, ['episodeFileUpdated']);
+    registerPagePopulator(this.repopulate, ['episodeFileUpdated', 'episodeFileDeleted']);
 
     if (useCurrentPage) {
       fetchMissing();

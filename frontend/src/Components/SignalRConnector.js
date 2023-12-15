@@ -197,6 +197,8 @@ class SignalRConnector extends Component {
       repopulatePage('episodeFileUpdated');
     } else if (body.action === 'deleted') {
       this.props.dispatchRemoveItem({ section, id: body.resource.id });
+
+      repopulatePage('episodeFileDeleted');
     }
   };
 

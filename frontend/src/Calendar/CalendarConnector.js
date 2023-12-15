@@ -55,7 +55,7 @@ class CalendarConnector extends Component {
       gotoCalendarToday
     } = this.props;
 
-    registerPagePopulator(this.repopulate);
+    registerPagePopulator(this.repopulate, ['episodeFileUpdated', 'episodeFileDeleted']);
 
     if (useCurrentPage) {
       fetchCalendar();
