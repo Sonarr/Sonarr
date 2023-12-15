@@ -411,7 +411,7 @@ class SeriesDetails extends Component {
                         <HeartRating
                           rating={ratings.value}
                           iconSize={20}
-                        /> : 
+                        /> :
                         null
                     }
                     <SeriesGenres genres={genres} />
