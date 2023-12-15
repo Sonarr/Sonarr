@@ -188,12 +188,14 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
 
             if (TryGetSideData<DoviConfigurationRecordSideData>(sideData, out var dovi))
             {
+                var hasHdr10Plus = TryGetSideData<HdrDynamicMetadataSpmte2094>(sideData, out _);
+
                 return dovi.DvBlSignalCompatibilityId switch
                 {
-                    1 => HdrFormat.DolbyVisionHdr10,
+                    1 => hasHdr10Plus ? HdrFormat.DolbyVisionHdr10Plus : HdrFormat.DolbyVisionHdr10,
                     2 => HdrFormat.DolbyVisionSdr,
                     4 => HdrFormat.DolbyVisionHlg,
-                    6 => HdrFormat.DolbyVisionHdr10,
+                    6 => hasHdr10Plus ? HdrFormat.DolbyVisionHdr10Plus : HdrFormat.DolbyVisionHdr10,
                     _ => HdrFormat.DolbyVision
                 };
             }
