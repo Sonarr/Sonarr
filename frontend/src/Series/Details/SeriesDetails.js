@@ -3,6 +3,7 @@ import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import TextTruncate from 'react-text-truncate';
+import Alert from 'Components/Alert';
 import HeartRating from 'Components/HeartRating';
 import Icon from 'Components/Icon';
 import Label from 'Components/Label';
@@ -604,13 +605,19 @@ class SeriesDetails extends Component {
             }
 
             {
-              !isFetching && episodesError &&
-                <div>{translate('EpisodesLoadError')}</div>
+              !isFetching && episodesError ?
+                <Alert kind={kinds.DANGER}>
+                  {translate('EpisodesLoadError')}
+                </Alert> :
+                null
             }
 
             {
-              !isFetching && episodeFilesError &&
-                <div>{translate('EpisodeFilesLoadError')}</div>
+              !isFetching && episodeFilesError ?
+                <Alert kind={kinds.DANGER}>
+                  {translate('EpisodeFilesLoadError')}
+                </Alert> :
+                null
             }
 
             {
@@ -633,10 +640,11 @@ class SeriesDetails extends Component {
             }
 
             {
-              isPopulated && !seasons.length &&
-                <div>
+              isPopulated && !seasons.length ?
+                <Alert kind={kinds.WARNING}>
                   {translate('NoEpisodeInformation')}
-                </div>
+                </Alert> :
+                null
             }
 
           </div>

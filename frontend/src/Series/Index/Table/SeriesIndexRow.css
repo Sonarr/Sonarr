@@ -93,7 +93,7 @@
 .seasonFolder {
   composes: cell;
 
-  width: 150px;
+  flex: 0 0 150px;
 }
 
 .episodeProgress,

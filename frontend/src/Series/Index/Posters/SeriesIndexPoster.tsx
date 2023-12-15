@@ -63,11 +63,11 @@ function SeriesIndexPoster(props: SeriesIndexPosterProps) {
   } = series;
 
   const {
-    seasonCount,
-    episodeCount,
-    episodeFileCount,
-    totalEpisodeCount,
-    sizeOnDisk,
+    seasonCount = 0,
+    episodeCount = 0,
+    episodeFileCount = 0,
+    totalEpisodeCount = 0,
+    sizeOnDisk = 0,
   } = statistics;
 
   const dispatch = useDispatch();
