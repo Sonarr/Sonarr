@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Text.RegularExpressions;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Indexers.Exceptions;
 using NzbDrone.Core.Parser.Model;
@@ -10,13 +11,14 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
 {
     public class BroadcastheNetParser : IParseIndexerResponse
     {
-        private static readonly Regex RegexProtocol = new Regex("^https?:", RegexOptions.Compiled);
+        private static readonly Regex RegexProtocol = new ("^https?:", RegexOptions.Compiled);
 
         public IList<ReleaseInfo> ParseResponse(IndexerResponse indexerResponse)
         {
             var results = new List<ReleaseInfo>();
+            var indexerHttpResponse = indexerResponse.HttpResponse;
 
-            switch (indexerResponse.HttpResponse.StatusCode)
+            switch (indexerHttpResponse.StatusCode)
             {
                 case HttpStatusCode.Unauthorized:
                     throw new ApiKeyException("API Key invalid or not authorized");
@@ -25,17 +27,22 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
                 case HttpStatusCode.ServiceUnavailable:
                     throw new RequestLimitReachedException("Cannot do more than 150 API requests per hour.");
                 default:
-                    if (indexerResponse.HttpResponse.StatusCode != HttpStatusCode.OK)
+                    if (indexerHttpResponse.StatusCode != HttpStatusCode.OK)
                     {
-                        throw new IndexerException(indexerResponse, "Indexer API call returned an unexpected StatusCode [{0}]", indexerResponse.HttpResponse.StatusCode);
+                        throw new IndexerException(indexerResponse, "Indexer API call returned an unexpected StatusCode [{0}]", indexerHttpResponse.StatusCode);
                     }
 
                     break;
             }
 
-            if (indexerResponse.HttpResponse.Headers.ContentType != null && indexerResponse.HttpResponse.Headers.ContentType.Contains("text/html"))
+            if (indexerHttpResponse.Headers.ContentType != null && indexerHttpResponse.Headers.ContentType.Contains("text/html"))
             {
                 throw new IndexerException(indexerResponse, "Indexer responded with html content. Site is likely blocked or unavailable.");
+            }
+
+            if (indexerResponse.Content.ContainsIgnoreCase("Call Limit Exceeded"))
+            {
+                throw new RequestLimitReachedException("Cannot do more than 150 API requests per hour.");
             }
 
             if (indexerResponse.Content == "Query execution was interrupted")
@@ -43,7 +50,7 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
                 throw new IndexerException(indexerResponse, "Indexer API returned an internal server error");
             }
 
-            var jsonResponse = new HttpResponse<JsonRpcResponse<BroadcastheNetTorrents>>(indexerResponse.HttpResponse).Resource;
+            var jsonResponse = new HttpResponse<JsonRpcResponse<BroadcastheNetTorrents>>(indexerHttpResponse).Resource;
 
             if (jsonResponse.Error != null || jsonResponse.Result == null)
             {
@@ -59,37 +66,33 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
 
             foreach (var torrent in jsonResponse.Result.Torrents.Values)
             {
-                var torrentInfo = new TorrentInfo();
+                var torrentInfo = new TorrentInfo
+                {
+                    Guid = $"BTN-{torrent.TorrentID}",
+                    InfoUrl = $"{protocol}//broadcasthe.net/torrents.php?id={torrent.GroupID}&torrentid={torrent.TorrentID}",
+                    DownloadUrl = RegexProtocol.Replace(torrent.DownloadURL, protocol),
+                    Title = CleanReleaseName(torrent.ReleaseName),
+                    InfoHash = torrent.InfoHash,
+                    Size = torrent.Size,
+                    Seeders = torrent.Seeders,
+                    Peers = torrent.Leechers + torrent.Seeders,
+                    PublishDate = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc).ToUniversalTime().AddSeconds(torrent.Time),
+                    Origin = torrent.Origin,
+                    Source = torrent.Source,
+                    Container = torrent.Container,
+                    Codec = torrent.Codec,
+                    Resolution = torrent.Resolution
+                };
 
-                torrentInfo.Guid = string.Format("BTN-{0}", torrent.TorrentID);
-                torrentInfo.Title = CleanReleaseName(torrent.ReleaseName);
-                torrentInfo.Size = torrent.Size;
-                torrentInfo.DownloadUrl = RegexProtocol.Replace(torrent.DownloadURL, protocol);
-                torrentInfo.InfoUrl = string.Format("{0}//broadcasthe.net/torrents.php?id={1}&torrentid={2}", protocol, torrent.GroupID, torrent.TorrentID);
-
-                // torrentInfo.CommentUrl =
-                if (torrent.TvdbID.HasValue)
+                if (torrent.TvdbID is > 0)
                 {
                     torrentInfo.TvdbId = torrent.TvdbID.Value;
                 }
 
-                if (torrent.TvrageID.HasValue)
+                if (torrent.TvrageID is > 0)
                 {
                     torrentInfo.TvRageId = torrent.TvrageID.Value;
                 }
-
-                torrentInfo.PublishDate = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc).ToUniversalTime().AddSeconds(torrent.Time);
-
-                // torrentInfo.MagnetUrl =
-                torrentInfo.InfoHash = torrent.InfoHash;
-                torrentInfo.Seeders = torrent.Seeders;
-                torrentInfo.Peers = torrent.Leechers + torrent.Seeders;
-
-                torrentInfo.Origin = torrent.Origin;
-                torrentInfo.Source = torrent.Source;
-                torrentInfo.Container = torrent.Container;
-                torrentInfo.Codec = torrent.Codec;
-                torrentInfo.Resolution = torrent.Resolution;
 
                 results.Add(torrentInfo);
             }
@@ -99,9 +102,7 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
 
         private string CleanReleaseName(string releaseName)
         {
-            releaseName = releaseName.Replace("\\", "");
-
-            return releaseName;
+            return releaseName.Replace("\\", "");
         }
     }
 }
