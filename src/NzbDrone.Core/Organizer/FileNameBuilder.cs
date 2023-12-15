@@ -686,7 +686,7 @@ namespace NzbDrone.Core.Organizer
             new Dictionary<string, int>(FileNameBuilderTokenEqualityComparer.Instance)
         {
             { MediaInfoVideoDynamicRangeToken, 5 },
-            { MediaInfoVideoDynamicRangeTypeToken, 8 }
+            { MediaInfoVideoDynamicRangeTypeToken, 9 }
         };
 
         private void AddMediaInfoTokens(Dictionary<string, Func<TokenMatch, string>> tokenHandlers, EpisodeFile episodeFile)

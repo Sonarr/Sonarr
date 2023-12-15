@@ -22,7 +22,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
         private readonly List<FFProbePixelFormat> _pixelFormats;
 
         public const int MINIMUM_MEDIA_INFO_SCHEMA_REVISION = 8;
-        public const int CURRENT_MEDIA_INFO_SCHEMA_REVISION = 8;
+        public const int CURRENT_MEDIA_INFO_SCHEMA_REVISION = 9;
 
         private static readonly string[] ValidHdrColourPrimaries = { "bt2020" };
         private static readonly string[] HlgTransferFunctions = { "bt2020-10", "arib-std-b67" };
