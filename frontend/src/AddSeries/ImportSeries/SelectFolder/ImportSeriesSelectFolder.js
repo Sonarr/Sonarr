@@ -118,7 +118,7 @@ class ImportSeriesSelectFolder extends Component {
                       className={styles.addErrorAlert}
                       kind={kinds.DANGER}
                     >
-                      {translate('RootFolderLoadError')}
+                      {translate('AddRootFolderError')}
 
                       <ul>
                         {
