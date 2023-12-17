@@ -81,7 +81,7 @@ namespace NzbDrone.Core.Download.Clients.Flood
                 }
             }
 
-            return result;
+            return result.Where(t => t.IsNotNullOrWhiteSpace());
         }
 
         public override string Name => "Flood";
