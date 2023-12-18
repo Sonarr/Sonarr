@@ -1,14 +1,14 @@
-using System.Runtime.Serialization;
+using NzbDrone.Core.Annotations;
 
 namespace NzbDrone.Core.ImportLists.Trakt.User
 {
     public enum TraktUserWatchedListType
     {
-        [EnumMember(Value = "All")]
+        [FieldOption(Label = "All")]
         All = 0,
-        [EnumMember(Value = "In Progress")]
+        [FieldOption(Label = "In Progress")]
         InProgress = 1,
-        [EnumMember(Value = "100% Watched")]
+        [FieldOption(Label = "100% Watched")]
         CompletelyWatched = 2
     }
 }
