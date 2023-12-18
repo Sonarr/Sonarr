@@ -127,5 +127,10 @@
     "ProxyPasswordHelpText": "Sie müssen nur einen Benutzernamen und ein Passwort eingeben, wenn dies erforderlich ist. Andernfalls lassen Sie sie leer.",
     "AddConnectionImplementation": "Verbindung hinzufügen - {implementationName}",
     "AddDownloadClientImplementation": "Download-Client hinzufügen - {implementationName}",
-    "AddIndexerImplementation": "Indexer hinzufügen - {implementationName}"
+    "AddIndexerImplementation": "Indexer hinzufügen - {implementationName}",
+    "AddNotificationError": "Neue Benachrichtigung konnte nicht hinzugefügt werden, bitte versuchen Sie es erneut.",
+    "AddQualityProfileError": "Qualitätsprofil konnte nicht hinzugefügt werden. Bitte versuchen Sie es erneut.",
+    "AddNewSeriesRootFolderHelpText": "Unterordner '{folder}' wird automatisch erstellt",
+    "AddNewSeriesSearchForMissingEpisodes": "Suche für fehlende Episoden starten",
+    "AddQualityProfile": "Qualitäts Profil hinzufügen"
 }
