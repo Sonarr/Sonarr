@@ -22,6 +22,7 @@ namespace NzbDrone.Core.ImportLists.Trakt.User
         {
             TraktListType = (int)TraktUserListType.UserWatchList;
             TraktWatchedListType = (int)TraktUserWatchedListType.All;
+            TraktWatchSorting = (int)TraktUserWatchSorting.Rank;
         }
 
         [FieldDefinition(1, Label = "List Type", Type = FieldType.Select, SelectOptions = typeof(TraktUserListType), HelpText = "Type of list you're seeking to import from")]
@@ -30,7 +31,18 @@ namespace NzbDrone.Core.ImportLists.Trakt.User
         [FieldDefinition(2, Label = "Watched List Filter", Type = FieldType.Select, SelectOptions = typeof(TraktUserWatchedListType), HelpText = "If List Type is Watched. Series do you want to import from")]
         public int TraktWatchedListType { get; set; }
 
-        [FieldDefinition(3, Label = "Username", HelpText = "Username for the List to import from (empty to use Auth User)")]
+        [FieldDefinition(3, Label = "Watch List Sorting", Type = FieldType.Select, SelectOptions = typeof(TraktUserWatchSorting), HelpText = "If List Type is Watch")]
+        public int TraktWatchSorting { get; set; }
+
+        [FieldDefinition(4, Label = "Username", HelpText = "Username for the List to import from (empty to use Auth User)")]
         public string Username { get; set; }
+    }
+
+    public enum TraktUserWatchSorting
+    {
+        Rank = 0,
+        Added = 1,
+        Title = 2,
+        Released = 3
     }
 }

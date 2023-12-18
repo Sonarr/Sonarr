@@ -6,9 +6,14 @@ namespace NzbDrone.Core.ImportLists.Trakt.User
 {
     public class TraktUserRequestGenerator : IImportListRequestGenerator
     {
-        public TraktUserSettings Settings { get; set; }
+        private readonly TraktUserSettings _settings;
+        private readonly string _clientId;
 
-        public string ClientId { get; set; }
+        public TraktUserRequestGenerator(TraktUserSettings settings, string clientId)
+        {
+            _settings = settings;
+            _clientId = clientId;
+        }
 
         public virtual ImportListPageableRequestChain GetListItems()
         {
@@ -21,33 +26,49 @@ namespace NzbDrone.Core.ImportLists.Trakt.User
 
         private IEnumerable<ImportListRequest> GetSeriesRequest()
         {
-            var link = Settings.BaseUrl.Trim();
-            var userName = Settings.Username.IsNotNullOrWhiteSpace() ? Settings.Username.Trim() : Settings.AuthUser.Trim();
+            var requestBuilder = new HttpRequestBuilder(_settings.BaseUrl.Trim());
 
-            switch (Settings.TraktListType)
+            switch (_settings.TraktListType)
             {
                 case (int)TraktUserListType.UserWatchList:
-                    link += $"/users/{userName}/watchlist/shows?limit={Settings.Limit}";
+                    var watchSorting = _settings.TraktWatchSorting switch
+                    {
+                        (int)TraktUserWatchSorting.Added => "added",
+                        (int)TraktUserWatchSorting.Title => "title",
+                        (int)TraktUserWatchSorting.Released => "released",
+                        _ => "rank"
+                    };
+
+                    requestBuilder
+                        .Resource("/users/{userName}/watchlist/shows/{sorting}")
+                        .SetSegment("sorting", watchSorting);
                     break;
                 case (int)TraktUserListType.UserWatchedList:
-                    link += $"/users/{userName}/watched/shows?extended=full&limit={Settings.Limit}";
+                    requestBuilder
+                        .Resource("/users/{userName}/watched/shows")
+                        .AddQueryParam("extended", "full");
                     break;
                 case (int)TraktUserListType.UserCollectionList:
-                    link += $"/users/{userName}/collection/shows?limit={Settings.Limit}";
+                    requestBuilder.Resource("/users/{userName}/collection/shows");
                     break;
             }
 
-            var request = new ImportListRequest(link, HttpAccept.Json);
+            var userName = _settings.Username.IsNotNullOrWhiteSpace() ? _settings.Username.Trim() : _settings.AuthUser.Trim();
 
-            request.HttpRequest.Headers.Add("trakt-api-version", "2");
-            request.HttpRequest.Headers.Add("trakt-api-key", ClientId);
+            requestBuilder
+                .SetSegment("userName", userName)
+                .Accept(HttpAccept.Json)
+                .WithRateLimit(4)
+                .SetHeader("trakt-api-version", "2")
+                .SetHeader("trakt-api-key", _clientId)
+                .AddQueryParam("limit", _settings.Limit.ToString());
 
-            if (Settings.AccessToken.IsNotNullOrWhiteSpace())
+            if (_settings.AccessToken.IsNotNullOrWhiteSpace())
             {
-                request.HttpRequest.Headers.Add("Authorization", "Bearer " + Settings.AccessToken);
+                requestBuilder.SetHeader("Authorization", $"Bearer {_settings.AccessToken}");
             }
 
-            yield return request;
+            yield return new ImportListRequest(requestBuilder.Build());
         }
     }
 }
