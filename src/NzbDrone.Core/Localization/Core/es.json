@@ -418,5 +418,8 @@
     "FormatDateTimeRelative": "{relativeDay}, {formattedDate} {formattedTime}",
     "FormatShortTimeSpanMinutes": "{minutes} minuto(s)",
     "FormatShortTimeSpanSeconds": "{seconds} segundo(s)",
-    "FormatTimeSpanDays": "{days}d {time}"
+    "FormatTimeSpanDays": "{days}d {time}",
+    "EditConditionImplementation": "Editar Condición - {implementationName}",
+    "FailedToFetchUpdates": "Fallo al buscar las actualizaciones",
+    "FailedToUpdateSettings": "Fallo al actualizar los ajustes"
 }

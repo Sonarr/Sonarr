@@ -4,5 +4,9 @@
     "AddCondition": "Koşul Ekle",
     "AddAutoTag": "Otomatik Etiket Ekle",
     "AddConnection": "Bağlantı Ekle",
-    "AddConditionImplementation": "Koşul Ekle - {uygulama Adı}"
+    "AddConditionImplementation": "Koşul Ekle - {implementationName}",
+    "EditConnectionImplementation": "Koşul Ekle - {implementationName}",
+    "AddConnectionImplementation": "Koşul Ekle - {implementationName}",
+    "AddIndexerImplementation": "Koşul Ekle - {implementationName}",
+    "EditIndexerImplementation": "Koşul Ekle - {implementationName}"
 }

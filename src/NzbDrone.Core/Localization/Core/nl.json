@@ -68,7 +68,7 @@
     "AddListError": "Kon geen nieuwe lijst toevoegen, probeer het opnieuw.",
     "AddNewRestriction": "Voeg nieuwe restrictie toe",
     "AddCustomFilter": "Aangepaste Filter Toevoegen",
-    "AddDownloadClientImplementation": "Voeg Downloadclient toe - {implementationName}",
+    "AddDownloadClientImplementation": "Voeg Downloadclient Toe - {implementationName}",
     "AddIndexer": "Voeg Indexeerder Toe",
     "AddIndexerImplementation": "Indexeerder toevoegen - {implementationName}",
     "UpdateMechanismHelpText": "Gebruik de ingebouwde updater van {appName} of een script",
@@ -78,7 +78,7 @@
     "AuthenticationRequired": "Verificatie vereist",
     "AddImportListExclusion": "Importlijst uitzondering toevoegen",
     "AddImportList": "Importlijst toevoegen",
-    "AddExclusion": "Uitzondering toevoegen",
+    "AddExclusion": "Uitzondering Toevoegen",
     "AddListExclusionError": "Kan geen nieuwe lijst uitzondering toevoegen, probeer het opnieuw.",
     "AddImportListImplementation": "Importlijst toevoegen - {implementationName}",
     "AddImportListExclusionError": "Kan geen nieuwe importlijst toevoegen, probeer het opnieuw.",
@@ -90,5 +90,11 @@
     "AuthenticationMethod": "Authenticatiemethode",
     "AuthenticationMethodHelpTextWarning": "Selecteer een geldige verificatie methode",
     "AddListExclusion": "Lijst uitzondering toevoegen",
-    "AddListExclusionSeriesHelpText": "Voorkom toevoegen van series aan {appName} door lijsten"
+    "AddListExclusionSeriesHelpText": "Voorkom toevoegen van series aan {appName} door lijsten",
+    "CouldNotFindResults": "Kon geen resultaten vinden voor '{term}'",
+    "DeleteBackupMessageText": "Bent u zeker dat u de veiligheidskopie '{name}' wilt verwijderen?",
+    "DeleteConditionMessageText": "Bent u zeker dat u de lijst '{name}' wilt verwijderen?",
+    "CountIndexersSelected": "{count} Indexer(s) Geselecteerd",
+    "DeleteDownloadClientMessageText": "Bent u zeker dat u de downloader '{name}' wilt verwijderen?",
+    "DeleteIndexerMessageText": "Bent u zeker dat u de indexeerder '{name}' wilt verwijderen?"
 }
