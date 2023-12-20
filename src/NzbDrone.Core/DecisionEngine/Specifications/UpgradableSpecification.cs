@@ -78,7 +78,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 return false;
             }
 
-            _logger.Debug("New item's custom formats [{0}] ({1}) do improve on [{2}] ({3}), accepting",
+            _logger.Debug("New item's custom formats [{0}] ({1}) improve on [{2}] ({3}), accepting",
                 newCustomFormats.ConcatToString(),
                 newFormatScore,
                 currentCustomFormats.ConcatToString(),

@@ -67,18 +67,18 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                 if (qualityCompare == 0 && newFormatScore < currentFormatScore)
                 {
                     _logger.Debug("New item's custom formats [{0}] ({1}) do not improve on [{2}] ({3}), skipping",
-                        newFormats.ConcatToString(),
+                        newFormats != null ? newFormats.ConcatToString() : "",
                         newFormatScore,
-                        currentFormats.ConcatToString(),
+                        currentFormats != null ? currentFormats.ConcatToString() : "",
                         currentFormatScore);
 
                     return Decision.Reject("Not a Custom Format upgrade for existing episode file(s)");
                 }
 
-                _logger.Debug("New item's custom formats [{0}] ({1}) do improve on [{2}] ({3}), accepting",
-                    newFormats.ConcatToString(),
+                _logger.Debug("New item's custom formats [{0}] ({1}) improve on [{2}] ({3}), accepting",
+                    newFormats != null ? newFormats.ConcatToString() : "",
                     newFormatScore,
-                    currentFormats.ConcatToString(),
+                    currentFormats != null ? currentFormats.ConcatToString() : "",
                     currentFormatScore);
             }
 
