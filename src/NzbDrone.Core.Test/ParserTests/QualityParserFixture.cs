@@ -21,6 +21,7 @@ namespace NzbDrone.Core.Test.ParserTests
             new object[] { Quality.WEBDL720p },
             new object[] { Quality.WEBDL1080p },
             new object[] { Quality.WEBDL2160p },
+            new object[] { Quality.Bluray576p },
             new object[] { Quality.Bluray720p },
             new object[] { Quality.Bluray1080p },
             new object[] { Quality.Bluray2160p },
@@ -39,6 +40,7 @@ namespace NzbDrone.Core.Test.ParserTests
             new object[] { "720p WEB-DL", Quality.WEBDL720p },
             new object[] { "1080p WEB-DL", Quality.WEBDL1080p },
             new object[] { "2160p WEB-DL", Quality.WEBDL2160p },
+            new object[] { "576p BluRay", Quality.Bluray576p },
             new object[] { "720p BluRay", Quality.Bluray720p },
             new object[] { "1080p BluRay", Quality.Bluray1080p },
             new object[] { "2160p BluRay", Quality.Bluray2160p },
@@ -105,7 +107,6 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("SERIES.S03E01-06.DUAL.BDRip.AC3.-HELLYWOOD", false)]
         [TestCase("SERIES.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD.avi", false)]
         [TestCase("SERIES.S03E01-06.DUAL.XviD.Bluray.AC3.-HELLYWOOD.avi", false)]
-        [TestCase("The.Series.S01E05.576p.BluRay.DD5.1.x264-HiSD", false)]
         [TestCase("The.Series.S01E05.480p.BluRay.DD5.1.x264-HiSD", false)]
         [TestCase("The Series (BD)(640x480(RAW) (BATCH 1) (1-13)", false)]
         [TestCase("[Doki] Series - 02 (848x480 XviD BD MP3) [95360783]", false)]
@@ -291,6 +292,26 @@ namespace NzbDrone.Core.Test.ParserTests
         public void should_parse_webrip2160p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.WEBRip2160p, proper);
+        }
+
+        [TestCase("Series - S01E03 - Come Fly With Me - 576p BluRay.mkv", false)]
+        [TestCase("Series.S01E02.Chained.Sonarr.[Bluray576p].mkv", false)]
+        [TestCase("[FFF] DATE A Sonarr Dev - 01 [BD][576p-AAC][0601BED4]", false)]
+        [TestCase("[coldhell] Series v3 [BD576p][03192D4C]", false)]
+        [TestCase("[RandomRemux] Series - 01 [576p BD][043EA407].mkv", false)]
+        [TestCase("[Kaylith] Series Friends Specials - 01 [BD 576p AAC][B7EEE164].mkv", false)]
+        [TestCase("SERIES.S03E01-06.DUAL.576p.Blu-ray.AC3.-HELLYWOOD.avi", false)]
+        [TestCase("[Elysium]Lucky.Series.01(BD.576p.AAC.DA)[0BB96AD8].mkv", false)]
+        [TestCase("Series.Galaxy.S01E01.33.576p.HDDVD.x264-SiNNERS.mkv", false)]
+        [TestCase("The.Series.S01E07.RERIP.576p.BluRay.x264-DEMAND", true)]
+        [TestCase("Sans.Series.De.Traces.FRENCH.576p.BluRay.x264-FHD", false)]
+        [TestCase("Series.Black.1x01.Selezione.Naturale.ITA.576p.BDMux.x264-NovaRip", false)]
+        [TestCase("Series.Hunter.S02.576p.Blu-ray.Remux.AVC.FLAC.2.0-SiCFoI", false)]
+        [TestCase("The.Series.S01E05.576p.BluRay.DD5.1.x264-HiSD", false)]
+        [TestCase("Series Title S01 [576p]BluRay.mkv", false)]
+        public void should_parse_bluray576p_quality(string title, bool proper)
+        {
+            ParseAndVerifyQuality(title, Quality.Bluray576p, proper);
         }
 
         [TestCase("SERIES.S03E01-06.DUAL.Bluray.AC3.-HELLYWOOD.avi", false)]
