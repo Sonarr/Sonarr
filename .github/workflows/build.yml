@@ -22,6 +22,8 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: ${{env.DOTNET_VERSION}}
+    - name: Dotnet Version
+      run: dotnet --version
     - name: Enable Extra Platforms In SDK
       shell: bash
       run: |
@@ -39,6 +41,7 @@ jobs:
         if grep -qv freebsd-x64 src/Directory.Build.props; then
           sed -i'' -e "s^<RuntimeIdentifiers>\(.*\)</RuntimeIdentifiers>^<RuntimeIdentifiers>\1;freebsd-x64;linux-x86</RuntimeIdentifiers>^g" src/Directory.Build.props
         fi
+    - name: Dotnet Version Before Build
+      run: dotnet --version
     - name: Build Backend
-      shell: bash
       run: dotnet msbuild -restore ${{env.SOLUTION_FILE}} -p:Configuration=Release -p:Platform=Windows -t:PublishAllRids
