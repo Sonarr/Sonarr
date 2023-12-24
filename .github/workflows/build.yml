@@ -32,7 +32,7 @@ jobs:
       run: |
         DOTNET_VERSION=$(jq -r '.sdk.version' global.json)
         echo "SDK_PATH=${{ env.DOTNET_ROOT }}/sdk/${DOTNET_VERSION}" >> "$GITHUB_ENV"
-        echo "SONARR_VERSION=${{ env.VERSION }}.${{ env.GITHUB_RUN_NUMBER }}" >> "$GITHUB_ENV"
+        echo "SONARR_VERSION=${{ env.VERSION }}.${{ github.run_number }}" >> "$GITHUB_ENV"
 
     - name: Enable Extra Platforms In SDK
       shell: bash
