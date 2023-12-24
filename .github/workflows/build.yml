@@ -28,6 +28,8 @@ jobs:
         dotnet-version: ${{ env.DOTNET_VERSION }}
     - name: Dotnet Version
       run: dotnet --version
+    - name: Dotnet Location
+      run: which dotnet
     - name: Enable Extra Platforms In SDK
       shell: bash
       run: |
