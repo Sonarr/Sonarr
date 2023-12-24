@@ -30,21 +30,7 @@ jobs:
         echo "SDK_PATH=${{ env.DOTNET_ROOT }}/sdk/${DOTNET_VERSION}" >> "$GITHUB_ENV"
     - name: Enable Extra Platforms In SDK
       shell: bash
-      run: |
-        echo "$SDK_PATH"
-        BUNDLEDVERSIONS="${{ env.SDK_PATH }}/Microsoft.NETCoreSdk.BundledVersions.props"
-          echo "$BUNDLEDVERSIONS"
-          if grep -q freebsd-x64 "$BUNDLEDVERSIONS"; then
-            echo "Extra platforms already enabled"
-          else
-            echo "Enabling extra platform support"
-            sed -i.ORI 's/osx-x64/osx-x64;freebsd-x64;linux-x86/' "$BUNDLEDVERSIONS"
-          fi
-    - name: Enable Extra Platforms
-      shell: bash
-      run: |
-        if grep -qv freebsd-x64 src/Directory.Build.props; then
-          sed -i'' -e "s^<RuntimeIdentifiers>\(.*\)</RuntimeIdentifiers>^<RuntimeIdentifiers>\1;freebsd-x64;linux-x86</RuntimeIdentifiers>^g" src/Directory.Build.props
-        fi
+      run: ./build.sh --enable-extra-platforms-in-sdk
     - name: Build Backend
-      run: dotnet msbuild -restore ${{ env.SOLUTION_FILE }} -p:Configuration=Release -p:Platform=Windows -t:PublishAllRids
+      shell: bash
+      run: ./build.sh --backend --enable-extra-platforms --packages
