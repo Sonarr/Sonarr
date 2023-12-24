@@ -14,23 +14,30 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  SOLUTION_FILE: src/Sonarr.sln
+  SONARR_MAJOR_VERSION: 4
+  VERSION: 4.0.0
 
 jobs:
   build_backend:
     runs-on: windows-latest
     steps:
+    - name: Check out
     - uses: actions/checkout@v3
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
+
     - name: Setup Environment Variables
       shell: bash
       run: |
         DOTNET_VERSION=$(jq -r '.sdk.version' global.json)
         echo "SDK_PATH=${{ env.DOTNET_ROOT }}/sdk/${DOTNET_VERSION}" >> "$GITHUB_ENV"
+        echo "SONARR_VERSION=${{ env.VERSION }}.${{ env.GITHUB_RUN_NUMBER }}" >> "$GITHUB_ENV"
+
     - name: Enable Extra Platforms In SDK
       shell: bash
       run: ./build.sh --enable-extra-platforms-in-sdk
+
     - name: Build Backend
       shell: bash
       run: ./build.sh --backend --enable-extra-platforms --packages

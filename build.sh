@@ -7,16 +7,14 @@ artifactsFolder="_artifacts";
 
 ProgressStart()
 {
-    echo "##teamcity[blockOpened name='$1']"
-    echo "##teamcity[progressStart '$1']"
+    echo "::group::$1"
     echo "Start '$1'"
 }
 
 ProgressEnd()
 {
     echo "Finish '$1'"
-    echo "##teamcity[progressFinish '$1']"
-    echo "##teamcity[blockClosed name='$1']"
+    echo "::endgroup::"
 }
 
 UpdateVersionNumber()
