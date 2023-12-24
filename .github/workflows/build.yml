@@ -26,9 +26,8 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
+      run: dotnet --version
     - name: Dotnet Version
-      with:
-        dotnet-version: ${{ env.DOTNET_VERSION }}
       run: dotnet --version
     - name: Enable Extra Platforms In SDK
       shell: bash
