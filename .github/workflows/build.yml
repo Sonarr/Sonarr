@@ -9,6 +9,10 @@ on:
   pull_request:
     branches: [ "develop" ]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 env:
   DOTNET_VERSION: 6.0.405
   SOLUTION_FILE: src/Sonarr.sln
@@ -27,7 +31,7 @@ jobs:
     - name: Enable Extra Platforms In SDK
       shell: bash
       run: |
-        BUNDLEDVERSIONS="${{env.DOTNET_ROOT}}/sdk/${DOTNET_VERSION}/Microsoft.NETCoreSdk.BundledVersions.props"
+        BUNDLEDVERSIONS="${{ env.DOTNET_ROOT }}/sdk/${{ env.DOTNET_VERSION }}/Microsoft.NETCoreSdk.BundledVersions.props"
           echo "$BUNDLEDVERSIONS"
           if grep -q freebsd-x64 "$BUNDLEDVERSIONS"; then
             echo "Extra platforms already enabled"
@@ -44,4 +48,4 @@ jobs:
     - name: Dotnet Version Before Build
       run: dotnet --version
     - name: Build Backend
-      run: dotnet msbuild -restore ${{env.SOLUTION_FILE}} -p:Configuration=Release -p:Platform=Windows -t:PublishAllRids
+      run: dotnet msbuild -restore ${{ env.SOLUTION_FILE }} -p:Configuration=Release -p:Platform=Windows -t:PublishAllRids
