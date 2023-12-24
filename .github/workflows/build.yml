@@ -35,4 +35,4 @@ jobs:
           fi
     - name: Build Backend
       shell: bash
-      run: ./build.sh --backend --enable-extra-platforms --packages
+      run: dotnet msbuild -restore ./src/Sonarr.sln -p:Configuration=Release -p:Platform=Windows -t:PublishAllRids
