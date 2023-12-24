@@ -26,7 +26,7 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
-    - name: Dotnet Version
+    - name: Dotnet List SDKs
       run: dotnet --list-sdks
     - name: Dotnet Version
       run: dotnet --version
