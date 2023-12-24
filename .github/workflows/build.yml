@@ -21,7 +21,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: ${{env.DOTNET_VERSION}}
+        dotnet-version: 6.0.405
     - name: Dotnet Version
       run: dotnet --version
     - name: Enable Extra Platforms In SDK
