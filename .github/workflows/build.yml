@@ -24,18 +24,16 @@ jobs:
     - uses: actions/checkout@v3
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: ${{ env.DOTNET_VERSION }}
-    - name: Dotnet List SDKs
-      run: dotnet --list-sdks
-    - name: Dotnet Version
-      run: dotnet --version
-    - name: Dotnet Location
-      run: which dotnet
+    - name: Setup Environment Variables
+      shell: bash
+      run: |
+        DOTNET_VERSION=$(jq '.sdk.version' global.json)
+        echo "SDK_PATH=${{ env.DOTNET_ROOT }}/sdk/${DOTNET_VERSION}" >> "$GITHUB_ENV"
     - name: Enable Extra Platforms In SDK
       shell: bash
       run: |
-        BUNDLEDVERSIONS="${{ env.DOTNET_ROOT }}/sdk/${{ env.DOTNET_VERSION }}/Microsoft.NETCoreSdk.BundledVersions.props"
+        echo "$SDK_PATH"
+        BUNDLEDVERSIONS="${{ env.SDK_PATH }}/Microsoft.NETCoreSdk.BundledVersions.props"
           echo "$BUNDLEDVERSIONS"
           if grep -q freebsd-x64 "$BUNDLEDVERSIONS"; then
             echo "Extra platforms already enabled"
