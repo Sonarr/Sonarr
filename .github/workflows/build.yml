@@ -27,7 +27,7 @@ jobs:
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
     - name: Dotnet Version
-      run: dotnet --version
+      run: dotnet -Version ${{ env.DOTNET_VERSION }} --version
     - name: Dotnet Location
       run: which dotnet
     - name: Enable Extra Platforms In SDK
