@@ -22,7 +22,7 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: ${{env.DOTNET_VERSION}}
-    - name: Enable Extra Platforms
+    - name: Enable Extra Platforms In SDK
       shell: bash
       run: |
         BUNDLEDVERSIONS="${{env.DOTNET_ROOT}}/sdk/${DOTNET_VERSION}/Microsoft.NETCoreSdk.BundledVersions.props"
@@ -33,6 +33,12 @@ jobs:
             echo "Enabling extra platform support"
             sed -i.ORI 's/osx-x64/osx-x64;freebsd-x64;linux-x86/' "$BUNDLEDVERSIONS"
           fi
+    - name: Enable Extra Platforms
+      shell: bash
+      run: |
+        if grep -qv freebsd-x64 src/Directory.Build.props; then
+          sed -i'' -e "s^<RuntimeIdentifiers>\(.*\)</RuntimeIdentifiers>^<RuntimeIdentifiers>\1;freebsd-x64;linux-x86</RuntimeIdentifiers>^g" src/Directory.Build.props
+        fi
     - name: Build Backend
       shell: bash
-      run: dotnet msbuild -restore ${{SOLUTION_FILE}} -p:Configuration=Release -p:Platform=Windows -t:PublishAllRids
+      run: dotnet msbuild -restore ${{env.SOLUTION_FILE}} -p:Configuration=Release -p:Platform=Windows -t:PublishAllRids
