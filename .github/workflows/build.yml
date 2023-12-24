@@ -14,7 +14,6 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  DOTNET_VERSION: 6.0.405
   SOLUTION_FILE: src/Sonarr.sln
 
 jobs:
@@ -27,7 +26,7 @@ jobs:
     - name: Setup Environment Variables
       shell: bash
       run: |
-        DOTNET_VERSION=$(jq '.sdk.version' global.json)
+        DOTNET_VERSION=$(jq -r '.sdk.version' global.json)
         echo "SDK_PATH=${{ env.DOTNET_ROOT }}/sdk/${DOTNET_VERSION}" >> "$GITHUB_ENV"
     - name: Enable Extra Platforms In SDK
       shell: bash
