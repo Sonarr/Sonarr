@@ -41,3 +41,15 @@ jobs:
     - name: Build Backend
       shell: bash
       run: ./build.sh --backend --enable-extra-platforms --packages
+
+    - name: Publish win-x64 Test Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: win-x64-tests
+        path: _tests/net6.0/win-x64/publish/**/*
+
+    - name: Publish win-x86 Test Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: win-x86-tests
+        path: _tests/net6.0/win-x86/publish/**/*
