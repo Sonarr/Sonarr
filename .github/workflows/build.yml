@@ -35,4 +35,4 @@ jobs:
           fi
     - name: Build Backend
       shell: bash
-      run: dotnet msbuild -restore ./src/Sonarr.sln -p:Configuration=Release -p:Platform=Windows -t:PublishAllRids
+      run: dotnet msbuild -restore ${{SOLUTION_FILE}} -p:Configuration=Release -p:Platform=Windows -t:PublishAllRids
