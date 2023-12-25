@@ -1,7 +1,7 @@
 # https://docs.github.com/en/actions/creating-actions/creating-a-composite-action
 
-name: Publish Test Artifact
-description: Publishes a test artifact
+name: Publish Artifact
+description: Publishes a build artifact
 
 inputs:
   runtime:
@@ -13,5 +13,5 @@ runs:
   steps:
     - uses: actions/upload-artifact@v4
       with:
-        name: ${{ inputs.runtime }}-tests
-        path: _tests/net6.0/${{ inputs.runtime }}/publish/**/*
+        name: ${{ inputs.runtime }}
+        path: _artifacts/net6.0/${{ inputs.runtime }}/publish/**/*
