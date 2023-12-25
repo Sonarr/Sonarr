@@ -24,6 +24,7 @@ namespace NzbDrone.Core.Download
         {
             public int IndexerId { get; set; }
             public bool FullSeason { get; set; }
+            public TorrentSeedConfiguration SeedConfiguration { get; set; }
         }
 
         private readonly ICached<CachedSeedConfiguration> _cacheDownloads;
@@ -53,6 +54,11 @@ namespace NzbDrone.Core.Download
                 return null;
             }
 
+            if (cachedConfig.SeedConfiguration != null)
+            {
+                return cachedConfig.SeedConfiguration;
+            }
+
             var seedConfig = _indexerSeedConfigProvider.GetSeedConfiguration(cachedConfig.IndexerId, cachedConfig.FullSeason);
 
             return seedConfig;
@@ -71,6 +77,21 @@ namespace NzbDrone.Core.Download
             ParsedEpisodeInfo parsedEpisodeInfo = null;
             if (historyItem.Release != null)
             {
+                if (historyItem.Release is TorrentInfo torrentInfo)
+                {
+                    return new CachedSeedConfiguration
+                    {
+                        IndexerId = historyItem.IndexerId,
+                        SeedConfiguration = new TorrentSeedConfiguration
+                        {
+                            Ratio = torrentInfo.MinimumRatio,
+                            SeedTime = torrentInfo.MinimumSeedTime.HasValue
+                                ? TimeSpan.FromSeconds(torrentInfo.MinimumSeedTime.Value)
+                                : null
+                        }
+                    };
+                }
+
                 parsedEpisodeInfo = Parser.Parser.ParseTitle(historyItem.Release.Title);
             }
 

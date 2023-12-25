@@ -37,7 +37,25 @@ namespace NzbDrone.Core.Indexers
                 return null;
             }
 
-            return GetSeedConfiguration(remoteEpisode.Release.IndexerId, remoteEpisode.ParsedEpisodeInfo.FullSeason);
+            var seedConfig = GetSeedConfiguration(remoteEpisode.Release.IndexerId, remoteEpisode.ParsedEpisodeInfo.FullSeason);
+
+            if (remoteEpisode.Release is not TorrentInfo torrentInfo)
+            {
+                return seedConfig;
+            }
+
+            if (!torrentInfo.MinimumSeedTime.HasValue || !torrentInfo.MinimumRatio.HasValue)
+            {
+                return seedConfig;
+            }
+
+            return new TorrentSeedConfiguration
+            {
+                Ratio = seedConfig?.Ratio ?? torrentInfo.MinimumRatio,
+                SeedTime = seedConfig?.SeedTime ?? (torrentInfo.MinimumSeedTime.HasValue
+                    ? TimeSpan.FromSeconds(torrentInfo.MinimumSeedTime.Value)
+                    : null)
+            };
         }
 
         public TorrentSeedConfiguration GetSeedConfiguration(int indexerId, bool fullSeason)

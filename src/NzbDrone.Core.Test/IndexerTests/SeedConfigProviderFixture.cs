@@ -37,6 +37,7 @@ namespace NzbDrone.Core.Test.IndexerTests
         {
             var settings = new TorznabSettings();
             settings.SeedCriteria.SeasonPackSeedTime = 10;
+            settings.SeedCriteria.SeedRatio = 1.0;
 
             Mocker.GetMock<IIndexerFactory>()
                      .Setup(v => v.Get(It.IsAny<int>()))
@@ -47,10 +48,12 @@ namespace NzbDrone.Core.Test.IndexerTests
 
             var result = Subject.GetSeedConfiguration(new RemoteEpisode
             {
-                Release = new ReleaseInfo()
+                Release = new TorrentInfo()
                 {
                     DownloadProtocol = DownloadProtocol.Torrent,
-                    IndexerId = 1
+                    IndexerId = 1,
+                    MinimumRatio = 1.5,
+                    MinimumSeedTime = 120
                 },
                 ParsedEpisodeInfo = new ParsedEpisodeInfo
                 {
@@ -60,6 +63,39 @@ namespace NzbDrone.Core.Test.IndexerTests
 
             result.Should().NotBeNull();
             result.SeedTime.Should().Be(TimeSpan.FromMinutes(10));
+            result.Ratio.Should().Be(1);
+        }
+
+        [Test]
+        public void should_return_episode_config_when_indexer_config_not_set()
+        {
+            var settings = new TorznabSettings();
+
+            Mocker.GetMock<IIndexerFactory>()
+                .Setup(v => v.Get(It.IsAny<int>()))
+                .Returns(new IndexerDefinition
+                {
+                    Settings = settings
+                });
+
+            var result = Subject.GetSeedConfiguration(new RemoteEpisode
+            {
+                Release = new TorrentInfo()
+                {
+                    DownloadProtocol = DownloadProtocol.Torrent,
+                    IndexerId = 1,
+                    MinimumRatio = 1.5,
+                    MinimumSeedTime = 120
+                },
+                ParsedEpisodeInfo = new ParsedEpisodeInfo
+                {
+                    FullSeason = true
+                }
+            });
+
+            result.Should().NotBeNull();
+            result.SeedTime.Should().Be(TimeSpan.FromSeconds(120));
+            result.Ratio.Should().Be(1.5);
         }
     }
 }
