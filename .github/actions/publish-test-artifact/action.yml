@@ -1,0 +1,17 @@
+# https://docs.github.com/en/actions/creating-actions/creating-a-composite-action
+
+name: Set up environment
+description: Runs setup actions and installs packages
+
+inputs:
+  runtime:
+    description: '.net runtime'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - uses: actions/upload-artifact@v4
+      with:
+        name: ${{ inputs.runtime }}-tests
+        path: _tests/net6.0/${{ inputs.runtime }}/publish/**/*

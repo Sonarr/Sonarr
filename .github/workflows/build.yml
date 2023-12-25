@@ -42,14 +42,94 @@ jobs:
       shell: bash
       run: ./build.sh --backend --enable-extra-platforms --packages
 
+    # Test Artifacts
+
     - name: Publish win-x64 Test Artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/publish-test-artifact@v1
       with:
-        name: win-x64-tests
-        path: _tests/net6.0/win-x64/publish/**/*
+        runtime: win-x64
 
     - name: Publish win-x86 Test Artifact
+      uses: actions/publish-test-artifact@v1
+      with:
+        runtime: win-x86
+
+    - name: Publish linux-x64 Test Artifact
+      uses: actions/publish-test-artifact@v1
+      with:
+        runtime: linux-x64
+
+    - name: Publish linux-musl-x64 Test Artifact
+      uses: actions/publish-test-artifact@v1
+      with:
+        runtime: linux-musl-x64
+
+    - name: Publish osx-x64 Test Artifact
+      uses: actions/publish-test-artifact@v1
+      with:
+        runtime: osx-x64
+
+    - name: Publish freebsd-x64 Test Artifact
+      uses: actions/publish-test-artifact@v1
+      with:
+        runtime: freebsd-x64
+
+    # Artifacts
+
+    - name: Publish win-x64 Artifact
+      uses: actions/publish-test-artifact@v1
+      with:
+        runtime: win-x64
+
+    - name: Publish win-x86 Artifact
+      uses: actions/publish-test-artifact@v1
+      with:
+        runtime: win-x86
+
+    - name: Publish linux-x64 Artifact
+      uses: actions/publish-test-artifact@v1
+      with:
+        runtime: linux-x64
+
+    - name: Publish linux-musl-x64 Artifact
+      uses: actions/publish-test-artifact@v1
+      with:
+        runtime: linux-musl-x64
+
+    - name: Publish linux-arm64 Artifact
+      uses: actions/publish-test-artifact@v1
+      with:
+        runtime: linux-arm64
+
+    - name: Publish linux-musl-arm64 Artifact
+      uses: actions/publish-test-artifact@v1
+      with:
+        runtime: linux-musl-arm64
+
+    - name: Publish linux-arm Artifact
+      uses: actions/publish-test-artifact@v1
+      with:
+        runtime: linux-arm
+
+    - name: Publish osx-x64 Artifact
+      uses: actions/publish-test-artifact@v1
+      with:
+        runtime: osx-x64
+
+    - name: Publish osx-arm64 Artifact
+      uses: actions/publish-test-artifact@v1
+      with:
+        runtime: osx-arm64
+
+    - name: Publish freebsd-x64 Artifact
+      uses: actions/publish-test-artifact@v1
+      with:
+        runtime: freebsd-x64
+
+    # Distribution Artifact
+    
+    - name: Publish Distribution Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: win-x86-tests
-        path: _tests/net6.0/win-x86/publish/**/*
+        name: distribution
+        path: distribution/**/*
