@@ -1,0 +1,25 @@
+# https://docs.github.com/en/actions/creating-actions/creating-a-composite-action
+
+name: Run test on DLLs matching the specified pattern
+description: Runs unit/integration tests
+
+inputs:
+  pattern:
+    description: 'Pattern for DLLs'
+    required: true
+  filter:
+    description: 'Filter for tests'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+
+    - name: Run tests
+      shell: bash
+      runs: |
+        for i in tests/${{ inputs.pattern }}; do
+            dotnet test $i --no-build -c Release --filter ${{ inputs.filter }}
+        done

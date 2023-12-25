@@ -123,6 +123,10 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         name: tests-linux-x64
+        path: tests
 
-    - name: Display structure of downloaded files
-      run: ls -R
+    - name: Test
+      uses: ./.github/actions/test
+      with:
+        pattern: Sonarr.*.Test.dll
+        filter: TestCategory!=ManualTest&TestCategory!=WINDOWS&TestCategory!=IntegrationTest&TestCategory!=AutomationTest
