@@ -74,3 +74,30 @@ jobs:
       with:
         name: distribution
         path: distribution/**/*
+
+  build_frontend:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out
+      uses: actions/checkout@v3
+
+    - name: Volta
+      uses: volta-cli/action@v4
+
+    - name: Yarn Intsall
+      run: yarn install
+
+    - name: Lint
+      run: yarn lint
+
+    - name: Stylelint
+      run: yarn stylelint
+
+    - name: Build
+      run: yarn build --env production
+
+    - name: Publish UI Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ui
+        path: _output/UI/**/*
