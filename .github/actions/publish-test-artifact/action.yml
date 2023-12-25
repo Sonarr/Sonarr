@@ -13,5 +13,5 @@ runs:
   steps:
     - uses: actions/upload-artifact@v4
       with:
-        name: ${{ inputs.runtime }}-tests
+        name: tests-${{ inputs.runtime }}
         path: _tests/net6.0/${{ inputs.runtime }}/publish/**/*

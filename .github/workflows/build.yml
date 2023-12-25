@@ -18,7 +18,7 @@ env:
   VERSION: 4.0.0
 
 jobs:
-  build_backend:
+  backend:
     runs-on: windows-latest
     steps:
     - name: Check out
@@ -75,7 +75,15 @@ jobs:
         name: distribution
         path: distribution/**/*
 
-  build_frontend:
+    # global.json Artifact
+    
+    - name: Publish Distribution Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: global_json
+        path: global.json
+
+  frontend:
     runs-on: ubuntu-latest
     steps:
     - name: Check out
@@ -101,3 +109,20 @@ jobs:
       with:
         name: ui
         path: _output/UI/**/*
+
+  unit_test_linux:
+    needs: backend
+    runs-on: ubuntu-latest
+    steps:
+    - name: Download global.json
+      uses: actions/download-artifact@v4
+      with:
+        name: global_json
+
+    - name: Download Artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: tests-linux-x64
+
+    - name: Display structure of downloaded files
+      run: ls -R
