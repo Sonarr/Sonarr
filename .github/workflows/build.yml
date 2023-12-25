@@ -77,7 +77,7 @@ jobs:
 
     # global.json Artifact
     
-    - name: Publish Distribution Artifact
+    - name: Publish global.json Artifact
       uses: actions/upload-artifact@v4
       with:
         name: global_json
@@ -114,16 +114,8 @@ jobs:
     needs: backend
     runs-on: ubuntu-latest
     steps:
-    - name: Download global.json
-      uses: actions/download-artifact@v4
-      with:
-        name: global_json
-
-    - name: Download Artifact
-      uses: actions/download-artifact@v4
-      with:
-        name: tests-linux-x64
-        path: tests
+    - name: Check out
+      uses: actions/checkout@v3
 
     - name: Test
       uses: ./.github/actions/test
