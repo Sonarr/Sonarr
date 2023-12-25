@@ -14,4 +14,4 @@ runs:
     - uses: actions/upload-artifact@v4
       with:
         name: ${{ inputs.runtime }}
-        path: _artifacts/net6.0/${{ inputs.runtime }}/publish/**/*
+        path: _artifacts/net6.0/${{ inputs.runtime }}/**/*
