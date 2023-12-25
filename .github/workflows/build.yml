@@ -49,82 +49,23 @@ jobs:
       with:
         runtime: win-x64
 
-    - name: Publish win-x86 Test Artifact
-      uses: ./.github/actions/publish-test-artifact
-      with:
-        runtime: win-x86
-
     - name: Publish linux-x64 Test Artifact
       uses: ./.github/actions/publish-test-artifact
       with:
         runtime: linux-x64
-
-    - name: Publish linux-musl-x64 Test Artifact
-      uses: ./.github/actions/publish-test-artifact
-      with:
-        runtime: linux-musl-x64
 
     - name: Publish osx-x64 Test Artifact
       uses: ./.github/actions/publish-test-artifact
       with:
         runtime: osx-x64
 
-    - name: Publish freebsd-x64 Test Artifact
-      uses: ./.github/actions/publish-test-artifact
+    # Build Artifacts
+    
+    - name: Publish Backend Artifact
+      uses: actions/upload-artifact@v4
       with:
-        runtime: freebsd-x64
-
-    # Artifacts
-
-    - name: Publish win-x64 Artifact
-      uses: ./.github/actions/publish-artifact
-      with:
-        runtime: win-x64
-
-    - name: Publish win-x86 Artifact
-      uses: ./.github/actions/publish-artifact
-      with:
-        runtime: win-x86
-
-    - name: Publish linux-x64 Artifact
-      uses: ./.github/actions/publish-artifact
-      with:
-        runtime: linux-x64
-
-    - name: Publish linux-musl-x64 Artifact
-      uses: ./.github/actions/publish-artifact
-      with:
-        runtime: linux-musl-x64
-
-    - name: Publish linux-arm64 Artifact
-      uses: ./.github/actions/publish-artifact
-      with:
-        runtime: linux-arm64
-
-    - name: Publish linux-musl-arm64 Artifact
-      uses: ./.github/actions/publish-artifact
-      with:
-        runtime: linux-musl-arm64
-
-    - name: Publish linux-arm Artifact
-      uses: ./.github/actions/publish-artifact
-      with:
-        runtime: linux-arm
-
-    - name: Publish osx-x64 Artifact
-      uses: ./.github/actions/publish-artifact
-      with:
-        runtime: osx-x64
-
-    - name: Publish osx-arm64 Artifact
-      uses: ./.github/actions/publish-artifact
-      with:
-        runtime: osx-arm64
-
-    - name: Publish freebsd-x64 Artifact
-      uses: ./.github/actions/publish-artifact
-      with:
-        runtime: freebsd-x64
+        name: backend
+        path: _artifacts/**/*
 
     # Distribution Artifact
     
