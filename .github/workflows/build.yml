@@ -69,19 +69,11 @@ jobs:
 
     # Distribution Artifact
     
-    - name: Publish Distribution Artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: distribution
-        path: distribution/**/*
-
-    # global.json Artifact
-    
-    - name: Publish global.json Artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: global_json
-        path: global.json
+    # - name: Publish Distribution Artifact
+    #   uses: actions/upload-artifact@v4
+    #   with:
+    #     name: distribution
+    #     path: distribution/**/*
 
   frontend:
     runs-on: ubuntu-latest

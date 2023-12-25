@@ -25,7 +25,7 @@ runs:
 
     - name: Run tests
       shell: bash
-      runs: |
+      run: |
         for i in _tests/${{ inputs.pattern }}; do
             dotnet test $i --no-build -c Release --filter ${{ inputs.filter }}
         done
