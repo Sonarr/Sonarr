@@ -28,6 +28,7 @@ interface Queue extends ModelBase {
   sizeleft: number;
   timeleft: string;
   estimatedCompletionTime: string;
+  addedOn: string;
   status: string;
   trackedDownloadStatus: QueueTrackedDownloadStatus;
   trackedDownloadState: QueueTrackedDownloadState;

@@ -193,9 +193,16 @@ namespace Sonarr.Api.V3.Queue
             else if (pagingSpec.SortKey == "estimatedCompletionTime")
             {
                 ordered = ascending
-                    ? fullQueue.OrderBy(q => q.EstimatedCompletionTime, new EstimatedCompletionTimeComparer())
+                    ? fullQueue.OrderBy(q => q.EstimatedCompletionTime, new DatetimeComparer())
                     : fullQueue.OrderByDescending(q => q.EstimatedCompletionTime,
-                        new EstimatedCompletionTimeComparer());
+                        new DatetimeComparer());
+            }
+            else if (pagingSpec.SortKey == "addedOn")
+            {
+                ordered = ascending
+                    ? fullQueue.OrderBy(q => q.AddedOn, new DatetimeComparer())
+                    : fullQueue.OrderByDescending(q => q.AddedOn,
+                        new DatetimeComparer());
             }
             else if (pagingSpec.SortKey == "protocol")
             {

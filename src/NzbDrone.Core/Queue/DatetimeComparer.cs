@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace NzbDrone.Core.Queue
 {
-    public class EstimatedCompletionTimeComparer : IComparer<DateTime?>
+    public class DatetimeComparer : IComparer<DateTime?>
     {
         public int Compare(DateTime? x, DateTime? y)
         {
