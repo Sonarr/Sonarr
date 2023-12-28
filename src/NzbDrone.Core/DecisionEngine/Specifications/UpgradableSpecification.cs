@@ -78,7 +78,11 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 return false;
             }
 
-            _logger.Debug("New item has a better custom format score");
+            _logger.Debug("New item's custom formats [{0}] ({1}) improve on [{2}] ({3}), accepting",
+                newCustomFormats.ConcatToString(),
+                newFormatScore,
+                currentCustomFormats.ConcatToString(),
+                currentFormatScore);
             return true;
         }
 
