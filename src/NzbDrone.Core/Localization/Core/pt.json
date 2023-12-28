@@ -180,5 +180,11 @@
     "DeleteIndexerMessageText": "Tem a certeza de que pretende eliminar o indexador '{name}'?",
     "DisabledForLocalAddresses": "Desativado para Endereços Locais",
     "CalendarOptions": "Opções do calendário",
-    "UpdateMechanismHelpText": "Use o atualizador do {appName} ou um script"
+    "UpdateMechanismHelpText": "Use o atualizador do {appName} ou um script",
+    "BackupFolderHelpText": "Caminhos relativos estarão no diretório AppData do {appName}",
+    "Automatic": "Automático",
+    "AutomaticSearch": "Pesquisa automática",
+    "AutoTaggingRequiredHelpText": "Esta condição de {implementationName} deve corresponder para que a regra de marcação automática seja aplicada. Caso contrário, uma única correspondência de {implementationName} é suficiente.",
+    "Backup": "Backup",
+    "AuthenticationRequiredPasswordConfirmationHelpTextWarning": "Confirmar nova senha"
 }

@@ -28,5 +28,7 @@
     "AptUpdater": "Usa apt per installare l'aggiornamento",
     "Backup": "Backup",
     "ApplyTagsHelpTextHowToApplySeries": "Come applicare le etichette alle serie selezionate",
-    "AddImportList": "Aggiungi lista da importare"
+    "AddImportList": "Aggiungi lista da importare",
+    "AddCondition": "Aggiungi Condizione",
+    "CloneCondition": "Duplica Condizione"
 }
