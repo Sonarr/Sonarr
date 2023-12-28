@@ -314,6 +314,22 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeMonitoredServiceTests
         }
 
         [Test]
+        public void should_not_monitor_last_season_for_future_episodes_if_all_episodes_already_aired()
+        {
+            _episodes.ForEach(e => e.AirDateUtc = DateTime.UtcNow.AddDays(-7));
+
+            var monitoringOptions = new MonitoringOptions
+            {
+                Monitor = MonitorTypes.Future
+            };
+
+            Subject.SetEpisodeMonitoredStatus(_series, monitoringOptions);
+
+            VerifySeasonNotMonitored(n => n.SeasonNumber > 0);
+            VerifyNotMonitored(n => n.SeasonNumber > 0);
+        }
+
+        [Test]
         public void should_monitor_any_recent_and_future_episodes_if_all_episodes_aired_within_90_days()
         {
             _series.Seasons = Builder<Season>.CreateListOfSize(1)
