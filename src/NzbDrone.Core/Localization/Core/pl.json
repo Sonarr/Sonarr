@@ -18,5 +18,6 @@
     "AddAutoTagError": "Nie można dodać nowego tagu automatycznego, spróbuj ponownie.",
     "AddConditionError": "Nie można dodać nowego warunku, spróbuj ponownie.",
     "AddConnection": "Dodaj połączenie",
-    "AddCustomFilter": "Dodaj spersonalizowany filtr"
+    "AddCustomFilter": "Dodaj spersonalizowany filtr",
+    "Close": "Zamknij"
 }
