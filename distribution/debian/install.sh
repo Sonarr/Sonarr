@@ -51,13 +51,7 @@ app_guid=${app_guid:-media}
 
 echo "This will install [${app^}] to [$bindir] and use [$datadir] for the AppData Directory"
 echo "${app^} will run as the user [$app_uid] and group [$app_guid]. By continuing, you've confirmed that that user and group will have READ and WRITE access to your Media Library and Download Client Completed Download directories"
-echo "Continue with the installation [Yes/No]?"
-select yn in "Yes" "No"; do
-    case $yn in
-    Yes) break ;;
-    No) exit 0 ;;
-    esac
-done
+read -n 1 -r -s -p $'Press enter to continue or ctrl+c to exit...\n'
 
 # Create User / Group as needed
 if [ "$app_guid" != "$app_uid" ]; then
