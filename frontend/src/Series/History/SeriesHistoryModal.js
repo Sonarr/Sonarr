@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import Modal from 'Components/Modal/Modal';
+import { sizes } from 'Helpers/Props';
 import SeriesHistoryModalContentConnector from './SeriesHistoryModalContentConnector';
 
 function SeriesHistoryModal(props) {
@@ -13,6 +14,7 @@ function SeriesHistoryModal(props) {
   return (
     <Modal
       isOpen={isOpen}
+      size={sizes.EXTRA_LARGE}
       onModalClose={onModalClose}
     >
       <SeriesHistoryModalContentConnector

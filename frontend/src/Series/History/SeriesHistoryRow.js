@@ -9,7 +9,6 @@ import RelativeDateCellConnector from 'Components/Table/Cells/RelativeDateCellCo
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
 import TableRow from 'Components/Table/TableRow';
 import Popover from 'Components/Tooltip/Popover';
-import Tooltip from 'Components/Tooltip/Tooltip';
 import EpisodeFormats from 'Episode/EpisodeFormats';
 import EpisodeLanguages from 'Episode/EpisodeLanguages';
 import EpisodeNumber from 'Episode/EpisodeNumber';
@@ -122,11 +121,19 @@ class SeriesHistoryRow extends Component {
           />
         </TableRowCell>
 
+        <TableRowCell>
+          <EpisodeFormats formats={customFormats} />
+        </TableRowCell>
+
+        <TableRowCell>
+          {formatCustomFormatScore(customFormatScore, customFormats.length)}
+        </TableRowCell>
+
         <RelativeDateCellConnector
           date={date}
         />
 
-        <TableRowCell className={styles.details}>
+        <TableRowCell className={styles.actions}>
           <Popover
             anchor={
               <Icon
@@ -144,24 +151,13 @@ class SeriesHistoryRow extends Component {
             }
             position={tooltipPositions.LEFT}
           />
-        </TableRowCell>
 
-        <TableRowCell className={styles.customFormatScore}>
-          <Tooltip
-            anchor={
-              formatCustomFormatScore(customFormatScore, customFormats.length)
-            }
-            tooltip={<EpisodeFormats formats={customFormats} />}
-            position={tooltipPositions.BOTTOM}
-          />
-        </TableRowCell>
-
-        <TableRowCell className={styles.actions}>
           {
             eventType === 'grabbed' &&
               <IconButton
                 title={translate('MarkAsFailed')}
                 name={icons.REMOVE}
+                size={14}
                 onPress={this.onMarkAsFailedPress}
               />
           }
