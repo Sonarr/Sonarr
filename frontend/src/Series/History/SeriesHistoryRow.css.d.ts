@@ -2,7 +2,6 @@
 // Please do not change this file!
 interface CssExports {
   'actions': string;
-  'details': string;
   'sourceTitle': string;
 }
 export const cssExports: CssExports;

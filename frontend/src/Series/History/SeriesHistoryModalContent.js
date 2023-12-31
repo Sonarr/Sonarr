@@ -41,13 +41,9 @@ const columns = [
     isVisible: true
   },
   {
-    name: 'date',
-    label: () => translate('Date'),
-    isVisible: true
-  },
-  {
-    name: 'details',
-    label: () => translate('Details'),
+    name: 'customFormats',
+    label: () => translate('CustomFormats'),
+    isSortable: false,
     isVisible: true
   },
   {
@@ -60,8 +56,12 @@ const columns = [
     isVisible: true
   },
   {
+    name: 'date',
+    label: () => translate('Date'),
+    isVisible: true
+  },
+  {
     name: 'actions',
-    label: () => translate('Actions'),
     isVisible: true
   }
 ];

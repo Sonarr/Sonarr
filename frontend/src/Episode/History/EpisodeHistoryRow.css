@@ -1,4 +1,3 @@
-.details,
 .actions {
   composes: cell from '~Components/Table/Cells/TableRowCell.css';
 
