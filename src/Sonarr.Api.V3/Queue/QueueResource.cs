@@ -29,7 +29,7 @@ namespace Sonarr.Api.V3.Queue
         public decimal Sizeleft { get; set; }
         public TimeSpan? Timeleft { get; set; }
         public DateTime? EstimatedCompletionTime { get; set; }
-        public DateTime? AddedOn { get; set; }
+        public DateTime? Added { get; set; }
         public string Status { get; set; }
         public TrackedDownloadStatus? TrackedDownloadStatus { get; set; }
         public TrackedDownloadState? TrackedDownloadState { get; set; }
@@ -72,7 +72,7 @@ namespace Sonarr.Api.V3.Queue
                 Sizeleft = model.Sizeleft,
                 Timeleft = model.Timeleft,
                 EstimatedCompletionTime = model.EstimatedCompletionTime,
-                AddedOn = model.AddedOn,
+                Added = model.Added,
                 Status = model.Status.FirstCharToLower(),
                 TrackedDownloadStatus = model.TrackedDownloadStatus,
                 TrackedDownloadState = model.TrackedDownloadState,
