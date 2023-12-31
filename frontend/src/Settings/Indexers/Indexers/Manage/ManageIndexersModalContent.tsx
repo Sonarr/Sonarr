@@ -14,9 +14,11 @@ import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import useSelectState from 'Helpers/Hooks/useSelectState';
 import { kinds } from 'Helpers/Props';
+import SortDirection from 'Helpers/Props/SortDirection';
 import {
   bulkDeleteIndexers,
   bulkEditIndexers,
+  setManageIndexersSort,
 } from 'Store/Actions/settingsActions';
 import createClientSideCollectionSelector from 'Store/Selectors/createClientSideCollectionSelector';
 import { SelectStateInputProps } from 'typings/props';
@@ -80,6 +82,8 @@ const COLUMNS = [
 
 interface ManageIndexersModalContentProps {
   onModalClose(): void;
+  sortKey?: string;
+  sortDirection?: SortDirection;
 }
 
 function ManageIndexersModalContent(props: ManageIndexersModalContentProps) {
@@ -92,6 +96,8 @@ function ManageIndexersModalContent(props: ManageIndexersModalContentProps) {
     isSaving,
     error,
     items,
+    sortKey,
+    sortDirection,
   }: IndexerAppState = useSelector(
     createClientSideCollectionSelector('settings.indexers')
   );
@@ -111,6 +117,13 @@ function ManageIndexersModalContent(props: ManageIndexersModalContentProps) {
   }, [selectedState]);
 
   const selectedCount = selectedIds.length;
+
+  const onSortPress = useCallback(
+    (value: string) => {
+      dispatch(setManageIndexersSort({ sortKey: value }));
+    },
+    [dispatch]
+  );
 
   const onDeletePress = useCallback(() => {
     setIsDeleteModalOpen(true);
@@ -214,6 +227,9 @@ function ManageIndexersModalContent(props: ManageIndexersModalContentProps) {
             allSelected={allSelected}
             allUnselected={allUnselected}
             onSelectAllChange={onSelectAllChange}
+            sortKey={sortKey}
+            sortDirection={sortDirection}
+            onSortPress={onSortPress}
           >
             <TableBody>
               {items.map((item) => {
