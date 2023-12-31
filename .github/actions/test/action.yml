@@ -27,5 +27,5 @@ runs:
       shell: bash
       run: |
         for i in _tests/${{ inputs.pattern }}; do
-            dotnet test $i --no-build -c Release --filter ${{ inputs.filter }}
+            dotnet test $i --filter "${{ inputs.filter }}"
         done
