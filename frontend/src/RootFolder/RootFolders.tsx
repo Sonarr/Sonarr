@@ -49,7 +49,7 @@ function RootFolders() {
 
   if (!isFetching && !!error) {
     return (
-      <Alert kind={kinds.DANGER}>{translate('UnableToLoadRootFolders')}</Alert>
+      <Alert kind={kinds.DANGER}>{translate('RootFoldersLoadError')}</Alert>
     );
   }
 
