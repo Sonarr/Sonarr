@@ -25,7 +25,4 @@ runs:
 
     - name: Run tests
       shell: bash
-      run: |
-        for i in _tests/${{ inputs.pattern }}; do
-            dotnet test $i --filter "${{ inputs.filter }}"
-        done
+      run: dotnet test Sonarr.*.Test.dll --filter "${{ inputs.filter }}"
