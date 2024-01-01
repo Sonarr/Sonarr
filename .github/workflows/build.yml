@@ -112,5 +112,6 @@ jobs:
     - name: Test
       uses: ./.github/actions/test
       with:
+        artifact: tests-linux-x64
         pattern: Sonarr.*.Test.dll
         filter: TestCategory!=ManualTest&TestCategory!=WINDOWS&TestCategory!=IntegrationTest&TestCategory!=AutomationTest

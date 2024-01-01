@@ -4,6 +4,9 @@ name: Run test on DLLs matching the specified pattern
 description: Runs unit/integration tests
 
 inputs:
+  artifact:
+    description: 'Test binary artifact'
+    required: true
   pattern:
     description: 'Pattern for DLLs'
     required: true
@@ -20,9 +23,9 @@ runs:
     - name: Download Artifact
       uses: actions/download-artifact@v4
       with:
-        name: tests-linux-x64
+        name: ${{ inputs.artifact }}
         path: _tests
 
     - name: Run tests
       shell: bash
-      run: dotnet test Sonarr.*.Test.dll --filter "${{ inputs.filter }}"
+      run: dotnet test Sonarr.*.Test.dll --filter "${{ inputs.filter }}" --logger trx --results-directory "TestResults-${{ matrix.dotnet-version }}"
