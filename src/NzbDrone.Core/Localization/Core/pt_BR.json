@@ -1700,5 +1700,8 @@
     "MonitorRecentEpisodes": "Episódios Recentes",
     "AuthenticationRequiredPasswordConfirmationHelpTextWarning": "Confirme a nova senha",
     "MonitorNoNewSeasons": "Sem Novas Temporadas",
-    "MonitorNewItems": "Monitorar Novos Itens"
+    "MonitorNewItems": "Monitorar Novos Itens",
+    "DownloadClientQbittorrentSettingsContentLayout": "Layout de Conteúdo",
+    "DownloadClientQbittorrentSettingsContentLayoutHelpText": "Seja para usar o layout de conteúdo configurado do qBittorrent, o layout original do torrent ou sempre criar uma subpasta (qBittorrent 4.3.2+)",
+    "AddRootFolderError": "Não foi possível adicionar a pasta raiz"
 }
