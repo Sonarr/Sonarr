@@ -791,5 +791,7 @@
     "SeriesDetailsOneEpisodeFile": "1 Episodendatei",
     "UpcomingSeriesDescription": "Die Serie wurde angekündigt, aber noch kein genauer Ausstrahlungstermin",
     "UpdateScriptPathHelpText": "Pfad zu einem benutzerdefinierten Skript, das ein extrahiertes Update-Paket übernimmt und den Rest des Update-Prozesses abwickelt",
-    "Branch": "Branch"
+    "Branch": "Branch",
+    "Airs": "Wird ausgestrahlt",
+    "AddRootFolderError": "Stammverzeichnis kann nicht hinzugefügt werden"
 }

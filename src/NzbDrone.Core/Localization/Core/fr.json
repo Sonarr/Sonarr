@@ -371,7 +371,7 @@
     "NoChanges": "Aucuns changements",
     "NoSeasons": "Pas de saisons",
     "PosterSize": "Taille des affiches",
-    "PosterOptions": "Poster options",
+    "PosterOptions": "Paramètres des affiches",
     "Posters": "Affiches",
     "Or": "ou",
     "ParseModalHelpTextDetails": "{appName} va tenter d'analyser le titre et de vous afficher les détails à son sujet",
@@ -399,8 +399,8 @@
     "ResetDefinitionTitlesHelpText": "Réinitialiser les titres de définition ainsi que les valeurs",
     "Reset": "Réinitialiser",
     "RestartSonarr": "Redémarrer {appName}",
-    "SelectSeries": "Sélectionnez la série",
-    "SearchForMissing": "Recherche des manquants",
+    "SelectSeries": "Sélectionner des séries",
+    "SearchForMissing": "Rechercher les manquants",
     "SearchAll": "Tout rechercher",
     "Series": "Série",
     "ShowSearchHelpText": "Afficher le bouton de recherche au survol",
@@ -1053,7 +1053,7 @@
     "IncludeCustomFormatWhenRenaming": "Inclure un format personnalisé lors du changement de nom",
     "InteractiveImportNoSeries": "Les séries doivent être choisies pour chaque fichier sélectionné",
     "Level": "Niveau",
-    "LibraryImport": "Importation de bibliothèque",
+    "LibraryImport": "Importer biblio.",
     "ListExclusionsLoadError": "Impossible de charger les exclusions de liste",
     "ListQualityProfileHelpText": "Les éléments de la liste des profils de qualité seront ajoutés avec",
     "ListTagsHelpText": "Balises qui seront ajoutées lors de l'importation à partir de cette liste",
@@ -1700,5 +1700,6 @@
     "TorrentBlackholeSaveMagnetFilesExtensionHelpText": "Extension à utiliser pour les liens magnétiques, par défaut '.magnet'",
     "TorrentBlackholeSaveMagnetFilesReadOnlyHelpText": "Au lieu de déplacer les fichiers, cela indiquera à {appName} de copier ou de créer un lien (en fonction des paramètres/configuration système)",
     "TorrentBlackholeTorrentFolder": "Dossier Torrent",
-    "XmlRpcPath": "Chemin XML RPC"
+    "XmlRpcPath": "Chemin XML RPC",
+    "AddRootFolderError": "Impossible d'ajouter le dossier racine"
 }
