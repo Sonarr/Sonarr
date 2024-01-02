@@ -1,8 +1,9 @@
-﻿#!/bin/bash
+#!/bin/bash
 ### Description: Sonarr .NET Debian install
 ### Originally written for Radarr by: DoctorArr - doctorarr@the-rowlands.co.uk on 2021-10-01 v1.0
 ### Updates for servarr suite made by Bakerboy448, DoctorArr, brightghost, aeramor and VP-EN
 ### Version v1.0.0 2023-12-29 - StevieTV - adapted from servarr script for Sonarr installs
+### Version V1.0.1 2024-01-02 - StevieTV - remove UTF8-BOM
 
 ### Boilerplate Warning
 #THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
@@ -13,7 +14,7 @@
 #OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 #WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-scriptversion="1.0.0"
+scriptversion="1.0.1"
 scriptdate="2023-12-29"
 
 set -euo pipefail
