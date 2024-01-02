@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Notifications.Join
         private readonly ILocalizationService _localizationService;
         private readonly Logger _logger;
 
-        public JoinProxy(IHttpClient httpClient,ILocalizationService localizationService, Logger logger)
+        public JoinProxy(IHttpClient httpClient, ILocalizationService localizationService, Logger logger)
         {
             _httpClient = httpClient;
             _localizationService = localizationService;
