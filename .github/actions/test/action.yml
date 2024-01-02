@@ -28,4 +28,4 @@ runs:
 
     - name: Run tests
       shell: bash
-      run: dotnet test Sonarr.*.Test.dll --filter "${{ inputs.filter }}" --logger trx --results-directory "TestResults-${{ matrix.dotnet-version }}"
+      run: dotnet test ./_tests/Sonarr.*.Test.dll --filter "${{ inputs.filter }}" --logger trx --results-directory "TestResults-${{ matrix.dotnet-version }}"
