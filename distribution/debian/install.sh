@@ -4,6 +4,7 @@
 ### Updates for servarr suite made by Bakerboy448, DoctorArr, brightghost, aeramor and VP-EN
 ### Version v1.0.0 2023-12-29 - StevieTV - adapted from servarr script for Sonarr installs
 ### Version V1.0.1 2024-01-02 - StevieTV - remove UTF8-BOM
+### Version V1.0.2 2024-01-03 - markus101 - Get user input from /dev/tty
 
 ### Boilerplate Warning
 #THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
@@ -14,8 +15,8 @@
 #OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 #WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-scriptversion="1.0.1"
-scriptdate="2023-12-29"
+scriptversion="1.0.2"
+scriptdate="2024-01-03"
 
 set -euo pipefail
 
@@ -42,17 +43,17 @@ datadir="/var/lib/$app/"       # {Update me if needed} AppData directory to use
 app_bin=${app^}                # Binary Name of the app
 
 # Prompt User
-read -r -p "What user should ${app^} run as? (Default: $app): " app_uid
+read -r -p "What user should ${app^} run as? (Default: $app): " app_uid < /dev/tty
 app_uid=$(echo "$app_uid" | tr -d ' ')
 app_uid=${app_uid:-$app}
 # Prompt Group
-read -r -p "What group should ${app^} run as? (Default: media): " app_guid
+read -r -p "What group should ${app^} run as? (Default: media): " app_guid < /dev/tty
 app_guid=$(echo "$app_guid" | tr -d ' ')
 app_guid=${app_guid:-media}
 
 echo "This will install [${app^}] to [$bindir] and use [$datadir] for the AppData Directory"
 echo "${app^} will run as the user [$app_uid] and group [$app_guid]. By continuing, you've confirmed that that user and group will have READ and WRITE access to your Media Library and Download Client Completed Download directories"
-read -n 1 -r -s -p $'Press enter to continue or ctrl+c to exit...\n'
+read -n 1 -r -s -p $'Press enter to continue or ctrl+c to exit...\n' < /dev/tty
 
 # Create User / Group as needed
 if [ "$app_guid" != "$app_uid" ]; then
