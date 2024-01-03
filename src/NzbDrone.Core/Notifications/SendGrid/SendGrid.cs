@@ -2,17 +2,20 @@ using System;
 using System.Collections.Generic;
 using FluentValidation.Results;
 using NLog;
+using NzbDrone.Core.Localization;
 
 namespace NzbDrone.Core.Notifications.SendGrid
 {
     public class SendGrid : NotificationBase<SendGridSettings>
     {
         private readonly ISendGridProxy _proxy;
+        private readonly ILocalizationService _localizationService;
         private readonly Logger _logger;
 
-        public SendGrid(ISendGridProxy proxy, Logger logger)
+        public SendGrid(ISendGridProxy proxy, ILocalizationService localizationService, Logger logger)
         {
             _proxy = proxy;
+            _localizationService = localizationService;
             _logger = logger;
         }
 
@@ -78,7 +81,7 @@ namespace NzbDrone.Core.Notifications.SendGrid
             catch (Exception ex)
             {
                 _logger.Error(ex, "Unable to send test message");
-                failures.Add(new ValidationFailure("", "Unable to send test message"));
+                failures.Add(new ValidationFailure("", _localizationService.GetLocalizedString("NotificationsValidationUnableToSendTestMessage", new Dictionary<string, object> { { "exceptionMessage", ex.Message } })));
             }
 
             return new ValidationResult(failures);

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using FluentValidation.Results;
 using NLog;
+using NzbDrone.Core.Localization;
 using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.Tv;
 
@@ -12,11 +13,13 @@ namespace NzbDrone.Core.Notifications.Gotify
     public class Gotify : NotificationBase<GotifySettings>
     {
         private readonly IGotifyProxy _proxy;
+        private readonly ILocalizationService _localizationService;
         private readonly Logger _logger;
 
-        public Gotify(IGotifyProxy proxy, Logger logger)
+        public Gotify(IGotifyProxy proxy, ILocalizationService localizationService, Logger logger)
         {
             _proxy = proxy;
+            _localizationService = localizationService;
             _logger = logger;
         }
 
@@ -101,7 +104,7 @@ namespace NzbDrone.Core.Notifications.Gotify
             catch (Exception ex)
             {
                 _logger.Error(ex, "Unable to send test message");
-                failures.Add(new ValidationFailure("", "Unable to send test message"));
+                failures.Add(new ValidationFailure(string.Empty, _localizationService.GetLocalizedString("NotificationsValidationUnableToSendTestMessage", new Dictionary<string, object> { { "exceptionMessage", ex.Message } })));
             }
 
             return new ValidationResult(failures);

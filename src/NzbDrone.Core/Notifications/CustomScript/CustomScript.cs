@@ -10,6 +10,7 @@ using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Processes;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.HealthCheck;
+using NzbDrone.Core.Localization;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.MediaInfo;
 using NzbDrone.Core.Parser;
@@ -27,6 +28,7 @@ namespace NzbDrone.Core.Notifications.CustomScript
         private readonly IDiskProvider _diskProvider;
         private readonly IProcessProvider _processProvider;
         private readonly ITagRepository _tagRepository;
+        private readonly ILocalizationService _localizationService;
         private readonly Logger _logger;
 
         public CustomScript(IConfigFileProvider configFileProvider,
@@ -34,6 +36,7 @@ namespace NzbDrone.Core.Notifications.CustomScript
             IDiskProvider diskProvider,
             IProcessProvider processProvider,
             ITagRepository tagRepository,
+            ILocalizationService localizationService,
             Logger logger)
         {
             _configFileProvider = configFileProvider;
@@ -41,14 +44,15 @@ namespace NzbDrone.Core.Notifications.CustomScript
             _diskProvider = diskProvider;
             _processProvider = processProvider;
             _tagRepository = tagRepository;
+            _localizationService = localizationService;
             _logger = logger;
         }
 
-        public override string Name => "Custom Script";
+        public override string Name => _localizationService.GetLocalizedString("NotificationsCustomScriptSettingsName");
 
         public override string Link => "https://wiki.servarr.com/sonarr/settings#connections";
 
-        public override ProviderMessage Message => new ProviderMessage("Testing will execute the script with the EventType set to Test, ensure your script handles this correctly", ProviderMessageType.Warning);
+        public override ProviderMessage Message => new ProviderMessage(_localizationService.GetLocalizedString("NotificationsCustomScriptSettingsProviderMessage", new Dictionary<string, object> { { "eventTypeTest", "Test" } }), ProviderMessageType.Warning);
 
         public override void OnGrab(GrabMessage message)
         {
@@ -360,7 +364,7 @@ namespace NzbDrone.Core.Notifications.CustomScript
 
             if (!_diskProvider.FileExists(Settings.Path))
             {
-                failures.Add(new NzbDroneValidationFailure("Path", "File does not exist"));
+                failures.Add(new NzbDroneValidationFailure("Path", _localizationService.GetLocalizedString("NotificationsCustomScriptValidationFileDoesNotExist")));
             }
 
             if (failures.Empty())

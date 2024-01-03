@@ -45,25 +45,25 @@ namespace NzbDrone.Core.Notifications.Apprise
             Tags = Array.Empty<string>();
         }
 
-        [FieldDefinition(1, Label = "Apprise Server URL", Type = FieldType.Url, Placeholder = "http://localhost:8000", HelpText = "Apprise server URL, including http(s):// and port if needed", HelpLink = "https://github.com/caronc/apprise-api")]
+        [FieldDefinition(1, Label = "NotificationsAppriseSettingsServerUrl", Type = FieldType.Url, Placeholder = "http://localhost:8000", HelpText = "NotificationsAppriseSettingsServerUrlHelpText", HelpLink = "https://github.com/caronc/apprise-api")]
         public string ServerUrl { get; set; }
 
-        [FieldDefinition(2, Label = "Apprise Configuration Key", Type = FieldType.Textbox, HelpText = "Configuration Key for the Persistent Storage Solution. Leave empty if Stateless URLs is used.", HelpLink = "https://github.com/caronc/apprise-api#persistent-storage-solution")]
+        [FieldDefinition(2, Label = "NotificationsAppriseSettingsConfigurationKey", Type = FieldType.Textbox, HelpText = "NotificationsAppriseSettingsConfigurationKeyHelpText", HelpLink = "https://github.com/caronc/apprise-api#persistent-storage-solution")]
         public string ConfigurationKey { get; set; }
 
-        [FieldDefinition(3, Label = "Apprise Stateless URLs", Type = FieldType.Textbox, HelpText = "One or more URLs separated by commas identifying where the notification should be sent to. Leave empty if Persistent Storage is used.", HelpLink = "https://github.com/caronc/apprise#productivity-based-notifications")]
+        [FieldDefinition(3, Label = "NotificationsAppriseSettingsStatelessUrls", Type = FieldType.Textbox, HelpText = "NotificationsAppriseSettingsStatelessUrlsHelpText", HelpLink = "https://github.com/caronc/apprise#productivity-based-notifications")]
         public string StatelessUrls { get; set; }
 
-        [FieldDefinition(4, Label = "Apprise Notification Type", Type = FieldType.Select, SelectOptions = typeof(AppriseNotificationType))]
+        [FieldDefinition(4, Label = "NotificationsAppriseSettingsNotificationType", Type = FieldType.Select, SelectOptions = typeof(AppriseNotificationType))]
         public int NotificationType { get; set; }
 
-        [FieldDefinition(5, Label = "Apprise Tags", Type = FieldType.Tag, HelpText = "Optionally notify only those tagged accordingly.")]
+        [FieldDefinition(5, Label = "NotificationsAppriseSettingsTags", Type = FieldType.Tag, HelpText = "")]
         public IEnumerable<string> Tags { get; set; }
 
-        [FieldDefinition(6, Label = "Username", Type = FieldType.Textbox, HelpText = "HTTP Basic Auth Username", Privacy = PrivacyLevel.UserName)]
+        [FieldDefinition(6, Label = "Username", Type = FieldType.Textbox, HelpText = "NotificationsAppriseSettingsUsernameHelpText", Privacy = PrivacyLevel.UserName)]
         public string AuthUsername { get; set; }
 
-        [FieldDefinition(7, Label = "Password", Type = FieldType.Password, HelpText = "HTTP Basic Auth Password", Privacy = PrivacyLevel.Password)]
+        [FieldDefinition(7, Label = "Password", Type = FieldType.Password, HelpText = "NotificationsAppriseSettingsPasswordHelpText", Privacy = PrivacyLevel.Password)]
         public string AuthPassword { get; set; }
 
         public NzbDroneValidationResult Validate()

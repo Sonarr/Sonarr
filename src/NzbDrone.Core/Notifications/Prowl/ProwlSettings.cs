@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Notifications.Prowl
     {
         private static readonly ProwlSettingsValidator Validator = new ProwlSettingsValidator();
 
-        [FieldDefinition(0, Label = "API Key", Privacy = PrivacyLevel.ApiKey, HelpLink = "https://www.prowlapp.com/api_settings.php")]
+        [FieldDefinition(0, Label = "ApiKey", Privacy = PrivacyLevel.ApiKey, HelpLink = "https://www.prowlapp.com/api_settings.php")]
         public string ApiKey { get; set; }
 
         [FieldDefinition(1, Label = "Priority", Type = FieldType.Select, SelectOptions = typeof(ProwlPriority))]

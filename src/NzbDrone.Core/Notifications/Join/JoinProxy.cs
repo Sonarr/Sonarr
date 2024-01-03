@@ -1,10 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Common.Serializer;
+using NzbDrone.Core.Localization;
 
 namespace NzbDrone.Core.Notifications.Join
 {
@@ -19,11 +21,13 @@ namespace NzbDrone.Core.Notifications.Join
         private const string URL = "https://joinjoaomgcd.appspot.com/_ah/api/messaging/v1/sendPush?";
 
         private readonly IHttpClient _httpClient;
+        private readonly ILocalizationService _localizationService;
         private readonly Logger _logger;
 
-        public JoinProxy(IHttpClient httpClient, Logger logger)
+        public JoinProxy(IHttpClient httpClient, ILocalizationService localizationService, Logger logger)
         {
             _httpClient = httpClient;
+            _localizationService = localizationService;
             _logger = logger;
         }
 
@@ -55,22 +59,22 @@ namespace NzbDrone.Core.Notifications.Join
             catch (JoinInvalidDeviceException ex)
             {
                 _logger.Error(ex, "Unable to send test Join message. Invalid Device IDs supplied.");
-                return new ValidationFailure("DeviceIds", "Device IDs appear invalid.");
+                return new ValidationFailure("DeviceIds", _localizationService.GetLocalizedString("NotificationsJoinValidationInvalidDeviceId"));
             }
             catch (JoinException ex)
             {
                 _logger.Error(ex, "Unable to send test Join message.");
-                return new ValidationFailure("ApiKey", ex.Message);
+                return new ValidationFailure("ApiKey", _localizationService.GetLocalizedString("NotificationsValidationUnableToSendTestMessage", new Dictionary<string, object> { { "exceptionMessage", ex.Message } }));
             }
             catch (HttpException ex)
             {
                 _logger.Error(ex, "Unable to send test Join message. Server connection failed.");
-                return new ValidationFailure("ApiKey", "Unable to connect to Join API. Please try again later.");
+                return new ValidationFailure("ApiKey", _localizationService.GetLocalizedString("NotificationsValidationUnableToSendTestMessage", new Dictionary<string, object> { { "service", "Join" }, { "responseCode", ex.Response.StatusCode }, { "exceptionMessage", ex.Message } }));
             }
             catch (Exception ex)
             {
                 _logger.Error(ex, "Unable to send test Join message. Unknown error.");
-                return new ValidationFailure("ApiKey", ex.Message);
+                return new ValidationFailure("ApiKey", _localizationService.GetLocalizedString("NotificationsValidationUnableToSendTestMessage", new Dictionary<string, object> { { "exceptionMessage", ex.Message } }));
             }
         }
 

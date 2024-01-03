@@ -33,7 +33,8 @@ namespace NzbDrone.Core.Notifications.Xbmc
         [FieldDefinition(1, Label = "Port")]
         public int Port { get; set; }
 
-        [FieldDefinition(2, Label = "Use SSL", Type = FieldType.Checkbox, HelpText = "Connect to Kodi over HTTPS instead of HTTP")]
+        [FieldDefinition(2, Label = "UseSsl", Type = FieldType.Checkbox, HelpText = "NotificationsSettingsUseSslHelpText")]
+        [FieldToken(TokenField.HelpText, "UseSsl", "serviceName", "Kodi")]
         public bool UseSsl { get; set; }
 
         [FieldDefinition(3, Label = "Username", Privacy = PrivacyLevel.UserName)]
@@ -43,19 +44,19 @@ namespace NzbDrone.Core.Notifications.Xbmc
         public string Password { get; set; }
 
         [DefaultValue(5)]
-        [FieldDefinition(5, Label = "Display Time", HelpText = "How long the notification will be displayed for (In seconds)")]
+        [FieldDefinition(5, Label = "NotificationsKodiSettingsDisplayTime", HelpText = "NotificationsKodiSettingsDisplayTimeHelpText")]
         public int DisplayTime { get; set; }
 
-        [FieldDefinition(6, Label = "GUI Notification", Type = FieldType.Checkbox)]
+        [FieldDefinition(6, Label = "NotificationsKodiSettingsGuiNotification", Type = FieldType.Checkbox)]
         public bool Notify { get; set; }
 
-        [FieldDefinition(7, Label = "Update Library", HelpText = "Update Library on Import & Rename?", Type = FieldType.Checkbox)]
+        [FieldDefinition(7, Label = "NotificationsSettingsUpdateLibrary", HelpText = "NotificationsKodiSettingsUpdateLibraryHelpText", Type = FieldType.Checkbox)]
         public bool UpdateLibrary { get; set; }
 
-        [FieldDefinition(8, Label = "Clean Library", HelpText = "Clean Library after update?", Type = FieldType.Checkbox)]
+        [FieldDefinition(8, Label = "NotificationsKodiSettingsCleanLibrary", HelpText = "NotificationsKodiSettingsCleanLibraryHelpText", Type = FieldType.Checkbox)]
         public bool CleanLibrary { get; set; }
 
-        [FieldDefinition(9, Label = "Always Update", HelpText = "Update Library even when a video is playing?", Type = FieldType.Checkbox)]
+        [FieldDefinition(9, Label = "NotificationsKodiSettingAlwaysUpdate", HelpText = "NotificationsKodiSettingAlwaysUpdateHelpText", Type = FieldType.Checkbox)]
         public bool AlwaysUpdate { get; set; }
 
         [JsonIgnore]

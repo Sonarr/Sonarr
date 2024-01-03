@@ -34,22 +34,25 @@ namespace NzbDrone.Core.Notifications.Plex.Server
         [FieldDefinition(1, Label = "Port")]
         public int Port { get; set; }
 
-        [FieldDefinition(2, Label = "Use SSL", Type = FieldType.Checkbox, HelpText = "Connect to Plex over HTTPS instead of HTTP")]
+        [FieldDefinition(2, Label = "UseSsl", Type = FieldType.Checkbox, HelpText = "NotificationsSettingsUseSslHelpText")]
+        [FieldToken(TokenField.HelpText, "UseSsl", "serviceName", "Plex")]
         public bool UseSsl { get; set; }
 
-        [FieldDefinition(3, Label = "Auth Token", Type = FieldType.Textbox, Privacy = PrivacyLevel.ApiKey, Advanced = true)]
+        [FieldDefinition(3, Label = "NotificationsPlexSettingsAuthToken", Type = FieldType.Textbox, Privacy = PrivacyLevel.ApiKey, Advanced = true)]
         public string AuthToken { get; set; }
 
-        [FieldDefinition(4, Label = "Authenticate with Plex.tv", Type = FieldType.OAuth)]
+        [FieldDefinition(4, Label = "NotificationsPlexSettingsAuthenticateWithPlexTv", Type = FieldType.OAuth)]
         public string SignIn { get; set; }
 
-        [FieldDefinition(5, Label = "Update Library", Type = FieldType.Checkbox)]
+        [FieldDefinition(5, Label = "NotificationsSettingsUpdateLibrary", Type = FieldType.Checkbox)]
         public bool UpdateLibrary { get; set; }
 
-        [FieldDefinition(6, Label = "Map Paths From", Type = FieldType.Textbox, Advanced = true, HelpText = "Sonarr path, used to modify series paths when Plex sees library path location differently from Sonarr")]
+        [FieldDefinition(6, Label = "NotificationsSettingsUpdateMapPathsFrom", Type = FieldType.Textbox, Advanced = true, HelpText = "NotificationsSettingsUpdateMapPathsFromHelpText")]
+        [FieldToken(TokenField.HelpText, "NotificationsSettingsUpdateMapPathsFrom", "serviceName", "Plex")]
         public string MapFrom { get; set; }
 
-        [FieldDefinition(7, Label = "Map Paths To", Type = FieldType.Textbox, Advanced = true, HelpText = "Plex path, used to modify series paths when Plex sees library path location differently from Sonarr")]
+        [FieldDefinition(7, Label = "NotificationsSettingsUpdateMapPathsTo", Type = FieldType.Textbox, Advanced = true, HelpText = "NotificationsSettingsUpdateMapPathsToHelpText")]
+        [FieldToken(TokenField.HelpText, "NotificationsSettingsUpdateMapPathsTo", "serviceName", "Plex")]
         public string MapTo { get; set; }
 
         public bool IsValid => !string.IsNullOrWhiteSpace(Host);

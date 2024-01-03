@@ -20,25 +20,26 @@ namespace NzbDrone.Core.Notifications.Signal
     {
         private static readonly SignalSettingsValidator Validator = new ();
 
-        [FieldDefinition(0, Label = "Host", Type = FieldType.Textbox, HelpText = "localhost")]
+        [FieldDefinition(0, Label = "Host", Type = FieldType.Textbox, Placeholder = "localhost")]
         public string Host { get; set; }
 
-        [FieldDefinition(1, Label = "Port", Type = FieldType.Textbox, HelpText = "8080")]
+        [FieldDefinition(1, Label = "Port", Type = FieldType.Textbox, Placeholder = "8080")]
         public int Port { get; set; }
 
-        [FieldDefinition(2, Label = "Use SSL", Type = FieldType.Checkbox, HelpText = "Use a secure connection.")]
+        [FieldDefinition(2, Label = "UseSsl", Type = FieldType.Checkbox, HelpText = "NotificationsSettingsUseSslHelpText")]
+        [FieldToken(TokenField.HelpText, "UseSsl", "serviceName",  "Signal")]
         public bool UseSsl { get; set; }
 
-        [FieldDefinition(3, Label = "Sender Number", Privacy = PrivacyLevel.ApiKey, HelpText = "Phone number of the sender register in signal-api")]
+        [FieldDefinition(3, Label = "NotificationsSignalSettingsSenderNumber", Privacy = PrivacyLevel.ApiKey, HelpText = "NotificationsSignalSettingsSenderNumberHelpText")]
         public string SenderNumber { get; set; }
 
-        [FieldDefinition(4, Label = "Group ID / PhoneNumber", HelpText = "GroupID / PhoneNumber of the receiver")]
+        [FieldDefinition(4, Label = "NotificationsSignalSettingsGroupIdPhoneNumber", HelpText = "NotificationsSignalSettingsGroupIdPhoneNumberHelpText")]
         public string ReceiverId { get; set; }
 
-        [FieldDefinition(5, Label = "Login", Privacy = PrivacyLevel.UserName, HelpText = "Username used to authenticate requests toward signal-api")]
+        [FieldDefinition(5, Label = "Username", Privacy = PrivacyLevel.UserName, HelpText = "NotificationsSignalSettingsUsernameHelpText")]
         public string AuthUsername { get; set; }
 
-        [FieldDefinition(6, Label = "Password", Type = FieldType.Password, Privacy = PrivacyLevel.Password, HelpText = "Password used to authenticate requests toward signal-api")]
+        [FieldDefinition(6, Label = "Password", Type = FieldType.Password, Privacy = PrivacyLevel.Password, HelpText = "NotificationsSignalSettingsPasswordHelpText")]
         public string AuthPassword { get; set; }
 
         public NzbDroneValidationResult Validate()

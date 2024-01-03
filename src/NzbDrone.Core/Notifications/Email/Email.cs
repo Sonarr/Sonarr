@@ -8,19 +8,22 @@ using MimeKit;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http.Dispatchers;
+using NzbDrone.Core.Localization;
 
 namespace NzbDrone.Core.Notifications.Email
 {
     public class Email : NotificationBase<EmailSettings>
     {
         private readonly ICertificateValidationService _certificateValidationService;
+        private readonly ILocalizationService _localizationService;
         private readonly Logger _logger;
 
-        public override string Name => "Email";
+        public override string Name => _localizationService.GetLocalizedString("NotificationsEmailSettingsName");
 
-        public Email(ICertificateValidationService certificateValidationService, Logger logger)
+        public Email(ICertificateValidationService certificateValidationService, ILocalizationService localizationService, Logger logger)
         {
             _certificateValidationService = certificateValidationService;
+            _localizationService = localizationService;
             _logger = logger;
         }
 
@@ -180,7 +183,7 @@ namespace NzbDrone.Core.Notifications.Email
             catch (Exception ex)
             {
                 _logger.Error(ex, "Unable to send test email");
-                return new ValidationFailure("Server", "Unable to send test email");
+                return new ValidationFailure("Server", _localizationService.GetLocalizedString("NotificationsValidationUnableToSendTestMessage", new Dictionary<string, object> { { "exceptionMessage", ex.Message } }));
             }
 
             return null;

@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Notifications.Synology
             UpdateLibrary = true;
         }
 
-        [FieldDefinition(0, Label = "Update Library", Type = FieldType.Checkbox, HelpText = "Call synoindex on localhost to update a library file")]
+        [FieldDefinition(0, Label = "NotificationsSettingsUpdateLibrary", Type = FieldType.Checkbox, HelpText = "NotificationsSynologySettingsUpdateLibraryHelpText")]
         public bool UpdateLibrary { get; set; }
 
         public NzbDroneValidationResult Validate()
