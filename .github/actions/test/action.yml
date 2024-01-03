@@ -30,6 +30,10 @@ runs:
       shell: bash
       run: ls -la ./_tests
 
+    - name: Make executable
+      shell: bash
+      run: chmod +x ./_tests/Sonarr.Test.Dummy && chmod +x ./_tests/ffprobe
+
     - name: Run tests
       shell: bash
       run: dotnet test ./_tests/Sonarr.*.Test.dll --filter "${{ inputs.filter }}" --logger trx --results-directory "TestResults-${{ matrix.dotnet-version }}"
