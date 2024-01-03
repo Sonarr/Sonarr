@@ -4,6 +4,9 @@ name: Run test on DLLs matching the specified pattern
 description: Runs unit/integration tests
 
 inputs:
+  platform:
+    description: 'OS platform that the tests are running on'
+    required: true
   artifact:
     description: 'Test binary artifact'
     required: true
@@ -26,11 +29,8 @@ runs:
         name: ${{ inputs.artifact }}
         path: _tests
 
-    - name: List all files
-      shell: bash
-      run: ls -la ./_tests
-
     - name: Make executable
+      if: ${{ inputs.platform }}
       shell: bash
       run: chmod +x ./_tests/Sonarr.Test.Dummy && chmod +x ./_tests/ffprobe
 
