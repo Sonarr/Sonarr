@@ -122,3 +122,19 @@ jobs:
         artifact: ${{ matrix.artifact }}
         pattern: Sonarr.*.Test.dll
         filter: ${{ matrix.filter }}
+
+  unit_test_postgres:
+    needs: backend
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out
+      uses: actions/checkout@v3
+
+    - name: Test
+      uses: ./.github/actions/test
+      with:
+        platform: ubuntu-latest
+        artifact: tests-linux-x64
+        pattern: Sonarr.*.Test.dll
+        filter: TestCategory!=ManualTest&TestCategory!=WINDOWS&TestCategory!=IntegrationTest&TestCategory!=AutomationTest
+        use_postgres: true

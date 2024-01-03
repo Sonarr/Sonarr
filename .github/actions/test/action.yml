@@ -4,6 +4,8 @@ name: Run test on DLLs matching the specified pattern
 description: Runs unit/integration tests
 
 inputs:
+  use_postgres:
+    description: 'Whether postgres should be used for the database'
   platform:
     description: 'OS platform that the tests are running on'
     required: true
@@ -22,6 +24,19 @@ runs:
   steps:
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
+
+    - name: Setup Postgres
+      if: ${{ inputs.use_postgres }}
+      uses: ikalnytskyi/action-setup-postgres@v4
+
+    - name: Setup Environment Variables
+      if: ${{ inputs.use_postgres }}
+      shell: bash
+      run: |
+        echo "Sonarr__Postgres__Host=localhost" >> "$GITHUB_ENV"
+        echo "Sonarr__Postgres__Port=5432" >> "$GITHUB_ENV"
+        echo "Sonarr__Postgres__User=postgres" >> "$GITHUB_ENV"
+        echo "Sonarr__Postgres__Password=postgres" >> "$GITHUB_ENV"
 
     - name: Download Artifact
       uses: actions/download-artifact@v4
