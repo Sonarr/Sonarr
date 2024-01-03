@@ -26,6 +26,10 @@ runs:
         name: ${{ inputs.artifact }}
         path: _tests
 
+    - name: List all files
+      shell: bash
+      run: ls -la ./_tests
+
     - name: Run tests
       shell: bash
       run: dotnet test ./_tests/Sonarr.*.Test.dll --filter "${{ inputs.filter }}" --logger trx --results-directory "TestResults-${{ matrix.dotnet-version }}"
