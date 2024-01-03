@@ -135,11 +135,12 @@ namespace NzbDrone.Core.Tv
                 // Monitor the last season when:
                 // - Not specials
                 // - The latest season
-                // - Set to monitor all or future episodes
+                // - Set to monitor all episodes
+                // - Set to monitor future episodes and series is continuing or not yet aired
                 if (seasonNumber > 0 &&
                     seasonNumber == lastSeason &&
                     (monitoringOptions.Monitor == MonitorTypes.All ||
-                    monitoringOptions.Monitor == MonitorTypes.Future))
+                     (monitoringOptions.Monitor == MonitorTypes.Future && series.Status is SeriesStatusType.Continuing or SeriesStatusType.Upcoming)))
                 {
                     season.Monitored = true;
                 }
