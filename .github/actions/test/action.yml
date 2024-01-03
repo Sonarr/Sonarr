@@ -30,7 +30,7 @@ runs:
         path: _tests
 
     - name: Make executable
-      if: ${{ inputs.platform }}
+      if: startsWith(inputs.platform, 'windows') != true
       shell: bash
       run: chmod +x ./_tests/Sonarr.Test.Dummy && chmod +x ./_tests/ffprobe
 
