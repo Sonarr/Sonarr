@@ -27,7 +27,6 @@ inputs:
 
 runs:
   using: 'composite'
-  env
   steps:
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
