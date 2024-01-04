@@ -60,13 +60,28 @@ jobs:
       with:
         runtime: osx-x64
 
-    # Build Artifact (since GitHub limits the number of artifacts)
+    # Build Artifacts (grouped by OS)
     
-    - name: Publish Backend Artifact
+    - name: Publish FreeBSD Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: backend
-        path: _artifacts/**/*
+        name: freebsd
+        path: _artifacts/freebsd-*/**/*
+    - name: Publish Linux Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: linux
+        path: _artifacts/linux-*/**/*
+    - name: Publish macOS Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: macos
+        path: _artifacts/osx-*/**/*
+    - name: Publish Windows Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: windows
+        path: _artifacts/win-*/**/*
 
   frontend:
     runs-on: ubuntu-latest
