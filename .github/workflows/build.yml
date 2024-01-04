@@ -187,6 +187,6 @@ jobs:
         artifact: ${{ matrix.artifact }}
         pattern: Sonarr.*.Test.dll
         filter: ${{ matrix.filter }}
-        integration_test: true
+        integration_tests: true
         binary_artifact: ${{ matrix.binary_artifact }}
         binary_path: ${{ matrix.binary_path }}

@@ -51,7 +51,7 @@ runs:
         path: _tests
 
     - name: Download Binary Artifact
-      if: ${{ inputs.binary_artifact }} != ''
+      if: ${{ inputs.integation_tests }}
       uses: actions/download-artifact@v4
       with:
         name: ${{ inputs.binary_artifact }}
@@ -60,7 +60,7 @@ runs:
     - name: Set up binary artifact
       if: ${{ inputs.binary_path != '' }}
       shell: bash
-      run: mv ${{inputs.binary_path}} _tests/bin
+      run: mv ./_artifacts/${{inputs.binary_path}} _tests/bin
 
     - name: Make executable
       if: startsWith(inputs.os, 'windows') != true
