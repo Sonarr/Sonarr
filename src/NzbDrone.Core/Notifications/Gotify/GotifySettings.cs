@@ -23,7 +23,7 @@ namespace NzbDrone.Core.Notifications.Gotify
             Priority = 5;
         }
 
-        [FieldDefinition(0, Label = "NotificationsGotifySettingsServer", HelpText = "")]
+        [FieldDefinition(0, Label = "NotificationsGotifySettingsServer", HelpText = "NotificationsGotifySettingsServerHelpText")]
         public string Server { get; set; }
 
         [FieldDefinition(1, Label = "NotificationsGotifySettingsAppToken", Privacy = PrivacyLevel.ApiKey, HelpText = "NotificationsGotifySettingsAppTokenHelpText")]

@@ -53,7 +53,7 @@ namespace NzbDrone.Core.Notifications.Ntfy
         [FieldDefinition(5, Label = "NotificationsNtfySettingsTopics", HelpText = "NotificationsNtfySettingsTopicsHelpText", Type = FieldType.Tag)]
         public IEnumerable<string> Topics { get; set; }
 
-        [FieldDefinition(6, Label = "NotificationsNtfySettingsTagsEmojis", Type = FieldType.Tag, HelpText = "", HelpLink = "https://ntfy.sh/docs/emojis/")]
+        [FieldDefinition(6, Label = "NotificationsNtfySettingsTagsEmojis", Type = FieldType.Tag, HelpText = "NotificationsNtfySettingsTagsEmojisHelpText", HelpLink = "https://ntfy.sh/docs/emojis/")]
         public IEnumerable<string> Tags { get; set; }
 
         [FieldDefinition(7, Label = "NotificationsNtfySettingsClickUrl", Type = FieldType.Url, HelpText = "NotificationsNtfySettingsClickUrlHelpText")]
