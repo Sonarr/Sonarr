@@ -133,7 +133,7 @@ jobs:
     - name: Test
       uses: ./.github/actions/test
       with:
-        platform: ${{ matrix.os }}
+        os: ${{ matrix.os }}
         artifact: ${{ matrix.artifact }}
         pattern: Sonarr.*.Test.dll
         filter: ${{ matrix.filter }}
@@ -148,7 +148,7 @@ jobs:
     - name: Test
       uses: ./.github/actions/test
       with:
-        platform: ubuntu-latest
+        os: ubuntu-latest
         artifact: tests-linux-x64
         pattern: Sonarr.*.Test.dll
         filter: TestCategory!=ManualTest&TestCategory!=WINDOWS&TestCategory!=IntegrationTest&TestCategory!=AutomationTest
@@ -183,8 +183,10 @@ jobs:
     - name: Test
       uses: ./.github/actions/test
       with:
-        platform: ${{ matrix.os }}
+        os: ${{ matrix.os }}
         artifact: ${{ matrix.artifact }}
         pattern: Sonarr.*.Test.dll
         filter: ${{ matrix.filter }}
-        binary_artifact: 
+        integration_test: true
+        binary_artifact: ${{ matrix.binary_artifact }}
+        binary_path: ${{ matrix.binary_path }}

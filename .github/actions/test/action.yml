@@ -6,8 +6,8 @@ description: Runs unit/integration tests
 inputs:
   use_postgres:
     description: 'Whether postgres should be used for the database'
-  platform:
-    description: 'OS platform that the tests are running on'
+  os:
+    description: 'OS that the tests are running on'
     required: true
   artifact:
     description: 'Test binary artifact'
@@ -18,9 +18,10 @@ inputs:
   filter:
     description: 'Filter for tests'
     required: true
+  integation_tests:
+    description: 'True if running integration tests'
   binary_artifact:
     description: 'Binary artifact for integration tests'
-    default: ''
   binary_path:
     description: 'Path witin binary artifact for integration tests'
 
@@ -57,20 +58,20 @@ runs:
         path: _artifacts
 
     - name: Set up binary artifact
-      if: ${{ inputs.binary_path }}
+      if: ${{ inputs.binary_path != '' }}
       shell: bash
       run: mv ${{inputs.binary_path}} _tests/bin
 
     - name: Make executable
-      if: startsWith(inputs.platform, 'windows') != true
+      if: startsWith(inputs.os, 'windows') != true
       shell: bash
       run: chmod +x ./_tests/Sonarr.Test.Dummy && chmod +x ./_tests/ffprobe
 
     - name: Make Sonarr binary executable
-      if: ${{ inputs.binary_path }} != '' && startsWith(inputs.platform, 'windows') != true
+      if: ${{ integation_tests && !startsWith(inputs.os, 'windows') }}
       shell: bash
       run: chmod +x ./_tests/bin/Sonarr
 
     - name: Run tests
       shell: bash
-      run: dotnet test ./_tests/Sonarr.*.Test.dll --filter "${{ inputs.filter }}" --logger trx --results-directory "TestResults-${{ matrix.dotnet-version }}"
+      run: dotnet test ./_tests/Sonarr.*.Test.dll --filter "${{ inputs.filter }}" --logger trx --results-directory "${{ inputs.integration_tests && integation_ || unit_ }}${{ env.platform }}"
