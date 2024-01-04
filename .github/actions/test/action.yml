@@ -18,7 +18,7 @@ inputs:
   filter:
     description: 'Filter for tests'
     required: true
-  integation_tests:
+  integration_tests:
     description: 'True if running integration tests'
   binary_artifact:
     description: 'Binary artifact for integration tests'
@@ -51,7 +51,7 @@ runs:
         path: _tests
 
     - name: Download Binary Artifact
-      if: ${{ inputs.integation_tests }}
+      if: ${{ inputs.integration_tests }}
       uses: actions/download-artifact@v4
       with:
         name: ${{ inputs.binary_artifact }}
@@ -68,7 +68,7 @@ runs:
       run: chmod +x ./_tests/Sonarr.Test.Dummy && chmod +x ./_tests/ffprobe
 
     - name: Make Sonarr binary executable
-      if: ${{ inputs.integation_tests && !startsWith(inputs.os, 'windows') }}
+      if: ${{ inputs.integration_tests && !startsWith(inputs.os, 'windows') }}
       shell: bash
       run: chmod +x ./_tests/bin/Sonarr
 
