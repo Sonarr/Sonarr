@@ -68,10 +68,10 @@ runs:
       run: chmod +x ./_tests/Sonarr.Test.Dummy && chmod +x ./_tests/ffprobe
 
     - name: Make Sonarr binary executable
-      if: ${{ integation_tests && !startsWith(inputs.os, 'windows') }}
+      if: ${{ inputs.integation_tests && !startsWith(inputs.os, 'windows') }}
       shell: bash
       run: chmod +x ./_tests/bin/Sonarr
 
     - name: Run tests
       shell: bash
-      run: dotnet test ./_tests/Sonarr.*.Test.dll --filter "${{ inputs.filter }}" --logger trx --results-directory "${{ inputs.integration_tests && integation_ || unit_ }}${{ env.platform }}"
+      run: dotnet test ./_tests/Sonarr.*.Test.dll --filter "${{ inputs.filter }}" --logger trx --results-directory "${{ inputs.integration_tests && 'integation_' || 'unit_' }}${{ inputs.artifact }}"
