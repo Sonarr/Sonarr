@@ -20,6 +20,7 @@ inputs:
     required: true
   binary_artifact:
     description: 'Binary artifact for integration tests'
+    default: ''
   binary_path:
     description: 'Path witin binary artifact for integration tests'
 
@@ -49,7 +50,7 @@ runs:
         path: _tests
 
     - name: Download Binary Artifact
-      if: ${{ inputs.binary_artifact }}
+      if: ${{ inputs.binary_artifact }} != ''
       uses: actions/download-artifact@v4
       with:
         name: ${{ inputs.binary_artifact }}
@@ -66,7 +67,7 @@ runs:
       run: chmod +x ./_tests/Sonarr.Test.Dummy && chmod +x ./_tests/ffprobe
 
     - name: Make Sonarr binary executable
-      if: ${{ inputs.binary_path }} && startsWith(inputs.platform, 'windows') != true
+      if: ${{ inputs.binary_path }} != '' && startsWith(inputs.platform, 'windows') != true
       shell: bash
       run: chmod +x ./_tests/bin/Sonarr
 
