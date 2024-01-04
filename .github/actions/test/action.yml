@@ -27,6 +27,7 @@ inputs:
 
 runs:
   using: 'composite'
+  env
   steps:
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
@@ -35,7 +36,12 @@ runs:
       if: ${{ inputs.use_postgres }}
       uses: ikalnytskyi/action-setup-postgres@v4
 
-    - name: Setup Environment Variables
+    - name: Setup Test Variables
+      shell: bash
+      run: |
+        echo "RESULTS_NAME=${{ inputs.integration_tests && 'integation_' || 'unit_' }}${{ inputs.artifact }}" >> "$GITHUB_ENV"
+
+    - name: Setup Postgres Environment Variables
       if: ${{ inputs.use_postgres }}
       shell: bash
       run: |
@@ -74,4 +80,10 @@ runs:
 
     - name: Run tests
       shell: bash
-      run: dotnet test ./_tests/Sonarr.*.Test.dll --filter "${{ inputs.filter }}" --logger trx --results-directory "${{ inputs.integration_tests && 'integation_' || 'unit_' }}${{ inputs.artifact }}"
+      run: dotnet test ./_tests/Sonarr.*.Test.dll --filter "${{ inputs.filter }}" --logger trx --results-directory "${{ env.RESULTS_NAME }}"
+
+    - name: Publish Test Results Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ env.RESULTS_NAME }}
+        path: ${{ env.RESULTS_NAME }}
