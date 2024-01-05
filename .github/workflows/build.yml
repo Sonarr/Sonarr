@@ -31,6 +31,7 @@ jobs:
     - name: Setup Environment Variables
       shell: bash
       run: |
+        echo "Run ID: ${{ github.run_id }}"
         DOTNET_VERSION=$(jq -r '.sdk.version' global.json)
         echo "SDK_PATH=${{ env.DOTNET_ROOT }}/sdk/${DOTNET_VERSION}" >> "$GITHUB_ENV"
         echo "SONARR_VERSION=${{ env.VERSION }}.${{ github.run_number }}" >> "$GITHUB_ENV"
@@ -190,3 +191,10 @@ jobs:
         integration_tests: true
         binary_artifact: ${{ matrix.binary_artifact }}
         binary_path: ${{ matrix.binary_path }}
+  
+  deploy:
+    if: ${{ github.ref_name == 'develop' || github.ref_name == 'main' }}
+    uses: ./.github/workflows/deploy.yml
+    with:
+      branch: ${{ github.ref_name }}
+      version: ${{ env.SONARR_VERSION }}
