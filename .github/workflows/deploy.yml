@@ -6,6 +6,9 @@ on:
       branch:
         required: true
         type: string
+      major_version:
+        required: true
+        type: string
       version:
         required: true
         type: string
@@ -14,14 +17,29 @@ on:
         required: true
 
 jobs:
-  package_linux:
-    runs-on: ubuntu-latest
+  package_windows:
+    runs-on: windows-latest
     steps:
     - name: Check out
       uses: actions/checkout@v3
 
-    - name: Download Artifact
-      uses: actions/download-artifact@v4
+    - name: Package
+      uses: ./.github/actions/package
       with:
-        name: linux
-        path: _artifacts
+        os: windows-latest
+        artifact: build_windows
+        branch: ${{ inputs.branch }}
+        version: ${{ inputs.version }}
+    
+
+  # package_linux:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - name: Check out
+  #     uses: actions/checkout@v3
+
+  #   - name: Download Artifact
+  #     uses: actions/download-artifact@v4
+  #     with:
+  #       name: build_linux
+  #       path: _artifacts

@@ -1,0 +1,45 @@
+name: Package
+description: Packages binaries for deployment
+
+inputs:
+  artifact:
+    description: 'Binary artifact'
+    required: true
+  branch:
+    description: 'Git branch used for this build'
+    required: true
+  major_version:
+    description: 'Sonarr major version'
+    required: true
+  version:
+    description: 'Sonarr version'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Download UI Artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: ${{ inputs.artifact }}
+        path: _artifacts
+        
+    - name: Download UI Artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: ui
+        path: _output/UI
+
+    - name: Create Packages
+      shell: bash
+      run: ./.github/actions/package.sh
+
+    - name: List Artifacts
+      shell: bash
+      run: ls -l _artifacts
+
+    # - name: Upload Artifact
+    #   uses: actions/upload-artifact@v4
+    #   with:
+    #     name: ${{ env.RESULTS_NAME }}
+    #     path: ${{ env.RESULTS_NAME }}

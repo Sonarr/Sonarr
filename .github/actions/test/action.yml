@@ -1,6 +1,6 @@
 # https://docs.github.com/en/actions/creating-actions/creating-a-composite-action
 
-name: Run test on DLLs matching the specified pattern
+name: Test
 description: Runs unit/integration tests
 
 inputs:
@@ -38,7 +38,7 @@ runs:
     - name: Setup Test Variables
       shell: bash
       run: |
-        echo "RESULTS_NAME=${{ inputs.integration_tests && 'integation_' || 'unit_' }}${{ inputs.artifact }}${{ inputs.use_postgres && '_postgres' }}" >> "$GITHUB_ENV"
+        echo "RESULTS_NAME=${{ inputs.integration_tests && 'integation-' || 'unit-' }}${{ inputs.artifact }}${{ inputs.use_postgres && '_postgres' }}" >> "$GITHUB_ENV"
 
     - name: Setup Postgres Environment Variables
       if: ${{ inputs.use_postgres }}
