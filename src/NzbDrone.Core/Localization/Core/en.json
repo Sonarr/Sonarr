@@ -340,7 +340,7 @@
   "DeleteSeriesModalHeader": "Delete - {title}",
   "DeleteSpecification": "Delete Specification",
   "DeleteSpecificationHelpText": "Are you sure you want to delete specification '{name}'?",
-  "DeleteTag": "DeleteTag",
+  "DeleteTag": "Delete Tag",
   "DeleteTagMessageText": "Are you sure you want to delete the tag '{label}'?",
   "Deleted": "Deleted",
   "DeletedReasonEpisodeMissingFromDisk": "{appName} was unable to find the file on disk so the file was unlinked from the episode in the database",
