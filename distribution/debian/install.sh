@@ -42,6 +42,11 @@ bindir="${installdir}/${app^}" # Full Path to Install Location
 datadir="/var/lib/$app/"       # {Update me if needed} AppData directory to use
 app_bin=${app^}                # Binary Name of the app
 
+if [ "$bindir" == $(dirname -- "$( readlink -f -- "$0"; )") ]; then
+    echo "You should not run this script from the intended install directory. The script will exit. Please re-run it from another directory"
+    exit
+fi
+
 # Prompt User
 read -r -p "What user should ${app^} run as? (Default: $app): " app_uid < /dev/tty
 app_uid=$(echo "$app_uid" | tr -d ' ')
