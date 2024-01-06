@@ -23,7 +23,6 @@ jobs:
     - name: Package
       uses: ./.github/actions/package
       with:
-        os: windows-latest
         artifact: build_windows
         branch: ${{ inputs.branch }}
         version: ${{ inputs.version }}
