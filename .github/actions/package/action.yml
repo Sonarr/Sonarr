@@ -50,21 +50,21 @@ runs:
 
     - name: Create Windows Installer (x64)
       if: ${{ inputs.platform == 'windows' }}
+      working-directory: distribution/windows/setup
       shell: cmd
       run: |
         SET RUNTIME=win-x64
 
-        cd distribution\windows\setup
-        distribution\windows\setup\build.bat
+        build.bat
 
     - name: Create Windows Installer (x86)
       if: ${{ inputs.platform == 'windows' }}
+      working-directory: distribution/windows/setup
       shell: cmd
       run: |
         SET RUNTIME=win-x86
 
-        cd .\distribution\windows\setup
-        .\.distribution\windows\setup\build.bat
+        build.bat
         
     - name: List Artifacts (Testing)
       shell: bash
