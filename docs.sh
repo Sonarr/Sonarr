@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
 
+FRAMEWORK="net6.0"
 PLATFORM=$1
 
 if [ "$PLATFORM" = "Windows" ]; then
@@ -32,7 +33,7 @@ dotnet msbuild -restore $slnFile -p:Configuration=Debug -p:Platform=$platform -p
 dotnet new tool-manifest
 dotnet tool install --version 6.5.0 Swashbuckle.AspNetCore.Cli
 
-dotnet tool run swagger tofile --output ./src/Sonarr.Api.V3/openapi.json "$outputFolder/net6.0/$RUNTIME/Sonarr.dll" v3 &
+dotnet tool run swagger tofile --output ./src/Sonarr.Api.V3/openapi.json "$outputFolder/$FRAMEWORK/$RUNTIME/Sonarr.dll" v3 &
 
 sleep 30
 

@@ -14,7 +14,8 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  BRANCH: ${{ github.head_ref || github.ref_name }} 
+  FRAMEWORK: net6.0
+  BRANCH: ${{ github.head_ref || github.ref_name }}
   SONARR_MAJOR_VERSION: 4
   VERSION: 4.0.0
 
@@ -22,6 +23,7 @@ jobs:
   backend:
     runs-on: windows-latest
     outputs:
+      framework: ${{ steps.variables.outputs.framework }}
       major_version: ${{ steps.variables.outputs.major_version }}
       version: ${{ steps.variables.outputs.version }}
     steps:
@@ -38,6 +40,7 @@ jobs:
         DOTNET_VERSION=$(jq -r '.sdk.version' global.json)
         echo "SDK_PATH=${{ env.DOTNET_ROOT }}/sdk/${DOTNET_VERSION}" >> "$GITHUB_ENV"
         echo "SONARR_VERSION=${{ env.VERSION }}.${{ github.run_number }}" >> "$GITHUB_ENV"
+        echo "framework=${{ env.FRAMEWORK }}" >> "$GITHUB_OUTPUT"
         echo "major_version=${{ env.SONARR_MAJOR_VERSION }}" >> "$GITHUB_OUTPUT"
         echo "version=${{ env.VERSION }}.${{ github.run_number }}" >> "$GITHUB_OUTPUT"
 
@@ -54,16 +57,19 @@ jobs:
     - name: Publish win-x64 Test Artifact
       uses: ./.github/actions/publish-test-artifact
       with:
+        framework: ${{ env.FRAMEWORK }}
         runtime: win-x64
 
     - name: Publish linux-x64 Test Artifact
       uses: ./.github/actions/publish-test-artifact
       with:
+        framework: ${{ env.FRAMEWORK }}
         runtime: linux-x64
 
     - name: Publish osx-x64 Test Artifact
       uses: ./.github/actions/publish-test-artifact
       with:
+        framework: ${{ env.FRAMEWORK }}
         runtime: osx-x64
 
     # Build Artifacts (grouped by OS)
@@ -113,7 +119,7 @@ jobs:
     - name: Publish UI Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: ui
+        name: build_ui
         path: _output/UI/**/*
 
   unit_test:
@@ -170,17 +176,17 @@ jobs:
             artifact: tests-linux-x64
             filter: TestCategory!=ManualTest&TestCategory!=WINDOWS&TestCategory=IntegrationTest
             binary_artifact: build_linux
-            binary_path: linux-x64/net6.0/Sonarr
+            binary_path: linux-x64/${{ needs.backend.outputs.framework }}/Sonarr
           - os: macos-latest
             artifact: tests-osx-x64
             filter: TestCategory!=ManualTest&TestCategory!=WINDOWS&TestCategory=IntegrationTest
             binary_artifact: build_macos
-            binary_path: osx-x64/net6.0/Sonarr
+            binary_path: osx-x64/${{ needs.backend.outputs.framework }}/Sonarr
           - os: windows-latest
             artifact: tests-win-x64
             filter: TestCategory!=ManualTest&TestCategory=WINDOWS&TestCategory=IntegrationTest
             binary_artifact: build_windows
-            binary_path: win-x64/net6.0/Sonarr
+            binary_path: win-x64/${{ needs.backend.outputs.framework }}/Sonarr
     runs-on: ${{ matrix.os }}
     steps:
     - name: Check out
@@ -203,6 +209,7 @@ jobs:
     secrets: inherit
     uses: ./.github/workflows/deploy.yml
     with:
+      framework: ${{ needs.backend.outputs.framework }}
       branch: ${{ github.ref_name }}
       major_version: ${{ needs.backend.outputs.major_version }}
       version: ${{ needs.backend.outputs.version }}

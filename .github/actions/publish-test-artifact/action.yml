@@ -4,6 +4,9 @@ name: Publish Test Artifact
 description: Publishes a test artifact
 
 inputs:
+  framework:
+    description: '.net framework'
+    required: true
   runtime:
     description: '.net runtime'
     required: true
@@ -14,4 +17,4 @@ runs:
     - uses: actions/upload-artifact@v4
       with:
         name: tests-${{ inputs.runtime }}
-        path: _tests/net6.0/${{ inputs.runtime }}/publish/**/*
+        path: _tests/${{ inputs.framework }}/${{ inputs.runtime }}/publish/**/*

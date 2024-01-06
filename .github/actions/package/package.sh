@@ -3,20 +3,17 @@
 outputFolder=_output
 artifactsFolder=_artifacts
 uiFolder="$outputFolder/UI"
+framework="${FRAMEWORK:=net6.0}"
 
-for folder in _artifacts/*
+for runtime in _artifacts/*
 do
-  name="${folder##*/}"
-  folderName="$outputFolder/$name"
+  name="${runtime##*/}"
+  folderName="$runtime/$framework/Sonarr"
   sonarrFolder="$folderName/Sonarr"
     
   echo "Creating package for $name"
 
-  rm -rf $folderName
-  mkdir $folderName
-  cp -r "$folder/net6.0/Sonarr" $sonarrFolder
-
-  echo "Copying UI folder"
+  echo "Copying UI runtime"
   cp -r $uiFolder $sonarrFolder
   
   echo "Setting permissions"

@@ -3,19 +3,39 @@ name: Deploy
 on:
   workflow_call:
     inputs:
+      framework: 
+        description: '.net framework'
+        type: string
+        required: true
       branch:
-        required: true
+        description: 'Git branch used for this build'
         type: string
+        required: true
       major_version:
-        required: true
+        description: 'Sonarr major version'
         type: string
+        required: true
       version:
-        required: true
+        description: 'Sonarr version'
         type: string
+        required: true
 
 jobs:
-  package_windows:
-    runs-on: windows-latest
+  package:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        include:
+          - os: ubuntu-latest
+            platform: freebsd
+          - os: ubuntu-latest
+            platform: linux
+          - os: ubuntu-latest
+            platform: macos
+          - os: windows-latest
+            platform: windows
+
+    runs-on: ${{ matrix.os }}
     steps:
     - name: Check out
       uses: actions/checkout@v3
@@ -23,19 +43,9 @@ jobs:
     - name: Package
       uses: ./.github/actions/package
       with:
-        artifact: build_windows
+        framework: ${{ inputs.framework }}
+        platform: ${{ matrix.platform }}
+        artifact: build_${{ matrix.platform }}
         branch: ${{ inputs.branch }}
+        major_version: ${{ inputs.major_version }}
         version: ${{ inputs.version }}
-    
-
-  # package_linux:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - name: Check out
-  #     uses: actions/checkout@v3
-
-  #   - name: Download Artifact
-  #     uses: actions/download-artifact@v4
-  #     with:
-  #       name: build_linux
-  #       path: _artifacts
