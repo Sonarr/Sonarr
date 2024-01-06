@@ -32,7 +32,7 @@ runs:
 
     - name: Create Packages
       shell: bash
-      run: ./.github/actions/package.sh
+      run: $GITHUB_ACTION_PATH/package.sh
 
     - name: List Artifacts
       shell: bash
