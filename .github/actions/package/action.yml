@@ -63,8 +63,8 @@ runs:
       run: |
         SET RUNTIME=win-x86
 
-        cd distribution\windows\setup
-        distribution\windows\setup\build.bat
+        cd .\distribution\windows\setup
+        .\.distribution\windows\setup\build.bat
         
     - name: List Artifacts (Testing)
       shell: bash
