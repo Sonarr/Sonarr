@@ -12,9 +12,6 @@ on:
       version:
         required: true
         type: string
-    secrets:
-      token:
-        required: true
 
 jobs:
   package_windows:
