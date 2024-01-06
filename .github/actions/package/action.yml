@@ -54,8 +54,8 @@ runs:
       run: |
         SET RUNTIME=win-x64
 
-        cd ./distribution/windows/setup
-        ./distribution/windows/setup/build.bat
+        cd \distribution\windows\setup
+        \distribution\windows\setup\build.bat
 
     - name: Create Windows Installer (x86)
       if: ${{ inputs.platform == 'windows' }}

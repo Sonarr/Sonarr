@@ -8,7 +8,7 @@ framework="${FRAMEWORK:=net6.0}"
 for runtime in _artifacts/*
 do
   name="${runtime##*/}"
-  folderName="$runtime/$framework/Sonarr"
+  folderName="$runtime/$framework"
   sonarrFolder="$folderName/Sonarr"
     
   echo "Creating package for $name"
