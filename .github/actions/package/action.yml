@@ -38,7 +38,7 @@ runs:
 
     - name: Configure Environment Variables
       shell: bash
-      runs: |
+      run: |
         echo "FRAMEWORK=${{ inputs.framework }}" >> "$GITHUB_ENV"
         echo "BRANCH=${{ inputs.branch }}" >> "$GITHUB_ENV"
         echo "SONARR_MAJOR_VERSION=${{ inputs.major_version }}" >> "$GITHUB_ENV"
