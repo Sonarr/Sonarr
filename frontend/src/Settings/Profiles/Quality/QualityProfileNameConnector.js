@@ -3,22 +3,30 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import createQualityProfileSelector from 'Store/Selectors/createQualityProfileSelector';
+import translate from 'Utilities/String/translate';
+import styles from './QualityProfileNameConnector.css';
 
 function createMapStateToProps() {
   return createSelector(
     createQualityProfileSelector(),
     (qualityProfile) => {
       return {
-        name: qualityProfile.name
+        name: qualityProfile?.name
       };
     }
   );
 }
 
-function QualityProfileNameConnector({ name, ...otherProps }) {
+function QualityProfileNameConnector({ name }) {
+  if (name) {
+    return (
+      <span>{name}</span>
+    );
+  }
+
   return (
-    <span>
-      {name}
+    <span className={styles.qualityProfileUnknown}>
+      {translate('None')}
     </span>
   );
 }
