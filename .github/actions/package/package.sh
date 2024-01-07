@@ -51,7 +51,7 @@ do
   if [[ "$name" == *"win"* ]]; then
     if [ "$RUNNER_OS" = "Windows" ]
       then
-        (cd $folderName; 7z a -tzip "$artifactsFolder/$name.zip" ./Sonarr)
+        (cd $folderName; 7z a -tzip "../../$artifactsFolder/$name.zip" ./Sonarr)
       else
       (cd $folderName; zip -rq "../../$artifactsFolder/$name.zip" ./Sonarr)
     fi
