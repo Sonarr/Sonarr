@@ -10,6 +10,7 @@ do
   name="${runtime##*/}"
   folderName="$runtime/$framework"
   sonarrFolder="$folderName/Sonarr"
+  archiveName="Sonarr.$BRANCH.$SONARR_VERSION.$name"
     
   echo "Creating package for $name"
 
@@ -40,20 +41,20 @@ do
     rm -r $packageFolder/Sonarr.app/Contents/MacOS/Sonarr.Update
               
     echo "Packaging macOS app Artifact"
-    (cd $packageFolder; zip -rq "../../$artifactsFolder/$name-app.zip" ./Sonarr.app)
+    (cd $packageFolder; zip -rq "../../$archiveName-app.zip" ./Sonarr.app)
   fi
 
   echo "Packaging Artifact"
   if [[ "$name" == *"linux"* ]] || [[ "$name" == *"osx"* ]] || [[ "$name" == *"freebsd"* ]]; then
-    tar -zcf "$artifactsFolder/$name.tar.gz" -C $folderName Sonarr
+    tar -zcf "$artifactsFolder/$archiveName.tar.gz" -C $folderName Sonarr
 	fi
     
   if [[ "$name" == *"win"* ]]; then
     if [ "$RUNNER_OS" = "Windows" ]
       then
-        (cd $folderName; 7z a -tzip "../../../$artifactsFolder/$name.zip" ./Sonarr)
+        (cd $folderName; 7z a -tzip "../../$archiveName.zip" ./Sonarr)
       else
-      (cd $folderName; zip -rq "../../$artifactsFolder/$name.zip" ./Sonarr)
+      (cd $folderName; zip -rq "../../$archiveName.zip" ./Sonarr)
     fi
 	fi
 done
