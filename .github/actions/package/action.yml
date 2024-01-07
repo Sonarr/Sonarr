@@ -65,10 +65,6 @@ runs:
         SET RUNTIME=win-x86
 
         build.bat
-        
-    - name: List Artifacts (Testing)
-      shell: bash
-      run: ls -l _artifacts
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v4

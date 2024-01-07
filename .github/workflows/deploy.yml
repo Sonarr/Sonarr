@@ -51,6 +51,7 @@ jobs:
         version: ${{ inputs.version }}
 
   release:
+    needs: package
     runs-on: ubuntu-latest
     permissions:
       contents: write
