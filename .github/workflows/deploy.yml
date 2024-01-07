@@ -49,3 +49,35 @@ jobs:
         branch: ${{ inputs.branch }}
         major_version: ${{ inputs.major_version }}
         version: ${{ inputs.version }}
+
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+    - name: Check out
+      uses: actions/checkout@v3
+
+    - name: Download release artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: _artifacts
+        pattern: release_*
+        merge-multiple: true
+
+    # - name: Create tag
+    #   uses: rickstaa/action-create-tag@v1
+    #   id: "tag_create"
+    #   with:
+    #     tag: v${{ inputs.version }}
+    #     message: ""
+
+    - uses: ncipollo/release-action@v1
+      with:
+        artifacts: _artifacts/Sonarr.*
+        commit: ${{ github.sha }}
+        generateReleaseNotes: true
+        name: ${{ inputs.version }}
+        prerelease: ${{ inputs.branch != 'main' }}
+        tag: v${{ inputs.version }}
+        bodyFile: "body.md"
