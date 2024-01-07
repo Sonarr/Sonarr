@@ -5,6 +5,9 @@ artifactsFolder=_artifacts
 uiFolder="$outputFolder/UI"
 framework="${FRAMEWORK:=net6.0}"
 
+rm -rf $artifactsFolder
+mkdir $artifactsFolder
+
 for runtime in _output/*
 do
   name="${runtime##*/}"
@@ -12,13 +15,13 @@ do
   sonarrFolder="$folderName/Sonarr"
   archiveName="Sonarr.$BRANCH.$SONARR_VERSION.$name"
 
-  if [[ "name" == 'UI' ]]; then
+  if [[ "$name" == 'UI' ]]; then
     continue
   fi
     
   echo "Creating package for $name"
 
-  echo "Copying UI runtime"
+  echo "Copying UI"
   cp -r $uiFolder $sonarrFolder
   
   echo "Setting permissions"
