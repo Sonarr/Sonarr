@@ -5,9 +5,13 @@ name: Build
 
 on:
   push:
-    branches: [ "develop" ]
+    branches:
+      - develop
+      - main
+      - marktest
   pull_request:
-    branches: [ "develop" ]
+    branches:
+      - develop
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -204,7 +208,7 @@ jobs:
         binary_path: ${{ matrix.binary_path }}
 
   deploy:
-    if: ${{ github.ref_name == 'develop' || github.ref_name == 'main' }}
+    if: ${{ github.ref_name == 'develop' || github.ref_name == 'main' || github.ref_name == 'marktest' }}
     needs: [backend, unit_test, unit_test_postgres, integration_test]
     secrets: inherit
     uses: ./.github/workflows/deploy.yml
