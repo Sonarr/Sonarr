@@ -22,9 +22,6 @@ on:
     secrets:
       SERVICES_API_KEY:
         required: true
-      SERVICES_UPDATE_URL:
-        required: true
-
 
 jobs:
   package:
