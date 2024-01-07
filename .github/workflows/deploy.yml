@@ -127,10 +127,10 @@ jobs:
         
         hashes="$hashes ]"
         
-        json="{\""branch\"":\""$branch\"", \""version\"":\""$version\"", \""lastCommit\"":\""$lastCommit\"", \""hashes\"":$hashes}"
-        url="${{ secrets.SERVICES_UPDATE_URL }}"
+        json="{\""branch\"":\""$branch\"", \""version\"":\""$version\"", \""lastCommit\"":\""$lastCommit\"", \""hashes\"":$hashes, \""gitHubRelease\"":true}"
+        url="https://services.sonarr.tv/v1/update"
         
         echo "Publishing update $version ($branch) to: $url"
         echo "$json"
         
-        curl -H "Content-Type: application/json" -H "X-Api-Key: ${{ secrets.SERVICES_API_KEY }}" -X POST -d "$json" $url
+        curl -H "Content-Type: application/json" -H "X-Api-Key: ${{ secrets.SERVICES_API_KEY }}" -X POST -d "$json" --fail-with-body $url
