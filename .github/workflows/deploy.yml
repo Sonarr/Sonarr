@@ -81,4 +81,3 @@ jobs:
         name: ${{ inputs.version }}
         prerelease: ${{ inputs.branch != 'main' }}
         tag: v${{ inputs.version }}
-        bodyFile: "body.md"
