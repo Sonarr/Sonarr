@@ -77,6 +77,7 @@ jobs:
         generateReleaseNotes: true
         name: ${{ inputs.version }}
         prerelease: ${{ inputs.branch != 'main' }}
+        skipIfReleaseExists: true
         tag: v${{ inputs.version }}
 
     - name: Publish to Services
