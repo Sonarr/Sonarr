@@ -40,7 +40,7 @@ do
     rm -r $packageFolder/Sonarr.app/Contents/MacOS/Sonarr.Update
               
     echo "Packaging macOS app Artifact"
-    (cd $packageFolder; zip -rq "../../$artifactsFolder/$name-app.zip" ./Sonarr.app)
+    (cd $packageFolder; zip -rq "../../../$artifactsFolder/$name-app.zip" ./Sonarr.app)
   fi
 
   echo "Packaging Artifact"
@@ -51,9 +51,9 @@ do
   if [[ "$name" == *"win"* ]]; then
     if [ "$RUNNER_OS" = "Windows" ]
       then
-        (cd $folderName; 7z a -tzip "../../$artifactsFolder/$name.zip" ./Sonarr)
+        (cd $folderName; 7z a -tzip "../../../$artifactsFolder/$name.zip" ./Sonarr)
       else
-      (cd $folderName; zip -rq "../../$artifactsFolder/$name.zip" ./Sonarr)
+      (cd $folderName; zip -rq "../../../$artifactsFolder/$name.zip" ./Sonarr)
     fi
 	fi
 done
