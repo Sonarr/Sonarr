@@ -68,6 +68,8 @@ runs:
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
+      compression-level: 0
+      if-no-files-found: error
       with:
         name: release_${{ inputs.platform }}
         path: |
