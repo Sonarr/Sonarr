@@ -66,13 +66,6 @@ jobs:
         pattern: release_*
         merge-multiple: true
 
-    # - name: Create tag
-    #   uses: rickstaa/action-create-tag@v1
-    #   id: "tag_create"
-    #   with:
-    #     tag: v${{ inputs.version }}
-    #     message: ""
-
     - uses: ncipollo/release-action@v1
       with:
         artifacts: _artifacts/Sonarr.*
