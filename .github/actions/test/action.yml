@@ -60,12 +60,12 @@ runs:
       uses: actions/download-artifact@v4
       with:
         name: ${{ inputs.binary_artifact }}
-        path: _artifacts
+        path: _output
 
     - name: Set up binary artifact
       if: ${{ inputs.binary_path != '' }}
       shell: bash
-      run: mv ./_artifacts/${{inputs.binary_path}} _tests/bin
+      run: mv ./_output/${{inputs.binary_path}} _tests/bin
 
     - name: Make executable
       if: startsWith(inputs.os, 'windows') != true

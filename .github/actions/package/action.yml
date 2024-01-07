@@ -28,7 +28,7 @@ runs:
       uses: actions/download-artifact@v4
       with:
         name: ${{ inputs.artifact }}
-        path: _artifacts
+        path: _output
         
     - name: Download UI Artifact
       uses: actions/download-artifact@v4
