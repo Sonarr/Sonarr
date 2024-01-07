@@ -53,8 +53,8 @@ Name: "startupShortcut"; Description: "Create shortcut in Startup folder (Starts
 Name: "none"; Description: "Do not start automatically"; GroupDescription: "Start automatically"; Flags: exclusive unchecked
 
 [Files]
-Source: "..\..\..\_artifacts\{#Runtime}\{#Framework}\Sonarr\Sonarr.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\..\..\_artifacts\{#Runtime}\{#Framework}\Sonarr\*"; Excludes: "Sonarr.Update"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\..\..\_output\{#Runtime}\{#Framework}\Sonarr\Sonarr.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\..\..\_output\{#Runtime}\{#Framework}\Sonarr\*"; Excludes: "Sonarr.Update"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
