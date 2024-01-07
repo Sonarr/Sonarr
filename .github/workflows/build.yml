@@ -41,12 +41,15 @@ jobs:
       id: variables
       shell: bash
       run: |
+        # Add 700 to the build number
+        SONARR_VERSION="${{ env.VERSION }}.$((${{ github.run_number }}+700))"
         DOTNET_VERSION=$(jq -r '.sdk.version' global.json)
+
         echo "SDK_PATH=${{ env.DOTNET_ROOT }}/sdk/${DOTNET_VERSION}" >> "$GITHUB_ENV"
-        echo "SONARR_VERSION=${{ env.VERSION }}.${{ github.run_number }}" >> "$GITHUB_ENV"
+        echo "SONARR_VERSION=$SONARR_VERSION" >> "$GITHUB_ENV"
         echo "framework=${{ env.FRAMEWORK }}" >> "$GITHUB_OUTPUT"
         echo "major_version=${{ env.SONARR_MAJOR_VERSION }}" >> "$GITHUB_OUTPUT"
-        echo "version=${{ env.VERSION }}.${{ github.run_number }}" >> "$GITHUB_OUTPUT"
+        echo "version=$SONARR_VERSION" >> "$GITHUB_OUTPUT"
 
     - name: Enable Extra Platforms In SDK
       shell: bash
