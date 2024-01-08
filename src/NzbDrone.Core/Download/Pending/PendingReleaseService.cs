@@ -388,7 +388,8 @@ namespace NzbDrone.Core.Download.Pending
                 Reason = reason,
                 AdditionalInfo = new PendingReleaseAdditionalInfo
                 {
-                    SeriesMatchType = decision.RemoteEpisode.SeriesMatchType
+                    SeriesMatchType = decision.RemoteEpisode.SeriesMatchType,
+                    ReleaseSource = decision.RemoteEpisode.ReleaseSource
                 }
             });
 
