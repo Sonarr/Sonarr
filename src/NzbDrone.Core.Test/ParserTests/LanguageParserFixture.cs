@@ -152,8 +152,19 @@ namespace NzbDrone.Core.Test.ParserTests
             result.Should().Contain(Language.Korean);
         }
 
+        [TestCase("Title.the.Series.2009.S01E08.2160p.WEB-DL.LAV.ENG")]
+        [TestCase("Title.the.Series.S01.COMPLETE.2009.1080p.WEB-DL.x264.AVC.AAC.LT.LV.RU")]
+        [TestCase("Title.the.Series.S03.1080p.WEB.x264.LAT.ENG")]
+        [TestCase("Title.the.Series.S02E02.LATViAN.1080p.WEB.XviD-LOL")]
+        public void should_parse_language_latvian(string postTitle)
+        {
+            var result = LanguageParser.ParseLanguages(postTitle);
+            result.Should().Contain(Language.Latvian);
+        }
+
         [TestCase("Title.the.Series.2009.S01E14.Russian.HDTV.XviD-LOL")]
         [TestCase("Title.the.Series.S01E01.1080p.WEB-DL.Rus.Eng.TVKlondike")]
+        [TestCase("Title.the.Series.S01.COMPLETE.2009.1080p.WEB-DL.x264.AVC.AAC.LT.LV.RU")]
         public void should_parse_language_russian(string postTitle)
         {
             var result = LanguageParser.ParseLanguages(postTitle);
