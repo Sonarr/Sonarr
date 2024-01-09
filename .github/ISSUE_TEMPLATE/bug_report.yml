@@ -1,5 +1,5 @@
 name: Bug Report
-description: 'Support Requests will be closed immediately, if you are not 100% certain this is a bug please go to our Reddit, Discord, Forums, or IRC first. Sonarr v2 is EOL & unsupported.'
+description: 'Support Requests will be closed immediately, if you are not 100% certain this is a bug please go to our Reddit, Discord, Forums, or IRC first. Only bug reports for v4 will be accepted, older versions are EOL & unsupported.'
 labels: ['needs-triage']
 body:
 - type: checkboxes
@@ -37,8 +37,8 @@ body:
     label: Environment
     description: |
       examples:
-        - **OS**: Ubuntu 20.04
-        - **Sonarr**: Sonarr 3.0.6.1265
+        - **OS**: Ubuntu 22.04
+        - **Sonarr**: Sonarr 4.0.0.766
         - **Docker Install**: Yes
         - **Using Reverse Proxy**: No
         - **Browser**: Firefox 90 (If UI related)
