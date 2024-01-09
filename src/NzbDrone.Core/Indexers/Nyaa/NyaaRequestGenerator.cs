@@ -9,20 +9,11 @@ namespace NzbDrone.Core.Indexers.Nyaa
     {
         public NyaaSettings Settings { get; set; }
 
-        public int MaxPages { get; set; }
-        public int PageSize { get; set; }
-
-        public NyaaRequestGenerator()
-        {
-            MaxPages = 30;
-            PageSize = 100;
-        }
-
         public virtual IndexerPageableRequestChain GetRecentRequests()
         {
             var pageableRequests = new IndexerPageableRequestChain();
 
-            pageableRequests.Add(GetPagedRequests(MaxPages, null));
+            pageableRequests.Add(GetPagedRequests(null));
 
             return pageableRequests;
         }
@@ -35,7 +26,7 @@ namespace NzbDrone.Core.Indexers.Nyaa
             {
                 foreach (var searchTitle in searchCriteria.SceneTitles.Select(PrepareQuery))
                 {
-                    pageableRequests.Add(GetPagedRequests(MaxPages, $"{searchTitle}+s{searchCriteria.SeasonNumber:00}e{searchCriteria.EpisodeNumber:00}"));
+                    pageableRequests.Add(GetPagedRequests($"{searchTitle}+s{searchCriteria.SeasonNumber:00}e{searchCriteria.EpisodeNumber:00}"));
                 }
             }
 
@@ -50,7 +41,7 @@ namespace NzbDrone.Core.Indexers.Nyaa
             {
                 foreach (var searchTitle in searchCriteria.SceneTitles.Select(PrepareQuery))
                 {
-                    pageableRequests.Add(GetPagedRequests(MaxPages, $"{searchTitle}+s{searchCriteria.SeasonNumber:00}"));
+                    pageableRequests.Add(GetPagedRequests($"{searchTitle}+s{searchCriteria.SeasonNumber:00}"));
                 }
             }
 
@@ -75,17 +66,17 @@ namespace NzbDrone.Core.Indexers.Nyaa
             {
                 if (searchCriteria.AbsoluteEpisodeNumber > 0)
                 {
-                    pageableRequests.Add(GetPagedRequests(MaxPages, $"{searchTitle}+{searchCriteria.AbsoluteEpisodeNumber:0}"));
+                    pageableRequests.Add(GetPagedRequests($"{searchTitle}+{searchCriteria.AbsoluteEpisodeNumber:0}"));
 
                     if (searchCriteria.AbsoluteEpisodeNumber < 10)
                     {
-                        pageableRequests.Add(GetPagedRequests(MaxPages, $"{searchTitle}+{searchCriteria.AbsoluteEpisodeNumber:00}"));
+                        pageableRequests.Add(GetPagedRequests($"{searchTitle}+{searchCriteria.AbsoluteEpisodeNumber:00}"));
                     }
                 }
 
                 if (Settings.AnimeStandardFormatSearch && searchCriteria.SeasonNumber > 0 && searchCriteria.EpisodeNumber > 0)
                 {
-                    pageableRequests.Add(GetPagedRequests(MaxPages, $"{searchTitle}+s{searchCriteria.SeasonNumber:00}e{searchCriteria.EpisodeNumber:00}"));
+                    pageableRequests.Add(GetPagedRequests($"{searchTitle}+s{searchCriteria.SeasonNumber:00}e{searchCriteria.EpisodeNumber:00}"));
                 }
             }
 
@@ -100,7 +91,7 @@ namespace NzbDrone.Core.Indexers.Nyaa
             {
                 if (Settings.AnimeStandardFormatSearch && searchCriteria.SeasonNumber > 0)
                 {
-                    pageableRequests.Add(GetPagedRequests(MaxPages, $"{searchTitle}+s{searchCriteria.SeasonNumber:00}"));
+                    pageableRequests.Add(GetPagedRequests($"{searchTitle}+s{searchCriteria.SeasonNumber:00}"));
                 }
             }
 
@@ -113,13 +104,13 @@ namespace NzbDrone.Core.Indexers.Nyaa
 
             foreach (var queryTitle in searchCriteria.EpisodeQueryTitles)
             {
-                pageableRequests.Add(GetPagedRequests(MaxPages, PrepareQuery(queryTitle)));
+                pageableRequests.Add(GetPagedRequests(PrepareQuery(queryTitle)));
             }
 
             return pageableRequests;
         }
 
-        private IEnumerable<IndexerRequest> GetPagedRequests(int maxPages, string term)
+        private IEnumerable<IndexerRequest> GetPagedRequests(string term)
         {
             var baseUrl = $"{Settings.BaseUrl.TrimEnd('/')}/?page=rss{Settings.AdditionalParameters}";
 
@@ -128,19 +119,7 @@ namespace NzbDrone.Core.Indexers.Nyaa
                 baseUrl += "&term=" + term;
             }
 
-            if (PageSize == 0)
-            {
-                yield return new IndexerRequest(baseUrl, HttpAccept.Rss);
-            }
-            else
-            {
-                yield return new IndexerRequest(baseUrl, HttpAccept.Rss);
-
-                for (var page = 1; page < maxPages; page++)
-                {
-                    yield return new IndexerRequest($"{baseUrl}&offset={page + 1}", HttpAccept.Rss);
-                }
-            }
+            yield return new IndexerRequest(baseUrl, HttpAccept.Rss);
         }
 
         private string PrepareQuery(string query)
