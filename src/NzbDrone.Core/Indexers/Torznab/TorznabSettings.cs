@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Text.RegularExpressions;
 using FluentValidation;
 using NzbDrone.Common.Extensions;
@@ -9,9 +10,11 @@ namespace NzbDrone.Core.Indexers.Torznab
 {
     public class TorznabSettingsValidator : AbstractValidator<TorznabSettings>
     {
+        private static readonly string[] ApiKeyWhiteList = Array.Empty<string>();
+
         private static bool ShouldHaveApiKey(TorznabSettings settings)
         {
-            return settings.BaseUrl != null;
+            return settings.BaseUrl != null && ApiKeyWhiteList.Any(c => settings.BaseUrl.ToLowerInvariant().Contains(c));
         }
 
         private static readonly Regex AdditionalParametersRegex = new Regex(@"(&.+?\=.+?)+", RegexOptions.Compiled);
