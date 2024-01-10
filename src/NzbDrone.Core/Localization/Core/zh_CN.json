@@ -1478,7 +1478,7 @@
     "Files": "文件",
     "SeriesDetailsOneEpisodeFile": "1个集文件",
     "UrlBase": "基本URL",
-    "DownloadClientRemovesCompletedDownloadsHealthCheckMessage": "下载客户端{downloadClientName}设置为删除已完成的下载。这可能导致在{appName}可以导入下载之前从您的客户端删除下载。",
+    "DownloadClientRemovesCompletedDownloadsHealthCheckMessage": "下载客户端 {downloadClientName} 已被设置为删除已完成的下载。这可能导致在 {1} 导入之前，已下载的文件会被从您的客户端中移除。",
     "ImportListSearchForMissingEpisodesHelpText": "将系列添加到{appName}后，自动搜索缺失的剧集",
     "AutoRedownloadFailed": "重新下载失败",
     "AutoRedownloadFailedFromInteractiveSearch": "从交互式搜索中重新下载失败",
@@ -1703,5 +1703,12 @@
     "MonitorNewItems": "监控新项目",
     "AddRootFolderError": "无法添加根文件夹",
     "DownloadClientQbittorrentSettingsContentLayout": "内容布局",
-    "DownloadClientQbittorrentSettingsContentLayoutHelpText": "是否使用 qBittorrent 配置的内容布局，使用种子的原始布局或始终创建子文件夹（qBittorrent 4.3.2+）"
+    "DownloadClientQbittorrentSettingsContentLayoutHelpText": "是否使用 qBittorrent 配置的内容布局，使用种子的原始布局或始终创建子文件夹（qBittorrent 4.3.2+）",
+    "NotificationsAppriseSettingsUsernameHelpText": "HTTP Basic Auth 用户名",
+    "NotificationsCustomScriptSettingsName": "自定义脚本",
+    "NotificationsCustomScriptValidationFileDoesNotExist": "文件不存在",
+    "NotificationsDiscordSettingsAvatar": "头像",
+    "NotificationsAppriseSettingsPasswordHelpText": "HTTP Basic Auth 密码",
+    "NotificationsAppriseSettingsStatelessUrlsHelpText": "用逗号分隔的一个或多个URL，以标识应将通知发送到何处。如果使用持久化存储，则留空。",
+    "NotificationsEmailSettingsName": "邮箱"
 }
