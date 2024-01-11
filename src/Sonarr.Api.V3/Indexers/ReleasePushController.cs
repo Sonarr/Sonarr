@@ -66,7 +66,7 @@ namespace Sonarr.Api.V3.Indexers
 
             lock (PushLock)
             {
-                var decisions = _downloadDecisionMaker.GetRssDecision(new List<ReleaseInfo> { info });
+                var decisions = _downloadDecisionMaker.GetRssDecision(new List<ReleaseInfo> { info }, true);
 
                 decision = decisions.FirstOrDefault();
 
