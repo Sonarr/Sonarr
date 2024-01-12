@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Notifications.Pushcut
     {
         private static readonly PushcutSettingsValidator Validator = new ();
 
-        [FieldDefinition(0, Label = "NotificationsPushcutSettingsNotificationName", Type = FieldType.Textbox, HelpText = "")]
+        [FieldDefinition(0, Label = "NotificationsPushcutSettingsNotificationName", Type = FieldType.Textbox, HelpText = "NotificationsPushcutSettingsNotificationNameHelpText")]
         public string NotificationName { get; set; }
 
         [FieldDefinition(1, Label = "ApiKey", Type = FieldType.Textbox, Privacy = PrivacyLevel.ApiKey, HelpText = "NotificationsPushcutSettingsApiKeyHelpText")]

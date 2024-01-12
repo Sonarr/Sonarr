@@ -57,7 +57,7 @@ namespace NzbDrone.Core.Notifications.Apprise
         [FieldDefinition(4, Label = "NotificationsAppriseSettingsNotificationType", Type = FieldType.Select, SelectOptions = typeof(AppriseNotificationType))]
         public int NotificationType { get; set; }
 
-        [FieldDefinition(5, Label = "NotificationsAppriseSettingsTags", Type = FieldType.Tag, HelpText = "")]
+        [FieldDefinition(5, Label = "NotificationsAppriseSettingsTags", Type = FieldType.Tag, HelpText = "NotificationsAppriseSettingsTagsHelpText")]
         public IEnumerable<string> Tags { get; set; }
 
         [FieldDefinition(6, Label = "Username", Type = FieldType.Textbox, HelpText = "NotificationsAppriseSettingsUsernameHelpText", Privacy = PrivacyLevel.UserName)]
