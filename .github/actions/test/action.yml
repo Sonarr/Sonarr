@@ -79,10 +79,9 @@ runs:
       shell: bash
       run: dotnet test ./_tests/Sonarr.*.Test.dll --filter "${{ inputs.filter }}" --logger trx --results-directory "${{ env.RESULTS_NAME }}"
 
-    - name: Publish Test Results
+    - name: Upload Test Results
       if: ${{ !cancelled() }}
-      uses: phoenix-actions/test-reporting@v12
+      uses: actions/upload-artifact@v4
       with:
-        name: ${{ env.RESULTS_NAME }}
+        name: results-${{ env.RESULTS_NAME }}
         path: ${{ env.RESULTS_NAME }}/*.trx
-        reporter: dotnet-trx

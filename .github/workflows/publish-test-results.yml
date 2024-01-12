@@ -1,0 +1,24 @@
+name: Publish Test Results
+
+on:
+  workflow_run:
+    workflows: ['Build']
+    types:
+      - completed
+
+permissions:
+  contents: read
+  actions: read
+  checks: write
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Publish Test Results
+      uses: phoenix-actions/test-reporting@v12
+      with:
+        artifact: /results-(.*)/
+        name: '$1'
+        path: '*.trx'
+        reporter: dotnet-trx
