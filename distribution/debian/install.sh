@@ -5,6 +5,7 @@
 ### Version v1.0.0 2023-12-29 - StevieTV - adapted from servarr script for Sonarr installs
 ### Version V1.0.1 2024-01-02 - StevieTV - remove UTF8-BOM
 ### Version V1.0.2 2024-01-03 - markus101 - Get user input from /dev/tty
+### Version V1.0.3 2024-01-06 - StevieTV - exit script when it is ran from install directory
 
 ### Boilerplate Warning
 #THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
@@ -15,8 +16,8 @@
 #OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 #WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-scriptversion="1.0.2"
-scriptdate="2024-01-03"
+scriptversion="1.0.3"
+scriptdate="2024-01-06"
 
 set -euo pipefail
 
@@ -41,6 +42,12 @@ installdir="/opt"              # {Update me if needed} Install Location
 bindir="${installdir}/${app^}" # Full Path to Install Location
 datadir="/var/lib/$app/"       # {Update me if needed} AppData directory to use
 app_bin=${app^}                # Binary Name of the app
+
+# This script should not be ran from installdir, otherwise later in the script the extracted files will be removed before they can be moved to installdir.
+if [ "$installdir" == "$(dirname -- "$( readlink -f -- "$0"; )")" ] || [ "$bindir" == "$(dirname -- "$( readlink -f -- "$0"; )")" ]; then
+    echo "You should not run this script from the intended install directory. The script will exit. Please re-run it from another directory"
+    exit
+fi
 
 # Prompt User
 read -r -p "What user should ${app^} run as? (Default: $app): " app_uid < /dev/tty
@@ -118,7 +125,6 @@ echo "Installation files downloaded and extracted"
 
 # remove existing installs
 echo "Removing existing installation"
-# If you happen to run this script in the installdir the line below will delete the extracted files and cause the mv some lines below to fail.
 rm -rf "$bindir"
 echo "Installing..."
 mv "${app^}" $installdir
