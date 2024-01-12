@@ -58,7 +58,7 @@ function getExpandedState(newState) {
 }
 
 function getDateYear(date) {
-  const dateDate = moment(date);
+  const dateDate = moment.utc(date);
 
   return dateDate.format('YYYY');
 }
