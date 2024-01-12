@@ -385,5 +385,37 @@ namespace NzbDrone.Core.Test.ParserTests
             var result = LanguageParser.ParseLanguages(postTitle);
             result.Should().BeEquivalentTo(new[] { Language.English, Language.Spanish, Language.Catalan });
         }
+
+        [TestCase("Series.Title.S01E01.German.DL.1080p.BluRay.x264-RlsGrp")]
+        [TestCase("Series.Title.S01E01.GERMAN.DL.1080P.WEB.H264-RlsGrp")]
+        [TestCase("Series.Title.2023.S01E01.German.DL.EAC3.1080p.DSNP.WEB.H264-RlsGrp")]
+        public void should_add_original_language_to_german_release_with_dl_tag(string postTitle)
+        {
+            var result = Parser.Parser.ParseTitle(postTitle);
+            result.Languages.Count.Should().Be(2);
+            result.Languages.Should().Contain(Language.German);
+            result.Languages.Should().Contain(Language.Original);
+        }
+
+        [TestCase("Series.Title.2023.S01E01.GERMAN.1080P.WEB-DL.H264-RlsGrp")]
+        [TestCase("Series.Title.2023.S01E01.GERMAN.1080P.WEB.DL.H264-RlsGrp")]
+        [TestCase("Series Title 2023 S01E01 GERMAN 1080P WEB DL H264-RlsGrp")]
+        [TestCase("Series.Title.2023.S01E01.GERMAN.1080P.WEBDL.H264-RlsGrp")]
+        public void should_not_add_original_language_to_german_release_when_title_contains_web_dl(string postTitle)
+        {
+            var result = Parser.Parser.ParseTitle(postTitle);
+            result.Languages.Count.Should().Be(1);
+            result.Languages.Should().Contain(Language.German);
+        }
+
+        [TestCase("Series.Title.2023.S01.German.ML.EAC3.1080p.NF.WEB.H264-RlsGrp")]
+        public void should_add_original_language_and_english_to_german_release_with_ml_tag(string postTitle)
+        {
+            var result = Parser.Parser.ParseTitle(postTitle);
+            result.Languages.Count.Should().Be(3);
+            result.Languages.Should().Contain(Language.German);
+            result.Languages.Should().Contain(Language.Original);
+            result.Languages.Should().Contain(Language.English);
+        }
     }
 }
