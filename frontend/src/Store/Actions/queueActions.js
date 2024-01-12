@@ -160,7 +160,7 @@ export const defaultState = {
       },
       {
         name: 'added',
-        label: () => translate('AddedOn'),
+        label: () => translate('Added'),
         isSortable: true,
         isVisible: false
       },
