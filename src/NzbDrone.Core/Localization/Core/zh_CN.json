@@ -1478,7 +1478,7 @@
     "Files": "文件",
     "SeriesDetailsOneEpisodeFile": "1个集文件",
     "UrlBase": "基本URL",
-    "DownloadClientRemovesCompletedDownloadsHealthCheckMessage": "下载客户端 {downloadClientName} 已被设置为删除已完成的下载。这可能导致在 {1} 导入之前，已下载的文件会被从您的客户端中移除。",
+    "DownloadClientRemovesCompletedDownloadsHealthCheckMessage": "下载客户端 {downloadClientName} 已被设置为删除已完成的下载。这可能导致在 {appName} 导入之前，已下载的文件会被从您的客户端中移除。",
     "ImportListSearchForMissingEpisodesHelpText": "将系列添加到{appName}后，自动搜索缺失的剧集",
     "AutoRedownloadFailed": "重新下载失败",
     "AutoRedownloadFailedFromInteractiveSearch": "从交互式搜索中重新下载失败",
