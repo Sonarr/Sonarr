@@ -40,18 +40,25 @@ class FilterMenuContent extends Component {
         }
 
         {
-          customFilters.map((filter) => {
-            return (
-              <FilterMenuItem
-                key={filter.id}
-                filterKey={filter.id}
-                selectedFilterKey={selectedFilterKey}
-                onPress={onFilterSelect}
-              >
-                {filter.label}
-              </FilterMenuItem>
-            );
-          })
+          (customFilters.length > 0) &&
+            <MenuItemSeparator />
+        }
+
+        {
+          customFilters
+            .sort((a, b) => a.label.localeCompare(b.label))
+            .map((filter) => {
+              return (
+                <FilterMenuItem
+                  key={filter.id}
+                  filterKey={filter.id}
+                  selectedFilterKey={selectedFilterKey}
+                  onPress={onFilterSelect}
+                >
+                  {filter.label}
+                </FilterMenuItem>
+              );
+            })
         }
 
         {
