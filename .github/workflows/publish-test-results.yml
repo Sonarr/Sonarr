@@ -13,12 +13,19 @@ permissions:
 
 jobs:
   report:
+    if: github.event.workflow_run.conclusion != 'skipped'
     runs-on: ubuntu-latest
     steps:
+    - name: Download Test Reports
+      uses: actions/download-artifact@v4
+      with:
+        name: results-*
+        path: test-results
+        merge-multiple: true
+
     - name: Publish Test Results
       uses: phoenix-actions/test-reporting@v12
       with:
-        artifact: /results-(.*)/
-        name: '$1'
-        path: '*.trx'
+        name: 'Test Results'
+        path: 'test-results/*.trx'
         reporter: dotnet-trx
