@@ -1017,7 +1017,7 @@
     "SearchForAllMissingEpisodes": "Etsi kaikkia puuttuvia jaksoja",
     "Seasons": "Tuotantokaudet",
     "SearchAll": "Etsi kaikkia",
-    "SearchByTvdbId": "Voit setsiä myös sarjan TVDB ID:llä, esim. \"tvdb:71663\".",
+    "SearchByTvdbId": "Voit etsiä myös sarjan TVDB ID:llä, esim. \"tvdb:71663\".",
     "RootFoldersLoadError": "Virhe ladattaessa juurikansioita",
     "SearchFailedError": "Haku epäonnistui. Yritä myöhemmin uudelleen.",
     "Year": "Vuosi",
@@ -1275,5 +1275,7 @@
     "NoEpisodeInformation": "Jaksotietoja ei ole saatavilla.",
     "ManualGrab": "Manuaalinen kaappaus",
     "DownloadClientDownloadStationSettingsDirectory": "Valinnainen jaettu kansio latauksille. Jätä tyhjäksi käyttääksesi Download Stationin oletussijaintia.",
-    "DownloadClientDownloadStationValidationNoDefaultDestinationDetail": "Sinun on kirjauduttava Diskstationillesi tunnuksella {username} ja määritettävä se manuaalisesti Download Stationin \"BT/HTTP/FTP/NZB > Location\" -asetuksiin."
+    "DownloadClientDownloadStationValidationNoDefaultDestinationDetail": "Sinun on kirjauduttava Diskstationillesi tunnuksella {username} ja määritettävä se manuaalisesti Download Stationin \"BT/HTTP/FTP/NZB > Location\" -asetuksiin.",
+    "NoEpisodeOverview": "Jaksolle ei ole kuvausta.",
+    "Table": "Taulukko"
 }

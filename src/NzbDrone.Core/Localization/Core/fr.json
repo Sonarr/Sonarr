@@ -1867,5 +1867,6 @@
     "NotificationsEmailSettingsRecipientAddressHelpText": "Liste séparée par des virgules des destinataires des courriels",
     "NotificationsSynologySettingsUpdateLibraryHelpText": "Appelle synoindex sur l'hôte local pour mettre à jour le fichier de bibliothèque",
     "NotificationsPushoverSettingsUserKey": "Clé utilisateur",
-    "NotificationsPushoverSettingsRetryHelpText": "Intervalle pour réessayer les alertes d'urgence, minimum 30 secondes"
+    "NotificationsPushoverSettingsRetryHelpText": "Intervalle pour réessayer les alertes d'urgence, minimum 30 secondes",
+    "DownloadClientQbittorrentSettingsContentLayoutHelpText": "Utiliser la disposition du contenu configurée par qBittorrent, la disposition originale du torrent ou toujours créer un sous-dossier (qBittorrent 4.3.2+)"
 }
