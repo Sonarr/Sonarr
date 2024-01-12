@@ -41,7 +41,7 @@ namespace NzbDrone.Mono.Test.EnvironmentInfo.VersionAdapters
             versionName.FullName.Should().Be("macOS " + versionString);
         }
 
-        [TestCase]
+        [Test]
         public void should_detect_server()
         {
             var fileContent = File.ReadAllText(GetTestPath("Files/macOS/SystemVersion.plist"));
@@ -63,7 +63,7 @@ namespace NzbDrone.Mono.Test.EnvironmentInfo.VersionAdapters
             versionName.Name.Should().Be("macOS Server");
         }
 
-        [TestCase]
+        [Test]
         public void should_return_null_if_folder_doesnt_exist()
         {
             Mocker.GetMock<IDiskProvider>()
