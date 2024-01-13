@@ -368,6 +368,7 @@
   "DotNetVersion": ".NET",
   "Download": "Download",
   "DownloadClient": "Download Client",
+  "DownloadClientAriaSettingsDirectoryHelpText": "Optional location to put downloads in, leave blank to use the default Aria2 location",
   "DownloadClientCheckNoneAvailableHealthCheckMessage": "No download client is available",
   "DownloadClientCheckUnableToCommunicateWithHealthCheckMessage": "Unable to communicate with {downloadClientName}. {errorMessage}",
   "DownloadClientDelugeSettingsUrlBaseHelpText": "Adds a prefix to the deluge json url, see {url}",
