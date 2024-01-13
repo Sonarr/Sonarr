@@ -13,19 +13,29 @@ permissions:
 
 jobs:
   report:
-    if: github.event.workflow_run.conclusion != 'skipped'
+    if: ${{ github.event.workflow_run.conclusion != 'skipped' && github.event.workflow_run.conclusion != 'cancelled' }}
     runs-on: ubuntu-latest
     steps:
+    - name: Check out
+      uses: actions/checkout@v3
+
     - name: Download Test Reports
       uses: actions/download-artifact@v4
       with:
-        name: results-*
         path: test-results
+        pattern: results-*
         merge-multiple: true
+        repository: ${{ github.event.repository.owner.login }}/${{ github.event.repository.name }}
+        run-id:  ${{ github.event.workflow_run.id }}
+        github-token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Publish Test Results
       uses: phoenix-actions/test-reporting@v12
       with:
-        name: 'Test Results'
-        path: 'test-results/*.trx'
+        list-suites: failed
+        list-tests: failed
+        name: Test Results
+        only-summary: true
+        path: '*.trx'
         reporter: dotnet-trx
+        working-directory: test-results

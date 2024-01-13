@@ -77,22 +77,20 @@ runs:
 
     - name: Run tests
       shell: bash
-      run: dotnet test ./_tests/Sonarr.*.Test.dll --filter "${{ inputs.filter }}" --logger trx --results-directory "${{ env.RESULTS_NAME }}"
+      run: dotnet test ./_tests/Sonarr.*.Test.dll --filter "${{ inputs.filter }}" --logger "trx;LogFileName=${{ env.RESULTS_NAME }}.trx"
 
     - name: Upload Test Results
       if: ${{ !cancelled() }}
       uses: actions/upload-artifact@v4
       with:
         name: results-${{ env.RESULTS_NAME }}
-        path: ${{ env.RESULTS_NAME }}/*.trx
+        path: TestResults/*.trx
 
     - name: Publish Test Results
-      if: ${{ !cancelled() }}
-      uses: EnricoMi/publish-unit-test-result-action/composite@v2
+      uses: phoenix-actions/test-reporting@v12
       with:
-        check_run: false
-        check_run_annotations: none
-        comment_mode: off
-        comment_title: ${{ env.RESULTS_NAME }} Test Results
-        large_files: true
-        files: ${{ env.RESULTS_NAME }}/*.trx
+        name: Test Results
+        output-to: step-summary
+        path: '*.trx'
+        reporter: dotnet-trx
+        working-directory: TestResults
