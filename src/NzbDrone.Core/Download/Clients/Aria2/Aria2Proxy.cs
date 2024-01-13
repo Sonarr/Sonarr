@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 using System.Xml.XPath;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Download.Extensions;
 
@@ -97,8 +98,14 @@ namespace NzbDrone.Core.Download.Clients.Aria2
 
         public string AddMagnet(Aria2Settings settings, string magnet)
         {
-            var response = ExecuteRequest(settings, "aria2.addUri", GetToken(settings), new List<string> { magnet });
+            var options = new Dictionary<string, string>();
 
+            if (settings.Directory.IsNotNullOrWhiteSpace())
+            {
+                options.Add("dir", settings.Directory);
+            }
+
+            var response = ExecuteRequest(settings, "aria2.addUri", GetToken(settings), new List<string> { magnet }, options);
             var gid = response.GetStringResponse();
 
             return gid;
@@ -106,8 +113,16 @@ namespace NzbDrone.Core.Download.Clients.Aria2
 
         public string AddTorrent(Aria2Settings settings, byte[] torrent)
         {
-            var response = ExecuteRequest(settings, "aria2.addTorrent", GetToken(settings), torrent);
+            // Aria2's second parameter is an array of URIs and needs to be sent if options are provided, this satisfies that requirement.
+            var emptyListOfUris = new List<string>();
+            var options = new Dictionary<string, string>();
 
+            if (settings.Directory.IsNotNullOrWhiteSpace())
+            {
+                options.Add("dir", settings.Directory);
+            }
+
+            var response = ExecuteRequest(settings, "aria2.addTorrent", GetToken(settings), torrent, emptyListOfUris, options);
             var gid = response.GetStringResponse();
 
             return gid;

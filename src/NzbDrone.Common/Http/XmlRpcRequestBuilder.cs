@@ -92,6 +92,10 @@ namespace NzbDrone.Common.Http
             {
                 data = new XElement("base64", Convert.ToBase64String(bytes));
             }
+            else if (value is Dictionary<string, string> d)
+            {
+                data = new XElement("struct", d.Select(p => new XElement("member", new XElement("name", p.Key), new XElement("value", p.Value))));
+            }
             else
             {
                 throw new InvalidOperationException($"Unhandled argument type {value.GetType().Name}");
