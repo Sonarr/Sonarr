@@ -188,7 +188,7 @@ jobs:
             binary_path: osx-x64/${{ needs.backend.outputs.framework }}/Sonarr
           - os: windows-latest
             artifact: tests-win-x64
-            filter: TestCategory!=ManualTest&TestCategory=WINDOWS&TestCategory=IntegrationTest
+            filter: TestCategory!=ManualTest&TestCategory!=LINUX&TestCategory=IntegrationTest
             binary_artifact: build_windows
             binary_path: win-x64/${{ needs.backend.outputs.framework }}/Sonarr
     runs-on: ${{ matrix.os }}
