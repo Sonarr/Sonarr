@@ -6,7 +6,7 @@ import { icons, kinds } from 'Helpers/Props';
 import translate from 'Utilities/String/translate';
 import styles from './HistoryEventTypeCell.css';
 
-function getIconName(eventType) {
+function getIconName(eventType, data) {
   switch (eventType) {
     case 'grabbed':
       return icons.DOWNLOADING;
@@ -17,7 +17,7 @@ function getIconName(eventType) {
     case 'downloadFailed':
       return icons.DOWNLOADING;
     case 'episodeFileDeleted':
-      return icons.DELETE;
+      return data.reason === 'MissingFromDisk' ? icons.FILE_MISSING : icons.DELETE;
     case 'episodeFileRenamed':
       return icons.ORGANIZE;
     case 'downloadIgnored':
@@ -47,7 +47,7 @@ function getTooltip(eventType, data) {
     case 'downloadFailed':
       return translate('DownloadFailedEpisodeTooltip');
     case 'episodeFileDeleted':
-      return translate('EpisodeFileDeletedTooltip');
+      return data.reason === 'MissingFromDisk' ? translate('EpisodeFileMissingTooltip') : translate('EpisodeFileDeletedTooltip');
     case 'episodeFileRenamed':
       return translate('EpisodeFileRenamedTooltip');
     case 'downloadIgnored':
@@ -58,7 +58,7 @@ function getTooltip(eventType, data) {
 }
 
 function HistoryEventTypeCell({ eventType, data }) {
-  const iconName = getIconName(eventType);
+  const iconName = getIconName(eventType, data);
   const iconKind = getIconKind(eventType);
   const tooltip = getTooltip(eventType, data);
 
