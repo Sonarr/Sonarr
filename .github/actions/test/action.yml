@@ -79,6 +79,13 @@ runs:
       shell: bash
       run: dotnet test ./_tests/Sonarr.*.Test.dll --filter "${{ inputs.filter }}" --logger trx --results-directory "${{ env.RESULTS_NAME }}"
 
+    - name: Upload Test Results
+      if: ${{ !cancelled() }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: results-${{ env.RESULTS_NAME }}
+        path: ${{ env.RESULTS_NAME }}/*.trx
+
     - name: Publish Test Results
       if: ${{ !cancelled() }}
       uses: EnricoMi/publish-unit-test-result-action/composite@v2
