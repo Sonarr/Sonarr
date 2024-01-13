@@ -44,7 +44,16 @@ export interface CustomFilter {
   filers: PropertyFilter[];
 }
 
+export interface AppSectionState {
+  dimensions: {
+    isSmallScreen: boolean;
+    width: number;
+    height: number;
+  };
+}
+
 interface AppState {
+  app: AppSectionState;
   calendar: CalendarAppState;
   commands: CommandAppState;
   episodeFiles: EpisodeFilesAppState;
