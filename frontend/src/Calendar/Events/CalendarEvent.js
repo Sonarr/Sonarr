@@ -99,7 +99,8 @@ class CalendarEvent extends Component {
         <div className={styles.overlay} >
           <div className={styles.info}>
             <div className={styles.seriesTitle}>
-              {series.title}
+              {/* {series.title} */}
+              Series Title
             </div>
 
             <div className={styles.statusContainer}>
@@ -128,6 +129,7 @@ class CalendarEvent extends Component {
                   <span className={styles.statusIcon}>
                     <CalendarEventQueueDetails
                       {...queueItem}
+                      fullColorEvents={fullColorEvents}
                     />
                   </span> :
                   null
@@ -150,7 +152,7 @@ class CalendarEvent extends Component {
                   <Icon
                     className={styles.statusIcon}
                     name={icons.EPISODE_FILE}
-                    kind={fullColorEvents ? kinds.DEFAULT : kinds.WARNING}
+                    kind={kinds.WARNING}
                     title={translate('QualityCutoffNotMet')}
                   /> :
                   null
@@ -162,7 +164,6 @@ class CalendarEvent extends Component {
                     className={styles.statusIcon}
                     name={icons.INFO}
                     kind={kinds.INFO}
-                    darken={fullColorEvents}
                     title={seasonNumber === 1 ? translate('SeriesPremiere') : translate('SeasonPremiere')}
                   /> :
                   null
@@ -174,7 +175,7 @@ class CalendarEvent extends Component {
                   <Icon
                     className={styles.statusIcon}
                     name={icons.INFO}
-                    kind={fullColorEvents ? kinds.DEFAULT : kinds.WARNING}
+                    kind={kinds.WARNING}
                     title={getFinaleTypeName(finaleType)}
                   /> :
                   null
@@ -187,7 +188,6 @@ class CalendarEvent extends Component {
                     className={styles.statusIcon}
                     name={icons.INFO}
                     kind={kinds.PINK}
-                    darken={fullColorEvents}
                     title={translate('Special')}
                   /> :
                   null
@@ -199,7 +199,8 @@ class CalendarEvent extends Component {
             showEpisodeInformation ?
               <div className={styles.episodeInfo}>
                 <div className={styles.episodeTitle}>
-                  {title}
+                  {/* {title} */}
+                  Episode Title
                 </div>
 
                 <div>

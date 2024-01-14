@@ -24,7 +24,8 @@ function Legend(props) {
       <LegendIconItem
         name="Finale"
         icon={icons.INFO}
-        kind={fullColorEvents ? kinds.DEFAULT : kinds.WARNING}
+        kind={kinds.WARNING}
+        fullColorEvents={fullColorEvents}
         tooltip={translate('CalendarLegendSeriesFinaleTooltip')}
       />
     );
@@ -36,7 +37,7 @@ function Legend(props) {
         name="Special"
         icon={icons.INFO}
         kind={kinds.PINK}
-        darken={fullColorEvents}
+        fullColorEvents={fullColorEvents}
         tooltip={translate('SpecialEpisode')}
       />
     );
@@ -47,7 +48,8 @@ function Legend(props) {
       <LegendIconItem
         name="Cutoff Not Met"
         icon={icons.EPISODE_FILE}
-        kind={fullColorEvents ? kinds.DEFAULT : kinds.WARNING}
+        kind={kinds.WARNING}
+        fullColorEvents={fullColorEvents}
         tooltip={translate('QualityCutoffNotMet')}
       />
     );
@@ -115,7 +117,7 @@ function Legend(props) {
           name="Premiere"
           icon={icons.INFO}
           kind={kinds.INFO}
-          darken={true}
+          fullColorEvents={fullColorEvents}
           tooltip={translate('CalendarLegendSeriesPremiereTooltip')}
         />
 

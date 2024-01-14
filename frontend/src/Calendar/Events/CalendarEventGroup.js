@@ -145,45 +145,46 @@ class CalendarEventGroup extends Component {
             {series.title}
           </div>
 
-          {
-            isMissingAbsoluteNumber &&
-              <Icon
-                containerClassName={styles.statusIcon}
-                name={icons.WARNING}
-                title={translate('EpisodeMissingAbsoluteNumber')}
-              />
-          }
+          <div className={styles.statusContainer}>
+            {
+              isMissingAbsoluteNumber &&
+                <Icon
+                  containerClassName={styles.statusIcon}
+                  name={icons.WARNING}
+                  title={translate('EpisodeMissingAbsoluteNumber')}
+                />
+            }
 
-          {
-            anyDownloading &&
-              <Icon
-                containerClassName={styles.statusIcon}
-                name={icons.DOWNLOADING}
-                title={translate('AnEpisodeIsDownloading')}
-              />
-          }
+            {
+              anyDownloading &&
+                <Icon
+                  containerClassName={styles.statusIcon}
+                  name={icons.DOWNLOADING}
+                  title={translate('AnEpisodeIsDownloading')}
+                />
+            }
 
-          {
-            firstEpisode.episodeNumber === 1 && seasonNumber > 0 &&
-              <Icon
-                containerClassName={styles.statusIcon}
-                name={icons.INFO}
-                kind={kinds.INFO}
-                darken={fullColorEvents}
-                title={seasonNumber === 1 ? translate('SeriesPremiere') : translate('SeasonPremiere')}
-              />
-          }
+            {
+              firstEpisode.episodeNumber === 1 && seasonNumber > 0 &&
+                <Icon
+                  containerClassName={styles.statusIcon}
+                  name={icons.INFO}
+                  kind={kinds.INFO}
+                  title={seasonNumber === 1 ? translate('SeriesPremiere') : translate('SeasonPremiere')}
+                />
+            }
 
-          {
-            showFinaleIcon &&
-            lastEpisode.finaleType ?
-              <Icon
-                containerClassName={styles.statusIcon}
-                name={icons.INFO}
-                kind={fullColorEvents ? kinds.DEFAULT : kinds.WARNING}
-                title={getFinaleTypeName(lastEpisode.finaleType)}
-              /> : null
-          }
+            {
+              showFinaleIcon &&
+              lastEpisode.finaleType ?
+                <Icon
+                  containerClassName={styles.statusIcon}
+                  name={icons.INFO}
+                  kind={kinds.WARNING}
+                  title={getFinaleTypeName(lastEpisode.finaleType)}
+                /> : null
+            }
+          </div>
         </div>
 
         <div className={styles.airingInfo}>

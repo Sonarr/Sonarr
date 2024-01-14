@@ -12,18 +12,10 @@
 
 .info {
   color: var(--infoColor);
-
-  &:global(.darken) {
-    color: color(var(--infoColor) shade(30%));
-  }
 }
 
 .pink {
   color: var(--pink);
-
-  &:global(.darken) {
-    color: color(var(--pink) shade(30%));
-  }
 }
 
 .success {

@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Icon from 'Components/Icon';
@@ -6,9 +7,9 @@ import styles from './LegendIconItem.css';
 function LegendIconItem(props) {
   const {
     name,
+    fullColorEvents,
     icon,
     kind,
-    darken,
     tooltip
   } = props;
 
@@ -18,9 +19,11 @@ function LegendIconItem(props) {
       title={tooltip}
     >
       <Icon
-        className={styles.icon}
+        className={classNames(
+          styles.icon,
+          fullColorEvents && 'fullColorEvents'
+        )}
         name={icon}
-        darken={darken}
         kind={kind}
       />
 
@@ -31,14 +34,10 @@ function LegendIconItem(props) {
 
 LegendIconItem.propTypes = {
   name: PropTypes.string.isRequired,
+  fullColorEvents: PropTypes.bool.isRequired,
   icon: PropTypes.object.isRequired,
   kind: PropTypes.string.isRequired,
-  darken: PropTypes.bool.isRequired,
   tooltip: PropTypes.string.isRequired
-};
-
-LegendIconItem.defaultProps = {
-  darken: false
 };
 
 export default LegendIconItem;
