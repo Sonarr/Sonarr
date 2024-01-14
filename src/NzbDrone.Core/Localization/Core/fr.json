@@ -1354,7 +1354,7 @@
     "DeleteSelectedEpisodeFiles": "Supprimer les fichiers d'épisode sélectionnés",
     "DeleteSelectedEpisodeFilesHelpText": "Êtes-vous sûr de vouloir supprimer les fichiers d'épisode sélectionnés ?",
     "DeleteSpecificationHelpText": "Êtes-vous sûr de vouloir supprimer la spécification « {name} » ?",
-    "DeleteTag": "Supprimer la balise",
+    "DeleteTag": "Supprimer l'étiquette",
     "DownloadClientStatusSingleClientHealthCheckMessage": "Clients de téléchargement indisponibles en raison d'échecs : {downloadClientNames}",
     "DownloadClientStatusAllClientHealthCheckMessage": "Tous les clients de téléchargement sont indisponibles en raison d'échecs",
     "DownloadClientsLoadError": "Impossible de charger les clients de téléchargement",
@@ -1625,7 +1625,7 @@
     "DownloadClientValidationSslConnectFailure": "Impossible de se connecter via SSL",
     "DownloadClientValidationUnableToConnect": "Impossible de se connecter à {clientName}",
     "IndexerIPTorrentsSettingsFeedUrlHelpText": "URL complète du flux RSS généré par IPTorrents, en utilisant uniquement les catégories que vous avez sélectionnées (HD, SD, x264, etc...)",
-    "IndexerHDBitsSettingsMediums": "Supports",
+    "IndexerHDBitsSettingsMediums": "Type de médias",
     "IndexerSettingsAdditionalNewznabParametersHelpText": "Veuillez noter que si vous modifiez la catégorie, vous devrez ajouter des règles requises/restrictives concernant les sous-groupes pour éviter les sorties en langues étrangères.",
     "IndexerSettingsAllowZeroSize": "Autoriser la taille zéro",
     "IndexerSettingsAllowZeroSizeHelpText": "L'activation de cette option vous permettra d'utiliser des flux qui ne spécifient pas la taille de la version, mais soyez prudent, les vérifications liées à la taille ne seront pas effectuées.",
@@ -1868,5 +1868,8 @@
     "NotificationsSynologySettingsUpdateLibraryHelpText": "Appelle synoindex sur l'hôte local pour mettre à jour le fichier de bibliothèque",
     "NotificationsPushoverSettingsUserKey": "Clé utilisateur",
     "NotificationsPushoverSettingsRetryHelpText": "Intervalle pour réessayer les alertes d'urgence, minimum 30 secondes",
-    "DownloadClientQbittorrentSettingsContentLayoutHelpText": "Utiliser la disposition du contenu configurée par qBittorrent, la disposition originale du torrent ou toujours créer un sous-dossier (qBittorrent 4.3.2+)"
+    "DownloadClientQbittorrentSettingsContentLayoutHelpText": "Utiliser la disposition du contenu configurée par qBittorrent, la disposition originale du torrent ou toujours créer un sous-dossier (qBittorrent 4.3.2+)",
+    "DownloadClientQbittorrentSettingsContentLayout": "Disposition du contenu",
+    "NotificationsGotifySettingIncludeSeriesPoster": "Inclure l'affiche de la série",
+    "NotificationsGotifySettingIncludeSeriesPosterHelpText": "Inclure l'affiche de la série dans le message"
 }
