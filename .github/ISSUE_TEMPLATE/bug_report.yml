@@ -1,5 +1,5 @@
 name: Bug Report
-description: 'Support Requests will be closed immediately, if you are not 100% certain this is a bug please go to our Reddit, Discord, Forums, or IRC first. Only bug reports for v4 will be accepted, older versions are EOL & unsupported.'
+description: 'Only bug reports for v4 will be accepted, older versions are no longer receiving bug fixes and support issues will be closed immediately.'
 labels: ['needs-triage']
 body:
 - type: checkboxes
