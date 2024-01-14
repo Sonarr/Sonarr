@@ -269,33 +269,6 @@ function InteractiveImportModalContent(
   const [interactiveImportErrorMessage, setInteractiveImportErrorMessage] =
     useState<string | null>(null);
   const [selectState, setSelectState] = useSelectState();
-  const [bulkSelectOptions, setBulkSelectOptions] = useState([
-    {
-      key: 'select',
-      value: translate('SelectDropdown'),
-      disabled: true,
-    },
-    {
-      key: 'season',
-      value: translate('SelectSeason'),
-    },
-    {
-      key: 'episode',
-      value: translate('SelectEpisodes'),
-    },
-    {
-      key: 'quality',
-      value: translate('SelectQuality'),
-    },
-    {
-      key: 'releaseGroup',
-      value: translate('SelectReleaseGroup'),
-    },
-    {
-      key: 'language',
-      value: translate('SelectLanguage'),
-    },
-  ]);
   const { allSelected, allUnselected, selectedState } = selectState;
   const previousIsDeleting = usePrevious(isDeleting);
   const dispatch = useDispatch();
@@ -318,19 +291,66 @@ function InteractiveImportModalContent(
     return getSelectedIds(selectedState);
   }, [selectedState]);
 
+  const bulkSelectOptions = useMemo(() => {
+    const { seasonSelectDisabled, episodeSelectDisabled } = items.reduce(
+      (acc, item) => {
+        if (!selectedIds.includes(item.id)) {
+          return acc;
+        }
+
+        acc.seasonSelectDisabled ||= !item.series;
+        acc.episodeSelectDisabled ||= !item.seasonNumber;
+
+        return acc;
+      },
+      {
+        seasonSelectDisabled: false,
+        episodeSelectDisabled: false,
+      }
+    );
+
+    const options = [
+      {
+        key: 'select',
+        value: translate('SelectDropdown'),
+        disabled: true,
+      },
+      {
+        key: 'season',
+        value: translate('SelectSeason'),
+        disabled: seasonSelectDisabled,
+      },
+      {
+        key: 'episode',
+        value: translate('SelectEpisodes'),
+        disabled: episodeSelectDisabled,
+      },
+      {
+        key: 'quality',
+        value: translate('SelectQuality'),
+      },
+      {
+        key: 'releaseGroup',
+        value: translate('SelectReleaseGroup'),
+      },
+      {
+        key: 'language',
+        value: translate('SelectLanguage'),
+      },
+    ];
+
+    if (allowSeriesChange) {
+      options.splice(1, 0, {
+        key: 'series',
+        value: translate('SelectSeries'),
+      });
+    }
+
+    return options;
+  }, [allowSeriesChange, items, selectedIds]);
+
   useEffect(
     () => {
-      if (allowSeriesChange) {
-        const newBulkSelectOptions = [...bulkSelectOptions];
-
-        newBulkSelectOptions.splice(1, 0, {
-          key: 'series',
-          value: translate('SelectSeries'),
-        });
-
-        setBulkSelectOptions(newBulkSelectOptions);
-      }
-
       if (initialSortKey) {
         const sortProps: { sortKey: string; sortDirection?: string } = {
           sortKey: initialSortKey,
