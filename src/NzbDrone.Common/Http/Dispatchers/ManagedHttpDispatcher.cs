@@ -102,31 +102,38 @@ namespace NzbDrone.Common.Http.Dispatchers
 
             var httpClient = GetClient(request.Url);
 
-            using var responseMessage = await httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cts.Token);
+            try
             {
-                byte[] data = null;
-
-                try
+                using var responseMessage = await httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cts.Token);
                 {
-                    if (request.ResponseStream != null && responseMessage.StatusCode == HttpStatusCode.OK)
+                    byte[] data = null;
+
+                    try
                     {
-                        await responseMessage.Content.CopyToAsync(request.ResponseStream, null, cts.Token);
+                        if (request.ResponseStream != null && responseMessage.StatusCode == HttpStatusCode.OK)
+                        {
+                            await responseMessage.Content.CopyToAsync(request.ResponseStream, null, cts.Token);
+                        }
+                        else
+                        {
+                            data = await responseMessage.Content.ReadAsByteArrayAsync(cts.Token);
+                        }
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        data = await responseMessage.Content.ReadAsByteArrayAsync(cts.Token);
+                        throw new WebException("Failed to read complete http response", ex, WebExceptionStatus.ReceiveFailure, null);
                     }
+
+                    var headers = responseMessage.Headers.ToNameValueCollection();
+
+                    headers.Add(responseMessage.Content.Headers.ToNameValueCollection());
+
+                    return new HttpResponse(request, new HttpHeader(headers), data, responseMessage.StatusCode, responseMessage.Version);
                 }
-                catch (Exception ex)
-                {
-                    throw new WebException("Failed to read complete http response", ex, WebExceptionStatus.ReceiveFailure, null);
-                }
-
-                var headers = responseMessage.Headers.ToNameValueCollection();
-
-                headers.Add(responseMessage.Content.Headers.ToNameValueCollection());
-
-                return new HttpResponse(request, new HttpHeader(headers), data, responseMessage.StatusCode, responseMessage.Version);
+            }
+            catch (OperationCanceledException ex) when (cts.IsCancellationRequested)
+            {
+                throw new WebException("Http request timed out", ex.InnerException, WebExceptionStatus.Timeout, null);
             }
         }
 
