@@ -16,7 +16,7 @@ namespace NzbDrone.Core.ImportLists.Rss.Plex
     {
         private PlexRssImportSettingsValidator Validator => new ();
 
-        [FieldDefinition(0, Label = "Url", Type = FieldType.Textbox, HelpLink = "https://app.plex.tv/desktop/#!/settings/watchlist")]
+        [FieldDefinition(0, Label = "ImportListsSettingsRssUrl", Type = FieldType.Textbox, HelpLink = "https://app.plex.tv/desktop/#!/settings/watchlist")]
         public override string Url { get; set; }
 
         public override NzbDroneValidationResult Validate()

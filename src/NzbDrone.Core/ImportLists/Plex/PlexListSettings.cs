@@ -27,10 +27,10 @@ namespace NzbDrone.Core.ImportLists.Plex
 
         public string BaseUrl { get; set; }
 
-        [FieldDefinition(0, Label = "Access Token", Type = FieldType.Textbox, Hidden = HiddenType.Hidden)]
+        [FieldDefinition(0, Label = "ImportListsSettingsAccessToken", Type = FieldType.Textbox, Hidden = HiddenType.Hidden)]
         public string AccessToken { get; set; }
 
-        [FieldDefinition(99, Label = "Authenticate with Plex.tv", Type = FieldType.OAuth)]
+        [FieldDefinition(99, Label = "ImportListsPlexSettingsAuthenticateWithPlex", Type = FieldType.OAuth)]
         public string SignIn { get; set; }
 
         public NzbDroneValidationResult Validate()

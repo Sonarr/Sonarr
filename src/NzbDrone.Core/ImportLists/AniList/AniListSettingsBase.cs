@@ -42,16 +42,16 @@ namespace NzbDrone.Core.ImportLists.AniList
 
         public string BaseUrl { get; set; }
 
-        [FieldDefinition(0, Label = "Access Token", Type = FieldType.Textbox, Hidden = HiddenType.Hidden)]
+        [FieldDefinition(0, Label = "ImportListsSettingsAccessToken", Type = FieldType.Textbox, Hidden = HiddenType.Hidden)]
         public string AccessToken { get; set; }
 
-        [FieldDefinition(0, Label = "Refresh Token", Type = FieldType.Textbox, Hidden = HiddenType.Hidden)]
+        [FieldDefinition(0, Label = "ImportListsSettingsRefreshToken", Type = FieldType.Textbox, Hidden = HiddenType.Hidden)]
         public string RefreshToken { get; set; }
 
-        [FieldDefinition(0, Label = "Expires", Type = FieldType.Textbox, Hidden = HiddenType.Hidden)]
+        [FieldDefinition(0, Label = "ImportListsSettingsExpires", Type = FieldType.Textbox, Hidden = HiddenType.Hidden)]
         public DateTime Expires { get; set; }
 
-        [FieldDefinition(99, Label = "Authenticate with AniList", Type = FieldType.OAuth)]
+        [FieldDefinition(99, Label = "ImportListsAniListSettingsAuthenticateWithAniList", Type = FieldType.OAuth)]
         public string SignIn { get; set; }
 
         public NzbDroneValidationResult Validate()

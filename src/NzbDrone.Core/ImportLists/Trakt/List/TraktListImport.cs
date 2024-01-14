@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using NLog;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Localization;
 using NzbDrone.Core.Parser;
 
 namespace NzbDrone.Core.ImportLists.Trakt.List
@@ -12,12 +14,13 @@ namespace NzbDrone.Core.ImportLists.Trakt.List
                                IImportListStatusService netImportStatusService,
                                IConfigService configService,
                                IParsingService parsingService,
+                               ILocalizationService localizationService,
                                Logger logger)
-        : base(netImportRepository, httpClient, netImportStatusService, configService, parsingService, logger)
+        : base(netImportRepository, httpClient, netImportStatusService, configService, parsingService, localizationService, logger)
         {
         }
 
-        public override string Name => "Trakt List";
+        public override string Name => _localizationService.GetLocalizedString("TypeOfList", new Dictionary<string, object> { { "typeOfList", "Trakt" } });
 
         public override IImportListRequestGenerator GetRequestGenerator()
         {

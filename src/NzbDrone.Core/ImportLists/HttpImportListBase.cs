@@ -10,6 +10,7 @@ using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Http.CloudFlare;
 using NzbDrone.Core.ImportLists.Exceptions;
 using NzbDrone.Core.Indexers.Exceptions;
+using NzbDrone.Core.Localization;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Validation;
@@ -31,8 +32,8 @@ namespace NzbDrone.Core.ImportLists
         public abstract IImportListRequestGenerator GetRequestGenerator();
         public abstract IParseImportListResponse GetParser();
 
-        public HttpImportListBase(IHttpClient httpClient, IImportListStatusService importListStatusService, IConfigService configService, IParsingService parsingService, Logger logger)
-            : base(importListStatusService, configService, parsingService, logger)
+        public HttpImportListBase(IHttpClient httpClient, IImportListStatusService importListStatusService, IConfigService configService, IParsingService parsingService, ILocalizationService localizationService, Logger logger)
+            : base(importListStatusService, configService, parsingService, localizationService, logger)
         {
             _httpClient = httpClient;
         }

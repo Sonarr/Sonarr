@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
+using NzbDrone.Core.Localization;
 
 namespace NzbDrone.Core.ImportLists.Sonarr
 {
@@ -23,10 +24,12 @@ namespace NzbDrone.Core.ImportLists.Sonarr
     {
         private readonly IHttpClient _httpClient;
         private readonly Logger _logger;
+        private readonly ILocalizationService _localizationService;
 
-        public SonarrV3Proxy(IHttpClient httpClient, Logger logger)
+        public SonarrV3Proxy(IHttpClient httpClient, ILocalizationService localizationService, Logger logger)
         {
             _httpClient = httpClient;
+            _localizationService = localizationService;
             _logger = logger;
         }
 
@@ -66,22 +69,22 @@ namespace NzbDrone.Core.ImportLists.Sonarr
                 if (ex.Response.StatusCode == HttpStatusCode.Unauthorized)
                 {
                     _logger.Error(ex, "API Key is invalid");
-                    return new ValidationFailure("ApiKey", "API Key is invalid");
+                    return new ValidationFailure("ApiKey", _localizationService.GetLocalizedString("ImportListsValidationInvalidApiKey"));
                 }
 
                 if (ex.Response.HasHttpRedirect)
                 {
                     _logger.Error(ex, "Sonarr returned redirect and is invalid");
-                    return new ValidationFailure("BaseUrl", "Sonarr URL is invalid, are you missing a URL base?");
+                    return new ValidationFailure("BaseUrl", _localizationService.GetLocalizedString("ImportListsSonarrValidationInvalidUrl"));
                 }
 
                 _logger.Error(ex, "Unable to connect to import list.");
-                return new ValidationFailure(string.Empty, $"Unable to connect to import list: {ex.Message}. Check the log surrounding this error for details.");
+                return new ValidationFailure(string.Empty, _localizationService.GetLocalizedString("ImportListsValidationUnableToConnectException", new Dictionary<string, object> { { "exceptionMessage", ex.Message } }));
             }
             catch (Exception ex)
             {
                 _logger.Error(ex, "Unable to connect to import list.");
-                return new ValidationFailure(string.Empty, $"Unable to connect to import list: {ex.Message}. Check the log surrounding this error for details.");
+                return new ValidationFailure(string.Empty, _localizationService.GetLocalizedString("ImportListsValidationUnableToConnectException", new Dictionary<string, object> { { "exceptionMessage", ex.Message } }));
             }
 
             return null;

@@ -18,7 +18,7 @@ namespace NzbDrone.Core.ImportLists.Rss
 
         public string BaseUrl { get; set; }
 
-        [FieldDefinition(0, Label = "Url", Type = FieldType.Textbox)]
+        [FieldDefinition(0, Label = "ImportListsSettingsRssUrl", Type = FieldType.Textbox)]
         public virtual string Url { get; set; }
 
         public virtual NzbDroneValidationResult Validate()

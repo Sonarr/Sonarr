@@ -22,10 +22,10 @@ namespace NzbDrone.Core.ImportLists.Simkl.User
             ShowType = (int)SimklUserShowType.Shows;
         }
 
-        [FieldDefinition(1, Label = "List Type", Type = FieldType.Select, SelectOptions = typeof(SimklUserListType), HelpText = "Type of list you're seeking to import from")]
+        [FieldDefinition(1, Label = "ImportListsSimklSettingsListType", Type = FieldType.Select, SelectOptions = typeof(SimklUserListType), HelpText = "ImportListsSimklSettingsListTypeHelpText")]
         public int ListType { get; set; }
 
-        [FieldDefinition(1, Label = "Show Type", Type = FieldType.Select, SelectOptions = typeof(SimklUserShowType), HelpText = "Type of show you're seeking to import from")]
+        [FieldDefinition(1, Label = "ImportListsSimklSettingsShowType", Type = FieldType.Select, SelectOptions = typeof(SimklUserShowType), HelpText = "ImportListsSimklSettingsShowTypeHelpText")]
         public int ShowType { get; set; }
     }
 }

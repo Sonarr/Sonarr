@@ -20,7 +20,7 @@ namespace NzbDrone.Core.AutoTagging.Specifications
         public override int Order => 1;
         public override string ImplementationName => "Quality Profile";
 
-        [FieldDefinition(1, Label = "Quality Profile", Type = FieldType.QualityProfile)]
+        [FieldDefinition(1, Label = "AutoTaggingSpecificationQualityProfile", Type = FieldType.QualityProfile)]
         public int Value { get; set; }
 
         protected override bool IsSatisfiedByWithoutNegate(Series series)

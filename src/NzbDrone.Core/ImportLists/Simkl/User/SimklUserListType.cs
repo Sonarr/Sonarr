@@ -1,18 +1,18 @@
-using System.Runtime.Serialization;
+using NzbDrone.Core.Annotations;
 
 namespace NzbDrone.Core.ImportLists.Simkl.User
 {
     public enum SimklUserListType
     {
-        [EnumMember(Value = "Watching")]
+        [FieldOption(Label = "ImportListsSimklSettingsUserListTypeWatching")]
         Watching = 0,
-        [EnumMember(Value = "Plan To Watch")]
+        [FieldOption(Label = "ImportListsSimklSettingsUserListTypePlanToWatch")]
         PlanToWatch = 1,
-        [EnumMember(Value = "Hold")]
+        [FieldOption(Label = "ImportListsSimklSettingsUserListTypeHold")]
         Hold = 2,
-        [EnumMember(Value = "Completed")]
+        [FieldOption(Label = "ImportListsSimklSettingsUserListTypeCompleted")]
         Completed = 3,
-        [EnumMember(Value = "Dropped")]
+        [FieldOption(Label = "ImportListsSimklSettingsUserListTypeDropped")]
         Dropped = 4
     }
 }

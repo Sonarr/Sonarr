@@ -25,16 +25,16 @@ namespace NzbDrone.Core.ImportLists.Trakt.User
             TraktWatchSorting = (int)TraktUserWatchSorting.Rank;
         }
 
-        [FieldDefinition(1, Label = "List Type", Type = FieldType.Select, SelectOptions = typeof(TraktUserListType), HelpText = "Type of list you're seeking to import from")]
+        [FieldDefinition(1, Label = "ImportListsTraktSettingsListType", Type = FieldType.Select, SelectOptions = typeof(TraktUserListType), HelpText = "ImportListsTraktSettingsListTypeHelpText")]
         public int TraktListType { get; set; }
 
-        [FieldDefinition(2, Label = "Watched List Filter", Type = FieldType.Select, SelectOptions = typeof(TraktUserWatchedListType), HelpText = "If List Type is Watched. Series do you want to import from")]
+        [FieldDefinition(2, Label = "ImportListsTraktSettingsWatchedListFilter", Type = FieldType.Select, SelectOptions = typeof(TraktUserWatchedListType), HelpText = "ImportListsTraktSettingsWatchedListFilterHelpText")]
         public int TraktWatchedListType { get; set; }
 
-        [FieldDefinition(3, Label = "Watch List Sorting", Type = FieldType.Select, SelectOptions = typeof(TraktUserWatchSorting), HelpText = "If List Type is Watch")]
+        [FieldDefinition(3, Label = "ImportListsTraktSettingsWatchedListSorting", Type = FieldType.Select, SelectOptions = typeof(TraktUserWatchSorting), HelpText = "ImportListsTraktSettingsWatchedListSortingHelpText")]
         public int TraktWatchSorting { get; set; }
 
-        [FieldDefinition(4, Label = "Username", HelpText = "Username for the List to import from (empty to use Auth User)")]
+        [FieldDefinition(4, Label = "Username", HelpText = "ImportListsTraktSettingsUserListUsernameHelpText")]
         public string Username { get; set; }
     }
 

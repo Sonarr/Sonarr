@@ -20,7 +20,7 @@ namespace NzbDrone.Core.ImportLists.Imdb
 
         public string BaseUrl { get; set; }
 
-        [FieldDefinition(1, Label = "List ID", HelpText = "IMDb list ID (e.g ls12345678)")]
+        [FieldDefinition(1, Label = "ImportListsImdbSettingsListId", HelpText = "ImportListsImdbSettingsListIdHelpText")]
         public string ListId { get; set; }
 
         public NzbDroneValidationResult Validate()
