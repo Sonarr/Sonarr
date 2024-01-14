@@ -526,7 +526,7 @@
     "DeleteRemotePathMappingMessageText": "Tem certeza de que deseja excluir este mapeamento de caminho remoto?",
     "DeleteSpecification": "Excluir Especificação",
     "DeleteSpecificationHelpText": "Tem certeza de que deseja excluir a especificação '{name}'?",
-    "DeleteTag": "Excluir Tag",
+    "DeleteTag": "Excluir Etiqueta",
     "DeleteTagMessageText": "Tem certeza de que deseja excluir a tag '{label}'?",
     "DisabledForLocalAddresses": "Desabilitado para endereços locais",
     "DoNotPrefer": "Não Preferir",
