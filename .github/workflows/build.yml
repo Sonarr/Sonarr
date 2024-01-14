@@ -207,13 +207,13 @@ jobs:
         binary_artifact: ${{ matrix.binary_artifact }}
         binary_path: ${{ matrix.binary_path }}
 
-  # deploy:
-  #   if: ${{ github.ref_name == 'develop' || github.ref_name == 'main' }}
-  #   needs: [backend, unit_test, unit_test_postgres, integration_test]
-  #   secrets: inherit
-  #   uses: ./.github/workflows/deploy.yml
-  #   with:
-  #     framework: ${{ needs.backend.outputs.framework }}
-  #     branch: ${{ github.ref_name }}
-  #     major_version: ${{ needs.backend.outputs.major_version }}
-  #     version: ${{ needs.backend.outputs.version }}
+  deploy:
+    if: ${{ github.ref_name == 'develop' || github.ref_name == 'main' }}
+    needs: [backend, unit_test, unit_test_postgres, integration_test]
+    secrets: inherit
+    uses: ./.github/workflows/deploy.yml
+    with:
+      framework: ${{ needs.backend.outputs.framework }}
+      branch: ${{ github.ref_name }}
+      major_version: ${{ needs.backend.outputs.major_version }}
+      version: ${{ needs.backend.outputs.version }}
