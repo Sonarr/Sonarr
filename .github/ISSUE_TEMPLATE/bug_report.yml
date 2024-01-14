@@ -1,5 +1,5 @@
 name: Bug Report
-description: 'Support issues are not bugs, if you are unsure if this is a bug please ask in one of our support channels. Only bug reports for v4 will be accepted, older versions are no longer receiving bug fixes.'
+description: 'Only bug reports for v4 will be accepted, older versions are no longer receiving bug fixes and support issues will be closed immediately.'
 labels: ['needs-triage']
 body:
 - type: checkboxes
