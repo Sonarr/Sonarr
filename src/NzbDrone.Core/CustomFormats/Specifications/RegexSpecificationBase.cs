@@ -21,7 +21,7 @@ namespace NzbDrone.Core.CustomFormats
         protected Regex _regex;
         protected string _raw;
 
-        [FieldDefinition(1, Label = "Regular Expression", HelpText = "Custom Format RegEx is Case Insensitive")]
+        [FieldDefinition(1, Label = "CustomFormatsSpecificationRegularExpression", HelpText = "CustomFormatsSpecificationRegularExpressionHelpText")]
         public string Value
         {
             get => _raw;

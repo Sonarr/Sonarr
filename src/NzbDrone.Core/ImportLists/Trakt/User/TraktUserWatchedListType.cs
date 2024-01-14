@@ -4,11 +4,11 @@ namespace NzbDrone.Core.ImportLists.Trakt.User
 {
     public enum TraktUserWatchedListType
     {
-        [FieldOption(Label = "All")]
+        [FieldOption(Label = "ImportListsTraktSettingsWatchedListTypeAll")]
         All = 0,
-        [FieldOption(Label = "In Progress")]
+        [FieldOption(Label = "ImportListsTraktSettingsWatchedListTypeInProgress")]
         InProgress = 1,
-        [FieldOption(Label = "100% Watched")]
+        [FieldOption(Label = "ImportListsTraktSettingsWatchedListTypeCompleted")]
         CompletelyWatched = 2
     }
 }

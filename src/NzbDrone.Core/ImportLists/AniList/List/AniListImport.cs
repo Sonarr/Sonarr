@@ -9,6 +9,7 @@ using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Http.CloudFlare;
 using NzbDrone.Core.ImportLists.Exceptions;
 using NzbDrone.Core.Indexers.Exceptions;
+using NzbDrone.Core.Localization;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 
@@ -21,12 +22,13 @@ namespace NzbDrone.Core.ImportLists.AniList.List
                     IImportListStatusService importListStatusService,
                     IConfigService configService,
                     IParsingService parsingService,
+                    ILocalizationService localizationService,
                     Logger logger)
-        : base(netImportRepository, httpClient, importListStatusService, configService, parsingService, logger)
+        : base(netImportRepository, httpClient, importListStatusService, configService, parsingService, localizationService, logger)
         {
         }
 
-        public override string Name => "AniList List";
+        public override string Name => _localizationService.GetLocalizedString("TypeOfList", new Dictionary<string, object> { { "typeOfList", "AniList" } });
 
         public override AniListRequestGenerator GetRequestGenerator()
         {

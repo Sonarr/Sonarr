@@ -1,31 +1,30 @@
-using System.Runtime.Serialization;
+using NzbDrone.Core.Annotations;
 
 namespace NzbDrone.Core.ImportLists.Trakt.Popular
 {
     public enum TraktPopularListType
     {
-        [EnumMember(Value = "Trending Shows")]
+        [FieldOption(Label = "ImportListsTraktSettingsPopularListTypeTrendingShows")]
         Trending = 0,
-        [EnumMember(Value = "Popular Shows")]
+        [FieldOption(Label = "ImportListsTraktSettingsPopularListTypePopularShows")]
         Popular = 1,
-        [EnumMember(Value = "Anticipated Shows")]
+        [FieldOption(Label = "ImportListsTraktSettingsPopularListTypeAnticipatedShows")]
         Anticipated = 2,
-
-        [EnumMember(Value = "Top Watched Shows By Week")]
+        [FieldOption(Label = "ImportListsTraktSettingsPopularListTypeTopWeekShows")]
         TopWatchedByWeek = 3,
-        [EnumMember(Value = "Top Watched Shows By Month")]
+        [FieldOption(Label = "ImportListsTraktSettingsPopularListTypeTopMonthShows")]
         TopWatchedByMonth = 4,
-        [EnumMember(Value = "Top Watched Shows By Year")]
+        [FieldOption(Label = "ImportListsTraktSettingsPopularListTypeTopYearShows")]
         TopWatchedByYear = 5,
-        [EnumMember(Value = "Top Watched Shows Of All Time")]
+        [FieldOption(Label = "ImportListsTraktSettingsPopularListTypeTopAllTimeShows")]
         TopWatchedByAllTime = 6,
-        [EnumMember(Value = "Recommended Shows By Week")]
+        [FieldOption(Label = "ImportListsTraktSettingsPopularListTypeRecommendedWeekShows")]
         RecommendedByWeek = 7,
-        [EnumMember(Value = "Recommended Shows By Month")]
+        [FieldOption(Label = "ImportListsTraktSettingsPopularListTypeRecommendedMonthShows")]
         RecommendedByMonth = 8,
-        [EnumMember(Value = "Recommended Shows By Year")]
+        [FieldOption(Label = "ImportListsTraktSettingsPopularListTypeRecommendedYearShows")]
         RecommendedByYear = 9,
-        [EnumMember(Value = "Recommended Shows Of All Time")]
+        [FieldOption(Label = "ImportListsTraktSettingsPopularListTypeRecommendedAllTimeShows")]
         RecommendedByAllTime = 10
     }
 }

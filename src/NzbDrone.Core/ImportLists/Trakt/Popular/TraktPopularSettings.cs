@@ -35,16 +35,16 @@ namespace NzbDrone.Core.ImportLists.Trakt.Popular
             TraktListType = (int)TraktPopularListType.Popular;
         }
 
-        [FieldDefinition(1, Label = "List Type", Type = FieldType.Select, SelectOptions = typeof(TraktPopularListType), HelpText = "Type of list you're seeking to import from")]
+        [FieldDefinition(1, Label = "ImportListsTraktSettingsListType", Type = FieldType.Select, SelectOptions = typeof(TraktPopularListType), HelpText = "ImportListsTraktSettingsListTypeHelpText")]
         public int TraktListType { get; set; }
 
-        [FieldDefinition(2, Label = "Rating", HelpText = "Filter series by rating range (0-100)")]
+        [FieldDefinition(2, Label = "ImportListsTraktSettingsRating", HelpText = "ImportListsTraktSettingsRatingHelpText")]
         public string Rating { get; set; }
 
-        [FieldDefinition(4, Label = "Genres", HelpText = "Filter series by Trakt Genre Slug (Comma Separated) Only for Popular Lists")]
+        [FieldDefinition(4, Label = "ImportListsTraktSettingsGenres", HelpText = "ImportListsTraktSettingsGenresHelpText")]
         public string Genres { get; set; }
 
-        [FieldDefinition(5, Label = "Years", HelpText = "Filter series by year or year range")]
+        [FieldDefinition(5, Label = "ImportListsTraktSettingsYears", HelpText = "ImportListsTraktSettingsYearsHelpText")]
         public string Years { get; set; }
     }
 }

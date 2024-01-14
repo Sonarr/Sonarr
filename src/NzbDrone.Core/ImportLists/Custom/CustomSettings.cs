@@ -22,7 +22,7 @@ namespace NzbDrone.Core.ImportLists.Custom
             BaseUrl = "";
         }
 
-        [FieldDefinition(0, Label = "List URL", HelpText = "The URL for the series list")]
+        [FieldDefinition(0, Label = "ImportListsCustomListSettingsUrl", HelpText = "ImportListsCustomListSettingsUrlHelpText")]
         public string BaseUrl { get; set; }
 
         public NzbDroneValidationResult Validate()

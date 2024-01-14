@@ -20,7 +20,7 @@ namespace NzbDrone.Core.CustomFormats
         public override int Order => 5;
         public override string ImplementationName => "Source";
 
-        [FieldDefinition(1, Label = "Source", Type = FieldType.Select, SelectOptions = typeof(QualitySource))]
+        [FieldDefinition(1, Label = "CustomFormatsSpecificationSource", Type = FieldType.Select, SelectOptions = typeof(QualitySource))]
         public int Value { get; set; }
 
         protected override bool IsSatisfiedByWithoutNegate(CustomFormatInput input)

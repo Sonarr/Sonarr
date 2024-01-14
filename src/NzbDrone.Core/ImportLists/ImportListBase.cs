@@ -4,6 +4,7 @@ using System.Linq;
 using FluentValidation.Results;
 using NLog;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Localization;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.ThingiProvider;
@@ -16,6 +17,7 @@ namespace NzbDrone.Core.ImportLists
         protected readonly IImportListStatusService _importListStatusService;
         protected readonly IConfigService _configService;
         protected readonly IParsingService _parsingService;
+        protected readonly ILocalizationService _localizationService;
         protected readonly Logger _logger;
 
         public abstract string Name { get; }
@@ -24,11 +26,12 @@ namespace NzbDrone.Core.ImportLists
 
         public abstract TimeSpan MinRefreshInterval { get; }
 
-        public ImportListBase(IImportListStatusService importListStatusService, IConfigService configService, IParsingService parsingService, Logger logger)
+        public ImportListBase(IImportListStatusService importListStatusService, IConfigService configService, IParsingService parsingService, ILocalizationService localizationService, Logger logger)
         {
             _importListStatusService = importListStatusService;
             _configService = configService;
             _parsingService = parsingService;
+            _localizationService = localizationService;
             _logger = logger;
         }
 
@@ -86,7 +89,7 @@ namespace NzbDrone.Core.ImportLists
             catch (Exception ex)
             {
                 _logger.Error(ex, "Test aborted due to exception");
-                failures.Add(new ValidationFailure(string.Empty, "Test was aborted due to an error: " + ex.Message));
+                failures.Add(new ValidationFailure(string.Empty, _localizationService.GetLocalizedString("ImportListsValidationTestFailed", new Dictionary<string, object> { { "exceptionMessage", ex.Message } })));
             }
 
             return new ValidationResult(failures);

@@ -22,7 +22,7 @@ namespace NzbDrone.Core.AutoTagging.Specifications
         public override int Order => 1;
         public override string ImplementationName => "Root Folder";
 
-        [FieldDefinition(1, Label = "Root Folder", Type = FieldType.RootFolder)]
+        [FieldDefinition(1, Label = "AutoTaggingSpecificationRootFolder", Type = FieldType.RootFolder)]
         public string Value { get; set; }
 
         protected override bool IsSatisfiedByWithoutNegate(Series series)

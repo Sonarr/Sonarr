@@ -4,6 +4,7 @@ using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Localization;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 
@@ -12,7 +13,7 @@ namespace NzbDrone.Core.ImportLists.Custom
     public class CustomImport : ImportListBase<CustomSettings>
     {
         private readonly ICustomImportProxy _customProxy;
-        public override string Name => "Custom List";
+        public override string Name => _localizationService.GetLocalizedString("ImportListsCustomListSettingsName");
 
         public override TimeSpan MinRefreshInterval => TimeSpan.FromHours(6);
 
@@ -22,8 +23,9 @@ namespace NzbDrone.Core.ImportLists.Custom
                             IImportListStatusService importListStatusService,
                             IConfigService configService,
                             IParsingService parsingService,
+                            ILocalizationService localizationService,
                             Logger logger)
-            : base(importListStatusService, configService, parsingService, logger)
+            : base(importListStatusService, configService, parsingService, localizationService, logger)
         {
             _customProxy = customProxy;
         }

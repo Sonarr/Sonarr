@@ -5,6 +5,7 @@ using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Localization;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Validation;
@@ -23,8 +24,9 @@ namespace NzbDrone.Core.ImportLists.Sonarr
                             IImportListStatusService importListStatusService,
                             IConfigService configService,
                             IParsingService parsingService,
+                            ILocalizationService localizationService,
                             Logger logger)
-            : base(importListStatusService, configService, parsingService, logger)
+            : base(importListStatusService, configService, parsingService, localizationService, logger)
         {
             _sonarrV3Proxy = sonarrV3Proxy;
         }
