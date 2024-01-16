@@ -18,14 +18,19 @@ namespace NzbDrone.Core.Indexers.FileList
 
         public IList<ReleaseInfo> ParseResponse(IndexerResponse indexerResponse)
         {
-            var torrentInfos = new List<ReleaseInfo>();
-
             if (indexerResponse.HttpResponse.StatusCode != HttpStatusCode.OK)
             {
                 throw new IndexerException(indexerResponse,
                     "Unexpected response status {0} code from API request",
                     indexerResponse.HttpResponse.StatusCode);
             }
+
+            if (!indexerResponse.HttpResponse.Headers.ContentType.Contains(HttpAccept.Json.Value))
+            {
+                throw new IndexerException(indexerResponse, "Unexpected response header '{0}' from indexer request, expected '{1}'", indexerResponse.HttpResponse.Headers.ContentType, HttpAccept.Json.Value);
+            }
+
+            var torrentInfos = new List<ReleaseInfo>();
 
             var queryResults = JsonConvert.DeserializeObject<List<FileListTorrent>>(indexerResponse.Content);
 
