@@ -40,8 +40,9 @@ class FilterMenuContent extends Component {
         }
 
         {
-          (customFilters.length > 0) &&
-            <MenuItemSeparator />
+          customFilters.length > 0 ?
+            <MenuItemSeparator /> :
+            null
         }
 
         {
