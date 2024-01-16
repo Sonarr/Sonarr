@@ -22,7 +22,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
         private readonly List<FFProbePixelFormat> _pixelFormats;
 
         public const int MINIMUM_MEDIA_INFO_SCHEMA_REVISION = 8;
-        public const int CURRENT_MEDIA_INFO_SCHEMA_REVISION = 9;
+        public const int CURRENT_MEDIA_INFO_SCHEMA_REVISION = 10;
 
         private static readonly string[] ValidHdrColourPrimaries = { "bt2020" };
         private static readonly string[] HlgTransferFunctions = { "bt2020-10", "arib-std-b67" };
@@ -117,7 +117,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                 // if it looks like PQ10 or similar HDR, do a frame analysis to figure out which type it is
                 if (PqTransferFunctions.Contains(mediaInfoModel.VideoTransferCharacteristics))
                 {
-                    var frameOutput = FFProbe.GetFrameJson(filename, ffOptions: new () { ExtraArguments = "-read_intervals \"%+#1\" -select_streams v" });
+                    var frameOutput = FFProbe.GetFrameJson(filename, ffOptions: new () { ExtraArguments = $"-read_intervals \"%+#1\" -select_streams v:{primaryVideoStream?.Index ?? 0}" });
                     mediaInfoModel.RawFrameData = frameOutput;
 
                     frames = FFProbe.AnalyseFrameJson(frameOutput);
