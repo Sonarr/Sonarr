@@ -62,15 +62,14 @@ namespace Sonarr.Api.V3.History
 
         [HttpGet]
         [Produces("application/json")]
-        public PagingResource<HistoryResource> GetHistory([FromQuery] PagingRequestResource paging, bool includeSeries, bool includeEpisode, int? eventType, int? episodeId, string downloadId, [FromQuery] int[] seriesIds = null, [FromQuery] int[] languages = null, [FromQuery] int[] quality = null)
+        public PagingResource<HistoryResource> GetHistory([FromQuery] PagingRequestResource paging, bool includeSeries, bool includeEpisode, [FromQuery(Name = "eventType")] int[] eventTypes, int? episodeId, string downloadId, [FromQuery] int[] seriesIds = null, [FromQuery] int[] languages = null, [FromQuery] int[] quality = null)
         {
             var pagingResource = new PagingResource<HistoryResource>(paging);
             var pagingSpec = pagingResource.MapToPagingSpec<HistoryResource, EpisodeHistory>("date", SortDirection.Descending);
 
-            if (eventType.HasValue)
+            if (eventTypes != null && eventTypes.Any())
             {
-                var filterValue = (EpisodeHistoryEventType)eventType.Value;
-                pagingSpec.FilterExpressions.Add(v => v.EventType == filterValue);
+                pagingSpec.FilterExpressions.Add(v => eventTypes.Contains((int)v.EventType));
             }
 
             if (episodeId.HasValue)

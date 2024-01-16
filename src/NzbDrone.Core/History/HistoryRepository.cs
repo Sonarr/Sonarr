@@ -124,21 +124,19 @@ namespace NzbDrone.Core.History
 
         public PagingSpec<EpisodeHistory> GetPaged(PagingSpec<EpisodeHistory> pagingSpec, int[] languages, int[] qualities)
         {
-            pagingSpec.Records = GetPagedRecords(PagedBuilder(pagingSpec, languages, qualities), pagingSpec, PagedQuery);
+            pagingSpec.Records = GetPagedRecords(PagedBuilder(languages, qualities), pagingSpec, PagedQuery);
 
             var countTemplate = $"SELECT COUNT(*) FROM (SELECT /**select**/ FROM \"{TableMapping.Mapper.TableNameMapping(typeof(EpisodeHistory))}\" /**join**/ /**innerjoin**/ /**leftjoin**/ /**where**/ /**groupby**/ /**having**/) AS \"Inner\"";
-            pagingSpec.TotalRecords = GetPagedRecordCount(PagedBuilder(pagingSpec, languages, qualities).Select(typeof(EpisodeHistory)), pagingSpec, countTemplate);
+            pagingSpec.TotalRecords = GetPagedRecordCount(PagedBuilder(languages, qualities).Select(typeof(EpisodeHistory)), pagingSpec, countTemplate);
 
             return pagingSpec;
         }
 
-        private SqlBuilder PagedBuilder(PagingSpec<EpisodeHistory> pagingSpec, int[] languages, int[] qualities)
+        private SqlBuilder PagedBuilder(int[] languages, int[] qualities)
         {
             var builder = Builder()
                 .Join<EpisodeHistory, Series>((h, a) => h.SeriesId == a.Id)
                 .Join<EpisodeHistory, Episode>((h, a) => h.EpisodeId == a.Id);
-
-            AddFilters(builder, pagingSpec);
 
             if (languages is { Length: > 0 })
             {
