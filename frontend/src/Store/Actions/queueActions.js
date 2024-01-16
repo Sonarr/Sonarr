@@ -159,6 +159,12 @@ export const defaultState = {
         isVisible: true
       },
       {
+        name: 'added',
+        label: () => translate('Added'),
+        isSortable: true,
+        isVisible: false
+      },
+      {
         name: 'progress',
         label: () => translate('Progress'),
         isSortable: true,
