@@ -98,7 +98,7 @@ echo "Directories created"
 echo ""
 echo "Installing pre-requisite Packages"
 # shellcheck disable=SC2086
-apt update && apt install $app_prereq
+apt update && apt install -y $app_prereq
 echo ""
 ARCH=$(dpkg --print-architecture)
 # get arch
