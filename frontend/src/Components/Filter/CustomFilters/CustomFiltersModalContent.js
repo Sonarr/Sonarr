@@ -30,22 +30,24 @@ function CustomFiltersModalContent(props) {
 
       <ModalBody>
         {
-          customFilters.map((customFilter) => {
-            return (
-              <CustomFilter
-                key={customFilter.id}
-                id={customFilter.id}
-                label={customFilter.label}
-                filters={customFilter.filters}
-                selectedFilterKey={selectedFilterKey}
-                isDeleting={isDeleting}
-                deleteError={deleteError}
-                dispatchSetFilter={dispatchSetFilter}
-                dispatchDeleteCustomFilter={dispatchDeleteCustomFilter}
-                onEditPress={onEditCustomFilter}
-              />
-            );
-          })
+          customFilters
+            .sort((a, b) => a.label.localeCompare(b.label))
+            .map((customFilter) => {
+              return (
+                <CustomFilter
+                  key={customFilter.id}
+                  id={customFilter.id}
+                  label={customFilter.label}
+                  filters={customFilter.filters}
+                  selectedFilterKey={selectedFilterKey}
+                  isDeleting={isDeleting}
+                  deleteError={deleteError}
+                  dispatchSetFilter={dispatchSetFilter}
+                  dispatchDeleteCustomFilter={dispatchDeleteCustomFilter}
+                  onEditPress={onEditCustomFilter}
+                />
+              );
+            })
         }
 
         <div className={styles.addButtonContainer}>
