@@ -21,5 +21,13 @@
     "Actions": "執行",
     "AddAutoTagError": "無法加入新的自動標籤，請重新嘗試。",
     "AddAutoTag": "新增自動標籤",
-    "AddCondition": "新增條件"
+    "AddCondition": "新增條件",
+    "AgeWhenGrabbed": "年齡（當獲取時）",
+    "AppUpdated": "{appName}已更新",
+    "ApplyChanges": "應用",
+    "AllTitles": "所有標題",
+    "ApplyTagsHelpTextHowToApplyDownloadClients": "如何將標籤套用在被選擇的下載客戶端",
+    "AddRootFolderError": "無法加進根目錄",
+    "ApplyTagsHelpTextAdd": "加入：將標籤加入已存在的標籤清單",
+    "ApplyTagsHelpTextHowToApplyImportLists": "如何套用標籤在所選擇的輸入清單"
 }

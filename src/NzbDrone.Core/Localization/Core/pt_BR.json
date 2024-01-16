@@ -717,7 +717,6 @@
     "PreferredSize": "Tamanho Preferido",
     "PrefixedRange": "Faixa Prefixada",
     "Presets": "Definições",
-    "PriorityHelpText": "Priorize vários clientes de download. Round-Robin é usado para clientes com a mesma prioridade.",
     "PrioritySettings": "Prioridade: {priority}",
     "ProfilesSettingsSummary": "Qualidade, Atraso do Idioma e Perfis de lançamentos",
     "Proxy": "Proxy",
@@ -1873,5 +1872,7 @@
     "NotificationsSignalSettingsSenderNumberHelpText": "Número de telefone do registro do remetente no signal-api",
     "NotificationsSlackSettingsChannelHelpText": "Substitui o canal padrão para o webhook de entrada (#other-channel)",
     "NotificationsSynologySettingsUpdateLibraryHelpText": "Chame synoindex no localhost para atualizar um arquivo de biblioteca",
-    "NotificationsTelegramSettingsSendSilentlyHelpText": "Envia a mensagem silenciosamente. Os usuários receberão uma notificação sem som"
+    "NotificationsTelegramSettingsSendSilentlyHelpText": "Envia a mensagem silenciosamente. Os usuários receberão uma notificação sem som",
+    "EpisodeFileMissingTooltip": "Arquivo do episódio ausente",
+    "DownloadClientAriaSettingsDirectoryHelpText": "Local opcional para colocar downloads, deixe em branco para usar o local padrão do Aria2"
 }

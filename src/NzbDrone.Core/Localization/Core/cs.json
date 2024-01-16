@@ -318,5 +318,7 @@
     "DeleteRootFolderMessageText": "Opravdu chcete smazat kořenový adresář s cestou '{path}'?",
     "EditSelectedDownloadClients": "Upravit vybrané klienty pro stahování",
     "EditSelectedImportLists": "Upravit vybrané seznamy k importu",
-    "FormatDateTime": "{formattedDate} {formattedTime}"
+    "FormatDateTime": "{formattedDate} {formattedTime}",
+    "AddRootFolderError": "Nepodařilo se přidat kořenový adresář",
+    "DownloadClientRemovesCompletedDownloadsHealthCheckMessage": "Klient stahování {downloadClientName} je nastaven na odstranění dokončených stahování. To může vést k tomu, že stahování budou z klienta odstraněna dříve, než je bude moci importovat {1}."
 }
