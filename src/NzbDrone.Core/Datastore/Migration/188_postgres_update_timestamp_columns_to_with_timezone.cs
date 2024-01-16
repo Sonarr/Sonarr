@@ -8,6 +8,8 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
+            Delete.FromTable("Commands").AllRows();
+
             Alter.Table("Blocklist").AlterColumn("Date").AsDateTimeOffset().NotNullable();
             Alter.Table("Blocklist").AlterColumn("PublishedDate").AsDateTimeOffset().Nullable();
             Alter.Table("Commands").AlterColumn("QueuedAt").AsDateTimeOffset().NotNullable();
