@@ -145,7 +145,12 @@ class CalendarEventGroup extends Component {
             {series.title}
           </div>
 
-          <div className={styles.statusContainer}>
+          <div
+            className={classNames(
+              styles.statusContainer,
+              fullColorEvents && 'fullColor'
+            )}
+          >
             {
               isMissingAbsoluteNumber &&
                 <Icon
@@ -168,7 +173,7 @@ class CalendarEventGroup extends Component {
               firstEpisode.episodeNumber === 1 && seasonNumber > 0 &&
                 <Icon
                   containerClassName={styles.statusIcon}
-                  name={icons.INFO}
+                  name={icons.PREMIERE}
                   kind={kinds.INFO}
                   title={seasonNumber === 1 ? translate('SeriesPremiere') : translate('SeasonPremiere')}
                 />
@@ -179,8 +184,8 @@ class CalendarEventGroup extends Component {
               lastEpisode.finaleType ?
                 <Icon
                   containerClassName={styles.statusIcon}
-                  name={icons.INFO}
-                  kind={kinds.WARNING}
+                  name={lastEpisode.finaleType === 'series' ? icons.FINALE_SERIES : icons.FINALE_SEASON}
+                  kind={lastEpisode.finaleType === 'series' ? kinds.DANGER : kinds.WARNING}
                   title={getFinaleTypeName(lastEpisode.finaleType)}
                 /> : null
             }

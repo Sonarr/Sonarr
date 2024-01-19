@@ -53,7 +53,10 @@
 .statusContainer {
   display: flex;
   align-items: center;
-  filter: var(--calendarFullColorFilter)
+
+   &:global(.fullColor) {
+    filter: var(--calendarFullColorFilter)
+  }
 }
 
 .statusIcon {

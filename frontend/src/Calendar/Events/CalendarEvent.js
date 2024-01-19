@@ -99,11 +99,15 @@ class CalendarEvent extends Component {
         <div className={styles.overlay} >
           <div className={styles.info}>
             <div className={styles.seriesTitle}>
-              {/* {series.title} */}
-              Series Title
+              {series.title}
             </div>
 
-            <div className={styles.statusContainer}>
+            <div
+              className={classNames(
+                styles.statusContainer,
+                fullColorEvents && 'fullColor'
+              )}
+            >
               {
                 missingAbsoluteNumber ?
                   <Icon
@@ -162,7 +166,7 @@ class CalendarEvent extends Component {
                 episodeNumber === 1 && seasonNumber > 0 ?
                   <Icon
                     className={styles.statusIcon}
-                    name={icons.INFO}
+                    name={icons.PREMIERE}
                     kind={kinds.INFO}
                     title={seasonNumber === 1 ? translate('SeriesPremiere') : translate('SeasonPremiere')}
                   /> :
@@ -174,8 +178,8 @@ class CalendarEvent extends Component {
                 finaleType ?
                   <Icon
                     className={styles.statusIcon}
-                    name={icons.INFO}
-                    kind={kinds.WARNING}
+                    name={finaleType === 'series' ? icons.FINALE_SERIES : icons.FINALE_SEASON}
+                    kind={finaleType === 'series' ? kinds.DANGER : kinds.WARNING}
                     title={getFinaleTypeName(finaleType)}
                   /> :
                   null
@@ -199,8 +203,7 @@ class CalendarEvent extends Component {
             showEpisodeInformation ?
               <div className={styles.episodeInfo}>
                 <div className={styles.episodeTitle}>
-                  {/* {title} */}
-                  Episode Title
+                  {title}
                 </div>
 
                 <div>
