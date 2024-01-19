@@ -162,17 +162,17 @@ namespace NzbDrone.Core.CustomFormats
 
             if (episodeFile.SceneName.IsNotNullOrWhiteSpace())
             {
-                _logger.Trace("Using scene name for release title: {0}", releaseTitle);
+                _logger.Trace("Using scene name for release title: {0}", episodeFile.SceneName);
                 releaseTitle = episodeFile.SceneName;
             }
             else if (episodeFile.OriginalFilePath.IsNotNullOrWhiteSpace())
             {
-                _logger.Trace("Using original file path for release title: {0}", releaseTitle);
+                _logger.Trace("Using original file path for release title: {0}", Path.GetFileName(episodeFile.OriginalFilePath));
                 releaseTitle = Path.GetFileName(episodeFile.OriginalFilePath);
             }
             else if (episodeFile.RelativePath.IsNotNullOrWhiteSpace())
             {
-                _logger.Trace("Using relative path for release title: {0}", releaseTitle);
+                _logger.Trace("Using relative path for release title: {0}", Path.GetFileName(episodeFile.RelativePath));
                 releaseTitle = Path.GetFileName(episodeFile.RelativePath);
             }
 
