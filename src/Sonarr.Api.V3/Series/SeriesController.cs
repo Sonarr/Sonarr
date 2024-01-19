@@ -113,7 +113,7 @@ namespace Sonarr.Api.V3.Series
             }
 
             MapCoversToLocal(seriesResources.ToArray());
-            LinkSeriesStatistics(seriesResources, seriesStats);
+            LinkSeriesStatistics(seriesResources, seriesStats.ToDictionary(x => x.SeriesId));
             PopulateAlternateTitles(seriesResources);
             seriesResources.ForEach(LinkRootFolderPath);
 
@@ -229,17 +229,14 @@ namespace Sonarr.Api.V3.Series
             LinkSeriesStatistics(resource, _seriesStatisticsService.SeriesStatistics(resource.Id));
         }
 
-        private void LinkSeriesStatistics(List<SeriesResource> resources, List<SeriesStatistics> seriesStatistics)
+        private void LinkSeriesStatistics(List<SeriesResource> resources, Dictionary<int, SeriesStatistics> seriesStatistics)
         {
             foreach (var series in resources)
             {
-                var stats = seriesStatistics.SingleOrDefault(ss => ss.SeriesId == series.Id);
-                if (stats == null)
+                if (seriesStatistics.TryGetValue(series.Id, out var stats))
                 {
-                    continue;
+                    LinkSeriesStatistics(series, stats);
                 }
-
-                LinkSeriesStatistics(series, stats);
             }
         }
 
