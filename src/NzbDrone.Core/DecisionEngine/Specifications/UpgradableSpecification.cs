@@ -46,25 +46,34 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 return false;
             }
 
-            var qualityRevisionComapre = newQuality?.Revision.CompareTo(currentQuality.Revision);
+            var qualityRevisionCompare = newQuality?.Revision.CompareTo(currentQuality.Revision);
 
             // Accept unless the user doesn't want to prefer propers, optionally they can
             // use preferred words to prefer propers/repacks over non-propers/repacks.
             if (downloadPropersAndRepacks != ProperDownloadTypes.DoNotPrefer &&
-                qualityRevisionComapre > 0)
+                qualityRevisionCompare > 0)
             {
                 _logger.Debug("New item has a better quality revision, skipping. Existing: {0}. New: {1}", currentQuality, newQuality);
                 return true;
             }
 
+            // Reject unless the user does not prefer propers/repacks and it's a revision downgrade.
+            if (downloadPropersAndRepacks != ProperDownloadTypes.DoNotPrefer &&
+                qualityRevisionCompare < 0)
+            {
+                _logger.Debug("Existing item has a better quality revision, skipping. Existing: {0}. New: {1}", currentQuality, newQuality);
+                return false;
+            }
+
             var currentFormatScore = qualityProfile.CalculateCustomFormatScore(currentCustomFormats);
             var newFormatScore = qualityProfile.CalculateCustomFormatScore(newCustomFormats);
 
-            // Reject unless the user does not prefer propers/repacks and it's a revision downgrade.
-            if (downloadPropersAndRepacks != ProperDownloadTypes.DoNotPrefer &&
-                qualityRevisionComapre < 0)
+            if (qualityProfile.UpgradeAllowed && currentFormatScore >= qualityProfile.CutoffFormatScore)
             {
-                _logger.Debug("Existing item has a better quality revision, skipping. Existing: {0}. New: {1}", currentQuality, newQuality);
+                _logger.Debug("Existing item meets cut-off for custom formats, skipping. Existing: [{0}] ({1}). Cutoff score: {2}",
+                    currentCustomFormats.ConcatToString(),
+                    currentFormatScore,
+                    qualityProfile.CutoffFormatScore);
                 return false;
             }
 
@@ -123,7 +132,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 return true;
             }
 
-            _logger.Debug("Existing item meets cut-off. skipping. Existing: {0}", currentQuality);
+            _logger.Debug("Existing item meets cut-off, skipping. Existing: {0}", currentQuality);
 
             return false;
         }
