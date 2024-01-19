@@ -52,6 +52,10 @@ $fullColorGradient: rgba(244, 245, 246, 0.2);
 .statusContainer {
   display: flex;
   align-items: center;
+
+  &:global(.fullColor) {
+    filter: var(--calendarFullColorFilter)
+  }
 }
 
 .statusIcon {

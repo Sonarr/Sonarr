@@ -16,6 +16,7 @@ interface CssExports {
   'onAir': string;
   'premiere': string;
   'seriesTitle': string;
+  'statusContainer': string;
   'statusIcon': string;
   'unaired': string;
   'unmonitored': string;

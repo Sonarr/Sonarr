@@ -41,6 +41,9 @@ import {
   faChevronCircleUp as fasChevronCircleUp,
   faCircle as fasCircle,
   faCircleDown as fasCircleDown,
+  faCirclePause as fasCirclePause,
+  faCirclePlay as fasCirclePlay,
+  faCircleStop as fasCircleStop,
   faCloud as fasCloud,
   faCloudDownloadAlt as fasCloudDownloadAlt,
   faCog as fasCog,
@@ -149,6 +152,8 @@ export const FATAL = fasTimesCircle;
 export const FILE = farFile;
 export const FILE_MISSING = fasFileCircleQuestion;
 export const FILTER = fasFilter;
+export const FINALE_SEASON = fasCirclePause;
+export const FINALE_SERIES = fasCircleStop;
 export const FOOTNOTE = fasAsterisk;
 export const FOLDER = farFolder;
 export const FOLDER_OPEN = fasFolderOpen;
@@ -180,6 +185,7 @@ export const PARENT = fasLevelUpAlt;
 export const PARSE = fasCalculator;
 export const PAUSED = fasPause;
 export const PENDING = farClock;
+export const PREMIERE = fasCirclePlay;
 export const PROFILE = fasUser;
 export const POSTER = fasTh;
 export const QUEUED = fasCloud;

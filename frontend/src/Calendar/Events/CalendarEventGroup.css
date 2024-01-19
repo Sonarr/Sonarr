@@ -50,6 +50,15 @@
   margin-bottom: 5px;
 }
 
+.statusContainer {
+  display: flex;
+  align-items: center;
+
+   &:global(.fullColor) {
+    filter: var(--calendarFullColorFilter)
+  }
+}
+
 .statusIcon {
   margin-left: 3px;
 }

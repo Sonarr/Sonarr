@@ -102,7 +102,12 @@ class CalendarEvent extends Component {
               {series.title}
             </div>
 
-            <div className={styles.statusContainer}>
+            <div
+              className={classNames(
+                styles.statusContainer,
+                fullColorEvents && 'fullColor'
+              )}
+            >
               {
                 missingAbsoluteNumber ?
                   <Icon
@@ -128,6 +133,7 @@ class CalendarEvent extends Component {
                   <span className={styles.statusIcon}>
                     <CalendarEventQueueDetails
                       {...queueItem}
+                      fullColorEvents={fullColorEvents}
                     />
                   </span> :
                   null
@@ -150,7 +156,7 @@ class CalendarEvent extends Component {
                   <Icon
                     className={styles.statusIcon}
                     name={icons.EPISODE_FILE}
-                    kind={fullColorEvents ? kinds.DEFAULT : kinds.WARNING}
+                    kind={kinds.WARNING}
                     title={translate('QualityCutoffNotMet')}
                   /> :
                   null
@@ -160,9 +166,8 @@ class CalendarEvent extends Component {
                 episodeNumber === 1 && seasonNumber > 0 ?
                   <Icon
                     className={styles.statusIcon}
-                    name={icons.INFO}
+                    name={icons.PREMIERE}
                     kind={kinds.INFO}
-                    darken={fullColorEvents}
                     title={seasonNumber === 1 ? translate('SeriesPremiere') : translate('SeasonPremiere')}
                   /> :
                   null
@@ -173,8 +178,8 @@ class CalendarEvent extends Component {
                 finaleType ?
                   <Icon
                     className={styles.statusIcon}
-                    name={icons.INFO}
-                    kind={fullColorEvents ? kinds.DEFAULT : kinds.WARNING}
+                    name={finaleType === 'series' ? icons.FINALE_SERIES : icons.FINALE_SEASON}
+                    kind={finaleType === 'series' ? kinds.DANGER : kinds.WARNING}
                     title={getFinaleTypeName(finaleType)}
                   /> :
                   null
@@ -187,7 +192,6 @@ class CalendarEvent extends Component {
                     className={styles.statusIcon}
                     name={icons.INFO}
                     kind={kinds.PINK}
-                    darken={fullColorEvents}
                     title={translate('Special')}
                   /> :
                   null

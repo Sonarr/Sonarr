@@ -22,9 +22,20 @@ function Legend(props) {
   if (showFinaleIcon) {
     iconsToShow.push(
       <LegendIconItem
-        name="Finale"
-        icon={icons.INFO}
-        kind={fullColorEvents ? kinds.DEFAULT : kinds.WARNING}
+        name={translate('SeasonFinale')}
+        icon={icons.FINALE_SEASON}
+        kind={kinds.WARNING}
+        fullColorEvents={fullColorEvents}
+        tooltip={translate('CalendarLegendSeriesFinaleTooltip')}
+      />
+    );
+
+    iconsToShow.push(
+      <LegendIconItem
+        name={translate('SeriesFinale')}
+        icon={icons.FINALE_SERIES}
+        kind={kinds.DANGER}
+        fullColorEvents={fullColorEvents}
         tooltip={translate('CalendarLegendSeriesFinaleTooltip')}
       />
     );
@@ -33,10 +44,10 @@ function Legend(props) {
   if (showSpecialIcon) {
     iconsToShow.push(
       <LegendIconItem
-        name="Special"
+        name={translate('Special')}
         icon={icons.INFO}
         kind={kinds.PINK}
-        darken={fullColorEvents}
+        fullColorEvents={fullColorEvents}
         tooltip={translate('SpecialEpisode')}
       />
     );
@@ -45,9 +56,10 @@ function Legend(props) {
   if (showCutoffUnmetIcon) {
     iconsToShow.push(
       <LegendIconItem
-        name="Cutoff Not Met"
+        name={translate('Cutoff Not Met')}
         icon={icons.EPISODE_FILE}
-        kind={fullColorEvents ? kinds.DEFAULT : kinds.WARNING}
+        kind={kinds.WARNING}
+        fullColorEvents={fullColorEvents}
         tooltip={translate('QualityCutoffNotMet')}
       />
     );
@@ -112,10 +124,10 @@ function Legend(props) {
 
       <div>
         <LegendIconItem
-          name="Premiere"
-          icon={icons.INFO}
+          name={translate('Premiere')}
+          icon={icons.PREMIERE}
           kind={kinds.INFO}
-          darken={true}
+          fullColorEvents={fullColorEvents}
           tooltip={translate('CalendarLegendSeriesPremiereTooltip')}
         />
 
@@ -127,6 +139,12 @@ function Legend(props) {
           <div>
             {iconsToShow[1]}
             {iconsToShow[2]}
+          </div>
+      }
+      {
+        iconsToShow.length > 3 &&
+          <div>
+            {iconsToShow[3]}
           </div>
       }
     </div>
