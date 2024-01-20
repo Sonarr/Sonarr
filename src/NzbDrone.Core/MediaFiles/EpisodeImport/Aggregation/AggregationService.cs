@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.Configuration;
@@ -30,7 +31,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation
                                  IConfigService configService,
                                  Logger logger)
         {
-            _augmenters = augmenters;
+            _augmenters = augmenters.OrderBy(a => a.Order).ToList();
             _diskProvider = diskProvider;
             _videoFileInfoReader = videoFileInfoReader;
             _configService = configService;

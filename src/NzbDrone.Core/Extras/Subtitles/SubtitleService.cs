@@ -76,16 +76,20 @@ namespace NzbDrone.Core.Extras.Subtitles
 
                 foreach (var group in groupedExtraFilesForEpisodeFile)
                 {
-                    var groupCount = group.Count();
-                    var copy = 1;
+                    var multipleCopies = group.Count() > 1;
+                    var orderedGroup = group.OrderBy(s => -s.Copy).ToList();
+                    var copy = group.First().Copy;
 
-                    foreach (var subtitleFile in group)
+                    foreach (var subtitleFile in orderedGroup)
                     {
-                        var suffix = GetSuffix(subtitleFile.Language, copy, subtitleFile.LanguageTags, groupCount > 1);
+                        if (multipleCopies && subtitleFile.Copy == 0)
+                        {
+                            subtitleFile.Copy = ++copy;
+                        }
+
+                        var suffix = GetSuffix(subtitleFile.Language, subtitleFile.Copy, subtitleFile.LanguageTags, multipleCopies, subtitleFile.Title);
 
                         movedFiles.AddIfNotNull(MoveFile(series, episodeFile, subtitleFile, suffix));
-
-                        copy++;
                     }
                 }
             }
@@ -229,11 +233,22 @@ namespace NzbDrone.Core.Extras.Subtitles
             return importedFiles;
         }
 
-        private string GetSuffix(Language language, int copy, List<string> languageTags, bool multipleCopies = false)
+        private string GetSuffix(Language language, int copy, List<string> languageTags, bool multipleCopies = false, string title = null)
         {
             var suffixBuilder = new StringBuilder();
 
-            if (multipleCopies)
+            if (title is not null)
+            {
+                suffixBuilder.Append('.');
+                suffixBuilder.Append(title);
+
+                if (multipleCopies)
+                {
+                    suffixBuilder.Append(" - ");
+                    suffixBuilder.Append(copy);
+                }
+            }
+            else if (multipleCopies)
             {
                 suffixBuilder.Append('.');
                 suffixBuilder.Append(copy);

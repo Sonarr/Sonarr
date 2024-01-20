@@ -7,6 +7,7 @@ using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Languages;
+using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Parser
 {
@@ -28,7 +29,11 @@ namespace NzbDrone.Core.Parser
         private static readonly Regex GermanDualLanguageRegex = new (@"(?<!WEB[-_. ]?)\bDL\b", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static readonly Regex GermanMultiLanguageRegex = new (@"\bML\b", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        private static readonly Regex SubtitleLanguageRegex = new Regex(".+?[-_. ](?<iso_code>[a-z]{2,3})([-_. ](?<tags>full|forced|foreign|default|cc|psdh|sdh))*$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex SubtitleLanguageRegex = new Regex(".+?([-_. ](?<tags>full|forced|foreign|default|cc|psdh|sdh))*[-_. ](?<iso_code>[a-z]{2,3})([-_. ](?<tags>full|forced|foreign|default|cc|psdh|sdh))*$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        private static readonly Regex SubtitleLanguageTitleRegex = new Regex(".+?(\\.((?<tags1>full|forced|foreign|default|cc|psdh|sdh)|(?<iso_code>[a-z]{2,3})))*\\.(?<title>[^.]*)(\\.((?<tags2>full|forced|foreign|default|cc|psdh|sdh)|(?<iso_code>[a-z]{2,3})))*$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        private static readonly Regex SubtitleTitleRegex = new Regex("((?<title>.+) - )?(?<copy>\\d+)$", RegexOptions.Compiled);
 
         public static List<Language> ParseLanguages(string title)
         {
@@ -247,6 +252,72 @@ namespace NzbDrone.Core.Parser
             }
 
             return Language.Unknown;
+        }
+
+        public static SubtitleTitleInfo ParseBasicSubtitle(string fileName)
+        {
+            return new SubtitleTitleInfo
+            {
+                TitleFirst = false,
+                LanguageTags = ParseLanguageTags(fileName),
+                Language = ParseSubtitleLanguage(fileName)
+            };
+        }
+
+        public static SubtitleTitleInfo ParseSubtitleLanguageInformation(string fileName)
+        {
+            var simpleFilename = Path.GetFileNameWithoutExtension(fileName);
+            var matchTitle = SubtitleLanguageTitleRegex.Match(simpleFilename);
+
+            if (!matchTitle.Groups["title"].Success || (matchTitle.Groups["iso_code"].Captures.Count is var languageCodeNumber && languageCodeNumber != 1))
+            {
+                Logger.Debug("Could not parse a title from subtitle file: {0}. Falling back to parsing without title.", fileName);
+
+                return ParseBasicSubtitle(fileName);
+            }
+
+            var isoCode = matchTitle.Groups["iso_code"].Value;
+            var isoLanguage = IsoLanguages.Find(isoCode.ToLower());
+
+            var language = isoLanguage?.Language ?? Language.Unknown;
+
+            var languageTags = matchTitle.Groups["tags1"].Captures
+                .Union(matchTitle.Groups["tags2"].Captures)
+                .Cast<Capture>()
+                .Where(tag => !tag.Value.Empty())
+                .Select(tag => tag.Value.ToLower());
+            var rawTitle = matchTitle.Groups["title"].Value;
+
+            var subtitleTitleInfo = new SubtitleTitleInfo
+            {
+                TitleFirst = matchTitle.Groups["tags1"].Captures.Empty(),
+                LanguageTags = languageTags.ToList(),
+                RawTitle = rawTitle,
+                Language = language
+            };
+
+            UpdateTitleAndCopyFromTitle(subtitleTitleInfo);
+
+            return subtitleTitleInfo;
+        }
+
+        public static void UpdateTitleAndCopyFromTitle(SubtitleTitleInfo subtitleTitleInfo)
+        {
+            if (subtitleTitleInfo.RawTitle is null)
+            {
+                subtitleTitleInfo.Title = null;
+                subtitleTitleInfo.Copy = 0;
+            }
+            else if (SubtitleTitleRegex.Match(subtitleTitleInfo.RawTitle) is var match && match.Success)
+            {
+                subtitleTitleInfo.Title = match.Groups["title"].Success ? match.Groups["title"].ToString() : null;
+                subtitleTitleInfo.Copy = int.Parse(match.Groups["copy"].ToString());
+            }
+            else
+            {
+                subtitleTitleInfo.Title = subtitleTitleInfo.RawTitle;
+                subtitleTitleInfo.Copy = 0;
+            }
         }
 
         public static List<string> ParseLanguageTags(string fileName)
