@@ -8,5 +8,11 @@
     "EditConnectionImplementation": "Koşul Ekle - {implementationName}",
     "AddConnectionImplementation": "Koşul Ekle - {implementationName}",
     "AddIndexerImplementation": "Koşul Ekle - {implementationName}",
-    "EditIndexerImplementation": "Koşul Ekle - {implementationName}"
+    "EditIndexerImplementation": "Koşul Ekle - {implementationName}",
+    "AddToDownloadQueue": "İndirme sırasına ekle",
+    "AddedToDownloadQueue": "İndirme sırasına eklendi",
+    "AllTitles": "Tüm Filmler",
+    "AbsoluteEpisodeNumbers": "Mutlak Bölüm Numaraları",
+    "Actions": "Eylemler",
+    "AbsoluteEpisodeNumber": "Mutlak Bölüm Numarası"
 }
