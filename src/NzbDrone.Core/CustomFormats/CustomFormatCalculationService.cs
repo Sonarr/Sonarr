@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Blocklisting;
 using NzbDrone.Core.History;
@@ -23,10 +24,12 @@ namespace NzbDrone.Core.CustomFormats
     public class CustomFormatCalculationService : ICustomFormatCalculationService
     {
         private readonly ICustomFormatService _formatService;
+        private readonly Logger _logger;
 
-        public CustomFormatCalculationService(ICustomFormatService formatService)
+        public CustomFormatCalculationService(ICustomFormatService formatService, Logger logger)
         {
             _formatService = formatService;
+            _logger = logger;
         }
 
         public List<CustomFormat> ParseCustomFormat(RemoteEpisode remoteEpisode, long size)
@@ -153,20 +156,23 @@ namespace NzbDrone.Core.CustomFormats
             return matches.OrderBy(x => x.Name).ToList();
         }
 
-        private static List<CustomFormat> ParseCustomFormat(EpisodeFile episodeFile, Series series, List<CustomFormat> allCustomFormats)
+        private List<CustomFormat> ParseCustomFormat(EpisodeFile episodeFile, Series series, List<CustomFormat> allCustomFormats)
         {
             var releaseTitle = string.Empty;
 
             if (episodeFile.SceneName.IsNotNullOrWhiteSpace())
             {
+                _logger.Trace("Using scene name for release title: {0}", episodeFile.SceneName);
                 releaseTitle = episodeFile.SceneName;
             }
             else if (episodeFile.OriginalFilePath.IsNotNullOrWhiteSpace())
             {
+                _logger.Trace("Using original file path for release title: {0}", Path.GetFileName(episodeFile.OriginalFilePath));
                 releaseTitle = Path.GetFileName(episodeFile.OriginalFilePath);
             }
             else if (episodeFile.RelativePath.IsNotNullOrWhiteSpace())
             {
+                _logger.Trace("Using relative path for release title: {0}", Path.GetFileName(episodeFile.RelativePath));
                 releaseTitle = Path.GetFileName(episodeFile.RelativePath);
             }
 
