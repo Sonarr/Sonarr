@@ -10,7 +10,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators
 {
     public class AggregateLanguage : IAggregateLocalEpisode
     {
-        public int Order => 2;
+        public int Order => 1;
 
         private readonly List<IAugmentLanguage> _augmentLanguages;
         private readonly Logger _logger;

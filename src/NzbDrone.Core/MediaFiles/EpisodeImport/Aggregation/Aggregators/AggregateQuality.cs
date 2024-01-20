@@ -10,7 +10,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators
 {
     public class AggregateQuality : IAggregateLocalEpisode
     {
-        public int Order => 3;
+        public int Order => 1;
 
         private readonly List<IAugmentQuality> _augmentQualities;
         private readonly Logger _logger;

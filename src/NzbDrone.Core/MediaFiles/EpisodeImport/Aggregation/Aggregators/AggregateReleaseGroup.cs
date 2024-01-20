@@ -6,7 +6,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators
 {
     public class AggregateReleaseGroup : IAggregateLocalEpisode
     {
-        public int Order => 5;
+        public int Order => 1;
 
         public LocalEpisode Aggregate(LocalEpisode localEpisode, DownloadClientItem downloadClientItem)
         {

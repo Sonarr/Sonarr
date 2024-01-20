@@ -8,7 +8,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators
 {
     public class AggregateReleaseInfo : IAggregateLocalEpisode
     {
-        public int Order => 4;
+        public int Order => 1;
 
         private readonly IHistoryService _historyService;
 

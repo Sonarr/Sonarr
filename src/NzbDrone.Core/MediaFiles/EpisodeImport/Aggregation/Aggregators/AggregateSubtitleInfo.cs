@@ -11,7 +11,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators
 {
     public class AggregateSubtitleInfo : IAggregateLocalEpisode
     {
-        public int Order => 6;
+        public int Order => 2;
 
         private readonly Logger _logger;
 
