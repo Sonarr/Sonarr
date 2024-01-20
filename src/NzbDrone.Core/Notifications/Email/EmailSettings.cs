@@ -45,8 +45,8 @@ namespace NzbDrone.Core.Notifications.Email
         [FieldDefinition(1, Label = "Port")]
         public int Port { get; set; }
 
-        [FieldDefinition(2, Label = "NotificationsEmailSettingsRequireEncryption", HelpText = "NotificationsEmailSettingsRequireEncryptionHelpText", Type = FieldType.Checkbox)]
-        public bool RequireEncryption { get; set; }
+        [FieldDefinition(2, Label = "NotificationsEmailSettingsUseEncryption", HelpText = "NotificationsEmailSettingsUseEncryptionHelpText", Type = FieldType.Select, SelectOptions = typeof(EmailEncryptionType))]
+        public int UseEncryption { get; set; }
 
         [FieldDefinition(3, Label = "Username", Privacy = PrivacyLevel.UserName)]
         public string Username { get; set; }
@@ -70,5 +70,12 @@ namespace NzbDrone.Core.Notifications.Email
         {
             return new NzbDroneValidationResult(Validator.Validate(this));
         }
+    }
+
+    public enum EmailEncryptionType
+    {
+        Preferred = 0,
+        Always = 1,
+        Never = 2
     }
 }
