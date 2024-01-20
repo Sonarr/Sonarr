@@ -107,6 +107,11 @@ namespace NzbDrone.Core.Update
 
             var updateSandboxFolder = _appFolderInfo.GetUpdateSandboxFolder();
 
+            if (_diskProvider.GetTotalSize(updateSandboxFolder) < 1.Gigabytes())
+            {
+                _logger.Warn("Temporary location '{0}' has less than 1 GB free space, Sonarr may not be able to update itself.", updateSandboxFolder);
+            }
+
             var packageDestination = Path.Combine(updateSandboxFolder, updatePackage.FileName);
 
             if (_diskProvider.FolderExists(updateSandboxFolder))
