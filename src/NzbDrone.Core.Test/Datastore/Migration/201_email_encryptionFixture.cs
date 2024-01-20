@@ -44,7 +44,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
             items.Should().HaveCount(1);
             items.First().Implementation.Should().Be("Email");
             items.First().ConfigContract.Should().Be("EmailSettings");
-            items.First().Settings.UseEncryption.Should().Be((int)EmailEncryptionType.Optimistically);
+            items.First().Settings.UseEncryption.Should().Be((int)EmailEncryptionType.Preferred);
         }
 
         [Test]

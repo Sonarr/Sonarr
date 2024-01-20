@@ -74,7 +74,7 @@ namespace NzbDrone.Core.Notifications.Email
 
     public enum EmailEncryptionType
     {
-        Optimistically = 0,
+        Preferred = 0,
         Always = 1,
         Never = 2
     }
