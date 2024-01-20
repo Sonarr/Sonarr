@@ -190,11 +190,15 @@ export default function SeriesIndexPosters(props: SeriesIndexPostersProps) {
 
     if (isSmallScreen) {
       const padding = bodyPaddingSmallScreen - 5;
+      const width = window.innerWidth - padding * 2;
+      const height = window.innerHeight;
 
-      setSize({
-        width: window.innerWidth - padding * 2,
-        height: window.innerHeight,
-      });
+      if (width !== size.width || height !== size.height) {
+        setSize({
+          width,
+          height,
+        });
+      }
 
       return;
     }
