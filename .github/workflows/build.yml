@@ -17,7 +17,7 @@ env:
   FRAMEWORK: net6.0
   BRANCH: ${{ github.head_ref || github.ref_name }}
   SONARR_MAJOR_VERSION: 4
-  VERSION: 4.0.0
+  VERSION: 4.0.1
 
 jobs:
   backend:
