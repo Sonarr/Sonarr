@@ -1727,8 +1727,6 @@
     "NotificationsEmailSettingsFromAddress": "发件地址",
     "NotificationsEmailSettingsRecipientAddress": "收件地址",
     "NotificationsEmailSettingsRecipientAddressHelpText": "逗号分隔的收件地址",
-    "NotificationsEmailSettingsRequireEncryption": "要求加密",
-    "NotificationsEmailSettingsRequireEncryptionHelpText": "要求 SSL（仅 465 端口）或 STARTTLS（其他任意端口）",
     "NotificationsEmailSettingsServer": "服务器",
     "NotificationsEmailSettingsServerHelpText": "邮件服务器的主机名或 IP",
     "NotificationsEmbySettingsSendNotifications": "发送通知",
