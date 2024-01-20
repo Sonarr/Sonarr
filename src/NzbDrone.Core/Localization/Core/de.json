@@ -248,7 +248,7 @@
     "TheTvdb": "TheTVDB",
     "TvdbId": "TVDB-ID",
     "UpdateAll": "Alle aktualisieren",
-    "UpdateSelected": "Update ausgewählt",
+    "UpdateSelected": "Auswahl aktualisieren",
     "ChmodFolderHelpTextWarning": "Dies funktioniert nur, wenn der Benutzer, der {appName} ausführt, der Eigentümer der Datei ist. Es ist besser, sicherzustellen, dass der Download-Client die Berechtigungen richtig festlegt.",
     "ChownGroupHelpTextWarning": "Dies funktioniert nur, wenn der Benutzer, der {appName} ausführt, der Eigentümer der Datei ist. Es ist besser sicherzustellen, dass der Download-Client dieselbe Gruppe wie {appName} verwendet.",
     "ClearBlocklistMessageText": "Sind Sie sicher, dass Sie alle Elemente aus der Sperrliste löschen möchten?",

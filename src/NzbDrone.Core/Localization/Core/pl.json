@@ -39,5 +39,8 @@
     "AddIndexer": "Dodaj indekser",
     "AddIndexerError": "Nie można dodać nowego indeksatora, spróbuj ponownie.",
     "Actions": "Akcje",
-    "AddNewSeriesError": "Nie udało się załadować wyników wyszukiwania, spróbuj ponownie."
+    "AddNewSeriesError": "Nie udało się załadować wyników wyszukiwania, spróbuj ponownie.",
+    "AddConditionImplementation": "Dodaj condition - {implementationName}",
+    "AddConnectionImplementation": "Dodaj Connection - {implementationName}",
+    "AddDownloadClientImplementation": "Dodaj klienta pobierania - {implementationName}"
 }

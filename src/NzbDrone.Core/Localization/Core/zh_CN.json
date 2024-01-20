@@ -1789,5 +1789,7 @@
     "NotificationsPlexSettingsAuthenticateWithPlexTv": "使用 Plex.tv 验证身份",
     "NotificationsPlexValidationNoTvLibraryFound": "需要至少一个电视资源库",
     "NotificationsPushBulletSettingSenderId": "发送 ID",
-    "DownloadClientAriaSettingsDirectoryHelpText": "可选的下载位置，留空使用 Aria2 默认位置"
+    "DownloadClientAriaSettingsDirectoryHelpText": "可选的下载位置，留空使用 Aria2 默认位置",
+    "DownloadClientPriorityHelpText": "下载客户端优先级，从1（最高）到50（最低），默认为1。具有相同优先级的客户端将轮换使用。",
+    "IndexerSettingsRejectBlocklistedTorrentHashes": "抓取时舍弃列入黑名单的种子散列值"
 }
