@@ -1735,8 +1735,6 @@
     "NotificationsEmbySettingsSendNotifications": "Envoyer des notifications",
     "NotificationsEmailSettingsServerHelpText": "Nom d'hôte ou adresse IP du serveur de courriel",
     "NotificationsEmailSettingsServer": "Serveur",
-    "NotificationsEmailSettingsRequireEncryptionHelpText": "Requiert SSL (port 465 uniquement) ou StartTLS (tout autre port)",
-    "NotificationsEmailSettingsRequireEncryption": "Requiert le chiffrement",
     "NotificationsEmailSettingsRecipientAddress": "Adresse(s) du/des destinataire(s)",
     "NotificationsEmailSettingsName": "Courriel",
     "NotificationsEmailSettingsFromAddress": "Depuis l'adresse",
