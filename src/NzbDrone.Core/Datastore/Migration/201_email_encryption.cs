@@ -31,7 +31,7 @@ namespace NzbDrone.Core.Datastore.Migration
                         var id = reader.GetInt32(0);
                         var settings = Json.Deserialize<JObject>(reader.GetString(1));
 
-                        settings["useEncryption"] = settings["requireEncryption"].ToObject<bool>() ? 1 : 0;
+                        settings["useEncryption"] = settings.Value<bool>("requireEncryption") ? 1 : 0;
                         settings["requireEncryption"] = null;
 
                         updated.Add(new
@@ -43,7 +43,7 @@ namespace NzbDrone.Core.Datastore.Migration
                 }
             }
 
-            var updateSql = $"UPDATE \"Notifications\" SET \"Settings\" = @Settings WHERE \"Id\" = @Id";
+            var updateSql = "UPDATE \"Notifications\" SET \"Settings\" = @Settings WHERE \"Id\" = @Id";
             conn.Execute(updateSql, updated, transaction: tran);
         }
     }
