@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Datastore.Migration
                     var id = reader.GetInt32(0);
                     var relativePath = reader.GetString(1);
                     var episodeFileRelativePath = reader.GetString(2);
-                    var episodeFileOriginalFilePath = reader.GetString(3);
+                    var episodeFileOriginalFilePath = reader[3] as string;
 
                     var subtitleTitleInfo = CleanSubtitleTitleInfo(episodeFileRelativePath, episodeFileOriginalFilePath, relativePath);
 

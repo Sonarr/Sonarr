@@ -62,7 +62,6 @@ namespace NzbDrone.Core.Test.Datastore.Migration
                     Id = 1,
                     SeriesId = 1,
                     RelativePath = episodePath,
-                    OriginalFilePath = string.Empty,
                     Quality = new { }.ToJson(),
                     Size = 0,
                     DateAdded = now,
