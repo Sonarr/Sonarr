@@ -174,9 +174,10 @@ namespace NzbDrone.Core.MediaFiles
 
             if (oldFiles.Any())
             {
-                environmentVariables.Add("Sonarr_DeletedRelativePaths", string.Join("|", oldFiles.Select(e => e.RelativePath)));
-                environmentVariables.Add("Sonarr_DeletedPaths", string.Join("|", oldFiles.Select(e => Path.Combine(series.Path, e.RelativePath))));
-                environmentVariables.Add("Sonarr_DeletedDateAdded", string.Join("|", oldFiles.Select(e => e.DateAdded)));
+                environmentVariables.Add("Sonarr_DeletedRelativePaths", string.Join("|", oldFiles.Select(e => e.EpisodeFile.RelativePath)));
+                environmentVariables.Add("Sonarr_DeletedPaths", string.Join("|", oldFiles.Select(e => Path.Combine(series.Path, e.EpisodeFile.RelativePath))));
+                environmentVariables.Add("Sonarr_DeletedDateAdded", string.Join("|", oldFiles.Select(e => e.EpisodeFile.DateAdded)));
+                environmentVariables.Add("Sonarr_DeletedRecycleBinPaths", string.Join("|", oldFiles.Select(e => e.RecycleBinPath ?? string.Empty)));
             }
 
             _logger.Debug("Executing external script: {0}", _configService.ScriptImportPath);

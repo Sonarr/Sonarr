@@ -66,7 +66,7 @@ namespace NzbDrone.Core.Test.HistoryTests
                                          DownloadId = "abcd"
                                      };
 
-            Subject.Handle(new EpisodeImportedEvent(localEpisode, episodeFile, new List<EpisodeFile>(), true, downloadClientItem));
+            Subject.Handle(new EpisodeImportedEvent(localEpisode, episodeFile, new List<DeletedEpisodeFile>(), true, downloadClientItem));
 
             Mocker.GetMock<IHistoryRepository>()
                 .Verify(v => v.Insert(It.Is<EpisodeHistory>(h => h.SourceTitle == Path.GetFileNameWithoutExtension(localEpisode.Path))));

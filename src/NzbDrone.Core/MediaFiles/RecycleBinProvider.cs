@@ -14,7 +14,7 @@ namespace NzbDrone.Core.MediaFiles
     public interface IRecycleBinProvider
     {
         void DeleteFolder(string path);
-        void DeleteFile(string path, string subfolder = "");
+        string DeleteFile(string path, string subfolder = "");
         void Empty();
         void Cleanup();
     }
@@ -66,7 +66,7 @@ namespace NzbDrone.Core.MediaFiles
             }
         }
 
-        public void DeleteFile(string path, string subfolder = "")
+        public string DeleteFile(string path, string subfolder = "")
         {
             _logger.Debug("Attempting to send '{0}' to recycling bin", path);
             var recyclingBin = _configService.RecycleBin;
@@ -82,6 +82,8 @@ namespace NzbDrone.Core.MediaFiles
 
                 _diskProvider.DeleteFile(path);
                 _logger.Debug("File has been permanently deleted: {0}", path);
+
+                return null;
             }
             else
             {
@@ -128,6 +130,8 @@ namespace NzbDrone.Core.MediaFiles
                 SetLastWriteTime(destination, DateTime.UtcNow);
 
                 _logger.Debug("File has been moved to the recycling bin: {0}", destination);
+
+                return destination;
             }
         }
 

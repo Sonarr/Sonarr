@@ -158,9 +158,10 @@ namespace NzbDrone.Core.Notifications.CustomScript
 
             if (message.OldFiles.Any())
             {
-                environmentVariables.Add("Sonarr_DeletedRelativePaths", string.Join("|", message.OldFiles.Select(e => e.RelativePath)));
-                environmentVariables.Add("Sonarr_DeletedPaths", string.Join("|", message.OldFiles.Select(e => Path.Combine(series.Path, e.RelativePath))));
-                environmentVariables.Add("Sonarr_DeletedDateAdded", string.Join("|", message.OldFiles.Select(e => e.DateAdded)));
+                environmentVariables.Add("Sonarr_DeletedRelativePaths", string.Join("|", message.OldFiles.Select(e => e.EpisodeFile.RelativePath)));
+                environmentVariables.Add("Sonarr_DeletedPaths", string.Join("|", message.OldFiles.Select(e => Path.Combine(series.Path, e.EpisodeFile.RelativePath))));
+                environmentVariables.Add("Sonarr_DeletedDateAdded", string.Join("|", message.OldFiles.Select(e => e.EpisodeFile.DateAdded)));
+                environmentVariables.Add("Sonarr_DeletedRecycleBinPaths", string.Join("|", message.OldFiles.Select(e => e.RecycleBinPath ?? string.Empty)));
             }
 
             ExecuteScript(environmentVariables);

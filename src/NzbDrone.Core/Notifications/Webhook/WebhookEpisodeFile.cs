@@ -37,5 +37,6 @@ namespace NzbDrone.Core.Notifications.Webhook
         public long Size { get; set; }
         public DateTime DateAdded { get; set; }
         public WebhookEpisodeFileMediaInfo MediaInfo { get; set; }
+        public string RecycleBinPath { get; set; }
     }
 }
