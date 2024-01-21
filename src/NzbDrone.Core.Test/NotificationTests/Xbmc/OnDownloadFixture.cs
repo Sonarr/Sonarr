@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using FizzWare.NBuilder;
 using Moq;
@@ -28,7 +28,7 @@ namespace NzbDrone.Core.Test.NotificationTests.Xbmc
             _downloadMessage = Builder<DownloadMessage>.CreateNew()
                                                        .With(d => d.Series = series)
                                                        .With(d => d.EpisodeFile = episodeFile)
-                                                       .With(d => d.OldFiles = new List<EpisodeFile>())
+                                                       .With(d => d.OldFiles = new List<DeletedEpisodeFile>())
                                                        .Build();
 
             Subject.Definition = new NotificationDefinition();
@@ -40,9 +40,12 @@ namespace NzbDrone.Core.Test.NotificationTests.Xbmc
 
         private void GivenOldFiles()
         {
-            _downloadMessage.OldFiles = Builder<EpisodeFile>.CreateListOfSize(1)
-                                                            .Build()
-                                                            .ToList();
+            _downloadMessage.OldFiles = Builder<DeletedEpisodeFile>
+                .CreateListOfSize(1)
+                .All()
+                .WithFactory(() => new DeletedEpisodeFile(Builder<EpisodeFile>.CreateNew().Build(), null))
+                .Build()
+                .ToList();
 
             Subject.Definition.Settings = new XbmcSettings
                                           {

@@ -176,7 +176,7 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
         public void should_return_ok_on_episode_imported_event()
         {
             GivenFolderExists(_downloadRootPath);
-            var importEvent = new EpisodeImportedEvent(new LocalEpisode(), new EpisodeFile(), new List<EpisodeFile>(), true, new DownloadClientItem());
+            var importEvent = new EpisodeImportedEvent(new LocalEpisode(), new EpisodeFile(), new List<DeletedEpisodeFile>(), true, new DownloadClientItem());
 
             Subject.Check(importEvent).ShouldBeOk();
         }

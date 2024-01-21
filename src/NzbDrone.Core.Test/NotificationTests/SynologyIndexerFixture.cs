@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.MediaFiles;
@@ -33,16 +33,16 @@ namespace NzbDrone.Core.Test.NotificationTests
                     RelativePath = "file1.S01E01E02.mkv"
                 },
 
-                OldFiles = new List<EpisodeFile>
+                OldFiles = new List<DeletedEpisodeFile>
                 {
-                    new EpisodeFile
+                    new DeletedEpisodeFile(new EpisodeFile
                     {
                         RelativePath = "file1.S01E01.mkv"
-                    },
-                    new EpisodeFile
+                    }, null),
+                    new DeletedEpisodeFile(new EpisodeFile
                     {
                         RelativePath = "file1.S01E02.mkv"
-                    }
+                    }, null)
                 }
             };
 
