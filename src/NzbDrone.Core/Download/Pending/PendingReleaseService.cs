@@ -46,6 +46,8 @@ namespace NzbDrone.Core.Download.Pending
         private readonly IConfigService _configService;
         private readonly ICustomFormatCalculationService _formatCalculator;
         private readonly IRemoteEpisodeAggregationService _aggregationService;
+        private readonly IDownloadClientFactory _downloadClientFactory;
+        private readonly IIndexerFactory _indexerFactory;
         private readonly IEventAggregator _eventAggregator;
         private readonly Logger _logger;
 
@@ -58,6 +60,8 @@ namespace NzbDrone.Core.Download.Pending
                                     IConfigService configService,
                                     ICustomFormatCalculationService formatCalculator,
                                     IRemoteEpisodeAggregationService aggregationService,
+                                    IDownloadClientFactory downloadClientFactory,
+                                    IIndexerFactory indexerFactory,
                                     IEventAggregator eventAggregator,
                                     Logger logger)
         {
@@ -70,6 +74,8 @@ namespace NzbDrone.Core.Download.Pending
             _configService = configService;
             _formatCalculator = formatCalculator;
             _aggregationService = aggregationService;
+            _downloadClientFactory = downloadClientFactory;
+            _indexerFactory = indexerFactory;
             _eventAggregator = eventAggregator;
             _logger = logger;
         }
@@ -107,9 +113,16 @@ namespace NzbDrone.Core.Download.Pending
 
                         if (matchingReport.Reason != reason)
                         {
-                            _logger.Debug("The release {0} is already pending with reason {1}, changing to {2}", decision.RemoteEpisode, matchingReport.Reason, reason);
-                            matchingReport.Reason = reason;
-                            _repository.Update(matchingReport);
+                            if (matchingReport.Reason == PendingReleaseReason.DownloadClientUnavailable)
+                            {
+                                _logger.Debug("The release {0} is already pending with reason {1}, not changing reason", decision.RemoteEpisode, matchingReport.Reason);
+                            }
+                            else
+                            {
+                                _logger.Debug("The release {0} is already pending with reason {1}, changing to {2}", decision.RemoteEpisode, matchingReport.Reason, reason);
+                                matchingReport.Reason = reason;
+                                _repository.Update(matchingReport);
+                            }
                         }
                         else
                         {
@@ -355,6 +368,16 @@ namespace NzbDrone.Core.Download.Pending
                 timeleft = TimeSpan.Zero;
             }
 
+            string downloadClientName = null;
+            var indexer = _indexerFactory.Find(pendingRelease.Release.IndexerId);
+
+            if (indexer is { DownloadClientId: > 0 })
+            {
+                var downloadClient = _downloadClientFactory.Find(indexer.DownloadClientId);
+
+                downloadClientName = downloadClient?.Name;
+            }
+
             var queue = new Queue.Queue
             {
                 Id = GetQueueId(pendingRelease, episode),
@@ -371,7 +394,8 @@ namespace NzbDrone.Core.Download.Pending
                 Added = pendingRelease.Added,
                 Status = pendingRelease.Reason.ToString(),
                 Protocol = pendingRelease.RemoteEpisode.Release.DownloadProtocol,
-                Indexer = pendingRelease.RemoteEpisode.Release.Indexer
+                Indexer = pendingRelease.RemoteEpisode.Release.Indexer,
+                DownloadClient = downloadClientName
             };
 
             return queue;
