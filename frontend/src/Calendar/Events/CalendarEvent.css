@@ -4,6 +4,7 @@ $fullColorGradient: rgba(244, 245, 246, 0.2);
   position: relative;
   margin: 4px 2px;
   padding: 5px;
+  min-height: 70px;
   border-bottom: 1px solid var(--calendarBorderColor);
   border-left: 4px solid var(--calendarBorderColor);
 }

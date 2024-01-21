@@ -2,6 +2,7 @@
   overflow-x: hidden;
   margin: 4px 2px;
   padding: 5px;
+  min-height: 70px;
   border-bottom: 1px solid var(--borderColor);
   border-left: 4px solid var(--borderColor);
   font-size: 12px;
