@@ -224,16 +224,19 @@ class CalendarEventGroup extends Component {
         </div>
 
         {
-          showEpisodeInformation &&
+          showEpisodeInformation ?
             <Link
               className={styles.expandContainer}
               component="div"
               onPress={this.onExpandPress}
             >
+              &nbsp;
               <Icon
                 name={icons.EXPAND}
               />
-            </Link>
+              &nbsp;
+            </Link> :
+            null
         }
       </div>
     );
