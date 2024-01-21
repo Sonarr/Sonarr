@@ -129,10 +129,8 @@ class SeriesDetailsSeason extends Component {
       items
     } = this.props;
 
-    const expand = _.some(items, (item) => {
-      return isAfter(item.airDateUtc) ||
-             isAfter(item.airDateUtc, { days: -30 });
-    });
+    const expand = _.some(items, (item) => isAfter(item.airDateUtc) || isAfter(item.airDateUtc, { days: -30 })) ||
+      items.every((item) => !item.airDateUtc);
 
     onExpandPress(seasonNumber, expand && seasonNumber > 0);
   }
