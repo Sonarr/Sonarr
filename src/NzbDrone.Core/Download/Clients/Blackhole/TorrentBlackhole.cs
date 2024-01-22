@@ -91,7 +91,7 @@ namespace NzbDrone.Core.Download.Clients.Blackhole
             {
                 yield return new DownloadClientItem
                 {
-                    DownloadClientInfo = DownloadClientItemClientInfo.FromDownloadClient(this),
+                    DownloadClientInfo = DownloadClientItemClientInfo.FromDownloadClient(this, false),
                     DownloadId = Definition.Name + "_" + item.DownloadId,
                     Category = "sonarr",
                     Title = item.Title,

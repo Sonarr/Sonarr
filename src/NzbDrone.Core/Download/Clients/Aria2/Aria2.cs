@@ -134,7 +134,7 @@ namespace NzbDrone.Core.Download.Clients.Aria2
                     CanMoveFiles = false,
                     CanBeRemoved = torrent.Status == "complete",
                     Category = null,
-                    DownloadClientInfo = DownloadClientItemClientInfo.FromDownloadClient(this),
+                    DownloadClientInfo = DownloadClientItemClientInfo.FromDownloadClient(this, false),
                     DownloadId = torrent.InfoHash?.ToUpper(),
                     IsEncrypted = false,
                     Message = torrent.ErrorMessage,

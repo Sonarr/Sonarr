@@ -71,7 +71,7 @@ namespace Sonarr.Api.V3.Queue
         }
 
         [RestDeleteById]
-        public void RemoveAction(int id, bool removeFromClient = true, bool blocklist = false, bool skipRedownload = false)
+        public void RemoveAction(int id, bool removeFromClient = true, bool blocklist = false, bool skipRedownload = false, bool changeCategory = false)
         {
             var pendingRelease = _pendingReleaseService.FindPendingQueueItem(id);
 
@@ -89,12 +89,12 @@ namespace Sonarr.Api.V3.Queue
                 throw new NotFoundException();
             }
 
-            Remove(trackedDownload, removeFromClient, blocklist, skipRedownload);
+            Remove(trackedDownload, removeFromClient, blocklist, skipRedownload, changeCategory);
             _trackedDownloadService.StopTracking(trackedDownload.DownloadItem.DownloadId);
         }
 
         [HttpDelete("bulk")]
-        public object RemoveMany([FromBody] QueueBulkResource resource, [FromQuery] bool removeFromClient = true, [FromQuery] bool blocklist = false, [FromQuery] bool skipRedownload = false)
+        public object RemoveMany([FromBody] QueueBulkResource resource, [FromQuery] bool removeFromClient = true, [FromQuery] bool blocklist = false, [FromQuery] bool skipRedownload = false, [FromQuery] bool changeCategory = false)
         {
             var trackedDownloadIds = new List<string>();
             var pendingToRemove = new List<NzbDrone.Core.Queue.Queue>();
@@ -125,7 +125,7 @@ namespace Sonarr.Api.V3.Queue
 
             foreach (var trackedDownload in trackedToRemove.DistinctBy(t => t.DownloadItem.DownloadId))
             {
-                Remove(trackedDownload, removeFromClient, blocklist, skipRedownload);
+                Remove(trackedDownload, removeFromClient, blocklist, skipRedownload, changeCategory);
                 trackedDownloadIds.Add(trackedDownload.DownloadItem.DownloadId);
             }
 
@@ -292,7 +292,7 @@ namespace Sonarr.Api.V3.Queue
             _pendingReleaseService.RemovePendingQueueItems(pendingRelease.Id);
         }
 
-        private TrackedDownload Remove(TrackedDownload trackedDownload, bool removeFromClient, bool blocklist, bool skipRedownload)
+        private TrackedDownload Remove(TrackedDownload trackedDownload, bool removeFromClient, bool blocklist, bool skipRedownload, bool changeCategory)
         {
             if (removeFromClient)
             {
@@ -305,13 +305,24 @@ namespace Sonarr.Api.V3.Queue
 
                 downloadClient.RemoveItem(trackedDownload.DownloadItem, true);
             }
+            else if (changeCategory)
+            {
+                var downloadClient = _downloadClientProvider.Get(trackedDownload.DownloadClient);
+
+                if (downloadClient == null)
+                {
+                    throw new BadRequestException();
+                }
+
+                downloadClient.MarkItemAsImported(trackedDownload.DownloadItem);
+            }
 
             if (blocklist)
             {
                 _failedDownloadService.MarkAsFailed(trackedDownload.DownloadItem.DownloadId, skipRedownload);
             }
 
-            if (!removeFromClient && !blocklist)
+            if (!removeFromClient && !blocklist && !changeCategory)
             {
                 if (!_ignoredDownloadService.IgnoreDownload(trackedDownload))
                 {
