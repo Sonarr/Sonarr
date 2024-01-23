@@ -270,7 +270,7 @@
   "CustomFormatsSpecificationMaximumSizeHelpText": "Release must be less than or equal to this size",
   "CustomFormatsSpecificationMinimumSize": "Minimum Size",
   "CustomFormatsSpecificationMinimumSizeHelpText": "Release must be greater than this size",
-  "CustomFormatsSpecificationRegularExpression": "Language",
+  "CustomFormatsSpecificationRegularExpression": "Regular Expression",
   "CustomFormatsSpecificationRegularExpressionHelpText": "Custom Format RegEx is Case Insensitive",
   "CustomFormatsSpecificationReleaseGroup": "Release Group",
   "CustomFormatsSpecificationResolution": "Resolution",
