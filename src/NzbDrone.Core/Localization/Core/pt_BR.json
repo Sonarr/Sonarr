@@ -86,7 +86,6 @@
     "RemotePathMappingWrongOSPathHealthCheckMessage": "O cliente de download remoto {downloadClientName} coloca os downloads em {path}, mas este não é um caminho {osName} válido. Revise seus mapeamentos de caminho remoto e baixe as configurações do cliente.",
     "UpdateStartupNotWritableHealthCheckMessage": "Não é possível instalar a atualização porque a pasta de inicialização '{startupFolder}' não pode ser gravada pelo usuário '{userName}'.",
     "UpdateStartupTranslocationHealthCheckMessage": "Não é possível instalar a atualização porque a pasta de inicialização '{startupFolder}' está em uma pasta de translocação do App.",
-    "BlocklistReleaseSearchEpisodeAgainHelpText": "Inicia uma busca por este episódio novamente e impede que esta versão seja capturada novamente",
     "BlocklistReleases": "Lançamentos na lista de bloqueio",
     "CloneCondition": "Clonar Condição",
     "CloneCustomFormat": "Clonar formato personalizado",
@@ -100,7 +99,6 @@
     "Negated": "Negado",
     "Remove": "Remover",
     "RemoveFromDownloadClient": "Remover Do Cliente de Download",
-    "RemoveFromDownloadClientHelpTextWarning": "A remoção removerá o download e o(s) arquivo(s) do cliente de download.",
     "RemoveSelectedItem": "Remover Item Selecionado",
     "RemoveSelectedItemQueueMessageText": "Tem certeza de que deseja remover 1 item da fila?",
     "RemoveSelectedItems": "Remover Itens Selecionados",
@@ -2007,5 +2005,7 @@
     "MetadataXmbcSettingsEpisodeMetadataImageThumbsHelpText": "Incluir etiquetas de miniatura de imagem no nome do arquivo .nfo (requer 'Metadados de Episódio')",
     "MetadataXmbcSettingsSeriesMetadataEpisodeGuideHelpText": "Incluir elemento de guia de episódios formatado em JSON em tvshow.nfo (requer 'Metadados da Série')",
     "MetadataXmbcSettingsSeriesMetadataHelpText": "tvshow.nfo com metadados da série completa",
-    "MetadataXmbcSettingsSeriesMetadataUrlHelpText": "Incluir URL da série TheTVDB em tvshow.nfo (pode ser combinado com 'Metadados da Série')"
+    "MetadataXmbcSettingsSeriesMetadataUrlHelpText": "Incluir URL da série TheTVDB em tvshow.nfo (pode ser combinado com 'Metadados da Série')",
+    "NotificationsEmailSettingsUseEncryption": "Usar Criptografia",
+    "NotificationsEmailSettingsUseEncryptionHelpText": "Se preferir usar criptografia se configurado no servidor, usar sempre criptografia via SSL (somente porta 465) ou StartTLS (qualquer outra porta) ou nunca usar criptografia"
 }

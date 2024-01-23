@@ -92,7 +92,6 @@
     "RemoveTagsAutomaticallyHelpText": "Автоматически удалять теги, если условия не выполняются",
     "DeleteSelectedIndexers": "Удалить индексатор(ы)",
     "DeleteTagMessageText": "Вы уверены, что хотите удалить тэг '{label}'?",
-    "RemoveFromDownloadClientHelpTextWarning": "Удаление приведет к удалению загрузки и файла(ов) из клиента загрузки.",
     "ResetAPIKeyMessageText": "Вы уверены, что хотите сбросить Ваш API ключ?",
     "ResetDefinitionTitlesHelpText": "Сбросить названия определений, а также значения",
     "Socks4": "Socks4",

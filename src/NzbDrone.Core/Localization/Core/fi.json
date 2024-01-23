@@ -1,5 +1,4 @@
 {
-    "BlocklistReleaseSearchEpisodeAgainHelpText": "Etsii jaksoa uudelleen ja estää tämän julkaisun automaattisen uudelleenkaappauksen.",
     "RecycleBinUnableToWriteHealthCheckMessage": "Määritettyyn roskakorikansioon ei voida tallentaa: {path}. Varmista että sijainti on olemassa ja että sovelluksen suorittavalla käyttäjällä on siihen kirjoitusoikeus.",
     "RemotePathMappingDownloadPermissionsEpisodeHealthCheckMessage": "{appName} näkee ladatun jakson \"{path}\", muttei voi käyttää sitä. Tämä johtuu todennäköisesti liian rajallisista käyttöoikeuksista.",
     "Added": "Lisäysaika",
@@ -512,7 +511,6 @@
     "AddCustomFilter": "Lisää oma suodatin",
     "AddConnectionImplementation": "Lisätään kytköstä - {implementationName}",
     "RemoveCompletedDownloadsHelpText": "Poista tuodut lataukset lataustyökalun historiasta",
-    "RemoveFromDownloadClientHelpTextWarning": "Poistaminen poistaa latauksen ja sen sisältämät tiedostot lataustyökalusta.",
     "RemoveFilter": "Poista suodatin",
     "RemoveRootFolder": "Poista juurikansio",
     "RenameEpisodes": "Nimeä jaksot uudelleen",

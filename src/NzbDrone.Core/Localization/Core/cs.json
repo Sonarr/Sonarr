@@ -18,7 +18,6 @@
     "BackupIntervalHelpText": "Interval mezi automatickými zálohami",
     "BackupRetentionHelpText": "Automatické zálohy starší než doba uchovávání budou automaticky vyčištěny",
     "BackupsLoadError": "Nelze načíst zálohy",
-    "BlocklistReleaseSearchEpisodeAgainHelpText": "Znovu spustí vyhledávání této epizody a zabrání tomu, aby bylo toto vydání získáno znovu",
     "BranchUpdate": "Větev, která se použije k aktualizaci {appName}u",
     "BranchUpdateMechanism": "Větev používaná externím aktualizačním mechanismem",
     "BrowserReloadRequired": "Vyžaduje se opětovné načtení prohlížeče",

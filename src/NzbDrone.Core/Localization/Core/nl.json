@@ -21,7 +21,6 @@
     "ApplyTagsHelpTextHowToApplyIndexers": "Hoe tags toepassen op de geselecteerde indexeerders",
     "CountDownloadClientsSelected": "{count} download client(s) geselecteerd",
     "ApplyTagsHelpTextHowToApplySeries": "Hoe tags toepassen op de geselecteerde series",
-    "BlocklistReleaseSearchEpisodeAgainHelpText": "Verbied {appName} om deze release opnieuw automatisch te downloaden",
     "Delete": "Verwijder",
     "ApplyTagsHelpTextRemove": "Verwijderen: Verwijder de ingevoerde tags",
     "ApplyTagsHelpTextReplace": "Vervangen: Vervang de tags met de ingevoerde tags (vul geen tags in om alle tags te wissen)",
