@@ -92,7 +92,7 @@ function RemoveQueueItemModal(props: RemoveQueueItemModalProps) {
         value: translate('ChangeCategory'),
         isDisabled: !canChangeCategory,
         hint: multipleSelected
-          ? translate('ChangeCategoryMulitpleHint')
+          ? translate('ChangeCategoryMultipleHint')
           : translate('ChangeCategoryHint'),
       },
       {
