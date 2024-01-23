@@ -74,7 +74,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                 item.Category = Settings.TvCategory;
                 item.Title = torrent.Name;
 
-                item.DownloadClientInfo = DownloadClientItemClientInfo.FromDownloadClient(this);
+                item.DownloadClientInfo = DownloadClientItemClientInfo.FromDownloadClient(this, false);
 
                 item.OutputPath = GetOutputPath(outputPath, torrent);
                 item.TotalSize = torrent.TotalSize;

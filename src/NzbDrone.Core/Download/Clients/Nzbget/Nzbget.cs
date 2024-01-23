@@ -73,7 +73,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
                 queueItem.Title = item.NzbName;
                 queueItem.TotalSize = totalSize;
                 queueItem.Category = item.Category;
-                queueItem.DownloadClientInfo = DownloadClientItemClientInfo.FromDownloadClient(this);
+                queueItem.DownloadClientInfo = DownloadClientItemClientInfo.FromDownloadClient(this, false);
                 queueItem.CanMoveFiles = true;
                 queueItem.CanBeRemoved = true;
 
@@ -120,7 +120,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
                 var historyItem = new DownloadClientItem();
                 var itemDir = item.FinalDir.IsNullOrWhiteSpace() ? item.DestDir : item.FinalDir;
 
-                historyItem.DownloadClientInfo = DownloadClientItemClientInfo.FromDownloadClient(this);
+                historyItem.DownloadClientInfo = DownloadClientItemClientInfo.FromDownloadClient(this, false);
                 historyItem.DownloadId = droneParameter == null ? item.Id.ToString() : droneParameter.Value.ToString();
                 historyItem.Title = item.Name;
                 historyItem.TotalSize = MakeInt64(item.FileSizeHi, item.FileSizeLo);
