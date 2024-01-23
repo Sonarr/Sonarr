@@ -38,6 +38,7 @@ namespace NzbDrone.Core.Test.Datastore.Migration
         [TestCase("Name (2020) - S01E20 - [AAC 2.0].3.forced.eng.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv", null, 3)]
         [TestCase("Name (2020) - S01E20 - [AAC 2.0].eng.forced.3.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv", null, 3)]
         [TestCase("Name (2020) - S01E20 - [AAC 2.0].fra.default.3.forced.ass", "Name (2020)/Season 1/Name (2020) - S01E20 - [AAC 2.0].mkv", null, 3)]
+        [TestCase("Name (2020) - Name.2020.S01E03.REAL.PROPER.1080p.HEVC.x265-MeGusta - 0609901d2ea34acd81c9030980406065.en.forced.srt", "Name (2020)/Season 1/Name (2020) - Name.2020.S01E03.REAL.PROPER.1080p.HEVC.x265-MeGusta - 0609901d2ea34acd81c9030980406065.mkv", null, 0)]
         public void should_process_file_with_missing_title(string subtitlePath, string episodePath, string title, int copy)
         {
             var now = DateTime.UtcNow;
