@@ -310,40 +310,35 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
         {
             try
             {
-                var downloadDir = GetDefaultDir();
+                var downloadDir = GetDownloadDirectory();
 
                 if (downloadDir == null)
                 {
-                    return new NzbDroneValidationFailure(nameof(Settings.TvDirectory), "DownloadClientDownloadStationValidationNoDefaultDestination")
+                    return new NzbDroneValidationFailure(nameof(Settings.TvDirectory), _localizationService.GetLocalizedString("DownloadClientDownloadStationValidationNoDefaultDestination"))
                     {
                         DetailedDescription = _localizationService.GetLocalizedString("DownloadClientDownloadStationValidationNoDefaultDestinationDetail", new Dictionary<string, object> { { "username", Settings.Username } })
                     };
                 }
 
-                downloadDir = GetDownloadDirectory();
+                var sharedFolder = downloadDir.Split('\\', '/')[0];
+                var fieldName = Settings.TvDirectory.IsNotNullOrWhiteSpace() ? nameof(Settings.TvDirectory) : nameof(Settings.TvCategory);
 
-                if (downloadDir != null)
+                var folderInfo = _fileStationProxy.GetInfoFileOrDirectory($"/{downloadDir}", Settings);
+
+                if (folderInfo.Additional == null)
                 {
-                    var sharedFolder = downloadDir.Split('\\', '/')[0];
-                    var fieldName = Settings.TvDirectory.IsNotNullOrWhiteSpace() ? nameof(Settings.TvDirectory) : nameof(Settings.TvCategory);
-
-                    var folderInfo = _fileStationProxy.GetInfoFileOrDirectory($"/{downloadDir}", Settings);
-
-                    if (folderInfo.Additional == null)
+                    return new NzbDroneValidationFailure(fieldName, _localizationService.GetLocalizedString("DownloadClientDownloadStationValidationSharedFolderMissing"))
                     {
-                        return new NzbDroneValidationFailure(fieldName, _localizationService.GetLocalizedString("DownloadClientDownloadStationValidationSharedFolderMissing"))
-                        {
-                            DetailedDescription = _localizationService.GetLocalizedString("DownloadClientDownloadStationValidationSharedFolderMissingDetail", new Dictionary<string, object> { { "sharedFolder", sharedFolder } })
-                        };
-                    }
+                        DetailedDescription = _localizationService.GetLocalizedString("DownloadClientDownloadStationValidationSharedFolderMissingDetail", new Dictionary<string, object> { { "sharedFolder", sharedFolder } })
+                    };
+                }
 
-                    if (!folderInfo.IsDir)
+                if (!folderInfo.IsDir)
+                {
+                    return new NzbDroneValidationFailure(fieldName, _localizationService.GetLocalizedString("DownloadClientDownloadStationValidationFolderMissing"))
                     {
-                        return new NzbDroneValidationFailure(fieldName, _localizationService.GetLocalizedString("DownloadClientDownloadStationValidationFolderMissing"))
-                        {
-                            DetailedDescription = _localizationService.GetLocalizedString("DownloadClientDownloadStationValidationFolderMissingDetail", new Dictionary<string, object> { { "downloadDir", downloadDir }, { "sharedFolder", sharedFolder } })
-                        };
-                    }
+                        DetailedDescription = _localizationService.GetLocalizedString("DownloadClientDownloadStationValidationFolderMissingDetail", new Dictionary<string, object> { { "downloadDir", downloadDir }, { "sharedFolder", sharedFolder } })
+                    };
                 }
 
                 return null;
@@ -460,7 +455,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
             var destDir = GetDefaultDir();
 
-            if (Settings.TvCategory.IsNotNullOrWhiteSpace())
+            if (destDir.IsNotNullOrWhiteSpace() && Settings.TvCategory.IsNotNullOrWhiteSpace())
             {
                 return $"{destDir.TrimEnd('/')}/{Settings.TvCategory}";
             }
