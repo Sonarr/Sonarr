@@ -454,6 +454,8 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
 
         [TestCase("0")]
         [TestCase("15d")]
+        [TestCase("")]
+        [TestCase(null)]
         public void should_set_history_removes_completed_downloads_false(string historyRetention)
         {
             _config.Misc.history_retention = historyRetention;
