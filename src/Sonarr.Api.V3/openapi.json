@@ -2956,6 +2956,101 @@
         }
       }
     },
+    "/api/v3/config/importlist": {
+      "get": {
+        "tags": [
+          "ImportListConfig"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImportListConfigResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v3/config/importlist/{id}": {
+      "put": {
+        "tags": [
+          "ImportListConfig"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ImportListConfigResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImportListConfigResource"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImportListConfigResource"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImportListConfigResource"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "ImportListConfig"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImportListConfigResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v3/importlistexclusion": {
       "get": {
         "tags": [
@@ -8753,6 +8848,23 @@
         },
         "additionalProperties": false
       },
+      "ImportListConfigResource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "listSyncLevel": {
+            "$ref": "#/components/schemas/ListSyncLevelType"
+          },
+          "listSyncTag": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
       "ImportListExclusionResource": {
         "type": "object",
         "properties": {
@@ -9103,6 +9215,15 @@
           }
         },
         "additionalProperties": false
+      },
+      "ListSyncLevelType": {
+        "enum": [
+          "disabled",
+          "logOnly",
+          "keepAndUnmonitor",
+          "keepAndTag"
+        ],
+        "type": "string"
       },
       "LocalizationLanguageResource": {
         "type": "object",
