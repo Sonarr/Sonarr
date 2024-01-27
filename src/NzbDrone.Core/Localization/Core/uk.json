@@ -1,1 +1,25 @@
-{}
+{
+    "CalendarOptions": "Опції Календаря",
+    "Activity": "Активність",
+    "AddAutoTag": "Додати Авто Тег",
+    "AddCondition": "Додати Умову",
+    "UpdateMechanismHelpText": "Використайте вбудоване оновлення {appName}'у або скрипт",
+    "Add": "Додати",
+    "About": "Про нас",
+    "Actions": "Дії",
+    "AddAutoTagError": "Не вдалося додати новий авто тег, спробуйте ще раз.",
+    "AddDownloadClientError": "Не вдається додати новий клієнт для завантаження, повторіть спробу.",
+    "AddExclusion": "Додати виняток",
+    "AddImportListExclusion": "Додати виняток до списку імпорту",
+    "AddDownloadClient": "Додати клієнт завантаження",
+    "Absolute": "Абсолютний",
+    "AddANewPath": "Додати новий шлях",
+    "AddConditionError": "Не вдалося додати нову умову, спробуйте ще раз.",
+    "AddConditionImplementation": "Додати умову - {implementationName}",
+    "AddConnection": "Додати Підключення",
+    "AddConnectionImplementation": "Додати Підключення - {implementationName}",
+    "AddCustomFilter": "Додати власний фільтр",
+    "AddCustomFormat": "Додати власний формат",
+    "AddDelayProfile": "Додати Профіль Затримки",
+    "AddCustomFormatError": "Неможливо додати новий власний формат, спробуйте ще раз."
+}

@@ -241,5 +241,12 @@
     "AuthenticationRequiredPasswordConfirmationHelpTextWarning": "Conferma la nuova password",
     "ClickToChangeSeason": "Click per cambiare stagione",
     "AnalyseVideoFilesHelpText": "Estrai le informazioni video come risoluzione, durata e codec dai file. Questo richiede che {appName} legga delle parti dei file, ciò potrebbe causare un alto utilizzo del disco e della rete durante le scansioni.",
-    "DownloadClientStatusAllClientHealthCheckMessage": "Nessun client di download è disponibile a causa di errori"
+    "DownloadClientStatusAllClientHealthCheckMessage": "Nessun client di download è disponibile a causa di errori",
+    "AddImportListImplementation": "Aggiungi lista di importazione - {implementationName}",
+    "AddNewSeriesHelpText": "È facile aggiungere una nuova serie, basta iniziare a digitare il nome della serie che desideri aggiungere.",
+    "AddNewSeriesSearchForCutoffUnmetEpisodes": "Inizia la ricerca degli episodi non soddisfatti",
+    "AddListExclusionSeriesHelpText": "Impedisce che le serie vengano aggiunte a{appName} tramite liste",
+    "AnimeEpisodeTypeDescription": "Episodi rilasciati utilizzando un numero di episodio assoluto",
+    "AnimeEpisodeTypeFormat": "Numero assoluto dell'episodio ({format})",
+    "AutoRedownloadFailed": "Download fallito"
 }

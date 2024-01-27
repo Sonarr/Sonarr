@@ -552,7 +552,7 @@
     "ApplyTagsHelpTextAdd": "Hinzufügen: Fügen Sie die Tags der vorhandenen Tag-Liste hinzu",
     "ApplyTagsHelpTextRemove": "Entfernen: Die eingegebenen Tags entfernen",
     "ApplyTagsHelpTextReplace": "Ersetzen: Ersetzen Sie die Tags durch die eingegebenen Tags (geben Sie keine Tags ein, um alle Tags zu löschen).",
-    "Wanted": "Gesucht",
+    "Wanted": "› Gesucht",
     "ConnectionLostToBackend": "{appName} hat die Verbindung zum Backend verloren und muss neu geladen werden, um die Funktionalität wiederherzustellen.",
     "Continuing": "Fortsetzung",
     "CopyUsingHardlinksHelpTextWarning": "Gelegentlich können Dateisperren das Umbenennen von Dateien verhindern, die geseedet werden. Sie können das Seeding vorübergehend deaktivieren und als Workaround die Umbenennungsfunktion von {appName} verwenden.",
@@ -791,5 +791,6 @@
     "UpdateScriptPathHelpText": "Pfad zu einem benutzerdefinierten Skript, das ein extrahiertes Update-Paket übernimmt und den Rest des Update-Prozesses abwickelt",
     "Branch": "Branch",
     "Airs": "Wird ausgestrahlt",
-    "AddRootFolderError": "Stammverzeichnis kann nicht hinzugefügt werden"
+    "AddRootFolderError": "Stammverzeichnis kann nicht hinzugefügt werden",
+    "IconForCutoffUnmet": "Symbol für Schwelle nicht erreicht"
 }
