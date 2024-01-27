@@ -49,7 +49,6 @@ namespace NzbDrone.Core.Download.Clients.Transmission
         [FieldToken(TokenField.HelpText, "UrlBase", "clientName", "Transmission")]
         [FieldToken(TokenField.HelpText, "UrlBase", "url", "http://[host]:[port]/[urlBase]/rpc")]
         [FieldToken(TokenField.HelpText, "UrlBase", "defaultUrl", "/transmission/")]
-
         public string UrlBase { get; set; }
 
         [FieldDefinition(4, Label = "Username", Type = FieldType.Textbox, Privacy = PrivacyLevel.UserName)]
