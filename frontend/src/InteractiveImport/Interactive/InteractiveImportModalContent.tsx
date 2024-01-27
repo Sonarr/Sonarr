@@ -298,14 +298,20 @@ function InteractiveImportModalContent(
           return acc;
         }
 
+        const lastSelectedSeason = acc.lastSelectedSeason;
+
         acc.seasonSelectDisabled ||= !item.series;
-        acc.episodeSelectDisabled ||= !item.seasonNumber;
+        acc.episodeSelectDisabled ||=
+          item.seasonNumber === undefined ||
+          (lastSelectedSeason >= 0 && item.seasonNumber !== lastSelectedSeason);
+        acc.lastSelectedSeason = item.seasonNumber ?? -1;
 
         return acc;
       },
       {
         seasonSelectDisabled: false,
         episodeSelectDisabled: false,
+        lastSelectedSeason: -1,
       }
     );
 
