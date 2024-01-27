@@ -4,32 +4,34 @@ using System.Linq;
 using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Common.TPL;
-using NzbDrone.Core.Parser.Model;
+using NzbDrone.Core.ImportLists.ImportListItems;
 
 namespace NzbDrone.Core.ImportLists
 {
     public interface IFetchAndParseImportList
     {
-        List<ImportListItemInfo> Fetch();
-        List<ImportListItemInfo> FetchSingleList(ImportListDefinition definition);
+        ImportListFetchResult Fetch();
+        ImportListFetchResult FetchSingleList(ImportListDefinition definition);
     }
 
     public class FetchAndParseImportListService : IFetchAndParseImportList
     {
         private readonly IImportListFactory _importListFactory;
         private readonly IImportListStatusService _importListStatusService;
+        private readonly IImportListItemService _importListItemService;
         private readonly Logger _logger;
 
-        public FetchAndParseImportListService(IImportListFactory importListFactory, IImportListStatusService importListStatusService, Logger logger)
+        public FetchAndParseImportListService(IImportListFactory importListFactory, IImportListStatusService importListStatusService, IImportListItemService importListItemService, Logger logger)
         {
             _importListFactory = importListFactory;
             _importListStatusService = importListStatusService;
+            _importListItemService = importListItemService;
             _logger = logger;
         }
 
-        public List<ImportListItemInfo> Fetch()
+        public ImportListFetchResult Fetch()
         {
-            var result = new List<ImportListItemInfo>();
+            var result = new ImportListFetchResult();
 
             var importLists = _importListFactory.AutomaticAddEnabled();
 
@@ -47,7 +49,7 @@ namespace NzbDrone.Core.ImportLists
             foreach (var importList in importLists)
             {
                 var importListLocal = importList;
-                var importListStatus = _importListStatusService.GetLastSyncListInfo(importListLocal.Definition.Id);
+                var importListStatus = _importListStatusService.GetListStatus(importListLocal.Definition.Id).LastInfoSync;
 
                 if (importListStatus.HasValue)
                 {
@@ -64,16 +66,23 @@ namespace NzbDrone.Core.ImportLists
                      {
                          try
                          {
-                             var importListReports = importListLocal.Fetch();
+                             var fetchResult = importListLocal.Fetch();
+                             var importListReports = fetchResult.Series;
 
                              lock (result)
                              {
                                  _logger.Debug("Found {0} reports from {1} ({2})", importListReports.Count, importList.Name, importListLocal.Definition.Name);
 
-                                 result.AddRange(importListReports);
-                             }
+                                 if (!fetchResult.AnyFailure)
+                                 {
+                                     importListReports.ForEach(s => s.ImportListId = importList.Definition.Id);
+                                     result.Series.AddRange(importListReports);
+                                     var removed = _importListItemService.SyncSeriesForList(importListReports, importList.Definition.Id);
+                                     _importListStatusService.UpdateListSyncStatus(importList.Definition.Id, removed > 0);
+                                 }
 
-                             _importListStatusService.UpdateListSyncStatus(importList.Definition.Id);
+                                 result.AnyFailure |= fetchResult.AnyFailure;
+                             }
                          }
                          catch (Exception e)
                          {
@@ -86,16 +95,16 @@ namespace NzbDrone.Core.ImportLists
 
             Task.WaitAll(taskList.ToArray());
 
-            result = result.DistinctBy(r => new { r.TvdbId, r.ImdbId, r.Title }).ToList();
+            result.Series = result.Series.DistinctBy(r => new { r.TvdbId, r.ImdbId, r.Title }).ToList();
 
-            _logger.Debug("Found {0} total reports from {1} lists", result.Count, importLists.Count);
+            _logger.Debug("Found {0} total reports from {1} lists", result.Series.Count, importLists.Count);
 
             return result;
         }
 
-        public List<ImportListItemInfo> FetchSingleList(ImportListDefinition definition)
+        public ImportListFetchResult FetchSingleList(ImportListDefinition definition)
         {
-            var result = new List<ImportListItemInfo>();
+            var result = new ImportListFetchResult();
 
             var importList = _importListFactory.GetInstance(definition);
 
@@ -114,16 +123,25 @@ namespace NzbDrone.Core.ImportLists
             {
                 try
                 {
-                    var importListReports = importListLocal.Fetch();
+                    var fetchResult = importListLocal.Fetch();
+                    var importListReports = fetchResult.Series;
 
                     lock (result)
                     {
                         _logger.Debug("Found {0} reports from {1} ({2})", importListReports.Count, importList.Name, importListLocal.Definition.Name);
 
-                        result.AddRange(importListReports);
+                        if (!fetchResult.AnyFailure)
+                        {
+                            importListReports.ForEach(s => s.ImportListId = importList.Definition.Id);
+                            result.Series.AddRange(importListReports);
+                            var removed = _importListItemService.SyncSeriesForList(importListReports, importList.Definition.Id);
+                            _importListStatusService.UpdateListSyncStatus(importList.Definition.Id, removed > 0);
+                        }
+
+                        result.AnyFailure |= fetchResult.AnyFailure;
                     }
 
-                    _importListStatusService.UpdateListSyncStatus(importList.Definition.Id);
+                    result.AnyFailure |= fetchResult.AnyFailure;
                 }
                 catch (Exception e)
                 {
@@ -134,8 +152,6 @@ namespace NzbDrone.Core.ImportLists
             taskList.Add(task);
 
             Task.WaitAll(taskList.ToArray());
-
-            result = result.DistinctBy(r => new { r.TvdbId, r.ImdbId, r.Title }).ToList();
 
             return result;
         }

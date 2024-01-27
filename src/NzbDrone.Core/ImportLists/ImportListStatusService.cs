@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using NLog;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Messaging.Events;
@@ -8,9 +9,10 @@ namespace NzbDrone.Core.ImportLists
 {
     public interface IImportListStatusService : IProviderStatusServiceBase<ImportListStatus>
     {
-        DateTime? GetLastSyncListInfo(int importListId);
+        ImportListStatus GetListStatus(int importListId);
 
-        void UpdateListSyncStatus(int importListId);
+        void UpdateListSyncStatus(int importListId, bool removedItems);
+        void MarkListsAsCleaned();
     }
 
     public class ImportListStatusService : ProviderStatusServiceBase<IImportList, ImportListStatus>, IImportListStatusService
@@ -20,20 +22,37 @@ namespace NzbDrone.Core.ImportLists
         {
         }
 
-        public DateTime? GetLastSyncListInfo(int importListId)
+        public ImportListStatus GetListStatus(int importListId)
         {
-            return GetProviderStatus(importListId).LastInfoSync;
+            return GetProviderStatus(importListId);
         }
 
-        public void UpdateListSyncStatus(int importListId)
+        public void UpdateListSyncStatus(int importListId, bool removedItems)
         {
             lock (_syncRoot)
             {
                 var status = GetProviderStatus(importListId);
 
                 status.LastInfoSync = DateTime.UtcNow;
+                status.HasRemovedItemSinceLastClean |= removedItems;
 
                 _providerStatusRepository.Upsert(status);
+            }
+        }
+
+        public void MarkListsAsCleaned()
+        {
+            lock (_syncRoot)
+            {
+                var toUpdate = new List<ImportListStatus>();
+
+                foreach (var status in _providerStatusRepository.All())
+                {
+                    status.HasRemovedItemSinceLastClean = false;
+                    toUpdate.Add(status);
+                }
+
+                _providerStatusRepository.UpdateMany(toUpdate);
             }
         }
     }

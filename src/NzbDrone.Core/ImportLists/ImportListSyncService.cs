@@ -3,39 +3,83 @@ using System.Linq;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Instrumentation.Extensions;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.ImportLists.Exclusions;
+using NzbDrone.Core.ImportLists.ImportListItems;
+using NzbDrone.Core.Jobs;
 using NzbDrone.Core.Messaging.Commands;
+using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.MetadataSource;
 using NzbDrone.Core.Parser.Model;
+using NzbDrone.Core.ThingiProvider.Events;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.ImportLists
 {
-    public class ImportListSyncService : IExecute<ImportListSyncCommand>
+    public class ImportListSyncService : IExecute<ImportListSyncCommand>, IHandleAsync<ProviderDeletedEvent<IImportList>>
     {
         private readonly IImportListFactory _importListFactory;
+        private readonly IImportListStatusService _importListStatusService;
         private readonly IImportListExclusionService _importListExclusionService;
+        private readonly IImportListItemService _importListItemService;
         private readonly IFetchAndParseImportList _listFetcherAndParser;
         private readonly ISearchForNewSeries _seriesSearchService;
         private readonly ISeriesService _seriesService;
         private readonly IAddSeriesService _addSeriesService;
+        private readonly IConfigService _configService;
+        private readonly ITaskManager _taskManager;
         private readonly Logger _logger;
 
         public ImportListSyncService(IImportListFactory importListFactory,
+                              IImportListStatusService importListStatusService,
                               IImportListExclusionService importListExclusionService,
+                              IImportListItemService importListItemService,
                               IFetchAndParseImportList listFetcherAndParser,
                               ISearchForNewSeries seriesSearchService,
                               ISeriesService seriesService,
                               IAddSeriesService addSeriesService,
+                              IConfigService configService,
+                              ITaskManager taskManager,
                               Logger logger)
         {
             _importListFactory = importListFactory;
+            _importListStatusService = importListStatusService;
             _importListExclusionService = importListExclusionService;
+            _importListItemService = importListItemService;
             _listFetcherAndParser = listFetcherAndParser;
             _seriesSearchService = seriesSearchService;
             _seriesService = seriesService;
             _addSeriesService = addSeriesService;
+            _configService = configService;
+            _taskManager = taskManager;
             _logger = logger;
+        }
+
+        private bool AllListsSuccessfulWithAPendingClean()
+        {
+            var lists = _importListFactory.AutomaticAddEnabled(false);
+            var anyRemoved = false;
+
+            foreach (var list in lists)
+            {
+                var status = _importListStatusService.GetListStatus(list.Definition.Id);
+
+                if (status.DisabledTill.HasValue)
+                {
+                    // list failed the last time it was synced.
+                    return false;
+                }
+
+                if (!status.LastInfoSync.HasValue)
+                {
+                    // list has never been synced.
+                    return false;
+                }
+
+                anyRemoved |= status.HasRemovedItemSinceLastClean;
+            }
+
+            return anyRemoved;
         }
 
         private void SyncAll()
@@ -49,18 +93,26 @@ namespace NzbDrone.Core.ImportLists
 
             _logger.ProgressInfo("Starting Import List Sync");
 
-            var listItems = _listFetcherAndParser.Fetch().ToList();
+            var result = _listFetcherAndParser.Fetch();
+
+            var listItems = result.Series.ToList();
 
             ProcessListItems(listItems);
+
+            TryCleanLibrary();
         }
 
         private void SyncList(ImportListDefinition definition)
         {
             _logger.ProgressInfo(string.Format("Starting Import List Refresh for List {0}", definition.Name));
 
-            var listItems = _listFetcherAndParser.FetchSingleList(definition).ToList();
+            var result = _listFetcherAndParser.FetchSingleList(definition);
+
+            var listItems = result.Series.ToList();
 
             ProcessListItems(listItems);
+
+            TryCleanLibrary();
         }
 
         private void ProcessListItems(List<ImportListItemInfo> items)
@@ -89,6 +141,11 @@ namespace NzbDrone.Core.ImportLists
                 reportNumber++;
 
                 var importList = importLists.Single(x => x.Id == item.ImportListId);
+
+                if (!importList.EnableAutomaticAdd)
+                {
+                    continue;
+                }
 
                 // Map by IMDb ID if we have it
                 if (item.TvdbId <= 0 && item.ImdbId.IsNotNullOrWhiteSpace())
@@ -180,10 +237,10 @@ namespace NzbDrone.Core.ImportLists
                         SeasonFolder = importList.SeasonFolder,
                         Tags = importList.Tags,
                         AddOptions = new AddSeriesOptions
-                                     {
-                                         SearchForMissingEpisodes = importList.SearchForMissingEpisodes,
-                                         Monitor = importList.ShouldMonitor
-                                     }
+                        {
+                            SearchForMissingEpisodes = importList.SearchForMissingEpisodes,
+                            Monitor = importList.ShouldMonitor
+                        }
                     });
                 }
             }
@@ -205,6 +262,65 @@ namespace NzbDrone.Core.ImportLists
             {
                 SyncAll();
             }
+        }
+
+        private void TryCleanLibrary()
+        {
+            if (_configService.ListSyncLevel == ListSyncLevelType.Disabled)
+            {
+                return;
+            }
+
+            if (AllListsSuccessfulWithAPendingClean())
+            {
+                CleanLibrary();
+            }
+        }
+
+        private void CleanLibrary()
+        {
+            if (_configService.ListSyncLevel == ListSyncLevelType.Disabled)
+            {
+                return;
+            }
+
+            var seriesToUpdate = new List<Series>();
+            var seriesInLibrary = _seriesService.GetAllSeries();
+
+            foreach (var series in seriesInLibrary)
+            {
+                var seriesExists = _importListItemService.Exists(series.TvdbId, series.ImdbId);
+
+                if (!seriesExists)
+                {
+                    switch (_configService.ListSyncLevel)
+                    {
+                        case ListSyncLevelType.LogOnly:
+                            _logger.Info("{0} was in your library, but not found in your lists --> You might want to unmonitor or remove it", series);
+                            break;
+                        case ListSyncLevelType.KeepAndUnmonitor when series.Monitored:
+                            _logger.Info("{0} was in your library, but not found in your lists --> Keeping in library but unmonitoring it", series);
+                            series.Monitored = false;
+                            seriesToUpdate.Add(series);
+                            break;
+                        case ListSyncLevelType.KeepAndTag when !series.Tags.Contains(_configService.ListSyncTag):
+                            _logger.Info("{0} was in your library, but not found in your lists --> Keeping in library but tagging it", series);
+                            series.Tags.Add(_configService.ListSyncTag);
+                            seriesToUpdate.Add(series);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+
+            _seriesService.UpdateSeries(seriesToUpdate, true);
+            _importListStatusService.MarkListsAsCleaned();
+        }
+
+        public void HandleAsync(ProviderDeletedEvent<IImportList> message)
+        {
+            TryCleanLibrary();
         }
     }
 }
