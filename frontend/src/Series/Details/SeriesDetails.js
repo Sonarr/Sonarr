@@ -428,14 +428,16 @@ class SeriesDetails extends Component {
                     className={styles.detailsLabel}
                     size={sizes.LARGE}
                   >
-                    <Icon
-                      name={icons.FOLDER}
-                      size={17}
-                    />
 
-                    <span className={styles.path}>
-                      {path}
-                    </span>
+                    <div>
+                      <Icon
+                        name={icons.FOLDER}
+                        size={17}
+                      />
+                      <span className={styles.path}>
+                        {path}
+                      </span>
+                    </div>
                   </Label>
 
                   <Tooltip
@@ -444,16 +446,18 @@ class SeriesDetails extends Component {
                         className={styles.detailsLabel}
                         size={sizes.LARGE}
                       >
-                        <Icon
-                          name={icons.DRIVE}
-                          size={17}
-                        />
 
-                        <span className={styles.sizeOnDisk}>
-                          {
-                            formatBytes(sizeOnDisk || 0)
-                          }
-                        </span>
+                        <div>
+                          <Icon
+                            name={icons.DRIVE}
+                            size={17}
+                          />
+                          <span className={styles.sizeOnDisk}>
+                            {
+                              formatBytes(sizeOnDisk || 0)
+                            }
+                          </span>
+                        </div>
                       </Label>
                     }
                     tooltip={
@@ -470,32 +474,36 @@ class SeriesDetails extends Component {
                     title={translate('QualityProfile')}
                     size={sizes.LARGE}
                   >
-                    <Icon
-                      name={icons.PROFILE}
-                      size={17}
-                    />
 
-                    <span className={styles.qualityProfileName}>
-                      {
-                        <QualityProfileNameConnector
-                          qualityProfileId={qualityProfileId}
-                        />
-                      }
-                    </span>
+                    <div>
+                      <Icon
+                        name={icons.PROFILE}
+                        size={17}
+                      />
+                      <span className={styles.qualityProfileName}>
+                        {
+                          <QualityProfileNameConnector
+                            qualityProfileId={qualityProfileId}
+                          />
+                        }
+                      </span>
+                    </div>
                   </Label>
 
                   <Label
                     className={styles.detailsLabel}
                     size={sizes.LARGE}
                   >
-                    <Icon
-                      name={monitored ? icons.MONITORED : icons.UNMONITORED}
-                      size={17}
-                    />
 
-                    <span className={styles.qualityProfileName}>
-                      {monitored ? translate('Monitored') : translate('Unmonitored')}
-                    </span>
+                    <div>
+                      <Icon
+                        name={monitored ? icons.MONITORED : icons.UNMONITORED}
+                        size={17}
+                      />
+                      <span className={styles.qualityProfileName}>
+                        {monitored ? translate('Monitored') : translate('Unmonitored')}
+                      </span>
+                    </div>
                   </Label>
 
                   <Label
@@ -503,14 +511,16 @@ class SeriesDetails extends Component {
                     title={statusDetails.message}
                     size={sizes.LARGE}
                   >
-                    <Icon
-                      name={statusDetails.icon}
-                      size={17}
-                    />
 
-                    <span className={styles.qualityProfileName}>
-                      {statusDetails.title}
-                    </span>
+                    <div>
+                      <Icon
+                        name={statusDetails.icon}
+                        size={17}
+                      />
+                      <span className={styles.qualityProfileName}>
+                        {statusDetails.title}
+                      </span>
+                    </div>
                   </Label>
 
                   {
@@ -520,14 +530,16 @@ class SeriesDetails extends Component {
                         title={translate('Network')}
                         size={sizes.LARGE}
                       >
-                        <Icon
-                          name={icons.NETWORK}
-                          size={17}
-                        />
 
-                        <span className={styles.qualityProfileName}>
-                          {network}
-                        </span>
+                        <div>
+                          <Icon
+                            name={icons.NETWORK}
+                            size={17}
+                          />
+                          <span className={styles.qualityProfileName}>
+                            {network}
+                          </span>
+                        </div>
                       </Label>
                   }
 
@@ -537,14 +549,16 @@ class SeriesDetails extends Component {
                         className={styles.detailsLabel}
                         size={sizes.LARGE}
                       >
-                        <Icon
-                          name={icons.EXTERNAL_LINK}
-                          size={17}
-                        />
 
-                        <span className={styles.links}>
-                          {translate('Links')}
-                        </span>
+                        <div>
+                          <Icon
+                            name={icons.EXTERNAL_LINK}
+                            size={17}
+                          />
+                          <span className={styles.links}>
+                            {translate('Links')}
+                          </span>
+                        </div>
                       </Label>
                     }
                     tooltip={
