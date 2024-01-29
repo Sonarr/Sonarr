@@ -10,7 +10,7 @@ function createIsDownloadingSelector() {
     (state) => state.queue.details,
     (episodeIds, details) => {
       return details.items.some((item) => {
-        return item.episode && episodeIds.includes(item.episode.id);
+        return !!(item.episodeId && episodeIds.includes(item.episodeId));
       });
     }
   );
