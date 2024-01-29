@@ -96,6 +96,17 @@ namespace NzbDrone.Core.Download
                 if (series == null)
                 {
                     trackedDownload.Warn("Series title mismatch; automatic import is not possible. Check the download troubleshooting entry on the wiki for common causes.");
+
+                    if (!trackedDownload.HasNotifiedManualInteractionRequired)
+                    {
+                        trackedDownload.HasNotifiedManualInteractionRequired = true;
+
+                        var releaseInfo = new GrabbedReleaseInfo(grabbedHistories);
+                        var manualInteractionEvent = new ManualInteractionRequiredEvent(trackedDownload, releaseInfo);
+
+                        _eventAggregator.PublishEvent(manualInteractionEvent);
+                    }
+
                     return;
                 }
 
@@ -133,9 +144,27 @@ namespace NzbDrone.Core.Download
                 return;
             }
 
+            var grabbedHistories = _historyService.FindByDownloadId(trackedDownload.DownloadItem.DownloadId).Where(h => h.EventType == EpisodeHistoryEventType.Grabbed).ToList();
+
+            if (grabbedHistories.Count == 0)
+            {
+                grabbedHistories = new List<EpisodeHistory> { new EpisodeHistory() };
+            }
+
             if (trackedDownload.RemoteEpisode == null)
             {
                 trackedDownload.Warn("Unable to parse download, automatic import is not possible.");
+
+                if (!trackedDownload.HasNotifiedManualInteractionRequired)
+                {
+                    trackedDownload.HasNotifiedManualInteractionRequired = true;
+
+                    var releaseInfo = new GrabbedReleaseInfo(grabbedHistories);
+                    var manualInteractionEvent = new ManualInteractionRequiredEvent(trackedDownload, releaseInfo);
+
+                    _eventAggregator.PublishEvent(manualInteractionEvent);
+                }
+
                 return;
             }
 
@@ -192,6 +221,16 @@ namespace NzbDrone.Core.Download
             if (statusMessages.Any())
             {
                 trackedDownload.Warn(statusMessages.ToArray());
+
+                if (!trackedDownload.HasNotifiedManualInteractionRequired)
+                {
+                    trackedDownload.HasNotifiedManualInteractionRequired = true;
+
+                    var releaseInfo = new GrabbedReleaseInfo(grabbedHistories);
+                    var manualInteractionEvent = new ManualInteractionRequiredEvent(trackedDownload, releaseInfo);
+
+                    _eventAggregator.PublishEvent(manualInteractionEvent);
+                }
             }
         }
 
