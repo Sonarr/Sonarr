@@ -76,6 +76,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series T Se.3 afl.3 en 4", "Series T", 3, new[] { 3, 4 })]
         [TestCase("Series Title (S15E06-08) City Sushi", "Series Title", 15, new[] { 6, 7, 8 })]
         [TestCase("Босх: Спадок (S2E1-4) / Series: Legacy (S2E1-4) (2023) WEB-DL 1080p Ukr/Eng | sub Eng", "Series: Legacy", 2, new[] { 1, 2, 3, 4 })]
+        [TestCase("Босх: Спадок / Series: Legacy / S2E1-4 of 10 (2023) WEB-DL 1080p Ukr/Eng | sub Eng", "Series: Legacy", 2, new[] { 1, 2, 3, 4 })]
 
         // [TestCase("", "", , new [] {  })]
         public void should_parse_multiple_episodes(string postTitle, string title, int season, int[] episodes)

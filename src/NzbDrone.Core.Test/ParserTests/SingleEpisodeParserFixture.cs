@@ -165,6 +165,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series Title [HDTV][Cap.402](website.com).avi", "Series Title", 4, 2)]
         [TestCase("Series Title [HDTV 720p][Cap.101](website.com).mkv", "Series Title", 1, 1)]
         [TestCase("Босх: Спадок (S2E1) / Series: Legacy (S2E1) (2023) WEB-DL 1080p Ukr/Eng | sub Eng", "Series: Legacy", 2, 1)]
+        [TestCase("Босх: Спадок / Series: Legacy / S2E1 of 10 (2023) WEB-DL 1080p Ukr/Eng | sub Eng", "Series: Legacy", 2, 1)]
 
         // [TestCase("", "", 0, 0)]
         public void should_parse_single_episode(string postTitle, string title, int seasonNumber, int episodeNumber)
