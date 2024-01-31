@@ -15,12 +15,17 @@ function PendingChangesModal(props) {
     isOpen,
     onConfirm,
     onCancel,
-    bindShortcut
+    bindShortcut,
+    unbindShortcut
   } = props;
 
   useEffect(() => {
-    bindShortcut('enter', onConfirm);
-  }, [bindShortcut, onConfirm]);
+    if (isOpen) {
+      bindShortcut('enter', onConfirm);
+
+      return () => unbindShortcut('enter', onConfirm);
+    }
+  }, [bindShortcut, unbindShortcut, isOpen, onConfirm]);
 
   return (
     <Modal
@@ -61,7 +66,8 @@ PendingChangesModal.propTypes = {
   kind: PropTypes.oneOf(kinds.all),
   onConfirm: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
-  bindShortcut: PropTypes.func.isRequired
+  bindShortcut: PropTypes.func.isRequired,
+  unbindShortcut: PropTypes.func.isRequired
 };
 
 PendingChangesModal.defaultProps = {
