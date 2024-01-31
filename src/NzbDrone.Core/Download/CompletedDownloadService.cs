@@ -73,11 +73,6 @@ namespace NzbDrone.Core.Download
             var grabbedHistories = _historyService.FindByDownloadId(trackedDownload.DownloadItem.DownloadId).Where(h => h.EventType == EpisodeHistoryEventType.Grabbed).ToList();
             var historyItem = grabbedHistories.MaxBy(h => h.Date);
 
-            if (grabbedHistories.Count == 0)
-            {
-                grabbedHistories = new List<EpisodeHistory> { new EpisodeHistory() };
-            }
-
             if (historyItem == null && trackedDownload.DownloadItem.Category.IsNullOrWhiteSpace())
             {
                 trackedDownload.Warn("Download wasn't grabbed by Sonarr and not in a category, Skipping.");
@@ -101,16 +96,7 @@ namespace NzbDrone.Core.Download
                 if (series == null)
                 {
                     trackedDownload.Warn("Series title mismatch; automatic import is not possible. Check the download troubleshooting entry on the wiki for common causes.");
-
-                    if (!trackedDownload.HasNotifiedManualInteractionRequired)
-                    {
-                        trackedDownload.HasNotifiedManualInteractionRequired = true;
-
-                        var releaseInfo = new GrabbedReleaseInfo(grabbedHistories);
-                        var manualInteractionEvent = new ManualInteractionRequiredEvent(trackedDownload, releaseInfo);
-
-                        _eventAggregator.PublishEvent(manualInteractionEvent);
-                    }
+                    SendManualInteractionRequiredNotification(trackedDownload);
 
                     return;
                 }
@@ -122,16 +108,7 @@ namespace NzbDrone.Core.Download
                 if (seriesMatchType == SeriesMatchType.Id && releaseSource != ReleaseSourceType.InteractiveSearch)
                 {
                     trackedDownload.Warn("Found matching series via grab history, but release was matched to series by ID. Automatic import is not possible. See the FAQ for details.");
-
-                    if (!trackedDownload.HasNotifiedManualInteractionRequired)
-                    {
-                        trackedDownload.HasNotifiedManualInteractionRequired = true;
-
-                        var releaseInfo = new GrabbedReleaseInfo(grabbedHistories);
-                        var manualInteractionEvent = new ManualInteractionRequiredEvent(trackedDownload, releaseInfo);
-
-                        _eventAggregator.PublishEvent(manualInteractionEvent);
-                    }
+                    SendManualInteractionRequiredNotification(trackedDownload);
 
                     return;
                 }
@@ -149,26 +126,10 @@ namespace NzbDrone.Core.Download
                 return;
             }
 
-            var grabbedHistories = _historyService.FindByDownloadId(trackedDownload.DownloadItem.DownloadId).Where(h => h.EventType == EpisodeHistoryEventType.Grabbed).ToList();
-
-            if (grabbedHistories.Count == 0)
-            {
-                grabbedHistories = new List<EpisodeHistory> { new EpisodeHistory() };
-            }
-
             if (trackedDownload.RemoteEpisode == null)
             {
                 trackedDownload.Warn("Unable to parse download, automatic import is not possible.");
-
-                if (!trackedDownload.HasNotifiedManualInteractionRequired)
-                {
-                    trackedDownload.HasNotifiedManualInteractionRequired = true;
-
-                    var releaseInfo = new GrabbedReleaseInfo(grabbedHistories);
-                    var manualInteractionEvent = new ManualInteractionRequiredEvent(trackedDownload, releaseInfo);
-
-                    _eventAggregator.PublishEvent(manualInteractionEvent);
-                }
+                SendManualInteractionRequiredNotification(trackedDownload);
 
                 return;
             }
@@ -226,16 +187,7 @@ namespace NzbDrone.Core.Download
             if (statusMessages.Any())
             {
                 trackedDownload.Warn(statusMessages.ToArray());
-
-                if (!trackedDownload.HasNotifiedManualInteractionRequired)
-                {
-                    trackedDownload.HasNotifiedManualInteractionRequired = true;
-
-                    var releaseInfo = new GrabbedReleaseInfo(grabbedHistories);
-                    var manualInteractionEvent = new ManualInteractionRequiredEvent(trackedDownload, releaseInfo);
-
-                    _eventAggregator.PublishEvent(manualInteractionEvent);
-                }
+                SendManualInteractionRequiredNotification(trackedDownload);
             }
         }
 
@@ -300,6 +252,26 @@ namespace NzbDrone.Core.Download
 
             _logger.Debug("Not all episodes have been imported for the release '{0}'", trackedDownload.DownloadItem.Title);
             return false;
+        }
+
+        private void SendManualInteractionRequiredNotification(TrackedDownload trackedDownload)
+        {
+            if (!trackedDownload.HasNotifiedManualInteractionRequired)
+            {
+                var grabbedHistories = _historyService.FindByDownloadId(trackedDownload.DownloadItem.DownloadId).Where(h => h.EventType == EpisodeHistoryEventType.Grabbed).ToList();
+
+                if (grabbedHistories.Count == 0)
+                {
+                    grabbedHistories = new List<EpisodeHistory> { new EpisodeHistory() };
+                }
+
+                trackedDownload.HasNotifiedManualInteractionRequired = true;
+
+                var releaseInfo = new GrabbedReleaseInfo(grabbedHistories);
+                var manualInteractionEvent = new ManualInteractionRequiredEvent(trackedDownload, releaseInfo);
+
+                _eventAggregator.PublishEvent(manualInteractionEvent);
+            }
         }
 
         private void SetImportItem(TrackedDownload trackedDownload)
