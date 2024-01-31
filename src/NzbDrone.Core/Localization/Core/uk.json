@@ -21,5 +21,22 @@
     "AddCustomFilter": "Додати власний фільтр",
     "AddCustomFormat": "Додати власний формат",
     "AddDelayProfile": "Додати Профіль Затримки",
-    "AddCustomFormatError": "Неможливо додати новий власний формат, спробуйте ще раз."
+    "AddCustomFormatError": "Неможливо додати новий власний формат, спробуйте ще раз.",
+    "AddListExclusion": "Додати виняток зі списку",
+    "AbsoluteEpisodeNumbers": "Загальні номери епізодів",
+    "AbsoluteEpisodeNumber": "Загальний номер епізоду",
+    "AddImportList": "Додати список імпорту",
+    "AddIndexer": "Додати Індексер",
+    "AddNew": "Додати",
+    "AddNewRestriction": "Додати нове обмеження",
+    "AddNewSeries": "Додати новий серіал",
+    "AddDownloadClientImplementation": "Додати клієнт завантаження - {implementationName}",
+    "AddImportListExclusionError": "Не вдалось додати виняток нового списку імпорту, спробуйте ще раз.",
+    "AddImportListImplementation": "Додати список імпорту - {implementationName}",
+    "AddIndexerError": "Неможливо додати новий індексер, спробуйте ще раз.",
+    "AddIndexerImplementation": "Додати індексер - {implementationName}",
+    "AddList": "Додати список",
+    "AddListError": "Неможливо додати новий список, спробуйте ще раз.",
+    "AddListExclusionError": "Неможливо додати новий виняток зі списку, спробуйте ще раз.",
+    "AddListExclusionSeriesHelpText": "Заборонити додавання серіалів до {appName} зі списків"
 }
