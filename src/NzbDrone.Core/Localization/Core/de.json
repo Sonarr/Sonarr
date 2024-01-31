@@ -792,5 +792,6 @@
     "Branch": "Branch",
     "Airs": "Wird ausgestrahlt",
     "AddRootFolderError": "Stammverzeichnis kann nicht hinzugefügt werden",
-    "IconForCutoffUnmet": "Symbol für Schwelle nicht erreicht"
+    "IconForCutoffUnmet": "Symbol für Schwelle nicht erreicht",
+    "DownloadClientSettingsAddPaused": "Pausiert hinzufügen"
 }
