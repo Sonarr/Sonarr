@@ -260,14 +260,9 @@ namespace NzbDrone.Core.Download
             {
                 var grabbedHistories = _historyService.FindByDownloadId(trackedDownload.DownloadItem.DownloadId).Where(h => h.EventType == EpisodeHistoryEventType.Grabbed).ToList();
 
-                if (grabbedHistories.Count == 0)
-                {
-                    grabbedHistories = new List<EpisodeHistory> { new EpisodeHistory() };
-                }
-
                 trackedDownload.HasNotifiedManualInteractionRequired = true;
 
-                var releaseInfo = new GrabbedReleaseInfo(grabbedHistories);
+                var releaseInfo = grabbedHistories.Count > 0 ? new GrabbedReleaseInfo(grabbedHistories) : null;
                 var manualInteractionEvent = new ManualInteractionRequiredEvent(trackedDownload, releaseInfo);
 
                 _eventAggregator.PublishEvent(manualInteractionEvent);
