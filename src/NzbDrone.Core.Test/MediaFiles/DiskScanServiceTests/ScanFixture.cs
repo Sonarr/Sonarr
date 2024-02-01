@@ -186,6 +186,7 @@ namespace NzbDrone.Core.Test.MediaFiles.DiskScanServiceTests
                            Path.Combine(_series.Path, "Scenes", "file6.mkv").AsOsAgnostic(),
                            Path.Combine(_series.Path, "Shorts", "file7.mkv").AsOsAgnostic(),
                            Path.Combine(_series.Path, "Trailers", "file8.mkv").AsOsAgnostic(),
+                           Path.Combine(_series.Path, "Other", "file9.mkv").AsOsAgnostic(),
                            Path.Combine(_series.Path, "Series Title S01E01 (1080p BluRay x265 10bit Tigole).mkv").AsOsAgnostic(),
                        });
 
