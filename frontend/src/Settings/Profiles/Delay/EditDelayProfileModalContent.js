@@ -88,7 +88,7 @@ function EditDelayProfileModalContent(props) {
         {
           !isFetching && !!error ?
             <div>
-              {translate('AddQualityProfileError')}
+              {translate('AddDelayProfileError')}
             </div> :
             null
         }
