@@ -605,7 +605,7 @@
     "Importing": "Importando",
     "IncludeCustomFormatWhenRenaming": "Incluir formato personalizado ao renomear",
     "IncludeCustomFormatWhenRenamingHelpText": "Incluir no formato de renomeação {Custom Formats}",
-    "IncludeHealthWarnings": "Incluir avisos de integridade",
+    "IncludeHealthWarnings": "Incluir Advertências de Saúde",
     "IndexerDownloadClientHelpText": "Especifique qual cliente de download é usado para baixar deste indexador",
     "IndexerOptionsLoadError": "Não foi possível carregar as opções do indexador",
     "IndexerPriority": "Prioridade do indexador",
