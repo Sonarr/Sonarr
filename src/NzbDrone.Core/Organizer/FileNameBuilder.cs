@@ -25,7 +25,6 @@ namespace NzbDrone.Core.Organizer
         string BuildFileName(List<Episode> episodes, Series series, EpisodeFile episodeFile, string extension = "", NamingConfig namingConfig = null, List<CustomFormat> customFormats = null);
         string BuildFilePath(List<Episode> episodes, Series series, EpisodeFile episodeFile, string extension, NamingConfig namingConfig = null, List<CustomFormat> customFormats = null);
         string BuildSeasonPath(Series series, int seasonNumber);
-        BasicNamingConfig GetBasicNamingConfig(NamingConfig nameSpec);
         string GetSeriesFolder(Series series, NamingConfig namingConfig = null);
         string GetSeasonFolder(Series series, int seasonNumber, NamingConfig namingConfig = null);
         bool RequiresEpisodeTitle(Series series, List<Episode> episodes);
@@ -251,52 +250,6 @@ namespace NzbDrone.Core.Organizer
             }
 
             return path;
-        }
-
-        public BasicNamingConfig GetBasicNamingConfig(NamingConfig nameSpec)
-        {
-            var episodeFormat = GetEpisodeFormat(nameSpec.StandardEpisodeFormat).LastOrDefault();
-
-            if (episodeFormat == null)
-            {
-                return new BasicNamingConfig();
-            }
-
-            var basicNamingConfig = new BasicNamingConfig
-                                    {
-                                        Separator = episodeFormat.Separator,
-                                        NumberStyle = episodeFormat.SeasonEpisodePattern
-                                    };
-
-            var titleTokens = TitleRegex.Matches(nameSpec.StandardEpisodeFormat);
-
-            foreach (Match match in titleTokens)
-            {
-                var separator = match.Groups["separator"].Value;
-                var token = match.Groups["token"].Value;
-
-                if (!separator.Equals(" "))
-                {
-                    basicNamingConfig.ReplaceSpaces = true;
-                }
-
-                if (token.StartsWith("{Series", StringComparison.InvariantCultureIgnoreCase))
-                {
-                    basicNamingConfig.IncludeSeriesTitle = true;
-                }
-
-                if (token.StartsWith("{Episode", StringComparison.InvariantCultureIgnoreCase))
-                {
-                    basicNamingConfig.IncludeEpisodeTitle = true;
-                }
-
-                if (token.StartsWith("{Quality", StringComparison.InvariantCultureIgnoreCase))
-                {
-                    basicNamingConfig.IncludeQuality = true;
-                }
-            }
-
-            return basicNamingConfig;
         }
 
         public string GetSeriesFolder(Series series, NamingConfig namingConfig = null)

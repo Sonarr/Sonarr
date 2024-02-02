@@ -49,12 +49,6 @@ namespace Sonarr.Api.V3.Config
             var nameSpec = _namingConfigService.GetConfig();
             var resource = nameSpec.ToResource();
 
-            if (resource.StandardEpisodeFormat.IsNotNullOrWhiteSpace())
-            {
-                var basicConfig = _filenameBuilder.GetBasicNamingConfig(nameSpec);
-                basicConfig.AddToResource(resource);
-            }
-
             return resource;
         }
 
