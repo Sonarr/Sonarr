@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Authentication;
 using NzbDrone.Core.Configuration;
 
@@ -46,7 +47,17 @@ namespace Sonarr.Http.Authentication
 
             await HttpContext.SignInAsync(AuthenticationType.Forms.ToString(), new ClaimsPrincipal(new ClaimsIdentity(claims, "Cookies", "user", "identifier")), authProperties);
 
-            return Redirect(_configFileProvider.UrlBase + "/");
+            if (returnUrl.IsNullOrWhiteSpace())
+            {
+                return Redirect(_configFileProvider.UrlBase + "/");
+            }
+
+            if (_configFileProvider.UrlBase.IsNullOrWhiteSpace() || returnUrl.StartsWith(_configFileProvider.UrlBase))
+            {
+                return Redirect(returnUrl);
+            }
+
+            return Redirect(_configFileProvider.UrlBase + returnUrl);
         }
 
         [HttpGet("logout")]
