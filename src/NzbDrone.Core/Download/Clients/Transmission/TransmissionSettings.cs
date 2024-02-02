@@ -45,7 +45,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
         [FieldToken(TokenField.HelpText, "UseSsl", "clientName", "Transmission")]
         public bool UseSsl { get; set; }
 
-        [FieldDefinition(3, Label = "UrlBase", Type = FieldType.Textbox, Advanced = true, HelpText = "DownloadClientTransmissionSettingsDirectoryHelpText")]
+        [FieldDefinition(3, Label = "UrlBase", Type = FieldType.Textbox, Advanced = true, HelpText = "DownloadClientTransmissionSettingsUrlBaseHelpText")]
         [FieldToken(TokenField.HelpText, "UrlBase", "clientName", "Transmission")]
         [FieldToken(TokenField.HelpText, "UrlBase", "url", "http://[host]:[port]/[urlBase]/rpc")]
         [FieldToken(TokenField.HelpText, "UrlBase", "defaultUrl", "/transmission/")]
