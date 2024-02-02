@@ -4738,48 +4738,6 @@
             }
           },
           {
-            "name": "includeSeriesTitle",
-            "in": "query",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "includeEpisodeTitle",
-            "in": "query",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "includeQuality",
-            "in": "query",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "replaceSpaces",
-            "in": "query",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "separator",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "numberStyle",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "id",
             "in": "query",
             "schema": {
@@ -9823,26 +9781,6 @@
             "nullable": true
           },
           "specialsFolderFormat": {
-            "type": "string",
-            "nullable": true
-          },
-          "includeSeriesTitle": {
-            "type": "boolean"
-          },
-          "includeEpisodeTitle": {
-            "type": "boolean"
-          },
-          "includeQuality": {
-            "type": "boolean"
-          },
-          "replaceSpaces": {
-            "type": "boolean"
-          },
-          "separator": {
-            "type": "string",
-            "nullable": true
-          },
-          "numberStyle": {
             "type": "string",
             "nullable": true
           }

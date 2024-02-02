@@ -32,24 +32,7 @@ namespace Sonarr.Api.V3.Config
                 SeriesFolderFormat = model.SeriesFolderFormat,
                 SeasonFolderFormat = model.SeasonFolderFormat,
                 SpecialsFolderFormat = model.SpecialsFolderFormat
-
-                // IncludeSeriesTitle
-                // IncludeEpisodeTitle
-                // IncludeQuality
-                // ReplaceSpaces
-                // Separator
-                // NumberStyle
             };
-        }
-
-        public static void AddToResource(this BasicNamingConfig basicNamingConfig, NamingConfigResource resource)
-        {
-            resource.IncludeSeriesTitle = basicNamingConfig.IncludeSeriesTitle;
-            resource.IncludeEpisodeTitle = basicNamingConfig.IncludeEpisodeTitle;
-            resource.IncludeQuality = basicNamingConfig.IncludeQuality;
-            resource.ReplaceSpaces = basicNamingConfig.ReplaceSpaces;
-            resource.Separator = basicNamingConfig.Separator;
-            resource.NumberStyle = basicNamingConfig.NumberStyle;
         }
 
         public static NamingConfig ToModel(this NamingConfigResource resource)
