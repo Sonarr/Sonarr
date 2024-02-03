@@ -7,7 +7,7 @@ using NzbDrone.Common.Instrumentation;
 namespace NzbDrone.Core.Datastore.Migration
 {
     [Maintenance(MigrationStage.BeforeAll, TransactionBehavior.None)]
-    public class DatabaseEngineversionCheck : FluentMigrator.Migration
+    public class DatabaseEngineVersionCheck : FluentMigrator.Migration
     {
         protected readonly Logger _logger;
 
