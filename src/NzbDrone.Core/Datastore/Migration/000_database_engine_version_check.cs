@@ -11,7 +11,7 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected readonly Logger _logger;
 
-        public DatabaseEngineversionCheck()
+        public DatabaseEngineVersionCheck()
         {
             _logger = NzbDroneLogger.GetLogger(this);
         }
