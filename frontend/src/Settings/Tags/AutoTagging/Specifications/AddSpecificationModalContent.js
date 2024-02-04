@@ -55,9 +55,9 @@ export default function AddSpecificationModalContent(props) {
 
         {
           !isSchemaFetching && !!schemaError ?
-            <div>
+            <Alert kind={kinds.DANGER}>
               {translate('AddConditionError')}
-            </div> :
+            </Alert> :
             null
         }
 

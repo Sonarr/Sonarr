@@ -43,9 +43,9 @@ class AddIndexerModalContent extends Component {
 
           {
             !isSchemaFetching && !!schemaError &&
-              <div>
+              <Alert kind={kinds.DANGER}>
                 {translate('AddIndexerError')}
-              </div>
+              </Alert>
           }
 
           {

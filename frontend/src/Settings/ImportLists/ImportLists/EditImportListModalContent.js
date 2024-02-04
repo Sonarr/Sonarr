@@ -74,9 +74,9 @@ function EditImportListModalContent(props) {
 
         {
           !isFetching && !!error ?
-            <div>
+            <Alert kind={kinds.DANGER}>
               {translate('AddListError')}
-            </div> :
+            </Alert> :
             null
         }
 

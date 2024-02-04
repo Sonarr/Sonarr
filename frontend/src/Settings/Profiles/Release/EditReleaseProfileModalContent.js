@@ -48,7 +48,7 @@ function EditReleaseProfileModalContent(props) {
         <Form {...otherProps}>
 
           <FormGroup>
-            <FormLabel>Name</FormLabel>
+            <FormLabel>{translate('Name')}</FormLabel>
 
             <FormInputGroup
               type={inputTypes.TEXT}

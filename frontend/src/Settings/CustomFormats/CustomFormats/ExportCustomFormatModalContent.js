@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import Alert from 'Components/Alert';
 import Button from 'Components/Link/Button';
 import ClipboardButton from 'Components/Link/ClipboardButton';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
@@ -41,9 +42,9 @@ class ExportCustomFormatModalContent extends Component {
 
             {
               !isFetching && !!error &&
-                <div>
+                <Alert kind={kinds.DANGER}>
                   {translate('CustomFormatsLoadError')}
-                </div>
+                </Alert>
             }
 
             {

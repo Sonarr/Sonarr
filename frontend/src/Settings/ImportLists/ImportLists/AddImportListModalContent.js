@@ -44,9 +44,9 @@ class AddImportListModalContent extends Component {
 
           {
             !isSchemaFetching && !!schemaError ?
-              <div>
+              <Alert kind={kinds.DANGER}>
                 {translate('AddListError')}
-              </div> :
+              </Alert> :
               null
           }
 

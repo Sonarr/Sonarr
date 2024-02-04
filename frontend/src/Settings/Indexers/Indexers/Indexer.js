@@ -42,7 +42,7 @@ class Indexer extends Component {
     });
   };
 
-  onDeleteIndexerModalClose= () => {
+  onDeleteIndexerModalClose = () => {
     this.setState({ isDeleteIndexerModalOpen: false });
   };
 

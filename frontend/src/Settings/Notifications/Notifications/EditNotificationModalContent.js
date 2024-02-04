@@ -59,9 +59,9 @@ function EditNotificationModalContent(props) {
 
         {
           !isFetching && !!error &&
-            <div>
+            <Alert kind={kinds.DANGER}>
               {translate('AddNotificationError')}
-            </div>
+            </Alert>
         }
 
         {

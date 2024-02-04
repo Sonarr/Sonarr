@@ -109,7 +109,7 @@ class OrganizePreviewModalContent extends Component {
 
           {
             !isFetching && error &&
-              <div>{translate('OrganizeLoadError')}</div>
+              <Alert kind={kinds.DANGER}>{translate('OrganizeLoadError')}</Alert>
           }
 
           {

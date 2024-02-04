@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import Alert from 'Components/Alert';
 import Form from 'Components/Form/Form';
 import FormGroup from 'Components/Form/FormGroup';
 import FormInputGroup from 'Components/Form/FormInputGroup';
@@ -11,7 +12,7 @@ import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
-import { inputTypes, sizes } from 'Helpers/Props';
+import { inputTypes, kinds, sizes } from 'Helpers/Props';
 import translate from 'Utilities/String/translate';
 import styles from './ImportCustomFormatModalContent.css';
 
@@ -95,9 +96,9 @@ class ImportCustomFormatModalContent extends Component {
 
             {
               !isFetching && !!error &&
-                <div>
+                <Alert kind={kinds.DANGER}>
                   {translate('CustomFormatsLoadError')}
-                </div>
+                </Alert>
             }
 
             {

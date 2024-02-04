@@ -42,9 +42,9 @@ class AddSpecificationModalContent extends Component {
 
           {
             !isSchemaFetching && !!schemaError &&
-              <div>
+              <Alert kind={kinds.DANGER}>
                 {translate('AddConditionError')}
-              </div>
+              </Alert>
           }
 
           {
