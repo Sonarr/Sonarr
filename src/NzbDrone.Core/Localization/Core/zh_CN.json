@@ -2,7 +2,7 @@
     "CloneCondition": "克隆条件",
     "DeleteCondition": "删除条件",
     "DeleteConditionMessageText": "你确定要删除条件 “{name}” 吗？",
-    "DeleteCustomFormatMessageText": "是否确实要删除条件“{customFormatName}”？",
+    "DeleteCustomFormatMessageText": "是否确实要删除条件“{name}”？",
     "ApiKeyValidationHealthCheckMessage": "请将API密钥更新为至少{length}个字符长。您可以通过设置或配置文件执行此操作",
     "RemoveSelectedItemQueueMessageText": "您确定要从队列中删除一个项目吗?",
     "RemoveSelectedItemsQueueMessageText": "您确定要从队列中删除{selectedCount}项吗?",

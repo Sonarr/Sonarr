@@ -1233,7 +1233,7 @@
     "EnableInteractiveSearch": "Activer la recherche interactive",
     "CloneCondition": "État du clone",
     "DeleteCustomFormat": "Supprimer le format personnalisé",
-    "DeleteCustomFormatMessageText": "Êtes-vous sûr de vouloir supprimer le format personnalisé '{customFormatName}' ?",
+    "DeleteCustomFormatMessageText": "Êtes-vous sûr de vouloir supprimer le format personnalisé '{name}' ?",
     "Conditions": "Conditions",
     "CountImportListsSelected": "{count} liste(s) d'importation sélectionnée(s)",
     "DeleteSeriesFolderConfirmation": "Le dossier de la série `{path}` et tout son contenu seront supprimés.",

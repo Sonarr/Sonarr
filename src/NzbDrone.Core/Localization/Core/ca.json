@@ -322,7 +322,7 @@
     "CustomFormatUnknownConditionOption": "Opció desconeguda '{key}' per a la condició '{implementation}'",
     "Cutoff": "Requisit",
     "DelayingDownloadUntil": "S'està retardant la baixada fins al {date} a les {time}",
-    "DeleteCustomFormatMessageText": "Esteu segur que voleu suprimir el format personalitzat '{customFormatName}'?",
+    "DeleteCustomFormatMessageText": "Esteu segur que voleu suprimir el format personalitzat '{name}'?",
     "DeleteQualityProfileMessageText": "Esteu segur que voleu suprimir el perfil de qualitat '{name}'?",
     "DeleteRemotePathMappingMessageText": "Esteu segur que voleu suprimir aquesta assignació de camins remots?",
     "DeleteRootFolderMessageText": "Esteu segur que voleu suprimir la carpeta arrel '{path}'?",
