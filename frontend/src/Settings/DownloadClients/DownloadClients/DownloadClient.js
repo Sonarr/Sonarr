@@ -41,7 +41,7 @@ class DownloadClient extends Component {
     });
   };
 
-  onDeleteDownloadClientModalClose= () => {
+  onDeleteDownloadClientModalClose = () => {
     this.setState({ isDeleteDownloadClientModalOpen: false });
   };
 

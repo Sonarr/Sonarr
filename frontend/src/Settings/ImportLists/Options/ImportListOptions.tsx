@@ -2,13 +2,14 @@ import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
 import AppState from 'App/State/AppState';
+import Alert from 'Components/Alert';
 import FieldSet from 'Components/FieldSet';
 import Form from 'Components/Form/Form';
 import FormGroup from 'Components/Form/FormGroup';
 import FormInputGroup from 'Components/Form/FormInputGroup';
 import FormLabel from 'Components/Form/FormLabel';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
-import { inputTypes } from 'Helpers/Props';
+import { inputTypes, kinds } from 'Helpers/Props';
 import { clearPendingChanges } from 'Store/Actions/baseActions';
 import {
   fetchImportListOptions,
@@ -110,7 +111,7 @@ function ImportListOptions(props: ImportListOptionsPageProps) {
       {isFetching ? <LoadingIndicator /> : null}
 
       {!isFetching && error ? (
-        <div>{translate('UnableToLoadListOptions')}</div>
+        <Alert kind={kinds.DANGER}>{translate('ListOptionsLoadError')}</Alert>
       ) : null}
 
       {hasSettings && !isFetching && !error ? (

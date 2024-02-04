@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
@@ -11,7 +10,6 @@ const newReleaseProfile = {
   enabled: true,
   required: [],
   ignored: [],
-  includePreferredWhenRenaming: false,
   tags: [],
   indexerId: 0
 };
@@ -30,7 +28,7 @@ function createMapStateToProps() {
         items
       } = releaseProfiles;
 
-      const profile = id ? _.find(items, { id }) : newReleaseProfile;
+      const profile = id ? items.find((i) => i.id === id) : newReleaseProfile;
       const settings = selectSettings(profile, pendingChanges, saveError);
 
       return {

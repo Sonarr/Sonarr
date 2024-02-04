@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import Alert from 'Components/Alert';
 import Card from 'Components/Card';
 import FieldSet from 'Components/FieldSet';
 import Form from 'Components/Form/Form';
@@ -122,9 +123,9 @@ export default function EditAutoTaggingModalContent(props) {
 
           {
             !isFetching && !!error ?
-              <div>
+              <Alert kind={kinds.DANGER}>
                 {translate('AddAutoTagError')}
-              </div> :
+              </Alert> :
               null
           }
 

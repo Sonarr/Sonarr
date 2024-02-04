@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
@@ -33,7 +32,7 @@ function createDelayProfileSelector() {
         items
       } = delayProfiles;
 
-      const profile = id ? _.find(items, { id }) : newDelayProfile;
+      const profile = id ? items.find((i) => i.id === id) : newDelayProfile;
       const settings = selectSettings(profile, pendingChanges, saveError);
 
       return {

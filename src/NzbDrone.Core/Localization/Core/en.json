@@ -1955,7 +1955,6 @@
   "Umask777Description": "{octal} - Everyone write",
   "UnableToLoadAutoTagging": "Unable to load auto tagging",
   "UnableToLoadBackups": "Unable to load backups",
-  "UnableToLoadListOptions": "Unable to load list options",
   "UnableToUpdateSonarrDirectly": "Unable to update {appName} directly,",
   "Unavailable": "Unavailable",
   "Underscore": "Underscore",

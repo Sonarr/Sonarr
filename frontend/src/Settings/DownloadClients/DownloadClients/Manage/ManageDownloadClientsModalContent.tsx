@@ -277,7 +277,7 @@ function ManageDownloadClientsModalContent(
             isDisabled={!anySelected}
             onPress={onTagsPress}
           >
-            Set Tags
+            {translate('SetTags')}
           </SpinnerButton>
         </div>
 

@@ -5,7 +5,6 @@ import FieldSet from 'Components/FieldSet';
 import Icon from 'Components/Icon';
 import PageSectionContent from 'Components/Page/PageSectionContent';
 import { icons } from 'Helpers/Props';
-import sortByName from 'Utilities/Array/sortByName';
 import translate from 'Utilities/String/translate';
 import AddImportListModal from './AddImportListModal';
 import EditImportListModalConnector from './EditImportListModalConnector';
@@ -67,7 +66,7 @@ class ImportLists extends Component {
         >
           <div className={styles.lists}>
             {
-              items.sort(sortByName).map((item) => {
+              items.map((item) => {
                 return (
                   <ImportList
                     key={item.id}

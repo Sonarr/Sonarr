@@ -69,9 +69,9 @@ class EditDownloadClientModalContent extends Component {
 
           {
             !isFetching && !!error &&
-              <div>
+              <Alert kind={kinds.DANGER}>
                 {translate('AddDownloadClientError')}
-              </div>
+              </Alert>
           }
 
           {

@@ -43,9 +43,9 @@ class AddDownloadClientModalContent extends Component {
 
           {
             !isSchemaFetching && !!schemaError &&
-              <div>
+              <Alert kind={kinds.DANGER}>
                 {translate('AddDownloadClientError')}
-              </div>
+              </Alert>
           }
 
           {

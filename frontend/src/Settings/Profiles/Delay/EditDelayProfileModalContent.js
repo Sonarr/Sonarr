@@ -87,9 +87,9 @@ function EditDelayProfileModalContent(props) {
 
         {
           !isFetching && !!error ?
-            <div>
+            <Alert kind={kinds.DANGER}>
               {translate('AddDelayProfileError')}
-            </div> :
+            </Alert> :
             null
         }
 

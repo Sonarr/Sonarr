@@ -40,7 +40,7 @@ class Tag extends Component {
     });
   };
 
-  onDeleteTagModalClose= () => {
+  onDeleteTagModalClose = () => {
     this.setState({ isDeleteTagModalOpen: false });
   };
 
