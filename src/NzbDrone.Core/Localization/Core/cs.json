@@ -245,7 +245,7 @@
     "CustomFormatJson": "Vlastní JSON formát",
     "Debug": "Ladit",
     "Day": "Den",
-    "DeleteCustomFormatMessageText": "Opravdu chcete odstranit vlastní formát '{customFormatName}'?",
+    "DeleteCustomFormatMessageText": "Opravdu chcete odstranit vlastní formát '{name}'?",
     "DefaultNameCopiedProfile": "{name} - Kopírovat",
     "DefaultNameCopiedSpecification": "{name} - Kopírovat",
     "DefaultNotFoundMessage": "Asi jsi se ztratil, není tu nic k vidění.",

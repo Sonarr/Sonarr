@@ -6,7 +6,7 @@
     "DeleteCondition": "Feltétel törlése",
     "DeleteConditionMessageText": "Biztosan törli a(z) „{name}” feltételt?",
     "DeleteCustomFormat": "Egyéni formátum törlése",
-    "DeleteCustomFormatMessageText": "Biztosan törölni akarod a/az '{customFormatName}' egyéni formátumot?",
+    "DeleteCustomFormatMessageText": "Biztosan törölni akarod a/az '{name}' egyéni formátumot?",
     "ExportCustomFormat": "Egyéni formátum exportálása",
     "IndexerJackettAllHealthCheckMessage": "A nem támogatott Jackett 'all' végpontot használó indexelők: {indexerNames}",
     "Remove": "Eltávolítás",

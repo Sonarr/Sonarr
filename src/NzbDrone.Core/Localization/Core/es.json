@@ -476,7 +476,7 @@
     "DeleteDelayProfile": "Eliminar Perfil de Retardo",
     "DownloadClientQbittorrentSettingsContentLayoutHelpText": "Si usar el diseño de contenido configurado de qBittorrent, el diseño original del torrent o siempre crear una subcarpeta (qBittorrent 4.3.2+)",
     "DelayProfiles": "Perfiles de retardo",
-    "DeleteCustomFormatMessageText": "¿Estás seguro de que quieres eliminar el formato personalizado '{customFormatName}'?",
+    "DeleteCustomFormatMessageText": "¿Estás seguro de que quieres eliminar el formato personalizado '{name}'?",
     "DeleteBackup": "Eliminar copia de seguridad",
     "CopyUsingHardlinksSeriesHelpText": "Los hardlinks permiten a {appName} a importar los torrents que se estén compartiendo a la carpeta de la serie sin usar espacio adicional en el disco o sin copiar el contenido completo del archivo. Los hardlinks solo funcionarán si el origen y el destino están en el mismo volumen",
     "DefaultDelayProfileSeries": "Este es el perfil por defecto. Aplica a todas las series que no tienen un perfil explícito.",

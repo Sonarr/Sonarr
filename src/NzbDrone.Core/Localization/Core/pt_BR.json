@@ -94,7 +94,7 @@
     "DeleteCondition": "Excluir condição",
     "DeleteConditionMessageText": "Tem certeza de que deseja excluir a condição '{name}'?",
     "DeleteCustomFormat": "Excluir formato personalizado",
-    "DeleteCustomFormatMessageText": "Tem certeza de que deseja excluir o formato personalizado '{customFormatName}'?",
+    "DeleteCustomFormatMessageText": "Tem certeza de que deseja excluir o formato personalizado '{name}'?",
     "ExportCustomFormat": "Exportar formato personalizado",
     "Negated": "Negado",
     "Remove": "Remover",

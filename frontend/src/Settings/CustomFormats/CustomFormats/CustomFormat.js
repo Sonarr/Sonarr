@@ -152,7 +152,7 @@ class CustomFormat extends Component {
           isOpen={this.state.isDeleteCustomFormatModalOpen}
           kind={kinds.DANGER}
           title={translate('DeleteCustomFormat')}
-          message={translate('DeleteCustomFormatMessageText', { customFormatName: name })}
+          message={translate('DeleteCustomFormatMessageText', { name })}
           confirmLabel={translate('Delete')}
           isSpinning={isDeleting}
           onConfirm={this.onConfirmDeleteCustomFormat}

@@ -11,7 +11,7 @@
     "RemoveFailedDownloads": "Αφαίρεση Αποτυχημένων Λήψεων",
     "DeleteCondition": "Διαγραφή συνθήκης",
     "DeleteConditionMessageText": "Είστε σίγουροι πως θέλετε να διαγράψετε τη συνθήκη '{name}';",
-    "DeleteCustomFormatMessageText": "Είστε σίγουροι πως θέλετε να διαγράψετε τη προσαρμοσμένη μορφή '{customFormatName}';",
+    "DeleteCustomFormatMessageText": "Είστε σίγουροι πως θέλετε να διαγράψετε τη προσαρμοσμένη μορφή '{name}';",
     "RemoveSelectedItemsQueueMessageText": "Είστε σίγουροι πως θέλετε να διαγράψετε {selectedCount} αντικείμενα από την ουρά;",
     "CloneCondition": "Κλωνοποίηση συνθήκης",
     "RemoveSelectedItemQueueMessageText": "Είστε σίγουροι πως θέλετε να διαγράψετε 1 αντικείμενο από την ουρά;",

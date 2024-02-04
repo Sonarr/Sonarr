@@ -5,7 +5,7 @@
     "MoveAutomatically": "Sposta Automaticamente",
     "ApplyTagsHelpTextRemove": "Rimuovi: Rimuove le etichette inserite",
     "ApplyTagsHelpTextAdd": "Aggiungi: Aggiunge le etichette alla lista esistente di etichette",
-    "DeleteCustomFormatMessageText": "Sei sicuro di voler eliminare il formato personalizzato '{customFormatName}'?",
+    "DeleteCustomFormatMessageText": "Sei sicuro di voler eliminare il formato personalizzato '{name}'?",
     "DeleteSelectedDownloadClients": "Cancella i Client di Download",
     "Added": "Aggiunto",
     "AutomaticAdd": "Aggiungi Automaticamente",

@@ -23,7 +23,7 @@
     "CloneCondition": "Bedingung klonen",
     "DeleteCondition": "Bedingung löschen",
     "DeleteConditionMessageText": "Bist du sicher, dass du die Bedingung '{name}' löschen willst?",
-    "DeleteCustomFormatMessageText": "Bist du sicher, dass du das eigene Format '{customFormatName}' löschen willst?",
+    "DeleteCustomFormatMessageText": "Bist du sicher, dass du das eigene Format '{name}' löschen willst?",
     "RemoveSelectedItemQueueMessageText": "Bist du sicher, dass du ein Eintrag aus der Warteschlange entfernen willst?",
     "RemoveSelectedItemsQueueMessageText": "Bist du sicher, dass du {selectedCount} Einträge aus der Warteschlange entfernen willst?",
     "DeleteSelectedDownloadClients": "Lösche Download Client(s)",

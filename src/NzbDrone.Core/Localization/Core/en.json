@@ -322,7 +322,7 @@
   "DeleteCondition": "Delete Condition",
   "DeleteConditionMessageText": "Are you sure you want to delete the condition '{name}'?",
   "DeleteCustomFormat": "Delete Custom Format",
-  "DeleteCustomFormatMessageText": "Are you sure you want to delete the custom format '{customFormatName}'?",
+  "DeleteCustomFormatMessageText": "Are you sure you want to delete the custom format '{name}'?",
   "DeleteDelayProfile": "Delete Delay Profile",
   "DeleteDelayProfileMessageText": "Are you sure you want to delete this delay profile?",
   "DeleteDownloadClient": "Delete Download Client",
