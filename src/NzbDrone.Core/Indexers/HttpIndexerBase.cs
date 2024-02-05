@@ -377,14 +377,14 @@ namespace NzbDrone.Core.Indexers
 
                 if (firstRequest == null)
                 {
-                    return new ValidationFailure(string.Empty, _localizationService.GetLocalizedString("IndexerValidationJackettNoRssFeedQueryAvailable"));
+                    return new ValidationFailure(string.Empty, _localizationService.GetLocalizedString("IndexerValidationNoRssFeedQueryAvailable"));
                 }
 
                 var releases = await FetchPage(firstRequest, parser);
 
                 if (releases.Empty())
                 {
-                    return new ValidationFailure(string.Empty, _localizationService.GetLocalizedString("IndexerValidationJackettNoResultsInConfiguredCategories"));
+                    return new ValidationFailure(string.Empty, _localizationService.GetLocalizedString("IndexerValidationNoResultsInConfiguredCategories"));
                 }
             }
             catch (ApiKeyException ex)
