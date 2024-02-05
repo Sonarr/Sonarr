@@ -72,7 +72,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                         currentFormats != null ? currentFormats.ConcatToString() : "",
                         currentFormatScore);
 
-                    return Decision.Reject("Not a Custom Format upgrade for existing episode file(s). New: [{0}] ({1}) do not improve on Existing: [{2}] ({3})"
+                    return Decision.Reject("Not a Custom Format upgrade for existing episode file(s). New: [{0}] ({1}) do not improve on Existing: [{2}] ({3})",
                         newFormats != null ? newFormats.ConcatToString() : "",
                         newFormatScore,
                         currentFormats != null ? currentFormats.ConcatToString() : "",
