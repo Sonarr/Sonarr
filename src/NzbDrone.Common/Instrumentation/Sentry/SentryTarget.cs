@@ -150,7 +150,7 @@ namespace NzbDrone.Common.Instrumentation.Sentry
         {
             SentrySdk.ConfigureScope(scope =>
             {
-                scope.User = new User
+                scope.User = new SentryUser
                 {
                     Id = HashUtil.AnonymousToken()
                 };
