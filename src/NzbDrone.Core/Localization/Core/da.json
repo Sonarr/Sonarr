@@ -1,3 +1,21 @@
 {
-    "Absolute": "Absolut"
+    "Absolute": "Absolut",
+    "AbsoluteEpisodeNumber": "Absolut Episode-nummer",
+    "AddConditionError": "Kan ikke tilføje en ny betingelse, prøv igen.",
+    "AddAutoTagError": "Kan ikke tilføje en ny liste, prøv igen.",
+    "AddConnection": "Tilføj forbindelse",
+    "AddCustomFormat": "Tilføj tilpasset format",
+    "AddCustomFormatError": "Kunne ikke tilføje et nyt tilpasset format, prøv igen.",
+    "AddDelayProfile": "Tilføj forsinkelsesprofil",
+    "AddCondition": "Tilføj betingelse",
+    "AddAutoTag": "Tilføj automatisk Tag",
+    "AbsoluteEpisodeNumbers": "Absolutte Episode-numre",
+    "Add": "Tilføj",
+    "Activity": "Aktivitet",
+    "About": "Om",
+    "Actions": "Handlinger",
+    "AddANewPath": "Tilføj en ny sti",
+    "AddConditionImplementation": "Tilføj betingelse - {implementationName}",
+    "AddConnectionImplementation": "Tilføj forbindelse - {implementationName}",
+    "AddCustomFilter": "Tilføj tilpasset filter"
 }
