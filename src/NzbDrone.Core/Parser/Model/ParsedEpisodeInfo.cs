@@ -23,6 +23,7 @@ namespace NzbDrone.Core.Parser.Model
         public bool IsPartialSeason { get; set; }
         public bool IsMultiSeason { get; set; }
         public bool IsSeasonExtra { get; set; }
+        public bool IsSplitEpisode { get; set; }
         public bool Special { get; set; }
         public string ReleaseGroup { get; set; }
         public string ReleaseHash { get; set; }

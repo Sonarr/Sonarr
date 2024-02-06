@@ -211,5 +211,19 @@ namespace NzbDrone.Core.Test.ParserTests
             result.FullSeason.Should().BeFalse();
             result.Special.Should().BeTrue();
         }
+
+        [TestCase("Series.Title.S06E01b.Fade.Out.Fade.in.Part.2.1080p.DSNP.WEB-DL.AAC2.0.H.264-FLUX", "Series Title", 6, 1)]
+        public void should_parse_split_episode(string postTitle, string title, int seasonNumber, int episodeNumber)
+        {
+            var result = Parser.Parser.ParseTitle(postTitle);
+            result.Should().NotBeNull();
+            result.EpisodeNumbers.Should().HaveCount(1);
+            result.SeasonNumber.Should().Be(seasonNumber);
+            result.EpisodeNumbers.First().Should().Be(episodeNumber);
+            result.SeriesTitle.Should().Be(title);
+            result.AbsoluteEpisodeNumbers.Should().BeEmpty();
+            result.FullSeason.Should().BeFalse();
+            result.IsSplitEpisode.Should().BeTrue();
+        }
     }
 }
