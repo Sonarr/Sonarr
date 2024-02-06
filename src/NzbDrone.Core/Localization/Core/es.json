@@ -989,7 +989,7 @@
     "ImportListsValidationInvalidApiKey": "La clave API es inválida",
     "ImportListsValidationTestFailed": "El test fue abortado debido a un error: {exceptionMessage}",
     "ImportScriptPathHelpText": "La ruta al script a usar para importar",
-    "ImportUsingScriptHelpText": "Copia archivos a importar usando un script (p. ej. para transcodificación)",
+    "ImportUsingScriptHelpText": "Copiar archivos para importar usando un script (p. ej. para transcodificación)",
     "Importing": "Importando",
     "IncludeUnmonitored": "Incluir sin monitorizar",
     "IndexerLongTermStatusAllUnavailableHealthCheckMessage": "Ningún indexador disponible debido a fallos durante más de 6 horas",
@@ -1059,5 +1059,12 @@
     "ICalTagsSeriesHelpText": "El feed solo contendrá series con al menos una etiqueta coincidente",
     "IconForCutoffUnmet": "Icono para Umbrales no alcanzados",
     "IconForCutoffUnmetHelpText": "Mostrar icono para archivos cuando el umbral no haya sido alcanzado",
-    "EpisodeCount": "Número de episodios"
+    "EpisodeCount": "Número de episodios",
+    "IndexerSettings": "Ajustes de Indexador",
+    "AddDelayProfileError": "No se pudo añadir un nuevo perfil de retraso, inténtelo de nuevo.",
+    "IndexerRssNoIndexersAvailableHealthCheckMessage": "Todos los indexers capaces de RSS están temporalmente desactivados debido a errores recientes con el indexer",
+    "IndexerRssNoIndexersEnabledHealthCheckMessage": "No hay indexadores disponibles con la sincronización RSS activada, {appName} no capturará nuevos estrenos automáticamente",
+    "IndexerSearchNoAutomaticHealthCheckMessage": "No hay indexadores disponibles con Búsqueda Automática activada, {appName} no proporcionará ningún resultado de búsquedas automáticas",
+    "IndexerSearchNoAvailableIndexersHealthCheckMessage": "Todos los indexadores con capacidad de búsqueda no están disponibles temporalmente debido a errores recientes del indexadores",
+    "IndexerSearchNoInteractiveHealthCheckMessage": "No hay indexadores disponibles con Búsqueda Interactiva activada, {appName} no proporcionará ningún resultado de búsquedas interactivas"
 }
