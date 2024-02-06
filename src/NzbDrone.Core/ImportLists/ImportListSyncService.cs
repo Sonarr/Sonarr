@@ -190,19 +190,6 @@ namespace NzbDrone.Core.ImportLists
                     item.Title = mappedSeries.Title;
                 }
 
-                // Map TVDb if we only have a series name
-                if (item.TvdbId <= 0 && item.Title.IsNotNullOrWhiteSpace())
-                {
-                    var mappedSeries = _seriesSearchService.SearchForNewSeries(item.Title)
-                        .FirstOrDefault();
-
-                    if (mappedSeries != null)
-                    {
-                        item.TvdbId = mappedSeries.TvdbId;
-                        item.Title = mappedSeries?.Title;
-                    }
-                }
-
                 // Check to see if series excluded
                 var excludedSeries = listExclusions.Where(s => s.TvdbId == item.TvdbId).SingleOrDefault();
 
