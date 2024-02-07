@@ -74,6 +74,10 @@ namespace NzbDrone.Core.Parser
                 new Regex(@"^(?:S?(?<season>(?<!\d+)(?:\d{1,2}|\d{4})(?!\d+))(?:(?:[-_]|[ex]){1,2}(?<episode>\d{2,3}(?!\d+))){2,})",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
+                // Split episodes (S01E05a, S01E05b, etc)
+                new Regex(@"^(?<title>.+?)(?:S?(?<season>(?<!\d+)(?:\d{1,2}|\d{4})(?!\d+))(?:(?:[-_ ]?[ex])(?<episode>\d{2,3}(?!\d+))(?<splitepisode>[a-d])(?:[ _.])))",
+                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
                 // Episodes without a title, Single (S01E05, 1x05)
                 new Regex(@"^(?:S?(?<season>(?<!\d+)(?:\d{1,2}|\d{4})(?!\d+))(?:(?:[-_ ]?[ex])(?<episode>\d{2,3}(?!\d+))))",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
@@ -965,6 +969,11 @@ namespace NzbDrone.Core.Parser
                         if (matchGroup.Groups["special"].Success)
                         {
                             result.Special = true;
+                        }
+
+                        if (matchGroup.Groups["splitepisode"].Success)
+                        {
+                            result.IsSplitEpisode = true;
                         }
                     }
 
