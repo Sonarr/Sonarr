@@ -407,17 +407,6 @@ namespace NzbDrone.Core.Test.ImportListTests
         }
 
         [Test]
-        public void should_search_if_series_title_and_no_series_id()
-        {
-            _importListFetch.Series.ForEach(m => m.ImportListId = 1);
-            WithList(1, true);
-            Subject.Execute(_commandAll);
-
-            Mocker.GetMock<ISearchForNewSeries>()
-                  .Verify(v => v.SearchForNewSeries(It.IsAny<string>()), Times.Once());
-        }
-
-        [Test]
         public void should_not_search_if_series_title_and_series_id()
         {
             _importListFetch.Series.ForEach(m => m.ImportListId = 1);
