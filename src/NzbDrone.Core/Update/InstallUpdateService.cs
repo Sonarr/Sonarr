@@ -105,11 +105,12 @@ namespace NzbDrone.Core.Update
                 return false;
             }
 
+            var tempFolder = _appFolderInfo.TempFolder;
             var updateSandboxFolder = _appFolderInfo.GetUpdateSandboxFolder();
 
-            if (_diskProvider.GetTotalSize(updateSandboxFolder) < 1.Gigabytes())
+            if (_diskProvider.GetTotalSize(tempFolder) < 1.Gigabytes())
             {
-                _logger.Warn("Temporary location '{0}' has less than 1 GB free space, Sonarr may not be able to update itself.", updateSandboxFolder);
+                _logger.Warn("Temporary location '{0}' has less than 1 GB free space, Sonarr may not be able to update itself.", tempFolder);
             }
 
             var packageDestination = Path.Combine(updateSandboxFolder, updatePackage.FileName);
