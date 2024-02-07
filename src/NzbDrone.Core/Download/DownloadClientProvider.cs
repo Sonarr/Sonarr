@@ -59,13 +59,18 @@ namespace NzbDrone.Core.Download
             {
                 var indexer = _indexerFactory.Find(indexerId);
 
-                if (indexer != null && indexer.DownloadClientId > 0)
+                if (indexer is { DownloadClientId: > 0 })
                 {
                     var client = availableProviders.SingleOrDefault(d => d.Definition.Id == indexer.DownloadClientId);
 
-                    if (client == null || (filterBlockedClients && blockedProviders.Contains(client.Definition.Id)))
+                    if (client == null)
                     {
-                        throw new DownloadClientUnavailableException($"Indexer specified download client is not available");
+                        throw new DownloadClientUnavailableException($"Indexer specified download client does not exist for {indexer.Name}");
+                    }
+
+                    if (filterBlockedClients && blockedProviders.Contains(client.Definition.Id))
+                    {
+                        throw new DownloadClientUnavailableException($"Indexer specified download client is not available due to recent failures for {indexer.Name}");
                     }
 
                     return client;
