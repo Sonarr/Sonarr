@@ -402,7 +402,7 @@ namespace NzbDrone.Core.Indexers.Newznab
                                                        searchCriteria.SeasonNumber > 0 &&
                                                        searchCriteria.EpisodeNumber > 0;
 
-                if (includeAnimeStandardFormatSearch)
+                if (includeAnimeStandardFormatSearch && SupportsEpisodeSearch)
                 {
                     AddTvIdPageableRequests(pageableRequests,
                         Settings.AnimeCategories,
@@ -419,7 +419,7 @@ namespace NzbDrone.Core.Indexers.Newznab
                         "search",
                         $"&q={NewsnabifyTitle(queryTitle)}+{searchCriteria.AbsoluteEpisodeNumber:00}"));
 
-                    if (includeAnimeStandardFormatSearch)
+                    if (includeAnimeStandardFormatSearch && SupportsEpisodeSearch)
                     {
                         pageableRequests.Add(GetPagedRequests(MaxPages,
                             Settings.AnimeCategories,
