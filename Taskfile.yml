@@ -1,0 +1,8 @@
+# https://taskfile.dev
+
+version: '3'
+
+includes:
+  containers:
+    taskfile: './docker/Taskfile.yml'
+    dir: './'

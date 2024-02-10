@@ -1,0 +1,20 @@
+# This packs the latest release artifact directly into a container
+FROM docker.io/alpine:latest
+RUN apk --no-cache add icu-libs sqlite-libs xmlstarlet
+
+ENV XDG_DATA_HOME="/config"
+ENV XDG_CONFIG_HOME="/config"
+
+RUN addgroup -S sonarr && adduser sonarr -G sonarr -S -D -H
+RUN mkdir -p /app && \
+    download=$(wget -q https://api.github.com/repos/Sonarr/Sonarr/releases/latest -O - | grep -e 'linux-musl-x64' | grep 'browser_download_url' | cut -d \" -f 4) && \
+    wget "$download" -O - | tar xzv -C /app && \
+    chown sonarr:sonarr -R /app
+
+USER sonarr
+VOLUME /blackhole
+VOLUME /config
+EXPOSE 8989
+
+WORKDIR /config
+ENTRYPOINT ["/app/Sonarr/Sonarr"]

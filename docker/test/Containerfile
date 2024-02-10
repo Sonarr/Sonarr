@@ -1,0 +1,13 @@
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS TESTER
+RUN apt update && apt install -y tofrodos tzdata sqlite3 mediainfo xmlstarlet && apt clean
+COPY . /source
+WORKDIR /source
+RUN dotnet test src/Sonarr.sln --filter "Category!=IntegrationTest&Category!=AutomationTest&Category!=WINDOWS" --logger":html;LogFileName=results.html" || true
+
+# TODO: figure this step to collect all the results.html
+#FROM docker.io/alpine
+#RUN ????
+
+# For now, as you need them, add them
+FROM scratch AS RESULT
+COPY --from=TESTER /source/src/NzbDrone.Core.Test/TestResults/results.html /results/NzbDrone_Core_Test.html
