@@ -175,8 +175,8 @@ namespace NzbDrone.Core.Notifications.Webhook
                 Series = new WebhookSeries(message.Series),
                 Episodes = remoteEpisode.Episodes.ConvertAll(x => new WebhookEpisode(x)),
                 DownloadInfo = new WebhookDownloadClientItem(quality, message.TrackedDownload.DownloadItem),
-                DownloadClient = message.DownloadClientName,
-                DownloadClientType = message.DownloadClientType,
+                DownloadClient = message.DownloadClientInfo?.Name,
+                DownloadClientType = message.DownloadClientInfo?.Type,
                 DownloadId = message.DownloadId,
                 CustomFormatInfo = new WebhookCustomFormatInfo(remoteEpisode.CustomFormats, remoteEpisode.CustomFormatScore),
                 Release = new WebhookGrabbedRelease(message.Release)

@@ -240,8 +240,7 @@ namespace NzbDrone.Core.Notifications
                 Quality = message.Episode.ParsedEpisodeInfo.Quality,
                 Episode = message.Episode,
                 TrackedDownload = message.TrackedDownload,
-                DownloadClientType = message.TrackedDownload.DownloadItem.DownloadClientInfo.Type,
-                DownloadClientName = message.TrackedDownload.DownloadItem.DownloadClientInfo.Name,
+                DownloadClientInfo = message.TrackedDownload.DownloadItem.DownloadClientInfo,
                 DownloadId = message.TrackedDownload.DownloadItem.DownloadId,
                 Release = message.Release
             };

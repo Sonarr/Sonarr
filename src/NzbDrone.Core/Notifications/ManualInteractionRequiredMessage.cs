@@ -1,3 +1,4 @@
+using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.TrackedDownloads;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
@@ -12,8 +13,7 @@ namespace NzbDrone.Core.Notifications
         public RemoteEpisode Episode { get; set; }
         public TrackedDownload TrackedDownload { get; set; }
         public QualityModel Quality { get; set; }
-        public string DownloadClientType { get; set; }
-        public string DownloadClientName { get; set; }
+        public DownloadClientItemClientInfo DownloadClientInfo { get; set; }
         public string DownloadId { get; set; }
         public GrabbedReleaseInfo Release { get; set; }
 
