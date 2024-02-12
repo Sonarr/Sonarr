@@ -10046,6 +10046,9 @@
           "isSeasonExtra": {
             "type": "boolean"
           },
+          "isSplitEpisode": {
+            "type": "boolean"
+          },
           "special": {
             "type": "boolean"
           },
