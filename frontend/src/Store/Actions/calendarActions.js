@@ -97,7 +97,7 @@ export const persistState = [
   'calendar.view',
   'calendar.selectedFilterKey',
   'calendar.options',
-  'seriesIndex.customFilters'
+  'calendar.customFilters'
 ];
 
 //
