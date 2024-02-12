@@ -77,7 +77,7 @@ function InteractiveImportSelectFolderModalContent(
 
     dispatch(
       executeCommand({
-        name: commandNames.DOWNLOADED_EPSIODES_SCAN,
+        name: commandNames.DOWNLOADED_EPISODES_SCAN,
         path: folder,
       })
     );
