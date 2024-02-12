@@ -1490,7 +1490,7 @@
     "DownloadClientDelugeValidationLabelPluginInactive": "标签插件未激活",
     "DownloadClientDelugeValidationLabelPluginFailureDetail": "{appName} 无法将标签添加到 {clientName}。",
     "DownloadClientDelugeValidationLabelPluginInactiveDetail": "你需要在 {clientName} 启用标签插件才可以使用分类。",
-    "DownloadClientDownloadStationSettingsDirectory": "用于存放下载内容的可选共享文件夹，留空以使用默认的 Download Station 位置",
+    "DownloadClientDownloadStationSettingsDirectoryHelpText": "用于存放下载内容的可选共享文件夹，留空以使用默认的 Download Station 位置",
     "DownloadClientDownloadStationValidationApiVersion": "Download Station API 版本不受支持，至少应为 {requiredVersion}。 它支持从 {minVersion} 到 {maxVersion}",
     "DownloadClientDownloadStationValidationFolderMissing": "文件夹不存在",
     "DownloadClientDownloadStationValidationSharedFolderMissing": "共享文件夹不存在",

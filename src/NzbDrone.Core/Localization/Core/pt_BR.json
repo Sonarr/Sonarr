@@ -1529,7 +1529,7 @@
     "Directory": "Diretório",
     "DownloadClientDelugeTorrentStateError": "Deluge está relatando um erro",
     "DownloadClientDelugeValidationLabelPluginInactiveDetail": "Você deve ter o plugin rótulo habilitado no {clientName} para usar categorias.",
-    "DownloadClientDownloadStationSettingsDirectory": "Pasta compartilhada opcional para colocar downloads, deixe em branco para usar o local padrão do Download Station",
+    "DownloadClientDownloadStationSettingsDirectoryHelpText": "Pasta compartilhada opcional para colocar downloads, deixe em branco para usar o local padrão do Download Station",
     "DownloadClientDownloadStationValidationApiVersion": "A versão da API do Download Station não é suportada; deve ser pelo menos {requiredVersion}. Suporta de {minVersion} a {maxVersion}",
     "DownloadClientDownloadStationValidationFolderMissing": "A pasta não existe",
     "DownloadClientDownloadStationValidationNoDefaultDestination": "Nenhum destino padrão",

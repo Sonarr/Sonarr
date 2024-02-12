@@ -350,7 +350,7 @@
     "DownloadClientDelugeValidationLabelPluginInactive": "Label-Plugin nicht aktiviert",
     "DownloadClientDelugeValidationLabelPluginInactiveDetail": "Um Kategorien verwenden zu können, muss das Label-Plugin in {clientName} aktiviert sein.",
     "DownloadClientDownloadStationProviderMessage": "{appName} kann keine Verbindung zur Download Station herstellen, wenn die 2-Faktor-Authentifizierung in Ihrem DSM-Konto aktiviert ist",
-    "DownloadClientDownloadStationSettingsDirectory": "Optionaler freigegebener Ordner zum Ablegen von Downloads. Lassen Sie das Feld leer, um den Standardspeicherort der Download Station zu verwenden",
+    "DownloadClientDownloadStationSettingsDirectoryHelpText": "Optionaler freigegebener Ordner zum Ablegen von Downloads. Lassen Sie das Feld leer, um den Standardspeicherort der Download Station zu verwenden",
     "DownloadClientDownloadStationValidationApiVersion": "Download Station API-Version wird nicht unterstützt, sollte mindestens {requiredVersion} sein. Es unterstützt von {minVersion} bis {maxVersion}",
     "DownloadClientDownloadStationValidationFolderMissing": "Ordner existiert nicht",
     "DownloadClientDownloadStationValidationFolderMissingDetail": "Der Ordner „{downloadDir}“ existiert nicht, er muss manuell im freigegebenen Ordner „{sharedFolder}“ erstellt werden.",
