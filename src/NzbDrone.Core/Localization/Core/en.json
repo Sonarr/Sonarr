@@ -410,7 +410,7 @@
   "DownloadClientDelugeValidationLabelPluginInactive": "Label plugin not activated",
   "DownloadClientDelugeValidationLabelPluginInactiveDetail": "You must have the Label plugin enabled in {clientName} to use categories.",
   "DownloadClientDownloadStationProviderMessage": "{appName} is unable to connect to Download Station if 2-Factor Authentication is enabled on your DSM account",
-  "DownloadClientDownloadStationSettingsDirectory": "Optional shared folder to put downloads into, leave blank to use the default Download Station location",
+  "DownloadClientDownloadStationSettingsDirectoryHelpText": "Optional shared folder to put downloads into, leave blank to use the default Download Station location",
   "DownloadClientDownloadStationValidationApiVersion": "Download Station API version not supported, should be at least {requiredVersion}. It supports from {minVersion} to {maxVersion}",
   "DownloadClientDownloadStationValidationFolderMissing": "Folder does not exist",
   "DownloadClientDownloadStationValidationFolderMissingDetail": "The folder '{downloadDir}' does not exist, it must be created manually inside the Shared Folder '{sharedFolder}'.",

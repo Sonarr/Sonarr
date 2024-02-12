@@ -49,7 +49,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
         [FieldDefinition(5, Label = "Category", Type = FieldType.Textbox, HelpText = "DownloadClientSettingsCategorySubFolderHelpText")]
         public string TvCategory { get; set; }
 
-        [FieldDefinition(6, Label = "Directory", Type = FieldType.Textbox, HelpText = "DownloadClientDownloadStationSettingsDirectory")]
+        [FieldDefinition(6, Label = "Directory", Type = FieldType.Textbox, HelpText = "DownloadClientDownloadStationSettingsDirectoryHelpText")]
         public string TvDirectory { get; set; }
 
         public DownloadStationSettings()

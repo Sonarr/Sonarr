@@ -587,7 +587,7 @@
     "UpgradeUntilEpisodeHelpText": "Una vez alcanzada esta calidad {appName} no se descargarán más episodios",
     "DownloadClientDelugeValidationLabelPluginFailureDetail": "{appName} no pudo añadir la etiqueta a {clientName}.",
     "DownloadClientDownloadStationProviderMessage": "{appName} no puede conectarse a la Estación de descarga si la Autenticación de 2 factores está habilitada en tu cuenta de DSM",
-    "DownloadClientDownloadStationSettingsDirectory": "Carpeta compartida opcional en la que poner las descargas, dejar en blanco para usar la ubicación de la Estación de Descarga predeterminada",
+    "DownloadClientDownloadStationSettingsDirectoryHelpText": "Carpeta compartida opcional en la que poner las descargas, dejar en blanco para usar la ubicación de la Estación de Descarga predeterminada",
     "DownloadClientPriorityHelpText": "Prioridad del cliente de descarga desde 1 (la más alta) hasta 50 (la más baja). Predeterminada: 1. Se usa round-robin para clientes con la misma prioridad.",
     "DownloadClientDelugeValidationLabelPluginInactive": "Extensión de etiqueta no activada",
     "DownloadClientQbittorrentValidationRemovesAtRatioLimit": "qBittorrent está configurado para eliminar torrents cuando alcanzan su Límite de Ratio de Compartición",

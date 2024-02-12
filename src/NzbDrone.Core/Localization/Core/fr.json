@@ -1649,7 +1649,7 @@
     "BlackholeWatchFolderHelpText": "Dossier à partir duquel {appName} devrait importer les téléchargements terminés",
     "DownloadClientDelugeValidationLabelPluginInactive": "Plugin d'étiquetage non activé",
     "DownloadClientDelugeValidationLabelPluginInactiveDetail": "Vous devez avoir le plugin d'étiquetage activé dans {clientName} pour utiliser les catégories.",
-    "DownloadClientDownloadStationSettingsDirectory": "Dossier partagé facultatif dans lequel placer les téléchargements, laissez vide pour utiliser l'emplacement par défaut de Download Station",
+    "DownloadClientDownloadStationSettingsDirectoryHelpText": "Dossier partagé facultatif dans lequel placer les téléchargements, laissez vide pour utiliser l'emplacement par défaut de Download Station",
     "DownloadClientDownloadStationValidationApiVersion": "Version de l'API de Download Station non prise en charge, elle devrait être au moins {requiredVersion}. Elle prend en charge de {minVersion} à {maxVersion}",
     "DownloadClientDownloadStationValidationFolderMissingDetail": "Le dossier '{downloadDir}' n'existe pas, il doit être créé manuellement à l'intérieur du Dossier Partagé '{sharedFolder}'.",
     "DownloadClientDownloadStationProviderMessage": "{appName} ne peut pas se connecter à Download Station si l'authentification à deux facteurs est activée sur votre compte DSM",
