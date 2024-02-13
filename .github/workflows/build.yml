@@ -5,9 +5,14 @@ on:
     branches:
       - develop
       - main
+    paths:
+      - '!src/Sonarr.Api.*/openapi.json'
   pull_request:
     branches:
       - develop
+    paths:
+      - '!src/NzbDrone.Core/Localization/Core/**'
+      - '!src/Sonarr.Api.*/openapi.json'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
