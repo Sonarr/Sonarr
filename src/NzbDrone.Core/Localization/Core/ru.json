@@ -195,5 +195,21 @@
     "AllFiles": "Все файлы",
     "AllSeriesAreHiddenByTheAppliedFilter": "Все результаты скрыты фильтром",
     "AlreadyInYourLibrary": "Уже в вашей библиотеке",
-    "Always": "Всегда"
+    "Always": "Всегда",
+    "Conditions": "Условия",
+    "AddAutoTag": "",
+    "AbsoluteEpisodeNumber": "Абсолютный номер эпизода",
+    "CustomFormatsSettings": "Настройки пользовательских форматов",
+    "Daily": "Ежедневно",
+    "AnalyticsEnabledHelpText": "Отправлять в {appName} анонимную информацию об использовании и ошибках. Анонимная статистика включает в себя информацию о браузере, какие страницы веб-интерфейса {appName} загружены, сообщения об ошибках, а также операционной системе. Мы используем эту информацию для выявления ошибок, а также для разработки нового функционала.",
+    "AppDataDirectory": "Директория AppData",
+    "AddANewPath": "Добавить новый путь",
+    "CustomFormatsLoadError": "Невозможно загрузить Специальные Форматы",
+    "CustomFormatsSpecificationLanguage": "Язык",
+    "CustomFormatsSpecificationMaximumSize": "Максимальный размер",
+    "CustomFormatsSpecificationMinimumSize": "Минимальный размер",
+    "CustomFormatsSpecificationRegularExpression": "Регулярное выражение",
+    "CustomFormatsSpecificationReleaseGroup": "Релиз группа",
+    "CustomFormatsSpecificationResolution": "Разрешение",
+    "CustomFormatsSpecificationSource": "Источник"
 }
