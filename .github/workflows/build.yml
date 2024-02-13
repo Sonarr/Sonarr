@@ -112,7 +112,7 @@ jobs:
     - name: Volta
       uses: volta-cli/action@v4
 
-    - name: Yarn Intsall
+    - name: Yarn Install
       run: yarn install
 
     - name: Lint
