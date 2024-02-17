@@ -17,7 +17,7 @@ import {
   unregisterPagePopulator,
 } from 'Utilities/pagePopulator';
 import translate from 'Utilities/String/translate';
-import EditImportListExclusionModalConnector from './EditImportListExclusionModalConnector';
+import EditImportListExclusionModal from './EditImportListExclusionModal';
 import ImportListExclusionRow from './ImportListExclusionRow';
 
 const COLUMNS = [
@@ -228,7 +228,7 @@ function ImportListExclusions(props: ImportListExclusionsProps) {
           {...otherProps}
         />
 
-        <EditImportListExclusionModalConnector
+        <EditImportListExclusionModal
           isOpen={isAddImportListExclusionModalOpen}
           onModalClose={onModalClose}
         />

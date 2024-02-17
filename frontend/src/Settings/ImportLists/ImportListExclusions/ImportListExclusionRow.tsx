@@ -6,7 +6,7 @@ import TableRow from 'Components/Table/TableRow';
 import { icons, kinds } from 'Helpers/Props';
 import ImportListExclusion from 'typings/ImportListExclusion';
 import translate from 'Utilities/String/translate';
-import EditImportListExclusionModalConnector from './EditImportListExclusionModalConnector';
+import EditImportListExclusionModal from './EditImportListExclusionModal';
 import styles from './ImportListExclusionRow.css';
 
 interface ImportListExclusionRowProps extends ImportListExclusion {
@@ -62,7 +62,7 @@ function ImportListExclusionRow(props: ImportListExclusionRowProps) {
         />
       </TableRowCell>
 
-      <EditImportListExclusionModalConnector
+      <EditImportListExclusionModal
         id={id}
         isOpen={isEditImportListExclusionModalOpen}
         onModalClose={onEditImportListExclusionModalClose}
