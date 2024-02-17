@@ -1,9 +1,10 @@
-import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import Icon from 'Components/Icon';
-import Link from 'Components/Link/Link';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
+import TableRowCell from 'Components/Table/Cells/TableRowCell';
+import TableRowCellButton from 'Components/Table/Cells/TableRowCellButton';
+import TableRow from 'Components/Table/TableRow';
 import { icons, kinds } from 'Helpers/Props';
 import translate from 'Utilities/String/translate';
 import EditImportListExclusionModalConnector from './EditImportListExclusionModalConnector';
@@ -60,21 +61,13 @@ class ImportListExclusion extends Component {
     } = this.props;
 
     return (
-      <div
-        className={classNames(
-          styles.importListExclusion
-        )}
-      >
-        <div className={styles.title}>{title}</div>
-        <div className={styles.tvdbId}>{tvdbId}</div>
+      <TableRow>
+        <TableRowCell>{title}</TableRowCell>
+        <TableRowCell>{tvdbId}</TableRowCell>
 
-        <div className={styles.actions}>
-          <Link
-            onPress={this.onEditImportListExclusionPress}
-          >
-            <Icon name={icons.EDIT} />
-          </Link>
-        </div>
+        <TableRowCellButton className={styles.actions} onPress={this.onEditImportListExclusionPress}>
+          <Icon name={icons.EDIT} />
+        </TableRowCellButton>
 
         <EditImportListExclusionModalConnector
           id={id}
@@ -92,7 +85,7 @@ class ImportListExclusion extends Component {
           onConfirm={this.onConfirmDeleteImportListExclusion}
           onCancel={this.onDeleteImportListExclusionModalClose}
         />
-      </div>
+      </TableRow>
     );
   }
 }

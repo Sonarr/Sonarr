@@ -4,11 +4,31 @@ import FieldSet from 'Components/FieldSet';
 import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
 import PageSectionContent from 'Components/Page/PageSectionContent';
+import Table from 'Components/Table/Table';
+import TableBody from 'Components/Table/TableBody';
+import TablePager from 'Components/Table/TablePager';
 import { icons } from 'Helpers/Props';
 import translate from 'Utilities/String/translate';
 import EditImportListExclusionModalConnector from './EditImportListExclusionModalConnector';
 import ImportListExclusion from './ImportListExclusion';
 import styles from './ImportListExclusions.css';
+
+const COLUMNS = [
+  {
+    name: 'title',
+    label: () => translate('Title'),
+    isVisible: true
+  },
+  {
+    name: 'tvdbid',
+    label: () => translate('TvdbId'),
+    isVisible: true
+  },
+  {
+    name: 'actions',
+    isVisible: true
+  }
+];
 
 class ImportListExclusions extends Component {
 
@@ -40,7 +60,10 @@ class ImportListExclusions extends Component {
   render() {
     const {
       items,
+      isFetching,
       onConfirmDeleteImportListExclusion,
+      totalRecords,
+      onFirstPagePress,
       ...otherProps
     } = this.props;
 
@@ -48,32 +71,26 @@ class ImportListExclusions extends Component {
       <FieldSet legend={translate('ImportListExclusions')}>
         <PageSectionContent
           errorMessage={translate('ImportListExclusionsLoadError')}
+          isFetching={isFetching}
           {...otherProps}
         >
-          <div className={styles.importListExclusionsHeader}>
-            <div className={styles.title}>
-              {translate('Title')}
-            </div>
-            <div className={styles.tvdbId}>
-              {translate('TvdbId')}
-            </div>
-          </div>
-
-          <div>
-            {
-              items.map((item, index) => {
-                return (
-                  <ImportListExclusion
-                    key={item.id}
-                    {...item}
-                    {...otherProps}
-                    index={index}
-                    onConfirmDeleteImportListExclusion={onConfirmDeleteImportListExclusion}
-                  />
-                );
-              })
-            }
-          </div>
+          <Table columns={COLUMNS} canModifyColumns={false}>
+            <TableBody>
+              {
+                items.map((item, index) => {
+                  return (
+                    <ImportListExclusion
+                      key={item.id}
+                      {...item}
+                      {...otherProps}
+                      index={index}
+                      onConfirmDeleteImportListExclusion={onConfirmDeleteImportListExclusion}
+                    />
+                  );
+                })
+              }
+            </TableBody>
+          </Table>
 
           <div className={styles.addImportListExclusion}>
             <Link
@@ -84,11 +101,17 @@ class ImportListExclusions extends Component {
             </Link>
           </div>
 
+          <TablePager
+            totalRecords={totalRecords}
+            isFetching={isFetching}
+            onFirstPagePress={onFirstPagePress}
+            {...otherProps}
+          />
+
           <EditImportListExclusionModalConnector
             isOpen={this.state.isAddImportListExclusionModalOpen}
             onModalClose={this.onModalClose}
           />
-
         </PageSectionContent>
       </FieldSet>
     );
@@ -98,8 +121,10 @@ class ImportListExclusions extends Component {
 ImportListExclusions.propTypes = {
   isFetching: PropTypes.bool.isRequired,
   error: PropTypes.object,
+  totalRecords: PropTypes.number,
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
-  onConfirmDeleteImportListExclusion: PropTypes.func.isRequired
+  onConfirmDeleteImportListExclusion: PropTypes.func.isRequired,
+  onFirstPagePress: PropTypes.func.isRequired
 };
 
 export default ImportListExclusions;

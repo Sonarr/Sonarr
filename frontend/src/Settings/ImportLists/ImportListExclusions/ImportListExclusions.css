@@ -1,17 +1,3 @@
-.importListExclusionsHeader {
-  display: flex;
-  margin-bottom: 10px;
-  font-weight: bold;
-}
-
-.title {
-  flex: 0 1 600px;
-}
-
-.tvdbId {
-  flex: 0 0 70px;
-}
-
 .addImportListExclusion {
   display: flex;
   justify-content: flex-end;
