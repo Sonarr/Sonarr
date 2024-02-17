@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
 import AppState from 'App/State/AppState';
@@ -10,6 +10,7 @@ import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import TablePager from 'Components/Table/TablePager';
 import TableRow from 'Components/Table/TableRow';
+import useModalOpenState from 'Helpers/Hooks/useModalOpenState';
 import { icons } from 'Helpers/Props';
 import * as importListExclusionActions from 'Store/Actions/Settings/importListExclusions';
 import {
@@ -160,15 +161,8 @@ function ImportListExclusions(props: ImportListExclusionsProps) {
   const [
     isAddImportListExclusionModalOpen,
     setAddImportListExclusionModalOpen,
-  ] = useState(false);
-
-  const onModalClose = useCallback(() => {
-    setAddImportListExclusionModalOpen(false);
-  }, [setAddImportListExclusionModalOpen]);
-
-  const onAddImportListExclusionPress = useCallback(() => {
-    setAddImportListExclusionModalOpen(true);
-  }, [setAddImportListExclusionModalOpen]);
+    setAddImportListExclusionModalClosed,
+  ] = useModalOpenState(false);
 
   const isFetchingForFirstTime = isFetching && !isPopulated;
 
@@ -209,7 +203,7 @@ function ImportListExclusions(props: ImportListExclusionsProps) {
               <TableRowCell>
                 <IconButton
                   name={icons.ADD}
-                  onPress={onAddImportListExclusionPress}
+                  onPress={setAddImportListExclusionModalOpen}
                 />
               </TableRowCell>
             </TableRow>
@@ -230,7 +224,7 @@ function ImportListExclusions(props: ImportListExclusionsProps) {
 
         <EditImportListExclusionModal
           isOpen={isAddImportListExclusionModalOpen}
-          onModalClose={onModalClose}
+          onModalClose={setAddImportListExclusionModalClosed}
         />
       </PageSectionContent>
     </FieldSet>

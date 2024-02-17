@@ -1,8 +1,9 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import IconButton from 'Components/Link/IconButton';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
 import TableRow from 'Components/Table/TableRow';
+import useModalOpenState from 'Helpers/Hooks/useModalOpenState';
 import { icons, kinds } from 'Helpers/Props';
 import ImportListExclusion from 'typings/ImportListExclusion';
 import translate from 'Utilities/String/translate';
@@ -18,33 +19,15 @@ function ImportListExclusionRow(props: ImportListExclusionRowProps) {
 
   const [
     isEditImportListExclusionModalOpen,
-    setIsEditImportListExclusionModalOpen,
-  ] = useState(false);
-
-  const onEditImportListExclusionPress = useCallback(
-    () => setIsEditImportListExclusionModalOpen(true),
-    [setIsEditImportListExclusionModalOpen]
-  );
-
-  const onEditImportListExclusionModalClose = useCallback(
-    () => setIsEditImportListExclusionModalOpen(false),
-    [setIsEditImportListExclusionModalOpen]
-  );
+    setEditImportListExclusionModalOpen,
+    setEditImportListExclusionModalClosed,
+  ] = useModalOpenState(false);
 
   const [
     isDeleteImportListExclusionModalOpen,
-    setIsDeleteImportListExclusionModalOpen,
-  ] = useState(false);
-
-  const onDeleteImportListExclusionPress = useCallback(
-    () => setIsDeleteImportListExclusionModalOpen(true),
-    [setIsDeleteImportListExclusionModalOpen]
-  );
-
-  const onDeleteImportListExclusionModalClose = useCallback(
-    () => setIsDeleteImportListExclusionModalOpen(false),
-    [setIsDeleteImportListExclusionModalOpen]
-  );
+    setDeleteImportListExclusionModalOpen,
+    setDeleteImportListExclusionModalClosed,
+  ] = useModalOpenState(false);
 
   const onConfirmDeleteImportListExclusionPress = useCallback(() => {
     onConfirmDeleteImportListExclusion(id);
@@ -58,15 +41,15 @@ function ImportListExclusionRow(props: ImportListExclusionRowProps) {
       <TableRowCell className={styles.actions}>
         <IconButton
           name={icons.EDIT}
-          onPress={onEditImportListExclusionPress}
+          onPress={setEditImportListExclusionModalOpen}
         />
       </TableRowCell>
 
       <EditImportListExclusionModal
         id={id}
         isOpen={isEditImportListExclusionModalOpen}
-        onModalClose={onEditImportListExclusionModalClose}
-        onDeleteImportListExclusionPress={onDeleteImportListExclusionPress}
+        onModalClose={setEditImportListExclusionModalClosed}
+        onDeleteImportListExclusionPress={setDeleteImportListExclusionModalOpen}
       />
 
       <ConfirmModal
@@ -76,7 +59,7 @@ function ImportListExclusionRow(props: ImportListExclusionRowProps) {
         message={translate('DeleteImportListExclusionMessageText')}
         confirmLabel={translate('Delete')}
         onConfirm={onConfirmDeleteImportListExclusionPress}
-        onCancel={onDeleteImportListExclusionModalClose}
+        onCancel={setDeleteImportListExclusionModalClosed}
       />
     </TableRow>
   );
