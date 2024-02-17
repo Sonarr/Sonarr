@@ -453,7 +453,7 @@ namespace NzbDrone.Core.Parser
                 if (series != null)
                 {
                     _logger.Debug()
-                           .Message("Found matching series by TVRage ID {0}, an alias may be needed for: {1}", tvdbId, parsedEpisodeInfo.SeriesTitle)
+                           .Message("Found matching series by TVRage ID {0}, an alias may be needed for: {1}", tvRageId, parsedEpisodeInfo.SeriesTitle)
                            .Property("TvRageId", tvRageId)
                            .Property("ParsedEpisodeInfo", parsedEpisodeInfo)
                            .WriteSentryWarn("TvRageIdMatch", tvRageId.ToString(), parsedEpisodeInfo.SeriesTitle)
