@@ -91,6 +91,7 @@ class TextTagInputConnector extends Component {
   render() {
     return (
       <TagInput
+        delimiters={['Tab', 'Enter', ',']}
         tagList={[]}
         onTagAdd={this.onTagAdd}
         onTagDelete={this.onTagDelete}
