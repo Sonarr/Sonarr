@@ -36,6 +36,8 @@ class EditImportListExclusionModalConnector extends Component {
 }
 
 EditImportListExclusionModalConnector.propTypes = {
+  id: PropTypes.number,
+  onDeleteImportListExclusionPress: PropTypes.func,
   onModalClose: PropTypes.func.isRequired,
   isOpen: PropTypes.bool.isRequired,
   clearPendingChanges: PropTypes.func.isRequired

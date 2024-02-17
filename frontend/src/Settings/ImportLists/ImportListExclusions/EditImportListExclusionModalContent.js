@@ -77,7 +77,7 @@ function EditImportListExclusionModalContent(props) {
                 <FormLabel>{translate('TvdbId')}</FormLabel>
 
                 <FormInputGroup
-                  type={inputTypes.TEXT}
+                  type={inputTypes.NUMBER}
                   name="tvdbId"
                   helpText={translate('TvdbIdExcludeHelpText')}
                   {...tvdbId}

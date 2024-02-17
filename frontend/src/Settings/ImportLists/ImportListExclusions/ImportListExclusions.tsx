@@ -18,7 +18,7 @@ import {
 } from 'Utilities/pagePopulator';
 import translate from 'Utilities/String/translate';
 import EditImportListExclusionModalConnector from './EditImportListExclusionModalConnector';
-import ImportListExclusion from './ImportListExclusion';
+import ImportListExclusionRow from './ImportListExclusionRow';
 
 const COLUMNS = [
   {
@@ -111,6 +111,10 @@ function ImportListExclusions(props: ImportListExclusionsProps) {
       dispatch(
         importListExclusionActions.setImportListExclusionTableOption(payload)
       );
+
+      if (payload.pageSize) {
+        dispatch(importListExclusionActions.gotoImportListExclusionFirstPage());
+      }
     },
     [dispatch]
   );
@@ -186,13 +190,11 @@ function ImportListExclusions(props: ImportListExclusionsProps) {
           onTableOptionChange={setImportListTableOption}
         >
           <TableBody>
-            {items.map((item, index) => {
+            {items.map((item) => {
               return (
-                <ImportListExclusion
+                <ImportListExclusionRow
                   key={item.id}
                   {...item}
-                  {...otherProps}
-                  index={index}
                   onConfirmDeleteImportListExclusion={
                     onConfirmDeleteImportListExclusion
                   }
@@ -216,6 +218,7 @@ function ImportListExclusions(props: ImportListExclusionsProps) {
 
         <TablePager
           totalRecords={totalRecords}
+          pageSize={pageSize}
           isFetching={isFetching}
           onFirstPagePress={gotoImportListExclusionFirstPage}
           onPreviousPagePress={gotoImportListExclusionPreviousPage}
