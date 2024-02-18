@@ -161,8 +161,8 @@ class SeriesSearchInput extends Component {
       return;
     }
 
-    // If a suggestion is highlighted, go to that movie
-    // otherwise search for a new movie
+    // If a suggestion is highlighted, go to that series
+    // otherwise search for a new series
     if (highlightedSuggestionIndex) {
       this.goToSeries(suggestions[highlightedSuggestionIndex]);
     } else {
