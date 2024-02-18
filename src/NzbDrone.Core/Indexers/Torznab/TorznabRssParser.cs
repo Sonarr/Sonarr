@@ -1,5 +1,6 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Xml.Linq;
 using NzbDrone.Common.Extensions;
@@ -80,8 +81,32 @@ namespace NzbDrone.Core.Indexers.Torznab
 
             torrentInfo.TvdbId = GetTvdbId(item);
             torrentInfo.TvRageId = GetTvRageId(item);
+            torrentInfo.MinimumSeedTime = GetMinimumSeedTime(item);
+            torrentInfo.MinimumRatio = GetMinimumRatio(item);
 
             return torrentInfo;
+        }
+
+        protected virtual long? GetMinimumSeedTime(XElement item)
+        {
+            var seedTimeString = TryGetTorznabAttribute(item, "minimumseedtime", null);
+            if (long.TryParse(seedTimeString, out var result))
+            {
+                return result;
+            }
+
+            return null;
+        }
+
+        protected virtual double? GetMinimumRatio(XElement item)
+        {
+            var ratioString = TryGetTorznabAttribute(item, "minimumratio", null);
+            if (double.TryParse(ratioString, NumberStyles.Float, CultureInfo.InvariantCulture, out var result))
+            {
+                return result;
+            }
+
+            return null;
         }
 
         protected override string GetInfoUrl(XElement item)

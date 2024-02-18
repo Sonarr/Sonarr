@@ -73,6 +73,8 @@ namespace NzbDrone.Core.Test.IndexerTests.TorznabTests
             releaseInfo.InfoHash.Should().Be("63e07ff523710ca268567dad344ce1e0e6b7e8a3");
             releaseInfo.Seeders.Should().Be(7);
             releaseInfo.Peers.Should().Be(7);
+            releaseInfo.MinimumRatio.Should().Be(1.0);
+            releaseInfo.MinimumSeedTime.Should().Be(172800);
         }
 
         [Test]
@@ -103,6 +105,8 @@ namespace NzbDrone.Core.Test.IndexerTests.TorznabTests
             releaseInfo.InfoHash.Should().Be("9fb267cff5ae5603f07a347676ec3bf3e35f75e1");
             releaseInfo.Seeders.Should().Be(34128);
             releaseInfo.Peers.Should().Be(36724);
+            releaseInfo.MinimumRatio.Should().Be(1.0);
+            releaseInfo.MinimumSeedTime.Should().Be(172800);
         }
 
         [Test]
@@ -134,6 +138,8 @@ namespace NzbDrone.Core.Test.IndexerTests.TorznabTests
             releaseInfo.InfoHash.Should().Be("2d69a861bef5a9f2cdf791b7328e37b7953205e1");
             releaseInfo.Seeders.Should().BeNull();
             releaseInfo.Peers.Should().BeNull();
+            releaseInfo.MinimumRatio.Should().BeNull();
+            releaseInfo.MinimumSeedTime.Should().BeNull();
         }
 
         [Test]

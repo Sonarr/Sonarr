@@ -8,6 +8,8 @@ namespace NzbDrone.Core.Parser.Model
         public string InfoHash { get; set; }
         public int? Seeders { get; set; }
         public int? Peers { get; set; }
+        public long? MinimumSeedTime { get; set; } // torznab provides it in seconds
+        public double? MinimumRatio { get; set; }
 
         public static int? GetSeeders(ReleaseInfo release)
         {
