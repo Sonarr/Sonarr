@@ -191,10 +191,21 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
         {
             GivenParseResultSeriesDoesntMatchSearchCriteria();
 
-            Subject.Map(_parsedEpisodeInfo, 10, 10, _singleEpisodeSearchCriteria);
+            Subject.Map(_parsedEpisodeInfo, 0, 10, _singleEpisodeSearchCriteria);
 
             Mocker.GetMock<ISeriesService>()
                   .Verify(v => v.FindByTvRageId(It.IsAny<int>()), Times.Once());
+        }
+
+        [Test]
+        public void should_not_FindByTvRageId_when_search_criteria_and_FindByTitle_matching_fails_and_tvdb_id_is_specified()
+        {
+            GivenParseResultSeriesDoesntMatchSearchCriteria();
+
+            Subject.Map(_parsedEpisodeInfo, 10, 10, _singleEpisodeSearchCriteria);
+
+            Mocker.GetMock<ISeriesService>()
+                .Verify(v => v.FindByTvRageId(It.IsAny<int>()), Times.Never());
         }
 
         [Test]
