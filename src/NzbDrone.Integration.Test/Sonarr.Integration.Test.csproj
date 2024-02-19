@@ -4,6 +4,7 @@
     <OutputType>Library</OutputType>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="GitHubActionsTestLogger" Version="2.3.3" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="6.0.21" />
   </ItemGroup>
   <ItemGroup>

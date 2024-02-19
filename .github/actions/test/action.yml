@@ -77,7 +77,7 @@ runs:
 
     - name: Run tests
       shell: bash
-      run: dotnet test ./_tests/Sonarr.*.Test.dll --filter "${{ inputs.filter }}" --logger "trx;LogFileName=${{ env.RESULTS_NAME }}.trx"
+      run: dotnet test ./_tests/Sonarr.*.Test.dll --filter "${{ inputs.filter }}" --logger "trx;LogFileName=${{ env.RESULTS_NAME }}.trx" --logger "GitHubActions;summary.includePassedTests=true;summary.includeSkippedTests=true"
 
     - name: Upload Test Results
       if: ${{ !cancelled() }}
@@ -85,12 +85,3 @@ runs:
       with:
         name: results-${{ env.RESULTS_NAME }}
         path: TestResults/*.trx
-
-    - name: Publish Test Results
-      uses: phoenix-actions/test-reporting@v12
-      with:
-        name: Test Results
-        output-to: step-summary
-        path: '*.trx'
-        reporter: dotnet-trx
-        working-directory: TestResults

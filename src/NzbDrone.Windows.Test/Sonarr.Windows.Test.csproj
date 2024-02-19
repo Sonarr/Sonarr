@@ -3,6 +3,9 @@
     <TargetFrameworks>net6.0</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="GitHubActionsTestLogger" Version="2.3.3" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\NzbDrone.Common.Test\Sonarr.Common.Test.csproj" />
     <ProjectReference Include="..\NzbDrone.Test.Common\Sonarr.Test.Common.csproj" />
     <ProjectReference Include="..\NzbDrone.Windows\Sonarr.Windows.csproj" />
