@@ -1271,7 +1271,6 @@
     "DownloadClientQbittorrentValidationCategoryRecommended": "Kategorian määritys on suositeltavaa",
     "NoEpisodeInformation": "Jaksotietoja ei ole saatavilla.",
     "ManualGrab": "Manuaalinen kaappaus",
-    "DownloadClientDownloadStationSettingsDirectory": "Valinnainen jaettu kansio latauksille. Download Stationin oletussijaintia jättämällä tyhjäksi.",
     "DownloadClientDownloadStationSettingsDirectoryHelpText": "Valinnainen jaettu kansio latauksille. Jätä tyhjäksi käyttääksesi Download Stationin oletussijaintia.",
     "DownloadClientDownloadStationValidationNoDefaultDestinationDetail": "Sinun on kirjauduttava Diskstationillesi tunnuksella {username} ja määritettävä se manuaalisesti Download Stationin \"BT/HTTP/FTP/NZB > Location\" -asetuksiin.",
     "NoEpisodeOverview": "Jaksolle ei ole kuvausta.",

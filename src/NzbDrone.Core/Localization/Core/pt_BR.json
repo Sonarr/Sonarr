@@ -1316,7 +1316,7 @@
     "ShowUnknownSeriesItemsHelpText": "Mostrar itens sem uma série na fila, isso pode incluir séries, filmes removidos ou qualquer outra coisa na categoria do {appName}",
     "Test": "Teste",
     "Level": "Nível",
-    "AddListExclusion": "Adicionar exclusão à lista",
+    "AddListExclusion": "Adicionar Exclusão de Lista",
     "AddListExclusionSeriesHelpText": "Impedir que o {appName} adicione séries por listas",
     "EditSeriesModalHeader": "Editar - {title}",
     "EditSelectedSeries": "Editar Séries Selecionadas",
@@ -2037,7 +2037,6 @@
     "ListSyncTag": "Etiqueta de Sincronização de Lista",
     "ListSyncTagHelpText": "Esta etiqueta será adicionada quando uma série cair ou não estiver mais na(s) sua(s) lista(s)",
     "LogOnly": "Só Registro",
-    "UnableToLoadListOptions": "Não foi possível carregar as opções da lista",
     "CleanLibraryLevel": "Limpar Nível da Biblioteca",
     "AddDelayProfileError": "Não foi possível adicionar um novo perfil de atraso. Tente novamente."
 }
