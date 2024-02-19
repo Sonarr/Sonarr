@@ -27,8 +27,9 @@ namespace NzbDrone.Core.Download.Clients.Porla
         PorlaTorrent AddTorrentFile(PorlaSettings settings, byte[] fileContent);            //torrents.add
         void RemoveTorrent(PorlaSettings settings, bool RemoveData, PorlaTorrent[] pts);    //torrents.remove
         void MoveTorrent(PorlaSettings settings, PorlaMoveSettings MoveSettings, PorlaTorrent pt); //torrents.move
-        void PauseTorrent(PorlaSettings settings, PorlaTorrent pt);      //torrents.pause
-        void ResumeTorrent(PorlaSettings settings, PorlaTorrent pt);     //torrents.resume
+        void PauseTorrent(PorlaSettings settings, PorlaTorrent pt);         //torrents.pause
+        void ResumeTorrent(PorlaSettings settings, PorlaTorrent pt);        //torrents.resume
+        PorlaTorrentDetails ListTorrents(PorlaSettings settings);           //torrents.list
         PorlaTorrentFiles ListTorrentsFiles(PorlaSettings settings, PorlaTorrent pt);    //torrents.files.list
         PorlaTorrentMetadata ListTorrentsMetadata(PorlaSettings settings);    //torrents.metadata.list
         //torrents.peers
