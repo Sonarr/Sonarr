@@ -33,7 +33,7 @@ jobs:
       version: ${{ steps.variables.outputs.version }}
     steps:
     - name: Check out
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
@@ -107,7 +107,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Check out
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Volta
       uses: volta-cli/action@v4
@@ -149,7 +149,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
     - name: Check out
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Test
       uses: ./.github/actions/test
@@ -164,7 +164,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Check out
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Test
       uses: ./.github/actions/test
@@ -199,7 +199,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
     - name: Check out
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Test
       uses: ./.github/actions/test
