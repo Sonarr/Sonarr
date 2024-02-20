@@ -161,12 +161,12 @@ class SeriesSearchInput extends Component {
       return;
     }
 
-    // If a suggestion is highlighted, go to that series
-    // otherwise search for a new series
-    if (highlightedSuggestionIndex) {
-      this.goToSeries(suggestions[highlightedSuggestionIndex]);
-    } else {
+    // If no suggestion is highlighted, search for a new series
+    // otherwise go to that suggestion
+    if (highlightedSuggestionIndex == null) {
       this.props.onGoToAddNewSeries(value);
+    } else {
+      this.goToSeries(suggestions[highlightedSuggestionIndex]);
     }
 
     this._autosuggest.input.blur();
