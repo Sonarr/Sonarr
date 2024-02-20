@@ -1,9 +1,8 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import Icon from 'Components/Icon';
+import IconButton from 'Components/Link/IconButton';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
-import TableRowCellButton from 'Components/Table/Cells/TableRowCellButton';
 import TableRow from 'Components/Table/TableRow';
 import { icons, kinds } from 'Helpers/Props';
 import translate from 'Utilities/String/translate';
@@ -65,9 +64,9 @@ class ImportListExclusion extends Component {
         <TableRowCell>{title}</TableRowCell>
         <TableRowCell>{tvdbId}</TableRowCell>
 
-        <TableRowCellButton className={styles.actions} onPress={this.onEditImportListExclusionPress}>
-          <Icon name={icons.EDIT} />
-        </TableRowCellButton>
+        <TableRowCell className={styles.actions}>
+          <IconButton name={icons.EDIT} onPress={this.onEditImportListExclusionPress} />
+        </TableRowCell>
 
         <EditImportListExclusionModalConnector
           id={id}

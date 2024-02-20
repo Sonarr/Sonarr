@@ -81,6 +81,18 @@ class ImportListExclusionsConnector extends Component {
     this.props.gotoImportListExclusionPage({ page });
   };
 
+  onSortPress = (sortKey) => {
+    this.props.setImportListExclusionSort({ sortKey });
+  };
+
+  onTableOptionChange = (payload) => {
+    this.props.setImportListExclusionTableOption(payload);
+
+    if (payload.pageSize) {
+      this.props.gotoImportListExclusionFirstPage();
+    }
+  };
+
   //
   // Render
 
@@ -95,6 +107,8 @@ class ImportListExclusionsConnector extends Component {
         onLastPagePress={this.onLastPagePress}
         onPageSelect={this.onPageSelect}
         onConfirmDeleteImportListExclusion={this.onConfirmDeleteImportListExclusion}
+        onSortPress={this.onSortPress}
+        onTableOptionChange={this.onTableOptionChange}
       />
     );
   }
@@ -108,7 +122,9 @@ ImportListExclusionsConnector.propTypes = {
   gotoImportListExclusionNextPage: PropTypes.func.isRequired,
   gotoImportListExclusionLastPage: PropTypes.func.isRequired,
   gotoImportListExclusionPage: PropTypes.func.isRequired,
-  deleteImportListExclusion: PropTypes.func.isRequired
+  deleteImportListExclusion: PropTypes.func.isRequired,
+  setImportListExclusionSort: PropTypes.func.isRequired,
+  setImportListExclusionTableOption: PropTypes.func.isRequired
 };
 
 export default connect(createMapStateToProps, mapDispatchToProps)(ImportListExclusionsConnector);

@@ -1,12 +1,13 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import FieldSet from 'Components/FieldSet';
-import Icon from 'Components/Icon';
-import Link from 'Components/Link/Link';
+import IconButton from 'Components/Link/IconButton';
 import PageSectionContent from 'Components/Page/PageSectionContent';
+import TableRowCell from 'Components/Table/Cells/TableRowCell';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import TablePager from 'Components/Table/TablePager';
+import TableRow from 'Components/Table/TableRow';
 import { icons } from 'Helpers/Props';
 import translate from 'Utilities/String/translate';
 import EditImportListExclusionModalConnector from './EditImportListExclusionModalConnector';
@@ -17,16 +18,19 @@ const COLUMNS = [
   {
     name: 'title',
     label: () => translate('Title'),
-    isVisible: true
+    isVisible: true,
+    isSortable: true
   },
   {
     name: 'tvdbid',
     label: () => translate('TvdbId'),
-    isVisible: true
+    isVisible: true,
+    isSortable: true
   },
   {
     name: 'actions',
-    isVisible: true
+    isVisible: true,
+    isSortable: false
   }
 ];
 
@@ -64,17 +68,21 @@ class ImportListExclusions extends Component {
       onConfirmDeleteImportListExclusion,
       totalRecords,
       onFirstPagePress,
+      isPopulated,
       ...otherProps
     } = this.props;
-
+    const isFetchingOrHasFetched = isFetching && !isPopulated;
     return (
       <FieldSet legend={translate('ImportListExclusions')}>
         <PageSectionContent
           errorMessage={translate('ImportListExclusionsLoadError')}
-          isFetching={isFetching}
+          isFetching={isFetchingOrHasFetched}
+          isPopulated={isPopulated}
           {...otherProps}
         >
-          <Table columns={COLUMNS} canModifyColumns={false}>
+          <Table columns={COLUMNS} canModifyColumns={false}
+            {...otherProps}
+          >
             <TableBody>
               {
                 items.map((item, index) => {
@@ -89,17 +97,17 @@ class ImportListExclusions extends Component {
                   );
                 })
               }
+
+              <TableRow >
+                <TableRowCell />
+                <TableRowCell />
+
+                <TableRowCell className={styles.actions}>
+                  <IconButton name={icons.ADD} onPress={this.onAddImportListExclusionPress} />
+                </TableRowCell>
+              </TableRow>
             </TableBody>
           </Table>
-
-          <div className={styles.addImportListExclusion}>
-            <Link
-              className={styles.addButton}
-              onPress={this.onAddImportListExclusionPress}
-            >
-              <Icon name={icons.ADD} />
-            </Link>
-          </div>
 
           <TablePager
             totalRecords={totalRecords}
@@ -120,11 +128,14 @@ class ImportListExclusions extends Component {
 
 ImportListExclusions.propTypes = {
   isFetching: PropTypes.bool.isRequired,
+  isPopulated: PropTypes.bool.isRequired,
   error: PropTypes.object,
   totalRecords: PropTypes.number,
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
   onConfirmDeleteImportListExclusion: PropTypes.func.isRequired,
-  onFirstPagePress: PropTypes.func.isRequired
+  onFirstPagePress: PropTypes.func.isRequired,
+  onSortPress: PropTypes.func.isRequired
+
 };
 
 export default ImportListExclusions;

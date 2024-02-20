@@ -5,6 +5,7 @@ import createSetSettingValueReducer from 'Store/Actions/Creators/Reducers/create
 import { createThunk, handleThunks } from 'Store/thunks';
 import serverSideCollectionHandlers from 'Utilities/serverSideCollectionHandlers';
 import createServerSideCollectionHandlers from '../Creators/createServerSideCollectionHandlers';
+import createSetTableOptionReducer from '../Creators/Reducers/createSetTableOptionReducer';
 
 //
 // Variables
@@ -20,6 +21,8 @@ export const GOTO_PREVIOUS_IMPORT_LIST_EXCLUSION_PAGE = 'settings/importListExcl
 export const GOTO_NEXT_IMPORT_LIST_EXCLUSION_PAGE = 'settings/importListExclusions/gotoImportListExclusionNextPage';
 export const GOTO_LAST_IMPORT_LIST_EXCLUSION_PAGE = 'settings/importListExclusions/gotoImportListExclusionLastPage';
 export const GOTO_IMPORT_LIST_EXCLUSION_PAGE = 'settings/importListExclusions/gotoImportListExclusionPage';
+export const SET_IMPORT_LIST_EXCLUSION_SORT = 'settings/importListExclusions/setImportListExclusionSort';
+export const SET_IMPORT_LIST_EXCLUSION_TABLE_OPTION = 'settings/importListExclusions/setImportListExclusionTableOption';
 export const SAVE_IMPORT_LIST_EXCLUSION = 'settings/importListExclusions/saveImportListExclusion';
 export const DELETE_IMPORT_LIST_EXCLUSION = 'settings/importListExclusions/deleteImportListExclusion';
 export const SET_IMPORT_LIST_EXCLUSION_VALUE = 'settings/importListExclusions/setImportListExclusionValue';
@@ -33,9 +36,11 @@ export const gotoImportListExclusionPreviousPage = createThunk(GOTO_PREVIOUS_IMP
 export const gotoImportListExclusionNextPage = createThunk(GOTO_NEXT_IMPORT_LIST_EXCLUSION_PAGE);
 export const gotoImportListExclusionLastPage = createThunk(GOTO_LAST_IMPORT_LIST_EXCLUSION_PAGE);
 export const gotoImportListExclusionPage = createThunk(GOTO_IMPORT_LIST_EXCLUSION_PAGE);
+export const setImportListExclusionSort = createThunk(SET_IMPORT_LIST_EXCLUSION_SORT);
 export const saveImportListExclusion = createThunk(SAVE_IMPORT_LIST_EXCLUSION);
 export const deleteImportListExclusion = createThunk(DELETE_IMPORT_LIST_EXCLUSION);
 
+export const setImportListExclusionTableOption = createAction(SET_IMPORT_LIST_EXCLUSION_TABLE_OPTION);
 export const setImportListExclusionValue = createAction(SET_IMPORT_LIST_EXCLUSION_VALUE, (payload) => {
   return {
     section,
@@ -76,7 +81,8 @@ export default {
         [serverSideCollectionHandlers.PREVIOUS_PAGE]: GOTO_PREVIOUS_IMPORT_LIST_EXCLUSION_PAGE,
         [serverSideCollectionHandlers.NEXT_PAGE]: GOTO_NEXT_IMPORT_LIST_EXCLUSION_PAGE,
         [serverSideCollectionHandlers.LAST_PAGE]: GOTO_LAST_IMPORT_LIST_EXCLUSION_PAGE,
-        [serverSideCollectionHandlers.EXACT_PAGE]: GOTO_IMPORT_LIST_EXCLUSION_PAGE
+        [serverSideCollectionHandlers.EXACT_PAGE]: GOTO_IMPORT_LIST_EXCLUSION_PAGE,
+        [serverSideCollectionHandlers.SORT]: SET_IMPORT_LIST_EXCLUSION_SORT
       }
     ),
     [SAVE_IMPORT_LIST_EXCLUSION]: createSaveProviderHandler(section, '/importlistexclusion'),
@@ -87,7 +93,8 @@ export default {
   // Reducers
 
   reducers: {
-    [SET_IMPORT_LIST_EXCLUSION_VALUE]: createSetSettingValueReducer(section)
+    [SET_IMPORT_LIST_EXCLUSION_VALUE]: createSetSettingValueReducer(section),
+    [SET_IMPORT_LIST_EXCLUSION_TABLE_OPTION]: createSetTableOptionReducer(section)
   }
 
 };
