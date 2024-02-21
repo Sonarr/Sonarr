@@ -73,6 +73,15 @@ const columns = [
     isVisible: true
   },
   {
+    name: 'indexerFlags',
+    label: React.createElement(Icon, {
+      name: icons.FLAG,
+      title: () => translate('IndexerFlags')
+    }),
+    isSortable: true,
+    isVisible: true
+  },
+  {
     name: 'rejections',
     label: React.createElement(Icon, {
       name: icons.DANGER,

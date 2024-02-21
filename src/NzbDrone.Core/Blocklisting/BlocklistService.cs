@@ -174,20 +174,25 @@ namespace NzbDrone.Core.Blocklisting
         public void Handle(DownloadFailedEvent message)
         {
             var blocklist = new Blocklist
-                            {
-                                SeriesId = message.SeriesId,
-                                EpisodeIds = message.EpisodeIds,
-                                SourceTitle = message.SourceTitle,
-                                Quality = message.Quality,
-                                Date = DateTime.UtcNow,
-                                PublishedDate = DateTime.Parse(message.Data.GetValueOrDefault("publishedDate")),
-                                Size = long.Parse(message.Data.GetValueOrDefault("size", "0")),
-                                Indexer = message.Data.GetValueOrDefault("indexer"),
-                                Protocol = (DownloadProtocol)Convert.ToInt32(message.Data.GetValueOrDefault("protocol")),
-                                Message = message.Message,
-                                TorrentInfoHash = message.Data.GetValueOrDefault("torrentInfoHash"),
-                                Languages = message.Languages
-                            };
+            {
+                SeriesId = message.SeriesId,
+                EpisodeIds = message.EpisodeIds,
+                SourceTitle = message.SourceTitle,
+                Quality = message.Quality,
+                Date = DateTime.UtcNow,
+                PublishedDate = DateTime.Parse(message.Data.GetValueOrDefault("publishedDate")),
+                Size = long.Parse(message.Data.GetValueOrDefault("size", "0")),
+                Indexer = message.Data.GetValueOrDefault("indexer"),
+                Protocol = (DownloadProtocol)Convert.ToInt32(message.Data.GetValueOrDefault("protocol")),
+                Message = message.Message,
+                TorrentInfoHash = message.Data.GetValueOrDefault("torrentInfoHash"),
+                Languages = message.Languages
+            };
+
+            if (Enum.TryParse(message.Data.GetValueOrDefault("indexerFlags"), true, out IndexerFlags flags))
+            {
+                blocklist.IndexerFlags = flags;
+            }
 
             _blocklistRepository.Insert(blocklist);
         }

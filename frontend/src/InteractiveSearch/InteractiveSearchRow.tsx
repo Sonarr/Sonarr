@@ -12,6 +12,7 @@ import type DownloadProtocol from 'DownloadClient/DownloadProtocol';
 import EpisodeFormats from 'Episode/EpisodeFormats';
 import EpisodeLanguages from 'Episode/EpisodeLanguages';
 import EpisodeQuality from 'Episode/EpisodeQuality';
+import IndexerFlags from 'Episode/IndexerFlags';
 import { icons, kinds, tooltipPositions } from 'Helpers/Props';
 import Language from 'Language/Language';
 import { QualityModel } from 'Quality/Quality';
@@ -98,6 +99,7 @@ interface InteractiveSearchRowProps {
   mappedEpisodeNumbers?: number[];
   mappedAbsoluteEpisodeNumbers?: number[];
   mappedEpisodeInfo: ReleaseEpisode[];
+  indexerFlags: number;
   rejections: string[];
   episodeRequested: boolean;
   downloadAllowed: boolean;
@@ -139,6 +141,7 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
     mappedEpisodeNumbers,
     mappedAbsoluteEpisodeNumbers,
     mappedEpisodeInfo,
+    indexerFlags = 0,
     rejections = [],
     episodeRequested,
     downloadAllowed,
@@ -254,8 +257,19 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
             customFormats.length
           )}
           tooltip={<EpisodeFormats formats={customFormats} />}
-          position={tooltipPositions.BOTTOM}
+          position={tooltipPositions.LEFT}
         />
+      </TableRowCell>
+
+      <TableRowCell className={styles.indexerFlags}>
+        {indexerFlags ? (
+          <Popover
+            anchor={<Icon name={icons.FLAG} kind={kinds.PRIMARY} />}
+            title={translate('IndexerFlags')}
+            body={<IndexerFlags indexerFlags={indexerFlags} />}
+            position={tooltipPositions.LEFT}
+          />
+        ) : null}
       </TableRowCell>
 
       <TableRowCell className={styles.rejected}>

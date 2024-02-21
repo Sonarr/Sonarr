@@ -162,6 +162,7 @@ export const actionHandlers = handleThunks({
         quality: item.quality,
         languages: item.languages,
         releaseGroup: item.releaseGroup,
+        indexerFlags: item.indexerFlags,
         downloadId: item.downloadId
       };
     });

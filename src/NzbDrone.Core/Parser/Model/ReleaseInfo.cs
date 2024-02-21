@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 using NzbDrone.Core.Download.Pending;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Languages;
@@ -38,6 +38,9 @@ namespace NzbDrone.Core.Parser.Model
         public string Resolution { get; set; }
 
         public List<Language> Languages { get; set; }
+
+        [JsonIgnore]
+        public IndexerFlags IndexerFlags { get; set; }
 
         // Used to track pending releases that are being reprocessed
         [JsonIgnore]
@@ -106,5 +109,17 @@ namespace NzbDrone.Core.Parser.Model
                     return ToString();
             }
         }
+    }
+
+    [Flags]
+    public enum IndexerFlags
+    {
+        Freeleech = 1, // General
+        Halfleech = 2, // General, only 1/2 of download counted
+        DoubleUpload = 4, // General
+        Internal = 8, // General, uploader is an internal release group
+        Scene = 16, // General, the torrent comes from a "scene" group
+        Freeleech75 = 32, // Signifies a torrent counts towards 75 percent of your download quota.
+        Freeleech25 = 64, // Signifies a torrent counts towards 25 percent of your download quota.
     }
 }

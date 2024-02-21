@@ -6,6 +6,7 @@ interface CssExports {
   'customFormatScore': string;
   'episodeNumber': string;
   'episodeNumberAnime': string;
+  'indexerFlags': string;
   'languages': string;
   'monitored': string;
   'releaseGroup': string;

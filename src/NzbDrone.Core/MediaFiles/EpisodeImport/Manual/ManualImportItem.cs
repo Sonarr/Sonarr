@@ -24,6 +24,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
         public string DownloadId { get; set; }
         public List<CustomFormat> CustomFormats { get; set; }
         public int CustomFormatScore { get; set; }
+        public int IndexerFlags { get; set; }
         public IEnumerable<Rejection> Rejections { get; set; }
 
         public ManualImportItem()

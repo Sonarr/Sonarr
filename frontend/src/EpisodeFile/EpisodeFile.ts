@@ -16,6 +16,7 @@ export interface EpisodeFile extends ModelBase {
   languages: Language[];
   quality: QualityModel;
   customFormats: CustomFormat[];
+  indexerFlags: number;
   mediaInfo: MediaInfo;
   qualityCutoffNotMet: boolean;
 }

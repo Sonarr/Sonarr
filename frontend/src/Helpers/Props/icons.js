@@ -62,6 +62,7 @@ import {
   faFileExport as fasFileExport,
   faFileInvoice as farFileInvoice,
   faFilter as fasFilter,
+  faFlag as fasFlag,
   faFolderOpen as fasFolderOpen,
   faForward as fasForward,
   faHeart as fasHeart,
@@ -154,6 +155,7 @@ export const FILE_MISSING = fasFileCircleQuestion;
 export const FILTER = fasFilter;
 export const FINALE_SEASON = fasCirclePause;
 export const FINALE_SERIES = fasCircleStop;
+export const FLAG = fasFlag;
 export const FOOTNOTE = fasAsterisk;
 export const FOLDER = farFolder;
 export const FOLDER_OPEN = fasFolderOpen;

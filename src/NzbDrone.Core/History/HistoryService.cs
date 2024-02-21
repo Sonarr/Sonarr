@@ -169,6 +169,7 @@ namespace NzbDrone.Core.History
                 history.Data.Add("CustomFormatScore", message.Episode.CustomFormatScore.ToString());
                 history.Data.Add("SeriesMatchType", message.Episode.SeriesMatchType.ToString());
                 history.Data.Add("ReleaseSource", message.Episode.ReleaseSource.ToString());
+                history.Data.Add("IndexerFlags", message.Episode.Release.IndexerFlags.ToString());
 
                 if (!message.Episode.ParsedEpisodeInfo.ReleaseHash.IsNullOrWhiteSpace())
                 {
@@ -201,16 +202,16 @@ namespace NzbDrone.Core.History
             foreach (var episode in message.EpisodeInfo.Episodes)
             {
                 var history = new EpisodeHistory
-                    {
-                        EventType = EpisodeHistoryEventType.DownloadFolderImported,
-                        Date = DateTime.UtcNow,
-                        Quality = message.EpisodeInfo.Quality,
-                        SourceTitle = message.ImportedEpisode.SceneName ?? Path.GetFileNameWithoutExtension(message.EpisodeInfo.Path),
-                        SeriesId = message.ImportedEpisode.SeriesId,
-                        EpisodeId = episode.Id,
-                        DownloadId = downloadId,
-                        Languages = message.EpisodeInfo.Languages
-                    };
+                {
+                    EventType = EpisodeHistoryEventType.DownloadFolderImported,
+                    Date = DateTime.UtcNow,
+                    Quality = message.EpisodeInfo.Quality,
+                    SourceTitle = message.ImportedEpisode.SceneName ?? Path.GetFileNameWithoutExtension(message.EpisodeInfo.Path),
+                    SeriesId = message.ImportedEpisode.SeriesId,
+                    EpisodeId = episode.Id,
+                    DownloadId = downloadId,
+                    Languages = message.EpisodeInfo.Languages
+                };
 
                 history.Data.Add("FileId", message.ImportedEpisode.Id.ToString());
                 history.Data.Add("DroppedPath", message.EpisodeInfo.Path);
@@ -220,6 +221,7 @@ namespace NzbDrone.Core.History
                 history.Data.Add("ReleaseGroup", message.EpisodeInfo.ReleaseGroup);
                 history.Data.Add("CustomFormatScore", message.EpisodeInfo.CustomFormatScore.ToString());
                 history.Data.Add("Size", message.EpisodeInfo.Size.ToString());
+                history.Data.Add("IndexerFlags", message.ImportedEpisode.IndexerFlags.ToString());
 
                 _historyRepository.Insert(history);
             }
@@ -280,6 +282,7 @@ namespace NzbDrone.Core.History
                 history.Data.Add("Reason", message.Reason.ToString());
                 history.Data.Add("ReleaseGroup", message.EpisodeFile.ReleaseGroup);
                 history.Data.Add("Size", message.EpisodeFile.Size.ToString());
+                history.Data.Add("IndexerFlags", message.EpisodeFile.IndexerFlags.ToString());
 
                 _historyRepository.Insert(history);
             }
@@ -311,6 +314,7 @@ namespace NzbDrone.Core.History
                 history.Data.Add("RelativePath", relativePath);
                 history.Data.Add("ReleaseGroup", message.EpisodeFile.ReleaseGroup);
                 history.Data.Add("Size", message.EpisodeFile.Size.ToString());
+                history.Data.Add("IndexerFlags", message.EpisodeFile.IndexerFlags.ToString());
 
                 _historyRepository.Insert(history);
             }
@@ -323,16 +327,16 @@ namespace NzbDrone.Core.History
             foreach (var episodeId in message.EpisodeIds)
             {
                 var history = new EpisodeHistory
-                              {
-                                  EventType = EpisodeHistoryEventType.DownloadIgnored,
-                                  Date = DateTime.UtcNow,
-                                  Quality = message.Quality,
-                                  SourceTitle = message.SourceTitle,
-                                  SeriesId = message.SeriesId,
-                                  EpisodeId = episodeId,
-                                  DownloadId = message.DownloadId,
-                                  Languages = message.Languages
-                              };
+                {
+                    EventType = EpisodeHistoryEventType.DownloadIgnored,
+                    Date = DateTime.UtcNow,
+                    Quality = message.Quality,
+                    SourceTitle = message.SourceTitle,
+                    SeriesId = message.SeriesId,
+                    EpisodeId = episodeId,
+                    DownloadId = message.DownloadId,
+                    Languages = message.Languages
+                };
 
                 history.Data.Add("DownloadClient", message.DownloadClientInfo.Type);
                 history.Data.Add("DownloadClientName", message.DownloadClientInfo.Name);

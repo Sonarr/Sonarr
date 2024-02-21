@@ -29,6 +29,7 @@ import { align, icons, kinds, scrollDirections } from 'Helpers/Props';
 import SelectEpisodeModal from 'InteractiveImport/Episode/SelectEpisodeModal';
 import { SelectedEpisode } from 'InteractiveImport/Episode/SelectEpisodeModalContent';
 import ImportMode from 'InteractiveImport/ImportMode';
+import SelectIndexerFlagsModal from 'InteractiveImport/IndexerFlags/SelectIndexerFlagsModal';
 import InteractiveImport, {
   InteractiveImportCommandOptions,
 } from 'InteractiveImport/InteractiveImport';
@@ -71,7 +72,8 @@ type SelectType =
   | 'episode'
   | 'releaseGroup'
   | 'quality'
-  | 'language';
+  | 'language'
+  | 'indexerFlags';
 
 type FilterExistingFiles = 'all' | 'new';
 
@@ -136,10 +138,20 @@ const COLUMNS = [
     isVisible: true,
   },
   {
+    name: 'indexerFlags',
+    label: React.createElement(Icon, {
+      name: icons.FLAG,
+      title: () => translate('IndexerFlags'),
+    }),
+    isSortable: true,
+    isVisible: true,
+  },
+  {
     name: 'rejections',
     label: React.createElement(Icon, {
       name: icons.DANGER,
       kind: kinds.DANGER,
+      title: () => translate('Rejections'),
     }),
     isSortable: true,
     isVisible: true,
@@ -284,8 +296,18 @@ function InteractiveImportModalContent(
       }
     }
 
+    const showIndexerFlags = items.some((item) => item.indexerFlags);
+
+    if (!showIndexerFlags) {
+      const indexerFlagsColumn = result.find((c) => c.name === 'indexerFlags');
+
+      if (indexerFlagsColumn) {
+        indexerFlagsColumn.isVisible = false;
+      }
+    }
+
     return result;
-  }, [showSeries]);
+  }, [showSeries, items]);
 
   const selectedIds: number[] = useMemo(() => {
     return getSelectedIds(selectedState);
@@ -342,6 +364,10 @@ function InteractiveImportModalContent(
       {
         key: 'language',
         value: translate('SelectLanguage'),
+      },
+      {
+        key: 'indexerFlags',
+        value: translate('SelectIndexerFlags'),
       },
     ];
 
@@ -483,6 +509,7 @@ function InteractiveImportModalContent(
           releaseGroup,
           quality,
           languages,
+          indexerFlags,
           episodeFileId,
         } = item;
 
@@ -532,6 +559,7 @@ function InteractiveImportModalContent(
               releaseGroup,
               quality,
               languages,
+              indexerFlags,
             });
 
             return;
@@ -546,6 +574,7 @@ function InteractiveImportModalContent(
           releaseGroup,
           quality,
           languages,
+          indexerFlags,
           downloadId,
           episodeFileId,
         });
@@ -732,6 +761,22 @@ function InteractiveImportModalContent(
         updateInteractiveImportItems({
           ids: selectedIds,
           quality,
+        })
+      );
+
+      dispatch(reprocessInteractiveImportItems({ ids: selectedIds }));
+
+      setSelectModalOpen(null);
+    },
+    [selectedIds, dispatch]
+  );
+
+  const onIndexerFlagsSelect = useCallback(
+    (indexerFlags: number) => {
+      dispatch(
+        updateInteractiveImportItems({
+          ids: selectedIds,
+          indexerFlags,
         })
       );
 
@@ -944,6 +989,14 @@ function InteractiveImportModalContent(
         real={false}
         modalTitle={modalTitle}
         onQualitySelect={onQualitySelect}
+        onModalClose={onSelectModalClose}
+      />
+
+      <SelectIndexerFlagsModal
+        isOpen={selectModalOpen === 'indexerFlags'}
+        indexerFlags={0}
+        modalTitle={modalTitle}
+        onIndexerFlagsSelect={onIndexerFlagsSelect}
         onModalClose={onSelectModalClose}
       />
 

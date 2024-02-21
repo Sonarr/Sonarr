@@ -65,6 +65,7 @@ namespace Sonarr.Api.V3.Indexers
         public int? Seeders { get; set; }
         public int? Leechers { get; set; }
         public DownloadProtocol Protocol { get; set; }
+        public int IndexerFlags { get; set; }
 
         public bool IsDaily { get; set; }
         public bool IsAbsoluteNumbering { get; set; }
@@ -100,6 +101,7 @@ namespace Sonarr.Api.V3.Indexers
             var parsedEpisodeInfo = model.RemoteEpisode.ParsedEpisodeInfo;
             var remoteEpisode = model.RemoteEpisode;
             var torrentInfo = (model.RemoteEpisode.Release as TorrentInfo) ?? new TorrentInfo();
+            var indexerFlags = torrentInfo.IndexerFlags;
 
             // TODO: Clean this mess up. don't mix data from multiple classes, use sub-resources instead? (Got a huge Deja Vu, didn't we talk about this already once?)
             return new ReleaseResource
@@ -152,6 +154,7 @@ namespace Sonarr.Api.V3.Indexers
                 Seeders = torrentInfo.Seeders,
                 Leechers = (torrentInfo.Peers.HasValue && torrentInfo.Seeders.HasValue) ? (torrentInfo.Peers.Value - torrentInfo.Seeders.Value) : (int?)null,
                 Protocol = releaseInfo.DownloadProtocol,
+                IndexerFlags = (int)indexerFlags,
 
                 IsDaily = parsedEpisodeInfo.IsDaily,
                 IsAbsoluteNumbering = parsedEpisodeInfo.IsAbsoluteNumbering,

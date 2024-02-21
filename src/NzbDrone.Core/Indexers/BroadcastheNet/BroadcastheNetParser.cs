@@ -81,7 +81,8 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
                     Source = torrent.Source,
                     Container = torrent.Container,
                     Codec = torrent.Codec,
-                    Resolution = torrent.Resolution
+                    Resolution = torrent.Resolution,
+                    IndexerFlags = GetIndexerFlags(torrent)
                 };
 
                 if (torrent.TvdbID is > 0)
@@ -98,6 +99,24 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
             }
 
             return results;
+        }
+
+        private static IndexerFlags GetIndexerFlags(BroadcastheNetTorrent item)
+        {
+            IndexerFlags flags = 0;
+            flags |= IndexerFlags.Freeleech;
+
+            switch (item.Origin.ToUpperInvariant())
+            {
+                case "INTERNAL":
+                    flags |= IndexerFlags.Internal;
+                    break;
+                case "SCENE":
+                    flags |= IndexerFlags.Scene;
+                    break;
+            }
+
+            return flags;
         }
 
         private string CleanReleaseName(string releaseName)

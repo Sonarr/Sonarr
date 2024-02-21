@@ -12,9 +12,11 @@ import Episode from 'Episode/Episode';
 import EpisodeFormats from 'Episode/EpisodeFormats';
 import EpisodeLanguages from 'Episode/EpisodeLanguages';
 import EpisodeQuality from 'Episode/EpisodeQuality';
+import IndexerFlags from 'Episode/IndexerFlags';
 import { icons, kinds, tooltipPositions } from 'Helpers/Props';
 import SelectEpisodeModal from 'InteractiveImport/Episode/SelectEpisodeModal';
 import { SelectedEpisode } from 'InteractiveImport/Episode/SelectEpisodeModalContent';
+import SelectIndexerFlagsModal from 'InteractiveImport/IndexerFlags/SelectIndexerFlagsModal';
 import SelectLanguageModal from 'InteractiveImport/Language/SelectLanguageModal';
 import SelectQualityModal from 'InteractiveImport/Quality/SelectQualityModal';
 import SelectReleaseGroupModal from 'InteractiveImport/ReleaseGroup/SelectReleaseGroupModal';
@@ -41,7 +43,8 @@ type SelectType =
   | 'episode'
   | 'releaseGroup'
   | 'quality'
-  | 'language';
+  | 'language'
+  | 'indexerFlags';
 
 type SelectedChangeProps = SelectStateInputProps & {
   hasEpisodeFileId: boolean;
@@ -60,6 +63,7 @@ interface InteractiveImportRowProps {
   size: number;
   customFormats?: object[];
   customFormatScore?: number;
+  indexerFlags: number;
   rejections: Rejection[];
   columns: Column[];
   episodeFileId?: number;
@@ -84,6 +88,7 @@ function InteractiveImportRow(props: InteractiveImportRowProps) {
     size,
     customFormats,
     customFormatScore,
+    indexerFlags,
     rejections,
     isReprocessing,
     isSelected,
@@ -98,6 +103,10 @@ function InteractiveImportRow(props: InteractiveImportRowProps) {
 
   const isSeriesColumnVisible = useMemo(
     () => columns.find((c) => c.name === 'series')?.isVisible ?? false,
+    [columns]
+  );
+  const isIndexerFlagsColumnVisible = useMemo(
+    () => columns.find((c) => c.name === 'indexerFlags')?.isVisible ?? false,
     [columns]
   );
 
@@ -306,6 +315,27 @@ function InteractiveImportRow(props: InteractiveImportRowProps) {
     [id, dispatch, setSelectModalOpen, selectRowAfterChange]
   );
 
+  const onSelectIndexerFlagsPress = useCallback(() => {
+    setSelectModalOpen('indexerFlags');
+  }, [setSelectModalOpen]);
+
+  const onIndexerFlagsSelect = useCallback(
+    (indexerFlags: number) => {
+      dispatch(
+        updateInteractiveImportItem({
+          id,
+          indexerFlags,
+        })
+      );
+
+      dispatch(reprocessInteractiveImportItems({ ids: [id] }));
+
+      setSelectModalOpen(null);
+      selectRowAfterChange();
+    },
+    [id, dispatch, setSelectModalOpen, selectRowAfterChange]
+  );
+
   const seriesTitle = series ? series.title : '';
   const isAnime = series?.seriesType === 'anime';
 
@@ -332,6 +362,7 @@ function InteractiveImportRow(props: InteractiveImportRowProps) {
   const showReleaseGroupPlaceholder = isSelected && !releaseGroup;
   const showQualityPlaceholder = isSelected && !quality;
   const showLanguagePlaceholder = isSelected && !languages;
+  const showIndexerFlagsPlaceholder = isSelected && !indexerFlags;
 
   return (
     <TableRow>
@@ -448,6 +479,28 @@ function InteractiveImportRow(props: InteractiveImportRowProps) {
         ) : null}
       </TableRowCell>
 
+      {isIndexerFlagsColumnVisible ? (
+        <TableRowCellButton
+          title={translate('ClickToChangeIndexerFlags')}
+          onPress={onSelectIndexerFlagsPress}
+        >
+          {showIndexerFlagsPlaceholder ? (
+            <InteractiveImportRowCellPlaceholder isOptional={true} />
+          ) : (
+            <>
+              {indexerFlags ? (
+                <Popover
+                  anchor={<Icon name={icons.FLAG} kind={kinds.PRIMARY} />}
+                  title={translate('IndexerFlags')}
+                  body={<IndexerFlags indexerFlags={indexerFlags} />}
+                  position={tooltipPositions.LEFT}
+                />
+              ) : null}
+            </>
+          )}
+        </TableRowCellButton>
+      ) : null}
+
       <TableRowCell>
         {rejections.length ? (
           <Popover
@@ -516,6 +569,14 @@ function InteractiveImportRow(props: InteractiveImportRowProps) {
         languageIds={languages ? languages.map((l) => l.id) : []}
         modalTitle={modalTitle}
         onLanguagesSelect={onLanguagesSelect}
+        onModalClose={onSelectModalClose}
+      />
+
+      <SelectIndexerFlagsModal
+        isOpen={selectModalOpen === 'indexerFlags'}
+        indexerFlags={indexerFlags ?? 0}
+        modalTitle={modalTitle}
+        onIndexerFlagsSelect={onIndexerFlagsSelect}
         onModalClose={onSelectModalClose}
       />
     </TableRow>

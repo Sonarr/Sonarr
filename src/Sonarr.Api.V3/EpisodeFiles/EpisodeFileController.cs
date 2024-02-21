@@ -9,6 +9,7 @@ using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Parser;
+using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
 using NzbDrone.SignalR;
 using Sonarr.Http;
@@ -202,6 +203,11 @@ namespace Sonarr.Api.V3.EpisodeFiles
                 if (resourceEpisodeFile.ReleaseGroup != null)
                 {
                     episodeFile.ReleaseGroup = resourceEpisodeFile.ReleaseGroup;
+                }
+
+                if (resourceEpisodeFile.IndexerFlags.HasValue)
+                {
+                    episodeFile.IndexerFlags = (IndexerFlags)resourceEpisodeFile.IndexerFlags;
                 }
             }
 

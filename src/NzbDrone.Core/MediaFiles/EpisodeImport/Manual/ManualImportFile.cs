@@ -16,6 +16,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
         public QualityModel Quality { get; set; }
         public List<Language> Languages { get; set; }
         public string ReleaseGroup { get; set; }
+        public int IndexerFlags { get; set; }
         public string DownloadId { get; set; }
 
         public bool Equals(ManualImportFile other)

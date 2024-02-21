@@ -30,6 +30,7 @@ namespace Sonarr.Api.V3.ManualImport
         public string DownloadId { get; set; }
         public List<CustomFormatResource> CustomFormats { get; set; }
         public int CustomFormatScore { get; set; }
+        public int IndexerFlags { get; set; }
         public IEnumerable<Rejection> Rejections { get; set; }
     }
 
@@ -65,6 +66,7 @@ namespace Sonarr.Api.V3.ManualImport
 
                 // QualityWeight
                 DownloadId = model.DownloadId,
+                IndexerFlags = model.IndexerFlags,
                 Rejections = model.Rejections
             };
         }
