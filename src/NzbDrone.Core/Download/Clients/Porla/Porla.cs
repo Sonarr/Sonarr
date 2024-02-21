@@ -40,26 +40,21 @@ namespace NzbDrone.Core.Download.Clients.Porla
 
         public override IEnumerable<DownloadClientItem> GetItems()
         {
-            //TODO: list with category filter
-            var plist = _proxy.ListTorrents(Settings); //TODO: Paginate
+            var plist = _proxy.ListTorrents(Settings);
 
             var items = new List<DownloadClientItem>();
 
+            //should probs paginate instead of cheating with the INT64.MAXVALUE
             foreach (var torrent in plist.torrents)
             {
-                //if (Settings.Category.IsNotNullOrWhiteSpace() && torrent.Label != Settings.Category)
-                //{
-                //    continue;
-                //}
+                // we don't need to check the category, the filter did that for us
 
-                //var filedetial = ListTorrentsFiles(Settings, pt);
                 var outputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(torrent.save_path));
-                var eta = TimeSpan.FromSeconds(0);
-
-                if (torrent.download_rate > 0 && torrent.total_done > 0)
-                {
-                    eta = TimeSpan.FromSeconds(torrent.total / (double)torrent.download_rate);
-                }
+                
+                var eta = TimeSpan.FromSeconds(0); //is -1 a valid eta to represent forever?
+                eta = TimeSpan.FromSeconds(torrent.eta)
+                //do we trust porla?
+                // if (torrent.download_rate > 0 && torrent.total_done > 0) { eta = TimeSpan.FromSeconds(torrent.total / (double)torrent.download_rate); }
 
                 var item = new DownloadClientItem
                 {
@@ -73,16 +68,18 @@ namespace NzbDrone.Core.Download.Clients.Porla
                     SeedRatio = torrent.ratio
                 };
 
-                //if (!string.IsNullOrEmpty(torrent.Error))
-                //{
-                //    item.Status = DownloadItemStatus.Warning;
-                //    item.Message = torrent.Error;
-                //}
+                if (string.IsNotNullOrEmpty(torrent.error))
+                {
+                    item.Status = DownloadItemStatus.Warning;
+                    item.Message = torrent.error;
+                }
+
+                //deal with moving_storage???
                 if (torrent.finished_duration > 0 || torrent.queue_position < 0)
                 {
                     item.Status = DownloadItemStatus.Completed;
                 }
-                //else if (torrent.State == HadoukenTorrentState.QueuedForChecking)
+                //else if (torrent.state == HadoukenTorrentState.QueuedForChecking)
                 //{
                 //    item.Status = DownloadItemStatus.Queued;
                 //}
@@ -94,6 +91,7 @@ namespace NzbDrone.Core.Download.Clients.Porla
                 {
                     item.Status = DownloadItemStatus.Downloading;
                 }
+                // torrent.state exists, can't quite tell if it's passthrough of https://libtorrent.org/reference-Torrent_Status.html#state_t
 
                 item.CanMoveFiles = item.CanBeRemoved = true //usure of the restrictions here
 
@@ -107,24 +105,27 @@ namespace NzbDrone.Core.Download.Clients.Porla
         {
             //Kinda sucks we don't have a `RemoveItems`, porla has a batch interface for removals
             _proxy.RemoveTorrent(Settings, deleteData, [item])
+            //when do we set item.Removed ?
         }
 
         public override DownloadClientInfo GetStatus()
         {
-            var preset = _proxy.ListPresets(Settings);
-
-            destDir = new OsPath(config.GetValueOrDefault("save_path") as string);
+            //var preset = _proxy.ListPresets(Settings);
+            //var sessettings = _proxy.GetSessionSettings(Settings);
 
             var status = new DownloadClientInfo
             {
                 IsLocalhost = Settings.Host == "127.0.0.1" || Settings.Host == "localhost"
-                RemovesCompletedDownloads = false //no settings (yet)
+                RemovesCompletedDownloads = false //should be determined through Flags From 
             };
 
-            if (destDir.IsNotNullOrEmpty)
-            {
-                status.OutputRootFolders = new List<OsPath> { _remotePathMappingService.RemapRemoteToLocal(Settings.Host, destDir) };
-            }
+            // this value is stored in the presets values... i think?
+
+            // destDir = new OsPath(preset.GetValueOrDefault("save_path") as string);
+            //if (destDir.IsNotNullOrEmpty)
+            //{
+            //    status.OutputRootFolders = new List<OsPath> { _remotePathMappingService.RemapRemoteToLocal(Settings.Host, destDir) };
+            //}
 
             return status;
         }
@@ -132,7 +133,6 @@ namespace NzbDrone.Core.Download.Clients.Porla
         protected override string AddFromMagnetLink(RemoteEpisode remoteEpisode, string hash, string magnetLink)
         {
             var torrent = _proxy.AddMagnetTorrent(Settings, magnetLink);
-
             return torrent.Hash.ToUpper();
         }
 
@@ -158,13 +158,13 @@ namespace NzbDrone.Core.Download.Clients.Porla
             try
             {
                 var sysVers = _proxy.GetSysVersion(Settings);
-                var version = new Version(sysVers.Versions["porla"]);
+                var version = new Version(sysVers.porla.version);
 
                 if (version < new Version("0.37.0"))
                 {
                     //return new ValidationFailure(string.Empty, _localizationService.GetLocalizedString("DownloadClientValidationErrorVersion",
                     //        new Dictionary<string, object> { { "clientName", Name }, { "requiredVersion", "0.37.0" }, { "reportedVersion", version } }));
-                    _logger.Warn($"Porla: Unsure if your version is compatible {version}")
+                    _logger.Warn($"Porla: Unsure if your version is compatible: {version}")
                 }
             }
             catch (DownloadClientAuthenticationException ex)
@@ -188,7 +188,7 @@ namespace NzbDrone.Core.Download.Clients.Porla
         {
             try
             {
-                _proxy.ListTorrents(Settings);
+                _proxy.ListTorrents(Settings, 0, 1);
             }
             catch (Exception ex)
             {

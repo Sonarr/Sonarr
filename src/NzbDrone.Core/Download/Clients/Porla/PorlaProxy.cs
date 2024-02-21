@@ -16,12 +16,12 @@ namespace NzbDrone.Core.Download.Clients.Porla
         //fs
             //fs.space
         //sessions
-        Session[] ListSessions(PorlaSettings settings);                     //sessions.list
+        List<PorlaSession> ListSessions(PorlaSettings settings);            //sessions.list
         void PauseSessions(PorlaSettings settings);                         //sessions.pause
-        void ResumeSessions(PorlaSettings settings);                        //sessions.pause
+        void ResumeSessions(PorlaSettings settings);                        //sessions.resume
         PorlaSessionsSettings GetSessionSettings(PorlaSettings settings);   //sessions.settings.list
         //presets
-        PorlaPresets ListPresets(PorlaSettings settings);     //presets.list
+        List<PorlaPreset> ListPresets(PorlaSettings settings);     //presets.list
         //torrents
         PorlaTorrent AddMagnetTorrent(PorlaSettings settings, string uri);                  //torrents.add
         PorlaTorrent AddTorrentFile(PorlaSettings settings, byte[] fileContent);            //torrents.add
@@ -29,16 +29,16 @@ namespace NzbDrone.Core.Download.Clients.Porla
         void MoveTorrent(PorlaSettings settings, PorlaMoveSettings MoveSettings, PorlaTorrent pt); //torrents.move
         void PauseTorrent(PorlaSettings settings, PorlaTorrent pt);         //torrents.pause
         void ResumeTorrent(PorlaSettings settings, PorlaTorrent pt);        //torrents.resume
-        PorlaTorrentDetails ListTorrents(PorlaSettings settings);           //torrents.list
-        PorlaTorrentFiles ListTorrentsFiles(PorlaSettings settings, PorlaTorrent pt);    //torrents.files.list
-        PorlaTorrentMetadata ListTorrentsMetadata(PorlaSettings settings);    //torrents.metadata.list
+        List<PorlaTorrentDetail> ListTorrents(PorlaSettings settings);      //torrents.list
+        //torrents.recheck
+            //torrents.files.list
+            //torrents.metadata.list
         //torrents.peers
-        void AddPeer(PorlaSettings settings, PorlaPeers peers, PorlaTorrent pt);    //torrents.peer.add
-        PorlaPeerDetail ListPeers(PorlaSettings settings, PorlaTorrent pt);        //torrents.peer.list
+            //torrents.peer.add
+            //torrents.peer.list
         //torrents.properties
             //torrents.properties.get
             //torrents.properties.set
-        //torrents.recheck
     }
 
     public class PorlaProxy : IPorlaProxy
@@ -60,10 +60,10 @@ namespace NzbDrone.Core.Download.Clients.Porla
             string JWT = settings.InfiniteJWT ??= String.Empty
             
             if (IsNullOrEmpty(JWT)) {
-                _logger.Warn("Porla: We don't implemenet alternate JWT methods (yet)")
+                //_logger.Warn("Porla: We don't implemenet alternate JWT methods (yet)")
                 //add logic here
             } else {
-                _logger.Notice("Porla: Setting Infinte JWT")
+                //_logger.Notice("Porla: Setting Infinte JWT")
             }
 
             var requestBuilder = new JsonRpcRequestBuilder(baseUrl, method, parameters);
@@ -119,7 +119,7 @@ namespace NzbDrone.Core.Download.Clients.Porla
 
         // session
 
-        public void ListSessions(PorlaSettings settings)
+        public PorlaSession[] ListSessions(PorlaSettings settings)
         {
             var empty = ProcessRequest<string>(settings, "sessions.list")
             LogSupposedToBeNothing(empty)
@@ -144,21 +144,21 @@ namespace NzbDrone.Core.Download.Clients.Porla
 
         // presets
 
-        public PorlaPresets ListPresets(PorlaSettings settings)
+        public PorlaPreset[] ListPresets(PorlaSettings settings)
         {
-            return ProcessRequest<PorlaPresets>(settings, "presets.list")
+            return ProcessRequest<>(settings, "presets.list")
         }
 
         // torrents
 
         public PorlaTorrent AddMagnetTorrent(PorlaSettings settings, string uri)
         {
-            return ProcessRequest<PorlaTorrent>(settings, "torrents.add")
+            return ProcessRequest<PorlaTorrent>(settings, "torrents.add", "preset", settings.Preset)
         }
 
         public PorlaTorrent AddTorrentFile(PorlaSettings settings, byte[] fileContent)
         {
-            return ProcessRequest<PorlaTorrent>(settings, "torrents.add")
+            return ProcessRequest<PorlaTorrent>(settings, "torrents.add", "preset", settings.Preset)
         }
 
         public void RemoveTorrent(PorlaSettings settings, bool RemoveData, PorlaTorrent[] pts)
@@ -185,27 +185,11 @@ namespace NzbDrone.Core.Download.Clients.Porla
             LogSupposedToBeNothing(empty)
         }
 
-        public PorlaTorrentFiles ListTorrentsFiles(PorlaSettings settings, PorlaTorrent pt)
+        public PorlaTorrentDetails ListTorrents(PorlaSettings settings, long page = 0, long size = long.MaxSize )
         {
-            return ProcessRequest<PorlaTorrentFiles>(settings, "torrents.files.list", pt.AsParams())
-        }
-
-        public PorlaTorrentMetadata ListTorrentsMetadata(PorlaSettings settings)
-        {
-            return ProcessRequest<PorlaTorrentFiles>(settings, "torrents.metadata.list")
-        }
-
-        //torrents.peers
-
-        public void AddPeer(PorlaSettings settings, PorlaPeers peers, PorlaTorrent pt)
-        {
-            var empty = ProcessRequest<string>(settings, "torrents.peer.add", PorlaPeers.MakeParams(pt))
-            LogSupposedToBeNothing(empty)
-        }
-
-        public PorlaPeerDetail ListPeers(PorlaSettings settings, PorlaTorrent pt)
-        {
-            return ProcessRequest<PorlaPeerDetail>(settings, "torrents.peer.list", pt.AsParams())
+            //cheating with the Int64.MaxValue  :P
+            ResponsePorlaTorrentList resp = ProcessRequest<PorlaTorrentDetails>(settings, "torrents.list", "filters", new { category = settings.Category ?? "" }, "page", page, "size", size);
+            return resp.torrents
         }
     }
 }

@@ -27,6 +27,7 @@ namespace NzbDrone.Core.Download.Clients.Hadouken
             Host = "localhost";
             Port = 1137;
             Category = "sonarr-tv";
+            Preset = "default";
         }
 
         [FieldDefinition(0, Label = "Host", Type = FieldType.Textbox)]
@@ -36,11 +37,11 @@ namespace NzbDrone.Core.Download.Clients.Hadouken
         public int Port { get; set; }
 
         [FieldDefinition(2, Label = "UseSsl", Type = FieldType.Checkbox, HelpText = "DownloadClientSettingsUseSslHelpText")]
-        [FieldToken(TokenField.HelpText, "UseSsl", "clientName", "Hadouken")]
+        [FieldToken(TokenField.HelpText, "UseSsl", "clientName", "Porla")]
         public bool UseSsl { get; set; }
 
         [FieldDefinition(3, Label = "UrlBase", Type = FieldType.Textbox, Advanced = true, HelpText = "DownloadClientSettingsUrlBaseHelpText")]
-        [FieldToken(TokenField.HelpText, "UrlBase", "clientName", "Hadouken")]
+        [FieldToken(TokenField.HelpText, "UrlBase", "clientName", "Porla")]
         [FieldToken(TokenField.HelpText, "UrlBase", "url", "http://[host]:[port]/[urlBase]/api")]
         public string UrlBase { get; set; }
 
@@ -49,6 +50,10 @@ namespace NzbDrone.Core.Download.Clients.Hadouken
 
         [FieldDefinition(5, Label = "Category", Type = FieldType.Textbox, HelpText = "DownloadClientSettingsCategoryHelpText")]
         public string Category { get; set; }
+
+        [FieldDefinition(6, Label = "Preset", Type = FieldType.Textbox, HelpText = "DownloadClientPorlaSettingsPreset")]
+        public string Preset { get; set; }
+
 
         public NzbDroneValidationResult Validate()
         {

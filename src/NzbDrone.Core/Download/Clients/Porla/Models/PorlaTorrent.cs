@@ -12,7 +12,7 @@ namespace NzbDrone.Core.Download.Clients.Porla.Models
         }
 
         public object[] AsParams() {
-            return new [ "info_hash", [InfoHash.Hash, null] ];
+            return [ "info_hash", [InfoHash.Hash, null] ];
         }
     }
 }
