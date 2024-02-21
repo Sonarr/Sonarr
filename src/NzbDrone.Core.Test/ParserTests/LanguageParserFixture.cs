@@ -441,6 +441,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Name (2020) - S01E20 - [AAC 2.0].testtitle.forced.fra.ass", new[] { "forced" }, "testtitle", "French")]
         [TestCase("Name (2020) - S01E20 - [AAC 2.0].fra.forced.testtitle.ass", new[] { "forced" }, "testtitle", "French")]
         [TestCase("Name (2020) - S01E20 - [AAC 2.0].forced.fra.testtitle.ass", new[] { "forced" }, "testtitle", "French")]
+        [TestCase("Name (2020) - S01E20 - [AAC 2.0].ru-something-else.srt", new string[0], "something-else", "Russian")]
         public void should_parse_title_and_tags(string postTitle, string[] expectedTags, string expectedTitle, string expectedLanguage)
         {
             var subtitleTitleInfo = LanguageParser.ParseSubtitleLanguageInformation(postTitle);
