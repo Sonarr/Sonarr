@@ -2,7 +2,6 @@ import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
 import AppState from 'App/State/AppState';
-import { ImportListExclusionsSettingsAppState } from 'App/State/SettingsAppState';
 import Alert from 'Components/Alert';
 import Form from 'Components/Form/Form';
 import FormGroup from 'Components/Form/FormGroup';
@@ -38,16 +37,12 @@ interface EditImportListExclusionModalContentProps {
   onDeleteImportListExclusionPress?: () => void;
 }
 
-interface WithPendingChangesState extends ImportListExclusionsSettingsAppState {
-  pendingChanges: Partial<ImportListExclusion>;
-}
-
 function createImportListExclusionSelector(id?: number) {
   return createSelector(
     (state: AppState) => state.settings.importListExclusions,
     (importListExclusions) => {
       const { isFetching, error, isSaving, saveError, pendingChanges, items } =
-        importListExclusions as WithPendingChangesState;
+        importListExclusions;
 
       const mapping = id
         ? items.find((i) => i.id === id)

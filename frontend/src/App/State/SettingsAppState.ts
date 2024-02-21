@@ -47,7 +47,9 @@ export interface ImportListExclusionsSettingsAppState
   extends AppSectionState<ImportListExclusion>,
     AppSectionSaveState,
     PagedAppSectionState,
-    AppSectionDeleteState {}
+    AppSectionDeleteState {
+  pendingChanges: Partial<ImportListExclusion>;
+}
 
 export type IndexerFlagSettingsAppState = AppSectionState<IndexerFlag>;
 export type LanguageSettingsAppState = AppSectionState<Language>;
