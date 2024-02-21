@@ -761,7 +761,7 @@
     "HealthMessagesInfoBox": "您可以通过单击行尾的wiki链接(图书图标)或检查[日志]({link})来查找有关这些运行状况检查消息原因的更多信息。如果你在理解这些信息方面有困难，你可以通过下面的链接联系我们的支持。",
     "StandardEpisodeFormat": "标准单集格式",
     "DefaultNameCopiedSpecification": "{name} - 复制",
-    "AddListExclusion": "添加列表例外",
+    "AddListExclusion": "新增 列表",
     "AddListExclusionSeriesHelpText": "防止剧集通过列表添加到{appName}",
     "AddNewSeriesSearchForCutoffUnmetEpisodes": "开始搜索未达截止条件的集",
     "AddedDate": "加入于:{date}",
