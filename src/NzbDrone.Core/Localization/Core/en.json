@@ -632,6 +632,7 @@
   "EpisodeNaming": "Episode Naming",
   "EpisodeNumbers": "Episode Number(s)",
   "EpisodeProgress": "Episode Progress",
+  "EpisodeRequested": "Episode Requested",
   "EpisodeSearchResultsLoadError": "Unable to load results for this episode search. Try again later",
   "EpisodeTitle": "Episode Title",
   "EpisodeTitleRequired": "Episode Title Required",
