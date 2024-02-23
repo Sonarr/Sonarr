@@ -250,6 +250,12 @@ export const defaultState = {
       label: () => translate('SeasonPack'),
       type: filterBuilderTypes.EXACT,
       valueType: filterBuilderValueTypes.BOOL
+    },
+    {
+      name: 'episodeRequested',
+      label: () => translate('EpisodeRequested'),
+      type: filterBuilderTypes.EXACT,
+      valueType: filterBuilderValueTypes.BOOL
     }
   ],
 
