@@ -37,8 +37,8 @@ class CustomFilter extends Component {
       dispatchSetFilter
     } = this.props;
 
-    // Assume that delete and then unmounting means the delete was successful.
-    // Moving this check to a ancestor would be more accurate, but would have
+    // Assume that delete and then unmounting means the deletion was successful.
+    // Moving this check to an ancestor would be more accurate, but would have
     // more boilerplate.
     if (this.state.isDeleting && id === selectedFilterKey) {
       dispatchSetFilter({ selectedFilterKey: 'all' });
