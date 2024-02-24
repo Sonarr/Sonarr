@@ -8,6 +8,7 @@ using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Localization;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
+using NzbDrone.Core.Tv;
 using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.ImportLists.Sonarr
@@ -61,11 +62,22 @@ namespace NzbDrone.Core.ImportLists.Sonarr
                         continue;
                     }
 
-                    series.Add(new ImportListItemInfo
+                    var info = new ImportListItemInfo
                     {
                         TvdbId = item.TvdbId,
                         Title = item.Title
-                    });
+                    };
+
+                    if (Settings.SyncSeasonMonitoring)
+                    {
+                        info.Seasons = item.Seasons.Select(s => new Season
+                        {
+                            SeasonNumber = s.SeasonNumber,
+                            Monitored = s.Monitored
+                        }).ToList();
+                    }
+
+                    series.Add(info);
                 }
 
                 _importListStatusService.RecordSuccess(Definition.Id);

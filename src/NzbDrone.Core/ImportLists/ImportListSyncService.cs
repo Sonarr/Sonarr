@@ -222,11 +222,14 @@ namespace NzbDrone.Core.ImportLists
                         QualityProfileId = importList.QualityProfileId,
                         SeriesType = importList.SeriesType,
                         SeasonFolder = importList.SeasonFolder,
+                        Seasons = item.Seasons,
                         Tags = importList.Tags,
                         AddOptions = new AddSeriesOptions
                         {
                             SearchForMissingEpisodes = importList.SearchForMissingEpisodes,
-                            Monitor = importList.ShouldMonitor
+
+                            // If seasons are provided use them for syncing monitored status, otherwise use the list setting.
+                            Monitor = item.Seasons.Any() ? MonitorTypes.Skip : importList.ShouldMonitor
                         }
                     });
                 }

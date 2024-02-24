@@ -851,6 +851,8 @@
   "ImportListsSimklSettingsUserListTypePlanToWatch": "Plan To Watch",
   "ImportListsSimklSettingsUserListTypeWatching": "Watching",
   "ImportListsSonarrSettingsApiKeyHelpText": "API Key of the {appName} instance to import from",
+  "ImportListsSonarrSettingsSyncSeasonMonitoring": "Sync Season Monitoring",
+  "ImportListsSonarrSettingsSyncSeasonMonitoringHelpText": "Sync season monitoring from {appName} instance, if enabled 'Monitor' will be ignored",
   "ImportListsSonarrSettingsFullUrl": "Full URL",
   "ImportListsSonarrSettingsFullUrlHelpText": "URL, including port, of the {appName} instance to import from",
   "ImportListsSonarrSettingsQualityProfilesHelpText": "Quality Profiles from the source instance to import from",
