@@ -15,6 +15,7 @@ namespace NzbDrone.Core.ImportLists.Sonarr
         public int QualityProfileId { get; set; }
         public int LanguageProfileId { get; set; }
         public string RootFolderPath { get; set; }
+        public List<SonarrSeason> Seasons { get; set; }
         public HashSet<int> Tags { get; set; }
     }
 
@@ -34,5 +35,11 @@ namespace NzbDrone.Core.ImportLists.Sonarr
     {
         public string Path { get; set; }
         public int Id { get; set; }
+    }
+
+    public class SonarrSeason
+    {
+        public int SeasonNumber { get; set; }
+        public bool Monitored { get; set; }
     }
 }

@@ -27,7 +27,8 @@ namespace NzbDrone.Core.Tv
         Recent,
         MonitorSpecials,
         UnmonitorSpecials,
-        None
+        None,
+        Skip
     }
 
     public enum NewItemMonitorTypes

@@ -40,6 +40,12 @@ namespace NzbDrone.Core.Tv
                 return;
             }
 
+            // Skip episode level monitoring and use season information when series was added
+            if (monitoringOptions.Monitor == MonitorTypes.Skip)
+            {
+                return;
+            }
+
             var firstSeason = series.Seasons.Select(s => s.SeasonNumber).Where(s => s > 0).MinOrDefault();
             var lastSeason = series.Seasons.Select(s => s.SeasonNumber).MaxOrDefault();
             var episodes = _episodeService.GetEpisodeBySeries(series.Id);
