@@ -453,5 +453,33 @@ namespace NzbDrone.Core.Test.TvTests
             _updatedEpisodes.First().EpisodeNumber.Should().Be(episodes[1].EpisodeNumber);
             _updatedEpisodes.First().AbsoluteEpisodeNumber.Should().Be(episodes[1].AbsoluteEpisodeNumber);
         }
+
+        [Test]
+        public void should_mark_updated_episodes_that_have_newly_added_absolute_episode_number()
+        {
+            var episodes = Builder<Episode>.CreateListOfSize(3)
+                .Build()
+                .ToList();
+
+            var existingEpisodes = new List<Episode>
+            {
+                episodes[0],
+                episodes[1]
+            };
+
+            existingEpisodes[0].AbsoluteEpisodeNumber = null;
+
+            Mocker.GetMock<IEpisodeService>().Setup(c => c.GetEpisodeBySeries(It.IsAny<int>()))
+                .Returns(existingEpisodes);
+
+            Subject.RefreshEpisodeInfo(GetAnimeSeries(), episodes);
+
+            _updatedEpisodes.First().SeasonNumber.Should().Be(episodes[1].SeasonNumber);
+            _updatedEpisodes.First().EpisodeNumber.Should().Be(episodes[1].EpisodeNumber);
+            _updatedEpisodes.First().AbsoluteEpisodeNumber.Should().NotBeNull();
+            _updatedEpisodes.First().AbsoluteEpisodeNumberAdded.Should().BeTrue();
+
+            _insertedEpisodes.Any(e => e.AbsoluteEpisodeNumberAdded).Should().BeFalse();
+        }
     }
 }

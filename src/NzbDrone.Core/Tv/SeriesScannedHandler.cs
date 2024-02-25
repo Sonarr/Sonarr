@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Tv
         private readonly IEpisodeMonitoredService _episodeMonitoredService;
         private readonly ISeriesService _seriesService;
         private readonly IManageCommandQueue _commandQueueManager;
-        private readonly IEpisodeAddedService _episodeAddedService;
+        private readonly IEpisodeRefreshedService _episodeRefreshedService;
         private readonly IEventAggregator _eventAggregator;
 
         private readonly Logger _logger;
@@ -21,14 +21,14 @@ namespace NzbDrone.Core.Tv
         public SeriesScannedHandler(IEpisodeMonitoredService episodeMonitoredService,
                                     ISeriesService seriesService,
                                     IManageCommandQueue commandQueueManager,
-                                    IEpisodeAddedService episodeAddedService,
+                                    IEpisodeRefreshedService episodeRefreshedService,
                                     IEventAggregator eventAggregator,
                                     Logger logger)
         {
             _episodeMonitoredService = episodeMonitoredService;
             _seriesService = seriesService;
             _commandQueueManager = commandQueueManager;
-            _episodeAddedService = episodeAddedService;
+            _episodeRefreshedService = episodeRefreshedService;
             _eventAggregator = eventAggregator;
             _logger = logger;
         }
@@ -39,7 +39,7 @@ namespace NzbDrone.Core.Tv
 
             if (addOptions == null)
             {
-                _episodeAddedService.SearchForRecentlyAdded(series.Id);
+                _episodeRefreshedService.Search(series.Id);
                 return;
             }
 
