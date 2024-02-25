@@ -59,6 +59,14 @@ namespace NzbDrone.Core.Tv
                     {
                         existingEpisodes.Remove(episodeToUpdate);
                         updateList.Add(episodeToUpdate);
+
+                        // Anime series with newly added absolute episode number
+                        if (series.SeriesType == SeriesTypes.Anime &&
+                            !episodeToUpdate.AbsoluteEpisodeNumber.HasValue &&
+                            episode.AbsoluteEpisodeNumber.HasValue)
+                        {
+                            episodeToUpdate.AbsoluteEpisodeNumberAdded = true;
+                        }
                     }
                     else
                     {
