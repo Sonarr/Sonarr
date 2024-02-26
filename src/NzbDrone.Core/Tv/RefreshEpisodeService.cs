@@ -53,7 +53,7 @@ namespace NzbDrone.Core.Tv
             {
                 try
                 {
-                    var episodeToUpdate = GetEpisodeToUpdate(series, episode, existingEpisodes);
+                    var episodeToUpdate = existingEpisodes.FirstOrDefault(e => e.SeasonNumber == episode.SeasonNumber && e.EpisodeNumber == episode.EpisodeNumber);
 
                     if (episodeToUpdate != null)
                     {
@@ -233,24 +233,6 @@ namespace NzbDrone.Core.Tv
                                  .DistinctBy(e => e.AbsoluteEpisodeNumber.Value)
                                  .Concat(remoteEpisodes.Where(e => !e.AbsoluteEpisodeNumber.HasValue))
                                  .ToList();
-        }
-
-        private Episode GetEpisodeToUpdate(Series series, Episode episode, List<Episode> existingEpisodes)
-        {
-            if (series.SeriesType == SeriesTypes.Anime)
-            {
-                if (episode.AbsoluteEpisodeNumber.HasValue)
-                {
-                    var matchingEpisode = existingEpisodes.FirstOrDefault(e => e.AbsoluteEpisodeNumber == episode.AbsoluteEpisodeNumber);
-
-                    if (matchingEpisode != null)
-                    {
-                        return matchingEpisode;
-                    }
-                }
-            }
-
-            return existingEpisodes.FirstOrDefault(e => e.SeasonNumber == episode.SeasonNumber && e.EpisodeNumber == episode.EpisodeNumber);
         }
 
         private IEnumerable<Episode> OrderEpisodes(Series series, List<Episode> episodes)
