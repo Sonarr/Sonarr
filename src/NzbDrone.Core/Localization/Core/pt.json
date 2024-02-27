@@ -60,7 +60,7 @@
     "AutoTaggingNegateHelpText": "Se marcada, a regra de etiqueta automática não será aplicada se esta condição {implementationName} corresponder.",
     "AddNew": "Adicionar Novo",
     "Age": "Idade",
-    "AddAutoTagError": "Não foi possível adicionar uma nova etiqueta automática, tente novamente.",
+    "AddAutoTagError": "Não foi possível adicionar uma nova tag automática. Por favor, tente novamente.",
     "AddConditionError": "Não foi possível adicionar uma nova condição, tente novamente.",
     "AddConnection": "Adicionar Conexão",
     "AddCustomFormat": "Adicionar formato personalizado",

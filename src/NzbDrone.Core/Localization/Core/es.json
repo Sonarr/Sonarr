@@ -18,7 +18,7 @@
     "Year": "Año",
     "Reload": "Recargar",
     "AbsoluteEpisodeNumber": "Número de Episodio Absoluto",
-    "AddAutoTagError": "No se pudo añadir una nueva etiqueta automática, inténtelo de nuevo.",
+    "AddAutoTagError": "",
     "AddConditionError": "No se pudo añadir una nueva condición, inténtelo de nuevo.",
     "AddConnection": "Añadir Conexión",
     "AddCustomFormat": "Añadir Formato Personalizado",

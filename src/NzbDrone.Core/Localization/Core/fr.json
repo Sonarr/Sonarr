@@ -1870,7 +1870,7 @@
     "EpisodeFileMissingTooltip": "Fichier de l'épisode manquant",
     "AutoTaggingSpecificationGenre": "Genre(s)",
     "AutoTaggingSpecificationMaximumYear": "Année maximum",
-    "AutoTaggingSpecificationMinimumYear": "Année maximum",
+    "AutoTaggingSpecificationMinimumYear": "Année minimum",
     "AutoTaggingSpecificationOriginalLanguage": "Langue",
     "AutoTaggingSpecificationQualityProfile": "Profil de Qualité",
     "AutoTaggingSpecificationRootFolder": "Dossier Racine",
@@ -1921,5 +1921,7 @@
     "IgnoreDownloadsHint": "Empêche {appName} de poursuivre le traitement de ces téléchargements",
     "IndexerSettingsRejectBlocklistedTorrentHashes": "Rejeter les hachages de torrents bloqués lors de la saisie",
     "IndexerSettingsRejectBlocklistedTorrentHashesHelpText": "Si un torrent est bloqué par le hachage, il peut ne pas être correctement rejeté pendant le RSS/recherche pour certains indexeurs. L'activation de cette fonction permet de le rejeter après que le torrent a été saisi, mais avant qu'il ne soit envoyé au client.",
-    "DownloadClientAriaSettingsDirectoryHelpText": "Emplacement facultatif pour les téléchargements, laisser vide pour utiliser l'emplacement par défaut Aria2"
+    "DownloadClientAriaSettingsDirectoryHelpText": "Emplacement facultatif pour les téléchargements, laisser vide pour utiliser l'emplacement par défaut Aria2",
+    "AddDelayProfileError": "Impossible d'ajouter un nouveau profil de délai, veuillez réessayer.",
+    "BlocklistReleaseHelpText": "Bloque le téléchargement de cette version par {appName} via RSS ou Recherche automatique"
 }
