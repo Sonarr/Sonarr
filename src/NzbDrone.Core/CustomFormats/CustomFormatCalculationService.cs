@@ -166,12 +166,7 @@ namespace NzbDrone.Core.CustomFormats
         {
             var releaseTitle = string.Empty;
 
-            if (episodeFile.SceneName.IsNotNullOrWhiteSpace())
-            {
-                _logger.Trace("Using scene name for release title: {0}", episodeFile.SceneName);
-                releaseTitle = episodeFile.SceneName;
-            }
-            else if (episodeFile.OriginalFilePath.IsNotNullOrWhiteSpace())
+            if (episodeFile.OriginalFilePath.IsNotNullOrWhiteSpace())
             {
                 _logger.Trace("Using original file path for release title: {0}", Path.GetFileName(episodeFile.OriginalFilePath));
                 releaseTitle = Path.GetFileName(episodeFile.OriginalFilePath);
