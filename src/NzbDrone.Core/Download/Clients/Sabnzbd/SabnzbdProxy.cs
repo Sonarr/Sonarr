@@ -14,7 +14,8 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
     {
         string GetBaseUrl(SabnzbdSettings settings, string relativePath = null);
         SabnzbdAddResponse DownloadNzb(byte[] nzbData, string filename, string category, int priority, SabnzbdSettings settings);
-        void RemoveFrom(string source, string id, bool deleteData, SabnzbdSettings settings);
+        void RemoveFromQueue(string id, bool deleteData, SabnzbdSettings settings);
+        void RemoveFromHistory(string id, bool deleteData, bool deletePermanently, SabnzbdSettings settings);
         string GetVersion(SabnzbdSettings settings);
         SabnzbdConfig GetConfig(SabnzbdSettings settings);
         SabnzbdFullStatus GetFullStatus(SabnzbdSettings settings);
@@ -60,12 +61,23 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             return response;
         }
 
-        public void RemoveFrom(string source, string id, bool deleteData, SabnzbdSettings settings)
+        public void RemoveFromQueue(string id, bool deleteData, SabnzbdSettings settings)
         {
-            var request = BuildRequest(source, settings);
+            var request = BuildRequest("queue", settings);
             request.AddQueryParam("name", "delete");
             request.AddQueryParam("del_files", deleteData ? 1 : 0);
             request.AddQueryParam("value", id);
+
+            ProcessRequest(request, settings);
+        }
+
+        public void RemoveFromHistory(string id, bool deleteData, bool deletePermanently, SabnzbdSettings settings)
+        {
+            var request = BuildRequest("history", settings);
+            request.AddQueryParam("name", "delete");
+            request.AddQueryParam("del_files", deleteData ? 1 : 0);
+            request.AddQueryParam("value", id);
+            request.AddQueryParam("archive", deletePermanently ? 0 : 1);
 
             ProcessRequest(request, settings);
         }
