@@ -1405,5 +1405,10 @@
     "PendingChangesDiscardChanges": "Vesse el a változtatásokat, és lépjen ki",
     "SeasonPremiere": "Évad Premier",
     "SeasonPremieresOnly": "Csak az évad premierjei",
-    "PasswordConfirmation": "Jelszó megerősítése"
+    "PasswordConfirmation": "Jelszó megerősítése",
+    "QualitiesHelpText": "A listán magasabb minőséget részesítik előnyben. Ugyanazon csoporton belül a tulajdonságok egyenlőek. Csak ellenőrzött minőségek szükségesek",
+    "Progress": "Előrehalad",
+    "ParseModalUnableToParse": "A megadott cím nem elemezhető, próbálkozzon újra.",
+    "ParseModalHelpText": "Adja meg a kiadás címét a fenti bevitelben",
+    "ProtocolHelpText": "Válassza ki, melyik protokoll(oka)t használja, és melyiket részesíti előnyben, ha az egyébként egyenlő kiadások közül választ"
 }

@@ -1872,8 +1872,8 @@
     "EpisodeFileMissingTooltip": "Arquivo do episódio ausente",
     "DownloadClientAriaSettingsDirectoryHelpText": "Local opcional para colocar downloads, deixe em branco para usar o local padrão do Aria2",
     "DownloadClientPriorityHelpText": "Prioridade do Cliente de Download de 1 (mais alta) a 50 (mais baixa). Padrão: 1. Round-Robin é usado para clientes com a mesma prioridade.",
-    "IndexerSettingsRejectBlocklistedTorrentHashes": "Rejeitar Torrent com Hashes na Lista de Bloqueio Enquanto Capturando",
-    "IndexerSettingsRejectBlocklistedTorrentHashesHelpText": "se um torrent for bloqueado por hash, ele pode não ser rejeitado corretamente durante o RSS/Pesquisa de alguns indexadores. Ativar isso permitirá que ele seja rejeitado após o torrent ser capturado, mas antes de ser enviado ao cliente.",
+    "IndexerSettingsRejectBlocklistedTorrentHashes": "Rejeitar Hashes de Torrent Bloqueados Durante a Captura",
+    "IndexerSettingsRejectBlocklistedTorrentHashesHelpText": "Se um torrent for bloqueado por hash, ele pode não ser rejeitado corretamente durante o RSS/Pesquisa de alguns indexadores. Ativar isso permitirá que ele seja rejeitado após o torrent ser capturado, mas antes de ser enviado ao cliente.",
     "ImportListsSimklSettingsListTypeHelpText": "Tipo de lista da qual você deseja importar",
     "ImportListsTraktSettingsPopularListTypeTopWeekShows": "Séries Mais Assistidas por Semana",
     "ImportListsTraktSettingsPopularListTypeTopYearShows": "Séries Mais Assistidas por Ano",
@@ -2038,5 +2038,11 @@
     "ListSyncTagHelpText": "Esta etiqueta será adicionada quando uma série cair ou não estiver mais na(s) sua(s) lista(s)",
     "LogOnly": "Só Registro",
     "CleanLibraryLevel": "Limpar Nível da Biblioteca",
-    "AddDelayProfileError": "Não foi possível adicionar um novo perfil de atraso. Tente novamente."
+    "AddDelayProfileError": "Não foi possível adicionar um novo perfil de atraso. Tente novamente.",
+    "ClickToChangeIndexerFlags": "Clique para alterar sinalizadores do indexador",
+    "SelectIndexerFlags": "Selecionar Sinalizadores do Indexador",
+    "SetIndexerFlagsModalTitle": "{modalTitle} - Definir Sinalizadores do Indexador",
+    "CustomFormatsSpecificationFlag": "Sinalizador",
+    "IndexerFlags": "Sinalizadores do Indexador",
+    "SetIndexerFlags": "Definir Sinalizadores de Indexador"
 }
