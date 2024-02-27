@@ -4,6 +4,7 @@ using System.Linq;
 using FluentAssertions;
 using NLog;
 using NUnit.Framework;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Instrumentation.Sentry;
 using NzbDrone.Test.Common;
 
@@ -26,7 +27,7 @@ namespace NzbDrone.Common.Test.InstrumentationTests
         [SetUp]
         public void Setup()
         {
-            _subject = new SentryTarget("https://aaaaaaaaaaaaaaaaaaaaaaaaaa@sentry.io/111111");
+            _subject = new SentryTarget("https://aaaaaaaaaaaaaaaaaaaaaaaaaa@sentry.io/111111", Mocker.GetMock<IAppFolderInfo>().Object);
         }
 
         private LogEventInfo GivenLogEvent(LogLevel level, Exception ex, string message)
