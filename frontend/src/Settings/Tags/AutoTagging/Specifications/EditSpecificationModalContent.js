@@ -86,10 +86,10 @@ function EditSpecificationModalContent(props) {
                   <InlineMarkdown data={translate('ConditionUsingRegularExpressions')} />
                 </div>
                 <div>
-                  <InlineMarkdown data={translate('RegularExpressionsTutorialLink')} />
+                  <InlineMarkdown data={translate('RegularExpressionsTutorialLink', { url: 'https://www.regular-expressions.info/tutorial.html' })} />
                 </div>
                 <div>
-                  <InlineMarkdown data={translate('RegularExpressionsCanBeTested')} />
+                  <InlineMarkdown data={translate('RegularExpressionsCanBeTested', { url: 'http://regexstorm.net/tester' })} />
                 </div>
               </Alert>
           }
