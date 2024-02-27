@@ -6,7 +6,7 @@ using NzbDrone.Core.Test.Framework;
 namespace NzbDrone.Core.Test.ParserTests
 {
     [TestFixture]
-    public class NormalizeTitleFixture : CoreTest
+    public class NormalizeSeriesTitleFixture : CoreTest
     {
         [TestCase("Series", "series")]
         [TestCase("Series (2009)", "series2009")]

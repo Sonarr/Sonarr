@@ -541,6 +541,7 @@ namespace NzbDrone.Core.Parser
         private static readonly Regex TitleComponentsRegex = new Regex(@"^(?:(?<title>.+?) \((?<title>.+?)\)|(?<title>.+?) \| (?<title>.+?))$",
                                                                 RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
+        private static readonly Regex PartRegex = new Regex(@"\(\d+\)$", RegexOptions.Compiled);
         private static readonly Regex PunctuationRegex = new Regex(@"[^\w\s]", RegexOptions.Compiled);
         private static readonly Regex ArticleWordRegex = new Regex(@"^(a|an|the)\s", RegexOptions.IgnoreCase | RegexOptions.Compiled);
         private static readonly Regex SpecialEpisodeWordRegex = new Regex(@"\b(part|special|edition|christmas)\b\s?", RegexOptions.IgnoreCase | RegexOptions.Compiled);
@@ -792,6 +793,7 @@ namespace NzbDrone.Core.Parser
             // Disabled, Until we run into specific testcases for the removal of these words.
             // title = SpecialEpisodeWordRegex.Replace(title, string.Empty);
 
+            title = PartRegex.Replace(title, "");
             title = PunctuationRegex.Replace(title, " ");
             title = DuplicateSpacesRegex.Replace(title, " ");
 
