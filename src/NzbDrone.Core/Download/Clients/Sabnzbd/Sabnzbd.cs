@@ -205,11 +205,11 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                     DeleteItemData(item);
                 }
 
-                _proxy.RemoveFrom("history", item.DownloadId, deleteData, Settings);
+                _proxy.RemoveFromHistory(item.DownloadId, deleteData, item.Status == DownloadItemStatus.Failed, Settings);
             }
             else
             {
-                _proxy.RemoveFrom("queue", item.DownloadId, deleteData, Settings);
+                _proxy.RemoveFromQueue(item.DownloadId, deleteData, Settings);
             }
         }
 
