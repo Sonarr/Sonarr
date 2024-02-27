@@ -82,7 +82,8 @@ namespace NzbDrone.Core.Datastore
                   .Ignore(i => i.Enable);
 
             Mapper.Entity<ImportListItemInfo>("ImportListItems").RegisterModel()
-                   .Ignore(i => i.ImportList);
+                   .Ignore(i => i.ImportList)
+                   .Ignore(i => i.Seasons);
 
             Mapper.Entity<NotificationDefinition>("Notifications").RegisterModel()
                   .Ignore(x => x.ImplementationName)
