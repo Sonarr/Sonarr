@@ -1123,7 +1123,7 @@
     "KeyboardShortcutsFocusSearchBox": "Selecionar a caixa de pesquisa",
     "KeyboardShortcutsSaveSettings": "Salvar configurações",
     "LocalStorageIsNotSupported": "O armazenamento local não é compatível ou está desabilitado. Um plugin ou a navegação privada pode tê-lo desativado.",
-    "MappedNetworkDrivesWindowsService": "As unidades de rede mapeadas não estão disponíveis ao executar como um serviço do Windows, consulte as [Perguntas frequentes](https://wiki.servarr.com/sonarr/faq#why-cant-sonarr-see-my-files-on-a-remote -server) para saber mais.",
+    "MappedNetworkDrivesWindowsService": "As unidades de rede mapeadas não estão disponíveis quando executadas como um serviço do Windows. Consulte as [FAQ]({url}) para obter mais informações.",
     "AirsTbaOn": "A ser anunciado em {networkLabel}",
     "AirsTimeOn": "{time} em {networkLabel}",
     "AirsTomorrowOn": "Amanhã às {time} em {networkLabel}",
@@ -2044,5 +2044,7 @@
     "SetIndexerFlagsModalTitle": "{modalTitle} - Definir Sinalizadores do Indexador",
     "CustomFormatsSpecificationFlag": "Sinalizador",
     "IndexerFlags": "Sinalizadores do Indexador",
-    "SetIndexerFlags": "Definir Sinalizadores de Indexador"
+    "SetIndexerFlags": "Definir Sinalizadores de Indexador",
+    "ImportListsSonarrSettingsSyncSeasonMonitoring": "Sincronização do Monitoramento da Temporada",
+    "ImportListsSonarrSettingsSyncSeasonMonitoringHelpText": "Sincronização do monitoramento de temporada da instância {appName}, se ativado, 'Monitorar' será ignorado"
 }
