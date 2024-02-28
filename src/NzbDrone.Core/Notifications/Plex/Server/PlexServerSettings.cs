@@ -38,20 +38,25 @@ namespace NzbDrone.Core.Notifications.Plex.Server
         [FieldToken(TokenField.HelpText, "UseSsl", "serviceName", "Plex")]
         public bool UseSsl { get; set; }
 
-        [FieldDefinition(3, Label = "NotificationsPlexSettingsAuthToken", Type = FieldType.Textbox, Privacy = PrivacyLevel.ApiKey, Advanced = true)]
+        [FieldDefinition(3, Label = "UrlBase", Type = FieldType.Textbox, Advanced = true, HelpText = "ConnectionSettingsUrlBaseHelpText")]
+        [FieldToken(TokenField.HelpText, "UrlBase", "connectionName", "Plex")]
+        [FieldToken(TokenField.HelpText, "UrlBase", "url", "http://[host]:[port]/[urlBase]/plex")]
+        public string UrlBase { get; set; }
+
+        [FieldDefinition(4, Label = "NotificationsPlexSettingsAuthToken", Type = FieldType.Textbox, Privacy = PrivacyLevel.ApiKey, Advanced = true)]
         public string AuthToken { get; set; }
 
-        [FieldDefinition(4, Label = "NotificationsPlexSettingsAuthenticateWithPlexTv", Type = FieldType.OAuth)]
+        [FieldDefinition(5, Label = "NotificationsPlexSettingsAuthenticateWithPlexTv", Type = FieldType.OAuth)]
         public string SignIn { get; set; }
 
-        [FieldDefinition(5, Label = "NotificationsSettingsUpdateLibrary", Type = FieldType.Checkbox)]
+        [FieldDefinition(6, Label = "NotificationsSettingsUpdateLibrary", Type = FieldType.Checkbox)]
         public bool UpdateLibrary { get; set; }
 
-        [FieldDefinition(6, Label = "NotificationsSettingsUpdateMapPathsFrom", Type = FieldType.Textbox, Advanced = true, HelpText = "NotificationsSettingsUpdateMapPathsFromHelpText")]
+        [FieldDefinition(7, Label = "NotificationsSettingsUpdateMapPathsFrom", Type = FieldType.Textbox, Advanced = true, HelpText = "NotificationsSettingsUpdateMapPathsFromHelpText")]
         [FieldToken(TokenField.HelpText, "NotificationsSettingsUpdateMapPathsFrom", "serviceName", "Plex")]
         public string MapFrom { get; set; }
 
-        [FieldDefinition(7, Label = "NotificationsSettingsUpdateMapPathsTo", Type = FieldType.Textbox, Advanced = true, HelpText = "NotificationsSettingsUpdateMapPathsToHelpText")]
+        [FieldDefinition(8, Label = "NotificationsSettingsUpdateMapPathsTo", Type = FieldType.Textbox, Advanced = true, HelpText = "NotificationsSettingsUpdateMapPathsToHelpText")]
         [FieldToken(TokenField.HelpText, "NotificationsSettingsUpdateMapPathsTo", "serviceName", "Plex")]
         public string MapTo { get; set; }
 
