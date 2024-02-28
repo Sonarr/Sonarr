@@ -55,6 +55,8 @@ namespace NzbDrone.Core.Tv
         {
             if (message.Series.AddOptions == null)
             {
+                var toSearch = new List<int>();
+
                 if (!message.Series.Monitored)
                 {
                     _logger.Debug("Series is not monitored");
@@ -65,19 +67,22 @@ namespace NzbDrone.Core.Tv
                         a.AirDateUtc.HasValue &&
                         a.AirDateUtc.Value.Between(DateTime.UtcNow.AddDays(-14), DateTime.UtcNow.AddDays(1)) &&
                         a.Monitored)
+                    .Select(e => e.Id)
                     .ToList();
 
                 if (previouslyAired.Empty())
                 {
                     _logger.Debug("Newly added episodes all air in the future");
-                    _searchCache.Set(message.Series.Id.ToString(), previouslyAired.Select(e => e.Id).ToList());
                 }
+
+                toSearch.AddRange(previouslyAired);
 
                 var absoluteEpisodeNumberAdded = message.Updated.Where(a =>
                         a.AbsoluteEpisodeNumberAdded &&
                         a.AirDateUtc.HasValue &&
                         a.AirDateUtc.Value.Between(DateTime.UtcNow.AddDays(-14), DateTime.UtcNow.AddDays(1)) &&
                         a.Monitored)
+                    .Select(e => e.Id)
                     .ToList();
 
                 if (absoluteEpisodeNumberAdded.Empty())
@@ -85,10 +90,7 @@ namespace NzbDrone.Core.Tv
                     _logger.Debug("No updated episodes recently aired and had absolute episode number added");
                 }
 
-                var toSearch = new List<int>();
-
-                toSearch.AddRange(previouslyAired.Select(e => e.Id));
-                toSearch.AddRange(absoluteEpisodeNumberAdded.Select(e => e.Id));
+                toSearch.AddRange(absoluteEpisodeNumberAdded);
 
                 if (toSearch.Any())
                 {

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NzbDrone.Common.Messaging;
 
@@ -15,6 +15,7 @@ namespace NzbDrone.Core.Tv.Events
         {
             Series = series;
             Added = new ReadOnlyCollection<Episode>(added);
+            Updated = new ReadOnlyCollection<Episode>(updated);
             Removed = new ReadOnlyCollection<Episode>(removed);
         }
     }
