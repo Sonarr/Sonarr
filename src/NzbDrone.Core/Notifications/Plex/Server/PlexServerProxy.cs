@@ -94,7 +94,7 @@ namespace NzbDrone.Core.Notifications.Plex.Server
         {
             var scheme = settings.UseSsl ? "https" : "http";
 
-            var requestBuilder = new HttpRequestBuilder($"{scheme}://{settings.Host.ToUrlHost()}:{settings.Port}")
+            var requestBuilder = new HttpRequestBuilder($"{scheme}://{settings.Host.ToUrlHost()}:{settings.Port}{settings.UrlBase}")
                                  .Accept(HttpAccept.Json)
                                  .AddQueryParam("X-Plex-Client-Identifier", _configService.PlexClientIdentifier)
                                  .AddQueryParam("X-Plex-Product", BuildInfo.AppName)

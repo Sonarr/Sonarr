@@ -247,6 +247,7 @@
   "ConnectionLostReconnect": "{appName} will try to connect automatically, or you can click reload below.",
   "ConnectionLostToBackend": "{appName} has lost its connection to the backend and will need to be reloaded to restore functionality.",
   "Connections": "Connections",
+  "ConnectionSettingsUrlBaseHelpText": "Adds a prefix to the {connectionName} url, such as {url}",
   "Continuing": "Continuing",
   "ContinuingOnly": "Continuing Only",
   "ContinuingSeriesDescription": "More episodes/another season is expected",
