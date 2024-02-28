@@ -351,8 +351,8 @@ namespace NzbDrone.Core.Notifications.CustomScript
             environmentVariables.Add("Sonarr_Series_OriginalLanguage", IsoLanguages.Get(series.OriginalLanguage).ThreeLetterCode);
             environmentVariables.Add("Sonarr_Series_Genres", string.Join("|", series.Genres));
             environmentVariables.Add("Sonarr_Series_Tags", string.Join("|", series.Tags.Select(t => _tagRepository.Get(t).Label)));
-            environmentVariables.Add("Sonarr_Download_Client", message.DownloadClientName ?? string.Empty);
-            environmentVariables.Add("Sonarr_Download_Client_Type", message.DownloadClientType ?? string.Empty);
+            environmentVariables.Add("Sonarr_Download_Client", message.DownloadClientInfo?.Name ?? string.Empty);
+            environmentVariables.Add("Sonarr_Download_Client_Type", message.DownloadClientInfo?.Type ?? string.Empty);
             environmentVariables.Add("Sonarr_Download_Id", message.DownloadId ?? string.Empty);
             environmentVariables.Add("Sonarr_Download_Size", message.TrackedDownload.DownloadItem.TotalSize.ToString());
             environmentVariables.Add("Sonarr_Download_Title", message.TrackedDownload.DownloadItem.Title);
