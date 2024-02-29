@@ -104,7 +104,7 @@ namespace NzbDrone.Core.Tv
                         throw;
                     }
 
-                    _logger.Debug("Seires {0} with TVDB ID {1} was not added due to validation failures. {2}", s, s.TvdbId, ex.Message);
+                    _logger.Debug("Series {0} with TVDB ID {1} was not added due to validation failures. {2}", s, s.TvdbId, ex.Message);
                 }
             }
 
