@@ -2046,5 +2046,9 @@
     "IndexerFlags": "Sinalizadores do Indexador",
     "SetIndexerFlags": "Definir Sinalizadores de Indexador",
     "ImportListsSonarrSettingsSyncSeasonMonitoring": "Sincronização do Monitoramento da Temporada",
-    "ImportListsSonarrSettingsSyncSeasonMonitoringHelpText": "Sincronização do monitoramento de temporada da instância {appName}, se ativado, 'Monitorar' será ignorado"
+    "ImportListsSonarrSettingsSyncSeasonMonitoringHelpText": "Sincronização do monitoramento de temporada da instância {appName}, se ativado, 'Monitorar' será ignorado",
+    "CustomFilter": "Filtro Personalizado",
+    "Filters": "Filtros",
+    "Label": "Rótulo",
+    "LabelIsRequired": "Rótulo é requerido"
 }
