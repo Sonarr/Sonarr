@@ -12,6 +12,7 @@ import PageToolbarSection from 'Components/Page/Toolbar/PageToolbarSection';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
+import TableOptionsModalWrapper from 'Components/Table/TableOptions/TableOptionsModalWrapper';
 import TablePager from 'Components/Table/TablePager';
 import { align, icons, kinds } from 'Helpers/Props';
 import getFilterValue from 'Utilities/Filter/getFilterValue';
@@ -180,6 +181,16 @@ class CutoffUnmet extends Component {
           </PageToolbarSection>
 
           <PageToolbarSection alignContent={align.RIGHT}>
+            <TableOptionsModalWrapper
+              {...otherProps}
+              columns={columns}
+            >
+              <PageToolbarButton
+                label={translate('Options')}
+                iconName={icons.TABLE}
+              />
+            </TableOptionsModalWrapper>
+
             <FilterMenu
               alignMenu={align.RIGHT}
               selectedFilterKey={selectedFilterKey}
