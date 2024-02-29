@@ -90,6 +90,29 @@ namespace NzbDrone.Core.Parser.Model
             }
         }
 
+        public ReleaseType ReleaseType
+        {
+            get
+            {
+                if (EpisodeNumbers.Length > 1 || AbsoluteEpisodeNumbers.Length > 1)
+                {
+                    return Model.ReleaseType.MultiEpisode;
+                }
+
+                if (EpisodeNumbers.Length == 1 || AbsoluteEpisodeNumbers.Length == 1)
+                {
+                    return Model.ReleaseType.SingleEpisode;
+                }
+
+                if (FullSeason)
+                {
+                    return Model.ReleaseType.SeasonPack;
+                }
+
+                return Model.ReleaseType.Unknown;
+            }
+        }
+
         public override string ToString()
         {
             var episodeString = "[Unknown Episode]";

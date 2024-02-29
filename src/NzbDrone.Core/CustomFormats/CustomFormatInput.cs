@@ -13,6 +13,7 @@ namespace NzbDrone.Core.CustomFormats
         public IndexerFlags IndexerFlags { get; set; }
         public List<Language> Languages { get; set; }
         public string Filename { get; set; }
+        public ReleaseType ReleaseType { get; set; }
 
         public CustomFormatInput()
         {

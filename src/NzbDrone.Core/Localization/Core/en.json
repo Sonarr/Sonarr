@@ -1597,6 +1597,7 @@
   "ReleaseSceneIndicatorUnknownMessage": "Numbering varies for this episode and release does not match any known mappings.",
   "ReleaseSceneIndicatorUnknownSeries": "Unknown episode or series.",
   "ReleaseTitle": "Release Title",
+  "ReleaseType": "Release Type",
   "Reload": "Reload",
   "RemotePath": "Remote Path",
   "RemotePathMappingBadDockerPathHealthCheckMessage": "You are using docker; download client {downloadClientName} places downloads in {path} but this is not a valid {osName} path. Review your remote path mappings and download client settings.",

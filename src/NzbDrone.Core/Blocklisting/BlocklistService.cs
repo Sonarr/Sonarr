@@ -194,6 +194,11 @@ namespace NzbDrone.Core.Blocklisting
                 blocklist.IndexerFlags = flags;
             }
 
+            if (Enum.TryParse(message.Data.GetValueOrDefault("releaseType"), true, out ReleaseType releaseType))
+            {
+                blocklist.ReleaseType = releaseType;
+            }
+
             _blocklistRepository.Insert(blocklist);
         }
 

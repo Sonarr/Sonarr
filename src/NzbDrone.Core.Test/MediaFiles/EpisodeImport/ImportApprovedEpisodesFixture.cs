@@ -49,6 +49,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
             _rejectedDecisions.Add(new ImportDecision(new LocalEpisode(), new Rejection("Rejected!")));
             _rejectedDecisions.Add(new ImportDecision(new LocalEpisode(), new Rejection("Rejected!")));
             _rejectedDecisions.Add(new ImportDecision(new LocalEpisode(), new Rejection("Rejected!")));
+            _rejectedDecisions.ForEach(r => r.LocalEpisode.FileEpisodeInfo = new ParsedEpisodeInfo());
 
             foreach (var episode in episodes)
             {
@@ -59,7 +60,8 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
                                                    Episodes = new List<Episode> { episode },
                                                    Path = Path.Combine(series.Path, "30 Rock - S01E01 - Pilot.avi"),
                                                    Quality = new QualityModel(Quality.Bluray720p),
-                                                   ReleaseGroup = "DRONE"
+                                                   ReleaseGroup = "DRONE",
+                                                   FileEpisodeInfo = new ParsedEpisodeInfo()
                                                }));
             }
 

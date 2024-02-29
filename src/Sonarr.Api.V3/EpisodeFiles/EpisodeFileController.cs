@@ -209,6 +209,11 @@ namespace Sonarr.Api.V3.EpisodeFiles
                 {
                     episodeFile.IndexerFlags = (IndexerFlags)resourceEpisodeFile.IndexerFlags;
                 }
+
+                if (resourceEpisodeFile.ReleaseType != null)
+                {
+                    episodeFile.ReleaseType = (ReleaseType)resourceEpisodeFile.ReleaseType;
+                }
             }
 
             _mediaFileService.Update(episodeFiles);

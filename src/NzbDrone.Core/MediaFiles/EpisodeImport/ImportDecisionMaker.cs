@@ -119,6 +119,10 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
             localEpisode.FileEpisodeInfo = fileEpisodeInfo;
             localEpisode.Size = _diskProvider.GetFileSize(localEpisode.Path);
+            localEpisode.ReleaseType = localEpisode.DownloadClientEpisodeInfo?.ReleaseType ??
+                                       localEpisode.FolderEpisodeInfo?.ReleaseType ??
+                                       localEpisode.FileEpisodeInfo?.ReleaseType ??
+                                       ReleaseType.Unknown;
 
             try
             {
