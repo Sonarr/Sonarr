@@ -425,6 +425,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
             item.Size = _diskProvider.GetFileSize(decision.LocalEpisode.Path);
             item.Rejections = decision.Rejections;
             item.IndexerFlags = (int)decision.LocalEpisode.IndexerFlags;
+            item.ReleaseType = decision.LocalEpisode.ReleaseType;
 
             return item;
         }
@@ -444,6 +445,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
             item.Quality = episodeFile.Quality;
             item.Languages = episodeFile.Languages;
             item.IndexerFlags = (int)episodeFile.IndexerFlags;
+            item.ReleaseType = episodeFile.ReleaseType;
             item.Size = _diskProvider.GetFileSize(item.Path);
             item.Rejections = Enumerable.Empty<Rejection>();
             item.EpisodeFileId = episodeFile.Id;
@@ -481,6 +483,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                     Quality = file.Quality,
                     Languages = file.Languages,
                     IndexerFlags = (IndexerFlags)file.IndexerFlags,
+                    ReleaseType = file.ReleaseType,
                     Series = series,
                     Size = 0
                 };
@@ -510,6 +513,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                 localEpisode.Quality = file.Quality;
                 localEpisode.Languages = file.Languages;
                 localEpisode.IndexerFlags = (IndexerFlags)file.IndexerFlags;
+                localEpisode.ReleaseType = file.ReleaseType;
 
                 // TODO: Cleanup non-tracked downloads
 

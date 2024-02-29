@@ -32,6 +32,7 @@ namespace NzbDrone.Core.Parser.Model
         public QualityModel Quality { get; set; }
         public List<Language> Languages { get; set; }
         public IndexerFlags IndexerFlags { get; set; }
+        public ReleaseType ReleaseType { get; set; }
         public MediaInfoModel MediaInfo { get; set; }
         public bool ExistingFile { get; set; }
         public bool SceneSource { get; set; }

@@ -22,6 +22,7 @@ namespace NzbDrone.Core.Blocklisting
         public DownloadProtocol Protocol { get; set; }
         public string Indexer { get; set; }
         public IndexerFlags IndexerFlags { get; set; }
+        public ReleaseType ReleaseType { get; set; }
         public string Message { get; set; }
         public string TorrentInfoHash { get; set; }
         public List<Language> Languages { get; set; }

@@ -97,6 +97,11 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                     episodeFile.ReleaseGroup = localEpisode.ReleaseGroup;
                     episodeFile.Languages = localEpisode.Languages;
 
+                    // Prefer the release type from the download client, folder and finally the file so we have the most accurate information.
+                    episodeFile.ReleaseType = localEpisode.DownloadClientEpisodeInfo?.ReleaseType ??
+                                              localEpisode.FolderEpisodeInfo?.ReleaseType ??
+                                              localEpisode.FileEpisodeInfo.ReleaseType;
+
                     if (downloadClientItem?.DownloadId.IsNotNullOrWhiteSpace() == true)
                     {
                         var grabHistory = _historyService.FindByDownloadId(downloadClientItem.DownloadId)
@@ -107,10 +112,25 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                         {
                             episodeFile.IndexerFlags = flags;
                         }
+
+                        // Prefer the release type from the grabbed history
+                        if (Enum.TryParse(grabHistory?.Data.GetValueOrDefault("releaseType"), true, out ReleaseType releaseType))
+                        {
+                            episodeFile.ReleaseType = releaseType;
+                        }
                     }
                     else
                     {
                         episodeFile.IndexerFlags = localEpisode.IndexerFlags;
+                    }
+
+                    // Fall back to parsed information if history is unavailable or missing
+                    if (episodeFile.ReleaseType == ReleaseType.Unknown)
+                    {
+                        // Prefer the release type from the download client, folder and finally the file so we have the most accurate information.
+                        episodeFile.ReleaseType = localEpisode.DownloadClientEpisodeInfo?.ReleaseType ??
+                                                  localEpisode.FolderEpisodeInfo?.ReleaseType ??
+                                                  localEpisode.FileEpisodeInfo.ReleaseType;
                     }
 
                     bool copyOnly;

@@ -27,6 +27,7 @@ namespace NzbDrone.Core.MediaFiles
         public LazyLoaded<List<Episode>> Episodes { get; set; }
         public LazyLoaded<Series> Series { get; set; }
         public List<Language> Languages { get; set; }
+        public ReleaseType ReleaseType { get; set; }
 
         public override string ToString()
         {
