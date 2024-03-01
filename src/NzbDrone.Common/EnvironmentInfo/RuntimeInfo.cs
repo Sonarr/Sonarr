@@ -21,7 +21,7 @@ namespace NzbDrone.Common.EnvironmentInfo
             IsWindowsService = hostLifetime is WindowsServiceLifetime;
             IsStarting = true;
 
-            // net6.0 will return Sonarr.dll for entry assembly, we need the actual
+            // net8.0 will return Sonarr.dll for entry assembly, we need the actual
             // executable name (Sonarr on linux).  On mono this will return the location of
             // the mono executable itself, which is not what we want.
             var entry = Process.GetCurrentProcess().MainModule;
