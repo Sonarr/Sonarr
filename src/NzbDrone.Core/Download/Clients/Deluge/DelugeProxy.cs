@@ -105,7 +105,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
                           {
                               download_location = settings.DownloadDirectory,
                               move_completed_path = settings.CompletedDirectory,
-                              move_completed = !string.IsNullOrEmpty(settings.CompletedDirectory),
+                              move_completed = settings.CompletedDirectory.IsNotNullOrWhiteSpace(),
                               add_paused = settings.AddPaused,
                               remove_at_ratio = false
                           };
@@ -121,7 +121,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
                           {
                               download_location = settings.DownloadDirectory,
                               move_completed_path = settings.CompletedDirectory,
-                              move_completed = !string.IsNullOrEmpty(settings.CompletedDirectory),
+                              move_completed = settings.CompletedDirectory.IsNotNullOrWhiteSpace(),
                               add_paused = settings.AddPaused,
                               remove_at_ratio = false
                           };
