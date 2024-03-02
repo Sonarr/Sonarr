@@ -251,8 +251,9 @@ namespace NzbDrone.Common.Http.Dispatchers
 
         private static bool HasRoutableIPv4Address()
         {
-            // Get all ipv4 addresses from all interfaces and return true if there are any except loopback address
+            // Get all IPv4 addresses from all interfaces and return true if there are any with non-loopback addresses
             var networkInterfaces = NetworkInterface.GetAllNetworkInterfaces();
+
             return networkInterfaces.Any(ni =>
                 ni.OperationalStatus == OperationalStatus.Up &&
                 ni.GetIPProperties().UnicastAddresses.Any(ip =>
@@ -283,8 +284,7 @@ namespace NzbDrone.Common.Http.Dispatchers
                 }
                 catch
                 {
-                    // fallback to ipv4 permanently if ipv6 connection has failed and a routable ipv4 is available.
-                    // if has_routable_ipv4_address not use_ipv6
+                    // Do not retry IPv6 if a routable IPv4 address is available, otherwise continue to attempt IPv6 connections.
                     useIPv6 = !HasRoutableIPv4Address();
                 }
                 finally
