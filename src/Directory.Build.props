@@ -192,5 +192,10 @@
     <_UsingDefaultRuntimeIdentifier>true</_UsingDefaultRuntimeIdentifier>
     <RuntimeIdentifier>osx-x64</RuntimeIdentifier>
   </PropertyGroup>
-
+  
+  <PropertyGroup Condition="'$(IsFreeBSD)' == 'true' and
+                            '$(RuntimeIdentifier)' == ''">
+    <_UsingDefaultRuntimeIdentifier>true</_UsingDefaultRuntimeIdentifier>
+    <RuntimeIdentifier>freebsd-x64</RuntimeIdentifier>
+  </PropertyGroup>
 </Project>
