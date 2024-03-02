@@ -1,8 +1,8 @@
 FROM ubuntu:jammy
 
 ENV DEBIAN_FRONTEND noninteractive
-ARG MONO_VERSION=8.0
-ARG MONO_URL=stable-jammy/snapshots/$MONO_VERSION
+ARG MONO_VERSION=6.12
+ARG MONO_URL=stable-focal/snapshots/$MONO_VERSION
 
 RUN apt-get update && apt install -y \
         ca-certificates gnupg \
