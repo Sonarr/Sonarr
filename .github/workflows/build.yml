@@ -81,12 +81,6 @@ jobs:
       with:
         framework: ${{ env.FRAMEWORK }}
         runtime: osx-x64
-    
-    - name: Publish freebsd-x64 Test Artifact
-      uses: ./.github/actions/publish-test-artifact
-      with:
-        framework: ${{ env.FRAMEWORK }}
-        runtime: freebsd-x64
    
     # Build Artifacts (grouped by OS)
     
