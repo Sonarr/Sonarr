@@ -10,6 +10,8 @@ elif [ "$PLATFORM" = "Linux" ]; then
   RUNTIME="linux-x64"
 elif [ "$PLATFORM" = "Mac" ]; then
   RUNTIME="osx-x64"
+elif [ "$PLATFORM" = "FreeBSD" ]; then
+  RUNTIME="freebsd-x64"
 else
   echo "Platform must be provided as first argument: Windows, Linux or Mac"
   exit 1
