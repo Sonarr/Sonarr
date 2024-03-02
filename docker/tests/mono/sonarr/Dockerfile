@@ -1,13 +1,15 @@
-FROM ubuntu:xenial
+FROM ubuntu:jammy
 
 ENV DEBIAN_FRONTEND noninteractive
-ARG MONO_VERSION=5.20
-ARG MONO_URL=stable-xenial/snapshots/$MONO_VERSION
+ARG MONO_VERSION=8.0
+ARG MONO_URL=stable-focal/snapshots/$MONO_VERSION
 
-RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF && \
-    echo "deb http://download.mono-project.com/repo/debian $MONO_URL main" > /etc/apt/sources.list.d/mono-official-stable.list && \
+RUN apt-get update && apt install -y \
+        ca-certificates gnupg \
+    && gpg --homedir /tmp --no-default-keyring --keyring /usr/share/keyrings/mono-official-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF && \
+    echo "deb [signed-by=/usr/share/keyrings/mono-official-archive-keyring.gpg] https://download.mono-project.com/repo/ubuntu $MONO_URL main" > /etc/apt/sources.list.d/mono-official-stable.list && \
     apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 2009837CBFFD68F45BC180471F4F90DE2A9B4BF8 && \
-    echo "deb http://apt.sonarr.tv/ubuntu xenial main" > /etc/apt/sources.list.d/sonarr.list && \
+    echo "deb http://apt.sonarr.tv/ubuntu jammy main" > /etc/apt/sources.list.d/sonarr.list && \
     apt-get update && apt-get install -y \ 
         tofrodos tzdata \
         sonarr \
