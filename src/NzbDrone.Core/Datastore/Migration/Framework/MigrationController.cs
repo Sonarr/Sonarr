@@ -53,7 +53,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
                 .Configure<ProcessorOptions>(opt =>
                 {
                     opt.PreviewOnly = false;
-                    opt.Timeout = TimeSpan.FromSeconds(60);
+                    opt.Timeout = TimeSpan.FromMinutes(5);
                 })
                 .Configure<SelectingProcessorAccessorOptions>(cfg =>
                 {
