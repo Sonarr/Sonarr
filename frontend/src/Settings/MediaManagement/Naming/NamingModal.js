@@ -150,7 +150,8 @@ const mediaInfoTokens = [
 
 const otherTokens = [
   { token: '{Release Group}', example: 'Rls Grp' },
-  { token: '{Custom Formats}', example: 'iNTERNAL' }
+  { token: '{Custom Formats}', example: 'iNTERNAL' },
+  { token: '{Custom Format:FormatName}', example: 'AMZN' }
 ];
 
 const originalTokens = [

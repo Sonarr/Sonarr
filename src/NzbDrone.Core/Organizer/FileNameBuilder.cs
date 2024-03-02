@@ -698,6 +698,15 @@ namespace NzbDrone.Core.Organizer
             }
 
             tokenHandlers["{Custom Formats}"] = m => string.Join(" ", customFormats.Where(x => x.IncludeCustomFormatWhenRenaming));
+            tokenHandlers["{Custom Format}"] = m =>
+            {
+                if (m.CustomFormat.IsNullOrWhiteSpace())
+                {
+                    return string.Empty;
+                }
+
+                return string.Join(" ", customFormats.Where(x => x.IncludeCustomFormatWhenRenaming && x.Name == m.CustomFormat));
+            };
         }
 
         private void AddIdTokens(Dictionary<string, Func<TokenMatch, string>> tokenHandlers, Series series)
