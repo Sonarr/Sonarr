@@ -8220,6 +8220,11 @@
             "format": "int32",
             "nullable": true
           },
+          "releaseType": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
           "mediaInfo": {
             "$ref": "#/components/schemas/MediaInfoResource"
           },
@@ -9531,6 +9536,9 @@
             "type": "integer",
             "format": "int32"
           },
+          "releaseType": {
+            "$ref": "#/components/schemas/ReleaseType"
+          },
           "rejections": {
             "type": "array",
             "items": {
@@ -9790,7 +9798,8 @@
           "recent",
           "monitorSpecials",
           "unmonitorSpecials",
-          "none"
+          "none",
+          "skip"
         ],
         "type": "string"
       },
@@ -10158,6 +10167,9 @@
           "isPossibleSceneSeasonSpecial": {
             "type": "boolean",
             "readOnly": true
+          },
+          "releaseType": {
+            "$ref": "#/components/schemas/ReleaseType"
           }
         },
         "additionalProperties": false
@@ -10962,6 +10974,15 @@
           }
         },
         "additionalProperties": false
+      },
+      "ReleaseType": {
+        "enum": [
+          "unknown",
+          "singleEpisode",
+          "multiEpisode",
+          "seasonPack"
+        ],
+        "type": "string"
       },
       "RemotePathMappingResource": {
         "type": "object",
