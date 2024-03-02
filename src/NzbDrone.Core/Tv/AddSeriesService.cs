@@ -84,7 +84,7 @@ namespace NzbDrone.Core.Tv
 
                     if (seriesToAdd.Any(f => f.TvdbId == series.TvdbId))
                     {
-                        _logger.Debug("TVDB ID {0} was not added due to validation failure: Series {1} already exists on list", s.TvdbId, s);
+                        _logger.Trace("TVDB ID {0} was already added from another import list, not adding series {1} again", s.TvdbId, s);
                         continue;
                     }
 
