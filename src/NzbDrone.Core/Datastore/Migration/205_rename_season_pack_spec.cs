@@ -8,7 +8,7 @@ namespace NzbDrone.Core.Datastore.Migration
     {
         protected override void MainDbUpgrade()
         {
-            Execute.Sql("UPDATE \"CustomFormats\" SET \"Specifications\" = Replace(\"Specifications\", 'SeasonPackSpecification', 'ReleaseTypeSpecification')");
+            Execute.Sql("UPDATE \"CustomFormats\" SET \"Specifications\" = REPLACE(\"Specifications\", 'SeasonPackSpecification', 'ReleaseTypeSpecification')");
         }
     }
 }
