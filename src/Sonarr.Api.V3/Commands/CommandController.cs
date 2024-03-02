@@ -7,6 +7,7 @@ using NzbDrone.Common.Composition;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Common.TPL;
 using NzbDrone.Core.Datastore.Events;
+using NzbDrone.Core.MediaFiles.EpisodeImport.Manual;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.ProgressMessaging;
@@ -61,6 +62,9 @@ namespace Sonarr.Api.V3.Commands
             using (var reader = new StreamReader(Request.Body))
             {
                 var body = reader.ReadToEnd();
+                var priority = commandType == typeof(ManualImportCommand)
+                    ? CommandPriority.High
+                    : CommandPriority.Normal;
 
                 dynamic command = STJson.Deserialize(body, commandType);
 
@@ -69,7 +73,8 @@ namespace Sonarr.Api.V3.Commands
                 command.SendUpdatesToClient = true;
                 command.ClientUserAgent = Request.Headers["UserAgent"];
 
-                var trackedCommand = _commandQueueManager.Push(command, CommandPriority.Normal, CommandTrigger.Manual);
+                var trackedCommand = _commandQueueManager.Push(command, priority, CommandTrigger.Manual);
+
                 return Created(trackedCommand.Id);
             }
         }
