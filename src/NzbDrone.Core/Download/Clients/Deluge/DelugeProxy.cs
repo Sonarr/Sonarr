@@ -103,12 +103,20 @@ namespace NzbDrone.Core.Download.Clients.Deluge
         {
             var options = new
                           {
-                              download_location = settings.DownloadDirectory,
-                              move_completed_path = settings.CompletedDirectory,
-                              move_completed = settings.CompletedDirectory.IsNotNullOrWhiteSpace(),
                               add_paused = settings.AddPaused,
                               remove_at_ratio = false
                           };
+                          
+                          if (settings.DownloadDirectory.IsNotNullOrWhiteSpace())
+                          {
+                              options.download_location = settings.DownloadDirectory;
+                          }
+
+                          if (settings.CompletedDirectory.IsNotNullOrWhiteSpace())
+                          {
+                              options.move_completed_path = settings.CompletedDirectory;
+                              options.move_completed = true;
+                          }
 
             var response = ProcessRequest<string>(settings, "core.add_torrent_magnet", magnetLink, options);
 
@@ -119,12 +127,20 @@ namespace NzbDrone.Core.Download.Clients.Deluge
         {
             var options = new
                           {
-                              download_location = settings.DownloadDirectory,
-                              move_completed_path = settings.CompletedDirectory,
-                              move_completed = settings.CompletedDirectory.IsNotNullOrWhiteSpace(),
                               add_paused = settings.AddPaused,
                               remove_at_ratio = false
                           };
+
+                          if (settings.DownloadDirectory.IsNotNullOrWhiteSpace())
+                          {
+                              options.download_location = settings.DownloadDirectory;
+                          }
+
+                          if (settings.CompletedDirectory.IsNotNullOrWhiteSpace())
+                          {
+                              options.move_completed_path = settings.CompletedDirectory;
+                              options.move_completed = true;
+                          }
 
             var response = ProcessRequest<string>(settings, "core.add_torrent_file", filename, fileContent, options);
 
