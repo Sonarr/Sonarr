@@ -1104,23 +1104,12 @@ namespace NzbDrone.Core.Organizer
 
         private string GetReleaseHash(EpisodeFile episodeFile)
         {
-            var releaseHash = episodeFile.ReleaseHash;
-
-            if (releaseHash.IsNullOrWhiteSpace())
+            if (episodeFile.ReleaseHash.IsNotNullOrWhiteSpace())
             {
-                // The Release Hash is empty, but it may not have been parsed originally.
-                // Try and parse it again from the Title (and force fallback to file name in case the file was manually imported)
-                releaseHash = Parser.Parser.ParseTitle(GetOriginalTitle(episodeFile, true))?.ReleaseHash;
+                return episodeFile.ReleaseHash;
             }
 
-            if (releaseHash.IsNullOrWhiteSpace())
-            {
-                return string.Empty;
-            }
-            else
-            {
-                return releaseHash;
-            }
+            return string.Empty;
         }
 
         private int GetLengthWithoutEpisodeTitle(string pattern, NamingConfig namingConfig)

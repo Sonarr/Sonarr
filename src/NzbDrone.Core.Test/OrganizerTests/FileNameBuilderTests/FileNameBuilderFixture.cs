@@ -992,7 +992,7 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
         }
 
         [Test]
-        public void should_replace_release_space_hash_with_stored_hash()
+        public void should_replace_release_hash_with_stored_hash()
         {
             _namingConfig.StandardEpisodeFormat = "{Release Hash}";
 
@@ -1002,54 +1002,15 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
                    .Should().Be("ABCDEFGH");
         }
 
-        [TestCase("[SubDESU]_Show_Title_DxD_07_(1280x720_x264-AAC)_[6B7FD717]", "6B7FD717")]
-        [TestCase("[Chihiro]_Show_Title!!_-_06_[848x480_H.264_AAC][859EEAFA]", "859EEAFA")]
-        [TestCase("[Underwater]_Show_Title_-_12_(720p)_[5C7BC4F9]", "5C7BC4F9")]
-        [TestCase("[HorribleSubs]_Show_Title_-_33_[720p]", "")]
-        [TestCase("[HorribleSubs] Show-Title - 13 [1080p].mkv", "")]
-        [TestCase("[Doremi].Show.Title.5.Go.Go!.31.[1280x720].[C65D4B1F].mkv", "C65D4B1F")]
-        [TestCase("[Doremi].Show.Title.5.Go.Go!.31[1280x720].[C65D4B1F]", "C65D4B1F")]
-        [TestCase("[Doremi].Show.Title.5.Go.Go!.31.[1280x720].mkv", "")]
-        [TestCase("[K-F] Series Title 214", "")]
-        [TestCase("[K-F] Series Title S10E14 214", "")]
-        [TestCase("[K-F] Series Title 10x14 214", "")]
-        [TestCase("[K-F] Series Title 214 10x14", "")]
-        [TestCase("Series Title - 031 - The Resolution to Kill [Lunar].avi", "")]
-        [TestCase("[ACX]Series Title 01 Episode Name [Kosaka] [9C57891E].mkv", "9C57891E")]
-        [TestCase("[S-T-D] Series Title! - 06 (1280x720 10bit AAC) [59B3F2EA].mkv", "59B3F2EA")]
-        public void should_replace_release_hash_with_scenename_hash(string sceneName, string hash)
+        [Test]
+        public void should_replace_null_release_hash_with_empty_string()
         {
             _namingConfig.StandardEpisodeFormat = "{Release Hash}";
 
-            _episodeFile.SceneName = sceneName;
+            _episodeFile.ReleaseHash = null;
 
             Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
-                   .Should().Be(hash);
-        }
-
-        [TestCase("[SubDESU]_Show_Title_DxD_07_(1280x720_x264-AAC)_[6B7FD717].mkv", "6B7FD717")]
-        [TestCase("[Chihiro]_Show_Title!!_-_06_[848x480_H.264_AAC][859EEAFA].mkv", "859EEAFA")]
-        [TestCase("[Underwater]_Show_Title_-_12_(720p)_[5C7BC4F9].mkv", "5C7BC4F9")]
-        [TestCase("[HorribleSubs]_Show_Title_-_33_[720p].mkv", "")]
-        [TestCase("[HorribleSubs] Show-Title - 13 [1080p].mkv", "")]
-        [TestCase("[Doremi].Show.Title.5.Go.Go!.31.[1280x720].[C65D4B1F].mkv", "C65D4B1F")]
-        [TestCase("[Doremi].Show.Title.5.Go.Go!.31[1280x720].[C65D4B1F].mkv", "C65D4B1F")]
-        [TestCase("[Doremi].Show.Title.5.Go.Go!.31.[1280x720].mkv", "")]
-        [TestCase("[K-F] Series Title 214.mkv", "")]
-        [TestCase("[K-F] Series Title S10E14 214.mkv", "")]
-        [TestCase("[K-F] Series Title 10x14 214.mkv", "")]
-        [TestCase("[K-F] Series Title 214 10x14.mkv", "")]
-        [TestCase("Series Title - 031 - The Resolution to Kill [Lunar].avi", "")]
-        [TestCase("[ACX]Series Title 01 Episode Name [Kosaka] [9C57891E].mkv", "9C57891E")]
-        [TestCase("[S-T-D] Series Title! - 06 (1280x720 10bit AAC) [59B3F2EA].mkv", "59B3F2EA")]
-        public void should_replace_release_hash_with_filename_hash(string fileName, string hash)
-        {
-            _namingConfig.StandardEpisodeFormat = "{Release Hash}";
-
-            _episodeFile.RelativePath = fileName;
-
-            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
-                   .Should().Be(hash);
+                   .Should().Be(string.Empty);
         }
 
         private void GivenMediaInfoModel(string videoCodec = "h264",
