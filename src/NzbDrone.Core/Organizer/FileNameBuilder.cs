@@ -705,7 +705,7 @@ namespace NzbDrone.Core.Organizer
                     return string.Empty;
                 }
 
-                return string.Join(" ", customFormats.Where(x => x.IncludeCustomFormatWhenRenaming && x.Name == m.CustomFormat));
+                return customFormats.Where(x => x.IncludeCustomFormatWhenRenaming && x.Name == m.CustomFormat).FirstOrDefault()?.ToString() ?? string.Empty;
             };
         }
 
