@@ -1042,7 +1042,7 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
         [TestCase("Series Title - 031 - The Resolution to Kill [Lunar].avi", "")]
         [TestCase("[ACX]Series Title 01 Episode Name [Kosaka] [9C57891E].mkv", "9C57891E")]
         [TestCase("[S-T-D] Series Title! - 06 (1280x720 10bit AAC) [59B3F2EA].mkv", "59B3F2EA")]
-        public void should_replace_release_space_hash_with_filename_hash(string fileName, string hash)
+        public void should_replace_release_hash_with_filename_hash(string fileName, string hash)
         {
             _namingConfig.StandardEpisodeFormat = "{Release Hash}";
 
