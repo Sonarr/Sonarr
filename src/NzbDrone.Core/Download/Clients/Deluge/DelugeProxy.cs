@@ -106,13 +106,13 @@ namespace NzbDrone.Core.Download.Clients.Deluge
                               add_paused = settings.AddPaused,
                               remove_at_ratio = false
                           };
-                          
-                          if (settings.DownloadDirectory.IsNotNullOrWhiteSpace())
+
+                          if (!string.IsNullOrWhiteSpace(settings.DownloadDirectory))
                           {
                               options.download_location = settings.DownloadDirectory;
                           }
 
-                          if (settings.CompletedDirectory.IsNotNullOrWhiteSpace())
+                          if (!string.IsNullOrWhiteSpace(settings.CompletedDirectory))
                           {
                               options.move_completed_path = settings.CompletedDirectory;
                               options.move_completed = true;
@@ -131,12 +131,12 @@ namespace NzbDrone.Core.Download.Clients.Deluge
                               remove_at_ratio = false
                           };
 
-                          if (settings.DownloadDirectory.IsNotNullOrWhiteSpace())
+                          if (!string.IsNullOrWhiteSpace(settings.DownloadDirectory))
                           {
                               options.download_location = settings.DownloadDirectory;
                           }
 
-                          if (settings.CompletedDirectory.IsNotNullOrWhiteSpace())
+                          if (!string.IsNullOrWhiteSpace(settings.CompletedDirectory))
                           {
                               options.move_completed_path = settings.CompletedDirectory;
                               options.move_completed = true;
