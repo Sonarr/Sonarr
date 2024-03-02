@@ -5,6 +5,7 @@ using Dapper;
 using FluentMigrator;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Datastore.Migration.Framework;
+using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.Datastore.Migration
 {
@@ -25,42 +26,37 @@ namespace NzbDrone.Core.Datastore.Migration
             using (var cmd = conn.CreateCommand())
             {
                 cmd.Transaction = tran;
-                cmd.CommandText = "SELECT \"Id\", \"SceneName\", \"RelativePath\", \"OriginalFilePath\" FROM \"EpisodeFiles\" WHERE \"ReleaseHash\" IS NULL";
+                cmd.CommandText = "SELECT \"Id\", \"SceneName\", \"RelativePath\", \"OriginalFilePath\" FROM \"EpisodeFiles\"";
 
                 using var reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
                     var id = reader.GetInt32(0);
-                    var sceneName = reader.IsDBNull(1) ? null : reader.GetString(1);
-                    var relativePath = reader.IsDBNull(2) ? null : reader.GetString(2);
-                    var originalFilePath = reader.IsDBNull(3) ? null : reader.GetString(3);
+                    var sceneName = reader[1] as string;
+                    var relativePath = reader[2] as string;
+                    var originalFilePath = reader[3] as string;
 
-                    string title = null;
-                    if (sceneName.IsNotNullOrWhiteSpace())
+                    ParsedEpisodeInfo parsedEpisodeInfo = null;
+
+                    var originalTitle = sceneName.IsNotNullOrWhiteSpace() ? sceneName : (originalFilePath.IsNotNullOrWhiteSpace() ? Path.GetFileNameWithoutExtension(originalFilePath) : null);
+
+                    if (originalTitle.IsNotNullOrWhiteSpace())
                     {
-                        title = sceneName;
-                    }
-                    else if (relativePath.IsNotNullOrWhiteSpace())
-                    {
-                        title = Path.GetFileNameWithoutExtension(relativePath);
-                    }
-                    else if (originalFilePath.IsNotNullOrWhiteSpace())
-                    {
-                        title = Path.GetFileNameWithoutExtension(originalFilePath);
+                        parsedEpisodeInfo = Parser.Parser.ParseTitle(originalTitle);
                     }
 
-                    if (!title.IsNullOrWhiteSpace())
+                    if (parsedEpisodeInfo == null || parsedEpisodeInfo.ReleaseHash.IsNullOrWhiteSpace())
                     {
-                        var parsedEpisodeInfo = Parser.Parser.ParseTitle(title);
+                        parsedEpisodeInfo = Parser.Parser.ParseTitle(Path.GetFileNameWithoutExtension(relativePath));
+                    }
 
-                        if (parsedEpisodeInfo != null && !parsedEpisodeInfo.ReleaseHash.IsNullOrWhiteSpace())
+                    if (parsedEpisodeInfo != null && parsedEpisodeInfo.ReleaseHash.IsNotNullOrWhiteSpace())
+                    {
+                        updates.Add(new
                         {
-                            updates.Add(new
-                            {
-                                Id = id,
-                                ReleaseHash = parsedEpisodeInfo.ReleaseHash
-                            });
-                        }
+                            Id = id,
+                            ReleaseHash = parsedEpisodeInfo.ReleaseHash
+                        });
                     }
                 }
             }
