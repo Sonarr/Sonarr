@@ -121,7 +121,7 @@ namespace NzbDrone.Core.Tv
             }
             catch (SeriesNotFoundException)
             {
-                _logger.Error("Series {0} with TVDB ID {1} was not found, it may have been removed from TheTVDB.  Path: {2}", newSeries, newSeries.TvdbId, newSeries.Path);
+                _logger.Error("Series {0} with TVDB ID {1} was not found, it may have been removed from TheTVDB. Path: {2}", newSeries, newSeries.TvdbId, newSeries.Path);
 
                 throw new ValidationException(new List<ValidationFailure>
                                               {
