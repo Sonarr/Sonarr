@@ -19,6 +19,7 @@ export interface AppSectionSaveState {
 
 export interface PagedAppSectionState {
   pageSize: number;
+  totalRecords?: number;
 }
 
 export interface AppSectionFilterState<T> {

@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router';
 import { createSelector } from 'reselect';
 import AppState from 'App/State/AppState';
 import FieldSet from 'Components/FieldSet';
@@ -41,11 +42,6 @@ const COLUMNS = [
   },
 ];
 
-interface ImportListExclusionsProps {
-  useCurrentPage: number;
-  totalRecords: number;
-}
-
 function createImportListExlucionsSelector() {
   return createSelector(
     (state: AppState) => state.settings.importListExclusions,
@@ -57,8 +53,9 @@ function createImportListExlucionsSelector() {
   );
 }
 
-function ImportListExclusions(props: ImportListExclusionsProps) {
-  const { useCurrentPage, totalRecords } = props;
+function ImportListExclusions() {
+  const history = useHistory();
+  const useCurrentPage = history.action === 'POP';
 
   const dispatch = useDispatch();
 
@@ -155,6 +152,7 @@ function ImportListExclusions(props: ImportListExclusionsProps) {
     sortKey,
     error,
     sortDirection,
+    totalRecords,
     ...otherProps
   } = selected;
 
