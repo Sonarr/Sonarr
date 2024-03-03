@@ -39,11 +39,11 @@ namespace NzbDrone.Core.Datastore.Migration
                     ParsedEpisodeInfo parsedEpisodeInfo = null;
 
                     var originalTitle = sceneName;
-                    
-                     if (originalTitle.IsNullOrWhiteSpace() && originalFilePath.IsNotNullOrWhiteSpace())
-                     {
-                         originalTitle = Path.GetFileNameWithoutExtension(originalFilePath);
-                     }
+
+                    if (originalTitle.IsNullOrWhiteSpace() && originalFilePath.IsNotNullOrWhiteSpace())
+                    {
+                        originalTitle = Path.GetFileNameWithoutExtension(originalFilePath);
+                    }
 
                     if (originalTitle.IsNotNullOrWhiteSpace())
                     {
