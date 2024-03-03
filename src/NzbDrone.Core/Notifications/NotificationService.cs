@@ -233,15 +233,33 @@ namespace NzbDrone.Core.Notifications
 
         public void Handle(ManualInteractionRequiredEvent message)
         {
+            var series = message.Episode.Series;
+            var mess = "";
+
+            if (series != null)
+            {
+                mess = GetMessage(series, message.Episode.Episodes, message.Episode.ParsedEpisodeInfo.Quality);
+            }
+
+            if (mess.IsNullOrWhiteSpace() && message.TrackedDownload.DownloadItem != null)
+            {
+                mess = message.TrackedDownload.DownloadItem.Title;
+            }
+
+            if (mess.IsNullOrWhiteSpace())
+            {
+                return;
+            }
+
             var manualInteractionMessage = new ManualInteractionRequiredMessage
             {
-                Message = GetMessage(message.Episode.Series, message.Episode.Episodes, message.Episode.ParsedEpisodeInfo.Quality),
-                Series = message.Episode.Series,
+                Message = mess,
+                Series = series,
                 Quality = message.Episode.ParsedEpisodeInfo.Quality,
                 Episode = message.Episode,
                 TrackedDownload = message.TrackedDownload,
-                DownloadClientInfo = message.TrackedDownload.DownloadItem.DownloadClientInfo,
-                DownloadId = message.TrackedDownload.DownloadItem.DownloadId,
+                DownloadClientInfo = message.TrackedDownload.DownloadItem?.DownloadClientInfo,
+                DownloadId = message.TrackedDownload.DownloadItem?.DownloadId,
                 Release = message.Release
             };
 
