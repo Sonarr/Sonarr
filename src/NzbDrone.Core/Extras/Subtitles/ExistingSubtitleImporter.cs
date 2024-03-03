@@ -4,6 +4,7 @@ using System.Linq;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Extras.Files;
+using NzbDrone.Core.Languages;
 using NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
@@ -78,11 +79,11 @@ namespace NzbDrone.Core.Extras.Subtitles
                                            SeasonNumber = localEpisode.SeasonNumber,
                                            EpisodeFileId = firstEpisode.EpisodeFileId,
                                            RelativePath = series.Path.GetRelativePath(possibleSubtitleFile),
-                                           Language = localEpisode.SubtitleInfo.Language,
-                                           LanguageTags = localEpisode.SubtitleInfo.LanguageTags,
-                                           Title = localEpisode.SubtitleInfo.Title,
+                                           Language = localEpisode.SubtitleInfo?.Language ?? Language.Unknown,
+                                           LanguageTags = localEpisode.SubtitleInfo?.LanguageTags ?? new List<string>(),
+                                           Title = localEpisode.SubtitleInfo?.Title,
                                            Extension = extension,
-                                           Copy = localEpisode.SubtitleInfo.Copy
+                                           Copy = localEpisode.SubtitleInfo?.Copy ?? 0
                                        };
 
                     subtitleFiles.Add(subtitleFile);
