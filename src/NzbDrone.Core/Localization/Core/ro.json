@@ -132,7 +132,6 @@
     "AuthForm": "Formulare (Pagina de autentificare)",
     "AuthenticationMethodHelpText": "Solicitați nume utilizator și parola pentru a accesa {appName}",
     "AuthenticationRequired": "Autentificare necesara",
-    "Authentication": "",
     "AddNewSeriesError": "Nu s-au putut încărca rezultatele căutării, încercați din nou.",
     "AddSeriesWithTitle": "Adăugați {title}",
     "AlreadyInYourLibrary": "Deja în biblioteca dvs.",
