@@ -1,7 +1,9 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.NetworkInformation;
 using System.Net.Security;
 using System.Net.Sockets;
 using System.Text;
@@ -247,6 +249,18 @@ namespace NzbDrone.Common.Http.Dispatchers
             return _credentialCache.Get("credentialCache", () => new CredentialCache());
         }
 
+        private static bool HasRoutableIPv4Address()
+        {
+            // Get all IPv4 addresses from all interfaces and return true if there are any with non-loopback addresses
+            var networkInterfaces = NetworkInterface.GetAllNetworkInterfaces();
+
+            return networkInterfaces.Any(ni =>
+                ni.OperationalStatus == OperationalStatus.Up &&
+                ni.GetIPProperties().UnicastAddresses.Any(ip =>
+                    ip.Address.AddressFamily == AddressFamily.InterNetwork &&
+                    !IPAddress.IsLoopback(ip.Address)));
+        }
+
         private static async ValueTask<Stream> onConnect(SocketsHttpConnectionContext context, CancellationToken cancellationToken)
         {
             // Until .NET supports an implementation of Happy Eyeballs (https://tools.ietf.org/html/rfc8305#section-2), let's make IPv4 fallback work in a simple way.
@@ -270,10 +284,8 @@ namespace NzbDrone.Common.Http.Dispatchers
                 }
                 catch
                 {
-                    // very naively fallback to ipv4 permanently for this execution based on the response of the first connection attempt.
-                    // note that this may cause users to eventually get switched to ipv4 (on a random failure when they are switching networks, for instance)
-                    // but in the interest of keeping this implementation simple, this is acceptable.
-                    useIPv6 = false;
+                    // Do not retry IPv6 if a routable IPv4 address is available, otherwise continue to attempt IPv6 connections.
+                    useIPv6 = !HasRoutableIPv4Address();
                 }
                 finally
                 {
