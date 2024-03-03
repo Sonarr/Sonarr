@@ -167,7 +167,6 @@
     "Custom": "Personalizzato",
     "CustomFormatJson": "Formato Personalizzato JSON",
     "Day": "Giorno",
-    "AddListExclusion": "Aggiungi Lista Esclusioni",
     "AddedDate": "Aggiunto: {date}",
     "AirsTbaOn": "Verrà trasmesso su {networkLabel}",
     "AirsTimeOn": "alle {time} su {networkLabel}",

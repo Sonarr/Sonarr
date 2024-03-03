@@ -1762,7 +1762,6 @@
     "NotificationsNtfySettingsServerUrl": "服务器 URL",
     "NotificationsNtfySettingsPasswordHelpText": "密码，可选",
     "NotificationsPushBulletSettingSenderIdHelpText": "发送通知的设备 ID，使用 pushbullet.com 设备 URL 中的 device_iden 参数值，或者留空来自行发送",
-    "NotificationsPushBulletSettingsAccessToken": "",
     "NotificationsPushBulletSettingsChannelTags": "频道标签",
     "NotificationsPushBulletSettingsChannelTagsHelpText": "通知的目标频道标签列表",
     "NotificationsPushBulletSettingsDeviceIds": "设备 ID",

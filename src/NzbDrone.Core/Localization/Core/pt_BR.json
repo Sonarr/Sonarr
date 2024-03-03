@@ -2050,5 +2050,7 @@
     "CustomFilter": "Filtro Personalizado",
     "Filters": "Filtros",
     "Label": "Rótulo",
-    "LabelIsRequired": "Rótulo é requerido"
+    "LabelIsRequired": "Rótulo é requerido",
+    "ConnectionSettingsUrlBaseHelpText": "Adiciona um prefixo a URL {connectionName}, como {url}",
+    "ReleaseType": "Tipo de Lançamento"
 }
