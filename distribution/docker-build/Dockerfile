@@ -1,7 +1,7 @@
 FROM ubuntu:jammy AS builder
 
 ENV DEBIAN_FRONTEND noninteractive 
-ENV MONO_VERSION 8.0
+ENV MONO_VERSION 6.12
 
 RUN apt-get update && \
     apt-get -y -o Dpkg::Options::="--force-confold" install --no-install-recommends \

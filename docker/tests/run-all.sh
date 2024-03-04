@@ -25,16 +25,20 @@ done
 MONO_VERSIONS=""
 
 # Future versions
-MONO_VERSIONS="$MONO_VERSIONS 8.0=preview-focal"
+MONO_VERSIONS="$MONO_VERSIONS 6.12=preview-focal"
 
 # Semi-Supported versions
-MONO_VERSIONS="$MONO_VERSIONS 8.0"
+MONO_VERSIONS="$MONO_VERSIONS 6.10 6.8 6.6 6.4 6.0"
 
 # Supported versions 
-MONO_VERSIONS="$MONO_VERSIONS 8.0"
+MONO_VERSIONS="$MONO_VERSIONS 5.20 5.18"
 
 # Legacy unsupported versions (but appear to work)
-MONO_VERSIONS="$MONO_VERSIONS <8.0"
+MONO_VERSIONS="$MONO_VERSIONS 5.16 5.14 5.12"
+
+# Legacy unsupported versions
+MONO_VERSIONS="$MONO_VERSIONS 5.10 5.8 5.4 5.0"
+#MONO_VERSIONS="$MONO_VERSIONS 4.8=stable-wheezy/snapshots/4.8"
 
 if [ "$opt_version" != "" ]; then
     MONO_VERSIONS="$opt_version"
@@ -55,7 +59,7 @@ prepOne() {
         docker build -t sonarr-test-$MONO_VERSION --build-arg MONO_VERSION=$MONO_VERSION --build-arg MONO_URL=$MONO_URL --file mono/complete/Dockerfile mono
     fi
 
-    if [ "$opt_mode" != "complete" ] && [ "$MONO_VERSION" != "8.0" ]; then    
+    if [ "$opt_mode" != "complete" ] && [ "$MONO_VERSION" != "5.0" ]; then    
         docker build -t sonarr-test-$MONO_VERSION-sonarr --build-arg MONO_VERSION=$MONO_VERSION --build-arg MONO_URL=$MONO_URL --file mono/sonarr/Dockerfile mono
     fi
 }
@@ -77,7 +81,7 @@ runOne() {
         docker run $dockerArgs sonarr-test-$MONO_VERSION
     fi
 
-    if [ "$opt_mode" != "complete" ] && [ "$MONO_VERSION" != "8.0" ]; then   
+    if [ "$opt_mode" != "complete" ] && [ "$MONO_VERSION" != "5.0" ]; then   
         dockerArgs="--rm"
         dockerArgs="$dockerArgs -v /${PWD}/../../_tests_linux:/data/_tests_linux:ro"
         dockerArgs="$dockerArgs -v /${PWD}/../../_output_linux:/data/_output_linux:ro"
