@@ -22,6 +22,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series Title - 031 - The Resolution to Kill [Lunar].avi", "Lunar", "")]
         [TestCase("[ACX]Series Title 01 Episode Name [Kosaka] [9C57891E].mkv", "ACX", "9C57891E")]
         [TestCase("[S-T-D] Series Title! - 06 (1280x720 10bit AAC) [59B3F2EA].mkv", "S-T-D", "59B3F2EA")]
+        [TestCase("[DHD] Series Title! - 08 (1280x720 10bit AAC) [8B8BF2EA].mkv", "DHD", "8B8BF2EA")]
+        [TestCase("[DHD] Series Title! - 10 (1280x720 10bit AAC) [10BBF2EA].mkv", "DHD", "10BBF2EA")]
         public void should_parse_absolute_numbers(string postTitle, string subGroup, string hash)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
@@ -45,6 +47,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series Title - 031 - The Resolution to Kill [Lunar].avi", "Lunar", "")]
         [TestCase("[ACX]Series Title 01 Episode Name [Kosaka] (9C57891E).mkv", "ACX", "9C57891E")]
         [TestCase("[S-T-D] Series Title! - 06 (1280x720 10bit AAC) (59B3F2EA).mkv", "S-T-D", "59B3F2EA")]
+        [TestCase("[DHD] Series Title! - 08 (1280x720 10bit AAC) (8B8BF2EA).mkv", "DHD", "8B8BF2EA")]
+        [TestCase("[DHD] Series Title! - 10 (1280x720 10bit AAC) (10BBF2EA).mkv", "DHD", "10BBF2EA")]
         public void should_parse_absolute_numbers_parenthesized_hash(string postTitle, string subGroup, string hash)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
