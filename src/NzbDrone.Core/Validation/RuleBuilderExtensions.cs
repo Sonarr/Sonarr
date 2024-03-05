@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Validation
 
         public static IRuleBuilderOptions<T, string> ValidHost<T>(this IRuleBuilder<T, string> ruleBuilder)
         {
-            ruleBuilder.SetValidator(new NotEmptyValidator(null));
+            ruleBuilder.SetValidator(new NotEmptyValidator(null)).WithMessage("wtf?");
 
             return ruleBuilder.Must(x => HostRegex.IsMatch(x) || x.IsValidIpAddress()).WithMessage("must be valid Host without http://");
         }

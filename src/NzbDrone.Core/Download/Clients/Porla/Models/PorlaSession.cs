@@ -1,22 +1,29 @@
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using Newtonsoft.Json;
 
 namespace NzbDrone.Core.Download.Clients.Porla.Models
 {
+    public sealed class ResponsePorlaSessionList
+    {
+        [JsonProperty("sessions", NullValueHandling = NullValueHandling.Ignore)]
+        public ReadOnlyCollection<PorlaSession> Sessions { get; set; }
+    }
+
     public class PorlaSession
     {
         [JsonProperty("is_dht_running", NullValueHandling = NullValueHandling.Ignore)]
-        public bool is_dht_running { get; set; }
+        public bool IsDHTRunning { get; set; }
 
         [JsonProperty("is_listening", NullValueHandling = NullValueHandling.Ignore)]
-        public bool is_listening { get; set; }
+        public bool IsListening { get; set; }
 
         [JsonProperty("is_paused", NullValueHandling = NullValueHandling.Ignore)]
-        public bool is_paused { get; set; }
+        public bool IsPaused { get; set; }
 
         [JsonProperty("name", NullValueHandling = NullValueHandling.Ignore)]
-        public string name { get; set; }
+        public string Name { get; set; }
 
         [JsonProperty("torrents_total", NullValueHandling = NullValueHandling.Ignore)]
-        public long torrents_total { get; set; }
+        public long TorrentsTotal { get; set; }
     }
 }
