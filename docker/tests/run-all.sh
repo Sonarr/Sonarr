@@ -25,10 +25,10 @@ done
 MONO_VERSIONS=""
 
 # Future versions
-MONO_VERSIONS="$MONO_VERSIONS 6.12=preview-focal"
+MONO_VERSIONS="$MONO_VERSIONS 6.10=preview-xenial"
 
 # Semi-Supported versions
-MONO_VERSIONS="$MONO_VERSIONS 6.10 6.8 6.6 6.4 6.0"
+MONO_VERSIONS="$MONO_VERSIONS 6.8 6.6 6.4 6.0"
 
 # Supported versions 
 MONO_VERSIONS="$MONO_VERSIONS 5.20 5.18"
@@ -51,7 +51,7 @@ prepOne() {
 
     MONO_VERSION_SPLIT=(${MONO_VERSION_PAIR//=/ })
     MONO_VERSION=${MONO_VERSION_SPLIT[0]}
-    MONO_URL=${MONO_VERSION_SPLIT[1]:-"stable-focal/snapshots/$MONO_VERSION"}
+    MONO_URL=${MONO_VERSION_SPLIT[1]:-"stable-xenial/snapshots/$MONO_VERSION"}
 
     echo "Building Test Docker for mono $MONO_VERSION"
     
