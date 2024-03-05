@@ -29,3 +29,4 @@ RUN groupadd sonarrtst -g 4020 && useradd sonarrtst -u 4021 -g 4020 -m -s /bin/b
 USER sonarrtst
 
 CMD bash /startup.sh
+
