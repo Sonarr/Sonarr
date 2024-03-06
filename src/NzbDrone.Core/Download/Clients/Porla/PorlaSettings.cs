@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Download.Clients.Porla
             Category = "sonarr-tv";
             Preset = "default";
             TvDirectory = "/tmp";
-            AutoTag = true;
+            SeriesTag = true;
         }
 
         [FieldDefinition(0, Label = "Host", Type = FieldType.Textbox)]
@@ -69,8 +69,8 @@ namespace NzbDrone.Core.Download.Clients.Porla
         [FieldDefinition(8, Label = "Directory", Type = FieldType.Textbox, HelpText = "DownloadClientPorlaSettingsDirectoryHelpText")]
         public string TvDirectory { get; set; }
 
-        [FieldDefinition(9, Label = "DownloadClientPorlaAutoTag", Type = FieldType.Checkbox, Advanced = true, HelpText = "DownloadClientPorlaAutoTagHelpText")]
-        public bool AutoTag { get; set; }
+        [FieldDefinition(9, Label = "DownloadClientPorlaSeriesTag", Type = FieldType.Checkbox, Advanced = true, HelpText = "DownloadClientPorlaSeriesTagHelpText")]
+        public bool SeriesTag { get; set; }
 
         public NzbDroneValidationResult Validate()
         {

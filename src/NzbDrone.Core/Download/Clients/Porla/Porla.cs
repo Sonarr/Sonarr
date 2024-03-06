@@ -149,14 +149,14 @@ namespace NzbDrone.Core.Download.Clients.Porla
 
         protected override string AddFromMagnetLink(RemoteEpisode remoteEpisode, string hash, string magnetLink)
         {
-            var tags = Settings.AutoTag ? ConvertRemoteEpisodeToTags(remoteEpisode) : null;
+            var tags = Settings.SeriesTag ? ConvertRemoteEpisodeToTags(remoteEpisode) : null;
             var torrent = _proxy.AddMagnetTorrent(Settings, magnetLink, tags);
             return torrent.InfoHash.Hash;
         }
 
         protected override string AddFromTorrentFile(RemoteEpisode remoteEpisode, string hash, string filename, byte[] fileContent)
         {
-            var tags = Settings.AutoTag ? ConvertRemoteEpisodeToTags(remoteEpisode) : null;
+            var tags = Settings.SeriesTag ? ConvertRemoteEpisodeToTags(remoteEpisode) : null;
             var torrent = _proxy.AddTorrentFile(Settings, fileContent, tags);
             return torrent.InfoHash.Hash;
         }
