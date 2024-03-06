@@ -13,7 +13,7 @@ namespace Sonarr.Http.Authentication
     {
         public NoAuthenticationHandler(IOptionsMonitor<AuthenticationSchemeOptions> options,
             ILoggerFactory logger,
-            UrlEncoder encoder,
+            UrlEncoder encoder)
             : base(options, logger, encoder)
         {
         }

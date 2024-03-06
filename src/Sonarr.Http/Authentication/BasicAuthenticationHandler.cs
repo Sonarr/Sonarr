@@ -21,7 +21,7 @@ namespace Sonarr.Http.Authentication
         public BasicAuthenticationHandler(IAuthenticationService authService,
             IOptionsMonitor<AuthenticationSchemeOptions> options,
             ILoggerFactory logger,
-            UrlEncoder encoder,
+            UrlEncoder encoder)
             : base(options, logger, encoder)
         {
             _authService = authService;
