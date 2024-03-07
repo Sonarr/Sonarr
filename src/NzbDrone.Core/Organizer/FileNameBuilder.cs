@@ -1168,6 +1168,11 @@ namespace NzbDrone.Core.Organizer
 
         private string Truncate(string input, string formatter)
         {
+            if (input.IsNullOrWhiteSpace())
+            {
+                return null;
+            }
+
             var maxLength = GetMaxLengthFromFormatter(formatter);
 
             if (maxLength == 0 || input.Length <= Math.Abs(maxLength))
