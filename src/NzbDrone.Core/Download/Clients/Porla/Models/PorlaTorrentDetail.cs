@@ -86,7 +86,7 @@ namespace NzbDrone.Core.Download.Clients.Porla.Models
         public long Size { get; set; }
 
         [JsonProperty("state", NullValueHandling = NullValueHandling.Ignore)]
-        public long State { get; set; }
+        public LibTorrentStatus State { get; set; }
 
         [JsonProperty("tags", NullValueHandling = NullValueHandling.Ignore)]
         public ReadOnlyCollection<string> Tags { get; set; }
