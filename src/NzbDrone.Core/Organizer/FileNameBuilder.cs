@@ -622,7 +622,7 @@ namespace NzbDrone.Core.Organizer
         {
             tokenHandlers["{Original Title}"] = m => GetOriginalTitle(episodeFile, useCurrentFilenameAsFallback);
             tokenHandlers["{Original Filename}"] = m => GetOriginalFileName(episodeFile, useCurrentFilenameAsFallback);
-            tokenHandlers["{Release Group}"] = m => Truncate(episodeFile.ReleaseGroup, m.CustomFormat) ?? m.DefaultValue("Sonarr");
+            tokenHandlers["{Release Group}"] = m => episodeFile.ReleaseGroup.IsNullOrWhiteSpace() ? m.DefaultValue("Sonarr") : Truncate(episodeFile.ReleaseGroup, m.CustomFormat);
         }
 
         private void AddQualityTokens(Dictionary<string, Func<TokenMatch, string>> tokenHandlers, Series series, EpisodeFile episodeFile)
@@ -1168,6 +1168,11 @@ namespace NzbDrone.Core.Organizer
 
         private string Truncate(string input, string formatter)
         {
+            if (input.IsNullOrWhiteSpace())
+            {
+                return string.Empty;
+            }
+
             var maxLength = GetMaxLengthFromFormatter(formatter);
 
             if (maxLength == 0 || input.Length <= Math.Abs(maxLength))
