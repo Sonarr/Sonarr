@@ -28,6 +28,6 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
             }
 
             return Decision.Accept();
-        } go
+        }
     }
 }
