@@ -9528,6 +9528,9 @@
             "type": "integer",
             "format": "int32"
           },
+          "releaseType": {
+            "$ref": "#/components/schemas/ReleaseType"
+          },
           "rejections": {
             "type": "array",
             "items": {
