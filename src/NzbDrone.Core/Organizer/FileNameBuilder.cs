@@ -1170,7 +1170,7 @@ namespace NzbDrone.Core.Organizer
         {
             if (input.IsNullOrWhiteSpace())
             {
-                return null;
+                return string.Empty;
             }
 
             var maxLength = GetMaxLengthFromFormatter(formatter);
