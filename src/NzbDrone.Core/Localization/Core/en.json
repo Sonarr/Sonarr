@@ -1590,7 +1590,7 @@
   "ReleaseHash": "Release Hash",
   "ReleaseProfile": "Release Profile",
   "ReleaseProfileIndexerHelpText": "Specify what indexer the profile applies to",
-  "ReleaseProfileIndexerHelpTextWarning": "Using a specific indexer with release profiles can lead to duplicate releases being grabbed",
+  "ReleaseProfileIndexerHelpTextWarning": "Setting a specific indexer on a release profile will cause this profile to only apply to releases from that indexer.",
   "ReleaseProfileTagSeriesHelpText": "Release profiles will apply to series with at least one matching tag. Leave blank to apply to all series",
   "ReleaseProfiles": "Release Profiles",
   "ReleaseProfilesLoadError": "Unable to load Release Profiles",

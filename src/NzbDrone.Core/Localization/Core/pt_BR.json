@@ -772,7 +772,6 @@
     "RegularExpressionsTutorialLink": "Mais detalhes sobre expressões regulares podem ser encontrados [aqui]({url}).",
     "ReleaseProfile": "Perfil de Lançamento",
     "ReleaseProfileIndexerHelpText": "Especifique a qual indexador o perfil se aplica",
-    "ReleaseProfileIndexerHelpTextWarning": "Usar um indexador específico com perfis de lançamento pode levar à captura de lançamentos duplicados",
     "ReleaseProfileTagSeriesHelpText": "Os perfis de lançamento serão aplicados a séries com pelo menos uma tag correspondente. Deixe em branco para aplicar a todas as séries",
     "ReleaseProfiles": "Perfis de Lançamentos",
     "ReleaseProfilesLoadError": "Não foi possível carregar perfis de lançamentos",

@@ -1082,7 +1082,6 @@
     "RefreshAndScan": "刷新并扫描",
     "RefreshAndScanTooltip": "刷新信息并扫描磁盘",
     "ReleaseProfileIndexerHelpText": "指定配置文件应用于哪个索引器",
-    "ReleaseProfileIndexerHelpTextWarning": "使用有发布配置的特定索引器可能会导致重复获取发布",
     "ReleaseRejected": "发布被拒绝",
     "ReleaseSceneIndicatorAssumingTvdb": "推测TVDB编号。",
     "ReleaseSceneIndicatorMappedNotRequested": "在此搜索中未包含已映射的剧集。",
