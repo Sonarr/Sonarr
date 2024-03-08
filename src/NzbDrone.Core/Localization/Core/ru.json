@@ -20,7 +20,7 @@
     "HiddenClickToShow": "Скрыто, нажмите чтобы показать",
     "HideAdvanced": "Скрыть расширенные",
     "ImportListRootFolderMissingRootHealthCheckMessage": "Отсутствует корневая папка для импортирования списка(ов): {rootFolderInfo}",
-    "ImportListRootFolderMultipleMissingRootsHealthCheckMessage": "Для импортируемых списков отсутствуют несколько корневых папок: {rootFoldersInfo}",
+    "ImportListRootFolderMultipleMissingRootsHealthCheckMessage": "Для импортируемых списков отсутствуют несколько корневых папок: {rootFolderInfo}",
     "ImportListStatusAllUnavailableHealthCheckMessage": "Все листы недоступны из-за ошибок",
     "ImportListStatusUnavailableHealthCheckMessage": "Листы недоступны из-за ошибок: {importListNames}",
     "ImportMechanismEnableCompletedDownloadHandlingIfPossibleHealthCheckMessage": "Включить обработку завершенной загрузки, если это возможно",
@@ -210,5 +210,11 @@
     "CustomFormatsSpecificationRegularExpression": "Регулярное выражение",
     "CustomFormatsSpecificationReleaseGroup": "Релиз группа",
     "CustomFormatsSpecificationResolution": "Разрешение",
-    "CustomFormatsSpecificationSource": "Источник"
+    "CustomFormatsSpecificationSource": "Источник",
+    "AddAutoTag": "Добавить автоматический тег",
+    "AddAutoTagError": "Не удалось добавить новый авто тег, пожалуйста повторите попытку.",
+    "AddListExclusionError": "Не удалось добавить новое исключение из списка. Повторите попытку.",
+    "AddImportListExclusionError": "Не удалось добавить новое исключение из списка импорта. Повторите попытку.",
+    "AddListExclusion": "Добавить исключение из списка",
+    "AddDelayProfileError": "Не удалось добавить новый профиль задержки. Повторите попытку."
 }

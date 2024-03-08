@@ -227,7 +227,7 @@
     "DeleteCondition": "Cancella Condizione",
     "DeleteEpisodeFromDisk": "Cancella episodio dal disco",
     "DeleteNotification": "Cancella Notifica",
-    "DownloadClientCheckUnableToCommunicateWithHealthCheckMessage": "Impossibile comunicare con {downloadClientName}.",
+    "DownloadClientCheckUnableToCommunicateWithHealthCheckMessage": "Impossibile comunicare con {downloadClientName}. {errorMessage}",
     "Connect": "Collegamento",
     "CustomFormatsSettings": "Formati Personalizzati Impostazioni",
     "Condition": "Condizione",
