@@ -1,5 +1,6 @@
 import ModelBase from 'App/ModelBase';
 import Episode from 'Episode/Episode';
+import ReleaseType from 'InteractiveImport/ReleaseType';
 import Language from 'Language/Language';
 import { QualityModel } from 'Quality/Quality';
 import Series from 'Series/Series';
@@ -33,6 +34,7 @@ interface InteractiveImport extends ModelBase {
   qualityWeight: number;
   customFormats: object[];
   indexerFlags: number;
+  releaseType: ReleaseType;
   rejections: Rejection[];
   episodeFileId?: number;
 }
