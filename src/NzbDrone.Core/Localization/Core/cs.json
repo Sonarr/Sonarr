@@ -30,7 +30,7 @@
     "CancelProcessing": "Zrušit zpracování",
     "CheckDownloadClientForDetails": "zkontrolujte klienta pro stahování pro více informací",
     "ChmodFolderHelpText": "Octal, aplikováno během importu / přejmenování na mediální složky a soubory (bez provádění bitů)",
-    "ChmodFolderHelpTextWarning": "Toto funguje pouze v případě, že uživatel, který spustil sonarr, je vlastníkem souboru. Je lepší zajistit, aby klient pro stahování správně nastavil oprávnění.",
+    "ChmodFolderHelpTextWarning": "Toto funguje pouze v případě, že uživatel, který spustil {appName}, je vlastníkem souboru. Je lepší zajistit, aby klient pro stahování správně nastavil oprávnění.",
     "ChooseAnotherFolder": "Vyberte jinou složku",
     "ChownGroup": "Skupina chown",
     "ConnectSettings": "Nastavení připojení",
@@ -67,7 +67,7 @@
     "CalendarLoadError": "Nelze načíst kalendář",
     "CertificateValidationHelpText": "Změňte přísnost ověřování certifikátů HTTPS. Neměňte, pokud nerozumíte rizikům.",
     "ChownGroupHelpText": "Název skupiny nebo gid. Použijte gid pro vzdálené systémy souborů.",
-    "ChownGroupHelpTextWarning": "Toto funguje pouze v případě, že uživatel, který spustil sonarr, je vlastníkem souboru. Je lepší zajistit, aby klient pro stahování správně nastavil oprávnění.",
+    "ChownGroupHelpTextWarning": "Toto funguje pouze v případě, že uživatel, který spustil {appName}, je vlastníkem souboru. Je lepší zajistit, aby klient stahování používal stejnou skupinu jako {appName}.",
     "ClientPriority": "Priorita klienta",
     "Clone": "Klonovat",
     "CloneIndexer": "Klonovat indexátor",
@@ -319,5 +319,5 @@
     "EditSelectedImportLists": "Upravit vybrané seznamy k importu",
     "FormatDateTime": "{formattedDate} {formattedTime}",
     "AddRootFolderError": "Nepodařilo se přidat kořenový adresář",
-    "DownloadClientRemovesCompletedDownloadsHealthCheckMessage": "Klient stahování {downloadClientName} je nastaven na odstranění dokončených stahování. To může vést k tomu, že stahování budou z klienta odstraněna dříve, než je bude moci importovat {1}."
+    "DownloadClientRemovesCompletedDownloadsHealthCheckMessage": "Klient stahování {downloadClientName} je nastaven na odstranění dokončených stahování. To může vést k tomu, že stahování budou z klienta odstraněna dříve, než je bude moci importovat {appName}."
 }

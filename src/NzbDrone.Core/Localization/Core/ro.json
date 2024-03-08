@@ -20,7 +20,7 @@
     "ApplyTagsHelpTextAdd": "Adăugare: adăugați etichetele la lista de etichete existentă",
     "ApplyTagsHelpTextReplace": "Înlocuire: înlocuiți etichetele cu etichetele introduse (nu introduceți etichete pentru a șterge toate etichetele)",
     "CancelPendingTask": "Sigur doriți să anulați această sarcină în așteptare?",
-    "DownloadClientCheckUnableToCommunicateWithHealthCheckMessage": "Nu pot comunica cu {downloadClientName}.",
+    "DownloadClientCheckUnableToCommunicateWithHealthCheckMessage": "Nu pot comunica cu {downloadClientName}. {errorMessage}",
     "CloneCustomFormat": "Clonați format personalizat",
     "Close": "Închide",
     "Delete": "Șterge",
