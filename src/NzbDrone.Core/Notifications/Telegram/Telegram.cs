@@ -7,7 +7,7 @@ namespace NzbDrone.Core.Notifications.Telegram
     public class Telegram : NotificationBase<TelegramSettings>
     {
         private readonly ITelegramProxy _proxy;
-
+        private string FormatImdbLinkFromId(string message, string id) => $"[{message}](https://www.imdb.com/title/{id})";
         public Telegram(ITelegramProxy proxy)
         {
             _proxy = proxy;
@@ -33,7 +33,13 @@ namespace NzbDrone.Core.Notifications.Telegram
 
         public override void OnSeriesAdd(SeriesAddMessage message)
         {
-            _proxy.SendNotification(SERIES_ADDED_TITLE, message.Message, Settings);
+            var text = message.Message;
+            if (Settings.SendLink)
+            {
+                text = FormatImdbLinkFromId(text, message.Series.ImdbId);
+            }
+
+            _proxy.SendNotification(SERIES_ADDED_TITLE, text, Settings);
         }
 
         public override void OnSeriesDelete(SeriesDeleteMessage deleteMessage)

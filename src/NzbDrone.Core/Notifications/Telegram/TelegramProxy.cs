@@ -35,13 +35,13 @@ namespace NzbDrone.Core.Notifications.Telegram
         public void SendNotification(string title, string message, TelegramSettings settings)
         {
             // Format text to add the title before and bold using markdown
-            var text = $"<b>{HttpUtility.HtmlEncode(title)}</b>\n{HttpUtility.HtmlEncode(message)}";
+            var text = $"*{HttpUtility.HtmlEncode(title)}*\n{HttpUtility.HtmlEncode(message)}";
 
             var requestBuilder = new HttpRequestBuilder(URL).Resource("bot{token}/sendmessage").Post();
 
             var request = requestBuilder.SetSegment("token", settings.BotToken)
                                         .AddFormParameter("chat_id", settings.ChatId)
-                                        .AddFormParameter("parse_mode", "HTML")
+                                        .AddFormParameter("parse_mode", "MarkdownV2")
                                         .AddFormParameter("text", text)
                                         .AddFormParameter("disable_notification", settings.SendSilently)
                                         .AddFormParameter("message_thread_id", settings.TopicId)

@@ -32,6 +32,9 @@ namespace NzbDrone.Core.Notifications.Telegram
         [FieldDefinition(3, Label = "NotificationsTelegramSettingsSendSilently", Type = FieldType.Checkbox, HelpText = "NotificationsTelegramSettingsSendSilentlyHelpText")]
         public bool SendSilently { get; set; }
 
+        [FieldDefinition(4, Label = "NotificationsTelegramSettingsSendLink", Type = FieldType.Checkbox, HelpText = "NotificationsTelegramSettingsSendLink")]
+        public bool SendLink {  get; set; }
+
         public NzbDroneValidationResult Validate()
         {
             return new NzbDroneValidationResult(Validator.Validate(this));

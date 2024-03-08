@@ -2,6 +2,7 @@
   <PropertyGroup>
     <TargetFrameworks>net6.0</TargetFrameworks>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <Platforms>AnyCPU;x86</Platforms>
   </PropertyGroup>
   <!-- 
        The netstandard version here doesn't work in net framework
