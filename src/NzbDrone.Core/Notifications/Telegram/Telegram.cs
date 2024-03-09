@@ -1,16 +1,78 @@
+using System;
 using System.Collections.Generic;
 using FluentValidation.Results;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Notifications.Telegram
 {
     public class Telegram : NotificationBase<TelegramSettings>
     {
+        private const string ImdbUrlFormat = "https://www.imdb.com/title/{0}";
+        private const string TvdbUrlFormat = "http://www.thetvdb.com/?tab=series&id={0}";
+        private const string TraktUrlFormat = "http://trakt.tv/search/tvdb/{0}?id_type=show";
+        private const string TvMazeUrlFormat = "http://www.tvmaze.com/shows/{0}/_";
+
         private readonly ITelegramProxy _proxy;
+        private readonly Dictionary<MetadataLinkType, Func<string, string, string>> _formatLinkFromIdMethods;
+
+        private string FormatImdbLinkFromId(string message, string id)
+        {
+            return $"[{message}]({string.Format(ImdbUrlFormat, id)})";
+        }
+
+        private string FormatTvdbLinkFromId(string message, string id)
+        {
+            return $"[{message}]({string.Format(TvdbUrlFormat, id)})";
+        }
+
+        private string FormatTraktLinkFromId(string message, string id)
+        {
+            return $"[{message}]({string.Format(TraktUrlFormat, id)})";
+        }
+
+        private string FormatTVMazeLinkFromId(string message, string id)
+        {
+            return $"[{message}]({string.Format(TvMazeUrlFormat, id)})";
+        }
+
+        private string GetIdByType(Series series, MetadataLinkType linkType)
+        {
+            switch (linkType)
+            {
+                case MetadataLinkType.IMDb:
+                    return series.ImdbId;
+                case MetadataLinkType.TVDb:
+                    return series.TvdbId.ToString();
+                case MetadataLinkType.Trakt:
+                    return series.TvdbId.ToString();
+                case MetadataLinkType.TVMaze:
+                    return series.TvMazeId.ToString();
+                default:
+                    throw new ArgumentException($"Unsupported link type: {linkType}", nameof(linkType));
+            }
+        }
 
         public Telegram(ITelegramProxy proxy)
         {
             _proxy = proxy;
+            _formatLinkFromIdMethods = new Dictionary<MetadataLinkType, Func<string, string, string>>
+            {
+                { MetadataLinkType.IMDb, FormatImdbLinkFromId },
+                { MetadataLinkType.TVDb, FormatTvdbLinkFromId },
+                { MetadataLinkType.Trakt, FormatTraktLinkFromId },
+                { MetadataLinkType.TVMaze, FormatTVMazeLinkFromId }
+            };
+        }
+
+        private string FormatMessageWithLink(string message, Series series)
+        {
+            if (Settings.SendMetadataLink && _formatLinkFromIdMethods.TryGetValue(Settings.MetadataLinkType, out var formatMethod))
+            {
+                message = formatMethod(message, GetIdByType(series, Settings.MetadataLinkType));
+            }
+
+            return message;
         }
 
         public override string Name => "Telegram";
@@ -33,12 +95,14 @@ namespace NzbDrone.Core.Notifications.Telegram
 
         public override void OnSeriesAdd(SeriesAddMessage message)
         {
-            _proxy.SendNotification(SERIES_ADDED_TITLE, message.Message, Settings);
+            var text = FormatMessageWithLink(message.Message, message.Series);
+            _proxy.SendNotification(SERIES_ADDED_TITLE, text, Settings);
         }
 
         public override void OnSeriesDelete(SeriesDeleteMessage deleteMessage)
         {
-            _proxy.SendNotification(SERIES_DELETED_TITLE, deleteMessage.Message, Settings);
+            var text = FormatMessageWithLink(deleteMessage.Message, deleteMessage.Series);
+            _proxy.SendNotification(SERIES_DELETED_TITLE, text, Settings);
         }
 
         public override void OnHealthIssue(HealthCheck.HealthCheck healthCheck)
