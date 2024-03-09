@@ -1,13 +1,40 @@
 using System.Collections.Generic;
 using FluentValidation.Results;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Notifications.Telegram
 {
     public class Telegram : NotificationBase<TelegramSettings>
     {
+        private string FormatMessageWithLink(string message, Series series)
+        {
+            if (Settings.MetadataLinkType is not MetadataLinkType.None)
+            {
+                if (Settings.MetadataLinkType == MetadataLinkType.IMDb)
+                {
+                    message = FormatImdbLinkFromId(message, series.ImdbId.ToString());
+                }
+                else if (Settings.MetadataLinkType == MetadataLinkType.TVDb)
+                {
+                    message = FormatTvdbLinkFromId(message, series.TvdbId.ToString());
+                }
+            }
+
+            return message;
+        }
+
         private readonly ITelegramProxy _proxy;
-        private string FormatImdbLinkFromId(string message, string id) => $"[{message}](https://www.imdb.com/title/{id})";
+        private string FormatImdbLinkFromId(string message, string id)
+        {
+            return $"[{message}](https://www.imdb.com/title/{id})";
+        }
+
+        private string FormatTvdbLinkFromId(string message, string id)
+        {
+            return $"[{message}](https://www.thetvdb.com/series/{id})";
+        }
+
         public Telegram(ITelegramProxy proxy)
         {
             _proxy = proxy;
@@ -33,17 +60,13 @@ namespace NzbDrone.Core.Notifications.Telegram
 
         public override void OnSeriesAdd(SeriesAddMessage message)
         {
-            var text = message.Message;
-            if (Settings.SendLink)
-            {
-                text = FormatImdbLinkFromId(text, message.Series.ImdbId);
-            }
-
+            var text = FormatMessageWithLink(message.Message, message.Series);
             _proxy.SendNotification(SERIES_ADDED_TITLE, text, Settings);
         }
 
         public override void OnSeriesDelete(SeriesDeleteMessage deleteMessage)
         {
+            var text = FormatMessageWithLink(deleteMessage.Message, deleteMessage.Series);
             _proxy.SendNotification(SERIES_DELETED_TITLE, deleteMessage.Message, Settings);
         }
 

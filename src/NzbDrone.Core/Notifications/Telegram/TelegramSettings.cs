@@ -2,9 +2,15 @@ using FluentValidation;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
-
 namespace NzbDrone.Core.Notifications.Telegram
 {
+    public enum MetadataLinkType
+    {
+        IMDb,
+        TVDb,
+        None
+    }
+
     public class TelegramSettingsValidator : AbstractValidator<TelegramSettings>
     {
         public TelegramSettingsValidator()
@@ -32,8 +38,8 @@ namespace NzbDrone.Core.Notifications.Telegram
         [FieldDefinition(3, Label = "NotificationsTelegramSettingsSendSilently", Type = FieldType.Checkbox, HelpText = "NotificationsTelegramSettingsSendSilentlyHelpText")]
         public bool SendSilently { get; set; }
 
-        [FieldDefinition(4, Label = "NotificationsTelegramSettingsSendLink", Type = FieldType.Checkbox, HelpText = "NotificationsTelegramSettingsSendLink")]
-        public bool SendLink {  get; set; }
+        [FieldDefinition(4, Label = "NotificationsTelegramSettingsMetadataLinkType", Type = FieldType.Select, SelectOptions = typeof(MetadataLinkType), HelpText = "NotificationsTelegramSettingsSendLink")]
+        public MetadataLinkType MetadataLinkType { get; set; }
 
         public NzbDroneValidationResult Validate()
         {
