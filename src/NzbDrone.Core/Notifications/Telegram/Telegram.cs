@@ -9,13 +9,13 @@ namespace NzbDrone.Core.Notifications.Telegram
     {
         private string FormatMessageWithLink(string message, Series series)
         {
-            if (Settings.MetadataLinkType is not MetadataLinkType.None)
+            if (Settings.MetadataLinkType is MetadataLinkType.None)
             {
-                if (Settings.MetadataLinkType == MetadataLinkType.IMDb)
+                if (Settings.MetadataLinkType is MetadataLinkType.IMDb)
                 {
                     message = FormatImdbLinkFromId(message, series.ImdbId.ToString());
                 }
-                else if (Settings.MetadataLinkType == MetadataLinkType.TVDb)
+                else if (Settings.MetadataLinkType is MetadataLinkType.TVDb)
                 {
                     message = FormatTvdbLinkFromId(message, series.TvdbId.ToString());
                 }
