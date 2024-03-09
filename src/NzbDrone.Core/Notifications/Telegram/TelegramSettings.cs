@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Notifications.Telegram
         public bool SendSilently { get; set; }
 
         [DefaultValue(true)]
-        [FieldDefinition(4, Label = "NotificationsTelegramSettingsMetadataLinkType", Type = FieldType.Checkbox, HelpText = "NotificationsTelegramSettingsSendMetadataLink")]
+        [FieldDefinition(4, Label = "NotificationsTelegramSettingsSendMetadataLink", Type = FieldType.Checkbox, HelpText = "NotificationsTelegramSettingsSendMetadataLink")]
         public bool SendMetadataLink { get; set; }
         [FieldDefinition(5, Label = "NotificationsTelegramSettingsMetadataLinkType", Type = FieldType.Select, SelectOptions = typeof(MetadataLinkType), HelpText = "NotificationsTelegramSettingsMetadataLinkType")]
         public MetadataLinkType MetadataLinkType { get; set; }
