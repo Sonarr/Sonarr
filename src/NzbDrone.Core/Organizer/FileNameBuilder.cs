@@ -623,7 +623,7 @@ namespace NzbDrone.Core.Organizer
             tokenHandlers["{Original Title}"] = m => GetOriginalTitle(episodeFile, useCurrentFilenameAsFallback);
             tokenHandlers["{Original Filename}"] = m => GetOriginalFileName(episodeFile, useCurrentFilenameAsFallback);
             tokenHandlers["{Release Group}"] = m => episodeFile.ReleaseGroup.IsNullOrWhiteSpace() ? m.DefaultValue("Sonarr") : Truncate(episodeFile.ReleaseGroup, m.CustomFormat);
-            tokenHandlers["{Release Hash}"] = m => GetReleaseHash(episodeFile);
+            tokenHandlers["{Release Hash}"] = m => episodeFile.ReleaseHash ?? string.Empty;
         }
 
         private void AddQualityTokens(Dictionary<string, Func<TokenMatch, string>> tokenHandlers, Series series, EpisodeFile episodeFile)
@@ -1100,16 +1100,6 @@ namespace NzbDrone.Core.Organizer
             }
 
             return Path.GetFileNameWithoutExtension(episodeFile.RelativePath);
-        }
-
-        private string GetReleaseHash(EpisodeFile episodeFile)
-        {
-            if (episodeFile.ReleaseHash.IsNotNullOrWhiteSpace())
-            {
-                return episodeFile.ReleaseHash;
-            }
-
-            return string.Empty;
         }
 
         private int GetLengthWithoutEpisodeTitle(string pattern, NamingConfig namingConfig)
