@@ -19,6 +19,14 @@ namespace NzbDrone.Core.Notifications.Telegram
                 {
                     message = FormatTvdbLinkFromId(message, series.TvdbId.ToString());
                 }
+                else if (Settings.MetadataLinkType is MetadataLinkType.Trakt)
+                {
+                    message = FormatTraktLinkFromId(message, series.TvdbId.ToString());
+                }
+                else if (Settings.MetadataLinkType is MetadataLinkType.TVMaze)
+                {
+                    message = FormatTVMazeLinkFromId(message, series.TvMazeId.ToString());
+                }
             }
 
             return message;
@@ -32,7 +40,17 @@ namespace NzbDrone.Core.Notifications.Telegram
 
         private string FormatTvdbLinkFromId(string message, string id)
         {
-            return $"[{message}](https://www.thetvdb.com/series/{id})";
+            return $"[{message}](http://www.thetvdb.com/?tab=series&id={id})";
+        }
+
+        private string FormatTraktLinkFromId(string message, string id)
+        {
+            return $"[{message}](http://trakt.tv/search/tvdb/{id}?id_type=show)";
+        }
+
+        private string FormatTVMazeLinkFromId(string message, string id)
+        {
+            return $"[{message}](http://www.tvmaze.com/shows/{id}/_)";
         }
 
         public Telegram(ITelegramProxy proxy)

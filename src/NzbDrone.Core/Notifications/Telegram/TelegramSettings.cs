@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using FluentValidation;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
@@ -8,7 +9,8 @@ namespace NzbDrone.Core.Notifications.Telegram
     {
         IMDb,
         TVDb,
-        None
+        TVMaze,
+        Trakt,
     }
 
     public class TelegramSettingsValidator : AbstractValidator<TelegramSettings>
@@ -38,6 +40,7 @@ namespace NzbDrone.Core.Notifications.Telegram
         [FieldDefinition(3, Label = "NotificationsTelegramSettingsSendSilently", Type = FieldType.Checkbox, HelpText = "NotificationsTelegramSettingsSendSilentlyHelpText")]
         public bool SendSilently { get; set; }
 
+        [DefaultValue(true)]
         [FieldDefinition(4, Label = "NotificationsTelegramSettingsMetadataLinkType", Type = FieldType.Checkbox, HelpText = "NotificationsTelegramSettingsSendMetadataLink")]
         public bool SendMetadataLink { get; set; }
         [FieldDefinition(5, Label = "NotificationsTelegramSettingsMetadataLinkType", Type = FieldType.Select, SelectOptions = typeof(MetadataLinkType), HelpText = "NotificationsTelegramSettingsMetadataLinkType")]
