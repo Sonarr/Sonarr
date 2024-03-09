@@ -102,7 +102,7 @@ namespace NzbDrone.Core.Notifications.Telegram
         public override void OnSeriesDelete(SeriesDeleteMessage deleteMessage)
         {
             var text = FormatMessageWithLink(deleteMessage.Message, deleteMessage.Series);
-            _proxy.SendNotification(SERIES_DELETED_TITLE, deleteMessage.Message, Settings);
+            _proxy.SendNotification(SERIES_DELETED_TITLE, text, Settings);
         }
 
         public override void OnHealthIssue(HealthCheck.HealthCheck healthCheck)
