@@ -9,7 +9,7 @@ namespace NzbDrone.Core.Notifications.Telegram
     {
         private string FormatMessageWithLink(string message, Series series)
         {
-            if (Settings.MetadataLinkType is MetadataLinkType.None)
+            if (Settings.SendMetadataLink)
             {
                 if (Settings.MetadataLinkType is MetadataLinkType.IMDb)
                 {
