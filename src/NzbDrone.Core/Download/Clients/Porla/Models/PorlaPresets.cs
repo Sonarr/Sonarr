@@ -9,7 +9,10 @@ namespace NzbDrone.Core.Download.Clients.Porla.Models
         public ReadOnlyCollection<PorlaPreset> Presets { get; set; }
     }
 
+    // TODO: Figure out all the fields in here.
     public sealed class PorlaPreset : object
     {
+        [JsonProperty("save_path", NullValueHandling = NullValueHandling.Ignore)]
+        public string SavePath { get; set; }
     }
 }

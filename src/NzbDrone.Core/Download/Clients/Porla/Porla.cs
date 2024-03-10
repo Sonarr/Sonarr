@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common.Disk;
@@ -115,7 +116,8 @@ namespace NzbDrone.Core.Download.Clients.Porla
 
         public override DownloadClientInfo GetStatus()
         {
-            // var preset = _proxy.ListPresets(Settings);
+            var presetSettings = _proxy.ListPresets(Settings)[0];  // figure out how to get the name we want
+
             // var sessettings = _proxy.GetSessionSettings(Settings);
 
             var status = new DownloadClientInfo
@@ -124,14 +126,13 @@ namespace NzbDrone.Core.Download.Clients.Porla
                 RemovesCompletedDownloads = false, // should be determined through Flags From  somewhere? I think session?
             };
 
-            // the default directory value is stored in the presets values... i think?
-            // but will not always be active if not set
+            // the default directory value is stored in the presets values... unclear if it's anywhere else.
 
-            // destDir = new OsPath(preset.GetValueOrDefault("save_path") as string);
-            // if (destDir.IsNotNullOrEmpty)
-            // {
-            //    status.OutputRootFolders = new List<OsPath> { _remotePathMappingService.RemapRemoteToLocal(Settings.Host, destDir) };
-            // }
+            var destDir = new OsPath(presetSettings?.SavePath ?? "");
+            if (!destDir.IsEmpty)
+            {
+               status.OutputRootFolders = new List<OsPath> { _remotePathMappingService.RemapRemoteToLocal(Settings.Host, destDir) };
+            }
 
             return status;
         }
@@ -163,7 +164,7 @@ namespace NzbDrone.Core.Download.Clients.Porla
 
         protected override void Test(List<ValidationFailure> failures)
         {
-            failures.AddIfNotNull(TestConnection());
+            failures.AddIfNotNull(TestVersion());
             if (failures.HasErrors())
             {
                 return;
@@ -172,26 +173,38 @@ namespace NzbDrone.Core.Download.Clients.Porla
             failures.AddIfNotNull(TestGetTorrents());
         }
 
-        private ValidationFailure TestConnection()
+        /// <summary> Test the connection by calling the `sys.version` </summary>
+        private ValidationFailure TestVersion()
         {
+            // TODO : Consider dropping the future version (painful to keep up with)
             try
             {
+                // Version Compatability check.
                 var sysVers = _proxy.GetSysVersion(Settings);
-                var version = new Version(sysVers.Porla.Version);
+                var badVersions = new List<string> { };         // List of Broken Versions
+                var goodVersion = new Version("0.37.0");        // The main version we want to see
+                var firstGoodVersion = new Version("0.37.0");   // The first (cronological) version that we are sure works (usually the goodVersion)
+                var lastGoodVersion = new Version("0.37.0");    // The last (cronological) version that we are sure works (usually the goodVersion)
+                var actualVersion = new Version(sysVers.Porla.Version);
 
-                if (version < new Version("0.37.0"))
+                if (badVersions.Any(s => new Version(s) == actualVersion))
                 {
-                    // return new ValidationFailure(string.Empty, _localizationService.GetLocalizedString("DownloadClientValidationErrorVersion",
-                    //        new Dictionary<string, object> { { "clientName", Name }, { "requiredVersion", "0.37.0" }, { "reportedVersion", version } }));
-                    _logger.Warn($"Porla: Unsure if your version is forwards compatible: {version}");
+                    _logger.Error($"Porla: Your Porla version isn't compatible with Sonarr!: {actualVersion}");
+                    return new ValidationFailure(string.Empty, _localizationService.GetLocalizedString("DownloadClientValidationErrorVersion",
+                            new Dictionary<string, object> { { "clientName", Name }, { "requiredVersion", goodVersion.ToString() }, { "reportedVersion", actualVersion } }));
                 }
 
-                if (version > new Version("0.37.0"))
+                if (actualVersion < firstGoodVersion)
                 {
-                    _logger.Warn($"Porla: Unsure if your version is backwards compatible: {version}");
+                    _logger.Warn($"Porla: Your version might not be forwards compatible: {actualVersion}");
                 }
 
-                if (version < new Version("1.0.0"))
+                if (actualVersion > lastGoodVersion)
+                {
+                    _logger.Warn($"Porla: Your version might not be backwards compatible: {actualVersion}");
+                }
+
+                if (actualVersion < new Version("1.0.0"))
                 {
                     _logger.Warn($"Porla: Porla is in active development, expect weirdness with it and this client");
                 }
@@ -225,7 +238,7 @@ namespace NzbDrone.Core.Download.Clients.Porla
         {
             try
             {
-                _proxy.ListTorrents(Settings, 0, 1);
+                _ = _proxy.ListTorrents(Settings, 0, 1);
             }
             catch (Exception ex)
             {

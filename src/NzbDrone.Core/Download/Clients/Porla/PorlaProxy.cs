@@ -45,8 +45,9 @@ namespace NzbDrone.Core.Download.Clients.Porla
         ReadOnlyCollection<PorlaTorrentDetail> ListTorrents(PorlaSettings settings, long page = 0, long size = long.MaxValue);      // torrents.list
 
         // torrents.recheck
-            // torrents.files.list
-            // torrents.metadata.list
+        // torrents.files.list
+        // torrents.metadata.list
+        // torrents.trackers.list
 
         // torrents.peers
             // torrents.peer.add
@@ -95,6 +96,7 @@ namespace NzbDrone.Core.Download.Clients.Porla
             _logger.Info($"Pain: {httpRequest.ToString()}");
             HttpResponse response;
 
+            // TODO: catch and throw auth exceptions like in Qbit
             try
             {
                 response = _httpClient.Execute(httpRequest);
@@ -183,8 +185,6 @@ namespace NzbDrone.Core.Download.Clients.Porla
         }
 
         // torrents
-
-        // can I use null here?
 
         public PorlaTorrent AddMagnetTorrent(PorlaSettings settings, string uri, IList<string> tags = null)
         {

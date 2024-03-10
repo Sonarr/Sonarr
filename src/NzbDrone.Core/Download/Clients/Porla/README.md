@@ -37,27 +37,30 @@ Could also be a way to have multiple Sonarrs pointed at the same Porla, or a dif
 
 ### Presets
 
-Presets are being set on the torrent adds
+Preset ussage are being set on the torrent adds, through a client setting.
 
-So I needed to do something with the `save_path`.  
-I wanted this to work "by default", so if you have NO presets set, you **NEED** to set the `save_path` _BUT_ if you want to use the presets values you shoule NOT set the `save_path` in the RPC request. That is why you see that intersting branch on the `AddTorrent` functions.
+So I needed to do something with the `save_path` on the `torrent.add` request.
+Theis field is optional if you set a defualt path on porla BUT required if you didn't.  
+I wanted this to work "by default", so if you have NO presets set, you **NEED** to set the `save_path` _BUT_ if you want to use the presets values you should NOT set the `save_path` in the RPC request. That is why you see that intersting branch on the `AddTorrent` functions.
 
 ### Tags
 
-Would be great to use to filter BIG lists of torrents even more! But it doesn't look like Sonarr expects that. looks like it expects everything
+Would be great to use to filter BIG lists of torrents even more! But Sonarr expects everything. Something to look at in the future if Sonarr ever does granular torrent requests.
 
-The idea is to use the tags to find a spesific series/show/season so listing is effiecient.
+The idea is to use the tags on torrents to make listing more efficient, in our case tagging them with series/show/season so we can find what we are looking for.
 
-So what I wanted to do instead is set tags for the series. I want to be able to come around later and filter torrents seperated from Sonarr.
+What I did set tags with the series attributes. I want to be able to come around later and filter torrents outside the context of Sonarr.
 
-TODO: Should probably create a flag to turn this off.
+You can set a client setting to disable this behavior.
 
 ### Torrent Metadata
 
 I **DID NOT USE** this, maybe add something?
 
+It's basically a any-field that we can fill with anything we want.
+
 ### LibTorrent [Torrent Flags](https://libtorrent.org/single-page-ref.html#torrent_flags_t)
 
 #### share_mode
 
-Should be very useful for private trackers. Sadly unclear how to implement it without stepping on toes.
+Should be very useful for private trackers. Sadly unclear how to implement it without doing some spagetti.

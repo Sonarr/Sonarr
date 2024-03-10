@@ -3,7 +3,6 @@ namespace NzbDrone.Core.Download.Clients.LibTorrent.Models
     /// <summary> Re-Implements <a href="https://libtorrent.org/reference-Torrent_Status.html#state_t">state_t</a> </summary>
     public enum LibTorrentStatus
     {
-
         /// <summary> The torrent has not started its download yet, and is currently checking existing files. </summary>
         checking_files = 1,
 
