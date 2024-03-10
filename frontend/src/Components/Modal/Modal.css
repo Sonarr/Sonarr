@@ -63,6 +63,13 @@
   width: 1280px;
 }
 
+
+.extraExtraLarge {
+  composes: modal;
+
+  width: 1600px;
+}
+
 @media only screen and (max-width: $breakpointExtraLarge) {
   .modal.extraLarge {
     width: 90%;
@@ -90,7 +97,8 @@
   .modal.small,
   .modal.medium,
   .modal.large,
-  .modal.extraLarge {
+  .modal.extraLarge,
+  .modal.extraExtraLarge {
     max-height: 100%;
     width: 100%;
     height: 100% !important;
