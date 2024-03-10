@@ -93,6 +93,30 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
                    .Should().Be(expected);
         }
 
+        [TestCase("{Custom Formats:-INTERNAL}", "AMZN NAME WITH SPACES")]
+        [TestCase("{Custom Formats:-NAME WITH SPACES}", "INTERNAL AMZN")]
+        [TestCase("{Custom Formats:-INTERNAL,NAME WITH SPACES}", "AMZN")]
+        [TestCase("{Custom Formats:INTERNAL}", "INTERNAL")]
+        [TestCase("{Custom Formats:NAME WITH SPACES}", "NAME WITH SPACES")]
+        [TestCase("{Custom Formats:INTERNAL,NAME WITH SPACES}", "INTERNAL NAME WITH SPACES")]
+        public void should_replace_custom_formats_with_filtered_names(string format, string expected)
+        {
+            _namingConfig.StandardEpisodeFormat = format;
+
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile, customFormats: _customFormats)
+                   .Should().Be(expected);
+        }
+
+        [TestCase("{Custom Formats:-}", "{Custom Formats:-}")]
+        [TestCase("{Custom Formats:}", "{Custom Formats:}")]
+        public void should_not_replace_custom_formats_due_to_invalid_token(string format, string expected)
+        {
+            _namingConfig.StandardEpisodeFormat = format;
+
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile, customFormats: _customFormats)
+                   .Should().Be(expected);
+        }
+
         [TestCase("{Custom Format}", "")]
         [TestCase("{Custom Format:INTERNAL}", "INTERNAL")]
         [TestCase("{Custom Format:AMZN}", "AMZN")]
