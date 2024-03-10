@@ -4,6 +4,7 @@ using NzbDrone.Core.Download.Clients.LibTorrent.Models;
 
 namespace NzbDrone.Core.Download.Clients.Porla.Models
 {
+    /// <summary> Implementation of the <em>Torrents</em> field type in the response data from <a href="https://github.com/porla/porla/blob/v0.37.0/src/methods/torrentslist_reqres.hpp">torrentslist_reqres.hpp</a></summary>
     public sealed class PorlaTorrentDetail
     {
         [JsonProperty("active_duration", NullValueHandling = NullValueHandling.Ignore)]
@@ -19,7 +20,7 @@ namespace NzbDrone.Core.Download.Clients.Porla.Models
         public string Category { get; set; }
 
         [JsonProperty("download_rate", NullValueHandling = NullValueHandling.Ignore)]
-        public long DownloadRate { get; set; }
+        public int DownloadRate { get; set; }
 
         [JsonProperty("error", NullValueHandling = NullValueHandling.Ignore)]
         public string Error { get; set; }
@@ -44,11 +45,12 @@ namespace NzbDrone.Core.Download.Clients.Porla.Models
         public long LastUpload { get; set; }
 
         [JsonProperty("list_peers", NullValueHandling = NullValueHandling.Ignore)]
-        public long ListPeers { get; set; }
+        public int ListPeers { get; set; }
 
         [JsonProperty("list_seeds", NullValueHandling = NullValueHandling.Ignore)]
-        public long ListSeeds { get; set; }
+        public int ListSeeds { get; set; }
 
+        // technically any valid json should be able to fit here.
         [JsonProperty("metadata", NullValueHandling = NullValueHandling.Ignore)]
         public ReadOnlyDictionary<string, string> Metadata { get; set; }
 
@@ -59,16 +61,16 @@ namespace NzbDrone.Core.Download.Clients.Porla.Models
         public string Name { get; set; }
 
         [JsonProperty("num_peers", NullValueHandling = NullValueHandling.Ignore)]
-        public long NumPeers { get; set; }
+        public int NumPeers { get; set; }
 
         [JsonProperty("num_seeds", NullValueHandling = NullValueHandling.Ignore)]
-        public long NumSeeds { get; set; }
+        public int NumSeeds { get; set; }
 
         [JsonProperty("progress", NullValueHandling = NullValueHandling.Ignore)]
-        public double Progress { get; set; }
+        public float Progress { get; set; }
 
         [JsonProperty("queue_position", NullValueHandling = NullValueHandling.Ignore)]
-        public long QueuePosition { get; set; }
+        public int QueuePosition { get; set; }
 
         [JsonProperty("ratio", NullValueHandling = NullValueHandling.Ignore)]
         public double Ratio { get; set; }
@@ -98,9 +100,10 @@ namespace NzbDrone.Core.Download.Clients.Porla.Models
         public long TotalDone { get; set; }
 
         [JsonProperty("upload_rate", NullValueHandling = NullValueHandling.Ignore)]
-        public long UploadRate { get; set; }
+        public int UploadRate { get; set; }
     }
 
+    /// <summary> Implementation of the torrent response data type from <a href="https://github.com/porla/porla/blob/v0.37.0/src/methods/torrentslist_reqres.hpp">torrentslist_reqres.hpp</a></summary>
     public sealed class ResponsePorlaTorrentList
     {
         [JsonProperty("order_by", NullValueHandling = NullValueHandling.Ignore)]
@@ -110,18 +113,18 @@ namespace NzbDrone.Core.Download.Clients.Porla.Models
         public string OrderByDir { get; set; }
 
         [JsonProperty("page", NullValueHandling = NullValueHandling.Ignore)]
-        public long Page { get; set; }
+        public int Page { get; set; }
 
         [JsonProperty("page_size", NullValueHandling = NullValueHandling.Ignore)]
-        public long PageSize { get; set; }
+        public int PageSize { get; set; }
 
         [JsonProperty("torrents", NullValueHandling = NullValueHandling.Ignore)]
         public ReadOnlyCollection<PorlaTorrentDetail> Torrents { get; set; }
 
         [JsonProperty("torrents_total", NullValueHandling = NullValueHandling.Ignore)]
-        public long TorrentsTotal { get; set; }
+        public int TorrentsTotal { get; set; }
 
         [JsonProperty("torrents_total_unfiltered", NullValueHandling = NullValueHandling.Ignore)]
-        public long TorrentsTotalUnfiltered { get; set; }
+        public int TorrentsTotalUnfiltered { get; set; }
     }
 }

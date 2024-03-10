@@ -43,6 +43,9 @@ So I needed to do something with the `save_path` on the `torrent.add` request.
 Theis field is optional if you set a defualt path on porla BUT required if you didn't.  
 I wanted this to work "by default", so if you have NO presets set, you **NEED** to set the `save_path` _BUT_ if you want to use the presets values you should NOT set the `save_path` in the RPC request. That is why you see that intersting branch on the `AddTorrent` functions.
 
+Interesting handling, the chosen preset is **overlayed** over the values from the _default_ preset if it exists.
+We need to deal with that, to determine the "effective" settings loaded inside porla
+
 ### Tags
 
 Would be great to use to filter BIG lists of torrents even more! But Sonarr expects everything. Something to look at in the future if Sonarr ever does granular torrent requests.
@@ -64,3 +67,32 @@ It's basically a any-field that we can fill with anything we want.
 #### share_mode
 
 Should be very useful for private trackers. Sadly unclear how to implement it without doing some spagetti.
+
+# Data / Response Examples
+
+Config Definition can be found at [`config.hpp`](https://github.com/porla/porla/blob/v0.37.0/src/config.hpp)
+
+## Presets.list
+
+Return should be defined in [`presets.hpp`](https://github.com/porla/porla/blob/v0.37.0/src/lua/packages/presets.cpp)
+
+### Config.toml
+```toml
+[presets.default]
+save_path = "/tmp/"
+
+[presets.other]
+tags = ["other"]
+```
+
+### Response
+```json
+{
+"default":{
+    "category":null,"download_limit":null,"max_connections":null,"max_uploads":null,"save_path":"/tmp/","session":null,"tags":null,"upload_limit":null
+    },
+"other":{
+    "category":null,"download_limit":null,"max_connections":null,"max_uploads":null,"save_path":null,"session":null,"tags":["other"],"upload_limit":null
+    }
+}
+```

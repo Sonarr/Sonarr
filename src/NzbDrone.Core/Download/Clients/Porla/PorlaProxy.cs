@@ -26,11 +26,11 @@ namespace NzbDrone.Core.Download.Clients.Porla
         ReadOnlyCollection<PorlaSession> ListSessions(PorlaSettings settings);      // sessions.list
         void PauseSessions(PorlaSettings settings);                                 // sessions.pause
         void ResumeSessions(PorlaSettings settings);                                // sessions.resume
-        PorlaSessionsSettings GetSessionSettings(PorlaSettings settings);           // sessions.settings.list
+        PorlaSessionSettings GetSessionSettings(PorlaSettings settings);           // sessions.settings.list
 
         // presets
 
-        ReadOnlyCollection<PorlaPreset> ListPresets(PorlaSettings settings);    // presets.list
+        ReadOnlyDictionary<string, PorlaPreset> ListPresets(PorlaSettings settings);    // presets.list
 
         // torrents
 
@@ -42,7 +42,7 @@ namespace NzbDrone.Core.Download.Clients.Porla
 
         void PauseTorrent(PorlaSettings settings, PorlaTorrent pt);     // torrents.pause
         void ResumeTorrent(PorlaSettings settings, PorlaTorrent pt);    // torrents.resume
-        ReadOnlyCollection<PorlaTorrentDetail> ListTorrents(PorlaSettings settings, long page = 0, long size = long.MaxValue);      // torrents.list
+        ReadOnlyCollection<PorlaTorrentDetail> ListTorrents(PorlaSettings settings, int page = 0, int size = int.MaxValue);      // torrents.list
 
         // torrents.recheck
         // torrents.files.list
@@ -171,14 +171,15 @@ namespace NzbDrone.Core.Download.Clients.Porla
             LogSupposedToBeNothing("ResumeSessions", empty);
         }
 
-        public PorlaSessionsSettings GetSessionSettings(PorlaSettings settings)
+        public PorlaSessionSettings GetSessionSettings(PorlaSettings settings)
         {
-            return ProcessRequest<PorlaSessionsSettings>(settings, "sessions.settings.list");
+            var resp = ProcessRequest<ResponsePorlaSessionSettingsList>(settings, "sessions.settings.list");
+            return resp.Settings;
         }
 
         // presets
 
-        public ReadOnlyCollection<PorlaPreset> ListPresets(PorlaSettings settings)
+        public ReadOnlyDictionary<string, PorlaPreset> ListPresets(PorlaSettings settings)
         {
             var presets = ProcessRequest<ResponsePorlaPresetsList>(settings, "presets.list");
             return presets.Presets;
@@ -194,10 +195,7 @@ namespace NzbDrone.Core.Download.Clients.Porla
 
         public PorlaTorrent AddTorrentFile(PorlaSettings settings, byte[] fileContent, IList<string> tags = null)
         {
-            _logger.Info($"Whute: {settings.TvDirectory}");
             var dir = string.IsNullOrWhiteSpace(settings.TvDirectory) ? null : settings.TvDirectory;
-            _logger.Info($"Whut: {dir}");
-
             return ProcessRequest<PorlaTorrent>(settings, "torrents.add", "preset", settings.Preset, "tags", tags, "ti", fileContent.ToBase64(), "save_path", dir);
         }
 
@@ -219,9 +217,9 @@ namespace NzbDrone.Core.Download.Clients.Porla
             LogSupposedToBeNothing("ResumeTorrent", empty);
         }
 
-        public ReadOnlyCollection<PorlaTorrentDetail> ListTorrents(PorlaSettings settings, long page = 0, long size = long.MaxValue)
+        public ReadOnlyCollection<PorlaTorrentDetail> ListTorrents(PorlaSettings settings, int page = 0, int size = int.MaxValue)
         {
-            // cheating with the Int64.MaxValue  :P
+            // cheating with the int.MaxValue. Should do proper Pagination :P
             var resp = ProcessRequest<ResponsePorlaTorrentList>(settings, "torrents.list", "filters", new { category = settings.Category ?? "" }, "page", page, "size", size);
             return resp.Torrents;
         }

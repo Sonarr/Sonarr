@@ -116,19 +116,18 @@ namespace NzbDrone.Core.Download.Clients.Porla
 
         public override DownloadClientInfo GetStatus()
         {
-            var presetSettings = _proxy.ListPresets(Settings)[0];  // figure out how to get the name we want
+            var presetEffectiveSettings = _proxy.ListPresets(Settings).GetEffective(Settings.Preset.IsNullOrWhiteSpace() ? "default" : Settings.Preset);
 
-            // var sessettings = _proxy.GetSessionSettings(Settings);
+            // var sessionSettings = _proxy.GetSessionSettings(Settings);
 
             var status = new DownloadClientInfo
             {
                 IsLocalhost = Settings.Host == "127.0.0.1" || Settings.Host == "localhost",
-                RemovesCompletedDownloads = false, // should be determined through Flags From  somewhere? I think session?
+                RemovesCompletedDownloads = false, // TODO: I don't think porla has config for this
             };
 
-            // the default directory value is stored in the presets values... unclear if it's anywhere else.
-
-            var destDir = new OsPath(presetSettings?.SavePath ?? "");
+            var savePath = (presetEffectiveSettings?.SavePath.IsNullOrWhiteSpace() ?? true ? Settings.TvDirectory : presetEffectiveSettings?.SavePath) ?? "";
+            var destDir = new OsPath(savePath);
             if (!destDir.IsEmpty)
             {
                status.OutputRootFolders = new List<OsPath> { _remotePathMappingService.RemapRemoteToLocal(Settings.Host, destDir) };

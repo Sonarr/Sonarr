@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 
 namespace NzbDrone.Core.Download.Clients.Porla.Models
 {
+    /// <summary> The data type for the <em>porla</em> field in the <em>sys.versions</em> response </summary>
     public class PorlaSysVersionsPorla
     {
         [JsonProperty("branch", NullValueHandling = NullValueHandling.Ignore)]
@@ -15,6 +16,7 @@ namespace NzbDrone.Core.Download.Clients.Porla.Models
         public string Version { get; set; }
     }
 
+    /// <summary> The response for the <em>sys.versions</em> call to porla </summary>
     public class PorlaSysVersions
     {
         [JsonProperty("boost", NullValueHandling = NullValueHandling.Ignore)]

@@ -3,6 +3,7 @@ using NzbDrone.Core.Download.Clients.LibTorrent.Models;
 
 namespace NzbDrone.Core.Download.Clients.Porla.Models
 {
+    /// <summary> Wraps the LibTorrent Infohash type into a Porla Type for easier handling </summary>
     public sealed class PorlaTorrent
     {
         [JsonProperty("info_hash", NullValueHandling = NullValueHandling.Ignore)]
