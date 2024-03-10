@@ -1644,7 +1644,6 @@
     "Pending": "Pendiente",
     "QualityDefinitions": "Definiciones de calidad",
     "RecyclingBin": "Papelera de reciclaje",
-    "ReleaseProfileIndexerHelpTextWarning": "Usar un indexador específico con perfiles de lanzamientos puede conllevar que lanzamientos duplicados sean capturados",
     "ReleaseTitle": "Título de lanzamiento",
     "RemotePathMappingLocalPathHelpText": "Ruta que {appName} debería usar para acceder a la ruta remota localmente",
     "Remove": "Eliminar",

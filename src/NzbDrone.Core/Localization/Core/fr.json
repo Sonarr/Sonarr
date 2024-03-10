@@ -654,7 +654,6 @@
     "ReleaseGroups": "Groupes de version",
     "ReleaseHash": "Somme de contrôle de la version",
     "ReleaseProfile": "Profil de version",
-    "ReleaseProfileIndexerHelpTextWarning": "L'utilisation d'un indexeur spécifique avec des profils de version peut entraîner la saisie de publications en double.",
     "ReleaseProfiles": "Profils de version",
     "ReleaseProfilesLoadError": "Impossible de charger les profils de version",
     "RemotePathMappingGenericPermissionsHealthCheckMessage": "Le client de téléchargement {downloadClientName} place les téléchargements dans {path} mais {appName} ne peut pas voir ce répertoire. Vous devrez peut-être ajuster les autorisations du dossier.",

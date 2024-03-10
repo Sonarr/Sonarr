@@ -1395,7 +1395,6 @@
     "NotificationsValidationInvalidUsernamePassword": "Virheellinen käyttäjätunnus tai salasana",
     "QueueFilterHasNoItems": "Mikään kohde ei vastaa valittua jonon suodatinta",
     "RegularExpression": "Säännöllinen lauseke",
-    "ReleaseProfileIndexerHelpTextWarning": "Tietyn tietolähteen käyttö julkaisuprofiileilla saattaa aiheuttaa julkaisujen kaksoiskappaleiden kaappauksia.",
     "ReleaseSceneIndicatorUnknownMessage": "Jakson numerointi vaihtelee, eikä julkaisu vastaa mitään tunnettua numerointia.",
     "DownloadClientSabnzbdValidationEnableJobFolders": "Käytä työkansioita",
     "EpisodeFileDeleted": "Jaksotiedosto poistettiin",

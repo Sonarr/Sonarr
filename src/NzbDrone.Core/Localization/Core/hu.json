@@ -894,7 +894,6 @@
     "FormatRuntimeMinutes": "{minutes} p",
     "DownloadClientRemovesCompletedDownloadsHealthCheckMessage": "A(z) {downloadClientName} letöltési kliens úgy van beállítva, hogy eltávolítsa a befejezett letöltéseket. Ez azt eredményezheti, hogy a letöltések eltávolításra kerülnek az ügyfélprogramból, mielőtt a {appName} importálhatná őket.",
     "RecyclingBinCleanupHelpTextWarning": "A kiválasztott napoknál régebbi fájlok a lomtárban automatikusan törlődnek",
-    "ReleaseProfileIndexerHelpTextWarning": "Egy adott indexelő kiadási profilokkal történő használata duplikált kiadások megragadásához vezethet",
     "RemotePath": "Távoli útvonal",
     "RelativePath": "Relatív út",
     "ReleaseProfile": "Release profil",
