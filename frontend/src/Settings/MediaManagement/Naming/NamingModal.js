@@ -154,6 +154,10 @@ const otherTokens = [
   { token: '{Custom Format:FormatName}', example: 'AMZN' }
 ];
 
+const otherAnimeTokens = [
+  { token: '{Release Hash}', example: 'ABCDEFGH' }
+];
+
 const originalTokens = [
   { token: '{Original Title}', example: 'The.Series.Title\'s!.S01E01.WEBDL.1080p.x264-EVOLVE' },
   { token: '{Original Filename}', example: 'the.series.title\'s!.s01e01.webdl.1080p.x264-EVOLVE' }
@@ -520,6 +524,24 @@ class NamingModal extends Component {
                     <div className={styles.groups}>
                       {
                         otherTokens.map(({ token, example }) => {
+                          return (
+                            <NamingOption
+                              key={token}
+                              name={name}
+                              value={value}
+                              token={token}
+                              example={example}
+                              tokenSeparator={tokenSeparator}
+                              tokenCase={tokenCase}
+                              onPress={this.onOptionPress}
+                            />
+                          );
+                        }
+                        )
+                      }
+
+                      {
+                        anime && otherAnimeTokens.map(({ token, example }) => {
                           return (
                             <NamingOption
                               key={token}
