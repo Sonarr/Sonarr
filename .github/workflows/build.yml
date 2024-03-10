@@ -121,7 +121,7 @@ jobs:
       run: yarn lint
 
     - name: Stylelint
-      run: yarn stylelint
+      run: yarn stylelint -f github
 
     - name: Build
       run: yarn build --env production
@@ -229,7 +229,7 @@ jobs:
   notifiy:
     name: Discord Notification
     needs: [backend, unit_test, unit_test_postgres, integration_test]
-    if: ${{ !cancelled() }}
+    if: ${{ !cancelled() && (github.ref_name == 'develop' || github.ref_name == 'main') }}
     env:
       STATUS: ${{ contains(needs.*.result, 'failure') && 'failure' || 'success' }}
     runs-on: ubuntu-latest
