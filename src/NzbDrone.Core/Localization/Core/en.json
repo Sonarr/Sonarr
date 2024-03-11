@@ -1407,6 +1407,8 @@
   "NotificationsTelegramSettingsSendSilentlyHelpText": "Sends the message silently. Users will receive a notification with no sound",
   "NotificationsTelegramSettingsTopicId": "Topic ID",
   "NotificationsTelegramSettingsTopicIdHelpText": "Specify a Topic ID to send notifications to that topic. Leave blank to use the general topic (Supergroups only)",
+  "NotificationsTelegramSettingsSendMetadataLink": "Add a link to the series metadata",
+  "NotificationsTelegramSettingsSendMetadataLinkHelpText": "Add a link to the series metadata when sending the notifications",
   "NotificationsTraktSettingsAccessToken": "Access Token",
   "NotificationsTraktSettingsAuthUser": "Auth User",
   "NotificationsTraktSettingsAuthenticateWithTrakt": "Authenticate with Trakt",
