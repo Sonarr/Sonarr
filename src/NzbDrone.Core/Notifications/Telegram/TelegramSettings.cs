@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel;
 using FluentValidation;
 using NzbDrone.Core.Annotations;
@@ -14,6 +15,13 @@ namespace NzbDrone.Core.Notifications.Telegram
             RuleFor(c => c.ChatId).NotEmpty();
             RuleFor(c => c.TopicId).Must(topicId => !topicId.HasValue || topicId > 1)
                                    .WithMessage("Topic ID must be greater than 1 or empty");
+            RuleFor(c => c.MetadataLinkType).Custom((metadataLinkType, context) =>
+            {
+                if (!Enum.IsDefined(typeof(MetadataLinkType), metadataLinkType))
+                {
+                    context.AddFailure($"MetadataLinkType is not valid: {0}");
+                }
+            });
         }
     }
 
