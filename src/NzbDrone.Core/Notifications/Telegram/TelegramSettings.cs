@@ -5,14 +5,6 @@ using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
 namespace NzbDrone.Core.Notifications.Telegram
 {
-    public enum MetadataLinkType
-    {
-        None = 0,
-        Imdb,
-        Tvdb,
-        Tvmaze,
-        Trakt,
-    }
 
     public class TelegramSettingsValidator : AbstractValidator<TelegramSettings>
     {
@@ -49,5 +41,14 @@ namespace NzbDrone.Core.Notifications.Telegram
         {
             return new NzbDroneValidationResult(Validator.Validate(this));
         }
+    }
+
+    public enum MetadataLinkType
+    {
+        None = 0,
+        Imdb,
+        Tvdb,
+        Tvmaze,
+        Trakt,
     }
 }
