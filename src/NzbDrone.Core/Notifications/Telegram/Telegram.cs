@@ -15,38 +15,6 @@ namespace NzbDrone.Core.Notifications.Telegram
             _proxy = proxy;
         }
 
-        private string FormatMessageWithLink(string message, Series series)
-        {
-            var linkType =  Settings.MetadataLinkType;
-
-            if (linkType == MetadataLinkType.None)
-            {
-                return message;
-            }
-
-            if (linkType == MetadataLinkType.Imdb && !string.IsNullOrWhiteSpace(series.ImdbId))
-            {
-                return $"[{message}](https://www.imdb.com/title/{series.ImdbId})";
-            }
-
-            if (linkType == MetadataLinkType.Tvdb && series.TvdbId > 0)
-            {
-                return $"[{message}](http://www.thetvdb.com/?tab=series&id={series.TvdbId})";
-            }
-
-            if (linkType == MetadataLinkType.Trakt && series.TvdbId > 0)
-            {
-                return $"[{message}](http://trakt.tv/search/tvdb/{series.TvdbId}?id_type=show)";
-            }
-
-            if (linkType == MetadataLinkType.Tvmaze && series.TvMazeId > 0)
-            {
-                return $"[{message}](http://www.tvmaze.com/shows/{series.TvMazeId}/_)";
-            }
-
-            return message;
-        }
-
         public override string Name => "Telegram";
         public override string Link => "https://telegram.org/";
 
@@ -104,6 +72,38 @@ namespace NzbDrone.Core.Notifications.Telegram
             failures.AddIfNotNull(_proxy.Test(Settings));
 
             return new ValidationResult(failures);
+        }
+
+        private string FormatMessageWithLink(string message, Series series)
+        {
+            var linkType =  Settings.MetadataLinkType;
+
+            if (linkType == MetadataLinkType.None)
+            {
+                return message;
+            }
+
+            if (linkType == MetadataLinkType.Imdb && !string.IsNullOrWhiteSpace(series.ImdbId))
+            {
+                return $"[{message}](https://www.imdb.com/title/{series.ImdbId})";
+            }
+
+            if (linkType == MetadataLinkType.Tvdb && series.TvdbId > 0)
+            {
+                return $"[{message}](http://www.thetvdb.com/?tab=series&id={series.TvdbId})";
+            }
+
+            if (linkType == MetadataLinkType.Trakt && series.TvdbId > 0)
+            {
+                return $"[{message}](http://trakt.tv/search/tvdb/{series.TvdbId}?id_type=show)";
+            }
+
+            if (linkType == MetadataLinkType.Tvmaze && series.TvMazeId > 0)
+            {
+                return $"[{message}](http://www.tvmaze.com/shows/{series.TvMazeId}/_)";
+            }
+
+            return message;
         }
     }
 }
