@@ -8,68 +8,40 @@ namespace NzbDrone.Core.Notifications.Telegram
 {
     public class Telegram : NotificationBase<TelegramSettings>
     {
-        private const string ImdbUrlFormat = "https://www.imdb.com/title/{0}";
-        private const string TvdbUrlFormat = "http://www.thetvdb.com/?tab=series&id={0}";
-        private const string TraktUrlFormat = "http://trakt.tv/search/tvdb/{0}?id_type=show";
-        private const string TvMazeUrlFormat = "http://www.tvmaze.com/shows/{0}/_";
-
         private readonly ITelegramProxy _proxy;
-        private readonly Dictionary<MetadataLinkType, Func<string, string, string>> _formatLinkFromIdMethods;
-
-        private string FormatImdbLinkFromId(string message, string id)
-        {
-            return $"[{message}]({string.Format(ImdbUrlFormat, id)})";
-        }
-
-        private string FormatTvdbLinkFromId(string message, string id)
-        {
-            return $"[{message}]({string.Format(TvdbUrlFormat, id)})";
-        }
-
-        private string FormatTraktLinkFromId(string message, string id)
-        {
-            return $"[{message}]({string.Format(TraktUrlFormat, id)})";
-        }
-
-        private string FormatTVMazeLinkFromId(string message, string id)
-        {
-            return $"[{message}]({string.Format(TvMazeUrlFormat, id)})";
-        }
-
-        private string GetIdByType(Series series, MetadataLinkType linkType)
-        {
-            switch (linkType)
-            {
-                case MetadataLinkType.Imdb:
-                    return series.ImdbId;
-                case MetadataLinkType.Tvdb:
-                    return series.TvdbId.ToString();
-                case MetadataLinkType.Trakt:
-                    return series.TvdbId.ToString();
-                case MetadataLinkType.Tvmaze:
-                    return series.TvMazeId.ToString();
-                default:
-                    throw new ArgumentException($"Unsupported link type: {linkType}", nameof(linkType));
-            }
-        }
 
         public Telegram(ITelegramProxy proxy)
         {
             _proxy = proxy;
-            _formatLinkFromIdMethods = new Dictionary<MetadataLinkType, Func<string, string, string>>
-            {
-                { MetadataLinkType.Imdb, FormatImdbLinkFromId },
-                { MetadataLinkType.Tvdb, FormatTvdbLinkFromId },
-                { MetadataLinkType.Trakt, FormatTraktLinkFromId },
-                { MetadataLinkType.Tvmaze, FormatTVMazeLinkFromId }
-            };
         }
 
         private string FormatMessageWithLink(string message, Series series)
         {
-            if (Settings.SendMetadataLink && _formatLinkFromIdMethods.TryGetValue(Settings.MetadataLinkType, out var formatMethod))
+            var linkType =  Settings.MetadataLinkType;
+
+            if (linkType == MetadataLinkType.None)
             {
-                message = formatMethod(message, GetIdByType(series, Settings.MetadataLinkType));
+                return message;
+            }
+
+            if (linkType == MetadataLinkType.Imdb && !string.IsNullOrWhiteSpace(series.ImdbId))
+            {
+                return $"[{message}](https://www.imdb.com/title/{series.ImdbId})";
+            }
+
+            if (linkType == MetadataLinkType.Tvdb && series.TvdbId > 0)
+            {
+                return $"[{message}](http://www.thetvdb.com/?tab=series&id={series.TvdbId})";
+            }
+
+            if (linkType == MetadataLinkType.Trakt && series.TvdbId > 0)
+            {
+                return $"[{message}](http://trakt.tv/search/tvdb/{series.TvdbId}?id_type=show)";
+            }
+
+            if (linkType == MetadataLinkType.Tvmaze && series.TvMazeId > 0)
+            {
+                return $"[{message}](http://www.tvmaze.com/shows/{series.TvMazeId}/_)";
             }
 
             return message;
