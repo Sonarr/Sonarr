@@ -40,13 +40,13 @@ namespace NzbDrone.Core.Notifications.Telegram
         {
             switch (linkType)
             {
-                case MetadataLinkType.IMDb:
+                case MetadataLinkType.Imdb:
                     return series.ImdbId;
-                case MetadataLinkType.TVDb:
+                case MetadataLinkType.Tvdb:
                     return series.TvdbId.ToString();
                 case MetadataLinkType.Trakt:
                     return series.TvdbId.ToString();
-                case MetadataLinkType.TVMaze:
+                case MetadataLinkType.Tvmaze:
                     return series.TvMazeId.ToString();
                 default:
                     throw new ArgumentException($"Unsupported link type: {linkType}", nameof(linkType));
@@ -58,10 +58,10 @@ namespace NzbDrone.Core.Notifications.Telegram
             _proxy = proxy;
             _formatLinkFromIdMethods = new Dictionary<MetadataLinkType, Func<string, string, string>>
             {
-                { MetadataLinkType.IMDb, FormatImdbLinkFromId },
-                { MetadataLinkType.TVDb, FormatTvdbLinkFromId },
+                { MetadataLinkType.Imdb, FormatImdbLinkFromId },
+                { MetadataLinkType.Tvdb, FormatTvdbLinkFromId },
                 { MetadataLinkType.Trakt, FormatTraktLinkFromId },
-                { MetadataLinkType.TVMaze, FormatTVMazeLinkFromId }
+                { MetadataLinkType.Tvmaze, FormatTVMazeLinkFromId }
             };
         }
 
