@@ -1,12 +1,10 @@
 using System;
-using System.ComponentModel;
 using FluentValidation;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
 namespace NzbDrone.Core.Notifications.Telegram
 {
-
     public class TelegramSettingsValidator : AbstractValidator<TelegramSettings>
     {
         public TelegramSettingsValidator()
@@ -53,6 +51,7 @@ namespace NzbDrone.Core.Notifications.Telegram
 
     public enum MetadataLinkType
     {
+        [FieldOption(Label = "None")]
         None = 0,
         [FieldOption(Label = "IMDb")]
         Imdb,
@@ -60,6 +59,7 @@ namespace NzbDrone.Core.Notifications.Telegram
         Tvdb,
         [FieldOption(Label = "TVMaze")]
         Tvmaze,
+        [FieldOption(Label = "Trakt")]
         Trakt,
     }
 }
