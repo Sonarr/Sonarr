@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using FluentValidation.Results;
 using NzbDrone.Common.Extensions;
-using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Notifications.Telegram
 {
