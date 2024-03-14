@@ -2056,5 +2056,6 @@
     "NotificationsValidationInvalidApiKeyExceptionMessage": "Clave API inválida: {exceptionMessage}",
     "NotificationsJoinSettingsApiKeyHelpText": "La clave API de tus ajustes de Añadir cuenta (haz clic en el botón Añadir API).",
     "NotificationsPushBulletSettingsDeviceIdsHelpText": "Lista de IDs de dispositivo (deja en blanco para enviar a todos los dispositivos)",
-    "NotificationsSettingsUpdateMapPathsToHelpText": "Ruta de {appName}, usado para modificar rutas de series cuando {serviceName} ve la ubicación de ruta de biblioteca de forma distinta a {appName} (Requiere 'Actualizar biblioteca')"
+    "NotificationsSettingsUpdateMapPathsToHelpText": "Ruta de {appName}, usado para modificar rutas de series cuando {serviceName} ve la ubicación de ruta de biblioteca de forma distinta a {appName} (Requiere 'Actualizar biblioteca')",
+    "ReleaseProfileIndexerHelpTextWarning": "Establecer un indexador específico en un perfil de lanzamiento provocará que este perfil solo se aplique a lanzamientos desde ese indexador."
 }

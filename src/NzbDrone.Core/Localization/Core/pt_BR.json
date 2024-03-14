@@ -2056,5 +2056,6 @@
     "DownloadClientDelugeSettingsDirectoryCompleted": "Mover para o Diretório Quando Concluído",
     "DownloadClientDelugeSettingsDirectoryCompletedHelpText": "Local opcional para mover os downloads concluídos, deixe em branco para usar o local padrão do Deluge",
     "DownloadClientDelugeSettingsDirectoryHelpText": "Local opcional para colocar downloads, deixe em branco para usar o local padrão do Deluge",
-    "EpisodeRequested": "Episódio Pedido"
+    "EpisodeRequested": "Episódio Pedido",
+    "ReleaseProfileIndexerHelpTextWarning": "Definir um indexador específico em um perfil de lançamento fará com que esse perfil seja aplicado apenas a lançamentos desse indexador."
 }
