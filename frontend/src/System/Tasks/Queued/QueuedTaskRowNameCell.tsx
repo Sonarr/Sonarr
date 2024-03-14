@@ -23,13 +23,16 @@ export default function QueuedTaskRowNameCell(
   }
 
   const series = useSelector(createMultiSeriesSelector(seriesIds));
+  const sortedSeries = series.sort((a, b) =>
+    a.sortTitle.localeCompare(b.sortTitle)
+  );
 
   return (
     <TableRowCell>
       <span className={styles.commandName}>
         {commandName}
-        {series.length ? (
-          <span> - {series.map((s) => s.title).join(', ')}</span>
+        {sortedSeries.length ? (
+          <span> - {sortedSeries.map((s) => s.title).join(', ')}</span>
         ) : null}
         {body.seasonNumber ? (
           <span>
