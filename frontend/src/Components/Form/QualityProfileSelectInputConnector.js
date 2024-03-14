@@ -28,7 +28,7 @@ function createMapStateToProps() {
           get value() {
             return translate('NoChange');
           },
-          disabled: includeNoChangeDisabled
+          isDisabled: includeNoChangeDisabled
         });
       }
 
@@ -38,7 +38,7 @@ function createMapStateToProps() {
           get value() {
             return `(${translate('Mixed')})`;
           },
-          disabled: true
+          isDisabled: true
         });
       }
 
