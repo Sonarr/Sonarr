@@ -226,7 +226,7 @@ jobs:
       major_version: ${{ needs.backend.outputs.major_version }}
       version: ${{ needs.backend.outputs.version }}
 
-  notifiy:
+  notify:
     name: Discord Notification
     needs: [backend, unit_test, unit_test_postgres, integration_test]
     if: ${{ !cancelled() && (github.ref_name == 'develop' || github.ref_name == 'main') }}
