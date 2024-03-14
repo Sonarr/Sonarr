@@ -15,7 +15,7 @@ interface ISeriesTypeOption {
   key: string;
   value: string;
   format?: string;
-  disabled?: boolean;
+  isDisabled?: boolean;
 }
 
 const seriesTypeOptions: ISeriesTypeOption[] = [
@@ -55,7 +55,7 @@ function SeriesTypeSelectInput(props: SeriesTypeSelectInputProps) {
     values.unshift({
       key: 'noChange',
       value: translate('NoChange'),
-      disabled: includeNoChangeDisabled,
+      isDisabled: includeNoChangeDisabled,
     });
   }
 
@@ -63,7 +63,7 @@ function SeriesTypeSelectInput(props: SeriesTypeSelectInputProps) {
     values.unshift({
       key: 'mixed',
       value: `(${translate('Mixed')})`,
-      disabled: true,
+      isDisabled: true,
     });
   }
 
