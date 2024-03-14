@@ -47,7 +47,7 @@ namespace NzbDrone.Core.Organizer
         private readonly ICached<bool> _patternHasEpisodeIdentifierCache;
         private readonly Logger _logger;
 
-        private static readonly Regex TitleRegex = new Regex(@"(?<escaped>\{\{|\}\})|\{(?<prefix>[- ._\[(]*)(?<token>(?:[a-z0-9]+)(?:(?<separator>[- ._]+)(?:[a-z0-9]+))?)(?::(?<customFormat>[ a-z0-9+-]+(?<![- ])))?(?<suffix>[- ._)\]]*)\}",
+        private static readonly Regex TitleRegex = new Regex(@"(?<escaped>\{\{|\}\})|\{(?<prefix>[- ._\[(]*)(?<token>(?:[a-z0-9]+)(?:(?<separator>[- ._]+)(?:[a-z0-9]+))?)(?::(?<customFormat>[ ,a-z0-9+-]+(?<![- ])))?(?<suffix>[- ._)\]]*)\}",
                                                              RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
 
         private static readonly Regex EpisodeRegex = new Regex(@"(?<episode>\{episode(?:\:0+)?})",
@@ -698,7 +698,7 @@ namespace NzbDrone.Core.Organizer
                 customFormats = _formatCalculator.ParseCustomFormat(episodeFile, series);
             }
 
-            tokenHandlers["{Custom Formats}"] = m => string.Join(" ", customFormats.Where(x => x.IncludeCustomFormatWhenRenaming));
+            tokenHandlers["{Custom Formats}"] = m => GetCustomFormatsToken(customFormats, m.CustomFormat);
             tokenHandlers["{Custom Format}"] = m =>
             {
                 if (m.CustomFormat.IsNullOrWhiteSpace())
@@ -715,6 +715,29 @@ namespace NzbDrone.Core.Organizer
             tokenHandlers["{ImdbId}"] = m => series.ImdbId ?? string.Empty;
             tokenHandlers["{TvdbId}"] = m => series.TvdbId.ToString();
             tokenHandlers["{TvMazeId}"] = m => series.TvMazeId > 0 ? series.TvMazeId.ToString() : string.Empty;
+        }
+
+        private string GetCustomFormatsToken(List<CustomFormat> customFormats, string filter)
+        {
+            var tokens = customFormats.Where(x => x.IncludeCustomFormatWhenRenaming);
+
+            var filteredTokens = tokens;
+
+            if (filter.IsNotNullOrWhiteSpace())
+            {
+                if (filter.StartsWith("-"))
+                {
+                    var splitFilter = filter.Substring(1).Split(',');
+                    filteredTokens = tokens.Where(c => !splitFilter.Contains(c.Name)).ToList();
+                }
+                else
+                {
+                    var splitFilter = filter.Split(',');
+                    filteredTokens = tokens.Where(c => splitFilter.Contains(c.Name)).ToList();
+                }
+            }
+
+            return string.Join(" ", filteredTokens);
         }
 
         private string GetLanguagesToken(List<string> mediaInfoLanguages, string filter, bool skipEnglishOnly, bool quoted)
