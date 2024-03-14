@@ -17,5 +17,22 @@
     "AddANewPath": "Tilføj en ny sti",
     "AddConditionImplementation": "Tilføj betingelse - {implementationName}",
     "AddConnectionImplementation": "Tilføj forbindelse - {implementationName}",
-    "AddCustomFilter": "Tilføj tilpasset filter"
+    "AddCustomFilter": "Tilføj tilpasset filter",
+    "ApplyChanges": "Anvend ændringer",
+    "Test": "Afprøv",
+    "AddImportList": "Tilføj importliste",
+    "AddExclusion": "Tilføj undtagelse",
+    "TestAll": "Afprøv alle",
+    "TestAllClients": "Afprøv alle klienter",
+    "TestAllLists": "Afprøv alle lister",
+    "Unknown": "Ukendt",
+    "AllTitles": "All titler",
+    "TablePageSize": "Sidestørrelse",
+    "TestAllIndexers": "Afprøv alle indeks",
+    "AddDownloadClientImplementation": "Tilføj downloadklient - {implementationName}",
+    "AddIndexerError": "Kunne ikke tilføje en ny indekser. Prøv igen.",
+    "AddImportListImplementation": "Tilføj importliste - {implementationName}",
+    "AddRootFolderError": "Kunne ikke tilføje rodmappe",
+    "Table": "Tabel",
+    "AddIndexer": "Tilføj indekser"
 }

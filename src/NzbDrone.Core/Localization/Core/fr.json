@@ -2056,5 +2056,6 @@
     "MetadataSettingsSeriesMetadataUrl": "URL des métadonnées de la série",
     "NotificationsPlexValidationNoTvLibraryFound": "Au moins une bibliothèque de télévision est requise",
     "DatabaseMigration": "Migration des bases de données",
-    "Filters": "Filtres"
+    "Filters": "Filtres",
+    "ReleaseProfileIndexerHelpTextWarning": "L'utilisation d'un indexeur spécifique avec des profils de version peut entraîner la saisie de publications en double."
 }
