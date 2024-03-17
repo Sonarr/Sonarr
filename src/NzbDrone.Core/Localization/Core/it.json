@@ -110,7 +110,7 @@
     "AddAutoTagError": "Impossibile aggiungere un nuovo tag automatico, riprova.",
     "AddCustomFormat": "Aggiungi Formato Personalizzato",
     "AddDownloadClient": "Aggiungi Client di Download",
-    "AddCustomFormatError": "Non riesco ad aggiungere un nuovo formato personalizzato, riprova.",
+    "AddCustomFormatError": "Impossibile aggiungere un nuovo formato personalizzato, riprova.",
     "AddDownloadClientError": "Impossibile aggiungere un nuovo client di download, riprova.",
     "AddDelayProfile": "Aggiungi Profilo di Ritardo",
     "AddIndexerError": "Impossibile aggiungere un nuovo Indicizzatore, riprova.",
@@ -248,5 +248,6 @@
     "AnimeEpisodeTypeDescription": "Episodi rilasciati utilizzando un numero di episodio assoluto",
     "AnimeEpisodeTypeFormat": "Numero assoluto dell'episodio ({format})",
     "AutoRedownloadFailed": "Download fallito",
-    "AddDelayProfileError": "Impossibile aggiungere un nuovo profilo di ritardo, riprova."
+    "AddDelayProfileError": "Impossibile aggiungere un nuovo profilo di ritardo, riprova.",
+    "Cutoff": "Taglio"
 }
