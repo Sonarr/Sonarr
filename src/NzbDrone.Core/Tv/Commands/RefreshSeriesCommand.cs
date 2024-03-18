@@ -39,5 +39,7 @@ namespace NzbDrone.Core.Tv.Commands
         public override bool UpdateScheduledTask => SeriesIds.Empty();
 
         public override bool IsLongRunning => true;
+
+        public override string CompletionMessage => "Completed";
     }
 }

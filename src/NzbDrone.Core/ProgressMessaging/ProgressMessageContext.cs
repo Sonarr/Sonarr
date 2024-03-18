@@ -1,10 +1,13 @@
-﻿using System;
+using System;
+using System.Threading;
 using NzbDrone.Core.Messaging.Commands;
 
 namespace NzbDrone.Core.ProgressMessaging
 {
     public static class ProgressMessageContext
     {
+        private static AsyncLocal<CommandModel> _commandModelAsync = new AsyncLocal<CommandModel>();
+
         [ThreadStatic]
         private static CommandModel _commandModel;
 
@@ -13,8 +16,15 @@ namespace NzbDrone.Core.ProgressMessaging
 
         public static CommandModel CommandModel
         {
-            get { return _commandModel; }
-            set { _commandModel = value; }
+            get
+            {
+                return _commandModel ?? _commandModelAsync.Value;
+            }
+            set
+            {
+                _commandModel = value;
+                _commandModelAsync.Value = value;
+            }
         }
 
         public static bool LockReentrancy()
