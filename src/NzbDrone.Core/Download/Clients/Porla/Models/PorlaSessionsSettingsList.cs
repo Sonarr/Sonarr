@@ -12,5 +12,7 @@ namespace NzbDrone.Core.Download.Clients.Porla.Models
 
     /// <summary> Wraps the LibTorrentSettingsPack type </summary>
     /// <see cref="LibTorrentSettingsPack"/>
-    public sealed class PorlaSessionSettings : LibTorrentSettingsPack {}
+    public sealed class PorlaSessionSettings : LibTorrentSettingsPack
+    {
+    }
 }

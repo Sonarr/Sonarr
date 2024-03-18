@@ -49,7 +49,7 @@ namespace NzbDrone.Core.Download.Clients.Porla
 
         [FieldDefinition(3, Label = "UrlBase", Type = FieldType.Textbox, Advanced = true, HelpText = "DownloadClientSettingsUrlBaseHelpText")]
         [FieldToken(TokenField.HelpText, "UrlBase", "clientName", "Porla")]
-        [FieldToken(TokenField.HelpText, "UrlBase", "url", "http://[host]:[port]/[urlBase]/api/v1/jsonrpc")]
+        [FieldToken(TokenField.HelpText, "UrlBase", "url", "http://[host]:[port]/[urlBase]/[apiUrl]")]
         public string UrlBase { get; set; }
 
         [FieldDefinition(4, Label = "ApiUrl", Type = FieldType.Textbox, Advanced = true, HelpText = "DownloadClientSettingsApiUrlHelpText")]

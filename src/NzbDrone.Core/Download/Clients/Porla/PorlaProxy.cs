@@ -93,7 +93,7 @@ namespace NzbDrone.Core.Download.Clients.Porla
             requestBuilder.LogResponseContent = true;
 
             var httpRequest = requestBuilder.Build();
-            _logger.Info($"Pain: {httpRequest.ToString()}");
+            _logger.Debug(httpRequest.ToString());
             HttpResponse response;
 
             // TODO: catch and throw auth exceptions like in Qbit
@@ -138,7 +138,7 @@ namespace NzbDrone.Core.Download.Clients.Porla
         {
             if (!string.IsNullOrEmpty(something))
             {
-                _logger.Warn($"Porla: method: {method} was not expected to return: {something}");
+                _logger.Warn($"method: {method} was not expected to return: {something}");
             }
         }
 

@@ -50,54 +50,45 @@ namespace NzbDrone.Core.Download.Clients.Porla
 
                 var outputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(torrent.SavePath));
 
-                var eta = TimeSpan.FromSeconds(0); // is -1 a valid eta to represent forever?
-                eta = TimeSpan.FromSeconds(torrent.ETA);
-
-                // do we trust porla?
-                // if (torrent.download_rate > 0 && torrent.total_done > 0) { eta = TimeSpan.FromSeconds(torrent.total / (double)torrent.download_rate); }
+                var eta = torrent.ETA < 0 ? TimeSpan.MaxValue : TimeSpan.FromSeconds(torrent.ETA);   // LibTorent uses `-1` to denote "infinite" time i.e. I am stuck, or I am done. FromSeconds will convert `-1` to 1.
 
                 var item = new DownloadClientItem
                 {
                     DownloadClientInfo = DownloadClientItemClientInfo.FromDownloadClient(this, false),
                     DownloadId = torrent.InfoHash.Hash,
                     OutputPath = outputPath + torrent.Name,
-                    RemainingSize = torrent.Total,
+                    RemainingSize = torrent.Total - torrent.TotalDone,
                     RemainingTime = eta,
                     Title = torrent.Name,
                     TotalSize = torrent.Size,
                     SeedRatio = torrent.Ratio
                 };
 
+                // deal with moving_storage=true ??
                 if (!string.IsNullOrEmpty(torrent.Error))
                 {
                     item.Status = DownloadItemStatus.Warning;
                     item.Message = torrent.Error;
-                }
-
-                _logger.Debug($"Torrent {torrent.InfoHash.Hash} state is {torrent.State}");
-
-                // deal with moving_storage???
-                if (torrent.FinishedDuration > 0)
+                } // TODO: check paused or finished first?
+                else if (torrent.FinishedDuration > 0)
                 {
                     item.Status = DownloadItemStatus.Completed;
+                    item.RemainingTime = torrent.ETA < 0 ? TimeSpan.Zero : eta;       // Sonarr wants to see a TimeSpan.Zero when it is done ( -1 -> 0 )
                 }
-
-                // else if (torrent.state == HadoukenTorrentState.QueuedForChecking)
-                // {
-                //    item.Status = DownloadItemStatus.Queued;
-                // }
-                // else if (torrent.State == HadoukenTorrentState.Paused)
-                // {
-                //    item.Status = DownloadItemStatus.Paused;
-                // }
+                else if (torrent.Flags.Contains("paused"))
+                {
+                   item.Status = DownloadItemStatus.Paused;
+                } /*  I don't know what the torent looks like if it is "Queued"
+                else if (???)
+                {
+                   item.Status = DownloadItemStatus.Queued;
+                } */
                 else
                 {
                     item.Status = DownloadItemStatus.Downloading;
                 }
 
-                // torrent.state exists, can't quite tell if it's passthrough of https://libtorrent.org/reference-Torrent_Status.html#state_t
-
-                item.CanMoveFiles = item.CanBeRemoved = true; // usure of the restrictions here
+                item.CanMoveFiles = item.CanBeRemoved = true; // usure of what restricts this on porla. Currently these is always true
 
                 items.Add(item);
             }
@@ -108,7 +99,7 @@ namespace NzbDrone.Core.Download.Clients.Porla
         public override void RemoveItem(DownloadClientItem item, bool deleteData)
         {
             // Kinda sucks we don't have a `RemoveItems`, porla has a batch interface for removals
-            PorlaTorrent[] singleItem = { new PorlaTorrent(item.DownloadId.ToLower(), "") };
+            PorlaTorrent[] singleItem = { new PorlaTorrent(item.DownloadId, "") };
             _proxy.RemoveTorrent(Settings, deleteData, singleItem);
 
             // when do we set item.Removed ?
@@ -136,13 +127,17 @@ namespace NzbDrone.Core.Download.Clients.Porla
             return status;
         }
 
+        /// <summary> Converts a RemoteEpisode into a list of <em>starr</em> tags </summary>
+        /// <see cref="RemoteEpisode"/>
         private static IList<string> ConvertRemoteEpisodeToTags(RemoteEpisode remoteEpisode)
         {
             var tags = new List<string>
             {
                 $"starr.series={remoteEpisode.Series.CleanTitle}",
                 $"starr.season={remoteEpisode.MappedSeasonNumber}",
-                $"starr.tvdbid={remoteEpisode.Series.TvdbId}"
+                $"starr.tvdbid={remoteEpisode.Series.TvdbId}",
+                $"starr.imdbid={remoteEpisode.Series.ImdbId}",
+                $"starr.year={remoteEpisode.Series.Year}"
             };
             return tags;
         }
@@ -188,24 +183,24 @@ namespace NzbDrone.Core.Download.Clients.Porla
 
                 if (badVersions.Any(s => new Version(s) == actualVersion))
                 {
-                    _logger.Error($"Porla: Your Porla version isn't compatible with Sonarr!: {actualVersion}");
+                    _logger.Error($"Your Porla version isn't compatible with Sonarr!: {actualVersion}");
                     return new ValidationFailure(string.Empty, _localizationService.GetLocalizedString("DownloadClientValidationErrorVersion",
                             new Dictionary<string, object> { { "clientName", Name }, { "requiredVersion", goodVersion.ToString() }, { "reportedVersion", actualVersion } }));
                 }
 
                 if (actualVersion < firstGoodVersion)
                 {
-                    _logger.Warn($"Porla: Your version might not be forwards compatible: {actualVersion}");
+                    _logger.Warn($"Your version might not be forwards compatible: {actualVersion}");
                 }
 
                 if (actualVersion > lastGoodVersion)
                 {
-                    _logger.Warn($"Porla: Your version might not be backwards compatible: {actualVersion}");
+                    _logger.Warn($"Your version might not be backwards compatible: {actualVersion}");
                 }
 
                 if (actualVersion < new Version("1.0.0"))
                 {
-                    _logger.Warn($"Porla: Porla is in active development, expect weirdness with it and this client");
+                    _logger.Warn($"Porla is in active development, expect weirdness with it and this client");
                 }
             }
             catch (DownloadClientAuthenticationException ex)
