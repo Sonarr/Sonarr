@@ -14,16 +14,18 @@ namespace NzbDrone.Core.Notifications.Xbmc
         {
             RuleFor(c => c.Host).ValidHost();
             RuleFor(c => c.DisplayTime).GreaterThanOrEqualTo(2);
+            RuleFor(c => c.UrlBase).ValidUrlBase();
         }
     }
 
     public class XbmcSettings : IProviderConfig
     {
-        private static readonly XbmcSettingsValidator Validator = new XbmcSettingsValidator();
+        private static readonly XbmcSettingsValidator Validator = new ();
 
         public XbmcSettings()
         {
             Port = 8080;
+            UrlBase = "/jsonrpc";
             DisplayTime = 5;
         }
 
@@ -65,7 +67,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
         public bool AlwaysUpdate { get; set; }
 
         [JsonIgnore]
-        public string Address => $"{Host.ToUrlHost()}:{Port}";
+        public string Address => $"{Host.ToUrlHost()}:{Port}{UrlBase}";
 
         public NzbDroneValidationResult Validate()
         {

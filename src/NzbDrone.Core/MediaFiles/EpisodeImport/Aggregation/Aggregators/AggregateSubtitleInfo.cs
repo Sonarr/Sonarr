@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using NLog;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Extras.Subtitles;
 using NzbDrone.Core.Parser;
@@ -26,6 +27,11 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators
             var isSubtitleFile = SubtitleFileExtensions.Extensions.Contains(Path.GetExtension(path));
 
             if (!isSubtitleFile)
+            {
+                return localEpisode;
+            }
+
+            if (localEpisode.Episodes.Empty())
             {
                 return localEpisode;
             }

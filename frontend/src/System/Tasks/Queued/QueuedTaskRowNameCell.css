@@ -1,0 +1,8 @@
+.commandName {
+  display: inline-block;
+  min-width: 220px;
+}
+
+.userAgent {
+  color: #b0b0b0;
+}

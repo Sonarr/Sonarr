@@ -991,6 +991,28 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
             result.Should().EndWith("HDR");
         }
 
+        [Test]
+        public void should_replace_release_hash_with_stored_hash()
+        {
+            _namingConfig.StandardEpisodeFormat = "{Release Hash}";
+
+            _episodeFile.ReleaseHash = "ABCDEFGH";
+
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
+                   .Should().Be("ABCDEFGH");
+        }
+
+        [Test]
+        public void should_replace_null_release_hash_with_empty_string()
+        {
+            _namingConfig.StandardEpisodeFormat = "{Release Hash}";
+
+            _episodeFile.ReleaseHash = null;
+
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
+                   .Should().Be(string.Empty);
+        }
+
         private void GivenMediaInfoModel(string videoCodec = "h264",
                                          string audioCodec = "dts",
                                          int audioChannels = 6,

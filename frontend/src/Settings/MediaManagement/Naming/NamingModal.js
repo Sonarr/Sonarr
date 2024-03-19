@@ -150,7 +150,12 @@ const mediaInfoTokens = [
 
 const otherTokens = [
   { token: '{Release Group}', example: 'Rls Grp' },
-  { token: '{Custom Formats}', example: 'iNTERNAL' }
+  { token: '{Custom Formats}', example: 'iNTERNAL' },
+  { token: '{Custom Format:FormatName}', example: 'AMZN' }
+];
+
+const otherAnimeTokens = [
+  { token: '{Release Hash}', example: 'ABCDEFGH' }
 ];
 
 const originalTokens = [
@@ -519,6 +524,24 @@ class NamingModal extends Component {
                     <div className={styles.groups}>
                       {
                         otherTokens.map(({ token, example }) => {
+                          return (
+                            <NamingOption
+                              key={token}
+                              name={name}
+                              value={value}
+                              token={token}
+                              example={example}
+                              tokenSeparator={tokenSeparator}
+                              tokenCase={tokenCase}
+                              onPress={this.onOptionPress}
+                            />
+                          );
+                        }
+                        )
+                      }
+
+                      {
+                        anime && otherAnimeTokens.map(({ token, example }) => {
                           return (
                             <NamingOption
                               key={token}

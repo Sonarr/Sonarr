@@ -2,14 +2,12 @@
 // Please do not change this file!
 interface CssExports {
   'actions': string;
-  'commandName': string;
   'duration': string;
   'ended': string;
   'queued': string;
   'started': string;
   'trigger': string;
   'triggerContent': string;
-  'userAgent': string;
 }
 export const cssExports: CssExports;
 export default cssExports;

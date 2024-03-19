@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Net;
 using Newtonsoft.Json.Linq;
 using NLog;
 using NzbDrone.Common.Cache;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Common.Serializer;
 
@@ -101,11 +103,21 @@ namespace NzbDrone.Core.Download.Clients.Deluge
 
         public string AddTorrentFromMagnet(string magnetLink, DelugeSettings settings)
         {
-            var options = new
-                          {
-                              add_paused = settings.AddPaused,
-                              remove_at_ratio = false
-                          };
+            dynamic options = new ExpandoObject();
+
+            options.add_paused = settings.AddPaused;
+            options.remove_at_ratio = false;
+
+            if (settings.DownloadDirectory.IsNotNullOrWhiteSpace())
+            {
+              options.download_location = settings.DownloadDirectory;
+            }
+
+            if (settings.CompletedDirectory.IsNotNullOrWhiteSpace())
+            {
+              options.move_completed_path = settings.CompletedDirectory;
+              options.move_completed = true;
+            }
 
             var response = ProcessRequest<string>(settings, "core.add_torrent_magnet", magnetLink, options);
 
@@ -114,11 +126,21 @@ namespace NzbDrone.Core.Download.Clients.Deluge
 
         public string AddTorrentFromFile(string filename, byte[] fileContent, DelugeSettings settings)
         {
-            var options = new
-                          {
-                              add_paused = settings.AddPaused,
-                              remove_at_ratio = false
-                          };
+            dynamic options = new ExpandoObject();
+
+            options.add_paused = settings.AddPaused;
+            options.remove_at_ratio = false;
+
+            if (settings.DownloadDirectory.IsNotNullOrWhiteSpace())
+            {
+              options.download_location = settings.DownloadDirectory;
+            }
+
+            if (settings.CompletedDirectory.IsNotNullOrWhiteSpace())
+            {
+              options.move_completed_path = settings.CompletedDirectory;
+              options.move_completed = true;
+            }
 
             var response = ProcessRequest<string>(settings, "core.add_torrent_file", filename, fileContent, options);
 

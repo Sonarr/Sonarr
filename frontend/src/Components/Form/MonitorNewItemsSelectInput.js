@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import monitorNewItemsOptions from 'Utilities/Series/monitorNewItemsOptions';
-import SelectInput from './SelectInput';
+import EnhancedSelectInput from './EnhancedSelectInput';
 
 function MonitorNewItemsSelectInput(props) {
   const {
@@ -16,7 +16,7 @@ function MonitorNewItemsSelectInput(props) {
     values.unshift({
       key: 'noChange',
       value: 'No Change',
-      disabled: true
+      isDisabled: true
     });
   }
 
@@ -24,12 +24,12 @@ function MonitorNewItemsSelectInput(props) {
     values.unshift({
       key: 'mixed',
       value: '(Mixed)',
-      disabled: true
+      isDisabled: true
     });
   }
 
   return (
-    <SelectInput
+    <EnhancedSelectInput
       values={values}
       {...otherProps}
     />

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tv.Events;
 
@@ -9,6 +10,7 @@ namespace NzbDrone.Core.ImportLists.Exclusions
     {
         ImportListExclusion Add(ImportListExclusion importListExclusion);
         List<ImportListExclusion> All();
+        PagingSpec<ImportListExclusion> Paged(PagingSpec<ImportListExclusion> pagingSpec);
         void Delete(int id);
         ImportListExclusion Get(int id);
         ImportListExclusion FindByTvdbId(int tvdbId);
@@ -52,6 +54,11 @@ namespace NzbDrone.Core.ImportLists.Exclusions
         public List<ImportListExclusion> All()
         {
             return _repo.All().ToList();
+        }
+
+        public PagingSpec<ImportListExclusion> Paged(PagingSpec<ImportListExclusion> pagingSpec)
+        {
+            return _repo.GetPaged(pagingSpec);
         }
 
         public void HandleAsync(SeriesDeletedEvent message)

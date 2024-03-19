@@ -15,8 +15,8 @@
     "RemoveSelectedItemsQueueMessageText": "Είστε σίγουροι πως θέλετε να διαγράψετε {selectedCount} αντικείμενα από την ουρά;",
     "CloneCondition": "Κλωνοποίηση συνθήκης",
     "RemoveSelectedItemQueueMessageText": "Είστε σίγουροι πως θέλετε να διαγράψετε 1 αντικείμενο από την ουρά;",
-    "AddConditionImplementation": "Προσθήκη",
+    "AddConditionImplementation": "Προσθήκη - {implementationName}",
     "AppUpdated": "{appName} Ενημερώθηκε",
     "AutoAdd": "Προσθήκη",
-    "AddConnectionImplementation": "Προσθήκη"
+    "AddConnectionImplementation": "Προσθήκη - {implementationName}"
 }

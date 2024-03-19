@@ -10,7 +10,7 @@
     "watch": "webpack --watch --config ./frontend/build/webpack.config.js",
     "lint": "eslint --config frontend/.eslintrc.js --ignore-path frontend/.eslintignore frontend/",
     "lint-fix": "yarn lint --fix",
-    "stylelint": "stylelint frontend/**/*.css --config frontend/.stylelintrc"
+    "stylelint": "stylelint \"frontend/**/*.css\" --config frontend/.stylelintrc"
   },
   "repository": "https://github.com/Sonarr/Sonarr",
   "author": "Team Sonarr",

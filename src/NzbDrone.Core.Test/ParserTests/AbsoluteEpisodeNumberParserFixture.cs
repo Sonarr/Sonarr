@@ -132,6 +132,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[Naruto-Kun.Hu] Dr Series S3 - 21 [1080p]", "Dr Series S3", 21, 0, 0)]
         [TestCase("[Naruto-Kun.Hu] Series Title - 12 [1080p].mkv", "Series Title", 12, 0, 0)]
         [TestCase("[Naruto-Kun.Hu] Anime Triangle - 08 [1080p].mkv", "Anime Triangle", 8, 0, 0)]
+        [TestCase("[Mystic Z-Team] Series Title Super - Episode 013 VF - Non-censuré [720p].mp4", "Series Title Super", 13, 0, 0)]
+        [TestCase("Series Title Kai Episodio 13 Audio Latino", "Series Title Kai", 13, 0, 0)]
 
         // [TestCase("", "", 0, 0, 0)]
         public void should_parse_absolute_numbers(string postTitle, string title, int absoluteEpisodeNumber, int seasonNumber, int episodeNumber)

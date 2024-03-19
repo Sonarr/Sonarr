@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Datastore;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Test.Framework;
@@ -14,14 +16,20 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeServiceTests
     [TestFixture]
     public class HandleEpisodeFileDeletedFixture : CoreTest<EpisodeService>
     {
+        private Series _series;
         private EpisodeFile _episodeFile;
         private List<Episode> _episodes;
 
         [SetUp]
         public void Setup()
         {
+            _series = Builder<Series>
+                .CreateNew()
+                .Build();
+
             _episodeFile = Builder<EpisodeFile>
                 .CreateNew()
+                .With(e => e.SeriesId = _series.Id)
                 .Build();
         }
 
@@ -30,6 +38,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeServiceTests
             _episodes = Builder<Episode>
                 .CreateListOfSize(1)
                 .All()
+                .With(e => e.SeriesId = _series.Id)
                 .With(e => e.Monitored = true)
                 .Build()
                 .ToList();
@@ -44,6 +53,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeServiceTests
             _episodes = Builder<Episode>
                 .CreateListOfSize(2)
                 .All()
+                .With(e => e.SeriesId = _series.Id)
                 .With(e => e.Monitored = true)
                 .Build()
                 .ToList();
@@ -85,9 +95,31 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeServiceTests
                   .Returns(true);
 
             Subject.Handle(new EpisodeFileDeletedEvent(_episodeFile, DeleteMediaFileReason.MissingFromDisk));
+            Subject.HandleAsync(new SeriesScannedEvent(_series, new List<string>()));
 
             Mocker.GetMock<IEpisodeRepository>()
-                .Verify(v => v.ClearFileId(It.IsAny<Episode>(), true), Times.Once());
+                .Verify(v => v.SetMonitored(It.IsAny<IEnumerable<int>>(), false), Times.Once());
+        }
+
+        [Test]
+        public void should_leave_monitored_if_autoUnmonitor_is_true_and_missing_episode_is_replaced()
+        {
+            GivenSingleEpisodeFile();
+
+            var newEpisodeFile = _episodeFile.JsonClone();
+            newEpisodeFile.Id = 123;
+            newEpisodeFile.Episodes = new LazyLoaded<List<Episode>>(_episodes);
+
+            Mocker.GetMock<IConfigService>()
+                .SetupGet(s => s.AutoUnmonitorPreviouslyDownloadedEpisodes)
+                .Returns(true);
+
+            Subject.Handle(new EpisodeFileDeletedEvent(_episodeFile, DeleteMediaFileReason.MissingFromDisk));
+            Subject.Handle(new EpisodeFileAddedEvent(newEpisodeFile));
+            Subject.HandleAsync(new SeriesScannedEvent(_series, new List<string>()));
+
+            Mocker.GetMock<IEpisodeRepository>()
+                .Verify(v => v.SetMonitored(It.IsAny<IEnumerable<int>>(), false), Times.Never());
         }
 
         [Test]

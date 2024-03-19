@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Core.ImportLists.Exclusions;
 using Sonarr.Http;
+using Sonarr.Http.Extensions;
 using Sonarr.Http.REST;
 using Sonarr.Http.REST.Attributes;
 
@@ -29,9 +31,20 @@ namespace Sonarr.Api.V3.ImportLists
 
         [HttpGet]
         [Produces("application/json")]
+        [Obsolete("Deprecated")]
         public List<ImportListExclusionResource> GetImportListExclusions()
         {
             return _importListExclusionService.All().ToResource();
+        }
+
+        [HttpGet("paged")]
+        [Produces("application/json")]
+        public PagingResource<ImportListExclusionResource> GetImportListExclusionsPaged([FromQuery] PagingRequestResource paging)
+        {
+            var pagingResource = new PagingResource<ImportListExclusionResource>(paging);
+            var pageSpec = pagingResource.MapToPagingSpec<ImportListExclusionResource, ImportListExclusion>();
+
+            return pageSpec.ApplyToPage(_importListExclusionService.Paged, ImportListExclusionResourceMapper.ToResource);
         }
 
         [RestPostById]

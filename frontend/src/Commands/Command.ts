@@ -13,6 +13,8 @@ export interface CommandBody {
   trigger: string;
   suppressMessages: boolean;
   seriesId?: number;
+  seriesIds?: number[];
+  seasonNumber?: number;
 }
 
 interface Command extends ModelBase {

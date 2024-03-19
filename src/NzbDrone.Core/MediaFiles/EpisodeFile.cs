@@ -21,6 +21,7 @@ namespace NzbDrone.Core.MediaFiles
         public string OriginalFilePath { get; set; }
         public string SceneName { get; set; }
         public string ReleaseGroup { get; set; }
+        public string ReleaseHash { get; set; }
         public QualityModel Quality { get; set; }
         public IndexerFlags IndexerFlags { get; set; }
         public MediaInfoModel MediaInfo { get; set; }
