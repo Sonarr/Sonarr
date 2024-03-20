@@ -388,7 +388,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                 }
             }
 
-            var minimumRetention = 60 * 24 * 14;
+            var minimumRetention = GetMinimumRetention();
 
             return new DownloadClientInfo
             {
@@ -396,6 +396,11 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                 OutputRootFolders = new List<OsPath> { _remotePathMappingService.RemapRemoteToLocal(Settings.Host, destDir) },
                 RemovesCompletedDownloads = (config.MaxRatioEnabled || (config.MaxSeedingTimeEnabled && config.MaxSeedingTime < minimumRetention)) && (config.MaxRatioAction == QBittorrentMaxRatioAction.Remove || config.MaxRatioAction == QBittorrentMaxRatioAction.DeleteFiles)
             };
+        }
+
+        private int GetMinimumRetention()
+        {
+            return 60 * 24 * 14; // 14 days in minutes
         }
 
         protected override void Test(List<ValidationFailure> failures)
@@ -448,7 +453,8 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
                 // Complain if qBittorrent is configured to remove torrents on max ratio
                 var config = Proxy.GetConfig(Settings);
-                if ((config.MaxRatioEnabled || config.MaxSeedingTimeEnabled) && (config.MaxRatioAction == QBittorrentMaxRatioAction.Remove || config.MaxRatioAction == QBittorrentMaxRatioAction.DeleteFiles))
+                var minimumRetention = GetMinimumRetention();
+                if ((config.MaxRatioEnabled || (config.MaxSeedingTimeEnabled && config.MaxSeedingTime < minimumRetention)) && (config.MaxRatioAction == QBittorrentMaxRatioAction.Remove || config.MaxRatioAction == QBittorrentMaxRatioAction.DeleteFiles))
                 {
                     return new NzbDroneValidationFailure(string.Empty, _localizationService.GetLocalizedString("DownloadClientQbittorrentValidationRemovesAtRatioLimit"))
                     {
