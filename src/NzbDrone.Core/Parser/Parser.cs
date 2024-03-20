@@ -554,6 +554,8 @@ namespace NzbDrone.Core.Parser
         private static readonly Regex ArticleWordRegex = new Regex(@"^(a|an|the)\s", RegexOptions.IgnoreCase | RegexOptions.Compiled);
         private static readonly Regex SpecialEpisodeWordRegex = new Regex(@"\b(part|special|edition|christmas)\b\s?", RegexOptions.IgnoreCase | RegexOptions.Compiled);
         private static readonly Regex DuplicateSpacesRegex = new Regex(@"\s{2,}", RegexOptions.Compiled);
+        private static readonly Regex SeasonFolderRegex = new Regex(@"^(?:S|Season|Saison|Series|Stagione)[-_. ]*(?<season>(?<!\d+)\d{1,4}(?!\d+))(?:[_. ]+(?!\d+)|$)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        private static readonly Regex SimpleEpisodeNumberRegex = new Regex(@"^[ex]?(?<episode>(?<!\d+)\d{1,3}(?!\d+))(?:[ex-](?<episode>(?<!\d+)\d{1,3}(?!\d+)))?(?:[_. ]|$)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         private static readonly Regex RequestInfoRegex = new Regex(@"^(?:\[.+?\])+", RegexOptions.Compiled);
 
@@ -562,6 +564,28 @@ namespace NzbDrone.Core.Parser
         public static ParsedEpisodeInfo ParsePath(string path)
         {
             var fileInfo = new FileInfo(path);
+
+            // Parse using the folder and file separately, but combine if they both parse correctly.
+            var episodeNumberMatch = SimpleEpisodeNumberRegex.Matches(fileInfo.Name);
+
+            if (episodeNumberMatch.Count != 0 && fileInfo.Directory?.Name != null)
+            {
+                var parsedFileInfo = ParseMatchCollection(episodeNumberMatch, fileInfo.Name);
+
+                if (parsedFileInfo != null)
+                {
+                    var seasonMatch = SeasonFolderRegex.Match(fileInfo.Directory.Name);
+
+                    if (seasonMatch.Success && seasonMatch.Groups["season"].Success)
+                    {
+                        parsedFileInfo.SeasonNumber = int.Parse(seasonMatch.Groups["season"].Value);
+
+                        Logger.Debug("Episode parsed from file and folder names. {0}", parsedFileInfo);
+
+                        return parsedFileInfo;
+                    }
+                }
+            }
 
             var result = ParseTitle(fileInfo.Name);
 

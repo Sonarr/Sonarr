@@ -29,6 +29,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase(@"C:\Test\Series\Season 01\1 Pilot (1080p HD).mkv", 1, 1)]
         [TestCase(@"C:\Test\Series\Season 1\02 Honor Thy Father (1080p HD).m4v", 1, 2)]
         [TestCase(@"C:\Test\Series\Season 1\2 Honor Thy Developer (1080p HD).m4v", 1, 2)]
+        [TestCase(@"C:\Test\Series\Season 2 - Total Series Action\01. Total Series Action - Episode 1 - Monster Cash.mkv", 2, 1)]
+        [TestCase(@"C:\Test\Series\Season 2\01. Total Series Action - Episode 1 - Monster Cash.mkv", 2, 1)]
 
         // [TestCase(@"C:\series.state.S02E04.720p.WEB-DL.DD5.1.H.264\73696S02-04.mkv", 2, 4)] //Gets treated as S01E04 (because it gets parsed as anime); 2020-01 broken test case: Expected result.EpisodeNumbers to contain 1 item(s), but found 0
         public void should_parse_from_path(string path, int season, int episode)
@@ -45,6 +47,7 @@ namespace NzbDrone.Core.Test.ParserTests
         }
 
         [TestCase("01-03\\The Series Title (2010) - 1x01-02-03 - Episode Title HDTV-720p Proper", "The Series Title (2010)", 1, new[] { 1, 2, 3 })]
+        [TestCase("Season 2\\E05-06 - Episode Title HDTV-720p Proper", "", 2, new[] { 5, 6 })]
         public void should_parse_multi_episode_from_path(string path, string title, int season, int[] episodes)
         {
             var result = Parser.Parser.ParsePath(path.AsOsAgnostic());
