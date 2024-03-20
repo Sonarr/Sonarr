@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using FluentValidation.Results;
 using NzbDrone.Core.Parser.Model;
@@ -20,7 +21,9 @@ namespace NzbDrone.Core.Organizer
         public ValidationFailure ValidateStandardFilename(SampleResult sampleResult)
         {
             var validationFailure = new ValidationFailure("StandardEpisodeFormat", ERROR_MESSAGE);
-            var parsedEpisodeInfo = Parser.Parser.ParseTitle(sampleResult.FileName);
+            var parsedEpisodeInfo = sampleResult.FileName.Contains(Path.DirectorySeparatorChar)
+                ? Parser.Parser.ParsePath(sampleResult.FileName)
+                : Parser.Parser.ParseTitle(sampleResult.FileName);
 
             if (parsedEpisodeInfo == null)
             {
@@ -38,7 +41,9 @@ namespace NzbDrone.Core.Organizer
         public ValidationFailure ValidateDailyFilename(SampleResult sampleResult)
         {
             var validationFailure = new ValidationFailure("DailyEpisodeFormat", ERROR_MESSAGE);
-            var parsedEpisodeInfo = Parser.Parser.ParseTitle(sampleResult.FileName);
+            var parsedEpisodeInfo = sampleResult.FileName.Contains(Path.DirectorySeparatorChar)
+                ? Parser.Parser.ParsePath(sampleResult.FileName)
+                : Parser.Parser.ParseTitle(sampleResult.FileName);
 
             if (parsedEpisodeInfo == null)
             {
@@ -66,7 +71,9 @@ namespace NzbDrone.Core.Organizer
         public ValidationFailure ValidateAnimeFilename(SampleResult sampleResult)
         {
             var validationFailure = new ValidationFailure("AnimeEpisodeFormat", ERROR_MESSAGE);
-            var parsedEpisodeInfo = Parser.Parser.ParseTitle(sampleResult.FileName);
+            var parsedEpisodeInfo = sampleResult.FileName.Contains(Path.DirectorySeparatorChar)
+                ? Parser.Parser.ParsePath(sampleResult.FileName)
+                : Parser.Parser.ParseTitle(sampleResult.FileName);
 
             if (parsedEpisodeInfo == null)
             {
