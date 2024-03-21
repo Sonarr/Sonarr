@@ -33,6 +33,7 @@ namespace NzbDrone.Core.Test.ImportListTests
 
             var item1 = new ImportListItemInfo()
             {
+                TvdbId = 12345,
                 Title = "Breaking Bad"
             };
 
@@ -421,7 +422,12 @@ namespace NzbDrone.Core.Test.ImportListTests
         [Test]
         public void should_search_by_imdb_if_series_title_and_series_imdb()
         {
-            _importListFetch.Series.ForEach(m => m.ImportListId = 1);
+            _importListFetch.Series.ForEach(m =>
+            {
+                m.ImportListId = 1;
+                m.TvdbId = 0;
+            });
+
             WithList(1, true);
             WithImdbId();
             Subject.Execute(_commandAll);
