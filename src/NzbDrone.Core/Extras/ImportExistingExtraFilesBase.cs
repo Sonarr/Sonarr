@@ -19,10 +19,15 @@ namespace NzbDrone.Core.Extras
         }
 
         public abstract int Order { get; }
-        public abstract IEnumerable<ExtraFile> ProcessFiles(Series series, List<string> filesOnDisk, List<string> importedFiles);
+        public abstract IEnumerable<ExtraFile> ProcessFiles(Series series, List<string> filesOnDisk, List<string> importedFiles, bool keepExistingEntries);
 
-        public virtual ImportExistingExtraFileFilterResult<TExtraFile> FilterAndClean(Series series, List<string> filesOnDisk, List<string> importedFiles)
+        public virtual ImportExistingExtraFileFilterResult<TExtraFile> FilterAndClean(Series series, List<string> filesOnDisk, List<string> importedFiles, bool keepExistingEntries)
         {
+            if (keepExistingEntries)
+            {
+                return Filter(series, filesOnDisk, importedFiles, new List<TExtraFile>());
+            }
+
             var seriesFiles = _extraFileService.GetFilesBySeries(series.Id);
 
             Clean(series, filesOnDisk, importedFiles, seriesFiles);

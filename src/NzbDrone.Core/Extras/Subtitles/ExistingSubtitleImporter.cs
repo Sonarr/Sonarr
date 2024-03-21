@@ -29,12 +29,12 @@ namespace NzbDrone.Core.Extras.Subtitles
 
         public override int Order => 1;
 
-        public override IEnumerable<ExtraFile> ProcessFiles(Series series, List<string> filesOnDisk, List<string> importedFiles)
+        public override IEnumerable<ExtraFile> ProcessFiles(Series series, List<string> filesOnDisk, List<string> importedFiles, bool keepExistingEntries)
         {
             _logger.Debug("Looking for existing subtitle files in {0}", series.Path);
 
             var subtitleFiles = new List<SubtitleFile>();
-            var filterResult = FilterAndClean(series, filesOnDisk, importedFiles);
+            var filterResult = FilterAndClean(series, filesOnDisk, importedFiles, keepExistingEntries);
 
             foreach (var possibleSubtitleFile in filterResult.FilesOnDisk)
             {
