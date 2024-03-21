@@ -35,6 +35,7 @@ namespace NzbDrone.Core.Notifications.Telegram
         public override void OnSeriesAdd(SeriesAddMessage message)
         {
             var text = FormatMessageWithLink(message.Message, message.Series);
+
             _proxy.SendNotification(SERIES_ADDED_TITLE, text, Settings);
         }
 
