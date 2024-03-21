@@ -82,7 +82,7 @@ namespace NzbDrone.Core.Notifications.Telegram
                 return message;
             }
 
-            if (linkType == MetadataLinkType.Imdb && !string.IsNullOrWhiteSpace(series.ImdbId))
+            if (linkType == MetadataLinkType.Imdb && series.ImdbId.IsNotNullOrWhiteSpace())
             {
                 return $"[{message}](https://www.imdb.com/title/{series.ImdbId})";
             }
