@@ -665,5 +665,13 @@
     "NotificationsPushoverSettingsRetry": "Torna-ho a provar",
     "NotificationsSettingsWebhookMethod": "Mètode",
     "Other": "Altres",
-    "Monitor": "Monitora"
+    "Monitor": "Monitora",
+    "AutoTaggingSpecificationOriginalLanguage": "Llenguatge",
+    "AutoTaggingSpecificationQualityProfile": "Perfil de Qualitat",
+    "AutoTaggingSpecificationRootFolder": "Carpeta arrel",
+    "AddDelayProfileError": "No s'ha pogut afegir un perfil realentit, torna-ho a probar",
+    "AutoTaggingSpecificationSeriesType": "Tipus de Sèries",
+    "AutoTaggingSpecificationStatus": "Estat",
+    "BlocklistAndSearch": "Llista de bloqueig i cerca",
+    "BlocklistAndSearchHint": "Comença una cerca per reemplaçar després d'haver bloquejat"
 }
