@@ -120,6 +120,17 @@ namespace NzbDrone.Core.Test.ImportListTests
         private void WithImdbId()
         {
             _list1Series.First().ImdbId = "tt0496424";
+
+            Mocker.GetMock<ISearchForNewSeries>()
+                .Setup(s => s.SearchForNewSeriesByImdbId(_list1Series.First().ImdbId))
+                .Returns(
+                    Builder<Series>
+                        .CreateListOfSize(1)
+                        .All()
+                        .With(s => s.Title = "Breaking Bad")
+                        .With(s => s.TvdbId = 81189)
+                        .Build()
+                        .ToList());
         }
 
         private void WithExistingSeries()
@@ -342,6 +353,7 @@ namespace NzbDrone.Core.Test.ImportListTests
         public void should_add_new_series_from_single_list_to_library()
         {
             _importListFetch.Series.ForEach(m => m.ImportListId = 1);
+            WithTvdbId();
             WithList(1, true);
             WithCleanLevel(ListSyncLevelType.Disabled);
 
@@ -358,6 +370,7 @@ namespace NzbDrone.Core.Test.ImportListTests
             _importListFetch.Series.ForEach(m => m.ImportListId = 1);
             _importListFetch.Series.AddRange(_list2Series);
 
+            WithTvdbId();
             WithList(1, true);
             WithList(2, true);
 
@@ -376,6 +389,7 @@ namespace NzbDrone.Core.Test.ImportListTests
             _importListFetch.Series.ForEach(m => m.ImportListId = 1);
             _importListFetch.Series.AddRange(_list2Series);
 
+            WithTvdbId();
             WithList(1, true);
             WithList(2, false);
 
@@ -422,12 +436,17 @@ namespace NzbDrone.Core.Test.ImportListTests
         public void should_search_by_imdb_if_series_title_and_series_imdb()
         {
             _importListFetch.Series.ForEach(m => m.ImportListId = 1);
+
             WithList(1, true);
             WithImdbId();
+
             Subject.Execute(_commandAll);
 
             Mocker.GetMock<ISearchForNewSeries>()
                   .Verify(v => v.SearchForNewSeriesByImdbId(It.IsAny<string>()), Times.Once());
+
+            Mocker.GetMock<IAddSeriesService>()
+                .Verify(v => v.AddSeries(It.Is<List<Series>>(t => t.Count == 1), It.IsAny<bool>()));
         }
 
         [Test]
@@ -497,6 +516,19 @@ namespace NzbDrone.Core.Test.ImportListTests
 
             Mocker.GetMock<IImportListExclusionService>()
                 .Verify(v => v.All(), Times.Never);
+        }
+
+        [Test]
+        public void should_not_add_if_tvdbid_is_0()
+        {
+            _importListFetch.Series.ForEach(m => m.ImportListId = 1);
+            WithList(1, true);
+            WithExcludedSeries();
+
+            Subject.Execute(_commandAll);
+
+            Mocker.GetMock<IAddSeriesService>()
+                .Verify(v => v.AddSeries(It.Is<List<Series>>(t => t.Count == 0), It.IsAny<bool>()));
         }
     }
 }
