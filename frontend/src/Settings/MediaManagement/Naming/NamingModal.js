@@ -124,8 +124,8 @@ const absoluteTokens = [
 ];
 
 const episodeTitleTokens = [
-  { token: '{Episode Title}', example: 'Episode\'s Title' },
-  { token: '{Episode CleanTitle}', example: 'Episodes Title' }
+  { token: '{Episode Title}', example: 'Episode\'s Title', footNote: 1 },
+  { token: '{Episode CleanTitle}', example: 'Episodes Title', footNote: 1 }
 ];
 
 const qualityTokens = [
@@ -451,7 +451,7 @@ class NamingModal extends Component {
                   <FieldSet legend={translate('EpisodeTitle')}>
                     <div className={styles.groups}>
                       {
-                        episodeTitleTokens.map(({ token, example }) => {
+                        episodeTitleTokens.map(({ token, example, footNote }) => {
                           return (
                             <NamingOption
                               key={token}
@@ -459,6 +459,7 @@ class NamingModal extends Component {
                               value={value}
                               token={token}
                               example={example}
+                              footNote={footNote}
                               tokenSeparator={tokenSeparator}
                               tokenCase={tokenCase}
                               onPress={this.onOptionPress}
@@ -467,6 +468,11 @@ class NamingModal extends Component {
                         }
                         )
                       }
+                    </div>
+  
+                    <div className={styles.footNote}>
+                      <Icon className={styles.icon} name={icons.FOOTNOTE} />
+                      <InlineMarkdown data={translate('EpisodeTitleFootNote')} />
                     </div>
                   </FieldSet>
 
