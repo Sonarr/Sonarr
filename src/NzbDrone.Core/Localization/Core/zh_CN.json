@@ -1786,7 +1786,7 @@
     "DownloadClientAriaSettingsDirectoryHelpText": "可选的下载位置，留空使用 Aria2 默认位置",
     "DownloadClientPriorityHelpText": "下载客户端优先级，从1（最高）到50（最低），默认为1。具有相同优先级的客户端将轮换使用。",
     "IndexerSettingsRejectBlocklistedTorrentHashes": "抓取时舍弃列入黑名单的种子散列值",
-    "ChangeCategory": "改变分类",
+    "ChangeCategory": "修改分类",
     "IgnoreDownload": "忽略下载",
     "IgnoreDownloads": "忽略下载",
     "IgnoreDownloadsHint": "阻止 {appName} 进一步处理这些下载",
@@ -1808,5 +1808,6 @@
     "ChangeCategoryHint": "将下载从下载客户端更改为“导入后类别”",
     "IgnoreDownloadHint": "阻止 {appName} 进一步处理此下载",
     "IndexerSettingsRejectBlocklistedTorrentHashesHelpText": "如果 torrent 的哈希被屏蔽了，某些索引器在使用RSS或者搜索期间可能无法正确拒绝它，启用此功能将允许在抓取 torrent 之后但在将其发送到客户端之前拒绝它。",
-    "RemoveQueueItemRemovalMethodHelpTextWarning": "“从下载客户端移除”将从下载客户端移除下载内容和文件。"
+    "RemoveQueueItemRemovalMethodHelpTextWarning": "“从下载客户端移除”将从下载客户端移除下载内容和文件。",
+    "AutoTaggingSpecificationOriginalLanguage": "语言"
 }
