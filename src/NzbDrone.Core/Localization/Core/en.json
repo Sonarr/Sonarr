@@ -635,7 +635,7 @@
   "EpisodeRequested": "Episode Requested",
   "EpisodeSearchResultsLoadError": "Unable to load results for this episode search. Try again later",
   "EpisodeTitle": "Episode Title",
-  "EpisodeTitleFootNote": "Episode Title/CleanTitle support a `:<MAX_LENGTH>` suffix allowing you to truncate the episode title. Ellipsis (`...`) will be added when truncating. The length of the truncated text (including ellipsis) will be equal to the specificied max length. For example `{Episode Title:30}`.",
+  "EpisodeTitleFootNote": "Episode Title/CleanTitle support a `:MAX_LENGTH` suffix allowing you to truncate the episode title. Ellipsis (`...`) will be added when truncating. The length of the truncated text (including ellipsis) will be equal to the specificied max length. For example `{Episode Title:30}`.",
   "EpisodeTitleRequired": "Episode Title Required",
   "EpisodeTitleRequiredHelpText": "Prevent importing for up to 48 hours if the episode title is in the naming format and the episode title is TBA",
   "Episodes": "Episodes",
