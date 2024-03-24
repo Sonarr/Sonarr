@@ -38,16 +38,16 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators
 
             var firstEpisode = localEpisode.Episodes.First();
             var episodeFile = firstEpisode.EpisodeFile.Value;
-            localEpisode.SubtitleInfo = CleanSubtitleTitleInfo(episodeFile, path);
+            localEpisode.SubtitleInfo = CleanSubtitleTitleInfo(episodeFile, path, localEpisode.FileNameBeforeRename);
 
             return localEpisode;
         }
 
-        public SubtitleTitleInfo CleanSubtitleTitleInfo(EpisodeFile episodeFile, string path)
+        public SubtitleTitleInfo CleanSubtitleTitleInfo(EpisodeFile episodeFile, string path, string fileNameBeforeRename)
         {
             var subtitleTitleInfo = LanguageParser.ParseSubtitleLanguageInformation(path);
 
-            var episodeFileTitle = Path.GetFileNameWithoutExtension(episodeFile.RelativePath);
+            var episodeFileTitle = Path.GetFileNameWithoutExtension(fileNameBeforeRename ?? episodeFile.RelativePath);
             var originalEpisodeFileTitle = Path.GetFileNameWithoutExtension(episodeFile.OriginalFilePath) ?? string.Empty;
 
             if (subtitleTitleInfo.TitleFirst && (episodeFileTitle.Contains(subtitleTitleInfo.RawTitle, StringComparison.OrdinalIgnoreCase) || originalEpisodeFileTitle.Contains(subtitleTitleInfo.RawTitle, StringComparison.OrdinalIgnoreCase)))
