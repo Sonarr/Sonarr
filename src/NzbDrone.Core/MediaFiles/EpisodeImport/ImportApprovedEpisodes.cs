@@ -176,9 +176,9 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                     {
                         if (localEpisode.ScriptImported)
                         {
-                            _existingExtraFiles.ImportExtraFiles(localEpisode.Series, localEpisode.PossibleExtraFiles, true);
+                            _existingExtraFiles.ImportExtraFiles(localEpisode.Series, localEpisode.PossibleExtraFiles, localEpisode.FileNameBeforeRename);
 
-                            if (localEpisode.FileRenamedAfterScriptImport)
+                            if (localEpisode.FileNameBeforeRename != episodeFile.RelativePath)
                             {
                                 _extraService.MoveFilesAfterRename(localEpisode.Series, episodeFile);
                             }
