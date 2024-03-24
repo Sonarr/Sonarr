@@ -139,12 +139,14 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
                 // Ignore torrents with an empty path
                 if (torrent.Path.IsNullOrWhiteSpace())
                 {
+                    _logger.Warn($"Torrent '{torrent.Name}' has an empty download path and will not be processed. Adjust this to an absolute path in rTorrent");
                     continue;
                 }
 
                 if (torrent.Path.StartsWith("."))
                 {
-                    throw new DownloadClientException("Download paths must be absolute. Please specify variable \"directory\" in rTorrent.");
+                    _logger.Warn($"Torrent '{torrent.Name}' has a download path starting with '.' and will not be processed. Adjust this to an absolute path in rTorrent");
+                    continue;
                 }
 
                 var item = new DownloadClientItem();
