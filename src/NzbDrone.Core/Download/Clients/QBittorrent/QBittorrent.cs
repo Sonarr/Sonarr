@@ -396,7 +396,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             };
         }
 
-        private int RemovesCompletedDownloads(QBittorrentPreferences config)
+        private bool RemovesCompletedDownloads(QBittorrentPreferences config)
         {
             var minimumRetention = 60 * 24 * 14; // 14 days in minutes
             return (config.MaxRatioEnabled || (config.MaxSeedingTimeEnabled && config.MaxSeedingTime < minimumRetention)) && (config.MaxRatioAction == QBittorrentMaxRatioAction.Remove || config.MaxRatioAction == QBittorrentMaxRatioAction.DeleteFiles);
