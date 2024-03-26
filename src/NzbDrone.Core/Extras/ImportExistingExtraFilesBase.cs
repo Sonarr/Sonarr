@@ -23,12 +23,16 @@ namespace NzbDrone.Core.Extras
 
         public virtual ImportExistingExtraFileFilterResult<TExtraFile> FilterAndClean(Series series, List<string> filesOnDisk, List<string> importedFiles, bool keepExistingEntries)
         {
+            var seriesFiles = _extraFileService.GetFilesBySeries(series.Id);
+
             if (keepExistingEntries)
             {
+                var incompleteImports = seriesFiles.IntersectBy(f => Path.Combine(series.Path, f.RelativePath), filesOnDisk, i => i, PathEqualityComparer.Instance).Select(f => f.Id);
+
+                _extraFileService.DeleteMany(incompleteImports);
+
                 return Filter(series, filesOnDisk, importedFiles, new List<TExtraFile>());
             }
-
-            var seriesFiles = _extraFileService.GetFilesBySeries(series.Id);
 
             Clean(series, filesOnDisk, importedFiles, seriesFiles);
 
