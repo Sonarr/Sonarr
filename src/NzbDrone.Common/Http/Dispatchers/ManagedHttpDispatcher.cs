@@ -270,7 +270,7 @@ namespace NzbDrone.Common.Http.Dispatchers
             }
             catch (Exception e)
             {
-                _logger.Debug(e, "Caught exception while GetAllNetworkInterfaces assuming IPv4 connectivity" + e.Message);
+                _logger.Debug(e, "Caught exception while GetAllNetworkInterfaces assuming IPv4 connectivity: {0}", e.Message);
                 return true;
             }
         }
