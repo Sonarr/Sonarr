@@ -6,7 +6,7 @@
     "AddConnection": "Bağlantı Ekle",
     "AddConditionImplementation": "Koşul Ekle - {implementationName}",
     "EditConnectionImplementation": "Koşul Ekle - {implementationName}",
-    "AddConnectionImplementation": "Koşul Ekle - {implementationName}",
+    "AddConnectionImplementation": "Bağlantı Ekle - {implementationName}",
     "AddIndexerImplementation": "Yeni Dizin Ekle - {implementationName}",
     "EditIndexerImplementation": "Koşul Ekle - {implementationName}",
     "AddToDownloadQueue": "İndirme kuyruğuna ekleyin",
