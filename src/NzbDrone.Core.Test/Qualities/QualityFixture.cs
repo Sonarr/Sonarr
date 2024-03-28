@@ -20,6 +20,7 @@ namespace NzbDrone.Core.Test.Qualities
                         new object[] { 4, Quality.HDTV720p },
                         new object[] { 5, Quality.WEBDL720p },
                         new object[] { 6, Quality.Bluray720p },
+                        new object[] { 6, Quality.Bluray720p },
                         new object[] { 7, Quality.Bluray1080p },
                         new object[] { 8, Quality.WEBDL480p },
                         new object[] { 9, Quality.HDTV1080p },
