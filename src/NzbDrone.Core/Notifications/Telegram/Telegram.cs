@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using FluentValidation.Results;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Notifications.Telegram
 {
@@ -33,12 +34,16 @@ namespace NzbDrone.Core.Notifications.Telegram
 
         public override void OnSeriesAdd(SeriesAddMessage message)
         {
-            _proxy.SendNotification(SERIES_ADDED_TITLE, message.Message, Settings);
+            var text = FormatMessageWithLink(message.Message, message.Series);
+
+            _proxy.SendNotification(SERIES_ADDED_TITLE, text, Settings);
         }
 
         public override void OnSeriesDelete(SeriesDeleteMessage deleteMessage)
         {
-            _proxy.SendNotification(SERIES_DELETED_TITLE, deleteMessage.Message, Settings);
+            var text = FormatMessageWithLink(deleteMessage.Message, deleteMessage.Series);
+
+            _proxy.SendNotification(SERIES_DELETED_TITLE, text, Settings);
         }
 
         public override void OnHealthIssue(HealthCheck.HealthCheck healthCheck)
@@ -68,6 +73,38 @@ namespace NzbDrone.Core.Notifications.Telegram
             failures.AddIfNotNull(_proxy.Test(Settings));
 
             return new ValidationResult(failures);
+        }
+
+        private string FormatMessageWithLink(string message, Series series)
+        {
+            var linkType =  Settings.MetadataLinkType;
+
+            if (linkType == MetadataLinkType.None)
+            {
+                return message;
+            }
+
+            if (linkType == MetadataLinkType.Imdb && series.ImdbId.IsNotNullOrWhiteSpace())
+            {
+                return $"[{message}](https://www.imdb.com/title/{series.ImdbId})";
+            }
+
+            if (linkType == MetadataLinkType.Tvdb && series.TvdbId > 0)
+            {
+                return $"[{message}](http://www.thetvdb.com/?tab=series&id={series.TvdbId})";
+            }
+
+            if (linkType == MetadataLinkType.Trakt && series.TvdbId > 0)
+            {
+                return $"[{message}](http://trakt.tv/search/tvdb/{series.TvdbId}?id_type=show)";
+            }
+
+            if (linkType == MetadataLinkType.Tvmaze && series.TvMazeId > 0)
+            {
+                return $"[{message}](http://www.tvmaze.com/shows/{series.TvMazeId}/_)";
+            }
+
+            return message;
         }
     }
 }

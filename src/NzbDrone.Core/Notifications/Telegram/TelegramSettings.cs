@@ -1,8 +1,8 @@
+using System;
 using FluentValidation;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
-
 namespace NzbDrone.Core.Notifications.Telegram
 {
     public class TelegramSettingsValidator : AbstractValidator<TelegramSettings>
@@ -13,6 +13,13 @@ namespace NzbDrone.Core.Notifications.Telegram
             RuleFor(c => c.ChatId).NotEmpty();
             RuleFor(c => c.TopicId).Must(topicId => !topicId.HasValue || topicId > 1)
                                    .WithMessage("Topic ID must be greater than 1 or empty");
+            RuleFor(c => c.MetadataLinkType).Custom((metadataLinkType, context) =>
+            {
+                if (!Enum.IsDefined(typeof(MetadataLinkType), metadataLinkType))
+                {
+                    context.AddFailure($"MetadataLinkType is not valid: {0}");
+                }
+            });
         }
     }
 
@@ -32,9 +39,27 @@ namespace NzbDrone.Core.Notifications.Telegram
         [FieldDefinition(3, Label = "NotificationsTelegramSettingsSendSilently", Type = FieldType.Checkbox, HelpText = "NotificationsTelegramSettingsSendSilentlyHelpText")]
         public bool SendSilently { get; set; }
 
+        public bool SendMetadataLink { get; set; }
+        [FieldDefinition(4, Label = "NotificationsTelegramSettingsMetadataLinkType", Type = FieldType.Select, SelectOptions = typeof(MetadataLinkType), HelpText = "NotificationsTelegramSettingsMetadataLinkType")]
+        public MetadataLinkType MetadataLinkType { get; set; }
+
         public NzbDroneValidationResult Validate()
         {
             return new NzbDroneValidationResult(Validator.Validate(this));
         }
+    }
+
+    public enum MetadataLinkType
+    {
+        [FieldOption(Label = "None")]
+        None = 0,
+        [FieldOption(Label = "IMDb")]
+        Imdb,
+        [FieldOption(Label = "TVDb")]
+        Tvdb,
+        [FieldOption(Label = "TVMaze")]
+        Tvmaze,
+        [FieldOption(Label = "Trakt")]
+        Trakt,
     }
 }
