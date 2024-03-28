@@ -43,28 +43,34 @@ namespace NzbDrone.Core.Download.Clients.Porla
 
             var items = new List<DownloadClientItem>();
 
-            // should probs paginate instead of cheating with the INT64.MAXVALUE
+            // should probs paginate instead of cheating
             foreach (var torrent in plist)
             {
-                // we don't need to check the category, the filter did that for us
+                // we don't need to check the category, the filter did that for us, but we are checking anyway becuase why not :)
+                if (torrent.Category != Settings.Category)
+                {
+                    _logger.Warn($"Porla Should not have sent us a torrrent in the catagory {torrent.Category}! We expected {Settings.Category}");
+                    continue;
+                }
 
                 var outputPath = _remotePathMappingService.RemapRemoteToLocal(Settings.Host, new OsPath(torrent.SavePath));
 
-                var eta = torrent.ETA < 0 ? TimeSpan.MaxValue : TimeSpan.FromSeconds(torrent.ETA);   // LibTorent uses `-1` to denote "infinite" time i.e. I am stuck, or I am done. FromSeconds will convert `-1` to 1.
+                var eta = torrent.ETA < 0 ? TimeSpan.MaxValue : TimeSpan.FromSeconds(torrent.ETA);   // LibTorent uses `-1` to denote "infinite" time i.e. I am stuck, or I am done. FromSeconds will convert `-1` to 1, so we need to do this.
 
                 var item = new DownloadClientItem
                 {
                     DownloadClientInfo = DownloadClientItemClientInfo.FromDownloadClient(this, false),
                     DownloadId = torrent.InfoHash.Hash,
                     OutputPath = outputPath + torrent.Name,
-                    RemainingSize = torrent.Total - torrent.TotalDone,
+                    RemainingSize = torrent.Total,
                     RemainingTime = eta,
                     Title = torrent.Name,
                     TotalSize = torrent.Size,
                     SeedRatio = torrent.Ratio
                 };
 
-                // deal with moving_storage=true ??
+                // deal with moving_storage=true ?
+
                 if (!string.IsNullOrEmpty(torrent.Error))
                 {
                     item.Status = DownloadItemStatus.Warning;
@@ -93,6 +99,11 @@ namespace NzbDrone.Core.Download.Clients.Porla
                 items.Add(item);
             }
 
+            if (items.Count < 1)
+            {
+                _logger.Info("No Items Returned");
+            }
+
             return items;
         }
 
@@ -114,7 +125,7 @@ namespace NzbDrone.Core.Download.Clients.Porla
             var status = new DownloadClientInfo
             {
                 IsLocalhost = Settings.Host == "127.0.0.1" || Settings.Host == "localhost",
-                RemovesCompletedDownloads = false, // TODO: I don't think porla has config for this
+                RemovesCompletedDownloads = false, // TODO: I don't think porla has config for this, it feels like it should
             };
 
             var savePath = (presetEffectiveSettings?.SavePath.IsNullOrWhiteSpace() ?? true ? Settings.TvDirectory : presetEffectiveSettings?.SavePath) ?? "";
@@ -137,22 +148,48 @@ namespace NzbDrone.Core.Download.Clients.Porla
                 $"starr.season={remoteEpisode.MappedSeasonNumber}",
                 $"starr.tvdbid={remoteEpisode.Series.TvdbId}",
                 $"starr.imdbid={remoteEpisode.Series.ImdbId}",
+                $"starr.tvmazeid={remoteEpisode.Series.TvMazeId}",
                 $"starr.year={remoteEpisode.Series.Year}"
             };
             return tags;
         }
 
+        // NOTE: If the torrent already exists in the client, it'll fail with error code -3
+        // {
+        //   "code": -3,
+        //   "data": null,
+        //   "message": "Torrent already in session 'default'"
+        // }
+        // IDK If I should deal with that...
+
         protected override string AddFromMagnetLink(RemoteEpisode remoteEpisode, string hash, string magnetLink)
         {
-            var tags = Settings.SeriesTag ? ConvertRemoteEpisodeToTags(remoteEpisode) : null;
-            var torrent = _proxy.AddMagnetTorrent(Settings, magnetLink, tags);
+            PorlaTorrent torrent;
+            if (Settings.SeriesTag)
+            {
+                torrent = _proxy.AddMagnetTorrent(Settings, magnetLink, ConvertRemoteEpisodeToTags(remoteEpisode));
+            }
+            else
+            {
+                torrent = _proxy.AddMagnetTorrent(Settings, magnetLink);
+            }
+
             return torrent.InfoHash.Hash;
         }
 
         protected override string AddFromTorrentFile(RemoteEpisode remoteEpisode, string hash, string filename, byte[] fileContent)
         {
-            var tags = Settings.SeriesTag ? ConvertRemoteEpisodeToTags(remoteEpisode) : null;
-            var torrent = _proxy.AddTorrentFile(Settings, fileContent, tags);
+            PorlaTorrent torrent;
+            if (Settings.SeriesTag)
+            {
+                var tags = ConvertRemoteEpisodeToTags(remoteEpisode);
+                torrent = _proxy.AddTorrentFile(Settings, fileContent, tags);
+            }
+            else
+            {
+                torrent = _proxy.AddTorrentFile(Settings, fileContent);
+            }
+
             return torrent.InfoHash.Hash;
         }
 
@@ -170,7 +207,6 @@ namespace NzbDrone.Core.Download.Clients.Porla
         /// <summary> Test the connection by calling the `sys.version` </summary>
         private ValidationFailure TestVersion()
         {
-            // TODO : Consider dropping the future version (painful to keep up with)
             try
             {
                 // Version Compatability check.
@@ -196,11 +232,6 @@ namespace NzbDrone.Core.Download.Clients.Porla
                 if (actualVersion > lastGoodVersion)
                 {
                     _logger.Warn($"Your version might not be backwards compatible: {actualVersion}");
-                }
-
-                if (actualVersion < new Version("1.0.0"))
-                {
-                    _logger.Warn($"Porla is in active development, expect weirdness with it and this client");
                 }
             }
             catch (DownloadClientAuthenticationException ex)

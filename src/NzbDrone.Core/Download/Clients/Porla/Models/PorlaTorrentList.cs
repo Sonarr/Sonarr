@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Download.Clients.Porla.Models
         [JsonProperty("error", NullValueHandling = NullValueHandling.Ignore)]
         public string Error { get; set; }
 
-        /// <summary> Estimated Time of Arrivial. The estimated amount of seconds until the torrent finishes downloading </summary>
+        /// <summary> Estimated Time of Arrivial. The estimated amount of seconds until the torrent finishes downloading. -1 indicates forever </summary>
         [JsonProperty("eta", NullValueHandling = NullValueHandling.Ignore)]
         public long ETA { get; set; }
 

@@ -34,7 +34,9 @@ namespace NzbDrone.Core.Download.Clients.Porla
 
         // torrents
 
-        PorlaTorrent AddMagnetTorrent(PorlaSettings settings, string uri, IList<string> tags = null);             // torrents.add
+        PorlaTorrent AddMagnetTorrent(PorlaSettings settings, string uri);
+        PorlaTorrent AddMagnetTorrent(PorlaSettings settings, string uri, IList<string> tags = null);
+        PorlaTorrent AddTorrentFile(PorlaSettings settings, byte[] fileContent);             // torrents.add
         PorlaTorrent AddTorrentFile(PorlaSettings settings, byte[] fileContent, IList<string> tags = null);       // torrents.add
         void RemoveTorrent(PorlaSettings settings, bool removeData, PorlaTorrent[] pts);        // torrents.remove
 
@@ -42,6 +44,7 @@ namespace NzbDrone.Core.Download.Clients.Porla
 
         void PauseTorrent(PorlaSettings settings, PorlaTorrent pt);     // torrents.pause
         void ResumeTorrent(PorlaSettings settings, PorlaTorrent pt);    // torrents.resume
+        ReadOnlyCollection<PorlaTorrentDetail> ListTorrents(PorlaSettings settings);
         ReadOnlyCollection<PorlaTorrentDetail> ListTorrents(PorlaSettings settings, int page = 0, int size = int.MaxValue);      // torrents.list
 
         // torrents.recheck
@@ -156,7 +159,7 @@ namespace NzbDrone.Core.Download.Clients.Porla
         public ReadOnlyCollection<PorlaSession> ListSessions(PorlaSettings settings)
         {
             var sessions = ProcessRequest<ResponsePorlaSessionList>(settings, "sessions.list");
-            return sessions.Sessions;
+            return sessions.Sessions; // can return nullish
         }
 
         public void PauseSessions(PorlaSettings settings)
@@ -174,7 +177,7 @@ namespace NzbDrone.Core.Download.Clients.Porla
         public PorlaSessionSettings GetSessionSettings(PorlaSettings settings)
         {
             var resp = ProcessRequest<ResponsePorlaSessionSettingsList>(settings, "sessions.settings.list");
-            return resp.Settings;
+            return resp.Settings; // can return nullish
         }
 
         // presets
@@ -182,15 +185,25 @@ namespace NzbDrone.Core.Download.Clients.Porla
         public ReadOnlyDictionary<string, PorlaPreset> ListPresets(PorlaSettings settings)
         {
             var presets = ProcessRequest<ResponsePorlaPresetsList>(settings, "presets.list");
-            return presets.Presets;
+            return presets.Presets; // can return nullish
         }
 
         // torrents
+
+        public PorlaTorrent AddMagnetTorrent(PorlaSettings settings, string uri)
+        {
+            return AddMagnetTorrent(settings, uri, null);
+        }
 
         public PorlaTorrent AddMagnetTorrent(PorlaSettings settings, string uri, IList<string> tags = null)
         {
             var dir = string.IsNullOrWhiteSpace(settings.TvDirectory) ? null : settings.TvDirectory;
             return ProcessRequest<PorlaTorrent>(settings, "torrents.add", "preset", settings.Preset, "tags", tags, "magnet_uri", uri, "save_path", dir);
+        }
+
+        public PorlaTorrent AddTorrentFile(PorlaSettings settings, byte[] fileContent)
+        {
+            return AddTorrentFile(settings, fileContent);
         }
 
         public PorlaTorrent AddTorrentFile(PorlaSettings settings, byte[] fileContent, IList<string> tags = null)
@@ -215,6 +228,12 @@ namespace NzbDrone.Core.Download.Clients.Porla
         {
             var empty = ProcessRequest<string>(settings, "torrents.resume", pt.AsParams());
             LogSupposedToBeNothing("ResumeTorrent", empty);
+        }
+
+        public ReadOnlyCollection<PorlaTorrentDetail> ListTorrents(PorlaSettings settings)
+        {
+            // This is really stupid but we need it for the tests. The Tests break weirdly if we don't have this signature
+            return ListTorrents(settings, 0, int.MaxValue);
         }
 
         public ReadOnlyCollection<PorlaTorrentDetail> ListTorrents(PorlaSettings settings, int page = 0, int size = int.MaxValue)

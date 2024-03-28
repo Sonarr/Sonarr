@@ -2,8 +2,7 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0 AS TESTER
 RUN apt update && apt install -y tofrodos tzdata sqlite3 mediainfo xmlstarlet && apt clean
 COPY . /source
 WORKDIR /source
-#RUN dotnet test --logger":html;LogFileName=results.html" --blame-hang-timeout 10000 src/Sonarr.sln || true
 RUN dotnet test src/Sonarr.sln --filter "Category!=IntegrationTest&Category!=AutomationTest&Category!=WINDOWS" --logger":html;LogFileName=results.html" || true
 
-# FROM scratch AS RESULT
-# COPY --from TESTER results.html .
+FROM scratch AS RESULT
+COPY --from=TESTER /source/src/NzbDrone.Core.Test/TestResults/results.html /out/

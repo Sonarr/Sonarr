@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
+using NLog;
 using NUnit.Framework;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Download;
@@ -57,18 +58,18 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.PorlaTests
                 Metadata = null, // not exactly correct, should be json `{}`
                 MovingStorage = false,
                 Name = _title,
-                NumPeers = 0,
+                NumPeers = 5, // I am unsure here. I think the queued items hold on to it's list of peers
                 NumSeeds = 0,
                 Progress = 0.0f,
-                QueuePosition = 0,
+                QueuePosition = 1,
                 Ratio = 0.0d,
                 SavePath = "/tmp",
                 SeedingDuration = 0L,
                 Session = "default",
-                Size = 0L,
+                Size = 100000000L,
                 State = LibTorrentStatus.downloading_metadata,
                 Tags = new (SomeTags),  // do we have a remote episode aviable? can I use CreateRemoteEpisode
-                Total = 0L,
+                Total = 100000000L,
                 TotalDone = 0L,
                 UploadRate = 0
             };
@@ -225,11 +226,11 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.PorlaTests
         protected void GivenFailedDownload()
         {
             Mocker.GetMock<IPorlaProxy>()
-                .Setup(s => s.AddMagnetTorrent(It.IsAny<PorlaSettings>(), It.IsAny<string>(), SomeTags))
+                .Setup(s => s.AddMagnetTorrent(It.IsAny<PorlaSettings>(), It.IsAny<string>(), It.IsAny<string[]>()))
                 .Throws<InvalidOperationException>();
 
             Mocker.GetMock<IPorlaProxy>()
-                .Setup(s => s.AddTorrentFile(It.IsAny<PorlaSettings>(), It.IsAny<byte[]>(), SomeTags))
+                .Setup(s => s.AddTorrentFile(It.IsAny<PorlaSettings>(), It.IsAny<byte[]>(), It.IsAny<string[]>()))
                 .Throws<InvalidOperationException>();
         }
 
@@ -240,21 +241,18 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.PorlaTests
                   .Returns<HttpRequest>(r => Task.FromResult(new HttpResponse(r, new HttpHeader(), new byte[1000])));
 
             Mocker.GetMock<IPorlaProxy>()
-                .Setup(s => s.AddMagnetTorrent(It.IsAny<PorlaSettings>(), It.IsAny<string>(), SomeTags))
+                .Setup(s => s.AddMagnetTorrent(It.IsAny<PorlaSettings>(), It.IsAny<string>(), It.IsAny<string[]>()))
                 .Callback(PrepareClientToReturnQueuedItem);
 
             Mocker.GetMock<IPorlaProxy>()
-                .Setup(s => s.AddTorrentFile(It.IsAny<PorlaSettings>(), It.IsAny<byte[]>(), SomeTags))
-                .Returns(new PorlaTorrent(_somehash, null))
+                .Setup(s => s.AddTorrentFile(It.IsAny<PorlaSettings>(), It.IsAny<byte[]>(), It.IsAny<string[]>()))
                 .Callback(PrepareClientToReturnQueuedItem);
         }
 
         protected virtual void GivenTorrents(ReadOnlyCollection<PorlaTorrentDetail> torrents)
         {
-            torrents ??= new ReadOnlyCollection<PorlaTorrentDetail>(new List<PorlaTorrentDetail>());
-
             Mocker.GetMock<IPorlaProxy>()
-                .Setup(s => s.ListTorrents(It.IsAny<PorlaSettings>(), 0, int.MaxValue))
+                .Setup(s => s.ListTorrents(It.IsAny<PorlaSettings>()))
                 .Returns(torrents);
         }
 
@@ -294,13 +292,14 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.PorlaTests
                 new List<PorlaTorrentDetail> { _paused }));
         }
 
-        [Test]
-        public void queued_item_should_have_required_properties()
-        {
-            PrepareClientToReturnQueuedItem();
-            var item = Subject.GetItems().Single();
-            VerifyQueued(item);
-        }
+        // TODO: We don't know what a Queued one looks like yet..
+        // [Test]
+        // public void queued_item_should_have_required_properties()
+        // {
+        //     PrepareClientToReturnQueuedItem();
+        //     var item = Subject.GetItems().Single();
+        //     VerifyQueued(item);
+        // }
 
         [Test]
         public void downloading_item_should_have_required_properties()
@@ -310,7 +309,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.PorlaTests
             VerifyDownloading(item);
         }
 
-        // NOTE: We don't have an example yet
+        // TODO: We don't have an example yet
         // [Test]
         // public void failed_item_should_have_required_properties()
         // {
@@ -352,33 +351,82 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.PorlaTests
             id.Should().NotBeNullOrEmpty();
         }
 
-        // TODO: figure out presets
-        [Test]
-        public void should_return_status_with_outputdirs_with_no_set_preset()
-        {
-            // var emptyPresets = new PorlaPreset();
-            var emptyPresetsDict = new Dictionary<string, PorlaPreset>();
-            var emptyROPresetsDict = new ReadOnlyDictionary<string, PorlaPreset>(emptyPresetsDict);
-            var someDir = "/tmp";
+        // presets test
 
-            // TODO: Idk how to mock the settings :( object. I want to know what the TvDirectory object is to use in the test below.
+        private readonly Dictionary<string, PorlaPreset> _emptyPresetsDict = new ();
+
+        protected void GivenSetupWithSettingsPreset(PorlaSettings ourSettings, Dictionary<string, PorlaPreset> theirPorlaPresets)
+        {
+            var roPresetsDict = new ReadOnlyDictionary<string, PorlaPreset>(theirPorlaPresets);
+
+            // mock settings to return ours instead of the default
+            Subject.Definition.Settings = ourSettings;
+
+            // mock proxy to return an empty presets
             Mocker.GetMock<IPorlaProxy>()
-                .Setup(v => v.ListPresets(It.Is<PorlaSettings>(s => s.TvDirectory == someDir)))
-                .Returns(emptyROPresetsDict);
+                .Setup(v => v.ListPresets(ourSettings))  // strict, our settings
+                .Returns(roPresetsDict);
+        }
+
+        [TestCase("localhost")]
+        [TestCase("127.0.0.1")]
+        public void should_have_correct_isLocalhost_is_true(string host)
+        {
+            // What we have setup
+            var ourSettings = new PorlaSettings
+            {
+                Host = host
+            };
+
+            GivenSetupWithSettingsPreset(ourSettings, _emptyPresetsDict);
 
             var result = Subject.GetStatus();
 
             result.IsLocalhost.Should().BeTrue();
+        }
+
+        [TestCase("not.localhost.com")]
+        [TestCase("1.4.20.68")]
+        public void should_have_correct_isLocalhost_is_false(string host)
+        {
+            // What we have setup
+            var ourSettings = new PorlaSettings
+            {
+                Host = host
+            };
+
+            GivenSetupWithSettingsPreset(ourSettings, _emptyPresetsDict);
+
+            var result = Subject.GetStatus();
+
+            result.IsLocalhost.Should().BeFalse();
+        }
+
+        [Test]
+        public void should_return_status_with_outputdirs_when_no_preset()
+        {
+            var someDir = "/tmp/other";
+
+            // What we have setup
+            var ourSettings = new PorlaSettings
+            {
+                TvDirectory = someDir,
+            };
+
+            GivenSetupWithSettingsPreset(ourSettings, _emptyPresetsDict);
+
+            var result = Subject.GetStatus();
+
             result.OutputRootFolders.Should().NotBeNull();
             result.OutputRootFolders.First().Should().Be(someDir);
         }
 
         [Test]
-        public void should_return_status_with_outputdirs_with_default_preset()
+        public void should_return_preset_outputdirs_via_default_preset_when_set_empty_tvdirectory()
         {
             var someDir = "/tmp/downloads";
 
-            // TODO: Should this be a It.Is<>(); ?
+            // What porla returns
             var presetWithSavePath = new PorlaPreset()
             {
                 SavePath = someDir
@@ -387,21 +435,23 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.PorlaTests
             {
                 { "default", presetWithSavePath }
             };
-            var defaultROPresetsDict = new ReadOnlyDictionary<string, PorlaPreset>(defaultPresetsDict);
 
-            Mocker.GetMock<IPorlaProxy>()
-                .Setup(v => v.ListPresets(It.Is<PorlaSettings>(s => s.TvDirectory == someDir && s.Preset == "default")))
-                .Returns(defaultROPresetsDict);
+            // What we have setup
+            var ourSettings = new PorlaSettings
+            {
+                TvDirectory = "" // set blank to use the preset's values
+            };
+
+            GivenSetupWithSettingsPreset(ourSettings, defaultPresetsDict);
 
             var result = Subject.GetStatus();
 
-            result.IsLocalhost.Should().BeTrue();
             result.OutputRootFolders.Should().NotBeNull();
             result.OutputRootFolders.First().Should().Be(someDir);
         }
 
         [Test]
-        public void should_return_status_with_outputdirs_with_alt_preset()
+        public void should_return_status_with_alt_outputdirs_when_alt_preset_set()
         {
             var someDir = "/home/user/downloads";
             var someOtherDir = "/data/downloads";
@@ -418,21 +468,23 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.PorlaTests
                 { "default", presetWithSomeSavePath },
                 { "alternative", presetWithSomeOtherSavePath }
             };
-            var comboROPresetsDict = new ReadOnlyDictionary<string, PorlaPreset>(comboPresetsDict);
 
-            Mocker.GetMock<IPorlaProxy>()
-                .Setup(v => v.ListPresets(It.Is<PorlaSettings>(s => s.TvDirectory == someOtherDir && s.Preset == "alternative")))
-                .Returns(comboROPresetsDict);
+            // What we have setup
+            var ourSettings = new PorlaSettings
+            {
+                Preset = "alternative"
+            };
+
+            GivenSetupWithSettingsPreset(ourSettings, comboPresetsDict);
 
             var result = Subject.GetStatus();
 
-            result.IsLocalhost.Should().BeTrue();
             result.OutputRootFolders.Should().NotBeNull();
             result.OutputRootFolders.First().Should().Be(someOtherDir);
         }
 
         [Test]
-        public void GetItems_should_ignore_torrents_with_a_different_category()
+        public void GetItems_should_ignore_torrents_with_a_different_category_even_if_porla_sends_us_some()
         {
             // TODO: should probs deep copy _downloading
             var someDownloadingTorrent = new PorlaTorrentDetail
@@ -472,9 +524,14 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.PorlaTests
 
             var torrents = new PorlaTorrentDetail[] { someDownloadingTorrent };
             var roTorrents = new ReadOnlyCollection<PorlaTorrentDetail>(torrents);
+
+            // should return nothing (we are making the request to porla that should filter for us) but let's say they do.
             Mocker.GetMock<IPorlaProxy>()
                 .Setup(v => v.ListTorrents(It.IsAny<PorlaSettings>(), 0, int.MaxValue))
                 .Returns(roTorrents);
+
+            Mocker.GetMock<Logger>()
+                .Verify(x => x.Warn(It.IsAny<string>), Times.AtLeastOnce);
 
             Subject.GetItems().Should().BeEmpty();
         }

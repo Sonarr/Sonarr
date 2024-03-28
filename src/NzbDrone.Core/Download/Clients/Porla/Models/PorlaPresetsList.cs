@@ -10,6 +10,12 @@ namespace NzbDrone.Core.Download.Clients.Porla.Models
         /// <summary> Gets the spesified preset values merged with the values from the default preset </summary>
         public static PorlaPreset GetEffective(this ReadOnlyDictionary<string, PorlaPreset> presets, string preset)
         {
+            if (presets == null)
+            {
+                // presets is null
+                return new PorlaPreset();
+            }
+
             var defaultExist  = presets.ContainsKey("default");
             var presetExist   = presets.ContainsKey(preset ?? "");
             var defaultPreset = presets.GetValueOrDefault("default");
