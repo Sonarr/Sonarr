@@ -2057,5 +2057,8 @@
     "DownloadClientDelugeSettingsDirectoryCompletedHelpText": "Local opcional para mover os downloads concluídos, deixe em branco para usar o local padrão do Deluge",
     "DownloadClientDelugeSettingsDirectoryHelpText": "Local opcional para colocar downloads, deixe em branco para usar o local padrão do Deluge",
     "EpisodeRequested": "Episódio Pedido",
-    "ReleaseProfileIndexerHelpTextWarning": "Definir um indexador específico em um perfil de lançamento fará com que esse perfil seja aplicado apenas a lançamentos desse indexador."
+    "ReleaseProfileIndexerHelpTextWarning": "Definir um indexador específico em um perfil de lançamento fará com que esse perfil seja aplicado apenas a lançamentos desse indexador.",
+    "ImportListsMyAnimeListSettingsAuthenticateWithMyAnimeList": "Autenticar com MyAnimeList",
+    "ImportListsMyAnimeListSettingsListStatus": "Status da Lista",
+    "ImportListsMyAnimeListSettingsListStatusHelpText": "Tipo de lista da qual você deseja importar, defina como 'Todas' para todas as listas"
 }
