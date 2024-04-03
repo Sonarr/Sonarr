@@ -2,12 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-
 using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
-using NzbDrone.Core.Download.Clients.FreeboxDownload;
 using NzbDrone.Core.Localization;
 
 namespace NzbDrone.Core.Notifications.Ntfy
@@ -153,11 +151,6 @@ namespace NzbDrone.Core.Notifications.Ntfy
 
                 throw new NtfyException("Unable to send text message: {0}", ex, ex.Message);
             }
-        }
-
-        private string GetBase64EncodedValue(string input)
-        {
-            return $"=?UTF-8?B?{input.EncodeBase64()}?=";
         }
     }
 }
