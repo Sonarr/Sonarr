@@ -555,7 +555,7 @@ namespace NzbDrone.Core.Parser
         private static readonly Regex SpecialEpisodeWordRegex = new Regex(@"\b(part|special|edition|christmas)\b\s?", RegexOptions.IgnoreCase | RegexOptions.Compiled);
         private static readonly Regex DuplicateSpacesRegex = new Regex(@"\s{2,}", RegexOptions.Compiled);
         private static readonly Regex SeasonFolderRegex = new Regex(@"^(?:S|Season|Saison|Series|Stagione)[-_. ]*(?<season>(?<!\d+)\d{1,4}(?!\d+))(?:[_. ]+(?!\d+)|$)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-        private static readonly Regex SimpleEpisodeNumberRegex = new Regex(@"^[ex]?(?<episode>(?<!\d+)\d{1,3}(?!\d+))(?:[ex-](?<episode>(?<!\d+)\d{1,3}(?!\d+)))?(?:[_. ]|$)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        private static readonly Regex SimpleEpisodeNumberRegex = new Regex(@"^[ex]?(?<episode>(?<!\d+)\d{1,3}(?!\d+))(?:[ex-](?<episode>(?<!\d+)\d{1,3}(?!\d+)))?(?:[_. ](?!\d+)(?<remaining>.+)|$)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         private static readonly Regex RequestInfoRegex = new Regex(@"^(?:\[.+?\])+", RegexOptions.Compiled);
 
@@ -564,30 +564,39 @@ namespace NzbDrone.Core.Parser
         public static ParsedEpisodeInfo ParsePath(string path)
         {
             var fileInfo = new FileInfo(path);
+            var result = ParseTitle(fileInfo.Name);
 
             // Parse using the folder and file separately, but combine if they both parse correctly.
-            var episodeNumberMatch = SimpleEpisodeNumberRegex.Matches(fileInfo.Name);
+            var episodeNumberMatch = SimpleEpisodeNumberRegex.Match(fileInfo.Name);
 
-            if (episodeNumberMatch.Count != 0 && fileInfo.Directory?.Name != null)
+            if (episodeNumberMatch.Success && fileInfo.Directory?.Name != null && (result == null || result.IsMiniSeries || result.AbsoluteEpisodeNumbers.Any()))
             {
-                var parsedFileInfo = ParseMatchCollection(episodeNumberMatch, fileInfo.Name);
+                var seasonMatch = SeasonFolderRegex.Match(fileInfo.Directory.Name);
 
-                if (parsedFileInfo != null)
+                if (seasonMatch.Success && seasonMatch.Groups["season"].Success)
                 {
-                    var seasonMatch = SeasonFolderRegex.Match(fileInfo.Directory.Name);
+                    var episodeCaptures = episodeNumberMatch.Groups["episode"].Captures.Cast<Capture>().ToList();
+                    var first = ParseNumber(episodeCaptures.First().Value);
+                    var last = ParseNumber(episodeCaptures.Last().Value);
+                    var pathTitle = $"S{seasonMatch.Groups["season"].Value}E{first:00}";
 
-                    if (seasonMatch.Success && seasonMatch.Groups["season"].Success)
+                    if (first != last)
                     {
-                        parsedFileInfo.SeasonNumber = int.Parse(seasonMatch.Groups["season"].Value);
-
-                        Logger.Debug("Episode parsed from file and folder names. {0}", parsedFileInfo);
-
-                        return parsedFileInfo;
+                        pathTitle += $"-E{last:00}";
                     }
+
+                    if (episodeNumberMatch.Groups["remaining"].Success)
+                    {
+                        pathTitle += $" {episodeNumberMatch.Groups["remaining"].Value}";
+                    }
+
+                    var parsedFileInfo = ParseTitle(pathTitle);
+
+                    Logger.Debug("Episode parsed from file and folder names. {0}", parsedFileInfo);
+
+                    return parsedFileInfo;
                 }
             }
-
-            var result = ParseTitle(fileInfo.Name);
 
             if (result == null && int.TryParse(Path.GetFileNameWithoutExtension(fileInfo.Name), out var number))
             {
@@ -1107,6 +1116,7 @@ namespace NzbDrone.Core.Parser
                 {
                     // If no season was found and it's not an absolute only release it should be treated as a mini series and season 1
                     result.SeasonNumber = 1;
+                    result.IsMiniSeries = true;
                 }
             }
             else
