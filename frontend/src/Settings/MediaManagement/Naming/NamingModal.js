@@ -475,7 +475,6 @@ class NamingModal extends Component {
                         )
                       }
                     </div>
-  
                     <div className={styles.footNote}>
                       <Icon className={styles.icon} name={icons.FOOTNOTE} />
                       <InlineMarkdown data={translate('EpisodeTitleFootNote')} />
