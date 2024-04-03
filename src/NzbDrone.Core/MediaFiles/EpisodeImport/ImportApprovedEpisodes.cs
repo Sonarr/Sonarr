@@ -123,6 +123,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                     else
                     {
                         episodeFile.IndexerFlags = localEpisode.IndexerFlags;
+                        episodeFile.ReleaseType = localEpisode.ReleaseType;
                     }
 
                     // Fall back to parsed information if history is unavailable or missing

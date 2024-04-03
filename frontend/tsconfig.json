@@ -29,7 +29,7 @@
       "./src/**/*",
       "./.eslintrc.js",
       "./build/webpack.config.js",
-      "./typings/*.ts",
+      "./typings/*.ts", "src/Episode/getReleaseTypeName/.ts",
   ],
   "exclude": [
     "node_modules"
