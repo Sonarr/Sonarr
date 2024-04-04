@@ -198,5 +198,7 @@
     "AppUpdated": "{appName} actualizat",
     "ShowRelativeDatesHelpText": "Afișați datele relative (Azi / Ieri / etc) sau absolute",
     "WeekColumnHeader": "Antetul coloanei săptămânii",
-    "TimeFormat": "Format ora"
+    "TimeFormat": "Format ora",
+    "CustomFilter": "Filtru personalizat",
+    "CustomFilters": "Filtre personalizate"
 }

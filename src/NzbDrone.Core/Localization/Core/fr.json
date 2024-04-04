@@ -2057,5 +2057,8 @@
     "NotificationsPlexValidationNoTvLibraryFound": "Au moins une bibliothèque de télévision est requise",
     "DatabaseMigration": "Migration des bases de données",
     "Filters": "Filtres",
-    "ReleaseProfileIndexerHelpTextWarning": "L'utilisation d'un indexeur spécifique avec des profils de version peut entraîner la saisie de publications en double."
+    "ReleaseProfileIndexerHelpTextWarning": "L'utilisation d'un indexeur spécifique avec des profils de version peut entraîner la saisie de publications en double.",
+    "ImportListsMyAnimeListSettingsListStatus": "Statut de la liste",
+    "ImportListsMyAnimeListSettingsListStatusHelpText": "Type de liste à partir de laquelle vous souhaitez importer, défini sur 'All' pour toutes les listes",
+    "ImportListsMyAnimeListSettingsAuthenticateWithMyAnimeList": "Authentifiez-vous avec MyAnimeList"
 }
