@@ -94,5 +94,15 @@
     "AudioLanguages": "Мови аудіо",
     "AuthForm": "Форми (сторінка входу)",
     "Authentication": "Автентифікація",
-    "AuthenticationMethod": "Метод автентифікації"
+    "AuthenticationMethod": "Метод автентифікації",
+    "Yes": "Так",
+    "AuthenticationRequired": "Потрібна Автентифікація",
+    "UpdateAll": "Оновити все",
+    "WhatsNew": "Що нового ?",
+    "Yesterday": "Вчора",
+    "AddedToDownloadQueue": "Додано в чергу на завантаження",
+    "AuthenticationRequiredWarning": "Щоб запобігти віддаленому доступу без автентифікації, {appName} тепер вимагає ввімкнення автентифікації. За бажанням можна вимкнути автентифікацію з локальних адрес.",
+    "AutomaticUpdatesDisabledDocker": "Автоматичні оновлення не підтримуються безпосередньо під час використання механізму оновлення Docker. Вам потрібно буде оновити зображення контейнера за межами {appName} або скористатися сценарієм",
+    "AuthenticationRequiredPasswordHelpTextWarning": "Введіть новий пароль",
+    "AuthenticationRequiredUsernameHelpTextWarning": "Введіть нове ім'я користувача"
 }
