@@ -379,7 +379,7 @@
   "DeleteTagMessageText": "Are you sure you want to delete the tag '{label}'?",
   "Deleted": "Deleted",
   "DeletedReasonEpisodeMissingFromDisk": "{appName} was unable to find the file on disk so the file was unlinked from the episode in the database",
-  "DeletedReasonManual": "File was deleted by via UI",
+  "DeletedReasonManual": "File was deleted using {appName}, either manually or by another tool through the API",
   "DeletedReasonUpgrade": "File was deleted to import an upgrade",
   "DeletedSeriesDescription": "Series was deleted from TheTVDB",
   "Destination": "Destination",
