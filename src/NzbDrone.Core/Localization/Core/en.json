@@ -278,6 +278,7 @@
   "CustomFormats": "Custom Formats",
   "CustomFormatsLoadError": "Unable to load Custom Formats",
   "CustomFormatsSettings": "Custom Formats Settings",
+  "CustomFormatsSettingsTriggerInfo": "A Custom Format will be applied to a release or file when it matches at least one of each of the different condition types chosen.",
   "CustomFormatsSettingsSummary": "Custom Formats and Settings",
   "CustomFormatsSpecificationFlag": "Flag",
   "CustomFormatsSpecificationLanguage": "Language",
