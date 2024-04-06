@@ -80,19 +80,19 @@ const fileNameTokens = [
 ];
 
 const seriesTokens = [
-  { token: '{Series Title}', example: 'The Series Title\'s!' },
-  { token: '{Series CleanTitle}', example: 'The Series Title\'s!' },
-  { token: '{Series TitleYear}', example: 'The Series Title\'s! (2010)' },
-  { token: '{Series CleanTitleYear}', example: 'The Series Title\'s! 2010' },
-  { token: '{Series TitleWithoutYear}', example: 'The Series Title\'s!' },
-  { token: '{Series CleanTitleWithoutYear}', example: 'The Series Title\'s!' },
-  { token: '{Series TitleThe}', example: 'Series Title\'s!, The' },
-  { token: '{Series CleanTitleThe}', example: 'Series Title\'s!, The' },
-  { token: '{Series TitleTheYear}', example: 'Series Title\'s!, The (2010)' },
-  { token: '{Series CleanTitleTheYear}', example: 'Series Title\'s!, The 2010' },
-  { token: '{Series TitleTheWithoutYear}', example: 'Series Title\'s!, The' },
-  { token: '{Series CleanTitleTheWithoutYear}', example: 'Series Title\'s!, The' },
-  { token: '{Series TitleFirstCharacter}', example: 'S' },
+  { token: '{Series Title}', example: 'The Series Title\'s!', footNote: 1 },
+  { token: '{Series CleanTitle}', example: 'The Series Title\'s!', footNote: 1 },
+  { token: '{Series TitleYear}', example: 'The Series Title\'s! (2010)', footNote: 1 },
+  { token: '{Series CleanTitleYear}', example: 'The Series Title\'s! 2010', footNote: 1 },
+  { token: '{Series TitleWithoutYear}', example: 'The Series Title\'s!', footNote: 1 },
+  { token: '{Series CleanTitleWithoutYear}', example: 'The Series Title\'s!', footNote: 1 },
+  { token: '{Series TitleThe}', example: 'Series Title\'s!, The', footNote: 1 },
+  { token: '{Series CleanTitleThe}', example: 'Series Title\'s!, The', footNote: 1 },
+  { token: '{Series TitleTheYear}', example: 'Series Title\'s!, The (2010)', footNote: 1 },
+  { token: '{Series CleanTitleTheYear}', example: 'Series Title\'s!, The 2010', footNote: 1 },
+  { token: '{Series TitleTheWithoutYear}', example: 'Series Title\'s!, The', footNote: 1 },
+  { token: '{Series CleanTitleTheWithoutYear}', example: 'Series Title\'s!, The', footNote: 1 },
+  { token: '{Series TitleFirstCharacter}', example: 'S', footNote: 1 },
   { token: '{Series Year}', example: '2010' }
 ];
 
@@ -124,8 +124,8 @@ const absoluteTokens = [
 ];
 
 const episodeTitleTokens = [
-  { token: '{Episode Title}', example: 'Episode\'s Title' },
-  { token: '{Episode CleanTitle}', example: 'Episodes Title' }
+  { token: '{Episode Title}', example: 'Episode\'s Title', footNote: 1 },
+  { token: '{Episode CleanTitle}', example: 'Episodes Title', footNote: 1 }
 ];
 
 const qualityTokens = [
@@ -149,7 +149,7 @@ const mediaInfoTokens = [
 ];
 
 const otherTokens = [
-  { token: '{Release Group}', example: 'Rls Grp' },
+  { token: '{Release Group}', example: 'Rls Grp', footNote: 1 },
   { token: '{Custom Formats}', example: 'iNTERNAL' },
   { token: '{Custom Format:FormatName}', example: 'AMZN' }
 ];
@@ -305,7 +305,7 @@ class NamingModal extends Component {
             <FieldSet legend={translate('Series')}>
               <div className={styles.groups}>
                 {
-                  seriesTokens.map(({ token, example }) => {
+                  seriesTokens.map(({ token, example, footNote }) => {
                     return (
                       <NamingOption
                         key={token}
@@ -313,6 +313,7 @@ class NamingModal extends Component {
                         value={value}
                         token={token}
                         example={example}
+                        footNote={footNote}
                         tokenSeparator={tokenSeparator}
                         tokenCase={tokenCase}
                         onPress={this.onOptionPress}
@@ -321,6 +322,11 @@ class NamingModal extends Component {
                   }
                   )
                 }
+              </div>
+
+              <div className={styles.footNote}>
+                <Icon className={styles.icon} name={icons.FOOTNOTE} />
+                <InlineMarkdown data={translate('SeriesFootNote')} />
               </div>
             </FieldSet>
 
@@ -451,7 +457,7 @@ class NamingModal extends Component {
                   <FieldSet legend={translate('EpisodeTitle')}>
                     <div className={styles.groups}>
                       {
-                        episodeTitleTokens.map(({ token, example }) => {
+                        episodeTitleTokens.map(({ token, example, footNote }) => {
                           return (
                             <NamingOption
                               key={token}
@@ -459,6 +465,7 @@ class NamingModal extends Component {
                               value={value}
                               token={token}
                               example={example}
+                              footNote={footNote}
                               tokenSeparator={tokenSeparator}
                               tokenCase={tokenCase}
                               onPress={this.onOptionPress}
@@ -467,6 +474,10 @@ class NamingModal extends Component {
                         }
                         )
                       }
+                    </div>
+                    <div className={styles.footNote}>
+                      <Icon className={styles.icon} name={icons.FOOTNOTE} />
+                      <InlineMarkdown data={translate('EpisodeTitleFootNote')} />
                     </div>
                   </FieldSet>
 
@@ -523,7 +534,7 @@ class NamingModal extends Component {
                   <FieldSet legend={translate('Other')}>
                     <div className={styles.groups}>
                       {
-                        otherTokens.map(({ token, example }) => {
+                        otherTokens.map(({ token, example, footNote }) => {
                           return (
                             <NamingOption
                               key={token}
@@ -531,6 +542,7 @@ class NamingModal extends Component {
                               value={value}
                               token={token}
                               example={example}
+                              footNote={footNote}
                               tokenSeparator={tokenSeparator}
                               tokenCase={tokenCase}
                               onPress={this.onOptionPress}
@@ -557,6 +569,11 @@ class NamingModal extends Component {
                         }
                         )
                       }
+                    </div>
+
+                    <div className={styles.footNote}>
+                      <Icon className={styles.icon} name={icons.FOOTNOTE} />
+                      <InlineMarkdown data={translate('ReleaseGroupFootNote')} />
                     </div>
                   </FieldSet>
 
