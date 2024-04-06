@@ -15,6 +15,7 @@ export interface InteractiveImportCommandOptions {
   quality: QualityModel;
   languages: Language[];
   indexerFlags: number;
+  releaseType: ReleaseType;
   downloadId?: string;
   episodeFileId?: number;
 }

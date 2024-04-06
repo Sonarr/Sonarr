@@ -36,6 +36,7 @@ import InteractiveImport, {
 import SelectLanguageModal from 'InteractiveImport/Language/SelectLanguageModal';
 import SelectQualityModal from 'InteractiveImport/Quality/SelectQualityModal';
 import SelectReleaseGroupModal from 'InteractiveImport/ReleaseGroup/SelectReleaseGroupModal';
+import SelectReleaseTypeModal from 'InteractiveImport/ReleaseType/SelectReleaseTypeModal';
 import SelectSeasonModal from 'InteractiveImport/Season/SelectSeasonModal';
 import SelectSeriesModal from 'InteractiveImport/Series/SelectSeriesModal';
 import Language from 'Language/Language';
@@ -73,7 +74,8 @@ type SelectType =
   | 'releaseGroup'
   | 'quality'
   | 'language'
-  | 'indexerFlags';
+  | 'indexerFlags'
+  | 'releaseType';
 
 type FilterExistingFiles = 'all' | 'new';
 
@@ -125,6 +127,12 @@ const COLUMNS = [
   {
     name: 'size',
     label: () => translate('Size'),
+    isSortable: true,
+    isVisible: true,
+  },
+  {
+    name: 'releaseType',
+    label: () => translate('ReleaseType'),
     isSortable: true,
     isVisible: true,
   },
@@ -369,6 +377,10 @@ function InteractiveImportModalContent(
         key: 'indexerFlags',
         value: translate('SelectIndexerFlags'),
       },
+      {
+        key: 'releaseType',
+        value: translate('SelectReleaseType'),
+      },
     ];
 
     if (allowSeriesChange) {
@@ -511,6 +523,7 @@ function InteractiveImportModalContent(
           languages,
           indexerFlags,
           episodeFileId,
+          releaseType,
         } = item;
 
         if (!series) {
@@ -560,6 +573,7 @@ function InteractiveImportModalContent(
               quality,
               languages,
               indexerFlags,
+              releaseType,
             });
 
             return;
@@ -575,6 +589,7 @@ function InteractiveImportModalContent(
           quality,
           languages,
           indexerFlags,
+          releaseType,
           downloadId,
           episodeFileId,
         });
@@ -777,6 +792,22 @@ function InteractiveImportModalContent(
         updateInteractiveImportItems({
           ids: selectedIds,
           indexerFlags,
+        })
+      );
+
+      dispatch(reprocessInteractiveImportItems({ ids: selectedIds }));
+
+      setSelectModalOpen(null);
+    },
+    [selectedIds, dispatch]
+  );
+
+  const onReleaseTypeSelect = useCallback(
+    (releaseType: string) => {
+      dispatch(
+        updateInteractiveImportItems({
+          ids: selectedIds,
+          releaseType,
         })
       );
 
@@ -997,6 +1028,14 @@ function InteractiveImportModalContent(
         indexerFlags={0}
         modalTitle={modalTitle}
         onIndexerFlagsSelect={onIndexerFlagsSelect}
+        onModalClose={onSelectModalClose}
+      />
+
+      <SelectReleaseTypeModal
+        isOpen={selectModalOpen === 'releaseType'}
+        releaseType="unknown"
+        modalTitle={modalTitle}
+        onReleaseTypeSelect={onReleaseTypeSelect}
         onModalClose={onSelectModalClose}
       />
 
