@@ -12,7 +12,7 @@ export default function TagInUse(props) {
     return null;
   }
 
-  if (count > 1 && labelPlural ) {
+  if (count > 1 && labelPlural) {
     return (
       <div>
         {count} {labelPlural.toLowerCase()}

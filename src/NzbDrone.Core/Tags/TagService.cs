@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Core.AutoTagging;
+using NzbDrone.Core.AutoTagging.Specifications;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.ImportLists;
@@ -120,7 +121,7 @@ namespace NzbDrone.Core.Tags
             var restrictions = _releaseProfileService.All();
             var series = _seriesService.GetAllSeriesTags();
             var indexers = _indexerService.All();
-            var autotags = _autoTaggingService.All();
+            var autoTags = _autoTaggingService.All();
             var downloadClients = _downloadClientFactory.All();
 
             var details = new List<TagDetails>();
@@ -137,7 +138,7 @@ namespace NzbDrone.Core.Tags
                         RestrictionIds = restrictions.Where(c => c.Tags.Contains(tag.Id)).Select(c => c.Id).ToList(),
                         SeriesIds = series.Where(c => c.Value.Contains(tag.Id)).Select(c => c.Key).ToList(),
                         IndexerIds = indexers.Where(c => c.Tags.Contains(tag.Id)).Select(c => c.Id).ToList(),
-                        AutoTagIds = autotags.Where(c => c.Tags.Contains(tag.Id)).Select(c => c.Id).ToList(),
+                        AutoTagIds = GetAutoTagIds(tag, autoTags),
                         DownloadClientIds = downloadClients.Where(c => c.Tags.Contains(tag.Id)).Select(c => c.Id).ToList(),
                     });
             }
@@ -187,6 +188,24 @@ namespace NzbDrone.Core.Tags
 
             _repo.Delete(tagId);
             _eventAggregator.PublishEvent(new TagsUpdatedEvent());
+        }
+
+        private List<int> GetAutoTagIds(Tag tag, List<AutoTag> autoTags)
+        {
+            var autoTagIds = autoTags.Where(c => c.Tags.Contains(tag.Id)).Select(c => c.Id).ToList();
+
+            foreach (var autoTag in autoTags)
+            {
+                foreach (var specification in autoTag.Specifications)
+                {
+                    if (specification is TagSpecification)
+                    {
+                        autoTagIds.Add(autoTag.Id);
+                    }
+                }
+            }
+
+            return autoTagIds.Distinct().ToList();
         }
     }
 }

@@ -27,6 +27,8 @@ function getType({ type, selectOptionsProviderAction }) {
         return inputTypes.DYNAMIC_SELECT;
       }
       return inputTypes.SELECT;
+    case 'seriesTag':
+      return inputTypes.SERIES_TAG;
     case 'tag':
       return inputTypes.TEXT_TAG;
     case 'tagSelect':
