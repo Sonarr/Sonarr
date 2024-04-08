@@ -1102,7 +1102,7 @@
     "ImportMechanismEnableCompletedDownloadHandlingIfPossibleMultiComputerHealthCheckMessage": "Activer la gestion des téléchargements terminés si possible (multi-ordinateur non pris en charge)",
     "ImportMechanismHandlingDisabledHealthCheckMessage": "Activer la gestion des téléchargements terminés",
     "ImportUsingScript": "Importer à l'aide d'un script",
-    "IncludeHealthWarnings": "Inclure des avertissements de santé",
+    "IncludeHealthWarnings": "Inclure les avertissements de santé",
     "Indexer": "Indexeur",
     "LibraryImportTipsSeriesUseRootFolder": "Pointez {appName} vers le dossier contenant toutes vos émissions de télévision, pas une en particulier. par exemple. \"`{goodFolderExample}`\" et non \"`{badFolderExample}`\". De plus, chaque série doit se trouver dans son propre dossier dans le dossier racine/bibliothèque.",
     "Links": "Liens",
@@ -1249,7 +1249,7 @@
     "Debug": "Déboguer",
     "DelayProfileSeriesTagsHelpText": "S'applique aux séries avec au moins une balise correspondante",
     "DelayingDownloadUntil": "Retarder le téléchargement jusqu'au {date} à {time}",
-    "DeletedReasonManual": "Le fichier a été supprimé via l'interface utilisateur",
+    "DeletedReasonManual": "Le fichier a été supprimé à l'aide de {appName}, soit manuellement, soit par un autre outil via l'API.",
     "DeleteRemotePathMapping": "Supprimer la correspondance de chemin distant",
     "DestinationPath": "Chemin de destination",
     "DestinationRelativePath": "Chemin relatif de destination",
@@ -2060,5 +2060,11 @@
     "ReleaseProfileIndexerHelpTextWarning": "L'utilisation d'un indexeur spécifique avec des profils de version peut entraîner la saisie de publications en double.",
     "ImportListsMyAnimeListSettingsListStatus": "Statut de la liste",
     "ImportListsMyAnimeListSettingsListStatusHelpText": "Type de liste à partir de laquelle vous souhaitez importer, défini sur 'All' pour toutes les listes",
-    "ImportListsMyAnimeListSettingsAuthenticateWithMyAnimeList": "Authentifiez-vous avec MyAnimeList"
+    "ImportListsMyAnimeListSettingsAuthenticateWithMyAnimeList": "Authentifiez-vous avec MyAnimeList",
+    "CustomFormatsSettingsTriggerInfo": "Un format personnalisé sera appliqué à une version ou à un fichier lorsqu'il correspond à au moins un de chacun des différents types de conditions choisis.",
+    "ClickToChangeReleaseType": "Cliquez pour changer le type de version",
+    "EpisodeTitleFootNote": "Contrôlez éventuellement la troncature à un nombre maximum d'octets, y compris les points de suspension (`...`). La troncature de la fin (par exemple `{Episode Title:30}`) ou du début (par exemple `{Episode Title:-30}`) sont toutes deux prises en charge. Les titres des épisodes seront automatiquement tronqués en fonction des limitations du système de fichiers si nécessaire.",
+    "SelectReleaseType": "Sélectionnez le type de version",
+    "SeriesFootNote": "Contrôlez éventuellement la troncature à un nombre maximum d'octets, y compris les points de suspension (`...`). La troncature de la fin (par exemple `{Series Title:30}`) ou du début (par exemple `{Series Title:-30}`) sont toutes deux prises en charge.",
+    "ReleaseGroupFootNote": "Contrôlez éventuellement la troncature à un nombre maximum d'octets, y compris les points de suspension (`...`). La troncature de la fin (par exemple `{Release Group:30}`) ou du début (par exemple `{Release Group:-30}`) sont toutes deux prises en charge.`)."
 }

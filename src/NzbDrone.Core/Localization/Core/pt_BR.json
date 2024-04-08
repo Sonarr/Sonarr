@@ -605,11 +605,11 @@
     "Importing": "Importando",
     "IncludeCustomFormatWhenRenaming": "Incluir formato personalizado ao renomear",
     "IncludeCustomFormatWhenRenamingHelpText": "Incluir no formato de renomeação {Custom Formats}",
-    "IncludeHealthWarnings": "Incluir Advertências de Saúde",
+    "IncludeHealthWarnings": "Incluir Alertas de Saúde",
     "IndexerDownloadClientHelpText": "Especifique qual cliente de download é usado para baixar deste indexador",
     "IndexerOptionsLoadError": "Não foi possível carregar as opções do indexador",
     "IndexerPriority": "Prioridade do indexador",
-    "IndexerPriorityHelpText": "Prioridade do indexador de 1 (mais alta) a 50 (mais baixa). Padrão: 25. Usado como desempate para lançamentos iguais ao obter lançamentos, o {appName} ainda usará todos os indexadores habilitados para sincronização e pesquisa de RSS",
+    "IndexerPriorityHelpText": "Prioridade do indexador de 1 (mais alta) a 50 (mais baixa). Padrão: 25. Usado ao capturar lançamentos como desempate para lançamentos iguais, {appName} ainda usará todos os indexadores habilitados para sincronização e pesquisa de RSS",
     "IndexerSettings": "Configurações do indexador",
     "IndexersLoadError": "Não foi possível carregar os indexadores",
     "IndexersSettingsSummary": "Indexadores e opções de indexador",
@@ -2060,5 +2060,6 @@
     "ReleaseProfileIndexerHelpTextWarning": "Definir um indexador específico em um perfil de lançamento fará com que esse perfil seja aplicado apenas a lançamentos desse indexador.",
     "ImportListsMyAnimeListSettingsAuthenticateWithMyAnimeList": "Autenticar com MyAnimeList",
     "ImportListsMyAnimeListSettingsListStatus": "Status da Lista",
-    "ImportListsMyAnimeListSettingsListStatusHelpText": "Tipo de lista da qual você deseja importar, defina como 'Todas' para todas as listas"
+    "ImportListsMyAnimeListSettingsListStatusHelpText": "Tipo de lista da qual você deseja importar, defina como 'Todas' para todas as listas",
+    "CustomFormatsSettingsTriggerInfo": "Um formato personalizado será aplicado a um lançamento ou arquivo quando corresponder a pelo menos um de cada um dos diferentes tipos de condição escolhidos."
 }
