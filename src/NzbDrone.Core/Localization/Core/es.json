@@ -267,7 +267,7 @@
     "DeletedReasonUpgrade": "Se ha borrado el archivo para importar una versión mejorada",
     "DeleteTagMessageText": "¿Está seguro de querer eliminar la etiqueta '{label}'?",
     "DisabledForLocalAddresses": "Deshabilitado para Direcciones Locales",
-    "DeletedReasonManual": "El archivo fue borrado por vía UI",
+    "DeletedReasonManual": "El archivo fue eliminado usando {appName}, o bien manualmente o por otra herramienta a través de la API",
     "ClearBlocklist": "Limpiar lista de bloqueos",
     "AuthenticationRequiredPasswordConfirmationHelpTextWarning": "Confirma la nueva contraseña",
     "MonitorPilotEpisode": "Episodio Piloto",
@@ -2060,5 +2060,11 @@
     "ReleaseProfileIndexerHelpTextWarning": "Establecer un indexador específico en un perfil de lanzamiento provocará que este perfil solo se aplique a lanzamientos desde ese indexador.",
     "ImportListsMyAnimeListSettingsAuthenticateWithMyAnimeList": "Autenticar con MyAnimeList",
     "ImportListsMyAnimeListSettingsListStatus": "Estado de lista",
-    "ImportListsMyAnimeListSettingsListStatusHelpText": "Tipo de lista desde la que quieres importar, establecer a 'Todo' para todas las listas"
+    "ImportListsMyAnimeListSettingsListStatusHelpText": "Tipo de lista desde la que quieres importar, establecer a 'Todo' para todas las listas",
+    "CustomFormatsSettingsTriggerInfo": "Un formato personalizado será aplicado al lanzamiento o archivo cuando coincida con al menos uno de los diferentes tipos de condición elegidos.",
+    "ClickToChangeReleaseType": "Haz clic para cambiar el tipo de lanzamiento",
+    "ReleaseGroupFootNote": "Opcionalmente controla el truncamiento hasta un número máximo de bytes, incluyendo elipsis (`...`). Está soportado truncar tanto desde el final (p. ej. `{Grupo de lanzamiento:30}`) como desde el principio (p. ej. `{Grupo de lanzamiento:-30}`).",
+    "SelectReleaseType": "Seleccionar tipo de lanzamiento",
+    "SeriesFootNote": "Opcionalmente controla el truncamiento hasta un número máximo de bytes, incluyendo elipsis (`...`). Está soportado truncar tanto desde el final (p. ej. `{Título de serie:30}`) como desde el principio (p. ej. `{Título de serie:-30}`).",
+    "EpisodeTitleFootNote": "Opcionalmente controla el truncamiento hasta un número máximo de bytes, incluyendo elipsis (`...`). Está soportado truncar tanto desde el final (p. ej. `{Título de episodio:30}`) como desde el principio (p. ej. `{Título de episodio:-30}`). Los títulos de episodio serán truncados automáticamente acorde a las limitaciones del sistema de archivos si es necesario."
 }
