@@ -6,15 +6,16 @@ namespace NzbDrone.Mono.Disk
 {
     public static class FindDriveType
     {
-        private static readonly Dictionary<string, DriveType> DriveTypeMap = new Dictionary<string, DriveType>
-                                                                                  {
-                                                                                      { "afpfs", DriveType.Network },
-                                                                                      { "apfs", DriveType.Fixed },
-                                                                                      { "fuse.mergerfs", DriveType.Fixed },
-                                                                                      { "fuse.glusterfs", DriveType.Network },
-                                                                                      { "nullfs", DriveType.Fixed },
-                                                                                      { "zfs", DriveType.Fixed }
-                                                                                  };
+        private static readonly Dictionary<string, DriveType> DriveTypeMap = new ()
+        {
+            { "afpfs", DriveType.Network },
+            { "apfs", DriveType.Fixed },
+            { "fuse.mergerfs", DriveType.Fixed },
+            { "fuse.shfs", DriveType.Fixed },
+            { "fuse.glusterfs", DriveType.Network },
+            { "nullfs", DriveType.Fixed },
+            { "zfs", DriveType.Fixed }
+        };
 
         public static DriveType Find(string driveFormat)
         {
