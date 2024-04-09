@@ -8292,9 +8292,7 @@
             "nullable": true
           },
           "releaseType": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
+            "$ref": "#/components/schemas/ReleaseType"
           },
           "mediaInfo": {
             "$ref": "#/components/schemas/MediaInfoResource"
@@ -10232,6 +10230,9 @@
             "type": "boolean"
           },
           "isSplitEpisode": {
+            "type": "boolean"
+          },
+          "isMiniSeries": {
             "type": "boolean"
           },
           "special": {
