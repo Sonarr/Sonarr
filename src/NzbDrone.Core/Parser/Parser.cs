@@ -294,10 +294,10 @@ namespace NzbDrone.Core.Parser
                 new Regex(@"^(?<title>.+?)(?:_|-|\s|\.)+S(?<season>\d{2}(?!\d+))(\W-\W)E(?<episode>(?<!\d+)\d{2}(?!\d+))(?!\\)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
-                // Season and episode numbers in square brackets (single and mult-episode)
+                // Season and episode numbers in square brackets (single and multi-episode)
                 // Series Title - [02x01] - Episode 1
                 // Series Title - [02x01x02] - Episode 1
-                new Regex(@"^(?<title>.+?)?(?:[-_\W](?<![()\[!]))+\[(?<season>(?<!\d+)\d{1,2})(?:(?:-|x){1,2}(?<episode>\d{2}))+\].+?(?:\.|$)",
+                new Regex(@"^(?<title>.+?)?(?:[-_\W](?<![()\[!]))+\[(?:s)?(?<season>(?<!\d+)\d{1,2})(?:(?:[ex])(?<episode>\d{2}))(?:(?:[-ex]){1,2}(?<episode>\d{2}))*\].+?(?:\.|$)",
                     RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 // Anime - Title with season number - Absolute Episode Number (Title S01 - EP14)
@@ -326,10 +326,6 @@ namespace NzbDrone.Core.Parser
 
                 // 4 digit season only releases
                 new Regex(@"^(?<title>.+?)[-_. ]+?(?:S|Season|Saison|Series|Stagione)[-_. ]?(?<season>\d{4}(?![-_. ]?\d+))(\W+|_|$)(?<extras>EXTRAS|SUBPACK)?(?!\\)",
-                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
-
-                // Episodes with a title and season/episode in square brackets
-                new Regex(@"^(?<title>.+?)(?:(?:[-_\W](?<![()\[!]))+\[S?(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:\-|[ex]|\W[ex]|_){1,2}(?<episode>(?<!\d+)\d{2}(?!\d+|i|p)))+\])\W?(?!\\)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 // Supports 103/113 naming
@@ -407,6 +403,10 @@ namespace NzbDrone.Core.Parser
 
                 // Anime - Title Episode/Episodio Absolute Episode Number
                 new Regex(@"^(?:\[(?<subgroup>.+?)\][-_. ]?)?(?<title>.+?)[-_. ]+(?:Episode|Episodio)(?:[-_. ]+(?<absoluteepisode>(?<!\d+)\d{2,4}(\.\d{1,2})?(?!\d+|[ip])))+.*?(?<hash>[(\[]\w{8}[)\]])?$",
+                    RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
+                // Anime - Title [Absolute Episode Number] from AniLibriaTV
+                new Regex(@"^(?:\[(?<subgroup>.+?)\][-_. ]?)?(?<title>.+?)(?:[-_. ]\[)(?:(?:-?)(?<absoluteepisode>(?<!\d+)\d{2,3}(\.\d{1,2})?(?!\d+|[ip])))+(?:\][-_. ]).*?(?<hash>[(\[]\w{8}[)\]])?$",
                     RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 // Anime - Title Absolute Episode Number

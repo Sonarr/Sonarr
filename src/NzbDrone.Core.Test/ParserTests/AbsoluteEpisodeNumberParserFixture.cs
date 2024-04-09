@@ -134,6 +134,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[Naruto-Kun.Hu] Anime Triangle - 08 [1080p].mkv", "Anime Triangle", 8, 0, 0)]
         [TestCase("[Mystic Z-Team] Series Title Super - Episode 013 VF - Non-censuré [720p].mp4", "Series Title Super", 13, 0, 0)]
         [TestCase("Series Title Kai Episodio 13 Audio Latino", "Series Title Kai", 13, 0, 0)]
+        [TestCase("Series_Title_2_[01]_[AniLibria_TV]_[WEBRip_1080p]", "Series Title 2", 1, 0, 0)]
 
         // [TestCase("", "", 0, 0, 0)]
         public void should_parse_absolute_numbers(string postTitle, string title, int absoluteEpisodeNumber, int seasonNumber, int episodeNumber)
@@ -179,6 +180,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[Erai-raws] Series-Title! 2 - 01~10 [1080p][Multiple Subtitle]", "Series-Title! 2", 1, 10)]
         [TestCase("[Erai-raws] Series Title! - 01 ~ 10 [1080p][Multiple Subtitle]", "Series Title!", 1, 10)]
         [TestCase("[Erai-raws] Series-Title! 2 - 01 ~ 10 [1080p][Multiple Subtitle]", "Series-Title! 2", 1, 10)]
+        [TestCase("Series_Title_2_[01-05]_[AniLibria_TV]_[WEBRip_1080p]", "Series Title 2", 1, 5)]
 
         // [TestCase("", "", 1, 2)]
         public void should_parse_multi_episode_absolute_numbers(string postTitle, string title, int firstAbsoluteEpisodeNumber, int lastAbsoluteEpisodeNumber)
