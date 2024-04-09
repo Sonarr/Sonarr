@@ -127,6 +127,7 @@ coverage*.xml
 coverage*.json
 setup/Output/
 *.~is
+.mono
 
 #VS outout folders
 bin

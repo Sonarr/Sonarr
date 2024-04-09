@@ -175,16 +175,46 @@
     </Otherwise>
   </Choose>
 
+  <!--
+       Set architecture to RuntimeInformation.ProcessArchitecture if not specified -->
+  <Choose>
+    <When Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::ProcessArchitecture)' == 'X64'">
+      <PropertyGroup>
+        <Architecture>x64</Architecture>
+      </PropertyGroup>
+    </When>
+    <When Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::ProcessArchitecture)' == 'X86'">
+      <PropertyGroup>
+        <Architecture>x86</Architecture>
+      </PropertyGroup>
+    </When>
+    <When Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::ProcessArchitecture)' == 'Arm64'">
+      <PropertyGroup>
+        <Architecture>arm64</Architecture>
+      </PropertyGroup>
+    </When>
+    <When Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::ProcessArchitecture)' == 'Arm'">
+      <PropertyGroup>
+        <Architecture>arm</Architecture>
+      </PropertyGroup>
+    </When>
+    <Otherwise>
+      <PropertyGroup>
+        <Architecture></Architecture>
+      </PropertyGroup>
+    </Otherwise>
+  </Choose>
+
   <PropertyGroup Condition="'$(IsWindows)' == 'true' and
                             '$(RuntimeIdentifier)' == ''">
     <_UsingDefaultRuntimeIdentifier>true</_UsingDefaultRuntimeIdentifier>
-    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <RuntimeIdentifier>win-$(Architecture)</RuntimeIdentifier>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(IsLinux)' == 'true' and
                             '$(RuntimeIdentifier)' == ''">
     <_UsingDefaultRuntimeIdentifier>true</_UsingDefaultRuntimeIdentifier>
-    <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
+    <RuntimeIdentifier>linux-$(Architecture)</RuntimeIdentifier>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(IsOSX)' == 'true' and
