@@ -706,7 +706,7 @@ namespace NzbDrone.Core.Organizer
                     return string.Empty;
                 }
 
-                return customFormats.Where(x => x.IncludeCustomFormatWhenRenaming && x.Name == m.CustomFormat).FirstOrDefault()?.ToString() ?? string.Empty;
+                return customFormats.FirstOrDefault(x => x.IncludeCustomFormatWhenRenaming && x.Name == m.CustomFormat)?.ToString() ?? string.Empty;
             };
         }
 
@@ -719,7 +719,7 @@ namespace NzbDrone.Core.Organizer
 
         private string GetCustomFormatsToken(List<CustomFormat> customFormats, string filter)
         {
-            var tokens = customFormats.Where(x => x.IncludeCustomFormatWhenRenaming);
+            var tokens = customFormats.Where(x => x.IncludeCustomFormatWhenRenaming).ToList();
 
             var filteredTokens = tokens;
 
