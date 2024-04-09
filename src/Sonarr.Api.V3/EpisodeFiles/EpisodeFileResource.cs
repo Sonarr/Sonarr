@@ -5,6 +5,7 @@ using NzbDrone.Core.CustomFormats;
 using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
 using Sonarr.Api.V3.CustomFormats;
 using Sonarr.Http.REST;
@@ -26,7 +27,7 @@ namespace Sonarr.Api.V3.EpisodeFiles
         public List<CustomFormatResource> CustomFormats { get; set; }
         public int CustomFormatScore { get; set; }
         public int? IndexerFlags { get; set; }
-        public int? ReleaseType { get; set; }
+        public ReleaseType? ReleaseType { get; set; }
         public MediaInfoResource MediaInfo { get; set; }
 
         public bool QualityCutoffNotMet { get; set; }
@@ -64,7 +65,7 @@ namespace Sonarr.Api.V3.EpisodeFiles
                 CustomFormats = customFormats.ToResource(false),
                 CustomFormatScore = customFormatScore,
                 IndexerFlags = (int)model.IndexerFlags,
-                ReleaseType = (int)model.ReleaseType,
+                ReleaseType = model.ReleaseType,
             };
         }
     }
