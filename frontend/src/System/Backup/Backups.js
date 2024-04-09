@@ -73,6 +73,7 @@ class Backups extends Component {
       isPopulated,
       error,
       items,
+      location,
       backupExecuting,
       onBackupPress,
       onDeleteBackupPress
@@ -101,6 +102,12 @@ class Backups extends Component {
         </PageToolbar>
 
         <PageContentBody>
+          <Alert>
+            {translate('BackupFilesLocation', {
+              location
+            })}
+          </Alert>
+
           {
             isFetching && !isPopulated &&
               <LoadingIndicator />
@@ -115,7 +122,7 @@ class Backups extends Component {
 
           {
             noBackups &&
-              <Alert kind={kinds.INFO}>
+              <Alert kind={kinds.WARNING}>
                 {translate('NoBackupsAreAvailable')}
               </Alert>
           }
@@ -132,7 +139,6 @@ class Backups extends Component {
                         id,
                         type,
                         name,
-                        path,
                         size,
                         time
                       } = item;
@@ -143,7 +149,6 @@ class Backups extends Component {
                           id={id}
                           type={type}
                           name={name}
-                          path={path}
                           size={size}
                           time={time}
                           onDeleteBackupPress={onDeleteBackupPress}
@@ -171,6 +176,7 @@ Backups.propTypes = {
   isPopulated: PropTypes.bool.isRequired,
   error: PropTypes.object,
   items: PropTypes.array.isRequired,
+  location: PropTypes.string.isRequired,
   backupExecuting: PropTypes.bool.isRequired,
   onBackupPress: PropTypes.func.isRequired,
   onDeleteBackupPress: PropTypes.func.isRequired

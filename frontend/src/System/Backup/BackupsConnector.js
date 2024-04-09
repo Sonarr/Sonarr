@@ -11,21 +11,24 @@ import Backups from './Backups';
 function createMapStateToProps() {
   return createSelector(
     (state) => state.system.backups,
+    (state) => state.system.status.item,
     createCommandExecutingSelector(commandNames.BACKUP),
-    (backups, backupExecuting) => {
+    (backups, status, backupExecuting) => {
       const {
         isFetching,
         isPopulated,
         error,
         items
       } = backups;
+      const { backupFolder } = status;
 
       return {
         isFetching,
         isPopulated,
         error,
         items,
-        backupExecuting
+        backupExecuting,
+        location: backupFolder
       };
     }
   );

@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import Icon from 'Components/Icon';
 import IconButton from 'Components/Link/IconButton';
-import Link from 'Components/Link/Link';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import RelativeDateCellConnector from 'Components/Table/Cells/RelativeDateCellConnector';
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
@@ -65,7 +64,6 @@ class BackupRow extends Component {
       id,
       type,
       name,
-      path,
       size,
       time
     } = this.props;
@@ -98,12 +96,7 @@ class BackupRow extends Component {
         </TableRowCell>
 
         <TableRowCell>
-          <Link
-            to={`${window.Sonarr.urlBase}${path}`}
-            noRouter={true}
-          >
-            {name}
-          </Link>
+          {name}
         </TableRowCell>
 
         <TableRowCell>
@@ -155,7 +148,6 @@ BackupRow.propTypes = {
   id: PropTypes.number.isRequired,
   type: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  path: PropTypes.string.isRequired,
   size: PropTypes.number.isRequired,
   time: PropTypes.string.isRequired,
   onDeleteBackupPress: PropTypes.func.isRequired

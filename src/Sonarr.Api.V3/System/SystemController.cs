@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Routing.Internal;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Core.Backup;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Lifecycle;
@@ -27,6 +28,7 @@ namespace Sonarr.Api.V3.System
         private readonly EndpointDataSource _endpointData;
         private readonly DfaGraphWriter _graphWriter;
         private readonly DuplicateEndpointDetector _detector;
+        private readonly IBackupService _backupService;
 
         public SystemController(IAppFolderInfo appFolderInfo,
                                 IRuntimeInfo runtimeInfo,
@@ -38,7 +40,8 @@ namespace Sonarr.Api.V3.System
                                 IDeploymentInfoProvider deploymentInfoProvider,
                                 EndpointDataSource endpoints,
                                 DfaGraphWriter graphWriter,
-                                DuplicateEndpointDetector detector)
+                                DuplicateEndpointDetector detector,
+                                IBackupService backupService)
         {
             _appFolderInfo = appFolderInfo;
             _runtimeInfo = runtimeInfo;
@@ -51,6 +54,7 @@ namespace Sonarr.Api.V3.System
             _endpointData = endpoints;
             _graphWriter = graphWriter;
             _detector = detector;
+            _backupService = backupService;
         }
 
         [HttpGet("status")]
@@ -69,6 +73,7 @@ namespace Sonarr.Api.V3.System
                 IsUserInteractive = RuntimeInfo.IsUserInteractive,
                 StartupPath = _appFolderInfo.StartUpFolder,
                 AppData = _appFolderInfo.GetAppDataPath(),
+                BackupFolder = _backupService.GetBackupFolder(),
                 OsName = _osInfo.Name,
                 OsVersion = _osInfo.Version,
                 IsNetCore = true,

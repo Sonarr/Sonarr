@@ -4,18 +4,7 @@ namespace NzbDrone.Core.Backup
 {
     public class BackupCommand : Command
     {
-        public BackupType Type
-        {
-            get
-            {
-                if (Trigger == CommandTrigger.Scheduled)
-                {
-                    return BackupType.Scheduled;
-                }
-
-                return BackupType.Manual;
-            }
-        }
+        public BackupType Type => Trigger == CommandTrigger.Scheduled ? BackupType.Scheduled : BackupType.Manual;
 
         public override bool SendUpdatesToClient => true;
 

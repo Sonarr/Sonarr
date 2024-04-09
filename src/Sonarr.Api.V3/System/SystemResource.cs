@@ -18,6 +18,7 @@ namespace Sonarr.Api.V3.System
         public bool IsUserInteractive { get; set; }
         public string StartupPath { get; set; }
         public string AppData { get; set; }
+        public string BackupFolder { get; set; }
         public string OsName { get; set; }
         public string OsVersion { get; set; }
         public bool IsNetCore { get; set; }
