@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using FluentValidation.Results;
 using NLog;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.IndexerSearch.Definitions;
@@ -93,7 +94,7 @@ namespace NzbDrone.Core.Indexers
             result.ForEach(c =>
             {
                 // Use multi languages from setting if ReleaseInfo languages is empty
-                if (!c.Languages.Any() && MultiRegex.IsMatch(c.Title) && settings.MultiLanguages.Any())
+                if (c.Languages.Empty() && MultiRegex.IsMatch(c.Title) && settings.MultiLanguages.Any())
                 {
                     c.Languages = settings.MultiLanguages.Select(i => (Language)i).ToList();
                 }
