@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Indexers
     public abstract class IndexerBase<TSettings> : IIndexer
         where TSettings : IIndexerSettings, new()
     {
-        private static readonly Regex MultiRegex = new (@"\b(?<multi>multi)\b", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex MultiRegex = new (@"[_. ](?<multi>multi)[_. ]", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         protected readonly IIndexerStatusService _indexerStatusService;
         protected readonly IConfigService _configService;
