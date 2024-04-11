@@ -24,8 +24,8 @@ red='\033[0;31m'
 brown='\033[0;33m'
 reset='\033[0m' # No Color
 
-scriptversion="1.0.3"
-scriptdate="2024-01-06"
+scriptversion="1.0.4"
+scriptdate="2024-04-10"
 
 set -euo pipefail
 
