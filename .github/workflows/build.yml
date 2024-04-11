@@ -217,7 +217,7 @@ jobs:
 
   deploy:
     if: ${{ github.ref_name == 'develop' || github.ref_name == 'main' }}
-    needs: [backend, unit_test, unit_test_postgres, integration_test]
+    needs: [backend, frontend, unit_test, unit_test_postgres, integration_test]
     secrets: inherit
     uses: ./.github/workflows/deploy.yml
     with:
@@ -228,7 +228,7 @@ jobs:
 
   notify:
     name: Discord Notification
-    needs: [backend, unit_test, unit_test_postgres, integration_test]
+    needs: [backend, frontend, unit_test, unit_test_postgres, integration_test, deploy]
     if: ${{ !cancelled() && (github.ref_name == 'develop' || github.ref_name == 'main') }}
     env:
       STATUS: ${{ contains(needs.*.result, 'failure') && 'failure' || 'success' }}
