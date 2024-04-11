@@ -6,7 +6,7 @@
 ### Version V1.0.1 2024-01-02 - StevieTV - remove UTF8-BOM
 ### Version V1.0.2 2024-01-03 - markus101 - Get user input from /dev/tty
 ### Version V1.0.3 2024-01-06 - StevieTV - exit script when it is ran from install
-### Version V1.0.4 2024-04-10 - nostrusdominion - added colors, moved root check, added title splash screen, improved readablity, changed app_prereq to not bother apt if they are already installed, supressed tarball extraction, add sleep timers.
+### Version V1.0.4 2024-04-10 - nostrusdominion - added colors, moved root check, moved architecture check, added title splash screen, improved readablity, changed app_prereq to not bother apt if they are already installed, supressed tarball extraction, add sleep timers.
 
 ### Boilerplate Warning
 #THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
@@ -36,6 +36,36 @@ if [ "$EUID" -ne 0 ]; then
     exit
 fi
 
+# Stuff the gremlins needs to know
+app="sonarr"
+app_port="8989"
+app_prereq="curl sqlite3 wget"
+app_umask="0002"
+branch="main"
+
+### CONSTANTS
+### Update these variables as required for your specific instance
+installdir="/opt"              # {Update me if needed} Install Location
+bindir="${installdir}/${app^}" # Full Path to Install Location
+datadir="/var/lib/$app/"       # {Update me if needed} AppData directory to use
+app_bin=${app^}                # Binary Name of the app
+
+# Check if architecture is correct
+echo ""
+ARCH=$(dpkg --print-architecture)
+# get arch
+dlbase="https://services.sonarr.tv/v1/download/$branch/latest?version=4&os=linux"
+case "$ARCH" in
+"amd64") DLURL="${dlbase}&arch=x64" ;;
+"armhf") DLURL="${dlbase}&arch=arm" ;;
+"arm64") DLURL="${dlbase}&arch=arm64" ;;
+*)
+    echo -e ${red}"Your arch is not supported!"
+    echo -e "Exiting installer script!"
+    exit 1
+    ;;
+esac
+
 ## Title Splash!
 
 echo -e "" ${brown}
@@ -58,20 +88,6 @@ echo -e "           |_____/ \_____|_|  \_\_____|_|      |_|              " ${res
 echo -e ""
 echo -e "         Running version ${brown}[$scriptversion]${reset} as of ${brown}[$scriptdate]${reset}      "
 
-# Stuff the gremlins needs to know
-app="sonarr"
-app_port="8989"
-app_prereq="curl sqlite3 wget"
-app_umask="0002"
-branch="main"
-
-### CONSTANTS
-### Update these variables as required for your specific instance
-installdir="/opt"              # {Update me if needed} Install Location
-bindir="${installdir}/${app^}" # Full Path to Install Location
-datadir="/var/lib/$app/"       # {Update me if needed} AppData directory to use
-app_bin=${app^}                # Binary Name of the app
-
 # This script should not be ran from installdir, otherwise later in the script the extracted files will be removed before they can be moved to installdir.
 if [ "$installdir" == "$(dirname -- "$( readlink -f -- "$0"; )")" ] || [ "$bindir" == "$(dirname -- "$( readlink -f -- "$0"; )")" ]; then
     echo ""
@@ -91,13 +107,13 @@ echo -e "      to your Media Library and Download Client directories!"${reset}
 
 # Prompt User
 echo ""
-read -r -p "What user should [${app^}] run as? (Default: $app): " app_uid
+read -r -p "What user should [${app^}] run as? (Default: $app): " app_uid < /dev/tty
 app_uid=$(echo "$app_uid" | tr -d ' ')
 app_uid=${app_uid:-$app}
 
 # Prompt Group
 echo ""
-read -r -p "What group should [${app^}] run as? (Default: media): " app_guid
+read -r -p "What group should [${app^}] run as? (Default: media): " app_guid < /dev/tty
 app_guid=$(echo "$app_guid" | tr -d ' ')
 app_guid=${app_guid:-media}
 
@@ -107,17 +123,30 @@ echo -e "${brown}[${app^}]${reset} will be installed to ${brown}[$bindir]${reset
 echo ""
 echo -e "${brown}${app^}${reset} will run as the user ${brown}[$app_uid]${reset} and group ${brown}[$app_guid]${reset}."
 echo ""
-echo -e "   By continuing, you've ${red}CONFIRMED${reset} that that ${brown}[$app_uid]${reset} and ${brown}[$app_guid]${reset}"
+echo -e "   By continuing, you ${red}CONFIRM${reset} that that ${brown}[$app_uid]${reset} and ${brown}[$app_guid]${reset}"
 echo -e "   will have both ${red}READ${reset} and ${red}WRITE${reset} access to all required directories."
 
 # User confirmation for installation to continue.
-echo
-read -r -p "Please type 'yes' to continue with the installation: " response
-if [[ $response != "yes" && $response != "YES" ]]; then
-    echo "Invalid response. Operation is canceled!"
-    echo "Exiting script!"
-    exit 0
-fi
+# User confirmation for installation to continue.
+echo ""
+while true; do
+    read -r -p "Please type 'yes' to continue with the installation: " response
+    response_lowercase=$(echo "$response" | tr '[:upper:]' '[:lower:]')
+    if [[ $response_lowercase == "yes" ]]; then
+        break
+    elif [[ $response_lowercase == "y" ]]; then
+        echo ""
+        echo "You must type in 'y e s' to continue with installation."
+        echo ""
+        continue
+    else
+        echo ""
+        echo "Invalid response! Operation is canceled!"
+        echo "Exiting script!"
+        exit 0
+    fi
+done
+
 
 # Create User / Group as needed
 if [ "$app_guid" != "$app_uid" ]; then
@@ -149,13 +178,15 @@ if service --status-all | grep -Fq "$app"; then
     echo ""
     echo -e ${yellow}"Stopped existing $app service."${reset}
 fi
+sleep 1
 
 # Create Appdata Directories
 mkdir -p "$datadir"
 chown -R "$app_uid":"$app_guid" "$datadir"
 chmod 775 "$datadir"
 echo ""
-echo -e "Directories ${yellow}$bindir${reset} and ${yellow}$datadir${reset} created!"
+echo -e "${yellow}$datadir${reset} was successfully created!"
+sleep 1
 
 # Download and install the App
 
@@ -181,23 +212,8 @@ else
     apt update && apt install "${missing_packages[@]}"
 fi
 
-# check if architecture is correct
-echo ""
-ARCH=$(dpkg --print-architecture)
-# get arch
-dlbase="https://services.sonarr.tv/v1/download/$branch/latest?version=4&os=linux"
-case "$ARCH" in
-"amd64") DLURL="${dlbase}&arch=x64" ;;
-"armhf") DLURL="${dlbase}&arch=arm" ;;
-"arm64") DLURL="${dlbase}&arch=arm64" ;;
-*)
-    echo -e ${red}"Your arch is not supported!"
-    echo -e "Exiting installer script!"${reset}
-    exit 1
-    ;;
-esac
-
 # Remove old tarballs, then download and install sonarr tarball for installation
+echo ""
 echo -e ${yellow}"Removing tarballs..."${reset}
 sleep 3
 # -f to Force so we do not fail if it doesn't exist
@@ -273,10 +289,19 @@ sleep 3
 
 # Check if the service is up and running
 echo ""
-echo "Checking if the service is up and running..."
+echo "Checking if the service is up and running... again this might take a few seconds"
 # Loop to wait until the service is active
+timeout=60
+start_time=$(date +%s) #current time in seconds
 while ! systemctl is-active --quiet "$app"; do
-    sleep 1
+    current_time=$(date +%s)
+    elapsed_time=$((current_time - start_time))
+    if (( elsaped_time >= timeout )); then
+        echo -e "${red}ERROR!${reset} Service failed to start within $timeout seconds."
+        echo -e "${red} EXITING SCRIPT!"
+        break
+    fi
+
 done
 echo ""
 echo -e "${brown}[${app^}]${reset} installation and service start up is complete!"
@@ -287,8 +312,11 @@ ip_local=$(grep -oP '^\S*' <<<"$host")
 echo ""
 echo -e "Attempting to check for a connection at http://$ip_local:$app_port..."
 sleep 3
-STATUS="$(systemctl is-active "$app")"
-if [ "${STATUS}" = "active" ]; then
+
+# Use curl to check for connection
+response_code=$(curl -s -o /dev/null -w "%{http_code}" "http://$ip_local:$app_port")
+
+if [ "$response_code" = "200" ]; then
     echo ""
     echo "Successful connection!"
     echo ""
@@ -298,7 +326,7 @@ if [ "${STATUS}" = "active" ]; then
     echo ""
 else
     echo ""
-    echo -e ${red}"${app^} failed to start."${reset}
+    echo -e "${red}${app^} failed to start.${reset}"
     echo ""
     echo "Please try again. Exiting script."
     echo
