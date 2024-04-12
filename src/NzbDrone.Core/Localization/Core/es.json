@@ -2066,5 +2066,8 @@
     "ReleaseGroupFootNote": "Opcionalmente controla el truncamiento hasta un número máximo de bytes, incluyendo elipsis (`...`). Está soportado truncar tanto desde el final (p. ej. `{Grupo de lanzamiento:30}`) como desde el principio (p. ej. `{Grupo de lanzamiento:-30}`).",
     "SelectReleaseType": "Seleccionar tipo de lanzamiento",
     "SeriesFootNote": "Opcionalmente controla el truncamiento hasta un número máximo de bytes, incluyendo elipsis (`...`). Está soportado truncar tanto desde el final (p. ej. `{Título de serie:30}`) como desde el principio (p. ej. `{Título de serie:-30}`).",
-    "EpisodeTitleFootNote": "Opcionalmente controla el truncamiento hasta un número máximo de bytes, incluyendo elipsis (`...`). Está soportado truncar tanto desde el final (p. ej. `{Título de episodio:30}`) como desde el principio (p. ej. `{Título de episodio:-30}`). Los títulos de episodio serán truncados automáticamente acorde a las limitaciones del sistema de archivos si es necesario."
+    "EpisodeTitleFootNote": "Opcionalmente controla el truncamiento hasta un número máximo de bytes, incluyendo elipsis (`...`). Está soportado truncar tanto desde el final (p. ej. `{Título de episodio:30}`) como desde el principio (p. ej. `{Título de episodio:-30}`). Los títulos de episodio serán truncados automáticamente acorde a las limitaciones del sistema de archivos si es necesario.",
+    "AutoTaggingSpecificationTag": "Etiqueta",
+    "NotificationsTelegramSettingsIncludeAppName": "Incluir {appName} en el título",
+    "NotificationsTelegramSettingsIncludeAppNameHelpText": "Prefija opcionalmente el título de mensaje con {appName} para diferenciar notificaciones de aplicaciones diferentes"
 }

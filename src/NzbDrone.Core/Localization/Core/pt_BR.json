@@ -989,7 +989,7 @@
     "AgeWhenGrabbed": "Tempo de vida (quando obtido)",
     "DelayingDownloadUntil": "Atrasando o download até {date} às {time}",
     "DeletedReasonEpisodeMissingFromDisk": "O {appName} não conseguiu encontrar o arquivo no disco, então o arquivo foi desvinculado do episódio no banco de dados",
-    "DeletedReasonManual": "O arquivo foi excluído por meio da IU",
+    "DeletedReasonManual": "O arquivo foi excluído usando {appName} manualmente ou por outra ferramenta por meio da API",
     "DownloadFailed": "Download Falhou",
     "DestinationRelativePath": "Caminho Relativo de Destino",
     "DownloadIgnoredEpisodeTooltip": "Download do Episódio Ignorado",
@@ -2061,5 +2061,12 @@
     "ImportListsMyAnimeListSettingsAuthenticateWithMyAnimeList": "Autenticar com MyAnimeList",
     "ImportListsMyAnimeListSettingsListStatus": "Status da Lista",
     "ImportListsMyAnimeListSettingsListStatusHelpText": "Tipo de lista da qual você deseja importar, defina como 'Todas' para todas as listas",
-    "CustomFormatsSettingsTriggerInfo": "Um formato personalizado será aplicado a um lançamento ou arquivo quando corresponder a pelo menos um de cada um dos diferentes tipos de condição escolhidos."
+    "CustomFormatsSettingsTriggerInfo": "Um formato personalizado será aplicado a um lançamento ou arquivo quando corresponder a pelo menos um de cada um dos diferentes tipos de condição escolhidos.",
+    "EpisodeTitleFootNote": "Opcionalmente, controle o truncamento para um número máximo de bytes, incluindo reticências (`...`). Truncar do final (por exemplo, `{Episode Title:30}`) ou do início (por exemplo, `{Episode Title:-30}`) é suportado. Os títulos dos episódios serão automaticamente truncados de acordo com as limitações do sistema de arquivos, se necessário.",
+    "NotificationsTelegramSettingsIncludeAppNameHelpText": "Opcionalmente, prefixe o título da mensagem com {appName} para diferenciar notificações de diferentes aplicativos",
+    "ReleaseGroupFootNote": "Opcionalmente, controle o truncamento para um número máximo de bytes, incluindo reticências (`...`). Truncar do final (por exemplo, `{Release Group:30}`) ou do início (por exemplo, `{Release Group:-30}`) é suportado.`).",
+    "ClickToChangeReleaseType": "Clique para alterar o tipo de lançamento",
+    "NotificationsTelegramSettingsIncludeAppName": "Incluir {appName} no Título",
+    "SelectReleaseType": "Selecionar o Tipo de Lançamento",
+    "SeriesFootNote": "Opcionalmente, controle o truncamento para um número máximo de bytes, incluindo reticências (`...`). Truncar do final (por exemplo, `{Series Title:30}`) ou do início (por exemplo, `{Series Title:-30}`) é suportado."
 }
