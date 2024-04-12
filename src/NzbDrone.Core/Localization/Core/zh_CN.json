@@ -588,7 +588,6 @@
     "DownloadIgnored": "忽略下载",
     "DownloadIgnoredEpisodeTooltip": "集下载被忽略",
     "EditAutoTag": "编辑自动标签",
-    "AddAutoTagError": "无法添加新的自动标签，请重试。",
     "AddImportListExclusionError": "无法添加新排除列表，请再试一次。",
     "AddIndexer": "添加索引器",
     "AddImportList": "添加导入列表",
