@@ -9,18 +9,19 @@
 ### Version V1.0.4 2024-04-10 - nostrusdominion - added colors, moved root check, moved architecture check, added title splash screen, improved readablity, changed app_prereq to not bother apt if they are already installed, supressed tarball extraction, add sleep timers.
 
 ### Boilerplate Warning
-#THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-#EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-#MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-#NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-#LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-#OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-#WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+# NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+# LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+# OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+# WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ### Colors
 green='\033[0;32m'
 yellow='\033[1;33m'
 red='\033[0;31m'
+cyan='\033[0;36m'
 brown='\033[0;33m'
 reset='\033[0m' # No Color
 
@@ -43,8 +44,9 @@ app_prereq="curl sqlite3 wget"
 app_umask="0002"
 branch="main"
 
-### CONSTANTS
-### Update these variables as required for your specific instance
+### Constants
+
+# Update these variables as required for your specific instance
 installdir="/opt"              # {Update me if needed} Install Location
 bindir="${installdir}/${app^}" # Full Path to Install Location
 datadir="/var/lib/$app/"       # {Update me if needed} AppData directory to use
@@ -66,9 +68,9 @@ case "$ARCH" in
     ;;
 esac
 
-## Title Splash!
+### Title Splash!
 
-echo -e "" ${brown}
+echo -e "" ${cyan}
 echo -e "           _____  ____  _   _          _____  _____             "
 echo -e "          / ____|/ __ \| \ | |   /\   |  __ \|  __ \            "
 echo -e "         | (___ | |  | |  \| |  /  \  | |__) | |__) |           "
@@ -91,61 +93,64 @@ echo -e "         Running version ${brown}[$scriptversion]${reset} as of ${brown
 # This script should not be ran from installdir, otherwise later in the script the extracted files will be removed before they can be moved to installdir.
 if [ "$installdir" == "$(dirname -- "$( readlink -f -- "$0"; )")" ] || [ "$bindir" == "$(dirname -- "$( readlink -f -- "$0"; )")" ]; then
     echo ""
-    echo -e "${red}Error!${reset} You should not run this script from the intended install directory."
-    echo "Please re-run it from another directory."
-    echo "Exiting Script!"
+    echo -e "$ {red}Error!${reset} You should not run this script from the intended install directory."
+    echo " Please re-run it from another directory."
+    echo " Exiting Script!"
     exit
 fi
 
 # User warning about permission conflicts
 echo ""
-echo -e ${red}"           WARNING! WARNING! WARNING!"${reset}
+echo -e ${red}"  WARNING!"${reset}
 echo ""
-echo -e "         It is ${red}CRITICAL${reset} that the ${brown}User${reset} and ${brown}Group${reset} you select"
-echo -e "       to run ${brown}[${app^}]${reset} will have both ${red}READ${reset} and ${red}WRITE${reset} access"
-echo -e "      to your Media Library and Download Client directories!"${reset}
+echo -e "  It is ${red}CRITICAL${reset} that the ${brown}User${reset} and ${brown}Group${reset} you select"
+echo -e "  to run ${brown}[${app^}]${reset} will have both ${red}READ${reset} and ${red}WRITE${reset} access"
+echo -e "  to your Media Library and Download Client directories!"${reset}
 
 # Prompt User
 echo ""
-read -r -p "What user should [${app^}] run as? (Default: $app): " app_uid < /dev/tty
+read -r -p " What user should [${app^}] run as? (Default: $app): " app_uid < /dev/tty
 app_uid=$(echo "$app_uid" | tr -d ' ')
 app_uid=${app_uid:-$app}
 
 # Prompt Group
 echo ""
-read -r -p "What group should [${app^}] run as? (Default: media): " app_guid < /dev/tty
+read -r -p " What group should [${app^}] run as? (Default: media): " app_guid < /dev/tty
 app_guid=$(echo "$app_guid" | tr -d ' ')
 app_guid=${app_guid:-media}
 
 # Info for the user and user confirmation
 echo ""
-echo -e "${brown}[${app^}]${reset} will be installed to ${brown}[$bindir]${reset} and use ${brown}[$datadir]${reset} for the AppData Directory"
+echo -e " ${brown}[${app^}]${reset} will be installed to ${brown}[$bindir]${reset} and use ${brown}[$datadir]${reset} for the AppData Directory"
 echo ""
-echo -e "${brown}${app^}${reset} will run as the user ${brown}[$app_uid]${reset} and group ${brown}[$app_guid]${reset}."
+echo -e " ${brown}${app^}${reset} will run as the user ${brown}[$app_uid]${reset} and group ${brown}[$app_guid]${reset}."
 echo ""
+<<<<<<< HEAD
 echo -e "   By continuing, you ${red}CONFIRM${reset} that user ${brown}[$app_uid]${reset} and group ${brown}[$app_guid]${reset}"
 echo -e "   will have both ${red}READ${reset} and ${red}WRITE${reset} access to all required directories."
+=======
+echo -e " By continuing, you ${red}CONFIRM${reset} that that ${brown}[$app_uid]${reset} and ${brown}[$app_guid]${reset}"
+echo -e " will have both ${red}READ${reset} and ${red}WRITE${reset} access to all required directories."
+>>>>>>> c641c11bf (Update install.sh file)
 
 # User confirmation for installation to continue.
 echo ""
 while true; do
-    read -r -p "Please type 'yes' to continue with the installation: " response
+    read -r -p " Do you want to continue with the installation? [y/N]: " response
     response_lowercase=$(echo "$response" | tr '[:upper:]' '[:lower:]')
-    if [[ $response_lowercase == "yes" ]]; then
+    if [[ $response_lowercase == "y" ]]; then
         break
-    elif [[ $response_lowercase == "y" ]]; then
+    elif [[ $response_lowercase == "n" ]]; then
         echo ""
-        echo "You must type in 'y e s' to continue with installation."
-        echo ""
-        continue
+        echo " Installation canceled."
+        echo " Exiting script."
+        exit 0
     else
         echo ""
-        echo "Invalid response! Operation is canceled!"
-        echo "Exiting script!"
-        exit 0
+        echo " Invalid response. Please enter 'y' to continue or 'n' to cancel."
+        echo ""
     fi
 done
-
 
 # Create User / Group as needed
 if [ "$app_guid" != "$app_uid" ]; then
@@ -179,12 +184,12 @@ if service --status-all | grep -Fq "$app"; then
 fi
 sleep 1
 
-# Create Appdata Directories
+# Create Appdata Directory
 mkdir -p "$datadir"
 chown -R "$app_uid":"$app_guid" "$datadir"
 chmod 775 "$datadir"
 echo ""
-echo -e "${yellow}$datadir${reset} was successfully created!"
+echo -e "${yellow}$datadir${reset} was successfully created."
 sleep 1
 
 # Download and install the App
@@ -213,25 +218,25 @@ fi
 
 # Remove old tarballs, then download and install sonarr tarball for installation
 echo ""
-echo -e ${yellow}"Removing tarballs..."${reset}
-sleep 3
+echo -e ${yellow}"Removing previous installation files..."${reset}
+sleep 2
 # -f to Force so we do not fail if it doesn't exist
 rm -f "${app^}".*.tar.gz
 echo ""
-echo -e ${yellow}"Downloading required files..."${reset}
+echo -e ${yellow}"Downloading required installation files..."${reset}
 echo ""
 wget --content-disposition "$DLURL"
 echo ""
 echo -e ${yellow}"Download complete!"${reset}
 echo ""
-echo -e ${yellow}"Extracting tarball!"${reset}
+echo -e ${yellow}"Extracting installation files..."${reset}
 tar -xvzf "${app^}".*.tar.gz >/dev/null 2>&1
 echo ""
-echo -e ${yellow}"Installation files downloaded and extracted!"${reset}
+echo -e ${yellow}"Installation files downloaded and extracted."${reset}
 
 # Remove existing installs
 echo ""
-echo -e "Removing existing installation files from ${brown}[$bindir]"${reset}
+echo -e "Removing existing installation files from ${brown}[$bindir]..."${reset}
 rm -rf "$bindir"
 sleep 2
 echo ""
@@ -244,7 +249,7 @@ chmod 775 "$bindir"
 touch "$datadir"/update_required
 chown "$app_uid":"$app_guid" "$datadir"/update_required
 echo ""
-echo -e "Successfully installed ${brown}[${app^}]${reset}!!"
+echo -e "Successfully installed ${cyan}[${app^}]${reset}!!"
 rm -rf "${app^}.*.tar.gz"
 sleep 2
 
@@ -277,7 +282,7 @@ WantedBy=multi-user.target
 EOF
 sleep 2
 echo ""
-echo -e "New service file created!"
+echo -e "New service file has been created."
 
 # Start the App
 echo ""
@@ -290,7 +295,7 @@ sleep 3
 echo ""
 echo "Checking if the service is up and running... again this might take a few seconds"
 # Loop to wait until the service is active
-timeout=60
+timeout=30
 start_time=$(date +%s) #current time in seconds
 while ! systemctl is-active --quiet "$app"; do
     current_time=$(date +%s)
@@ -300,7 +305,6 @@ while ! systemctl is-active --quiet "$app"; do
         echo -e "${red} EXITING SCRIPT!"
         break
     fi
-
 done
 echo ""
 echo -e "${brown}[${app^}]${reset} installation and service start up is complete!"
