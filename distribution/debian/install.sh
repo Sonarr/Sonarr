@@ -125,13 +125,11 @@ echo -e " ${brown}[${app^}]${reset} will be installed to ${brown}[$bindir]${rese
 echo ""
 echo -e " ${brown}${app^}${reset} will run as the user ${brown}[$app_uid]${reset} and group ${brown}[$app_guid]${reset}."
 echo ""
-<<<<<<< HEAD
 echo -e "   By continuing, you ${red}CONFIRM${reset} that user ${brown}[$app_uid]${reset} and group ${brown}[$app_guid]${reset}"
 echo -e "   will have both ${red}READ${reset} and ${red}WRITE${reset} access to all required directories."
 =======
 echo -e " By continuing, you ${red}CONFIRM${reset} that that ${brown}[$app_uid]${reset} and ${brown}[$app_guid]${reset}"
 echo -e " will have both ${red}READ${reset} and ${red}WRITE${reset} access to all required directories."
->>>>>>> c641c11bf (Update install.sh file)
 
 # User confirmation for installation to continue.
 echo ""
