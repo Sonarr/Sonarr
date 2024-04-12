@@ -127,7 +127,6 @@ echo -e "   By continuing, you ${red}CONFIRM${reset} that user ${brown}[$app_uid
 echo -e "   will have both ${red}READ${reset} and ${red}WRITE${reset} access to all required directories."
 
 # User confirmation for installation to continue.
-# User confirmation for installation to continue.
 echo ""
 while true; do
     read -r -p "Please type 'yes' to continue with the installation: " response
