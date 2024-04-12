@@ -8,7 +8,7 @@ namespace NzbDrone.Core.Indexers.IPTorrents
 {
     public class IPTorrents : HttpIndexerBase<IPTorrentsSettings>
     {
-        public override string Name => "IP Torrents";
+        public override string Name => "IP Torrents RSS";
 
         public override DownloadProtocol Protocol => DownloadProtocol.Torrent;
         public override bool SupportsSearch => false;
@@ -21,12 +21,12 @@ namespace NzbDrone.Core.Indexers.IPTorrents
 
         public override IIndexerRequestGenerator GetRequestGenerator()
         {
-            return new IPTorrentsRequestGenerator() { Settings = Settings };
+            return new IPTorrentsRequestGenerator { Settings = Settings };
         }
 
         public override IParseIndexerResponse GetParser()
         {
-            return new TorrentRssParser() { ParseSizeInDescription = true };
+            return new TorrentRssParser { ParseSizeInDescription = true };
         }
     }
 }

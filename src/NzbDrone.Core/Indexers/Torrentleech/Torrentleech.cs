@@ -8,7 +8,7 @@ namespace NzbDrone.Core.Indexers.Torrentleech
 {
     public class Torrentleech : HttpIndexerBase<TorrentleechSettings>
     {
-        public override string Name => "TorrentLeech";
+        public override string Name => "TorrentLeech RSS";
 
         public override DownloadProtocol Protocol => DownloadProtocol.Torrent;
         public override bool SupportsSearch => false;
@@ -21,12 +21,12 @@ namespace NzbDrone.Core.Indexers.Torrentleech
 
         public override IIndexerRequestGenerator GetRequestGenerator()
         {
-            return new TorrentleechRequestGenerator() { Settings = Settings };
+            return new TorrentleechRequestGenerator { Settings = Settings };
         }
 
         public override IParseIndexerResponse GetParser()
         {
-            return new TorrentRssParser() { UseGuidInfoUrl = true, ParseSeedersInDescription = true };
+            return new TorrentRssParser { UseGuidInfoUrl = true, ParseSeedersInDescription = true };
         }
     }
 }
