@@ -20,73 +20,77 @@ namespace NzbDrone.Core.Notifications.Telegram
         public override void OnGrab(GrabMessage grabMessage)
         {
             var title = Settings.IncludeAppNameInTitle ? EPISODE_GRABBED_TITLE_BRANDED : EPISODE_GRABBED_TITLE;
+            var links = GetLinks(grabMessage.Series);
 
-            _proxy.SendNotification(title, grabMessage.Message, Settings);
+            _proxy.SendNotification(title, grabMessage.Message, links, Settings);
         }
 
         public override void OnDownload(DownloadMessage message)
         {
             var title = Settings.IncludeAppNameInTitle ? EPISODE_DOWNLOADED_TITLE_BRANDED : EPISODE_DOWNLOADED_TITLE;
+            var links = GetLinks(message.Series);
 
-            _proxy.SendNotification(title, message.Message, Settings);
+            _proxy.SendNotification(title, message.Message, links, Settings);
         }
 
         public override void OnImportComplete(ImportCompleteMessage message)
         {
             var title = Settings.IncludeAppNameInTitle ? EPISODE_DOWNLOADED_TITLE_BRANDED : EPISODE_DOWNLOADED_TITLE;
+            var links = GetLinks(message.Series);
 
-            _proxy.SendNotification(title, message.Message, Settings);
+            _proxy.SendNotification(title, message.Message, links, Settings);
         }
 
         public override void OnEpisodeFileDelete(EpisodeDeleteMessage deleteMessage)
         {
             var title = Settings.IncludeAppNameInTitle ? EPISODE_DELETED_TITLE_BRANDED : EPISODE_DELETED_TITLE;
+            var links = GetLinks(deleteMessage.Series);
 
-            _proxy.SendNotification(title, deleteMessage.Message, Settings);
+            _proxy.SendNotification(title, deleteMessage.Message, links, Settings);
         }
 
         public override void OnSeriesAdd(SeriesAddMessage message)
         {
             var title = Settings.IncludeAppNameInTitle ? SERIES_ADDED_TITLE_BRANDED : SERIES_ADDED_TITLE;
-            var text = FormatMessageWithLink(message.Message, message.Series);
+            var links = GetLinks(message.Series);
 
-            _proxy.SendNotification(title, text, Settings);
+            _proxy.SendNotification(title, message.Message, links, Settings);
         }
 
         public override void OnSeriesDelete(SeriesDeleteMessage deleteMessage)
         {
             var title = Settings.IncludeAppNameInTitle ? SERIES_DELETED_TITLE_BRANDED : SERIES_DELETED_TITLE;
-            var text = FormatMessageWithLink(deleteMessage.Message, deleteMessage.Series);
+            var links = GetLinks(deleteMessage.Series);
 
-            _proxy.SendNotification(title, text, Settings);
+            _proxy.SendNotification(title, deleteMessage.Message, links, Settings);
         }
 
         public override void OnHealthIssue(HealthCheck.HealthCheck healthCheck)
         {
             var title = Settings.IncludeAppNameInTitle ? HEALTH_ISSUE_TITLE_BRANDED : HEALTH_ISSUE_TITLE;
 
-            _proxy.SendNotification(title, healthCheck.Message, Settings);
+            _proxy.SendNotification(title, healthCheck.Message, null, Settings);
         }
 
         public override void OnHealthRestored(HealthCheck.HealthCheck previousCheck)
         {
             var title = Settings.IncludeAppNameInTitle ? HEALTH_RESTORED_TITLE_BRANDED : HEALTH_RESTORED_TITLE;
 
-            _proxy.SendNotification(title, $"The following issue is now resolved: {previousCheck.Message}", Settings);
+            _proxy.SendNotification(title, $"The following issue is now resolved: {previousCheck.Message}", null, Settings);
         }
 
         public override void OnApplicationUpdate(ApplicationUpdateMessage updateMessage)
         {
             var title = Settings.IncludeAppNameInTitle ? APPLICATION_UPDATE_TITLE_BRANDED : APPLICATION_UPDATE_TITLE;
 
-            _proxy.SendNotification(title, updateMessage.Message, Settings);
+            _proxy.SendNotification(title, updateMessage.Message, null, Settings);
         }
 
         public override void OnManualInteractionRequired(ManualInteractionRequiredMessage message)
         {
             var title = Settings.IncludeAppNameInTitle ? MANUAL_INTERACTION_REQUIRED_TITLE_BRANDED : MANUAL_INTERACTION_REQUIRED_TITLE;
 
-            _proxy.SendNotification(title, message.Message, Settings);
+            _proxy.SendNotification(title, message.Message, null, Settings);
         }
 
         public override ValidationResult Test()
@@ -98,36 +102,36 @@ namespace NzbDrone.Core.Notifications.Telegram
             return new ValidationResult(failures);
         }
 
-        private string FormatMessageWithLink(string message, Series series)
+        private List<TelegramLink> GetLinks(Series series)
         {
-            var linkType =  Settings.MetadataLinkType;
+            var links = new List<TelegramLink>();
 
-            if (linkType == MetadataLinkType.None)
+            foreach (var link in Settings.MetadataLinks)
             {
-                return message;
+                var linkType = (MetadataLinkType)link;
+
+                if (linkType == MetadataLinkType.Imdb && series.ImdbId.IsNotNullOrWhiteSpace())
+                {
+                    links.Add(new TelegramLink("IMDb", $"https://www.imdb.com/title/{series.ImdbId}"));
+                }
+
+                if (linkType == MetadataLinkType.Tvdb && series.TvdbId > 0)
+                {
+                    links.Add(new TelegramLink("TVDb", $"http://www.thetvdb.com/?tab=series&id={series.TvdbId}"));
+                }
+
+                if (linkType == MetadataLinkType.Trakt && series.TvdbId > 0)
+                {
+                    links.Add(new TelegramLink("TVMaze", $"http://trakt.tv/search/tvdb/{series.TvdbId}?id_type=show"));
+                }
+
+                if (linkType == MetadataLinkType.Tvmaze && series.TvMazeId > 0)
+                {
+                    links.Add(new TelegramLink("Trakt", $"http://www.tvmaze.com/shows/{series.TvMazeId}/_"));
+                }
             }
 
-            if (linkType == MetadataLinkType.Imdb && series.ImdbId.IsNotNullOrWhiteSpace())
-            {
-                return $"[{message}](https://www.imdb.com/title/{series.ImdbId})";
-            }
-
-            if (linkType == MetadataLinkType.Tvdb && series.TvdbId > 0)
-            {
-                return $"[{message}](http://www.thetvdb.com/?tab=series&id={series.TvdbId})";
-            }
-
-            if (linkType == MetadataLinkType.Trakt && series.TvdbId > 0)
-            {
-                return $"[{message}](http://trakt.tv/search/tvdb/{series.TvdbId}?id_type=show)";
-            }
-
-            if (linkType == MetadataLinkType.Tvmaze && series.TvMazeId > 0)
-            {
-                return $"[{message}](http://www.tvmaze.com/shows/{series.TvMazeId}/_)";
-            }
-
-            return message;
+            return links;
         }
     }
 }
