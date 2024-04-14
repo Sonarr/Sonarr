@@ -1,6 +1,5 @@
 using FluentValidation;
 using NzbDrone.Core.Annotations;
-using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Notifications.Gotify
@@ -14,9 +13,9 @@ namespace NzbDrone.Core.Notifications.Gotify
         }
     }
 
-    public class GotifySettings : IProviderConfig
+    public class GotifySettings : NotificationSettingsBase<GotifySettings>
     {
-        private static readonly GotifySettingsValidator Validator = new GotifySettingsValidator();
+        private static readonly GotifySettingsValidator Validator = new ();
 
         public GotifySettings()
         {
@@ -35,7 +34,7 @@ namespace NzbDrone.Core.Notifications.Gotify
         [FieldDefinition(3, Label = "NotificationsGotifySettingIncludeSeriesPoster", Type = FieldType.Checkbox, HelpText = "NotificationsGotifySettingIncludeSeriesPosterHelpText")]
         public bool IncludeSeriesPoster { get; set; }
 
-        public NzbDroneValidationResult Validate()
+        public override NzbDroneValidationResult Validate()
         {
             return new NzbDroneValidationResult(Validator.Validate(this));
         }

@@ -14,16 +14,16 @@ namespace NzbDrone.Core.ImportLists.Imdb
         }
     }
 
-    public class ImdbListSettings : IImportListSettings
+    public class ImdbListSettings : ImportListSettingsBase<ImdbListSettings>
     {
-        private static readonly ImdbSettingsValidator Validator = new ImdbSettingsValidator();
+        private static readonly ImdbSettingsValidator Validator = new ();
 
-        public string BaseUrl { get; set; }
+        public override string BaseUrl { get; set; }
 
         [FieldDefinition(1, Label = "ImportListsImdbSettingsListId", HelpText = "ImportListsImdbSettingsListIdHelpText")]
         public string ListId { get; set; }
 
-        public NzbDroneValidationResult Validate()
+        public override NzbDroneValidationResult Validate()
         {
             return new NzbDroneValidationResult(Validator.Validate(this));
         }

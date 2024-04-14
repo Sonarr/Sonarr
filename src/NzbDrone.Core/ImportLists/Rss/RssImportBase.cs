@@ -8,7 +8,7 @@ using NzbDrone.Core.Parser;
 namespace NzbDrone.Core.ImportLists.Rss
 {
     public class RssImportBase<TSettings> : HttpImportListBase<TSettings>
-        where TSettings : RssImportBaseSettings, new()
+        where TSettings : RssImportBaseSettings<TSettings>, new()
     {
         public override string Name => "RSS List Base";
         public override ImportListType ListType => ImportListType.Advanced;
@@ -36,7 +36,7 @@ namespace NzbDrone.Core.ImportLists.Rss
 
         public override IImportListRequestGenerator GetRequestGenerator()
         {
-            return new RssImportRequestGenerator
+            return new RssImportRequestGenerator<TSettings>
             {
                 Settings = Settings
             };

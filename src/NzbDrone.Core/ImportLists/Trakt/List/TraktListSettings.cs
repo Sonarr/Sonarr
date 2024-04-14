@@ -1,12 +1,12 @@
 using FluentValidation;
 using NzbDrone.Core.Annotations;
+using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.ImportLists.Trakt.List
 {
     public class TraktListSettingsValidator : TraktSettingsBaseValidator<TraktListSettings>
     {
         public TraktListSettingsValidator()
-        : base()
         {
             RuleFor(c => c.Username).NotEmpty();
             RuleFor(c => c.Listname).NotEmpty();
@@ -15,12 +15,17 @@ namespace NzbDrone.Core.ImportLists.Trakt.List
 
     public class TraktListSettings : TraktSettingsBase<TraktListSettings>
     {
-        protected override AbstractValidator<TraktListSettings> Validator => new TraktListSettingsValidator();
+        private static readonly TraktListSettingsValidator Validator = new ();
 
         [FieldDefinition(1, Label = "Username", HelpText = "ImportListsTraktSettingsUsernameHelpText")]
         public string Username { get; set; }
 
         [FieldDefinition(2, Label = "ImportListsTraktSettingsListName", HelpText = "ImportListsTraktSettingsListNameHelpText")]
         public string Listname { get; set; }
+
+        public override NzbDroneValidationResult Validate()
+        {
+            return new NzbDroneValidationResult(Validator.Validate(this));
+        }
     }
 }

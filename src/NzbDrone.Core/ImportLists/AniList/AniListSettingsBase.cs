@@ -29,18 +29,17 @@ namespace NzbDrone.Core.ImportLists.AniList
         }
     }
 
-    public class AniListSettingsBase<TSettings> : IImportListSettings
+    public class AniListSettingsBase<TSettings> : ImportListSettingsBase<TSettings>
         where TSettings : AniListSettingsBase<TSettings>
     {
-        protected virtual AbstractValidator<TSettings> Validator => new AniListSettingsBaseValidator<TSettings>();
+        private static readonly AniListSettingsBaseValidator<TSettings> Validator = new ();
 
         public AniListSettingsBase()
         {
-            BaseUrl = "https://graphql.anilist.co";
             SignIn = "startOAuth";
         }
 
-        public string BaseUrl { get; set; }
+        public override string BaseUrl { get; set; } = "https://graphql.anilist.co";
 
         [FieldDefinition(0, Label = "ImportListsSettingsAccessToken", Type = FieldType.Textbox, Hidden = HiddenType.Hidden)]
         public string AccessToken { get; set; }
@@ -54,7 +53,7 @@ namespace NzbDrone.Core.ImportLists.AniList
         [FieldDefinition(99, Label = "ImportListsAniListSettingsAuthenticateWithAniList", Type = FieldType.OAuth)]
         public string SignIn { get; set; }
 
-        public NzbDroneValidationResult Validate()
+        public override NzbDroneValidationResult Validate()
         {
             return new NzbDroneValidationResult(Validator.Validate((TSettings)this));
         }

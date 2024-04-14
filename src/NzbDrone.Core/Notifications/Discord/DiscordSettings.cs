@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using FluentValidation;
 using NzbDrone.Core.Annotations;
-using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Notifications.Discord
@@ -14,7 +13,7 @@ namespace NzbDrone.Core.Notifications.Discord
         }
     }
 
-    public class DiscordSettings : IProviderConfig
+    public class DiscordSettings : NotificationSettingsBase<DiscordSettings>
     {
         public DiscordSettings()
         {
@@ -89,7 +88,7 @@ namespace NzbDrone.Core.Notifications.Discord
         [FieldDefinition(6, Label = "NotificationsDiscordSettingsOnManualInteractionFields", Advanced = true, SelectOptions = typeof(DiscordManualInteractionFieldType), HelpText = "NotificationsDiscordSettingsOnManualInteractionFieldsHelpText", Type = FieldType.Select)]
         public IEnumerable<int> ManualInteractionFields { get; set; }
 
-        public NzbDroneValidationResult Validate()
+        public override NzbDroneValidationResult Validate()
         {
             return new NzbDroneValidationResult(Validator.Validate(this));
         }

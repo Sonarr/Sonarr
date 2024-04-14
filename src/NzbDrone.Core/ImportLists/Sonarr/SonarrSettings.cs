@@ -15,13 +15,12 @@ namespace NzbDrone.Core.ImportLists.Sonarr
         }
     }
 
-    public class SonarrSettings : IImportListSettings
+    public class SonarrSettings : ImportListSettingsBase<SonarrSettings>
     {
-        private static readonly SonarrSettingsValidator Validator = new SonarrSettingsValidator();
+        private static readonly SonarrSettingsValidator Validator = new ();
 
         public SonarrSettings()
         {
-            BaseUrl = "";
             ApiKey = "";
             ProfileIds = Array.Empty<int>();
             LanguageProfileIds = Array.Empty<int>();
@@ -30,7 +29,7 @@ namespace NzbDrone.Core.ImportLists.Sonarr
         }
 
         [FieldDefinition(0, Label = "ImportListsSonarrSettingsFullUrl", HelpText = "ImportListsSonarrSettingsFullUrlHelpText")]
-        public string BaseUrl { get; set; }
+        public override string BaseUrl { get; set; } = string.Empty;
 
         [FieldDefinition(1, Label = "ApiKey", HelpText = "ImportListsSonarrSettingsApiKeyHelpText")]
         public string ApiKey { get; set; }
@@ -51,7 +50,7 @@ namespace NzbDrone.Core.ImportLists.Sonarr
         [FieldDefinition(6, Type = FieldType.Select, SelectOptionsProviderAction = "getLanguageProfiles", Label = "Language Profiles", HelpText = "Language Profiles from the source instance to import from")]
         public IEnumerable<int> LanguageProfileIds { get; set; }
 
-        public NzbDroneValidationResult Validate()
+        public override NzbDroneValidationResult Validate()
         {
             return new NzbDroneValidationResult(Validator.Validate(this));
         }

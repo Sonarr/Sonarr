@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Equ;
 using FluentValidation;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.Languages;
@@ -18,7 +19,7 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
         }
     }
 
-    public class BroadcastheNetSettings : ITorrentIndexerSettings
+    public class BroadcastheNetSettings : PropertywiseEquatable<BroadcastheNetSettings>, ITorrentIndexerSettings
     {
         private static readonly BroadcastheNetSettingsValidator Validator = new ();
 

@@ -1,6 +1,5 @@
 using FluentValidation;
 using NzbDrone.Core.Annotations;
-using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Notifications.Slack
@@ -14,9 +13,9 @@ namespace NzbDrone.Core.Notifications.Slack
         }
     }
 
-    public class SlackSettings : IProviderConfig
+    public class SlackSettings : NotificationSettingsBase<SlackSettings>
     {
-        private static readonly SlackSettingsValidator Validator = new SlackSettingsValidator();
+        private static readonly SlackSettingsValidator Validator = new ();
 
         [FieldDefinition(0, Label = "NotificationsSettingsWebhookUrl", HelpText = "NotificationsSlackSettingsWebhookUrlHelpText", Type = FieldType.Url, HelpLink = "https://my.slack.com/services/new/incoming-webhook/")]
         public string WebHookUrl { get; set; }
@@ -30,7 +29,7 @@ namespace NzbDrone.Core.Notifications.Slack
         [FieldDefinition(3, Label = "NotificationsSlackSettingsChannel", HelpText = "NotificationsSlackSettingsChannelHelpText", Type = FieldType.Textbox)]
         public string Channel { get; set; }
 
-        public NzbDroneValidationResult Validate()
+        public override NzbDroneValidationResult Validate()
         {
             return new NzbDroneValidationResult(Validator.Validate(this));
         }

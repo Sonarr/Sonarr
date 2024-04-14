@@ -1,7 +1,6 @@
-﻿using FluentValidation;
+using FluentValidation;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Annotations;
-using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Notifications.Twitter
@@ -28,9 +27,9 @@ namespace NzbDrone.Core.Notifications.Twitter
         }
     }
 
-    public class TwitterSettings : IProviderConfig
+    public class TwitterSettings : NotificationSettingsBase<TwitterSettings>
     {
-        private static readonly TwitterSettingsValidator Validator = new TwitterSettingsValidator();
+        private static readonly TwitterSettingsValidator Validator = new ();
 
         public TwitterSettings()
         {
@@ -59,7 +58,7 @@ namespace NzbDrone.Core.Notifications.Twitter
         [FieldDefinition(6, Label = "NotificationsTwitterSettingsConnectToTwitter", Type = FieldType.OAuth)]
         public string AuthorizeNotification { get; set; }
 
-        public NzbDroneValidationResult Validate()
+        public override NzbDroneValidationResult Validate()
         {
             return new NzbDroneValidationResult(Validator.Validate(this));
         }

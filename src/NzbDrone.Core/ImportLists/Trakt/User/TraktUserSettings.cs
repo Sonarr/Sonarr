@@ -1,12 +1,12 @@
 using FluentValidation;
 using NzbDrone.Core.Annotations;
+using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.ImportLists.Trakt.User
 {
     public class TraktUserSettingsValidator : TraktSettingsBaseValidator<TraktUserSettings>
     {
         public TraktUserSettingsValidator()
-        : base()
         {
             RuleFor(c => c.TraktListType).NotNull();
             RuleFor(c => c.TraktWatchedListType).NotNull();
@@ -16,7 +16,7 @@ namespace NzbDrone.Core.ImportLists.Trakt.User
 
     public class TraktUserSettings : TraktSettingsBase<TraktUserSettings>
     {
-        protected override AbstractValidator<TraktUserSettings> Validator => new TraktUserSettingsValidator();
+        private static readonly TraktUserSettingsValidator Validator = new ();
 
         public TraktUserSettings()
         {
@@ -36,6 +36,11 @@ namespace NzbDrone.Core.ImportLists.Trakt.User
 
         [FieldDefinition(4, Label = "Username", HelpText = "ImportListsTraktSettingsUserListUsernameHelpText")]
         public string Username { get; set; }
+
+        public override NzbDroneValidationResult Validate()
+        {
+            return new NzbDroneValidationResult(Validator.Validate(this));
+        }
     }
 
     public enum TraktUserWatchSorting

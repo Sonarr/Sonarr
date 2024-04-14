@@ -1,7 +1,6 @@
-﻿using FluentValidation;
+using FluentValidation;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Annotations;
-using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Download.Clients.NzbVortex
@@ -23,9 +22,9 @@ namespace NzbDrone.Core.Download.Clients.NzbVortex
         }
     }
 
-    public class NzbVortexSettings : IProviderConfig
+    public class NzbVortexSettings : DownloadClientSettingsBase<NzbVortexSettings>
     {
-        private static readonly NzbVortexSettingsValidator Validator = new NzbVortexSettingsValidator();
+        private static readonly NzbVortexSettingsValidator Validator = new ();
 
         public NzbVortexSettings()
         {
@@ -59,7 +58,7 @@ namespace NzbDrone.Core.Download.Clients.NzbVortex
         [FieldDefinition(6, Label = "DownloadClientSettingsOlderPriority", Type = FieldType.Select, SelectOptions = typeof(NzbVortexPriority), HelpText = "DownloadClientSettingsOlderPriorityEpisodeHelpText")]
         public int OlderTvPriority { get; set; }
 
-        public NzbDroneValidationResult Validate()
+        public override NzbDroneValidationResult Validate()
         {
             return new NzbDroneValidationResult(Validator.Validate(this));
         }

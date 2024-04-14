@@ -2,7 +2,6 @@ using System.Text.RegularExpressions;
 using FluentValidation;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Annotations;
-using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
 using NzbDrone.Core.Validation.Paths;
 
@@ -34,9 +33,9 @@ namespace NzbDrone.Core.Download.Clients.FreeboxDownload
         }
     }
 
-    public class FreeboxDownloadSettings : IProviderConfig
+    public class FreeboxDownloadSettings : DownloadClientSettingsBase<FreeboxDownloadSettings>
     {
-        private static readonly FreeboxDownloadSettingsValidator Validator = new FreeboxDownloadSettingsValidator();
+        private static readonly FreeboxDownloadSettingsValidator Validator = new ();
 
         public FreeboxDownloadSettings()
         {
@@ -84,7 +83,7 @@ namespace NzbDrone.Core.Download.Clients.FreeboxDownload
         [FieldDefinition(10, Label = "DownloadClientSettingsAddPaused", Type = FieldType.Checkbox)]
         public bool AddPaused { get; set; }
 
-        public NzbDroneValidationResult Validate()
+        public override NzbDroneValidationResult Validate()
         {
             return new NzbDroneValidationResult(Validator.Validate(this));
         }

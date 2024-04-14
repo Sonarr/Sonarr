@@ -1,7 +1,6 @@
 using FluentValidation;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Annotations;
-using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Notifications.Plex.Server
@@ -17,9 +16,9 @@ namespace NzbDrone.Core.Notifications.Plex.Server
         }
     }
 
-    public class PlexServerSettings : IProviderConfig
+    public class PlexServerSettings : NotificationSettingsBase<PlexServerSettings>
     {
-        private static readonly PlexServerSettingsValidator Validator = new PlexServerSettingsValidator();
+        private static readonly PlexServerSettingsValidator Validator = new ();
 
         public PlexServerSettings()
         {
@@ -62,7 +61,7 @@ namespace NzbDrone.Core.Notifications.Plex.Server
 
         public bool IsValid => !string.IsNullOrWhiteSpace(Host);
 
-        public NzbDroneValidationResult Validate()
+        public override NzbDroneValidationResult Validate()
         {
             return new NzbDroneValidationResult(Validator.Validate(this));
         }

@@ -1,8 +1,7 @@
-﻿using System.Text.RegularExpressions;
+using System.Text.RegularExpressions;
 using FluentValidation;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Annotations;
-using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Download.Clients.DownloadStation
@@ -26,9 +25,9 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
         }
     }
 
-    public class DownloadStationSettings : IProviderConfig
+    public class DownloadStationSettings : DownloadClientSettingsBase<DownloadStationSettings>
     {
-        private static readonly DownloadStationSettingsValidator Validator = new DownloadStationSettingsValidator();
+        private static readonly DownloadStationSettingsValidator Validator = new ();
 
         [FieldDefinition(0, Label = "Host", Type = FieldType.Textbox)]
         public string Host { get; set; }
@@ -58,7 +57,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
             this.Port = 5000;
         }
 
-        public NzbDroneValidationResult Validate()
+        public override NzbDroneValidationResult Validate()
         {
             return new NzbDroneValidationResult(Validator.Validate(this));
         }

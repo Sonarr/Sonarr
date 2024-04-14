@@ -1,7 +1,6 @@
 using System;
 using FluentValidation;
 using NzbDrone.Core.Annotations;
-using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Notifications.Trakt
@@ -16,9 +15,9 @@ namespace NzbDrone.Core.Notifications.Trakt
         }
     }
 
-    public class TraktSettings : IProviderConfig
+    public class TraktSettings : NotificationSettingsBase<TraktSettings>
     {
-        private static readonly TraktSettingsValidator Validator = new TraktSettingsValidator();
+        private static readonly TraktSettingsValidator Validator = new ();
 
         public TraktSettings()
         {
@@ -40,7 +39,7 @@ namespace NzbDrone.Core.Notifications.Trakt
         [FieldDefinition(4, Label = "NotificationsTraktSettingsAuthenticateWithTrakt", Type = FieldType.OAuth)]
         public string SignIn { get; set; }
 
-        public NzbDroneValidationResult Validate()
+        public override NzbDroneValidationResult Validate()
         {
             return new NzbDroneValidationResult(Validator.Validate(this));
         }
