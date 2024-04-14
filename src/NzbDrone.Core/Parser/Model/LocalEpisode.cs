@@ -37,13 +37,14 @@ namespace NzbDrone.Core.Parser.Model
         public bool ExistingFile { get; set; }
         public bool SceneSource { get; set; }
         public string ReleaseGroup { get; set; }
+        public string ReleaseHash { get; set; }
         public string SceneName { get; set; }
         public bool OtherVideoFiles { get; set; }
         public List<CustomFormat> CustomFormats { get; set; }
         public int CustomFormatScore { get; set; }
         public GrabbedReleaseInfo Release { get; set; }
         public bool ScriptImported { get; set; }
-        public bool FileRenamedAfterScriptImport { get; set; }
+        public string FileNameBeforeRename { get; set; }
         public bool ShouldImportExtras { get; set; }
         public List<string> PossibleExtraFiles { get; set; }
         public SubtitleTitleInfo SubtitleInfo { get; set; }

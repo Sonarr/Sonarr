@@ -10,7 +10,7 @@ namespace NzbDrone.Core.Extras
 {
     public interface IExistingExtraFiles
     {
-        List<string> ImportExtraFiles(Series series, List<string> possibleExtraFiles);
+        List<string> ImportExtraFiles(Series series, List<string> possibleExtraFiles, string fileNameBeforeRename);
     }
 
     public class ExistingExtraFileService : IExistingExtraFiles, IHandle<SeriesScannedEvent>
@@ -25,7 +25,7 @@ namespace NzbDrone.Core.Extras
             _logger = logger;
         }
 
-        public List<string> ImportExtraFiles(Series series, List<string> possibleExtraFiles)
+        public List<string> ImportExtraFiles(Series series, List<string> possibleExtraFiles, string fileNameBeforeRename)
         {
             _logger.Debug("Looking for existing extra files in {0}", series.Path);
 
@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Extras
 
             foreach (var existingExtraFileImporter in _existingExtraFileImporters)
             {
-                var imported = existingExtraFileImporter.ProcessFiles(series, possibleExtraFiles, importedFiles);
+                var imported = existingExtraFileImporter.ProcessFiles(series, possibleExtraFiles, importedFiles, fileNameBeforeRename);
 
                 importedFiles.AddRange(imported.Select(f => Path.Combine(series.Path, f.RelativePath)));
             }
@@ -45,7 +45,7 @@ namespace NzbDrone.Core.Extras
         {
             var series = message.Series;
             var possibleExtraFiles = message.PossibleExtraFiles;
-            var importedFiles = ImportExtraFiles(series, possibleExtraFiles);
+            var importedFiles = ImportExtraFiles(series, possibleExtraFiles, null);
 
             _logger.Info("Found {0} possible extra files, imported {1} files.", possibleExtraFiles.Count, importedFiles.Count);
         }

@@ -1,0 +1,44 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build dotnet",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "msbuild",
+        "-restore",
+        "${workspaceFolder}/src/Sonarr.sln",
+        "-p:GenerateFullPaths=true",
+        "-p:Configuration=Debug",
+        "-p:Platform=Posix",
+        "-consoleloggerparameters:NoSummary;ForceNoAlign"
+      ],
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "publish",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "publish",
+        "${workspaceFolder}/src/Sonarr.sln",
+        "-property:GenerateFullPaths=true",
+        "-consoleloggerparameters:NoSummary;ForceNoAlign"
+      ],
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "watch",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "watch",
+        "run",
+        "--project",
+        "${workspaceFolder}/src/Sonarr.sln"
+      ],
+      "problemMatcher": "$msCompile"
+    }
+  ]
+}

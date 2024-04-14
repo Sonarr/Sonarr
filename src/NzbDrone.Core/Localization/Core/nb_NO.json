@@ -8,5 +8,12 @@
     "Absolute": "Absolutt",
     "Activity": "Aktivitet",
     "About": "Om",
-    "CalendarOptions": "Kalenderinnstillinger"
+    "CalendarOptions": "Kalenderinnstillinger",
+    "AbsoluteEpisodeNumbers": "Absolutte Episode Numre",
+    "AddANewPath": "Legg til ny filsti",
+    "AddConditionImplementation": "Legg til betingelse - {implementationName}",
+    "AddConditionError": "Ikke mulig å legge til ny betingelse, vennligst prøv igjen",
+    "AbsoluteEpisodeNumber": "Absolutt Episode Nummer",
+    "AddAutoTagError": "Ikke mulig å legge til ny automatisk tagg, vennligst prøv igjen",
+    "Actions": "Handlinger"
 }

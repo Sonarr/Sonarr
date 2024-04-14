@@ -99,7 +99,7 @@ namespace NzbDrone.Core.Notifications.Plex.PlexTv
 
             var clientIdentifier = _configService.PlexClientIdentifier;
 
-            var requestBuilder = new HttpRequestBuilder("https://metadata.provider.plex.tv/library/sections/watchlist/all")
+            var requestBuilder = new HttpRequestBuilder("https://discover.provider.plex.tv/library/sections/watchlist/all")
                                  .Accept(HttpAccept.Json)
                                  .AddQueryParam("clientID", clientIdentifier)
                                  .AddQueryParam("context[device][product]", BuildInfo.AppName)
@@ -107,7 +107,8 @@ namespace NzbDrone.Core.Notifications.Plex.PlexTv
                                  .AddQueryParam("context[device][platformVersion]", "7")
                                  .AddQueryParam("context[device][version]", BuildInfo.Version.ToString())
                                  .AddQueryParam("includeFields", "title,type,year,ratingKey")
-                                 .AddQueryParam("includeElements", "Guid")
+                                 .AddQueryParam("excludeElements", "Image")
+                                 .AddQueryParam("includeGuids", "1")
                                  .AddQueryParam("sort", "watchlistedAt:desc")
                                  .AddQueryParam("type", (int)PlexMediaType.Show)
                                  .AddQueryParam("X-Plex-Container-Size", pageSize)

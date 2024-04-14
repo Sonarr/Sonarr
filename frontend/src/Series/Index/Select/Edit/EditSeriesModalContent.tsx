@@ -36,7 +36,7 @@ const monitoredOptions = [
     get value() {
       return translate('NoChange');
     },
-    disabled: true,
+    isDisabled: true,
   },
   {
     key: 'monitored',
@@ -58,7 +58,7 @@ const seasonFolderOptions = [
     get value() {
       return translate('NoChange');
     },
-    disabled: true,
+    isDisabled: true,
   },
   {
     key: 'yes',

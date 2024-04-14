@@ -23,8 +23,8 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
 
             if (localEpisode.FileEpisodeInfo.FullSeason)
             {
-                _logger.Debug("Single episode file detected as containing all episodes in the season");
-                return Decision.Reject("Single episode file contains all episodes in seasons");
+                _logger.Debug("Single episode file detected as containing all episodes in the season due to no episode parsed from the file name.");
+                return Decision.Reject("Single episode file contains all episodes in seasons. Review file name or manually import");
             }
 
             return Decision.Accept();

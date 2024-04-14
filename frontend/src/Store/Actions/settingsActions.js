@@ -1,5 +1,4 @@
 import { createAction } from 'redux-actions';
-import indexerFlags from 'Store/Actions/Settings/indexerFlags';
 import { handleThunks } from 'Store/thunks';
 import createHandleActions from './Creators/createHandleActions';
 import autoTaggings from './Settings/autoTaggings';
@@ -13,6 +12,7 @@ import general from './Settings/general';
 import importListExclusions from './Settings/importListExclusions';
 import importListOptions from './Settings/importListOptions';
 import importLists from './Settings/importLists';
+import indexerFlags from './Settings/indexerFlags';
 import indexerOptions from './Settings/indexerOptions';
 import indexers from './Settings/indexers';
 import languages from './Settings/languages';
@@ -91,7 +91,8 @@ export const defaultState = {
 };
 
 export const persistState = [
-  'settings.advancedSettings'
+  'settings.advancedSettings',
+  'settings.importListExclusions.pageSize'
 ];
 
 //

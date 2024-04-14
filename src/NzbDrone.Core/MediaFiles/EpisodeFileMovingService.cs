@@ -78,7 +78,7 @@ namespace NzbDrone.Core.MediaFiles
 
         public EpisodeFile MoveEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode)
         {
-            var filePath = _buildFileNames.BuildFilePath(localEpisode.Episodes, localEpisode.Series, episodeFile, Path.GetExtension(localEpisode.Path));
+            var filePath = _buildFileNames.BuildFilePath(localEpisode.Episodes, localEpisode.Series, episodeFile, Path.GetExtension(localEpisode.Path), null, localEpisode.CustomFormats);
 
             EnsureEpisodeFolder(episodeFile, localEpisode, filePath);
 
@@ -89,7 +89,7 @@ namespace NzbDrone.Core.MediaFiles
 
         public EpisodeFile CopyEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode)
         {
-            var filePath = _buildFileNames.BuildFilePath(localEpisode.Episodes, localEpisode.Series, episodeFile, Path.GetExtension(localEpisode.Path));
+            var filePath = _buildFileNames.BuildFilePath(localEpisode.Episodes, localEpisode.Series, episodeFile, Path.GetExtension(localEpisode.Path), null, localEpisode.CustomFormats);
 
             EnsureEpisodeFolder(episodeFile, localEpisode, filePath);
 
@@ -123,6 +123,11 @@ namespace NzbDrone.Core.MediaFiles
 
             episodeFile.RelativePath = series.Path.GetRelativePath(destinationFilePath);
 
+            if (localEpisode is not null)
+            {
+                localEpisode.FileNameBeforeRename = episodeFile.RelativePath;
+            }
+
             if (localEpisode is not null && _scriptImportDecider.TryImport(episodeFilePath, destinationFilePath, localEpisode, episodeFile, mode) is var scriptImportDecision && scriptImportDecision != ScriptImportDecision.DeferMove)
             {
                 if (scriptImportDecision == ScriptImportDecision.RenameRequested)
@@ -130,7 +135,6 @@ namespace NzbDrone.Core.MediaFiles
                     try
                     {
                         MoveEpisodeFile(episodeFile, series, episodeFile.Episodes);
-                        localEpisode.FileRenamedAfterScriptImport = true;
                     }
                     catch (SameFilenameException)
                     {

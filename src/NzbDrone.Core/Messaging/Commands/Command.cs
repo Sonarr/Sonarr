@@ -23,7 +23,7 @@ namespace NzbDrone.Core.Messaging.Commands
         }
 
         public virtual bool UpdateScheduledTask => true;
-        public virtual string CompletionMessage => "Completed";
+        public virtual string CompletionMessage => null;
         public virtual bool RequiresDiskAccess => false;
         public virtual bool IsExclusive => false;
         public virtual bool IsLongRunning => false;

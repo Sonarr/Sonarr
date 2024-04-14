@@ -6,6 +6,7 @@ using System.Text.Encodings.Web;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NzbDrone.Common.EnvironmentInfo;
@@ -20,9 +21,8 @@ namespace Sonarr.Http.Authentication
         public BasicAuthenticationHandler(IAuthenticationService authService,
             IOptionsMonitor<AuthenticationSchemeOptions> options,
             ILoggerFactory logger,
-            UrlEncoder encoder,
-            ISystemClock clock)
-            : base(options, logger, encoder, clock)
+            UrlEncoder encoder)
+            : base(options, logger, encoder)
         {
             _authService = authService;
         }
@@ -71,7 +71,7 @@ namespace Sonarr.Http.Authentication
 
         protected override Task HandleChallengeAsync(AuthenticationProperties properties)
         {
-            Response.Headers.Add("WWW-Authenticate", $"Basic realm=\"{BuildInfo.AppName}\"");
+            Response.Headers.Append("WWW-Authenticate", $"Basic realm=\"{BuildInfo.AppName}\"");
             Response.StatusCode = 401;
             return Task.CompletedTask;
         }

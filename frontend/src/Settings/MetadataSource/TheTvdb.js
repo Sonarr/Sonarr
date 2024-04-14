@@ -4,7 +4,6 @@ import translate from 'Utilities/String/translate';
 import styles from './TheTvdb.css';
 
 function TheTvdb(props) {
-  debugger;
   return (
     <div className={styles.container}>
       <img

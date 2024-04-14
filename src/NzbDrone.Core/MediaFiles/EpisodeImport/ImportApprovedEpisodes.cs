@@ -95,6 +95,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                     episodeFile.SeasonNumber = localEpisode.SeasonNumber;
                     episodeFile.Episodes = localEpisode.Episodes;
                     episodeFile.ReleaseGroup = localEpisode.ReleaseGroup;
+                    episodeFile.ReleaseHash = localEpisode.ReleaseHash;
                     episodeFile.Languages = localEpisode.Languages;
 
                     // Prefer the release type from the download client, folder and finally the file so we have the most accurate information.
@@ -122,6 +123,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                     else
                     {
                         episodeFile.IndexerFlags = localEpisode.IndexerFlags;
+                        episodeFile.ReleaseType = localEpisode.ReleaseType;
                     }
 
                     // Fall back to parsed information if history is unavailable or missing
@@ -175,9 +177,9 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                     {
                         if (localEpisode.ScriptImported)
                         {
-                            _existingExtraFiles.ImportExtraFiles(localEpisode.Series, localEpisode.PossibleExtraFiles);
+                            _existingExtraFiles.ImportExtraFiles(localEpisode.Series, localEpisode.PossibleExtraFiles, localEpisode.FileNameBeforeRename);
 
-                            if (localEpisode.FileRenamedAfterScriptImport)
+                            if (localEpisode.FileNameBeforeRename != episodeFile.RelativePath)
                             {
                                 _extraService.MoveFilesAfterRename(localEpisode.Series, episodeFile);
                             }

@@ -3,9 +3,6 @@
 interface CssExports {
   'addButton': string;
   'addImportListExclusion': string;
-  'importListExclusionsHeader': string;
-  'title': string;
-  'tvdbId': string;
 }
 export const cssExports: CssExports;
 export default cssExports;

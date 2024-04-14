@@ -3,10 +3,12 @@ import AppSectionState, {
   AppSectionItemState,
   AppSectionSaveState,
   AppSectionSchemaState,
+  PagedAppSectionState,
 } from 'App/State/AppSectionState';
 import Language from 'Language/Language';
 import DownloadClient from 'typings/DownloadClient';
 import ImportList from 'typings/ImportList';
+import ImportListExclusion from 'typings/ImportListExclusion';
 import ImportListOptionsSettings from 'typings/ImportListOptionsSettings';
 import Indexer from 'typings/Indexer';
 import IndexerFlag from 'typings/IndexerFlag';
@@ -41,6 +43,14 @@ export interface ImportListOptionsSettingsAppState
   extends AppSectionItemState<ImportListOptionsSettings>,
     AppSectionSaveState {}
 
+export interface ImportListExclusionsSettingsAppState
+  extends AppSectionState<ImportListExclusion>,
+    AppSectionSaveState,
+    PagedAppSectionState,
+    AppSectionDeleteState {
+  pendingChanges: Partial<ImportListExclusion>;
+}
+
 export type IndexerFlagSettingsAppState = AppSectionState<IndexerFlag>;
 export type LanguageSettingsAppState = AppSectionState<Language>;
 export type UiSettingsAppState = AppSectionItemState<UiSettings>;
@@ -48,6 +58,7 @@ export type UiSettingsAppState = AppSectionItemState<UiSettings>;
 interface SettingsAppState {
   advancedSettings: boolean;
   downloadClients: DownloadClientAppState;
+  importListExclusions: ImportListExclusionsSettingsAppState;
   importListOptions: ImportListOptionsSettingsAppState;
   importLists: ImportListAppState;
   indexerFlags: IndexerFlagSettingsAppState;

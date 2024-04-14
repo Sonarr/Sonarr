@@ -20,7 +20,7 @@
     "ApplyTagsHelpTextAdd": "Adăugare: adăugați etichetele la lista de etichete existentă",
     "ApplyTagsHelpTextReplace": "Înlocuire: înlocuiți etichetele cu etichetele introduse (nu introduceți etichete pentru a șterge toate etichetele)",
     "CancelPendingTask": "Sigur doriți să anulați această sarcină în așteptare?",
-    "DownloadClientCheckUnableToCommunicateWithHealthCheckMessage": "Nu pot comunica cu {downloadClientName}.",
+    "DownloadClientCheckUnableToCommunicateWithHealthCheckMessage": "Nu pot comunica cu {downloadClientName}. {errorMessage}",
     "CloneCustomFormat": "Clonați format personalizat",
     "Close": "Închide",
     "Delete": "Șterge",
@@ -132,7 +132,6 @@
     "AuthForm": "Formulare (Pagina de autentificare)",
     "AuthenticationMethodHelpText": "Solicitați nume utilizator și parola pentru a accesa {appName}",
     "AuthenticationRequired": "Autentificare necesara",
-    "Authentication": "",
     "AddNewSeriesError": "Nu s-au putut încărca rezultatele căutării, încercați din nou.",
     "AddSeriesWithTitle": "Adăugați {title}",
     "AlreadyInYourLibrary": "Deja în biblioteca dvs.",
@@ -199,5 +198,7 @@
     "AppUpdated": "{appName} actualizat",
     "ShowRelativeDatesHelpText": "Afișați datele relative (Azi / Ieri / etc) sau absolute",
     "WeekColumnHeader": "Antetul coloanei săptămânii",
-    "TimeFormat": "Format ora"
+    "TimeFormat": "Format ora",
+    "CustomFilter": "Filtru personalizat",
+    "CustomFilters": "Filtre personalizate"
 }

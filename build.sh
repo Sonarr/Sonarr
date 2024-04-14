@@ -4,7 +4,7 @@ set -e
 outputFolder='_output'
 testPackageFolder='_tests'
 artifactsFolder="_artifacts";
-framework="${FRAMEWORK:=net6.0}"
+framework="${FRAMEWORK:=net8.0}"
 
 ProgressStart()
 {

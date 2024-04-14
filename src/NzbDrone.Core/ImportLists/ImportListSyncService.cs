@@ -190,6 +190,29 @@ namespace NzbDrone.Core.ImportLists
                     item.Title = mappedSeries.Title;
                 }
 
+                // Map by MyAniList ID if we have it
+                if (item.TvdbId <= 0 && item.MalId > 0)
+                {
+                    var mappedSeries = _seriesSearchService.SearchForNewSeriesByMyAnimeListId(item.MalId)
+                        .FirstOrDefault();
+
+                    if (mappedSeries == null)
+                    {
+                        _logger.Debug("Rejected, unable to find matching TVDB ID for MAL ID: {0} [{1}]", item.MalId, item.Title);
+
+                        continue;
+                    }
+
+                    item.TvdbId = mappedSeries.TvdbId;
+                    item.Title = mappedSeries.Title;
+                }
+
+                if (item.TvdbId == 0)
+                {
+                    _logger.Debug("[{0}] Rejected, unable to find TVDB ID", item.Title);
+                    continue;
+                }
+
                 // Check to see if series excluded
                 var excludedSeries = listExclusions.Where(s => s.TvdbId == item.TvdbId).SingleOrDefault();
 
@@ -202,7 +225,7 @@ namespace NzbDrone.Core.ImportLists
                 // Break if Series Exists in DB
                 if (existingTvdbIds.Any(x => x == item.TvdbId))
                 {
-                    _logger.Debug("{0} [{1}] Rejected, Series Exists in DB", item.TvdbId, item.Title);
+                    _logger.Debug("{0} [{1}] Rejected, series exists in database", item.TvdbId, item.Title);
                     continue;
                 }
 

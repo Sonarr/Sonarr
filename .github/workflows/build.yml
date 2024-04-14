@@ -19,10 +19,10 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  FRAMEWORK: net6.0
+  FRAMEWORK: net8.0
   RAW_BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
   SONARR_MAJOR_VERSION: 4
-  VERSION: 4.0.2
+  VERSION: 4.0.4
 
 jobs:
   backend:
@@ -121,7 +121,7 @@ jobs:
       run: yarn lint
 
     - name: Stylelint
-      run: yarn stylelint
+      run: yarn stylelint -f github
 
     - name: Build
       run: yarn build --env production
@@ -217,7 +217,7 @@ jobs:
 
   deploy:
     if: ${{ github.ref_name == 'develop' || github.ref_name == 'main' }}
-    needs: [backend, unit_test, unit_test_postgres, integration_test]
+    needs: [backend, frontend, unit_test, unit_test_postgres, integration_test]
     secrets: inherit
     uses: ./.github/workflows/deploy.yml
     with:
@@ -225,3 +225,25 @@ jobs:
       branch: ${{ github.ref_name }}
       major_version: ${{ needs.backend.outputs.major_version }}
       version: ${{ needs.backend.outputs.version }}
+
+  notify:
+    name: Discord Notification
+    needs: [backend, frontend, unit_test, unit_test_postgres, integration_test, deploy]
+    if: ${{ !cancelled() && (github.ref_name == 'develop' || github.ref_name == 'main') }}
+    env:
+      STATUS: ${{ contains(needs.*.result, 'failure') && 'failure' || 'success' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Notify
+        uses: tsickert/discord-webhook@v5.3.0
+        with:
+          webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          username: 'GitHub Actions'
+          avatar-url: 'https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png'
+          embed-title: "${{ github.workflow }}: ${{ env.STATUS == 'success' && 'Success' || 'Failure' }}"
+          embed-url: 'https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+          embed-description: |
+            **Branch** ${{ github.ref }}
+            **Build** ${{ needs.backend.outputs.version }}
+          embed-color: ${{ env.STATUS == 'success' && '3066993' || '15158332' }}
