@@ -1,7 +1,6 @@
-﻿using FluentValidation;
+using FluentValidation;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Annotations;
-using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Download.Clients.Hadouken
@@ -22,9 +21,9 @@ namespace NzbDrone.Core.Download.Clients.Hadouken
         }
     }
 
-    public class HadoukenSettings : IProviderConfig
+    public class HadoukenSettings : DownloadClientSettingsBase<HadoukenSettings>
     {
-        private static readonly HadoukenSettingsValidator Validator = new HadoukenSettingsValidator();
+        private static readonly HadoukenSettingsValidator Validator = new ();
 
         public HadoukenSettings()
         {
@@ -57,7 +56,7 @@ namespace NzbDrone.Core.Download.Clients.Hadouken
         [FieldDefinition(6, Label = "Category", Type = FieldType.Textbox, HelpText = "DownloadClientSettingsCategoryHelpText")]
         public string Category { get; set; }
 
-        public NzbDroneValidationResult Validate()
+        public override NzbDroneValidationResult Validate()
         {
             return new NzbDroneValidationResult(Validator.Validate(this));
         }

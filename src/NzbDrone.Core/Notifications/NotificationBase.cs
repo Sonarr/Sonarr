@@ -8,7 +8,7 @@ using NzbDrone.Core.Tv;
 namespace NzbDrone.Core.Notifications
 {
     public abstract class NotificationBase<TSettings> : INotification
-        where TSettings : IProviderConfig, new()
+        where TSettings : NotificationSettingsBase<TSettings>, new()
     {
         protected const string EPISODE_GRABBED_TITLE = "Episode Grabbed";
         protected const string EPISODE_DOWNLOADED_TITLE = "Episode Downloaded";

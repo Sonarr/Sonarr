@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using FluentValidation;
 using NzbDrone.Core.Annotations;
-using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Notifications.Pushover
@@ -17,9 +16,9 @@ namespace NzbDrone.Core.Notifications.Pushover
         }
     }
 
-    public class PushoverSettings : IProviderConfig
+    public class PushoverSettings : NotificationSettingsBase<PushoverSettings>
     {
-        private static readonly PushoverSettingsValidator Validator = new PushoverSettingsValidator();
+        private static readonly PushoverSettingsValidator Validator = new ();
 
         public PushoverSettings()
         {
@@ -51,7 +50,7 @@ namespace NzbDrone.Core.Notifications.Pushover
 
         public bool IsValid => !string.IsNullOrWhiteSpace(UserKey) && Priority >= -1 && Priority <= 2;
 
-        public NzbDroneValidationResult Validate()
+        public override NzbDroneValidationResult Validate()
         {
             return new NzbDroneValidationResult(Validator.Validate(this));
         }

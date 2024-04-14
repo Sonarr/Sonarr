@@ -1,6 +1,5 @@
-﻿using FluentValidation;
+using FluentValidation;
 using NzbDrone.Core.Annotations;
-using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Notifications.Prowl
@@ -13,9 +12,9 @@ namespace NzbDrone.Core.Notifications.Prowl
         }
     }
 
-    public class ProwlSettings : IProviderConfig
+    public class ProwlSettings : NotificationSettingsBase<ProwlSettings>
     {
-        private static readonly ProwlSettingsValidator Validator = new ProwlSettingsValidator();
+        private static readonly ProwlSettingsValidator Validator = new ();
 
         [FieldDefinition(0, Label = "ApiKey", Privacy = PrivacyLevel.ApiKey, HelpLink = "https://www.prowlapp.com/api_settings.php")]
         public string ApiKey { get; set; }
@@ -25,7 +24,7 @@ namespace NzbDrone.Core.Notifications.Prowl
 
         public bool IsValid => !string.IsNullOrWhiteSpace(ApiKey) && Priority >= -2 && Priority <= 2;
 
-        public NzbDroneValidationResult Validate()
+        public override NzbDroneValidationResult Validate()
         {
             return new NzbDroneValidationResult(Validator.Validate(this));
         }

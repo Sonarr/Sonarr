@@ -1,7 +1,6 @@
 using FluentValidation;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Annotations;
-using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Download.Clients.QBittorrent
@@ -19,9 +18,9 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
         }
     }
 
-    public class QBittorrentSettings : IProviderConfig
+    public class QBittorrentSettings : DownloadClientSettingsBase<QBittorrentSettings>
     {
-        private static readonly QBittorrentSettingsValidator Validator = new QBittorrentSettingsValidator();
+        private static readonly QBittorrentSettingsValidator Validator = new ();
 
         public QBittorrentSettings()
         {
@@ -74,7 +73,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
         [FieldDefinition(13, Label = "DownloadClientQbittorrentSettingsContentLayout", Type = FieldType.Select, SelectOptions = typeof(QBittorrentContentLayout), HelpText = "DownloadClientQbittorrentSettingsContentLayoutHelpText")]
         public int ContentLayout { get; set; }
 
-        public NzbDroneValidationResult Validate()
+        public override NzbDroneValidationResult Validate()
         {
             return new NzbDroneValidationResult(Validator.Validate(this));
         }

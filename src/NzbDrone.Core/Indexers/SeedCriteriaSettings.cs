@@ -1,3 +1,4 @@
+using Equ;
 using FluentValidation;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.Validation;
@@ -46,7 +47,7 @@ namespace NzbDrone.Core.Indexers
         }
     }
 
-    public class SeedCriteriaSettings
+    public class SeedCriteriaSettings : PropertywiseEquatable<SeedCriteriaSettings>
     {
         [FieldDefinition(0, Type = FieldType.Number, Label = "IndexerSettingsSeedRatio", HelpText = "IndexerSettingsSeedRatioHelpText")]
         public double? SeedRatio { get; set; }

@@ -3,7 +3,6 @@ using FluentValidation;
 using Newtonsoft.Json;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Annotations;
-using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Notifications.Xbmc
@@ -18,7 +17,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
         }
     }
 
-    public class XbmcSettings : IProviderConfig
+    public class XbmcSettings : NotificationSettingsBase<XbmcSettings>
     {
         private static readonly XbmcSettingsValidator Validator = new ();
 
@@ -69,7 +68,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
         [JsonIgnore]
         public string Address => $"{Host.ToUrlHost()}:{Port}{UrlBase}";
 
-        public NzbDroneValidationResult Validate()
+        public override NzbDroneValidationResult Validate()
         {
             return new NzbDroneValidationResult(Validator.Validate(this));
         }

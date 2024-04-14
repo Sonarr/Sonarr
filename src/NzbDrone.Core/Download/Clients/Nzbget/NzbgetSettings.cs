@@ -1,7 +1,6 @@
 using FluentValidation;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Annotations;
-using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Download.Clients.Nzbget
@@ -21,9 +20,9 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
         }
     }
 
-    public class NzbgetSettings : IProviderConfig
+    public class NzbgetSettings : DownloadClientSettingsBase<NzbgetSettings>
     {
-        private static readonly NzbgetSettingsValidator Validator = new NzbgetSettingsValidator();
+        private static readonly NzbgetSettingsValidator Validator = new ();
 
         public NzbgetSettings()
         {
@@ -67,7 +66,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
         [FieldDefinition(9, Label = "DownloadClientSettingsAddPaused", Type = FieldType.Checkbox, HelpText = "DownloadClientNzbgetSettingsAddPausedHelpText")]
         public bool AddPaused { get; set; }
 
-        public NzbDroneValidationResult Validate()
+        public override NzbDroneValidationResult Validate()
         {
             return new NzbDroneValidationResult(Validator.Validate(this));
         }

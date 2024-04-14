@@ -1,6 +1,5 @@
 using FluentValidation;
 using NzbDrone.Core.Annotations;
-using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Download.Clients.Deluge
@@ -17,9 +16,9 @@ namespace NzbDrone.Core.Download.Clients.Deluge
         }
     }
 
-    public class DelugeSettings : IProviderConfig
+    public class DelugeSettings : DownloadClientSettingsBase<DelugeSettings>
     {
-        private static readonly DelugeSettingsValidator Validator = new DelugeSettingsValidator();
+        private static readonly DelugeSettingsValidator Validator = new ();
 
         public DelugeSettings()
         {
@@ -67,7 +66,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
         [FieldDefinition(11, Label = "DownloadClientDelugeSettingsDirectoryCompleted", Type = FieldType.Textbox, Advanced = true, HelpText = "DownloadClientDelugeSettingsDirectoryCompletedHelpText")]
         public string CompletedDirectory { get; set; }
 
-        public NzbDroneValidationResult Validate()
+        public override NzbDroneValidationResult Validate()
         {
             return new NzbDroneValidationResult(Validator.Validate(this));
         }

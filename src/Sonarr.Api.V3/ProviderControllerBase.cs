@@ -90,10 +90,8 @@ namespace Sonarr.Api.V3
             var existingDefinition = _providerFactory.Find(providerResource.Id);
             var providerDefinition = GetDefinition(providerResource, existingDefinition, true, !forceSave, false);
 
-            // Comparing via JSON string to eliminate the need for every provider implementation to implement equality checks.
             // Compare settings separately because they are not serialized with the definition.
-            var hasDefinitionChanged = STJson.ToJson(existingDefinition) != STJson.ToJson(providerDefinition) ||
-                                       STJson.ToJson(existingDefinition.Settings) != STJson.ToJson(providerDefinition.Settings);
+            var hasDefinitionChanged = !existingDefinition.Equals(providerDefinition) || !existingDefinition.Settings.Equals(providerDefinition.Settings);
 
             // Only test existing definitions if it is enabled and forceSave isn't set and the definition has changed.
             if (providerDefinition.Enable && !forceSave && hasDefinitionChanged)

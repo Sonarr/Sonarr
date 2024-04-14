@@ -1,6 +1,5 @@
 using FluentValidation;
 using NzbDrone.Core.Annotations;
-using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Notifications.Pushcut
@@ -14,7 +13,7 @@ namespace NzbDrone.Core.Notifications.Pushcut
         }
     }
 
-    public class PushcutSettings : IProviderConfig
+    public class PushcutSettings : NotificationSettingsBase<PushcutSettings>
     {
         private static readonly PushcutSettingsValidator Validator = new ();
 
@@ -27,7 +26,7 @@ namespace NzbDrone.Core.Notifications.Pushcut
         [FieldDefinition(2, Label = "NotificationsPushcutSettingsTimeSensitive", Type = FieldType.Checkbox, HelpText = "NotificationsPushcutSettingsTimeSensitiveHelpText")]
         public bool TimeSensitive { get; set; }
 
-        public NzbDroneValidationResult Validate()
+        public override NzbDroneValidationResult Validate()
         {
             return new NzbDroneValidationResult(Validator.Validate(this));
         }

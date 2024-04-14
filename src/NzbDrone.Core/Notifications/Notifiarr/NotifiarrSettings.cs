@@ -1,6 +1,5 @@
 using FluentValidation;
 using NzbDrone.Core.Annotations;
-using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Notifications.Notifiarr
@@ -13,14 +12,14 @@ namespace NzbDrone.Core.Notifications.Notifiarr
         }
     }
 
-    public class NotifiarrSettings : IProviderConfig
+    public class NotifiarrSettings : NotificationSettingsBase<NotifiarrSettings>
     {
-        private static readonly NotifiarrSettingsValidator Validator = new NotifiarrSettingsValidator();
+        private static readonly NotifiarrSettingsValidator Validator = new ();
 
         [FieldDefinition(0, Label = "ApiKey", Privacy = PrivacyLevel.ApiKey, HelpText = "NotificationsNotifiarrSettingsApiKeyHelpText", HelpLink = "https://notifiarr.com")]
         public string ApiKey { get; set; }
 
-        public NzbDroneValidationResult Validate()
+        public override NzbDroneValidationResult Validate()
         {
             return new NzbDroneValidationResult(Validator.Validate(this));
         }

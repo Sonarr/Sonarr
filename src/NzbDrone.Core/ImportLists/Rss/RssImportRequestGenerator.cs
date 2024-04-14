@@ -3,9 +3,10 @@ using NzbDrone.Common.Http;
 
 namespace NzbDrone.Core.ImportLists.Rss
 {
-    public class RssImportRequestGenerator : IImportListRequestGenerator
+    public class RssImportRequestGenerator<TSettings> : IImportListRequestGenerator
+        where TSettings : RssImportBaseSettings<TSettings>, new()
     {
-        public RssImportBaseSettings Settings { get; set; }
+        public RssImportBaseSettings<TSettings> Settings { get; set; }
 
         public virtual ImportListPageableRequestChain GetListItems()
         {
@@ -18,9 +19,7 @@ namespace NzbDrone.Core.ImportLists.Rss
 
         private IEnumerable<ImportListRequest> GetSeriesRequest()
         {
-            var request = new ImportListRequest(Settings.Url, HttpAccept.Rss);
-
-            yield return request;
+            yield return new ImportListRequest(Settings.Url, HttpAccept.Rss);
         }
     }
 }

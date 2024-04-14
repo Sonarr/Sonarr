@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using FluentValidation;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Annotations;
-using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Notifications.Apprise
@@ -35,7 +34,7 @@ namespace NzbDrone.Core.Notifications.Apprise
         }
     }
 
-    public class AppriseSettings : IProviderConfig
+    public class AppriseSettings : NotificationSettingsBase<AppriseSettings>
     {
         private static readonly AppriseSettingsValidator Validator = new ();
 
@@ -66,7 +65,7 @@ namespace NzbDrone.Core.Notifications.Apprise
         [FieldDefinition(7, Label = "Password", Type = FieldType.Password, HelpText = "NotificationsAppriseSettingsPasswordHelpText", Privacy = PrivacyLevel.Password)]
         public string AuthPassword { get; set; }
 
-        public NzbDroneValidationResult Validate()
+        public override NzbDroneValidationResult Validate()
         {
             return new NzbDroneValidationResult(Validator.Validate(this));
         }

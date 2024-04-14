@@ -14,9 +14,9 @@ namespace NzbDrone.Core.ImportLists.Plex
         }
     }
 
-    public class PlexListSettings : IImportListSettings
+    public class PlexListSettings : ImportListSettingsBase<PlexListSettings>
     {
-        protected virtual PlexListSettingsValidator Validator => new PlexListSettingsValidator();
+        private static readonly PlexListSettingsValidator Validator = new ();
 
         public PlexListSettings()
         {
@@ -25,7 +25,7 @@ namespace NzbDrone.Core.ImportLists.Plex
 
         public virtual string Scope => "";
 
-        public string BaseUrl { get; set; }
+        public override string BaseUrl { get; set; }
 
         [FieldDefinition(0, Label = "ImportListsSettingsAccessToken", Type = FieldType.Textbox, Hidden = HiddenType.Hidden)]
         public string AccessToken { get; set; }
@@ -33,7 +33,7 @@ namespace NzbDrone.Core.ImportLists.Plex
         [FieldDefinition(99, Label = "ImportListsPlexSettingsAuthenticateWithPlex", Type = FieldType.OAuth)]
         public string SignIn { get; set; }
 
-        public NzbDroneValidationResult Validate()
+        public override NzbDroneValidationResult Validate()
         {
             return new NzbDroneValidationResult(Validator.Validate(this));
         }

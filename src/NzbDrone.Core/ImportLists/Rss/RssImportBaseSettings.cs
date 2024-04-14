@@ -4,7 +4,8 @@ using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.ImportLists.Rss
 {
-    public class RssImportSettingsValidator : AbstractValidator<RssImportBaseSettings>
+    public class RssImportSettingsValidator<TSettings> : AbstractValidator<TSettings>
+        where TSettings : RssImportBaseSettings<TSettings>
     {
         public RssImportSettingsValidator()
         {
@@ -12,18 +13,19 @@ namespace NzbDrone.Core.ImportLists.Rss
         }
     }
 
-    public class RssImportBaseSettings : IImportListSettings
+    public class RssImportBaseSettings<TSettings> : ImportListSettingsBase<TSettings>
+        where TSettings : RssImportBaseSettings<TSettings>
     {
-        private RssImportSettingsValidator Validator => new ();
+        private static readonly RssImportSettingsValidator<TSettings> Validator = new ();
 
-        public string BaseUrl { get; set; }
+        public override string BaseUrl { get; set; }
 
         [FieldDefinition(0, Label = "ImportListsSettingsRssUrl", Type = FieldType.Textbox)]
         public virtual string Url { get; set; }
 
-        public virtual NzbDroneValidationResult Validate()
+        public override NzbDroneValidationResult Validate()
         {
-            return new NzbDroneValidationResult(Validator.Validate(this));
+            return new NzbDroneValidationResult(Validator.Validate(this as TSettings));
         }
     }
 }

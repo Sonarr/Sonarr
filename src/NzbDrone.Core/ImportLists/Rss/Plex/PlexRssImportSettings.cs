@@ -12,9 +12,9 @@ namespace NzbDrone.Core.ImportLists.Rss.Plex
         }
     }
 
-    public class PlexRssImportSettings : RssImportBaseSettings
+    public class PlexRssImportSettings : RssImportBaseSettings<PlexRssImportSettings>
     {
-        private PlexRssImportSettingsValidator Validator => new ();
+        private static readonly PlexRssImportSettingsValidator Validator = new ();
 
         [FieldDefinition(0, Label = "ImportListsSettingsRssUrl", Type = FieldType.Textbox, HelpLink = "https://app.plex.tv/desktop/#!/settings/watchlist")]
         public override string Url { get; set; }

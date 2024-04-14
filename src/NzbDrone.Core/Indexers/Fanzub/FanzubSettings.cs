@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Equ;
 using FluentValidation;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.Languages;
@@ -15,9 +16,9 @@ namespace NzbDrone.Core.Indexers.Fanzub
         }
     }
 
-    public class FanzubSettings : IIndexerSettings
+    public class FanzubSettings : PropertywiseEquatable<FanzubSettings>, IIndexerSettings
     {
-        private static readonly FanzubSettingsValidator Validator = new FanzubSettingsValidator();
+        private static readonly FanzubSettingsValidator Validator = new ();
 
         public FanzubSettings()
         {

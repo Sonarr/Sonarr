@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using Equ;
 using FluentValidation;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Annotations;
@@ -25,9 +26,9 @@ namespace NzbDrone.Core.Indexers.IPTorrents
         }
     }
 
-    public class IPTorrentsSettings : ITorrentIndexerSettings
+    public class IPTorrentsSettings : PropertywiseEquatable<IPTorrentsSettings>, ITorrentIndexerSettings
     {
-        private static readonly IPTorrentsSettingsValidator Validator = new IPTorrentsSettingsValidator();
+        private static readonly IPTorrentsSettingsValidator Validator = new ();
 
         public IPTorrentsSettings()
         {
@@ -42,7 +43,7 @@ namespace NzbDrone.Core.Indexers.IPTorrents
         public int MinimumSeeders { get; set; }
 
         [FieldDefinition(2)]
-        public SeedCriteriaSettings SeedCriteria { get; set; } = new SeedCriteriaSettings();
+        public SeedCriteriaSettings SeedCriteria { get; set; } = new ();
 
         [FieldDefinition(3, Type = FieldType.Checkbox, Label = "IndexerSettingsRejectBlocklistedTorrentHashes", HelpText = "IndexerSettingsRejectBlocklistedTorrentHashesHelpText", Advanced = true)]
         public bool RejectBlocklistedTorrentHashesWhileGrabbing { get; set; }

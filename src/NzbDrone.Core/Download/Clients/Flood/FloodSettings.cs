@@ -3,7 +3,6 @@ using System.Linq;
 using FluentValidation;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.Download.Clients.Flood.Models;
-using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Download.Clients.Flood
@@ -17,9 +16,9 @@ namespace NzbDrone.Core.Download.Clients.Flood
         }
     }
 
-    public class FloodSettings : IProviderConfig
+    public class FloodSettings : DownloadClientSettingsBase<FloodSettings>
     {
-        private static readonly FloodSettingsValidator Validator = new FloodSettingsValidator();
+        private static readonly FloodSettingsValidator Validator = new ();
 
         public FloodSettings()
         {
@@ -69,7 +68,7 @@ namespace NzbDrone.Core.Download.Clients.Flood
         [FieldDefinition(10, Label = "DownloadClientFloodSettingsStartOnAdd", Type = FieldType.Checkbox)]
         public bool StartOnAdd { get; set; }
 
-        public NzbDroneValidationResult Validate()
+        public override NzbDroneValidationResult Validate()
         {
             return new NzbDroneValidationResult(Validator.Validate(this));
         }

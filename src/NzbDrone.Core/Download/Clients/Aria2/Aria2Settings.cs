@@ -1,6 +1,5 @@
 using FluentValidation;
 using NzbDrone.Core.Annotations;
-using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Download.Clients.Aria2
@@ -13,9 +12,9 @@ namespace NzbDrone.Core.Download.Clients.Aria2
         }
     }
 
-    public class Aria2Settings : IProviderConfig
+    public class Aria2Settings : DownloadClientSettingsBase<Aria2Settings>
     {
-        private static readonly Aria2SettingsValidator Validator = new Aria2SettingsValidator();
+        private static readonly Aria2SettingsValidator Validator = new ();
 
         public Aria2Settings()
         {
@@ -44,7 +43,7 @@ namespace NzbDrone.Core.Download.Clients.Aria2
         [FieldDefinition(5, Label = "Directory", Type = FieldType.Textbox, HelpText = "DownloadClientAriaSettingsDirectoryHelpText")]
         public string Directory { get; set; }
 
-        public NzbDroneValidationResult Validate()
+        public override NzbDroneValidationResult Validate()
         {
                 return new NzbDroneValidationResult(Validator.Validate(this));
             }

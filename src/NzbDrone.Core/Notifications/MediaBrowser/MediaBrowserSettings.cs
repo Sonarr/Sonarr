@@ -2,7 +2,6 @@ using FluentValidation;
 using Newtonsoft.Json;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Annotations;
-using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Notifications.Emby
@@ -19,9 +18,9 @@ namespace NzbDrone.Core.Notifications.Emby
         }
     }
 
-    public class MediaBrowserSettings : IProviderConfig
+    public class MediaBrowserSettings : NotificationSettingsBase<MediaBrowserSettings>
     {
-        private static readonly MediaBrowserSettingsValidator Validator = new MediaBrowserSettingsValidator();
+        private static readonly MediaBrowserSettingsValidator Validator = new ();
 
         public MediaBrowserSettings()
         {
@@ -65,7 +64,7 @@ namespace NzbDrone.Core.Notifications.Emby
 
         public bool IsValid => !string.IsNullOrWhiteSpace(Host) && Port > 0;
 
-        public NzbDroneValidationResult Validate()
+        public override NzbDroneValidationResult Validate()
         {
             return new NzbDroneValidationResult(Validator.Validate(this));
         }

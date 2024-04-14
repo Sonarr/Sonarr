@@ -2,13 +2,13 @@ using System.Text.RegularExpressions;
 using FluentValidation;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Annotations;
+using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.ImportLists.Trakt.Popular
 {
     public class TraktPopularSettingsValidator : TraktSettingsBaseValidator<TraktPopularSettings>
     {
         public TraktPopularSettingsValidator()
-        : base()
         {
             RuleFor(c => c.TraktListType).NotNull();
 
@@ -28,7 +28,7 @@ namespace NzbDrone.Core.ImportLists.Trakt.Popular
 
     public class TraktPopularSettings : TraktSettingsBase<TraktPopularSettings>
     {
-        protected override AbstractValidator<TraktPopularSettings> Validator => new TraktPopularSettingsValidator();
+        private static readonly TraktPopularSettingsValidator Validator = new ();
 
         public TraktPopularSettings()
         {
@@ -46,5 +46,10 @@ namespace NzbDrone.Core.ImportLists.Trakt.Popular
 
         [FieldDefinition(5, Label = "ImportListsTraktSettingsYears", HelpText = "ImportListsTraktSettingsYearsHelpText")]
         public string Years { get; set; }
+
+        public override NzbDroneValidationResult Validate()
+        {
+            return new NzbDroneValidationResult(Validator.Validate(this));
+        }
     }
 }
