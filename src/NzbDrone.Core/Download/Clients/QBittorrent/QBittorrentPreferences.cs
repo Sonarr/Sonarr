@@ -28,6 +28,12 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
         [JsonProperty(PropertyName = "max_seeding_time")]
         public long MaxSeedingTime { get; set; } // Get the global share time limit in minutes
 
+        [JsonProperty(PropertyName = "max_inactive_seeding_time_enabled")]
+        public bool MaxInactiveSeedingTimeEnabled { get; set; } // True if share inactive time limit is enabled
+
+        [JsonProperty(PropertyName = "max_inactive_seeding_time")]
+        public long MaxInactiveSeedingTime { get; set; } // Get the global share inactive time limit in minutes
+
         [JsonProperty(PropertyName = "max_ratio_act")]
         public QBittorrentMaxRatioAction MaxRatioAction { get; set; } // Action performed when a torrent reaches the maximum share ratio.
 

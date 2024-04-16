@@ -108,7 +108,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
             Subject.Definition.Settings.As<QBittorrentSettings>().RecentTvPriority = (int)QBittorrentPriority.First;
         }
 
-        protected void GivenGlobalSeedLimits(float maxRatio, int maxSeedingTime = -1, QBittorrentMaxRatioAction maxRatioAction = QBittorrentMaxRatioAction.Pause)
+        protected void GivenGlobalSeedLimits(float maxRatio, int maxSeedingTime = -1, int maxInactiveSeedingTime = -1, QBittorrentMaxRatioAction maxRatioAction = QBittorrentMaxRatioAction.Pause)
         {
             Mocker.GetMock<IQBittorrentProxy>()
                   .Setup(s => s.GetConfig(It.IsAny<QBittorrentSettings>()))
@@ -118,7 +118,9 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
                       MaxRatio = maxRatio,
                       MaxRatioEnabled = maxRatio >= 0,
                       MaxSeedingTime = maxSeedingTime,
-                      MaxSeedingTimeEnabled = maxSeedingTime >= 0
+                      MaxSeedingTimeEnabled = maxSeedingTime >= 0,
+                      MaxInactiveSeedingTime = maxInactiveSeedingTime,
+                      MaxInactiveSeedingTimeEnabled = maxInactiveSeedingTime >= 0
                   });
         }
 
@@ -610,7 +612,9 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
             float ratio = 0.1f,
             float ratioLimit = -2,
             int seedingTime = 1,
-            int seedingTimeLimit = -2)
+            int seedingTimeLimit = -2,
+            int inactiveSeedingTimeLimit = -2,
+            long lastActivity = -1)
         {
             var torrent = new QBittorrentTorrent
             {
@@ -624,7 +628,9 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
                 SavePath = "",
                 Ratio = ratio,
                 RatioLimit = ratioLimit,
-                SeedingTimeLimit = seedingTimeLimit
+                SeedingTimeLimit = seedingTimeLimit,
+                InactiveSeedingTimeLimit = inactiveSeedingTimeLimit,
+                LastActivity = lastActivity == -1 ? DateTimeOffset.UtcNow.ToUnixTimeSeconds() : lastActivity
             };
 
             GivenTorrents(new List<QBittorrentTorrent>() { torrent });
@@ -740,10 +746,65 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
         }
 
         [Test]
+        public void should_not_be_removable_and_should_not_allow_move_files_if_max_inactive_seedingtime_reached_and_not_paused()
+        {
+            GivenGlobalSeedLimits(-1, maxInactiveSeedingTime: 20);
+            GivenCompletedTorrent("uploading", ratio: 2.0f, lastActivity: DateTimeOffset.UtcNow.Subtract(TimeSpan.FromMinutes(25)).ToUnixTimeSeconds());
+
+            var item = Subject.GetItems().Single();
+            item.CanBeRemoved.Should().BeFalse();
+            item.CanMoveFiles.Should().BeFalse();
+        }
+
+        [Test]
+        public void should_be_removable_and_should_allow_move_files_if_max_inactive_seedingtime_reached_and_paused()
+        {
+            GivenGlobalSeedLimits(-1, maxInactiveSeedingTime: 20);
+            GivenCompletedTorrent("pausedUP", ratio: 2.0f, lastActivity: DateTimeOffset.UtcNow.Subtract(TimeSpan.FromMinutes(25)).ToUnixTimeSeconds());
+
+            var item = Subject.GetItems().Single();
+            item.CanBeRemoved.Should().BeTrue();
+            item.CanMoveFiles.Should().BeTrue();
+        }
+
+        [Test]
+        public void should_be_removable_and_should_allow_move_files_if_overridden_max_inactive_seedingtime_reached_and_paused()
+        {
+            GivenGlobalSeedLimits(-1, maxInactiveSeedingTime: 40);
+            GivenCompletedTorrent("pausedUP", ratio: 2.0f, seedingTime: 20, inactiveSeedingTimeLimit: 10, lastActivity: DateTimeOffset.UtcNow.Subtract(TimeSpan.FromMinutes(15)).ToUnixTimeSeconds());
+
+            var item = Subject.GetItems().Single();
+            item.CanBeRemoved.Should().BeTrue();
+            item.CanMoveFiles.Should().BeTrue();
+        }
+
+        [Test]
+        public void should_not_be_removable_if_overridden_max_inactive_seedingtime_not_reached_and_paused()
+        {
+            GivenGlobalSeedLimits(-1, maxInactiveSeedingTime: 20);
+            GivenCompletedTorrent("pausedUP", ratio: 2.0f, seedingTime: 30, inactiveSeedingTimeLimit: 40, lastActivity: DateTimeOffset.UtcNow.Subtract(TimeSpan.FromMinutes(30)).ToUnixTimeSeconds());
+
+            var item = Subject.GetItems().Single();
+            item.CanBeRemoved.Should().BeFalse();
+            item.CanMoveFiles.Should().BeFalse();
+        }
+
+        [Test]
         public void should_be_removable_and_should_allow_move_files_if_max_seedingtime_reached_but_ratio_not_and_paused()
         {
             GivenGlobalSeedLimits(2.0f, 20);
             GivenCompletedTorrent("pausedUP", ratio: 1.0f, seedingTime: 30);
+
+            var item = Subject.GetItems().Single();
+            item.CanBeRemoved.Should().BeTrue();
+            item.CanMoveFiles.Should().BeTrue();
+        }
+
+        [Test]
+        public void should_be_removable_and_should_allow_move_files_if_max_inactive_seedingtime_reached_but_ratio_not_and_paused()
+        {
+            GivenGlobalSeedLimits(2.0f, maxInactiveSeedingTime: 20);
+            GivenCompletedTorrent("pausedUP", ratio: 1.0f, lastActivity: DateTimeOffset.UtcNow.Subtract(TimeSpan.FromMinutes(25)).ToUnixTimeSeconds());
 
             var item = Subject.GetItems().Single();
             item.CanBeRemoved.Should().BeTrue();
