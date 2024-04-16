@@ -1,17 +1,23 @@
 'connection':
-  - src/NzbDrone.Core/Notifications/**/*
+  - changed-files:
+    - any-glob-to-any-file: src/NzbDrone.Core/Notifications/**/*
 
 'db-migration':
-  - src/NzbDrone.Core/Datastore/Migration/*
+  - changed-files:
+    - any-glob-to-any-file: src/NzbDrone.Core/Datastore/Migration/*
 
 'download-client':
-  - src/NzbDrone.Core/Download/Clients/**/*
+  - changed-files:
+    - any-glob-to-any-file: src/NzbDrone.Core/Download/Clients/**/*
 
 'indexer':
-  - src/NzbDrone.Core/Indexers/**/*
+  - changed-files:
+    - any-glob-to-any-file: src/NzbDrone.Core/Indexers/**/*
 
 'parsing':
-  - src/NzbDrone.Core/Parser/**/*
+  - changed-files:
+    - any-glob-to-any-file: src/NzbDrone.Core/Parser/**/*
 
 'ui-only':
-  - all: ['frontend/**/*']
+  - changed-files:
+    - any-glob-to-all-files: frontend/**/*
