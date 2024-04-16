@@ -1,0 +1,24 @@
+name: Merge Conflict Labeler
+
+on:
+  push:
+    branches:
+      - develop
+  pull_request_target:
+  issue_comment:
+
+permissions: {}
+
+jobs:
+  label:
+    name: Labeling
+    runs-on: ubuntu-latest
+    if: ${{ github.repository == 'Sonarr/Sonarr' }}
+    steps:
+      - name: Apply label
+        uses: eps1lon/actions-label-merge-conflict@v3
+        if: ${{ github.event_name == 'push' || github.event_name == 'pull_request_target'}}
+        with:
+          dirtyLabel: 'merge-conflict'
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          
