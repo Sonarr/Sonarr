@@ -5,20 +5,22 @@ on:
     branches:
       - develop
   pull_request_target:
-  issue_comment:
-
-permissions: {}
+    branches:
+      - develop
+    types: [synchronize]
 
 jobs:
   label:
     name: Labeling
     runs-on: ubuntu-latest
     if: ${{ github.repository == 'Sonarr/Sonarr' }}
+    permissions:
+      contents: read
+      pull-requests: write
     steps:
       - name: Apply label
         uses: eps1lon/actions-label-merge-conflict@v3
-        if: ${{ github.event_name == 'push' || github.event_name == 'pull_request_target'}}
         with:
           dirtyLabel: 'merge-conflict'
-          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
           
