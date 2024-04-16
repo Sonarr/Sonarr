@@ -1654,6 +1654,16 @@
         "tags": [
           "DownloadClient"
         ],
+        "parameters": [
+          {
+            "name": "forceTest",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -2897,6 +2907,16 @@
         "tags": [
           "ImportList"
         ],
+        "parameters": [
+          {
+            "name": "forceTest",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -3486,6 +3506,16 @@
       "post": {
         "tags": [
           "Indexer"
+        ],
+        "parameters": [
+          {
+            "name": "forceTest",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
         ],
         "requestBody": {
           "content": {
@@ -4470,6 +4500,16 @@
         "tags": [
           "Metadata"
         ],
+        "parameters": [
+          {
+            "name": "forceTest",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -5031,6 +5071,16 @@
       "post": {
         "tags": [
           "Notification"
+        ],
+        "parameters": [
+          {
+            "name": "forceTest",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
         ],
         "requestBody": {
           "content": {
