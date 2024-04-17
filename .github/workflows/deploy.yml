@@ -69,12 +69,38 @@ jobs:
         pattern: release_*
         merge-multiple: true
 
+    - name: Get Previous Release
+      id: previous-release
+      uses: cardinalby/git-get-release-action@v1
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      with:
+        latest: true
+        prerelease: ${{ inputs.branch != 'main' }}
+
+    - name: Generate Release Notes
+      id: generate-release-notes
+      uses: actions/github-script@v7
+      with:
+        github-token: ${{ github.token }}
+        result-encoding: string
+        script: |
+          const { data } = await github.rest.repos.generateReleaseNotes({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            tag_name: 'v${{ inputs.version }}',
+            target_commitish: '${{ github.sha }}',
+            previous_tag_name: '${{ steps.previous-release.outputs.tag_name }}',
+          })
+          return data.body
+
     - name: Create release
       uses: ncipollo/release-action@v1
       with:
         artifacts: _artifacts/Sonarr.*
         commit: ${{ github.sha }}
-        generateReleaseNotes: true
+        generateReleaseNotes: false
+        body: ${{ steps.generate-release-notes.outputs.result }}
         name: ${{ inputs.version }}
         prerelease: ${{ inputs.branch != 'main' }}
         skipIfReleaseExists: true

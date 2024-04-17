@@ -22,7 +22,7 @@ env:
   FRAMEWORK: net6.0
   RAW_BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
   SONARR_MAJOR_VERSION: 4
-  VERSION: 4.0.3
+  VERSION: 4.0.4
 
 jobs:
   backend:
@@ -217,7 +217,7 @@ jobs:
 
   deploy:
     if: ${{ github.ref_name == 'develop' || github.ref_name == 'main' }}
-    needs: [backend, unit_test, unit_test_postgres, integration_test]
+    needs: [backend, frontend, unit_test, unit_test_postgres, integration_test]
     secrets: inherit
     uses: ./.github/workflows/deploy.yml
     with:
@@ -228,7 +228,7 @@ jobs:
 
   notify:
     name: Discord Notification
-    needs: [backend, unit_test, unit_test_postgres, integration_test]
+    needs: [backend, frontend, unit_test, unit_test_postgres, integration_test, deploy]
     if: ${{ !cancelled() && (github.ref_name == 'develop' || github.ref_name == 'main') }}
     env:
       STATUS: ${{ contains(needs.*.result, 'failure') && 'failure' || 'success' }}
@@ -236,7 +236,7 @@ jobs:
 
     steps:
       - name: Notify
-        uses: tsickert/discord-webhook@v5.3.0
+        uses: tsickert/discord-webhook@v6.0.0
         with:
           webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }}
           username: 'GitHub Actions'

@@ -68,11 +68,11 @@
     "CancelPendingTask": "Êtes-vous sur de vouloir annuler cette tâche en attente ?",
     "Clear": "Effacer",
     "AddAutoTagError": "Impossible d'ajouter un nouveau tag automatique, veuillez réessayer.",
-    "AddConditionError": "Impossible d'ajouter une nouvelle condition, Réessayer.",
+    "AddConditionError": "Impossible d'ajouter une nouvelle condition, veuillez réessayer.",
     "AddCondition": "Ajouter une condition",
     "AddAutoTag": "Ajouter un tag automatique",
     "AddCustomFormatError": "Impossible d'ajouter un nouveau format personnalisé, veuillez réessayer.",
-    "AddIndexerError": "Impossible d'ajouter un nouvelle indexeur, veuillez réessayer.",
+    "AddIndexerError": "Impossible d'ajouter un nouvel indexeur, veuillez réessayer.",
     "AddNewRestriction": "Ajouter une nouvelle restriction",
     "AddListError": "Impossible d'ajouter une nouvelle liste, veuillez réessayer.",
     "AddDownloadClientError": "Impossible d'ajouter un nouveau client de téléchargement, veuillez réessayer.",
@@ -534,7 +534,7 @@
     "IndexerSearchNoInteractiveHealthCheckMessage": "Aucun indexeur n'est disponible avec la recherche interactive activée. {appName} ne fournira aucun résultat de recherche interactif",
     "IndexerStatusUnavailableHealthCheckMessage": "Indexeurs indisponibles en raison d'échecs : {indexerNames}",
     "Info": "Information",
-    "InstallLatest": "Installer le dernier",
+    "InstallLatest": "Installer la dernière",
     "InteractiveImportNoLanguage": "La ou les langues doivent être choisies pour chaque fichier sélectionné",
     "InteractiveImportNoQuality": "La qualité doit être choisie pour chaque fichier sélectionné",
     "InteractiveSearchModalHeader": "Recherche interactive",
@@ -2066,5 +2066,8 @@
     "EpisodeTitleFootNote": "Contrôlez éventuellement la troncature à un nombre maximum d'octets, y compris les points de suspension (`...`). La troncature de la fin (par exemple `{Episode Title:30}`) ou du début (par exemple `{Episode Title:-30}`) sont toutes deux prises en charge. Les titres des épisodes seront automatiquement tronqués en fonction des limitations du système de fichiers si nécessaire.",
     "SelectReleaseType": "Sélectionnez le type de version",
     "SeriesFootNote": "Contrôlez éventuellement la troncature à un nombre maximum d'octets, y compris les points de suspension (`...`). La troncature de la fin (par exemple `{Series Title:30}`) ou du début (par exemple `{Series Title:-30}`) sont toutes deux prises en charge.",
-    "ReleaseGroupFootNote": "Contrôlez éventuellement la troncature à un nombre maximum d'octets, y compris les points de suspension (`...`). La troncature de la fin (par exemple `{Release Group:30}`) ou du début (par exemple `{Release Group:-30}`) sont toutes deux prises en charge.`)."
+    "ReleaseGroupFootNote": "Contrôlez éventuellement la troncature à un nombre maximum d'octets, y compris les points de suspension (`...`). La troncature de la fin (par exemple `{Release Group:30}`) ou du début (par exemple `{Release Group:-30}`) sont toutes deux prises en charge.`).",
+    "AutoTaggingSpecificationTag": "Étiquette",
+    "NotificationsTelegramSettingsIncludeAppName": "Inclure {appName} dans le Titre",
+    "NotificationsTelegramSettingsIncludeAppNameHelpText": "Préfixer éventuellement le titre du message par {appName} pour différencier les notifications des différentes applications"
 }

@@ -1,0 +1,13 @@
+// This file is used to open the backend and frontend in the same workspace, which is necessary as
+// the frontend has vscode settings that are distinct from the backend
+{
+  "folders": [
+    {
+      "path": ".."
+    },
+    {
+      "path": "../frontend"
+    }
+  ],
+  "settings": {}
+}

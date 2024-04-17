@@ -9,13 +9,13 @@ jobs:
   lock:
     runs-on: ubuntu-latest
     steps:
-      - uses: dessant/lock-threads@v2
+      - uses: dessant/lock-threads@v5
         with:
           github-token: ${{ github.token }}
-          issue-lock-inactive-days: '90'
-          issue-exclude-created-before: ''
-          issue-exclude-labels: 'one-day-maybe'
-          issue-lock-labels: ''
-          issue-lock-comment: ''
+          issue-inactive-days: '90'
+          exclude-issue-created-before: ''
+          exclude-any-issue-labels: 'one-day-maybe'
+          add-issue-labels: ''
+          issue-comment: ''
           issue-lock-reason: 'resolved'
           process-only: ''

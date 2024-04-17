@@ -978,6 +978,8 @@
   "IndexerSettingsPasskey": "Passkey",
   "IndexerSettingsRejectBlocklistedTorrentHashes": "Reject Blocklisted Torrent Hashes While Grabbing",
   "IndexerSettingsRejectBlocklistedTorrentHashesHelpText": "If a torrent is blocked by hash it may not properly be rejected during RSS/Search for some indexers, enabling this will allow it to be rejected after the torrent is grabbed, but before it is sent to the client.",
+  "IndexerSettingsMultiLanguageRelease": "Multi Languages",
+  "IndexerSettingsMultiLanguageReleaseHelpText": "What languages are normally in a multi release on this indexer?",
   "IndexerSettingsRssUrl": "RSS URL",
   "IndexerSettingsRssUrlHelpText": "Enter to URL to an {indexer} compatible RSS feed",
   "IndexerSettingsSeasonPackSeedTime": "Season-Pack Seed Time",
