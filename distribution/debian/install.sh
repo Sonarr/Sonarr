@@ -18,12 +18,12 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ### Colors
-green='\033[0;32m'
-yellow='\033[1;33m'
-red='\033[0;31m'
-cyan='\033[0;36m'
-brown='\033[0;33m'
-reset='\033[0m' # No Color
+green=$(tput setaf 2)
+yellow=$(tput setaf 3)
+red=$(tput setaf 1)
+orange=$(tput setaf 166)
+cyan=$(tput setaf 6)
+reset=$(tput sgr0) # No Color
 
 scriptversion="1.0.4"
 scriptdate="2024-04-10"
@@ -88,7 +88,7 @@ echo -e "            \___ \| |    |  _  /  | | |  ___/  | |              "
 echo -e "            ____) | |____| | \ \ _| |_| |      | |              "
 echo -e "           |_____/ \_____|_|  \_\_____|_|      |_|              " ${reset}
 echo -e ""
-echo -e "         Running version ${brown}[$scriptversion]${reset} as of ${brown}[$scriptdate]${reset}      "
+echo -e "         Running version ${orange}[$scriptversion]${reset} as of ${orange}[$scriptdate]${reset}      "
 
 # This script should not be ran from installdir, otherwise later in the script the extracted files will be removed before they can be moved to installdir.
 if [ "$installdir" == "$(dirname -- "$( readlink -f -- "$0"; )")" ] || [ "$bindir" == "$(dirname -- "$( readlink -f -- "$0"; )")" ]; then
@@ -103,8 +103,8 @@ fi
 echo ""
 echo -e ${red}"  WARNING!"${reset}
 echo ""
-echo -e "  It is ${red}CRITICAL${reset} that the ${brown}User${reset} and ${brown}Group${reset} you select"
-echo -e "  to run ${brown}[${app^}]${reset} will have both ${red}READ${reset} and ${red}WRITE${reset} access"
+echo -e "  It is ${red}CRITICAL${reset} that the ${orange}User${reset} and ${orange}Group${reset} you select"
+echo -e "  to run ${orange}[${app^}]${reset} will have both ${red}READ${reset} and ${red}WRITE${reset} access"
 echo -e "  to your Media Library and Download Client directories!"${reset}
 
 # Prompt User
@@ -121,13 +121,13 @@ app_guid=${app_guid:-media}
 
 # Info for the user and user confirmation
 echo ""
-echo -e " ${brown}[${app^}]${reset} will be installed to ${brown}[$bindir]${reset} and use ${brown}[$datadir]${reset} for the AppData Directory"
+echo -e " ${orange}[${app^}]${reset} will be installed to ${orange}[$bindir]${reset} and use ${orange}[$datadir]${reset} for the AppData Directory"
 echo ""
-echo -e " ${brown}${app^}${reset} will run as the user ${brown}[$app_uid]${reset} and group ${brown}[$app_guid]${reset}."
+echo -e " ${orange}${app^}${reset} will run as the user ${orange}[$app_uid]${reset} and group ${orange}[$app_guid]${reset}."
 echo ""
-echo -e "   By continuing, you ${red}CONFIRM${reset} that user ${brown}[$app_uid]${reset} and group ${brown}[$app_guid]${reset}"
+echo -e "   By continuing, you ${red}CONFIRM${reset} that user ${orange}[$app_uid]${reset} and group ${orange}[$app_guid]${reset}"
 echo -e "   will have both ${red}READ${reset} and ${red}WRITE${reset} access to all required directories."
-echo -e " By continuing, you ${red}CONFIRM${reset} that that ${brown}[$app_uid]${reset} and ${brown}[$app_guid]${reset}"
+echo -e " By continuing, you ${red}CONFIRM${reset} that that ${orange}[$app_uid]${reset} and ${orange}[$app_guid]${reset}"
 echo -e " will have both ${red}READ${reset} and ${red}WRITE${reset} access to all required directories."
 
 # User confirmation for installation to continue.
@@ -208,7 +208,7 @@ if [ ${#missing_packages[@]} -eq 0 ]; then
     echo -e ${green}"All prerequisite packages are already installed!"${reset}
 else
     echo ""
-    echo -e "Installing missing prerequisite packages: ${brown}${missing_packages[*]}${reset}"
+    echo -e "Installing missing prerequisite packages: ${orange}${missing_packages[*]}${reset}"
     # Install missing prerequisite packages
     apt update && apt install "${missing_packages[@]}"
 fi
@@ -233,11 +233,11 @@ echo -e ${yellow}"Installation files downloaded and extracted."${reset}
 
 # Remove existing installs
 echo ""
-echo -e "Removing existing installation files from ${brown}[$bindir]..."${reset}
+echo -e "Removing existing installation files from ${orange}[$bindir]..."${reset}
 rm -rf "$bindir"
 sleep 2
 echo ""
-echo -e "Attempting to install ${brown}[${app^}]${reset}..."
+echo -e "Attempting to install ${orange}[${app^}]${reset}..."
 sleep 2
 mv "${app^}" $installdir
 chown "$app_uid":"$app_guid" -R "$bindir"
@@ -283,7 +283,7 @@ echo -e "New service file has been created."
 
 # Start the App
 echo ""
-echo -e "${brown}[${app^}]${reset} is attempting to start, this may take a few seconds..."
+echo -e "${orange}[${app^}]${reset} is attempting to start, this may take a few seconds..."
 systemctl -q daemon-reload
 systemctl enable --now -q "$app"
 sleep 3
@@ -304,7 +304,7 @@ while ! systemctl is-active --quiet "$app"; do
     fi
 done
 echo ""
-echo -e "${brown}[${app^}]${reset} installation and service start up is complete!"
+echo -e "${orange}[${app^}]${reset} installation and service start up is complete!"
 
 # Finish Installation
 host=$(hostname -I)
