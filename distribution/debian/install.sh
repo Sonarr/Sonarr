@@ -88,7 +88,7 @@ echo -e "            \___ \| |    |  _  /  | | |  ___/  | |              "
 echo -e "            ____) | |____| | \ \ _| |_| |      | |              "
 echo -e "           |_____/ \_____|_|  \_\_____|_|      |_|              " ${reset}
 echo -e ""
-echo -e "         Running version ${orange}[$scriptversion]${reset} as of ${orange}[$scriptdate]${reset}      "
+echo -e " Running version ${orange}[$scriptversion]${reset} as of ${orange}[$scriptdate]${reset}      "
 
 # This script should not be ran from installdir, otherwise later in the script the extracted files will be removed before they can be moved to installdir.
 if [ "$installdir" == "$(dirname -- "$( readlink -f -- "$0"; )")" ] || [ "$bindir" == "$(dirname -- "$( readlink -f -- "$0"; )")" ]; then
@@ -101,11 +101,11 @@ fi
 
 # User warning about permission conflicts
 echo ""
-echo -e ${red}"  WARNING!"${reset}
+echo -e ${red}" WARNING!"${reset}
 echo ""
-echo -e "  It is ${red}CRITICAL${reset} that the ${orange}User${reset} and ${orange}Group${reset} you select"
-echo -e "  to run ${orange}[${app^}]${reset} will have both ${red}READ${reset} and ${red}WRITE${reset} access"
-echo -e "  to your Media Library and Download Client directories!"${reset}
+echo -e " It is ${red}CRITICAL${reset} that the ${orange}User${reset} and ${orange}Group${reset} you select"
+echo -e " to run ${orange}[${app^}]${reset} will have both ${red}READ${reset} and ${red}WRITE${reset} access"
+echo -e " to your Media Library and Download Client directories!"${reset}
 
 # Prompt User
 echo ""
@@ -121,12 +121,10 @@ app_guid=${app_guid:-media}
 
 # Info for the user and user confirmation
 echo ""
-echo -e " ${orange}[${app^}]${reset} will be installed to ${orange}[$bindir]${reset} and use ${orange}[$datadir]${reset} for the AppData Directory"
+echo -e " ${cyan}[${app^}]${reset} will be installed to ${orange}[$bindir]${reset} and use ${orange}[$datadir]${reset} for the AppData Directory"
 echo ""
-echo -e " ${orange}${app^}${reset} will run as the user ${orange}[$app_uid]${reset} and group ${orange}[$app_guid]${reset}."
+echo -e " ${cyan}[${app^}]${reset} will run as the user ${orange}[$app_uid]${reset} and group ${orange}[$app_guid]${reset}."
 echo ""
-echo -e "   By continuing, you ${red}CONFIRM${reset} that user ${orange}[$app_uid]${reset} and group ${orange}[$app_guid]${reset}"
-echo -e "   will have both ${red}READ${reset} and ${red}WRITE${reset} access to all required directories."
 echo -e " By continuing, you ${red}CONFIRM${reset} that that ${orange}[$app_uid]${reset} and ${orange}[$app_guid]${reset}"
 echo -e " will have both ${red}READ${reset} and ${red}WRITE${reset} access to all required directories."
 
@@ -237,7 +235,7 @@ echo -e "Removing existing installation files from ${orange}[$bindir]..."${reset
 rm -rf "$bindir"
 sleep 2
 echo ""
-echo -e "Attempting to install ${orange}[${app^}]${reset}..."
+echo -e "Attempting to install ${cyan}[${app^}]${reset}..."
 sleep 2
 mv "${app^}" $installdir
 chown "$app_uid":"$app_guid" -R "$bindir"
@@ -247,7 +245,7 @@ touch "$datadir"/update_required
 chown "$app_uid":"$app_guid" "$datadir"/update_required
 echo ""
 echo -e "Successfully installed ${cyan}[${app^}]${reset}!!"
-rm -rf "${app^}.*.tar.gz"
+rm -f "${app^}".*.tar.gz
 sleep 2
 
 # Configure Autostart
@@ -265,6 +263,7 @@ cat <<EOF | tee /etc/systemd/system/"$app".service >/dev/null
 [Unit]
 Description=${app^} Daemon
 After=syslog.target network.target
+
 [Service]
 User=$app_uid
 Group=$app_guid
@@ -274,19 +273,21 @@ ExecStart=$bindir/$app_bin -nobrowser -data=$datadir
 TimeoutStopSec=20
 KillMode=process
 Restart=on-failure
+
 [Install]
 WantedBy=multi-user.target
 EOF
-sleep 2
+
 echo ""
 echo -e "New service file has been created."
+sleep 1
 
 # Start the App
 echo ""
-echo -e "${orange}[${app^}]${reset} is attempting to start, this may take a few seconds..."
+echo -e "${cyan}[${app^}]${reset} is attempting to start, this may take a few seconds..."
 systemctl -q daemon-reload
 systemctl enable --now -q "$app"
-sleep 3
+sleep 2
 
 # Check if the service is up and running
 echo ""
@@ -304,7 +305,7 @@ while ! systemctl is-active --quiet "$app"; do
     fi
 done
 echo ""
-echo -e "${orange}[${app^}]${reset} installation and service start up is complete!"
+echo -e "${cyan}[${app^}]${reset} installation and service start up is complete!"
 
 # Finish Installation
 host=$(hostname -I)
