@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System.Runtime.Serialization;
 
 namespace NzbDrone.Core.MediaFiles.EpisodeImport
 {
@@ -17,11 +16,6 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
         public RecycleBinException(string message, Exception innerException)
             : base(message, innerException)
-        {
-        }
-
-        protected RecycleBinException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
         {
         }
     }
