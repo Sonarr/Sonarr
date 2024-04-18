@@ -3,6 +3,7 @@ using System.IO;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Test.Common;
@@ -334,6 +335,31 @@ namespace NzbDrone.Common.Test
             result[1].Should().Be(@"Test");
             result[2].Should().Be(@"TV");
             result[3].Should().Be(@"Series Title");
+        }
+
+        [TestCase(@"C:\Test\")]
+        [TestCase(@"C:\Test")]
+        [TestCase(@"C:\Test\TV\")]
+        [TestCase(@"C:\Test\TV")]
+        public void IsPathValid_should_be_true(string path)
+        {
+            path.AsOsAgnostic().IsPathValid(PathValidationType.CurrentOs).Should().BeTrue();
+        }
+
+        [TestCase(@"C:\Test \")]
+        [TestCase(@"C:\Test ")]
+        [TestCase(@"C:\ Test\")]
+        [TestCase(@"C:\ Test")]
+        [TestCase(@"C:\Test \TV")]
+        [TestCase(@"C:\ Test\TV")]
+        [TestCase(@"C:\Test \TV\")]
+        [TestCase(@"C:\ Test\TV\")]
+        [TestCase(@" C:\Test\TV\")]
+        [TestCase(@" C:\Test\TV")]
+
+        public void IsPathValid_should_be_false(string path)
+        {
+            path.AsOsAgnostic().IsPathValid(PathValidationType.CurrentOs).Should().BeFalse();
         }
     }
 }

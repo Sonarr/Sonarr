@@ -154,6 +154,23 @@ namespace NzbDrone.Common.Extensions
                 return false;
             }
 
+            if (path.Trim() != path)
+            {
+                return false;
+            }
+
+            var directoryInfo = new DirectoryInfo(path);
+
+            while (directoryInfo != null)
+            {
+                if (directoryInfo.Name.Trim() != directoryInfo.Name)
+                {
+                    return false;
+                }
+
+                directoryInfo = directoryInfo.Parent;
+            }
+
             if (validationType == PathValidationType.AnyOs)
             {
                 return IsPathValidForWindows(path) || IsPathValidForNonWindows(path);
@@ -289,6 +306,11 @@ namespace NzbDrone.Common.Extensions
             }
 
             return processName;
+        }
+
+        public static string CleanPath(this string path)
+        {
+            return Path.Join(path.Split(Path.DirectorySeparatorChar).Select(s => s.Trim()).ToArray());
         }
 
         public static string GetAppDataPath(this IAppFolderInfo appFolderInfo)
