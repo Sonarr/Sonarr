@@ -249,5 +249,6 @@
     "AnimeEpisodeTypeFormat": "Numero assoluto dell'episodio ({format})",
     "AutoRedownloadFailed": "Download fallito",
     "AddDelayProfileError": "Impossibile aggiungere un nuovo profilo di ritardo, riprova.",
-    "Cutoff": "Taglio"
+    "Cutoff": "Taglio",
+    "AddListExclusion": "Aggiungi elenco esclusioni"
 }

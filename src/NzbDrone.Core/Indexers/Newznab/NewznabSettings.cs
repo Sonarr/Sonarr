@@ -1,9 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using FluentValidation;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Annotations;
+using NzbDrone.Core.Languages;
 using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Indexers.Newznab
@@ -55,6 +57,7 @@ namespace NzbDrone.Core.Indexers.Newznab
             ApiPath = "/api";
             Categories = new[] { 5030, 5040 };
             AnimeCategories = Enumerable.Empty<int>();
+            MultiLanguages = Array.Empty<int>();
         }
 
         [FieldDefinition(0, Label = "URL")]
@@ -79,7 +82,10 @@ namespace NzbDrone.Core.Indexers.Newznab
         [FieldDefinition(6, Label = "IndexerSettingsAdditionalParameters", HelpText = "IndexerSettingsAdditionalNewznabParametersHelpText", Advanced = true)]
         public string AdditionalParameters { get; set; }
 
-        // Field 7 is used by TorznabSettings MinimumSeeders
+        [FieldDefinition(7, Type = FieldType.Select, SelectOptions = typeof(RealLanguageFieldConverter), Label = "IndexerSettingsMultiLanguageRelease", HelpText = "IndexerSettingsMultiLanguageReleaseHelpText", Advanced = true)]
+        public IEnumerable<int> MultiLanguages { get; set; }
+
+        // Field 8 is used by TorznabSettings MinimumSeeders
         // If you need to add another field here, update TorznabSettings as well and this comment
 
         public virtual NzbDroneValidationResult Validate()

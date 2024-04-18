@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using FluentValidation;
 using NzbDrone.Core.Annotations;
+using NzbDrone.Core.Languages;
 using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Indexers.FileList
@@ -35,6 +36,7 @@ namespace NzbDrone.Core.Indexers.FileList
             };
 
             AnimeCategories = Array.Empty<int>();
+            MultiLanguages = Array.Empty<int>();
         }
 
         [FieldDefinition(0, Label = "Username", Privacy = PrivacyLevel.UserName)]
@@ -42,6 +44,9 @@ namespace NzbDrone.Core.Indexers.FileList
 
         [FieldDefinition(1, Label = "IndexerSettingsPasskey", Privacy = PrivacyLevel.ApiKey)]
         public string Passkey { get; set; }
+
+        [FieldDefinition(2, Type = FieldType.Select, SelectOptions = typeof(RealLanguageFieldConverter), Label = "IndexerSettingsMultiLanguageRelease", HelpText = "IndexerSettingsMultiLanguageReleaseHelpText", Advanced = true)]
+        public IEnumerable<int> MultiLanguages { get; set; }
 
         [FieldDefinition(3, Label = "IndexerSettingsApiUrl", Advanced = true, HelpText = "IndexerSettingsApiUrlHelpText")]
         public string BaseUrl { get; set; }

@@ -1,5 +1,8 @@
+using System;
+using System.Collections.Generic;
 using FluentValidation;
 using NzbDrone.Core.Annotations;
+using NzbDrone.Core.Languages;
 using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Indexers.TorrentRss
@@ -23,6 +26,7 @@ namespace NzbDrone.Core.Indexers.TorrentRss
             BaseUrl = string.Empty;
             AllowZeroSize = false;
             MinimumSeeders = IndexerDefaults.MINIMUM_SEEDERS;
+            MultiLanguages = Array.Empty<int>();
         }
 
         [FieldDefinition(0, Label = "IndexerSettingsRssUrl")]
@@ -42,6 +46,9 @@ namespace NzbDrone.Core.Indexers.TorrentRss
 
         [FieldDefinition(5, Type = FieldType.Checkbox, Label = "IndexerSettingsRejectBlocklistedTorrentHashes", HelpText = "IndexerSettingsRejectBlocklistedTorrentHashesHelpText", Advanced = true)]
         public bool RejectBlocklistedTorrentHashesWhileGrabbing { get; set; }
+
+        [FieldDefinition(6, Type = FieldType.Select, SelectOptions = typeof(RealLanguageFieldConverter), Label = "IndexerSettingsMultiLanguageRelease", HelpText = "IndexerSettingsMultiLanguageReleaseHelpText", Advanced = true)]
+        public IEnumerable<int> MultiLanguages { get; set; }
 
         public NzbDroneValidationResult Validate()
         {

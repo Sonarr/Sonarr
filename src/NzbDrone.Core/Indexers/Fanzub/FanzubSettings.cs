@@ -1,5 +1,8 @@
+using System;
+using System.Collections.Generic;
 using FluentValidation;
 using NzbDrone.Core.Annotations;
+using NzbDrone.Core.Languages;
 using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Indexers.Fanzub
@@ -19,6 +22,7 @@ namespace NzbDrone.Core.Indexers.Fanzub
         public FanzubSettings()
         {
             BaseUrl = "http://fanzub.com/rss/";
+            MultiLanguages = Array.Empty<int>();
         }
 
         [FieldDefinition(0, Label = "IndexerSettingsRssUrl", HelpText = "IndexerSettingsRssUrlHelpText")]
@@ -27,6 +31,9 @@ namespace NzbDrone.Core.Indexers.Fanzub
 
         [FieldDefinition(1, Label = "IndexerSettingsAnimeStandardFormatSearch", Type = FieldType.Checkbox, HelpText = "IndexerSettingsAnimeStandardFormatSearchHelpText")]
         public bool AnimeStandardFormatSearch { get; set; }
+
+        [FieldDefinition(2, Type = FieldType.Select, SelectOptions = typeof(RealLanguageFieldConverter), Label = "IndexerSettingsMultiLanguageRelease", HelpText = "IndexerSettingsMultiLanguageReleaseHelpText", Advanced = true)]
+        public IEnumerable<int> MultiLanguages { get; set; }
 
         public NzbDroneValidationResult Validate()
         {
