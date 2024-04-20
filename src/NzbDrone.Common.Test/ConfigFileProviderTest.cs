@@ -54,9 +54,9 @@ namespace NzbDrone.Common.Test
                 .Setup(v => v.Value)
                 .Returns(new AppOptions());
 
-            Mocker.GetMock<IOptions<HttpOptions>>()
+            Mocker.GetMock<IOptions<ServerOptions>>()
                 .Setup(v => v.Value)
-                .Returns(new HttpOptions());
+                .Returns(new ServerOptions());
 
             Mocker.GetMock<IOptions<LogOptions>>()
                 .Setup(v => v.Value)

@@ -73,7 +73,7 @@ namespace NzbDrone.Core.Configuration
         private readonly PostgresOptions _postgresOptions;
         private readonly AuthOptions _authOptions;
         private readonly AppOptions _appOptions;
-        private readonly HttpOptions _httpOptions;
+        private readonly ServerOptions _serverOptions;
         private readonly UpdateOptions _updateOptions;
         private readonly LogOptions _logOptions;
 
@@ -89,7 +89,7 @@ namespace NzbDrone.Core.Configuration
                                   IOptions<PostgresOptions> postgresOptions,
                                   IOptions<AuthOptions> authOptions,
                                   IOptions<AppOptions> appOptions,
-                                  IOptions<HttpOptions> httpOptions,
+                                  IOptions<ServerOptions> serverOptions,
                                   IOptions<UpdateOptions> updateOptions,
                                   IOptions<LogOptions> logOptions)
         {
@@ -100,7 +100,7 @@ namespace NzbDrone.Core.Configuration
             _postgresOptions = postgresOptions.Value;
             _authOptions = authOptions.Value;
             _appOptions = appOptions.Value;
-            _httpOptions = httpOptions.Value;
+            _serverOptions = serverOptions.Value;
             _updateOptions = updateOptions.Value;
             _logOptions = logOptions.Value;
         }
@@ -158,7 +158,7 @@ namespace NzbDrone.Core.Configuration
             {
                 const string defaultValue = "*";
 
-                var bindAddress = _httpOptions.BindAddress ?? GetValue("BindAddress", defaultValue);
+                var bindAddress = _serverOptions.BindAddress ?? GetValue("BindAddress", defaultValue);
                 if (string.IsNullOrWhiteSpace(bindAddress))
                 {
                     return defaultValue;
@@ -168,11 +168,11 @@ namespace NzbDrone.Core.Configuration
             }
         }
 
-        public int Port => _httpOptions.Port ?? GetValueInt("Port", 8989);
+        public int Port => _serverOptions.Port ?? GetValueInt("Port", 8989);
 
-        public int SslPort => _httpOptions.SslPort ?? GetValueInt("SslPort", 9898);
+        public int SslPort => _serverOptions.SslPort ?? GetValueInt("SslPort", 9898);
 
-        public bool EnableSsl => _httpOptions.EnableSsl ?? GetValueBoolean("EnableSsl", false);
+        public bool EnableSsl => _serverOptions.EnableSsl ?? GetValueBoolean("EnableSsl", false);
 
         public bool LaunchBrowser => _appOptions.LaunchBrowser ?? GetValueBoolean("LaunchBrowser", true);
 
@@ -204,29 +204,16 @@ namespace NzbDrone.Core.Configuration
                     return AuthenticationType.Basic;
                 }
 
-                var parsed = Enum.TryParse<AuthenticationType>(_authOptions.Method, out var enumValue);
-                if (parsed)
-                {
-                    return enumValue;
-                }
-
-                return GetValueEnum("AuthenticationMethod", AuthenticationType.None);
+                return Enum.TryParse<AuthenticationType>(_authOptions.Method, out var enumValue)
+                    ? enumValue
+                    : GetValueEnum("AuthenticationMethod", AuthenticationType.None);
             }
         }
 
-        public AuthenticationRequiredType AuthenticationRequired
-        {
-            get
-            {
-                var parsed = Enum.TryParse<AuthenticationRequiredType>(_authOptions.Required, out var enumValue);
-                if (parsed)
-                {
-                    return enumValue;
-                }
-
-                return GetValueEnum("AuthenticationRequired", AuthenticationRequiredType.Enabled);
-            }
-        }
+        public AuthenticationRequiredType AuthenticationRequired =>
+            Enum.TryParse<AuthenticationRequiredType>(_authOptions.Required, out var enumValue)
+                ? enumValue
+                : GetValueEnum("AuthenticationRequired", AuthenticationRequiredType.Enabled);
 
         public bool AnalyticsEnabled => _logOptions.AnalyticsEnabled ?? GetValueBoolean("AnalyticsEnabled", true, persist: false);
 
@@ -247,14 +234,14 @@ namespace NzbDrone.Core.Configuration
         public bool LogSql => _logOptions.Sql ?? GetValueBoolean("LogSql", false, persist: false);
         public int LogRotate => _logOptions.Rotate ?? GetValueInt("LogRotate", 50, persist: false);
         public bool FilterSentryEvents => _logOptions.FilterSentryEvents ?? GetValueBoolean("FilterSentryEvents", true, persist: false);
-        public string SslCertPath => _httpOptions.SslCertPath ?? GetValue("SslCertPath", "");
-        public string SslCertPassword => _httpOptions.SslCertPassword ?? GetValue("SslCertPassword", "");
+        public string SslCertPath => _serverOptions.SslCertPath ?? GetValue("SslCertPath", "");
+        public string SslCertPassword => _serverOptions.SslCertPassword ?? GetValue("SslCertPassword", "");
 
         public string UrlBase
         {
             get
             {
-                var urlBase = _httpOptions.UrlBase ?? GetValue("UrlBase", "").Trim('/');
+                var urlBase = _serverOptions.UrlBase ?? GetValue("UrlBase", "").Trim('/');
 
                 if (urlBase.IsNullOrWhiteSpace())
                 {
@@ -284,19 +271,10 @@ namespace NzbDrone.Core.Configuration
 
         public bool UpdateAutomatically => _updateOptions.Automatically ?? GetValueBoolean("UpdateAutomatically", false, false);
 
-        public UpdateMechanism UpdateMechanism
-        {
-            get
-            {
-                var isParsed = Enum.TryParse<UpdateMechanism>(_updateOptions.Mechanism, out var enumValue);
-                if (isParsed)
-                {
-                    return enumValue;
-                }
-
-                return GetValueEnum("UpdateMechanism", UpdateMechanism.BuiltIn, false);
-            }
-        }
+        public UpdateMechanism UpdateMechanism =>
+            Enum.TryParse<UpdateMechanism>(_updateOptions.Mechanism, out var enumValue)
+                ? enumValue
+                : GetValueEnum("UpdateMechanism", UpdateMechanism.BuiltIn, false);
 
         public string UpdateScriptPath => _updateOptions.ScriptPath ?? GetValue("UpdateScriptPath", "", false);
 

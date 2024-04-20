@@ -101,7 +101,7 @@ namespace NzbDrone.Host
                                 services.Configure<PostgresOptions>(config.GetSection("Sonarr:Postgres"));
                                 services.Configure<AppOptions>(config.GetSection("Sonarr:App"));
                                 services.Configure<AuthOptions>(config.GetSection("Sonarr:Auth"));
-                                services.Configure<HttpOptions>(config.GetSection("Sonarr:Http"));
+                                services.Configure<ServerOptions>(config.GetSection("Sonarr:Server"));
                                 services.Configure<LogOptions>(config.GetSection("Sonarr:Log"));
                                 services.Configure<UpdateOptions>(config.GetSection("Sonarr:Update"));
                             }).Build();
@@ -125,12 +125,12 @@ namespace NzbDrone.Host
         {
             var config = GetConfiguration(context);
 
-            var bindAddress = config.GetValue<string>($"Sonarr:Http:{nameof(HttpOptions.BindAddress)}") ?? config.GetValue(nameof(ConfigFileProvider.BindAddress), "*");
-            var port = config.GetValue<int?>($"Sonarr:Http:{nameof(HttpOptions.Port)}") ?? config.GetValue(nameof(ConfigFileProvider.Port), 8989);
-            var sslPort = config.GetValue<int?>($"Sonarr:Http:{nameof(HttpOptions.SslPort)}") ?? config.GetValue(nameof(ConfigFileProvider.SslPort), 9898);
-            var enableSsl = config.GetValue<bool?>($"Sonarr:Http:{nameof(HttpOptions.EnableSsl)}") ?? config.GetValue(nameof(ConfigFileProvider.EnableSsl), false);
-            var sslCertPath = config.GetValue<string>($"Sonarr:Http:{nameof(HttpOptions.SslCertPath)}") ?? config.GetValue<string>(nameof(ConfigFileProvider.SslCertPath));
-            var sslCertPassword = config.GetValue<string>($"Sonarr:Http:{nameof(HttpOptions.SslCertPassword)}") ?? config.GetValue<string>(nameof(ConfigFileProvider.SslCertPassword));
+            var bindAddress = config.GetValue<string>($"Sonarr:Server:{nameof(ServerOptions.BindAddress)}") ?? config.GetValue(nameof(ConfigFileProvider.BindAddress), "*");
+            var port = config.GetValue<int?>($"Sonarr:Server:{nameof(ServerOptions.Port)}") ?? config.GetValue(nameof(ConfigFileProvider.Port), 8989);
+            var sslPort = config.GetValue<int?>($"Sonarr:Server:{nameof(ServerOptions.SslPort)}") ?? config.GetValue(nameof(ConfigFileProvider.SslPort), 9898);
+            var enableSsl = config.GetValue<bool?>($"Sonarr:Server:{nameof(ServerOptions.EnableSsl)}") ?? config.GetValue(nameof(ConfigFileProvider.EnableSsl), false);
+            var sslCertPath = config.GetValue<string>($"Sonarr:Server:{nameof(ServerOptions.SslCertPath)}") ?? config.GetValue<string>(nameof(ConfigFileProvider.SslCertPath));
+            var sslCertPassword = config.GetValue<string>($"Sonarr:Server:{nameof(ServerOptions.SslCertPassword)}") ?? config.GetValue<string>(nameof(ConfigFileProvider.SslCertPassword));
 
             var urls = new List<string> { BuildUrl("http", bindAddress, port) };
 
@@ -160,7 +160,7 @@ namespace NzbDrone.Host
                     services.Configure<PostgresOptions>(config.GetSection("Sonarr:Postgres"));
                     services.Configure<AppOptions>(config.GetSection("Sonarr:App"));
                     services.Configure<AuthOptions>(config.GetSection("Sonarr:Auth"));
-                    services.Configure<HttpOptions>(config.GetSection("Sonarr:Http"));
+                    services.Configure<ServerOptions>(config.GetSection("Sonarr:Server"));
                     services.Configure<LogOptions>(config.GetSection("Sonarr:Log"));
                     services.Configure<UpdateOptions>(config.GetSection("Sonarr:Update"));
                 })

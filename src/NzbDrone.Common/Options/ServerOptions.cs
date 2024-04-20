@@ -1,6 +1,6 @@
 namespace NzbDrone.Common.Options;
 
-public class HttpOptions
+public class ServerOptions
 {
     public string UrlBase { get; set; }
     public string BindAddress { get; set; }
