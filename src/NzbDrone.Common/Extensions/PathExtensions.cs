@@ -29,6 +29,12 @@ namespace NzbDrone.Common.Extensions
 
         public static string CleanFilePath(this string path)
         {
+            if (path.IsNotNullOrWhiteSpace())
+            {
+                // Trim trailing spaces before checking if the path is valid so validation doesn't fail for something we can fix.
+                path = path.TrimEnd(' ');
+            }
+
             Ensure.That(path, () => path).IsNotNullOrWhiteSpace();
             Ensure.That(path, () => path).IsValidPath(PathValidationType.AnyOs);
 
@@ -37,10 +43,10 @@ namespace NzbDrone.Common.Extensions
             // UNC
             if (!info.FullName.Contains('/') && info.FullName.StartsWith(@"\\"))
             {
-                return info.FullName.TrimEnd('/', '\\', ' ');
+                return info.FullName.TrimEnd('/', '\\');
             }
 
-            return info.FullName.TrimEnd('/').Trim('\\', ' ');
+            return info.FullName.TrimEnd('/').Trim('\\');
         }
 
         public static bool PathNotEquals(this string firstPath, string secondPath, StringComparison? comparison = null)
