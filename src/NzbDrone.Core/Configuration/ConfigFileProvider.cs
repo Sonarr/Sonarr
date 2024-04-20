@@ -10,6 +10,7 @@ using NzbDrone.Common.Cache;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Common.Options;
 using NzbDrone.Core.Authentication;
 using NzbDrone.Core.Configuration.Events;
 using NzbDrone.Core.Datastore;
@@ -70,6 +71,11 @@ namespace NzbDrone.Core.Configuration
         private readonly IDiskProvider _diskProvider;
         private readonly ICached<string> _cache;
         private readonly PostgresOptions _postgresOptions;
+        private readonly AuthOptions _authOptions;
+        private readonly AppOptions _appOptions;
+        private readonly HttpOptions _httpOptions;
+        private readonly UpdateOptions _updateOptions;
+        private readonly LogOptions _logOptions;
 
         private readonly string _configFile;
         private static readonly Regex HiddenCharacterRegex = new Regex("[^a-z0-9]", RegexOptions.Compiled | RegexOptions.IgnoreCase);
@@ -80,13 +86,23 @@ namespace NzbDrone.Core.Configuration
                                   ICacheManager cacheManager,
                                   IEventAggregator eventAggregator,
                                   IDiskProvider diskProvider,
-                                  IOptions<PostgresOptions> postgresOptions)
+                                  IOptions<PostgresOptions> postgresOptions,
+                                  IOptions<AuthOptions> authOptions,
+                                  IOptions<AppOptions> appOptions,
+                                  IOptions<HttpOptions> httpOptions,
+                                  IOptions<UpdateOptions> updateOptions,
+                                  IOptions<LogOptions> logOptions)
         {
             _cache = cacheManager.GetCache<string>(GetType());
             _eventAggregator = eventAggregator;
             _diskProvider = diskProvider;
             _configFile = appFolderInfo.GetConfigPath();
             _postgresOptions = postgresOptions.Value;
+            _authOptions = authOptions.Value;
+            _appOptions = appOptions.Value;
+            _httpOptions = httpOptions.Value;
+            _updateOptions = updateOptions.Value;
+            _logOptions = logOptions.Value;
         }
 
         public Dictionary<string, object> GetConfigDictionary()
@@ -142,7 +158,7 @@ namespace NzbDrone.Core.Configuration
             {
                 const string defaultValue = "*";
 
-                var bindAddress = GetValue("BindAddress", defaultValue);
+                var bindAddress = _httpOptions.BindAddress ?? GetValue("BindAddress", defaultValue);
                 if (string.IsNullOrWhiteSpace(bindAddress))
                 {
                     return defaultValue;
@@ -152,19 +168,19 @@ namespace NzbDrone.Core.Configuration
             }
         }
 
-        public int Port => GetValueInt("Port", 8989);
+        public int Port => _httpOptions.Port ?? GetValueInt("Port", 8989);
 
-        public int SslPort => GetValueInt("SslPort", 9898);
+        public int SslPort => _httpOptions.SslPort ?? GetValueInt("SslPort", 9898);
 
-        public bool EnableSsl => GetValueBoolean("EnableSsl", false);
+        public bool EnableSsl => _httpOptions.EnableSsl ?? GetValueBoolean("EnableSsl", false);
 
-        public bool LaunchBrowser => GetValueBoolean("LaunchBrowser", true);
+        public bool LaunchBrowser => _appOptions.LaunchBrowser ?? GetValueBoolean("LaunchBrowser", true);
 
         public string ApiKey
         {
             get
             {
-                var apiKey = GetValue("ApiKey", GenerateApiKey());
+                var apiKey = _authOptions.ApiKey ?? GetValue("ApiKey", GenerateApiKey());
 
                 if (apiKey.IsNullOrWhiteSpace())
                 {
@@ -180,7 +196,7 @@ namespace NzbDrone.Core.Configuration
         {
             get
             {
-                var enabled = GetValueBoolean("AuthenticationEnabled", false, false);
+                var enabled = _authOptions.Enabled ?? GetValueBoolean("AuthenticationEnabled", false, false);
 
                 if (enabled)
                 {
@@ -188,20 +204,38 @@ namespace NzbDrone.Core.Configuration
                     return AuthenticationType.Basic;
                 }
 
+                var parsed = Enum.TryParse<AuthenticationType>(_authOptions.Method, out var enumValue);
+                if (parsed)
+                {
+                    return enumValue;
+                }
+
                 return GetValueEnum("AuthenticationMethod", AuthenticationType.None);
             }
         }
 
-        public AuthenticationRequiredType AuthenticationRequired => GetValueEnum("AuthenticationRequired", AuthenticationRequiredType.Enabled);
+        public AuthenticationRequiredType AuthenticationRequired
+        {
+            get
+            {
+                var parsed = Enum.TryParse<AuthenticationRequiredType>(_authOptions.Required, out var enumValue);
+                if (parsed)
+                {
+                    return enumValue;
+                }
 
-        public bool AnalyticsEnabled => GetValueBoolean("AnalyticsEnabled", true, persist: false);
+                return GetValueEnum("AuthenticationRequired", AuthenticationRequiredType.Enabled);
+            }
+        }
 
-        public string Branch => GetValue("Branch", "main").ToLowerInvariant();
+        public bool AnalyticsEnabled => _logOptions.AnalyticsEnabled ?? GetValueBoolean("AnalyticsEnabled", true, persist: false);
 
-        public string LogLevel => GetValue("LogLevel", "info").ToLowerInvariant();
-        public string ConsoleLogLevel => GetValue("ConsoleLogLevel", string.Empty, persist: false);
+        public string Branch => _updateOptions.Branch ?? GetValue("Branch", "main").ToLowerInvariant();
 
-        public string Theme => GetValue("Theme", "auto", persist: false);
+        public string LogLevel => _logOptions.Level ?? GetValue("LogLevel", "info").ToLowerInvariant();
+        public string ConsoleLogLevel => _logOptions.ConsoleLevel ?? GetValue("ConsoleLogLevel", string.Empty, persist: false);
+
+        public string Theme => _appOptions.Theme ?? GetValue("Theme", "auto", persist: false);
 
         public string PostgresHost => _postgresOptions?.Host ?? GetValue("PostgresHost", string.Empty, persist: false);
         public string PostgresUser => _postgresOptions?.User ?? GetValue("PostgresUser", string.Empty, persist: false);
@@ -210,17 +244,17 @@ namespace NzbDrone.Core.Configuration
         public string PostgresLogDb => _postgresOptions?.LogDb ?? GetValue("PostgresLogDb", "sonarr-log", persist: false);
         public int PostgresPort => (_postgresOptions?.Port ?? 0) != 0 ? _postgresOptions.Port : GetValueInt("PostgresPort", 5432, persist: false);
 
-        public bool LogSql => GetValueBoolean("LogSql", false, persist: false);
-        public int LogRotate => GetValueInt("LogRotate", 50, persist: false);
-        public bool FilterSentryEvents => GetValueBoolean("FilterSentryEvents", true, persist: false);
-        public string SslCertPath => GetValue("SslCertPath", "");
-        public string SslCertPassword => GetValue("SslCertPassword", "");
+        public bool LogSql => _logOptions.Sql ?? GetValueBoolean("LogSql", false, persist: false);
+        public int LogRotate => _logOptions.Rotate ?? GetValueInt("LogRotate", 50, persist: false);
+        public bool FilterSentryEvents => _logOptions.FilterSentryEvents ?? GetValueBoolean("FilterSentryEvents", true, persist: false);
+        public string SslCertPath => _httpOptions.SslCertPath ?? GetValue("SslCertPath", "");
+        public string SslCertPassword => _httpOptions.SslCertPassword ?? GetValue("SslCertPassword", "");
 
         public string UrlBase
         {
             get
             {
-                var urlBase = GetValue("UrlBase", "").Trim('/');
+                var urlBase = _httpOptions.UrlBase ?? GetValue("UrlBase", "").Trim('/');
 
                 if (urlBase.IsNullOrWhiteSpace())
                 {
@@ -237,7 +271,7 @@ namespace NzbDrone.Core.Configuration
         {
             get
             {
-                var instanceName = GetValue("InstanceName", BuildInfo.AppName);
+                var instanceName = _appOptions.InstanceName ?? GetValue("InstanceName", BuildInfo.AppName);
 
                 if (instanceName.StartsWith(BuildInfo.AppName) || instanceName.EndsWith(BuildInfo.AppName))
                 {
@@ -248,17 +282,29 @@ namespace NzbDrone.Core.Configuration
             }
         }
 
-        public bool UpdateAutomatically => GetValueBoolean("UpdateAutomatically", false, false);
+        public bool UpdateAutomatically => _updateOptions.Automatically ?? GetValueBoolean("UpdateAutomatically", false, false);
 
-        public UpdateMechanism UpdateMechanism => GetValueEnum("UpdateMechanism", UpdateMechanism.BuiltIn, false);
+        public UpdateMechanism UpdateMechanism
+        {
+            get
+            {
+                var isParsed = Enum.TryParse<UpdateMechanism>(_updateOptions.Mechanism, out var enumValue);
+                if (isParsed)
+                {
+                    return enumValue;
+                }
 
-        public string UpdateScriptPath => GetValue("UpdateScriptPath", "", false);
+                return GetValueEnum("UpdateMechanism", UpdateMechanism.BuiltIn, false);
+            }
+        }
 
-        public string SyslogServer => GetValue("SyslogServer", "", persist: false);
+        public string UpdateScriptPath => _updateOptions.ScriptPath ?? GetValue("UpdateScriptPath", "", false);
 
-        public int SyslogPort => GetValueInt("SyslogPort", 514, persist: false);
+        public string SyslogServer => _logOptions.SyslogServer ?? GetValue("SyslogServer", "", persist: false);
 
-        public string SyslogLevel => GetValue("SyslogLevel", LogLevel, persist: false).ToLowerInvariant();
+        public int SyslogPort => _logOptions.SyslogPort ?? GetValueInt("SyslogPort", 514, persist: false);
+
+        public string SyslogLevel => _logOptions.SyslogLevel ?? GetValue("SyslogLevel", LogLevel, persist: false).ToLowerInvariant();
 
         public int GetValueInt(string key, int defaultValue, bool persist = true)
         {
