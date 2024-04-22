@@ -97,6 +97,7 @@ namespace NzbDrone.Host
 
             services.AddSwaggerGen(c =>
             {
+                c.EnableAnnotations();
                 c.SwaggerDoc("v3", new OpenApiInfo
                 {
                     Version = "3.0.0",

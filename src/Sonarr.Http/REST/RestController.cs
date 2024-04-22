@@ -12,6 +12,7 @@ using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Datastore;
 using Sonarr.Http.REST.Attributes;
 using Sonarr.Http.Validation;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Sonarr.Http.REST
 {
@@ -48,6 +49,7 @@ namespace Sonarr.Http.REST
 
         [RestGetById]
         [Produces("application/json")]
+        [SwaggerOperation(Summary = "Gets a resource by id.")]
         public virtual ActionResult<TResource> GetResourceByIdWithErrorHandler(int id)
         {
             try

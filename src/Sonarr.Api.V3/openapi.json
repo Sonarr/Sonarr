@@ -32,6 +32,7 @@
         "tags": [
           "ApiInfo"
         ],
+        "summary": "Get information about the API.",
         "responses": {
           "200": {
             "description": "Success"
@@ -243,6 +244,7 @@
         "tags": [
           "AutoTagging"
         ],
+        "summary": "Gets a resource by id.",
         "parameters": [
           {
             "name": "id",
@@ -285,27 +287,12 @@
         "tags": [
           "Backup"
         ],
+        "summary": "Gets a list of backups.",
         "responses": {
           "200": {
             "description": "Success",
             "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/BackupResource"
-                  }
-                }
-              },
               "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/BackupResource"
-                  }
-                }
-              },
-              "text/json": {
                 "schema": {
                   "type": "array",
                   "items": {
@@ -323,6 +310,7 @@
         "tags": [
           "Backup"
         ],
+        "summary": "Deletes a backup.",
         "parameters": [
           {
             "name": "id",
@@ -346,6 +334,7 @@
         "tags": [
           "Backup"
         ],
+        "summary": "Restores a backup.",
         "parameters": [
           {
             "name": "id",
@@ -369,6 +358,7 @@
         "tags": [
           "Backup"
         ],
+        "summary": "Restores a backup by uploading.",
         "responses": {
           "200": {
             "description": "Success"
@@ -381,6 +371,7 @@
         "tags": [
           "Blocklist"
         ],
+        "summary": "Gets a list of blocklists.",
         "parameters": [
           {
             "name": "page",
@@ -455,6 +446,7 @@
         "tags": [
           "Blocklist"
         ],
+        "summary": "Deletes a blocklist by id.",
         "parameters": [
           {
             "name": "id",
@@ -478,6 +470,7 @@
         "tags": [
           "Blocklist"
         ],
+        "summary": "Deletes a list of blocklists in bulk.",
         "requestBody": {
           "content": {
             "application/json": {
@@ -509,6 +502,7 @@
         "tags": [
           "Calendar"
         ],
+        "summary": "Gets a list of episodes.",
         "parameters": [
           {
             "name": "start",
@@ -577,36 +571,6 @@
                   "items": {
                     "$ref": "#/components/schemas/EpisodeResource"
                   }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v3/calendar/{id}": {
-      "get": {
-        "tags": [
-          "Calendar"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EpisodeResource"
                 }
               }
             }
@@ -752,6 +716,7 @@
         "tags": [
           "Command"
         ],
+        "summary": "Gets a resource by id.",
         "parameters": [
           {
             "name": "id",
@@ -907,6 +872,7 @@
         "tags": [
           "CustomFilter"
         ],
+        "summary": "Gets a resource by id.",
         "parameters": [
           {
             "name": "id",
@@ -1062,6 +1028,7 @@
         "tags": [
           "CustomFormat"
         ],
+        "summary": "Gets a resource by id.",
         "parameters": [
           {
             "name": "id",
@@ -1189,6 +1156,7 @@
         "tags": [
           "Cutoff"
         ],
+        "summary": "Gets a resource by id.",
         "parameters": [
           {
             "name": "id",
@@ -1219,6 +1187,7 @@
         "tags": [
           "DelayProfile"
         ],
+        "summary": "Creates a delay profile.",
         "requestBody": {
           "content": {
             "application/json": {
@@ -1255,6 +1224,7 @@
         "tags": [
           "DelayProfile"
         ],
+        "summary": "Gets a list of delay profiles.",
         "responses": {
           "200": {
             "description": "Success",
@@ -1277,6 +1247,7 @@
         "tags": [
           "DelayProfile"
         ],
+        "summary": "Deletes a delay profile.",
         "parameters": [
           {
             "name": "id",
@@ -1298,6 +1269,7 @@
         "tags": [
           "DelayProfile"
         ],
+        "summary": "Updates a delay profile.",
         "parameters": [
           {
             "name": "id",
@@ -1344,6 +1316,7 @@
         "tags": [
           "DelayProfile"
         ],
+        "summary": "Gets a resource by id.",
         "parameters": [
           {
             "name": "id",
@@ -1374,6 +1347,7 @@
         "tags": [
           "DelayProfile"
         ],
+        "summary": "Updates order for delay profile.",
         "parameters": [
           {
             "name": "id",
@@ -1576,6 +1550,7 @@
         "tags": [
           "DownloadClient"
         ],
+        "summary": "Gets a resource by id.",
         "parameters": [
           {
             "name": "id",
@@ -1814,6 +1789,7 @@
         "tags": [
           "DownloadClientConfig"
         ],
+        "summary": "Gets a resource by id.",
         "parameters": [
           {
             "name": "id",
@@ -1958,6 +1934,7 @@
         "tags": [
           "Episode"
         ],
+        "summary": "Gets a resource by id.",
         "parameters": [
           {
             "name": "id",
@@ -2129,6 +2106,7 @@
         "tags": [
           "EpisodeFile"
         ],
+        "summary": "Gets a resource by id.",
         "parameters": [
           {
             "name": "id",
@@ -2676,6 +2654,7 @@
         "tags": [
           "HostConfig"
         ],
+        "summary": "Gets a resource by id.",
         "parameters": [
           {
             "name": "id",
@@ -2829,6 +2808,7 @@
         "tags": [
           "ImportList"
         ],
+        "summary": "Gets a resource by id.",
         "parameters": [
           {
             "name": "id",
@@ -3067,6 +3047,7 @@
         "tags": [
           "ImportListConfig"
         ],
+        "summary": "Gets a resource by id.",
         "parameters": [
           {
             "name": "id",
@@ -3276,6 +3257,7 @@
         "tags": [
           "ImportListExclusion"
         ],
+        "summary": "Gets a resource by id.",
         "parameters": [
           {
             "name": "id",
@@ -3429,6 +3411,7 @@
         "tags": [
           "Indexer"
         ],
+        "summary": "Gets a resource by id.",
         "parameters": [
           {
             "name": "id",
@@ -3667,6 +3650,7 @@
         "tags": [
           "IndexerConfig"
         ],
+        "summary": "Gets a resource by id.",
         "parameters": [
           {
             "name": "id",
@@ -3773,6 +3757,7 @@
         "tags": [
           "Language"
         ],
+        "summary": "Gets a resource by id.",
         "parameters": [
           {
             "name": "id",
@@ -3912,6 +3897,7 @@
         "tags": [
           "LanguageProfile"
         ],
+        "summary": "Gets a resource by id.",
         "parameters": [
           {
             "name": "id",
@@ -4000,6 +3986,7 @@
         "tags": [
           "Localization"
         ],
+        "summary": "Gets a resource by id.",
         "parameters": [
           {
             "name": "id",
@@ -4316,6 +4303,7 @@
         "tags": [
           "MediaManagementConfig"
         ],
+        "summary": "Gets a resource by id.",
         "parameters": [
           {
             "name": "id",
@@ -4469,6 +4457,7 @@
         "tags": [
           "Metadata"
         ],
+        "summary": "Gets a resource by id.",
         "parameters": [
           {
             "name": "id",
@@ -4672,6 +4661,7 @@
         "tags": [
           "Missing"
         ],
+        "summary": "Gets a resource by id.",
         "parameters": [
           {
             "name": "id",
@@ -4787,6 +4777,7 @@
         "tags": [
           "NamingConfig"
         ],
+        "summary": "Gets a resource by id.",
         "parameters": [
           {
             "name": "id",
@@ -5041,6 +5032,7 @@
         "tags": [
           "Notification"
         ],
+        "summary": "Gets a resource by id.",
         "parameters": [
           {
             "name": "id",
@@ -5294,6 +5286,7 @@
         "tags": [
           "QualityDefinition"
         ],
+        "summary": "Gets a resource by id.",
         "parameters": [
           {
             "name": "id",
@@ -5527,6 +5520,7 @@
         "tags": [
           "QualityProfile"
         ],
+        "summary": "Gets a resource by id.",
         "parameters": [
           {
             "name": "id",
@@ -5942,14 +5936,17 @@
         "tags": [
           "Release"
         ],
+        "summary": "Sends release to the download client.",
         "requestBody": {
+          "description": "Requires \"guid\" and \"indexerId\"",
           "content": {
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/ReleaseResource"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -5961,6 +5958,7 @@
         "tags": [
           "Release"
         ],
+        "summary": "Gets a list of releases for an interactive search.",
         "parameters": [
           {
             "name": "seriesId",
@@ -6170,6 +6168,7 @@
         "tags": [
           "ReleaseProfile"
         ],
+        "summary": "Gets a resource by id.",
         "parameters": [
           {
             "name": "id",
@@ -6382,6 +6381,7 @@
         "tags": [
           "RemotePathMapping"
         ],
+        "summary": "Gets a resource by id.",
         "parameters": [
           {
             "name": "id",
@@ -6531,6 +6531,7 @@
         "tags": [
           "RootFolder"
         ],
+        "summary": "Gets a resource by id.",
         "parameters": [
           {
             "name": "id",
@@ -7168,6 +7169,7 @@
         "tags": [
           "Tag"
         ],
+        "summary": "Gets a resource by id.",
         "parameters": [
           {
             "name": "id",
@@ -7220,6 +7222,7 @@
         "tags": [
           "TagDetails"
         ],
+        "summary": "Gets a resource by id.",
         "parameters": [
           {
             "name": "id",
@@ -7288,6 +7291,7 @@
         "tags": [
           "Task"
         ],
+        "summary": "Gets a resource by id.",
         "parameters": [
           {
             "name": "id",
@@ -7364,6 +7368,7 @@
         "tags": [
           "UiConfig"
         ],
+        "summary": "Gets a resource by id.",
         "parameters": [
           {
             "name": "id",

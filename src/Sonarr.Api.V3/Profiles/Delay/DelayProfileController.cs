@@ -6,6 +6,7 @@ using Sonarr.Http;
 using Sonarr.Http.REST;
 using Sonarr.Http.REST.Attributes;
 using Sonarr.Http.Validation;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Sonarr.Api.V3.Profiles.Delay
 {
@@ -35,6 +36,7 @@ namespace Sonarr.Api.V3.Profiles.Delay
 
         [RestPostById]
         [Consumes("application/json")]
+        [SwaggerOperation(Summary = "Creates a delay profile.")]
         public ActionResult<DelayProfileResource> Create([FromBody] DelayProfileResource resource)
         {
             var model = resource.ToModel();
@@ -44,6 +46,7 @@ namespace Sonarr.Api.V3.Profiles.Delay
         }
 
         [RestDeleteById]
+        [SwaggerOperation(Summary = "Deletes a delay profile.")]
         public void DeleteProfile(int id)
         {
             if (id == 1)
@@ -56,6 +59,7 @@ namespace Sonarr.Api.V3.Profiles.Delay
 
         [RestPutById]
         [Consumes("application/json")]
+        [SwaggerOperation(Summary = "Updates a delay profile.")]
         public ActionResult<DelayProfileResource> Update([FromBody] DelayProfileResource resource)
         {
             var model = resource.ToModel();
@@ -70,12 +74,14 @@ namespace Sonarr.Api.V3.Profiles.Delay
 
         [HttpGet]
         [Produces("application/json")]
+        [SwaggerOperation(Summary = "Gets a list of delay profiles.")]
         public List<DelayProfileResource> GetAll()
         {
             return _delayProfileService.All().ToResource();
         }
 
         [HttpPut("reorder/{id}")]
+        [SwaggerOperation(Summary = "Updates order for delay profile.")]
         public List<DelayProfileResource> Reorder([FromRoute] int id, [FromQuery] int? after)
         {
             ValidateId(id);

@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Core.CustomFormats;
 using NzbDrone.Core.Datastore;
@@ -20,6 +21,12 @@ namespace Sonarr.Api.V3.Wanted
                              IBroadcastSignalRMessage signalRBroadcaster)
             : base(episodeService, seriesService, upgradableSpecification, formatCalculator, signalRBroadcaster)
         {
+        }
+
+        [NonAction]
+        public override ActionResult<EpisodeResource> GetResourceByIdWithErrorHandler(int id)
+        {
+            throw new NotImplementedException();
         }
 
         [HttpGet]

@@ -10,6 +10,7 @@ using NzbDrone.Core.Backup;
 using Sonarr.Http;
 using Sonarr.Http.REST;
 using Sonarr.Http.REST.Attributes;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Sonarr.Api.V3.System.Backup
 {
@@ -32,6 +33,8 @@ namespace Sonarr.Api.V3.System.Backup
         }
 
         [HttpGet]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Gets a list of backups.")]
         public List<BackupResource> GetBackupFiles()
         {
             var backups = _backupService.GetBackups();
@@ -50,6 +53,7 @@ namespace Sonarr.Api.V3.System.Backup
         }
 
         [RestDeleteById]
+        [SwaggerOperation(Summary = "Deletes a backup.")]
         public void DeleteBackup(int id)
         {
             var backup = GetBackup(id);
@@ -70,6 +74,8 @@ namespace Sonarr.Api.V3.System.Backup
         }
 
         [HttpPost("restore/{id:int}")]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Restores a backup.")]
         public object Restore([FromRoute] int id)
         {
             var backup = GetBackup(id);
@@ -91,6 +97,8 @@ namespace Sonarr.Api.V3.System.Backup
 
         [HttpPost("restore/upload")]
         [RequestFormLimits(MultipartBodyLengthLimit = 500000000)]
+        [Produces("application/json")]
+        [SwaggerOperation(Summary = "Restores a backup by uploading.")]
         public object UploadAndRestore()
         {
             var files = Request.Form.Files;

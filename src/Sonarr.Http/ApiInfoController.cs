@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace NzbDrone.Http
 {
@@ -7,6 +8,7 @@ namespace NzbDrone.Http
     {
         [HttpGet("/api")]
         [Produces("application/json")]
+        [SwaggerOperation(Summary = "Get information about the API.")]
         public object GetApiInfo()
         {
             return new ApiInfoResource

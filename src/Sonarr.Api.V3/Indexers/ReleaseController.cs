@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentValidation;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NLog;
 using NzbDrone.Common.Cache;
@@ -18,6 +19,7 @@ using NzbDrone.Core.Profiles.Qualities;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Validation;
 using Sonarr.Http;
+using Swashbuckle.AspNetCore.Annotations;
 using HttpStatusCode = System.Net.HttpStatusCode;
 
 namespace Sonarr.Api.V3.Indexers
@@ -68,7 +70,8 @@ namespace Sonarr.Api.V3.Indexers
 
         [HttpPost]
         [Consumes("application/json")]
-        public async Task<object> DownloadRelease([FromBody] ReleaseResource release)
+        [SwaggerOperation(Summary = "Sends release to the download client.")]
+        public async Task<object> DownloadRelease([FromBody, SwaggerRequestBody(@"Requires ""guid"" and ""indexerId""", Required = true)] ReleaseResource release)
         {
             var remoteEpisode = _remoteEpisodeCache.Find(GetCacheKey(release));
 
@@ -89,7 +92,7 @@ namespace Sonarr.Api.V3.Indexers
                     Ensure.That(release.Quality, () => release.Quality).IsNotNull();
                     Ensure.That(release.Languages, () => release.Languages).IsNotNull();
 
-                    // Clone the remote episode so we don't overwrite anything on the original
+                    // Clone the remote episode, so we don't overwrite anything on the original
                     remoteEpisode = new RemoteEpisode
                     {
                         Release = remoteEpisode.Release,
@@ -170,6 +173,8 @@ namespace Sonarr.Api.V3.Indexers
 
         [HttpGet]
         [Produces("application/json")]
+        [SwaggerOperation(Summary = "Gets a list of releases for an interactive search.")]
+        [SwaggerResponse(StatusCodes.Status200OK, type: typeof(List<ReleaseResource>))]
         public async Task<List<ReleaseResource>> GetReleases(int? seriesId, int? episodeId, int? seasonNumber)
         {
             if (episodeId.HasValue)

@@ -7,6 +7,7 @@ using NzbDrone.Core.Indexers;
 using Sonarr.Http;
 using Sonarr.Http.Extensions;
 using Sonarr.Http.REST.Attributes;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Sonarr.Api.V3.Blocklist
 {
@@ -25,6 +26,7 @@ namespace Sonarr.Api.V3.Blocklist
 
         [HttpGet]
         [Produces("application/json")]
+        [SwaggerOperation(Summary = "Gets a list of blocklists.")]
         public PagingResource<BlocklistResource> GetBlocklist([FromQuery] PagingRequestResource paging, [FromQuery] int[] seriesIds = null, [FromQuery] DownloadProtocol[] protocols = null)
         {
             var pagingResource = new PagingResource<BlocklistResource>(paging);
@@ -44,6 +46,7 @@ namespace Sonarr.Api.V3.Blocklist
         }
 
         [RestDeleteById]
+        [SwaggerOperation(Summary = "Deletes a blocklist by id.")]
         public void DeleteBlocklist(int id)
         {
             _blocklistService.Delete(id);
@@ -51,6 +54,7 @@ namespace Sonarr.Api.V3.Blocklist
 
         [HttpDelete("bulk")]
         [Produces("application/json")]
+        [SwaggerOperation(Summary = "Deletes a list of blocklists in bulk.")]
         public object Remove([FromBody] BlocklistBulkResource resource)
         {
             _blocklistService.Delete(resource.Ids);

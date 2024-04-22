@@ -10,6 +10,7 @@ using NzbDrone.Core.Tv;
 using NzbDrone.SignalR;
 using Sonarr.Api.V3.Episodes;
 using Sonarr.Http;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Sonarr.Api.V3.Calendar
 {
@@ -29,8 +30,15 @@ namespace Sonarr.Api.V3.Calendar
             _tagService = tagService;
         }
 
+        [NonAction]
+        public override ActionResult<EpisodeResource> GetResourceByIdWithErrorHandler(int id)
+        {
+            throw new NotImplementedException();
+        }
+
         [HttpGet]
         [Produces("application/json")]
+        [SwaggerOperation(Summary = "Gets a list of episodes.")]
         public List<EpisodeResource> GetCalendar(DateTime? start, DateTime? end, bool unmonitored = false, bool includeSeries = false, bool includeEpisodeFile = false, bool includeEpisodeImages = false, string tags = "")
         {
             var startUse = start ?? DateTime.Today;
