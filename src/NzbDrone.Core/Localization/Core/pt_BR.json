@@ -2068,5 +2068,8 @@
     "ClickToChangeReleaseType": "Clique para alterar o tipo de lançamento",
     "NotificationsTelegramSettingsIncludeAppName": "Incluir {appName} no Título",
     "SelectReleaseType": "Selecionar o Tipo de Lançamento",
-    "SeriesFootNote": "Opcionalmente, controle o truncamento para um número máximo de bytes, incluindo reticências (`...`). Truncar do final (por exemplo, `{Series Title:30}`) ou do início (por exemplo, `{Series Title:-30}`) é suportado."
+    "SeriesFootNote": "Opcionalmente, controle o truncamento para um número máximo de bytes, incluindo reticências (`...`). Truncar do final (por exemplo, `{Series Title:30}`) ou do início (por exemplo, `{Series Title:-30}`) é suportado.",
+    "IndexerSettingsMultiLanguageReleaseHelpText": "Quais idiomas normalmente estão em um lançamento multi neste indexador?",
+    "AutoTaggingSpecificationTag": "Etiqueta",
+    "IndexerSettingsMultiLanguageRelease": "Multi Idiomas"
 }
