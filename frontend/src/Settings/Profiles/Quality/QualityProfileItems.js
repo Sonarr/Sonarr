@@ -21,8 +21,9 @@ class QualityProfileItems extends Component {
     super(props, context);
 
     this.state = {
-      qualitiesHeight: 0,
-      qualitiesHeightEditGroups: 0
+      defaultHeight: 0,
+      editGroupsHeight: 0,
+      editSizesHeight: 0
     };
   }
 
@@ -30,17 +31,23 @@ class QualityProfileItems extends Component {
   // Listeners
 
   onMeasure = ({ height }) => {
-    if (this.props.editGroups) {
-      this.setState({
-        qualitiesHeightEditGroups: height
-      });
-    } else {
-      this.setState({ qualitiesHeight: height });
-    }
+    const heightKey = `${this.props.mode}Height`;
+
+    this.setState({
+      [heightKey]: height
+    });
   };
 
-  onToggleEditGroupsMode = () => {
-    this.props.onToggleEditGroupsMode();
+  onEditGroupsPress = () => {
+    this.props.onChangeMode('editGroups');
+  };
+
+  onEditSizesPress = () => {
+    this.props.onChangeMode('editSizes');
+  };
+
+  onDefaultModePress = () => {
+    this.props.onChangeMode('default');
   };
 
   //
@@ -48,7 +55,7 @@ class QualityProfileItems extends Component {
 
   render() {
     const {
-      editGroups,
+      mode,
       dropQualityIndex,
       dropPosition,
       qualityProfileItems,
@@ -57,15 +64,10 @@ class QualityProfileItems extends Component {
       ...otherProps
     } = this.props;
 
-    const {
-      qualitiesHeight,
-      qualitiesHeightEditGroups
-    } = this.state;
-
     const isDragging = dropQualityIndex !== null;
     const isDraggingUp = isDragging && dropPosition === 'above';
     const isDraggingDown = isDragging && dropPosition === 'below';
-    const minHeight = editGroups ? qualitiesHeightEditGroups : qualitiesHeight;
+    const height = this.state[`${mode}Height`];
 
     return (
       <FormGroup size={sizes.EXTRA_SMALL}>
@@ -107,16 +109,33 @@ class QualityProfileItems extends Component {
           <Button
             className={styles.editGroupsButton}
             kind={kinds.PRIMARY}
-            onPress={this.onToggleEditGroupsMode}
+            onPress={mode === 'editGroups' ? this.onDefaultModePress : this.onEditGroupsPress}
           >
             <div>
               <Icon
-                className={styles.editGroupsButtonIcon}
-                name={editGroups ? icons.REORDER : icons.GROUP}
+                className={styles.editButtonIcon}
+                name={mode === 'editGroups' ? icons.REORDER : icons.GROUP}
               />
 
               {
-                editGroups ? translate('DoneEditingGroups') : translate('EditGroups')
+                mode === 'editGroups' ? translate('DoneEditingGroups') : translate('EditGroups')
+              }
+            </div>
+          </Button>
+
+          <Button
+            className={styles.editSizesButton}
+            kind={kinds.PRIMARY}
+            onPress={mode === 'editSizes' ? this.onDefaultModePress : this.onEditSizesPress}
+          >
+            <div>
+              <Icon
+                className={styles.editButtonIcon}
+                name={mode === 'editSizes' ? icons.REORDER : icons.FILE}
+              />
+
+              {
+                mode === 'editSizes' ? translate('DoneEditingSizes') : translate('EditSizes')
               }
             </div>
           </Button>
@@ -128,21 +147,24 @@ class QualityProfileItems extends Component {
           >
             <div
               className={styles.qualities}
-              style={{ minHeight: `${minHeight}px` }}
+              style={{ height: `${height}px` }}
             >
               {
-                qualityProfileItems.map(({ id, name, allowed, quality, items }, index) => {
+                qualityProfileItems.map(({ id, name, allowed, quality, items, minSize, maxSize, preferredSize }, index) => {
                   const identifier = quality ? quality.id : id;
 
                   return (
                     <QualityProfileItemDragSource
                       key={identifier}
-                      editGroups={editGroups}
+                      mode={mode}
                       groupId={id}
                       qualityId={quality && quality.id}
                       name={quality ? quality.name : name}
                       allowed={allowed}
                       items={items}
+                      minSize={minSize}
+                      maxSize={maxSize}
+                      preferredSize={preferredSize}
                       qualityIndex={`${index + 1}`}
                       isInGroup={false}
                       isDragging={isDragging}
@@ -164,14 +186,14 @@ class QualityProfileItems extends Component {
 }
 
 QualityProfileItems.propTypes = {
-  editGroups: PropTypes.bool.isRequired,
+  mode: PropTypes.string.isRequired,
   dragQualityIndex: PropTypes.string,
   dropQualityIndex: PropTypes.string,
   dropPosition: PropTypes.string,
   qualityProfileItems: PropTypes.arrayOf(PropTypes.object).isRequired,
   errors: PropTypes.arrayOf(PropTypes.object),
   warnings: PropTypes.arrayOf(PropTypes.object),
-  onToggleEditGroupsMode: PropTypes.func.isRequired
+  onChangeMode: PropTypes.func.isRequired
 };
 
 QualityProfileItems.defaultProps = {

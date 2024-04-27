@@ -126,7 +126,7 @@ class EditQualityProfileModalContentConnector extends Component {
       dragQualityIndex: null,
       dropQualityIndex: null,
       dropPosition: null,
-      editGroups: false
+      mode: 'default' // default, editGroups, editSizes
     };
   }
 
@@ -249,6 +249,49 @@ class EditQualityProfileModalContentConnector extends Component {
     const group = _.find(items, (i) => i.id === id);
 
     group.name = name;
+
+    this.props.setQualityProfileValue({
+      name: 'items',
+      value: items
+    });
+  };
+
+  onSizeChange = ({ id, minSize, maxSize, preferredSize }) => {
+    const qualityProfile = _.cloneDeep(this.props.item);
+    const items = qualityProfile.items.value;
+    let quality = null;
+
+    // eslint-disable-next-line guard-for-in
+    for (const index in items) {
+      const item = items[index];
+
+      if (item.quality?.id === id) {
+        quality = item;
+        break;
+      }
+
+      // eslint-disable-next-line guard-for-in
+      for (const i in item.items) {
+        const nestedItem = items[i];
+
+        if (nestedItem.quality?.id === id) {
+          quality = nestedItem;
+          break;
+        }
+      }
+
+      if (quality) {
+        break;
+      }
+    }
+
+    if (!quality) {
+      return;
+    }
+
+    quality.minSize = minSize;
+    quality.maxSize = maxSize;
+    quality.preferredSize = preferredSize;
 
     this.props.setQualityProfileValue({
       name: 'items',
@@ -439,8 +482,8 @@ class EditQualityProfileModalContentConnector extends Component {
     });
   };
 
-  onToggleEditGroupsMode = () => {
-    this.setState({ editGroups: !this.state.editGroups });
+  onChangeMode = (mode) => {
+    this.setState({ mode });
   };
 
   //
@@ -466,7 +509,8 @@ class EditQualityProfileModalContentConnector extends Component {
         onQualityProfileItemDragMove={this.onQualityProfileItemDragMove}
         onQualityProfileItemDragEnd={this.onQualityProfileItemDragEnd}
         onQualityProfileFormatItemScoreChange={this.onQualityProfileFormatItemScoreChange}
-        onToggleEditGroupsMode={this.onToggleEditGroupsMode}
+        onChangeMode={this.onChangeMode}
+        onSizeChange={this.onSizeChange}
       />
     );
   }

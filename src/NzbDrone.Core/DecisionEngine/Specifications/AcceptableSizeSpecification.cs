@@ -3,20 +3,17 @@ using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications
 {
     public class AcceptableSizeSpecification : IDownloadDecisionEngineSpecification
     {
-        private readonly IQualityDefinitionService _qualityDefinitionService;
         private readonly IEpisodeService _episodeService;
         private readonly Logger _logger;
 
-        public AcceptableSizeSpecification(IQualityDefinitionService qualityDefinitionService, IEpisodeService episodeService, Logger logger)
+        public AcceptableSizeSpecification(IEpisodeService episodeService, Logger logger)
         {
-            _qualityDefinitionService = qualityDefinitionService;
             _episodeService = episodeService;
             _logger = logger;
         }
@@ -78,11 +75,14 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 return DownloadSpecDecision.Reject(DownloadRejectionReason.UnknownRuntime, "Runtime of all episodes is 0, unable to validate size until it is available");
             }
 
-            var qualityDefinition = _qualityDefinitionService.Get(quality);
+            var qualityProfile = subject.Series.QualityProfile.Value;
+            var qualityIndex = qualityProfile.GetIndex(quality, true);
+            var qualityOrGroup = qualityProfile.Items[qualityIndex.Index];
+            var item = qualityOrGroup.Quality == null ? qualityOrGroup.Items[qualityIndex.GroupIndex] : qualityOrGroup;
 
-            if (qualityDefinition.MinSize.HasValue)
+            if (item.MinSize.HasValue)
             {
-                var minSize = qualityDefinition.MinSize.Value.Megabytes();
+                var minSize = item.MinSize.Value.Megabytes();
 
                 // Multiply maxSize by runtime of all episodes
                 minSize *= runtime;
@@ -97,13 +97,13 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 }
             }
 
-            if (!qualityDefinition.MaxSize.HasValue || qualityDefinition.MaxSize.Value == 0)
+            if (!item.MaxSize.HasValue || item.MaxSize.Value == 0)
             {
                 _logger.Debug("Max size is unlimited, skipping size check");
             }
             else
             {
-                var maxSize = qualityDefinition.MaxSize.Value.Megabytes();
+                var maxSize = item.MaxSize.Value.Megabytes();
 
                 // Multiply maxSize by runtime of all episodes
                 maxSize *= runtime;
