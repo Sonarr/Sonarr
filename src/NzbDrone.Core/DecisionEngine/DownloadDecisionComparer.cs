@@ -185,15 +185,19 @@ namespace NzbDrone.Core.DecisionEngine
         {
             var sizeCompare =  CompareBy(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode =>
             {
-                var preferredSize = _qualityDefinitionService.Get(remoteEpisode.ParsedEpisodeInfo.Quality.Quality).PreferredSize;
+                var qualityProfile = remoteEpisode.Series.QualityProfile.Value;
+                var qualityIndex = qualityProfile.GetIndex(remoteEpisode.ParsedEpisodeInfo.Quality.Quality, true);
+                var qualityOrGroup = qualityProfile.Items[qualityIndex.Index];
+                var item = qualityOrGroup.Quality == null ? qualityOrGroup.Items[qualityIndex.GroupIndex] : qualityOrGroup;
+                var preferredSize = item.PreferredSize;
 
                 // If no value for preferred it means unlimited so fallback to sort largest is best
                 if (preferredSize.HasValue && remoteEpisode.Series.Runtime > 0)
                 {
-                    var preferredMovieSize = remoteEpisode.Series.Runtime * preferredSize.Value.Megabytes();
+                    var preferredEpisodeSize = remoteEpisode.Series.Runtime * preferredSize.Value.Megabytes();
 
                     // Calculate closest to the preferred size
-                    return Math.Abs((remoteEpisode.Release.Size - preferredMovieSize).Round(200.Megabytes())) * (-1);
+                    return Math.Abs((remoteEpisode.Release.Size - preferredEpisodeSize).Round(200.Megabytes())) * (-1);
                 }
                 else
                 {

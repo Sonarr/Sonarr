@@ -2,6 +2,7 @@ import AppSectionState, {
   AppSectionDeleteState,
   AppSectionItemSchemaState,
   AppSectionItemState,
+  AppSectionListState,
   AppSectionSaveState,
   PagedAppSectionState,
 } from 'App/State/AppSectionState';
@@ -14,6 +15,7 @@ import ImportListOptionsSettings from 'typings/ImportListOptionsSettings';
 import Indexer from 'typings/Indexer';
 import IndexerFlag from 'typings/IndexerFlag';
 import Notification from 'typings/Notification';
+import QualityDefinition from 'typings/QualityDefinition';
 import QualityProfile from 'typings/QualityProfile';
 import General from 'typings/Settings/General';
 import NamingConfig from 'typings/Settings/NamingConfig';
@@ -54,6 +56,10 @@ export interface IndexerAppState
 export interface NotificationAppState
   extends AppSectionState<Notification>,
     AppSectionDeleteState {}
+
+export interface QualityDefinitionsAppState
+  extends AppSectionListState<QualityDefinition>,
+    AppSectionSaveState {}
 
 export interface QualityProfilesAppState
   extends AppSectionState<QualityProfile>,
@@ -101,6 +107,7 @@ interface SettingsAppState {
   naming: NamingAppState;
   namingExamples: NamingExamplesAppState;
   notifications: NotificationAppState;
+  qualityDefinitions: QualityDefinitionsAppState;
   qualityProfiles: QualityProfilesAppState;
   releaseProfiles: ReleaseProfilesAppState;
   ui: UiSettingsAppState;

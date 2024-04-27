@@ -1,4 +1,4 @@
-﻿using NzbDrone.Core.Messaging.Commands;
+using NzbDrone.Core.Messaging.Commands;
 
 namespace NzbDrone.Core.Qualities.Commands
 {

@@ -198,7 +198,14 @@ namespace NzbDrone.Core.Profiles.Qualities
                 {
                     var quality = group.First().Quality;
 
-                    items.Add(new QualityProfileQualityItem { Quality = group.First().Quality, Allowed = allowed.Contains(quality) });
+                    items.Add(new QualityProfileQualityItem
+                    {
+                        Quality = group.First().Quality,
+                        Allowed = allowed.Contains(quality),
+                        MinSize = group.First().MinSize,
+                        MaxSize = group.First().MaxSize,
+                        PreferredSize = group.First().PreferredSize
+                    });
                     continue;
                 }
 
@@ -211,7 +218,10 @@ namespace NzbDrone.Core.Profiles.Qualities
                     Items = group.Select(g => new QualityProfileQualityItem
                     {
                         Quality = g.Quality,
-                        Allowed = groupAllowed
+                        Allowed = groupAllowed,
+                        MinSize = g.MinSize,
+                        MaxSize = g.MaxSize,
+                        PreferredSize = g.PreferredSize
                     }).ToList(),
                     Allowed = groupAllowed
                 });
