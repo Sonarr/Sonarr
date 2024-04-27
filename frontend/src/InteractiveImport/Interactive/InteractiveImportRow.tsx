@@ -128,7 +128,8 @@ function InteractiveImportRow(props: InteractiveImportRowProps) {
         seasonNumber != null &&
         episodes.length &&
         quality &&
-        languages
+        languages &&
+        size > 0
       ) {
         onSelectedChange({
           id,
