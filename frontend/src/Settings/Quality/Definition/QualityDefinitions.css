@@ -8,24 +8,11 @@
   flex: 0 1 250px;
 }
 
-.sizeLimit {
-  flex: 0 1 500px;
-}
+.notice {
+  composes: alert from '~Components/Alert.css';
 
-.megabytesPerMinute {
-  flex: 0 0 250px;
-}
-
-.sizeLimitHelpTextContainer {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 20px;
-  max-width: 1000px;
-}
-
-.sizeLimitHelpText {
-  max-width: 500px;
-  color: var(--helpTextColor);
+  margin: 0;
+  margin-bottom: 20px;
 }
 
 @media only screen and (max-width: $breakpointSmall) {

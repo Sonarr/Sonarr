@@ -47,6 +47,7 @@ namespace NzbDrone.Core.Qualities
         public void UpdateMany(List<QualityDefinition> qualityDefinitions)
         {
             _repo.UpdateMany(qualityDefinitions);
+            _cache.Clear();
         }
 
         public List<QualityDefinition> All()
@@ -119,9 +120,6 @@ namespace NzbDrone.Core.Qualities
             {
                 var existing = existingDefinitions.SingleOrDefault(d => d.Quality == definition.Quality);
 
-                existing.MinSize = definition.MinSize;
-                existing.MaxSize = definition.MaxSize;
-                existing.PreferredSize = definition.PreferredSize;
                 existing.Title = message.ResetTitles ? definition.Title : existing.Title;
 
                 updateList.Add(existing);

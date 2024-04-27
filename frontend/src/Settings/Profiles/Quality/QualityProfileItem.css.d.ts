@@ -6,6 +6,7 @@ interface CssExports {
   'createGroupButton': string;
   'dragHandle': string;
   'dragIcon': string;
+  'editSizes': string;
   'isDragging': string;
   'isInGroup': string;
   'isPreview': string;

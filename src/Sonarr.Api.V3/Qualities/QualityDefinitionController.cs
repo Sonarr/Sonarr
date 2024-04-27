@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Core.Messaging.Events;
+using NzbDrone.Core.Profiles.Qualities;
 using NzbDrone.Core.Qualities;
 using NzbDrone.SignalR;
 using Sonarr.Http;
@@ -17,13 +18,16 @@ namespace Sonarr.Api.V3.Qualities
         IHandle<CommandExecutedEvent>
     {
         private readonly IQualityDefinitionService _qualityDefinitionService;
+        private readonly IQualityProfileService _qualityProfileService;
 
         public QualityDefinitionController(
             IQualityDefinitionService qualityDefinitionService,
+            IQualityProfileService qualityProfileService,
             IBroadcastSignalRMessage signalRBroadcaster)
             : base(signalRBroadcaster)
         {
             _qualityDefinitionService = qualityDefinitionService;
+            _qualityProfileService = qualityProfileService;
 
             SharedValidator.RuleFor(c => c)
                 .SetValidator(new QualityDefinitionResourceValidator());
@@ -34,6 +38,12 @@ namespace Sonarr.Api.V3.Qualities
         {
             var model = resource.ToModel();
             _qualityDefinitionService.Update(model);
+
+            if (model.MinSize.HasValue || model.MaxSize.HasValue || model.PreferredSize.HasValue)
+            {
+                _qualityProfileService.UpdateALlSizeLimits(new QualityProfileSizeLimit(model));
+            }
+
             return Accepted(model.Id);
         }
 
@@ -55,6 +65,16 @@ namespace Sonarr.Api.V3.Qualities
             var qualityDefinitions = resource.ToModel().ToList();
 
             _qualityDefinitionService.UpdateMany(qualityDefinitions);
+
+            var toUpdate = qualityDefinitions
+                .Where(q => q.MinSize.HasValue || q.MaxSize.HasValue || q.PreferredSize.HasValue)
+                .Select(q => new QualityProfileSizeLimit(q))
+                .ToArray();
+
+            if (toUpdate.Any())
+            {
+                _qualityProfileService.UpdateALlSizeLimits(toUpdate);
+            }
 
             return Accepted(_qualityDefinitionService.All()
                 .ToResource());
