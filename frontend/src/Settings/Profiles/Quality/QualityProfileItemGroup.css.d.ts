@@ -7,6 +7,8 @@ interface CssExports {
   'dragHandle': string;
   'dragIcon': string;
   'editGroups': string;
+  'editSizes': string;
+  'editSizesQualityNameLabel': string;
   'groupQualities': string;
   'isDragging': string;
   'items': string;

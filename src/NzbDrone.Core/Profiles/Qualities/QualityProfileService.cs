@@ -21,6 +21,7 @@ namespace NzbDrone.Core.Profiles.Qualities
         QualityProfile Get(int id);
         bool Exists(int id);
         QualityProfile GetDefaultProfile(string name, Quality cutoff = null, params Quality[] allowed);
+        void UpdateALlSizeLimits(params QualityProfileSizeLimit[] sizeLimits);
     }
 
     public class QualityProfileService : IQualityProfileService,
@@ -198,7 +199,14 @@ namespace NzbDrone.Core.Profiles.Qualities
                 {
                     var quality = group.First().Quality;
 
-                    items.Add(new QualityProfileQualityItem { Quality = group.First().Quality, Allowed = allowed.Contains(quality) });
+                    items.Add(new QualityProfileQualityItem
+                    {
+                        Quality = group.First().Quality,
+                        Allowed = allowed.Contains(quality),
+                        MinSize = group.First().MinSize,
+                        MaxSize = group.First().MaxSize,
+                        PreferredSize = group.First().PreferredSize
+                    });
                     continue;
                 }
 
@@ -211,7 +219,10 @@ namespace NzbDrone.Core.Profiles.Qualities
                     Items = group.Select(g => new QualityProfileQualityItem
                     {
                         Quality = g.Quality,
-                        Allowed = groupAllowed
+                        Allowed = groupAllowed,
+                        MinSize = g.MinSize,
+                        MaxSize = g.MaxSize,
+                        PreferredSize = g.PreferredSize
                     }).ToList(),
                     Allowed = groupAllowed
                 });
@@ -242,6 +253,27 @@ namespace NzbDrone.Core.Profiles.Qualities
                                  };
 
             return qualityProfile;
+        }
+
+        public void UpdateALlSizeLimits(params QualityProfileSizeLimit[] sizeLimits)
+        {
+            var all = All();
+
+            foreach (var qualityProfile in all)
+            {
+                foreach (var sizeLimit in sizeLimits)
+                {
+                        var qualityIndex = qualityProfile.GetIndex(sizeLimit.Quality, true);
+                        var qualityOrGroup = qualityProfile.Items[qualityIndex.Index];
+                        var item = qualityOrGroup.Quality == null ? qualityOrGroup.Items[qualityIndex.GroupIndex] : qualityOrGroup;
+
+                        item.MinSize = sizeLimit.MinSize;
+                        item.MaxSize = sizeLimit.MaxSize;
+                        item.PreferredSize = sizeLimit.PreferredSize;
+                }
+            }
+
+            _qualityProfileRepository.UpdateMany(all);
         }
 
         private QualityProfile AddDefaultProfile(string name, Quality cutoff, params Quality[] allowed)
