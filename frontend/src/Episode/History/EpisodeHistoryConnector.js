@@ -3,13 +3,19 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { clearEpisodeHistory, episodeHistoryMarkAsFailed, fetchEpisodeHistory } from 'Store/Actions/episodeHistoryActions';
+import createUISettingsSelector from 'Store/Selectors/createUISettingsSelector';
 import EpisodeHistory from './EpisodeHistory';
 
 function createMapStateToProps() {
   return createSelector(
     (state) => state.episodeHistory,
-    (episodeHistory) => {
-      return episodeHistory;
+    createUISettingsSelector(),
+    (episodeHistory, uiSettings) => {
+      return {
+        ...episodeHistory,
+        timeFormat: uiSettings.timeFormat,
+        shortDateFormat: uiSettings.shortDateFormat
+      };
     }
   );
 }

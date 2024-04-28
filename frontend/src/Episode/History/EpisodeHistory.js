@@ -66,6 +66,8 @@ class EpisodeHistory extends Component {
       isPopulated,
       error,
       items,
+      timeFormat,
+      shortDateFormat,
       onMarkAsFailedPress
     } = this.props;
 
@@ -101,6 +103,8 @@ class EpisodeHistory extends Component {
                   <EpisodeHistoryRow
                     key={item.id}
                     {...item}
+                    timeFormat={timeFormat}
+                    shortDateFormat={shortDateFormat}
                     onMarkAsFailedPress={onMarkAsFailedPress}
                   />
                 );
@@ -120,6 +124,8 @@ EpisodeHistory.propTypes = {
   isPopulated: PropTypes.bool.isRequired,
   error: PropTypes.object,
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
+  timeFormat: PropTypes.string.isRequired,
+  shortDateFormat: PropTypes.string.isRequired,
   onMarkAsFailedPress: PropTypes.func.isRequired
 };
 

@@ -5,7 +5,6 @@ import HistoryEventTypeCell from 'Activity/History/HistoryEventTypeCell';
 import Icon from 'Components/Icon';
 import IconButton from 'Components/Link/IconButton';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
-import RelativeDateCellConnector from 'Components/Table/Cells/RelativeDateCellConnector';
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
 import TableRow from 'Components/Table/TableRow';
 import Popover from 'Components/Tooltip/Popover';
@@ -15,6 +14,7 @@ import EpisodeNumber from 'Episode/EpisodeNumber';
 import EpisodeQuality from 'Episode/EpisodeQuality';
 import SeasonEpisodeNumber from 'Episode/SeasonEpisodeNumber';
 import { icons, kinds, tooltipPositions } from 'Helpers/Props';
+import formatDateTime from 'Utilities/Date/formatDateTime';
 import formatCustomFormatScore from 'Utilities/Number/formatCustomFormatScore';
 import translate from 'Utilities/String/translate';
 import styles from './SeriesHistoryRow.css';
@@ -77,7 +77,9 @@ class SeriesHistoryRow extends Component {
       fullSeries,
       series,
       episode,
-      customFormatScore
+      customFormatScore,
+      timeFormat,
+      shortDateFormat
     } = this.props;
 
     const {
@@ -129,9 +131,9 @@ class SeriesHistoryRow extends Component {
           {formatCustomFormatScore(customFormatScore, customFormats.length)}
         </TableRowCell>
 
-        <RelativeDateCellConnector
-          date={date}
-        />
+        <TableRowCell>
+          {formatDateTime(date, shortDateFormat, timeFormat, { includeSeconds: true })}
+        </TableRowCell>
 
         <TableRowCell className={styles.actions}>
           <Popover
@@ -192,6 +194,8 @@ SeriesHistoryRow.propTypes = {
   series: PropTypes.object.isRequired,
   episode: PropTypes.object.isRequired,
   customFormatScore: PropTypes.number.isRequired,
+  timeFormat: PropTypes.string.isRequired,
+  shortDateFormat: PropTypes.string.isRequired,
   onMarkAsFailedPress: PropTypes.func.isRequired
 };
 
