@@ -19,16 +19,16 @@ namespace NzbDrone.Core.Update.History
     {
         private readonly IUpdateHistoryRepository _repository;
         private readonly IEventAggregator _eventAggregator;
-        private readonly Logger _logger;
         private readonly IConfigFileProvider _configFileProvider;
+        private readonly Logger _logger;
         private Version _prevVersion;
 
-        public UpdateHistoryService(IUpdateHistoryRepository repository, IEventAggregator eventAggregator, Logger logger, IConfigFileProvider configFileProvider)
+        public UpdateHistoryService(IUpdateHistoryRepository repository, IEventAggregator eventAggregator, IConfigFileProvider configFileProvider, Logger logger)
         {
             _repository = repository;
             _eventAggregator = eventAggregator;
-            _logger = logger;
             _configFileProvider = configFileProvider;
+            _logger = logger;
         }
 
         public Version PreviouslyInstalled()

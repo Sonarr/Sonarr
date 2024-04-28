@@ -95,6 +95,7 @@ namespace NzbDrone.Host
                                     .AddStartupContext(startupContext)
                                     .Resolve<UtilityModeRouter>()
                                     .Route(appMode);
+
                                 if (config.GetValue(nameof(ConfigFileProvider.LogDbEnabled), true))
                                 {
                                     c.AddLogDatabase();
@@ -161,6 +162,7 @@ namespace NzbDrone.Host
                         .AddNzbDroneLogger()
                         .AddDatabase()
                         .AddStartupContext(context);
+
                     if (logDbEnabled)
                     {
                         c.AddLogDatabase();

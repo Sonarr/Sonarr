@@ -2,24 +2,25 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Update;
 using NzbDrone.Core.Update.History;
 using Sonarr.Http;
-using Sonarr.Http.REST.Filters;
 
 namespace Sonarr.Api.V3.Update
 {
     [V3ApiController]
-    [TypeFilter(typeof(LogDatabaseDisabledActionFilterAttribute<List<UpdateResource>>))]
     public class UpdateController : Controller
     {
         private readonly IRecentUpdateProvider _recentUpdateProvider;
         private readonly IUpdateHistoryService _updateHistoryService;
+        private readonly IConfigFileProvider _configFileProvider;
 
-        public UpdateController(IRecentUpdateProvider recentUpdateProvider, IUpdateHistoryService updateHistoryService)
+        public UpdateController(IRecentUpdateProvider recentUpdateProvider, IUpdateHistoryService updateHistoryService, IConfigFileProvider configFileProvider)
         {
             _recentUpdateProvider = recentUpdateProvider;
             _updateHistoryService = updateHistoryService;
+            _configFileProvider = configFileProvider;
         }
 
         [HttpGet]
@@ -47,7 +48,11 @@ namespace Sonarr.Api.V3.Update
                     installed.Installed = true;
                 }
 
-                var installDates = _updateHistoryService.InstalledSince(resources.Last().ReleaseDate)
+                var updateHistory = _configFileProvider.LogDbEnabled
+                    ? _updateHistoryService.InstalledSince(resources.Last().ReleaseDate)
+                    : new List<UpdateHistory>();
+
+                var installDates = updateHistory
                                                         .DistinctBy(v => v.Version)
                                                         .ToDictionary(v => v.Version);
 
