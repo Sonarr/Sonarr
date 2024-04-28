@@ -5,10 +5,12 @@ using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Update;
 using NzbDrone.Core.Update.History;
 using Sonarr.Http;
+using Sonarr.Http.REST.Filters;
 
 namespace Sonarr.Api.V3.Update
 {
     [V3ApiController]
+    [TypeFilter(typeof(LogDatabaseDisabledActionFilterAttribute<List<UpdateResource>>))]
     public class UpdateController : Controller
     {
         private readonly IRecentUpdateProvider _recentUpdateProvider;

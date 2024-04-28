@@ -30,6 +30,7 @@ namespace NzbDrone.Common.Test
                 .AddNzbDroneLogger()
                 .AutoAddServices(Bootstrap.ASSEMBLIES)
                 .AddDummyDatabase()
+                .AddDummyLogDatabase()
                 .AddStartupContext(new StartupContext("first", "second"));
 
             container.RegisterInstance(new Mock<IHostLifetime>().Object);

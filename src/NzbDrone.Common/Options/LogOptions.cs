@@ -11,4 +11,5 @@ public class LogOptions
     public string SyslogServer { get; set; }
     public int? SyslogPort { get; set; }
     public string SyslogLevel { get; set; }
+    public bool? DbEnabled { get; set; }
 }

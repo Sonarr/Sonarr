@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using NLog;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Update.History.Events;
@@ -19,13 +20,15 @@ namespace NzbDrone.Core.Update.History
         private readonly IUpdateHistoryRepository _repository;
         private readonly IEventAggregator _eventAggregator;
         private readonly Logger _logger;
+        private readonly IConfigFileProvider _configFileProvider;
         private Version _prevVersion;
 
-        public UpdateHistoryService(IUpdateHistoryRepository repository, IEventAggregator eventAggregator, Logger logger)
+        public UpdateHistoryService(IUpdateHistoryRepository repository, IEventAggregator eventAggregator, Logger logger, IConfigFileProvider configFileProvider)
         {
             _repository = repository;
             _eventAggregator = eventAggregator;
             _logger = logger;
+            _configFileProvider = configFileProvider;
         }
 
         public Version PreviouslyInstalled()
@@ -58,7 +61,7 @@ namespace NzbDrone.Core.Update.History
 
         public void Handle(ApplicationStartedEvent message)
         {
-            if (BuildInfo.Version.Major == 10)
+            if (BuildInfo.Version.Major == 10 || !_configFileProvider.LogDbEnabled)
             {
                 // Don't save dev versions, they change constantly
                 return;

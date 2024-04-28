@@ -3,10 +3,11 @@ using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Instrumentation;
 using Sonarr.Http;
 using Sonarr.Http.Extensions;
-
+using Sonarr.Http.REST.Filters;
 namespace Sonarr.Api.V3.Logs
 {
     [V3ApiController]
+    [TypeFilter(typeof(LogDatabaseDisabledActionFilterAttribute<PagingResource<LogResource>>))]
     public class LogController : Controller
     {
         private readonly ILogService _logService;
