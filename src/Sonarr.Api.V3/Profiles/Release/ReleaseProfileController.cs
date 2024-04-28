@@ -36,7 +36,7 @@ namespace Sonarr.Api.V3.Profiles.Release
         }
 
         [RestPostById]
-        public ActionResult<ReleaseProfileResource> Create(ReleaseProfileResource resource)
+        public ActionResult<ReleaseProfileResource> Create([FromBody] ReleaseProfileResource resource)
         {
             var model = resource.ToModel();
             model = _profileService.Add(model);
@@ -50,7 +50,7 @@ namespace Sonarr.Api.V3.Profiles.Release
         }
 
         [RestPutById]
-        public ActionResult<ReleaseProfileResource> Update(ReleaseProfileResource resource)
+        public ActionResult<ReleaseProfileResource> Update([FromBody] ReleaseProfileResource resource)
         {
             var model = resource.ToModel();
 

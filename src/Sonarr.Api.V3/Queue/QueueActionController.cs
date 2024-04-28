@@ -21,7 +21,7 @@ namespace Sonarr.Api.V3.Queue
         }
 
         [HttpPost("grab/{id:int}")]
-        public async Task<object> Grab(int id)
+        public async Task<object> Grab([FromRoute] int id)
         {
             var pendingRelease = _pendingReleaseService.FindPendingQueueItem(id);
 

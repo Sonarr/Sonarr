@@ -49,7 +49,7 @@ namespace Sonarr.Api.V3.ImportLists
 
         [RestPostById]
         [Consumes("application/json")]
-        public ActionResult<ImportListExclusionResource> AddImportListExclusion(ImportListExclusionResource resource)
+        public ActionResult<ImportListExclusionResource> AddImportListExclusion([FromBody] ImportListExclusionResource resource)
         {
             var importListExclusion = _importListExclusionService.Add(resource.ToModel());
 
@@ -58,7 +58,7 @@ namespace Sonarr.Api.V3.ImportLists
 
         [RestPutById]
         [Consumes("application/json")]
-        public ActionResult<ImportListExclusionResource> UpdateImportListExclusion(ImportListExclusionResource resource)
+        public ActionResult<ImportListExclusionResource> UpdateImportListExclusion([FromBody] ImportListExclusionResource resource)
         {
             _importListExclusionService.Update(resource.ToModel());
             return Accepted(resource.Id);

@@ -34,7 +34,7 @@ namespace Sonarr.Api.V3.Config
 
         [RestPutById]
         [Consumes("application/json")]
-        public virtual ActionResult<TResource> SaveConfig(TResource resource)
+        public virtual ActionResult<TResource> SaveConfig([FromBody] TResource resource)
         {
             var dictionary = resource.GetType()
                 .GetProperties(BindingFlags.Instance | BindingFlags.Public)

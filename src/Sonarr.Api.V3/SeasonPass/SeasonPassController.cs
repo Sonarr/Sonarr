@@ -19,7 +19,7 @@ namespace Sonarr.Api.V3.SeasonPass
 
         [HttpPost]
         [Consumes("application/json")]
-        public IActionResult UpdateAll(SeasonPassResource resource)
+        public IActionResult UpdateAll([FromBody] SeasonPassResource resource)
         {
             var seriesToUpdate = _seriesService.GetSeries(resource.Series.Select(s => s.Id));
 

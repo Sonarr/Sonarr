@@ -50,7 +50,7 @@ namespace Sonarr.Api.V3.RootFolders
 
         [RestPostById]
         [Consumes("application/json")]
-        public ActionResult<RootFolderResource> CreateRootFolder(RootFolderResource rootFolderResource)
+        public ActionResult<RootFolderResource> CreateRootFolder([FromBody] RootFolderResource rootFolderResource)
         {
             var model = rootFolderResource.ToModel();
 

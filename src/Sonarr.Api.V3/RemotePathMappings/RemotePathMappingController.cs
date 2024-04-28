@@ -41,7 +41,7 @@ namespace Sonarr.Api.V3.RemotePathMappings
 
         [RestPostById]
         [Consumes("application/json")]
-        public ActionResult<RemotePathMappingResource> CreateMapping(RemotePathMappingResource resource)
+        public ActionResult<RemotePathMappingResource> CreateMapping([FromBody] RemotePathMappingResource resource)
         {
             var model = resource.ToModel();
 
@@ -62,7 +62,7 @@ namespace Sonarr.Api.V3.RemotePathMappings
         }
 
         [RestPutById]
-        public ActionResult<RemotePathMappingResource> UpdateMapping(RemotePathMappingResource resource)
+        public ActionResult<RemotePathMappingResource> UpdateMapping([FromBody] RemotePathMappingResource resource)
         {
             var mapping = resource.ToModel();
 

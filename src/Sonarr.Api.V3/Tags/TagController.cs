@@ -36,14 +36,14 @@ namespace Sonarr.Api.V3.Tags
 
         [RestPostById]
         [Consumes("application/json")]
-        public ActionResult<TagResource> Create(TagResource resource)
+        public ActionResult<TagResource> Create([FromBody] TagResource resource)
         {
             return Created(_tagService.Add(resource.ToModel()).Id);
         }
 
         [RestPutById]
         [Consumes("application/json")]
-        public ActionResult<TagResource> Update(TagResource resource)
+        public ActionResult<TagResource> Update([FromBody] TagResource resource)
         {
             _tagService.Update(resource.ToModel());
             return Accepted(resource.Id);

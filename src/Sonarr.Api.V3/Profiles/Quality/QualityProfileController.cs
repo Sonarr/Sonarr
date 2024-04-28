@@ -46,7 +46,7 @@ namespace Sonarr.Api.V3.Profiles.Quality
 
         [RestPostById]
         [Consumes("application/json")]
-        public ActionResult<QualityProfileResource> Create(QualityProfileResource resource)
+        public ActionResult<QualityProfileResource> Create([FromBody] QualityProfileResource resource)
         {
             var model = resource.ToModel();
             model = _profileService.Add(model);
@@ -61,7 +61,7 @@ namespace Sonarr.Api.V3.Profiles.Quality
 
         [RestPutById]
         [Consumes("application/json")]
-        public ActionResult<QualityProfileResource> Update(QualityProfileResource resource)
+        public ActionResult<QualityProfileResource> Update([FromBody] QualityProfileResource resource)
         {
             var model = resource.ToModel();
 
