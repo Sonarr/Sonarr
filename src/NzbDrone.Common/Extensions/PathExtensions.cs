@@ -29,6 +29,12 @@ namespace NzbDrone.Common.Extensions
 
         public static string CleanFilePath(this string path)
         {
+            if (path.IsNotNullOrWhiteSpace())
+            {
+                // Trim trailing spaces before checking if the path is valid so validation doesn't fail for something we can fix.
+                path = path.TrimEnd(' ');
+            }
+
             Ensure.That(path, () => path).IsNotNullOrWhiteSpace();
             Ensure.That(path, () => path).IsValidPath(PathValidationType.AnyOs);
 
@@ -37,10 +43,10 @@ namespace NzbDrone.Common.Extensions
             // UNC
             if (!info.FullName.Contains('/') && info.FullName.StartsWith(@"\\"))
             {
-                return info.FullName.TrimEnd('/', '\\', ' ');
+                return info.FullName.TrimEnd('/', '\\');
             }
 
-            return info.FullName.TrimEnd('/').Trim('\\', ' ');
+            return info.FullName.TrimEnd('/').Trim('\\');
         }
 
         public static bool PathNotEquals(this string firstPath, string secondPath, StringComparison? comparison = null)
@@ -152,6 +158,23 @@ namespace NzbDrone.Common.Extensions
             if (string.IsNullOrWhiteSpace(path) || path.ContainsInvalidPathChars())
             {
                 return false;
+            }
+
+            if (path.Trim() != path)
+            {
+                return false;
+            }
+
+            var directoryInfo = new DirectoryInfo(path);
+
+            while (directoryInfo != null)
+            {
+                if (directoryInfo.Name.Trim() != directoryInfo.Name)
+                {
+                    return false;
+                }
+
+                directoryInfo = directoryInfo.Parent;
             }
 
             if (validationType == PathValidationType.AnyOs)
@@ -289,6 +312,11 @@ namespace NzbDrone.Common.Extensions
             }
 
             return processName;
+        }
+
+        public static string CleanPath(this string path)
+        {
+            return Path.Join(path.Split(Path.DirectorySeparatorChar).Select(s => s.Trim()).ToArray());
         }
 
         public static string GetAppDataPath(this IAppFolderInfo appFolderInfo)
