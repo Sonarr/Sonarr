@@ -34,6 +34,7 @@ namespace NzbDrone.Core.Download
                 {
                     { Result.HasHttpServerError: true } => PredicateResult.True(),
                     { Result.StatusCode: HttpStatusCode.RequestTimeout } => PredicateResult.True(),
+                    { Exception: HttpException { Response.HasHttpServerError: true } } => PredicateResult.True(),
                     _ => PredicateResult.False()
                 },
                 Delay = TimeSpan.FromSeconds(3),
