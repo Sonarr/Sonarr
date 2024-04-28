@@ -76,11 +76,11 @@ jobs:
         framework: ${{ env.FRAMEWORK }}
         runtime: linux-x64
 
-    - name: Publish osx-x64 Test Artifact
+    - name: Publish osx-arm64 Test Artifact
       uses: ./.github/actions/publish-test-artifact
       with:
         framework: ${{ env.FRAMEWORK }}
-        runtime: osx-x64
+        runtime: osx-arm64
 
     # Build Artifacts (grouped by OS)
     
@@ -143,7 +143,7 @@ jobs:
             artifact: tests-linux-x64
             filter: TestCategory!=ManualTest&TestCategory!=WINDOWS&TestCategory!=IntegrationTest&TestCategory!=AutomationTest
           - os: macos-latest
-            artifact: tests-osx-x64
+            artifact: tests-osx-arm64
             filter: TestCategory!=ManualTest&TestCategory!=WINDOWS&TestCategory!=IntegrationTest&TestCategory!=AutomationTest
           - os: windows-latest
             artifact: tests-win-x64
@@ -190,10 +190,10 @@ jobs:
             binary_artifact: build_linux
             binary_path: linux-x64/${{ needs.backend.outputs.framework }}/Sonarr
           - os: macos-latest
-            artifact: tests-osx-x64
+            artifact: tests-osx-arm64
             filter: TestCategory!=ManualTest&TestCategory!=WINDOWS&TestCategory=IntegrationTest
             binary_artifact: build_macos
-            binary_path: osx-x64/${{ needs.backend.outputs.framework }}/Sonarr
+            binary_path: osx-arm64/${{ needs.backend.outputs.framework }}/Sonarr
           - os: windows-latest
             artifact: tests-win-x64
             filter: TestCategory!=ManualTest&TestCategory!=LINUX&TestCategory=IntegrationTest
