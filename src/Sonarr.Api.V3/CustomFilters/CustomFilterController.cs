@@ -31,7 +31,7 @@ namespace Sonarr.Api.V3.CustomFilters
 
         [RestPostById]
         [Consumes("application/json")]
-        public ActionResult<CustomFilterResource> AddCustomFilter(CustomFilterResource resource)
+        public ActionResult<CustomFilterResource> AddCustomFilter([FromBody] CustomFilterResource resource)
         {
             var customFilter = _customFilterService.Add(resource.ToModel());
 
@@ -40,7 +40,7 @@ namespace Sonarr.Api.V3.CustomFilters
 
         [RestPutById]
         [Consumes("application/json")]
-        public ActionResult<CustomFilterResource> UpdateCustomFilter(CustomFilterResource resource)
+        public ActionResult<CustomFilterResource> UpdateCustomFilter([FromBody] CustomFilterResource resource)
         {
             _customFilterService.Update(resource.ToModel());
             return Accepted(resource.Id);

@@ -90,7 +90,7 @@ namespace Sonarr.Api.V3.EpisodeFiles
 
         [RestPutById]
         [Consumes("application/json")]
-        public ActionResult<EpisodeFileResource> SetQuality(EpisodeFileResource episodeFileResource)
+        public ActionResult<EpisodeFileResource> SetQuality([FromBody] EpisodeFileResource episodeFileResource)
         {
             var episodeFile = _mediaFileService.Get(episodeFileResource.Id);
             episodeFile.Quality = episodeFileResource.Quality;

@@ -51,7 +51,7 @@ namespace Sonarr.Api.V3.AutoTagging
 
         [RestPostById]
         [Consumes("application/json")]
-        public ActionResult<AutoTaggingResource> Create(AutoTaggingResource autoTagResource)
+        public ActionResult<AutoTaggingResource> Create([FromBody] AutoTaggingResource autoTagResource)
         {
             var model = autoTagResource.ToModel(_specifications);
 
@@ -62,7 +62,7 @@ namespace Sonarr.Api.V3.AutoTagging
 
         [RestPutById]
         [Consumes("application/json")]
-        public ActionResult<AutoTaggingResource> Update(AutoTaggingResource resource)
+        public ActionResult<AutoTaggingResource> Update([FromBody] AutoTaggingResource resource)
         {
             var model = resource.ToModel(_specifications);
 

@@ -35,7 +35,7 @@ namespace Sonarr.Api.V3.Profiles.Delay
 
         [RestPostById]
         [Consumes("application/json")]
-        public ActionResult<DelayProfileResource> Create(DelayProfileResource resource)
+        public ActionResult<DelayProfileResource> Create([FromBody] DelayProfileResource resource)
         {
             var model = resource.ToModel();
             model = _delayProfileService.Add(model);
@@ -56,7 +56,7 @@ namespace Sonarr.Api.V3.Profiles.Delay
 
         [RestPutById]
         [Consumes("application/json")]
-        public ActionResult<DelayProfileResource> Update(DelayProfileResource resource)
+        public ActionResult<DelayProfileResource> Update([FromBody] DelayProfileResource resource)
         {
             var model = resource.ToModel();
             _delayProfileService.Update(model);
@@ -76,7 +76,7 @@ namespace Sonarr.Api.V3.Profiles.Delay
         }
 
         [HttpPut("reorder/{id}")]
-        public List<DelayProfileResource> Reorder([FromRoute] int id, int? after)
+        public List<DelayProfileResource> Reorder([FromRoute] int id, [FromQuery] int? after)
         {
             ValidateId(id);
 

@@ -51,7 +51,7 @@ namespace Sonarr.Api.V3.Commands
         [RestPostById]
         [Consumes("application/json")]
         [Produces("application/json")]
-        public ActionResult<CommandResource> StartCommand(CommandResource commandResource)
+        public ActionResult<CommandResource> StartCommand([FromBody] CommandResource commandResource)
         {
             var commandType =
                 _knownTypes.GetImplementations(typeof(Command))

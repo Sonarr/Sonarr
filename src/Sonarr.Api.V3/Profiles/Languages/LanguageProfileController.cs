@@ -15,7 +15,7 @@ namespace Sonarr.Api.V3.Profiles.Languages
         [RestPostById]
         [Produces("application/json")]
         [Consumes("application/json")]
-        public ActionResult<LanguageProfileResource> Create(LanguageProfileResource resource)
+        public ActionResult<LanguageProfileResource> Create([FromBody] LanguageProfileResource resource)
         {
             return Accepted(resource);
         }
@@ -28,7 +28,7 @@ namespace Sonarr.Api.V3.Profiles.Languages
         [RestPutById]
         [Produces("application/json")]
         [Consumes("application/json")]
-        public ActionResult<LanguageProfileResource> Update(LanguageProfileResource resource)
+        public ActionResult<LanguageProfileResource> Update([FromBody] LanguageProfileResource resource)
         {
             return Accepted(resource);
         }
