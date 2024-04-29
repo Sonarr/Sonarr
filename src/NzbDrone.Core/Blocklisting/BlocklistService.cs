@@ -14,6 +14,7 @@ namespace NzbDrone.Core.Blocklisting
 {
     public interface IBlocklistService
     {
+        List<Blocklist> GetBlocklist();
         bool Blocklisted(int seriesId, ReleaseInfo release);
         bool BlocklistedTorrentHash(int seriesId, string hash);
         PagingSpec<Blocklist> Paged(PagingSpec<Blocklist> pagingSpec);
@@ -32,6 +33,11 @@ namespace NzbDrone.Core.Blocklisting
         public BlocklistService(IBlocklistRepository blocklistRepository)
         {
             _blocklistRepository = blocklistRepository;
+        }
+
+        public List<Blocklist> GetBlocklist()
+        {
+            return _blocklistRepository.All().ToList();
         }
 
         public bool Blocklisted(int seriesId, ReleaseInfo release)

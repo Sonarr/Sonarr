@@ -64,7 +64,7 @@ namespace NzbDrone.Core.CustomFormats
 
             var episodeInfo = new ParsedEpisodeInfo
             {
-                SeriesTitle = series.Title,
+                SeriesTitle = series?.Title ?? parsed.SeriesTitle,
                 ReleaseTitle = parsed?.ReleaseTitle ?? blocklist.SourceTitle,
                 Quality = blocklist.Quality,
                 Languages = blocklist.Languages,
