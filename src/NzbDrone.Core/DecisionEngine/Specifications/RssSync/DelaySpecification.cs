@@ -1,6 +1,7 @@
 using System.Linq;
 using NLog;
 using NzbDrone.Core.Download.Pending;
+using NzbDrone.Core.Indexers;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Profiles.Delay;
@@ -38,6 +39,12 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
             var delayProfile = _delayProfileService.BestForTags(subject.Series.Tags);
             var delay = delayProfile.GetProtocolDelay(subject.Release.DownloadProtocol);
             var isPreferredProtocol = subject.Release.DownloadProtocol == delayProfile.PreferredProtocol;
+            var isEnabledProtocol = subject.Release.DownloadProtocol switch
+            {
+                DownloadProtocol.Usenet when delayProfile.EnableUsenet => true,
+                DownloadProtocol.Torrent when delayProfile.EnableTorrent => true,
+                _ => false
+            };
 
             if (delay == 0)
             {
@@ -69,7 +76,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
                 var bestQualityInProfile = qualityProfile.LastAllowedQuality();
                 var isBestInProfile = qualityComparer.Compare(subject.ParsedEpisodeInfo.Quality.Quality, bestQualityInProfile) >= 0;
 
-                if (isBestInProfile && isPreferredProtocol)
+                if (isBestInProfile && isEnabledProtocol)
                 {
                     _logger.Debug("Quality is highest in profile for preferred protocol, will not delay");
                     return Decision.Accept();
@@ -82,7 +89,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
                 var score = subject.CustomFormatScore;
                 var minimum = delayProfile.MinimumCustomFormatScore;
 
-                if (score >= minimum && isPreferredProtocol)
+                if (score >= minimum && isEnabledProtocol)
                 {
                     _logger.Debug("Custom format score ({0}) meets minimum ({1}) for preferred protocol, will not delay", score, minimum);
                     return Decision.Accept();
