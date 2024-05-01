@@ -153,8 +153,8 @@ namespace Sonarr.Api.V3.Queue
             var filteredQueue = includeUnknownSeriesItems ? queue : queue.Where(q => q.Series != null);
             var pending = _pendingReleaseService.GetPendingQueue();
 
-            var hasSeriesIdFilter = seriesIds.Any();
-            var hasLanguageFilter = languages.Any();
+            var hasSeriesIdFilter = seriesIds != null && seriesIds.Any();
+            var hasLanguageFilter = languages != null && languages.Any();
             var fullQueue = filteredQueue.Concat(pending).Where(q =>
             {
                 var include = true;
