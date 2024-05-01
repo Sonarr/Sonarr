@@ -2,11 +2,11 @@
 // README at: https://github.com/devcontainers/templates/tree/main/src/dotnet
 {
   "name": "Sonarr",
-  "image": "mcr.microsoft.com/devcontainers/dotnet:1-6.0",
+  "image": "mcr.microsoft.com/devcontainers/dotnet:1-8.0",
   "features": {
     "ghcr.io/devcontainers/features/node:1": {
       "nodeGypDependencies": true,
-      "version": "16",
+      "version": "20",
       "nvmVersion": "latest"
     }
   },
