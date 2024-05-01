@@ -23,7 +23,6 @@ using NzbDrone.Common.Instrumentation.Extensions;
 using NzbDrone.Common.Options;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Datastore.Extensions;
-using Sonarr.Http.ClientSchema;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 using PostgresOptions = NzbDrone.Core.Datastore.PostgresOptions;
@@ -171,8 +170,6 @@ namespace NzbDrone.Host
                     {
                         c.AddDummyLogDatabase();
                     }
-
-                    SchemaBuilder.Initialize(c);
                 })
                 .ConfigureServices(services =>
                 {
