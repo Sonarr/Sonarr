@@ -10,7 +10,7 @@
       "request": "launch",
       "preLaunchTask": "build dotnet",
       // If you have changed target frameworks, make sure to update the program path.
-      "program": "${workspaceFolder}/_output/net6.0/Sonarr",
+      "program": "${workspaceFolder}/_output/net8.0/Sonarr",
       "args": [],
       "cwd": "${workspaceFolder}",
       // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
