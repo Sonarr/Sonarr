@@ -19,7 +19,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  FRAMEWORK: net6.0
+  FRAMEWORK: net8.0
   RAW_BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
   SONARR_MAJOR_VERSION: 4
   VERSION: 4.0.13

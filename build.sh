@@ -4,7 +4,7 @@ set -e
 outputFolder='_output'
 testPackageFolder='_tests'
 artifactsFolder="_artifacts";
-framework="${FRAMEWORK:=net6.0}"
+framework="${FRAMEWORK:=net8.0}"
 
 ProgressStart()
 {
@@ -77,9 +77,9 @@ Build()
 
     if [[ -z "$RID" || -z "$FRAMEWORK" ]];
     then
-        dotnet msbuild -restore $slnFile -p:Configuration=Release -p:Platform=$platform -t:PublishAllRids
+        dotnet msbuild -restore $slnFile -p:SelfContained=True -p:Configuration=Release -p:Platform=$platform -t:PublishAllRids
     else
-        dotnet msbuild -restore $slnFile -p:Configuration=Release -p:Platform=$platform -p:RuntimeIdentifiers=$RID -t:PublishAllRids
+        dotnet msbuild -restore $slnFile -p:SelfContained=True -p:Configuration=Release -p:Platform=$platform -p:RuntimeIdentifiers=$RID -t:PublishAllRids
     fi
 
     ProgressEnd 'Build'
