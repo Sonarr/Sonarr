@@ -846,7 +846,7 @@
     "SpecialsFolderFormat": "Formato da Pasta para Especiais",
     "SslCertPassword": "Senha do Certificado SSL",
     "SslCertPasswordHelpText": "Senha para arquivo pfx",
-    "SslCertPath": "Caminho do certificado SSL",
+    "SslCertPath": "Caminho do Certificado SSL",
     "SslCertPathHelpText": "Caminho para o arquivo pfx",
     "SslPort": "Porta SSL",
     "StandardEpisodeFormat": "Formato do Episódio Padrão",
