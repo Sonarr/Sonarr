@@ -473,6 +473,7 @@
   "DownloadClientQbittorrentTorrentStateDhtDisabled": "qBittorrent cannot resolve magnet link with DHT disabled",
   "DownloadClientQbittorrentTorrentStateError": "qBittorrent is reporting an error",
   "DownloadClientQbittorrentTorrentStateMetadata": "qBittorrent is downloading metadata",
+  "DownloadClientQbittorrentTorrentStateMissingFiles": "qBittorrent is reporting missing files",
   "DownloadClientQbittorrentTorrentStatePathError": "Unable to Import. Path matches client base download directory, it's possible 'Keep top-level folder' is disabled for this torrent or 'Torrent Content Layout' is NOT set to 'Original' or 'Create Subfolder'?",
   "DownloadClientQbittorrentTorrentStateStalled": "The download is stalled with no connections",
   "DownloadClientQbittorrentTorrentStateUnknown": "Unknown download state: {state}",
