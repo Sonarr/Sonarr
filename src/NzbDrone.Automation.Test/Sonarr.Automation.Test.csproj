@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net6.0</TargetFrameworks>
+    <TargetFrameworks>net8.0</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="GitHubActionsTestLogger" Version="2.3.3" />
+    <PackageReference Include="GitHubActionsTestLogger" Version="2.4.1" />
     <PackageReference Include="Selenium.Support" Version="3.141.0" />
     <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="111.0.5563.6400" />
   </ItemGroup>
