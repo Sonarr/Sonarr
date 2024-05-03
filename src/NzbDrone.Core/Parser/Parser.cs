@@ -183,7 +183,7 @@ namespace NzbDrone.Core.Parser
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 // Single or multi episode releases with multiple titles, then season and episode numbers after the last title. (Title1 / Title2 / ... / S1E1-2 of 6)
-                new Regex(@"^((?<title>.*?)[ ._]\/[ ._])+\(?S(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:\W|_)?E?[ ._]?(?<episode>(?<!\d+)\d{1,2}(?!\d+))(?:-(?<episode>(?<!\d+)\d{1,2}(?!\d+)))?([ ._]of[ ._]\d+)?\)?[ ._][\(\[]",
+                new Regex(@"^((?<title>.*?)[ ._]\/[ ._])+\(?S(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:\W|_)?E?[ ._]?(?<episode>(?<!\d+)\d{1,2}(?!\d+))(?:-(?<episode>(?<!\d+)\d{1,2}(?!\d+)))?(?:[ ._]of[ ._](?<episodecount>\d{1,2}))?\)?[ ._][\(\[]",
                     RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 // Multi-episode with title (S01E99-100, S01E05-06)
@@ -1086,6 +1086,12 @@ namespace NzbDrone.Core.Parser
                         {
                             result.FullSeason = true;
                         }
+                    }
+
+                    if (episodeCaptures.Count == 2 && matchCollection[0].Groups["episodecount"].Success && episodeCaptures.Last().Value == matchCollection[0].Groups["episodecount"].Value)
+                    {
+                        result.EpisodeNumbers = Array.Empty<int>();
+                        result.FullSeason = true;
                     }
                 }
 
