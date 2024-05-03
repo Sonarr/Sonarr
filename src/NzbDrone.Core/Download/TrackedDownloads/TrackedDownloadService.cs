@@ -28,7 +28,8 @@ namespace NzbDrone.Core.Download.TrackedDownloads
 
     public class TrackedDownloadService : ITrackedDownloadService,
                                           IHandle<EpisodeInfoRefreshedEvent>,
-                                          IHandle<SeriesDeletedEvent>
+                                          IHandle<SeriesDeletedEvent>,
+                                          IHandle<SeriesEditedEvent>
     {
         private readonly IParsingService _parsingService;
         private readonly IHistoryService _historyService;
@@ -281,16 +282,35 @@ namespace NzbDrone.Core.Download.TrackedDownloads
         public void Handle(SeriesDeletedEvent message)
         {
             var cachedItems = _cache.Values.Where(t =>
-                                        t.RemoteEpisode?.Series != null &&
-                                        message.Series.Any(s => s.Id == t.RemoteEpisode.Series.Id))
-                                    .ToList();
+                    t.RemoteEpisode?.Series != null &&
+                    message.Series.Any(s => s.Id == t.RemoteEpisode.Series.Id))
+                .ToList();
 
-            if (cachedItems.Any())
+            if (cachedItems.Empty())
             {
-                cachedItems.ForEach(UpdateCachedItem);
-
-                _eventAggregator.PublishEvent(new TrackedDownloadRefreshedEvent(GetTrackedDownloads()));
+                return;
             }
+
+            cachedItems.ForEach(UpdateCachedItem);
+
+            _eventAggregator.PublishEvent(new TrackedDownloadRefreshedEvent(GetTrackedDownloads()));
+        }
+
+        public void Handle(SeriesEditedEvent message)
+        {
+            var cachedItems = _cache.Values.Where(t =>
+                    t.RemoteEpisode?.Series != null &&
+                    message.Series.Id == t.RemoteEpisode.Series.Id)
+                .ToList();
+
+            if (cachedItems.Empty())
+            {
+                return;
+            }
+
+            cachedItems.ForEach(UpdateCachedItem);
+
+            _eventAggregator.PublishEvent(new TrackedDownloadRefreshedEvent(GetTrackedDownloads()));
         }
     }
 }

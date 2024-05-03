@@ -238,6 +238,15 @@ namespace NzbDrone.Core.Tv
             _seriesRepository.UpdateMany(series);
             _logger.Debug("{0} series updated", series.Count);
 
+            var updatedSeries = GetSeries(series.Select(s => s.Id));
+
+            foreach (var s in updatedSeries)
+            {
+                var oldSeries = series.Single(c => c.Id == s.Id);
+
+                _eventAggregator.PublishEvent(new SeriesEditedEvent(s, oldSeries));
+            }
+
             return series;
         }
 
