@@ -31,6 +31,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series.Stagione.3.HDTV.XviD-NOTAG", "Series", 3)]
         [TestCase("Series.Stagione.3.HDTV.XviD-NOTAG", "Series", 3)]
         [TestCase("Series No More S01 2023 1080p WEB-DL AVC AC3 2.0 Dual Audio -ZR-", "Series No More", 1)]
+        [TestCase("Series Title / S1E1-8 of 8 [2024, WEB-DL 1080p] + Original + RUS", "Series Title", 1)]
+        [TestCase("Series Title / S2E1-16 of 16 [2022, WEB-DL] RUS", "Series Title", 2)]
         public void should_parse_full_season_release(string postTitle, string title, int season)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
