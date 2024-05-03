@@ -86,6 +86,10 @@ class SeriesHistoryRow extends Component {
 
     const EpisodeComponent = fullSeries ? SeasonEpisodeNumber : EpisodeNumber;
 
+    if (!series || !episode) {
+      return null;
+    }
+
     return (
       <TableRow>
         <HistoryEventTypeCell
