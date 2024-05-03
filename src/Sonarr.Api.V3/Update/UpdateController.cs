@@ -48,10 +48,12 @@ namespace Sonarr.Api.V3.Update
                     installed.Installed = true;
                 }
 
-                var updateHistory = _configFileProvider.LogDbEnabled
-                    ? _updateHistoryService.InstalledSince(resources.Last().ReleaseDate)
-                    : new List<UpdateHistory>();
+                if (!_configFileProvider.LogDbEnabled)
+                {
+                    return resources;
+                }
 
+                var updateHistory = _updateHistoryService.InstalledSince(resources.Last().ReleaseDate);
                 var installDates = updateHistory
                                                         .DistinctBy(v => v.Version)
                                                         .ToDictionary(v => v.Version);
