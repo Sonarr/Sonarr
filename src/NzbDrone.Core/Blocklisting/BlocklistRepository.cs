@@ -73,6 +73,6 @@ namespace NzbDrone.Core.Blocklisting
             });
 
         private string BuildProtocolWhereClause(DownloadProtocol? protocol) =>
-            $"\"{TableMapping.Mapper.TableNameMapping(typeof(Blocklist))}\".\"Protocol\" = {(int) protocol}";
+            $"\"{TableMapping.Mapper.TableNameMapping(typeof(Blocklist))}\".\"Protocol\" = {(int)protocol}";
     }
 }
