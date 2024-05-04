@@ -12,11 +12,10 @@ function App({ store, history }) {
     <DocumentTitle title={window.Sonarr.instanceName}>
       <Provider store={store}>
         <ConnectedRouter history={history}>
-          <ApplyTheme>
-            <PageConnector>
-              <AppRoutes app={App} />
-            </PageConnector>
-          </ApplyTheme>
+          <ApplyTheme />
+          <PageConnector>
+            <AppRoutes app={App} />
+          </PageConnector>
         </ConnectedRouter>
       </Provider>
     </DocumentTitle>

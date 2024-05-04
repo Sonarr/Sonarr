@@ -1,5 +1,5 @@
 export interface UiSettings {
-  theme: string;
+  theme: 'auto' | 'dark' | 'light';
   showRelativeDates: boolean;
   shortDateFormat: string;
   longDateFormat: string;
