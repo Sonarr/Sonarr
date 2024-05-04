@@ -12,7 +12,7 @@ namespace NzbDrone.Core.Blocklisting
         List<Blocklist> BlocklistedByTorrentInfoHash(int seriesId, string torrentInfoHash);
         List<Blocklist> BlocklistedBySeries(int seriesId);
         void DeleteForSeriesIds(List<int> seriesIds);
-        PagingSpec<Blocklist> GetPaged(PagingSpec<Blocklist> pagingSpec, DownloadProtocol? protocol);
+        PagingSpec<Blocklist> GetPaged(PagingSpec<Blocklist> pagingSpec, DownloadProtocol[] protocols);
     }
 
     public class BlocklistRepository : BasicRepository<Blocklist>, IBlocklistRepository
@@ -42,24 +42,24 @@ namespace NzbDrone.Core.Blocklisting
             Delete(x => seriesIds.Contains(x.SeriesId));
         }
 
-        public PagingSpec<Blocklist> GetPaged(PagingSpec<Blocklist> pagingSpec, DownloadProtocol? protocol)
+        public PagingSpec<Blocklist> GetPaged(PagingSpec<Blocklist> pagingSpec, DownloadProtocol[] protocols)
         {
-            pagingSpec.Records = GetPagedRecords(PagedBuilder(protocol), pagingSpec, PagedQuery);
+            pagingSpec.Records = GetPagedRecords(PagedBuilder(protocols), pagingSpec, PagedQuery);
 
             var countTemplate = $"SELECT COUNT(*) FROM (SELECT /**select**/ FROM \"{TableMapping.Mapper.TableNameMapping(typeof(Blocklist))}\" /**join**/ /**innerjoin**/ /**leftjoin**/ /**where**/ /**groupby**/ /**having**/) AS \"Inner\"";
-            pagingSpec.TotalRecords = GetPagedRecordCount(PagedBuilder(protocol).Select(typeof(Blocklist)), pagingSpec, countTemplate);
+            pagingSpec.TotalRecords = GetPagedRecordCount(PagedBuilder(protocols).Select(typeof(Blocklist)), pagingSpec, countTemplate);
 
             return pagingSpec;
         }
 
-        private SqlBuilder PagedBuilder(DownloadProtocol? protocol)
+        private SqlBuilder PagedBuilder(DownloadProtocol[] protocols)
         {
             var builder = Builder()
                 .Join<Blocklist, Series>((b, m) => b.SeriesId == m.Id);
 
-            if (protocol != null)
+            if (protocols is { Length: > 0 })
             {
-                builder.Where($"({BuildProtocolWhereClause(protocol)})");
+                builder.Where($"({BuildProtocolWhereClause(protocols)})");
             }
 
             return builder;
@@ -72,7 +72,16 @@ namespace NzbDrone.Core.Blocklisting
                 return blocklist;
             });
 
-        private string BuildProtocolWhereClause(DownloadProtocol? protocol) =>
-            $"\"{TableMapping.Mapper.TableNameMapping(typeof(Blocklist))}\".\"Protocol\" = {(int)protocol}";
+        private string BuildProtocolWhereClause(DownloadProtocol[] protocols)
+        {
+            var clauses = new List<string>();
+
+            foreach (var protocol in protocols)
+            {
+                clauses.Add($"\"{TableMapping.Mapper.TableNameMapping(typeof(Blocklist))}\".\"Protocol\" = {(int)protocol}");
+            }
+
+            return $"({string.Join(" OR ", clauses)})";
+        }
     }
 }

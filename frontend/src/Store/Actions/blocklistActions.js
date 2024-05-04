@@ -97,7 +97,7 @@ export const defaultState = {
       valueType: filterBuilderValueTypes.SERIES
     },
     {
-      name: 'protocol',
+      name: 'protocols',
       label: () => translate('Protocol'),
       type: filterBuilderTypes.EQUAL,
       valueType: filterBuilderValueTypes.PROTOCOL

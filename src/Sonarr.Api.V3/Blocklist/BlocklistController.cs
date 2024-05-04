@@ -25,7 +25,7 @@ namespace Sonarr.Api.V3.Blocklist
 
         [HttpGet]
         [Produces("application/json")]
-        public PagingResource<BlocklistResource> GetBlocklist([FromQuery] PagingRequestResource paging, [FromQuery] int[] seriesIds = null, [FromQuery] DownloadProtocol? protocol = null)
+        public PagingResource<BlocklistResource> GetBlocklist([FromQuery] PagingRequestResource paging, [FromQuery] int[] seriesIds = null, [FromQuery] DownloadProtocol[] protocols = null)
         {
             var pagingResource = new PagingResource<BlocklistResource>(paging);
             var pagingSpec = pagingResource.MapToPagingSpec<BlocklistResource, NzbDrone.Core.Blocklisting.Blocklist>("date", SortDirection.Descending);
@@ -35,7 +35,7 @@ namespace Sonarr.Api.V3.Blocklist
                 pagingSpec.FilterExpressions.Add(b => seriesIds.Contains(b.SeriesId));
             }
 
-            return pagingSpec.ApplyToPage(b => _blocklistService.Paged(pagingSpec, protocol), b => BlocklistResourceMapper.MapToResource(b, _formatCalculator));
+            return pagingSpec.ApplyToPage(b => _blocklistService.Paged(pagingSpec, protocols), b => BlocklistResourceMapper.MapToResource(b, _formatCalculator));
         }
 
         [RestDeleteById]
