@@ -14,10 +14,9 @@ namespace NzbDrone.Core.Blocklisting
 {
     public interface IBlocklistService
     {
-        List<Blocklist> GetBlocklist();
         bool Blocklisted(int seriesId, ReleaseInfo release);
         bool BlocklistedTorrentHash(int seriesId, string hash);
-        PagingSpec<Blocklist> Paged(PagingSpec<Blocklist> pagingSpec);
+        PagingSpec<Blocklist> Paged(PagingSpec<Blocklist> pagingSpec, DownloadProtocol? protocol);
         void Block(RemoteEpisode remoteEpisode, string message);
         void Delete(int id);
         void Delete(List<int> ids);
@@ -33,11 +32,6 @@ namespace NzbDrone.Core.Blocklisting
         public BlocklistService(IBlocklistRepository blocklistRepository)
         {
             _blocklistRepository = blocklistRepository;
-        }
-
-        public List<Blocklist> GetBlocklist()
-        {
-            return _blocklistRepository.All().ToList();
         }
 
         public bool Blocklisted(int seriesId, ReleaseInfo release)
@@ -72,9 +66,9 @@ namespace NzbDrone.Core.Blocklisting
                 b.TorrentInfoHash.Equals(hash, StringComparison.InvariantCultureIgnoreCase));
         }
 
-        public PagingSpec<Blocklist> Paged(PagingSpec<Blocklist> pagingSpec)
+        public PagingSpec<Blocklist> Paged(PagingSpec<Blocklist> pagingSpec, DownloadProtocol? protocol)
         {
-            return _blocklistRepository.GetPaged(pagingSpec);
+            return _blocklistRepository.GetPaged(pagingSpec, protocol);
         }
 
         public void Block(RemoteEpisode remoteEpisode, string message)
