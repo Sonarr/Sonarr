@@ -30,12 +30,17 @@ namespace Sonarr.Api.V3.Blocklist
             var pagingResource = new PagingResource<BlocklistResource>(paging);
             var pagingSpec = pagingResource.MapToPagingSpec<BlocklistResource, NzbDrone.Core.Blocklisting.Blocklist>("date", SortDirection.Descending);
 
-            if (seriesIds != null && seriesIds.Any())
+            if (seriesIds?.Any() == true)
             {
                 pagingSpec.FilterExpressions.Add(b => seriesIds.Contains(b.SeriesId));
             }
 
-            return pagingSpec.ApplyToPage(b => _blocklistService.Paged(pagingSpec, protocols), b => BlocklistResourceMapper.MapToResource(b, _formatCalculator));
+            if (protocols?.Any() == true)
+            {
+                pagingSpec.FilterExpressions.Add(b => protocols.Contains(b.Protocol));
+            }
+
+            return pagingSpec.ApplyToPage(b => _blocklistService.Paged(pagingSpec), b => BlocklistResourceMapper.MapToResource(b, _formatCalculator));
         }
 
         [RestDeleteById]
