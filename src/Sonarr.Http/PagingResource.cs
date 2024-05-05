@@ -21,7 +21,7 @@ namespace Sonarr.Http
         public string SortKey { get; set; }
         public SortDirection SortDirection { get; set; }
         public int TotalRecords { get; set; }
-        public List<TResource> Records { get; set; }
+        public List<TResource> Records { get; set; } = new ();
 
         public PagingResource()
         {
