@@ -48,7 +48,7 @@ namespace NzbDrone.Core.Indexers
 
     public class SeedCriteriaSettings
     {
-        [FieldDefinition(0, Type = FieldType.Textbox, Label = "IndexerSettingsSeedRatio", HelpText = "IndexerSettingsSeedRatioHelpText")]
+        [FieldDefinition(0, Type = FieldType.Number, Label = "IndexerSettingsSeedRatio", HelpText = "IndexerSettingsSeedRatioHelpText")]
         public double? SeedRatio { get; set; }
 
         [FieldDefinition(1, Type = FieldType.Number, Label = "IndexerSettingsSeedTime", Unit = "minutes", HelpText = "IndexerSettingsSeedTimeHelpText", Advanced = true)]

@@ -162,7 +162,7 @@ namespace Sonarr.Http.ClientSchema
                         field.Hidden = fieldAttribute.Hidden.ToString().FirstCharToLower();
                     }
 
-                    if (fieldAttribute.Type is FieldType.Number && propertyInfo.PropertyType == typeof(double))
+                    if (fieldAttribute.Type is FieldType.Number && (propertyInfo.PropertyType == typeof(double) || propertyInfo.PropertyType == typeof(double?)))
                     {
                         field.IsFloat = true;
                     }
