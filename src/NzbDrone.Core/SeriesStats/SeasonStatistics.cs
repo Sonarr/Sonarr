@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Datastore;
@@ -28,7 +29,7 @@ namespace NzbDrone.Core.SeriesStats
 
                 try
                 {
-                    if (!DateTime.TryParse(NextAiringString, out nextAiring))
+                    if (!DateTime.TryParse(NextAiringString, DateTimeFormatInfo.InvariantInfo, DateTimeStyles.AssumeUniversal, out nextAiring))
                     {
                         return null;
                     }
@@ -51,7 +52,7 @@ namespace NzbDrone.Core.SeriesStats
 
                 try
                 {
-                    if (!DateTime.TryParse(PreviousAiringString, out previousAiring))
+                    if (!DateTime.TryParse(PreviousAiringString, DateTimeFormatInfo.InvariantInfo, DateTimeStyles.AssumeUniversal, out previousAiring))
                     {
                         return null;
                     }
@@ -74,7 +75,7 @@ namespace NzbDrone.Core.SeriesStats
 
                 try
                 {
-                    if (!DateTime.TryParse(LastAiredString, out lastAired))
+                    if (!DateTime.TryParse(LastAiredString, DateTimeFormatInfo.InvariantInfo, DateTimeStyles.AssumeUniversal, out lastAired))
                     {
                         return null;
                     }
