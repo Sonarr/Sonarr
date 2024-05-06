@@ -13,8 +13,8 @@ namespace NzbDrone.Core.Download.Clients.Transmission
         public bool IsFinished { get; set; }
         public long Eta { get; set; }
         public TransmissionTorrentStatus Status { get; set; }
-        public int SecondsDownloading { get; set; }
-        public int SecondsSeeding { get; set; }
+        public long SecondsDownloading { get; set; }
+        public long SecondsSeeding { get; set; }
         public string ErrorString { get; set; }
         public long DownloadedEver { get; set; }
         public long UploadedEver { get; set; }
