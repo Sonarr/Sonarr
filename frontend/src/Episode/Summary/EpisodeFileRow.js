@@ -11,6 +11,7 @@ import EpisodeLanguages from 'Episode/EpisodeLanguages';
 import EpisodeQuality from 'Episode/EpisodeQuality';
 import { icons, kinds, tooltipPositions } from 'Helpers/Props';
 import formatBytes from 'Utilities/Number/formatBytes';
+import formatCustomFormatScore from 'Utilities/Number/formatCustomFormatScore';
 import translate from 'Utilities/String/translate';
 import MediaInfo from './MediaInfo';
 import styles from './EpisodeFileRow.css';
@@ -55,6 +56,7 @@ class EpisodeFileRow extends Component {
       languages,
       quality,
       customFormats,
+      customFormatScore,
       qualityCutoffNotMet,
       mediaInfo,
       columns
@@ -127,6 +129,17 @@ class EpisodeFileRow extends Component {
               );
             }
 
+            if (name === 'customFormatScore') {
+              return (
+                <TableRowCell
+                  key={name}
+                  className={styles.customFormatScore}
+                >
+                  {formatCustomFormatScore(customFormatScore, customFormats.length)}
+                </TableRowCell>
+              );
+            }
+
             if (name === 'actions') {
               return (
                 <TableRowCell
@@ -183,6 +196,7 @@ EpisodeFileRow.propTypes = {
   quality: PropTypes.object.isRequired,
   qualityCutoffNotMet: PropTypes.bool.isRequired,
   customFormats: PropTypes.arrayOf(PropTypes.object),
+  customFormatScore: PropTypes.number.isRequired,
   mediaInfo: PropTypes.object,
   columns: PropTypes.arrayOf(PropTypes.object).isRequired,
   onDeleteEpisodeFile: PropTypes.func.isRequired
