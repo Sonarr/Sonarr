@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Localization;
 using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.Tags;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Tv;
 
@@ -15,12 +17,14 @@ namespace NzbDrone.Core.Notifications.Webhook
         private readonly IConfigFileProvider _configFileProvider;
         private readonly IConfigService _configService;
         protected readonly ILocalizationService _localizationService;
+        private readonly ITagRepository _tagRepository;
 
-        protected WebhookBase(IConfigFileProvider configFileProvider, IConfigService configService, ILocalizationService localizationService)
+        protected WebhookBase(IConfigFileProvider configFileProvider, IConfigService configService, ILocalizationService localizationService, ITagRepository tagRepository)
         {
             _configFileProvider = configFileProvider;
             _configService = configService;
             _localizationService = localizationService;
+            _tagRepository = tagRepository;
         }
 
         protected WebhookGrabPayload BuildOnGrabPayload(GrabMessage message)
@@ -33,7 +37,7 @@ namespace NzbDrone.Core.Notifications.Webhook
                 EventType = WebhookEventType.Grab,
                 InstanceName = _configFileProvider.InstanceName,
                 ApplicationUrl = _configService.ApplicationUrl,
-                Series = new WebhookSeries(message.Series),
+                Series = new WebhookSeries(message.Series, GetTagLabels(message.Series)),
                 Episodes = remoteEpisode.Episodes.ConvertAll(x => new WebhookEpisode(x)),
                 Release = new WebhookRelease(quality, remoteEpisode),
                 DownloadClient = message.DownloadClientName,
@@ -52,7 +56,7 @@ namespace NzbDrone.Core.Notifications.Webhook
                 EventType = WebhookEventType.Download,
                 InstanceName = _configFileProvider.InstanceName,
                 ApplicationUrl = _configService.ApplicationUrl,
-                Series = new WebhookSeries(message.Series),
+                Series = new WebhookSeries(message.Series, GetTagLabels(message.Series)),
                 Episodes = episodeFile.Episodes.Value.ConvertAll(x => new WebhookEpisode(x)),
                 EpisodeFile = new WebhookEpisodeFile(episodeFile),
                 Release = new WebhookGrabbedRelease(message.Release),
@@ -82,7 +86,7 @@ namespace NzbDrone.Core.Notifications.Webhook
                 EventType = WebhookEventType.EpisodeFileDelete,
                 InstanceName = _configFileProvider.InstanceName,
                 ApplicationUrl = _configService.ApplicationUrl,
-                Series = new WebhookSeries(deleteMessage.Series),
+                Series = new WebhookSeries(deleteMessage.Series, GetTagLabels(deleteMessage.Series)),
                 Episodes = deleteMessage.EpisodeFile.Episodes.Value.ConvertAll(x => new WebhookEpisode(x)),
                 EpisodeFile = new WebhookEpisodeFile(deleteMessage.EpisodeFile),
                 DeleteReason = deleteMessage.Reason
@@ -96,7 +100,7 @@ namespace NzbDrone.Core.Notifications.Webhook
                 EventType = WebhookEventType.SeriesAdd,
                 InstanceName = _configFileProvider.InstanceName,
                 ApplicationUrl = _configService.ApplicationUrl,
-                Series = new WebhookSeries(addMessage.Series),
+                Series = new WebhookSeries(addMessage.Series, GetTagLabels(addMessage.Series)),
             };
         }
 
@@ -107,7 +111,7 @@ namespace NzbDrone.Core.Notifications.Webhook
                 EventType = WebhookEventType.SeriesDelete,
                 InstanceName = _configFileProvider.InstanceName,
                 ApplicationUrl = _configService.ApplicationUrl,
-                Series = new WebhookSeries(deleteMessage.Series),
+                Series = new WebhookSeries(deleteMessage.Series, GetTagLabels(deleteMessage.Series)),
                 DeletedFiles = deleteMessage.DeletedFiles
             };
         }
@@ -119,7 +123,7 @@ namespace NzbDrone.Core.Notifications.Webhook
                 EventType = WebhookEventType.Rename,
                 InstanceName = _configFileProvider.InstanceName,
                 ApplicationUrl = _configService.ApplicationUrl,
-                Series = new WebhookSeries(series),
+                Series = new WebhookSeries(series, GetTagLabels(series)),
                 RenamedEpisodeFiles = renamedFiles.ConvertAll(x => new WebhookRenamedEpisodeFile(x))
             };
         }
@@ -172,7 +176,7 @@ namespace NzbDrone.Core.Notifications.Webhook
                 EventType = WebhookEventType.ManualInteractionRequired,
                 InstanceName = _configFileProvider.InstanceName,
                 ApplicationUrl = _configService.ApplicationUrl,
-                Series = new WebhookSeries(message.Series),
+                Series = new WebhookSeries(message.Series, GetTagLabels(message.Series)),
                 Episodes = remoteEpisode.Episodes.ConvertAll(x => new WebhookEpisode(x)),
                 DownloadInfo = new WebhookDownloadClientItem(quality, message.TrackedDownload.DownloadItem),
                 DownloadClient = message.DownloadClientInfo?.Name,
@@ -192,12 +196,13 @@ namespace NzbDrone.Core.Notifications.Webhook
                 EventType = WebhookEventType.Test,
                 InstanceName = _configFileProvider.InstanceName,
                 ApplicationUrl = _configService.ApplicationUrl,
-                Series = new WebhookSeries()
+                Series = new WebhookSeries
                 {
                     Id = 1,
                     Title = "Test Title",
                     Path = "C:\\testpath",
-                    TvdbId = 1234
+                    TvdbId = 1234,
+                    Tags = new List<string> { "test-tag" }
                 },
                 Episodes = new List<WebhookEpisode>()
                 {
@@ -210,6 +215,15 @@ namespace NzbDrone.Core.Notifications.Webhook
                     }
                 }
             };
+        }
+
+        private List<string> GetTagLabels(Series series)
+        {
+            return _tagRepository.GetTags(series.Tags)
+                .Select(s => s.Label)
+                .Where(l => l.IsNotNullOrWhiteSpace())
+                .OrderBy(l => l)
+                .ToList();
         }
     }
 }
