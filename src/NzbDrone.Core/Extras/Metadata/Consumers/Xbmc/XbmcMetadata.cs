@@ -183,7 +183,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
 
                     if (series.Tags.Any())
                     {
-                        var tags = _tagRepo.Get(series.Tags);
+                        var tags = _tagRepo.GetTags(series.Tags);
 
                         foreach (var tag in tags)
                         {
