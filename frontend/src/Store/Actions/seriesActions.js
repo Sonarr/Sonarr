@@ -192,6 +192,22 @@ export const filterPredicates = {
     });
 
     return predicate(hasMissingSeason, filterValue);
+  },
+
+  hasUnmonitoredSeason: function(item, filterValue, type) {
+    const predicate = filterTypePredicates[type];
+    const { seasons = [] } = item;
+
+    const hasUnmonitoredSeason = seasons.some((season) => {
+      const {
+        seasonNumber,
+        monitored
+      } = season;
+
+      return seasonNumber > 0 && !monitored;
+    });
+
+    return predicate(hasUnmonitoredSeason, filterValue);
   }
 };
 
@@ -350,6 +366,12 @@ export const filterBuilderProps = [
   {
     name: 'hasMissingSeason',
     label: () => translate('HasMissingSeason'),
+    type: filterBuilderTypes.EXACT,
+    valueType: filterBuilderValueTypes.BOOL
+  },
+  {
+    name: 'hasUnmonitoredSeason',
+    label: () => translate('HasUnmonitoredSeason'),
     type: filterBuilderTypes.EXACT,
     valueType: filterBuilderValueTypes.BOOL
   },
