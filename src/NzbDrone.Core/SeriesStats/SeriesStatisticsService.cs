@@ -40,23 +40,23 @@ namespace NzbDrone.Core.SeriesStats
         private SeriesStatistics MapSeriesStatistics(List<SeasonStatistics> seasonStatistics)
         {
             var seriesStatistics = new SeriesStatistics
-                                   {
-                                       SeasonStatistics = seasonStatistics,
-                                       SeriesId = seasonStatistics.First().SeriesId,
-                                       EpisodeFileCount = seasonStatistics.Sum(s => s.EpisodeFileCount),
-                                       EpisodeCount = seasonStatistics.Sum(s => s.EpisodeCount),
-                                       TotalEpisodeCount = seasonStatistics.Sum(s => s.TotalEpisodeCount),
-                                       SizeOnDisk = seasonStatistics.Sum(s => s.SizeOnDisk),
-                                       ReleaseGroups = seasonStatistics.SelectMany(s => s.ReleaseGroups).Distinct().ToList()
-                                   };
+            {
+                SeasonStatistics = seasonStatistics,
+                SeriesId = seasonStatistics.First().SeriesId,
+                EpisodeFileCount = seasonStatistics.Sum(s => s.EpisodeFileCount),
+                EpisodeCount = seasonStatistics.Sum(s => s.EpisodeCount),
+                TotalEpisodeCount = seasonStatistics.Sum(s => s.TotalEpisodeCount),
+                SizeOnDisk = seasonStatistics.Sum(s => s.SizeOnDisk),
+                ReleaseGroups = seasonStatistics.SelectMany(s => s.ReleaseGroups).Distinct().ToList()
+            };
 
             var nextAiring = seasonStatistics.Where(s => s.NextAiring != null).MinBy(s => s.NextAiring);
             var previousAiring = seasonStatistics.Where(s => s.PreviousAiring != null).MaxBy(s => s.PreviousAiring);
             var lastAired = seasonStatistics.Where(s => s.SeasonNumber > 0 && s.LastAired != null).MaxBy(s => s.LastAired);
 
-            seriesStatistics.NextAiringString = nextAiring?.NextAiringString;
-            seriesStatistics.PreviousAiringString = previousAiring?.PreviousAiringString;
-            seriesStatistics.LastAiredString = lastAired?.LastAiredString;
+            seriesStatistics.NextAiring = nextAiring?.NextAiring;
+            seriesStatistics.PreviousAiring = previousAiring?.PreviousAiring;
+            seriesStatistics.LastAired = lastAired?.LastAired;
 
             return seriesStatistics;
         }
