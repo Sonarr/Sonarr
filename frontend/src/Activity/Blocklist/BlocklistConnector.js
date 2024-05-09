@@ -6,6 +6,7 @@ import * as commandNames from 'Commands/commandNames';
 import withCurrentPage from 'Components/withCurrentPage';
 import * as blocklistActions from 'Store/Actions/blocklistActions';
 import { executeCommand } from 'Store/Actions/commandActions';
+import { createCustomFiltersSelector } from 'Store/Selectors/createClientSideCollectionSelector';
 import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
 import { registerPagePopulator, unregisterPagePopulator } from 'Utilities/pagePopulator';
 import Blocklist from './Blocklist';
@@ -13,10 +14,12 @@ import Blocklist from './Blocklist';
 function createMapStateToProps() {
   return createSelector(
     (state) => state.blocklist,
+    createCustomFiltersSelector('blocklist'),
     createCommandExecutingSelector(commandNames.CLEAR_BLOCKLIST),
-    (blocklist, isClearingBlocklistExecuting) => {
+    (blocklist, customFilters, isClearingBlocklistExecuting) => {
       return {
         isClearingBlocklistExecuting,
+        customFilters,
         ...blocklist
       };
     }
@@ -97,6 +100,10 @@ class BlocklistConnector extends Component {
     this.props.setBlocklistSort({ sortKey });
   };
 
+  onFilterSelect = (selectedFilterKey) => {
+    this.props.setBlocklistFilter({ selectedFilterKey });
+  };
+
   onClearBlocklistPress = () => {
     this.props.executeCommand({ name: commandNames.CLEAR_BLOCKLIST });
   };
@@ -122,6 +129,7 @@ class BlocklistConnector extends Component {
         onPageSelect={this.onPageSelect}
         onRemoveSelected={this.onRemoveSelected}
         onSortPress={this.onSortPress}
+        onFilterSelect={this.onFilterSelect}
         onTableOptionChange={this.onTableOptionChange}
         onClearBlocklistPress={this.onClearBlocklistPress}
         {...this.props}
@@ -142,6 +150,7 @@ BlocklistConnector.propTypes = {
   gotoBlocklistPage: PropTypes.func.isRequired,
   removeBlocklistItems: PropTypes.func.isRequired,
   setBlocklistSort: PropTypes.func.isRequired,
+  setBlocklistFilter: PropTypes.func.isRequired,
   setBlocklistTableOption: PropTypes.func.isRequired,
   clearBlocklist: PropTypes.func.isRequired,
   executeCommand: PropTypes.func.isRequired

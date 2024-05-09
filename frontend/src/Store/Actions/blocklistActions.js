@@ -1,6 +1,6 @@
 import { createAction } from 'redux-actions';
 import { batchActions } from 'redux-batched-actions';
-import { sortDirections } from 'Helpers/Props';
+import { filterBuilderTypes, filterBuilderValueTypes, sortDirections } from 'Helpers/Props';
 import { createThunk, handleThunks } from 'Store/thunks';
 import createAjaxRequest from 'Utilities/createAjaxRequest';
 import serverSideCollectionHandlers from 'Utilities/serverSideCollectionHandlers';
@@ -77,6 +77,31 @@ export const defaultState = {
       isVisible: true,
       isModifiable: false
     }
+  ],
+
+  selectedFilterKey: 'all',
+
+  filters: [
+    {
+      key: 'all',
+      label: () => translate('All'),
+      filters: []
+    }
+  ],
+
+  filterBuilderProps: [
+    {
+      name: 'seriesIds',
+      label: () => translate('Series'),
+      type: filterBuilderTypes.EQUAL,
+      valueType: filterBuilderValueTypes.SERIES
+    },
+    {
+      name: 'protocols',
+      label: () => translate('Protocol'),
+      type: filterBuilderTypes.EQUAL,
+      valueType: filterBuilderValueTypes.PROTOCOL
+    }
   ]
 };
 
@@ -84,6 +109,7 @@ export const persistState = [
   'blocklist.pageSize',
   'blocklist.sortKey',
   'blocklist.sortDirection',
+  'blocklist.selectedFilterKey',
   'blocklist.columns'
 ];
 
@@ -97,6 +123,7 @@ export const GOTO_NEXT_BLOCKLIST_PAGE = 'blocklist/gotoBlocklistNextPage';
 export const GOTO_LAST_BLOCKLIST_PAGE = 'blocklist/gotoBlocklistLastPage';
 export const GOTO_BLOCKLIST_PAGE = 'blocklist/gotoBlocklistPage';
 export const SET_BLOCKLIST_SORT = 'blocklist/setBlocklistSort';
+export const SET_BLOCKLIST_FILTER = 'blocklist/setBlocklistFilter';
 export const SET_BLOCKLIST_TABLE_OPTION = 'blocklist/setBlocklistTableOption';
 export const REMOVE_BLOCKLIST_ITEM = 'blocklist/removeBlocklistItem';
 export const REMOVE_BLOCKLIST_ITEMS = 'blocklist/removeBlocklistItems';
@@ -112,6 +139,7 @@ export const gotoBlocklistNextPage = createThunk(GOTO_NEXT_BLOCKLIST_PAGE);
 export const gotoBlocklistLastPage = createThunk(GOTO_LAST_BLOCKLIST_PAGE);
 export const gotoBlocklistPage = createThunk(GOTO_BLOCKLIST_PAGE);
 export const setBlocklistSort = createThunk(SET_BLOCKLIST_SORT);
+export const setBlocklistFilter = createThunk(SET_BLOCKLIST_FILTER);
 export const setBlocklistTableOption = createAction(SET_BLOCKLIST_TABLE_OPTION);
 export const removeBlocklistItem = createThunk(REMOVE_BLOCKLIST_ITEM);
 export const removeBlocklistItems = createThunk(REMOVE_BLOCKLIST_ITEMS);
@@ -132,7 +160,8 @@ export const actionHandlers = handleThunks({
       [serverSideCollectionHandlers.NEXT_PAGE]: GOTO_NEXT_BLOCKLIST_PAGE,
       [serverSideCollectionHandlers.LAST_PAGE]: GOTO_LAST_BLOCKLIST_PAGE,
       [serverSideCollectionHandlers.EXACT_PAGE]: GOTO_BLOCKLIST_PAGE,
-      [serverSideCollectionHandlers.SORT]: SET_BLOCKLIST_SORT
+      [serverSideCollectionHandlers.SORT]: SET_BLOCKLIST_SORT,
+      [serverSideCollectionHandlers.FILTER]: SET_BLOCKLIST_FILTER
     }),
 
   [REMOVE_BLOCKLIST_ITEM]: createRemoveItemHandler(section, '/blocklist'),

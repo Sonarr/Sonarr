@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import Alert from 'Components/Alert';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
+import FilterMenu from 'Components/Menu/FilterMenu';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
@@ -20,6 +21,7 @@ import getSelectedIds from 'Utilities/Table/getSelectedIds';
 import removeOldSelectedState from 'Utilities/Table/removeOldSelectedState';
 import selectAll from 'Utilities/Table/selectAll';
 import toggleSelected from 'Utilities/Table/toggleSelected';
+import BlocklistFilterModal from './BlocklistFilterModal';
 import BlocklistRowConnector from './BlocklistRowConnector';
 
 class Blocklist extends Component {
@@ -114,9 +116,13 @@ class Blocklist extends Component {
       error,
       items,
       columns,
+      selectedFilterKey,
+      filters,
+      customFilters,
       totalRecords,
       isRemoving,
       isClearingBlocklistExecuting,
+      onFilterSelect,
       ...otherProps
     } = this.props;
 
@@ -161,6 +167,15 @@ class Blocklist extends Component {
                 iconName={icons.TABLE}
               />
             </TableOptionsModalWrapper>
+
+            <FilterMenu
+              alignMenu={align.RIGHT}
+              selectedFilterKey={selectedFilterKey}
+              filters={filters}
+              customFilters={customFilters}
+              filterModalConnectorComponent={BlocklistFilterModal}
+              onFilterSelect={onFilterSelect}
+            />
           </PageToolbarSection>
         </PageToolbar>
 
@@ -180,7 +195,11 @@ class Blocklist extends Component {
           {
             isPopulated && !error && !items.length &&
               <Alert kind={kinds.INFO}>
-                {translate('NoHistoryBlocklist')}
+                {
+                  selectedFilterKey === 'all' ?
+                    translate('NoHistoryBlocklist') :
+                    translate('BlocklistFilterHasNoItems')
+                }
               </Alert>
           }
 
@@ -251,11 +270,15 @@ Blocklist.propTypes = {
   error: PropTypes.object,
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
   columns: PropTypes.arrayOf(PropTypes.object).isRequired,
+  selectedFilterKey: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  filters: PropTypes.arrayOf(PropTypes.object).isRequired,
+  customFilters: PropTypes.arrayOf(PropTypes.object).isRequired,
   totalRecords: PropTypes.number,
   isRemoving: PropTypes.bool.isRequired,
   isClearingBlocklistExecuting: PropTypes.bool.isRequired,
   onRemoveSelected: PropTypes.func.isRequired,
-  onClearBlocklistPress: PropTypes.func.isRequired
+  onClearBlocklistPress: PropTypes.func.isRequired,
+  onFilterSelect: PropTypes.func.isRequired
 };
 
 export default Blocklist;
