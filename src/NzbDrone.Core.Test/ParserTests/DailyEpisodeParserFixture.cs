@@ -33,6 +33,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("2019_08_20_1080_all.mp4", "", 2019, 8, 20)]
         [TestCase("Series and Title 20201013 Ep7432 [720p WebRip (x264)] [SUBS]", "Series and Title", 2020, 10, 13)]
         [TestCase("Series Title (1955) - 1954-01-23 05 00 00 - Cottage for Sale.ts", "Series Title (1955)", 1954, 1, 23)]
+        [TestCase("Series Title - 30-04-2024 HDTV 1080p H264 AAC", "Series Title", 2024, 4, 30)]
 
         // [TestCase("", "", 0, 0, 0)]
         public void should_parse_daily_episode(string postTitle, string title, int year, int month, int day)
@@ -99,6 +100,14 @@ namespace NzbDrone.Core.Test.ParserTests
             var title = string.Format("{0:yyyy.MM.dd} - A Talk Show - HD TV.mkv", DateTime.Now.AddDays(2));
 
             Parser.Parser.ParseTitle(title).Should().BeNull();
+        }
+
+        [TestCase("Tmc - Quotidien - 05-06-2024 HDTV 1080p H264 AAC")]
+
+        // [TestCase("", "", 0, 0, 0)]
+        public void should_not_parse_ambiguous_daily_episode(string postTitle)
+        {
+            Parser.Parser.ParseTitle(postTitle).Should().BeNull();
         }
     }
 }

@@ -339,7 +339,7 @@ namespace NzbDrone.Core.Parser
 
                 // 4 digit episode number
                 // Episodes with a title, Single episodes (S01E05, 1x05, etc) & Multi-episode (S01E05E06, S01E05-06, S01E05 E06, etc)
-                new Regex(@"^(?<title>.+?)(?:(?:[-_\W](?<![()\[!]))+S?(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:\-|[ex]|\W[ex]|_){1,2}(?<episode>\d{4}(?!\d+|i|p)))+)\W?(?!\\)",
+                new Regex(@"^(?<title>.+?)(?:(?:[-_\W](?<![()\[!]|\d{1,2}-))+S?(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:(?:\-|[ex]|\W[ex]|_){1,2}(?<episode>\d{4}(?!\d+|i|p)))+)\W?(?!\\)",
                     RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 // Episodes with airdate (2018.04.28)
@@ -350,7 +350,11 @@ namespace NzbDrone.Core.Parser
                 new Regex(@"^(?<title>.+?)[_. ](?<absoluteepisode>\d{1,4})(?:[_. ]+)(?:BLM|B[oö]l[uü]m)", RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 // Episodes with airdate (04.28.2018)
-                new Regex(@"^(?<title>.+?)?\W*(?<airmonth>[0-1][0-9])[-_. ]+(?<airday>[0-3][0-9])[-_. ]+(?<airyear>\d{4})(?!\d+)",
+                new Regex(@"^(?<title>.+?)?\W*(?<ambiguousairmonth>[0-1][0-9])[-_. ]+(?<ambiguousairday>[0-3][0-9])[-_. ]+(?<airyear>\d{4})(?!\d+)",
+                    RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
+                // Episodes with airdate (28.04.2018)
+                new Regex(@"^(?<title>.+?)?\W*(?<ambiguousairday>[0-3][0-9])[-_. ]+(?<ambiguousairmonth>[0-1][0-9])[-_. ]+(?<airyear>\d{4})(?!\d+)",
                     RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 // Episodes with airdate (20180428)
@@ -362,7 +366,7 @@ namespace NzbDrone.Core.Parser
                     RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 // Supports 1103/1113 naming
-                new Regex(@"^(?<title>.+?)?(?:(?:[-_. ](?<![()\[!]))*(?<season>(?<!\d+|\(|\[|e|x)\d{2})(?<episode>(?<!e|x)(?:[1-9][0-9]|[0][1-9])(?!p|i|\d+|\)|\]|\W\d+|\W(?:e|ep|x)\d+)))+([-_. ]+|$)(?!\\)",
+                new Regex(@"^(?<title>.+?)?(?:(?:[-_. ](?<![()\[!]))*(?<!\d{1,2}-)(?<season>(?<!\d+|\(|\[|e|x)\d{2})(?<episode>(?<!e|x)(?:[1-9][0-9]|[0][1-9])(?!p|i|\d+|\)|\]|\W\d+|\W(?:e|ep|x)\d+)))+([-_. ]+|$)(?!\\)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 // Dutch/Flemish release titles
@@ -1128,15 +1132,36 @@ namespace NzbDrone.Core.Parser
             else
             {
                 // Try to Parse as a daily show
-                var airmonth = Convert.ToInt32(matchCollection[0].Groups["airmonth"].Value);
-                var airday = Convert.ToInt32(matchCollection[0].Groups["airday"].Value);
 
-                // Swap day and month if month is bigger than 12 (scene fail)
-                if (airmonth > 12)
+                var airmonth = 0;
+                var airday = 0;
+
+                if (matchCollection[0].Groups["ambiguousairmonth"].Success &&
+                    matchCollection[0].Groups["ambiguousairday"].Success)
                 {
-                    var tempDay = airday;
-                    airday = airmonth;
-                    airmonth = tempDay;
+                    var ambiguousAirMonth = Convert.ToInt32(matchCollection[0].Groups["ambiguousairmonth"].Value);
+                    var ambiguousAirDay = Convert.ToInt32(matchCollection[0].Groups["ambiguousairday"].Value);
+
+                    if (ambiguousAirDay <= 12 && ambiguousAirMonth <= 12)
+                    {
+                        throw new InvalidDateException("Ambiguous Date, cannot validate month and day with {0} and {1}", ambiguousAirMonth, ambiguousAirDay);
+                    }
+
+                    airmonth = ambiguousAirMonth;
+                    airday = ambiguousAirDay;
+                }
+                else
+                {
+                    airmonth = Convert.ToInt32(matchCollection[0].Groups["airmonth"].Value);
+                    airday = Convert.ToInt32(matchCollection[0].Groups["airday"].Value);
+
+                    // Swap day and month if month is bigger than 12 (scene fail)
+                    if (airmonth > 12)
+                    {
+                        var tempDay = airday;
+                        airday = airmonth;
+                        airmonth = tempDay;
+                    }
                 }
 
                 DateTime airDate;
