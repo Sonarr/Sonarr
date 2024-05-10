@@ -15,6 +15,7 @@ class RelativeDateCell extends PureComponent {
       className,
       date,
       includeSeconds,
+      includeTime,
       showRelativeDates,
       shortDateFormat,
       longDateFormat,
@@ -39,7 +40,7 @@ class RelativeDateCell extends PureComponent {
         title={formatDateTime(date, longDateFormat, timeFormat, { includeSeconds, includeRelativeDay: !showRelativeDates })}
         {...otherProps}
       >
-        {getRelativeDate(date, shortDateFormat, showRelativeDates, { timeFormat, includeSeconds, timeForToday: true })}
+        {getRelativeDate(date, shortDateFormat, showRelativeDates, { timeFormat, includeSeconds, includeTime, timeForToday: true })}
       </Component>
     );
   }
@@ -49,6 +50,7 @@ RelativeDateCell.propTypes = {
   className: PropTypes.string.isRequired,
   date: PropTypes.string,
   includeSeconds: PropTypes.bool.isRequired,
+  includeTime: PropTypes.bool.isRequired,
   showRelativeDates: PropTypes.bool.isRequired,
   shortDateFormat: PropTypes.string.isRequired,
   longDateFormat: PropTypes.string.isRequired,
@@ -60,6 +62,7 @@ RelativeDateCell.propTypes = {
 RelativeDateCell.defaultProps = {
   className: styles.cell,
   includeSeconds: false,
+  includeTime: false,
   component: TableRowCell
 };
 
