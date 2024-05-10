@@ -46,7 +46,7 @@ namespace NzbDrone.Core.Parser
         private static readonly Regex RealRegex = new (@"\b(?<real>REAL)\b",
                                                                 RegexOptions.Compiled);
 
-        private static readonly Regex ResolutionRegex = new (@"\b(?:(?<R360p>360p)|(?<R480p>480p|640x480|848x480)|(?<R540p>540p)|(?<R576p>576p)|(?<R720p>720p|1280x720|960p)|(?<R1080p>1080p|1920x1080|1440p|FHD|1080i|4kto1080p)|(?<R2160p>2160p|3840x2160|4k[-_. ](?:UHD|HEVC|BD|H265)|(?:UHD|HEVC|BD|H265)[-_. ]4k))\b",
+        private static readonly Regex ResolutionRegex = new (@"\b(?:(?<R360p>360p)|(?<R480p>480p|480i|640x480|848x480)|(?<R540p>540p)|(?<R576p>576p)|(?<R720p>720p|1280x720|960p)|(?<R1080p>1080p|1920x1080|1440p|FHD|1080i|4kto1080p)|(?<R2160p>2160p|3840x2160|4k[-_. ](?:UHD|HEVC|BD|H265)|(?:UHD|HEVC|BD|H265)[-_. ]4k))\b",
                                                                 RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         // Handle cases where no resolution is in the release name (assume if UHD then 4k) or resolution is non-standard
@@ -307,6 +307,35 @@ namespace NzbDrone.Core.Parser
                     }
 
                     result.Quality = Quality.SDTV;
+                    return result;
+                }
+            }
+
+            if (sourceMatch == null && remuxMatch && resolution != Resolution.Unknown)
+            {
+                result.SourceDetectionSource = QualityDetectionSource.Unknown;
+
+                if (resolution == Resolution.R480P)
+                {
+                    result.Quality = Quality.Bluray480p;
+                    return result;
+                }
+
+                if (resolution == Resolution.R720p)
+                {
+                    result.Quality = Quality.Bluray720p;
+                    return result;
+                }
+
+                if (resolution == Resolution.R2160p)
+                {
+                    result.Quality = Quality.Bluray2160pRemux;
+                    return result;
+                }
+
+                if (resolution == Resolution.R1080p)
+                {
+                    result.Quality = Quality.Bluray1080pRemux;
                     return result;
                 }
             }

@@ -109,6 +109,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("The.Series.S01E05.480p.BluRay.DD5.1.x264-HiSD", false)]
         [TestCase("The Series (BD)(640x480(RAW) (BATCH 1) (1-13)", false)]
         [TestCase("[Doki] Series - 02 (848x480 XviD BD MP3) [95360783]", false)]
+        [TestCase("Adventures.of.Sonic.the.Hedgehog.S01.BluRay.480i.DD.2.0.AVC.REMUX-FraMeSToR", false)]
+        [TestCase("Adventures.of.Sonic.the.Hedgehog.S01E01.Best.Hedgehog.480i.DD.2.0.AVC.REMUX-FraMeSToR", false)]
         public void should_parse_bluray480p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.Bluray480p, proper);
@@ -309,6 +311,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Sans.Series.De.Traces.FRENCH.720p.BluRay.x264-FHD", false)]
         [TestCase("Series.Black.1x01.Selezione.Naturale.ITA.720p.BDMux.x264-NovaRip", false)]
         [TestCase("Series.Hunter.S02.720p.Blu-ray.Remux.AVC.FLAC.2.0-SiCFoI", false)]
+        [TestCase("Adventures.of.Sonic.the.Hedgehog.S01E01.Best.Hedgehog.720p.DD.2.0.AVC.REMUX-FraMeSToR", false)]
         public void should_parse_bluray720p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.Bluray720p, proper);
@@ -340,6 +343,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series.Title.S03E01.The.Calm.1080p.DTS-HD.MA.5.1.AVC.REMUX-FraMeSToR", false)]
         [TestCase("Series Title Season 2 (BDRemux 1080p HEVC FLAC) [Netaro]", false)]
         [TestCase("[Vodes] Series Title - Other Title (2020) [BDRemux 1080p HEVC Dual-Audio]", false)]
+        [TestCase("Adventures.of.Sonic.the.Hedgehog.S01E01.Best.Hedgehog.1080p.DD.2.0.AVC.REMUX-FraMeSToR", false)]
         public void should_parse_bluray1080p_remux_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.Bluray1080pRemux, proper);
@@ -360,6 +364,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series.Title.S01E08.The.Sonarr.BluRay.2160p.AVC.DTS-HD.MA.5.1.REMUX-FraMeSToR", false)]
         [TestCase("Series.Title.2x11.Nato.Per.The.Sonarr.Bluray.Remux.AVC.2160p.AC3.ITA", false)]
         [TestCase("[Dolby Vision] Sonarr.of.Series.S07.MULTi.UHD.BLURAY.REMUX.DV-NoTag", false)]
+        [TestCase("Adventures.of.Sonic.the.Hedgehog.S01E01.Best.Hedgehog.2160p.DD.2.0.AVC.REMUX-FraMeSToR", false)]
         public void should_parse_bluray2160p_remux_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.Bluray2160pRemux, proper);
