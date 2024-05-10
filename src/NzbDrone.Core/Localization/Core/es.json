@@ -249,7 +249,7 @@
     "ConnectionLostToBackend": "{appName} ha perdido su conexión con el backend y tendrá que ser recargado para restaurar su funcionalidad.",
     "CalendarOptions": "Opciones de Calendario",
     "BypassDelayIfAboveCustomFormatScoreHelpText": "Habilitar ignorar cuando la versión tenga una puntuación superior a la puntuación mínima configurada para el formato personalizado",
-    "Default": "Por defecto",
+    "Default": "Predeterminado",
     "DeleteBackupMessageText": "Seguro que quieres eliminar la copia de seguridad '{name}'?",
     "DeleteAutoTagHelpText": "¿Está seguro de querer eliminar el etiquetado automático '{name}'?",
     "AddImportListImplementation": "Añadir lista de importación - {implementationName}",
@@ -1964,7 +1964,7 @@
     "NotificationsValidationInvalidAuthenticationToken": "Token de autenticación inválido",
     "NotificationsValidationUnableToConnect": "No se pudo conectar: {exceptionMessage}",
     "NotificationsValidationUnableToSendTestMessageApiResponse": "No se pudo enviar un mensaje de prueba. Respuesta de la API: {error}",
-    "OverrideGrabModalTitle": "Sobrescribe y captura - {title}",
+    "OverrideGrabModalTitle": "Sobrescribir y capturar - {title}",
     "ReleaseProfileTagSeriesHelpText": "Los perfiles de lanzamientos se aplicarán a series con al menos una etiqueta coincidente. Deja en blanco para aplicar a todas las series",
     "ReleaseSceneIndicatorMappedNotRequested": "El episodio mapeado no fue solicitado en esta búsqueda.",
     "RemotePathMappingBadDockerPathHealthCheckMessage": "Estás usando docker; el cliente de descarga {downloadClientName} ubica las descargas en {path} pero esta no es una ruta {osName} válida. Revisa tus mapeos de ruta remotos y opciones del cliente de descarga.",
@@ -2071,5 +2071,8 @@
     "NotificationsTelegramSettingsIncludeAppName": "Incluir {appName} en el título",
     "NotificationsTelegramSettingsIncludeAppNameHelpText": "Opcionalmente prefija el título del mensaje con {appName} para diferenciar las notificaciones de las diferentes aplicaciones",
     "IndexerSettingsMultiLanguageRelease": "Múltiples idiomas",
-    "IndexerSettingsMultiLanguageReleaseHelpText": "¿Qué idiomas están normalmente en un lanzamiento múltiple en este indexador?"
+    "IndexerSettingsMultiLanguageReleaseHelpText": "¿Qué idiomas están normalmente en un lanzamiento múltiple en este indexador?",
+    "DownloadClientQbittorrentTorrentStateMissingFiles": "qBittorrent está reportando archivos faltantes",
+    "BlocklistFilterHasNoItems": "El filtro de lista de bloqueo seleccionado no contiene ningún elemento",
+    "HasUnmonitoredSeason": "Tiene temporada sin monitorizar"
 }

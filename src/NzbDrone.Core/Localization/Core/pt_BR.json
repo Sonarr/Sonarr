@@ -1190,7 +1190,7 @@
     "FilterNotInNext": "não no próximo",
     "FilterSeriesPlaceholder": "Filtrar séries",
     "FilterStartsWith": "começa com",
-    "GrabRelease": "Obter lançamento",
+    "GrabRelease": "Baixar Lançamento",
     "HardlinkCopyFiles": "Hardlink/Copiar Arquivos",
     "InteractiveImportNoEpisode": "Escolha um ou mais episódios para cada arquivo selecionado",
     "InteractiveImportNoImportMode": "Defina um modo de importação",
@@ -1203,7 +1203,7 @@
     "KeyboardShortcutsOpenModal": "Abrir este pop-up",
     "Local": "Local",
     "Logout": "Sair",
-    "ManualGrab": "Obter manualmente",
+    "ManualGrab": "Baixar Manualmente",
     "ManualImport": "Importação manual",
     "Mapping": "Mapeamento",
     "MarkAsFailedConfirmation": "Tem certeza de que deseja marcar \"{sourceTitle}\" como em falha?",
@@ -1229,7 +1229,7 @@
     "RemoveFilter": "Remover filtro",
     "RootFolderSelectFreeSpace": "{freeSpace} Livre",
     "Search": "Pesquisar",
-    "SelectDownloadClientModalTitle": "{modalTitle} - Selecione o Cliente de Download",
+    "SelectDownloadClientModalTitle": "{modalTitle} - Selecionar Cliente de Download",
     "SelectReleaseGroup": "Selecionar um Grupo de Lançamento",
     "SelectSeason": "Selecionar Temporada",
     "SelectSeasonModalTitle": "{modalTitle} - Selecione a Temporada",
@@ -2071,5 +2071,7 @@
     "SeriesFootNote": "Opcionalmente, controle o truncamento para um número máximo de bytes, incluindo reticências (`...`). Truncar do final (por exemplo, `{Series Title:30}`) ou do início (por exemplo, `{Series Title:-30}`) é suportado.",
     "IndexerSettingsMultiLanguageReleaseHelpText": "Quais idiomas normalmente estão em um lançamento multi neste indexador?",
     "AutoTaggingSpecificationTag": "Etiqueta",
-    "IndexerSettingsMultiLanguageRelease": "Multi Idiomas"
+    "IndexerSettingsMultiLanguageRelease": "Multi Idiomas",
+    "DownloadClientQbittorrentTorrentStateMissingFiles": "qBittorrent está relatando arquivos perdidos",
+    "BlocklistFilterHasNoItems": "O filtro da lista de bloqueio selecionado não contém itens"
 }
