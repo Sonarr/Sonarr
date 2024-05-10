@@ -308,6 +308,7 @@
   "Date": "Date",
   "Dates": "Dates",
   "Day": "Day",
+  "DayOfWeekAt": "{day} at {time}",
   "Debug": "Debug",
   "Default": "Default",
   "DefaultCase": "Default Case",
@@ -1949,10 +1950,12 @@
   "Title": "Title",
   "Titles": "Titles",
   "Today": "Today",
+  "TodayAt": "Today at {time}",
   "ToggleMonitoredSeriesUnmonitored ": "Cannot toggle monitored state when series is unmonitored",
   "ToggleMonitoredToUnmonitored": "Monitored, click to unmonitor",
   "ToggleUnmonitoredToMonitored": "Unmonitored, click to monitor",
   "Tomorrow": "Tomorrow",
+  "TomorrowAt": "Tomorrow at {time}",
   "TorrentBlackhole": "Torrent Blackhole",
   "TorrentBlackholeSaveMagnetFiles": "Save Magnet Files",
   "TorrentBlackholeSaveMagnetFilesExtension": "Save Magnet Files Extension",
@@ -2074,5 +2077,6 @@
   "Year": "Year",
   "Yes": "Yes",
   "YesCancel": "Yes, Cancel",
-  "Yesterday": "Yesterday"
+  "Yesterday": "Yesterday",
+  "YesterdayAt": "Yesterday at {time}"
 }
