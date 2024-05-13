@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.Tv;
 using Sonarr.Api.V3.EpisodeFiles;
@@ -39,7 +39,7 @@ namespace Sonarr.Api.V3.Episodes
         public List<MediaCover> Images { get; set; }
 
         // Hiding this so people don't think its usable (only used to set the initial state)
-        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public bool Grabbed { get; set; }
     }
 
