@@ -128,7 +128,7 @@ namespace NzbDrone.Core.ImportLists.Plex
                 return new ValidationFailure(string.Empty, $"Unable to connect to Plex Watchlist: {ex.Message}. Check the log for details.");
             }
 
-            return null; // Indicate no fatal errors even if the list is empty.
+            return null;
         }
     }
 }
