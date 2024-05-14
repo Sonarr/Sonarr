@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
@@ -103,6 +105,30 @@ namespace NzbDrone.Core.ImportLists.Plex
             }
 
             return new { };
+        }
+
+        protected override ValidationFailure TestConnection()
+        {
+            try
+            {
+                var parser = GetParser();
+                var generator = GetRequestGenerator();
+                var pageableRequests = generator.GetListItems();
+                var request = pageableRequests.GetAllTiers().First().First();
+                var releases = FetchPage(request, parser);
+
+                if (releases.Empty())
+                {
+                    _logger.Info("No results were returned from Plex Watchlist.");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Warn(ex, "Unable to connect to Plex Watchlist");
+                return new ValidationFailure(string.Empty, $"Unable to connect to Plex Watchlist: {ex.Message}. Check the log for details.");
+            }
+
+            return null; // Indicate no fatal errors even if the list is empty.
         }
     }
 }
