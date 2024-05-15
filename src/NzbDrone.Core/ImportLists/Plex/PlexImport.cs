@@ -7,6 +7,8 @@ using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Exceptions;
+using NzbDrone.Core.ImportLists.Exceptions;
+using NzbDrone.Core.Indexers.Exceptions;
 using NzbDrone.Core.Localization;
 using NzbDrone.Core.Notifications.Plex.PlexTv;
 using NzbDrone.Core.Parser;
@@ -122,10 +124,27 @@ namespace NzbDrone.Core.ImportLists.Plex
                     _logger.Info("No results were returned from Plex Watchlist.");
                 }
             }
+            catch (RequestLimitReachedException)
+            {
+                _logger.Warn("Request limit reached");
+            }
+            catch (UnsupportedFeedException ex)
+            {
+                _logger.Warn(ex, "Plex Watchlist feed is not supported");
+
+                return new ValidationFailure(string.Empty, "Plex Watchlist feed is not supported: " + ex.Message);
+            }
+            catch (ImportListException ex)
+            {
+                _logger.Warn(ex, "Unable to connect to Plex Watchlist");
+
+                return new ValidationFailure(string.Empty, $"Unable to connect to Plex Watchlist: {ex.Message}. Check the log surrounding this error for details.");
+            }
             catch (Exception ex)
             {
                 _logger.Warn(ex, "Unable to connect to Plex Watchlist");
-                return new ValidationFailure(string.Empty, $"Unable to connect to Plex Watchlist: {ex.Message}. Check the log for details.");
+
+                return new ValidationFailure(string.Empty, $"Unable to connect to Plex Watchlist: {ex.Message}. Check the log surrounding this error for details.");
             }
 
             return null;
