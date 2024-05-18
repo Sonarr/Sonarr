@@ -48,7 +48,7 @@ jobs:
 
         echo "SDK_PATH=${{ env.DOTNET_ROOT }}/sdk/${DOTNET_VERSION}" >> "$GITHUB_ENV"
         echo "SONARR_VERSION=$SONARR_VERSION" >> "$GITHUB_ENV"
-        echo "BRANCH=${RAW_BRANCH_NAME/\//-}" >> "$GITHUB_ENV"
+        echo "BRANCH=${RAW_BRANCH_NAME//\//-}" >> "$GITHUB_ENV"
 
         echo "framework=${{ env.FRAMEWORK }}" >> "$GITHUB_OUTPUT"
         echo "major_version=${{ env.SONARR_MAJOR_VERSION }}" >> "$GITHUB_OUTPUT"
