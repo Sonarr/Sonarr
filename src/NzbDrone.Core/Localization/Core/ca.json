@@ -743,5 +743,14 @@
     "IndexerHDBitsSettingsMediums": "Mitjans",
     "UpdateStartupTranslocationHealthCheckMessage": "No es pot instal·lar l'actualització perquè la carpeta d'inici '{startupFolder}' es troba en una carpeta de translocació d'aplicacions.",
     "UpdateStartupNotWritableHealthCheckMessage": "No es pot instal·lar l'actualització perquè l'usuari '{userName}' no té permisos d'escriptura de la carpeta d'inici '{startupFolder}'.",
-    "DownloadClientTransmissionSettingsDirectoryHelpText": "Ubicació opcional per a les baixades, deixeu-lo en blanc per utilitzar la ubicació predeterminada de Transmission"
+    "DownloadClientTransmissionSettingsDirectoryHelpText": "Ubicació opcional per a les baixades, deixeu-lo en blanc per utilitzar la ubicació predeterminada de Transmission",
+    "Mixed": "Combinat",
+    "Proxy": "Servidor intermediari",
+    "Mapping": "Mapejat",
+    "More": "Més",
+    "MultiLanguages": "Multi-idioma",
+    "Organize": "Organitza",
+    "Search": "Cerca",
+    "SelectDropdown": "Seleccioneu...",
+    "Shutdown": "Apaga"
 }

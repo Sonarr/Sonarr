@@ -518,7 +518,7 @@
     "AnEpisodeIsDownloading": "集正在下载",
     "AuthenticationRequiredWarning": "为了防止未经身份验证的远程访问，{appName} 现在需要启用身份验证。您可以禁用本地地址的身份验证。",
     "AutomaticSearch": "自动搜索",
-    "BackupFolderHelpText": "相对路径将在{appName}的AppData目录下",
+    "BackupFolderHelpText": "相对路径将在 {appName} 的 AppData 目录下",
     "BindAddress": "绑定地址",
     "BindAddressHelpText": "有效的 IP 地址、localhost、或以'*'代表所有接口",
     "BlocklistLoadError": "无法加载黑名单",
@@ -1827,5 +1827,8 @@
     "CustomFormatsSpecificationMaximumSizeHelpText": "必须小于或等于该尺寸时才会发布",
     "AutoTaggingSpecificationGenre": "类型",
     "AutoTaggingSpecificationSeriesType": "系列类型",
-    "AutoTaggingSpecificationStatus": "状态"
+    "AutoTaggingSpecificationStatus": "状态",
+    "ClickToChangeIndexerFlags": "点击修改索引器标志",
+    "ConnectionSettingsUrlBaseHelpText": "向 {clientName} url 添加前缀，例如 {url}",
+    "BlocklistFilterHasNoItems": "所选的黑名单过滤器没有项目"
 }
