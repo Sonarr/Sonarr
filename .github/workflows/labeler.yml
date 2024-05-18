@@ -8,5 +8,6 @@ jobs:
       contents: read
       pull-requests: write
     runs-on: ubuntu-latest
+    if: github.repository == 'Sonarr/Sonarr'
     steps:
       - uses: actions/labeler@v5

@@ -8,6 +8,7 @@ on:
 jobs:
   lock:
     runs-on: ubuntu-latest
+    if: github.repository == 'Sonarr/Sonarr'
     steps:
       - uses: dessant/lock-threads@v5
         with:
