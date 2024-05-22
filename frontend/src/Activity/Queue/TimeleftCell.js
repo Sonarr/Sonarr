@@ -24,7 +24,11 @@ function TimeleftCell(props) {
   } = props;
 
   if (status === 'delay') {
-    const date = getRelativeDate(estimatedCompletionTime, shortDateFormat, showRelativeDates);
+    const date = getRelativeDate({
+      date: estimatedCompletionTime,
+      shortDateFormat,
+      showRelativeDates
+    });
     const time = formatTime(estimatedCompletionTime, timeFormat, { includeMinuteZero: true });
 
     return (
@@ -40,7 +44,11 @@ function TimeleftCell(props) {
   }
 
   if (status === 'downloadClientUnavailable') {
-    const date = getRelativeDate(estimatedCompletionTime, shortDateFormat, showRelativeDates);
+    const date = getRelativeDate({
+      date: estimatedCompletionTime,
+      shortDateFormat,
+      showRelativeDates
+    });
     const time = formatTime(estimatedCompletionTime, timeFormat, { includeMinuteZero: true });
 
     return (

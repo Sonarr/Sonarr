@@ -40,7 +40,7 @@ class RelativeDateCell extends PureComponent {
         title={formatDateTime(date, longDateFormat, timeFormat, { includeSeconds, includeRelativeDay: !showRelativeDates })}
         {...otherProps}
       >
-        {getRelativeDate(date, shortDateFormat, showRelativeDates, { timeFormat, includeSeconds, includeTime, timeForToday: true })}
+        {getRelativeDate({ date, shortDateFormat, showRelativeDates, timeFormat, includeSeconds, includeTime, timeForToday: true })}
       </Component>
     );
   }

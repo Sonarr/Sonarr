@@ -217,7 +217,10 @@ function SeriesIndexPoster(props: SeriesIndexPosterProps) {
             timeFormat
           )}`}
         >
-          {getRelativeDate(nextAiring, shortDateFormat, showRelativeDates, {
+          {getRelativeDate({
+            date: nextAiring,
+            shortDateFormat,
+            showRelativeDates,
             timeFormat,
             timeForToday: true,
           })}
