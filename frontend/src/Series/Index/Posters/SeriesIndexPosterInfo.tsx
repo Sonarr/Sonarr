@@ -80,7 +80,10 @@ function SeriesIndexPosterInfo(props: SeriesIndexPosterInfoProps) {
           timeFormat
         )}`}
       >
-        {getRelativeDate(previousAiring, shortDateFormat, showRelativeDates, {
+        {getRelativeDate({
+          date: previousAiring,
+          shortDateFormat,
+          showRelativeDates,
           timeFormat,
           timeForToday: true,
         })}
@@ -89,15 +92,13 @@ function SeriesIndexPosterInfo(props: SeriesIndexPosterInfoProps) {
   }
 
   if (sortKey === 'added' && added) {
-    const addedDate = getRelativeDate(
-      added,
+    const addedDate = getRelativeDate({
+      date: added,
       shortDateFormat,
       showRelativeDates,
-      {
-        timeFormat,
-        timeForToday: false,
-      }
-    );
+      timeFormat,
+      timeForToday: false,
+    });
 
     return (
       <div

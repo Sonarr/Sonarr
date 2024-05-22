@@ -28,7 +28,7 @@ class DayOfWeek extends Component {
     if (view === calendarViews.WEEK) {
       formatedDate = momentDate.format(calendarWeekColumnHeader);
     } else if (view === calendarViews.FORECAST) {
-      formatedDate = getRelativeDate(date, shortDateFormat, showRelativeDates);
+      formatedDate = getRelativeDate({ date, shortDateFormat, showRelativeDates });
     }
 
     return (
