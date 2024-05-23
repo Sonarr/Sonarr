@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Notifications.Webhook
@@ -14,6 +15,8 @@ namespace NzbDrone.Core.Notifications.Webhook
         public string ImdbId { get; set; }
         public SeriesTypes Type { get; set; }
         public int Year { get; set; }
+        public List<string> Genres { get; set; }
+        public List<WebhookImage> Images { get; set; }
         public List<string> Tags { get; set; }
 
         public WebhookSeries()
@@ -31,6 +34,8 @@ namespace NzbDrone.Core.Notifications.Webhook
             ImdbId = series.ImdbId;
             Type = series.SeriesType;
             Year = series.Year;
+            Genres = series.Genres;
+            Images = series.Images.Select(i => new WebhookImage(i)).ToList();
             Tags = tags;
         }
     }
