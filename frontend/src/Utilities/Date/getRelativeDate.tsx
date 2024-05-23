@@ -30,22 +30,21 @@ function getRelativeDate({
     return null;
   }
 
-  if (includeTime && !timeFormat) {
+  if ((includeTime || timeForToday) && !timeFormat) {
     throw new Error(
-      "getRelativeDate: 'timeFormat' is required when 'includeTime' is true"
+      "getRelativeDate: 'timeFormat' is required when 'includeTime' or 'timeForToday' is true"
     );
   }
 
   const isTodayDate = isToday(date);
-  const time =
-    includeTime && timeFormat
-      ? formatTime(date, timeFormat, {
-          includeMinuteZero: true,
-          includeSeconds,
-        })
-      : '';
+  const time = timeFormat
+    ? formatTime(date, timeFormat, {
+        includeMinuteZero: true,
+        includeSeconds,
+      })
+    : '';
 
-  if (isTodayDate && timeForToday && timeFormat) {
+  if (isTodayDate && timeForToday) {
     return time;
   }
 
