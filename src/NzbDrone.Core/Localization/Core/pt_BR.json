@@ -2073,5 +2073,10 @@
     "AutoTaggingSpecificationTag": "Etiqueta",
     "IndexerSettingsMultiLanguageRelease": "Multi Idiomas",
     "DownloadClientQbittorrentTorrentStateMissingFiles": "qBittorrent está relatando arquivos perdidos",
-    "BlocklistFilterHasNoItems": "O filtro selecionado para a lista de bloqueio não contém itens"
+    "BlocklistFilterHasNoItems": "O filtro selecionado para a lista de bloqueio não contém itens",
+    "DayOfWeekAt": "{day} às {time}",
+    "TodayAt": "Hoje às {time}",
+    "TomorrowAt": "Amanhã às {time}",
+    "HasUnmonitoredSeason": "Tem Temporada Não Monitorada",
+    "YesterdayAt": "Ontem às {time}"
 }

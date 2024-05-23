@@ -2074,5 +2074,9 @@
     "IndexerSettingsMultiLanguageReleaseHelpText": "¿Qué idiomas están normalmente en un lanzamiento múltiple en este indexador?",
     "DownloadClientQbittorrentTorrentStateMissingFiles": "qBittorrent está reportando archivos faltantes",
     "BlocklistFilterHasNoItems": "El filtro de lista de bloqueo seleccionado no contiene elementos",
-    "HasUnmonitoredSeason": "Tiene temporada sin monitorizar"
+    "HasUnmonitoredSeason": "Tiene temporada sin monitorizar",
+    "TomorrowAt": "Mañana a las {time}",
+    "YesterdayAt": "Ayer a las {time}",
+    "TodayAt": "Hoy a las {time}",
+    "DayOfWeekAt": "{day} a las {time}"
 }
