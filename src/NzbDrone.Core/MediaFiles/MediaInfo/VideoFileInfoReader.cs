@@ -25,7 +25,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
         public const int CURRENT_MEDIA_INFO_SCHEMA_REVISION = 10;
 
         private static readonly string[] ValidHdrColourPrimaries = { "bt2020" };
-        private static readonly string[] HlgTransferFunctions = { "bt2020-10", "arib-std-b67" };
+        private static readonly string[] HlgTransferFunctions = { "arib-std-b67" };
         private static readonly string[] PqTransferFunctions = { "smpte2084" };
         private static readonly string[] ValidHdrTransferFunctions = HlgTransferFunctions.Concat(PqTransferFunctions).ToArray();
 
