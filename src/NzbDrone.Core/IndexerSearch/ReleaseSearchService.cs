@@ -265,7 +265,7 @@ namespace NzbDrone.Core.IndexerSearch
                     }
                 }
 
-                if (sceneMapping.ParseTerm == series.CleanTitle && sceneMapping.FilterRegex.IsNullOrWhiteSpace())
+                if (sceneMapping.SearchTerm == series.Title && sceneMapping.FilterRegex.IsNullOrWhiteSpace())
                 {
                     // Disable the implied mapping if we have an explicit mapping by the same name
                     includeGlobal = false;
