@@ -5,5 +5,7 @@
     "ApiKeyValidationHealthCheckMessage": "Hãy cập nhật mã API để dài ít nhất {length} kí tự. Bạn có thể làm điều này trong cài đặt hoặc trong tập config",
     "AppDataLocationHealthCheckMessage": "Việc cập nhật sẽ không xảy ra để tránh xóa AppData khi cập nhật",
     "ApplyChanges": "Áp dụng thay đổi",
-    "AutomaticAdd": "Tự động thêm"
+    "AutomaticAdd": "Tự động thêm",
+    "CalendarOptions": "Tùy chọn lịch",
+    "UpdateMechanismHelpText": "Sử dụng trình cập nhật tích hợp của {appName} hoặc một tập lệnh"
 }

@@ -205,5 +205,7 @@
     "Category": "Categorie",
     "BlocklistReleaseHelpText": "Voorkom dat deze release opnieuw wordt gedownload door {appName} door een RSS lijst of een automatische zoekopdracht",
     "ChangeCategory": "Verander categorie",
-    "ChownGroup": "chown groep"
+    "ChownGroup": "chown groep",
+    "AutoTaggingSpecificationTag": "Tag",
+    "AddDelayProfileError": "Mislukt om vertragingsprofiel toe te voegen, probeer het later nog eens."
 }
