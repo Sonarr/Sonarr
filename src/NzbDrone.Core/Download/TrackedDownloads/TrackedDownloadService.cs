@@ -28,6 +28,7 @@ namespace NzbDrone.Core.Download.TrackedDownloads
 
     public class TrackedDownloadService : ITrackedDownloadService,
                                           IHandle<EpisodeInfoRefreshedEvent>,
+                                          IHandle<SeriesAddedEvent>,
                                           IHandle<SeriesDeletedEvent>
     {
         private readonly IParsingService _parsingService;
@@ -278,12 +279,29 @@ namespace NzbDrone.Core.Download.TrackedDownloads
             }
         }
 
+        public void Handle(SeriesAddedEvent message)
+        {
+            var cachedItems = _cache.Values
+                .Where(t =>
+                    t.RemoteEpisode?.Series == null ||
+                    message.Series?.TvdbId == t.RemoteEpisode.Series.TvdbId)
+                .ToList();
+
+            if (cachedItems.Any())
+            {
+                cachedItems.ForEach(UpdateCachedItem);
+
+                _eventAggregator.PublishEvent(new TrackedDownloadRefreshedEvent(GetTrackedDownloads()));
+            }
+        }
+
         public void Handle(SeriesDeletedEvent message)
         {
-            var cachedItems = _cache.Values.Where(t =>
-                                        t.RemoteEpisode?.Series != null &&
-                                        message.Series.Any(s => s.Id == t.RemoteEpisode.Series.Id))
-                                    .ToList();
+            var cachedItems = _cache.Values
+                .Where(t =>
+                    t.RemoteEpisode?.Series != null &&
+                    message.Series.Any(s => s.Id == t.RemoteEpisode.Series.Id || s.TvdbId == t.RemoteEpisode.Series.TvdbId))
+                .ToList();
 
             if (cachedItems.Any())
             {
