@@ -233,7 +233,7 @@ namespace NzbDrone.Core.Notifications
 
         public void Handle(ManualInteractionRequiredEvent message)
         {
-            var series = message.Episode.Series;
+            var series = message.Episode?.Series;
             var mess = "";
 
             if (series != null)
@@ -255,7 +255,7 @@ namespace NzbDrone.Core.Notifications
             {
                 Message = mess,
                 Series = series,
-                Quality = message.Episode.ParsedEpisodeInfo.Quality,
+                Quality = message.Episode?.ParsedEpisodeInfo.Quality,
                 Episode = message.Episode,
                 TrackedDownload = message.TrackedDownload,
                 DownloadClientInfo = message.TrackedDownload.DownloadItem?.DownloadClientInfo,
