@@ -107,7 +107,7 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo
         [TestCase(10, "", "", "", null, HdrFormat.None)]
         [TestCase(10, "bt709", "bt709", "", null, HdrFormat.None)]
         [TestCase(8, "bt2020", "smpte2084", "", null, HdrFormat.None)]
-        [TestCase(10, "bt2020", "bt2020-10", "", null, HdrFormat.Hlg10)]
+        [TestCase(10, "bt2020", "bt2020-10", "", null, HdrFormat.None)]
         [TestCase(10, "bt2020", "arib-std-b67", "", null, HdrFormat.Hlg10)]
         [TestCase(10, "bt2020", "smpte2084", "", null, HdrFormat.Pq10)]
         [TestCase(10, "bt2020", "smpte2084", "FFMpegCore.SideData", null, HdrFormat.Pq10)]
