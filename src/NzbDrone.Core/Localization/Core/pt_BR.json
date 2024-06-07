@@ -432,7 +432,7 @@
     "AuthBasic": "Básico (pop-up do navegador)",
     "AuthForm": "Formulário (página de login)",
     "Authentication": "Autenticação",
-    "AuthenticationMethodHelpText": "Exigir nome de usuário e senha para acessar o {appName}",
+    "AuthenticationMethodHelpText": "Exigir Nome de Usuário e Senha para acessar {appName}",
     "AuthenticationRequired": "Autenticação exigida",
     "AutoRedownloadFailedHelpText": "Procurar automaticamente e tente baixar uma versão diferente",
     "AutoTaggingLoadError": "Não foi possível carregar tagging automática",

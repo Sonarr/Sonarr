@@ -34,5 +34,9 @@
     "AddImportListImplementation": "Tilføj importliste - {implementationName}",
     "AddRootFolderError": "Kunne ikke tilføje rodmappe",
     "Table": "Tabel",
-    "AddIndexer": "Tilføj indekser"
+    "AddIndexer": "Tilføj indekser",
+    "AddDownloadClient": "Tilføj downloadklient",
+    "AddImportListExclusion": "Tilføj ekslusion til importeringslisten",
+    "AddDelayProfileError": "Kan ikke tilføje en ny forsinkelsesprofil. Prøv venligst igen.",
+    "AddDownloadClientError": "Ikke muligt at tilføje en ny downloadklient. Prøv venligst igen."
 }
