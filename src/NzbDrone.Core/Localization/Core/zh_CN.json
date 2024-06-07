@@ -550,7 +550,7 @@
     "AutoRedownloadFailedHelpText": "自动搜索并尝试下载不同的版本",
     "AutoTaggingLoadError": "无法加载自动标记",
     "Automatic": "自动化",
-    "AutoTaggingRequiredHelpText": "这个{implementationName}条件必须匹配自动标记规则才能应用。否则，一个{implementationName}匹配就足够了。",
+    "AutoTaggingRequiredHelpText": "这个{0}条件必须匹配自动标记规则才能应用。否则，一个{0}匹配就足够了。",
     "AutoTaggingNegateHelpText": "如果选中，当 {implementationName} 条件匹配时，自动标记不会应用。",
     "BackupRetentionHelpText": "超过保留期限的自动备份将被自动清理",
     "BackupsLoadError": "无法加载备份",
