@@ -419,13 +419,21 @@ namespace NzbDrone.Core.Configuration
                             throw new InvalidConfigFileException($"{_configFile} is corrupt. Please delete the config file and Sonarr will recreate it.");
                         }
 
-                        return XDocument.Parse(_diskProvider.ReadAllText(_configFile));
+                        var xDoc = XDocument.Parse(_diskProvider.ReadAllText(_configFile));
+                        var config = xDoc.Descendants(CONFIG_ELEMENT_NAME).ToList();
+
+                        if (config.Count != 1)
+                        {
+                            throw new InvalidConfigFileException($"{_configFile} is invalid. Please delete the config file and Sonarr will recreate it.");
+                        }
+
+                        return xDoc;
                     }
 
-                    var xDoc = new XDocument(new XDeclaration("1.0", "utf-8", "yes"));
-                    xDoc.Add(new XElement(CONFIG_ELEMENT_NAME));
+                    var newXDoc = new XDocument(new XDeclaration("1.0", "utf-8", "yes"));
+                    newXDoc.Add(new XElement(CONFIG_ELEMENT_NAME));
 
-                    return xDoc;
+                    return newXDoc;
                 }
             }
             catch (XmlException ex)
