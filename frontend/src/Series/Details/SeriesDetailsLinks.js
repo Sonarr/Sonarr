@@ -9,7 +9,8 @@ function SeriesDetailsLinks(props) {
   const {
     tvdbId,
     tvMazeId,
-    imdbId
+    imdbId,
+    tmdbId
   } = props;
 
   return (
@@ -71,6 +72,22 @@ function SeriesDetailsLinks(props) {
             </Label>
           </Link>
       }
+
+      {
+        !!tmdbId &&
+          <Link
+            className={styles.link}
+            to={`https://www.themoviedb.org/tv/${tmdbId}`}
+          >
+            <Label
+              className={styles.linkLabel}
+              kind={kinds.INFO}
+              size={sizes.LARGE}
+            >
+              TMDB
+            </Label>
+          </Link>
+      }
     </div>
   );
 }
@@ -78,7 +95,8 @@ function SeriesDetailsLinks(props) {
 SeriesDetailsLinks.propTypes = {
   tvdbId: PropTypes.number.isRequired,
   tvMazeId: PropTypes.number,
-  imdbId: PropTypes.string
+  imdbId: PropTypes.string,
+  tmdbId: PropTypes.number
 };
 
 export default SeriesDetailsLinks;

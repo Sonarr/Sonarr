@@ -29,6 +29,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
             Tvdb = series.TvdbId.ToString();
             TvMaze = series.TvMazeId > 0 ? series.TvMazeId.ToString() : null;
             TvRage = series.TvRageId > 0 ? series.TvMazeId.ToString() : null;
+            Tmdb = series.TmdbId > 0 ? series.TmdbId.ToString() : null;
             Imdb = series.ImdbId;
         }
     }

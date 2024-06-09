@@ -56,5 +56,14 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
             Subject.GetSeriesFolder(_series)
                    .Should().Be($"Series Title ({_series.TvMazeId})");
         }
+
+        [Test]
+        public void should_add_tmdb_id()
+        {
+            _namingConfig.SeriesFolderFormat = "{Series Title} ({TmdbId})";
+
+            Subject.GetSeriesFolder(_series)
+                .Should().Be($"Series Title ({_series.TmdbId})");
+        }
     }
 }

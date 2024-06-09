@@ -20,6 +20,7 @@ namespace NzbDrone.Core.Notifications.Emby
         public string Imdb { get; set; }
         public int Tvdb { get; set; }
         public int TvMaze { get; set; }
+        public int Tmdb { get; set; }
         public int TvRage { get; set; }
     }
 

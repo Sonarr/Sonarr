@@ -13,6 +13,7 @@ const fuseOptions = {
     'tvdbId',
     'tvMazeId',
     'imdbId',
+    'tmdbId',
     'tags.label'
   ]
 };

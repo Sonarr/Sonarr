@@ -36,7 +36,7 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
 
             _singleEpisodeSearchCriteria = new SingleEpisodeSearchCriteria
             {
-                Series = new Tv.Series { TvRageId = 10, TvdbId = 20, TvMazeId = 30, ImdbId = "t40" },
+                Series = new Tv.Series { TvRageId = 10, TvdbId = 20, TvMazeId = 30, ImdbId = "t40", TmdbId = 50 },
                 SceneTitles = new List<string> { "Monkey Island" },
                 SeasonNumber = 1,
                 EpisodeNumber = 2
@@ -44,14 +44,14 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
 
             _seasonSearchCriteria = new SeasonSearchCriteria
             {
-                Series = new Tv.Series { TvRageId = 10, TvdbId = 20, TvMazeId = 30, ImdbId = "t40" },
+                Series = new Tv.Series { TvRageId = 10, TvdbId = 20, TvMazeId = 30, ImdbId = "t40", TmdbId = 50 },
                 SceneTitles = new List<string> { "Monkey Island" },
                 SeasonNumber = 1,
             };
 
             _animeSearchCriteria = new AnimeEpisodeSearchCriteria()
             {
-                Series = new Tv.Series { TvRageId = 10, TvdbId = 20, TvMazeId = 30, ImdbId = "t40" },
+                Series = new Tv.Series { TvRageId = 10, TvdbId = 20, TvMazeId = 30, ImdbId = "t40", TmdbId = 50 },
                 SceneTitles = new List<string>() { "Monkey+Island" },
                 AbsoluteEpisodeNumber = 100,
                 SeasonNumber = 5,
@@ -60,7 +60,7 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
 
             _animeSeasonSearchCriteria = new AnimeSeasonSearchCriteria()
             {
-                Series = new Tv.Series { TvRageId = 10, TvdbId = 20, TvMazeId = 30, ImdbId = "t40" },
+                Series = new Tv.Series { TvRageId = 10, TvdbId = 20, TvMazeId = 30, ImdbId = "t40", TmdbId = 50 },
                 SceneTitles = new List<string> { "Monkey Island" },
                 SeasonNumber = 3,
             };
@@ -266,6 +266,19 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
             var page = results.GetAllTiers().First().First();
 
             page.Url.Query.Should().Contain("imdbid=t40");
+        }
+
+        [Test]
+        public void should_search_by_tmdb_if_supported()
+        {
+            _capabilities.SupportedTvSearchParameters = new[] { "q", "tmdbid", "season", "ep" };
+
+            var results = Subject.GetSearchRequests(_singleEpisodeSearchCriteria);
+            results.GetTier(0).Should().HaveCount(1);
+
+            var page = results.GetAllTiers().First().First();
+
+            page.Url.Query.Should().Contain("tmdbid=50");
         }
 
         [Test]

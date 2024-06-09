@@ -68,6 +68,11 @@ namespace NzbDrone.Core.Notifications.Emby
                         return MediaBrowserMatchQuality.Id;
                     }
 
+                    if (item is { ProviderIds.Tmdb: int tmdbid } && tmdbid != 0 && tmdbid == series.TmdbId)
+                    {
+                        return MediaBrowserMatchQuality.Id;
+                    }
+
                     if (item is { ProviderIds.TvRage: int tvrageid } && tvrageid != 0 && tvrageid == series.TvRageId)
                     {
                         return MediaBrowserMatchQuality.Id;

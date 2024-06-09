@@ -70,6 +70,7 @@ interface Series extends ModelBase {
   tvdbId: number;
   tvMazeId: number;
   tvRageId: number;
+  tmdbId: number;
   useSceneNumbering: boolean;
   year: number;
   isSaving?: boolean;

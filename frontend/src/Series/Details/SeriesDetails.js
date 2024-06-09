@@ -175,6 +175,7 @@ class SeriesDetails extends Component {
       tvdbId,
       tvMazeId,
       imdbId,
+      tmdbId,
       title,
       runtime,
       ratings,
@@ -566,6 +567,7 @@ class SeriesDetails extends Component {
                         tvdbId={tvdbId}
                         tvMazeId={tvMazeId}
                         imdbId={imdbId}
+                        tmdbId={tmdbId}
                       />
                     }
                     kind={kinds.INVERSE}
@@ -719,6 +721,7 @@ SeriesDetails.propTypes = {
   tvdbId: PropTypes.number.isRequired,
   tvMazeId: PropTypes.number,
   imdbId: PropTypes.string,
+  tmdbId: PropTypes.number,
   title: PropTypes.string.isRequired,
   runtime: PropTypes.number.isRequired,
   ratings: PropTypes.object.isRequired,
