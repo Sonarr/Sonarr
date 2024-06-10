@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
@@ -46,7 +45,8 @@ const defaultFontSize = parseInt(fonts.defaultFontSize);
 const lineHeight = parseFloat(fonts.lineHeight);
 
 function getFanartUrl(images) {
-  return _.find(images, { coverType: 'fanart' })?.url;
+  const image = images.find((img) => img.coverType === 'fanart');
+  return image?.url ?? image?.remoteUrl;
 }
 
 function getExpandedState(newState) {
