@@ -3,8 +3,11 @@
 interface CssExports {
   'definitions': string;
   'header': string;
-  'notice': string;
+  'megabytesPerMinute': string;
   'quality': string;
+  'sizeLimit': string;
+  'sizeLimitHelpText': string;
+  'sizeLimitHelpTextContainer': string;
   'title': string;
 }
 export const cssExports: CssExports;
