@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Download.Aggregation
         {
             if (remoteEpisode == null)
             {
-                return remoteEpisode;
+                return null;
             }
 
             foreach (var augmenter in _augmenters)
