@@ -24,7 +24,7 @@ namespace NzbDrone.Core.ImportLists.Imdb
             // Parse TSV response from IMDB export
             var rows = importResponse.Content.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
 
-            series = rows.Skip(1).SelectList(m => m.Split(',')).Where(m => m.Length > 1).SelectList(i => new ImportListItemInfo { ImdbId = i[1] });
+            series = rows.Skip(1).SelectList(m => m.Split(',')).Where(m => m.Length > 5).SelectList(i => new ImportListItemInfo { ImdbId = i[1], Title = i[5] });
 
             return series;
         }
