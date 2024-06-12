@@ -58,12 +58,12 @@ namespace NzbDrone.Core.Tv
             }
             else
             {
-                if (series.AddOptions.SearchForMissingEpisodes)
+                if (addOptions.SearchForMissingEpisodes)
                 {
                     _commandQueueManager.Push(new MissingEpisodeSearchCommand(series.Id));
                 }
 
-                if (series.AddOptions.SearchForCutoffUnmetEpisodes)
+                if (addOptions.SearchForCutoffUnmetEpisodes)
                 {
                     _commandQueueManager.Push(new CutoffUnmetEpisodeSearchCommand(series.Id));
                 }
