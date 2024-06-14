@@ -153,7 +153,11 @@ namespace NzbDrone.Common.Disk
         {
             Ensure.That(path, () => path).IsValidPath(PathValidationType.CurrentOs);
 
-            return Directory.EnumerateDirectories(path);
+            return Directory.EnumerateDirectories(path, "*", new EnumerationOptions
+            {
+                AttributesToSkip = FileAttributes.System,
+                IgnoreInaccessible = true
+            });
         }
 
         public IEnumerable<string> GetFiles(string path, bool recursive)
