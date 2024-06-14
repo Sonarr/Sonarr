@@ -48,11 +48,11 @@ namespace NzbDrone.Core.Test.UpdateTests
         {
             const string branch = "main";
             UseRealHttp();
-            var recent = Subject.GetRecentUpdates(branch, new Version(3, 0), null);
+            var recent = Subject.GetRecentUpdates(branch, new Version(4, 0), null);
 
             recent.Should().NotBeEmpty();
             recent.Should().OnlyContain(c => c.Hash.IsNotNullOrWhiteSpace());
-            recent.Should().OnlyContain(c => c.FileName.Contains($"Sonarr.{c.Branch}.3."));
+            recent.Should().OnlyContain(c => c.FileName.Contains($"Sonarr.{c.Branch}.4."));
             recent.Should().OnlyContain(c => c.ReleaseDate.Year >= 2014);
             recent.Where(c => c.Changes != null).Should().OnlyContain(c => c.Changes.New != null);
             recent.Where(c => c.Changes != null).Should().OnlyContain(c => c.Changes.Fixed != null);
