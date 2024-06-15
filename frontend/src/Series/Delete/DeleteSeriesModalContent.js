@@ -50,15 +50,15 @@ class DeleteSeriesModalContent extends Component {
     const {
       title,
       path,
-      statistics,
+      statistics = {},
       deleteOptions,
       onModalClose,
       onDeleteOptionChange
     } = this.props;
 
     const {
-      episodeFileCount,
-      sizeOnDisk
+      episodeFileCount = 0,
+      sizeOnDisk = 0
     } = statistics;
 
     const deleteFiles = this.state.deleteFiles;
@@ -108,16 +108,20 @@ class DeleteSeriesModalContent extends Component {
           </FormGroup>
 
           {
-            deleteFiles &&
+            deleteFiles ?
               <div className={styles.deleteFilesMessage}>
                 <div><InlineMarkdown data={translate('DeleteSeriesFolderConfirmation', { path })} blockClassName={styles.folderPath} /></div>
-                {
-                  !!episodeFileCount &&
-                    <div>{translate('DeleteSeriesFolderEpisodeCount', { episodeFileCount, size: formatBytes(sizeOnDisk) })}</div>
-                }
-              </div>
-          }
 
+                {
+                  episodeFileCount ?
+                    <div className={styles.deleteCount}>
+                      {translate('DeleteSeriesFolderEpisodeCount', { episodeFileCount, size: formatBytes(sizeOnDisk) })}
+                    </div> :
+                    null
+                }
+              </div> :
+              null
+          }
         </ModalBody>
 
         <ModalFooter>

@@ -16,6 +16,7 @@ import Series from 'Series/Series';
 import { bulkDeleteSeries, setDeleteOption } from 'Store/Actions/seriesActions';
 import createAllSeriesSelector from 'Store/Selectors/createAllSeriesSelector';
 import { CheckInputChanged } from 'typings/inputs';
+import formatBytes from 'Utilities/Number/formatBytes';
 import translate from 'Utilities/String/translate';
 import styles from './DeleteSeriesModalContent.css';
 
@@ -85,6 +86,24 @@ function DeleteSeriesModalContent(props: DeleteSeriesModalContentProps) {
     onModalClose,
   ]);
 
+  const { totalEpisodeFileCount, totalSizeOnDisk } = useMemo(() => {
+    return series.reduce(
+      (acc, s) => {
+        const { statistics = { episodeFileCount: 0, sizeOnDisk: 0 } } = s;
+        const { episodeFileCount = 0, sizeOnDisk = 0 } = statistics;
+
+        acc.totalEpisodeFileCount += episodeFileCount;
+        acc.totalSizeOnDisk += sizeOnDisk;
+
+        return acc;
+      },
+      {
+        totalEpisodeFileCount: 0,
+        totalSizeOnDisk: 0,
+      }
+    );
+  }, [series]);
+
   return (
     <ModalContent onModalClose={onModalClose}>
       <ModalHeader>{translate('DeleteSelectedSeries')}</ModalHeader>
@@ -137,19 +156,43 @@ function DeleteSeriesModalContent(props: DeleteSeriesModalContentProps) {
 
         <ul>
           {series.map((s) => {
+            const { episodeFileCount = 0, sizeOnDisk = 0 } = s.statistics;
+
             return (
               <li key={s.title}>
                 <span>{s.title}</span>
 
                 {deleteFiles && (
-                  <span className={styles.pathContainer}>
-                    -<span className={styles.path}>{s.path}</span>
+                  <span>
+                    <span className={styles.pathContainer}>
+                      -<span className={styles.path}>{s.path}</span>
+                    </span>
+
+                    {!!episodeFileCount && (
+                      <span className={styles.statistics}>
+                        (
+                        {translate('DeleteSeriesFolderEpisodeCount', {
+                          episodeFileCount,
+                          size: formatBytes(sizeOnDisk),
+                        })}
+                        )
+                      </span>
+                    )}
                   </span>
                 )}
               </li>
             );
           })}
         </ul>
+
+        {deleteFiles && !!totalEpisodeFileCount ? (
+          <div className={styles.deleteFilesMessage}>
+            {translate('DeleteSeriesFolderEpisodeCount', {
+              episodeFileCount: totalEpisodeFileCount,
+              size: formatBytes(totalSizeOnDisk),
+            })}
+          </div>
+        ) : null}
       </ModalBody>
 
       <ModalFooter>
