@@ -14,4 +14,9 @@
 .deleteFilesMessage {
   margin-top: 20px;
   color: var(--dangerColor);
+
+  .deleteCount {
+    margin-top: 20px;
+    color: var(--warningColor);
+  }
 }
