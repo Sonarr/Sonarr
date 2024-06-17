@@ -126,6 +126,10 @@ namespace NzbDrone.Core.Parser
                 new Regex(@"^\[(?<subgroup>.+?)\][-_. ]?(?<title>.+?)(?:(?<!\b[0]\d+))(?<absoluteepisode>\d{2,3}(\.\d{1,2})?(?!\d+|[-]))[. ]-[. ](?<absoluteepisode>\d{2,3}(\.\d{1,2})?(?!\d+|[-]))(?:[-_. ]+(?<special>special|ova|ovd))?.*?(?<hash>[(\[]\w{8}[)\]])?(?:$|\.mkv)",
                     RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
+                // Anime - [SubGroup] Title with trailing number S## (Full season)
+                new Regex(@"^\[(?<subgroup>.+?)\][-_. ]?(?<title>.+?)[-_. ]+(?:S(?<season>(?<!\d+)(?:\d{1,2}|\d{4})(?!\d+))).+?(?:$|\.mkv)",
+                    RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
                 // Anime - [SubGroup] Title Absolute Episode Number
                 new Regex(@"^\[(?<subgroup>.+?)\][-_. ]?(?<title>.+?)[-_. ]+\(?(?:[-_. ]?#?(?<absoluteepisode>\d{2,3}(\.\d{1,2})?(?!\d+|-[a-z]+)))+\)?(?:[-_. ]+(?<special>special|ova|ovd))?.*?(?<hash>[(\[]\w{8}[)\]])?(?:$|\.mkv)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
