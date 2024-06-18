@@ -25,6 +25,11 @@ namespace NzbDrone.Core.Download.Aggregation
 
         public RemoteEpisode Augment(RemoteEpisode remoteEpisode)
         {
+            if (remoteEpisode == null)
+            {
+                return null;
+            }
+
             foreach (var augmenter in _augmenters)
             {
                 try
