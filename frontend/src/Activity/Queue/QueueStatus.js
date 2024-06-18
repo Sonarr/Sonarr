@@ -70,6 +70,11 @@ function QueueStatus(props) {
     iconName = icons.DOWNLOADED;
     title = translate('Downloaded');
 
+    if (trackedDownloadState === 'importBlocked') {
+      title += ` - ${translate('UnableToImportAutomatically')}`;
+      iconKind = kinds.WARNING;
+    }
+
     if (trackedDownloadState === 'importPending') {
       title += ` - ${translate('WaitingToImport')}`;
       iconKind = kinds.PURPLE;

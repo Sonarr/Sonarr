@@ -40,6 +40,7 @@ namespace NzbDrone.Core.Download.TrackedDownloads
     public enum TrackedDownloadState
     {
         Downloading,
+        ImportBlocked,
         ImportPending,
         Importing,
         Imported,
