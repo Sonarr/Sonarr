@@ -188,6 +188,11 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
                 series.TvMazeId = show.TvMazeId.Value;
             }
 
+            if (show.TmdbId.HasValue)
+            {
+                series.TmdbId = show.TmdbId.Value;
+            }
+
             series.ImdbId = show.ImdbId;
             series.Title = show.Title;
             series.CleanTitle = Parser.Parser.CleanSeriesTitle(show.Title);

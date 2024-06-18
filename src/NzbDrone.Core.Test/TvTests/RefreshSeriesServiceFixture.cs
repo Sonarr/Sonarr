@@ -138,6 +138,20 @@ namespace NzbDrone.Core.Test.TvTests
         }
 
         [Test]
+        public void should_update_tmdb_id_if_changed()
+        {
+            var newSeriesInfo = _series.JsonClone();
+            newSeriesInfo.TmdbId = _series.TmdbId + 1;
+
+            GivenNewSeriesInfo(newSeriesInfo);
+
+            Subject.Execute(new RefreshSeriesCommand(new List<int> { _series.Id }));
+
+            Mocker.GetMock<ISeriesService>()
+                .Verify(v => v.UpdateSeries(It.Is<Series>(s => s.TmdbId == newSeriesInfo.TmdbId), It.IsAny<bool>(), It.IsAny<bool>()));
+        }
+
+        [Test]
         public void should_log_error_if_tvdb_id_not_found()
         {
             Subject.Execute(new RefreshSeriesCommand(new List<int> { _series.Id }));

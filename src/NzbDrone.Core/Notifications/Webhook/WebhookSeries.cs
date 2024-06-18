@@ -12,6 +12,7 @@ namespace NzbDrone.Core.Notifications.Webhook
         public string Path { get; set; }
         public int TvdbId { get; set; }
         public int TvMazeId { get; set; }
+        public int TmdbId { get; set; }
         public string ImdbId { get; set; }
         public SeriesTypes Type { get; set; }
         public int Year { get; set; }
@@ -31,6 +32,7 @@ namespace NzbDrone.Core.Notifications.Webhook
             Path = series.Path;
             TvdbId = series.TvdbId;
             TvMazeId = series.TvMazeId;
+            TmdbId = series.TmdbId;
             ImdbId = series.ImdbId;
             Type = series.SeriesType;
             Year = series.Year;

@@ -11585,6 +11585,10 @@
             "type": "integer",
             "format": "int32"
           },
+          "tmdbId": {
+            "type": "integer",
+            "format": "int32"
+          },
           "firstAired": {
             "type": "string",
             "format": "date-time",

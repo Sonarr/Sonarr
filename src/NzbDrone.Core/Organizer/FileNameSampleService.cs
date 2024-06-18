@@ -48,7 +48,8 @@ namespace NzbDrone.Core.Organizer
                 Year = 2010,
                 ImdbId = "tt12345",
                 TvdbId = 12345,
-                TvMazeId = 54321
+                TvMazeId = 54321,
+                TmdbId = 11223
             };
 
             _dailySeries = new Series
@@ -58,7 +59,8 @@ namespace NzbDrone.Core.Organizer
                 Year = 2010,
                 ImdbId = "tt12345",
                 TvdbId = 12345,
-                TvMazeId = 54321
+                TvMazeId = 54321,
+                TmdbId = 11223
             };
 
             _animeSeries = new Series
@@ -68,7 +70,8 @@ namespace NzbDrone.Core.Organizer
                 Year = 2010,
                 ImdbId = "tt12345",
                 TvdbId = 12345,
-                TvMazeId = 54321
+                TvMazeId = 54321,
+                TmdbId = 11223
             };
 
             _episode1 = new Episode

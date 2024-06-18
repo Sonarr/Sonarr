@@ -99,6 +99,7 @@ const seriesTokens = [
 const seriesIdTokens = [
   { token: '{ImdbId}', example: 'tt12345' },
   { token: '{TvdbId}', example: '12345' },
+  { token: '{TmdbId}', example: '11223' },
   { token: '{TvMazeId}', example: '54321' }
 ];
 
