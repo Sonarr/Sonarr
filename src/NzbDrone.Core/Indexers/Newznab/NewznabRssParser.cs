@@ -68,16 +68,17 @@ namespace NzbDrone.Core.Indexers.Newznab
         protected override bool PostProcess(IndexerResponse indexerResponse, List<XElement> items, List<ReleaseInfo> releases)
         {
             var enclosureTypes = items.SelectMany(GetEnclosures).Select(v => v.Type).Distinct().ToArray();
+
             if (enclosureTypes.Any() && enclosureTypes.Intersect(PreferredEnclosureMimeTypes).Empty())
             {
                 if (enclosureTypes.Intersect(TorrentEnclosureMimeTypes).Any())
                 {
                     _logger.Warn("{0} does not contain {1}, found {2}, did you intend to add a Torznab indexer?", indexerResponse.Request.Url, NzbEnclosureMimeType, enclosureTypes[0]);
+
+                    return false;
                 }
-                else
-                {
-                    _logger.Warn("{1} does not contain {1}, found {2}.", indexerResponse.Request.Url, NzbEnclosureMimeType, enclosureTypes[0]);
-                }
+
+                _logger.Warn("{0} does not contain {1}, found {2}.", indexerResponse.Request.Url, NzbEnclosureMimeType, enclosureTypes[0]);
             }
 
             return true;
