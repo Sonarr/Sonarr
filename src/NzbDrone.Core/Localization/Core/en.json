@@ -1361,6 +1361,8 @@
   "NotificationsNtfyValidationAuthorizationRequired": "Authorization is required",
   "NotificationsPlexSettingsAuthToken": "Auth Token",
   "NotificationsPlexSettingsAuthenticateWithPlexTv": "Authenticate with Plex.tv",
+  "NotificationsPlexSettingsServer": "Server",
+  "NotificationsPlexSettingsServerHelpText": "Select server from plex.tv account after authenticating",
   "NotificationsPlexValidationNoTvLibraryFound": "At least one TV library is required",
   "NotificationsPushBulletSettingSenderId": "Sender ID",
   "NotificationsPushBulletSettingSenderIdHelpText": "The device ID to send notifications from, use device_iden in the device's URL on pushbullet.com (leave blank to send from yourself)",

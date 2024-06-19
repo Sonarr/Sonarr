@@ -5,6 +5,7 @@ import createRemoveItemHandler from 'Store/Actions/Creators/createRemoveItemHand
 import createSaveProviderHandler, { createCancelSaveProviderHandler } from 'Store/Actions/Creators/createSaveProviderHandler';
 import createTestProviderHandler, { createCancelTestProviderHandler } from 'Store/Actions/Creators/createTestProviderHandler';
 import createSetProviderFieldValueReducer from 'Store/Actions/Creators/Reducers/createSetProviderFieldValueReducer';
+import createSetProviderFieldValuesReducer from 'Store/Actions/Creators/Reducers/createSetProviderFieldValuesReducer';
 import createSetSettingValueReducer from 'Store/Actions/Creators/Reducers/createSetSettingValueReducer';
 import { createThunk } from 'Store/thunks';
 import selectProviderSchema from 'Utilities/State/selectProviderSchema';
@@ -22,6 +23,7 @@ export const FETCH_NOTIFICATION_SCHEMA = 'settings/notifications/fetchNotificati
 export const SELECT_NOTIFICATION_SCHEMA = 'settings/notifications/selectNotificationSchema';
 export const SET_NOTIFICATION_VALUE = 'settings/notifications/setNotificationValue';
 export const SET_NOTIFICATION_FIELD_VALUE = 'settings/notifications/setNotificationFieldValue';
+export const SET_NOTIFICATION_FIELD_VALUES = 'settings/notifications/setNotificationFieldValues';
 export const SAVE_NOTIFICATION = 'settings/notifications/saveNotification';
 export const CANCEL_SAVE_NOTIFICATION = 'settings/notifications/cancelSaveNotification';
 export const DELETE_NOTIFICATION = 'settings/notifications/deleteNotification';
@@ -49,6 +51,13 @@ export const setNotificationValue = createAction(SET_NOTIFICATION_VALUE, (payloa
 });
 
 export const setNotificationFieldValue = createAction(SET_NOTIFICATION_FIELD_VALUE, (payload) => {
+  return {
+    section,
+    ...payload
+  };
+});
+
+export const setNotificationFieldValues = createAction(SET_NOTIFICATION_FIELD_VALUES, (payload) => {
   return {
     section,
     ...payload
@@ -99,6 +108,7 @@ export default {
   reducers: {
     [SET_NOTIFICATION_VALUE]: createSetSettingValueReducer(section),
     [SET_NOTIFICATION_FIELD_VALUE]: createSetProviderFieldValueReducer(section),
+    [SET_NOTIFICATION_FIELD_VALUES]: createSetProviderFieldValuesReducer(section),
 
     [SELECT_NOTIFICATION_SCHEMA]: (state, { payload }) => {
       return selectProviderSchema(state, section, payload, (selectedSchema) => {

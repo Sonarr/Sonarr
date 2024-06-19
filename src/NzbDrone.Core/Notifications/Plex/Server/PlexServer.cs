@@ -5,6 +5,7 @@ using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common.Cache;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Core.Annotations;
 using NzbDrone.Core.Exceptions;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Notifications.Plex.PlexTv;
@@ -191,6 +192,79 @@ namespace NzbDrone.Core.Notifications.Plex.Server
                        {
                            authToken
                        };
+            }
+
+            if (action == "servers")
+            {
+                Settings.Validate().Filter("AuthToken").ThrowOnError();
+
+                if (Settings.AuthToken.IsNullOrWhiteSpace())
+                {
+                    return new { };
+                }
+
+                var servers = _plexTvService.GetServers(Settings.AuthToken);
+                var options = servers.SelectMany(s =>
+                {
+                    var result = new List<FieldSelectStringOption>();
+
+                    // result.Add(new FieldSelectStringOption
+                    // {
+                    //     Value = s.Name,
+                    //     Name = s.Name,
+                    //     IsDisabled = true
+                    // });
+
+                    s.Connections.ForEach(c =>
+                    {
+                        var isSecure = c.Protocol == "https";
+                        var additionalProperties = new Dictionary<string, object>();
+                        var hints = new List<string>();
+
+                        additionalProperties.Add("host", c.Host);
+                        additionalProperties.Add("port", c.Port);
+                        additionalProperties.Add("useSsl", isSecure);
+                        hints.Add(c.Local ? "Local" : "Remote");
+
+                        if (isSecure)
+                        {
+                            hints.Add("Secure");
+                        }
+
+                        result.Add(new FieldSelectStringOption
+                        {
+                            Value = c.Uri,
+                            Name = $"{s.Name} ({c.Host})",
+                            Hint = string.Join(", ", hints),
+                            AdditionalProperties = additionalProperties
+                        });
+
+                        if (isSecure)
+                        {
+                            var uri = $"http://{c.Address}:{c.Port}";
+                            var insecureAdditionalProperties = new Dictionary<string, object>();
+
+                            insecureAdditionalProperties.Add("host", c.Address);
+                            insecureAdditionalProperties.Add("port", c.Port);
+                            insecureAdditionalProperties.Add("useSsl", false);
+
+                            result.Add(new FieldSelectStringOption
+                            {
+                                Value = uri,
+                                Name = $"{s.Name} ({c.Address})",
+                                Hint = c.Local ? "Local" : "Remote",
+                                AdditionalProperties = insecureAdditionalProperties
+                            });
+                        }
+                    });
+
+                    return result;
+                });
+
+                return new
+                {
+                    options
+                };
             }
 
             return new { };
