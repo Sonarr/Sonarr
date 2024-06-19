@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import {
   saveNotification,
-  setNotificationFieldValue,
+  setNotificationFieldValues,
   setNotificationValue,
   testNotification,
   toggleAdvancedSettings
@@ -27,7 +27,7 @@ function createMapStateToProps() {
 
 const mapDispatchToProps = {
   setNotificationValue,
-  setNotificationFieldValue,
+  setNotificationFieldValues,
   saveNotification,
   testNotification,
   toggleAdvancedSettings
@@ -51,8 +51,8 @@ class EditNotificationModalContentConnector extends Component {
     this.props.setNotificationValue({ name, value });
   };
 
-  onFieldChange = ({ name, value }) => {
-    this.props.setNotificationFieldValue({ name, value });
+  onFieldChange = ({ name, value, additionalProperties = {} }) => {
+    this.props.setNotificationFieldValues({ properties: { ...additionalProperties, [name]: value } });
   };
 
   onSavePress = () => {
@@ -91,7 +91,7 @@ EditNotificationModalContentConnector.propTypes = {
   saveError: PropTypes.object,
   item: PropTypes.object.isRequired,
   setNotificationValue: PropTypes.func.isRequired,
-  setNotificationFieldValue: PropTypes.func.isRequired,
+  setNotificationFieldValues: PropTypes.func.isRequired,
   saveNotification: PropTypes.func.isRequired,
   testNotification: PropTypes.func.isRequired,
   toggleAdvancedSettings: PropTypes.func.isRequired,

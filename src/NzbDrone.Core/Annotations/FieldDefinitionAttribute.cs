@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
 namespace NzbDrone.Core.Annotations
@@ -59,13 +60,27 @@ namespace NzbDrone.Core.Annotations
         public string Value { get; set; }
     }
 
-    public class FieldSelectOption
+    public class FieldSelectOption<T>
+        where T : struct
     {
-        public int Value { get; set; }
+        public T Value { get; set; }
         public string Name { get; set; }
         public int Order { get; set; }
         public string Hint { get; set; }
-        public int? ParentValue { get; set; }
+        public T? ParentValue { get; set; }
+        public bool? IsDisabled { get; set; }
+        public Dictionary<string, object> AdditionalProperties { get; set; }
+    }
+
+    public class FieldSelectStringOption
+    {
+        public string Value { get; set; }
+        public string Name { get; set; }
+        public int Order { get; set; }
+        public string Hint { get; set; }
+        public string ParentValue { get; set; }
+        public bool? IsDisabled { get; set; }
+        public Dictionary<string, object> AdditionalProperties { get; set; }
     }
 
     public enum FieldType
