@@ -127,7 +127,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
 
             foreach (var torrent in torrents)
             {
-                if (torrent.Hash == null)
+                if (torrent.Hash.IsNullOrWhiteSpace() || torrent.Name.IsNullOrWhiteSpace())
                 {
                     continue;
                 }
