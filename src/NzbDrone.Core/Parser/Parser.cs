@@ -745,7 +745,7 @@ namespace NzbDrone.Core.Parser
                         Logger.Trace(regex);
                         try
                         {
-                            var result = ParseMatchCollection(match, releaseTitle);
+                            var result = ParseMatchCollection(match, simpleTitle);
 
                             if (result != null)
                             {
@@ -1209,6 +1209,7 @@ namespace NzbDrone.Core.Parser
                 }
             }
 
+            // TODO: This needs to check the modified title
             if (lastSeasonEpisodeStringIndex != releaseTitle.Length)
             {
                 result.ReleaseTokens = releaseTitle.Substring(lastSeasonEpisodeStringIndex);
@@ -1289,7 +1290,7 @@ namespace NzbDrone.Core.Parser
 
         private static int ParseNumber(string value)
         {
-            var normalized = value.Normalize(NormalizationForm.FormKC);
+            var normalized = ConvertToNumerals(value.Normalize(NormalizationForm.FormKC));
 
             if (int.TryParse(normalized, out var number))
             {
@@ -1308,7 +1309,7 @@ namespace NzbDrone.Core.Parser
 
         private static decimal ParseDecimal(string value)
         {
-            var normalized = value.Normalize(NormalizationForm.FormKC);
+            var normalized = ConvertToNumerals(value.Normalize(NormalizationForm.FormKC));
 
             if (decimal.TryParse(normalized, NumberStyles.Float, CultureInfo.InvariantCulture, out var number))
             {
@@ -1316,6 +1317,25 @@ namespace NzbDrone.Core.Parser
             }
 
             throw new FormatException(string.Format("{0} isn't a number", value));
+        }
+
+        private static string ConvertToNumerals(string input)
+        {
+            var result = new StringBuilder(input.Length);
+
+            foreach (var c in input.ToCharArray())
+            {
+                if (char.IsNumber(c))
+                {
+                    result.Append(char.GetNumericValue(c));
+                }
+                else
+                {
+                    result.Append(c);
+                }
+            }
+
+            return result.ToString();
         }
     }
 }
