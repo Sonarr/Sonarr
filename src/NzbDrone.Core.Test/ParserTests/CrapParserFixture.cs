@@ -39,6 +39,13 @@ namespace NzbDrone.Core.Test.ParserTests
             ExceptionVerification.IgnoreWarns();
         }
 
+        [TestCase("علم نف) أ.دعادل الأبيض ٢٠٢٤ ٣ ٣")]
+        [TestCase("ror-240618_1007-1022-")]
+        public void should_parse_unknown_formats_without_error(string title)
+        {
+            Parser.Parser.ParseTitle(title).Should().NotBeNull();
+        }
+
         [Test]
         public void should_not_parse_md5()
         {
