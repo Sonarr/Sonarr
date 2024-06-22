@@ -23,6 +23,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[www.test-hyphen.ca] - Series (2011) S01", "Series (2011)")]
         [TestCase("test123.ca - Series Time S02 720p HDTV x264 CRON", "Series Time")]
         [TestCase("[www.test-hyphen123.co.za] - Series Title S01E01", "Series Title")]
+        [TestCase("(seriesawake.com) Series Super - 57 [720p] [English Subbed]", "Series Super")]
 
         public void should_not_parse_url_in_name(string postTitle, string title)
         {
