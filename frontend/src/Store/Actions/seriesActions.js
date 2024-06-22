@@ -194,20 +194,30 @@ export const filterPredicates = {
     return predicate(hasMissingSeason, filterValue);
   },
 
-  hasUnmonitoredSeason: function(item, filterValue, type) {
+  seasonsMonitoredStatus: function(item, filterValue, type) {
     const predicate = filterTypePredicates[type];
     const { seasons = [] } = item;
 
-    const hasUnmonitoredSeason = seasons.some((season) => {
-      const {
-        seasonNumber,
-        monitored
-      } = season;
+    const { monitoredCount, unmonitoredCount } = seasons.reduce((acc, { seasonNumber, monitored }) => {
+      if (seasonNumber <= 0) {
+        return acc;
+      }
+      if (monitored) {
+        acc.monitoredCount++;
+      } else {
+        acc.unmonitoredCount++;
+      }
+      return acc;
+    }, { monitoredCount: 0, unmonitoredCount: 0 });
 
-      return seasonNumber > 0 && !monitored;
-    });
+    let seasonsMonitoredStatus = 'partial';
+    if (monitoredCount === 0) {
+      seasonsMonitoredStatus = 'none';
+    } else if (unmonitoredCount === 0) {
+      seasonsMonitoredStatus = 'all';
+    }
 
-    return predicate(hasUnmonitoredSeason, filterValue);
+    return predicate(seasonsMonitoredStatus, filterValue);
   }
 };
 
@@ -370,10 +380,10 @@ export const filterBuilderProps = [
     valueType: filterBuilderValueTypes.BOOL
   },
   {
-    name: 'hasUnmonitoredSeason',
-    label: () => translate('HasUnmonitoredSeason'),
+    name: 'seasonsMonitoredStatus',
+    label: () => translate('SeasonsMonitoredStatus'),
     type: filterBuilderTypes.EXACT,
-    valueType: filterBuilderValueTypes.BOOL
+    valueType: filterBuilderValueTypes.SEASONS_MONITORED_STATUS
   },
   {
     name: 'year',

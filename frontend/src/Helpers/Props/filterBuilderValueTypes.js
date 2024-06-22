@@ -8,6 +8,7 @@ export const LANGUAGE = 'language';
 export const PROTOCOL = 'protocol';
 export const QUALITY = 'quality';
 export const QUALITY_PROFILE = 'qualityProfile';
+export const SEASONS_MONITORED_STATUS = 'seasonsMonitoredStatus';
 export const SERIES = 'series';
 export const SERIES_STATUS = 'seriesStatus';
 export const SERIES_TYPES = 'seriesType';
