@@ -546,6 +546,24 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                 _logger.ProgressTrace("Manually imported {0} files", imported.Count);
             }
 
+            var untrackedImports = imported.Where(i => importedTrackedDownload.FirstOrDefault(t => t.ImportResult != i) == null).ToList();
+
+            if (untrackedImports.Any())
+            {
+                foreach (var groupedUntrackedImport in untrackedImports.GroupBy(i => new { i.EpisodeFile.SeriesId, i.EpisodeFile.SeasonNumber }))
+                {
+                    var localEpisodes = groupedUntrackedImport.Select(u => u.ImportDecision.LocalEpisode).ToList();
+                    var episodeFiles = groupedUntrackedImport.Select(u => u.EpisodeFile).ToList();
+                    var localEpisode = localEpisodes.First();
+                    var series = localEpisode.Series;
+                    var sourcePath = localEpisodes.Select(l => l.Path).ToList().GetLongestCommonPath();
+                    var episodes = localEpisodes.SelectMany(l => l.Episodes).ToList();
+                    var parsedEpisodeInfo = localEpisode.FolderEpisodeInfo ?? localEpisode.FileEpisodeInfo;
+
+                    _eventAggregator.PublishEvent(new UntrackedDownloadCompletedEvent(series, episodes, episodeFiles, parsedEpisodeInfo, sourcePath));
+                }
+            }
+
             foreach (var groupedTrackedDownload in importedTrackedDownload.GroupBy(i => i.TrackedDownload.DownloadItem.DownloadId).ToList())
             {
                 var trackedDownload = groupedTrackedDownload.First().TrackedDownload;
@@ -562,15 +580,20 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                     }
                 }
 
-                var allEpisodesImported = groupedTrackedDownload.Select(c => c.ImportResult)
-                                                                .Where(c => c.Result == ImportResultType.Imported)
+                var importedResults = groupedTrackedDownload.Select(c => c.ImportResult)
+                    .Where(c => c.Result == ImportResultType.Imported)
+                    .ToList();
+
+                var allEpisodesImported = importedResults
                                                                 .SelectMany(c => c.ImportDecision.LocalEpisode.Episodes).Count() >=
                                                                     Math.Max(1, trackedDownload.RemoteEpisode?.Episodes?.Count ?? 1);
 
                 if (allEpisodesImported)
                 {
+                    var episodeFiles = importedResults.Select(i => i.EpisodeFile).ToList();
+
                     trackedDownload.State = TrackedDownloadState.Imported;
-                    _eventAggregator.PublishEvent(new DownloadCompletedEvent(trackedDownload, importedSeries.Id));
+                    _eventAggregator.PublishEvent(new DownloadCompletedEvent(trackedDownload, importedSeries.Id, episodeFiles, importedResults.First().ImportDecision.LocalEpisode.Release));
                 }
             }
         }

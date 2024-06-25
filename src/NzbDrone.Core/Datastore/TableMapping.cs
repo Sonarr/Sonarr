@@ -89,6 +89,7 @@ namespace NzbDrone.Core.Datastore
                   .Ignore(x => x.ImplementationName)
                   .Ignore(i => i.SupportsOnGrab)
                   .Ignore(i => i.SupportsOnDownload)
+                  .Ignore(i => i.SupportsOnImportComplete)
                   .Ignore(i => i.SupportsOnUpgrade)
                   .Ignore(i => i.SupportsOnRename)
                   .Ignore(i => i.SupportsOnSeriesAdd)

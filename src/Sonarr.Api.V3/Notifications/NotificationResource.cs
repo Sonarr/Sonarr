@@ -8,6 +8,7 @@ namespace Sonarr.Api.V3.Notifications
         public bool OnGrab { get; set; }
         public bool OnDownload { get; set; }
         public bool OnUpgrade { get; set; }
+        public bool OnImportComplete { get; set; }
         public bool OnRename { get; set; }
         public bool OnSeriesAdd { get; set; }
         public bool OnSeriesDelete { get; set; }
@@ -21,6 +22,7 @@ namespace Sonarr.Api.V3.Notifications
         public bool SupportsOnGrab { get; set; }
         public bool SupportsOnDownload { get; set; }
         public bool SupportsOnUpgrade { get; set; }
+        public bool SupportsOnImportComplete { get; set; }
         public bool SupportsOnRename { get; set; }
         public bool SupportsOnSeriesAdd { get; set; }
         public bool SupportsOnSeriesDelete { get; set; }
@@ -47,6 +49,7 @@ namespace Sonarr.Api.V3.Notifications
             resource.OnGrab = definition.OnGrab;
             resource.OnDownload = definition.OnDownload;
             resource.OnUpgrade = definition.OnUpgrade;
+            resource.OnImportComplete = definition.OnImportComplete;
             resource.OnRename = definition.OnRename;
             resource.OnSeriesAdd = definition.OnSeriesAdd;
             resource.OnSeriesDelete = definition.OnSeriesDelete;
@@ -60,6 +63,7 @@ namespace Sonarr.Api.V3.Notifications
             resource.SupportsOnGrab = definition.SupportsOnGrab;
             resource.SupportsOnDownload = definition.SupportsOnDownload;
             resource.SupportsOnUpgrade = definition.SupportsOnUpgrade;
+            resource.SupportsOnImportComplete = definition.SupportsOnImportComplete;
             resource.SupportsOnRename = definition.SupportsOnRename;
             resource.SupportsOnSeriesAdd = definition.SupportsOnSeriesAdd;
             resource.SupportsOnSeriesDelete = definition.SupportsOnSeriesDelete;
@@ -85,6 +89,7 @@ namespace Sonarr.Api.V3.Notifications
             definition.OnGrab = resource.OnGrab;
             definition.OnDownload = resource.OnDownload;
             definition.OnUpgrade = resource.OnUpgrade;
+            definition.OnImportComplete = resource.OnImportComplete;
             definition.OnRename = resource.OnRename;
             definition.OnSeriesAdd = resource.OnSeriesAdd;
             definition.OnSeriesDelete = resource.OnSeriesDelete;
@@ -98,6 +103,7 @@ namespace Sonarr.Api.V3.Notifications
             definition.SupportsOnGrab = resource.SupportsOnGrab;
             definition.SupportsOnDownload = resource.SupportsOnDownload;
             definition.SupportsOnUpgrade = resource.SupportsOnUpgrade;
+            definition.SupportsOnImportComplete = resource.SupportsOnImportComplete;
             definition.SupportsOnRename = resource.SupportsOnRename;
             definition.SupportsOnSeriesAdd = resource.SupportsOnSeriesAdd;
             definition.SupportsOnSeriesDelete = resource.SupportsOnSeriesDelete;

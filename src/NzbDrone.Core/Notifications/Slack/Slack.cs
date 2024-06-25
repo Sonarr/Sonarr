@@ -59,6 +59,23 @@ namespace NzbDrone.Core.Notifications.Slack
             _proxy.SendPayload(payload, Settings);
         }
 
+        public override void OnImportComplete(ImportCompleteMessage message)
+        {
+            var attachments = new List<Attachment>
+            {
+                new Attachment
+                {
+                    Fallback = message.Message,
+                    Title = message.Series.Title,
+                    Text = message.Message,
+                    Color = "good"
+                }
+            };
+            var payload = CreatePayload($"Imported all expected episodes: {message.Message}", attachments);
+
+            _proxy.SendPayload(payload, Settings);
+        }
+
         public override void OnRename(Series series, List<RenamedEpisodeFile> renamedFiles)
         {
             var attachments = new List<Attachment>

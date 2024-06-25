@@ -34,6 +34,8 @@ namespace NzbDrone.Core.Download
         private readonly IParsingService _parsingService;
         private readonly ISeriesService _seriesService;
         private readonly ITrackedDownloadAlreadyImported _trackedDownloadAlreadyImported;
+        private readonly IEpisodeService _episodeService;
+        private readonly IMediaFileService _mediaFileService;
         private readonly Logger _logger;
 
         public CompletedDownloadService(IEventAggregator eventAggregator,
@@ -43,6 +45,8 @@ namespace NzbDrone.Core.Download
                                         IParsingService parsingService,
                                         ISeriesService seriesService,
                                         ITrackedDownloadAlreadyImported trackedDownloadAlreadyImported,
+                                        IEpisodeService episodeService,
+                                        IMediaFileService mediaFileService,
                                         Logger logger)
         {
             _eventAggregator = eventAggregator;
@@ -52,6 +56,8 @@ namespace NzbDrone.Core.Download
             _parsingService = parsingService;
             _seriesService = seriesService;
             _trackedDownloadAlreadyImported = trackedDownloadAlreadyImported;
+            _episodeService = episodeService;
+            _mediaFileService = mediaFileService;
             _logger = logger;
         }
 
@@ -198,11 +204,23 @@ namespace NzbDrone.Core.Download
                                                    .Count() >= Math.Max(1,
                                           trackedDownload.RemoteEpisode.Episodes.Count);
 
+            var historyItems = _historyService.FindByDownloadId(trackedDownload.DownloadItem.DownloadId)
+                .OrderByDescending(h => h.Date)
+                .ToList();
+
+            var grabbedHistory = historyItems.Where(h => h.EventType == EpisodeHistoryEventType.Grabbed).ToList();
+            var releaseInfo = grabbedHistory.Count > 0 ? new GrabbedReleaseInfo(grabbedHistory) : null;
+
             if (allEpisodesImported)
             {
                 _logger.Debug("All episodes were imported for {0}", trackedDownload.DownloadItem.Title);
                 trackedDownload.State = TrackedDownloadState.Imported;
-                _eventAggregator.PublishEvent(new DownloadCompletedEvent(trackedDownload, trackedDownload.RemoteEpisode.Series.Id));
+
+                _eventAggregator.PublishEvent(new DownloadCompletedEvent(trackedDownload,
+                    trackedDownload.RemoteEpisode.Series.Id,
+                    importResults.Where(c => c.Result == ImportResultType.Imported).Select(c => c.EpisodeFile).ToList(),
+                    releaseInfo));
+
                 return true;
             }
 
@@ -216,12 +234,9 @@ namespace NzbDrone.Core.Download
             // safe, but commenting for future benefit.
 
             var atLeastOneEpisodeImported = importResults.Any(c => c.Result == ImportResultType.Imported);
-
-            var historyItems = _historyService.FindByDownloadId(trackedDownload.DownloadItem.DownloadId)
-                                              .OrderByDescending(h => h.Date)
-                                              .ToList();
-
             var allEpisodesImportedInHistory = _trackedDownloadAlreadyImported.IsImported(trackedDownload, historyItems);
+            var episodes = _episodeService.GetEpisodes(trackedDownload.RemoteEpisode.Episodes.Select(e => e.Id));
+            var files = _mediaFileService.GetFiles(episodes.Select(e => e.EpisodeFileId).Distinct());
 
             if (allEpisodesImportedInHistory)
             {
@@ -245,7 +260,7 @@ namespace NzbDrone.Core.Download
                 }
 
                 trackedDownload.State = TrackedDownloadState.Imported;
-                _eventAggregator.PublishEvent(new DownloadCompletedEvent(trackedDownload, trackedDownload.RemoteEpisode.Series.Id));
+                _eventAggregator.PublishEvent(new DownloadCompletedEvent(trackedDownload, trackedDownload.RemoteEpisode.Series.Id, files, releaseInfo));
 
                 return true;
             }

@@ -45,6 +45,11 @@ namespace NzbDrone.Core.Notifications.Plex.Server
             UpdateIfEnabled(message.Series);
         }
 
+        public override void OnImportComplete(ImportCompleteMessage message)
+        {
+            UpdateIfEnabled(message.Series);
+        }
+
         public override void OnRename(Series series, List<RenamedEpisodeFile> renamedFiles)
         {
             UpdateIfEnabled(series);

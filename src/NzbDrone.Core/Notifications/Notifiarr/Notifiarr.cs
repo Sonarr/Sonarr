@@ -35,6 +35,11 @@ namespace NzbDrone.Core.Notifications.Notifiarr
             _proxy.SendNotification(BuildOnDownloadPayload(message), Settings);
         }
 
+        public override void OnImportComplete(ImportCompleteMessage message)
+        {
+            _proxy.SendNotification(BuildOnImportCompletePayload(message), Settings);
+        }
+
         public override void OnRename(Series series, List<RenamedEpisodeFile> renamedFiles)
         {
             _proxy.SendNotification(BuildOnRenamePayload(series, renamedFiles), Settings);

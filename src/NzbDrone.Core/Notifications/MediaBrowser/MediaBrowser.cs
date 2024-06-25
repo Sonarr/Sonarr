@@ -39,6 +39,19 @@ namespace NzbDrone.Core.Notifications.Emby
             }
         }
 
+        public override void OnImportComplete(ImportCompleteMessage message)
+        {
+            if (Settings.Notify)
+            {
+                _mediaBrowserService.Notify(Settings, IMPORT_COMPLETE_TITLE_BRANDED, message.Message);
+            }
+
+            if (Settings.UpdateLibrary)
+            {
+                _mediaBrowserService.Update(Settings, message.Series, "Created");
+            }
+        }
+
         public override void OnRename(Series series, List<RenamedEpisodeFile> renamedFiles)
         {
             if (Settings.UpdateLibrary)

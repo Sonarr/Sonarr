@@ -42,6 +42,14 @@ namespace NzbDrone.Core.Notifications.Synology
             }
         }
 
+        public override void OnImportComplete(ImportCompleteMessage message)
+        {
+            if (Settings.UpdateLibrary)
+            {
+                _indexerProxy.UpdateFolder(message.Series.Path);
+            }
+        }
+
         public override void OnRename(Series series, List<RenamedEpisodeFile> renamedFiles)
         {
             if (Settings.UpdateLibrary)

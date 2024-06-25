@@ -36,6 +36,11 @@ namespace NzbDrone.Core.Notifications.Gotify
             SendNotification(EPISODE_DOWNLOADED_TITLE, message.Message, message.Series);
         }
 
+        public override void OnImportComplete(ImportCompleteMessage message)
+        {
+            SendNotification(IMPORT_COMPLETE_TITLE, message.Message, message.Series);
+        }
+
         public override void OnEpisodeFileDelete(EpisodeDeleteMessage message)
         {
             SendNotification(EPISODE_DELETED_TITLE, message.Message, message.Series);

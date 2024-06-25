@@ -26,6 +26,11 @@ namespace NzbDrone.Core.Notifications.Prowl
             _prowlProxy.SendNotification(EPISODE_DOWNLOADED_TITLE, message.Message, Settings);
         }
 
+        public override void OnImportComplete(ImportCompleteMessage message)
+        {
+            _prowlProxy.SendNotification(IMPORT_COMPLETE_TITLE, message.Message, Settings);
+        }
+
         public override void OnEpisodeFileDelete(EpisodeDeleteMessage deleteMessage)
         {
             _prowlProxy.SendNotification(EPISODE_DELETED_TITLE, deleteMessage.Message, Settings);

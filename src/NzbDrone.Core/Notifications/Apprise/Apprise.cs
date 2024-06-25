@@ -27,6 +27,11 @@ namespace NzbDrone.Core.Notifications.Apprise
             _proxy.SendNotification(EPISODE_DOWNLOADED_TITLE, message.Message, Settings);
         }
 
+        public override void OnImportComplete(ImportCompleteMessage message)
+        {
+            _proxy.SendNotification(IMPORT_COMPLETE_TITLE, message.Message, Settings);
+        }
+
         public override void OnEpisodeFileDelete(EpisodeDeleteMessage deleteMessage)
         {
             _proxy.SendNotification(EPISODE_DELETED_TITLE, deleteMessage.Message, Settings);

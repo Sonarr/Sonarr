@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Common.EnsureThat;
 
@@ -7,6 +7,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
     public class ImportResult
     {
         public ImportDecision ImportDecision { get; private set; }
+        public EpisodeFile EpisodeFile { get; private set; }
         public List<string> Errors { get; private set; }
 
         public ImportResultType Result
@@ -33,6 +34,15 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
             ImportDecision = importDecision;
             Errors = errors.ToList();
+        }
+
+        public ImportResult(ImportDecision importDecision, EpisodeFile episodeFile)
+        {
+            Ensure.That(importDecision, () => importDecision).IsNotNull();
+
+            ImportDecision = importDecision;
+            EpisodeFile = episodeFile;
+            Errors = new List<string>();
         }
     }
 }

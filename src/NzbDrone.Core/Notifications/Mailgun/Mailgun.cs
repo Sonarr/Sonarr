@@ -32,6 +32,11 @@ namespace NzbDrone.Core.Notifications.Mailgun
             _proxy.SendNotification(EPISODE_DOWNLOADED_TITLE, downloadMessage.Message, Settings);
         }
 
+        public override void OnImportComplete(ImportCompleteMessage message)
+        {
+            _proxy.SendNotification(IMPORT_COMPLETE_TITLE, message.Message, Settings);
+        }
+
         public override void OnEpisodeFileDelete(EpisodeDeleteMessage deleteMessage)
         {
             var body = $"{deleteMessage.Message} deleted.";
