@@ -128,12 +128,13 @@ namespace NzbDrone.Core.Download.Clients.Deluge
 
             foreach (var torrent in torrents)
             {
+                // Silently ignore torrents with no hash
                 if (torrent.Hash.IsNullOrWhiteSpace())
                 {
                     continue;
                 }
 
-                // Ignore invalid torrents. No point logging Deluge's mess every ~60-90 seconds.
+                // Ignore torrents without a name, but track to log a single warning for all invalid torrents.
                 if (torrent.Name.IsNullOrWhiteSpace())
                 {
                     ignoredCount++;
