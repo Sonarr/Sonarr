@@ -124,11 +124,20 @@ namespace NzbDrone.Core.Download.Clients.Deluge
             }
 
             var items = new List<DownloadClientItem>();
+            var ignoredCount = 0;
 
             foreach (var torrent in torrents)
             {
-                if (torrent.Hash == null)
+                // Silently ignore torrents with no hash
+                if (torrent.Hash.IsNullOrWhiteSpace())
                 {
+                    continue;
+                }
+
+                // Ignore torrents without a name, but track to log a single warning for all invalid torrents.
+                if (torrent.Name.IsNullOrWhiteSpace())
+                {
+                    ignoredCount++;
                     continue;
                 }
 
@@ -187,6 +196,11 @@ namespace NzbDrone.Core.Download.Clients.Deluge
                     torrent.State == DelugeTorrentStatus.Paused;
 
                 items.Add(item);
+            }
+
+            if (ignoredCount > 0)
+            {
+                _logger.Warn("{0} torrent(s) were ignored becuase they did not have a title, check Deluge and remove any invalid torrents");
             }
 
             return items;
