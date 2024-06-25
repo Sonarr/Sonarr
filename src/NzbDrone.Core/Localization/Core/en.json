@@ -1992,6 +1992,7 @@
   "Umask770Description": "{octal} - Owner & Group write",
   "Umask775Description": "{octal} - Owner & Group write, Other read",
   "Umask777Description": "{octal} - Everyone write",
+  "UnableToImportAutomatically": "Unable to Import Automatically",
   "UnableToLoadAutoTagging": "Unable to load auto tagging",
   "UnableToLoadBackups": "Unable to load backups",
   "UnableToUpdateSonarrDirectly": "Unable to update {appName} directly,",
