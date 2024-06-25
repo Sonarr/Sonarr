@@ -49,11 +49,12 @@ class TableOptionsModal extends Component {
 
   onPageSizeChange = ({ value }) => {
     let pageSizeError = null;
+    const maxPageSize = this.props.maxPageSize ?? 250;
 
     if (value < 5) {
       pageSizeError = translate('TablePageSizeMinimum', { minimumValue: '5' });
-    } else if (value > 250) {
-      pageSizeError = translate('TablePageSizeMaximum', { maximumValue: '250' });
+    } else if (value > maxPageSize) {
+      pageSizeError = translate('TablePageSizeMaximum', { maximumValue: `${maxPageSize}` });
     } else {
       this.props.onTableOptionChange({ pageSize: value });
     }
@@ -248,6 +249,7 @@ TableOptionsModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   columns: PropTypes.arrayOf(PropTypes.object).isRequired,
   pageSize: PropTypes.number,
+  maxPageSize: PropTypes.number,
   canModifyColumns: PropTypes.bool.isRequired,
   optionsComponent: PropTypes.elementType,
   onTableOptionChange: PropTypes.func.isRequired,
