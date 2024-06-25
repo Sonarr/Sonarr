@@ -71,6 +71,10 @@ namespace NzbDrone.Core.Test.Download.CompletedDownloadServiceTests
             Mocker.GetMock<IProvideImportItemService>()
                   .Setup(s => s.ProvideImportItem(It.IsAny<DownloadClientItem>(), It.IsAny<DownloadClientItem>()))
                   .Returns<DownloadClientItem, DownloadClientItem>((i, p) => i);
+
+            Mocker.GetMock<IEpisodeService>()
+                .Setup(s => s.GetEpisodes(It.IsAny<IEnumerable<int>>()))
+                .Returns(new List<Episode>());
         }
 
         private RemoteEpisode BuildRemoteEpisode()

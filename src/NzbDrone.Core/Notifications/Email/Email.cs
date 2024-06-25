@@ -43,6 +43,13 @@ namespace NzbDrone.Core.Notifications.Email
             SendEmail(Settings, EPISODE_DOWNLOADED_TITLE_BRANDED, body);
         }
 
+        public override void OnImportComplete(ImportCompleteMessage message)
+        {
+            var body = $"All expected episode files in {message.Message} downloaded and sorted.";
+
+            SendEmail(Settings, IMPORT_COMPLETE_TITLE, body);
+        }
+
         public override void OnEpisodeFileDelete(EpisodeDeleteMessage deleteMessage)
         {
             var body = $"{deleteMessage.Message} deleted.";

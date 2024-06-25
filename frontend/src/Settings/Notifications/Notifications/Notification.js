@@ -59,6 +59,7 @@ class Notification extends Component {
       onGrab,
       onDownload,
       onUpgrade,
+      onImportComplete,
       onRename,
       onSeriesAdd,
       onSeriesDelete,
@@ -71,6 +72,7 @@ class Notification extends Component {
       supportsOnGrab,
       supportsOnDownload,
       supportsOnUpgrade,
+      supportsOnImportComplete,
       supportsOnRename,
       supportsOnSeriesAdd,
       supportsOnSeriesDelete,
@@ -105,7 +107,7 @@ class Notification extends Component {
         {
           supportsOnDownload && onDownload ?
             <Label kind={kinds.SUCCESS}>
-              {translate('OnImport')}
+              {translate('OnFileImport')}
             </Label> :
             null
         }
@@ -114,6 +116,14 @@ class Notification extends Component {
           supportsOnUpgrade && onDownload && onUpgrade ?
             <Label kind={kinds.SUCCESS}>
               {translate('OnUpgrade')}
+            </Label> :
+            null
+        }
+
+        {
+          supportsOnImportComplete && onImportComplete ?
+            <Label kind={kinds.SUCCESS}>
+              {translate('OnImportComplete')}
             </Label> :
             null
         }
@@ -191,7 +201,7 @@ class Notification extends Component {
         }
 
         {
-          !onGrab && !onDownload && !onRename && !onHealthIssue && !onHealthRestored && !onApplicationUpdate && !onSeriesAdd && !onSeriesDelete && !onEpisodeFileDelete && !onManualInteractionRequired ?
+          !onGrab && !onDownload && !onRename && !onImportComplete && !onHealthIssue && !onHealthRestored && !onApplicationUpdate && !onSeriesAdd && !onSeriesDelete && !onEpisodeFileDelete && !onManualInteractionRequired ?
             <Label
               kind={kinds.DISABLED}
               outline={true}
@@ -233,6 +243,7 @@ Notification.propTypes = {
   onGrab: PropTypes.bool.isRequired,
   onDownload: PropTypes.bool.isRequired,
   onUpgrade: PropTypes.bool.isRequired,
+  onImportComplete: PropTypes.bool.isRequired,
   onRename: PropTypes.bool.isRequired,
   onSeriesAdd: PropTypes.bool.isRequired,
   onSeriesDelete: PropTypes.bool.isRequired,
@@ -244,6 +255,7 @@ Notification.propTypes = {
   onManualInteractionRequired: PropTypes.bool.isRequired,
   supportsOnGrab: PropTypes.bool.isRequired,
   supportsOnDownload: PropTypes.bool.isRequired,
+  supportsOnImportComplete: PropTypes.bool.isRequired,
   supportsOnSeriesAdd: PropTypes.bool.isRequired,
   supportsOnSeriesDelete: PropTypes.bool.isRequired,
   supportsOnEpisodeFileDelete: PropTypes.bool.isRequired,

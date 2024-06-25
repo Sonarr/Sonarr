@@ -37,6 +37,14 @@ namespace NzbDrone.Core.Notifications.Xbmc
             UpdateAndClean(message.Series, message.OldFiles.Any());
         }
 
+        public override void OnImportComplete(ImportCompleteMessage message)
+        {
+            const string header = "Sonarr - Imported";
+
+            Notify(Settings, header, message.Message);
+            UpdateAndClean(message.Series);
+        }
+
         public override void OnRename(Series series, List<RenamedEpisodeFile> renamedFiles)
         {
             UpdateAndClean(series);

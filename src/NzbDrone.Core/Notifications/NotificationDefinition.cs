@@ -11,6 +11,7 @@ namespace NzbDrone.Core.Notifications
         public bool OnGrab { get; set; }
         public bool OnDownload { get; set; }
         public bool OnUpgrade { get; set; }
+        public bool OnImportComplete { get; set; }
         public bool OnRename { get; set; }
         public bool OnSeriesAdd { get; set; }
         public bool OnSeriesDelete { get; set; }
@@ -33,6 +34,9 @@ namespace NzbDrone.Core.Notifications
 
         [MemberwiseEqualityIgnore]
         public bool SupportsOnRename { get; set; }
+
+        [MemberwiseEqualityIgnore]
+        public bool SupportsOnImportComplete { get; set; }
 
         [MemberwiseEqualityIgnore]
         public bool SupportsOnSeriesAdd { get; set; }
@@ -59,7 +63,7 @@ namespace NzbDrone.Core.Notifications
         public bool SupportsOnManualInteractionRequired { get; set; }
 
         [MemberwiseEqualityIgnore]
-        public override bool Enable => OnGrab || OnDownload || (OnDownload && OnUpgrade) || OnRename || OnSeriesAdd || OnSeriesDelete || OnEpisodeFileDelete || (OnEpisodeFileDelete && OnEpisodeFileDeleteForUpgrade) || OnHealthIssue || OnHealthRestored || OnApplicationUpdate || OnManualInteractionRequired;
+        public override bool Enable => OnGrab || OnDownload || (OnDownload && OnUpgrade) || OnImportComplete || OnRename || OnSeriesAdd || OnSeriesDelete || OnEpisodeFileDelete || (OnEpisodeFileDelete && OnEpisodeFileDeleteForUpgrade) || OnHealthIssue || OnHealthRestored || OnApplicationUpdate || OnManualInteractionRequired;
 
         public bool Equals(NotificationDefinition other)
         {

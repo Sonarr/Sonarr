@@ -18,6 +18,7 @@ function NotificationEventItems(props) {
     onGrab,
     onDownload,
     onUpgrade,
+    onImportComplete,
     onRename,
     onSeriesAdd,
     onSeriesDelete,
@@ -30,6 +31,7 @@ function NotificationEventItems(props) {
     supportsOnGrab,
     supportsOnDownload,
     supportsOnUpgrade,
+    supportsOnImportComplete,
     supportsOnRename,
     supportsOnSeriesAdd,
     supportsOnSeriesDelete,
@@ -66,7 +68,7 @@ function NotificationEventItems(props) {
             <FormInputGroup
               type={inputTypes.CHECK}
               name="onDownload"
-              helpText={translate('OnImport')}
+              helpText={translate('OnFileImport')}
               isDisabled={!supportsOnDownload.value}
               {...onDownload}
               onChange={onInputChange}
@@ -86,6 +88,17 @@ function NotificationEventItems(props) {
                 />
               </div>
           }
+
+          <div>
+            <FormInputGroup
+              type={inputTypes.CHECK}
+              name="onImportComplete"
+              helpText={translate('OnImportComplete')}
+              isDisabled={!supportsOnImportComplete.value}
+              {...onImportComplete}
+              onChange={onInputChange}
+            />
+          </div>
 
           <div>
             <FormInputGroup

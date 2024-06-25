@@ -30,6 +30,13 @@ namespace NzbDrone.Core.Notifications.Telegram
             _proxy.SendNotification(title, message.Message, Settings);
         }
 
+        public override void OnImportComplete(ImportCompleteMessage message)
+        {
+            var title = Settings.IncludeAppNameInTitle ? EPISODE_DOWNLOADED_TITLE_BRANDED : EPISODE_DOWNLOADED_TITLE;
+
+            _proxy.SendNotification(title, message.Message, Settings);
+        }
+
         public override void OnEpisodeFileDelete(EpisodeDeleteMessage deleteMessage)
         {
             var title = Settings.IncludeAppNameInTitle ? EPISODE_DELETED_TITLE_BRANDED : EPISODE_DELETED_TITLE;

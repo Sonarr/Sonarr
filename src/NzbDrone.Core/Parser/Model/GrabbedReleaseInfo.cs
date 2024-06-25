@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Core.History;
@@ -9,6 +10,7 @@ namespace NzbDrone.Core.Parser.Model
         public string Title { get; set; }
         public string Indexer { get; set; }
         public long Size { get; set; }
+        public ReleaseType ReleaseType { get; set; }
 
         public List<int> EpisodeIds { get; set; }
 
@@ -19,12 +21,14 @@ namespace NzbDrone.Core.Parser.Model
 
             grabbedHistory.Data.TryGetValue("indexer", out var indexer);
             grabbedHistory.Data.TryGetValue("size", out var sizeString);
+            Enum.TryParse(grabbedHistory.Data.GetValueOrDefault("releaseType"), out ReleaseType releaseType);
             long.TryParse(sizeString, out var size);
 
             Title = grabbedHistory.SourceTitle;
             Indexer = indexer;
             Size = size;
             EpisodeIds = episodeIds;
+            ReleaseType = releaseType;
         }
     }
 }

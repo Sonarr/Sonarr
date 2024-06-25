@@ -116,6 +116,7 @@ export default {
         selectedSchema.onGrab = selectedSchema.supportsOnGrab;
         selectedSchema.onDownload = selectedSchema.supportsOnDownload;
         selectedSchema.onUpgrade = selectedSchema.supportsOnUpgrade;
+        selectedSchema.onImportComplete = selectedSchema.supportsOnImportComplete;
         selectedSchema.onRename = selectedSchema.supportsOnRename;
         selectedSchema.onSeriesAdd = selectedSchema.supportsOnSeriesAdd;
         selectedSchema.onSeriesDelete = selectedSchema.supportsOnSeriesDelete;

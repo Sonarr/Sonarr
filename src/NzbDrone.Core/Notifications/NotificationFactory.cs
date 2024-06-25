@@ -13,6 +13,7 @@ namespace NzbDrone.Core.Notifications
         List<INotification> OnGrabEnabled(bool filterBlockedNotifications = true);
         List<INotification> OnDownloadEnabled(bool filterBlockedNotifications = true);
         List<INotification> OnUpgradeEnabled(bool filterBlockedNotifications = true);
+        List<INotification> OnImportCompleteEnabled(bool filterBlockedNotifications = true);
         List<INotification> OnRenameEnabled(bool filterBlockedNotifications = true);
         List<INotification> OnSeriesAddEnabled(bool filterBlockedNotifications = true);
         List<INotification> OnSeriesDeleteEnabled(bool filterBlockedNotifications = true);
@@ -69,6 +70,16 @@ namespace NzbDrone.Core.Notifications
             }
 
             return GetAvailableProviders().Where(n => ((NotificationDefinition)n.Definition).OnUpgrade).ToList();
+        }
+
+        public List<INotification> OnImportCompleteEnabled(bool filterBlockedNotifications = true)
+        {
+            if (filterBlockedNotifications)
+            {
+                return FilterBlockedNotifications(GetAvailableProviders().Where(n => ((NotificationDefinition)n.Definition).OnImportComplete)).ToList();
+            }
+
+            return GetAvailableProviders().Where(n => ((NotificationDefinition)n.Definition).OnImportComplete).ToList();
         }
 
         public List<INotification> OnRenameEnabled(bool filterBlockedNotifications = true)
@@ -184,6 +195,7 @@ namespace NzbDrone.Core.Notifications
             definition.SupportsOnGrab = provider.SupportsOnGrab;
             definition.SupportsOnDownload = provider.SupportsOnDownload;
             definition.SupportsOnUpgrade = provider.SupportsOnUpgrade;
+            definition.SupportsOnImportComplete = provider.SupportsOnImportComplete;
             definition.SupportsOnRename = provider.SupportsOnRename;
             definition.SupportsOnSeriesAdd = provider.SupportsOnSeriesAdd;
             definition.SupportsOnSeriesDelete = provider.SupportsOnSeriesDelete;

@@ -81,6 +81,29 @@ namespace NzbDrone.Core.Notifications.Webhook
             return payload;
         }
 
+        protected WebhookImportCompletePayload BuildOnImportCompletePayload(ImportCompleteMessage message)
+        {
+            var episodeFiles = message.EpisodeFiles;
+
+            var payload = new WebhookImportCompletePayload
+            {
+                EventType = WebhookEventType.Download,
+                InstanceName = _configFileProvider.InstanceName,
+                ApplicationUrl = _configService.ApplicationUrl,
+                Series = GetSeries(message.Series),
+                Episodes = message.Episodes.ConvertAll(x => new WebhookEpisode(x)),
+                EpisodeFiles = episodeFiles.ConvertAll(e => new WebhookEpisodeFile(e)),
+                Release = new WebhookGrabbedRelease(message.Release, episodeFiles.First().ReleaseType),
+                DownloadClient = message.DownloadClientInfo?.Name,
+                DownloadClientType = message.DownloadClientInfo?.Type,
+                DownloadId = message.DownloadId,
+                SourcePath = message.SourcePath,
+                DestinationPath = message.DestinationPath
+            };
+
+            return payload;
+        }
+
         protected WebhookEpisodeDeletePayload BuildOnEpisodeFileDelete(EpisodeDeleteMessage deleteMessage)
         {
             return new WebhookEpisodeDeletePayload

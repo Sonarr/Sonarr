@@ -39,6 +39,13 @@ namespace NzbDrone.Core.Notifications.Trakt
             AddEpisodeToCollection(Settings, message.Series, message.EpisodeFile);
         }
 
+        public override void OnImportComplete(ImportCompleteMessage message)
+        {
+            RefreshTokenIfNecessary();
+
+            message.EpisodeFiles.ForEach(f => AddEpisodeToCollection(Settings, message.Series, f));
+        }
+
         public override void OnEpisodeFileDelete(EpisodeDeleteMessage deleteMessage)
         {
             RefreshTokenIfNecessary();

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Extensions;
@@ -18,6 +19,8 @@ namespace NzbDrone.Core.Notifications
     public class NotificationService
         : IHandle<EpisodeGrabbedEvent>,
           IHandle<EpisodeImportedEvent>,
+          IHandle<DownloadCompletedEvent>,
+          IHandle<UntrackedDownloadCompletedEvent>,
           IHandle<SeriesRenamedEvent>,
           IHandle<SeriesAddCompletedEvent>,
           IHandle<SeriesDeletedEvent>,
@@ -44,19 +47,7 @@ namespace NzbDrone.Core.Notifications
 
         private string GetMessage(Series series, List<Episode> episodes, QualityModel quality)
         {
-            var qualityString = quality.Quality.ToString();
-
-            if (quality.Revision.Version > 1)
-            {
-                if (series.SeriesType == SeriesTypes.Anime)
-                {
-                    qualityString += " v" + quality.Revision.Version;
-                }
-                else
-                {
-                    qualityString += " Proper";
-                }
-            }
+            var qualityString = GetQualityString(series, quality);
 
             if (series.SeriesType == SeriesTypes.Daily)
             {
@@ -80,6 +71,35 @@ namespace NzbDrone.Core.Notifications
                                     episodeNumbers,
                                     episodeTitles,
                                     qualityString);
+        }
+
+        private string GetFullSeasonMessage(Series series, int seasonNumber, QualityModel quality)
+        {
+            var qualityString = GetQualityString(series, quality);
+
+            return string.Format("{0} - Season {1} [{2}]",
+                series.Title,
+                seasonNumber,
+                qualityString);
+        }
+
+        private string GetQualityString(Series series, QualityModel quality)
+        {
+            var qualityString = quality.Quality.ToString();
+
+            if (quality.Revision.Version > 1)
+            {
+                if (series.SeriesType == SeriesTypes.Anime)
+                {
+                    qualityString += " v" + quality.Revision.Version;
+                }
+                else
+                {
+                    qualityString += " Proper";
+                }
+            }
+
+            return qualityString;
         }
 
         private bool ShouldHandleSeries(ProviderDefinition definition, Series series)
@@ -185,6 +205,91 @@ namespace NzbDrone.Core.Notifications
                 {
                     _notificationStatusService.RecordFailure(notification.Definition.Id);
                     _logger.Warn(ex, "Unable to send OnDownload notification to: " + notification.Definition.Name);
+                }
+            }
+        }
+
+        public void Handle(DownloadCompletedEvent message)
+        {
+            var series = message.TrackedDownload.RemoteEpisode.Series;
+            var episodes = message.TrackedDownload.RemoteEpisode.Episodes;
+            var parsedEpisodeInfo = message.TrackedDownload.RemoteEpisode.ParsedEpisodeInfo;
+
+            var downloadMessage = new ImportCompleteMessage
+            {
+                Message = parsedEpisodeInfo.FullSeason
+                    ? GetFullSeasonMessage(series, episodes.First().SeasonNumber, parsedEpisodeInfo.Quality)
+                    : GetMessage(series, episodes, parsedEpisodeInfo.Quality),
+                Series = series,
+                Episodes = episodes,
+                EpisodeFiles = message.EpisodeFiles,
+                DownloadClientInfo = message.TrackedDownload.DownloadItem.DownloadClientInfo,
+                DownloadId = message.TrackedDownload.DownloadItem.DownloadId,
+                Release = message.Release,
+                SourcePath = message.TrackedDownload.DownloadItem.OutputPath.FullPath,
+                DestinationPath = message.EpisodeFiles.Select(e => Path.Join(series.Path, e.RelativePath)).ToList().GetLongestCommonPath(),
+                ReleaseGroup = parsedEpisodeInfo.ReleaseGroup,
+                ReleaseQuality = parsedEpisodeInfo.Quality
+            };
+
+            foreach (var notification in _notificationFactory.OnImportCompleteEnabled())
+            {
+                try
+                {
+                    if (ShouldHandleSeries(notification.Definition, series))
+                    {
+                        if (((NotificationDefinition)notification.Definition).OnImportComplete)
+                        {
+                            notification.OnImportComplete(downloadMessage);
+                            _notificationStatusService.RecordSuccess(notification.Definition.Id);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _notificationStatusService.RecordFailure(notification.Definition.Id);
+                    _logger.Warn(ex, "Unable to send OnImportComplete notification to: " + notification.Definition.Name);
+                }
+            }
+        }
+
+        public void Handle(UntrackedDownloadCompletedEvent message)
+        {
+            var series = message.Series;
+            var episodes = message.Episodes;
+            var parsedEpisodeInfo = message.ParsedEpisodeInfo;
+
+            var downloadMessage = new ImportCompleteMessage
+            {
+                Message = parsedEpisodeInfo.FullSeason
+                    ? GetFullSeasonMessage(series, episodes.First().SeasonNumber, parsedEpisodeInfo.Quality)
+                    : GetMessage(series, episodes, parsedEpisodeInfo.Quality),
+                Series = series,
+                Episodes = episodes,
+                EpisodeFiles = message.EpisodeFiles,
+                SourcePath = message.SourcePath,
+                DestinationPath = message.EpisodeFiles.Select(e => Path.Join(series.Path, e.RelativePath)).ToList().GetLongestCommonPath(),
+                ReleaseGroup = parsedEpisodeInfo.ReleaseGroup,
+                ReleaseQuality = parsedEpisodeInfo.Quality
+            };
+
+            foreach (var notification in _notificationFactory.OnImportCompleteEnabled())
+            {
+                try
+                {
+                    if (ShouldHandleSeries(notification.Definition, series))
+                    {
+                        if (((NotificationDefinition)notification.Definition).OnImportComplete)
+                        {
+                            notification.OnImportComplete(downloadMessage);
+                            _notificationStatusService.RecordSuccess(notification.Definition.Id);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _notificationStatusService.RecordFailure(notification.Definition.Id);
+                    _logger.Warn(ex, "Unable to send OnImportComplete notification to: " + notification.Definition.Name);
                 }
             }
         }
