@@ -73,8 +73,8 @@ namespace NzbDrone.Core.Download
 
         public void Check(TrackedDownload trackedDownload)
         {
-            // Only process tracked downloads that are still downloading
-            if (trackedDownload.State != TrackedDownloadState.Downloading)
+            // Only process tracked downloads that are still downloading or import is blocked (if they fail after attempting to be processed)
+            if (trackedDownload.State != TrackedDownloadState.Downloading && trackedDownload.State != TrackedDownloadState.ImportBlocked)
             {
                 return;
             }
