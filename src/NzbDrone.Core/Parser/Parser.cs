@@ -745,7 +745,7 @@ namespace NzbDrone.Core.Parser
                         Logger.Trace(regex);
                         try
                         {
-                            var result = ParseMatchCollection(match, simpleTitle);
+                            var result = ParseMatchCollection(match, releaseTitle);
 
                             if (result != null)
                             {
@@ -1209,8 +1209,7 @@ namespace NzbDrone.Core.Parser
                 }
             }
 
-            // TODO: This needs to check the modified title
-            if (lastSeasonEpisodeStringIndex != releaseTitle.Length)
+            if (lastSeasonEpisodeStringIndex < releaseTitle.Length)
             {
                 result.ReleaseTokens = releaseTitle.Substring(lastSeasonEpisodeStringIndex);
             }
