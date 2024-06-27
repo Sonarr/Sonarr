@@ -1822,6 +1822,8 @@
   "SeriesMonitoring": "Series Monitoring",
   "SeriesPremiere": "Series Premiere",
   "SeriesProgressBarText": "{episodeFileCount} / {episodeCount} (Total: {totalEpisodeCount}, Downloading: {downloadingCount})",
+  "SeriesRename": "Series Rename",
+  "SeriesRenamesHelpText": "Series rename is used to overwrite system Rename Episodes",
   "SeriesTitle": "Series Title",
   "SeriesTitleToExcludeHelpText": "The name of the series to exclude",
   "SeriesType": "Series Type",

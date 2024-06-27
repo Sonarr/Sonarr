@@ -20,6 +20,7 @@ export const SELECT = 'select';
 export const SERIES_TAG = 'seriesTag';
 export const DYNAMIC_SELECT = 'dynamicSelect';
 export const SERIES_TYPE_SELECT = 'seriesTypeSelect';
+export const SERIES_RENAME_SELECT = 'seriesRenameSelect';
 export const TAG = 'tag';
 export const TEXT = 'text';
 export const TEXT_AREA = 'textArea';
@@ -49,6 +50,7 @@ export const all = [
   SERIES_TAG,
   DYNAMIC_SELECT,
   SERIES_TYPE_SELECT,
+  SERIES_RENAME_SELECT,
   TAG,
   TEXT,
   TEXT_AREA,

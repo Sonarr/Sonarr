@@ -25,6 +25,7 @@ interface CssExports {
   'releaseGroups': string;
   'seasonCount': string;
   'seasonFolder': string;
+  'seriesRename': string;
   'seriesType': string;
   'sizeOnDisk': string;
   'sortTitle': string;

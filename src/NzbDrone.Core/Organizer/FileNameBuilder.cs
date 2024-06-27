@@ -138,7 +138,9 @@ namespace NzbDrone.Core.Organizer
                 namingConfig = _namingConfigService.GetConfig();
             }
 
-            if (!namingConfig.RenameEpisodes)
+            var renameEpisodes = GetRenameEpisodes(series, namingConfig.RenameEpisodes);
+
+            if (!renameEpisodes)
             {
                 return GetOriginalTitle(episodeFile, true) + extension;
             }
@@ -398,7 +400,9 @@ namespace NzbDrone.Core.Organizer
             var namingConfig = _namingConfigService.GetConfig();
             var pattern = namingConfig.StandardEpisodeFormat;
 
-            if (!namingConfig.RenameEpisodes)
+            var renameEpisodes = GetRenameEpisodes(series, namingConfig.RenameEpisodes);
+
+            if (!renameEpisodes)
             {
                 return false;
             }
@@ -1227,6 +1231,16 @@ namespace NzbDrone.Core.Organizer
             int.TryParse(formatter, out var maxCustomLength);
 
             return maxCustomLength;
+        }
+
+        private static bool GetRenameEpisodes(Series series, bool systemRenameEpisodes)
+        {
+            return series?.SeriesRename switch
+            {
+                SeriesRenameTypes.Disabled => false,
+                SeriesRenameTypes.Enabled => true,
+                _ => systemRenameEpisodes
+            };
         }
     }
 

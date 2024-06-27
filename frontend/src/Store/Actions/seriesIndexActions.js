@@ -73,6 +73,12 @@ export const defaultState = {
       isVisible: false
     },
     {
+      name: 'seriesRename',
+      label: () => translate('RenameEpisodes'),
+      isSortable: true,
+      isVisible: false
+    },
+    {
       name: 'network',
       label: () => translate('Network'),
       isSortable: true,

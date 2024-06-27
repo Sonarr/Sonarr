@@ -17,6 +17,7 @@ interface SavePayload {
   monitorNewItems?: string;
   qualityProfileId?: number;
   seriesType?: string;
+  seriesRename?: string;
   seasonFolder?: boolean;
   rootFolderPath?: string;
   moveFiles?: boolean;
@@ -83,6 +84,7 @@ function EditSeriesModalContent(props: EditSeriesModalContentProps) {
     NO_CHANGE
   );
   const [seriesType, setSeriesType] = useState(NO_CHANGE);
+  const [seriesRename, setSeriesRename] = useState(NO_CHANGE);
   const [seasonFolder, setSeasonFolder] = useState(NO_CHANGE);
   const [rootFolderPath, setRootFolderPath] = useState(NO_CHANGE);
   const [isConfirmMoveModalOpen, setIsConfirmMoveModalOpen] = useState(false);
@@ -112,6 +114,11 @@ function EditSeriesModalContent(props: EditSeriesModalContentProps) {
         payload.seriesType = seriesType;
       }
 
+      if (seriesRename !== NO_CHANGE) {
+        hasChanges = true;
+        payload.seriesRename = seriesRename;
+      }
+
       if (seasonFolder !== NO_CHANGE) {
         hasChanges = true;
         payload.seasonFolder = seasonFolder === 'yes';
@@ -134,6 +141,7 @@ function EditSeriesModalContent(props: EditSeriesModalContentProps) {
       monitorNewItems,
       qualityProfileId,
       seriesType,
+      seriesRename,
       seasonFolder,
       rootFolderPath,
       onSavePress,
@@ -155,6 +163,9 @@ function EditSeriesModalContent(props: EditSeriesModalContentProps) {
           break;
         case 'seriesType':
           setSeriesType(value);
+          break;
+        case 'seriesRename':
+          setSeriesRename(value);
           break;
         case 'seasonFolder':
           setSeasonFolder(value);
@@ -246,6 +257,20 @@ function EditSeriesModalContent(props: EditSeriesModalContentProps) {
             includeNoChange={true}
             includeNoChangeDisabled={false}
             helpText={translate('SeriesTypesHelpText')}
+            onChange={onInputChange}
+          />
+        </FormGroup>
+
+        <FormGroup>
+          <FormLabel>{translate('SeriesRename')}</FormLabel>
+
+          <FormInputGroup
+            type={inputTypes.SERIES_RENAME_SELECT}
+            name="seriesRename"
+            value={seriesRename}
+            includeNoChange={true}
+            includeNoChangeDisabled={false}
+            helpText={translate('SeriesRenamesHelpText')}
             onChange={onInputChange}
           />
         </FormGroup>

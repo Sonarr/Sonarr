@@ -22,6 +22,7 @@ import PasswordInput from './PasswordInput';
 import PathInputConnector from './PathInputConnector';
 import QualityProfileSelectInputConnector from './QualityProfileSelectInputConnector';
 import RootFolderSelectInputConnector from './RootFolderSelectInputConnector';
+import SeriesRenameSelectInput from './SeriesRenameSelectInput';
 import SeriesTagInput from './SeriesTagInput';
 import SeriesTypeSelectInput from './SeriesTypeSelectInput';
 import TagInputConnector from './TagInputConnector';
@@ -93,6 +94,9 @@ function getComponent(type) {
 
     case inputTypes.SERIES_TYPE_SELECT:
       return SeriesTypeSelectInput;
+
+    case inputTypes.SERIES_RENAME_SELECT:
+      return SeriesRenameSelectInput;
 
     case inputTypes.TAG:
       return TagInputConnector;

@@ -80,6 +80,7 @@ class EditSeriesModalContent extends Component {
       seasonFolder,
       qualityProfileId,
       seriesType,
+      seriesRename,
       path,
       tags
     } = item;
@@ -160,6 +161,18 @@ class EditSeriesModalContent extends Component {
                 name="seriesType"
                 {...seriesType}
                 helpText={translate('SeriesTypesHelpText')}
+                onChange={onInputChange}
+              />
+            </FormGroup>
+
+            <FormGroup>
+              <FormLabel>{translate('SeriesRename')}</FormLabel>
+
+              <FormInputGroup
+                type={inputTypes.SERIES_RENAME_SELECT}
+                name="seriesRename"
+                {...seriesRename}
+                helpText={translate('SeriesRenamesHelpText')}
                 onChange={onInputChange}
               />
             </FormGroup>

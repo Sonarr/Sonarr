@@ -23,6 +23,7 @@ import SeriesTitleLink from 'Series/SeriesTitleLink';
 import { executeCommand } from 'Store/Actions/commandActions';
 import { SelectStateInputProps } from 'typings/props';
 import formatBytes from 'Utilities/Number/formatBytes';
+import firstCharToUpper from 'Utilities/String/firstCharToUpper';
 import titleCase from 'Utilities/String/titleCase';
 import translate from 'Utilities/String/translate';
 import SeriesIndexProgressBar from '../ProgressBar/SeriesIndexProgressBar';
@@ -65,6 +66,7 @@ function SeriesIndexRow(props: SeriesIndexRowProps) {
     seasonFolder,
     images,
     seriesType,
+    seriesRename,
     network,
     originalLanguage,
     certification,
@@ -220,6 +222,14 @@ function SeriesIndexRow(props: SeriesIndexRowProps) {
           return (
             <VirtualTableRowCell key={name} className={styles[name]}>
               {titleCase(seriesType)}
+            </VirtualTableRowCell>
+          );
+        }
+
+        if (name === 'seriesRename') {
+          return (
+            <VirtualTableRowCell key={name} className={styles[name]}>
+              {translate(firstCharToUpper(seriesRename))}
             </VirtualTableRowCell>
           );
         }

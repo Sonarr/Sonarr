@@ -42,6 +42,7 @@ function createMapStateToProps() {
         'seasonFolder',
         'qualityProfileId',
         'seriesType',
+        'seriesRename',
         'path',
         'tags'
       ]);

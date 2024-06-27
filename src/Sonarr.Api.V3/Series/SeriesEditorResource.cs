@@ -10,6 +10,7 @@ namespace Sonarr.Api.V3.Series
         public NewItemMonitorTypes? MonitorNewItems { get; set; }
         public int? QualityProfileId { get; set; }
         public SeriesTypes? SeriesType { get; set; }
+        public SeriesRenameTypes? SeriesRename { get; set; }
         public bool? SeasonFolder { get; set; }
         public string RootFolderPath { get; set; }
         public List<int> Tags { get; set; }

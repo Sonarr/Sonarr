@@ -38,6 +38,7 @@ namespace NzbDrone.Core.Tv
         public int Runtime { get; set; }
         public List<MediaCover.MediaCover> Images { get; set; }
         public SeriesTypes SeriesType { get; set; }
+        public SeriesRenameTypes SeriesRename { get; set; }
         public string Network { get; set; }
         public bool UseSceneNumbering { get; set; }
         public string TitleSlug { get; set; }
@@ -76,6 +77,7 @@ namespace NzbDrone.Core.Tv
             MonitorNewItems = otherSeries.MonitorNewItems;
 
             SeriesType = otherSeries.SeriesType;
+            SeriesRename = otherSeries.SeriesRename;
             RootFolderPath = otherSeries.RootFolderPath;
             Tags = otherSeries.Tags;
             AddOptions = otherSeries.AddOptions;

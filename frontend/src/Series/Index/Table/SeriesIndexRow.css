@@ -17,7 +17,8 @@
   flex: 4 0 110px;
 }
 
-.seriesType {
+.seriesType,
+.seriesRename {
   composes: cell;
 
   flex: 0 0 100px;

@@ -2,6 +2,7 @@ import ModelBase from 'App/ModelBase';
 import Language from 'Language/Language';
 
 export type SeriesType = 'anime' | 'daily' | 'standard';
+export type SeriesRename = 'system' | 'disabled' | 'enabled';
 
 export interface Image {
   coverType: string;
@@ -61,6 +62,7 @@ interface Series extends ModelBase {
   seasonFolder: boolean;
   seasons: Season[];
   seriesType: SeriesType;
+  seriesRename: SeriesRename;
   sortTitle: string;
   statistics: Statistics;
   status: string;

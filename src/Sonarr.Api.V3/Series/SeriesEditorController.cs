@@ -49,6 +49,11 @@ namespace Sonarr.Api.V3.Series
                     series.SeriesType = resource.SeriesType.Value;
                 }
 
+                if (resource.SeriesRename.HasValue)
+                {
+                    series.SeriesRename = resource.SeriesRename.Value;
+                }
+
                 if (resource.SeasonFolder.HasValue)
                 {
                     series.SeasonFolder = resource.SeasonFolder.Value;
