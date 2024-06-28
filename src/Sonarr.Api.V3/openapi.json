@@ -8483,10 +8483,6 @@
             "format": "date-time",
             "nullable": true
           },
-          "seriesTitle": {
-            "type": "string",
-            "nullable": true
-          },
           "series": {
             "$ref": "#/components/schemas/SeriesResource"
           },
