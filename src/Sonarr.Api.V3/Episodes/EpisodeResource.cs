@@ -34,7 +34,6 @@ namespace Sonarr.Api.V3.Episodes
         public bool UnverifiedSceneNumbering { get; set; }
         public DateTime? EndTime { get; set; }
         public DateTime? GrabDate { get; set; }
-        public string SeriesTitle { get; set; }
         public SeriesResource Series { get; set; }
 
         public List<MediaCover> Images { get; set; }
@@ -79,7 +78,6 @@ namespace Sonarr.Api.V3.Episodes
                 SceneEpisodeNumber = model.SceneEpisodeNumber,
                 SceneSeasonNumber = model.SceneSeasonNumber,
                 UnverifiedSceneNumbering = model.UnverifiedSceneNumbering,
-                SeriesTitle = model.SeriesTitle,
 
                 // Series = model.Series.MapToResource(),
             };
