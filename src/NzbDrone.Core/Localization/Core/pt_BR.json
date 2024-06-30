@@ -2078,5 +2078,6 @@
     "TodayAt": "Hoje às {time}",
     "TomorrowAt": "Amanhã às {time}",
     "HasUnmonitoredSeason": "Tem Temporada Não Monitorada",
-    "YesterdayAt": "Ontem às {time}"
+    "YesterdayAt": "Ontem às {time}",
+    "UnableToImportAutomatically": "Não foi possível importar automaticamente"
 }
