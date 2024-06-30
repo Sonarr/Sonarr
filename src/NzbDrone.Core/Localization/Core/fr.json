@@ -1779,7 +1779,7 @@
     "NotificationsPushoverSettingsDevicesHelpText": "Liste des noms des appareils (laisser vide pour envoyer à tous les appareils)",
     "NotificationsPushoverSettingsDevices": "Appareils",
     "NotificationsPushcutSettingsTimeSensitiveHelpText": "Activer pour marquer la notification comme « Time Sensitive »",
-    "NotificationsPushcutSettingsTimeSensitive": "Time Sensitive",
+    "NotificationsPushcutSettingsTimeSensitive": "Sensible au temps",
     "NotificationsPushcutSettingsNotificationNameHelpText": "Nom de la notification de l'onglet Notifications de l'app Pushcut",
     "NotificationsPushcutSettingsNotificationName": "Nom de la notification",
     "NotificationsPushcutSettingsApiKeyHelpText": "Les clés API peuvent être gérées dans la vue Compte de l'app Pushcut",
@@ -2071,5 +2071,13 @@
     "NotificationsTelegramSettingsIncludeAppName": "Inclure {appName} dans le Titre",
     "NotificationsTelegramSettingsIncludeAppNameHelpText": "Préfixer éventuellement le titre du message par {appName} pour différencier les notifications des différentes applications",
     "IndexerSettingsMultiLanguageRelease": "Multilingue",
-    "IndexerSettingsMultiLanguageReleaseHelpText": "Quelles langues sont normalement présentes dans une version multiple de l'indexeur ?"
+    "IndexerSettingsMultiLanguageReleaseHelpText": "Quelles langues sont normalement présentes dans une version multiple de l'indexeur ?",
+    "DownloadClientQbittorrentTorrentStateMissingFiles": "qBittorrent signale des fichiers manquants",
+    "BlocklistFilterHasNoItems": "La liste de blocage sélectionnée ne contient aucun élément",
+    "HasUnmonitoredSeason": "A une saison non surveillée",
+    "YesterdayAt": "Hier à {time}",
+    "UnableToImportAutomatically": "Impossible d'importer automatiquement",
+    "DayOfWeekAt": "{day} à {time}",
+    "TomorrowAt": "Demain à {time}",
+    "TodayAt": "Aujourd'hui à {time}"
 }

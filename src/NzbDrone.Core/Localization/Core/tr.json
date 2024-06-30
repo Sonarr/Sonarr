@@ -846,5 +846,6 @@
     "AllResultsAreHiddenByTheAppliedFilter": "Tüm sonuçlar, uygulanan filtre tarafından gizlenir",
     "AllSeriesInRootFolderHaveBeenImported": "{path} içerisindeki tüm diziler içeri aktarıldı",
     "AlternateTitles": "Alternatif Başlıklar",
-    "AnEpisodeIsDownloading": "Bir bölüm indiriliyor"
+    "AnEpisodeIsDownloading": "Bir bölüm indiriliyor",
+    "UnableToImportAutomatically": "Otomatikman İçe Aktarılamıyor"
 }

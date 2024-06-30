@@ -2078,5 +2078,8 @@
     "TomorrowAt": "Mañana a las {time}",
     "YesterdayAt": "Ayer a las {time}",
     "TodayAt": "Hoy a las {time}",
-    "DayOfWeekAt": "{day} a las {time}"
+    "DayOfWeekAt": "{day} a las {time}",
+    "UnableToImportAutomatically": "No se pudo importar automáticamente",
+    "NotificationsPlexSettingsServer": "Servidor",
+    "NotificationsPlexSettingsServerHelpText": "Selecciona el servidor desde una cuenta de plex.tv después de autenticarse"
 }
