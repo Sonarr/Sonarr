@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Queue
     public class QueueService : IQueueService, IHandle<TrackedDownloadRefreshedEvent>
     {
         private readonly IEventAggregator _eventAggregator;
-        private static List<Queue> _queue = new List<Queue>();
+        private static List<Queue> _queue = new ();
 
         public QueueService(IEventAggregator eventAggregator)
         {
@@ -96,8 +96,11 @@ namespace NzbDrone.Core.Queue
 
         public void Handle(TrackedDownloadRefreshedEvent message)
         {
-            _queue = message.TrackedDownloads.OrderBy(c => c.DownloadItem.RemainingTime).SelectMany(MapQueue)
-                            .ToList();
+            _queue = message.TrackedDownloads
+                .Where(t => t.IsTrackable)
+                .OrderBy(c => c.DownloadItem.RemainingTime)
+                .SelectMany(MapQueue)
+                .ToList();
 
             _eventAggregator.PublishEvent(new QueueUpdatedEvent());
         }
