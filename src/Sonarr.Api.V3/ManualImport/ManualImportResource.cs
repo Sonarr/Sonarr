@@ -32,6 +32,7 @@ namespace Sonarr.Api.V3.ManualImport
         public List<CustomFormatResource> CustomFormats { get; set; }
         public int CustomFormatScore { get; set; }
         public int IndexerFlags { get; set; }
+        public int IndexerId { get; set; }
         public ReleaseType ReleaseType { get; set; }
         public IEnumerable<Rejection> Rejections { get; set; }
     }
@@ -62,6 +63,7 @@ namespace Sonarr.Api.V3.ManualImport
                 EpisodeFileId = model.EpisodeFileId,
                 ReleaseGroup = model.ReleaseGroup,
                 Quality = model.Quality,
+                IndexerId = model.IndexerId,
                 Languages = model.Languages,
                 CustomFormats = customFormats.ToResource(false),
                 CustomFormatScore = customFormatScore,

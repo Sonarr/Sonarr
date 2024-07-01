@@ -8,6 +8,7 @@ namespace NzbDrone.Core.Parser.Model
     {
         public string Title { get; set; }
         public string Indexer { get; set; }
+        public int IndexerId { get; set; }
         public long Size { get; set; }
 
         public List<int> EpisodeIds { get; set; }
@@ -18,11 +19,14 @@ namespace NzbDrone.Core.Parser.Model
             var episodeIds = grabbedHistories.Select(h => h.EpisodeId).Distinct().ToList();
 
             grabbedHistory.Data.TryGetValue("indexer", out var indexer);
+            grabbedHistory.Data.TryGetValue("indexerId", out var indexerIdString);
             grabbedHistory.Data.TryGetValue("size", out var sizeString);
             long.TryParse(sizeString, out var size);
+            int.TryParse(indexerIdString, out var indexerId);
 
             Title = grabbedHistory.SourceTitle;
             Indexer = indexer;
+            IndexerId = indexerId;
             Size = size;
             EpisodeIds = episodeIds;
         }

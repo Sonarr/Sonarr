@@ -83,6 +83,7 @@ namespace NzbDrone.Core.Blocklisting
                                 PublishedDate = remoteEpisode.Release.PublishDate,
                                 Size = remoteEpisode.Release.Size,
                                 Indexer = remoteEpisode.Release.Indexer,
+                                IndexerId = remoteEpisode.Release.IndexerId,
                                 Protocol = remoteEpisode.Release.DownloadProtocol,
                                 Message = message,
                                 Languages = remoteEpisode.ParsedEpisodeInfo.Languages
@@ -183,6 +184,7 @@ namespace NzbDrone.Core.Blocklisting
                 PublishedDate = DateTime.Parse(message.Data.GetValueOrDefault("publishedDate")),
                 Size = long.Parse(message.Data.GetValueOrDefault("size", "0")),
                 Indexer = message.Data.GetValueOrDefault("indexer"),
+                IndexerId = int.Parse(message.Data.GetValueOrDefault("indexerId")),
                 Protocol = (DownloadProtocol)Convert.ToInt32(message.Data.GetValueOrDefault("protocol")),
                 Message = message.Message,
                 TorrentInfoHash = message.Data.GetValueOrDefault("torrentInfoHash"),
