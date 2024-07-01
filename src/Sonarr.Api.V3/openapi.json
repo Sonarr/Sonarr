@@ -12007,6 +12007,7 @@
       "TrackedDownloadState": {
         "enum": [
           "downloading",
+          "importBlocked",
           "importPending",
           "importing",
           "imported",
