@@ -77,7 +77,7 @@ class HistoryRow extends Component {
       onMarkAsFailedPress
     } = this.props;
 
-    if (!episode) {
+    if (!series || !episode) {
       return null;
     }
 
