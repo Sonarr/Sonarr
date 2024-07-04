@@ -64,6 +64,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Title.S01.720p.VFF.WEB-DL.AAC2.0.H.264-BTN")]
         [TestCase("Title.S01.720p.VFQ.WEB-DL.AAC2.0.H.264-BTN")]
         [TestCase("Title.S01.720p.TRUEFRENCH.WEB-DL.AAC2.0.H.264-BTN")]
+        [TestCase("Series In The Middle S01 Multi VFI VO 1080p WEB x265 HEVC AAC 5.1-Papaya")]
         public void should_parse_language_french(string postTitle)
         {
             var result = LanguageParser.ParseLanguages(postTitle);
