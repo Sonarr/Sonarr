@@ -88,8 +88,7 @@ function DeleteSeriesModalContent(props: DeleteSeriesModalContentProps) {
 
   const { totalEpisodeFileCount, totalSizeOnDisk } = useMemo(() => {
     return series.reduce(
-      (acc, s) => {
-        const { statistics = { episodeFileCount: 0, sizeOnDisk: 0 } } = s;
+      (acc, { statistics = {} }) => {
         const { episodeFileCount = 0, sizeOnDisk = 0 } = statistics;
 
         acc.totalEpisodeFileCount += episodeFileCount;
@@ -155,17 +154,17 @@ function DeleteSeriesModalContent(props: DeleteSeriesModalContentProps) {
         </div>
 
         <ul>
-          {series.map((s) => {
-            const { episodeFileCount = 0, sizeOnDisk = 0 } = s.statistics;
+          {series.map(({ title, path, statistics = {} }) => {
+            const { episodeFileCount = 0, sizeOnDisk = 0 } = statistics;
 
             return (
-              <li key={s.title}>
-                <span>{s.title}</span>
+              <li key={title}>
+                <span>{title}</span>
 
                 {deleteFiles && (
                   <span>
                     <span className={styles.pathContainer}>
-                      -<span className={styles.path}>{s.path}</span>
+                      -<span className={styles.path}>{path}</span>
                     </span>
 
                     {!!episodeFileCount && (
