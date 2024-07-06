@@ -2,7 +2,6 @@ import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import Icon from 'Components/Icon';
-import Label from 'Components/Label';
 import IconButton from 'Components/Link/IconButton';
 import Link from 'Components/Link/Link';
 import SpinnerIconButton from 'Components/Link/SpinnerIconButton';
@@ -15,7 +14,7 @@ import SpinnerIcon from 'Components/SpinnerIcon';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import Popover from 'Components/Tooltip/Popover';
-import { align, icons, kinds, sizes, sortDirections, tooltipPositions } from 'Helpers/Props';
+import { align, icons, sortDirections, tooltipPositions } from 'Helpers/Props';
 import InteractiveImportModal from 'InteractiveImport/InteractiveImportModal';
 import OrganizePreviewModalConnector from 'Organize/OrganizePreviewModalConnector';
 import SeriesHistoryModal from 'Series/History/SeriesHistoryModal';
@@ -27,6 +26,7 @@ import translate from 'Utilities/String/translate';
 import getToggledRange from 'Utilities/Table/getToggledRange';
 import EpisodeRowConnector from './EpisodeRowConnector';
 import SeasonInfo from './SeasonInfo';
+import SeasonProgressLabel from './SeasonProgressLabel';
 import styles from './SeriesDetailsSeason.css';
 
 function getSeasonStatistics(episodes) {
@@ -62,18 +62,6 @@ function getSeasonStatistics(episodes) {
     hasMonitoredEpisodes,
     sizeOnDisk
   };
-}
-
-function getEpisodeCountKind(monitored, episodeFileCount, episodeCount) {
-  if (episodeFileCount === episodeCount && episodeCount > 0) {
-    return kinds.SUCCESS;
-  }
-
-  if (!monitored) {
-    return kinds.WARNING;
-  }
-
-  return kinds.DANGER;
 }
 
 class SeriesDetailsSeason extends Component {
@@ -265,12 +253,13 @@ class SeriesDetailsSeason extends Component {
               className={styles.episodeCountTooltip}
               canFlip={true}
               anchor={
-                <Label
-                  kind={getEpisodeCountKind(monitored, episodeFileCount, episodeCount)}
-                  size={sizes.LARGE}
-                >
-                  <span>{episodeFileCount} / {episodeCount}</span>
-                </Label>
+                <SeasonProgressLabel
+                  seriesId={seriesId}
+                  seasonNumber={seasonNumber}
+                  monitored={monitored}
+                  episodeCount={episodeCount}
+                  episodeFileCount={episodeFileCount}
+                />
               }
               title={translate('SeasonInformation')}
               body={

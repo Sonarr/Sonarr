@@ -11,6 +11,7 @@ interface CssExports {
   'medium': string;
   'outline': string;
   'primary': string;
+  'purple': string;
   'small': string;
   'success': string;
   'warning': string;
