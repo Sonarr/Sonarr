@@ -88,6 +88,15 @@
   }
 }
 
+.purple {
+  border-color: var(--purple);
+  background-color: var(--purple);
+
+  &.outline {
+    color: var(--purple);
+  }
+}
+
 /** Sizes **/
 
 .small {
