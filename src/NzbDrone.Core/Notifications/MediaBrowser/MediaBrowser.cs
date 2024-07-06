@@ -1,5 +1,8 @@
 using System.Collections.Generic;
+using System.Linq;
 using FluentValidation.Results;
+using NLog;
+using NzbDrone.Common.Cache;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Tv;
@@ -9,10 +12,18 @@ namespace NzbDrone.Core.Notifications.Emby
     public class MediaBrowser : NotificationBase<MediaBrowserSettings>
     {
         private readonly IMediaBrowserService _mediaBrowserService;
+        private readonly MediaServerUpdateQueue<MediaBrowser, string> _updateQueue;
+        private readonly Logger _logger;
 
-        public MediaBrowser(IMediaBrowserService mediaBrowserService)
+        private static string Created = "Created";
+        private static string Deleted = "Deleted";
+        private static string Modified = "Modified";
+
+        public MediaBrowser(IMediaBrowserService mediaBrowserService, ICacheManager cacheManager, Logger logger)
         {
             _mediaBrowserService = mediaBrowserService;
+            _updateQueue = new MediaServerUpdateQueue<MediaBrowser, string>(cacheManager);
+            _logger = logger;
         }
 
         public override string Link => "https://emby.media/";
@@ -33,10 +44,7 @@ namespace NzbDrone.Core.Notifications.Emby
                 _mediaBrowserService.Notify(Settings, EPISODE_DOWNLOADED_TITLE_BRANDED, message.Message);
             }
 
-            if (Settings.UpdateLibrary)
-            {
-                _mediaBrowserService.Update(Settings, message.Series, "Created");
-            }
+            UpdateIfEnabled(message.Series, Created);
         }
 
         public override void OnImportComplete(ImportCompleteMessage message)
@@ -46,18 +54,12 @@ namespace NzbDrone.Core.Notifications.Emby
                 _mediaBrowserService.Notify(Settings, IMPORT_COMPLETE_TITLE_BRANDED, message.Message);
             }
 
-            if (Settings.UpdateLibrary)
-            {
-                _mediaBrowserService.Update(Settings, message.Series, "Created");
-            }
+            UpdateIfEnabled(message.Series, Created);
         }
 
         public override void OnRename(Series series, List<RenamedEpisodeFile> renamedFiles)
         {
-            if (Settings.UpdateLibrary)
-            {
-                _mediaBrowserService.Update(Settings, series, "Modified");
-            }
+            UpdateIfEnabled(series, Modified);
         }
 
         public override void OnEpisodeFileDelete(EpisodeDeleteMessage deleteMessage)
@@ -67,10 +69,7 @@ namespace NzbDrone.Core.Notifications.Emby
                 _mediaBrowserService.Notify(Settings, EPISODE_DELETED_TITLE_BRANDED, deleteMessage.Message);
             }
 
-            if (Settings.UpdateLibrary)
-            {
-                _mediaBrowserService.Update(Settings, deleteMessage.Series, "Deleted");
-            }
+            UpdateIfEnabled(deleteMessage.Series, Deleted);
         }
 
         public override void OnSeriesAdd(SeriesAddMessage message)
@@ -80,10 +79,7 @@ namespace NzbDrone.Core.Notifications.Emby
                 _mediaBrowserService.Notify(Settings, SERIES_ADDED_TITLE_BRANDED, message.Message);
             }
 
-            if (Settings.UpdateLibrary)
-            {
-                _mediaBrowserService.Update(Settings, message.Series, "Created");
-            }
+            UpdateIfEnabled(message.Series, Created);
         }
 
         public override void OnSeriesDelete(SeriesDeleteMessage deleteMessage)
@@ -93,10 +89,7 @@ namespace NzbDrone.Core.Notifications.Emby
                 _mediaBrowserService.Notify(Settings, SERIES_DELETED_TITLE_BRANDED, deleteMessage.Message);
             }
 
-            if (Settings.UpdateLibrary)
-            {
-                _mediaBrowserService.Update(Settings, deleteMessage.Series, "Deleted");
-            }
+            UpdateIfEnabled(deleteMessage.Series, Deleted);
         }
 
         public override void OnHealthIssue(HealthCheck.HealthCheck message)
@@ -120,6 +113,34 @@ namespace NzbDrone.Core.Notifications.Emby
             if (Settings.Notify)
             {
                 _mediaBrowserService.Notify(Settings, APPLICATION_UPDATE_TITLE_BRANDED, updateMessage.Message);
+            }
+        }
+
+        public override void ProcessQueue()
+        {
+            _updateQueue.ProcessQueue(Settings.Host, (items) =>
+            {
+                if (Settings.UpdateLibrary)
+                {
+                    _logger.Debug("Performing library update for {0} series", items.Count);
+
+                    items.ForEach(item =>
+                    {
+                        // If there is only one update type for the series use that, otherwise send null and let Emby decide
+                        var updateType = item.Info.Count == 1 ? item.Info.First() : null;
+
+                        _mediaBrowserService.Update(Settings, item.Series, updateType);
+                    });
+                }
+            });
+        }
+
+        private void UpdateIfEnabled(Series series, string updateType)
+        {
+            if (Settings.UpdateLibrary)
+            {
+                _logger.Debug("Scheduling library update for series {0} {1}", series.Id, series.Title);
+                _updateQueue.Add(Settings.Host, series, updateType);
             }
         }
 
