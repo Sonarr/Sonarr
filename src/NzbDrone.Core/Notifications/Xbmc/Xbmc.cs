@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net.Sockets;
 using FluentValidation.Results;
 using NLog;
+using NzbDrone.Common.Cache;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Tv;
@@ -12,11 +13,13 @@ namespace NzbDrone.Core.Notifications.Xbmc
     public class Xbmc : NotificationBase<XbmcSettings>
     {
         private readonly IXbmcService _xbmcService;
+        private readonly MediaServerUpdateQueue<Xbmc, bool> _updateQueue;
         private readonly Logger _logger;
 
-        public Xbmc(IXbmcService xbmcService, Logger logger)
+        public Xbmc(IXbmcService xbmcService, ICacheManager cacheManager, Logger logger)
         {
             _xbmcService = xbmcService;
+            _updateQueue = new MediaServerUpdateQueue<Xbmc, bool>(cacheManager);
             _logger = logger;
         }
 
@@ -99,6 +102,35 @@ namespace NzbDrone.Core.Notifications.Xbmc
 
         public override string Name => "Kodi";
 
+        public override void ProcessQueue()
+        {
+            _updateQueue.ProcessQueue(Settings.Host, (items) =>
+            {
+                _logger.Debug("Performing library update for {0} series", items.Count);
+
+                items.ForEach(item =>
+                {
+                    try
+                    {
+                        if (Settings.UpdateLibrary)
+                        {
+                            _xbmcService.Update(Settings, item.Series);
+                        }
+
+                        if (item.Info.Contains(true) && Settings.CleanLibrary)
+                        {
+                            _xbmcService.Clean(Settings);
+                        }
+                    }
+                    catch (SocketException ex)
+                    {
+                        var logMessage = string.Format("Unable to connect to Kodi Host: {0}:{1}", Settings.Host, Settings.Port);
+                        _logger.Debug(ex, logMessage);
+                    }
+                });
+            });
+        }
+
         public override ValidationResult Test()
         {
             var failures = new List<ValidationFailure>();
@@ -126,22 +158,10 @@ namespace NzbDrone.Core.Notifications.Xbmc
 
         private void UpdateAndClean(Series series, bool clean = true)
         {
-            try
+            if (Settings.UpdateLibrary || Settings.CleanLibrary)
             {
-                if (Settings.UpdateLibrary)
-                {
-                    _xbmcService.Update(Settings, series);
-                }
-
-                if (clean && Settings.CleanLibrary)
-                {
-                    _xbmcService.Clean(Settings);
-                }
-            }
-            catch (SocketException ex)
-            {
-                var logMessage = string.Format("Unable to connect to Kodi Host: {0}:{1}", Settings.Host, Settings.Port);
-                _logger.Debug(ex, logMessage);
+                _logger.Debug("Scheduling library update for series {0} {1}", series.Id, series.Title);
+                _updateQueue.Add(Settings.Host, series, clean);
             }
         }
     }
