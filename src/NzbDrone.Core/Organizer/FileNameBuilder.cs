@@ -6,7 +6,6 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Diacritical;
-using DryIoc.ImTools;
 using NLog;
 using NzbDrone.Common.Cache;
 using NzbDrone.Common.Disk;
@@ -111,6 +110,9 @@ namespace NzbDrone.Core.Organizer
             { "tib", "bod" },
             { "wel", "cym" }
         }.ToImmutableDictionary();
+
+        public static readonly ImmutableArray<string> BadCharacters = ImmutableArray.Create("\\", "/", "<", ">", "?", "*", "|", "\"");
+        public static readonly ImmutableArray<string> GoodCharacters = ImmutableArray.Create("+", "+", "", "", "!", "-", "", "");
 
         public FileNameBuilder(INamingConfigService namingConfigService,
                                IQualityDefinitionService qualityDefinitionService,
@@ -1156,8 +1158,6 @@ namespace NzbDrone.Core.Organizer
         private static string CleanFileName(string name, NamingConfig namingConfig)
         {
             var result = name;
-            string[] badCharacters = { "\\", "/", "<", ">", "?", "*", "|", "\"" };
-            string[] goodCharacters = { "+", "+", "", "", "!", "-", "", "" };
 
             if (namingConfig.ReplaceIllegalCharacters)
             {
@@ -1182,6 +1182,9 @@ namespace NzbDrone.Core.Organizer
                         case ColonReplacementFormat.SpaceDashSpace:
                             replacement = " - ";
                             break;
+                        case ColonReplacementFormat.Custom:
+                            replacement = namingConfig.CustomColonReplacementFormat;
+                            break;
                     }
 
                     result = result.Replace(":", replacement);
@@ -1192,9 +1195,9 @@ namespace NzbDrone.Core.Organizer
                 result = result.Replace(":", string.Empty);
             }
 
-            for (var i = 0; i < badCharacters.Length; i++)
+            for (var i = 0; i < BadCharacters.Length; i++)
             {
-                result = result.Replace(badCharacters[i], namingConfig.ReplaceIllegalCharacters ? goodCharacters[i] : string.Empty);
+                result = result.Replace(BadCharacters[i], namingConfig.ReplaceIllegalCharacters ? GoodCharacters[i] : string.Empty);
             }
 
             return result.TrimStart(' ', '.').TrimEnd(' ');
@@ -1268,6 +1271,7 @@ namespace NzbDrone.Core.Organizer
         Dash = 1,
         SpaceDash = 2,
         SpaceDashSpace = 3,
-        Smart = 4
+        Smart = 4,
+        Custom = 5
     }
 }
