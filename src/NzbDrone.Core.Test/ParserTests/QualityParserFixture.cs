@@ -254,6 +254,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series Title Season 2 (WEB 1080p HEVC Opus) [Netaro]", false)]
         [TestCase("Series.Title.S01E01.Erste.Begegnungen.German.DD51.Synced.DL.1080p.HBOMaxHD.AVC-TVS", false)]
         [TestCase("Series.Title.S01E05.Tavora.greift.an.German.DL.1080p.DisneyHD.h264-4SF", false)]
+        [TestCase("Series.Title.S02E04.German.Dubbed.DL.AAC.1080p.WEB.AVC-GROUP", false)]
         public void should_parse_webdl1080p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.WEBDL1080p, proper);
@@ -279,6 +280,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[HorribleSubs] Series Title! S01 [Web][MKV][h264][2160p][AAC 2.0][Softsubs (HorribleSubs)]", false)]
         [TestCase("Series Title S02 2013 WEB-DL 4k H265 AAC 2Audio-HDSWEB", false)]
         [TestCase("Series.Title.S02E02.This.Year.Will.Be.Different.2160p.WEB.H.265", false)]
+        [TestCase("Series.Title.S02E04.German.Dubbed.DL.AAC.2160p.DV.HDR.WEB.HEVC-GROUP", false)]
         public void should_parse_webdl2160p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.WEBDL2160p, proper);
