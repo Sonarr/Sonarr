@@ -118,6 +118,7 @@ function RemoveQueueItemModal(props: RemoveQueueItemModalProps) {
       {
         key: 'blocklistAndSearch',
         value: translate('BlocklistAndSearch'),
+        isDisabled: isPending,
         hint: multipleSelected
           ? translate('BlocklistAndSearchMultipleHint')
           : translate('BlocklistAndSearchHint'),
@@ -130,7 +131,7 @@ function RemoveQueueItemModal(props: RemoveQueueItemModalProps) {
           : translate('BlocklistOnlyHint'),
       },
     ];
-  }, [multipleSelected]);
+  }, [isPending, multipleSelected]);
 
   const handleRemovalMethodChange = useCallback(
     ({ value }: { value: RemovalMethod }) => {
