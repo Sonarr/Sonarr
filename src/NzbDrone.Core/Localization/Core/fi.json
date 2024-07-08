@@ -961,7 +961,7 @@
     "Global": "Yleiset",
     "GeneralSettings": "Yleiset asetukset",
     "ImportListsLoadError": "Tuontilistojen lataus epäonnistui",
-    "Importing": "Tuonti",
+    "Importing": "Tuodaan",
     "IndexerDownloadClientHealthCheckMessage": "Tietolähteet virheellisillä lataustyökaluilla: {indexerNames}.",
     "Indexer": "Tietolähde",
     "Location": "Sijainti",
