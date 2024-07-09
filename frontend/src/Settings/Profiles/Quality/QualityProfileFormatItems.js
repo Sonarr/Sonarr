@@ -18,9 +18,18 @@ function calcOrder(profileFormatItems) {
 
   return [...profileFormatItems].sort((a, b) => {
     if (b.score !== a.score) {
+      if (a.score === null) {
+        return 1;
+      }
+
+      if (b.score === null) {
+        return -1;
+      }
+
       return b.score - a.score;
     }
-    return a.name > b.name ? 1 : -1;
+
+    return a.name.localeCompare(b.name);
   }).map((x) => items[x.format]);
 }
 

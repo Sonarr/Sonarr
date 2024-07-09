@@ -56,13 +56,13 @@ class QualityProfileFormatItem extends Component {
 QualityProfileFormatItem.propTypes = {
   formatId: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
-  score: PropTypes.number.isRequired,
+  score: PropTypes.number,
   onScoreChange: PropTypes.func
 };
 
 QualityProfileFormatItem.defaultProps = {
   // To handle the case score is deleted during edit
-  score: 0
+  score: null
 };
 
 export default QualityProfileFormatItem;

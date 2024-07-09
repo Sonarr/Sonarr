@@ -148,7 +148,16 @@ namespace NzbDrone.Core.CustomFormats
         {
             var matches = new List<CustomFormat>();
 
-            foreach (var customFormat in allCustomFormats)
+            var profileFormatItems = input.Series?.QualityProfile?.Value?.FormatItems
+                .Where(f => f.Score.HasValue)
+                .Select(f => f.Format)
+                .ToList();
+
+            var customFormats = profileFormatItems == null
+                ? allCustomFormats
+                : allCustomFormats.Intersect(profileFormatItems).ToList();
+
+            foreach (var customFormat in customFormats)
             {
                 var specificationMatches = customFormat.Specifications
                     .GroupBy(t => t.GetType())

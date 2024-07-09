@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 using NzbDrone.Core.CustomFormats;
 using NzbDrone.Core.Profiles;
 using NzbDrone.Core.Profiles.Qualities;
@@ -35,7 +36,9 @@ namespace Sonarr.Api.V3.Profiles.Quality
     {
         public int Format { get; set; }
         public string Name { get; set; }
-        public int Score { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
+        public int? Score { get; set; }
     }
 
     public static class ProfileResourceMapper
