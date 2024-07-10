@@ -5,6 +5,7 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using NzbDrone.Core.AutoTagging;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
@@ -28,6 +29,10 @@ namespace NzbDrone.Core.Test.TvTests.SeriesServiceTests
                 .With(s => s.Path = @"C:\Test\name".AsOsAgnostic())
                 .With(s => s.RootFolderPath = "")
                 .Build().ToList();
+
+            Mocker.GetMock<IAutoTaggingService>()
+                .Setup(s => s.GetTagChanges(It.IsAny<Series>()))
+                .Returns(new AutoTaggingChanges());
         }
 
         [Test]
@@ -78,6 +83,24 @@ namespace NzbDrone.Core.Test.TvTests.SeriesServiceTests
                   .Returns<Series, NamingConfig>((s, n) => s.Title);
 
             Subject.UpdateSeries(series, false);
+        }
+
+        [Test]
+        public void should_add_and_remove_tags()
+        {
+            _series[0].Tags = new HashSet<int> { 1, 2 };
+
+            Mocker.GetMock<IAutoTaggingService>()
+                .Setup(s => s.GetTagChanges(_series[0]))
+                .Returns(new AutoTaggingChanges
+                {
+                    TagsToAdd = new HashSet<int> { 3 },
+                    TagsToRemove = new HashSet<int> { 1 }
+                });
+
+            var result = Subject.UpdateSeries(_series, false);
+
+            result[0].Tags.Should().BeEquivalentTo(new[] { 2, 3 });
         }
     }
 }
