@@ -75,7 +75,7 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
         [TestCase("I've Been Caught", "Ive Been Caught")]
         [TestCase("I'm Lost", "Im Lost")]
         [TestCase("That'll Be The Day", "Thatll Be The Day")]
-        [TestCase("I'd Rather Be Alone", "I'd Rather Be Alone")]
+        [TestCase("I'd Rather Be Alone", "Id Rather Be Alone")]
         [TestCase("I Can't Die", "I Cant Die")]
         [TestCase("Won`t Get Fooled Again", "Wont Get Fooled Again")]
         [TestCase("Don’t Blink", "Dont Blink")]
