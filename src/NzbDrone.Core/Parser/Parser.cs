@@ -946,6 +946,7 @@ namespace NzbDrone.Core.Parser
                 {
                     return string.Empty;
                 }
+
                 return m.Value;
             });
 
