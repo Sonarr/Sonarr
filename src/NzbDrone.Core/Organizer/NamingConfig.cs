@@ -9,6 +9,7 @@ namespace NzbDrone.Core.Organizer
             RenameEpisodes = false,
             ReplaceIllegalCharacters = true,
             ColonReplacementFormat = ColonReplacementFormat.Smart,
+            CustomColonReplacementFormat = string.Empty,
             MultiEpisodeStyle = MultiEpisodeStyle.PrefixedRange,
             StandardEpisodeFormat = "{Series Title} - S{season:00}E{episode:00} - {Episode Title} {Quality Full}",
             DailyEpisodeFormat = "{Series Title} - {Air-Date} - {Episode Title} {Quality Full}",
