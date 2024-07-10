@@ -90,5 +90,18 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
             Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
                 .Should().Be(expected);
         }
+
+        [TestCase("Series: Title", ColonReplacementFormat.Custom, "\ua789", "Series\ua789 Title")]
+        [TestCase("Series: Title", ColonReplacementFormat.Custom, "∶", "Series∶ Title")]
+        public void should_replace_colon_with_custom_format(string seriesName, ColonReplacementFormat replacementFormat, string customFormat, string expected)
+        {
+            _series.Title = seriesName;
+            _namingConfig.StandardEpisodeFormat = "{Series Title}";
+            _namingConfig.ColonReplacementFormat = replacementFormat;
+            _namingConfig.CustomColonReplacementFormat = customFormat;
+
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
+                .Should().Be(expected);
+        }
     }
 }

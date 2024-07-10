@@ -138,7 +138,8 @@ class Naming extends Component {
       { key: 1, value: translate('ReplaceWithDash') },
       { key: 2, value: translate('ReplaceWithSpaceDash') },
       { key: 3, value: translate('ReplaceWithSpaceDashSpace') },
-      { key: 4, value: translate('SmartReplace'), hint: translate('SmartReplaceHint') }
+      { key: 4, value: translate('SmartReplace'), hint: translate('SmartReplaceHint') },
+      { key: 5, value: translate('Custom'), hint: translate('CustomColonReplacementFormatHint') }
     ];
 
     const standardEpisodeFormatHelpTexts = [];
@@ -257,6 +258,22 @@ class Naming extends Component {
                       helpText={translate('ColonReplacementFormatHelpText')}
                       onChange={onInputChange}
                       {...settings.colonReplacementFormat}
+                    />
+                  </FormGroup> :
+                  null
+              }
+
+              {
+                replaceIllegalCharacters && settings.colonReplacementFormat.value === 5 ?
+                  <FormGroup>
+                    <FormLabel>{translate('ColonReplacement')}</FormLabel>
+
+                    <FormInputGroup
+                      type={inputTypes.TEXT}
+                      name="customColonReplacementFormat"
+                      helpText={translate('CustomColonReplacementFormatHelpText')}
+                      onChange={onInputChange}
+                      {...settings.customColonReplacementFormat}
                     />
                   </FormGroup> :
                   null
