@@ -4841,6 +4841,13 @@
             }
           },
           {
+            "name": "customColonReplacementFormat",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "multiEpisodeStyle",
             "in": "query",
             "schema": {
@@ -10006,6 +10013,10 @@
             "type": "integer",
             "format": "int32"
           },
+          "customColonReplacementFormat": {
+            "type": "string",
+            "nullable": true
+          },
           "multiEpisodeStyle": {
             "type": "integer",
             "format": "int32"
@@ -10110,6 +10121,9 @@
           "onUpgrade": {
             "type": "boolean"
           },
+          "onImportComplete": {
+            "type": "boolean"
+          },
           "onRename": {
             "type": "boolean"
           },
@@ -10147,6 +10161,9 @@
             "type": "boolean"
           },
           "supportsOnUpgrade": {
+            "type": "boolean"
+          },
+          "supportsOnImportComplete": {
             "type": "boolean"
           },
           "supportsOnRename": {
