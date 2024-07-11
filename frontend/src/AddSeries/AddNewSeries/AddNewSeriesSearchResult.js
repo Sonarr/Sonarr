@@ -145,6 +145,7 @@ class AddNewSeriesSearchResult extends Component {
               <Label size={sizes.LARGE}>
                 <HeartRating
                   rating={ratings.value}
+                  votes={ratings.votes}
                   iconSize={13}
                 />
               </Label>
