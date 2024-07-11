@@ -128,8 +128,16 @@ export const filterPredicates = {
 
   ratings: function(item, filterValue, type) {
     const predicate = filterTypePredicates[type];
+    const { value = 0 } = item.ratings;
 
-    return predicate(item.ratings.value * 10, filterValue);
+    return predicate(value * 10, filterValue);
+  },
+
+  ratingVotes: function(item, filterValue, type) {
+    const predicate = filterTypePredicates[type];
+    const { votes = 0 } = item.ratings;
+
+    return predicate(votes, filterValue);
   },
 
   originalLanguage: function(item, filterValue, type) {
@@ -345,6 +353,11 @@ export const filterBuilderProps = [
   {
     name: 'ratings',
     label: () => translate('Rating'),
+    type: filterBuilderTypes.NUMBER
+  },
+  {
+    name: 'ratingVotes',
+    label: () => translate('RatingVotes'),
     type: filterBuilderTypes.NUMBER
   },
   {
