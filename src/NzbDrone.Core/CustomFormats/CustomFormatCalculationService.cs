@@ -149,7 +149,7 @@ namespace NzbDrone.Core.CustomFormats
             var matches = new List<CustomFormat>();
 
             var profileFormatItems = input.Series?.QualityProfile?.Value?.FormatItems
-                .Where(f => f.Score.HasValue)
+                .Where(f => f.Enabled)
                 .Select(f => f.Format)
                 .ToList();
 

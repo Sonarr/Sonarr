@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json.Serialization;
 using NzbDrone.Core.CustomFormats;
 using NzbDrone.Core.Profiles;
 using NzbDrone.Core.Profiles.Qualities;
@@ -36,9 +35,8 @@ namespace Sonarr.Api.V3.Profiles.Quality
     {
         public int Format { get; set; }
         public string Name { get; set; }
-
-        [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
-        public int? Score { get; set; }
+        public int Score { get; set; }
+        public bool Enabled { get; set; } = true;
     }
 
     public static class ProfileResourceMapper
@@ -86,7 +84,8 @@ namespace Sonarr.Api.V3.Profiles.Quality
             {
                 Format = model.Format.Id,
                 Name = model.Format.Name,
-                Score = model.Score
+                Score = model.Score,
+                Enabled = model.Enabled
             };
         }
 
@@ -132,7 +131,8 @@ namespace Sonarr.Api.V3.Profiles.Quality
             return new ProfileFormatItem
             {
                 Format = new CustomFormat { Id = resource.Format },
-                Score = resource.Score
+                Score = resource.Score,
+                Enabled = resource.Enabled
             };
         }
 

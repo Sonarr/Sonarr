@@ -18,14 +18,6 @@ function calcOrder(profileFormatItems) {
 
   return [...profileFormatItems].sort((a, b) => {
     if (b.score !== a.score) {
-      if (a.score === null) {
-        return 1;
-      }
-
-      if (b.score === null) {
-        return -1;
-      }
-
       return b.score - a.score;
     }
 
