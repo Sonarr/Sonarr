@@ -133,7 +133,7 @@ namespace NzbDrone.Common.Test
 
         [TestCase(@"C:\test\", @"C:\Test\mydir")]
         [TestCase(@"C:\test", @"C:\Test\mydir\")]
-        public void path_should_be_parent_on_windows_only(string parentPath, string childPath)
+        public void windows_path_should_be_parent(string parentPath, string childPath)
         {
             var expectedResult = OsInfo.IsWindows;
 
@@ -145,22 +145,22 @@ namespace NzbDrone.Common.Test
         [TestCase(@"C:\", null)]
         [TestCase(@"\\server\share", null)]
         [TestCase(@"\\server\share\test", @"\\server\share")]
-        public void path_should_return_parent_windows(string path, string parentPath)
+        public void windows_path_should_return_parent(string path, string parentPath)
         {
-            WindowsOnly();
             path.GetParentPath().Should().Be(parentPath);
         }
 
         [TestCase(@"/", null)]
         [TestCase(@"/test", "/")]
-        public void path_should_return_parent_mono(string path, string parentPath)
+        [TestCase(@"/test/tv", "/test")]
+        public void unix_path_should_return_parent(string path, string parentPath)
         {
-            PosixOnly();
             path.GetParentPath().Should().Be(parentPath);
         }
 
         [TestCase(@"C:\Test\mydir", "Test")]
         [TestCase(@"C:\Test\", @"C:\")]
+        [TestCase(@"C:\Test", @"C:\")]
         [TestCase(@"C:\", null)]
         [TestCase(@"\\server\share", null)]
         [TestCase(@"\\server\share\test", @"\\server\share")]
@@ -172,10 +172,29 @@ namespace NzbDrone.Common.Test
 
         [TestCase(@"/", null)]
         [TestCase(@"/test", "/")]
+        [TestCase(@"/test/tv", "test")]
         public void path_should_return_parent_name_mono(string path, string parentPath)
         {
             PosixOnly();
             path.GetParentName().Should().Be(parentPath);
+        }
+
+        [TestCase(@"C:\Test\mydir", "mydir")]
+        [TestCase(@"C:\Test\", "Test")]
+        [TestCase(@"C:\Test", "Test")]
+        [TestCase(@"C:\", "C:\\")]
+        [TestCase(@"\\server\share", @"\\server\share")]
+        [TestCase(@"\\server\share\test", "test")]
+        public void path_should_return_directory_name_windows(string path, string parentPath)
+        {
+            path.GetDirectoryName().Should().Be(parentPath);
+        }
+
+        [TestCase(@"/test", "test")]
+        [TestCase(@"/test/tv", "tv")]
+        public void path_should_return_directory_name_mono(string path, string parentPath)
+        {
+            path.GetDirectoryName().Should().Be(parentPath);
         }
 
         [Test]
