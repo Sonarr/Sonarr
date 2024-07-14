@@ -6,13 +6,13 @@ on:
       - develop
       - main
     paths-ignore:
-      - 'src/Sonarr.Api.*/openapi.json'
+      - "src/Sonarr.Api.*/openapi.json"
   pull_request:
     branches:
       - develop
     paths-ignore:
-      - 'src/NzbDrone.Core/Localization/Core/**'
-      - 'src/Sonarr.Api.*/openapi.json'
+      - "src/NzbDrone.Core/Localization/Core/**"
+      - "src/Sonarr.Api.*/openapi.json"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -22,7 +22,7 @@ env:
   FRAMEWORK: net6.0
   RAW_BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
   SONARR_MAJOR_VERSION: 4
-  VERSION: 4.0.6
+  VERSION: 4.0.7
 
 jobs:
   backend:
@@ -32,105 +32,105 @@ jobs:
       major_version: ${{ steps.variables.outputs.major_version }}
       version: ${{ steps.variables.outputs.version }}
     steps:
-    - name: Check out
-      uses: actions/checkout@v4
+      - name: Check out
+        uses: actions/checkout@v4
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
 
-    - name: Setup Environment Variables
-      id: variables
-      shell: bash
-      run: |
-        # Add 800 to the build number because GitHub won't let us pick an arbitrary starting point
-        SONARR_VERSION="${{ env.VERSION }}.$((${{ github.run_number }}+800))"
-        DOTNET_VERSION=$(jq -r '.sdk.version' global.json)
+      - name: Setup Environment Variables
+        id: variables
+        shell: bash
+        run: |
+          # Add 800 to the build number because GitHub won't let us pick an arbitrary starting point
+          SONARR_VERSION="${{ env.VERSION }}.$((${{ github.run_number }}+800))"
+          DOTNET_VERSION=$(jq -r '.sdk.version' global.json)
 
-        echo "SDK_PATH=${{ env.DOTNET_ROOT }}/sdk/${DOTNET_VERSION}" >> "$GITHUB_ENV"
-        echo "SONARR_VERSION=$SONARR_VERSION" >> "$GITHUB_ENV"
-        echo "BRANCH=${RAW_BRANCH_NAME//\//-}" >> "$GITHUB_ENV"
+          echo "SDK_PATH=${{ env.DOTNET_ROOT }}/sdk/${DOTNET_VERSION}" >> "$GITHUB_ENV"
+          echo "SONARR_VERSION=$SONARR_VERSION" >> "$GITHUB_ENV"
+          echo "BRANCH=${RAW_BRANCH_NAME//\//-}" >> "$GITHUB_ENV"
 
-        echo "framework=${{ env.FRAMEWORK }}" >> "$GITHUB_OUTPUT"
-        echo "major_version=${{ env.SONARR_MAJOR_VERSION }}" >> "$GITHUB_OUTPUT"
-        echo "version=$SONARR_VERSION" >> "$GITHUB_OUTPUT"
+          echo "framework=${{ env.FRAMEWORK }}" >> "$GITHUB_OUTPUT"
+          echo "major_version=${{ env.SONARR_MAJOR_VERSION }}" >> "$GITHUB_OUTPUT"
+          echo "version=$SONARR_VERSION" >> "$GITHUB_OUTPUT"
 
-    - name: Enable Extra Platforms In SDK
-      shell: bash
-      run: ./build.sh --enable-extra-platforms-in-sdk
+      - name: Enable Extra Platforms In SDK
+        shell: bash
+        run: ./build.sh --enable-extra-platforms-in-sdk
 
-    - name: Build Backend
-      shell: bash
-      run: ./build.sh --backend --enable-extra-platforms --packages
+      - name: Build Backend
+        shell: bash
+        run: ./build.sh --backend --enable-extra-platforms --packages
 
-    # Test Artifacts
+      # Test Artifacts
 
-    - name: Publish win-x64 Test Artifact
-      uses: ./.github/actions/publish-test-artifact
-      with:
-        framework: ${{ env.FRAMEWORK }}
-        runtime: win-x64
+      - name: Publish win-x64 Test Artifact
+        uses: ./.github/actions/publish-test-artifact
+        with:
+          framework: ${{ env.FRAMEWORK }}
+          runtime: win-x64
 
-    - name: Publish linux-x64 Test Artifact
-      uses: ./.github/actions/publish-test-artifact
-      with:
-        framework: ${{ env.FRAMEWORK }}
-        runtime: linux-x64
+      - name: Publish linux-x64 Test Artifact
+        uses: ./.github/actions/publish-test-artifact
+        with:
+          framework: ${{ env.FRAMEWORK }}
+          runtime: linux-x64
 
-    - name: Publish osx-arm64 Test Artifact
-      uses: ./.github/actions/publish-test-artifact
-      with:
-        framework: ${{ env.FRAMEWORK }}
-        runtime: osx-arm64
+      - name: Publish osx-arm64 Test Artifact
+        uses: ./.github/actions/publish-test-artifact
+        with:
+          framework: ${{ env.FRAMEWORK }}
+          runtime: osx-arm64
 
-    # Build Artifacts (grouped by OS)
-    
-    - name: Publish FreeBSD Artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: build_freebsd
-        path: _artifacts/freebsd-*/**/*
-    - name: Publish Linux Artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: build_linux
-        path: _artifacts/linux-*/**/*
-    - name: Publish macOS Artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: build_macos
-        path: _artifacts/osx-*/**/*
-    - name: Publish Windows Artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: build_windows
-        path: _artifacts/win-*/**/*
+      # Build Artifacts (grouped by OS)
+
+      - name: Publish FreeBSD Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build_freebsd
+          path: _artifacts/freebsd-*/**/*
+      - name: Publish Linux Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build_linux
+          path: _artifacts/linux-*/**/*
+      - name: Publish macOS Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build_macos
+          path: _artifacts/osx-*/**/*
+      - name: Publish Windows Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build_windows
+          path: _artifacts/win-*/**/*
 
   frontend:
     runs-on: ubuntu-latest
     steps:
-    - name: Check out
-      uses: actions/checkout@v4
+      - name: Check out
+        uses: actions/checkout@v4
 
-    - name: Volta
-      uses: volta-cli/action@v4
+      - name: Volta
+        uses: volta-cli/action@v4
 
-    - name: Yarn Install
-      run: yarn install
+      - name: Yarn Install
+        run: yarn install
 
-    - name: Lint
-      run: yarn lint
+      - name: Lint
+        run: yarn lint
 
-    - name: Stylelint
-      run: yarn stylelint -f github
+      - name: Stylelint
+        run: yarn stylelint -f github
 
-    - name: Build
-      run: yarn build --env production
+      - name: Build
+        run: yarn build --env production
 
-    - name: Publish UI Artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: build_ui
-        path: _output/UI/**/*
+      - name: Publish UI Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build_ui
+          path: _output/UI/**/*
 
   unit_test:
     needs: backend
@@ -150,32 +150,32 @@ jobs:
             filter: TestCategory!=ManualTest&TestCategory!=LINUX&TestCategory!=IntegrationTest&TestCategory!=AutomationTest
     runs-on: ${{ matrix.os }}
     steps:
-    - name: Check out
-      uses: actions/checkout@v4
+      - name: Check out
+        uses: actions/checkout@v4
 
-    - name: Test
-      uses: ./.github/actions/test
-      with:
-        os: ${{ matrix.os }}
-        artifact: ${{ matrix.artifact }}
-        pattern: Sonarr.*.Test.dll
-        filter: ${{ matrix.filter }}
+      - name: Test
+        uses: ./.github/actions/test
+        with:
+          os: ${{ matrix.os }}
+          artifact: ${{ matrix.artifact }}
+          pattern: Sonarr.*.Test.dll
+          filter: ${{ matrix.filter }}
 
   unit_test_postgres:
     needs: backend
     runs-on: ubuntu-latest
     steps:
-    - name: Check out
-      uses: actions/checkout@v4
+      - name: Check out
+        uses: actions/checkout@v4
 
-    - name: Test
-      uses: ./.github/actions/test
-      with:
-        os: ubuntu-latest
-        artifact: tests-linux-x64
-        pattern: Sonarr.*.Test.dll
-        filter: TestCategory!=ManualTest&TestCategory!=WINDOWS&TestCategory!=IntegrationTest&TestCategory!=AutomationTest
-        use_postgres: true
+      - name: Test
+        uses: ./.github/actions/test
+        with:
+          os: ubuntu-latest
+          artifact: tests-linux-x64
+          pattern: Sonarr.*.Test.dll
+          filter: TestCategory!=ManualTest&TestCategory!=WINDOWS&TestCategory!=IntegrationTest&TestCategory!=AutomationTest
+          use_postgres: true
 
   integration_test:
     needs: backend
@@ -201,19 +201,19 @@ jobs:
             binary_path: win-x64/${{ needs.backend.outputs.framework }}/Sonarr
     runs-on: ${{ matrix.os }}
     steps:
-    - name: Check out
-      uses: actions/checkout@v4
+      - name: Check out
+        uses: actions/checkout@v4
 
-    - name: Test
-      uses: ./.github/actions/test
-      with:
-        os: ${{ matrix.os }}
-        artifact: ${{ matrix.artifact }}
-        pattern: Sonarr.*.Test.dll
-        filter: ${{ matrix.filter }}
-        integration_tests: true
-        binary_artifact: ${{ matrix.binary_artifact }}
-        binary_path: ${{ matrix.binary_path }}
+      - name: Test
+        uses: ./.github/actions/test
+        with:
+          os: ${{ matrix.os }}
+          artifact: ${{ matrix.artifact }}
+          pattern: Sonarr.*.Test.dll
+          filter: ${{ matrix.filter }}
+          integration_tests: true
+          binary_artifact: ${{ matrix.binary_artifact }}
+          binary_path: ${{ matrix.binary_path }}
 
   deploy:
     if: ${{ github.ref_name == 'develop' || github.ref_name == 'main' }}
@@ -228,7 +228,15 @@ jobs:
 
   notify:
     name: Discord Notification
-    needs: [backend, frontend, unit_test, unit_test_postgres, integration_test, deploy]
+    needs:
+      [
+        backend,
+        frontend,
+        unit_test,
+        unit_test_postgres,
+        integration_test,
+        deploy,
+      ]
     if: ${{ !cancelled() && (github.ref_name == 'develop' || github.ref_name == 'main') }}
     env:
       STATUS: ${{ contains(needs.*.result, 'failure') && 'failure' || 'success' }}
@@ -239,10 +247,10 @@ jobs:
         uses: tsickert/discord-webhook@v6.0.0
         with:
           webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }}
-          username: 'GitHub Actions'
-          avatar-url: 'https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png'
+          username: "GitHub Actions"
+          avatar-url: "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
           embed-title: "${{ github.workflow }}: ${{ env.STATUS == 'success' && 'Success' || 'Failure' }}"
-          embed-url: 'https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+          embed-url: "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           embed-description: |
             **Branch** ${{ github.ref }}
             **Build** ${{ needs.backend.outputs.version }}
