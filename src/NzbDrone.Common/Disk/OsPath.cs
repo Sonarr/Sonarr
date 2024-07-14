@@ -10,7 +10,7 @@ namespace NzbDrone.Common.Disk
         private readonly string _path;
         private readonly OsPathKind _kind;
 
-        private static readonly Regex UncPathRegex = new Regex(@"^\\\\(?:\?\\UNC\\)?[^\\]+\\[^\\]+(?:\\|$)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex UncPathRegex = new Regex(@"(?<unc>^\\\\(?:\?\\UNC\\)?[^\\]+\\[^\\]+)(?:\\|$)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public OsPath(string path)
         {
@@ -22,7 +22,7 @@ namespace NzbDrone.Common.Disk
             else
             {
                 _kind = DetectPathKind(path);
-                _path = TrimTrailingSlashes(FixSlashes(path, _kind), _kind);
+                _path = FixSlashes(path, _kind);
             }
         }
 
@@ -36,7 +36,7 @@ namespace NzbDrone.Common.Disk
             else
             {
                 _kind = kind;
-                _path = TrimTrailingSlashes(FixSlashes(path, kind), kind);
+                _path = FixSlashes(path, kind);
             }
         }
 
@@ -99,7 +99,7 @@ namespace NzbDrone.Common.Disk
             return path;
         }
 
-        private static string TrimTrailingSlashes(string path, OsPathKind kind)
+        private static string TrimTrailingSlash(string path, OsPathKind kind)
         {
             switch (kind)
             {
@@ -156,7 +156,7 @@ namespace NzbDrone.Common.Disk
                     return Null;
                 }
 
-                if (rootLength > index)
+                if (rootLength > index + 1)
                 {
                     return new OsPath(_path.Substring(0, rootLength));
                 }
@@ -166,6 +166,8 @@ namespace NzbDrone.Common.Disk
         }
 
         public string FullPath => _path;
+
+        public string PathWithoutTrailingSlash => TrimTrailingSlash(_path, _kind);
 
         public string FileName
         {
@@ -186,6 +188,30 @@ namespace NzbDrone.Common.Disk
                 }
 
                 return _path.Substring(index).Trim('\\', '/');
+            }
+        }
+
+        public string Name
+        {
+            // Meant to behave similar to DirectoryInfo.Name
+
+            get
+            {
+                var index = GetFileNameIndex();
+
+                if (index == -1)
+                {
+                    return PathWithoutTrailingSlash;
+                }
+
+                var rootLength = GetRootLength();
+
+                if (rootLength > index + 1)
+                {
+                    return _path.Substring(0, rootLength);
+                }
+
+                return TrimTrailingSlash(_path.Substring(index).TrimStart('/', '\\'), _kind);
             }
         }
 
@@ -242,7 +268,7 @@ namespace NzbDrone.Common.Disk
                 // \\?\UNC\server\share\ or \\server\share
                 if (uncMatch.Success)
                 {
-                    return uncMatch.Length;
+                    return uncMatch.Groups["unc"].Length;
                 }
 
                 // \\?\C:\
@@ -345,8 +371,8 @@ namespace NzbDrone.Common.Disk
                 return true;
             }
 
-            var left = _path;
-            var right = other._path;
+            var left = PathWithoutTrailingSlash;
+            var right = other.PathWithoutTrailingSlash;
 
             if (Kind == OsPathKind.Windows || other.Kind == OsPathKind.Windows)
             {

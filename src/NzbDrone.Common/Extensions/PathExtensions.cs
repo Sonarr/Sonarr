@@ -99,35 +99,23 @@ namespace NzbDrone.Common.Extensions
                 return null;
             }
 
-            var path = new OsPath(cleanPath).Directory.AsDirectory();
+            var path = new OsPath(cleanPath).Directory;
 
-            return path == OsPath.Null ? null : path.FullPath;
+            return path == OsPath.Null ? null : path.PathWithoutTrailingSlash;
         }
 
         public static string GetParentName(this string childPath)
         {
-            var cleanPath = childPath.GetCleanPath();
+            var path = new OsPath(childPath).Directory;
 
-            if (cleanPath.IsNullOrWhiteSpace())
-            {
-                return null;
-            }
-
-            return Directory.GetParent(cleanPath)?.Name;
+            return path == OsPath.Null ? null : path.Name;
         }
 
         public static string GetDirectoryName(this string childPath)
         {
-            var cleanPath = childPath.GetCleanPath();
+            var path = new OsPath(childPath);
 
-            if (cleanPath.IsNullOrWhiteSpace())
-            {
-                return null;
-            }
-
-            var directoryInfo = new DirectoryInfo(cleanPath);
-
-            return directoryInfo.Name;
+            return path == OsPath.Null ? null : path.Name;
         }
 
         public static string GetCleanPath(this string path)
