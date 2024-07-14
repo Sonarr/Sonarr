@@ -1309,7 +1309,6 @@
     "OnApplicationUpdate": "程序更新时",
     "OnHealthIssue": "健康度异常",
     "OnHealthRestored": "健康度恢复",
-    "OnImport": "导入中",
     "Password": "密码",
     "PendingDownloadClientUnavailable": "挂起 - 下载客户端不可用",
     "QueueLoadError": "加载队列失败",

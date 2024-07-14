@@ -1526,7 +1526,6 @@
     "ShowQualityProfile": "Mostrar perfil de calidad",
     "ShowQualityProfileHelpText": "Muestra el perfil de calidad bajo el póster",
     "ShowRelativeDates": "Mostrar fechas relativas",
-    "OnImport": "Al importar",
     "Other": "Otro",
     "ShowRelativeDatesHelpText": "Muestra fechas absolutas o relativas (Hoy/Ayer/etc)",
     "Proxy": "Proxy",
@@ -2081,5 +2080,10 @@
     "DayOfWeekAt": "{day} a las {time}",
     "UnableToImportAutomatically": "No se pudo importar automáticamente",
     "NotificationsPlexSettingsServer": "Servidor",
-    "NotificationsPlexSettingsServerHelpText": "Selecciona el servidor desde una cuenta de plex.tv después de autenticarse"
+    "NotificationsPlexSettingsServerHelpText": "Selecciona el servidor desde una cuenta de plex.tv después de autenticarse",
+    "CustomColonReplacement": "Reemplazo personalizado de dos puntos",
+    "CustomColonReplacementFormatHelpText": "Caracteres que serán usados como reemplazo para los dos puntos",
+    "CustomColonReplacementFormatHint": "Caracteres válidos del sistema de archivos como dos puntos (letra)",
+    "OnFileImport": "Al importar un archivo",
+    "OnImportComplete": "Al completar la importación"
 }

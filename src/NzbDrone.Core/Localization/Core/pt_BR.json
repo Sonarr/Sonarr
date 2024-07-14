@@ -686,7 +686,6 @@
     "OnGrab": "Ao obter",
     "OnHealthIssue": "Ao Problema de Saúde",
     "OnHealthRestored": "Com a Saúde Restaurada",
-    "OnImport": "Ao Importar",
     "OnRename": "Ao Renomear",
     "OnSeriesAdd": "Ao Adicionar Série",
     "OnSeriesDelete": "Ao Excluir Série",
@@ -1262,7 +1261,7 @@
     "OverrideGrabNoQuality": "A qualidade deve ser selecionada",
     "OverrideGrabNoSeries": "A série deve ser selecionada",
     "Parse": "Analisar",
-    "ParseModalHelpTextDetails": "{appName} tentará analisar o título e mostrar detalhes sobre ele",
+    "ParseModalHelpTextDetails": "O {appName} tentará analisar o título e mostrar detalhes sobre ele",
     "RecentChanges": "Mudanças Recentes",
     "ReleaseRejected": "Lançamento Rejeitado",
     "ReleaseSceneIndicatorAssumingScene": "Assumindo a Numeração da Scene.",
@@ -2079,5 +2078,12 @@
     "TomorrowAt": "Amanhã às {time}",
     "HasUnmonitoredSeason": "Tem Temporada Não Monitorada",
     "YesterdayAt": "Ontem às {time}",
-    "UnableToImportAutomatically": "Não foi possível importar automaticamente"
+    "UnableToImportAutomatically": "Não foi possível importar automaticamente",
+    "CustomColonReplacement": "Substituto de Dois Pontos Personalizado",
+    "CustomColonReplacementFormatHint": "Caractere válido do sistema de arquivos, como dois pontos (letra)",
+    "NotificationsPlexSettingsServerHelpText": "Selecione o servidor da conta plex.tv após a autenticação",
+    "OnFileImport": "Ao Importar o Arquivo",
+    "OnImportComplete": "Ao Completar Importação",
+    "CustomColonReplacementFormatHelpText": "Caracteres a serem usados em substituição aos dois pontos",
+    "NotificationsPlexSettingsServer": "Servidor"
 }
