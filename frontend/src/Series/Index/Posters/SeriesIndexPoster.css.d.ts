@@ -10,6 +10,8 @@ interface CssExports {
   'nextAiring': string;
   'overlayTitle': string;
   'posterContainer': string;
+  'tags': string;
+  'tagsList': string;
   'title': string;
 }
 export const cssExports: CssExports;

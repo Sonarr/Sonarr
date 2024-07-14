@@ -5,6 +5,7 @@ import { REFRESH_SERIES, SERIES_SEARCH } from 'Commands/commandNames';
 import IconButton from 'Components/Link/IconButton';
 import Link from 'Components/Link/Link';
 import SpinnerIconButton from 'Components/Link/SpinnerIconButton';
+import TagListConnector from 'Components/TagListConnector';
 import { icons } from 'Helpers/Props';
 import DeleteSeriesModal from 'Series/Delete/DeleteSeriesModal';
 import EditSeriesModalConnector from 'Series/Edit/EditSeriesModalConnector';
@@ -70,6 +71,7 @@ function SeriesIndexOverview(props: SeriesIndexOverviewProps) {
     overview,
     statistics = {} as Statistics,
     images,
+    tags,
     network,
   } = series;
 
@@ -205,15 +207,22 @@ function SeriesIndexOverview(props: SeriesIndexOverviewProps) {
           </div>
 
           <div className={styles.details}>
-            <Link className={styles.overview} to={link}>
-              <TextTruncate
-                line={Math.floor(
-                  overviewHeight / (defaultFontSize * lineHeight)
-                )}
-                text={overview}
-              />
-            </Link>
+            <div className={styles.overviewContainer}>
+              <Link className={styles.overview} to={link}>
+                <TextTruncate
+                  line={Math.floor(
+                    overviewHeight / (defaultFontSize * lineHeight)
+                  )}
+                  text={overview}
+                />
+              </Link>
 
+              {overviewOptions.showTags ? (
+                <div className={styles.tags}>
+                  <TagListConnector tags={tags} />
+                </div>
+              ) : null}
+            </div>
             <SeriesIndexOverviewInfo
               height={overviewHeight}
               monitored={monitored}

@@ -20,6 +20,7 @@ export interface SeriesIndexAppState {
     showTitle: boolean;
     showMonitored: boolean;
     showQualityProfile: boolean;
+    showTags: boolean;
     showSearchAction: boolean;
   };
 
@@ -34,6 +35,7 @@ export interface SeriesIndexAppState {
     showSeasonCount: boolean;
     showPath: boolean;
     showSizeOnDisk: boolean;
+    showTags: boolean;
     showSearchAction: boolean;
   };
 
