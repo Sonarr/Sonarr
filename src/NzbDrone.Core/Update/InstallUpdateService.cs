@@ -83,7 +83,7 @@ namespace NzbDrone.Core.Update
         {
             EnsureAppDataSafety();
 
-            if (OsInfo.IsWindows || _configFileProvider.UpdateMechanism != UpdateMechanism.Script)
+            if (_configFileProvider.UpdateMechanism != UpdateMechanism.Script)
             {
                 var startupFolder = _appFolderInfo.StartUpFolder;
                 var uiFolder = Path.Combine(startupFolder, "UI");
@@ -143,7 +143,7 @@ namespace NzbDrone.Core.Update
 
             _backupService.Backup(BackupType.Update);
 
-            if (OsInfo.IsNotWindows && _configFileProvider.UpdateMechanism == UpdateMechanism.Script)
+            if (_configFileProvider.UpdateMechanism == UpdateMechanism.Script)
             {
                 InstallUpdateWithScript(updateSandboxFolder);
                 return true;

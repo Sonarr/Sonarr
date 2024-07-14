@@ -40,7 +40,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
             var startupFolder = _appFolderInfo.StartUpFolder;
             var uiFolder = Path.Combine(startupFolder, "UI");
 
-            if ((OsInfo.IsWindows || _configFileProvider.UpdateAutomatically) &&
+            if (_configFileProvider.UpdateAutomatically &&
                 _configFileProvider.UpdateMechanism == UpdateMechanism.BuiltIn &&
                 !_osInfo.IsDocker)
             {

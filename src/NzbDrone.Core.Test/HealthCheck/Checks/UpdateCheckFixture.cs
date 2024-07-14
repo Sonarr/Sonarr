@@ -7,6 +7,7 @@ using NzbDrone.Core.HealthCheck.Checks;
 using NzbDrone.Core.Localization;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Update;
+using NzbDrone.Test.Common;
 
 namespace NzbDrone.Core.Test.HealthCheck.Checks
 {
@@ -22,27 +23,9 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
         }
 
         [Test]
-        public void should_return_error_when_app_folder_is_write_protected()
-        {
-            WindowsOnly();
-
-            Mocker.GetMock<IAppFolderInfo>()
-                  .Setup(s => s.StartUpFolder)
-                  .Returns(@"C:\NzbDrone");
-
-            Mocker.GetMock<IDiskProvider>()
-                  .Setup(c => c.FolderWritable(It.IsAny<string>()))
-                  .Returns(false);
-
-            Subject.Check().ShouldBeError();
-        }
-
-        [Test]
         public void should_return_error_when_app_folder_is_write_protected_and_update_automatically_is_enabled()
         {
-            PosixOnly();
-
-            const string startupFolder = @"/opt/nzbdrone";
+            var startupFolder = @"C:\NzbDrone".AsOsAgnostic();
 
             Mocker.GetMock<IConfigFileProvider>()
                   .Setup(s => s.UpdateAutomatically)
@@ -62,10 +45,8 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
         [Test]
         public void should_return_error_when_ui_folder_is_write_protected_and_update_automatically_is_enabled()
         {
-            PosixOnly();
-
-            const string startupFolder = @"/opt/nzbdrone";
-            const string uiFolder = @"/opt/nzbdrone/UI";
+            var startupFolder = @"C:\NzbDrone".AsOsAgnostic();
+            var uiFolder = @"C:\NzbDrone\UI".AsOsAgnostic();
 
             Mocker.GetMock<IConfigFileProvider>()
                   .Setup(s => s.UpdateAutomatically)
@@ -89,7 +70,7 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
         [Test]
         public void should_not_return_error_when_app_folder_is_write_protected_and_external_script_enabled()
         {
-            PosixOnly();
+            var startupFolder = @"C:\NzbDrone".AsOsAgnostic();
 
             Mocker.GetMock<IConfigFileProvider>()
                   .Setup(s => s.UpdateAutomatically)
@@ -101,7 +82,7 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
 
             Mocker.GetMock<IAppFolderInfo>()
                   .Setup(s => s.StartUpFolder)
-                  .Returns(@"/opt/nzbdrone");
+                  .Returns(startupFolder);
 
             Mocker.GetMock<IDiskProvider>()
                   .Verify(c => c.FolderWritable(It.IsAny<string>()), Times.Never());
