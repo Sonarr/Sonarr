@@ -92,14 +92,7 @@ namespace NzbDrone.Common.Extensions
 
         public static string GetParentPath(this string childPath)
         {
-            var cleanPath = childPath.GetCleanPath();
-
-            if (cleanPath.IsNullOrWhiteSpace())
-            {
-                return null;
-            }
-
-            var path = new OsPath(cleanPath).Directory;
+            var path = new OsPath(childPath).Directory;
 
             return path == OsPath.Null ? null : path.PathWithoutTrailingSlash;
         }
@@ -134,7 +127,7 @@ namespace NzbDrone.Common.Extensions
 
             while (child.Directory != OsPath.Null)
             {
-                if (child.Directory.Equals(parent))
+                if (child.Directory.Equals(parent, true))
                 {
                     return true;
                 }

@@ -135,9 +135,14 @@ namespace NzbDrone.Common.Test
         [TestCase(@"C:\test", @"C:\Test\mydir\")]
         public void windows_path_should_be_parent(string parentPath, string childPath)
         {
-            var expectedResult = OsInfo.IsWindows;
+            parentPath.IsParentPath(childPath).Should().Be(true);
+        }
 
-            parentPath.IsParentPath(childPath).Should().Be(expectedResult);
+        [TestCase("/test", "/test/mydir/")]
+        [TestCase("/test/", "/test/mydir")]
+        public void posix_path_should_be_parent(string parentPath, string childPath)
+        {
+            parentPath.IsParentPath(childPath).Should().Be(true);
         }
 
         [TestCase(@"C:\Test\mydir", @"C:\Test")]

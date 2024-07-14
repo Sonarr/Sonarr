@@ -361,6 +361,11 @@ namespace NzbDrone.Common.Disk
 
         public bool Equals(OsPath other)
         {
+            return Equals(other, false);
+        }
+
+        public bool Equals(OsPath other, bool ignoreTrailingSlash)
+        {
             if (ReferenceEquals(other, null))
             {
                 return false;
@@ -371,8 +376,8 @@ namespace NzbDrone.Common.Disk
                 return true;
             }
 
-            var left = PathWithoutTrailingSlash;
-            var right = other.PathWithoutTrailingSlash;
+            var left = ignoreTrailingSlash ? PathWithoutTrailingSlash : _path;
+            var right = ignoreTrailingSlash ? other.PathWithoutTrailingSlash : other._path;
 
             if (Kind == OsPathKind.Windows || other.Kind == OsPathKind.Windows)
             {
