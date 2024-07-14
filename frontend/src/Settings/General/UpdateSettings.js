@@ -17,7 +17,6 @@ function UpdateSettings(props) {
   const {
     advancedSettings,
     settings,
-    isWindows,
     packageUpdateMechanism,
     onInputChange
   } = props;
@@ -68,63 +67,59 @@ function UpdateSettings(props) {
         />
       </FormGroup>
 
-      {
-        isWindows ?
-          null :
-          <div>
+      <div>
+        <FormGroup
+          advancedSettings={advancedSettings}
+          isAdvanced={true}
+          size={sizes.MEDIUM}
+        >
+          <FormLabel>{translate('Automatic')}</FormLabel>
+
+          <FormInputGroup
+            type={inputTypes.CHECK}
+            name="updateAutomatically"
+            helpText={translate('UpdateAutomaticallyHelpText')}
+            helpTextWarning={updateMechanism.value === 'docker' ? translate('AutomaticUpdatesDisabledDocker') : undefined}
+            onChange={onInputChange}
+            {...updateAutomatically}
+          />
+        </FormGroup>
+
+        <FormGroup
+          advancedSettings={advancedSettings}
+          isAdvanced={true}
+        >
+          <FormLabel>{translate('Mechanism')}</FormLabel>
+
+          <FormInputGroup
+            type={inputTypes.SELECT}
+            name="updateMechanism"
+            values={updateOptions}
+            helpText={translate('UpdateMechanismHelpText')}
+            helpLink="https://wiki.servarr.com/sonarr/settings#updates"
+            onChange={onInputChange}
+            {...updateMechanism}
+          />
+        </FormGroup>
+
+        {
+          updateMechanism.value === 'script' &&
             <FormGroup
               advancedSettings={advancedSettings}
               isAdvanced={true}
-              size={sizes.MEDIUM}
             >
-              <FormLabel>{translate('Automatic')}</FormLabel>
+              <FormLabel>{translate('ScriptPath')}</FormLabel>
 
               <FormInputGroup
-                type={inputTypes.CHECK}
-                name="updateAutomatically"
-                helpText={translate('UpdateAutomaticallyHelpText')}
-                helpTextWarning={updateMechanism.value === 'docker' ? translate('AutomaticUpdatesDisabledDocker') : undefined}
+                type={inputTypes.TEXT}
+                name="updateScriptPath"
+                helpText={translate('UpdateScriptPathHelpText')}
                 onChange={onInputChange}
-                {...updateAutomatically}
+                {...updateScriptPath}
               />
             </FormGroup>
-
-            <FormGroup
-              advancedSettings={advancedSettings}
-              isAdvanced={true}
-            >
-              <FormLabel>{translate('Mechanism')}</FormLabel>
-
-              <FormInputGroup
-                type={inputTypes.SELECT}
-                name="updateMechanism"
-                values={updateOptions}
-                helpText={translate('UpdateMechanismHelpText')}
-                helpLink="https://wiki.servarr.com/sonarr/settings#updates"
-                onChange={onInputChange}
-                {...updateMechanism}
-              />
-            </FormGroup>
-
-            {
-              updateMechanism.value === 'script' &&
-                <FormGroup
-                  advancedSettings={advancedSettings}
-                  isAdvanced={true}
-                >
-                  <FormLabel>{translate('ScriptPath')}</FormLabel>
-
-                  <FormInputGroup
-                    type={inputTypes.TEXT}
-                    name="updateScriptPath"
-                    helpText={translate('UpdateScriptPathHelpText')}
-                    onChange={onInputChange}
-                    {...updateScriptPath}
-                  />
-                </FormGroup>
-            }
-          </div>
-      }
+        }
+      </div>
     </FieldSet>
   );
 }
