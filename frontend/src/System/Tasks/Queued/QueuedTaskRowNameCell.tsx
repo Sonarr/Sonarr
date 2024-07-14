@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { CommandBody } from 'Commands/Command';
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
 import createMultiSeriesSelector from 'Store/Selectors/createMultiSeriesSelector';
+import sortByProp from 'Utilities/Array/sortByProp';
 import translate from 'Utilities/String/translate';
 import styles from './QueuedTaskRowNameCell.css';
 
@@ -39,9 +40,7 @@ export default function QueuedTaskRowNameCell(
   }
 
   const series = useSelector(createMultiSeriesSelector(seriesIds));
-  const sortedSeries = series.sort((a, b) =>
-    a.sortTitle.localeCompare(b.sortTitle)
-  );
+  const sortedSeries = series.sort(sortByProp('sortTitle'));
 
   return (
     <TableRowCell>

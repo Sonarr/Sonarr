@@ -5,6 +5,7 @@ import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
+import sortByProp from 'Utilities/Array/sortByProp';
 import translate from 'Utilities/String/translate';
 import CustomFilter from './CustomFilter';
 import styles from './CustomFiltersModalContent.css';
@@ -31,7 +32,7 @@ function CustomFiltersModalContent(props) {
       <ModalBody>
         {
           customFilters
-            .sort((a, b) => a.label.localeCompare(b.label))
+            .sort((a, b) => sortByProp(a, b, 'label'))
             .map((customFilter) => {
               return (
                 <CustomFilter

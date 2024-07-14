@@ -5,12 +5,12 @@ import { createSelector } from 'reselect';
 import { deleteNotification, fetchNotifications } from 'Store/Actions/settingsActions';
 import createSortedSectionSelector from 'Store/Selectors/createSortedSectionSelector';
 import createTagsSelector from 'Store/Selectors/createTagsSelector';
-import sortByName from 'Utilities/Array/sortByName';
+import sortByProp from 'Utilities/Array/sortByProp';
 import Notifications from './Notifications';
 
 function createMapStateToProps() {
   return createSelector(
-    createSortedSectionSelector('settings.notifications', sortByName),
+    createSortedSectionSelector('settings.notifications', sortByProp('name')),
     createTagsSelector(),
     (notifications, tagList) => {
       return {

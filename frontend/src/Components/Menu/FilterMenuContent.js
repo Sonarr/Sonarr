@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import sortByProp from 'Utilities/Array/sortByProp';
 import translate from 'Utilities/String/translate';
 import FilterMenuItem from './FilterMenuItem';
 import MenuContent from './MenuContent';
@@ -47,7 +48,7 @@ class FilterMenuContent extends Component {
 
         {
           customFilters
-            .sort((a, b) => a.label.localeCompare(b.label))
+            .sort(sortByProp('label'))
             .map((filter) => {
               return (
                 <FilterMenuItem
