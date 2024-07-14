@@ -5,7 +5,7 @@ import { icons } from 'Helpers/Props';
 import createUISettingsSelector from 'Store/Selectors/createUISettingsSelector';
 import dimensions from 'Styles/Variables/dimensions';
 import QualityProfile from 'typings/QualityProfile';
-import { UiSettings } from 'typings/UiSettings';
+import UiSettings from 'typings/Settings/UiSettings';
 import formatDateTime from 'Utilities/Date/formatDateTime';
 import getRelativeDate from 'Utilities/Date/getRelativeDate';
 import formatBytes from 'Utilities/Number/formatBytes';

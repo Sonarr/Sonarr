@@ -30,7 +30,7 @@ import LogsTableConnector from 'System/Events/LogsTableConnector';
 import Logs from 'System/Logs/Logs';
 import Status from 'System/Status/Status';
 import Tasks from 'System/Tasks/Tasks';
-import UpdatesConnector from 'System/Updates/UpdatesConnector';
+import Updates from 'System/Updates/Updates';
 import getPathWithUrlBase from 'Utilities/getPathWithUrlBase';
 import CutoffUnmetConnector from 'Wanted/CutoffUnmet/CutoffUnmetConnector';
 import MissingConnector from 'Wanted/Missing/MissingConnector';
@@ -248,7 +248,7 @@ function AppRoutes(props) {
 
       <Route
         path="/system/updates"
-        component={UpdatesConnector}
+        component={Updates}
       />
 
       <Route

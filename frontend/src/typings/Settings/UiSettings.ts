@@ -1,4 +1,4 @@
-export interface UiSettings {
+export default interface UiSettings {
   theme: 'auto' | 'dark' | 'light';
   showRelativeDates: boolean;
   shortDateFormat: string;
