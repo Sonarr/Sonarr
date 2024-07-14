@@ -46,6 +46,7 @@ export interface CustomFilter {
 }
 
 export interface AppSectionState {
+  version: string;
   dimensions: {
     isSmallScreen: boolean;
     width: number;

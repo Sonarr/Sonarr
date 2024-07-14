@@ -42,6 +42,7 @@ namespace NzbDrone.Core.Update
                                          .AddQueryParam("runtime", "netcore")
                                          .AddQueryParam("runtimeVer", _platformInfo.Version)
                                          .AddQueryParam("dbType", _mainDatabase.DatabaseType)
+                                         .AddQueryParam("includeMajorVersion", true)
                                          .SetSegment("branch", branch);
 
             if (_analyticsService.IsEnabled)
