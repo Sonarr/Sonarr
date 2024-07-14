@@ -73,12 +73,24 @@ $hoverScale: 1.05;
   flex: 1 0 auto;
 }
 
+.overviewContainer {
+  display: flex;
+  justify-content: space-between;
+  flex: 0 1 1000px;
+  flex-direction: column;
+}
+
 .overview {
   composes: link;
 
-  flex: 0 1 1000px;
   overflow: hidden;
   min-height: 0;
+}
+
+.tags {
+  display: flex;
+  justify-content: space-around;
+  overflow: hidden;
 }
 
 @media only screen and (max-width: $breakpointSmall) {

@@ -1864,6 +1864,8 @@
   "ShowSeasonCount": "Show Season Count",
   "ShowSeriesTitleHelpText": "Show series title under poster",
   "ShowSizeOnDisk": "Show Size on Disk",
+  "ShowTags": "Show Tags",
+  "ShowTagsHelpText": "Show tags under poster",
   "ShowTitle": "Show Title",
   "ShowUnknownSeriesItems": "Show Unknown Series Items",
   "ShowUnknownSeriesItemsHelpText": "Show items without a series in the queue, this could include removed series, movies or anything else in {appName}'s category",

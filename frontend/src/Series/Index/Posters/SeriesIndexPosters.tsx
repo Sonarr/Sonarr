@@ -141,6 +141,7 @@ export default function SeriesIndexPosters(props: SeriesIndexPostersProps) {
       showTitle,
       showMonitored,
       showQualityProfile,
+      showTags,
     } = posterOptions;
 
     const nextAiringHeight = 19;
@@ -162,6 +163,10 @@ export default function SeriesIndexPosters(props: SeriesIndexPostersProps) {
 
     if (showQualityProfile) {
       heights.push(19);
+    }
+
+    if (showTags) {
+      heights.push(21);
     }
 
     switch (sortKey) {

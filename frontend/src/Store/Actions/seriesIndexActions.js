@@ -29,6 +29,7 @@ export const defaultState = {
     showTitle: false,
     showMonitored: true,
     showQualityProfile: true,
+    showTags: false,
     showSearchAction: false
   },
 
@@ -43,6 +44,7 @@ export const defaultState = {
     showSeasonCount: true,
     showPath: false,
     showSizeOnDisk: false,
+    showTags: false,
     showSearchAction: false
   },
 

@@ -52,6 +52,7 @@ function SeriesIndexPosterOptionsModalContent(
     showTitle,
     showMonitored,
     showQualityProfile,
+    showTags,
     showSearchAction,
   } = posterOptions;
 
@@ -126,6 +127,18 @@ function SeriesIndexPosterOptionsModalContent(
               name="showQualityProfile"
               value={showQualityProfile}
               helpText={translate('ShowQualityProfileHelpText')}
+              onChange={onPosterOptionChange}
+            />
+          </FormGroup>
+
+          <FormGroup>
+            <FormLabel>{translate('ShowTags')}</FormLabel>
+
+            <FormInputGroup
+              type={inputTypes.CHECK}
+              name="showTags"
+              value={showTags}
+              helpText={translate('ShowTagsHelpText')}
               onChange={onPosterOptionChange}
             />
           </FormGroup>

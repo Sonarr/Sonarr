@@ -57,6 +57,20 @@ $hoverScale: 1.05;
   font-size: $smallFontSize;
 }
 
+.tags {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 3px;
+  height: 21px;
+  background-color: var(--seriesBackgroundColor);
+}
+
+.tagsList {
+  display: flex;
+  overflow: hidden;
+}
+
 .ended {
   position: absolute;
   top: 0;

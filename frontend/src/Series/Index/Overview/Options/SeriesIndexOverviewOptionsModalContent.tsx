@@ -55,6 +55,7 @@ function SeriesIndexOverviewOptionsModalContent(
     showSeasonCount,
     showPath,
     showSizeOnDisk,
+    showTags,
     showSearchAction,
   } = useSelector(selectOverviewOptions);
 
@@ -181,6 +182,17 @@ function SeriesIndexOverviewOptionsModalContent(
               type={inputTypes.CHECK}
               name="showSizeOnDisk"
               value={showSizeOnDisk}
+              onChange={onOverviewOptionChange}
+            />
+          </FormGroup>
+
+          <FormGroup>
+            <FormLabel>{translate('ShowTags')}</FormLabel>
+
+            <FormInputGroup
+              type={inputTypes.CHECK}
+              name="showTags"
+              value={showTags}
               onChange={onOverviewOptionChange}
             />
           </FormGroup>
