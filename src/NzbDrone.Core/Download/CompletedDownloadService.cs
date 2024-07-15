@@ -235,8 +235,6 @@ namespace NzbDrone.Core.Download
 
             var atLeastOneEpisodeImported = importResults.Any(c => c.Result == ImportResultType.Imported);
             var allEpisodesImportedInHistory = _trackedDownloadAlreadyImported.IsImported(trackedDownload, historyItems);
-            var episodes = _episodeService.GetEpisodes(trackedDownload.RemoteEpisode.Episodes.Select(e => e.Id));
-            var files = _mediaFileService.GetFiles(episodes.Select(e => e.EpisodeFileId).Distinct());
 
             if (allEpisodesImportedInHistory)
             {
@@ -258,6 +256,9 @@ namespace NzbDrone.Core.Download
                            .WriteSentryWarn("DownloadHistoryIncomplete")
                            .Write();
                 }
+
+                var episodes = _episodeService.GetEpisodes(trackedDownload.RemoteEpisode.Episodes.Select(e => e.Id));
+                var files = _mediaFileService.GetFiles(episodes.Select(e => e.EpisodeFileId).Where(i => i > 0).Distinct());
 
                 trackedDownload.State = TrackedDownloadState.Imported;
                 _eventAggregator.PublishEvent(new DownloadCompletedEvent(trackedDownload, trackedDownload.RemoteEpisode.Series.Id, files, releaseInfo));
