@@ -1848,7 +1848,6 @@
     "VersionNumber": "Versión {version}",
     "OnManualInteractionRequired": "Cuando se requiera interacción manual",
     "OnLatestVersion": "La última versión de {appName} ya está instalada",
-    "OnUpgrade": "Al actualizar",
     "RootFolders": "Carpetas raíz",
     "SeasonPremiere": "Estreno de temporada",
     "UnableToUpdateSonarrDirectly": "No se pudo actualizar {appName} directamente,",
