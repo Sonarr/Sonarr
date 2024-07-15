@@ -115,7 +115,7 @@ class Notification extends Component {
         {
           supportsOnUpgrade && onDownload && onUpgrade ?
             <Label kind={kinds.SUCCESS}>
-              {translate('OnUpgrade')}
+              {translate('OnFileUpgrade')}
             </Label> :
             null
         }
