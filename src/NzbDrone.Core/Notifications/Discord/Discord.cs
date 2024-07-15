@@ -236,6 +236,96 @@ namespace NzbDrone.Core.Notifications.Discord
             _proxy.SendPayload(payload, Settings);
         }
 
+        public override void OnImportComplete(ImportCompleteMessage message)
+        {
+            var series = message.Series;
+            var episodes = message.Episodes;
+
+            var embed = new Embed
+            {
+                Author = new DiscordAuthor
+                {
+                    Name = Settings.Author.IsNullOrWhiteSpace() ? Environment.MachineName : Settings.Author,
+                    IconUrl = "https://raw.githubusercontent.com/Sonarr/Sonarr/develop/Logo/256.png"
+                },
+                Url = $"http://thetvdb.com/?tab=series&id={series.TvdbId}",
+                Description = "Import Complete",
+                Title = GetTitle(series, episodes),
+                Color = (int)DiscordColors.Success,
+                Fields = new List<DiscordField>(),
+                Timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffZ")
+            };
+
+            if (Settings.ImportFields.Contains((int)DiscordImportFieldType.Poster))
+            {
+                embed.Thumbnail = new DiscordImage
+                {
+                    Url = series.Images.FirstOrDefault(x => x.CoverType == MediaCoverTypes.Poster)?.RemoteUrl
+                };
+            }
+
+            if (Settings.ImportFields.Contains((int)DiscordImportFieldType.Fanart))
+            {
+                embed.Image = new DiscordImage
+                {
+                    Url = series.Images.FirstOrDefault(x => x.CoverType == MediaCoverTypes.Fanart)?.RemoteUrl
+                };
+            }
+
+            foreach (var field in Settings.ImportFields)
+            {
+                var discordField = new DiscordField();
+
+                switch ((DiscordImportFieldType)field)
+                {
+                    case DiscordImportFieldType.Overview:
+                        var overview = episodes.First().Overview ?? "";
+                        discordField.Name = "Overview";
+                        discordField.Value = overview.Length <= 300 ? overview : $"{overview.AsSpan(0, 300)}...";
+                        break;
+                    case DiscordImportFieldType.Rating:
+                        discordField.Name = "Rating";
+                        discordField.Value = episodes.First().Ratings.Value.ToString();
+                        break;
+                    case DiscordImportFieldType.Genres:
+                        discordField.Name = "Genres";
+                        discordField.Value = series.Genres.Take(5).Join(", ");
+                        break;
+                    case DiscordImportFieldType.Quality:
+                        discordField.Name = "Quality";
+                        discordField.Inline = true;
+                        discordField.Value = message.ReleaseQuality.Quality.Name;
+                        break;
+                    case DiscordImportFieldType.Group:
+                        discordField.Name = "Group";
+                        discordField.Value = message.ReleaseGroup;
+                        break;
+                    case DiscordImportFieldType.Size:
+                        discordField.Name = "Size";
+                        discordField.Value = BytesToString(message.Release?.Size ?? message.EpisodeFiles.Sum(f => f.Size));
+                        discordField.Inline = true;
+                        break;
+                    case DiscordImportFieldType.Release:
+                        discordField.Name = "Release";
+                        discordField.Value = $"```{message.Release?.Title ?? message.SourceTitle}```";
+                        break;
+                    case DiscordImportFieldType.Links:
+                        discordField.Name = "Links";
+                        discordField.Value = GetLinksString(series);
+                        break;
+                }
+
+                if (discordField.Name.IsNotNullOrWhiteSpace() && discordField.Value.IsNotNullOrWhiteSpace())
+                {
+                    embed.Fields.Add(discordField);
+                }
+            }
+
+            var payload = CreatePayload(null, new List<Embed> { embed });
+
+            _proxy.SendPayload(payload, Settings);
+        }
+
         public override void OnRename(Series series, List<RenamedEpisodeFile> renamedFiles)
         {
             var attachments = new List<Embed>
