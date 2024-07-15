@@ -1372,7 +1372,6 @@
     "LanguagesLoadError": "无法加载语言",
     "MonitorMissingEpisodes": "缺失剧集",
     "OneMinute": "1分钟",
-    "OnUpgrade": "升级中",
     "RemotePathMappings": "远程路径映射",
     "RemotePathMappingsLoadError": "无法加载远程路径映射",
     "RemoveQueueItemConfirmation": "您确定要从队列中移除“{sourceTitle}”吗？",
