@@ -14,6 +14,7 @@ namespace NzbDrone.Core.Notifications
         public List<Episode> Episodes { get; set; }
         public List<EpisodeFile> EpisodeFiles { get; set; }
         public string SourcePath { get; set; }
+        public string SourceTitle { get; set; }
         public DownloadClientItemClientInfo DownloadClientInfo { get; set; }
         public string DownloadId { get; set; }
         public GrabbedReleaseInfo Release { get; set; }

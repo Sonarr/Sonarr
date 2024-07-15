@@ -268,6 +268,7 @@ namespace NzbDrone.Core.Notifications
                 Episodes = episodes,
                 EpisodeFiles = message.EpisodeFiles,
                 SourcePath = message.SourcePath,
+                SourceTitle = parsedEpisodeInfo.ReleaseTitle,
                 DestinationPath = message.EpisodeFiles.Select(e => Path.Join(series.Path, e.RelativePath)).ToList().GetLongestCommonPath(),
                 ReleaseGroup = parsedEpisodeInfo.ReleaseGroup,
                 ReleaseQuality = parsedEpisodeInfo.Quality
