@@ -3,6 +3,7 @@
 interface CssExports {
   'addSpecification': string;
   'center': string;
+  'customFormats': string;
   'deleteButton': string;
   'rightButtons': string;
 }

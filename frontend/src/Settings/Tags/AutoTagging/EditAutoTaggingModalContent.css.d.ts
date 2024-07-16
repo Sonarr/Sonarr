@@ -2,6 +2,7 @@
 // Please do not change this file!
 interface CssExports {
   'addSpecification': string;
+  'autoTaggings': string;
   'center': string;
   'deleteButton': string;
   'rightButtons': string;
