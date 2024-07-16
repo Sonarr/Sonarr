@@ -26,7 +26,7 @@
   background-color: var(--cardCenterBackgroundColor);
 }
 
-.customFormats{
+.customFormats {
   display: flex;
   flex-wrap: wrap;
 }
