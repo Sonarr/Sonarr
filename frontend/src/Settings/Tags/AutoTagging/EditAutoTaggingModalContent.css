@@ -25,3 +25,8 @@
   border-radius: 4px;
   background-color: var(--cardCenterBackgroundColor);
 }
+
+.autoTaggings {
+  display: flex;
+  flex-wrap: wrap;
+}
