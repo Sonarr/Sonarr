@@ -561,6 +561,34 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
         }
 
         [Test]
+        public void should_correct_category_output_path()
+        {
+            var config = new QBittorrentPreferences
+            {
+                SavePath = @"C:\Downloads\Finished\QBittorrent".AsOsAgnostic()
+            };
+
+            Mocker.GetMock<IQBittorrentProxy>()
+                .Setup(v => v.GetConfig(It.IsAny<QBittorrentSettings>()))
+                .Returns(config);
+
+            Mocker.GetMock<IQBittorrentProxy>()
+                .Setup(v => v.GetApiVersion(It.IsAny<QBittorrentSettings>()))
+                .Returns(new Version(2, 0));
+
+            Mocker.GetMock<IQBittorrentProxy>()
+                .Setup(s => s.GetLabels(It.IsAny<QBittorrentSettings>()))
+                .Returns(new Dictionary<string, QBittorrentLabel>
+                    { { "tv", new QBittorrentLabel { Name = "tv", SavePath = "//server/store/downloads" } } });
+
+            var result = Subject.GetStatus();
+
+            result.IsLocalhost.Should().BeTrue();
+            result.OutputRootFolders.Should().NotBeNull();
+            result.OutputRootFolders.First().Should().Be(@"\\server\store\downloads");
+        }
+
+        [Test]
         public async Task Download_should_handle_http_redirect_to_magnet()
         {
             GivenRedirectToMagnet();

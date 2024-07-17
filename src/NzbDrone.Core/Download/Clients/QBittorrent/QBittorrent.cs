@@ -377,7 +377,14 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             {
                 if (Proxy.GetLabels(Settings).TryGetValue(Settings.TvCategory, out var label) && label.SavePath.IsNotNullOrWhiteSpace())
                 {
-                    var labelDir = new OsPath(label.SavePath);
+                    var savePath = label.SavePath;
+
+                    if (savePath.StartsWith("//"))
+                    {
+                        savePath = savePath.Replace('/', '\\');
+                    }
+
+                    var labelDir = new OsPath(savePath);
 
                     if (labelDir.IsRooted)
                     {
