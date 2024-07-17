@@ -377,7 +377,15 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             {
                 if (Proxy.GetLabels(Settings).TryGetValue(Settings.TvCategory, out var label) && label.SavePath.IsNotNullOrWhiteSpace())
                 {
-                    var labelDir = new OsPath(label.SavePath);
+                    var savePath = label.SavePath;
+
+                    if (savePath.StartsWith("//"))
+                    {
+                        _logger.Trace("Replacing double forward slashes in path '{0}'. If this is not meant to be a Windows UNC path fix the 'Save Path' in qBittorrent's {1} category", savePath, Settings.TvCategory);
+                        savePath = savePath.Replace('/', '\\');
+                    }
+
+                    var labelDir = new OsPath(savePath);
 
                     if (labelDir.IsRooted)
                     {
