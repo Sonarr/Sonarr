@@ -269,6 +269,25 @@ dotnet_diagnostic.CA5397.severity = suggestion
 
 dotnet_diagnostic.SYSLIB0006.severity = none
 
+# .NET 8 specific analyzer rules
+dotnet_diagnostic.CA1311.severity = suggestion
+dotnet_diagnostic.CA1510.severity = suggestion
+dotnet_diagnostic.CA1512.severity = suggestion
+dotnet_diagnostic.CA1849.severity = suggestion
+dotnet_diagnostic.CA1850.severity = suggestion
+dotnet_diagnostic.CA1851.severity = suggestion
+dotnet_diagnostic.CA1852.severity = suggestion
+dotnet_diagnostic.CA1854.severity = suggestion
+dotnet_diagnostic.CA1859.severity = suggestion
+dotnet_diagnostic.CA1860.severity = suggestion
+dotnet_diagnostic.CA1861.severity = suggestion
+dotnet_diagnostic.CA1862.severity = suggestion
+dotnet_diagnostic.CA1863.severity = suggestion
+dotnet_diagnostic.CA1866.severity = suggestion
+dotnet_diagnostic.CA1867.severity = suggestion
+dotnet_diagnostic.CA1868.severity = suggestion
+dotnet_diagnostic.CA1870.severity = suggestion
+
 [*.{js,html,hbs,less,css,ts,tsx}]
 charset = utf-8
 trim_trailing_whitespace = true
