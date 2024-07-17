@@ -20,7 +20,8 @@ function calcOrder(profileFormatItems) {
     if (b.score !== a.score) {
       return b.score - a.score;
     }
-    return a.name > b.name ? 1 : -1;
+
+    return a.localeCompare(b.name, undefined, { numeric: true });
   }).map((x) => items[x.format]);
 }
 

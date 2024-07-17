@@ -21,6 +21,7 @@ import { scrollDirections } from 'Helpers/Props';
 import Series from 'Series/Series';
 import createAllSeriesSelector from 'Store/Selectors/createAllSeriesSelector';
 import dimensions from 'Styles/Variables/dimensions';
+import sortByProp from 'Utilities/Array/sortByProp';
 import translate from 'Utilities/String/translate';
 import SelectSeriesModalTableHeader from './SelectSeriesModalTableHeader';
 import SelectSeriesRow from './SelectSeriesRow';
@@ -163,9 +164,7 @@ function SelectSeriesModalContent(props: SelectSeriesModalContentProps) {
   );
 
   const items = useMemo(() => {
-    const sorted = [...allSeries].sort((a, b) =>
-      a.sortTitle.localeCompare(b.sortTitle)
-    );
+    const sorted = [...allSeries].sort(sortByProp('sortTitle'));
 
     return sorted.filter(
       (item) =>

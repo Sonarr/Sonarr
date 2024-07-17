@@ -2,13 +2,17 @@ import { createSelector } from 'reselect';
 import { DownloadClientAppState } from 'App/State/SettingsAppState';
 import DownloadProtocol from 'DownloadClient/DownloadProtocol';
 import createSortedSectionSelector from 'Store/Selectors/createSortedSectionSelector';
-import sortByName from 'Utilities/Array/sortByName';
+import DownloadClient from 'typings/DownloadClient';
+import sortByProp from 'Utilities/Array/sortByProp';
 
 export default function createEnabledDownloadClientsSelector(
   protocol: DownloadProtocol
 ) {
   return createSelector(
-    createSortedSectionSelector('settings.downloadClients', sortByName),
+    createSortedSectionSelector<DownloadClient>(
+      'settings.downloadClients',
+      sortByProp('name')
+    ),
     (downloadClients: DownloadClientAppState) => {
       const { isFetching, isPopulated, error, items } = downloadClients;
 

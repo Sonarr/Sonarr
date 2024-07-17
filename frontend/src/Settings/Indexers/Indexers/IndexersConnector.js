@@ -5,12 +5,12 @@ import { createSelector } from 'reselect';
 import { cloneIndexer, deleteIndexer, fetchIndexers } from 'Store/Actions/settingsActions';
 import createSortedSectionSelector from 'Store/Selectors/createSortedSectionSelector';
 import createTagsSelector from 'Store/Selectors/createTagsSelector';
-import sortByName from 'Utilities/Array/sortByName';
+import sortByProp from 'Utilities/Array/sortByProp';
 import Indexers from './Indexers';
 
 function createMapStateToProps() {
   return createSelector(
-    createSortedSectionSelector('settings.indexers', sortByName),
+    createSortedSectionSelector('settings.indexers', sortByProp('name')),
     createTagsSelector(),
     (indexers, tagList) => {
       return {

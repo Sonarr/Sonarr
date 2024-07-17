@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { filterBuilderTypes } from 'Helpers/Props';
 import * as filterTypes from 'Helpers/Props/filterTypes';
-import sortByName from 'Utilities/Array/sortByName';
+import sortByProp from 'Utilities/Array/sortByProp';
 import FilterBuilderRowValue from './FilterBuilderRowValue';
 
 function createTagListSelector() {
@@ -38,7 +38,7 @@ function createTagListSelector() {
           }
 
           return acc;
-        }, []).sort(sortByName);
+        }, []).sort(sortByProp('name'));
       }
 
       return _.uniqBy(items, 'id');

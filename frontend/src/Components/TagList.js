@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { kinds } from 'Helpers/Props';
+import sortByProp from 'Utilities/Array/sortByProp';
 import Label from './Label';
 import styles from './TagList.css';
 
@@ -8,7 +9,7 @@ function TagList({ tags, tagList }) {
   const sortedTags = tags
     .map((tagId) => tagList.find((tag) => tag.id === tagId))
     .filter((tag) => !!tag)
-    .sort((a, b) => a.label.localeCompare(b.label));
+    .sort(sortByProp('label'));
 
   return (
     <div className={styles.tags}>
