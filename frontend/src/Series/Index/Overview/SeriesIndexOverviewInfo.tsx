@@ -236,7 +236,9 @@ function SeriesIndexOverviewInfo(props: SeriesIndexOverviewInfoProps) {
     <div className={styles.infos}>
       {!!nextAiring && (
         <SeriesIndexOverviewInfoRow
-          title={formatDateTime(nextAiring, longDateFormat, timeFormat)}
+          title={translate('NextAiringDate', {
+            date: formatDateTime(nextAiring, longDateFormat, timeFormat),
+          })}
           iconName={icons.SCHEDULED}
           label={getRelativeDate({
             date: nextAiring,
