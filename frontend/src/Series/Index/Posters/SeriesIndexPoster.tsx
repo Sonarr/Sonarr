@@ -211,14 +211,6 @@ function SeriesIndexPoster(props: SeriesIndexPosterProps) {
         </div>
       ) : null}
 
-      {showTags && tags.length ? (
-        <div className={styles.tags}>
-          <div className={styles.tagsList}>
-            <TagListConnector tags={tags} />
-          </div>
-        </div>
-      ) : null}
-
       {nextAiring ? (
         <div
           className={styles.nextAiring}
@@ -238,6 +230,14 @@ function SeriesIndexPoster(props: SeriesIndexPosterProps) {
         </div>
       ) : null}
 
+      {showTags && tags.length ? (
+        <div className={styles.tags}>
+          <div className={styles.tagsList}>
+            <TagListConnector tags={tags} />
+          </div>
+        </div>
+      ) : null}
+
       <SeriesIndexPosterInfo
         originalLanguage={originalLanguage}
         network={network}
@@ -253,6 +253,8 @@ function SeriesIndexPoster(props: SeriesIndexPosterProps) {
         shortDateFormat={shortDateFormat}
         longDateFormat={longDateFormat}
         timeFormat={timeFormat}
+        tags={tags}
+        showTags={showTags}
       />
 
       <EditSeriesModalConnector

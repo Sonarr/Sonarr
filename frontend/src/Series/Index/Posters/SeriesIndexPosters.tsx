@@ -183,6 +183,11 @@ export default function SeriesIndexPosters(props: SeriesIndexPostersProps) {
           heights.push(19);
         }
         break;
+      case 'tags':
+        if (!showTags) {
+          heights.push(21);
+        }
+        break;
       default:
       // No need to add a height of 0
     }

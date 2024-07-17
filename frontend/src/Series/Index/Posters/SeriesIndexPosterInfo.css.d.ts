@@ -2,6 +2,8 @@
 // Please do not change this file!
 interface CssExports {
   'info': string;
+  'tags': string;
+  'tagsList': string;
 }
 export const cssExports: CssExports;
 export default cssExports;
