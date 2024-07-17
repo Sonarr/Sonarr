@@ -381,6 +381,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
                     if (savePath.StartsWith("//"))
                     {
+                        _logger.Trace("Replacing slashes in probable Windows UNC path '{0}'. If this is not meant to be a Windows UNC path fix your qBittorrent configuration", savePath);
                         savePath = savePath.Replace('/', '\\');
                     }
 
