@@ -2084,5 +2084,6 @@
     "OnFileImport": "Ao Importar o Arquivo",
     "OnImportComplete": "Ao Completar Importação",
     "CustomColonReplacementFormatHelpText": "Caracteres a serem usados em substituição aos dois pontos",
-    "NotificationsPlexSettingsServer": "Servidor"
+    "NotificationsPlexSettingsServer": "Servidor",
+    "OnFileUpgrade": "Ao Atualizar o Arquivo"
 }
