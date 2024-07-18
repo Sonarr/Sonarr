@@ -21,7 +21,7 @@ function calcOrder(profileFormatItems) {
       return b.score - a.score;
     }
 
-    return a.localeCompare(b.name, undefined, { numeric: true });
+    return a.name.localeCompare(b.name, undefined, { numeric: true });
   }).map((x) => items[x.format]);
 }
 
