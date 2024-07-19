@@ -1,5 +1,6 @@
+import Column from 'Components/Table/Column';
 import SortDirection from 'Helpers/Props/SortDirection';
-import { FilterBuilderProp } from './AppState';
+import { FilterBuilderProp, PropertyFilter } from './AppState';
 
 export interface Error {
   responseJSON: {
@@ -18,11 +19,18 @@ export interface AppSectionSaveState {
 }
 
 export interface PagedAppSectionState {
+  page: number;
   pageSize: number;
+  totalPages: number;
   totalRecords?: number;
+}
+export interface TableAppSectionState {
+  columns: Column[];
 }
 
 export interface AppSectionFilterState<T> {
+  selectedFilterKey: string;
+  filters: PropertyFilter[];
   filterBuilderProps: FilterBuilderProp<T>[];
 }
 

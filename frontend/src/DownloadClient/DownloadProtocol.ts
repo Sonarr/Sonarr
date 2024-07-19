@@ -1,7 +1,3 @@
-enum DownloadProtocol {
-  Unknown = 'unknown',
-  Usenet = 'usenet',
-  Torrent = 'torrent',
-}
+type DownloadProtocol = 'usenet' | 'torrent' | 'unknown';
 
 export default DownloadProtocol;

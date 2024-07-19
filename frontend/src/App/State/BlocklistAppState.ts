@@ -1,8 +1,16 @@
 import Blocklist from 'typings/Blocklist';
-import AppSectionState, { AppSectionFilterState } from './AppSectionState';
+import AppSectionState, {
+  AppSectionFilterState,
+  PagedAppSectionState,
+  TableAppSectionState,
+} from './AppSectionState';
 
 interface BlocklistAppState
   extends AppSectionState<Blocklist>,
-    AppSectionFilterState<Blocklist> {}
+    AppSectionFilterState<Blocklist>,
+    PagedAppSectionState,
+    TableAppSectionState {
+  isRemoving: boolean;
+}
 
 export default BlocklistAppState;

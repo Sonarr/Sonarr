@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
-import BlocklistConnector from 'Activity/Blocklist/BlocklistConnector';
+import Blocklist from 'Activity/Blocklist/Blocklist';
 import HistoryConnector from 'Activity/History/HistoryConnector';
 import QueueConnector from 'Activity/Queue/QueueConnector';
 import AddNewSeriesConnector from 'AddSeries/AddNewSeries/AddNewSeriesConnector';
@@ -135,7 +135,7 @@ function AppRoutes(props) {
 
       <Route
         path="/activity/blocklist"
-        component={BlocklistConnector}
+        component={Blocklist}
       />
 
       {/*
