@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import Blocklist from 'Activity/Blocklist/Blocklist';
-import HistoryConnector from 'Activity/History/HistoryConnector';
+import History from 'Activity/History/History';
 import QueueConnector from 'Activity/Queue/QueueConnector';
 import AddNewSeriesConnector from 'AddSeries/AddNewSeries/AddNewSeriesConnector';
 import ImportSeries from 'AddSeries/ImportSeries/ImportSeries';
@@ -125,7 +125,7 @@ function AppRoutes(props) {
 
       <Route
         path="/activity/history"
-        component={HistoryConnector}
+        component={History}
       />
 
       <Route

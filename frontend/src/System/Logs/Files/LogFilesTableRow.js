@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import Link from 'Components/Link/Link';
-import RelativeDateCellConnector from 'Components/Table/Cells/RelativeDateCellConnector';
+import RelativeDateCell from 'Components/Table/Cells/RelativeDateCell';
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
 import TableRow from 'Components/Table/TableRow';
 import translate from 'Utilities/String/translate';
@@ -23,7 +23,7 @@ class LogFilesTableRow extends Component {
       <TableRow>
         <TableRowCell>{filename}</TableRowCell>
 
-        <RelativeDateCellConnector
+        <RelativeDateCell
           date={lastWriteTime}
         />
 

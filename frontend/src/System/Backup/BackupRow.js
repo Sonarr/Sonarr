@@ -4,7 +4,7 @@ import Icon from 'Components/Icon';
 import IconButton from 'Components/Link/IconButton';
 import Link from 'Components/Link/Link';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
-import RelativeDateCellConnector from 'Components/Table/Cells/RelativeDateCellConnector';
+import RelativeDateCell from 'Components/Table/Cells/RelativeDateCell';
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
 import TableRow from 'Components/Table/TableRow';
 import { icons, kinds } from 'Helpers/Props';
@@ -110,7 +110,7 @@ class BackupRow extends Component {
           {formatBytes(size)}
         </TableRowCell>
 
-        <RelativeDateCellConnector
+        <RelativeDateCell
           date={time}
         />
 

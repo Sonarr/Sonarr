@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import IconButton from 'Components/Link/IconButton';
-import RelativeDateCellConnector from 'Components/Table/Cells/RelativeDateCellConnector';
+import RelativeDateCell from 'Components/Table/Cells/RelativeDateCell';
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
 import TableSelectCell from 'Components/Table/Cells/TableSelectCell';
 import Column from 'Components/Table/Column';
@@ -119,7 +119,7 @@ function BlocklistRow(props: BlocklistRowProps) {
         if (name === 'date') {
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore ts(2739)
-          return <RelativeDateCellConnector key={name} date={date} />;
+          return <RelativeDateCell key={name} date={date} />;
         }
 
         if (name === 'indexer') {

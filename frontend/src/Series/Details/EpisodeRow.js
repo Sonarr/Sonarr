@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import Icon from 'Components/Icon';
 import MonitorToggleButton from 'Components/MonitorToggleButton';
-import RelativeDateCellConnector from 'Components/Table/Cells/RelativeDateCellConnector';
+import RelativeDateCell from 'Components/Table/Cells/RelativeDateCell';
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
 import TableRow from 'Components/Table/TableRow';
 import Popover from 'Components/Tooltip/Popover';
@@ -176,7 +176,7 @@ class EpisodeRow extends Component {
 
             if (name === 'airDateUtc') {
               return (
-                <RelativeDateCellConnector
+                <RelativeDateCell
                   key={name}
                   date={airDateUtc}
                 />
