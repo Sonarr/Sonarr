@@ -1,11 +1,15 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import Label from 'Components/Label';
 import { kinds } from 'Helpers/Props';
+import { QualityModel } from 'Quality/Quality';
 import formatBytes from 'Utilities/Number/formatBytes';
 import translate from 'Utilities/String/translate';
 
-function getTooltip(title, quality, size) {
+function getTooltip(
+  title: string,
+  quality: QualityModel,
+  size: number | undefined
+) {
   if (!title) {
     return;
   }
@@ -27,7 +31,11 @@ function getTooltip(title, quality, size) {
   return title;
 }
 
-function revisionLabel(className, quality, showRevision) {
+function revisionLabel(
+  className: string | undefined,
+  quality: QualityModel,
+  showRevision: boolean
+) {
   if (!showRevision) {
     return;
   }
@@ -55,16 +63,27 @@ function revisionLabel(className, quality, showRevision) {
       </Label>
     );
   }
+
+  return null;
 }
 
-function EpisodeQuality(props) {
+interface EpisodeQualityProps {
+  className?: string;
+  title?: string;
+  quality: QualityModel;
+  size?: number;
+  isCutoffNotMet?: boolean;
+  showRevision?: boolean;
+}
+
+function EpisodeQuality(props: EpisodeQualityProps) {
   const {
     className,
-    title,
+    title = '',
     quality,
     size,
     isCutoffNotMet,
-    showRevision
+    showRevision = false,
   } = props;
 
   if (!quality) {
@@ -79,23 +98,10 @@ function EpisodeQuality(props) {
         title={getTooltip(title, quality, size)}
       >
         {quality.quality.name}
-      </Label>{revisionLabel(className, quality, showRevision)}
+      </Label>
+      {revisionLabel(className, quality, showRevision)}
     </span>
   );
 }
-
-EpisodeQuality.propTypes = {
-  className: PropTypes.string,
-  title: PropTypes.string,
-  quality: PropTypes.object.isRequired,
-  size: PropTypes.number,
-  isCutoffNotMet: PropTypes.bool,
-  showRevision: PropTypes.bool
-};
-
-EpisodeQuality.defaultProps = {
-  title: '',
-  showRevision: false
-};
 
 export default EpisodeQuality;

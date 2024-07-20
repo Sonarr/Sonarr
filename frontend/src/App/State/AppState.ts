@@ -59,6 +59,7 @@ interface AppState {
   blocklist: BlocklistAppState;
   calendar: CalendarAppState;
   commands: CommandAppState;
+  episodes: EpisodesAppState;
   episodeFiles: EpisodeFilesAppState;
   episodesSelection: EpisodesAppState;
   history: HistoryAppState;

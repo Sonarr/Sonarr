@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import IconButton from 'Components/Link/IconButton';
-import RelativeDateCellConnector from 'Components/Table/Cells/RelativeDateCellConnector';
+import RelativeDateCell from 'Components/Table/Cells/RelativeDateCell';
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
 import TableRowButton from 'Components/Table/TableRowButton';
 import { icons } from 'Helpers/Props';
@@ -41,7 +41,7 @@ class RecentFolderRow extends Component {
       <TableRowButton onPress={this.onPress}>
         <TableRowCell>{folder}</TableRowCell>
 
-        <RelativeDateCellConnector date={lastUsed} />
+        <RelativeDateCell date={lastUsed} />
 
         <TableRowCell className={styles.actions}>
           <IconButton
