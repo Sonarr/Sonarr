@@ -1,4 +1,5 @@
 import ModelBase from 'App/ModelBase';
+import DownloadProtocol from 'DownloadClient/DownloadProtocol';
 import Language from 'Language/Language';
 import { QualityModel } from 'Quality/Quality';
 import CustomFormat from 'typings/CustomFormat';
@@ -7,6 +8,7 @@ export type QueueTrackedDownloadStatus = 'ok' | 'warning' | 'error';
 
 export type QueueTrackedDownloadState =
   | 'downloading'
+  | 'importBlocked'
   | 'importPending'
   | 'importing'
   | 'imported'
@@ -23,6 +25,7 @@ interface Queue extends ModelBase {
   languages: Language[];
   quality: QualityModel;
   customFormats: CustomFormat[];
+  customFormatScore: number;
   size: number;
   title: string;
   sizeleft: number;
@@ -35,13 +38,14 @@ interface Queue extends ModelBase {
   statusMessages: StatusMessage[];
   errorMessage: string;
   downloadId: string;
-  protocol: string;
+  protocol: DownloadProtocol;
   downloadClient: string;
   outputPath: string;
   episodeHasFile: boolean;
   seriesId?: number;
   episodeId?: number;
   seasonNumber?: number;
+  downloadClientHasPostImportCategory: boolean;
 }
 
 export default Queue;
