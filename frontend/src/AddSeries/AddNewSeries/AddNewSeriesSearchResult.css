@@ -69,6 +69,11 @@
   height: 55px;
 }
 
+.originalLanguageName,
+.network {
+  margin-left: 8px;
+}
+
 .tvdbLink {
   composes: link from '~Components/Link/Link.css';
 
