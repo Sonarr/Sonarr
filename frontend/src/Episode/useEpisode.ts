@@ -9,7 +9,7 @@ export type EpisodeEntities =
   | 'cutoffUnmet'
   | 'missing';
 
-function createEpisodeSelector(episodeId: number) {
+function createEpisodeSelector(episodeId?: number) {
   return createSelector(
     (state: AppState) => state.episodes.items,
     (episodes) => {
@@ -18,7 +18,7 @@ function createEpisodeSelector(episodeId: number) {
   );
 }
 
-function createCalendarEpisodeSelector(episodeId: number) {
+function createCalendarEpisodeSelector(episodeId?: number) {
   return createSelector(
     (state: AppState) => state.calendar.items,
     (episodes) => {
@@ -27,7 +27,10 @@ function createCalendarEpisodeSelector(episodeId: number) {
   );
 }
 
-function useEpisode(episodeId: number, episodeEntity: EpisodeEntities) {
+function useEpisode(
+  episodeId: number | undefined,
+  episodeEntity: EpisodeEntities
+) {
   let selector = createEpisodeSelector;
 
   switch (episodeEntity) {

@@ -46,6 +46,8 @@ export interface CustomFilter {
 }
 
 export interface AppSectionState {
+  isConnected: boolean;
+  isReconnecting: boolean;
   version: string;
   dimensions: {
     isSmallScreen: boolean;

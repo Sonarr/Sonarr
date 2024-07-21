@@ -3,7 +3,19 @@ import AppSectionState, {
   AppSectionFilterState,
   AppSectionItemState,
   Error,
+  PagedAppSectionState,
+  TableAppSectionState,
 } from './AppSectionState';
+
+export interface QueueStatus {
+  totalCount: number;
+  count: number;
+  unknownCount: number;
+  errors: boolean;
+  warnings: boolean;
+  unknownErrors: boolean;
+  unknownWarnings: boolean;
+}
 
 export interface QueueDetailsAppState extends AppSectionState<Queue> {
   params: unknown;
@@ -11,7 +23,9 @@ export interface QueueDetailsAppState extends AppSectionState<Queue> {
 
 export interface QueuePagedAppState
   extends AppSectionState<Queue>,
-    AppSectionFilterState<Queue> {
+    AppSectionFilterState<Queue>,
+    PagedAppSectionState,
+    TableAppSectionState {
   isGrabbing: boolean;
   grabError: Error;
   isRemoving: boolean;
@@ -19,9 +33,12 @@ export interface QueuePagedAppState
 }
 
 interface QueueAppState {
-  status: AppSectionItemState<Queue>;
+  status: AppSectionItemState<QueueStatus>;
   details: QueueDetailsAppState;
   paged: QueuePagedAppState;
+  options: {
+    includeUnknownSeriesItems: boolean;
+  };
 }
 
 export default QueueAppState;

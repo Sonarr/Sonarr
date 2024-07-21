@@ -1,51 +1,59 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import Icon from 'Components/Icon';
 import Popover from 'Components/Tooltip/Popover';
-import { icons, kinds, tooltipPositions } from 'Helpers/Props';
+import { icons, kinds } from 'Helpers/Props';
+import TooltipPosition from 'Helpers/Props/TooltipPosition';
+import {
+  QueueTrackedDownloadState,
+  QueueTrackedDownloadStatus,
+  StatusMessage,
+} from 'typings/Queue';
 import translate from 'Utilities/String/translate';
 import styles from './QueueStatus.css';
 
-function getDetailedPopoverBody(statusMessages) {
+function getDetailedPopoverBody(statusMessages: StatusMessage[]) {
   return (
     <div>
-      {
-        statusMessages.map(({ title, messages }) => {
-          return (
-            <div
-              key={title}
-              className={messages.length ? undefined: styles.noMessages}
-            >
-              {title}
-              <ul>
-                {
-                  messages.map((message) => {
-                    return (
-                      <li key={message}>
-                        {message}
-                      </li>
-                    );
-                  })
-                }
-              </ul>
-            </div>
-          );
-        })
-      }
+      {statusMessages.map(({ title, messages }) => {
+        return (
+          <div
+            key={title}
+            className={messages.length ? undefined : styles.noMessages}
+          >
+            {title}
+            <ul>
+              {messages.map((message) => {
+                return <li key={message}>{message}</li>;
+              })}
+            </ul>
+          </div>
+        );
+      })}
     </div>
   );
 }
 
-function QueueStatus(props) {
+interface QueueStatusProps {
+  sourceTitle: string;
+  status: string;
+  trackedDownloadStatus?: QueueTrackedDownloadStatus;
+  trackedDownloadState?: QueueTrackedDownloadState;
+  statusMessages?: StatusMessage[];
+  errorMessage?: string;
+  position: TooltipPosition;
+  canFlip?: boolean;
+}
+
+function QueueStatus(props: QueueStatusProps) {
   const {
     sourceTitle,
     status,
-    trackedDownloadStatus,
-    trackedDownloadState,
-    statusMessages,
+    trackedDownloadStatus = 'ok',
+    trackedDownloadState = 'downloading',
+    statusMessages = [],
     errorMessage,
     position,
-    canFlip
+    canFlip = false,
   } = props;
 
   const hasWarning = trackedDownloadStatus === 'warning';
@@ -115,7 +123,8 @@ function QueueStatus(props) {
   if (status === 'warning') {
     iconName = icons.DOWNLOADING;
     iconKind = kinds.WARNING;
-    const warningMessage = errorMessage || translate('CheckDownloadClientForDetails');
+    const warningMessage =
+      errorMessage || translate('CheckDownloadClientForDetails');
     title = translate('DownloadWarning', { warningMessage });
   }
 
@@ -133,35 +142,23 @@ function QueueStatus(props) {
 
   return (
     <Popover
-      anchor={
-        <Icon
-          name={iconName}
-          kind={iconKind}
-        />
-      }
+      anchor={<Icon name={iconName} kind={iconKind} />}
       title={title}
-      body={hasWarning || hasError ? getDetailedPopoverBody(statusMessages) : sourceTitle}
+      body={
+        hasWarning || hasError
+          ? getDetailedPopoverBody(statusMessages)
+          : sourceTitle
+      }
       position={position}
       canFlip={canFlip}
     />
   );
 }
 
-QueueStatus.propTypes = {
-  sourceTitle: PropTypes.string.isRequired,
-  status: PropTypes.string.isRequired,
-  trackedDownloadStatus: PropTypes.string.isRequired,
-  trackedDownloadState: PropTypes.string.isRequired,
-  statusMessages: PropTypes.arrayOf(PropTypes.object),
-  errorMessage: PropTypes.string,
-  position: PropTypes.oneOf(tooltipPositions.all).isRequired,
-  canFlip: PropTypes.bool.isRequired
-};
-
 QueueStatus.defaultProps = {
   trackedDownloadStatus: 'ok',
   trackedDownloadState: 'downloading',
-  canFlip: false
+  canFlip: false,
 };
 
 export default QueueStatus;

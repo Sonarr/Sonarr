@@ -2,6 +2,7 @@
 // Please do not change this file!
 interface CssExports {
   'torrent': string;
+  'unknown': string;
   'usenet': string;
 }
 export const cssExports: CssExports;

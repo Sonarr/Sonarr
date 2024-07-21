@@ -3,7 +3,7 @@ import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import Blocklist from 'Activity/Blocklist/Blocklist';
 import History from 'Activity/History/History';
-import QueueConnector from 'Activity/Queue/QueueConnector';
+import Queue from 'Activity/Queue/Queue';
 import AddNewSeriesConnector from 'AddSeries/AddNewSeries/AddNewSeriesConnector';
 import ImportSeries from 'AddSeries/ImportSeries/ImportSeries';
 import CalendarPageConnector from 'Calendar/CalendarPageConnector';
@@ -130,7 +130,7 @@ function AppRoutes(props) {
 
       <Route
         path="/activity/queue"
-        component={QueueConnector}
+        component={Queue}
       />
 
       <Route

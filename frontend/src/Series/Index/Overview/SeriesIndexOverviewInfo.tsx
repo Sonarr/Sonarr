@@ -137,14 +137,13 @@ function getInfoRowProps(
         date: formatDateTime(previousAiring, longDateFormat, timeFormat),
       }),
       iconName: icons.CALENDAR,
-      label:
-        getRelativeDate({
-          date: previousAiring,
-          shortDateFormat,
-          showRelativeDates,
-          timeFormat,
-          timeForToday: true,
-        }) ?? '',
+      label: getRelativeDate({
+        date: previousAiring,
+        shortDateFormat,
+        showRelativeDates,
+        timeFormat,
+        timeForToday: true,
+      }),
     };
   }
 

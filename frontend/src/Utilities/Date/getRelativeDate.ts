@@ -27,7 +27,7 @@ function getRelativeDate({
   includeTime = false,
 }: GetRelativeDateOptions) {
   if (!date) {
-    return null;
+    return '';
   }
 
   if ((includeTime || timeForToday) && !timeFormat) {
