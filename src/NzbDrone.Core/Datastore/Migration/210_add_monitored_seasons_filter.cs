@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Data;
 using Dapper;
@@ -23,7 +22,7 @@ namespace NzbDrone.Core.Datastore.Migration
             using (var getUnmonitoredSeasonFilter = conn.CreateCommand())
             {
                 getUnmonitoredSeasonFilter.Transaction = tran;
-                getUnmonitoredSeasonFilter.CommandText = "SELECT \"Id\", \"Filters\" FROM \"CustomFilters\" WHERE EXISTS (SELECT 1 FROM json_each(\"Filters\") AS EACH WHERE json_extract(EACH.value, '$.key') = 'hasUnmonitoredSeason')";
+                getUnmonitoredSeasonFilter.CommandText = "SELECT \"Id\", \"Filters\" FROM \"CustomFilters\"";
 
                 using (var reader = getUnmonitoredSeasonFilter.ExecuteReader())
                 {
@@ -34,7 +33,7 @@ namespace NzbDrone.Core.Datastore.Migration
 
                         foreach (var filter in filters)
                         {
-                            if (filter["key"].ToString() == "hasUnmonitoredSeason")
+                            if (filter["key"]?.ToString() == "hasUnmonitoredSeason")
                             {
                                 var value = filter["value"].ToString();
                                 var type = filter["type"].ToString();
@@ -70,7 +69,6 @@ namespace NzbDrone.Core.Datastore.Migration
                 }
             }
 
-            Console.WriteLine("Migrating 210");
             var updateSql = "UPDATE \"CustomFilters\" SET \"Filters\" = @Filters WHERE \"Id\" = @Id";
             conn.Execute(updateSql, updated, transaction: tran);
         }
