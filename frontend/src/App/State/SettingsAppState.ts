@@ -1,8 +1,8 @@
 import AppSectionState, {
   AppSectionDeleteState,
+  AppSectionItemSchemaState,
   AppSectionItemState,
   AppSectionSaveState,
-  AppSectionSchemaState,
   PagedAppSectionState,
 } from 'App/State/AppSectionState';
 import Language from 'Language/Language';
@@ -40,7 +40,7 @@ export interface NotificationAppState
 
 export interface QualityProfilesAppState
   extends AppSectionState<QualityProfile>,
-    AppSectionSchemaState<QualityProfile> {}
+    AppSectionItemSchemaState<QualityProfile> {}
 
 export interface ImportListOptionsSettingsAppState
   extends AppSectionItemState<ImportListOptionsSettings>,

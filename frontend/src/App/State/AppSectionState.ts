@@ -43,6 +43,13 @@ export interface AppSectionSchemaState<T> {
   };
 }
 
+export interface AppSectionItemSchemaState<T> {
+  isSchemaFetching: boolean;
+  isSchemaPopulated: boolean;
+  schemaError: Error;
+  schema: T;
+}
+
 export interface AppSectionItemState<T> {
   isFetching: boolean;
   isPopulated: boolean;

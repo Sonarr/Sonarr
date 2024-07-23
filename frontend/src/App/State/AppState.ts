@@ -35,14 +35,14 @@ export interface PropertyFilter {
 export interface Filter {
   key: string;
   label: string;
-  filers: PropertyFilter[];
+  filters: PropertyFilter[];
 }
 
 export interface CustomFilter {
   id: number;
   type: string;
   label: string;
-  filers: PropertyFilter[];
+  filters: PropertyFilter[];
 }
 
 export interface AppSectionState {

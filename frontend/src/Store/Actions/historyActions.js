@@ -4,7 +4,7 @@ import Icon from 'Components/Icon';
 import { filterBuilderTypes, filterBuilderValueTypes, filterTypes, icons, sortDirections } from 'Helpers/Props';
 import { createThunk, handleThunks } from 'Store/thunks';
 import createAjaxRequest from 'Utilities/createAjaxRequest';
-import serverSideCollectionHandlers from 'Utilities/serverSideCollectionHandlers';
+import serverSideCollectionHandlers from 'Utilities/State/serverSideCollectionHandlers';
 import translate from 'Utilities/String/translate';
 import { updateItem } from './baseActions';
 import createHandleActions from './Creators/createHandleActions';

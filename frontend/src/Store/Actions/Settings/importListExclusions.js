@@ -5,7 +5,7 @@ import createServerSideCollectionHandlers from 'Store/Actions/Creators/createSer
 import createSetSettingValueReducer from 'Store/Actions/Creators/Reducers/createSetSettingValueReducer';
 import createSetTableOptionReducer from 'Store/Actions/Creators/Reducers/createSetTableOptionReducer';
 import { createThunk, handleThunks } from 'Store/thunks';
-import serverSideCollectionHandlers from 'Utilities/serverSideCollectionHandlers';
+import serverSideCollectionHandlers from 'Utilities/State/serverSideCollectionHandlers';
 
 //
 // Variables

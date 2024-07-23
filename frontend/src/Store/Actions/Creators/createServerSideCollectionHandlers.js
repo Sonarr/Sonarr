@@ -1,5 +1,5 @@
-import pages from 'Utilities/pages';
-import serverSideCollectionHandlers from 'Utilities/serverSideCollectionHandlers';
+import pages from 'Utilities/State/pages';
+import serverSideCollectionHandlers from 'Utilities/State/serverSideCollectionHandlers';
 import createFetchServerSideCollectionHandler from './createFetchServerSideCollectionHandler';
 import createSetServerSideCollectionFilterHandler from './createSetServerSideCollectionFilterHandler';
 import createSetServerSideCollectionPageHandler from './createSetServerSideCollectionPageHandler';
