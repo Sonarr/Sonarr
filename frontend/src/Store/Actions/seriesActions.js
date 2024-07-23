@@ -202,15 +202,18 @@ export const filterPredicates = {
       if (seasonNumber <= 0) {
         return acc;
       }
+
       if (monitored) {
         acc.monitoredCount++;
       } else {
         acc.unmonitoredCount++;
       }
+
       return acc;
     }, { monitoredCount: 0, unmonitoredCount: 0 });
 
     let seasonsMonitoredStatus = 'partial';
+
     if (monitoredCount === 0) {
       seasonsMonitoredStatus = 'none';
     } else if (unmonitoredCount === 0) {
