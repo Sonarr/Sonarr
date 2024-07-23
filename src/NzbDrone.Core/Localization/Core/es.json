@@ -2085,5 +2085,13 @@
     "CustomColonReplacementFormatHint": "Caracteres válidos del sistema de archivos como dos puntos (letra)",
     "OnFileImport": "Al importar un archivo",
     "OnImportComplete": "Al completar la importación",
-    "OnFileUpgrade": "Al actualizar archivo"
+    "OnFileUpgrade": "Al actualizar archivo",
+    "RatingVotes": "Calificaciones",
+    "ShowTagsHelpText": "Muestra etiquetas debajo del póster",
+    "ShowTags": "Mostrar etiquetas",
+    "Install": "Instalar",
+    "InstallMajorVersionUpdate": "Instalar actualización",
+    "CountVotes": "{votes} votos",
+    "InstallMajorVersionUpdateMessage": "Esta actualización instalará una nueva versión principal y podría no ser compatible con tu sistema. ¿Estás seguro que quieres instalar esta actualización?",
+    "InstallMajorVersionUpdateMessageLink": "Por favor revisa [{domain}]({url}) para más información."
 }

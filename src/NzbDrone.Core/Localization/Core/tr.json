@@ -847,5 +847,8 @@
     "AllSeriesInRootFolderHaveBeenImported": "{path} içerisindeki tüm diziler içeri aktarıldı",
     "AlternateTitles": "Alternatif Başlıklar",
     "AnEpisodeIsDownloading": "Bir bölüm indiriliyor",
-    "UnableToImportAutomatically": "Otomatikman İçe Aktarılamıyor"
+    "UnableToImportAutomatically": "Otomatikman İçe Aktarılamıyor",
+    "Any": "Herhangi",
+    "ShowTags": "Etiketleri göster",
+    "ShowTagsHelpText": "Etiketleri posterin altında göster"
 }
