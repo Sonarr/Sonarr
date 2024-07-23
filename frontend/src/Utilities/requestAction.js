@@ -1,18 +1,17 @@
 import $ from 'jquery';
-import _ from 'lodash';
 import createAjaxRequest from './createAjaxRequest';
 
 function flattenProviderData(providerData) {
-  return _.reduce(Object.keys(providerData), (result, key) => {
+  return Object.keys(providerData).reduce((acc, key) => {
     const property = providerData[key];
 
     if (key === 'fields') {
-      result[key] = property;
+      acc[key] = property;
     } else {
-      result[key] = property.value;
+      acc[key] = property.value;
     }
 
-    return result;
+    return acc;
   }, {});
 }
 

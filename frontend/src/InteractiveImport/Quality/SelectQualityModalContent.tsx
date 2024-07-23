@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
-import { Error } from 'App/State/AppSectionState';
 import AppState from 'App/State/AppState';
 import Alert from 'Components/Alert';
 import Form from 'Components/Form/Form';
@@ -21,21 +20,14 @@ import { CheckInputChanged } from 'typings/inputs';
 import getQualities from 'Utilities/Quality/getQualities';
 import translate from 'Utilities/String/translate';
 
-interface QualitySchemaState {
-  isFetching: boolean;
-  isPopulated: boolean;
-  error: Error;
-  items: Quality[];
-}
-
 function createQualitySchemaSelector() {
   return createSelector(
     (state: AppState) => state.settings.qualityProfiles,
-    (qualityProfiles): QualitySchemaState => {
+    (qualityProfiles) => {
       const { isSchemaFetching, isSchemaPopulated, schemaError, schema } =
         qualityProfiles;
 
-      const items = getQualities(schema.items) as Quality[];
+      const items = getQualities(schema.items);
 
       return {
         isFetching: isSchemaFetching,
