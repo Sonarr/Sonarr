@@ -198,8 +198,6 @@ function Updates() {
         {hasUpdates && (
           <div>
             {items.map((update) => {
-              const hasChanges = !!update.changes;
-
               return (
                 <div key={update.version} className={styles.update}>
                   <div className={styles.info}>
@@ -249,7 +247,7 @@ function Updates() {
                     ) : null}
                   </div>
 
-                  {hasChanges ? (
+                  {update.changes ? (
                     <div>
                       <UpdateChanges
                         title={translate('New')}

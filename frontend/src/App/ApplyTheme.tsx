@@ -1,12 +1,8 @@
-import React, { Fragment, ReactNode, useCallback, useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
 import themes from 'Styles/Themes';
 import AppState from './State/AppState';
-
-interface ApplyThemeProps {
-  children: ReactNode;
-}
 
 function createThemeSelector() {
   return createSelector(
@@ -17,7 +13,7 @@ function createThemeSelector() {
   );
 }
 
-function ApplyTheme({ children }: ApplyThemeProps) {
+function ApplyTheme() {
   const theme = useSelector(createThemeSelector());
 
   const updateCSSVariables = useCallback(() => {
@@ -31,7 +27,7 @@ function ApplyTheme({ children }: ApplyThemeProps) {
     updateCSSVariables();
   }, [updateCSSVariables, theme]);
 
-  return <Fragment>{children}</Fragment>;
+  return null;
 }
 
 export default ApplyTheme;
