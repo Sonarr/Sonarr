@@ -13,7 +13,7 @@ interface Update {
   installedOn: string;
   installable: boolean;
   latest: boolean;
-  changes: Changes;
+  changes: Changes | null;
   hash: string;
 }
 

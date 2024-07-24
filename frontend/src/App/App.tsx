@@ -1,13 +1,19 @@
-import { ConnectedRouter } from 'connected-react-router';
+import { ConnectedRouter, ConnectedRouterProps } from 'connected-react-router';
 import PropTypes from 'prop-types';
 import React from 'react';
 import DocumentTitle from 'react-document-title';
 import { Provider } from 'react-redux';
+import { Store } from 'redux';
 import PageConnector from 'Components/Page/PageConnector';
 import ApplyTheme from './ApplyTheme';
 import AppRoutes from './AppRoutes';
 
-function App({ store, history }) {
+interface AppProps {
+  store: Store;
+  history: ConnectedRouterProps['history'];
+}
+
+function App({ store, history }: AppProps) {
   return (
     <DocumentTitle title={window.Sonarr.instanceName}>
       <Provider store={store}>
@@ -24,7 +30,7 @@ function App({ store, history }) {
 
 App.propTypes = {
   store: PropTypes.object.isRequired,
-  history: PropTypes.object.isRequired
+  history: PropTypes.object.isRequired,
 };
 
 export default App;
