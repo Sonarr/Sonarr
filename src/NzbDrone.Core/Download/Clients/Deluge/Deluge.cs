@@ -200,7 +200,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
 
             if (ignoredCount > 0)
             {
-                _logger.Warn("{0} torrent(s) were ignored becuase they did not have a title, check Deluge and remove any invalid torrents");
+                _logger.Warn("{0} torrent(s) were ignored because they did not have a title, check Deluge and remove any invalid torrents");
             }
 
             return items;
