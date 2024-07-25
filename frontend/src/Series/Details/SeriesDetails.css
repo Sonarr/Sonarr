@@ -129,6 +129,7 @@
 .path,
 .sizeOnDisk,
 .qualityProfileName,
+.originalLanguageName,
 .network,
 .links,
 .tags {

@@ -185,6 +185,7 @@ class SeriesDetails extends Component {
       monitored,
       status,
       network,
+      originalLanguage,
       overview,
       images,
       seasons,
@@ -431,7 +432,6 @@ class SeriesDetails extends Component {
                     className={styles.detailsLabel}
                     size={sizes.LARGE}
                   >
-
                     <div>
                       <Icon
                         name={icons.FOLDER}
@@ -449,7 +449,6 @@ class SeriesDetails extends Component {
                         className={styles.detailsLabel}
                         size={sizes.LARGE}
                       >
-
                         <div>
                           <Icon
                             name={icons.DRIVE}
@@ -477,7 +476,6 @@ class SeriesDetails extends Component {
                     title={translate('QualityProfile')}
                     size={sizes.LARGE}
                   >
-
                     <div>
                       <Icon
                         name={icons.PROFILE}
@@ -497,7 +495,6 @@ class SeriesDetails extends Component {
                     className={styles.detailsLabel}
                     size={sizes.LARGE}
                   >
-
                     <div>
                       <Icon
                         name={monitored ? icons.MONITORED : icons.UNMONITORED}
@@ -514,7 +511,6 @@ class SeriesDetails extends Component {
                     title={statusDetails.message}
                     size={sizes.LARGE}
                   >
-
                     <div>
                       <Icon
                         name={statusDetails.icon}
@@ -527,23 +523,43 @@ class SeriesDetails extends Component {
                   </Label>
 
                   {
-                    !!network &&
+                    originalLanguage?.name ?
+                      <Label
+                        className={styles.detailsLabel}
+                        title={translate('OriginalLanguage')}
+                        size={sizes.LARGE}
+                      >
+                        <div>
+                          <Icon
+                            name={icons.LANGUAGE}
+                            size={17}
+                          />
+                          <span className={styles.originalLanguageName}>
+                            {originalLanguage.name}
+                          </span>
+                        </div>
+                      </Label> :
+                      null
+                  }
+
+                  {
+                    network ?
                       <Label
                         className={styles.detailsLabel}
                         title={translate('Network')}
                         size={sizes.LARGE}
                       >
-
                         <div>
                           <Icon
                             name={icons.NETWORK}
                             size={17}
                           />
-                          <span className={styles.qualityProfileName}>
+                          <span className={styles.network}>
                             {network}
                           </span>
                         </div>
-                      </Label>
+                      </Label> :
+                      null
                   }
 
                   <Tooltip
@@ -552,7 +568,6 @@ class SeriesDetails extends Component {
                         className={styles.detailsLabel}
                         size={sizes.LARGE}
                       >
-
                         <div>
                           <Icon
                             name={icons.EXTERNAL_LINK}
@@ -734,6 +749,7 @@ SeriesDetails.propTypes = {
   monitor: PropTypes.string,
   status: PropTypes.string.isRequired,
   network: PropTypes.string,
+  originalLanguage: PropTypes.object,
   overview: PropTypes.string.isRequired,
   images: PropTypes.arrayOf(PropTypes.object).isRequired,
   seasons: PropTypes.arrayOf(PropTypes.object).isRequired,

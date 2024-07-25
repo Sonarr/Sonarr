@@ -4,6 +4,8 @@ interface CssExports {
   'alreadyExistsIcon': string;
   'content': string;
   'icons': string;
+  'network': string;
+  'originalLanguageName': string;
   'overlay': string;
   'overview': string;
   'poster': string;
