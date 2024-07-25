@@ -164,8 +164,8 @@ namespace NzbDrone.Core.MediaFiles
             var episodeFiles = _mediaFileService.Get(message.Files);
 
             _logger.ProgressInfo("Renaming {0} files for {1}", episodeFiles.Count, series.Title);
-            RenameFiles(episodeFiles, series);
-            _logger.ProgressInfo("Selected episode files renamed for {0}", series.Title);
+            var renamedFiles = RenameFiles(episodeFiles, series);
+            _logger.ProgressInfo("{0} selected episode files renamed for {1}", renamedFiles.Count, series.Title);
 
             _eventAggregator.PublishEvent(new RenameCompletedEvent());
         }
@@ -179,8 +179,8 @@ namespace NzbDrone.Core.MediaFiles
             {
                 var episodeFiles = _mediaFileService.GetFilesBySeries(series.Id);
                 _logger.ProgressInfo("Renaming all files in series: {0}", series.Title);
-                RenameFiles(episodeFiles, series);
-                _logger.ProgressInfo("All episode files renamed for {0}", series.Title);
+                var renamedFiles = RenameFiles(episodeFiles, series);
+                _logger.ProgressInfo("{0} episode files renamed for {1}", renamedFiles.Count, series.Title);
             }
 
             _eventAggregator.PublishEvent(new RenameCompletedEvent());
