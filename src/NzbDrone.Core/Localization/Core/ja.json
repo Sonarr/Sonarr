@@ -1,3 +1,8 @@
 {
-    "About": "約"
+    "About": "約",
+    "AddANewPath": "新しいパスを追加",
+    "Add": "追加",
+    "AddCondition": "条件の追加",
+    "DeleteAutoTagHelpText": "オートタグ'{name}'を削除してもよろしいですか？",
+    "Activity": "アクティビティ"
 }
