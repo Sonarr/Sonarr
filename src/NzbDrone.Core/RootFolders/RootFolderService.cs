@@ -130,8 +130,8 @@ namespace NzbDrone.Core.RootFolders
 
         public void Remove(int id)
         {
-            _cache.Clear();
             _rootFolderRepository.Delete(id);
+            _cache.Clear();
         }
 
         private List<UnmappedFolder> GetUnmappedFolders(string path, Dictionary<int, string> seriesPaths)
