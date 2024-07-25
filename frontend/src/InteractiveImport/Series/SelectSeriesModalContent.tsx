@@ -163,16 +163,21 @@ function SelectSeriesModalContent(props: SelectSeriesModalContentProps) {
     [allSeries, onSeriesSelect]
   );
 
-  const items = useMemo(() => {
-    const sorted = [...allSeries].sort(sortByProp('sortTitle'));
+  const sortedSeries = useMemo(
+    () => [...allSeries].sort(sortByProp('sortTitle')),
+    [allSeries]
+  );
 
-    return sorted.filter(
-      (item) =>
-        item.title.toLowerCase().includes(filter.toLowerCase()) ||
-        item.tvdbId.toString().includes(filter) ||
-        item.imdbId?.includes(filter)
-    );
-  }, [allSeries, filter]);
+  const items = useMemo(
+    () =>
+      sortedSeries.filter(
+        (item) =>
+          item.title.toLowerCase().includes(filter.toLowerCase()) ||
+          item.tvdbId.toString().includes(filter) ||
+          item.imdbId?.includes(filter)
+      ),
+    [sortedSeries, filter]
+  );
 
   return (
     <ModalContent onModalClose={onModalClose}>
