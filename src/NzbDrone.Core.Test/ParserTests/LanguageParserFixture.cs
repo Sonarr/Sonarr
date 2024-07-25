@@ -41,6 +41,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Title.the.Italian.Series.S01E01.The.Family.720p.HDTV.x264-FTP")]
         [TestCase("Title.the.Italy.Series.S02E01.720p.HDTV.x264-TLA")]
         [TestCase("Series Title - S01E01 - Pilot.en.sub")]
+        [TestCase("Series.Title.S01E01.SUBFRENCH.1080p.WEB.x264-GROUP")]
+
         public void should_parse_language_unknown(string postTitle)
         {
             var result = LanguageParser.ParseLanguages(postTitle);
