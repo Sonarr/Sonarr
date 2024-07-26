@@ -176,6 +176,20 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
                         tvShow.Add(imdbId);
                     }
 
+                    if (series.TmdbId > 0)
+                    {
+                        var tmdbId = new XElement("uniqueid", series.TmdbId);
+                        tmdbId.SetAttributeValue("type", "tmdb");
+                        tvShow.Add(tmdbId);
+                    }
+
+                    if (series.TvMazeId > 0)
+                    {
+                        var tvMazeId = new XElement("uniqueid", series.TvMazeId);
+                        tvMazeId.SetAttributeValue("type", "tvmaze");
+                        tvShow.Add(tvMazeId);
+                    }
+
                     foreach (var genre in series.Genres)
                     {
                         tvShow.Add(new XElement("genre", genre));
