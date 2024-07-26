@@ -22,7 +22,7 @@ namespace NzbDrone.Core.Datastore.Migration
             using (var getUnmonitoredSeasonFilter = conn.CreateCommand())
             {
                 getUnmonitoredSeasonFilter.Transaction = tran;
-                getUnmonitoredSeasonFilter.CommandText = "SELECT \"Id\", \"Filters\" FROM \"CustomFilters\"";
+                getUnmonitoredSeasonFilter.CommandText = "SELECT \"Id\", \"Filters\" FROM \"CustomFilters\" WHERE \"Type\" = 'series'";
 
                 using (var reader = getUnmonitoredSeasonFilter.ExecuteReader())
                 {
@@ -68,9 +68,9 @@ namespace NzbDrone.Core.Datastore.Migration
                     }
                 }
             }
-
-            var updateSql = "UPDATE \"CustomFilters\" SET \"Filters\" = @Filters WHERE \"Id\" = @Id";
-            conn.Execute(updateSql, updated, transaction: tran);
         }
+
+        var updateSql = "UPDATE \"CustomFilters\" SET \"Filters\" = @Filters WHERE \"Id\" = @Id";
+        conn.Execute(updateSql, updated, transaction: tran);
     }
 }
