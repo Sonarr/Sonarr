@@ -68,9 +68,9 @@ namespace NzbDrone.Core.Datastore.Migration
                     }
                 }
             }
-        }
 
-        var updateSql = "UPDATE \"CustomFilters\" SET \"Filters\" = @Filters WHERE \"Id\" = @Id";
-        conn.Execute(updateSql, updated, transaction: tran);
+            var updateSql = "UPDATE \"CustomFilters\" SET \"Filters\" = @Filters WHERE \"Id\" = @Id";
+            conn.Execute(updateSql, updated, transaction: tran);
+        }
     }
 }
