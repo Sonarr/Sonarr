@@ -2093,5 +2093,6 @@
     "RatingVotes": "Votos de Avaliação",
     "Install": "Instalar",
     "InstallMajorVersionUpdate": "Instalar Atualização",
-    "InstallMajorVersionUpdateMessageLink": "Verifique [{domain}]({url}) para obter mais informações."
+    "InstallMajorVersionUpdateMessageLink": "Verifique [{domain}]({url}) para obter mais informações.",
+    "NextAiringDate": "Próxima Exibição: {date}"
 }
