@@ -2037,7 +2037,7 @@
   "UpcomingSeriesDescription": "Series has been announced but no exact air date yet",
   "UpdateAll": "Update All",
   "UpdateAutomaticallyHelpText": "Automatically download and install updates. You will still be able to install from System: Updates",
-  "UpdateAvailableHealthCheckMessage": "New update is available",
+  "UpdateAvailableHealthCheckMessage": "New update is available: {version}",
   "UpdateFiltered": "Update Filtered",
   "UpdateMechanismHelpText": "Use {appName}'s built-in updater or a script",
   "UpdateMonitoring": "Update Monitoring",
