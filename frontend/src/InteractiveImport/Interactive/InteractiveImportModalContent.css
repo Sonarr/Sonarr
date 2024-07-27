@@ -37,7 +37,7 @@
   composes: select from '~Components/Form/SelectInput.css';
 
   margin-right: 10px;
-  width: auto;
+  max-width: fit-content;
 }
 
 .errorMessage {
@@ -53,6 +53,7 @@
 
     .leftButtons {
       align-items: flex-start;
+      max-width: fit-content;
     }
 
     .rightButtons {
