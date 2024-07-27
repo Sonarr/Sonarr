@@ -9,7 +9,7 @@ import Scroller from 'Components/Scroller/Scroller';
 import { icons } from 'Helpers/Props';
 import locationShape from 'Helpers/Props/Shapes/locationShape';
 import dimensions from 'Styles/Variables/dimensions';
-import HealthStatusConnector from 'System/Status/Health/HealthStatusConnector';
+import HealthStatus from 'System/Status/Health/HealthStatus';
 import translate from 'Utilities/String/translate';
 import MessagesConnector from './Messages/MessagesConnector';
 import PageSidebarItem from './PageSidebarItem';
@@ -147,7 +147,7 @@ const links = [
       {
         title: () => translate('Status'),
         to: '/system/status',
-        statusComponent: HealthStatusConnector
+        statusComponent: HealthStatus
       },
       {
         title: () => translate('Tasks'),

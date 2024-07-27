@@ -3,13 +3,13 @@ import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
 import translate from 'Utilities/String/translate';
 import QueuedTasks from './Queued/QueuedTasks';
-import ScheduledTasksConnector from './Scheduled/ScheduledTasksConnector';
+import ScheduledTasks from './Scheduled/ScheduledTasks';
 
 function Tasks() {
   return (
     <PageContent title={translate('Tasks')}>
       <PageContentBody>
-        <ScheduledTasksConnector />
+        <ScheduledTasks />
         <QueuedTasks />
       </PageContentBody>
     </PageContent>
