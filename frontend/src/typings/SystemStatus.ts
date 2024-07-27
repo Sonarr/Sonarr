@@ -4,6 +4,8 @@ interface SystemStatus {
   authentication: string;
   branch: string;
   buildTime: string;
+  databaseVersion: string;
+  databaseType: string;
   instanceName: string;
   isAdmin: boolean;
   isDebug: boolean;
@@ -18,8 +20,10 @@ interface SystemStatus {
   mode: string;
   osName: string;
   osVersion: string;
+  packageAuthor: string;
   packageUpdateMechanism: string;
   packageUpdateMechanismMessage: string;
+  packageVersion: string;
   runtimeName: string;
   runtimeVersion: string;
   sqliteVersion: string;
