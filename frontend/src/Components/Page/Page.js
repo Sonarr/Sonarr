@@ -110,10 +110,6 @@ class Page extends Component {
             isOpen={this.state.isConnectionLostModalOpen}
             onModalClose={this.onConnectionLostModalClose}
           />
-
-          <AuthenticationRequiredModal
-            isOpen={!authenticationEnabled}
-          />
         </div>
       </ColorImpairedContext.Provider>
     );
