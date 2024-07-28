@@ -53,6 +53,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[UHA-WINGS][Anime-Series Title S02][01][x264 1080p][CHT].mp4", "Anime-Series Title S2", "UHA-WINGS", 1)]
         [TestCase("[Suzuya Raws] 腼腆英雄 东京夺还篇 / Series 2nd Season - 01 [CR WebRip 1080p HEVC-10bit AAC][Multi-Subs]", "Series 2nd Season", "Suzuya Raws", 1)]
         [TestCase("[ANi] SERIES / SERIES 靦腆英雄 - 11 [1080P][Baha][WEB-DL][AAC AVC][CHT][MP4]", "SERIES", "ANi", 11)]
+        [TestCase("[Q] 全职高手 第3季 / Series S3 - 09 (1080p HBR HEVC Multi-Sub)", "Series S3", "Q", 9)]
+        [TestCase("[Q] 全职高手 第3季 | Series S3 - 09 (1080p HBR HEVC Multi-Sub)", "Series S3", "Q", 9)]
         public void should_parse_chinese_anime_season_episode_releases(string postTitle, string title, string subgroup, int absoluteEpisodeNumber)
         {
             postTitle = XmlCleaner.ReplaceUnicode(postTitle);
