@@ -380,8 +380,17 @@ namespace NzbDrone.Common.Test
         [TestCase(@" C:\Test\TV\")]
         [TestCase(@" C:\Test\TV")]
 
-        public void IsPathValid_should_be_false(string path)
+        public void IsPathValid_should_be_false_on_windows(string path)
         {
+            WindowsOnly();
+            path.IsPathValid(PathValidationType.CurrentOs).Should().BeFalse();
+        }
+
+        [TestCase(@"")]
+        [TestCase(@"relative/path")]
+        public void IsPathValid_should_be_false_on_unix(string path)
+        {
+            PosixOnly();
             path.AsOsAgnostic().IsPathValid(PathValidationType.CurrentOs).Should().BeFalse();
         }
     }
