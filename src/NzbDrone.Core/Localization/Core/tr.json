@@ -445,7 +445,6 @@
     "ManageLists": "Listeleri Yönet",
     "MediaInfoFootNote": "Full/AudioLanguages/SubtitleLanguages, dosya adında yer alan dilleri filtrelemenize olanak tanıyan bir `:EN+DE` son ekini destekler. Belirli dilleri hariç tutmak için '-DE'yi kullanın. `+` (örneğin `:EN+`) eklenmesi, hariç tutulan dillere bağlı olarak `[EN]`/`[EN+--]`/`[--]` sonucunu verecektir. Örneğin `{MediaInfo Full:EN+DE}`.",
     "Never": "Asla",
-    "NoHistoryBlocklist": "Geçmiş engellenenler listesi yok",
     "NoIndexersFound": "Dizinleyici bulunamadı",
     "NotificationsAppriseSettingsConfigurationKeyHelpText": "Kalıcı Depolama Çözümü için Yapılandırma Anahtarı. Durum Bilgisi Olmayan URL'ler kullanılıyorsa boş bırakın.",
     "NotificationsAppriseSettingsPasswordHelpText": "HTTP Temel Kimlik Doğrulama Parolası",

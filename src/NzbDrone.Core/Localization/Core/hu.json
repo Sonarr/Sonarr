@@ -573,7 +573,6 @@
     "MoveSeriesFoldersDontMoveFiles": "Nem, én magam mozgatom át a fájlokat",
     "MoveSeriesFoldersMoveFiles": "Igen, mozgassa át a fájlokat",
     "MoveSeriesFoldersToNewPath": "Szeretné áthelyezni a sorozatfájlokat a(z) „{originalPath}” helyről a „{destinationPath}” címre?",
-    "NoHistoryBlocklist": "Nincs előzmény a tiltólistán",
     "NoHistoryFound": "Nem található előzmény",
     "NotificationsDiscordSettingsAvatarHelpText": "Módosítsa az integrációból származó üzenetekhez használt avatart",
     "NotificationsDiscordSettingsOnManualInteractionFieldsHelpText": "Módosítsa a „kézi interakcióról” értesítéshez átadott mezőket",
