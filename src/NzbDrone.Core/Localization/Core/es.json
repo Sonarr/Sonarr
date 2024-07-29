@@ -276,7 +276,6 @@
     "MonitorSeries": "Monitorizar Series",
     "NoHistory": "Sin historial",
     "NoHistoryFound": "No se encontró historial",
-    "NoHistoryBlocklist": "Sin historial de la lista de bloqueos",
     "QueueIsEmpty": "La cola está vacía",
     "Quality": "Calidad",
     "RefreshAndScanTooltip": "Actualizar información y escanear disco",

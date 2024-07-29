@@ -43,7 +43,6 @@
     "NotificationStatusSingleClientHealthCheckMessage": "Уведомления недоступны из-за сбоев: {notificationNames}",
     "CountIndexersSelected": "{count} выбранных индексаторов",
     "EditAutoTag": "Редактировать автоматическую маркировку",
-    "NoHistoryBlocklist": "Нет истории блокировок",
     "ManageDownloadClients": "Менеджер клиентов загрузки",
     "ManageImportLists": "Управление списками импорта",
     "ManageLists": "Управление листами",

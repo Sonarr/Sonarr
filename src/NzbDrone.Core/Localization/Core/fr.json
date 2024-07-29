@@ -226,7 +226,6 @@
     "MinimumFreeSpace": "Espace libre minimum",
     "Monitored": "Surveillé",
     "NoHistoryFound": "Aucun historique n'a été trouvé",
-    "NoHistoryBlocklist": "Pas d'historique de liste noire",
     "Period": "Période",
     "QualityDefinitionsLoadError": "Impossible de charger les définitions de qualité",
     "RemoveSelected": "Enlever la sélection",

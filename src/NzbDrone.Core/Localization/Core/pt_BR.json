@@ -1075,7 +1075,6 @@
     "FullColorEventsHelpText": "Estilo alterado para colorir todo o evento com a cor do status, em vez de apenas a borda esquerda. Não se aplica à Agenda",
     "ICalTagsSeriesHelpText": "O feed conterá apenas séries com pelo menos uma tag correspondente",
     "IconForFinalesHelpText": "Mostrar ícone para finais de séries/temporadas com base nas informações de episódios disponíveis",
-    "NoHistoryBlocklist": "Não há lista de bloqueio no histórico",
     "QualityCutoffNotMet": "Corte da Qualidade ainda não foi alcançado",
     "QueueLoadError": "Falha ao carregar a fila",
     "RemoveQueueItem": "Remover - {sourceTitle}",

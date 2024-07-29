@@ -114,7 +114,6 @@
     "ImportMechanismEnableCompletedDownloadHandlingIfPossibleMultiComputerHealthCheckMessage": "Activa la gestió de baixades completades si és possible (no admet diversos ordinadors)",
     "InfoUrl": "URL d'informació",
     "NoDownloadClientsFound": "No s'han trobat clients de baixada",
-    "NoHistoryBlocklist": "Sense historial de llistes de bloqueig",
     "NoHistoryFound": "No s'ha trobat cap historial",
     "NoIndexersFound": "No s'han trobat indexadors",
     "NoImportListsFound": "No s'han trobat llistes d'importació",
