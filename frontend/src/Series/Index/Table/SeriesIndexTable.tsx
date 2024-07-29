@@ -7,8 +7,7 @@ import AppState from 'App/State/AppState';
 import Scroller from 'Components/Scroller/Scroller';
 import Column from 'Components/Table/Column';
 import useMeasure from 'Helpers/Hooks/useMeasure';
-import ScrollDirection from 'Helpers/Props/ScrollDirection';
-import SortDirection from 'Helpers/Props/SortDirection';
+import { SortDirection } from 'Helpers/Props/sortDirections';
 import Series from 'Series/Series';
 import dimensions from 'Styles/Variables/dimensions';
 import getIndexOfFirstCharacter from 'Utilities/Array/getIndexOfFirstCharacter';
@@ -172,10 +171,7 @@ function SeriesIndexTable(props: SeriesIndexTableProps) {
 
   return (
     <div ref={measureRef}>
-      <Scroller
-        className={styles.tableScroller}
-        scrollDirection={ScrollDirection.Horizontal}
-      >
+      <Scroller className={styles.tableScroller} scrollDirection="horizontal">
         <SeriesIndexTableHeader
           showBanners={showBanners}
           columns={columns}

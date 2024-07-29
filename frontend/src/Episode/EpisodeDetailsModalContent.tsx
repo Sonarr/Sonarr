@@ -111,7 +111,6 @@ function EpisodeDetailsModalContent(props: EpisodeDetailsModalContentProps) {
     <ModalContent onModalClose={onModalClose}>
       <ModalHeader>
         <MonitorToggleButton
-          id={episodeId}
           monitored={monitored}
           size={18}
           isDisabled={!seriesMonitored}

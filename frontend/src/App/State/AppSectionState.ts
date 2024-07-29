@@ -1,5 +1,5 @@
 import Column from 'Components/Table/Column';
-import SortDirection from 'Helpers/Props/SortDirection';
+import { SortDirection } from 'Helpers/Props/sortDirections';
 import { FilterBuilderProp, PropertyFilter } from './AppState';
 
 export interface Error {

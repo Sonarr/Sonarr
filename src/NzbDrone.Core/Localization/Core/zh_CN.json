@@ -1165,7 +1165,7 @@
     "Test": "测试",
     "ThemeHelpText": "改变应用界面主题，选择“自动”主题会通过操作系统主题来自适应白天黑夜模式。（受Theme.Park启发）",
     "TimeFormat": "时间格式",
-    "ToggleMonitoredSeriesUnmonitored ": "当系列不受监控时，无法切换监控状态",
+    "ToggleMonitoredSeriesUnmonitored": "当系列不受监控时，无法切换监控状态",
     "ToggleMonitoredToUnmonitored": "已监视，单击可取消监视",
     "Total": "全部的",
     "TorrentsDisabled": "Torrents关闭",

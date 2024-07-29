@@ -779,7 +779,7 @@
     "Time": "Heure",
     "TimeFormat": "Format de l'heure",
     "TimeLeft": "Temps restant",
-    "ToggleMonitoredSeriesUnmonitored ": "Impossible de basculer entre l'état surveillé lorsque la série n'est pas surveillée",
+    "ToggleMonitoredSeriesUnmonitored": "Impossible de basculer entre l'état surveillé lorsque la série n'est pas surveillée",
     "ToggleMonitoredToUnmonitored": "Surveillé, cliquez pour annuler la surveillance",
     "TotalFileSize": "Taille totale des fichiers",
     "TotalRecords": "Enregistrements totaux : {totalRecords}",

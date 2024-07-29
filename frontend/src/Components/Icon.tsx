@@ -5,6 +5,7 @@ import {
 import classNames from 'classnames';
 import React, { ComponentProps } from 'react';
 import { kinds } from 'Helpers/Props';
+import { Kind } from 'Helpers/Props/kinds';
 import styles from './Icon.css';
 
 export interface IconProps
@@ -14,7 +15,7 @@ export interface IconProps
   > {
   containerClassName?: ComponentProps<'span'>['className'];
   name: FontAwesomeIconProps['icon'];
-  kind?: Extract<(typeof kinds.all)[number], keyof typeof styles>;
+  kind?: Extract<Kind, keyof typeof styles>;
   size?: number;
   isSpinning?: FontAwesomeIconProps['spin'];
   title?: string | (() => string);

@@ -1,11 +1,13 @@
 import classNames from 'classnames';
 import React, { ComponentProps, ReactNode } from 'react';
 import { kinds, sizes } from 'Helpers/Props';
+import { Kind } from 'Helpers/Props/kinds';
+import { Size } from 'Helpers/Props/sizes';
 import styles from './Label.css';
 
 export interface LabelProps extends ComponentProps<'span'> {
-  kind?: Extract<(typeof kinds.all)[number], keyof typeof styles>;
-  size?: Extract<(typeof sizes.all)[number], keyof typeof styles>;
+  kind?: Extract<Kind, keyof typeof styles>;
+  size?: Extract<Size, keyof typeof styles>;
   outline?: boolean;
   children: ReactNode;
 }

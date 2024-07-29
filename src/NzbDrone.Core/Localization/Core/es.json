@@ -1595,7 +1595,7 @@
     "TestParsing": "Probar análisis",
     "ThemeHelpText": "Cambia el tema de la interfaz de la aplicación, el tema 'Auto' usará el tema de tu sistema para establecer el modo luminoso u oscuro. Inspirado por Theme.Park",
     "TimeLeft": "Tiempo restante",
-    "ToggleMonitoredSeriesUnmonitored ": "No se puede conmutar el estado monitorizado cuando la serie no está monitorizada",
+    "ToggleMonitoredSeriesUnmonitored": "No se puede conmutar el estado monitorizado cuando la serie no está monitorizada",
     "Tomorrow": "Mañana",
     "TorrentBlackhole": "Blackhole de torrent",
     "TorrentBlackholeSaveMagnetFiles": "Guardar archivos magnet",

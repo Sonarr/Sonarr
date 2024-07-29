@@ -328,7 +328,7 @@
     "TagsSettingsSummary": "Täältä näet kaikki tunnisteet käyttökohteineen ja voit poistaa käyttämättömät tunnisteet.",
     "Tomorrow": "Huomenna",
     "TestParsing": "Testaa jäsennystä",
-    "ToggleMonitoredSeriesUnmonitored ": "Valvontatilaa ei ole mahdollista muuttaa, jos sarjaa ei valvota.",
+    "ToggleMonitoredSeriesUnmonitored": "Valvontatilaa ei ole mahdollista muuttaa, jos sarjaa ei valvota.",
     "Trace": "Jäljitys",
     "TotalRecords": "Rivien kokonaismäärä: {totalRecords}",
     "TotalSpace": "Kokonaistila",
