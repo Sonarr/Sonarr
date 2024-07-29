@@ -15,7 +15,7 @@ import TableBody from 'Components/Table/TableBody';
 import Episode from 'Episode/Episode';
 import useSelectState from 'Helpers/Hooks/useSelectState';
 import { kinds, scrollDirections } from 'Helpers/Props';
-import SortDirection from 'Helpers/Props/SortDirection';
+import { SortDirection } from 'Helpers/Props/sortDirections';
 import {
   clearEpisodes,
   fetchEpisodes,

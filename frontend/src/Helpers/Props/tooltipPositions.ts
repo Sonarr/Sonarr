@@ -3,9 +3,6 @@ export const RIGHT = 'right';
 export const BOTTOM = 'bottom';
 export const LEFT = 'left';
 
-export const all = [
-  TOP,
-  RIGHT,
-  BOTTOM,
-  LEFT
-];
+export const all = [TOP, RIGHT, BOTTOM, LEFT];
+
+export type TooltipPosition = 'top' | 'right' | 'bottom' | 'left';

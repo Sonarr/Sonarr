@@ -1,4 +1,4 @@
-import SortDirection from 'Helpers/Props/SortDirection';
+import { SortDirection } from 'Helpers/Props/sortDirections';
 
 export type SortCallback = (
   sortKey: string,

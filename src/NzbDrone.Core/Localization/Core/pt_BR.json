@@ -1288,7 +1288,7 @@
     "TablePageSizeMaximum": "O tamanho da página não pode exceder {maximumValue}",
     "Tba": "A ser anunciado",
     "Titles": "Título",
-    "ToggleMonitoredSeriesUnmonitored ": "Não é possível alternar o estado monitorado quando a série não é monitorada",
+    "ToggleMonitoredSeriesUnmonitored": "Não é possível alternar o estado monitorado quando a série não é monitorada",
     "ToggleMonitoredToUnmonitored": "Monitorado, clique para cancelar o monitoramento",
     "ToggleUnmonitoredToMonitored": "Não monitorado, clique para monitorar",
     "TotalRecords": "Total de registros: {totalRecords}",

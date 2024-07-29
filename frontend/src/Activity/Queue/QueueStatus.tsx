@@ -2,7 +2,7 @@ import React from 'react';
 import Icon, { IconProps } from 'Components/Icon';
 import Popover from 'Components/Tooltip/Popover';
 import { icons, kinds } from 'Helpers/Props';
-import TooltipPosition from 'Helpers/Props/TooltipPosition';
+import { TooltipPosition } from 'Helpers/Props/tooltipPositions';
 import {
   QueueTrackedDownloadState,
   QueueTrackedDownloadStatus,

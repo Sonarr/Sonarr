@@ -3,7 +3,7 @@ import MenuContent from 'Components/Menu/MenuContent';
 import SortMenu from 'Components/Menu/SortMenu';
 import SortMenuItem from 'Components/Menu/SortMenuItem';
 import { align } from 'Helpers/Props';
-import SortDirection from 'Helpers/Props/SortDirection';
+import { SortDirection } from 'Helpers/Props/sortDirections';
 import translate from 'Utilities/String/translate';
 
 interface SeriesIndexSortMenuProps {

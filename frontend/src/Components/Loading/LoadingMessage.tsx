@@ -8,21 +8,21 @@ const messages = [
   'Bleep Bloop.',
   'Locating the required gigapixels to render...',
   'Spinning up the hamster wheel...',
-  'At least you\'re not on hold',
+  "At least you're not on hold",
   'Hum something loud while others stare',
   'Loading humorous message... Please Wait',
-  'I could\'ve been faster in Python',
-  'Don\'t forget to rewind your episodes',
+  "I could've been faster in Python",
+  "Don't forget to rewind your episodes",
   'Congratulations! You are the 1000th visitor.',
-  'HELP! I\'m being held hostage and forced to write these stupid lines!',
+  "HELP! I'm being held hostage and forced to write these stupid lines!",
   'RE-calibrating the internet...',
-  'I\'ll be here all week',
-  'Don\'t forget to tip your waitress',
+  "I'll be here all week",
+  "Don't forget to tip your waitress",
   'Apply directly to the forehead',
-  'Loading Battlestation'
+  'Loading Battlestation',
 ];
 
-let message = null;
+let message: string | null = null;
 
 function LoadingMessage() {
   if (!message) {
@@ -30,11 +30,7 @@ function LoadingMessage() {
     message = messages[index];
   }
 
-  return (
-    <div className={styles.loadingMessage}>
-      {message}
-    </div>
-  );
+  return <div className={styles.loadingMessage}>{message}</div>;
 }
 
 export default LoadingMessage;

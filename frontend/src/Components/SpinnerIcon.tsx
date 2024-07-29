@@ -10,11 +10,13 @@ export interface SpinnerIconProps extends IconProps {
 export default function SpinnerIcon({
   name,
   spinningName = icons.SPINNER,
+  isSpinning,
   ...otherProps
 }: SpinnerIconProps) {
   return (
     <Icon
-      name={(otherProps.isSpinning && spinningName) || name}
+      name={(isSpinning && spinningName) || name}
+      isSpinning={isSpinning}
       {...otherProps}
     />
   );
