@@ -51,7 +51,7 @@
     "SizeOnDisk": "Tamanho no disco",
     "SystemTimeHealthCheckMessage": "A hora do sistema está desligada por mais de 1 dia. Tarefas agendadas podem não ser executadas corretamente até que o horário seja corrigido",
     "Unmonitored": "Não monitorado",
-    "UpdateAvailableHealthCheckMessage": "Nova atualização está disponível",
+    "UpdateAvailableHealthCheckMessage": "Nova atualização disponível: {version}",
     "Added": "Adicionado",
     "ApiKeyValidationHealthCheckMessage": "Atualize sua chave de API para ter pelo menos {length} caracteres. Você pode fazer isso através das configurações ou do arquivo de configuração",
     "RemoveCompletedDownloads": "Remover downloads concluídos",
@@ -2093,5 +2093,10 @@
     "Install": "Instalar",
     "InstallMajorVersionUpdate": "Instalar Atualização",
     "InstallMajorVersionUpdateMessageLink": "Verifique [{domain}]({url}) para obter mais informações.",
-    "NextAiringDate": "Próxima Exibição: {date}"
+    "NextAiringDate": "Próxima Exibição: {date}",
+    "SeasonsMonitoredAll": "Todas",
+    "SeasonsMonitoredPartial": "Parcial",
+    "SeasonsMonitoredNone": "Nenhuma",
+    "SeasonsMonitoredStatus": "Temporadas monitoradas",
+    "NoBlocklistItems": "Sem itens na lista de bloqueio"
 }

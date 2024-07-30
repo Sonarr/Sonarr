@@ -452,7 +452,7 @@
     "RootFolderSelectFreeSpace": "{freeSpace} Libre",
     "WantMoreControlAddACustomFormat": "Vous souhaitez avoir plus de contrôle sur les téléchargements préférés ? Ajoutez un [Format personnalisé](/settings/customformats)",
     "RemoveSelectedItemsQueueMessageText": "Voulez-vous vraiment supprimer {selectedCount} éléments de la file d'attente ?",
-    "UpdateAll": "Tout actualiser",
+    "UpdateAll": "Actualiser",
     "EnableSslHelpText": "Nécessite un redémarrage en tant qu'administrateur pour être effectif",
     "UnmonitorDeletedEpisodesHelpText": "Les épisodes effacés du disque dur ne seront plus surveillés dans {appName}",
     "RssSync": "Synchronisation RSS",
@@ -2076,5 +2076,7 @@
     "UnableToImportAutomatically": "Impossible d'importer automatiquement",
     "DayOfWeekAt": "{day} à {time}",
     "TomorrowAt": "Demain à {time}",
-    "TodayAt": "Aujourd'hui à {time}"
+    "TodayAt": "Aujourd'hui à {time}",
+    "ShowTagsHelpText": "Afficher les labels sous l'affiche",
+    "ShowTags": "Afficher les labels"
 }
