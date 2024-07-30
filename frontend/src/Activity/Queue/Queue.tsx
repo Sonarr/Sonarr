@@ -73,6 +73,7 @@ function Queue() {
     sortKey,
     sortDirection,
     page,
+    pageSize,
     totalPages,
     totalRecords,
     isGrabbing,
@@ -269,8 +270,10 @@ function Queue() {
               allSelected={allSelected}
               allUnselected={allUnselected}
               columns={columns}
+              pageSize={pageSize}
               sortKey={sortKey}
               sortDirection={sortDirection}
+              optionsComponent={QueueOptions}
               onTableOptionChange={handleTableOptionChange}
               onSelectAllChange={handleSelectAllChange}
               onSortPress={handleSortPress}
@@ -344,6 +347,7 @@ function Queue() {
         <PageToolbarSection alignContent={align.RIGHT}>
           <TableOptionsModalWrapper
             columns={columns}
+            pageSize={pageSize}
             maxPageSize={200}
             optionsComponent={QueueOptions}
             onTableOptionChange={handleTableOptionChange}
