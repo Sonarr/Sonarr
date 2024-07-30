@@ -1839,7 +1839,7 @@
     "Titles": "Títulos",
     "ToggleUnmonitoredToMonitored": "Sin monitorizar, haz clic para monitorizar",
     "TotalFileSize": "Tamaño total de archivo",
-    "UpdateAvailableHealthCheckMessage": "Hay disponible una nueva actualización",
+    "UpdateAvailableHealthCheckMessage": "Hay disponible una nueva actualización: {version}",
     "UpgradeUntilCustomFormatScore": "Actualizar hasta la puntuación de formato personalizado",
     "UrlBase": "URL base",
     "UseSsl": "Usar SSL",
@@ -2093,5 +2093,10 @@
     "CountVotes": "{votes} votos",
     "InstallMajorVersionUpdateMessage": "Esta actualización instalará una nueva versión principal y podría no ser compatible con tu sistema. ¿Estás seguro que quieres instalar esta actualización?",
     "InstallMajorVersionUpdateMessageLink": "Por favor revisa [{domain}]({url}) para más información.",
-    "NextAiringDate": "Siguiente emisión: {date}"
+    "NextAiringDate": "Siguiente emisión: {date}",
+    "SeasonsMonitoredAll": "Todas",
+    "SeasonsMonitoredNone": "Ninguna",
+    "SeasonsMonitoredStatus": "Temporadas monitorizadas",
+    "NoBlocklistItems": "Ningún elemento en la lista de bloqueo",
+    "SeasonsMonitoredPartial": "Parcial"
 }
