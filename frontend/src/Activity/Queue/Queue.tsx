@@ -77,6 +77,7 @@ function Queue() {
     totalRecords,
     isGrabbing,
     isRemoving,
+    pageSize,
   } = useSelector((state: AppState) => state.queue.paged);
 
   const { count } = useSelector(createQueueStatusSelector());
@@ -347,6 +348,7 @@ function Queue() {
             maxPageSize={200}
             optionsComponent={QueueOptions}
             onTableOptionChange={handleTableOptionChange}
+            pageSize={pageSize}
           >
             <PageToolbarButton
               label={translate('Options')}

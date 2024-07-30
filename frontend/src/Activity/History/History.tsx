@@ -55,6 +55,7 @@ function History() {
     page,
     totalPages,
     totalRecords,
+    pageSize,
   } = useSelector((state: AppState) => state.history);
 
   const { isEpisodesFetching, isEpisodesPopulated, episodesError } =
@@ -155,6 +156,7 @@ function History() {
           <TableOptionsModalWrapper
             columns={columns}
             onTableOptionChange={handleTableOptionChange}
+            pageSize={pageSize}
           >
             <PageToolbarButton
               label={translate('Options')}

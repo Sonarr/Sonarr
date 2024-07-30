@@ -62,6 +62,7 @@ function Blocklist() {
     totalPages,
     totalRecords,
     isRemoving,
+    pageSize,
   } = useSelector((state: AppState) => state.blocklist);
 
   const customFilters = useSelector(createCustomFiltersSelector('blocklist'));
@@ -224,6 +225,7 @@ function Blocklist() {
             <TableOptionsModalWrapper
               columns={columns}
               onTableOptionChange={handleTableOptionChange}
+              pageSize={pageSize}
             >
               <PageToolbarButton
                 label={translate('Options')}
