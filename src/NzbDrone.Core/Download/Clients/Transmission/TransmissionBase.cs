@@ -43,12 +43,6 @@ namespace NzbDrone.Core.Download.Clients.Transmission
 
             foreach (var torrent in torrents)
             {
-                // If totalsize == 0 the torrent is a magnet downloading metadata
-                if (torrent.TotalSize == 0)
-                {
-                    continue;
-                }
-
                 var outputPath = new OsPath(torrent.DownloadDir);
 
                 if (Settings.TvDirectory.IsNotNullOrWhiteSpace())
@@ -98,6 +92,10 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                 {
                     item.Status = DownloadItemStatus.Warning;
                     item.Message = torrent.ErrorString;
+                }
+                else if (torrent.TotalSize == 0)
+                {
+                    item.Status = DownloadItemStatus.Queued;
                 }
                 else if (torrent.LeftUntilDone == 0 && (torrent.Status == TransmissionTorrentStatus.Stopped ||
                                                         torrent.Status == TransmissionTorrentStatus.Seeding ||
