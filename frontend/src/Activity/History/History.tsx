@@ -53,6 +53,7 @@ function History() {
     sortKey,
     sortDirection,
     page,
+    pageSize,
     totalPages,
     totalRecords,
   } = useSelector((state: AppState) => state.history);
@@ -154,6 +155,7 @@ function History() {
         <PageToolbarSection alignContent={align.RIGHT}>
           <TableOptionsModalWrapper
             columns={columns}
+            pageSize={pageSize}
             onTableOptionChange={handleTableOptionChange}
           >
             <PageToolbarButton
@@ -193,6 +195,7 @@ function History() {
           <div>
             <Table
               columns={columns}
+              pageSize={pageSize}
               sortKey={sortKey}
               sortDirection={sortDirection}
               onTableOptionChange={handleTableOptionChange}

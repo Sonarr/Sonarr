@@ -5,7 +5,7 @@ import FormGroup from 'Components/Form/FormGroup';
 import FormInputGroup from 'Components/Form/FormInputGroup';
 import FormLabel from 'Components/Form/FormLabel';
 import { inputTypes } from 'Helpers/Props';
-import { setQueueOption } from 'Store/Actions/queueActions';
+import { gotoQueuePage, setQueueOption } from 'Store/Actions/queueActions';
 import { CheckInputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
 
@@ -22,6 +22,10 @@ function QueueOptions() {
           [name]: value,
         })
       );
+
+      if (name === 'includeUnknownSeriesItems') {
+        dispatch(gotoQueuePage({ page: 1 }));
+      }
     },
     [dispatch]
   );

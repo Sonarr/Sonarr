@@ -59,6 +59,7 @@ function Blocklist() {
     sortKey,
     sortDirection,
     page,
+    pageSize,
     totalPages,
     totalRecords,
     isRemoving,
@@ -223,6 +224,7 @@ function Blocklist() {
           <PageToolbarSection alignContent={align.RIGHT}>
             <TableOptionsModalWrapper
               columns={columns}
+              pageSize={pageSize}
               onTableOptionChange={handleTableOptionChange}
             >
               <PageToolbarButton
@@ -264,6 +266,7 @@ function Blocklist() {
                 allSelected={allSelected}
                 allUnselected={allUnselected}
                 columns={columns}
+                pageSize={pageSize}
                 sortKey={sortKey}
                 sortDirection={sortDirection}
                 onTableOptionChange={handleTableOptionChange}
