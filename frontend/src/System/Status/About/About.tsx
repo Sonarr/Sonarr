@@ -66,7 +66,7 @@ function About() {
         ) : null}
 
         {isDocker ? (
-          <DescriptionListItem title={translate('Docker')} data={'Yes'} />
+          <DescriptionListItem title={translate('Docker')} data="Yes" />
         ) : null}
 
         <DescriptionListItem

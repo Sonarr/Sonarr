@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import Icon from 'Components/Icon';
 import Popover from 'Components/Tooltip/Popover';
 import { icons, kinds, tooltipPositions } from 'Helpers/Props';
@@ -82,9 +82,7 @@ function EpisodeNumber(props: EpisodeNumberProps) {
         <Popover
           anchor={
             <span>
-              {showSeasonNumber && seasonNumber != null && (
-                <Fragment>{seasonNumber}x</Fragment>
-              )}
+              {showSeasonNumber && seasonNumber != null && <>{seasonNumber}x</>}
 
               {showSeasonNumber ? padNumber(episodeNumber, 2) : episodeNumber}
 
@@ -111,9 +109,7 @@ function EpisodeNumber(props: EpisodeNumberProps) {
         />
       ) : (
         <span>
-          {showSeasonNumber && seasonNumber != null && (
-            <Fragment>{seasonNumber}x</Fragment>
-          )}
+          {showSeasonNumber && seasonNumber != null && <>{seasonNumber}x</>}
 
           {showSeasonNumber ? padNumber(episodeNumber, 2) : episodeNumber}
 

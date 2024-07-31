@@ -42,11 +42,7 @@ interface SeriesIndexOverviewsProps {
   isSmallScreen: boolean;
 }
 
-const Row: React.FC<ListChildComponentProps<RowItemData>> = ({
-  index,
-  style,
-  data,
-}) => {
+function Row({ index, style, data }: ListChildComponentProps<RowItemData>) {
   const { items, ...otherData } = data;
 
   if (index >= items.length) {
@@ -60,7 +56,7 @@ const Row: React.FC<ListChildComponentProps<RowItemData>> = ({
       <SeriesIndexOverview seriesId={series.id} {...otherData} />
     </div>
   );
-};
+}
 
 function getWindowScrollTopPosition() {
   return document.documentElement.scrollTop || document.body.scrollTop || 0;

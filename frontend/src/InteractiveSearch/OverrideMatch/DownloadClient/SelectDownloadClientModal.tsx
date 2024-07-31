@@ -17,7 +17,7 @@ function SelectDownloadClientModal(props: SelectDownloadClientModalProps) {
     props;
 
   return (
-    <Modal isOpen={isOpen} onModalClose={onModalClose} size={sizes.MEDIUM}>
+    <Modal isOpen={isOpen} size={sizes.MEDIUM} onModalClose={onModalClose}>
       <SelectDownloadClientModalContent
         protocol={protocol}
         modalTitle={modalTitle}

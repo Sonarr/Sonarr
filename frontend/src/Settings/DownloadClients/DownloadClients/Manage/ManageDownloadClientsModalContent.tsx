@@ -231,9 +231,9 @@ function ManageDownloadClientsModalContent(
             selectAll={true}
             allSelected={allSelected}
             allUnselected={allUnselected}
-            onSelectAllChange={onSelectAllChange}
             sortKey={sortKey}
             sortDirection={sortDirection}
+            onSelectAllChange={onSelectAllChange}
             onSortPress={onSortPress}
           >
             <TableBody>
@@ -286,9 +286,9 @@ function ManageDownloadClientsModalContent(
 
       <ManageDownloadClientsEditModal
         isOpen={isEditModalOpen}
+        downloadClientIds={selectedIds}
         onModalClose={onEditModalClose}
         onSavePress={onSavePress}
-        downloadClientIds={selectedIds}
       />
 
       <TagsModal

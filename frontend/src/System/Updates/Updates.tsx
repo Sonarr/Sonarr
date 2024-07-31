@@ -1,10 +1,4 @@
-import React, {
-  Fragment,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
 import AppState from 'App/State/AppState';
@@ -158,7 +152,7 @@ function Updates() {
                 {translate('InstallLatest')}
               </SpinnerButton>
             ) : (
-              <Fragment>
+              <>
                 <Icon name={icons.WARNING} kind={kinds.WARNING} size={30} />
 
                 <div className={styles.message}>
@@ -171,7 +165,7 @@ function Updates() {
                     }
                   />
                 </div>
-              </Fragment>
+              </>
             )}
 
             {isFetching ? (

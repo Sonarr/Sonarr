@@ -35,6 +35,10 @@ import getPathWithUrlBase from 'Utilities/getPathWithUrlBase';
 import CutoffUnmetConnector from 'Wanted/CutoffUnmet/CutoffUnmetConnector';
 import MissingConnector from 'Wanted/Missing/MissingConnector';
 
+function RedirectWithUrlBase() {
+  return <Redirect to={getPathWithUrlBase('/')} />;
+}
+
 function AppRoutes() {
   return (
     <Switch>
@@ -51,9 +55,7 @@ function AppRoutes() {
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           addUrlBase={false}
-          render={() => {
-            return <Redirect to={getPathWithUrlBase('/')} />;
-          }}
+          render={RedirectWithUrlBase}
         />
       )}
 
@@ -61,21 +63,9 @@ function AppRoutes() {
 
       <Route path="/add/import" component={ImportSeries} />
 
-      <Route
-        path="/serieseditor"
-        exact={true}
-        render={() => {
-          return <Redirect to={getPathWithUrlBase('/')} />;
-        }}
-      />
+      <Route path="/serieseditor" exact={true} render={RedirectWithUrlBase} />
 
-      <Route
-        path="/seasonpass"
-        exact={true}
-        render={() => {
-          return <Redirect to={getPathWithUrlBase('/')} />;
-        }}
-      />
+      <Route path="/seasonpass" exact={true} render={RedirectWithUrlBase} />
 
       <Route path="/series/:titleSlug" component={SeriesDetailsPageConnector} />
 
