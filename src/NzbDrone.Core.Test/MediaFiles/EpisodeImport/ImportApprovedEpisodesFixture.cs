@@ -74,8 +74,9 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
                 .Returns(new List<EpisodeHistory>());
 
             _downloadClientItem = Builder<DownloadClientItem>.CreateNew()
-                                                             .With(d => d.OutputPath = new OsPath(outputPath))
-                                                             .Build();
+                .With(d => d.OutputPath = new OsPath(outputPath))
+                .With(d => d.DownloadClientInfo = new DownloadClientItemClientInfo())
+                .Build();
         }
 
         private void GivenNewDownload()
@@ -201,11 +202,54 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
             GivenNewDownload();
             _downloadClientItem.Title = "30.Rock.S01E01";
             _downloadClientItem.CanMoveFiles = false;
+            _downloadClientItem.DownloadClientInfo = null;
 
             Subject.Import(new List<ImportDecision> { _approvedDecisions.First() }, true, _downloadClientItem);
 
             Mocker.GetMock<IUpgradeMediaFiles>()
                   .Verify(v => v.UpgradeEpisodeFile(It.IsAny<EpisodeFile>(), _approvedDecisions.First().LocalEpisode, true), Times.Once());
+        }
+
+        [Test]
+        public void should_copy_when_remove_completed_downloads_is_disabled_and_can_move_files()
+        {
+            GivenNewDownload();
+            _downloadClientItem.Title = "30.Rock.S01E01";
+            _downloadClientItem.CanMoveFiles = true;
+            _downloadClientItem.DownloadClientInfo.RemoveCompletedDownloads = false;
+
+            Subject.Import(new List<ImportDecision> { _approvedDecisions.First() }, true, _downloadClientItem);
+
+            Mocker.GetMock<IUpgradeMediaFiles>()
+                .Verify(v => v.UpgradeEpisodeFile(It.IsAny<EpisodeFile>(), _approvedDecisions.First().LocalEpisode, true), Times.Once());
+        }
+
+        [Test]
+        public void should_copy_when_remove_completed_downloads_is_enabled_and_cannot_move_files()
+        {
+            GivenNewDownload();
+            _downloadClientItem.Title = "30.Rock.S01E01";
+            _downloadClientItem.CanMoveFiles = false;
+            _downloadClientItem.DownloadClientInfo.RemoveCompletedDownloads = true;
+
+            Subject.Import(new List<ImportDecision> { _approvedDecisions.First() }, true, _downloadClientItem);
+
+            Mocker.GetMock<IUpgradeMediaFiles>()
+                .Verify(v => v.UpgradeEpisodeFile(It.IsAny<EpisodeFile>(), _approvedDecisions.First().LocalEpisode, true), Times.Once());
+        }
+
+        [Test]
+        public void should_move_when_remove_completed_downloads_is_enabled_and_can_move_files()
+        {
+            GivenNewDownload();
+            _downloadClientItem.Title = "30.Rock.S01E01";
+            _downloadClientItem.CanMoveFiles = true;
+            _downloadClientItem.DownloadClientInfo.RemoveCompletedDownloads = true;
+
+            Subject.Import(new List<ImportDecision> { _approvedDecisions.First() }, true, _downloadClientItem);
+
+            Mocker.GetMock<IUpgradeMediaFiles>()
+                .Verify(v => v.UpgradeEpisodeFile(It.IsAny<EpisodeFile>(), _approvedDecisions.First().LocalEpisode, false), Times.Once());
         }
 
         [Test]
