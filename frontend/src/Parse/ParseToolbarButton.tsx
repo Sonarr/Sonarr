@@ -1,4 +1,4 @@
-import React, { Fragment, useCallback, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
 import { icons } from 'Helpers/Props';
 import ParseModal from 'Parse/ParseModal';
@@ -16,7 +16,7 @@ function ParseToolbarButton() {
   }, [setIsParseModalOpen]);
 
   return (
-    <Fragment>
+    <>
       <PageToolbarButton
         label={translate('TestParsing')}
         iconName={icons.PARSE}
@@ -24,7 +24,7 @@ function ParseToolbarButton() {
       />
 
       <ParseModal isOpen={isParseModalOpen} onModalClose={onParseModalClose} />
-    </Fragment>
+    </>
   );
 }
 

@@ -64,7 +64,7 @@ function ErrorBoundaryError(props: ErrorBoundaryErrorProps) {
           <div>{info.componentStack}</div>
         )}
 
-        {<div className={styles.version}>Version: {window.Sonarr.version}</div>}
+        <div className={styles.version}>Version: {window.Sonarr.version}</div>
       </details>
     </div>
   );
