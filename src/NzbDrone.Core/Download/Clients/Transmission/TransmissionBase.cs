@@ -117,7 +117,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                     item.Status = DownloadItemStatus.Downloading;
                 }
 
-                item.CanBeRemoved = HasReachedSeedLimit(torrent, item.SeedRatio, configFunc);
+                item.CanBeRemoved = item.DownloadClientInfo.RemoveCompletedDownloads && HasReachedSeedLimit(torrent, item.SeedRatio, configFunc);
                 item.CanMoveFiles = item.CanBeRemoved && torrent.Status == TransmissionTorrentStatus.Stopped;
 
                 items.Add(item);

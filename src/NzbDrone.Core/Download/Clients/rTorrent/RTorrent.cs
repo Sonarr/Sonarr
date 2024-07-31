@@ -185,7 +185,7 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
                 // Grab cached seedConfig
                 var seedConfig = _downloadSeedConfigProvider.GetSeedConfiguration(torrent.Hash);
 
-                if (torrent.IsFinished && seedConfig != null)
+                if (item.DownloadClientInfo.RemoveCompletedDownloads && torrent.IsFinished && seedConfig != null)
                 {
                     var canRemove = false;
 
