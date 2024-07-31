@@ -1429,6 +1429,8 @@
   "NotificationsTelegramSettingsChatIdHelpText": "You must start a conversation with the bot or add it to your group to receive messages",
   "NotificationsTelegramSettingsIncludeAppName": "Include {appName} in Title",
   "NotificationsTelegramSettingsIncludeAppNameHelpText": "Optionally prefix message title with {appName} to differentiate notifications from different applications",
+  "NotificationsTelegramSettingsMetadataLinks": "Metadata Links",
+  "NotificationsTelegramSettingsMetadataLinksHelpText": "Add a links to series metadata when sending notifications",
   "NotificationsTelegramSettingsSendSilently": "Send Silently",
   "NotificationsTelegramSettingsSendSilentlyHelpText": "Sends the message silently. Users will receive a notification with no sound",
   "NotificationsTelegramSettingsTopicId": "Topic ID",
