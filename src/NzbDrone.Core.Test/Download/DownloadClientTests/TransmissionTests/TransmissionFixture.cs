@@ -49,10 +49,13 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
         }
 
         [Test]
-        public void magnet_download_should_not_return_the_item()
+        public void magnet_download_should_be_returned_as_queued()
         {
             PrepareClientToReturnMagnetItem();
-            Subject.GetItems().Count().Should().Be(0);
+
+            var item = Subject.GetItems().Single();
+
+            item.Status.Should().Be(DownloadItemStatus.Queued);
         }
 
         [Test]
