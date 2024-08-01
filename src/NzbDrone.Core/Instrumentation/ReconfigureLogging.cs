@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NLog.Config;
+using NLog.Targets;
 using NLog.Targets.Syslog;
 using NLog.Targets.Syslog.Settings;
 using NzbDrone.Common.EnvironmentInfo;
@@ -51,6 +52,7 @@ namespace NzbDrone.Core.Instrumentation
             var rules = LogManager.Configuration.LoggingRules;
 
             // Console
+            ReconfigureConsole();
             SetMinimumLogLevel(rules, "consoleLogger", minimumConsoleLogLevel);
 
             // Log Files
@@ -106,6 +108,22 @@ namespace NzbDrone.Core.Instrumentation
             {
                 sentryTarget.SentryEnabled = (RuntimeInfo.IsProduction && _configFileProvider.AnalyticsEnabled) || RuntimeInfo.IsDevelopment;
                 sentryTarget.FilterEvents = _configFileProvider.FilterSentryEvents;
+            }
+        }
+
+        private void ReconfigureConsole()
+        {
+            var consoleTarget = LogManager.Configuration.AllTargets.OfType<ColoredConsoleTarget>().FirstOrDefault();
+
+            if (consoleTarget != null)
+            {
+                var format = _configFileProvider.ConsoleLogFormat;
+
+                consoleTarget.Layout = format switch
+                {
+                    ConsoleLogFormat.Clef => NzbDroneLogger.ClefLogLayout,
+                    _ => NzbDroneLogger.ConsoleLogLayout
+                };
             }
         }
 

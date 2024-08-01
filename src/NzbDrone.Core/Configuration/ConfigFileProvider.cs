@@ -10,6 +10,7 @@ using NzbDrone.Common.Cache;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Common.Instrumentation;
 using NzbDrone.Common.Options;
 using NzbDrone.Core.Authentication;
 using NzbDrone.Core.Configuration.Events;
@@ -38,6 +39,7 @@ namespace NzbDrone.Core.Configuration
         bool AnalyticsEnabled { get; }
         string LogLevel { get; }
         string ConsoleLogLevel { get; }
+        ConsoleLogFormat ConsoleLogFormat { get; }
         bool LogSql { get; }
         int LogRotate { get; }
         bool FilterSentryEvents { get; }
@@ -222,6 +224,11 @@ namespace NzbDrone.Core.Configuration
 
         public string LogLevel => _logOptions.Level ?? GetValue("LogLevel", "debug").ToLowerInvariant();
         public string ConsoleLogLevel => _logOptions.ConsoleLevel ?? GetValue("ConsoleLogLevel", string.Empty, persist: false);
+
+        public ConsoleLogFormat ConsoleLogFormat =>
+            Enum.TryParse<ConsoleLogFormat>(_logOptions.ConsoleFormat, out var enumValue)
+                ? enumValue
+                : GetValueEnum("ConsoleLogFormat", ConsoleLogFormat.Standard, false);
 
         public string Theme => _appOptions.Theme ?? GetValue("Theme", "auto", persist: false);
 
