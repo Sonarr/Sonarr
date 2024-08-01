@@ -77,6 +77,7 @@ class Page extends Component {
       isSidebarVisible,
       enableColorImpairedMode,
       authenticationEnabled,
+      version,
       onSidebarToggle,
       onSidebarVisibleChange
     } = this.props;
@@ -87,6 +88,8 @@ class Page extends Component {
           <SignalRConnector />
 
           <PageHeader
+            version={version}
+            isSmallScreen={isSmallScreen}
             onSidebarToggle={onSidebarToggle}
           />
 
@@ -130,6 +133,7 @@ Page.propTypes = {
   isDisconnected: PropTypes.bool.isRequired,
   enableColorImpairedMode: PropTypes.bool.isRequired,
   authenticationEnabled: PropTypes.bool.isRequired,
+  version: PropTypes.string.isRequired,
   onResize: PropTypes.func.isRequired,
   onSidebarToggle: PropTypes.func.isRequired,
   onSidebarVisibleChange: PropTypes.func.isRequired

@@ -259,6 +259,7 @@ class PageConnector extends Component {
       dispatchFetchUISettings,
       dispatchFetchStatus,
       dispatchFetchTranslations,
+      version,
       ...otherProps
     } = this.props;
 
@@ -275,6 +276,7 @@ class PageConnector extends Component {
       return (
         <Page
           {...otherProps}
+          version={version}
           onSidebarToggle={this.onSidebarToggle}
         />
       );
@@ -300,6 +302,7 @@ PageConnector.propTypes = {
   dispatchFetchUISettings: PropTypes.func.isRequired,
   dispatchFetchStatus: PropTypes.func.isRequired,
   dispatchFetchTranslations: PropTypes.func.isRequired,
+  version: PropTypes.string.isRequired,
   onSidebarVisibleChange: PropTypes.func.isRequired
 };
 

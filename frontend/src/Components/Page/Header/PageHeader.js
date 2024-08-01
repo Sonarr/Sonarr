@@ -46,6 +46,8 @@ class PageHeader extends Component {
 
   render() {
     const {
+      version,
+      isSmallScreen,
       onSidebarToggle
     } = this.props;
 
@@ -75,6 +77,14 @@ class PageHeader extends Component {
         <SeriesSearchInputConnector />
 
         <div className={styles.right}>
+          {
+            !isSmallScreen && version ?
+              <div className={styles.version} title={translate('Version')}>
+                v{version}
+              </div> :
+              null
+          }
+
           <IconButton
             className={styles.donate}
             name={icons.HEART}
@@ -98,6 +108,8 @@ class PageHeader extends Component {
 }
 
 PageHeader.propTypes = {
+  version: PropTypes.string.isRequired,
+  isSmallScreen: PropTypes.bool.isRequired,
   onSidebarToggle: PropTypes.func.isRequired,
   bindShortcut: PropTypes.func.isRequired
 };

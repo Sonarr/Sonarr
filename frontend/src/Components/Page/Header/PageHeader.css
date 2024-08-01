@@ -37,6 +37,11 @@
   flex-grow: 1;
 }
 
+.version {
+  margin-right: 5px;
+  line-height: 60px;
+}
+
 .donate {
   composes: link from '~Components/Link/Link.css';
 
