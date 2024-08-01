@@ -220,7 +220,7 @@ namespace NzbDrone.Core.Configuration
 
         public string Branch => _updateOptions.Branch ?? GetValue("Branch", "main").ToLowerInvariant();
 
-        public string LogLevel => _logOptions.Level ?? GetValue("LogLevel", "info").ToLowerInvariant();
+        public string LogLevel => _logOptions.Level ?? GetValue("LogLevel", "debug").ToLowerInvariant();
         public string ConsoleLogLevel => _logOptions.ConsoleLevel ?? GetValue("ConsoleLogLevel", string.Empty, persist: false);
 
         public string Theme => _appOptions.Theme ?? GetValue("Theme", "auto", persist: false);
