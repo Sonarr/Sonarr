@@ -170,6 +170,7 @@ namespace NzbDrone.Core.History
                 history.Data.Add("SeriesMatchType", message.Episode.SeriesMatchType.ToString());
                 history.Data.Add("ReleaseSource", message.Episode.ReleaseSource.ToString());
                 history.Data.Add("IndexerFlags", message.Episode.Release.IndexerFlags.ToString());
+                history.Data.Add("IndexerId", message.Episode.Release.IndexerId.ToString());
                 history.Data.Add("ReleaseType", message.Episode.ParsedEpisodeInfo.ReleaseType.ToString());
 
                 if (!message.Episode.ParsedEpisodeInfo.ReleaseHash.IsNullOrWhiteSpace())
@@ -223,6 +224,7 @@ namespace NzbDrone.Core.History
                 history.Data.Add("CustomFormatScore", message.EpisodeInfo.CustomFormatScore.ToString());
                 history.Data.Add("Size", message.EpisodeInfo.Size.ToString());
                 history.Data.Add("IndexerFlags", message.ImportedEpisode.IndexerFlags.ToString());
+                history.Data.Add("IndexerId", message.ImportedEpisode.IndexerId.ToString());
                 history.Data.Add("ReleaseType", message.ImportedEpisode.ReleaseType.ToString());
 
                 _historyRepository.Insert(history);
@@ -284,6 +286,7 @@ namespace NzbDrone.Core.History
                 history.Data.Add("Reason", message.Reason.ToString());
                 history.Data.Add("ReleaseGroup", message.EpisodeFile.ReleaseGroup);
                 history.Data.Add("Size", message.EpisodeFile.Size.ToString());
+                history.Data.Add("IndexerId", message.EpisodeFile.IndexerId.ToString());
                 history.Data.Add("IndexerFlags", message.EpisodeFile.IndexerFlags.ToString());
                 history.Data.Add("ReleaseType", message.EpisodeFile.ReleaseType.ToString());
 
@@ -318,6 +321,7 @@ namespace NzbDrone.Core.History
                 history.Data.Add("ReleaseGroup", message.EpisodeFile.ReleaseGroup);
                 history.Data.Add("Size", message.EpisodeFile.Size.ToString());
                 history.Data.Add("IndexerFlags", message.EpisodeFile.IndexerFlags.ToString());
+                history.Data.Add("IndexerId", message.EpisodeFile.IndexerId.ToString());
                 history.Data.Add("ReleaseType", message.EpisodeFile.ReleaseType.ToString());
 
                 _historyRepository.Insert(history);
