@@ -59,7 +59,7 @@ namespace NzbDrone.Core.Instrumentation
             SetMinimumLogLevel(rules, "appFileInfo", minimumLogLevel <= LogLevel.Info ? LogLevel.Info : LogLevel.Off);
             SetMinimumLogLevel(rules, "appFileDebug", minimumLogLevel <= LogLevel.Debug ? LogLevel.Debug : LogLevel.Off);
             SetMinimumLogLevel(rules, "appFileTrace", minimumLogLevel <= LogLevel.Trace ? LogLevel.Trace : LogLevel.Off);
-            SetLogRotation();
+            ReconfigureFile();
 
             // Log Sql
             SqlBuilderExtensions.LogSql = _configFileProvider.LogSql;
@@ -93,11 +93,12 @@ namespace NzbDrone.Core.Instrumentation
             }
         }
 
-        private void SetLogRotation()
+        private void ReconfigureFile()
         {
             foreach (var target in LogManager.Configuration.AllTargets.OfType<NzbDroneFileTarget>())
             {
                 target.MaxArchiveFiles = _configFileProvider.LogRotate;
+                target.ArchiveAboveSize = _configFileProvider.LogSizeLimit.Megabytes();
             }
         }
 
