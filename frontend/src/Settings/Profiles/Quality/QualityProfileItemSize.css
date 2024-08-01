@@ -1,0 +1,60 @@
+.sizeLimit {
+  flex: 0 1 500px;
+}
+
+.slider {
+  width: 100%;
+  height: 20px;
+}
+
+.track {
+  top: 9px;
+  margin: 0 5px;
+  height: 3px;
+  background-color: var(--sliderAccentColor);
+  box-shadow: 0 0 0 #000;
+
+  &:nth-child(3n + 1) {
+    background-color: #ddd;
+  }
+}
+
+.thumb {
+  top: 1px;
+  z-index: 0 !important;
+  width: 18px;
+  height: 18px;
+  border: 3px solid var(--sliderAccentColor);
+  border-radius: 50%;
+  background-color: var(--white);
+  text-align: center;
+  cursor: pointer;
+}
+
+.sizes {
+  display: flex;
+  justify-content: space-between;
+}
+
+.megabytesPerMinuteContainer {
+  display: flex;
+  justify-content: space-between;
+  flex: 0 0 400px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--borderColor);
+}
+
+.megabytesPerMinute {
+  display: flex;
+  flex-direction: column;
+}
+
+.sizeInput {
+  composes: input from '~Components/Form/TextInput.css';
+
+  display: inline-block;
+  flex-grow: 1;
+  margin-bottom: 2px;
+  padding: 6px;
+}

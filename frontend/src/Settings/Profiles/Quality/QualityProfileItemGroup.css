@@ -7,6 +7,10 @@
   &.editGroups {
     background: var(--inputBackgroundColor);
   }
+
+  &.editSizes {
+    padding: 10px;
+  }
 }
 
 .qualityProfileItemGroupInfo {
@@ -68,6 +72,10 @@
   composes: qualityNameContainer;
 
   cursor: pointer;
+}
+
+.editSizesQualityNameLabel {
+  composes: qualityNameContainer;
 }
 
 .deleteGroupButton {

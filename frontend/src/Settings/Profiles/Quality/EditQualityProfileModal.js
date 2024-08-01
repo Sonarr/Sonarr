@@ -21,7 +21,7 @@ class EditQualityProfileModal extends Component {
   // Listeners
 
   onContentHeightChange = (height) => {
-    if (this.state.height === 'auto' || height > this.state.height) {
+    if (this.state.height === 'auto' || height !== 0) {
       this.setState({ height });
     }
   };

@@ -11,7 +11,7 @@ import styles from './QualityProfileItemDragSource.css';
 const qualityProfileItemDragSource = {
   beginDrag(props) {
     const {
-      editGroups,
+      mode,
       qualityIndex,
       groupId,
       qualityId,
@@ -20,7 +20,7 @@ const qualityProfileItemDragSource = {
     } = props;
 
     return {
-      editGroups,
+      mode,
       qualityIndex,
       groupId,
       qualityId,
@@ -110,12 +110,15 @@ class QualityProfileItemDragSource extends Component {
 
   render() {
     const {
-      editGroups,
+      mode,
       groupId,
       qualityId,
       name,
       allowed,
       items,
+      minSize,
+      maxSize,
+      preferredSize,
       qualityIndex,
       isDragging,
       isDraggingUp,
@@ -129,7 +132,8 @@ class QualityProfileItemDragSource extends Component {
       onItemGroupAllowedChange,
       onItemGroupNameChange,
       onQualityProfileItemDragMove,
-      onQualityProfileItemDragEnd
+      onQualityProfileItemDragEnd,
+      onSizeChange
     } = this.props;
 
     const isBefore = !isDragging && isDraggingUp && isOverCurrent;
@@ -156,7 +160,7 @@ class QualityProfileItemDragSource extends Component {
         {
           !!groupId && qualityId == null &&
             <QualityProfileItemGroup
-              editGroups={editGroups}
+              mode={mode}
               groupId={groupId}
               name={name}
               allowed={allowed}
@@ -172,23 +176,28 @@ class QualityProfileItemDragSource extends Component {
               onItemGroupNameChange={onItemGroupNameChange}
               onQualityProfileItemDragMove={onQualityProfileItemDragMove}
               onQualityProfileItemDragEnd={onQualityProfileItemDragEnd}
+              onSizeChange={onSizeChange}
             />
         }
 
         {
           qualityId != null &&
             <QualityProfileItem
-              editGroups={editGroups}
+              mode={mode}
               groupId={groupId}
               qualityId={qualityId}
               name={name}
               allowed={allowed}
+              minSize={minSize}
+              maxSize={maxSize}
+              preferredSize={preferredSize}
               qualityIndex={qualityIndex}
               isDragging={isDragging}
               isOverCurrent={isOverCurrent}
               connectDragSource={connectDragSource}
               onCreateGroupPress={onCreateGroupPress}
               onQualityProfileItemAllowedChange={onQualityProfileItemAllowedChange}
+              onSizeChange={onSizeChange}
             />
         }
 
@@ -207,12 +216,15 @@ class QualityProfileItemDragSource extends Component {
 }
 
 QualityProfileItemDragSource.propTypes = {
-  editGroups: PropTypes.bool.isRequired,
+  mode: PropTypes.string.isRequired,
   groupId: PropTypes.number,
   qualityId: PropTypes.number,
   name: PropTypes.string.isRequired,
   allowed: PropTypes.bool.isRequired,
   items: PropTypes.arrayOf(PropTypes.object),
+  minSize: PropTypes.number,
+  maxSize: PropTypes.number,
+  preferredSize: PropTypes.number,
   qualityIndex: PropTypes.string.isRequired,
   isDragging: PropTypes.bool,
   isDraggingUp: PropTypes.bool,
@@ -227,7 +239,8 @@ QualityProfileItemDragSource.propTypes = {
   onItemGroupAllowedChange: PropTypes.func,
   onItemGroupNameChange: PropTypes.func,
   onQualityProfileItemDragMove: PropTypes.func.isRequired,
-  onQualityProfileItemDragEnd: PropTypes.func.isRequired
+  onQualityProfileItemDragEnd: PropTypes.func.isRequired,
+  onSizeChange: PropTypes.func.isRequired
 };
 
 export default DropTarget(

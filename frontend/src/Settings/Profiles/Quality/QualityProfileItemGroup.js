@@ -48,7 +48,7 @@ class QualityProfileItemGroup extends Component {
 
   render() {
     const {
-      editGroups,
+      mode,
       groupId,
       name,
       allowed,
@@ -60,20 +60,22 @@ class QualityProfileItemGroup extends Component {
       connectDragSource,
       onQualityProfileItemAllowedChange,
       onQualityProfileItemDragMove,
-      onQualityProfileItemDragEnd
+      onQualityProfileItemDragEnd,
+      onSizeChange
     } = this.props;
 
     return (
       <div
         className={classNames(
           styles.qualityProfileItemGroup,
-          editGroups && styles.editGroups,
+          mode === 'editGroups' && styles.editGroups,
+          mode === 'editSizes' && styles.editSizes,
           isDragging && styles.isDragging
         )}
       >
         <div className={styles.qualityProfileItemGroupInfo}>
           {
-            editGroups &&
+            mode === 'editGroups' &&
               <div className={styles.qualityNameContainer}>
                 <IconButton
                   className={styles.deleteGroupButton}
@@ -92,7 +94,7 @@ class QualityProfileItemGroup extends Component {
           }
 
           {
-            !editGroups &&
+            mode === 'default' &&
               <label
                 className={styles.qualityNameLabel}
               >
@@ -129,31 +131,53 @@ class QualityProfileItemGroup extends Component {
           }
 
           {
-            connectDragSource(
-              <div className={styles.dragHandle}>
-                <Icon
-                  className={styles.dragIcon}
-                  name={icons.REORDER}
-                  title={translate('Reorder')}
-                />
-              </div>
-            )
+            mode === 'editSizes' &&
+              <label
+                className={styles.editSizesQualityNameLabel}
+              >
+                <div className={styles.nameContainer}>
+                  <div className={classNames(
+                    styles.name,
+                    !allowed && styles.notAllowed
+                  )}
+                  >
+                    {name}
+                  </div>
+                </div>
+              </label>
+          }
+
+          {
+            mode === 'editSizes' ? null :
+              connectDragSource(
+                <div className={styles.dragHandle}>
+                  <Icon
+                    className={styles.dragIcon}
+                    name={icons.REORDER}
+                    title={translate('Reorder')}
+                  />
+                </div>
+              )
           }
         </div>
 
         {
-          editGroups &&
-            <div className={styles.items}>
+          mode === 'default' ?
+            null :
+            <div className={mode === 'editGroups' ? styles.items : undefined}>
               {
                 items.map(({ quality }, index) => {
                   return (
                     <QualityProfileItemDragSource
                       key={quality.id}
-                      editGroups={editGroups}
+                      mode={mode}
                       groupId={groupId}
                       qualityId={quality.id}
                       name={quality.name}
                       allowed={allowed}
+                      minSize={quality.minSize}
+                      maxSize={quality.maxSize}
+                      preferredSize={quality.preferredSize}
                       items={items}
                       qualityIndex={`${qualityIndex}.${index + 1}`}
                       isDragging={isDragging}
@@ -163,6 +187,7 @@ class QualityProfileItemGroup extends Component {
                       onQualityProfileItemAllowedChange={onQualityProfileItemAllowedChange}
                       onQualityProfileItemDragMove={onQualityProfileItemDragMove}
                       onQualityProfileItemDragEnd={onQualityProfileItemDragEnd}
+                      onSizeChange={onSizeChange}
                     />
                   );
                 }).reverse()
@@ -175,7 +200,7 @@ class QualityProfileItemGroup extends Component {
 }
 
 QualityProfileItemGroup.propTypes = {
-  editGroups: PropTypes.bool,
+  mode: PropTypes.string.isRequired,
   groupId: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   allowed: PropTypes.bool.isRequired,
@@ -190,10 +215,12 @@ QualityProfileItemGroup.propTypes = {
   onItemGroupNameChange: PropTypes.func.isRequired,
   onDeleteGroupPress: PropTypes.func.isRequired,
   onQualityProfileItemDragMove: PropTypes.func.isRequired,
-  onQualityProfileItemDragEnd: PropTypes.func.isRequired
+  onQualityProfileItemDragEnd: PropTypes.func.isRequired,
+  onSizeChange: PropTypes.func
 };
 
 QualityProfileItemGroup.defaultProps = {
+  mode: 'default',
   // The drag preview will not connect the drag handle.
   connectDragSource: (node) => node
 };

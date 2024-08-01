@@ -7,7 +7,7 @@ import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
 import { icons } from 'Helpers/Props';
 import SettingsToolbarConnector from 'Settings/SettingsToolbarConnector';
 import translate from 'Utilities/String/translate';
-import QualityDefinitionsConnector from './Definition/QualityDefinitionsConnector';
+import QualityDefinitions from './Definition/QualityDefinitions';
 import ResetQualityDefinitionsModal from './Reset/ResetQualityDefinitionsModal';
 
 class Quality extends Component {
@@ -83,7 +83,7 @@ class Quality extends Component {
         />
 
         <PageContentBody>
-          <QualityDefinitionsConnector
+          <QualityDefinitions
             onChildMounted={this.onChildMounted}
             onChildStateChange={this.onChildStateChange}
           />

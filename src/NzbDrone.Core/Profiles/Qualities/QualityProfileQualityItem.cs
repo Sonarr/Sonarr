@@ -16,6 +16,9 @@ namespace NzbDrone.Core.Profiles.Qualities
         public Quality Quality { get; set; }
         public List<QualityProfileQualityItem> Items { get; set; }
         public bool Allowed { get; set; }
+        public double? MinSize { get; set; }
+        public double? MaxSize { get; set; }
+        public double? PreferredSize { get; set; }
 
         public QualityProfileQualityItem()
         {
