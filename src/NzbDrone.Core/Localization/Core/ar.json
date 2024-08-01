@@ -1,4 +1,6 @@
 {
     "AddAutoTag": "أضف كلمات دلالية تلقائيا",
-    "AddCondition": "إضافة شرط"
+    "AddCondition": "إضافة شرط",
+    "AutoTaggingNegateHelpText": "إذا تم تحديده ، فلن يتم تطبيق التنسيق المخصص إذا تطابق شرط {implementationName} هذا.",
+    "ConnectionLostReconnect": "سيحاول {appName} الاتصال تلقائيًا ، أو يمكنك النقر فوق إعادة التحميل أدناه."
 }

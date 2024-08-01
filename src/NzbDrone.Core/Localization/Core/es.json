@@ -2098,5 +2098,7 @@
     "SeasonsMonitoredNone": "Ninguna",
     "SeasonsMonitoredStatus": "Temporadas monitorizadas",
     "NoBlocklistItems": "Ningún elemento en la lista de bloqueo",
-    "SeasonsMonitoredPartial": "Parcial"
+    "SeasonsMonitoredPartial": "Parcial",
+    "NotificationsTelegramSettingsMetadataLinksHelpText": "Añade un enlace a los metadatos de la serie cuando se envían notificaciones",
+    "NotificationsTelegramSettingsMetadataLinks": "Enlaces de metadatos"
 }
