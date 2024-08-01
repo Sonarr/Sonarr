@@ -97,6 +97,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                     episodeFile.ReleaseGroup = localEpisode.ReleaseGroup;
                     episodeFile.ReleaseHash = localEpisode.ReleaseHash;
                     episodeFile.Languages = localEpisode.Languages;
+                    episodeFile.IndexerFlags = localEpisode.IndexerFlags;
 
                     // Prefer the release type from the download client, folder and finally the file so we have the most accurate information.
                     episodeFile.ReleaseType = localEpisode.DownloadClientEpisodeInfo?.ReleaseType ??
@@ -109,11 +110,6 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                             .OrderByDescending(h => h.Date)
                             .FirstOrDefault(h => h.EventType == EpisodeHistoryEventType.Grabbed);
 
-                        if (Enum.TryParse(grabHistory?.Data.GetValueOrDefault("indexerFlags"), true, out IndexerFlags flags))
-                        {
-                            episodeFile.IndexerFlags = flags;
-                        }
-
                         // Prefer the release type from the grabbed history
                         if (Enum.TryParse(grabHistory?.Data.GetValueOrDefault("releaseType"), true, out ReleaseType releaseType))
                         {
@@ -122,7 +118,6 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                     }
                     else
                     {
-                        episodeFile.IndexerFlags = localEpisode.IndexerFlags;
                         episodeFile.ReleaseType = localEpisode.ReleaseType;
                     }
 
