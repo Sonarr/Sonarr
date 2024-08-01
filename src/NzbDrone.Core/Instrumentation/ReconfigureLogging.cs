@@ -117,7 +117,7 @@ namespace NzbDrone.Core.Instrumentation
             syslogTarget.MessageSend.Protocol = ProtocolType.Udp;
             syslogTarget.MessageSend.Udp.Port = syslogPort;
             syslogTarget.MessageSend.Udp.Server = syslogServer;
-            syslogTarget.MessageSend.Udp.ReconnectInterval = 500;
+            syslogTarget.MessageSend.Retry.ConstantBackoff.BaseDelay = 500;
             syslogTarget.MessageCreation.Rfc = RfcNumber.Rfc5424;
             syslogTarget.MessageCreation.Rfc5424.AppName = _configFileProvider.InstanceName;
 
