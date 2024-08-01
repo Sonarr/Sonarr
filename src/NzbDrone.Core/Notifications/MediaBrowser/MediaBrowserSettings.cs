@@ -25,6 +25,7 @@ namespace NzbDrone.Core.Notifications.Emby
         public MediaBrowserSettings()
         {
             Port = 8096;
+            UpdateLibrary = true;
         }
 
         [FieldDefinition(0, Label = "Host")]
