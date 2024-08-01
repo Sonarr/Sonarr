@@ -167,6 +167,7 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
 
                 // 'Started' without 'Queued' is when the torrent is 'forced seeding'
                 item.CanMoveFiles = item.CanBeRemoved =
+                    item.DownloadClientInfo.RemoveCompletedDownloads &&
                     !torrent.Status.HasFlag(UTorrentTorrentStatus.Queued) &&
                     !torrent.Status.HasFlag(UTorrentTorrentStatus.Started);
 

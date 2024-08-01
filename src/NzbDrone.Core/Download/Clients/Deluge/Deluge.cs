@@ -190,6 +190,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
                 // Here we detect if Deluge is managing the torrent and whether the seed criteria has been met.
                 // This allows Sonarr to delete the torrent as appropriate.
                 item.CanMoveFiles = item.CanBeRemoved =
+                    item.DownloadClientInfo.RemoveCompletedDownloads &&
                     torrent.IsAutoManaged &&
                     torrent.StopAtRatio &&
                     torrent.Ratio >= torrent.StopRatio &&
