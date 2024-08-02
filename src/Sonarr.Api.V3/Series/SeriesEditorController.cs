@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Messaging.Commands;
@@ -14,11 +15,13 @@ namespace Sonarr.Api.V3.Series
     {
         private readonly ISeriesService _seriesService;
         private readonly IManageCommandQueue _commandQueueManager;
+        private readonly SeriesEditorValidator _seriesEditorValidator;
 
-        public SeriesEditorController(ISeriesService seriesService, IManageCommandQueue commandQueueManager)
+        public SeriesEditorController(ISeriesService seriesService, IManageCommandQueue commandQueueManager, SeriesEditorValidator seriesEditorValidator)
         {
             _seriesService = seriesService;
             _commandQueueManager = commandQueueManager;
+            _seriesEditorValidator = seriesEditorValidator;
         }
 
         [HttpPut]
@@ -58,10 +61,10 @@ namespace Sonarr.Api.V3.Series
                 {
                     series.RootFolderPath = resource.RootFolderPath;
                     seriesToMove.Add(new BulkMoveSeries
-                                     {
-                                         SeriesId = series.Id,
-                                         SourcePath = series.Path
-                                     });
+                    {
+                        SeriesId = series.Id,
+                        SourcePath = series.Path
+                    });
                 }
 
                 if (resource.Tags != null)
@@ -82,15 +85,22 @@ namespace Sonarr.Api.V3.Series
                             break;
                     }
                 }
+
+                var validationResult = _seriesEditorValidator.Validate(series);
+
+                if (!validationResult.IsValid)
+                {
+                    throw new ValidationException(validationResult.Errors);
+                }
             }
 
             if (resource.MoveFiles && seriesToMove.Any())
             {
                 _commandQueueManager.Push(new BulkMoveSeriesCommand
-                                          {
-                                              DestinationRootFolder = resource.RootFolderPath,
-                                              Series = seriesToMove
-                                          });
+                {
+                    DestinationRootFolder = resource.RootFolderPath,
+                    Series = seriesToMove
+                });
             }
 
             return Accepted(_seriesService.UpdateSeries(seriesToUpdate, !resource.MoveFiles).ToResource());
