@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using FluentValidation;
 using FluentValidation.Results;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -102,7 +103,7 @@ namespace Sonarr.Http.REST
             if (controllerAttributes.Any(x => x.AttributeType == DEPRECATED_ATTRIBUTE) || attributes.Any(x => x.AttributeType == DEPRECATED_ATTRIBUTE))
             {
                 _logger.Warn("API call made to deprecated endpoint from {0}", Request.Headers.UserAgent.ToString());
-                Response.Headers.Add("Deprecation", "true");
+                Response.Headers.Append("Deprecation", "true");
             }
 
             base.OnActionExecuting(context);

@@ -22,7 +22,7 @@ namespace Sonarr.Http.Middleware
         {
             if (context.Request.IsApiRequest() && !context.Response.Headers.ContainsKey(VERSIONHEADER))
             {
-                context.Response.Headers.Add(VERSIONHEADER, _version);
+                context.Response.Headers.Append(VERSIONHEADER, _version);
             }
 
             await _next(context);
