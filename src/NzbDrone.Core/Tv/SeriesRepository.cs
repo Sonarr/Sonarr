@@ -14,6 +14,7 @@ namespace NzbDrone.Core.Tv
         List<Series> FindByTitleInexact(string cleanTitle);
         Series FindByTvdbId(int tvdbId);
         Series FindByTvRageId(int tvRageId);
+        Series FindByImdbId(string imdbId);
         Series FindByPath(string path);
         List<int> AllSeriesTvdbIds();
         Dictionary<int, string> AllSeriesPaths();
@@ -71,6 +72,11 @@ namespace NzbDrone.Core.Tv
         public Series FindByTvRageId(int tvRageId)
         {
             return Query(s => s.TvRageId == tvRageId).SingleOrDefault();
+        }
+
+        public Series FindByImdbId(string imdbId)
+        {
+            return Query(s => s.ImdbId == imdbId).SingleOrDefault();
         }
 
         public Series FindByPath(string path)
