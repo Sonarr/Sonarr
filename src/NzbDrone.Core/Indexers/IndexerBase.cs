@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using FluentValidation.Results;
 using NLog;
@@ -20,8 +19,6 @@ namespace NzbDrone.Core.Indexers
     public abstract class IndexerBase<TSettings> : IIndexer
         where TSettings : IIndexerSettings, new()
     {
-        private static readonly Regex MultiRegex = new (@"[_. ](?<multi>multi)[_. ]", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-
         protected readonly IIndexerStatusService _indexerStatusService;
         protected readonly IConfigService _configService;
         protected readonly IParsingService _parsingService;
@@ -94,7 +91,7 @@ namespace NzbDrone.Core.Indexers
             result.ForEach(c =>
             {
                 // Use multi languages from setting if ReleaseInfo languages is empty
-                if (c.Languages.Empty() && MultiRegex.IsMatch(c.Title) && settings.MultiLanguages.Any())
+                if (c.Languages.Empty() && settings.MultiLanguages.Any() && Parser.Parser.HasMultipleLanguages(c.Title))
                 {
                     c.Languages = settings.MultiLanguages.Select(i => (Language)i).ToList();
                 }
