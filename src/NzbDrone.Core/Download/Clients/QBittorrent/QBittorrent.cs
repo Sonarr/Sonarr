@@ -287,7 +287,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                     case "forcedMetaDL": // torrent metadata is being forcibly downloaded
                         if (config.DhtEnabled)
                         {
-                            item.Status = DownloadItemStatus.Queued;
+                            item.Status = DownloadItemStatus.Downloading;
                             item.Message = _localizationService.GetLocalizedString("DownloadClientQbittorrentTorrentStateMetadata");
                         }
                         else

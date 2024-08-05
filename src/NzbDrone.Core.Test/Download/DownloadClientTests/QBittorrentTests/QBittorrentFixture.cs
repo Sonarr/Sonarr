@@ -229,7 +229,6 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
         [TestCase("queuedDL")]
         [TestCase("checkingDL")]
         [TestCase("checkingUP")]
-        [TestCase("metaDL")]
         [TestCase("checkingResumeData")]
         public void queued_item_should_have_required_properties(string state)
         {
@@ -248,6 +247,28 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
 
             var item = Subject.GetItems().Single();
             VerifyQueued(item);
+            item.RemainingTime.Should().NotHaveValue();
+        }
+
+        [TestCase("metaDL")]
+        [TestCase("forcedMetaDL")]
+        public void metaDL_item_should_have_required_properties(string state)
+        {
+            var torrent = new QBittorrentTorrent
+            {
+                Hash = "HASH",
+                Name = _title,
+                Size = 1000,
+                Progress = 0.0,
+                Eta = 8640000,
+                State = state,
+                Label = "",
+                SavePath = ""
+            };
+            GivenTorrents(new List<QBittorrentTorrent> { torrent });
+
+            var item = Subject.GetItems().Single();
+            VerifyDownloading(item);
             item.RemainingTime.Should().NotHaveValue();
         }
 
