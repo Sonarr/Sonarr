@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
 import translate from 'Utilities/String/translate';
@@ -7,22 +7,17 @@ import DiskSpace from './DiskSpace/DiskSpace';
 import Health from './Health/Health';
 import MoreInfo from './MoreInfo/MoreInfo';
 
-class Status extends Component {
-  //
-  // Render
-
-  render() {
-    return (
-      <PageContent title={translate('Status')}>
-        <PageContentBody>
-          <Health />
-          <DiskSpace />
-          <About />
-          <MoreInfo />
-        </PageContentBody>
-      </PageContent>
-    );
-  }
+function Status() {
+  return (
+    <PageContent title={translate('Status')}>
+      <PageContentBody>
+        <Health />
+        <DiskSpace />
+        <About />
+        <MoreInfo />
+      </PageContentBody>
+    </PageContent>
+  );
 }
 
 export default Status;
