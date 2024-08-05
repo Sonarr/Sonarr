@@ -17,7 +17,7 @@ function SelectLanguageModal(props: SelectLanguageModalProps) {
     props;
 
   return (
-    <Modal isOpen={isOpen} onModalClose={onModalClose} size={sizes.MEDIUM}>
+    <Modal isOpen={isOpen} size={sizes.MEDIUM} onModalClose={onModalClose}>
       <SelectLanguageModalContent
         languageIds={languageIds}
         modalTitle={modalTitle}

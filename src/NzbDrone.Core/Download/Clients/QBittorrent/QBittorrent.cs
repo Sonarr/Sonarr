@@ -225,7 +225,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
             foreach (var torrent in torrents)
             {
-                var item = new DownloadClientItem()
+                var item = new DownloadClientItem
                 {
                     DownloadId = torrent.Hash.ToUpper(),
                     Category = torrent.Category.IsNotNullOrWhiteSpace() ? torrent.Category : torrent.Label,
@@ -239,7 +239,10 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
                 // Avoid removing torrents that haven't reached the global max ratio.
                 // Removal also requires the torrent to be paused, in case a higher max ratio was set on the torrent itself (which is not exposed by the api).
-                item.CanMoveFiles = item.CanBeRemoved = torrent.State is "pausedUP" or "stoppedUP" && HasReachedSeedLimit(torrent, config);
+                item.CanMoveFiles = item.CanBeRemoved =
+                    item.DownloadClientInfo.RemoveCompletedDownloads &&
+                    torrent.State is "pausedUP" or "stoppedUP" &&
+                    HasReachedSeedLimit(torrent, config);
 
                 switch (torrent.State)
                 {

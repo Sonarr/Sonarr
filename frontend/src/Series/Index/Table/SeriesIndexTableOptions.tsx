@@ -1,4 +1,4 @@
-import React, { Fragment, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import FormGroup from 'Components/Form/FormGroup';
 import FormInputGroup from 'Components/Form/FormInputGroup';
@@ -32,7 +32,7 @@ function SeriesIndexTableOptions(props: SeriesIndexTableOptionsProps) {
   );
 
   return (
-    <Fragment>
+    <>
       <FormGroup>
         <FormLabel>{translate('ShowBanners')}</FormLabel>
 
@@ -56,7 +56,7 @@ function SeriesIndexTableOptions(props: SeriesIndexTableOptionsProps) {
           onChange={onTableOptionChangeWrapper}
         />
       </FormGroup>
-    </Fragment>
+    </>
   );
 }
 

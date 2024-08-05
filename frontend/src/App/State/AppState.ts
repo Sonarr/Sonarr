@@ -35,18 +35,21 @@ export interface PropertyFilter {
 export interface Filter {
   key: string;
   label: string;
-  filers: PropertyFilter[];
+  filters: PropertyFilter[];
 }
 
 export interface CustomFilter {
   id: number;
   type: string;
   label: string;
-  filers: PropertyFilter[];
+  filters: PropertyFilter[];
 }
 
 export interface AppSectionState {
+  isConnected: boolean;
+  isReconnecting: boolean;
   version: string;
+  prevVersion?: string;
   dimensions: {
     isSmallScreen: boolean;
     width: number;
@@ -59,6 +62,7 @@ interface AppState {
   blocklist: BlocklistAppState;
   calendar: CalendarAppState;
   commands: CommandAppState;
+  episodes: EpisodesAppState;
   episodeFiles: EpisodeFilesAppState;
   episodesSelection: EpisodesAppState;
   history: HistoryAppState;

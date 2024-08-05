@@ -1,8 +1,8 @@
 import AppSectionState, {
   AppSectionDeleteState,
+  AppSectionItemSchemaState,
   AppSectionItemState,
   AppSectionSaveState,
-  AppSectionSchemaState,
   PagedAppSectionState,
 } from 'App/State/AppSectionState';
 import Language from 'Language/Language';
@@ -20,7 +20,9 @@ import UiSettings from 'typings/Settings/UiSettings';
 export interface DownloadClientAppState
   extends AppSectionState<DownloadClient>,
     AppSectionDeleteState,
-    AppSectionSaveState {}
+    AppSectionSaveState {
+  isTestingAll: boolean;
+}
 
 export type GeneralAppState = AppSectionItemState<General>;
 
@@ -32,7 +34,9 @@ export interface ImportListAppState
 export interface IndexerAppState
   extends AppSectionState<Indexer>,
     AppSectionDeleteState,
-    AppSectionSaveState {}
+    AppSectionSaveState {
+  isTestingAll: boolean;
+}
 
 export interface NotificationAppState
   extends AppSectionState<Notification>,
@@ -40,7 +44,7 @@ export interface NotificationAppState
 
 export interface QualityProfilesAppState
   extends AppSectionState<QualityProfile>,
-    AppSectionSchemaState<QualityProfile> {}
+    AppSectionItemSchemaState<QualityProfile> {}
 
 export interface ImportListOptionsSettingsAppState
   extends AppSectionItemState<ImportListOptionsSettings>,

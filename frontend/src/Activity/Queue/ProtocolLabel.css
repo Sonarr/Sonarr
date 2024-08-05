@@ -11,3 +11,7 @@
   border-color: var(--usenetColor);
   background-color: var(--usenetColor);
 }
+
+.unknown {
+  composes: label from '~Components/Label.css';
+}

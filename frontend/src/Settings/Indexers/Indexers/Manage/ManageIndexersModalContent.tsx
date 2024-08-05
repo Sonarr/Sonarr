@@ -226,9 +226,9 @@ function ManageIndexersModalContent(props: ManageIndexersModalContentProps) {
             selectAll={true}
             allSelected={allSelected}
             allUnselected={allUnselected}
-            onSelectAllChange={onSelectAllChange}
             sortKey={sortKey}
             sortDirection={sortDirection}
+            onSelectAllChange={onSelectAllChange}
             onSortPress={onSortPress}
           >
             <TableBody>
@@ -281,9 +281,9 @@ function ManageIndexersModalContent(props: ManageIndexersModalContentProps) {
 
       <ManageIndexersEditModal
         isOpen={isEditModalOpen}
+        indexerIds={selectedIds}
         onModalClose={onEditModalClose}
         onSavePress={onSavePress}
-        indexerIds={selectedIds}
       />
 
       <TagsModal

@@ -857,7 +857,7 @@ function InteractiveImportModalContent(
 
               <MenuContent>
                 <SelectedMenuItem
-                  name={'all'}
+                  name="all"
                   isSelected={!filterExistingFiles}
                   onPress={onFilterExistingFilesChange}
                 >
@@ -865,7 +865,7 @@ function InteractiveImportModalContent(
                 </SelectedMenuItem>
 
                 <SelectedMenuItem
-                  name={'new'}
+                  name="new"
                   isSelected={filterExistingFiles}
                   onPress={onFilterExistingFilesChange}
                 >
@@ -945,7 +945,7 @@ function InteractiveImportModalContent(
           <SelectInput
             className={styles.bulkSelect}
             name="select"
-            value={'select'}
+            value="select"
             values={bulkSelectOptions}
             isDisabled={!selectedIds.length}
             onChange={onSelectModalSelect}

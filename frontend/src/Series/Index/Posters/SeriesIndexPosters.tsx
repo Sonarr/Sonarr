@@ -60,12 +60,12 @@ const seriesIndexSelector = createSelector(
   }
 );
 
-const Cell: React.FC<GridChildComponentProps<CellItemData>> = ({
+function Cell({
   columnIndex,
   rowIndex,
   style,
   data,
-}) => {
+}: GridChildComponentProps<CellItemData>) {
   const { layout, items, sortKey, isSelectMode } = data;
   const { columnCount, padding, posterWidth, posterHeight } = layout;
   const index = rowIndex * columnCount + columnIndex;
@@ -92,7 +92,7 @@ const Cell: React.FC<GridChildComponentProps<CellItemData>> = ({
       />
     </div>
   );
-};
+}
 
 function getWindowScrollTopPosition() {
   return document.documentElement.scrollTop || document.body.scrollTop || 0;
@@ -181,6 +181,11 @@ export default function SeriesIndexPosters(props: SeriesIndexPostersProps) {
       case 'qualityProfileId':
         if (!showQualityProfile) {
           heights.push(19);
+        }
+        break;
+      case 'tags':
+        if (!showTags) {
+          heights.push(21);
         }
         break;
       default:

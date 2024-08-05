@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import AppUpdatedModalConnector from 'App/AppUpdatedModalConnector';
+import AppUpdatedModal from 'App/AppUpdatedModal';
 import ColorImpairedContext from 'App/ColorImpairedContext';
-import ConnectionLostModalConnector from 'App/ConnectionLostModalConnector';
+import ConnectionLostModal from 'App/ConnectionLostModal';
 import SignalRConnector from 'Components/SignalRConnector';
 import AuthenticationRequiredModal from 'FirstRun/AuthenticationRequiredModal';
 import locationShape from 'Helpers/Props/Shapes/locationShape';
@@ -101,12 +101,12 @@ class Page extends Component {
             {children}
           </div>
 
-          <AppUpdatedModalConnector
+          <AppUpdatedModal
             isOpen={this.state.isUpdatedModalOpen}
             onModalClose={this.onUpdatedModalClose}
           />
 
-          <ConnectionLostModalConnector
+          <ConnectionLostModal
             isOpen={this.state.isConnectionLostModalOpen}
             onModalClose={this.onConnectionLostModalClose}
           />

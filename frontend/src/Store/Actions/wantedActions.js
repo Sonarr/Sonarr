@@ -1,7 +1,7 @@
 import { createAction } from 'redux-actions';
 import { filterTypes, sortDirections } from 'Helpers/Props';
 import { createThunk, handleThunks } from 'Store/thunks';
-import serverSideCollectionHandlers from 'Utilities/serverSideCollectionHandlers';
+import serverSideCollectionHandlers from 'Utilities/State/serverSideCollectionHandlers';
 import translate from 'Utilities/String/translate';
 import createBatchToggleEpisodeMonitoredHandler from './Creators/createBatchToggleEpisodeMonitoredHandler';
 import createHandleActions from './Creators/createHandleActions';

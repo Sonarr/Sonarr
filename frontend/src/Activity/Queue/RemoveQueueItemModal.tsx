@@ -12,7 +12,7 @@ import { inputTypes, kinds, sizes } from 'Helpers/Props';
 import translate from 'Utilities/String/translate';
 import styles from './RemoveQueueItemModal.css';
 
-interface RemovePressProps {
+export interface RemovePressProps {
   remove: boolean;
   changeCategory: boolean;
   blocklist: boolean;
@@ -21,7 +21,7 @@ interface RemovePressProps {
 
 interface RemoveQueueItemModalProps {
   isOpen: boolean;
-  sourceTitle: string;
+  sourceTitle?: string;
   canChangeCategory: boolean;
   canIgnore: boolean;
   isPending: boolean;
@@ -39,7 +39,7 @@ type BlocklistMethod =
 function RemoveQueueItemModal(props: RemoveQueueItemModalProps) {
   const {
     isOpen,
-    sourceTitle,
+    sourceTitle = '',
     canIgnore,
     canChangeCategory,
     isPending,

@@ -1458,6 +1458,18 @@
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.12.tgz#12bb1e2be27293c1406acb6af1c3f3a1481d98c6"
   integrity sha512-5zvhXYtRNRluoE/jAp4GVsSduVUzNWKkOZrCDBWYtE7biZywwdC2AcEzg+cSMLFRfVgeAFqpfNabiPjxFddV1Q==
 
+"@types/qs@6.9.15":
+  version "6.9.15"
+  resolved "https://registry.yarnpkg.com/@types/qs/-/qs-6.9.15.tgz#adde8a060ec9c305a82de1babc1056e73bd64dce"
+  integrity sha512-uXHQKES6DQKKCLh441Xv/dwxOq1TVS3JPUMlEqoEglvlhR6Mxnlew/Xq/LRVHpLyk7iK3zODe1qYHIMltO7XGg==
+
+"@types/react-document-title@2.0.9":
+  version "2.0.9"
+  resolved "https://registry.yarnpkg.com/@types/react-document-title/-/react-document-title-2.0.9.tgz#65fd57e6086ef8ced5ad45ac8a439dd878ca71d6"
+  integrity sha512-Q8bSnESgyVoMCo0vAKJj2N4wD/yl7EnutaFntKpaL/edUUo4kTNH8M6A5iCoje9sknRdLx7cfB39cpdTNr5Z+Q==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-dom@18.2.25":
   version "18.2.25"
   resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-18.2.25.tgz#2946a30081f53e7c8d585eb138277245caedc521"

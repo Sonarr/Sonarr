@@ -119,7 +119,7 @@ namespace NzbDrone.Core.Download.Clients.FreeboxDownload
                         break;
                 }
 
-                item.CanBeRemoved = item.CanMoveFiles = torrent.Status == FreeboxDownloadTaskStatus.Done;
+                item.CanBeRemoved = item.CanMoveFiles = item.DownloadClientInfo.RemoveCompletedDownloads && torrent.Status == FreeboxDownloadTaskStatus.Done;
 
                 queueItems.Add(item);
             }

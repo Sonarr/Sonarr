@@ -3,7 +3,7 @@ import { batchActions } from 'redux-batched-actions';
 import { filterBuilderTypes, filterBuilderValueTypes, sortDirections } from 'Helpers/Props';
 import { createThunk, handleThunks } from 'Store/thunks';
 import createAjaxRequest from 'Utilities/createAjaxRequest';
-import serverSideCollectionHandlers from 'Utilities/serverSideCollectionHandlers';
+import serverSideCollectionHandlers from 'Utilities/State/serverSideCollectionHandlers';
 import translate from 'Utilities/String/translate';
 import { set, updateItem } from './baseActions';
 import createHandleActions from './Creators/createHandleActions';
@@ -117,10 +117,6 @@ export const persistState = [
 // Action Types
 
 export const FETCH_BLOCKLIST = 'blocklist/fetchBlocklist';
-export const GOTO_FIRST_BLOCKLIST_PAGE = 'blocklist/gotoBlocklistFirstPage';
-export const GOTO_PREVIOUS_BLOCKLIST_PAGE = 'blocklist/gotoBlocklistPreviousPage';
-export const GOTO_NEXT_BLOCKLIST_PAGE = 'blocklist/gotoBlocklistNextPage';
-export const GOTO_LAST_BLOCKLIST_PAGE = 'blocklist/gotoBlocklistLastPage';
 export const GOTO_BLOCKLIST_PAGE = 'blocklist/gotoBlocklistPage';
 export const SET_BLOCKLIST_SORT = 'blocklist/setBlocklistSort';
 export const SET_BLOCKLIST_FILTER = 'blocklist/setBlocklistFilter';
@@ -133,10 +129,6 @@ export const CLEAR_BLOCKLIST = 'blocklist/clearBlocklist';
 // Action Creators
 
 export const fetchBlocklist = createThunk(FETCH_BLOCKLIST);
-export const gotoBlocklistFirstPage = createThunk(GOTO_FIRST_BLOCKLIST_PAGE);
-export const gotoBlocklistPreviousPage = createThunk(GOTO_PREVIOUS_BLOCKLIST_PAGE);
-export const gotoBlocklistNextPage = createThunk(GOTO_NEXT_BLOCKLIST_PAGE);
-export const gotoBlocklistLastPage = createThunk(GOTO_LAST_BLOCKLIST_PAGE);
 export const gotoBlocklistPage = createThunk(GOTO_BLOCKLIST_PAGE);
 export const setBlocklistSort = createThunk(SET_BLOCKLIST_SORT);
 export const setBlocklistFilter = createThunk(SET_BLOCKLIST_FILTER);
@@ -155,10 +147,6 @@ export const actionHandlers = handleThunks({
     fetchBlocklist,
     {
       [serverSideCollectionHandlers.FETCH]: FETCH_BLOCKLIST,
-      [serverSideCollectionHandlers.FIRST_PAGE]: GOTO_FIRST_BLOCKLIST_PAGE,
-      [serverSideCollectionHandlers.PREVIOUS_PAGE]: GOTO_PREVIOUS_BLOCKLIST_PAGE,
-      [serverSideCollectionHandlers.NEXT_PAGE]: GOTO_NEXT_BLOCKLIST_PAGE,
-      [serverSideCollectionHandlers.LAST_PAGE]: GOTO_LAST_BLOCKLIST_PAGE,
       [serverSideCollectionHandlers.EXACT_PAGE]: GOTO_BLOCKLIST_PAGE,
       [serverSideCollectionHandlers.SORT]: SET_BLOCKLIST_SORT,
       [serverSideCollectionHandlers.FILTER]: SET_BLOCKLIST_FILTER

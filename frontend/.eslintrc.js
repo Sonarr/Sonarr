@@ -359,11 +359,16 @@ module.exports = {
       ],
 
       rules: Object.assign(typescriptEslintRecommended.rules, {
-        'no-shadow': 'off',
-        // These should be enabled after cleaning things up
-        '@typescript-eslint/no-unused-vars': 'warn',
+        '@typescript-eslint/no-unused-vars': [
+          'error',
+          {
+            args: 'after-used',
+            argsIgnorePattern: '^_',
+            ignoreRestSiblings: true
+          }
+        ],
         '@typescript-eslint/explicit-function-return-type': 'off',
-        'react/prop-types': 'off',
+        'no-shadow': 'off',
         'prettier/prettier': 'error',
         'simple-import-sort/imports': [
           'error',
@@ -376,7 +381,41 @@ module.exports = {
               ['^@?\\w', `^(${dirs})(/.*|$)`, '^\\.', '^\\..*css$']
             ]
           }
-        ]
+        ],
+
+        // React Hooks
+        'react-hooks/rules-of-hooks': 'error',
+        'react-hooks/exhaustive-deps': 'error',
+
+        // React
+        'react/function-component-definition': 'error',
+        'react/hook-use-state': 'error',
+        'react/jsx-boolean-value': ['error', 'always'],
+        'react/jsx-curly-brace-presence': [
+          'error',
+          { props: 'never', children: 'never' }
+        ],
+        'react/jsx-fragments': 'error',
+        'react/jsx-handler-names': [
+          'error',
+          {
+            eventHandlerPrefix: 'on',
+            eventHandlerPropPrefix: 'on'
+          }
+        ],
+        'react/jsx-no-bind': ['error', { ignoreRefs: true }],
+        'react/jsx-no-useless-fragment': ['error', { allowExpressions: true }],
+        'react/jsx-pascal-case': ['error', { allowAllCaps: true }],
+        'react/jsx-sort-props': [
+          'error',
+          {
+            callbacksLast: true,
+            noSortAlphabetically: true,
+            reservedFirst: true
+          }
+        ],
+        'react/prop-types': 'off',
+        'react/self-closing-comp': 'error'
       })
     },
     {

@@ -43,12 +43,6 @@ namespace NzbDrone.Core.Download.Clients.Transmission
 
             foreach (var torrent in torrents)
             {
-                // If totalsize == 0 the torrent is a magnet downloading metadata
-                if (torrent.TotalSize == 0)
-                {
-                    continue;
-                }
-
                 var outputPath = new OsPath(torrent.DownloadDir);
 
                 if (Settings.TvDirectory.IsNotNullOrWhiteSpace())
@@ -99,6 +93,10 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                     item.Status = DownloadItemStatus.Warning;
                     item.Message = torrent.ErrorString;
                 }
+                else if (torrent.TotalSize == 0)
+                {
+                    item.Status = DownloadItemStatus.Queued;
+                }
                 else if (torrent.LeftUntilDone == 0 && (torrent.Status == TransmissionTorrentStatus.Stopped ||
                                                         torrent.Status == TransmissionTorrentStatus.Seeding ||
                                                         torrent.Status == TransmissionTorrentStatus.SeedingWait))
@@ -119,7 +117,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                     item.Status = DownloadItemStatus.Downloading;
                 }
 
-                item.CanBeRemoved = HasReachedSeedLimit(torrent, item.SeedRatio, configFunc);
+                item.CanBeRemoved = item.DownloadClientInfo.RemoveCompletedDownloads && HasReachedSeedLimit(torrent, item.SeedRatio, configFunc);
                 item.CanMoveFiles = item.CanBeRemoved && torrent.Status == TransmissionTorrentStatus.Stopped;
 
                 items.Add(item);

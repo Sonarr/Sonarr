@@ -3,3 +3,11 @@
   text-align: center;
   font-size: $smallFontSize;
 }
+
+.tags {
+  composes: tags from '~./SeriesIndexPoster.css';
+}
+
+.tagsList {
+  composes: tagsList from '~./SeriesIndexPoster.css';
+}

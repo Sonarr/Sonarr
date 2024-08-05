@@ -92,6 +92,8 @@
     "@babel/preset-react": "7.24.1",
     "@babel/preset-typescript": "7.24.1",
     "@types/lodash": "4.14.194",
+    "@types/qs": "6.9.15",
+    "@types/react-document-title": "2.0.9",
     "@types/react-lazyload": "3.2.0",
     "@types/react-router-dom": "5.3.3",
     "@types/react-text-truncate": "0.14.1",

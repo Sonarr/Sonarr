@@ -3,13 +3,13 @@ import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import QueueStatusConnector from 'Activity/Queue/Status/QueueStatusConnector';
+import QueueStatus from 'Activity/Queue/Status/QueueStatus';
 import OverlayScroller from 'Components/Scroller/OverlayScroller';
 import Scroller from 'Components/Scroller/Scroller';
 import { icons } from 'Helpers/Props';
 import locationShape from 'Helpers/Props/Shapes/locationShape';
 import dimensions from 'Styles/Variables/dimensions';
-import HealthStatusConnector from 'System/Status/Health/HealthStatusConnector';
+import HealthStatus from 'System/Status/Health/HealthStatus';
 import translate from 'Utilities/String/translate';
 import MessagesConnector from './Messages/MessagesConnector';
 import PageSidebarItem from './PageSidebarItem';
@@ -50,7 +50,7 @@ const links = [
       {
         title: () => translate('Queue'),
         to: '/activity/queue',
-        statusComponent: QueueStatusConnector
+        statusComponent: QueueStatus
       },
       {
         title: () => translate('History'),
@@ -147,7 +147,7 @@ const links = [
       {
         title: () => translate('Status'),
         to: '/system/status',
-        statusComponent: HealthStatusConnector
+        statusComponent: HealthStatus
       },
       {
         title: () => translate('Tasks'),

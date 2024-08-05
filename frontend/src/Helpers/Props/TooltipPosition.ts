@@ -1,8 +1,3 @@
-enum TooltipPosition {
-  Top = 'top',
-  Right = 'right',
-  Bottom = 'bottom',
-  Left = 'left',
-}
+type TooltipPosition = 'top' | 'right' | 'bottom' | 'left';
 
 export default TooltipPosition;

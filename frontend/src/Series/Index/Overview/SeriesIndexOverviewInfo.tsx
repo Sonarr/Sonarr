@@ -137,14 +137,13 @@ function getInfoRowProps(
         date: formatDateTime(previousAiring, longDateFormat, timeFormat),
       }),
       iconName: icons.CALENDAR,
-      label:
-        getRelativeDate({
-          date: previousAiring,
-          shortDateFormat,
-          showRelativeDates,
-          timeFormat,
-          timeForToday: true,
-        }) ?? '',
+      label: getRelativeDate({
+        date: previousAiring,
+        shortDateFormat,
+        showRelativeDates,
+        timeFormat,
+        timeForToday: true,
+      }),
     };
   }
 
@@ -236,7 +235,9 @@ function SeriesIndexOverviewInfo(props: SeriesIndexOverviewInfoProps) {
     <div className={styles.infos}>
       {!!nextAiring && (
         <SeriesIndexOverviewInfoRow
-          title={formatDateTime(nextAiring, longDateFormat, timeFormat)}
+          title={translate('NextAiringDate', {
+            date: formatDateTime(nextAiring, longDateFormat, timeFormat),
+          })}
           iconName={icons.SCHEDULED}
           label={getRelativeDate({
             date: nextAiring,

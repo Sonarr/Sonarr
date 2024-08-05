@@ -74,8 +74,8 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
                 .Returns(new List<EpisodeHistory>());
 
             _downloadClientItem = Builder<DownloadClientItem>.CreateNew()
-                                                             .With(d => d.OutputPath = new OsPath(outputPath))
-                                                             .Build();
+                .With(d => d.OutputPath = new OsPath(outputPath))
+                .Build();
         }
 
         private void GivenNewDownload()

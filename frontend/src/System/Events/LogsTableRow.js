@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import Icon from 'Components/Icon';
-import RelativeDateCellConnector from 'Components/Table/Cells/RelativeDateCellConnector';
+import RelativeDateCell from 'Components/Table/Cells/RelativeDateCell';
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
 import TableRowButton from 'Components/Table/TableRowButton';
 import { icons } from 'Helpers/Props';
@@ -98,7 +98,7 @@ class LogsTableRow extends Component {
 
             if (name === 'time') {
               return (
-                <RelativeDateCellConnector
+                <RelativeDateCell
                   key={name}
                   date={time}
                 />

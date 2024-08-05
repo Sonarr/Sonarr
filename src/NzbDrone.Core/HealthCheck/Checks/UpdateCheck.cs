@@ -86,9 +86,19 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 }
             }
 
-            if (BuildInfo.BuildDateTime < DateTime.UtcNow.AddDays(-14) && _checkUpdateService.AvailableUpdate() != null)
+            if (BuildInfo.BuildDateTime < DateTime.UtcNow.AddDays(-14))
             {
-                return new HealthCheck(GetType(), HealthCheckResult.Warning, _localizationService.GetLocalizedString("UpdateAvailableHealthCheckMessage"));
+                var latestAvailable = _checkUpdateService.AvailableUpdate();
+
+                if (latestAvailable != null)
+                {
+                    return new HealthCheck(GetType(),
+                        HealthCheckResult.Warning,
+                        _localizationService.GetLocalizedString("UpdateAvailableHealthCheckMessage", new Dictionary<string, object>
+                        {
+                            { "version", $"v{latestAvailable.Version}" }
+                        }));
+                }
             }
 
             return new HealthCheck(GetType());

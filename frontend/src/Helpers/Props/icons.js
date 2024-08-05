@@ -69,6 +69,7 @@ import {
   faHistory as fasHistory,
   faHome as fasHome,
   faInfoCircle as fasInfoCircle,
+  faLanguage as fasLanguage,
   faLaptop as fasLaptop,
   faLevelUpAlt as fasLevelUpAlt,
   faListCheck as fasListCheck,
@@ -168,6 +169,7 @@ export const IGNORE = fasTimesCircle;
 export const INFO = fasInfoCircle;
 export const INTERACTIVE = fasUser;
 export const KEYBOARD = farKeyboard;
+export const LANGUAGE = fasLanguage;
 export const LOGOUT = fasSignOutAlt;
 export const MANAGE = fasListCheck;
 export const MEDIA_INFO = farFileInvoice;

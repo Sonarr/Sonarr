@@ -11,6 +11,63 @@ export type HistoryEventType =
   | 'episodeFileRenamed'
   | 'downloadIgnored';
 
+export interface GrabbedHistoryData {
+  indexer: string;
+  nzbInfoUrl: string;
+  releaseGroup: string;
+  age: string;
+  ageHours: string;
+  ageMinutes: string;
+  publishedDate: string;
+  downloadClient: string;
+  downloadClientName: string;
+  size: string;
+  downloadUrl: string;
+  guid: string;
+  tvdbId: string;
+  tvRageId: string;
+  protocol: string;
+  customFormatScore?: string;
+  seriesMatchType: string;
+  releaseSource: string;
+  indexerFlags: string;
+  releaseType: string;
+}
+
+export interface DownloadFailedHistory {
+  message: string;
+}
+
+export interface DownloadFolderImportedHistory {
+  customFormatScore?: string;
+  droppedPath: string;
+  importedPath: string;
+}
+
+export interface EpisodeFileDeletedHistory {
+  customFormatScore?: string;
+  reason: 'Manual' | 'MissingFromDisk' | 'Upgrade';
+}
+
+export interface EpisodeFileRenamedHistory {
+  sourcePath: string;
+  sourceRelativePath: string;
+  path: string;
+  relativePath: string;
+}
+
+export interface DownloadIgnoredHistory {
+  message: string;
+}
+
+export type HistoryData =
+  | GrabbedHistoryData
+  | DownloadFailedHistory
+  | DownloadFolderImportedHistory
+  | EpisodeFileDeletedHistory
+  | EpisodeFileRenamedHistory
+  | DownloadIgnoredHistory;
+
 export default interface History {
   episodeId: number;
   seriesId: number;
@@ -23,6 +80,6 @@ export default interface History {
   date: string;
   downloadId: string;
   eventType: HistoryEventType;
-  data: unknown;
+  data: HistoryData;
   id: number;
 }
