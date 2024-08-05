@@ -97,7 +97,8 @@ namespace NzbDrone.Core.HealthCheck.Checks
                         _localizationService.GetLocalizedString("UpdateAvailableHealthCheckMessage", new Dictionary<string, object>
                         {
                             { "version", $"v{latestAvailable.Version}" }
-                        }));
+                        }),
+                        "#new-update-is-available");
                 }
             }
 
