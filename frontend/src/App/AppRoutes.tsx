@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import Blocklist from 'Activity/Blocklist/Blocklist';
@@ -164,9 +163,5 @@ function AppRoutes() {
     </Switch>
   );
 }
-
-AppRoutes.propTypes = {
-  app: PropTypes.func.isRequired,
-};
 
 export default AppRoutes;

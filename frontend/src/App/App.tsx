@@ -1,5 +1,4 @@
 import { ConnectedRouter, ConnectedRouterProps } from 'connected-react-router';
-import PropTypes from 'prop-types';
 import React from 'react';
 import DocumentTitle from 'react-document-title';
 import { Provider } from 'react-redux';
@@ -20,17 +19,12 @@ function App({ store, history }: AppProps) {
         <ConnectedRouter history={history}>
           <ApplyTheme />
           <PageConnector>
-            <AppRoutes app={App} />
+            <AppRoutes />
           </PageConnector>
         </ConnectedRouter>
       </Provider>
     </DocumentTitle>
   );
 }
-
-App.propTypes = {
-  store: PropTypes.object.isRequired,
-  history: PropTypes.object.isRequired,
-};
 
 export default App;
