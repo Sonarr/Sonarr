@@ -61,7 +61,7 @@ function HistoryRow(props: HistoryRowProps) {
     date,
     data,
     downloadId,
-    isMarkingAsFailed,
+    isMarkingAsFailed = false,
     markAsFailedError,
     columns,
   } = props;
@@ -267,9 +267,5 @@ function HistoryRow(props: HistoryRowProps) {
     </TableRow>
   );
 }
-
-HistoryRow.defaultProps = {
-  customFormats: [],
-};
 
 export default HistoryRow;

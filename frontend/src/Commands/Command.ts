@@ -26,7 +26,7 @@ export interface CommandBody {
   seriesId?: number;
   seriesIds?: number[];
   seasonNumber?: number;
-  [key: string]: string | number | boolean | undefined | number[] | undefined;
+  [key: string]: string | number | boolean | number[] | undefined;
 }
 
 interface Command extends ModelBase {
