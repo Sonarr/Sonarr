@@ -83,6 +83,7 @@ namespace NzbDrone.Core.Indexers.Torznab
             {
                 torrentInfo.TvdbId = GetTvdbId(item);
                 torrentInfo.TvRageId = GetTvRageId(item);
+                releaseInfo.ImdbId = GetImdbId(item);
                 torrentInfo.IndexerFlags = GetFlags(item);
             }
 
@@ -175,6 +176,18 @@ namespace NzbDrone.Core.Indexers.Torznab
             }
 
             return 0;
+        }
+
+        protected virtual string GetImdbId(XElement item)
+        {
+            var imdbIdString = TryGetTorznabAttribute(item, "imdb");
+
+            if (!imdbIdString.IsNullOrWhiteSpace() && int.TryParse(imdbIdString, out var imdbId) && imdbId > 0)
+            {
+                return $"tt{imdbId:D7}";
+            }
+
+            return null;
         }
 
         protected override string GetInfoHash(XElement item)

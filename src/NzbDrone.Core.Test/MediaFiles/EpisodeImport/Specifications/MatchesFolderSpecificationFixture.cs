@@ -233,11 +233,11 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
             GivenEpisodes(actualInfo, actualInfo.EpisodeNumbers);
 
             Mocker.GetMock<IParsingService>()
-                .Setup(v => v.ParseSpecialEpisodeTitle(fileInfo, It.IsAny<string>(), 0, 0, null))
+                .Setup(v => v.ParseSpecialEpisodeTitle(fileInfo, It.IsAny<string>(), 0, 0, null, null))
                 .Returns(actualInfo);
 
             Mocker.GetMock<IParsingService>()
-                .Setup(v => v.ParseSpecialEpisodeTitle(folderInfo, It.IsAny<string>(), 0, 0, null))
+                .Setup(v => v.ParseSpecialEpisodeTitle(folderInfo, It.IsAny<string>(), 0, 0, null, null))
                 .Returns(actualInfo);
 
             Subject.IsSatisfiedBy(localEpisode, null).Accepted.Should().BeTrue();

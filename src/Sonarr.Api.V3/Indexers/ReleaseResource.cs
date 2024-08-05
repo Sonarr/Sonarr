@@ -48,6 +48,7 @@ namespace Sonarr.Api.V3.Indexers
         public bool Rejected { get; set; }
         public int TvdbId { get; set; }
         public int TvRageId { get; set; }
+        public string ImdbId { get; set; }
         public IEnumerable<string> Rejections { get; set; }
         public DateTime PublishDate { get; set; }
         public string CommentUrl { get; set; }
@@ -136,6 +137,7 @@ namespace Sonarr.Api.V3.Indexers
                 Rejected = model.Rejected,
                 TvdbId = releaseInfo.TvdbId,
                 TvRageId = releaseInfo.TvRageId,
+                ImdbId = releaseInfo.ImdbId,
                 Rejections = model.Rejections.Select(r => r.Reason).ToList(),
                 PublishDate = releaseInfo.PublishDate,
                 CommentUrl = releaseInfo.CommentUrl,
@@ -194,6 +196,7 @@ namespace Sonarr.Api.V3.Indexers
             model.DownloadProtocol = resource.Protocol;
             model.TvdbId = resource.TvdbId;
             model.TvRageId = resource.TvRageId;
+            model.ImdbId = resource.ImdbId;
             model.PublishDate = resource.PublishDate.ToUniversalTime();
 
             return model;

@@ -165,6 +165,7 @@ namespace NzbDrone.Core.History
                 history.Data.Add("Guid", message.Episode.Release.Guid);
                 history.Data.Add("TvdbId", message.Episode.Release.TvdbId.ToString());
                 history.Data.Add("TvRageId", message.Episode.Release.TvRageId.ToString());
+                history.Data.Add("ImdbId", message.Episode.Release.ImdbId);
                 history.Data.Add("Protocol", ((int)message.Episode.Release.DownloadProtocol).ToString());
                 history.Data.Add("CustomFormatScore", message.Episode.CustomFormatScore.ToString());
                 history.Data.Add("SeriesMatchType", message.Episode.SeriesMatchType.ToString());

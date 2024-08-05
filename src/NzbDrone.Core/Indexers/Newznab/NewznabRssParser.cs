@@ -90,6 +90,7 @@ namespace NzbDrone.Core.Indexers.Newznab
 
             releaseInfo.TvdbId = GetTvdbId(item);
             releaseInfo.TvRageId = GetTvRageId(item);
+            releaseInfo.ImdbId = GetImdbId(item);
 
             return releaseInfo;
         }
@@ -180,6 +181,18 @@ namespace NzbDrone.Core.Indexers.Newznab
             }
 
             return 0;
+        }
+
+        protected virtual string GetImdbId(XElement item)
+        {
+            var imdbIdString = TryGetNewznabAttribute(item, "imdb");
+
+            if (!imdbIdString.IsNullOrWhiteSpace() && int.TryParse(imdbIdString, out var imdbId) && imdbId > 0)
+            {
+                return $"tt{imdbId:D7}";
+            }
+
+            return null;
         }
 
         protected string TryGetNewznabAttribute(XElement item, string key, string defaultValue = "")
