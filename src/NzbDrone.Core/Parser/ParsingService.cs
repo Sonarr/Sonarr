@@ -384,6 +384,7 @@ namespace NzbDrone.Core.Parser
                     return new FindSeriesResult(searchCriteria.Series, SeriesMatchType.Title);
                 }
 
+                _logger.Debug("Could not match Searched Series [{0}] to Parsed Series [{1}], attempting id match", searchCriteria.Series.CleanTitle, parsedEpisodeInfo.SeriesTitle);
                 if (tvdbId > 0 && tvdbId == searchCriteria.Series.TvdbId)
                 {
                     _logger.Debug()
