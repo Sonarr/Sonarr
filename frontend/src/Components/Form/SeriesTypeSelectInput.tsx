@@ -46,9 +46,9 @@ function SeriesTypeSelectInput(props: SeriesTypeSelectInputProps) {
   const values = [...seriesTypeOptions];
 
   const {
-    includeNoChange,
+    includeNoChange = false,
     includeNoChangeDisabled = true,
-    includeMixed,
+    includeMixed = false,
   } = props;
 
   if (includeNoChange) {
@@ -76,10 +76,5 @@ function SeriesTypeSelectInput(props: SeriesTypeSelectInputProps) {
     />
   );
 }
-
-SeriesTypeSelectInput.defaultProps = {
-  includeNoChange: false,
-  includeMixed: false,
-};
 
 export default SeriesTypeSelectInput;

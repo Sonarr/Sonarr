@@ -51,7 +51,7 @@ function HistoryDetailsModal(props: HistoryDetailsModalProps) {
     sourceTitle,
     data,
     downloadId,
-    isMarkingAsFailed,
+    isMarkingAsFailed = false,
     shortDateFormat,
     timeFormat,
     onMarkAsFailedPress,
@@ -92,9 +92,5 @@ function HistoryDetailsModal(props: HistoryDetailsModalProps) {
     </Modal>
   );
 }
-
-HistoryDetailsModal.defaultProps = {
-  isMarkingAsFailed: false,
-};
 
 export default HistoryDetailsModal;
