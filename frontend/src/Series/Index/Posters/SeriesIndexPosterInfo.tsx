@@ -37,7 +37,7 @@ function SeriesIndexPosterInfo(props: SeriesIndexPosterInfoProps) {
     added,
     seasonCount,
     path,
-    sizeOnDisk,
+    sizeOnDisk = 0,
     tags,
     sortKey,
     showRelativeDates,
