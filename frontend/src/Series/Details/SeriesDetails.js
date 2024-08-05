@@ -212,8 +212,8 @@ class SeriesDetails extends Component {
     } = this.props;
 
     const {
-      episodeFileCount,
-      sizeOnDisk
+      episodeFileCount = 0,
+      sizeOnDisk = 0
     } = statistics;
 
     const {
@@ -454,10 +454,9 @@ class SeriesDetails extends Component {
                             name={icons.DRIVE}
                             size={17}
                           />
+
                           <span className={styles.sizeOnDisk}>
-                            {
-                              formatBytes(sizeOnDisk || 0)
-                            }
+                            {formatBytes(sizeOnDisk)}
                           </span>
                         </div>
                       </Label>

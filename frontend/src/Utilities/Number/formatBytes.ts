@@ -1,10 +1,6 @@
 import { filesize } from 'filesize';
 
-function formatBytes(input?: string | number) {
-  if (!input) {
-    return '';
-  }
-
+function formatBytes(input: string | number) {
   const size = Number(input);
 
   if (isNaN(size)) {

@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import DescriptionList from 'Components/DescriptionList/DescriptionList';
 import DescriptionListItem from 'Components/DescriptionList/DescriptionListItem';
@@ -6,14 +5,19 @@ import formatBytes from 'Utilities/Number/formatBytes';
 import translate from 'Utilities/String/translate';
 import styles from './SeasonInfo.css';
 
-function SeasonInfo(props) {
-  const {
-    totalEpisodeCount,
-    monitoredEpisodeCount,
-    episodeFileCount,
-    sizeOnDisk
-  } = props;
+interface SeasonInfoProps {
+  totalEpisodeCount: number;
+  monitoredEpisodeCount: number;
+  episodeFileCount: number;
+  sizeOnDisk: number;
+}
 
+function SeasonInfo({
+  totalEpisodeCount,
+  monitoredEpisodeCount,
+  episodeFileCount,
+  sizeOnDisk,
+}: SeasonInfoProps) {
   return (
     <DescriptionList>
       <DescriptionListItem
@@ -46,12 +50,5 @@ function SeasonInfo(props) {
     </DescriptionList>
   );
 }
-
-SeasonInfo.propTypes = {
-  totalEpisodeCount: PropTypes.number.isRequired,
-  monitoredEpisodeCount: PropTypes.number.isRequired,
-  episodeFileCount: PropTypes.number.isRequired,
-  sizeOnDisk: PropTypes.number.isRequired
-};
 
 export default SeasonInfo;
