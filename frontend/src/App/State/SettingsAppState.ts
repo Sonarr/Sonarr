@@ -24,7 +24,9 @@ export interface DownloadClientAppState
   isTestingAll: boolean;
 }
 
-export type GeneralAppState = AppSectionItemState<General>;
+export interface GeneralAppState
+  extends AppSectionItemState<General>,
+    AppSectionSaveState {}
 
 export interface ImportListAppState
   extends AppSectionState<ImportList>,
