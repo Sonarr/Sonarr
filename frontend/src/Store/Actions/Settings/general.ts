@@ -3,6 +3,7 @@ import createFetchHandler from 'Store/Actions/Creators/createFetchHandler';
 import createSaveHandler from 'Store/Actions/Creators/createSaveHandler';
 import createSetSettingValueReducer from 'Store/Actions/Creators/Reducers/createSetSettingValueReducer';
 import { createThunk } from 'Store/thunks';
+import { FormChangePaylod } from 'typings/FormChange';
 
 //
 // Variables
@@ -13,7 +14,8 @@ const section = 'settings.general';
 // Actions Types
 
 export const FETCH_GENERAL_SETTINGS = 'settings/general/fetchGeneralSettings';
-export const SET_GENERAL_SETTINGS_VALUE = 'settings/general/setGeneralSettingsValue';
+export const SET_GENERAL_SETTINGS_VALUE =
+  'settings/general/setGeneralSettingsValue';
 export const SAVE_GENERAL_SETTINGS = 'settings/general/saveGeneralSettings';
 
 //
@@ -21,10 +23,16 @@ export const SAVE_GENERAL_SETTINGS = 'settings/general/saveGeneralSettings';
 
 export const fetchGeneralSettings = createThunk(FETCH_GENERAL_SETTINGS);
 export const saveGeneralSettings = createThunk(SAVE_GENERAL_SETTINGS);
-export const setGeneralSettingsValue = createAction(SET_GENERAL_SETTINGS_VALUE, (payload) => {
+
+export const setGeneralSettingsValue = createAction<
+  FormChangePaylod & {
+    section: string;
+  },
+  FormChangePaylod
+>(SET_GENERAL_SETTINGS_VALUE, (payload) => {
   return {
     section,
-    ...payload
+    ...payload,
   };
 });
 
@@ -32,7 +40,6 @@ export const setGeneralSettingsValue = createAction(SET_GENERAL_SETTINGS_VALUE, 
 // Details
 
 export default {
-
   //
   // State
 
@@ -43,7 +50,7 @@ export default {
     pendingChanges: {},
     isSaving: false,
     saveError: null,
-    item: {}
+    item: {},
   },
 
   //
@@ -51,14 +58,13 @@ export default {
 
   actionHandlers: {
     [FETCH_GENERAL_SETTINGS]: createFetchHandler(section, '/config/host'),
-    [SAVE_GENERAL_SETTINGS]: createSaveHandler(section, '/config/host')
+    [SAVE_GENERAL_SETTINGS]: createSaveHandler(section, '/config/host'),
   },
 
   //
   // Reducers
 
   reducers: {
-    [SET_GENERAL_SETTINGS_VALUE]: createSetSettingValueReducer(section)
-  }
-
+    [SET_GENERAL_SETTINGS_VALUE]: createSetSettingValueReducer(section),
+  },
 };
