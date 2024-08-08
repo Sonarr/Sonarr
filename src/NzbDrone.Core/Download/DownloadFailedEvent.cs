@@ -21,7 +21,6 @@ namespace NzbDrone.Core.Download
         public string DownloadClient { get; set; }
         public string DownloadId { get; set; }
         public string Message { get; set; }
-        public string TorrentInfoHash { get; set; }
         public Dictionary<string, string> Data { get; set; }
         public TrackedDownload TrackedDownload { get; set; }
         public List<Language> Languages { get; set; }

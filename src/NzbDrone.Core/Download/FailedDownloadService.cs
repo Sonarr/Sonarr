@@ -125,8 +125,6 @@ namespace NzbDrone.Core.Download
         {
             Enum.TryParse(historyItem.Data.GetValueOrDefault(EpisodeHistory.RELEASE_SOURCE, ReleaseSourceType.Unknown.ToString()), out ReleaseSourceType releaseSource);
 
-            var torrentInfoHash = GetTorrentInfoHash(historyItem, trackedDownload);
-
             var downloadFailedEvent = new DownloadFailedEvent
             {
                 SeriesId = historyItem.SeriesId,
@@ -141,20 +139,9 @@ namespace NzbDrone.Core.Download
                 Languages = historyItem.Languages,
                 SkipRedownload = skipRedownload,
                 ReleaseSource = releaseSource,
-                TorrentInfoHash = torrentInfoHash
             };
 
             _eventAggregator.PublishEvent(downloadFailedEvent);
-        }
-
-        private string GetTorrentInfoHash(EpisodeHistory historyItem, TrackedDownload trackedDownload)
-        {
-            if (trackedDownload == null)
-            {
-                return historyItem.Data.GetValueOrDefault("torrentInfoHash", null);
-            }
-
-            return trackedDownload.Protocol == DownloadProtocol.Torrent ? trackedDownload.DownloadItem.DownloadId : null;
         }
 
         private List<int> GetEpisodeIds(List<EpisodeHistory> historyItems)
