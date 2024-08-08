@@ -4,6 +4,7 @@ using System.Linq;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Download;
+using NzbDrone.Core.Download.TrackedDownloads;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
@@ -185,8 +186,10 @@ namespace NzbDrone.Core.Blocklisting
                 Indexer = message.Data.GetValueOrDefault("indexer"),
                 Protocol = (DownloadProtocol)Convert.ToInt32(message.Data.GetValueOrDefault("protocol")),
                 Message = message.Message,
-                TorrentInfoHash = message.Data.GetValueOrDefault("torrentInfoHash"),
-                Languages = message.Languages
+                Languages = message.Languages,
+                TorrentInfoHash = message.TrackedDownload?.Protocol == DownloadProtocol.Torrent
+                    ? message.TrackedDownload.DownloadItem.DownloadId
+                    : message.Data.GetValueOrDefault("torrentInfoHash", null)
             };
 
             if (Enum.TryParse(message.Data.GetValueOrDefault("indexerFlags"), true, out IndexerFlags flags))
@@ -198,8 +201,6 @@ namespace NzbDrone.Core.Blocklisting
             {
                 blocklist.ReleaseType = releaseType;
             }
-
-            _blocklistRepository.Insert(blocklist);
         }
 
         public void HandleAsync(SeriesDeletedEvent message)
