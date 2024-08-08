@@ -1,4 +1,5 @@
-﻿using NLog;
+using NLog;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
 

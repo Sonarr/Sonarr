@@ -49,8 +49,8 @@ namespace NzbDrone.Host
             services.AddLogging(b =>
             {
                 b.ClearProviders();
-                b.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
-                b.AddFilter("Microsoft.AspNetCore", Microsoft.Extensions.Logging.LogLevel.Warning);
+                b.SetMinimumLevel(LogLevel.Trace);
+                b.AddFilter("Microsoft.AspNetCore", LogLevel.Warning);
                 b.AddFilter("Sonarr.Http.Authentication", LogLevel.Information);
                 b.AddFilter("Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager", LogLevel.Error);
                 b.AddNLog();

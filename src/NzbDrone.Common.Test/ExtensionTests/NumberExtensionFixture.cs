@@ -1,11 +1,11 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Common.Extensions;
 
 namespace NzbDrone.Common.Test.ExtensionTests
 {
     [TestFixture]
-    public class Int64ExtensionFixture
+    public class NumberExtensionFixture
     {
         [TestCase(0, "0 B")]
         [TestCase(1000, "1,000.0 B")]

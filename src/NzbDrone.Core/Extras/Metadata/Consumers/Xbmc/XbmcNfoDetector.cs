@@ -1,5 +1,6 @@
 using System.Text.RegularExpressions;
 using NzbDrone.Common.Disk;
+using NzbDrone.Common.Extensions;
 
 namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
 {

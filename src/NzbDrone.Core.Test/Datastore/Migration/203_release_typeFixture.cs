@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Datastore.Migration;
 using NzbDrone.Core.MediaFiles.MediaInfo;
