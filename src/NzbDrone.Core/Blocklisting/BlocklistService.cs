@@ -186,7 +186,10 @@ namespace NzbDrone.Core.Blocklisting
                 Indexer = message.Data.GetValueOrDefault("indexer"),
                 Protocol = (DownloadProtocol)Convert.ToInt32(message.Data.GetValueOrDefault("protocol")),
                 Message = message.Message,
-                Languages = message.Languages
+                Languages = message.Languages,
+                TorrentInfoHash = message.TrackedDownload?.Protocol == DownloadProtocol.Torrent
+                ? message.TrackedDownload.DownloadItem.DownloadId
+                : message.Data.GetValueOrDefault("torrentInfoHash", null)
             };
 
             if (Enum.TryParse(message.Data.GetValueOrDefault("indexerFlags"), true, out IndexerFlags flags))
@@ -197,15 +200,6 @@ namespace NzbDrone.Core.Blocklisting
             if (Enum.TryParse(message.Data.GetValueOrDefault("releaseType"), true, out ReleaseType releaseType))
             {
                 blocklist.ReleaseType = releaseType;
-            }
-
-            if (message.TrackedDownload == null)
-            {
-                blocklist.TorrentInfoHash =  message.Data.GetValueOrDefault("torrentInfoHash", null);
-            }
-            else
-            {
-                blocklist.TorrentInfoHash = message.TrackedDownload.Protocol == DownloadProtocol.Torrent ? message.TrackedDownload.DownloadItem.DownloadId : null;
             }
         }
 
