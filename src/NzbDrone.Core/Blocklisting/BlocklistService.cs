@@ -188,8 +188,8 @@ namespace NzbDrone.Core.Blocklisting
                 Message = message.Message,
                 Languages = message.Languages,
                 TorrentInfoHash = message.TrackedDownload?.Protocol == DownloadProtocol.Torrent
-                ? message.TrackedDownload.DownloadItem.DownloadId
-                : message.Data.GetValueOrDefault("torrentInfoHash", null)
+                    ? message.TrackedDownload.DownloadItem.DownloadId
+                    : message.Data.GetValueOrDefault("torrentInfoHash", null)
             };
 
             if (Enum.TryParse(message.Data.GetValueOrDefault("indexerFlags"), true, out IndexerFlags flags))
