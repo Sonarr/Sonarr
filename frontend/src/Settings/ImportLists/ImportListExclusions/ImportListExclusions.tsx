@@ -16,7 +16,18 @@ import useCurrentPage from 'Helpers/Hooks/useCurrentPage';
 import useModalOpenState from 'Helpers/Hooks/useModalOpenState';
 import useSelectState from 'Helpers/Hooks/useSelectState';
 import { icons, kinds } from 'Helpers/Props';
-import * as importListExclusionActions from 'Store/Actions/Settings/importListExclusions';
+import {
+  bulkDeleteImportListExclusions,
+  deleteImportListExclusion,
+  fetchImportListExclusions,
+  gotoImportListExclusionFirstPage,
+  gotoImportListExclusionLastPage,
+  gotoImportListExclusionNextPage,
+  gotoImportListExclusionPage,
+  gotoImportListExclusionPreviousPage,
+  setImportListExclusionSort,
+  setImportListExclusionTableOption,
+} from 'Store/Actions/Settings/importListExclusions';
 import { CheckInputChanged } from 'typings/inputs';
 import { SelectStateInputProps } from 'typings/props';
 import {
@@ -115,64 +126,58 @@ function ImportListExclusions() {
     setIsConfirmRemoveModalOpen(false);
   }, [setIsConfirmRemoveModalOpen]);
 
-  const gotoImportListExclusionFirstPage = useCallback(() => {
-    dispatch(importListExclusionActions.gotoImportListExclusionFirstPage());
+  const gotoImportListExclusionFirstPagePress = useCallback(() => {
+    dispatch(gotoImportListExclusionFirstPage());
   }, [dispatch]);
 
-  const gotoImportListExclusionPreviousPage = useCallback(() => {
-    dispatch(importListExclusionActions.gotoImportListExclusionPreviousPage());
+  const gotoImportListExclusionPreviousPagePress = useCallback(() => {
+    dispatch(gotoImportListExclusionPreviousPage());
   }, [dispatch]);
 
-  const gotoImportListExclusionNextPage = useCallback(() => {
-    dispatch(importListExclusionActions.gotoImportListExclusionNextPage());
+  const gotoImportListExclusionNextPagePress = useCallback(() => {
+    dispatch(gotoImportListExclusionNextPage());
   }, [dispatch]);
 
-  const gotoImportListExclusionLastPage = useCallback(() => {
-    dispatch(importListExclusionActions.gotoImportListExclusionLastPage());
+  const gotoImportListExclusionLastPagePress = useCallback(() => {
+    dispatch(gotoImportListExclusionLastPage());
   }, [dispatch]);
 
-  const gotoImportListExclusionPage = useCallback(
+  const gotoImportListExclusionPagePress = useCallback(
     (page: number) => {
-      dispatch(
-        importListExclusionActions.gotoImportListExclusionPage({ page })
-      );
+      dispatch(gotoImportListExclusionPage({ page }));
     },
     [dispatch]
   );
 
-  const setImportListExclusionSort = useCallback(
+  const onImportListExclusionSort = useCallback(
     (sortKey: { sortKey: string }) => {
-      dispatch(
-        importListExclusionActions.setImportListExclusionSort({ sortKey })
-      );
+      dispatch(setImportListExclusionSort({ sortKey }));
     },
     [dispatch]
   );
 
-  const setImportListTableOption = useCallback(
+  const onImportListTableOption = useCallback(
     (payload: { pageSize: number }) => {
-      dispatch(
-        importListExclusionActions.setImportListExclusionTableOption(payload)
-      );
+      dispatch(setImportListExclusionTableOption(payload));
 
       if (payload.pageSize) {
-        dispatch(importListExclusionActions.gotoImportListExclusionFirstPage());
+        dispatch(gotoImportListExclusionFirstPage());
       }
     },
     [dispatch]
   );
 
   const repopulate = useCallback(() => {
-    gotoImportListExclusionFirstPage();
-  }, [gotoImportListExclusionFirstPage]);
+    gotoImportListExclusionFirstPagePress();
+  }, [gotoImportListExclusionFirstPagePress]);
 
   useEffect(() => {
     registerPagePopulator(repopulate);
 
     if (requestCurrentPage) {
-      dispatch(importListExclusionActions.fetchImportListExclusions());
+      dispatch(fetchImportListExclusions());
     } else {
-      gotoImportListExclusionFirstPage();
+      gotoImportListExclusionFirstPagePress();
     }
 
     return () => unregisterPagePopulator(repopulate);
@@ -181,18 +186,14 @@ function ImportListExclusions() {
 
   const onConfirmDeleteImportListExclusion = useCallback(
     (id: number) => {
-      dispatch(importListExclusionActions.deleteImportListExclusion({ id }));
+      dispatch(deleteImportListExclusion({ id }));
       repopulate();
     },
     [dispatch, repopulate]
   );
 
   const handleRemoveSelectedConfirmed = useCallback(() => {
-    dispatch(
-      importListExclusionActions.bulkDeleteImportListExclusions({
-        ids: selectedIds,
-      })
-    );
+    dispatch(bulkDeleteImportListExclusions({ ids: selectedIds }));
     setIsConfirmRemoveModalOpen(false);
     repopulate();
   }, [selectedIds, setIsConfirmRemoveModalOpen, dispatch, repopulate]);
@@ -222,9 +223,9 @@ function ImportListExclusions() {
           pageSize={pageSize}
           sortKey={sortKey}
           sortDirection={sortDirection}
-          onTableOptionChange={setImportListTableOption}
+          onTableOptionChange={onImportListTableOption}
           onSelectAllChange={handleSelectAllChange}
-          onSortPress={setImportListExclusionSort}
+          onSortPress={onImportListExclusionSort}
         >
           <TableBody>
             {items.map((item) => {
@@ -267,11 +268,11 @@ function ImportListExclusions() {
           totalRecords={totalRecords}
           pageSize={pageSize}
           isFetching={isFetching}
-          onFirstPagePress={gotoImportListExclusionFirstPage}
-          onPreviousPagePress={gotoImportListExclusionPreviousPage}
-          onNextPagePress={gotoImportListExclusionNextPage}
-          onLastPagePress={gotoImportListExclusionLastPage}
-          onPageSelect={gotoImportListExclusionPage}
+          onFirstPagePress={gotoImportListExclusionFirstPagePress}
+          onPreviousPagePress={gotoImportListExclusionPreviousPagePress}
+          onNextPagePress={gotoImportListExclusionNextPagePress}
+          onLastPagePress={gotoImportListExclusionLastPagePress}
+          onPageSelect={gotoImportListExclusionPagePress}
           {...otherProps}
         />
 
