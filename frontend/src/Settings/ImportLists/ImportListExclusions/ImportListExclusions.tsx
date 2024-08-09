@@ -1,24 +1,30 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router';
 import { createSelector } from 'reselect';
 import AppState from 'App/State/AppState';
 import FieldSet from 'Components/FieldSet';
 import IconButton from 'Components/Link/IconButton';
+import SpinnerButton from 'Components/Link/SpinnerButton';
+import ConfirmModal from 'Components/Modal/ConfirmModal';
 import PageSectionContent from 'Components/Page/PageSectionContent';
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import TablePager from 'Components/Table/TablePager';
 import TableRow from 'Components/Table/TableRow';
+import useCurrentPage from 'Helpers/Hooks/useCurrentPage';
 import useModalOpenState from 'Helpers/Hooks/useModalOpenState';
-import { icons } from 'Helpers/Props';
+import useSelectState from 'Helpers/Hooks/useSelectState';
+import { icons, kinds } from 'Helpers/Props';
 import * as importListExclusionActions from 'Store/Actions/Settings/importListExclusions';
+import { CheckInputChanged } from 'typings/inputs';
+import { SelectStateInputProps } from 'typings/props';
 import {
   registerPagePopulator,
   unregisterPagePopulator,
 } from 'Utilities/pagePopulator';
 import translate from 'Utilities/String/translate';
+import getSelectedIds from 'Utilities/Table/getSelectedIds';
 import EditImportListExclusionModal from './EditImportListExclusionModal';
 import ImportListExclusionRow from './ImportListExclusionRow';
 
@@ -54,21 +60,60 @@ function createImportListExlucionsSelector() {
 }
 
 function ImportListExclusions() {
-  const history = useHistory();
-  const useCurrentPage = history.action === 'POP';
+  const requestCurrentPage = useCurrentPage();
+
+  const {
+    isFetching,
+    isPopulated,
+    items,
+    pageSize,
+    sortKey,
+    error,
+    sortDirection,
+    totalRecords,
+    isDeleting,
+    ...otherProps
+  } = useSelector(createImportListExlucionsSelector());
 
   const dispatch = useDispatch();
 
-  const fetchImportListExclusions = useCallback(() => {
-    dispatch(importListExclusionActions.fetchImportListExclusions());
-  }, [dispatch]);
+  const [isConfirmRemoveModalOpen, setIsConfirmRemoveModalOpen] =
+    useState(false);
 
-  const deleteImportListExclusion = useCallback(
-    (payload: { id: number }) => {
-      dispatch(importListExclusionActions.deleteImportListExclusion(payload));
+  const [selectState, setSelectState] = useSelectState();
+  const { allSelected, allUnselected, selectedState } = selectState;
+
+  const selectedIds = useMemo(() => {
+    return getSelectedIds(selectedState);
+  }, [selectedState]);
+
+  const handleSelectAllChange = useCallback(
+    ({ value }: CheckInputChanged) => {
+      setSelectState({ type: value ? 'selectAll' : 'unselectAll', items });
     },
-    [dispatch]
+    [items, setSelectState]
   );
+
+  const handleSelectedChange = useCallback(
+    ({ id, value, shiftKey = false }: SelectStateInputProps) => {
+      setSelectState({
+        type: 'toggleSelected',
+        items,
+        id,
+        isSelected: value,
+        shiftKey,
+      });
+    },
+    [items, setSelectState]
+  );
+
+  const handleRemoveSelectedPress = useCallback(() => {
+    setIsConfirmRemoveModalOpen(true);
+  }, [setIsConfirmRemoveModalOpen]);
+
+  const handleConfirmRemoveModalClose = useCallback(() => {
+    setIsConfirmRemoveModalOpen(false);
+  }, [setIsConfirmRemoveModalOpen]);
 
   const gotoImportListExclusionFirstPage = useCallback(() => {
     dispatch(importListExclusionActions.gotoImportListExclusionFirstPage());
@@ -124,8 +169,8 @@ function ImportListExclusions() {
   useEffect(() => {
     registerPagePopulator(repopulate);
 
-    if (useCurrentPage) {
-      fetchImportListExclusions();
+    if (requestCurrentPage) {
+      dispatch(importListExclusionActions.fetchImportListExclusions());
     } else {
       gotoImportListExclusionFirstPage();
     }
@@ -136,25 +181,21 @@ function ImportListExclusions() {
 
   const onConfirmDeleteImportListExclusion = useCallback(
     (id: number) => {
-      deleteImportListExclusion({ id });
+      dispatch(importListExclusionActions.deleteImportListExclusion({ id }));
       repopulate();
     },
-    [deleteImportListExclusion, repopulate]
+    [dispatch, repopulate]
   );
 
-  const selected = useSelector(createImportListExlucionsSelector());
-
-  const {
-    isFetching,
-    isPopulated,
-    items,
-    pageSize,
-    sortKey,
-    error,
-    sortDirection,
-    totalRecords,
-    ...otherProps
-  } = selected;
+  const handleRemoveSelectedConfirmed = useCallback(() => {
+    dispatch(
+      importListExclusionActions.bulkDeleteImportListExclusions({
+        ids: selectedIds,
+      })
+    );
+    setIsConfirmRemoveModalOpen(false);
+    repopulate();
+  }, [selectedIds, setIsConfirmRemoveModalOpen, dispatch, repopulate]);
 
   const [
     isAddImportListExclusionModalOpen,
@@ -173,13 +214,17 @@ function ImportListExclusions() {
         error={error}
       >
         <Table
+          selectAll={true}
+          allSelected={allSelected}
+          allUnselected={allUnselected}
           columns={COLUMNS}
           canModifyColumns={false}
           pageSize={pageSize}
           sortKey={sortKey}
           sortDirection={sortDirection}
-          onSortPress={setImportListExclusionSort}
           onTableOptionChange={setImportListTableOption}
+          onSelectAllChange={handleSelectAllChange}
+          onSortPress={setImportListExclusionSort}
         >
           <TableBody>
             {items.map((item) => {
@@ -187,16 +232,26 @@ function ImportListExclusions() {
                 <ImportListExclusionRow
                   key={item.id}
                   {...item}
+                  isSelected={selectedState[item.id] || false}
                   onConfirmDeleteImportListExclusion={
                     onConfirmDeleteImportListExclusion
                   }
+                  onSelectedChange={handleSelectedChange}
                 />
               );
             })}
 
             <TableRow>
-              <TableRowCell />
-              <TableRowCell />
+              <TableRowCell colSpan={3}>
+                <SpinnerButton
+                  kind={kinds.DANGER}
+                  isSpinning={isDeleting}
+                  isDisabled={!selectedIds.length}
+                  onPress={handleRemoveSelectedPress}
+                >
+                  {translate('Delete')}
+                </SpinnerButton>
+              </TableRowCell>
 
               <TableRowCell>
                 <IconButton
@@ -223,6 +278,16 @@ function ImportListExclusions() {
         <EditImportListExclusionModal
           isOpen={isAddImportListExclusionModalOpen}
           onModalClose={setAddImportListExclusionModalClosed}
+        />
+
+        <ConfirmModal
+          isOpen={isConfirmRemoveModalOpen}
+          kind={kinds.DANGER}
+          title={translate('RemoveSelected')}
+          message={translate('RemoveSelectedImportListExclusionMessageText')}
+          confirmLabel={translate('RemoveSelected')}
+          onConfirm={handleRemoveSelectedConfirmed}
+          onCancel={handleConfirmRemoveModalClose}
         />
       </PageSectionContent>
     </FieldSet>

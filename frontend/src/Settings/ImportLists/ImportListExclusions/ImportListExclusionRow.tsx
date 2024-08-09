@@ -2,20 +2,31 @@ import React, { useCallback } from 'react';
 import IconButton from 'Components/Link/IconButton';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
+import TableSelectCell from 'Components/Table/Cells/TableSelectCell';
 import TableRow from 'Components/Table/TableRow';
 import useModalOpenState from 'Helpers/Hooks/useModalOpenState';
 import { icons, kinds } from 'Helpers/Props';
 import ImportListExclusion from 'typings/ImportListExclusion';
+import { SelectStateInputProps } from 'typings/props';
 import translate from 'Utilities/String/translate';
 import EditImportListExclusionModal from './EditImportListExclusionModal';
 import styles from './ImportListExclusionRow.css';
 
 interface ImportListExclusionRowProps extends ImportListExclusion {
+  isSelected: boolean;
   onConfirmDeleteImportListExclusion: (id: number) => void;
+  onSelectedChange: (options: SelectStateInputProps) => void;
 }
 
 function ImportListExclusionRow(props: ImportListExclusionRowProps) {
-  const { id, title, tvdbId, onConfirmDeleteImportListExclusion } = props;
+  const {
+    id,
+    title,
+    tvdbId,
+    isSelected,
+    onConfirmDeleteImportListExclusion,
+    onSelectedChange,
+  } = props;
 
   const [
     isEditImportListExclusionModalOpen,
@@ -35,6 +46,12 @@ function ImportListExclusionRow(props: ImportListExclusionRowProps) {
 
   return (
     <TableRow>
+      <TableSelectCell
+        id={id}
+        isSelected={isSelected}
+        onSelectedChange={onSelectedChange}
+      />
+
       <TableRowCell>{title}</TableRowCell>
       <TableRowCell>{tvdbId}</TableRowCell>
 
