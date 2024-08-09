@@ -12,6 +12,7 @@ namespace NzbDrone.Core.ImportLists.Exclusions
         List<ImportListExclusion> All();
         PagingSpec<ImportListExclusion> Paged(PagingSpec<ImportListExclusion> pagingSpec);
         void Delete(int id);
+        void Delete(List<int> ids);
         ImportListExclusion Get(int id);
         ImportListExclusion FindByTvdbId(int tvdbId);
         ImportListExclusion Update(ImportListExclusion importListExclusion);
@@ -39,6 +40,11 @@ namespace NzbDrone.Core.ImportLists.Exclusions
         public void Delete(int id)
         {
             _repo.Delete(id);
+        }
+
+        public void Delete(List<int> ids)
+        {
+            _repo.DeleteMany(ids);
         }
 
         public ImportListExclusion Get(int id)
