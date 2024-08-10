@@ -85,6 +85,10 @@ const links = [
     to: '/settings',
     children: [
       {
+        title: () => translate('Users'),
+        to: '/settings/users'
+      },
+      {
         title: () => translate('MediaManagement'),
         to: '/settings/mediamanagement'
       },

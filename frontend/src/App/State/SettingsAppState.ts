@@ -16,6 +16,7 @@ import Notification from 'typings/Notification';
 import QualityProfile from 'typings/QualityProfile';
 import General from 'typings/Settings/General';
 import UiSettings from 'typings/Settings/UiSettings';
+import UsersAppState from './UsersAppState';
 
 export interface DownloadClientAppState
   extends AppSectionState<DownloadClient>,
@@ -75,6 +76,7 @@ interface SettingsAppState {
   notifications: NotificationAppState;
   qualityProfiles: QualityProfilesAppState;
   ui: UiSettingsAppState;
+  users: UsersAppState;
 }
 
 export default SettingsAppState;

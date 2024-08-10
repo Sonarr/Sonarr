@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Xml.Linq;
@@ -19,6 +20,8 @@ namespace NzbDrone.Core.Authentication
         User FindUser();
         User FindUser(string username, string password);
         User FindUser(Guid identifier);
+        public User FindUser(int id);
+        List<User> All();
     }
 
     public class UserService : IUserService, IHandle<ApplicationStartedEvent>
@@ -77,7 +80,7 @@ namespace NzbDrone.Core.Authentication
 
         public User FindUser()
         {
-            return _repo.SingleOrDefault();
+            return _repo.All().FirstOrDefault();
         }
 
         public User FindUser(string username, string password)
@@ -118,6 +121,16 @@ namespace NzbDrone.Core.Authentication
         public User FindUser(Guid identifier)
         {
             return _repo.FindUser(identifier);
+        }
+
+        public User FindUser(int id)
+        {
+            return _repo.Get(id);
+        }
+
+        public List<User> All()
+        {
+            return _repo.All().ToList();
         }
 
         private User SetUserHashedPassword(User user, string password)

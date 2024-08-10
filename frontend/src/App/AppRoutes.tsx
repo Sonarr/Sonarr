@@ -25,6 +25,7 @@ import QualityConnector from 'Settings/Quality/QualityConnector';
 import Settings from 'Settings/Settings';
 import TagSettings from 'Settings/Tags/TagSettings';
 import UISettingsConnector from 'Settings/UI/UISettingsConnector';
+import UsersConnector from 'Settings/Users/UsersConnector';
 import BackupsConnector from 'System/Backup/BackupsConnector';
 import LogsTableConnector from 'System/Events/LogsTableConnector';
 import Logs from 'System/Logs/Logs';
@@ -98,6 +99,8 @@ function AppRoutes() {
       */}
 
       <Route exact={true} path="/settings" component={Settings} />
+
+      <Route path="/settings/users" component={UsersConnector} />
 
       <Route
         path="/settings/mediamanagement"
