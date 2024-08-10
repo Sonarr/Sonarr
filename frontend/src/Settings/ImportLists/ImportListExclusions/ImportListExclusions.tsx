@@ -58,7 +58,7 @@ const COLUMNS = [
   },
 ];
 
-function createImportListExlucionsSelector() {
+function createImportListExclusionsSelector() {
   return createSelector(
     (state: AppState) => state.settings.importListExclusions,
     (importListExclusions) => {
@@ -85,7 +85,7 @@ function ImportListExclusions() {
     totalRecords,
     isDeleting,
     deleteError,
-  } = useSelector(createImportListExlucionsSelector());
+  } = useSelector(createImportListExclusionsSelector());
 
   const dispatch = useDispatch();
 
