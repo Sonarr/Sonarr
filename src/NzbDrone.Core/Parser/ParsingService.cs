@@ -420,12 +420,12 @@ namespace NzbDrone.Core.Parser
 
                 if (imdbId.IsNotNullOrWhiteSpace() && imdbId.Equals(searchCriteria.Series.ImdbId, StringComparison.Ordinal) && tvdbId <= 0)
                 {
-                    _logger.Debug()
+                    _logger.ForDebugEvent()
                            .Message("Found matching series by IMDb ID {0}, an alias may be needed for: {1}", imdbId, parsedEpisodeInfo.SeriesTitle)
                            .Property("ImdbId", imdbId)
                            .Property("ParsedEpisodeInfo", parsedEpisodeInfo)
                            .WriteSentryWarn("ImdbIdMatch", imdbId, parsedEpisodeInfo.SeriesTitle)
-                           .Write();
+                           .Log();
 
                     return new FindSeriesResult(searchCriteria.Series, SeriesMatchType.Id);
                 }
@@ -491,12 +491,12 @@ namespace NzbDrone.Core.Parser
 
                 if (series != null)
                 {
-                    _logger.Debug()
+                    _logger.ForDebugEvent()
                            .Message("Found matching series by IMDb ID {0}, an alias may be needed for: {1}", imdbId, parsedEpisodeInfo.SeriesTitle)
                            .Property("ImdbId", imdbId)
                            .Property("ParsedEpisodeInfo", parsedEpisodeInfo)
                            .WriteSentryWarn("ImdbIdMatch", imdbId, parsedEpisodeInfo.SeriesTitle)
-                           .Write();
+                           .Log();
 
                     matchType = SeriesMatchType.Id;
                 }
