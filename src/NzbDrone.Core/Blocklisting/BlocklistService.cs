@@ -200,6 +200,8 @@ namespace NzbDrone.Core.Blocklisting
             {
                 blocklist.ReleaseType = releaseType;
             }
+
+            _blocklistRepository.Insert(blocklist);
         }
 
         public void HandleAsync(SeriesDeletedEvent message)
