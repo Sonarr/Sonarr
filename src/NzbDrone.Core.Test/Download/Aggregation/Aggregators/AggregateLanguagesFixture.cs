@@ -4,6 +4,8 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Download.Aggregation.Aggregators;
+using NzbDrone.Core.Indexers;
+using NzbDrone.Core.Indexers.TorrentRss;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
@@ -60,6 +62,63 @@ namespace NzbDrone.Core.Test.Download.Aggregation.Aggregators
             _remoteEpisode.ParsedEpisodeInfo = GetParsedEpisodeInfo(new List<Language> { Language.French }, _simpleReleaseTitle);
 
             Subject.Aggregate(_remoteEpisode).Languages.Should().Equal(_remoteEpisode.ParsedEpisodeInfo.Languages);
+        }
+
+        [Test]
+        public void should_return_multi_languages_when_indexer_has_multi_languages_configuration()
+        {
+            var releaseTitle = "Series.Title.S01E01.MULTi.1080p.WEB.H265-RlsGroup";
+            var indexerDefinition = new IndexerDefinition
+            {
+                Settings = new TorrentRssIndexerSettings { MultiLanguages = new List<int> { Language.Original.Id, Language.French.Id } }
+            };
+            Mocker.GetMock<IIndexerFactory>()
+                .Setup(v => v.Get(1))
+                .Returns(indexerDefinition);
+
+            _remoteEpisode.ParsedEpisodeInfo = GetParsedEpisodeInfo(new List<Language> { }, releaseTitle);
+            _remoteEpisode.Release.IndexerId = 1;
+            _remoteEpisode.Release.Title = releaseTitle;
+
+            Subject.Aggregate(_remoteEpisode).Languages.Should().BeEquivalentTo(new List<Language> { _series.OriginalLanguage, Language.French });
+        }
+
+        [Test]
+        public void should_return_multi_languages_when_release_as_unknown_as_default_language_and_indexer_has_multi_languages_configuration()
+        {
+            var releaseTitle = "Series.Title.S01E01.MULTi.1080p.WEB.H265-RlsGroup";
+            var indexerDefinition = new IndexerDefinition
+            {
+                Settings = new TorrentRssIndexerSettings { MultiLanguages = new List<int> { Language.Original.Id, Language.French.Id } }
+            };
+            Mocker.GetMock<IIndexerFactory>()
+                .Setup(v => v.Get(1))
+                .Returns(indexerDefinition);
+
+            _remoteEpisode.ParsedEpisodeInfo = GetParsedEpisodeInfo(new List<Language> { Language.Unknown }, releaseTitle);
+            _remoteEpisode.Release.IndexerId = 1;
+            _remoteEpisode.Release.Title = releaseTitle;
+
+            Subject.Aggregate(_remoteEpisode).Languages.Should().BeEquivalentTo(new List<Language> { _series.OriginalLanguage, Language.French });
+        }
+
+        [Test]
+        public void should_return_original_when_indexer_has_no_multi_languages_configuration()
+        {
+            var releaseTitle = "Series.Title.S01E01.MULTi.1080p.WEB.H265-RlsGroup";
+            var indexerDefinition = new IndexerDefinition
+            {
+                Settings = new TorrentRssIndexerSettings { }
+            };
+            Mocker.GetMock<IIndexerFactory>()
+                .Setup(v => v.Get(1))
+                .Returns(indexerDefinition);
+
+            _remoteEpisode.ParsedEpisodeInfo = GetParsedEpisodeInfo(new List<Language> { }, releaseTitle);
+            _remoteEpisode.Release.IndexerId = 1;
+            _remoteEpisode.Release.Title = releaseTitle;
+
+            Subject.Aggregate(_remoteEpisode).Languages.Should().BeEquivalentTo(new List<Language> { _series.OriginalLanguage });
         }
 
         [Test]
