@@ -8,6 +8,7 @@ import SpinnerButton from 'Components/Link/SpinnerButton';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import PageSectionContent from 'Components/Page/PageSectionContent';
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
+import Column from 'Components/Table/Column';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import TablePager from 'Components/Table/TablePager';
@@ -37,8 +38,9 @@ import translate from 'Utilities/String/translate';
 import getSelectedIds from 'Utilities/Table/getSelectedIds';
 import EditImportListExclusionModal from './EditImportListExclusionModal';
 import ImportListExclusionRow from './ImportListExclusionRow';
+import styles from './ImportListExclusions.css';
 
-const COLUMNS = [
+const COLUMNS: Column[] = [
   {
     name: 'title',
     label: () => translate('Title'),
@@ -52,7 +54,9 @@ const COLUMNS = [
     isSortable: true,
   },
   {
+    className: styles.actions,
     name: 'actions',
+    label: '',
     isVisible: true,
     isSortable: false,
   },
