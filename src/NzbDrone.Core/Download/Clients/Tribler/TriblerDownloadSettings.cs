@@ -48,25 +48,28 @@ namespace NzbDrone.Core.Download.Clients.Tribler
         [FieldDefinition(2, Label = "Port", Type = FieldType.Textbox)]
         public int Port { get; set; }
 
-        [FieldDefinition(3, Label = "Use SSL", Type = FieldType.Checkbox, HelpText = "Use secure connection when connecting to Tribler")]
+        [FieldDefinition(3, Label = "UseSsl", Type = FieldType.Checkbox, HelpText = "DownloadClientSettingsUseSslHelpText")]
         public bool UseSsl { get; set; }
 
-        [FieldDefinition(4, Label = "Url Base", Type = FieldType.Textbox, Advanced = true, HelpText = "Adds a prefix to the tribler url, eg http://[host]:[port]/[urlBase], defaults to ''")]
+        [FieldDefinition(4, Label = "UrlBase", Type = FieldType.Textbox, Advanced = true, HelpText = "DownloadClientSettingsUrlBaseHelpText")]
+        [FieldToken(TokenField.HelpText, "UrlBase", "clientName", "Tribler")]
+        [FieldToken(TokenField.HelpText, "UrlBase", "url", "http://[host]:[port]/[urlBase]")]
+
         public string UrlBase { get; set; }
 
-        [FieldDefinition(5, Label = "ApiKey", Type = FieldType.Textbox, Privacy = PrivacyLevel.ApiKey, HelpText = "Api key, found in %APPDATA%\\Roaming\\.Tribler\\7.10\\triblerd.conf, the api key is [api].key, NOT [http_api].key")]
+        [FieldDefinition(5, Label = "ApiKey", Type = FieldType.Textbox, Privacy = PrivacyLevel.ApiKey, HelpText = "DownloadClientTriblerSettingsApiKeyHelpText")]
         public string ApiKey { get; set; }
 
-        [FieldDefinition(6, Label = "Category", Type = FieldType.Textbox, HelpText = "Adding a category specific to Sonarr avoids conflicts with unrelated downloads, but it's optional. Creates a [category] subdirectory in the output directory.")]
+        [FieldDefinition(6, Label = "Category", Type = FieldType.Textbox, HelpText = "DownloadClientSettingsCategoryHelpText")]
         public string TvCategory { get; set; }
 
-        [FieldDefinition(7, Label = "Directory", Type = FieldType.Textbox, Advanced = true, HelpText = "Optional location to put downloads in, leave blank to use the default Transmission location")]
+        [FieldDefinition(7, Label = "Directory", Type = FieldType.Textbox, Advanced = true, HelpText = "DownloadClientTriblerSettingsDirectoryHelpText")]
         public string TvDirectory { get; set; }
 
-        [FieldDefinition(8, Label = "AnonymityLevel", Type = FieldType.Number, HelpText = "Number of proxies to use when downloading content. To disable set to 0. Proxies reduce download/upload speed. See https://www.tribler.org/anonymity.html")]
+        [FieldDefinition(8, Label = "DownloadClientTriblerSettingsAnonymityLevel", Type = FieldType.Number, HelpText = "DownloadClientTriblerSettingsAnonymityLevelHelpText")]
         public int AnonymityLevel { get; set; }
 
-        [FieldDefinition(9, Label = "SafeSeeding", Type = FieldType.Checkbox, HelpText = "If seeding only should be done through proxies. The Anonymity level defines the number of proxies used. See https://www.tribler.org/anonymity.html")]
+        [FieldDefinition(9, Label = "DownloadClientTriblerSettingsSafeSeeding", Type = FieldType.Checkbox, HelpText = "DownloadClientTriblerSettingsSafeSeedingHelpText")]
         public bool SafeSeeding { get; set; }
 
         public NzbDroneValidationResult Validate()

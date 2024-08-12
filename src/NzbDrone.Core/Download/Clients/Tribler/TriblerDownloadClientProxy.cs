@@ -105,7 +105,7 @@ namespace NzbDrone.Core.Download.Clients.Tribler
         {
             var deleteDownloadRequestObject = new RemoveDownloadRequest
             {
-                Remove_data = deleteData
+                RemoveData = deleteData
             };
 
             var deleteRequestBuilder = getRequestBuilder(settings, "downloads/" + item.DownloadId.ToLower());
@@ -124,7 +124,7 @@ namespace NzbDrone.Core.Download.Clients.Tribler
             var addDownloadRequestBuilder = getRequestBuilder(settings, "downloads");
             addDownloadRequestBuilder.Method = System.Net.Http.HttpMethod.Put;
 
-            // manually set content of delete request.
+            // manually set content of download request.
             var addDownloadRequest = addDownloadRequestBuilder.Build();
             addDownloadRequest.SetContent(Json.ToJson(downloadRequest));
 

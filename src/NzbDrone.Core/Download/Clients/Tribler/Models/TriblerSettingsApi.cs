@@ -1,128 +1,128 @@
+using System.CodeDom.Compiler;
+using System.Runtime.Serialization;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+
 namespace NzbDrone.Core.Indexers.Tribler
 {
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
+    [GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
     public class GetTriblerSettingsResponse
     {
-        [Newtonsoft.Json.JsonProperty("settings", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [JsonProperty("settings", NullValueHandling = NullValueHandling.Ignore)]
         public Settings Settings { get; set; }
     }
 
 
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
-    public partial class Settings
+    [GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
+    public class Settings
     {
-        [Newtonsoft.Json.JsonProperty("general", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [JsonProperty("general", NullValueHandling = NullValueHandling.Ignore)]
         public General General { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("tunnel_community", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public Tunnel_community Tunnel_community { get; set; }
+        [JsonProperty("tunnel_community", NullValueHandling = NullValueHandling.Ignore)]
+        public TunnelCommunity TunnelCommunity { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("dht", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [JsonProperty("dht", NullValueHandling = NullValueHandling.Ignore)]
         public Dht Dht { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("download_defaults", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public Download_defaults Download_defaults { get; set; }
+        [JsonProperty("download_defaults", NullValueHandling = NullValueHandling.Ignore)]
+        public DownloadDefaults DownloadDefaults { get; set; }
 
 
     }
 
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
-    public partial class General
+    [GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
+    public class General
     {
-        [Newtonsoft.Json.JsonProperty("log_dir", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Log_dir { get; set; }
+        [JsonProperty("log_dir", NullValueHandling = NullValueHandling.Ignore)]
+        public string LogDir { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("version", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [JsonProperty("version", NullValueHandling = NullValueHandling.Ignore)]
         public string Version { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("version_checker_enabled", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool? Version_checker_enabled { get; set; }
+        [JsonProperty("version_checker_enabled", NullValueHandling = NullValueHandling.Ignore)]
+        public bool? VersionCheckerEnabled { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("testnet", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool? Testnet { get; set; }
+        [JsonProperty("testnet", NullValueHandling = NullValueHandling.Ignore)]
+        public bool? TestNet { get; set; }
     }
 
 
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
-    public partial class Tunnel_community
+    [GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
+    public class TunnelCommunity
     {
-        [Newtonsoft.Json.JsonProperty("exitnode_enabled", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool? Exitnode_enabled { get; set; }
+        [JsonProperty("exitnode_enabled", NullValueHandling = NullValueHandling.Ignore)]
+        public bool? ExitNodeEnabled { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("enabled", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [JsonProperty("enabled", NullValueHandling = NullValueHandling.Ignore)]
         public bool? Enabled { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("random_slots", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int? Random_slots { get; set; }
+        [JsonProperty("random_slots", NullValueHandling = NullValueHandling.Ignore)]
+        public int? RandomSlots { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("competing_slots", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int? Competing_slots { get; set; }
+        [JsonProperty("competing_slots", NullValueHandling = NullValueHandling.Ignore)]
+        public int? CompetingSlots { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("min_circuits", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int? Min_Circuits { get; set; }
+        [JsonProperty("min_circuits", NullValueHandling = NullValueHandling.Ignore)]
+        public int? MinCircuits { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("max_circuits", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int? Max_Circuits { get; set; }
+        [JsonProperty("max_circuits", NullValueHandling = NullValueHandling.Ignore)]
+        public int? MaxCircuits { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("testnet", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool? Testnet { get; set; }
+        [JsonProperty("testnet", NullValueHandling = NullValueHandling.Ignore)]
+        public bool? TestNet { get; set; }
     }
 
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
-    public partial class Dht
+    [GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
+    public class Dht
     {
-        [Newtonsoft.Json.JsonProperty("enabled", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [JsonProperty("enabled", NullValueHandling = NullValueHandling.Ignore)]
         public bool? Enabled { get; set; }
 
+    }
+
+
+    [GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
+    public class DownloadDefaults
+    {
+        [JsonProperty("anonymity_enabled", NullValueHandling = NullValueHandling.Ignore)]
+        public bool? AnonymityEnabled { get; set; }
+
+        [JsonProperty("number_hops", NullValueHandling = NullValueHandling.Ignore)]
+        public int? NumberHops { get; set; }
+
+        [JsonProperty("safeseeding_enabled", NullValueHandling = NullValueHandling.Ignore)]
+        public bool? SafeSeedingEnabled { get; set; }
+
+        [JsonProperty("saveas", NullValueHandling = NullValueHandling.Ignore)]
+        public string SaveAS { get; set; }
+
+        [JsonProperty("seeding_mode", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonConverter(typeof(StringEnumConverter))]
+        public DownloadDefaultsSeedingMode? SeedingMode { get; set; }
+
+        [JsonProperty("seeding_ratio", NullValueHandling = NullValueHandling.Ignore)]
+        public double? SeedingRatio { get; set; }
+
+        [JsonProperty("seeding_time", NullValueHandling = NullValueHandling.Ignore)]
+        public double? SeedingTime { get; set; }
 
     }
 
 
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
-    public partial class Download_defaults
+    [GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
+    public enum DownloadDefaultsSeedingMode
     {
-        [Newtonsoft.Json.JsonProperty("anonymity_enabled", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool? Anonymity_enabled { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("number_hops", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int? Number_hops { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("safeseeding_enabled", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool? Safeseeding_enabled { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("saveas", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Saveas { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("seeding_mode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
-        public Download_defaultsSeeding_mode? Seeding_mode { get; set; }
-
-        /// <summary>Seeding ratio download/upload</summary>
-        [Newtonsoft.Json.JsonProperty("seeding_ratio", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public double? Seeding_ratio { get; set; }
-
-        /// <summary>Seeding time in seconds</summary>
-        [Newtonsoft.Json.JsonProperty("seeding_time", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public double? Seeding_time { get; set; }
-
-
-    }
-
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
-    public enum Download_defaultsSeeding_mode
-    {
-        [System.Runtime.Serialization.EnumMember(Value = @"ratio")]
+        [EnumMember(Value = @"ratio")]
         Ratio = 0,
 
-        [System.Runtime.Serialization.EnumMember(Value = @"forever")]
+        [EnumMember(Value = @"forever")]
         Forever = 1,
 
-        [System.Runtime.Serialization.EnumMember(Value = @"time")]
+        [EnumMember(Value = @"time")]
         Time = 2,
 
-        [System.Runtime.Serialization.EnumMember(Value = @"never")]
+        [EnumMember(Value = @"never")]
         Never = 3,
 
     }

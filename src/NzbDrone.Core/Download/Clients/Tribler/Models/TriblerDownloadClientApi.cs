@@ -1,257 +1,254 @@
+using System.CodeDom.Compiler;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Runtime.Serialization;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+
 namespace NzbDrone.Core.Download.Clients.Tribler
 {
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
+    [GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
     public enum DownloadStatus
     {
-        [System.Runtime.Serialization.EnumMember(Value = @"WAITING4HASHCHECK")]
-        WAITING4HASHCHECK = 0,
+        [EnumMember(Value = @"WAITING4HASHCHECK")]
+        Waiting4HashCheck = 0,
 
-        [System.Runtime.Serialization.EnumMember(Value = @"HASHCHECKING")]
-        HASHCHECKING = 1,
+        [EnumMember(Value = @"HASHCHECKING")]
+        Hashchecking = 1,
 
-        [System.Runtime.Serialization.EnumMember(Value = @"METADATA")]
-        METADATA = 2,
+        [EnumMember(Value = @"METADATA")]
+        Metadata = 2,
 
-        [System.Runtime.Serialization.EnumMember(Value = @"DOWNLOADING")]
-        DOWNLOADING = 3,
+        [EnumMember(Value = @"DOWNLOADING")]
+        Downloading = 3,
 
-        [System.Runtime.Serialization.EnumMember(Value = @"SEEDING")]
-        SEEDING = 4,
+        [EnumMember(Value = @"SEEDING")]
+        Seeding = 4,
 
-        [System.Runtime.Serialization.EnumMember(Value = @"STOPPED")]
-        STOPPED = 5,
+        [EnumMember(Value = @"STOPPED")]
+        Stopped = 5,
 
-        [System.Runtime.Serialization.EnumMember(Value = @"ALLOCATING_DISKSPACE")]
-        ALLOCATING_DISKSPACE = 6,
+        [EnumMember(Value = @"ALLOCATING_DISKSPACE")]
+        AllocatingDiskspace = 6,
 
-        [System.Runtime.Serialization.EnumMember(Value = @"EXIT_NODES")]
-        EXIT_NODES = 7,
+        [EnumMember(Value = @"EXIT_NODES")]
+        Exitnodes = 7,
 
-        [System.Runtime.Serialization.EnumMember(Value = @"CIRCUITS")]
-        CIRCUITS = 8,
+        [EnumMember(Value = @"CIRCUITS")]
+        Circuits = 8,
 
-        [System.Runtime.Serialization.EnumMember(Value = @"STOPPED_ON_ERROR")]
-        STOPPED_ON_ERROR = 9,
-        
+        [EnumMember(Value = @"STOPPED_ON_ERROR")]
+        StoppedOnError = 9,
+
     }
 
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
-    public partial class Trackers
+    [GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
+    public class Trackers
     {
-        /// <summary>url of tracker</summary>
-        [Newtonsoft.Json.JsonProperty("url", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [JsonProperty("url", NullValueHandling = NullValueHandling.Ignore)]
         public string Url { get; set; }
 
-        /// <summary>number of peers</summary>
-        [Newtonsoft.Json.JsonProperty("peers", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [JsonProperty("peers", NullValueHandling = NullValueHandling.Ignore)]
         public object Peers { get; set; }
 
-        /// <summary>If the tracker is working or not.</summary>
-        [Newtonsoft.Json.JsonProperty("status", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [JsonProperty("status", NullValueHandling = NullValueHandling.Ignore)]
         public string Status { get; set; }
 
 
     }
 
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
-    public partial class Download
+    [GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
+    public class Download
     {
-        [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [JsonProperty("name", NullValueHandling = NullValueHandling.Ignore)]
         public string Name { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("progress", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [JsonProperty("progress", NullValueHandling = NullValueHandling.Ignore)]
         public float? Progress { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("anon_download", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool? Anon_download { get; set; }
+        [JsonProperty("anon_download", NullValueHandling = NullValueHandling.Ignore)]
+        public bool? AnonDownload { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("availability", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [JsonProperty("availability", NullValueHandling = NullValueHandling.Ignore)]
         public float? Availability { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("eta", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [JsonProperty("eta", NullValueHandling = NullValueHandling.Ignore)]
         public double? Eta { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("total_pieces", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public long? Total_pieces { get; set; }
+        [JsonProperty("total_pieces", NullValueHandling = NullValueHandling.Ignore)]
+        public long? TotalPieces { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("num_seeds", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public long? Num_seeds { get; set; }
+        [JsonProperty("num_seeds", NullValueHandling = NullValueHandling.Ignore)]
+        public long? NumSeeds { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("total_up", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public long? Total_up { get; set; }
+        [JsonProperty("total_up", NullValueHandling = NullValueHandling.Ignore)]
+        public long? TotalUp { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("status", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+        [JsonProperty("status", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonConverter(typeof(StringEnumConverter))]
         public DownloadStatus? Status { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("infohash", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [JsonProperty("infohash", NullValueHandling = NullValueHandling.Ignore)]
         public string Infohash { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("ratio", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [JsonProperty("ratio", NullValueHandling = NullValueHandling.Ignore)]
         public float? Ratio { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("vod_mode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool? Vod_mode { get; set; }
+        [JsonProperty("vod_mode", NullValueHandling = NullValueHandling.Ignore)]
+        public bool? VideoOnDemandMode { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("time_added", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public long? Time_added { get; set; }
+        [JsonProperty("time_added", NullValueHandling = NullValueHandling.Ignore)]
+        public long? TimeAdded { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("max_upload_speed", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public long? Max_upload_speed { get; set; }
+        [JsonProperty("max_upload_speed", NullValueHandling = NullValueHandling.Ignore)]
+        public long? MaxUploadSpeed { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("max_download_speed", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public long? Max_download_speed { get; set; }
+        [JsonProperty("max_download_speed", NullValueHandling = NullValueHandling.Ignore)]
+        public long? MaxDownloadSpeed { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("hops", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [JsonProperty("hops", NullValueHandling = NullValueHandling.Ignore)]
         public long? Hops { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("safe_seeding", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool? Safe_seeding { get; set; }
+        [JsonProperty("safe_seeding", NullValueHandling = NullValueHandling.Ignore)]
+        public bool? SafeSeeding { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("error", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [JsonProperty("error", NullValueHandling = NullValueHandling.Ignore)]
         public string Error { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("total_down", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public long? Total_down { get; set; }
+        [JsonProperty("total_down", NullValueHandling = NullValueHandling.Ignore)]
+        public long? TotalDown { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("vod_prebuffering_progress", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public float? Vod_prebuffering_progress { get; set; }
+        [JsonProperty("vod_prebuffering_progress", NullValueHandling = NullValueHandling.Ignore)]
+        public float? VideoOnDemandPrebufferingProgress { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("trackers", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.ICollection<Trackers> Trackers { get; set; }
+        [JsonProperty("trackers", NullValueHandling = NullValueHandling.Ignore)]
+        public ICollection<Trackers> Trackers { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("size", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [JsonProperty("size", NullValueHandling = NullValueHandling.Ignore)]
         public long? Size { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("peers", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.ICollection<string> Peers { get; set; }
+        [JsonProperty("peers", NullValueHandling = NullValueHandling.Ignore)]
+        public ICollection<string> Peers { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("destination", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [JsonProperty("destination", NullValueHandling = NullValueHandling.Ignore)]
         public string Destination { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("speed_down", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public float? Speed_down { get; set; }
+        [JsonProperty("speed_down", NullValueHandling = NullValueHandling.Ignore)]
+        public float? SpeedDown { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("speed_up", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public float? Speed_up { get; set; }
+        [JsonProperty("speed_up", NullValueHandling = NullValueHandling.Ignore)]
+        public float? SpeedUp { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("vod_prebuffering_progress_consec", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public float? Vod_prebuffering_progress_consec { get; set; }
+        [JsonProperty("vod_prebuffering_progress_consec", NullValueHandling = NullValueHandling.Ignore)]
+        public float? VideoOnDemandPrebufferingProgressConsec { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("files", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.ICollection<string> Files { get; set; }
+        [JsonProperty("files", NullValueHandling = NullValueHandling.Ignore)]
+        public ICollection<string> Files { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("num_peers", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public long? Num_peers { get; set; }
+        [JsonProperty("num_peers", NullValueHandling = NullValueHandling.Ignore)]
+        public long? NumPeers { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("channel_download", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [JsonProperty("channel_download", NullValueHandling = NullValueHandling.Ignore)]
         public bool? ChannelDownload { get; set; }
     }
 
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
-    public partial class DownloadsResponse
+    [GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
+    public class DownloadsResponse
     {
-        [Newtonsoft.Json.JsonProperty("downloads", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.ICollection<Download> Downloads { get; set; }
+        [JsonProperty("downloads", NullValueHandling = NullValueHandling.Ignore)]
+        public ICollection<Download> Downloads { get; set; }
     }
 
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
-    public partial class AddDownloadRequest
+    [GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
+    public class AddDownloadRequest
     {
-        /// <summary>Number of hops for the anonymous download. No hops is equivalent to a plain download</summary>
-        [Newtonsoft.Json.JsonProperty("anon_hops", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public long? Anon_hops { get; set; }
+        [JsonProperty("anon_hops", NullValueHandling = NullValueHandling.Ignore)]
+        public long? AnonymityHops { get; set; }
 
-        /// <summary>Whether the seeding of the download should be anonymous or not</summary>
-        [Newtonsoft.Json.JsonProperty("safe_seeding", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool? Safe_seeding { get; set; }
+        [JsonProperty("safe_seeding", NullValueHandling = NullValueHandling.Ignore)]
+        public bool? SafeSeeding { get; set; }
 
-        /// <summary>the download destination path of the torrent</summary>
-        [Newtonsoft.Json.JsonProperty("destination", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [JsonProperty("destination", NullValueHandling = NullValueHandling.Ignore)]
         public string Destination { get; set; }
 
-        /// <summary>The URI of the torrent file that should be downloaded. This URI can either represent a file location, a magnet link or a HTTP(S) url.</summary>
-        [Newtonsoft.Json.JsonProperty("uri", Required = Newtonsoft.Json.Required.Always)]
-        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        [JsonProperty("uri", Required = Newtonsoft.Json.Required.Always)]
+        [Required(AllowEmptyStrings = true)]
         public string Uri { get; set; }
     }
 
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
-    public partial class AddDownloadResponse
+    [GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
+    public class AddDownloadResponse
     {
-        [Newtonsoft.Json.JsonProperty("infohash", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [JsonProperty("infohash", NullValueHandling = NullValueHandling.Ignore)]
         public string Infohash { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("started", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [JsonProperty("started", NullValueHandling = NullValueHandling.Ignore)]
         public bool? Started { get; set; }
     }
 
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
-    public partial class RemoveDownloadRequest
+    [GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
+    public class RemoveDownloadRequest
     {
-        /// <summary>Whether or not to remove the associated data</summary>
-        [Newtonsoft.Json.JsonProperty("remove_data", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool? Remove_data { get; set; }
+        [JsonProperty("remove_data", NullValueHandling = NullValueHandling.Ignore)]
+        public bool? RemoveData { get; set; }
     }
 
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
-    public partial class DeleteDownloadResponse
+    [GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
+    public class DeleteDownloadResponse
     {
-        [Newtonsoft.Json.JsonProperty("removed", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [JsonProperty("removed", NullValueHandling = NullValueHandling.Ignore)]
         public bool? Removed { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("infohash", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [JsonProperty("infohash", NullValueHandling = NullValueHandling.Ignore)]
         public string Infohash { get; set; }
     }
 
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
-    public partial class UpdateDownloadRequest
+    [GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
+    public class UpdateDownloadRequest
     {
-        /// <summary>The anonymity of a download can be changed at runtime by passing the anon_hops parameter, however, this must be the only parameter in this request.</summary>
-        [Newtonsoft.Json.JsonProperty("anon_hops", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public long? Anon_hops { get; set; }
+        [JsonProperty("anon_hops", NullValueHandling = NullValueHandling.Ignore)]
+        public long? AnonHops { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("selected_files", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.ICollection<int> Selected_files { get; set; }
+        [JsonProperty("selected_files", NullValueHandling = NullValueHandling.Ignore)]
+        public ICollection<int> Selected_files { get; set; }
 
-        /// <summary>State parameter to be passed to modify the state of the download (resume/stop/recheck)</summary>
-        [Newtonsoft.Json.JsonProperty("state", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [JsonProperty("state", NullValueHandling = NullValueHandling.Ignore)]
         public string State { get; set; }
     }
 
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
-    public partial class UpdateDownloadResponse
+    [GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
+    public class UpdateDownloadResponse
     {
-        [Newtonsoft.Json.JsonProperty("modified", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [JsonProperty("modified", NullValueHandling = NullValueHandling.Ignore)]
         public bool? Modified { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("infohash", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [JsonProperty("infohash", NullValueHandling = NullValueHandling.Ignore)]
         public string Infohash { get; set; }
     }
 
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
-    public partial class File
+    [GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
+    public class File
     {
-        [Newtonsoft.Json.JsonProperty("size", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [JsonProperty("size", NullValueHandling = NullValueHandling.Ignore)]
         public long? Size { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("index", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [JsonProperty("index", NullValueHandling = NullValueHandling.Ignore)]
         public long? Index { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [JsonProperty("name", NullValueHandling = NullValueHandling.Ignore)]
         public string Name { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("progress", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [JsonProperty("progress", NullValueHandling = NullValueHandling.Ignore)]
         public float? Progress { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("included", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [JsonProperty("included", NullValueHandling = NullValueHandling.Ignore)]
         public bool? Included { get; set; }
     }
 
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
-    public partial class GetFilesResponse
+    [GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
+    public class GetFilesResponse
     {
-        [Newtonsoft.Json.JsonProperty("files", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.ICollection<File> Files { get; set; }
+        [JsonProperty("files", NullValueHandling = NullValueHandling.Ignore)]
+        public ICollection<File> Files { get; set; }
     }
 }

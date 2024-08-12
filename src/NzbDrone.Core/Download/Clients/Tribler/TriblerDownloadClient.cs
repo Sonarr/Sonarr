@@ -127,22 +127,22 @@ namespace NzbDrone.Core.Download.Clients.Tribler
 
                 switch (download.Status)
                 {
-                    case DownloadStatus.HASHCHECKING:
-                    case DownloadStatus.WAITING4HASHCHECK:
-                    case DownloadStatus.CIRCUITS:
-                    case DownloadStatus.EXIT_NODES:
-                    case DownloadStatus.DOWNLOADING:
+                    case DownloadStatus.Hashchecking:
+                    case DownloadStatus.Waiting4HashCheck:
+                    case DownloadStatus.Circuits:
+                    case DownloadStatus.Exitnodes:
+                    case DownloadStatus.Downloading:
                         item.Status = DownloadItemStatus.Downloading;
                         break;
-                    case DownloadStatus.METADATA:
-                    case DownloadStatus.ALLOCATING_DISKSPACE:
+                    case DownloadStatus.Metadata:
+                    case DownloadStatus.AllocatingDiskspace:
                         item.Status = DownloadItemStatus.Queued;
                         break;
-                    case DownloadStatus.SEEDING:
-                    case DownloadStatus.STOPPED:
+                    case DownloadStatus.Seeding:
+                    case DownloadStatus.Stopped:
                         item.Status = DownloadItemStatus.Completed;
                         break;
-                    case DownloadStatus.STOPPED_ON_ERROR:
+                    case DownloadStatus.StoppedOnError:
                         item.Status = DownloadItemStatus.Failed;
                         break;
                     default: // new status in API? default to downloading
@@ -153,7 +153,7 @@ namespace NzbDrone.Core.Download.Clients.Tribler
                 }
 
                 // override status' if completed but progress is not finished
-                if (download.Status == DownloadStatus.STOPPED && download.Progress < 1)
+                if (download.Status == DownloadStatus.Stopped && download.Progress < 1)
                 {
                     item.Status = DownloadItemStatus.Paused;
                 }
@@ -184,7 +184,7 @@ namespace NzbDrone.Core.Download.Clients.Tribler
         public override DownloadClientInfo GetStatus()
         {
             var config = _proxy.GetConfig(Settings);
-            var destDir = config.Settings.Download_defaults.Saveas;
+            var destDir = config.Settings.DownloadDefaults.SaveAS;
 
             if (Settings.TvCategory.IsNotNullOrWhiteSpace())
             {
@@ -214,30 +214,30 @@ namespace NzbDrone.Core.Download.Clients.Tribler
             }
 
             // if download is still running then it's not finished.
-            if (torrent.Status != DownloadStatus.STOPPED)
+            if (torrent.Status != DownloadStatus.Stopped)
             {
                 return false;
             }
 
-            switch (config.Settings.Download_defaults.Seeding_mode)
+            switch (config.Settings.DownloadDefaults.SeedingMode)
             {
                 // if in ratio mode, wait for ratio to become larger than expeced. Tribler's DownloadStatus will switch from SEEDING to STOPPED
-                case Download_defaultsSeeding_mode.Ratio:
+                case DownloadDefaultsSeedingMode.Ratio:
 
                     return torrent.Ratio.HasValue
-                        && torrent.Ratio >= config.Settings.Download_defaults.Seeding_ratio;
+                        && torrent.Ratio >= config.Settings.DownloadDefaults.SeedingRatio;
 
-                case Download_defaultsSeeding_mode.Time:
-                    var downloadStarted = DateTimeOffset.FromUnixTimeSeconds(torrent.Time_added.Value);
-                    var maxSeedingTime = TimeSpan.FromSeconds(config.Settings.Download_defaults.Seeding_time ?? 0);
+                case DownloadDefaultsSeedingMode.Time:
+                    var downloadStarted = DateTimeOffset.FromUnixTimeSeconds(torrent.TimeAdded.Value);
+                    var maxSeedingTime = TimeSpan.FromSeconds(config.Settings.DownloadDefaults.SeedingTime ?? 0);
 
-                    return torrent.Time_added.HasValue
+                    return torrent.TimeAdded.HasValue
                         && downloadStarted.Add(maxSeedingTime) < DateTimeOffset.Now;
 
-                case Download_defaultsSeeding_mode.Never:
+                case DownloadDefaultsSeedingMode.Never:
                     return true;
 
-                case Download_defaultsSeeding_mode.Forever:
+                case DownloadDefaultsSeedingMode.Forever:
                 default:
                     return false;
             }
@@ -249,8 +249,8 @@ namespace NzbDrone.Core.Download.Clients.Tribler
             {
                 Destination = GetDownloadDirectory(),
                 Uri = magnetLink,
-                Safe_seeding = Settings.SafeSeeding,
-                Anon_hops = Settings.AnonymityLevel
+                SafeSeeding = Settings.SafeSeeding,
+                AnonymityHops = Settings.AnonymityLevel
             };
 
             return _proxy.AddFromMagnetLink(Settings, addDownloadRequestObject);
@@ -286,7 +286,7 @@ namespace NzbDrone.Core.Download.Clients.Tribler
             }
 
             var config = _proxy.GetConfig(Settings);
-            var destDir = config.Settings.Download_defaults.Saveas;
+            var destDir = config.Settings.DownloadDefaults.SaveAS;
 
             return $"{destDir.TrimEnd('/')}/{Settings.TvCategory}";
         }
