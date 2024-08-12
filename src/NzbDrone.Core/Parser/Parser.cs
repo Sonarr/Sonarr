@@ -575,6 +575,8 @@ namespace NzbDrone.Core.Parser
 
         private static readonly string[] Numbers = new[] { "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine" };
 
+        private static readonly Regex MultiRegex = new (@"[_. ](?<multi>multi)[_. ]", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
         public static ParsedEpisodeInfo ParsePath(string path)
         {
             var fileInfo = new FileInfo(path);
@@ -957,6 +959,11 @@ namespace NzbDrone.Core.Parser
             });
 
             return title;
+        }
+
+        public static bool HasMultipleLanguages(string title)
+        {
+            return MultiRegex.IsMatch(title);
         }
 
         private static SeriesTitleInfo GetSeriesTitleInfo(string title, MatchCollection matchCollection)

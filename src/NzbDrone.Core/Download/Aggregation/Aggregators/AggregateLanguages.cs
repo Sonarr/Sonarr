@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using NzbDrone.Common.Extensions;
+using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
@@ -10,10 +12,13 @@ namespace NzbDrone.Core.Download.Aggregation.Aggregators
 {
     public class AggregateLanguages : IAggregateRemoteEpisode
     {
+        private readonly IIndexerFactory _indexerFactory;
         private readonly Logger _logger;
 
-        public AggregateLanguages(Logger logger)
+        public AggregateLanguages(IIndexerFactory indexerFactory,
+                                  Logger logger)
         {
+            _indexerFactory = indexerFactory;
             _logger = logger;
         }
 
@@ -69,6 +74,17 @@ namespace NzbDrone.Core.Download.Aggregation.Aggregators
 
                 // Remove all languages that aren't part of the updated releaseTokens
                 languages = languages.Except(languagesToRemove).ToList();
+            }
+
+            if ((languages.Count == 0 || (languages.Count == 1 && languages.First() == Language.Unknown)) && releaseInfo is { IndexerId: > 0 } && releaseInfo.Title.IsNotNullOrWhiteSpace())
+            {
+                var indexer = _indexerFactory.Get(releaseInfo.IndexerId);
+
+                if (indexer?.Settings is IIndexerSettings settings && settings.MultiLanguages.Any() && Parser.Parser.HasMultipleLanguages(releaseInfo.Title))
+                {
+                    // Use indexer setting for Multi-languages
+                    languages = settings.MultiLanguages.Select(i => (Language)i).ToList();
+                }
             }
 
             // Use series language as fallback if we couldn't parse a language

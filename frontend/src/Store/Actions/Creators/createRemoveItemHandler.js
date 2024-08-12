@@ -7,7 +7,7 @@ function createRemoveItemHandler(section, url) {
   return function(getState, payload, dispatch) {
     const {
       id,
-      ...queryParams
+      queryParams
     } = payload;
 
     dispatch(set({ section, isDeleting: true }));

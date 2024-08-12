@@ -95,6 +95,11 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
                     torrentInfo.TvRageId = torrent.TvrageID.Value;
                 }
 
+                if (torrent.ImdbID.IsNotNullOrWhiteSpace() && int.TryParse(torrent.ImdbID, out var imdbId) && imdbId > 0)
+                {
+                    torrentInfo.ImdbId = $"tt{imdbId:D7}";
+                }
+
                 results.Add(torrentInfo);
             }
 

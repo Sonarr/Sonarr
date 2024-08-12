@@ -21,7 +21,7 @@ interface RootFolderRowProps {
 }
 
 function RootFolderRow(props: RootFolderRowProps) {
-  const { id, path, accessible, freeSpace, unmappedFolders = [] } = props;
+  const { id, path, accessible, freeSpace = 0, unmappedFolders = [] } = props;
 
   const isUnavailable = !accessible;
 

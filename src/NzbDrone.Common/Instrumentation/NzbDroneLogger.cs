@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using NLog;
 using NLog.Config;
+using NLog.Layouts.ClefJsonLayout;
 using NLog.Targets;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
@@ -13,6 +14,8 @@ namespace NzbDrone.Common.Instrumentation
     public static class NzbDroneLogger
     {
         private const string FILE_LOG_LAYOUT = @"${date:format=yyyy-MM-dd HH\:mm\:ss.f}|${level}|${logger}|${message}${onexception:inner=${newline}${newline}[v${assembly-version}] ${exception:format=ToString}${newline}}";
+        public const string ConsoleLogLayout = "[${level}] ${logger}: ${message} ${onexception:inner=${newline}${newline}[v${assembly-version}] ${exception:format=ToString}${newline}}";
+        public static CompactJsonLayout ClefLogLayout = new CompactJsonLayout();
 
         private static bool _isConfigured;
 
@@ -33,6 +36,8 @@ namespace NzbDrone.Common.Instrumentation
             GlobalExceptionHandlers.Register();
 
             var appFolderInfo = new AppFolderInfo(startupContext);
+
+            RegisterGlobalFilters();
 
             if (Debugger.IsAttached)
             {
@@ -122,7 +127,16 @@ namespace NzbDrone.Common.Instrumentation
             var coloredConsoleTarget = new ColoredConsoleTarget();
 
             coloredConsoleTarget.Name = "consoleLogger";
-            coloredConsoleTarget.Layout = "[${level}] ${logger}: ${message} ${onexception:inner=${newline}${newline}[v${assembly-version}] ${exception:format=ToString}${newline}}";
+
+            var logFormat = Enum.TryParse<ConsoleLogFormat>(Environment.GetEnvironmentVariable("SONARR__LOG__CONSOLEFORMAT"), out var formatEnumValue)
+                ? formatEnumValue
+                : ConsoleLogFormat.Standard;
+
+            coloredConsoleTarget.Layout = logFormat switch
+            {
+                ConsoleLogFormat.Clef => ClefLogLayout,
+                _ => ConsoleLogLayout
+            };
 
             var loggingRule = new LoggingRule("*", level, coloredConsoleTarget);
 
@@ -148,7 +162,7 @@ namespace NzbDrone.Common.Instrumentation
             fileTarget.ConcurrentWrites = false;
             fileTarget.ConcurrentWriteAttemptDelay = 50;
             fileTarget.ConcurrentWriteAttempts = 10;
-            fileTarget.ArchiveAboveSize = 1024000;
+            fileTarget.ArchiveAboveSize = 1.Megabytes();
             fileTarget.MaxArchiveFiles = maxArchiveFiles;
             fileTarget.EnableFileDelete = true;
             fileTarget.ArchiveNumbering = ArchiveNumberingMode.Rolling;
@@ -196,6 +210,17 @@ namespace NzbDrone.Common.Instrumentation
             LogManager.Configuration.LoggingRules.Insert(0, rule);
         }
 
+        private static void RegisterGlobalFilters()
+        {
+            LogManager.Setup().LoadConfiguration(c =>
+            {
+                c.ForLogger("System.*").WriteToNil(LogLevel.Warn);
+                c.ForLogger("Microsoft.*").WriteToNil(LogLevel.Warn);
+                c.ForLogger("Microsoft.Hosting.Lifetime*").WriteToNil(LogLevel.Info);
+                c.ForLogger("Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware").WriteToNil(LogLevel.Fatal);
+            });
+        }
+
         public static Logger GetLogger(Type obj)
         {
             return LogManager.GetLogger(obj.Name.Replace("NzbDrone.", ""));
@@ -205,5 +230,11 @@ namespace NzbDrone.Common.Instrumentation
         {
             return GetLogger(obj.GetType());
         }
+    }
+
+    public enum ConsoleLogFormat
+    {
+        Standard,
+        Clef
     }
 }

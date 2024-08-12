@@ -59,7 +59,7 @@ app_guid=$(echo "$app_guid" | tr -d ' ')
 app_guid=${app_guid:-media}
 
 echo "This will install [${app^}] to [$bindir] and use [$datadir] for the AppData Directory"
-echo "${app^} will run as the user [$app_uid] and group [$app_guid]. By continuing, you've confirmed that that user and group will have READ and WRITE access to your Media Library and Download Client Completed Download directories"
+echo "${app^} will run as the user [$app_uid] and group [$app_guid]. By continuing, you've confirmed that the selected user and group will have READ and WRITE access to your Media Library and Download Client Completed Download directories"
 read -n 1 -r -s -p $'Press enter to continue or ctrl+c to exit...\n' < /dev/tty
 
 # Create User / Group as needed
@@ -114,7 +114,7 @@ case "$ARCH" in
 esac
 echo ""
 echo "Removing previous tarballs"
-# -f to Force so we fail if it doesnt exist
+# -f to Force so we fail if it doesn't exist
 rm -f "${app^}".*.tar.gz
 echo ""
 echo "Downloading..."
