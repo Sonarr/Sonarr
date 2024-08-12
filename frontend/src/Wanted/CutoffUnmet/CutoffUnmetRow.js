@@ -26,6 +26,7 @@ function CutoffUnmetRow(props) {
     sceneAbsoluteEpisodeNumber,
     unverifiedSceneNumbering,
     airDateUtc,
+    lastSearchTime,
     title,
     isSelected,
     columns,
@@ -106,6 +107,16 @@ function CutoffUnmetRow(props) {
             );
           }
 
+          if (name === 'episodes.lastSearchTime') {
+            return (
+              <RelativeDateCell
+                key={name}
+                date={lastSearchTime}
+                includeSeconds={true}
+              />
+            );
+          }
+
           if (name === 'languages') {
             return (
               <TableRowCell
@@ -166,6 +177,7 @@ CutoffUnmetRow.propTypes = {
   sceneAbsoluteEpisodeNumber: PropTypes.number,
   unverifiedSceneNumbering: PropTypes.bool.isRequired,
   airDateUtc: PropTypes.string.isRequired,
+  lastSearchTime: PropTypes.string,
   title: PropTypes.string.isRequired,
   isSelected: PropTypes.bool,
   columns: PropTypes.arrayOf(PropTypes.object).isRequired,
