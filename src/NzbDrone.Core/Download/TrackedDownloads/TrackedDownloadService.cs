@@ -120,8 +120,6 @@ namespace NzbDrone.Core.Download.TrackedDownloads
                 if (parsedEpisodeInfo != null)
                 {
                     trackedDownload.RemoteEpisode = _parsingService.Map(parsedEpisodeInfo, 0, 0, null);
-
-                    _aggregationService.Augment(trackedDownload.RemoteEpisode);
                 }
 
                 var downloadHistory = _downloadHistoryService.GetLatestDownloadHistoryItem(downloadItem.DownloadId);
@@ -158,17 +156,24 @@ namespace NzbDrone.Core.Download.TrackedDownloads
                         }
                     }
 
-                    if (trackedDownload.RemoteEpisode != null &&
-                        Enum.TryParse(grabbedEvent?.Data?.GetValueOrDefault("indexerFlags"), true, out IndexerFlags flags))
+                    if (trackedDownload.RemoteEpisode != null)
                     {
                         trackedDownload.RemoteEpisode.Release ??= new ReleaseInfo();
-                        trackedDownload.RemoteEpisode.Release.IndexerFlags = flags;
+                        trackedDownload.RemoteEpisode.Release.Indexer = trackedDownload.Indexer;
+                        trackedDownload.RemoteEpisode.Release.Title = trackedDownload.RemoteEpisode.ParsedEpisodeInfo?.ReleaseTitle;
+
+                        if (Enum.TryParse(grabbedEvent?.Data?.GetValueOrDefault("indexerFlags"), true, out IndexerFlags flags))
+                        {
+                            trackedDownload.RemoteEpisode.Release.IndexerFlags = flags;
+                        }
                     }
                 }
 
-                // Calculate custom formats
                 if (trackedDownload.RemoteEpisode != null)
                 {
+                    _aggregationService.Augment(trackedDownload.RemoteEpisode);
+
+                    // Calculate custom formats
                     trackedDownload.RemoteEpisode.CustomFormats = _formatCalculator.ParseCustomFormat(trackedDownload.RemoteEpisode, downloadItem.TotalSize);
                 }
 
