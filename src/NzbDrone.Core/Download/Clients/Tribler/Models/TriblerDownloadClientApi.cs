@@ -1,4 +1,3 @@
-using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
@@ -7,7 +6,6 @@ using Newtonsoft.Json.Converters;
 
 namespace NzbDrone.Core.Download.Clients.Tribler
 {
-    [GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
     public enum DownloadStatus
     {
         [EnumMember(Value = @"WAITING4HASHCHECK")]
@@ -39,10 +37,8 @@ namespace NzbDrone.Core.Download.Clients.Tribler
 
         [EnumMember(Value = @"STOPPED_ON_ERROR")]
         StoppedOnError = 9,
-
     }
 
-    [GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
     public class Trackers
     {
         [JsonProperty("url", NullValueHandling = NullValueHandling.Ignore)]
@@ -53,11 +49,8 @@ namespace NzbDrone.Core.Download.Clients.Tribler
 
         [JsonProperty("status", NullValueHandling = NullValueHandling.Ignore)]
         public string Status { get; set; }
-
-
     }
 
-    [GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
     public class Download
     {
         [JsonProperty("name", NullValueHandling = NullValueHandling.Ignore)]
@@ -152,14 +145,12 @@ namespace NzbDrone.Core.Download.Clients.Tribler
         public bool? ChannelDownload { get; set; }
     }
 
-    [GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
     public class DownloadsResponse
     {
         [JsonProperty("downloads", NullValueHandling = NullValueHandling.Ignore)]
         public ICollection<Download> Downloads { get; set; }
     }
 
-    [GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
     public class AddDownloadRequest
     {
         [JsonProperty("anon_hops", NullValueHandling = NullValueHandling.Ignore)]
@@ -176,7 +167,6 @@ namespace NzbDrone.Core.Download.Clients.Tribler
         public string Uri { get; set; }
     }
 
-    [GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
     public class AddDownloadResponse
     {
         [JsonProperty("infohash", NullValueHandling = NullValueHandling.Ignore)]
@@ -186,14 +176,12 @@ namespace NzbDrone.Core.Download.Clients.Tribler
         public bool? Started { get; set; }
     }
 
-    [GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
     public class RemoveDownloadRequest
     {
         [JsonProperty("remove_data", NullValueHandling = NullValueHandling.Ignore)]
         public bool? RemoveData { get; set; }
     }
 
-    [GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
     public class DeleteDownloadResponse
     {
         [JsonProperty("removed", NullValueHandling = NullValueHandling.Ignore)]
@@ -203,7 +191,6 @@ namespace NzbDrone.Core.Download.Clients.Tribler
         public string Infohash { get; set; }
     }
 
-    [GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
     public class UpdateDownloadRequest
     {
         [JsonProperty("anon_hops", NullValueHandling = NullValueHandling.Ignore)]
@@ -216,7 +203,6 @@ namespace NzbDrone.Core.Download.Clients.Tribler
         public string State { get; set; }
     }
 
-    [GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
     public class UpdateDownloadResponse
     {
         [JsonProperty("modified", NullValueHandling = NullValueHandling.Ignore)]
@@ -226,7 +212,6 @@ namespace NzbDrone.Core.Download.Clients.Tribler
         public string Infohash { get; set; }
     }
 
-    [GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
     public class File
     {
         [JsonProperty("size", NullValueHandling = NullValueHandling.Ignore)]
@@ -245,7 +230,6 @@ namespace NzbDrone.Core.Download.Clients.Tribler
         public bool? Included { get; set; }
     }
 
-    [GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
     public class GetFilesResponse
     {
         [JsonProperty("files", NullValueHandling = NullValueHandling.Ignore)]

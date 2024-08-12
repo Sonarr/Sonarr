@@ -120,7 +120,6 @@ namespace NzbDrone.Core.Download.Clients.Tribler
 
         public string AddFromMagnetLink(TriblerDownloadSettings settings, AddDownloadRequest downloadRequest)
         {
-            // run hash through InfoHash class to ensure the correct casing.
             var addDownloadRequestBuilder = getRequestBuilder(settings, "downloads");
             addDownloadRequestBuilder.Method = System.Net.Http.HttpMethod.Put;
 
@@ -130,6 +129,7 @@ namespace NzbDrone.Core.Download.Clients.Tribler
 
             var infoHashAsString = ProcessRequest<AddDownloadResponse>(addDownloadRequest).Infohash;
 
+            // run hash through InfoHash class to ensure the correct casing.
             var infoHash = MonoTorrent.InfoHash.FromHex(infoHashAsString);
             return infoHash.ToHex();
         }

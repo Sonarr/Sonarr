@@ -1,19 +1,15 @@
-using System.CodeDom.Compiler;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
 namespace NzbDrone.Core.Indexers.Tribler
 {
-    [GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
     public class GetTriblerSettingsResponse
     {
         [JsonProperty("settings", NullValueHandling = NullValueHandling.Ignore)]
         public Settings Settings { get; set; }
     }
 
-
-    [GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
     public class Settings
     {
         [JsonProperty("general", NullValueHandling = NullValueHandling.Ignore)]
@@ -27,11 +23,8 @@ namespace NzbDrone.Core.Indexers.Tribler
 
         [JsonProperty("download_defaults", NullValueHandling = NullValueHandling.Ignore)]
         public DownloadDefaults DownloadDefaults { get; set; }
-
-
     }
 
-    [GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
     public class General
     {
         [JsonProperty("log_dir", NullValueHandling = NullValueHandling.Ignore)]
@@ -47,8 +40,6 @@ namespace NzbDrone.Core.Indexers.Tribler
         public bool? TestNet { get; set; }
     }
 
-
-    [GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
     public class TunnelCommunity
     {
         [JsonProperty("exitnode_enabled", NullValueHandling = NullValueHandling.Ignore)]
@@ -73,16 +64,12 @@ namespace NzbDrone.Core.Indexers.Tribler
         public bool? TestNet { get; set; }
     }
 
-    [GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
     public class Dht
     {
         [JsonProperty("enabled", NullValueHandling = NullValueHandling.Ignore)]
         public bool? Enabled { get; set; }
-
     }
 
-
-    [GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
     public class DownloadDefaults
     {
         [JsonProperty("anonymity_enabled", NullValueHandling = NullValueHandling.Ignore)]
@@ -106,11 +93,8 @@ namespace NzbDrone.Core.Indexers.Tribler
 
         [JsonProperty("seeding_time", NullValueHandling = NullValueHandling.Ignore)]
         public double? SeedingTime { get; set; }
-
     }
 
-
-    [GeneratedCode("NJsonSchema", "10.5.2.0 (Newtonsoft.Json v11.0.0.0)")]
     public enum DownloadDefaultsSeedingMode
     {
         [EnumMember(Value = @"ratio")]
@@ -124,6 +108,5 @@ namespace NzbDrone.Core.Indexers.Tribler
 
         [EnumMember(Value = @"never")]
         Never = 3,
-
     }
 }
