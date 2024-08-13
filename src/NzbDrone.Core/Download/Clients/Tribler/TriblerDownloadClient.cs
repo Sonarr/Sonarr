@@ -302,16 +302,13 @@ namespace NzbDrone.Core.Download.Clients.Tribler
             {
                 _logger.Error(ex, ex.Message);
 
-                return new NzbDroneValidationFailure("ApiKey", "Authentication failure")
-                {
-                    DetailedDescription = string.Format("Please verify your ApiKey is correct. Also verify if the host running Sonarr isn't blocked from accessing {0} by WhiteList limitations in the {0} configuration.", Name)
-                };
+                return new ValidationFailure("APIKey", _localizationService.GetLocalizedString("DownloadClientValidationApiKeyIncorrect"));
             }
             catch (DownloadClientUnavailableException ex)
             {
                 _logger.Error(ex, ex.Message);
 
-                return new NzbDroneValidationFailure("Url", "Unable to connect to Tribler")
+                return new NzbDroneValidationFailure("Host", _localizationService.GetLocalizedString("DownloadClientValidationUnableToConnect", new Dictionary<string, object> { { "clientName", Name } }))
                 {
                     DetailedDescription = ex.Message
                 };
@@ -320,7 +317,7 @@ namespace NzbDrone.Core.Download.Clients.Tribler
             {
                 _logger.Error(ex, "Failed to test");
 
-                return new NzbDroneValidationFailure(string.Empty, "Unknown exception: " + ex.Message);
+                return new NzbDroneValidationFailure(string.Empty, _localizationService.GetLocalizedString("DownloadClientValidationUnknownException", new Dictionary<string, object> { { "exception", ex.Message } }));
             }
         }
     }

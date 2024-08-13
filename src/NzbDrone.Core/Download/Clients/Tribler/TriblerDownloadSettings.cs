@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Download.Clients.Tribler
                 .When(c => c.TvDirectory.IsNotNullOrWhiteSpace())
                 .WithMessage("Cannot use Category and Directory");
 
-            RuleFor(c => c.AnonymityLevel).GreaterThanOrEqualTo(0).WithMessage("Should be greater than or equal to zero");
+            RuleFor(c => c.AnonymityLevel).GreaterThanOrEqualTo(0);
         }
     }
 
@@ -67,6 +67,7 @@ namespace NzbDrone.Core.Download.Clients.Tribler
         public string TvDirectory { get; set; }
 
         [FieldDefinition(8, Label = "DownloadClientTriblerSettingsAnonymityLevel", Type = FieldType.Number, HelpText = "DownloadClientTriblerSettingsAnonymityLevelHelpText")]
+        [FieldToken(TokenField.HelpText, "DownloadClientTriblerSettingsAnonymityLevel", "url", "https://www.tribler.org/anonymity.html")]
         public int AnonymityLevel { get; set; }
 
         [FieldDefinition(9, Label = "DownloadClientTriblerSettingsSafeSeeding", Type = FieldType.Checkbox, HelpText = "DownloadClientTriblerSettingsSafeSeedingHelpText")]
