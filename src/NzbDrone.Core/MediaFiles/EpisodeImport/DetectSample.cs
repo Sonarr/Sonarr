@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using System.IO;
 using NLog;
 using NzbDrone.Core.MediaFiles.MediaInfo;
+using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.MediaFiles.EpisodeImport
@@ -9,6 +10,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
     public interface IDetectSample
     {
         DetectSampleResult IsSample(Series series, string path, bool isSpecial);
+        DetectSampleResult IsSample(LocalEpisode localEpisode);
     }
 
     public class DetectSample : IDetectSample
@@ -23,6 +25,51 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
         }
 
         public DetectSampleResult IsSample(Series series, string path, bool isSpecial)
+        {
+            var extensionResult = IsSample(path, isSpecial);
+
+            if (extensionResult != DetectSampleResult.Indeterminate)
+            {
+                return extensionResult;
+            }
+
+            var fileRuntime = _videoFileInfoReader.GetRunTime(path);
+
+            if (!fileRuntime.HasValue)
+            {
+                _logger.Error("Failed to get runtime from the file, make sure ffprobe is available");
+                return DetectSampleResult.Indeterminate;
+            }
+
+            return IsSample(path, fileRuntime.Value, series.Runtime);
+        }
+
+        public DetectSampleResult IsSample(LocalEpisode localEpisode)
+        {
+            var extensionResult = IsSample(localEpisode.Path, localEpisode.IsSpecial);
+
+            if (extensionResult != DetectSampleResult.Indeterminate)
+            {
+                return extensionResult;
+            }
+
+            var runtime = 0;
+
+            foreach (var episode in localEpisode.Episodes)
+            {
+                runtime += episode.Runtime > 0 ? episode.Runtime : localEpisode.Series.Runtime;
+            }
+
+            if (localEpisode.MediaInfo == null)
+            {
+                _logger.Error("Failed to get runtime from the file, make sure ffprobe is available");
+                return DetectSampleResult.Indeterminate;
+            }
+
+            return IsSample(localEpisode.Path, localEpisode.MediaInfo.RunTime, runtime);
+        }
+
+        private DetectSampleResult IsSample(string path, bool isSpecial)
         {
             if (isSpecial)
             {
@@ -44,49 +91,45 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                 return DetectSampleResult.NotSample;
             }
 
-            // TODO: Use MediaInfo from the import process, no need to re-process the file again here
-            var runTime = _videoFileInfoReader.GetRunTime(path);
+            return DetectSampleResult.Indeterminate;
+        }
 
-            if (!runTime.HasValue)
-            {
-                _logger.Error("Failed to get runtime from the file, make sure ffprobe is available");
-                return DetectSampleResult.Indeterminate;
-            }
+        private DetectSampleResult IsSample(string path, TimeSpan fileRuntime, int expectedRuntime)
+        {
+            var minimumRuntime = GetMinimumAllowedRuntime(expectedRuntime);
 
-            var minimumRuntime = GetMinimumAllowedRuntime(series);
-
-            if (runTime.Value.TotalMinutes.Equals(0))
+            if (fileRuntime.TotalMinutes.Equals(0))
             {
                 _logger.Error("[{0}] has a runtime of 0, is it a valid video file?", path);
                 return DetectSampleResult.Sample;
             }
 
-            if (runTime.Value.TotalSeconds < minimumRuntime)
+            if (fileRuntime.TotalSeconds < minimumRuntime)
             {
-                _logger.Debug("[{0}] appears to be a sample. Runtime: {1} seconds. Expected at least: {2} seconds", path, runTime, minimumRuntime);
+                _logger.Debug("[{0}] appears to be a sample. Runtime: {1} seconds. Expected at least: {2} seconds", path, fileRuntime, minimumRuntime);
                 return DetectSampleResult.Sample;
             }
 
-            _logger.Debug("[{0}] does not appear to be a sample. Runtime {1} seconds is more than minimum of {2} seconds", path, runTime, minimumRuntime);
+            _logger.Debug("[{0}] does not appear to be a sample. Runtime {1} seconds is more than minimum of {2} seconds", path, fileRuntime, minimumRuntime);
             return DetectSampleResult.NotSample;
         }
 
-        private int GetMinimumAllowedRuntime(Series series)
+        private int GetMinimumAllowedRuntime(int runtime)
         {
             // Anime short - 15 seconds
-            if (series.Runtime <= 3)
+            if (runtime <= 3)
             {
                 return 15;
             }
 
             // Webisodes - 90 seconds
-            if (series.Runtime <= 10)
+            if (runtime <= 10)
             {
                 return 90;
             }
 
             // 30 minute episodes - 5 minutes
-            if (series.Runtime <= 30)
+            if (runtime <= 30)
             {
                 return 300;
             }
