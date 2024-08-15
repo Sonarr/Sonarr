@@ -3301,6 +3301,37 @@
         }
       }
     },
+    "/api/v3/importlistexclusion/bulk": {
+      "delete": {
+        "tags": [
+          "ImportListExclusion"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ImportListExclusionBulkResource"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ImportListExclusionBulkResource"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ImportListExclusionBulkResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/v3/indexer": {
       "get": {
         "tags": [
@@ -9009,6 +9040,21 @@
           "listSyncTag": {
             "type": "integer",
             "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ImportListExclusionBulkResource": {
+        "type": "object",
+        "properties": {
+          "ids": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false
