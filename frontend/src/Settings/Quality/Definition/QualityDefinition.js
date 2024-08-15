@@ -13,7 +13,7 @@ import QualityDefinitionLimits from './QualityDefinitionLimits';
 import styles from './QualityDefinition.css';
 
 const MIN = 0;
-const MAX = 400;
+const MAX = 1000;
 const MIN_DISTANCE = 1;
 
 const slider = {
