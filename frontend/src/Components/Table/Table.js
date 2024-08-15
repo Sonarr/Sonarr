@@ -66,7 +66,9 @@ function Table(props) {
             columns.map((column) => {
               const {
                 name,
-                isVisible
+                isVisible,
+                isSortable,
+                ...otherColumnProps
               } = column;
 
               if (!isVisible) {
@@ -84,6 +86,7 @@ function Table(props) {
                     name={name}
                     isSortable={false}
                     {...otherProps}
+                    {...otherColumnProps}
                   >
                     <TableOptionsModalWrapper
                       columns={columns}
