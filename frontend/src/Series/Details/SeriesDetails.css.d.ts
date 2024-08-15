@@ -24,6 +24,7 @@ interface CssExports {
   'seriesNavigationButton': string;
   'seriesNavigationButtons': string;
   'sizeOnDisk': string;
+  'statusName': string;
   'tags': string;
   'title': string;
   'titleContainer': string;
