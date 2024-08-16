@@ -20,10 +20,10 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Kometa
             EpisodeImages = true;
         }
 
-        [FieldDefinition(0, Label = "MetadataSettingsSeriesImages", Type = FieldType.Checkbox, Section = MetadataSectionType.Image, HelpText = "poster.jpg")]
+        [FieldDefinition(0, Label = "MetadataSettingsSeriesImages", Type = FieldType.Checkbox, Section = MetadataSectionType.Image, HelpText = "Poster.jpg")]
         public bool SeriesImages { get; set; }
 
-        [FieldDefinition(1, Label = "MetadataSettingsSeasonImages", Type = FieldType.Checkbox, Section = MetadataSectionType.Image, HelpText = "season##.jpg")]
+        [FieldDefinition(1, Label = "MetadataSettingsSeasonImages", Type = FieldType.Checkbox, Section = MetadataSectionType.Image, HelpText = "Season##.jpg")]
         public bool SeasonImages { get; set; }
 
         [FieldDefinition(2, Label = "MetadataSettingsEpisodeImages", Type = FieldType.Checkbox, Section = MetadataSectionType.Image, HelpText = "S##E##.jpg")]
