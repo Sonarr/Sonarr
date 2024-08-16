@@ -55,6 +55,12 @@ namespace Sonarr.Api.V3.Qualities
                 .ToResource());
         }
 
+        [HttpGet("limits")]
+        public ActionResult<QualityDefinitionLimits> GetLimits()
+        {
+            return Ok(_qualityDefinitionService.GetLimits());
+        }
+
         [NonAction]
         public void Handle(CommandExecutedEvent message)
         {
