@@ -77,7 +77,7 @@ namespace NzbDrone.Core.Notifications.Discord
                         break;
                     case DiscordGrabFieldType.Rating:
                         discordField.Name = "Rating";
-                        discordField.Value = episodes.First().Ratings.Value.ToString();
+                        discordField.Value = series.Ratings.Value.ToString(CultureInfo.InvariantCulture);
                         break;
                     case DiscordGrabFieldType.Genres:
                         discordField.Name = "Genres";
@@ -180,7 +180,7 @@ namespace NzbDrone.Core.Notifications.Discord
                         break;
                     case DiscordImportFieldType.Rating:
                         discordField.Name = "Rating";
-                        discordField.Value = episodes.First().Ratings.Value.ToString();
+                        discordField.Value = series.Ratings.Value.ToString(CultureInfo.InvariantCulture);
                         break;
                     case DiscordImportFieldType.Genres:
                         discordField.Name = "Genres";
@@ -286,7 +286,7 @@ namespace NzbDrone.Core.Notifications.Discord
                         break;
                     case DiscordImportFieldType.Rating:
                         discordField.Name = "Rating";
-                        discordField.Value = episodes.First().Ratings.Value.ToString();
+                        discordField.Value = series.Ratings.Value.ToString(CultureInfo.InvariantCulture);
                         break;
                     case DiscordImportFieldType.Genres:
                         discordField.Name = "Genres";
@@ -571,7 +571,7 @@ namespace NzbDrone.Core.Notifications.Discord
                         break;
                     case DiscordManualInteractionFieldType.Rating:
                         discordField.Name = "Rating";
-                        discordField.Value = episodes.FirstOrDefault()?.Ratings?.Value.ToString(CultureInfo.InvariantCulture);
+                        discordField.Value = series?.Ratings?.Value.ToString(CultureInfo.InvariantCulture);
                         break;
                     case DiscordManualInteractionFieldType.Genres:
                         discordField.Name = "Genres";
