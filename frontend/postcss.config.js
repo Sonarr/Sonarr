@@ -16,6 +16,7 @@ const mixinsFiles = [
 
 module.exports = {
   plugins: [
+    'autoprefixer',
     ['postcss-mixins', {
       mixinsFiles
     }],
