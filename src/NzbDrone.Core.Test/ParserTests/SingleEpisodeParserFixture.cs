@@ -172,6 +172,9 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[ReleaseGroup] SeriesTitle S01E1 Webdl 1080p", "SeriesTitle", 1, 1)]
         [TestCase("[SubsPlus+] Series no Chill - S02E01 (NF WEB 1080p AVC AAC)", "Series no Chill", 2, 1)]
         [TestCase("[SubsPlus+] Series no Chill - S02E01v2 (NF WEB 1080p AVC AAC)", "Series no Chill", 2, 1)]
+        [TestCase("Series - Temporada 1 - [HDTV 1080p][Cap.101](wolfmax4k.com)", "Series", 1, 1)]
+        [TestCase("Series [HDTV 1080p][Cap.101](wolfmax4k.com)", "Series", 1, 1)]
+        [TestCase("Series [HDTV 1080p][Cap. 101](wolfmax4k.com).mkv", "Series", 1, 1)]
 
         // [TestCase("", "", 0, 0)]
         public void should_parse_single_episode(string postTitle, string title, int seasonNumber, int episodeNumber)
