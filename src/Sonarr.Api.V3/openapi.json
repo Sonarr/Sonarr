@@ -8858,6 +8858,10 @@
             "type": "string",
             "nullable": true
           },
+          "logSizeLimit": {
+            "type": "integer",
+            "nullable": true
+          },
           "consoleLogLevel": {
             "type": "string",
             "nullable": true

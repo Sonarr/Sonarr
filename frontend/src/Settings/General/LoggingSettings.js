@@ -30,12 +30,14 @@ const logLevelOptions = [
 
 function LoggingSettings(props) {
   const {
+    advancedSettings,
     settings,
     onInputChange
   } = props;
 
   const {
-    logLevel
+    logLevel,
+    logSizeLimit
   } = settings;
 
   return (
@@ -52,11 +54,30 @@ function LoggingSettings(props) {
           {...logLevel}
         />
       </FormGroup>
+
+      <FormGroup
+        advancedSettings={advancedSettings}
+        isAdvanced={true}
+      >
+        <FormLabel>{translate('LogSizeLimit')}</FormLabel>
+
+        <FormInputGroup
+          type={inputTypes.NUMBER}
+          name="logSizeLimit"
+          min={1}
+          max={10}
+          unit="MB"
+          helpText={translate('LogSizeLimitHelpText')}
+          onChange={onInputChange}
+          {...logSizeLimit}
+        />
+      </FormGroup>
     </FieldSet>
   );
 }
 
 LoggingSettings.propTypes = {
+  advancedSettings: PropTypes.bool.isRequired,
   settings: PropTypes.object.isRequired,
   onInputChange: PropTypes.func.isRequired
 };
