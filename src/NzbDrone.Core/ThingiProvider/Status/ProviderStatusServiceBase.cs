@@ -151,12 +151,7 @@ namespace NzbDrone.Core.ThingiProvider.Status
 
         public virtual void HandleAsync(ProviderDeletedEvent<TProvider> message)
         {
-            var providerStatus = _providerStatusRepository.FindByProviderId(message.ProviderId);
-
-            if (providerStatus != null)
-            {
-                _providerStatusRepository.Delete(providerStatus);
-            }
+            _providerStatusRepository.DeleteByProviderId(message.ProviderId);
         }
     }
 }
