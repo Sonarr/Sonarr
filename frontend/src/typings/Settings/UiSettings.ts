@@ -4,4 +4,5 @@ export default interface UiSettings {
   shortDateFormat: string;
   longDateFormat: string;
   timeFormat: string;
+  uiLanguage: number;
 }
