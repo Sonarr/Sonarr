@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
@@ -6,29 +6,22 @@ using NzbDrone.Core.Configuration;
 
 namespace Sonarr.Http.Frontend.Mappers
 {
-    public class ManifestMapper : StaticResourceMapperBase
+    public class ManifestMapper : UrlBaseReplacementResourceMapperBase
     {
-        private readonly IAppFolderInfo _appFolderInfo;
-        private readonly IConfigFileProvider _configFileProvider;
-
         public ManifestMapper(IAppFolderInfo appFolderInfo, IDiskProvider diskProvider, IConfigFileProvider configFileProvider, Logger logger)
-            : base(diskProvider, logger)
+            : base(diskProvider, configFileProvider, logger)
         {
-            _appFolderInfo = appFolderInfo;
-            _configFileProvider = configFileProvider;
+            FilePath = Path.Combine(appFolderInfo.StartUpFolder, configFileProvider.UiFolder, "Content", "manifest.json");
         }
 
         public override string Map(string resourceUrl)
         {
-            var path = resourceUrl.Replace('/', Path.DirectorySeparatorChar);
-            path = path.Trim(Path.DirectorySeparatorChar);
-
-            return Path.ChangeExtension(Path.Combine(_appFolderInfo.StartUpFolder, _configFileProvider.UiFolder, path), "json");
+            return FilePath;
         }
 
         public override bool CanHandle(string resourceUrl)
         {
-            return resourceUrl.StartsWith("/Content/Images/Icons/manifest");
+            return resourceUrl.StartsWith("/Content/manifest");
         }
     }
 }

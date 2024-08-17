@@ -30,8 +30,8 @@ namespace Sonarr.Http.Frontend.Mappers
         {
             resourceUrl = resourceUrl.ToLowerInvariant();
 
-            if (resourceUrl.StartsWith("/content/images/icons/manifest") ||
-                resourceUrl.StartsWith("/content/images/icons/browserconfig"))
+            if (resourceUrl.StartsWith("/content/manifest") ||
+                resourceUrl.StartsWith("/content/browserconfig"))
             {
                 return false;
             }
