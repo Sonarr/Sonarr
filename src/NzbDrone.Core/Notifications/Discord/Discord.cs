@@ -224,6 +224,14 @@ namespace NzbDrone.Core.Notifications.Discord
                         discordField.Name = "Links";
                         discordField.Value = GetLinksString(series);
                         break;
+                    case DiscordImportFieldType.CustomFormats:
+                        discordField.Name = "Custom Formats";
+                        discordField.Value = string.Join("|", message.EpisodeInfo.CustomFormats);
+                        break;
+                    case DiscordImportFieldType.CustomFormatScore:
+                        discordField.Name = "Custom Format Score";
+                        discordField.Value = message.EpisodeInfo.CustomFormatScore.ToString();
+                        break;
                 }
 
                 if (discordField.Name.IsNotNullOrWhiteSpace() && discordField.Value.IsNotNullOrWhiteSpace())
