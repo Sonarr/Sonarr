@@ -30,7 +30,11 @@ interface RemoveQueueItemModalProps {
   onModalClose: () => void;
 }
 
-type RemovalMethod = 'removeFromClient' | 'changeCategory' | 'ignore';
+type RemovalMethod =
+  | 'removeFromClient'
+  | 'changeCategory'
+  | 'ignore'
+  | 'keepInQueue';
 type BlocklistMethod =
   | 'doNotBlocklist'
   | 'blocklistAndSearch'
@@ -104,6 +108,13 @@ function RemoveQueueItemModal(props: RemoveQueueItemModalProps) {
         hint: multipleSelected
           ? translate('IgnoreDownloadsHint')
           : translate('IgnoreDownloadHint'),
+      },
+      {
+        key: 'keepInQueue',
+        value: translate('KeepInQueue'),
+        hint: multipleSelected
+          ? translate('KeepInQueueMultipleHint')
+          : translate('KeepInQueueHint'),
       },
     ];
   }, [canChangeCategory, canIgnore, multipleSelected]);
