@@ -47,6 +47,13 @@ namespace Sonarr.Api.V3.CustomFormats
             return _formatService.GetById(id).ToResource(true);
         }
 
+        [HttpGet]
+        [Produces("application/json")]
+        public List<CustomFormatResource> GetAll()
+        {
+            return _formatService.All().ToResource(true);
+        }
+
         [RestPostById]
         [Consumes("application/json")]
         public ActionResult<CustomFormatResource> Create([FromBody] CustomFormatResource customFormatResource)
@@ -71,11 +78,26 @@ namespace Sonarr.Api.V3.CustomFormats
             return Accepted(model.Id);
         }
 
-        [HttpGet]
+        [HttpPut("bulk")]
+        [Consumes("application/json")]
         [Produces("application/json")]
-        public List<CustomFormatResource> GetAll()
+        public virtual ActionResult<CustomFormatResource> Update([FromBody] CustomFormatBulkResource resource)
         {
-            return _formatService.All().ToResource(true);
+            if (!resource.Ids.Any())
+            {
+                throw new BadRequestException("ids must be provided");
+            }
+
+            var customFormats = resource.Ids.Select(id => _formatService.GetById(id)).ToList();
+
+            customFormats.ForEach(existing =>
+            {
+                existing.IncludeCustomFormatWhenRenaming = resource.IncludeCustomFormatWhenRenaming ?? existing.IncludeCustomFormatWhenRenaming;
+            });
+
+            _formatService.Update(customFormats);
+
+            return Accepted(customFormats.ConvertAll(cf => cf.ToResource(true)));
         }
 
         [RestDeleteById]
@@ -84,12 +106,21 @@ namespace Sonarr.Api.V3.CustomFormats
             _formatService.Delete(id);
         }
 
+        [HttpDelete("bulk")]
+        [Consumes("application/json")]
+        public virtual object DeleteFormats([FromBody] CustomFormatBulkResource resource)
+        {
+            _formatService.Delete(resource.Ids.ToList());
+
+            return new { };
+        }
+
         [HttpGet("schema")]
         public object GetTemplates()
         {
             var schema = _specifications.OrderBy(x => x.Order).Select(x => x.ToSchema()).ToList();
 
-            var presets = GetPresets();
+            var presets = GetPresets().ToList();
 
             foreach (var item in schema)
             {

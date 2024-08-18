@@ -9,10 +9,12 @@ namespace NzbDrone.Core.CustomFormats
     public interface ICustomFormatService
     {
         void Update(CustomFormat customFormat);
+        void Update(List<CustomFormat> customFormat);
         CustomFormat Insert(CustomFormat customFormat);
         List<CustomFormat> All();
         CustomFormat GetById(int id);
         void Delete(int id);
+        void Delete(List<int> ids);
     }
 
     public class CustomFormatService : ICustomFormatService
@@ -51,6 +53,12 @@ namespace NzbDrone.Core.CustomFormats
             _cache.Clear();
         }
 
+        public void Update(List<CustomFormat> customFormat)
+        {
+            _formatRepository.UpdateMany(customFormat);
+            _cache.Clear();
+        }
+
         public CustomFormat Insert(CustomFormat customFormat)
         {
             // Add to DB then insert into profiles
@@ -70,6 +78,21 @@ namespace NzbDrone.Core.CustomFormats
             _eventAggregator.PublishEvent(new CustomFormatDeletedEvent(format));
 
             _formatRepository.Delete(id);
+            _cache.Clear();
+        }
+
+        public void Delete(List<int> ids)
+        {
+            foreach (var id in ids)
+            {
+                var format = _formatRepository.Get(id);
+
+                // Remove from profiles before removing from DB
+                _eventAggregator.PublishEvent(new CustomFormatDeletedEvent(format));
+
+                _formatRepository.Delete(id);
+            }
+
             _cache.Clear();
         }
     }

@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { ImportListAppState } from 'App/State/SettingsAppState';
+import { CustomFormatAppState } from 'App/State/SettingsAppState';
 import Alert from 'Components/Alert';
 import Button from 'Components/Link/Button';
 import SpinnerButton from 'Components/Link/SpinnerButton';
@@ -14,23 +14,24 @@ import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import useSelectState from 'Helpers/Hooks/useSelectState';
 import { kinds } from 'Helpers/Props';
+import SortDirection from 'Helpers/Props/SortDirection';
 import {
-  bulkDeleteImportLists,
-  bulkEditImportLists,
+  bulkDeleteCustomFormats,
+  bulkEditCustomFormats,
+  setManageCustomFormatsSort,
 } from 'Store/Actions/settingsActions';
 import createClientSideCollectionSelector from 'Store/Selectors/createClientSideCollectionSelector';
 import { SelectStateInputProps } from 'typings/props';
 import getErrorMessage from 'Utilities/Object/getErrorMessage';
 import translate from 'Utilities/String/translate';
 import getSelectedIds from 'Utilities/Table/getSelectedIds';
-import ManageImportListsEditModal from './Edit/ManageImportListsEditModal';
-import ManageImportListsModalRow from './ManageImportListsModalRow';
-import TagsModal from './Tags/TagsModal';
-import styles from './ManageImportListsModalContent.css';
+import ManageCustomFormatsEditModal from './Edit/ManageCustomFormatsEditModal';
+import ManageCustomFormatsModalRow from './ManageCustomFormatsModalRow';
+import styles from './ManageCustomFormatsModalContent.css';
 
 // TODO: This feels janky to do, but not sure of a better way currently
 type OnSelectedChangeCallback = React.ComponentProps<
-  typeof ManageImportListsModalRow
+  typeof ManageCustomFormatsModalRow
 >['onSelectedChange'];
 
 const COLUMNS = [
@@ -41,43 +42,21 @@ const COLUMNS = [
     isVisible: true,
   },
   {
-    name: 'implementation',
-    label: () => translate('Implementation'),
-    isSortable: true,
-    isVisible: true,
-  },
-  {
-    name: 'qualityProfileId',
-    label: () => translate('QualityProfile'),
-    isSortable: true,
-    isVisible: true,
-  },
-  {
-    name: 'rootFolderPath',
-    label: () => translate('RootFolder'),
-    isSortable: true,
-    isVisible: true,
-  },
-  {
-    name: 'enableAutomaticAdd',
-    label: () => translate('AutoAdd'),
-    isSortable: true,
-    isVisible: true,
-  },
-  {
-    name: 'tags',
-    label: () => translate('Tags'),
+    name: 'includeCustomFormatWhenRenaming',
+    label: () => translate('IncludeCustomFormatWhenRenaming'),
     isSortable: true,
     isVisible: true,
   },
 ];
 
-interface ManageImportListsModalContentProps {
+interface ManageCustomFormatsModalContentProps {
   onModalClose(): void;
+  sortKey?: string;
+  sortDirection?: SortDirection;
 }
 
-function ManageImportListsModalContent(
-  props: ManageImportListsModalContentProps
+function ManageCustomFormatsModalContent(
+  props: ManageCustomFormatsModalContentProps
 ) {
   const { onModalClose } = props;
 
@@ -88,15 +67,15 @@ function ManageImportListsModalContent(
     isSaving,
     error,
     items,
-  }: ImportListAppState = useSelector(
-    createClientSideCollectionSelector('settings.importLists')
+    sortKey,
+    sortDirection,
+  }: CustomFormatAppState = useSelector(
+    createClientSideCollectionSelector('settings.customFormats')
   );
   const dispatch = useDispatch();
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [isTagsModalOpen, setIsTagsModalOpen] = useState(false);
-  const [isSavingTags, setIsSavingTags] = useState(false);
 
   const [selectState, setSelectState] = useSelectState();
 
@@ -107,6 +86,13 @@ function ManageImportListsModalContent(
   }, [selectedState]);
 
   const selectedCount = selectedIds.length;
+
+  const onSortPress = useCallback(
+    (value: string) => {
+      dispatch(setManageCustomFormatsSort({ sortKey: value }));
+    },
+    [dispatch]
+  );
 
   const onDeletePress = useCallback(() => {
     setIsDeleteModalOpen(true);
@@ -125,7 +111,7 @@ function ManageImportListsModalContent(
   }, [setIsEditModalOpen]);
 
   const onConfirmDelete = useCallback(() => {
-    dispatch(bulkDeleteImportLists({ ids: selectedIds }));
+    dispatch(bulkDeleteCustomFormats({ ids: selectedIds }));
     setIsDeleteModalOpen(false);
   }, [selectedIds, dispatch]);
 
@@ -134,33 +120,9 @@ function ManageImportListsModalContent(
       setIsEditModalOpen(false);
 
       dispatch(
-        bulkEditImportLists({
+        bulkEditCustomFormats({
           ids: selectedIds,
           ...payload,
-        })
-      );
-    },
-    [selectedIds, dispatch]
-  );
-
-  const onTagsPress = useCallback(() => {
-    setIsTagsModalOpen(true);
-  }, [setIsTagsModalOpen]);
-
-  const onTagsModalClose = useCallback(() => {
-    setIsTagsModalOpen(false);
-  }, [setIsTagsModalOpen]);
-
-  const onApplyTagsPress = useCallback(
-    (tags: number[], applyTags: string) => {
-      setIsSavingTags(true);
-      setIsTagsModalOpen(false);
-
-      dispatch(
-        bulkEditImportLists({
-          ids: selectedIds,
-          tags,
-          applyTags,
         })
       );
     },
@@ -187,19 +149,19 @@ function ManageImportListsModalContent(
     [items, setSelectState]
   );
 
-  const errorMessage = getErrorMessage(error, 'Unable to load import lists.');
+  const errorMessage = getErrorMessage(error, 'Unable to load custom formats.');
   const anySelected = selectedCount > 0;
 
   return (
     <ModalContent onModalClose={onModalClose}>
-      <ModalHeader>{translate('ManageImportLists')}</ModalHeader>
+      <ModalHeader>{translate('ManageCustomFormats')}</ModalHeader>
       <ModalBody>
         {isFetching ? <LoadingIndicator /> : null}
 
         {error ? <div>{errorMessage}</div> : null}
 
         {isPopulated && !error && !items.length ? (
-          <Alert kind={kinds.INFO}>{translate('NoImportListsFound')}</Alert>
+          <Alert kind={kinds.INFO}>{translate('NoCustomFormatsFound')}</Alert>
         ) : null}
 
         {isPopulated && !!items.length && !isFetching && !isFetching ? (
@@ -209,12 +171,15 @@ function ManageImportListsModalContent(
             selectAll={true}
             allSelected={allSelected}
             allUnselected={allUnselected}
+            sortKey={sortKey}
+            sortDirection={sortDirection}
             onSelectAllChange={onSelectAllChange}
+            onSortPress={onSortPress}
           >
             <TableBody>
               {items.map((item) => {
                 return (
-                  <ManageImportListsModalRow
+                  <ManageCustomFormatsModalRow
                     key={item.id}
                     isSelected={selectedState[item.id]}
                     {...item}
@@ -246,38 +211,23 @@ function ManageImportListsModalContent(
           >
             {translate('Edit')}
           </SpinnerButton>
-
-          <SpinnerButton
-            isSpinning={isSaving && isSavingTags}
-            isDisabled={!anySelected}
-            onPress={onTagsPress}
-          >
-            {translate('SetTags')}
-          </SpinnerButton>
         </div>
 
         <Button onPress={onModalClose}>{translate('Close')}</Button>
       </ModalFooter>
 
-      <ManageImportListsEditModal
+      <ManageCustomFormatsEditModal
         isOpen={isEditModalOpen}
-        importListIds={selectedIds}
+        customFormatIds={selectedIds}
         onModalClose={onEditModalClose}
         onSavePress={onSavePress}
-      />
-
-      <TagsModal
-        isOpen={isTagsModalOpen}
-        ids={selectedIds}
-        onApplyTagsPress={onApplyTagsPress}
-        onModalClose={onTagsModalClose}
       />
 
       <ConfirmModal
         isOpen={isDeleteModalOpen}
         kind={kinds.DANGER}
-        title={translate('DeleteSelectedImportLists')}
-        message={translate('DeleteSelectedImportListsMessageText', {
+        title={translate('DeleteSelectedCustomFormats')}
+        message={translate('DeleteSelectedCustomFormatsMessageText', {
           count: selectedIds.length,
         })}
         confirmLabel={translate('Delete')}
@@ -288,4 +238,4 @@ function ManageImportListsModalContent(
   );
 }
 
-export default ManageImportListsModalContent;
+export default ManageCustomFormatsModalContent;

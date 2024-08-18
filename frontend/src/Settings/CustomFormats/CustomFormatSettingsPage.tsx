@@ -8,6 +8,7 @@ import ParseToolbarButton from 'Parse/ParseToolbarButton';
 import SettingsToolbarConnector from 'Settings/SettingsToolbarConnector';
 import translate from 'Utilities/String/translate';
 import CustomFormatsConnector from './CustomFormats/CustomFormatsConnector';
+import ManageCustomFormatsToolbarButton from './CustomFormats/Manage/ManageCustomFormatsToolbarButton';
 
 function CustomFormatSettingsPage() {
   return (
@@ -21,6 +22,8 @@ function CustomFormatSettingsPage() {
             <PageToolbarSeparator />
 
             <ParseToolbarButton />
+
+            <ManageCustomFormatsToolbarButton />
           </>
         }
       />
