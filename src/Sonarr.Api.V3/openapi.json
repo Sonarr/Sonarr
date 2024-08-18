@@ -5634,6 +5634,14 @@
               "type": "boolean",
               "default": false
             }
+          },
+          {
+            "name": "keepInQueue",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
           }
         ],
         "responses": {
@@ -5675,6 +5683,14 @@
           },
           {
             "name": "changeCategory",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "keepInQueue",
             "in": "query",
             "schema": {
               "type": "boolean",
