@@ -15,6 +15,8 @@ export type SeriesMonitor =
   | 'unmonitorSpecials'
   | 'none';
 
+export type SeriesStatus = 'continuing' | 'ended' | 'upcoming' | 'deleted';
+
 export type MonitorNewItems = 'all' | 'none';
 
 export interface Image {
@@ -86,7 +88,7 @@ interface Series extends ModelBase {
   seriesType: SeriesType;
   sortTitle: string;
   statistics: Statistics;
-  status: string;
+  status: SeriesStatus;
   tags: number[];
   title: string;
   titleSlug: string;

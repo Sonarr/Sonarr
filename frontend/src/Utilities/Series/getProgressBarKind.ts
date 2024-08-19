@@ -1,7 +1,8 @@
 import { kinds } from 'Helpers/Props';
+import { SeriesStatus } from 'Series/Series';
 
 function getProgressBarKind(
-  status: string,
+  status: SeriesStatus,
   monitored: boolean,
   progress: number,
   isDownloading: boolean
