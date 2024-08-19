@@ -157,6 +157,7 @@ class GeneralSettings extends Component {
                 />
 
                 <LoggingSettings
+                  advancedSettings={advancedSettings}
                   settings={settings}
                   onInputChange={onInputChange}
                 />
