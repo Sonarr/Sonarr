@@ -13,10 +13,12 @@ namespace NzbDrone.Core.Indexers
         List<IIndexer> RssEnabled(bool filterBlockedIndexers = true);
         List<IIndexer> AutomaticSearchEnabled(bool filterBlockedIndexers = true);
         List<IIndexer> InteractiveSearchEnabled(bool filterBlockedIndexers = true);
+        IndexerDefinition FindByName(string name);
     }
 
     public class IndexerFactory : ProviderFactory<IIndexer, IndexerDefinition>, IIndexerFactory
     {
+        private readonly IIndexerRepository _indexerRepository;
         private readonly IIndexerStatusService _indexerStatusService;
         private readonly Logger _logger;
 
@@ -28,6 +30,7 @@ namespace NzbDrone.Core.Indexers
                               Logger logger)
             : base(providerRepository, providers, container, eventAggregator, logger)
         {
+            _indexerRepository = providerRepository;
             _indexerStatusService = indexerStatusService;
             _logger = logger;
         }
@@ -80,6 +83,11 @@ namespace NzbDrone.Core.Indexers
             }
 
             return enabledIndexers.ToList();
+        }
+
+        public IndexerDefinition FindByName(string name)
+        {
+            return _indexerRepository.FindByName(name);
         }
 
         private IEnumerable<IIndexer> FilterBlockedIndexers(IEnumerable<IIndexer> indexers)

@@ -76,9 +76,18 @@ namespace NzbDrone.Core.Download.Aggregation.Aggregators
                 languages = languages.Except(languagesToRemove).ToList();
             }
 
-            if ((languages.Count == 0 || (languages.Count == 1 && languages.First() == Language.Unknown)) && releaseInfo is { IndexerId: > 0 } && releaseInfo.Title.IsNotNullOrWhiteSpace())
+            if ((languages.Count == 0 || (languages.Count == 1 && languages.First() == Language.Unknown)) && releaseInfo?.Title?.IsNotNullOrWhiteSpace() == true)
             {
-                var indexer = _indexerFactory.Get(releaseInfo.IndexerId);
+                IndexerDefinition indexer = null;
+
+                if (releaseInfo is { IndexerId: > 0 })
+                {
+                    indexer = _indexerFactory.Get(releaseInfo.IndexerId);
+                }
+                else if (releaseInfo.Indexer?.IsNotNullOrWhiteSpace() == true)
+                {
+                    indexer = _indexerFactory.FindByName(releaseInfo.Indexer);
+                }
 
                 if (indexer?.Settings is IIndexerSettings settings && settings.MultiLanguages.Any() && Parser.Parser.HasMultipleLanguages(releaseInfo.Title))
                 {
