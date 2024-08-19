@@ -1,96 +1,89 @@
 import classNames from 'classnames';
 import React, {
-  ComponentClass,
-  FunctionComponent,
+  ComponentPropsWithoutRef,
+  ElementType,
   SyntheticEvent,
   useCallback,
 } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import styles from './Link.css';
 
-interface ReactRouterLinkProps {
-  to?: string;
-}
+export type LinkProps<C extends ElementType = 'button'> =
+  ComponentPropsWithoutRef<C> & {
+    component?: C;
+    to?: string;
+    target?: string;
+    isDisabled?: LinkProps<C>['disabled'];
+    noRouter?: boolean;
+    onPress?(event: SyntheticEvent): void;
+  };
 
-export interface LinkProps extends React.HTMLProps<HTMLAnchorElement> {
-  className?: string;
-  component?:
-    | string
-    | FunctionComponent<LinkProps>
-    | ComponentClass<LinkProps, unknown>;
-  to?: string;
-  target?: string;
-  isDisabled?: boolean;
-  noRouter?: boolean;
-  onPress?(event: SyntheticEvent): void;
-}
-function Link(props: LinkProps) {
-  const {
-    className,
-    component = 'button',
-    to,
-    target,
-    type,
-    isDisabled,
-    noRouter = false,
-    onPress,
-    ...otherProps
-  } = props;
+export default function Link<C extends ElementType = 'button'>({
+  className,
+  component,
+  to,
+  target,
+  type,
+  isDisabled,
+  noRouter,
+  onPress,
+  ...otherProps
+}: LinkProps<C>) {
+  const Component = component || 'button';
 
   const onClick = useCallback(
     (event: SyntheticEvent) => {
-      if (!isDisabled && onPress) {
-        onPress(event);
+      if (isDisabled) {
+        return;
       }
+
+      onPress?.(event);
     },
     [isDisabled, onPress]
   );
 
-  const linkProps: React.HTMLProps<HTMLAnchorElement> & ReactRouterLinkProps = {
-    target,
-  };
-  let el = component;
-
-  if (to) {
-    if (/\w+?:\/\//.test(to)) {
-      el = 'a';
-      linkProps.href = to;
-      linkProps.target = target || '_blank';
-      linkProps.rel = 'noreferrer';
-    } else if (noRouter) {
-      el = 'a';
-      linkProps.href = to;
-      linkProps.target = target || '_self';
-    } else {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      el = RouterLink;
-      linkProps.to = `${window.Sonarr.urlBase}/${to.replace(/^\//, '')}`;
-      linkProps.target = target;
-    }
-  }
-
-  if (el === 'button' || el === 'input') {
-    linkProps.type = type || 'button';
-    linkProps.disabled = isDisabled;
-  }
-
-  linkProps.className = classNames(
+  const linkClass = classNames(
     className,
     styles.link,
     to && styles.to,
     isDisabled && 'isDisabled'
   );
 
-  const elementProps = {
-    ...otherProps,
-    type,
-    ...linkProps,
-  };
+  if (to) {
+    const toLink = /\w+?:\/\//.test(to);
 
-  elementProps.onClick = onClick;
+    if (toLink || noRouter) {
+      return (
+        <a
+          href={to}
+          target={target || (toLink ? '_blank' : '_self')}
+          rel={toLink ? 'noreferrer' : undefined}
+          className={linkClass}
+          onClick={onClick}
+          {...otherProps}
+        />
+      );
+    }
 
-  return React.createElement(el, elementProps);
+    return (
+      <RouterLink
+        to={`${window.Sonarr.urlBase}/${to.replace(/^\//, '')}`}
+        target={target}
+        className={linkClass}
+        onClick={onClick}
+        {...otherProps}
+      />
+    );
+  }
+
+  return (
+    <Component
+      type={type || 'button'}
+      target={target}
+      className={linkClass}
+      disabled={isDisabled}
+      onClick={onClick}
+      {...otherProps}
+    />
+  );
 }
-
-export default Link;
