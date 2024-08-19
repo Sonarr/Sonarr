@@ -51,7 +51,7 @@
     "SizeOnDisk": "Tamanho no disco",
     "SystemTimeHealthCheckMessage": "A hora do sistema está desligada por mais de 1 dia. Tarefas agendadas podem não ser executadas corretamente até que o horário seja corrigido",
     "Unmonitored": "Não monitorado",
-    "UpdateAvailableHealthCheckMessage": "Nova atualização disponível: {version}",
+    "UpdateAvailableHealthCheckMessage": "Nova atualização está disponível: {version}",
     "Added": "Adicionado",
     "ApiKeyValidationHealthCheckMessage": "Atualize sua chave de API para ter pelo menos {length} caracteres. Você pode fazer isso através das configurações ou do arquivo de configuração",
     "RemoveCompletedDownloads": "Remover downloads concluídos",
@@ -2100,5 +2100,7 @@
     "SeasonsMonitoredStatus": "Temporadas monitoradas",
     "NoBlocklistItems": "Sem itens na lista de bloqueio",
     "NotificationsTelegramSettingsMetadataLinks": "Links de Metadados",
-    "NotificationsTelegramSettingsMetadataLinksHelpText": "Adicione links aos metadados da série ao enviar notificações"
+    "NotificationsTelegramSettingsMetadataLinksHelpText": "Adicione links aos metadados da série ao enviar notificações",
+    "DeleteSelected": "Excluir Selecionado",
+    "DeleteSelectedImportListExclusionsMessageText": "Tem certeza de que deseja excluir as listas de importação selecionadas das exclusões?"
 }
