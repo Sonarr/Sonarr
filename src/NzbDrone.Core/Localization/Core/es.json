@@ -1401,7 +1401,7 @@
     "NotificationsEmailSettingsBccAddressHelpText": "Lista separada por coma de destinatarios de e-mail bcc",
     "NotificationsEmailSettingsName": "E-mail",
     "NotificationsEmailSettingsRecipientAddress": "Dirección(es) de destinatario",
-    "NotificationsEmbySettingsSendNotificationsHelpText": "Hace que Emby envíe notificaciones a los proveedores configurados. No soportado en Jellyfin.",
+    "NotificationsEmbySettingsSendNotificationsHelpText": "Hacer que Emby envíe notificaciones a los proveedores configurados. No soportado en Jellyfin.",
     "NotificationsGotifySettingsAppToken": "Token de app",
     "NotificationsGotifySettingIncludeSeriesPosterHelpText": "Incluye poster de serie en mensaje",
     "NotificationsJoinSettingsDeviceNames": "Nombres de dispositivo",
@@ -1839,7 +1839,7 @@
     "Titles": "Títulos",
     "ToggleUnmonitoredToMonitored": "Sin monitorizar, haz clic para monitorizar",
     "TotalFileSize": "Tamaño total de archivo",
-    "UpdateAvailableHealthCheckMessage": "Hay disponible una nueva actualización: {version}",
+    "UpdateAvailableHealthCheckMessage": "Una nueva actualización está disponible: {version}",
     "UpgradeUntilCustomFormatScore": "Actualizar hasta la puntuación de formato personalizado",
     "UrlBase": "URL base",
     "UseSsl": "Usar SSL",
@@ -1919,7 +1919,7 @@
     "NotificationsDiscordSettingsWebhookUrlHelpText": "URL de canal webhook de Discord",
     "NotificationsEmailSettingsCcAddress": "Dirección(es) CC",
     "NotificationsEmbySettingsSendNotifications": "Enviar notificaciones",
-    "NotificationsEmbySettingsUpdateLibraryHelpText": "Actualiza biblioteca al importar, renombrar o borrar",
+    "NotificationsEmbySettingsUpdateLibraryHelpText": "Actualiza la biblioteca al importar, renombrar o borrar",
     "NotificationsJoinSettingsDeviceIdsHelpText": "En desuso, usar Nombres de dispositivo en su lugar. Lista separada por coma de los IDs de dispositivo a los que te gustaría enviar notificaciones. Si no se establece, todos los dispositivos recibirán notificaciones.",
     "NotificationsPushoverSettingsExpire": "Caduca",
     "NotificationsMailgunSettingsSenderDomain": "Dominio del remitente",
@@ -2100,5 +2100,7 @@
     "NoBlocklistItems": "Ningún elemento en la lista de bloqueo",
     "SeasonsMonitoredPartial": "Parcial",
     "NotificationsTelegramSettingsMetadataLinksHelpText": "Añade un enlace a los metadatos de la serie cuando se envían notificaciones",
-    "NotificationsTelegramSettingsMetadataLinks": "Enlaces de metadatos"
+    "NotificationsTelegramSettingsMetadataLinks": "Enlaces de metadatos",
+    "DeleteSelected": "Borrar seleccionados",
+    "DeleteSelectedImportListExclusionsMessageText": "¿Estás seguro que quieres borrar las exclusiones de listas de importación seleccionadas?"
 }
