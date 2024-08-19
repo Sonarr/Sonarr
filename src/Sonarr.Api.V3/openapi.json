@@ -8860,7 +8860,7 @@
           },
           "logSizeLimit": {
             "type": "integer",
-            "nullable": true
+            "format": "int32"
           },
           "consoleLogLevel": {
             "type": "string",
