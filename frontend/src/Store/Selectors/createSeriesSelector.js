@@ -5,8 +5,7 @@ export function createSeriesSelectorForHook(seriesId) {
     (state) => state.series.itemMap,
     (state) => state.series.items,
     (itemMap, allSeries) => {
-
-      return seriesId ? allSeries[itemMap[seriesId]]: undefined;
+      return seriesId ? allSeries[itemMap[seriesId]] : undefined;
     }
   );
 }

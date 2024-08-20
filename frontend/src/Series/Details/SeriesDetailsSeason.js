@@ -18,7 +18,7 @@ import { align, icons, sortDirections, tooltipPositions } from 'Helpers/Props';
 import InteractiveImportModal from 'InteractiveImport/InteractiveImportModal';
 import OrganizePreviewModalConnector from 'Organize/OrganizePreviewModalConnector';
 import SeriesHistoryModal from 'Series/History/SeriesHistoryModal';
-import SeasonInteractiveSearchModalConnector from 'Series/Search/SeasonInteractiveSearchModalConnector';
+import SeasonInteractiveSearchModal from 'Series/Search/SeasonInteractiveSearchModal';
 import isAfter from 'Utilities/Date/isAfter';
 import isBefore from 'Utilities/Date/isBefore';
 import formatBytes from 'Utilities/Number/formatBytes';
@@ -505,7 +505,7 @@ class SeriesDetailsSeason extends Component {
           onModalClose={this.onHistoryModalClose}
         />
 
-        <SeasonInteractiveSearchModalConnector
+        <SeasonInteractiveSearchModal
           isOpen={isInteractiveSearchModalOpen}
           seriesId={seriesId}
           seasonNumber={seasonNumber}

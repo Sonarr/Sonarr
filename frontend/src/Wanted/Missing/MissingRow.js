@@ -5,8 +5,8 @@ import TableRowCell from 'Components/Table/Cells/TableRowCell';
 import TableSelectCell from 'Components/Table/Cells/TableSelectCell';
 import TableRow from 'Components/Table/TableRow';
 import episodeEntities from 'Episode/episodeEntities';
-import EpisodeSearchCellConnector from 'Episode/EpisodeSearchCellConnector';
-import EpisodeStatusConnector from 'Episode/EpisodeStatusConnector';
+import EpisodeSearchCell from 'Episode/EpisodeSearchCell';
+import EpisodeStatus from 'Episode/EpisodeStatus';
 import EpisodeTitleLink from 'Episode/EpisodeTitleLink';
 import SeasonEpisodeNumber from 'Episode/SeasonEpisodeNumber';
 import SeriesTitleLink from 'Series/SeriesTitleLink';
@@ -115,7 +115,7 @@ function MissingRow(props) {
                 key={name}
                 className={styles.status}
               >
-                <EpisodeStatusConnector
+                <EpisodeStatus
                   episodeId={id}
                   episodeFileId={episodeFileId}
                   episodeEntity={episodeEntities.WANTED_MISSING}
@@ -126,7 +126,7 @@ function MissingRow(props) {
 
           if (name === 'actions') {
             return (
-              <EpisodeSearchCellConnector
+              <EpisodeSearchCell
                 key={name}
                 episodeId={id}
                 seriesId={series.id}

@@ -1,34 +1,44 @@
-import PropTypes from 'prop-types';
 import React from 'react';
+import { useSelector } from 'react-redux';
 import QueueDetails from 'Activity/Queue/QueueDetails';
 import Icon from 'Components/Icon';
 import ProgressBar from 'Components/ProgressBar';
+import Episode from 'Episode/Episode';
+import useEpisode, { EpisodeEntities } from 'Episode/useEpisode';
+import useEpisodeFile from 'EpisodeFile/useEpisodeFile';
 import { icons, kinds, sizes } from 'Helpers/Props';
+import { createQueueItemSelectorForHook } from 'Store/Selectors/createQueueItemSelector';
 import isBefore from 'Utilities/Date/isBefore';
 import translate from 'Utilities/String/translate';
 import EpisodeQuality from './EpisodeQuality';
 import styles from './EpisodeStatus.css';
 
-function EpisodeStatus(props) {
+interface EpisodeStatusProps {
+  episodeId: number;
+  episodeEntity?: EpisodeEntities;
+  episodeFileId: number;
+}
+
+function EpisodeStatus(props: EpisodeStatusProps) {
+  const { episodeId, episodeEntity = 'episodes', episodeFileId } = props;
+
   const {
     airDateUtc,
     monitored,
-    grabbed,
-    queueItem,
-    episodeFile
-  } = props;
+    grabbed = false,
+  } = useEpisode(episodeId, episodeEntity) as Episode;
+
+  const queueItem = useSelector(createQueueItemSelectorForHook(episodeId));
+  const episodeFile = useEpisodeFile(episodeFileId);
 
   const hasEpisodeFile = !!episodeFile;
   const isQueued = !!queueItem;
   const hasAired = isBefore(airDateUtc);
 
   if (isQueued) {
-    const {
-      sizeleft,
-      size
-    } = queueItem;
+    const { sizeleft, size } = queueItem;
 
-    const progress = size ? (100 - sizeleft / size * 100) : 0;
+    const progress = size ? 100 - (sizeleft / size) * 100 : 0;
 
     return (
       <div className={styles.center}>
@@ -76,10 +86,7 @@ function EpisodeStatus(props) {
   if (!airDateUtc) {
     return (
       <div className={styles.center}>
-        <Icon
-          name={icons.TBA}
-          title={translate('Tba')}
-        />
+        <Icon name={icons.TBA} title={translate('Tba')} />
       </div>
     );
   }
@@ -109,20 +116,9 @@ function EpisodeStatus(props) {
 
   return (
     <div className={styles.center}>
-      <Icon
-        name={icons.NOT_AIRED}
-        title={translate('EpisodeHasNotAired')}
-      />
+      <Icon name={icons.NOT_AIRED} title={translate('EpisodeHasNotAired')} />
     </div>
   );
 }
-
-EpisodeStatus.propTypes = {
-  airDateUtc: PropTypes.string,
-  monitored: PropTypes.bool.isRequired,
-  grabbed: PropTypes.bool,
-  queueItem: PropTypes.object,
-  episodeFile: PropTypes.object
-};
 
 export default EpisodeStatus;

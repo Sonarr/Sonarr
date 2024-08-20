@@ -9,5 +9,5 @@ export default {
   EPISODES,
   INTERACTIVE_IMPORT,
   WANTED_CUTOFF_UNMET,
-  WANTED_MISSING
-};
+  WANTED_MISSING,
+} as const;

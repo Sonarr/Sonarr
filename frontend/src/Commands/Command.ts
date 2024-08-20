@@ -26,6 +26,7 @@ export interface CommandBody {
   seriesId?: number;
   seriesIds?: number[];
   seasonNumber?: number;
+  episodeIds?: number[];
   [key: string]: string | number | boolean | number[] | undefined;
 }
 

@@ -32,6 +32,7 @@ import {
   reprocessInteractiveImportItems,
   updateInteractiveImportItem,
 } from 'Store/Actions/interactiveImportActions';
+import CustomFormat from 'typings/CustomFormat';
 import { SelectStateInputProps } from 'typings/props';
 import Rejection from 'typings/Rejection';
 import formatBytes from 'Utilities/Number/formatBytes';
@@ -66,7 +67,7 @@ interface InteractiveImportRowProps {
   languages?: Language[];
   size: number;
   releaseType: ReleaseType;
-  customFormats?: object[];
+  customFormats?: CustomFormat[];
   customFormatScore?: number;
   indexerFlags: number;
   rejections: Rejection[];
@@ -92,7 +93,7 @@ function InteractiveImportRow(props: InteractiveImportRowProps) {
     releaseGroup,
     size,
     releaseType,
-    customFormats,
+    customFormats = [],
     customFormatScore,
     indexerFlags,
     rejections,
