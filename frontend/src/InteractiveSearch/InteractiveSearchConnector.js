@@ -86,9 +86,10 @@ class InteractiveSearchConnector extends Component {
 }
 
 InteractiveSearchConnector.propTypes = {
+  type: PropTypes.string.isRequired,
   searchPayload: PropTypes.object.isRequired,
-  isPopulated: PropTypes.bool.isRequired,
-  dispatchFetchReleases: PropTypes.func.isRequired
+  isPopulated: PropTypes.bool,
+  dispatchFetchReleases: PropTypes.func
 };
 
 export default connect(createMapStateToProps, createMapDispatchToProps)(InteractiveSearchConnector);

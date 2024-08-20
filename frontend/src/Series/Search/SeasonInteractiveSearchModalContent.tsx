@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import Button from 'Components/Link/Button';
 import ModalBody from 'Components/Modal/ModalBody';
@@ -10,20 +9,25 @@ import InteractiveSearchConnector from 'InteractiveSearch/InteractiveSearchConne
 import formatSeason from 'Season/formatSeason';
 import translate from 'Utilities/String/translate';
 
-function SeasonInteractiveSearchModalContent(props) {
-  const {
-    seriesId,
-    seasonNumber,
-    onModalClose
-  } = props;
+interface SeasonInteractiveSearchModalContentProps {
+  seriesId: number;
+  seasonNumber: number;
+  onModalClose(): void;
+}
+
+function SeasonInteractiveSearchModalContent(
+  props: SeasonInteractiveSearchModalContentProps
+) {
+  const { seriesId, seasonNumber, onModalClose } = props;
 
   return (
     <ModalContent onModalClose={onModalClose}>
       <ModalHeader>
-        {seasonNumber === null ?
-          translate('InteractiveSearchModalHeader') :
-          translate('InteractiveSearchModalHeaderSeason', { season: formatSeason(seasonNumber) })
-        }
+        {seasonNumber === null
+          ? translate('InteractiveSearchModalHeader')
+          : translate('InteractiveSearchModalHeaderSeason', {
+              season: formatSeason(seasonNumber) as string,
+            })}
       </ModalHeader>
 
       <ModalBody scrollDirection={scrollDirections.BOTH}>
@@ -31,24 +35,16 @@ function SeasonInteractiveSearchModalContent(props) {
           type="season"
           searchPayload={{
             seriesId,
-            seasonNumber
+            seasonNumber,
           }}
         />
       </ModalBody>
 
       <ModalFooter>
-        <Button onPress={onModalClose}>
-          {translate('Close')}
-        </Button>
+        <Button onPress={onModalClose}>{translate('Close')}</Button>
       </ModalFooter>
     </ModalContent>
   );
 }
-
-SeasonInteractiveSearchModalContent.propTypes = {
-  seriesId: PropTypes.number.isRequired,
-  seasonNumber: PropTypes.number.isRequired,
-  onModalClose: PropTypes.func.isRequired
-};
 
 export default SeasonInteractiveSearchModalContent;

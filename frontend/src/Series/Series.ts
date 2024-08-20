@@ -53,6 +53,7 @@ export interface AlternateTitle {
   sceneSeasonNumber?: number;
   title: string;
   sceneOrigin: 'unknown' | 'unknown:tvdb' | 'mixed' | 'tvdb';
+  comment?: string;
 }
 
 export interface SeriesAddOptions {

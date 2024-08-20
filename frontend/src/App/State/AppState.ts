@@ -1,10 +1,10 @@
-import InteractiveImportAppState from 'App/State/InteractiveImportAppState';
 import BlocklistAppState from './BlocklistAppState';
 import CalendarAppState from './CalendarAppState';
 import CommandAppState from './CommandAppState';
 import EpisodeFilesAppState from './EpisodeFilesAppState';
 import EpisodesAppState from './EpisodesAppState';
 import HistoryAppState from './HistoryAppState';
+import InteractiveImportAppState from './InteractiveImportAppState';
 import ParseAppState from './ParseAppState';
 import QueueAppState from './QueueAppState';
 import RootFolderAppState from './RootFolderAppState';
@@ -12,6 +12,7 @@ import SeriesAppState, { SeriesIndexAppState } from './SeriesAppState';
 import SettingsAppState from './SettingsAppState';
 import SystemAppState from './SystemAppState';
 import TagsAppState from './TagsAppState';
+import WantedAppState from './WantedAppState';
 
 interface FilterBuilderPropOption {
   id: string;
@@ -62,8 +63,8 @@ interface AppState {
   blocklist: BlocklistAppState;
   calendar: CalendarAppState;
   commands: CommandAppState;
-  episodes: EpisodesAppState;
   episodeFiles: EpisodeFilesAppState;
+  episodes: EpisodesAppState;
   episodesSelection: EpisodesAppState;
   history: HistoryAppState;
   interactiveImport: InteractiveImportAppState;
@@ -75,6 +76,7 @@ interface AppState {
   settings: SettingsAppState;
   system: SystemAppState;
   tags: TagsAppState;
+  wanted: WantedAppState;
 }
 
 export default AppState;

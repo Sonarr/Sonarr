@@ -1,13 +1,14 @@
 import React, { useCallback, useState } from 'react';
 import Link from 'Components/Link/Link';
 import EpisodeDetailsModal from 'Episode/EpisodeDetailsModal';
+import { EpisodeEntities } from 'Episode/useEpisode';
 import FinaleType from './FinaleType';
 import styles from './EpisodeTitleLink.css';
 
 interface EpisodeTitleLinkProps {
   episodeId: number;
   seriesId: number;
-  episodeEntity: string;
+  episodeEntity: EpisodeEntities;
   episodeTitle: string;
   finaleType?: string;
   showOpenSeriesButton: boolean;
