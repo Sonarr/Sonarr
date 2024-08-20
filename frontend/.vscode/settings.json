@@ -9,7 +9,7 @@
 
   "editor.formatOnSave": false,
   "editor.codeActionsOnSave": {
-    "source.fixAll": true
+    "source.fixAll": "explicit"
   },
 
   "typescript.preferences.quoteStyle": "single",
