@@ -47,7 +47,7 @@ namespace Sonarr.Http.Authentication
 
             await HttpContext.SignInAsync(AuthenticationType.Forms.ToString(), new ClaimsPrincipal(new ClaimsIdentity(claims, "Cookies", "user", "identifier")), authProperties);
 
-            if (returnUrl.IsNullOrWhiteSpace())
+            if (returnUrl.IsNullOrWhiteSpace() || !Url.IsLocalUrl(returnUrl))
             {
                 return Redirect(_configFileProvider.UrlBase + "/");
             }
