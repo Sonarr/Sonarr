@@ -20,6 +20,15 @@ namespace Sonarr.Api.V3.Qualities
             : base(signalRBroadcaster)
         {
             _qualityDefinitionService = qualityDefinitionService;
+
+            SetupValidation(qualityDefinitionService);
+        }
+
+        private void SetupValidation(IQualityDefinitionService qualityDefinitionService)
+        {
+            var limits = qualityDefinitionService.GetLimits();
+            SharedValidator.RuleFor(c => c)
+                .SetValidator(new QualityDefinitionResourceValidator(limits));
         }
 
         [RestPutById]
