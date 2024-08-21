@@ -1,4 +1,5 @@
 ﻿using FluentValidation.Validators;
+using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.RootFolders;
 
@@ -19,7 +20,7 @@ namespace NzbDrone.Core.Validation.Paths
         {
             context.MessageFormatter.AppendArgument("path", context.PropertyValue?.ToString());
 
-            return context.PropertyValue == null || _rootFolderService.All().Exists(r => r.Path.PathEquals(context.PropertyValue.ToString()));
+            return context.PropertyValue == null || _rootFolderService.All().Exists(r => r.Path.IsPathValid(PathValidationType.CurrentOs) && r.Path.PathEquals(context.PropertyValue.ToString()));
         }
     }
 }
