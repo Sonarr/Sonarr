@@ -212,8 +212,8 @@ class SeriesDetails extends Component {
     } = this.props;
 
     const {
-      episodeFileCount,
-      sizeOnDisk
+      episodeFileCount = 0,
+      sizeOnDisk = 0
     } = statistics;
 
     const {
@@ -230,7 +230,7 @@ class SeriesDetails extends Component {
     } = this.state;
 
     const statusDetails = getSeriesStatusDetails(status);
-    const runningYears = statusDetails.title === translate('Ended') ? `${year}-${getDateYear(lastAired)}` : `${year}-`;
+    const runningYears = status === 'ended' ? `${year}-${getDateYear(lastAired)}` : `${year}-`;
 
     let episodeFilesCountMessage = translate('SeriesDetailsNoEpisodeFiles');
 
@@ -454,10 +454,9 @@ class SeriesDetails extends Component {
                             name={icons.DRIVE}
                             size={17}
                           />
+
                           <span className={styles.sizeOnDisk}>
-                            {
-                              formatBytes(sizeOnDisk || 0)
-                            }
+                            {formatBytes(sizeOnDisk)}
                           </span>
                         </div>
                       </Label>
@@ -510,13 +509,14 @@ class SeriesDetails extends Component {
                     className={styles.detailsLabel}
                     title={statusDetails.message}
                     size={sizes.LARGE}
+                    kind={status === 'deleted' ? kinds.INVERSE : undefined}
                   >
                     <div>
                       <Icon
                         name={statusDetails.icon}
                         size={17}
                       />
-                      <span className={styles.qualityProfileName}>
+                      <span className={styles.statusName}>
                         {statusDetails.title}
                       </span>
                     </div>

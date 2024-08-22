@@ -15,6 +15,7 @@ import SeasonEpisodeNumber from 'Episode/SeasonEpisodeNumber';
 import useEpisode from 'Episode/useEpisode';
 import usePrevious from 'Helpers/Hooks/usePrevious';
 import { icons, tooltipPositions } from 'Helpers/Props';
+import Language from 'Language/Language';
 import { QualityModel } from 'Quality/Quality';
 import SeriesTitleLink from 'Series/SeriesTitleLink';
 import useSeries from 'Series/useSeries';
@@ -31,7 +32,7 @@ interface HistoryRowProps {
   id: number;
   episodeId: number;
   seriesId: number;
-  languages: object[];
+  languages: Language[];
   quality: QualityModel;
   customFormats?: CustomFormat[];
   customFormatScore: number;
@@ -61,7 +62,7 @@ function HistoryRow(props: HistoryRowProps) {
     date,
     data,
     downloadId,
-    isMarkingAsFailed,
+    isMarkingAsFailed = false,
     markAsFailedError,
     columns,
   } = props;
@@ -267,9 +268,5 @@ function HistoryRow(props: HistoryRowProps) {
     </TableRow>
   );
 }
-
-HistoryRow.defaultProps = {
-  customFormats: [],
-};
 
 export default HistoryRow;

@@ -134,6 +134,12 @@ module.exports = (env) => {
               {
                 source: 'frontend/src/Content/robots.txt',
                 destination: path.join(distFolder, 'Content/robots.txt')
+              },
+
+              // manifest.json and browserconfig.xml
+              {
+                source: 'frontend/src/Content/*.(json|xml)',
+                destination: path.join(distFolder, 'Content')
               }
             ]
           }

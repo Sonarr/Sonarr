@@ -26,4 +26,5 @@
   composes: cell from '~Components/Table/Cells/TableRowCell.css';
 
   width: 70px;
+  text-align: right;
 }

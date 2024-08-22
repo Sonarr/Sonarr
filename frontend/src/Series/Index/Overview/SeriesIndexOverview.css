@@ -25,7 +25,7 @@ $hoverScale: 1.05;
   }
 }
 
-.ended {
+.status {
   position: absolute;
   top: 0;
   right: 0;
@@ -34,8 +34,15 @@ $hoverScale: 1.05;
   height: 0;
   border-width: 0 25px 25px 0;
   border-style: solid;
-  border-color: transparent var(--dangerColor) transparent transparent;
   color: var(--white);
+
+  &.ended {
+    border-color: transparent var(--dangerColor) transparent transparent;
+  }
+
+  &.deleted {
+    border-color: transparent var(--gray) transparent transparent;
+  }
 }
 
 .info {

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Core.ImportLists.Exclusions;
@@ -20,7 +21,10 @@ namespace Sonarr.Api.V3.ImportLists
         {
             _importListExclusionService = importListExclusionService;
 
-            SharedValidator.RuleFor(c => c.TvdbId).NotEmpty().SetValidator(importListExclusionExistsValidator);
+            SharedValidator.RuleFor(c => c.TvdbId).Cascade(CascadeMode.Stop)
+                .NotEmpty()
+                .SetValidator(importListExclusionExistsValidator);
+
             SharedValidator.RuleFor(c => c.Title).NotEmpty();
         }
 
@@ -65,9 +69,18 @@ namespace Sonarr.Api.V3.ImportLists
         }
 
         [RestDeleteById]
-        public void DeleteImportListExclusionResource(int id)
+        public void DeleteImportListExclusion(int id)
         {
             _importListExclusionService.Delete(id);
+        }
+
+        [HttpDelete("bulk")]
+        [Produces("application/json")]
+        public object DeleteImportListExclusions([FromBody] ImportListExclusionBulkResource resource)
+        {
+            _importListExclusionService.Delete(resource.Ids.ToList());
+
+            return new { };
         }
     }
 }

@@ -119,9 +119,7 @@ namespace NzbDrone.Core.Download.TrackedDownloads
 
                 if (parsedEpisodeInfo != null)
                 {
-                    trackedDownload.RemoteEpisode = _parsingService.Map(parsedEpisodeInfo, 0, 0);
-
-                    _aggregationService.Augment(trackedDownload.RemoteEpisode);
+                    trackedDownload.RemoteEpisode = _parsingService.Map(parsedEpisodeInfo, 0, 0, null);
                 }
 
                 var downloadHistory = _downloadHistoryService.GetLatestDownloadHistoryItem(downloadItem.DownloadId);
@@ -147,7 +145,7 @@ namespace NzbDrone.Core.Download.TrackedDownloads
                         // Try parsing the original source title and if that fails, try parsing it as a special
                         // TODO: Pass the TVDB ID and TVRage IDs in as well so we have a better chance for finding the item
                         parsedEpisodeInfo = Parser.Parser.ParseTitle(firstHistoryItem.SourceTitle) ??
-                                            _parsingService.ParseSpecialEpisodeTitle(parsedEpisodeInfo, firstHistoryItem.SourceTitle, 0, 0);
+                                            _parsingService.ParseSpecialEpisodeTitle(parsedEpisodeInfo, firstHistoryItem.SourceTitle, 0, 0, null);
 
                         if (parsedEpisodeInfo != null)
                         {
@@ -158,17 +156,24 @@ namespace NzbDrone.Core.Download.TrackedDownloads
                         }
                     }
 
-                    if (trackedDownload.RemoteEpisode != null &&
-                        Enum.TryParse(grabbedEvent?.Data?.GetValueOrDefault("indexerFlags"), true, out IndexerFlags flags))
+                    if (trackedDownload.RemoteEpisode != null)
                     {
                         trackedDownload.RemoteEpisode.Release ??= new ReleaseInfo();
-                        trackedDownload.RemoteEpisode.Release.IndexerFlags = flags;
+                        trackedDownload.RemoteEpisode.Release.Indexer = trackedDownload.Indexer;
+                        trackedDownload.RemoteEpisode.Release.Title = trackedDownload.RemoteEpisode.ParsedEpisodeInfo?.ReleaseTitle;
+
+                        if (Enum.TryParse(grabbedEvent?.Data?.GetValueOrDefault("indexerFlags"), true, out IndexerFlags flags))
+                        {
+                            trackedDownload.RemoteEpisode.Release.IndexerFlags = flags;
+                        }
                     }
                 }
 
-                // Calculate custom formats
                 if (trackedDownload.RemoteEpisode != null)
                 {
+                    _aggregationService.Augment(trackedDownload.RemoteEpisode);
+
+                    // Calculate custom formats
                     trackedDownload.RemoteEpisode.CustomFormats = _formatCalculator.ParseCustomFormat(trackedDownload.RemoteEpisode, downloadItem.TotalSize);
                 }
 
@@ -234,7 +239,7 @@ namespace NzbDrone.Core.Download.TrackedDownloads
         {
             var parsedEpisodeInfo = Parser.Parser.ParseTitle(trackedDownload.DownloadItem.Title);
 
-            trackedDownload.RemoteEpisode = parsedEpisodeInfo == null ? null : _parsingService.Map(parsedEpisodeInfo, 0, 0);
+            trackedDownload.RemoteEpisode = parsedEpisodeInfo == null ? null : _parsingService.Map(parsedEpisodeInfo, 0, 0, null);
 
             _aggregationService.Augment(trackedDownload.RemoteEpisode);
         }

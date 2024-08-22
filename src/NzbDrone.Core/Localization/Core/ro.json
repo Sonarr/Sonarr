@@ -200,5 +200,6 @@
     "WeekColumnHeader": "Antetul coloanei săptămânii",
     "TimeFormat": "Format ora",
     "CustomFilter": "Filtru personalizat",
-    "CustomFilters": "Filtre personalizate"
+    "CustomFilters": "Filtre personalizate",
+    "UpdateAvailableHealthCheckMessage": "O nouă versiune este disponibilă: {version}"
 }

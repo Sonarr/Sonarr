@@ -48,7 +48,6 @@ interface ImportListOptionsPageProps {
 
 function ImportListOptions(props: ImportListOptionsPageProps) {
   const { setChildSave, onChildStateChange } = props;
-  const selected = useSelector(createImportListOptionsSelector());
 
   const {
     isSaving,
@@ -58,7 +57,7 @@ function ImportListOptions(props: ImportListOptionsPageProps) {
     error,
     settings,
     hasSettings,
-  } = selected;
+  } = useSelector(createImportListOptionsSelector());
 
   const { listSyncLevel, listSyncTag } = settings;
 

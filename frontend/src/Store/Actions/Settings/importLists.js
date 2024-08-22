@@ -20,19 +20,19 @@ const section = 'settings.importLists';
 //
 // Actions Types
 
-export const FETCH_IMPORT_LISTS = 'settings/importlists/fetchImportLists';
-export const FETCH_IMPORT_LIST_SCHEMA = 'settings/importlists/fetchImportListSchema';
-export const SELECT_IMPORT_LIST_SCHEMA = 'settings/importlists/selectImportListSchema';
-export const SET_IMPORT_LIST_VALUE = 'settings/importlists/setImportListValue';
-export const SET_IMPORT_LIST_FIELD_VALUE = 'settings/importlists/setImportListFieldValue';
-export const SAVE_IMPORT_LIST = 'settings/importlists/saveImportList';
-export const CANCEL_SAVE_IMPORT_LIST = 'settings/importlists/cancelSaveImportList';
-export const DELETE_IMPORT_LIST = 'settings/importlists/deleteImportList';
-export const TEST_IMPORT_LIST = 'settings/importlists/testImportList';
-export const CANCEL_TEST_IMPORT_LIST = 'settings/importlists/cancelTestImportList';
-export const TEST_ALL_IMPORT_LISTS = 'settings/importlists/testAllImportLists';
-export const BULK_EDIT_IMPORT_LISTS = 'settings/importlists/bulkEditImportLists';
-export const BULK_DELETE_IMPORT_LISTS = 'settings/importlists/bulkDeleteImportLists';
+export const FETCH_IMPORT_LISTS = 'settings/importLists/fetchImportLists';
+export const FETCH_IMPORT_LIST_SCHEMA = 'settings/importLists/fetchImportListSchema';
+export const SELECT_IMPORT_LIST_SCHEMA = 'settings/importLists/selectImportListSchema';
+export const SET_IMPORT_LIST_VALUE = 'settings/importLists/setImportListValue';
+export const SET_IMPORT_LIST_FIELD_VALUE = 'settings/importLists/setImportListFieldValue';
+export const SAVE_IMPORT_LIST = 'settings/importLists/saveImportList';
+export const CANCEL_SAVE_IMPORT_LIST = 'settings/importLists/cancelSaveImportList';
+export const DELETE_IMPORT_LIST = 'settings/importLists/deleteImportList';
+export const TEST_IMPORT_LIST = 'settings/importLists/testImportList';
+export const CANCEL_TEST_IMPORT_LIST = 'settings/importLists/cancelTestImportList';
+export const TEST_ALL_IMPORT_LISTS = 'settings/importLists/testAllImportLists';
+export const BULK_EDIT_IMPORT_LISTS = 'settings/importLists/bulkEditImportLists';
+export const BULK_DELETE_IMPORT_LISTS = 'settings/importLists/bulkDeleteImportLists';
 
 //
 // Action Creators

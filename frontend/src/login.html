@@ -11,8 +11,11 @@
     <!-- Android/Apple Phone -->
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="format-detection" content="telephone=no">
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="format-detection" content="telephone=no" />
 
     <meta name="description" content="Sonarr" />
 
@@ -33,7 +36,11 @@
       sizes="16x16"
       href="/Content/Images/Icons/favicon-16x16.png"
     />
-    <link rel="manifest" href="/Content/Images/Icons/manifest.json" crossorigin="use-credentials" />
+    <link
+      rel="manifest"
+      href="/Content/manifest.json"
+      crossorigin="use-credentials"
+    />
     <link
       rel="mask-icon"
       href="/Content/Images/Icons/safari-pinned-tab.svg"
@@ -45,10 +52,7 @@
       href="/favicon.ico"
       data-no-hash
     />
-    <meta
-      name="msapplication-config"
-      content="/Content/Images/Icons/browserconfig.xml"
-    />
+    <meta name="msapplication-config" content="/Content/browserconfig.xml" />
 
     <link rel="stylesheet" type="text/css" href="/Content/styles.css" />
     <link rel="stylesheet" type="text/css" href="/Content/Fonts/fonts.css" />
@@ -59,7 +63,7 @@
       body {
         background-color: var(--pageBackground);
         color: var(--textColor);
-        font-family: "Roboto", "open sans", "Helvetica Neue", Helvetica, Arial,
+        font-family: 'Roboto', 'open sans', 'Helvetica Neue', Helvetica, Arial,
           sans-serif;
       }
 
@@ -209,9 +213,7 @@
           </div>
 
           <div class="panel-body">
-            <div class="sign-in">
-              SIGN IN TO CONTINUE
-            </div>
+            <div class="sign-in">SIGN IN TO CONTINUE</div>
 
             <form
               role="form"
@@ -230,8 +232,8 @@
                   pattern=".{1,}"
                   required
                   title="User name is required"
-                  autoFocus="true"
-                  autoCapitalize="false"
+                  autofocus="true"
+                  autocapitalize="false"
                 />
               </div>
 
@@ -282,16 +284,16 @@
   </body>
 
   <script type="text/javascript">
-    var yearSpan = document.getElementById("year");
-    yearSpan.innerHTML = "2010-" + new Date().getFullYear();
+    var yearSpan = document.getElementById('year');
+    yearSpan.innerHTML = '2010-' + new Date().getFullYear();
 
-    var copyDiv = document.getElementById("copy");
-    copyDiv.classList.remove("hidden");
+    var copyDiv = document.getElementById('copy');
+    copyDiv.classList.remove('hidden');
 
-    if (window.location.search.indexOf("loginFailed=true") > -1) {
-      var loginFailedDiv = document.getElementById("login-failed");
+    if (window.location.search.indexOf('loginFailed=true') > -1) {
+      var loginFailedDiv = document.getElementById('login-failed');
 
-      loginFailedDiv.classList.remove("hidden");
+      loginFailedDiv.classList.remove('hidden');
     }
 
     var light = {
@@ -311,7 +313,7 @@
       primaryHoverBorderColor: '#3483e7',
       failedColor: '#f05050',
       forgotPasswordColor: '#909fa7',
-      forgotPasswordAltColor: '#748690'
+      forgotPasswordAltColor: '#748690',
     };
 
     var dark = {
@@ -331,21 +333,16 @@
       primaryHoverBorderColor: '#3483e7',
       failedColor: '#f05050',
       forgotPasswordColor: '#737d83',
-      forgotPasswordAltColor: '#546067'
+      forgotPasswordAltColor: '#546067',
     };
 
-    var theme = "_THEME_";
+    var theme = '_THEME_';
     var defaultDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    var finalTheme = theme === 'dark' || (theme === 'auto' && defaultDark) ?
-      dark :
-      light;
+    var finalTheme =
+      theme === 'dark' || (theme === 'auto' && defaultDark) ? dark : light;
 
     Object.entries(finalTheme).forEach(([key, value]) => {
-      document.documentElement.style.setProperty(
-        `--${key}`,
-        value
-      );
+      document.documentElement.style.setProperty(`--${key}`, value);
     });
-
   </script>
 </html>

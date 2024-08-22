@@ -155,10 +155,4 @@ function QueueStatus(props: QueueStatusProps) {
   );
 }
 
-QueueStatus.defaultProps = {
-  trackedDownloadStatus: 'ok',
-  trackedDownloadState: 'downloading',
-  canFlip: false,
-};
-
 export default QueueStatus;

@@ -3,6 +3,7 @@
 interface CssExports {
   'actions': string;
   'content': string;
+  'deleted': string;
   'details': string;
   'ended': string;
   'info': string;
@@ -11,6 +12,7 @@ interface CssExports {
   'overviewContainer': string;
   'poster': string;
   'posterContainer': string;
+  'status': string;
   'tags': string;
   'title': string;
   'titleRow': string;

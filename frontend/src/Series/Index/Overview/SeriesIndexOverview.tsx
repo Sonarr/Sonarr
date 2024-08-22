@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import React, { useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import TextTruncate from 'react-text-truncate';
@@ -146,9 +147,19 @@ function SeriesIndexOverview(props: SeriesIndexOverviewProps) {
               <SeriesIndexPosterSelect seriesId={seriesId} />
             ) : null}
 
-            {status === 'ended' && (
-              <div className={styles.ended} title={translate('Ended')} />
-            )}
+            {status === 'ended' ? (
+              <div
+                className={classNames(styles.status, styles.ended)}
+                title={translate('Ended')}
+              />
+            ) : null}
+
+            {status === 'deleted' ? (
+              <div
+                className={classNames(styles.status, styles.deleted)}
+                title={translate('Deleted')}
+              />
+            ) : null}
 
             <Link className={styles.link} style={elementStyle} to={link}>
               <SeriesPoster

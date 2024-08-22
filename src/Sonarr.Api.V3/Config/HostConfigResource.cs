@@ -21,6 +21,7 @@ namespace Sonarr.Api.V3.Config
         public string Password { get; set; }
         public string PasswordConfirmation { get; set; }
         public string LogLevel { get; set; }
+        public int LogSizeLimit { get; set; }
         public string ConsoleLogLevel { get; set; }
         public string Branch { get; set; }
         public string ApiKey { get; set; }
@@ -65,6 +66,7 @@ namespace Sonarr.Api.V3.Config
                 // Username
                 // Password
                 LogLevel = model.LogLevel,
+                LogSizeLimit = model.LogSizeLimit,
                 ConsoleLogLevel = model.ConsoleLogLevel,
                 Branch = model.Branch,
                 ApiKey = model.ApiKey,

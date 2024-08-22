@@ -229,9 +229,9 @@ namespace NzbDrone.Core.Notifications.Webhook
                     TvdbId = 1234,
                     Tags = new List<string> { "test-tag" }
                 },
-                Episodes = new List<WebhookEpisode>()
+                Episodes = new List<WebhookEpisode>
                 {
-                    new WebhookEpisode()
+                    new ()
                     {
                         Id = 123,
                         EpisodeNumber = 1,
@@ -244,6 +244,11 @@ namespace NzbDrone.Core.Notifications.Webhook
 
         private WebhookSeries GetSeries(Series series)
         {
+            if (series == null)
+            {
+                return null;
+            }
+
             _mediaCoverService.ConvertToLocalUrls(series.Id, series.Images);
 
             return new WebhookSeries(series, GetTagLabels(series));
@@ -251,6 +256,11 @@ namespace NzbDrone.Core.Notifications.Webhook
 
         private List<string> GetTagLabels(Series series)
         {
+            if (series == null)
+            {
+                return null;
+            }
+
             return _tagRepository.GetTags(series.Tags)
                 .Select(s => s.Label)
                 .Where(l => l.IsNotNullOrWhiteSpace())

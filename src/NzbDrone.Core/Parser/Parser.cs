@@ -192,6 +192,10 @@ namespace NzbDrone.Core.Parser
                 new Regex(@"^(?<title>.+?)?\W*(?<airyear>\d{4})\W+(?<airmonth>[0-1][0-9])\W+(?<airday>[0-3][0-9])(?!\W+[0-3][0-9]).+?(?:s?(?<season>(?<!\d+)(?:\d{1,2})(?!\d+)))(?:[ex](?<episode>(?<!\d+)(?:\d{1,3})(?!\d+)))",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
+                // Episodes with absolute episode number AND airdate (TJET Wrestling)
+                new Regex(@"^(?<title>.+?)?[-_. ](?:e\d{2,3}(?!\d+))[-_. ](?<airyear>\d{4})\W+(?<airmonth>[0-1][0-9])\W+(?<airday>[0-3][0-9])(?!\W+[0-3][0-9]).+?(?:\[[a-z]+\])",
+                    RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
                 // Single or multi episode releases with multiple titles, then season and episode numbers after the last title. (Title1 / Title2 / ... / S1E1-2 of 6)
                 new Regex(@"^((?<title>.*?)[ ._]\/[ ._])+\(?S(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:\W|_)?E?[ ._]?(?<episode>(?<!\d+)\d{1,2}(?!\d+))(?:-(?<episode>(?<!\d+)\d{1,2}(?!\d+)))?(?:[ ._]of[ ._](?<episodecount>\d{1,2}))?\)?[ ._][\(\[]",
                     RegexOptions.IgnoreCase | RegexOptions.Compiled),
@@ -338,6 +342,10 @@ namespace NzbDrone.Core.Parser
                 new Regex(@"^(?<title>.+?)[-_. ]+?(?:S|Season|Saison|Series|Stagione)[-_. ]?(?<season>\d{4}(?![-_. ]?\d+))(\W+|_|$)(?<extras>EXTRAS|SUBPACK)?(?!\\)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
+                // Spanish tracker releases
+                new Regex(@"^(?<title>.+?)(?:(?:[-_. ]+?Temporada.+?|\[.+?\])\[Cap)(?:[-_. ]+(?<season>(?<!\d+)\d{1,2})(?<episode>(?<!e|x)(?:[1-9][0-9]|[0][1-9])))+(?:\])",
+                    RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
                 // Supports 103/113 naming
                 new Regex(@"^(?<title>.+?)?(?:(?:[_.-](?<![()\[!]))+(?<season>(?<!\d+)[1-9])(?<episode>[1-9][0-9]|[0][1-9])(?![a-z]|\d+))+(?:[_.]|$)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
@@ -393,10 +401,6 @@ namespace NzbDrone.Core.Parser
 
                 // iTunes 1-05 Title (Quality).ext
                 new Regex(@"^(?:(?<season>(?<!\d+)(?:\d{1,2})(?!\d+))(?:-(?<episode>\d{2,3}(?!\d+))))",
-                    RegexOptions.IgnoreCase | RegexOptions.Compiled),
-
-                // Spanish tracker releases
-                new Regex(@"^(?<title>.+?)(?:(?:[-_. ]+?Temporada.+?|\[.+?\])\[Cap[-_.])(?<season>(?<!\d+)\d{1,2})(?<episode>(?<!e|x)(?:[1-9][0-9]|[0][1-9]))(?:\])",
                     RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 // Anime Range - Title Absolute Episode Number (ep01-12)
@@ -552,7 +556,7 @@ namespace NzbDrone.Core.Parser
 
         // Handle Exception Release Groups that don't follow -RlsGrp; Manual List
         // name only...be very careful with this last; high chance of false positives
-        private static readonly Regex ExceptionReleaseGroupRegexExact = new Regex(@"(?<releasegroup>(?:D\-Z0N3|Fight-BB|VARYG|E\.N\.D|KRaLiMaRKo|BluDragon)\b)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        private static readonly Regex ExceptionReleaseGroupRegexExact = new Regex(@"(?<releasegroup>(?:D\-Z0N3|Fight-BB|VARYG|E\.N\.D|KRaLiMaRKo|BluDragon|DarQ)\b)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         // groups whose releases end with RlsGroup) or RlsGroup]
         private static readonly Regex ExceptionReleaseGroupRegex = new Regex(@"(?<=[._ \[])(?<releasegroup>(Silence|afm72|Panda|Ghost|MONOLITH|Tigole|Joy|ImE|UTR|t3nzin|Anime Time|Project Angel|Hakata Ramen|HONE|Vyndros|SEV|Garshasp|Kappa|Natty|RCVR|SAMPA|YOGI|r00t|EDGE2020|RZeroX)(?=\]|\)))", RegexOptions.IgnoreCase | RegexOptions.Compiled);
@@ -574,6 +578,8 @@ namespace NzbDrone.Core.Parser
         private static readonly Regex RequestInfoRegex = new Regex(@"^(?:\[.+?\])+", RegexOptions.Compiled);
 
         private static readonly string[] Numbers = new[] { "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine" };
+
+        private static readonly Regex MultiRegex = new (@"[_. ](?<multi>multi)[_. ]", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public static ParsedEpisodeInfo ParsePath(string path)
         {
@@ -957,6 +963,11 @@ namespace NzbDrone.Core.Parser
             });
 
             return title;
+        }
+
+        public static bool HasMultipleLanguages(string title)
+        {
+            return MultiRegex.IsMatch(title);
         }
 
         private static SeriesTitleInfo GetSeriesTitleInfo(string title, MatchCollection matchCollection)

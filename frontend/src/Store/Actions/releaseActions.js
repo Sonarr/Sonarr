@@ -269,8 +269,9 @@ export const defaultState = {
 };
 
 export const persistState = [
-  'releases.selectedFilterKey',
+  'releases.episode.selectedFilterKey',
   'releases.episode.customFilters',
+  'releases.season.selectedFilterKey',
   'releases.season.customFilters'
 ];
 

@@ -5,6 +5,7 @@ import { sizes } from 'Helpers/Props';
 import createSeriesQueueItemsDetailsSelector, {
   SeriesQueueDetails,
 } from 'Series/Index/createSeriesQueueDetailsSelector';
+import { SeriesStatus } from 'Series/Series';
 import getProgressBarKind from 'Utilities/Series/getProgressBarKind';
 import translate from 'Utilities/String/translate';
 import styles from './SeriesIndexProgressBar.css';
@@ -13,7 +14,7 @@ interface SeriesIndexProgressBarProps {
   seriesId: number;
   seasonNumber?: number;
   monitored: boolean;
-  status: string;
+  status: SeriesStatus;
   episodeCount: number;
   episodeFileCount: number;
   totalEpisodeCount: number;

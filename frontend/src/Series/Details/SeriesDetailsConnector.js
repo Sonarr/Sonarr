@@ -152,7 +152,7 @@ class SeriesDetailsConnector extends Component {
   // Lifecycle
 
   componentDidMount() {
-    registerPagePopulator(this.populate);
+    registerPagePopulator(this.populate, ['seriesUpdated']);
     this.populate();
   }
 

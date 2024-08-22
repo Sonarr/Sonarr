@@ -193,7 +193,7 @@ namespace NzbDrone.Core.IndexerSearch
             foreach (var item in dict)
             {
                 item.Value.Episodes = item.Value.Episodes.Distinct().ToList();
-                item.Value.SceneTitles = item.Value.SceneTitles.Distinct().ToList();
+                item.Value.SceneTitles = item.Value.SceneTitles.Distinct(StringComparer.InvariantCultureIgnoreCase).ToList();
             }
 
             return dict.Values.ToList();
@@ -221,7 +221,7 @@ namespace NzbDrone.Core.IndexerSearch
 
             foreach (var item in dict)
             {
-                item.Value.SceneTitles = item.Value.SceneTitles.Distinct().ToList();
+                item.Value.SceneTitles = item.Value.SceneTitles.Distinct(StringComparer.InvariantCultureIgnoreCase).ToList();
             }
 
             return dict.Values.ToList();
@@ -463,7 +463,7 @@ namespace NzbDrone.Core.IndexerSearch
             spec.UserInvokedSearch = userInvokedSearch;
             spec.InteractiveSearch = interactiveSearch;
 
-            if (!spec.SceneTitles.Contains(series.Title))
+            if (!spec.SceneTitles.Contains(series.Title, StringComparer.InvariantCultureIgnoreCase))
             {
                 spec.SceneTitles.Add(series.Title);
             }

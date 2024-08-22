@@ -19,5 +19,5 @@ export const all = [
   PRIMARY,
   PURPLE,
   SUCCESS,
-  WARNING
-];
+  WARNING,
+] as const;

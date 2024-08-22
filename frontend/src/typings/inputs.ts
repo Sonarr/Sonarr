@@ -1,4 +1,6 @@
-export type CheckInputChanged = {
+export type InputChanged<T = unknown> = {
   name: string;
-  value: boolean;
+  value: T;
 };
+
+export type CheckInputChanged = InputChanged<boolean>;

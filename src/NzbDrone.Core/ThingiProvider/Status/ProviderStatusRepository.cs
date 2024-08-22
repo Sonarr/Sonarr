@@ -8,6 +8,7 @@ namespace NzbDrone.Core.ThingiProvider.Status
         where TModel : ProviderStatusBase, new()
     {
         TModel FindByProviderId(int providerId);
+        void DeleteByProviderId(int providerId);
     }
 
     public class ProviderStatusRepository<TModel> : BasicRepository<TModel>, IProviderStatusRepository<TModel>
@@ -21,6 +22,11 @@ namespace NzbDrone.Core.ThingiProvider.Status
         public TModel FindByProviderId(int providerId)
         {
             return Query(c => c.ProviderId == providerId).SingleOrDefault();
+        }
+
+        public void DeleteByProviderId(int providerId)
+        {
+            Delete(c => c.ProviderId == providerId);
         }
     }
 }

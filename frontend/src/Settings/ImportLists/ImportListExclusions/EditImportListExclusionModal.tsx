@@ -32,7 +32,7 @@ function EditImportListExclusionModal(
     <Modal size={sizes.MEDIUM} isOpen={isOpen} onModalClose={onModalClosePress}>
       <EditImportListExclusionModalContent
         {...otherProps}
-        onModalClose={onModalClose}
+        onModalClose={onModalClosePress}
       />
     </Modal>
   );
