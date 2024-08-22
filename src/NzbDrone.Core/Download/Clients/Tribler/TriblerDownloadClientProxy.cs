@@ -9,13 +9,9 @@ namespace NzbDrone.Core.Download.Clients.Tribler
     public interface ITriblerDownloadClientProxy
     {
         ICollection<Download> GetDownloads(TriblerDownloadSettings settings);
-
         ICollection<File> GetDownloadFiles(TriblerDownloadSettings settings, Download downloadItem);
-
         GetTriblerSettingsResponse GetConfig(TriblerDownloadSettings settings);
-
         void RemoveDownload(TriblerDownloadSettings settings, DownloadClientItem item, bool deleteData);
-
         string AddFromMagnetLink(TriblerDownloadSettings settings, AddDownloadRequest downloadRequest);
     }
 
@@ -61,13 +57,12 @@ namespace NzbDrone.Core.Download.Clients.Tribler
         {
             var httpRequest = requestBuilder;
 
-            HttpResponse response;
-
             _logger.Debug("Url: {0}", httpRequest.Url);
 
             try
             {
-                response = _httpClient.Execute(httpRequest);
+                var response = _httpClient.Execute(httpRequest);
+                return Json.Deserialize<T>(response.Content);
             }
             catch (HttpException ex)
             {
@@ -79,7 +74,6 @@ namespace NzbDrone.Core.Download.Clients.Tribler
                 throw new DownloadClientUnavailableException("Unable to connect to Tribler. Status Code: {0}", ex.Response.StatusCode, ex);
             }
 
-            return Json.Deserialize<T>(response.Content);
         }
 
         public GetTriblerSettingsResponse GetConfig(TriblerDownloadSettings settings)
@@ -111,7 +105,6 @@ namespace NzbDrone.Core.Download.Clients.Tribler
             var deleteRequestBuilder = getRequestBuilder(settings, "downloads/" + item.DownloadId.ToLower());
             deleteRequestBuilder.Method = System.Net.Http.HttpMethod.Delete;
 
-            // manually set content of delete request.
             var deleteRequest = deleteRequestBuilder.Build();
             deleteRequest.SetContent(Json.ToJson(deleteDownloadRequestObject));
 
@@ -123,15 +116,10 @@ namespace NzbDrone.Core.Download.Clients.Tribler
             var addDownloadRequestBuilder = getRequestBuilder(settings, "downloads");
             addDownloadRequestBuilder.Method = System.Net.Http.HttpMethod.Put;
 
-            // manually set content of download request.
             var addDownloadRequest = addDownloadRequestBuilder.Build();
             addDownloadRequest.SetContent(Json.ToJson(downloadRequest));
 
-            var infoHashAsString = ProcessRequest<AddDownloadResponse>(addDownloadRequest).Infohash;
-
-            // run hash through InfoHash class to ensure the correct casing.
-            var infoHash = MonoTorrent.InfoHash.FromHex(infoHashAsString);
-            return infoHash.ToHex();
+            return ProcessRequest<AddDownloadResponse>(addDownloadRequest).Infohash;
         }
     }
 }

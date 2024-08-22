@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using FluentValidation.Results;
-using MonoTorrent;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
@@ -66,7 +65,7 @@ namespace NzbDrone.Core.Download.Clients.Tribler
 
                 var item = new DownloadClientItem
                 {
-                    DownloadId = InfoHash.FromHex(download.Infohash).ToHex(),
+                    DownloadId = download.Infohash,
                     Title = download.Name,
 
                     DownloadClientInfo = DownloadClientItemClientInfo.FromDownloadClient(this, false) // TODO: WHAT IS POST-IMPORT
@@ -152,7 +151,7 @@ namespace NzbDrone.Core.Download.Clients.Tribler
                         break;
                 }
 
-                // override status' if completed but progress is not finished
+                // Override status if completed, but not finished downloading
                 if (download.Status == DownloadStatus.Stopped && download.Progress < 1)
                 {
                     item.Status = DownloadItemStatus.Paused;
@@ -162,6 +161,7 @@ namespace NzbDrone.Core.Download.Clients.Tribler
                 if (download.Error != null && download.Error.Length > 0)
                 {
                     item.Status = DownloadItemStatus.Warning; // maybe this should be an error?
+                    item.Message = download.Error;
                 }
 
                 // done (finished seeding & stopped, guessed)
@@ -302,7 +302,7 @@ namespace NzbDrone.Core.Download.Clients.Tribler
             {
                 _logger.Error(ex, ex.Message);
 
-                return new ValidationFailure("APIKey", _localizationService.GetLocalizedString("DownloadClientValidationApiKeyIncorrect"));
+                return new ValidationFailure("ApiKey", _localizationService.GetLocalizedString("DownloadClientValidationApiKeyIncorrect"));
             }
             catch (DownloadClientUnavailableException ex)
             {
