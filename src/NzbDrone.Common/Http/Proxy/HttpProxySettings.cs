@@ -33,7 +33,6 @@ namespace NzbDrone.Common.Http.Proxy
                     var hostlist = BypassFilter.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
                     for (var i = 0; i < hostlist.Length; i++)
                     {
-                        hostlist[i] = hostlist[i].Trim();
                         if (hostlist[i].StartsWith("*"))
                         {
                             hostlist[i] = ";" + hostlist[i];
