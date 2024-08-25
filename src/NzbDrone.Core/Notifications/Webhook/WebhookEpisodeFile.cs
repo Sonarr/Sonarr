@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Notifications.Webhook
         {
             Id = episodeFile.Id;
             RelativePath = episodeFile.RelativePath;
-            Path = episodeFile.Path;
+            Path = System.IO.Path.Combine(episodeFile.Series.Value.Path, episodeFile.RelativePath);
             Quality = episodeFile.Quality.Quality.Name;
             QualityVersion = episodeFile.Quality.Revision.Version;
             ReleaseGroup = episodeFile.ReleaseGroup;
