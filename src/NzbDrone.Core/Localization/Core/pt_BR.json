@@ -2102,5 +2102,7 @@
     "NotificationsTelegramSettingsMetadataLinks": "Links de Metadados",
     "NotificationsTelegramSettingsMetadataLinksHelpText": "Adicione links aos metadados da série ao enviar notificações",
     "DeleteSelected": "Excluir Selecionado",
-    "DeleteSelectedImportListExclusionsMessageText": "Tem certeza de que deseja excluir as listas de importação selecionadas das exclusões?"
+    "DeleteSelectedImportListExclusionsMessageText": "Tem certeza de que deseja excluir as listas de importação selecionadas das exclusões?",
+    "LogSizeLimit": "Limite de Tamanho do Registro",
+    "LogSizeLimitHelpText": "Tamanho máximo do arquivo de registro em MB antes do arquivamento. O padrão é 1 MB."
 }
