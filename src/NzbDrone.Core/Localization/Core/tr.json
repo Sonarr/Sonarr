@@ -452,7 +452,7 @@
     "NotificationsAppriseSettingsStatelessUrlsHelpText": "Bildirimin nereye gönderilmesi gerektiğini belirten, virgülle ayrılmış bir veya daha fazla URL. Kalıcı Depolama kullanılıyorsa boş bırakın.",
     "NotificationsDiscordSettingsOnManualInteractionFields": "Manuel Etkileşimlerde",
     "NotificationsEmbySettingsSendNotifications": "Bildirim Gönder",
-    "NotificationsEmbySettingsSendNotificationsHelpText": "MediaBrowser'ın yapılandırılmış sağlayıcılara bildirim göndermesini sağlayın",
+    "NotificationsEmbySettingsSendNotificationsHelpText": "Emby'nin yapılandırılmış sağlayıcılara bildirim göndermesini sağlayın. Jellyfin'de desteklenmiyor.",
     "NotificationsJoinSettingsDeviceIdsHelpText": "Kullanımdan kaldırıldı, bunun yerine Cihaz Adlarını kullanın. Bildirim göndermek istediğiniz Cihaz Kimliklerinin virgülle ayrılmış listesi. Ayarlanmadığı takdirde tüm cihazlar bildirim alacaktır.",
     "NotificationsMailgunSettingsApiKeyHelpText": "MailGun'dan oluşturulan API anahtarı",
     "NotificationsMailgunSettingsUseEuEndpointHelpText": "AB MailGun uç noktasını kullanmayı etkinleştirin",
@@ -480,7 +480,7 @@
     "NotificationsEmailSettingsCcAddressHelpText": "E-posta CC alıcılarının virgülle ayrılmış listesi",
     "NotificationsEmailSettingsCcAddress": "CC Adres(ler)i",
     "NotificationsEmailSettingsRecipientAddress": "Alıcı Adres(ler)i",
-    "NotificationsEmbySettingsUpdateLibraryHelpText": "İçe Aktarma, Yeniden Adlandırma veya Silme sırasında Kitaplık Güncellensin mi?",
+    "NotificationsEmbySettingsUpdateLibraryHelpText": "İçe Aktarma, Yeniden Adlandırma veya Silme sırasında Kitaplığı Güncelleyin",
     "NotificationsGotifySettingsAppToken": "Uygulama Jetonu",
     "NotificationsJoinSettingsDeviceIds": "Cihaz Kimlikleri",
     "NotificationsJoinSettingsNotificationPriority": "Bildirim Önceliği",
@@ -849,5 +849,9 @@
     "UnableToImportAutomatically": "Otomatikman İçe Aktarılamıyor",
     "Any": "Herhangi",
     "ShowTags": "Etiketleri göster",
-    "ShowTagsHelpText": "Etiketleri posterin altında göster"
+    "ShowTagsHelpText": "Etiketleri posterin altında göster",
+    "DeleteSelected": "Seçileni Sil",
+    "LogSizeLimit": "Log Boyutu Sınırı",
+    "LogSizeLimitHelpText": "Arşivlemeden önce MB cinsinden maksimum log dosya boyutu. Varsayılan 1 MB'tır.",
+    "ProgressBarProgress": "İlerleme Çubuğu %{progress} seviyesinde"
 }

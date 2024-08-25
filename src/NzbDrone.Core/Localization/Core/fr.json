@@ -1176,7 +1176,7 @@
     "Total": "Total",
     "Upcoming": "À venir",
     "UpdateAutomaticallyHelpText": "Téléchargez et installez automatiquement les mises à jour. Vous pourrez toujours installer à partir du système : mises à jour",
-    "UpdateAvailableHealthCheckMessage": "Une nouvelle mise à jour est disponible : {version}",
+    "UpdateAvailableHealthCheckMessage": "Une nouvelle mise à jour est disponible : {version}",
     "UpdateFiltered": "Mise à jour filtrée",
     "IconForSpecialsHelpText": "Afficher l'icône pour les épisodes spéciaux (saison 0)",
     "Ignored": "Ignoré",
@@ -1724,8 +1724,8 @@
     "NotificationsGotifySettingsPriorityHelpText": "Priorité de la notification",
     "NotificationsGotifySettingsAppTokenHelpText": "Le jeton d'application généré par Gotify",
     "NotificationsGotifySettingsAppToken": "Jeton d'app",
-    "NotificationsEmbySettingsUpdateLibraryHelpText": "Mettre à jour la bibliothèque lors de l'importation, du changement de nom ou de la suppression",
-    "NotificationsEmbySettingsSendNotificationsHelpText": "Demandez à Emby d'envoyer des notifications aux fournisseurs configurés. Non pris en charge sur Jellyfin.",
+    "NotificationsEmbySettingsUpdateLibraryHelpText": "Mise à jour de la bibliothèque en cas d'importation, de renommage ou de suppression",
+    "NotificationsEmbySettingsSendNotificationsHelpText": "Demander à Emby d'envoyer des notifications aux fournisseurs configurés. Non supporté par Jellyfin.",
     "NotificationsEmbySettingsSendNotifications": "Envoyer des notifications",
     "NotificationsEmailSettingsServerHelpText": "Nom d'hôte ou adresse IP du serveur de courriel",
     "NotificationsEmailSettingsServer": "Serveur",
@@ -2100,5 +2100,9 @@
     "SeasonsMonitoredPartial": "Partielle",
     "SeasonsMonitoredNone": "Aucune",
     "SeasonsMonitoredStatus": "Saisons surveillées",
-    "NotificationsTelegramSettingsMetadataLinks": "Liens de métadonnées"
+    "NotificationsTelegramSettingsMetadataLinks": "Liens de métadonnées",
+    "LogSizeLimitHelpText": "Taille maximale du fichier journal en Mo avant archivage. La valeur par défaut est de 1 Mo.",
+    "DeleteSelected": "Supprimer la sélection",
+    "LogSizeLimit": "Limite de taille du journal",
+    "DeleteSelectedImportListExclusionsMessageText": "Êtes-vous sûr de vouloir supprimer les exclusions de la liste d'importation sélectionnée ?"
 }
