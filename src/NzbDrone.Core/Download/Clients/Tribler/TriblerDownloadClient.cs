@@ -157,7 +157,6 @@ namespace NzbDrone.Core.Download.Clients.Tribler
                     item.Status = DownloadItemStatus.Paused;
                 }
 
-                // override status if error is set
                 if (download.Error != null && download.Error.Length > 0)
                 {
                     item.Status = DownloadItemStatus.Warning; // maybe this should be an error?
