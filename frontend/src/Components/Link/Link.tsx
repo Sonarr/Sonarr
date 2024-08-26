@@ -78,7 +78,7 @@ export default function Link<C extends ElementType = 'button'>({
 
   return (
     <Component
-      type={type || 'button'}
+      type={component === 'button' ? type || 'button' : undefined}
       target={target}
       className={linkClass}
       disabled={isDisabled}
