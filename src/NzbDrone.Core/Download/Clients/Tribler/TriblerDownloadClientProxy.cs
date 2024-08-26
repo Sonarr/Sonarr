@@ -73,7 +73,6 @@ namespace NzbDrone.Core.Download.Clients.Tribler
 
                 throw new DownloadClientUnavailableException("Unable to connect to Tribler. Status Code: {0}", ex.Response.StatusCode, ex);
             }
-
         }
 
         public GetTriblerSettingsResponse GetConfig(TriblerDownloadSettings settings)
