@@ -264,7 +264,7 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
       <TableRowCell className={styles.indexerFlags}>
         {indexerFlags ? (
           <Popover
-            anchor={<Icon name={icons.FLAG} kind={kinds.PRIMARY} />}
+            anchor={<Icon name={icons.FLAG} />}
             title={translate('IndexerFlags')}
             body={<IndexerFlags indexerFlags={indexerFlags} />}
             position={tooltipPositions.LEFT}

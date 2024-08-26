@@ -2,7 +2,7 @@ import moment from 'moment';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CommandBody } from 'Commands/Command';
-import Icon from 'Components/Icon';
+import Icon, { IconProps } from 'Components/Icon';
 import IconButton from 'Components/Link/IconButton';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
@@ -19,7 +19,10 @@ import translate from 'Utilities/String/translate';
 import QueuedTaskRowNameCell from './QueuedTaskRowNameCell';
 import styles from './QueuedTaskRow.css';
 
-function getStatusIconProps(status: string, message: string | undefined) {
+function getStatusIconProps(
+  status: string,
+  message: string | undefined
+): IconProps {
   const title = titleCase(status);
 
   switch (status) {
