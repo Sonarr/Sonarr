@@ -6671,17 +6671,7 @@
           "200": {
             "description": "OK",
             "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/SeriesResource"
-                }
-              },
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SeriesResource"
-                }
-              },
-              "text/json": {
                 "schema": {
                   "$ref": "#/components/schemas/SeriesResource"
                 }
@@ -6763,17 +6753,7 @@
           "200": {
             "description": "OK",
             "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/SeriesResource"
-                }
-              },
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SeriesResource"
-                }
-              },
-              "text/json": {
                 "schema": {
                   "$ref": "#/components/schemas/SeriesResource"
                 }
