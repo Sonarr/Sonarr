@@ -381,7 +381,7 @@ namespace NzbDrone.Core.Configuration
             }
 
             // If SSL is enabled and a cert hash is still in the config file or cert path is empty disable SSL
-            if (EnableSsl && (GetValue("SslCertHash", null).IsNotNullOrWhiteSpace() || SslCertPath.IsNullOrWhiteSpace()))
+            if (EnableSsl && (GetValue("SslCertHash", string.Empty, false).IsNotNullOrWhiteSpace() || SslCertPath.IsNullOrWhiteSpace()))
             {
                 SetValue("EnableSsl", false);
             }
