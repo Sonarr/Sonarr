@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Common.Extensions;
@@ -23,9 +24,19 @@ namespace Sonarr.Api.V3.Profiles.Release
 
             SharedValidator.RuleFor(d => d).Custom((restriction, context) =>
             {
-                if (restriction.MapIgnored().Empty() && restriction.MapRequired().Empty())
+                if (restriction.MapRequired().Empty() && restriction.MapIgnored().Empty())
                 {
-                    context.AddFailure("'Must contain' or 'Must not contain' is required");
+                    context.AddFailure(nameof(ReleaseProfile.Required), "'Must contain' or 'Must not contain' is required");
+                }
+
+                if (restriction.MapRequired().Any(t => t.IsNullOrWhiteSpace()))
+                {
+                    context.AddFailure(nameof(ReleaseProfile.Required), "'Must contain' should not contain whitespaces or an empty string");
+                }
+
+                if (restriction.MapIgnored().Any(t => t.IsNullOrWhiteSpace()))
+                {
+                    context.AddFailure(nameof(ReleaseProfile.Ignored), "'Must not contain' should not contain whitespaces or an empty string");
                 }
 
                 if (restriction.Enabled && restriction.IndexerId != 0 && !_indexerFactory.Exists(restriction.IndexerId))

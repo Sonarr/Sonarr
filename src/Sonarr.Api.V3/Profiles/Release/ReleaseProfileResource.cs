@@ -88,18 +88,18 @@ namespace Sonarr.Api.V3.Profiles.Release
             {
                 if (array.ValueKind == JsonValueKind.String)
                 {
-                    return array.GetString().Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                    return array.GetString().Split(new[] { ',' }, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries).ToList();
                 }
 
                 if (array.ValueKind == JsonValueKind.Array)
                 {
-                    return JsonSerializer.Deserialize<List<string>>(array);
+                    return array.Deserialize<List<string>>();
                 }
             }
 
             if (resource is string str)
             {
-                return str.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                return str.Split(new[] { ',' }, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries).ToList();
             }
 
             throw new BadRequestException($"Invalid field {title}, should be string or string array");
