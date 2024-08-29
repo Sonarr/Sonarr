@@ -19,34 +19,50 @@
 
   &.primary {
     background-color: var(--primaryColor);
+
+    &:global(.colorImpaired) {
+      background: repeating-linear-gradient(25deg, color(#5d9cec shade(5%)), color(#5d9cec shade(5%)) 5px, color(#5d9cec shade(70%)) 5px, color(#5d9cec shade(70%)) 10px);
+    }
+  }
+
+  &.success {
+    background-color: var(--successColor);
+
+    &:global(.colorImpaired) {
+      background: repeating-linear-gradient(50deg, color(#00853d shade(5%)), color(#00853d shade(5%)) 5px, color(#00853d shade(70%)) 5px, color(#00853d shade(70%)) 10px);
+    }
   }
 
   &.danger {
     background-color: var(--dangerColor);
 
     &:global(.colorImpaired) {
-      background: repeating-linear-gradient(90deg, color(#f05050 shade(5%)), color(#f05050 shade(5%)) 5px, color(#f05050 shade(15%)) 5px, color(#f05050 shade(15%)) 10px);
+      background: repeating-linear-gradient(75deg, color(#f05050 shade(5%)), color(#f05050 shade(5%)) 5px, color(#f05050 shade(70%)) 5px, color(#f05050 shade(70%)) 10px);
     }
-  }
-
-  &.success {
-    background-color: var(--successColor);
-  }
-
-  &.purple {
-    background-color: var(--purple);
   }
 
   &.warning {
     background-color: var(--warningColor);
 
     &:global(.colorImpaired) {
-      background: repeating-linear-gradient(45deg, #ffa500, #ffa500 5px, color(#ffa500 tint(15%)) 5px, color(#ffa500 tint(15%)) 10px);
+      background: repeating-linear-gradient(100deg, #ffa500, #ffa500 5px, color(#ffa500 shade(70%)) 5px, color(#ffa500 shade(70%)) 10px);
+    }
+  }
+
+  &.purple {
+    background-color: var(--purple);
+
+    &:global(.colorImpaired) {
+      background: repeating-linear-gradient(125deg, color(#7a43b6 shade(5%)), color(#7a43b6 shade(5%)) 5px, color(#7a43b6 shade(70%)) 5px, color(#7a43b6 shade(70%)) 10px);
     }
   }
 
   &.info {
     background-color: var(--infoColor);
+
+    &:global(.colorImpaired) {
+       background: repeating-linear-gradient(150deg, color(#5d9cec shade(5%)), color(#5d9cec shade(5%)) 5px, color(#5d9cec shade(70%)) 5px, color(#5d9cec shade(70%)) 10px);
+    }
   }
 }
 
