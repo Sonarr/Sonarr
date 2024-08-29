@@ -1,4 +1,4 @@
-$fullColorGradient: rgba(244, 245, 246, 0.2);
+$fullColorGradient: rgba(0, 0, 0, 0.4);
 
 .event {
   position: relative;
@@ -81,6 +81,11 @@ $fullColorGradient: rgba(244, 245, 246, 0.2);
 
   &:global(.colorImpaired) {
     border-left-color: color(#27c24c saturation(+15%)) !important;
+    background: repeating-linear-gradient(150deg, var(--colorImpairedGradientDark), var(--colorImpairedGradientDark) 5px, var(--colorImpairedGradient) 5px, var(--colorImpairedGradient) 10px);
+  }
+
+  &:global(.fullColor.colorImpaired) {
+    background: repeating-linear-gradient(150deg, $fullColorGradient, $fullColorGradient 5px, transparent 5px, transparent 10px);
   }
 }
 
@@ -89,6 +94,15 @@ $fullColorGradient: rgba(244, 245, 246, 0.2);
 
   &:global(.fullColor) {
     background-color: rgba(122, 67, 182, 0.4) !important;
+  }
+
+  &:global(.colorImpaired) {
+    border-left-color: color(#7a43b6 saturation(+15%)) !important;
+    background: repeating-linear-gradient(125deg, var(--colorImpairedGradientDark), var(--colorImpairedGradientDark) 5px, var(--colorImpairedGradient) 5px, var(--colorImpairedGradient) 10px);
+  }
+
+  &:global(.fullColor.colorImpaired) {
+    background: repeating-linear-gradient(125deg, $fullColorGradient, $fullColorGradient 5px, transparent 5px, transparent 10px);
   }
 }
 
@@ -100,11 +114,12 @@ $fullColorGradient: rgba(244, 245, 246, 0.2);
   }
 
   &:global(.colorImpaired) {
-    background: repeating-linear-gradient(45deg, var(--colorImpairedGradientDark), var(--colorImpairedGradientDark) 5px, var(--colorImpairedGradient) 5px, var(--colorImpairedGradient) 10px);
+    border-left-color: color(#adadad saturation(+15%)) !important;
+    background: repeating-linear-gradient(50deg, var(--colorImpairedGradientDark), var(--colorImpairedGradientDark) 5px, var(--colorImpairedGradient) 5px, var(--colorImpairedGradient) 10px);
   }
 
   &:global(.fullColor.colorImpaired) {
-    background: repeating-linear-gradient(45deg, $fullColorGradient, $fullColorGradient 5px, transparent 5px, transparent 10px);
+    background: repeating-linear-gradient(50deg, $fullColorGradient, $fullColorGradient 5px, transparent 5px, transparent 10px);
   }
 }
 
@@ -116,11 +131,12 @@ $fullColorGradient: rgba(244, 245, 246, 0.2);
   }
 
   &:global(.colorImpaired) {
-    background: repeating-linear-gradient(90deg, var(--colorImpairedGradientDark), var(--colorImpairedGradientDark) 5px, var(--colorImpairedGradient) 5px, var(--colorImpairedGradient) 10px);
+    border-left-color: color(#ffa500 saturation(+15%)) !important;
+    background: repeating-linear-gradient(75deg, var(--colorImpairedGradientDark), var(--colorImpairedGradientDark) 5px, var(--colorImpairedGradient) 5px, var(--colorImpairedGradient) 10px);
   }
 
   &:global(.fullColor.colorImpaired) {
-    background: repeating-linear-gradient(90deg, $fullColorGradient, $fullColorGradient 5px, transparent 5px, transparent 10px);
+    background: repeating-linear-gradient(75deg, $fullColorGradient, $fullColorGradient 5px, transparent 5px, transparent 10px);
   }
 }
 
@@ -133,11 +149,11 @@ $fullColorGradient: rgba(244, 245, 246, 0.2);
 
   &:global(.colorImpaired) {
     border-left-color: color(#f05050 saturation(+15%)) !important;
-    background: repeating-linear-gradient(90deg, var(--colorImpairedGradientDark), var(--colorImpairedGradientDark) 5px, var(--colorImpairedGradient) 5px, var(--colorImpairedGradient) 10px);
+    background: repeating-linear-gradient(100deg, var(--colorImpairedGradientDark), var(--colorImpairedGradientDark) 5px, var(--colorImpairedGradient) 5px, var(--colorImpairedGradient) 10px);
   }
 
   &:global(.fullColor.colorImpaired) {
-    background: repeating-linear-gradient(90deg, $fullColorGradient, $fullColorGradient 5px, transparent 5px, transparent 10px);
+    background: repeating-linear-gradient(100deg, $fullColorGradient, $fullColorGradient 5px, transparent 5px, transparent 10px);
   }
 }
 
@@ -149,10 +165,11 @@ $fullColorGradient: rgba(244, 245, 246, 0.2);
   }
 
   &:global(.colorImpaired) {
-    background: repeating-linear-gradient(90deg, var(--colorImpairedGradientDark), var(--colorImpairedGradientDark) 5px, var(--colorImpairedGradient) 5px, var(--colorImpairedGradient) 10px);
+    border-left-color: color(#5d9cec saturation(+15%)) !important;
+    background: repeating-linear-gradient(25deg, var(--colorImpairedGradientDark), var(--colorImpairedGradientDark) 5px, var(--colorImpairedGradient) 5px, var(--colorImpairedGradient) 10px);
   }
 
   &:global(.fullColor.colorImpaired) {
-    background: repeating-linear-gradient(90deg, $fullColorGradient, $fullColorGradient 5px, transparent 5px, transparent 10px);
+    background: repeating-linear-gradient(25deg, $fullColorGradient, $fullColorGradient 5px, transparent 5px, transparent 10px);
   }
 }
