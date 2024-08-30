@@ -1,9 +1,8 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import Label from 'Components/Label';
 import { kinds } from 'Helpers/Props';
 
-function getKind(seeders) {
+function getKind(seeders: number = 0) {
   if (seeders > 50) {
     return kinds.PRIMARY;
   }
@@ -19,7 +18,7 @@ function getKind(seeders) {
   return kinds.DANGER;
 }
 
-function getPeersTooltipPart(peers, peersUnit) {
+function getPeersTooltipPart(peersUnit: string, peers?: number) {
   if (peers == null) {
     return `Unknown ${peersUnit}s`;
   }
@@ -31,27 +30,27 @@ function getPeersTooltipPart(peers, peersUnit) {
   return `${peers} ${peersUnit}s`;
 }
 
-function Peers(props) {
-  const {
-    seeders,
-    leechers
-  } = props;
+interface PeersProps {
+  seeders?: number;
+  leechers?: number;
+}
+
+function Peers(props: PeersProps) {
+  const { seeders, leechers } = props;
 
   const kind = getKind(seeders);
 
   return (
     <Label
       kind={kind}
-      title={`${getPeersTooltipPart(seeders, 'seeder')}, ${getPeersTooltipPart(leechers, 'leecher')}`}
+      title={`${getPeersTooltipPart('seeder', seeders)}, ${getPeersTooltipPart(
+        'leecher',
+        leechers
+      )}`}
     >
       {seeders == null ? '-' : seeders} / {leechers == null ? '-' : leechers}
     </Label>
   );
 }
-
-Peers.propTypes = {
-  seeders: PropTypes.number,
-  leechers: PropTypes.number
-};
 
 export default Peers;

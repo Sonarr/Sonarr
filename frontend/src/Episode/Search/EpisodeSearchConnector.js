@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import * as commandNames from 'Commands/commandNames';
-import InteractiveSearchConnector from 'InteractiveSearch/InteractiveSearchConnector';
+import InteractiveSearch from 'InteractiveSearch/InteractiveSearch';
 import { executeCommand } from 'Store/Actions/commandActions';
 import EpisodeSearch from './EpisodeSearch';
 
@@ -65,7 +65,7 @@ class EpisodeSearchConnector extends Component {
 
     if (this.state.isInteractiveSearchOpen) {
       return (
-        <InteractiveSearchConnector
+        <InteractiveSearch
           type="episode"
           searchPayload={{ episodeId }}
         />

@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react';
+import { useSelector } from 'react-redux';
 import ProtocolLabel from 'Activity/Queue/ProtocolLabel';
 import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
@@ -8,15 +9,13 @@ import TableRowCell from 'Components/Table/Cells/TableRowCell';
 import TableRow from 'Components/Table/TableRow';
 import Popover from 'Components/Tooltip/Popover';
 import Tooltip from 'Components/Tooltip/Tooltip';
-import type DownloadProtocol from 'DownloadClient/DownloadProtocol';
 import EpisodeFormats from 'Episode/EpisodeFormats';
 import EpisodeLanguages from 'Episode/EpisodeLanguages';
 import EpisodeQuality from 'Episode/EpisodeQuality';
 import IndexerFlags from 'Episode/IndexerFlags';
 import { icons, kinds, tooltipPositions } from 'Helpers/Props';
-import Language from 'Language/Language';
-import { QualityModel } from 'Quality/Quality';
-import CustomFormat from 'typings/CustomFormat';
+import createUISettingsSelector from 'Store/Selectors/createUISettingsSelector';
+import Release from 'typings/Release';
 import formatDateTime from 'Utilities/Date/formatDateTime';
 import formatAge from 'Utilities/Number/formatAge';
 import formatBytes from 'Utilities/Number/formatBytes';
@@ -24,7 +23,6 @@ import formatCustomFormatScore from 'Utilities/Number/formatCustomFormatScore';
 import translate from 'Utilities/String/translate';
 import OverrideMatchModal from './OverrideMatch/OverrideMatchModal';
 import Peers from './Peers';
-import ReleaseEpisode from './ReleaseEpisode';
 import ReleaseSceneIndicator from './ReleaseSceneIndicator';
 import styles from './InteractiveSearchRow.css';
 
@@ -72,43 +70,7 @@ function getDownloadTooltip(
   return translate('AddToDownloadQueue');
 }
 
-interface InteractiveSearchRowProps {
-  guid: string;
-  protocol: DownloadProtocol;
-  age: number;
-  ageHours: number;
-  ageMinutes: number;
-  publishDate: string;
-  title: string;
-  infoUrl: string;
-  indexerId: number;
-  indexer: string;
-  size: number;
-  seeders?: number;
-  leechers?: number;
-  quality: QualityModel;
-  languages: Language[];
-  customFormats: CustomFormat[];
-  customFormatScore: number;
-  sceneMapping?: object;
-  seasonNumber?: number;
-  episodeNumbers?: number[];
-  absoluteEpisodeNumbers?: number[];
-  mappedSeriesId?: number;
-  mappedSeasonNumber?: number;
-  mappedEpisodeNumbers?: number[];
-  mappedAbsoluteEpisodeNumbers?: number[];
-  mappedEpisodeInfo: ReleaseEpisode[];
-  indexerFlags: number;
-  rejections: string[];
-  episodeRequested: boolean;
-  downloadAllowed: boolean;
-  isDaily: boolean;
-  isGrabbing: boolean;
-  isGrabbed: boolean;
-  grabError?: string;
-  longDateFormat: string;
-  timeFormat: string;
+interface InteractiveSearchRowProps extends Release {
   searchPayload: object;
   onGrabPress(...args: unknown[]): void;
 }
@@ -148,12 +110,14 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
     isDaily,
     isGrabbing = false,
     isGrabbed = false,
-    longDateFormat,
-    timeFormat,
     grabError,
     searchPayload,
     onGrabPress,
   } = props;
+
+  const { longDateFormat, timeFormat } = useSelector(
+    createUISettingsSelector()
+  );
 
   const [isConfirmGrabModalOpen, setIsConfirmGrabModalOpen] = useState(false);
   const [isOverrideModalOpen, setIsOverrideModalOpen] = useState(false);
