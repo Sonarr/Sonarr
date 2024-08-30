@@ -2,9 +2,9 @@ import React from 'react';
 import Modal from 'Components/Modal/Modal';
 import DownloadProtocol from 'DownloadClient/DownloadProtocol';
 import { sizes } from 'Helpers/Props';
-import ReleaseEpisode from 'InteractiveSearch/ReleaseEpisode';
 import Language from 'Language/Language';
 import { QualityModel } from 'Quality/Quality';
+import { ReleaseEpisode } from 'typings/Release';
 import OverrideMatchModalContent from './OverrideMatchModalContent';
 
 interface OverrideMatchModalProps {

@@ -18,7 +18,6 @@ import SelectLanguageModal from 'InteractiveImport/Language/SelectLanguageModal'
 import SelectQualityModal from 'InteractiveImport/Quality/SelectQualityModal';
 import SelectSeasonModal from 'InteractiveImport/Season/SelectSeasonModal';
 import SelectSeriesModal from 'InteractiveImport/Series/SelectSeriesModal';
-import ReleaseEpisode from 'InteractiveSearch/ReleaseEpisode';
 import Language from 'Language/Language';
 import { QualityModel } from 'Quality/Quality';
 import Series from 'Series/Series';
@@ -26,6 +25,7 @@ import { grabRelease } from 'Store/Actions/releaseActions';
 import { fetchDownloadClients } from 'Store/Actions/settingsActions';
 import createEnabledDownloadClientsSelector from 'Store/Selectors/createEnabledDownloadClientsSelector';
 import { createSeriesSelectorForHook } from 'Store/Selectors/createSeriesSelector';
+import { ReleaseEpisode } from 'typings/Release';
 import translate from 'Utilities/String/translate';
 import SelectDownloadClientModal from './DownloadClient/SelectDownloadClientModal';
 import OverrideMatchData from './OverrideMatchData';

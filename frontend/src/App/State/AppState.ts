@@ -8,6 +8,7 @@ import InteractiveImportAppState from './InteractiveImportAppState';
 import ParseAppState from './ParseAppState';
 import PathsAppState from './PathsAppState';
 import QueueAppState from './QueueAppState';
+import ReleasesAppState from './ReleasesAppState';
 import RootFolderAppState from './RootFolderAppState';
 import SeriesAppState, { SeriesIndexAppState } from './SeriesAppState';
 import SettingsAppState from './SettingsAppState';
@@ -72,6 +73,7 @@ interface AppState {
   parse: ParseAppState;
   paths: PathsAppState;
   queue: QueueAppState;
+  releases: ReleasesAppState;
   rootFolders: RootFolderAppState;
   series: SeriesAppState;
   seriesIndex: SeriesIndexAppState;
