@@ -307,7 +307,7 @@
     "TagDetails": "Dettagli Etichetta - {label}",
     "BranchUpdate": "Branca da usare per aggiornare {appName}",
     "DefaultNotFoundMessage": "Ti devi essere perso, non c'è nulla da vedere qui.",
-    "DeleteIndexerMessageText": "Sicuro di voler eliminare l'indicizzatore '{name}'?",
+    "DeleteIndexerMessageText": "Sei sicuro di voler eliminare l'indicizzatore '{name}'?",
     "Socks5": "Socks5 (Supporto TOR)",
     "DeleteEpisodeFileMessage": "Sei sicuro di volere eliminare '{path}'?",
     "NotificationsKodiSettingsCleanLibraryHelpText": "Pulisci libreria dopo l'aggiornamento",
@@ -331,7 +331,7 @@
     "RemoveFromDownloadClient": "Rimuovi dal client di download",
     "RemoveQueueItemConfirmation": "Sei sicuro di voler rimuovere '{sourceTitle}' dalla coda?",
     "NoIndexersFound": "Nessun indicizzatore trovato",
-    "DeleteImportListMessageText": "Sei sicuro di volere eliminare la lista '{name}'?",
+    "DeleteImportListMessageText": "Sei sicuro di voler eliminare la lista '{name}'?",
     "DeleteDelayProfile": "Elimina Profilo di Ritardo",
     "DeleteTagMessageText": "Sei sicuro di voler eliminare l'etichetta '{label}'?",
     "MinutesSixty": "60 Minuti: {sixty}",
@@ -355,7 +355,7 @@
     "CustomFormatsSpecificationMaximumSize": "Dimensione Massima",
     "CustomFormatsSpecificationMinimumSize": "Dimensione Minima",
     "DelayProfile": "Profilo di Ritardo",
-    "DeleteBackupMessageText": "Sei sicuro di voler cancellare il backup '{name}'?",
+    "DeleteBackupMessageText": "Sei sicuro di voler eliminare il backup '{name}'?",
     "DeleteDelayProfileMessageText": "Sei sicuro di volere eliminare questo profilo di ritardo?",
     "NotificationsTelegramSettingsSendSilentlyHelpText": "Invia il messaggio silenziosamente. L'utente riceverà una notifica senza suono",
     "NotificationsPushoverSettingsRetry": "Riprova",
@@ -927,5 +927,7 @@
     "EditRestriction": "Modifica Restrizione",
     "EnableSsl": "Abilita SSL",
     "EpisodeFileDeleted": "File dell'Episodio Eliminato",
-    "Importing": "Importando"
+    "Importing": "Importando",
+    "DownloadClientDelugeSettingsDirectory": "Cartella Download",
+    "CountCustomFormatsSelected": "{count} formati personalizzati selezionati"
 }

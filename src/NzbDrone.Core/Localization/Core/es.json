@@ -2104,5 +2104,11 @@
     "DeleteSelected": "Borrar seleccionados",
     "DeleteSelectedImportListExclusionsMessageText": "¿Estás seguro que quieres borrar las exclusiones de listas de importación seleccionadas?",
     "LogSizeLimit": "Límite de tamaño de registro",
-    "LogSizeLimitHelpText": "Máximo tamaño de archivo de registro en MB antes de archivarlo. Predeterminado es 1MB."
+    "LogSizeLimitHelpText": "Máximo tamaño de archivo de registro en MB antes de archivarlo. Predeterminado es 1MB.",
+    "NoCustomFormatsFound": "Ningún formato personalizado encontrado",
+    "DeleteSelectedCustomFormats": "Borrar formato(s) personalizado(s)",
+    "DeleteSelectedCustomFormatsMessageText": "¿Estás seguro que quieres borrar los {count} formato(s) personalizado(s) seleccionado(s)?",
+    "EditSelectedCustomFormats": "Editar formatos personalizados seleccionados",
+    "ManageCustomFormats": "Gestionar formatos personalizados",
+    "CountCustomFormatsSelected": "{count} formato(s) personalizado(s) seleccionado(s)"
 }
