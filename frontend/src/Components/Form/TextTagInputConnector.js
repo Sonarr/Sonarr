@@ -86,6 +86,7 @@ class TextTagInputConnector extends Component {
     newValue.splice(tagToReplace.index, 1);
 
     const newTagValue = newTag.name.trim();
+
     if (newTagValue) {
       newValue.push(newTagValue);
     }
