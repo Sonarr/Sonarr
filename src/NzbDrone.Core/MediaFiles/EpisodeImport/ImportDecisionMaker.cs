@@ -119,17 +119,17 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
         {
             ImportDecision decision = null;
 
-            var fileEpisodeInfo = Parser.Parser.ParsePath(localEpisode.Path);
-
-            localEpisode.FileEpisodeInfo = fileEpisodeInfo;
-            localEpisode.Size = _diskProvider.GetFileSize(localEpisode.Path);
-            localEpisode.ReleaseType = localEpisode.DownloadClientEpisodeInfo?.ReleaseType ??
-                                       localEpisode.FolderEpisodeInfo?.ReleaseType ??
-                                       localEpisode.FileEpisodeInfo?.ReleaseType ??
-                                       ReleaseType.Unknown;
-
             try
             {
+                var fileEpisodeInfo = Parser.Parser.ParsePath(localEpisode.Path);
+
+                localEpisode.FileEpisodeInfo = fileEpisodeInfo;
+                localEpisode.Size = _diskProvider.GetFileSize(localEpisode.Path);
+                localEpisode.ReleaseType = localEpisode.DownloadClientEpisodeInfo?.ReleaseType ??
+                                           localEpisode.FolderEpisodeInfo?.ReleaseType ??
+                                           localEpisode.FileEpisodeInfo?.ReleaseType ??
+                                           ReleaseType.Unknown;
+
                 _aggregationService.Augment(localEpisode, downloadClientItem);
 
                 if (localEpisode.Episodes.Empty())
