@@ -154,5 +154,37 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
             releases[1].Languages.Should().BeEquivalentTo(new[] { Language.English, Language.Spanish });
             releases[2].Languages.Should().BeEquivalentTo(new[] { Language.French });
         }
+
+        [TestCase("no custom attributes", IndexerFlags.Scene, false)]
+        [TestCase("prematch=1 attribute", IndexerFlags.Scene, true)]
+        [TestCase("haspretime=1 attribute", IndexerFlags.Scene, true)]
+        [TestCase("prematch=0 attribute", IndexerFlags.Scene, false)]
+        [TestCase("haspretime=0 attribute", IndexerFlags.Scene, false)]
+        [TestCase("no custom attributes", IndexerFlags.Nuked, false)]
+        [TestCase("nuked=1 attribute", IndexerFlags.Nuked, true)]
+        [TestCase("nuked=0 attribute", IndexerFlags.Nuked, false)]
+        [TestCase("prematch=1 and nuked=1 attributes", IndexerFlags.Scene | IndexerFlags.Nuked, true)]
+        [TestCase("haspretime=1 and nuked=1 attributes", IndexerFlags.Scene | IndexerFlags.Nuked, true)]
+        public async Task should_parse_indexer_flags(string releaseGuid, IndexerFlags indexerFlags, bool flagExpected)
+        {
+            var feed = ReadAllText(@"Files/Indexers/Newznab/newznab_indexerflags.xml");
+
+            Mocker.GetMock<IHttpClient>()
+                .Setup(o => o.ExecuteAsync(It.Is<HttpRequest>(v => v.Method == HttpMethod.Get)))
+                .Returns<HttpRequest>(r => Task.FromResult(new HttpResponse(r, new HttpHeader(), feed)));
+
+            var releases = await Subject.FetchRecent();
+
+            var release = releases.Should().ContainSingle(r => r.Guid == releaseGuid).Subject;
+
+            if (flagExpected)
+            {
+                release.IndexerFlags.Should().HaveFlag(indexerFlags, because: $"release has {releaseGuid}");
+            }
+            else
+            {
+                release.IndexerFlags.Should().NotHaveFlag(indexerFlags, because: $"release has {releaseGuid}");
+            }
+        }
     }
 }
