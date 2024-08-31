@@ -49,7 +49,11 @@ class TextTagInputConnector extends Component {
     const newTags = tag.name.startsWith('/') ? [tag.name] : split(tag.name);
 
     newTags.forEach((newTag) => {
-      newValue.push(newTag.trim());
+      const newTagValue = newTag.trim();
+
+      if (newTagValue) {
+        newValue.push(newTagValue);
+      }
     });
 
     onChange({ name, value: newValue });
@@ -80,7 +84,12 @@ class TextTagInputConnector extends Component {
 
     const newValue = [...valueArray];
     newValue.splice(tagToReplace.index, 1);
-    newValue.push(newTag.name.trim());
+
+    const newTagValue = newTag.name.trim();
+
+    if (newTagValue) {
+      newValue.push(newTagValue);
+    }
 
     onChange({ name, value: newValue });
   };
