@@ -69,7 +69,7 @@ namespace NzbDrone.Core.Test.CustomFormats.Specifications.LanguageSpecification
         }
 
         [Test]
-        public void should_match_negated_except_language_if_language_is_missing()
+        public void should_match_negated_except_language_if_language_is_only_present_language()
         {
             Subject.Value = Language.French.Id;
             Subject.ExceptLanguage = true;
