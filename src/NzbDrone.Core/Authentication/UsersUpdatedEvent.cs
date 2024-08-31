@@ -1,6 +1,6 @@
 using NzbDrone.Common.Messaging;
 
-namespace NzbDrone.Core.Users
+namespace NzbDrone.Core.Authentication
 {
     public class UsersUpdatedEvent : IEvent
     {

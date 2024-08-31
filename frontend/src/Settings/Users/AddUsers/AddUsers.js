@@ -6,7 +6,6 @@ import Icon from 'Components/Icon';
 import PageSectionContent from 'Components/Page/PageSectionContent';
 import { icons } from 'Helpers/Props';
 import { fetchRootFolders } from 'Store/Actions/rootFolderActions';
-import { fetchUsers } from 'Store/Actions/settingsActions';
 import createSortedSectionSelector from 'Store/Selectors/createSortedSectionSelector';
 import sortByProp from 'Utilities/Array/sortByProp';
 import translate from 'Utilities/String/translate';
@@ -16,24 +15,14 @@ import styles from './AddUsers.css';
 export default function AddUsers() {
   const {
     error,
-    items,
-    isDeleting,
     isFetching,
     isPopulated
   } = useSelector(
     createSortedSectionSelector('settings.users', sortByProp('username'))
   );
 
-  // const userList = useSelector(createUserDetailsSelector());
   const dispatch = useDispatch();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-
-  // const onClonePress = useCallback((id) => {
-  //   dispatch(cloneAutoTagging({ id }));
-
-  //   setTagsFromId(id);
-  //   setIsEditModalOpen(true);
-  // }, [dispatch, setIsEditModalOpen]);
 
   const onEditPress = useCallback(() => {
     setIsEditModalOpen(true);
@@ -43,12 +32,7 @@ export default function AddUsers() {
     setIsEditModalOpen(false);
   }, [setIsEditModalOpen]);
 
-  // const onConfirmDelete = useCallback((id) => {
-  //   dispatch(deleteAutoTagging({ id }));
-  // }, [dispatch]);
-
   useEffect(() => {
-    dispatch(fetchUsers());
     dispatch(fetchRootFolders());
   }, [dispatch]);
 

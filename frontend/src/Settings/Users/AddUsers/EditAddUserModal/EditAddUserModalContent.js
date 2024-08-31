@@ -17,11 +17,13 @@ import { inputTypes, kinds } from 'Helpers/Props';
 import { saveUser, setUserValue } from 'Store/Actions/Settings/users';
 import { createProviderSettingsSelectorHook } from 'Store/Selectors/createProviderSettingsSelector';
 import translate from 'Utilities/String/translate';
+import styles from './EditAddUserModalContent.css';
 
 export default function EditAddUserModalContent(props) {
   const {
     id,
-    onModalClose
+    onModalClose,
+    onDeletePress
   } = props;
 
   const {
@@ -35,7 +37,9 @@ export default function EditAddUserModalContent(props) {
   } = useSelector(createProviderSettingsSelectorHook('users', id));
 
   const dispatch = useDispatch();
+
   const onInputChange = useCallback(({ name, value }) => {
+
     dispatch(setUserValue({ name, value }));
   }, [dispatch]);
 
@@ -53,15 +57,31 @@ export default function EditAddUserModalContent(props) {
     isSavingRef.current = isSaving;
   }, [isSaving, saveError, onModalClose]);
 
+  const roleOptions = [
+    {
+      key: 'admin',
+      get value() {
+        return translate('Admin');
+      }
+    },
+    {
+      key: 'readOnly',
+      get value() {
+        return translate('ReadOnly');
+      }
+    }
+  ];
+
   const {
     username,
-    password
+    password,
+    role = { value: 'Admin' }
   } = item;
 
   return (
     <ModalContent onModalClose={onModalClose}>
       <ModalHeader>
-        {id ? translate('EditAutoTag') : translate('AddUser')}
+        {id ? translate('EditUser') : translate('AddUser')}
       </ModalHeader>
 
       <ModalBody>
@@ -69,7 +89,6 @@ export default function EditAddUserModalContent(props) {
           {
             isFetching ? <LoadingIndicator />: null
           }
-
           {
             !isFetching && !!error ?
               <Alert kind={kinds.DANGER}>
@@ -77,7 +96,6 @@ export default function EditAddUserModalContent(props) {
               </Alert> :
               null
           }
-
           {
             !isFetching && !error ?
               <div>
@@ -108,6 +126,18 @@ export default function EditAddUserModalContent(props) {
                       onChange={onInputChange}
                     />
                   </FormGroup>
+
+                  <FormGroup>
+                    <FormLabel>{translate('Role')}</FormLabel>
+
+                    <FormInputGroup
+                      type={inputTypes.SELECT}
+                      name="role"
+                      values={roleOptions}
+                      onChange={onInputChange}
+                      {...role}
+                    />
+                  </FormGroup>
                 </Form>
 
               </div> :
@@ -116,6 +146,16 @@ export default function EditAddUserModalContent(props) {
         </div>
       </ModalBody>
       <ModalFooter>
+
+        {id && (
+          <Button
+            className={styles.deleteButton}
+            kind={kinds.DANGER}
+            onPress={onDeletePress}
+          >
+            {translate('Delete')}
+          </Button>
+        )}
 
         <Button
           onPress={onModalClose}
@@ -137,5 +177,7 @@ export default function EditAddUserModalContent(props) {
 
 EditAddUserModalContent.propTypes = {
   id: PropTypes.number,
-  onModalClose: PropTypes.func.isRequired
+  onModalClose: PropTypes.func.isRequired,
+  onDeletePress: PropTypes.func,
+  userId: PropTypes.number
 };

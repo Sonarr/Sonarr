@@ -9,6 +9,7 @@ import EditAddUserModalContent from './EditAddUserModalContent';
 export default function EditAddUserModal(props) {
   const {
     isOpen,
+    id,
     onModalClose: onOriginalModalClose,
     ...otherProps
   } = props;
@@ -38,6 +39,7 @@ export default function EditAddUserModal(props) {
         {...otherProps}
         onContentHeightChange={onContentHeightChange}
         onModalClose={onModalClose}
+        id={id}
       />
     </Modal>
   );
@@ -45,6 +47,7 @@ export default function EditAddUserModal(props) {
 
 EditAddUserModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
-  onModalClose: PropTypes.func.isRequired
+  onModalClose: PropTypes.func.isRequired,
+  id: PropTypes.number
 };
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using NzbDrone.Core.Configuration;
+using NzbDrone.Core.Authentication;
 
 namespace Sonarr.Http.Authentication
 {
@@ -23,16 +23,16 @@ namespace Sonarr.Http.Authentication
 
     public class ApiKeyAuthenticationHandler : AuthenticationHandler<ApiKeyAuthenticationOptions>
     {
-        private readonly string _apiKey;
+        private readonly UserService _userService;
 
         public ApiKeyAuthenticationHandler(IOptionsMonitor<ApiKeyAuthenticationOptions> options,
             ILoggerFactory logger,
             UrlEncoder encoder,
             ISystemClock clock,
-            IConfigFileProvider config)
+            UserService userService)
             : base(options, logger, encoder, clock)
         {
-            _apiKey = config.ApiKey;
+            _userService = userService;
         }
 
         private string ParseApiKey()
@@ -61,11 +61,13 @@ namespace Sonarr.Http.Authentication
                 return Task.FromResult(AuthenticateResult.NoResult());
             }
 
-            if (_apiKey == providedApiKey)
+            var user = _userService.FindUserFromApiKey(providedApiKey);
+            if (user != null)
             {
                 var claims = new List<Claim>
                 {
-                    new Claim("ApiKey", "true")
+                    new Claim("ApiKey", "true"),
+                    new Claim(ClaimTypes.Role, user.Role.ToString())
                 };
 
                 var identity = new ClaimsIdentity(claims, Options.AuthenticationType);

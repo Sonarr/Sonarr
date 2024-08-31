@@ -12,6 +12,8 @@ namespace Sonarr.Api.V3.Users
         public string Username { get; set; }
 
         public string Password { get; set; }
+
+        public UserRole Role { get; set; }
     }
 
     public static class UserResourceMapper
@@ -27,7 +29,8 @@ namespace Sonarr.Api.V3.Users
             {
                 Id = model.Id,
                 Identifier = model.Identifier,
-                Username = model.Username
+                Username = model.Username,
+                Role = model.Role
             };
         }
 
@@ -41,7 +44,10 @@ namespace Sonarr.Api.V3.Users
             return new User
             {
                 Id = resource.Id,
-                Identifier = resource.Identifier
+                Username = resource.Username,
+                Identifier = resource.Identifier,
+                Password = string.IsNullOrEmpty(resource.Password) ? null : resource.Password,
+                Role = resource.Role
             };
         }
 
@@ -53,6 +59,11 @@ namespace Sonarr.Api.V3.Users
         public static string GetPassword(this UserResource resource)
         {
             return resource.Password;
+        }
+
+        public static UserRole getRole(this UserResource resource)
+        {
+            return resource.Role;
         }
 
         public static List<UserResource> ToResource(this IEnumerable<User> models)
