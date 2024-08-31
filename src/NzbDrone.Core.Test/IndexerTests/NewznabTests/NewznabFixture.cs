@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using DryIoc.ImTools;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -155,17 +156,16 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
             releases[2].Languages.Should().BeEquivalentTo(new[] { Language.French });
         }
 
-        [TestCase("no custom attributes", IndexerFlags.Scene, false)]
-        [TestCase("prematch=1 attribute", IndexerFlags.Scene, true)]
-        [TestCase("haspretime=1 attribute", IndexerFlags.Scene, true)]
-        [TestCase("prematch=0 attribute", IndexerFlags.Scene, false)]
-        [TestCase("haspretime=0 attribute", IndexerFlags.Scene, false)]
-        [TestCase("no custom attributes", IndexerFlags.Nuked, false)]
-        [TestCase("nuked=1 attribute", IndexerFlags.Nuked, true)]
-        [TestCase("nuked=0 attribute", IndexerFlags.Nuked, false)]
-        [TestCase("prematch=1 and nuked=1 attributes", IndexerFlags.Scene | IndexerFlags.Nuked, true)]
-        [TestCase("haspretime=1 and nuked=1 attributes", IndexerFlags.Scene | IndexerFlags.Nuked, true)]
-        public async Task should_parse_indexer_flags(string releaseGuid, IndexerFlags indexerFlags, bool flagExpected)
+        [TestCase("no custom attributes")]
+        [TestCase("prematch=1 attribute", IndexerFlags.Scene)]
+        [TestCase("haspretime=1 attribute", IndexerFlags.Scene)]
+        [TestCase("prematch=0 attribute")]
+        [TestCase("haspretime=0 attribute")]
+        [TestCase("nuked=1 attribute", IndexerFlags.Nuked)]
+        [TestCase("nuked=0 attribute")]
+        [TestCase("prematch=1 and nuked=1 attributes", IndexerFlags.Scene, IndexerFlags.Nuked)]
+        [TestCase("haspretime=0 and nuked=0 attributes")]
+        public async Task should_parse_indexer_flags(string releaseGuid, params IndexerFlags[] indexerFlags)
         {
             var feed = ReadAllText(@"Files/Indexers/Newznab/newznab_indexerflags.xml");
 
@@ -177,14 +177,7 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
 
             var release = releases.Should().ContainSingle(r => r.Guid == releaseGuid).Subject;
 
-            if (flagExpected)
-            {
-                release.IndexerFlags.Should().HaveFlag(indexerFlags, because: $"release has {releaseGuid}");
-            }
-            else
-            {
-                release.IndexerFlags.Should().NotHaveFlag(indexerFlags, because: $"release has {releaseGuid}");
-            }
+            indexerFlags.ForEach(f => release.IndexerFlags.Should().HaveFlag(f));
         }
     }
 }

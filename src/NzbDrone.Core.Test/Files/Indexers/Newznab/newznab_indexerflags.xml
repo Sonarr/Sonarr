@@ -112,7 +112,7 @@
 
 		<item>
 			<title>title</title>
-			<guid isPermaLink="true">haspretime=1 and nuked=1 attributes</guid>
+			<guid isPermaLink="true">haspretime=0 and nuked=0 attributes</guid>
 			<link>link</link>
 			<comments>comments</comments>
 			<pubDate>Sat, 31 Aug 2024 12:28:40 +0300</pubDate>
@@ -120,8 +120,8 @@
 			<description>description</description>
 			<enclosure url="url" length="500" type="application/x-nzb"/>
 
-			<newznab:attr name="haspretime" value="1"/>
-			<newznab:attr name="nuked" value="1"/>
+			<newznab:attr name="haspretime" value="0"/>
+			<newznab:attr name="nuked" value="0"/>
 		</item>
 
 	</channel>
