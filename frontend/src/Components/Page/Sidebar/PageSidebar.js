@@ -177,10 +177,18 @@ const links = [
   }
 ];
 
-function getActiveParent(pathname) {
-  let activeParent = links[0].to;
+const userRole = window.Sonarr.role;
+const filteredLinks = links.filter((link) => {
+  if (link.iconName === icons.SYSTEM || link.iconName === icons.SETTINGS) {
+    return userRole === 'Admin';
+  }
+  return true;
+});
 
-  links.forEach((link) => {
+function getActiveParent(pathname) {
+  let activeParent = filteredLinks[0].to;
+
+  filteredLinks.forEach((link) => {
     if (link.to && link.to === pathname) {
       activeParent = link.to;
 
@@ -470,7 +478,7 @@ class PageSidebar extends Component {
         >
           <div>
             {
-              links.map((link) => {
+              filteredLinks.map((link) => {
                 const childWithStatusComponent = _.find(link.children, (child) => {
                   return !!child.statusComponent;
                 });

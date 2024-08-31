@@ -43,7 +43,7 @@ namespace Sonarr.Http.Frontend
         [HttpGet("/initialize.json")]
         public IActionResult Index()
         {
-            _apiKey = GetCurrentUser();
+            _apiKey = GetCurrentUser().ApiKey;
             return Content(GetContent(), "application/json");
         }
 
@@ -54,10 +54,13 @@ namespace Sonarr.Http.Frontend
                 return _generatedContent;
             }
 
+            var role = GetCurrentUser().Role;
+
             var builder = new StringBuilder();
             builder.AppendLine("{");
             builder.AppendLine($"  \"apiRoot\": \"{_urlBase}/api/v3\",");
             builder.AppendLine($"  \"apiKey\": \"{_apiKey}\",");
+            builder.AppendLine($"  \"role\": \"{role}\",");
             builder.AppendLine($"  \"release\": \"{BuildInfo.Release}\",");
             builder.AppendLine($"  \"version\": \"{BuildInfo.Version.ToString()}\",");
             builder.AppendLine($"  \"instanceName\": \"{_configFileProvider.InstanceName.ToString()}\",");
@@ -74,7 +77,7 @@ namespace Sonarr.Http.Frontend
             return _generatedContent;
         }
 
-        private string GetCurrentUser()
+        private User GetCurrentUser()
         {
             var user = _httpContextAccessor.HttpContext.User;
 
@@ -87,7 +90,7 @@ namespace Sonarr.Http.Frontend
             }
 
             var identifier = Guid.Parse(identifierClaim.Value);
-            return _userService.FindUser(identifier).ApiKey;
+            return _userService.FindUser(identifier);
         }
     }
 }

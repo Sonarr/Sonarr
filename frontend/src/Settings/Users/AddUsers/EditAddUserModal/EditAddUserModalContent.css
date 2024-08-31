@@ -10,7 +10,7 @@
 }
   
 .addSpecification {
-  composes: addUser from '../addUser.css';
+  composes: addUser from '../AddUser.css';
 
   background-color: var(--cardAlternateBackgroundColor);
   color: var(--gray);
