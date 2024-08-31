@@ -206,5 +206,35 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 new List<CustomFormat>())
             .Should().BeTrue();
         }
+
+        [Test]
+        public void should_return_false_when_minimum_custom_score_is_not_met_and_upgrading_is_allowed()
+        {
+            _qualityProfile.UpgradeAllowed = true;
+            _qualityProfile.MinUpgradeFormatScore = 51;
+
+            Subject.IsUpgradable(
+                _qualityProfile,
+                new QualityModel(Quality.DVD),
+                new List<CustomFormat> { _customFormatOne },
+                new QualityModel(Quality.DVD),
+                new List<CustomFormat> { _customFormatTwo })
+            .Should().BeFalse();
+        }
+
+        [Test]
+        public void should_return_true_when_minimum_custom_score_is_met_and_upgrading_is_allowed()
+        {
+            _qualityProfile.UpgradeAllowed = true;
+            _qualityProfile.MinUpgradeFormatScore = 50;
+
+            Subject.IsUpgradable(
+                _qualityProfile,
+                new QualityModel(Quality.DVD),
+                new List<CustomFormat> { _customFormatOne },
+                new QualityModel(Quality.DVD),
+                new List<CustomFormat> { _customFormatTwo })
+            .Should().BeTrue();
+        }
     }
 }

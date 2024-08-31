@@ -65,6 +65,7 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
                     {
                         profile.MinFormatScore = 0;
                         profile.CutoffFormatScore = 0;
+                        profile.MinUpgradeFormatScore = 1;
                     }
 
                     updatedProfiles.Add(profile);
@@ -73,7 +74,7 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
 
             if (updatedProfiles.Any())
             {
-                _repository.SetFields(updatedProfiles, p => p.FormatItems, p => p.MinFormatScore, p => p.CutoffFormatScore);
+                _repository.SetFields(updatedProfiles, p => p.FormatItems, p => p.MinFormatScore, p => p.CutoffFormatScore, p => p.MinUpgradeFormatScore);
             }
         }
     }
