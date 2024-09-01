@@ -27,8 +27,6 @@ interface HistoryDetailsProps {
   sourceTitle: string;
   data: HistoryData;
   downloadId?: string;
-  shortDateFormat: string;
-  timeFormat: string;
 }
 
 function HistoryDetails(props: HistoryDetailsProps) {
