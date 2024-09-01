@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import IconButton from 'Components/Link/IconButton';
 import RelativeDateCell from 'Components/Table/Cells/RelativeDateCell';
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
@@ -20,7 +20,6 @@ import { QualityModel } from 'Quality/Quality';
 import SeriesTitleLink from 'Series/SeriesTitleLink';
 import useSeries from 'Series/useSeries';
 import { fetchHistory, markAsFailed } from 'Store/Actions/historyActions';
-import createUISettingsSelector from 'Store/Selectors/createUISettingsSelector';
 import CustomFormat from 'typings/CustomFormat';
 import { HistoryData, HistoryEventType } from 'typings/History';
 import formatCustomFormatScore from 'Utilities/Number/formatCustomFormatScore';
@@ -71,10 +70,6 @@ function HistoryRow(props: HistoryRowProps) {
   const dispatch = useDispatch();
   const series = useSeries(seriesId);
   const episode = useEpisode(episodeId, 'episodes');
-
-  const { shortDateFormat, timeFormat } = useSelector(
-    createUISettingsSelector()
-  );
 
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
 
@@ -260,8 +255,6 @@ function HistoryRow(props: HistoryRowProps) {
         data={data}
         downloadId={downloadId}
         isMarkingAsFailed={isMarkingAsFailed}
-        shortDateFormat={shortDateFormat}
-        timeFormat={timeFormat}
         onMarkAsFailedPress={handleMarkAsFailedPress}
         onModalClose={handleDetailsModalClose}
       />

@@ -38,8 +38,6 @@ interface HistoryDetailsModalProps {
   data: HistoryData;
   downloadId?: string;
   isMarkingAsFailed: boolean;
-  shortDateFormat: string;
-  timeFormat: string;
   onMarkAsFailedPress: () => void;
   onModalClose: () => void;
 }
@@ -52,8 +50,6 @@ function HistoryDetailsModal(props: HistoryDetailsModalProps) {
     data,
     downloadId,
     isMarkingAsFailed = false,
-    shortDateFormat,
-    timeFormat,
     onMarkAsFailedPress,
     onModalClose,
   } = props;
@@ -69,8 +65,6 @@ function HistoryDetailsModal(props: HistoryDetailsModalProps) {
             sourceTitle={sourceTitle}
             data={data}
             downloadId={downloadId}
-            shortDateFormat={shortDateFormat}
-            timeFormat={timeFormat}
           />
         </ModalBody>
 
