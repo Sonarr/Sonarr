@@ -255,6 +255,7 @@ class EditQualityProfileModalContent extends Component {
                               <FormInputGroup
                                 type={inputTypes.NUMBER}
                                 name="minUpgradeFormatScore"
+                                min={1}
                                 {...minUpgradeFormatScore}
                                 helpText={translate('MinimumUpgradeCustomFormatScoreHelpText')}
                                 onChange={onInputChange}
