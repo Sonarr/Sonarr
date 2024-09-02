@@ -67,5 +67,15 @@ namespace NzbDrone.Core.Test.CustomFormats.Specifications.LanguageSpecification
 
             Subject.IsSatisfiedBy(_input).Should().BeTrue();
         }
+
+        [Test]
+        public void should_match_negated_except_language_if_language_is_only_present_language()
+        {
+            Subject.Value = Language.French.Id;
+            Subject.ExceptLanguage = true;
+            Subject.Negate = true;
+
+            Subject.IsSatisfiedBy(_input).Should().BeTrue();
+        }
     }
 }

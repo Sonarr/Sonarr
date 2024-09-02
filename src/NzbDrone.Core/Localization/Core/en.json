@@ -290,6 +290,8 @@
   "CustomFormatsSettingsTriggerInfo": "A Custom Format will be applied to a release or file when it matches at least one of each of the different condition types chosen.",
   "CustomFormatsSpecificationFlag": "Flag",
   "CustomFormatsSpecificationLanguage": "Language",
+  "CustomFormatsSpecificationExceptLanguage": "Except Language",
+  "CustomFormatsSpecificationExceptLanguageHelpText": "Matches if any language other than the selected language is present",
   "CustomFormatsSpecificationMaximumSize": "Maximum Size",
   "CustomFormatsSpecificationMaximumSizeHelpText": "Release must be less than or equal to this size",
   "CustomFormatsSpecificationMinimumSize": "Minimum Size",
