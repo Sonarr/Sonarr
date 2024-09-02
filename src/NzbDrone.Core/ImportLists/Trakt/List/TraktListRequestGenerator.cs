@@ -22,7 +22,7 @@ namespace NzbDrone.Core.ImportLists.Trakt.List
         {
             var link = Settings.BaseUrl.Trim();
 
-            link += $"/users/{Settings.Username.Trim()}/lists/{Settings.Listname.ToUrlSlug()}/items/shows?limit={Settings.Limit}";
+            link += $"/users/{Settings.Username.Trim()}/lists/{Settings.Listname.ToUrlSlug()}/items/show,season,episode?limit={Settings.Limit}";
 
             var request = new ImportListRequest(link, HttpAccept.Json);
 
