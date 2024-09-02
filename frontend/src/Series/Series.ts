@@ -94,9 +94,9 @@ interface Series extends ModelBase {
   title: string;
   titleSlug: string;
   tvdbId: number;
-  tvMazeId?: number;
-  tvRageId?: number;
-  tmdbId?: number;
+  tvMazeId: number;
+  tvRageId: number;
+  tmdbId: number;
   useSceneNumbering: boolean;
   year: number;
   isSaving?: boolean;
