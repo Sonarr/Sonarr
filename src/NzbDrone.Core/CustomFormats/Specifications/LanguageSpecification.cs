@@ -30,7 +30,7 @@ namespace NzbDrone.Core.CustomFormats
         [FieldDefinition(1, Label = "CustomFormatsSpecificationLanguage", Type = FieldType.Select, SelectOptions = typeof(LanguageFieldConverter))]
         public int Value { get; set; }
 
-        [FieldDefinition(1, Label = "CustomFormatsSpecificationExceptLanguage", HelpText = "CustomFormatsSpecificationExceptLanguageHelpText", Type = FieldType.Select, SelectOptions = typeof(LanguageFieldConverter))]
+        [FieldDefinition(1, Label = "CustomFormatsSpecificationExceptLanguage", HelpText = "CustomFormatsSpecificationExceptLanguageHelpText", Type = FieldType.Checkbox)]
         public bool ExceptLanguage { get; set; }
 
         public override bool IsSatisfiedBy(CustomFormatInput input)
