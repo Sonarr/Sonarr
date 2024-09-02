@@ -26,6 +26,8 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
         public virtual Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
+            var qualityProfile = subject.Series.QualityProfile.Value;
+
             foreach (var file in subject.Episodes.Where(c => c.EpisodeFileId != 0).Select(c => c.EpisodeFile.Value))
             {
                 if (file == null)
@@ -36,15 +38,45 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
                 var customFormats = _formatService.ParseCustomFormat(file);
 
-                _logger.Debug("Comparing file quality with report. Existing file is {0}", file.Quality);
+                _logger.Debug("Comparing file quality with report. Existing file is {0}.", file.Quality);
 
-                if (!_upgradableSpecification.IsUpgradable(subject.Series.QualityProfile,
-                                                           file.Quality,
-                                                           customFormats,
-                                                           subject.ParsedEpisodeInfo.Quality,
-                                                           subject.CustomFormats))
+                if (!_upgradableSpecification.CutoffNotMet(qualityProfile,
+                        file.Quality,
+                        _formatService.ParseCustomFormat(file),
+                        subject.ParsedEpisodeInfo.Quality))
                 {
-                    return Decision.Reject("Existing file on disk is of equal or higher preference: {0}", file.Quality);
+                    _logger.Debug("Cutoff already met, rejecting.");
+
+                    var qualityCutoffIndex = qualityProfile.GetIndex(qualityProfile.Cutoff);
+                    var qualityCutoff = qualityProfile.Items[qualityCutoffIndex.Index];
+
+                    return Decision.Reject("Existing file meets cutoff: {0}", qualityCutoff);
+                }
+
+                var upgradeableRejectReason = _upgradableSpecification.IsUpgradable(qualityProfile,
+                    file.Quality,
+                    customFormats,
+                    subject.ParsedEpisodeInfo.Quality,
+                    subject.CustomFormats);
+
+                switch (upgradeableRejectReason)
+                {
+                    case UpgradeableRejectReason.None:
+                        continue;
+                    case UpgradeableRejectReason.BetterQuality:
+                        return Decision.Reject("Existing file on disk is of equal or higher preference: {0}", file.Quality);
+
+                    case UpgradeableRejectReason.BetterRevision:
+                        return Decision.Reject("Existing file on disk is of equal or higher revision: {0}", file.Quality.Revision);
+
+                    case UpgradeableRejectReason.QualityCutoff:
+                        return Decision.Reject("Existing file on disk meets quality cutoff: {0}", qualityProfile.Items[qualityProfile.GetIndex(qualityProfile.Cutoff).Index]);
+
+                    case UpgradeableRejectReason.CustomFormatCutoff:
+                        return Decision.Reject("Existing file on disk meets Custom Format cutoff: {0}", qualityProfile.CutoffFormatScore);
+
+                    case UpgradeableRejectReason.CustomFormatScore:
+                        return Decision.Reject("Existing file on disk has a equal or higher custom format score: {0}", qualityProfile.CalculateCustomFormatScore(customFormats));
                 }
             }
 
