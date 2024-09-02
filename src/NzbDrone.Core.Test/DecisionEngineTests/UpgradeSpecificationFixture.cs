@@ -107,7 +107,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             var profile = new QualityProfile
                           {
-                              Items = Qualities.QualityFixture.GetDefaultQualities(),
+                              Items = Qualities.QualityFixture.GetDefaultQualities()
                           };
 
             Subject.IsUpgradable(
@@ -117,6 +117,44 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                        new QualityModel(Quality.HDTV720p, new Revision(version: 1)),
                        new List<CustomFormat>())
                    .Should().BeFalse();
+        }
+
+        [Test]
+        public void should_return_true_if_release_has_higher_quality_and_cutoff_is_not_already_met()
+        {
+            var profile = new QualityProfile
+            {
+                Items = Qualities.QualityFixture.GetDefaultQualities(),
+                UpgradeAllowed = true,
+                Cutoff = Quality.HDTV1080p.Id
+            };
+
+            Subject.IsUpgradable(
+                    profile,
+                    new QualityModel(Quality.HDTV720p, new Revision(version: 1)),
+                    new List<CustomFormat>(),
+                    new QualityModel(Quality.HDTV1080p, new Revision(version: 1)),
+                    new List<CustomFormat>())
+                .Should().BeTrue();
+        }
+
+        [Test]
+        public void should_return_false_if_release_has_higher_quality_and_cutoff_is_already_met()
+        {
+            var profile = new QualityProfile
+            {
+                Items = Qualities.QualityFixture.GetDefaultQualities(),
+                UpgradeAllowed = true,
+                Cutoff = Quality.HDTV720p.Id
+            };
+
+            Subject.IsUpgradable(
+                    profile,
+                    new QualityModel(Quality.HDTV720p, new Revision(version: 1)),
+                    new List<CustomFormat>(),
+                    new QualityModel(Quality.HDTV1080p, new Revision(version: 1)),
+                    new List<CustomFormat>())
+                .Should().BeFalse();
         }
     }
 }

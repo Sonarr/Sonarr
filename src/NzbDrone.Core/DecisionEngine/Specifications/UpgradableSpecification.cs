@@ -34,7 +34,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             var qualityCompare = qualityComparer.Compare(newQuality?.Quality, currentQuality.Quality);
             var downloadPropersAndRepacks = _configService.DownloadPropersAndRepacks;
 
-            if (qualityCompare > 0)
+            if (qualityCompare > 0 && QualityCutoffNotMet(qualityProfile, currentQuality, newQuality))
             {
                 _logger.Debug("New item has a better quality. Existing: {0}. New: {1}", currentQuality, newQuality);
                 return true;
@@ -62,6 +62,14 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 qualityRevisionCompare < 0)
             {
                 _logger.Debug("Existing item has a better quality revision, skipping. Existing: {0}. New: {1}", currentQuality, newQuality);
+                return false;
+            }
+
+            if (qualityCompare > 0)
+            {
+                _logger.Debug("Existing item meets cut-off for quality, skipping. Existing: {0}. Cutoff: {1}",
+                    currentQuality,
+                    qualityProfile.Cutoff);
                 return false;
             }
 
@@ -132,7 +140,10 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 return true;
             }
 
-            _logger.Debug("Existing item meets cut-off, skipping. Existing: {0}", currentQuality);
+            _logger.Debug("Existing item meets cut-off, skipping. Existing: {0} [{1}] ({2})",
+                currentQuality,
+                currentFormats.ConcatToString(),
+                profile.CalculateCustomFormatScore(currentFormats));
 
             return false;
         }

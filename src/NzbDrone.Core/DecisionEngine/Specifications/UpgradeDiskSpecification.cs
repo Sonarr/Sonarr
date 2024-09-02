@@ -26,6 +26,8 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
         public virtual Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
+            var qualityProfile = subject.Series.QualityProfile.Value;
+
             foreach (var file in subject.Episodes.Where(c => c.EpisodeFileId != 0).Select(c => c.EpisodeFile.Value))
             {
                 if (file == null)
@@ -36,9 +38,22 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
                 var customFormats = _formatService.ParseCustomFormat(file);
 
-                _logger.Debug("Comparing file quality with report. Existing file is {0}", file.Quality);
+                _logger.Debug("Comparing file quality with report. Existing file is {0}.", file.Quality);
 
-                if (!_upgradableSpecification.IsUpgradable(subject.Series.QualityProfile,
+                if (!_upgradableSpecification.CutoffNotMet(qualityProfile,
+                        file.Quality,
+                        _formatService.ParseCustomFormat(file),
+                        subject.ParsedEpisodeInfo.Quality))
+                {
+                    _logger.Debug("Cutoff already met, rejecting.");
+
+                    var qualityCutoffIndex = qualityProfile.GetIndex(qualityProfile.Cutoff);
+                    var qualityCutoff = qualityProfile.Items[qualityCutoffIndex.Index];
+
+                    return Decision.Reject("Existing file meets cutoff: {0}", qualityCutoff);
+                }
+
+                if (!_upgradableSpecification.IsUpgradable(qualityProfile,
                                                            file.Quality,
                                                            customFormats,
                                                            subject.ParsedEpisodeInfo.Quality,
