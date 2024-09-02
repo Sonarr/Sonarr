@@ -25,6 +25,7 @@ function MissingRow(props) {
     sceneAbsoluteEpisodeNumber,
     unverifiedSceneNumbering,
     airDateUtc,
+    lastSearchTime,
     title,
     isSelected,
     columns,
@@ -109,6 +110,16 @@ function MissingRow(props) {
             );
           }
 
+          if (name === 'episodes.lastSearchTime') {
+            return (
+              <RelativeDateCell
+                key={name}
+                date={lastSearchTime}
+                includeSeconds={true}
+              />
+            );
+          }
+
           if (name === 'status') {
             return (
               <TableRowCell
@@ -156,6 +167,7 @@ MissingRow.propTypes = {
   sceneAbsoluteEpisodeNumber: PropTypes.number,
   unverifiedSceneNumbering: PropTypes.bool.isRequired,
   airDateUtc: PropTypes.string.isRequired,
+  lastSearchTime: PropTypes.string,
   title: PropTypes.string.isRequired,
   isSelected: PropTypes.bool,
   columns: PropTypes.arrayOf(PropTypes.object).isRequired,
