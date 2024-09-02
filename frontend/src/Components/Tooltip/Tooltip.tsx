@@ -65,8 +65,7 @@ function Tooltip(props: TooltipProps) {
 
   const handleMouseLeave = useCallback(() => {
     // Still listen for mouse leave on mobile to allow clicks outside to close the tooltip.
-
-    setTimeout(() => {
+    closeTimeout.current = window.setTimeout(() => {
       setIsOpen(false);
     }, 100);
   }, [setIsOpen]);
@@ -111,18 +110,18 @@ function Tooltip(props: TooltipProps) {
   );
 
   useEffect(() => {
-    const currentTimeout = closeTimeout.current;
-
     if (updater.current && isOpen) {
       updater.current();
     }
+  });
 
+  useEffect(() => {
     return () => {
-      if (currentTimeout) {
-        window.clearTimeout(currentTimeout);
+      if (closeTimeout.current) {
+        window.clearTimeout(closeTimeout.current);
       }
     };
-  });
+  }, []);
 
   return (
     <Manager>
