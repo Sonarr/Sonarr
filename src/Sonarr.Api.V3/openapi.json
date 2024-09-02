@@ -8513,6 +8513,11 @@
             "format": "date-time",
             "nullable": true
           },
+          "lastSearchTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
           "runtime": {
             "type": "integer",
             "format": "int32"
