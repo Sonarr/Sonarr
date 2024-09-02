@@ -33,7 +33,6 @@
     "@types/react": "18.2.79",
     "@types/react-dom": "18.2.25",
     "classnames": "2.3.2",
-    "clipboard": "2.0.11",
     "connected-react-router": "6.9.3",
     "element-class": "0.2.2",
     "filesize": "10.0.7",
