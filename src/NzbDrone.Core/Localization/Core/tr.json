@@ -853,5 +853,7 @@
     "DeleteSelected": "Seçileni Sil",
     "LogSizeLimit": "Log Boyutu Sınırı",
     "LogSizeLimitHelpText": "Arşivlemeden önce MB cinsinden maksimum log dosya boyutu. Varsayılan 1 MB'tır.",
-    "ProgressBarProgress": "İlerleme Çubuğu %{progress} seviyesinde"
+    "ProgressBarProgress": "İlerleme Çubuğu %{progress} seviyesinde",
+    "CountVotes": "{votes} oy",
+    "UpdateAvailableHealthCheckMessage": "Yeni güncelleme mevcut: {version}"
 }
