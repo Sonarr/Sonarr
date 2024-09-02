@@ -76,7 +76,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                         return Decision.Reject("Existing file on disk meets Custom Format cutoff: {0}", qualityProfile.CutoffFormatScore);
 
                     case UpgradeableRejectReason.CustomFormatScore:
-                        return Decision.Reject("Existing file on disk has a higher custom format score: {0}", qualityProfile.CalculateCustomFormatScore(customFormats));
+                        return Decision.Reject("Existing file on disk has a equal or higher custom format score: {0}", qualityProfile.CalculateCustomFormatScore(customFormats));
                 }
             }
 

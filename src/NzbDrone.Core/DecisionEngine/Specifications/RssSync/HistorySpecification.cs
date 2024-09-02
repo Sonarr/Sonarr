@@ -106,7 +106,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
                             return Decision.Reject("{0} grab event in history meets Custom Format cutoff: {1}", rejectionSubject, qualityProfile.CutoffFormatScore);
 
                         case UpgradeableRejectReason.CustomFormatScore:
-                            return Decision.Reject("{0} grab event in history has a higher custom format score: {1}", rejectionSubject, qualityProfile.CalculateCustomFormatScore(customFormats));
+                            return Decision.Reject("{0} grab event in history has an equal or higher custom format score: {1}", rejectionSubject, qualityProfile.CalculateCustomFormatScore(customFormats));
                     }
                 }
             }

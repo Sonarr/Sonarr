@@ -91,7 +91,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                         return Decision.Reject("Release in queue on disk meets Custom Format cutoff: {0}", qualityProfile.CutoffFormatScore);
 
                     case UpgradeableRejectReason.CustomFormatScore:
-                        return Decision.Reject("Release in queue on disk has a higher custom format score: {0}", qualityProfile.CalculateCustomFormatScore(queuedItemCustomFormats));
+                        return Decision.Reject("Release in queue on disk has an equal or higher custom format score: {0}", qualityProfile.CalculateCustomFormatScore(queuedItemCustomFormats));
                 }
 
                 _logger.Debug("Checking if profiles allow upgrading. Queued: {0}", remoteEpisode.ParsedEpisodeInfo.Quality);
