@@ -111,16 +111,4 @@ namespace NzbDrone.Core.Parser.Model
             }
         }
     }
-
-    [Flags]
-    public enum IndexerFlags
-    {
-        Freeleech = 1, // General
-        Halfleech = 2, // General, only 1/2 of download counted
-        DoubleUpload = 4, // General
-        Internal = 8, // General, uploader is an internal release group
-        Scene = 16, // General, the torrent comes from a "scene" group
-        Freeleech75 = 32, // Signifies a torrent counts towards 75 percent of your download quota.
-        Freeleech25 = 64, // Signifies a torrent counts towards 25 percent of your download quota.
-    }
 }

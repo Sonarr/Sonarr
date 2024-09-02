@@ -1,0 +1,128 @@
+﻿<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:newznab="http://www.newznab.com/DTD/2010/feeds/attributes/">
+	<channel>
+		<title>somenewznabindexer.com</title>
+		<description>somenewznabindexer.com Feed</description>
+		<link>https://somenewznabindexer.com/</link>
+		<language>en-gb</language>
+		<webMaster>contact@somenewznabindexer.com</webMaster>
+		<category/>
+		<newznab:response offset="0" total="100"/>
+		<item>
+			<title>title</title>
+			<guid isPermaLink="true">no custom attributes</guid>
+			<link>link</link>
+			<comments>comments</comments>
+			<pubDate>Sat, 31 Aug 2024 12:28:40 +0300</pubDate>
+			<category>category</category>
+			<description>description</description>
+			<enclosure url="url" length="500" type="application/x-nzb"/>
+		</item>
+		
+		<item>
+			<title>title</title>
+			<guid isPermaLink="true">prematch=1 attribute</guid>
+			<link>link</link>
+			<comments>comments</comments>
+			<pubDate>Sat, 31 Aug 2024 12:28:40 +0300</pubDate>
+			<category>category</category>
+			<description>description</description>
+			<enclosure url="url" length="500" type="application/x-nzb"/>
+			
+			<newznab:attr name="prematch" value="1"/>
+		</item>
+
+		<item>
+			<title>title</title>
+			<guid isPermaLink="true">haspretime=1 attribute</guid>
+			<link>link</link>
+			<comments>comments</comments>
+			<pubDate>Sat, 31 Aug 2024 12:28:40 +0300</pubDate>
+			<category>category</category>
+			<description>description</description>
+			<enclosure url="url" length="500" type="application/x-nzb"/>
+			
+			<newznab:attr name="haspretime" value="1"/>
+		</item>
+
+		<item>
+			<title>title</title>
+			<guid isPermaLink="true">prematch=0 attribute</guid>
+			<link>link</link>
+			<comments>comments</comments>
+			<pubDate>Sat, 31 Aug 2024 12:28:40 +0300</pubDate>
+			<category>category</category>
+			<description>description</description>
+			<enclosure url="url" length="500" type="application/x-nzb"/>
+			
+			<newznab:attr name="prematch" value="0"/>
+		</item>
+
+		<item>
+			<title>title</title>
+			<guid isPermaLink="true">haspretime=0 attribute</guid>
+			<link>link</link>
+			<comments>comments</comments>
+			<pubDate>Sat, 31 Aug 2024 12:28:40 +0300</pubDate>
+			<category>category</category>
+			<description>description</description>
+			<enclosure url="url" length="500" type="application/x-nzb"/>
+			
+			<newznab:attr name="haspretime" value="0"/>
+		</item>
+
+		<item>
+			<title>title</title>
+			<guid isPermaLink="true">nuked=1 attribute</guid>
+			<link>link</link>
+			<comments>comments</comments>
+			<pubDate>Sat, 31 Aug 2024 12:28:40 +0300</pubDate>
+			<category>category</category>
+			<description>description</description>
+			<enclosure url="url" length="500" type="application/x-nzb"/>
+			
+			<newznab:attr name="nuked" value="1"/>
+		</item>
+
+		<item>
+			<title>title</title>
+			<guid isPermaLink="true">nuked=0 attribute</guid>
+			<link>link</link>
+			<comments>comments</comments>
+			<pubDate>Sat, 31 Aug 2024 12:28:40 +0300</pubDate>
+			<category>category</category>
+			<description>description</description>
+			<enclosure url="url" length="500" type="application/x-nzb"/>
+			
+			<newznab:attr name="nuked" value="0"/>
+		</item>
+
+		<item>
+			<title>title</title>
+			<guid isPermaLink="true">prematch=1 and nuked=1 attributes</guid>
+			<link>link</link>
+			<comments>comments</comments>
+			<pubDate>Sat, 31 Aug 2024 12:28:40 +0300</pubDate>
+			<category>category</category>
+			<description>description</description>
+			<enclosure url="url" length="500" type="application/x-nzb"/>
+
+			<newznab:attr name="prematch" value="1"/>
+			<newznab:attr name="nuked" value="1"/>
+		</item>
+
+		<item>
+			<title>title</title>
+			<guid isPermaLink="true">haspretime=0 and nuked=0 attributes</guid>
+			<link>link</link>
+			<comments>comments</comments>
+			<pubDate>Sat, 31 Aug 2024 12:28:40 +0300</pubDate>
+			<category>category</category>
+			<description>description</description>
+			<enclosure url="url" length="500" type="application/x-nzb"/>
+
+			<newznab:attr name="haspretime" value="0"/>
+			<newznab:attr name="nuked" value="0"/>
+		</item>
+
+	</channel>
+</rss>
