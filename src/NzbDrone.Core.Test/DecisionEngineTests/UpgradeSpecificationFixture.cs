@@ -156,6 +156,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 Id = 1,
                 Name = "One"
             };
+
             var customFormatTwo = new CustomFormat
             {
                 Id = 2,
@@ -184,12 +185,12 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             };
 
             Subject.IsUpgradable(
-                profile,
-                new QualityModel(Quality.DVD),
-                new List<CustomFormat> { customFormatOne },
-                new QualityModel(Quality.DVD),
-                new List<CustomFormat> { customFormatTwo })
-            .Should().Be(UpgradeableRejectReason.MinCustomFormatScore);
+                    profile,
+                    new QualityModel(Quality.DVD),
+                    new List<CustomFormat> { customFormatOne },
+                    new QualityModel(Quality.DVD),
+                    new List<CustomFormat> { customFormatTwo })
+                .Should().Be(UpgradeableRejectReason.MinCustomFormatScore);
         }
 
         [Test]
@@ -200,6 +201,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 Id = 1,
                 Name = "One"
             };
+
             var customFormatTwo = new CustomFormat
             {
                 Id = 2,
@@ -228,12 +230,12 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             };
 
             Subject.IsUpgradable(
-                profile,
-                new QualityModel(Quality.DVD),
-                new List<CustomFormat> { customFormatOne },
-                new QualityModel(Quality.DVD),
-                new List<CustomFormat> { customFormatTwo })
-            .Should().Be(UpgradeableRejectReason.None);
+                    profile,
+                    new QualityModel(Quality.DVD),
+                    new List<CustomFormat> { customFormatOne },
+                    new QualityModel(Quality.DVD),
+                    new List<CustomFormat> { customFormatTwo })
+                .Should().Be(UpgradeableRejectReason.None);
         }
     }
 }
