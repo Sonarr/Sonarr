@@ -1177,7 +1177,7 @@
   "MinimumCustomFormatScore": "Minimum Custom Format Score",
   "MinimumCustomFormatScoreHelpText": "Minimum custom format score allowed to download",
   "MinimumCustomFormatScoreIncrement": "Minimum Custom Format Score Increment",
-  "MinimumCustomFormatScoreIncrementHelpText": "Minimum required improvement of the custom format score between existing and new releases before Sonarr considers it an upgrade",
+  "MinimumCustomFormatScoreIncrementHelpText": "Minimum required improvement of the custom format score between existing and new releases before {appName} considers it an upgrade",
   "MinimumFreeSpace": "Minimum Free Space",
   "MinimumFreeSpaceHelpText": "Prevent import if it would leave less than this amount of disk space available",
   "MinimumLimits": "Minimum Limits",
