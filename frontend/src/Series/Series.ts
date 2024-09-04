@@ -73,7 +73,7 @@ interface Series extends ModelBase {
   firstAired: string;
   genres: string[];
   images: Image[];
-  imdbId: string;
+  imdbId?: string;
   monitored: boolean;
   monitorNewItems: MonitorNewItems;
   network: string;
