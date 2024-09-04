@@ -97,13 +97,13 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
             if (newFormatScore < currentFormatScore + qualityProfile.MinUpgradeFormatScore)
             {
-                _logger.Debug("New item's custom formats [{0}] ({1}) do not meet minimum upgrade score of {3}, skipping. Existing: [{4}] ({5}).",
+                _logger.Debug("New item's custom formats [{0}] ({1}) do not meet minimum custom format score increment of {3} required for upgrade, skipping. Existing: [{4}] ({5}).",
                               newCustomFormats.ConcatToString(),
                               newFormatScore,
                               qualityProfile.MinUpgradeFormatScore,
                               currentCustomFormats.ConcatToString(),
                               currentFormatScore);
-                return false;
+                return UpgradeableRejectReason.MinCustomFormatScore;
             }
 
             _logger.Debug("New item's custom formats [{0}] ({1}) improve on [{2}] ({3}), accepting",
