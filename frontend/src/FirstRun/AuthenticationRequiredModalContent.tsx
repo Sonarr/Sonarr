@@ -18,19 +18,20 @@ import {
 } from 'Settings/General/SecuritySettings';
 import { clearPendingChanges } from 'Store/Actions/baseActions';
 import {
+  saveRegisterSettings,
+  setRegisterValue,
+} from 'Store/Actions/Settings/register';
+import {
   fetchGeneralSettings,
-  fetchUsers,
   saveGeneralSettings,
   setGeneralSettingsValue,
 } from 'Store/Actions/settingsActions';
 import { fetchStatus } from 'Store/Actions/systemActions';
+import { createProviderSettingsSelectorHook } from 'Store/Selectors/createProviderSettingsSelector';
 import createSettingsSectionSelector from 'Store/Selectors/createSettingsSectionSelector';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
 import styles from './AuthenticationRequiredModalContent.css';
-import { fetchRegisterSettings, saveRegisterSettings, setRegisterValue } from 'Store/Actions/Settings/register';
-import createRegisterSelector from 'Store/Selectors/createRegisterSelector';
-import { createProviderSettingsSelectorHook } from 'Store/Selectors/createProviderSettingsSelector';
 
 const GENERAL_SECTION = 'general';
 
@@ -47,8 +48,6 @@ export default function AuthenticationRequiredModalContent() {
   const dispatch = useDispatch();
 
   const { item } = useSelector(createProviderSettingsSelectorHook('register'));
-
-  console.log(item);
 
   const { username, password, passwordConfirmation } = item;
 
@@ -91,8 +90,8 @@ export default function AuthenticationRequiredModalContent() {
   }, [isSaving, wasSaving, dispatch]);
 
   const onPress = useCallback(() => {
-    dispatch(saveGeneralSettings());
     dispatch(saveRegisterSettings());
+    dispatch(saveGeneralSettings());
   }, [dispatch]);
 
   return (

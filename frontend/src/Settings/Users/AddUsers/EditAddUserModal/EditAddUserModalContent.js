@@ -74,6 +74,7 @@ export default function EditAddUserModalContent(props) {
   const {
     username,
     password,
+    passwordConfirmation,
     role = { value: 'Admin' }
   } = item;
 
@@ -122,6 +123,17 @@ export default function EditAddUserModalContent(props) {
                       type={inputTypes.PASSWORD}
                       name="password"
                       {...password}
+                      onChange={onInputChange}
+                    />
+                  </FormGroup>
+
+                  <FormGroup>
+                    <FormLabel>{translate('PasswordConfirmation')}</FormLabel>
+
+                    <FormInputGroup
+                      type={inputTypes.PASSWORD}
+                      name="passwordConfirmation"
+                      {...passwordConfirmation}
                       onChange={onInputChange}
                     />
                   </FormGroup>

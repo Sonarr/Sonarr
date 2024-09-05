@@ -28,6 +28,8 @@ namespace NzbDrone.Core.Authentication
         public User FindUserFromApiKey(string apiKey);
 
         List<User> All();
+
+        bool hasUsers();
     }
 
     public class UserService : IUserService, IHandle<ApplicationStartedEvent>
@@ -181,6 +183,11 @@ namespace NzbDrone.Core.Authentication
             user.Password = GetHashedPassword(password, salt, ITERATIONS);
 
             return user;
+        }
+
+        public bool hasUsers()
+        {
+            return _repo.All().Any();
         }
 
         private byte[] GenerateSalt()

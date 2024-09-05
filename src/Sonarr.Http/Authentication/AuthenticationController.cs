@@ -47,16 +47,6 @@ namespace Sonarr.Http.Authentication
             return Redirect(_configFileProvider.UrlBase + returnUrl);
         }
 
-        // Will only ever be used when the first user is signs up.
-        [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] LoginResource resource)
-        {
-            var user = _authService.AddUser(resource.Username, resource.Password);
-            await _authService.SignInUser(HttpContext, user, true);
-
-            return Redirect(HttpContext.Request.Path);
-        }
-
         [HttpGet("logout")]
         public async Task<IActionResult> Logout()
         {

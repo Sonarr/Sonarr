@@ -13,6 +13,8 @@ namespace Sonarr.Api.V3.Users
 
         public string Password { get; set; }
 
+        public string PasswordConfirmation { get; set; }
+
         public UserRole Role { get; set; }
     }
 
@@ -59,6 +61,11 @@ namespace Sonarr.Api.V3.Users
         public static string GetPassword(this UserResource resource)
         {
             return resource.Password;
+        }
+
+        public static string GetPasswordConfirmation(this UserResource resource)
+        {
+            return resource.PasswordConfirmation;
         }
 
         public static UserRole getRole(this UserResource resource)

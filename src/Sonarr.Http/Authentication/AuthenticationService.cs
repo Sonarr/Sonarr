@@ -15,9 +15,6 @@ namespace Sonarr.Http.Authentication
         void LogUnauthorized(HttpRequest context);
         User Login(HttpRequest request, string username, string password);
         void Logout(HttpContext context);
-
-        User AddUser(string username, string password);
-
         Task SignInUser(HttpContext httpContext, User user, bool isPersistent);
     }
 
@@ -25,18 +22,16 @@ namespace Sonarr.Http.Authentication
     {
         private static readonly Logger _authLogger = LogManager.GetLogger("Auth");
         private readonly IUserService _userService;
-
-        private static AuthenticationType AUTH_METHOD;
-
+        private readonly IConfigFileProvider _configFileProvider;
         public AuthenticationService(IConfigFileProvider configFileProvider, IUserService userService)
         {
             _userService = userService;
-            AUTH_METHOD = configFileProvider.AuthenticationMethod;
+            _configFileProvider = configFileProvider;
         }
 
         public User Login(HttpRequest request, string username, string password)
         {
-            if (AUTH_METHOD == AuthenticationType.None)
+            if (_configFileProvider.AuthenticationMethod == AuthenticationType.None)
             {
                 return null;
             }
@@ -57,7 +52,7 @@ namespace Sonarr.Http.Authentication
 
         public void Logout(HttpContext context)
         {
-            if (AUTH_METHOD == AuthenticationType.None)
+            if (_configFileProvider.AuthenticationMethod == AuthenticationType.None)
             {
                 return;
             }
@@ -66,11 +61,6 @@ namespace Sonarr.Http.Authentication
             {
                 LogLogout(context.Request, context.User.Identity.Name);
             }
-        }
-
-        public User AddUser(string username, string password)
-        {
-            return _userService.Upsert(username, password);
         }
 
         public async Task SignInUser(HttpContext httpContext, User user, bool isPersistent)

@@ -4,14 +4,12 @@ using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Authentication;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Update;
 using NzbDrone.Core.Validation;
 using NzbDrone.Core.Validation.Paths;
 using Sonarr.Http;
-using Sonarr.Http.Authentication;
 using Sonarr.Http.REST;
 using Sonarr.Http.REST.Attributes;
 
@@ -24,18 +22,14 @@ namespace Sonarr.Api.V3.Config
         private readonly IConfigService _configService;
         private readonly IUserService _userService;
 
-        private readonly IAuthenticationService _authService;
-
         public HostConfigController(IConfigFileProvider configFileProvider,
                                     IConfigService configService,
                                     IUserService userService,
-                                    FileExistsValidator fileExistsValidator,
-                                    IAuthenticationService authService)
+                                    FileExistsValidator fileExistsValidator)
         {
             _configFileProvider = configFileProvider;
             _configService = configService;
             _userService = userService;
-            _authService = authService;
 
             SharedValidator.RuleFor(c => c.BindAddress)
                            .ValidIpAddress()
@@ -46,14 +40,6 @@ namespace Sonarr.Api.V3.Config
 
             SharedValidator.RuleFor(c => c.UrlBase).ValidUrlBase();
             SharedValidator.RuleFor(c => c.InstanceName).StartsOrEndsWithSonarr();
-
-            SharedValidator.RuleFor(c => c.Username).NotEmpty().When(c => c.AuthenticationMethod == AuthenticationType.Basic ||
-                                                                          c.AuthenticationMethod == AuthenticationType.Forms);
-            SharedValidator.RuleFor(c => c.Password).NotEmpty().When(c => c.AuthenticationMethod == AuthenticationType.Basic ||
-                                                                          c.AuthenticationMethod == AuthenticationType.Forms);
-
-            SharedValidator.RuleFor(c => c.PasswordConfirmation)
-                .Must((resource, p) => IsMatchingPassword(resource)).WithMessage("Must match Password");
 
             SharedValidator.RuleFor(c => c.SslPort).ValidPort().When(c => c.EnableSsl);
             SharedValidator.RuleFor(c => c.SslPort).NotEqual(c => c.Port).When(c => c.EnableSsl);
@@ -91,23 +77,6 @@ namespace Sonarr.Api.V3.Config
             return cert != null;
         }
 
-        private bool IsMatchingPassword(HostConfigResource resource)
-        {
-            var user = _userService.FindUser();
-
-            if (user != null && user.Password == resource.Password)
-            {
-                return true;
-            }
-
-            if (resource.Password == resource.PasswordConfirmation)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
         protected override HostConfigResource GetResourceById(int id)
         {
             return GetHostConfig();
@@ -137,12 +106,6 @@ namespace Sonarr.Api.V3.Config
 
             _configFileProvider.SaveConfigDictionary(dictionary);
             _configService.SaveConfigDictionary(dictionary);
-
-            if (resource.Username.IsNotNullOrWhiteSpace() && resource.Password.IsNotNullOrWhiteSpace())
-            {
-                var user = _userService.Upsert(resource.Username, resource.Password);
-                _authService.SignInUser(HttpContext, user, true);
-            }
 
             return Accepted(resource.Id);
         }

@@ -10,6 +10,8 @@ function createSaveHandler(section, url) {
     const state = getSectionState(getState(), section, true);
     const saveData = Object.assign({}, state.item, state.pendingChanges, payload);
 
+    console.log(saveData);
+
     const promise = createAjaxRequest({
       url,
       method: 'PUT',
