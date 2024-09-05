@@ -11,3 +11,10 @@
 
   cursor: pointer;
 }
+
+@media only screen and (max-width: $breakpointExtraSmall) {
+  .links {
+    display: flex;
+    flex-flow: column wrap;
+  }
+}
