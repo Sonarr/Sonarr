@@ -1,3 +1,4 @@
+import { initializeConfig } from 'intializeConfig';
 import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Alert from 'Components/Alert';
@@ -18,16 +19,11 @@ import {
 } from 'Settings/General/SecuritySettings';
 import { clearPendingChanges } from 'Store/Actions/baseActions';
 import {
-  saveRegisterSettings,
-  setRegisterValue,
-} from 'Store/Actions/Settings/register';
-import {
   fetchGeneralSettings,
   saveGeneralSettings,
   setGeneralSettingsValue,
 } from 'Store/Actions/settingsActions';
 import { fetchStatus } from 'Store/Actions/systemActions';
-import { createProviderSettingsSelectorHook } from 'Store/Selectors/createProviderSettingsSelector';
 import createSettingsSectionSelector from 'Store/Selectors/createSettingsSectionSelector';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
@@ -47,11 +43,13 @@ export default function AuthenticationRequiredModalContent() {
 
   const dispatch = useDispatch();
 
-  const { item } = useSelector(createProviderSettingsSelectorHook('register'));
-
-  const { username, password, passwordConfirmation } = item;
-
-  const { authenticationMethod, authenticationRequired } = settings;
+  const {
+    authenticationMethod,
+    authenticationRequired,
+    username,
+    password,
+    passwordConfirmation,
+  } = settings;
 
   const wasSaving = usePrevious(isSaving);
 
@@ -71,13 +69,6 @@ export default function AuthenticationRequiredModalContent() {
     [dispatch]
   );
 
-  const onInputChangeRegister = useCallback(
-    ({ name, value }: InputChanged) => {
-      dispatch(setRegisterValue({ name, value }));
-    },
-    [dispatch]
-  );
-
   const authenticationEnabled =
     authenticationMethod && authenticationMethod.value !== 'none';
 
@@ -86,12 +77,14 @@ export default function AuthenticationRequiredModalContent() {
       return;
     }
 
-    dispatch(fetchStatus());
+    // Grab the API key when new user is automatically signed in.
+    initializeConfig().then(() => {
+      dispatch(fetchStatus());
+    });
   }, [isSaving, wasSaving, dispatch]);
 
-  const onPress = useCallback(() => {
-    dispatch(saveRegisterSettings());
-    dispatch(saveGeneralSettings());
+  const onPress = useCallback(async () => {
+    await dispatch(saveGeneralSettings());
   }, [dispatch]);
 
   return (
@@ -148,7 +141,7 @@ export default function AuthenticationRequiredModalContent() {
                     ? undefined
                     : translate('AuthenticationRequiredUsernameHelpTextWarning')
                 }
-                onChange={onInputChangeRegister}
+                onChange={onInputChange}
                 {...username}
               />
             </FormGroup>
@@ -164,7 +157,7 @@ export default function AuthenticationRequiredModalContent() {
                     ? undefined
                     : translate('AuthenticationRequiredPasswordHelpTextWarning')
                 }
-                onChange={onInputChangeRegister}
+                onChange={onInputChange}
                 {...password}
               />
             </FormGroup>
@@ -182,7 +175,7 @@ export default function AuthenticationRequiredModalContent() {
                         'AuthenticationRequiredPasswordConfirmationHelpTextWarning'
                       )
                 }
-                onChange={onInputChangeRegister}
+                onChange={onInputChange}
                 {...passwordConfirmation}
               />
             </FormGroup>

@@ -27,7 +27,6 @@ import releaseProfiles from './Settings/releaseProfiles';
 import remotePathMappings from './Settings/remotePathMappings';
 import ui from './Settings/ui';
 import users from './Settings/users';
-import register from './Settings/register';
 
 export * from './Settings/autoTaggingSpecifications';
 export * from './Settings/autoTaggings';
@@ -55,7 +54,6 @@ export * from './Settings/releaseProfiles';
 export * from './Settings/remotePathMappings';
 export * from './Settings/ui';
 export * from './Settings/users';
-export * from './Settings/register';
 
 //
 // Variables
@@ -92,8 +90,7 @@ export const defaultState = {
   releaseProfiles: releaseProfiles.defaultState,
   remotePathMappings: remotePathMappings.defaultState,
   ui: ui.defaultState,
-  users: users.defaultState,
-  register: register.defaultState
+  users: users.defaultState
 };
 
 export const persistState = [
@@ -140,8 +137,7 @@ export const actionHandlers = handleThunks({
   ...releaseProfiles.actionHandlers,
   ...remotePathMappings.actionHandlers,
   ...ui.actionHandlers,
-  ...users.actionHandlers,
-  ...register.actionHandlers
+  ...users.actionHandlers
 });
 
 //
@@ -178,7 +174,6 @@ export const reducers = createHandleActions({
   ...releaseProfiles.reducers,
   ...remotePathMappings.reducers,
   ...ui.reducers,
-  ...users.reducers,
-  ...register.reducers
+  ...users.reducers
 
 }, defaultState, section);

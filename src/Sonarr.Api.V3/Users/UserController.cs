@@ -51,19 +51,9 @@ namespace Sonarr.Api.V3.Users
 
         [HttpPost]
         [Consumes("application/json")]
-        public ActionResult Create([FromBody] UserResource resource)
+        public ActionResult<UserResource> Create([FromBody] UserResource resource)
         {
-            var hasUsers = _userService.hasUsers();
-            var role = hasUsers ? resource.getRole() : UserRole.Admin;
-            var user = _userService.Add(resource.GetUserName(), resource.GetPassword(), role);
-
-            if (!hasUsers)
-            {
-                _authService.SignInUser(HttpContext, user, true);
-            }
-
-            // Redirect to www.google.com.au after user creation
-            return Redirect("https://www.google.com.au");
+            return Created(_userService.Add(resource.GetUserName(), resource.GetPassword(), resource.getRole()).Id);
         }
 
         [RestPutById]
