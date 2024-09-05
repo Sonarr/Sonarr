@@ -198,7 +198,7 @@ namespace NzbDrone.Core.Tags
             {
                 foreach (var specification in autoTag.Specifications)
                 {
-                    if (specification is TagSpecification)
+                    if (specification is TagSpecification tagSpecification && tagSpecification.Value == tag.Id)
                     {
                         autoTagIds.Add(autoTag.Id);
                     }
