@@ -38,12 +38,14 @@ namespace Sonarr.Http.Frontend
 
             _httpContextAccessor = httpContextAccessor;
             _userService = userService;
+
+            var currentUser = GetCurrentUser();
+            _apiKey = currentUser != null ? currentUser.ApiKey : "None";
         }
 
         [HttpGet("/initialize.json")]
         public IActionResult Index()
         {
-            _apiKey = GetCurrentUser().ApiKey;
             return Content(GetContent(), "application/json");
         }
 
@@ -54,7 +56,8 @@ namespace Sonarr.Http.Frontend
                 return _generatedContent;
             }
 
-            var role = GetCurrentUser().Role;
+            var currentUser = GetCurrentUser();
+            var role = currentUser != null ? currentUser.Role.ToString() : "Admin";
 
             var builder = new StringBuilder();
             builder.AppendLine("{");

@@ -27,7 +27,6 @@ export const saveUser = createThunk(SAVE_USER);
 export const deleteUser = createThunk(DELETE_USER);
 
 export const setUserValue = createAction(SET_USER_VALUE, (payload) => {
-  console.log(payload);
   return {
     section,
     ...payload

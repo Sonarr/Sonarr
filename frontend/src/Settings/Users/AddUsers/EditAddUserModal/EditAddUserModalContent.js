@@ -39,7 +39,6 @@ export default function EditAddUserModalContent(props) {
   const dispatch = useDispatch();
 
   const onInputChange = useCallback(({ name, value }) => {
-
     dispatch(setUserValue({ name, value }));
   }, [dispatch]);
 

@@ -9,6 +9,8 @@ function createAppStore(history) {
     middlewares(history)
   );
 
+  console.log(appStore.getState());
+
   return appStore;
 }
 

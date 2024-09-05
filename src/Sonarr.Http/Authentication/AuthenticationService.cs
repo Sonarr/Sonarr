@@ -1,3 +1,7 @@
+using System.Collections.Generic;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using NLog;
 using NzbDrone.Core.Authentication;
@@ -11,6 +15,10 @@ namespace Sonarr.Http.Authentication
         void LogUnauthorized(HttpRequest context);
         User Login(HttpRequest request, string username, string password);
         void Logout(HttpContext context);
+
+        User AddUser(string username, string password);
+
+        Task SignInUser(HttpContext httpContext, User user, bool isPersistent);
     }
 
     public class AuthenticationService : IAuthenticationService
@@ -58,6 +66,28 @@ namespace Sonarr.Http.Authentication
             {
                 LogLogout(context.Request, context.User.Identity.Name);
             }
+        }
+
+        public User AddUser(string username, string password)
+        {
+            return _userService.Upsert(username, password);
+        }
+
+        public async Task SignInUser(HttpContext httpContext, User user, bool isPersistent)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim("user", user.Username),
+                new Claim("identifier", user.Identifier.ToString()),
+                new Claim("AuthType", AuthenticationType.Forms.ToString())
+            };
+
+            var authProperties = new AuthenticationProperties
+            {
+                IsPersistent = isPersistent
+            };
+
+            await httpContext.SignInAsync(AuthenticationType.Forms.ToString(), new ClaimsPrincipal(new ClaimsIdentity(claims, "Cookies", "user", "identifier")), authProperties);
         }
 
         public void LogUnauthorized(HttpRequest context)

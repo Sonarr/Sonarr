@@ -1,8 +1,7 @@
-using System.Collections.Generic;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Authentication;
@@ -33,19 +32,7 @@ namespace Sonarr.Http.Authentication
                 return Redirect($"~/login?returnUrl={returnUrl}&loginFailed=true");
             }
 
-            var claims = new List<Claim>
-            {
-                new Claim("user", user.Username),
-                new Claim("identifier", user.Identifier.ToString()),
-                new Claim("AuthType", AuthenticationType.Forms.ToString())
-            };
-
-            var authProperties = new AuthenticationProperties
-            {
-                IsPersistent = resource.RememberMe == "on"
-            };
-
-            await HttpContext.SignInAsync(AuthenticationType.Forms.ToString(), new ClaimsPrincipal(new ClaimsIdentity(claims, "Cookies", "user", "identifier")), authProperties);
+            await _authService.SignInUser(HttpContext, user, resource.RememberMe == "on");
 
             if (returnUrl.IsNullOrWhiteSpace() || !Url.IsLocalUrl(returnUrl))
             {
@@ -58,6 +45,16 @@ namespace Sonarr.Http.Authentication
             }
 
             return Redirect(_configFileProvider.UrlBase + returnUrl);
+        }
+
+        // Will only ever be used when the first user is signs up.
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] LoginResource resource)
+        {
+            var user = _authService.AddUser(resource.Username, resource.Password);
+            await _authService.SignInUser(HttpContext, user, true);
+
+            return Redirect(HttpContext.Request.Path);
         }
 
         [HttpGet("logout")]

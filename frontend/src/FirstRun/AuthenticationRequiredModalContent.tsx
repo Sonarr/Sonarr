@@ -19,6 +19,7 @@ import {
 import { clearPendingChanges } from 'Store/Actions/baseActions';
 import {
   fetchGeneralSettings,
+  fetchUsers,
   saveGeneralSettings,
   setGeneralSettingsValue,
 } from 'Store/Actions/settingsActions';
@@ -27,26 +28,31 @@ import createSettingsSectionSelector from 'Store/Selectors/createSettingsSection
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
 import styles from './AuthenticationRequiredModalContent.css';
+import { fetchRegisterSettings, saveRegisterSettings, setRegisterValue } from 'Store/Actions/Settings/register';
+import createRegisterSelector from 'Store/Selectors/createRegisterSelector';
+import { createProviderSettingsSelectorHook } from 'Store/Selectors/createProviderSettingsSelector';
 
-const SECTION = 'general';
+const GENERAL_SECTION = 'general';
 
-const selector = createSettingsSectionSelector(SECTION);
+const general_selector = createSettingsSectionSelector(GENERAL_SECTION);
 
 function onModalClose() {
   // No-op
 }
 
 export default function AuthenticationRequiredModalContent() {
-  const { isPopulated, error, isSaving, settings } = useSelector(selector);
+  const { isPopulated, error, isSaving, settings } =
+    useSelector(general_selector);
+
   const dispatch = useDispatch();
 
-  const {
-    authenticationMethod,
-    authenticationRequired,
-    username,
-    password,
-    passwordConfirmation,
-  } = settings;
+  const { item } = useSelector(createProviderSettingsSelectorHook('register'));
+
+  console.log(item);
+
+  const { username, password, passwordConfirmation } = item;
+
+  const { authenticationMethod, authenticationRequired } = settings;
 
   const wasSaving = usePrevious(isSaving);
 
@@ -66,6 +72,13 @@ export default function AuthenticationRequiredModalContent() {
     [dispatch]
   );
 
+  const onInputChangeRegister = useCallback(
+    ({ name, value }: InputChanged) => {
+      dispatch(setRegisterValue({ name, value }));
+    },
+    [dispatch]
+  );
+
   const authenticationEnabled =
     authenticationMethod && authenticationMethod.value !== 'none';
 
@@ -79,6 +92,7 @@ export default function AuthenticationRequiredModalContent() {
 
   const onPress = useCallback(() => {
     dispatch(saveGeneralSettings());
+    dispatch(saveRegisterSettings());
   }, [dispatch]);
 
   return (
@@ -135,7 +149,7 @@ export default function AuthenticationRequiredModalContent() {
                     ? undefined
                     : translate('AuthenticationRequiredUsernameHelpTextWarning')
                 }
-                onChange={onInputChange}
+                onChange={onInputChangeRegister}
                 {...username}
               />
             </FormGroup>
@@ -151,7 +165,7 @@ export default function AuthenticationRequiredModalContent() {
                     ? undefined
                     : translate('AuthenticationRequiredPasswordHelpTextWarning')
                 }
-                onChange={onInputChange}
+                onChange={onInputChangeRegister}
                 {...password}
               />
             </FormGroup>
@@ -169,7 +183,7 @@ export default function AuthenticationRequiredModalContent() {
                         'AuthenticationRequiredPasswordConfirmationHelpTextWarning'
                       )
                 }
-                onChange={onInputChange}
+                onChange={onInputChangeRegister}
                 {...passwordConfirmation}
               />
             </FormGroup>

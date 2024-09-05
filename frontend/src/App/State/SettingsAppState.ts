@@ -17,6 +17,7 @@ import QualityProfile from 'typings/QualityProfile';
 import General from 'typings/Settings/General';
 import UiSettings from 'typings/Settings/UiSettings';
 import UsersAppState from './UsersAppState';
+import RegisterAppState from './RegisterAppState';
 
 export interface DownloadClientAppState
   extends AppSectionState<DownloadClient>,
@@ -79,6 +80,7 @@ interface SettingsAppState {
   qualityProfiles: QualityProfilesAppState;
   ui: UiSettingsAppState;
   users: UsersAppState;
+  register: RegisterAppState;
 }
 
 export default SettingsAppState;

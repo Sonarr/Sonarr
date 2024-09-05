@@ -11,6 +11,7 @@ using NzbDrone.Core.Update;
 using NzbDrone.Core.Validation;
 using NzbDrone.Core.Validation.Paths;
 using Sonarr.Http;
+using Sonarr.Http.Authentication;
 using Sonarr.Http.REST;
 using Sonarr.Http.REST.Attributes;
 
@@ -23,14 +24,18 @@ namespace Sonarr.Api.V3.Config
         private readonly IConfigService _configService;
         private readonly IUserService _userService;
 
+        private readonly IAuthenticationService _authService;
+
         public HostConfigController(IConfigFileProvider configFileProvider,
                                     IConfigService configService,
                                     IUserService userService,
-                                    FileExistsValidator fileExistsValidator)
+                                    FileExistsValidator fileExistsValidator,
+                                    IAuthenticationService authService)
         {
             _configFileProvider = configFileProvider;
             _configService = configService;
             _userService = userService;
+            _authService = authService;
 
             SharedValidator.RuleFor(c => c.BindAddress)
                            .ValidIpAddress()
@@ -135,7 +140,8 @@ namespace Sonarr.Api.V3.Config
 
             if (resource.Username.IsNotNullOrWhiteSpace() && resource.Password.IsNotNullOrWhiteSpace())
             {
-                _userService.Upsert(resource.Username, resource.Password);
+                var user = _userService.Upsert(resource.Username, resource.Password);
+                _authService.SignInUser(HttpContext, user, true);
             }
 
             return Accepted(resource.Id);
