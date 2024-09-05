@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Common.Cache;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.RootFolders;
 using NzbDrone.Core.Tv;
 
@@ -22,14 +23,18 @@ namespace NzbDrone.Core.AutoTagging
     {
         private readonly IAutoTaggingRepository _repository;
         private readonly RootFolderService _rootFolderService;
+        private readonly IEventAggregator _eventAggregator;
         private readonly ICached<Dictionary<int, AutoTag>> _cache;
 
         public AutoTaggingService(IAutoTaggingRepository repository,
                                   RootFolderService rootFolderService,
+                                  IEventAggregator eventAggregator,
                                   ICacheManager cacheManager)
         {
             _repository = repository;
             _rootFolderService = rootFolderService;
+            _eventAggregator = eventAggregator;
+
             _cache = cacheManager.GetCache<Dictionary<int, AutoTag>>(typeof(AutoTag), "autoTags");
         }
 
@@ -51,13 +56,17 @@ namespace NzbDrone.Core.AutoTagging
         public void Update(AutoTag autoTag)
         {
             _repository.Update(autoTag);
+
             _cache.Clear();
+            _eventAggregator.PublishEvent(new AutoTagsUpdatedEvent());
         }
 
         public AutoTag Insert(AutoTag autoTag)
         {
             var result = _repository.Insert(autoTag);
+
             _cache.Clear();
+            _eventAggregator.PublishEvent(new AutoTagsUpdatedEvent());
 
             return result;
         }
@@ -65,7 +74,9 @@ namespace NzbDrone.Core.AutoTagging
         public void Delete(int id)
         {
             _repository.Delete(id);
+
             _cache.Clear();
+            _eventAggregator.PublishEvent(new AutoTagsUpdatedEvent());
         }
 
         public List<AutoTag> AllForTag(int tagId)
