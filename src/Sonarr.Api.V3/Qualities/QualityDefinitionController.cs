@@ -12,27 +12,31 @@ using Sonarr.Http.REST.Attributes;
 namespace Sonarr.Api.V3.Qualities
 {
     [V3ApiController]
-    public class QualityDefinitionController : RestControllerWithSignalR<QualityDefinitionResource, QualityDefinition>, IHandle<CommandExecutedEvent>
+    public class QualityDefinitionController :
+        RestControllerWithSignalR<QualityDefinitionResource, QualityDefinition>,
+        IHandle<CommandExecutedEvent>
     {
         private readonly IQualityDefinitionService _qualityDefinitionService;
 
-        public QualityDefinitionController(IQualityDefinitionService qualityDefinitionService, IBroadcastSignalRMessage signalRBroadcaster)
+        public QualityDefinitionController(
+            IQualityDefinitionService qualityDefinitionService,
+            IBroadcastSignalRMessage signalRBroadcaster)
             : base(signalRBroadcaster)
         {
             _qualityDefinitionService = qualityDefinitionService;
 
-            SetupValidation(qualityDefinitionService);
+            SetupValidation();
         }
 
-        private void SetupValidation(IQualityDefinitionService qualityDefinitionService)
+        private void SetupValidation()
         {
-            var limits = qualityDefinitionService.GetLimits();
             SharedValidator.RuleFor(c => c)
-                .SetValidator(new QualityDefinitionResourceValidator(limits));
+                .SetValidator(new QualityDefinitionResourceValidator());
         }
 
         [RestPutById]
-        public ActionResult<QualityDefinitionResource> Update([FromBody] QualityDefinitionResource resource)
+        public ActionResult<QualityDefinitionResource> Update(
+            [FromBody] QualityDefinitionResource resource)
         {
             var model = resource.ToModel();
             _qualityDefinitionService.Update(model);
@@ -54,9 +58,7 @@ namespace Sonarr.Api.V3.Qualities
         public object UpdateMany([FromBody] List<QualityDefinitionResource> resource)
         {
             // Read from request
-            var qualityDefinitions = resource
-                                                 .ToModel()
-                                                 .ToList();
+            var qualityDefinitions = resource.ToModel().ToList();
 
             _qualityDefinitionService.UpdateMany(qualityDefinitions);
 
@@ -65,9 +67,11 @@ namespace Sonarr.Api.V3.Qualities
         }
 
         [HttpGet("limits")]
-        public ActionResult<QualityDefinitionLimits> GetLimits()
+        public ActionResult<QualityDefinitionLimitsResource> GetLimits()
         {
-            return Ok(_qualityDefinitionService.GetLimits());
+            return Ok(new QualityDefinitionLimitsResource(
+                QualityDefinitionLimits.MinLimit,
+                QualityDefinitionLimits.MaxLimit));
         }
 
         [NonAction]

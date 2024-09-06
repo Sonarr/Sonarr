@@ -17,7 +17,6 @@ namespace NzbDrone.Core.Qualities
         List<QualityDefinition> All();
         QualityDefinition GetById(int id);
         QualityDefinition Get(Quality quality);
-        QualityDefinitionLimits GetLimits();
     }
 
     public class QualityDefinitionService : IQualityDefinitionService, IExecute<ResetQualityDefinitionsCommand>, IHandle<ApplicationStartedEvent>
@@ -63,11 +62,6 @@ namespace NzbDrone.Core.Qualities
         public QualityDefinition Get(Quality quality)
         {
             return GetAll()[quality];
-        }
-
-        public QualityDefinitionLimits GetLimits()
-        {
-            return new QualityDefinitionLimits();
         }
 
         private void InsertMissingDefinitions()
