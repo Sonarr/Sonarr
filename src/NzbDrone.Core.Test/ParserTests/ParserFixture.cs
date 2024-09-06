@@ -1,5 +1,6 @@
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Core.Languages;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
@@ -99,6 +100,15 @@ namespace NzbDrone.Core.Test.ParserTests
         {
             var seriesTitleInfo = Parser.Parser.ParseTitle(postTitle).SeriesTitleInfo;
             seriesTitleInfo.AllTitles.Should().BeEquivalentTo(titles);
+        }
+
+        [TestCase("[Reza] Series in Russian - S01E08 [WEBRip 1080p HEVC AAC] (Dual Audio) (Tokidoki Bosotto Russiago de Dereru Tonari no Alya-san)", "Unknown")]
+        public void should_parse_language_after_parsing_title(string postTitle, string expectedLanguage)
+        {
+            var result = Parser.Parser.ParseTitle(postTitle);
+
+            result.Languages.Count.Should().Be(1);
+            result.Languages.Should().Contain((Language)expectedLanguage);
         }
     }
 }
