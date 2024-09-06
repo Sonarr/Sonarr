@@ -767,7 +767,7 @@ namespace NzbDrone.Core.Parser
                                     result.Special = true;
                                 }
 
-                                result.Languages = LanguageParser.ParseLanguages(releaseTitle);
+                                result.Languages = LanguageParser.ParseLanguages(result.ReleaseTokens);
                                 Logger.Debug("Languages parsed: {0}", string.Join(", ", result.Languages));
 
                                 result.Quality = QualityParser.ParseQuality(title);
