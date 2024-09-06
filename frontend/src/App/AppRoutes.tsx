@@ -103,7 +103,7 @@ function AppRoutes() {
       <ProtectedRoute
         path="/settings/users"
         component={UsersConnector}
-        allowedRoles={['admin']}
+        allowedRoles={['Admin']}
       />
 
       <Route

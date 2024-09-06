@@ -1,15 +1,30 @@
-import React, { useCallback } from 'react';
-import { Redirect, Route } from 'react-router-dom';
+import React, { ComponentType, useCallback } from 'react';
+import {
+  Redirect,
+  Route,
+  RouteComponentProps,
+  RouteProps,
+} from 'react-router-dom';
+import { Role } from './Roles';
 
-function ProtectedRoute({ component: Component, allowedRoles, ...rest }) {
-  const userRole = window.sonarr.role;
+interface ProtectedRouteProps extends RouteProps {
+  component: ComponentType<RouteComponentProps> | ComponentType;
+  allowedRoles: Role[];
+}
+
+function ProtectedRoute({
+  component: Component,
+  allowedRoles,
+  ...rest
+}: ProtectedRouteProps) {
+  const userRole: Role = window.Sonarr.role;
 
   const renderComponent = useCallback(
-    (props) => {
+    (props: RouteComponentProps) => {
       return allowedRoles.includes(userRole) ? (
         <Component {...props} />
       ) : (
-        <Redirect to="/" /> // Redirect to home or any other page if not authorized
+        <Redirect to="/" />
       );
     },
     [allowedRoles, userRole, Component]
