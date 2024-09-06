@@ -1116,10 +1116,10 @@ namespace NzbDrone.Core.Organizer
         {
             if (episodeFile.SceneName.IsNullOrWhiteSpace())
             {
-                return GetOriginalFileName(episodeFile, useCurrentFilenameAsFallback);
+                return CleanFileName(GetOriginalFileName(episodeFile, useCurrentFilenameAsFallback));
             }
 
-            return episodeFile.SceneName;
+            return CleanFileName(episodeFile.SceneName);
         }
 
         private string GetOriginalFileName(EpisodeFile episodeFile, bool useCurrentFilenameAsFallback)
