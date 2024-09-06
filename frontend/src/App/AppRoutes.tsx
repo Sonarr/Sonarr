@@ -34,6 +34,7 @@ import Updates from 'System/Updates/Updates';
 import getPathWithUrlBase from 'Utilities/getPathWithUrlBase';
 import CutoffUnmetConnector from 'Wanted/CutoffUnmet/CutoffUnmetConnector';
 import MissingConnector from 'Wanted/Missing/MissingConnector';
+import ProtectedRoute from './ProtectedRoute';
 
 function RedirectWithUrlBase() {
   return <Redirect to={getPathWithUrlBase('/')} />;
@@ -99,7 +100,11 @@ function AppRoutes() {
 
       <Route exact={true} path="/settings" component={Settings} />
 
-      <Route path="/settings/users" component={UsersConnector} />
+      <ProtectedRoute
+        path="/settings/users"
+        component={UsersConnector}
+        allowedRoles={['admin']}
+      />
 
       <Route
         path="/settings/mediamanagement"
