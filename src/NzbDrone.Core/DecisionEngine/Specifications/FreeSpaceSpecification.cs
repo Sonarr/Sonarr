@@ -25,6 +25,12 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
         public Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
+            if (_configService.SkipFreeSpaceCheckWhenImporting)
+            {
+                _logger.Debug("Skipping free space check");
+                return Decision.Accept();
+            }
+
             var size = subject.Release.Size;
             var freeSpace = _diskProvider.GetAvailableSpace(subject.Series.Path);
 

@@ -76,5 +76,19 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
         }
+
+        [Test]
+        public void should_return_true_if_skip_free_space_check_is_true()
+        {
+            Mocker.GetMock<IConfigService>()
+                .Setup(s => s.SkipFreeSpaceCheckWhenImporting)
+                .Returns(true);
+
+            WithMinimumFreeSpace(150);
+            WithAvailableSpace(200);
+            WithSize(100);
+
+            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
+        }
     }
 }
