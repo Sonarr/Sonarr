@@ -1,7 +1,9 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import Alert from 'Components/Alert';
 import FieldSet from 'Components/FieldSet';
 import PageSectionContent from 'Components/Page/PageSectionContent';
+import { kinds } from 'Helpers/Props';
 import translate from 'Utilities/String/translate';
 import QualityDefinitionConnector from './QualityDefinitionConnector';
 import styles from './QualityDefinitions.css';
@@ -15,8 +17,11 @@ class QualityDefinitions extends Component {
     const {
       items,
       advancedSettings,
+      saveError,
       ...otherProps
     } = this.props;
+
+    console.log(saveError);
 
     return (
       <FieldSet legend={translate('QualityDefinitions')}>
@@ -24,6 +29,32 @@ class QualityDefinitions extends Component {
           errorMessage={translate('QualityDefinitionsLoadError')}
           {...otherProps}
         >
+          {
+            saveError ?
+              <div className={styles.saveError}>
+                <Alert kind={kinds.DANGER}>
+                  {translate('QualityDefinitionsSaveError')}
+                  <ul>
+                    {
+                      Array.isArray(saveError.responseJSON) ?
+                        saveError.responseJSON.map((error, index) => {
+                          return (
+                            <li key={index}>
+                              {error.errorMessage}
+                            </li>
+                          );
+                        }) :
+                        <li>
+                          {
+                            JSON.stringify(saveError.responseJSON)
+                          }
+                        </li>
+                    }
+                  </ul>
+                </Alert>
+              </div> : null
+          }
+
           <div className={styles.header}>
             <div className={styles.quality}>
               {translate('Quality')}
@@ -72,6 +103,7 @@ class QualityDefinitions extends Component {
 QualityDefinitions.propTypes = {
   isFetching: PropTypes.bool.isRequired,
   error: PropTypes.object,
+  saveError: PropTypes.object,
   defaultProfile: PropTypes.object,
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
   advancedSettings: PropTypes.bool.isRequired

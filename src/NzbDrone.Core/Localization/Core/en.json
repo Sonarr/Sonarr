@@ -1591,6 +1591,7 @@
   "QualityCutoffNotMet": "Quality cutoff has not been met",
   "QualityDefinitions": "Quality Definitions",
   "QualityDefinitionsLoadError": "Unable to load Quality Definitions",
+  "QualityDefinitionsSaveError": "Unable to save Quality Definitions",
   "QualityLimitsSeriesRuntimeHelpText": "Limits are automatically adjusted for the series runtime and number of episodes in the file.",
   "QualityProfile": "Quality Profile",
   "QualityProfileInUseSeriesListCollection": "Can't delete a quality profile that is attached to a series, list, or collection",

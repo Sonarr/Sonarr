@@ -5,6 +5,7 @@ interface CssExports {
   'header': string;
   'megabytesPerMinute': string;
   'quality': string;
+  'saveError': string;
   'sizeLimit': string;
   'sizeLimitHelpText': string;
   'sizeLimitHelpTextContainer': string;

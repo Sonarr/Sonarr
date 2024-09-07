@@ -1,3 +1,7 @@
+.saveError {
+  margin-bottom: 20px;
+}
+
 .header {
   display: flex;
   font-weight: bold;
