@@ -1,11 +1,7 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
 namespace NzbDrone.Core.Qualities;
 
-[SuppressMessage("Performance", "CA1822:Mark members as static", Justification =
-    "Serializable properties of a DTO")]
-public record QualityDefinitionLimits
+public static class QualityDefinitionLimits
 {
-    public int MinLimit => 0;
-    public int MaxLimit => 1000;
+    public const int Min = 0;
+    public const int Max = 1000;
 }

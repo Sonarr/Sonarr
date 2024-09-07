@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using NzbDrone.Api.V3.Qualities;
 using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Qualities;
@@ -21,14 +22,8 @@ namespace Sonarr.Api.V3.Qualities
         {
             _qualityDefinitionService = qualityDefinitionService;
 
-            SetupValidation(qualityDefinitionService);
-        }
-
-        private void SetupValidation(IQualityDefinitionService qualityDefinitionService)
-        {
-            var limits = qualityDefinitionService.GetLimits();
             SharedValidator.RuleFor(c => c)
-                .SetValidator(new QualityDefinitionResourceValidator(limits));
+                .SetValidator(new QualityDefinitionResourceValidator());
         }
 
         [RestPutById]
@@ -65,9 +60,9 @@ namespace Sonarr.Api.V3.Qualities
         }
 
         [HttpGet("limits")]
-        public ActionResult<QualityDefinitionLimits> GetLimits()
+        public ActionResult<QualityDefinitionLimitsResource> GetLimits()
         {
-            return Ok(_qualityDefinitionService.GetLimits());
+            return Ok(new QualityDefinitionLimitsResource());
         }
 
         [NonAction]
