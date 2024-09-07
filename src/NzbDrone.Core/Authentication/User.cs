@@ -17,7 +17,6 @@ namespace NzbDrone.Core.Authentication
         public string Salt { get; set; }
         public int Iterations { get; set; }
         public UserRole Role { get; set; }
-
         public string ApiKey { get; set; }
     }
 }

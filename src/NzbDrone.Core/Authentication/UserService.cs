@@ -22,13 +22,11 @@ namespace NzbDrone.Core.Authentication
         User FindUser(Guid identifier);
         User UpdateByModel(User updatedUser);
         public User FindUser(int id);
-
         void Delete(int id);
-
         public User FindUserFromApiKey(string apiKey);
 
+        public bool IsUsernameUnique(string username);
         List<User> All();
-
         bool hasUsers();
     }
 
@@ -43,12 +41,12 @@ namespace NzbDrone.Core.Authentication
         private readonly IDiskProvider _diskProvider;
         private readonly IEventAggregator _eventAggregator;
 
-        public UserService(IUserRepository repo, IEventAggregator eventAggregator, IAppFolderInfo appFolderInfo, IDiskProvider diskProvider)
+        public UserService(IUserRepository repo, IAppFolderInfo appFolderInfo, IDiskProvider diskProvider, IEventAggregator eventAggregator)
         {
             _repo = repo;
-            _eventAggregator = eventAggregator;
             _appFolderInfo = appFolderInfo;
             _diskProvider = diskProvider;
+            _eventAggregator = eventAggregator;
         }
 
         public User Add(string username, string password, UserRole role)
@@ -70,7 +68,6 @@ namespace NzbDrone.Core.Authentication
             return _repo.Update(user);
         }
 
-        // TODO: Do not allow to change username to something that already exists.
         public User UpdateByModel(User updatedUser)
         {
             var user = FindUser(updatedUser.Id);
@@ -188,6 +185,12 @@ namespace NzbDrone.Core.Authentication
         public bool hasUsers()
         {
             return _repo.All().Any();
+        }
+
+        public bool IsUsernameUnique(string username)
+        {
+            var existingUser = _repo.FindUser(username);
+            return existingUser == null;
         }
 
         private byte[] GenerateSalt()

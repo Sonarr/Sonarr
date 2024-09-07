@@ -83,6 +83,7 @@ const links = [
     iconName: icons.SETTINGS,
     title: () => translate('Settings'),
     to: '/settings',
+    allowedRoles: ['Admin'],
     children: [
       {
         title: () => translate('Users'),
@@ -147,6 +148,7 @@ const links = [
     iconName: icons.SYSTEM,
     title: () => translate('System'),
     to: '/system/status',
+    allowedRoles: ['Admin'],
     children: [
       {
         title: () => translate('Status'),

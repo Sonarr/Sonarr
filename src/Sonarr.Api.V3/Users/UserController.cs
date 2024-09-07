@@ -3,12 +3,10 @@ using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Core.Authentication;
-using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.SignalR;
 using Sonarr.Http;
-using Sonarr.Http.Authentication;
 using Sonarr.Http.REST;
 using Sonarr.Http.REST.Attributes;
 
@@ -19,19 +17,17 @@ namespace Sonarr.Api.V3.Users
     public class UserController : RestControllerWithSignalR<UserResource, User>, IHandle<UsersUpdatedEvent>
     {
         private readonly IUserService _userService;
-        private readonly IAuthenticationService _authService;
-
-        private readonly IConfigFileProvider _configFileProvider;
 
         public UserController(IBroadcastSignalRMessage signalRBroadcaster,
-        IUserService userService,
-        IAuthenticationService authService,
-        IConfigFileProvider configFileProvider)
+        IUserService userService)
             : base(signalRBroadcaster)
         {
             _userService = userService;
-            _authService = authService;
-            _configFileProvider = configFileProvider;
+
+            SharedValidator.RuleFor(u => u.Username).NotEmpty();
+            SharedValidator.RuleFor(u => u.Username)
+                .Must((resource, username) => _userService.IsUsernameUnique(username))
+                .WithMessage("Username already exists");
 
             SharedValidator.RuleFor(c => c.PasswordConfirmation)
             .Must((resource, p) => IsMatchingPassword(resource)).WithMessage("Must match Password");

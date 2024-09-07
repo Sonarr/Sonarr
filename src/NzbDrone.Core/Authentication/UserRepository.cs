@@ -9,7 +9,6 @@ namespace NzbDrone.Core.Authentication
     {
         User FindUser(string username);
         User FindUser(Guid identifier);
-
         User FindByApiKey(string apiKey);
     }
 

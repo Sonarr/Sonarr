@@ -61,11 +61,6 @@ namespace Sonarr.Http.Authentication
         {
             var providedApiKey = ParseApiKey();
 
-            if (string.IsNullOrWhiteSpace(providedApiKey))
-            {
-                return Task.FromResult(AuthenticateResult.NoResult());
-            }
-
             // If the authentication method is set to None, this means the app has not been setup yet and allow all requests until setup is complete.
             var user = _userService.FindUserFromApiKey(providedApiKey);
             var authMethod = _configFileProvider.AuthenticationMethod;

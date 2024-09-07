@@ -31,15 +31,14 @@ import styles from './AuthenticationRequiredModalContent.css';
 
 const GENERAL_SECTION = 'general';
 
-const general_selector = createSettingsSectionSelector(GENERAL_SECTION);
+const selector = createSettingsSectionSelector(GENERAL_SECTION);
 
 function onModalClose() {
   // No-op
 }
 
 export default function AuthenticationRequiredModalContent() {
-  const { isPopulated, error, isSaving, settings } =
-    useSelector(general_selector);
+  const { isPopulated, error, isSaving, settings } = useSelector(selector);
 
   const dispatch = useDispatch();
 

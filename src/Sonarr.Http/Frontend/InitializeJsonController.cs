@@ -38,14 +38,12 @@ namespace Sonarr.Http.Frontend
 
             _httpContextAccessor = httpContextAccessor;
             _userService = userService;
-
-            var currentUser = GetCurrentUser();
-            _apiKey = currentUser != null ? currentUser.ApiKey : "None";
         }
 
         [HttpGet("/initialize.json")]
         public IActionResult Index()
         {
+            _apiKey = GetCurrentUser()?.ApiKey;
             return Content(GetContent(), "application/json");
         }
 
