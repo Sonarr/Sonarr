@@ -15,6 +15,7 @@ namespace NzbDrone.Core.Test.ParserTests
             new object[] { Quality.DVD },
             new object[] { Quality.WEBDL480p },
             new object[] { Quality.Bluray480p },
+            new object[] { Quality.Bluray576p },
             new object[] { Quality.HDTV720p },
             new object[] { Quality.HDTV1080p },
             new object[] { Quality.HDTV2160p },
@@ -105,7 +106,6 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("SERIES.S03E01-06.DUAL.BDRip.AC3.-HELLYWOOD", false)]
         [TestCase("SERIES.S03E01-06.DUAL.BDRip.XviD.AC3.-HELLYWOOD.avi", false)]
         [TestCase("SERIES.S03E01-06.DUAL.XviD.Bluray.AC3.-HELLYWOOD.avi", false)]
-        [TestCase("The.Series.S01E05.576p.BluRay.DD5.1.x264-HiSD", false)]
         [TestCase("The.Series.S01E05.480p.BluRay.DD5.1.x264-HiSD", false)]
         [TestCase("The Series (BD)(640x480(RAW) (BATCH 1) (1-13)", false)]
         [TestCase("[Doki] Series - 02 (848x480 XviD BD MP3) [95360783]", false)]
@@ -122,6 +122,12 @@ namespace NzbDrone.Core.Test.ParserTests
         public void should_parse_webrip480p_quality(string title, bool proper)
         {
             ParseAndVerifyQuality(title, Quality.WEBRip480p, proper);
+        }
+
+        [TestCase("The.Series.S01E05.576p.BluRay.DD5.1.x264-HiSD", false)]
+        public void should_parse_bluray576p_quality(string title, bool proper)
+        {
+            ParseAndVerifyQuality(title, Quality.Bluray576p, proper);
         }
 
         [TestCase("Series - S01E01 - Title [HDTV]", false)]
