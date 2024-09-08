@@ -7,12 +7,19 @@ namespace NzbDrone.Core.MediaFiles
     {
         private static List<string> _archiveExtensions = new List<string>
         {
-            ".rar",
-            ".r00",
-            ".zip",
-            ".tar",
+            ".7z",
+            ".bz2",
             ".gz",
-            ".tar.gz"
+            ".r00",
+            ".rar",
+            ".tar.bz2",
+            ".tar.gz",
+            ".tar",
+            ".tb2",
+            ".tbz2",
+            ".tgz",
+            ".zip",
+            ".zipx"
         };
 
         private static List<string> _executableExtensions = new List<string>
