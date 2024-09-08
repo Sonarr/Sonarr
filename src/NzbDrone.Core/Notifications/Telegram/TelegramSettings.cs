@@ -59,19 +59,4 @@ namespace NzbDrone.Core.Notifications.Telegram
             return new NzbDroneValidationResult(Validator.Validate(this));
         }
     }
-
-    public enum MetadataLinkType
-    {
-        [FieldOption(Label = "IMDb")]
-        Imdb,
-
-        [FieldOption(Label = "TVDb")]
-        Tvdb,
-
-        [FieldOption(Label = "TVMaze")]
-        Tvmaze,
-
-        [FieldOption(Label = "Trakt")]
-        Trakt,
-    }
 }
