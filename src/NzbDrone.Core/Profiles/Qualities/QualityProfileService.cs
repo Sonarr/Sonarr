@@ -98,6 +98,8 @@ namespace NzbDrone.Core.Profiles.Qualities
                 Quality.WEBRip480p,
                 Quality.WEBDL480p,
                 Quality.DVD,
+                Quality.Bluray480p,
+                Quality.Bluray576p,
                 Quality.HDTV720p,
                 Quality.HDTV1080p,
                 Quality.WEBRip720p,
@@ -112,7 +114,9 @@ namespace NzbDrone.Core.Profiles.Qualities
                 Quality.SDTV,
                 Quality.WEBRip480p,
                 Quality.WEBDL480p,
-                Quality.DVD);
+                Quality.DVD,
+                Quality.Bluray480p,
+                Quality.Bluray576p);
 
             AddDefaultProfile("HD-720p",
                 Quality.HDTV720p,
