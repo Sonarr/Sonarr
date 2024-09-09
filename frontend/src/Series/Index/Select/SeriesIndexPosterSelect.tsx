@@ -15,9 +15,8 @@ function SeriesIndexPosterSelect(props: SeriesIndexPosterSelectProps) {
   const isSelected = selectState.selectedState[seriesId];
 
   const onSelectPress = useCallback(
-    (event: SyntheticEvent) => {
-      const nativeEvent = event.nativeEvent as PointerEvent;
-      const shiftKey = nativeEvent.shiftKey;
+    (event: SyntheticEvent<HTMLElement, PointerEvent>) => {
+      const shiftKey = event.nativeEvent.shiftKey;
 
       selectDispatch({
         type: 'toggleSelected',

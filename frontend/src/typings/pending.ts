@@ -1,6 +1,8 @@
 export interface ValidationFailure {
   propertyName: string;
   errorMessage: string;
+  infoLink?: string;
+  detailedDescription?: string;
   severity: 'error' | 'warning';
 }
 

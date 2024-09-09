@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react';
-// @ts-expect-error 'MiddleTruncate' isn't typed
 import MiddleTruncate from 'react-middle-truncate';
 import { useDispatch } from 'react-redux';
 import { Tag } from 'App/State/TagsAppState';

@@ -8,6 +8,7 @@ import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
 import { icons } from 'Helpers/Props';
 import { clear, fetch } from 'Store/Actions/parseActions';
+import { InputChanged } from 'typings/inputs';
 import getErrorMessage from 'Utilities/Object/getErrorMessage';
 import translate from 'Utilities/String/translate';
 import ParseResult from './ParseResult';
@@ -21,7 +22,7 @@ function Parse() {
   const dispatch = useDispatch();
 
   const onInputChange = useCallback(
-    ({ value }: { value: string }) => {
+    ({ value }: InputChanged<string>) => {
       const trimmedValue = value.trim();
 
       setTitle(value);

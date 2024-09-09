@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
 import AppState from 'App/State/AppState';
 import * as commandNames from 'Commands/commandNames';
-import PathInputConnector from 'Components/Form/PathInputConnector';
+import PathInput from 'Components/Form/PathInput';
 import Icon from 'Components/Icon';
 import Button from 'Components/Link/Button';
 import ModalBody from 'Components/Modal/ModalBody';
@@ -104,9 +104,10 @@ function InteractiveImportSelectFolderModalContent(
       </ModalHeader>
 
       <ModalBody>
-        <PathInputConnector
+        <PathInput
           name="folder"
           value={folder}
+          includeFiles={false}
           onChange={onPathChange}
         />
 

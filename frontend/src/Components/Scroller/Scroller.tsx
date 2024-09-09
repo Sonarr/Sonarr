@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import { throttle } from 'lodash';
 import React, {
+  ComponentProps,
   ForwardedRef,
   forwardRef,
   MutableRefObject,
@@ -24,6 +25,7 @@ interface ScrollerProps {
   scrollTop?: number;
   initialScrollTop?: number;
   children?: ReactNode;
+  style?: ComponentProps<'div'>['style'];
   onScroll?: (payload: OnScroll) => void;
 }
 

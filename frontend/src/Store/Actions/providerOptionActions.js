@@ -55,10 +55,19 @@ export const actionHandlers = handleThunks({
       payload
     };
 
-    dispatch(set({
-      section: subsection,
-      isFetching: true
-    }));
+    // Subsection might not yet be defined
+    if (getState()[section][payload.section]) {
+      dispatch(set({
+        section: subsection,
+        isFetching: true
+      }));
+    } else {
+      dispatch(set({
+        section: subsection,
+        ...defaultState,
+        isFetching: true
+      }));
+    }
 
     const promise = requestAction(payload);
 

@@ -1,14 +1,5 @@
 import ModelBase from 'App/ModelBase';
-
-export interface Field {
-  order: number;
-  name: string;
-  label: string;
-  value: boolean | number | string;
-  type: string;
-  advanced: boolean;
-  privacy: string;
-}
+import Field from './Field';
 
 interface ImportList extends ModelBase {
   enable: boolean;

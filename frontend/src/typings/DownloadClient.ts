@@ -1,18 +1,11 @@
 import ModelBase from 'App/ModelBase';
+import Field from './Field';
 
-export interface Field {
-  order: number;
-  name: string;
-  label: string;
-  value: boolean | number | string;
-  type: string;
-  advanced: boolean;
-  privacy: string;
-}
+export type Protocol = 'torrent' | 'usenet' | 'unknown';
 
 interface DownloadClient extends ModelBase {
   enable: boolean;
-  protocol: string;
+  protocol: Protocol;
   priority: number;
   removeCompletedDownloads: boolean;
   removeFailedDownloads: boolean;

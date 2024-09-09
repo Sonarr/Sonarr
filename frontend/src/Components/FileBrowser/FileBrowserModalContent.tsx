@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Alert from 'Components/Alert';
-import PathInput from 'Components/Form/PathInput';
+import { PathInputInternal } from 'Components/Form/PathInput';
 import Button from 'Components/Link/Button';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import InlineMarkdown from 'Components/Markdown/InlineMarkdown';
@@ -151,7 +151,7 @@ function FileBrowserModalContent(props: FileBrowserModalContentProps) {
           </Alert>
         ) : null}
 
-        <PathInput
+        <PathInputInternal
           className={styles.pathInput}
           placeholder={translate('FileBrowserPlaceholderText')}
           hasFileBrowser={false}

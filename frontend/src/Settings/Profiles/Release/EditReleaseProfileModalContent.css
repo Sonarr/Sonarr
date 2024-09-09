@@ -5,7 +5,7 @@
 }
 
 .tagInternalInput {
-  composes: internalInput from '~Components/Form/TagInput.css';
+  composes: internalInput from '~Components/Form/Tag/TagInput.css';
 
   flex: 0 0 100%;
 }
