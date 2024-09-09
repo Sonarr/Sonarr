@@ -13,6 +13,8 @@ namespace Sonarr.Api.V3.Users
         public string Password { get; set; }
         public string PasswordConfirmation { get; set; }
         public UserRole Role { get; set; }
+        public string ApiKey { get; set; }
+        public bool ResetApiKey { get; set; }
     }
 
     public static class UserResourceMapper
@@ -29,7 +31,8 @@ namespace Sonarr.Api.V3.Users
                 Id = model.Id,
                 Identifier = model.Identifier,
                 Username = model.Username,
-                Role = model.Role
+                Role = model.Role,
+                ApiKey = model.ApiKey
             };
         }
 

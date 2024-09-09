@@ -1,19 +1,23 @@
+import { initializeConfig } from 'intializeConfig';
 import PropTypes from 'prop-types';
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Alert from 'Components/Alert';
 import Form from 'Components/Form/Form';
 import FormGroup from 'Components/Form/FormGroup';
+import FormInputButton from 'Components/Form/FormInputButton';
 import FormInputGroup from 'Components/Form/FormInputGroup';
 import FormLabel from 'Components/Form/FormLabel';
+import Icon from 'Components/Icon';
 import Button from 'Components/Link/Button';
+import ClipboardButton from 'Components/Link/ClipboardButton';
 import SpinnerErrorButton from 'Components/Link/SpinnerErrorButton';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
-import { inputTypes, kinds } from 'Helpers/Props';
+import { icons, inputTypes, kinds } from 'Helpers/Props';
 import { saveUser, setUserValue } from 'Store/Actions/Settings/users';
 import { createProviderSettingsSelectorHook } from 'Store/Selectors/createProviderSettingsSelector';
 import translate from 'Utilities/String/translate';
@@ -35,8 +39,16 @@ export default function EditAddUserModalContent(props) {
     validationErrors,
     validationWarnings
   } = useSelector(createProviderSettingsSelectorHook('users', id));
-
   const dispatch = useDispatch();
+
+  const isEditMode = Boolean(id);
+
+  const [resetApiKey, setResetApikey] = useState(false);
+
+  const onResetApiKeyPress = useCallback(() => {
+    dispatch(setUserValue({ name: 'ResetApiKey', value: !resetApiKey }));
+    setResetApikey(!resetApiKey);
+  }, [dispatch, resetApiKey]);
 
   const onInputChange = useCallback(({ name, value }) => {
     dispatch(setUserValue({ name, value }));
@@ -48,13 +60,17 @@ export default function EditAddUserModalContent(props) {
 
   const isSavingRef = useRef();
 
+  // Todo: Make a seamless tranistion for a user resetting their own Apikey.
   useEffect(() => {
     if (isSavingRef.current && !isSaving && !saveError) {
       onModalClose();
+      if (resetApiKey) {
+        initializeConfig();
+      }
     }
 
     isSavingRef.current = isSaving;
-  }, [isSaving, saveError, onModalClose]);
+  }, [isSaving, saveError, onModalClose, resetApiKey]);
 
   const roleOptions = [
     {
@@ -75,7 +91,8 @@ export default function EditAddUserModalContent(props) {
     username,
     password,
     passwordConfirmation,
-    role = { value: 'Admin' }
+    role = { value: 'Admin' },
+    apiKey
   } = item;
 
   return (
@@ -149,15 +166,44 @@ export default function EditAddUserModalContent(props) {
                       {...role}
                     />
                   </FormGroup>
-                </Form>
 
+                  {isEditMode && (
+                    <FormGroup>
+                      <FormLabel>{translate('ApiKey')}</FormLabel>
+
+                      <FormInputGroup
+                        type={inputTypes.TEXT}
+                        name="apiKey"
+                        readOnly={true}
+                        helpTextWarning={resetApiKey ? translate('ApiRefreshText'): null}
+                        buttons={[
+                          <ClipboardButton
+                            key="copy"
+                            value={apiKey.value}
+                            kind={kinds.DEFAULT}
+                          />,
+                          <FormInputButton
+                            key="reset"
+                            onPress={onResetApiKeyPress}
+                          >
+                            <Icon
+                              name={resetApiKey ? icons.CLOSE : icons.REFRESH}
+                            />
+                          </FormInputButton>
+                        ]}
+                        onChange={onInputChange}
+                        {...apiKey}
+                      />
+                    </FormGroup>
+                  )}
+
+                </Form>
               </div> :
               null
           }
         </div>
       </ModalBody>
       <ModalFooter>
-
         {id && (
           <Button
             className={styles.deleteButton}

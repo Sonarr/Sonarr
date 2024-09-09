@@ -21,11 +21,11 @@ namespace NzbDrone.Core.Authentication
         User FindUser(string username, string password);
         User FindUser(Guid identifier);
         User UpdateByModel(User updatedUser);
-        public User FindUser(int id);
+        User FindUser(int id);
         void Delete(int id);
-        public User FindUserFromApiKey(string apiKey);
-
-        public bool IsUsernameUnique(string username);
+        User FindUserFromApiKey(string apiKey);
+        User ResetApiKey(User user);
+        bool IsUsernameUnique(string username);
         List<User> All();
         bool hasUsers();
     }
@@ -169,6 +169,12 @@ namespace NzbDrone.Core.Authentication
         public User FindUserFromApiKey(string apiKey)
         {
             return _repo.FindByApiKey(apiKey);
+        }
+
+        public User ResetApiKey(User user)
+        {
+            user.ApiKey = GenerateApiKey();
+            return Update(user);
         }
 
         private User SetUserHashedPassword(User user, string password)

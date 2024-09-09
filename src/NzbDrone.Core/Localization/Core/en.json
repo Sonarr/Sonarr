@@ -89,6 +89,7 @@
   "AnimeEpisodeTypeFormat": "Absolute episode number ({format})",
   "Any": "Any",
   "ApiKey": "API Key",
+  "ApiRefreshText": "Will be refreshed on save",
   "ApiKeyValidationHealthCheckMessage": "Please update your API key to be at least {length} characters long. You can do this via settings or the config file",
   "AppDataDirectory": "AppData Directory",
   "AppDataLocationHealthCheckMessage": "Updating will not be possible to prevent deleting AppData on Update",

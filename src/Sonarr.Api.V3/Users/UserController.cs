@@ -56,7 +56,12 @@ namespace Sonarr.Api.V3.Users
         [Consumes("application/json")]
         public ActionResult<UserResource> Update([FromBody] UserResource resource)
         {
-            _userService.UpdateByModel(resource.ToModel());
+            var user = _userService.UpdateByModel(resource.ToModel());
+            if (resource.ResetApiKey)
+            {
+                _userService.ResetApiKey(user);
+            }
+
             return Accepted(resource.Id);
         }
 
