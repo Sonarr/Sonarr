@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -25,9 +26,12 @@ namespace Sonarr.Api.V3.Users
             _userService = userService;
 
             SharedValidator.RuleFor(u => u.Username).NotEmpty();
-            SharedValidator.RuleFor(u => u.Username)
-                .Must((resource, username) => _userService.IsUsernameUnique(username))
-                .WithMessage("Username already exists");
+            SharedValidator.RuleFor(c => c.Username)
+            .Must((v, c) => !_userService.All().Any(f => f.Username == c && f.Id != v.Id))
+            .WithMessage("Username already exists.");
+
+            PostValidator.RuleFor(c => c.Password)
+            .NotNull().WithMessage("Password cannot be null");
 
             SharedValidator.RuleFor(c => c.PasswordConfirmation)
             .Must((resource, p) => IsMatchingPassword(resource)).WithMessage("Must match Password");
