@@ -2110,5 +2110,6 @@
     "EditSelectedCustomFormats": "Editar formatos personalizados selecionados",
     "ManageCustomFormats": "Gerenciar formatos personalizados",
     "NoCustomFormatsFound": "Nenhum formato personalizado encontrado",
-    "CountCustomFormatsSelected": "{count} formato(s) personalizado(s) selecionado(s)"
+    "CountCustomFormatsSelected": "{count} formato(s) personalizado(s) selecionado(s)",
+    "LastSearched": "Última Pesquisa"
 }

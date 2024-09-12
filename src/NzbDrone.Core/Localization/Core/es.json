@@ -78,7 +78,7 @@
     "Torrents": "Torrents",
     "Ui": "Interfaz",
     "Underscore": "Guion bajo",
-    "UpdateMechanismHelpText": "Usa el actualizador integrado de {appName} o un script",
+    "UpdateMechanismHelpText": "Usar el actualizador integrado de {appName} o un script",
     "Warn": "Advertencia",
     "AutoTagging": "Etiquetado Automático",
     "AddAutoTag": "Añadir etiqueta automática",
@@ -2110,5 +2110,8 @@
     "DeleteSelectedCustomFormatsMessageText": "¿Estás seguro que quieres borrar los {count} formato(s) personalizado(s) seleccionado(s)?",
     "EditSelectedCustomFormats": "Editar formatos personalizados seleccionados",
     "ManageCustomFormats": "Gestionar formatos personalizados",
-    "CountCustomFormatsSelected": "{count} formato(s) personalizado(s) seleccionado(s)"
+    "CountCustomFormatsSelected": "{count} formato(s) personalizado(s) seleccionado(s)",
+    "LastSearched": "Último buscado",
+    "CustomFormatsSpecificationExceptLanguageHelpText": "Coincide si cualquier idioma distinto del seleccionado está presente",
+    "CustomFormatsSpecificationExceptLanguage": "Excepto idioma"
 }
