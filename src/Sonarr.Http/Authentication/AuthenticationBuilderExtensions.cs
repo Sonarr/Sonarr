@@ -1,7 +1,10 @@
 using System;
+using System.Web;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.DependencyInjection;
 using NzbDrone.Core.Authentication;
+using NzbDrone.Core.Configuration;
 
 namespace Sonarr.Http.Authentication
 {
@@ -29,19 +32,25 @@ namespace Sonarr.Http.Authentication
 
         public static AuthenticationBuilder AddAppAuthentication(this IServiceCollection services)
         {
-            return services.AddAuthentication()
-                .AddNone(AuthenticationType.None.ToString())
-                .AddExternal(AuthenticationType.External.ToString())
-                .AddBasic(AuthenticationType.Basic.ToString())
-                .AddCookie(AuthenticationType.Forms.ToString(), options =>
+            services.AddOptions<CookieAuthenticationOptions>(AuthenticationType.Forms.ToString())
+                .Configure<IConfigFileProvider>((options, configFileProvider) =>
                 {
-                    options.Cookie.Name = "SonarrAuth";
+                    // Url Encode the cookie name to account for spaces or other invalid characters in the configured instance name
+                    var instanceName = HttpUtility.UrlEncode(configFileProvider.InstanceName);
+
+                    options.Cookie.Name = $"{instanceName}Auth";
                     options.AccessDeniedPath = "/login?loginFailed=true";
                     options.LoginPath = "/login";
                     options.ExpireTimeSpan = TimeSpan.FromDays(7);
                     options.SlidingExpiration = true;
                     options.ReturnUrlParameter = "returnUrl";
-                })
+                });
+
+            return services.AddAuthentication()
+                .AddNone(AuthenticationType.None.ToString())
+                .AddExternal(AuthenticationType.External.ToString())
+                .AddBasic(AuthenticationType.Basic.ToString())
+                .AddCookie(AuthenticationType.Forms.ToString())
                 .AddApiKey("API", options =>
                 {
                     options.HeaderName = "X-Api-Key";
