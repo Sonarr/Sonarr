@@ -8,23 +8,23 @@ public class QualityDefinitionResourceValidator : AbstractValidator<QualityDefin
     public QualityDefinitionResourceValidator()
     {
         RuleFor(c => c.MinSize)
-            .GreaterThanOrEqualTo(QualityDefinitionLimits.MinLimit)
+            .GreaterThanOrEqualTo(QualityDefinitionLimits.Min)
             .WithErrorCode("GreaterThanOrEqualTo")
-            .LessThanOrEqualTo(c => c.PreferredSize ?? QualityDefinitionLimits.MaxLimit)
+            .LessThanOrEqualTo(c => c.PreferredSize ?? QualityDefinitionLimits.Max)
             .WithErrorCode("LessThanOrEqualTo")
             .When(c => c.MinSize is not null);
 
         RuleFor(c => c.PreferredSize)
-            .GreaterThanOrEqualTo(c => c.MinSize ?? QualityDefinitionLimits.MinLimit)
+            .GreaterThanOrEqualTo(c => c.MinSize ?? QualityDefinitionLimits.Min)
             .WithErrorCode("GreaterThanOrEqualTo")
-            .LessThanOrEqualTo(c => c.MaxSize ?? QualityDefinitionLimits.MaxLimit)
+            .LessThanOrEqualTo(c => c.MaxSize ?? QualityDefinitionLimits.Max)
             .WithErrorCode("LessThanOrEqualTo")
             .When(c => c.PreferredSize is not null);
 
         RuleFor(c => c.MaxSize)
-            .GreaterThanOrEqualTo(c => c.PreferredSize ?? QualityDefinitionLimits.MinLimit)
+            .GreaterThanOrEqualTo(c => c.PreferredSize ?? QualityDefinitionLimits.Min)
             .WithErrorCode("GreaterThanOrEqualTo")
-            .LessThanOrEqualTo(QualityDefinitionLimits.MaxLimit)
+            .LessThanOrEqualTo(QualityDefinitionLimits.Max)
             .WithErrorCode("LessThanOrEqualTo")
             .When(c => c.MaxSize is not null);
     }

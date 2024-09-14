@@ -1,9 +1,6 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
 namespace Sonarr.Api.V3.Qualities;
 
-[SuppressMessage("StyleCop.CSharp.NamingRules",
-    "SA1313:Parameter names should begin with lower-case letter",
-    Justification =
-        "False positive for record types since params should follow property naming rules")]
-public record QualityDefinitionLimitsResource(int MinLimit, int MaxLimit);
+// SA1313 still applies to records until https://github.com/DotNetAnalyzers/StyleCopAnalyzers/issues/3181 is available in a release build.
+#pragma warning disable SA1313
+public record QualityDefinitionLimitsResource(int Min, int Max);
+#pragma warning restore SA1313

@@ -25,18 +25,12 @@ namespace Sonarr.Api.V3.Qualities
         {
             _qualityDefinitionService = qualityDefinitionService;
 
-            SetupValidation();
-        }
-
-        private void SetupValidation()
-        {
             SharedValidator.RuleFor(c => c)
                 .SetValidator(new QualityDefinitionResourceValidator());
         }
 
         [RestPutById]
-        public ActionResult<QualityDefinitionResource> Update(
-            [FromBody] QualityDefinitionResource resource)
+        public ActionResult<QualityDefinitionResource> Update([FromBody] QualityDefinitionResource resource)
         {
             var model = resource.ToModel();
             _qualityDefinitionService.Update(model);
@@ -70,8 +64,8 @@ namespace Sonarr.Api.V3.Qualities
         public ActionResult<QualityDefinitionLimitsResource> GetLimits()
         {
             return Ok(new QualityDefinitionLimitsResource(
-                QualityDefinitionLimits.MinLimit,
-                QualityDefinitionLimits.MaxLimit));
+                QualityDefinitionLimits.Min,
+                QualityDefinitionLimits.Max));
         }
 
         [NonAction]

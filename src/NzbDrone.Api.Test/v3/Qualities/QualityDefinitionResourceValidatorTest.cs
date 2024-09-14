@@ -15,7 +15,7 @@ public class QualityDefinitionResourceValidatorTests
     {
         var resource = new QualityDefinitionResource
         {
-            MinSize = QualityDefinitionLimits.MinLimit - 1,
+            MinSize = QualityDefinitionLimits.Min - 1,
             PreferredSize = null,
             MaxSize = null
         };
@@ -50,7 +50,7 @@ public class QualityDefinitionResourceValidatorTests
     {
         var resource = new QualityDefinitionResource
         {
-            MinSize = QualityDefinitionLimits.MinLimit,
+            MinSize = QualityDefinitionLimits.Min,
             PreferredSize = null,
             MaxSize = null
         };
@@ -86,7 +86,7 @@ public class QualityDefinitionResourceValidatorTests
         {
             MinSize = null,
             PreferredSize = null,
-            MaxSize = QualityDefinitionLimits.MaxLimit + 1
+            MaxSize = QualityDefinitionLimits.Max + 1
         };
 
         var result = _validator.TestValidate(resource);
@@ -102,7 +102,7 @@ public class QualityDefinitionResourceValidatorTests
         {
             MinSize = null,
             PreferredSize = null,
-            MaxSize = QualityDefinitionLimits.MaxLimit
+            MaxSize = QualityDefinitionLimits.Max
         };
 
         var result = _validator.TestValidate(resource);
