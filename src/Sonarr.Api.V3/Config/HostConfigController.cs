@@ -1,7 +1,6 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Security.Cryptography.X509Certificates;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Common.Extensions;
@@ -58,7 +57,7 @@ namespace Sonarr.Api.V3.Config
                 .NotEmpty()
                 .IsValidPath()
                 .SetValidator(fileExistsValidator)
-                .Must((resource, path) => IsValidSslCertificate(resource)).WithMessage("Invalid SSL certificate file or password")
+                .IsValidCertificate()
                 .When(c => c.EnableSsl);
 
             SharedValidator.RuleFor(c => c.LogSizeLimit).InclusiveBetween(1, 10);
@@ -69,21 +68,6 @@ namespace Sonarr.Api.V3.Config
             SharedValidator.RuleFor(c => c.BackupFolder).IsValidPath().When(c => Path.IsPathRooted(c.BackupFolder));
             SharedValidator.RuleFor(c => c.BackupInterval).InclusiveBetween(1, 7);
             SharedValidator.RuleFor(c => c.BackupRetention).InclusiveBetween(1, 90);
-        }
-
-        private bool IsValidSslCertificate(HostConfigResource resource)
-        {
-            X509Certificate2 cert;
-            try
-            {
-                cert = new X509Certificate2(resource.SslCertPath, resource.SslCertPassword, X509KeyStorageFlags.DefaultKeySet);
-            }
-            catch
-            {
-                return false;
-            }
-
-            return cert != null;
         }
 
         private bool IsMatchingPassword(HostConfigResource resource)
