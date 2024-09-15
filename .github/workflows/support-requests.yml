@@ -1,0 +1,29 @@
+name: 'Support Requests'
+
+on:
+  issues:
+    types: [labeled, unlabeled, reopened]
+
+permissions:
+  issues: write
+
+jobs:
+  action:
+    runs-on: ubuntu-latest
+    if: github.repository == 'Sonarr/Sonarr'
+    steps:
+      - uses: dessant/support-requests@v4
+        with:
+          github-token: ${{ github.token }}
+          support-label: 'support'
+          issue-comment: >
+            :wave: @{issue-author}, we use the issue tracker exclusively
+            for bug reports and feature requests. However, this issue appears
+            to be a support request. Please use one of the support channels: 
+            [forums](https://forums.sonarr.tv/), [subreddit](https://www.reddit.com/r/sonarr/), 
+            [discord](https://discord.gg/Ex7FmFK), or [IRC](https://web.libera.chat/?channels=#sonarr) 
+            for support/questions.
+          close-issue: true
+          issue-close-reason: 'not planned'
+          lock-issue: false
+          issue-lock-reason: 'off-topic'
