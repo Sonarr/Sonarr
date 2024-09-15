@@ -1903,7 +1903,7 @@
   "SizeLimit": "Size Limit",
   "SizeOnDisk": "Size on disk",
   "SkipFreeSpaceCheck": "Skip Free Space Check",
-  "SkipFreeSpaceCheckWhenImportingHelpText": "Use when {appName} is unable to detect free space of your root folder during file import",
+  "SkipFreeSpaceCheckHelpText": "Use when {appName} is unable to detect free space of your root folder",
   "SkipRedownload": "Skip Redownload",
   "SkipRedownloadHelpText": "Prevents {appName} from trying to download an alternative release for this item",
   "Small": "Small",
