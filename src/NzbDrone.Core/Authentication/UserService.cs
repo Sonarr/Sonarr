@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Xml.Linq;
@@ -13,12 +14,20 @@ namespace NzbDrone.Core.Authentication
 {
     public interface IUserService
     {
-        User Add(string username, string password);
+        User Add(string username, string password, UserRole role);
         User Update(User user);
         User Upsert(string username, string password);
         User FindUser();
         User FindUser(string username, string password);
         User FindUser(Guid identifier);
+        User UpdateByModel(User updatedUser);
+        User FindUser(int id);
+        void Delete(int id);
+        User FindUserFromApiKey(string apiKey);
+        User ResetApiKey(User user);
+        bool IsUsernameUnique(string username);
+        List<User> All();
+        bool hasUsers();
     }
 
     public class UserService : IUserService, IHandle<ApplicationStartedEvent>
@@ -30,22 +39,25 @@ namespace NzbDrone.Core.Authentication
         private readonly IUserRepository _repo;
         private readonly IAppFolderInfo _appFolderInfo;
         private readonly IDiskProvider _diskProvider;
+        private readonly IEventAggregator _eventAggregator;
 
-        public UserService(IUserRepository repo, IAppFolderInfo appFolderInfo, IDiskProvider diskProvider)
+        public UserService(IUserRepository repo, IAppFolderInfo appFolderInfo, IDiskProvider diskProvider, IEventAggregator eventAggregator)
         {
             _repo = repo;
             _appFolderInfo = appFolderInfo;
             _diskProvider = diskProvider;
+            _eventAggregator = eventAggregator;
         }
 
-        public User Add(string username, string password)
+        public User Add(string username, string password, UserRole role)
         {
             var user = new User
             {
                 Identifier = Guid.NewGuid(),
-                Username = username.ToLowerInvariant()
+                Username = username.ToLowerInvariant(),
+                Role = role,
+                ApiKey = GenerateApiKey()
             };
-
             SetUserHashedPassword(user, password);
 
             return _repo.Insert(user);
@@ -56,13 +68,31 @@ namespace NzbDrone.Core.Authentication
             return _repo.Update(user);
         }
 
+        public User UpdateByModel(User updatedUser)
+        {
+            var user = FindUser(updatedUser.Id);
+            if (user == null)
+            {
+                return null;
+            }
+
+            user.Username = updatedUser.Username;
+            user.Role = updatedUser.Role;
+            if (!updatedUser.Password.IsNullOrWhiteSpace())
+            {
+                SetUserHashedPassword(user, updatedUser.Password);
+            }
+
+            return Update(user);
+        }
+
         public User Upsert(string username, string password)
         {
             var user = FindUser();
 
             if (user == null)
             {
-                return Add(username, password);
+                return Add(username, password, UserRole.Admin);
             }
 
             if (user.Password != password)
@@ -77,7 +107,7 @@ namespace NzbDrone.Core.Authentication
 
         public User FindUser()
         {
-            return _repo.SingleOrDefault();
+            return _repo.All().FirstOrDefault();
         }
 
         public User FindUser(string username, string password)
@@ -120,6 +150,33 @@ namespace NzbDrone.Core.Authentication
             return _repo.FindUser(identifier);
         }
 
+        public User FindUser(int id)
+        {
+            return _repo.Get(id);
+        }
+
+        public List<User> All()
+        {
+            return _repo.All().ToList();
+        }
+
+        public void Delete(int id)
+        {
+            _repo.Delete(id);
+            _eventAggregator.PublishEvent(new UsersUpdatedEvent());
+        }
+
+        public User FindUserFromApiKey(string apiKey)
+        {
+            return _repo.FindByApiKey(apiKey);
+        }
+
+        public User ResetApiKey(User user)
+        {
+            user.ApiKey = GenerateApiKey();
+            return Update(user);
+        }
+
         private User SetUserHashedPassword(User user, string password)
         {
             var salt = GenerateSalt();
@@ -131,12 +188,28 @@ namespace NzbDrone.Core.Authentication
             return user;
         }
 
+        public bool hasUsers()
+        {
+            return _repo.All().Any();
+        }
+
+        public bool IsUsernameUnique(string username)
+        {
+            var existingUser = _repo.FindUser(username);
+            return existingUser == null;
+        }
+
         private byte[] GenerateSalt()
         {
             var salt = new byte[SALT_SIZE];
             RandomNumberGenerator.Create().GetBytes(salt);
 
             return salt;
+        }
+
+        private string GenerateApiKey()
+        {
+            return Guid.NewGuid().ToString().Replace("-", "");
         }
 
         private string GetHashedPassword(string password, byte[] salt, int iterations)
@@ -184,7 +257,7 @@ namespace NzbDrone.Core.Authentication
             var username = usernameElement.Value;
             var password = passwordElement.Value;
 
-            Add(username, password);
+            Add(username, password, UserRole.Admin);
         }
     }
 }

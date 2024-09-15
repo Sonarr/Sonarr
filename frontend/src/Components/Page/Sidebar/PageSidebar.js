@@ -83,7 +83,12 @@ const links = [
     iconName: icons.SETTINGS,
     title: () => translate('Settings'),
     to: '/settings',
+    allowedRoles: ['Admin'],
     children: [
+      {
+        title: () => translate('Users'),
+        to: '/settings/users'
+      },
       {
         title: () => translate('MediaManagement'),
         to: '/settings/mediamanagement'
@@ -143,6 +148,7 @@ const links = [
     iconName: icons.SYSTEM,
     title: () => translate('System'),
     to: '/system/status',
+    allowedRoles: ['Admin'],
     children: [
       {
         title: () => translate('Status'),
@@ -173,10 +179,18 @@ const links = [
   }
 ];
 
-function getActiveParent(pathname) {
-  let activeParent = links[0].to;
+const userRole = window.Sonarr.role;
+const filteredLinks = links.filter((link) => {
+  if (link.iconName === icons.SYSTEM || link.iconName === icons.SETTINGS) {
+    return userRole === 'Admin';
+  }
+  return true;
+});
 
-  links.forEach((link) => {
+function getActiveParent(pathname) {
+  let activeParent = filteredLinks[0].to;
+
+  filteredLinks.forEach((link) => {
     if (link.to && link.to === pathname) {
       activeParent = link.to;
 
@@ -466,7 +480,7 @@ class PageSidebar extends Component {
         >
           <div>
             {
-              links.map((link) => {
+              filteredLinks.map((link) => {
                 const childWithStatusComponent = _.find(link.children, (child) => {
                   return !!child.statusComponent;
                 });

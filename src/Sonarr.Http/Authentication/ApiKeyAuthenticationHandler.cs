@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using NzbDrone.Core.Authentication;
 using NzbDrone.Core.Configuration;
 
 namespace Sonarr.Http.Authentication
@@ -23,16 +24,20 @@ namespace Sonarr.Http.Authentication
 
     public class ApiKeyAuthenticationHandler : AuthenticationHandler<ApiKeyAuthenticationOptions>
     {
-        private readonly string _apiKey;
+        private readonly UserService _userService;
+
+        private readonly IConfigFileProvider _configFileProvider;
 
         public ApiKeyAuthenticationHandler(IOptionsMonitor<ApiKeyAuthenticationOptions> options,
             ILoggerFactory logger,
             UrlEncoder encoder,
             ISystemClock clock,
-            IConfigFileProvider config)
+            UserService userService,
+            IConfigFileProvider configFileProvider)
             : base(options, logger, encoder, clock)
         {
-            _apiKey = config.ApiKey;
+            _userService = userService;
+            _configFileProvider = configFileProvider;
         }
 
         private string ParseApiKey()
@@ -56,16 +61,15 @@ namespace Sonarr.Http.Authentication
         {
             var providedApiKey = ParseApiKey();
 
-            if (string.IsNullOrWhiteSpace(providedApiKey))
-            {
-                return Task.FromResult(AuthenticateResult.NoResult());
-            }
-
-            if (_apiKey == providedApiKey)
+            // If the authentication method is set to None, this means the app has not been setup yet and allow all requests until setup is complete.
+            var user = _userService.FindUserFromApiKey(providedApiKey);
+            var authMethod = _configFileProvider.AuthenticationMethod;
+            if (user != null || authMethod == AuthenticationType.None)
             {
                 var claims = new List<Claim>
                 {
-                    new Claim("ApiKey", "true")
+                    new Claim("ApiKey", "true"),
+                    new Claim(ClaimTypes.Role, user != null ? user.Role.ToString() : "Admin")
                 };
 
                 var identity = new ClaimsIdentity(claims, Options.AuthenticationType);

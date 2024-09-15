@@ -1,3 +1,4 @@
+import { initializeConfig } from 'intializeConfig';
 import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Alert from 'Components/Alert';
@@ -28,9 +29,9 @@ import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
 import styles from './AuthenticationRequiredModalContent.css';
 
-const SECTION = 'general';
+const GENERAL_SECTION = 'general';
 
-const selector = createSettingsSectionSelector(SECTION);
+const selector = createSettingsSectionSelector(GENERAL_SECTION);
 
 function onModalClose() {
   // No-op
@@ -38,6 +39,7 @@ function onModalClose() {
 
 export default function AuthenticationRequiredModalContent() {
   const { isPopulated, error, isSaving, settings } = useSelector(selector);
+
   const dispatch = useDispatch();
 
   const {
@@ -74,11 +76,14 @@ export default function AuthenticationRequiredModalContent() {
       return;
     }
 
-    dispatch(fetchStatus());
+    // Grab the API key when new user is automatically signed in.
+    initializeConfig().then(() => {
+      dispatch(fetchStatus());
+    });
   }, [isSaving, wasSaving, dispatch]);
 
-  const onPress = useCallback(() => {
-    dispatch(saveGeneralSettings());
+  const onPress = useCallback(async () => {
+    await dispatch(saveGeneralSettings());
   }, [dispatch]);
 
   return (

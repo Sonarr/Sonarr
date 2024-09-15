@@ -24,6 +24,7 @@ import QualityConnector from 'Settings/Quality/QualityConnector';
 import Settings from 'Settings/Settings';
 import TagSettings from 'Settings/Tags/TagSettings';
 import UISettingsConnector from 'Settings/UI/UISettingsConnector';
+import UsersConnector from 'Settings/Users/UsersConnector';
 import BackupsConnector from 'System/Backup/BackupsConnector';
 import LogsTableConnector from 'System/Events/LogsTableConnector';
 import Logs from 'System/Logs/Logs';
@@ -33,6 +34,7 @@ import Updates from 'System/Updates/Updates';
 import getPathWithUrlBase from 'Utilities/getPathWithUrlBase';
 import CutoffUnmetConnector from 'Wanted/CutoffUnmet/CutoffUnmetConnector';
 import MissingConnector from 'Wanted/Missing/MissingConnector';
+import ProtectedRoute from './ProtectedRoute';
 
 function RedirectWithUrlBase() {
   return <Redirect to={getPathWithUrlBase('/')} />;
@@ -97,6 +99,12 @@ function AppRoutes() {
       */}
 
       <Route exact={true} path="/settings" component={Settings} />
+
+      <ProtectedRoute
+        path="/settings/users"
+        component={UsersConnector}
+        allowedRoles={['Admin']}
+      />
 
       <Route
         path="/settings/mediamanagement"

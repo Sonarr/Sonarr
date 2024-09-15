@@ -191,6 +191,7 @@ namespace NzbDrone.Host
                 .Build();
             });
 
+            services.AddHttpContextAccessor();
             services.AddAppAuthentication();
         }
 

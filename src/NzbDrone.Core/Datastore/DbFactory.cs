@@ -9,6 +9,7 @@ using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Exceptions;
 using NzbDrone.Common.Instrumentation;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Datastore.Migration.Framework;
 
 namespace NzbDrone.Core.Datastore
@@ -26,6 +27,8 @@ namespace NzbDrone.Core.Datastore
         private readonly IConnectionStringFactory _connectionStringFactory;
         private readonly IDiskProvider _diskProvider;
         private readonly IRestoreDatabase _restoreDatabaseService;
+
+        private readonly IConfigFileProvider _configFileProvider;
 
         static DbFactory()
         {
@@ -46,12 +49,14 @@ namespace NzbDrone.Core.Datastore
         public DbFactory(IMigrationController migrationController,
                          IConnectionStringFactory connectionStringFactory,
                          IDiskProvider diskProvider,
-                         IRestoreDatabase restoreDatabaseService)
+                         IRestoreDatabase restoreDatabaseService,
+                         IConfigFileProvider configFileProvider)
         {
             _migrationController = migrationController;
             _connectionStringFactory = connectionStringFactory;
             _diskProvider = diskProvider;
             _restoreDatabaseService = restoreDatabaseService;
+            _configFileProvider = configFileProvider;
         }
 
         public IDatabase Create(MigrationType migrationType = MigrationType.Main)

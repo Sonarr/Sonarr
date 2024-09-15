@@ -29,7 +29,11 @@ namespace Sonarr.Http.Authentication
 
         public static AuthenticationBuilder AddAppAuthentication(this IServiceCollection services)
         {
-            return services.AddAuthentication()
+            return services.AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = "API";
+                    options.DefaultChallengeScheme = "API";
+                })
                 .AddNone(AuthenticationType.None.ToString())
                 .AddExternal(AuthenticationType.External.ToString())
                 .AddBasic(AuthenticationType.Basic.ToString())

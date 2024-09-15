@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NLog;
 using NLog.Extensions.Logging;
+using NzbDrone.Core.Configuration;
 
 namespace NzbDrone.Core.Datastore.Migration.Framework
 {
@@ -22,11 +23,15 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
         private readonly Logger _logger;
         private readonly ILoggerProvider _migrationLoggerProvider;
 
+        private readonly IConfigFileProvider _configFileProvider;
+
         public MigrationController(Logger logger,
-                                   ILoggerProvider migrationLoggerProvider)
+                                   ILoggerProvider migrationLoggerProvider,
+                                   IConfigFileProvider configFileProvider)
         {
             _logger = logger;
             _migrationLoggerProvider = migrationLoggerProvider;
+            _configFileProvider = configFileProvider;
         }
 
         public void Migrate(string connectionString, MigrationContext migrationContext, DatabaseType databaseType)
@@ -63,6 +68,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
                 {
                     cfg.GeneratorId = db;
                 })
+                .AddSingleton(_configFileProvider)
                 .BuildServiceProvider();
 
             using (var scope = serviceProvider.CreateScope())
