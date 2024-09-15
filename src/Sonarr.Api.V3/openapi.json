@@ -10673,6 +10673,10 @@
             "type": "integer",
             "format": "int32"
           },
+          "minUpgradeFormatScore": {
+            "type": "integer",
+            "format": "int32"
+          },
           "formatItems": {
             "type": "array",
             "items": {

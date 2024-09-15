@@ -77,6 +77,9 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
                     case UpgradeableRejectReason.CustomFormatScore:
                         return Decision.Reject("Existing file on disk has a equal or higher custom format score: {0}", qualityProfile.CalculateCustomFormatScore(customFormats));
+
+                    case UpgradeableRejectReason.MinCustomFormatScore:
+                        return Decision.Reject("Existing file differential between new release does not meet minimum Custom Format score increment: {0}", qualityProfile.MinFormatScore);
                 }
             }
 

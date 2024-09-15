@@ -1176,6 +1176,8 @@
   "MinimumAgeHelpText": "Usenet only: Minimum age in minutes of NZBs before they are grabbed. Use this to give new releases time to propagate to your usenet provider.",
   "MinimumCustomFormatScore": "Minimum Custom Format Score",
   "MinimumCustomFormatScoreHelpText": "Minimum custom format score allowed to download",
+  "MinimumCustomFormatScoreIncrement": "Minimum Custom Format Score Increment",
+  "MinimumCustomFormatScoreIncrementHelpText": "Minimum required improvement of the custom format score between existing and new releases before {appName} considers it an upgrade",
   "MinimumFreeSpace": "Minimum Free Space",
   "MinimumFreeSpaceHelpText": "Prevent import if it would leave less than this amount of disk space available",
   "MinimumLimits": "Minimum Limits",
