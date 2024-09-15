@@ -12,14 +12,21 @@ using Sonarr.Http.REST.Attributes;
 namespace Sonarr.Api.V3.Qualities
 {
     [V3ApiController]
-    public class QualityDefinitionController : RestControllerWithSignalR<QualityDefinitionResource, QualityDefinition>, IHandle<CommandExecutedEvent>
+    public class QualityDefinitionController :
+        RestControllerWithSignalR<QualityDefinitionResource, QualityDefinition>,
+        IHandle<CommandExecutedEvent>
     {
         private readonly IQualityDefinitionService _qualityDefinitionService;
 
-        public QualityDefinitionController(IQualityDefinitionService qualityDefinitionService, IBroadcastSignalRMessage signalRBroadcaster)
+        public QualityDefinitionController(
+            IQualityDefinitionService qualityDefinitionService,
+            IBroadcastSignalRMessage signalRBroadcaster)
             : base(signalRBroadcaster)
         {
             _qualityDefinitionService = qualityDefinitionService;
+
+            SharedValidator.RuleFor(c => c)
+                .SetValidator(new QualityDefinitionResourceValidator());
         }
 
         [RestPutById]
@@ -45,14 +52,20 @@ namespace Sonarr.Api.V3.Qualities
         public object UpdateMany([FromBody] List<QualityDefinitionResource> resource)
         {
             // Read from request
-            var qualityDefinitions = resource
-                                                 .ToModel()
-                                                 .ToList();
+            var qualityDefinitions = resource.ToModel().ToList();
 
             _qualityDefinitionService.UpdateMany(qualityDefinitions);
 
             return Accepted(_qualityDefinitionService.All()
                 .ToResource());
+        }
+
+        [HttpGet("limits")]
+        public ActionResult<QualityDefinitionLimitsResource> GetLimits()
+        {
+            return Ok(new QualityDefinitionLimitsResource(
+                QualityDefinitionLimits.Min,
+                QualityDefinitionLimits.Max));
         }
 
         [NonAction]
