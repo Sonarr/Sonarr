@@ -691,7 +691,6 @@
     "SslPort": "SSL-portti",
     "StopSelecting": "Lopeta valitseminen",
     "Standard": "Vakio",
-    "SkipFreeSpaceCheckWhenImportingHelpText": "Käytä kun juurikansion tallennusmedian vapaata tilaa ei tunnisteta tiedostotuonnin yhteydessä.",
     "Small": "Pieni",
     "DownloadWarning": "Latausvaroitus: {warningMessage}",
     "DownloadIgnored": "Lataus ohitettiin",

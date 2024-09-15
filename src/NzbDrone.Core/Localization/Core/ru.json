@@ -1593,7 +1593,6 @@
     "SkipFreeSpaceCheck": "Пропустить проверку свободного места",
     "ShowSizeOnDisk": "Показать размер на диске",
     "ShowSearchHelpText": "Показать копку поиска при наведении",
-    "SkipFreeSpaceCheckWhenImportingHelpText": "Используйте, когда {appName} не может обнаружить свободное место в вашей корневой папке во время импорта файлов",
     "SpecialsFolderFormat": "Формат папки спец. эпизодов",
     "SmartReplace": "Умная замена",
     "SkipRedownloadHelpText": "Предотвращает попытку {appName} загрузить альтернативную версию для этого элемента",

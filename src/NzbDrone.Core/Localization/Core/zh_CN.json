@@ -1147,7 +1147,6 @@
     "ShowSeriesTitleHelpText": "在海报下显示剧集标题",
     "ShowUnknownSeriesItems": "实现未知剧集项目",
     "ShowUnknownSeriesItemsHelpText": "显示队列中没有剧集的项目，这可能包括已删除的剧集、电影或 {appName} 分类中的任何其他内容",
-    "SkipFreeSpaceCheckWhenImportingHelpText": "在文件导入期间，当{appName}无法检测根文件夹的空闲空间时使用",
     "Small": "小",
     "SingleEpisodeInvalidFormat": "单集：非法格式",
     "SkipFreeSpaceCheck": "跳过剩余空间检查",

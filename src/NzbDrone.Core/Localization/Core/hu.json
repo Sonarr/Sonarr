@@ -997,7 +997,6 @@
     "UiSettingsLoadError": "Nem sikerült betölteni a felhasználói felület beállításait",
     "SelectDropdown": "Válassz...",
     "SelectEpisodes": "Epizód(ok) kiválasztása",
-    "SkipFreeSpaceCheckWhenImportingHelpText": "Akkor használja, ha a(z) {appName} nem tud szabad helyet észlelni a gyökérmappában a fájlimportálás során",
     "SkipRedownloadHelpText": "Megakadályozza, hogy {appName} megpróbáljon letölteni egy alternatív kiadást ehhez az elemhez",
     "Specials": "Különlegességek",
     "SslCertPasswordHelpText": "Jelszó a pfx fájlhoz",

@@ -742,7 +742,6 @@
     "ShowUnknownSeriesItems": "Afficher les éléments de série inconnus",
     "ShowUnknownSeriesItemsHelpText": "Afficher les éléments sans série dans la file d'attente. Cela peut inclure des séries, des films ou tout autre élément supprimé dans la catégorie de {appName}",
     "ShownClickToHide": "Affiché, cliquez pour masquer",
-    "SkipFreeSpaceCheckWhenImportingHelpText": "À utiliser lorsque {appName} ne parvient pas à détecter l'espace libre de votre dossier racine lors de l'importation de fichiers",
     "SkipRedownloadHelpText": "Empêche {appName} d'essayer de télécharger une version alternative pour cet élément",
     "Small": "Petit",
     "Socks5": "Socks5 (Support TOR)",

@@ -834,7 +834,6 @@
     "SingleEpisode": "Episódio Único",
     "SizeLimit": "Limite de Tamanho",
     "SkipFreeSpaceCheck": "Ignorar verificação de espaço livre",
-    "SkipFreeSpaceCheckWhenImportingHelpText": "Use quando {appName} não consegue detectar espaço livre em sua pasta raiz durante a importação do arquivo",
     "SmartReplace": "Substituição inteligente",
     "SmartReplaceHint": "Traço ou Espaço e Traço, dependendo do nome",
     "Socks4": "Socks4",
