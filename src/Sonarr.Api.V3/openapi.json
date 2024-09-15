@@ -5482,6 +5482,35 @@
         }
       }
     },
+    "/api/v3/qualitydefinition/limits": {
+      "get": {
+        "tags": [
+          "QualityDefinition"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/QualityDefinitionLimitsResource"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QualityDefinitionLimitsResource"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QualityDefinitionLimitsResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v3/qualityprofile": {
       "post": {
         "tags": [
@@ -10559,6 +10588,20 @@
             "$ref": "#/components/schemas/QualitySource"
           },
           "resolution": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "QualityDefinitionLimitsResource": {
+        "type": "object",
+        "properties": {
+          "min": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "max": {
             "type": "integer",
             "format": "int32"
           }
