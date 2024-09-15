@@ -147,8 +147,14 @@ namespace NzbDrone.Core.Parser
                         return result;
                     }
 
-                    if (resolution == Resolution.R360P || resolution == Resolution.R480P ||
-                        resolution == Resolution.R540p || resolution == Resolution.R576p)
+                    if (resolution == Resolution.R576p)
+                    {
+                        result.Quality = Quality.Bluray576p;
+                        return result;
+                    }
+
+                    if (resolution == Resolution.R360p || resolution == Resolution.R480p ||
+                        resolution == Resolution.R540p)
                     {
                         result.Quality = Quality.Bluray480p;
                         return result;
@@ -315,7 +321,7 @@ namespace NzbDrone.Core.Parser
             {
                 result.SourceDetectionSource = QualityDetectionSource.Unknown;
 
-                if (resolution == Resolution.R480P)
+                if (resolution == Resolution.R480p)
                 {
                     result.Quality = Quality.Bluray480p;
                     return result;
@@ -345,7 +351,7 @@ namespace NzbDrone.Core.Parser
             {
                 result.SourceDetectionSource = QualityDetectionSource.Name;
 
-                if (resolution == Resolution.R360P || resolution == Resolution.R480P ||
+                if (resolution == Resolution.R360p || resolution == Resolution.R480p ||
                     resolution == Resolution.R540p || resolution == Resolution.R576p ||
                     normalizedName.ContainsIgnoreCase("480p"))
                 {
@@ -387,7 +393,7 @@ namespace NzbDrone.Core.Parser
             {
                 result.SourceDetectionSource = QualityDetectionSource.Name;
 
-                if (resolution == Resolution.R360P || resolution == Resolution.R480P ||
+                if (resolution == Resolution.R360p || resolution == Resolution.R480p ||
                     resolution == Resolution.R540p || resolution == Resolution.R576p ||
                     normalizedName.ContainsIgnoreCase("480p"))
                 {
@@ -477,7 +483,7 @@ namespace NzbDrone.Core.Parser
                     return result;
                 }
 
-                if (resolution == Resolution.R360P || resolution == Resolution.R480P ||
+                if (resolution == Resolution.R360p || resolution == Resolution.R480p ||
                     resolution == Resolution.R540p || resolution == Resolution.R576p)
                 {
                     result.ResolutionDetectionSource = QualityDetectionSource.Name;
@@ -603,12 +609,12 @@ namespace NzbDrone.Core.Parser
 
             if (match.Groups["R360p"].Success)
             {
-                return Resolution.R360P;
+                return Resolution.R360p;
             }
 
             if (match.Groups["R480p"].Success)
             {
-                return Resolution.R480P;
+                return Resolution.R480p;
             }
 
             if (match.Groups["R540p"].Success)
@@ -707,8 +713,8 @@ namespace NzbDrone.Core.Parser
 
     public enum Resolution
     {
-        R360P = 360,
-        R480P = 480,
+        R360p = 360,
+        R480p = 480,
         R540p = 540,
         R576p = 576,
         R720p = 720,
