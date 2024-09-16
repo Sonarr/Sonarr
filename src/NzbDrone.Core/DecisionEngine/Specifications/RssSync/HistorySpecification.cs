@@ -93,6 +93,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
                     {
                         case UpgradeableRejectReason.None:
                             continue;
+
                         case UpgradeableRejectReason.BetterQuality:
                             return Decision.Reject("{0} grab event in history is of equal or higher preference: {1}", rejectionSubject, mostRecent.Quality);
 
@@ -106,7 +107,10 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
                             return Decision.Reject("{0} grab event in history meets Custom Format cutoff: {1}", rejectionSubject, qualityProfile.CutoffFormatScore);
 
                         case UpgradeableRejectReason.CustomFormatScore:
-                            return Decision.Reject("{0} grab event in history has an equal or higher custom format score: {1}", rejectionSubject, qualityProfile.CalculateCustomFormatScore(customFormats));
+                            return Decision.Reject("{0} grab event in history has an equal or higher Custom Format score: {1}", rejectionSubject, qualityProfile.CalculateCustomFormatScore(customFormats));
+
+                        case UpgradeableRejectReason.MinCustomFormatScore:
+                            return Decision.Reject("{0} grab event in history has Custom Format score within Custom Format score increment: {1}", rejectionSubject, qualityProfile.MinUpgradeFormatScore);
                     }
                 }
             }

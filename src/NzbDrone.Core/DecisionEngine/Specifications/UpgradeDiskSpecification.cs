@@ -63,6 +63,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 {
                     case UpgradeableRejectReason.None:
                         continue;
+
                     case UpgradeableRejectReason.BetterQuality:
                         return Decision.Reject("Existing file on disk is of equal or higher preference: {0}", file.Quality);
 
@@ -76,10 +77,10 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                         return Decision.Reject("Existing file on disk meets Custom Format cutoff: {0}", qualityProfile.CutoffFormatScore);
 
                     case UpgradeableRejectReason.CustomFormatScore:
-                        return Decision.Reject("Existing file on disk has a equal or higher custom format score: {0}", qualityProfile.CalculateCustomFormatScore(customFormats));
+                        return Decision.Reject("Existing file on disk has a equal or higher Custom Format score: {0}", qualityProfile.CalculateCustomFormatScore(customFormats));
 
                     case UpgradeableRejectReason.MinCustomFormatScore:
-                        return Decision.Reject("Existing file differential between new release does not meet minimum Custom Format score increment: {0}", qualityProfile.MinFormatScore);
+                        return Decision.Reject("Existing file on disk has Custom Format score within Custom Format score increment: {0}", qualityProfile.MinUpgradeFormatScore);
                 }
             }
 

@@ -79,19 +79,22 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 switch (upgradeableRejectReason)
                 {
                     case UpgradeableRejectReason.BetterQuality:
-                        return Decision.Reject("Release in queue on disk is of equal or higher preference: {0}", remoteEpisode.ParsedEpisodeInfo.Quality);
+                        return Decision.Reject("Release in queue is of equal or higher preference: {0}", remoteEpisode.ParsedEpisodeInfo.Quality);
 
                     case UpgradeableRejectReason.BetterRevision:
-                        return Decision.Reject("Release in queue on disk is of equal or higher revision: {0}", remoteEpisode.ParsedEpisodeInfo.Quality.Revision);
+                        return Decision.Reject("Release in queue is of equal or higher revision: {0}", remoteEpisode.ParsedEpisodeInfo.Quality.Revision);
 
                     case UpgradeableRejectReason.QualityCutoff:
-                        return Decision.Reject("Release in queue on disk meets quality cutoff: {0}", qualityProfile.Items[qualityProfile.GetIndex(qualityProfile.Cutoff).Index]);
+                        return Decision.Reject("Release in queue meets quality cutoff: {0}", qualityProfile.Items[qualityProfile.GetIndex(qualityProfile.Cutoff).Index]);
 
                     case UpgradeableRejectReason.CustomFormatCutoff:
-                        return Decision.Reject("Release in queue on disk meets Custom Format cutoff: {0}", qualityProfile.CutoffFormatScore);
+                        return Decision.Reject("Release in queue meets Custom Format cutoff: {0}", qualityProfile.CutoffFormatScore);
 
                     case UpgradeableRejectReason.CustomFormatScore:
-                        return Decision.Reject("Release in queue on disk has an equal or higher custom format score: {0}", qualityProfile.CalculateCustomFormatScore(queuedItemCustomFormats));
+                        return Decision.Reject("Release in queue has an equal or higher Custom Format score: {0}", qualityProfile.CalculateCustomFormatScore(queuedItemCustomFormats));
+
+                    case UpgradeableRejectReason.MinCustomFormatScore:
+                        return Decision.Reject("Release in queue has Custom Format score within Custom Format score increment: {0}", qualityProfile.MinUpgradeFormatScore);
                 }
 
                 _logger.Debug("Checking if profiles allow upgrading. Queued: {0}", remoteEpisode.ParsedEpisodeInfo.Quality);
