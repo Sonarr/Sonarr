@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Configuration;
@@ -29,7 +31,11 @@ namespace Sonarr.Api.V3.Logs
             }
 
             var pagingResource = new PagingResource<LogResource>(paging);
-            var pageSpec = pagingResource.MapToPagingSpec<LogResource, Log>();
+            var pageSpec = pagingResource.MapToPagingSpec<LogResource, Log>(new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+            {
+                "id",
+                "time"
+            });
 
             if (pageSpec.SortKey == "time")
             {

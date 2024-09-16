@@ -110,7 +110,6 @@ export const defaultState = {
       {
         name: 'actions',
         columnLabel: () => translate('Actions'),
-        isSortable: true,
         isVisible: true,
         isModifiable: false
       }

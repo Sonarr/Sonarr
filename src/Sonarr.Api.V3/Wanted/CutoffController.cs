@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Core.CustomFormats;
 using NzbDrone.Core.Datastore;
@@ -31,13 +33,15 @@ namespace Sonarr.Api.V3.Wanted
         public PagingResource<EpisodeResource> GetCutoffUnmetEpisodes([FromQuery] PagingRequestResource paging, bool includeSeries = false, bool includeEpisodeFile = false, bool includeImages = false, bool monitored = true)
         {
             var pagingResource = new PagingResource<EpisodeResource>(paging);
-            var pagingSpec = new PagingSpec<Episode>
-            {
-                Page = pagingResource.Page,
-                PageSize = pagingResource.PageSize,
-                SortKey = pagingResource.SortKey,
-                SortDirection = pagingResource.SortDirection
-            };
+            var pagingSpec = pagingResource.MapToPagingSpec<EpisodeResource, Episode>(
+                new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+                {
+                    "series.sortTitle",
+                    "episodes.airDateUtc",
+                    "episodes.lastSearchTime"
+                },
+                "episodes.airDateUtc",
+                SortDirection.Ascending);
 
             if (monitored)
             {

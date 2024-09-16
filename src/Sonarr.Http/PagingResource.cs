@@ -38,7 +38,11 @@ namespace Sonarr.Http
 
     public static class PagingResourceMapper
     {
-        public static PagingSpec<TModel> MapToPagingSpec<TResource, TModel>(this PagingResource<TResource> pagingResource, string defaultSortKey = "Id", SortDirection defaultSortDirection = SortDirection.Ascending)
+        public static PagingSpec<TModel> MapToPagingSpec<TResource, TModel>(
+            this PagingResource<TResource> pagingResource,
+            HashSet<string> allowedSortKeys,
+            string defaultSortKey = "id",
+            SortDirection defaultSortDirection = SortDirection.Ascending)
         {
             var pagingSpec = new PagingSpec<TModel>
             {
@@ -48,15 +52,15 @@ namespace Sonarr.Http
                 SortDirection = pagingResource.SortDirection,
             };
 
-            if (pagingResource.SortKey == null)
-            {
-                pagingSpec.SortKey = defaultSortKey;
+            pagingSpec.SortKey = pagingResource.SortKey != null &&
+                                 allowedSortKeys is { Count: > 0 } &&
+                                 allowedSortKeys.Contains(pagingResource.SortKey)
+                ? pagingResource.SortKey
+                : defaultSortKey;
 
-                if (pagingResource.SortDirection == SortDirection.Default)
-                {
-                    pagingSpec.SortDirection = defaultSortDirection;
-                }
-            }
+            pagingSpec.SortDirection = pagingResource.SortDirection == SortDirection.Default
+                ? defaultSortDirection
+                : pagingResource.SortDirection;
 
             return pagingSpec;
         }
