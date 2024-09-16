@@ -161,13 +161,12 @@ function InteractiveSearch({ type, searchPayload }: InteractiveSearchProps) {
   );
 
   useEffect(() => {
-    // If search results are not yet isPopulated fetch them,
-    // otherwise re-show the existing props.
+    // Only fetch releases if they are not already being fetched and not yet populated.
 
-    if (!isPopulated) {
+    if (!isFetching && !isPopulated) {
       dispatch(fetchReleases(searchPayload));
     }
-  }, [isPopulated, searchPayload, dispatch]);
+  }, [isFetching, isPopulated, searchPayload, dispatch]);
 
   const errorMessage = getErrorMessage(error);
 
