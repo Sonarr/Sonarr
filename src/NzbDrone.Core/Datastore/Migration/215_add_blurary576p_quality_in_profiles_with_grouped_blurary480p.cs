@@ -9,8 +9,8 @@ using NzbDrone.Core.Datastore.Migration.Framework;
 
 namespace NzbDrone.Core.Datastore.Migration
 {
-    [Migration(214)]
-    public class add_blurary576p_quality_in_profiles : NzbDroneMigrationBase
+    [Migration(215)]
+    public class add_blurary576p_quality_in_profiles_with_grouped_blurary480p : NzbDroneMigrationBase
     {
         protected override void MainDbUpgrade()
         {
@@ -19,46 +19,46 @@ namespace NzbDrone.Core.Datastore.Migration
 
         private void ConvertProfile(IDbConnection conn, IDbTransaction tran)
         {
-            var updater = new ProfileUpdater214(conn, tran);
+            var updater = new ProfileUpdater215(conn, tran);
 
             updater.InsertQualityAfter(13, 22); // Group Bluray576p with Bluray480p
             updater.Commit();
         }
     }
 
-    public class Profile214
+    public class Profile215
     {
         public int Id { get; set; }
         public string Name { get; set; }
         public int Cutoff { get; set; }
-        public List<ProfileItem214> Items { get; set; }
+        public List<ProfileItem215> Items { get; set; }
     }
 
-    public class ProfileItem214
+    public class ProfileItem215
     {
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
         public int Id { get; set; }
 
         public string Name { get; set; }
         public int? Quality { get; set; }
-        public List<ProfileItem214> Items { get; set; }
+        public List<ProfileItem215> Items { get; set; }
         public bool Allowed { get; set; }
 
-        public ProfileItem214()
+        public ProfileItem215()
         {
-            Items = new List<ProfileItem214>();
+            Items = new List<ProfileItem215>();
         }
     }
 
-    public class ProfileUpdater214
+    public class ProfileUpdater215
     {
         private readonly IDbConnection _connection;
         private readonly IDbTransaction _transaction;
 
-        private List<Profile214> _profiles;
-        private HashSet<Profile214> _changedProfiles = new HashSet<Profile214>();
+        private List<Profile215> _profiles;
+        private HashSet<Profile215> _changedProfiles = new HashSet<Profile215>();
 
-        public ProfileUpdater214(IDbConnection conn, IDbTransaction tran)
+        public ProfileUpdater215(IDbConnection conn, IDbTransaction tran)
         {
             _connection = conn;
             _transaction = tran;
@@ -86,11 +86,17 @@ namespace NzbDrone.Core.Datastore.Migration
         {
             foreach (var profile in _profiles)
             {
-                var findIndex = profile.Items.FindIndex(v => v.Quality == find);
+                // Don't update if Bluray 576p was already added to the profile in 214
+                if (profile.Items.FindIndex(v => v.Quality == quality || v.Items.Any(i => i.Quality == quality)) > -1)
+                {
+                    continue;
+                }
+
+                var findIndex = profile.Items.FindIndex(v => v.Quality == find || v.Items.Any(i => i.Quality == find));
 
                 if (findIndex > -1)
                 {
-                    profile.Items.Insert(findIndex + 1, new ProfileItem214
+                    profile.Items.Insert(findIndex + 1, new ProfileItem215
                     {
                         Quality = quality,
                         Allowed = profile.Items[findIndex].Allowed
@@ -101,9 +107,9 @@ namespace NzbDrone.Core.Datastore.Migration
             }
         }
 
-        private List<Profile214> GetProfiles()
+        private List<Profile215> GetProfiles()
         {
-            var profiles = new List<Profile214>();
+            var profiles = new List<Profile215>();
 
             using (var getProfilesCmd = _connection.CreateCommand())
             {
@@ -114,12 +120,12 @@ namespace NzbDrone.Core.Datastore.Migration
                 {
                     while (profileReader.Read())
                     {
-                        profiles.Add(new Profile214
+                        profiles.Add(new Profile215
                         {
                             Id = profileReader.GetInt32(0),
                             Name = profileReader.GetString(1),
                             Cutoff = profileReader.GetInt32(2),
-                            Items = Json.Deserialize<List<ProfileItem214>>(profileReader.GetString(3))
+                            Items = Json.Deserialize<List<ProfileItem215>>(profileReader.GetString(3))
                         });
                     }
                 }
