@@ -180,13 +180,13 @@ namespace NzbDrone.Core.Notifications.Gotify
 
                         if (linkType == MetadataLinkType.Trakt && series.TvdbId > 0)
                         {
-                            linkText = "TVMaze";
+                            linkText = "Trakt";
                             linkUrl = $"http://trakt.tv/search/tvdb/{series.TvdbId}?id_type=show";
                         }
 
                         if (linkType == MetadataLinkType.Tvmaze && series.TvMazeId > 0)
                         {
-                            linkText = "Trakt";
+                            linkText = "TVMaze";
                             linkUrl = $"http://www.tvmaze.com/shows/{series.TvMazeId}/_";
                         }
 
