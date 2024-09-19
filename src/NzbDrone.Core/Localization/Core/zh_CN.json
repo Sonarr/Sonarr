@@ -1134,7 +1134,7 @@
     "SeriesPremiere": "剧集首播",
     "ShortDateFormat": "短日期格式",
     "ShowEpisodes": "显示剧集",
-    "ShowMonitored": "显示已追踪项",
+    "ShowMonitored": "显示追踪状态",
     "ShowMonitoredHelpText": "在海报下显示追踪状态",
     "ShowNetwork": "显示网络",
     "ShowPreviousAiring": "显示上一次播出",
@@ -1471,8 +1471,8 @@
     "UrlBase": "基本URL",
     "DownloadClientRemovesCompletedDownloadsHealthCheckMessage": "下载客户端 {downloadClientName} 已被设置为删除已完成的下载。这可能导致在 {appName} 导入之前，已下载的文件会被您的客户端移除。",
     "ImportListSearchForMissingEpisodesHelpText": "将系列添加到{appName}后，自动搜索缺失的剧集",
-    "AutoRedownloadFailed": "重新下载失败",
-    "AutoRedownloadFailedFromInteractiveSearch": "来自手动搜索的资源重新下载失败",
+    "AutoRedownloadFailed": "失败时重新下载",
+    "AutoRedownloadFailedFromInteractiveSearch": "失败时重新下载来自手动搜索的资源",
     "AutoRedownloadFailedFromInteractiveSearchHelpText": "当从手动搜索中抓取的发布资源下载失败时，自动搜索并尝试下载不同的发布资源",
     "ImportListSearchForMissingEpisodes": "搜索缺失集",
     "QueueFilterHasNoItems": "所选的队列过滤器中无项目",
@@ -1946,5 +1946,9 @@
     "NotificationsTwitterSettingsMentionHelpText": "在发送的推文中提及此用户",
     "NotificationsTwitterSettingsMention": "提及",
     "ShowTags": "显示标签",
-    "ShowTagsHelpText": "在海报下显示标签"
+    "ShowTagsHelpText": "在海报下显示标签",
+    "SkipFreeSpaceCheckHelpText": "当 {appName} 无法检测到根目录的剩余空间时使用",
+    "MinimumCustomFormatScoreIncrement": "自定义格式分数最小增量",
+    "MinimumCustomFormatScoreIncrementHelpText": "{appName} 将新版本视为升级版本之前，新版本资源相较于现有版本在自定义格式分数上的最小提升",
+    "LastSearched": "最近搜索"
 }
