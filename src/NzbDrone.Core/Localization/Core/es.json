@@ -78,7 +78,7 @@
     "Torrents": "Torrents",
     "Ui": "Interfaz",
     "Underscore": "Guion bajo",
-    "UpdateMechanismHelpText": "Usar el actualizador integrado de {appName} o un script",
+    "UpdateMechanismHelpText": "Usa el actualizador integrado de {appName} o un script",
     "Warn": "Advertencia",
     "AutoTagging": "Etiquetado Automático",
     "AddAutoTag": "Añadir etiqueta automática",
@@ -2112,5 +2112,12 @@
     "CountCustomFormatsSelected": "{count} formato(s) personalizado(s) seleccionado(s)",
     "LastSearched": "Último buscado",
     "CustomFormatsSpecificationExceptLanguageHelpText": "Coincide si cualquier idioma distinto del seleccionado está presente",
-    "CustomFormatsSpecificationExceptLanguage": "Excepto idioma"
+    "CustomFormatsSpecificationExceptLanguage": "Excepto idioma",
+    "MinimumCustomFormatScoreIncrement": "Incremento mínimo de puntuación de formato personalizado",
+    "MinimumCustomFormatScoreIncrementHelpText": "Mejora mínima requerida de la puntuación de formato personalizado entre los lanzamientos existentes y nuevos antes de que {appName} lo considere una actualización",
+    "NotificationsGotifySettingsMetadataLinks": "Enlaces de metadatos",
+    "NotificationsGotifySettingsMetadataLinksHelpText": "Añade un enlace a los metadatos de la serie cuando se envían notificaciones",
+    "NotificationsGotifySettingsPreferredMetadataLink": "Enlace de metadatos preferido",
+    "NotificationsGotifySettingsPreferredMetadataLinkHelpText": "Enlace de metadatos para clientes que solo soportan un único enlace",
+    "SkipFreeSpaceCheckHelpText": "Se usa cuando {appName} no puede detectar el espacio libre de tu carpeta raíz"
 }

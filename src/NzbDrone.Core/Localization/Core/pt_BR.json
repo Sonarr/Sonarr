@@ -2110,5 +2110,10 @@
     "ManageCustomFormats": "Gerenciar formatos personalizados",
     "NoCustomFormatsFound": "Nenhum formato personalizado encontrado",
     "CountCustomFormatsSelected": "{count} formato(s) personalizado(s) selecionado(s)",
-    "LastSearched": "Última Pesquisa"
+    "LastSearched": "Última Pesquisa",
+    "SkipFreeSpaceCheckHelpText": "Usar quando {appName} não consegue detectar espaço livre em sua pasta raiz",
+    "CustomFormatsSpecificationExceptLanguage": "Exceto Idioma",
+    "CustomFormatsSpecificationExceptLanguageHelpText": "Corresponde se qualquer idioma diferente do idioma selecionado estiver presente",
+    "MinimumCustomFormatScoreIncrement": "Incremento Mínimo da Pontuação de Formato Personalizado",
+    "MinimumCustomFormatScoreIncrementHelpText": "Melhoria mínima necessária da pontuação do formato personalizado entre versões existentes e novas antes que {appName} considere isso uma atualização"
 }
