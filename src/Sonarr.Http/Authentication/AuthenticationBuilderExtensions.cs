@@ -11,7 +11,7 @@ namespace Sonarr.Http.Authentication
 {
     public static class AuthenticationBuilderExtensions
     {
-        private static readonly Regex CookieNameRegex = new Regex(@"[^a-z0-9]", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex CookieNameRegex = new Regex(@"[^a-z0-9]+", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public static AuthenticationBuilder AddApiKey(this AuthenticationBuilder authenticationBuilder, string name, Action<ApiKeyAuthenticationOptions> options)
         {
