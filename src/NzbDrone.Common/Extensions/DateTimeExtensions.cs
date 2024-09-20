@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace NzbDrone.Common.Extensions
 {
@@ -37,6 +37,11 @@ namespace NzbDrone.Common.Extensions
         public static bool Between(this DateTime dateTime, DateTime afterDateTime, DateTime beforeDateTime)
         {
             return dateTime >= afterDateTime && dateTime <= beforeDateTime;
+        }
+
+        public static DateTime WithoutTicks(this DateTime dateTime)
+        {
+            return dateTime.AddTicks(-(dateTime.Ticks % TimeSpan.TicksPerSecond));
         }
     }
 }
