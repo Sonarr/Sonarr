@@ -135,7 +135,7 @@ namespace NzbDrone.Host
                     Name = "apikey",
                     Type = SecuritySchemeType.ApiKey,
                     Scheme = "apiKey",
-                    Description = "Apikey passed as header",
+                    Description = "Apikey passed as query parameter",
                     In = ParameterLocation.Query,
                     Reference = new OpenApiReference
                     {
