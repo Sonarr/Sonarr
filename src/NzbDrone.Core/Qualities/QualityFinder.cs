@@ -17,6 +17,20 @@ namespace NzbDrone.Core.Qualities
                 return matchingQuality;
             }
 
+            // Handle 576p releases that have a Television or Web source, so they don't get rolled up to Bluray 576p
+            if (resolution < 720)
+            {
+                switch (source)
+                {
+                    case QualitySource.Television:
+                        return Quality.SDTV;
+                    case QualitySource.Web:
+                        return Quality.WEBDL480p;
+                    case QualitySource.WebRip:
+                        return Quality.WEBRip480p;
+                }
+            }
+
             var matchingResolution = Quality.All.Where(q => q.Resolution == resolution)
                                             .OrderBy(q => q.Source)
                                             .ToList();
