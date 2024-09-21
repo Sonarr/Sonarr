@@ -20,18 +20,22 @@ export default function ClipboardButton({
   const [state, setState] = useState<ClipboardState>(null);
 
   useEffect(() => {
-    const handler =
-      state &&
-      setTimeout(() => {
-        setState(null);
-      }, 3000);
+    if (!state) {
+      return;
+    }
+
+    const timeoutId = setTimeout(() => {
+      setState(null);
+    }, 3000);
 
     return () => {
-      if (handler) clearTimeout(handler);
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
     };
   }, [state]);
 
-  const onClick = useCallback(async () => {
+  const handleClick = useCallback(async () => {
     try {
       await navigator.clipboard.writeText(value);
       setState('success');
@@ -41,16 +45,20 @@ export default function ClipboardButton({
   }, [value]);
 
   return (
-    <FormInputButton className={className} onClick={onClick} {...otherProps}>
+    <FormInputButton
+      className={className}
+      onClick={handleClick}
+      {...otherProps}
+    >
       <span className={state ? styles.showStateIcon : undefined}>
-        {!!state && (
+        {state ? (
           <span className={styles.stateIconContainer}>
             <Icon
               name={state === 'error' ? icons.DANGER : icons.CHECK}
               kind={state === 'error' ? kinds.DANGER : kinds.SUCCESS}
             />
           </span>
-        )}
+        ) : null}
 
         <span className={styles.clipboardIconContainer}>
           <Icon name={icons.CLIPBOARD} />
