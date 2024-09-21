@@ -1928,6 +1928,22 @@
             }
           },
           {
+            "name": "includeSeries",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "includeEpisodeFile",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
             "name": "includeImages",
             "in": "query",
             "schema": {
@@ -12364,7 +12380,7 @@
       },
       "apikey": {
         "type": "apiKey",
-        "description": "Apikey passed as header",
+        "description": "Apikey passed as query parameter",
         "name": "apikey",
         "in": "query"
       }
