@@ -170,5 +170,41 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
             result.Quality.Revision.Version.Should().Be(2);
             result.Quality.RevisionDetectionSource.Should().Be(QualityDetectionSource.Name);
         }
+
+        [Test]
+        public void should_return_Bluray576p_when_Bluray_came_from_name_and_mediainfo_indicates_576p()
+        {
+            _nameAugmenter.Setup(s => s.AugmentQuality(It.IsAny<LocalEpisode>(), It.IsAny<DownloadClientItem>()))
+                .Returns(new AugmentQualityResult(QualitySource.Bluray, Confidence.Default, 480, Confidence.Default, new Revision(0), Confidence.Tag));
+
+            _mediaInfoAugmenter.Setup(s => s.AugmentQuality(It.IsAny<LocalEpisode>(), It.IsAny<DownloadClientItem>()))
+                .Returns(AugmentQualityResult.ResolutionOnly(576, Confidence.MediaInfo));
+
+            GivenAugmenters(_nameAugmenter, _mediaInfoAugmenter);
+
+            var result = Subject.Aggregate(new LocalEpisode(), null);
+
+            result.Quality.SourceDetectionSource.Should().Be(QualityDetectionSource.Name);
+            result.Quality.ResolutionDetectionSource.Should().Be(QualityDetectionSource.MediaInfo);
+            result.Quality.Quality.Should().Be(Quality.Bluray576p);
+        }
+
+        [Test]
+        public void should_return_SDTV_when_HDTV_came_from_name_and_mediainfo_indicates_576p()
+        {
+            _nameAugmenter.Setup(s => s.AugmentQuality(It.IsAny<LocalEpisode>(), It.IsAny<DownloadClientItem>()))
+                .Returns(new AugmentQualityResult(QualitySource.Television, Confidence.Default, 480, Confidence.Default, new Revision(0), Confidence.Tag));
+
+            _mediaInfoAugmenter.Setup(s => s.AugmentQuality(It.IsAny<LocalEpisode>(), It.IsAny<DownloadClientItem>()))
+                .Returns(AugmentQualityResult.ResolutionOnly(576, Confidence.MediaInfo));
+
+            GivenAugmenters(_nameAugmenter, _mediaInfoAugmenter);
+
+            var result = Subject.Aggregate(new LocalEpisode(), null);
+
+            result.Quality.SourceDetectionSource.Should().Be(QualityDetectionSource.Name);
+            result.Quality.ResolutionDetectionSource.Should().Be(QualityDetectionSource.MediaInfo);
+            result.Quality.Quality.Should().Be(Quality.SDTV);
+        }
     }
 }

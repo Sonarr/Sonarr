@@ -47,6 +47,8 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators.Au
         [TestCase(1490, 1, 720)]
         [TestCase(1280, 1, 720)] // HD
         [TestCase(1200, 1, 720)]
+        [TestCase(1000, 1, 576)]
+        [TestCase(720, 576, 576)]
         [TestCase(800, 1, 480)]
         [TestCase(720, 1, 480)] // SDTV
         [TestCase(600, 1, 480)]
@@ -107,6 +109,26 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators.Au
             result.Should().NotBe(null);
             result.Resolution.Should().Be(1080);
             result.Source.Should().Be(QualitySource.Unknown);
+        }
+
+        [Test]
+        public void should_include_source_for_576_if_extracted_from_title()
+        {
+            var mediaInfo = Builder<MediaInfoModel>.CreateNew()
+                .With(m => m.Width = 1024)
+                .With(m => m.Height = 576)
+                .With(m => m.Title = "Series.Title.S01E05.Bluray.x264-Sonarr")
+                .Build();
+
+            var localEpisode = Builder<LocalEpisode>.CreateNew()
+                .With(l => l.MediaInfo = mediaInfo)
+                .Build();
+
+            var result = Subject.AugmentQuality(localEpisode, null);
+
+            result.Should().NotBe(null);
+            result.Resolution.Should().Be(576);
+            result.Source.Should().Be(QualitySource.Bluray);
         }
     }
 }
