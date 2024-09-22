@@ -33,10 +33,10 @@ namespace Sonarr.Api.V3.Blocklist
             var pagingSpec = pagingResource.MapToPagingSpec<BlocklistResource, NzbDrone.Core.Blocklisting.Blocklist>(
                 new HashSet<string>(StringComparer.OrdinalIgnoreCase)
                 {
-                    "series.sortTitle",
-                    "sourceTitle",
                     "date",
-                    "indexer"
+                    "indexer",
+                    "series.sortTitle",
+                    "sourceTitle"
                 },
                 "date",
                 SortDirection.Descending);

@@ -36,9 +36,9 @@ namespace Sonarr.Api.V3.Wanted
             var pagingSpec = pagingResource.MapToPagingSpec<EpisodeResource, Episode>(
                 new HashSet<string>(StringComparer.OrdinalIgnoreCase)
                 {
-                    "series.sortTitle",
                     "episodes.airDateUtc",
-                    "episodes.lastSearchTime"
+                    "episodes.lastSearchTime",
+                    "series.sortTitle"
                 },
                 "episodes.airDateUtc",
                 SortDirection.Ascending);

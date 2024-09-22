@@ -68,8 +68,8 @@ namespace Sonarr.Api.V3.History
             var pagingSpec = pagingResource.MapToPagingSpec<HistoryResource, EpisodeHistory>(
                 new HashSet<string>(StringComparer.OrdinalIgnoreCase)
                 {
-                    "series.sortTitle",
-                    "date"
+                    "date",
+                    "series.sortTitle"
                 },
                 "date",
                 SortDirection.Descending);
