@@ -69,28 +69,29 @@ namespace NzbDrone.Core.Notifications.Telegram
         {
             var title = Settings.IncludeAppNameInTitle ? HEALTH_ISSUE_TITLE_BRANDED : HEALTH_ISSUE_TITLE;
 
-            _proxy.SendNotification(title, healthCheck.Message, null, Settings);
+            _proxy.SendNotification(title, healthCheck.Message, new List<TelegramLink>(), Settings);
         }
 
         public override void OnHealthRestored(HealthCheck.HealthCheck previousCheck)
         {
             var title = Settings.IncludeAppNameInTitle ? HEALTH_RESTORED_TITLE_BRANDED : HEALTH_RESTORED_TITLE;
 
-            _proxy.SendNotification(title, $"The following issue is now resolved: {previousCheck.Message}", null, Settings);
+            _proxy.SendNotification(title, $"The following issue is now resolved: {previousCheck.Message}", new List<TelegramLink>(), Settings);
         }
 
         public override void OnApplicationUpdate(ApplicationUpdateMessage updateMessage)
         {
             var title = Settings.IncludeAppNameInTitle ? APPLICATION_UPDATE_TITLE_BRANDED : APPLICATION_UPDATE_TITLE;
 
-            _proxy.SendNotification(title, updateMessage.Message, null, Settings);
+            _proxy.SendNotification(title, updateMessage.Message, new List<TelegramLink>(), Settings);
         }
 
         public override void OnManualInteractionRequired(ManualInteractionRequiredMessage message)
         {
             var title = Settings.IncludeAppNameInTitle ? MANUAL_INTERACTION_REQUIRED_TITLE_BRANDED : MANUAL_INTERACTION_REQUIRED_TITLE;
+            var links = GetLinks(message.Series);
 
-            _proxy.SendNotification(title, message.Message, null, Settings);
+            _proxy.SendNotification(title, message.Message, links, Settings);
         }
 
         public override ValidationResult Test()
@@ -105,6 +106,11 @@ namespace NzbDrone.Core.Notifications.Telegram
         private List<TelegramLink> GetLinks(Series series)
         {
             var links = new List<TelegramLink>();
+
+            if (series == null)
+            {
+                return links;
+            }
 
             foreach (var link in Settings.MetadataLinks)
             {
