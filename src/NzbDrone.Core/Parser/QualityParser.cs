@@ -63,7 +63,7 @@ namespace NzbDrone.Core.Parser
 
         private static readonly Regex HighDefPdtvRegex = new (@"hr[-_. ]ws", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        private static readonly Regex RemuxRegex = new (@"(?:[_. ]|\d{4}p-)(?<remux>(?:(BD|UHD)[-_. ]?)?Remux)\b|(?<remux>(?:(BD|UHD)[-_. ]?)?Remux[_. ]\d{4}p)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex RemuxRegex = new (@"(?:[_. ]|\d{4}p-|\bHybrid-)(?<remux>(?:(BD|UHD)[-_. ]?)?Remux)\b|(?<remux>(?:(BD|UHD)[-_. ]?)?Remux[_. ]\d{4}p)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public static QualityModel ParseQuality(string name)
         {
