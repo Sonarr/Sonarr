@@ -43,7 +43,7 @@ function SeriesImage({
 }: SeriesImageProps) {
   const [url, setUrl] = useState<string | null>(null);
   const [hasError, setHasError] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(true);
   const image = useRef<Image | null>(null);
 
   const handleLoad = useCallback(() => {
