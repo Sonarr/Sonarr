@@ -16,6 +16,7 @@ import IndexerFlag from 'typings/IndexerFlag';
 import Notification from 'typings/Notification';
 import QualityProfile from 'typings/QualityProfile';
 import General from 'typings/Settings/General';
+import ReleaseProfile from 'typings/Settings/ReleaseProfile';
 import UiSettings from 'typings/Settings/UiSettings';
 
 export interface DownloadClientAppState
@@ -48,6 +49,12 @@ export interface NotificationAppState
 export interface QualityProfilesAppState
   extends AppSectionState<QualityProfile>,
     AppSectionItemSchemaState<QualityProfile> {}
+
+export interface ReleaseProfilesAppState
+  extends AppSectionState<ReleaseProfile>,
+    AppSectionSaveState {
+  pendingChanges: Partial<ReleaseProfile>;
+}
 
 export interface CustomFormatAppState
   extends AppSectionState<CustomFormat>,
@@ -83,6 +90,7 @@ interface SettingsAppState {
   languages: LanguageSettingsAppState;
   notifications: NotificationAppState;
   qualityProfiles: QualityProfilesAppState;
+  releaseProfiles: ReleaseProfilesAppState;
   ui: UiSettingsAppState;
 }
 

@@ -361,7 +361,7 @@
   "DeleteQualityProfile": "Delete Quality Profile",
   "DeleteQualityProfileMessageText": "Are you sure you want to delete the quality profile '{name}'?",
   "DeleteReleaseProfile": "Delete Release Profile",
-  "DeleteReleaseProfileMessageText": "Are you sure you want to delete this release profile '{name}'?",
+  "DeleteReleaseProfileMessageText": "Are you sure you want to delete the release profile '{name}'?",
   "DeleteRemotePathMapping": "Delete Remote Path Mapping",
   "DeleteRemotePathMappingMessageText": "Are you sure you want to delete this remote path mapping?",
   "DeleteRootFolder": "Delete Root Folder",

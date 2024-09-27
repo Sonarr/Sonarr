@@ -1,5 +1,7 @@
-import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { createSelector } from 'reselect';
+import AppState from 'App/State/AppState';
 import Form from 'Components/Form/Form';
 import FormGroup from 'Components/Form/FormGroup';
 import FormInputGroup from 'Components/Form/FormInputGroup';
@@ -10,33 +12,97 @@ import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
+import usePrevious from 'Helpers/Hooks/usePrevious';
 import { inputTypes, kinds } from 'Helpers/Props';
+import {
+  saveReleaseProfile,
+  setReleaseProfileValue,
+} from 'Store/Actions/Settings/releaseProfiles';
+import selectSettings from 'Store/Selectors/selectSettings';
+import { PendingSection } from 'typings/pending';
+import ReleaseProfile from 'typings/Settings/ReleaseProfile';
 import translate from 'Utilities/String/translate';
 import styles from './EditReleaseProfileModalContent.css';
 
 const tagInputDelimiters = ['Tab', 'Enter'];
 
-function EditReleaseProfileModalContent(props) {
-  const {
-    isSaving,
-    saveError,
-    item,
-    onInputChange,
-    onModalClose,
-    onSavePress,
-    onDeleteReleaseProfilePress,
-    ...otherProps
-  } = props;
+const newReleaseProfile = {
+  enabled: true,
+  required: [],
+  ignored: [],
+  tags: [],
+  indexerId: 0,
+};
 
-  const {
-    id,
-    name,
-    enabled,
-    required,
-    ignored,
-    tags,
-    indexerId
-  } = item;
+function createReleaseProfileSelector(id?: number) {
+  return createSelector(
+    (state: AppState) => state.settings.releaseProfiles,
+    (releaseProfiles) => {
+      const { items, isFetching, error, isSaving, saveError, pendingChanges } =
+        releaseProfiles;
+
+      const mapping = id ? items.find((i) => i.id === id) : newReleaseProfile;
+      const settings = selectSettings(mapping, pendingChanges, saveError);
+
+      return {
+        id,
+        isFetching,
+        error,
+        isSaving,
+        saveError,
+        item: settings.settings as PendingSection<ReleaseProfile>,
+        ...settings,
+      };
+    }
+  );
+}
+
+interface EditReleaseProfileModalContentProps {
+  id?: number;
+  onModalClose: () => void;
+  onDeleteReleaseProfilePress?: () => void;
+}
+
+function EditReleaseProfileModalContent({
+  id,
+  onModalClose,
+  onDeleteReleaseProfilePress,
+}: EditReleaseProfileModalContentProps) {
+  const { item, isFetching, isSaving, error, saveError, ...otherProps } =
+    useSelector(createReleaseProfileSelector(id));
+
+  const { name, enabled, required, ignored, tags, indexerId } = item;
+
+  const dispatch = useDispatch();
+  const previousIsSaving = usePrevious(isSaving);
+
+  useEffect(() => {
+    if (!id) {
+      Object.entries(newReleaseProfile).forEach(([name, value]) => {
+        // @ts-expect-error 'setReleaseProfileValue' isn't typed yet
+        dispatch(setReleaseProfileValue({ name, value }));
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (previousIsSaving && !isSaving && !saveError) {
+      onModalClose();
+    }
+  }, [previousIsSaving, isSaving, saveError, onModalClose]);
+
+  const handleSavePress = useCallback(() => {
+    dispatch(saveReleaseProfile({ id }));
+  }, [dispatch, id]);
+
+  const handleInputChange = useCallback(
+    (payload: { name: string; value: string | number }) => {
+      // @ts-expect-error 'setReleaseProfileValue' isn't typed yet
+      dispatch(setReleaseProfileValue(payload));
+    },
+    [dispatch]
+  );
 
   return (
     <ModalContent onModalClose={onModalClose}>
@@ -46,7 +112,6 @@ function EditReleaseProfileModalContent(props) {
 
       <ModalBody>
         <Form {...otherProps}>
-
           <FormGroup>
             <FormLabel>{translate('Name')}</FormLabel>
 
@@ -56,7 +121,7 @@ function EditReleaseProfileModalContent(props) {
               {...name}
               placeholder={translate('OptionalName')}
               canEdit={true}
-              onChange={onInputChange}
+              onChange={handleInputChange}
             />
           </FormGroup>
 
@@ -68,7 +133,7 @@ function EditReleaseProfileModalContent(props) {
               name="enabled"
               helpText={translate('EnableProfileHelpText')}
               {...enabled}
-              onChange={onInputChange}
+              onChange={handleInputChange}
             />
           </FormGroup>
 
@@ -85,7 +150,7 @@ function EditReleaseProfileModalContent(props) {
               placeholder={translate('AddNewRestriction')}
               delimiters={tagInputDelimiters}
               canEdit={true}
-              onChange={onInputChange}
+              onChange={handleInputChange}
             />
           </FormGroup>
 
@@ -102,7 +167,7 @@ function EditReleaseProfileModalContent(props) {
               placeholder={translate('AddNewRestriction')}
               delimiters={tagInputDelimiters}
               canEdit={true}
-              onChange={onInputChange}
+              onChange={handleInputChange}
             />
           </FormGroup>
 
@@ -113,10 +178,12 @@ function EditReleaseProfileModalContent(props) {
               type={inputTypes.INDEXER_SELECT}
               name="indexerId"
               helpText={translate('ReleaseProfileIndexerHelpText')}
-              helpTextWarning={translate('ReleaseProfileIndexerHelpTextWarning')}
+              helpTextWarning={translate(
+                'ReleaseProfileIndexerHelpTextWarning'
+              )}
               {...indexerId}
               includeAny={true}
-              onChange={onInputChange}
+              onChange={handleInputChange}
             />
           </FormGroup>
 
@@ -128,33 +195,28 @@ function EditReleaseProfileModalContent(props) {
               name="tags"
               helpText={translate('ReleaseProfileTagSeriesHelpText')}
               {...tags}
-              onChange={onInputChange}
+              onChange={handleInputChange}
             />
           </FormGroup>
         </Form>
       </ModalBody>
       <ModalFooter>
-        {
-          id &&
-            <Button
-              className={styles.deleteButton}
-              kind={kinds.DANGER}
-              onPress={onDeleteReleaseProfilePress}
-            >
-              {translate('Delete')}
-            </Button>
-        }
+        {id ? (
+          <Button
+            className={styles.deleteButton}
+            kind={kinds.DANGER}
+            onPress={onDeleteReleaseProfilePress}
+          >
+            {translate('Delete')}
+          </Button>
+        ) : null}
 
-        <Button
-          onPress={onModalClose}
-        >
-          {translate('Cancel')}
-        </Button>
+        <Button onPress={onModalClose}>{translate('Cancel')}</Button>
 
         <SpinnerErrorButton
           isSpinning={isSaving}
           error={saveError}
-          onPress={onSavePress}
+          onPress={handleSavePress}
         >
           {translate('Save')}
         </SpinnerErrorButton>
@@ -162,15 +224,5 @@ function EditReleaseProfileModalContent(props) {
     </ModalContent>
   );
 }
-
-EditReleaseProfileModalContent.propTypes = {
-  isSaving: PropTypes.bool.isRequired,
-  saveError: PropTypes.object,
-  item: PropTypes.object.isRequired,
-  onInputChange: PropTypes.func.isRequired,
-  onModalClose: PropTypes.func.isRequired,
-  onSavePress: PropTypes.func.isRequired,
-  onDeleteReleaseProfilePress: PropTypes.func
-};
 
 export default EditReleaseProfileModalContent;

@@ -31,12 +31,6 @@ const newImportListExclusion = {
   tvdbId: 0,
 };
 
-interface EditImportListExclusionModalContentProps {
-  id?: number;
-  onModalClose: () => void;
-  onDeleteImportListExclusionPress?: () => void;
-}
-
 function createImportListExclusionSelector(id?: number) {
   return createSelector(
     (state: AppState) => state.settings.importListExclusions,
@@ -62,12 +56,24 @@ function createImportListExclusionSelector(id?: number) {
   );
 }
 
-function EditImportListExclusionModalContent(
-  props: EditImportListExclusionModalContentProps
-) {
-  const { id, onModalClose, onDeleteImportListExclusionPress } = props;
+interface EditImportListExclusionModalContentProps {
+  id?: number;
+  onModalClose: () => void;
+  onDeleteImportListExclusionPress?: () => void;
+}
+
+function EditImportListExclusionModalContent({
+  id,
+  onModalClose,
+  onDeleteImportListExclusionPress,
+}: EditImportListExclusionModalContentProps) {
+  const { isFetching, isSaving, item, error, saveError, ...otherProps } =
+    useSelector(createImportListExclusionSelector(id));
+
+  const { title, tvdbId } = item;
 
   const dispatch = useDispatch();
+  const previousIsSaving = usePrevious(isSaving);
 
   const dispatchSetImportListExclusionValue = (payload: {
     name: string;
@@ -77,20 +83,10 @@ function EditImportListExclusionModalContent(
     dispatch(setImportListExclusionValue(payload));
   };
 
-  const { isFetching, isSaving, item, error, saveError, ...otherProps } =
-    useSelector(createImportListExclusionSelector(props.id));
-  const previousIsSaving = usePrevious(isSaving);
-
-  const { title, tvdbId } = item;
-
   useEffect(() => {
     if (!id) {
-      Object.keys(newImportListExclusion).forEach((name) => {
-        dispatchSetImportListExclusionValue({
-          name,
-          value:
-            newImportListExclusion[name as keyof typeof newImportListExclusion],
-        });
+      Object.entries(newImportListExclusion).forEach(([name, value]) => {
+        dispatchSetImportListExclusionValue({ name, value });
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -100,7 +96,7 @@ function EditImportListExclusionModalContent(
     if (previousIsSaving && !isSaving && !saveError) {
       onModalClose();
     }
-  });
+  }, [previousIsSaving, isSaving, saveError, onModalClose]);
 
   const onSavePress = useCallback(() => {
     dispatch(saveImportListExclusion({ id }));
