@@ -4,7 +4,7 @@
 }
 
 .addReleaseProfile {
-  composes: releaseProfile from '~./ReleaseProfile.css';
+  composes: releaseProfile from '~./ReleaseProfileRow.css';
 
   background-color: var(--cardAlternateBackgroundColor);
   color: var(--gray);

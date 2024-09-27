@@ -3,26 +3,26 @@ import { useDispatch } from 'react-redux';
 import Modal from 'Components/Modal/Modal';
 import { sizes } from 'Helpers/Props';
 import { clearPendingChanges } from 'Store/Actions/baseActions';
-import EditImportListExclusionModalContent from './EditImportListExclusionModalContent';
+import EditReleaseProfileModalContent from './EditReleaseProfileModalContent';
 
-interface EditImportListExclusionModalProps {
+interface EditReleaseProfileModalProps {
   id?: number;
   isOpen: boolean;
   onModalClose: () => void;
-  onDeleteImportListExclusionPress?: () => void;
+  onDeleteReleaseProfilePress?: () => void;
 }
 
-function EditImportListExclusionModal(
-  props: EditImportListExclusionModalProps
-) {
-  const { isOpen, onModalClose, ...otherProps } = props;
-
+function EditReleaseProfileModal({
+  isOpen,
+  onModalClose,
+  ...otherProps
+}: EditReleaseProfileModalProps) {
   const dispatch = useDispatch();
 
   const handleModalClose = useCallback(() => {
     dispatch(
       clearPendingChanges({
-        section: 'settings.importListExclusions',
+        section: 'settings.releaseProfiles',
       })
     );
     onModalClose();
@@ -30,7 +30,7 @@ function EditImportListExclusionModal(
 
   return (
     <Modal size={sizes.MEDIUM} isOpen={isOpen} onModalClose={handleModalClose}>
-      <EditImportListExclusionModalContent
+      <EditReleaseProfileModalContent
         {...otherProps}
         onModalClose={handleModalClose}
       />
@@ -38,4 +38,4 @@ function EditImportListExclusionModal(
   );
 }
 
-export default EditImportListExclusionModal;
+export default EditReleaseProfileModal;
