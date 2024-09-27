@@ -206,5 +206,19 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 new List<CustomFormat>())
             .Should().BeTrue();
         }
+
+        [Test]
+        public void should_returntrue_when_quality_is_revision_upgrade_for_same_quality()
+        {
+            _qualityProfile.UpgradeAllowed = false;
+
+            Subject.IsUpgradeAllowed(
+                    _qualityProfile,
+                    new QualityModel(Quality.DVD, new Revision(1)),
+                    new List<CustomFormat> { _customFormatOne },
+                    new QualityModel(Quality.DVD, new Revision(2)),
+                    new List<CustomFormat> { _customFormatOne })
+                .Should().BeTrue();
+        }
     }
 }

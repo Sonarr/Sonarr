@@ -178,6 +178,12 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             var isQualityUpgrade = new QualityModelComparer(qualityProfile).Compare(newQuality, currentQuality) > 0;
             var isCustomFormatUpgrade = qualityProfile.CalculateCustomFormatScore(newCustomFormats) > qualityProfile.CalculateCustomFormatScore(currentCustomFormats);
 
+            if (IsRevisionUpgrade(currentQuality, newQuality))
+            {
+                _logger.Debug("New quality '{0}' is a revision upgrade for '{1}'", newQuality, currentQuality);
+                return true;
+            }
+
             if ((isQualityUpgrade || isCustomFormatUpgrade) && qualityProfile.UpgradeAllowed)
             {
                 _logger.Debug("Quality profile allows upgrading");
