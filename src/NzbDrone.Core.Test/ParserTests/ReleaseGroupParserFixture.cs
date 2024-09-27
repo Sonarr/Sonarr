@@ -89,6 +89,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series Title S01 1080p Blu-ray Remux AVC DTS-HD MA 2.0 - BluDragon", "BluDragon")]
         [TestCase("Example (2013) S01E01 (1080p iP WEBRip x265 SDR AAC 2.0 English - DarQ)", "DarQ")]
         [TestCase("Series.Title.S08E03.720p.WEB.DL.AAC2.0.H.264.KCRT", "KCRT")]
+        [TestCase("S02E05 2160p  WEB-DL DV HDR ENG DDP5.1 Atmos H265 MP4-BEN THE MAN", "BEN THE MAN")]
         public void should_parse_exception_release_group(string title, string expected)
         {
             Parser.Parser.ParseReleaseGroup(title).Should().Be(expected);
