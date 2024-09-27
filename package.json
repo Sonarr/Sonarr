@@ -34,6 +34,7 @@
     "@types/react-dom": "18.2.25",
     "classnames": "2.3.2",
     "connected-react-router": "6.9.3",
+    "copy-to-clipboard": "3.3.3",
     "element-class": "0.2.2",
     "filesize": "10.0.7",
     "fuse.js": "6.6.2",
