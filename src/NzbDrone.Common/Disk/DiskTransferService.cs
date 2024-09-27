@@ -475,6 +475,8 @@ namespace NzbDrone.Common.Disk
             {
                 _diskProvider.CopyFile(sourcePath, targetPath);
 
+                WaitForIO();
+
                 var targetSize = _diskProvider.GetFileSize(targetPath);
                 if (targetSize != originalSize)
                 {
@@ -493,6 +495,8 @@ namespace NzbDrone.Common.Disk
             try
             {
                 _diskProvider.MoveFile(sourcePath, targetPath);
+
+                WaitForIO();
 
                 var targetSize = _diskProvider.GetFileSize(targetPath);
                 if (targetSize != originalSize)
