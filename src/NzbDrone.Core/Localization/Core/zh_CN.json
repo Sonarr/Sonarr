@@ -223,7 +223,7 @@
     "EpisodeAirDate": "剧集播出日期",
     "IndexerSearchNoInteractiveHealthCheckMessage": "没有启用交互式搜索的索引器，{appName}将不提供任何交互式搜索结果",
     "ProxyFailedToTestHealthCheckMessage": "测试代理失败: {url}",
-    "About": "关于",
+    "About": "关于关于",
     "Actions": "动作",
     "AppDataDirectory": "AppData 目录",
     "ApplyTagsHelpTextHowToApplySeries": "如何将标记应用于所选剧集",

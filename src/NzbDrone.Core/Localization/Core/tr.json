@@ -855,5 +855,17 @@
     "LogSizeLimitHelpText": "Arşivlemeden önce MB cinsinden maksimum log dosya boyutu. Varsayılan 1 MB'tır.",
     "ProgressBarProgress": "İlerleme Çubuğu %{progress} seviyesinde",
     "CountVotes": "{votes} oy",
-    "UpdateAvailableHealthCheckMessage": "Yeni güncelleme mevcut: {version}"
+    "UpdateAvailableHealthCheckMessage": "Yeni güncelleme mevcut: {version}",
+    "MinimumCustomFormatScoreIncrement": "Minimum Özel Format Puanı Artışı",
+    "MinimumCustomFormatScoreIncrementHelpText": "{appName}'in bunu bir yükseltme olarak değerlendirmesi için mevcut ve yeni sürümler arasında özel biçim puanında gereken minimum iyileştirme",
+    "SkipFreeSpaceCheckHelpText": "{appName} kök klasörünüzde boş alan tespit edemediğinde bunu kullansın",
+    "DayOfWeekAt": "{day}, {time} saatinde",
+    "Logout": "Çıkış",
+    "TodayAt": "Bugün {time}'da",
+    "TomorrowAt": "Yarın {time}'da",
+    "NoBlocklistItems": "Engellenenler listesi öğesi yok",
+    "YesterdayAt": "Dün saat {time}'da",
+    "CustomFormatsSpecificationExceptLanguage": "Dil Dışında",
+    "CustomFormatsSpecificationExceptLanguageHelpText": "Seçilen dil dışında herhangi bir dil mevcutsa eşleşir",
+    "LastSearched": "Son Aranan"
 }
