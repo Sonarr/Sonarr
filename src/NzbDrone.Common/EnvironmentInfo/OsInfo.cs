@@ -32,7 +32,8 @@ namespace NzbDrone.Common.EnvironmentInfo
             {
                 Os = Os.Osx;
             }
-            else if (OperatingSystem.IsFreeBSD())
+            // the OperatingSystem class does not have an IsNetBSD method
+            else if (OperatingSystem.IsFreeBSD() || OperatingSystem.IsOSPlatform("NETBSD"))
             {
                 Os = Os.Bsd;
             }
