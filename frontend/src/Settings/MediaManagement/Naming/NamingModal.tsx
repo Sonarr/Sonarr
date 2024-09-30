@@ -69,20 +69,56 @@ const caseOptions: { key: TokenCase; value: string }[] = [
 const fileNameTokens = [
   {
     token:
-      '{Series Title} - S{season:00}E{episode:00} - {Episode Title} {Quality Full}',
+      '{Series TitleYear} - S{season:00}E{episode:00} - {Episode CleanTitle} {Quality Full}',
     example:
-      "The Series Title's! (2010) - S01E01 - Episode Title HDTV-720p Proper",
+      "The Series Title's! (2010) - S01E01 - Episode Title WEBDL-1080p Proper",
   },
   {
     token:
-      '{Series Title} - {season:0}x{episode:00} - {Episode Title} {Quality Full}',
+      '{Series TitleYear} - {season:0}x{episode:00} - {Episode CleanTitle} {Quality Full}',
     example:
-      "The Series Title's! (2010) - 1x01 - Episode Title HDTV-720p Proper",
+      "The Series Title's! (2010) - 1x01 - Episode Title WEBDL-1080p Proper",
   },
   {
     token:
-      '{Series.Title}.S{season:00}E{episode:00}.{EpisodeClean.Title}.{Quality.Full}',
-    example: "The.Series.Title's!.(2010).S01E01.Episode.Title.HDTV-720p",
+      '{Series.CleanTitleYear}.S{season:00}E{episode:00}.{Episode.CleanTitle}.{Quality.Full}',
+    example: "The.Series.Title's!.2010.S01E01.Episode.Title.WEBDL-1080p.Proper",
+  },
+];
+
+const fileNameDailyTokens = [
+  {
+    token:
+      '{Series TitleYear} - {Air-Date} - {Episode CleanTitle} {Quality Full}',
+    example:
+      "The Series Title's! (2010) - 2013-10-30 - Episode Title WEBDL-1080p Proper",
+  },
+  {
+    token:
+      '{Series.CleanTitleYear}.{Air.Date}.{Episode.CleanTitle}.{Quality.Full}',
+    example:
+      "The.Series.Title's!.2010.2013.10.30.Episode.Title.WEBDL-1080p.Proper",
+  },
+];
+
+const fileNameAnimeTokens = [
+  {
+    token:
+      '{Series TitleYear} - S{season:00}E{episode:00} - {absolute:000} - {Episode CleanTitle} {Quality Full}',
+    example:
+      "The Series Title's! (2010) - S01E01 - 001- Episode Title WEBDL-1080p Proper",
+  },
+  {
+    token:
+      '{Series TitleYear} - {season:0}x{episode:00} - {absolute:000} - {Episode CleanTitle} {Quality Full}',
+    example:
+      "The Series Title's! (2010) - 1x01 - 001 - Episode Title WEBDL-1080p Proper",
+  },
+  {
+    token:
+      '{Series.CleanTitleYear}.S{season:00}E{episode:00}.{absolute:000}.{Episode.CleanTitle}.{Quality.Full}',
+    example:
+      "The.Series.Title's!.2010.S01E01.001.Episode.Title.WEBDL-1080p.Proper",
   },
 ];
 
@@ -231,7 +267,6 @@ interface NamingModalProps {
     | 'specialsFolderFormat'
   >;
   value: string;
-  advancedSettings: boolean;
   season?: boolean;
   episode?: boolean;
   daily?: boolean;
@@ -246,9 +281,9 @@ function NamingModal(props: NamingModalProps) {
     isOpen,
     name,
     value,
-    advancedSettings,
     season = false,
     episode = false,
+    daily = false,
     anime = false,
     additional = false,
     onInputChange,
@@ -339,9 +374,39 @@ function NamingModal(props: NamingModalProps) {
             />
           </div>
 
-          {advancedSettings ? null : (
+          {episode ? (
             <FieldSet legend={translate('FileNames')}>
               <div className={styles.groups}>
+                {daily
+                  ? fileNameDailyTokens.map(({ token, example }) => (
+                      <NamingOption
+                        key={token}
+                        token={token}
+                        example={example}
+                        isFullFilename={true}
+                        tokenSeparator={tokenSeparator}
+                        tokenCase={tokenCase}
+                        size={sizes.LARGE}
+                        onPress={handleOptionPress}
+                      />
+                    ))
+                  : null}
+
+                {anime
+                  ? fileNameAnimeTokens.map(({ token, example }) => (
+                      <NamingOption
+                        key={token}
+                        token={token}
+                        example={example}
+                        isFullFilename={true}
+                        tokenSeparator={tokenSeparator}
+                        tokenCase={tokenCase}
+                        size={sizes.LARGE}
+                        onPress={handleOptionPress}
+                      />
+                    ))
+                  : null}
+
                 {fileNameTokens.map(({ token, example }) => (
                   <NamingOption
                     key={token}
@@ -356,7 +421,7 @@ function NamingModal(props: NamingModalProps) {
                 ))}
               </div>
             </FieldSet>
-          )}
+          ) : null}
 
           <FieldSet legend={translate('Series')}>
             <div className={styles.groups}>
