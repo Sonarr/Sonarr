@@ -13,7 +13,7 @@ import { inputTypes, kinds, sizes } from 'Helpers/Props';
 import RootFolders from 'RootFolder/RootFolders';
 import SettingsToolbarConnector from 'Settings/SettingsToolbarConnector';
 import translate from 'Utilities/String/translate';
-import NamingConnector from './Naming/NamingConnector';
+import Naming from './Naming/Naming';
 import AddRootFolder from './RootFolder/AddRootFolder';
 
 const episodeTitleRequiredOptions = [
@@ -127,7 +127,7 @@ class MediaManagement extends Component {
         />
 
         <PageContentBody>
-          <NamingConnector />
+          <Naming />
 
           {
             isFetching ?

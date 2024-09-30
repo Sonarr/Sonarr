@@ -8,6 +8,7 @@ interface CssExports {
   'lower': string;
   'option': string;
   'small': string;
+  'title': string;
   'token': string;
   'upper': string;
 }
