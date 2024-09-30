@@ -75,17 +75,19 @@ namespace NzbDrone.Core.Indexers.FileList
 
     public enum FileListCategories
     {
-        [FieldOption]
+        [FieldOption(Label = "Anime")]
         Anime = 24,
-        [FieldOption]
+        [FieldOption(Label = "Animation")]
         Animation = 15,
-        [FieldOption]
+        [FieldOption(Label = "TV 4K")]
         TV_4K = 27,
-        [FieldOption]
+        [FieldOption(Label = "TV HD")]
         TV_HD = 21,
-        [FieldOption]
+        [FieldOption(Label = "TV SD")]
         TV_SD = 23,
-        [FieldOption]
-        Sport = 13
+        [FieldOption(Label = "Sport")]
+        Sport = 13,
+        [FieldOption(Label = "RO Dubbed")]
+        RoDubbed = 28
     }
 }
