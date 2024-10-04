@@ -36,8 +36,6 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                     continue;
                 }
 
-                var customFormats = _formatService.ParseCustomFormat(file);
-
                 _logger.Debug("Comparing file quality with report. Existing file is {0}.", file.Quality);
 
                 if (!_upgradableSpecification.CutoffNotMet(qualityProfile,
@@ -47,11 +45,13 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 {
                     _logger.Debug("Cutoff already met, rejecting.");
 
-                    var qualityCutoffIndex = qualityProfile.GetIndex(qualityProfile.Cutoff);
-                    var qualityCutoff = qualityProfile.Items[qualityCutoffIndex.Index];
+                    var cutoff = qualityProfile.UpgradeAllowed ? qualityProfile.Cutoff : qualityProfile.FirststAllowedQuality().Id;
+                    var qualityCutoff = qualityProfile.Items[qualityProfile.GetIndex(cutoff).Index];
 
                     return Decision.Reject("Existing file meets cutoff: {0}", qualityCutoff);
                 }
+
+                var customFormats = _formatService.ParseCustomFormat(file);
 
                 var upgradeableRejectReason = _upgradableSpecification.IsUpgradable(qualityProfile,
                     file.Quality,
