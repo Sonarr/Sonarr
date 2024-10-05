@@ -1,3 +1,4 @@
+using System.IO;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -87,6 +88,17 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             WithMinimumFreeSpace(150);
             WithAvailableSpace(200);
             WithSize(100);
+
+            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
+        }
+
+        [Test]
+        public void should_return_true_if_root_folder_is_not_available()
+        {
+            WithMinimumFreeSpace(150);
+            WithSize(100);
+
+            Mocker.GetMock<IDiskProvider>().Setup(s => s.GetAvailableSpace(It.IsAny<string>())).Throws<DirectoryNotFoundException>();
 
             Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
         }
