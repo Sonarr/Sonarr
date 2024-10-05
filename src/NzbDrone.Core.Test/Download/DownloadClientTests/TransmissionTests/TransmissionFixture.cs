@@ -440,5 +440,26 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
             item.CanBeRemoved.Should().BeTrue();
             item.CanMoveFiles.Should().BeTrue();
         }
+
+        [TestCase(@"Pok\u00e9 Bowl Complete", "Poké Bowl Complete")]
+        [TestCase("Pok\u00e9 Bowl Complete", "Poké Bowl Complete")]
+        [TestCase(@"Series with a +\u2b50", "Series with a \u2b50")]
+        [TestCase("Series with a \u2b50", "Series with a \u2b50")]
+
+        public void should_replace_unicode_characters(string input, string expected)
+        {
+            _completed.DownloadDir = @"/Downloads/Finished/transmission";
+            _completed.Name = input;
+
+            GivenTorrents(new List<TransmissionTorrent>
+            {
+                _completed
+            });
+
+            var items = Subject.GetItems().ToList();
+
+            items.Should().HaveCount(1);
+            items.First().OutputPath.Should().Be(@"/Downloads/Finished/transmission/" + expected);
+        }
     }
 }

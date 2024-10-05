@@ -12,6 +12,7 @@ namespace NzbDrone.Common.Extensions
     public static class StringExtensions
     {
         private static readonly Regex CamelCaseRegex = new Regex("(?<!^)[A-Z]", RegexOptions.Compiled);
+        private static readonly Regex UnicodeEscapeRegex = new Regex(@"\+?\\u(?<Value>[a-z0-9]{4})", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public static string NullSafe(this string target)
         {
@@ -250,6 +251,11 @@ namespace NzbDrone.Common.Extensions
             Array.Reverse(array);
 
             return new string(array);
+        }
+
+        public static string ReplaceEncodedUnicodeCharacters(this string text)
+        {
+            return UnicodeEscapeRegex.Replace(text, m => ((char)int.Parse(m.Groups["Value"].Value, NumberStyles.HexNumber)).ToString());
         }
     }
 }
