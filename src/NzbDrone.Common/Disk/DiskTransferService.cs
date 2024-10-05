@@ -505,16 +505,22 @@ namespace NzbDrone.Common.Disk
         private void VerifyFile(string sourcePath, string targetPath, long originalSize, string action)
         {
             var targetSize = _diskProvider.GetFileSize(targetPath);
-            if (targetSize != originalSize)
+
+            if (targetSize == originalSize)
             {
-                _logger.Debug("File {0} incomplete, waiting in case filesystem is not synchronized. [{1}] was {2} bytes long instead of the expected {3}.", action, targetPath, targetSize, originalSize));
-                WaitForIO();
+                return;
             }
+
+            _logger.Debug("File {0} incomplete, waiting in case filesystem is not synchronized. [{1}] was {2} bytes long instead of the expected {3}.", action, targetPath, targetSize, originalSize));
+            WaitForIO();
             targetSize = _diskProvider.GetFileSize(targetPath);
-            if (targetSize != originalSize)
+
+            if (targetSize == originalSize)
             {
-                throw new IOException(string.Format("File {0} incomplete, data loss may have occurred. [{1}] was {2} bytes long instead of the expected {3}.", action, targetPath, targetSize, originalSize));
+                return;
             }
+
+            throw new IOException(string.Format("File {0} incomplete, data loss may have occurred. [{1}] was {2} bytes long instead of the expected {3}.", action, targetPath, targetSize, originalSize));
         }
 
         private bool ShouldIgnore(DirectoryInfo folder)
