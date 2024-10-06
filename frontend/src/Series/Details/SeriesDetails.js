@@ -199,6 +199,7 @@ class SeriesDetails extends Component {
       isSearching,
       isFetching,
       isPopulated,
+      isSmallScreen,
       episodesError,
       episodeFilesError,
       hasEpisodes,
@@ -428,99 +429,6 @@ class SeriesDetails extends Component {
                 </div>
 
                 <div className={styles.detailsLabels}>
-                  <Label
-                    className={styles.detailsLabel}
-                    size={sizes.LARGE}
-                  >
-                    <div>
-                      <Icon
-                        name={icons.FOLDER}
-                        size={17}
-                      />
-                      <span className={styles.path}>
-                        {path}
-                      </span>
-                    </div>
-                  </Label>
-
-                  <Tooltip
-                    anchor={
-                      <Label
-                        className={styles.detailsLabel}
-                        size={sizes.LARGE}
-                      >
-                        <div>
-                          <Icon
-                            name={icons.DRIVE}
-                            size={17}
-                          />
-
-                          <span className={styles.sizeOnDisk}>
-                            {formatBytes(sizeOnDisk)}
-                          </span>
-                        </div>
-                      </Label>
-                    }
-                    tooltip={
-                      <span>
-                        {episodeFilesCountMessage}
-                      </span>
-                    }
-                    kind={kinds.INVERSE}
-                    position={tooltipPositions.BOTTOM}
-                  />
-
-                  <Label
-                    className={styles.detailsLabel}
-                    title={translate('QualityProfile')}
-                    size={sizes.LARGE}
-                  >
-                    <div>
-                      <Icon
-                        name={icons.PROFILE}
-                        size={17}
-                      />
-                      <span className={styles.qualityProfileName}>
-                        {
-                          <QualityProfileNameConnector
-                            qualityProfileId={qualityProfileId}
-                          />
-                        }
-                      </span>
-                    </div>
-                  </Label>
-
-                  <Label
-                    className={styles.detailsLabel}
-                    size={sizes.LARGE}
-                  >
-                    <div>
-                      <Icon
-                        name={monitored ? icons.MONITORED : icons.UNMONITORED}
-                        size={17}
-                      />
-                      <span className={styles.qualityProfileName}>
-                        {monitored ? translate('Monitored') : translate('Unmonitored')}
-                      </span>
-                    </div>
-                  </Label>
-
-                  <Label
-                    className={styles.detailsLabel}
-                    title={statusDetails.message}
-                    size={sizes.LARGE}
-                    kind={status === 'deleted' ? kinds.INVERSE : undefined}
-                  >
-                    <div>
-                      <Icon
-                        name={statusDetails.icon}
-                        size={17}
-                      />
-                      <span className={styles.statusName}>
-                        {statusDetails.title}
-                      </span>
-                    </div>
-                  </Label>
 
                   {
                     originalLanguage?.name ?
@@ -562,6 +470,23 @@ class SeriesDetails extends Component {
                       null
                   }
 
+                  <Label
+                    className={styles.detailsLabel}
+                    title={statusDetails.message}
+                    size={sizes.LARGE}
+                    kind={status === 'deleted' ? kinds.INVERSE : undefined}
+                  >
+                    <div>
+                      <Icon
+                        name={statusDetails.icon}
+                        size={17}
+                      />
+                      <span className={styles.statusName}>
+                        {statusDetails.title}
+                      </span>
+                    </div>
+                  </Label>
+
                   <Tooltip
                     anchor={
                       <Label
@@ -591,6 +516,43 @@ class SeriesDetails extends Component {
                     position={tooltipPositions.BOTTOM}
                   />
 
+                  { !isSmallScreen && <br /> }
+
+                  <Label
+                    className={styles.detailsLabel}
+                    size={sizes.LARGE}
+                  >
+                    <div>
+                      <Icon
+                        name={monitored ? icons.MONITORED : icons.UNMONITORED}
+                        size={17}
+                      />
+                      <span className={styles.qualityProfileName}>
+                        {monitored ? translate('Monitored') : translate('Unmonitored')}
+                      </span>
+                    </div>
+                  </Label>
+
+                  <Label
+                    className={styles.detailsLabel}
+                    title={translate('QualityProfile')}
+                    size={sizes.LARGE}
+                  >
+                    <div>
+                      <Icon
+                        name={icons.PROFILE}
+                        size={17}
+                      />
+                      <span className={styles.qualityProfileName}>
+                        {
+                          <QualityProfileNameConnector
+                            qualityProfileId={qualityProfileId}
+                          />
+                        }
+                      </span>
+                    </div>
+                  </Label>
+
                   {
                     !!tags.length &&
                       <Tooltip
@@ -613,8 +575,50 @@ class SeriesDetails extends Component {
                         kind={kinds.INVERSE}
                         position={tooltipPositions.BOTTOM}
                       />
-
                   }
+
+                  <Tooltip
+                    anchor={
+                      <Label
+                        className={styles.detailsLabel}
+                        size={sizes.LARGE}
+                      >
+                        <div>
+                          <Icon
+                            name={icons.DRIVE}
+                            size={17}
+                          />
+
+                          <span className={styles.sizeOnDisk}>
+                            {formatBytes(sizeOnDisk)}
+                          </span>
+                        </div>
+                      </Label>
+                    }
+                    tooltip={
+                      <span>
+                        {episodeFilesCountMessage}
+                      </span>
+                    }
+                    kind={kinds.INVERSE}
+                    position={tooltipPositions.BOTTOM}
+                  />
+
+                  <Label
+                    className={styles.detailsLabel}
+                    size={sizes.LARGE}
+                  >
+                    <div>
+                      <Icon
+                        name={icons.FOLDER}
+                        size={17}
+                      />
+                      <span className={styles.path}>
+                        {path}
+                      </span>
+                    </div>
+                  </Label>
+
                 </div>
 
                 <Measure onMeasure={this.onMeasure}>
@@ -765,6 +769,7 @@ SeriesDetails.propTypes = {
   isSearching: PropTypes.bool.isRequired,
   isFetching: PropTypes.bool.isRequired,
   isPopulated: PropTypes.bool.isRequired,
+  isSmallScreen: PropTypes.bool.isRequired,
   episodesError: PropTypes.object,
   episodeFilesError: PropTypes.object,
   hasEpisodes: PropTypes.bool.isRequired,
