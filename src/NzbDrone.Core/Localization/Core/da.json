@@ -38,5 +38,10 @@
     "AddDownloadClient": "Tilføj downloadklient",
     "AddImportListExclusion": "Tilføj ekslusion til importeringslisten",
     "AddDelayProfileError": "Kan ikke tilføje en ny forsinkelsesprofil. Prøv venligst igen.",
-    "AddDownloadClientError": "Ikke muligt at tilføje en ny downloadklient. Prøv venligst igen."
+    "AddDownloadClientError": "Ikke muligt at tilføje en ny downloadklient. Prøv venligst igen.",
+    "AddListError": "Kan ikke tilføje en ny liste, prøv igen.",
+    "AddListExclusion": "Tilføj ekskludering af liste",
+    "AddIndexerImplementation": "Tilføj betingelse - {implementationName}",
+    "AddImportListExclusionError": "Kunne ikke tilføje en ny listeekskludering. Prøv igen.",
+    "AddList": "Tilføj Liste"
 }
