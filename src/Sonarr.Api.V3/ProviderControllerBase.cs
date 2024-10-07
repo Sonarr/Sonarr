@@ -86,9 +86,16 @@ namespace Sonarr.Api.V3
         [RestPutById]
         [Consumes("application/json")]
         [Produces("application/json")]
-        public ActionResult<TProviderResource> UpdateProvider([FromBody] TProviderResource providerResource, [FromQuery] bool forceSave = false)
+        public ActionResult<TProviderResource> UpdateProvider([FromRoute] int id, [FromBody] TProviderResource providerResource, [FromQuery] bool forceSave = false)
         {
-            var existingDefinition = _providerFactory.Find(providerResource.Id);
+            // TODO: Remove fallback to Id from body in next API version bump
+            var existingDefinition = _providerFactory.Find(id) ?? _providerFactory.Find(providerResource.Id);
+
+            if (existingDefinition == null)
+            {
+                return NotFound();
+            }
+
             var providerDefinition = GetDefinition(providerResource, existingDefinition, true, !forceSave, false);
 
             // Compare settings separately because they are not serialized with the definition.
@@ -105,7 +112,7 @@ namespace Sonarr.Api.V3
                 _providerFactory.Update(providerDefinition);
             }
 
-            return Accepted(providerResource.Id);
+            return Accepted(existingDefinition.Id);
         }
 
         [HttpPut("bulk")]
