@@ -489,7 +489,6 @@ namespace NzbDrone.Common.Disk
             {
                 _diskProvider.MoveFile(sourcePath, targetPath);
                 VerifyFile(sourcePath, targetPath, originalSize, "move");
-
             }
             catch (Exception ex)
             {
