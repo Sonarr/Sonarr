@@ -1,0 +1,19 @@
+# https://taskfile.dev
+
+version: '3'
+
+vars:
+  container_command: "podman"
+
+tasks:
+  test:
+    cmds:
+      - '{{.container_command}} build -v $(realpath ./node_modules):/source/node_modules:U -v $(realpath ~/.nuget):/root/.nuget:U -v $(realpath .git):/source/.git:ro,U . -f docker/test/Containerfile -t sonarr:test'
+
+  build:alpine:
+    cmds:
+      - '{{.container_command}} build -v $(realpath ./node_modules):/source/node_modules:U -v $(realpath ~/.nuget):/root/.nuget:U -v $(realpath .git):/source/.git:ro,U --layers --squash-all . -f docker/build/alpine/Containerfile -t sonarr:local-alpine'
+
+  pack:alpine:
+    cmds:
+      - '{{.container_command}} build -v $(realpath ./node_modules):/source/node_modules:U -v $(realpath ~/.nuget):/root/.nuget:U -v $(realpath .git):/source/.git:ro,U --layers --squash-all . -f docker/pack/alpine/Containerfile -t sonarr:local-pack'

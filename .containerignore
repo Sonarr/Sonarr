@@ -1,0 +1,10 @@
+.git*
+*/TestResults*
+node_modules/
+_output*
+_artifacts
+_rawPackage/
+_dotTrace*
+_tests*
+_publish*
+_temp*
