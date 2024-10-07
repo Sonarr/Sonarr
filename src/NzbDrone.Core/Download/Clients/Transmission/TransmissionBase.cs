@@ -66,7 +66,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                 var item = new DownloadClientItem();
                 item.DownloadId = torrent.HashString.ToUpper();
                 item.Category = Settings.TvCategory;
-                item.Title = torrent.Name;
+                item.Title = torrent.Name.ReplaceEncodedUnicodeCharacters();
 
                 item.DownloadClientInfo = DownloadClientItemClientInfo.FromDownloadClient(this, false);
 
@@ -242,7 +242,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
 
         protected virtual OsPath GetOutputPath(OsPath outputPath, TransmissionTorrent torrent)
         {
-            return outputPath + torrent.Name.Replace(":", "_");
+            return outputPath + torrent.Name.ReplaceEncodedUnicodeCharacters().Replace(":", "_");
         }
 
         protected string GetDownloadDirectory()
