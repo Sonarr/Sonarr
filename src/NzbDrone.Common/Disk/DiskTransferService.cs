@@ -511,7 +511,7 @@ namespace NzbDrone.Common.Disk
                 return;
             }
 
-            _logger.Debug("File {0} incomplete, waiting in case filesystem is not synchronized. [{1}] was {2} bytes long instead of the expected {3}.", action, targetPath, targetSize, originalSize));
+            _logger.Debug("File {0} incomplete, waiting in case filesystem is not synchronized. [{1}] was {2} bytes long instead of the expected {3}.", action, targetPath, targetSize, originalSize);
             WaitForIO();
             targetSize = _diskProvider.GetFileSize(targetPath);
 
