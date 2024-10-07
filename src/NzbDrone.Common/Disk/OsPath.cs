@@ -104,9 +104,19 @@ namespace NzbDrone.Common.Disk
             switch (kind)
             {
                 case OsPathKind.Windows when !path.EndsWith(":\\"):
-                    return path.TrimEnd('\\');
+                    while (!path.EndsWith(":\\") && path.EndsWith('\\'))
+                    {
+                        path = path[..^1];
+                    }
+
+                    return path;
                 case OsPathKind.Unix when path != "/":
-                    return path.TrimEnd('/');
+                    while (path != "/" && path.EndsWith('/'))
+                    {
+                        path = path[..^1];
+                    }
+
+                    return path;
             }
 
             return path;
