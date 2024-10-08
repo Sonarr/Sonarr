@@ -22,9 +22,9 @@ function SeriesSearchResult(props) {
   let tag = null;
 
   if (match.key === 'alternateTitles.title') {
-    alternateTitle = alternateTitles[match.arrayIndex];
+    alternateTitle = alternateTitles[match.refIndex];
   } else if (match.key === 'tags.label') {
-    tag = tags[match.arrayIndex];
+    tag = tags[match.refIndex];
   }
 
   return (
