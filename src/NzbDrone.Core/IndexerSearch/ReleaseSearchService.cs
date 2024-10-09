@@ -339,7 +339,9 @@ namespace NzbDrone.Core.IndexerSearch
             var searchSpec = Get<DailyEpisodeSearchCriteria>(series, new List<Episode> { episode }, monitoredOnly, userInvokedSearch, interactiveSearch);
             searchSpec.AirDate = airDate;
 
-            return await Dispatch(indexer => indexer.Fetch(searchSpec), searchSpec);
+            var downloadDecisions = await Dispatch(indexer => indexer.Fetch(searchSpec), searchSpec);
+
+            return DeDupeDecisions(downloadDecisions);
         }
 
         private async Task<List<DownloadDecision>> SearchAnime(Series series, Episode episode, bool monitoredOnly, bool userInvokedSearch, bool interactiveSearch, bool isSeasonSearch = false)
@@ -352,7 +354,9 @@ namespace NzbDrone.Core.IndexerSearch
             searchSpec.EpisodeNumber = episode.SceneEpisodeNumber ?? episode.EpisodeNumber;
             searchSpec.AbsoluteEpisodeNumber = episode.SceneAbsoluteEpisodeNumber ?? episode.AbsoluteEpisodeNumber ?? 0;
 
-            return await Dispatch(indexer => indexer.Fetch(searchSpec), searchSpec);
+            var downloadDecisions = await Dispatch(indexer => indexer.Fetch(searchSpec), searchSpec);
+
+            return DeDupeDecisions(downloadDecisions);
         }
 
         private async Task<List<DownloadDecision>> SearchSpecial(Series series, List<Episode> episodes, bool monitoredOnly, bool userInvokedSearch, bool interactiveSearch)
