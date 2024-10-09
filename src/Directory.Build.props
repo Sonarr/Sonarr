@@ -213,7 +213,7 @@
   <PropertyGroup Condition="'$(IsOSX)' == 'true' and
                             '$(RuntimeIdentifier)' == ''">
     <_UsingDefaultRuntimeIdentifier>true</_UsingDefaultRuntimeIdentifier>
-    <RuntimeIdentifier>osx-x64</RuntimeIdentifier>
+    <RuntimeIdentifier>osx-$(Architecture)</RuntimeIdentifier>
   </PropertyGroup>
 
 </Project>
