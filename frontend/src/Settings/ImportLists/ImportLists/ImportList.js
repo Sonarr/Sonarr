@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import Card from 'Components/Card';
 import Label from 'Components/Label';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
+import TagList from 'Components/TagList';
 import { kinds } from 'Helpers/Props';
 import formatShortTimeSpan from 'Utilities/Date/formatShortTimeSpan';
 import translate from 'Utilities/String/translate';
@@ -57,6 +58,8 @@ class ImportList extends Component {
       id,
       name,
       enableAutomaticAdd,
+      tags,
+      tagList,
       minRefreshInterval
     } = this.props;
 
@@ -72,16 +75,21 @@ class ImportList extends Component {
 
         <div className={styles.enabled}>
           {
-            enableAutomaticAdd &&
+            enableAutomaticAdd ?
               <Label kind={kinds.SUCCESS}>
                 {translate('AutomaticAdd')}
-              </Label>
+              </Label> :
+              null
           }
-
         </div>
 
+        <TagList
+          tags={tags}
+          tagList={tagList}
+        />
+
         <div className={styles.enabled}>
-          <Label kind={kinds.INFO} title='List Refresh Interval'>
+          <Label kind={kinds.DEFAULT} title='List Refresh Interval'>
             {`${translate('Refresh')}: ${formatShortTimeSpan(minRefreshInterval)}`}
           </Label>
         </div>
@@ -111,6 +119,8 @@ ImportList.propTypes = {
   id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   enableAutomaticAdd: PropTypes.bool.isRequired,
+  tags: PropTypes.arrayOf(PropTypes.number).isRequired,
+  tagList: PropTypes.arrayOf(PropTypes.object).isRequired,
   minRefreshInterval: PropTypes.string.isRequired,
   onConfirmDeleteImportList: PropTypes.func.isRequired
 };
