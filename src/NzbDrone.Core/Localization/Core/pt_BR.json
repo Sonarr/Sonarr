@@ -744,7 +744,7 @@
     "DelayProfileProtocol": "Protocolo: {preferredProtocol}",
     "DeleteDelayProfileMessageText": "Tem certeza de que deseja excluir este perfil de atraso?",
     "DeleteImportListMessageText": "Tem certeza de que deseja excluir a lista '{name}'?",
-    "DeleteReleaseProfileMessageText": "Tem certeza de que deseja excluir este perfil de lançamento '{name}'?",
+    "DeleteReleaseProfileMessageText": "Tem certeza de que deseja excluir o perfil de lançamento '{name}'?",
     "DownloadClientSeriesTagHelpText": "Use este cliente de download apenas para séries com pelo menos uma tag correspondente. Deixe em branco para usar com todas as séries.",
     "EpisodeTitleRequiredHelpText": "Impeça a importação por até 48 horas se o título do episódio estiver no formato de nomenclatura e o título do episódio for TBA",
     "External": "Externo",
@@ -2115,5 +2115,10 @@
     "CustomFormatsSpecificationExceptLanguage": "Exceto Idioma",
     "CustomFormatsSpecificationExceptLanguageHelpText": "Corresponde se qualquer idioma diferente do idioma selecionado estiver presente",
     "MinimumCustomFormatScoreIncrement": "Incremento Mínimo da Pontuação de Formato Personalizado",
-    "MinimumCustomFormatScoreIncrementHelpText": "Melhoria mínima necessária da pontuação do formato personalizado entre versões existentes e novas antes que {appName} considere isso uma atualização"
+    "MinimumCustomFormatScoreIncrementHelpText": "Melhoria mínima necessária da pontuação do formato personalizado entre versões existentes e novas antes que {appName} considere isso uma atualização",
+    "NotificationsGotifySettingsMetadataLinks": "Links de metadados",
+    "NotificationsGotifySettingsMetadataLinksHelpText": "Adicionar links aos metadados da série ao enviar notificações",
+    "NotificationsGotifySettingsPreferredMetadataLink": "Link de Metadados Preferido",
+    "NotificationsGotifySettingsPreferredMetadataLinkHelpText": "Link de metadados para clientes que suportam apenas um único link",
+    "FolderNameTokens": "Tokens de Nome de Pasta"
 }
