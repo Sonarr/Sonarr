@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import Alert from 'Components/Alert';
 import TextInput from 'Components/Form/TextInput';
 import Icon from 'Components/Icon';
 import Button from 'Components/Link/Button';
@@ -129,7 +130,8 @@ class AddNewSeries extends Component {
                 <div className={styles.helpText}>
                   {translate('AddNewSeriesError')}
                 </div>
-                <div>{getErrorMessage(error)}</div>
+
+                <Alert kind={kinds.DANGER}>{getErrorMessage(error)}</Alert>
               </div> : null
           }
 
