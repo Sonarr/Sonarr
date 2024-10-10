@@ -49,6 +49,7 @@ class ImportLists extends Component {
   render() {
     const {
       items,
+      tagList,
       onConfirmDeleteImportList,
       ...otherProps
     } = this.props;
@@ -71,6 +72,7 @@ class ImportLists extends Component {
                   <ImportList
                     key={item.id}
                     {...item}
+                    tagList={tagList}
                     onConfirmDeleteImportList={onConfirmDeleteImportList}
                   />
                 );
@@ -109,6 +111,7 @@ ImportLists.propTypes = {
   isFetching: PropTypes.bool.isRequired,
   error: PropTypes.object,
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
+  tagList: PropTypes.arrayOf(PropTypes.object).isRequired,
   onConfirmDeleteImportList: PropTypes.func.isRequired
 };
 
