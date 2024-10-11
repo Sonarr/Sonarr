@@ -1,6 +1,7 @@
 using System;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Core.Notifications;
+using NzbDrone.SignalR;
 using Sonarr.Http;
 
 namespace Sonarr.Api.V3.Notifications
@@ -11,8 +12,8 @@ namespace Sonarr.Api.V3.Notifications
         public static readonly NotificationResourceMapper ResourceMapper = new ();
         public static readonly NotificationBulkResourceMapper BulkResourceMapper = new ();
 
-        public NotificationController(NotificationFactory notificationFactory)
-            : base(notificationFactory, "notification", ResourceMapper, BulkResourceMapper)
+        public NotificationController(IBroadcastSignalRMessage signalRBroadcaster, NotificationFactory notificationFactory)
+            : base(signalRBroadcaster, notificationFactory, "notification", ResourceMapper, BulkResourceMapper)
         {
         }
 
