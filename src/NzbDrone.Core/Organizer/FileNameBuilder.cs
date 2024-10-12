@@ -187,6 +187,7 @@ namespace NzbDrone.Core.Organizer
 
                 splitPattern = AddSeasonEpisodeNumberingTokens(splitPattern, tokenHandlers, episodes, namingConfig);
                 splitPattern = AddAbsoluteNumberingTokens(splitPattern, tokenHandlers, series, episodes, namingConfig);
+                splitPattern = splitPattern.Replace("...", "{{ellipsis}}");
 
                 UpdateMediaInfoIfNeeded(splitPattern, episodeFile, series);
 
