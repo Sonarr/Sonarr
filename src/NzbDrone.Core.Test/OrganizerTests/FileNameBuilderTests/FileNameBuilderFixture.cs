@@ -1027,6 +1027,15 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
                    .Should().Be(string.Empty);
         }
 
+        [Test]
+        public void should_maintain_ellipsis_in_naming_format()
+        {
+            _namingConfig.StandardEpisodeFormat = "{Series.Title}.S{season:00}.E{episode:00}...{Episode.CleanTitle}";
+
+            Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
+                .Should().Be("South.Park.S15.E06...City.Sushi");
+        }
+
         private void GivenMediaInfoModel(string videoCodec = "h264",
                                          string audioCodec = "dts",
                                          int audioChannels = 6,
