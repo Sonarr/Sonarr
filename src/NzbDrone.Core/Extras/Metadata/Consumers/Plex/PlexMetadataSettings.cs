@@ -21,6 +21,9 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Plex
         [FieldDefinition(0, Label = "MetadataPlexSettingsSeriesPlexMatchFile", Type = FieldType.Checkbox, Section = MetadataSectionType.Metadata, HelpText = "MetadataPlexSettingsSeriesPlexMatchFileHelpText")]
         public bool SeriesPlexMatchFile { get; set; }
 
+        [FieldDefinition(0, Label = "MetadataPlexSettingsEpisodeMappings", Type = FieldType.Checkbox, Section = MetadataSectionType.Metadata, HelpText = "MetadataPlexSettingsEpisodeMappingsHelpText")]
+        public bool EpisodeMappings { get; set; }
+
         public NzbDroneValidationResult Validate()
         {
             return new NzbDroneValidationResult(Validator.Validate(this));

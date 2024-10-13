@@ -113,7 +113,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Wdtv
             return null;
         }
 
-        public override MetadataFileResult SeriesMetadata(Series series)
+        public override MetadataFileResult SeriesMetadata(Series series, SeriesMetadataReason reason)
         {
             // Series metadata is not supported
             return null;

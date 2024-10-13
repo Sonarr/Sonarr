@@ -53,6 +53,11 @@ namespace NzbDrone.Core.Extras.Subtitles
             return Enumerable.Empty<SubtitleFile>();
         }
 
+        public override IEnumerable<ExtraFile> CreateAfterEpisodesImported(Series series)
+        {
+            return Enumerable.Empty<SubtitleFile>();
+        }
+
         public override IEnumerable<ExtraFile> CreateAfterEpisodeImport(Series series, EpisodeFile episodeFile)
         {
             return Enumerable.Empty<SubtitleFile>();

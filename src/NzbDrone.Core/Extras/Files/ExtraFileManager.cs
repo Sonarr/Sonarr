@@ -17,6 +17,7 @@ namespace NzbDrone.Core.Extras.Files
         int Order { get; }
         IEnumerable<ExtraFile> CreateAfterMediaCoverUpdate(Series series);
         IEnumerable<ExtraFile> CreateAfterSeriesScan(Series series, List<EpisodeFile> episodeFiles);
+        IEnumerable<ExtraFile> CreateAfterEpisodesImported(Series series);
         IEnumerable<ExtraFile> CreateAfterEpisodeImport(Series series, EpisodeFile episodeFile);
         IEnumerable<ExtraFile> CreateAfterEpisodeFolder(Series series, string seriesFolder, string seasonFolder);
         IEnumerable<ExtraFile> MoveFilesAfterRename(Series series, List<EpisodeFile> episodeFiles);
@@ -46,6 +47,7 @@ namespace NzbDrone.Core.Extras.Files
         public abstract int Order { get; }
         public abstract IEnumerable<ExtraFile> CreateAfterMediaCoverUpdate(Series series);
         public abstract IEnumerable<ExtraFile> CreateAfterSeriesScan(Series series, List<EpisodeFile> episodeFiles);
+        public abstract IEnumerable<ExtraFile> CreateAfterEpisodesImported(Series series);
         public abstract IEnumerable<ExtraFile> CreateAfterEpisodeImport(Series series, EpisodeFile episodeFile);
         public abstract IEnumerable<ExtraFile> CreateAfterEpisodeFolder(Series series, string seriesFolder, string seasonFolder);
         public abstract IEnumerable<ExtraFile> MoveFilesAfterRename(Series series, List<EpisodeFile> episodeFiles);

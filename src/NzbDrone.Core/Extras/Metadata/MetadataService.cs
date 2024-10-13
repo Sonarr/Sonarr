@@ -99,7 +99,7 @@ namespace NzbDrone.Core.Extras.Metadata
             {
                 var consumerFiles = GetMetadataFilesForConsumer(consumer, metadataFiles);
 
-                files.AddIfNotNull(ProcessSeriesMetadata(consumer, series, consumerFiles));
+                files.AddIfNotNull(ProcessSeriesMetadata(consumer, series, consumerFiles, SeriesMetadataReason.Scan));
                 files.AddRange(ProcessSeriesImages(consumer, series, consumerFiles));
                 files.AddRange(ProcessSeasonImages(consumer, series, consumerFiles));
 
@@ -108,6 +108,31 @@ namespace NzbDrone.Core.Extras.Metadata
                     files.AddIfNotNull(ProcessEpisodeMetadata(consumer, series, episodeFile, consumerFiles));
                     files.AddRange(ProcessEpisodeImages(consumer, series, episodeFile, consumerFiles));
                 }
+            }
+
+            _metadataFileService.Upsert(files);
+
+            return files;
+        }
+
+        public override IEnumerable<ExtraFile> CreateAfterEpisodesImported(Series series)
+        {
+            var metadataFiles = _metadataFileService.GetFilesBySeries(series.Id);
+            _cleanMetadataService.Clean(series);
+
+            if (!_diskProvider.FolderExists(series.Path))
+            {
+                _logger.Info("Series folder does not exist, skipping metadata creation");
+                return Enumerable.Empty<MetadataFile>();
+            }
+
+            var files = new List<MetadataFile>();
+
+            foreach (var consumer in _metadataFactory.Enabled())
+            {
+                var consumerFiles = GetMetadataFilesForConsumer(consumer, metadataFiles);
+
+                files.AddIfNotNull(ProcessSeriesMetadata(consumer, series, consumerFiles, SeriesMetadataReason.EpisodesImported));
             }
 
             _metadataFileService.Upsert(files);
@@ -147,7 +172,7 @@ namespace NzbDrone.Core.Extras.Metadata
 
                 if (seriesFolder.IsNotNullOrWhiteSpace())
                 {
-                    files.AddIfNotNull(ProcessSeriesMetadata(consumer, series, consumerFiles));
+                    files.AddIfNotNull(ProcessSeriesMetadata(consumer, series, consumerFiles, SeriesMetadataReason.EpisodeFolderCreated));
                     files.AddRange(ProcessSeriesImages(consumer, series, consumerFiles));
                 }
 
@@ -218,9 +243,9 @@ namespace NzbDrone.Core.Extras.Metadata
             return seriesMetadata.Where(c => c.Consumer == consumer.GetType().Name).ToList();
         }
 
-        private MetadataFile ProcessSeriesMetadata(IMetadata consumer, Series series, List<MetadataFile> existingMetadataFiles)
+        private MetadataFile ProcessSeriesMetadata(IMetadata consumer, Series series, List<MetadataFile> existingMetadataFiles, SeriesMetadataReason reason)
         {
-            var seriesMetadata = consumer.SeriesMetadata(series);
+            var seriesMetadata = consumer.SeriesMetadata(series, reason);
 
             if (seriesMetadata == null)
             {

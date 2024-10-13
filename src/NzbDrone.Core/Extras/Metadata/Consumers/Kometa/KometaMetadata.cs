@@ -92,7 +92,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Kometa
             return null;
         }
 
-        public override MetadataFileResult SeriesMetadata(Series series)
+        public override MetadataFileResult SeriesMetadata(Series series, SeriesMetadataReason reason)
         {
             return null;
         }
