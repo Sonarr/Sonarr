@@ -29,7 +29,8 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
                 Host = "127.0.0.1",
                 Port = 2222,
                 Username = "admin",
-                Password = "pass"
+                Password = "pass",
+                TvCategory = ""
             };
 
             Subject.Definition = new DownloadClientDefinition();
@@ -152,7 +153,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
             }
 
             Mocker.GetMock<ITransmissionProxy>()
-                  .Setup(s => s.GetTorrents(It.IsAny<TransmissionSettings>()))
+                  .Setup(s => s.GetTorrents(null, It.IsAny<TransmissionSettings>()))
                   .Returns(torrents);
         }
 

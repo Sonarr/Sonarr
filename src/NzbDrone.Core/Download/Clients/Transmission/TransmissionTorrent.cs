@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace NzbDrone.Core.Download.Clients.Transmission
@@ -11,6 +13,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
         public long TotalSize { get; set; }
         public long LeftUntilDone { get; set; }
         public bool IsFinished { get; set; }
+        public IReadOnlyCollection<string> Labels { get; set; } = Array.Empty<string>();
         public long Eta { get; set; }
         public TransmissionTorrentStatus Status { get; set; }
         public long SecondsDownloading { get; set; }

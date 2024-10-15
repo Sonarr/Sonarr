@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using FluentValidation.Results;
 using NLog;
 using NzbDrone.Common.Disk;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Core.Blocklisting;
 using NzbDrone.Core.Configuration;
@@ -15,6 +17,9 @@ namespace NzbDrone.Core.Download.Clients.Transmission
 {
     public class Transmission : TransmissionBase
     {
+        public override string Name => "Transmission";
+        public override bool SupportsLabels => HasClientVersion(4, 0);
+
         public Transmission(ITransmissionProxy proxy,
                             ITorrentFileInfoReader torrentFileInfoReader,
                             IHttpClient httpClient,
@@ -28,9 +33,41 @@ namespace NzbDrone.Core.Download.Clients.Transmission
         {
         }
 
+        public override void MarkItemAsImported(DownloadClientItem downloadClientItem)
+        {
+            if (!SupportsLabels)
+            {
+                throw new NotSupportedException($"{Name} does not support marking items as imported");
+            }
+
+            // set post-import category
+            if (Settings.TvImportedCategory.IsNotNullOrWhiteSpace() &&
+                Settings.TvImportedCategory != Settings.TvCategory)
+            {
+                try
+                {
+                    var torrent = _proxy.GetTorrents(new[] { downloadClientItem.DownloadId.ToLower() }, Settings).FirstOrDefault();
+
+                    var labels = torrent?.Labels?.ToHashSet() ?? new HashSet<string>();
+                    labels.Add(Settings.TvImportedCategory);
+
+                    if (Settings.TvCategory.IsNotNullOrWhiteSpace())
+                    {
+                        labels.Remove(Settings.TvCategory);
+                    }
+
+                    _proxy.SetTorrentLabels(downloadClientItem.DownloadId.ToLower(), labels, Settings);
+                }
+                catch (DownloadClientException ex)
+                {
+                    _logger.Warn(ex, "Failed to set post-import torrent label \"{0}\" for {1} in Transmission.", Settings.TvImportedCategory, downloadClientItem.Title);
+                }
+            }
+        }
+
         protected override ValidationFailure ValidateVersion()
         {
-            var versionString = _proxy.GetClientVersion(Settings);
+            var versionString = _proxy.GetClientVersion(Settings, true);
 
             _logger.Debug("Transmission version information: {0}", versionString);
 
@@ -44,7 +81,5 @@ namespace NzbDrone.Core.Download.Clients.Transmission
 
             return null;
         }
-
-        public override string Name => "Transmission";
     }
 }
