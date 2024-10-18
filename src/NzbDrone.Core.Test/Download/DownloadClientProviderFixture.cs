@@ -201,16 +201,8 @@ namespace NzbDrone.Core.Test.Download
             var clientTags = new HashSet<int> { 1 };
 
             WithTorrentClient(0, clientTags);
-            WithTorrentClient(0, clientTags);
-            WithTorrentClient(0, clientTags);
-            WithTorrentClient(0, clientTags);
 
-            var client1 = Subject.GetDownloadClient(DownloadProtocol.Torrent, 0, false, seriesTags);
-            var client2 = Subject.GetDownloadClient(DownloadProtocol.Torrent, 0, false, seriesTags);
-            var client3 = Subject.GetDownloadClient(DownloadProtocol.Torrent, 0, false, seriesTags);
-            var client4 = Subject.GetDownloadClient(DownloadProtocol.Torrent, 0, false, seriesTags);
-
-            Subject.GetDownloadClient(DownloadProtocol.Torrent, 0, false, seriesTags).Should().BeNull();
+            Assert.Throws<DownloadClientUnavailableException>(() => Subject.GetDownloadClient(DownloadProtocol.Torrent, 0, false, seriesTags));
         }
 
         [Test]
