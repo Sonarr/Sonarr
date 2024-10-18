@@ -41,18 +41,23 @@ namespace NzbDrone.Core.Download
             var blockedProviders = new HashSet<int>(_downloadClientStatusService.GetBlockedProviders().Select(v => v.ProviderId));
             var availableProviders = _downloadClientFactory.GetAvailableProviders().Where(v => v.Protocol == downloadProtocol).ToList();
 
-            if (tags != null)
+            if (!availableProviders.Any())
+            {
+                return null;
+            }
+
+            if (tags is { Count: > 0 })
             {
                 var matchingTagsClients = availableProviders.Where(i => i.Definition.Tags.Intersect(tags).Any()).ToList();
 
                 availableProviders = matchingTagsClients.Count > 0 ?
                     matchingTagsClients :
                     availableProviders.Where(i => i.Definition.Tags.Empty()).ToList();
-            }
 
-            if (!availableProviders.Any())
-            {
-                return null;
+                if (!availableProviders.Any())
+                {
+                    throw new DownloadClientUnavailableException("No download client was found without tags or a matching series tag. Please check your settings.");
+                }
             }
 
             if (indexerId > 0)
