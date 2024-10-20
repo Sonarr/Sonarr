@@ -620,7 +620,7 @@
     "TorrentDelayTime": "Torrent-Verzögerung: {torrentDelay}",
     "TorrentBlackholeTorrentFolder": "Torrent-Ordner",
     "UpdateStartupNotWritableHealthCheckMessage": "Das Update kann nicht installiert werden, da der Startordner „{startupFolder}“ für den Benutzer „{userName}“ nicht beschreibbar ist.",
-    "UpdateSonarrDirectlyLoadError": "{appName} kann nicht direkt aktualisiert werden.",
+    "UpdateAppDirectlyLoadError": "{appName} kann nicht direkt aktualisiert werden.",
     "UpdateStartupTranslocationHealthCheckMessage": "Das Update kann nicht installiert werden, da sich der Startordner „{startupFolder}“ in einem App Translocation-Ordner befindet.",
     "Uptime": "Betriebszeit",
     "UpgradesAllowed": "Upgrades erlaubt",

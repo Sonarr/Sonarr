@@ -797,7 +797,7 @@
     "UnmonitoredOnly": "Non surveillé uniquement",
     "UpdateMechanismHelpText": "Utilisez le programme de mise à jour intégré de {appName} ou un script",
     "UpdateSelected": "Mise à jour sélectionnée",
-    "UpdateSonarrDirectlyLoadError": "Impossible de mettre à jour directement {appName},",
+    "UpdateAppDirectlyLoadError": "Impossible de mettre à jour directement {appName},",
     "UpdateStartupNotWritableHealthCheckMessage": "Impossible d'installer la mise à jour car le dossier de démarrage « {startupFolder} » n'est pas accessible en écriture par l'utilisateur « {userName} ».",
     "UpdateStartupTranslocationHealthCheckMessage": "Impossible d'installer la mise à jour, car le dossier de démarrage « {startupFolder} » se trouve dans un dossier App Translocation.",
     "UpdaterLogFiles": "Journaux du programme de mise à jour",

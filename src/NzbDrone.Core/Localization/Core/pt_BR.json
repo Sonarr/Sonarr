@@ -889,7 +889,7 @@
     "UnsavedChanges": "Alterações Não Salvas",
     "UpdateAutomaticallyHelpText": "Baixe e instale atualizações automaticamente. Você ainda poderá instalar a partir do Sistema: Atualizações",
     "UpdateMechanismHelpText": "Usar o atualizador integrado do {appName} ou um script",
-    "UpdateSonarrDirectlyLoadError": "Incapaz de atualizar o {appName} diretamente,",
+    "UpdateAppDirectlyLoadError": "Incapaz de atualizar o {appName} diretamente,",
     "UpdateUiNotWritableHealthCheckMessage": "Não é possível instalar a atualização porque a pasta de IU '{uiFolder}' não pode ser salva pelo usuário '{userName}'.",
     "UpgradeUntil": "Atualizar Até",
     "UpgradeUntilCustomFormatScore": "Atualizar até pontuação de formato personalizado",

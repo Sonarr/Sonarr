@@ -569,7 +569,7 @@
     "UpcomingSeriesDescription": "Sarja on julkistettu, mutta tarkka esitysaika ei ole vielä tiedossa.",
     "UnselectAll": "Tyhjennä valinnat",
     "UpdateMonitoring": "Päivitä valvontatila",
-    "UpdateSonarrDirectlyLoadError": "{appName}ia ei voida päivittää suoraan,",
+    "UpdateAppDirectlyLoadError": "{appName}ia ei voida päivittää suoraan,",
     "UpgradeUntilThisQualityIsMetOrExceeded": "Päivitä kunnes tämä laatu on savutettu tai ylitetty",
     "Updates": "Päivitykset",
     "UpdateSelected": "Päivitä valitut",

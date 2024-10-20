@@ -1231,7 +1231,7 @@
     "UiSettingsLoadError": "无法加载UI设置",
     "UnknownEventTooltip": "未知事件",
     "UpdateScriptPathHelpText": "自定义脚本的路径，该脚本处理获取的更新包并处理更新过程的其余部分",
-    "UpdateSonarrDirectlyLoadError": "无法直接更新{appName}，",
+    "UpdateAppDirectlyLoadError": "无法直接更新{appName}，",
     "View": "查看",
     "Negate": "反选",
     "ListTagsHelpText": "从此列表导入时将添加标记",
