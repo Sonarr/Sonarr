@@ -1576,7 +1576,7 @@
     "ShowPath": "Mostrar ruta",
     "ShowNetwork": "Mostrar red",
     "TvdbIdExcludeHelpText": "La ID de TVDB de la serie a excluir",
-    "UpdateSonarrDirectlyLoadError": "No se pudo actualizar {appName} directamente,",
+    "UpdateAppDirectlyLoadError": "No se pudo actualizar {appName} directamente,",
     "UpgradesAllowedHelpText": "Si se deshabilita las calidades no serán actualizadas",
     "WithFiles": "Con archivos",
     "SystemTimeHealthCheckMessage": "La hora del sistema está desfasada más de 1 día. Las tareas programadas pueden no ejecutarse correctamente hasta que la hora sea corregida",

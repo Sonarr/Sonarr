@@ -793,7 +793,7 @@
     "External": "Внешний",
     "Never": "Никогда",
     "Ok": "Ок",
-    "UpdateSonarrDirectlyLoadError": "Невозможно обновить {appName} напрямую,",
+    "UpdateAppDirectlyLoadError": "Невозможно обновить {appName} напрямую,",
     "WeekColumnHeader": "Заголовок столбца недели",
     "OrganizeModalHeader": "Упорядочить и переименовать",
     "MultiLanguages": "Многоязычный",

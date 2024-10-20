@@ -818,7 +818,7 @@
     "UnsavedChanges": "Cambiamenti Non Salvati",
     "UnselectAll": "Deseleziona Tutto",
     "UpdateAll": "Aggiorna Tutto",
-    "UpdateSonarrDirectlyLoadError": "Impossibile aggiornare {appName} direttamente,",
+    "UpdateAppDirectlyLoadError": "Impossibile aggiornare {appName} direttamente,",
     "UseSeasonFolderHelpText": "Ordina episodi dentro all cartella della stagione",
     "VideoCodec": "Codec Video",
     "DownloadClientValidationCategoryMissingDetail": "La categoria che ha inserito non esiste in {clientName}. Crealo prima su {clientName}.",

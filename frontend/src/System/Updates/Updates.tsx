@@ -77,7 +77,7 @@ function Updates() {
   const hasUpdates = isPopulated && !hasError && items.length > 0;
   const noUpdates = isPopulated && !hasError && !items.length;
 
-  const externalUpdaterPrefix = translate('UpdateSonarrDirectlyLoadError');
+  const externalUpdaterPrefix = translate('UpdateAppDirectlyLoadError');
   const externalUpdaterMessages: Partial<Record<UpdateMechanism, string>> = {
     external: translate('ExternalUpdater'),
     apt: translate('AptUpdater'),
@@ -262,10 +262,16 @@ function Updates() {
           </div>
         )}
 
-        {updatesError ? <div>{translate('FailedToFetchUpdates')}</div> : null}
+        {updatesError ? (
+          <Alert kind={kinds.WARNING}>
+            {translate('FailedToFetchUpdates')}
+          </Alert>
+        ) : null}
 
         {generalSettingsError ? (
-          <div>{translate('FailedToUpdateSettings')}</div>
+          <Alert kind={kinds.DANGER}>
+            {translate('FailedToFetchSettings')}
+          </Alert>
         ) : null}
 
         <ConfirmModal
