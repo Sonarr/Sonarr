@@ -147,7 +147,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             {
                 request.AddFormParameter("paused", false);
             }
-            else if ((QBittorrentState)settings.InitialState == QBittorrentState.Pause)
+            else if ((QBittorrentState)settings.InitialState == QBittorrentState.Stop)
             {
                 request.AddFormParameter("paused", true);
             }
@@ -177,7 +177,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             {
                 request.AddFormParameter("paused", false);
             }
-            else if ((QBittorrentState)settings.InitialState == QBittorrentState.Pause)
+            else if ((QBittorrentState)settings.InitialState == QBittorrentState.Stop)
             {
                 request.AddFormParameter("paused", true);
             }
@@ -213,7 +213,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             catch (DownloadClientException ex)
             {
                 // if setCategory fails due to method not being found, then try older setLabel command for qBittorrent < v.3.3.5
-                if (ex.InnerException is HttpException && (ex.InnerException as HttpException).Response.StatusCode == HttpStatusCode.NotFound)
+                if (ex.InnerException is HttpException httpException && httpException.Response.StatusCode == HttpStatusCode.NotFound)
                 {
                     var setLabelRequest = BuildRequest(settings).Resource("/command/setLabel")
                                                                 .Post()
@@ -255,29 +255,13 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             catch (DownloadClientException ex)
             {
                 // qBittorrent rejects all Prio commands with 403: Forbidden if Options -> BitTorrent -> Torrent Queueing is not enabled
-                if (ex.InnerException is HttpException && (ex.InnerException as HttpException).Response.StatusCode == HttpStatusCode.Forbidden)
+                if (ex.InnerException is HttpException httpException && httpException.Response.StatusCode == HttpStatusCode.Forbidden)
                 {
                     return;
                 }
 
                 throw;
             }
-        }
-
-        public void PauseTorrent(string hash, QBittorrentSettings settings)
-        {
-            var request = BuildRequest(settings).Resource("/command/pause")
-                                                 .Post()
-                                                 .AddFormParameter("hash", hash);
-            ProcessRequest(request, settings);
-        }
-
-        public void ResumeTorrent(string hash, QBittorrentSettings settings)
-        {
-            var request = BuildRequest(settings).Resource("/command/resume")
-                                                .Post()
-                                                .AddFormParameter("hash", hash);
-            ProcessRequest(request, settings);
         }
 
         public void SetForceStart(string hash, bool enabled, QBittorrentSettings settings)
