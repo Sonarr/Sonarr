@@ -52,11 +52,11 @@ namespace NzbDrone.Core.Notifications.Emby
         [FieldDefinition(6, Label = "NotificationsSettingsUpdateLibrary", HelpText = "NotificationsEmbySettingsUpdateLibraryHelpText", Type = FieldType.Checkbox)]
         public bool UpdateLibrary { get; set; }
 
-        [FieldDefinition(7, Label = "NotificationsSettingsUpdateMapPathsFrom", HelpText = "NotificationsSettingsUpdateMapPathsFromHelpText", Type = FieldType.Textbox, Advanced = true)]
+        [FieldDefinition(7, Label = "NotificationsSettingsUpdateMapPathsFrom", HelpText = "NotificationsSettingsUpdateMapPathsFromSeriesHelpText", Type = FieldType.Textbox, Advanced = true)]
         [FieldToken(TokenField.HelpText, "NotificationsSettingsUpdateMapPathsFrom", "serviceName", "Emby/Jellyfin")]
         public string MapFrom { get; set; }
 
-        [FieldDefinition(8, Label = "NotificationsSettingsUpdateMapPathsTo", HelpText = "NotificationsSettingsUpdateMapPathsToHelpText", Type = FieldType.Textbox, Advanced = true)]
+        [FieldDefinition(8, Label = "NotificationsSettingsUpdateMapPathsTo", HelpText = "NotificationsSettingsUpdateMapPathsToSeriesHelpText", Type = FieldType.Textbox, Advanced = true)]
         [FieldToken(TokenField.HelpText, "NotificationsSettingsUpdateMapPathsTo", "serviceName", "Emby/Jellyfin")]
         public string MapTo { get; set; }
 
