@@ -232,5 +232,6 @@
     "CustomFormatJson": "Aangepast formaat JSON",
     "CustomFormatUnknownCondition": "Onbekende aangepaste formaatvoorwaarde '{implementation}'.",
     "ClickToChangeIndexerFlags": "Klik om indexeringsvlaggen te wijzigen",
-    "CustomFormatsSettingsTriggerInfo": "Een Aangepast Formaat wordt toegepast op een uitgave of bestand als het overeenkomt met ten minste één van de verschillende condities die zijn gekozen."
+    "CustomFormatsSettingsTriggerInfo": "Een Aangepast Formaat wordt toegepast op een uitgave of bestand als het overeenkomt met ten minste één van de verschillende condities die zijn gekozen.",
+    "CountVotes": "{votes} Stemmen"
 }

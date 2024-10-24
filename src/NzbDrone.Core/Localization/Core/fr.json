@@ -1873,7 +1873,7 @@
     "AutoTaggingSpecificationStatus": "État",
     "CustomFormatsSpecificationLanguage": "Langue",
     "CustomFormatsSpecificationMaximumSize": "Taille maximum",
-    "CustomFormatsSpecificationMinimumSize": "Taille maximum",
+    "CustomFormatsSpecificationMinimumSize": "Taille minimum",
     "CustomFormatsSpecificationRegularExpression": "Expression régulière",
     "CustomFormatsSpecificationReleaseGroup": "Groupe de versions",
     "CustomFormatsSpecificationResolution": "Résolution",
@@ -2103,5 +2103,7 @@
     "LogSizeLimitHelpText": "Taille maximale du fichier journal en Mo avant archivage. La valeur par défaut est de 1 Mo.",
     "DeleteSelected": "Supprimer la sélection",
     "LogSizeLimit": "Limite de taille du journal",
-    "DeleteSelectedImportListExclusionsMessageText": "Êtes-vous sûr de vouloir supprimer les exclusions de la liste d'importation sélectionnée ?"
+    "DeleteSelectedImportListExclusionsMessageText": "Êtes-vous sûr de vouloir supprimer les exclusions de la liste d'importation sélectionnée ?",
+    "CustomFormatsSpecificationExceptLanguage": "Excepté Langue",
+    "CustomFormatsSpecificationExceptLanguageHelpText": "Corresponf si l'autre langue que celle sélectionné est présente"
 }
