@@ -495,7 +495,7 @@
     "DeleteEpisodesFiles": "Eliminar {episodeFileCount} archivos de episodios",
     "DeleteImportListExclusionMessageText": "¿Está seguro de que desea eliminar esta exclusión de la lista de importación?",
     "DeleteQualityProfile": "Borrar perfil de calidad",
-    "DeleteReleaseProfileMessageText": "¿Estás seguro que quieres eliminar este perfil de lanzamiento '{name}'?",
+    "DeleteReleaseProfileMessageText": "¿Estás seguro que quieres eliminar el perfil de lanzamiento '{name}'?",
     "DeleteRemotePathMapping": "Borrar mapeo de ruta remota",
     "DeleteSelectedEpisodeFiles": "Borrar los archivos de episodios seleccionados",
     "DeleteSelectedEpisodeFilesHelpText": "Esta seguro que desea borrar los archivos de episodios seleccionados?",
@@ -2119,5 +2119,6 @@
     "NotificationsGotifySettingsMetadataLinksHelpText": "Añade un enlace a los metadatos de la serie cuando se envían notificaciones",
     "NotificationsGotifySettingsPreferredMetadataLink": "Enlace de metadatos preferido",
     "NotificationsGotifySettingsPreferredMetadataLinkHelpText": "Enlace de metadatos para clientes que solo soportan un único enlace",
-    "SkipFreeSpaceCheckHelpText": "Se usa cuando {appName} no puede detectar el espacio libre de tu carpeta raíz"
+    "SkipFreeSpaceCheckHelpText": "Se usa cuando {appName} no puede detectar el espacio libre de tu carpeta raíz",
+    "FolderNameTokens": "Tokens de nombre de carpeta"
 }

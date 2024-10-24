@@ -184,7 +184,7 @@
     "BackupFolderHelpText": "Caminhos relativos estarão no diretório AppData do {appName}",
     "Automatic": "Automático",
     "AutomaticSearch": "Pesquisa automática",
-    "AutoTaggingRequiredHelpText": "Esta condição de {implementationName} deve corresponder para que a regra de marcação automática seja aplicada. Caso contrário, uma única correspondência de {implementationName} é suficiente.",
+    "AutoTaggingRequiredHelpText": "Esta condição {implementationName} tem de corresponder para que a regra de marcação automática seja aplicada. Caso contrário, uma única correspondência {implementationName} é suficiente.",
     "Backup": "Backup",
     "AuthenticationRequiredPasswordConfirmationHelpTextWarning": "Confirmar nova senha",
     "Conditions": "Condições",
@@ -209,5 +209,12 @@
     "ChangeCategoryMultipleHint": "Altera os downloads para a \"Categoria pós-importação' do cliente de download",
     "ChownGroup": "Fazer chown em grupo",
     "Clone": "Clonar",
-    "ContinuingOnly": "Continuando apenas"
+    "ContinuingOnly": "Continuando apenas",
+    "CountCustomFormatsSelected": "{count} formatos selecionados",
+    "CountVotes": "{votes} votos",
+    "CustomFormatUnknownCondition": "Condição de formato personalizado \"{implementation}\" desconhecida",
+    "BlocklistReleaseHelpText": "Impede o {appName} de capturar automaticamente estes ficheiros novamente",
+    "BlackholeFolderHelpText": "Pasta em que {appName} guardará o ficheiro {extension}.",
+    "BlackholeWatchFolderHelpText": "Pasta de onde {appName} deve importar os downloads completos",
+    "CustomFormatUnknownConditionOption": "Opção \"{key}\" desconhecida para a condição \"{implementation}\""
 }

@@ -201,5 +201,9 @@
     "TimeFormat": "Format ora",
     "CustomFilter": "Filtru personalizat",
     "CustomFilters": "Filtre personalizate",
-    "UpdateAvailableHealthCheckMessage": "O nouă versiune este disponibilă: {version}"
+    "UpdateAvailableHealthCheckMessage": "O nouă versiune este disponibilă: {version}",
+    "OnFileImport": "La import fișier",
+    "FileNameTokens": "Jetoane pentru nume de fișier",
+    "FolderNameTokens": "Jetoane pentru nume de folder",
+    "OnFileUpgrade": "La actualizare fișier"
 }
