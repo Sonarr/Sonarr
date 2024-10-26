@@ -4,11 +4,13 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import { fetchDelayProfiles, fetchDownloadClients, fetchImportLists, fetchIndexers, fetchNotifications, fetchReleaseProfiles } from 'Store/Actions/settingsActions';
 import { fetchTagDetails, fetchTags } from 'Store/Actions/tagActions';
+import createSortedSectionSelector from 'Store/Selectors/createSortedSectionSelector';
+import sortByProp from 'Utilities/Array/sortByProp';
 import Tags from './Tags';
 
 function createMapStateToProps() {
   return createSelector(
-    (state) => state.tags,
+    createSortedSectionSelector('tags', sortByProp('label')),
     (tags) => {
       const isFetching = tags.isFetching || tags.details.isFetching;
       const error = tags.error || tags.details.error;
