@@ -1,5 +1,4 @@
-// import copy from 'copy-to-clipboard';
-
+import copy from 'copy-to-clipboard';
 import React, { useCallback, useEffect, useState } from 'react';
 import FormInputButton from 'Components/Form/FormInputButton';
 import Icon from 'Components/Icon';
