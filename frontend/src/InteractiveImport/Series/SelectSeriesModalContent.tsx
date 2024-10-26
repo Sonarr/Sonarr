@@ -21,6 +21,7 @@ import { scrollDirections } from 'Helpers/Props';
 import Series from 'Series/Series';
 import createAllSeriesSelector from 'Store/Selectors/createAllSeriesSelector';
 import dimensions from 'Styles/Variables/dimensions';
+import { InputChanged } from 'typings/inputs';
 import sortByProp from 'Utilities/Array/sortByProp';
 import translate from 'Utilities/String/translate';
 import SelectSeriesModalTableHeader from './SelectSeriesModalTableHeader';
@@ -149,7 +150,7 @@ function SelectSeriesModalContent(props: SelectSeriesModalContentProps) {
   }, [listRef, scrollerRef]);
 
   const onFilterChange = useCallback(
-    ({ value }: { value: string }) => {
+    ({ value }: InputChanged<string>) => {
       setFilter(value);
     },
     [setFilter]

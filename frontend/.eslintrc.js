@@ -210,7 +210,6 @@ module.exports = {
     'no-undef-init': 'off',
     'no-undefined': 'off',
     'no-unused-vars': ['error', { args: 'none', ignoreRestSiblings: true }],
-    'no-use-before-define': 'error',
 
     // Node.js and CommonJS
 

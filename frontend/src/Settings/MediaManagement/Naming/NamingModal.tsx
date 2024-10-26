@@ -310,7 +310,7 @@ function NamingModal(props: NamingModalProps) {
   );
 
   const handleInputSelectionChange = useCallback(
-    (selectionStart: number, selectionEnd: number) => {
+    (selectionStart: number | null, selectionEnd: number | null) => {
       setSelectionStart(selectionStart);
       setSelectionEnd(selectionEnd);
     },

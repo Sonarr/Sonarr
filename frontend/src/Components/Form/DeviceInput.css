@@ -1,8 +1,0 @@
-.deviceInputWrapper {
-  display: flex;
-}
-
-.input {
-  composes: input from '~./TagInput.css';
-  composes: hasButton from '~Components/Form/Input.css';
-}
