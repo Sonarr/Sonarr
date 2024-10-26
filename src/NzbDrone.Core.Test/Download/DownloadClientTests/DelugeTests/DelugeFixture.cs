@@ -312,11 +312,12 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DelugeTests
         [Test]
         public void should_return_status_with_outputdirs()
         {
-            var configItems = new Dictionary<string, object>();
-
-            configItems.Add("download_location", @"C:\Downloads\Downloading\deluge".AsOsAgnostic());
-            configItems.Add("move_completed_path", @"C:\Downloads\Finished\deluge".AsOsAgnostic());
-            configItems.Add("move_completed", true);
+            var configItems = new Dictionary<string, object>
+            {
+                { "download_location", @"C:\Downloads\Downloading\deluge".AsOsAgnostic() },
+                { "move_completed_path", @"C:\Downloads\Finished\deluge".AsOsAgnostic() },
+                { "move_completed", true }
+            };
 
             Mocker.GetMock<IDelugeProxy>()
                 .Setup(v => v.GetConfig(It.IsAny<DelugeSettings>()))
@@ -327,6 +328,19 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.DelugeTests
             result.IsLocalhost.Should().BeTrue();
             result.OutputRootFolders.Should().NotBeNull();
             result.OutputRootFolders.First().Should().Be(@"C:\Downloads\Finished\deluge".AsOsAgnostic());
+        }
+
+        [Test]
+        public void should_return_status_with_outputdirs_for_directories_in_settings()
+        {
+            Subject.Definition.Settings.As<DelugeSettings>().DownloadDirectory =  @"D:\Downloads\Downloading\deluge".AsOsAgnostic();
+            Subject.Definition.Settings.As<DelugeSettings>().CompletedDirectory =  @"D:\Downloads\Finished\deluge".AsOsAgnostic();
+
+            var result = Subject.GetStatus();
+
+            result.IsLocalhost.Should().BeTrue();
+            result.OutputRootFolders.Should().NotBeNull();
+            result.OutputRootFolders.First().Should().Be(@"D:\Downloads\Finished\deluge".AsOsAgnostic());
         }
     }
 }

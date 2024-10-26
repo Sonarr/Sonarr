@@ -216,9 +216,18 @@ namespace NzbDrone.Core.Download.Clients.Deluge
         {
             var config = _proxy.GetConfig(Settings);
             var label = _proxy.GetLabelOptions(Settings);
+
             OsPath destDir;
 
-            if (label != null && label.ApplyMoveCompleted && label.MoveCompleted)
+            if (Settings.CompletedDirectory.IsNotNullOrWhiteSpace())
+            {
+                destDir = new OsPath(Settings.CompletedDirectory);
+            }
+            else if (Settings.DownloadDirectory.IsNotNullOrWhiteSpace())
+            {
+                destDir = new OsPath(Settings.DownloadDirectory);
+            }
+            else if (label is { ApplyMoveCompleted: true, MoveCompleted: true })
             {
                 // if label exists and a label completed path exists and is enabled use it instead of global
                 destDir = new OsPath(label.MoveCompletedPath);
@@ -234,7 +243,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
 
             var status = new DownloadClientInfo
             {
-                IsLocalhost = Settings.Host == "127.0.0.1" || Settings.Host == "localhost"
+                IsLocalhost = Settings.Host is "127.0.0.1" or "localhost"
             };
 
             if (!destDir.IsEmpty)
