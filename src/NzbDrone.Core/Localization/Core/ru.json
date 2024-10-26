@@ -1277,7 +1277,6 @@
     "FailedToLoadSeriesFromApi": "Не удалось загрузить сериалы из API",
     "FileNames": "Имена файлов",
     "FailedToLoadSonarr": "Не удалось загрузить {appName}",
-    "FailedToUpdateSettings": "Не удалось обновить настройки",
     "FilterGreaterThanOrEqual": "больше или равно",
     "Filter": "Фильтр",
     "FilterIs": "является",

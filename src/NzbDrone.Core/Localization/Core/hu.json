@@ -779,7 +779,6 @@
     "FailedToLoadSystemStatusFromApi": "Nem sikerült betölteni a rendszerállapotot az API-ból",
     "FailedToLoadTagsFromApi": "Nem sikerült betölteni a címkéket az API-ból",
     "FailedToLoadTranslationsFromApi": "Nem sikerült betölteni a fordításokat az API-ból",
-    "FailedToUpdateSettings": "Nem sikerült frissíteni a beállításokat",
     "FilterDoesNotEndWith": "nem ér véget",
     "Level": "Szint",
     "LibraryImportTipsQualityInEpisodeFilename": "Győződjön meg arról, hogy a fájlok fájlnevében szerepel a minőség. például. `episode.s02e15.bluray.mkv`",
