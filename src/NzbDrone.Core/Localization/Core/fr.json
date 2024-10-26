@@ -1472,7 +1472,6 @@
     "FailedToLoadSonarr": "Échec du chargement de {appName}",
     "FailedToLoadSystemStatusFromApi": "Échec du chargement de l'état du système à partir de l'API",
     "FailedToLoadUiSettingsFromApi": "Échec du chargement des paramètres de l'interface utilisateur à partir de l'API",
-    "FailedToUpdateSettings": "Échec de la mise à jour des paramètres",
     "FeatureRequests": "Requêtes de nouvelles fonctionnalités",
     "File": "Fichier",
     "NoImportListsFound": "Aucune liste d'importation trouvée",

@@ -898,7 +898,6 @@
     "HardlinkCopyFiles": "Hardlink/tiedostojen kopiointi",
     "ExternalUpdater": "{appName} on määritetty käyttämään ulkoista päivitysratkaisua.",
     "GrabReleaseUnknownSeriesOrEpisodeMessageText": "{appName} ei tunnista mihin sarjalle ja jaksolle julkaisu kuuluu, eikä sen automaattinen tuonti onnistu. Haluatko kaapata julkaisun \"{title}\"?",
-    "FailedToUpdateSettings": "Asetusten päivitys epäonnistui",
     "Forums": "Keskustelualue",
     "ErrorLoadingPage": "Virhe ladattaessa sivua",
     "FormatRuntimeHours": "{hours} t",

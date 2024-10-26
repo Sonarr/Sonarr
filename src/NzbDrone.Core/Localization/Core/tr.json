@@ -466,7 +466,6 @@
     "No": "Hayır",
     "NotificationsDiscordSettingsWebhookUrlHelpText": "Discord kanalı webhook URL'si",
     "NotificationsEmailSettingsBccAddressHelpText": "E-posta bcc alıcılarının virgülle ayrılmış listesi",
-    "FailedToUpdateSettings": "Ayarlar güncellenemedi",
     "False": "Pasif",
     "HistoryLoadError": "Geçmiş yüklenemiyor",
     "NotificationsEmailSettingsRecipientAddressHelpText": "E-posta alıcılarının virgülle ayrılmış listesi",

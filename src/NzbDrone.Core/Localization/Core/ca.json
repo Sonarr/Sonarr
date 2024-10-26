@@ -29,7 +29,6 @@
     "AnalyticsEnabledHelpText": "Envieu informació anònima d'ús i errors als servidors de {appName}. Això inclou informació sobre el vostre navegador, quines pàgines {appName} WebUI feu servir, informes d'errors, així com el sistema operatiu i la versió de l'entorn d'execució. Utilitzarem aquesta informació per a prioritzar les funcions i les correccions d'errors.",
     "AuthenticationRequiredHelpText": "Canvia per a quines sol·licituds cal autenticar. No canvieu tret que entengueu els riscos.",
     "BypassDelayIfAboveCustomFormatScoreHelpText": "Habiliteu l'omissió quan la versió tingui una puntuació superior a la puntuació mínima per al format personalitzat",
-    "FailedToUpdateSettings": "No s'ha pogut actualitzar la configuració",
     "Ended": "Acabat",
     "Language": "Idioma",
     "NextAiring": "Propera emissió",

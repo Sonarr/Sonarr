@@ -419,7 +419,6 @@
     "FormatTimeSpanDays": "{days}d {time}",
     "EditConditionImplementation": "Editar Condición - {implementationName}",
     "FailedToFetchUpdates": "Fallo al buscar las actualizaciones",
-    "FailedToUpdateSettings": "Fallo al actualizar los ajustes",
     "MaintenanceRelease": "Lanzamiento de mantenimiento: Corrección de errores y otras mejoras. Ver el historial de commits de Github para más detalles",
     "CreateEmptySeriesFoldersHelpText": "Crea carpetas de series faltantes durante el análisis del disco",
     "DefaultCase": "Caso predeterminado",

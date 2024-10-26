@@ -230,7 +230,6 @@
     "Exception": "Exceção",
     "ExternalUpdater": "O {appName} está configurado para usar um mecanismo de atualização externo",
     "FailedToFetchUpdates": "Falha ao buscar atualizações",
-    "FailedToUpdateSettings": "Falha ao atualizar as configurações",
     "FeatureRequests": "Solicitações de recursos",
     "Filename": "Nome do arquivo",
     "Fixed": "Corrigido",
