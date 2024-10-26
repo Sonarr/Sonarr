@@ -15,7 +15,7 @@
     <PackageReference Include="NLog.Extensions.Logging" Version="5.3.11" />
     <PackageReference Include="Sentry" Version="4.0.2" />
     <PackageReference Include="SharpZipLib" Version="1.4.2" />
-    <PackageReference Include="System.Text.Json" Version="6.0.9" />
+    <PackageReference Include="System.Text.Json" Version="6.0.10" />
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
     <PackageReference Include="System.Data.SQLite.Core.Servarr" Version="1.0.115.5-18" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.1" />
