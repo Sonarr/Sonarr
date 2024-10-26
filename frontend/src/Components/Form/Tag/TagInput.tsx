@@ -2,6 +2,7 @@ import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React, {
   KeyboardEvent,
+  Ref,
   SyntheticEvent,
   useCallback,
   useEffect,
@@ -14,7 +15,6 @@ import {
   RenderSuggestion,
   SuggestionsFetchRequestedParams,
 } from 'react-autosuggest';
-import { RefHandler } from 'react-popper';
 import useDebouncedCallback from 'Helpers/Hooks/useDebouncedCallback';
 import { kinds } from 'Helpers/Props';
 import { Kind } from 'Helpers/Props/kinds';
@@ -269,7 +269,10 @@ function TagInput<T extends TagBase>({
   }, []);
 
   const renderInputComponent = useCallback(
-    (inputProps: RenderInputComponentProps, forwardedRef: RefHandler) => {
+    (
+      inputProps: RenderInputComponentProps,
+      forwardedRef: Ref<HTMLDivElement>
+    ) => {
       return (
         <TagInputInput
           forwardedRef={forwardedRef}

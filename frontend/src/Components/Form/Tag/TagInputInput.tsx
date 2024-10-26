@@ -1,12 +1,11 @@
-import React, { MouseEvent, useCallback } from 'react';
-import { RefHandler } from 'react-popper';
+import React, { MouseEvent, Ref, useCallback } from 'react';
 import { Kind } from 'Helpers/Props/kinds';
 import { TagBase } from './TagInput';
 import { TagInputTagProps } from './TagInputTag';
 import styles from './TagInputInput.css';
 
 interface TagInputInputProps<T extends TagBase> {
-  forwardedRef?: RefHandler;
+  forwardedRef?: Ref<HTMLDivElement>;
   className?: string;
   tags: TagBase[];
   inputProps: object;

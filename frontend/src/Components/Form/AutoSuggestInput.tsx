@@ -1,8 +1,12 @@
 import classNames from 'classnames';
 import React, {
+  FocusEvent,
+  FormEvent,
   KeyboardEvent,
   KeyboardEventHandler,
   MutableRefObject,
+  ReactNode,
+  Ref,
   SyntheticEvent,
   useCallback,
   useEffect,
@@ -15,7 +19,7 @@ import Autosuggest, {
   RenderInputComponentProps,
   RenderSuggestionsContainerParams,
 } from 'react-autosuggest';
-import { Manager, Popper, Reference, RefHandler } from 'react-popper';
+import { Manager, Popper, Reference } from 'react-popper';
 import Portal from 'Components/Portal';
 import usePrevious from 'Helpers/Hooks/usePrevious';
 import { InputChanged } from 'typings/inputs';
@@ -37,16 +41,16 @@ interface AutoSuggestInputProps<T>
   maxHeight?: number;
   renderInputComponent?: (
     inputProps: RenderInputComponentProps,
-    ref: RefHandler
-  ) => React.ReactNode;
+    ref: Ref<HTMLDivElement>
+  ) => ReactNode;
   onInputChange: (
-    event: React.FormEvent<HTMLElement>,
+    event: FormEvent<HTMLElement>,
     params: ChangeEvent
   ) => unknown;
   onInputKeyDown?: KeyboardEventHandler<HTMLElement>;
   onInputFocus?: (event: SyntheticEvent) => unknown;
   onInputBlur: (
-    event: React.FocusEvent<HTMLElement>,
+    event: FocusEvent<HTMLElement>,
     params?: BlurEvent<T>
   ) => unknown;
   onChange?: (change: InputChanged<T>) => unknown;
