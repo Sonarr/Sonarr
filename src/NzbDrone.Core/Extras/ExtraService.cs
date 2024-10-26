@@ -26,7 +26,8 @@ namespace NzbDrone.Core.Extras
                                 IHandle<MediaCoversUpdatedEvent>,
                                 IHandle<EpisodeFolderCreatedEvent>,
                                 IHandle<SeriesScannedEvent>,
-                                IHandle<SeriesRenamedEvent>
+                                IHandle<SeriesRenamedEvent>,
+                                IHandle<DownloadsProcessedEvent>
     {
         private readonly IMediaFileService _mediaFileService;
         private readonly IEpisodeService _episodeService;
