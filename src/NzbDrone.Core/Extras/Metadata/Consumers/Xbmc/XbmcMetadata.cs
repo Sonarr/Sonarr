@@ -137,8 +137,13 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
             return null;
         }
 
-        public override MetadataFileResult SeriesMetadata(Series series)
+        public override MetadataFileResult SeriesMetadata(Series series, SeriesMetadataReason reason)
         {
+            if (reason == SeriesMetadataReason.EpisodesImported)
+            {
+                return null;
+            }
+
             var xmlResult = string.Empty;
 
             if (Settings.SeriesMetadata)

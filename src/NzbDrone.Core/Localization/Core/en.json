@@ -1151,6 +1151,8 @@
   "Message": "Message",
   "Metadata": "Metadata",
   "MetadataLoadError": "Unable to load Metadata",
+  "MetadataPlexSettingsEpisodeMappings": "Episode Mappings",
+  "MetadataPlexSettingsEpisodeMappingsHelpText": "Include episode mappings for all files in .plexmatch file",
   "MetadataPlexSettingsSeriesPlexMatchFile": "Series Plex Match File",
   "MetadataPlexSettingsSeriesPlexMatchFileHelpText": "Creates a .plexmatch file in the series folder",
   "MetadataProvidedBy": "Metadata is provided by {provider}",

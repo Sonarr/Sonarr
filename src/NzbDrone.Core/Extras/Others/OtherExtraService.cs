@@ -46,6 +46,11 @@ namespace NzbDrone.Core.Extras.Others
             return Enumerable.Empty<ExtraFile>();
         }
 
+        public override IEnumerable<ExtraFile> CreateAfterEpisodesImported(Series series)
+        {
+            return Enumerable.Empty<ExtraFile>();
+        }
+
         public override IEnumerable<ExtraFile> CreateAfterEpisodeImport(Series series, EpisodeFile episodeFile)
         {
             return Enumerable.Empty<ExtraFile>();
