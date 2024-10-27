@@ -12,7 +12,7 @@ function ManageCustomFormatsToolbarButton() {
   return (
     <>
       <PageToolbarButton
-        label={translate('ManageCustomFormats')}
+        label={translate('ManageFormats')}
         iconName={icons.MANAGE}
         onPress={openManageModal}
       />
