@@ -1,5 +1,10 @@
-.recentFoldersContainer {
+.foldersContainer {
   margin-top: 15px;
+}
+
+.foldersTitle {
+  border-bottom: 1px solid var(--borderColor);
+  font-size: 21px;
 }
 
 .buttonsContainer {
