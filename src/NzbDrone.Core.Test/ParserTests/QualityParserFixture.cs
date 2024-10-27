@@ -502,6 +502,13 @@ namespace NzbDrone.Core.Test.ParserTests
             result.Revision.IsRepack.Should().Be(isRepack);
         }
 
+        [TestCase("[MTBB] Series Title - S02E02 - 027 - Episode Title [WEBDL-1080p v2][x264][AAC]", 2)]
+        public void should_be_able_to_parse_anime_version(string title, int version)
+        {
+            var result = QualityParser.ParseQuality(title);
+            result.Revision.Version.Should().Be(version);
+        }
+
         private void ParseAndVerifyQuality(string title, Quality quality, bool proper)
         {
             var result = QualityParser.ParseQuality(title);
