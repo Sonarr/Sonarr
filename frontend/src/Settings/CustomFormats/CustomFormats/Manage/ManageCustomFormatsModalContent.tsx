@@ -47,6 +47,11 @@ const COLUMNS = [
     isSortable: true,
     isVisible: true,
   },
+  {
+    name: 'actions',
+    label: '',
+    isVisible: true,
+  },
 ];
 
 interface ManageCustomFormatsModalContentProps {
