@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Common.Crypto;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
 
 namespace Sonarr.Http.Frontend.Mappers
@@ -26,6 +28,11 @@ namespace Sonarr.Http.Frontend.Mappers
             if (!ShouldBreakCache(resourceUrl))
             {
                 return resourceUrl;
+            }
+
+            if (!RuntimeInfo.IsProduction)
+            {
+                return resourceUrl + "?t=" + DateTime.UtcNow.Ticks;
             }
 
             var mapper = _diskMappers.Single(m => m.CanHandle(resourceUrl));
