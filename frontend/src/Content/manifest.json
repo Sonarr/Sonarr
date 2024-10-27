@@ -1,5 +1,5 @@
 {
-  "name": "Sonarr",
+  "name": "__INSTANCE_NAME__",
   "icons": [
     {
       "src": "__URL_BASE__/Content/Images/Icons/android-chrome-192x192.png",
