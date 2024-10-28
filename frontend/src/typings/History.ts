@@ -40,6 +40,8 @@ export interface DownloadFailedHistory {
 
 export interface DownloadFolderImportedHistory {
   customFormatScore?: string;
+  downloadClient: string;
+  downloadClientName: string;
   droppedPath: string;
   importedPath: string;
 }
