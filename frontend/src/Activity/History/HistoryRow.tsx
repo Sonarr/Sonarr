@@ -195,9 +195,14 @@ function HistoryRow(props: HistoryRowProps) {
         }
 
         if (name === 'downloadClient') {
+          const downloadClientName =
+            'downloadClientName' in data ? data.downloadClientName : null;
+          const downloadClient =
+            'downloadClient' in data ? data.downloadClient : null;
+
           return (
             <TableRowCell key={name} className={styles.downloadClient}>
-              {'downloadClient' in data ? data.downloadClient : ''}
+              {downloadClientName ?? downloadClient ?? ''}
             </TableRowCell>
           );
         }
