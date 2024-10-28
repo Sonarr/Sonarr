@@ -60,7 +60,10 @@ namespace NzbDrone.Core.Notifications.Webhook
                 ApplicationUrl = _configService.ApplicationUrl,
                 Series = GetSeries(message.Series),
                 Episodes = episodeFile.Episodes.Value.ConvertAll(x => new WebhookEpisode(x)),
-                EpisodeFile = new WebhookEpisodeFile(episodeFile),
+                EpisodeFile = new WebhookEpisodeFile(episodeFile)
+                {
+                    SourcePath = message.SourcePath
+                },
                 Release = new WebhookGrabbedRelease(message.Release),
                 IsUpgrade = message.OldFiles.Any(),
                 DownloadClient = message.DownloadClientInfo?.Name,
