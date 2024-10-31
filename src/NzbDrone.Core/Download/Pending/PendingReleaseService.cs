@@ -274,10 +274,7 @@ namespace NzbDrone.Core.Download.Pending
             {
                 foreach (var series in knownRemoteEpisodes.Values.Select(v => v.Series))
                 {
-                    if (!seriesMap.ContainsKey(series.Id))
-                    {
-                        seriesMap[series.Id] = series;
-                    }
+                    seriesMap.TryAdd(series.Id, series);
                 }
             }
 
@@ -293,7 +290,7 @@ namespace NzbDrone.Core.Download.Pending
                 // Just in case the series was removed, but wasn't cleaned up yet (housekeeper will clean it up)
                 if (series == null)
                 {
-                    return null;
+                    continue;
                 }
 
                 // Languages will be empty if added before upgrading to v4, reparsing the languages if they're empty will set it to Unknown or better.
