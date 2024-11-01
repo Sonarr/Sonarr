@@ -23,10 +23,10 @@ function SeasonInteractiveSearchModal(
   const dispatch = useDispatch();
 
   const handleModalClose = useCallback(() => {
+    onModalClose();
+
     dispatch(cancelFetchReleases());
     dispatch(clearReleases());
-
-    onModalClose();
   }, [dispatch, onModalClose]);
 
   useEffect(() => {

@@ -160,13 +160,17 @@ function InteractiveSearch({ type, searchPayload }: InteractiveSearchProps) {
     [dispatch]
   );
 
-  useEffect(() => {
-    // Only fetch releases if they are not already being fetched and not yet populated.
+  useEffect(
+    () => {
+      // Only fetch releases if they are not already being fetched and not yet populated.
 
-    if (!isFetching && !isPopulated) {
-      dispatch(fetchReleases(searchPayload));
-    }
-  }, [isFetching, isPopulated, searchPayload, dispatch]);
+      if (!isFetching && !isPopulated) {
+        dispatch(fetchReleases(searchPayload));
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
 
   const errorMessage = getErrorMessage(error);
 
