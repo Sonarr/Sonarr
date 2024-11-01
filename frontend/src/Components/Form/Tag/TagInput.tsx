@@ -26,7 +26,7 @@ import TagInputTag, { EditedTag, TagInputTagProps } from './TagInputTag';
 import styles from './TagInput.css';
 
 export interface TagBase {
-  id: boolean | number | string;
+  id: boolean | number | string | null;
   name: string | number;
 }
 
@@ -44,7 +44,7 @@ function getTag<T extends { id: T['id']; name: T['name'] }>(
     if (existingTag) {
       return existingTag;
     } else if (allowNew) {
-      return { id: 0, name: value } as T;
+      return { name: value } as T;
     }
   } else if (selectedIndex != null) {
     return suggestions[selectedIndex];
