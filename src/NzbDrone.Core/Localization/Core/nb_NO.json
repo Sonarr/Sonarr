@@ -15,5 +15,8 @@
     "AddConditionError": "Ikke mulig å legge til ny betingelse, vennligst prøv igjen",
     "AbsoluteEpisodeNumber": "Absolutt Episode Nummer",
     "AddAutoTagError": "Ikke mulig å legge til ny automatisk tagg, vennligst prøv igjen",
-    "Actions": "Handlinger"
+    "Actions": "Handlinger",
+    "AddCustomFilter": "Legg til eget filter",
+    "AddConnection": "Legg til tilkobling",
+    "AddDelayProfile": "Legg til forsinkelsesprofil"
 }
