@@ -145,7 +145,7 @@
     "BindAddressHelpText": "Tüm arayüzler için geçerli IP adresi, localhost veya '*'",
     "CloneAutoTag": "Otomatik Etiketi Klonla",
     "Dash": "Çizgi",
-    "DeleteReleaseProfileMessageText": "'{name}' bu yayımlama profilini silmek istediğinizden emin misiniz?",
+    "DeleteReleaseProfileMessageText": "'{name}' sürüm profilini silmek istediğinizden emin misiniz?",
     "DownloadClientFreeboxApiError": "Freebox API'si şu hatayı döndürdü: {errorDescription}",
     "DeleteSelectedDownloadClients": "İndirme İstemcilerini Sil",
     "DeleteSelectedDownloadClientsMessageText": "Seçilen {count} indirme istemcisini silmek istediğinizden emin misiniz?",
@@ -866,5 +866,17 @@
     "YesterdayAt": "Dün saat {time}'da",
     "CustomFormatsSpecificationExceptLanguage": "Dil Dışında",
     "CustomFormatsSpecificationExceptLanguageHelpText": "Seçilen dil dışında herhangi bir dil mevcutsa eşleşir",
-    "LastSearched": "Son Aranan"
+    "LastSearched": "Son Aranan",
+    "Enable": "Etkinleştir",
+    "OnFileUpgrade": "Dosyada Yükseltme",
+    "SmartReplace": "Akıllı Değiştir",
+    "OnFileImport": "Dosya İçe Aktarımı",
+    "SmartReplaceHint": "İsme bağlı olarak Dash veya Space Dash",
+    "DefaultNotFoundMessage": "Kaybolmuş olmalısın, burada görülecek bir şey yok.",
+    "ToggleUnmonitoredToMonitored": "İzlenmiyor, izlemek için tıklayın",
+    "ToggleMonitoredToUnmonitored": "İzleniyor, izlemeyi bırakmak için tıklayın",
+    "Install": "Kur",
+    "InstallMajorVersionUpdate": "Güncellemeyi Kur",
+    "InstallMajorVersionUpdateMessage": "Bu güncelleştirme yeni bir ana sürüm yükleyecek ve sisteminizle uyumlu olmayabilir. Bu güncelleştirmeyi yüklemek istediğinizden emin misiniz?",
+    "InstallMajorVersionUpdateMessageLink": "Daha fazla bilgi için lütfen [{domain}]({url}) adresini kontrol edin."
 }
