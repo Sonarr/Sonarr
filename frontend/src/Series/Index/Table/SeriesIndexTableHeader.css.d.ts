@@ -10,6 +10,7 @@ interface CssExports {
   'episodeProgress': string;
   'genres': string;
   'latestSeason': string;
+  'monitorNewItems': string;
   'network': string;
   'nextAiring': string;
   'originalLanguage': string;

@@ -14,6 +14,7 @@ interface CssExports {
   'genres': string;
   'latestSeason': string;
   'link': string;
+  'monitorNewItems': string;
   'network': string;
   'nextAiring': string;
   'originalLanguage': string;
