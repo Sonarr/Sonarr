@@ -2,7 +2,7 @@ import React from 'react';
 import translate from 'Utilities/String/translate';
 import FilterBuilderRowValue from './FilterBuilderRowValue';
 
-const seriesStatusList = [
+const statusTagList = [
   {
     id: 'continuing',
     get name() {
@@ -32,7 +32,7 @@ const seriesStatusList = [
 function SeriesStatusFilterBuilderRowValue(props) {
   return (
     <FilterBuilderRowValue
-      tagList={seriesStatusList}
+      tagList={statusTagList}
       {...props}
     />
   );
