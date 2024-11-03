@@ -109,6 +109,12 @@
   flex: 0 0 145px;
 }
 
+.monitorNewItems {
+  composes: headerCell from '~Components/Table/VirtualTableHeaderCell.css';
+
+  flex: 0 0 175px;
+}
+
 .actions {
   composes: headerCell from '~Components/Table/VirtualTableHeaderCell.css';
 

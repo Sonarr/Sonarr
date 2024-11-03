@@ -148,6 +148,12 @@
   flex: 0 0 145px;
 }
 
+.monitorNewItems {
+  composes: cell;
+
+  flex: 0 0 175px;
+}
+
 .actions {
   composes: cell;
 
