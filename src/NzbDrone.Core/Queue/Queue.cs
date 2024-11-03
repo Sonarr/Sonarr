@@ -22,7 +22,7 @@ namespace NzbDrone.Core.Queue
         public TimeSpan? Timeleft { get; set; }
         public DateTime? EstimatedCompletionTime { get; set; }
         public DateTime? Added { get; set; }
-        public string Status { get; set; }
+        public QueueStatus Status { get; set; }
         public TrackedDownloadStatus? TrackedDownloadStatus { get; set; }
         public TrackedDownloadState? TrackedDownloadState { get; set; }
         public List<TrackedDownloadStatusMessage> StatusMessages { get; set; }

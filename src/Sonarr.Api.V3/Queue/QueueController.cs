@@ -136,7 +136,7 @@ namespace Sonarr.Api.V3.Queue
 
         [HttpGet]
         [Produces("application/json")]
-        public PagingResource<QueueResource> GetQueue([FromQuery] PagingRequestResource paging, bool includeUnknownSeriesItems = false, bool includeSeries = false, bool includeEpisode = false, [FromQuery] int[] seriesIds = null, DownloadProtocol? protocol = null, [FromQuery] int[] languages = null, [FromQuery] int[] quality = null)
+        public PagingResource<QueueResource> GetQueue([FromQuery] PagingRequestResource paging, bool includeUnknownSeriesItems = false, bool includeSeries = false, bool includeEpisode = false, [FromQuery] int[] seriesIds = null, DownloadProtocol? protocol = null, [FromQuery] int[] languages = null, [FromQuery] int[] quality = null, [FromQuery] QueueStatus[] status = null)
         {
             var pagingResource = new PagingResource<QueueResource>(paging);
             var pagingSpec = pagingResource.MapToPagingSpec<QueueResource, NzbDrone.Core.Queue.Queue>(
@@ -165,10 +165,10 @@ namespace Sonarr.Api.V3.Queue
                 "timeleft",
                 SortDirection.Ascending);
 
-            return pagingSpec.ApplyToPage((spec) => GetQueue(spec, seriesIds?.ToHashSet(), protocol, languages?.ToHashSet(), quality?.ToHashSet(), includeUnknownSeriesItems), (q) => MapToResource(q, includeSeries, includeEpisode));
+            return pagingSpec.ApplyToPage((spec) => GetQueue(spec, seriesIds?.ToHashSet(), protocol, languages?.ToHashSet(), quality?.ToHashSet(), status?.ToHashSet(), includeUnknownSeriesItems), (q) => MapToResource(q, includeSeries, includeEpisode));
         }
 
-        private PagingSpec<NzbDrone.Core.Queue.Queue> GetQueue(PagingSpec<NzbDrone.Core.Queue.Queue> pagingSpec, HashSet<int> seriesIds, DownloadProtocol? protocol, HashSet<int> languages, HashSet<int> quality, bool includeUnknownSeriesItems)
+        private PagingSpec<NzbDrone.Core.Queue.Queue> GetQueue(PagingSpec<NzbDrone.Core.Queue.Queue> pagingSpec, HashSet<int> seriesIds, DownloadProtocol? protocol, HashSet<int> languages, HashSet<int> quality, HashSet<QueueStatus> status, bool includeUnknownSeriesItems)
         {
             var ascending = pagingSpec.SortDirection == SortDirection.Ascending;
             var orderByFunc = GetOrderByFunc(pagingSpec);
@@ -180,6 +180,7 @@ namespace Sonarr.Api.V3.Queue
             var hasSeriesIdFilter = seriesIds.Any();
             var hasLanguageFilter = languages.Any();
             var hasQualityFilter = quality.Any();
+            var hasStatusFilter = status.Any();
 
             var fullQueue = filteredQueue.Concat(pending).Where(q =>
             {
@@ -203,6 +204,11 @@ namespace Sonarr.Api.V3.Queue
                 if (include && hasQualityFilter)
                 {
                     include &= quality.Contains(q.Quality.Quality.Id);
+                }
+
+                if (include && hasStatusFilter)
+                {
+                    include &= status.Contains(q.Status);
                 }
 
                 return include;

@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Download.TrackedDownloads;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.Qualities;
+using NzbDrone.Core.Queue;
 using Sonarr.Api.V3.CustomFormats;
 using Sonarr.Api.V3.Episodes;
 using Sonarr.Api.V3.Series;
@@ -30,7 +30,7 @@ namespace Sonarr.Api.V3.Queue
         public TimeSpan? Timeleft { get; set; }
         public DateTime? EstimatedCompletionTime { get; set; }
         public DateTime? Added { get; set; }
-        public string Status { get; set; }
+        public QueueStatus Status { get; set; }
         public TrackedDownloadStatus? TrackedDownloadStatus { get; set; }
         public TrackedDownloadState? TrackedDownloadState { get; set; }
         public List<TrackedDownloadStatusMessage> StatusMessages { get; set; }
@@ -74,7 +74,7 @@ namespace Sonarr.Api.V3.Queue
                 Timeleft = model.Timeleft,
                 EstimatedCompletionTime = model.EstimatedCompletionTime,
                 Added = model.Added,
-                Status = model.Status.FirstCharToLower(),
+                Status = model.Status,
                 TrackedDownloadStatus = model.TrackedDownloadStatus,
                 TrackedDownloadState = model.TrackedDownloadState,
                 StatusMessages = model.StatusMessages,

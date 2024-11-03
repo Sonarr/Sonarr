@@ -13,6 +13,7 @@ import LanguageFilterBuilderRowValue from './LanguageFilterBuilderRowValue';
 import ProtocolFilterBuilderRowValue from './ProtocolFilterBuilderRowValue';
 import QualityFilterBuilderRowValueConnector from './QualityFilterBuilderRowValueConnector';
 import QualityProfileFilterBuilderRowValue from './QualityProfileFilterBuilderRowValue';
+import QueueStatusFilterBuilderRowValue from './QueueStatusFilterBuilderRowValue';
 import SeasonsMonitoredStatusFilterBuilderRowValue from './SeasonsMonitoredStatusFilterBuilderRowValue';
 import SeriesFilterBuilderRowValue from './SeriesFilterBuilderRowValue';
 import SeriesStatusFilterBuilderRowValue from './SeriesStatusFilterBuilderRowValue';
@@ -79,6 +80,9 @@ function getRowValueConnector(selectedFilterBuilderProp) {
 
     case filterBuilderValueTypes.QUALITY_PROFILE:
       return QualityProfileFilterBuilderRowValue;
+
+    case filterBuilderValueTypes.QUEUE_STATUS:
+      return QueueStatusFilterBuilderRowValue;
 
     case filterBuilderValueTypes.SEASONS_MONITORED_STATUS:
       return SeasonsMonitoredStatusFilterBuilderRowValue;

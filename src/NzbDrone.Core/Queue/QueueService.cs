@@ -69,7 +69,7 @@ namespace NzbDrone.Core.Queue
                 Size = trackedDownload.DownloadItem.TotalSize,
                 Sizeleft = trackedDownload.DownloadItem.RemainingSize,
                 Timeleft = trackedDownload.DownloadItem.RemainingTime,
-                Status = trackedDownload.DownloadItem.Status.ToString(),
+                Status = Enum.TryParse(trackedDownload.DownloadItem.Status.ToString(), out QueueStatus outValue) ? outValue : QueueStatus.Unknown,
                 TrackedDownloadStatus = trackedDownload.Status,
                 TrackedDownloadState = trackedDownload.State,
                 StatusMessages = trackedDownload.StatusMessages.ToList(),

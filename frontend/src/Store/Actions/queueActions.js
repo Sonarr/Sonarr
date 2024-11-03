@@ -212,6 +212,12 @@ export const defaultState = {
         label: () => translate('Protocol'),
         type: filterBuilderTypes.EQUAL,
         valueType: filterBuilderValueTypes.PROTOCOL
+      },
+      {
+        name: 'status',
+        label: () => translate('Status'),
+        type: filterBuilderTypes.EQUAL,
+        valueType: filterBuilderValueTypes.QUEUE_STATUS
       }
     ]
   }
