@@ -136,7 +136,7 @@ namespace Sonarr.Api.V3.Queue
 
         [HttpGet]
         [Produces("application/json")]
-        public PagingResource<QueueResource> GetQueue([FromQuery] PagingRequestResource paging, bool includeUnknownSeriesItems = false, bool includeSeries = false, bool includeEpisode = false, [FromQuery] int[] seriesIds = null, DownloadProtocol? protocol = null, [FromQuery] int[] languages = null, int? quality = null)
+        public PagingResource<QueueResource> GetQueue([FromQuery] PagingRequestResource paging, bool includeUnknownSeriesItems = false, bool includeSeries = false, bool includeEpisode = false, [FromQuery] int[] seriesIds = null, DownloadProtocol? protocol = null, [FromQuery] int[] languages = null, [FromQuery] int[] quality = null)
         {
             var pagingResource = new PagingResource<QueueResource>(paging);
             var pagingSpec = pagingResource.MapToPagingSpec<QueueResource, NzbDrone.Core.Queue.Queue>(
@@ -165,10 +165,10 @@ namespace Sonarr.Api.V3.Queue
                 "timeleft",
                 SortDirection.Ascending);
 
-            return pagingSpec.ApplyToPage((spec) => GetQueue(spec, seriesIds?.ToHashSet(), protocol, languages?.ToHashSet(), quality, includeUnknownSeriesItems), (q) => MapToResource(q, includeSeries, includeEpisode));
+            return pagingSpec.ApplyToPage((spec) => GetQueue(spec, seriesIds?.ToHashSet(), protocol, languages?.ToHashSet(), quality?.ToHashSet(), includeUnknownSeriesItems), (q) => MapToResource(q, includeSeries, includeEpisode));
         }
 
-        private PagingSpec<NzbDrone.Core.Queue.Queue> GetQueue(PagingSpec<NzbDrone.Core.Queue.Queue> pagingSpec, HashSet<int> seriesIds, DownloadProtocol? protocol, HashSet<int> languages, int? quality, bool includeUnknownSeriesItems)
+        private PagingSpec<NzbDrone.Core.Queue.Queue> GetQueue(PagingSpec<NzbDrone.Core.Queue.Queue> pagingSpec, HashSet<int> seriesIds, DownloadProtocol? protocol, HashSet<int> languages, HashSet<int> quality, bool includeUnknownSeriesItems)
         {
             var ascending = pagingSpec.SortDirection == SortDirection.Ascending;
             var orderByFunc = GetOrderByFunc(pagingSpec);
@@ -179,6 +179,8 @@ namespace Sonarr.Api.V3.Queue
 
             var hasSeriesIdFilter = seriesIds.Any();
             var hasLanguageFilter = languages.Any();
+            var hasQualityFilter = quality.Any();
+
             var fullQueue = filteredQueue.Concat(pending).Where(q =>
             {
                 var include = true;
@@ -198,9 +200,9 @@ namespace Sonarr.Api.V3.Queue
                     include &= q.Languages.Any(l => languages.Contains(l.Id));
                 }
 
-                if (include && quality.HasValue)
+                if (include && hasQualityFilter)
                 {
-                    include &= q.Quality.Quality.Id == quality.Value;
+                    include &= quality.Contains(q.Quality.Quality.Id);
                 }
 
                 return include;
@@ -282,7 +284,7 @@ namespace Sonarr.Api.V3.Queue
             switch (pagingSpec.SortKey)
             {
                 case "status":
-                    return q => q.Status;
+                    return q => q.Status.ToString();
                 case "series.sortTitle":
                     return q => q.Series?.SortTitle ?? q.Title;
                 case "title":
