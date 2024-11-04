@@ -44,11 +44,18 @@ namespace NzbDrone.Core.Download.Clients.Transmission
             if (Settings.TvImportedCategory.IsNotNullOrWhiteSpace() &&
                 Settings.TvImportedCategory != Settings.TvCategory)
             {
+                var hash = downloadClientItem.DownloadId.ToLowerInvariant();
+                var torrent = _proxy.GetTorrents(new[] { hash }, Settings).FirstOrDefault();
+
+                if (torrent == null)
+                {
+                    _logger.Warn("Could not find torrent with hash \"{0}\" in Transmission.", hash);
+                    return;
+                }
+
                 try
                 {
-                    var torrent = _proxy.GetTorrents(new[] { downloadClientItem.DownloadId.ToLower() }, Settings).FirstOrDefault();
-
-                    var labels = torrent?.Labels?.ToHashSet() ?? new HashSet<string>();
+                    var labels = torrent.Labels.ToHashSet(StringComparer.InvariantCultureIgnoreCase);
                     labels.Add(Settings.TvImportedCategory);
 
                     if (Settings.TvCategory.IsNotNullOrWhiteSpace())
@@ -56,7 +63,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                         labels.Remove(Settings.TvCategory);
                     }
 
-                    _proxy.SetTorrentLabels(downloadClientItem.DownloadId.ToLower(), labels, Settings);
+                    _proxy.SetTorrentLabels(hash, labels, Settings);
                 }
                 catch (DownloadClientException ex)
                 {

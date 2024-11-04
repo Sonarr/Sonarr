@@ -50,7 +50,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
 
                 if (Settings.TvCategory.IsNotNullOrWhiteSpace() && SupportsLabels && torrent.Labels is { Count: > 0 })
                 {
-                    if (!torrent.Labels.Contains(Settings.TvCategory))
+                    if (!torrent.Labels.Contains(Settings.TvCategory, StringComparer.InvariantCultureIgnoreCase))
                     {
                         continue;
                     }
