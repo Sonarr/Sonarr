@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Text;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -433,6 +434,15 @@ namespace NzbDrone.Common.Test
         public void unix_path_should_return_relative_path(string parentPath, string childPath, string relativePath)
         {
             parentPath.GetRelativePath(childPath).Should().Be(relativePath);
+        }
+
+        [Test]
+        public void should_be_equal_with_different_unicode_representations()
+        {
+            var path1 = @"C:\Test\file.mkv".AsOsAgnostic().Normalize(NormalizationForm.FormC);
+            var path2 = @"C:\Test\file.mkv".AsOsAgnostic().Normalize(NormalizationForm.FormD);
+
+            path1.PathEquals(path2);
         }
     }
 }
