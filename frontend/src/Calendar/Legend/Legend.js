@@ -56,7 +56,7 @@ function Legend(props) {
   if (showCutoffUnmetIcon) {
     iconsToShow.push(
       <LegendIconItem
-        name={translate('Cutoff Not Met')}
+        name={translate('CutoffNotMet')}
         icon={icons.EPISODE_FILE}
         kind={kinds.WARNING}
         fullColorEvents={fullColorEvents}
