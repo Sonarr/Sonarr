@@ -5931,8 +5931,21 @@
             "name": "quality",
             "in": "query",
             "schema": {
-              "type": "integer",
-              "format": "int32"
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/QueueStatus"
+              }
             }
           }
         ],
@@ -10855,8 +10868,7 @@
             "nullable": true
           },
           "status": {
-            "type": "string",
-            "nullable": true
+            "$ref": "#/components/schemas/QueueStatus"
           },
           "trackedDownloadStatus": {
             "$ref": "#/components/schemas/TrackedDownloadStatus"
@@ -10934,6 +10946,21 @@
           }
         },
         "additionalProperties": false
+      },
+      "QueueStatus": {
+        "enum": [
+          "unknown",
+          "queued",
+          "paused",
+          "downloading",
+          "completed",
+          "failed",
+          "warning",
+          "delay",
+          "downloadClientUnavailable",
+          "fallback"
+        ],
+        "type": "string"
       },
       "QueueStatusResource": {
         "type": "object",
