@@ -7,5 +7,6 @@ interface Window {
     theme: string;
     urlBase: string;
     version: string;
+    isProduction: boolean;
   };
 }
