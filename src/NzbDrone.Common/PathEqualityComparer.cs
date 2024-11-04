@@ -21,10 +21,10 @@ namespace NzbDrone.Common
         {
             if (OsInfo.IsWindows)
             {
-                return obj.CleanFilePath().ToLower().GetHashCode();
+                return obj.CleanFilePath().Normalize().ToLower().GetHashCode();
             }
 
-            return obj.CleanFilePath().GetHashCode();
+            return obj.CleanFilePath().Normalize().GetHashCode();
         }
     }
 }
