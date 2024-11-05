@@ -76,7 +76,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Plex
                         episodeFormat = $"SP{episodesInFile.First():00}";
                     }
 
-                    content.Append($"Episode: {episodeFormat}: {episodeFile.RelativePath}");
+                    content.AppendLine($"Episode: {episodeFormat}: {episodeFile.RelativePath}");
                 }
             }
 
