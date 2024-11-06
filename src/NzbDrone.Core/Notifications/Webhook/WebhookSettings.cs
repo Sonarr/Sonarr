@@ -1,4 +1,5 @@
-using System;
+﻿using System;
+using System.Collections.Generic;
 using FluentValidation;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.Validation;
@@ -10,6 +11,7 @@ namespace NzbDrone.Core.Notifications.Webhook
         public WebhookSettingsValidator()
         {
             RuleFor(c => c.Url).IsValidUrl();
+            RuleForEach(c => c.Headers).Matches("^\\S+: ?\\S+$").WithMessage("Header must have the \"Header-Name: Value\" format.");
         }
     }
 
@@ -20,6 +22,7 @@ namespace NzbDrone.Core.Notifications.Webhook
         public WebhookSettings()
         {
             Method = Convert.ToInt32(WebhookMethod.POST);
+            Headers = Array.Empty<string>();
         }
 
         [FieldDefinition(0, Label = "NotificationsSettingsWebhookUrl", Type = FieldType.Url)]
@@ -33,6 +36,9 @@ namespace NzbDrone.Core.Notifications.Webhook
 
         [FieldDefinition(3, Label = "Password", Type = FieldType.Password, Privacy = PrivacyLevel.Password)]
         public string Password { get; set; }
+
+        [FieldDefinition(4, Label = "NotificationsSettingsWebhookHeaders", Type = FieldType.Tag, Advanced = true, Placeholder = "Header-Name: Value")]
+        public IEnumerable<string> Headers { get; set; }
 
         public override NzbDroneValidationResult Validate()
         {
