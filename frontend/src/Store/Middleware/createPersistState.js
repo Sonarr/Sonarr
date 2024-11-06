@@ -96,14 +96,22 @@ function merge(initialState, persistedState) {
   return computedState;
 }
 
+const KEY = 'sonarr';
+
 const config = {
   slicer,
   serialize,
   merge,
-  key: 'sonarr'
+  key: window.Sonarr.instanceName.toLowerCase().replace(/ /g, '_') || KEY
 };
 
 export default function createPersistState() {
+  // Migrate existing local storage value to new key if it does not already exist.
+  // Leave old value as-is in case there are multiple instances using the same key.
+  if (config.key !== KEY && localStorage.getItem(KEY) && !localStorage.getItem(config.key)) {
+    localStorage.setItem(config.key, localStorage.getItem(KEY));
+  }
+
   // Migrate existing local storage before proceeding
   const persistedState = JSON.parse(localStorage.getItem(config.key));
   migrate(persistedState);
