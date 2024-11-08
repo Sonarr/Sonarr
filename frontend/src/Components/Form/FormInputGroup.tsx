@@ -19,6 +19,7 @@ import DownloadClientSelectInput from './Select/DownloadClientSelectInput';
 import EnhancedSelectInput from './Select/EnhancedSelectInput';
 import IndexerFlagsSelectInput from './Select/IndexerFlagsSelectInput';
 import IndexerSelectInput from './Select/IndexerSelectInput';
+import LanguageSelectInput from './Select/LanguageSelectInput';
 import MonitorEpisodesSelectInput from './Select/MonitorEpisodesSelectInput';
 import MonitorNewItemsSelectInput from './Select/MonitorNewItemsSelectInput';
 import ProviderDataSelectInput from './Select/ProviderOptionSelectInput';
@@ -50,6 +51,9 @@ function getComponent(type: InputType) {
 
     case inputTypes.KEY_VALUE_LIST:
       return KeyValueListInput;
+
+    case inputTypes.LANGUAGE_SELECT:
+      return LanguageSelectInput;
 
     case inputTypes.MONITOR_EPISODES_SELECT:
       return MonitorEpisodesSelectInput;
