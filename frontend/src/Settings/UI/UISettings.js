@@ -66,10 +66,10 @@ class UISettings extends Component {
       isFetching,
       error,
       settings,
+      languages,
       hasSettings,
       onInputChange,
       onSavePress,
-      languages,
       ...otherProps
     } = this.props;
 
@@ -213,9 +213,8 @@ class UISettings extends Component {
                   <FormGroup>
                     <FormLabel>{translate('UiLanguage')}</FormLabel>
                     <FormInputGroup
-                      type={inputTypes.SELECT}
+                      type={inputTypes.LANGUAGE_SELECT}
                       name="uiLanguage"
-                      values={languages}
                       helpText={translate('UiLanguageHelpText')}
                       helpTextWarning={translate('BrowserReloadRequired')}
                       onChange={onInputChange}
@@ -244,8 +243,8 @@ UISettings.propTypes = {
   isFetching: PropTypes.bool.isRequired,
   error: PropTypes.object,
   settings: PropTypes.object.isRequired,
-  hasSettings: PropTypes.bool.isRequired,
   languages: PropTypes.arrayOf(PropTypes.object).isRequired,
+  hasSettings: PropTypes.bool.isRequired,
   onSavePress: PropTypes.func.isRequired,
   onInputChange: PropTypes.func.isRequired
 };
