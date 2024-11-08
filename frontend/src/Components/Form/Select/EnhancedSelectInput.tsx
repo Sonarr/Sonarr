@@ -192,7 +192,7 @@ function EnhancedSelectInput<T extends EnhancedSelectInputValue<V>, V>(
     const { top, bottom } = data.offsets.reference;
     const windowHeight = window.innerHeight;
 
-    if (/^botton/.test(data.placement)) {
+    if (/^bottom/.test(data.placement)) {
       data.styles.maxHeight = windowHeight - bottom;
     } else {
       data.styles.maxHeight = top;
@@ -233,18 +233,12 @@ function EnhancedSelectInput<T extends EnhancedSelectInputValue<V>, V>(
   }, [handleWindowClick]);
 
   const handlePress = useCallback(() => {
-    if (isOpen) {
-      removeListener();
-    } else {
-      addListener();
-    }
-
     if (!isOpen && onOpen) {
       onOpen();
     }
 
     setIsOpen(!isOpen);
-  }, [isOpen, setIsOpen, addListener, removeListener, onOpen]);
+  }, [isOpen, setIsOpen, onOpen]);
 
   const handleSelect = useCallback(
     (newValue: ArrayElement<V>) => {
@@ -410,6 +404,16 @@ function EnhancedSelectInput<T extends EnhancedSelectInputValue<V>, V>(
       updater.current();
     }
   });
+
+  useEffect(() => {
+    if (isOpen) {
+      addListener();
+    } else {
+      removeListener();
+    }
+
+    return removeListener;
+  }, [isOpen, addListener, removeListener]);
 
   return (
     <div>
