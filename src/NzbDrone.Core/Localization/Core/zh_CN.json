@@ -1953,5 +1953,6 @@
     "InstallMajorVersionUpdateMessageLink": "请查看 [{domain}]({url}) 以获取更多信息。",
     "Install": "安装",
     "InstallMajorVersionUpdate": "安装更新",
-    "InstallMajorVersionUpdateMessage": "此更新将安装新的主要版本，这可能与您的系统不兼容。您确定要安装此更新吗？"
+    "InstallMajorVersionUpdateMessage": "此更新将安装新的主要版本，这可能与您的系统不兼容。您确定要安装此更新吗？",
+    "Fallback": "备选"
 }

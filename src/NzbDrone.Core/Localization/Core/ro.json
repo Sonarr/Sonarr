@@ -1,6 +1,6 @@
 {
     "Backup": "Copie de rezervă",
-    "CloneCondition": "Clonați condiție",
+    "CloneCondition": "Clonează condiție",
     "ApplyChanges": "Aplicați modificări",
     "AutomaticAdd": "Adăugare automată",
     "AllTitles": "Toate titlurile",
@@ -21,7 +21,7 @@
     "ApplyTagsHelpTextReplace": "Înlocuire: înlocuiți etichetele cu etichetele introduse (nu introduceți etichete pentru a șterge toate etichetele)",
     "CancelPendingTask": "Sigur doriți să anulați această sarcină în așteptare?",
     "DownloadClientCheckUnableToCommunicateWithHealthCheckMessage": "Nu pot comunica cu {downloadClientName}. {errorMessage}",
-    "CloneCustomFormat": "Clonați format personalizat",
+    "CloneCustomFormat": "Clonează format personalizat",
     "Close": "Închide",
     "Delete": "Șterge",
     "Added": "Adăugat",
@@ -205,5 +205,9 @@
     "OnFileImport": "La import fișier",
     "FileNameTokens": "Jetoane pentru nume de fișier",
     "FolderNameTokens": "Jetoane pentru nume de folder",
-    "OnFileUpgrade": "La actualizare fișier"
+    "OnFileUpgrade": "La actualizare fișier",
+    "CloneIndexer": "Clonează Indexer",
+    "CloneProfile": "Clonează Profil",
+    "DownloadClientUnavailable": "Client de descărcare indisponibil",
+    "Clone": "Clonează"
 }
