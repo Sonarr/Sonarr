@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Net.Http;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
@@ -44,10 +43,9 @@ namespace NzbDrone.Core.Notifications.Webhook
                     request.Credentials = new BasicNetworkCredential(settings.Username, settings.Password);
                 }
 
-                foreach (var header in settings.Headers.Where(h => h.Contains(':')))
+                foreach (var header in settings.Headers)
                 {
-                    var parts = header.Split(':', 2, StringSplitOptions.TrimEntries);
-                    request.Headers.Add(parts[0], parts[1]);
+                    request.Headers.Add(header.Key, header.Value);
                 }
 
                 _httpClient.Execute(request);

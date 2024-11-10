@@ -34,7 +34,8 @@ namespace NzbDrone.Common.Reflection
                    || type == typeof(string)
                    || type == typeof(DateTime)
                    || type == typeof(Version)
-                   || type == typeof(decimal);
+                   || type == typeof(decimal)
+                   || (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(KeyValuePair<,>));
         }
 
         public static bool IsReadable(this PropertyInfo propertyInfo)
