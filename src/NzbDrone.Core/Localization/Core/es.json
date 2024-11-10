@@ -2122,5 +2122,13 @@
     "FolderNameTokens": "Tokens de nombre de carpeta",
     "FailedToFetchSettings": "Error al recuperar la configuración",
     "MetadataPlexSettingsEpisodeMappings": "Asignaciones de episodios",
-    "MetadataPlexSettingsEpisodeMappingsHelpText": "Incluye las asignaciones de episodios para todos los archivos en el archivo .plexmatch"
+    "MetadataPlexSettingsEpisodeMappingsHelpText": "Incluye las asignaciones de episodios para todos los archivos en el archivo .plexmatch",
+    "RecentFolders": "Carpetas recientes",
+    "Warning": "Aviso",
+    "Delay": "Retardo",
+    "DownloadClientUnavailable": "Cliente de descarga no disponible",
+    "FavoriteFolders": "Carpetas favoritas",
+    "ManageFormats": "Gestionar formatos",
+    "FavoriteFolderAdd": "Añadir carpeta favorita",
+    "FavoriteFolderRemove": "Eliminar carpeta favorita"
 }
