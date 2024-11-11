@@ -138,7 +138,7 @@ namespace Sonarr.Api.V3.Indexers
                 TvdbId = releaseInfo.TvdbId,
                 TvRageId = releaseInfo.TvRageId,
                 ImdbId = releaseInfo.ImdbId,
-                Rejections = model.Rejections.Select(r => r.Reason).ToList(),
+                Rejections = model.Rejections.Select(r => r.Message).ToList(),
                 PublishDate = releaseInfo.PublishDate,
                 CommentUrl = releaseInfo.CommentUrl,
                 DownloadUrl = releaseInfo.DownloadUrl,

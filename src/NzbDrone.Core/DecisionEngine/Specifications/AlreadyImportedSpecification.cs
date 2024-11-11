@@ -9,7 +9,7 @@ using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications
 {
-    public class AlreadyImportedSpecification : IDecisionEngineSpecification
+    public class AlreadyImportedSpecification : IDownloadDecisionEngineSpecification
     {
         private readonly IHistoryService _historyService;
         private readonly IConfigService _configService;
@@ -27,14 +27,14 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
         public SpecificationPriority Priority => SpecificationPriority.Database;
         public RejectionType Type => RejectionType.Permanent;
 
-        public Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
+        public DownloadSpecDecision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
             var cdhEnabled = _configService.EnableCompletedDownloadHandling;
 
             if (!cdhEnabled)
             {
                 _logger.Debug("Skipping already imported check because CDH is disabled");
-                return Decision.Accept();
+                return DownloadSpecDecision.Accept();
             }
 
             _logger.Debug("Performing already imported check on report");
@@ -80,7 +80,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                     if (torrentInfo?.InfoHash != null && torrentInfo.InfoHash.ToUpper() == lastGrabbed.DownloadId)
                     {
                         _logger.Debug("Has same torrent hash as a grabbed and imported release");
-                        return Decision.Reject("Has same torrent hash as a grabbed and imported release");
+                        return DownloadSpecDecision.Reject(DownloadRejectionReason.AlreadyImportedSameHash, "Has same torrent hash as a grabbed and imported release");
                     }
                 }
 
@@ -90,11 +90,11 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 if (release.Title.Equals(lastGrabbed.SourceTitle, StringComparison.InvariantCultureIgnoreCase))
                 {
                     _logger.Debug("Has same release name as a grabbed and imported release");
-                    return Decision.Reject("Has same release name as a grabbed and imported release");
+                    return DownloadSpecDecision.Reject(DownloadRejectionReason.AlreadyImportedSameName, "Has same release name as a grabbed and imported release");
                 }
             }
 
-            return Decision.Accept();
+            return DownloadSpecDecision.Accept();
         }
     }
 }

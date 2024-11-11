@@ -10,7 +10,7 @@ using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
 {
-    public class DeletedEpisodeFileSpecification : IDecisionEngineSpecification
+    public class DeletedEpisodeFileSpecification : IDownloadDecisionEngineSpecification
     {
         private readonly IDiskProvider _diskProvider;
         private readonly IConfigService _configService;
@@ -26,17 +26,17 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
         public SpecificationPriority Priority => SpecificationPriority.Disk;
         public RejectionType Type => RejectionType.Temporary;
 
-        public virtual Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
+        public virtual DownloadSpecDecision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
             if (!_configService.AutoUnmonitorPreviouslyDownloadedEpisodes)
             {
-                return Decision.Accept();
+                return DownloadSpecDecision.Accept();
             }
 
             if (searchCriteria != null)
             {
                 _logger.Debug("Skipping deleted episodefile check during search");
-                return Decision.Accept();
+                return DownloadSpecDecision.Accept();
             }
 
             var missingEpisodeFiles = subject.Episodes
@@ -54,10 +54,10 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
                 }
 
                 _logger.Debug("Files for this episode exist in the database but not on disk, will be unmonitored on next diskscan. skipping.");
-                return Decision.Reject("Series is not monitored");
+                return DownloadSpecDecision.Reject(DownloadRejectionReason.SeriesNotMonitored, "Series is not monitored");
             }
 
-            return Decision.Accept();
+            return DownloadSpecDecision.Accept();
         }
 
         private bool IsEpisodeFileMissing(Series series, EpisodeFile episodeFile)

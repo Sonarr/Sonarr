@@ -6,7 +6,7 @@ using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications
 {
-    public class MaximumSizeSpecification : IDecisionEngineSpecification
+    public class MaximumSizeSpecification : IDownloadDecisionEngineSpecification
     {
         private readonly IConfigService _configService;
         private readonly Logger _logger;
@@ -20,7 +20,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
         public SpecificationPriority Priority => SpecificationPriority.Default;
         public RejectionType Type => RejectionType.Permanent;
 
-        public Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
+        public DownloadSpecDecision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
             var size = subject.Release.Size;
             var maximumSize = _configService.MaximumSize.Megabytes();
@@ -28,13 +28,13 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             if (maximumSize == 0)
             {
                 _logger.Debug("Maximum size is not set.");
-                return Decision.Accept();
+                return DownloadSpecDecision.Accept();
             }
 
             if (size == 0)
             {
                 _logger.Debug("Release has unknown size, skipping size check.");
-                return Decision.Accept();
+                return DownloadSpecDecision.Accept();
             }
 
             _logger.Debug("Checking if release meets maximum size requirements. {0}", size.SizeSuffix());
@@ -44,10 +44,10 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 var message = $"{size.SizeSuffix()} is too big, maximum size is {maximumSize.SizeSuffix()} (Settings->Indexers->Maximum Size)";
 
                 _logger.Debug(message);
-                return Decision.Reject(message);
+                return DownloadSpecDecision.Reject(DownloadRejectionReason.MaximumSizeExceeded, message);
             }
 
-            return Decision.Accept();
+            return DownloadSpecDecision.Accept();
         }
     }
 }

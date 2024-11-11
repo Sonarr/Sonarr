@@ -5,7 +5,6 @@ using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.CustomFormats;
-using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.TrackedDownloads;
 using NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation;
@@ -136,15 +135,15 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                 {
                     if (IsPartialSeason(localEpisode))
                     {
-                        decision = new ImportDecision(localEpisode, new Rejection("Partial season packs are not supported"));
+                        decision = new ImportDecision(localEpisode, new ImportRejection(ImportRejectionReason.PartialSeason, "Partial season packs are not supported"));
                     }
                     else if (IsSeasonExtra(localEpisode))
                     {
-                        decision = new ImportDecision(localEpisode, new Rejection("Extras are not supported"));
+                        decision = new ImportDecision(localEpisode, new ImportRejection(ImportRejectionReason.SeasonExtra, "Extras are not supported"));
                     }
                     else
                     {
-                        decision = new ImportDecision(localEpisode, new Rejection("Invalid season or episode"));
+                        decision = new ImportDecision(localEpisode, new ImportRejection(ImportRejectionReason.InvalidSeasonOrEpisode, "Invalid season or episode"));
                     }
                 }
                 else
@@ -167,13 +166,13 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
             }
             catch (AugmentingFailedException)
             {
-                decision = new ImportDecision(localEpisode, new Rejection("Unable to parse file"));
+                decision = new ImportDecision(localEpisode, new ImportRejection(ImportRejectionReason.UnableToParse, "Unable to parse file"));
             }
             catch (Exception ex)
             {
                 _logger.Error(ex, "Couldn't import file. {0}", localEpisode.Path);
 
-                decision = new ImportDecision(localEpisode, new Rejection("Unexpected error processing file"));
+                decision = new ImportDecision(localEpisode, new ImportRejection(ImportRejectionReason.Error, "Unexpected error processing file"));
             }
 
             if (decision == null)
@@ -192,7 +191,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
             return decision;
         }
 
-        private Rejection EvaluateSpec(IImportDecisionEngineSpecification spec, LocalEpisode localEpisode, DownloadClientItem downloadClientItem)
+        private ImportRejection EvaluateSpec(IImportDecisionEngineSpecification spec, LocalEpisode localEpisode, DownloadClientItem downloadClientItem)
         {
             try
             {
@@ -200,7 +199,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
                 if (!result.Accepted)
                 {
-                    return new Rejection(result.Reason);
+                    return new ImportRejection(result.Reason, result.Message);
                 }
             }
             catch (Exception e)
@@ -208,7 +207,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                 // e.Data.Add("report", remoteEpisode.Report.ToJson());
                 // e.Data.Add("parsed", remoteEpisode.ParsedEpisodeInfo.ToJson());
                 _logger.Error(e, "Couldn't evaluate decision on {0}", localEpisode.Path);
-                return new Rejection($"{spec.GetType().Name}: {e.Message}");
+                return new ImportRejection(ImportRejectionReason.DecisionError, $"{spec.GetType().Name}: {e.Message}");
             }
 
             return null;

@@ -5,7 +5,7 @@ using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications
 {
-    public class SceneMappingSpecification : IDecisionEngineSpecification
+    public class SceneMappingSpecification : IDownloadDecisionEngineSpecification
     {
         private readonly Logger _logger;
 
@@ -17,18 +17,18 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
         public SpecificationPriority Priority => SpecificationPriority.Default;
         public RejectionType Type => RejectionType.Temporary; // Temporary till there's a mapping
 
-        public Decision IsSatisfiedBy(RemoteEpisode remoteEpisode, SearchCriteriaBase searchCriteria)
+        public DownloadSpecDecision IsSatisfiedBy(RemoteEpisode remoteEpisode, SearchCriteriaBase searchCriteria)
         {
             if (remoteEpisode.SceneMapping == null)
             {
                 _logger.Debug("No applicable scene mapping, skipping.");
-                return Decision.Accept();
+                return DownloadSpecDecision.Accept();
             }
 
             if (remoteEpisode.SceneMapping.SceneOrigin.IsNullOrWhiteSpace())
             {
                 _logger.Debug("No explicit scene origin in scene mapping.");
-                return Decision.Accept();
+                return DownloadSpecDecision.Accept();
             }
 
             var split = remoteEpisode.SceneMapping.SceneOrigin.Split(':');
@@ -50,11 +50,11 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
                 if (remoteEpisode.SceneMapping.Comment.IsNotNullOrWhiteSpace())
                 {
-                    return Decision.Reject("{0} has ambiguous numbering");
+                    return DownloadSpecDecision.Reject(DownloadRejectionReason.AmbiguousNumbering, "{0} has ambiguous numbering");
                 }
                 else
                 {
-                    return Decision.Reject("Ambiguous numbering");
+                    return DownloadSpecDecision.Reject(DownloadRejectionReason.AmbiguousNumbering, "Ambiguous numbering");
                 }
             }
 
@@ -65,7 +65,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 _logger.Debug("SceneMapping origin is explicitly unknown, unsure what numbering scheme it uses but '{0}' will be assumed. Provide full release title to Sonarr/TheXEM team.", type);
             }
 
-            return Decision.Accept();
+            return DownloadSpecDecision.Accept();
         }
     }
 }

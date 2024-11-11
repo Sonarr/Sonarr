@@ -6,7 +6,7 @@ using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications
 {
-    public class UpgradeAllowedSpecification : IDecisionEngineSpecification
+    public class UpgradeAllowedSpecification : IDownloadDecisionEngineSpecification
     {
         private readonly UpgradableSpecification _upgradableSpecification;
         private readonly ICustomFormatCalculationService _formatService;
@@ -24,7 +24,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
         public SpecificationPriority Priority => SpecificationPriority.Default;
         public RejectionType Type => RejectionType.Permanent;
 
-        public virtual Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
+        public virtual DownloadSpecDecision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
             var qualityProfile = subject.Series.QualityProfile.Value;
 
@@ -48,11 +48,11 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 {
                     _logger.Debug("Upgrading is not allowed by the quality profile");
 
-                    return Decision.Reject("Existing file and the Quality profile does not allow upgrades");
+                    return DownloadSpecDecision.Reject(DownloadRejectionReason.QualityUpgradesDisabled, "Existing file and the Quality profile does not allow upgrades");
                 }
             }
 
-            return Decision.Accept();
+            return DownloadSpecDecision.Accept();
         }
     }
 }

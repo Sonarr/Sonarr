@@ -7,7 +7,7 @@ namespace NzbDrone.Core.DecisionEngine
     public class DownloadDecision
     {
         public RemoteEpisode RemoteEpisode { get; private set; }
-        public IEnumerable<Rejection> Rejections { get; private set; }
+        public IEnumerable<DownloadRejection> Rejections { get; private set; }
 
         public bool Approved => !Rejections.Any();
 
@@ -27,7 +27,7 @@ namespace NzbDrone.Core.DecisionEngine
             }
         }
 
-        public DownloadDecision(RemoteEpisode episode, params Rejection[] rejections)
+        public DownloadDecision(RemoteEpisode episode, params DownloadRejection[] rejections)
         {
             RemoteEpisode = episode;
             Rejections = rejections.ToList();

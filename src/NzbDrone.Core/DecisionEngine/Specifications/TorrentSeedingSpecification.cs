@@ -6,7 +6,7 @@ using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications
 {
-    public class TorrentSeedingSpecification : IDecisionEngineSpecification
+    public class TorrentSeedingSpecification : IDownloadDecisionEngineSpecification
     {
         private readonly IIndexerFactory _indexerFactory;
         private readonly Logger _logger;
@@ -20,13 +20,13 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
         public SpecificationPriority Priority => SpecificationPriority.Default;
         public RejectionType Type => RejectionType.Permanent;
 
-        public Decision IsSatisfiedBy(RemoteEpisode remoteEpisode, SearchCriteriaBase searchCriteria)
+        public DownloadSpecDecision IsSatisfiedBy(RemoteEpisode remoteEpisode, SearchCriteriaBase searchCriteria)
         {
             var torrentInfo = remoteEpisode.Release as TorrentInfo;
 
             if (torrentInfo == null || torrentInfo.IndexerId == 0)
             {
-                return Decision.Accept();
+                return DownloadSpecDecision.Accept();
             }
 
             IndexerDefinition indexer;
@@ -37,7 +37,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             catch (ModelNotFoundException)
             {
                 _logger.Debug("Indexer with id {0} does not exist, skipping seeders check", torrentInfo.IndexerId);
-                return Decision.Accept();
+                return DownloadSpecDecision.Accept();
             }
 
             var torrentIndexerSettings = indexer.Settings as ITorrentIndexerSettings;
@@ -49,11 +49,11 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 if (torrentInfo.Seeders.HasValue && torrentInfo.Seeders.Value < minimumSeeders)
                 {
                     _logger.Debug("Not enough seeders: {0}. Minimum seeders: {1}", torrentInfo.Seeders, minimumSeeders);
-                    return Decision.Reject("Not enough seeders: {0}. Minimum seeders: {1}", torrentInfo.Seeders, minimumSeeders);
+                    return DownloadSpecDecision.Reject(DownloadRejectionReason.MinimumSeeders, "Not enough seeders: {0}. Minimum seeders: {1}", torrentInfo.Seeders, minimumSeeders);
                 }
             }
 
-            return Decision.Accept();
+            return DownloadSpecDecision.Accept();
         }
     }
 }

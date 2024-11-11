@@ -7,7 +7,7 @@ using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications
 {
-    public class RawDiskSpecification : IDecisionEngineSpecification
+    public class RawDiskSpecification : IDownloadDecisionEngineSpecification
     {
         private static readonly Regex[] DiscRegex = new[]
                                                     {
@@ -29,11 +29,11 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
         public SpecificationPriority Priority => SpecificationPriority.Default;
         public RejectionType Type => RejectionType.Permanent;
 
-        public virtual Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
+        public virtual DownloadSpecDecision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
             if (subject.Release == null)
             {
-                return Decision.Accept();
+                return DownloadSpecDecision.Accept();
             }
 
             foreach (var regex in DiscRegex)
@@ -41,28 +41,28 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 if (regex.IsMatch(subject.Release.Title))
                 {
                     _logger.Debug("Release contains raw Bluray/DVD, rejecting.");
-                    return Decision.Reject("Raw Bluray/DVD release");
+                    return DownloadSpecDecision.Reject(DownloadRejectionReason.Raw, "Raw Bluray/DVD release");
                 }
             }
 
             if (subject.Release.Container.IsNullOrWhiteSpace())
             {
-                return Decision.Accept();
+                return DownloadSpecDecision.Accept();
             }
 
             if (_dvdContainerTypes.Contains(subject.Release.Container.ToLower()))
             {
                 _logger.Debug("Release contains raw DVD, rejecting.");
-                return Decision.Reject("Raw DVD release");
+                return DownloadSpecDecision.Reject(DownloadRejectionReason.Raw, "Raw DVD release");
             }
 
             if (_blurayContainerTypes.Contains(subject.Release.Container.ToLower()))
             {
                 _logger.Debug("Release contains raw Bluray, rejecting.");
-                return Decision.Reject("Raw Bluray release");
+                return DownloadSpecDecision.Reject(DownloadRejectionReason.Raw, "Raw Bluray release");
             }
 
-            return Decision.Accept();
+            return DownloadSpecDecision.Accept();
         }
     }
 }

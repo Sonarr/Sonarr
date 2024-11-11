@@ -5,7 +5,7 @@ using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications
 {
-    public class RetentionSpecification : IDecisionEngineSpecification
+    public class RetentionSpecification : IDownloadDecisionEngineSpecification
     {
         private readonly IConfigService _configService;
         private readonly Logger _logger;
@@ -19,12 +19,12 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
         public SpecificationPriority Priority => SpecificationPriority.Default;
         public RejectionType Type => RejectionType.Permanent;
 
-        public virtual Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
+        public virtual DownloadSpecDecision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
             if (subject.Release.DownloadProtocol != Indexers.DownloadProtocol.Usenet)
             {
                 _logger.Debug("Not checking retention requirement for non-usenet report");
-                return Decision.Accept();
+                return DownloadSpecDecision.Accept();
             }
 
             var age = subject.Release.Age;
@@ -34,10 +34,10 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             if (retention > 0 && age > retention)
             {
                 _logger.Debug("Report age: {0} rejected by user's retention limit", age);
-                return Decision.Reject("Older than configured retention");
+                return DownloadSpecDecision.Reject(DownloadRejectionReason.MaximumAge, "Older than configured retention");
             }
 
-            return Decision.Accept();
+            return DownloadSpecDecision.Accept();
         }
     }
 }

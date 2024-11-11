@@ -3,7 +3,6 @@ using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.CustomFormats;
-using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
@@ -25,7 +24,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
             _logger = logger;
         }
 
-        public Decision IsSatisfiedBy(LocalEpisode localEpisode, DownloadClientItem downloadClientItem)
+        public ImportSpecDecision IsSatisfiedBy(LocalEpisode localEpisode, DownloadClientItem downloadClientItem)
         {
             var downloadPropersAndRepacks = _configService.DownloadPropersAndRepacks;
             var qualityProfile = localEpisode.Series.QualityProfile.Value;
@@ -46,7 +45,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                 if (qualityCompare < 0)
                 {
                     _logger.Debug("This file isn't a quality upgrade for all episodes. Existing quality: {0}. New Quality {1}. Skipping {2}", episodeFile.Quality.Quality, localEpisode.Quality.Quality, localEpisode.Path);
-                    return Decision.Reject("Not an upgrade for existing episode file(s). Existing quality: {0}. New Quality {1}.", episodeFile.Quality.Quality, localEpisode.Quality.Quality);
+                    return ImportSpecDecision.Reject(ImportRejectionReason.NotQualityUpgrade, "Not an upgrade for existing episode file(s). Existing quality: {0}. New Quality {1}.", episodeFile.Quality.Quality, localEpisode.Quality.Quality);
                 }
 
                 // Same quality, propers/repacks are preferred and it is not a revision update. Reject revision downgrade.
@@ -56,7 +55,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                     localEpisode.Quality.Revision.CompareTo(episodeFile.Quality.Revision) < 0)
                 {
                     _logger.Debug("This file isn't a quality revision upgrade for all episodes. Skipping {0}", localEpisode.Path);
-                    return Decision.Reject("Not a quality revision upgrade for existing episode file(s)");
+                    return ImportSpecDecision.Reject(ImportRejectionReason.NotRevisionUpgrade, "Not a quality revision upgrade for existing episode file(s)");
                 }
 
                 var currentFormats = _formatService.ParseCustomFormat(episodeFile);
@@ -72,7 +71,8 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                         currentFormats != null ? currentFormats.ConcatToString() : "",
                         currentFormatScore);
 
-                    return Decision.Reject("Not a Custom Format upgrade for existing episode file(s). New: [{0}] ({1}) do not improve on Existing: [{2}] ({3})",
+                    return ImportSpecDecision.Reject(ImportRejectionReason.NotCustomFormatUpgrade,
+                        "Not a Custom Format upgrade for existing episode file(s). New: [{0}] ({1}) do not improve on Existing: [{2}] ({3})",
                         newFormats != null ? newFormats.ConcatToString() : "",
                         newFormatScore,
                         currentFormats != null ? currentFormats.ConcatToString() : "",
@@ -86,7 +86,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                     currentFormatScore);
             }
 
-            return Decision.Accept();
+            return ImportSpecDecision.Accept();
         }
     }
 }

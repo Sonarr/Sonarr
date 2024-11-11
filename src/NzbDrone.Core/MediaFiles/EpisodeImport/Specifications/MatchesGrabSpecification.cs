@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Extensions;
-using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
@@ -18,18 +17,18 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
             _logger = logger;
         }
 
-        public Decision IsSatisfiedBy(LocalEpisode localEpisode, DownloadClientItem downloadClientItem)
+        public ImportSpecDecision IsSatisfiedBy(LocalEpisode localEpisode, DownloadClientItem downloadClientItem)
         {
             if (localEpisode.ExistingFile)
             {
-                return Decision.Accept();
+                return ImportSpecDecision.Accept();
             }
 
             var releaseInfo = localEpisode.Release;
 
             if (releaseInfo == null || releaseInfo.EpisodeIds.Empty())
             {
-                return Decision.Accept();
+                return ImportSpecDecision.Accept();
             }
 
             var unexpected = localEpisode.Episodes.Where(e => releaseInfo.EpisodeIds.All(o => o != e.Id)).ToList();
@@ -40,13 +39,13 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
 
                 if (unexpected.Count == 1)
                 {
-                    return Decision.Reject("Episode {0} was not found in the grabbed release: {1}", FormatEpisode(unexpected), releaseInfo.Title);
+                    return ImportSpecDecision.Reject(ImportRejectionReason.EpisodeNotFoundInRelease, "Episode {0} was not found in the grabbed release: {1}", FormatEpisode(unexpected), releaseInfo.Title);
                 }
 
-                return Decision.Reject("Episodes {0} were not found in the grabbed release: {1}", FormatEpisode(unexpected), releaseInfo.Title);
+                return ImportSpecDecision.Reject(ImportRejectionReason.EpisodeNotFoundInRelease, "Episodes {0} were not found in the grabbed release: {1}", FormatEpisode(unexpected), releaseInfo.Title);
             }
 
-            return Decision.Accept();
+            return ImportSpecDecision.Accept();
         }
 
         private string FormatEpisode(List<Episode> episodes)
