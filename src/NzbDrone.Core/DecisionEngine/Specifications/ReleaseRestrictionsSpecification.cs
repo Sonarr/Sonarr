@@ -8,7 +8,7 @@ using NzbDrone.Core.Profiles.Releases;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications
 {
-    public class ReleaseRestrictionsSpecification : IDecisionEngineSpecification
+    public class ReleaseRestrictionsSpecification : IDownloadDecisionEngineSpecification
     {
         private readonly Logger _logger;
         private readonly IReleaseProfileService _releaseProfileService;
@@ -24,7 +24,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
         public SpecificationPriority Priority => SpecificationPriority.Default;
         public RejectionType Type => RejectionType.Permanent;
 
-        public virtual Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
+        public virtual DownloadSpecDecision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
             _logger.Debug("Checking if release meets restrictions: {0}", subject);
 
@@ -43,7 +43,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 {
                     var terms = string.Join(", ", requiredTerms);
                     _logger.Debug("[{0}] does not contain one of the required terms: {1}", title, terms);
-                    return Decision.Reject("Does not contain one of the required terms: {0}", terms);
+                    return DownloadSpecDecision.Reject(DownloadRejectionReason.MustContainMissing, "Does not contain one of the required terms: {0}", terms);
                 }
             }
 
@@ -56,12 +56,12 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 {
                     var terms = string.Join(", ", foundTerms);
                     _logger.Debug("[{0}] contains these ignored terms: {1}", title, terms);
-                    return Decision.Reject("Contains these ignored terms: {0}", terms);
+                    return DownloadSpecDecision.Reject(DownloadRejectionReason.MustNotContainPresent, "Contains these ignored terms: {0}", terms);
                 }
             }
 
             _logger.Debug("[{0}] No restrictions apply, allowing", subject);
-            return Decision.Accept();
+            return DownloadSpecDecision.Accept();
         }
 
         private List<string> ContainsAny(List<string> terms, string title)

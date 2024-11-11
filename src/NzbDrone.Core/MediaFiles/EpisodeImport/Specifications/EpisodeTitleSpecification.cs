@@ -3,7 +3,6 @@ using System.Linq;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Parser.Model;
@@ -29,12 +28,12 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
             _logger = logger;
         }
 
-        public Decision IsSatisfiedBy(LocalEpisode localEpisode, DownloadClientItem downloadClientItem)
+        public ImportSpecDecision IsSatisfiedBy(LocalEpisode localEpisode, DownloadClientItem downloadClientItem)
         {
             if (localEpisode.ExistingFile)
             {
                 _logger.Debug("{0} is in series folder, skipping check", localEpisode.Path);
-                return Decision.Accept();
+                return ImportSpecDecision.Accept();
             }
 
             var episodeTitleRequired = _configService.EpisodeTitleRequired;
@@ -42,13 +41,13 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
             if (episodeTitleRequired == EpisodeTitleRequiredType.Never)
             {
                 _logger.Debug("Episode titles are never required, skipping check");
-                return Decision.Accept();
+                return ImportSpecDecision.Accept();
             }
 
             if (!_buildFileNames.RequiresEpisodeTitle(localEpisode.Series, localEpisode.Episodes))
             {
                 _logger.Debug("File name format does not require episode title, skipping check");
-                return Decision.Accept();
+                return ImportSpecDecision.Accept();
             }
 
             var episodes = localEpisode.Episodes;
@@ -64,7 +63,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                                             e.AirDateUtc.Value == firstEpisode.AirDateUtc.Value) < 4)
             {
                 _logger.Debug("Episode title only required for bulk season releases");
-                return Decision.Accept();
+                return ImportSpecDecision.Accept();
             }
 
             foreach (var episode in episodes)
@@ -82,18 +81,18 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                 {
                     _logger.Debug("Episode does not have a title and recently aired");
 
-                    return Decision.Reject("Episode does not have a title and recently aired");
+                    return ImportSpecDecision.Reject(ImportRejectionReason.TitleMissing, "Episode does not have a title and recently aired");
                 }
 
                 if (title.Equals("TBA"))
                 {
                     _logger.Debug("Episode has a TBA title and recently aired");
 
-                    return Decision.Reject("Episode has a TBA title and recently aired");
+                    return ImportSpecDecision.Reject(ImportRejectionReason.TitleTba, "Episode has a TBA title and recently aired");
                 }
             }
 
-            return Decision.Accept();
+            return ImportSpecDecision.Accept();
         }
     }
 }

@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Common.Extensions;
-using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
@@ -21,11 +20,11 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
             _parsingService = parsingService;
         }
 
-        public Decision IsSatisfiedBy(LocalEpisode localEpisode, DownloadClientItem downloadClientItem)
+        public ImportSpecDecision IsSatisfiedBy(LocalEpisode localEpisode, DownloadClientItem downloadClientItem)
         {
             if (localEpisode.ExistingFile)
             {
-                return Decision.Accept();
+                return ImportSpecDecision.Accept();
             }
 
             var fileInfo = localEpisode.FileEpisodeInfo;
@@ -44,13 +43,13 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
             if (folderInfo == null)
             {
                 _logger.Debug("No folder ParsedEpisodeInfo, skipping check");
-                return Decision.Accept();
+                return ImportSpecDecision.Accept();
             }
 
             if (fileInfo == null)
             {
                 _logger.Debug("No file ParsedEpisodeInfo, skipping check");
-                return Decision.Accept();
+                return ImportSpecDecision.Accept();
             }
 
             var folderEpisodes = _parsingService.GetEpisodes(folderInfo, localEpisode.Series, true);
@@ -59,7 +58,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
             if (folderEpisodes.Empty())
             {
                 _logger.Debug("No episode numbers in folder ParsedEpisodeInfo, skipping check");
-                return Decision.Accept();
+                return ImportSpecDecision.Accept();
             }
 
             var unexpected = fileEpisodes.Where(e => folderEpisodes.All(o => o.Id != e.Id)).ToList();
@@ -70,13 +69,13 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
 
                 if (unexpected.Count == 1)
                 {
-                    return Decision.Reject("Episode {0} was unexpected considering the {1} folder name", FormatEpisode(unexpected), folderInfo.ReleaseTitle);
+                    return ImportSpecDecision.Reject(ImportRejectionReason.EpisodeUnexpected, "Episode {0} was unexpected considering the {1} folder name", FormatEpisode(unexpected), folderInfo.ReleaseTitle);
                 }
 
-                return Decision.Reject("Episodes {0} were unexpected considering the {1} folder name", FormatEpisode(unexpected), folderInfo.ReleaseTitle);
+                return ImportSpecDecision.Reject(ImportRejectionReason.EpisodeUnexpected, "Episodes {0} were unexpected considering the {1} folder name", FormatEpisode(unexpected), folderInfo.ReleaseTitle);
             }
 
-            return Decision.Accept();
+            return ImportSpecDecision.Accept();
         }
 
         private string FormatEpisode(List<Episode> episodes)

@@ -8,7 +8,7 @@ using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications
 {
-    public class FreeSpaceSpecification : IDecisionEngineSpecification
+    public class FreeSpaceSpecification : IDownloadDecisionEngineSpecification
     {
         private readonly IConfigService _configService;
         private readonly IDiskProvider _diskProvider;
@@ -24,12 +24,12 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
         public SpecificationPriority Priority => SpecificationPriority.Default;
         public RejectionType Type => RejectionType.Permanent;
 
-        public Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
+        public DownloadSpecDecision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
             if (_configService.SkipFreeSpaceCheckWhenImporting)
             {
                 _logger.Debug("Skipping free space check");
-                return Decision.Accept();
+                return DownloadSpecDecision.Accept();
             }
 
             var size = subject.Release.Size;
@@ -49,7 +49,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             {
                 _logger.Debug("Unable to get available space for {0}. Skipping", path);
 
-                return Decision.Accept();
+                return DownloadSpecDecision.Accept();
             }
 
             var minimumSpace = _configService.MinimumFreeSpaceWhenImporting.Megabytes();
@@ -60,7 +60,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 var message = "Importing after download will exceed available disk space";
 
                 _logger.Debug(message);
-                return Decision.Reject(message);
+                return DownloadSpecDecision.Reject(DownloadRejectionReason.MinimumFreeSpace, message);
             }
 
             if (remainingSpace < minimumSpace)
@@ -68,10 +68,10 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 var message = $"Not enough free space ({minimumSpace.SizeSuffix()}) to import after download: {remainingSpace.SizeSuffix()}. (Settings: Media Management: Minimum Free Space)";
 
                 _logger.Debug(message);
-                return Decision.Reject(message);
+                return DownloadSpecDecision.Reject(DownloadRejectionReason.MinimumFreeSpace, message);
             }
 
-            return Decision.Accept();
+            return DownloadSpecDecision.Accept();
         }
     }
 }

@@ -4,7 +4,7 @@ using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications
 {
-    public class SameEpisodesGrabSpecification : IDecisionEngineSpecification
+    public class SameEpisodesGrabSpecification : IDownloadDecisionEngineSpecification
     {
         private readonly SameEpisodesSpecification _sameEpisodesSpecification;
         private readonly Logger _logger;
@@ -18,15 +18,15 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
         public SpecificationPriority Priority => SpecificationPriority.Default;
         public RejectionType Type => RejectionType.Permanent;
 
-        public virtual Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
+        public virtual DownloadSpecDecision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
             if (_sameEpisodesSpecification.IsSatisfiedBy(subject.Episodes))
             {
-                return Decision.Accept();
+                return DownloadSpecDecision.Accept();
             }
 
             _logger.Debug("Episode file on disk contains more episodes than this release contains");
-            return Decision.Reject("Episode file on disk contains more episodes than this release contains");
+            return DownloadSpecDecision.Reject(DownloadRejectionReason.ExistingFileHasMoreEpisodes, "Episode file on disk contains more episodes than this release contains");
         }
     }
 }

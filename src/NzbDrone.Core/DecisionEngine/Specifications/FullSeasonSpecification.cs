@@ -7,7 +7,7 @@ using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications
 {
-    public class FullSeasonSpecification : IDecisionEngineSpecification
+    public class FullSeasonSpecification : IDownloadDecisionEngineSpecification
     {
         private readonly Logger _logger;
 
@@ -19,7 +19,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
         public SpecificationPriority Priority => SpecificationPriority.Default;
         public RejectionType Type => RejectionType.Permanent;
 
-        public virtual Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
+        public virtual DownloadSpecDecision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
             if (subject.ParsedEpisodeInfo.FullSeason)
             {
@@ -28,11 +28,11 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 if (subject.Episodes.Any(e => !e.AirDateUtc.HasValue || e.AirDateUtc.Value.After(DateTime.UtcNow.AddHours(24))))
                 {
                     _logger.Debug("Full season release {0} rejected. All episodes haven't aired yet.", subject.Release.Title);
-                    return Decision.Reject("Full season release rejected. All episodes haven't aired yet.");
+                    return DownloadSpecDecision.Reject(DownloadRejectionReason.FullSeasonNotAired, "Full season release rejected. All episodes haven't aired yet.");
                 }
             }
 
-            return Decision.Accept();
+            return DownloadSpecDecision.Accept();
         }
     }
 }

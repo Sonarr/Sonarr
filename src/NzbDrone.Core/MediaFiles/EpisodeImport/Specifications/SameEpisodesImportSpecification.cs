@@ -19,15 +19,15 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
 
         public RejectionType Type => RejectionType.Permanent;
 
-        public Decision IsSatisfiedBy(LocalEpisode localEpisode, DownloadClientItem downloadClientItem)
+        public ImportSpecDecision IsSatisfiedBy(LocalEpisode localEpisode, DownloadClientItem downloadClientItem)
         {
             if (_sameEpisodesSpecification.IsSatisfiedBy(localEpisode.Episodes))
             {
-                return Decision.Accept();
+                return ImportSpecDecision.Accept();
             }
 
             _logger.Debug("Episode file on disk contains more episodes than this file contains");
-            return Decision.Reject("Episode file on disk contains more episodes than this file contains");
+            return ImportSpecDecision.Reject(ImportRejectionReason.ExistingFileHasMoreEpisodes, "Episode file on disk contains more episodes than this file contains");
         }
     }
 }

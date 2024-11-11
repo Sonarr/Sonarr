@@ -22,12 +22,12 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
 
         public SpecificationPriority Priority => SpecificationPriority.Database;
 
-        public Decision IsSatisfiedBy(LocalEpisode localEpisode, DownloadClientItem downloadClientItem)
+        public ImportSpecDecision IsSatisfiedBy(LocalEpisode localEpisode, DownloadClientItem downloadClientItem)
         {
             if (downloadClientItem == null)
             {
                 _logger.Debug("No download client information is available, skipping");
-                return Decision.Accept();
+                return ImportSpecDecision.Accept();
             }
 
             foreach (var episode in localEpisode.Episodes)
@@ -64,17 +64,17 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                     if (lastImported.Date.After(lastGrabbed.Date))
                     {
                         _logger.Debug("Episode file previously imported at {0}", lastImported.Date);
-                        return Decision.Reject("Episode file already imported at {0}", lastImported.Date.ToLocalTime());
+                        return ImportSpecDecision.Reject(ImportRejectionReason.EpisodeAlreadyImported, "Episode file already imported at {0}", lastImported.Date.ToLocalTime());
                     }
                 }
                 else
                 {
                     _logger.Debug("Episode file previously imported at {0}", lastImported.Date);
-                    return Decision.Reject("Episode file already imported at {0}", lastImported.Date.ToLocalTime());
+                    return ImportSpecDecision.Reject(ImportRejectionReason.EpisodeAlreadyImported, "Episode file already imported at {0}", lastImported.Date.ToLocalTime());
                 }
             }
 
-            return Decision.Accept();
+            return ImportSpecDecision.Accept();
         }
     }
 }

@@ -22,38 +22,38 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         private List<ReleaseInfo> _reports;
         private RemoteEpisode _remoteEpisode;
 
-        private Mock<IDecisionEngineSpecification> _pass1;
-        private Mock<IDecisionEngineSpecification> _pass2;
-        private Mock<IDecisionEngineSpecification> _pass3;
+        private Mock<IDownloadDecisionEngineSpecification> _pass1;
+        private Mock<IDownloadDecisionEngineSpecification> _pass2;
+        private Mock<IDownloadDecisionEngineSpecification> _pass3;
 
-        private Mock<IDecisionEngineSpecification> _fail1;
-        private Mock<IDecisionEngineSpecification> _fail2;
-        private Mock<IDecisionEngineSpecification> _fail3;
+        private Mock<IDownloadDecisionEngineSpecification> _fail1;
+        private Mock<IDownloadDecisionEngineSpecification> _fail2;
+        private Mock<IDownloadDecisionEngineSpecification> _fail3;
 
-        private Mock<IDecisionEngineSpecification> _failDelayed1;
+        private Mock<IDownloadDecisionEngineSpecification> _failDelayed1;
 
         [SetUp]
         public void Setup()
         {
-            _pass1 = new Mock<IDecisionEngineSpecification>();
-            _pass2 = new Mock<IDecisionEngineSpecification>();
-            _pass3 = new Mock<IDecisionEngineSpecification>();
+            _pass1 = new Mock<IDownloadDecisionEngineSpecification>();
+            _pass2 = new Mock<IDownloadDecisionEngineSpecification>();
+            _pass3 = new Mock<IDownloadDecisionEngineSpecification>();
 
-            _fail1 = new Mock<IDecisionEngineSpecification>();
-            _fail2 = new Mock<IDecisionEngineSpecification>();
-            _fail3 = new Mock<IDecisionEngineSpecification>();
+            _fail1 = new Mock<IDownloadDecisionEngineSpecification>();
+            _fail2 = new Mock<IDownloadDecisionEngineSpecification>();
+            _fail3 = new Mock<IDownloadDecisionEngineSpecification>();
 
-            _failDelayed1 = new Mock<IDecisionEngineSpecification>();
+            _failDelayed1 = new Mock<IDownloadDecisionEngineSpecification>();
 
-            _pass1.Setup(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), null)).Returns(Decision.Accept);
-            _pass2.Setup(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), null)).Returns(Decision.Accept);
-            _pass3.Setup(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), null)).Returns(Decision.Accept);
+            _pass1.Setup(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), null)).Returns(DownloadSpecDecision.Accept);
+            _pass2.Setup(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), null)).Returns(DownloadSpecDecision.Accept);
+            _pass3.Setup(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), null)).Returns(DownloadSpecDecision.Accept);
 
-            _fail1.Setup(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), null)).Returns(Decision.Reject("fail1"));
-            _fail2.Setup(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), null)).Returns(Decision.Reject("fail2"));
-            _fail3.Setup(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), null)).Returns(Decision.Reject("fail3"));
+            _fail1.Setup(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), null)).Returns(DownloadSpecDecision.Reject(DownloadRejectionReason.Unknown, "fail1"));
+            _fail2.Setup(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), null)).Returns(DownloadSpecDecision.Reject(DownloadRejectionReason.Unknown, "fail2"));
+            _fail3.Setup(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), null)).Returns(DownloadSpecDecision.Reject(DownloadRejectionReason.Unknown, "fail3"));
 
-            _failDelayed1.Setup(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), null)).Returns(Decision.Reject("failDelayed1"));
+            _failDelayed1.Setup(c => c.IsSatisfiedBy(It.IsAny<RemoteEpisode>(), null)).Returns(DownloadSpecDecision.Reject(DownloadRejectionReason.MinimumAgeDelay, "failDelayed1"));
             _failDelayed1.SetupGet(c => c.Priority).Returns(SpecificationPriority.Disk);
 
             _reports = new List<ReleaseInfo> { new ReleaseInfo { Title = "The.Office.S03E115.DVDRip.XviD-OSiTV" } };
@@ -68,9 +68,9 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                   .Returns(_remoteEpisode);
         }
 
-        private void GivenSpecifications(params Mock<IDecisionEngineSpecification>[] mocks)
+        private void GivenSpecifications(params Mock<IDownloadDecisionEngineSpecification>[] mocks)
         {
-            Mocker.SetConstant<IEnumerable<IDecisionEngineSpecification>>(mocks.Select(c => c.Object));
+            Mocker.SetConstant<IEnumerable<IDownloadDecisionEngineSpecification>>(mocks.Select(c => c.Object));
         }
 
         [Test]
@@ -273,7 +273,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                         Episodes = episodes.Where(v => v.SceneEpisodeNumber == p.EpisodeNumbers.First()).ToList()
                     });
 
-            Mocker.SetConstant<IEnumerable<IDecisionEngineSpecification>>(new List<IDecisionEngineSpecification>
+            Mocker.SetConstant<IEnumerable<IDownloadDecisionEngineSpecification>>(new List<IDownloadDecisionEngineSpecification>
             {
                 Mocker.Resolve<NzbDrone.Core.DecisionEngine.Specifications.Search.EpisodeRequestedSpecification>()
             });
@@ -345,7 +345,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             var result = Subject.GetRssDecision(_reports);
 
             result.Should().HaveCount(1);
-            result.First().Rejections.First().Reason.Should().Contain("12345");
+            result.First().Rejections.First().Message.Should().Contain("12345");
         }
     }
 }

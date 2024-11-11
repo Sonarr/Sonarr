@@ -4,7 +4,7 @@ using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications
 {
-    public class SplitEpisodeSpecification : IDecisionEngineSpecification
+    public class SplitEpisodeSpecification : IDownloadDecisionEngineSpecification
     {
         private readonly Logger _logger;
 
@@ -16,15 +16,15 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
         public SpecificationPriority Priority => SpecificationPriority.Default;
         public RejectionType Type => RejectionType.Permanent;
 
-        public virtual Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
+        public virtual DownloadSpecDecision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
             if (subject.ParsedEpisodeInfo.IsSplitEpisode)
             {
                 _logger.Debug("Split episode release {0} rejected. Not supported", subject.Release.Title);
-                return Decision.Reject("Split episode releases are not supported");
+                return DownloadSpecDecision.Reject(DownloadRejectionReason.SplitEpisode, "Split episode releases are not supported");
             }
 
-            return Decision.Accept();
+            return DownloadSpecDecision.Accept();
         }
     }
 }

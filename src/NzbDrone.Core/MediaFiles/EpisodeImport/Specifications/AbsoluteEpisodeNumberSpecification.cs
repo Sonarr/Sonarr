@@ -1,7 +1,6 @@
 using System;
 using NLog;
 using NzbDrone.Common.Extensions;
-using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Parser.Model;
@@ -20,18 +19,18 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
             _logger = logger;
         }
 
-        public Decision IsSatisfiedBy(LocalEpisode localEpisode, DownloadClientItem downloadClientItem)
+        public ImportSpecDecision IsSatisfiedBy(LocalEpisode localEpisode, DownloadClientItem downloadClientItem)
         {
             if (localEpisode.Series.SeriesType != SeriesTypes.Anime)
             {
                 _logger.Debug("Series type is not Anime, skipping check");
-                return Decision.Accept();
+                return ImportSpecDecision.Accept();
             }
 
             if (!_buildFileNames.RequiresAbsoluteEpisodeNumber())
             {
                 _logger.Debug("File name format does not require absolute episode number, skipping check");
-                return Decision.Accept();
+                return ImportSpecDecision.Accept();
             }
 
             foreach (var episode in localEpisode.Episodes)
@@ -49,11 +48,11 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                 {
                     _logger.Debug("Episode does not have an absolute episode number and recently aired");
 
-                    return Decision.Reject("Episode does not have an absolute episode number and recently aired");
+                    return ImportSpecDecision.Reject(ImportRejectionReason.MissingAbsoluteEpisodeNumber, "Episode does not have an absolute episode number and recently aired");
                 }
             }
 
-            return Decision.Accept();
+            return ImportSpecDecision.Accept();
         }
     }
 }

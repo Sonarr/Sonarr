@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using NzbDrone.Core.CustomFormats;
-using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
@@ -27,7 +26,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
         public int CustomFormatScore { get; set; }
         public int IndexerFlags { get; set; }
         public ReleaseType ReleaseType { get; set; }
-        public IEnumerable<Rejection> Rejections { get; set; }
+        public IEnumerable<ImportRejection> Rejections { get; set; }
 
         public ManualImportItem()
         {

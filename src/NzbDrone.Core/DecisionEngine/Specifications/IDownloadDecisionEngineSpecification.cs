@@ -3,12 +3,12 @@ using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications
 {
-    public interface IDecisionEngineSpecification
+    public interface IDownloadDecisionEngineSpecification
     {
         RejectionType Type { get; }
 
         SpecificationPriority Priority { get; }
 
-        Decision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria);
+        DownloadSpecDecision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria);
     }
 }
