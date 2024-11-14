@@ -28,6 +28,7 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
             BaseUrl = "https://api.broadcasthe.net/";
             MinimumSeeders = IndexerDefaults.MINIMUM_SEEDERS;
             MultiLanguages = Array.Empty<int>();
+            FailDownloads = Array.Empty<int>();
         }
 
         [FieldDefinition(0, Label = "IndexerSettingsApiUrl", Advanced = true, HelpText = "IndexerSettingsApiUrlHelpText")]
@@ -47,6 +48,9 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
 
         [FieldDefinition(5, Type = FieldType.Select, SelectOptions = typeof(RealLanguageFieldConverter), Label = "IndexerSettingsMultiLanguageRelease", HelpText = "IndexerSettingsMultiLanguageReleaseHelpText", Advanced = true)]
         public IEnumerable<int> MultiLanguages { get; set; }
+
+        [FieldDefinition(6, Type = FieldType.Select, SelectOptions = typeof(FailDownloads), Label = "IndexerSettingsFailDownloads", HelpText = "IndexerSettingsFailDownloadsHelpText", Advanced = true)]
+        public IEnumerable<int> FailDownloads { get; set; }
 
         public NzbDroneValidationResult Validate()
         {

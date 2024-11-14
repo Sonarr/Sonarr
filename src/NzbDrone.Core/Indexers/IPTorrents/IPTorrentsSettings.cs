@@ -34,6 +34,7 @@ namespace NzbDrone.Core.Indexers.IPTorrents
         {
             MinimumSeeders = IndexerDefaults.MINIMUM_SEEDERS;
             MultiLanguages = Array.Empty<int>();
+            FailDownloads = Array.Empty<int>();
         }
 
         [FieldDefinition(0, Label = "IndexerIPTorrentsSettingsFeedUrl", HelpText = "IndexerIPTorrentsSettingsFeedUrlHelpText")]
@@ -50,6 +51,9 @@ namespace NzbDrone.Core.Indexers.IPTorrents
 
         [FieldDefinition(4, Type = FieldType.Select, SelectOptions = typeof(RealLanguageFieldConverter), Label = "IndexerSettingsMultiLanguageRelease", HelpText = "IndexerSettingsMultiLanguageReleaseHelpText", Advanced = true)]
         public IEnumerable<int> MultiLanguages { get; set; }
+
+        [FieldDefinition(5, Type = FieldType.Select, SelectOptions = typeof(FailDownloads), Label = "IndexerSettingsFailDownloads", HelpText = "IndexerSettingsFailDownloadsHelpText", Advanced = true)]
+        public IEnumerable<int> FailDownloads { get; set; }
 
         public NzbDroneValidationResult Validate()
         {

@@ -5,6 +5,7 @@ public enum ImportRejectionReason
     Unknown,
     FileLocked,
     UnknownSeries,
+    DangerousFile,
     ExecutableFile,
     ArchiveFile,
     SeriesFolder,

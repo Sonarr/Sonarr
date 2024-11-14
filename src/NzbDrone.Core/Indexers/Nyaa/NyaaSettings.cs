@@ -30,6 +30,7 @@ namespace NzbDrone.Core.Indexers.Nyaa
             AdditionalParameters = "&cats=1_0&filter=1";
             MinimumSeeders = IndexerDefaults.MINIMUM_SEEDERS;
             MultiLanguages = Array.Empty<int>();
+            FailDownloads = Array.Empty<int>();
         }
 
         [FieldDefinition(0, Label = "IndexerSettingsWebsiteUrl")]
@@ -52,6 +53,9 @@ namespace NzbDrone.Core.Indexers.Nyaa
 
         [FieldDefinition(6, Type = FieldType.Select, SelectOptions = typeof(RealLanguageFieldConverter), Label = "IndexerSettingsMultiLanguageRelease", HelpText = "IndexerSettingsMultiLanguageReleaseHelpText", Advanced = true)]
         public IEnumerable<int> MultiLanguages { get; set; }
+
+        [FieldDefinition(7, Type = FieldType.Select, SelectOptions = typeof(FailDownloads), Label = "IndexerSettingsFailDownloads", HelpText = "IndexerSettingsFailDownloadsHelpText", Advanced = true)]
+        public IEnumerable<int> FailDownloads { get; set; }
 
         public NzbDroneValidationResult Validate()
         {

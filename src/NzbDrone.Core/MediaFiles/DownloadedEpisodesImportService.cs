@@ -318,6 +318,11 @@ namespace NzbDrone.Core.MediaFiles
         {
             var files = _diskProvider.GetFiles(folder, true);
 
+            if (files.Any(file => FileExtensions.DangerousExtensions.Contains(Path.GetExtension(file))))
+            {
+                return RejectionResult(ImportRejectionReason.DangerousFile, "Caution: Found potentially dangerous file");
+            }
+
             if (files.Any(file => FileExtensions.ExecutableExtensions.Contains(Path.GetExtension(file))))
             {
                 return RejectionResult(ImportRejectionReason.ExecutableFile, "Caution: Found executable file");
