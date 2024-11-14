@@ -15,5 +15,6 @@ namespace NzbDrone.Core.Test.IndexerTests
         public string BaseUrl { get; set; }
 
         public IEnumerable<int> MultiLanguages { get; set; }
+        public IEnumerable<int> FailDownloads { get; set; }
     }
 }

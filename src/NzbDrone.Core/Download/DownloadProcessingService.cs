@@ -55,13 +55,17 @@ namespace NzbDrone.Core.Download
             {
                 try
                 {
+                    // Process completed items followed by failed, this allows failed imports to have
+                    // their state changed and be processed immediately instead of the next execution.
+
+                    if (enableCompletedDownloadHandling && trackedDownload.State == TrackedDownloadState.ImportPending)
+                    {
+                        _completedDownloadService.Import(trackedDownload);
+                    }
+
                     if (trackedDownload.State == TrackedDownloadState.FailedPending)
                     {
                         _failedDownloadService.ProcessFailed(trackedDownload);
-                    }
-                    else if (enableCompletedDownloadHandling && trackedDownload.State == TrackedDownloadState.ImportPending)
-                    {
-                        _completedDownloadService.Import(trackedDownload);
                     }
                 }
                 catch (Exception e)

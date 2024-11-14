@@ -998,6 +998,8 @@
   "IndexerSettingsCategoriesHelpText": "Drop down list, leave blank to disable standard/daily shows",
   "IndexerSettingsCookie": "Cookie",
   "IndexerSettingsCookieHelpText": "If your site requires a login cookie to access the rss, you'll have to retrieve it via a browser.",
+  "IndexerSettingsFailDownloads": "Fail Downloads",
+  "IndexerSettingsFailDownloadsHelpText": "While processing completed downloads {appName} will treat selected errors preventing importing as failed downloads.",
   "IndexerSettingsMinimumSeeders": "Minimum Seeders",
   "IndexerSettingsMinimumSeedersHelpText": "Minimum number of seeders required.",
   "IndexerSettingsMultiLanguageRelease": "Multi Languages",

@@ -8,5 +8,7 @@ namespace NzbDrone.Core.Indexers
         string BaseUrl { get; set; }
 
         IEnumerable<int> MultiLanguages { get; set; }
+
+        IEnumerable<int> FailDownloads { get; set; }
     }
 }

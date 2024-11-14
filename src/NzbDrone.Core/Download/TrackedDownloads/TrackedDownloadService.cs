@@ -166,6 +166,11 @@ namespace NzbDrone.Core.Download.TrackedDownloads
                         {
                             trackedDownload.RemoteEpisode.Release.IndexerFlags = flags;
                         }
+
+                        if (downloadHistory != null)
+                        {
+                            trackedDownload.RemoteEpisode.Release.IndexerId = downloadHistory.IndexerId;
+                        }
                     }
                 }
 

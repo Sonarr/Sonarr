@@ -59,6 +59,7 @@ namespace NzbDrone.Core.Indexers.Newznab
             Categories = new[] { 5030, 5040 };
             AnimeCategories = Enumerable.Empty<int>();
             MultiLanguages = Array.Empty<int>();
+            FailDownloads = Array.Empty<int>();
         }
 
         [FieldDefinition(0, Label = "URL")]
@@ -85,6 +86,9 @@ namespace NzbDrone.Core.Indexers.Newznab
 
         [FieldDefinition(7, Type = FieldType.Select, SelectOptions = typeof(RealLanguageFieldConverter), Label = "IndexerSettingsMultiLanguageRelease", HelpText = "IndexerSettingsMultiLanguageReleaseHelpText", Advanced = true)]
         public IEnumerable<int> MultiLanguages { get; set; }
+
+        [FieldDefinition(8, Type = FieldType.Select, SelectOptions = typeof(FailDownloads), Label = "IndexerSettingsFailDownloads", HelpText = "IndexerSettingsFailDownloadsHelpText", Advanced = true)]
+        public IEnumerable<int> FailDownloads { get; set; }
 
         // Field 8 is used by TorznabSettings MinimumSeeders
         // If you need to add another field here, update TorznabSettings as well and this comment
