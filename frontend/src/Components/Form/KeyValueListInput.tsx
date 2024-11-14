@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import React, { useCallback, useState } from 'react';
+import { InputOnChange } from 'typings/inputs';
 import KeyValueListInputItem from './KeyValueListInputItem';
 import styles from './KeyValueListInput.css';
 
@@ -16,7 +17,7 @@ export interface KeyValueListInputProps {
   hasWarning?: boolean;
   keyPlaceholder?: string;
   valuePlaceholder?: string;
-  onChange: (updatedValue: { name: string; value: KeyValue[] }) => void;
+  onChange: InputOnChange<KeyValue[]>;
 }
 
 function KeyValueListInput({
@@ -31,22 +32,22 @@ function KeyValueListInput({
 }: KeyValueListInputProps): JSX.Element {
   const [isFocused, setIsFocused] = useState(false);
 
-  // Handler for item change (add or update item)
-  const onItemChange = useCallback(
+  const handleItemChange = useCallback(
     (index: number | null, itemValue: KeyValue) => {
       const newValue = [...value];
+
       if (index === null) {
         newValue.push(itemValue);
       } else {
         newValue.splice(index, 1, itemValue);
       }
+
       onChange({ name, value: newValue });
     },
     [value, name, onChange]
   );
 
-  // Handler for removing an item
-  const onRemoveItem = useCallback(
+  const handleRemoveItem = useCallback(
     (index: number) => {
       const newValue = [...value];
       newValue.splice(index, 1);
@@ -55,15 +56,15 @@ function KeyValueListInput({
     [value, name, onChange]
   );
 
-  // Handle focus event
   const onFocus = useCallback(() => setIsFocused(true), []);
 
-  // Handle blur event
   const onBlur = useCallback(() => {
     setIsFocused(false);
 
     const newValue = value.reduce((acc: KeyValue[], v) => {
-      if (v.key || v.value) acc.push(v);
+      if (v.key || v.value) {
+        acc.push(v);
+      }
       return acc;
     }, []);
 
@@ -72,7 +73,6 @@ function KeyValueListInput({
     }
   }, [value, name, onChange]);
 
-  // Render component
   return (
     <div
       className={classNames(
@@ -91,8 +91,8 @@ function KeyValueListInput({
           keyPlaceholder={keyPlaceholder}
           valuePlaceholder={valuePlaceholder}
           isNew={index === value.length}
-          onChange={onItemChange}
-          onRemove={onRemoveItem}
+          onChange={handleItemChange}
+          onRemove={handleRemoveItem}
           onFocus={onFocus}
           onBlur={onBlur}
         />

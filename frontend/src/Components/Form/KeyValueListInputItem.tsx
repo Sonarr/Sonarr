@@ -29,7 +29,6 @@ function KeyValueListInputItem({
   onFocus,
   onBlur,
 }: KeyValueListInputItemProps): JSX.Element {
-  // Handler for key change
   const handleKeyChange = useCallback(
     ({ value: keyValue }: { value: string }) => {
       onChange(index, { key: keyValue, value });
@@ -37,7 +36,6 @@ function KeyValueListInputItem({
     [index, value, onChange]
   );
 
-  // Handler for value change
   const handleValueChange = useCallback(
     ({ value }: { value: string }) => {
       onChange(index, { key: keyValue, value });
@@ -45,11 +43,9 @@ function KeyValueListInputItem({
     [index, keyValue, onChange]
   );
 
-  // Handler for remove button press
-  const handleRemovePress = useCallback(
-    () => onRemove(index),
-    [index, onRemove]
-  );
+  const handleRemovePress = useCallback(() => {
+    onRemove(index);
+  }, [index, onRemove]);
 
   return (
     <div className={styles.itemContainer}>
@@ -78,7 +74,7 @@ function KeyValueListInputItem({
       </div>
 
       <div className={styles.buttonWrapper}>
-        {!isNew && (
+        {isNew ? null : (
           <IconButton
             name={icons.REMOVE}
             tabIndex={-1}
