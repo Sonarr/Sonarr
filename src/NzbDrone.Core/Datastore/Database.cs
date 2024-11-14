@@ -52,7 +52,7 @@ namespace NzbDrone.Core.Datastore
             {
                 using var db = _datamapperFactory();
                 var dbConnection = db as DbConnection;
-                var version = Regex.Replace(dbConnection.ServerVersion, @"\(.*?\)", "");
+                var version = Regex.Replace(dbConnection.ServerVersion, @"\(.*?\)", "").Replace(" - Percona Distribution", "");
 
                 return new Version(version);
             }
