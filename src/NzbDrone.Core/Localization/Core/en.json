@@ -1436,6 +1436,7 @@
   "NotificationsSettingsWebhookMethod": "Method",
   "NotificationsSettingsWebhookMethodHelpText": "Which HTTP method to use submit to the Webservice",
   "NotificationsSettingsWebhookUrl": "Webhook URL",
+  "NotificationsSettingsWebhookHeaders": "Headers",
   "NotificationsSignalSettingsGroupIdPhoneNumber": "Group ID / Phone Number",
   "NotificationsSignalSettingsGroupIdPhoneNumberHelpText": "Group ID / Phone Number of the receiver",
   "NotificationsSignalSettingsPasswordHelpText": "Password used to authenticate requests toward signal-api",

@@ -1,4 +1,5 @@
-using System;
+﻿using System;
+using System.Collections.Generic;
 using FluentValidation;
 using NzbDrone.Core.Annotations;
 using NzbDrone.Core.Validation;
@@ -20,6 +21,7 @@ namespace NzbDrone.Core.Notifications.Webhook
         public WebhookSettings()
         {
             Method = Convert.ToInt32(WebhookMethod.POST);
+            Headers = new List<KeyValuePair<string, string>>();
         }
 
         [FieldDefinition(0, Label = "NotificationsSettingsWebhookUrl", Type = FieldType.Url)]
@@ -33,6 +35,9 @@ namespace NzbDrone.Core.Notifications.Webhook
 
         [FieldDefinition(3, Label = "Password", Type = FieldType.Password, Privacy = PrivacyLevel.Password)]
         public string Password { get; set; }
+
+        [FieldDefinition(4, Label = "NotificationsSettingsWebhookHeaders", Type = FieldType.KeyValueList, Advanced = true)]
+        public IEnumerable<KeyValuePair<string, string>> Headers { get; set; }
 
         public override NzbDroneValidationResult Validate()
         {

@@ -43,6 +43,11 @@ namespace NzbDrone.Core.Notifications.Webhook
                     request.Credentials = new BasicNetworkCredential(settings.Username, settings.Password);
                 }
 
+                foreach (var header in settings.Headers)
+                {
+                    request.Headers.Add(header.Key, header.Value);
+                }
+
                 _httpClient.Execute(request);
             }
             catch (HttpException ex)

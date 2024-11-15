@@ -10,6 +10,7 @@ import CaptchaInput from './CaptchaInput';
 import CheckInput from './CheckInput';
 import { FormInputButtonProps } from './FormInputButton';
 import FormInputHelpText from './FormInputHelpText';
+import KeyValueListInput from './KeyValueListInput';
 import NumberInput from './NumberInput';
 import OAuthInput from './OAuthInput';
 import PasswordInput from './PasswordInput';
@@ -46,6 +47,9 @@ function getComponent(type: InputType) {
 
     case inputTypes.DEVICE:
       return DeviceInput;
+
+    case inputTypes.KEY_VALUE_LIST:
+      return KeyValueListInput;
 
     case inputTypes.MONITOR_EPISODES_SELECT:
       return MonitorEpisodesSelectInput;
