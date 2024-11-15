@@ -104,9 +104,8 @@ namespace NzbDrone.Core.Download.Clients.Blackhole
                     Status = item.Status
                 };
 
-                queueItem.CanMoveFiles = queueItem.CanBeRemoved =
-                    queueItem.DownloadClientInfo.RemoveCompletedDownloads &&
-                    !Settings.ReadOnly;
+                queueItem.CanMoveFiles = !Settings.ReadOnly;
+                queueItem.CanBeRemoved = queueItem.DownloadClientInfo.RemoveCompletedDownloads;
 
                 yield return queueItem;
             }
