@@ -13,6 +13,14 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
     [TestFixture]
     public class TransmissionFixture : TransmissionFixtureBase<Transmission>
     {
+        [SetUp]
+        public void Setup_Transmission()
+        {
+            Mocker.GetMock<ITransmissionProxy>()
+                .Setup(v => v.GetClientVersion(It.IsAny<TransmissionSettings>(), It.IsAny<bool>()))
+                .Returns("4.0.6");
+        }
+
         [Test]
         public void queued_item_should_have_required_properties()
         {
@@ -272,7 +280,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
         public void should_only_check_version_number(string version)
         {
             Mocker.GetMock<ITransmissionProxy>()
-                  .Setup(s => s.GetClientVersion(It.IsAny<TransmissionSettings>()))
+                  .Setup(s => s.GetClientVersion(It.IsAny<TransmissionSettings>(), true))
                   .Returns(version);
 
             Subject.Test().IsValid.Should().BeTrue();

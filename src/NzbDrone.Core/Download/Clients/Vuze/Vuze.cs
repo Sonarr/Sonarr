@@ -15,6 +15,9 @@ namespace NzbDrone.Core.Download.Clients.Vuze
     {
         private const int MINIMUM_SUPPORTED_PROTOCOL_VERSION = 14;
 
+        public override string Name => "Vuze";
+        public override bool SupportsLabels => false;
+
         public Vuze(ITransmissionProxy proxy,
                     ITorrentFileInfoReader torrentFileInfoReader,
                     IHttpClient httpClient,
@@ -67,7 +70,5 @@ namespace NzbDrone.Core.Download.Clients.Vuze
 
             return null;
         }
-
-        public override string Name => "Vuze";
     }
 }
