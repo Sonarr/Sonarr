@@ -62,6 +62,7 @@
   font-weight: 300;
   font-size: 50px;
   line-height: 50px;
+  text-wrap: balance;
 }
 
 .toggleMonitoredContainer {
@@ -144,6 +145,7 @@
   margin-top: 8px;
   min-height: 0;
   font-size: $intermediateFontSize;
+  text-wrap: balance;
 }
 
 .contentContainer {
