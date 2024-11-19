@@ -18,8 +18,8 @@ namespace NzbDrone.Core.Queue
         public QualityModel Quality { get; set; }
         public decimal Size { get; set; }
         public string Title { get; set; }
-        public decimal Sizeleft { get; set; }
-        public TimeSpan? Timeleft { get; set; }
+        public decimal SizeLeft { get; set; }
+        public TimeSpan? TimeLeft { get; set; }
         public DateTime? EstimatedCompletionTime { get; set; }
         public DateTime? Added { get; set; }
         public QueueStatus Status { get; set; }

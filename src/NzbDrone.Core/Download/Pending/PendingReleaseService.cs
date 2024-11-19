@@ -359,11 +359,11 @@ namespace NzbDrone.Core.Download.Pending
                 ect = ect.AddMinutes(_configService.RssSyncInterval);
             }
 
-            var timeleft = ect.Subtract(DateTime.UtcNow);
+            var timeLeft = ect.Subtract(DateTime.UtcNow);
 
-            if (timeleft.TotalSeconds < 0)
+            if (timeLeft.TotalSeconds < 0)
             {
-                timeleft = TimeSpan.Zero;
+                timeLeft = TimeSpan.Zero;
             }
 
             string downloadClientName = null;
@@ -385,9 +385,9 @@ namespace NzbDrone.Core.Download.Pending
                 Quality = pendingRelease.RemoteEpisode.ParsedEpisodeInfo.Quality,
                 Title = pendingRelease.Title,
                 Size = pendingRelease.RemoteEpisode.Release.Size,
-                Sizeleft = pendingRelease.RemoteEpisode.Release.Size,
+                SizeLeft = pendingRelease.RemoteEpisode.Release.Size,
                 RemoteEpisode = pendingRelease.RemoteEpisode,
-                Timeleft = timeleft,
+                TimeLeft = timeLeft,
                 EstimatedCompletionTime = ect,
                 Added = pendingRelease.Added,
                 Status = Enum.TryParse(pendingRelease.Reason.ToString(), out QueueStatus outValue) ? outValue : QueueStatus.Unknown,
