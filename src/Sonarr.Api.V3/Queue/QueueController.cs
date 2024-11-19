@@ -219,8 +219,8 @@ namespace Sonarr.Api.V3.Queue
             if (pagingSpec.SortKey == "timeleft")
             {
                 ordered = ascending
-                    ? fullQueue.OrderBy(q => q.Timeleft, new TimeleftComparer())
-                    : fullQueue.OrderByDescending(q => q.Timeleft, new TimeleftComparer());
+                    ? fullQueue.OrderBy(q => q.TimeLeft, new TimeleftComparer())
+                    : fullQueue.OrderByDescending(q => q.TimeLeft, new TimeleftComparer());
             }
             else if (pagingSpec.SortKey == "estimatedCompletionTime")
             {
@@ -271,7 +271,7 @@ namespace Sonarr.Api.V3.Queue
                 ordered = ascending ? fullQueue.OrderBy(orderByFunc) : fullQueue.OrderByDescending(orderByFunc);
             }
 
-            ordered = ordered.ThenByDescending(q => q.Size == 0 ? 0 : 100 - (q.Sizeleft / q.Size * 100));
+            ordered = ordered.ThenByDescending(q => q.Size == 0 ? 0 : 100 - (q.SizeLeft / q.Size * 100));
 
             pagingSpec.Records = ordered.Skip((pagingSpec.Page - 1) * pagingSpec.PageSize).Take(pagingSpec.PageSize).ToList();
             pagingSpec.TotalRecords = fullQueue.Count;
@@ -312,9 +312,9 @@ namespace Sonarr.Api.V3.Queue
                     return q => q.Size;
                 case "progress":
                     // Avoid exploding if a download's size is 0
-                    return q => 100 - (q.Sizeleft / Math.Max(q.Size * 100, 1));
+                    return q => 100 - (q.SizeLeft / Math.Max(q.Size * 100, 1));
                 default:
-                    return q => q.Timeleft;
+                    return q => q.TimeLeft;
             }
         }
 

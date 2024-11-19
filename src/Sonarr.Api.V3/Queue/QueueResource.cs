@@ -26,8 +26,8 @@ namespace Sonarr.Api.V3.Queue
         public int CustomFormatScore { get; set; }
         public decimal Size { get; set; }
         public string Title { get; set; }
-        public decimal Sizeleft { get; set; }
-        public TimeSpan? Timeleft { get; set; }
+        public decimal SizeLeft { get; set; }
+        public TimeSpan? TimeLeft { get; set; }
         public DateTime? EstimatedCompletionTime { get; set; }
         public DateTime? Added { get; set; }
         public QueueStatus Status { get; set; }
@@ -42,6 +42,11 @@ namespace Sonarr.Api.V3.Queue
         public string Indexer { get; set; }
         public string OutputPath { get; set; }
         public bool EpisodeHasFile { get; set; }
+
+        [Obsolete]
+        public decimal Sizeleft { get; set; }
+        [Obsolete]
+        public TimeSpan? Timeleft { get; set; }
     }
 
     public static class QueueResourceMapper
@@ -70,8 +75,8 @@ namespace Sonarr.Api.V3.Queue
                 CustomFormatScore = customFormatScore,
                 Size = model.Size,
                 Title = model.Title,
-                Sizeleft = model.Sizeleft,
-                Timeleft = model.Timeleft,
+                SizeLeft = model.SizeLeft,
+                TimeLeft = model.TimeLeft,
                 EstimatedCompletionTime = model.EstimatedCompletionTime,
                 Added = model.Added,
                 Status = model.Status,
@@ -85,7 +90,12 @@ namespace Sonarr.Api.V3.Queue
                 DownloadClientHasPostImportCategory = model.DownloadClientHasPostImportCategory,
                 Indexer = model.Indexer,
                 OutputPath = model.OutputPath,
-                EpisodeHasFile = model.Episode?.HasFile ?? false
+                EpisodeHasFile = model.Episode?.HasFile ?? false,
+
+                #pragma warning disable CS0612
+                Sizeleft = model.SizeLeft,
+                Timeleft = model.TimeLeft,
+                #pragma warning restore CS0612
             };
         }
 
