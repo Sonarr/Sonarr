@@ -23,19 +23,26 @@ namespace NzbDrone.Core.HealthCheck.Checks
 
         public override HealthCheck Check()
         {
-            var request = _cloudRequestBuilder.Create()
-                .Resource("/time")
-                .Build();
-
-            var response = _client.Execute(request);
-            var result = Json.Deserialize<ServiceTimeResponse>(response.Content);
-            var systemTime = DateTime.UtcNow;
-
-            // +/- more than 1 day
-            if (Math.Abs(result.DateTimeUtc.Subtract(systemTime).TotalDays) >= 1)
+            try
             {
-                _logger.Error("System time mismatch. SystemTime: {0} Expected Time: {1}. Update system time", systemTime, result.DateTimeUtc);
-                return new HealthCheck(GetType(), HealthCheckResult.Error, _localizationService.GetLocalizedString("SystemTimeHealthCheckMessage"), "#system-time-off");
+                var request = _cloudRequestBuilder.Create()
+                    .Resource("/time")
+                    .Build();
+
+                var response = _client.Execute(request);
+                var result = Json.Deserialize<ServiceTimeResponse>(response.Content);
+                var systemTime = DateTime.UtcNow;
+
+                // +/- more than 1 day
+                if (Math.Abs(result.DateTimeUtc.Subtract(systemTime).TotalDays) >= 1)
+                {
+                    _logger.Error("System time mismatch. SystemTime: {0} Expected Time: {1}. Update system time", systemTime, result.DateTimeUtc);
+                    return new HealthCheck(GetType(), HealthCheckResult.Error, _localizationService.GetLocalizedString("SystemTimeHealthCheckMessage"), "#system-time-off");
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.Warn(e, "Unable to verify system time");
             }
 
             return new HealthCheck(GetType());
