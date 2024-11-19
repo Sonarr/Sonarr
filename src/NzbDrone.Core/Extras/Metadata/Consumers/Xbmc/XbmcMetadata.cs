@@ -421,7 +421,15 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
 
             try
             {
-                var screenshot = episodeFile.Episodes.Value.First().Images.SingleOrDefault(i => i.CoverType == MediaCoverTypes.Screenshot);
+                var firstEpisode = episodeFile.Episodes.Value.FirstOrDefault();
+
+                if (firstEpisode == null)
+                {
+                    _logger.Debug("Episode file has no associated episodes, potentially a duplicate file");
+                    return new List<ImageFileResult>();
+                }
+
+                var screenshot = firstEpisode.Images.SingleOrDefault(i => i.CoverType == MediaCoverTypes.Screenshot);
 
                 if (screenshot == null)
                 {
