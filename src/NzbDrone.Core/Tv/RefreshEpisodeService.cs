@@ -145,7 +145,7 @@ namespace NzbDrone.Core.Tv
 
         private bool GetMonitoredStatus(Episode episode, IEnumerable<Season> seasons, Series series)
         {
-            if ((episode.EpisodeNumber == 0 && episode.SeasonNumber != 1) || series.MonitorNewItems == NewItemMonitorTypes.None)
+            if (episode.EpisodeNumber == 0 && episode.SeasonNumber != 1)
             {
                 return false;
             }
