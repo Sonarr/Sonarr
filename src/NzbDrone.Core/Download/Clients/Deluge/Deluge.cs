@@ -20,6 +20,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
     public class Deluge : TorrentClientBase<DelugeSettings>
     {
         private readonly IDelugeProxy _proxy;
+        private bool _hasAttemptedReconnecting = false;
 
         public Deluge(IDelugeProxy proxy,
                       ITorrentFileInfoReader torrentFileInfoReader,
@@ -194,10 +195,20 @@ namespace NzbDrone.Core.Download.Clients.Deluge
                 items.Add(item);
             }
 
-            if (ignoredCount > 0)
+            if (ignoredCount > 0 && _hasAttemptedReconnecting)
             {
-                _logger.Warn("{0} torrent(s) were ignored because they did not have a hash or title. Deluge may have disconnected from it's daemon. If you continue to see this error, check Deluge for invalid torrents.");
-                _proxy.ReconnectToDaemon(Settings);
+                if (_hasAttemptedReconnecting)
+                {
+                    _logger.Warn("{0} torrent(s) were ignored because they did not have a hash or title. Deluge may have disconnected from it's daemon. If you continue to see this error, check Deluge for invalid torrents.");
+                }
+                else
+                {
+                    _proxy.ReconnectToDaemon(Settings);
+                }
+            }
+            else
+            {
+                _hasAttemptedReconnecting = false;
             }
 
             return items;
