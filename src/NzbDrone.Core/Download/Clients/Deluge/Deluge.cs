@@ -128,14 +128,9 @@ namespace NzbDrone.Core.Download.Clients.Deluge
 
             foreach (var torrent in torrents)
             {
-                // Silently ignore torrents with no hash
-                if (torrent.Hash.IsNullOrWhiteSpace())
-                {
-                    continue;
-                }
-
-                // Ignore torrents without a name, but track to log a single warning for all invalid torrents.
-                if (torrent.Name.IsNullOrWhiteSpace())
+                // Ignore torrents without a hash or name, but track to log a single warning
+                // for all invalid torrents as well as reconnect to the Daemon.
+                if (torrent.Hash.IsNullOrWhiteSpace() || torrent.Name.IsNullOrWhiteSpace())
                 {
                     ignoredCount++;
                     continue;
@@ -201,7 +196,8 @@ namespace NzbDrone.Core.Download.Clients.Deluge
 
             if (ignoredCount > 0)
             {
-                _logger.Warn("{0} torrent(s) were ignored because they did not have a title. Check Deluge and remove any invalid torrents");
+                _logger.Warn("{0} torrent(s) were ignored because they did not have a hash or title. Check Deluge and remove any invalid torrents");
+                _proxy.ReconnectToDaemon(Settings);
             }
 
             return items;
@@ -322,9 +318,9 @@ namespace NzbDrone.Core.Download.Clients.Deluge
                 return null;
             }
 
-            var enabledPlugins = _proxy.GetEnabledPlugins(Settings);
+            var methods = _proxy.GetMethods(Settings);
 
-            if (!enabledPlugins.Contains("Label"))
+            if (!methods.Any(m => m.StartsWith("label.")))
             {
                 return new NzbDroneValidationFailure("TvCategory", _localizationService.GetLocalizedString("DownloadClientDelugeValidationLabelPluginInactive"))
                 {
