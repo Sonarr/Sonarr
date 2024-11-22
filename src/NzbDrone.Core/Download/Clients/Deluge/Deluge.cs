@@ -196,7 +196,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
 
             if (ignoredCount > 0)
             {
-                _logger.Warn("{0} torrent(s) were ignored because they did not have a hash or title. Check Deluge and remove any invalid torrents");
+                _logger.Warn("{0} torrent(s) were ignored because they did not have a hash or title. Deluge may have disconnected from it's daemon. If you continue to see this error, check Deluge for invalid torrents.");
                 _proxy.ReconnectToDaemon(Settings);
             }
 
