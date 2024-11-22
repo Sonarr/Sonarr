@@ -199,7 +199,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
             {
                 if (_hasAttemptedReconnecting)
                 {
-                    _logger.Warn("{0} torrent(s) were ignored because they did not have a hash or title. Deluge may have disconnected from it's daemon. If you continue to see this error, check Deluge for invalid torrents.");
+                    _logger.Warn("{0} torrent(s) were ignored because they did not have a hash or title. Deluge may have disconnected from it's daemon. If you continue to see this error, check Deluge for invalid torrents.", ignoredCount);
                 }
                 else
                 {
