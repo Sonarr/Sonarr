@@ -278,20 +278,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
                 status.OutputRootFolders = new List<OsPath> { _remotePathMappingService.RemapRemoteToLocal(Settings.Host, category.FullPath) };
             }
 
-            if (config.Misc.history_retention.IsNullOrWhiteSpace())
-            {
-                status.RemovesCompletedDownloads = false;
-            }
-            else if (config.Misc.history_retention.EndsWith("d"))
-            {
-                int.TryParse(config.Misc.history_retention.AsSpan(0, config.Misc.history_retention.Length - 1),
-                    out var daysRetention);
-                status.RemovesCompletedDownloads = daysRetention < 14;
-            }
-            else
-            {
-                status.RemovesCompletedDownloads = config.Misc.history_retention != "0";
-            }
+            status.RemovesCompletedDownloads = RemovesCompletedDownloads(config);
 
             return status;
         }
@@ -546,6 +533,44 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             }
 
             return categories.Contains(category);
+        }
+
+        private bool RemovesCompletedDownloads(SabnzbdConfig config)
+        {
+            var retention = config.Misc.history_retention;
+            var option = config.Misc.history_retention_option;
+            var number = config.Misc.history_retention_number;
+
+            switch (option)
+            {
+                case "all":
+                    return false;
+                case "number-archive":
+                case "number-delete":
+                    return true;
+                case "days-archive":
+                case "days-delete":
+                    return number < 14;
+                case "all-archive":
+                case "all-delete":
+                    return true;
+            }
+
+            // TODO: Remove these checks once support for SABnzbd < 4.3 is removed
+
+            if (retention.IsNullOrWhiteSpace())
+            {
+                return false;
+            }
+
+            if (retention.EndsWith("d"))
+            {
+                int.TryParse(config.Misc.history_retention.AsSpan(0, config.Misc.history_retention.Length - 1),
+                    out var daysRetention);
+                return daysRetention < 14;
+            }
+
+            return retention != "0";
         }
 
         private bool ValidatePath(DownloadClientItem downloadClientItem)
