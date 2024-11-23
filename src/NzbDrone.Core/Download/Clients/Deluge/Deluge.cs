@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
     public class Deluge : TorrentClientBase<DelugeSettings>
     {
         private readonly IDelugeProxy _proxy;
-        private bool _hasAttemptedReconnecting = false;
+        private bool _hasAttemptedReconnecting;
 
         public Deluge(IDelugeProxy proxy,
                       ITorrentFileInfoReader torrentFileInfoReader,
