@@ -11,6 +11,7 @@ using NzbDrone.Core.Languages;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
+using NzbDrone.Core.Profiles;
 using NzbDrone.Core.Profiles.Qualities;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.CustomFormats;
@@ -362,6 +363,39 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             GivenFileQuality(new QualityModel(Quality.WEBDL1080p));
             GivenNewQuality(new QualityModel(Quality.Bluray1080p));
+
+            Subject.IsSatisfiedBy(_parseResultSingle, null).Accepted.Should().BeFalse();
+        }
+
+        [Test]
+        public void should_return_false_if_quality_profile_does_not_allow_upgrades_but_format_cutoff_is_above_current_score()
+        {
+            var customFormat = new CustomFormat("My Format", new ResolutionSpecification { Value = (int)Resolution.R1080p }) { Id = 1 };
+
+            GivenProfile(new QualityProfile
+            {
+                Cutoff = Quality.SDTV.Id,
+                MinFormatScore = 0,
+                CutoffFormatScore = 10000,
+                Items = Qualities.QualityFixture.GetDefaultQualities(),
+                FormatItems = CustomFormatsTestHelpers.GetSampleFormatItems("My Format"),
+                UpgradeAllowed = false
+            });
+
+            _parseResultSingle.Series.QualityProfile.Value.FormatItems = new List<ProfileFormatItem>
+            {
+                new ProfileFormatItem
+                {
+                    Format = customFormat,
+                    Score = 50
+                }
+            };
+
+            GivenFileQuality(new QualityModel(Quality.WEBDL1080p));
+            GivenNewQuality(new QualityModel(Quality.WEBDL1080p));
+
+            GivenOldCustomFormats(new List<CustomFormat>());
+            GivenNewCustomFormats(new List<CustomFormat> { customFormat });
 
             Subject.IsSatisfiedBy(_parseResultSingle, null).Accepted.Should().BeFalse();
         }
