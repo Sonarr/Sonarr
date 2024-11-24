@@ -26,6 +26,7 @@ module.exports = (env) => {
   const config = {
     mode: isProduction ? 'production' : 'development',
     devtool: isProduction ? 'source-map' : 'eval-source-map',
+    target: 'web',
 
     stats: {
       children: false
