@@ -607,7 +607,7 @@
     "TheLogLevelDefault": "Günlük düzeyi varsayılan olarak 'Bilgi' şeklindedir ve [Genel Ayarlar](/settings/general) bölümünden değiştirilebilir",
     "NotificationsTwitterSettingsAccessToken": "Erişim Jetonu",
     "AutoRedownloadFailedHelpText": "Otomatik olarak farklı bir Yayın arayın ve indirmeye çalışın",
-    "Queue": "Sırada",
+    "Queue": "Kuyruk",
     "RemoveFromQueue": "Kuyruktan kaldır",
     "TorrentDelayTime": "Torrent Gecikmesi: {torrentDelay}",
     "Yes": "Evet",

@@ -29,5 +29,12 @@
     "ApplyTagsHelpTextHowToApplyDownloadClients": "如何將標籤套用在被選擇的下載客戶端",
     "AddRootFolderError": "無法加進根目錄",
     "ApplyTagsHelpTextAdd": "加入：將標籤加入已存在的標籤清單",
-    "ApplyTagsHelpTextHowToApplyImportLists": "如何套用標籤在所選擇的輸入清單"
+    "ApplyTagsHelpTextHowToApplyImportLists": "如何套用標籤在所選擇的輸入清單",
+    "Version": "版本",
+    "UpdateAppDirectlyLoadError": "無法直接更新 {appName}，",
+    "Uptime": "上線時間",
+    "AddCustomFilter": "新增自定義過濾器",
+    "UnselectAll": "取消全選",
+    "Any": "任何",
+    "UpdateAvailableHealthCheckMessage": "可用的新版本: {version}"
 }

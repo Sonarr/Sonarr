@@ -1016,7 +1016,7 @@
     "ImportListStatusAllUnavailableHealthCheckMessage": "Ninguna lista está disponible debido a fallos",
     "ImportLists": "Listas de Importación",
     "ImportListsAniListSettingsImportHiatusHelpText": "Medios: Series en hiatus",
-    "ImportListsAniListSettingsImportCompleted": "Importación Completados",
+    "ImportListsAniListSettingsImportCompleted": "Importar Completados",
     "ImportListsAniListSettingsImportCancelledHelpText": "Medios: Series que están canceladas",
     "ImportListsCustomListSettingsName": "Lista personalizada",
     "ImportListsCustomListSettingsUrl": "URL de la lista",
@@ -2130,5 +2130,10 @@
     "FavoriteFolders": "Carpetas favoritas",
     "ManageFormats": "Gestionar formatos",
     "FavoriteFolderAdd": "Añadir carpeta favorita",
-    "FavoriteFolderRemove": "Eliminar carpeta favorita"
+    "FavoriteFolderRemove": "Eliminar carpeta favorita",
+    "NotificationsSettingsWebhookHeaders": "Cabeceras",
+    "Completed": "Completado",
+    "CutoffNotMet": "Límite no alcanzado",
+    "Menu": "Menú",
+    "Premiere": "Estreno"
 }

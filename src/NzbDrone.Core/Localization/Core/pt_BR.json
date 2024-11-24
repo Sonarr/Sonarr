@@ -55,7 +55,7 @@
     "Added": "Adicionado",
     "ApiKeyValidationHealthCheckMessage": "Atualize sua chave de API para ter pelo menos {length} caracteres. Você pode fazer isso através das configurações ou do arquivo de configuração",
     "RemoveCompletedDownloads": "Remover downloads concluídos",
-    "AppDataLocationHealthCheckMessage": "A atualização não será possível para evitar a exclusão de AppData",
+    "AppDataLocationHealthCheckMessage": "A atualização não será possível para evitar a exclusão de AppData na Atualização",
     "DownloadClientCheckUnableToCommunicateWithHealthCheckMessage": "Não é possível se comunicar com {downloadClientName}. {errorMessage}",
     "DownloadClientRootFolderHealthCheckMessage": "O cliente de download {downloadClientName} coloca os downloads na pasta raiz {rootFolderPath}. Você não deve baixar para uma pasta raiz.",
     "DownloadClientSortingHealthCheckMessage": "O cliente de download {downloadClientName} tem classificação {sortingMode} habilitada para a categoria {appName}. Você deve desativar a classificação em seu cliente de download para evitar problemas de importação.",
@@ -419,7 +419,7 @@
     "AddReleaseProfile": "Adicionar perfil de lançamento",
     "AddRemotePathMapping": "Adicionar mapeamento de caminho remoto",
     "AddRemotePathMappingError": "Não foi possível adicionar um novo mapeamento de caminho remoto. Tente novamente.",
-    "AfterManualRefresh": "Após a atualização manual",
+    "AfterManualRefresh": "Após a Atualização Manual",
     "Always": "Sempre",
     "AnalyseVideoFiles": "Analisar arquivos de vídeo",
     "Analytics": "Análises",
@@ -2131,5 +2131,9 @@
     "FavoriteFolderAdd": "Adicionar Pasta Favorita",
     "FavoriteFolderRemove": "Remover Pasta Favorita",
     "FavoriteFolders": "Pastas Favoritas",
-    "Fallback": "Reserva"
+    "Fallback": "Reserva",
+    "CutoffNotMet": "Corte Não Alcançado",
+    "Premiere": "Estreia",
+    "Completed": "Completado",
+    "Menu": "Menu"
 }

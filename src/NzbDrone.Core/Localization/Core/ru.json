@@ -2088,5 +2088,6 @@
     "SeasonsMonitoredAll": "Все",
     "LogSizeLimit": "Ограничение размера журнала",
     "LogSizeLimitHelpText": "Максимальный размер файла журнала в МБ перед архивированием. По умолчанию - 1 МБ.",
-    "IndexerHDBitsSettingsMediums": "Mediums"
+    "IndexerHDBitsSettingsMediums": "Mediums",
+    "CountCustomFormatsSelected": "{count} пользовательских форматов выбрано"
 }
