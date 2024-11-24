@@ -2085,6 +2085,8 @@
   "UpdateStartupTranslocationHealthCheckMessage": "Cannot install update because startup folder '{startupFolder}' is in an App Translocation folder.",
   "UpdateUiNotWritableHealthCheckMessage": "Cannot install update because UI folder '{uiFolder}' is not writable by the  user '{userName}'.",
   "UpdaterLogFiles": "Updater Log Files",
+  "UpdatePath": "Update Path",
+  "UpdateSeriesPath": "Update Series Path",
   "Updates": "Updates",
   "UpgradeUntil": "Upgrade Until",
   "UpgradeUntilCustomFormatScore": "Upgrade Until Custom Format Score",

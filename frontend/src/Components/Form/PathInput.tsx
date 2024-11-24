@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import React, {
   KeyboardEvent,
   SyntheticEvent,
@@ -29,6 +30,7 @@ interface PathInputProps {
   value?: string;
   placeholder?: string;
   includeFiles: boolean;
+  hasButton?: boolean;
   hasFileBrowser?: boolean;
   onChange: (change: InputChanged<string>) => void;
 }
@@ -96,6 +98,7 @@ export function PathInputInternal(props: PathInputInternalProps) {
     value: inputValue = '',
     paths,
     includeFiles,
+    hasButton,
     hasFileBrowser = true,
     onChange,
     onFetchPaths,
@@ -229,9 +232,12 @@ export function PathInputInternal(props: PathInputInternalProps) {
       />
 
       {hasFileBrowser ? (
-        <div>
+        <>
           <FormInputButton
-            className={styles.fileBrowserButton}
+            className={classNames(
+              styles.fileBrowserButton,
+              hasButton && styles.fileBrowserMiddleButton
+            )}
             onPress={handleFileBrowserOpenPress}
           >
             <Icon name={icons.FOLDER_OPEN} />
@@ -245,7 +251,7 @@ export function PathInputInternal(props: PathInputInternalProps) {
             onChange={onChange}
             onModalClose={handleFileBrowserModalClose}
           />
-        </div>
+        </>
       ) : null}
     </div>
   );

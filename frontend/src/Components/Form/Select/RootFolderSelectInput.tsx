@@ -3,7 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
 import FileBrowserModal from 'Components/FileBrowser/FileBrowserModal';
 import usePrevious from 'Helpers/Hooks/usePrevious';
-import { addRootFolder } from 'Store/Actions/rootFolderActions';
+import {
+  addRootFolder,
+  fetchRootFolders,
+} from 'Store/Actions/rootFolderActions';
 import createRootFoldersSelector from 'Store/Selectors/createRootFoldersSelector';
 import { EnhancedSelectInputChanged, InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
@@ -188,6 +191,10 @@ function RootFolderSelectInput({
     // Only run on mount
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    dispatch(fetchRootFolders());
+  }, [dispatch]);
 
   return (
     <>

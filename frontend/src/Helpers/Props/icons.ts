@@ -65,6 +65,7 @@ import {
   faFilter as fasFilter,
   faFlag as fasFlag,
   faFolderOpen as fasFolderOpen,
+  faFolderTree as farFolderTree,
   faForward as fasForward,
   faHeart as fasHeart,
   faHistory as fasHistory,
@@ -201,6 +202,7 @@ export const REMOVE = fasTimes;
 export const RESTART = fasRedoAlt;
 export const RESTORE = fasHistory;
 export const REORDER = fasBars;
+export const ROOT_FOLDER = farFolderTree;
 export const RSS = fasRss;
 export const SAVE = fasSave;
 export const SCENE_MAPPING = fasSitemap;

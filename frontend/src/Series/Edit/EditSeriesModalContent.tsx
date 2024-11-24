@@ -4,6 +4,7 @@ import SeriesMonitorNewItemsOptionsPopoverContent from 'AddSeries/SeriesMonitorN
 import AppState from 'App/State/AppState';
 import Form from 'Components/Form/Form';
 import FormGroup from 'Components/Form/FormGroup';
+import FormInputButton from 'Components/Form/FormInputButton';
 import FormInputGroup from 'Components/Form/FormInputGroup';
 import FormLabel from 'Components/Form/FormLabel';
 import Icon from 'Components/Icon';
@@ -21,6 +22,8 @@ import { saveSeries, setSeriesValue } from 'Store/Actions/seriesActions';
 import selectSettings from 'Store/Selectors/selectSettings';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
+import RootFolderModal from './RootFolder/RootFolderModal';
+import { RootFolderUpdated } from './RootFolder/RootFolderModalContent';
 import styles from './EditSeriesModalContent.css';
 
 export interface EditSeriesModalContentProps {
@@ -43,10 +46,16 @@ function EditSeriesModalContent({
     seriesType,
     path,
     tags,
+    rootFolderPath: initialRootFolderPath,
   } = useSeries(seriesId)!;
+
   const { isSaving, saveError, pendingChanges } = useSelector(
     (state: AppState) => state.series
   );
+
+  const [isRootFolderModalOpen, setIsRootFolderModalOpen] = useState(false);
+
+  const [rootFolderPath, setRootFolderPath] = useState(initialRootFolderPath);
 
   const isPathChanging = pendingChanges.path && path !== pendingChanges.path;
 
@@ -84,6 +93,26 @@ function EditSeriesModalContent({
       dispatch(setSeriesValue({ name, value }));
     },
     [dispatch]
+  );
+
+  const handleRootFolderPress = useCallback(() => {
+    setIsRootFolderModalOpen(true);
+  }, []);
+
+  const handleRootFolderModalClose = useCallback(() => {
+    setIsRootFolderModalOpen(false);
+  }, []);
+
+  const handleRootFolderChange = useCallback(
+    ({
+      path: newPath,
+      rootFolderPath: newRootFolderPath,
+    }: RootFolderUpdated) => {
+      setIsRootFolderModalOpen(false);
+      setRootFolderPath(newRootFolderPath);
+      handleInputChange({ name: 'path', value: newPath });
+    },
+    [handleInputChange]
   );
 
   const handleCancelPress = useCallback(() => {
@@ -196,6 +225,16 @@ function EditSeriesModalContent({
               type={inputTypes.PATH}
               name="path"
               {...settings.path}
+              buttons={[
+                <FormInputButton
+                  key="fileBrowser"
+                  kind={kinds.DEFAULT}
+                  title="Root Folder"
+                  onPress={handleRootFolderPress}
+                >
+                  <Icon name={icons.ROOT_FOLDER} />
+                </FormInputButton>,
+              ]}
               onChange={handleInputChange}
             />
           </FormGroup>
@@ -232,6 +271,14 @@ function EditSeriesModalContent({
           {translate('Save')}
         </SpinnerErrorButton>
       </ModalFooter>
+
+      <RootFolderModal
+        isOpen={isRootFolderModalOpen}
+        seriesId={seriesId}
+        rootFolderPath={rootFolderPath}
+        onSavePress={handleRootFolderChange}
+        onModalClose={handleRootFolderModalClose}
+      />
 
       <MoveSeriesModal
         originalPath={path}
