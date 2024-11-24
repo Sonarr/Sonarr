@@ -24,7 +24,7 @@ import { align, icons, kinds, sizes, sortDirections, tooltipPositions } from 'He
 import InteractiveImportModal from 'InteractiveImport/InteractiveImportModal';
 import OrganizePreviewModalConnector from 'Organize/OrganizePreviewModalConnector';
 import DeleteSeriesModal from 'Series/Delete/DeleteSeriesModal';
-import EditSeriesModalConnector from 'Series/Edit/EditSeriesModalConnector';
+import EditSeriesModal from 'Series/Edit/EditSeriesModal';
 import SeriesHistoryModal from 'Series/History/SeriesHistoryModal';
 import MonitoringOptionsModal from 'Series/MonitoringOptions/MonitoringOptionsModal';
 import SeriesPoster from 'Series/SeriesPoster';
@@ -709,7 +709,7 @@ class SeriesDetails extends Component {
             onModalClose={this.onSeriesHistoryModalClose}
           />
 
-          <EditSeriesModalConnector
+          <EditSeriesModal
             isOpen={isEditSeriesModalOpen}
             seriesId={id}
             onModalClose={this.onEditSeriesModalClose}
