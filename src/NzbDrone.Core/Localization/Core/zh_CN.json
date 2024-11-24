@@ -1954,5 +1954,6 @@
     "Install": "安装",
     "InstallMajorVersionUpdate": "安装更新",
     "InstallMajorVersionUpdateMessage": "此更新将安装新的主要版本，这可能与您的系统不兼容。您确定要安装此更新吗？",
-    "Fallback": "备选"
+    "Fallback": "备选",
+    "FailedToFetchSettings": "设置同步失败"
 }
