@@ -1,19 +1,15 @@
-interface AjaxResponse {
-  responseJSON:
-    | {
-        message: string | undefined;
-      }
-    | undefined;
-}
+import { Error } from 'App/State/AppSectionState';
 
-function getErrorMessage(xhr: AjaxResponse, fallbackErrorMessage?: string) {
-  if (!xhr || !xhr.responseJSON || !xhr.responseJSON.message) {
+function getErrorMessage(xhr: Error, fallbackErrorMessage?: string) {
+  if (!xhr || !xhr.responseJSON) {
     return fallbackErrorMessage;
   }
 
-  const message = xhr.responseJSON.message;
+  if ('message' in xhr.responseJSON && xhr.responseJSON.message) {
+    return xhr.responseJSON.message;
+  }
 
-  return message || fallbackErrorMessage;
+  return fallbackErrorMessage;
 }
 
 export default getErrorMessage;

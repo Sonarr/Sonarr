@@ -9,7 +9,7 @@ import SpinnerIconButton from 'Components/Link/SpinnerIconButton';
 import TagListConnector from 'Components/TagListConnector';
 import { icons } from 'Helpers/Props';
 import DeleteSeriesModal from 'Series/Delete/DeleteSeriesModal';
-import EditSeriesModalConnector from 'Series/Edit/EditSeriesModalConnector';
+import EditSeriesModal from 'Series/Edit/EditSeriesModal';
 import SeriesIndexProgressBar from 'Series/Index/ProgressBar/SeriesIndexProgressBar';
 import SeriesIndexPosterSelect from 'Series/Index/Select/SeriesIndexPosterSelect';
 import { Statistics } from 'Series/Series';
@@ -268,7 +268,7 @@ function SeriesIndexPoster(props: SeriesIndexPosterProps) {
         showTags={showTags}
       />
 
-      <EditSeriesModalConnector
+      <EditSeriesModal
         isOpen={isEditSeriesModalOpen}
         seriesId={seriesId}
         onModalClose={onEditSeriesModalClose}

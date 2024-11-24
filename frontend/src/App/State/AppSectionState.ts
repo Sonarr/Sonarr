@@ -1,11 +1,16 @@
 import Column from 'Components/Table/Column';
 import { SortDirection } from 'Helpers/Props/sortDirections';
+import { ValidationFailure } from 'typings/pending';
 import { FilterBuilderProp, PropertyFilter } from './AppState';
 
 export interface Error {
-  responseJSON: {
-    message: string;
-  };
+  status?: number;
+  responseJSON:
+    | {
+        message: string | undefined;
+      }
+    | ValidationFailure[]
+    | undefined;
 }
 
 export interface AppSectionDeleteState {

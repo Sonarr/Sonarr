@@ -59,6 +59,8 @@ interface SeriesAppState
   deleteOptions: {
     addImportListExclusion: boolean;
   };
+
+  pendingChanges: Partial<Series>;
 }
 
 export default SeriesAppState;
