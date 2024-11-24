@@ -145,6 +145,7 @@ interface FormInputGroupProps<T> {
   autoFocus?: boolean;
   includeNoChange?: boolean;
   includeNoChangeDisabled?: boolean;
+  valueOptions?: object;
   selectedValueOptions?: object;
   indexerFlags?: number;
   pending?: boolean;

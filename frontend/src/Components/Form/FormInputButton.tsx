@@ -14,13 +14,14 @@ function FormInputButton({
   className = styles.button,
   canSpin = false,
   isLastButton = true,
+  kind = kinds.PRIMARY,
   ...otherProps
 }: FormInputButtonProps) {
   if (canSpin) {
     return (
       <SpinnerButton
         className={classNames(className, !isLastButton && styles.middleButton)}
-        kind={kinds.PRIMARY}
+        kind={kind}
         {...otherProps}
       />
     );
@@ -29,7 +30,7 @@ function FormInputButton({
   return (
     <Button
       className={classNames(className, !isLastButton && styles.middleButton)}
-      kind={kinds.PRIMARY}
+      kind={kind}
       {...otherProps}
     />
   );

@@ -219,10 +219,10 @@ namespace NzbDrone.Core.RootFolders
             {
                 var osPath = new OsPath(path);
 
-                return osPath.Directory.ToString().TrimEnd(osPath.IsUnixPath ? '/' : '\\');
+                return osPath.Directory.ToString().GetCleanPath();
             }
 
-            return possibleRootFolder.Path;
+            return possibleRootFolder.Path.GetCleanPath();
         }
     }
 }

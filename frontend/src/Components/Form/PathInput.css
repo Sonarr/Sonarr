@@ -16,3 +16,7 @@
 
   height: 35px;
 }
+
+.fileBrowserMiddleButton {
+  composes: middleButton from '~./FormInputButton.css';
+}

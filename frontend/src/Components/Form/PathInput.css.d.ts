@@ -2,6 +2,7 @@
 // Please do not change this file!
 interface CssExports {
   'fileBrowserButton': string;
+  'fileBrowserMiddleButton': string;
   'hasFileBrowser': string;
   'inputWrapper': string;
   'pathMatch': string;
