@@ -135,8 +135,9 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
         private bool CustomFormatCutoffNotMet(QualityProfile profile, List<CustomFormat> currentFormats)
         {
             var score = profile.CalculateCustomFormatScore(currentFormats);
+            var cutoff = profile.UpgradeAllowed ? profile.CutoffFormatScore : profile.MinFormatScore;
 
-            return score < profile.CutoffFormatScore;
+            return score < cutoff;
         }
 
         public bool CutoffNotMet(QualityProfile profile, QualityModel currentQuality, List<CustomFormat> currentFormats, QualityModel newQuality = null)
