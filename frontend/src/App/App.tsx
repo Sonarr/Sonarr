@@ -1,3 +1,4 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ConnectedRouter, ConnectedRouterProps } from 'connected-react-router';
 import React from 'react';
 import DocumentTitle from 'react-document-title';
@@ -12,17 +13,21 @@ interface AppProps {
   history: ConnectedRouterProps['history'];
 }
 
+const queryClient = new QueryClient();
+
 function App({ store, history }: AppProps) {
   return (
     <DocumentTitle title={window.Sonarr.instanceName}>
-      <Provider store={store}>
-        <ConnectedRouter history={history}>
-          <ApplyTheme />
-          <PageConnector>
-            <AppRoutes />
-          </PageConnector>
-        </ConnectedRouter>
-      </Provider>
+      <QueryClientProvider client={queryClient}>
+        <Provider store={store}>
+          <ConnectedRouter history={history}>
+            <ApplyTheme />
+            <PageConnector>
+              <AppRoutes />
+            </PageConnector>
+          </ConnectedRouter>
+        </Provider>
+      </QueryClientProvider>
     </DocumentTitle>
   );
 }
