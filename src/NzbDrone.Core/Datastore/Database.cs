@@ -2,7 +2,6 @@ using System;
 using System.Data;
 using System.Data.Common;
 using System.Data.SQLite;
-using System.Text.RegularExpressions;
 using Dapper;
 using NLog;
 using NzbDrone.Common.Instrumentation;
@@ -52,9 +51,8 @@ namespace NzbDrone.Core.Datastore
             {
                 using var db = _datamapperFactory();
                 var dbConnection = db as DbConnection;
-                var version = Regex.Replace(dbConnection.ServerVersion, @"\(.*?\)", "");
 
-                return new Version(version);
+                return DatabaseVersionParser.ParseServerVersion(dbConnection.ServerVersion);
             }
         }
 
