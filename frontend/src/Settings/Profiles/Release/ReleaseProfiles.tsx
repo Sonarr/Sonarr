@@ -14,7 +14,7 @@ import createClientSideCollectionSelector from 'Store/Selectors/createClientSide
 import createTagsSelector from 'Store/Selectors/createTagsSelector';
 import translate from 'Utilities/String/translate';
 import EditReleaseProfileModal from './EditReleaseProfileModal';
-import ReleaseProfileRow from './ReleaseProfileRow';
+import ReleaseProfileItem from './ReleaseProfileItem';
 import styles from './ReleaseProfiles.css';
 
 function ReleaseProfiles() {
@@ -59,7 +59,7 @@ function ReleaseProfiles() {
 
           {items.map((item) => {
             return (
-              <ReleaseProfileRow
+              <ReleaseProfileItem
                 key={item.id}
                 tagList={tagList}
                 indexerList={indexerList}

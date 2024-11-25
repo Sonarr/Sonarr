@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react';
-import MiddleTruncate from 'react-middle-truncate';
 import Label, { LabelProps } from 'Components/Label';
 import IconButton from 'Components/Link/IconButton';
 import Link from 'Components/Link/Link';
+import MiddleTruncate from 'Components/MiddleTruncate';
 import { icons } from 'Helpers/Props';
 import { TagBase } from './TagInput';
 import styles from './TagInputTag.css';
@@ -58,7 +58,7 @@ function TagInputTag<T extends TagBase>({
           tabIndex={-1}
           onPress={handleDelete}
         >
-          <MiddleTruncate text={String(tag.name)} start={10} end={10} />
+          <MiddleTruncate text={String(tag.name)} />
         </Link>
 
         {canEdit ? (
