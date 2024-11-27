@@ -26,8 +26,11 @@ namespace Sonarr.Api.V3.Queue
         public int CustomFormatScore { get; set; }
         public decimal Size { get; set; }
         public string Title { get; set; }
-        public decimal SizeLeft { get; set; }
-        public TimeSpan? TimeLeft { get; set; }
+
+        // Collides with existing properties due to case-insensitive deserialization
+        // public decimal SizeLeft { get; set; }
+        // public TimeSpan? TimeLeft { get; set; }
+
         public DateTime? EstimatedCompletionTime { get; set; }
         public DateTime? Added { get; set; }
         public QueueStatus Status { get; set; }
@@ -43,9 +46,10 @@ namespace Sonarr.Api.V3.Queue
         public string OutputPath { get; set; }
         public bool EpisodeHasFile { get; set; }
 
-        [Obsolete]
+        [Obsolete("Will be replaced by SizeLeft")]
         public decimal Sizeleft { get; set; }
-        [Obsolete]
+
+        [Obsolete("Will be replaced by TimeLeft")]
         public TimeSpan? Timeleft { get; set; }
     }
 
@@ -75,8 +79,11 @@ namespace Sonarr.Api.V3.Queue
                 CustomFormatScore = customFormatScore,
                 Size = model.Size,
                 Title = model.Title,
-                SizeLeft = model.SizeLeft,
-                TimeLeft = model.TimeLeft,
+
+                // Collides with existing properties due to case-insensitive deserialization
+                // SizeLeft = model.SizeLeft,
+                // TimeLeft = model.TimeLeft,
+
                 EstimatedCompletionTime = model.EstimatedCompletionTime,
                 Added = model.Added,
                 Status = model.Status,
@@ -92,10 +99,10 @@ namespace Sonarr.Api.V3.Queue
                 OutputPath = model.OutputPath,
                 EpisodeHasFile = model.Episode?.HasFile ?? false,
 
-                #pragma warning disable CS0612
+                #pragma warning disable CS0618
                 Sizeleft = model.SizeLeft,
                 Timeleft = model.TimeLeft,
-                #pragma warning restore CS0612
+                #pragma warning restore CS0618
             };
         }
 
