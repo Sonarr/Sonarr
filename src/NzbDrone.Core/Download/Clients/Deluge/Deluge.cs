@@ -20,6 +20,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
     public class Deluge : TorrentClientBase<DelugeSettings>
     {
         private readonly IDelugeProxy _proxy;
+        private bool _hasAttemptedReconnecting;
 
         public Deluge(IDelugeProxy proxy,
                       ITorrentFileInfoReader torrentFileInfoReader,
@@ -128,14 +129,9 @@ namespace NzbDrone.Core.Download.Clients.Deluge
 
             foreach (var torrent in torrents)
             {
-                // Silently ignore torrents with no hash
-                if (torrent.Hash.IsNullOrWhiteSpace())
-                {
-                    continue;
-                }
-
-                // Ignore torrents without a name, but track to log a single warning for all invalid torrents.
-                if (torrent.Name.IsNullOrWhiteSpace())
+                // Ignore torrents without a hash or name, but track to log a single warning
+                // for all invalid torrents as well as reconnect to the Daemon.
+                if (torrent.Hash.IsNullOrWhiteSpace() || torrent.Name.IsNullOrWhiteSpace())
                 {
                     ignoredCount++;
                     continue;
@@ -199,9 +195,20 @@ namespace NzbDrone.Core.Download.Clients.Deluge
                 items.Add(item);
             }
 
-            if (ignoredCount > 0)
+            if (ignoredCount > 0 && _hasAttemptedReconnecting)
             {
-                _logger.Warn("{0} torrent(s) were ignored because they did not have a title. Check Deluge and remove any invalid torrents");
+                if (_hasAttemptedReconnecting)
+                {
+                    _logger.Warn("{0} torrent(s) were ignored because they did not have a hash or title. Deluge may have disconnected from it's daemon. If you continue to see this error, check Deluge for invalid torrents.", ignoredCount);
+                }
+                else
+                {
+                    _proxy.ReconnectToDaemon(Settings);
+                }
+            }
+            else
+            {
+                _hasAttemptedReconnecting = false;
             }
 
             return items;
@@ -322,9 +329,9 @@ namespace NzbDrone.Core.Download.Clients.Deluge
                 return null;
             }
 
-            var enabledPlugins = _proxy.GetEnabledPlugins(Settings);
+            var methods = _proxy.GetMethods(Settings);
 
-            if (!enabledPlugins.Contains("Label"))
+            if (!methods.Any(m => m.StartsWith("label.")))
             {
                 return new NzbDroneValidationFailure("TvCategory", _localizationService.GetLocalizedString("DownloadClientDelugeValidationLabelPluginInactive"))
                 {
