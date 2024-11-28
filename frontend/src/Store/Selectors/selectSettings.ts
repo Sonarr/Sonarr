@@ -93,7 +93,7 @@ function selectSettings<T extends ModelBaseSetting>(
 
       // Return a flattened value
       if (key === 'implementationName') {
-        // acc.implementationName = item[key];
+        acc.implementationName = item[key];
 
         return acc;
       }
