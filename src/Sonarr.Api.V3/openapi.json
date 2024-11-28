@@ -6970,6 +6970,29 @@
         }
       }
     },
+    "/api/v3/series/{id}/folder": {
+      "get": {
+        "tags": [
+          "SeriesFolder"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/v3/series/import": {
       "post": {
         "tags": [
@@ -10848,15 +10871,6 @@
             "type": "string",
             "nullable": true
           },
-          "sizeleft": {
-            "type": "number",
-            "format": "double"
-          },
-          "timeleft": {
-            "type": "string",
-            "format": "date-span",
-            "nullable": true
-          },
           "estimatedCompletionTime": {
             "type": "string",
             "format": "date-time",
@@ -10911,6 +10925,17 @@
           },
           "episodeHasFile": {
             "type": "boolean"
+          },
+          "sizeleft": {
+            "type": "number",
+            "format": "double",
+            "deprecated": true
+          },
+          "timeleft": {
+            "type": "string",
+            "format": "date-span",
+            "nullable": true,
+            "deprecated": true
           }
         },
         "additionalProperties": false
