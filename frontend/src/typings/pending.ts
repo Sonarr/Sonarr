@@ -58,5 +58,6 @@ type Mapped<T> = {
 };
 
 export type PendingSection<T> = Mapped<T> & {
+  implementationName?: string;
   fields?: PendingField<T>[];
 };
