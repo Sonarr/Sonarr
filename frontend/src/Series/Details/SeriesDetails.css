@@ -59,10 +59,10 @@
 }
 
 .title {
+  text-wrap: balance;
   font-weight: 300;
   font-size: 50px;
   line-height: 50px;
-  text-wrap: balance;
 }
 
 .toggleMonitoredContainer {
@@ -144,8 +144,8 @@
   flex: 1 0 0;
   margin-top: 8px;
   min-height: 0;
-  font-size: $intermediateFontSize;
   text-wrap: balance;
+  font-size: $intermediateFontSize;
 }
 
 .contentContainer {
