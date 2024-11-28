@@ -1,4 +1,5 @@
 using System;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.MediaFiles;
 
 namespace NzbDrone.Core.Notifications.Webhook
@@ -20,6 +21,7 @@ namespace NzbDrone.Core.Notifications.Webhook
             SceneName = episodeFile.SceneName;
             Size = episodeFile.Size;
             DateAdded = episodeFile.DateAdded;
+            Languages = episodeFile.Languages.SelectList(language => language.Name).ConcatToString("/");
 
             if (episodeFile.MediaInfo != null)
             {
@@ -36,6 +38,7 @@ namespace NzbDrone.Core.Notifications.Webhook
         public string SceneName { get; set; }
         public long Size { get; set; }
         public DateTime DateAdded { get; set; }
+        public string Languages { get; set; }
         public WebhookEpisodeFileMediaInfo MediaInfo { get; set; }
         public string SourcePath { get; set; }
         public string RecycleBinPath { get; set; }
