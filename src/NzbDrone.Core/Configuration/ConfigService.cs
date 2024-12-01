@@ -390,6 +390,12 @@ namespace NzbDrone.Core.Configuration
 
         public string ApplicationUrl => GetValue("ApplicationUrl", string.Empty);
 
+        public bool TrustCGNAT
+        {
+            get { return GetValueBoolean("TrustCGNAT", false); }
+            set { SetValue("TrustCGNAT", value); }
+        }
+
         private string GetValue(string key)
         {
             return GetValue(key, string.Empty);

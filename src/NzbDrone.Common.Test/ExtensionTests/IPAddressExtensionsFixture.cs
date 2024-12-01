@@ -8,6 +8,18 @@ namespace NzbDrone.Common.Test.ExtensionTests
     [TestFixture]
     public class IPAddressExtensionsFixture
     {
+        [OneTimeSetUp]
+        public void Setup()
+        {
+            Environment.SetEnvironmentVariable("SONARR_TRUST_CGNAT", "true");
+        }
+
+        [OneTimeTearDown]
+        public void Cleanup()
+        {
+            Environment.SetEnvironmentVariable("SONARR_TRUST_CGNAT", null);
+        }
+
         [TestCase("::1")]
         [TestCase("10.64.5.1")]
         [TestCase("127.0.0.1")]

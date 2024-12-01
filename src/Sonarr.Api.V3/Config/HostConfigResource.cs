@@ -45,6 +45,7 @@ namespace Sonarr.Api.V3.Config
         public string BackupFolder { get; set; }
         public int BackupInterval { get; set; }
         public int BackupRetention { get; set; }
+        public bool TrustCGNAT { get; set; }
     }
 
     public static class HostConfigResourceMapper
@@ -89,7 +90,8 @@ namespace Sonarr.Api.V3.Config
                 BackupFolder = configService.BackupFolder,
                 BackupInterval = configService.BackupInterval,
                 BackupRetention = configService.BackupRetention,
-                ApplicationUrl = configService.ApplicationUrl
+                ApplicationUrl = configService.ApplicationUrl,
+                TrustCGNAT = configService.TrustCGNAT
             };
         }
     }

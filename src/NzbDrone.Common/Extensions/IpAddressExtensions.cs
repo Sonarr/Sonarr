@@ -5,6 +5,15 @@ namespace NzbDrone.Common.Extensions
 {
     public static class IPAddressExtensions
     {
+        private static readonly IConfigService _configService;
+        private static readonly bool TrustCGNAT;
+
+        static IPAddressExtensions()
+        {
+            _configService = ServiceFactory.Instance.GetInstance<IConfigService>();
+            TrustCGNAT = _configService?.TrustCGNAT ?? Environment.GetEnvironmentVariable("SONARR_TRUST_CGNAT")?.Equals("true", StringComparison.OrdinalIgnoreCase) ?? false;
+        }
+
         public static bool IsLocalAddress(this IPAddress ipAddress)
         {
             // Map back to IPv4 if mapped to IPv6, for example "::ffff:1.2.3.4" to "1.2.3.4".
@@ -50,10 +59,10 @@ namespace NzbDrone.Common.Extensions
             // Class C private range: 192.168.0.0 – 192.168.255.255 (192.168.0.0/16)
             bool IsClassC() => ipv4Bytes[0] == 192 && ipv4Bytes[1] == 168;
 
-            // Tailscale CGNAT range: 100.64.0.0 - 100.127.255.255 (100.64.0.0/10)
-            bool IsTailscaleCGNAT() => ipv4Bytes[0] == 100 && ipv4Bytes[1] >= 64 && ipv4Bytes[1] <= 127;
+            // CGNAT range: 100.64.0.0 - 100.127.255.255 (100.64.0.0/10)
+            bool IsCGNAT() => ipv4Bytes[0] == 100 && ipv4Bytes[1] >= 64 && ipv4Bytes[1] <= 127;
 
-            return IsLinkLocal() || IsClassA() || IsClassC() || IsClassB() || IsTailscaleCGNAT();
+            return IsLinkLocal() || IsClassA() || IsClassC() || IsClassB() || (TrustCGNAT && IsCGNAT());
         }
     }
 }
