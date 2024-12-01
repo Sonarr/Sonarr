@@ -248,7 +248,7 @@
     "LastWriteTime": "Hora da última gravação",
     "Location": "Localização",
     "LogFilesLocation": "Os arquivos de log estão localizados em: {location}",
-    "Logs": "Logs",
+    "Logs": "Registros",
     "MaintenanceRelease": "Versão de manutenção: correções de bugs e outras melhorias. Consulte o Histórico de commit do Github para saber mais",
     "Manual": "Manual",
     "Message": "Mensagem",
@@ -2135,5 +2135,8 @@
     "CutoffNotMet": "Corte Não Alcançado",
     "Premiere": "Estreia",
     "Completed": "Completado",
-    "Menu": "Menu"
+    "Menu": "Menu",
+    "NotificationsSettingsWebhookHeaders": "Cabeçalhos",
+    "UpdatePath": "Caminho da Atualização",
+    "UpdateSeriesPath": "Atualizar Caminho da Série"
 }
