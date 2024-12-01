@@ -1955,5 +1955,13 @@
     "InstallMajorVersionUpdate": "安装更新",
     "InstallMajorVersionUpdateMessage": "此更新将安装新的主要版本，这可能与您的系统不兼容。您确定要安装此更新吗？",
     "Fallback": "备选",
-    "FailedToFetchSettings": "设置同步失败"
+    "FailedToFetchSettings": "设置同步失败",
+    "Warning": "警告",
+    "OnFileUpgrade": "文件升级时",
+    "OnFileImport": "关于文件导入",
+    "ManageFormats": "管理格式",
+    "FavoriteFolderAdd": "添加收藏文件夹",
+    "FavoriteFolderRemove": "删除收藏夹",
+    "FavoriteFolders": "收藏夹",
+    "NotificationsSettingsWebhookHeaders": "标头"
 }
