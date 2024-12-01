@@ -452,14 +452,14 @@ namespace NzbDrone.Mono.Disk
                 }
                 else
                 {
-                    _logger.Debug(ex, "Hardlink '{0}' to '{1}' failed.", source, destination);
+                    _logger.Warn(ex, "Hardlink '{0}' to '{1}' failed.", source, destination);
                 }
 
                 return false;
             }
             catch (Exception ex)
             {
-                _logger.Debug(ex, "Hardlink '{0}' to '{1}' failed.", source, destination);
+                _logger.Warn(ex, "Hardlink '{0}' to '{1}' failed.", source, destination);
                 return false;
             }
         }
