@@ -94,8 +94,5 @@ namespace NzbDrone.Core.Configuration
 
         CertificateValidationType CertificateValidation { get; }
         string ApplicationUrl { get; }
-
-        // Network
-        bool TrustCGNAT { get; set; }
     }
 }
