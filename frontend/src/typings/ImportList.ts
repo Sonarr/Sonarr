@@ -1,17 +1,10 @@
-import ModelBase from 'App/ModelBase';
-import Field from './Field';
+import Provider from './Provider';
 
-interface ImportList extends ModelBase {
+interface ImportList extends Provider {
   enable: boolean;
   enableAutomaticAdd: boolean;
   qualityProfileId: number;
   rootFolderPath: string;
-  name: string;
-  fields: Field[];
-  implementationName: string;
-  implementation: string;
-  configContract: string;
-  infoLink: string;
   tags: number[];
 }
 

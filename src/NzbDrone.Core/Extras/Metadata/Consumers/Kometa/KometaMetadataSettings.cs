@@ -15,19 +15,11 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Kometa
 
         public KometaMetadataSettings()
         {
-            SeriesImages = true;
-            SeasonImages = true;
-            EpisodeImages = true;
+            Deprecated = true;
         }
 
-        [FieldDefinition(0, Label = "MetadataSettingsSeriesImages", Type = FieldType.Checkbox, Section = MetadataSectionType.Image, HelpText = "Poster.jpg")]
-        public bool SeriesImages { get; set; }
-
-        [FieldDefinition(1, Label = "MetadataSettingsSeasonImages", Type = FieldType.Checkbox, Section = MetadataSectionType.Image, HelpText = "Season##.jpg")]
-        public bool SeasonImages { get; set; }
-
-        [FieldDefinition(2, Label = "MetadataSettingsEpisodeImages", Type = FieldType.Checkbox, Section = MetadataSectionType.Image, HelpText = "S##E##.jpg")]
-        public bool EpisodeImages { get; set; }
+        [FieldDefinition(0, Label = "MetadataKometaDeprecatedSetting", Type = FieldType.Checkbox, Section = MetadataSectionType.Image, Hidden = HiddenType.Hidden)]
+        public bool Deprecated { get; set; }
 
         public bool IsValid => true;
 

@@ -1,20 +1,13 @@
-import ModelBase from 'App/ModelBase';
-import Field from './Field';
+import Provider from './Provider';
 
 export type Protocol = 'torrent' | 'usenet' | 'unknown';
 
-interface DownloadClient extends ModelBase {
+interface DownloadClient extends Provider {
   enable: boolean;
   protocol: Protocol;
   priority: number;
   removeCompletedDownloads: boolean;
   removeFailedDownloads: boolean;
-  name: string;
-  fields: Field[];
-  implementationName: string;
-  implementation: string;
-  configContract: string;
-  infoLink: string;
   tags: number[];
 }
 

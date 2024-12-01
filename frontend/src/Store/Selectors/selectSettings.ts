@@ -100,6 +100,7 @@ function selectSettings<T extends ModelBaseSetting>(
 
       const setting: Pending<T> = {
         value: item[key],
+        pending: false,
         errors: getFailures(errors, key),
         warnings: getFailures(warnings, key),
       };

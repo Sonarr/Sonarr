@@ -63,6 +63,16 @@ export interface AppSectionItemState<T> {
   item: T;
 }
 
+export interface AppSectionProviderState<T>
+  extends AppSectionDeleteState,
+    AppSectionSaveState {
+  isFetching: boolean;
+  isPopulated: boolean;
+  error: Error;
+  items: T[];
+  pendingChanges: Partial<T>;
+}
+
 interface AppSectionState<T> {
   isFetching: boolean;
   isPopulated: boolean;

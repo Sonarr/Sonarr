@@ -33,7 +33,7 @@ export interface Pending<T> {
   value: T;
   errors: Failure[];
   warnings: Failure[];
-  pending?: boolean;
+  pending: boolean;
   previousValue?: T;
 }
 
