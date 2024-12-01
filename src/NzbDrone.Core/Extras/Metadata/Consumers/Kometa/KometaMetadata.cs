@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Kometa
 
         public override string Name => "Kometa";
 
-        public override ProviderMessage Message => new ProviderMessage(_localizationService.GetLocalizedString("MetadataKometaDeprecated"), ProviderMessageType.Warning);
+        public override ProviderMessage Message => new (_localizationService.GetLocalizedString("MetadataKometaDeprecated"), ProviderMessageType.Warning);
 
         public override string GetFilenameAfterMove(Series series, EpisodeFile episodeFile, MetadataFile metadataFile)
         {
