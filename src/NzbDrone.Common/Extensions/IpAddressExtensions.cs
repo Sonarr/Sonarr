@@ -50,7 +50,10 @@ namespace NzbDrone.Common.Extensions
             // Class C private range: 192.168.0.0 – 192.168.255.255 (192.168.0.0/16)
             bool IsClassC() => ipv4Bytes[0] == 192 && ipv4Bytes[1] == 168;
 
-            return IsLinkLocal() || IsClassA() || IsClassC() || IsClassB();
+            // Tailscale CGNAT range: 100.64.0.0 - 100.127.255.255 (100.64.0.0/10)
+            bool IsTailscaleCGNAT() => ipv4Bytes[0] == 100 && ipv4Bytes[1] >= 64 && ipv4Bytes[1] <= 127;
+
+            return IsLinkLocal() || IsClassA() || IsClassC() || IsClassB() || IsTailscaleCGNAT();
         }
     }
 }
