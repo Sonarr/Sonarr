@@ -52,5 +52,11 @@ namespace NzbDrone.Common.Extensions
 
             return IsLinkLocal() || IsClassA() || IsClassC() || IsClassB();
         }
+
+        public static bool IsCgnatIpAddress(this IPAddress ipAddress)
+        {
+            var bytes = ipAddress.GetAddressBytes();
+            return bytes.Length == 4 && bytes[0] == 100 && bytes[1] >= 64 && bytes[1] <= 127;
+        }
     }
 }

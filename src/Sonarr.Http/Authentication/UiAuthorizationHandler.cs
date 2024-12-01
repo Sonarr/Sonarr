@@ -30,7 +30,7 @@ namespace NzbDrone.Http.Authentication
                     IPAddress.TryParse(httpContext.GetRemoteIP(), out var ipAddress))
                 {
                     if (ipAddress.IsLocalAddress() ||
-                        (_configService.TrustCgnat && IsCGNATAddress(ipAddress)))
+                        (_configService.TrustCgnatIpAddresses && ipAddress.IsCgnatIpAddress()))
                     {
                         context.Succeed(requirement);
                     }
@@ -38,22 +38,6 @@ namespace NzbDrone.Http.Authentication
             }
 
             return Task.CompletedTask;
-        }
-
-        private bool IsCGNATAddress(IPAddress ipAddress)
-        {
-            if (ipAddress.IsIPv4MappedToIPv6)
-            {
-                ipAddress = ipAddress.MapToIPv4();
-            }
-
-            if (ipAddress.AddressFamily != AddressFamily.InterNetwork)
-            {
-                return false;
-            }
-
-            var bytes = ipAddress.GetAddressBytes();
-            return bytes[0] == 100 && bytes[1] >= 64 && bytes[1] <= 127;
         }
 
         public void Handle(ConfigSavedEvent message)
