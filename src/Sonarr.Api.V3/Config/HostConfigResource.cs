@@ -90,8 +90,7 @@ namespace Sonarr.Api.V3.Config
                 BackupFolder = configService.BackupFolder,
                 BackupInterval = configService.BackupInterval,
                 BackupRetention = configService.BackupRetention,
-                ApplicationUrl = configService.ApplicationUrl,
-                TrustCGNAT = configService.TrustCGNAT
+                ApplicationUrl = configService.ApplicationUrl
             };
         }
     }

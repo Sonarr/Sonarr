@@ -27,14 +27,33 @@ namespace NzbDrone.Http.Authentication
             if (_authenticationRequired == AuthenticationRequiredType.DisabledForLocalAddresses)
             {
                 if (context.Resource is HttpContext httpContext &&
-                    IPAddress.TryParse(httpContext.GetRemoteIP(), out var ipAddress) &&
-                    ipAddress.IsLocalAddress())
+                    IPAddress.TryParse(httpContext.GetRemoteIP(), out var ipAddress))
                 {
-                    context.Succeed(requirement);
+                    if (ipAddress.IsLocalAddress() ||
+                        (_configService.TrustCgnat && IsCGNATAddress(ipAddress)))
+                    {
+                        context.Succeed(requirement);
+                    }
                 }
             }
 
             return Task.CompletedTask;
+        }
+
+        private bool IsCGNATAddress(IPAddress ipAddress)
+        {
+            if (ipAddress.IsIPv4MappedToIPv6)
+            {
+                ipAddress = ipAddress.MapToIPv4();
+            }
+
+            if (ipAddress.AddressFamily != AddressFamily.InterNetwork)
+            {
+                return false;
+            }
+
+            var bytes = ipAddress.GetAddressBytes();
+            return bytes[0] == 100 && bytes[1] >= 64 && bytes[1] <= 127;
         }
 
         public void Handle(ConfigSavedEvent message)
