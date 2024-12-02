@@ -138,6 +138,8 @@ ProviderFieldFormGroup.propTypes = {
   type: PropTypes.string.isRequired,
   advanced: PropTypes.bool.isRequired,
   hidden: PropTypes.string,
+  isDisabled: PropTypes.bool,
+  provider: PropTypes.string,
   pending: PropTypes.bool.isRequired,
   errors: PropTypes.arrayOf(PropTypes.object).isRequired,
   warnings: PropTypes.arrayOf(PropTypes.object).isRequired,

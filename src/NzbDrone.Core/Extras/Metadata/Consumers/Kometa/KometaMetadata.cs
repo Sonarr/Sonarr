@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -6,21 +5,21 @@ using System.Text.RegularExpressions;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Extras.Metadata.Files;
-using NzbDrone.Core.MediaCover;
+using NzbDrone.Core.Localization;
 using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Extras.Metadata.Consumers.Kometa
 {
     public class KometaMetadata : MetadataBase<KometaMetadataSettings>
     {
+        private readonly ILocalizationService _localizationService;
         private readonly Logger _logger;
-        private readonly IMapCoversToLocal _mediaCoverService;
 
-        public KometaMetadata(IMapCoversToLocal mediaCoverService,
-                            Logger logger)
+        public KometaMetadata(ILocalizationService localizationService, Logger logger)
         {
-            _mediaCoverService = mediaCoverService;
+            _localizationService = localizationService;
             _logger = logger;
         }
 
@@ -29,6 +28,8 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Kometa
         private static readonly Regex EpisodeImageRegex = new Regex(@"^S(?<season>\d{2,})E(?<episode>\d{2,})\.(?:png|jpg)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public override string Name => "Kometa";
+
+        public override ProviderMessage Message => new (_localizationService.GetLocalizedString("MetadataKometaDeprecated"), ProviderMessageType.Warning);
 
         public override string GetFilenameAfterMove(Series series, EpisodeFile episodeFile, MetadataFile metadataFile)
         {
@@ -104,92 +105,17 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Kometa
 
         public override List<ImageFileResult> SeriesImages(Series series)
         {
-            if (!Settings.SeriesImages)
-            {
-                return new List<ImageFileResult>();
-            }
-
-            return ProcessSeriesImages(series).ToList();
+            return new List<ImageFileResult>();
         }
 
         public override List<ImageFileResult> SeasonImages(Series series, Season season)
         {
-            if (!Settings.SeasonImages)
-            {
-                return new List<ImageFileResult>();
-            }
-
-            return ProcessSeasonImages(series, season).ToList();
+            return new List<ImageFileResult>();
         }
 
         public override List<ImageFileResult> EpisodeImages(Series series, EpisodeFile episodeFile)
         {
-            if (!Settings.EpisodeImages)
-            {
-                return new List<ImageFileResult>();
-            }
-
-            try
-            {
-                var firstEpisode = episodeFile.Episodes.Value.FirstOrDefault();
-
-                if (firstEpisode == null)
-                {
-                    _logger.Debug("Episode file has no associated episodes, potentially a duplicate file");
-                    return new List<ImageFileResult>();
-                }
-
-                var screenshot = firstEpisode.Images.SingleOrDefault(i => i.CoverType == MediaCoverTypes.Screenshot);
-
-                if (screenshot == null)
-                {
-                    _logger.Debug("Episode screenshot not available");
-                    return new List<ImageFileResult>();
-                }
-
-                return new List<ImageFileResult>
-                   {
-                       new ImageFileResult(GetEpisodeImageFilename(series, episodeFile), screenshot.RemoteUrl)
-                   };
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex, "Unable to process episode image for file: {0}", Path.Combine(series.Path, episodeFile.RelativePath));
-
-                return new List<ImageFileResult>();
-            }
-        }
-
-        private IEnumerable<ImageFileResult> ProcessSeriesImages(Series series)
-        {
-            foreach (var image in series.Images)
-            {
-                if (image.CoverType == MediaCoverTypes.Poster)
-                {
-                    var source = _mediaCoverService.GetCoverPath(series.Id, image.CoverType);
-                    var destination = image.CoverType + Path.GetExtension(source);
-
-                    yield return new ImageFileResult(destination, source);
-                }
-            }
-        }
-
-        private IEnumerable<ImageFileResult> ProcessSeasonImages(Series series, Season season)
-        {
-            foreach (var image in season.Images)
-            {
-                if (image.CoverType == MediaCoverTypes.Poster)
-                {
-                    var filename = string.Format("Season{0:00}.jpg", season.SeasonNumber);
-
-                    if (season.SeasonNumber == 0)
-                    {
-                        filename = "Season00.jpg";
-                    }
-
-                    yield return new ImageFileResult(filename, image.RemoteUrl);
-                }
-            }
+            return new List<ImageFileResult>();
         }
 
         private string GetEpisodeImageFilename(Series series, EpisodeFile episodeFile)

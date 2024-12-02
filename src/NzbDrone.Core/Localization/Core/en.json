@@ -1163,6 +1163,8 @@
   "Message": "Message",
   "Metadata": "Metadata",
   "MetadataLoadError": "Unable to load Metadata",
+  "MetadataKometaDeprecated": "Kometa files will no longer be created, support will be removed completely in v5",
+  "MetadataKometaDeprecatedSetting": "Deprecated",
   "MetadataPlexSettingsEpisodeMappings": "Episode Mappings",
   "MetadataPlexSettingsEpisodeMappingsHelpText": "Include episode mappings for all files in .plexmatch file",
   "MetadataPlexSettingsSeriesPlexMatchFile": "Series Plex Match File",
