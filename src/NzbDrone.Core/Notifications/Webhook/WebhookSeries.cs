@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using NzbDrone.Core.Languages;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Notifications.Webhook
@@ -19,6 +20,7 @@ namespace NzbDrone.Core.Notifications.Webhook
         public List<string> Genres { get; set; }
         public List<WebhookImage> Images { get; set; }
         public List<string> Tags { get; set; }
+        public Language OriginalLanguage { get; set; }
 
         public WebhookSeries()
         {
@@ -39,6 +41,7 @@ namespace NzbDrone.Core.Notifications.Webhook
             Genres = series.Genres;
             Images = series.Images.Select(i => new WebhookImage(i)).ToList();
             Tags = tags;
+            OriginalLanguage = series.OriginalLanguage;
         }
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using NzbDrone.Core.Languages;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
 
@@ -21,6 +22,7 @@ namespace NzbDrone.Core.Notifications.Webhook
             Size = remoteEpisode.Release.Size;
             CustomFormats = remoteEpisode.CustomFormats?.Select(x => x.Name).ToList();
             CustomFormatScore = remoteEpisode.CustomFormatScore;
+            Languages = remoteEpisode.Languages;
         }
 
         public string Quality { get; set; }
@@ -31,5 +33,6 @@ namespace NzbDrone.Core.Notifications.Webhook
         public long Size { get; set; }
         public int CustomFormatScore { get; set; }
         public List<string> CustomFormats { get; set; }
+        public List<Language> Languages { get; set; }
     }
 }
