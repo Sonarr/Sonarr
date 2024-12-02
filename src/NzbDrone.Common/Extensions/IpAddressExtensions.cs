@@ -39,18 +39,18 @@ namespace NzbDrone.Common.Extensions
         private static bool IsLocalIPv4(byte[] ipv4Bytes)
         {
             // Link local (no IP assigned by DHCP): 169.254.0.0 to 169.254.255.255 (169.254.0.0/16)
-            bool IsLinkLocal() => ipv4Bytes[0] == 169 && ipv4Bytes[1] == 254;
+            var isLinkLocal = ipv4Bytes[0] == 169 && ipv4Bytes[1] == 254;
 
             // Class A private range: 10.0.0.0 – 10.255.255.255 (10.0.0.0/8)
-            bool IsClassA() => ipv4Bytes[0] == 10;
+            var isClassA = ipv4Bytes[0] == 10;
 
             // Class B private range: 172.16.0.0 – 172.31.255.255 (172.16.0.0/12)
-            bool IsClassB() => ipv4Bytes[0] == 172 && ipv4Bytes[1] >= 16 && ipv4Bytes[1] <= 31;
+            var isClassB = ipv4Bytes[0] == 172 && ipv4Bytes[1] >= 16 && ipv4Bytes[1] <= 31;
 
             // Class C private range: 192.168.0.0 – 192.168.255.255 (192.168.0.0/16)
-            bool IsClassC() => ipv4Bytes[0] == 192 && ipv4Bytes[1] == 168;
+            var isClassC = ipv4Bytes[0] == 192 && ipv4Bytes[1] == 168;
 
-            return IsLinkLocal() || IsClassA() || IsClassC() || IsClassB();
+            return isLinkLocal || isClassA || isClassC || isClassB;
         }
 
         public static bool IsCgnatIpAddress(this IPAddress ipAddress)
