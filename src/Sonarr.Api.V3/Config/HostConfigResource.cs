@@ -45,6 +45,7 @@ namespace Sonarr.Api.V3.Config
         public string BackupFolder { get; set; }
         public int BackupInterval { get; set; }
         public int BackupRetention { get; set; }
+        public bool TrustCgnatIpAddresses { get; set; }
     }
 
     public static class HostConfigResourceMapper

@@ -27,10 +27,13 @@ namespace NzbDrone.Http.Authentication
             if (_authenticationRequired == AuthenticationRequiredType.DisabledForLocalAddresses)
             {
                 if (context.Resource is HttpContext httpContext &&
-                    IPAddress.TryParse(httpContext.GetRemoteIP(), out var ipAddress) &&
-                    ipAddress.IsLocalAddress())
+                    IPAddress.TryParse(httpContext.GetRemoteIP(), out var ipAddress))
                 {
-                    context.Succeed(requirement);
+                    if (ipAddress.IsLocalAddress() ||
+                        (_configService.TrustCgnatIpAddresses && ipAddress.IsCgnatIpAddress()))
+                    {
+                        context.Succeed(requirement);
+                    }
                 }
             }
 
