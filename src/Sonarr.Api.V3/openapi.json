@@ -7049,7 +7049,33 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SeriesResource"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SeriesResource"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SeriesResource"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -9084,6 +9110,9 @@
           "backupRetention": {
             "type": "integer",
             "format": "int32"
+          },
+          "trustCgnatIpAddresses": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -9353,6 +9382,19 @@
           "advanced"
         ],
         "type": "string"
+      },
+      "ImportRejectionResource": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "$ref": "#/components/schemas/RejectionType"
+          }
+        },
+        "additionalProperties": false
       },
       "IndexerBulkResource": {
         "type": "object",
@@ -9810,7 +9852,7 @@
           "rejections": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Rejection"
+              "$ref": "#/components/schemas/ImportRejectionResource"
             },
             "nullable": true
           }
@@ -9907,7 +9949,7 @@
           "rejections": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Rejection"
+              "$ref": "#/components/schemas/ImportRejectionResource"
             },
             "nullable": true
           }
@@ -11031,19 +11073,6 @@
           "value": {
             "type": "number",
             "format": "double"
-          }
-        },
-        "additionalProperties": false
-      },
-      "Rejection": {
-        "type": "object",
-        "properties": {
-          "reason": {
-            "type": "string",
-            "nullable": true
-          },
-          "type": {
-            "$ref": "#/components/schemas/RejectionType"
           }
         },
         "additionalProperties": false
