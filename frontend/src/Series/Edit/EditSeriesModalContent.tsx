@@ -15,7 +15,13 @@ import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import Popover from 'Components/Tooltip/Popover';
-import { icons, inputTypes, kinds, tooltipPositions } from 'Helpers/Props';
+import {
+  icons,
+  inputTypes,
+  kinds,
+  sizes,
+  tooltipPositions,
+} from 'Helpers/Props';
 import MoveSeriesModal from 'Series/MoveSeries/MoveSeriesModal';
 import useSeries from 'Series/useSeries';
 import { saveSeries, setSeriesValue } from 'Store/Actions/seriesActions';
@@ -151,7 +157,7 @@ function EditSeriesModalContent({
 
       <ModalBody>
         <Form {...otherSettings}>
-          <FormGroup>
+          <FormGroup size={sizes.MEDIUM}>
             <FormLabel>{translate('Monitored')}</FormLabel>
 
             <FormInputGroup
@@ -163,7 +169,7 @@ function EditSeriesModalContent({
             />
           </FormGroup>
 
-          <FormGroup>
+          <FormGroup size={sizes.MEDIUM}>
             <FormLabel>
               {translate('MonitorNewSeasons')}
               <Popover
@@ -183,7 +189,7 @@ function EditSeriesModalContent({
             />
           </FormGroup>
 
-          <FormGroup>
+          <FormGroup size={sizes.MEDIUM}>
             <FormLabel>{translate('UseSeasonFolder')}</FormLabel>
 
             <FormInputGroup
@@ -195,7 +201,7 @@ function EditSeriesModalContent({
             />
           </FormGroup>
 
-          <FormGroup>
+          <FormGroup size={sizes.MEDIUM}>
             <FormLabel>{translate('QualityProfile')}</FormLabel>
 
             <FormInputGroup
@@ -206,7 +212,7 @@ function EditSeriesModalContent({
             />
           </FormGroup>
 
-          <FormGroup>
+          <FormGroup size={sizes.MEDIUM}>
             <FormLabel>{translate('SeriesType')}</FormLabel>
 
             <FormInputGroup
@@ -218,7 +224,7 @@ function EditSeriesModalContent({
             />
           </FormGroup>
 
-          <FormGroup>
+          <FormGroup size={sizes.MEDIUM}>
             <FormLabel>{translate('Path')}</FormLabel>
 
             <FormInputGroup
@@ -229,7 +235,7 @@ function EditSeriesModalContent({
                 <FormInputButton
                   key="fileBrowser"
                   kind={kinds.DEFAULT}
-                  title="Root Folder"
+                  title={translate('RootFolder')}
                   onPress={handleRootFolderPress}
                 >
                   <Icon name={icons.ROOT_FOLDER} />
@@ -239,7 +245,7 @@ function EditSeriesModalContent({
             />
           </FormGroup>
 
-          <FormGroup>
+          <FormGroup size={sizes.MEDIUM}>
             <FormLabel>{translate('Tags')}</FormLabel>
 
             <FormInputGroup
