@@ -24,7 +24,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
     {
         List<ManualImportItem> GetMediaFiles(int seriesId, int? seasonNumber);
         List<ManualImportItem> GetMediaFiles(string path, string downloadId, int? seriesId, bool filterExistingFiles);
-        ManualImportItem ReprocessItem(string path, string downloadId, int seriesId, int? seasonNumber, List<int> episodeIds, string releaseGroup, QualityModel quality, List<Language> languages, int indexerFlags, ReleaseType releaseType);
+        ManualImportItem ReprocessItem(string path, string downloadId, int seriesId, int? seasonNumber, List<int> episodeIds, string releaseGroup, QualityModel quality, List<Language> languages, int indexerFlags, int indexerId, ReleaseType releaseType);
     }
 
     public class ManualImportService : IExecute<ManualImportCommand>, IManualImportService
@@ -138,7 +138,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
             return ProcessFolder(path, path, downloadId, seriesId, filterExistingFiles);
         }
 
-        public ManualImportItem ReprocessItem(string path, string downloadId, int seriesId, int? seasonNumber, List<int> episodeIds, string releaseGroup, QualityModel quality, List<Language> languages, int indexerFlags, ReleaseType releaseType)
+        public ManualImportItem ReprocessItem(string path, string downloadId, int seriesId, int? seasonNumber, List<int> episodeIds, string releaseGroup, QualityModel quality, List<Language> languages, int indexerFlags, int indexerId, ReleaseType releaseType)
         {
             var rootFolder = Path.GetDirectoryName(path);
             var series = _seriesService.GetSeries(seriesId);
@@ -178,6 +178,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                 localEpisode.Languages = finalLanguges;
                 localEpisode.Quality = finalQuality;
                 localEpisode.IndexerFlags = (IndexerFlags)indexerFlags;
+                localEpisode.IndexerId = indexerId;
                 localEpisode.ReleaseType = releaseType;
 
                 localEpisode.CustomFormats = _formatCalculator.ParseCustomFormat(localEpisode);
@@ -222,6 +223,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                     Languages = languages?.Count <= 1 && (languages?.SingleOrDefault() ?? Language.Unknown) == Language.Unknown ? LanguageParser.ParseLanguages(path) : languages,
                     Quality = quality.Quality == Quality.Unknown ? QualityParser.ParseQuality(path) : quality,
                     IndexerFlags = (IndexerFlags)indexerFlags,
+                    IndexerId = indexerId,
                     ReleaseType = releaseType
                 };
 
@@ -440,6 +442,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
             item.Size = _diskProvider.GetFileSize(decision.LocalEpisode.Path);
             item.Rejections = decision.Rejections;
             item.IndexerFlags = (int)decision.LocalEpisode.IndexerFlags;
+            item.IndexerId = decision.LocalEpisode.IndexerId;
             item.ReleaseType = decision.LocalEpisode.ReleaseType;
 
             if (decision.LocalEpisode.Series != null)
@@ -468,6 +471,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
             item.Quality = episodeFile.Quality;
             item.Languages = episodeFile.Languages;
             item.IndexerFlags = (int)episodeFile.IndexerFlags;
+            item.IndexerId = episodeFile.IndexerId;
             item.ReleaseType = episodeFile.ReleaseType;
             item.Size = _diskProvider.GetFileSize(item.Path);
             item.Rejections = Enumerable.Empty<ImportRejection>();
@@ -506,6 +510,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                     Quality = file.Quality,
                     Languages = file.Languages,
                     IndexerFlags = (IndexerFlags)file.IndexerFlags,
+                    IndexerId = file.IndexerId,
                     ReleaseType = file.ReleaseType,
                     Series = series,
                     Size = 0
@@ -534,6 +539,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                 localEpisode.Quality = file.Quality;
                 localEpisode.Languages = file.Languages;
                 localEpisode.IndexerFlags = (IndexerFlags)file.IndexerFlags;
+                localEpisode.IndexerId = file.IndexerId;
                 localEpisode.ReleaseType = file.ReleaseType;
 
                 localEpisode.CustomFormats = _formatCalculator.ParseCustomFormat(localEpisode);
