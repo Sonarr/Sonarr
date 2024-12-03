@@ -2138,5 +2138,9 @@
     "Menu": "Menu",
     "NotificationsSettingsWebhookHeaders": "Cabeçalhos",
     "UpdatePath": "Caminho da Atualização",
-    "UpdateSeriesPath": "Atualizar Caminho da Série"
+    "UpdateSeriesPath": "Atualizar Caminho da Série",
+    "MetadataKometaDeprecated": "Os arquivos Kometa não serão mais criados, o suporte será completamente removido na v5",
+    "MetadataKometaDeprecatedSetting": "Deprecado",
+    "IndexerSettingsFailDownloads": "Downloads com Falhas",
+    "IndexerSettingsFailDownloadsHelpText": "Durante o processamento de downloads concluídos, {appName} tratará os erros selecionados, impedindo a importação, como downloads com falha."
 }
