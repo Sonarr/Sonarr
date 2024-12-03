@@ -159,11 +159,14 @@ class Missing extends Component {
         <PageToolbar>
           <PageToolbarSection>
             <PageToolbarButton
-              label={translate('SearchSelected')}
+              label={itemsSelected ? translate('SearchSelected') : translate('SearchAll')}
               iconName={icons.SEARCH}
-              isDisabled={!itemsSelected || isSearchingForMissingEpisodes}
-              onPress={this.onSearchSelectedPress}
+              isSpinning={isSearchingForMissingEpisodes}
+              isDisabled={isSearchingForMissingEpisodes}
+              onPress={itemsSelected ? this.onSearchSelectedPress : this.onSearchAllMissingPress}
             />
+
+            <PageToolbarSeparator />
 
             <PageToolbarButton
               label={isShowingMonitored ? translate('UnmonitorSelected') : translate('MonitorSelected')}
@@ -171,16 +174,6 @@ class Missing extends Component {
               isDisabled={!itemsSelected}
               isSpinning={isSaving}
               onPress={this.onToggleSelectedPress}
-            />
-
-            <PageToolbarSeparator />
-
-            <PageToolbarButton
-              label={translate('SearchAll')}
-              iconName={icons.SEARCH}
-              isDisabled={!items.length}
-              isSpinning={isSearchingForMissingEpisodes}
-              onPress={this.onSearchAllMissingPress}
             />
 
             <PageToolbarSeparator />
