@@ -367,5 +367,10 @@
     "BypassDelayIfAboveCustomFormatScore": "Пропустити, якщо перевищено оцінку користувацького формату",
     "Clone": "Клонування",
     "BlocklistFilterHasNoItems": "Вибраний фільтр чорного списку не містить елементів",
-    "BypassDelayIfAboveCustomFormatScoreHelpText": "Увімкнути обхід, якщо реліз має оцінку вищу за встановлений мінімальний бал користувацького формату"
+    "BypassDelayIfAboveCustomFormatScoreHelpText": "Увімкнути обхід, якщо реліз має оцінку вищу за встановлений мінімальний бал користувацького формату",
+    "AutoTaggingRequiredHelpText": "Ця умова {0} має збігатися, щоб користувацький формат застосовувався. В іншому випадку достатньо одного збігу {1}.",
+    "CountIndexersSelected": "{count} індексер(-и) обрано",
+    "CountCustomFormatsSelected": "Користувацькі формати обрано {count}",
+    "BlocklistReleaseHelpText": "Блокує завантаження цього випуску {appName} через RSS або Автоматичний пошук",
+    "AutoTaggingNegateHelpText": "Якщо позначено, настроюваний формат не застосовуватиметься, якщо ця умова {0} збігається."
 }
