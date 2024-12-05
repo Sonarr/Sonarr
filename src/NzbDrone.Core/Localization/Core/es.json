@@ -2137,5 +2137,9 @@
     "Menu": "Menú",
     "Premiere": "Estreno",
     "UpdateSeriesPath": "Actualizar Ruta de Series",
-    "UpdatePath": "Actualizar Ruta"
+    "UpdatePath": "Actualizar Ruta",
+    "MetadataKometaDeprecatedSetting": "Obsoleto",
+    "MetadataKometaDeprecated": "Los archivos de Kometa no seguirán siendo creados, se eliminará completamente el soporte en la v5",
+    "IndexerSettingsFailDownloadsHelpText": "Mientras se procesan las descargas completadas, {appName} tratará los errores seleccionados evitando la importación como descargas fallidas.",
+    "IndexerSettingsFailDownloads": "Fallo de Descargas"
 }
