@@ -57,6 +57,13 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 return UpgradeableRejectReason.None;
             }
 
+            if (!qualityProfile.UpgradeAllowed)
+            {
+                _logger.Debug("Quality profile '{0}' does not allow upgrading. Skipping.", qualityProfile.Name);
+
+                return UpgradeableRejectReason.UpgradesNotAllowed;
+            }
+
             // Reject unless the user does not prefer propers/repacks and it's a revision downgrade.
             if (downloadPropersAndRepacks != ProperDownloadTypes.DoNotPrefer &&
                 qualityRevisionCompare < 0)
@@ -86,7 +93,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 return UpgradeableRejectReason.CustomFormatScore;
             }
 
-            if (qualityProfile.UpgradeAllowed && currentFormatScore >= qualityProfile.CutoffFormatScore)
+            if (currentFormatScore >= qualityProfile.CutoffFormatScore)
             {
                 _logger.Debug("Existing item meets cut-off for custom formats, skipping. Existing: [{0}] ({1}). Cutoff score: {2}",
                     currentCustomFormats.ConcatToString(),

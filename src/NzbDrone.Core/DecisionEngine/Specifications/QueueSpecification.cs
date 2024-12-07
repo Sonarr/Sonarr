@@ -95,17 +95,9 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
                     case UpgradeableRejectReason.MinCustomFormatScore:
                         return DownloadSpecDecision.Reject(DownloadRejectionReason.QueueCustomFormatScoreIncrement, "Release in queue has Custom Format score within Custom Format score increment: {0}", qualityProfile.MinUpgradeFormatScore);
-                }
 
-                _logger.Debug("Checking if profiles allow upgrading. Queued: {0}", remoteEpisode.ParsedEpisodeInfo.Quality);
-
-                if (!_upgradableSpecification.IsUpgradeAllowed(subject.Series.QualityProfile,
-                                                               remoteEpisode.ParsedEpisodeInfo.Quality,
-                                                               queuedItemCustomFormats,
-                                                               subject.ParsedEpisodeInfo.Quality,
-                                                               subject.CustomFormats))
-                {
-                    return DownloadSpecDecision.Reject(DownloadRejectionReason.QueueNoUpgrades, "Another release is queued and the Quality profile does not allow upgrades");
+                    case UpgradeableRejectReason.UpgradesNotAllowed:
+                        return DownloadSpecDecision.Reject(DownloadRejectionReason.QueueUpgradesNotAllowed, "Release in queue and Quality Profile '{0}' does not allow upgrades", qualityProfile.Name);
                 }
 
                 if (_upgradableSpecification.IsRevisionUpgrade(remoteEpisode.ParsedEpisodeInfo.Quality, subject.ParsedEpisodeInfo.Quality))
