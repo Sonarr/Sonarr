@@ -111,6 +111,9 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
 
                         case UpgradeableRejectReason.MinCustomFormatScore:
                             return DownloadSpecDecision.Reject(DownloadRejectionReason.HistoryCustomFormatScoreIncrement, "{0} grab event in history has Custom Format score within Custom Format score increment: {1}", rejectionSubject, qualityProfile.MinUpgradeFormatScore);
+
+                        case UpgradeableRejectReason.UpgradesNotAllowed:
+                            return DownloadSpecDecision.Reject(DownloadRejectionReason.HistoryUpgradesNotAllowed, "{0} grab event in history and Quality Profile '{1}' does not allow upgrades", rejectionSubject, qualityProfile.Name);
                     }
                 }
             }
