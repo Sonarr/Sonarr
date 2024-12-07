@@ -5,6 +5,7 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Serializer;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.CustomFormats;
 using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.Languages;
@@ -393,6 +394,43 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             GivenFileQuality(new QualityModel(Quality.WEBDL1080p));
             GivenNewQuality(new QualityModel(Quality.WEBDL1080p));
+
+            GivenOldCustomFormats(new List<CustomFormat>());
+            GivenNewCustomFormats(new List<CustomFormat> { customFormat });
+
+            Subject.IsSatisfiedBy(_parseResultSingle, null).Accepted.Should().BeFalse();
+        }
+
+        [Test]
+        public void should_return_false_if_quality_profile_does_not_allow_upgrades_but_format_cutoff_is_above_current_score_and_is_revision_upgrade()
+        {
+            var customFormat = new CustomFormat("My Format", new ResolutionSpecification { Value = (int)Resolution.R1080p }) { Id = 1 };
+
+            Mocker.GetMock<IConfigService>()
+                .SetupGet(s => s.DownloadPropersAndRepacks)
+                .Returns(ProperDownloadTypes.DoNotPrefer);
+
+            GivenProfile(new QualityProfile
+            {
+                Cutoff = Quality.SDTV.Id,
+                MinFormatScore = 0,
+                CutoffFormatScore = 10000,
+                Items = Qualities.QualityFixture.GetDefaultQualities(),
+                FormatItems = CustomFormatsTestHelpers.GetSampleFormatItems("My Format"),
+                UpgradeAllowed = false
+            });
+
+            _parseResultSingle.Series.QualityProfile.Value.FormatItems = new List<ProfileFormatItem>
+            {
+                new ProfileFormatItem
+                {
+                    Format = customFormat,
+                    Score = 50
+                }
+            };
+
+            GivenFileQuality(new QualityModel(Quality.WEBDL1080p, new Revision(version: 1)));
+            GivenNewQuality(new QualityModel(Quality.WEBDL1080p, new Revision(version: 2)));
 
             GivenOldCustomFormats(new List<CustomFormat>());
             GivenNewCustomFormats(new List<CustomFormat> { customFormat });

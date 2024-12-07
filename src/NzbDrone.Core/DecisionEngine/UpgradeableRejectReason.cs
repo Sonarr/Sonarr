@@ -8,6 +8,7 @@ namespace NzbDrone.Core.DecisionEngine
         QualityCutoff,
         CustomFormatScore,
         CustomFormatCutoff,
-        MinCustomFormatScore
+        MinCustomFormatScore,
+        UpgradesNotAllowed
     }
 }
