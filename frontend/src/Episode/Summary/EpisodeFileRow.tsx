@@ -9,26 +9,27 @@ import Popover from 'Components/Tooltip/Popover';
 import EpisodeFormats from 'Episode/EpisodeFormats';
 import EpisodeLanguages from 'Episode/EpisodeLanguages';
 import EpisodeQuality from 'Episode/EpisodeQuality';
+import { EpisodeFile } from 'EpisodeFile/EpisodeFile';
 import useModalOpenState from 'Helpers/Hooks/useModalOpenState';
 import { icons, kinds, tooltipPositions } from 'Helpers/Props';
-import Language from 'Language/Language';
-import { QualityModel } from 'Quality/Quality';
-import CustomFormat from 'typings/CustomFormat';
 import formatBytes from 'Utilities/Number/formatBytes';
 import formatCustomFormatScore from 'Utilities/Number/formatCustomFormatScore';
 import translate from 'Utilities/String/translate';
 import MediaInfo from './MediaInfo';
 import styles from './EpisodeFileRow.css';
 
-interface EpisodeFileRowProps {
-  path: string;
-  size: number;
-  languages: Language[];
-  quality: QualityModel;
-  qualityCutoffNotMet: boolean;
-  customFormats: CustomFormat[];
-  customFormatScore: number;
-  mediaInfo: object;
+interface EpisodeFileRowProps
+  extends Pick<
+    EpisodeFile,
+    | 'path'
+    | 'size'
+    | 'languages'
+    | 'quality'
+    | 'customFormats'
+    | 'customFormatScore'
+    | 'qualityCutoffNotMet'
+    | 'mediaInfo'
+  > {
   columns: Column[];
   onDeleteEpisodeFile(): void;
 }
