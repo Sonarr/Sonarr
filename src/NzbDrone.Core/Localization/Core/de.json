@@ -22,7 +22,7 @@
     "Language": "Sprache",
     "CloneCondition": "Bedingung klonen",
     "DeleteCondition": "Bedingung löschen",
-    "DeleteConditionMessageText": "Bist du sicher, dass du die Bedingung '{name}' löschen willst?",
+    "DeleteConditionMessageText": "Bist du sicher, dass du die Bedingung '{0}' löschen willst?",
     "DeleteCustomFormatMessageText": "Bist du sicher, dass du das benutzerdefinierte Format '{name}' wirklich löschen willst?",
     "RemoveSelectedItemQueueMessageText": "Bist du sicher, dass du ein Eintrag aus der Warteschlange entfernen willst?",
     "RemoveSelectedItemsQueueMessageText": "Bist du sicher, dass du {selectedCount} Einträge aus der Warteschlange entfernen willst?",

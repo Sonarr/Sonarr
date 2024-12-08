@@ -134,5 +134,8 @@
     "Search": "Cari",
     "ShowEpisodes": "Tampilkan episode",
     "Refresh": "Muat Ulang",
-    "CalendarLegendEpisodeOnAirTooltip": "Episode sedang tayang"
+    "CalendarLegendEpisodeOnAirTooltip": "Episode sedang tayang",
+    "AddCustomFormatError": "Tidak dapat menambahkan format khusus baru, coba lagi.",
+    "AddDelayProfile": "Tambah Delay Profile",
+    "AddDownloadClient": "Tambahkan Download Client"
 }
