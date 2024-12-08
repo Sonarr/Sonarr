@@ -201,6 +201,9 @@ namespace NzbDrone.Core.Datastore
             SqlMapper.RemoveTypeMap(typeof(Guid));
             SqlMapper.RemoveTypeMap(typeof(Guid?));
             SqlMapper.AddTypeHandler(new GuidConverter());
+            SqlMapper.RemoveTypeMap(typeof(TimeSpan));
+            SqlMapper.RemoveTypeMap(typeof(TimeSpan?));
+            SqlMapper.AddTypeHandler(new TimeSpanConverter());
             SqlMapper.AddTypeHandler(new CommandConverter());
             SqlMapper.AddTypeHandler(new SystemVersionConverter());
         }
