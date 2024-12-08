@@ -19,8 +19,8 @@ import {
   clearReleases,
 } from 'Store/Actions/releaseActions';
 import translate from 'Utilities/String/translate';
-import EpisodeHistoryConnector from './History/EpisodeHistoryConnector';
-import EpisodeSearchConnector from './Search/EpisodeSearchConnector';
+import EpisodeHistory from './History/EpisodeHistory';
+import EpisodeSearch from './Search/EpisodeSearch';
 import SeasonEpisodeNumber from './SeasonEpisodeNumber';
 import EpisodeSummary from './Summary/EpisodeSummary';
 import styles from './EpisodeDetailsModalContent.css';
@@ -168,13 +168,13 @@ function EpisodeDetailsModalContent(props: EpisodeDetailsModalContentProps) {
 
           <TabPanel>
             <div className={styles.tabContent}>
-              <EpisodeHistoryConnector episodeId={episodeId} />
+              <EpisodeHistory episodeId={episodeId} />
             </div>
           </TabPanel>
 
           <TabPanel>
             {/* Don't wrap in tabContent so we not have a top margin */}
-            <EpisodeSearchConnector
+            <EpisodeSearch
               episodeId={episodeId}
               startInteractiveSearch={startInteractiveSearch}
               onModalClose={onModalClose}

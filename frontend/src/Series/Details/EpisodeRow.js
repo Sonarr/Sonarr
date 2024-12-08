@@ -13,8 +13,8 @@ import EpisodeSearchCell from 'Episode/EpisodeSearchCell';
 import EpisodeStatus from 'Episode/EpisodeStatus';
 import EpisodeTitleLink from 'Episode/EpisodeTitleLink';
 import IndexerFlags from 'Episode/IndexerFlags';
-import EpisodeFileLanguageConnector from 'EpisodeFile/EpisodeFileLanguageConnector';
-import MediaInfoConnector from 'EpisodeFile/MediaInfoConnector';
+import EpisodeFileLanguages from 'EpisodeFile/EpisodeFileLanguages';
+import MediaInfo from 'EpisodeFile/MediaInfo';
 import * as mediaInfoTypes from 'EpisodeFile/mediaInfoTypes';
 import { icons, kinds, tooltipPositions } from 'Helpers/Props';
 import formatBytes from 'Utilities/Number/formatBytes';
@@ -229,7 +229,7 @@ class EpisodeRow extends Component {
                   key={name}
                   className={styles.languages}
                 >
-                  <EpisodeFileLanguageConnector
+                  <EpisodeFileLanguages
                     episodeFileId={episodeFileId}
                   />
                 </TableRowCell>
@@ -242,7 +242,7 @@ class EpisodeRow extends Component {
                   key={name}
                   className={styles.audio}
                 >
-                  <MediaInfoConnector
+                  <MediaInfo
                     type={mediaInfoTypes.AUDIO}
                     episodeFileId={episodeFileId}
                   />
@@ -256,7 +256,7 @@ class EpisodeRow extends Component {
                   key={name}
                   className={styles.audioLanguages}
                 >
-                  <MediaInfoConnector
+                  <MediaInfo
                     type={mediaInfoTypes.AUDIO_LANGUAGES}
                     episodeFileId={episodeFileId}
                   />
@@ -270,7 +270,7 @@ class EpisodeRow extends Component {
                   key={name}
                   className={styles.subtitles}
                 >
-                  <MediaInfoConnector
+                  <MediaInfo
                     type={mediaInfoTypes.SUBTITLES}
                     episodeFileId={episodeFileId}
                   />
@@ -284,7 +284,7 @@ class EpisodeRow extends Component {
                   key={name}
                   className={styles.video}
                 >
-                  <MediaInfoConnector
+                  <MediaInfo
                     type={mediaInfoTypes.VIDEO}
                     episodeFileId={episodeFileId}
                   />
@@ -298,7 +298,7 @@ class EpisodeRow extends Component {
                   key={name}
                   className={styles.videoDynamicRangeType}
                 >
-                  <MediaInfoConnector
+                  <MediaInfo
                     type={mediaInfoTypes.VIDEO_DYNAMIC_RANGE_TYPE}
                     episodeFileId={episodeFileId}
                   />
