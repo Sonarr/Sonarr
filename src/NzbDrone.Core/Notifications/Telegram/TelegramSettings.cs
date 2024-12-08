@@ -51,7 +51,10 @@ namespace NzbDrone.Core.Notifications.Telegram
         [FieldDefinition(4, Label = "NotificationsTelegramSettingsIncludeAppName", Type = FieldType.Checkbox, HelpText = "NotificationsTelegramSettingsIncludeAppNameHelpText")]
         public bool IncludeAppNameInTitle { get; set; }
 
-        [FieldDefinition(5, Label = "NotificationsTelegramSettingsMetadataLinks", Type = FieldType.Select, SelectOptions = typeof(MetadataLinkType), HelpText = "NotificationsTelegramSettingsMetadataLinksHelpText")]
+        [FieldDefinition(5, Label = "NotificationsTelegramSettingsIncludeInstanceName", Type = FieldType.Checkbox, HelpText = "NotificationsTelegramSettingsIncludeInstanceNameHelpText", Advanced = true)]
+        public bool IncludeInstanceNameInTitle { get; set; }
+
+        [FieldDefinition(6, Label = "NotificationsTelegramSettingsMetadataLinks", Type = FieldType.Select, SelectOptions = typeof(MetadataLinkType), HelpText = "NotificationsTelegramSettingsMetadataLinksHelpText")]
         public IEnumerable<int> MetadataLinks { get; set; }
 
         public override NzbDroneValidationResult Validate()
