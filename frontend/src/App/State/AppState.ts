@@ -70,6 +70,7 @@ interface AppState {
   captcha: CaptchaAppState;
   commands: CommandAppState;
   episodeFiles: EpisodeFilesAppState;
+  episodeHistory: HistoryAppState;
   episodes: EpisodesAppState;
   episodesSelection: EpisodesAppState;
   history: HistoryAppState;
