@@ -74,9 +74,6 @@ interface SelectEpisodeModalContentProps {
   onModalClose(): unknown;
 }
 
-//
-// Render
-
 function SelectEpisodeModalContent(props: SelectEpisodeModalContentProps) {
   const {
     selectedIds,

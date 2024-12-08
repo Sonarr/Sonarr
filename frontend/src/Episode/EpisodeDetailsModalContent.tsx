@@ -19,7 +19,7 @@ import {
   clearReleases,
 } from 'Store/Actions/releaseActions';
 import translate from 'Utilities/String/translate';
-import EpisodeHistoryConnector from './History/EpisodeHistoryConnector';
+import EpisodeHistory from './History/EpisodeHistory';
 import EpisodeSearch from './Search/EpisodeSearch';
 import SeasonEpisodeNumber from './SeasonEpisodeNumber';
 import EpisodeSummary from './Summary/EpisodeSummary';
@@ -168,7 +168,7 @@ function EpisodeDetailsModalContent(props: EpisodeDetailsModalContentProps) {
 
           <TabPanel>
             <div className={styles.tabContent}>
-              <EpisodeHistoryConnector episodeId={episodeId} />
+              <EpisodeHistory episodeId={episodeId} />
             </div>
           </TabPanel>
 
