@@ -9,7 +9,7 @@ import EpisodeSearchCell from 'Episode/EpisodeSearchCell';
 import EpisodeStatus from 'Episode/EpisodeStatus';
 import EpisodeTitleLink from 'Episode/EpisodeTitleLink';
 import SeasonEpisodeNumber from 'Episode/SeasonEpisodeNumber';
-import EpisodeFileLanguageConnector from 'EpisodeFile/EpisodeFileLanguageConnector';
+import EpisodeFileLanguages from 'EpisodeFile/EpisodeFileLanguages';
 import SeriesTitleLink from 'Series/SeriesTitleLink';
 import styles from './CutoffUnmetRow.css';
 
@@ -123,7 +123,7 @@ function CutoffUnmetRow(props) {
                 key={name}
                 className={styles.languages}
               >
-                <EpisodeFileLanguageConnector
+                <EpisodeFileLanguages
                   episodeFileId={episodeFileId}
                 />
               </TableRowCell>
