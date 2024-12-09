@@ -1,7 +1,13 @@
-/* eslint max-params: 0 */
 import moment from 'moment';
+import { CalendarStatus } from 'typings/Calendar';
 
-function getStatusStyle(hasFile, downloading, startTime, endTime, isMonitored) {
+function getStatusStyle(
+  hasFile: boolean,
+  downloading: boolean,
+  startTime: moment.Moment,
+  endTime: moment.Moment,
+  isMonitored: boolean
+): CalendarStatus {
   const currentTime = moment();
 
   if (hasFile) {

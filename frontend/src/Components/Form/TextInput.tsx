@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import React, {
   ChangeEvent,
+  FocusEvent,
   SyntheticEvent,
   useCallback,
   useEffect,
@@ -25,7 +26,7 @@ export interface TextInputProps<T> {
   min?: number;
   max?: number;
   onChange: (change: InputChanged<T> | FileInputChanged) => void;
-  onFocus?: (event: SyntheticEvent) => void;
+  onFocus?: (event: FocusEvent) => void;
   onBlur?: (event: SyntheticEvent) => void;
   onCopy?: (event: SyntheticEvent) => void;
   onSelectionChange?: (start: number | null, end: number | null) => void;
@@ -94,7 +95,7 @@ function TextInput<T>({
   );
 
   const handleFocus = useCallback(
-    (event: SyntheticEvent) => {
+    (event: FocusEvent) => {
       onFocus?.(event);
 
       selectionChanged();

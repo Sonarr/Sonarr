@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { FocusEvent, ReactNode } from 'react';
 import Link from 'Components/Link/Link';
 import { inputTypes } from 'Helpers/Props';
 import { InputType } from 'Helpers/Props/inputTypes';
@@ -152,9 +152,11 @@ interface FormInputGroupProps<T> {
   canEdit?: boolean;
   includeAny?: boolean;
   delimiters?: string[];
+  readOnly?: boolean;
   errors?: (ValidationMessage | ValidationError)[];
   warnings?: (ValidationMessage | ValidationWarning)[];
   onChange: (args: T) => void;
+  onFocus?: (event: FocusEvent<HTMLInputElement>) => void;
 }
 
 function FormInputGroup<T>(props: FormInputGroupProps<T>) {
