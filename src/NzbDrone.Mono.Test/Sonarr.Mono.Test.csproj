@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net6.0</TargetFrameworks>
+    <TargetFrameworks>net8.0</TargetFrameworks>
   </PropertyGroup>
   <!--
        The netstandard version here doesn't work in net framework
        See https://github.com/xamarin/XamarinComponents/issues/282
   -->
   <ItemGroup>
-    <PackageReference Include="GitHubActionsTestLogger" Version="2.3.3" />
+    <PackageReference Include="GitHubActionsTestLogger" Version="2.4.1" />
     <PackageReference Include="Mono.Posix.NETStandard" Version="5.20.1.34-servarr24" />
   </ItemGroup>
   <ItemGroup>
