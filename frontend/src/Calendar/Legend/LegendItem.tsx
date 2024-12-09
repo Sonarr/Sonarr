@@ -1,17 +1,26 @@
 import classNames from 'classnames';
-import PropTypes from 'prop-types';
 import React from 'react';
+import { CalendarStatus } from 'typings/Calendar';
 import titleCase from 'Utilities/String/titleCase';
 import styles from './LegendItem.css';
 
-function LegendItem(props) {
+interface LegendItemProps {
+  name?: string;
+  status: CalendarStatus;
+  tooltip: string;
+  isAgendaView: boolean;
+  fullColorEvents: boolean;
+  colorImpairedMode: boolean;
+}
+
+function LegendItem(props: LegendItemProps) {
   const {
     name,
     status,
     tooltip,
     isAgendaView,
     fullColorEvents,
-    colorImpairedMode
+    colorImpairedMode,
   } = props;
 
   return (
@@ -28,14 +37,5 @@ function LegendItem(props) {
     </div>
   );
 }
-
-LegendItem.propTypes = {
-  name: PropTypes.string,
-  status: PropTypes.string.isRequired,
-  tooltip: PropTypes.string.isRequired,
-  isAgendaView: PropTypes.bool.isRequired,
-  fullColorEvents: PropTypes.bool.isRequired,
-  colorImpairedMode: PropTypes.bool.isRequired
-};
 
 export default LegendItem;

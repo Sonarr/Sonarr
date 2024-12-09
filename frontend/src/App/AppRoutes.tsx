@@ -5,7 +5,7 @@ import History from 'Activity/History/History';
 import Queue from 'Activity/Queue/Queue';
 import AddNewSeriesConnector from 'AddSeries/AddNewSeries/AddNewSeriesConnector';
 import ImportSeries from 'AddSeries/ImportSeries/ImportSeries';
-import CalendarPageConnector from 'Calendar/CalendarPageConnector';
+import CalendarPage from 'Calendar/CalendarPage';
 import NotFound from 'Components/NotFound';
 import Switch from 'Components/Router/Switch';
 import SeriesDetailsPageConnector from 'Series/Details/SeriesDetailsPageConnector';
@@ -72,7 +72,7 @@ function AppRoutes() {
         Calendar
       */}
 
-      <Route path="/calendar" component={CalendarPageConnector} />
+      <Route path="/calendar" component={CalendarPage} />
 
       {/*
         Activity

@@ -1,5 +1,6 @@
 import ModelBase from 'App/ModelBase';
 import DownloadProtocol from 'DownloadClient/DownloadProtocol';
+import Episode from 'Episode/Episode';
 import Language from 'Language/Language';
 import { QualityModel } from 'Quality/Quality';
 import CustomFormat from 'typings/CustomFormat';
@@ -46,6 +47,7 @@ interface Queue extends ModelBase {
   episodeId?: number;
   seasonNumber?: number;
   downloadClientHasPostImportCategory: boolean;
+  episode?: Episode;
 }
 
 export default Queue;
