@@ -25,6 +25,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
         public List<CustomFormat> CustomFormats { get; set; }
         public int CustomFormatScore { get; set; }
         public int IndexerFlags { get; set; }
+        public int IndexerId { get; set; }
         public ReleaseType ReleaseType { get; set; }
         public IEnumerable<ImportRejection> Rejections { get; set; }
 
