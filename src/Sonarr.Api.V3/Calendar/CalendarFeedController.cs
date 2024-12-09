@@ -54,6 +54,11 @@ namespace Sonarr.Api.V3.Calendar
             {
                 var series = allSeries.SingleOrDefault(s => s.Id == episode.SeriesId);
 
+                if (series == null)
+                {
+                    continue;
+                }
+
                 if (premieresOnly && (episode.SeasonNumber == 0 || episode.EpisodeNumber != 1))
                 {
                     continue;
