@@ -81,7 +81,7 @@
     "redux-thunk": "2.4.2",
     "reselect": "4.1.8",
     "stacktrace-js": "2.0.2",
-    "typescript": "5.1.6"
+    "typescript": "5.7.2"
   },
   "devDependencies": {
     "@babel/core": "7.25.8",
@@ -108,7 +108,7 @@
     "babel-loader": "9.2.1",
     "babel-plugin-inline-classnames": "2.0.1",
     "babel-plugin-transform-react-remove-prop-types": "0.4.24",
-    "core-js": "3.38.1",
+    "core-js": "3.39.0",
     "css-loader": "6.7.3",
     "css-modules-typescript-loader": "4.0.1",
     "eslint": "8.57.1",
