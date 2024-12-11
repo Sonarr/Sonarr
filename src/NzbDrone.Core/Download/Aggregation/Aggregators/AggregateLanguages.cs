@@ -82,9 +82,10 @@ namespace NzbDrone.Core.Download.Aggregation.Aggregators
 
                 if (releaseInfo is { IndexerId: > 0 })
                 {
-                    indexer = _indexerFactory.Get(releaseInfo.IndexerId);
+                    indexer = _indexerFactory.Find(releaseInfo.IndexerId);
                 }
-                else if (releaseInfo.Indexer?.IsNotNullOrWhiteSpace() == true)
+
+                if (indexer == null && releaseInfo.Indexer?.IsNotNullOrWhiteSpace() == true)
                 {
                     indexer = _indexerFactory.FindByName(releaseInfo.Indexer);
                 }
