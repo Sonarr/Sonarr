@@ -38,6 +38,10 @@ namespace NzbDrone.Core.Download
 
         public IDownloadClient GetDownloadClient(DownloadProtocol downloadProtocol, int indexerId = 0, bool filterBlockedClients = false, HashSet<int> tags = null)
         {
+            // Tags aren't required, but indexers with tags should not be picked unless there is at least one matching tag.
+            // Defaulting to an empty HashSet ensures this is always checked.
+            tags ??= new HashSet<int>();
+
             var blockedProviders = new HashSet<int>(_downloadClientStatusService.GetBlockedProviders().Select(v => v.ProviderId));
             var availableProviders = _downloadClientFactory.GetAvailableProviders().Where(v => v.Protocol == downloadProtocol).ToList();
 
@@ -46,18 +50,15 @@ namespace NzbDrone.Core.Download
                 return null;
             }
 
-            if (tags is { Count: > 0 })
+            var matchingTagsClients = availableProviders.Where(i => i.Definition.Tags.Intersect(tags).Any()).ToList();
+
+            availableProviders = matchingTagsClients.Count > 0 ?
+                matchingTagsClients :
+                availableProviders.Where(i => i.Definition.Tags.Empty()).ToList();
+
+            if (!availableProviders.Any())
             {
-                var matchingTagsClients = availableProviders.Where(i => i.Definition.Tags.Intersect(tags).Any()).ToList();
-
-                availableProviders = matchingTagsClients.Count > 0 ?
-                    matchingTagsClients :
-                    availableProviders.Where(i => i.Definition.Tags.Empty()).ToList();
-
-                if (!availableProviders.Any())
-                {
-                    throw new DownloadClientUnavailableException("No download client was found without tags or a matching series tag. Please check your settings.");
-                }
+                throw new DownloadClientUnavailableException("No download client was found without tags or a matching series tag. Please check your settings.");
             }
 
             if (indexerId > 0)
