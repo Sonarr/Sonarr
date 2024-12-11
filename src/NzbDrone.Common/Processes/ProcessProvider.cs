@@ -313,7 +313,7 @@ namespace NzbDrone.Common.Processes
                 processInfo = new ProcessInfo();
                 processInfo.Id = process.Id;
                 processInfo.Name = process.ProcessName;
-                processInfo.StartPath = process.MainModule.FileName;
+                processInfo.StartPath = process.MainModule?.FileName;
 
                 if (process.Id != GetCurrentProcessId() && process.HasExited)
                 {
