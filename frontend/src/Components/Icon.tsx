@@ -18,7 +18,7 @@ export interface IconProps
   kind?: Extract<Kind, keyof typeof styles>;
   size?: number;
   isSpinning?: FontAwesomeIconProps['spin'];
-  title?: string | (() => string);
+  title?: string | (() => string) | null;
 }
 
 export default function Icon({
