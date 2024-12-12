@@ -2142,5 +2142,7 @@
     "MetadataKometaDeprecated": "Os arquivos Kometa não serão mais criados, o suporte será completamente removido na v5",
     "MetadataKometaDeprecatedSetting": "Deprecado",
     "IndexerSettingsFailDownloads": "Downloads com Falhas",
-    "IndexerSettingsFailDownloadsHelpText": "Durante o processamento de downloads concluídos, {appName} tratará os erros selecionados, impedindo a importação, como downloads com falha."
+    "IndexerSettingsFailDownloadsHelpText": "Durante o processamento de downloads concluídos, {appName} tratará esses tipos de arquivos selecionados como downloads com falha.",
+    "NotificationsTelegramSettingsIncludeInstanceName": "Incluir nome da instância no título",
+    "NotificationsTelegramSettingsIncludeInstanceNameHelpText": "Opcionalmente, inclua o nome da instância na notificação"
 }
