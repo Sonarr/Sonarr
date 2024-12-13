@@ -6,6 +6,7 @@ import Label from 'Components/Label';
 import Link from 'Components/Link/Link';
 import MetadataAttribution from 'Components/MetadataAttribution';
 import { icons, kinds, sizes } from 'Helpers/Props';
+import SeriesGenres from 'Series/SeriesGenres';
 import SeriesPoster from 'Series/SeriesPoster';
 import translate from 'Utilities/String/translate';
 import AddNewSeriesModal from './AddNewSeriesModal';
@@ -56,6 +57,7 @@ class AddNewSeriesSearchResult extends Component {
       year,
       network,
       originalLanguage,
+      genres,
       status,
       overview,
       statistics,
@@ -182,6 +184,18 @@ class AddNewSeriesSearchResult extends Component {
               }
 
               {
+                genres.length > 0 ?
+                  <Label size={sizes.LARGE}>
+                    <Icon
+                      name={icons.GENRE}
+                      size={13}
+                    />
+                    <SeriesGenres className={styles.genres} genres={genres} />
+                  </Label> :
+                  null
+              }
+
+              {
                 seasonCount ?
                   <Label size={sizes.LARGE}>
                     {seasons}
@@ -243,6 +257,7 @@ AddNewSeriesSearchResult.propTypes = {
   year: PropTypes.number.isRequired,
   network: PropTypes.string,
   originalLanguage: PropTypes.object,
+  genres: PropTypes.arrayOf(PropTypes.string),
   status: PropTypes.string.isRequired,
   overview: PropTypes.string,
   statistics: PropTypes.object.isRequired,
@@ -252,6 +267,10 @@ AddNewSeriesSearchResult.propTypes = {
   images: PropTypes.arrayOf(PropTypes.object).isRequired,
   isExistingSeries: PropTypes.bool.isRequired,
   isSmallScreen: PropTypes.bool.isRequired
+};
+
+AddNewSeriesSearchResult.defaultProps = {
+  genres: []
 };
 
 export default AddNewSeriesSearchResult;

@@ -3,6 +3,7 @@
 interface CssExports {
   'alreadyExistsIcon': string;
   'content': string;
+  'genres': string;
   'icons': string;
   'network': string;
   'originalLanguageName': string;

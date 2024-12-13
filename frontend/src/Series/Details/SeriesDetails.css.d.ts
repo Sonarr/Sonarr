@@ -8,6 +8,7 @@ interface CssExports {
   'details': string;
   'detailsLabel': string;
   'fileCountMessage': string;
+  'genres': string;
   'header': string;
   'headerContent': string;
   'info': string;
