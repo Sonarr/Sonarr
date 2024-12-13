@@ -70,8 +70,13 @@
 }
 
 .originalLanguageName,
-.network {
+.network,
+.genres {
   margin-left: 8px;
+}
+
+.genres {
+  pointer-events: all;
 }
 
 .tvdbLink {

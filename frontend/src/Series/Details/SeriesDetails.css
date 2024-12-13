@@ -110,7 +110,8 @@
   font-size: 20px;
 }
 
-.runtime {
+.runtime,
+.genres {
   margin-right: 15px;
 }
 
