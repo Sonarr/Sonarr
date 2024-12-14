@@ -2140,6 +2140,9 @@
     "UpdatePath": "Actualizar Ruta",
     "MetadataKometaDeprecatedSetting": "Obsoleto",
     "MetadataKometaDeprecated": "Los archivos de Kometa no seguirán siendo creados, se eliminará completamente el soporte en la v5",
-    "IndexerSettingsFailDownloadsHelpText": "Mientras se procesan las descargas completadas, {appName} tratará los errores seleccionados evitando la importación como descargas fallidas.",
-    "IndexerSettingsFailDownloads": "Fallo de Descargas"
+    "IndexerSettingsFailDownloadsHelpText": "Mientras se procesan las descargas completadas, {appName} tratará esos tipos de archivo seleccionados como descargas fallidas.",
+    "IndexerSettingsFailDownloads": "Fallo de Descargas",
+    "NotificationsTelegramSettingsIncludeInstanceNameHelpText": "Opcionalmente incluye el nombre de la instancia en la notificación",
+    "NotificationsTelegramSettingsIncludeInstanceName": "Incluir el nombre de la instancia en el título",
+    "Fallback": "Retirada"
 }
