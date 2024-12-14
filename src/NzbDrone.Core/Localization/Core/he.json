@@ -4,7 +4,11 @@
     "Add": "הוסף",
     "Activity": "פעילות",
     "Indexer": "אינדקסר",
-    "AddAutoTag": "הוסף טגית אוטומטית",
+    "AddAutoTag": "הוסף תג אוטומטית",
     "About": "אודות",
-    "Actions": "פעולות"
+    "Actions": "פעולות",
+    "AddConditionError": "לא ניתן להוסיף תנאי חדש, נסה שנית.",
+    "AddAutoTagError": "לא ניתן להוסיף תג חדש, נסה שנית.",
+    "AddCondition": "הוסף תנאי",
+    "AddANewPath": "הוסף נתיב חדש"
 }
