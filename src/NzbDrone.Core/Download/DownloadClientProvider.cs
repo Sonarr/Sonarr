@@ -38,7 +38,7 @@ namespace NzbDrone.Core.Download
 
         public IDownloadClient GetDownloadClient(DownloadProtocol downloadProtocol, int indexerId = 0, bool filterBlockedClients = false, HashSet<int> tags = null)
         {
-            // Tags aren't required, but indexers with tags should not be picked unless there is at least one matching tag.
+            // Tags aren't required, but download clients with tags should not be picked unless there is at least one matching tag.
             // Defaulting to an empty HashSet ensures this is always checked.
             tags ??= new HashSet<int>();
 
