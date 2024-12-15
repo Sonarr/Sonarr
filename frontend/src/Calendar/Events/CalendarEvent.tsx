@@ -74,12 +74,12 @@ function CalendarEvent(props: CalendarEventProps) {
 
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
 
-  const handleDetailsModalClose = useCallback(() => {
+  const handlePress = useCallback(() => {
     setIsDetailsModalOpen(true);
     onEventModalOpenToggle(true);
   }, [onEventModalOpenToggle]);
 
-  const handlePress = useCallback(() => {
+  const handleDetailsModalClose = useCallback(() => {
     setIsDetailsModalOpen(false);
     onEventModalOpenToggle(false);
   }, [onEventModalOpenToggle]);
