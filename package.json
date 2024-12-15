@@ -21,10 +21,10 @@
     "defaults"
   ],
   "dependencies": {
-    "@fortawesome/fontawesome-free": "6.6.0",
-    "@fortawesome/fontawesome-svg-core": "6.6.0",
-    "@fortawesome/free-regular-svg-icons": "6.6.0",
-    "@fortawesome/free-solid-svg-icons": "6.6.0",
+    "@fortawesome/fontawesome-free": "6.7.1",
+    "@fortawesome/fontawesome-svg-core": "6.7.1",
+    "@fortawesome/free-regular-svg-icons": "6.7.1",
+    "@fortawesome/free-solid-svg-icons": "6.7.1",
     "@fortawesome/react-fontawesome": "0.2.2",
     "@juggle/resize-observer": "3.4.0",
     "@microsoft/signalr": "6.0.21",
