@@ -1,10 +1,12 @@
 import React from 'react';
-import ErrorBoundaryError from 'Components/Error/ErrorBoundaryError';
+import ErrorBoundaryError, {
+  ErrorBoundaryErrorProps,
+} from 'Components/Error/ErrorBoundaryError';
 import translate from 'Utilities/String/translate';
 import PageContentBody from './PageContentBody';
 import styles from './PageContentError.css';
 
-function PageContentError(props) {
+function PageContentError(props: ErrorBoundaryErrorProps) {
   return (
     <div className={styles.content}>
       <PageContentBody>

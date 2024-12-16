@@ -1,6 +1,6 @@
-import { IconDefinition } from '@fortawesome/free-regular-svg-icons';
 import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
+import { IconName } from 'Components/Icon';
 import { icons } from 'Helpers/Props';
 import createUISettingsSelector from 'Store/Selectors/createUISettingsSelector';
 import dimensions from 'Styles/Variables/dimensions';
@@ -21,7 +21,7 @@ interface RowProps {
 
 interface RowInfoProps {
   title: string;
-  iconName: IconDefinition;
+  iconName: IconName;
   label: string;
 }
 

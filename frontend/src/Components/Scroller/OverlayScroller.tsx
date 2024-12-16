@@ -11,8 +11,8 @@ interface OverlayScrollerProps {
   trackClassName?: string;
   scrollTop?: number;
   scrollDirection: ScrollDirection;
-  autoHide: boolean;
-  autoScroll: boolean;
+  autoHide?: boolean;
+  autoScroll?: boolean;
   children?: React.ReactNode;
   onScroll?: (payload: OnScroll) => void;
 }
