@@ -1,18 +1,18 @@
-import { IconDefinition } from '@fortawesome/fontawesome-common-types';
-import React from 'react';
+import React, { SyntheticEvent } from 'react';
+import { IconName } from 'Components/Icon';
 import MenuItem from 'Components/Menu/MenuItem';
 import SpinnerIcon from 'Components/SpinnerIcon';
 import styles from './PageToolbarOverflowMenuItem.css';
 
 interface PageToolbarOverflowMenuItemProps {
-  iconName: IconDefinition;
-  spinningName?: IconDefinition;
+  iconName: IconName;
+  spinningName?: IconName;
   isDisabled?: boolean;
   isSpinning?: boolean;
   showIndicator?: boolean;
   label: string;
   text?: string;
-  onPress: () => void;
+  onPress?: (event: SyntheticEvent<Element, Event>) => void;
 }
 
 function PageToolbarOverflowMenuItem(props: PageToolbarOverflowMenuItemProps) {
