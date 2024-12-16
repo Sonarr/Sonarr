@@ -1,11 +1,11 @@
-import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import React, { useCallback } from 'react';
 import { useSelect } from 'App/SelectContext';
+import { IconName } from 'Components/Icon';
 import PageToolbarOverflowMenuItem from 'Components/Page/Toolbar/PageToolbarOverflowMenuItem';
 
 interface SeriesIndexSelectModeMenuItemProps {
   label: string;
-  iconName: IconDefinition;
+  iconName: IconName;
   isSelectMode: boolean;
   onPress: () => void;
 }

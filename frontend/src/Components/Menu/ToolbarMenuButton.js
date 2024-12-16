@@ -52,6 +52,7 @@ function ToolbarMenuButton(props) {
 }
 
 ToolbarMenuButton.propTypes = {
+  className: PropTypes.string,
   iconName: PropTypes.object.isRequired,
   showIndicator: PropTypes.bool.isRequired,
   text: PropTypes.string
