@@ -1,7 +1,9 @@
+import { Error } from './AppSectionState';
 import BlocklistAppState from './BlocklistAppState';
 import CalendarAppState from './CalendarAppState';
 import CaptchaAppState from './CaptchaAppState';
 import CommandAppState from './CommandAppState';
+import CustomFiltersAppState from './CustomFiltersAppState';
 import EpisodeFilesAppState from './EpisodeFilesAppState';
 import EpisodesAppState from './EpisodesAppState';
 import HistoryAppState from './HistoryAppState';
@@ -52,7 +54,9 @@ export interface CustomFilter {
 }
 
 export interface AppSectionState {
+  isUpdated: boolean;
   isConnected: boolean;
+  isDisconnected: boolean;
   isReconnecting: boolean;
   isSidebarVisible: boolean;
   version: string;
@@ -63,6 +67,10 @@ export interface AppSectionState {
     width: number;
     height: number;
   };
+  translations: {
+    error?: Error;
+    isPopulated: boolean;
+  };
 }
 
 interface AppState {
@@ -71,6 +79,7 @@ interface AppState {
   calendar: CalendarAppState;
   captcha: CaptchaAppState;
   commands: CommandAppState;
+  customFilters: CustomFiltersAppState;
   episodeFiles: EpisodeFilesAppState;
   episodeHistory: HistoryAppState;
   episodes: EpisodesAppState;
