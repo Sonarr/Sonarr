@@ -35,7 +35,7 @@ export default function getLanguageName(code: string) {
 
   try {
     return languageNames.of(code) ?? code;
-  } catch (error) {
+  } catch {
     return code;
   }
 }

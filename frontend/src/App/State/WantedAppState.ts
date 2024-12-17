@@ -1,9 +1,9 @@
 import AppSectionState from 'App/State/AppSectionState';
 import Episode from 'Episode/Episode';
 
-interface WantedCutoffUnmetAppState extends AppSectionState<Episode> {}
+type WantedCutoffUnmetAppState = AppSectionState<Episode>;
 
-interface WantedMissingAppState extends AppSectionState<Episode> {}
+type WantedMissingAppState = AppSectionState<Episode>;
 
 interface WantedAppState {
   cutoffUnmet: WantedCutoffUnmetAppState;

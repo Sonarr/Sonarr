@@ -1,7 +1,7 @@
 import React, { ComponentPropsWithoutRef } from 'react';
 import styles from './TableRowCell.css';
 
-export interface TableRowCellProps extends ComponentPropsWithoutRef<'td'> {}
+export type TableRowCellProps = ComponentPropsWithoutRef<'td'>;
 
 export default function TableRowCell({
   className = styles.cell,
