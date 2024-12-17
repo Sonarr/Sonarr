@@ -75,6 +75,17 @@ namespace NzbDrone.Common.EnvironmentInfo
         {
             try
             {
+                if (OsInfo.IsOsx)
+                {
+                    var userAppDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile, Environment.SpecialFolderOption.DoNotVerify), ".config", "Sonarr");
+
+                    if (_diskProvider.FolderExists(userAppDataFolder) && !_diskProvider.FileExists(_appFolderInfo.GetConfigPath()))
+                    {
+                        _diskTransferService.MirrorFolder(userAppDataFolder, _appFolderInfo.AppDataFolder);
+                        _diskProvider.DeleteFolder(userAppDataFolder, true);
+                    }
+                }
+
                 var oldDbFile = Path.Combine(_appFolderInfo.AppDataFolder, "nzbdrone.db");
 
                 if (_startupContext.Args.ContainsKey(StartupContext.APPDATA))
@@ -134,7 +145,7 @@ namespace NzbDrone.Common.EnvironmentInfo
             catch (Exception ex)
             {
                 _logger.Debug(ex, ex.Message);
-                throw new SonarrStartupException("Unable to migrate AppData folder from {0} to {1}. Migrate manually", _appFolderInfo.LegacyAppDataFolder, _appFolderInfo.AppDataFolder);
+                throw new SonarrStartupException(ex, "Unable to migrate AppData folder from {0} to {1}. Migrate manually", _appFolderInfo.LegacyAppDataFolder, _appFolderInfo.AppDataFolder);
             }
         }
 
