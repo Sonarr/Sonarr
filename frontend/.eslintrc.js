@@ -363,7 +363,11 @@ module.exports = {
           {
             args: 'after-used',
             argsIgnorePattern: '^_',
+            caughtErrorsIgnorePattern: '^_',
+            destructuredArrayIgnorePattern: '^_',
+            varsIgnorePattern: '^_',
             ignoreRestSiblings: true
+
           }
         ],
         '@typescript-eslint/explicit-function-return-type': 'off',

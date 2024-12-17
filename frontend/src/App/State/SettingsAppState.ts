@@ -37,8 +37,7 @@ export interface NamingAppState
   extends AppSectionItemState<NamingConfig>,
     AppSectionSaveState {}
 
-export interface NamingExamplesAppState
-  extends AppSectionItemState<NamingExample> {}
+export type NamingExamplesAppState = AppSectionItemState<NamingExample>;
 
 export interface ImportListAppState
   extends AppSectionState<ImportList>,
