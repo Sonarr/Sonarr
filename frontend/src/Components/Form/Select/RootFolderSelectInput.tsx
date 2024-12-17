@@ -134,7 +134,7 @@ function RootFolderSelectInput({
   const handleNewRootFolderSelect = useCallback(
     ({ value: newValue }: InputChanged<string>) => {
       setNewRootFolderPath(newValue);
-      dispatch(addRootFolder(newValue));
+      dispatch(addRootFolder({ path: newValue }));
     },
     [setNewRootFolderPath, dispatch]
   );
