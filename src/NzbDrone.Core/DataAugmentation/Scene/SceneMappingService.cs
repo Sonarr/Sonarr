@@ -94,6 +94,11 @@ namespace NzbDrone.Core.DataAugmentation.Scene
 
         public SceneMapping FindSceneMapping(string seriesTitle, string releaseTitle, int sceneSeasonNumber)
         {
+            if (seriesTitle.IsNullOrWhiteSpace())
+            {
+                return null;
+            }
+
             var mappings = FindMappings(seriesTitle, releaseTitle);
 
             if (mappings == null)
