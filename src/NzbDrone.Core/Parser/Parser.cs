@@ -836,6 +836,11 @@ namespace NzbDrone.Core.Parser
 
         public static string CleanSeriesTitle(this string title)
         {
+            if (title.IsNullOrWhiteSpace())
+            {
+                return title;
+            }
+
             // If Title only contains numbers return it as is.
             if (long.TryParse(title, out _))
             {

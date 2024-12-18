@@ -127,7 +127,7 @@ namespace Sonarr.Api.V3.Indexers
 
                         if (episodes.Empty())
                         {
-                            throw new NzbDroneClientException(HttpStatusCode.NotFound, "Unable to parse episodes in the release");
+                            throw new NzbDroneClientException(HttpStatusCode.NotFound, "Unable to parse episodes in the release, will need to be manually provided");
                         }
 
                         remoteEpisode.Series = series;
@@ -135,7 +135,7 @@ namespace Sonarr.Api.V3.Indexers
                     }
                     else
                     {
-                        throw new NzbDroneClientException(HttpStatusCode.NotFound, "Unable to find matching series and episodes");
+                        throw new NzbDroneClientException(HttpStatusCode.NotFound, "Unable to find matching series and episodes, will need to be manually provided");
                     }
                 }
                 else if (remoteEpisode.Episodes.Empty())
@@ -154,7 +154,7 @@ namespace Sonarr.Api.V3.Indexers
 
                 if (remoteEpisode.Episodes.Empty())
                 {
-                    throw new NzbDroneClientException(HttpStatusCode.NotFound, "Unable to parse episodes in the release");
+                    throw new NzbDroneClientException(HttpStatusCode.NotFound, "Unable to parse episodes in the release, will need to be manually provided");
                 }
 
                 await _downloadService.DownloadReport(remoteEpisode, release.DownloadClientId);
