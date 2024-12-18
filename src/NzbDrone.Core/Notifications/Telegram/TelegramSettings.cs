@@ -48,17 +48,19 @@ namespace NzbDrone.Core.Notifications.Telegram
         [FieldDefinition(3, Label = "NotificationsTelegramSettingsSendSilently", Type = FieldType.Checkbox, HelpText = "NotificationsTelegramSettingsSendSilentlyHelpText")]
         public bool SendSilently { get; set; }
 
-        [FieldDefinition(4, Label = "NotificationsTelegramSettingsIncludeAppName", Type = FieldType.Checkbox, HelpText = "NotificationsTelegramSettingsIncludeAppNameHelpText")]
+        [FieldDefinition(4, Label = "NotificationsTelegramSettingsDisableLinkPreview", Type = FieldType.Checkbox, HelpText = "NotificationsTelegramSettingsDisableLinkPreviewHelpText")]
+        public bool DisableLinkPreview { get; set; }
+
+        [FieldDefinition(5, Label = "NotificationsTelegramSettingsIncludeAppName", Type = FieldType.Checkbox, HelpText = "NotificationsTelegramSettingsIncludeAppNameHelpText")]
         public bool IncludeAppNameInTitle { get; set; }
 
-        [FieldDefinition(5, Label = "NotificationsTelegramSettingsIncludeInstanceName", Type = FieldType.Checkbox, HelpText = "NotificationsTelegramSettingsIncludeInstanceNameHelpText", Advanced = true)]
+        [FieldDefinition(6, Label = "NotificationsTelegramSettingsIncludeInstanceName", Type = FieldType.Checkbox, HelpText = "NotificationsTelegramSettingsIncludeInstanceNameHelpText", Advanced = true)]
         public bool IncludeInstanceNameInTitle { get; set; }
 
-        [FieldDefinition(6, Label = "NotificationsTelegramSettingsMetadataLinks", Type = FieldType.Select, SelectOptions = typeof(MetadataLinkType), HelpText = "NotificationsTelegramSettingsMetadataLinksHelpText")]
+        [FieldDefinition(7, Label = "NotificationsTelegramSettingsMetadataLinks", Type = FieldType.Select, SelectOptions = typeof(MetadataLinkType), HelpText = "NotificationsTelegramSettingsMetadataLinksHelpText")]
         public IEnumerable<int> MetadataLinks { get; set; }
 
-        [FieldDefinition(7, Label = "NotificationsTelegramSettingsDisableLinkPreview", Type = FieldType.Checkbox, HelpText = "NotificationsTelegramSettingsDisableLinkPreviewHelpText")]
-        public bool DisableLinkPreview { get; set; }
+
 
         public override NzbDroneValidationResult Validate()
         {
