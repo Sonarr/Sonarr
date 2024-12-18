@@ -57,6 +57,9 @@ namespace NzbDrone.Core.Notifications.Telegram
         [FieldDefinition(6, Label = "NotificationsTelegramSettingsMetadataLinks", Type = FieldType.Select, SelectOptions = typeof(MetadataLinkType), HelpText = "NotificationsTelegramSettingsMetadataLinksHelpText")]
         public IEnumerable<int> MetadataLinks { get; set; }
 
+        [FieldDefinition(7, Label = "NotificationsTelegramSettingsDisableLinkPreview", Type = FieldType.Checkbox, HelpText = "NotificationsTelegramSettingsDisableLinkPreviewHelpText")]
+        public bool DisableLinkPreview { get; set; }
+
         public override NzbDroneValidationResult Validate()
         {
             return new NzbDroneValidationResult(Validator.Validate(this));
