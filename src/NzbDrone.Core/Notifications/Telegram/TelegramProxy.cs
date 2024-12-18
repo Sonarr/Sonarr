@@ -55,6 +55,7 @@ namespace NzbDrone.Core.Notifications.Telegram
                                         .AddFormParameter("text", text)
                                         .AddFormParameter("disable_notification", settings.SendSilently)
                                         .AddFormParameter("message_thread_id", settings.TopicId)
+                                        .AddFormParameter("link_preview_options", new {is_enabled=settings.DisableLinkPreview})
                                         .Build();
 
             _httpClient.Post(request);
