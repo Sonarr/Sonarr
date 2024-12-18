@@ -6,12 +6,13 @@
     <PackageReference Include="Dapper" Version="2.0.123" />
     <PackageReference Include="Diacritical.Net" Version="1.0.4" />
     <PackageReference Include="Equ" Version="2.3.0" />
-    <PackageReference Include="MailKit" Version="3.6.0" />
+    <PackageReference Include="MailKit" Version="4.8.0" />
     <PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="6.0.21" />
-    <PackageReference Include="Polly" Version="8.3.1" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="2.1.7" />
+    <PackageReference Include="Polly" Version="8.5.0" />
     <PackageReference Include="Servarr.FFMpegCore" Version="4.7.0-26" />
     <PackageReference Include="Servarr.FFprobe" Version="5.1.4.112" />
-    <PackageReference Include="System.Memory" Version="4.5.5" />
+    <PackageReference Include="System.Memory" Version="4.6.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.1" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
@@ -19,13 +20,13 @@
     <PackageReference Include="Servarr.FluentMigrator.Runner.SQLite" Version="3.3.2.9" />
     <PackageReference Include="Servarr.FluentMigrator.Runner.Postgres" Version="3.3.2.9" />
     <PackageReference Include="FluentValidation" Version="9.5.4" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.5" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.6" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="NLog" Version="5.3.2" />
+    <PackageReference Include="NLog" Version="5.3.4" />
     <PackageReference Include="MonoTorrent" Version="2.0.7" />
     <PackageReference Include="System.Data.SQLite.Core.Servarr" Version="1.0.115.5-18" />
     <PackageReference Include="System.Text.Json" Version="6.0.10" />
-    <PackageReference Include="Npgsql" Version="7.0.7" />
+    <PackageReference Include="Npgsql" Version="7.0.9" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NzbDrone.Common\Sonarr.Common.csproj" />
