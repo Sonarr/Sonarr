@@ -1,7 +1,8 @@
 import { createSelector } from 'reselect';
 import AppState from 'App/State/AppState';
+import { Tag } from 'App/State/TagsAppState';
 
-function createTagsSelector() {
+function createTagsSelector(): (state: AppState) => Tag[] {
   return createSelector(
     (state: AppState) => state.tags.items,
     (tags) => {

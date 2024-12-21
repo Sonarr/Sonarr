@@ -1,10 +1,9 @@
 import moment from 'moment';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
 import AppState from 'App/State/AppState';
 import * as commandNames from 'Commands/commandNames';
-import Measure from 'Components/Measure';
 import FilterMenu from 'Components/Menu/FilterMenu';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
@@ -12,6 +11,7 @@ import PageToolbar from 'Components/Page/Toolbar/PageToolbar';
 import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
 import PageToolbarSection from 'Components/Page/Toolbar/PageToolbarSection';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
+import useMeasure from 'Helpers/Hooks/useMeasure';
 import { align, icons } from 'Helpers/Props';
 import NoSeries from 'Series/NoSeries';
 import {
@@ -96,26 +96,12 @@ function CalendarPage() {
   const customFilters = useSelector(createCustomFiltersSelector('calendar'));
   const hasSeries = !!useSelector(createSeriesCountSelector());
 
+  const [pageContentRef, { width }] = useMeasure();
   const [isCalendarLinkModalOpen, setIsCalendarLinkModalOpen] = useState(false);
   const [isOptionsModalOpen, setIsOptionsModalOpen] = useState(false);
-  const [width, setWidth] = useState(0);
 
   const isMeasured = width > 0;
   const PageComponent = hasSeries ? Calendar : NoSeries;
-
-  const handleMeasure = useCallback(
-    ({ width: newWidth }: { width: number }) => {
-      setWidth(newWidth);
-
-      const dayCount = Math.max(
-        3,
-        Math.min(7, Math.floor(newWidth / MINIMUM_DAY_WIDTH))
-      );
-
-      dispatch(setCalendarDaysCount({ dayCount }));
-    },
-    [dispatch]
-  );
 
   const handleGetCalendarLinkPress = useCallback(() => {
     setIsCalendarLinkModalOpen(true);
@@ -151,6 +137,19 @@ function CalendarPage() {
     },
     [dispatch]
   );
+
+  useEffect(() => {
+    if (width === 0) {
+      return;
+    }
+
+    const dayCount = Math.max(
+      3,
+      Math.min(7, Math.floor(width / MINIMUM_DAY_WIDTH))
+    );
+
+    dispatch(setCalendarDaysCount({ dayCount }));
+  }, [width, dispatch]);
 
   return (
     <PageContent title={translate('Calendar')}>
@@ -200,13 +199,11 @@ function CalendarPage() {
       </PageToolbar>
 
       <PageContentBody
+        ref={pageContentRef}
         className={styles.calendarPageBody}
         innerClassName={styles.calendarInnerPageBody}
       >
-        <Measure whitelist={['width']} onMeasure={handleMeasure}>
-          {isMeasured ? <PageComponent totalItems={0} /> : <div />}
-        </Measure>
-
+        {isMeasured ? <PageComponent totalItems={0} /> : <div />}
         {hasSeries && <Legend />}
       </PageContentBody>
 

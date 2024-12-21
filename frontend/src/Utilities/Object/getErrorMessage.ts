@@ -1,6 +1,6 @@
 import { Error } from 'App/State/AppSectionState';
 
-function getErrorMessage(xhr: Error, fallbackErrorMessage?: string) {
+function getErrorMessage(xhr: Error, fallbackErrorMessage = '') {
   if (!xhr || !xhr.responseJSON) {
     return fallbackErrorMessage;
   }

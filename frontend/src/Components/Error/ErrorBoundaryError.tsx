@@ -3,7 +3,7 @@ import StackTrace from 'stacktrace-js';
 import translate from 'Utilities/String/translate';
 import styles from './ErrorBoundaryError.css';
 
-interface ErrorBoundaryErrorProps {
+export interface ErrorBoundaryErrorProps {
   className: string;
   messageClassName: string;
   detailsClassName: string;
