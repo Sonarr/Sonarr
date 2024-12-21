@@ -15,11 +15,14 @@ namespace NzbDrone.Common.Http
         public string JsonMethod { get; private set; }
         public List<object> JsonParameters { get; private set; }
 
+        public bool JsonParametersToObject { get; private set; }
+
         public JsonRpcRequestBuilder(string baseUrl)
             : base(baseUrl)
         {
             Method = HttpMethod.Post;
             JsonParameters = new List<object>();
+            JsonParametersToObject = false;
         }
 
         public JsonRpcRequestBuilder(string baseUrl, string method, IEnumerable<object> parameters)
@@ -28,6 +31,16 @@ namespace NzbDrone.Common.Http
             Method = HttpMethod.Post;
             JsonMethod = method;
             JsonParameters = parameters.ToList();
+            JsonParametersToObject = false;
+        }
+
+        public JsonRpcRequestBuilder(string baseUrl, string method, bool convertParameterToObject, IEnumerable<object> parameters)
+            : base(baseUrl)
+        {
+            Method = HttpMethod.Post;
+            JsonMethod = method;
+            JsonParameters = parameters.ToList();
+            JsonParametersToObject = convertParameterToObject;
         }
 
         public override HttpRequestBuilder Clone()
@@ -51,18 +64,29 @@ namespace NzbDrone.Common.Http
 
             request.Headers.ContentType = JsonRpcContentType;
 
-            var parameterData = new object[JsonParameters.Count];
+            var parameterAsArray = new object[JsonParameters.Count];
             var parameterSummary = new string[JsonParameters.Count];
 
             for (var i = 0; i < JsonParameters.Count; i++)
             {
-                ConvertParameter(JsonParameters[i], out parameterData[i], out parameterSummary[i]);
+                ConvertParameter(JsonParameters[i], out parameterAsArray[i], out parameterSummary[i]);
+            }
+
+            object paramFinal = parameterAsArray;
+
+            if (JsonParametersToObject)
+            {
+                var left  = parameterAsArray.Skip(0).Where((v, i) => i % 2 == 0);
+                var right = parameterAsArray.Skip(1).Where((v, i) => i % 2 == 0);
+
+                var parameterAsDict = left.Zip(right, Tuple.Create).ToDictionary(x => x.Item1.ToString(), x => x.Item2);
+                paramFinal = parameterAsDict;
             }
 
             var message = new Dictionary<string, object>();
             message["jsonrpc"] = "2.0";
             message["method"] = JsonMethod;
-            message["params"] = parameterData;
+            message["params"] = paramFinal;
             message["id"] = CreateNextId();
 
             request.SetContent(message.ToJson());
