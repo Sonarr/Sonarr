@@ -13,11 +13,11 @@ import { Manager, Popper, Reference } from 'react-popper';
 import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
-import Measure from 'Components/Measure';
 import Modal from 'Components/Modal/Modal';
 import ModalBody from 'Components/Modal/ModalBody';
 import Portal from 'Components/Portal';
 import Scroller from 'Components/Scroller/Scroller';
+import useMeasure from 'Helpers/Hooks/useMeasure';
 import { icons, scrollDirections, sizes } from 'Helpers/Props';
 import ArrayElement from 'typings/Helpers/ArrayElement';
 import { EnhancedSelectInputChanged, InputChanged } from 'typings/inputs';
@@ -162,13 +162,13 @@ function EnhancedSelectInput<T extends EnhancedSelectInputValue<V>, V>(
     onOpen,
   } = props;
 
+  const [measureRef, { width }] = useMeasure();
   const updater = useRef<(() => void) | null>(null);
   const buttonId = useMemo(() => getUniqueElementId(), []);
   const optionsId = useMemo(() => getUniqueElementId(), []);
   const [selectedIndex, setSelectedIndex] = useState(
     getSelectedIndex(value, values)
   );
-  const [width, setWidth] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const isMobile = useMemo(() => isMobileUtil(), []);
 
@@ -378,13 +378,6 @@ function EnhancedSelectInput<T extends EnhancedSelectInputValue<V>, V>(
     ]
   );
 
-  const handleMeasure = useCallback(
-    ({ width: newWidth }: { width: number }) => {
-      setWidth(newWidth);
-    },
-    [setWidth]
-  );
-
   const handleOptionsModalClose = useCallback(() => {
     setIsOpen(false);
   }, [setIsOpen]);
@@ -418,7 +411,7 @@ function EnhancedSelectInput<T extends EnhancedSelectInputValue<V>, V>(
         <Reference>
           {({ ref }) => (
             <div ref={ref} id={buttonId}>
-              <Measure whitelist={['width']} onMeasure={handleMeasure}>
+              <div ref={measureRef}>
                 {isEditable && typeof value === 'string' ? (
                   <div className={styles.editableContainer}>
                     <TextInput
@@ -492,7 +485,7 @@ function EnhancedSelectInput<T extends EnhancedSelectInputValue<V>, V>(
                     </div>
                   </Link>
                 )}
-              </Measure>
+              </div>
             </div>
           )}
         </Reference>
