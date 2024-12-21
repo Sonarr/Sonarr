@@ -1472,6 +1472,8 @@
   "NotificationsTelegramSettingsMetadataLinksHelpText": "Add a links to series metadata when sending notifications",
   "NotificationsTelegramSettingsSendSilently": "Send Silently",
   "NotificationsTelegramSettingsSendSilentlyHelpText": "Sends the message silently. Users will receive a notification with no sound",
+  "NotificationsTelegramSettingsDisableLinkPreview": "Disable Link Preview",
+  "NotificationsTelegramSettingsDisableLinkPreviewHelpText": "Disable link preview generation. Users will receive a notification with url only. Telegram will not generate a preview",
   "NotificationsTelegramSettingsTopicId": "Topic ID",
   "NotificationsTelegramSettingsTopicIdHelpText": "Specify a Topic ID to send notifications to that topic. Leave blank to use the general topic (Supergroups only)",
   "NotificationsTraktSettingsAccessToken": "Access Token",
