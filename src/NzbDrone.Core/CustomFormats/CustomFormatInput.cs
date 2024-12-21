@@ -11,6 +11,7 @@ namespace NzbDrone.Core.CustomFormats
         public Series Series { get; set; }
         public long Size { get; set; }
         public IndexerFlags IndexerFlags { get; set; }
+        public int IndexerId { get; set; }
         public List<Language> Languages { get; set; }
         public string Filename { get; set; }
         public ReleaseType ReleaseType { get; set; }
