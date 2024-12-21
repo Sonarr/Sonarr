@@ -1,16 +1,17 @@
 import React, { useEffect } from 'react';
 import Button from 'Components/Link/Button';
-import SpinnerButton from 'Components/Link/SpinnerButton';
+import SpinnerButton, {
+  SpinnerButtonProps,
+} from 'Components/Link/SpinnerButton';
 import Modal, { ModalProps } from 'Components/Modal/Modal';
 import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import useKeyboardShortcuts from 'Helpers/Hooks/useKeyboardShortcuts';
-import { Kind } from 'Helpers/Props/kinds';
 
 interface ConfirmModalProps extends Omit<ModalProps, 'onModalClose'> {
-  kind?: Kind;
+  kind?: SpinnerButtonProps['kind'];
   title: string;
   message: React.ReactNode;
   confirmLabel?: string;
