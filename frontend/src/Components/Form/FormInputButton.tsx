@@ -8,12 +8,14 @@ import styles from './FormInputButton.css';
 export interface FormInputButtonProps extends ButtonProps {
   canSpin?: boolean;
   isLastButton?: boolean;
+  isSpinning?: boolean;
 }
 
 function FormInputButton({
   className = styles.button,
   canSpin = false,
   isLastButton = true,
+  isSpinning = false,
   kind = kinds.PRIMARY,
   ...otherProps
 }: FormInputButtonProps) {
@@ -22,6 +24,7 @@ function FormInputButton({
       <SpinnerButton
         className={classNames(className, !isLastButton && styles.middleButton)}
         kind={kind}
+        isSpinning={isSpinning}
         {...otherProps}
       />
     );

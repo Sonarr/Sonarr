@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import AppState from 'App/State/AppState';
 import Alert from 'Components/Alert';
 import FieldSet from 'Components/FieldSet';
-import Icon, { IconProps } from 'Components/Icon';
+import Icon, { IconKind } from 'Components/Icon';
 import IconButton from 'Components/Link/IconButton';
 import SpinnerIconButton from 'Components/Link/SpinnerIconButton';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
@@ -97,7 +97,7 @@ function Health() {
               {items.map((item) => {
                 const source = item.source;
 
-                let kind: IconProps['kind'] = kinds.WARNING;
+                let kind: IconKind = kinds.WARNING;
                 switch (item.type.toLowerCase()) {
                   case 'error':
                     kind = kinds.DANGER;

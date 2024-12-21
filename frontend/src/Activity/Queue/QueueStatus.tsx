@@ -1,5 +1,5 @@
 import React from 'react';
-import Icon, { IconProps } from 'Components/Icon';
+import Icon, { IconKind } from 'Components/Icon';
 import Popover from 'Components/Tooltip/Popover';
 import { icons, kinds } from 'Helpers/Props';
 import { TooltipPosition } from 'Helpers/Props/tooltipPositions';
@@ -61,7 +61,7 @@ function QueueStatus(props: QueueStatusProps) {
 
   // status === 'downloading'
   let iconName = icons.DOWNLOADING;
-  let iconKind: IconProps['kind'] = kinds.DEFAULT;
+  let iconKind: IconKind = kinds.DEFAULT;
   let title = translate('Downloading');
 
   if (status === 'paused') {
