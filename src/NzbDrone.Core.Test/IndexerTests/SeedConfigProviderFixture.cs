@@ -22,10 +22,33 @@ namespace NzbDrone.Core.Test.IndexerTests
 
             var result = Subject.GetSeedConfiguration(new RemoteEpisode
             {
-                Release = new ReleaseInfo()
+                Release = new ReleaseInfo
                 {
                     DownloadProtocol = DownloadProtocol.Torrent,
                     IndexerId = 0
+                }
+            });
+
+            result.Should().BeNull();
+        }
+
+        [Test]
+        public void should_not_return_config_for_invalid_indexer()
+        {
+            Mocker.GetMock<ICachedIndexerSettingsProvider>()
+                  .Setup(v => v.GetSettings(It.IsAny<int>()))
+                  .Returns<CachedIndexerSettings>(null);
+
+            var result = Subject.GetSeedConfiguration(new RemoteEpisode
+            {
+                Release = new ReleaseInfo
+                {
+                    DownloadProtocol = DownloadProtocol.Torrent,
+                    IndexerId = 1
+                },
+                ParsedEpisodeInfo = new ParsedEpisodeInfo
+                {
+                    FullSeason = true
                 }
             });
 
@@ -48,7 +71,7 @@ namespace NzbDrone.Core.Test.IndexerTests
 
             var result = Subject.GetSeedConfiguration(new RemoteEpisode
             {
-                Release = new ReleaseInfo()
+                Release = new ReleaseInfo
                 {
                     DownloadProtocol = DownloadProtocol.Torrent,
                     IndexerId = 1

@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using NLog;
 using NzbDrone.Common.Cache;
+using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.ThingiProvider.Events;
 
@@ -12,8 +14,10 @@ public interface ICachedIndexerSettingsProvider
     CachedIndexerSettings GetSettings(int indexerId);
 }
 
-public class CachedIndexerSettingsProvider : ICachedIndexerSettingsProvider, IHandle<ProviderUpdatedEvent<IIndexer>>
+public class CachedIndexerSettingsProvider : ICachedIndexerSettingsProvider, IHandle<ProviderUpdatedEvent<IIndexer>>, IHandle<ProviderDeletedEvent<IIndexer>>
 {
+    private static readonly Logger Logger = NzbDroneLogger.GetLogger(typeof(CachedIndexerSettingsProvider));
+
     private readonly IIndexerFactory _indexerFactory;
     private readonly ICached<CachedIndexerSettings> _cache;
 
@@ -35,11 +39,12 @@ public class CachedIndexerSettingsProvider : ICachedIndexerSettingsProvider, IHa
 
     private CachedIndexerSettings FetchIndexerSettings(int indexerId)
     {
-        var indexer = _indexerFactory.Get(indexerId);
-        var indexerSettings = indexer.Settings as IIndexerSettings;
+        var indexer = _indexerFactory.Find(indexerId);
 
-        if (indexerSettings == null)
+        if (indexer?.Settings is not IIndexerSettings indexerSettings)
         {
+            Logger.Trace("Could not load settings for indexer ID: {0}", indexerId);
+
             return null;
         }
 
@@ -57,6 +62,11 @@ public class CachedIndexerSettingsProvider : ICachedIndexerSettingsProvider, IHa
     }
 
     public void Handle(ProviderUpdatedEvent<IIndexer> message)
+    {
+        _cache.Clear();
+    }
+
+    public void Handle(ProviderDeletedEvent<IIndexer> message)
     {
         _cache.Clear();
     }
