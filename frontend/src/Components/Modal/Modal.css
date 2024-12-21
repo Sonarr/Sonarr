@@ -39,6 +39,12 @@
  * Sizes
  */
 
+.extraSmall {
+  composes: modal;
+
+  width: 320px;
+}
+
 .small {
   composes: modal;
 
@@ -62,7 +68,6 @@
 
   width: 1280px;
 }
-
 
 .extraExtraLarge {
   composes: modal;

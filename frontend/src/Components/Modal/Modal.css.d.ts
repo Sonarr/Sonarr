@@ -3,6 +3,7 @@
 interface CssExports {
   'extraExtraLarge': string;
   'extraLarge': string;
+  'extraSmall': string;
   'large': string;
   'medium': string;
   'modal': string;
