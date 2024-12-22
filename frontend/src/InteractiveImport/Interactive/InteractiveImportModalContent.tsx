@@ -77,8 +77,6 @@ type SelectType =
   | 'indexerFlags'
   | 'releaseType';
 
-type FilterExistingFiles = 'all' | 'new';
-
 // TODO: This feels janky to do, but not sure of a better way currently
 type OnSelectedChangeCallback = React.ComponentProps<
   typeof InteractiveImportRow
@@ -641,10 +639,8 @@ function InteractiveImportModalContent(
     [dispatch]
   );
 
-  const onFilterExistingFilesChange = useCallback<
-    (value: FilterExistingFiles) => void
-  >(
-    (value) => {
+  const onFilterExistingFilesChange = useCallback(
+    (value: string | undefined) => {
       const filter = value !== 'all';
 
       setFilterExistingFiles(filter);

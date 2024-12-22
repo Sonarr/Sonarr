@@ -2,7 +2,6 @@ import moment from 'moment';
 import React, { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import AppState from 'App/State/AppState';
-import { CalendarView } from 'Calendar/calendarViews';
 import Icon from 'Components/Icon';
 import Button from 'Components/Link/Button';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
@@ -37,7 +36,7 @@ function CalendarHeader() {
   const { longDateFormat } = useSelector(createUISettingsSelector());
 
   const handleViewChange = useCallback(
-    (newView: CalendarView) => {
+    (newView: string) => {
       dispatch(setCalendarView({ view: newView }));
     },
     [dispatch]

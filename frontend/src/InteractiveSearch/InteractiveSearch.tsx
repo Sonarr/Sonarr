@@ -137,7 +137,7 @@ function InteractiveSearch({ type, searchPayload }: InteractiveSearchProps) {
   const dispatch = useDispatch();
 
   const handleFilterSelect = useCallback(
-    (selectedFilterKey: string) => {
+    (selectedFilterKey: string | number) => {
       const action =
         type === 'episode' ? setEpisodeReleasesFilter : setSeasonReleasesFilter;
 
