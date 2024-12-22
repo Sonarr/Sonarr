@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
 import AppState from 'App/State/AppState';
-import FilterModal from 'Components/Filter/FilterModal';
+import FilterModal, { FilterModalProps } from 'Components/Filter/FilterModal';
 import { setHistoryFilter } from 'Store/Actions/historyActions';
 
 function createHistorySelector() {
@@ -23,19 +23,16 @@ function createFilterBuilderPropsSelector() {
   );
 }
 
-interface HistoryFilterModalProps {
-  isOpen: boolean;
-}
+type HistoryFilterModalProps = FilterModalProps<History>;
 
 export default function HistoryFilterModal(props: HistoryFilterModalProps) {
   const sectionItems = useSelector(createHistorySelector());
   const filterBuilderProps = useSelector(createFilterBuilderPropsSelector());
-  const customFilterType = 'history';
 
   const dispatch = useDispatch();
 
   const dispatchSetFilter = useCallback(
-    (payload: unknown) => {
+    (payload: { selectedFilterKey: string | number }) => {
       dispatch(setHistoryFilter(payload));
     },
     [dispatch]
@@ -43,11 +40,10 @@ export default function HistoryFilterModal(props: HistoryFilterModalProps) {
 
   return (
     <FilterModal
-      // TODO: Don't spread all the props
       {...props}
       sectionItems={sectionItems}
       filterBuilderProps={filterBuilderProps}
-      customFilterType={customFilterType}
+      customFilterType="history"
       dispatchSetFilter={dispatchSetFilter}
     />
   );

@@ -61,6 +61,7 @@ export type InputType =
   | 'autoComplete'
   | 'captcha'
   | 'check'
+  | 'date'
   | 'device'
   | 'keyValueList'
   | 'monitorEpisodesSelect'
