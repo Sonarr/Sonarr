@@ -1,15 +1,14 @@
 import React from 'react';
-import { CustomFilter } from 'App/State/AppState';
+import { CustomFilter, Filter } from 'App/State/AppState';
 import FilterMenu from 'Components/Menu/FilterMenu';
-import { align } from 'Helpers/Props';
 import SeriesIndexFilterModal from 'Series/Index/SeriesIndexFilterModal';
 
 interface SeriesIndexFilterMenuProps {
   selectedFilterKey: string | number;
-  filters: object[];
+  filters: Filter[];
   customFilters: CustomFilter[];
   isDisabled: boolean;
-  onFilterSelect(filterName: string): unknown;
+  onFilterSelect: (filter: number | string) => void;
 }
 
 function SeriesIndexFilterMenu(props: SeriesIndexFilterMenuProps) {
@@ -23,7 +22,7 @@ function SeriesIndexFilterMenu(props: SeriesIndexFilterMenuProps) {
 
   return (
     <FilterMenu
-      alignMenu={align.RIGHT}
+      alignMenu="right"
       isDisabled={isDisabled}
       selectedFilterKey={selectedFilterKey}
       filters={filters}

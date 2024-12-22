@@ -132,7 +132,7 @@ function CalendarPage() {
   }, [missingEpisodeIds, dispatch]);
 
   const handleFilterSelect = useCallback(
-    (key: string) => {
+    (key: string | number) => {
       dispatch(setCalendarFilter({ selectedFilterKey: key }));
     },
     [dispatch]

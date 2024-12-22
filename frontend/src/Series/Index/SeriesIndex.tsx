@@ -145,7 +145,7 @@ const SeriesIndex = withScrollPosition((props: SeriesIndexProps) => {
   );
 
   const onFilterSelect = useCallback(
-    (value: string) => {
+    (value: string | number) => {
       dispatch(setSeriesFilter({ selectedFilterKey: value }));
     },
     [dispatch]

@@ -45,7 +45,7 @@ export interface PropertyFilter {
 
 export interface Filter {
   key: string;
-  label: string;
+  label: string | (() => string);
   type: string;
   filters: PropertyFilter[];
 }

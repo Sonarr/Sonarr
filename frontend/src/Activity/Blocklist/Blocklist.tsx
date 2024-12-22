@@ -145,7 +145,7 @@ function Blocklist() {
   });
 
   const handleFilterSelect = useCallback(
-    (selectedFilterKey: string) => {
+    (selectedFilterKey: string | number) => {
       dispatch(setBlocklistFilter({ selectedFilterKey }));
     },
     [dispatch]
