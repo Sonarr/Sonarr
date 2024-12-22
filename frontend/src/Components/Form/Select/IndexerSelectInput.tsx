@@ -42,7 +42,6 @@ interface IndexerSelectInputConnectorProps {
   name: string;
   value: number;
   includeAny?: boolean;
-  values: object[];
   onChange: (change: EnhancedSelectInputChanged<number>) => void;
 }
 
@@ -73,9 +72,5 @@ function IndexerSelectInput({
     />
   );
 }
-
-IndexerSelectInput.defaultProps = {
-  includeAny: false,
-};
 
 export default IndexerSelectInput;
