@@ -8,7 +8,7 @@ import translate from 'Utilities/String/translate';
 interface SeriesIndexViewMenuProps {
   view: string;
   isDisabled: boolean;
-  onViewSelect(value: string): unknown;
+  onViewSelect(value: string): void;
 }
 
 function SeriesIndexViewMenu(props: SeriesIndexViewMenuProps) {
