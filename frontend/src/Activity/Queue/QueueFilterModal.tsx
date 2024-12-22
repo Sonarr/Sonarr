@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
 import AppState from 'App/State/AppState';
-import FilterModal from 'Components/Filter/FilterModal';
+import FilterModal, { FilterModalProps } from 'Components/Filter/FilterModal';
 import { setQueueFilter } from 'Store/Actions/queueActions';
 
 function createQueueSelector() {
@@ -23,9 +23,7 @@ function createFilterBuilderPropsSelector() {
   );
 }
 
-interface QueueFilterModalProps {
-  isOpen: boolean;
-}
+type QueueFilterModalProps = FilterModalProps<History>;
 
 export default function QueueFilterModal(props: QueueFilterModalProps) {
   const sectionItems = useSelector(createQueueSelector());
@@ -43,7 +41,6 @@ export default function QueueFilterModal(props: QueueFilterModalProps) {
 
   return (
     <FilterModal
-      // TODO: Don't spread all the props
       {...props}
       sectionItems={sectionItems}
       filterBuilderProps={filterBuilderProps}

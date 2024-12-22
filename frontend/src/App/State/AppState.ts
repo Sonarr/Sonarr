@@ -1,3 +1,6 @@
+import ModelBase from 'App/ModelBase';
+import { DateFilterValue } from 'Components/Filter/Builder/DateFilterBuilderRowValue';
+import { FilterBuilderTypes } from 'Helpers/Props/filterBuilderTypes';
 import { Error } from './AppSectionState';
 import BlocklistAppState from './BlocklistAppState';
 import CalendarAppState from './CalendarAppState';
@@ -21,33 +24,33 @@ import SystemAppState from './SystemAppState';
 import TagsAppState from './TagsAppState';
 import WantedAppState from './WantedAppState';
 
-interface FilterBuilderPropOption {
+export interface FilterBuilderPropOption {
   id: string;
   name: string;
 }
 
 export interface FilterBuilderProp<T> {
   name: string;
-  label: string;
-  type: string;
+  label: string | (() => string);
+  type: FilterBuilderTypes;
   valueType?: string;
   optionsSelector?: (items: T[]) => FilterBuilderPropOption[];
 }
 
 export interface PropertyFilter {
   key: string;
-  value: boolean | string | number | string[] | number[];
+  value: string | string[] | number[] | boolean[] | DateFilterValue;
   type: string;
 }
 
 export interface Filter {
   key: string;
   label: string;
+  type: string;
   filters: PropertyFilter[];
 }
 
-export interface CustomFilter {
-  id: number;
+export interface CustomFilter extends ModelBase {
   type: string;
   label: string;
   filters: PropertyFilter[];

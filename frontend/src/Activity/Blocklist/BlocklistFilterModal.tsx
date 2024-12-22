@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
 import AppState from 'App/State/AppState';
-import FilterModal from 'Components/Filter/FilterModal';
+import FilterModal, { FilterModalProps } from 'Components/Filter/FilterModal';
 import { setBlocklistFilter } from 'Store/Actions/blocklistActions';
 
 function createBlocklistSelector() {
@@ -23,9 +23,7 @@ function createFilterBuilderPropsSelector() {
   );
 }
 
-interface BlocklistFilterModalProps {
-  isOpen: boolean;
-}
+type BlocklistFilterModalProps = FilterModalProps<History>;
 
 export default function BlocklistFilterModal(props: BlocklistFilterModalProps) {
   const sectionItems = useSelector(createBlocklistSelector());
@@ -43,7 +41,6 @@ export default function BlocklistFilterModal(props: BlocklistFilterModalProps) {
 
   return (
     <FilterModal
-      // TODO: Don't spread all the props
       {...props}
       sectionItems={sectionItems}
       filterBuilderProps={filterBuilderProps}

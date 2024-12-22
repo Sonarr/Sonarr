@@ -2,7 +2,8 @@ import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
 import AppState from 'App/State/AppState';
-import FilterModal from 'Components/Filter/FilterModal';
+import FilterModal, { FilterModalProps } from 'Components/Filter/FilterModal';
+import Series from 'Series/Series';
 import { setSeriesFilter } from 'Store/Actions/seriesIndexActions';
 
 function createSeriesSelector() {
@@ -23,16 +24,13 @@ function createFilterBuilderPropsSelector() {
   );
 }
 
-interface SeriesIndexFilterModalProps {
-  isOpen: boolean;
-}
+type SeriesIndexFilterModalProps = FilterModalProps<Series>;
 
 export default function SeriesIndexFilterModal(
   props: SeriesIndexFilterModalProps
 ) {
   const sectionItems = useSelector(createSeriesSelector());
   const filterBuilderProps = useSelector(createFilterBuilderPropsSelector());
-  const customFilterType = 'series';
 
   const dispatch = useDispatch();
 
@@ -45,11 +43,10 @@ export default function SeriesIndexFilterModal(
 
   return (
     <FilterModal
-      // TODO: Don't spread all the props
       {...props}
       sectionItems={sectionItems}
       filterBuilderProps={filterBuilderProps}
-      customFilterType={customFilterType}
+      customFilterType="series"
       dispatchSetFilter={dispatchSetFilter}
     />
   );
