@@ -3,6 +3,7 @@ import Link from 'Components/Link/Link';
 import { inputTypes } from 'Helpers/Props';
 import { InputType } from 'Helpers/Props/inputTypes';
 import { Kind } from 'Helpers/Props/kinds';
+import { InputChanged } from 'typings/inputs';
 import { ValidationError, ValidationWarning } from 'typings/pending';
 import translate from 'Utilities/String/translate';
 import AutoCompleteInput from './AutoCompleteInput';
@@ -118,6 +119,12 @@ function getComponent(type: InputType) {
   }
 }
 
+export interface FormInputGroupValues<T> {
+  key: T;
+  value: string;
+  hint?: string;
+}
+
 // TODO: Remove once all parent components are updated to TSX and we can refactor to a consistent type
 export interface ValidationMessage {
   message: string;
@@ -129,7 +136,7 @@ interface FormInputGroupProps<T> {
   inputClassName?: string;
   name: string;
   value?: unknown;
-  values?: unknown[];
+  values?: FormInputGroupValues<unknown>[];
   isDisabled?: boolean;
   type?: InputType;
   kind?: Kind;
@@ -143,10 +150,12 @@ interface FormInputGroupProps<T> {
   helpLink?: string;
   placeholder?: string;
   autoFocus?: boolean;
+  includeFiles?: boolean;
   includeNoChange?: boolean;
   includeNoChangeDisabled?: boolean;
   valueOptions?: object;
   selectedValueOptions?: object;
+  selectOptionsProviderAction?: string;
   indexerFlags?: number;
   pending?: boolean;
   canEdit?: boolean;
@@ -155,7 +164,7 @@ interface FormInputGroupProps<T> {
   readOnly?: boolean;
   errors?: (ValidationMessage | ValidationError)[];
   warnings?: (ValidationMessage | ValidationWarning)[];
-  onChange: (args: T) => void;
+  onChange: (change: InputChanged<T>) => void;
   onFocus?: (event: FocusEvent<HTMLInputElement>) => void;
 }
 

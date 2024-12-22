@@ -16,7 +16,7 @@ import ModalHeader from 'Components/Modal/ModalHeader';
 import { inputTypes, kinds } from 'Helpers/Props';
 import Quality, { QualityModel } from 'Quality/Quality';
 import { fetchQualityProfileSchema } from 'Store/Actions/settingsActions';
-import { CheckInputChanged } from 'typings/inputs';
+import { InputChanged } from 'typings/inputs';
 import getQualities from 'Utilities/Quality/getQualities';
 import translate from 'Utilities/String/translate';
 
@@ -85,14 +85,14 @@ function SelectQualityModalContent(props: SelectQualityModalContentProps) {
   );
 
   const onProperChange = useCallback(
-    ({ value }: CheckInputChanged) => {
+    ({ value }: InputChanged<boolean>) => {
       setProper(value);
     },
     [setProper]
   );
 
   const onRealChange = useCallback(
-    ({ value }: CheckInputChanged) => {
+    ({ value }: InputChanged<boolean>) => {
       setReal(value);
     },
     [setReal]
