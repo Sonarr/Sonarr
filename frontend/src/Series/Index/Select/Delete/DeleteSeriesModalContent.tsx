@@ -15,7 +15,7 @@ import { inputTypes, kinds } from 'Helpers/Props';
 import Series from 'Series/Series';
 import { bulkDeleteSeries, setDeleteOption } from 'Store/Actions/seriesActions';
 import createAllSeriesSelector from 'Store/Selectors/createAllSeriesSelector';
-import { CheckInputChanged } from 'typings/inputs';
+import { InputChanged } from 'typings/inputs';
 import formatBytes from 'Utilities/Number/formatBytes';
 import translate from 'Utilities/String/translate';
 import styles from './DeleteSeriesModalContent.css';
@@ -48,7 +48,7 @@ function DeleteSeriesModalContent(props: DeleteSeriesModalContentProps) {
   }, [seriesIds, allSeries]);
 
   const onDeleteFilesChange = useCallback(
-    ({ value }: CheckInputChanged) => {
+    ({ value }: InputChanged<boolean>) => {
       setDeleteFiles(value);
     },
     [setDeleteFiles]
