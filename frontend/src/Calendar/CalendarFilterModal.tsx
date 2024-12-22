@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
 import AppState from 'App/State/AppState';
-import FilterModal from 'Components/Filter/FilterModal';
+import FilterModal, { FilterModalProps } from 'Components/Filter/FilterModal';
 import { setCalendarFilter } from 'Store/Actions/calendarActions';
 
 function createCalendarSelector() {
@@ -23,9 +23,7 @@ function createFilterBuilderPropsSelector() {
   );
 }
 
-interface CalendarFilterModalProps {
-  isOpen: boolean;
-}
+type CalendarFilterModalProps = FilterModalProps<History>;
 
 export default function CalendarFilterModal(props: CalendarFilterModalProps) {
   const sectionItems = useSelector(createCalendarSelector());
@@ -43,7 +41,6 @@ export default function CalendarFilterModal(props: CalendarFilterModalProps) {
 
   return (
     <FilterModal
-      // TODO: Don't spread all the props
       {...props}
       sectionItems={sectionItems}
       filterBuilderProps={filterBuilderProps}

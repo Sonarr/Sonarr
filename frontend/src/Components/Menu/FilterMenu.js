@@ -75,7 +75,7 @@ class FilterMenu extends Component {
         </Menu>
 
         {
-          showCustomFilters &&
+          showCustomFilters ?
             <FilterModalConnectorComponent
               {...filterModalConnectorComponentProps}
               isOpen={this.state.isFilterModalOpen}
@@ -84,7 +84,7 @@ class FilterMenu extends Component {
               customFilters={customFilters}
               onFilterSelect={onFilterSelect}
               onModalClose={this.onFiltersModalClose}
-            />
+            /> : null
         }
       </div>
     );

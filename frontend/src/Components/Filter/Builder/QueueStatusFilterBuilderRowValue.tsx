@@ -1,7 +1,8 @@
 import React from 'react';
 import translate from 'Utilities/String/translate';
-import FilterBuilderRowValue from './FilterBuilderRowValue';
-import FilterBuilderRowValueProps from './FilterBuilderRowValueProps';
+import FilterBuilderRowValue, {
+  FilterBuilderRowValueProps,
+} from './FilterBuilderRowValue';
 
 const statusTagList = [
   {
@@ -60,7 +61,14 @@ const statusTagList = [
   },
 ];
 
-function QueueStatusFilterBuilderRowValue(props: FilterBuilderRowValueProps) {
+type QueueStatusFilterBuilderRowValueProps<T> = Omit<
+  FilterBuilderRowValueProps<T, string>,
+  'tagList'
+>;
+
+function QueueStatusFilterBuilderRowValue<T>(
+  props: QueueStatusFilterBuilderRowValueProps<T>
+) {
   return <FilterBuilderRowValue {...props} tagList={statusTagList} />;
 }
 

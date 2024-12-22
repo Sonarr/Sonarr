@@ -1,7 +1,8 @@
 import React from 'react';
 import translate from 'Utilities/String/translate';
-import FilterBuilderRowValue from './FilterBuilderRowValue';
-import FilterBuilderRowValueProps from './FilterBuilderRowValueProps';
+import FilterBuilderRowValue, {
+  FilterBuilderRowValueProps,
+} from './FilterBuilderRowValue';
 
 const EVENT_TYPE_OPTIONS = [
   {
@@ -42,8 +43,13 @@ const EVENT_TYPE_OPTIONS = [
   },
 ];
 
-function HistoryEventTypeFilterBuilderRowValue(
-  props: FilterBuilderRowValueProps
+type QualityProfileFilterBuilderRowValueProps<T> = Omit<
+  FilterBuilderRowValueProps<T, number>,
+  'tagList'
+>;
+
+function HistoryEventTypeFilterBuilderRowValue<T>(
+  props: QualityProfileFilterBuilderRowValueProps<T>
 ) {
   return <FilterBuilderRowValue {...props} tagList={EVENT_TYPE_OPTIONS} />;
 }
