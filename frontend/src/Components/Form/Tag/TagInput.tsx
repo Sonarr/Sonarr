@@ -356,16 +356,4 @@ TagInput.propTypes = {
   onTagReplace: PropTypes.func,
 };
 
-TagInput.defaultProps = {
-  className: styles.internalInput,
-  inputContainerClassName: styles.input,
-  allowNew: true,
-  kind: kinds.INFO,
-  placeholder: '',
-  delimiters: ['Tab', 'Enter', ' ', ','],
-  minQueryLength: 1,
-  canEdit: false,
-  tagComponent: TagInputTag,
-};
-
 export default TagInput;
