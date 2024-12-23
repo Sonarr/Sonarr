@@ -95,7 +95,6 @@ function Metadata({ id, name, enable, fields }: MetadataProps) {
       ) : null}
 
       <EditMetadataModal
-        advancedSettings={false}
         id={id}
         isOpen={isEditMetadataModalOpen}
         onModalClose={handleModalClose}
