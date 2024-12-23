@@ -22,7 +22,7 @@ import Popover from 'Components/Tooltip/Popover';
 import Tooltip from 'Components/Tooltip/Tooltip';
 import { align, icons, kinds, sizes, sortDirections, tooltipPositions } from 'Helpers/Props';
 import InteractiveImportModal from 'InteractiveImport/InteractiveImportModal';
-import OrganizePreviewModalConnector from 'Organize/OrganizePreviewModalConnector';
+import OrganizePreviewModal from 'Organize/OrganizePreviewModal';
 import DeleteSeriesModal from 'Series/Delete/DeleteSeriesModal';
 import EditSeriesModal from 'Series/Edit/EditSeriesModal';
 import SeriesHistoryModal from 'Series/History/SeriesHistoryModal';
@@ -682,7 +682,7 @@ class SeriesDetails extends Component {
 
           </div>
 
-          <OrganizePreviewModalConnector
+          <OrganizePreviewModal
             isOpen={isOrganizeModalOpen}
             seriesId={id}
             onModalClose={this.onOrganizeModalClose}

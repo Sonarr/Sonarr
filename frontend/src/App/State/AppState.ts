@@ -12,6 +12,7 @@ import EpisodesAppState from './EpisodesAppState';
 import HistoryAppState from './HistoryAppState';
 import InteractiveImportAppState from './InteractiveImportAppState';
 import OAuthAppState from './OAuthAppState';
+import OrganizePreviewAppState from './OrganizePreviewAppState';
 import ParseAppState from './ParseAppState';
 import PathsAppState from './PathsAppState';
 import ProviderOptionsAppState from './ProviderOptionsAppState';
@@ -90,6 +91,7 @@ interface AppState {
   history: HistoryAppState;
   interactiveImport: InteractiveImportAppState;
   oAuth: OAuthAppState;
+  organizePreview: OrganizePreviewAppState;
   parse: ParseAppState;
   paths: PathsAppState;
   providerOptions: ProviderOptionsAppState;
