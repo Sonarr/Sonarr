@@ -1,5 +1,5 @@
 import React from 'react';
-import TagListConnector from 'Components/TagListConnector';
+import SeriesTagList from 'Components/SeriesTagList';
 import Language from 'Language/Language';
 import QualityProfile from 'typings/QualityProfile';
 import formatDateTime from 'Utilities/Date/formatDateTime';
@@ -131,7 +131,7 @@ function SeriesIndexPosterInfo(props: SeriesIndexPosterInfoProps) {
     return (
       <div className={styles.tags}>
         <div className={styles.tagsList}>
-          <TagListConnector tags={tags} />
+          <SeriesTagList tags={tags} />
         </div>
       </div>
     );
