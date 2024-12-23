@@ -66,7 +66,7 @@ interface RowItemData {
 }
 
 function Row({ index, style, data }: ListChildComponentProps<RowItemData>) {
-  const { items, columns, onSeriesSelect } = data;
+  const { items, onSeriesSelect } = data;
   const series = index >= items.length ? null : items[index];
 
   const handlePress = useCallback(() => {
@@ -90,13 +90,10 @@ function Row({ index, style, data }: ListChildComponentProps<RowItemData>) {
     >
       <SelectSeriesRow
         key={series.id}
-        id={series.id}
         title={series.title}
         tvdbId={series.tvdbId}
         imdbId={series.imdbId}
         year={series.year}
-        columns={columns}
-        onSeriesSelect={onSeriesSelect}
       />
     </VirtualTableRowButton>
   );
