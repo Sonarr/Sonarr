@@ -16,7 +16,7 @@ import TableBody from 'Components/Table/TableBody';
 import Popover from 'Components/Tooltip/Popover';
 import { align, icons, sortDirections, tooltipPositions } from 'Helpers/Props';
 import InteractiveImportModal from 'InteractiveImport/InteractiveImportModal';
-import OrganizePreviewModalConnector from 'Organize/OrganizePreviewModalConnector';
+import OrganizePreviewModal from 'Organize/OrganizePreviewModal';
 import SeriesHistoryModal from 'Series/History/SeriesHistoryModal';
 import SeasonInteractiveSearchModal from 'Series/Search/SeasonInteractiveSearchModal';
 import isAfter from 'Utilities/Date/isAfter';
@@ -475,7 +475,7 @@ class SeriesDetailsSeason extends Component {
           }
         </div>
 
-        <OrganizePreviewModalConnector
+        <OrganizePreviewModal
           isOpen={isOrganizeModalOpen}
           seriesId={seriesId}
           seasonNumber={seasonNumber}
