@@ -6,7 +6,7 @@ import Label from 'Components/Label';
 import IconButton from 'Components/Link/IconButton';
 import Link from 'Components/Link/Link';
 import SpinnerIconButton from 'Components/Link/SpinnerIconButton';
-import TagListConnector from 'Components/TagListConnector';
+import SeriesTagList from 'Components/SeriesTagList';
 import { icons } from 'Helpers/Props';
 import DeleteSeriesModal from 'Series/Delete/DeleteSeriesModal';
 import EditSeriesModal from 'Series/Edit/EditSeriesModal';
@@ -244,7 +244,7 @@ function SeriesIndexPoster(props: SeriesIndexPosterProps) {
       {showTags && tags.length ? (
         <div className={styles.tags}>
           <div className={styles.tagsList}>
-            <TagListConnector tags={tags} />
+            <SeriesTagList tags={tags} />
           </div>
         </div>
       ) : null}
