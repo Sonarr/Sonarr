@@ -17,7 +17,7 @@ interface CheckInputProps {
   name: string;
   checkedValue?: boolean;
   uncheckedValue?: boolean;
-  value?: string | boolean;
+  value?: string | boolean | null;
   helpText?: string;
   helpTextWarning?: string;
   isDisabled?: boolean;
