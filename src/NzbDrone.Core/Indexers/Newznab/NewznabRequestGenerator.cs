@@ -454,7 +454,7 @@ namespace NzbDrone.Core.Indexers.Newznab
                     searchCriteria,
                     $"&season={NewznabifySeasonNumber(searchCriteria.SeasonNumber)}");
 
-                var queryTitles = TextSearchEngine == "raw" ? searchCriteria.SceneTitles : searchCriteria.CleanSceneTitles;
+                var queryTitles = TextSearchEngine == "raw" ? searchCriteria.AllSceneTitles : searchCriteria.CleanSceneTitles;
 
                 foreach (var queryTitle in queryTitles)
                 {
@@ -582,7 +582,7 @@ namespace NzbDrone.Core.Indexers.Newznab
             }
             else if (SupportsTvQuerySearch)
             {
-                var queryTitles = TvTextSearchEngine == "raw" ? searchCriteria.SceneTitles : searchCriteria.CleanSceneTitles;
+                var queryTitles = TvTextSearchEngine == "raw" ? searchCriteria.AllSceneTitles : searchCriteria.CleanSceneTitles;
                 foreach (var queryTitle in queryTitles)
                 {
                     chain.Add(GetPagedRequests(MaxPages,
