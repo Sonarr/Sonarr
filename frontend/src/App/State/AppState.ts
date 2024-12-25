@@ -62,6 +62,7 @@ export interface AppSectionState {
   isConnected: boolean;
   isDisconnected: boolean;
   isReconnecting: boolean;
+  isRestarting: boolean;
   isSidebarVisible: boolean;
   version: string;
   prevVersion?: string;
