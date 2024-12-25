@@ -25,7 +25,7 @@ import Settings from 'Settings/Settings';
 import TagSettings from 'Settings/Tags/TagSettings';
 import UISettingsConnector from 'Settings/UI/UISettingsConnector';
 import Backups from 'System/Backup/Backups';
-import LogsTableConnector from 'System/Events/LogsTableConnector';
+import LogsTable from 'System/Events/LogsTable';
 import Logs from 'System/Logs/Logs';
 import Status from 'System/Status/Status';
 import Tasks from 'System/Tasks/Tasks';
@@ -151,7 +151,7 @@ function AppRoutes() {
 
       <Route path="/system/updates" component={Updates} />
 
-      <Route path="/system/events" component={LogsTableConnector} />
+      <Route path="/system/events" component={LogsTable} />
 
       <Route path="/system/logs/files" component={Logs} />
 
