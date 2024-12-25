@@ -9,6 +9,7 @@
 
 .step {
   display: flex;
+  margin-bottom: 10px;
   font-size: $largeFontSize;
   line-height: 20px;
 }

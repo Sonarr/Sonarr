@@ -24,7 +24,7 @@ import QualityConnector from 'Settings/Quality/QualityConnector';
 import Settings from 'Settings/Settings';
 import TagSettings from 'Settings/Tags/TagSettings';
 import UISettingsConnector from 'Settings/UI/UISettingsConnector';
-import BackupsConnector from 'System/Backup/BackupsConnector';
+import Backups from 'System/Backup/Backups';
 import LogsTableConnector from 'System/Events/LogsTableConnector';
 import Logs from 'System/Logs/Logs';
 import Status from 'System/Status/Status';
@@ -147,7 +147,7 @@ function AppRoutes() {
 
       <Route path="/system/tasks" component={Tasks} />
 
-      <Route path="/system/backup" component={BackupsConnector} />
+      <Route path="/system/backup" component={Backups} />
 
       <Route path="/system/updates" component={Updates} />
 

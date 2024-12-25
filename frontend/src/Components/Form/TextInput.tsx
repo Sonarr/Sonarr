@@ -7,13 +7,11 @@ import React, {
   useEffect,
   useRef,
 } from 'react';
-import { InputType } from 'Helpers/Props/inputTypes';
 import { FileInputChanged, InputChanged } from 'typings/inputs';
 import styles from './TextInput.css';
 
-export interface TextInputProps<T> {
+interface CommonTextInputProps {
   className?: string;
-  type?: InputType;
   readOnly?: boolean;
   autoFocus?: boolean;
   placeholder?: string;
@@ -25,14 +23,23 @@ export interface TextInputProps<T> {
   step?: number;
   min?: number;
   max?: number;
-  onChange: (change: InputChanged<T> | FileInputChanged) => void;
   onFocus?: (event: FocusEvent) => void;
   onBlur?: (event: SyntheticEvent) => void;
   onCopy?: (event: SyntheticEvent) => void;
   onSelectionChange?: (start: number | null, end: number | null) => void;
 }
 
-function TextInput<T>({
+export interface TextInputProps extends CommonTextInputProps {
+  type?: 'date' | 'number' | 'password' | 'text';
+  onChange: (change: InputChanged<string>) => void;
+}
+
+export interface FileInputProps extends CommonTextInputProps {
+  type: 'file';
+  onChange: (change: FileInputChanged) => void;
+}
+
+function TextInput({
   className = styles.input,
   type = 'text',
   readOnly = false,
@@ -51,7 +58,7 @@ function TextInput<T>({
   onCopy,
   onChange,
   onSelectionChange,
-}: TextInputProps<T>) {
+}: TextInputProps | FileInputProps): JSX.Element {
   const inputRef = useRef<HTMLInputElement>(null);
   const selectionTimeout = useRef<ReturnType<typeof setTimeout>>();
   const selectionStart = useRef<number | null>();
