@@ -52,5 +52,20 @@
     "AddNewRestriction": "加入新的限制",
     "AuthenticationRequiredWarning": "為防止未經認證的遠程訪問，{appName} 現需要啟用身份認證。您可以選擇禁用本地地址的身份認證。",
     "AddRemotePathMappingError": "無法加入新的遠程路徑對應，請重試。",
-    "AnalyseVideoFilesHelpText": "從文件中提取影像資訊，如解析度、運行環境和編解碼器資訊。這需要 {appName} 在掃描期間讀取文件並可能導致高磁盤或網絡佔用。"
+    "AnalyseVideoFilesHelpText": "從文件中提取影像資訊，如解析度、運行環境和編解碼器資訊。這需要 {appName} 在掃描期間讀取文件並可能導致高磁盤或網絡佔用。",
+    "AddDelayProfileError": "無法加入新的延遲配置，請重新嘗試。",
+    "AddImportListExclusionError": "無法加入新的導入列表排除，請重試。",
+    "AddIndexerError": "無法加入新的索引器，請重試。",
+    "AddList": "加入清單",
+    "AddListError": "無法加入新的清單，請重試。",
+    "AddANewPath": "新增新的路徑",
+    "AddCustomFormat": "加入自訂格式",
+    "AddCustomFormatError": "無法加入自訂格式，請重試。",
+    "AddDownloadClient": "加入下載用戶端",
+    "AddDownloadClientError": "無法加入下載用戶端，請重試。",
+    "AddExclusion": "加入排除",
+    "AbsoluteEpisodeNumbers": "絕對集數",
+    "AbsoluteEpisodeNumber": "絕對集數",
+    "AddListExclusionError": "無法加入新的清單排除，請重試。",
+    "AddNew": "加入新的"
 }

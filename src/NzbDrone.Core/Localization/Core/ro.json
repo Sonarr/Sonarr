@@ -209,5 +209,7 @@
     "CloneIndexer": "Clonează Indexer",
     "CloneProfile": "Clonează Profil",
     "DownloadClientUnavailable": "Client de descărcare indisponibil",
-    "Clone": "Clonează"
+    "Clone": "Clonează",
+    "DownloadClientSettingsOlderPriority": "Prioritate mai vechi",
+    "DownloadClientSettingsRecentPriority": "Prioritate recente"
 }

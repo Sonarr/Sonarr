@@ -250,7 +250,7 @@
     "AutoRedownloadFailed": "Download fallito",
     "AddDelayProfileError": "Impossibile aggiungere un nuovo profilo di ritardo, riprova.",
     "Cutoff": "Taglio",
-    "AddListExclusion": "Aggiungi Lista esclusioni",
+    "AddListExclusion": "Aggiungi elenco esclusioni",
     "DownloadClientValidationApiKeyRequired": "API Key Richiesta",
     "Donate": "Dona",
     "DownloadClientDownloadStationValidationNoDefaultDestination": "Nessuna destinazione predefinita",
