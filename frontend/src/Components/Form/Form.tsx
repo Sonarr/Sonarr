@@ -5,18 +5,20 @@ import { ValidationError, ValidationWarning } from 'typings/pending';
 import styles from './Form.css';
 
 export interface FormProps {
+  id?: string;
   children: ReactNode;
   validationErrors?: ValidationError[];
   validationWarnings?: ValidationWarning[];
 }
 
 function Form({
+  id,
   children,
   validationErrors = [],
   validationWarnings = [],
 }: FormProps) {
   return (
-    <div>
+    <div id={id}>
       {validationErrors.length || validationWarnings.length ? (
         <div className={styles.validationFailures}>
           {validationErrors.map((error, index) => {

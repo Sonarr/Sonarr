@@ -28,6 +28,9 @@ function createSettingsSectionSelector<
       const saveError =
         'saveError' in sectionSettings ? sectionSettings.saveError : undefined;
 
+      const isSaving =
+        'isSaving' in sectionSettings ? sectionSettings.isSaving : false;
+
       const {
         settings,
         pendingChanges: selectedPendingChanges,
@@ -36,6 +39,7 @@ function createSettingsSectionSelector<
 
       return {
         ...other,
+        isSaving,
         saveError,
         settings: settings as PendingSection<T>,
         pendingChanges: selectedPendingChanges as Partial<T>,
