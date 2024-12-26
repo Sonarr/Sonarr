@@ -83,7 +83,7 @@ function Naming() {
     dispatch(fetchNamingExamples());
 
     return () => {
-      dispatch(clearPendingChanges({ section: SECTION }));
+      dispatch(clearPendingChanges({ section: 'settings.naming' }));
     };
   }, [dispatch]);
 

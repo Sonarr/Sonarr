@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { saveIndexer, setIndexerFieldValue, setIndexerValue, testIndexer, toggleAdvancedSettings } from 'Store/Actions/settingsActions';
+import { saveIndexer, setIndexerFieldValue, setIndexerValue, testIndexer } from 'Store/Actions/settingsActions';
 import createProviderSettingsSelector from 'Store/Selectors/createProviderSettingsSelector';
 import EditIndexerModalContent from './EditIndexerModalContent';
 
@@ -23,8 +23,7 @@ const mapDispatchToProps = {
   setIndexerValue,
   setIndexerFieldValue,
   saveIndexer,
-  testIndexer,
-  toggleAdvancedSettings
+  testIndexer
 };
 
 class EditIndexerModalContentConnector extends Component {
@@ -57,10 +56,6 @@ class EditIndexerModalContentConnector extends Component {
     this.props.testIndexer({ id: this.props.id });
   };
 
-  onAdvancedSettingsPress = () => {
-    this.props.toggleAdvancedSettings();
-  };
-
   //
   // Render
 
@@ -70,7 +65,6 @@ class EditIndexerModalContentConnector extends Component {
         {...this.props}
         onSavePress={this.onSavePress}
         onTestPress={this.onTestPress}
-        onAdvancedSettingsPress={this.onAdvancedSettingsPress}
         onInputChange={this.onInputChange}
         onFieldChange={this.onFieldChange}
       />
@@ -86,7 +80,6 @@ EditIndexerModalContentConnector.propTypes = {
   item: PropTypes.object.isRequired,
   setIndexerValue: PropTypes.func.isRequired,
   setIndexerFieldValue: PropTypes.func.isRequired,
-  toggleAdvancedSettings: PropTypes.func.isRequired,
   saveIndexer: PropTypes.func.isRequired,
   testIndexer: PropTypes.func.isRequired,
   onModalClose: PropTypes.func.isRequired

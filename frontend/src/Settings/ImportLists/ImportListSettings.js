@@ -5,7 +5,7 @@ import PageContentBody from 'Components/Page/PageContentBody';
 import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
 import { icons } from 'Helpers/Props';
-import SettingsToolbarConnector from 'Settings/SettingsToolbarConnector';
+import SettingsToolbar from 'Settings/SettingsToolbar';
 import translate from 'Utilities/String/translate';
 import ImportListExclusions from './ImportListExclusions/ImportListExclusions';
 import ImportListsConnector from './ImportLists/ImportListsConnector';
@@ -81,7 +81,7 @@ class ImportListSettings extends Component {
 
     return (
       <PageContent title={translate('ImportListSettings')}>
-        <SettingsToolbarConnector
+        <SettingsToolbar
           isSaving={isSaving}
           hasPendingChanges={hasPendingChanges}
           additionalButtons={

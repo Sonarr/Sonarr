@@ -5,7 +5,7 @@ import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
 import ParseToolbarButton from 'Parse/ParseToolbarButton';
-import SettingsToolbarConnector from 'Settings/SettingsToolbarConnector';
+import SettingsToolbar from 'Settings/SettingsToolbar';
 import translate from 'Utilities/String/translate';
 import CustomFormatsConnector from './CustomFormats/CustomFormatsConnector';
 import ManageCustomFormatsToolbarButton from './CustomFormats/Manage/ManageCustomFormatsToolbarButton';
@@ -13,9 +13,7 @@ import ManageCustomFormatsToolbarButton from './CustomFormats/Manage/ManageCusto
 function CustomFormatSettingsPage() {
   return (
     <PageContent title={translate('CustomFormatsSettings')}>
-      <SettingsToolbarConnector
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
+      <SettingsToolbar
         showSave={false}
         additionalButtons={
           <>

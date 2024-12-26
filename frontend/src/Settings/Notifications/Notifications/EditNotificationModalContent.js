@@ -33,7 +33,6 @@ function EditNotificationModalContent(props) {
     onModalClose,
     onSavePress,
     onTestPress,
-    onAdvancedSettingsPress,
     onDeleteNotificationPress,
     ...otherProps
   } = props;
@@ -139,8 +138,6 @@ function EditNotificationModalContent(props) {
         }
 
         <AdvancedSettingsButton
-          advancedSettings={advancedSettings}
-          onAdvancedSettingsPress={onAdvancedSettingsPress}
           showLabel={false}
         />
 
@@ -183,7 +180,6 @@ EditNotificationModalContent.propTypes = {
   onModalClose: PropTypes.func.isRequired,
   onSavePress: PropTypes.func.isRequired,
   onTestPress: PropTypes.func.isRequired,
-  onAdvancedSettingsPress: PropTypes.func.isRequired,
   onDeleteNotificationPress: PropTypes.func
 };
 
