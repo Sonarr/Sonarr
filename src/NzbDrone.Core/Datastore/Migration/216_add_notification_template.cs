@@ -38,7 +38,7 @@ namespace NzbDrone.Core.Datastore.Migration
             var name = "Email template";
             var title = "Sonarr - {{ if grab_message }}Episode Grabbed{{ else if series_add_message }}Series Added{{ else }}{{fallback_title}}{{ end }}";
             var body = @"<!DOCTYPE html>
-<html lang=""en"" xmlns:th=""http://www.thymeleaf.org"">
+<html>
 	<head>
 		<title>Sonarr Notification</title>
 	</head>
