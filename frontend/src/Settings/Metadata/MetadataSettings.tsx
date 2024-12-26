@@ -8,9 +8,7 @@ import Metadatas from './Metadata/Metadatas';
 function MetadataSettings() {
   return (
     <PageContent title={translate('MetadataSettings')}>
-      <SettingsToolbar
-        showSave={false}
-      />
+      <SettingsToolbar showSave={false} />
 
       <PageContentBody>
         <Metadatas />
