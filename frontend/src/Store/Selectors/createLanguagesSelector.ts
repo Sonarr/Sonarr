@@ -1,15 +1,23 @@
 import { createSelector } from 'reselect';
 import AppState from 'App/State/AppState';
 
-function createLanguagesSelector() {
+interface LanguageFilter {
+  [key: string]: boolean | undefined;
+  Any: boolean;
+  Original?: boolean;
+  Unknown?: boolean;
+}
+
+function createLanguagesSelector(
+  excludeLanguages: LanguageFilter = { Any: true }
+) {
   return createSelector(
     (state: AppState) => state.settings.languages,
     (languages) => {
       const { isFetching, isPopulated, error, items } = languages;
 
-      const filterItems = ['Any'];
       const filteredLanguages = items.filter(
-        (lang) => !filterItems.includes(lang.name)
+        (lang) => !excludeLanguages[lang.name]
       );
 
       return {

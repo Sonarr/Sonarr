@@ -50,7 +50,6 @@ function createReleaseProfileSelector(id?: number) {
       );
 
       return {
-        id,
         isFetching,
         error,
         isSaving,

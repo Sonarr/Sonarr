@@ -23,7 +23,7 @@ import Profiles from 'Settings/Profiles/Profiles';
 import QualityConnector from 'Settings/Quality/QualityConnector';
 import Settings from 'Settings/Settings';
 import TagSettings from 'Settings/Tags/TagSettings';
-import UISettingsConnector from 'Settings/UI/UISettingsConnector';
+import UISettings from 'Settings/UI/UISettings';
 import Backups from 'System/Backup/Backups';
 import LogsTable from 'System/Events/LogsTable';
 import Logs from 'System/Logs/Logs';
@@ -137,7 +137,7 @@ function AppRoutes() {
 
       <Route path="/settings/general" component={GeneralSettingsConnector} />
 
-      <Route path="/settings/ui" component={UISettingsConnector} />
+      <Route path="/settings/ui" component={UISettings} />
 
       {/*
         System
