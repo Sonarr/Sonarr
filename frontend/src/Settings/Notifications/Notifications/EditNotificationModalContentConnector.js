@@ -6,8 +6,7 @@ import {
   saveNotification,
   setNotificationFieldValues,
   setNotificationValue,
-  testNotification,
-  toggleAdvancedSettings
+  testNotification
 } from 'Store/Actions/settingsActions';
 import createProviderSettingsSelector from 'Store/Selectors/createProviderSettingsSelector';
 import EditNotificationModalContent from './EditNotificationModalContent';
@@ -29,8 +28,7 @@ const mapDispatchToProps = {
   setNotificationValue,
   setNotificationFieldValues,
   saveNotification,
-  testNotification,
-  toggleAdvancedSettings
+  testNotification
 };
 
 class EditNotificationModalContentConnector extends Component {
@@ -63,10 +61,6 @@ class EditNotificationModalContentConnector extends Component {
     this.props.testNotification({ id: this.props.id });
   };
 
-  onAdvancedSettingsPress = () => {
-    this.props.toggleAdvancedSettings();
-  };
-
   //
   // Render
 
@@ -76,7 +70,6 @@ class EditNotificationModalContentConnector extends Component {
         {...this.props}
         onSavePress={this.onSavePress}
         onTestPress={this.onTestPress}
-        onAdvancedSettingsPress={this.onAdvancedSettingsPress}
         onInputChange={this.onInputChange}
         onFieldChange={this.onFieldChange}
       />
@@ -94,7 +87,6 @@ EditNotificationModalContentConnector.propTypes = {
   setNotificationFieldValues: PropTypes.func.isRequired,
   saveNotification: PropTypes.func.isRequired,
   testNotification: PropTypes.func.isRequired,
-  toggleAdvancedSettings: PropTypes.func.isRequired,
   onModalClose: PropTypes.func.isRequired
 };
 

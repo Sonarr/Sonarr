@@ -3,21 +3,16 @@ import Link from 'Components/Link/Link';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
 import translate from 'Utilities/String/translate';
-import SettingsToolbarConnector from './SettingsToolbarConnector';
+import SettingsToolbar from './SettingsToolbar';
 import styles from './Settings.css';
 
 function Settings() {
   return (
     <PageContent title={translate('Settings')}>
-      <SettingsToolbarConnector
-        hasPendingChanges={false}
-      />
+      <SettingsToolbar hasPendingChanges={false} />
 
       <PageContentBody>
-        <Link
-          className={styles.link}
-          to="/settings/mediamanagement"
-        >
+        <Link className={styles.link} to="/settings/mediamanagement">
           {translate('MediaManagement')}
         </Link>
 
@@ -25,10 +20,7 @@ function Settings() {
           {translate('MediaManagementSettingsSummary')}
         </div>
 
-        <Link
-          className={styles.link}
-          to="/settings/profiles"
-        >
+        <Link className={styles.link} to="/settings/profiles">
           {translate('Profiles')}
         </Link>
 
@@ -36,10 +28,7 @@ function Settings() {
           {translate('ProfilesSettingsSummary')}
         </div>
 
-        <Link
-          className={styles.link}
-          to="/settings/quality"
-        >
+        <Link className={styles.link} to="/settings/quality">
           {translate('Quality')}
         </Link>
 
@@ -47,10 +36,7 @@ function Settings() {
           {translate('QualitySettingsSummary')}
         </div>
 
-        <Link
-          className={styles.link}
-          to="/settings/customformats"
-        >
+        <Link className={styles.link} to="/settings/customformats">
           {translate('CustomFormats')}
         </Link>
 
@@ -58,10 +44,7 @@ function Settings() {
           {translate('CustomFormatsSettingsSummary')}
         </div>
 
-        <Link
-          className={styles.link}
-          to="/settings/indexers"
-        >
+        <Link className={styles.link} to="/settings/indexers">
           {translate('Indexers')}
         </Link>
 
@@ -69,10 +52,7 @@ function Settings() {
           {translate('IndexersSettingsSummary')}
         </div>
 
-        <Link
-          className={styles.link}
-          to="/settings/downloadclients"
-        >
+        <Link className={styles.link} to="/settings/downloadclients">
           {translate('DownloadClients')}
         </Link>
 
@@ -80,10 +60,7 @@ function Settings() {
           {translate('DownloadClientsSettingsSummary')}
         </div>
 
-        <Link
-          className={styles.link}
-          to="/settings/importlists"
-        >
+        <Link className={styles.link} to="/settings/importlists">
           {translate('ImportLists')}
         </Link>
 
@@ -91,10 +68,7 @@ function Settings() {
           {translate('ImportListsSettingsSummary')}
         </div>
 
-        <Link
-          className={styles.link}
-          to="/settings/connect"
-        >
+        <Link className={styles.link} to="/settings/connect">
           {translate('Connect')}
         </Link>
 
@@ -102,10 +76,7 @@ function Settings() {
           {translate('ConnectSettingsSummary')}
         </div>
 
-        <Link
-          className={styles.link}
-          to="/settings/metadata"
-        >
+        <Link className={styles.link} to="/settings/metadata">
           {translate('Metadata')}
         </Link>
 
@@ -113,10 +84,7 @@ function Settings() {
           {translate('MetadataSettingsSeriesSummary')}
         </div>
 
-        <Link
-          className={styles.link}
-          to="/settings/metadatasource"
-        >
+        <Link className={styles.link} to="/settings/metadatasource">
           {translate('MetadataSource')}
         </Link>
 
@@ -124,21 +92,13 @@ function Settings() {
           {translate('MetadataSourceSettingsSeriesSummary')}
         </div>
 
-        <Link
-          className={styles.link}
-          to="/settings/tags"
-        >
+        <Link className={styles.link} to="/settings/tags">
           {translate('Tags')}
         </Link>
 
-        <div className={styles.summary}>
-          {translate('TagsSettingsSummary')}
-        </div>
+        <div className={styles.summary}>{translate('TagsSettingsSummary')}</div>
 
-        <Link
-          className={styles.link}
-          to="/settings/general"
-        >
+        <Link className={styles.link} to="/settings/general">
           {translate('General')}
         </Link>
 
@@ -146,22 +106,14 @@ function Settings() {
           {translate('GeneralSettingsSummary')}
         </div>
 
-        <Link
-          className={styles.link}
-          to="/settings/ui"
-        >
+        <Link className={styles.link} to="/settings/ui">
           {translate('Ui')}
         </Link>
 
-        <div className={styles.summary}>
-          {translate('UiSettingsSummary')}
-        </div>
+        <div className={styles.summary}>{translate('UiSettingsSummary')}</div>
       </PageContentBody>
     </PageContent>
   );
 }
-
-Settings.propTypes = {
-};
 
 export default Settings;

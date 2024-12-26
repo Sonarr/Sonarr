@@ -5,7 +5,7 @@ import PageContentBody from 'Components/Page/PageContentBody';
 import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
 import { icons } from 'Helpers/Props';
-import SettingsToolbarConnector from 'Settings/SettingsToolbarConnector';
+import SettingsToolbar from 'Settings/SettingsToolbar';
 import translate from 'Utilities/String/translate';
 import DownloadClientsConnector from './DownloadClients/DownloadClientsConnector';
 import ManageDownloadClientsModal from './DownloadClients/Manage/ManageDownloadClientsModal';
@@ -71,7 +71,7 @@ class DownloadClientSettings extends Component {
 
     return (
       <PageContent title={translate('DownloadClientSettings')}>
-        <SettingsToolbarConnector
+        <SettingsToolbar
           isSaving={isSaving}
           hasPendingChanges={hasPendingChanges}
           additionalButtons={

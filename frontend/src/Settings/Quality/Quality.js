@@ -5,7 +5,7 @@ import PageContentBody from 'Components/Page/PageContentBody';
 import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
 import { icons } from 'Helpers/Props';
-import SettingsToolbarConnector from 'Settings/SettingsToolbarConnector';
+import SettingsToolbar from 'Settings/SettingsToolbar';
 import translate from 'Utilities/String/translate';
 import QualityDefinitionsConnector from './Definition/QualityDefinitionsConnector';
 import ResetQualityDefinitionsModal from './Reset/ResetQualityDefinitionsModal';
@@ -64,7 +64,7 @@ class Quality extends Component {
 
     return (
       <PageContent title={translate('QualitySettings')}>
-        <SettingsToolbarConnector
+        <SettingsToolbar
           isSaving={isSaving}
           hasPendingChanges={hasPendingChanges}
           additionalButtons={

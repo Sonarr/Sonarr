@@ -10,7 +10,7 @@ import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
 import { inputTypes, kinds } from 'Helpers/Props';
-import SettingsToolbarConnector from 'Settings/SettingsToolbarConnector';
+import SettingsToolbar from 'Settings/SettingsToolbar';
 import themes from 'Styles/Themes';
 import titleCase from 'Utilities/String/titleCase';
 import translate from 'Utilities/String/translate';
@@ -78,7 +78,7 @@ class UISettings extends Component {
 
     return (
       <PageContent title={translate('UiSettings')}>
-        <SettingsToolbarConnector
+        <SettingsToolbar
           {...otherProps}
           onSavePress={onSavePress}
         />
