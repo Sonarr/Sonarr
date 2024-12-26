@@ -14,6 +14,7 @@ export const QUALITY_PROFILE_SELECT = 'qualityProfileSelect';
 export const INDEXER_SELECT = 'indexerSelect';
 export const INDEXER_FLAGS_SELECT = 'indexerFlagsSelect';
 export const LANGUAGE_SELECT = 'languageSelect';
+export const NOTIFICATION_TEMPLATE_SELECT = 'notificationTemplateSelect';
 export const DOWNLOAD_CLIENT_SELECT = 'downloadClientSelect';
 export const ROOT_FOLDER_SELECT = 'rootFolderSelect';
 export const SELECT = 'select';
@@ -42,6 +43,7 @@ export const all = [
   PATH,
   QUALITY_PROFILE_SELECT,
   INDEXER_SELECT,
+  NOTIFICATION_TEMPLATE_SELECT,
   DOWNLOAD_CLIENT_SELECT,
   ROOT_FOLDER_SELECT,
   LANGUAGE_SELECT,
@@ -75,6 +77,7 @@ export type InputType =
   | 'indexerSelect'
   | 'indexerFlagsSelect'
   | 'languageSelect'
+  | 'notificationTemplateSelect'
   | 'downloadClientSelect'
   | 'rootFolderSelect'
   | 'select'

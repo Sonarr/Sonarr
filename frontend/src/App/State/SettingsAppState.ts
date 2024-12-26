@@ -14,6 +14,7 @@ import ImportListOptionsSettings from 'typings/ImportListOptionsSettings';
 import Indexer from 'typings/Indexer';
 import IndexerFlag from 'typings/IndexerFlag';
 import Notification from 'typings/Notification';
+import NotificationTemplate from 'typings/Settings/NotificationTemplate';
 import QualityProfile from 'typings/QualityProfile';
 import General from 'typings/Settings/General';
 import NamingConfig from 'typings/Settings/NamingConfig';
@@ -54,6 +55,12 @@ export interface IndexerAppState
 export interface NotificationAppState
   extends AppSectionState<Notification>,
     AppSectionDeleteState {}
+
+export interface NotificationTemplateAppState
+  extends AppSectionState<NotificationTemplate>,
+    AppSectionSaveState {
+  pendingChanges: Partial<NotificationTemplate>;
+}
 
 export interface QualityProfilesAppState
   extends AppSectionState<QualityProfile>,
@@ -101,6 +108,7 @@ interface SettingsAppState {
   naming: NamingAppState;
   namingExamples: NamingExamplesAppState;
   notifications: NotificationAppState;
+  notificationTemplates: NotificationTemplateAppState;
   qualityProfiles: QualityProfilesAppState;
   releaseProfiles: ReleaseProfilesAppState;
   ui: UiSettingsAppState;
