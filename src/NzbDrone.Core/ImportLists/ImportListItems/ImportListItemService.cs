@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.ThingiProvider.Events;
@@ -30,14 +31,38 @@ namespace NzbDrone.Core.ImportLists.ImportListItems
         {
             var existingListSeries = GetAllForLists(new List<int> { listId });
 
-            listSeries.ForEach(l => l.Id = existingListSeries.FirstOrDefault(e => e.TvdbId == l.TvdbId)?.Id ?? 0);
+            var toAdd = new List<ImportListItemInfo>();
+            var toUpdate = new List<ImportListItemInfo>();
 
-            _importListSeriesRepository.InsertMany(listSeries.Where(l => l.Id == 0).ToList());
-            _importListSeriesRepository.UpdateMany(listSeries.Where(l => l.Id > 0).ToList());
-            var toDelete = existingListSeries.Where(l => !listSeries.Any(x => x.TvdbId == l.TvdbId)).ToList();
-            _importListSeriesRepository.DeleteMany(toDelete);
+            listSeries.ForEach(item =>
+            {
+                var existingItem = FindItem(existingListSeries, item);
 
-            return toDelete.Count;
+                if (existingItem == null)
+                {
+                    toAdd.Add(item);
+                    return;
+                }
+
+                // Remove so we'll only be left with items to remove at the end
+                existingListSeries.Remove(existingItem);
+                toUpdate.Add(existingItem);
+
+                existingItem.Title = item.Title;
+                existingItem.Year = item.Year;
+                existingItem.TvdbId = item.TvdbId;
+                existingItem.ImdbId = item.ImdbId;
+                existingItem.TmdbId = item.TmdbId;
+                existingItem.MalId = item.MalId;
+                existingItem.AniListId = item.AniListId;
+                existingItem.ReleaseDate = item.ReleaseDate;
+            });
+
+            _importListSeriesRepository.InsertMany(toAdd);
+            _importListSeriesRepository.UpdateMany(toUpdate);
+            _importListSeriesRepository.DeleteMany(existingListSeries);
+
+            return existingListSeries.Count;
         }
 
         public List<ImportListItemInfo> GetAllForLists(List<int> listIds)
@@ -54,6 +79,39 @@ namespace NzbDrone.Core.ImportLists.ImportListItems
         public bool Exists(int tvdbId, string imdbId)
         {
             return _importListSeriesRepository.Exists(tvdbId, imdbId);
+        }
+
+        private ImportListItemInfo FindItem(List<ImportListItemInfo> existingItems, ImportListItemInfo item)
+        {
+            return existingItems.FirstOrDefault(e =>
+            {
+                if (e.TvdbId > 0 && item.TvdbId > 0 && e.TvdbId == item.TvdbId)
+                {
+                    return true;
+                }
+
+                if (e.ImdbId.IsNotNullOrWhiteSpace() && item.ImdbId.IsNotNullOrWhiteSpace() && e.ImdbId == item.ImdbId)
+                {
+                    return true;
+                }
+
+                if (e.TmdbId > 0 && item.TmdbId > 0 && e.TmdbId == item.TmdbId)
+                {
+                    return true;
+                }
+
+                if (e.MalId > 0 && item.MalId > 0 && e.MalId == item.MalId)
+                {
+                    return true;
+                }
+
+                if (e.AniListId > 0 && item.AniListId > 0 && e.AniListId == item.AniListId)
+                {
+                    return true;
+                }
+
+                return false;
+            });
         }
     }
 }
