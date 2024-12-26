@@ -110,7 +110,7 @@ namespace NzbDrone.Common.Instrumentation.Sentry
                                       o.Environment = BuildInfo.Branch;
 
                                       // Crash free run statistics (sends a ping for healthy and for crashes sessions)
-                                      o.AutoSessionTracking = true;
+                                      o.AutoSessionTracking = false;
 
                                       // Caches files in the event device is offline
                                       // Sentry creates a 'sentry' sub directory, no need to concat here
