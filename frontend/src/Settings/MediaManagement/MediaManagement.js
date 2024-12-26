@@ -11,7 +11,7 @@ import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
 import { inputTypes, kinds, sizes } from 'Helpers/Props';
 import RootFolders from 'RootFolder/RootFolders';
-import SettingsToolbarConnector from 'Settings/SettingsToolbarConnector';
+import SettingsToolbar from 'Settings/SettingsToolbar';
 import translate from 'Utilities/String/translate';
 import Naming from './Naming/Naming';
 import AddRootFolder from './RootFolder/AddRootFolder';
@@ -120,7 +120,7 @@ class MediaManagement extends Component {
 
     return (
       <PageContent title={translate('MediaManagementSettings')}>
-        <SettingsToolbarConnector
+        <SettingsToolbar
           advancedSettings={advancedSettings}
           {...otherProps}
           onSavePress={onSavePress}

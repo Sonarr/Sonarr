@@ -6,8 +6,7 @@ import {
   saveDownloadClient,
   setDownloadClientFieldValue,
   setDownloadClientValue,
-  testDownloadClient,
-  toggleAdvancedSettings
+  testDownloadClient
 } from 'Store/Actions/settingsActions';
 import createProviderSettingsSelector from 'Store/Selectors/createProviderSettingsSelector';
 import EditDownloadClientModalContent from './EditDownloadClientModalContent';
@@ -29,8 +28,7 @@ const mapDispatchToProps = {
   setDownloadClientValue,
   setDownloadClientFieldValue,
   saveDownloadClient,
-  testDownloadClient,
-  toggleAdvancedSettings
+  testDownloadClient
 };
 
 class EditDownloadClientModalContentConnector extends Component {
@@ -63,10 +61,6 @@ class EditDownloadClientModalContentConnector extends Component {
     this.props.testDownloadClient({ id: this.props.id });
   };
 
-  onAdvancedSettingsPress = () => {
-    this.props.toggleAdvancedSettings();
-  };
-
   //
   // Render
 
@@ -76,7 +70,6 @@ class EditDownloadClientModalContentConnector extends Component {
         {...this.props}
         onSavePress={this.onSavePress}
         onTestPress={this.onTestPress}
-        onAdvancedSettingsPress={this.onAdvancedSettingsPress}
         onInputChange={this.onInputChange}
         onFieldChange={this.onFieldChange}
       />
@@ -94,7 +87,6 @@ EditDownloadClientModalContentConnector.propTypes = {
   setDownloadClientFieldValue: PropTypes.func.isRequired,
   saveDownloadClient: PropTypes.func.isRequired,
   testDownloadClient: PropTypes.func.isRequired,
-  toggleAdvancedSettings: PropTypes.func.isRequired,
   onModalClose: PropTypes.func.isRequired
 };
 
