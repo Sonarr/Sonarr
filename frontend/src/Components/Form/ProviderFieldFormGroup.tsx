@@ -20,6 +20,7 @@ interface ProviderFieldFormGroupProps<T> {
   hidden?: string;
   isDisabled?: boolean;
   provider?: string;
+  providerData?: object;
   pending: boolean;
   errors: Failure[];
   warnings: Failure[];

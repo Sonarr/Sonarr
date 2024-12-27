@@ -1,13 +1,12 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 
-export default function TagInUse(props) {
-  const {
-    label,
-    labelPlural,
-    count
-  } = props;
+interface TagInUseProps {
+  label: string;
+  labelPlural?: string;
+  count: number;
+}
 
+export default function TagInUse({ label, labelPlural, count }: TagInUseProps) {
   if (count === 0) {
     return null;
   }
@@ -26,9 +25,3 @@ export default function TagInUse(props) {
     </div>
   );
 }
-
-TagInUse.propTypes = {
-  label: PropTypes.string.isRequired,
-  labelPlural: PropTypes.string,
-  count: PropTypes.number.isRequired
-};

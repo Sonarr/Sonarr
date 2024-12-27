@@ -18,7 +18,7 @@ function createQualityProfilesSelector(
   includeMixed: boolean
 ) {
   return createSelector(
-    createSortedSectionSelector(
+    createSortedSectionSelector<QualityProfile, QualityProfilesAppState>(
       'settings.qualityProfiles',
       sortByProp<QualityProfile, 'name'>('name')
     ),

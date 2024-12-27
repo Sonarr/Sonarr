@@ -14,7 +14,7 @@ import styles from './Metadatas.css';
 
 function createMetadatasSelector() {
   return createSelector(
-    createSortedSectionSelector<MetadataType>(
+    createSortedSectionSelector<MetadataType, MetadataAppState>(
       'settings.metadata',
       sortByProp('name')
     ),

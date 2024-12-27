@@ -1,25 +1,34 @@
-import PropTypes from 'prop-types';
 import React, { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import Modal from 'Components/Modal/Modal';
 import { sizes } from 'Helpers/Props';
 import { clearPendingChanges } from 'Store/Actions/baseActions';
-import EditSpecificationModalContent from './EditSpecificationModalContent';
+import EditSpecificationModalContent, {
+  EditSpecificationModalContentProps,
+} from './EditSpecificationModalContent';
 
-function EditSpecificationModal({ isOpen, onModalClose, ...otherProps }) {
+interface EditSpecificationModalProps
+  extends EditSpecificationModalContentProps {
+  isOpen: boolean;
+  onModalClose: () => void;
+}
+
+function EditSpecificationModal({
+  isOpen,
+  onModalClose,
+  ...otherProps
+}: EditSpecificationModalProps) {
   const dispatch = useDispatch();
 
   const onWrappedModalClose = useCallback(() => {
-    dispatch(clearPendingChanges({ section: 'settings.autoTaggingSpecifications' }));
+    dispatch(
+      clearPendingChanges({ section: 'settings.autoTaggingSpecifications' })
+    );
     onModalClose();
   }, [onModalClose, dispatch]);
 
   return (
-    <Modal
-      size={sizes.MEDIUM}
-      isOpen={isOpen}
-      onModalClose={onModalClose}
-    >
+    <Modal size={sizes.MEDIUM} isOpen={isOpen} onModalClose={onModalClose}>
       <EditSpecificationModalContent
         {...otherProps}
         onModalClose={onWrappedModalClose}
@@ -27,10 +36,5 @@ function EditSpecificationModal({ isOpen, onModalClose, ...otherProps }) {
     </Modal>
   );
 }
-
-EditSpecificationModal.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  onModalClose: PropTypes.func.isRequired
-};
 
 export default EditSpecificationModal;

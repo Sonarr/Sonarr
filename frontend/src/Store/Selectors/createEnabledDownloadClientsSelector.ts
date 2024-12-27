@@ -9,7 +9,7 @@ export default function createEnabledDownloadClientsSelector(
   protocol: DownloadProtocol
 ) {
   return createSelector(
-    createSortedSectionSelector<DownloadClient>(
+    createSortedSectionSelector<DownloadClient, DownloadClientAppState>(
       'settings.downloadClients',
       sortByProp('name')
     ),

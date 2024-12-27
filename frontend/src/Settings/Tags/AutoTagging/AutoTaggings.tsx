@@ -1,14 +1,20 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { AutoTaggingAppState } from 'App/State/SettingsAppState';
 import Card from 'Components/Card';
 import FieldSet from 'Components/FieldSet';
 import Icon from 'Components/Icon';
 import PageSectionContent from 'Components/Page/PageSectionContent';
 import { icons } from 'Helpers/Props';
 import { fetchRootFolders } from 'Store/Actions/rootFolderActions';
-import { cloneAutoTagging, deleteAutoTagging, fetchAutoTaggings } from 'Store/Actions/settingsActions';
+import {
+  cloneAutoTagging,
+  deleteAutoTagging,
+  fetchAutoTaggings,
+} from 'Store/Actions/settingsActions';
 import createSortedSectionSelector from 'Store/Selectors/createSortedSectionSelector';
 import createTagsSelector from 'Store/Selectors/createTagsSelector';
+import AutoTaggingModel from 'typings/AutoTagging';
 import sortByProp from 'Utilities/Array/sortByProp';
 import translate from 'Utilities/String/translate';
 import AutoTagging from './AutoTagging';
@@ -16,27 +22,27 @@ import EditAutoTaggingModal from './EditAutoTaggingModal';
 import styles from './AutoTaggings.css';
 
 export default function AutoTaggings() {
-  const {
-    error,
-    items,
-    isDeleting,
-    isFetching,
-    isPopulated
-  } = useSelector(
-    createSortedSectionSelector('settings.autoTaggings', sortByProp('name'))
+  const { error, items, isDeleting, isFetching, isPopulated } = useSelector(
+    createSortedSectionSelector<AutoTaggingModel, AutoTaggingAppState>(
+      'settings.autoTaggings',
+      sortByProp('name')
+    )
   );
 
   const tagList = useSelector(createTagsSelector());
   const dispatch = useDispatch();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [tagsFromId, setTagsFromId] = useState(undefined);
+  const [tagsFromId, setTagsFromId] = useState<number>();
 
-  const onClonePress = useCallback((id) => {
-    dispatch(cloneAutoTagging({ id }));
+  const onClonePress = useCallback(
+    (id: number) => {
+      dispatch(cloneAutoTagging({ id }));
 
-    setTagsFromId(id);
-    setIsEditModalOpen(true);
-  }, [dispatch, setIsEditModalOpen]);
+      setTagsFromId(id);
+      setIsEditModalOpen(true);
+    },
+    [dispatch, setIsEditModalOpen]
+  );
 
   const onEditPress = useCallback(() => {
     setIsEditModalOpen(true);
@@ -46,9 +52,12 @@ export default function AutoTaggings() {
     setIsEditModalOpen(false);
   }, [setIsEditModalOpen]);
 
-  const onConfirmDelete = useCallback((id) => {
-    dispatch(deleteAutoTagging({ id }));
-  }, [dispatch]);
+  const onConfirmDelete = useCallback(
+    (id: number) => {
+      dispatch(deleteAutoTagging({ id }));
+    },
+    [dispatch]
+  );
 
   useEffect(() => {
     dispatch(fetchAutoTaggings());
@@ -64,30 +73,22 @@ export default function AutoTaggings() {
         isPopulated={isPopulated}
       >
         <div className={styles.autoTaggings}>
-          {
-            items.map((item) => {
-              return (
-                <AutoTagging
-                  key={item.id}
-                  {...item}
-                  isDeleting={isDeleting}
-                  tagList={tagList}
-                  onConfirmDeleteAutoTagging={onConfirmDelete}
-                  onCloneAutoTaggingPress={onClonePress}
-                />
-              );
-            })
-          }
-
-          <Card
-            className={styles.addAutoTagging}
-            onPress={onEditPress}
-          >
-            <div className={styles.center}>
-              <Icon
-                name={icons.ADD}
-                size={45}
+          {items.map((item) => {
+            return (
+              <AutoTagging
+                key={item.id}
+                {...item}
+                isDeleting={isDeleting}
+                tagList={tagList}
+                onConfirmDeleteAutoTagging={onConfirmDelete}
+                onCloneAutoTaggingPress={onClonePress}
               />
+            );
+          })}
+
+          <Card className={styles.addAutoTagging} onPress={onEditPress}>
+            <div className={styles.center}>
+              <Icon name={icons.ADD} size={45} />
             </div>
           </Card>
         </div>
@@ -97,7 +98,6 @@ export default function AutoTaggings() {
           tagsFromId={tagsFromId}
           onModalClose={onEditModalClose}
         />
-
       </PageSectionContent>
     </FieldSet>
   );
