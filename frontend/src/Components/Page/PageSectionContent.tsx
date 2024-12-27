@@ -1,4 +1,5 @@
 import React from 'react';
+import { Error } from 'App/State/AppSectionState';
 import Alert from 'Components/Alert';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import { kinds } from 'Helpers/Props';
@@ -6,7 +7,7 @@ import { kinds } from 'Helpers/Props';
 interface PageSectionContentProps {
   isFetching: boolean;
   isPopulated: boolean;
-  error?: object;
+  error?: Error;
   errorMessage: string;
   children: React.ReactNode;
 }
@@ -18,7 +19,7 @@ function PageSectionContent({
   errorMessage,
   children,
 }: PageSectionContentProps) {
-  if (isFetching) {
+  if (isFetching && !isPopulated) {
     return <LoadingIndicator />;
   }
 

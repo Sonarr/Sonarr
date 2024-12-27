@@ -1,25 +1,35 @@
-import PropTypes from 'prop-types';
 import React, { useCallback, useState } from 'react';
 import Card from 'Components/Card';
 import Label from 'Components/Label';
 import IconButton from 'Components/Link/IconButton';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import { icons, kinds } from 'Helpers/Props';
+import Field from 'typings/Field';
 import translate from 'Utilities/String/translate';
 import EditSpecificationModal from './EditSpecificationModal';
 import styles from './Specification.css';
 
-export default function Specification(props) {
-  const {
-    id,
-    implementationName,
-    name,
-    required,
-    negate,
-    onConfirmDeleteSpecification,
-    onCloneSpecificationPress
-  } = props;
+interface SpecificationProps {
+  id: number;
+  implementation: string;
+  implementationName: string;
+  name: string;
+  negate: boolean;
+  required: boolean;
+  fields: Field[];
+  onConfirmDeleteSpecification: (specId: number) => void;
+  onCloneSpecificationPress: (specId: number) => void;
+}
 
+export default function Specification({
+  id,
+  implementationName,
+  name,
+  required,
+  negate,
+  onConfirmDeleteSpecification,
+  onCloneSpecificationPress,
+}: SpecificationProps) {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
@@ -55,9 +65,7 @@ export default function Specification(props) {
       onPress={onEditPress}
     >
       <div className={styles.nameContainer}>
-        <div className={styles.name}>
-          {name}
-        </div>
+        <div className={styles.name}>{name}</div>
 
         <IconButton
           className={styles.cloneButton}
@@ -68,25 +76,15 @@ export default function Specification(props) {
       </div>
 
       <div className={styles.labels}>
-        <Label kind={kinds.DEFAULT}>
-          {implementationName}
-        </Label>
+        <Label kind={kinds.DEFAULT}>{implementationName}</Label>
 
-        {
-          negate ?
-            <Label kind={kinds.DANGER}>
-              {translate('Negated')}
-            </Label> :
-            null
-        }
+        {negate ? (
+          <Label kind={kinds.DANGER}>{translate('Negated')}</Label>
+        ) : null}
 
-        {
-          required ?
-            <Label kind={kinds.SUCCESS}>
-              {translate('Required')}
-            </Label> :
-            null
-        }
+        {required ? (
+          <Label kind={kinds.SUCCESS}>{translate('Required')}</Label>
+        ) : null}
       </div>
 
       <EditSpecificationModal
@@ -108,15 +106,3 @@ export default function Specification(props) {
     </Card>
   );
 }
-
-Specification.propTypes = {
-  id: PropTypes.number.isRequired,
-  implementation: PropTypes.string.isRequired,
-  implementationName: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  negate: PropTypes.bool.isRequired,
-  required: PropTypes.bool.isRequired,
-  fields: PropTypes.arrayOf(PropTypes.object).isRequired,
-  onConfirmDeleteSpecification: PropTypes.func.isRequired,
-  onCloneSpecificationPress: PropTypes.func.isRequired
-};

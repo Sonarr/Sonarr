@@ -6,7 +6,10 @@ import sortByProp from 'Utilities/Array/sortByProp';
 
 export default function createRootFoldersSelector() {
   return createSelector(
-    createSortedSectionSelector<RootFolder>('rootFolders', sortByProp('path')),
+    createSortedSectionSelector<RootFolder, RootFolderAppState>(
+      'rootFolders',
+      sortByProp('path')
+    ),
     (rootFolders: RootFolderAppState) => rootFolders
   );
 }

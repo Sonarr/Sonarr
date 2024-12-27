@@ -1,27 +1,38 @@
-import PropTypes from 'prop-types';
 import React, { useCallback, useState } from 'react';
+import { Tag } from 'App/State/TagsAppState';
 import Card from 'Components/Card';
 import Label from 'Components/Label';
 import IconButton from 'Components/Link/IconButton';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import TagList from 'Components/TagList';
 import { icons, kinds } from 'Helpers/Props';
+import { Kind } from 'Helpers/Props/kinds';
+import { AutoTaggingSpecification } from 'typings/AutoTagging';
 import translate from 'Utilities/String/translate';
 import EditAutoTaggingModal from './EditAutoTaggingModal';
 import styles from './AutoTagging.css';
 
-export default function AutoTagging(props) {
-  const {
-    id,
-    name,
-    tags,
-    tagList,
-    specifications,
-    isDeleting,
-    onConfirmDeleteAutoTagging,
-    onCloneAutoTaggingPress
-  } = props;
+interface AutoTaggingProps {
+  id: number;
+  name: string;
+  specifications: AutoTaggingSpecification[];
+  tags: number[];
+  tagList: Tag[];
+  isDeleting: boolean;
+  onConfirmDeleteAutoTagging: (id: number) => void;
+  onCloneAutoTaggingPress: (id: number) => void;
+}
 
+export default function AutoTagging({
+  id,
+  name,
+  tags,
+  tagList,
+  specifications,
+  isDeleting,
+  onConfirmDeleteAutoTagging,
+  onCloneAutoTaggingPress,
+}: AutoTaggingProps) {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
@@ -57,9 +68,7 @@ export default function AutoTagging(props) {
       onPress={onEditPress}
     >
       <div className={styles.nameContainer}>
-        <div className={styles.name}>
-          {name}
-        </div>
+        <div className={styles.name}>{name}</div>
 
         <div>
           <IconButton
@@ -71,36 +80,29 @@ export default function AutoTagging(props) {
         </div>
       </div>
 
-      <TagList
-        tags={tags}
-        tagList={tagList}
-      />
+      <TagList tags={tags} tagList={tagList} />
 
       <div>
-        {
-          specifications.map((item, index) => {
-            if (!item) {
-              return null;
-            }
+        {specifications.map((item, index) => {
+          if (!item) {
+            return null;
+          }
 
-            let kind = kinds.DEFAULT;
-            if (item.required) {
-              kind = kinds.SUCCESS;
-            }
-            if (item.negate) {
-              kind = kinds.DANGER;
-            }
+          let kind: Kind = 'default';
 
-            return (
-              <Label
-                key={index}
-                kind={kind}
-              >
-                {item.name}
-              </Label>
-            );
-          })
-        }
+          if (item.required) {
+            kind = 'success';
+          }
+          if (item.negate) {
+            kind = 'danger';
+          }
+
+          return (
+            <Label key={index} kind={kind}>
+              {item.name}
+            </Label>
+          );
+        })}
       </div>
 
       <EditAutoTaggingModal
@@ -123,14 +125,3 @@ export default function AutoTagging(props) {
     </Card>
   );
 }
-
-AutoTagging.propTypes = {
-  id: PropTypes.number.isRequired,
-  name: PropTypes.string.isRequired,
-  specifications: PropTypes.arrayOf(PropTypes.object).isRequired,
-  tags: PropTypes.arrayOf(PropTypes.number).isRequired,
-  tagList: PropTypes.arrayOf(PropTypes.object).isRequired,
-  isDeleting: PropTypes.bool.isRequired,
-  onConfirmDeleteAutoTagging: PropTypes.func.isRequired,
-  onCloneAutoTaggingPress: PropTypes.func.isRequired
-};
