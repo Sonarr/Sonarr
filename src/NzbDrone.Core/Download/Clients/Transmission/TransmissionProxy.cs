@@ -7,6 +7,7 @@ using System.Net;
 using Newtonsoft.Json.Linq;
 using NLog;
 using NzbDrone.Common.Cache;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
 using NzbDrone.Common.Serializer;
@@ -261,7 +262,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
 
         private void AuthenticateClient(HttpRequestBuilder requestBuilder, TransmissionSettings settings, bool reauthenticate = false)
         {
-            var authKey = string.Format("{0}:{1}", requestBuilder.BaseUrl, settings.Password);
+            var authKey = $"{requestBuilder.BaseUrl}:{settings.Password}";
 
             var sessionId = _authSessionIdCache.Find(authKey);
 
@@ -273,24 +274,26 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                 authLoginRequest.SuppressHttpError = true;
 
                 var response = _httpClient.Execute(authLoginRequest);
-                if (response.StatusCode == HttpStatusCode.MovedPermanently)
-                {
-                    var url = response.Headers.GetSingleValue("Location");
 
-                    throw new DownloadClientException("Remote site redirected to " + url);
-                }
-                else if (response.StatusCode == HttpStatusCode.Conflict)
+                switch (response.StatusCode)
                 {
-                    sessionId = response.Headers.GetSingleValue("X-Transmission-Session-Id");
+                    case HttpStatusCode.MovedPermanently:
+                        var url = response.Headers.GetSingleValue("Location");
 
-                    if (sessionId == null)
-                    {
-                        throw new DownloadClientException("Remote host did not return a Session Id.");
-                    }
-                }
-                else
-                {
-                    throw new DownloadClientAuthenticationException("Failed to authenticate with Transmission.");
+                        throw new DownloadClientException("Remote site redirected to " + url);
+                    case HttpStatusCode.Forbidden:
+                        throw new DownloadClientException($"Failed to authenticate with Transmission. It may be necessary to add {BuildInfo.AppName}'s IP address to RPC whitelist.");
+                    case HttpStatusCode.Conflict:
+                        sessionId = response.Headers.GetSingleValue("X-Transmission-Session-Id");
+
+                        if (sessionId == null)
+                        {
+                            throw new DownloadClientException("Remote host did not return a Session Id.");
+                        }
+
+                        break;
+                    default:
+                        throw new DownloadClientAuthenticationException("Failed to authenticate with Transmission.");
                 }
 
                 _logger.Debug("Transmission authentication succeeded.");
