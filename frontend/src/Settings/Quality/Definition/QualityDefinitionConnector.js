@@ -60,6 +60,7 @@ class QualityDefinitionConnector extends Component {
 
 QualityDefinitionConnector.propTypes = {
   id: PropTypes.number.isRequired,
+  advancedSettings: PropTypes.bool.isRequired,
   minSize: PropTypes.number,
   maxSize: PropTypes.number,
   preferredSize: PropTypes.number,
