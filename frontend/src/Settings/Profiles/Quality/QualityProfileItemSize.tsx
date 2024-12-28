@@ -5,6 +5,7 @@ import Label from 'Components/Label';
 import Popover from 'Components/Tooltip/Popover';
 import { kinds, tooltipPositions } from 'Helpers/Props';
 import QualityDefinitionLimits from 'Settings/Quality/Definition/QualityDefinitionLimits';
+import { InputChanged } from 'typings/inputs';
 import formatBytes from 'Utilities/Number/formatBytes';
 import roundNumber from 'Utilities/Number/roundNumber';
 import translate from 'Utilities/String/translate';
@@ -90,7 +91,7 @@ export default function QualityProfileItemSize(
   );
 
   const handleMinSizeChange = useCallback(
-    ({ value }: { value: number }) => {
+    ({ value }: InputChanged<number>) => {
       setSizes({
         minSize: value,
         preferredSize: sizes.preferredSize,
@@ -108,7 +109,7 @@ export default function QualityProfileItemSize(
   );
 
   const handlePreferredSizeChange = useCallback(
-    ({ value }: { value: number }) => {
+    ({ value }: InputChanged<number>) => {
       setSizes({
         minSize: sizes.minSize,
         preferredSize: value,
@@ -126,7 +127,7 @@ export default function QualityProfileItemSize(
   );
 
   const handleMaxSizeChange = useCallback(
-    ({ value }: { value: number }) => {
+    ({ value }: InputChanged<number>) => {
       setSizes({
         minSize: sizes.minSize,
         preferredSize: sizes.preferredSize,
@@ -242,6 +243,7 @@ export default function QualityProfileItemSize(
             max={preferredSize ? preferredSize - 5 : MAX - 5}
             step={0.1}
             isFloat={true}
+            // @ts-expect-error - Typngs are too loose
             onChange={handleMinSizeChange}
           />
           <Label kind={kinds.INFO}>
@@ -259,6 +261,7 @@ export default function QualityProfileItemSize(
             max={maxSize ? maxSize - 5 : MAX - 5}
             step={0.1}
             isFloat={true}
+            // @ts-expect-error - Typngs are too loose
             onChange={handlePreferredSizeChange}
           />
 
@@ -277,6 +280,7 @@ export default function QualityProfileItemSize(
             max={MAX}
             step={0.1}
             isFloat={true}
+            // @ts-expect-error - Typngs are too loose
             onChange={handleMaxSizeChange}
           />
 
