@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
-using NzbDrone.Core.CustomFormats;
-using NzbDrone.Core.Profiles;
-using NzbDrone.Core.Profiles.Qualities;
 using Sonarr.Http.REST;
+using Workarr.CustomFormats;
+using Workarr.Profiles;
+using Workarr.Profiles.Qualities;
 
 namespace Sonarr.Api.V3.Profiles.Quality
 {
@@ -22,7 +22,7 @@ namespace Sonarr.Api.V3.Profiles.Quality
     public class QualityProfileQualityItemResource : RestResource
     {
         public string Name { get; set; }
-        public NzbDrone.Core.Qualities.Quality Quality { get; set; }
+        public Workarr.Qualities.Quality Quality { get; set; }
         public List<QualityProfileQualityItemResource> Items { get; set; }
         public bool Allowed { get; set; }
 
@@ -121,7 +121,7 @@ namespace Sonarr.Api.V3.Profiles.Quality
             {
                 Id = resource.Id,
                 Name = resource.Name,
-                Quality = resource.Quality != null ? (NzbDrone.Core.Qualities.Quality)resource.Quality.Id : null,
+                Quality = resource.Quality != null ? (Workarr.Qualities.Quality)resource.Quality.Id : null,
                 Items = resource.Items.ConvertAll(ToModel),
                 Allowed = resource.Allowed
             };

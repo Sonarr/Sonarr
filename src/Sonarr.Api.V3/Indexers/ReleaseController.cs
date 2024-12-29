@@ -4,20 +4,20 @@ using System.Threading.Tasks;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using NLog;
-using NzbDrone.Common.Cache;
-using NzbDrone.Common.EnsureThat;
-using NzbDrone.Common.Extensions;
-using NzbDrone.Core.DecisionEngine;
-using NzbDrone.Core.Download;
-using NzbDrone.Core.Exceptions;
-using NzbDrone.Core.Indexers;
-using NzbDrone.Core.IndexerSearch;
-using NzbDrone.Core.Parser;
-using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Profiles.Qualities;
-using NzbDrone.Core.Tv;
-using NzbDrone.Core.Validation;
 using Sonarr.Http;
+using Workarr.Cache;
+using Workarr.DecisionEngine;
+using Workarr.Download;
+using Workarr.EnsureThat;
+using Workarr.Exceptions;
+using Workarr.Extensions;
+using Workarr.Indexers;
+using Workarr.IndexerSearch;
+using Workarr.Parser;
+using Workarr.Parser.Model;
+using Workarr.Profiles.Qualities;
+using Workarr.Tv;
+using Workarr.Validation;
 using HttpStatusCode = System.Net.HttpStatusCode;
 
 namespace Sonarr.Api.V3.Indexers
@@ -76,7 +76,7 @@ namespace Sonarr.Api.V3.Indexers
             {
                 _logger.Debug("Couldn't find requested release in cache, cache timeout probably expired.");
 
-                throw new NzbDroneClientException(HttpStatusCode.NotFound, "Couldn't find requested release in cache, try searching again");
+                throw new WorkarrClientException(HttpStatusCode.NotFound, "Couldn't find requested release in cache, try searching again");
             }
 
             try
@@ -127,7 +127,7 @@ namespace Sonarr.Api.V3.Indexers
 
                         if (episodes.Empty())
                         {
-                            throw new NzbDroneClientException(HttpStatusCode.NotFound, "Unable to parse episodes in the release, will need to be manually provided");
+                            throw new WorkarrClientException(HttpStatusCode.NotFound, "Unable to parse episodes in the release, will need to be manually provided");
                         }
 
                         remoteEpisode.Series = series;
@@ -135,7 +135,7 @@ namespace Sonarr.Api.V3.Indexers
                     }
                     else
                     {
-                        throw new NzbDroneClientException(HttpStatusCode.NotFound, "Unable to find matching series and episodes, will need to be manually provided");
+                        throw new WorkarrClientException(HttpStatusCode.NotFound, "Unable to find matching series and episodes, will need to be manually provided");
                     }
                 }
                 else if (remoteEpisode.Episodes.Empty())
@@ -154,7 +154,7 @@ namespace Sonarr.Api.V3.Indexers
 
                 if (remoteEpisode.Episodes.Empty())
                 {
-                    throw new NzbDroneClientException(HttpStatusCode.NotFound, "Unable to parse episodes in the release, will need to be manually provided");
+                    throw new WorkarrClientException(HttpStatusCode.NotFound, "Unable to parse episodes in the release, will need to be manually provided");
                 }
 
                 await _downloadService.DownloadReport(remoteEpisode, release.DownloadClientId);
@@ -162,7 +162,7 @@ namespace Sonarr.Api.V3.Indexers
             catch (ReleaseDownloadException ex)
             {
                 _logger.Error(ex, ex.Message);
-                throw new NzbDroneClientException(HttpStatusCode.Conflict, "Getting release from indexer failed");
+                throw new WorkarrClientException(HttpStatusCode.Conflict, "Getting release from indexer failed");
             }
 
             return release;
@@ -196,12 +196,12 @@ namespace Sonarr.Api.V3.Indexers
             }
             catch (SearchFailedException ex)
             {
-                throw new NzbDroneClientException(HttpStatusCode.BadRequest, ex.Message);
+                throw new WorkarrClientException(HttpStatusCode.BadRequest, ex.Message);
             }
             catch (Exception ex)
             {
                 _logger.Error(ex, "Episode search failed: " + ex.Message);
-                throw new NzbDroneClientException(HttpStatusCode.InternalServerError, ex.Message);
+                throw new WorkarrClientException(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
 
@@ -216,12 +216,12 @@ namespace Sonarr.Api.V3.Indexers
             }
             catch (SearchFailedException ex)
             {
-                throw new NzbDroneClientException(HttpStatusCode.BadRequest, ex.Message);
+                throw new WorkarrClientException(HttpStatusCode.BadRequest, ex.Message);
             }
             catch (Exception ex)
             {
                 _logger.Error(ex, "Season search failed: " + ex.Message);
-                throw new NzbDroneClientException(HttpStatusCode.InternalServerError, ex.Message);
+                throw new WorkarrClientException(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
 

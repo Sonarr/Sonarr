@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using NzbDrone.Core.ThingiProvider;
+using Workarr.ThingiProvider;
 
 namespace Sonarr.Api.V3
 {

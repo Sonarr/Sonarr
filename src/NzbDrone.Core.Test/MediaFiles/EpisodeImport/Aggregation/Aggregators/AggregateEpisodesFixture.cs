@@ -3,13 +3,13 @@ using System.Linq;
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common.Extensions;
-using NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators;
-using NzbDrone.Core.Parser;
-using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
+using Workarr.Extensions;
+using Workarr.MediaFiles.EpisodeImport.Aggregation.Aggregators;
+using Workarr.Parser;
+using Workarr.Parser.Model;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
 {
@@ -38,8 +38,8 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
         [Test]
         public void should_not_use_folder_for_full_season()
         {
-            var fileEpisodeInfo = Parser.Parser.ParseTitle("Series.Title.S01E01");
-            var folderEpisodeInfo = Parser.Parser.ParseTitle("Series.Title.S01");
+            var fileEpisodeInfo = Parser.ParseTitle("Series.Title.S01E01");
+            var folderEpisodeInfo = Parser.ParseTitle("Series.Title.S01");
             var localEpisode = new LocalEpisode
                                {
                                    FileEpisodeInfo = fileEpisodeInfo,
@@ -57,8 +57,8 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
         [Test]
         public void should_not_use_folder_when_it_contains_more_than_one_valid_video_file()
         {
-            var fileEpisodeInfo = Parser.Parser.ParseTitle("Series.Title.S01E01");
-            var folderEpisodeInfo = Parser.Parser.ParseTitle("Series.Title.S01");
+            var fileEpisodeInfo = Parser.ParseTitle("Series.Title.S01E01");
+            var folderEpisodeInfo = Parser.ParseTitle("Series.Title.S01");
             var localEpisode = new LocalEpisode
             {
                 FileEpisodeInfo = fileEpisodeInfo,
@@ -77,8 +77,8 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
         [Test]
         public void should_not_use_folder_name_if_file_name_is_scene_name()
         {
-            var fileEpisodeInfo = Parser.Parser.ParseTitle("Series.Title.S01E01");
-            var folderEpisodeInfo = Parser.Parser.ParseTitle("Series.Title.S01E01");
+            var fileEpisodeInfo = Parser.ParseTitle("Series.Title.S01E01");
+            var folderEpisodeInfo = Parser.ParseTitle("Series.Title.S01E01");
             var localEpisode = new LocalEpisode
             {
                 FileEpisodeInfo = fileEpisodeInfo,
@@ -96,8 +96,8 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
         [Test]
         public void should_use_folder_when_only_one_video_file()
         {
-            var fileEpisodeInfo = Parser.Parser.ParseTitle("Series.Title.S01E01");
-            var folderEpisodeInfo = Parser.Parser.ParseTitle("Series.Title.S01E01");
+            var fileEpisodeInfo = Parser.ParseTitle("Series.Title.S01E01");
+            var folderEpisodeInfo = Parser.ParseTitle("Series.Title.S01E01");
             var localEpisode = new LocalEpisode
             {
                 FileEpisodeInfo = fileEpisodeInfo,
@@ -115,8 +115,8 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
         [Test]
         public void should_use_file_when_folder_is_absolute_and_file_is_not()
         {
-            var fileEpisodeInfo = Parser.Parser.ParseTitle("Series.Title.S01E01");
-            var folderEpisodeInfo = Parser.Parser.ParseTitle("Series.Title.01");
+            var fileEpisodeInfo = Parser.ParseTitle("Series.Title.S01E01");
+            var folderEpisodeInfo = Parser.ParseTitle("Series.Title.01");
             var localEpisode = new LocalEpisode
                                {
                                    FileEpisodeInfo = fileEpisodeInfo,
@@ -134,7 +134,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
         [Test]
         public void should_use_special_info_when_not_null()
         {
-            var fileEpisodeInfo = Parser.Parser.ParseTitle("S00E01");
+            var fileEpisodeInfo = Parser.ParseTitle("S00E01");
             var specialEpisodeInfo = fileEpisodeInfo.JsonClone();
 
             var localEpisode = new LocalEpisode

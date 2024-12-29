@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using NzbDrone.Common.Composition;
-using NzbDrone.Common.Serializer;
-using NzbDrone.Common.TPL;
-using NzbDrone.Core.Datastore.Events;
-using NzbDrone.Core.MediaFiles.EpisodeImport.Manual;
-using NzbDrone.Core.Messaging.Commands;
-using NzbDrone.Core.Messaging.Events;
-using NzbDrone.Core.ProgressMessaging;
 using NzbDrone.SignalR;
 using Sonarr.Http;
 using Sonarr.Http.REST;
 using Sonarr.Http.REST.Attributes;
 using Sonarr.Http.Validation;
+using Workarr.Composition;
+using Workarr.Datastore.Events;
+using Workarr.MediaFiles.EpisodeImport.Manual;
+using Workarr.Messaging.Commands;
+using Workarr.Messaging.Events;
+using Workarr.ProgressMessaging;
+using Workarr.Serializer.System.Text.Json;
+using Workarr.TPL;
 
 namespace Sonarr.Api.V3.Commands
 {

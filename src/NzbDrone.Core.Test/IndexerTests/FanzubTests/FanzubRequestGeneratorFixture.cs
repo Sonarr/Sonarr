@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Indexers.Fanzub;
-using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Test.Framework;
+using Workarr.Indexers.Fanzub;
+using Workarr.IndexerSearch.Definitions;
 
 namespace NzbDrone.Core.Test.IndexerTests.FanzubTests
 {

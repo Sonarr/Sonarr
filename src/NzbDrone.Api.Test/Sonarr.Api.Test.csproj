@@ -7,9 +7,13 @@
     <PackageReference Include="NBuilder" Version="6.1.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NzbDrone.Core\Sonarr.Core.csproj" />
     <ProjectReference Include="..\NzbDrone.Test.Common\Sonarr.Test.Common.csproj" />
     <ProjectReference Include="..\Sonarr.Api.V3\Sonarr.Api.V3.csproj" />
     <ProjectReference Include="..\Sonarr.Http\Sonarr.Http.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="DryIoc">
+      <HintPath>..\..\..\..\..\.nuget\packages\dryioc.dll\5.4.3\lib\net6.0\DryIoc.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>

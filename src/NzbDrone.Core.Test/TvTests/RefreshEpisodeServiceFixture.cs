@@ -5,11 +5,11 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common.Extensions;
-using NzbDrone.Core.MetadataSource.SkyHook;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
+using Workarr.Extensions;
+using Workarr.MetadataSource.SkyHook;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.TvTests
 {

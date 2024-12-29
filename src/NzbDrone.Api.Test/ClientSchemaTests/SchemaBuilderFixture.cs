@@ -2,10 +2,10 @@ using System.Collections.Generic;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.Annotations;
-using NzbDrone.Core.Localization;
 using NzbDrone.Test.Common;
 using Sonarr.Http.ClientSchema;
+using Workarr.Annotations;
+using Workarr.Localization;
 
 namespace NzbDrone.Api.Test.ClientSchemaTests
 {

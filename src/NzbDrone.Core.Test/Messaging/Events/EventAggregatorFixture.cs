@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common;
-using NzbDrone.Common.Messaging;
-using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Test.Common;
+using Workarr.Common;
+using Workarr.Messaging;
+using Workarr.Messaging.Events;
 
 namespace NzbDrone.Core.Test.Messaging.Events
 {

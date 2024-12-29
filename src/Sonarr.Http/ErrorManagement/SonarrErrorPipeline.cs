@@ -5,10 +5,10 @@ using FluentValidation;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using NLog;
-using NzbDrone.Common.Serializer;
-using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Exceptions;
 using Sonarr.Http.Exceptions;
+using Workarr.Datastore;
+using Workarr.Exceptions;
+using Workarr.Serializer.System.Text.Json;
 
 namespace Sonarr.Http.ErrorManagement
 {
@@ -52,7 +52,7 @@ namespace Sonarr.Http.ErrorManagement
                 await response.WriteAsync(STJson.ToJson(validationException.Errors));
                 return;
             }
-            else if (exception is NzbDroneClientException clientException)
+            else if (exception is WorkarrClientException clientException)
             {
                 statusCode = clientException.StatusCode;
             }

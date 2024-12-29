@@ -1,9 +1,9 @@
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.Configuration;
-using NzbDrone.Core.HealthCheck.Checks;
-using NzbDrone.Core.Localization;
 using NzbDrone.Core.Test.Framework;
+using Workarr.Configuration;
+using Workarr.HealthCheck.Checks;
+using Workarr.Localization;
 
 namespace NzbDrone.Core.Test.HealthCheck.Checks
 {

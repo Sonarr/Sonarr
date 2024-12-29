@@ -12,7 +12,7 @@ namespace Sonarr.Api.V3.DiskSpace
 
     public static class DiskSpaceResourceMapper
     {
-        public static DiskSpaceResource MapToResource(this NzbDrone.Core.DiskSpace.DiskSpace model)
+        public static DiskSpaceResource MapToResource(this Workarr.DiskSpace.DiskSpace model)
         {
             if (model == null)
             {

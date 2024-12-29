@@ -4,9 +4,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using NLog;
-using NzbDrone.Common.Extensions;
 using Sonarr.Http.ErrorManagement;
 using Sonarr.Http.Extensions;
+using Workarr.Extensions;
 
 namespace Sonarr.Http.Middleware
 {

@@ -4,10 +4,11 @@ using System.ServiceProcess;
 using System.Threading;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Processes;
 using NzbDrone.Test.Common;
 using NzbDrone.Test.Common.Categories;
+using Workarr.Common;
+using Workarr.EnvironmentInfo;
+using Workarr.Processes;
 
 namespace NzbDrone.Common.Test
 {

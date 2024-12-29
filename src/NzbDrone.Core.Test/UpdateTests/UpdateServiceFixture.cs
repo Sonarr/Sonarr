@@ -4,20 +4,20 @@ using System.IO;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common;
-using NzbDrone.Common.Disk;
-using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Extensions;
-using NzbDrone.Common.Http;
-using NzbDrone.Common.Model;
-using NzbDrone.Common.Processes;
-using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Update;
-using NzbDrone.Core.Update.Commands;
 using NzbDrone.Test.Common;
 using NzbDrone.Test.Common.Categories;
+using Workarr.Common;
+using Workarr.Configuration;
+using Workarr.Disk;
+using Workarr.EnvironmentInfo;
+using Workarr.Extensions;
+using Workarr.Http;
+using Workarr.Messaging.Commands;
+using Workarr.Model;
+using Workarr.Processes;
+using Workarr.Update;
+using Workarr.Update.Commands;
 
 namespace NzbDrone.Core.Test.UpdateTests
 {

@@ -1,12 +1,12 @@
 using System;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.Download;
-using NzbDrone.Core.Download.Clients;
-using NzbDrone.Core.HealthCheck.Checks;
-using NzbDrone.Core.Localization;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
+using Workarr.Download;
+using Workarr.Download.Clients;
+using Workarr.HealthCheck.Checks;
+using Workarr.Localization;
 
 namespace NzbDrone.Core.Test.HealthCheck.Checks
 {

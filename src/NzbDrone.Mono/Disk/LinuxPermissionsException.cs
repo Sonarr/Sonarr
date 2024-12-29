@@ -1,8 +1,8 @@
-﻿using NzbDrone.Common.Exceptions;
+﻿using Workarr.Exceptions;
 
 namespace NzbDrone.Mono.Disk
 {
-    public class LinuxPermissionsException : NzbDroneException
+    public class LinuxPermissionsException : WorkarrException
     {
         public LinuxPermissionsException(string message, params object[] args)
             : base(message, args)

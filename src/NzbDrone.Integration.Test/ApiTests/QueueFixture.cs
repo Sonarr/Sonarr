@@ -3,10 +3,10 @@ using System.Linq;
 using System.Threading;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Integration.Test.Client;
 using Sonarr.Api.V3.Queue;
 using Sonarr.Http;
+using Workarr.Messaging.Commands;
 
 namespace NzbDrone.Integration.Test.ApiTests
 {

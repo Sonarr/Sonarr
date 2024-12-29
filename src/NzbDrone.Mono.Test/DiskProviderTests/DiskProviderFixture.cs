@@ -7,10 +7,10 @@ using Mono.Unix;
 using Mono.Unix.Native;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common.Disk;
-using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Test.DiskTests;
 using NzbDrone.Mono.Disk;
+using Workarr.Disk;
+using Workarr.EnvironmentInfo;
 
 namespace NzbDrone.Mono.Test.DiskProviderTests
 {

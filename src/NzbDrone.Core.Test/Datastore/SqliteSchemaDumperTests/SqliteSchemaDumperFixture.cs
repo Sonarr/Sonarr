@@ -2,7 +2,7 @@
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Datastore.Migration.Framework;
+using Workarr.Datastore.Migrations.Framework;
 
 namespace NzbDrone.Core.Test.Datastore.SqliteSchemaDumperTests
 {

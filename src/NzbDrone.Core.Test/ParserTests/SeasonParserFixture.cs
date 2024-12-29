@@ -1,6 +1,7 @@
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Test.Framework;
+using Workarr.Parser;
 
 namespace NzbDrone.Core.Test.ParserTests
 {
@@ -38,7 +39,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[Zoombie] Zom 100: Bucket List of the Dead S01 [Web][MKV][h265 10-bit][1080p][AC3 2.0][Softsubs (Zoombie)]", "Zom 100: Bucket List of the Dead", 1)]
         public void should_parse_full_season_release(string postTitle, string title, int season)
         {
-            var result = Parser.Parser.ParseTitle(postTitle);
+            var result = Parser.ParseTitle(postTitle);
             result.SeasonNumber.Should().Be(season);
             result.SeriesTitle.Should().Be(title);
             result.EpisodeNumbers.Should().BeEmpty();
@@ -53,7 +54,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("The.Series.S03.Extras.02.720p", "The Series", 3)]
         public void should_parse_season_extras(string postTitle, string title, int season)
         {
-            var result = Parser.Parser.ParseTitle(postTitle);
+            var result = Parser.ParseTitle(postTitle);
             result.SeasonNumber.Should().Be(season);
             result.SeriesTitle.Should().Be(title);
             result.EpisodeNumbers.Should().BeEmpty();
@@ -67,7 +68,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series.S11.SUBPACK.DVDRip.XviD-REWARD", "Series", 11)]
         public void should_parse_season_subpack(string postTitle, string title, int season)
         {
-            var result = Parser.Parser.ParseTitle(postTitle);
+            var result = Parser.ParseTitle(postTitle);
             result.SeasonNumber.Should().Be(season);
             result.SeriesTitle.Should().Be(title);
             result.EpisodeNumbers.Should().BeEmpty();
@@ -81,7 +82,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("The.Series.S06.P1.1080p.Blu-Ray.10-Bit.Dual-Audio.TrueHD.x265-iAHD", "The Series", 6, 1)]
         public void should_parse_partial_season_release(string postTitle, string title, int season, int seasonPart)
         {
-            var result = Parser.Parser.ParseTitle(postTitle);
+            var result = Parser.ParseTitle(postTitle);
             result.SeasonNumber.Should().Be(season);
             result.SeriesTitle.Should().Be(title);
             result.EpisodeNumbers.Should().BeEmpty();
@@ -101,7 +102,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series Title S01 04 (1080p BluRay x265 HEVC 10bit AAC 5.1 Vyndros)", "Series Title", 1)]
         public void should_parse_multi_season_release(string postTitle, string title, int firstSeason)
         {
-            var result = Parser.Parser.ParseTitle(postTitle);
+            var result = Parser.ParseTitle(postTitle);
             result.SeasonNumber.Should().Be(firstSeason);
             result.SeriesTitle.Should().Be(title);
             result.EpisodeNumbers.Should().BeEmpty();
@@ -114,7 +115,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [Test]
         public void should_not_parse_season_folders()
         {
-            var result = Parser.Parser.ParseTitle("Season 3");
+            var result = Parser.ParseTitle("Season 3");
             result.Should().BeNull();
         }
     }

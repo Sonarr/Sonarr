@@ -4,9 +4,9 @@ using System.Threading;
 using FluentAssertions;
 using Newtonsoft.Json;
 using NUnit.Framework;
-using NzbDrone.Core.Messaging.Commands;
 using RestSharp;
 using Sonarr.Http.REST;
+using Workarr.Messaging.Commands;
 
 namespace NzbDrone.Integration.Test.Client
 {

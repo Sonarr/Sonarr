@@ -2,10 +2,10 @@ using System.IO;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
-using NzbDrone.Common.Disk;
-using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Extensions;
 using Sonarr.Http;
+using Workarr.Disk;
+using Workarr.EnvironmentInfo;
+using Workarr.Extensions;
 
 namespace Sonarr.Api.V3.MediaCovers
 {

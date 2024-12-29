@@ -2,9 +2,9 @@
 using System.Text;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Common.Http;
-using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Test.Framework;
+using Workarr.Http;
+using Workarr.Indexers;
 
 namespace NzbDrone.Core.Test.IndexerTests
 {

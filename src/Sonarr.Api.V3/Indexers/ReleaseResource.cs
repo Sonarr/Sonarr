@@ -2,15 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Serialization;
-using NzbDrone.Core.DecisionEngine;
-using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Languages;
-using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Qualities;
-using NzbDrone.Core.Tv;
 using Sonarr.Api.V3.CustomFormats;
 using Sonarr.Api.V3.Series;
 using Sonarr.Http.REST;
+using Workarr.DecisionEngine;
+using Workarr.Indexers;
+using Workarr.Parser.Model;
+using Workarr.Qualities;
+using Workarr.Tv;
 
 namespace Sonarr.Api.V3.Indexers
 {
@@ -32,7 +31,7 @@ namespace Sonarr.Api.V3.Indexers
         public bool FullSeason { get; set; }
         public bool SceneSource { get; set; }
         public int SeasonNumber { get; set; }
-        public List<Language> Languages { get; set; }
+        public List<Workarr.Languages.Language> Languages { get; set; }
         public int LanguageWeight { get; set; }
         public string AirDate { get; set; }
         public string SeriesTitle { get; set; }

@@ -4,12 +4,12 @@ using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Download;
-using NzbDrone.Core.Download.TrackedDownloads;
-using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Queue;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
+using Workarr.Download;
+using Workarr.Download.TrackedDownloads;
+using Workarr.Parser.Model;
+using Workarr.Queue;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.QueueTests
 {
@@ -23,7 +23,7 @@ namespace NzbDrone.Core.Test.QueueTests
         {
             var downloadClientInfo = Builder<DownloadClientItemClientInfo>.CreateNew().Build();
 
-            var downloadItem = Builder<NzbDrone.Core.Download.DownloadClientItem>.CreateNew()
+            var downloadItem = Builder<Workarr.Download.DownloadClientItem>.CreateNew()
                                         .With(v => v.RemainingTime = TimeSpan.FromSeconds(10))
                                         .With(v => v.DownloadClientInfo = downloadClientInfo)
                                         .Build();

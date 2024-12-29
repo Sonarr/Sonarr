@@ -3,10 +3,10 @@ using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.AutoTagging;
-using NzbDrone.Core.AutoTagging.Specifications;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
+using Workarr.AutoTagging;
+using Workarr.AutoTagging.Specifications;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.AutoTagging
 {

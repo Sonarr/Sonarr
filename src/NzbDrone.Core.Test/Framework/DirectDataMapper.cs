@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using NzbDrone.Common.Serializer;
-using NzbDrone.Core.Datastore;
+using Workarr.Datastore;
+using Workarr.Serializer.Newtonsoft.Json;
 
 namespace NzbDrone.Core.Test.Framework
 {

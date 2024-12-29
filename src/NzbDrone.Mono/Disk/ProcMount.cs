@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using Mono.Unix;
-using NzbDrone.Common.Disk;
-using NzbDrone.Common.Extensions;
+using Workarr.Disk;
+using Workarr.Extensions;
 
 namespace NzbDrone.Mono.Disk
 {

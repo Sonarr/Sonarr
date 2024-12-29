@@ -4,12 +4,12 @@ using System.Linq;
 using Dapper;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Datastore.Converters;
-using NzbDrone.Core.Datastore.Migration;
-using NzbDrone.Core.Download.Pending;
-using NzbDrone.Core.Languages;
-using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
+using Workarr.Datastore.Converters;
+using Workarr.Datastore.Migrations;
+using Workarr.Download.Pending;
+using Workarr.Languages;
+using Workarr.Qualities;
 
 namespace NzbDrone.Core.Test.Datastore.Migration
 {

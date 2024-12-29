@@ -2,12 +2,12 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Common.Extensions;
-using NzbDrone.Core.Indexers;
-using NzbDrone.Core.IndexerSearch.Definitions;
-using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common.Categories;
+using Workarr.Extensions;
+using Workarr.Indexers;
+using Workarr.IndexerSearch.Definitions;
+using Workarr.Parser.Model;
 
 namespace NzbDrone.Core.Test.IndexerTests.IntegrationTests
 {

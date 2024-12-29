@@ -14,24 +14,24 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Hosting.WindowsServices;
 using Microsoft.Extensions.Logging;
 using NLog;
-using NzbDrone.Common.Composition.Extensions;
-using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Exceptions;
-using NzbDrone.Common.Extensions;
-using NzbDrone.Common.Instrumentation;
-using NzbDrone.Common.Instrumentation.Extensions;
-using NzbDrone.Common.Options;
-using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Datastore.Extensions;
+using Workarr.Composition;
+using Workarr.Configuration;
+using Workarr.Datastore.Extensions;
+using Workarr.EnvironmentInfo;
+using Workarr.Exceptions;
+using Workarr.Extensions;
+using Workarr.Instrumentation;
+using Workarr.Instrumentation.Instrumentation.Extensions;
+using Workarr.Options;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
-using PostgresOptions = NzbDrone.Core.Datastore.PostgresOptions;
+using PostgresOptions = Workarr.Datastore.PostgresOptions;
 
 namespace NzbDrone.Host
 {
     public static class Bootstrap
     {
-        private static readonly Logger Logger = NzbDroneLogger.GetLogger(typeof(Bootstrap));
+        private static readonly Logger Logger = WorkarrLogger.GetLogger(typeof(Bootstrap));
 
         public static readonly List<string> ASSEMBLIES = new List<string>
         {
@@ -89,7 +89,7 @@ namespace NzbDrone.Host
                             .ConfigureContainer<IContainer>(c =>
                             {
                                 c.AutoAddServices(Bootstrap.ASSEMBLIES)
-                                    .AddNzbDroneLogger()
+                                    .AddWorkarrLogger()
                                     .AddDatabase()
                                     .AddStartupContext(startupContext)
                                     .Resolve<UtilityModeRouter>()
@@ -120,7 +120,7 @@ namespace NzbDrone.Host
             }
             catch (InvalidConfigFileException ex)
             {
-                throw new SonarrStartupException(ex);
+                throw new WorkarrStartupException(ex);
             }
             catch (TerminateApplicationException e)
             {
@@ -158,7 +158,7 @@ namespace NzbDrone.Host
                 .ConfigureContainer<IContainer>(c =>
                 {
                     c.AutoAddServices(Bootstrap.ASSEMBLIES)
-                        .AddNzbDroneLogger()
+                        .AddWorkarrLogger()
                         .AddDatabase()
                         .AddStartupContext(context);
 
@@ -282,11 +282,11 @@ namespace NzbDrone.Host
             {
                 if (ex.HResult == 0x2 || ex.HResult == 0x2006D080)
                 {
-                    throw new SonarrStartupException(ex,
+                    throw new WorkarrStartupException(ex,
                         $"The SSL certificate file {cert} does not exist");
                 }
 
-                throw new SonarrStartupException(ex);
+                throw new WorkarrStartupException(ex);
             }
 
             return certificate;

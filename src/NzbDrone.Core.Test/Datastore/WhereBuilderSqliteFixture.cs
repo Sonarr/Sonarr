@@ -4,9 +4,9 @@ using System.Linq;
 using System.Linq.Expressions;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
+using Workarr.Datastore;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.Datastore
 {

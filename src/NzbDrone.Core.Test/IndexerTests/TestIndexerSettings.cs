@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
-using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Validation;
+using Workarr.Indexers;
+using Workarr.Validation;
 
 namespace NzbDrone.Core.Test.IndexerTests
 {
     public class TestIndexerSettings : IIndexerSettings
     {
-        public NzbDroneValidationResult Validate()
+        public WorkarrValidationResult Validate()
         {
             throw new NotImplementedException();
         }

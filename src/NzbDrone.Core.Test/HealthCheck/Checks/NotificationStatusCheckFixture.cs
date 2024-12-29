@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.HealthCheck.Checks;
-using NzbDrone.Core.Localization;
-using NzbDrone.Core.Notifications;
 using NzbDrone.Core.Test.Framework;
+using Workarr.HealthCheck.Checks;
+using Workarr.Localization;
+using Workarr.Notifications;
 
 namespace NzbDrone.Core.Test.HealthCheck.Checks
 {

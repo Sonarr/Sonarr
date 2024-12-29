@@ -1,8 +1,8 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Http;
 using NzbDrone.Test.Common;
+using Workarr.EnvironmentInfo;
+using Workarr.Http;
 
 namespace NzbDrone.Common.Test.Http
 {

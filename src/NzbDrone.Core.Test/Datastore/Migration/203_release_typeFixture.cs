@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Common.Extensions;
-using NzbDrone.Common.Serializer;
-using NzbDrone.Core.Datastore.Migration;
-using NzbDrone.Core.MediaFiles.MediaInfo;
-using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
+using Workarr.Datastore.Migrations;
+using Workarr.Extensions;
+using Workarr.MediaFiles.MediaInfo;
+using Workarr.Parser.Model;
+using Workarr.Qualities;
+using Workarr.Serializer.Newtonsoft.Json;
 
 namespace NzbDrone.Core.Test.Datastore.Migration
 {

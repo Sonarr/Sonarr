@@ -1,11 +1,11 @@
 using System;
 using System.Text.RegularExpressions;
-using Diacritical;
+using Diacritics.Extensions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.DependencyInjection;
-using NzbDrone.Core.Authentication;
-using NzbDrone.Core.Configuration;
+using Workarr.Authentication;
+using Workarr.Configuration;
 
 namespace Sonarr.Http.Authentication
 {

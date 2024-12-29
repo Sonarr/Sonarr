@@ -1,7 +1,7 @@
 using NUnit.Framework;
-using NzbDrone.Common.Disk;
-using NzbDrone.Common.EnsureThat;
 using NzbDrone.Test.Common;
+using Workarr.Disk;
+using Workarr.EnsureThat;
 
 namespace NzbDrone.Common.Test.EnsureTest
 {

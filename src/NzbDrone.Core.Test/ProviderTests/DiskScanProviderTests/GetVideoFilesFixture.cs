@@ -4,9 +4,9 @@ using System.Linq;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common.Disk;
-using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Test.Framework;
+using Workarr.Disk;
+using Workarr.MediaFiles;
 
 namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
 {

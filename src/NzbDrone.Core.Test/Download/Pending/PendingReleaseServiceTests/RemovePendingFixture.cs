@@ -3,12 +3,12 @@ using System.Linq;
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common.Crypto;
-using NzbDrone.Core.Download.Pending;
-using NzbDrone.Core.Parser;
-using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
+using Workarr.Crypto;
+using Workarr.Download.Pending;
+using Workarr.Parser;
+using Workarr.Parser.Model;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
 {

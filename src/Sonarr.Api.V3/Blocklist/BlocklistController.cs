@@ -2,13 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using NzbDrone.Core.Blocklisting;
-using NzbDrone.Core.CustomFormats;
-using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Indexers;
 using Sonarr.Http;
 using Sonarr.Http.Extensions;
 using Sonarr.Http.REST.Attributes;
+using Workarr.Blocklisting;
+using Workarr.CustomFormats;
+using Workarr.Datastore;
+using Workarr.Indexers;
 
 namespace Sonarr.Api.V3.Blocklist
 {
@@ -30,7 +30,7 @@ namespace Sonarr.Api.V3.Blocklist
         public PagingResource<BlocklistResource> GetBlocklist([FromQuery] PagingRequestResource paging, [FromQuery] int[] seriesIds = null, [FromQuery] DownloadProtocol[] protocols = null)
         {
             var pagingResource = new PagingResource<BlocklistResource>(paging);
-            var pagingSpec = pagingResource.MapToPagingSpec<BlocklistResource, NzbDrone.Core.Blocklisting.Blocklist>(
+            var pagingSpec = pagingResource.MapToPagingSpec<BlocklistResource, Workarr.Blocklisting.Blocklist>(
                 new HashSet<string>(StringComparer.OrdinalIgnoreCase)
                 {
                     "date",

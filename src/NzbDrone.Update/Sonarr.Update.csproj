@@ -9,6 +9,6 @@
     <PackageReference Include="NLog" Version="5.3.4" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NzbDrone.Common\Sonarr.Common.csproj" />
+    <ProjectReference Include="..\Workarr\Workarr.csproj" />
   </ItemGroup>
 </Project>

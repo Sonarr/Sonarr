@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using NzbDrone.Core.RemotePathMappings;
-using NzbDrone.Core.Validation.Paths;
 using Sonarr.Http;
 using Sonarr.Http.REST;
 using Sonarr.Http.REST.Attributes;
+using Workarr.RemotePathMappings;
+using Workarr.Validation.Paths;
 
 namespace Sonarr.Api.V3.RemotePathMappings
 {

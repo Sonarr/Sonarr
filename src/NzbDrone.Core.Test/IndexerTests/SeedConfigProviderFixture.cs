@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Indexers.Torznab;
-using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
+using Workarr.Indexers;
+using Workarr.Indexers.Torznab;
+using Workarr.Parser.Model;
 
 namespace NzbDrone.Core.Test.IndexerTests
 {

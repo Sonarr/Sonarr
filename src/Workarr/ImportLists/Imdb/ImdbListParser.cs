@@ -1,0 +1,50 @@
+using System.Net;
+using Workarr.Extensions;
+using Workarr.ImportLists.Exceptions;
+using Workarr.Parser.Model;
+
+namespace Workarr.ImportLists.Imdb
+{
+    public class ImdbListParser : IParseImportListResponse
+    {
+        public IList<ImportListItemInfo> ParseResponse(ImportListResponse importListResponse)
+        {
+            var importResponse = importListResponse;
+
+            var series = new List<ImportListItemInfo>();
+
+            if (!PreProcess(importResponse))
+            {
+                return series;
+            }
+
+            // Parse TSV response from IMDB export
+            var rows = importResponse.Content.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+
+            series = rows.Skip(1).SelectList(m => m.Split(',')).Where(m => m.Length > 5).SelectList(i => new ImportListItemInfo { ImdbId = i[1], Title = i[5] });
+
+            return series;
+        }
+
+        protected virtual bool PreProcess(ImportListResponse listResponse)
+        {
+            if (listResponse.HttpResponse.StatusCode != HttpStatusCode.OK)
+            {
+                throw new ImportListException(listResponse,
+                    "Imdb call resulted in an unexpected StatusCode [{0}]",
+                    listResponse.HttpResponse.StatusCode);
+            }
+
+            if (listResponse.HttpResponse.Headers.ContentType != null &&
+                listResponse.HttpResponse.Headers.ContentType.Contains("text/json") &&
+                listResponse.HttpRequest.Headers.Accept != null &&
+                !listResponse.HttpRequest.Headers.Accept.Contains("text/json"))
+            {
+                throw new ImportListException(listResponse,
+                    "Imdb responded with html content. Site is likely blocked or unavailable.");
+            }
+
+            return true;
+        }
+    }
+}

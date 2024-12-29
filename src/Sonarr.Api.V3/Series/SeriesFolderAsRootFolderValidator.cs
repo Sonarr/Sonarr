@@ -1,8 +1,8 @@
 using System;
 using System.IO;
 using FluentValidation.Validators;
-using NzbDrone.Common.Extensions;
-using NzbDrone.Core.Organizer;
+using Workarr.Extensions;
+using Workarr.Organizer;
 
 namespace Sonarr.Api.V3.Series
 {

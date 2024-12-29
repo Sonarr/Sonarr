@@ -1,6 +1,6 @@
 using System;
-using NzbDrone.Core.ImportLists;
-using NzbDrone.Core.Tv;
+using Workarr.ImportLists;
+using Workarr.Tv;
 
 namespace Sonarr.Api.V3.ImportLists
 {

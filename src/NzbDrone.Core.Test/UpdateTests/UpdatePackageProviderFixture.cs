@@ -2,10 +2,10 @@ using System;
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Update;
+using Workarr.EnvironmentInfo;
+using Workarr.Extensions;
+using Workarr.Update;
 
 namespace NzbDrone.Core.Test.UpdateTests
 {

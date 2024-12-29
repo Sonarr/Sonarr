@@ -1,9 +1,9 @@
 using System;
-using NzbDrone.Common.Exceptions;
+using Workarr.Exceptions;
 
 namespace NzbDrone.Host.AccessControl
 {
-    public class RemoteAccessException : NzbDroneException
+    public class RemoteAccessException : WorkarrException
     {
         public RemoteAccessException(string message, params object[] args)
             : base(message, args)

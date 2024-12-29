@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
+using Workarr.Organizer;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
 {

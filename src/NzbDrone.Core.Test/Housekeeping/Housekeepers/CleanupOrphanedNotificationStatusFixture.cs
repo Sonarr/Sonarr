@@ -1,10 +1,10 @@
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Housekeeping.Housekeepers;
-using NzbDrone.Core.Notifications;
-using NzbDrone.Core.Notifications.Join;
 using NzbDrone.Core.Test.Framework;
+using Workarr.Housekeeping.Housekeepers;
+using Workarr.Notifications;
+using Workarr.Notifications.Join;
 
 namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
 {

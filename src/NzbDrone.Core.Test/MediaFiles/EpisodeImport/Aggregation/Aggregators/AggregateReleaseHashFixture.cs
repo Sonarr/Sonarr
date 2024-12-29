@@ -1,11 +1,12 @@
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators;
-using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
+using Workarr.MediaFiles.EpisodeImport.Aggregation.Aggregators;
+using Workarr.Parser;
+using Workarr.Parser.Model;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
 {
@@ -23,9 +24,9 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
         [Test]
         public void should_prefer_file()
         {
-            var fileEpisodeInfo = Parser.Parser.ParseTitle("[DHD] Series Title! - 08 (1280x720 10bit AAC) [ABCDEFGH]");
-            var folderEpisodeInfo = Parser.Parser.ParseTitle("[DHD] Series Title! - 08 [12345678]");
-            var downloadClientEpisodeInfo = Parser.Parser.ParseTitle("[DHD] Series Title! - 08 (1280x720 10bit AAC) [ABCD1234]");
+            var fileEpisodeInfo = Parser.ParseTitle("[DHD] Series Title! - 08 (1280x720 10bit AAC) [ABCDEFGH]");
+            var folderEpisodeInfo = Parser.ParseTitle("[DHD] Series Title! - 08 [12345678]");
+            var downloadClientEpisodeInfo = Parser.ParseTitle("[DHD] Series Title! - 08 (1280x720 10bit AAC) [ABCD1234]");
             var localEpisode = new LocalEpisode
             {
                 FileEpisodeInfo = fileEpisodeInfo,
@@ -43,9 +44,9 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
         [Test]
         public void should_fallback_to_downloadclient()
         {
-            var fileEpisodeInfo = Parser.Parser.ParseTitle("[DHD] Series Title! - 08 (1280x720 10bit AAC)");
-            var downloadClientEpisodeInfo = Parser.Parser.ParseTitle("[DHD] Series Title! - 08 (1280x720 10bit AAC) [ABCD1234]");
-            var folderEpisodeInfo = Parser.Parser.ParseTitle("[DHD] Series Title! - 08 [12345678]");
+            var fileEpisodeInfo = Parser.ParseTitle("[DHD] Series Title! - 08 (1280x720 10bit AAC)");
+            var downloadClientEpisodeInfo = Parser.ParseTitle("[DHD] Series Title! - 08 (1280x720 10bit AAC) [ABCD1234]");
+            var folderEpisodeInfo = Parser.ParseTitle("[DHD] Series Title! - 08 [12345678]");
             var localEpisode = new LocalEpisode
             {
                 FileEpisodeInfo = fileEpisodeInfo,
@@ -63,9 +64,9 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
         [Test]
         public void should_fallback_to_folder()
         {
-            var fileEpisodeInfo = Parser.Parser.ParseTitle("[DHD] Series Title! - 08 (1280x720 10bit AAC)");
-            var downloadClientEpisodeInfo = Parser.Parser.ParseTitle("[DHD] Series Title! - 08 (1280x720 10bit AAC)");
-            var folderEpisodeInfo = Parser.Parser.ParseTitle("[DHD] Series Title! - 08 [12345678]");
+            var fileEpisodeInfo = Parser.ParseTitle("[DHD] Series Title! - 08 (1280x720 10bit AAC)");
+            var downloadClientEpisodeInfo = Parser.ParseTitle("[DHD] Series Title! - 08 (1280x720 10bit AAC)");
+            var folderEpisodeInfo = Parser.ParseTitle("[DHD] Series Title! - 08 [12345678]");
             var localEpisode = new LocalEpisode
             {
                 FileEpisodeInfo = fileEpisodeInfo,

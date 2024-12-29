@@ -3,12 +3,12 @@ using System.Linq;
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.MediaFiles;
-using NzbDrone.Core.MediaFiles.Commands;
-using NzbDrone.Core.MediaFiles.Events;
-using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
+using Workarr.MediaFiles;
+using Workarr.MediaFiles.Commands;
+using Workarr.MediaFiles.Events;
+using Workarr.Messaging.Events;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.MediaFiles
 {

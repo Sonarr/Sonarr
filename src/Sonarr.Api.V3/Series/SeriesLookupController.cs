@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using NzbDrone.Core.MediaCover;
-using NzbDrone.Core.MetadataSource;
-using NzbDrone.Core.Organizer;
-using NzbDrone.Core.SeriesStats;
 using Sonarr.Http;
+using Workarr.MediaCover;
+using Workarr.MetadataSource;
+using Workarr.Organizer;
+using Workarr.SeriesStats;
 
 namespace Sonarr.Api.V3.Series
 {
@@ -30,7 +30,7 @@ namespace Sonarr.Api.V3.Series
             return MapToResource(tvDbResults);
         }
 
-        private IEnumerable<SeriesResource> MapToResource(IEnumerable<NzbDrone.Core.Tv.Series> series)
+        private IEnumerable<SeriesResource> MapToResource(IEnumerable<Workarr.Tv.Series> series)
         {
             foreach (var currentSeries in series)
             {

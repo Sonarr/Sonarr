@@ -5,11 +5,12 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.ImportLists;
-using NzbDrone.Core.ImportLists.ImportListItems;
-using NzbDrone.Core.MetadataSource;
-using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
+using Workarr.ImportLists;
+using Workarr.ImportLists.ImportListItems;
+using Workarr.MetadataSource;
+using Workarr.Parser.Model;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.ImportListTests
 {
@@ -33,7 +34,7 @@ namespace NzbDrone.Core.Test.ImportListTests
 
             Mocker.GetMock<ISearchForNewSeries>()
                 .Setup(v => v.SearchForNewSeriesByImdbId(It.IsAny<string>()))
-                .Returns((string value) => new List<Tv.Series>() { new Tv.Series() { ImdbId = value } });
+                .Returns((string value) => new List<Series>() { new Series() { ImdbId = value } });
         }
 
         private Mock<IImportList> WithList(int id, bool enabled, bool enabledAuto, ImportListFetchResult fetchResult, TimeSpan? minRefresh = null, int? lastSyncOffset = null, int? syncDeletedCount = null)

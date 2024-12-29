@@ -2,12 +2,12 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using NzbDrone.Common.Extensions;
-using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Profiles.Releases;
 using Sonarr.Http;
 using Sonarr.Http.REST;
 using Sonarr.Http.REST.Attributes;
+using Workarr.Extensions;
+using Workarr.Indexers;
+using Workarr.Profiles.Releases;
 
 namespace Sonarr.Api.V3.Profiles.Release
 {

@@ -2,10 +2,10 @@
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common.Disk;
-using NzbDrone.Common.Http;
-using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.Test.Framework;
+using Workarr.Disk;
+using Workarr.Http;
+using Workarr.MediaCover;
 
 namespace NzbDrone.Core.Test.MediaCoverTests
 {

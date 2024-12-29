@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
+using Workarr.TPL;
 
 namespace NzbDrone.Common.Test
 {

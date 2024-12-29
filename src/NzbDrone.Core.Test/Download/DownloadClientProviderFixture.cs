@@ -4,10 +4,10 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.Download;
-using NzbDrone.Core.Download.Clients;
-using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Test.Framework;
+using Workarr.Download;
+using Workarr.Download.Clients;
+using Workarr.Indexers;
 
 namespace NzbDrone.Core.Test.Download
 {

@@ -1,7 +1,7 @@
-using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Validation;
 using NzbDrone.SignalR;
 using Sonarr.Http;
+using Workarr.Indexers;
+using Workarr.Validation;
 
 namespace Sonarr.Api.V3.Indexers
 {

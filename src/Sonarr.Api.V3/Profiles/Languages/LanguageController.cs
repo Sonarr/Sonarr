@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using NzbDrone.Core.Languages;
 using Sonarr.Http;
 using Sonarr.Http.REST;
 
@@ -12,7 +11,7 @@ namespace Sonarr.Api.V3.Profiles.Languages
     {
         protected override LanguageResource GetResourceById(int id)
         {
-            var language = (Language)id;
+            var language = (Workarr.Languages.Language)id;
 
             return new LanguageResource
             {
@@ -24,7 +23,7 @@ namespace Sonarr.Api.V3.Profiles.Languages
         [HttpGet]
         public List<LanguageResource> GetAll()
         {
-            var languageResources = Language.All.Select(l => new LanguageResource
+            var languageResources = Workarr.Languages.Language.All.Select(l => new LanguageResource
             {
                 Id = (int)l,
                 Name = l.ToString()

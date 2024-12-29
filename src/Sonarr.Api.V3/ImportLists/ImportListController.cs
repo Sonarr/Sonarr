@@ -1,9 +1,9 @@
 using FluentValidation;
-using NzbDrone.Core.ImportLists;
-using NzbDrone.Core.Validation;
-using NzbDrone.Core.Validation.Paths;
 using NzbDrone.SignalR;
 using Sonarr.Http;
+using Workarr.ImportLists;
+using Workarr.Validation;
+using Workarr.Validation.Paths;
 
 namespace Sonarr.Api.V3.ImportLists
 {

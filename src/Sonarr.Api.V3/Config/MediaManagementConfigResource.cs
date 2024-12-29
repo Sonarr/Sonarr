@@ -1,8 +1,8 @@
-using NzbDrone.Core.Configuration;
-using NzbDrone.Core.MediaFiles;
-using NzbDrone.Core.MediaFiles.EpisodeImport;
-using NzbDrone.Core.Qualities;
 using Sonarr.Http.REST;
+using Workarr.Configuration;
+using Workarr.MediaFiles;
+using Workarr.MediaFiles.EpisodeImport;
+using Workarr.Qualities;
 
 namespace Sonarr.Api.V3.Config
 {

@@ -2,6 +2,7 @@ using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Test.Framework;
+using Workarr.Parser;
 
 namespace NzbDrone.Core.Test.ParserTests
 {
@@ -179,7 +180,7 @@ namespace NzbDrone.Core.Test.ParserTests
         // [TestCase("", "", 0, 0)]
         public void should_parse_single_episode(string postTitle, string title, int seasonNumber, int episodeNumber)
         {
-            var result = Parser.Parser.ParseTitle(postTitle);
+            var result = Parser.ParseTitle(postTitle);
             result.Should().NotBeNull();
             result.EpisodeNumbers.Should().HaveCount(1);
             result.SeasonNumber.Should().Be(seasonNumber);
@@ -198,7 +199,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("221204 乃木坂工事中 ep389.mp4", "乃木坂工事中", 1, 389)]
         public void should_parse_japanese_variety_show_format(string postTitle, string title, int seasonNumber, int episodeNumber)
         {
-            var result = Parser.Parser.ParseTitle(postTitle);
+            var result = Parser.ParseTitle(postTitle);
             result.Should().NotBeNull();
             result.EpisodeNumbers.Should().HaveCount(1);
             result.SeasonNumber.Should().Be(seasonNumber);
@@ -211,7 +212,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series Title S01E11.5 [SP]-The Poppies Bloom Red on the Battlefield", "Series Title", 1, 11)]
         public void should_parse_decimal_number_as_special(string postTitle, string title, int seasonNumber, int episodeNumber)
         {
-            var result = Parser.Parser.ParseTitle(postTitle);
+            var result = Parser.ParseTitle(postTitle);
             result.Should().NotBeNull();
             result.EpisodeNumbers.Should().HaveCount(1);
             result.SeasonNumber.Should().Be(seasonNumber);
@@ -225,7 +226,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series.Title.S06E01b.Fade.Out.Fade.in.Part.2.1080p.DSNP.WEB-DL.AAC2.0.H.264-FLUX", "Series Title", 6, 1)]
         public void should_parse_split_episode(string postTitle, string title, int seasonNumber, int episodeNumber)
         {
-            var result = Parser.Parser.ParseTitle(postTitle);
+            var result = Parser.ParseTitle(postTitle);
             result.Should().NotBeNull();
             result.EpisodeNumbers.Should().HaveCount(1);
             result.SeasonNumber.Should().Be(seasonNumber);

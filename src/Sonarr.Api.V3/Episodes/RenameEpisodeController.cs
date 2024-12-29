@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using NzbDrone.Core.MediaFiles;
 using Sonarr.Http;
+using Workarr.MediaFiles;
 
 namespace Sonarr.Api.V3.Episodes
 {

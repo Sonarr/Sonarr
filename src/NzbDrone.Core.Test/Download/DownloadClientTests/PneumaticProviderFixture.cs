@@ -6,17 +6,17 @@ using FizzWare.NBuilder;
 using Moq;
 using NLog;
 using NUnit.Framework;
-using NzbDrone.Common.Http;
-using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Download;
-using NzbDrone.Core.Download.Clients.Pneumatic;
-using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Localization;
-using NzbDrone.Core.Parser;
-using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Test.IndexerTests;
 using NzbDrone.Test.Common;
+using Workarr.Configuration;
+using Workarr.Download;
+using Workarr.Download.Clients.Pneumatic;
+using Workarr.Http;
+using Workarr.Indexers;
+using Workarr.Localization;
+using Workarr.Parser;
+using Workarr.Parser.Model;
 
 namespace NzbDrone.Core.Test.Download.DownloadClientTests
 {

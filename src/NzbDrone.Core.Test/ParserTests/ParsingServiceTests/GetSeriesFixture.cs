@@ -1,10 +1,10 @@
 ﻿using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.DataAugmentation.Scene;
-using NzbDrone.Core.Parser;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
+using Workarr.DataAugmentation.Scene;
+using Workarr.Parser;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
 {
@@ -30,14 +30,14 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
             Subject.GetSeries(title);
 
             Mocker.GetMock<ISeriesService>()
-                  .Verify(s => s.FindByTitle(Parser.Parser.ParseTitle(title).SeriesTitle), Times.Once());
+                  .Verify(s => s.FindByTitle(Parser.ParseTitle(title).SeriesTitle), Times.Once());
         }
 
         [Test]
         public void should_fallback_to_title_without_year_and_year_when_title_lookup_fails()
         {
             const string title = "Show.2004.S01E01.720p.hdtv";
-            var parsedEpisodeInfo = Parser.Parser.ParseTitle(title);
+            var parsedEpisodeInfo = Parser.ParseTitle(title);
 
             Subject.GetSeries(title);
 

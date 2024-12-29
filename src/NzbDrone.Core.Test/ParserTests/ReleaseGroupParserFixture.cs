@@ -49,7 +49,7 @@ namespace NzbDrone.Core.Test.ParserTests
         // [TestCase("", "")]
         public void should_parse_release_group(string title, string expected)
         {
-            Parser.Parser.ParseReleaseGroup(title).Should().Be(expected);
+            Workarr.Parser.Parser.ParseReleaseGroup(title).Should().Be(expected);
         }
 
         [TestCase("Show.Name.2009.S01.1080p.BluRay.DTS5.1.x264-D-Z0N3", "D-Z0N3")]
@@ -94,7 +94,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series.S01E05.1080p.WEB-DL.DDP5.1.H264-BEN.THE.MEN", "BEN.THE.MEN")]
         public void should_parse_exception_release_group(string title, string expected)
         {
-            Parser.Parser.ParseReleaseGroup(title).Should().Be(expected);
+            Workarr.Parser.Parser.ParseReleaseGroup(title).Should().Be(expected);
         }
 
         [Test]
@@ -102,7 +102,7 @@ namespace NzbDrone.Core.Test.ParserTests
         {
             const string path = @"C:\Test\Doctor.Series.2005.s01e01.internal.bdrip.x264-archivist.mkv";
 
-            Parser.Parser.ParsePath(path).ReleaseGroup.Should().Be("archivist");
+            Workarr.Parser.Parser.ParsePath(path).ReleaseGroup.Should().Be("archivist");
         }
 
         [TestCase("Series.Title.S02E04.720p.WEBRip.x264-SKGTV English", "SKGTV")]
@@ -112,7 +112,7 @@ namespace NzbDrone.Core.Test.ParserTests
         // [TestCase("", "")]
         public void should_not_include_language_in_release_group(string title, string expected)
         {
-            Parser.Parser.ParseReleaseGroup(title).Should().Be(expected);
+            Workarr.Parser.Parser.ParseReleaseGroup(title).Should().Be(expected);
         }
 
         [TestCase("Series.Title.S02E04.720p.WEB-DL.AAC2.0.H.264-EVL-RP", "EVL")]
@@ -143,7 +143,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series.Title.S04E06.Episode.Name.720p.WEB-DL.DD5.1.H.264-HarrHD-RePACKPOST", "HarrHD")]
         public void should_not_include_repost_in_release_group(string title, string expected)
         {
-            Parser.Parser.ParseReleaseGroup(title).Should().Be(expected);
+            Workarr.Parser.Parser.ParseReleaseGroup(title).Should().Be(expected);
         }
 
         [TestCase("[FFF] Series Title!! - S01E11 - Someday, With Sonarr", "FFF")]
@@ -156,13 +156,13 @@ namespace NzbDrone.Core.Test.ParserTests
         // [TestCase("", "")]
         public void should_parse_anime_release_groups(string title, string expected)
         {
-            Parser.Parser.ParseReleaseGroup(title).Should().Be(expected);
+            Workarr.Parser.Parser.ParseReleaseGroup(title).Should().Be(expected);
         }
 
         [TestCase("Terrible.Anime.Title.001.DBOX.480p.x264-iKaos [v3] [6AFFEF6B]")]
         public void should_not_parse_anime_hash_as_release_group(string title)
         {
-            Parser.Parser.ParseReleaseGroup(title).Should().BeNull();
+            Workarr.Parser.Parser.ParseReleaseGroup(title).Should().BeNull();
         }
     }
 }

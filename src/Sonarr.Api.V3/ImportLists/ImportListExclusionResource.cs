@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
-using NzbDrone.Core.ImportLists.Exclusions;
 using Sonarr.Http.REST;
+using Workarr.ImportLists.Exclusions;
 
 namespace Sonarr.Api.V3.ImportLists
 {

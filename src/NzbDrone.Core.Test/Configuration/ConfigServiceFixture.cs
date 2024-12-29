@@ -4,8 +4,8 @@ using System.Linq;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.Configuration;
 using NzbDrone.Test.Common;
+using Workarr.Configuration;
 
 namespace NzbDrone.Core.Test.Configuration
 {

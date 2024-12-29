@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NzbDrone.Common.Crypto;
-using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Extensions;
+using Workarr.Crypto;
+using Workarr.EnvironmentInfo;
+using Workarr.Extensions;
 
 namespace Sonarr.Http.Frontend.Mappers
 {

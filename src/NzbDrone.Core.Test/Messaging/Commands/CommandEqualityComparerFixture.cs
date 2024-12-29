@@ -5,14 +5,14 @@ using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Common.Extensions;
-using NzbDrone.Core.Indexers;
-using NzbDrone.Core.IndexerSearch;
-using NzbDrone.Core.MediaFiles.Commands;
-using NzbDrone.Core.MediaFiles.EpisodeImport.Manual;
-using NzbDrone.Core.Messaging.Commands;
-using NzbDrone.Core.Update.Commands;
 using NzbDrone.Test.Common;
+using Workarr.Extensions;
+using Workarr.Indexers;
+using Workarr.IndexerSearch;
+using Workarr.MediaFiles.Commands;
+using Workarr.MediaFiles.EpisodeImport.Manual;
+using Workarr.Messaging.Commands;
+using Workarr.Update.Commands;
 
 namespace NzbDrone.Core.Test.Messaging.Commands
 {

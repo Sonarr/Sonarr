@@ -5,15 +5,15 @@ using System.Linq;
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common.Extensions;
-using NzbDrone.Core.AutoTagging;
-using NzbDrone.Core.Exceptions;
-using NzbDrone.Core.MediaFiles;
-using NzbDrone.Core.MetadataSource;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
-using NzbDrone.Core.Tv.Commands;
 using NzbDrone.Test.Common;
+using Workarr.AutoTagging;
+using Workarr.Exceptions;
+using Workarr.Extensions;
+using Workarr.MediaFiles;
+using Workarr.MetadataSource;
+using Workarr.Tv;
+using Workarr.Tv.Commands;
 
 namespace NzbDrone.Core.Test.TvTests
 {

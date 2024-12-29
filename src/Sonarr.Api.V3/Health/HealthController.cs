@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using NzbDrone.Core.Datastore.Events;
-using NzbDrone.Core.HealthCheck;
-using NzbDrone.Core.Messaging.Events;
 using NzbDrone.SignalR;
 using Sonarr.Http;
 using Sonarr.Http.REST;
+using Workarr.Datastore.Events;
+using Workarr.HealthCheck;
+using Workarr.Messaging.Events;
 
 namespace Sonarr.Api.V3.Health
 {

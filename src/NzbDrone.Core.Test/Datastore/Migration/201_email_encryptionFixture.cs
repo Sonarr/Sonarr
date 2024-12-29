@@ -2,10 +2,10 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Common.Serializer;
-using NzbDrone.Core.Datastore.Migration;
-using NzbDrone.Core.Notifications.Email;
 using NzbDrone.Core.Test.Framework;
+using Workarr.Datastore.Migrations;
+using Workarr.Notifications.Email;
+using Workarr.Serializer.Newtonsoft.Json;
 
 namespace NzbDrone.Core.Test.Datastore.Migration
 {

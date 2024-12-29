@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NzbDrone.Core.Update;
 using Sonarr.Http.REST;
+using Workarr.Update;
 
 namespace Sonarr.Api.V3.Update
 {

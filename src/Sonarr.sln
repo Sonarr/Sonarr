@@ -36,11 +36,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceInstall", "ServiceHe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceUninstall", "ServiceHelpers\ServiceUninstall\ServiceUninstall.csproj", "{700D0B95-95CD-43F3-B6C9-FAA0FC1358D4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sonarr.Core", "NzbDrone.Core\Sonarr.Core.csproj", "{FF5EE3B6-913B-47CE-9CEB-11C51B4E1205}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sonarr.Update", "NzbDrone.Update\Sonarr.Update.csproj", "{4CCC53CD-8D5E-4CC4-97D2-5C9312AC2BD7}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sonarr.Common", "NzbDrone.Common\Sonarr.Common.csproj", "{F2BE0FDF-6E47-4827-A420-DD4EF82407F8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Host", "Host", "{486ADF86-DD89-4E19-B805-9D94F19800D9}"
 EndProject
@@ -74,6 +70,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sonarr.Mono", "NzbDrone.Mono\Sonarr.Mono.csproj", "{22F71728-AB73-4774-8DC2-6D2D7734AE0C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sonarr.Windows", "NzbDrone.Windows\Sonarr.Windows.csproj", "{4AE3B731-442E-4AF0-88A5-9FABEB685A0D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Workarr", "Workarr\Workarr.csproj", "{4BDD21D0-F04A-4722-8B8D-564958A6DF4B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -227,18 +225,6 @@ Global
 		{700D0B95-95CD-43F3-B6C9-FAA0FC1358D4}.Release|Posix.Build.0 = Release|Any CPU
 		{700D0B95-95CD-43F3-B6C9-FAA0FC1358D4}.Release|Windows.ActiveCfg = Release|Any CPU
 		{700D0B95-95CD-43F3-B6C9-FAA0FC1358D4}.Release|Windows.Build.0 = Release|Any CPU
-		{FF5EE3B6-913B-47CE-9CEB-11C51B4E1205}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FF5EE3B6-913B-47CE-9CEB-11C51B4E1205}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FF5EE3B6-913B-47CE-9CEB-11C51B4E1205}.Debug|Posix.ActiveCfg = Debug|Any CPU
-		{FF5EE3B6-913B-47CE-9CEB-11C51B4E1205}.Debug|Posix.Build.0 = Debug|Any CPU
-		{FF5EE3B6-913B-47CE-9CEB-11C51B4E1205}.Debug|Windows.ActiveCfg = Debug|Any CPU
-		{FF5EE3B6-913B-47CE-9CEB-11C51B4E1205}.Debug|Windows.Build.0 = Debug|Any CPU
-		{FF5EE3B6-913B-47CE-9CEB-11C51B4E1205}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FF5EE3B6-913B-47CE-9CEB-11C51B4E1205}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FF5EE3B6-913B-47CE-9CEB-11C51B4E1205}.Release|Posix.ActiveCfg = Release|Any CPU
-		{FF5EE3B6-913B-47CE-9CEB-11C51B4E1205}.Release|Posix.Build.0 = Release|Any CPU
-		{FF5EE3B6-913B-47CE-9CEB-11C51B4E1205}.Release|Windows.ActiveCfg = Release|Any CPU
-		{FF5EE3B6-913B-47CE-9CEB-11C51B4E1205}.Release|Windows.Build.0 = Release|Any CPU
 		{4CCC53CD-8D5E-4CC4-97D2-5C9312AC2BD7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4CCC53CD-8D5E-4CC4-97D2-5C9312AC2BD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4CCC53CD-8D5E-4CC4-97D2-5C9312AC2BD7}.Debug|Posix.ActiveCfg = Debug|Any CPU
@@ -251,18 +237,6 @@ Global
 		{4CCC53CD-8D5E-4CC4-97D2-5C9312AC2BD7}.Release|Posix.Build.0 = Release|Any CPU
 		{4CCC53CD-8D5E-4CC4-97D2-5C9312AC2BD7}.Release|Windows.ActiveCfg = Release|Any CPU
 		{4CCC53CD-8D5E-4CC4-97D2-5C9312AC2BD7}.Release|Windows.Build.0 = Release|Any CPU
-		{F2BE0FDF-6E47-4827-A420-DD4EF82407F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F2BE0FDF-6E47-4827-A420-DD4EF82407F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F2BE0FDF-6E47-4827-A420-DD4EF82407F8}.Debug|Posix.ActiveCfg = Debug|Any CPU
-		{F2BE0FDF-6E47-4827-A420-DD4EF82407F8}.Debug|Posix.Build.0 = Debug|Any CPU
-		{F2BE0FDF-6E47-4827-A420-DD4EF82407F8}.Debug|Windows.ActiveCfg = Debug|Any CPU
-		{F2BE0FDF-6E47-4827-A420-DD4EF82407F8}.Debug|Windows.Build.0 = Debug|Any CPU
-		{F2BE0FDF-6E47-4827-A420-DD4EF82407F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F2BE0FDF-6E47-4827-A420-DD4EF82407F8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F2BE0FDF-6E47-4827-A420-DD4EF82407F8}.Release|Posix.ActiveCfg = Release|Any CPU
-		{F2BE0FDF-6E47-4827-A420-DD4EF82407F8}.Release|Posix.Build.0 = Release|Any CPU
-		{F2BE0FDF-6E47-4827-A420-DD4EF82407F8}.Release|Windows.ActiveCfg = Release|Any CPU
-		{F2BE0FDF-6E47-4827-A420-DD4EF82407F8}.Release|Windows.Build.0 = Release|Any CPU
 		{95C11A9E-56ED-456A-8447-2C89C1139266}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{95C11A9E-56ED-456A-8447-2C89C1139266}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95C11A9E-56ED-456A-8447-2C89C1139266}.Debug|Posix.ActiveCfg = Debug|Any CPU
@@ -393,6 +367,14 @@ Global
 		{4AE3B731-442E-4AF0-88A5-9FABEB685A0D}.Release|Posix.Build.0 = Release|Any CPU
 		{4AE3B731-442E-4AF0-88A5-9FABEB685A0D}.Release|Windows.ActiveCfg = Release|Any CPU
 		{4AE3B731-442E-4AF0-88A5-9FABEB685A0D}.Release|Windows.Build.0 = Release|Any CPU
+		{4BDD21D0-F04A-4722-8B8D-564958A6DF4B}.Debug|Posix.ActiveCfg = Debug|Any CPU
+		{4BDD21D0-F04A-4722-8B8D-564958A6DF4B}.Debug|Posix.Build.0 = Debug|Any CPU
+		{4BDD21D0-F04A-4722-8B8D-564958A6DF4B}.Debug|Windows.ActiveCfg = Debug|Any CPU
+		{4BDD21D0-F04A-4722-8B8D-564958A6DF4B}.Debug|Windows.Build.0 = Debug|Any CPU
+		{4BDD21D0-F04A-4722-8B8D-564958A6DF4B}.Release|Posix.ActiveCfg = Release|Any CPU
+		{4BDD21D0-F04A-4722-8B8D-564958A6DF4B}.Release|Posix.Build.0 = Release|Any CPU
+		{4BDD21D0-F04A-4722-8B8D-564958A6DF4B}.Release|Windows.ActiveCfg = Release|Any CPU
+		{4BDD21D0-F04A-4722-8B8D-564958A6DF4B}.Release|Windows.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

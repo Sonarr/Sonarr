@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Serialization;
-using NzbDrone.Core.AutoTagging;
-using NzbDrone.Core.AutoTagging.Specifications;
 using Sonarr.Http.ClientSchema;
 using Sonarr.Http.REST;
+using Workarr.AutoTagging;
+using Workarr.AutoTagging.Specifications;
 
 namespace Sonarr.Api.V3.AutoTagging
 {

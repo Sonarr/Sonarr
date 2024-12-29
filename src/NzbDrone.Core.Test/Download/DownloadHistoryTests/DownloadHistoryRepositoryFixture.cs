@@ -3,9 +3,9 @@ using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Download.History;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
+using Workarr.Download.History;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.Download.DownloadHistoryTests
 {

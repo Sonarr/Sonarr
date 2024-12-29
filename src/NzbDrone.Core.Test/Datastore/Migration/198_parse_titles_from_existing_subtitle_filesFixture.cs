@@ -5,9 +5,9 @@ using System.Linq;
 using Dapper;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Common.Serializer;
-using NzbDrone.Core.Datastore.Migration;
 using NzbDrone.Core.Test.Framework;
+using Workarr.Datastore.Migrations;
+using Workarr.Serializer.Newtonsoft.Json;
 
 namespace NzbDrone.Core.Test.Datastore.Migration
 {

@@ -1,9 +1,9 @@
 using NLog;
-using NzbDrone.Common;
-using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Processes;
 using NzbDrone.Host.AccessControl;
-using IServiceProvider = NzbDrone.Common.IServiceProvider;
+using Workarr.Common;
+using Workarr.EnvironmentInfo;
+using Workarr.Processes;
+using IServiceProvider = Workarr.Common.IServiceProvider;
 
 namespace NzbDrone.Host
 {

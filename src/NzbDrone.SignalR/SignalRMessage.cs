@@ -1,4 +1,4 @@
-using NzbDrone.Core.Datastore.Events;
+using Workarr.Datastore.Events;
 
 namespace NzbDrone.SignalR
 {

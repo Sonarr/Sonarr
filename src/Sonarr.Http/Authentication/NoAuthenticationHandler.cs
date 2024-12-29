@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using NzbDrone.Core.Authentication;
+using Workarr.Authentication;
 
 namespace Sonarr.Http.Authentication
 {

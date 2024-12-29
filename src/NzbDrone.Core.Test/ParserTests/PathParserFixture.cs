@@ -37,7 +37,7 @@ namespace NzbDrone.Core.Test.ParserTests
         // [TestCase(@"C:\series.state.S02E04.720p.WEB-DL.DD5.1.H.264\73696S02-04.mkv", 2, 4)] //Gets treated as S01E04 (because it gets parsed as anime); 2020-01 broken test case: Expected result.EpisodeNumbers to contain 1 item(s), but found 0
         public void should_parse_from_path(string path, int season, int episode)
         {
-            var result = Parser.Parser.ParsePath(path.AsOsAgnostic());
+            var result = Workarr.Parser.Parser.ParsePath(path.AsOsAgnostic());
 
             result.EpisodeNumbers.Should().HaveCount(1);
             result.SeasonNumber.Should().Be(season);
@@ -52,7 +52,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Season 2\\E05-06 - Episode Title HDTV-720p Proper", "", 2, new[] { 5, 6 })]
         public void should_parse_multi_episode_from_path(string path, string title, int season, int[] episodes)
         {
-            var result = Parser.Parser.ParsePath(path.AsOsAgnostic());
+            var result = Workarr.Parser.Parser.ParsePath(path.AsOsAgnostic());
 
             result.SeriesTitle.Should().Be(title);
             result.EpisodeNumbers.Should().HaveCount(episodes.Length);

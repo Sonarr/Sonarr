@@ -3,10 +3,10 @@ using System.Linq;
 using System.Net;
 using FluentAssertions;
 using NLog;
-using NzbDrone.Common.Serializer;
 using RestSharp;
 using Sonarr.Http;
 using Sonarr.Http.REST;
+using Workarr.Serializer.Newtonsoft.Json;
 
 namespace NzbDrone.Integration.Test.Client
 {

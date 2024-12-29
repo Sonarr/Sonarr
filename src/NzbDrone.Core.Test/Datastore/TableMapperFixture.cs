@@ -2,9 +2,10 @@ using System.Collections.Generic;
 using Dapper;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Datastore.Converters;
-using NzbDrone.Core.Tv;
+using Workarr.Datastore;
+using Workarr.Datastore.Converters;
+using Workarr.Datastore.Extensions;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.Datastore
 {

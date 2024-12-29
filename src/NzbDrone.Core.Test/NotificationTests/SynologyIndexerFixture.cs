@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.MediaFiles;
-using NzbDrone.Core.Notifications;
-using NzbDrone.Core.Notifications.Synology;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
+using Workarr.MediaFiles;
+using Workarr.Notifications;
+using Workarr.Notifications.Synology;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.NotificationTests
 {

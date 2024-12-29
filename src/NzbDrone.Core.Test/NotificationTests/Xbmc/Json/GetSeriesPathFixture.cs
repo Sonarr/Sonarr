@@ -3,10 +3,10 @@ using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Notifications.Xbmc;
-using NzbDrone.Core.Notifications.Xbmc.Model;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
+using Workarr.Notifications.Xbmc;
+using Workarr.Notifications.Xbmc.Model;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.NotificationTests.Xbmc.Json
 {

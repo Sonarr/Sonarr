@@ -5,10 +5,10 @@ using System.Linq;
 using Mono.Unix;
 using Mono.Unix.Native;
 using NLog;
-using NzbDrone.Common.Disk;
-using NzbDrone.Common.EnsureThat;
-using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Extensions;
+using Workarr.Disk;
+using Workarr.EnsureThat;
+using Workarr.EnvironmentInfo;
+using Workarr.Extensions;
 
 namespace NzbDrone.Mono.Disk
 {

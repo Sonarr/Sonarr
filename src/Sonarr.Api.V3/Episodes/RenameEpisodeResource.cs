@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Sonarr.Http.REST;
+using Workarr.MediaFiles;
 
 namespace Sonarr.Api.V3.Episodes
 {
@@ -16,7 +17,7 @@ namespace Sonarr.Api.V3.Episodes
 
     public static class RenameEpisodeResourceMapper
     {
-        public static RenameEpisodeResource ToResource(this NzbDrone.Core.MediaFiles.RenameEpisodeFilePreview model)
+        public static RenameEpisodeResource ToResource(this RenameEpisodeFilePreview model)
         {
             if (model == null)
             {
@@ -34,7 +35,7 @@ namespace Sonarr.Api.V3.Episodes
             };
         }
 
-        public static List<RenameEpisodeResource> ToResource(this IEnumerable<NzbDrone.Core.MediaFiles.RenameEpisodeFilePreview> models)
+        public static List<RenameEpisodeResource> ToResource(this IEnumerable<RenameEpisodeFilePreview> models)
         {
             return models.Select(ToResource).ToList();
         }

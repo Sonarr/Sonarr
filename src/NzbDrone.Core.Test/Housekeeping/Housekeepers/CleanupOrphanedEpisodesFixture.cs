@@ -1,9 +1,9 @@
 ﻿using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Housekeeping.Housekeepers;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
+using Workarr.Housekeeping.Housekeepers;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
 {

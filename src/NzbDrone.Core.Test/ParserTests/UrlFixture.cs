@@ -1,7 +1,7 @@
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Parser;
 using NzbDrone.Core.Test.Framework;
+using Workarr.Parser;
 
 namespace NzbDrone.Core.Test.ParserTests
 {
@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Test.ParserTests
 
         public void should_not_parse_url_in_name(string postTitle, string title)
         {
-            var result = Parser.Parser.ParseSeriesName(postTitle).CleanSeriesTitle();
+            var result = Workarr.Parser.Parser.ParseSeriesName(postTitle).CleanSeriesTitle();
             result.Should().Be(title.CleanSeriesTitle());
         }
 
@@ -49,7 +49,7 @@ namespace NzbDrone.Core.Test.ParserTests
 
         public void should_not_parse_url_in_group(string title, string expected)
         {
-            Parser.Parser.ParseReleaseGroup(title).Should().Be(expected);
+            Workarr.Parser.Parser.ParseReleaseGroup(title).Should().Be(expected);
         }
     }
 }

@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common.Http;
-using NzbDrone.Common.Serializer;
-using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Indexers.HDBits;
-using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
+using Workarr.Http;
+using Workarr.Indexers;
+using Workarr.Indexers.HDBits;
+using Workarr.Parser.Model;
+using Workarr.Serializer.Newtonsoft.Json;
 
 namespace NzbDrone.Core.Test.IndexerTests.HDBitsTests
 {

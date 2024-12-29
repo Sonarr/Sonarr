@@ -1,9 +1,9 @@
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.RootFolders;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
+using Workarr.RootFolders;
 
 namespace NzbDrone.Core.Test.RootFolderTests
 {

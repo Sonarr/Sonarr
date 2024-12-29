@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
-using NzbDrone.Core.MediaCover;
+using Workarr.MediaCover;
 
 namespace Sonarr.Http.Frontend.Mappers
 {

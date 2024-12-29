@@ -1,9 +1,9 @@
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Processes;
 using NzbDrone.Mono.EnvironmentInfo.VersionAdapters;
 using NzbDrone.Test.Common;
+using Workarr.EnvironmentInfo;
+using Workarr.Processes;
 
 namespace NzbDrone.Mono.Test.EnvironmentInfo
 {

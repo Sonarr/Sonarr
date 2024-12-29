@@ -1,6 +1,6 @@
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Common.Extensions;
+using Workarr.Extensions;
 
 namespace NzbDrone.Common.Test.ExtensionTests
 {

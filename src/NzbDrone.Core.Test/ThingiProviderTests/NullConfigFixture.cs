@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.ThingiProvider;
+using Workarr.ThingiProvider;
 
 namespace NzbDrone.Core.Test.ThingiProviderTests
 {

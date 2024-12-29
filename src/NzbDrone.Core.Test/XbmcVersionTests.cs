@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Notifications.Xbmc.Model;
+using Workarr.Notifications.Xbmc.Model;
 
 namespace NzbDrone.Core.Test
 {

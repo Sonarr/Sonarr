@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using NzbDrone.Core.Annotations;
+using Workarr.Annotations;
 
 namespace Sonarr.Http.ClientSchema
 {

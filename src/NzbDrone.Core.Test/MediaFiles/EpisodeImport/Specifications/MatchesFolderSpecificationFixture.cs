@@ -5,12 +5,12 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.MediaFiles.EpisodeImport.Specifications;
-using NzbDrone.Core.Parser;
-using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
+using Workarr.MediaFiles.EpisodeImport.Specifications;
+using Workarr.Parser;
+using Workarr.Parser.Model;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
 {
@@ -215,15 +215,15 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
         public void should_be_accepted_if_both_file_and_folder_info_map_to_same_special()
         {
             var title = "Some.Special.S12E00.WEB-DL.1080p-GoodNightTV";
-            var actualInfo = Parser.Parser.ParseTitle("Some.Special.S0E100.WEB-DL.1080p-GoodNightTV.mkv");
+            var actualInfo = Parser.ParseTitle("Some.Special.S0E100.WEB-DL.1080p-GoodNightTV.mkv");
 
-            var folderInfo = Parser.Parser.ParseTitle(title);
-            var fileInfo = Parser.Parser.ParseTitle(title + ".mkv");
+            var folderInfo = Parser.ParseTitle(title);
+            var fileInfo = Parser.ParseTitle(title + ".mkv");
             var localEpisode = new LocalEpisode
             {
                 FileEpisodeInfo = fileInfo,
                 FolderEpisodeInfo = folderInfo,
-                Series = new Tv.Series
+                Series = new Series
                 {
                     Id = 1,
                     Title = "Some Special"

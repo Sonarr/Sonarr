@@ -2,9 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Serialization;
-using NzbDrone.Core.CustomFormats;
 using Sonarr.Http.ClientSchema;
 using Sonarr.Http.REST;
+using Workarr.CustomFormats;
+using Workarr.CustomFormats.Specifications;
 
 namespace Sonarr.Api.V3.CustomFormats
 {

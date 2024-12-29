@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using Newtonsoft.Json;
 using NUnit.Framework;
-using NzbDrone.Core.Download.Clients.DownloadStation;
+using Workarr.Download.Clients.DownloadStation;
 
 namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
 {

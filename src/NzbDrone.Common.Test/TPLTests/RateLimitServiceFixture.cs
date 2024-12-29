@@ -3,9 +3,9 @@ using System.Collections.Concurrent;
 using System.Diagnostics;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Common.Cache;
-using NzbDrone.Common.TPL;
 using NzbDrone.Test.Common;
+using Workarr.Cache;
+using Workarr.TPL;
 
 namespace NzbDrone.Common.Test.TPLTests
 {

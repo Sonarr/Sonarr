@@ -1,9 +1,8 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Common.Http;
-using NzbDrone.Common.Http.Proxy;
-using NzbDrone.Core.Http;
 using NzbDrone.Test.Common;
+using Workarr.Http;
+using Workarr.Http.Proxy;
 
 namespace NzbDrone.Core.Test.Http
 {

@@ -1,12 +1,12 @@
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.MetadataSource;
-using NzbDrone.Core.MetadataSource.SkyHook;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
 using NzbDrone.Test.Common.Categories;
+using Workarr.MetadataSource;
+using Workarr.MetadataSource.SkyHook;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.MetadataSource.SkyHook
 {

@@ -4,20 +4,21 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common.Serializer;
-using NzbDrone.Core.Configuration;
-using NzbDrone.Core.CustomFormats;
-using NzbDrone.Core.DecisionEngine.Specifications;
-using NzbDrone.Core.Languages;
-using NzbDrone.Core.MediaFiles;
-using NzbDrone.Core.Parser;
-using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Profiles;
-using NzbDrone.Core.Profiles.Qualities;
-using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.CustomFormats;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
+using Workarr.Configuration;
+using Workarr.CustomFormats;
+using Workarr.CustomFormats.Specifications;
+using Workarr.DecisionEngine.Specifications;
+using Workarr.Languages;
+using Workarr.MediaFiles;
+using Workarr.Parser;
+using Workarr.Parser.Model;
+using Workarr.Profiles;
+using Workarr.Profiles.Qualities;
+using Workarr.Qualities;
+using Workarr.Serializer.Newtonsoft.Json;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.DecisionEngineTests
 {

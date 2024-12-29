@@ -11,7 +11,11 @@
     <PackageReference Include="RestSharp" Version="106.15.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NzbDrone.Common\Sonarr.Common.csproj" />
-    <ProjectReference Include="..\NzbDrone.Core\Sonarr.Core.csproj" />
+    <ProjectReference Include="..\Workarr\Workarr.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="DryIoc">
+      <HintPath>..\..\..\..\..\.nuget\packages\dryioc.dll\5.4.3\lib\net6.0\DryIoc.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>

@@ -2,14 +2,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using NzbDrone.Common.Crypto;
-using NzbDrone.Common.Disk;
-using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Extensions;
-using NzbDrone.Core.Backup;
 using Sonarr.Http;
 using Sonarr.Http.REST;
 using Sonarr.Http.REST.Attributes;
+using Workarr.Backup;
+using Workarr.Crypto;
+using Workarr.Disk;
+using Workarr.EnvironmentInfo;
+using Workarr.Extensions;
 
 namespace Sonarr.Api.V3.System.Backup
 {
@@ -124,17 +124,17 @@ namespace Sonarr.Api.V3.System.Backup
             };
         }
 
-        private string GetBackupPath(NzbDrone.Core.Backup.Backup backup)
+        private string GetBackupPath(Workarr.Backup.Backup backup)
         {
             return Path.Combine(_backupService.GetBackupFolder(backup.Type), backup.Name);
         }
 
-        private int GetBackupId(NzbDrone.Core.Backup.Backup backup)
+        private int GetBackupId(Workarr.Backup.Backup backup)
         {
             return HashConverter.GetHashInt31($"backup-{backup.Type}-{backup.Name}");
         }
 
-        private NzbDrone.Core.Backup.Backup GetBackup(int id)
+        private Workarr.Backup.Backup GetBackup(int id)
         {
             return _backupService.GetBackups().SingleOrDefault(b => GetBackupId(b) == id);
         }

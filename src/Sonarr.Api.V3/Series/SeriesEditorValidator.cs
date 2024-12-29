@@ -1,11 +1,11 @@
 using FluentValidation;
-using NzbDrone.Common.Extensions;
-using NzbDrone.Core.Validation;
-using NzbDrone.Core.Validation.Paths;
+using Workarr.Extensions;
+using Workarr.Validation;
+using Workarr.Validation.Paths;
 
 namespace Sonarr.Api.V3.Series
 {
-    public class SeriesEditorValidator : AbstractValidator<NzbDrone.Core.Tv.Series>
+    public class SeriesEditorValidator : AbstractValidator<Workarr.Tv.Series>
     {
         public SeriesEditorValidator(RootFolderExistsValidator rootFolderExistsValidator, QualityProfileExistsValidator qualityProfileExistsValidator)
         {

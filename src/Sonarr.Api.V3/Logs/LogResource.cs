@@ -1,6 +1,6 @@
 using System;
-using NzbDrone.Core.Instrumentation;
 using Sonarr.Http.REST;
+using Workarr.Instrumentation;
 
 namespace Sonarr.Api.V3.Logs
 {

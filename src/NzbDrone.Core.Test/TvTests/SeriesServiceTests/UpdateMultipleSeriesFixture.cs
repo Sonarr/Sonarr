@@ -5,11 +5,11 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.AutoTagging;
-using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
+using Workarr.AutoTagging;
+using Workarr.Organizer;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.TvTests.SeriesServiceTests
 {

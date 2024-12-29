@@ -3,17 +3,17 @@ using System.Linq;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.Download;
-using NzbDrone.Core.Download.TrackedDownloads;
-using NzbDrone.Core.History;
-using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Indexers.TorrentRss;
-using NzbDrone.Core.Languages;
-using NzbDrone.Core.Parser;
-using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
-using NzbDrone.Core.Tv.Events;
+using Workarr.Download;
+using Workarr.Download.TrackedDownloads;
+using Workarr.History;
+using Workarr.Indexers;
+using Workarr.Indexers.TorrentRss;
+using Workarr.Languages;
+using Workarr.Parser;
+using Workarr.Parser.Model;
+using Workarr.Tv;
+using Workarr.Tv.Events;
 
 namespace NzbDrone.Core.Test.Download.TrackedDownloads
 {

@@ -4,10 +4,10 @@ using System.Linq;
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.Download;
-using NzbDrone.Core.Housekeeping.Housekeepers;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.ThingiProvider.Status;
+using Workarr.Download;
+using Workarr.Housekeeping.Housekeepers;
+using Workarr.ThingiProvider.Status;
 
 namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
 {

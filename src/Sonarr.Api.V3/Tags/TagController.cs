@@ -1,13 +1,13 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using NzbDrone.Core.AutoTagging;
-using NzbDrone.Core.Datastore.Events;
-using NzbDrone.Core.Messaging.Events;
-using NzbDrone.Core.Tags;
 using NzbDrone.SignalR;
 using Sonarr.Http;
 using Sonarr.Http.REST;
 using Sonarr.Http.REST.Attributes;
+using Workarr.AutoTagging;
+using Workarr.Datastore.Events;
+using Workarr.Messaging.Events;
+using Workarr.Tags;
 
 namespace Sonarr.Api.V3.Tags
 {

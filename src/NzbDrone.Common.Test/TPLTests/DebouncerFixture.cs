@@ -2,7 +2,7 @@ using System;
 using System.Threading;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Common.TPL;
+using Workarr.TPL;
 
 namespace NzbDrone.Common.Test.TPLTests
 {

@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Profiles.Delay;
 using Sonarr.Http.REST;
+using Workarr.Indexers;
+using Workarr.Profiles.Delay;
 
 namespace Sonarr.Api.V3.Profiles.Delay
 {

@@ -3,13 +3,13 @@ using System.Linq;
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common.Disk;
-using NzbDrone.Core.HealthCheck.Checks;
-using NzbDrone.Core.Localization;
-using NzbDrone.Core.RootFolders;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
+using Workarr.Disk;
+using Workarr.HealthCheck.Checks;
+using Workarr.Localization;
+using Workarr.RootFolders;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.HealthCheck.Checks
 {

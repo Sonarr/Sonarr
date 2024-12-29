@@ -4,10 +4,10 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.Download;
-using NzbDrone.Core.Download.Clients.Transmission;
-using NzbDrone.Core.Download.Clients.Vuze;
 using NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests;
+using Workarr.Download;
+using Workarr.Download.Clients.Transmission;
+using Workarr.Download.Clients.Vuze;
 
 namespace NzbDrone.Core.Test.Download.DownloadClientTests.VuzeTests
 {

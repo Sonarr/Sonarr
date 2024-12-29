@@ -2,8 +2,8 @@
 using Mono.Unix;
 using Mono.Unix.Native;
 using NLog;
-using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Mono.Interop;
+using Workarr.EnvironmentInfo;
 
 namespace NzbDrone.Mono.Disk
 {

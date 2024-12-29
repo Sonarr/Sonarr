@@ -3,9 +3,9 @@ using System.Linq;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Core.Notifications;
 using NzbDrone.Core.Test.Framework;
+using Workarr.EnvironmentInfo;
+using Workarr.Notifications;
 
 namespace NzbDrone.Core.Test.NotificationTests
 {

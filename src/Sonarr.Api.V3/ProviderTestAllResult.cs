@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using FluentValidation.Results;
-using NzbDrone.Common.Extensions;
+using Workarr.Extensions;
 
 namespace Sonarr.Api.V3
 {

@@ -4,7 +4,7 @@ using FluentMigrator;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
 using NUnit.Framework;
-using NzbDrone.Core.Datastore.Migration.Framework;
+using Workarr.Datastore.Migrations.Framework;
 
 namespace NzbDrone.Core.Test.Framework
 {

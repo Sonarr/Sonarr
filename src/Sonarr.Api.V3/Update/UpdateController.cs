@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Update;
-using NzbDrone.Core.Update.History;
 using Sonarr.Http;
+using Workarr.Configuration;
+using Workarr.EnvironmentInfo;
+using Workarr.Update;
+using Workarr.Update.History;
 
 namespace Sonarr.Api.V3.Update
 {

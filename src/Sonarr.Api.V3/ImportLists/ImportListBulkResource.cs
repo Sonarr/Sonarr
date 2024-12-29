@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using NzbDrone.Core.ImportLists;
+using Workarr.ImportLists;
 
 namespace Sonarr.Api.V3.ImportLists
 {

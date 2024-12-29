@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.CustomFormats;
-using NzbDrone.Core.DecisionEngine.Specifications;
-using NzbDrone.Core.Profiles;
-using NzbDrone.Core.Profiles.Qualities;
-using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
+using Workarr.CustomFormats;
+using Workarr.DecisionEngine.Specifications;
+using Workarr.Profiles;
+using Workarr.Profiles.Qualities;
+using Workarr.Qualities;
 
 namespace NzbDrone.Core.Test.DecisionEngineTests
 {

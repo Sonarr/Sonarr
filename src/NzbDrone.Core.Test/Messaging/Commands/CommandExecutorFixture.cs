@@ -2,11 +2,11 @@ using System;
 using System.Threading;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common;
-using NzbDrone.Core.Lifecycle;
-using NzbDrone.Core.Messaging.Commands;
-using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Test.Common;
+using Workarr.Common;
+using Workarr.Lifecycle;
+using Workarr.Messaging.Commands;
+using Workarr.Messaging.Events;
 
 namespace NzbDrone.Core.Test.Messaging.Commands
 {

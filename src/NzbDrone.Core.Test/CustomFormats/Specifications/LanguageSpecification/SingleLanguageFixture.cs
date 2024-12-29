@@ -2,17 +2,17 @@ using System.Collections.Generic;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Common.Extensions;
-using NzbDrone.Core.CustomFormats;
-using NzbDrone.Core.Languages;
-using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
+using Workarr.CustomFormats;
+using Workarr.Extensions;
+using Workarr.Languages;
+using Workarr.Parser.Model;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.CustomFormats.Specifications.LanguageSpecification
 {
     [TestFixture]
-    public class SingleLanguageFixture : CoreTest<Core.CustomFormats.LanguageSpecification>
+    public class SingleLanguageFixture : CoreTest<Workarr.CustomFormats.Specifications.LanguageSpecification>
     {
         private CustomFormatInput _input;
 

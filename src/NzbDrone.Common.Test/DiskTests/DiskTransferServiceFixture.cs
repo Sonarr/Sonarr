@@ -4,9 +4,9 @@ using System.Linq;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common.Disk;
-using NzbDrone.Common.Extensions;
 using NzbDrone.Test.Common;
+using Workarr.Disk;
+using Workarr.Extensions;
 
 namespace NzbDrone.Common.Test.DiskTests
 {

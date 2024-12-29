@@ -1,9 +1,9 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using NzbDrone.Core.Download;
-using NzbDrone.Core.Download.Pending;
 using Sonarr.Http;
 using Sonarr.Http.REST;
+using Workarr.Download;
+using Workarr.Download.Pending;
 
 namespace Sonarr.Api.V3.Queue
 {

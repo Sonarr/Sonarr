@@ -1,13 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using NzbDrone.Common.Extensions;
-using NzbDrone.Core.Datastore.Events;
-using NzbDrone.Core.Jobs;
-using NzbDrone.Core.Messaging.Events;
 using NzbDrone.SignalR;
 using Sonarr.Http;
 using Sonarr.Http.REST;
+using Workarr.Datastore.Events;
+using Workarr.Extensions;
+using Workarr.Jobs;
+using Workarr.Messaging.Events;
 
 namespace Sonarr.Api.V3.System.Tasks
 {

@@ -2,8 +2,8 @@ using System;
 using System.IO;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Common.Disk;
 using NzbDrone.Test.Common;
+using Workarr.Disk;
 
 namespace NzbDrone.Common.Test.DiskTests
 {

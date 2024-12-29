@@ -2,8 +2,8 @@
 using System.Xml.Linq;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Indexers;
 using NzbDrone.Test.Common;
+using Workarr.Indexers;
 
 namespace NzbDrone.Core.Test.IndexerTests
 {

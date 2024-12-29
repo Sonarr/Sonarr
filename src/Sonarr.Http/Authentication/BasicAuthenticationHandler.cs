@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Core.Authentication;
+using Workarr.Authentication;
+using Workarr.EnvironmentInfo;
 
 namespace Sonarr.Http.Authentication
 {

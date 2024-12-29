@@ -5,9 +5,9 @@ using System.Net;
 using System.Reflection;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Common.Disk;
 using NzbDrone.Integration.Test.Client;
 using RestSharp;
+using Workarr.Disk;
 
 namespace NzbDrone.Integration.Test.ApiTests
 {

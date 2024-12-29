@@ -4,14 +4,14 @@ using System.Linq;
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.Configuration;
-using NzbDrone.Core.ImportLists;
-using NzbDrone.Core.ImportLists.Exclusions;
-using NzbDrone.Core.ImportLists.ImportListItems;
-using NzbDrone.Core.MetadataSource;
-using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
+using Workarr.Configuration;
+using Workarr.ImportLists;
+using Workarr.ImportLists.Exclusions;
+using Workarr.ImportLists.ImportListItems;
+using Workarr.MetadataSource;
+using Workarr.Parser.Model;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.ImportListTests
 {

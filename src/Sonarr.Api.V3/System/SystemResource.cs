@@ -1,8 +1,8 @@
 using System;
-using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Core.Authentication;
-using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Update;
+using Workarr.Authentication;
+using Workarr.Datastore;
+using Workarr.EnvironmentInfo;
+using Workarr.Update;
 
 namespace Sonarr.Api.V3.System
 {

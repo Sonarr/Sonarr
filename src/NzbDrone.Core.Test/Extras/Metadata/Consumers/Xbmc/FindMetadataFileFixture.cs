@@ -3,11 +3,11 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.Extras.Metadata;
-using NzbDrone.Core.Extras.Metadata.Consumers.Xbmc;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
+using Workarr.Extras.Metadata;
+using Workarr.Extras.Metadata.Consumers.Xbmc;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.Extras.Metadata.Consumers.Xbmc
 {

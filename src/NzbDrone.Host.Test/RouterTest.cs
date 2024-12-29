@@ -1,10 +1,10 @@
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common;
-using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Processes;
 using NzbDrone.Host;
 using NzbDrone.Test.Common;
+using Workarr.Common;
+using Workarr.EnvironmentInfo;
+using Workarr.Processes;
 
 namespace NzbDrone.App.Test
 {

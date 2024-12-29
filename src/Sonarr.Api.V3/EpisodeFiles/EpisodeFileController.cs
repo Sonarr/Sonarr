@@ -1,20 +1,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using NzbDrone.Core.CustomFormats;
-using NzbDrone.Core.Datastore.Events;
-using NzbDrone.Core.DecisionEngine.Specifications;
-using NzbDrone.Core.Exceptions;
-using NzbDrone.Core.MediaFiles;
-using NzbDrone.Core.MediaFiles.Events;
-using NzbDrone.Core.Messaging.Events;
-using NzbDrone.Core.Parser;
-using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Tv;
 using NzbDrone.SignalR;
 using Sonarr.Http;
 using Sonarr.Http.REST;
 using Sonarr.Http.REST.Attributes;
+using Workarr.CustomFormats;
+using Workarr.Datastore.Events;
+using Workarr.DecisionEngine.Specifications;
+using Workarr.Exceptions;
+using Workarr.MediaFiles;
+using Workarr.MediaFiles.Events;
+using Workarr.Messaging.Events;
+using Workarr.Parser;
+using Workarr.Parser.Model;
+using Workarr.Tv;
 using BadRequestException = Sonarr.Http.REST.BadRequestException;
 
 namespace Sonarr.Api.V3.EpisodeFiles
@@ -152,7 +152,7 @@ namespace Sonarr.Api.V3.EpisodeFiles
 
             if (episodeFile == null)
             {
-                throw new NzbDroneClientException(global::System.Net.HttpStatusCode.NotFound, "Episode file not found");
+                throw new WorkarrClientException(global::System.Net.HttpStatusCode.NotFound, "Episode file not found");
             }
 
             var series = _seriesService.GetSeries(episodeFile.SeriesId);

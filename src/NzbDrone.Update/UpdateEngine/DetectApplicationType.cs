@@ -1,6 +1,6 @@
-using NzbDrone.Common;
-using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Processes;
+using Workarr.Common;
+using Workarr.EnvironmentInfo;
+using Workarr.Processes;
 
 namespace NzbDrone.Update.UpdateEngine
 {

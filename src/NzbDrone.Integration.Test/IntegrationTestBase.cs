@@ -10,10 +10,6 @@ using NLog;
 using NLog.Config;
 using NLog.Targets;
 using NUnit.Framework;
-using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Processes;
-using NzbDrone.Core.Qualities;
-using NzbDrone.Core.Tv.Commands;
 using NzbDrone.Integration.Test.Client;
 using NzbDrone.SignalR;
 using NzbDrone.Test.Common.Categories;
@@ -29,6 +25,10 @@ using Sonarr.Api.V3.RootFolders;
 using Sonarr.Api.V3.Series;
 using Sonarr.Api.V3.System.Tasks;
 using Sonarr.Api.V3.Tags;
+using Workarr.EnvironmentInfo;
+using Workarr.Processes;
+using Workarr.Qualities;
+using Workarr.Tv.Commands;
 
 namespace NzbDrone.Integration.Test
 {
@@ -249,7 +249,7 @@ namespace NzbDrone.Integration.Test
                 series.Path = Path.Combine(SeriesRootFolder, series.Title);
                 series.Monitored = true;
                 series.Seasons.ForEach(v => v.Monitored = true);
-                series.AddOptions = new Core.Tv.AddSeriesOptions();
+                series.AddOptions = new Workarr.Tv.AddSeriesOptions();
                 Directory.CreateDirectory(series.Path);
 
                 result = Series.Post(series);

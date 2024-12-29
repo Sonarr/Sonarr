@@ -8,11 +8,12 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Npgsql;
 using NUnit.Framework;
-using NzbDrone.Common.Extensions;
-using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Datastore.Migration.Framework;
 using NzbDrone.Test.Common.Datastore;
+using Workarr.Configuration;
+using Workarr.Datastore;
+using Workarr.Datastore.Extensions;
+using Workarr.Datastore.Migrations.Framework;
+using Workarr.Extensions;
 
 namespace NzbDrone.Core.Test.Framework
 {

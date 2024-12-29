@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Indexers.Newznab;
 using NzbDrone.Core.Test.Framework;
+using Workarr.Indexers.Newznab;
 
 namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
 {

@@ -1,8 +1,8 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Profiles.Qualities;
-using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
+using Workarr.Profiles.Qualities;
+using Workarr.Qualities;
 
 namespace NzbDrone.Core.Test.Profiles
 {

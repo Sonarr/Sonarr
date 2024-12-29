@@ -2,12 +2,12 @@ using System.Collections.Generic;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Indexers.FileList;
-using NzbDrone.Core.Indexers.Newznab;
-using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
+using Workarr.Indexers;
+using Workarr.Indexers.FileList;
+using Workarr.Indexers.Newznab;
+using Workarr.Lifecycle;
 
 namespace NzbDrone.Core.Test.IndexerTests
 {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Common.Extensions;
+using Workarr.Extensions;
 
 namespace NzbDrone.Common.Test.ExtensionTests.IEnumerableExtensionTests
 {

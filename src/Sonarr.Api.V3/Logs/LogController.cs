@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using NzbDrone.Common.Extensions;
-using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Instrumentation;
 using Sonarr.Http;
 using Sonarr.Http.Extensions;
+using Workarr.Configuration;
+using Workarr.Extensions;
+using Workarr.Instrumentation;
 
 namespace Sonarr.Api.V3.Logs
 {

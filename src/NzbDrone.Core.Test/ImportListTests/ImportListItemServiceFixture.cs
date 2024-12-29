@@ -4,9 +4,9 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.ImportLists.ImportListItems;
-using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
+using Workarr.ImportLists.ImportListItems;
+using Workarr.Parser.Model;
 
 namespace NzbDrone.Core.Test.ImportListTests
 {

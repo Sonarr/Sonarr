@@ -2,12 +2,12 @@ using System.Collections.Generic;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.AutoTagging;
-using NzbDrone.Core.AutoTagging.Specifications;
-using NzbDrone.Core.Housekeeping.Housekeepers;
-using NzbDrone.Core.Profiles.Releases;
-using NzbDrone.Core.Tags;
 using NzbDrone.Core.Test.Framework;
+using Workarr.AutoTagging;
+using Workarr.AutoTagging.Specifications;
+using Workarr.Housekeeping.Housekeepers;
+using Workarr.Profiles.Releases;
+using Workarr.Tags;
 
 namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
 {

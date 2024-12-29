@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.Download;
-using NzbDrone.Core.Download.Clients.RTorrent;
-using NzbDrone.Core.MediaFiles.TorrentInfo;
+using Workarr.Download;
+using Workarr.Download.Clients.rTorrent;
+using Workarr.MediaFiles.TorrentInfo;
 
 namespace NzbDrone.Core.Test.Download.DownloadClientTests.RTorrentTests
 {

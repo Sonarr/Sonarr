@@ -10,7 +10,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NzbDrone.Test.Common\Sonarr.Test.Common.csproj" />
-    <ProjectReference Include="..\NzbDrone.Core\Sonarr.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Logo\1024.png">
@@ -20,5 +19,13 @@
     <None Update="Files\**\*.*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="DryIoc">
+      <HintPath>..\..\..\..\..\.nuget\packages\dryioc.dll\5.4.3\lib\net6.0\DryIoc.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog.Extensions.Logging">
+      <HintPath>..\..\..\..\..\.nuget\packages\nlog.extensions.logging\5.3.15\lib\net6.0\NLog.Extensions.Logging.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>

@@ -5,12 +5,12 @@ using FluentAssertions;
 using Moq;
 using NLog;
 using NUnit.Framework;
-using NzbDrone.Common.Cache;
-using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Messaging;
-using NzbDrone.Common.Processes;
-using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Test.Common.AutoMoq;
+using Workarr.Cache;
+using Workarr.EnvironmentInfo;
+using Workarr.Messaging;
+using Workarr.Messaging.Events;
+using Workarr.Processes;
 
 namespace NzbDrone.Test.Common
 {

@@ -4,9 +4,9 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.AutoTagging;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
+using Workarr.AutoTagging;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.TvTests.SeriesServiceTests
 {

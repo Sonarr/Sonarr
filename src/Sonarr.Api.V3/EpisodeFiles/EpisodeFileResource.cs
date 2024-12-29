@@ -1,14 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using NzbDrone.Core.CustomFormats;
-using NzbDrone.Core.DecisionEngine.Specifications;
-using NzbDrone.Core.Languages;
-using NzbDrone.Core.MediaFiles;
-using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Qualities;
 using Sonarr.Api.V3.CustomFormats;
 using Sonarr.Http.REST;
+using Workarr.CustomFormats;
+using Workarr.DecisionEngine.Specifications;
+using Workarr.MediaFiles;
+using Workarr.Parser.Model;
+using Workarr.Qualities;
 
 namespace Sonarr.Api.V3.EpisodeFiles
 {
@@ -22,7 +21,7 @@ namespace Sonarr.Api.V3.EpisodeFiles
         public DateTime DateAdded { get; set; }
         public string SceneName { get; set; }
         public string ReleaseGroup { get; set; }
-        public List<Language> Languages { get; set; }
+        public List<Workarr.Languages.Language> Languages { get; set; }
         public QualityModel Quality { get; set; }
         public List<CustomFormatResource> CustomFormats { get; set; }
         public int CustomFormatScore { get; set; }
@@ -35,7 +34,7 @@ namespace Sonarr.Api.V3.EpisodeFiles
 
     public static class EpisodeFileResourceMapper
     {
-        public static EpisodeFileResource ToResource(this EpisodeFile model, NzbDrone.Core.Tv.Series series, IUpgradableSpecification upgradableSpecification, ICustomFormatCalculationService formatCalculationService)
+        public static EpisodeFileResource ToResource(this EpisodeFile model, Workarr.Tv.Series series, IUpgradableSpecification upgradableSpecification, ICustomFormatCalculationService formatCalculationService)
         {
             if (model == null)
             {

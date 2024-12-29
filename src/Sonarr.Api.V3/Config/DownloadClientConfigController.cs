@@ -1,5 +1,5 @@
-using NzbDrone.Core.Configuration;
 using Sonarr.Http;
+using Workarr.Configuration;
 
 namespace Sonarr.Api.V3.Config
 {

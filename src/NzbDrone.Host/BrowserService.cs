@@ -1,8 +1,8 @@
 ﻿using System;
 using NLog;
-using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Processes;
-using NzbDrone.Core.Configuration;
+using Workarr.Configuration;
+using Workarr.EnvironmentInfo;
+using Workarr.Processes;
 
 namespace NzbDrone.Host
 {

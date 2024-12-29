@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
-using NzbDrone.Common.Serializer;
-using NzbDrone.Core.CustomFilters;
 using Sonarr.Http.REST;
+using Workarr.CustomFilters;
+using Workarr.Serializer.System.Text.Json;
 
 namespace Sonarr.Api.V3.CustomFilters
 {

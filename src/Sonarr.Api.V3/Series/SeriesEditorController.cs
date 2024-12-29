@@ -2,11 +2,11 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using NzbDrone.Common.Extensions;
-using NzbDrone.Core.Messaging.Commands;
-using NzbDrone.Core.Tv;
-using NzbDrone.Core.Tv.Commands;
 using Sonarr.Http;
+using Workarr.Extensions;
+using Workarr.Messaging.Commands;
+using Workarr.Tv;
+using Workarr.Tv.Commands;
 
 namespace Sonarr.Api.V3.Series
 {

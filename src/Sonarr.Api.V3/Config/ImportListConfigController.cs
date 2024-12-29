@@ -1,8 +1,8 @@
 using FluentValidation;
-using NzbDrone.Core.Configuration;
-using NzbDrone.Core.ImportLists;
-using NzbDrone.Core.Validation;
 using Sonarr.Http;
+using Workarr.Configuration;
+using Workarr.ImportLists;
+using Workarr.Validation;
 
 namespace Sonarr.Api.V3.Config
 {

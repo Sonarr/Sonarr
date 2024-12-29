@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
-using NzbDrone.Common.Extensions;
+using Workarr.Extensions;
 
 namespace NzbDrone.Mono.Disk
 {

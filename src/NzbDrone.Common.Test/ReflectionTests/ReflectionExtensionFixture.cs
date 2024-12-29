@@ -1,9 +1,9 @@
 using System.Reflection;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Common.Reflection;
-using NzbDrone.Core.Datastore;
 using NzbDrone.Test.Common;
+using Workarr.Datastore;
+using Workarr.Reflection;
 
 namespace NzbDrone.Common.Test.ReflectionTests
 {

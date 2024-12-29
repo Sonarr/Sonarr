@@ -3,13 +3,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Routing.Internal;
-using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Extensions;
-using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Lifecycle;
 using Sonarr.Http;
 using Sonarr.Http.Validation;
+using Workarr.Configuration;
+using Workarr.Datastore;
+using Workarr.EnvironmentInfo;
+using Workarr.Extensions;
+using Workarr.Lifecycle;
 
 namespace Sonarr.Api.V3.System
 {

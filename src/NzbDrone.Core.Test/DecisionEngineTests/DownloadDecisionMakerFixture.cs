@@ -4,15 +4,15 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.DataAugmentation.Scene;
-using NzbDrone.Core.DecisionEngine;
-using NzbDrone.Core.DecisionEngine.Specifications;
-using NzbDrone.Core.IndexerSearch.Definitions;
-using NzbDrone.Core.Parser;
-using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
+using Workarr.DataAugmentation.Scene;
+using Workarr.DecisionEngine;
+using Workarr.DecisionEngine.Specifications;
+using Workarr.IndexerSearch.Definitions;
+using Workarr.Parser;
+using Workarr.Parser.Model;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.DecisionEngineTests
 {
@@ -275,7 +275,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             Mocker.SetConstant<IEnumerable<IDownloadDecisionEngineSpecification>>(new List<IDownloadDecisionEngineSpecification>
             {
-                Mocker.Resolve<NzbDrone.Core.DecisionEngine.Specifications.Search.EpisodeRequestedSpecification>()
+                Mocker.Resolve<Workarr.DecisionEngine.Specifications.Search.EpisodeRequestedSpecification>()
             });
 
             var decisions = Subject.GetSearchDecision(reports, criteria);

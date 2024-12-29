@@ -7,14 +7,14 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.CustomFormats;
-using NzbDrone.Core.MediaFiles;
-using NzbDrone.Core.MediaFiles.MediaInfo;
-using NzbDrone.Core.Organizer;
-using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
+using Workarr.CustomFormats;
+using Workarr.MediaFiles;
+using Workarr.MediaFiles.MediaInfo;
+using Workarr.Organizer;
+using Workarr.Qualities;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
 {
@@ -555,7 +555,7 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
         {
             _namingConfig.StandardEpisodeFormat = "{Series.Title}.S{season:00}E{episode:00}.{Episode.Title}.{MEDIAINFO.FULL}";
 
-            _episodeFile.MediaInfo = new Core.MediaFiles.MediaInfo.MediaInfoModel()
+            _episodeFile.MediaInfo = new MediaInfoModel()
             {
                 VideoFormat = "h264",
                 AudioFormat = "dts",
@@ -583,7 +583,7 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
         {
             _namingConfig.StandardEpisodeFormat = "{Series.Title}.S{season:00}E{episode:00}.{Episode.Title}.{MEDIAINFO.FULL}";
 
-            _episodeFile.MediaInfo = new Core.MediaFiles.MediaInfo.MediaInfoModel()
+            _episodeFile.MediaInfo = new MediaInfoModel()
             {
                 VideoFormat = "h264",
                 AudioFormat = "dts",
@@ -602,7 +602,7 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
         {
             _namingConfig.StandardEpisodeFormat = "{Series.Title}.S{season:00}E{episode:00}.{Episode.Title}.{MEDIAINFO.FULL}";
 
-            _episodeFile.MediaInfo = new Core.MediaFiles.MediaInfo.MediaInfoModel()
+            _episodeFile.MediaInfo = new MediaInfoModel()
             {
                 VideoFormat = "h264",
                 AudioFormat = "dts",

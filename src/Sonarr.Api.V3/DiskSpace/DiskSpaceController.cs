@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using NzbDrone.Core.DiskSpace;
 using Sonarr.Http;
+using Workarr.DiskSpace;
 
 namespace Sonarr.Api.V3.DiskSpace
 {

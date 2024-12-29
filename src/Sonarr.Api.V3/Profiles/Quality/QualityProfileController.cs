@@ -2,12 +2,12 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using NzbDrone.Common.Extensions;
-using NzbDrone.Core.CustomFormats;
-using NzbDrone.Core.Profiles.Qualities;
 using Sonarr.Http;
 using Sonarr.Http.REST;
 using Sonarr.Http.REST.Attributes;
+using Workarr.CustomFormats;
+using Workarr.Extensions;
+using Workarr.Profiles.Qualities;
 
 namespace Sonarr.Api.V3.Profiles.Quality
 {

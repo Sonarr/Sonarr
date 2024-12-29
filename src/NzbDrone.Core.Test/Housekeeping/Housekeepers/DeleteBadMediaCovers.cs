@@ -5,14 +5,14 @@ using System.Linq;
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common.Disk;
-using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Extras.Metadata;
-using NzbDrone.Core.Extras.Metadata.Files;
-using NzbDrone.Core.Housekeeping.Housekeepers;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
+using Workarr.Configuration;
+using Workarr.Disk;
+using Workarr.Extras.Metadata;
+using Workarr.Extras.Metadata.Files;
+using Workarr.Housekeeping.Housekeepers;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
 {

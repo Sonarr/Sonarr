@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common.Cache;
-using NzbDrone.Common.Messaging;
-using NzbDrone.Common.TPL;
-using NzbDrone.Core.HealthCheck;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
+using Workarr.Cache;
+using Workarr.HealthCheck;
+using Workarr.Messaging;
+using Workarr.TPL;
 
 namespace NzbDrone.Core.Test.HealthCheck
 {
@@ -74,11 +74,11 @@ namespace NzbDrone.Core.Test.HealthCheck
         public bool Executed { get; set; }
         public bool Checked { get; set; }
 
-        public Core.HealthCheck.HealthCheck Check()
+        public Workarr.HealthCheck.HealthCheck Check()
         {
             Executed = true;
 
-            return new Core.HealthCheck.HealthCheck(GetType());
+            return new Workarr.HealthCheck.HealthCheck(GetType());
         }
 
         public bool ShouldCheckOnEvent(FakeEvent message)

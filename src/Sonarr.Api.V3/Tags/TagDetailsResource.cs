@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
-using NzbDrone.Core.Tags;
 using Sonarr.Http.REST;
+using Workarr.Tags;
 
 namespace Sonarr.Api.V3.Tags
 {

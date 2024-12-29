@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using FluentAssertions;
 using FluentValidation.Results;
 using NUnit.Framework;
-using NzbDrone.Core.MediaFiles;
-using NzbDrone.Core.Notifications;
-using NzbDrone.Core.Tv;
-using NzbDrone.Core.Validation;
 using NzbDrone.Test.Common;
+using Workarr.MediaFiles;
+using Workarr.Notifications;
+using Workarr.Tv;
+using Workarr.Validation;
 
 namespace NzbDrone.Core.Test.NotificationTests
 {
@@ -16,9 +16,9 @@ namespace NzbDrone.Core.Test.NotificationTests
     {
         private class TestSetting : NotificationSettingsBase<TestSetting>
         {
-            public override NzbDroneValidationResult Validate()
+            public override WorkarrValidationResult Validate()
             {
-                return new NzbDroneValidationResult();
+                return new WorkarrValidationResult();
             }
         }
 
@@ -73,12 +73,12 @@ namespace NzbDrone.Core.Test.NotificationTests
                 TestLogger.Info("Series OnDelete was called");
             }
 
-            public override void OnHealthIssue(NzbDrone.Core.HealthCheck.HealthCheck artist)
+            public override void OnHealthIssue(Workarr.HealthCheck.HealthCheck artist)
             {
                 TestLogger.Info("OnHealthIssue was called");
             }
 
-            public override void OnHealthRestored(Core.HealthCheck.HealthCheck healthCheck)
+            public override void OnHealthRestored(Workarr.HealthCheck.HealthCheck healthCheck)
             {
                 TestLogger.Info("OnHealthRestored was called");
             }

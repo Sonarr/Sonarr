@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using FluentValidation.Validators;
-using NzbDrone.Common.Extensions;
+using Workarr.Extensions;
 
 namespace Sonarr.Http.Validation
 {

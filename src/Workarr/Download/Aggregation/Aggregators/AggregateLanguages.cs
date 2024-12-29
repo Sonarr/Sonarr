@@ -1,0 +1,125 @@
+using NLog;
+using Workarr.Extensions;
+using Workarr.Indexers;
+using Workarr.Languages;
+using Workarr.Parser;
+using Workarr.Parser.Model;
+
+namespace Workarr.Download.Aggregation.Aggregators
+{
+    public class AggregateLanguages : IAggregateRemoteEpisode
+    {
+        private readonly IIndexerFactory _indexerFactory;
+        private readonly Logger _logger;
+
+        public AggregateLanguages(IIndexerFactory indexerFactory,
+                                  Logger logger)
+        {
+            _indexerFactory = indexerFactory;
+            _logger = logger;
+        }
+
+        public RemoteEpisode Aggregate(RemoteEpisode remoteEpisode)
+        {
+            var parsedEpisodeInfo = remoteEpisode.ParsedEpisodeInfo;
+            var releaseInfo = remoteEpisode.Release;
+            var languages = parsedEpisodeInfo.Languages;
+            var series = remoteEpisode.Series;
+            var releaseTokens = parsedEpisodeInfo.ReleaseTokens ?? parsedEpisodeInfo.ReleaseTitle;
+            var normalizedReleaseTokens = Parser.Parser.NormalizeEpisodeTitle(releaseTokens);
+            var languagesToRemove = new List<Language>();
+
+            if (series == null)
+            {
+                _logger.Debug("Unable to aggregate languages, using parsed values: {0}", string.Join(", ", languages.ToList()));
+
+                remoteEpisode.Languages = releaseInfo != null && releaseInfo.Languages.Any() ? releaseInfo.Languages : languages;
+
+                return remoteEpisode;
+            }
+
+            if (releaseInfo != null && releaseInfo.Languages.Any())
+            {
+                _logger.Debug("Languages provided by indexer, using release values: {0}", string.Join(", ", releaseInfo.Languages));
+
+                // Use languages from release (given by indexer or user) if available
+                languages = releaseInfo.Languages;
+            }
+            else
+            {
+                // Exclude any languages that are part of the episode title, if the episode title is in the release tokens (falls back to release title)
+                foreach (var episode in remoteEpisode.Episodes)
+                {
+                    var episodeTitleLanguage = LanguageParser.ParseLanguages(episode.Title);
+
+                    if (!episodeTitleLanguage.Contains(Language.Unknown))
+                    {
+                        var normalizedEpisodeTitle = Parser.Parser.NormalizeEpisodeTitle(episode.Title);
+                        var episodeTitleIndex = normalizedReleaseTokens.IndexOf(normalizedEpisodeTitle,
+                            StringComparison.CurrentCultureIgnoreCase);
+
+                        if (episodeTitleIndex >= 0)
+                        {
+                            releaseTokens = releaseTokens.Remove(episodeTitleIndex, normalizedEpisodeTitle.Length);
+                            languagesToRemove.AddRange(episodeTitleLanguage);
+                        }
+                    }
+                }
+
+                // Remove any languages still in the title that would normally be removed
+                languagesToRemove = languagesToRemove.Except(LanguageParser.ParseLanguages(releaseTokens)).ToList();
+
+                // Remove all languages that aren't part of the updated releaseTokens
+                languages = languages.Except(languagesToRemove).ToList();
+            }
+
+            if ((languages.Count == 0 || (languages.Count == 1 && languages.First() == Language.Unknown)) && releaseInfo?.Title?.IsNotNullOrWhiteSpace() == true)
+            {
+                IndexerDefinition indexer = null;
+
+                if (releaseInfo is { IndexerId: > 0 })
+                {
+                    indexer = _indexerFactory.Find(releaseInfo.IndexerId);
+                }
+
+                if (indexer == null && releaseInfo.Indexer?.IsNotNullOrWhiteSpace() == true)
+                {
+                    indexer = _indexerFactory.FindByName(releaseInfo.Indexer);
+                }
+
+                if (indexer?.Settings is IIndexerSettings settings && settings.MultiLanguages.Any() && Parser.Parser.HasMultipleLanguages(releaseInfo.Title))
+                {
+                    // Use indexer setting for Multi-languages
+                    languages = settings.MultiLanguages.Select(i => (Language)i).ToList();
+                }
+            }
+
+            // Use series language as fallback if we couldn't parse a language
+            if (languages.Count == 0 || (languages.Count == 1 && languages.First() == Language.Unknown))
+            {
+                languages = new List<Language> { series.OriginalLanguage };
+                _logger.Debug("Language couldn't be parsed from release, fallback to series original language: {0}", series.OriginalLanguage.Name);
+            }
+
+            if (languages.Contains(Language.Original))
+            {
+                languages.Remove(Language.Original);
+
+                if (!languages.Contains(series.OriginalLanguage))
+                {
+                    languages.Add(series.OriginalLanguage);
+                }
+                else
+                {
+                    languages.Add(Language.Unknown);
+                }
+            }
+
+            _logger.Debug("Selected languages: {0}", string.Join(", ", languages.ToList()));
+
+            remoteEpisode.Languages = languages;
+
+            return remoteEpisode;
+        }
+    }
+}

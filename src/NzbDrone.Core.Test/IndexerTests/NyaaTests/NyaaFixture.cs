@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common.Http;
-using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Indexers.Nyaa;
-using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
+using Workarr.Http;
+using Workarr.Indexers;
+using Workarr.Indexers.Nyaa;
+using Workarr.Parser.Model;
 
 namespace NzbDrone.Core.Test.IndexerTests.NyaaTests
 {

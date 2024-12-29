@@ -9,7 +9,7 @@
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.6.2" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NzbDrone.Core\Sonarr.Core.csproj" />
     <ProjectReference Include="..\Sonarr.Http\Sonarr.Http.csproj" />
+    <ProjectReference Include="..\Workarr\Workarr.csproj" />
   </ItemGroup>
 </Project>

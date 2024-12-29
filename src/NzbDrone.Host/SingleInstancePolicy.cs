@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
-using NzbDrone.Common.Processes;
+using Workarr.Processes;
 
 namespace NzbDrone.Host
 {

@@ -1,7 +1,7 @@
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Languages;
 using NzbDrone.Core.Test.Framework;
+using Workarr.Languages;
 
 namespace NzbDrone.Core.Test.Languages
 {

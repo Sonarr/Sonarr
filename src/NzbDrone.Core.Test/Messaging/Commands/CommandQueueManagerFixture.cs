@@ -4,9 +4,9 @@ using System.Linq;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.Download;
-using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Test.Framework;
+using Workarr.Download;
+using Workarr.Messaging.Commands;
 
 namespace NzbDrone.Core.Test.Messaging.Commands
 {

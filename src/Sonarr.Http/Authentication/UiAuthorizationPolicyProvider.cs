@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
-using NzbDrone.Core.Configuration;
+using Workarr.Configuration;
 
 namespace NzbDrone.Http.Authentication
 {

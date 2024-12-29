@@ -1,8 +1,8 @@
 using System;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Common.Cache;
 using NzbDrone.Test.Common;
+using Workarr.Cache;
 
 namespace NzbDrone.Common.Test.CacheTests
 {

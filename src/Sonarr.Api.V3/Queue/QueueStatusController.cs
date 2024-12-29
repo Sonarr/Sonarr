@@ -1,20 +1,20 @@
 using System;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using NzbDrone.Common.TPL;
-using NzbDrone.Core.Datastore.Events;
-using NzbDrone.Core.Download.Pending;
-using NzbDrone.Core.Download.TrackedDownloads;
-using NzbDrone.Core.Messaging.Events;
-using NzbDrone.Core.Queue;
 using NzbDrone.SignalR;
 using Sonarr.Http;
 using Sonarr.Http.REST;
+using Workarr.Datastore.Events;
+using Workarr.Download.Pending;
+using Workarr.Download.TrackedDownloads;
+using Workarr.Messaging.Events;
+using Workarr.Queue;
+using Workarr.TPL;
 
 namespace Sonarr.Api.V3.Queue
 {
     [V3ApiController("queue/status")]
-    public class QueueStatusController : RestControllerWithSignalR<QueueStatusResource, NzbDrone.Core.Queue.Queue>,
+    public class QueueStatusController : RestControllerWithSignalR<QueueStatusResource, Workarr.Queue.Queue>,
                                IHandle<QueueUpdatedEvent>, IHandle<PendingReleasesUpdatedEvent>
     {
         private readonly IQueueService _queueService;

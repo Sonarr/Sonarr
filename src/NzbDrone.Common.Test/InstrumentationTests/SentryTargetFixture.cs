@@ -4,9 +4,9 @@ using System.Linq;
 using FluentAssertions;
 using NLog;
 using NUnit.Framework;
-using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Instrumentation.Sentry;
 using NzbDrone.Test.Common;
+using Workarr.EnvironmentInfo;
+using Workarr.Instrumentation.Instrumentation.Sentry;
 
 namespace NzbDrone.Common.Test.InstrumentationTests
 {

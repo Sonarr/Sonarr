@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using NzbDrone.Core.Profiles.Delay;
 using Sonarr.Http;
 using Sonarr.Http.REST;
 using Sonarr.Http.REST.Attributes;
 using Sonarr.Http.Validation;
+using Workarr.Profiles.Delay;
 
 namespace Sonarr.Api.V3.Profiles.Delay
 {

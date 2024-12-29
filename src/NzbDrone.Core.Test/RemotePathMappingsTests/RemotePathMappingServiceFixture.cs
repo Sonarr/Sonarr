@@ -4,10 +4,10 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common.Disk;
-using NzbDrone.Core.RemotePathMappings;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
+using Workarr.Disk;
+using Workarr.RemotePathMappings;
 
 namespace NzbDrone.Core.Test.RemotePathMappingsTests
 {
