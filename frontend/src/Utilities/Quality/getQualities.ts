@@ -1,13 +1,13 @@
 import Quality from 'Quality/Quality';
-import { QualityProfileQualityItem } from 'typings/QualityProfile';
+import { QualityProfileItems } from 'typings/QualityProfile';
 
-export default function getQualities(qualities?: QualityProfileQualityItem[]) {
+export default function getQualities(qualities?: QualityProfileItems) {
   if (!qualities) {
     return [];
   }
 
   return qualities.reduce<Quality[]>((acc, item) => {
-    if (item.quality) {
+    if ('quality' in item) {
       acc.push(item.quality);
     } else {
       const groupQualities = item.items.reduce<Quality[]>((acc, i) => {

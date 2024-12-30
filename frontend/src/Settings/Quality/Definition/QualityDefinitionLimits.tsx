@@ -3,7 +3,7 @@ import formatBytes from 'Utilities/Number/formatBytes';
 import translate from 'Utilities/String/translate';
 
 interface QualityDefinitionLimitsProps {
-  bytes?: number;
+  bytes: number | null;
   message: string;
 }
 

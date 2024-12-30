@@ -11,7 +11,7 @@ import useEpisodeFile from 'EpisodeFile/useEpisodeFile';
 import { icons, kinds, sizes } from 'Helpers/Props';
 import Series from 'Series/Series';
 import useSeries from 'Series/useSeries';
-import QualityProfileNameConnector from 'Settings/Profiles/Quality/QualityProfileNameConnector';
+import QualityProfileNameConnector from 'Settings/Profiles/Quality/QualityProfileName';
 import {
   deleteEpisodeFile,
   fetchEpisodeFile,
