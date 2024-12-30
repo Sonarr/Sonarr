@@ -7,16 +7,17 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common.Composition.Extensions;
-using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Instrumentation.Extensions;
-using NzbDrone.Common.Options;
-using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Datastore.Extensions;
-using NzbDrone.Core.Lifecycle;
-using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Host;
 using NzbDrone.Test.Common;
+using Workarr.Common;
+using Workarr.Composition;
+using Workarr.Datastore;
+using Workarr.Datastore.Extensions;
+using Workarr.EnvironmentInfo;
+using Workarr.Instrumentation.Instrumentation.Extensions;
+using Workarr.Lifecycle;
+using Workarr.Messaging.Events;
+using Workarr.Options;
 
 namespace NzbDrone.Common.Test
 {
@@ -27,7 +28,7 @@ namespace NzbDrone.Common.Test
         public void event_handlers_should_be_unique()
         {
             var container = new Container(rules => rules.WithNzbDroneRules())
-                .AddNzbDroneLogger()
+                .AddWorkarrLogger()
                 .AutoAddServices(Bootstrap.ASSEMBLIES)
                 .AddDummyDatabase()
                 .AddDummyLogDatabase()

@@ -1,8 +1,8 @@
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.MediaFiles;
-using NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators;
 using NzbDrone.Core.Test.Framework;
+using Workarr.MediaFiles;
+using Workarr.MediaFiles.EpisodeImport.Aggregation.Aggregators;
 
 namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
 {

@@ -1,11 +1,11 @@
 ﻿using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common.Cache;
-using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Indexers.Exceptions;
-using NzbDrone.Core.Indexers.TorrentRss;
 using NzbDrone.Core.Test.Framework;
+using Workarr.Cache;
+using Workarr.Indexers;
+using Workarr.Indexers.Exceptions;
+using Workarr.Indexers.TorrentRss;
 
 namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
 {

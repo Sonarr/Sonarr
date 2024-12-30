@@ -1,6 +1,6 @@
-using NzbDrone.Core.Configuration;
-using NzbDrone.Core.ImportLists;
 using Sonarr.Http.REST;
+using Workarr.Configuration;
+using Workarr.ImportLists;
 
 namespace Sonarr.Api.V3.Config
 {

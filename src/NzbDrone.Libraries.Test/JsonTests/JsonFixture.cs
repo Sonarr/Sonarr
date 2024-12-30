@@ -1,7 +1,7 @@
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Common.Serializer;
 using NzbDrone.Test.Common;
+using Workarr.Serializer.Newtonsoft.Json;
 
 namespace NzbDrone.Libraries.Test.JsonTests
 {

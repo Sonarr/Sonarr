@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using NzbDrone.Core.CustomFilters;
 using Sonarr.Http;
 using Sonarr.Http.REST;
 using Sonarr.Http.REST.Attributes;
+using Workarr.CustomFilters;
 
 namespace Sonarr.Api.V3.CustomFilters
 {

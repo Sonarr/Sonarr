@@ -1,8 +1,8 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using NzbDrone.Common.Serializer;
 using Sonarr.Http.Exceptions;
+using Workarr.Serializer.System.Text.Json;
 
 namespace Sonarr.Http.ErrorManagement
 {

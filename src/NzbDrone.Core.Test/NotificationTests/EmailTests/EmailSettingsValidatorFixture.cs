@@ -2,9 +2,9 @@ using System;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Notifications.Email;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
+using Workarr.Notifications.Email;
 
 namespace NzbDrone.Core.Test.NotificationTests.EmailTests
 {

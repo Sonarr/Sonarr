@@ -2,11 +2,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using NLog;
-using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Processes;
-using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Lifecycle;
-using NzbDrone.Core.Messaging.Events;
+using Workarr.Configuration;
+using Workarr.EnvironmentInfo;
+using Workarr.Lifecycle;
+using Workarr.Messaging.Events;
+using Workarr.Processes;
 
 namespace NzbDrone.Host
 {

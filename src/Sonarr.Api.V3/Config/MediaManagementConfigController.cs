@@ -1,9 +1,9 @@
 using FluentValidation;
-using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Validation;
-using NzbDrone.Core.Validation.Paths;
 using Sonarr.Http;
+using Workarr.Configuration;
+using Workarr.EnvironmentInfo;
+using Workarr.Validation;
+using Workarr.Validation.Paths;
 
 namespace Sonarr.Api.V3.Config
 {

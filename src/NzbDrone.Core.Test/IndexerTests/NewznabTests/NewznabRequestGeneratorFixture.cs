@@ -3,10 +3,11 @@ using System.Linq;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Indexers.Newznab;
-using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Test.Framework;
+using Workarr.Indexers;
+using Workarr.Indexers.Newznab;
+using Workarr.IndexerSearch.Definitions;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
 {
@@ -36,7 +37,7 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
 
             _singleEpisodeSearchCriteria = new SingleEpisodeSearchCriteria
             {
-                Series = new Tv.Series { TvRageId = 10, TvdbId = 20, TvMazeId = 30, ImdbId = "t40", TmdbId = 50 },
+                Series = new Series { TvRageId = 10, TvdbId = 20, TvMazeId = 30, ImdbId = "t40", TmdbId = 50 },
                 SceneTitles = new List<string> { "Monkey Island" },
                 SeasonNumber = 1,
                 EpisodeNumber = 2
@@ -44,14 +45,14 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
 
             _seasonSearchCriteria = new SeasonSearchCriteria
             {
-                Series = new Tv.Series { TvRageId = 10, TvdbId = 20, TvMazeId = 30, ImdbId = "t40", TmdbId = 50 },
+                Series = new Series { TvRageId = 10, TvdbId = 20, TvMazeId = 30, ImdbId = "t40", TmdbId = 50 },
                 SceneTitles = new List<string> { "Monkey Island" },
                 SeasonNumber = 1,
             };
 
             _animeSearchCriteria = new AnimeEpisodeSearchCriteria()
             {
-                Series = new Tv.Series { TvRageId = 10, TvdbId = 20, TvMazeId = 30, ImdbId = "t40", TmdbId = 50 },
+                Series = new Series { TvRageId = 10, TvdbId = 20, TvMazeId = 30, ImdbId = "t40", TmdbId = 50 },
                 SceneTitles = new List<string>() { "Monkey+Island" },
                 AbsoluteEpisodeNumber = 100,
                 SeasonNumber = 5,
@@ -60,7 +61,7 @@ namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
 
             _animeSeasonSearchCriteria = new AnimeSeasonSearchCriteria()
             {
-                Series = new Tv.Series { TvRageId = 10, TvdbId = 20, TvMazeId = 30, ImdbId = "t40", TmdbId = 50 },
+                Series = new Series { TvRageId = 10, TvdbId = 20, TvMazeId = 30, ImdbId = "t40", TmdbId = 50 },
                 SceneTitles = new List<string> { "Monkey Island" },
                 SeasonNumber = 3,
             };

@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using NzbDrone.Core.Organizer;
-using NzbDrone.Core.Tv;
 using Sonarr.Http;
+using Workarr.Organizer;
+using Workarr.Tv;
 
 namespace Sonarr.Api.V3.Series;
 

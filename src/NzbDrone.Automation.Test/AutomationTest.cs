@@ -7,10 +7,10 @@ using NLog.Config;
 using NLog.Targets;
 using NUnit.Framework;
 using NzbDrone.Automation.Test.PageModel;
-using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Test.Common;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using Workarr.EnvironmentInfo;
 
 namespace NzbDrone.Automation.Test
 {

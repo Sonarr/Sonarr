@@ -4,7 +4,6 @@
     <OutputType>Library</OutputType>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NzbDrone.Core\Sonarr.Core.csproj" />
-    <ProjectReference Include="..\NzbDrone.Common\Sonarr.Common.csproj" />
+    <ProjectReference Include="..\Workarr\Workarr.csproj" />
   </ItemGroup>
 </Project>

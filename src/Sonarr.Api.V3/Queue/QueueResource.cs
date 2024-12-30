@@ -1,15 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NzbDrone.Core.Download.TrackedDownloads;
-using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Languages;
-using NzbDrone.Core.Qualities;
-using NzbDrone.Core.Queue;
 using Sonarr.Api.V3.CustomFormats;
 using Sonarr.Api.V3.Episodes;
 using Sonarr.Api.V3.Series;
 using Sonarr.Http.REST;
+using Workarr.Download.TrackedDownloads;
+using Workarr.Indexers;
+using Workarr.Qualities;
+using Workarr.Queue;
 
 namespace Sonarr.Api.V3.Queue
 {
@@ -20,7 +19,7 @@ namespace Sonarr.Api.V3.Queue
         public int? SeasonNumber { get; set; }
         public SeriesResource Series { get; set; }
         public EpisodeResource Episode { get; set; }
-        public List<Language> Languages { get; set; }
+        public List<Workarr.Languages.Language> Languages { get; set; }
         public QualityModel Quality { get; set; }
         public List<CustomFormatResource> CustomFormats { get; set; }
         public int CustomFormatScore { get; set; }
@@ -55,7 +54,7 @@ namespace Sonarr.Api.V3.Queue
 
     public static class QueueResourceMapper
     {
-        public static QueueResource ToResource(this NzbDrone.Core.Queue.Queue model, bool includeSeries, bool includeEpisode)
+        public static QueueResource ToResource(this Workarr.Queue.Queue model, bool includeSeries, bool includeEpisode)
         {
             if (model == null)
             {
@@ -106,7 +105,7 @@ namespace Sonarr.Api.V3.Queue
             };
         }
 
-        public static List<QueueResource> ToResource(this IEnumerable<NzbDrone.Core.Queue.Queue> models, bool includeSeries, bool includeEpisode)
+        public static List<QueueResource> ToResource(this IEnumerable<Workarr.Queue.Queue> models, bool includeSeries, bool includeEpisode)
         {
             return models.Select((m) => ToResource(m, includeSeries, includeEpisode)).ToList();
         }

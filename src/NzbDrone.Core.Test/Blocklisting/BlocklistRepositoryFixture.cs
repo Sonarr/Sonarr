@@ -4,11 +4,11 @@ using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Blocklisting;
-using NzbDrone.Core.Languages;
-using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
+using Workarr.Blocklisting;
+using Workarr.Languages;
+using Workarr.Qualities;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.Blocklisting
 {

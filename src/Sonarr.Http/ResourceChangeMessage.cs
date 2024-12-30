@@ -1,6 +1,6 @@
 using System;
-using NzbDrone.Core.Datastore.Events;
 using Sonarr.Http.REST;
+using Workarr.Datastore.Events;
 
 namespace Sonarr.Http
 {

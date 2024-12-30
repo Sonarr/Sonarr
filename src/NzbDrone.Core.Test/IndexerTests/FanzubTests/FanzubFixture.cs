@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common.Http;
-using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Indexers.Fanzub;
 using NzbDrone.Core.Test.Framework;
+using Workarr.Http;
+using Workarr.Indexers;
+using Workarr.Indexers.Fanzub;
 
 namespace NzbDrone.Core.Test.IndexerTests.FanzubTests
 {

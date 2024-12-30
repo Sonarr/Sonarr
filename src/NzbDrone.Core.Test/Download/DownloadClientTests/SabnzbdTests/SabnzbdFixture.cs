@@ -6,14 +6,14 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common.Disk;
-using NzbDrone.Core.Download;
-using NzbDrone.Core.Download.Clients.Sabnzbd;
-using NzbDrone.Core.Download.Clients.Sabnzbd.Responses;
-using NzbDrone.Core.RemotePathMappings;
-using NzbDrone.Core.Tv;
-using NzbDrone.Core.Validation;
 using NzbDrone.Test.Common;
+using Workarr.Disk;
+using Workarr.Download;
+using Workarr.Download.Clients.Sabnzbd;
+using Workarr.Download.Clients.Sabnzbd.Responses;
+using Workarr.RemotePathMappings;
+using Workarr.Tv;
+using Workarr.Validation;
 
 namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
 {
@@ -570,7 +570,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
                   .Setup(v => v.GetVersion(It.IsAny<SabnzbdSettings>()))
                   .Returns("develop");
 
-            var result = new NzbDroneValidationResult(Subject.Test());
+            var result = new WorkarrValidationResult(Subject.Test());
 
             result.IsValid.Should().BeTrue();
             result.HasWarnings.Should().BeTrue();
@@ -583,7 +583,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
             _config.Misc.tv_categories = null;
             _config.Sorters = new List<SabnzbdSorter>();
 
-            var result = new NzbDroneValidationResult(Subject.Test());
+            var result = new WorkarrValidationResult(Subject.Test());
 
             result.IsValid.Should().BeTrue();
         }
@@ -600,7 +600,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
                 .Build()
                 .ToList();
 
-            var result = new NzbDroneValidationResult(Subject.Test());
+            var result = new WorkarrValidationResult(Subject.Test());
 
             result.IsValid.Should().BeTrue();
         }
@@ -617,7 +617,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
                 .Build()
                 .ToList();
 
-            var result = new NzbDroneValidationResult(Subject.Test());
+            var result = new WorkarrValidationResult(Subject.Test());
 
             result.IsValid.Should().BeFalse();
         }
@@ -628,7 +628,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
             _config.Misc.enable_tv_sorting = false;
             _config.Misc.tv_categories = null;
 
-            var result = new NzbDroneValidationResult(Subject.Test());
+            var result = new WorkarrValidationResult(Subject.Test());
 
             result.IsValid.Should().BeTrue();
         }
@@ -639,7 +639,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
             _config.Misc.enable_tv_sorting = true;
             _config.Misc.tv_categories = null;
 
-            var result = new NzbDroneValidationResult(Subject.Test());
+            var result = new WorkarrValidationResult(Subject.Test());
 
             result.IsValid.Should().BeFalse();
         }
@@ -650,7 +650,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
             _config.Misc.enable_tv_sorting = true;
             _config.Misc.tv_categories = Array.Empty<string>();
 
-            var result = new NzbDroneValidationResult(Subject.Test());
+            var result = new WorkarrValidationResult(Subject.Test());
 
             result.IsValid.Should().BeFalse();
         }
@@ -661,7 +661,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
             _config.Misc.enable_tv_sorting = true;
             _config.Misc.tv_categories = new[] { "tv-custom" };
 
-            var result = new NzbDroneValidationResult(Subject.Test());
+            var result = new WorkarrValidationResult(Subject.Test());
 
             result.IsValid.Should().BeTrue();
         }
@@ -672,7 +672,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
             _config.Misc.enable_tv_sorting = true;
             _config.Misc.tv_categories = new[] { "tv" };
 
-            var result = new NzbDroneValidationResult(Subject.Test());
+            var result = new WorkarrValidationResult(Subject.Test());
 
             result.IsValid.Should().BeFalse();
         }
@@ -685,7 +685,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.SabnzbdTests
             _config.Misc.enable_tv_sorting = true;
             _config.Misc.tv_categories = new[] { "Default" };
 
-            var result = new NzbDroneValidationResult(Subject.Test());
+            var result = new WorkarrValidationResult(Subject.Test());
 
             result.IsValid.Should().BeFalse();
         }

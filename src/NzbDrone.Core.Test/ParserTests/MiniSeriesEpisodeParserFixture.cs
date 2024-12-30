@@ -2,6 +2,7 @@ using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Test.Framework;
+using Workarr.Parser;
 
 namespace NzbDrone.Core.Test.ParserTests
 {
@@ -17,7 +18,7 @@ namespace NzbDrone.Core.Test.ParserTests
         // [TestCase("", "", 0)]
         public void should_parse_mini_series_episode(string postTitle, string title, int episodeNumber)
         {
-            var result = Parser.Parser.ParseTitle(postTitle);
+            var result = Parser.ParseTitle(postTitle);
             result.Should().NotBeNull();
             result.EpisodeNumbers.Should().HaveCount(1);
             result.SeasonNumber.Should().Be(1);
@@ -35,7 +36,7 @@ namespace NzbDrone.Core.Test.ParserTests
         // [TestCase("", "", 0, "")]
         public void should_parse_korean_series_episode(string postTitle, string title, int episodeNumber, string airdate)
         {
-            var result = Parser.Parser.ParseTitle(postTitle);
+            var result = Parser.ParseTitle(postTitle);
             result.Should().NotBeNull();
             result.EpisodeNumbers.Should().HaveCount(1);
             result.SeasonNumber.Should().Be(1);

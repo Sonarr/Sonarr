@@ -5,12 +5,12 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.DataAugmentation.Xem;
-using NzbDrone.Core.DataAugmentation.Xem.Model;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
-using NzbDrone.Core.Tv.Events;
 using NzbDrone.Test.Common;
+using Workarr.DataAugmentation.Xem;
+using Workarr.DataAugmentation.Xem.Model;
+using Workarr.Tv;
+using Workarr.Tv.Events;
 
 namespace NzbDrone.Core.Test.DataAugmentation.SceneNumbering
 {

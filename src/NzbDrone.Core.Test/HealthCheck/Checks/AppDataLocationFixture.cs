@@ -1,10 +1,10 @@
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Core.HealthCheck.Checks;
-using NzbDrone.Core.Localization;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
+using Workarr.EnvironmentInfo;
+using Workarr.HealthCheck.Checks;
+using Workarr.Localization;
 
 namespace NzbDrone.Core.Test.HealthCheck.Checks
 {

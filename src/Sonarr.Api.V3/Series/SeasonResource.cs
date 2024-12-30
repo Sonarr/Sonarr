@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
-using NzbDrone.Core.MediaCover;
-using NzbDrone.Core.Tv;
+using Workarr.MediaCover;
+using Workarr.Tv;
 
 namespace Sonarr.Api.V3.Series
 {

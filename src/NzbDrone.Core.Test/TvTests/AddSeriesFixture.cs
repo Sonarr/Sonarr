@@ -7,12 +7,12 @@ using FluentValidation;
 using FluentValidation.Results;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.Exceptions;
-using NzbDrone.Core.MetadataSource;
-using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
+using Workarr.Exceptions;
+using Workarr.MetadataSource;
+using Workarr.Organizer;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.TvTests
 {

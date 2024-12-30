@@ -4,12 +4,12 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.DecisionEngine;
-using NzbDrone.Core.Download;
-using NzbDrone.Core.IndexerSearch;
-using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
+using Workarr.DecisionEngine;
+using Workarr.Download;
+using Workarr.IndexerSearch;
+using Workarr.Messaging.Commands;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.IndexerSearchTests
 {

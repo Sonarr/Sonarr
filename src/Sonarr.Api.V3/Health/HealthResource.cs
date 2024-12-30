@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using NzbDrone.Common.Http;
-using NzbDrone.Core.HealthCheck;
 using Sonarr.Http.REST;
+using Workarr.HealthCheck;
+using Workarr.Http;
 
 namespace Sonarr.Api.V3.Health
 {

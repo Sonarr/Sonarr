@@ -1,4 +1,4 @@
-using NzbDrone.Core.Indexers;
+using Workarr.Indexers;
 
 namespace Sonarr.Api.V3.Indexers
 {

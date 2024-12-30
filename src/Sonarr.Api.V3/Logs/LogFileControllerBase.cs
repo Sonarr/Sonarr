@@ -3,8 +3,8 @@ using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using NLog;
-using NzbDrone.Common.Disk;
-using NzbDrone.Core.Configuration;
+using Workarr.Configuration;
+using Workarr.Disk;
 
 namespace Sonarr.Api.V3.Logs
 {

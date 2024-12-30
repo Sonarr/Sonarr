@@ -3,9 +3,9 @@ using System.Linq;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Core.Download;
 using NzbDrone.Core.Test.Framework;
+using Workarr.Download;
+using Workarr.EnvironmentInfo;
 
 namespace NzbDrone.Core.Test.Download
 {

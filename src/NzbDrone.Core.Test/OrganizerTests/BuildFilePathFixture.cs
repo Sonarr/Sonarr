@@ -2,11 +2,11 @@ using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.MediaFiles;
-using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
+using Workarr.MediaFiles;
+using Workarr.Organizer;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.OrganizerTests
 {

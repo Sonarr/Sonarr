@@ -1,11 +1,11 @@
 using System;
 using System.IO;
 using NLog;
-using NzbDrone.Common;
-using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Extensions;
-using NzbDrone.Common.Processes;
-using IServiceProvider = NzbDrone.Common.IServiceProvider;
+using Workarr.Common;
+using Workarr.EnvironmentInfo;
+using Workarr.Extensions;
+using Workarr.Processes;
+using IServiceProvider = Workarr.Common.IServiceProvider;
 
 namespace NzbDrone.Update.UpdateEngine
 {

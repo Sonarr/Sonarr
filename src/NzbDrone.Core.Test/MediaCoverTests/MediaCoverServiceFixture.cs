@@ -5,12 +5,12 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common.Disk;
-using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
-using NzbDrone.Core.Tv.Events;
+using Workarr.Disk;
+using Workarr.EnvironmentInfo;
+using Workarr.MediaCover;
+using Workarr.Tv;
+using Workarr.Tv.Events;
 
 namespace NzbDrone.Core.Test.MediaCoverTests
 {
@@ -26,16 +26,16 @@ namespace NzbDrone.Core.Test.MediaCoverTests
 
             _series = Builder<Series>.CreateNew()
                 .With(v => v.Id = 2)
-                .With(v => v.Images = new List<MediaCover.MediaCover> { new MediaCover.MediaCover(MediaCoverTypes.Poster, "") })
+                .With(v => v.Images = new List<MediaCover> { new MediaCover(MediaCoverTypes.Poster, "") })
                 .Build();
         }
 
         [Test]
         public void should_convert_cover_urls_to_local()
         {
-            var covers = new List<MediaCover.MediaCover>
+            var covers = new List<MediaCover>
                 {
-                    new MediaCover.MediaCover { CoverType = MediaCoverTypes.Banner }
+                    new MediaCover { CoverType = MediaCoverTypes.Banner }
                 };
 
             Mocker.GetMock<IDiskProvider>().Setup(c => c.FileGetLastWrite(It.IsAny<string>()))
@@ -52,9 +52,9 @@ namespace NzbDrone.Core.Test.MediaCoverTests
         [Test]
         public void should_convert_media_urls_to_local_without_time_if_file_doesnt_exist()
         {
-            var covers = new List<MediaCover.MediaCover>
+            var covers = new List<MediaCover>
                 {
-                    new MediaCover.MediaCover { CoverType = MediaCoverTypes.Banner }
+                    new MediaCover { CoverType = MediaCoverTypes.Banner }
                 };
 
             Subject.ConvertToLocalUrls(12, covers);

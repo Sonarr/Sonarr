@@ -6,12 +6,12 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common.Disk;
-using NzbDrone.Core.Download;
-using NzbDrone.Core.Download.Clients.Nzbget;
-using NzbDrone.Core.Exceptions;
-using NzbDrone.Core.RemotePathMappings;
 using NzbDrone.Test.Common;
+using Workarr.Disk;
+using Workarr.Download;
+using Workarr.Download.Clients.Nzbget;
+using Workarr.Exceptions;
+using Workarr.RemotePathMappings;
 
 namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbgetTests
 {

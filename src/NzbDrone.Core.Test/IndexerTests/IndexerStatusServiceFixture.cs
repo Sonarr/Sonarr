@@ -3,9 +3,9 @@ using System.Linq;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Test.Framework;
+using Workarr.EnvironmentInfo;
+using Workarr.Indexers;
 
 namespace NzbDrone.Core.Test.IndexerTests
 {

@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Http;
 using NLog;
-using NzbDrone.Core.Authentication;
-using NzbDrone.Core.Configuration;
 using Sonarr.Http.Extensions;
+using Workarr.Authentication;
+using Workarr.Configuration;
 
 namespace Sonarr.Http.Authentication
 {

@@ -1,7 +1,7 @@
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Qualities;
+using Workarr.Qualities;
 
 namespace NzbDrone.Integration.Test.ApiTests.WantedTests
 {

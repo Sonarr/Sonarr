@@ -4,19 +4,20 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.Configuration;
-using NzbDrone.Core.CustomFormats;
-using NzbDrone.Core.DecisionEngine.Specifications;
-using NzbDrone.Core.Download.TrackedDownloads;
-using NzbDrone.Core.Languages;
-using NzbDrone.Core.Parser;
-using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Profiles.Qualities;
-using NzbDrone.Core.Qualities;
-using NzbDrone.Core.Queue;
 using NzbDrone.Core.Test.CustomFormats;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
+using Workarr.Configuration;
+using Workarr.CustomFormats;
+using Workarr.CustomFormats.Specifications;
+using Workarr.DecisionEngine.Specifications;
+using Workarr.Download.TrackedDownloads;
+using Workarr.Languages;
+using Workarr.Parser;
+using Workarr.Parser.Model;
+using Workarr.Profiles.Qualities;
+using Workarr.Qualities;
+using Workarr.Queue;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.DecisionEngineTests
 {
@@ -83,7 +84,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             Mocker.GetMock<IQueueService>()
                 .Setup(s => s.GetQueue())
-                .Returns(new List<Queue.Queue>());
+                .Returns(new List<Queue>());
         }
 
         private void GivenQueueFormats(List<CustomFormat> formats)
@@ -95,7 +96,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
         private void GivenQueue(IEnumerable<RemoteEpisode> remoteEpisodes, TrackedDownloadState trackedDownloadState = TrackedDownloadState.Downloading)
         {
-            var queue = remoteEpisodes.Select(remoteEpisode => new Queue.Queue
+            var queue = remoteEpisodes.Select(remoteEpisode => new Queue
             {
                 RemoteEpisode = remoteEpisode,
                 TrackedDownloadState = trackedDownloadState

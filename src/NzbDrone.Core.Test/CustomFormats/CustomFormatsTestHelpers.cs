@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NzbDrone.Core.CustomFormats;
-using NzbDrone.Core.Profiles;
 using NzbDrone.Core.Test.Framework;
+using Workarr.CustomFormats;
+using Workarr.Profiles;
 
 namespace NzbDrone.Core.Test.CustomFormats
 {

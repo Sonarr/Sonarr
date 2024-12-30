@@ -1,9 +1,9 @@
-using NzbDrone.Common.Http.Proxy;
-using NzbDrone.Core.Authentication;
-using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Security;
-using NzbDrone.Core.Update;
 using Sonarr.Http.REST;
+using Workarr.Authentication;
+using Workarr.Configuration;
+using Workarr.Http.Proxy;
+using Workarr.Security;
+using Workarr.Update;
 
 namespace Sonarr.Api.V3.Config
 {

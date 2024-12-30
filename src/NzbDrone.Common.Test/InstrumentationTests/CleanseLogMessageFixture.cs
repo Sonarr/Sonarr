@@ -1,6 +1,6 @@
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Common.Instrumentation;
+using Workarr.Instrumentation.Instrumentation;
 
 namespace NzbDrone.Common.Test.InstrumentationTests
 {

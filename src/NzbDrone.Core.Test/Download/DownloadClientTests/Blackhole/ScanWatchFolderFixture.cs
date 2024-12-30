@@ -6,12 +6,12 @@ using System.Threading;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common.Disk;
-using NzbDrone.Core.Download;
-using NzbDrone.Core.Download.Clients.Blackhole;
-using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
+using Workarr.Disk;
+using Workarr.Download;
+using Workarr.Download.Clients.Blackhole;
+using Workarr.MediaFiles;
 
 namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
 {

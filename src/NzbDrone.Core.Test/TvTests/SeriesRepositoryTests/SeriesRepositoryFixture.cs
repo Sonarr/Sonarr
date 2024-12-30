@@ -2,10 +2,10 @@ using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Profiles.Qualities;
-using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
+using Workarr.Profiles.Qualities;
+using Workarr.Qualities;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.TvTests.SeriesRepositoryTests
 {

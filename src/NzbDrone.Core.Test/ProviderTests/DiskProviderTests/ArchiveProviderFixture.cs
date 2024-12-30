@@ -1,9 +1,9 @@
 ﻿using System.IO;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Common;
-using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Test.Common;
+using Workarr.Common;
+using Workarr.EnvironmentInfo;
 
 namespace NzbDrone.Core.Test.ProviderTests.DiskProviderTests
 {

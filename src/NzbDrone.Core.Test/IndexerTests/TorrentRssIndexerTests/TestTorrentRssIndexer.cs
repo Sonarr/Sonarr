@@ -3,12 +3,12 @@ using FluentValidation.Results;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
-using NzbDrone.Common.Http;
-using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Indexers.TorrentRss;
-using NzbDrone.Core.Localization;
-using NzbDrone.Core.Parser;
+using Workarr.Configuration;
+using Workarr.Http;
+using Workarr.Indexers;
+using Workarr.Indexers.TorrentRss;
+using Workarr.Localization;
+using Workarr.Parser;
 
 namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
 {

@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.Download;
-using NzbDrone.Core.Download.Clients.Transmission;
+using Workarr.Download;
+using Workarr.Download.Clients.Transmission;
 
 namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
 {

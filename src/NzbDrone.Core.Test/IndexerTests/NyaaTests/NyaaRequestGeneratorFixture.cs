@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Indexers.Nyaa;
-using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Test.Framework;
+using Workarr.Indexers.Nyaa;
+using Workarr.IndexerSearch.Definitions;
 
 namespace NzbDrone.Core.Test.IndexerTests.NyaaTests
 {

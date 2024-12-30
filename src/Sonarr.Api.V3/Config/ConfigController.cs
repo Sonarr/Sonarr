@@ -1,9 +1,9 @@
 using System.Linq;
 using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
-using NzbDrone.Core.Configuration;
 using Sonarr.Http.REST;
 using Sonarr.Http.REST.Attributes;
+using Workarr.Configuration;
 
 namespace Sonarr.Api.V3.Config
 {

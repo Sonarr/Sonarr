@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using NzbDrone.Common.Reflection;
-using NzbDrone.Core.ThingiProvider;
 using Sonarr.Http.ClientSchema;
 using Sonarr.Http.REST;
+using Workarr.Reflection;
+using Workarr.ThingiProvider;
 
 namespace Sonarr.Api.V3
 {

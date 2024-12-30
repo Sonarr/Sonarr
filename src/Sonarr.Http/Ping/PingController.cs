@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using NzbDrone.Common.Cache;
-using NzbDrone.Core.Configuration;
 using NzbDrone.Http.Ping;
+using Workarr.Cache;
+using Workarr.Configuration;
 
 namespace NzbDrone.Http
 {

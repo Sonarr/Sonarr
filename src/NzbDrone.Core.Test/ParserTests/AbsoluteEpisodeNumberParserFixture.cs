@@ -4,6 +4,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
+using Workarr.Parser;
 
 namespace NzbDrone.Core.Test.ParserTests
 {
@@ -143,7 +144,7 @@ namespace NzbDrone.Core.Test.ParserTests
         // [TestCase("", "", 0, 0, 0)]
         public void should_parse_absolute_numbers(string postTitle, string title, int absoluteEpisodeNumber, int seasonNumber, int episodeNumber)
         {
-            var result = Parser.Parser.ParseTitle(postTitle);
+            var result = Parser.ParseTitle(postTitle);
             result.Should().NotBeNull();
             result.AbsoluteEpisodeNumbers.Single().Should().Be(absoluteEpisodeNumber);
             result.SeasonNumber.Should().Be(seasonNumber);
@@ -157,7 +158,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[DeadFish] Another Anime Show - 01 - OVD [BD][720p][AAC]", "Another Anime Show", 1)]
         public void should_parse_absolute_specials(string postTitle, string title, int absoluteEpisodeNumber)
         {
-            var result = Parser.Parser.ParseTitle(postTitle);
+            var result = Parser.ParseTitle(postTitle);
             result.Should().NotBeNull();
             result.AbsoluteEpisodeNumbers.Single().Should().Be(absoluteEpisodeNumber);
             result.SeasonNumber.Should().Be(0);
@@ -191,7 +192,7 @@ namespace NzbDrone.Core.Test.ParserTests
         {
             var absoluteEpisodeNumbers = Enumerable.Range(firstAbsoluteEpisodeNumber, lastAbsoluteEpisodeNumber - firstAbsoluteEpisodeNumber + 1)
                                                         .ToArray();
-            var result = Parser.Parser.ParseTitle(postTitle);
+            var result = Parser.ParseTitle(postTitle);
             result.Should().NotBeNull();
             result.AbsoluteEpisodeNumbers.Should().BeEquivalentTo(absoluteEpisodeNumbers);
             result.SeriesTitle.Should().Be(title);
@@ -204,7 +205,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[Judas] Japanse Anime, Title (Anime, Title?) (Season 1) [1080p][HEVC x265 10bit][Multi-Subs] (Batch)", "Japanse Anime, Title (Anime, Title)", 1)]
         public void should_parse_anime_season_packs(string postTitle, string title, int seasonNumber)
         {
-            var result = Parser.Parser.ParseTitle(postTitle);
+            var result = Parser.ParseTitle(postTitle);
             result.Should().NotBeNull();
             result.AbsoluteEpisodeNumbers.Should().BeEmpty();
             result.SeriesTitle.Should().Be(title);
@@ -217,7 +218,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[HorribleSubs] Show Slayer - 10.5 [1080p].mkv", "Show Slayer", 10.5)]
         public void should_handle_anime_recap_numbering(string postTitle, string title, double specialEpisodeNumber)
         {
-            var result = Parser.Parser.ParseTitle(postTitle);
+            var result = Parser.ParseTitle(postTitle);
             result.Should().NotBeNull();
             result.SeriesTitle.Should().Be(title);
             result.AbsoluteEpisodeNumbers.Should().BeEmpty();
@@ -229,7 +230,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series Title 921-928 [English Dub][1080p][onepiecedubb]", "921.mkv", "Series Title", 921)]
         public void should_handle_ambiguously_named_anime_files_in_batch_release(string releaseName, string filename, string title, int absoluteEpisodeNumber)
         {
-            var result = Parser.Parser.ParsePath(Path.Combine(@"C:\Test".AsOsAgnostic(), releaseName, filename));
+            var result = Workarr.Parser.Parser.ParsePath(Path.Combine(@"C:\Test".AsOsAgnostic(), releaseName, filename));
             result.Should().NotBeNull();
             result.AbsoluteEpisodeNumbers.Single().Should().Be(absoluteEpisodeNumber);
             result.SeasonNumber.Should().Be(0);
@@ -244,7 +245,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[Kaleido-subs] Sky Series - 07.5 (S00E01) - (BD 1080p HEVC x265 10-bit Opus 2.0) [A548C980].mkv", "Sky Series", 7.5, 0, 1)]
         public void should_parse_absolute_followed_by_standard_as_standard(string releaseName, string title, decimal specialEpisodeNumber, int seasonNumber, int episodeNumber)
         {
-            var result = Parser.Parser.ParseTitle(releaseName);
+            var result = Parser.ParseTitle(releaseName);
 
             result.Should().NotBeNull();
             result.EpisodeNumbers.Should().HaveCount(1);

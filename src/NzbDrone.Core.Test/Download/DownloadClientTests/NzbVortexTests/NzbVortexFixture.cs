@@ -5,15 +5,15 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common.Disk;
-using NzbDrone.Common.Extensions;
-using NzbDrone.Core.Download;
-using NzbDrone.Core.Download.Clients;
-using NzbDrone.Core.Download.Clients.Nzbget;
-using NzbDrone.Core.Download.Clients.NzbVortex;
-using NzbDrone.Core.Download.Clients.NzbVortex.Responses;
-using NzbDrone.Core.RemotePathMappings;
 using NzbDrone.Test.Common;
+using Workarr.Disk;
+using Workarr.Download;
+using Workarr.Download.Clients;
+using Workarr.Download.Clients.Nzbget;
+using Workarr.Download.Clients.NzbVortex;
+using Workarr.Download.Clients.NzbVortex.Responses;
+using Workarr.Extensions;
+using Workarr.RemotePathMappings;
 
 namespace NzbDrone.Core.Test.Download.DownloadClientTests.NzbVortexTests
 {

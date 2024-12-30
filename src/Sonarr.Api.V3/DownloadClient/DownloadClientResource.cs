@@ -1,5 +1,5 @@
-using NzbDrone.Core.Download;
-using NzbDrone.Core.Indexers;
+using Workarr.Download;
+using Workarr.Indexers;
 
 namespace Sonarr.Api.V3.DownloadClient
 {

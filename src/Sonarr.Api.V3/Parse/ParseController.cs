@@ -1,12 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
-using NzbDrone.Common.Extensions;
-using NzbDrone.Core.CustomFormats;
-using NzbDrone.Core.Download.Aggregation;
-using NzbDrone.Core.Parser;
 using Sonarr.Api.V3.CustomFormats;
 using Sonarr.Api.V3.Episodes;
 using Sonarr.Api.V3.Series;
 using Sonarr.Http;
+using Workarr.CustomFormats;
+using Workarr.Download.Aggregation;
+using Workarr.Extensions;
+using Workarr.Parser;
 
 namespace Sonarr.Api.V3.Parse
 {

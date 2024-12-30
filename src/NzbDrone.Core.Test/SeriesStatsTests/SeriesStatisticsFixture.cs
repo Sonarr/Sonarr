@@ -4,13 +4,13 @@ using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Common.Extensions;
-using NzbDrone.Core.Languages;
-using NzbDrone.Core.MediaFiles;
-using NzbDrone.Core.Qualities;
-using NzbDrone.Core.SeriesStats;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
+using Workarr.Extensions;
+using Workarr.Languages;
+using Workarr.MediaFiles;
+using Workarr.Qualities;
+using Workarr.SeriesStats;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.SeriesStatsTests
 {

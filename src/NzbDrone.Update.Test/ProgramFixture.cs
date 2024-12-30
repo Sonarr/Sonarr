@@ -1,10 +1,10 @@
 using System;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common.Model;
-using NzbDrone.Common.Processes;
 using NzbDrone.Test.Common;
 using NzbDrone.Update.UpdateEngine;
+using Workarr.Model;
+using Workarr.Processes;
 
 namespace NzbDrone.Update.Test
 {

@@ -1,8 +1,8 @@
 using System;
 using Microsoft.AspNetCore.Mvc;
-using NzbDrone.Core.Extras.Metadata;
 using NzbDrone.SignalR;
 using Sonarr.Http;
+using Workarr.Extras.Metadata;
 
 namespace Sonarr.Api.V3.Metadata
 {

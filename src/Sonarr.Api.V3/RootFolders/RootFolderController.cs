@@ -1,13 +1,13 @@
 using System.Collections.Generic;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using NzbDrone.Core.RootFolders;
-using NzbDrone.Core.Validation.Paths;
 using NzbDrone.SignalR;
 using Sonarr.Http;
 using Sonarr.Http.Extensions;
 using Sonarr.Http.REST;
 using Sonarr.Http.REST.Attributes;
+using Workarr.RootFolders;
+using Workarr.Validation.Paths;
 
 namespace Sonarr.Api.V3.RootFolders
 {

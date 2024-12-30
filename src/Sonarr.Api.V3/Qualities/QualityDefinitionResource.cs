@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using NzbDrone.Core.Qualities;
 using Sonarr.Http.REST;
+using Workarr.Qualities;
 
 namespace Sonarr.Api.V3.Qualities
 {

@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using NzbDrone.Core.Qualities;
+using Workarr.Qualities;
 
 namespace Sonarr.Api.V3.Qualities;
 

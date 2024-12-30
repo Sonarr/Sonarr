@@ -1,7 +1,7 @@
 using System;
 using Npgsql;
-using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Datastore.Migration.Framework;
+using Workarr.Datastore;
+using Workarr.Datastore.Migrations.Framework;
 
 namespace NzbDrone.Test.Common.Datastore
 {

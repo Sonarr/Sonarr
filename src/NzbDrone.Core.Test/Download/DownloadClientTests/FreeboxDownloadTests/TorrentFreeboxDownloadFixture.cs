@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common.Disk;
-using NzbDrone.Common.Http;
-using NzbDrone.Core.Download;
-using NzbDrone.Core.Download.Clients;
-using NzbDrone.Core.Download.Clients.FreeboxDownload;
-using NzbDrone.Core.Download.Clients.FreeboxDownload.Responses;
-using NzbDrone.Core.Parser.Model;
+using Workarr.Disk;
+using Workarr.Download;
+using Workarr.Download.Clients;
+using Workarr.Download.Clients.FreeboxDownload;
+using Workarr.Download.Clients.FreeboxDownload.Responses;
+using Workarr.Http;
+using Workarr.Parser.Model;
 
 namespace NzbDrone.Core.Test.Download.DownloadClientTests.FreeboxDownloadTests
 {
@@ -224,7 +224,7 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.FreeboxDownloadTests
 
             var remoteEpisode = CreateRemoteEpisode();
 
-            var episode = new Tv.Episode()
+            var episode = new Workarr.Tv.Episode()
             {
                 AirDateUtc = DateTime.UtcNow.Date.AddDays(-ageDay)
             };

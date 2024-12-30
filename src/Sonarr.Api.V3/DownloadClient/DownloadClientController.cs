@@ -1,6 +1,6 @@
-using NzbDrone.Core.Download;
 using NzbDrone.SignalR;
 using Sonarr.Http;
+using Workarr.Download;
 
 namespace Sonarr.Api.V3.DownloadClient
 {

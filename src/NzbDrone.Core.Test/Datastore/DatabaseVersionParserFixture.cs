@@ -1,6 +1,6 @@
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Datastore;
+using Workarr.Datastore;
 
 namespace NzbDrone.Core.Test.Datastore;
 

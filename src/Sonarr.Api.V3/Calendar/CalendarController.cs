@@ -2,14 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using NzbDrone.Common.Extensions;
-using NzbDrone.Core.CustomFormats;
-using NzbDrone.Core.DecisionEngine.Specifications;
-using NzbDrone.Core.Tags;
-using NzbDrone.Core.Tv;
 using NzbDrone.SignalR;
 using Sonarr.Api.V3.Episodes;
 using Sonarr.Http;
+using Workarr.CustomFormats;
+using Workarr.DecisionEngine.Specifications;
+using Workarr.Extensions;
+using Workarr.Tags;
+using Workarr.Tv;
 
 namespace Sonarr.Api.V3.Calendar
 {

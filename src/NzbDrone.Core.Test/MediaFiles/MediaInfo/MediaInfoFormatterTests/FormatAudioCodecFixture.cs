@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.MediaFiles.MediaInfo;
 using NzbDrone.Test.Common;
+using Workarr.MediaFiles.MediaInfo;
 
 namespace NzbDrone.Core.Test.MediaFiles.MediaInfo.MediaInfoFormatterTests
 {

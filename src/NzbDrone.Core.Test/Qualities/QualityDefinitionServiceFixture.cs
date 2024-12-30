@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.Lifecycle;
-using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
+using Workarr.Lifecycle;
+using Workarr.Qualities;
 
 namespace NzbDrone.Core.Test.Qualities
 {

@@ -1,7 +1,7 @@
 using System.IO;
 using NUnit.Framework;
-using NzbDrone.Core.Datastore.Migration.Framework;
 using NzbDrone.Test.Common.Datastore;
+using Workarr.Datastore.Migrations.Framework;
 
 namespace NzbDrone.Core.Test
 {

@@ -1,8 +1,8 @@
 ﻿using NUnit.Framework;
-using NzbDrone.Core.Notifications.Prowl;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
 using NzbDrone.Test.Common.Categories;
+using Workarr.Notifications.Prowl;
 
 namespace NzbDrone.Core.Test.NotificationTests
 {

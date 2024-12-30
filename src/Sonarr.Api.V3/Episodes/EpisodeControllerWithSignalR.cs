@@ -1,16 +1,16 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using NzbDrone.Core.CustomFormats;
-using NzbDrone.Core.Datastore.Events;
-using NzbDrone.Core.DecisionEngine.Specifications;
-using NzbDrone.Core.Download;
-using NzbDrone.Core.MediaFiles.Events;
-using NzbDrone.Core.Messaging.Events;
-using NzbDrone.Core.Tv;
 using NzbDrone.SignalR;
 using Sonarr.Api.V3.EpisodeFiles;
 using Sonarr.Api.V3.Series;
 using Sonarr.Http.REST;
+using Workarr.CustomFormats;
+using Workarr.Datastore.Events;
+using Workarr.DecisionEngine.Specifications;
+using Workarr.Download;
+using Workarr.MediaFiles.Events;
+using Workarr.Messaging.Events;
+using Workarr.Tv;
 
 namespace Sonarr.Api.V3.Episodes
 {
@@ -91,7 +91,7 @@ namespace Sonarr.Api.V3.Episodes
 
             if (includeSeries || includeEpisodeFile || includeImages)
             {
-                var seriesDict = new Dictionary<int, NzbDrone.Core.Tv.Series>();
+                var seriesDict = new Dictionary<int, Workarr.Tv.Series>();
                 for (var i = 0; i < episodes.Count; i++)
                 {
                     var episode = episodes[i];

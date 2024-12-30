@@ -1,11 +1,11 @@
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Parser;
-using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
+using Workarr.Parser;
+using Workarr.Parser.Model;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.ParserTests
 {

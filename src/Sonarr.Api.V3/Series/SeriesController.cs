@@ -2,32 +2,32 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using NzbDrone.Common.Extensions;
-using NzbDrone.Core.DataAugmentation.Scene;
-using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Datastore.Events;
-using NzbDrone.Core.MediaCover;
-using NzbDrone.Core.MediaFiles;
-using NzbDrone.Core.MediaFiles.Events;
-using NzbDrone.Core.Messaging.Commands;
-using NzbDrone.Core.Messaging.Events;
-using NzbDrone.Core.RootFolders;
-using NzbDrone.Core.SeriesStats;
-using NzbDrone.Core.Tv;
-using NzbDrone.Core.Tv.Commands;
-using NzbDrone.Core.Tv.Events;
-using NzbDrone.Core.Validation;
-using NzbDrone.Core.Validation.Paths;
 using NzbDrone.SignalR;
 using Sonarr.Http;
 using Sonarr.Http.Extensions;
 using Sonarr.Http.REST;
 using Sonarr.Http.REST.Attributes;
+using Workarr.DataAugmentation.Scene;
+using Workarr.Datastore;
+using Workarr.Datastore.Events;
+using Workarr.Extensions;
+using Workarr.MediaCover;
+using Workarr.MediaFiles;
+using Workarr.MediaFiles.Events;
+using Workarr.Messaging.Commands;
+using Workarr.Messaging.Events;
+using Workarr.RootFolders;
+using Workarr.SeriesStats;
+using Workarr.Tv;
+using Workarr.Tv.Commands;
+using Workarr.Tv.Events;
+using Workarr.Validation;
+using Workarr.Validation.Paths;
 
 namespace Sonarr.Api.V3.Series
 {
     [V3ApiController]
-    public class SeriesController : RestControllerWithSignalR<SeriesResource, NzbDrone.Core.Tv.Series>,
+    public class SeriesController : RestControllerWithSignalR<SeriesResource, Workarr.Tv.Series>,
                                 IHandle<EpisodeImportedEvent>,
                                 IHandle<EpisodeFileDeletedEvent>,
                                 IHandle<SeriesUpdatedEvent>,
@@ -210,7 +210,7 @@ namespace Sonarr.Api.V3.Series
             _seriesService.DeleteSeries(new List<int> { id }, deleteFiles, addImportListExclusion);
         }
 
-        private SeriesResource GetSeriesResource(NzbDrone.Core.Tv.Series series, bool includeSeasonImages)
+        private SeriesResource GetSeriesResource(Workarr.Tv.Series series, bool includeSeasonImages)
         {
             if (series == null)
             {

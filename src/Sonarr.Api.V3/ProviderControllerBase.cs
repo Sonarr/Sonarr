@@ -3,16 +3,16 @@ using System.Linq;
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
-using NzbDrone.Common.Extensions;
-using NzbDrone.Common.Serializer;
-using NzbDrone.Core.Datastore.Events;
-using NzbDrone.Core.Messaging.Events;
-using NzbDrone.Core.ThingiProvider;
-using NzbDrone.Core.ThingiProvider.Events;
-using NzbDrone.Core.Validation;
 using NzbDrone.SignalR;
 using Sonarr.Http.REST;
 using Sonarr.Http.REST.Attributes;
+using Workarr.Datastore.Events;
+using Workarr.Extensions;
+using Workarr.Messaging.Events;
+using Workarr.Serializer.Newtonsoft.Json;
+using Workarr.ThingiProvider;
+using Workarr.ThingiProvider.Events;
+using Workarr.Validation;
 
 namespace Sonarr.Api.V3
 {
@@ -306,7 +306,7 @@ namespace Sonarr.Api.V3
 
         protected void VerifyValidationResult(ValidationResult validationResult, bool includeWarnings)
         {
-            var result = validationResult as NzbDroneValidationResult ?? new NzbDroneValidationResult(validationResult.Errors);
+            var result = validationResult as WorkarrValidationResult ?? new WorkarrValidationResult(validationResult.Errors);
 
             if (includeWarnings && (!result.IsValid || result.HasWarnings))
             {

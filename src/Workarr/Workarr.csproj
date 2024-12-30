@@ -1,0 +1,234 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>disable</Nullable>
+        <NeutralLanguage>en</NeutralLanguage>
+        <LangVersion>preview</LangVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Reference Include="Dapper">
+        <HintPath>..\..\..\..\..\.nuget\packages\dapper\2.0.123\lib\net5.0\Dapper.dll</HintPath>
+      </Reference>
+      <Reference Include="DryIoc">
+        <HintPath>..\..\..\..\..\.nuget\packages\dryioc.dll\5.4.3\lib\net6.0\DryIoc.dll</HintPath>
+      </Reference>
+      <Reference Include="FluentMigrator.Abstractions">
+        <HintPath>..\..\..\..\..\.nuget\packages\servarr.fluentmigrator.abstractions\3.3.2.9\lib\netstandard2.0\FluentMigrator.Abstractions.dll</HintPath>
+      </Reference>
+      <Reference Include="FluentValidation">
+        <HintPath>..\..\..\..\..\.nuget\packages\fluentvalidation\9.5.4\lib\net5.0\FluentValidation.dll</HintPath>
+      </Reference>
+      <Reference Include="ICSharpCode.SharpZipLib">
+        <HintPath>..\..\..\..\..\.nuget\packages\sharpziplib\1.4.2\lib\net6.0\ICSharpCode.SharpZipLib.dll</HintPath>
+      </Reference>
+      <Reference Include="Microsoft.Extensions.Hosting.Abstractions">
+        <HintPath>..\..\..\..\..\.nuget\packages\microsoft.extensions.hosting.abstractions\6.0.0\lib\netstandard2.1\Microsoft.Extensions.Hosting.Abstractions.dll</HintPath>
+      </Reference>
+      <Reference Include="Microsoft.Extensions.Hosting.WindowsServices">
+        <HintPath>..\..\..\..\..\.nuget\packages\microsoft.extensions.hosting.windowsservices\6.0.2\lib\netstandard2.1\Microsoft.Extensions.Hosting.WindowsServices.dll</HintPath>
+      </Reference>
+      <Reference Include="Microsoft.Extensions.Logging.Abstractions">
+        <HintPath>..\..\..\..\..\.nuget\packages\microsoft.extensions.logging.abstractions\6.0.4\lib\net6.0\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
+      </Reference>
+      <Reference Include="Newtonsoft.Json">
+        <HintPath>..\..\..\..\..\.nuget\packages\newtonsoft.json\13.0.3\lib\net6.0\Newtonsoft.Json.dll</HintPath>
+      </Reference>
+      <Reference Include="NLog">
+        <HintPath>..\..\..\..\..\.nuget\packages\nlog\5.3.4\lib\netstandard2.0\NLog.dll</HintPath>
+      </Reference>
+      <Reference Include="NLog.Extensions.Logging">
+        <HintPath>..\..\..\..\..\.nuget\packages\nlog.extensions.logging\5.3.15\lib\net6.0\NLog.Extensions.Logging.dll</HintPath>
+      </Reference>
+      <Reference Include="NLog.Layouts.ClefJsonLayout">
+        <HintPath>..\..\..\..\..\.nuget\packages\nlog.layouts.clefjsonlayout\1.0.2\lib\net6.0\NLog.Layouts.ClefJsonLayout.dll</HintPath>
+      </Reference>
+      <Reference Include="Sentry">
+        <HintPath>..\..\..\..\..\.nuget\packages\sentry\4.0.2\lib\net6.0\Sentry.dll</HintPath>
+      </Reference>
+      <Reference Include="System.Data.SQLite">
+        <HintPath>..\..\..\..\..\.nuget\packages\system.data.sqlite.core.servarr\1.0.115.5-18\lib\netstandard2.0\System.Data.SQLite.dll</HintPath>
+      </Reference>
+      <Reference Include="System.ServiceProcess.ServiceController">
+        <HintPath>..\..\..\..\..\.nuget\packages\system.serviceprocess.servicecontroller\6.0.1\lib\net6.0\System.ServiceProcess.ServiceController.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Update="EnsureThat\Resources\ExceptionMessages.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>ExceptionMessages.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="EnsureThat\Resources\ExceptionMessages.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>ExceptionMessages.resx</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Update="Localization\Core\ar.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Localization\Core\bg.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Localization\Core\bn.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Localization\Core\bs.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Localization\Core\ca.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Localization\Core\cs.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Localization\Core\da.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Localization\Core\de.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Localization\Core\el.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Localization\Core\en.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Localization\Core\es.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Localization\Core\es_MX.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Localization\Core\et.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Localization\Core\fa.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Localization\Core\fi.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Localization\Core\fr.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Localization\Core\he.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Localization\Core\hi.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Localization\Core\hr.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Localization\Core\hu.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Localization\Core\id.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Localization\Core\is.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Localization\Core\it.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Localization\Core\ja.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Localization\Core\ko.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Localization\Core\lt.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Localization\Core\lv.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Localization\Core\nb_NO.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Localization\Core\nl.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Localization\Core\pl.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Localization\Core\pt.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Localization\Core\pt_BR.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Localization\Core\ro.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Localization\Core\ru.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Localization\Core\sk.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Localization\Core\sr.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Localization\Core\sv.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Localization\Core\ta.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Localization\Core\th.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Localization\Core\tr.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Localization\Core\uk.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Localization\Core\vi.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Localization\Core\zh_CN.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Localization\Core\zh_Hans.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Localization\Core\zh_TW.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Diacritics" Version="3.3.29" />
+      <PackageReference Include="Equ" Version="2.3.0" />
+      <PackageReference Include="IPAddressRange" Version="6.1.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="6.0.36" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.2" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="8.0.0" />
+      <PackageReference Include="MonoTorrent" Version="2.0.0" />
+      <PackageReference Include="NLog.Targets.Syslog" Version="7.0.0" />
+      <PackageReference Include="Npgsql" Version="9.0.2" />
+      <PackageReference Include="Servarr.FFMpegCore" Version="4.7.0-26" />
+      <PackageReference Include="Servarr.FFprobe" Version="5.1.4.112" />
+      <PackageReference Include="FluentMigrator.Runner" Version="6.2.0" />
+      <PackageReference Include="MailKit" Version="4.9.0" />
+      <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.2" />
+      <PackageReference Include="MimeKit" Version="4.9.0" />
+      <PackageReference Include="Polly" Version="8.5.0" />
+      <PackageReference Include="SixLabors.ImageSharp" Version="3.1.6" />
+      <PackageReference Include="System.Text.Json" Version="8.0.5" />
+      <PackageReference Include="XtreamTools" Version="1.0.19" />
+    </ItemGroup>
+
+</Project>

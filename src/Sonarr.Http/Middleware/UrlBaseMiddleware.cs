@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using NzbDrone.Common.Extensions;
+using Workarr.Extensions;
 
 namespace Sonarr.Http.Middleware
 {

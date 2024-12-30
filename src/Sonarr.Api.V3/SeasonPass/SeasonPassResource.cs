@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using NzbDrone.Core.Tv;
+using Workarr.Tv;
 
 namespace Sonarr.Api.V3.SeasonPass
 {

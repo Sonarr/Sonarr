@@ -3,11 +3,11 @@ using System.IO;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common.Disk;
 using NzbDrone.Mono.Disk;
 using NzbDrone.Mono.EnvironmentInfo.VersionAdapters;
 using NzbDrone.Test.Common;
 using NzbDrone.Test.Common.Categories;
+using Workarr.Disk;
 
 namespace NzbDrone.Mono.Test.EnvironmentInfo.VersionAdapters
 {

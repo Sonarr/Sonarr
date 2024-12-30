@@ -1,5 +1,5 @@
 using System;
-using NzbDrone.Common.TPL;
+using Workarr.TPL;
 
 namespace NzbDrone.Test.Common
 {

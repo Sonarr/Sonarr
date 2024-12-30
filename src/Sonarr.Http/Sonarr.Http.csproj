@@ -3,12 +3,20 @@
     <TargetFrameworks>net6.0</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Diacritics" Version="3.3.29" />
     <PackageReference Include="FluentValidation" Version="9.5.4" />
     <PackageReference Include="ImpromptuInterface" Version="7.0.1" />
     <PackageReference Include="NLog" Version="5.3.4" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NzbDrone.Core\Sonarr.Core.csproj" />
     <ProjectReference Include="..\NzbDrone.SignalR\Sonarr.SignalR.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="DryIoc">
+      <HintPath>..\..\..\..\..\.nuget\packages\dryioc.dll\5.4.3\lib\net6.0\DryIoc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.SQLite">
+      <HintPath>..\..\..\..\..\.nuget\packages\system.data.sqlite.core.servarr\1.0.115.5-18\lib\netstandard2.0\System.Data.SQLite.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>

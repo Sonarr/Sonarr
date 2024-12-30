@@ -2,9 +2,9 @@ using System;
 using System.IO;
 using System.Text.RegularExpressions;
 using NLog;
-using NzbDrone.Common.Disk;
-using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Extensions;
+using Workarr.Disk;
+using Workarr.EnvironmentInfo;
+using Workarr.Extensions;
 
 namespace Sonarr.Http.Frontend.Mappers
 {

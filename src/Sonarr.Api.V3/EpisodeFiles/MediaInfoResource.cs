@@ -1,7 +1,7 @@
 using System;
-using NzbDrone.Common.Extensions;
-using NzbDrone.Core.MediaFiles.MediaInfo;
 using Sonarr.Http.REST;
+using Workarr.Extensions;
+using Workarr.MediaFiles.MediaInfo;
 
 namespace Sonarr.Api.V3.EpisodeFiles
 {

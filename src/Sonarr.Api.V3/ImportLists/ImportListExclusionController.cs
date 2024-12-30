@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using NzbDrone.Core.Datastore;
-using NzbDrone.Core.ImportLists.Exclusions;
 using Sonarr.Http;
 using Sonarr.Http.Extensions;
 using Sonarr.Http.REST;
 using Sonarr.Http.REST.Attributes;
+using Workarr.Datastore;
+using Workarr.ImportLists.Exclusions;
 
 namespace Sonarr.Api.V3.ImportLists
 {

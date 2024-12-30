@@ -4,12 +4,12 @@ using System.Linq;
 using System.Reflection;
 using System.Text.Json;
 using DryIoc;
-using NzbDrone.Common.EnsureThat;
-using NzbDrone.Common.Extensions;
-using NzbDrone.Common.Reflection;
-using NzbDrone.Common.Serializer;
-using NzbDrone.Core.Annotations;
-using NzbDrone.Core.Localization;
+using Workarr.Annotations;
+using Workarr.EnsureThat;
+using Workarr.Extensions;
+using Workarr.Localization;
+using Workarr.Reflection;
+using Workarr.Serializer.System.Text.Json;
 
 namespace Sonarr.Http.ClientSchema
 {

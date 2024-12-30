@@ -2,8 +2,8 @@
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Test.Framework;
+using Workarr.Configuration;
 
 namespace NzbDrone.Core.Test.Configuration
 {

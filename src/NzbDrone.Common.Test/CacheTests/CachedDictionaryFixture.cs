@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Common.Cache;
+using Workarr.Cache;
 
 namespace NzbDrone.Common.Test.CacheTests
 {

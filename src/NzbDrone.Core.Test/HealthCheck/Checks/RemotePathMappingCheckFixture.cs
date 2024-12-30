@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using System.IO;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common.Disk;
-using NzbDrone.Common.EnsureThat;
-using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Download;
-using NzbDrone.Core.Download.Clients;
-using NzbDrone.Core.HealthCheck.Checks;
-using NzbDrone.Core.Localization;
-using NzbDrone.Core.MediaFiles;
-using NzbDrone.Core.MediaFiles.Events;
-using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
+using Workarr.Configuration;
+using Workarr.Disk;
+using Workarr.Download;
+using Workarr.Download.Clients;
+using Workarr.EnsureThat;
+using Workarr.EnvironmentInfo;
+using Workarr.HealthCheck.Checks;
+using Workarr.Localization;
+using Workarr.MediaFiles;
+using Workarr.MediaFiles.Events;
+using Workarr.Parser.Model;
 
 namespace NzbDrone.Core.Test.HealthCheck.Checks
 {

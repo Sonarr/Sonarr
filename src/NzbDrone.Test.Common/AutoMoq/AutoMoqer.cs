@@ -6,8 +6,8 @@ using System.Linq;
 using System.Reflection;
 using DryIoc;
 using Moq;
-using NzbDrone.Common.Composition;
-using NzbDrone.Common.EnvironmentInfo;
+using Workarr.Composition;
+using Workarr.EnvironmentInfo;
 
 namespace NzbDrone.Test.Common.AutoMoq
 {

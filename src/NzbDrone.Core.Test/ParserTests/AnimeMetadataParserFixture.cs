@@ -1,6 +1,7 @@
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Test.Framework;
+using Workarr.Parser;
 
 namespace NzbDrone.Core.Test.ParserTests
 {
@@ -41,7 +42,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[S-T-D] Series Title! - 06 (1280x720 10bit AAC) (59B3F2EA).mkv", "S-T-D", "59B3F2EA")]
         public void should_parse_releasegroup_and_hash(string postTitle, string subGroup, string hash)
         {
-            var result = Parser.Parser.ParseTitle(postTitle);
+            var result = Parser.ParseTitle(postTitle);
             result.Should().NotBeNull();
             result.ReleaseGroup.Should().Be(subGroup);
             result.ReleaseHash.Should().Be(hash);
@@ -55,7 +56,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[DHD] Series Title! - 10 (1280x720 8bit AAC) [10B10BEA].mkv", "10B10BEA")]
         public void should_parse_release_hashes_with_10b_or_8b(string postTitle, string hash)
         {
-            var result = Parser.Parser.ParseTitle(postTitle);
+            var result = Parser.ParseTitle(postTitle);
             result.Should().NotBeNull();
             result.ReleaseHash.Should().Be(hash);
         }

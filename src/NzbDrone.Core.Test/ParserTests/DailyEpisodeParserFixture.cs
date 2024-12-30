@@ -1,9 +1,10 @@
 using System;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Common.Expansive;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
+using Workarr.Expansive;
+using Workarr.Parser;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.ParserTests
 {
@@ -39,7 +40,7 @@ namespace NzbDrone.Core.Test.ParserTests
         // [TestCase("", "", 0, 0, 0)]
         public void should_parse_daily_episode(string postTitle, string title, int year, int month, int day)
         {
-            var result = Parser.Parser.ParseTitle(postTitle);
+            var result = Parser.ParseTitle(postTitle);
             var airDate = new DateTime(year, month, day);
             result.Should().NotBeNull();
             result.SeriesTitle.Should().Be(title);
@@ -55,7 +56,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series.Title.2015.09.07.Part.2.720p.HULU.WEBRip.AAC2.0.H.264-Sonarr", "Series Title", 2015, 9, 7, 2)]
         public void should_parse_daily_episode_with_multiple_parts(string postTitle, string title, int year, int month, int day, int part)
         {
-            var result = Parser.Parser.ParseTitle(postTitle);
+            var result = Parser.ParseTitle(postTitle);
             var airDate = new DateTime(year, month, day);
             result.Should().NotBeNull();
             result.SeriesTitle.Should().Be(title);
@@ -76,7 +77,7 @@ namespace NzbDrone.Core.Test.ParserTests
         public void should_not_accept_ancient_daily_series(string title)
         {
             var yearTooLow = title.Expand(new { year = 1950, month = 10, day = 14 });
-            Parser.Parser.ParseTitle(yearTooLow).Should().BeNull();
+            Parser.ParseTitle(yearTooLow).Should().BeNull();
         }
 
         [TestCase("A Late Talk Show {year} {month} {day} Emma Roberts HDTV XviD BFF")]
@@ -92,7 +93,7 @@ namespace NzbDrone.Core.Test.ParserTests
 
             var validDate = title.Expand(new { year = twoDaysFromNow.Year, month = twoDaysFromNow.Month.ToString("00"), day = twoDaysFromNow.Day.ToString("00") });
 
-            Parser.Parser.ParseTitle(validDate).Should().BeNull();
+            Parser.ParseTitle(validDate).Should().BeNull();
         }
 
         [Test]
@@ -100,7 +101,7 @@ namespace NzbDrone.Core.Test.ParserTests
         {
             var title = string.Format("{0:yyyy.MM.dd} - A Talk Show - HD TV.mkv", DateTime.Now.AddDays(2));
 
-            Parser.Parser.ParseTitle(title).Should().BeNull();
+            Parser.ParseTitle(title).Should().BeNull();
         }
 
         [TestCase("Tmc - Quotidien - 05-06-2024 HDTV 1080p H264 AAC")]
@@ -108,7 +109,7 @@ namespace NzbDrone.Core.Test.ParserTests
         // [TestCase("", "", 0, 0, 0)]
         public void should_not_parse_ambiguous_daily_episode(string postTitle)
         {
-            Parser.Parser.ParseTitle(postTitle).Should().BeNull();
+            Parser.ParseTitle(postTitle).Should().BeNull();
         }
     }
 }

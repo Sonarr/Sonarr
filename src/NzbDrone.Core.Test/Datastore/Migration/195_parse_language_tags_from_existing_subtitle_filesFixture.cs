@@ -4,8 +4,8 @@ using System.Linq;
 using Dapper;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Datastore.Migration;
 using NzbDrone.Core.Test.Framework;
+using Workarr.Datastore.Migrations;
 
 namespace NzbDrone.Core.Test.Datastore.Migration
 {

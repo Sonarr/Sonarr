@@ -1,12 +1,12 @@
 using System;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Languages;
-using NzbDrone.Core.Localization;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
+using Workarr.Configuration;
+using Workarr.EnvironmentInfo;
+using Workarr.Languages;
+using Workarr.Localization;
 
 namespace NzbDrone.Core.Test.Localization
 {

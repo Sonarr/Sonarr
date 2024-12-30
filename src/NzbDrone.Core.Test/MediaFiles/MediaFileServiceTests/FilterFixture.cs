@@ -4,10 +4,10 @@ using System.Linq;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
+using Workarr.MediaFiles;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.MediaFiles.MediaFileServiceTests
 {

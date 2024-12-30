@@ -1,10 +1,10 @@
 using System.Data.SQLite;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Datastore.Converters;
-using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv.Commands;
+using Workarr.Datastore.Converters;
+using Workarr.Messaging.Commands;
+using Workarr.Tv.Commands;
 
 namespace NzbDrone.Core.Test.Datastore.Converters
 {

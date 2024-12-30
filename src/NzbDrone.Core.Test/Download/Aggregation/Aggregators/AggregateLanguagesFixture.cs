@@ -4,13 +4,13 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.Download.Aggregation.Aggregators;
-using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Indexers.TorrentRss;
-using NzbDrone.Core.Languages;
-using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
+using Workarr.Download.Aggregation.Aggregators;
+using Workarr.Indexers;
+using Workarr.Indexers.TorrentRss;
+using Workarr.Languages;
+using Workarr.Parser.Model;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.Download.Aggregation.Aggregators
 {

@@ -1,8 +1,8 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 using NLog;
-using NzbDrone.Common.Disk;
-using NzbDrone.Common.EnvironmentInfo;
+using Workarr.Disk;
+using Workarr.EnvironmentInfo;
 
 namespace NzbDrone.Mono.EnvironmentInfo.VersionAdapters
 {

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using NzbDrone.Core.SeriesStats;
+using Workarr.SeriesStats;
 
 namespace Sonarr.Api.V3.Series
 {

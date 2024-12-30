@@ -4,14 +4,14 @@ using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 using NLog;
-using NzbDrone.Common.Extensions;
-using NzbDrone.Core.Datastore;
-using NzbDrone.Core.DecisionEngine;
-using NzbDrone.Core.Download;
-using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Profiles.Qualities;
 using Sonarr.Http;
+using Workarr.Datastore;
+using Workarr.DecisionEngine;
+using Workarr.Download;
+using Workarr.Extensions;
+using Workarr.Indexers;
+using Workarr.Parser.Model;
+using Workarr.Profiles.Qualities;
 
 namespace Sonarr.Api.V3.Indexers
 {

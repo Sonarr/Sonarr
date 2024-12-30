@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.CustomFormats;
-using NzbDrone.Core.DecisionEngine.Specifications;
-using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Profiles.Qualities;
-using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.CustomFormats;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
+using Workarr.CustomFormats;
+using Workarr.DecisionEngine.Specifications;
+using Workarr.Parser.Model;
+using Workarr.Profiles.Qualities;
+using Workarr.Qualities;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.DecisionEngineTests
 {

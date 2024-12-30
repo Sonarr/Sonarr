@@ -1,16 +1,15 @@
 using System;
 using NUnit.Framework;
-using NzbDrone.Common.Cache;
-using NzbDrone.Common.Cloud;
-using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Http;
-using NzbDrone.Common.Http.Dispatchers;
-using NzbDrone.Common.Http.Proxy;
-using NzbDrone.Common.TPL;
-using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Http;
-using NzbDrone.Core.Security;
 using NzbDrone.Test.Common;
+using Workarr.Cache;
+using Workarr.Cloud;
+using Workarr.Configuration;
+using Workarr.EnvironmentInfo;
+using Workarr.Http;
+using Workarr.Http.Dispatchers;
+using Workarr.Http.Proxy;
+using Workarr.Security;
+using Workarr.TPL;
 
 namespace NzbDrone.Core.Test.Framework
 {

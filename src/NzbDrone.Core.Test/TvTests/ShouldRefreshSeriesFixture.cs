@@ -3,8 +3,8 @@ using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.TvTests
 {

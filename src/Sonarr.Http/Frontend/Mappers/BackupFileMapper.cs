@@ -1,7 +1,7 @@
 using System.IO;
 using NLog;
-using NzbDrone.Common.Disk;
-using NzbDrone.Core.Backup;
+using Workarr.Backup;
+using Workarr.Disk;
 
 namespace Sonarr.Http.Frontend.Mappers
 {

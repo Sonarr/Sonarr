@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Exceptions;
-using NzbDrone.Core.MediaCover;
-using NzbDrone.Core.MetadataSource.SkyHook;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common.Categories;
+using Workarr.Exceptions;
+using Workarr.MediaCover;
+using Workarr.MetadataSource.SkyHook;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.MetadataSource.SkyHook
 {
@@ -53,7 +53,7 @@ namespace NzbDrone.Core.Test.MetadataSource.SkyHook
         {
             series.Should().NotBeNull();
             series.Title.Should().NotBeNullOrWhiteSpace();
-            series.CleanTitle.Should().Be(Parser.Parser.CleanSeriesTitle(series.Title));
+            series.CleanTitle.Should().Be(Workarr.Parser.Parser.CleanSeriesTitle(series.Title));
             series.SortTitle.Should().Be(SeriesTitleNormalizer.Normalize(series.Title, series.TvdbId));
             series.Overview.Should().NotBeNullOrWhiteSpace();
             series.AirTime.Should().NotBeNullOrWhiteSpace();

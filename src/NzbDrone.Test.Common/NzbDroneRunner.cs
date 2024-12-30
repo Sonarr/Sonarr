@@ -6,13 +6,13 @@ using System.Threading;
 using System.Xml.Linq;
 using NLog;
 using NUnit.Framework;
-using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Extensions;
-using NzbDrone.Common.Processes;
-using NzbDrone.Common.Serializer;
-using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Datastore;
 using RestSharp;
+using Workarr.Configuration;
+using Workarr.Datastore;
+using Workarr.EnvironmentInfo;
+using Workarr.Extensions;
+using Workarr.Processes;
+using Workarr.Serializer.Newtonsoft.Json;
 
 namespace NzbDrone.Test.Common
 {

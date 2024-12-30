@@ -3,11 +3,11 @@ using System.IO;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
-using NzbDrone.Core.Validation.Paths;
 using NzbDrone.Test.Common;
+using Workarr.EnvironmentInfo;
+using Workarr.Tv;
+using Workarr.Validation.Paths;
 
 namespace NzbDrone.Core.Test.ValidationTests
 {

@@ -4,12 +4,12 @@ using System.Threading.Tasks;
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common.Http;
-using NzbDrone.Core.Indexers;
-using NzbDrone.Core.IndexerSearch.Definitions;
-using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
+using Workarr.Http;
+using Workarr.Indexers;
+using Workarr.IndexerSearch.Definitions;
+using Workarr.Parser.Model;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.IndexerTests
 {

@@ -1,5 +1,5 @@
 ﻿using System.IO;
-using NzbDrone.Common.Disk;
+using Workarr.Disk;
 
 namespace NzbDrone.Common.Test.DiskTests
 {

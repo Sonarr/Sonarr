@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Win32;
 using NLog;
-using NzbDrone.Common.EnvironmentInfo;
+using Workarr.EnvironmentInfo;
 
 namespace NzbDrone.Windows.EnvironmentInfo
 {

@@ -1,0 +1,17 @@
+using FluentMigrator;
+using Workarr.Datastore.Migrations.Framework;
+
+namespace Workarr.Datastore.Migrations
+{
+    [Migration(156)]
+    public class add_bypass_to_delay_profile : NzbDroneMigrationBase
+    {
+        protected override void MainDbUpgrade()
+        {
+            Alter.Table("DelayProfiles").AddColumn("BypassIfHighestQuality").AsBoolean().WithDefaultValue(false);
+
+            // Set to true for existing Delay Profiles to keep behavior the same.
+            Update.Table("DelayProfiles").Set(new { BypassIfHighestQuality = true }).AllRows();
+        }
+    }
+}

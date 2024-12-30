@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.Blocklisting;
-using NzbDrone.Core.Download;
-using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
+using Workarr.Blocklisting;
+using Workarr.Download;
+using Workarr.Qualities;
 
 namespace NzbDrone.Core.Test.Blocklisting
 {

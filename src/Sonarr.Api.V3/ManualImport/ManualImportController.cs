@@ -1,13 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using NzbDrone.Common.Extensions;
-using NzbDrone.Core.Languages;
-using NzbDrone.Core.MediaFiles.EpisodeImport.Manual;
-using NzbDrone.Core.Qualities;
 using Sonarr.Api.V3.CustomFormats;
 using Sonarr.Api.V3.Episodes;
 using Sonarr.Http;
+using Workarr.Extensions;
+using Workarr.MediaFiles.EpisodeImport.Manual;
+using Workarr.Qualities;
 
 namespace Sonarr.Api.V3.ManualImport
 {
@@ -51,7 +50,7 @@ namespace Sonarr.Api.V3.ManualImport
 
                 // Only set the language/quality if they're unknown and languages were returned.
                 // Languages won't be returned when reprocessing if the season/episode isn't filled in yet and we don't want to return no languages to the client.
-                if (item.Languages.Count <= 1 && (item.Languages.SingleOrDefault() ?? Language.Unknown) == Language.Unknown && processedItem.Languages.Any())
+                if (item.Languages.Count <= 1 && (item.Languages.SingleOrDefault() ?? Workarr.Languages.Language.Unknown) == Workarr.Languages.Language.Unknown && processedItem.Languages.Any())
                 {
                     item.Languages = processedItem.Languages;
                 }

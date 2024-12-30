@@ -1,7 +1,7 @@
 using FluentValidation;
-using NzbDrone.Core.Configuration;
 using Sonarr.Http;
 using Sonarr.Http.Validation;
+using Workarr.Configuration;
 
 namespace Sonarr.Api.V3.Config
 {

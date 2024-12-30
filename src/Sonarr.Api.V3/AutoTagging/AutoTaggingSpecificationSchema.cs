@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using NzbDrone.Core.AutoTagging.Specifications;
 using Sonarr.Http.ClientSchema;
 using Sonarr.Http.REST;
+using Workarr.AutoTagging.Specifications;
 
 namespace Sonarr.Api.V3.AutoTagging
 {

@@ -2,8 +2,8 @@ using System;
 using System.Linq;
 using NetFwTypeLib;
 using NLog;
-using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Core.Configuration;
+using Workarr.Configuration;
+using Workarr.EnvironmentInfo;
 
 namespace NzbDrone.Host.AccessControl
 {

@@ -3,15 +3,15 @@ using System.Linq;
 using System.Reflection;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using NzbDrone.Common.Extensions;
-using NzbDrone.Core.Authentication;
-using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Update;
-using NzbDrone.Core.Validation;
-using NzbDrone.Core.Validation.Paths;
 using Sonarr.Http;
 using Sonarr.Http.REST;
 using Sonarr.Http.REST.Attributes;
+using Workarr.Authentication;
+using Workarr.Configuration;
+using Workarr.Extensions;
+using Workarr.Update;
+using Workarr.Validation;
+using Workarr.Validation.Paths;
 
 namespace Sonarr.Api.V3.Config
 {

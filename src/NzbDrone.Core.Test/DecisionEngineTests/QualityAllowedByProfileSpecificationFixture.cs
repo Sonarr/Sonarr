@@ -1,13 +1,13 @@
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Datastore;
-using NzbDrone.Core.DecisionEngine.Specifications;
-using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Profiles.Qualities;
-using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
+using Workarr.Datastore;
+using Workarr.DecisionEngine.Specifications;
+using Workarr.Parser.Model;
+using Workarr.Profiles.Qualities;
+using Workarr.Qualities;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.DecisionEngineTests
 {

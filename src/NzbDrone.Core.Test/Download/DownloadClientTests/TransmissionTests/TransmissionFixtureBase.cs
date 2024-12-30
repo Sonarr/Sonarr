@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common.Http;
-using NzbDrone.Common.Serializer;
-using NzbDrone.Core.Download;
-using NzbDrone.Core.Download.Clients.Transmission;
-using NzbDrone.Core.MediaFiles.TorrentInfo;
+using Workarr.Download;
+using Workarr.Download.Clients.Transmission;
+using Workarr.Http;
+using Workarr.MediaFiles.TorrentInfo;
+using Workarr.Serializer.Newtonsoft.Json;
 
 namespace NzbDrone.Core.Test.Download.DownloadClientTests.TransmissionTests
 {

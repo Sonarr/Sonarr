@@ -1,13 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using NzbDrone.Core.CustomFormats;
-using NzbDrone.Core.DecisionEngine.Specifications;
-using NzbDrone.Core.Tv;
 using NzbDrone.SignalR;
 using Sonarr.Http;
 using Sonarr.Http.REST;
 using Sonarr.Http.REST.Attributes;
+using Workarr.CustomFormats;
+using Workarr.DecisionEngine.Specifications;
+using Workarr.Tv;
 
 namespace Sonarr.Api.V3.Episodes
 {

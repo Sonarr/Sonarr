@@ -3,13 +3,13 @@ using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Configuration;
-using NzbDrone.Core.DecisionEngine.Specifications;
-using NzbDrone.Core.MediaFiles;
-using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
+using Workarr.Configuration;
+using Workarr.DecisionEngine.Specifications;
+using Workarr.MediaFiles;
+using Workarr.Parser.Model;
+using Workarr.Qualities;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.DecisionEngineTests
 {

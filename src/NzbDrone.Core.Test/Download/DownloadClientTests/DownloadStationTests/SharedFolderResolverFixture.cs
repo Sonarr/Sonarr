@@ -2,12 +2,12 @@
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common.Disk;
-using NzbDrone.Core.Download.Clients;
-using NzbDrone.Core.Download.Clients.DownloadStation;
-using NzbDrone.Core.Download.Clients.DownloadStation.Proxies;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
+using Workarr.Disk;
+using Workarr.Download.Clients;
+using Workarr.Download.Clients.DownloadStation;
+using Workarr.Download.Clients.DownloadStation.Proxies;
 
 namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
 {

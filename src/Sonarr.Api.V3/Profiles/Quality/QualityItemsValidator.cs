@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentValidation;
 using FluentValidation.Validators;
-using NzbDrone.Common.Extensions;
+using Workarr.Extensions;
 
 namespace Sonarr.Api.V3.Profiles.Quality
 {
@@ -182,7 +182,7 @@ namespace Sonarr.Api.V3.Profiles.Quality
                 }
             }
 
-            var allQualityIds = NzbDrone.Core.Qualities.Quality.All;
+            var allQualityIds = Workarr.Qualities.Quality.All;
 
             foreach (var quality in allQualityIds)
             {

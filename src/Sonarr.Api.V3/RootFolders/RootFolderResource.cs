@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using NzbDrone.Common.Extensions;
-using NzbDrone.Core.RootFolders;
 using Sonarr.Http.REST;
+using Workarr.Extensions;
+using Workarr.RootFolders;
 
 namespace Sonarr.Api.V3.RootFolders
 {

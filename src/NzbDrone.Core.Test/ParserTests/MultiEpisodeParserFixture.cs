@@ -1,6 +1,7 @@
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Test.Framework;
+using Workarr.Parser;
 
 namespace NzbDrone.Core.Test.ParserTests
 {
@@ -83,7 +84,7 @@ namespace NzbDrone.Core.Test.ParserTests
         // [TestCase("", "", , new [] {  })]
         public void should_parse_multiple_episodes(string postTitle, string title, int season, int[] episodes)
         {
-            var result = Parser.Parser.ParseTitle(postTitle);
+            var result = Parser.ParseTitle(postTitle);
             result.SeasonNumber.Should().Be(season);
             result.EpisodeNumbers.Should().BeEquivalentTo(episodes);
             result.SeriesTitle.Should().Be(title);

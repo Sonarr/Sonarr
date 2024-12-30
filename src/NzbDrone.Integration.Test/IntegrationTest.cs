@@ -3,12 +3,12 @@ using System.Linq;
 using System.Threading;
 using NLog;
 using NUnit.Framework;
-using NzbDrone.Common.Extensions;
-using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Datastore.Migration.Framework;
-using NzbDrone.Core.Indexers.Newznab;
 using NzbDrone.Test.Common;
 using NzbDrone.Test.Common.Datastore;
+using Workarr.Datastore;
+using Workarr.Datastore.Migrations.Framework;
+using Workarr.Extensions;
+using Workarr.Indexers.Newznab;
 
 namespace NzbDrone.Integration.Test
 {
@@ -64,7 +64,7 @@ namespace NzbDrone.Integration.Test
             indexer.ConfigContract = nameof(NewznabSettings);
             indexer.Implementation = nameof(Newznab);
             indexer.Name = "NewznabTest";
-            indexer.Protocol = Core.Indexers.DownloadProtocol.Usenet;
+            indexer.Protocol = Workarr.Indexers.DownloadProtocol.Usenet;
 
             // Change Console Log Level to Debug so we get more details.
             var config = HostConfig.Get(1);

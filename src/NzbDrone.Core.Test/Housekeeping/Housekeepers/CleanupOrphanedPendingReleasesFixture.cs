@@ -1,11 +1,11 @@
 ﻿using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Download.Pending;
-using NzbDrone.Core.Housekeeping.Housekeepers;
-using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
+using Workarr.Download.Pending;
+using Workarr.Housekeeping.Housekeepers;
+using Workarr.Parser.Model;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
 {

@@ -1,4 +1,4 @@
-using NzbDrone.Core.Extras.Metadata;
+using Workarr.Extras.Metadata;
 
 namespace Sonarr.Api.V3.Metadata
 {

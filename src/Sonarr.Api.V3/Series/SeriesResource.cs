@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NzbDrone.Common.Extensions;
-using NzbDrone.Core.Languages;
-using NzbDrone.Core.MediaCover;
-using NzbDrone.Core.Tv;
 using Sonarr.Http.REST;
+using Workarr.Extensions;
+using Workarr.MediaCover;
+using Workarr.Tv;
 
 namespace Sonarr.Api.V3.Series
 {
@@ -32,7 +31,7 @@ namespace Sonarr.Api.V3.Series
         public string Network { get; set; }
         public string AirTime { get; set; }
         public List<MediaCover> Images { get; set; }
-        public Language OriginalLanguage { get; set; }
+        public Workarr.Languages.Language OriginalLanguage { get; set; }
         public string RemotePoster { get; set; }
         public List<SeasonResource> Seasons { get; set; }
         public int Year { get; set; }
@@ -77,7 +76,7 @@ namespace Sonarr.Api.V3.Series
 
     public static class SeriesResourceMapper
     {
-        public static SeriesResource ToResource(this NzbDrone.Core.Tv.Series model, bool includeSeasonImages = false)
+        public static SeriesResource ToResource(this Workarr.Tv.Series model, bool includeSeasonImages = false)
         {
             if (model == null)
             {
@@ -144,14 +143,14 @@ namespace Sonarr.Api.V3.Series
                    };
         }
 
-        public static NzbDrone.Core.Tv.Series ToModel(this SeriesResource resource)
+        public static Workarr.Tv.Series ToModel(this SeriesResource resource)
         {
             if (resource == null)
             {
                 return null;
             }
 
-            return new NzbDrone.Core.Tv.Series
+            return new Workarr.Tv.Series
                    {
                        Id = resource.Id,
 
@@ -205,7 +204,7 @@ namespace Sonarr.Api.V3.Series
                    };
         }
 
-        public static NzbDrone.Core.Tv.Series ToModel(this SeriesResource resource, NzbDrone.Core.Tv.Series series)
+        public static Workarr.Tv.Series ToModel(this SeriesResource resource, Workarr.Tv.Series series)
         {
             var updatedSeries = resource.ToModel();
 
@@ -214,12 +213,12 @@ namespace Sonarr.Api.V3.Series
             return series;
         }
 
-        public static List<SeriesResource> ToResource(this IEnumerable<NzbDrone.Core.Tv.Series> series, bool includeSeasonImages = false)
+        public static List<SeriesResource> ToResource(this IEnumerable<Workarr.Tv.Series> series, bool includeSeasonImages = false)
         {
             return series.Select(s => ToResource(s, includeSeasonImages)).ToList();
         }
 
-        public static List<NzbDrone.Core.Tv.Series> ToModel(this IEnumerable<SeriesResource> resources)
+        public static List<Workarr.Tv.Series> ToModel(this IEnumerable<SeriesResource> resources)
         {
             return resources.Select(ToModel).ToList();
         }

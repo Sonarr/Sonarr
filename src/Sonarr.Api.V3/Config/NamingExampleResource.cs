@@ -1,4 +1,4 @@
-using NzbDrone.Core.Organizer;
+using Workarr.Organizer;
 
 namespace Sonarr.Api.V3.Config
 {

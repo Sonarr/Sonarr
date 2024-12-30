@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.IO;
-using NzbDrone.Common.Disk;
-using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Extensions;
-using NzbDrone.Core.Configuration;
 using Sonarr.Http;
+using Workarr.Configuration;
+using Workarr.Disk;
+using Workarr.EnvironmentInfo;
+using Workarr.Extensions;
 
 namespace Sonarr.Api.V3.Logs
 {

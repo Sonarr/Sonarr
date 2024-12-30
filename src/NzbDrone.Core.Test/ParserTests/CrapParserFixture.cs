@@ -4,6 +4,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
+using Workarr.Parser;
 
 namespace NzbDrone.Core.Test.ParserTests
 {
@@ -35,7 +36,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("_unpack e096aeb3c2c0483a96f5b32fc6d10ff5.mkv")]
         public void should_not_parse_crap(string title)
         {
-            Parser.Parser.ParseTitle(title).Should().BeNull();
+            Parser.ParseTitle(title).Should().BeNull();
             ExceptionVerification.IgnoreWarns();
         }
 
@@ -43,7 +44,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("ror-240618_1007-1022-")]
         public void should_parse_unknown_formats_without_error(string title)
         {
-            Parser.Parser.ParseTitle(title).Should().NotBeNull();
+            Parser.ParseTitle(title).Should().NotBeNull();
         }
 
         [Test]
@@ -61,7 +62,7 @@ namespace NzbDrone.Core.Test.ParserTests
 
                 hash = BitConverter.ToString(hashData).Replace("-", "");
 
-                if (Parser.Parser.ParseTitle(hash) == null)
+                if (Parser.ParseTitle(hash) == null)
                 {
                     success++;
                 }
@@ -89,7 +90,7 @@ namespace NzbDrone.Core.Test.ParserTests
                     hash.Append(charset[hashAlgo.Next() % charset.Length]);
                 }
 
-                if (Parser.Parser.ParseTitle(hash.ToString()) == null)
+                if (Parser.ParseTitle(hash.ToString()) == null)
                 {
                     success++;
                 }
@@ -101,19 +102,19 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("theseriestitle1618finale")]
         public void should_not_parse_file_name_without_proper_spacing(string fileName)
         {
-            Parser.Parser.ParseTitle(fileName).Should().BeNull();
+            Parser.ParseTitle(fileName).Should().BeNull();
         }
 
         [TestCase("Series Title (2018) Complete 360p HDTV AAC H.264-NEXT")]
         public void should_not_parse_invalid_release_name(string fileName)
         {
-            Parser.Parser.ParseTitle(fileName).Should().BeNull();
+            Parser.ParseTitle(fileName).Should().BeNull();
         }
 
         [TestCase("Specials/Series - Episode Title (part 1)")]
         public void should_not_parse_special_with_part_number(string fileName)
         {
-            Parser.Parser.ParseTitle(fileName).Should().BeNull();
+            Parser.ParseTitle(fileName).Should().BeNull();
         }
     }
 }

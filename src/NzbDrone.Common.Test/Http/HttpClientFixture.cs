@@ -11,17 +11,17 @@ using FluentAssertions;
 using Moq;
 using NLog;
 using NUnit.Framework;
-using NzbDrone.Common.Cache;
-using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Http;
-using NzbDrone.Common.Http.Dispatchers;
-using NzbDrone.Common.Http.Proxy;
-using NzbDrone.Common.TPL;
-using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Security;
 using NzbDrone.Test.Common;
 using NzbDrone.Test.Common.Categories;
-using HttpClient = NzbDrone.Common.Http.HttpClient;
+using Workarr.Cache;
+using Workarr.Configuration;
+using Workarr.EnvironmentInfo;
+using Workarr.Http;
+using Workarr.Http.Dispatchers;
+using Workarr.Http.Proxy;
+using Workarr.Security;
+using Workarr.TPL;
+using HttpClient = Workarr.Http.HttpClient;
 
 namespace NzbDrone.Common.Test.Http
 {

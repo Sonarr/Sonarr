@@ -2,10 +2,10 @@ using System.Collections.Generic;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators.Augmenters.Language;
-using NzbDrone.Core.MediaFiles.MediaInfo;
-using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
+using Workarr.MediaFiles.EpisodeImport.Aggregation.Aggregators.Augmenters.Language;
+using Workarr.MediaFiles.MediaInfo;
+using Workarr.Parser.Model;
 
 namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators.Augmenters.Language
 {
@@ -36,7 +36,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators.Au
             var result = Subject.AugmentLanguage(localEpisode, null);
 
             result.Languages.Count.Should().Be(1);
-            result.Languages.Should().Contain(Core.Languages.Language.English);
+            result.Languages.Should().Contain(Workarr.Languages.Language.English);
         }
 
         [Test]
@@ -53,7 +53,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators.Au
             var result = Subject.AugmentLanguage(localEpisode, null);
 
             result.Languages.Count.Should().Be(1);
-            result.Languages.Should().Contain(Core.Languages.Language.English);
+            result.Languages.Should().Contain(Workarr.Languages.Language.English);
         }
 
         [Test]
@@ -86,7 +86,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators.Au
             var result = Subject.AugmentLanguage(localEpisode, null);
 
             result.Languages.Count.Should().Be(1);
-            result.Languages.Should().Contain(Core.Languages.Language.English);
+            result.Languages.Should().Contain(Workarr.Languages.Language.English);
         }
 
         [Test]
@@ -103,8 +103,8 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators.Au
             var result = Subject.AugmentLanguage(localEpisode, null);
 
             result.Languages.Count.Should().Be(2);
-            result.Languages.Should().Contain(Core.Languages.Language.English);
-            result.Languages.Should().Contain(Core.Languages.Language.German);
+            result.Languages.Should().Contain(Workarr.Languages.Language.English);
+            result.Languages.Should().Contain(Workarr.Languages.Language.German);
         }
     }
 }

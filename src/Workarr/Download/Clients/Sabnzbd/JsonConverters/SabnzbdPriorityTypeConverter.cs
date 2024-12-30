@@ -1,0 +1,27 @@
+using Newtonsoft.Json;
+
+namespace Workarr.Download.Clients.Sabnzbd.JsonConverters
+{
+    public class SabnzbdPriorityTypeConverter : JsonConverter
+    {
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            var priorityType = (SabnzbdPriority)value;
+            writer.WriteValue(priorityType.ToString());
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            var queuePriority = reader.Value.ToString();
+
+            Enum.TryParse(queuePriority, out SabnzbdPriority output);
+
+            return output;
+        }
+
+        public override bool CanConvert(Type objectType)
+        {
+            return objectType == typeof(SabnzbdPriority);
+        }
+    }
+}

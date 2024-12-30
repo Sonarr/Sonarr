@@ -3,12 +3,12 @@ using System.Linq;
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.CustomFormats;
-using NzbDrone.Core.ImportLists;
-using NzbDrone.Core.Lifecycle;
-using NzbDrone.Core.Profiles.Qualities;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
+using Workarr.CustomFormats;
+using Workarr.ImportLists;
+using Workarr.Lifecycle;
+using Workarr.Profiles.Qualities;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.Profiles
 {

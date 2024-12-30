@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Test.Framework;
+using Workarr.Parser;
 
 namespace NzbDrone.Core.Test.ParserTests
 {
@@ -12,7 +13,7 @@ namespace NzbDrone.Core.Test.ParserTests
         {
             const string title = "Series.Title.S01E01.pilot.720p.hdtv";
 
-            var result = Parser.Parser.ParseTitle(title).SeriesTitleInfo;
+            var result = Parser.ParseTitle(title).SeriesTitleInfo;
 
             result.Year.Should().Be(0);
         }
@@ -22,7 +23,7 @@ namespace NzbDrone.Core.Test.ParserTests
         {
             const string title = "Series.Title.S01E01.pilot.720p.hdtv";
 
-            var result = Parser.Parser.ParseTitle(title).SeriesTitleInfo;
+            var result = Parser.ParseTitle(title).SeriesTitleInfo;
 
             result.Title.Should().Be(result.TitleWithoutYear);
         }
@@ -32,7 +33,7 @@ namespace NzbDrone.Core.Test.ParserTests
         {
             const string title = "Series.Title.2004.S01E01.pilot.720p.hdtv";
 
-            var result = Parser.Parser.ParseTitle(title).SeriesTitleInfo;
+            var result = Parser.ParseTitle(title).SeriesTitleInfo;
 
             result.Year.Should().Be(2004);
         }
@@ -42,7 +43,7 @@ namespace NzbDrone.Core.Test.ParserTests
         {
             const string title = "Series.Title.2004.S01E01.pilot.720p.hdtv";
 
-            var result = Parser.Parser.ParseTitle(title).SeriesTitleInfo;
+            var result = Parser.ParseTitle(title).SeriesTitleInfo;
 
             result.Title.Should().Be("Series Title 2004");
         }
@@ -52,7 +53,7 @@ namespace NzbDrone.Core.Test.ParserTests
         {
             const string title = "Series.Title.2004.S01E01.pilot.720p.hdtv";
 
-            var result = Parser.Parser.ParseTitle(title).SeriesTitleInfo;
+            var result = Parser.ParseTitle(title).SeriesTitleInfo;
 
             result.TitleWithoutYear.Should().Be("Series Title");
         }

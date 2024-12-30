@@ -1,4 +1,4 @@
-using NzbDrone.Core.Notifications;
+using Workarr.Notifications;
 
 namespace Sonarr.Api.V3.Notifications
 {

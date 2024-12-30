@@ -8,21 +8,21 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common;
-using NzbDrone.Common.Composition.Extensions;
-using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Instrumentation.Extensions;
-using NzbDrone.Common.Options;
-using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Datastore.Extensions;
-using NzbDrone.Core.Download;
-using NzbDrone.Core.Download.TrackedDownloads;
-using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Messaging.Commands;
-using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Host;
 using NzbDrone.SignalR;
 using NzbDrone.Test.Common;
+using Workarr.Common;
+using Workarr.Composition;
+using Workarr.Datastore;
+using Workarr.Datastore.Extensions;
+using Workarr.Download;
+using Workarr.Download.TrackedDownloads;
+using Workarr.EnvironmentInfo;
+using Workarr.Indexers;
+using Workarr.Instrumentation.Instrumentation.Extensions;
+using Workarr.Messaging.Commands;
+using Workarr.Messaging.Events;
+using Workarr.Options;
 using IServiceProvider = System.IServiceProvider;
 
 namespace NzbDrone.App.Test
@@ -39,7 +39,7 @@ namespace NzbDrone.App.Test
 
             var container = new Container(rules => rules.WithNzbDroneRules())
                 .AutoAddServices(Bootstrap.ASSEMBLIES)
-                .AddNzbDroneLogger()
+                .AddWorkarrLogger()
                 .AddDummyDatabase()
                 .AddStartupContext(args);
 

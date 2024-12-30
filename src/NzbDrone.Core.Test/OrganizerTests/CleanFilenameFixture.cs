@@ -1,7 +1,7 @@
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Test.Framework;
+using Workarr.Organizer;
 
 namespace NzbDrone.Core.Test.OrganizerTests
 {

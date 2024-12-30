@@ -2,9 +2,9 @@
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.MetadataSource;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
+using Workarr.MetadataSource;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.MetadataSource
 {

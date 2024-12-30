@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using FizzWare.NBuilder;
-using NzbDrone.Core.Datastore;
+using Workarr.Datastore;
 
 namespace NzbDrone.Core.Test.Framework
 {

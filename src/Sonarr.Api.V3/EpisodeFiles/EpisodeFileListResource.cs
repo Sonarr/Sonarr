@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using NzbDrone.Core.Languages;
-using NzbDrone.Core.Qualities;
+using Workarr.Languages;
+using Workarr.Qualities;
 
 namespace Sonarr.Api.V3.EpisodeFiles
 {

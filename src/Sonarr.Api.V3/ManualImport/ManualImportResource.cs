@@ -1,16 +1,15 @@
 using System.Collections.Generic;
 using System.Linq;
-using NzbDrone.Common.Crypto;
-using NzbDrone.Core.DecisionEngine;
-using NzbDrone.Core.Languages;
-using NzbDrone.Core.MediaFiles.EpisodeImport;
-using NzbDrone.Core.MediaFiles.EpisodeImport.Manual;
-using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Qualities;
 using Sonarr.Api.V3.CustomFormats;
 using Sonarr.Api.V3.Episodes;
 using Sonarr.Api.V3.Series;
 using Sonarr.Http.REST;
+using Workarr.Crypto;
+using Workarr.DecisionEngine;
+using Workarr.MediaFiles.EpisodeImport;
+using Workarr.MediaFiles.EpisodeImport.Manual;
+using Workarr.Parser.Model;
+using Workarr.Qualities;
 
 namespace Sonarr.Api.V3.ManualImport
 {
@@ -27,7 +26,7 @@ namespace Sonarr.Api.V3.ManualImport
         public int? EpisodeFileId { get; set; }
         public string ReleaseGroup { get; set; }
         public QualityModel Quality { get; set; }
-        public List<Language> Languages { get; set; }
+        public List<Workarr.Languages.Language> Languages { get; set; }
         public int QualityWeight { get; set; }
         public string DownloadId { get; set; }
         public List<CustomFormatResource> CustomFormats { get; set; }

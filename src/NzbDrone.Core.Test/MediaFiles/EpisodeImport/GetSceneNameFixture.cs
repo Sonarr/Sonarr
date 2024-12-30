@@ -4,14 +4,14 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.MediaFiles;
-using NzbDrone.Core.MediaFiles.EpisodeImport;
-using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Profiles.Qualities;
-using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
+using Workarr.MediaFiles;
+using Workarr.MediaFiles.EpisodeImport;
+using Workarr.Parser.Model;
+using Workarr.Profiles.Qualities;
+using Workarr.Qualities;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
 {

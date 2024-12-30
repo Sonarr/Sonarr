@@ -3,13 +3,13 @@ using FluentAssertions;
 using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common.Disk;
-using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Extensions;
-using NzbDrone.Common.Options;
-using NzbDrone.Core.Authentication;
-using NzbDrone.Core.Configuration;
 using NzbDrone.Test.Common;
+using Workarr.Authentication;
+using Workarr.Configuration;
+using Workarr.Disk;
+using Workarr.EnvironmentInfo;
+using Workarr.Extensions;
+using Workarr.Options;
 
 namespace NzbDrone.Common.Test
 {

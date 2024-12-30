@@ -2,12 +2,12 @@ using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using NzbDrone.Common.Extensions;
-using NzbDrone.Core.Authentication;
-using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Configuration.Events;
-using NzbDrone.Core.Messaging.Events;
 using Sonarr.Http.Extensions;
+using Workarr.Authentication;
+using Workarr.Configuration;
+using Workarr.Configuration.Events;
+using Workarr.Extensions;
+using Workarr.Messaging.Events;
 
 namespace NzbDrone.Http.Authentication
 {

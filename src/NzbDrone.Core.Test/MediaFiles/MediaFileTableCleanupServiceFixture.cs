@@ -4,11 +4,11 @@ using System.Linq;
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common.Disk;
-using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
+using Workarr.Disk;
+using Workarr.MediaFiles;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.MediaFiles
 {

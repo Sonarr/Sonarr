@@ -3,12 +3,12 @@ using System.Linq;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common.Disk;
-using NzbDrone.Core.DiskSpace;
-using NzbDrone.Core.RootFolders;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
+using Workarr.Disk;
+using Workarr.DiskSpace;
+using Workarr.RootFolders;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.DiskSpace
 {

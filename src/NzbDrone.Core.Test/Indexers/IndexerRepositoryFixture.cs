@@ -1,8 +1,8 @@
 ﻿using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Test.Framework;
+using Workarr.Indexers;
 
 namespace NzbDrone.Core.Test.Indexers
 {

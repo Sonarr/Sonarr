@@ -3,18 +3,18 @@ using System.IO;
 using System.Net.Sockets;
 using Microsoft.AspNetCore.Connections;
 using NLog;
-using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Exceptions;
-using NzbDrone.Common.Instrumentation;
 using NzbDrone.Host;
 using NzbDrone.Host.AccessControl;
 using NzbDrone.RuntimePatches;
+using Workarr.EnvironmentInfo;
+using Workarr.Exceptions;
+using Workarr.Instrumentation;
 
 namespace NzbDrone.Console
 {
     public static class ConsoleApp
     {
-        private static readonly Logger Logger = NzbDroneLogger.GetLogger(typeof(ConsoleApp));
+        private static readonly Logger Logger = WorkarrLogger.GetLogger(typeof(ConsoleApp));
 
         private enum ExitCodes
         {
@@ -34,7 +34,7 @@ namespace NzbDrone.Console
                 startupArgs = new StartupContext(args);
                 try
                 {
-                    NzbDroneLogger.Register(startupArgs, false, true);
+                    WorkarrLogger.Register(startupArgs, false, true);
                 }
                 catch (Exception ex)
                 {
@@ -44,7 +44,7 @@ namespace NzbDrone.Console
 
                 Bootstrap.Start(args);
             }
-            catch (SonarrStartupException ex)
+            catch (WorkarrStartupException ex)
             {
                 System.Console.WriteLine("");
                 System.Console.WriteLine("");

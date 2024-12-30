@@ -1,0 +1,59 @@
+using Workarr.Http;
+using Workarr.IndexerSearch.Definitions;
+
+namespace Workarr.Indexers.Torrentleech
+{
+    public class TorrentleechRequestGenerator : IIndexerRequestGenerator
+    {
+        public TorrentleechSettings Settings { get; set; }
+
+        public virtual IndexerPageableRequestChain GetRecentRequests()
+        {
+            var pageableRequests = new IndexerPageableRequestChain();
+
+            pageableRequests.Add(GetRssRequests(null));
+
+            return pageableRequests;
+        }
+
+        public virtual IndexerPageableRequestChain GetSearchRequests(SingleEpisodeSearchCriteria searchCriteria)
+        {
+            return new IndexerPageableRequestChain();
+        }
+
+        public virtual IndexerPageableRequestChain GetSearchRequests(SeasonSearchCriteria searchCriteria)
+        {
+            return new IndexerPageableRequestChain();
+        }
+
+        public virtual IndexerPageableRequestChain GetSearchRequests(DailyEpisodeSearchCriteria searchCriteria)
+        {
+            return new IndexerPageableRequestChain();
+        }
+
+        public virtual IndexerPageableRequestChain GetSearchRequests(DailySeasonSearchCriteria searchCriteria)
+        {
+            return new IndexerPageableRequestChain();
+        }
+
+        public virtual IndexerPageableRequestChain GetSearchRequests(AnimeEpisodeSearchCriteria searchCriteria)
+        {
+            return new IndexerPageableRequestChain();
+        }
+
+        public virtual IndexerPageableRequestChain GetSearchRequests(AnimeSeasonSearchCriteria searchCriteria)
+        {
+            return new IndexerPageableRequestChain();
+        }
+
+        public virtual IndexerPageableRequestChain GetSearchRequests(SpecialEpisodeSearchCriteria searchCriteria)
+        {
+            return new IndexerPageableRequestChain();
+        }
+
+        private IEnumerable<IndexerRequest> GetRssRequests(string searchParameters)
+        {
+            yield return new IndexerRequest(string.Format("{0}/{1}{2}", Settings.BaseUrl.Trim().TrimEnd('/'), Settings.ApiKey, searchParameters), HttpAccept.Rss);
+        }
+    }
+}

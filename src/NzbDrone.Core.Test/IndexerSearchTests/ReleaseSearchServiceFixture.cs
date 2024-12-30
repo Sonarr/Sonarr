@@ -7,13 +7,13 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.DataAugmentation.Scene;
-using NzbDrone.Core.DecisionEngine;
-using NzbDrone.Core.Indexers;
-using NzbDrone.Core.IndexerSearch;
-using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
+using Workarr.DataAugmentation.Scene;
+using Workarr.DecisionEngine;
+using Workarr.Indexers;
+using Workarr.IndexerSearch;
+using Workarr.IndexerSearch.Definitions;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.IndexerSearchTests
 {
@@ -35,7 +35,7 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
                   .Returns(new List<IIndexer> { _mockIndexer.Object });
 
             Mocker.GetMock<IMakeDownloadDecision>()
-                .Setup(s => s.GetSearchDecision(It.IsAny<List<Parser.Model.ReleaseInfo>>(), It.IsAny<SearchCriteriaBase>()))
+                .Setup(s => s.GetSearchDecision(It.IsAny<List<Workarr.Parser.Model.ReleaseInfo>>(), It.IsAny<SearchCriteriaBase>()))
                 .Returns(new List<DownloadDecision>());
 
             _xemSeries = Builder<Series>.CreateNew()
@@ -111,31 +111,31 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
 
             _mockIndexer.Setup(v => v.Fetch(It.IsAny<SingleEpisodeSearchCriteria>()))
                 .Callback<SingleEpisodeSearchCriteria>(s => result.Add(s))
-                .Returns(Task.FromResult<IList<Parser.Model.ReleaseInfo>>(new List<Parser.Model.ReleaseInfo>()));
+                .Returns(Task.FromResult<IList<Workarr.Parser.Model.ReleaseInfo>>(new List<Workarr.Parser.Model.ReleaseInfo>()));
 
             _mockIndexer.Setup(v => v.Fetch(It.IsAny<SeasonSearchCriteria>()))
                 .Callback<SeasonSearchCriteria>(s => result.Add(s))
-                .Returns(Task.FromResult<IList<Parser.Model.ReleaseInfo>>(new List<Parser.Model.ReleaseInfo>()));
+                .Returns(Task.FromResult<IList<Workarr.Parser.Model.ReleaseInfo>>(new List<Workarr.Parser.Model.ReleaseInfo>()));
 
             _mockIndexer.Setup(v => v.Fetch(It.IsAny<DailyEpisodeSearchCriteria>()))
                 .Callback<DailyEpisodeSearchCriteria>(s => result.Add(s))
-                .Returns(Task.FromResult<IList<Parser.Model.ReleaseInfo>>(new List<Parser.Model.ReleaseInfo>()));
+                .Returns(Task.FromResult<IList<Workarr.Parser.Model.ReleaseInfo>>(new List<Workarr.Parser.Model.ReleaseInfo>()));
 
             _mockIndexer.Setup(v => v.Fetch(It.IsAny<DailySeasonSearchCriteria>()))
                 .Callback<DailySeasonSearchCriteria>(s => result.Add(s))
-                .Returns(Task.FromResult<IList<Parser.Model.ReleaseInfo>>(new List<Parser.Model.ReleaseInfo>()));
+                .Returns(Task.FromResult<IList<Workarr.Parser.Model.ReleaseInfo>>(new List<Workarr.Parser.Model.ReleaseInfo>()));
 
             _mockIndexer.Setup(v => v.Fetch(It.IsAny<AnimeEpisodeSearchCriteria>()))
                 .Callback<AnimeEpisodeSearchCriteria>(s => result.Add(s))
-                .Returns(Task.FromResult<IList<Parser.Model.ReleaseInfo>>(new List<Parser.Model.ReleaseInfo>()));
+                .Returns(Task.FromResult<IList<Workarr.Parser.Model.ReleaseInfo>>(new List<Workarr.Parser.Model.ReleaseInfo>()));
 
             _mockIndexer.Setup(v => v.Fetch(It.IsAny<AnimeSeasonSearchCriteria>()))
                 .Callback<AnimeSeasonSearchCriteria>(s => result.Add(s))
-                .Returns(Task.FromResult<IList<Parser.Model.ReleaseInfo>>(new List<Parser.Model.ReleaseInfo>()));
+                .Returns(Task.FromResult<IList<Workarr.Parser.Model.ReleaseInfo>>(new List<Workarr.Parser.Model.ReleaseInfo>()));
 
             _mockIndexer.Setup(v => v.Fetch(It.IsAny<SpecialEpisodeSearchCriteria>()))
                 .Callback<SpecialEpisodeSearchCriteria>(s => result.Add(s))
-                .Returns(Task.FromResult<IList<Parser.Model.ReleaseInfo>>(new List<Parser.Model.ReleaseInfo>()));
+                .Returns(Task.FromResult<IList<Workarr.Parser.Model.ReleaseInfo>>(new List<Workarr.Parser.Model.ReleaseInfo>()));
 
             return result;
         }

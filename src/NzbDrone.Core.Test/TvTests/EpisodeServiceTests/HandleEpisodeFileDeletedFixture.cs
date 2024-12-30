@@ -3,13 +3,13 @@ using System.Linq;
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common.Extensions;
-using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Datastore;
-using NzbDrone.Core.MediaFiles;
-using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
+using Workarr.Configuration;
+using Workarr.Datastore;
+using Workarr.Extensions;
+using Workarr.MediaFiles;
+using Workarr.MediaFiles.Events;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.TvTests.EpisodeServiceTests
 {

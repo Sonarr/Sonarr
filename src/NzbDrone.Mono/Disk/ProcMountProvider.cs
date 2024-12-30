@@ -4,8 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using NLog;
-using NzbDrone.Common.Disk;
-using NzbDrone.Common.Extensions;
+using Workarr.Disk;
+using Workarr.Extensions;
 
 namespace NzbDrone.Mono.Disk
 {

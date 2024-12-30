@@ -15,7 +15,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series.Title.S01E00.Episode.Title.720p.HDTV.x264-Sonarr", "episode title")]
         public void should_normalize_episode_title(string input, string expected)
         {
-            var result = Parser.Parser.NormalizeEpisodeTitle(input);
+            var result = Workarr.Parser.Parser.NormalizeEpisodeTitle(input);
 
             result.Should().Be(expected);
         }

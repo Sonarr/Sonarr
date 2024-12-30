@@ -4,13 +4,14 @@ using System.IO;
 using System.Linq;
 using DryIoc;
 using NLog;
-using NzbDrone.Common.Composition.Extensions;
-using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Extensions;
-using NzbDrone.Common.Instrumentation;
-using NzbDrone.Common.Instrumentation.Extensions;
-using NzbDrone.Common.Processes;
 using NzbDrone.Update.UpdateEngine;
+using Workarr.Composition;
+using Workarr.EnvironmentInfo;
+using Workarr.Extensions;
+using Workarr.Instrumentation;
+using Workarr.Instrumentation.Instrumentation;
+using Workarr.Instrumentation.Instrumentation.Extensions;
+using Workarr.Processes;
 
 namespace NzbDrone.Update
 {
@@ -19,7 +20,7 @@ namespace NzbDrone.Update
         private readonly IInstallUpdateService _installUpdateService;
         private readonly IProcessProvider _processProvider;
 
-        private static readonly Logger Logger = NzbDroneLogger.GetLogger(typeof(UpdateApp));
+        private static readonly Logger Logger = WorkarrLogger.GetLogger(typeof(UpdateApp));
 
         public UpdateApp(IInstallUpdateService installUpdateService, IProcessProvider processProvider)
         {
@@ -32,13 +33,13 @@ namespace NzbDrone.Update
             try
             {
                 var startupArgument = new StartupContext(args);
-                NzbDroneLogger.Register(startupArgument, true, true);
+                WorkarrLogger.Register(startupArgument, true, true);
 
                 Logger.Info("Starting Sonarr Update Client");
 
                 var container = new Container(rules => rules.WithNzbDroneRules())
                     .AutoAddServices(new List<string> { "Sonarr.Update" })
-                    .AddNzbDroneLogger()
+                    .AddWorkarrLogger()
                     .AddStartupContext(startupArgument);
 
                 container.Resolve<InitializeLogger>().Initialize();

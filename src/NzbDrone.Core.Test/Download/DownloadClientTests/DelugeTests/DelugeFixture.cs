@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common.Http;
-using NzbDrone.Core.Download;
-using NzbDrone.Core.Download.Clients.Deluge;
-using NzbDrone.Core.MediaFiles.TorrentInfo;
 using NzbDrone.Test.Common;
+using Workarr.Download;
+using Workarr.Download.Clients.Deluge;
+using Workarr.Http;
+using Workarr.MediaFiles.TorrentInfo;
 
 namespace NzbDrone.Core.Test.Download.DownloadClientTests.DelugeTests
 {

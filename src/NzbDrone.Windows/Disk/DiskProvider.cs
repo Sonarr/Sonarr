@@ -5,15 +5,15 @@ using System.Runtime.InteropServices;
 using System.Security.AccessControl;
 using System.Security.Principal;
 using NLog;
-using NzbDrone.Common.Disk;
-using NzbDrone.Common.EnsureThat;
-using NzbDrone.Common.Instrumentation;
+using Workarr.Disk;
+using Workarr.EnsureThat;
+using Workarr.Instrumentation;
 
 namespace NzbDrone.Windows.Disk
 {
     public class DiskProvider : DiskProviderBase
     {
-        private static readonly Logger Logger = NzbDroneLogger.GetLogger(typeof(DiskProvider));
+        private static readonly Logger Logger = WorkarrLogger.GetLogger(typeof(DiskProvider));
 
         [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
         [return: MarshalAs(UnmanagedType.Bool)]

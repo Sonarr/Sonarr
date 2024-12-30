@@ -5,14 +5,14 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common.Disk;
-using NzbDrone.Common.Http;
-using NzbDrone.Core.Download;
-using NzbDrone.Core.Download.Clients.DownloadStation;
-using NzbDrone.Core.Download.Clients.DownloadStation.Proxies;
-using NzbDrone.Core.MediaFiles.TorrentInfo;
-using NzbDrone.Core.Parser.Model;
 using NzbDrone.Test.Common;
+using Workarr.Disk;
+using Workarr.Download;
+using Workarr.Download.Clients.DownloadStation;
+using Workarr.Download.Clients.DownloadStation.Proxies;
+using Workarr.Http;
+using Workarr.MediaFiles.TorrentInfo;
+using Workarr.Parser.Model;
 
 namespace NzbDrone.Core.Test.Download.DownloadClientTests.DownloadStationTests
 {

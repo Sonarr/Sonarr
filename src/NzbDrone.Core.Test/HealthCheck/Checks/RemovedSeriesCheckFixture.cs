@@ -2,10 +2,10 @@ using System.Collections.Generic;
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.HealthCheck.Checks;
-using NzbDrone.Core.Localization;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
+using Workarr.HealthCheck.Checks;
+using Workarr.Localization;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.HealthCheck.Checks
 {

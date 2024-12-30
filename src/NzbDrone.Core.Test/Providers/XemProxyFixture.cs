@@ -1,8 +1,8 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.DataAugmentation.Xem;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common.Categories;
+using Workarr.DataAugmentation.Xem;
 
 namespace NzbDrone.Core.Test.Providers
 {

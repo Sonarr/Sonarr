@@ -4,14 +4,14 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common.Disk;
-using NzbDrone.Core.Configuration;
-using NzbDrone.Core.MediaFiles;
-using NzbDrone.Core.MediaFiles.Events;
-using NzbDrone.Core.MediaFiles.MediaInfo;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
+using Workarr.Configuration;
+using Workarr.Disk;
+using Workarr.MediaFiles;
+using Workarr.MediaFiles.Events;
+using Workarr.MediaFiles.MediaInfo;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.MediaFiles.MediaInfo
 {

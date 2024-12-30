@@ -1,7 +1,7 @@
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Parser;
 using NzbDrone.Core.Test.Framework;
+using Workarr.Parser;
 
 namespace NzbDrone.Core.Test.ParserTests
 {

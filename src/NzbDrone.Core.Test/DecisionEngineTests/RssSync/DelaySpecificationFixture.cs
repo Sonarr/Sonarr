@@ -5,21 +5,21 @@ using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.CustomFormats;
-using NzbDrone.Core.DecisionEngine;
-using NzbDrone.Core.DecisionEngine.Specifications;
-using NzbDrone.Core.DecisionEngine.Specifications.RssSync;
-using NzbDrone.Core.Download.Pending;
-using NzbDrone.Core.Indexers;
-using NzbDrone.Core.IndexerSearch.Definitions;
-using NzbDrone.Core.Languages;
-using NzbDrone.Core.MediaFiles;
-using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Profiles.Delay;
-using NzbDrone.Core.Profiles.Qualities;
-using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
+using Workarr.CustomFormats;
+using Workarr.DecisionEngine;
+using Workarr.DecisionEngine.Specifications;
+using Workarr.DecisionEngine.Specifications.RssSync;
+using Workarr.Download.Pending;
+using Workarr.Indexers;
+using Workarr.IndexerSearch.Definitions;
+using Workarr.Languages;
+using Workarr.MediaFiles;
+using Workarr.Parser.Model;
+using Workarr.Profiles.Delay;
+using Workarr.Profiles.Qualities;
+using Workarr.Qualities;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
 {

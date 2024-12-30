@@ -1,8 +1,8 @@
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Languages;
-using NzbDrone.Core.Parser;
 using NzbDrone.Core.Test.Framework;
+using Workarr.Languages;
+using Workarr.Parser;
 
 namespace NzbDrone.Core.Test.ParserTests
 {
@@ -405,7 +405,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series.Title.2023.S01E01.German.DL.EAC3.1080p.DSNP.WEB.H264-RlsGrp")]
         public void should_add_original_language_to_german_release_with_dl_tag(string postTitle)
         {
-            var result = Parser.Parser.ParseTitle(postTitle);
+            var result = Parser.ParseTitle(postTitle);
             result.Languages.Count.Should().Be(2);
             result.Languages.Should().Contain(Language.German);
             result.Languages.Should().Contain(Language.Original);
@@ -417,7 +417,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series.Title.2023.S01E01.GERMAN.1080P.WEBDL.H264-RlsGrp")]
         public void should_not_add_original_language_to_german_release_when_title_contains_web_dl(string postTitle)
         {
-            var result = Parser.Parser.ParseTitle(postTitle);
+            var result = Parser.ParseTitle(postTitle);
             result.Languages.Count.Should().Be(1);
             result.Languages.Should().Contain(Language.German);
         }
@@ -425,7 +425,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series.Title.2023.S01.German.ML.EAC3.1080p.NF.WEB.H264-RlsGrp")]
         public void should_add_original_language_and_english_to_german_release_with_ml_tag(string postTitle)
         {
-            var result = Parser.Parser.ParseTitle(postTitle);
+            var result = Parser.ParseTitle(postTitle);
             result.Languages.Count.Should().Be(3);
             result.Languages.Should().Contain(Language.German);
             result.Languages.Should().Contain(Language.Original);
@@ -437,7 +437,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series / S1E1-10 of 10 [2023, HEVC, HDR10, Dolby Vision, WEB-DL 2160p] [Hybrid] 3 XX + Original")]
         public void should_parse_original_title_from_release_name(string postTitle)
         {
-            var result = Parser.Parser.ParseTitle(postTitle);
+            var result = Parser.ParseTitle(postTitle);
             result.Languages.Count.Should().Be(1);
             result.Languages.Should().Contain(Language.Original);
         }
@@ -447,7 +447,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Серія (Сезон 1-3) / The Series (Seasons 1-3) (2019-2022) BDRip-AVC 4xUkr/Eng | Sub 2xUkr/Eng")]
         public void should_parse_english_and_ukranian(string postTitle)
         {
-            var result = Parser.Parser.ParseTitle(postTitle);
+            var result = Parser.ParseTitle(postTitle);
             result.Languages.Count.Should().Be(2);
             result.Languages.Should().Contain(Language.Ukrainian);
             result.Languages.Should().Contain(Language.English);
@@ -456,7 +456,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Серія (Сезон 1, серії 01-26 із 51) / Seri (Season 1, episodes 01-26) (2018) WEBRip-AVC 2Ukr/Tur")]
         public void should_parse_turkish_and_ukranian(string postTitle)
         {
-            var result = Parser.Parser.ParseTitle(postTitle);
+            var result = Parser.ParseTitle(postTitle);
             result.Languages.Count.Should().Be(2);
             result.Languages.Should().Contain(Language.Ukrainian);
             result.Languages.Should().Contain(Language.Turkish);

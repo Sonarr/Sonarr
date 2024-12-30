@@ -2,10 +2,10 @@ using System.Linq;
 using FluentAssertions;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
-using NzbDrone.Common.Serializer;
-using NzbDrone.Core.Datastore.Migration;
-using NzbDrone.Core.Download.Clients.RTorrent;
 using NzbDrone.Core.Test.Framework;
+using Workarr.Datastore.Migrations;
+using Workarr.Download.Clients.rTorrent;
+using Workarr.Serializer.Newtonsoft.Json;
 
 namespace NzbDrone.Core.Test.Datastore.Migration
 {

@@ -5,18 +5,18 @@ using FluentAssertions;
 using Moq;
 using NLog;
 using NUnit.Framework;
-using NzbDrone.Common.Disk;
-using NzbDrone.Common.Http;
-using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Download;
-using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Localization;
-using NzbDrone.Core.Parser;
-using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.RemotePathMappings;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Test.IndexerTests;
-using NzbDrone.Core.Tv;
+using Workarr.Configuration;
+using Workarr.Disk;
+using Workarr.Download;
+using Workarr.Http;
+using Workarr.Indexers;
+using Workarr.Localization;
+using Workarr.Parser;
+using Workarr.Parser.Model;
+using Workarr.RemotePathMappings;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.Download.DownloadClientTests
 {

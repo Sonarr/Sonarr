@@ -1,7 +1,7 @@
 ﻿using FluentValidation.TestHelper;
 using NUnit.Framework;
-using NzbDrone.Core.Qualities;
 using Sonarr.Api.V3.Qualities;
+using Workarr.Qualities;
 
 namespace NzbDrone.Api.Test.v3.Qualities;
 

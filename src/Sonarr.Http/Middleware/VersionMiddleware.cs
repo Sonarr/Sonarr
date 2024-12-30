@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using NzbDrone.Common.EnvironmentInfo;
 using Sonarr.Http.Extensions;
+using Workarr.EnvironmentInfo;
 
 namespace Sonarr.Http.Middleware
 {

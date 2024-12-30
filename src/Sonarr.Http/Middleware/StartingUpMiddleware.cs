@@ -1,9 +1,9 @@
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Serializer;
 using Sonarr.Http.Extensions;
+using Workarr.EnvironmentInfo;
+using Workarr.Serializer.System.Text.Json;
 
 namespace Sonarr.Http.Middleware
 {

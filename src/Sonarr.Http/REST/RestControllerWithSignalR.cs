@@ -1,9 +1,9 @@
 using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
-using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Datastore.Events;
-using NzbDrone.Core.Messaging.Events;
 using NzbDrone.SignalR;
+using Workarr.Datastore;
+using Workarr.Datastore.Events;
+using Workarr.Messaging.Events;
 
 namespace Sonarr.Http.REST
 {

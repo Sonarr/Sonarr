@@ -3,13 +3,14 @@ using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.CustomFormats;
-using NzbDrone.Core.Datastore;
-using NzbDrone.Core.Housekeeping.Housekeepers;
-using NzbDrone.Core.Messaging.Events;
-using NzbDrone.Core.Profiles;
-using NzbDrone.Core.Profiles.Qualities;
 using NzbDrone.Core.Test.Framework;
+using Workarr.CustomFormats;
+using Workarr.CustomFormats.Specifications;
+using Workarr.Datastore;
+using Workarr.Housekeeping.Housekeepers;
+using Workarr.Messaging.Events;
+using Workarr.Profiles;
+using Workarr.Profiles.Qualities;
 
 namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
 {

@@ -1,9 +1,9 @@
 using System.Data.SQLite;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Datastore.Converters;
-using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
+using Workarr.Datastore.Converters;
+using Workarr.Qualities;
 
 namespace NzbDrone.Core.Test.Datastore.Converters
 {

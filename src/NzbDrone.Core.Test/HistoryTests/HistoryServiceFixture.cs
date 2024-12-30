@@ -4,17 +4,17 @@ using System.Linq;
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Core.Download;
-using NzbDrone.Core.History;
-using NzbDrone.Core.Indexers;
-using NzbDrone.Core.MediaFiles;
-using NzbDrone.Core.MediaFiles.Events;
-using NzbDrone.Core.Parser.Model;
-using NzbDrone.Core.Profiles.Qualities;
-using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Test.Qualities;
-using NzbDrone.Core.Tv;
+using Workarr.Download;
+using Workarr.History;
+using Workarr.Indexers;
+using Workarr.MediaFiles;
+using Workarr.MediaFiles.Events;
+using Workarr.Parser.Model;
+using Workarr.Profiles.Qualities;
+using Workarr.Qualities;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.HistoryTests
 {

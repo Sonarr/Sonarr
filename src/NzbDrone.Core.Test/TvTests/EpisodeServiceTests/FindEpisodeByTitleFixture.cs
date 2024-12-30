@@ -5,7 +5,7 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.TvTests.EpisodeServiceTests
 {

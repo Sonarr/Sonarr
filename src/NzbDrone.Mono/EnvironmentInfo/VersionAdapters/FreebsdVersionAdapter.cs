@@ -1,6 +1,6 @@
 using System.Linq;
-using NzbDrone.Common.EnvironmentInfo;
-using NzbDrone.Common.Processes;
+using Workarr.EnvironmentInfo;
+using Workarr.Processes;
 
 namespace NzbDrone.Mono.EnvironmentInfo.VersionAdapters
 {

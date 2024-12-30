@@ -1,4 +1,4 @@
-using NzbDrone.Common.EnvironmentInfo;
+using Workarr.EnvironmentInfo;
 
 namespace NzbDrone.Host.AccessControl
 {

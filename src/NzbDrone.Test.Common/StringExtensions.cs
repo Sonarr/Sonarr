@@ -1,5 +1,5 @@
 ﻿using System.IO;
-using NzbDrone.Common.EnvironmentInfo;
+using Workarr.EnvironmentInfo;
 
 namespace NzbDrone.Test.Common
 {

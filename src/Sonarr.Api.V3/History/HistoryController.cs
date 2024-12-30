@@ -2,17 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using NzbDrone.Common.Extensions;
-using NzbDrone.Core.CustomFormats;
-using NzbDrone.Core.Datastore;
-using NzbDrone.Core.DecisionEngine.Specifications;
-using NzbDrone.Core.Download;
-using NzbDrone.Core.History;
-using NzbDrone.Core.Tv;
 using Sonarr.Api.V3.Episodes;
 using Sonarr.Api.V3.Series;
 using Sonarr.Http;
 using Sonarr.Http.Extensions;
+using Workarr.CustomFormats;
+using Workarr.Datastore;
+using Workarr.DecisionEngine.Specifications;
+using Workarr.Download;
+using Workarr.Extensions;
+using Workarr.History;
+using Workarr.Tv;
 
 namespace Sonarr.Api.V3.History
 {

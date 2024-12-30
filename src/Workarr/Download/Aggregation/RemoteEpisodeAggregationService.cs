@@ -1,0 +1,46 @@
+using NLog;
+using Workarr.Download.Aggregation.Aggregators;
+using Workarr.Parser.Model;
+
+namespace Workarr.Download.Aggregation
+{
+    public interface IRemoteEpisodeAggregationService
+    {
+        RemoteEpisode Augment(RemoteEpisode remoteEpisode);
+    }
+
+    public class RemoteEpisodeAggregationService : IRemoteEpisodeAggregationService
+    {
+        private readonly IEnumerable<IAggregateRemoteEpisode> _augmenters;
+        private readonly Logger _logger;
+
+        public RemoteEpisodeAggregationService(IEnumerable<IAggregateRemoteEpisode> augmenters,
+                                  Logger logger)
+        {
+            _augmenters = augmenters;
+            _logger = logger;
+        }
+
+        public RemoteEpisode Augment(RemoteEpisode remoteEpisode)
+        {
+            if (remoteEpisode == null)
+            {
+                return null;
+            }
+
+            foreach (var augmenter in _augmenters)
+            {
+                try
+                {
+                    augmenter.Aggregate(remoteEpisode);
+                }
+                catch (Exception ex)
+                {
+                    _logger.Warn(ex, ex.Message);
+                }
+            }
+
+            return remoteEpisode;
+        }
+    }
+}

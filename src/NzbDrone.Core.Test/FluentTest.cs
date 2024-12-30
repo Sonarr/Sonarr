@@ -5,6 +5,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
+using Workarr.Common;
 
 namespace NzbDrone.Core.Test
 {

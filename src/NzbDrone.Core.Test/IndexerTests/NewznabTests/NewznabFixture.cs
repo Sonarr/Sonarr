@@ -7,13 +7,13 @@ using DryIoc.ImTools;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common.Http;
-using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Indexers.Newznab;
-using NzbDrone.Core.Languages;
-using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
+using Workarr.Http;
+using Workarr.Indexers;
+using Workarr.Indexers.Newznab;
+using Workarr.Languages;
+using Workarr.Parser.Model;
 
 namespace NzbDrone.Core.Test.IndexerTests.NewznabTests
 {

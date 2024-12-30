@@ -1,5 +1,5 @@
 using FluentValidation.Validators;
-using NzbDrone.Core.ImportLists.Exclusions;
+using Workarr.ImportLists.Exclusions;
 
 namespace Sonarr.Api.V3.ImportLists
 {

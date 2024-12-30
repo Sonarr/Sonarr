@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using NzbDrone.Core.Languages;
 using Sonarr.Http;
 using Sonarr.Http.REST;
 
@@ -20,12 +19,12 @@ namespace Sonarr.Api.V3.Profiles.Languages
                 Id = 1,
                 Name = "Deprecated",
                 UpgradeAllowed = true,
-                Cutoff = Language.English,
+                Cutoff = Workarr.Languages.Language.English,
                 Languages = new List<LanguageProfileItemResource>
                 {
                     new LanguageProfileItemResource
                     {
-                        Language = Language.English,
+                        Language = Workarr.Languages.Language.English,
                         Allowed = true
                     }
                 }

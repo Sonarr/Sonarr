@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common.Disk;
-using NzbDrone.Common.Http;
-using NzbDrone.Core.Download;
-using NzbDrone.Core.Download.Clients;
-using NzbDrone.Core.Download.Clients.QBittorrent;
-using NzbDrone.Core.Exceptions;
-using NzbDrone.Core.MediaFiles.TorrentInfo;
 using NzbDrone.Test.Common;
+using Workarr.Disk;
+using Workarr.Download;
+using Workarr.Download.Clients;
+using Workarr.Download.Clients.QBittorrent;
+using Workarr.Exceptions;
+using Workarr.Http;
+using Workarr.MediaFiles.TorrentInfo;
 
 namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
 {

@@ -1,8 +1,9 @@
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Test.Framework;
+using Workarr.Indexers;
+using Workarr.Parser;
 
 namespace NzbDrone.Core.Test.ParserTests
 {
@@ -29,7 +30,7 @@ namespace NzbDrone.Core.Test.ParserTests
         {
             postTitle = XmlCleaner.ReplaceUnicode(postTitle);
 
-            var result = Parser.Parser.ParseTitle(postTitle);
+            var result = Parser.ParseTitle(postTitle);
             result.Should().NotBeNull();
             result.ReleaseGroup.Should().Be(subgroup);
             result.AbsoluteEpisodeNumbers.Single().Should().Be(absoluteEpisodeNumber);
@@ -59,7 +60,7 @@ namespace NzbDrone.Core.Test.ParserTests
         {
             postTitle = XmlCleaner.ReplaceUnicode(postTitle);
 
-            var result = Parser.Parser.ParseTitle(postTitle);
+            var result = Parser.ParseTitle(postTitle);
             result.Should().NotBeNull();
             result.ReleaseGroup.Should().Be(subgroup);
             result.AbsoluteEpisodeNumbers.Single().Should().Be(absoluteEpisodeNumber);
@@ -80,7 +81,7 @@ namespace NzbDrone.Core.Test.ParserTests
         {
             postTitle = XmlCleaner.ReplaceUnicode(postTitle);
 
-            var result = Parser.Parser.ParseTitle(postTitle);
+            var result = Parser.ParseTitle(postTitle);
             result.Should().NotBeNull();
             result.ReleaseGroup.Should().Be(subgroup);
             result.AbsoluteEpisodeNumbers.Single().Should().Be(absoluteEpisodeNumber);
@@ -97,7 +98,7 @@ namespace NzbDrone.Core.Test.ParserTests
         {
             postTitle = XmlCleaner.ReplaceUnicode(postTitle);
 
-            var result = Parser.Parser.ParseTitle(postTitle);
+            var result = Parser.ParseTitle(postTitle);
             result.Should().NotBeNull();
             result.ReleaseGroup.Should().Be(subgroup);
             result.AbsoluteEpisodeNumbers.Should().BeEquivalentTo(absoluteEpisodeNumbers);
@@ -115,7 +116,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[GM-Team][国漫][Anime Title][2019][234 Fin][AVC][GB][1080P]", "Anime Title", 234)]
         public void should_parse_gm_team_releases_and_files(string postTitle, string title, int absoluteEpisodeNumber)
         {
-            var result = Parser.Parser.ParseTitle(postTitle);
+            var result = Parser.ParseTitle(postTitle);
             result.Should().NotBeNull();
             result.AbsoluteEpisodeNumbers.Single().Should().Be(absoluteEpisodeNumber);
             result.SeriesTitle.Should().Be(title);
@@ -126,7 +127,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[Subz] My Series - １５８ [h264 10-bit][1080p]", "My Series", 158)]
         public void should_parse_unicode_digits(string postTitle, string title, int absoluteEpisodeNumber)
         {
-            var result = Parser.Parser.ParseTitle(postTitle);
+            var result = Parser.ParseTitle(postTitle);
             result.Should().NotBeNull();
             result.SeriesTitle.Should().Be(title);
             result.AbsoluteEpisodeNumbers.Should().NotBeEmpty();
@@ -140,7 +141,7 @@ namespace NzbDrone.Core.Test.ParserTests
         {
             postTitle = XmlCleaner.ReplaceUnicode(postTitle);
 
-            var result = Parser.Parser.ParseTitle(postTitle);
+            var result = Parser.ParseTitle(postTitle);
             result.Should().NotBeNull();
             result.ReleaseGroup.Should().Be(subgroup);
             result.AbsoluteEpisodeNumbers.Single().Should().Be(absoluteEpisodeNumber);

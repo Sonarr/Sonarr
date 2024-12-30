@@ -2,12 +2,12 @@
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Download;
-using NzbDrone.Core.Download.TrackedDownloads;
-using NzbDrone.Core.History;
-using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
+using Workarr.Download;
+using Workarr.Download.TrackedDownloads;
+using Workarr.History;
+using Workarr.Parser.Model;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.Download.TrackedDownloads
 {

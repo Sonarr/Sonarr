@@ -1,11 +1,12 @@
 ﻿using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators;
-using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
-using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
+using Workarr.MediaFiles.EpisodeImport.Aggregation.Aggregators;
+using Workarr.Parser;
+using Workarr.Parser.Model;
+using Workarr.Tv;
 
 namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
 {
@@ -23,8 +24,8 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
         [Test]
         public void should_not_use_downloadclient_for_full_season()
         {
-            var fileEpisodeInfo = Parser.Parser.ParseTitle("Series.Title.S01E01.WEB-DL-Wizzy");
-            var downloadClientEpisodeInfo = Parser.Parser.ParseTitle("Series.Title.S01.WEB-DL-Viva");
+            var fileEpisodeInfo = Parser.ParseTitle("Series.Title.S01E01.WEB-DL-Wizzy");
+            var downloadClientEpisodeInfo = Parser.ParseTitle("Series.Title.S01.WEB-DL-Viva");
             var localEpisode = new LocalEpisode
             {
                 FileEpisodeInfo = fileEpisodeInfo,
@@ -41,8 +42,8 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
         [Test]
         public void should_not_use_folder_for_full_season()
         {
-            var fileEpisodeInfo = Parser.Parser.ParseTitle("Series.Title.S01E01.WEB-DL-Wizzy");
-            var folderEpisodeInfo = Parser.Parser.ParseTitle("Series.Title.S01.WEB-DL-Drone");
+            var fileEpisodeInfo = Parser.ParseTitle("Series.Title.S01E01.WEB-DL-Wizzy");
+            var folderEpisodeInfo = Parser.ParseTitle("Series.Title.S01.WEB-DL-Drone");
             var localEpisode = new LocalEpisode
             {
                 FileEpisodeInfo = fileEpisodeInfo,
@@ -59,9 +60,9 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
         [Test]
         public void should_prefer_downloadclient()
         {
-            var fileEpisodeInfo = Parser.Parser.ParseTitle("Series.Title.S01E01.WEB-DL-Wizzy");
-            var folderEpisodeInfo = Parser.Parser.ParseTitle("Series.Title.S01E01.WEB-DL-Drone");
-            var downloadClientEpisodeInfo = Parser.Parser.ParseTitle("Series.Title.S01E01.WEB-DL-Viva");
+            var fileEpisodeInfo = Parser.ParseTitle("Series.Title.S01E01.WEB-DL-Wizzy");
+            var folderEpisodeInfo = Parser.ParseTitle("Series.Title.S01E01.WEB-DL-Drone");
+            var downloadClientEpisodeInfo = Parser.ParseTitle("Series.Title.S01E01.WEB-DL-Viva");
             var localEpisode = new LocalEpisode
             {
                 FileEpisodeInfo = fileEpisodeInfo,
@@ -79,9 +80,9 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
         [Test]
         public void should_prefer_folder()
         {
-            var fileEpisodeInfo = Parser.Parser.ParseTitle("Series.Title.S01E01.WEB-DL-Wizzy");
-            var folderEpisodeInfo = Parser.Parser.ParseTitle("Series.Title.S01E01.WEB-DL-Drone");
-            var downloadClientEpisodeInfo = Parser.Parser.ParseTitle("Series.Title.S01E01.WEB-DL");
+            var fileEpisodeInfo = Parser.ParseTitle("Series.Title.S01E01.WEB-DL-Wizzy");
+            var folderEpisodeInfo = Parser.ParseTitle("Series.Title.S01E01.WEB-DL-Drone");
+            var downloadClientEpisodeInfo = Parser.ParseTitle("Series.Title.S01E01.WEB-DL");
             var localEpisode = new LocalEpisode
             {
                 FileEpisodeInfo = fileEpisodeInfo,
@@ -99,9 +100,9 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators
         [Test]
         public void should_fallback_to_file()
         {
-            var fileEpisodeInfo = Parser.Parser.ParseTitle("Series.Title.S01E01.WEB-DL-Wizzy");
-            var folderEpisodeInfo = Parser.Parser.ParseTitle("Series.Title.S01E01.WEB-DL");
-            var downloadClientEpisodeInfo = Parser.Parser.ParseTitle("Series.Title.S01E01.WEB-DL");
+            var fileEpisodeInfo = Parser.ParseTitle("Series.Title.S01E01.WEB-DL-Wizzy");
+            var folderEpisodeInfo = Parser.ParseTitle("Series.Title.S01E01.WEB-DL");
+            var downloadClientEpisodeInfo = Parser.ParseTitle("Series.Title.S01E01.WEB-DL");
             var localEpisode = new LocalEpisode
             {
                 FileEpisodeInfo = fileEpisodeInfo,

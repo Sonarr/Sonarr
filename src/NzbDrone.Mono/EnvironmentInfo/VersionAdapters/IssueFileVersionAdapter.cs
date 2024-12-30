@@ -1,6 +1,6 @@
 using System.Linq;
-using NzbDrone.Common.Disk;
-using NzbDrone.Common.EnvironmentInfo;
+using Workarr.Disk;
+using Workarr.EnvironmentInfo;
 
 namespace NzbDrone.Mono.EnvironmentInfo.VersionAdapters
 {

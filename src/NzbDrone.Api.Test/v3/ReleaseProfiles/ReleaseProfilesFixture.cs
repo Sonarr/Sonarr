@@ -1,8 +1,8 @@
 using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Common.Serializer;
 using Sonarr.Api.V3.Profiles.Release;
 using Sonarr.Http.REST;
+using Workarr.Serializer.System.Text.Json;
 
 namespace NzbDrone.Api.Test.v3.ReleaseProfiles
 {

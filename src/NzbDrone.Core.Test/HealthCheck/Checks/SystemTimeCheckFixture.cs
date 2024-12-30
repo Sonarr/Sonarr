@@ -2,13 +2,13 @@ using System;
 using System.Text;
 using Moq;
 using NUnit.Framework;
-using NzbDrone.Common.Cloud;
-using NzbDrone.Common.Http;
-using NzbDrone.Common.Serializer;
-using NzbDrone.Core.HealthCheck.Checks;
-using NzbDrone.Core.Localization;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common;
+using Workarr.Cloud;
+using Workarr.HealthCheck.Checks;
+using Workarr.Http;
+using Workarr.Localization;
+using Workarr.Serializer.Newtonsoft.Json;
 
 namespace NzbDrone.Core.Test.HealthCheck.Checks
 {

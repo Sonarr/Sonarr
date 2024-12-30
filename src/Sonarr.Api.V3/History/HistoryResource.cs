@@ -1,13 +1,12 @@
 using System;
 using System.Collections.Generic;
-using NzbDrone.Core.CustomFormats;
-using NzbDrone.Core.History;
-using NzbDrone.Core.Languages;
-using NzbDrone.Core.Qualities;
 using Sonarr.Api.V3.CustomFormats;
 using Sonarr.Api.V3.Episodes;
 using Sonarr.Api.V3.Series;
 using Sonarr.Http.REST;
+using Workarr.CustomFormats;
+using Workarr.History;
+using Workarr.Qualities;
 
 namespace Sonarr.Api.V3.History
 {
@@ -16,7 +15,7 @@ namespace Sonarr.Api.V3.History
         public int EpisodeId { get; set; }
         public int SeriesId { get; set; }
         public string SourceTitle { get; set; }
-        public List<Language> Languages { get; set; }
+        public List<Workarr.Languages.Language> Languages { get; set; }
         public QualityModel Quality { get; set; }
         public List<CustomFormatResource> CustomFormats { get; set; }
         public int CustomFormatScore { get; set; }

@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
-using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Test.Framework;
+using Workarr.Qualities;
 
 namespace NzbDrone.Core.Test.Qualities
 {

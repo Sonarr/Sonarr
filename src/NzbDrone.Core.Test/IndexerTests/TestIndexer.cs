@@ -1,9 +1,9 @@
 ﻿using NLog;
-using NzbDrone.Common.Http;
-using NzbDrone.Core.Configuration;
-using NzbDrone.Core.Indexers;
-using NzbDrone.Core.Localization;
-using NzbDrone.Core.Parser;
+using Workarr.Configuration;
+using Workarr.Http;
+using Workarr.Indexers;
+using Workarr.Localization;
+using Workarr.Parser;
 
 namespace NzbDrone.Core.Test.IndexerTests
 {

@@ -1,17 +1,17 @@
 ﻿using FluentAssertions;
-using NzbDrone.Common.Extensions;
-using NzbDrone.Core.HealthCheck;
+using Workarr.Extensions;
+using Workarr.HealthCheck;
 
 namespace NzbDrone.Core.Test.HealthCheck.Checks
 {
     public static class HealthCheckFixtureExtensions
     {
-        public static void ShouldBeOk(this Core.HealthCheck.HealthCheck result)
+        public static void ShouldBeOk(this Workarr.HealthCheck.HealthCheck result)
         {
             result.Type.Should().Be(HealthCheckResult.Ok);
         }
 
-        public static void ShouldBeNotice(this Core.HealthCheck.HealthCheck result, string message = null)
+        public static void ShouldBeNotice(this Workarr.HealthCheck.HealthCheck result, string message = null)
         {
             result.Type.Should().Be(HealthCheckResult.Notice);
 
@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
             }
         }
 
-        public static void ShouldBeWarning(this Core.HealthCheck.HealthCheck result, string message = null, string wikiFragment = null)
+        public static void ShouldBeWarning(this Workarr.HealthCheck.HealthCheck result, string message = null, string wikiFragment = null)
         {
             result.Type.Should().Be(HealthCheckResult.Warning);
 
@@ -36,7 +36,7 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
             }
         }
 
-        public static void ShouldBeError(this Core.HealthCheck.HealthCheck result, string message = null, string wikiFragment = null)
+        public static void ShouldBeError(this Workarr.HealthCheck.HealthCheck result, string message = null, string wikiFragment = null)
         {
             result.Type.Should().Be(HealthCheckResult.Error);
 
