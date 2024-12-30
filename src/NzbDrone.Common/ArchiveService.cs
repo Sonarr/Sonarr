@@ -42,17 +42,18 @@ namespace NzbDrone.Common
 
         public void CreateZip(string path, IEnumerable<string> files)
         {
-            using (var zipFile = ZipFile.Create(path))
+            _logger.Debug("Creating archive {0}", path);
+
+            using var zipFile = ZipFile.Create(path);
+
+            zipFile.BeginUpdate();
+
+            foreach (var file in files)
             {
-                zipFile.BeginUpdate();
-
-                foreach (var file in files)
-                {
-                    zipFile.Add(file, Path.GetFileName(file));
-                }
-
-                zipFile.CommitUpdate();
+                zipFile.Add(file, Path.GetFileName(file));
             }
+
+            zipFile.CommitUpdate();
         }
 
         private void ExtractZip(string compressedFile, string destination)

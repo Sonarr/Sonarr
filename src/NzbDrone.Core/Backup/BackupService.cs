@@ -66,12 +66,19 @@ namespace NzbDrone.Core.Backup
         {
             _logger.ProgressInfo("Starting Backup");
 
+            var backupFolder = GetBackupFolder(backupType);
+
             _diskProvider.EnsureFolder(_backupTempFolder);
-            _diskProvider.EnsureFolder(GetBackupFolder(backupType));
+            _diskProvider.EnsureFolder(backupFolder);
+
+            if (!_diskProvider.FolderWritable(backupFolder))
+            {
+                throw new UnauthorizedAccessException($"Backup folder {backupFolder} is not writable");
+            }
 
             var dateNow = DateTime.Now;
             var backupFilename = $"sonarr_backup_v{BuildInfo.Version}_{dateNow:yyyy.MM.dd_HH.mm.ss}.zip";
-            var backupPath = Path.Combine(GetBackupFolder(backupType), backupFilename);
+            var backupPath = Path.Combine(backupFolder, backupFilename);
 
             Cleanup();
 
