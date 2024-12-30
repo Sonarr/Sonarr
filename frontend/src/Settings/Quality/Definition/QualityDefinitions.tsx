@@ -6,7 +6,6 @@ import AppState from 'App/State/AppState';
 import FieldSet from 'Components/FieldSet';
 import PageSectionContent from 'Components/Page/PageSectionContent';
 import usePrevious from 'Helpers/Hooks/usePrevious';
-import useShowAdvancedSettings from 'Helpers/Hooks/useShowAdvancedSettings';
 import {
   fetchQualityDefinitions,
   saveQualityDefinitions,
@@ -16,7 +15,7 @@ import {
   SetChildSave,
 } from 'typings/Settings/SettingsState';
 import translate from 'Utilities/String/translate';
-import QualityDefinitionConnector from './QualityDefinitionConnector';
+import QualityDefinition from './QualityDefinition';
 import styles from './QualityDefinitions.css';
 
 function createQualityDefinitionsSelector() {
@@ -50,7 +49,6 @@ function QualityDefinitions({
   onChildStateChange,
 }: QualityDefinitionsProps) {
   const dispatch = useDispatch();
-  const showAdvancedSettings = useShowAdvancedSettings();
   const { items, isFetching, isPopulated, isSaving, error, hasPendingChanges } =
     useSelector(createQualityDefinitionsSelector());
 
@@ -90,31 +88,12 @@ function QualityDefinitions({
         <div className={styles.header}>
           <div className={styles.quality}>{translate('Quality')}</div>
           <div className={styles.title}>{translate('Title')}</div>
-          <div className={styles.sizeLimit}>{translate('SizeLimit')}</div>
-
-          {showAdvancedSettings ? (
-            <div className={styles.megabytesPerMinute}>
-              {translate('MegabytesPerMinute')}
-            </div>
-          ) : null}
         </div>
 
         <div className={styles.definitions}>
           {items.map((item) => {
-            return (
-              <QualityDefinitionConnector
-                key={item.id}
-                {...item}
-                advancedSettings={showAdvancedSettings}
-              />
-            );
+            return <QualityDefinition key={item.id} {...item} />;
           })}
-        </div>
-
-        <div className={styles.sizeLimitHelpTextContainer}>
-          <div className={styles.sizeLimitHelpText}>
-            {translate('QualityLimitsSeriesRuntimeHelpText')}
-          </div>
         </div>
       </PageSectionContent>
     </FieldSet>

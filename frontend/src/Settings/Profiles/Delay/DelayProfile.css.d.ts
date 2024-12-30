@@ -8,6 +8,9 @@ interface CssExports {
   'dragIcon': string;
   'editButton': string;
   'isDragging': string;
+  'placeholder': string;
+  'placeholderAfter': string;
+  'placeholderBefore': string;
 }
 export const cssExports: CssExports;
 export default cssExports;
