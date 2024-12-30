@@ -38,3 +38,17 @@
   width: $dragHandleWidth;
   text-align: center;
 }
+
+.placeholder {
+  width: 100%;
+  height: 30px;
+  border-bottom: 1px dotted #aaa;
+}
+
+.placeholderBefore {
+  margin-bottom: 8px;
+}
+
+.placeholderAfter {
+  margin-top: 8px;
+}

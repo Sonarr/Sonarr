@@ -1,16 +1,21 @@
-import React from 'react';
+import React, { ForwardedRef, forwardRef, ReactNode } from 'react';
 import styles from './ModalFooter.css';
 
 interface ModalFooterProps extends React.HTMLAttributes<HTMLDivElement> {
-  children?: React.ReactNode;
+  children: ReactNode;
 }
 
-function ModalFooter({ children, ...otherProps }: ModalFooterProps) {
-  return (
-    <div className={styles.modalFooter} {...otherProps}>
-      {children}
-    </div>
-  );
-}
+const ModalFooter = forwardRef(
+  (
+    { children, ...otherProps }: ModalFooterProps,
+    ref: ForwardedRef<HTMLDivElement>
+  ) => {
+    return (
+      <div ref={ref} className={styles.modalFooter} {...otherProps}>
+        {children}
+      </div>
+    );
+  }
+);
 
 export default ModalFooter;

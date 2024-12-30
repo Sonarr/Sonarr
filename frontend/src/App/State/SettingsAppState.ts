@@ -39,7 +39,7 @@ export interface AutoTaggingSpecificationAppState
     AppSectionSchemaState<AutoTaggingSpecification> {}
 
 export interface DelayProfileAppState
-  extends AppSectionState<DelayProfile>,
+  extends AppSectionListState<DelayProfile>,
     AppSectionDeleteState,
     AppSectionSaveState {}
 
@@ -77,7 +77,7 @@ export interface NotificationAppState
     AppSectionDeleteState {}
 
 export interface QualityDefinitionsAppState
-  extends AppSectionState<QualityProfile>,
+  extends AppSectionState<QualityDefinition>,
     AppSectionSaveState {
   pendingChanges: {
     [key: number]: Partial<QualityProfile>;
@@ -86,7 +86,9 @@ export interface QualityDefinitionsAppState
 
 export interface QualityProfilesAppState
   extends AppSectionState<QualityProfile>,
-    AppSectionItemSchemaState<QualityProfile> {}
+    AppSectionItemSchemaState<QualityProfile>,
+    AppSectionDeleteState,
+    AppSectionSaveState {}
 
 export interface ReleaseProfilesAppState
   extends AppSectionState<ReleaseProfile>,

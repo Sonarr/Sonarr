@@ -23,12 +23,16 @@ interface SizeProps {
   maxSize: number | null;
 }
 
-export interface OnSizeChangeArguments extends SizeProps {
-  id: number;
+export interface SizeChanged extends SizeProps {
+  qualityId: number;
 }
 
-export interface QualityProfileItemSizeProps extends OnSizeChangeArguments {
-  onSizeChange: (props: OnSizeChangeArguments) => void;
+export interface QualityProfileItemSizeProps {
+  id: number;
+  minSize: number | null;
+  preferredSize: number | null;
+  maxSize: number | null;
+  onSizeChange: (props: SizeChanged) => void;
 }
 
 function trackRenderer(props: HTMLProps<HTMLDivElement>) {
@@ -45,10 +49,13 @@ function getSliderValue(value: number | null, defaultValue: number): number {
   return roundNumber(sliderValue);
 }
 
-export default function QualityProfileItemSize(
-  props: QualityProfileItemSizeProps
-) {
-  const { id, minSize, maxSize, preferredSize, onSizeChange } = props;
+export default function QualityProfileItemSize({
+  id,
+  minSize,
+  maxSize,
+  preferredSize,
+  onSizeChange,
+}: QualityProfileItemSizeProps) {
   const [sizes, setSizes] = useState<SizeProps>({
     minSize: getSliderValue(minSize, MIN),
     preferredSize: getSliderValue(preferredSize, SLIDER_MAX - MIN_DISTANCE),
@@ -61,21 +68,14 @@ export default function QualityProfileItemSize(
       number,
       number
     ]) => {
-      // console.log('Sizes:', sliderMinSize, sliderPreferredSize, sliderMaxSize);
-      console.log(
-        'Min Sizes: ',
-        sliderMinSize,
-        roundNumber(Math.pow(sliderMinSize, 1.1))
-      );
-
       setSizes({
         minSize: sliderMinSize,
         preferredSize: sliderPreferredSize,
         maxSize: sliderMaxSize,
       });
 
-      onSizeChange({
-        id,
+      onSizeChange?.({
+        qualityId: id,
         minSize: roundNumber(Math.pow(sliderMinSize, 1.1)),
         preferredSize:
           sliderPreferredSize === MAX - MIN_DISTANCE
@@ -98,8 +98,8 @@ export default function QualityProfileItemSize(
         maxSize: sizes.maxSize,
       });
 
-      onSizeChange({
-        id,
+      onSizeChange?.({
+        qualityId: id,
         minSize: value,
         preferredSize: sizes.preferredSize,
         maxSize: sizes.maxSize,
@@ -116,8 +116,8 @@ export default function QualityProfileItemSize(
         maxSize: sizes.maxSize,
       });
 
-      onSizeChange({
-        id,
+      onSizeChange?.({
+        qualityId: id,
         minSize: sizes.minSize,
         preferredSize: value,
         maxSize: sizes.maxSize,
@@ -134,8 +134,8 @@ export default function QualityProfileItemSize(
         maxSize: value,
       });
 
-      onSizeChange({
-        id,
+      onSizeChange?.({
+        qualityId: id,
         minSize: sizes.minSize,
         preferredSize: sizes.preferredSize,
         maxSize: value,
