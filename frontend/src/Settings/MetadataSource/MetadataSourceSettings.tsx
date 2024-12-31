@@ -7,10 +7,8 @@ import TheTvdb from './TheTvdb';
 
 function MetadataSourceSettings() {
   return (
-    <PageContent title={translate('MetadataSourceSettings')} >
-      <SettingsToolbar
-        showSave={false}
-      />
+    <PageContent title={translate('MetadataSourceSettings')}>
+      <SettingsToolbar showSave={false} />
 
       <PageContentBody>
         <TheTvdb />
