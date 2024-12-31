@@ -3,7 +3,7 @@ import InlineMarkdown from 'Components/Markdown/InlineMarkdown';
 import translate from 'Utilities/String/translate';
 import styles from './TheTvdb.css';
 
-function TheTvdb(props) {
+function TheTvdb() {
   return (
     <div className={styles.container}>
       <img
@@ -12,12 +12,13 @@ function TheTvdb(props) {
       />
 
       <div className={styles.info}>
-        <div className={styles.title}>
-          {translate('TheTvdb')}
-        </div>
-        <InlineMarkdown data={translate('SeriesAndEpisodeInformationIsProvidedByTheTVDB', { url: 'https://www.thetvdb.com/subscribe' })} />
+        <div className={styles.title}>{translate('TheTvdb')}</div>
+        <InlineMarkdown
+          data={translate('SeriesAndEpisodeInformationIsProvidedByTheTVDB', {
+            url: 'https://www.thetvdb.com/subscribe',
+          })}
+        />
       </div>
-
     </div>
   );
 }
