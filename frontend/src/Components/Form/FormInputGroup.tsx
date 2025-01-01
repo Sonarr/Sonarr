@@ -1,5 +1,6 @@
 import React, { FocusEvent, ReactNode } from 'react';
 import Link from 'Components/Link/Link';
+import DownloadProtocol from 'DownloadClient/DownloadProtocol';
 import { inputTypes } from 'Helpers/Props';
 import { InputType } from 'Helpers/Props/inputTypes';
 import { Kind } from 'Helpers/Props/kinds';
@@ -158,6 +159,7 @@ interface FormInputGroupProps<T> {
   selectOptionsProviderAction?: string;
   indexerFlags?: number;
   pending?: boolean;
+  protocol?: DownloadProtocol;
   canEdit?: boolean;
   includeAny?: boolean;
   delimiters?: string[];
