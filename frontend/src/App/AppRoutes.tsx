@@ -14,7 +14,7 @@ import CustomFormatSettingsPage from 'Settings/CustomFormats/CustomFormatSetting
 import DownloadClientSettingsConnector from 'Settings/DownloadClients/DownloadClientSettingsConnector';
 import GeneralSettingsConnector from 'Settings/General/GeneralSettingsConnector';
 import ImportListSettingsConnector from 'Settings/ImportLists/ImportListSettingsConnector';
-import IndexerSettingsConnector from 'Settings/Indexers/IndexerSettingsConnector';
+import IndexerSettings from 'Settings/Indexers/IndexerSettings';
 import MediaManagement from 'Settings/MediaManagement/MediaManagement';
 import MetadataSettings from 'Settings/Metadata/MetadataSettings';
 import MetadataSourceSettings from 'Settings/MetadataSource/MetadataSourceSettings';
@@ -109,7 +109,7 @@ function AppRoutes() {
         component={CustomFormatSettingsPage}
       />
 
-      <Route path="/settings/indexers" component={IndexerSettingsConnector} />
+      <Route path="/settings/indexers" component={IndexerSettings} />
 
       <Route
         path="/settings/downloadclients"
