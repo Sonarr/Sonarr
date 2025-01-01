@@ -73,7 +73,10 @@ export type NamingExamplesAppState = AppSectionItemState<NamingExample>;
 export interface ImportListAppState
   extends AppSectionState<ImportList>,
     AppSectionDeleteState,
-    AppSectionSaveState {}
+    AppSectionSaveState,
+    AppSectionSchemaState<Presets<ImportList>> {
+  isTestingAll: boolean;
+}
 
 export interface IndexerOptionsAppState
   extends AppSectionItemState<IndexerOptions>,

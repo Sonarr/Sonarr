@@ -1,7 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { createSelector } from 'reselect';
-import AppState from 'App/State/AppState';
 import Alert from 'Components/Alert';
 import FieldSet from 'Components/FieldSet';
 import Form from 'Components/Form/Form';
@@ -9,6 +7,7 @@ import FormGroup from 'Components/Form/FormGroup';
 import FormInputGroup from 'Components/Form/FormInputGroup';
 import FormLabel from 'Components/Form/FormLabel';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
+import useShowAdvancedSettings from 'Helpers/Hooks/useShowAdvancedSettings';
 import { inputTypes, kinds } from 'Helpers/Props';
 import { clearPendingChanges } from 'Store/Actions/baseActions';
 import {
@@ -27,41 +26,28 @@ const cleanLibraryLevelOptions = [
   { key: 'keepAndTag', value: () => translate('KeepAndTagSeries') },
 ];
 
-function createImportListOptionsSelector() {
-  return createSelector(
-    (state: AppState) => state.settings.advancedSettings,
-    createSettingsSectionSelector(SECTION),
-    (advancedSettings, sectionSettings) => {
-      return {
-        advancedSettings,
-        save: sectionSettings.isSaving,
-        ...sectionSettings,
-      };
-    }
-  );
-}
-
-interface ImportListOptionsPageProps {
+interface ImportListOptionsProps {
   setChildSave(saveCallback: () => void): void;
   onChildStateChange(payload: unknown): void;
 }
 
-function ImportListOptions(props: ImportListOptionsPageProps) {
-  const { setChildSave, onChildStateChange } = props;
+function ImportListOptions({
+  setChildSave,
+  onChildStateChange,
+}: ImportListOptionsProps) {
+  const dispatch = useDispatch();
+  const showAdvancedSettings = useShowAdvancedSettings();
 
   const {
     isSaving,
     hasPendingChanges,
-    advancedSettings,
     isFetching,
     error,
     settings,
     hasSettings,
-  } = useSelector(createImportListOptionsSelector());
+  } = useSelector(createSettingsSectionSelector(SECTION));
 
   const { listSyncLevel, listSyncTag } = settings;
-
-  const dispatch = useDispatch();
 
   const onInputChange = useCallback(
     ({ name, value }: { name: string; value: unknown }) => {
@@ -85,7 +71,7 @@ function ImportListOptions(props: ImportListOptionsPageProps) {
     setChildSave(() => dispatch(saveImportListOptions()));
 
     return () => {
-      dispatch(clearPendingChanges({ section: SECTION }));
+      dispatch(clearPendingChanges({ section: `settings.${SECTION}` }));
     };
   }, [dispatch, setChildSave]);
 
@@ -96,16 +82,11 @@ function ImportListOptions(props: ImportListOptionsPageProps) {
     });
   }, [onChildStateChange, isSaving, hasPendingChanges]);
 
-  const translatedLevelOptions = cleanLibraryLevelOptions.map(
-    ({ key, value }) => {
-      return {
-        key,
-        value: value(),
-      };
-    }
-  );
+  if (!showAdvancedSettings) {
+    return null;
+  }
 
-  return advancedSettings ? (
+  return (
     <FieldSet legend={translate('Options')}>
       {isFetching ? <LoadingIndicator /> : null}
 
@@ -115,19 +96,22 @@ function ImportListOptions(props: ImportListOptionsPageProps) {
 
       {hasSettings && !isFetching && !error ? (
         <Form>
-          <FormGroup advancedSettings={advancedSettings} isAdvanced={true}>
+          <FormGroup advancedSettings={showAdvancedSettings} isAdvanced={true}>
             <FormLabel>{translate('CleanLibraryLevel')}</FormLabel>
             <FormInputGroup
               type={inputTypes.SELECT}
               name="listSyncLevel"
-              values={translatedLevelOptions}
+              values={cleanLibraryLevelOptions}
               helpText={translate('ListSyncLevelHelpText')}
               onChange={onInputChange}
               {...listSyncLevel}
             />
           </FormGroup>
           {listSyncLevel.value === 'keepAndTag' ? (
-            <FormGroup advancedSettings={advancedSettings} isAdvanced={true}>
+            <FormGroup
+              advancedSettings={showAdvancedSettings}
+              isAdvanced={true}
+            >
               <FormLabel>{translate('ListSyncTag')}</FormLabel>
               <FormInputGroup
                 {...listSyncTag}
@@ -142,7 +126,7 @@ function ImportListOptions(props: ImportListOptionsPageProps) {
         </Form>
       ) : null}
     </FieldSet>
-  ) : null;
+  );
 }
 
 export default ImportListOptions;
