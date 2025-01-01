@@ -21,6 +21,7 @@ import Notification from 'typings/Notification';
 import QualityDefinition from 'typings/QualityDefinition';
 import QualityProfile from 'typings/QualityProfile';
 import General from 'typings/Settings/General';
+import MediaManagement from 'typings/Settings/MediaManagement';
 import NamingConfig from 'typings/Settings/NamingConfig';
 import NamingExample from 'typings/Settings/NamingExample';
 import ReleaseProfile from 'typings/Settings/ReleaseProfile';
@@ -52,6 +53,10 @@ export interface DownloadClientAppState
 
 export interface GeneralAppState
   extends AppSectionItemState<General>,
+    AppSectionSaveState {}
+
+export interface MediaManagementAppState
+  extends AppSectionItemState<MediaManagement>,
     AppSectionSaveState {}
 
 export interface NamingAppState
@@ -131,6 +136,7 @@ interface SettingsAppState {
   indexerFlags: IndexerFlagSettingsAppState;
   indexers: IndexerAppState;
   languages: LanguageSettingsAppState;
+  mediaManagement: MediaManagementAppState;
   metadata: MetadataAppState;
   naming: NamingAppState;
   namingExamples: NamingExamplesAppState;
