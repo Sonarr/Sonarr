@@ -1,22 +1,23 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import FieldSet from 'Components/FieldSet';
 import FormGroup from 'Components/Form/FormGroup';
 import FormInputGroup from 'Components/Form/FormInputGroup';
 import FormLabel from 'Components/Form/FormLabel';
 import { inputTypes, sizes } from 'Helpers/Props';
+import { InputChanged } from 'typings/inputs';
+import { PendingSection } from 'typings/pending';
+import General from 'typings/Settings/General';
 import translate from 'Utilities/String/translate';
 
-function AnalyticSettings(props) {
-  const {
-    settings,
-    onInputChange
-  } = props;
+interface AnalyticSettingsProps {
+  analyticsEnabled: PendingSection<General>['analyticsEnabled'];
+  onInputChange: (change: InputChanged) => void;
+}
 
-  const {
-    analyticsEnabled
-  } = settings;
-
+function AnalyticSettings({
+  analyticsEnabled,
+  onInputChange,
+}: AnalyticSettingsProps) {
   return (
     <FieldSet legend={translate('Analytics')}>
       <FormGroup size={sizes.MEDIUM}>
@@ -34,10 +35,5 @@ function AnalyticSettings(props) {
     </FieldSet>
   );
 }
-
-AnalyticSettings.propTypes = {
-  settings: PropTypes.object.isRequired,
-  onInputChange: PropTypes.func.isRequired
-};
 
 export default AnalyticSettings;

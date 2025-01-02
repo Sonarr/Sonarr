@@ -12,7 +12,7 @@ import SeriesDetailsPageConnector from 'Series/Details/SeriesDetailsPageConnecto
 import SeriesIndex from 'Series/Index/SeriesIndex';
 import CustomFormatSettingsPage from 'Settings/CustomFormats/CustomFormatSettingsPage';
 import DownloadClientSettingsConnector from 'Settings/DownloadClients/DownloadClientSettingsConnector';
-import GeneralSettingsConnector from 'Settings/General/GeneralSettingsConnector';
+import GeneralSettings from 'Settings/General/GeneralSettings';
 import ImportListSettings from 'Settings/ImportLists/ImportListSettings';
 import IndexerSettings from 'Settings/Indexers/IndexerSettings';
 import MediaManagement from 'Settings/MediaManagement/MediaManagement';
@@ -129,7 +129,7 @@ function AppRoutes() {
 
       <Route path="/settings/tags" component={TagSettings} />
 
-      <Route path="/settings/general" component={GeneralSettingsConnector} />
+      <Route path="/settings/general" component={GeneralSettings} />
 
       <Route path="/settings/ui" component={UISettings} />
 
