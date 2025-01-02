@@ -1,4 +1,4 @@
-import React, { FocusEvent, ReactNode } from 'react';
+import React, { ComponentType, FocusEvent, ReactNode } from 'react';
 import Link from 'Components/Link/Link';
 import DownloadProtocol from 'DownloadClient/DownloadProtocol';
 import { inputTypes } from 'Helpers/Props';
@@ -37,88 +37,39 @@ import TextArea from './TextArea';
 import TextInput from './TextInput';
 import styles from './FormInputGroup.css';
 
-function getComponent(type: InputType) {
-  switch (type) {
-    case inputTypes.AUTO_COMPLETE:
-      return AutoCompleteInput;
-
-    case inputTypes.CAPTCHA:
-      return CaptchaInput;
-
-    case inputTypes.CHECK:
-      return CheckInput;
-
-    case inputTypes.DEVICE:
-      return DeviceInput;
-
-    case inputTypes.KEY_VALUE_LIST:
-      return KeyValueListInput;
-
-    case inputTypes.LANGUAGE_SELECT:
-      return LanguageSelectInput;
-
-    case inputTypes.MONITOR_EPISODES_SELECT:
-      return MonitorEpisodesSelectInput;
-
-    case inputTypes.MONITOR_NEW_ITEMS_SELECT:
-      return MonitorNewItemsSelectInput;
-
-    case inputTypes.NUMBER:
-      return NumberInput;
-
-    case inputTypes.OAUTH:
-      return OAuthInput;
-
-    case inputTypes.PASSWORD:
-      return PasswordInput;
-
-    case inputTypes.PATH:
-      return PathInput;
-
-    case inputTypes.QUALITY_PROFILE_SELECT:
-      return QualityProfileSelectInput;
-
-    case inputTypes.INDEXER_SELECT:
-      return IndexerSelectInput;
-
-    case inputTypes.INDEXER_FLAGS_SELECT:
-      return IndexerFlagsSelectInput;
-
-    case inputTypes.DOWNLOAD_CLIENT_SELECT:
-      return DownloadClientSelectInput;
-
-    case inputTypes.ROOT_FOLDER_SELECT:
-      return RootFolderSelectInput;
-
-    case inputTypes.SELECT:
-      return EnhancedSelectInput;
-
-    case inputTypes.DYNAMIC_SELECT:
-      return ProviderDataSelectInput;
-
-    case inputTypes.TAG:
-    case inputTypes.SERIES_TAG:
-      return SeriesTagInput;
-
-    case inputTypes.SERIES_TYPE_SELECT:
-      return SeriesTypeSelectInput;
-
-    case inputTypes.TEXT_AREA:
-      return TextArea;
-
-    case inputTypes.TEXT_TAG:
-      return TextTagInput;
-
-    case inputTypes.TAG_SELECT:
-      return TagSelectInput;
-
-    case inputTypes.UMASK:
-      return UMaskInput;
-
-    default:
-      return TextInput;
-  }
-}
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const componentMap: Record<InputType, ComponentType<any>> = {
+  autoComplete: AutoCompleteInput,
+  captcha: CaptchaInput,
+  check: CheckInput,
+  date: TextInput,
+  device: DeviceInput,
+  file: TextInput,
+  float: NumberInput,
+  keyValueList: KeyValueListInput,
+  languageSelect: LanguageSelectInput,
+  monitorEpisodesSelect: MonitorEpisodesSelectInput,
+  monitorNewItemsSelect: MonitorNewItemsSelectInput,
+  number: NumberInput,
+  oauth: OAuthInput,
+  password: PasswordInput,
+  path: PathInput,
+  qualityProfileSelect: QualityProfileSelectInput,
+  indexerSelect: IndexerSelectInput,
+  indexerFlagsSelect: IndexerFlagsSelectInput,
+  downloadClientSelect: DownloadClientSelectInput,
+  rootFolderSelect: RootFolderSelectInput,
+  select: EnhancedSelectInput,
+  dynamicSelect: ProviderDataSelectInput,
+  tag: SeriesTagInput,
+  seriesTag: SeriesTagInput,
+  seriesTypeSelect: SeriesTypeSelectInput,
+  text: TextInput,
+  textArea: TextArea,
+  textTag: TextTagInput,
+  tagSelect: TagSelectInput,
+  umask: UMaskInput,
+};
 
 export interface FormInputGroupValues<T> {
   key: T;
@@ -135,6 +86,7 @@ interface FormInputGroupProps<T> {
   className?: string;
   containerClassName?: string;
   inputClassName?: string;
+  autocomplete?: string;
   name: string;
   value?: unknown;
   values?: FormInputGroupValues<unknown>[];
@@ -189,7 +141,7 @@ function FormInputGroup<T>(props: FormInputGroupProps<T>) {
     ...otherProps
   } = props;
 
-  const InputComponent = getComponent(type);
+  const InputComponent = componentMap[type];
   const checkInput = type === inputTypes.CHECK;
   const hasError = !!errors.length;
   const hasWarning = !hasError && !!warnings.length;
@@ -201,7 +153,6 @@ function FormInputGroup<T>(props: FormInputGroupProps<T>) {
     <div className={containerClassName}>
       <div className={className}>
         <div className={styles.inputContainer}>
-          {/* @ts-expect-error - need to pass through all the expected options */}
           <InputComponent
             className={inputClassName}
             helpText={helpText}

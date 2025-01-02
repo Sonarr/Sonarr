@@ -1,10 +1,13 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import FieldSet from 'Components/FieldSet';
 import FormGroup from 'Components/Form/FormGroup';
 import FormInputGroup from 'Components/Form/FormInputGroup';
 import FormLabel from 'Components/Form/FormLabel';
+import useShowAdvancedSettings from 'Helpers/Hooks/useShowAdvancedSettings';
 import { inputTypes } from 'Helpers/Props';
+import { InputChanged } from 'typings/inputs';
+import { PendingSection } from 'typings/pending';
+import General from 'typings/Settings/General';
 import translate from 'Utilities/String/translate';
 
 const logLevelOptions = [
@@ -12,33 +15,34 @@ const logLevelOptions = [
     key: 'info',
     get value() {
       return translate('Info');
-    }
+    },
   },
   {
     key: 'debug',
     get value() {
       return translate('Debug');
-    }
+    },
   },
   {
     key: 'trace',
     get value() {
       return translate('Trace');
-    }
-  }
+    },
+  },
 ];
 
-function LoggingSettings(props) {
-  const {
-    advancedSettings,
-    settings,
-    onInputChange
-  } = props;
+interface LoggingSettingsProps {
+  logLevel: PendingSection<General>['logLevel'];
+  logSizeLimit: PendingSection<General>['logSizeLimit'];
+  onInputChange: (change: InputChanged) => void;
+}
 
-  const {
-    logLevel,
-    logSizeLimit
-  } = settings;
+function LoggingSettings({
+  logLevel,
+  logSizeLimit,
+  onInputChange,
+}: LoggingSettingsProps) {
+  const showAdvancedSettings = useShowAdvancedSettings();
 
   return (
     <FieldSet legend={translate('Logging')}>
@@ -49,16 +53,17 @@ function LoggingSettings(props) {
           type={inputTypes.SELECT}
           name="logLevel"
           values={logLevelOptions}
-          helpTextWarning={logLevel.value === 'trace' ? translate('LogLevelTraceHelpTextWarning') : undefined}
+          helpTextWarning={
+            logLevel.value === 'trace'
+              ? translate('LogLevelTraceHelpTextWarning')
+              : undefined
+          }
           onChange={onInputChange}
           {...logLevel}
         />
       </FormGroup>
 
-      <FormGroup
-        advancedSettings={advancedSettings}
-        isAdvanced={true}
-      >
+      <FormGroup advancedSettings={showAdvancedSettings} isAdvanced={true}>
         <FormLabel>{translate('LogSizeLimit')}</FormLabel>
 
         <FormInputGroup
@@ -75,11 +80,5 @@ function LoggingSettings(props) {
     </FieldSet>
   );
 }
-
-LoggingSettings.propTypes = {
-  advancedSettings: PropTypes.bool.isRequired,
-  settings: PropTypes.object.isRequired,
-  onInputChange: PropTypes.func.isRequired
-};
 
 export default LoggingSettings;

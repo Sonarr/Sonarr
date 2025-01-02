@@ -1,4 +1,4 @@
-import { cloneDeep, isEmpty } from 'lodash';
+import { cloneDeep } from 'lodash';
 import { Error } from 'App/State/AppSectionState';
 import Field from 'typings/Field';
 import {
@@ -10,6 +10,7 @@ import {
   ValidationFailure,
   ValidationWarning,
 } from 'typings/pending';
+import isEmpty from 'Utilities/Object/isEmpty';
 
 interface ValidationFailures {
   errors: ValidationError[];

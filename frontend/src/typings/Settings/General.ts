@@ -18,6 +18,7 @@ export default interface General {
   password: string;
   passwordConfirmation: string;
   logLevel: string;
+  logSizeLimit: number;
   consoleLogLevel: string;
   branch: string;
   apiKey: string;
