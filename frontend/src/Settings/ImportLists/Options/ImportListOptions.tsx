@@ -107,6 +107,7 @@ function ImportListOptions({
               {...listSyncLevel}
             />
           </FormGroup>
+
           {listSyncLevel.value === 'keepAndTag' ? (
             <FormGroup
               advancedSettings={showAdvancedSettings}
@@ -115,7 +116,7 @@ function ImportListOptions({
               <FormLabel>{translate('ListSyncTag')}</FormLabel>
               <FormInputGroup
                 {...listSyncTag}
-                type={inputTypes.TAG}
+                type={inputTypes.SERIES_TAG}
                 name="listSyncTag"
                 value={listSyncTag.value === 0 ? [] : [listSyncTag.value]}
                 helpText={translate('ListSyncTagHelpText')}

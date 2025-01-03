@@ -38,6 +38,7 @@ function BackupSettings({
           type={inputTypes.PATH}
           name="backupFolder"
           helpText={translate('BackupFolderHelpText')}
+          includeFiles={false}
           onChange={onInputChange}
           {...backupFolder}
         />

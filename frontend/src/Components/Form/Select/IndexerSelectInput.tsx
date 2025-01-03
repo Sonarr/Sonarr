@@ -38,7 +38,7 @@ function createIndexersSelector(includeAny: boolean) {
   );
 }
 
-interface IndexerSelectInputConnectorProps {
+export interface IndexerSelectInputProps {
   name: string;
   value: number;
   includeAny?: boolean;
@@ -50,7 +50,7 @@ function IndexerSelectInput({
   value,
   includeAny = false,
   onChange,
-}: IndexerSelectInputConnectorProps) {
+}: IndexerSelectInputProps) {
   const dispatch = useDispatch();
   const { isFetching, isPopulated, values } = useSelector(
     createIndexersSelector(includeAny)

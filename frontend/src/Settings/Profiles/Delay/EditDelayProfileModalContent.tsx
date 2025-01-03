@@ -21,11 +21,15 @@ import {
   setDelayProfileValue,
 } from 'Store/Actions/settingsActions';
 import selectSettings from 'Store/Selectors/selectSettings';
+import DelayProfile from 'typings/DelayProfile';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
 import styles from './EditDelayProfileModalContent.css';
 
-const newDelayProfile: Record<string, boolean | number | number[] | string> = {
+const newDelayProfile: DelayProfile & { [key: string]: unknown } = {
+  id: 0,
+  name: '',
+  order: 0,
   enableUsenet: true,
   enableTorrent: true,
   preferredProtocol: 'usenet',
@@ -72,7 +76,11 @@ function createDelayProfileSelector(id: number | undefined) {
         delayProfiles;
 
       const profile = id ? items.find((i) => i.id === id) : newDelayProfile;
-      const settings = selectSettings(profile!, pendingChanges, saveError);
+      const settings = selectSettings<DelayProfile>(
+        profile!,
+        pendingChanges,
+        saveError
+      );
 
       return {
         isFetching,

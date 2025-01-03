@@ -24,7 +24,7 @@ import AutoSuggestInput from './AutoSuggestInput';
 import FormInputButton from './FormInputButton';
 import styles from './PathInput.css';
 
-interface PathInputProps {
+export interface PathInputProps {
   className?: string;
   name: string;
   value?: string;

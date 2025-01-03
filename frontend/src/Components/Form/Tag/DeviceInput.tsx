@@ -19,7 +19,7 @@ interface DeviceTag {
   name: string;
 }
 
-interface DeviceInputProps extends TagInputProps<DeviceTag> {
+export interface DeviceInputProps extends TagInputProps<DeviceTag> {
   className?: string;
   name: string;
   value: string[];

@@ -8,6 +8,7 @@ import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import { inputTypes } from 'Helpers/Props';
+import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
 import styles from './ManageIndexersEditModalContent.css';
 
@@ -57,7 +58,7 @@ function ManageIndexersEditModalContent(
   const [enableAutomaticSearch, setEnableAutomaticSearch] = useState(NO_CHANGE);
   const [enableInteractiveSearch, setEnableInteractiveSearch] =
     useState(NO_CHANGE);
-  const [priority, setPriority] = useState<null | string | number>(null);
+  const [priority, setPriority] = useState<null | number>(null);
 
   const save = useCallback(() => {
     let hasChanges = false;
@@ -97,27 +98,24 @@ function ManageIndexersEditModalContent(
     onModalClose,
   ]);
 
-  const onInputChange = useCallback(
-    ({ name, value }: { name: string; value: string }) => {
-      switch (name) {
-        case 'enableRss':
-          setEnableRss(value);
-          break;
-        case 'enableAutomaticSearch':
-          setEnableAutomaticSearch(value);
-          break;
-        case 'enableInteractiveSearch':
-          setEnableInteractiveSearch(value);
-          break;
-        case 'priority':
-          setPriority(value);
-          break;
-        default:
-          console.warn(`EditIndexersModalContent Unknown Input: '${name}'`);
-      }
-    },
-    []
-  );
+  const onInputChange = useCallback(({ name, value }: InputChanged) => {
+    switch (name) {
+      case 'enableRss':
+        setEnableRss(value as string);
+        break;
+      case 'enableAutomaticSearch':
+        setEnableAutomaticSearch(value as string);
+        break;
+      case 'enableInteractiveSearch':
+        setEnableInteractiveSearch(value as string);
+        break;
+      case 'priority':
+        setPriority(value as number);
+        break;
+      default:
+        console.warn(`EditIndexersModalContent Unknown Input: '${name}'`);
+    }
+  }, []);
 
   const selectedCount = indexerIds.length;
 

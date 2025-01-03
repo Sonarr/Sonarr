@@ -19,6 +19,7 @@ import {
   setNamingSettingsValue,
 } from 'Store/Actions/settingsActions';
 import createSettingsSectionSelector from 'Store/Selectors/createSettingsSectionSelector';
+import { InputChanged } from 'typings/inputs';
 import NamingConfig from 'typings/Settings/NamingConfig';
 import translate from 'Utilities/String/translate';
 import NamingModal from './NamingModal';
@@ -88,9 +89,9 @@ function Naming() {
   }, [dispatch]);
 
   const handleInputChange = useCallback(
-    ({ name, value }: { name: string; value: string }) => {
+    (change: InputChanged) => {
       // @ts-expect-error 'setNamingSettingsValue' isn't typed yet
-      dispatch(setNamingSettingsValue({ name, value }));
+      dispatch(setNamingSettingsValue(change));
 
       if (namingExampleTimeout.current) {
         clearTimeout(namingExampleTimeout.current);

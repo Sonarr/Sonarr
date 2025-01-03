@@ -56,7 +56,7 @@ function createQualityProfilesSelector(
   );
 }
 
-interface QualityProfileSelectInputConnectorProps
+export interface QualityProfileSelectInputProps
   extends Omit<
     EnhancedSelectInputProps<
       EnhancedSelectInputValue<number | string>,
@@ -78,7 +78,7 @@ function QualityProfileSelectInput({
   includeMixed = false,
   onChange,
   ...otherProps
-}: QualityProfileSelectInputConnectorProps) {
+}: QualityProfileSelectInputProps) {
   const values = useSelector(
     createQualityProfilesSelector(
       includeNoChange,
