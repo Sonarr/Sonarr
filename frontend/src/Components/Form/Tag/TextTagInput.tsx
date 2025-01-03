@@ -8,7 +8,11 @@ interface TextTag extends TagBase {
   name: string;
 }
 
-interface TextTagInputProps extends TagInputProps<TextTag> {
+export interface TextTagInputProps
+  extends Omit<
+    TagInputProps<TextTag>,
+    'tags' | 'tagList' | 'onTagAdd' | 'onTagDelete'
+  > {
   name: string;
   value: string | string[];
   onChange: (change: InputChanged<string[]>) => unknown;

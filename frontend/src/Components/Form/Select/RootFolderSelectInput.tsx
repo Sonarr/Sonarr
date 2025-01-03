@@ -24,16 +24,16 @@ export interface RootFolderSelectInputValue
   isMissing?: boolean;
 }
 
-interface RootFolderSelectInputProps
+export interface RootFolderSelectInputProps
   extends Omit<
     EnhancedSelectInputProps<EnhancedSelectInputValue<string>, string>,
     'value' | 'values'
   > {
   name: string;
   value?: string;
-  isSaving: boolean;
-  saveError?: object;
-  includeNoChange: boolean;
+  includeMissingValue?: boolean;
+  includeNoChange?: boolean;
+  includeNoChangeDisabled?: boolean;
 }
 
 function createRootFolderOptionsSelector(
@@ -107,13 +107,20 @@ function createRootFolderOptionsSelector(
 function RootFolderSelectInput({
   name,
   value,
+  includeMissingValue = true,
   includeNoChange = false,
+  includeNoChangeDisabled = true,
   onChange,
   ...otherProps
 }: RootFolderSelectInputProps) {
   const dispatch = useDispatch();
   const { values, isSaving, saveError } = useSelector(
-    createRootFolderOptionsSelector(value, true, includeNoChange, false)
+    createRootFolderOptionsSelector(
+      value,
+      includeMissingValue,
+      includeNoChange,
+      includeNoChangeDisabled
+    )
   );
   const [isAddNewRootFolderModalOpen, setIsAddNewRootFolderModalOpen] =
     useState(false);

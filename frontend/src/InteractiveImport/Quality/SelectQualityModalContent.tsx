@@ -78,8 +78,8 @@ function SelectQualityModalContent(props: SelectQualityModalContentProps) {
   }, [items]);
 
   const onQualityChange = useCallback(
-    ({ value }: { value: string }) => {
-      setQualityId(parseInt(value));
+    ({ value }: { value: number }) => {
+      setQualityId(value);
     },
     [setQualityId]
   );
@@ -118,7 +118,7 @@ function SelectQualityModalContent(props: SelectQualityModalContentProps) {
       <ModalHeader>{modalTitle} - Select Quality</ModalHeader>
 
       <ModalBody>
-        {isFetching && <LoadingIndicator />}
+        {isFetching ? <LoadingIndicator /> : null}
 
         {!isFetching && error ? (
           <Alert kind={kinds.DANGER}>{translate('QualitiesLoadError')}</Alert>

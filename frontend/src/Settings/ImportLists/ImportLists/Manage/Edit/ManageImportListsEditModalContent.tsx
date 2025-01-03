@@ -8,6 +8,7 @@ import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import { inputTypes } from 'Helpers/Props';
+import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
 import styles from './ManageImportListsEditModalContent.css';
 
@@ -90,24 +91,21 @@ function ManageImportListsEditModalContent(
     onModalClose,
   ]);
 
-  const onInputChange = useCallback(
-    ({ name, value }: { name: string; value: string }) => {
-      switch (name) {
-        case 'enableAutomaticAdd':
-          setEnableAutomaticAdd(value);
-          break;
-        case 'qualityProfileId':
-          setQualityProfileId(value);
-          break;
-        case 'rootFolderPath':
-          setRootFolderPath(value);
-          break;
-        default:
-          console.warn(`EditImportListModalContent Unknown Input: '${name}'`);
-      }
-    },
-    []
-  );
+  const onInputChange = useCallback(({ name, value }: InputChanged) => {
+    switch (name) {
+      case 'enableAutomaticAdd':
+        setEnableAutomaticAdd(value as string);
+        break;
+      case 'qualityProfileId':
+        setQualityProfileId(value as number);
+        break;
+      case 'rootFolderPath':
+        setRootFolderPath(value as string);
+        break;
+      default:
+        console.warn(`EditImportListModalContent Unknown Input: '${name}'`);
+    }
+  }, []);
 
   const selectedCount = importListIds.length;
 

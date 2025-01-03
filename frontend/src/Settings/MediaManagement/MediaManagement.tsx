@@ -464,6 +464,7 @@ function MediaManagement() {
                   type={inputTypes.PATH}
                   name="recycleBin"
                   helpText={translate('RecyclingBinHelpText')}
+                  includeFiles={false}
                   onChange={handleInputChange}
                   {...settings.recycleBin}
                 />
@@ -537,7 +538,6 @@ function MediaManagement() {
                     name="chownGroup"
                     helpText={translate('ChownGroupHelpText')}
                     helpTextWarning={translate('ChownGroupHelpTextWarning')}
-                    values={fileDateOptions}
                     onChange={handleInputChange}
                     {...settings.chownGroup}
                   />

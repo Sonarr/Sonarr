@@ -66,8 +66,6 @@ function UpdateSettings({
           }
           helpLink="https://wiki.servarr.com/sonarr/settings#updates"
           {...branch}
-          // @ts-expect-error - FormInputGroup doesn't accept a values prop
-          // of string[] which is needed for AutoCompleteInput
           values={branchValues}
           readOnly={usingExternalUpdateMechanism}
           onChange={onInputChange}

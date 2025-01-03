@@ -8,11 +8,14 @@ import EnhancedSelectInput, {
 import SeriesTypeSelectInputOption from './SeriesTypeSelectInputOption';
 import SeriesTypeSelectInputSelectedValue from './SeriesTypeSelectInputSelectedValue';
 
-interface SeriesTypeSelectInputProps
-  extends EnhancedSelectInputProps<EnhancedSelectInputValue<string>, string> {
-  includeNoChange: boolean;
+export interface SeriesTypeSelectInputProps
+  extends Omit<
+    EnhancedSelectInputProps<EnhancedSelectInputValue<string>, string>,
+    'values'
+  > {
+  includeNoChange?: boolean;
   includeNoChangeDisabled?: boolean;
-  includeMixed: boolean;
+  includeMixed?: boolean;
 }
 
 export interface ISeriesTypeOption {

@@ -1,51 +1,73 @@
-import React, { ComponentType, FocusEvent, ReactNode } from 'react';
+import React, { ElementType, ReactNode } from 'react';
 import Link from 'Components/Link/Link';
-import DownloadProtocol from 'DownloadClient/DownloadProtocol';
 import { inputTypes } from 'Helpers/Props';
 import { InputType } from 'Helpers/Props/inputTypes';
-import { Kind } from 'Helpers/Props/kinds';
-import { InputChanged } from 'typings/inputs';
 import { ValidationError, ValidationWarning } from 'typings/pending';
 import translate from 'Utilities/String/translate';
-import AutoCompleteInput from './AutoCompleteInput';
-import CaptchaInput from './CaptchaInput';
-import CheckInput from './CheckInput';
+import AutoCompleteInput, { AutoCompleteInputProps } from './AutoCompleteInput';
+import CaptchaInput, { CaptchaInputProps } from './CaptchaInput';
+import CheckInput, { CheckInputProps } from './CheckInput';
 import { FormInputButtonProps } from './FormInputButton';
 import FormInputHelpText from './FormInputHelpText';
-import KeyValueListInput from './KeyValueListInput';
-import NumberInput from './NumberInput';
-import OAuthInput from './OAuthInput';
+import KeyValueListInput, { KeyValueListInputProps } from './KeyValueListInput';
+import NumberInput, { NumberInputProps } from './NumberInput';
+import OAuthInput, { OAuthInputProps } from './OAuthInput';
 import PasswordInput from './PasswordInput';
-import PathInput from './PathInput';
-import DownloadClientSelectInput from './Select/DownloadClientSelectInput';
-import EnhancedSelectInput from './Select/EnhancedSelectInput';
-import IndexerFlagsSelectInput from './Select/IndexerFlagsSelectInput';
-import IndexerSelectInput from './Select/IndexerSelectInput';
-import LanguageSelectInput from './Select/LanguageSelectInput';
-import MonitorEpisodesSelectInput from './Select/MonitorEpisodesSelectInput';
-import MonitorNewItemsSelectInput from './Select/MonitorNewItemsSelectInput';
-import ProviderDataSelectInput from './Select/ProviderOptionSelectInput';
-import QualityProfileSelectInput from './Select/QualityProfileSelectInput';
-import RootFolderSelectInput from './Select/RootFolderSelectInput';
-import SeriesTypeSelectInput from './Select/SeriesTypeSelectInput';
-import UMaskInput from './Select/UMaskInput';
-import DeviceInput from './Tag/DeviceInput';
-import SeriesTagInput from './Tag/SeriesTagInput';
-import TagSelectInput from './Tag/TagSelectInput';
-import TextTagInput from './Tag/TextTagInput';
-import TextArea from './TextArea';
-import TextInput from './TextInput';
+import PathInput, { PathInputProps } from './PathInput';
+import DownloadClientSelectInput, {
+  DownloadClientSelectInputProps,
+} from './Select/DownloadClientSelectInput';
+import EnhancedSelectInput, {
+  EnhancedSelectInputProps,
+} from './Select/EnhancedSelectInput';
+import IndexerFlagsSelectInput, {
+  IndexerFlagsSelectInputProps,
+} from './Select/IndexerFlagsSelectInput';
+import IndexerSelectInput, {
+  IndexerSelectInputProps,
+} from './Select/IndexerSelectInput';
+import LanguageSelectInput, {
+  LanguageSelectInputProps,
+} from './Select/LanguageSelectInput';
+import MonitorEpisodesSelectInput, {
+  MonitorEpisodesSelectInputProps,
+} from './Select/MonitorEpisodesSelectInput';
+import MonitorNewItemsSelectInput, {
+  MonitorNewItemsSelectInputProps,
+} from './Select/MonitorNewItemsSelectInput';
+import ProviderDataSelectInput, {
+  ProviderOptionSelectInputProps,
+} from './Select/ProviderOptionSelectInput';
+import QualityProfileSelectInput, {
+  QualityProfileSelectInputProps,
+} from './Select/QualityProfileSelectInput';
+import RootFolderSelectInput, {
+  RootFolderSelectInputProps,
+} from './Select/RootFolderSelectInput';
+import SeriesTypeSelectInput, {
+  SeriesTypeSelectInputProps,
+} from './Select/SeriesTypeSelectInput';
+import UMaskInput, { UMaskInputProps } from './Select/UMaskInput';
+import DeviceInput, { DeviceInputProps } from './Tag/DeviceInput';
+import SeriesTagInput, { SeriesTagInputProps } from './Tag/SeriesTagInput';
+import TagSelectInput, { TagSelectInputProps } from './Tag/TagSelectInput';
+import TextTagInput, { TextTagInputProps } from './Tag/TextTagInput';
+import TextArea, { TextAreaProps } from './TextArea';
+import TextInput, { TextInputProps } from './TextInput';
 import styles from './FormInputGroup.css';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const componentMap: Record<InputType, ComponentType<any>> = {
+const componentMap: Record<InputType, ElementType> = {
   autoComplete: AutoCompleteInput,
   captcha: CaptchaInput,
   check: CheckInput,
   date: TextInput,
   device: DeviceInput,
+  downloadClientSelect: DownloadClientSelectInput,
+  dynamicSelect: ProviderDataSelectInput,
   file: TextInput,
   float: NumberInput,
+  indexerFlagsSelect: IndexerFlagsSelectInput,
+  indexerSelect: IndexerSelectInput,
   keyValueList: KeyValueListInput,
   languageSelect: LanguageSelectInput,
   monitorEpisodesSelect: MonitorEpisodesSelectInput,
@@ -55,21 +77,84 @@ const componentMap: Record<InputType, ComponentType<any>> = {
   password: PasswordInput,
   path: PathInput,
   qualityProfileSelect: QualityProfileSelectInput,
-  indexerSelect: IndexerSelectInput,
-  indexerFlagsSelect: IndexerFlagsSelectInput,
-  downloadClientSelect: DownloadClientSelectInput,
   rootFolderSelect: RootFolderSelectInput,
   select: EnhancedSelectInput,
-  dynamicSelect: ProviderDataSelectInput,
-  tag: SeriesTagInput,
   seriesTag: SeriesTagInput,
   seriesTypeSelect: SeriesTypeSelectInput,
+  tag: SeriesTagInput,
+  tagSelect: TagSelectInput,
   text: TextInput,
   textArea: TextArea,
   textTag: TextTagInput,
-  tagSelect: TagSelectInput,
   umask: UMaskInput,
-};
+} as const;
+
+// type Components = typeof componentMap;
+
+type PickProps<V, C extends InputType> = C extends 'text'
+  ? TextInputProps
+  : C extends 'autoComplete'
+  ? AutoCompleteInputProps
+  : C extends 'captcha'
+  ? CaptchaInputProps
+  : C extends 'check'
+  ? CheckInputProps
+  : C extends 'date'
+  ? TextInputProps
+  : C extends 'device'
+  ? DeviceInputProps
+  : C extends 'downloadClientSelect'
+  ? DownloadClientSelectInputProps
+  : C extends 'dynamicSelect'
+  ? ProviderOptionSelectInputProps
+  : C extends 'file'
+  ? TextInputProps
+  : C extends 'float'
+  ? TextInputProps
+  : C extends 'indexerFlagsSelect'
+  ? IndexerFlagsSelectInputProps
+  : C extends 'indexerSelect'
+  ? IndexerSelectInputProps
+  : C extends 'keyValueList'
+  ? KeyValueListInputProps
+  : C extends 'languageSelect'
+  ? LanguageSelectInputProps
+  : C extends 'monitorEpisodesSelect'
+  ? MonitorEpisodesSelectInputProps
+  : C extends 'monitorNewItemsSelect'
+  ? MonitorNewItemsSelectInputProps
+  : C extends 'number'
+  ? NumberInputProps
+  : C extends 'oauth'
+  ? OAuthInputProps
+  : C extends 'password'
+  ? TextInputProps
+  : C extends 'path'
+  ? PathInputProps
+  : C extends 'qualityProfileSelect'
+  ? QualityProfileSelectInputProps
+  : C extends 'rootFolderSelect'
+  ? RootFolderSelectInputProps
+  : C extends 'select'
+  ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    EnhancedSelectInputProps<any, V>
+  : C extends 'seriesTag'
+  ? SeriesTagInputProps
+  : C extends 'seriesTypeSelect'
+  ? SeriesTypeSelectInputProps
+  : C extends 'tag'
+  ? SeriesTagInputProps
+  : C extends 'tagSelect'
+  ? TagSelectInputProps
+  : C extends 'text'
+  ? TextInputProps
+  : C extends 'textArea'
+  ? TextAreaProps
+  : C extends 'textTag'
+  ? TextTagInputProps
+  : C extends 'umask'
+  ? UMaskInputProps
+  : never;
 
 export interface FormInputGroupValues<T> {
   key: T;
@@ -82,53 +167,37 @@ export interface ValidationMessage {
   message: string;
 }
 
-interface FormInputGroupProps<T> {
+export type FormInputGroupProps<V, C extends InputType> = Omit<
+  PickProps<V, C>,
+  'className'
+> & {
+  type: C;
   className?: string;
   containerClassName?: string;
   inputClassName?: string;
+  autoFocus?: boolean;
   autocomplete?: string;
   name: string;
-  value?: unknown;
-  values?: FormInputGroupValues<unknown>[];
-  isDisabled?: boolean;
-  type?: InputType;
-  kind?: Kind;
-  min?: number;
-  max?: number;
-  unit?: string;
   buttons?: ReactNode | ReactNode[];
   helpText?: string;
   helpTexts?: string[];
   helpTextWarning?: string;
   helpLink?: string;
-  placeholder?: string;
-  autoFocus?: boolean;
-  includeFiles?: boolean;
-  includeMissingValue?: boolean;
-  includeNoChange?: boolean;
-  includeNoChangeDisabled?: boolean;
-  valueOptions?: object;
-  selectedValueOptions?: object;
-  selectOptionsProviderAction?: string;
-  indexerFlags?: number;
   pending?: boolean;
-  protocol?: DownloadProtocol;
-  canEdit?: boolean;
-  includeAny?: boolean;
-  delimiters?: string[];
-  readOnly?: boolean;
+  placeholder?: string;
+  unit?: string;
   errors?: (ValidationMessage | ValidationError)[];
   warnings?: (ValidationMessage | ValidationWarning)[];
-  onChange: (change: InputChanged<T>) => void;
-  onFocus?: (event: FocusEvent<HTMLInputElement>) => void;
-}
+};
 
-function FormInputGroup<T>(props: FormInputGroupProps<T>) {
+function FormInputGroup<T, C extends InputType>(
+  props: FormInputGroupProps<T, C>
+) {
   const {
     className = styles.inputGroup,
     containerClassName = styles.inputGroupContainer,
     inputClassName,
-    type = 'text',
+    type,
     unit,
     buttons = [],
     helpText,
@@ -153,6 +222,7 @@ function FormInputGroup<T>(props: FormInputGroupProps<T>) {
     <div className={containerClassName}>
       <div className={className}>
         <div className={styles.inputContainer}>
+          {/* @ts-expect-error - tpyes are validated already */}
           <InputComponent
             className={inputClassName}
             helpText={helpText}

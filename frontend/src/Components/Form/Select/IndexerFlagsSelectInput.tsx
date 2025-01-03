@@ -30,7 +30,7 @@ const selectIndexerFlagsValues = (selectedFlags: number) =>
     }
   );
 
-interface IndexerFlagsSelectInputProps {
+export interface IndexerFlagsSelectInputProps {
   name: string;
   indexerFlags: number;
   onChange(payload: EnhancedSelectInputChanged<number>): void;

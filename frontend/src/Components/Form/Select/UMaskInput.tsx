@@ -1,5 +1,4 @@
 /* eslint-disable no-bitwise */
-import PropTypes from 'prop-types';
 import React, { SyntheticEvent } from 'react';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
@@ -67,7 +66,7 @@ function formatPermissions(permissions: number) {
   return result;
 }
 
-interface UMaskInputProps {
+export interface UMaskInputProps {
   name: string;
   value: string;
   hasError?: boolean;
@@ -128,15 +127,5 @@ function UMaskInput({ name, value, onChange }: UMaskInputProps) {
     </div>
   );
 }
-
-UMaskInput.propTypes = {
-  name: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
-  hasError: PropTypes.bool,
-  hasWarning: PropTypes.bool,
-  onChange: PropTypes.func.isRequired,
-  onFocus: PropTypes.func,
-  onBlur: PropTypes.func,
-};
 
 export default UMaskInput;

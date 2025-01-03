@@ -12,20 +12,20 @@ interface LanguageSelectInputOnChangeProps {
   value: number | string | Language;
 }
 
-interface LanguageSelectInputProps {
+export interface LanguageSelectInputProps {
   name: string;
   value: number | string | Language;
-  includeNoChange: boolean;
+  includeNoChange?: boolean;
   includeNoChangeDisabled?: boolean;
-  includeMixed: boolean;
+  includeMixed?: boolean;
   onChange: (payload: LanguageSelectInputOnChangeProps) => void;
 }
 
 export default function LanguageSelectInput({
   value,
-  includeNoChange,
+  includeNoChange = false,
   includeNoChangeDisabled,
-  includeMixed,
+  includeMixed = false,
   onChange,
   ...otherProps
 }: LanguageSelectInputProps) {

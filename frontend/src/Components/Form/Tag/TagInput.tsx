@@ -1,5 +1,4 @@
 import classNames from 'classnames';
-import PropTypes from 'prop-types';
 import React, {
   KeyboardEvent,
   Ref,
@@ -16,9 +15,7 @@ import {
   SuggestionsFetchRequestedParams,
 } from 'react-autosuggest';
 import useDebouncedCallback from 'Helpers/Hooks/useDebouncedCallback';
-import { kinds } from 'Helpers/Props';
 import { Kind } from 'Helpers/Props/kinds';
-import tagShape from 'Helpers/Props/Shapes/tagShape';
 import { InputChanged } from 'typings/inputs';
 import AutoSuggestInput from '../AutoSuggestInput';
 import TagInputInput from './TagInputInput';
@@ -336,24 +333,5 @@ function TagInput<T extends TagBase>({
     />
   );
 }
-
-TagInput.propTypes = {
-  className: PropTypes.string,
-  inputContainerClassName: PropTypes.string,
-  tags: PropTypes.arrayOf(PropTypes.shape(tagShape)).isRequired,
-  tagList: PropTypes.arrayOf(PropTypes.shape(tagShape)).isRequired,
-  allowNew: PropTypes.bool,
-  kind: PropTypes.oneOf(kinds.all),
-  placeholder: PropTypes.string,
-  delimiters: PropTypes.arrayOf(PropTypes.string),
-  minQueryLength: PropTypes.number,
-  canEdit: PropTypes.bool,
-  hasError: PropTypes.bool,
-  hasWarning: PropTypes.bool,
-  tagComponent: PropTypes.elementType,
-  onTagAdd: PropTypes.func.isRequired,
-  onTagDelete: PropTypes.func.isRequired,
-  onTagReplace: PropTypes.func,
-};
 
 export default TagInput;

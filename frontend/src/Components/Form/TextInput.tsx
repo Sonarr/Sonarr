@@ -10,7 +10,7 @@ import React, {
 import { FileInputChanged, InputChanged } from 'typings/inputs';
 import styles from './TextInput.css';
 
-interface CommonTextInputProps {
+export interface CommonTextInputProps {
   className?: string;
   readOnly?: boolean;
   autoFocus?: boolean;
@@ -23,7 +23,7 @@ interface CommonTextInputProps {
   step?: number;
   min?: number;
   max?: number;
-  onFocus?: (event: FocusEvent) => void;
+  onFocus?: (event: FocusEvent<HTMLInputElement, Element>) => void;
   onBlur?: (event: SyntheticEvent) => void;
   onCopy?: (event: SyntheticEvent) => void;
   onSelectionChange?: (start: number | null, end: number | null) => void;
@@ -102,7 +102,7 @@ function TextInput({
   );
 
   const handleFocus = useCallback(
-    (event: FocusEvent) => {
+    (event: FocusEvent<HTMLInputElement, Element>) => {
       onFocus?.(event);
 
       selectionChanged();

@@ -16,7 +16,7 @@ import FormInputButton from './FormInputButton';
 import TextInput from './TextInput';
 import styles from './CaptchaInput.css';
 
-interface CaptchaInputProps {
+export interface CaptchaInputProps {
   className?: string;
   name: string;
   value?: string;

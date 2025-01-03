@@ -3,16 +3,16 @@
 interface CssExports {
   'checkbox': string;
   'container': string;
-  'dangerIsChecked': string;
+  'danger': string;
   'helpText': string;
   'input': string;
   'isDisabled': string;
   'isIndeterminate': string;
   'isNotChecked': string;
   'label': string;
-  'primaryIsChecked': string;
-  'successIsChecked': string;
-  'warningIsChecked': string;
+  'primary': string;
+  'success': string;
+  'warning': string;
 }
 export const cssExports: CssExports;
 export default cssExports;

@@ -8,6 +8,7 @@ import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import { inputTypes } from 'Helpers/Props';
+import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
 import styles from './ManageDownloadClientsEditModalContent.css';
 
@@ -57,7 +58,7 @@ function ManageDownloadClientsEditModalContent(
   const [removeCompletedDownloads, setRemoveCompletedDownloads] =
     useState(NO_CHANGE);
   const [removeFailedDownloads, setRemoveFailedDownloads] = useState(NO_CHANGE);
-  const [priority, setPriority] = useState<null | string | number>(null);
+  const [priority, setPriority] = useState<null | number>(null);
 
   const save = useCallback(() => {
     let hasChanges = false;
@@ -97,29 +98,26 @@ function ManageDownloadClientsEditModalContent(
     onModalClose,
   ]);
 
-  const onInputChange = useCallback(
-    ({ name, value }: { name: string; value: string }) => {
-      switch (name) {
-        case 'enable':
-          setEnable(value);
-          break;
-        case 'priority':
-          setPriority(value);
-          break;
-        case 'removeCompletedDownloads':
-          setRemoveCompletedDownloads(value);
-          break;
-        case 'removeFailedDownloads':
-          setRemoveFailedDownloads(value);
-          break;
-        default:
-          console.warn(
-            `EditDownloadClientsModalContent Unknown Input: '${name}'`
-          );
-      }
-    },
-    []
-  );
+  const onInputChange = useCallback(({ name, value }: InputChanged) => {
+    switch (name) {
+      case 'enable':
+        setEnable(value as string);
+        break;
+      case 'priority':
+        setPriority(value as number);
+        break;
+      case 'removeCompletedDownloads':
+        setRemoveCompletedDownloads(value as string);
+        break;
+      case 'removeFailedDownloads':
+        setRemoveFailedDownloads(value as string);
+        break;
+      default:
+        console.warn(
+          `EditDownloadClientsModalContent Unknown Input: '${name}'`
+        );
+    }
+  }, []);
 
   const selectedCount = downloadClientIds.length;
 
