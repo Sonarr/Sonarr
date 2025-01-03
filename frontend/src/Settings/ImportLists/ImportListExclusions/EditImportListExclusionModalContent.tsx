@@ -22,6 +22,7 @@ import {
 } from 'Store/Actions/settingsActions';
 import selectSettings from 'Store/Selectors/selectSettings';
 import ImportListExclusion from 'typings/ImportListExclusion';
+import { InputChanged } from 'typings/inputs';
 import { PendingSection } from 'typings/pending';
 import translate from 'Utilities/String/translate';
 import styles from './EditImportListExclusionModalContent.css';
@@ -102,9 +103,9 @@ function EditImportListExclusionModalContent({
   }, [dispatch, id]);
 
   const onInputChange = useCallback(
-    (payload: { name: string; value: string | number }) => {
+    (change: InputChanged) => {
       // @ts-expect-error 'setImportListExclusionValue' isn't typed yet
-      dispatch(setImportListExclusionValue(payload));
+      dispatch(setImportListExclusionValue(change));
     },
     [dispatch]
   );

@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
 import { addTag } from 'Store/Actions/tagActions';
@@ -12,10 +12,10 @@ interface SeriesTag extends TagBase {
   name: string;
 }
 
-interface SeriesTagInputProps {
+export interface SeriesTagInputProps {
   name: string;
-  value: number | number[];
-  onChange: (change: InputChanged<number | number[]>) => void;
+  value: number[];
+  onChange: (change: InputChanged<number[]>) => void;
 }
 
 const VALID_TAG_REGEX = new RegExp('[^-_a-z0-9]', 'i');
@@ -65,42 +65,22 @@ export default function SeriesTagInput({
   onChange,
 }: SeriesTagInputProps) {
   const dispatch = useDispatch();
-  const isArray = Array.isArray(value);
-
-  const arrayValue = useMemo(() => {
-    if (isArray) {
-      return value;
-    }
-
-    return value === 0 ? [] : [value];
-  }, [isArray, value]);
 
   const { tags, tagList, allTags } = useSelector(
-    createSeriesTagsSelector(arrayValue)
+    createSeriesTagsSelector(value)
   );
 
   const handleTagCreated = useCallback(
     (tag: SeriesTag) => {
-      if (isArray) {
-        onChange({ name, value: [...value, tag.id] });
-      } else {
-        onChange({
-          name,
-          value: tag.id,
-        });
-      }
+      onChange({ name, value: [...value, tag.id] });
     },
-    [name, value, isArray, onChange]
+    [name, value, onChange]
   );
 
   const handleTagAdd = useCallback(
     (newTag: SeriesTag) => {
       if (newTag.id) {
-        if (isArray) {
-          onChange({ name, value: [...value, newTag.id] });
-        } else {
-          onChange({ name, value: newTag.id });
-        }
+        onChange({ name, value: [...value, newTag.id] });
 
         return;
       }
@@ -116,21 +96,17 @@ export default function SeriesTagInput({
         );
       }
     },
-    [name, value, isArray, allTags, handleTagCreated, onChange, dispatch]
+    [name, value, allTags, handleTagCreated, onChange, dispatch]
   );
 
   const handleTagDelete = useCallback(
     ({ index }: { index: number }) => {
-      if (isArray) {
-        const newValue = value.slice();
-        newValue.splice(index, 1);
+      const newValue = value.slice();
+      newValue.splice(index, 1);
 
-        onChange({ name, value: newValue });
-      } else {
-        onChange({ name, value: 0 });
-      }
+      onChange({ name, value: newValue });
     },
-    [name, value, isArray, onChange]
+    [name, value, onChange]
   );
 
   return (

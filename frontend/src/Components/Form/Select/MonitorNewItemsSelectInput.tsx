@@ -5,19 +5,20 @@ import EnhancedSelectInput, {
   EnhancedSelectInputValue,
 } from './EnhancedSelectInput';
 
-interface MonitorNewItemsSelectInputProps
+export interface MonitorNewItemsSelectInputProps
   extends Omit<
     EnhancedSelectInputProps<EnhancedSelectInputValue<string>, string>,
     'values'
   > {
   includeNoChange?: boolean;
+  includeNoChangeDisabled?: boolean;
   includeMixed?: boolean;
-  onChange: (...args: unknown[]) => unknown;
 }
 
 function MonitorNewItemsSelectInput(props: MonitorNewItemsSelectInputProps) {
   const {
     includeNoChange = false,
+    includeNoChangeDisabled = true,
     includeMixed = false,
     ...otherProps
   } = props;
@@ -30,7 +31,7 @@ function MonitorNewItemsSelectInput(props: MonitorNewItemsSelectInputProps) {
     values.unshift({
       key: 'noChange',
       value: 'No Change',
-      isDisabled: true,
+      isDisabled: includeNoChangeDisabled,
     });
   }
 

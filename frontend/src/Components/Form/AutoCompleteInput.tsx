@@ -7,8 +7,9 @@ import {
 import { InputChanged } from 'typings/inputs';
 import AutoSuggestInput from './AutoSuggestInput';
 
-interface AutoCompleteInputProps {
+export interface AutoCompleteInputProps {
   name: string;
+  readOnly?: boolean;
   value?: string;
   values: string[];
   onChange: (change: InputChanged<string>) => unknown;

@@ -11,7 +11,7 @@ interface ChangeEvent<T = Element> extends SyntheticEvent<T, MouseEvent> {
   target: EventTarget & T;
 }
 
-interface CheckInputProps {
+export interface CheckInputProps {
   className?: string;
   containerClassName?: string;
   name: string;
@@ -45,7 +45,6 @@ function CheckInput(props: CheckInputProps) {
   const isChecked = value === checkedValue;
   const isUnchecked = value === uncheckedValue;
   const isIndeterminate = !isChecked && !isUnchecked;
-  const isCheckClass: keyof typeof styles = `${kind}IsChecked`;
 
   const toggleChecked = useCallback(
     (checked: boolean, shiftKey: boolean) => {
@@ -112,7 +111,7 @@ function CheckInput(props: CheckInputProps) {
         <div
           className={classNames(
             className,
-            isChecked ? styles[isCheckClass] : styles.isNotChecked,
+            isChecked ? styles[kind] : styles.isNotChecked,
             isIndeterminate && styles.isIndeterminate,
             isDisabled && styles.isDisabled
           )}

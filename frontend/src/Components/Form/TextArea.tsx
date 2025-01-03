@@ -9,7 +9,7 @@ import React, {
 import { InputChanged } from 'typings/inputs';
 import styles from './TextArea.css';
 
-interface TextAreaProps {
+export interface TextAreaProps {
   className?: string;
   readOnly?: boolean;
   autoFocus?: boolean;

@@ -61,10 +61,10 @@ function TableOptionsModal({
     dropIndex > dragIndex;
 
   const handlePageSizeChange = useCallback(
-    ({ value }: InputChanged<number>) => {
+    ({ value }: InputChanged<number | null>) => {
       let error: string | null = null;
 
-      if (value < 5) {
+      if (value === null || value < 5) {
         error = translate('TablePageSizeMinimum', {
           minimumValue: '5',
         });
@@ -76,7 +76,7 @@ function TableOptionsModal({
         onTableOptionChange({ pageSize: value });
       }
 
-      setPageSize(value);
+      setPageSize(value ?? 0);
       setPageSizeError(error);
     },
     [maxPageSize, onTableOptionChange]

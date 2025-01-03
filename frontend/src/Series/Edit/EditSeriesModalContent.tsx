@@ -241,6 +241,7 @@ function EditSeriesModalContent({
                   <Icon name={icons.ROOT_FOLDER} />
                 </FormInputButton>,
               ]}
+              includeFiles={false}
               onChange={handleInputChange}
             />
           </FormGroup>

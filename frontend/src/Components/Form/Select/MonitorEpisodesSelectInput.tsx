@@ -6,13 +6,13 @@ import EnhancedSelectInput, {
   EnhancedSelectInputValue,
 } from './EnhancedSelectInput';
 
-interface MonitorEpisodesSelectInputProps
+export interface MonitorEpisodesSelectInputProps
   extends Omit<
     EnhancedSelectInputProps<EnhancedSelectInputValue<string>, string>,
     'values'
   > {
-  includeNoChange: boolean;
-  includeMixed: boolean;
+  includeNoChange?: boolean;
+  includeMixed?: boolean;
 }
 
 function MonitorEpisodesSelectInput(props: MonitorEpisodesSelectInputProps) {

@@ -41,10 +41,11 @@
 .checkbox:focus + .input {
   outline: 0;
   border-color: var(--inputFocusBorderColor);
-  box-shadow: inset 0 1px 1px var(--inputBoxShadowColor), 0 0 8px var(--inputFocusBoxShadowColor);
+  box-shadow: inset 0 1px 1px var(--inputBoxShadowColor),
+    0 0 8px var(--inputFocusBoxShadowColor);
 }
 
-.dangerIsChecked {
+.danger {
   border-color: var(--dangerColor);
   background-color: var(--dangerColor);
 
@@ -53,7 +54,7 @@
   }
 }
 
-.primaryIsChecked {
+.primary {
   border-color: var(--primaryColor);
   background-color: var(--primaryColor);
 
@@ -62,7 +63,7 @@
   }
 }
 
-.successIsChecked {
+.success {
   border-color: var(--successColor);
   background-color: var(--successColor);
 
@@ -71,7 +72,7 @@
   }
 }
 
-.warningIsChecked {
+.warning {
   border-color: var(--warningColor);
   background-color: var(--warningColor);
 

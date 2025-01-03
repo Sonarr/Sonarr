@@ -6,7 +6,7 @@ import { kinds } from 'Helpers/Props';
 import { resetOAuth, startOAuth } from 'Store/Actions/oAuthActions';
 import { InputOnChange } from 'typings/inputs';
 
-interface OAuthInputProps {
+export interface OAuthInputProps {
   label?: string;
   name: string;
   provider: string;
