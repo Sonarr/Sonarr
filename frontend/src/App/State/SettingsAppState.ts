@@ -99,7 +99,9 @@ export interface IndexerAppState
 
 export interface NotificationAppState
   extends AppSectionState<Notification>,
-    AppSectionDeleteState {}
+    AppSectionDeleteState,
+    AppSectionSaveState,
+    AppSectionSchemaState<Presets<Notification>> {}
 
 export interface QualityDefinitionsAppState
   extends AppSectionState<QualityDefinition>,
