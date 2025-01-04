@@ -20,12 +20,14 @@ import IndexerFlag from 'typings/IndexerFlag';
 import Notification from 'typings/Notification';
 import QualityDefinition from 'typings/QualityDefinition';
 import QualityProfile from 'typings/QualityProfile';
+import DownloadClientOptions from 'typings/Settings/DownloadClientOptions';
 import General from 'typings/Settings/General';
 import IndexerOptions from 'typings/Settings/IndexerOptions';
 import MediaManagement from 'typings/Settings/MediaManagement';
 import NamingConfig from 'typings/Settings/NamingConfig';
 import NamingExample from 'typings/Settings/NamingExample';
 import ReleaseProfile from 'typings/Settings/ReleaseProfile';
+import RemotePathMapping from 'typings/Settings/RemotePathMapping';
 import UiSettings from 'typings/Settings/UiSettings';
 import MetadataAppState from './MetadataAppState';
 
@@ -52,9 +54,14 @@ export interface DelayProfileAppState
 export interface DownloadClientAppState
   extends AppSectionState<DownloadClient>,
     AppSectionDeleteState,
-    AppSectionSaveState {
+    AppSectionSaveState,
+    AppSectionSchemaState<Presets<DownloadClient>> {
   isTestingAll: boolean;
 }
+
+export interface DownloadClientOptionsAppState
+  extends AppSectionItemState<DownloadClientOptions>,
+    AppSectionSaveState {}
 
 export interface GeneralAppState
   extends AppSectionItemState<General>,
@@ -131,6 +138,13 @@ export interface ImportListExclusionsSettingsAppState
   pendingChanges: Partial<ImportListExclusion>;
 }
 
+export interface RemotePathMappingsAppState
+  extends AppSectionState<RemotePathMapping>,
+    AppSectionDeleteState,
+    AppSectionSaveState {
+  pendingChanges: Partial<RemotePathMapping>;
+}
+
 export type IndexerFlagSettingsAppState = AppSectionState<IndexerFlag>;
 export type LanguageSettingsAppState = AppSectionState<Language>;
 export type UiSettingsAppState = AppSectionItemState<UiSettings>;
@@ -142,6 +156,7 @@ interface SettingsAppState {
   customFormats: CustomFormatAppState;
   delayProfiles: DelayProfileAppState;
   downloadClients: DownloadClientAppState;
+  downloadClientOptions: DownloadClientOptionsAppState;
   general: GeneralAppState;
   importListExclusions: ImportListExclusionsSettingsAppState;
   importListOptions: ImportListOptionsSettingsAppState;
@@ -158,6 +173,7 @@ interface SettingsAppState {
   qualityDefinitions: QualityDefinitionsAppState;
   qualityProfiles: QualityProfilesAppState;
   releaseProfiles: ReleaseProfilesAppState;
+  remotePathMappings: RemotePathMappingsAppState;
   ui: UiSettingsAppState;
 }
 

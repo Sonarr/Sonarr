@@ -210,6 +210,10 @@ function EditDelayProfileModalContent({
   useEffect(() => {
     if (!id) {
       Object.keys(newDelayProfile).forEach((name) => {
+        if (name === 'id') {
+          return;
+        }
+
         dispatch(
           // @ts-expect-error - actions are not typed
           setDelayProfileValue({
