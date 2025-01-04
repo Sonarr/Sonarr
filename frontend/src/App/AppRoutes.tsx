@@ -11,7 +11,7 @@ import Switch from 'Components/Router/Switch';
 import SeriesDetailsPageConnector from 'Series/Details/SeriesDetailsPageConnector';
 import SeriesIndex from 'Series/Index/SeriesIndex';
 import CustomFormatSettingsPage from 'Settings/CustomFormats/CustomFormatSettingsPage';
-import DownloadClientSettingsConnector from 'Settings/DownloadClients/DownloadClientSettingsConnector';
+import DownloadClientSettings from 'Settings/DownloadClients/DownloadClientSettings';
 import GeneralSettings from 'Settings/General/GeneralSettings';
 import ImportListSettings from 'Settings/ImportLists/ImportListSettings';
 import IndexerSettings from 'Settings/Indexers/IndexerSettings';
@@ -113,7 +113,7 @@ function AppRoutes() {
 
       <Route
         path="/settings/downloadclients"
-        component={DownloadClientSettingsConnector}
+        component={DownloadClientSettings}
       />
 
       <Route path="/settings/importlists" component={ImportListSettings} />
