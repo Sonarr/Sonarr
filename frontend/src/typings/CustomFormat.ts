@@ -1,4 +1,5 @@
 import ModelBase from 'App/ModelBase';
+import CustomFormatSpecification from './CustomFormatSpecification';
 
 export interface QualityProfileFormatItem {
   format: number;
@@ -9,6 +10,7 @@ export interface QualityProfileFormatItem {
 interface CustomFormat extends ModelBase {
   name: string;
   includeCustomFormatWhenRenaming: boolean;
+  specifications: CustomFormatSpecification[];
 }
 
 export default CustomFormat;
