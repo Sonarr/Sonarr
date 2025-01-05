@@ -1,10 +1,10 @@
 import { Filter } from 'App/State/AppState';
 
-export default function getFilterValue(
+export default function getFilterValue<T>(
   filters: Filter[],
   filterKey: string | number,
   filterValueKey: string,
-  defaultValue: string | number | boolean
+  defaultValue: T
 ) {
   const filter = filters.find((f) => f.key === filterKey);
 

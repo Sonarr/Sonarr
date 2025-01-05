@@ -31,7 +31,7 @@ import Status from 'System/Status/Status';
 import Tasks from 'System/Tasks/Tasks';
 import Updates from 'System/Updates/Updates';
 import getPathWithUrlBase from 'Utilities/getPathWithUrlBase';
-import CutoffUnmetConnector from 'Wanted/CutoffUnmet/CutoffUnmetConnector';
+import CutoffUnmet from 'Wanted/CutoffUnmet/CutoffUnmet';
 import MissingConnector from 'Wanted/Missing/MissingConnector';
 
 function RedirectWithUrlBase() {
@@ -90,7 +90,7 @@ function AppRoutes() {
 
       <Route path="/wanted/missing" component={MissingConnector} />
 
-      <Route path="/wanted/cutoffunmet" component={CutoffUnmetConnector} />
+      <Route path="/wanted/cutoffunmet" component={CutoffUnmet} />
 
       {/*
         Settings

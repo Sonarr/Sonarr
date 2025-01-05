@@ -3,7 +3,7 @@ import { createSelector } from 'reselect';
 import AppState from 'App/State/AppState';
 import Episode from './Episode';
 
-export type EpisodeEntities =
+export type EpisodeEntity =
   | 'calendar'
   | 'episodes'
   | 'interactiveImport.episodes'
@@ -48,7 +48,7 @@ function createWantedMissingEpisodeSelector(episodeId?: number) {
 
 function useEpisode(
   episodeId: number | undefined,
-  episodeEntity: EpisodeEntities
+  episodeEntity: EpisodeEntity
 ) {
   let selector = createEpisodeSelector;
 

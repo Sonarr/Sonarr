@@ -1,14 +1,14 @@
 import React, { useCallback, useState } from 'react';
 import Modal from 'Components/Modal/Modal';
 import EpisodeDetailsTab from 'Episode/EpisodeDetailsTab';
-import { EpisodeEntities } from 'Episode/useEpisode';
+import { EpisodeEntity } from 'Episode/useEpisode';
 import { sizes } from 'Helpers/Props';
 import EpisodeDetailsModalContent from './EpisodeDetailsModalContent';
 
 interface EpisodeDetailsModalProps {
   isOpen: boolean;
   episodeId: number;
-  episodeEntity: EpisodeEntities;
+  episodeEntity: EpisodeEntity;
   seriesId: number;
   episodeTitle: string;
   isSaving?: boolean;
