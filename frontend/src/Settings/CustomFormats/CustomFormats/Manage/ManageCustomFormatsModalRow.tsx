@@ -12,7 +12,7 @@ import { icons } from 'Helpers/Props';
 import { deleteCustomFormat } from 'Store/Actions/settingsActions';
 import { SelectStateInputProps } from 'typings/props';
 import translate from 'Utilities/String/translate';
-import EditCustomFormatModalConnector from '../EditCustomFormatModalConnector';
+import EditCustomFormatModal from '../EditCustomFormatModal';
 import styles from './ManageCustomFormatsModalRow.css';
 
 interface ManageCustomFormatsModalRowProps {
@@ -102,7 +102,7 @@ function ManageCustomFormatsModalRow(props: ManageCustomFormatsModalRowProps) {
         />
       </TableRowCell>
 
-      <EditCustomFormatModalConnector
+      <EditCustomFormatModal
         id={id}
         isOpen={isEditCustomFormatModalOpen}
         onModalClose={handleEditCustomFormatModalClose}
