@@ -258,14 +258,7 @@ function FormInputGroup<T>(props: FormInputGroupProps<T>) {
       {helpLink ? <Link to={helpLink}>{translate('MoreInfo')}</Link> : null}
 
       {errors.map((error, index) => {
-        return 'message' in error ? (
-          <FormInputHelpText
-            key={index}
-            text={error.message}
-            isError={true}
-            isCheckInput={checkInput}
-          />
-        ) : (
+        return 'errorMessage' in error ? (
           <FormInputHelpText
             key={index}
             text={error.errorMessage}
@@ -274,23 +267,30 @@ function FormInputGroup<T>(props: FormInputGroupProps<T>) {
             isError={true}
             isCheckInput={checkInput}
           />
+        ) : (
+          <FormInputHelpText
+            key={index}
+            text={error.message}
+            isError={true}
+            isCheckInput={checkInput}
+          />
         );
       })}
 
       {warnings.map((warning, index) => {
-        return 'message' in warning ? (
+        return 'errorMessage' in warning ? (
           <FormInputHelpText
             key={index}
-            text={warning.message}
+            text={warning.errorMessage}
+            link={warning.infoLink}
+            tooltip={warning.detailedDescription}
             isWarning={true}
             isCheckInput={checkInput}
           />
         ) : (
           <FormInputHelpText
             key={index}
-            text={warning.errorMessage}
-            link={warning.infoLink}
-            tooltip={warning.detailedDescription}
+            text={warning.message}
             isWarning={true}
             isCheckInput={checkInput}
           />
