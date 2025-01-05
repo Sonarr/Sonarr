@@ -630,14 +630,14 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
         {
             if (torrent.RatioLimit >= 0)
             {
-                if (torrent.Ratio >= torrent.RatioLimit)
+                if (torrent.RatioLimit - torrent.Ratio <= 0.001f)
                 {
                     return true;
                 }
             }
             else if (torrent.RatioLimit == -2 && config.MaxRatioEnabled)
             {
-                if (Math.Round(torrent.Ratio, 2) >= config.MaxRatio)
+                if (config.MaxRatio - torrent.Ratio <= 0.001f)
                 {
                     return true;
                 }

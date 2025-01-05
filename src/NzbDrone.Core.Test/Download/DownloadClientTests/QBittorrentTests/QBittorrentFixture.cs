@@ -714,10 +714,58 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.QBittorrentTests
 
         [TestCase("pausedUP")]
         [TestCase("stoppedUP")]
+        public void should_be_removable_and_should_allow_move_files_if_max_ratio_reached_after_rounding_and_paused(string state)
+        {
+            GivenGlobalSeedLimits(1.0f);
+            GivenCompletedTorrent(state, ratio: 1.1006066990976857f);
+
+            var item = Subject.GetItems().Single();
+            item.CanBeRemoved.Should().BeTrue();
+            item.CanMoveFiles.Should().BeTrue();
+        }
+
+        [TestCase("pausedUP")]
+        [TestCase("stoppedUP")]
+        public void should_be_removable_and_should_allow_move_files_if_just_under_max_ratio_reached_after_rounding_and_paused(string state)
+        {
+            GivenGlobalSeedLimits(1.0f);
+            GivenCompletedTorrent(state, ratio: 0.9999f);
+
+            var item = Subject.GetItems().Single();
+            item.CanBeRemoved.Should().BeTrue();
+            item.CanMoveFiles.Should().BeTrue();
+        }
+
+        [TestCase("pausedUP")]
+        [TestCase("stoppedUP")]
         public void should_be_removable_and_should_allow_move_files_if_overridden_max_ratio_reached_and_paused(string state)
         {
             GivenGlobalSeedLimits(2.0f);
             GivenCompletedTorrent(state, ratio: 1.0f, ratioLimit: 0.8f);
+
+            var item = Subject.GetItems().Single();
+            item.CanBeRemoved.Should().BeTrue();
+            item.CanMoveFiles.Should().BeTrue();
+        }
+
+        [TestCase("pausedUP")]
+        [TestCase("stoppedUP")]
+        public void should_be_removable_and_should_allow_move_files_if_overridden_max_ratio_reached_after_rounding_and_paused(string state)
+        {
+            GivenGlobalSeedLimits(2.0f);
+            GivenCompletedTorrent(state, ratio: 1.1006066990976857f, ratioLimit: 1.1f);
+
+            var item = Subject.GetItems().Single();
+            item.CanBeRemoved.Should().BeTrue();
+            item.CanMoveFiles.Should().BeTrue();
+        }
+
+        [TestCase("pausedUP")]
+        [TestCase("stoppedUP")]
+        public void should_be_removable_and_should_allow_move_files_if_just_under_overridden_max_ratio_reached_after_rounding_and_paused(string state)
+        {
+            GivenGlobalSeedLimits(2.0f);
+            GivenCompletedTorrent(state, ratio: 0.9999f, ratioLimit: 1.0f);
 
             var item = Subject.GetItems().Single();
             item.CanBeRemoved.Should().BeTrue();
