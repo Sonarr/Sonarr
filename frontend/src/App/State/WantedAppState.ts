@@ -1,9 +1,25 @@
-import AppSectionState from 'App/State/AppSectionState';
+import AppSectionState, {
+  AppSectionFilterState,
+  PagedAppSectionState,
+  TableAppSectionState,
+} from 'App/State/AppSectionState';
 import Episode from 'Episode/Episode';
 
-type WantedCutoffUnmetAppState = AppSectionState<Episode>;
+interface WantedEpisode extends Episode {
+  isSaving?: boolean;
+}
 
-type WantedMissingAppState = AppSectionState<Episode>;
+interface WantedCutoffUnmetAppState
+  extends AppSectionState<WantedEpisode>,
+    AppSectionFilterState<WantedEpisode>,
+    PagedAppSectionState,
+    TableAppSectionState {}
+
+interface WantedMissingAppState
+  extends AppSectionState<WantedEpisode>,
+    AppSectionFilterState<WantedEpisode>,
+    PagedAppSectionState,
+    TableAppSectionState {}
 
 interface WantedAppState {
   cutoffUnmet: WantedCutoffUnmetAppState;

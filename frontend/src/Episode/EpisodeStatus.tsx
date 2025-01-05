@@ -4,7 +4,7 @@ import QueueDetails from 'Activity/Queue/QueueDetails';
 import Icon from 'Components/Icon';
 import ProgressBar from 'Components/ProgressBar';
 import Episode from 'Episode/Episode';
-import useEpisode, { EpisodeEntities } from 'Episode/useEpisode';
+import useEpisode, { EpisodeEntity } from 'Episode/useEpisode';
 import useEpisodeFile from 'EpisodeFile/useEpisodeFile';
 import { icons, kinds, sizes } from 'Helpers/Props';
 import { createQueueItemSelectorForHook } from 'Store/Selectors/createQueueItemSelector';
@@ -15,13 +15,15 @@ import styles from './EpisodeStatus.css';
 
 interface EpisodeStatusProps {
   episodeId: number;
-  episodeEntity?: EpisodeEntities;
+  episodeEntity?: EpisodeEntity;
   episodeFileId: number;
 }
 
-function EpisodeStatus(props: EpisodeStatusProps) {
-  const { episodeId, episodeEntity = 'episodes', episodeFileId } = props;
-
+function EpisodeStatus({
+  episodeId,
+  episodeEntity = 'episodes',
+  episodeFileId,
+}: EpisodeStatusProps) {
   const {
     airDateUtc,
     monitored,

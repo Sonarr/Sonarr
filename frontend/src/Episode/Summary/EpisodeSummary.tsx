@@ -6,7 +6,7 @@ import Column from 'Components/Table/Column';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import Episode from 'Episode/Episode';
-import useEpisode, { EpisodeEntities } from 'Episode/useEpisode';
+import useEpisode, { EpisodeEntity } from 'Episode/useEpisode';
 import useEpisodeFile from 'EpisodeFile/useEpisodeFile';
 import { icons, kinds, sizes } from 'Helpers/Props';
 import Series from 'Series/Series';
@@ -72,7 +72,7 @@ const COLUMNS: Column[] = [
 interface EpisodeSummaryProps {
   seriesId: number;
   episodeId: number;
-  episodeEntity: EpisodeEntities;
+  episodeEntity: EpisodeEntity;
   episodeFileId?: number;
 }
 

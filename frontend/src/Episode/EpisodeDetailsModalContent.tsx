@@ -10,7 +10,7 @@ import MonitorToggleButton from 'Components/MonitorToggleButton';
 import Episode from 'Episode/Episode';
 import EpisodeDetailsTab from 'Episode/EpisodeDetailsTab';
 import episodeEntities from 'Episode/episodeEntities';
-import useEpisode, { EpisodeEntities } from 'Episode/useEpisode';
+import useEpisode, { EpisodeEntity } from 'Episode/useEpisode';
 import Series from 'Series/Series';
 import useSeries from 'Series/useSeries';
 import { toggleEpisodeMonitored } from 'Store/Actions/episodeActions';
@@ -29,7 +29,7 @@ const TABS: EpisodeDetailsTab[] = ['details', 'history', 'search'];
 
 export interface EpisodeDetailsModalContentProps {
   episodeId: number;
-  episodeEntity: EpisodeEntities;
+  episodeEntity: EpisodeEntity;
   seriesId: number;
   episodeTitle: string;
   isSaving?: boolean;
