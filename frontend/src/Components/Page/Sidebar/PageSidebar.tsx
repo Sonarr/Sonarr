@@ -19,7 +19,7 @@ import { setIsSidebarVisible } from 'Store/Actions/appActions';
 import dimensions from 'Styles/Variables/dimensions';
 import HealthStatus from 'System/Status/Health/HealthStatus';
 import translate from 'Utilities/String/translate';
-import MessagesConnector from './Messages/MessagesConnector';
+import Messages from './Messages/Messages';
 import PageSidebarItem from './PageSidebarItem';
 import styles from './PageSidebar.css';
 
@@ -511,7 +511,7 @@ function PageSidebar({ isSidebarVisible, isSmallScreen }: PageSidebarProps) {
           })}
         </div>
 
-        <MessagesConnector />
+        <Messages />
       </ScrollerComponent>
     </div>
   );
