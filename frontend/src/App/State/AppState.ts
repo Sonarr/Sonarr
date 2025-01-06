@@ -11,6 +11,7 @@ import EpisodeFilesAppState from './EpisodeFilesAppState';
 import EpisodesAppState from './EpisodesAppState';
 import HistoryAppState from './HistoryAppState';
 import InteractiveImportAppState from './InteractiveImportAppState';
+import MessagesAppState from './MessagesAppState';
 import OAuthAppState from './OAuthAppState';
 import OrganizePreviewAppState from './OrganizePreviewAppState';
 import ParseAppState from './ParseAppState';
@@ -76,6 +77,7 @@ export interface AppSectionState {
     error?: Error;
     isPopulated: boolean;
   };
+  messages: MessagesAppState;
 }
 
 interface AppState {
