@@ -147,7 +147,7 @@ function InteractiveSearch({ type, searchPayload }: InteractiveSearchProps) {
   );
 
   const handleSortPress = useCallback(
-    (sortKey: string, sortDirection: SortDirection) => {
+    (sortKey: string, sortDirection?: SortDirection) => {
       dispatch(setReleasesSort({ sortKey, sortDirection }));
     },
     [dispatch]

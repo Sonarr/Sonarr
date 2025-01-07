@@ -3,13 +3,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import AppState from 'App/State/AppState';
 import FieldSet from 'Components/FieldSet';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
+import Column from 'Components/Table/Column';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import { fetchCommands } from 'Store/Actions/commandActions';
 import translate from 'Utilities/String/translate';
 import QueuedTaskRow from './QueuedTaskRow';
 
-const columns = [
+const columns: Column[] = [
   {
     name: 'trigger',
     label: '',
@@ -42,6 +43,7 @@ const columns = [
   },
   {
     name: 'actions',
+    label: '',
     isVisible: true,
   },
 ];

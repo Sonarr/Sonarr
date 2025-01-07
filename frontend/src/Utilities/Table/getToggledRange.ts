@@ -2,8 +2,8 @@ import ModelBase from 'App/ModelBase';
 
 function getToggledRange<T extends ModelBase>(
   items: T[],
-  id: number,
-  lastToggled: number
+  id: number | string,
+  lastToggled: number | string
 ) {
   const lastToggledIndex = items.findIndex((item) => item.id === lastToggled);
   const changedIndex = items.findIndex((item) => item.id === id);
