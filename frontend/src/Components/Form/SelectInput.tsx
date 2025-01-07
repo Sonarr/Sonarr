@@ -4,7 +4,7 @@ import { InputChanged } from 'typings/inputs';
 import styles from './SelectInput.css';
 
 interface SelectInputOption {
-  key: string;
+  key: string | number;
   value: string | number | (() => string | number);
 }
 

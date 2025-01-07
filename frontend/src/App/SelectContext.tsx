@@ -9,13 +9,13 @@ export type SelectContextAction =
   | { type: 'unselectAll' }
   | {
       type: 'toggleSelected';
-      id: number;
-      isSelected: boolean;
+      id: number | string;
+      isSelected: boolean | null;
       shiftKey: boolean;
     }
   | {
       type: 'removeItem';
-      id: number;
+      id: number | string;
     }
   | {
       type: 'updateItems';
