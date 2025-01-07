@@ -5,11 +5,11 @@ import areAllSelected from 'Utilities/Table/areAllSelected';
 import selectAll from 'Utilities/Table/selectAll';
 import toggleSelected from 'Utilities/Table/toggleSelected';
 
-export type SelectedState = Record<number, boolean>;
+export type SelectedState = Record<number | string, boolean>;
 
 export interface SelectState {
   selectedState: SelectedState;
-  lastToggled: number | null;
+  lastToggled: number | string | null;
   allSelected: boolean;
   allUnselected: boolean;
 }
@@ -20,14 +20,14 @@ export type SelectAction =
   | { type: 'unselectAll'; items: ModelBase[] }
   | {
       type: 'toggleSelected';
-      id: number;
-      isSelected: boolean;
+      id: number | string;
+      isSelected: boolean | null;
       shiftKey: boolean;
       items: ModelBase[];
     }
   | {
       type: 'removeItem';
-      id: number;
+      id: number | string;
     }
   | {
       type: 'updateItems';

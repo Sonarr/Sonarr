@@ -54,7 +54,7 @@ function LogsTableRow({
   }, []);
 
   return (
-    <TableRowButton overlayContent={true} onPress={handlePress}>
+    <TableRowButton onPress={handlePress}>
       {columns.map((column) => {
         const { name, isVisible } = column;
 

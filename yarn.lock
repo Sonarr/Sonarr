@@ -1479,6 +1479,14 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-virtualized@9.22.0":
+  version "9.22.0"
+  resolved "https://registry.yarnpkg.com/@types/react-virtualized/-/react-virtualized-9.22.0.tgz#2ff9b3692fa04a429df24ffc7d181d9f33b3831d"
+  integrity sha512-JL/YCCFZ123za//cj10Apk54F0UGFMrjOE0QHTuXt1KBMFrzLOGv9/x6Uc/pZ0Gaf4o6w61Fostvlw0DwuPXig==
+  dependencies:
+    "@types/prop-types" "*"
+    "@types/react" "*"
+
 "@types/react-window@1.8.8":
   version "1.8.8"
   resolved "https://registry.yarnpkg.com/@types/react-window/-/react-window-1.8.8.tgz#c20645414d142364fbe735818e1c1e0a145696e3"

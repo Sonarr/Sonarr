@@ -19,7 +19,7 @@ import {
   bulkEditImportLists,
 } from 'Store/Actions/settingsActions';
 import createClientSideCollectionSelector from 'Store/Selectors/createClientSideCollectionSelector';
-import { SelectStateInputProps } from 'typings/props';
+import { CheckInputChanged } from 'typings/inputs';
 import getErrorMessage from 'Utilities/Object/getErrorMessage';
 import translate from 'Utilities/String/translate';
 import getSelectedIds from 'Utilities/Table/getSelectedIds';
@@ -168,7 +168,7 @@ function ManageImportListsModalContent(
   );
 
   const onSelectAllChange = useCallback(
-    ({ value }: SelectStateInputProps) => {
+    ({ value }: CheckInputChanged) => {
       setSelectState({ type: value ? 'selectAll' : 'unselectAll', items });
     },
     [items, setSelectState]
