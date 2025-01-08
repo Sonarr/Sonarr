@@ -41,11 +41,11 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
 
             if (delay == 0)
             {
-                _logger.Debug("QualityProfile does not require a waiting period before download for {0}.", subject.Release.DownloadProtocol);
+                _logger.Debug("Delay Profile does not require a waiting period before download for {0}.", subject.Release.DownloadProtocol);
                 return DownloadSpecDecision.Accept();
             }
 
-            _logger.Debug("QualityProfile requires a waiting period of {0} minutes for {1}", delay, subject.Release.DownloadProtocol);
+            _logger.Debug("Delay Profile requires a waiting period of {0} minutes for {1}", delay, subject.Release.DownloadProtocol);
 
             var qualityComparer = new QualityModelComparer(qualityProfile);
 
