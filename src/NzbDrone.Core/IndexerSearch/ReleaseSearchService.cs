@@ -413,11 +413,6 @@ namespace NzbDrone.Core.IndexerSearch
                 downloadDecisions.AddRange(decisions);
             }
 
-            foreach (var episode in episodesToSearch)
-            {
-                downloadDecisions.AddRange(await SearchAnime(series, episode, monitoredOnly, userInvokedSearch, interactiveSearch, true));
-            }
-
             return DeDupeDecisions(downloadDecisions);
         }
 
