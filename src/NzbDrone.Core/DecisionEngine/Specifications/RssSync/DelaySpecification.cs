@@ -45,6 +45,8 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
                 return DownloadSpecDecision.Accept();
             }
 
+            _logger.Debug("QualityProfile requires a waiting period of {0} minutes for {1}", delay, subject.Release.DownloadProtocol);
+
             var qualityComparer = new QualityModelComparer(qualityProfile);
 
             if (isPreferredProtocol)
@@ -95,6 +97,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
 
             if (oldest != null && oldest.Release.AgeMinutes > delay)
             {
+                _logger.Debug("Oldest pending release {0} has been delayed for {1}, longer than the set delay of {2}. Release will be accepted", oldest.Release.Title, oldest.Release.AgeMinutes, delay);
                 return DownloadSpecDecision.Accept();
             }
 
