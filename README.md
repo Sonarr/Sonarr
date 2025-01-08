@@ -1,6 +1,6 @@
 # <img width="24px" src="./Logo/256.png" alt="Sonarr"></img> Sonarr
 
-[![Translated](https://translate.servarr.com/widgets/servarr/-/sonarr/svg-badge.svg)](https://translate.servarr.com/engage/servarr/)
+[![Translated](https://translate.servarr.com/widget/servarr/sonarr/svg-badge.svg)](https://translate.servarr.com/engage/servarr/)
 [![Backers on Open Collective](https://opencollective.com/Sonarr/backers/badge.svg)](#backers)
 [![Sponsors on Open Collective](https://opencollective.com/Sonarr/sponsors/badge.svg)](#sponsors)
 [![Mega Sponsors on Open Collective](https://opencollective.com/Sonarr/megasponsors/badge.svg)](#mega-sponsors)
