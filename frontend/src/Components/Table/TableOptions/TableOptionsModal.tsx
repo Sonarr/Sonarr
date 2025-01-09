@@ -21,12 +21,12 @@ import Column from '../Column';
 import TableOptionsColumn from './TableOptionsColumn';
 import styles from './TableOptionsModal.css';
 
-interface TableOptionsModalProps {
+export interface TableOptionsModalProps {
   isOpen: boolean;
   columns: Column[];
   pageSize?: number;
   maxPageSize?: number;
-  canModifyColumns: boolean;
+  canModifyColumns?: boolean;
   optionsComponent?: React.ElementType;
   onTableOptionChange: (payload: TableOptionsChangePayload) => void;
   onModalClose: () => void;
@@ -208,9 +208,5 @@ function TableOptionsModal({
     </DndProvider>
   );
 }
-
-TableOptionsModal.defaultProps = {
-  canModifyColumns: true,
-};
 
 export default TableOptionsModal;
