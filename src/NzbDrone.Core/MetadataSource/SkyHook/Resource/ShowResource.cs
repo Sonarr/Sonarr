@@ -24,7 +24,8 @@ namespace NzbDrone.Core.MetadataSource.SkyHook.Resource
         public int? TvRageId { get; set; }
         public int? TvMazeId { get; set; }
         public int? TmdbId { get; set; }
-
+        public HashSet<int> MalIds { get; set; }
+        public HashSet<int> AniListIds { get; set; }
         public string Status { get; set; }
         public int? Runtime { get; set; }
         public TimeOfDayResource TimeOfDay { get; set; }
