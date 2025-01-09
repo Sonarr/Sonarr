@@ -7,12 +7,11 @@ import {
   FilterBuilderTypes,
   possibleFilterTypes,
 } from 'Helpers/Props/filterBuilderTypes';
+import { DateFilterValue, FilterType } from 'Helpers/Props/filterTypes';
 import { InputChanged } from 'typings/inputs';
 import sortByProp from 'Utilities/Array/sortByProp';
 import BoolFilterBuilderRowValue from './BoolFilterBuilderRowValue';
-import DateFilterBuilderRowValue, {
-  DateFilterValue,
-} from './DateFilterBuilderRowValue';
+import DateFilterBuilderRowValue from './DateFilterBuilderRowValue';
 import DefaultFilterBuilderRowValue from './DefaultFilterBuilderRowValue';
 import HistoryEventTypeFilterBuilderRowValue from './HistoryEventTypeFilterBuilderRowValue';
 import IndexerFilterBuilderRowValue from './IndexerFilterBuilderRowValue';
@@ -134,7 +133,7 @@ interface FilterBuilderRowProps<T> {
   index: number;
   filterKey?: string;
   filterValue?: (DateFilterValue | string) | string[] | number[] | boolean[];
-  filterType?: string;
+  filterType: FilterType;
   filterCount: number;
   filterBuilderProps: FilterBuilderProp<T>[];
   sectionItems: T[];
@@ -195,7 +194,7 @@ function FilterBuilderRow<T>({
   );
 
   const handleFilterTypeChange = useCallback(
-    ({ value }: InputChanged<string>) => {
+    ({ value }: InputChanged<FilterType>) => {
       if (filterKey == null || filterValue == null || filterType == null) {
         return;
       }

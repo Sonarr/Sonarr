@@ -31,5 +31,42 @@ export const all = [
   STARTS_WITH,
   NOT_STARTS_WITH,
   ENDS_WITH,
-  NOT_ENDS_WITH
+  NOT_ENDS_WITH,
 ];
+
+export type FilterType =
+  | 'unknown'
+  | 'contains'
+  | 'equal'
+  | 'greaterThan'
+  | 'greaterThanOrEqual'
+  | 'inLast'
+  | 'notInLast'
+  | 'inNext'
+  | 'notInNext'
+  | 'lessThan'
+  | 'lessThanOrEqual'
+  | 'notContains'
+  | 'notEqual'
+  | 'startsWith'
+  | 'notStartsWith'
+  | 'endsWith'
+  | 'notEndsWith';
+
+export type FilterDateType =
+  | 'seconds'
+  | 'minutes'
+  | 'hours'
+  | 'days'
+  | 'weeks'
+  | 'months';
+
+export interface DateFilterBuilderTime {
+  key: FilterDateType;
+  value: string;
+}
+
+export interface DateFilterValue {
+  time: string;
+  value: number | null;
+}

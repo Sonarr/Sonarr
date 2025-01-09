@@ -1,6 +1,6 @@
-import moment from 'moment';
+import moment, { MomentInput } from 'moment';
 
-function isToday(date) {
+function isToday(date: MomentInput) {
   if (!date) {
     return false;
   }

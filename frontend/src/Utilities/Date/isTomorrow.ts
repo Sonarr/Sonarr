@@ -1,6 +1,6 @@
-import moment from 'moment';
+import moment, { MomentInput } from 'moment';
 
-function isTomorrow(date) {
+function isTomorrow(date: MomentInput) {
   if (!date) {
     return false;
   }
