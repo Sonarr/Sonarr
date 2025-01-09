@@ -35,7 +35,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series Title / S2E1-16 of 16 [2022, WEB-DL] RUS", "Series Title", 2)]
         [TestCase("[hchcsen] Mobile Series 00 S01 [BD Remux Dual Audio 1080p AVC 2xFLAC] (Kidou Senshi Gundam 00 Season 1)", "Mobile Series 00", 1)]
         [TestCase("[HorribleRips] Mobile Series 00 S1 [1080p]", "Mobile Series 00", 1)]
-        [TestCase("[Zoombie] Zom 100: Bucket List of the Dead S01 [Web][MKV][h265 10-bit][1080p][AC3 2.0][Softsubs (Zoombie)]", "Zom 100: Bucket List of the Dead", 1)]
+        [TestCase("[Zoombie] Series 100: Bucket List S01 [Web][MKV][h265 10-bit][1080p][AC3 2.0][Softsubs (Zoombie)]", "Series 100: Bucket List", 1)]
+        [TestCase("Seriesless (2016/S01/WEB-DL/1080p/AC3 5.1/DUAL/SUB)", "Seriesless (2016)", 1)]
         public void should_parse_full_season_release(string postTitle, string title, int season)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
