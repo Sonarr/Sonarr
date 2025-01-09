@@ -1,6 +1,6 @@
-import moment from 'moment';
+import moment, { MomentInput } from 'moment';
 
-function formatDate(date, dateFormat) {
+function formatDate(date: MomentInput, dateFormat: string) {
   if (!date) {
     return '';
   }

@@ -1,7 +1,7 @@
-import moment from 'moment';
+import moment, { DurationInputArg1 } from 'moment';
 import translate from 'Utilities/String/translate';
 
-function formatShortTimeSpan(timeSpan) {
+function formatShortTimeSpan(timeSpan: DurationInputArg1) {
   if (!timeSpan) {
     return '';
   }

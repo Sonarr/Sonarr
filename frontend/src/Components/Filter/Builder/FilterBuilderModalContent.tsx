@@ -23,10 +23,10 @@ import translate from 'Utilities/String/translate';
 import FilterBuilderRow from './FilterBuilderRow';
 import styles from './FilterBuilderModalContent.css';
 
-const NEW_FILTER: Partial<PropertyFilter> = {
-  key: undefined,
-  value: undefined,
-  type: '',
+const NEW_FILTER: PropertyFilter = {
+  key: '',
+  value: '',
+  type: 'unknown',
 };
 
 interface FilterBuilderModalContentProps<T> {
@@ -76,7 +76,7 @@ function FilterBuilderModalContent<T>({
   const [label, setLabel] = useState(initialLabel);
   // Push an empty filter if there aren't any filters. FilterBuilderRow
   // will handle initializing the filter.
-  const [filters, setFilters] = useState<Partial<PropertyFilter>[]>(
+  const [filters, setFilters] = useState<PropertyFilter[]>(
     initialFilters.length ? initialFilters : [NEW_FILTER]
   );
   const [labelErrors, setLabelErrors] = useState<ValidationMessage[]>([]);

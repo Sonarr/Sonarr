@@ -1,5 +1,5 @@
 import translate from 'Utilities/String/translate';
-import * as filterTypes from './filterTypes';
+import { FilterType } from './filterTypes';
 
 export const ARRAY = 'array';
 export const CONTAINS = 'contains';
@@ -11,6 +11,11 @@ export const STRING = 'string';
 
 export const all = [ARRAY, CONTAINS, DATE, EQUAL, EXACT, NUMBER, STRING];
 
+interface FilterBuilderTypeOption {
+  key: FilterType;
+  value: () => string;
+}
+
 export type FilterBuilderTypes =
   | 'array'
   | 'contains'
@@ -20,128 +25,131 @@ export type FilterBuilderTypes =
   | 'number'
   | 'string';
 
-export const possibleFilterTypes = {
+export const possibleFilterTypes: Record<
+  FilterBuilderTypes,
+  FilterBuilderTypeOption[]
+> = {
   array: [
     {
-      key: filterTypes.CONTAINS,
+      key: 'contains',
       value: () => translate('FilterContains'),
     },
     {
-      key: filterTypes.NOT_CONTAINS,
+      key: 'notContains',
       value: () => translate('FilterDoesNotContain'),
     },
   ],
 
   contains: [
     {
-      key: filterTypes.CONTAINS,
+      key: 'contains',
       value: () => translate('FilterContains'),
     },
   ],
 
   date: [
     {
-      key: filterTypes.LESS_THAN,
+      key: 'lessThan',
       value: () => translate('FilterIsBefore'),
     },
     {
-      key: filterTypes.GREATER_THAN,
+      key: 'greaterThan',
       value: () => translate('FilterIsAfter'),
     },
     {
-      key: filterTypes.IN_LAST,
+      key: 'inLast',
       value: () => translate('FilterInLast'),
     },
     {
-      key: filterTypes.NOT_IN_LAST,
+      key: 'notInLast',
       value: () => translate('FilterNotInLast'),
     },
     {
-      key: filterTypes.IN_NEXT,
+      key: 'inNext',
       value: () => translate('FilterInNext'),
     },
     {
-      key: filterTypes.NOT_IN_NEXT,
+      key: 'notInNext',
       value: () => translate('FilterNotInNext'),
     },
   ],
 
   equal: [
     {
-      key: filterTypes.EQUAL,
+      key: 'equal',
       value: () => translate('FilterIs'),
     },
   ],
 
   exact: [
     {
-      key: filterTypes.EQUAL,
+      key: 'equal',
       value: () => translate('FilterIs'),
     },
     {
-      key: filterTypes.NOT_EQUAL,
+      key: 'notEqual',
       value: () => translate('FilterIsNot'),
     },
   ],
 
   number: [
     {
-      key: filterTypes.EQUAL,
+      key: 'equal',
       value: () => translate('FilterEqual'),
     },
     {
-      key: filterTypes.GREATER_THAN,
+      key: 'greaterThan',
       value: () => translate('FilterGreaterThan'),
     },
     {
-      key: filterTypes.GREATER_THAN_OR_EQUAL,
+      key: 'greaterThanOrEqual',
       value: () => translate('FilterGreaterThanOrEqual'),
     },
     {
-      key: filterTypes.LESS_THAN,
+      key: 'lessThan',
       value: () => translate('FilterLessThan'),
     },
     {
-      key: filterTypes.LESS_THAN_OR_EQUAL,
+      key: 'lessThanOrEqual',
       value: () => translate('FilterLessThanOrEqual'),
     },
     {
-      key: filterTypes.NOT_EQUAL,
+      key: 'notEqual',
       value: () => translate('FilterNotEqual'),
     },
   ],
 
   string: [
     {
-      key: filterTypes.CONTAINS,
+      key: 'contains',
       value: () => translate('FilterContains'),
     },
     {
-      key: filterTypes.NOT_CONTAINS,
+      key: 'notContains',
       value: () => translate('FilterDoesNotContain'),
     },
     {
-      key: filterTypes.EQUAL,
+      key: 'equal',
       value: () => translate('FilterEqual'),
     },
     {
-      key: filterTypes.NOT_EQUAL,
+      key: 'notEqual',
       value: () => translate('FilterNotEqual'),
     },
     {
-      key: filterTypes.STARTS_WITH,
+      key: 'startsWith',
       value: () => translate('FilterStartsWith'),
     },
     {
-      key: filterTypes.NOT_STARTS_WITH,
+      key: 'notStartsWith',
       value: () => translate('FilterDoesNotStartWith'),
     },
     {
-      key: filterTypes.ENDS_WITH,
+      key: 'endsWith',
       value: () => translate('FilterEndsWith'),
     },
     {
-      key: filterTypes.NOT_ENDS_WITH,
+      key: 'notEndsWith',
       value: () => translate('FilterDoesNotEndWith'),
     },
   ],
