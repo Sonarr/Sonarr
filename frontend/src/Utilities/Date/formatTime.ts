@@ -1,6 +1,10 @@
-import moment from 'moment';
+import moment, { MomentInput } from 'moment';
 
-function formatTime(date, timeFormat, { includeMinuteZero = false, includeSeconds = false } = {}) {
+function formatTime(
+  date: MomentInput,
+  timeFormat: string,
+  { includeMinuteZero = false, includeSeconds = false } = {}
+) {
   if (!date) {
     return '';
   }

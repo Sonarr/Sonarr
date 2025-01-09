@@ -1,8 +1,8 @@
-import moment from 'moment';
+import moment, { DurationInputArg1 } from 'moment';
 import padNumber from 'Utilities/Number/padNumber';
 import translate from 'Utilities/String/translate';
 
-function formatTimeSpan(timeSpan) {
+function formatTimeSpan(timeSpan: DurationInputArg1) {
   if (!timeSpan) {
     return '';
   }

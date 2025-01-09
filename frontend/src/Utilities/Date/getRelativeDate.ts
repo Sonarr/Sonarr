@@ -74,7 +74,7 @@ function getRelativeDate({
     return includeTime ? translate('DayOfWeekAt', { day, time }) : day;
   }
 
-  return includeTime
+  return includeTime && timeFormat
     ? formatDateTime(date, shortDateFormat, timeFormat, { includeSeconds })
     : moment(date).format(shortDateFormat);
 }

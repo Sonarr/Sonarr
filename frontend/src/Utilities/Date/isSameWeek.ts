@@ -1,6 +1,6 @@
-import moment from 'moment';
+import moment, { MomentInput } from 'moment';
 
-function isSameWeek(date) {
+function isSameWeek(date: MomentInput) {
   if (!date) {
     return false;
   }

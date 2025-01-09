@@ -6,6 +6,7 @@ import {
   filterBuilderValueTypes,
   kinds,
 } from 'Helpers/Props';
+import { FilterType } from 'Helpers/Props/filterTypes';
 import { InputOnChange } from 'typings/inputs';
 import convertToBytes from 'Utilities/Number/convertToBytes';
 import formatBytes from 'Utilities/Number/formatBytes';
@@ -93,7 +94,7 @@ export interface FilterBuilderRowValueProps<
   T,
   V extends string | number | boolean
 > {
-  filterType?: string;
+  filterType: FilterType;
   filterValue: V[];
   sectionItems: T[];
   selectedFilterBuilderProp: FilterBuilderProp<T>;

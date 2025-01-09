@@ -4,17 +4,16 @@ import SelectInput from 'Components/Form/SelectInput';
 import TextInput from 'Components/Form/TextInput';
 import usePrevious from 'Helpers/Hooks/usePrevious';
 import {
-  IN_LAST,
-  IN_NEXT,
-  NOT_IN_LAST,
-  NOT_IN_NEXT,
+  DateFilterBuilderTime,
+  DateFilterValue,
+  FilterType,
 } from 'Helpers/Props/filterTypes';
 import { InputChanged, InputOnChange } from 'typings/inputs';
 import isString from 'Utilities/String/isString';
 import { FilterBuilderRowValueProps, NAME } from './FilterBuilderRowValue';
 import styles from './DateFilterBuilderRowValue.css';
 
-const timeOptions = [
+const timeOptions: DateFilterBuilderTime[] = [
   { key: 'seconds', value: 'seconds' },
   { key: 'minutes', value: 'minutes' },
   { key: 'hours', value: 'hours' },
@@ -23,18 +22,13 @@ const timeOptions = [
   { key: 'months', value: 'months' },
 ];
 
-function isInFilter(filterType: string | undefined) {
+function isInFilter(filterType: FilterType) {
   return (
-    filterType === IN_LAST ||
-    filterType === NOT_IN_LAST ||
-    filterType === IN_NEXT ||
-    filterType === NOT_IN_NEXT
+    filterType === 'inLast' ||
+    filterType === 'notInLast' ||
+    filterType === 'inNext' ||
+    filterType === 'notInNext'
   );
-}
-
-export interface DateFilterValue {
-  time: string;
-  value: number | null;
 }
 
 interface DateFilterBuilderRowValueProps<T>

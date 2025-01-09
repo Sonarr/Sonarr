@@ -1,6 +1,6 @@
 import ModelBase from 'App/ModelBase';
-import { DateFilterValue } from 'Components/Filter/Builder/DateFilterBuilderRowValue';
 import { FilterBuilderTypes } from 'Helpers/Props/filterBuilderTypes';
+import { DateFilterValue, FilterType } from 'Helpers/Props/filterTypes';
 import { Error } from './AppSectionState';
 import BlocklistAppState from './BlocklistAppState';
 import CalendarAppState from './CalendarAppState';
@@ -42,7 +42,7 @@ export interface FilterBuilderProp<T> {
 export interface PropertyFilter {
   key: string;
   value: string | string[] | number[] | boolean[] | DateFilterValue;
-  type: string;
+  type: FilterType;
 }
 
 export interface Filter {
