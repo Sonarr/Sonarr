@@ -299,12 +299,18 @@ namespace NzbDrone.Core.ImportLists
 
             var seriesToUpdate = new List<Series>();
             var seriesInLibrary = _seriesService.GetAllSeries();
+            var allListItems = _importListItemService.All();
 
             foreach (var series in seriesInLibrary)
             {
-                var seriesExists = _importListItemService.Exists(series.TvdbId, series.ImdbId);
+                var seriesExists = allListItems.Where(l =>
+                    l.TvdbId == series.TvdbId ||
+                    l.ImdbId == series.ImdbId ||
+                    l.TmdbId == series.TmdbId ||
+                    series.MalIds.Contains(l.MalId) ||
+                    series.AniListIds.Contains(l.AniListId)).ToList();
 
-                if (!seriesExists)
+                if (!seriesExists.Any())
                 {
                     switch (_configService.ListSyncLevel)
                     {

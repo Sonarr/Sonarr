@@ -14,7 +14,7 @@ namespace NzbDrone.Core.Test.ImportListTests
     {
         private void GivenExisting(List<ImportListItemInfo> existing)
         {
-            Mocker.GetMock<IImportListItemInfoRepository>()
+            Mocker.GetMock<IImportListItemRepository>()
                 .Setup(v => v.GetAllForLists(It.IsAny<List<int>>()))
                 .Returns(existing);
         }
@@ -58,13 +58,13 @@ namespace NzbDrone.Core.Test.ImportListTests
 
             numDeleted.Should().Be(1);
 
-            Mocker.GetMock<IImportListItemInfoRepository>()
+            Mocker.GetMock<IImportListItemRepository>()
                 .Verify(v => v.InsertMany(It.Is<List<ImportListItemInfo>>(s => s.Count == 1 && s[0].TvdbId == newItem.TvdbId)), Times.Once());
 
-            Mocker.GetMock<IImportListItemInfoRepository>()
+            Mocker.GetMock<IImportListItemRepository>()
                 .Verify(v => v.UpdateMany(It.Is<List<ImportListItemInfo>>(s => s.Count == 1 && s[0].TvdbId == updatedItem.TvdbId)), Times.Once());
 
-            Mocker.GetMock<IImportListItemInfoRepository>()
+            Mocker.GetMock<IImportListItemRepository>()
                 .Verify(v => v.DeleteMany(It.Is<List<ImportListItemInfo>>(s => s.Count == 1 && s[0].TvdbId != newItem.TvdbId && s[0].TvdbId != updatedItem.TvdbId)), Times.Once());
         }
 
@@ -107,13 +107,13 @@ namespace NzbDrone.Core.Test.ImportListTests
 
             numDeleted.Should().Be(1);
 
-            Mocker.GetMock<IImportListItemInfoRepository>()
+            Mocker.GetMock<IImportListItemRepository>()
                 .Verify(v => v.InsertMany(It.Is<List<ImportListItemInfo>>(s => s.Count == 1 && s[0].ImdbId == newItem.ImdbId)), Times.Once());
 
-            Mocker.GetMock<IImportListItemInfoRepository>()
+            Mocker.GetMock<IImportListItemRepository>()
                 .Verify(v => v.UpdateMany(It.Is<List<ImportListItemInfo>>(s => s.Count == 1 && s[0].ImdbId == updatedItem.ImdbId)), Times.Once());
 
-            Mocker.GetMock<IImportListItemInfoRepository>()
+            Mocker.GetMock<IImportListItemRepository>()
                 .Verify(v => v.DeleteMany(It.Is<List<ImportListItemInfo>>(s => s.Count == 1 && s[0].ImdbId != newItem.ImdbId && s[0].ImdbId != updatedItem.ImdbId)), Times.Once());
         }
 
@@ -156,13 +156,13 @@ namespace NzbDrone.Core.Test.ImportListTests
 
             numDeleted.Should().Be(1);
 
-            Mocker.GetMock<IImportListItemInfoRepository>()
+            Mocker.GetMock<IImportListItemRepository>()
                 .Verify(v => v.InsertMany(It.Is<List<ImportListItemInfo>>(s => s.Count == 1 && s[0].TmdbId == newItem.TmdbId)), Times.Once());
 
-            Mocker.GetMock<IImportListItemInfoRepository>()
+            Mocker.GetMock<IImportListItemRepository>()
                 .Verify(v => v.UpdateMany(It.Is<List<ImportListItemInfo>>(s => s.Count == 1 && s[0].TmdbId == updatedItem.TmdbId)), Times.Once());
 
-            Mocker.GetMock<IImportListItemInfoRepository>()
+            Mocker.GetMock<IImportListItemRepository>()
                 .Verify(v => v.DeleteMany(It.Is<List<ImportListItemInfo>>(s => s.Count == 1 && s[0].TmdbId != newItem.TmdbId && s[0].TmdbId != updatedItem.TmdbId)), Times.Once());
         }
 
@@ -205,13 +205,13 @@ namespace NzbDrone.Core.Test.ImportListTests
 
             numDeleted.Should().Be(1);
 
-            Mocker.GetMock<IImportListItemInfoRepository>()
+            Mocker.GetMock<IImportListItemRepository>()
                 .Verify(v => v.InsertMany(It.Is<List<ImportListItemInfo>>(s => s.Count == 1 && s[0].MalId == newItem.MalId)), Times.Once());
 
-            Mocker.GetMock<IImportListItemInfoRepository>()
+            Mocker.GetMock<IImportListItemRepository>()
                 .Verify(v => v.UpdateMany(It.Is<List<ImportListItemInfo>>(s => s.Count == 1 && s[0].MalId == updatedItem.MalId)), Times.Once());
 
-            Mocker.GetMock<IImportListItemInfoRepository>()
+            Mocker.GetMock<IImportListItemRepository>()
                 .Verify(v => v.DeleteMany(It.Is<List<ImportListItemInfo>>(s => s.Count == 1 && s[0].MalId != newItem.MalId && s[0].MalId != updatedItem.MalId)), Times.Once());
         }
 
@@ -254,13 +254,13 @@ namespace NzbDrone.Core.Test.ImportListTests
 
             numDeleted.Should().Be(1);
 
-            Mocker.GetMock<IImportListItemInfoRepository>()
+            Mocker.GetMock<IImportListItemRepository>()
                 .Verify(v => v.InsertMany(It.Is<List<ImportListItemInfo>>(s => s.Count == 1 && s[0].AniListId == newItem.AniListId)), Times.Once());
 
-            Mocker.GetMock<IImportListItemInfoRepository>()
+            Mocker.GetMock<IImportListItemRepository>()
                 .Verify(v => v.UpdateMany(It.Is<List<ImportListItemInfo>>(s => s.Count == 1 && s[0].AniListId == updatedItem.AniListId)), Times.Once());
 
-            Mocker.GetMock<IImportListItemInfoRepository>()
+            Mocker.GetMock<IImportListItemRepository>()
                 .Verify(v => v.DeleteMany(It.Is<List<ImportListItemInfo>>(s => s.Count == 1 && s[0].AniListId != newItem.AniListId && s[0].AniListId != updatedItem.AniListId)), Times.Once());
         }
     }

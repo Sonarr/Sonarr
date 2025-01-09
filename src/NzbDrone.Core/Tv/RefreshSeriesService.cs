@@ -94,6 +94,8 @@ namespace NzbDrone.Core.Tv
             series.TvMazeId = seriesInfo.TvMazeId;
             series.TmdbId = seriesInfo.TmdbId;
             series.ImdbId = seriesInfo.ImdbId;
+            series.MalIds = seriesInfo.MalIds;
+            series.AniListIds = seriesInfo.AniListIds;
             series.AirTime = seriesInfo.AirTime;
             series.Overview = seriesInfo.Overview;
             series.OriginalLanguage = seriesInfo.OriginalLanguage;

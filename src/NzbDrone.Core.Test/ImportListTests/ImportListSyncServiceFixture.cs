@@ -42,24 +42,45 @@ namespace NzbDrone.Core.Test.ImportListTests
                 .TheFirst(1)
                 .With(s => s.TvdbId = 6)
                 .With(s => s.ImdbId = "6")
+                .With(s => s.TmdbId = 6)
+                .With(s => s.MalIds = new HashSet<int> { 6 })
+                .With(s => s.AniListIds = new HashSet<int> { 6 })
+                .With(s => s.Monitored = true)
                 .TheNext(1)
                 .With(s => s.TvdbId = 7)
                 .With(s => s.ImdbId = "7")
+                .With(s => s.TmdbId = 7)
+                .With(s => s.MalIds = new HashSet<int> { 7 })
+                .With(s => s.AniListIds = new HashSet<int> { 7 })
+                .With(s => s.Monitored = true)
                 .TheNext(1)
                 .With(s => s.TvdbId = 8)
                 .With(s => s.ImdbId = "8")
+                .With(s => s.TmdbId = 8)
+                .With(s => s.MalIds = new HashSet<int> { 8 })
+                .With(s => s.AniListIds = new HashSet<int> { 8 })
+                .With(s => s.Monitored = true)
                 .Build().ToList();
 
             _list2Series = Builder<ImportListItemInfo>.CreateListOfSize(3)
                 .TheFirst(1)
                 .With(s => s.TvdbId = 6)
                 .With(s => s.ImdbId = "6")
+                .With(s => s.TmdbId = 6)
+                .With(s => s.MalId = 6)
+                .With(s => s.AniListId = 6)
                 .TheNext(1)
                 .With(s => s.TvdbId = 7)
                 .With(s => s.ImdbId = "7")
+                .With(s => s.TmdbId = 7)
+                .With(s => s.MalId = 7)
+                .With(s => s.AniListId = 7)
                 .TheNext(1)
                 .With(s => s.TvdbId = 8)
                 .With(s => s.ImdbId = "8")
+                .With(s => s.TmdbId = 8)
+                .With(s => s.MalId = 8)
+                .With(s => s.AniListId = 8)
                 .Build().ToList();
 
             _importListFetch = new ImportListFetchResult(_list1Series, false);
@@ -110,6 +131,10 @@ namespace NzbDrone.Core.Test.ImportListTests
             Mocker.GetMock<IImportListExclusionService>()
                   .Setup(v => v.All())
                   .Returns(new List<ImportListExclusion>());
+
+            Mocker.GetMock<IImportListItemService>()
+                .Setup(s => s.All())
+                .Returns(new List<ImportListItemInfo>());
         }
 
         private void WithTvdbId()
@@ -151,6 +176,19 @@ namespace NzbDrone.Core.Test.ImportListTests
                           TvdbId = _list1Series.First().TvdbId
                         }
                     });
+        }
+
+        private List<ImportListItemInfo> WithImportListItems(int count)
+        {
+            var importListItems = Builder<ImportListItemInfo>.CreateListOfSize(count)
+                .Build()
+                .ToList();
+
+            Mocker.GetMock<IImportListItemService>()
+                .Setup(s => s.All())
+                .Returns(importListItems);
+
+            return importListItems;
         }
 
         private void WithMonitorType(MonitorTypes monitor)
@@ -285,16 +323,18 @@ namespace NzbDrone.Core.Test.ImportListTests
         {
             WithList(1, true);
             WithCleanLevel(ListSyncLevelType.KeepAndUnmonitor);
+            var importListItems = WithImportListItems(_existingSeries.Count - 1);
             _importListFetch.Series.ForEach(m => m.ImportListId = 1);
 
-            Mocker.GetMock<IImportListItemService>()
-                .Setup(v => v.Exists(6, It.IsAny<string>()))
-                .Returns(true);
+            for (var i = 0; i < importListItems.Count; i++)
+            {
+                importListItems[i].TvdbId = _existingSeries[i].TvdbId;
+            }
 
             Subject.Execute(_commandAll);
 
             Mocker.GetMock<ISeriesService>()
-                  .Verify(v => v.UpdateSeries(It.Is<List<Series>>(s => s.Count > 0 && s.All(m => !m.Monitored)), true), Times.Once());
+                  .Verify(v => v.UpdateSeries(It.Is<List<Series>>(s => s.Count == 1 && s.All(m => !m.Monitored)), true), Times.Once());
         }
 
         [Test]
@@ -302,18 +342,75 @@ namespace NzbDrone.Core.Test.ImportListTests
         {
             WithList(1, true);
             WithCleanLevel(ListSyncLevelType.KeepAndUnmonitor);
+            var importListItems = WithImportListItems(_existingSeries.Count - 1);
             _importListFetch.Series.ForEach(m => m.ImportListId = 1);
 
-            var x = _importLists;
-
-            Mocker.GetMock<IImportListItemService>()
-                .Setup(v => v.Exists(It.IsAny<int>(), "6"))
-                .Returns(true);
+            for (var i = 0; i < importListItems.Count; i++)
+            {
+                importListItems[i].ImdbId = _existingSeries[i].ImdbId;
+            }
 
             Subject.Execute(_commandAll);
 
             Mocker.GetMock<ISeriesService>()
-                  .Verify(v => v.UpdateSeries(It.Is<List<Series>>(s => s.Count > 0 && s.All(m => !m.Monitored)), true), Times.Once());
+                  .Verify(v => v.UpdateSeries(It.Is<List<Series>>(s => s.Count == 1 && s.All(m => !m.Monitored)), true), Times.Once());
+        }
+
+        [Test]
+        public void should_not_clean_on_clean_library_if_tmdb_match()
+        {
+            WithList(1, true);
+            WithCleanLevel(ListSyncLevelType.KeepAndUnmonitor);
+            var importListItems = WithImportListItems(_existingSeries.Count - 1);
+            _importListFetch.Series.ForEach(m => m.ImportListId = 1);
+
+            for (var i = 0; i < importListItems.Count; i++)
+            {
+                importListItems[i].TmdbId = _existingSeries[i].TmdbId;
+            }
+
+            Subject.Execute(_commandAll);
+
+            Mocker.GetMock<ISeriesService>()
+                .Verify(v => v.UpdateSeries(It.Is<List<Series>>(s => s.Count == 1 && s.All(m => !m.Monitored)), true), Times.Once());
+        }
+
+        [Test]
+        public void should_not_clean_on_clean_library_if_malid_match()
+        {
+            WithList(1, true);
+            WithCleanLevel(ListSyncLevelType.KeepAndUnmonitor);
+            var importListItems = WithImportListItems(_existingSeries.Count - 1);
+            _importListFetch.Series.ForEach(m => m.ImportListId = 1);
+
+            for (var i = 0; i < importListItems.Count; i++)
+            {
+                importListItems[i].MalId = _existingSeries[i].MalIds.First();
+            }
+
+            Subject.Execute(_commandAll);
+
+            Mocker.GetMock<ISeriesService>()
+                .Verify(v => v.UpdateSeries(It.Is<List<Series>>(s => s.Count == 1 && s.All(m => !m.Monitored)), true), Times.Once());
+        }
+
+        [Test]
+        public void should_not_clean_on_clean_library_if_anilistid_match()
+        {
+            WithList(1, true);
+            WithCleanLevel(ListSyncLevelType.KeepAndUnmonitor);
+            var importListItems = WithImportListItems(_existingSeries.Count - 1);
+            _importListFetch.Series.ForEach(m => m.ImportListId = 1);
+
+            for (var i = 0; i < importListItems.Count; i++)
+            {
+                importListItems[i].AniListId = _existingSeries[i].AniListIds.First();
+            }
+
+            Subject.Execute(_commandAll);
+
+            Mocker.GetMock<ISeriesService>()
+                .Verify(v => v.UpdateSeries(It.Is<List<Series>>(s => s.Count == 1 && s.All(m => !m.Monitored)), true), Times.Once());
         }
 
         [Test]
@@ -345,6 +442,7 @@ namespace NzbDrone.Core.Test.ImportListTests
 
             Mocker.GetMock<ISeriesService>()
                   .Verify(v => v.UpdateSeries(It.IsAny<List<Series>>(), It.IsAny<bool>()), Times.Never());
+
             Mocker.GetMock<ISeriesService>()
                 .Verify(v => v.DeleteSeries(It.IsAny<List<int>>(), It.IsAny<bool>(), It.IsAny<bool>()), Times.Never());
         }

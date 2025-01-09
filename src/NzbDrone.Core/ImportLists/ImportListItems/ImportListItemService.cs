@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Parser.Model;
@@ -10,21 +9,18 @@ namespace NzbDrone.Core.ImportLists.ImportListItems
 {
     public interface IImportListItemService
     {
+        List<ImportListItemInfo> All();
         List<ImportListItemInfo> GetAllForLists(List<int> listIds);
         int SyncSeriesForList(List<ImportListItemInfo> listSeries, int listId);
-        bool Exists(int tvdbId, string imdbId);
     }
 
     public class ImportListItemService : IImportListItemService, IHandleAsync<ProviderDeletedEvent<IImportList>>
     {
-        private readonly IImportListItemInfoRepository _importListSeriesRepository;
-        private readonly Logger _logger;
+        private readonly IImportListItemRepository _importListItemRepository;
 
-        public ImportListItemService(IImportListItemInfoRepository importListSeriesRepository,
-                             Logger logger)
+        public ImportListItemService(IImportListItemRepository importListItemRepository)
         {
-            _importListSeriesRepository = importListSeriesRepository;
-            _logger = logger;
+            _importListItemRepository = importListItemRepository;
         }
 
         public int SyncSeriesForList(List<ImportListItemInfo> listSeries, int listId)
@@ -58,27 +54,27 @@ namespace NzbDrone.Core.ImportLists.ImportListItems
                 existingItem.ReleaseDate = item.ReleaseDate;
             });
 
-            _importListSeriesRepository.InsertMany(toAdd);
-            _importListSeriesRepository.UpdateMany(toUpdate);
-            _importListSeriesRepository.DeleteMany(existingListSeries);
+            _importListItemRepository.InsertMany(toAdd);
+            _importListItemRepository.UpdateMany(toUpdate);
+            _importListItemRepository.DeleteMany(existingListSeries);
 
             return existingListSeries.Count;
         }
 
+        public List<ImportListItemInfo> All()
+        {
+            return _importListItemRepository.All().ToList();
+        }
+
         public List<ImportListItemInfo> GetAllForLists(List<int> listIds)
         {
-            return _importListSeriesRepository.GetAllForLists(listIds).ToList();
+            return _importListItemRepository.GetAllForLists(listIds).ToList();
         }
 
         public void HandleAsync(ProviderDeletedEvent<IImportList> message)
         {
-            var seriesOnList = _importListSeriesRepository.GetAllForLists(new List<int> { message.ProviderId });
-            _importListSeriesRepository.DeleteMany(seriesOnList);
-        }
-
-        public bool Exists(int tvdbId, string imdbId)
-        {
-            return _importListSeriesRepository.Exists(tvdbId, imdbId);
+            var seriesOnList = _importListItemRepository.GetAllForLists(new List<int> { message.ProviderId });
+            _importListItemRepository.DeleteMany(seriesOnList);
         }
 
         private ImportListItemInfo FindItem(List<ImportListItemInfo> existingItems, ImportListItemInfo item)
