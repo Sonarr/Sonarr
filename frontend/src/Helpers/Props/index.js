@@ -1,7 +1,6 @@
 import * as align from './align';
 import * as filterBuilderTypes from './filterBuilderTypes';
 import * as filterBuilderValueTypes from './filterBuilderValueTypes';
-import filterTypePredicates from './filterTypePredicates';
 import * as filterTypes from './filterTypes';
 import * as icons from './icons';
 import * as inputTypes from './inputTypes';
@@ -17,7 +16,6 @@ export {
   inputTypes,
   filterBuilderTypes,
   filterBuilderValueTypes,
-  filterTypePredicates,
   filterTypes,
   icons,
   kinds,

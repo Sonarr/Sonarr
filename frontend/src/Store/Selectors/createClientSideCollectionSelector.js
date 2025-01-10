@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import { createSelector } from 'reselect';
-import { filterTypePredicates, filterTypes, sortDirections } from 'Helpers/Props';
+import { filterTypes, sortDirections } from 'Helpers/Props';
+import getFilterTypePredicate from 'Helpers/Props/getFilterTypePredicate';
 import findSelectedFilters from 'Utilities/Filter/findSelectedFilters';
 
 function getSortClause(sortKey, sortDirection, sortPredicates) {
@@ -56,7 +57,7 @@ function filter(items, state) {
           accepted = predicate(item, value, type);
         }
       } else if (item.hasOwnProperty(key)) {
-        const predicate = filterTypePredicates[type];
+        const predicate = getFilterTypePredicate(type);
 
         if (Array.isArray(value)) {
           if (
