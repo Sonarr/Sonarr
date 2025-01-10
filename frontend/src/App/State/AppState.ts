@@ -9,7 +9,7 @@ import CommandAppState from './CommandAppState';
 import CustomFiltersAppState from './CustomFiltersAppState';
 import EpisodeFilesAppState from './EpisodeFilesAppState';
 import EpisodesAppState from './EpisodesAppState';
-import HistoryAppState from './HistoryAppState';
+import HistoryAppState, { SeriesHistoryAppState } from './HistoryAppState';
 import InteractiveImportAppState from './InteractiveImportAppState';
 import MessagesAppState from './MessagesAppState';
 import OAuthAppState from './OAuthAppState';
@@ -102,6 +102,7 @@ interface AppState {
   releases: ReleasesAppState;
   rootFolders: RootFolderAppState;
   series: SeriesAppState;
+  seriesHistory: SeriesHistoryAppState;
   seriesIndex: SeriesIndexAppState;
   settings: SettingsAppState;
   system: SystemAppState;
