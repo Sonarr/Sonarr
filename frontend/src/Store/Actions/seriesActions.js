@@ -1,7 +1,8 @@
 import _ from 'lodash';
 import { createAction } from 'redux-actions';
 import { batchActions } from 'redux-batched-actions';
-import { filterBuilderTypes, filterBuilderValueTypes, filterTypePredicates, filterTypes, sortDirections } from 'Helpers/Props';
+import { filterBuilderTypes, filterBuilderValueTypes, filterTypes, sortDirections } from 'Helpers/Props';
+import getFilterTypePredicate from 'Helpers/Props/getFilterTypePredicate';
 import { createThunk, handleThunks } from 'Store/thunks';
 import sortByProp from 'Utilities/Array/sortByProp';
 import createAjaxRequest from 'Utilities/createAjaxRequest';
@@ -103,7 +104,7 @@ export const filterPredicates = {
       episodeFileCount / episodeCount * 100 :
       100;
 
-    const predicate = filterTypePredicates[type];
+    const predicate = getFilterTypePredicate(type);
 
     return predicate(progress, filterValue);
   },
@@ -127,21 +128,21 @@ export const filterPredicates = {
   },
 
   ratings: function(item, filterValue, type) {
-    const predicate = filterTypePredicates[type];
+    const predicate = getFilterTypePredicate(type);
     const { value = 0 } = item.ratings;
 
     return predicate(value * 10, filterValue);
   },
 
   ratingVotes: function(item, filterValue, type) {
-    const predicate = filterTypePredicates[type];
+    const predicate = getFilterTypePredicate(type);
     const { votes = 0 } = item.ratings;
 
     return predicate(votes, filterValue);
   },
 
   originalLanguage: function(item, filterValue, type) {
-    const predicate = filterTypePredicates[type];
+    const predicate = getFilterTypePredicate(type);
     const { originalLanguage } = item;
 
     return predicate(originalLanguage ? originalLanguage.name : '', filterValue);
@@ -154,20 +155,20 @@ export const filterPredicates = {
       releaseGroups = []
     } = statistics;
 
-    const predicate = filterTypePredicates[type];
+    const predicate = getFilterTypePredicate(type);
 
     return predicate(releaseGroups, filterValue);
   },
 
   seasonCount: function(item, filterValue, type) {
-    const predicate = filterTypePredicates[type];
+    const predicate = getFilterTypePredicate(type);
     const seasonCount = item.statistics ? item.statistics.seasonCount : 0;
 
     return predicate(seasonCount, filterValue);
   },
 
   sizeOnDisk: function(item, filterValue, type) {
-    const predicate = filterTypePredicates[type];
+    const predicate = getFilterTypePredicate(type);
     const sizeOnDisk = item.statistics && item.statistics.sizeOnDisk ?
       item.statistics.sizeOnDisk :
       0;
@@ -176,7 +177,7 @@ export const filterPredicates = {
   },
 
   hasMissingSeason: function(item, filterValue, type) {
-    const predicate = filterTypePredicates[type];
+    const predicate = getFilterTypePredicate(type);
     const { seasons = [] } = item;
 
     const hasMissingSeason = seasons.some((season) => {
@@ -203,7 +204,7 @@ export const filterPredicates = {
   },
 
   seasonsMonitoredStatus: function(item, filterValue, type) {
-    const predicate = filterTypePredicates[type];
+    const predicate = getFilterTypePredicate(type);
     const { seasons = [] } = item;
 
     const { monitoredCount, unmonitoredCount } = seasons.reduce((acc, { seasonNumber, monitored }) => {
