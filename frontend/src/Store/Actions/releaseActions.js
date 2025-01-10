@@ -1,5 +1,6 @@
 import { createAction } from 'redux-actions';
-import { filterBuilderTypes, filterBuilderValueTypes, filterTypePredicates, filterTypes, sortDirections } from 'Helpers/Props';
+import { filterBuilderTypes, filterBuilderValueTypes, filterTypes, sortDirections } from 'Helpers/Props';
+import getFilterTypePredicate from 'Helpers/Props/getFilterTypePredicate';
 import { createThunk, handleThunks } from 'Store/thunks';
 import sortByProp from 'Utilities/Array/sortByProp';
 import createAjaxRequest from 'Utilities/createAjaxRequest';
@@ -107,8 +108,7 @@ export const defaultState = {
     },
 
     languages: function(item, filterValue, type) {
-      const predicate = filterTypePredicates[type];
-
+      const predicate = getFilterTypePredicate(type);
       const languages = item.languages.map((language) => language.name);
 
       return predicate(languages, filterValue);

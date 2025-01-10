@@ -14,3 +14,21 @@ export const SERIES = 'series';
 export const SERIES_STATUS = 'seriesStatus';
 export const SERIES_TYPES = 'seriesType';
 export const TAG = 'tag';
+
+export type FilterBuildValueType =
+  | 'bool'
+  | 'bytes'
+  | 'date'
+  | 'default'
+  | 'historyEventType'
+  | 'indexer'
+  | 'language'
+  | 'protocol'
+  | 'quality'
+  | 'qualityProfile'
+  | 'queueStatus'
+  | 'seasonsMonitoredStatus'
+  | 'series'
+  | 'seriesStatus'
+  | 'seriesType'
+  | 'tag';
