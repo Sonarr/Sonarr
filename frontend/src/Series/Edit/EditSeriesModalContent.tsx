@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import SeriesMonitorNewItemsOptionsPopoverContent from 'AddSeries/SeriesMonitorNewItemsOptionsPopoverContent';
 import AppState from 'App/State/AppState';
@@ -15,6 +15,7 @@ import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import Popover from 'Components/Tooltip/Popover';
+import usePrevious from 'Helpers/Hooks/usePrevious';
 import {
   icons,
   inputTypes,
@@ -58,6 +59,8 @@ function EditSeriesModalContent({
   const { isSaving, saveError, pendingChanges } = useSelector(
     (state: AppState) => state.series
   );
+
+  const wasSaving = usePrevious(isSaving);
 
   const [isRootFolderModalOpen, setIsRootFolderModalOpen] = useState(false);
 
@@ -150,6 +153,12 @@ function EditSeriesModalContent({
       })
     );
   }, [seriesId, dispatch]);
+
+  useEffect(() => {
+    if (!isSaving && wasSaving && !saveError) {
+      onModalClose();
+    }
+  }, [isSaving, wasSaving, saveError, onModalClose]);
 
   return (
     <ModalContent onModalClose={onModalClose}>

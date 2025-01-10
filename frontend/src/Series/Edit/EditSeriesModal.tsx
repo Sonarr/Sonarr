@@ -2,8 +2,9 @@ import React, { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import Modal from 'Components/Modal/Modal';
 import { clearPendingChanges } from 'Store/Actions/baseActions';
-import { EditSeriesModalContentProps } from './EditSeriesModalContent';
-import EditSeriesModalContentConnector from './EditSeriesModalContentConnector';
+import EditSeriesModalContent, {
+  EditSeriesModalContentProps,
+} from './EditSeriesModalContent';
 
 interface EditSeriesModalProps extends EditSeriesModalContentProps {
   isOpen: boolean;
@@ -23,10 +24,7 @@ function EditSeriesModal({
 
   return (
     <Modal isOpen={isOpen} onModalClose={handleModalClose}>
-      <EditSeriesModalContentConnector
-        {...otherProps}
-        onModalClose={handleModalClose}
-      />
+      <EditSeriesModalContent {...otherProps} onModalClose={handleModalClose} />
     </Modal>
   );
 }
