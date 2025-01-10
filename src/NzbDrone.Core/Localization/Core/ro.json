@@ -211,5 +211,6 @@
     "DownloadClientUnavailable": "Client de descărcare indisponibil",
     "Clone": "Clonează",
     "DownloadClientSettingsOlderPriority": "Prioritate mai vechi",
-    "DownloadClientSettingsRecentPriority": "Prioritate recente"
+    "DownloadClientSettingsRecentPriority": "Prioritate recente",
+    "Absolute": "Absolut"
 }
