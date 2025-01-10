@@ -20,10 +20,30 @@ import translate from 'Utilities/String/translate';
 
 const SECTION = 'importListOptions';
 const cleanLibraryLevelOptions = [
-  { key: 'disabled', value: () => translate('Disabled') },
-  { key: 'logOnly', value: () => translate('LogOnly') },
-  { key: 'keepAndUnmonitor', value: () => translate('KeepAndUnmonitorSeries') },
-  { key: 'keepAndTag', value: () => translate('KeepAndTagSeries') },
+  {
+    key: 'disabled',
+    get value() {
+      return translate('Disabled');
+    },
+  },
+  {
+    key: 'logOnly',
+    get value() {
+      return translate('LogOnly');
+    },
+  },
+  {
+    key: 'keepAndUnmonitor',
+    get value() {
+      return translate('KeepAndUnmonitorSeries');
+    },
+  },
+  {
+    key: 'keepAndTag',
+    get value() {
+      return translate('KeepAndTagSeries');
+    },
+  },
 ];
 
 interface ImportListOptionsProps {
