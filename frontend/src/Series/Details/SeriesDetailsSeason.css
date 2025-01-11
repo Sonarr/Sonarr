@@ -17,17 +17,37 @@
   font-size: 24px;
 }
 
-.seasonNumber {
+.seasonInfo {
   margin-right: 10px;
   margin-left: 5px;
 }
 
+.seasonNumber {
+  line-height: 24px;
+}
+
+.seasonStats {
+  display: flex;
+  align-items: flex-end;
+  flex-direction: column;
+  margin-left: auto;
+  gap: 2px;
+}
+
+.seasonStatsLabel {
+  composes: label from '~Components/Label.css';
+
+  margin: 0;
+  width: 100%;
+}
+
 .episodeCountTooltip {
   display: flex;
+  align-items: stretch;
+  width: 100%;
 }
 
 .sizeOnDisk {
-  margin-left: 10px;
   color: #777;
   font-size: $defaultFontSize;
 }

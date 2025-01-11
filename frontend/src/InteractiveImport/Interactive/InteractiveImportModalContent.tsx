@@ -219,7 +219,7 @@ const importModeSelector = createSelector(
   }
 );
 
-interface InteractiveImportModalContentProps {
+export interface InteractiveImportModalContentProps {
   downloadId?: string;
   seriesId?: number;
   seasonNumber?: number;
