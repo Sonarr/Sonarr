@@ -3,7 +3,7 @@ import EpisodeLanguages from 'Episode/EpisodeLanguages';
 import useEpisodeFile from './useEpisodeFile';
 
 interface EpisodeFileLanguagesProps {
-  episodeFileId: number;
+  episodeFileId: number | undefined;
 }
 
 function EpisodeFileLanguages({ episodeFileId }: EpisodeFileLanguagesProps) {

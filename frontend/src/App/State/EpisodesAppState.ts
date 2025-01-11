@@ -1,6 +1,9 @@
 import AppSectionState from 'App/State/AppSectionState';
+import Column from 'Components/Table/Column';
 import Episode from 'Episode/Episode';
 
-type EpisodesAppState = AppSectionState<Episode>;
+interface EpisodesAppState extends AppSectionState<Episode> {
+  columns: Column[];
+}
 
 export default EpisodesAppState;

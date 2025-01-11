@@ -8,7 +8,7 @@ import ImportSeries from 'AddSeries/ImportSeries/ImportSeries';
 import CalendarPage from 'Calendar/CalendarPage';
 import NotFound from 'Components/NotFound';
 import Switch from 'Components/Router/Switch';
-import SeriesDetailsPageConnector from 'Series/Details/SeriesDetailsPageConnector';
+import SeriesDetailsPage from 'Series/Details/SeriesDetailsPage';
 import SeriesIndex from 'Series/Index/SeriesIndex';
 import CustomFormatSettingsPage from 'Settings/CustomFormats/CustomFormatSettingsPage';
 import DownloadClientSettings from 'Settings/DownloadClients/DownloadClientSettings';
@@ -66,7 +66,7 @@ function AppRoutes() {
 
       <Route path="/seasonpass" exact={true} render={RedirectWithUrlBase} />
 
-      <Route path="/series/:titleSlug" component={SeriesDetailsPageConnector} />
+      <Route path="/series/:titleSlug" component={SeriesDetailsPage} />
 
       {/*
         Calendar

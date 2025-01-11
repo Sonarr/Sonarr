@@ -28,6 +28,7 @@ function getEpisodeCountKind(
 }
 
 interface SeasonProgressLabelProps {
+  className: string;
   seriesId: number;
   seasonNumber: number;
   monitored: boolean;
@@ -36,6 +37,7 @@ interface SeasonProgressLabelProps {
 }
 
 function SeasonProgressLabel({
+  className,
   seriesId,
   seasonNumber,
   monitored,
@@ -53,6 +55,7 @@ function SeasonProgressLabel({
 
   return (
     <Label
+      className={className}
       kind={getEpisodeCountKind(
         monitored,
         episodeFileCount,

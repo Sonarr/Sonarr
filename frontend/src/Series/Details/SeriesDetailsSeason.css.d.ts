@@ -16,7 +16,10 @@ interface CssExports {
   'left': string;
   'noEpisodes': string;
   'season': string;
+  'seasonInfo': string;
   'seasonNumber': string;
+  'seasonStats': string;
+  'seasonStatsLabel': string;
   'sizeOnDisk': string;
 }
 export const cssExports: CssExports;

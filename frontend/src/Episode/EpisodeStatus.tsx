@@ -16,7 +16,7 @@ import styles from './EpisodeStatus.css';
 interface EpisodeStatusProps {
   episodeId: number;
   episodeEntity?: EpisodeEntity;
-  episodeFileId: number;
+  episodeFileId: number | undefined;
 }
 
 function EpisodeStatus({
