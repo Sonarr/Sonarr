@@ -41,6 +41,7 @@ function HistoryDetails(props: HistoryDetailsProps) {
       indexer,
       releaseGroup,
       seriesMatchType,
+      releaseSource,
       customFormatScore,
       nzbInfoUrl,
       downloadClient,
@@ -52,6 +53,31 @@ function HistoryDetails(props: HistoryDetailsProps) {
     } = data as GrabbedHistoryData;
 
     const downloadClientNameInfo = downloadClientName ?? downloadClient;
+
+    let releaseSourceMessage = '';
+
+    switch (releaseSource) {
+      case 'Unknown':
+        releaseSourceMessage = translate('Unknown');
+        break;
+      case 'Rss':
+        releaseSourceMessage = translate('RSS');
+        break;
+      case 'Search':
+        releaseSourceMessage = translate('Search');
+        break;
+      case 'UserInvokedSearch':
+        releaseSourceMessage = translate('UserInvokedSearch');
+        break;
+      case 'InteractiveSearch':
+        releaseSourceMessage = translate('InteractiveSearch');
+        break;
+      case 'ReleasePush':
+        releaseSourceMessage = translate('ReleasePush');
+        break;
+      default:
+        releaseSourceMessage = '';
+    }
 
     return (
       <DescriptionList>
@@ -85,6 +111,14 @@ function HistoryDetails(props: HistoryDetailsProps) {
             descriptionClassName={styles.description}
             title={translate('SeriesMatchType')}
             data={seriesMatchType}
+          />
+        ) : null}
+
+        {releaseSource ? (
+          <DescriptionListItem
+            descriptionClassName={styles.description}
+            title={translate('ReleaseSource')}
+            data={releaseSourceMessage}
           />
         ) : null}
 
