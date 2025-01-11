@@ -1,6 +1,6 @@
 import translate from 'Utilities/String/translate';
 
-function formatRuntime(runtime: number) {
+function formatRuntime(runtime: number | undefined) {
   if (!runtime) {
     return '';
   }
