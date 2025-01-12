@@ -61,7 +61,7 @@ function HistoryDetails(props: HistoryDetailsProps) {
         releaseSourceMessage = translate('Unknown');
         break;
       case 'Rss':
-        releaseSourceMessage = translate('RSS');
+        releaseSourceMessage = translate('Rss');
         break;
       case 'Search':
         releaseSourceMessage = translate('Search');
