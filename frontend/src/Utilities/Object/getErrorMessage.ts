@@ -1,12 +1,25 @@
 import { Error } from 'App/State/AppSectionState';
+import { ApiError } from 'Helpers/Hooks/useApiQuery';
 
-function getErrorMessage(xhr: Error, fallbackErrorMessage = '') {
-  if (!xhr || !xhr.responseJSON) {
+function getErrorMessage(error: Error | ApiError, fallbackErrorMessage = '') {
+  if (!error) {
     return fallbackErrorMessage;
   }
 
-  if ('message' in xhr.responseJSON && xhr.responseJSON.message) {
-    return xhr.responseJSON.message;
+  if (error instanceof ApiError) {
+    if (!error.statusBody) {
+      return fallbackErrorMessage;
+    }
+
+    return error.statusBody.message;
+  }
+
+  if (!error.responseJSON) {
+    return fallbackErrorMessage;
+  }
+
+  if ('message' in error.responseJSON && error.responseJSON.message) {
+    return error.responseJSON.message;
   }
 
   return fallbackErrorMessage;

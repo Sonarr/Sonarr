@@ -1,6 +1,7 @@
 import ModelBase from 'App/ModelBase';
 import { FilterBuilderTypes } from 'Helpers/Props/filterBuilderTypes';
 import { DateFilterValue, FilterType } from 'Helpers/Props/filterTypes';
+import AddSeriesAppState from './AddSeriesAppState';
 import { Error } from './AppSectionState';
 import BlocklistAppState from './BlocklistAppState';
 import CalendarAppState from './CalendarAppState';
@@ -81,6 +82,7 @@ export interface AppSectionState {
 }
 
 interface AppState {
+  addSeries: AddSeriesAppState;
   app: AppSectionState;
   blocklist: BlocklistAppState;
   calendar: CalendarAppState;

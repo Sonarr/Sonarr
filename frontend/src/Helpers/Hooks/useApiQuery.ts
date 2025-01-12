@@ -1,54 +1,76 @@
-import { useQuery } from '@tanstack/react-query';
+import { UndefinedInitialDataOptions, useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 
-interface QueryOptions {
-  url: string;
-  headers?: HeadersInit;
+interface ApiErrorResponse {
+  message: string;
+  details: string;
 }
 
-const absUrlRegex = /^(https?:)?\/\//i;
+export class ApiError extends Error {
+  public statusCode: number;
+  public statusText: string;
+  public statusBody?: ApiErrorResponse;
+
+  public constructor(
+    path: string,
+    statusCode: number,
+    statusText: string,
+    statusBody?: ApiErrorResponse
+  ) {
+    super(`Request Error: (${statusCode}) ${path}`);
+
+    this.statusCode = statusCode;
+    this.statusText = statusText;
+    this.statusBody = statusBody;
+
+    Object.setPrototypeOf(this, new.target.prototype);
+  }
+}
+
+interface QueryOptions<T> {
+  path: string;
+  headers?: HeadersInit;
+  queryOptions?:
+    | Omit<UndefinedInitialDataOptions<T, ApiError>, 'queryKey' | 'queryFn'>
+    | undefined;
+}
+
 const apiRoot = window.Sonarr.apiRoot;
 
-function isAbsolute(url: string) {
-  return absUrlRegex.test(url);
-}
-
-function getUrl(url: string) {
-  return apiRoot + url;
-}
-
-function useApiQuery<T>(options: QueryOptions) {
-  const { url, headers } = options;
-
-  const final = useMemo(() => {
-    if (isAbsolute(url)) {
-      return {
-        url,
-        headers,
-      };
-    }
-
+function useApiQuery<T>(options: QueryOptions<T>) {
+  const { path, headers } = useMemo(() => {
     return {
-      url: getUrl(url),
+      path: apiRoot + options.path,
       headers: {
-        ...headers,
+        ...options.headers,
         'X-Api-Key': window.Sonarr.apiKey,
       },
     };
-  }, [url, headers]);
+  }, [options]);
 
   return useQuery({
-    queryKey: [final.url],
-    queryFn: async () => {
-      const result = await fetch(final.url, {
-        headers: final.headers,
+    ...options.queryOptions,
+    queryKey: [path, headers],
+    queryFn: async ({ signal }) => {
+      const response = await fetch(path, {
+        headers,
+        signal,
       });
 
-      if (!result.ok) {
-        throw new Error('Failed to fetch');
+      if (!response.ok) {
+        // eslint-disable-next-line init-declarations
+        let body;
+
+        try {
+          body = (await response.json()) as ApiErrorResponse;
+        } catch {
+          throw new ApiError(path, response.status, response.statusText);
+        }
+
+        throw new ApiError(path, response.status, response.statusText, body);
       }
 
-      return result.json() as T;
+      return response.json() as T;
     },
   });
 }

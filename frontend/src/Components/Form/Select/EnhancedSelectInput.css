@@ -44,6 +44,7 @@
 
 .optionsContainer {
   z-index: $popperZIndex;
+  max-height: vh(50);
   width: auto;
 }
 

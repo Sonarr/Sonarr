@@ -37,7 +37,7 @@ function RootFolderModalContent(props: RootFolderModalContentProps) {
   const [rootFolderPath, setRootFolderPath] = useState(props.rootFolderPath);
 
   const { isLoading, data } = useApiQuery<SeriesFolder>({
-    url: `/series/${seriesId}/folder`,
+    path: `/series/${seriesId}/folder`,
   });
 
   const onInputChange = useCallback(({ value }: InputChanged<string>) => {
