@@ -3,7 +3,7 @@ import { Redirect, Route } from 'react-router-dom';
 import Blocklist from 'Activity/Blocklist/Blocklist';
 import History from 'Activity/History/History';
 import Queue from 'Activity/Queue/Queue';
-import AddNewSeriesConnector from 'AddSeries/AddNewSeries/AddNewSeriesConnector';
+import AddNewSeries from 'AddSeries/AddNewSeries/AddNewSeries';
 import ImportSeries from 'AddSeries/ImportSeries/ImportSeries';
 import CalendarPage from 'Calendar/CalendarPage';
 import NotFound from 'Components/NotFound';
@@ -58,7 +58,7 @@ function AppRoutes() {
         />
       )}
 
-      <Route path="/add/new" component={AddNewSeriesConnector} />
+      <Route path="/add/new" component={AddNewSeries} />
 
       <Route path="/add/import" component={ImportSeries} />
 
