@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import React from 'react';
+import { IconName } from 'Components/Icon';
 import Button, { ButtonProps } from 'Components/Link/Button';
 import SpinnerButton from 'Components/Link/SpinnerButton';
 import { kinds } from 'Helpers/Props';
@@ -9,6 +10,7 @@ export interface FormInputButtonProps extends ButtonProps {
   canSpin?: boolean;
   isLastButton?: boolean;
   isSpinning?: boolean;
+  spinnerIcon?: IconName;
 }
 
 function FormInputButton({

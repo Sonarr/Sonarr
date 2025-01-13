@@ -11,6 +11,7 @@ import CustomFiltersAppState from './CustomFiltersAppState';
 import EpisodeFilesAppState from './EpisodeFilesAppState';
 import EpisodesAppState from './EpisodesAppState';
 import HistoryAppState, { SeriesHistoryAppState } from './HistoryAppState';
+import ImportSeriesAppState from './ImportSeriesAppState';
 import InteractiveImportAppState from './InteractiveImportAppState';
 import MessagesAppState from './MessagesAppState';
 import OAuthAppState from './OAuthAppState';
@@ -94,6 +95,7 @@ interface AppState {
   episodes: EpisodesAppState;
   episodesSelection: EpisodesAppState;
   history: HistoryAppState;
+  importSeries: ImportSeriesAppState;
   interactiveImport: InteractiveImportAppState;
   oAuth: OAuthAppState;
   organizePreview: OrganizePreviewAppState;

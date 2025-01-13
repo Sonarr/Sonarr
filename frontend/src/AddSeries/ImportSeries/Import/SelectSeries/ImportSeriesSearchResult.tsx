@@ -1,29 +1,36 @@
-import PropTypes from 'prop-types';
 import React, { useCallback } from 'react';
+import { useSelector } from 'react-redux';
 import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
 import { icons } from 'Helpers/Props';
+import createExistingSeriesSelector from 'Store/Selectors/createExistingSeriesSelector';
 import ImportSeriesTitle from './ImportSeriesTitle';
 import styles from './ImportSeriesSearchResult.css';
 
-function ImportSeriesSearchResult(props) {
-  const {
-    tvdbId,
-    title,
-    year,
-    network,
-    isExistingSeries,
-    onPress
-  } = props;
+interface ImportSeriesSearchResultProps {
+  tvdbId: number;
+  title: string;
+  year: number;
+  network?: string;
+  onPress: (tvdbId: number) => void;
+}
 
-  const onPressCallback = useCallback(() => onPress(tvdbId), [tvdbId, onPress]);
+function ImportSeriesSearchResult({
+  tvdbId,
+  title,
+  year,
+  network,
+  onPress,
+}: ImportSeriesSearchResultProps) {
+  const isExistingSeries = useSelector(createExistingSeriesSelector(tvdbId));
+
+  const handlePress = useCallback(() => {
+    onPress(tvdbId);
+  }, [tvdbId, onPress]);
 
   return (
     <div className={styles.container}>
-      <Link
-        className={styles.series}
-        onPress={onPressCallback}
-      >
+      <Link className={styles.series} onPress={handlePress}>
         <ImportSeriesTitle
           title={title}
           year={year}
@@ -45,14 +52,5 @@ function ImportSeriesSearchResult(props) {
     </div>
   );
 }
-
-ImportSeriesSearchResult.propTypes = {
-  tvdbId: PropTypes.number.isRequired,
-  title: PropTypes.string.isRequired,
-  year: PropTypes.number.isRequired,
-  network: PropTypes.string,
-  isExistingSeries: PropTypes.bool.isRequired,
-  onPress: PropTypes.func.isRequired
-};
 
 export default ImportSeriesSearchResult;

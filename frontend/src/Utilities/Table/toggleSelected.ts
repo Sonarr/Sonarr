@@ -1,9 +1,8 @@
-import ModelBase from 'App/ModelBase';
-import { SelectState } from 'Helpers/Hooks/useSelectState';
+import { SelectState, SelectStateModel } from 'Helpers/Hooks/useSelectState';
 import areAllSelected from './areAllSelected';
 import getToggledRange from './getToggledRange';
 
-function toggleSelected<T extends ModelBase>(
+function toggleSelected<T extends SelectStateModel>(
   selectState: SelectState,
   items: T[],
   id: number | string,
