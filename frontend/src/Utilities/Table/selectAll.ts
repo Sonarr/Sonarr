@@ -2,9 +2,9 @@ import { SelectedState } from 'Helpers/Hooks/useSelectState';
 
 function selectAll(selectedState: SelectedState, selected: boolean) {
   const newSelectedState = Object.keys(selectedState).reduce<
-    Record<number, boolean>
+    Record<number | string, boolean>
   >((acc, item) => {
-    acc[Number(item)] = selected;
+    acc[item] = selected;
     return acc;
   }, {});
 

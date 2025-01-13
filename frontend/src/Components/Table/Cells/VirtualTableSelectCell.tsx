@@ -9,7 +9,7 @@ import styles from './VirtualTableSelectCell.css';
 
 interface VirtualTableSelectCellProps extends VirtualTableRowCellProps {
   inputClassName?: string;
-  id: number;
+  id: number | string;
   isSelected?: boolean;
   isDisabled: boolean;
   onSelectedChange: (options: SelectStateInputProps) => void;

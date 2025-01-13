@@ -1,7 +1,10 @@
 import { Error } from 'App/State/AppSectionState';
 import { ApiError } from 'Helpers/Hooks/useApiQuery';
 
-function getErrorMessage(error: Error | ApiError, fallbackErrorMessage = '') {
+function getErrorMessage(
+  error: Error | ApiError | undefined,
+  fallbackErrorMessage = ''
+) {
   if (!error) {
     return fallbackErrorMessage;
   }

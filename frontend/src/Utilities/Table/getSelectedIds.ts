@@ -1,12 +1,15 @@
 import { reduce } from 'lodash';
 import { SelectedState } from 'Helpers/Hooks/useSelectState';
 
-function getSelectedIds(selectedState: SelectedState): number[] {
+function getSelectedIds<T extends number | string = number>(
+  selectedState: SelectedState,
+  idParser: (id: string) => T = (id) => parseInt(id) as T
+): T[] {
   return reduce(
     selectedState,
-    (result: number[], value, id) => {
+    (result: T[], value, id) => {
       if (value) {
-        result.push(parseInt(id));
+        result.push(idParser(id));
       }
 
       return result;

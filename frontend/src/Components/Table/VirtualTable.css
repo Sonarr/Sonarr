@@ -1,7 +1,3 @@
-.tableContainer {
-  width: 100%;
-}
-
-.tableBodyContainer {
+.tableScroller {
   position: relative;
 }

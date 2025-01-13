@@ -1,5 +1,4 @@
 import AppSectionState, { Error } from 'App/State/AppSectionState';
-import Language from 'Language/Language';
 import Series, { SeriesMonitor, SeriesType } from 'Series/Series';
 
 export interface AddSeries extends Series {
@@ -17,7 +16,6 @@ interface AddSeriesAppState extends AppSectionState<AddSeries> {
     qualityProfileId: number;
     seriesType: SeriesType;
     seasonFolder: boolean;
-    language: Language;
     tags: number[];
     searchForMissingEpisodes: boolean;
     searchForCutoffUnmetEpisodes: boolean;
