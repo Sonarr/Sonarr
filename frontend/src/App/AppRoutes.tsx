@@ -4,7 +4,7 @@ import Blocklist from 'Activity/Blocklist/Blocklist';
 import History from 'Activity/History/History';
 import Queue from 'Activity/Queue/Queue';
 import AddNewSeries from 'AddSeries/AddNewSeries/AddNewSeries';
-import ImportSeries from 'AddSeries/ImportSeries/ImportSeries';
+import ImportSeriesPage from 'AddSeries/ImportSeries/ImportSeriesPage';
 import CalendarPage from 'Calendar/CalendarPage';
 import NotFound from 'Components/NotFound';
 import Switch from 'Components/Router/Switch';
@@ -60,7 +60,7 @@ function AppRoutes() {
 
       <Route path="/add/new" component={AddNewSeries} />
 
-      <Route path="/add/import" component={ImportSeries} />
+      <Route path="/add/import" component={ImportSeriesPage} />
 
       <Route path="/serieseditor" exact={true} render={RedirectWithUrlBase} />
 

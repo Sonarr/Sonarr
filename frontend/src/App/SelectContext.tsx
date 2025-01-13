@@ -1,6 +1,9 @@
 import { cloneDeep } from 'lodash';
 import React, { useCallback, useEffect } from 'react';
-import useSelectState, { SelectState } from 'Helpers/Hooks/useSelectState';
+import useSelectState, {
+  SelectState,
+  SelectStateModel,
+} from 'Helpers/Hooks/useSelectState';
 import ModelBase from './ModelBase';
 
 export type SelectContextAction =
@@ -24,7 +27,7 @@ export type SelectContextAction =
 
 export type SelectDispatch = (action: SelectContextAction) => void;
 
-interface SelectProviderOptions<T extends ModelBase> {
+interface SelectProviderOptions<T extends SelectStateModel> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   children: any;
   items: Array<T>;
@@ -34,7 +37,7 @@ const SelectContext = React.createContext<
   [SelectState, SelectDispatch] | undefined
 >(cloneDeep(undefined));
 
-export function SelectProvider<T extends ModelBase>(
+export function SelectProvider<T extends SelectStateModel>(
   props: SelectProviderOptions<T>
 ) {
   const { items } = props;
