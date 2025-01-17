@@ -169,6 +169,50 @@ namespace NzbDrone.Core.Test.Download.Aggregation.Aggregators
         }
 
         [Test]
+        public void should_return_multi_languages_when_release_as_specified_language_and_indexer_has_multi_languages_configuration()
+        {
+            var releaseTitle = "Series.Title.S01E01.MULTi.VFF.VFQ.1080p.BluRay.DTS.HDMA.x264-RlsGroup";
+            var indexerDefinition = new IndexerDefinition
+            {
+                Id = 1,
+                Settings = new TorrentRssIndexerSettings { MultiLanguages = new List<int> { Language.Original.Id, Language.French.Id } }
+            };
+            Mocker.GetMock<IIndexerFactory>()
+                .Setup(v => v.Find(1))
+                .Returns(indexerDefinition);
+
+            _remoteEpisode.ParsedEpisodeInfo = GetParsedEpisodeInfo(new List<Language> { Language.French }, releaseTitle);
+            _remoteEpisode.Release.IndexerId = 1;
+            _remoteEpisode.Release.Title = releaseTitle;
+
+            Subject.Aggregate(_remoteEpisode).Languages.Should().BeEquivalentTo(new List<Language> { _series.OriginalLanguage, Language.French });
+            Mocker.GetMock<IIndexerFactory>().Verify(c => c.Find(1), Times.Once());
+            Mocker.GetMock<IIndexerFactory>().VerifyNoOtherCalls();
+        }
+
+        [Test]
+        public void should_return_multi_languages_when_release_as_other_language_and_indexer_has_multi_languages_configuration()
+        {
+            var releaseTitle = "Series.Title.S01E01.MULTi.GERMAN.1080p.BluRay.DTS.HDMA.x264-RlsGroup";
+            var indexerDefinition = new IndexerDefinition
+            {
+                Id = 1,
+                Settings = new TorrentRssIndexerSettings { MultiLanguages = new List<int> { Language.Original.Id, Language.French.Id } }
+            };
+            Mocker.GetMock<IIndexerFactory>()
+                .Setup(v => v.Find(1))
+                .Returns(indexerDefinition);
+
+            _remoteEpisode.ParsedEpisodeInfo = GetParsedEpisodeInfo(new List<Language> { Language.German }, releaseTitle);
+            _remoteEpisode.Release.IndexerId = 1;
+            _remoteEpisode.Release.Title = releaseTitle;
+
+            Subject.Aggregate(_remoteEpisode).Languages.Should().BeEquivalentTo(new List<Language> { _series.OriginalLanguage, Language.French, Language.German });
+            Mocker.GetMock<IIndexerFactory>().Verify(c => c.Find(1), Times.Once());
+            Mocker.GetMock<IIndexerFactory>().VerifyNoOtherCalls();
+        }
+
+        [Test]
         public void should_return_original_when_indexer_has_no_multi_languages_configuration()
         {
             var releaseTitle = "Series.Title.S01E01.MULTi.1080p.WEB.H265-RlsGroup";
