@@ -33,8 +33,4 @@ function SeriesIndexFilterMenu(props: SeriesIndexFilterMenuProps) {
   );
 }
 
-SeriesIndexFilterMenu.defaultProps = {
-  showCustomFilters: false,
-};
-
 export default SeriesIndexFilterMenu;
