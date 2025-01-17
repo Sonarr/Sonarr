@@ -22,7 +22,7 @@
     "Language": "Sprache",
     "CloneCondition": "Bedingung klonen",
     "DeleteCondition": "Bedingung löschen",
-    "DeleteConditionMessageText": "Bist du sicher, dass du die Bedingung '{0}' löschen willst?",
+    "DeleteConditionMessageText": "Bist du sicher, dass du die Bedingung '{name}' löschen willst?",
     "DeleteCustomFormatMessageText": "Bist du sicher, dass du das benutzerdefinierte Format '{name}' wirklich löschen willst?",
     "RemoveSelectedItemQueueMessageText": "Bist du sicher, dass du ein Eintrag aus der Warteschlange entfernen willst?",
     "RemoveSelectedItemsQueueMessageText": "Bist du sicher, dass du {selectedCount} Einträge aus der Warteschlange entfernen willst?",
@@ -2138,5 +2138,14 @@
     "UpgradeUntilCustomFormatScoreEpisodeHelpText": "Sobald dieser benutzerdefinierte Formatwert erreicht ist, wird {appName} keine Episoden-Releases mehr herunterladen",
     "UpgradesAllowedHelpText": "Wenn deaktiviert, werden Qualitäten nicht aktualisiert.",
     "VideoDynamicRange": "Video-Dynamikbereich",
-    "Warning": "Warnung"
+    "Warning": "Warnung",
+    "ReleasePush": "Veröffentlichung-Push",
+    "ReleaseSource": "Veröffentlichungsquelle",
+    "MetadataKometaDeprecatedSetting": "Veraltet",
+    "MetadataKometaDeprecated": "Kometa-Dateien werden nicht mehr erstellt, die Unterstützung wird in Version 5 vollständig entfernt",
+    "NotificationsTelegramSettingsIncludeInstanceName": "Instanzname im Titel einfügen",
+    "NotificationsTelegramSettingsIncludeInstanceNameHelpText": "Optional den Instanznamen in die Benachrichtigung einfügen",
+    "IndexerSettingsFailDownloadsHelpText": "Beim Verarbeiten abgeschlossener Downloads behandelt {appName} diese ausgewählten Dateitypen als fehlgeschlagene Downloads.",
+    "UserInvokedSearch": "Benutzerinitiierte Suche",
+    "IndexerSettingsFailDownloads": "Fehlgeschlagene Downloads"
 }
