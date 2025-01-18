@@ -18,7 +18,7 @@ export function unregisterPagePopulator(populator: Populator) {
   }
 }
 
-export function repopulatePage(reason: string) {
+export function repopulatePage(reason?: string) {
   if (!currentPopulator) {
     return;
   }
