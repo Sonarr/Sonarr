@@ -341,10 +341,11 @@ namespace NzbDrone.Common.Disk
 
             var isCifs = targetDriveFormat == "cifs";
             var isBtrfs = sourceDriveFormat == "btrfs" && targetDriveFormat == "btrfs";
+            var isZfs = sourceDriveFormat == "zfs" && targetDriveFormat == "zfs";
 
             if (mode.HasFlag(TransferMode.Copy))
             {
-                if (isBtrfs)
+                if (isBtrfs || isZfs)
                 {
                     if (_diskProvider.TryCreateRefLink(sourcePath, targetPath))
                     {
@@ -358,7 +359,7 @@ namespace NzbDrone.Common.Disk
 
             if (mode.HasFlag(TransferMode.Move))
             {
-                if (isBtrfs)
+                if (isBtrfs || isZfs)
                 {
                     if (isSameMount && _diskProvider.TryRenameFile(sourcePath, targetPath))
                     {
