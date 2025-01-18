@@ -4,7 +4,7 @@ import AppUpdatedModal from 'App/AppUpdatedModal';
 import ColorImpairedContext from 'App/ColorImpairedContext';
 import ConnectionLostModal from 'App/ConnectionLostModal';
 import AppState from 'App/State/AppState';
-import SignalRConnector from 'Components/SignalRConnector';
+import SignalRListener from 'Components/SignalRListener';
 import AuthenticationRequiredModal from 'FirstRun/AuthenticationRequiredModal';
 import useAppPage from 'Helpers/Hooks/useAppPage';
 import { saveDimensions } from 'Store/Actions/appActions';
@@ -87,7 +87,7 @@ function Page({ children }: PageProps) {
   return (
     <ColorImpairedContext.Provider value={enableColorImpairedMode}>
       <div className={styles.page}>
-        <SignalRConnector />
+        <SignalRListener />
 
         <PageHeader />
 
