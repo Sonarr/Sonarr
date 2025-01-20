@@ -25,6 +25,7 @@ using NzbDrone.Host.AccessControl;
 using NzbDrone.Http.Authentication;
 using NzbDrone.SignalR;
 using Sonarr.Api.V3.System;
+using Sonarr.Api.V5.Series;
 using Sonarr.Http;
 using Sonarr.Http.Authentication;
 using Sonarr.Http.ClientSchema;
@@ -87,7 +88,10 @@ namespace NzbDrone.Host
             {
                 options.ReturnHttpNotAcceptable = true;
             })
+
+            // Register all controllers from the API and HTTP projects
             .AddApplicationPart(typeof(SystemController).Assembly)
+            .AddApplicationPart(typeof(SeriesLookupController).Assembly)
             .AddApplicationPart(typeof(StaticResourceController).Assembly)
             .AddJsonOptions(options =>
             {
@@ -102,6 +106,18 @@ namespace NzbDrone.Host
                     Version = "3.0.0",
                     Title = "Sonarr",
                     Description = "Sonarr API docs - The v3 API docs apply to both v3 and v4 versions of Sonarr. Some functionality may only be available in v4 of the Sonarr application.",
+                    License = new OpenApiLicense
+                    {
+                        Name = "GPL-3.0",
+                        Url = new Uri("https://github.com/Sonarr/Sonarr/blob/develop/LICENSE")
+                    }
+                });
+
+                c.SwaggerDoc("v5", new OpenApiInfo
+                {
+                    Version = "5.0.0",
+                    Title = "Sonarr",
+                    Description = "Sonarr API docs - The v5 API docs apply to Sonarr v5 only.",
                     License = new OpenApiLicense
                     {
                         Name = "GPL-3.0",
@@ -265,7 +281,7 @@ namespace NzbDrone.Host
             app.UseMiddleware<StartingUpMiddleware>();
             app.UseMiddleware<CacheHeaderMiddleware>();
             app.UseMiddleware<IfModifiedMiddleware>();
-            app.UseMiddleware<BufferingMiddleware>(new List<string> { "/api/v3/command" });
+            app.UseMiddleware<BufferingMiddleware>(new List<string> { "/api/v3/command", "/api/v5/command" });
 
             app.UseWebSockets();
 

@@ -12,7 +12,7 @@ Sonarr is a PVR for Usenet and BitTorrent users. It can monitor multiple RSS fee
 - [Download/Installation](https://sonarr.tv/#downloads-v3)
 - [FAQ](https://wiki.servarr.com/sonarr/faq)
 - [Wiki](https://wiki.servarr.com/Sonarr)
-- [v4 Beta API Documentation](https://sonarr.tv/docs/api)
+- [API Documentation](https://sonarr.tv/docs/api)
 - [Donate](https://sonarr.tv/donate)
 
 ## Support

@@ -35,7 +35,7 @@ interface QueryOptions<T> {
     | undefined;
 }
 
-const apiRoot = window.Sonarr.apiRoot;
+const apiRoot = '/api/v5'; // window.Sonarr.apiRoot;
 
 function useApiQuery<T>(options: QueryOptions<T>) {
   const { path, headers } = useMemo(() => {
