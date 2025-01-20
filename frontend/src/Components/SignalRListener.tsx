@@ -1,4 +1,8 @@
-import signalR, { HubConnection } from '@microsoft/signalr';
+import {
+  HubConnection,
+  HubConnectionBuilder,
+  LogLevel,
+} from '@microsoft/signalr';
 import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ModelBase from 'App/ModelBase';
@@ -321,8 +325,8 @@ function SignalRListener() {
 
     const url = `${window.Sonarr.urlBase}/signalr/messages`;
 
-    connection.current = new signalR.HubConnectionBuilder()
-      .configureLogging(new SignalRLogger(signalR.LogLevel.Information))
+    connection.current = new HubConnectionBuilder()
+      .configureLogging(new SignalRLogger(LogLevel.Information))
       .withUrl(
         `${url}?access_token=${encodeURIComponent(window.Sonarr.apiKey)}`
       )
