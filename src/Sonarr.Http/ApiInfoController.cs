@@ -11,8 +11,8 @@ namespace NzbDrone.Http
         {
             return new ApiInfoResource
             {
-                Current = "v3",
-                Deprecated = new List<string>()
+                Current = "v5",
+                Deprecated = new List<string> { "v3" }
             };
         }
     }

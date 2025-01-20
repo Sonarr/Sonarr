@@ -1,27 +1,28 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFrameworks>net8.0</TargetFrameworks>
-    <OutputType>Library</OutputType>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="NLog.Extensions.Logging" Version="5.3.15" />
-    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.6.2" />
-    <PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="8.0.1" />
-    <PackageReference Include="DryIoc.dll" Version="5.4.3" />
-    <PackageReference Include="DryIoc.Microsoft.DependencyInjection" Version="6.2.0" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\NzbDrone.Common\Sonarr.Common.csproj" />
-    <ProjectReference Include="..\NzbDrone.Core\Sonarr.Core.csproj" />
-    <ProjectReference Include="..\NzbDrone.SignalR\Sonarr.SignalR.csproj" />
-    <ProjectReference Include="..\Sonarr.Api.V3\Sonarr.Api.V3.csproj" />
-    <ProjectReference Include="..\Sonarr.Http\Sonarr.Http.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Interop.NetFwTypeLib">
-      <HintPath>..\Libraries\Interop.NetFwTypeLib.dll</HintPath>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </Reference>
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFrameworks>net8.0</TargetFrameworks>
+		<OutputType>Library</OutputType>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="NLog.Extensions.Logging" Version="5.3.15" />
+		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.6.2" />
+		<PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="8.0.1" />
+		<PackageReference Include="DryIoc.dll" Version="5.4.3" />
+		<PackageReference Include="DryIoc.Microsoft.DependencyInjection" Version="6.2.0" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\NzbDrone.Common\Sonarr.Common.csproj" />
+		<ProjectReference Include="..\NzbDrone.Core\Sonarr.Core.csproj" />
+		<ProjectReference Include="..\NzbDrone.SignalR\Sonarr.SignalR.csproj" />
+		<ProjectReference Include="..\Sonarr.Api.V3\Sonarr.Api.V3.csproj" />
+		<ProjectReference Include="..\Sonarr.Api.V5\Sonarr.Api.V5.csproj" />
+		<ProjectReference Include="..\Sonarr.Http\Sonarr.Http.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<Reference Include="Interop.NetFwTypeLib">
+			<HintPath>..\Libraries\Interop.NetFwTypeLib.dll</HintPath>
+			<EmbedInteropTypes>True</EmbedInteropTypes>
+		</Reference>
+	</ItemGroup>
 </Project>

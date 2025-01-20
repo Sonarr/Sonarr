@@ -31,4 +31,12 @@ namespace Sonarr.Http
         {
         }
     }
+
+    public class V5ApiControllerAttribute : VersionedApiControllerAttribute
+    {
+        public V5ApiControllerAttribute(string resource = "[controller]")
+            : base(5, resource)
+        {
+        }
+    }
 }
