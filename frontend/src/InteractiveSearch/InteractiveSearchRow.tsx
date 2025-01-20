@@ -21,6 +21,7 @@ import formatAge from 'Utilities/Number/formatAge';
 import formatBytes from 'Utilities/Number/formatBytes';
 import formatCustomFormatScore from 'Utilities/Number/formatCustomFormatScore';
 import translate from 'Utilities/String/translate';
+import InteractiveSearchPayload from './InteractiveSearchPayload';
 import OverrideMatchModal from './OverrideMatch/OverrideMatchModal';
 import Peers from './Peers';
 import ReleaseSceneIndicator from './ReleaseSceneIndicator';
@@ -71,7 +72,7 @@ function getDownloadTooltip(
 }
 
 interface InteractiveSearchRowProps extends Release {
-  searchPayload: object;
+  searchPayload: InteractiveSearchPayload;
   onGrabPress(...args: unknown[]): void;
 }
 

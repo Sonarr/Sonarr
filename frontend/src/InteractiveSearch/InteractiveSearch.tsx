@@ -12,7 +12,6 @@ import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import { align, icons, kinds, sortDirections } from 'Helpers/Props';
 import { SortDirection } from 'Helpers/Props/sortDirections';
-import InteractiveSearchType from 'InteractiveSearch/InteractiveSearchType';
 import {
   fetchReleases,
   grabRelease,
@@ -24,7 +23,9 @@ import createClientSideCollectionSelector from 'Store/Selectors/createClientSide
 import getErrorMessage from 'Utilities/Object/getErrorMessage';
 import translate from 'Utilities/String/translate';
 import InteractiveSearchFilterModal from './InteractiveSearchFilterModal';
+import InteractiveSearchPayload from './InteractiveSearchPayload';
 import InteractiveSearchRow from './InteractiveSearchRow';
+import InteractiveSearchType from './InteractiveSearchType';
 import styles from './InteractiveSearch.css';
 
 const columns: Column[] = [
@@ -115,7 +116,7 @@ const columns: Column[] = [
 
 interface InteractiveSearchProps {
   type: InteractiveSearchType;
-  searchPayload: object;
+  searchPayload: InteractiveSearchPayload;
 }
 
 function InteractiveSearch({ type, searchPayload }: InteractiveSearchProps) {
