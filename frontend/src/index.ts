@@ -23,12 +23,13 @@ const error = console.error;
 function logError(...parameters: any[]) {
   const filter = parameters.find((parameter) => {
     return (
-      parameter.includes(
+      typeof parameter === 'string' &&
+      (parameter.includes(
         'Support for defaultProps will be removed from function components in a future major release'
       ) ||
-      parameter.includes(
-        'findDOMNode is deprecated and will be removed in the next major release'
-      )
+        parameter.includes(
+          'findDOMNode is deprecated and will be removed in the next major release'
+        ))
     );
   });
 
