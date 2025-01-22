@@ -369,6 +369,7 @@ namespace NzbDrone.Core.IndexerSearch
             searchSpec.EpisodeQueryTitles = episodes.Where(e => !string.IsNullOrWhiteSpace(e.Title))
                                                     .Where(e => !monitoredOnly || e.Monitored)
                                                     .SelectMany(e => searchSpec.CleanSceneTitles.Select(title => title + " " + SearchCriteriaBase.GetCleanSceneTitle(e.Title)))
+                                                    .Distinct(StringComparer.InvariantCultureIgnoreCase)
                                                     .ToArray();
 
             downloadDecisions.AddRange(await Dispatch(indexer => indexer.Fetch(searchSpec), searchSpec));
