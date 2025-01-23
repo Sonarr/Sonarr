@@ -18,9 +18,9 @@ import {
 } from 'typings/History';
 import formatDateTime from 'Utilities/Date/formatDateTime';
 import formatAge from 'Utilities/Number/formatAge';
+import formatBytes from 'Utilities/Number/formatBytes';
 import formatCustomFormatScore from 'Utilities/Number/formatCustomFormatScore';
 import translate from 'Utilities/String/translate';
-import formatBytes from '../../../Utilities/Number/formatBytes';
 import styles from './HistoryDetails.css';
 
 interface HistoryDetailsProps {
