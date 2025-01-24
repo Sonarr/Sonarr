@@ -750,5 +750,13 @@
     "Organize": "Organitza",
     "Search": "Cerca",
     "SelectDropdown": "Seleccioneu...",
-    "Shutdown": "Apaga"
+    "Shutdown": "Apaga",
+    "ClickToChangeReleaseType": "Feu clic per canviar el tipus de llançament",
+    "BlocklistFilterHasNoItems": "El filtre de la llista de bloqueig seleccionat no conté elements",
+    "CustomColonReplacement": "Reemplaçament personalitzat de dos punts",
+    "CountVotes": "{votes} vots",
+    "Completed": "Completat",
+    "ContinuingOnly": "Només en emissió",
+    "CleanLibraryLevel": "Neteja el nivell de la llibreria",
+    "CountCustomFormatsSelected": "{count} format(s) personalitzat(s) seleccionat(s)"
 }

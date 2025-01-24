@@ -2089,5 +2089,9 @@
     "LogSizeLimit": "Ограничение размера журнала",
     "LogSizeLimitHelpText": "Максимальный размер файла журнала в МБ перед архивированием. По умолчанию - 1 МБ.",
     "IndexerHDBitsSettingsMediums": "Mediums",
-    "CountCustomFormatsSelected": "{count} пользовательских форматов выбрано"
+    "CountCustomFormatsSelected": "{count} пользовательских форматов выбрано",
+    "Completed": "Завершено",
+    "CutoffNotMet": "Порог не достигнут",
+    "CustomFormatsSpecificationExceptLanguage": "Кроме языка",
+    "CustomFormatsSpecificationExceptLanguageHelpText": "Подходит, если есть любой язык кроме указанного"
 }
