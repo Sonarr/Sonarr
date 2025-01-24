@@ -21,8 +21,8 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
         private readonly Logger _logger;
         private readonly List<FFProbePixelFormat> _pixelFormats;
 
-        public const int MINIMUM_MEDIA_INFO_SCHEMA_REVISION = 8;
-        public const int CURRENT_MEDIA_INFO_SCHEMA_REVISION = 11;
+        public const int MINIMUM_MEDIA_INFO_SCHEMA_REVISION = 12;
+        public const int CURRENT_MEDIA_INFO_SCHEMA_REVISION = 12;
 
         private static readonly string[] ValidHdrColourPrimaries = { "bt2020" };
         private static readonly string[] HlgTransferFunctions = { "arib-std-b67" };
@@ -81,7 +81,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                 mediaInfoModel.VideoFormat = primaryVideoStream?.CodecName;
                 mediaInfoModel.VideoCodecID = primaryVideoStream?.CodecTagString;
                 mediaInfoModel.VideoProfile = primaryVideoStream?.Profile;
-                mediaInfoModel.VideoBitrate = primaryVideoStream?.BitRate ?? 0;
+                mediaInfoModel.VideoBitrate = GetBitrate(primaryVideoStream);
                 mediaInfoModel.VideoBitDepth = GetPixelFormat(primaryVideoStream?.PixelFormat)?.Components.Min(x => x.BitDepth) ?? 8;
                 mediaInfoModel.VideoColourPrimaries = primaryVideoStream?.ColorPrimaries;
                 mediaInfoModel.VideoTransferCharacteristics = primaryVideoStream?.ColorTransfer;
@@ -91,7 +91,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                 mediaInfoModel.AudioFormat = analysis.PrimaryAudioStream?.CodecName;
                 mediaInfoModel.AudioCodecID = analysis.PrimaryAudioStream?.CodecTagString;
                 mediaInfoModel.AudioProfile = analysis.PrimaryAudioStream?.Profile;
-                mediaInfoModel.AudioBitrate = analysis.PrimaryAudioStream?.BitRate ?? 0;
+                mediaInfoModel.AudioBitrate = GetBitrate(analysis.PrimaryAudioStream);
                 mediaInfoModel.RunTime = GetBestRuntime(analysis.PrimaryAudioStream?.Duration, primaryVideoStream?.Duration, analysis.Format.Duration);
                 mediaInfoModel.AudioStreamCount = analysis.AudioStreams.Count;
                 mediaInfoModel.AudioChannels = analysis.PrimaryAudioStream?.Channels ?? 0;
@@ -159,6 +159,21 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
             }
 
             return video.Value;
+        }
+
+        private static long GetBitrate(MediaStream mediaStream)
+        {
+            if (mediaStream?.BitRate is > 0)
+            {
+                return mediaStream.BitRate;
+            }
+
+            if ((mediaStream?.Tags?.TryGetValue("BPS", out var bitratePerSecond) ?? false) && bitratePerSecond.IsNotNullOrWhiteSpace())
+            {
+                return Convert.ToInt64(bitratePerSecond);
+            }
+
+            return 0;
         }
 
         private VideoStream GetPrimaryVideoStream(IMediaAnalysis mediaAnalysis)
