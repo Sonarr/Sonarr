@@ -232,7 +232,7 @@ function HistoryDetails(props: HistoryDetailsProps) {
 
         {size ? (
           <DescriptionListItem
-            title={translate('Size')}
+            title={translate('FileSize')}
             data={formatBytes(size)}
           />
         ) : null}
@@ -275,7 +275,7 @@ function HistoryDetails(props: HistoryDetailsProps) {
 
         {size ? (
           <DescriptionListItem
-            title={translate('Size')}
+            title={translate('FileSize')}
             data={formatBytes(size)}
           />
         ) : null}
