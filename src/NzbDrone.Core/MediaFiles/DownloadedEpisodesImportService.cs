@@ -265,8 +265,8 @@ namespace NzbDrone.Core.MediaFiles
                 return new List<ImportResult>
                 {
                     new ImportResult(new ImportDecision(new LocalEpisode { Path = fileInfo.FullName },
-                            new ImportRejection(ImportRejectionReason.DangerousFile, "Caution: Found potentially dangerous file")),
-                        $"Caution: Found potentially dangerous file")
+                            new ImportRejection(ImportRejectionReason.DangerousFile, $"Caution: Found potentially dangerous file with extension: {extension}")),
+                        $"Caution: Found potentially dangerous file with extension: {extension}")
                 };
             }
 
@@ -275,8 +275,8 @@ namespace NzbDrone.Core.MediaFiles
                 return new List<ImportResult>
                 {
                     new ImportResult(new ImportDecision(new LocalEpisode { Path = fileInfo.FullName },
-                            new ImportRejection(ImportRejectionReason.ExecutableFile, "Caution: Found executable file")),
-                        $"Caution: Found executable file")
+                            new ImportRejection(ImportRejectionReason.ExecutableFile, $"Caution: Found executable file with extension: '{extension}'")),
+                        $"Caution: Found executable file with extension: '{extension}'")
                 };
             }
 
