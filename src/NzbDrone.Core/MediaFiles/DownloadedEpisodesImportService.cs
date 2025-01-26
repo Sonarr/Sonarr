@@ -260,6 +260,26 @@ namespace NzbDrone.Core.MediaFiles
 
             var extension = Path.GetExtension(fileInfo.Name);
 
+            if (FileExtensions.DangerousExtensions.Contains(extension))
+            {
+                return new List<ImportResult>
+                {
+                    new ImportResult(new ImportDecision(new LocalEpisode { Path = fileInfo.FullName },
+                            new ImportRejection(ImportRejectionReason.DangerousFile, $"Caution: Found potentially dangerous file with extension: {extension}")),
+                        $"Caution: Found potentially dangerous file with extension: {extension}")
+                };
+            }
+
+            if (FileExtensions.ExecutableExtensions.Contains(extension))
+            {
+                return new List<ImportResult>
+                {
+                    new ImportResult(new ImportDecision(new LocalEpisode { Path = fileInfo.FullName },
+                            new ImportRejection(ImportRejectionReason.ExecutableFile, $"Caution: Found executable file with extension: '{extension}'")),
+                        $"Caution: Found executable file with extension: '{extension}'")
+                };
+            }
+
             if (extension.IsNullOrWhiteSpace() || !MediaFileExtensions.Extensions.Contains(extension))
             {
                 _logger.Debug("[{0}] has an unsupported extension: '{1}'", fileInfo.FullName, extension);

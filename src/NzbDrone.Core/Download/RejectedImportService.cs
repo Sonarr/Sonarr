@@ -22,7 +22,7 @@ public class RejectedImportService : IRejectedImportService
 
     public bool Process(TrackedDownload trackedDownload, ImportResult importResult)
     {
-        if (importResult.Result != ImportResultType.Rejected || importResult.ImportDecision.LocalEpisode != null)
+        if (importResult.Result != ImportResultType.Rejected || importResult.ImportDecision.LocalEpisode == null)
         {
             return false;
         }
