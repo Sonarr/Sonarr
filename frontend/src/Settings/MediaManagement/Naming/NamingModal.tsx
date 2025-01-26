@@ -2,7 +2,6 @@ import React, { useCallback, useState } from 'react';
 import FieldSet from 'Components/FieldSet';
 import SelectInput from 'Components/Form/SelectInput';
 import TextInput from 'Components/Form/TextInput';
-import Icon from 'Components/Icon';
 import Button from 'Components/Link/Button';
 import InlineMarkdown from 'Components/Markdown/InlineMarkdown';
 import Modal from 'Components/Modal/Modal';
@@ -10,7 +9,7 @@ import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
-import { icons, sizes } from 'Helpers/Props';
+import { sizes } from 'Helpers/Props';
 import NamingConfig from 'typings/Settings/NamingConfig';
 import translate from 'Utilities/String/translate';
 import NamingOption from './NamingOption';
@@ -123,63 +122,63 @@ const fileNameAnimeTokens = [
 ];
 
 const seriesTokens = [
-  { token: '{Series Title}', example: "The Series Title's!", footNote: true },
+  { token: '{Series Title}', example: "The Series Title's!", footNotes: '1' },
   {
     token: '{Series CleanTitle}',
     example: "The Series Title's!",
-    footNote: true,
+    footNotes: '1',
   },
   {
     token: '{Series TitleYear}',
     example: "The Series Title's! (2010)",
-    footNote: true,
+    footNotes: '1',
   },
   {
     token: '{Series CleanTitleYear}',
     example: "The Series Title's! 2010",
-    footNote: true,
+    footNotes: '1',
   },
   {
     token: '{Series TitleWithoutYear}',
     example: "The Series Title's!",
-    footNote: true,
+    footNotes: '1',
   },
   {
     token: '{Series CleanTitleWithoutYear}',
     example: "The Series Title's!",
-    footNote: true,
+    footNotes: '1',
   },
   {
     token: '{Series TitleThe}',
     example: "Series Title's!, The",
-    footNote: true,
+    footNotes: '1',
   },
   {
     token: '{Series CleanTitleThe}',
     example: "Series Title's!, The",
-    footNote: true,
+    footNotes: '1',
   },
   {
     token: '{Series TitleTheYear}',
     example: "Series Title's!, The (2010)",
-    footNote: true,
+    footNotes: '1',
   },
   {
     token: '{Series CleanTitleTheYear}',
     example: "Series Title's!, The 2010",
-    footNote: true,
+    footNotes: '1',
   },
   {
     token: '{Series TitleTheWithoutYear}',
     example: "Series Title's!, The",
-    footNote: true,
+    footNotes: '1',
   },
   {
     token: '{Series CleanTitleTheWithoutYear}',
     example: "Series Title's!, The",
-    footNote: true,
+    footNotes: '1',
   },
-  { token: '{Series TitleFirstCharacter}', example: 'S', footNote: true },
+  { token: '{Series TitleFirstCharacter}', example: 'S', footNotes: '1' },
   { token: '{Series Year}', example: '2010' },
 ];
 
@@ -212,8 +211,8 @@ const absoluteTokens = [
 ];
 
 const episodeTitleTokens = [
-  { token: '{Episode Title}', example: "Episode's Title", footNote: true },
-  { token: '{Episode CleanTitle}', example: 'Episodes Title', footNote: true },
+  { token: '{Episode Title}', example: "Episode's Title", footNotes: '1' },
+  { token: '{Episode CleanTitle}', example: 'Episodes Title', footNotes: '1' },
 ];
 
 const qualityTokens = [
@@ -223,12 +222,21 @@ const qualityTokens = [
 
 const mediaInfoTokens = [
   { token: '{MediaInfo Simple}', example: 'x264 DTS' },
-  { token: '{MediaInfo Full}', example: 'x264 DTS [EN+DE]', footNote: true },
+  { token: '{MediaInfo Full}', example: 'x264 DTS [EN+DE]', footNotes: '1' },
 
   { token: '{MediaInfo AudioCodec}', example: 'DTS' },
   { token: '{MediaInfo AudioChannels}', example: '5.1' },
-  { token: '{MediaInfo AudioLanguages}', example: '[EN+DE]', footNote: true },
-  { token: '{MediaInfo SubtitleLanguages}', example: '[DE]', footNote: true },
+  {
+    token: '{MediaInfo AudioLanguages}',
+    example: '[EN+DE]',
+    footNotes: '1,2',
+  },
+  {
+    token: '{MediaInfo AudioLanguagesAll}',
+    example: '[EN]',
+    footNotes: '1',
+  },
+  { token: '{MediaInfo SubtitleLanguages}', example: '[DE]', footNotes: '1' },
 
   { token: '{MediaInfo VideoCodec}', example: 'x264' },
   { token: '{MediaInfo VideoBitDepth}', example: '10' },
@@ -237,7 +245,7 @@ const mediaInfoTokens = [
 ];
 
 const otherTokens = [
-  { token: '{Release Group}', example: 'Rls Grp', footNote: true },
+  { token: '{Release Group}', example: 'Rls Grp', footNotes: '1' },
   { token: '{Custom Formats}', example: 'iNTERNAL' },
   { token: '{Custom Format:FormatName}', example: 'AMZN' },
 ];
@@ -425,12 +433,12 @@ function NamingModal(props: NamingModalProps) {
 
           <FieldSet legend={translate('Series')}>
             <div className={styles.groups}>
-              {seriesTokens.map(({ token, example, footNote }) => (
+              {seriesTokens.map(({ token, example, footNotes }) => (
                 <NamingOption
                   key={token}
                   token={token}
                   example={example}
-                  footNote={footNote}
+                  footNotes={footNotes}
                   tokenSeparator={tokenSeparator}
                   tokenCase={tokenCase}
                   onPress={handleOptionPress}
@@ -439,7 +447,7 @@ function NamingModal(props: NamingModalProps) {
             </div>
 
             <div className={styles.footNote}>
-              <Icon className={styles.icon} name={icons.FOOTNOTE} />
+              <sup className={styles.identifier}>1</sup>
               <InlineMarkdown data={translate('SeriesFootNote')} />
             </div>
           </FieldSet>
@@ -531,12 +539,12 @@ function NamingModal(props: NamingModalProps) {
             <div>
               <FieldSet legend={translate('EpisodeTitle')}>
                 <div className={styles.groups}>
-                  {episodeTitleTokens.map(({ token, example, footNote }) => (
+                  {episodeTitleTokens.map(({ token, example, footNotes }) => (
                     <NamingOption
                       key={token}
                       token={token}
                       example={example}
-                      footNote={footNote}
+                      footNotes={footNotes}
                       tokenSeparator={tokenSeparator}
                       tokenCase={tokenCase}
                       onPress={handleOptionPress}
@@ -544,7 +552,7 @@ function NamingModal(props: NamingModalProps) {
                   ))}
                 </div>
                 <div className={styles.footNote}>
-                  <Icon className={styles.icon} name={icons.FOOTNOTE} />
+                  <sup className={styles.identifier}>1</sup>
                   <InlineMarkdown data={translate('EpisodeTitleFootNote')} />
                 </div>
               </FieldSet>
@@ -566,12 +574,12 @@ function NamingModal(props: NamingModalProps) {
 
               <FieldSet legend={translate('MediaInfo')}>
                 <div className={styles.groups}>
-                  {mediaInfoTokens.map(({ token, example, footNote }) => (
+                  {mediaInfoTokens.map(({ token, example, footNotes }) => (
                     <NamingOption
                       key={token}
                       token={token}
                       example={example}
-                      footNote={footNote}
+                      footNotes={footNotes}
                       tokenSeparator={tokenSeparator}
                       tokenCase={tokenCase}
                       onPress={handleOptionPress}
@@ -580,19 +588,24 @@ function NamingModal(props: NamingModalProps) {
                 </div>
 
                 <div className={styles.footNote}>
-                  <Icon className={styles.icon} name={icons.FOOTNOTE} />
+                  <sup className={styles.identifier}>1</sup>
                   <InlineMarkdown data={translate('MediaInfoFootNote')} />
+                </div>
+
+                <div className={styles.footNote}>
+                  <sup className={styles.identifier}>2</sup>
+                  <InlineMarkdown data={translate('MediaInfoFootNote2')} />
                 </div>
               </FieldSet>
 
               <FieldSet legend={translate('Other')}>
                 <div className={styles.groups}>
-                  {otherTokens.map(({ token, example, footNote }) => (
+                  {otherTokens.map(({ token, example, footNotes }) => (
                     <NamingOption
                       key={token}
                       token={token}
                       example={example}
-                      footNote={footNote}
+                      footNotes={footNotes}
                       tokenSeparator={tokenSeparator}
                       tokenCase={tokenCase}
                       onPress={handleOptionPress}
@@ -614,7 +627,7 @@ function NamingModal(props: NamingModalProps) {
                 </div>
 
                 <div className={styles.footNote}>
-                  <Icon className={styles.icon} name={icons.FOOTNOTE} />
+                  <sup className={styles.identifier}>1</sup>
                   <InlineMarkdown data={translate('ReleaseGroupFootNote')} />
                 </div>
               </FieldSet>
