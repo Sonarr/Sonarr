@@ -25,6 +25,7 @@ namespace NzbDrone.Core.MediaFiles
         {
             ".lnk",
             ".ps1",
+            ".scr",
             ".vbs",
             ".zipx"
         };
