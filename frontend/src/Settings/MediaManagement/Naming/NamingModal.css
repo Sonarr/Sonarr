@@ -21,8 +21,8 @@
   display: flex;
   color: var(--helpTextColor);
 
-  .icon {
-    margin-top: 3px;
+  .identifier {
+    margin-top: 8px;
     margin-right: 5px;
     padding: 2px;
   }

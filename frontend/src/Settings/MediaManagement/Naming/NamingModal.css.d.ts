@@ -3,7 +3,7 @@
 interface CssExports {
   'footNote': string;
   'groups': string;
-  'icon': string;
+  'identifier': string;
   'namingSelect': string;
   'namingSelectContainer': string;
 }
