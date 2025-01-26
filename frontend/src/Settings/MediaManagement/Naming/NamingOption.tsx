@@ -1,8 +1,6 @@
 import classNames from 'classnames';
 import React, { useCallback } from 'react';
-import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
-import { icons } from 'Helpers/Props';
 import { Size } from 'Helpers/Props/sizes';
 import TokenCase from './TokenCase';
 import TokenSeparator from './TokenSeparator';
@@ -14,7 +12,7 @@ interface NamingOptionProps {
   example: string;
   tokenCase: TokenCase;
   isFullFilename?: boolean;
-  footNote?: boolean;
+  footNotes?: string;
   size?: Extract<Size, keyof typeof styles>;
   onPress: ({
     isFullFilename,
@@ -32,7 +30,7 @@ function NamingOption(props: NamingOptionProps) {
     example,
     tokenCase,
     isFullFilename = false,
-    footNote = false,
+    footNotes,
     size = 'small',
     onPress,
   } = props;
@@ -66,8 +64,10 @@ function NamingOption(props: NamingOptionProps) {
       <div className={styles.example}>
         {example.replace(/ /g, tokenSeparator)}
 
-        {footNote ? (
-          <Icon className={styles.footNote} name={icons.FOOTNOTE} />
+        {footNotes ? (
+          <div className={styles.footNotes}>
+            <sup>{footNotes}</sup>
+          </div>
         ) : null}
       </div>
     </Link>

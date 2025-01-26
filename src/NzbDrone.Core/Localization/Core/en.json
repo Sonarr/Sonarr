@@ -1156,6 +1156,7 @@
   "Mechanism": "Mechanism",
   "MediaInfo": "Media Info",
   "MediaInfoFootNote": "MediaInfo Full/AudioLanguages/SubtitleLanguages support a `:EN+DE` suffix allowing you to filter the languages included in the filename. Use `-DE` to exclude specific languages. Appending `+` (eg `:EN+`) will output `[EN]`/`[EN+--]`/`[--]` depending on excluded languages. For example `{MediaInfo Full:EN+DE}`.",
+  "MediaInfoFootNote2": "MediaInfo AudioLanguages excludes English if it is the only language. Use MediaInfo AudioLanguagesAll to include English-only",
   "MediaManagement": "Media Management",
   "MediaManagementSettings": "Media Management Settings",
   "MediaManagementSettingsLoadError": "Unable to load Media Management settings",
