@@ -44,11 +44,13 @@ export interface DownloadFolderImportedHistory {
   downloadClientName: string;
   droppedPath: string;
   importedPath: string;
+  size: string;
 }
 
 export interface EpisodeFileDeletedHistory {
   customFormatScore?: string;
   reason: 'Manual' | 'MissingFromDisk' | 'Upgrade';
+  size: string;
 }
 
 export interface EpisodeFileRenamedHistory {

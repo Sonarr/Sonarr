@@ -18,6 +18,7 @@ import {
 } from 'typings/History';
 import formatDateTime from 'Utilities/Date/formatDateTime';
 import formatAge from 'Utilities/Number/formatAge';
+import formatBytes from 'Utilities/Number/formatBytes';
 import formatCustomFormatScore from 'Utilities/Number/formatCustomFormatScore';
 import translate from 'Utilities/String/translate';
 import styles from './HistoryDetails.css';
@@ -50,6 +51,7 @@ function HistoryDetails(props: HistoryDetailsProps) {
       ageHours,
       ageMinutes,
       publishedDate,
+      size,
     } = data as GrabbedHistoryData;
 
     const downloadClientNameInfo = downloadClientName ?? downloadClient;
@@ -160,6 +162,13 @@ function HistoryDetails(props: HistoryDetailsProps) {
             })}
           />
         ) : null}
+
+        {size ? (
+          <DescriptionListItem
+            title={translate('Size')}
+            data={formatBytes(size)}
+          />
+        ) : null}
       </DescriptionList>
     );
   }
@@ -187,7 +196,7 @@ function HistoryDetails(props: HistoryDetailsProps) {
   }
 
   if (eventType === 'downloadFolderImported') {
-    const { customFormatScore, droppedPath, importedPath } =
+    const { customFormatScore, droppedPath, importedPath, size } =
       data as DownloadFolderImportedHistory;
 
     return (
@@ -220,12 +229,20 @@ function HistoryDetails(props: HistoryDetailsProps) {
             data={formatCustomFormatScore(parseInt(customFormatScore))}
           />
         ) : null}
+
+        {size ? (
+          <DescriptionListItem
+            title={translate('FileSize')}
+            data={formatBytes(size)}
+          />
+        ) : null}
       </DescriptionList>
     );
   }
 
   if (eventType === 'episodeFileDeleted') {
-    const { reason, customFormatScore } = data as EpisodeFileDeletedHistory;
+    const { reason, customFormatScore, size } =
+      data as EpisodeFileDeletedHistory;
 
     let reasonMessage = '';
 
@@ -253,6 +270,13 @@ function HistoryDetails(props: HistoryDetailsProps) {
           <DescriptionListItem
             title={translate('CustomFormatScore')}
             data={formatCustomFormatScore(parseInt(customFormatScore))}
+          />
+        ) : null}
+
+        {size ? (
+          <DescriptionListItem
+            title={translate('FileSize')}
+            data={formatBytes(size)}
           />
         ) : null}
       </DescriptionList>
