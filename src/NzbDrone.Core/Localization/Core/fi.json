@@ -1455,7 +1455,7 @@
     "HealthMessagesInfoBox": "Saat lisätietoja näiden vakausviestien syistä painamalla rivin lopussa olevaa wikilinkkiä (kirjakuvake) tai tarkastelemalla [lokitietoja]({link}). Mikäli et osaa tulkita näitä viestejä, tavoitat tukemme alla olevilla linkeillä.",
     "MegabytesPerMinute": "Megatavua minuutissa",
     "MustContain": "Täytyy sisältää",
-    "NoLinks": "Linkkejä ei ole",
+    "NoLinks": "Kytköksiä ei ole",
     "Proxy": "Välityspalvelin",
     "ProxyUsernameHelpText": "Käyttäjätunnus ja salasana tulee täyttää vain tarvittaessa. Mikäli näitä ei ole, tulee kentät jättää tyhjiksi.",
     "ImportListsSettingsSummary": "Sisällön tuonti muista {appName}-instansseista tai palveluista, ja poikkeuslistojen hallinta.",
