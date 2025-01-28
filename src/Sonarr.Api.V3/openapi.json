@@ -10778,6 +10778,21 @@
           },
           "allowed": {
             "type": "boolean"
+          },
+          "minSize": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "maxSize": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "preferredSize": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
           }
         },
         "additionalProperties": false

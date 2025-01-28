@@ -15,6 +15,7 @@ namespace Sonarr.Http
             Resource = resource;
             Template = $"api/v{version}/{resource}";
             PolicyName = API_CORS_POLICY;
+            Version = version;
         }
 
         public string Resource { get; }
@@ -22,6 +23,7 @@ namespace Sonarr.Http
         public int? Order => 2;
         public string Name { get; set; }
         public string PolicyName { get; set; }
+        public int Version { get; set; }
     }
 
     public class V3ApiControllerAttribute : VersionedApiControllerAttribute
