@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
+import { useDispatch } from 'react-redux';
 import Modal from 'Components/Modal/Modal';
 import { sizes } from 'Helpers/Props';
-import { useDispatch } from 'react-redux';
 import { clearPendingChanges } from 'Store/Actions/baseActions';
 import {
   cancelSaveDownloadClient,
