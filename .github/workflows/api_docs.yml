@@ -1,12 +1,12 @@
-name: 'API Docs'
+name: "API Docs"
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 0 * * 1'
+    - cron: "0 0 * * 1"
   push:
     branches:
-      - develop
+      - v5-develop
     paths:
       - ".github/workflows/api_docs.yml"
       - "docs.sh"
@@ -46,7 +46,7 @@ jobs:
           then
             git commit -am 'Automated API Docs update' -m "ignore-downstream"
             git push -f --set-upstream origin api-docs
-            curl -X POST -H "Authorization: Bearer ${{ secrets.OPENAPI_PAT }}" -H "Accept: application/vnd.github+json" https://api.github.com/repos/sonarr/sonarr/pulls -d '{"head":"api-docs","base":"develop","title":"Update API docs"}'
+            curl -X POST -H "Authorization: Bearer ${{ secrets.OPENAPI_PAT }}" -H "Accept: application/vnd.github+json" https://api.github.com/repos/sonarr/sonarr/pulls -d '{"head":"api-docs","base":"v5-develop","title":"Update API docs"}'
           else
             echo "No changes since last run"
           fi

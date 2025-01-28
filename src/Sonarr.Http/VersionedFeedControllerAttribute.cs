@@ -24,4 +24,12 @@ namespace Sonarr.Http
         {
         }
     }
+
+    public class V5FeedControllerAttribute : VersionedFeedControllerAttribute
+    {
+        public V5FeedControllerAttribute(string resource = "[controller]")
+            : base(5, resource)
+        {
+        }
+    }
 }
