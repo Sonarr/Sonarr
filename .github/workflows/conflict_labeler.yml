@@ -7,6 +7,7 @@ on:
   pull_request_target:
     branches:
       - develop
+      - v5-develop
     types: [synchronize]
 
 jobs:
@@ -21,6 +22,5 @@ jobs:
       - name: Apply label
         uses: eps1lon/actions-label-merge-conflict@v3
         with:
-          dirtyLabel: 'merge-conflict'
-          repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          
+          dirtyLabel: "merge-conflict"
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
