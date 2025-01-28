@@ -1,0 +1,551 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Sonarr",
+    "description": "Sonarr API docs - The v5 API docs apply to Sonarr v5 only.",
+    "license": {
+      "name": "GPL-3.0",
+      "url": "https://github.com/Sonarr/Sonarr/blob/develop/LICENSE"
+    },
+    "version": "5.0.0"
+  },
+  "servers": [
+    {
+      "url": "{protocol}://{hostpath}",
+      "variables": {
+        "protocol": {
+          "default": "http",
+          "enum": [
+            "http",
+            "https"
+          ]
+        },
+        "hostpath": {
+          "default": "localhost:8989"
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/api/v5/series/lookup": {
+      "get": {
+        "tags": [
+          "SeriesLookup"
+        ],
+        "parameters": [
+          {
+            "name": "term",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SeriesResource"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SeriesResource"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SeriesResource"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AddSeriesOptions": {
+        "type": "object",
+        "properties": {
+          "ignoreEpisodesWithFiles": {
+            "type": "boolean"
+          },
+          "ignoreEpisodesWithoutFiles": {
+            "type": "boolean"
+          },
+          "monitor": {
+            "$ref": "#/components/schemas/MonitorTypes"
+          },
+          "searchForMissingEpisodes": {
+            "type": "boolean"
+          },
+          "searchForCutoffUnmetEpisodes": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AlternateTitleResource": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "seasonNumber": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "sceneSeasonNumber": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "sceneOrigin": {
+            "type": "string",
+            "nullable": true
+          },
+          "comment": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Language": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "MediaCover": {
+        "type": "object",
+        "properties": {
+          "coverType": {
+            "$ref": "#/components/schemas/MediaCoverTypes"
+          },
+          "url": {
+            "type": "string",
+            "nullable": true
+          },
+          "remoteUrl": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "MediaCoverTypes": {
+        "enum": [
+          "unknown",
+          "poster",
+          "banner",
+          "fanart",
+          "screenshot",
+          "headshot",
+          "clearlogo"
+        ],
+        "type": "string"
+      },
+      "MonitorTypes": {
+        "enum": [
+          "unknown",
+          "all",
+          "future",
+          "missing",
+          "existing",
+          "firstSeason",
+          "lastSeason",
+          "latestSeason",
+          "pilot",
+          "recent",
+          "monitorSpecials",
+          "unmonitorSpecials",
+          "none",
+          "skip"
+        ],
+        "type": "string"
+      },
+      "NewItemMonitorTypes": {
+        "enum": [
+          "all",
+          "none"
+        ],
+        "type": "string"
+      },
+      "Ratings": {
+        "type": "object",
+        "properties": {
+          "votes": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "value": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "SeasonResource": {
+        "type": "object",
+        "properties": {
+          "seasonNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "monitored": {
+            "type": "boolean"
+          },
+          "statistics": {
+            "$ref": "#/components/schemas/SeasonStatisticsResource"
+          },
+          "images": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MediaCover"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SeasonStatisticsResource": {
+        "type": "object",
+        "properties": {
+          "nextAiring": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "previousAiring": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "episodeFileCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "episodeCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalEpisodeCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sizeOnDisk": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "releaseGroups": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "percentOfEpisodes": {
+            "type": "number",
+            "format": "double",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SeriesResource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "alternateTitles": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AlternateTitleResource"
+            },
+            "nullable": true
+          },
+          "sortTitle": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "$ref": "#/components/schemas/SeriesStatusType"
+          },
+          "ended": {
+            "type": "boolean",
+            "readOnly": true
+          },
+          "profileName": {
+            "type": "string",
+            "nullable": true
+          },
+          "overview": {
+            "type": "string",
+            "nullable": true
+          },
+          "nextAiring": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "previousAiring": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "network": {
+            "type": "string",
+            "nullable": true
+          },
+          "airTime": {
+            "type": "string",
+            "nullable": true
+          },
+          "images": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MediaCover"
+            },
+            "nullable": true
+          },
+          "originalLanguage": {
+            "$ref": "#/components/schemas/Language"
+          },
+          "remotePoster": {
+            "type": "string",
+            "nullable": true
+          },
+          "seasons": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SeasonResource"
+            },
+            "nullable": true
+          },
+          "year": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "path": {
+            "type": "string",
+            "nullable": true
+          },
+          "qualityProfileId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "seasonFolder": {
+            "type": "boolean"
+          },
+          "monitored": {
+            "type": "boolean"
+          },
+          "monitorNewItems": {
+            "$ref": "#/components/schemas/NewItemMonitorTypes"
+          },
+          "useSceneNumbering": {
+            "type": "boolean"
+          },
+          "runtime": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tvdbId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tvRageId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tvMazeId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tmdbId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "firstAired": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "lastAired": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "seriesType": {
+            "$ref": "#/components/schemas/SeriesTypes"
+          },
+          "cleanTitle": {
+            "type": "string",
+            "nullable": true
+          },
+          "imdbId": {
+            "type": "string",
+            "nullable": true
+          },
+          "titleSlug": {
+            "type": "string",
+            "nullable": true
+          },
+          "rootFolderPath": {
+            "type": "string",
+            "nullable": true
+          },
+          "folder": {
+            "type": "string",
+            "nullable": true
+          },
+          "certification": {
+            "type": "string",
+            "nullable": true
+          },
+          "genres": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "tags": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          },
+          "added": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "addOptions": {
+            "$ref": "#/components/schemas/AddSeriesOptions"
+          },
+          "ratings": {
+            "$ref": "#/components/schemas/Ratings"
+          },
+          "statistics": {
+            "$ref": "#/components/schemas/SeriesStatisticsResource"
+          },
+          "episodesChanged": {
+            "type": "boolean",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SeriesStatisticsResource": {
+        "type": "object",
+        "properties": {
+          "seasonCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "episodeFileCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "episodeCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalEpisodeCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sizeOnDisk": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "releaseGroups": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "percentOfEpisodes": {
+            "type": "number",
+            "format": "double",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SeriesStatusType": {
+        "enum": [
+          "continuing",
+          "ended",
+          "upcoming",
+          "deleted"
+        ],
+        "type": "string"
+      },
+      "SeriesTypes": {
+        "enum": [
+          "standard",
+          "daily",
+          "anime"
+        ],
+        "type": "string"
+      }
+    },
+    "securitySchemes": {
+      "X-Api-Key": {
+        "type": "apiKey",
+        "description": "Apikey passed as header",
+        "name": "X-Api-Key",
+        "in": "header"
+      },
+      "apikey": {
+        "type": "apiKey",
+        "description": "Apikey passed as query parameter",
+        "name": "apikey",
+        "in": "query"
+      }
+    }
+  },
+  "security": [
+    {
+      "X-Api-Key": [ ]
+    },
+    {
+      "apikey": [ ]
+    }
+  ]
+}
