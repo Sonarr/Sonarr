@@ -1,10 +1,10 @@
 import React, { useCallback } from 'react';
 import Label from 'Components/Label';
+import SeriesTagList from 'Components/SeriesTagList';
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
 import TableSelectCell from 'Components/Table/Cells/TableSelectCell';
 import Column from 'Components/Table/Column';
 import TableRow from 'Components/Table/TableRow';
-import SeriesTagList from 'Components/SeriesTagList';
 import { kinds } from 'Helpers/Props';
 import { SelectStateInputProps } from 'typings/props';
 import translate from 'Utilities/String/translate';
