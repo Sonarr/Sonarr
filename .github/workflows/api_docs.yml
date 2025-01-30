@@ -33,7 +33,7 @@ jobs:
         id: setup-dotnet
 
       - name: Create openapi.json
-        run: ./docs.sh Linux
+        run: ./docs.sh Linux x64
 
       - name: Commit API Docs Change
         continue-on-error: true

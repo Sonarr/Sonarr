@@ -3,7 +3,7 @@ set -e
 
 FRAMEWORK="net8.0"
 PLATFORM=$1
-ARCHITECTURE="${2:-'default value'}"
+ARCHITECTURE="${2:-x64}"
 
 if [ "$PLATFORM" = "Windows" ]; then
   RUNTIME="win-$ARCHITECTURE"
