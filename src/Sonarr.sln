@@ -293,6 +293,12 @@ Global
 		{4AE3B731-442E-4AF0-88A5-9FABEB685A0D}.Release|Windows.Build.0 = Release|Any CPU
 		{1A9DFC67-3712-47A5-8DCA-0BCAA95F9EDC}.Debug|Posix.ActiveCfg = Debug|Any CPU
 		{1A9DFC67-3712-47A5-8DCA-0BCAA95F9EDC}.Debug|Posix.Build.0 = Debug|Any CPU
+		{1A9DFC67-3712-47A5-8DCA-0BCAA95F9EDC}.Debug|Windows.ActiveCfg = Debug|Any CPU
+		{1A9DFC67-3712-47A5-8DCA-0BCAA95F9EDC}.Debug|Windows.Build.0 = Debug|Any CPU
+		{1A9DFC67-3712-47A5-8DCA-0BCAA95F9EDC}.Release|Posix.ActiveCfg = Release|Any CPU
+		{1A9DFC67-3712-47A5-8DCA-0BCAA95F9EDC}.Release|Posix.Build.0 = Release|Any CPU
+		{1A9DFC67-3712-47A5-8DCA-0BCAA95F9EDC}.Release|Windows.ActiveCfg = Release|Any CPU
+		{1A9DFC67-3712-47A5-8DCA-0BCAA95F9EDC}.Release|Windows.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
