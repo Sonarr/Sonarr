@@ -29,6 +29,8 @@ import HintedSelectInputOption from './HintedSelectInputOption';
 import HintedSelectInputSelectedValue from './HintedSelectInputSelectedValue';
 import styles from './EnhancedSelectInput.css';
 
+const MINIMUM_DISTANCE_FROM_EDGE = 10;
+
 function isArrowKey(keyCode: number) {
   return keyCode === keyCodes.UP_ARROW || keyCode === keyCodes.DOWN_ARROW;
 }
@@ -189,14 +191,9 @@ function EnhancedSelectInput<T extends EnhancedSelectInputValue<V>, V>(
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleComputeMaxHeight = useCallback((data: any) => {
-    const { top, bottom } = data.offsets.reference;
     const windowHeight = window.innerHeight;
 
-    if (/^bottom/.test(data.placement)) {
-      data.styles.maxHeight = windowHeight - bottom;
-    } else {
-      data.styles.maxHeight = top;
-    }
+    data.styles.maxHeight = windowHeight - MINIMUM_DISTANCE_FROM_EDGE;
 
     return data;
   }, []);
@@ -507,6 +504,10 @@ function EnhancedSelectInput<T extends EnhancedSelectInputValue<V>, V>(
                 order: 851,
                 enabled: true,
                 fn: handleComputeMaxHeight,
+              },
+              preventOverflow: {
+                enabled: true,
+                boundariesElement: 'viewport',
               },
             }}
           >
