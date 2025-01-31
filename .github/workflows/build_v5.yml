@@ -3,13 +3,12 @@ name: Build
 on:
   push:
     branches:
-      - develop
-      - main
+      - v5-develop
+      - v5-main
     paths-ignore:
       - "src/Sonarr.Api.*/openapi.json"
   pull_request:
     branches:
-      - develop
       - v5-develop
     paths-ignore:
       - "src/NzbDrone.Core/Localization/Core/**"
@@ -22,89 +21,77 @@ concurrency:
 env:
   FRAMEWORK: net8.0
   RAW_BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
-  SONARR_MAJOR_VERSION: 4
-  VERSION: 4.0.13
+  SONARR_MAJOR_VERSION: 5
+  VERSION: 5.0.0
 
 jobs:
-  backend:
-    runs-on: windows-latest
+  prepare:
+    runs-on: ubuntu-latest
     outputs:
       framework: ${{ steps.variables.outputs.framework }}
       major_version: ${{ steps.variables.outputs.major_version }}
       version: ${{ steps.variables.outputs.version }}
+      branch: ${{ steps.variables.outputs.branch }}
     steps:
-      - name: Check out
-        uses: actions/checkout@v4
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-
       - name: Setup Environment Variables
         id: variables
         shell: bash
         run: |
-          # Add 800 to the build number because GitHub won't let us pick an arbitrary starting point
-          SONARR_VERSION="${{ env.VERSION }}.$((${{ github.run_number }}+800))"
-          DOTNET_VERSION=$(jq -r '.sdk.version' global.json)
-
-          echo "SDK_PATH=${{ env.DOTNET_ROOT }}/sdk/${DOTNET_VERSION}" >> "$GITHUB_ENV"
-          echo "SONARR_VERSION=$SONARR_VERSION" >> "$GITHUB_ENV"
-          echo "BRANCH=${RAW_BRANCH_NAME//\//-}" >> "$GITHUB_ENV"
-
           echo "framework=${{ env.FRAMEWORK }}" >> "$GITHUB_OUTPUT"
           echo "major_version=${{ env.SONARR_MAJOR_VERSION }}" >> "$GITHUB_OUTPUT"
-          echo "version=$SONARR_VERSION" >> "$GITHUB_OUTPUT"
+          echo "version=${{ env.VERSION }}.$((${{ github.run_number }}))" >> "$GITHUB_OUTPUT"
+          echo "branch=${RAW_BRANCH_NAME//\//-}" >> "$GITHUB_OUTPUT"
 
-      - name: Enable Extra Platforms In SDK
-        shell: bash
-        run: ./build.sh --enable-extra-platforms-in-sdk
+  backend:
+    needs: prepare
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runtime: freebsd-x64
+            package_tests: false
+            os: ubuntu-latest
+          - runtime: linux-arm
+            package_tests: false
+            os: ubuntu-latest
+          - runtime: linux-arm64
+            package_tests: false
+            os: ubuntu-latest
+          - runtime: linux-musl-arm64
+            package_tests: false
+            os: ubuntu-latest
+          - runtime: linux-musl-x64
+            package_tests: false
+            os: ubuntu-latest
+          - runtime: linux-x64
+            package_tests: true
+            os: ubuntu-latest
+          - runtime: osx-arm64
+            package_tests: true
+            os: ubuntu-latest
+          - runtime: osx-x64
+            package_tests: false
+            os: ubuntu-latest
+          - runtime: win-x64
+            package_tests: true
+            os: ubuntu-latest
+          - runtime: win-x86
+            package_tests: false
+            os: ubuntu-latest
 
-      - name: Build Backend
-        shell: bash
-        run: ./build.sh --backend --enable-extra-platforms --packages
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
 
-      # Test Artifacts
-
-      - name: Publish win-x64 Test Artifact
-        uses: ./.github/actions/publish-test-artifact
+      - name: Build
+        uses: ./.github/actions/build
         with:
-          framework: ${{ env.FRAMEWORK }}
-          runtime: win-x64
-
-      - name: Publish linux-x64 Test Artifact
-        uses: ./.github/actions/publish-test-artifact
-        with:
-          framework: ${{ env.FRAMEWORK }}
-          runtime: linux-x64
-
-      - name: Publish osx-arm64 Test Artifact
-        uses: ./.github/actions/publish-test-artifact
-        with:
-          framework: ${{ env.FRAMEWORK }}
-          runtime: osx-arm64
-
-      # Build Artifacts (grouped by OS)
-
-      - name: Publish FreeBSD Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: build_freebsd
-          path: _artifacts/freebsd-*/**/*
-      - name: Publish Linux Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: build_linux
-          path: _artifacts/linux-*/**/*
-      - name: Publish macOS Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: build_macos
-          path: _artifacts/osx-*/**/*
-      - name: Publish Windows Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: build_windows
-          path: _artifacts/win-*/**/*
+          branch: ${{ needs.prepare.outputs.branch }}
+          version: ${{ needs.prepare.outputs.version }}
+          framework: ${{ needs.prepare.outputs.framework }}
+          runtime: ${{ matrix.runtime }}
+          package_tests: ${{ matrix.package_tests }}
 
   frontend:
     runs-on: ubuntu-latest
@@ -179,7 +166,7 @@ jobs:
           use_postgres: true
 
   integration_test:
-    needs: backend
+    needs: [prepare, backend]
     strategy:
       fail-fast: false
       matrix:
@@ -188,18 +175,18 @@ jobs:
           - os: ubuntu-latest
             artifact: tests-linux-x64
             filter: TestCategory!=ManualTest&TestCategory!=WINDOWS&TestCategory=IntegrationTest
-            binary_artifact: build_linux
-            binary_path: linux-x64/${{ needs.backend.outputs.framework }}/Sonarr
+            binary_artifact: build-linux-x64
+            binary_path: linux-x64/${{ needs.prepare.outputs.framework }}/Sonarr
           - os: macos-latest
             artifact: tests-osx-arm64
             filter: TestCategory!=ManualTest&TestCategory!=WINDOWS&TestCategory=IntegrationTest
-            binary_artifact: build_macos
-            binary_path: osx-arm64/${{ needs.backend.outputs.framework }}/Sonarr
+            binary_artifact: build-osx-arm64
+            binary_path: osx-arm64/${{ needs.prepare.outputs.framework }}/Sonarr
           - os: windows-latest
             artifact: tests-win-x64
             filter: TestCategory!=ManualTest&TestCategory!=LINUX&TestCategory=IntegrationTest
-            binary_artifact: build_windows
-            binary_path: win-x64/${{ needs.backend.outputs.framework }}/Sonarr
+            binary_artifact: build-win-x64
+            binary_path: win-x64/${{ needs.prepare.outputs.framework }}/Sonarr
     runs-on: ${{ matrix.os }}
     steps:
       - name: Check out
@@ -217,20 +204,29 @@ jobs:
           binary_path: ${{ matrix.binary_path }}
 
   deploy:
-    if: ${{ github.ref_name == 'develop' || github.ref_name == 'main' }}
-    needs: [backend, frontend, unit_test, unit_test_postgres, integration_test]
+    if: ${{ github.ref_name == 'v5-develop' || github.ref_name == 'v5-main' }}
+    needs:
+      [
+        prepare,
+        backend,
+        frontend,
+        unit_test,
+        unit_test_postgres,
+        integration_test,
+      ]
     secrets: inherit
     uses: ./.github/workflows/deploy.yml
     with:
-      framework: ${{ needs.backend.outputs.framework }}
+      framework: ${{ needs.prepare.outputs.framework }}
       branch: ${{ github.ref_name }}
-      major_version: ${{ needs.backend.outputs.major_version }}
-      version: ${{ needs.backend.outputs.version }}
+      major_version: ${{ needs.prepare.outputs.major_version }}
+      version: ${{ needs.prepare.outputs.version }}
 
   notify:
     name: Discord Notification
     needs:
       [
+        prepare,
         backend,
         frontend,
         unit_test,
@@ -238,7 +234,7 @@ jobs:
         integration_test,
         deploy,
       ]
-    if: ${{ !cancelled() && (github.ref_name == 'develop' || github.ref_name == 'main') }}
+    if: ${{ !cancelled() && (github.ref_name == 'v5-develop' || github.ref_name == 'v5-main') }}
     env:
       STATUS: ${{ contains(needs.*.result, 'failure') && 'failure' || 'success' }}
     runs-on: ubuntu-latest
@@ -254,5 +250,5 @@ jobs:
           embed-url: "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           embed-description: |
             **Branch** ${{ github.ref }}
-            **Build** ${{ needs.backend.outputs.version }}
+            **Build** ${{ needs.prepare.outputs.version }}
           embed-color: ${{ env.STATUS == 'success' && '3066993' || '15158332' }}
