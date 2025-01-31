@@ -2,34 +2,34 @@ name: Package
 description: Packages binaries for deployment
 
 inputs:
-  platform:
-    description: 'Binary platform'
+  runtime:
+    description: "Binary runtime"
     required: true
-  framework: 
-    description: '.net framework'
+  framework:
+    description: ".net framework"
     required: true
   artifact:
-    description: 'Binary artifact'
+    description: "Binary artifact"
     required: true
   branch:
-    description: 'Git branch used for this build'
+    description: "Git branch used for this build"
     required: true
   major_version:
-    description: 'Sonarr major version'
+    description: "Sonarr major version"
     required: true
   version:
-    description: 'Sonarr version'
+    description: "Sonarr version"
     required: true
 
 runs:
-  using: 'composite'
+  using: "composite"
   steps:
     - name: Download Artifact
       uses: actions/download-artifact@v4
       with:
         name: ${{ inputs.artifact }}
         path: _output
-        
+
     - name: Download UI Artifact
       uses: actions/download-artifact@v4
       with:
@@ -49,7 +49,7 @@ runs:
       run: $GITHUB_ACTION_PATH/package.sh
 
     - name: Create Windows Installer (x64)
-      if: ${{ inputs.platform == 'windows' }}
+      if: ${{ inputs.runtime == 'win-x64' }}
       working-directory: distribution/windows/setup
       shell: cmd
       run: |
@@ -58,7 +58,7 @@ runs:
         build.bat
 
     - name: Create Windows Installer (x86)
-      if: ${{ inputs.platform == 'windows' }}
+      if: ${{ inputs.runtime == 'win-x86' }}
       working-directory: distribution/windows/setup
       shell: cmd
       run: |
@@ -69,7 +69,7 @@ runs:
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: release_${{ inputs.platform }}
+        name: release-${{ inputs.runtime }}
         compression-level: 0
         if-no-files-found: error
         path: |
