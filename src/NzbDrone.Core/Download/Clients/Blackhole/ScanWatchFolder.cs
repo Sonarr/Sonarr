@@ -52,7 +52,13 @@ namespace NzbDrone.Core.Download.Clients.Blackhole
         {
             foreach (var folder in _diskScanService.FilterPaths(watchFolder, _diskProvider.GetDirectories(watchFolder)))
             {
-                var title = FileNameBuilder.CleanFileName(Path.GetFileName(folder));
+                var folderName = Path.GetFileName(folder);
+                var title = FileNameBuilder.CleanFileName(folderName);
+
+                if (SpecialFolders.IsSpecialFolder(folderName))
+                {
+                    continue;
+                }
 
                 var newWatchItem = new WatchFolderItem
                 {

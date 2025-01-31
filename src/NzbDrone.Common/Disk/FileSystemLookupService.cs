@@ -17,37 +17,6 @@ namespace NzbDrone.Common.Disk
         private readonly IDiskProvider _diskProvider;
         private readonly IRuntimeInfo _runtimeInfo;
 
-        private readonly HashSet<string> _setToRemove = new HashSet<string>
-                                                        {
-                                                            // Windows
-                                                            "boot",
-                                                            "bootmgr",
-                                                            "cache",
-                                                            "msocache",
-                                                            "recovery",
-                                                            "$recycle.bin",
-                                                            "recycler",
-                                                            "system volume information",
-                                                            "temporary internet files",
-                                                            "windows",
-
-                                                            // OS X
-                                                            ".fseventd",
-                                                            ".spotlight",
-                                                            ".trashes",
-                                                            ".vol",
-                                                            "cachedmessages",
-                                                            "caches",
-                                                            "trash",
-
-                                                            // QNAP
-                                                            ".@__thumb",
-
-                                                            // Synology
-                                                            "@eadir",
-                                                            "#recycle"
-                                                        };
-
         public FileSystemLookupService(IDiskProvider diskProvider, IRuntimeInfo runtimeInfo)
         {
             _diskProvider = diskProvider;
@@ -158,7 +127,7 @@ namespace NzbDrone.Common.Disk
                                            })
                                            .ToList();
 
-            directories.RemoveAll(d => _setToRemove.Contains(d.Name.ToLowerInvariant()));
+            directories.RemoveAll(d => SpecialFolders.IsSpecialFolder(d.Name));
 
             return directories;
         }

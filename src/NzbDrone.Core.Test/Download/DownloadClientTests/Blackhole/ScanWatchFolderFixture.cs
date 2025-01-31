@@ -95,5 +95,22 @@ namespace NzbDrone.Core.Test.Download.DownloadClientTests.Blackhole
 
             VerifySingleItem(DownloadItemStatus.Completed);
         }
+
+        [TestCase("@eaDir")]
+        [TestCase(".@__thumb")]
+        public void GetItems_should_not_include_special_subfolders(string folderName)
+        {
+            GivenCompletedItem();
+
+            var targetDir = Path.Combine(_completedDownloadFolder, folderName);
+
+            Mocker.GetMock<IDiskProvider>()
+                .Setup(c => c.GetDirectories(_completedDownloadFolder))
+                .Returns(new[] { targetDir });
+
+            var items = Subject.GetItems(_completedDownloadFolder, TimeSpan.FromMilliseconds(50)).ToList();
+
+            items.Count.Should().Be(0);
+        }
     }
 }
