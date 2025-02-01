@@ -9,7 +9,7 @@ namespace NzbDrone.Common.Test.EnsureTest
     public class PathExtensionFixture : TestBase
     {
         [TestCase(@"p:\TV Shows\file with, comma.mkv")]
-        [TestCase(@"\\serer\share\file with, comma.mkv")]
+        [TestCase(@"\\server\share\file with, comma.mkv")]
         public void EnsureWindowsPath(string path)
         {
             WindowsOnly();
