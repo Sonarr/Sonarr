@@ -27,7 +27,7 @@ env:
 
 jobs:
   backend:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     outputs:
       framework: ${{ steps.variables.outputs.framework }}
       major_version: ${{ steps.variables.outputs.major_version }}

@@ -77,9 +77,9 @@ Build()
 
     if [[ -z "$RID" || -z "$FRAMEWORK" ]];
     then
-        dotnet msbuild -restore $slnFile -p:SelfContained=True -p:Configuration=Release -p:Platform=$platform -t:PublishAllRids
+        dotnet msbuild -restore $slnFile -p:SelfContained=True -p:Configuration=Release -p:Platform=$platform -p:EnableWindowsTargeting=true -t:PublishAllRids
     else
-        dotnet msbuild -restore $slnFile -p:SelfContained=True -p:Configuration=Release -p:Platform=$platform -p:RuntimeIdentifiers=$RID -t:PublishAllRids
+        dotnet msbuild -restore $slnFile -p:SelfContained=True -p:Configuration=Release -p:Platform=$platform -p:RuntimeIdentifiers=$RID -p:EnableWindowsTargeting=true -t:PublishAllRids
     fi
 
     ProgressEnd 'Build'
