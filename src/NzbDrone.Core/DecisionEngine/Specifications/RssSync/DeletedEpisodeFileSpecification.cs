@@ -54,7 +54,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
                 }
 
                 _logger.Debug("Files for this episode exist in the database but not on disk, will be unmonitored on next diskscan. skipping.");
-                return DownloadSpecDecision.Reject(DownloadRejectionReason.SeriesNotMonitored, "Series is not monitored");
+                return DownloadSpecDecision.Reject(DownloadRejectionReason.EpisodeNotMonitored, "Episode is not monitored");
             }
 
             return DownloadSpecDecision.Accept();
