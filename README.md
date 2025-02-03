@@ -82,4 +82,4 @@ Thank you to [<img src="https://resources.jetbrains.com/storage/products/company
 ### Licenses
 
 - [GNU GPL v3](http://www.gnu.org/licenses/gpl.html)
-- Copyright 2010-2024
+- Copyright 2010-2025
