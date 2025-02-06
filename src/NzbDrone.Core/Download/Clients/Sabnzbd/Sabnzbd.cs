@@ -262,7 +262,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
             if (category != null)
             {
-                if (config.Misc.enable_tv_sorting && ContainsCategory(config.Misc.tv_categories, Settings.TvCategory))
+                if ((config.Misc.enable_tv_sorting && ContainsCategory(config.Misc.tv_categories, Settings.TvCategory)) || config.Sorters.Any(s => s.is_active && ContainsCategory(s.sort_cats, Settings.TvCategory)))
                 {
                     status.SortingMode = "TV";
                 }
