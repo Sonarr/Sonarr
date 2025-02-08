@@ -13,7 +13,7 @@ NZBDrone is a PVR for newsgroup users. It can monitor multiple RSS feeds for new
 * full integration with SABNzbd
 * full integration with XBMC (notification, library update, metadata)
 * full support for specials and multi-episode releases
-* beautiful UI
+* beautiful UI, the best the UI
 
 
 ## Configuring Development Enviroment: ##
