@@ -103,5 +103,20 @@
     "DeleteReleaseProfileMessageText": "Er du sikker på, at du vil slette udgivelsesprofilen »{name}«?",
     "MinutesSixty": "60 minutter: {sixty}",
     "NegateHelpText": "Hvis dette er markeret, gælder det tilpassede format ikke, hvis denne {implementationName}-betingelse stemmer overens.",
-    "RemoveSelectedItemsQueueMessageText": "Er du sikker på, at du vil fjerne {selectedCount} elementer fra køen?"
+    "RemoveSelectedItemsQueueMessageText": "Er du sikker på, at du vil fjerne {selectedCount} elementer fra køen?",
+    "AddNewSeriesSearchForCutoffUnmetEpisodes": "Start søgning efter uopfyldte cutoff epsioder",
+    "AddNewSeriesRootFolderHelpText": "'{folder}' undermappen vil blive oprettet automatisk",
+    "AddNewSeriesSearchForMissingEpisodes": "Start søgning efter manglende episoder",
+    "AddListExclusionSeriesHelpText": "Forhindre serie fra at blive tilføjet til {appName} af lister",
+    "AddQualityProfile": "Tilføj Kvalitetsprofil",
+    "AddReleaseProfile": "Tilføj udgivelsesprofil",
+    "AddNewSeriesError": "Kunne ikke indlæse søgeresultater, prøv igen.",
+    "AddNewSeriesHelpText": "Det er nemt at tilføje en ny serie, bare start med at skrive navnet på serien du gerne vil tilføje.",
+    "AddQualityProfileError": "Kunne ikke tilføje ny kvalitetsprofil, prøv igen.",
+    "AddListExclusionError": "Kunne ikke tilføje den nye liste eksklusion, prøv igen.",
+    "AddNewRestriction": "Tilføj ny restriktion",
+    "AddNotificationError": "Kunne ikke tilføje ny notifikation, prøv igen.",
+    "AddRemotePathMapping": "Tilføj Sammenkædning med fjernsti",
+    "AddNew": "Tilføj ny",
+    "AddNewSeries": "Tilføj ny serie"
 }
