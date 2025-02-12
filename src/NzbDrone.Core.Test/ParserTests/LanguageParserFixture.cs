@@ -86,6 +86,12 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Title.the.Series.S04E15.Brotherly.Love.GERMAN.DUBBED.WS.WEBRiP.XviD.REPACK-TVP")]
         [TestCase("The Series Title - S02E16 - Kampfhaehne - mkv - by Videomann")]
         [TestCase("Series.Title.S01E03.Ger.Dub.AAC.1080p.WebDL.x264-TKP21")]
+        [TestCase("Series Title S01 Eng Fre Ger Ita Spa Cze Jpn 2160p BluRay Remux DV HDR HEVC Atmos SGF")]
+        [TestCase("Series Title.S01.Eng.Fre.Ger.Ita.Por.Spa.2160p.WEBMux.DV.HDR.HEVC.Atmos-SGF")]
+        [TestCase("Series.Title.S02E10.Episode.Title.German.DL.BD.x264-TVS")]
+        [TestCase("Series Title S01 Eng Fre Ger Ita Por Spa 2160p WEBMux HDR HEVC DDP SGF")]
+        [TestCase("Series Title S01 KOREAN ENG FRA GER ITA SPA MULTI 2160p NF WEB DL DDP5 1 DV HDR x265 Atmos MassModz")]
+        [TestCase("Series.Title.S02E09.EpisodeName.German.DL.BD.x264-TVS")]
         public void should_parse_language_german(string postTitle)
         {
             var result = LanguageParser.ParseLanguages(postTitle);
