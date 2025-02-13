@@ -121,6 +121,8 @@ namespace NzbDrone.Core.Test.ParserTests
 
         [TestCase("Title.the.Series.2009.S01E14.Italian.HDTV.XviD-LOL")]
         [TestCase("Title.the.Series.1x19.ita.720p.bdmux.x264-novarip")]
+        [TestCase("Title.the.Series.ENG-FRE-ITA.AAC.1080p.WebDL.x264")]
+        [TestCase("Title the Series (BDrip 1080p ENG-FRE-ITA) Multisub x264")]
         public void should_parse_language_italian(string postTitle)
         {
             var result = LanguageParser.ParseLanguages(postTitle);
