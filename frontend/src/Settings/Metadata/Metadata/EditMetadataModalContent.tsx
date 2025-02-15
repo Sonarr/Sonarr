@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import AppState from 'App/State/AppState';
 import Alert from 'Components/Alert';
@@ -13,6 +13,7 @@ import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
+import usePrevious from 'Helpers/Hooks/usePrevious';
 import { inputTypes } from 'Helpers/Props';
 import {
   saveMetadata,
@@ -41,6 +42,8 @@ function EditMetadataModalContent({
     (state: AppState) => state.settings.metadata
   );
 
+  const wasSaving = usePrevious(isSaving);
+
   const { settings, ...otherSettings } = useMemo(() => {
     const item = items.find((item) => item.id === id)!;
 
@@ -68,6 +71,12 @@ function EditMetadataModalContent({
   const handleSavePress = useCallback(() => {
     dispatch(saveMetadata({ id }));
   }, [id, dispatch]);
+
+  useEffect(() => {
+    if (wasSaving && !isSaving && !saveError) {
+      onModalClose();
+    }
+  }, [isSaving, wasSaving, saveError, onModalClose]);
 
   return (
     <ModalContent onModalClose={onModalClose}>
