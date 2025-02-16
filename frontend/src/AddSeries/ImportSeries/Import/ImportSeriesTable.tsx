@@ -1,6 +1,7 @@
 import React, { RefObject, useCallback, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FixedSizeList, ListChildComponentProps } from 'react-window';
+import { useAddSeriesOptions } from 'AddSeries/addSeriesOptionsStore';
 import { useSelect } from 'App/SelectContext';
 import AppState from 'App/State/AppState';
 import { ImportSeries } from 'App/State/ImportSeriesAppState';
@@ -59,9 +60,8 @@ function ImportSeriesTable({
 }: ImportSeriesTableProps) {
   const dispatch = useDispatch();
 
-  const { monitor, qualityProfileId, seriesType, seasonFolder } = useSelector(
-    (state: AppState) => state.addSeries.defaults
-  );
+  const { monitor, qualityProfileId, seriesType, seasonFolder } =
+    useAddSeriesOptions();
 
   const items = useSelector((state: AppState) => state.importSeries.items);
   const { isSmallScreen } = useSelector(createDimensionsSelector());

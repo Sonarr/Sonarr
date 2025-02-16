@@ -1,9 +1,13 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
+import AddSeries from 'AddSeries/AddSeries';
+import {
+  AddSeriesOptions,
+  setAddSeriesOption,
+  useAddSeriesOptions,
+} from 'AddSeries/addSeriesOptionsStore';
 import SeriesMonitoringOptionsPopoverContent from 'AddSeries/SeriesMonitoringOptionsPopoverContent';
 import SeriesTypePopoverContent from 'AddSeries/SeriesTypePopoverContent';
-import { AddSeries } from 'App/State/AddSeriesAppState';
-import AppState from 'App/State/AppState';
 import CheckInput from 'Components/Form/CheckInput';
 import Form from 'Components/Form/Form';
 import FormGroup from 'Components/Form/FormGroup';
@@ -17,46 +21,43 @@ import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import Popover from 'Components/Tooltip/Popover';
 import { icons, inputTypes, kinds, tooltipPositions } from 'Helpers/Props';
+import { SeriesType } from 'Series/Series';
 import SeriesPoster from 'Series/SeriesPoster';
-import { addSeries, setAddSeriesDefault } from 'Store/Actions/addSeriesActions';
 import createDimensionsSelector from 'Store/Selectors/createDimensionsSelector';
 import selectSettings from 'Store/Selectors/selectSettings';
 import useIsWindows from 'System/useIsWindows';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
+import { useAddSeries } from './useAddSeries';
 import styles from './AddNewSeriesModalContent.css';
 
-export interface AddNewSeriesModalContentProps
-  extends Pick<
-    AddSeries,
-    'tvdbId' | 'title' | 'year' | 'overview' | 'images' | 'folder'
-  > {
-  initialSeriesType: string;
+export interface AddNewSeriesModalContentProps {
+  series: AddSeries;
+  initialSeriesType: SeriesType;
   onModalClose: () => void;
 }
 
 function AddNewSeriesModalContent({
-  tvdbId,
-  title,
-  year,
-  overview,
-  images,
-  folder,
+  series,
   initialSeriesType,
   onModalClose,
 }: AddNewSeriesModalContentProps) {
-  const dispatch = useDispatch();
-  const { isAdding, addError, defaults } = useSelector(
-    (state: AppState) => state.addSeries
-  );
+  const { title, year, overview, images, folder } = series;
+  const options = useAddSeriesOptions();
   const { isSmallScreen } = useSelector(createDimensionsSelector());
   const isWindows = useIsWindows();
 
-  const { settings, validationErrors, validationWarnings } = useMemo(() => {
-    return selectSettings(defaults, {}, addError);
-  }, [defaults, addError]);
+  const {
+    isPending: isAdding,
+    error: addError,
+    mutate: addSeries,
+  } = useAddSeries();
 
-  const [seriesType, setSeriesType] = useState(
+  const { settings, validationErrors, validationWarnings } = useMemo(() => {
+    return selectSettings(options, {}, addError);
+  }, [options, addError]);
+
+  const [seriesType, setSeriesType] = useState<SeriesType>(
     initialSeriesType === 'standard'
       ? settings.seriesType.value
       : initialSeriesType
@@ -74,35 +75,33 @@ function AddNewSeriesModalContent({
   } = settings;
 
   const handleInputChange = useCallback(
-    ({ name, value }: InputChanged) => {
-      dispatch(setAddSeriesDefault({ [name]: value }));
+    ({ name, value }: InputChanged<string | number | boolean | number[]>) => {
+      setAddSeriesOption(name as keyof AddSeriesOptions, value);
     },
-    [dispatch]
+    []
   );
 
   const handleQualityProfileIdChange = useCallback(
     ({ value }: InputChanged<string | number>) => {
-      dispatch(setAddSeriesDefault({ qualityProfileId: value }));
+      setAddSeriesOption('qualityProfileId', value as number);
     },
-    [dispatch]
+    []
   );
 
   const handleAddSeriesPress = useCallback(() => {
-    dispatch(
-      addSeries({
-        tvdbId,
-        rootFolderPath: rootFolderPath.value,
-        monitor: monitor.value,
-        qualityProfileId: qualityProfileId.value,
-        seriesType,
-        seasonFolder: seasonFolder.value,
-        searchForMissingEpisodes: searchForMissingEpisodes.value,
-        searchForCutoffUnmetEpisodes: searchForCutoffUnmetEpisodes.value,
-        tags: tags.value,
-      })
-    );
+    addSeries({
+      ...series,
+      rootFolderPath: rootFolderPath.value,
+      monitor: monitor.value,
+      qualityProfileId: qualityProfileId.value,
+      seriesType,
+      seasonFolder: seasonFolder.value,
+      searchForMissingEpisodes: searchForMissingEpisodes.value,
+      searchForCutoffUnmetEpisodes: searchForCutoffUnmetEpisodes.value,
+      tags: tags.value,
+    });
   }, [
-    tvdbId,
+    series,
     seriesType,
     rootFolderPath,
     monitor,
@@ -111,7 +110,7 @@ function AddNewSeriesModalContent({
     searchForMissingEpisodes,
     searchForCutoffUnmetEpisodes,
     tags,
-    dispatch,
+    addSeries,
   ]);
 
   useEffect(() => {

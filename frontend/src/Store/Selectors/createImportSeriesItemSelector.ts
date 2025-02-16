@@ -7,10 +7,9 @@ function createImportSeriesItemSelector(id: string) {
   return createSelector(
     (_state: AppState, connectorInput: { id: string }) =>
       connectorInput ? connectorInput.id : id,
-    (state: AppState) => state.addSeries,
     (state: AppState) => state.importSeries,
     createAllSeriesSelector(),
-    (connectorId, addSeries, importSeries, series) => {
+    (connectorId, importSeries, series) => {
       const finalId = id || connectorId;
 
       const item =
@@ -26,10 +25,6 @@ function createImportSeriesItemSelector(id: string) {
         });
 
       return {
-        defaultMonitor: addSeries.defaults.monitor,
-        defaultQualityProfileId: addSeries.defaults.qualityProfileId,
-        defaultSeriesType: addSeries.defaults.seriesType,
-        defaultSeasonFolder: addSeries.defaults.seasonFolder,
         ...item,
         isExistingSeries,
       };

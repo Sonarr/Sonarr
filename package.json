@@ -81,7 +81,8 @@
     "redux-thunk": "2.4.2",
     "reselect": "4.1.8",
     "stacktrace-js": "2.0.2",
-    "typescript": "5.7.2"
+    "typescript": "5.7.2",
+    "zustand": "5.0.3"
   },
   "devDependencies": {
     "@babel/core": "7.26.0",

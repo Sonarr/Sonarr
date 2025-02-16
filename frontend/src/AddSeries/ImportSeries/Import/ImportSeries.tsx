@@ -1,6 +1,10 @@
 import React, { useEffect, useMemo, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
+import {
+  setAddSeriesOption,
+  useAddSeriesOption,
+} from 'AddSeries/addSeriesOptionsStore';
 import { SelectProvider } from 'App/SelectContext';
 import AppState from 'App/State/AppState';
 import Alert from 'Components/Alert';
@@ -8,7 +12,6 @@ import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
 import { kinds } from 'Helpers/Props';
-import { setAddSeriesDefault } from 'Store/Actions/addSeriesActions';
 import { clearImportSeries } from 'Store/Actions/importSeriesActions';
 import { fetchRootFolders } from 'Store/Actions/rootFolderActions';
 import translate from 'Utilities/String/translate';
@@ -48,9 +51,7 @@ function ImportSeries() {
     (state: AppState) => state.settings.qualityProfiles.items
   );
 
-  const defaultQualityProfileId = useSelector(
-    (state: AppState) => state.addSeries.defaults.qualityProfileId
-  );
+  const defaultQualityProfileId = useAddSeriesOption('qualityProfileId');
 
   const scrollerRef = useRef<HTMLDivElement>(null);
 
@@ -76,9 +77,7 @@ function ImportSeries() {
       !defaultQualityProfileId ||
       !qualityProfiles.some((p) => p.id === defaultQualityProfileId)
     ) {
-      dispatch(
-        setAddSeriesDefault({ qualityProfileId: qualityProfiles[0].id })
-      );
+      setAddSeriesOption('qualityProfileId', qualityProfiles[0].id);
     }
   }, [defaultQualityProfileId, qualityProfiles, dispatch]);
 

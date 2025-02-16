@@ -60,7 +60,9 @@ namespace Sonarr.Http.REST
             }
         }
 
-        protected abstract TResource GetResourceById(int id);
+        #nullable enable
+        protected abstract TResource? GetResourceById(int id);
+        #nullable disable
 
         public override void OnActionExecuting(ActionExecutingContext context)
         {

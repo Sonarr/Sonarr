@@ -17,7 +17,7 @@ interface ValidationFailures {
   warnings: ValidationWarning[];
 }
 
-function getValidationFailures(saveError?: Error): ValidationFailures {
+function getValidationFailures(saveError?: Error | null): ValidationFailures {
   if (!saveError || saveError.status !== 400) {
     return {
       errors: [],
@@ -77,7 +77,7 @@ export interface ModelBaseSetting {
 function selectSettings<T extends ModelBaseSetting>(
   item: T,
   pendingChanges?: Partial<ModelBaseSetting>,
-  saveError?: Error
+  saveError?: Error | null
 ) {
   const { errors, warnings } = getValidationFailures(saveError);
 
