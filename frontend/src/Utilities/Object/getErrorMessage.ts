@@ -1,5 +1,5 @@
 import { Error } from 'App/State/AppSectionState';
-import { ApiError } from 'Helpers/Hooks/useApiQuery';
+import { ApiError } from 'Utilities/Fetch/fetchJson';
 
 function getErrorMessage(
   error: Error | ApiError | undefined,

@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { AddSeries } from 'App/State/AddSeriesAppState';
 import AppState from 'App/State/AppState';
 import Alert from 'Components/Alert';
 import TextInput from 'Components/Form/TextInput';
@@ -10,7 +9,6 @@ import Link from 'Components/Link/Link';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
-import useApiQuery from 'Helpers/Hooks/useApiQuery';
 import useDebounce from 'Helpers/Hooks/useDebounce';
 import useQueryParams from 'Helpers/Hooks/useQueryParams';
 import { icons, kinds } from 'Helpers/Props';
@@ -18,6 +16,7 @@ import { InputChanged } from 'typings/inputs';
 import getErrorMessage from 'Utilities/Object/getErrorMessage';
 import translate from 'Utilities/String/translate';
 import AddNewSeriesSearchResult from './AddNewSeriesSearchResult';
+import { useLookupSeries } from './useAddSeries';
 import styles from './AddNewSeries.css';
 
 function AddNewSeries() {
@@ -48,12 +47,7 @@ function AddNewSeries() {
     isFetching: isFetchingApi,
     error,
     data = [],
-  } = useApiQuery<AddSeries[]>({
-    path: `/series/lookup?term=${query}`,
-    queryOptions: {
-      enabled: !!query,
-    },
-  });
+  } = useLookupSeries(query);
 
   useEffect(() => {
     setIsFetching(isFetchingApi);
@@ -103,7 +97,9 @@ function AddNewSeries() {
         {!isFetching && !error && !!data.length ? (
           <div className={styles.searchResults}>
             {data.map((item) => {
-              return <AddNewSeriesSearchResult key={item.tvdbId} {...item} />;
+              return (
+                <AddNewSeriesSearchResult key={item.tvdbId} series={item} />
+              );
             })}
           </div>
         ) : null}

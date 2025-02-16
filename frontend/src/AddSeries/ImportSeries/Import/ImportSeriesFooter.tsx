@@ -1,5 +1,10 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import {
+  AddSeriesOptions,
+  setAddSeriesOption,
+  useAddSeriesOptions,
+} from 'AddSeries/addSeriesOptionsStore';
 import { useSelect } from 'App/SelectContext';
 import AppState from 'App/State/AppState';
 import CheckInput from 'Components/Form/CheckInput';
@@ -12,7 +17,6 @@ import PageContentFooter from 'Components/Page/PageContentFooter';
 import Popover from 'Components/Tooltip/Popover';
 import { icons, inputTypes, kinds, tooltipPositions } from 'Helpers/Props';
 import { SeriesMonitor, SeriesType } from 'Series/Series';
-import { setAddSeriesDefault } from 'Store/Actions/addSeriesActions';
 import {
   cancelLookupSeries,
   importSeries,
@@ -33,7 +37,7 @@ function ImportSeriesFooter() {
     qualityProfileId: defaultQualityProfileId,
     seriesType: defaultSeriesType,
     seasonFolder: defaultSeasonFolder,
-  } = useSelector((state: AppState) => state.addSeries.defaults);
+  } = useAddSeriesOptions();
 
   const { isLookingUpSeries, isImporting, items, importError } = useSelector(
     (state: AppState) => state.importSeries
@@ -110,7 +114,7 @@ function ImportSeriesFooter() {
   ]);
 
   const handleInputChange = useCallback(
-    ({ name, value }: InputChanged) => {
+    ({ name, value }: InputChanged<string | number | boolean | number[]>) => {
       if (name === 'monitor') {
         setMonitor(value as SeriesMonitor);
       } else if (name === 'qualityProfileId') {
@@ -121,7 +125,7 @@ function ImportSeriesFooter() {
         setSeasonFolder(value as boolean);
       }
 
-      dispatch(setAddSeriesDefault({ [name]: value }));
+      setAddSeriesOption(name as keyof AddSeriesOptions, value);
 
       selectedIds.forEach((id) => {
         dispatch(

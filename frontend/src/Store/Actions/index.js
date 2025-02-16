@@ -1,4 +1,3 @@
-import * as addSeries from './addSeriesActions';
 import * as app from './appActions';
 import * as blocklist from './blocklistActions';
 import * as calendar from './calendarActions';
@@ -29,7 +28,6 @@ import * as tags from './tagActions';
 import * as wanted from './wantedActions';
 
 export default [
-  addSeries,
   app,
   blocklist,
   calendar,

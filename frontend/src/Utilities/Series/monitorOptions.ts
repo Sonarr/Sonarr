@@ -1,6 +1,12 @@
+import { SeriesMonitor } from 'Series/Series';
 import translate from 'Utilities/String/translate';
 
-const monitorOptions = [
+interface MonitorOption {
+  key: SeriesMonitor;
+  value: string;
+}
+
+const monitorOptions: MonitorOption[] = [
   {
     key: 'all',
     get value() {

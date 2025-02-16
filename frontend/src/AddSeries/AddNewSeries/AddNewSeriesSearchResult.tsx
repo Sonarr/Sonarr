@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { AddSeries } from 'App/State/AddSeriesAppState';
+import AddSeries from 'AddSeries/AddSeries';
 import HeartRating from 'Components/HeartRating';
 import Icon from 'Components/Icon';
 import Label from 'Components/Label';
@@ -16,24 +16,27 @@ import translate from 'Utilities/String/translate';
 import AddNewSeriesModal from './AddNewSeriesModal';
 import styles from './AddNewSeriesSearchResult.css';
 
-type AddNewSeriesSearchResultProps = AddSeries;
+interface AddNewSeriesSearchResultProps {
+  series: AddSeries;
+}
 
-function AddNewSeriesSearchResult({
-  tvdbId,
-  titleSlug,
-  title,
-  year,
-  network,
-  originalLanguage,
-  genres = [],
-  status,
-  statistics = {} as Statistics,
-  ratings,
-  folder,
-  overview,
-  seriesType,
-  images,
-}: AddNewSeriesSearchResultProps) {
+function AddNewSeriesSearchResult({ series }: AddNewSeriesSearchResultProps) {
+  const {
+    tvdbId,
+    titleSlug,
+    title,
+    year,
+    network,
+    originalLanguage,
+    genres = [],
+    status,
+    statistics = {} as Statistics,
+    ratings,
+    overview,
+    seriesType,
+    images,
+  } = series;
+
   const isExistingSeries = useSelector(createExistingSeriesSelector(tvdbId));
   const { isSmallScreen } = useSelector(createDimensionsSelector());
   const [isNewAddSeriesModalOpen, setIsNewAddSeriesModalOpen] = useState(false);
@@ -168,13 +171,8 @@ function AddNewSeriesSearchResult({
 
       <AddNewSeriesModal
         isOpen={isNewAddSeriesModalOpen && !isExistingSeries}
-        tvdbId={tvdbId}
-        title={title}
-        year={year}
-        overview={overview}
-        folder={folder}
+        series={series}
         initialSeriesType={seriesType}
-        images={images}
         onModalClose={handleAddSeriesModalClose}
       />
     </div>
