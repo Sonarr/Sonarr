@@ -95,7 +95,7 @@ namespace NzbDrone.Core.Instrumentation
 
         private void ReconfigureFile()
         {
-            foreach (var target in LogManager.Configuration.AllTargets.OfType<NzbDroneFileTarget>())
+            foreach (var target in LogManager.Configuration.AllTargets.OfType<CleansingFileTarget>())
             {
                 target.MaxArchiveFiles = _configFileProvider.LogRotate;
                 target.ArchiveAboveSize = _configFileProvider.LogSizeLimit.Megabytes();
@@ -120,11 +120,7 @@ namespace NzbDrone.Core.Instrumentation
             {
                 var format = _configFileProvider.ConsoleLogFormat;
 
-                consoleTarget.Layout = format switch
-                {
-                    ConsoleLogFormat.Clef => NzbDroneLogger.ClefLogLayout,
-                    _ => NzbDroneLogger.ConsoleLogLayout
-                };
+                NzbDroneLogger.ConfigureConsoleLayout(consoleTarget, format);
             }
         }
 
