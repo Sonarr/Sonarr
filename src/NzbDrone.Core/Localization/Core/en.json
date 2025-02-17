@@ -1469,6 +1469,8 @@
   "NotificationsTelegramSettingsBotToken": "Bot Token",
   "NotificationsTelegramSettingsChatId": "Chat ID",
   "NotificationsTelegramSettingsChatIdHelpText": "You must start a conversation with the bot or add it to your group to receive messages",
+  "NotificationsTelegramSettingsLinkPreview": "Link Preview",
+  "NotificationsTelegramSettingsLinkPreviewHelpText": "Determines which link will be previewed in the Telegram notification. Choose 'None' to disable",
   "NotificationsTelegramSettingsIncludeAppName": "Include {appName} in Title",
   "NotificationsTelegramSettingsIncludeAppNameHelpText": "Optionally prefix message title with {appName} to differentiate notifications from different applications",
   "NotificationsTelegramSettingsIncludeInstanceName": "Include Instance Name in Title",

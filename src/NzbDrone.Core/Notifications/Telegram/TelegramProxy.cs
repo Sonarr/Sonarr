@@ -50,12 +50,21 @@ namespace NzbDrone.Core.Notifications.Telegram
             var requestBuilder = new HttpRequestBuilder(URL).Resource("bot{token}/sendmessage").Post();
 
             var request = requestBuilder.SetSegment("token", settings.BotToken)
-                                        .AddFormParameter("chat_id", settings.ChatId)
-                                        .AddFormParameter("parse_mode", "HTML")
-                                        .AddFormParameter("text", text)
-                                        .AddFormParameter("disable_notification", settings.SendSilently)
-                                        .AddFormParameter("message_thread_id", settings.TopicId)
+                                        .Accept(HttpAccept.Json)
                                         .Build();
+
+            request.Headers.ContentType = "application/json";
+
+            var payload = new TelegramPayload
+            {
+                ChatId = settings.ChatId,
+                Text = text.ToString(),
+                DisableNotification = settings.SendSilently,
+                MessageThreadId = settings.TopicId,
+                LinkPreviewOptions = new TelegramLinkPreviewOptions(links, settings)
+            };
+
+            request.SetContent(payload.ToJson());
 
             _httpClient.Post(request);
         }
@@ -70,7 +79,7 @@ namespace NzbDrone.Core.Notifications.Telegram
 
                 var links = new List<TelegramLink>
                     {
-                        new TelegramLink("Sonarr.tv", "https://sonarr.tv")
+                        new TelegramLink(null, "Sonarr.tv", "https://sonarr.tv")
                     };
 
                 var testMessageTitle = settings.IncludeAppNameInTitle ? brandedTitle : title;
