@@ -29,26 +29,28 @@ public class RejectedImportService : IRejectedImportService
 
         var rejectionReason = importResult.ImportDecision.Rejections.FirstOrDefault()?.Reason;
 
-        if (trackedDownload.RemoteEpisode.Release.IndexerId != 0)
+        if (trackedDownload.RemoteEpisode.Release.IndexerId == 0)
         {
-            var indexerSettings = _cachedIndexerSettingsProvider.GetSettings(trackedDownload.RemoteEpisode.Release.IndexerId);
+            trackedDownload.Warn(new TrackedDownloadStatusMessage(importResult.Errors.First(), new List<string>()));
+            return true;
+        }
 
-            if (rejectionReason == ImportRejectionReason.DangerousFile &&
-                indexerSettings.FailDownloads.Contains(FailDownloads.PotentiallyDangerous))
-            {
-                trackedDownload.Fail();
-            }
-            else if (rejectionReason == ImportRejectionReason.ExecutableFile &&
-                     indexerSettings.FailDownloads.Contains(FailDownloads.Executables))
-            {
-                trackedDownload.Fail();
-            }
+        var indexerSettings = _cachedIndexerSettingsProvider.GetSettings(trackedDownload.RemoteEpisode.Release.IndexerId);
+
+        if (rejectionReason == ImportRejectionReason.DangerousFile &&
+            indexerSettings.FailDownloads.Contains(FailDownloads.PotentiallyDangerous))
+        {
+            trackedDownload.Fail();
+        }
+        else if (rejectionReason == ImportRejectionReason.ExecutableFile &&
+                 indexerSettings.FailDownloads.Contains(FailDownloads.Executables))
+        {
+            trackedDownload.Fail();
         }
         else
         {
             trackedDownload.Warn(new TrackedDownloadStatusMessage(importResult.Errors.First(), new List<string>()));
         }
-
         return true;
     }
 }
