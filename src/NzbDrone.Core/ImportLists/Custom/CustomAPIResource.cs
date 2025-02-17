@@ -4,5 +4,7 @@ namespace NzbDrone.Core.ImportLists.Custom
     {
         public string Title { get; set; }
         public int TvdbId { get; set; }
+        public int TmdbId { get; set; }
+        public string ImdbId { get; set; }
     }
 }
