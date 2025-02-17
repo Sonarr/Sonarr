@@ -205,8 +205,8 @@ namespace NzbDrone.Core.Configuration
 
                 if (enabled)
                 {
-                    SetValue("AuthenticationMethod", AuthenticationType.Basic);
-                    return AuthenticationType.Basic;
+                    SetValue("AuthenticationMethod", AuthenticationType.Forms);
+                    return AuthenticationType.Forms;
                 }
 
                 return Enum.TryParse<AuthenticationType>(_authOptions.Method, out var enumValue)

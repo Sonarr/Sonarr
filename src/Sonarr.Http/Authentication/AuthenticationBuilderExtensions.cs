@@ -18,11 +18,6 @@ namespace Sonarr.Http.Authentication
             return authenticationBuilder.AddScheme<ApiKeyAuthenticationOptions, ApiKeyAuthenticationHandler>(name, options);
         }
 
-        public static AuthenticationBuilder AddBasic(this AuthenticationBuilder authenticationBuilder, string name)
-        {
-            return authenticationBuilder.AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>(name, options => { });
-        }
-
         public static AuthenticationBuilder AddNone(this AuthenticationBuilder authenticationBuilder, string name)
         {
             return authenticationBuilder.AddScheme<AuthenticationSchemeOptions, NoAuthenticationHandler>(name, options => { });
@@ -54,7 +49,9 @@ namespace Sonarr.Http.Authentication
             return services.AddAuthentication()
                 .AddNone(AuthenticationType.None.ToString())
                 .AddExternal(AuthenticationType.External.ToString())
-                .AddBasic(AuthenticationType.Basic.ToString())
+#pragma warning disable CS0618 // Type or member is obsolete
+                .AddCookie(AuthenticationType.Basic.ToString())
+#pragma warning restore CS0618 // Type or member is obsolete
                 .AddCookie(AuthenticationType.Forms.ToString())
                 .AddApiKey("API", options =>
                 {

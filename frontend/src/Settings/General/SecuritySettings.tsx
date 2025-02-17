@@ -36,6 +36,8 @@ export const authenticationMethodOptions = [
     get value() {
       return translate('AuthBasic');
     },
+    isDisabled: true,
+    isHidden: true,
   },
   {
     key: 'forms',
