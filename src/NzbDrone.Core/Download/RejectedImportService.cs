@@ -22,23 +22,27 @@ public class RejectedImportService : IRejectedImportService
 
     public bool Process(TrackedDownload trackedDownload, ImportResult importResult)
     {
-        if (importResult.Result != ImportResultType.Rejected || importResult.ImportDecision.LocalEpisode == null)
+        if (importResult.Result != ImportResultType.Rejected || importResult.ImportDecision.LocalEpisode == null || trackedDownload.RemoteEpisode.Release == null)
         {
             return false;
         }
 
-        var indexerSettings = _cachedIndexerSettingsProvider.GetSettings(trackedDownload.RemoteEpisode.Release.IndexerId);
         var rejectionReason = importResult.ImportDecision.Rejections.FirstOrDefault()?.Reason;
 
-        if (rejectionReason == ImportRejectionReason.DangerousFile &&
-            indexerSettings.FailDownloads.Contains(FailDownloads.PotentiallyDangerous))
+        if (trackedDownload.RemoteEpisode.Release.IndexerId != 0)
         {
-            trackedDownload.Fail();
-        }
-        else if (rejectionReason == ImportRejectionReason.ExecutableFile &&
-            indexerSettings.FailDownloads.Contains(FailDownloads.Executables))
-        {
-            trackedDownload.Fail();
+            var indexerSettings = _cachedIndexerSettingsProvider.GetSettings(trackedDownload.RemoteEpisode.Release.IndexerId);
+
+            if (rejectionReason == ImportRejectionReason.DangerousFile &&
+                indexerSettings.FailDownloads.Contains(FailDownloads.PotentiallyDangerous))
+            {
+                trackedDownload.Fail();
+            }
+            else if (rejectionReason == ImportRejectionReason.ExecutableFile &&
+                     indexerSettings.FailDownloads.Contains(FailDownloads.Executables))
+            {
+                trackedDownload.Fail();
+            }
         }
         else
         {
