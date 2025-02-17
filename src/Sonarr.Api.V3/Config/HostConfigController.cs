@@ -40,10 +40,14 @@ namespace Sonarr.Api.V3.Config
             SharedValidator.RuleFor(c => c.UrlBase).ValidUrlBase();
             SharedValidator.RuleFor(c => c.InstanceName).StartsOrEndsWithSonarr();
 
-            SharedValidator.RuleFor(c => c.Username).NotEmpty().When(c => c.AuthenticationMethod == AuthenticationType.Basic ||
-                                                                          c.AuthenticationMethod == AuthenticationType.Forms);
-            SharedValidator.RuleFor(c => c.Password).NotEmpty().When(c => c.AuthenticationMethod == AuthenticationType.Basic ||
-                                                                          c.AuthenticationMethod == AuthenticationType.Forms);
+            SharedValidator.RuleFor(c => c.Username).NotEmpty().When(c => c.AuthenticationMethod == AuthenticationType.Forms);
+            SharedValidator.RuleFor(c => c.Password).NotEmpty().When(c => c.AuthenticationMethod == AuthenticationType.Forms);
+
+            SharedValidator.RuleFor(c => c.AuthenticationMethod)
+#pragma warning disable CS0618 // Type or member is obsolete
+                .NotEqual(AuthenticationType.Basic)
+#pragma warning restore CS0618 // Type or member is obsolete
+                .WithMessage("'Basic' is no longer supported, switch to 'Forms' instead.");
 
             SharedValidator.RuleFor(c => c.PasswordConfirmation)
                 .Must((resource, p) => IsMatchingPassword(resource)).WithMessage("Must match Password");
