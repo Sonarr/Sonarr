@@ -27,15 +27,14 @@ public class RejectedImportService : IRejectedImportService
             return false;
         }
 
+        var indexerSettings = _cachedIndexerSettingsProvider.GetSettings(trackedDownload.RemoteEpisode.Release.IndexerId);
         var rejectionReason = importResult.ImportDecision.Rejections.FirstOrDefault()?.Reason;
 
-        if (trackedDownload.RemoteEpisode.Release.IndexerId == 0)
+        if (indexerSettings == null)
         {
             trackedDownload.Warn(new TrackedDownloadStatusMessage(importResult.Errors.First(), new List<string>()));
             return true;
         }
-
-        var indexerSettings = _cachedIndexerSettingsProvider.GetSettings(trackedDownload.RemoteEpisode.Release.IndexerId);
 
         if (rejectionReason == ImportRejectionReason.DangerousFile &&
             indexerSettings.FailDownloads.Contains(FailDownloads.PotentiallyDangerous))
@@ -43,7 +42,7 @@ public class RejectedImportService : IRejectedImportService
             trackedDownload.Fail();
         }
         else if (rejectionReason == ImportRejectionReason.ExecutableFile &&
-                 indexerSettings.FailDownloads.Contains(FailDownloads.Executables))
+            indexerSettings.FailDownloads.Contains(FailDownloads.Executables))
         {
             trackedDownload.Fail();
         }
@@ -51,6 +50,7 @@ public class RejectedImportService : IRejectedImportService
         {
             trackedDownload.Warn(new TrackedDownloadStatusMessage(importResult.Errors.First(), new List<string>()));
         }
+
         return true;
     }
 }
