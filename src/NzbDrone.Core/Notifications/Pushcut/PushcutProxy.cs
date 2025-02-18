@@ -12,7 +12,7 @@ namespace NzbDrone.Core.Notifications.Pushcut
 {
     public interface IPushcutProxy
     {
-        void SendNotification(string title, string message, PushcutSettings settings);
+        void SendNotification(string title, string message, string imageLink, string imdbLink, PushcutSettings settings);
         ValidationFailure Test(PushcutSettings settings);
     }
 
@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Notifications.Pushcut
             _logger = logger;
         }
 
-        public void SendNotification(string title, string message, PushcutSettings settings)
+        public void SendNotification(string title, string message, string imageLink, string imdbLink, PushcutSettings settings)
         {
             var request = new HttpRequestBuilder("https://api.pushcut.io/v1/notifications/{notificationName}")
                 .SetSegment("notificationName", settings?.NotificationName)
@@ -40,8 +40,21 @@ namespace NzbDrone.Core.Notifications.Pushcut
             {
                 Title = title,
                 Text = message,
-                IsTimeSensitive = settings?.TimeSensitive
+                Image = imageLink,
+                IsTimeSensitive = settings?.TimeSensitive,
+                Actions = new List<PushcutAction>()
             };
+
+            if (imdbLink.IsNotNullOrWhiteSpace())
+            {
+                var action = new PushcutAction
+                {
+                    Name = "IMDb",
+                    Url = imdbLink
+                };
+
+                payload.Actions.Add(action);
+            }
 
             request.Method = HttpMethod.Post;
             request.Headers.ContentType = "application/json";
@@ -64,7 +77,7 @@ namespace NzbDrone.Core.Notifications.Pushcut
             {
                 const string title = "Sonarr Test Title";
                 const string message = "Success! You have properly configured your Pushcut notification settings.";
-                SendNotification(title, message, settings);
+                SendNotification(title, message, null, null, settings);
             }
             catch (PushcutException pushcutException) when (pushcutException.InnerException is HttpException httpException)
             {
