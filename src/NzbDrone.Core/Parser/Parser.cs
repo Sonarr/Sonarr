@@ -1191,14 +1191,12 @@ namespace NzbDrone.Core.Parser
                 {
                     airmonth = Convert.ToInt32(matchCollection[0].Groups["airmonth"].Value);
                     airday = Convert.ToInt32(matchCollection[0].Groups["airday"].Value);
+                }
 
-                    // Swap day and month if month is bigger than 12 (scene fail)
-                    if (airmonth > 12)
-                    {
-                        var tempDay = airday;
-                        airday = airmonth;
-                        airmonth = tempDay;
-                    }
+                // Swap day and month if month is bigger than 12 (scene fail)
+                if (airmonth > 12)
+                {
+                    (airday, airmonth) = (airmonth, airday);
                 }
 
                 DateTime airDate;
