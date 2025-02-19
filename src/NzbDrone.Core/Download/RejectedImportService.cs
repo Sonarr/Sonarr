@@ -22,13 +22,19 @@ public class RejectedImportService : IRejectedImportService
 
     public bool Process(TrackedDownload trackedDownload, ImportResult importResult)
     {
-        if (importResult.Result != ImportResultType.Rejected || importResult.ImportDecision.LocalEpisode == null)
+        if (importResult.Result != ImportResultType.Rejected || importResult.ImportDecision.LocalEpisode == null || trackedDownload.RemoteEpisode?.Release == null)
         {
             return false;
         }
 
         var indexerSettings = _cachedIndexerSettingsProvider.GetSettings(trackedDownload.RemoteEpisode.Release.IndexerId);
         var rejectionReason = importResult.ImportDecision.Rejections.FirstOrDefault()?.Reason;
+
+        if (indexerSettings == null)
+        {
+            trackedDownload.Warn(new TrackedDownloadStatusMessage(importResult.Errors.First(), new List<string>()));
+            return true;
+        }
 
         if (rejectionReason == ImportRejectionReason.DangerousFile &&
             indexerSettings.FailDownloads.Contains(FailDownloads.PotentiallyDangerous))
