@@ -127,6 +127,12 @@ namespace Sonarr.Api.V5.Series
             return seriesResources;
         }
 
+        [NonAction]
+        public override ActionResult<SeriesResource> GetResourceByIdWithErrorHandler(int id)
+        {
+            return base.GetResourceByIdWithErrorHandler(id);
+        }
+
         [RestGetById]
         [Produces("application/json")]
         public ActionResult<SeriesResource> GetResourceByIdWithErrorHandler(int id, [FromQuery]bool includeSeasonImages = false)
