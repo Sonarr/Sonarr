@@ -170,7 +170,7 @@ runs:
         framework="${{ inputs.framework }}"
         runtime="${{ inputs.runtime }}"
 
-        cp test.sh "_tests/$framework/$runtime/publish"
+        cp scripts/test.sh "_tests/$framework/$runtime/publish"
 
         rm -f _tests/$framework/$runtime/*.log.config
 

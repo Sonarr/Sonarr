@@ -7,7 +7,7 @@ cd /data/test
 
 runTest()
 {
-    bash test.sh Linux $1
+    bash scripts/test.sh Linux $1
     cp TestResult.xml /data/_tests_results/TestResult_$1.xml
 }
 
