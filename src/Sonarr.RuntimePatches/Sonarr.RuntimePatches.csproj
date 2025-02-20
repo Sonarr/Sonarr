@@ -3,6 +3,6 @@
     <TargetFrameworks>net8.0</TargetFrameworks>
   </PropertyGroup>  
   <ItemGroup>
-    <PackageReference Include="Lib.Harmony" Version="2.3.3" />
+    <PackageReference Include="Lib.Harmony" Version="2.3.5" />
   </ItemGroup>
 </Project>
