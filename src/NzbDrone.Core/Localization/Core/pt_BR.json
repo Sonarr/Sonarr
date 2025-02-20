@@ -55,7 +55,7 @@
     "Added": "Adicionado",
     "ApiKeyValidationHealthCheckMessage": "Atualize sua chave de API para ter pelo menos {length} caracteres. Você pode fazer isso através das configurações ou do arquivo de configuração",
     "RemoveCompletedDownloads": "Remover downloads concluídos",
-    "AppDataLocationHealthCheckMessage": "A atualização não será possível para evitar a exclusão de Appdata ao Atualizar",
+    "AppDataLocationHealthCheckMessage": "Não será possível atualizar para evitar a exclusão de AppData na Atualização",
     "DownloadClientCheckUnableToCommunicateWithHealthCheckMessage": "Não é possível se comunicar com {downloadClientName}. {errorMessage}",
     "DownloadClientRootFolderHealthCheckMessage": "O cliente de download {downloadClientName} coloca os downloads na pasta raiz {rootFolderPath}. Você não deve baixar para uma pasta raiz.",
     "DownloadClientSortingHealthCheckMessage": "O cliente de download {downloadClientName} tem classificação {sortingMode} habilitada para a categoria do {appName}. Você deve desabilitar essa classificação em seu cliente de download para evitar problemas de importação.",
@@ -2152,5 +2152,7 @@
     "Minimum": "Mínimo",
     "Minute": "minuto",
     "MinuteShorthand": "m",
-    "QualityDefinitionsSizeNotice": "As restrições de tamanho foram transferidas para Perfis de Qualidade"
+    "QualityDefinitionsSizeNotice": "As restrições de tamanho foram transferidas para Perfis de Qualidade",
+    "NotificationsTelegramSettingsLinkPreview": "Prévia do Link",
+    "NotificationsTelegramSettingsLinkPreviewHelpText": "Determina qual link será visualizado na notificação do Telegram. Escolha 'Nenhum' para desativar"
 }

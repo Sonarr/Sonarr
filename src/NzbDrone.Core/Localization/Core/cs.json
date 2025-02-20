@@ -370,7 +370,7 @@
     "CutoffUnmetLoadError": "Chybné načítání nesplněných položek",
     "AddDelayProfileError": "Nelze přidat nový profil zpoždění, zkuste to prosím znovu.",
     "AddedDate": "Přidáno: {date}",
-    "AlternateTitles": "Střídej tituly",
+    "AlternateTitles": "Alternativní názvy",
     "BlocklistAndSearchHint": "Začne hledat náhradu po blokaci",
     "BlocklistAndSearchMultipleHint": "Začne vyhledávat náhrady po blokaci",
     "BlocklistFilterHasNoItems": "Vybraný filtr blokování neobsahuje žádné položky",
@@ -515,5 +515,17 @@
     "DeleteSpecificationHelpText": "Opravdu smazat specifikaci '{name}'?",
     "DownloadClientStatusAllClientHealthCheckMessage": "Všichni klienti pro stahování jsou nedostupní z důvodu selhání",
     "DownloadClientStatusSingleClientHealthCheckMessage": "Klienti pro stahování jsou nedostupní z důvodu selhání: {downloadClientNames}",
-    "DownloadClientTransmissionSettingsUrlBaseHelpText": "Přidá předponu k url {clientName} rpc, např. {url}, výchozí hodnota je ‚{defaultUrl}‘"
+    "DownloadClientTransmissionSettingsUrlBaseHelpText": "Přidá předponu k url {clientName} rpc, např. {url}, výchozí hodnota je ‚{defaultUrl}‘",
+    "DownloadClientPneumaticSettingsStrmFolder": "Složka Strm",
+    "DownloadClientDelugeValidationLabelPluginInactive": "Plugin pro štítky není aktivován",
+    "DoneEditingSizes": "Úprava velikostí dokončena",
+    "DownloadClientDownloadStationProviderMessage": "Pokud je ve vašem účtu DSM zapnuto dvoufázové ověření, {appName} se nebude moci připojit k Download station",
+    "DownloadClientDelugeTorrentStateError": "Deluge hlásí chybu",
+    "DeleteSelectedIndexers": "Smazat Indexer(y)",
+    "DownloadClientPneumaticSettingsNzbFolderHelpText": "Tato složka bude muset být dostupná z XBMC",
+    "DownloadClientDelugeSettingsDirectoryCompleted": "Adresář kam přesunout po dokončení",
+    "DeleteSeriesFolderCountWithFilesConfirmation": "Jste si jisti že chcete smazat {count} vybraných seriálů a všechen jejich obsah?",
+    "DownloadClientDelugeSettingsDirectoryHelpText": "Nepovinné - umístění stahovaných souborů, pokud ponecháte prázné, použije se výchozí umístění Deluge",
+    "DownloadClientDelugeSettingsDirectoryCompletedHelpText": "Nepovinné - umístění kam přesunout dokončená stahování, pokud ponecháte prázné, použije se výchozí umístění Deluge",
+    "DownloadClientDelugeValidationLabelPluginInactiveDetail": "Pro použití kategorií je nutné mít v {clientName} aktivovaný plugin pro štítky."
 }
