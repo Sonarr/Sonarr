@@ -31,7 +31,7 @@ public class RejectedImportService : IRejectedImportService
 
         if (indexerSettings == null)
         {
-            trackedDownload.Warn(importResult.Errors.First());
+            trackedDownload.Warn(new TrackedDownloadStatusMessage(trackedDownload.DownloadItem.Title, importResult.Errors));
             return true;
         }
 
@@ -47,7 +47,7 @@ public class RejectedImportService : IRejectedImportService
         }
         else
         {
-            trackedDownload.Warn(importResult.Errors.First());
+            trackedDownload.Warn(new TrackedDownloadStatusMessage(trackedDownload.DownloadItem.Title, importResult.Errors));
         }
 
         return true;
