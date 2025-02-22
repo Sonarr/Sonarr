@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Core.Download.TrackedDownloads;
 using NzbDrone.Core.Indexers;
@@ -32,7 +31,7 @@ public class RejectedImportService : IRejectedImportService
 
         if (indexerSettings == null)
         {
-            trackedDownload.Warn(new TrackedDownloadStatusMessage(importResult.Errors.First(), new List<string>()));
+            trackedDownload.Warn(new TrackedDownloadStatusMessage(trackedDownload.DownloadItem.Title, importResult.Errors));
             return true;
         }
 
@@ -48,7 +47,7 @@ public class RejectedImportService : IRejectedImportService
         }
         else
         {
-            trackedDownload.Warn(new TrackedDownloadStatusMessage(importResult.Errors.First(), new List<string>()));
+            trackedDownload.Warn(new TrackedDownloadStatusMessage(trackedDownload.DownloadItem.Title, importResult.Errors));
         }
 
         return true;
