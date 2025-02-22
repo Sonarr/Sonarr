@@ -23,7 +23,9 @@ namespace NzbDrone.Core.MediaFiles
 
         private static List<string> _dangerousExtensions = new List<string>
         {
+            ".arj",
             ".lnk",
+            ".lzh",
             ".ps1",
             ".scr",
             ".vbs",
