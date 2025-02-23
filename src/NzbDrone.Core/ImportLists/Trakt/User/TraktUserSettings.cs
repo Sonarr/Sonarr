@@ -31,7 +31,7 @@ namespace NzbDrone.Core.ImportLists.Trakt.User
         [FieldDefinition(2, Label = "ImportListsTraktSettingsWatchedListFilter", Type = FieldType.Select, SelectOptions = typeof(TraktUserWatchedListType), HelpText = "ImportListsTraktSettingsWatchedListFilterSeriesHelpText")]
         public int TraktWatchedListType { get; set; }
 
-        [FieldDefinition(3, Label = "ImportListsTraktSettingsWatchedListSorting", Type = FieldType.Select, SelectOptions = typeof(TraktUserWatchSorting), HelpText = "ImportListsTraktSettingsWatchedListSortingHelpText")]
+        [FieldDefinition(3, Label = "ImportListsTraktSettingsWatchListSorting", Type = FieldType.Select, SelectOptions = typeof(TraktUserWatchSorting), HelpText = "ImportListsTraktSettingsWatchListSortingHelpText")]
         public int TraktWatchSorting { get; set; }
 
         [FieldDefinition(4, Label = "Username", HelpText = "ImportListsTraktSettingsUserListUsernameHelpText")]
