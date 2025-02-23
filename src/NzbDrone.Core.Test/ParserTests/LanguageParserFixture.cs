@@ -468,6 +468,24 @@ namespace NzbDrone.Core.Test.ParserTests
             result.Languages.Should().Contain(Language.Turkish);
         }
 
+        [TestCase("series.title.s01e01.2023.[Azerbaijan.Dubbed].1080p.WEB-DLRip.TeeWee")]
+        [TestCase("Series s02e04 (2023) [Azerbaijani Dubbed] 1080p WEB-DLRip TeeWee")]
+        public void should_parse_azerbaijani(string postTitle)
+        {
+            var result = Parser.Parser.ParseTitle(postTitle);
+            result.Languages.Count.Should().Be(1);
+            result.Languages.Should().Contain(Language.Azerbaijani);
+        }
+
+        [TestCase("series.title.s01e01.2023.[Uzbekistan.Dubbed].1080p.WEB-DLRip.TeeWee")]
+        [TestCase("Sweet.Series.S02E08.2023.[Uzbek.Dubbed].1080p.WEB-DLRip.TeeWee")]
+        public void should_parse_uzbek(string postTitle)
+        {
+            var result = Parser.Parser.ParseTitle(postTitle);
+            result.Languages.Count.Should().Be(1);
+            result.Languages.Should().Contain(Language.Uzbek);
+        }
+
         [TestCase("Name (2020) - S01E20 - [AAC 2.0].testtitle.default.eng.forced.ass", new[] { "default", "forced" }, "testtitle", "English")]
         [TestCase("Name (2020) - S01E20 - [AAC 2.0].eng.default.testtitle.forced.ass", new[] { "default", "forced" }, "testtitle", "English")]
         [TestCase("Name (2020) - S01E20 - [AAC 2.0].default.eng.testtitle.forced.ass", new[] { "default", "forced" }, "testtitle", "English")]

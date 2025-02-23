@@ -117,6 +117,9 @@ namespace NzbDrone.Core.Languages
         public static Language Indonesian => new Language(44, "Indonesian");
         public static Language Macedonian => new Language(45, "Macedonian");
         public static Language Slovenian => new Language(46, "Slovenian");
+        public static Language Azerbaijani => new Language(47, "Azerbaijani");
+        public static Language Uzbek => new Language(48, "Uzbek");
+        public static Language Malay => new Language(49, "Malay");
         public static Language Original => new Language(-2, "Original");
 
         public static List<Language> All
@@ -172,6 +175,9 @@ namespace NzbDrone.Core.Languages
                     Indonesian,
                     Macedonian,
                     Slovenian,
+                    Azerbaijani,
+                    Uzbek,
+                    Malay,
                     Original
                 };
             }
