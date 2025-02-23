@@ -179,6 +179,16 @@ namespace NzbDrone.Core.Parser
                 languages.Add(Language.Latvian);
             }
 
+            if (lowerTitle.Contains("azerbaijani") || lowerTitle.Contains("azerbaijan"))
+            {
+                languages.Add(Language.Azerbaijani);
+            }
+
+            if (lowerTitle.Contains("uzbek") || lowerTitle.Contains("uzbekistan"))
+            {
+                languages.Add(Language.Uzbek);
+            }
+
             var regexLanguages = RegexLanguage(title);
 
             if (regexLanguages.Any())
