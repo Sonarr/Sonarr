@@ -57,6 +57,8 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
 
         public List<string> Subtitles { get; set; }
 
+        public List<string> AudioStreams { get; set; }
+
         public string ScanType { get; set; }
 
         [JsonIgnore]
