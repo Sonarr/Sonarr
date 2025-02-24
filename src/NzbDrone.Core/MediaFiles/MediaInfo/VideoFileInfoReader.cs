@@ -173,6 +173,13 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                 return Convert.ToInt64(bitratePerSecond);
             }
 
+            // Check for keys that start with BPS as some files contain the BPS-eng tag
+            if (mediaStream?.Tags?.FirstOrDefault(kvp => kvp.Key.StartsWith("BPS", StringComparison.OrdinalIgnoreCase)).Value?.IsNotNullOrWhiteSpace() ?? false)
+            {
+                bitratePerSecond = mediaStream.Tags.FirstOrDefault(kvp => kvp.Key.StartsWith("BPS", StringComparison.OrdinalIgnoreCase)).Value;
+                return Convert.ToInt64(bitratePerSecond);
+            }
+
             return 0;
         }
 
