@@ -14,6 +14,7 @@ interface MediaInfo {
   runTime: string;
   scanType: string;
   subtitles: string;
+  audioStreams: string;
 }
 
 export default MediaInfo;
