@@ -22,6 +22,7 @@ namespace Sonarr.Api.V3.EpisodeFiles
         public string RunTime { get; set; }
         public string ScanType { get; set; }
         public string Subtitles { get; set; }
+        public string AudioStreams { get; set; }
     }
 
     public static class MediaInfoResourceMapper
@@ -49,7 +50,8 @@ namespace Sonarr.Api.V3.EpisodeFiles
                 Resolution = $"{model.Width}x{model.Height}",
                 RunTime = FormatRuntime(model.RunTime),
                 ScanType = model.ScanType,
-                Subtitles = model.Subtitles.ConcatToString("/")
+                Subtitles = model.Subtitles.ConcatToString("/"),
+                AudioStreams = model.AudioStreams.ConcatToString("+")
             };
         }
 
