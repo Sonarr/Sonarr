@@ -1,0 +1,9 @@
+.mediaInfo {
+    display: grid;
+    grid-template-rows: auto auto;
+    align-items: center;
+}
+
+.audioInfo {
+    padding-top: 10px;
+}
