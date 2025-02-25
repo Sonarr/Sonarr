@@ -49,7 +49,7 @@ namespace Sonarr.Api.V3.EpisodeFiles
                 Resolution = $"{model.Width}x{model.Height}",
                 RunTime = FormatRuntime(model.RunTime),
                 ScanType = model.ScanType,
-                Subtitles = model.Subtitles.ConcatToString("/"),
+                Subtitles = model.Subtitles.ConcatToString("/")
             };
         }
 
