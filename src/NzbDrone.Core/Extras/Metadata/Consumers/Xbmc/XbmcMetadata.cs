@@ -382,20 +382,25 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
 
                     streamDetails.Add(video);
 
-                    var audio = new XElement("audio");
-                    var audioChannelCount = episodeFile.MediaInfo.AudioChannels;
-                    audio.Add(new XElement("bitrate", episodeFile.MediaInfo.AudioBitrate));
-                    audio.Add(new XElement("channels", audioChannelCount));
-                    audio.Add(new XElement("codec", MediaInfoFormatter.FormatAudioCodec(episodeFile.MediaInfo, sceneName)));
-                    audio.Add(new XElement("language", episodeFile.MediaInfo.AudioLanguages));
-                    streamDetails.Add(audio);
-
-                    if (episodeFile.MediaInfo.Subtitles != null && episodeFile.MediaInfo.Subtitles.Count > 0)
+                    if (episodeFile.MediaInfo.AudioStreams is { Count: > 0 })
                     {
-                        foreach (var s in episodeFile.MediaInfo.Subtitles)
+                        foreach (var audioStream in episodeFile.MediaInfo.AudioStreams)
+                        {
+                            var audio = new XElement("audio");
+                            audio.Add(new XElement("bitrate", audioStream.Bitrate));
+                            audio.Add(new XElement("channels", audioStream.Channels));
+                            audio.Add(new XElement("codec", MediaInfoFormatter.FormatAudioCodec(audioStream, sceneName)));
+                            audio.Add(new XElement("language", audioStream.Language));
+                            streamDetails.Add(audio);
+                        }
+                    }
+
+                    if (episodeFile.MediaInfo.SubtitleStreams is { Count: > 0 })
+                    {
+                        foreach (var subtitleStream in episodeFile.MediaInfo.SubtitleStreams)
                         {
                             var subtitle = new XElement("subtitle");
-                            subtitle.Add(new XElement("language", s));
+                            subtitle.Add(new XElement("language", subtitleStream.Language));
                             streamDetails.Add(subtitle);
                         }
                     }

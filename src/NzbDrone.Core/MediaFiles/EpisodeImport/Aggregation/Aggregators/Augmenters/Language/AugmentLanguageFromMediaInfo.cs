@@ -19,7 +19,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation.Aggregators.Augment
                 return null;
             }
 
-            var audioLanguages = localEpisode.MediaInfo.AudioLanguages.Distinct().ToList();
+            var audioLanguages = localEpisode.MediaInfo.AudioStreams?.Select(l => l.Language).Distinct().ToList() ?? [];
 
             var languages = new List<Languages.Language>();
 

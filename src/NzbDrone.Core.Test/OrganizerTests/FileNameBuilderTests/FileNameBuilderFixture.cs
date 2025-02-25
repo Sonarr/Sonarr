@@ -558,9 +558,25 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
             _episodeFile.MediaInfo = new Core.MediaFiles.MediaInfo.MediaInfoModel()
             {
                 VideoFormat = "h264",
-                AudioFormat = "dts",
-                AudioLanguages = new List<string> { "eng", "spa" },
-                Subtitles = new List<string> { "eng", "spa", "ita" }
+                AudioStreams =
+                [
+                    new MediaInfoAudioStreamModel
+                    {
+                        Format = "dts",
+                        Language = "eng",
+                    },
+                    new MediaInfoAudioStreamModel
+                    {
+                        Format = "dts",
+                        Language = "spa",
+                    },
+                ],
+                SubtitleStreams =
+                [
+                    new MediaInfoSubtitleStreamModel { Language = "eng" },
+                    new MediaInfoSubtitleStreamModel { Language = "spa" },
+                    new MediaInfoSubtitleStreamModel { Language = "ita" },
+                ],
             };
 
             Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
@@ -589,10 +605,19 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
             _episodeFile.MediaInfo = new Core.MediaFiles.MediaInfo.MediaInfoModel()
             {
                 VideoFormat = "h264",
-                AudioFormat = "dts",
-                AudioChannels = 6,
-                AudioLanguages = new List<string> { "eng" },
-                Subtitles = new List<string> { language },
+                AudioStreams =
+                [
+                    new MediaInfoAudioStreamModel
+                    {
+                        Format = "dts",
+                        Channels = 6,
+                        Language = "eng",
+                    },
+                ],
+                SubtitleStreams =
+                [
+                    new MediaInfoSubtitleStreamModel { Language = language },
+                ],
                 SchemaRevision = 3
             };
 
@@ -608,9 +633,20 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
             _episodeFile.MediaInfo = new Core.MediaFiles.MediaInfo.MediaInfoModel()
             {
                 VideoFormat = "h264",
-                AudioFormat = "dts",
-                AudioLanguages = new List<string> { "eng" },
-                Subtitles = new List<string> { "eng", "spa", "ita" }
+                AudioStreams =
+                [
+                    new MediaInfoAudioStreamModel
+                    {
+                        Format = "dts",
+                        Language = "eng",
+                    },
+                ],
+                SubtitleStreams =
+                [
+                    new MediaInfoSubtitleStreamModel { Language = "eng" },
+                    new MediaInfoSubtitleStreamModel { Language = "spa" },
+                    new MediaInfoSubtitleStreamModel { Language = "ita" },
+                ],
             };
 
             Subject.BuildFileName(new List<Episode> { _episode1 }, _series, _episodeFile)
@@ -992,10 +1028,21 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
                 .Callback((EpisodeFile e, Series s) => e.MediaInfo = new MediaInfoModel
                 {
                     VideoFormat = "AVC",
-                    AudioFormat = "DTS",
-                    AudioChannels = 6,
-                    AudioLanguages = new List<string> { "eng" },
-                    Subtitles = new List<string> { "eng", "esp", "ita" },
+                    AudioStreams =
+                    [
+                        new MediaInfoAudioStreamModel
+                        {
+                            Format = "dts",
+                            Channels = 6,
+                            Language = "eng",
+                        },
+                    ],
+                    SubtitleStreams =
+                    [
+                        new MediaInfoSubtitleStreamModel { Language = "eng" },
+                        new MediaInfoSubtitleStreamModel { Language = "esp" },
+                        new MediaInfoSubtitleStreamModel { Language = "ita" },
+                    ],
                     VideoBitDepth = 10,
                     VideoColourPrimaries = "bt2020",
                     VideoTransferCharacteristics = "PQ",
@@ -1051,10 +1098,18 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
             _episodeFile.MediaInfo = new MediaInfoModel
             {
                 VideoFormat = videoCodec,
-                AudioFormat = audioCodec,
-                AudioChannels = audioChannels,
-                AudioLanguages = audioLanguages.Split("/").ToList(),
-                Subtitles = subtitles.Split("/").ToList(),
+                AudioStreams = audioLanguages.Split('/')
+                    .Select(language => new MediaInfoAudioStreamModel
+                    {
+                        Format = audioCodec,
+                        Channels = audioChannels,
+                        Language = language,
+                    }).ToList(),
+                SubtitleStreams = subtitles.Split('/')
+                    .Select(language => new MediaInfoSubtitleStreamModel
+                    {
+                        Language = language
+                    }).ToList(),
                 VideoBitDepth = videoBitDepth,
                 VideoHdrFormat = hdrFormat,
                 SchemaRevision = schemaRevision

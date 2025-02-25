@@ -21,8 +21,8 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
         private readonly IDiskProvider _diskProvider;
         private readonly Logger _logger;
 
-        public const int MINIMUM_MEDIA_INFO_SCHEMA_REVISION = 13;
-        public const int CURRENT_MEDIA_INFO_SCHEMA_REVISION = 13;
+        public const int MINIMUM_MEDIA_INFO_SCHEMA_REVISION = 14;
+        public const int CURRENT_MEDIA_INFO_SCHEMA_REVISION = 14;
 
         private static readonly string[] ValidHdrColourPrimaries = { "bt2020" };
         private static readonly string[] HlgTransferFunctions = { "arib-std-b67" };
@@ -75,27 +75,70 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                 mediaInfoModel.VideoTransferCharacteristics = primaryVideoStream?.ColorTransfer;
                 mediaInfoModel.Height = primaryVideoStream?.Height ?? 0;
                 mediaInfoModel.Width = primaryVideoStream?.Width ?? 0;
-                mediaInfoModel.AudioFormat = analysis.PrimaryAudioStream?.CodecName;
-                mediaInfoModel.AudioCodecID = analysis.PrimaryAudioStream?.CodecTagString;
-                mediaInfoModel.AudioProfile = analysis.PrimaryAudioStream?.Profile;
-                mediaInfoModel.AudioBitrate = GetBitrate(analysis.PrimaryAudioStream);
                 mediaInfoModel.RunTime = GetBestRuntime(analysis.PrimaryAudioStream?.Duration, primaryVideoStream?.Duration, analysis.Format.Duration);
-                mediaInfoModel.AudioStreamCount = analysis.AudioStreams.Count;
-                mediaInfoModel.AudioChannels = analysis.PrimaryAudioStream?.Channels ?? 0;
-                mediaInfoModel.AudioChannelPositions = analysis.PrimaryAudioStream?.ChannelLayout;
                 mediaInfoModel.VideoFps = primaryVideoStream?.FrameRate ?? 0;
-                mediaInfoModel.AudioLanguages = analysis.AudioStreams?.Select(x => x.Language)
-                    .Where(l => l.IsNotNullOrWhiteSpace())
-                    .ToList();
-                mediaInfoModel.Subtitles = analysis.SubtitleStreams?.Select(x => x.Language)
-                    .Where(l => l.IsNotNullOrWhiteSpace())
-                    .ToList();
                 mediaInfoModel.ScanType = primaryVideoStream?.FieldOrder switch
                 {
                     "tt" or "bb" or "tb" or "bt" => "Interlaced",
                     _ => "Progressive"
                 };
                 mediaInfoModel.RawStreamData = string.Concat(analysis.OutputData);
+
+                mediaInfoModel.AudioStreams = analysis.AudioStreams?
+                    .Where(stream => stream.Language.IsNotNullOrWhiteSpace())
+                    .OrderBy(stream => stream.Index)
+                    .Select(stream =>
+                    {
+                        var model = new MediaInfoAudioStreamModel
+                        {
+                            Language = stream.Language,
+                            Format = stream.CodecName,
+                            CodecId = stream.CodecTagString,
+                            Profile = stream.Profile,
+                            Bitrate = GetBitrate(stream),
+                            Channels = stream.Channels,
+                            ChannelPositions = stream.ChannelLayout
+                        };
+
+                        if ((stream.Tags?.TryGetValue("title", out var audioTitle) ?? false) && audioTitle.IsNotNullOrWhiteSpace())
+                        {
+                            model.Title = audioTitle.Trim();
+                        }
+
+                        return  model;
+                    })
+                    .ToList();
+
+                mediaInfoModel.SubtitleStreams = analysis.SubtitleStreams?
+                    .Where(stream => stream.Language.IsNotNullOrWhiteSpace())
+                    .OrderBy(stream => stream.Index)
+                    .Select(stream =>
+                    {
+                        var model = new MediaInfoSubtitleStreamModel
+                        {
+                            Language = stream.Language,
+                            Format = stream.CodecName,
+                        };
+
+                        if ((stream.Tags?.TryGetValue("title", out var subtitleTitle) ?? false) && subtitleTitle.IsNotNullOrWhiteSpace())
+                        {
+                            model.Title = subtitleTitle.Trim();
+                        }
+
+                        if (stream.Disposition?.TryGetValue("forced", out var forcedSubtitle) ?? false)
+                        {
+                            model.Forced = forcedSubtitle;
+                        }
+
+                        if (stream.Disposition?.TryGetValue("hearing_impaired", out var hearingImpairedSubtitle) ?? false)
+                        {
+                            model.HearingImpaired = hearingImpairedSubtitle;
+                        }
+
+                        return  model;
+                    })
+                    .ToList();
+
                 mediaInfoModel.SchemaRevision = CURRENT_MEDIA_INFO_SCHEMA_REVISION;
 
                 if (analysis.Format.Tags?.TryGetValue("title", out var title) ?? false)

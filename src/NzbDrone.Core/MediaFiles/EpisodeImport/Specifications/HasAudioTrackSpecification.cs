@@ -21,7 +21,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                 return ImportSpecDecision.Accept();
             }
 
-            if (localEpisode.MediaInfo.AudioStreamCount == 0)
+            if (localEpisode.MediaInfo.AudioStreams == null || localEpisode.MediaInfo.AudioStreams.Count == 0)
             {
                 _logger.Debug("No audio tracks found in file");
 

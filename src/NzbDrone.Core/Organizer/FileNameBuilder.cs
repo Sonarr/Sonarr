@@ -661,10 +661,10 @@ namespace NzbDrone.Core.Organizer
             var sceneName = episodeFile.GetSceneOrFileName();
 
             var videoCodec = MediaInfoFormatter.FormatVideoCodec(episodeFile.MediaInfo, sceneName);
-            var audioCodec = MediaInfoFormatter.FormatAudioCodec(episodeFile.MediaInfo, sceneName);
-            var audioChannels = MediaInfoFormatter.FormatAudioChannels(episodeFile.MediaInfo);
-            var audioLanguages = episodeFile.MediaInfo.AudioLanguages ?? new List<string>();
-            var subtitles = episodeFile.MediaInfo.Subtitles ?? new List<string>();
+            var audioCodec = MediaInfoFormatter.FormatAudioCodec(episodeFile.MediaInfo.PrimaryAudioStream, sceneName);
+            var audioChannels = MediaInfoFormatter.FormatAudioChannels(episodeFile.MediaInfo.PrimaryAudioStream);
+            var audioLanguages = episodeFile.MediaInfo.AudioStreams?.Select(l => l.Language).ToList() ?? [];
+            var subtitles = episodeFile.MediaInfo.SubtitleStreams?.Select(l => l.Language).ToList() ?? [];
 
             var videoBitDepth = episodeFile.MediaInfo.VideoBitDepth > 0 ? episodeFile.MediaInfo.VideoBitDepth.ToString() : 8.ToString();
             var audioChannelsFormatted = audioChannels > 0 ?

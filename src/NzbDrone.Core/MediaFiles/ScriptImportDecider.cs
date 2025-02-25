@@ -168,18 +168,18 @@ namespace NzbDrone.Core.MediaFiles
             else
             {
                 environmentVariables.Add("Sonarr_EpisodeFile_MediaInfo_AudioChannels",
-                    MediaInfoFormatter.FormatAudioChannels(localEpisode.MediaInfo).ToString());
+                    MediaInfoFormatter.FormatAudioChannels(localEpisode.MediaInfo.PrimaryAudioStream).ToString());
                 environmentVariables.Add("Sonarr_EpisodeFile_MediaInfo_AudioCodec",
-                    MediaInfoFormatter.FormatAudioCodec(localEpisode.MediaInfo, null));
+                    MediaInfoFormatter.FormatAudioCodec(localEpisode.MediaInfo.PrimaryAudioStream, null));
                 environmentVariables.Add("Sonarr_EpisodeFile_MediaInfo_AudioLanguages",
-                    localEpisode.MediaInfo.AudioLanguages.Distinct().ConcatToString(" / "));
+                    localEpisode.MediaInfo.AudioStreams?.Select(l => l.Language).Distinct().ConcatToString(" / "));
                 environmentVariables.Add("Sonarr_EpisodeFile_MediaInfo_Languages",
-                    localEpisode.MediaInfo.AudioLanguages.ConcatToString(" / "));
+                    localEpisode.MediaInfo.AudioStreams?.Select(l => l.Language).ConcatToString(" / "));
                 environmentVariables.Add("Sonarr_EpisodeFile_MediaInfo_Height",
                     localEpisode.MediaInfo.Height.ToString());
                 environmentVariables.Add("Sonarr_EpisodeFile_MediaInfo_Width", localEpisode.MediaInfo.Width.ToString());
                 environmentVariables.Add("Sonarr_EpisodeFile_MediaInfo_Subtitles",
-                    localEpisode.MediaInfo.Subtitles.ConcatToString(" / "));
+                    localEpisode.MediaInfo.SubtitleStreams?.Select(l => l.Language).ConcatToString(" / "));
                 environmentVariables.Add("Sonarr_EpisodeFile_MediaInfo_VideoCodec",
                     MediaInfoFormatter.FormatVideoCodec(localEpisode.MediaInfo, null));
                 environmentVariables.Add("Sonarr_EpisodeFile_MediaInfo_VideoDynamicRangeType",

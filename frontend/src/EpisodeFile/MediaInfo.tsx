@@ -3,12 +3,12 @@ import getLanguageName from 'Utilities/String/getLanguageName';
 import translate from 'Utilities/String/translate';
 import { useEpisodeFile } from './EpisodeFileProvider';
 
-function formatLanguages(languages: string | undefined) {
+function formatLanguages(languages: string[] | undefined) {
   if (!languages) {
     return null;
   }
 
-  const splitLanguages = [...new Set(languages.split('/'))].map((l) => {
+  const splitLanguages = [...new Set(languages)].map((l) => {
     const simpleLanguage = l.split('_')[0];
 
     if (simpleLanguage === 'und') {
@@ -50,15 +50,20 @@ function MediaInfo({ episodeFileId, type }: MediaInfoProps) {
   }
 
   const {
-    audioChannels,
-    audioCodec,
-    audioLanguages,
-    subtitles,
+    audioStreams = [],
+    subtitleStreams = [],
     videoCodec,
     videoDynamicRangeType,
   } = episodeFile.mediaInfo;
 
   if (type === 'audio') {
+    const [
+      { channels: audioChannels, codec: audioCodec } = {
+        channels: null,
+        codec: null,
+      },
+    ] = audioStreams;
+
     return (
       <span>
         {audioCodec ? audioCodec : ''}
@@ -71,11 +76,11 @@ function MediaInfo({ episodeFileId, type }: MediaInfoProps) {
   }
 
   if (type === 'audioLanguages') {
-    return formatLanguages(audioLanguages);
+    return formatLanguages(audioStreams.map(({ language }) => language));
   }
 
   if (type === 'subtitles') {
-    return formatLanguages(subtitles);
+    return formatLanguages(subtitleStreams.map(({ language }) => language));
   }
 
   if (type === 'video') {

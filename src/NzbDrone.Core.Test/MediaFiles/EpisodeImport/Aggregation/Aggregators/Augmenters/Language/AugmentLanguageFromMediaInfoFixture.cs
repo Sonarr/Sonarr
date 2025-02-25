@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
@@ -26,7 +25,9 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators.Au
         public void should_return_language_for_single_known_language()
         {
             var mediaInfo = Builder<MediaInfoModel>.CreateNew()
-                                                   .With(m => m.AudioLanguages = new List<string> { "eng" })
+                                                   .With(m => m.AudioStreams = [
+                                                       new MediaInfoAudioStreamModel { Language = "eng" },
+                                                   ])
                                                    .Build();
 
             var localEpisode = Builder<LocalEpisode>.CreateNew()
@@ -43,7 +44,10 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators.Au
         public void should_only_return_one_when_language_duplicated()
         {
             var mediaInfo = Builder<MediaInfoModel>.CreateNew()
-                                                   .With(m => m.AudioLanguages = new List<string> { "eng", "eng" })
+                                                   .With(m => m.AudioStreams = [
+                                                       new MediaInfoAudioStreamModel { Language = "eng" },
+                                                       new MediaInfoAudioStreamModel { Language = "eng" },
+                                                   ])
                                                    .Build();
 
             var localEpisode = Builder<LocalEpisode>.CreateNew()
@@ -60,7 +64,10 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators.Au
         public void should_return_null_if_all_unknown()
         {
             var mediaInfo = Builder<MediaInfoModel>.CreateNew()
-                                                   .With(m => m.AudioLanguages = new List<string> { "pirate", "pirate" })
+                                                   .With(m => m.AudioStreams = [
+                                                       new MediaInfoAudioStreamModel { Language = "pirate" },
+                                                       new MediaInfoAudioStreamModel { Language = "pirate" },
+                                                   ])
                                                    .Build();
 
             var localEpisode = Builder<LocalEpisode>.CreateNew()
@@ -76,7 +83,10 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators.Au
         public void should_return_known_languages_only()
         {
             var mediaInfo = Builder<MediaInfoModel>.CreateNew()
-                                                   .With(m => m.AudioLanguages = new List<string> { "eng", "pirate" })
+                                                   .With(m => m.AudioStreams = [
+                                                       new MediaInfoAudioStreamModel { Language = "eng" },
+                                                       new MediaInfoAudioStreamModel { Language = "pirate" },
+                                                   ])
                                                    .Build();
 
             var localEpisode = Builder<LocalEpisode>.CreateNew()
@@ -93,7 +103,10 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Aggregation.Aggregators.Au
         public void should_return_multiple_known_languages()
         {
             var mediaInfo = Builder<MediaInfoModel>.CreateNew()
-                                                   .With(m => m.AudioLanguages = new List<string> { "eng", "ger" })
+                                                   .With(m => m.AudioStreams = [
+                                                       new MediaInfoAudioStreamModel { Language = "eng" },
+                                                       new MediaInfoAudioStreamModel { Language = "ger" },
+                                                   ])
                                                    .Build();
 
             var localEpisode = Builder<LocalEpisode>.CreateNew()
