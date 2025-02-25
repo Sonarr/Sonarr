@@ -103,6 +103,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                 mediaInfoModel.Subtitles = analysis.SubtitleStreams?.Select(x => x.Language)
                     .Where(l => l.IsNotNullOrWhiteSpace())
                     .ToList();
+                mediaInfoModel.AudioStreams = analysis.AudioStreams;
                 mediaInfoModel.ScanType = "Progressive";
                 mediaInfoModel.RawStreamData = ffprobeOutput;
                 mediaInfoModel.SchemaRevision = CURRENT_MEDIA_INFO_SCHEMA_REVISION;
@@ -161,7 +162,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
             return video.Value;
         }
 
-        private static long GetBitrate(MediaStream mediaStream)
+        internal static long GetBitrate(MediaStream mediaStream)
         {
             if (mediaStream?.BitRate is > 0)
             {
@@ -173,10 +174,9 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                 return Convert.ToInt64(bitratePerSecond);
             }
 
-            // Check for keys that start with BPS as some files contain the BPS-eng tag
-            if (mediaStream?.Tags?.FirstOrDefault(kvp => kvp.Key.StartsWith("BPS", StringComparison.OrdinalIgnoreCase)).Value?.IsNotNullOrWhiteSpace() ?? false)
+            if (mediaStream?.Tags?.FirstOrDefault(kvp => kvp.Key.StartsWith("BPS-", StringComparison.Ordinal)).Value?.IsNotNullOrWhiteSpace() ?? false)
             {
-                bitratePerSecond = mediaStream.Tags.FirstOrDefault(kvp => kvp.Key.StartsWith("BPS", StringComparison.OrdinalIgnoreCase)).Value;
+                bitratePerSecond = mediaStream.Tags.FirstOrDefault(kvp => kvp.Key.StartsWith("BPS-", StringComparison.Ordinal)).Value;
                 return Convert.ToInt64(bitratePerSecond);
             }
 
