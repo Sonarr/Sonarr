@@ -83,7 +83,7 @@ namespace NzbDrone.Core.Download
 
                 if (grabbedItems.Empty())
                 {
-                    trackedDownload.Warn("Download wasn't grabbed by sonarr, skipping");
+                    trackedDownload.Warn("Download wasn't grabbed by Sonarr, skipping automatic download handling");
                     return;
                 }
 
