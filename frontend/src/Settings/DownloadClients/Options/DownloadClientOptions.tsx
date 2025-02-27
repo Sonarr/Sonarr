@@ -137,8 +137,6 @@ function DownloadClientOptions({
                 </FormGroup>
               ) : null}
             </Form>
-
-            <Alert kind={kinds.INFO}>{translate('RemoveDownloadsAlert')}</Alert>
           </FieldSet>
         </div>
       ) : null}

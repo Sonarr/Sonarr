@@ -1711,7 +1711,6 @@
   "RemoveCompleted": "Remove Completed",
   "RemoveCompletedDownloads": "Remove Completed Downloads",
   "RemoveCompletedDownloadsHelpText": "Remove imported downloads from download client history",
-  "RemoveDownloadsAlert": "The Remove settings were moved to the individual Download Client settings in the table above.",
   "RemoveFailed": "Remove Failed",
   "RemoveFailedDownloads": "Remove Failed Downloads",
   "RemoveFailedDownloadsHelpText": "Remove failed downloads from download client history",
