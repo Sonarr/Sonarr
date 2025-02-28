@@ -20,7 +20,7 @@ namespace Sonarr.Api.V3.System.Backup
         private readonly IAppFolderInfo _appFolderInfo;
         private readonly IDiskProvider _diskProvider;
 
-        private static readonly List<string> ValidExtensions = new () { ".zip", ".db", ".xml" };
+        private static readonly List<string> ValidExtensions = new() { ".zip", ".db", ".xml" };
 
         public BackupController(IBackupService backupService,
                             IAppFolderInfo appFolderInfo,

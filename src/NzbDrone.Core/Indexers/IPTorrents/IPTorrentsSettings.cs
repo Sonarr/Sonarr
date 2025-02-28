@@ -28,7 +28,7 @@ namespace NzbDrone.Core.Indexers.IPTorrents
 
     public class IPTorrentsSettings : PropertywiseEquatable<IPTorrentsSettings>, ITorrentIndexerSettings
     {
-        private static readonly IPTorrentsSettingsValidator Validator = new ();
+        private static readonly IPTorrentsSettingsValidator Validator = new();
 
         public IPTorrentsSettings()
         {
@@ -44,7 +44,7 @@ namespace NzbDrone.Core.Indexers.IPTorrents
         public int MinimumSeeders { get; set; }
 
         [FieldDefinition(2)]
-        public SeedCriteriaSettings SeedCriteria { get; set; } = new ();
+        public SeedCriteriaSettings SeedCriteria { get; set; } = new();
 
         [FieldDefinition(3, Type = FieldType.Checkbox, Label = "IndexerSettingsRejectBlocklistedTorrentHashes", HelpText = "IndexerSettingsRejectBlocklistedTorrentHashesHelpText", Advanced = true)]
         public bool RejectBlocklistedTorrentHashesWhileGrabbing { get; set; }

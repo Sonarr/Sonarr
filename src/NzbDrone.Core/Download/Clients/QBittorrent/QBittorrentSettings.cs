@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
     public class QBittorrentSettings : DownloadClientSettingsBase<QBittorrentSettings>
     {
-        private static readonly QBittorrentSettingsValidator Validator = new ();
+        private static readonly QBittorrentSettingsValidator Validator = new();
 
         public QBittorrentSettings()
         {

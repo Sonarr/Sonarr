@@ -27,7 +27,7 @@ namespace NzbDrone.Core.ImportLists.Simkl
     public class SimklSettingsBase<TSettings> : ImportListSettingsBase<TSettings>
         where TSettings : SimklSettingsBase<TSettings>
     {
-        private static readonly SimklSettingsBaseValidator<TSettings> Validator = new ();
+        private static readonly SimklSettingsBaseValidator<TSettings> Validator = new();
 
         public SimklSettingsBase()
         {

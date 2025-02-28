@@ -32,7 +32,7 @@ namespace NzbDrone.Core.ImportLists.AniList
     public class AniListSettingsBase<TSettings> : ImportListSettingsBase<TSettings>
         where TSettings : AniListSettingsBase<TSettings>
     {
-        private static readonly AniListSettingsBaseValidator<TSettings> Validator = new ();
+        private static readonly AniListSettingsBaseValidator<TSettings> Validator = new();
 
         public AniListSettingsBase()
         {

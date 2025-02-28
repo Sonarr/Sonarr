@@ -84,7 +84,7 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
 
             GivenRootFolder(rootFolderPath);
 
-            _clientStatus.OutputRootFolders = new List<OsPath> { new (downloadRootPath) };
+            _clientStatus.OutputRootFolders = new List<OsPath> { new(downloadRootPath) };
 
             Subject.Check().ShouldBeWarning();
         }

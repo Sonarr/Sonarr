@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
     public class SabnzbdSettings : DownloadClientSettingsBase<SabnzbdSettings>
     {
-        private static readonly SabnzbdSettingsValidator Validator = new ();
+        private static readonly SabnzbdSettingsValidator Validator = new();
 
         public SabnzbdSettings()
         {

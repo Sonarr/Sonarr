@@ -234,7 +234,7 @@ namespace NzbDrone.Core.Notifications.Webhook
                 },
                 Episodes = new List<WebhookEpisode>
                 {
-                    new ()
+                    new()
                     {
                         Id = 123,
                         EpisodeNumber = 1,

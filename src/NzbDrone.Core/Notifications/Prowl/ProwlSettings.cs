@@ -14,7 +14,7 @@ namespace NzbDrone.Core.Notifications.Prowl
 
     public class ProwlSettings : NotificationSettingsBase<ProwlSettings>
     {
-        private static readonly ProwlSettingsValidator Validator = new ();
+        private static readonly ProwlSettingsValidator Validator = new();
 
         [FieldDefinition(0, Label = "ApiKey", Privacy = PrivacyLevel.ApiKey, HelpLink = "https://www.prowlapp.com/api_settings.php")]
         public string ApiKey { get; set; }

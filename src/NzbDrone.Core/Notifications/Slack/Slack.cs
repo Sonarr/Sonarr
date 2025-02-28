@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Notifications.Slack
         {
             var attachments = new List<Attachment>
             {
-                new ()
+                new()
                 {
                     Fallback = message.Message,
                     Title = message.Series.Title,
@@ -46,7 +46,7 @@ namespace NzbDrone.Core.Notifications.Slack
         {
             var attachments = new List<Attachment>
             {
-                new ()
+                new()
                 {
                     Fallback = message.Message,
                     Title = message.Series.Title,
@@ -63,7 +63,7 @@ namespace NzbDrone.Core.Notifications.Slack
         {
             var attachments = new List<Attachment>
             {
-                new ()
+                new()
                 {
                     Fallback = message.Message,
                     Title = message.Series.Title,
@@ -80,7 +80,7 @@ namespace NzbDrone.Core.Notifications.Slack
         {
             var attachments = new List<Attachment>
             {
-                new ()
+                new()
                 {
                     Title = series.Title,
                 }
@@ -95,7 +95,7 @@ namespace NzbDrone.Core.Notifications.Slack
         {
             var attachments = new List<Attachment>
             {
-                new ()
+                new()
                 {
                     Title = GetTitle(deleteMessage.Series, deleteMessage.EpisodeFile.Episodes),
                 }
@@ -110,7 +110,7 @@ namespace NzbDrone.Core.Notifications.Slack
         {
             var attachments = new List<Attachment>
             {
-                new ()
+                new()
                 {
                     Title = message.Series.Title,
                 }
@@ -125,7 +125,7 @@ namespace NzbDrone.Core.Notifications.Slack
         {
             var attachments = new List<Attachment>
             {
-                new ()
+                new()
                 {
                     Title = deleteMessage.Series.Title,
                     Text = deleteMessage.DeletedFilesMessage
@@ -141,7 +141,7 @@ namespace NzbDrone.Core.Notifications.Slack
         {
             var attachments = new List<Attachment>
             {
-                new ()
+                new()
                 {
                     Title = healthCheck.Source.Name,
                     Text = healthCheck.Message,
@@ -158,7 +158,7 @@ namespace NzbDrone.Core.Notifications.Slack
         {
             var attachments = new List<Attachment>
             {
-                new ()
+                new()
                 {
                     Title = previousCheck.Source.Name,
                     Text = $"The following issue is now resolved: {previousCheck.Message}",
@@ -175,7 +175,7 @@ namespace NzbDrone.Core.Notifications.Slack
         {
             var attachments = new List<Attachment>
             {
-                new ()
+                new()
                 {
                     Title = Environment.MachineName,
                     Text = updateMessage.Message,
@@ -192,7 +192,7 @@ namespace NzbDrone.Core.Notifications.Slack
         {
             var attachments = new List<Attachment>
             {
-                new ()
+                new()
                 {
                     Title = Environment.MachineName,
                     Text = message.Message,

@@ -10,7 +10,7 @@ namespace NzbDrone.Core.AutoTagging.Specifications
 
     public class MonitoredSpecification : AutoTaggingSpecificationBase
     {
-        private static readonly MonitoredSpecificationValidator Validator = new ();
+        private static readonly MonitoredSpecificationValidator Validator = new();
 
         public override int Order => 1;
         public override string ImplementationName => "Monitored";

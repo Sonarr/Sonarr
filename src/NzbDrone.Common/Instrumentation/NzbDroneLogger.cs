@@ -15,8 +15,8 @@ namespace NzbDrone.Common.Instrumentation
         private const string FileLogLayout = @"${date:format=yyyy-MM-dd HH\:mm\:ss.f}|${level}|${logger}|${message}${onexception:inner=${newline}${newline}[v${assembly-version}] ${exception:format=ToString}${newline}}";
         private const string ConsoleFormat = "[${level}] ${logger}: ${message} ${onexception:inner=${newline}${newline}[v${assembly-version}] ${exception:format=ToString}${newline}}";
 
-        private static readonly CleansingConsoleLogLayout CleansingConsoleLayout  = new (ConsoleFormat);
-        private static readonly CleansingClefLogLayout ClefLogLayout = new ();
+        private static readonly CleansingConsoleLogLayout CleansingConsoleLayout  = new(ConsoleFormat);
+        private static readonly CleansingClefLogLayout ClefLogLayout = new();
 
         private static bool _isConfigured;
 

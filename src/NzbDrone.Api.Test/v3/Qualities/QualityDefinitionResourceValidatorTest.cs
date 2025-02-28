@@ -8,7 +8,7 @@ namespace NzbDrone.Api.Test.v3.Qualities;
 [Parallelizable(ParallelScope.All)]
 public class QualityDefinitionResourceValidatorTests
 {
-    private readonly QualityDefinitionResourceValidator _validator = new ();
+    private readonly QualityDefinitionResourceValidator _validator = new();
 
     [Test]
     public void Validate_fails_when_min_size_is_below_min_limit()

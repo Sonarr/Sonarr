@@ -22,7 +22,7 @@ namespace NzbDrone.Core.CustomFormats
 
     public class ReleaseTypeSpecification : CustomFormatSpecificationBase
     {
-        private static readonly SeasonPackSpecificationValidator Validator = new ();
+        private static readonly SeasonPackSpecificationValidator Validator = new();
 
         public override int Order => 10;
         public override string ImplementationName => "Release Type";

@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
 
     public class TransmissionSettings : DownloadClientSettingsBase<TransmissionSettings>
     {
-        private static readonly TransmissionSettingsValidator Validator = new ();
+        private static readonly TransmissionSettingsValidator Validator = new();
 
         // This constructor is used when creating a new instance, such as the user adding a new Transmission client.
         public TransmissionSettings()

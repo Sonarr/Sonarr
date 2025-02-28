@@ -136,7 +136,7 @@ namespace NzbDrone.Test.Common
 
         private void Start(string outputSonarrConsoleExe)
         {
-            StringDictionary envVars = new ();
+            StringDictionary envVars = new();
             if (PostgresOptions?.Host != null)
             {
                 envVars.Add("Sonarr__Postgres__Host", PostgresOptions.Host);

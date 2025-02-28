@@ -6,7 +6,7 @@
         public ImportRejectionReason Reason { get; set; }
         public string Message { get; private set; }
 
-        private static readonly ImportSpecDecision AcceptDecision = new () { Accepted = true };
+        private static readonly ImportSpecDecision AcceptDecision = new() { Accepted = true };
         private ImportSpecDecision()
         {
         }

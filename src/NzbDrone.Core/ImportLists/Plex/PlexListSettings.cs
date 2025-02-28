@@ -16,7 +16,7 @@ namespace NzbDrone.Core.ImportLists.Plex
 
     public class PlexListSettings : ImportListSettingsBase<PlexListSettings>
     {
-        private static readonly PlexListSettingsValidator Validator = new ();
+        private static readonly PlexListSettingsValidator Validator = new();
 
         public PlexListSettings()
         {

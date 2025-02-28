@@ -17,7 +17,7 @@ namespace NzbDrone.Core.ImportLists.Sonarr
 
     public class SonarrSettings : ImportListSettingsBase<SonarrSettings>
     {
-        private static readonly SonarrSettingsValidator Validator = new ();
+        private static readonly SonarrSettingsValidator Validator = new();
 
         public SonarrSettings()
         {

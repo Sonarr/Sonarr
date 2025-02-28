@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
     public class DownloadStationSettings : DownloadClientSettingsBase<DownloadStationSettings>
     {
-        private static readonly DownloadStationSettingsValidator Validator = new ();
+        private static readonly DownloadStationSettingsValidator Validator = new();
 
         [FieldDefinition(0, Label = "Host", Type = FieldType.Textbox)]
         public string Host { get; set; }

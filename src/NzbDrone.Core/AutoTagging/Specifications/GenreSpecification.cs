@@ -18,7 +18,7 @@ namespace NzbDrone.Core.AutoTagging.Specifications
 
     public class GenreSpecification : AutoTaggingSpecificationBase
     {
-        private static readonly GenreSpecificationValidator Validator = new ();
+        private static readonly GenreSpecificationValidator Validator = new();
 
         public override int Order => 1;
         public override string ImplementationName => "Genre";

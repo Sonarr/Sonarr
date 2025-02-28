@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
 
     public class DelugeSettings : DownloadClientSettingsBase<DelugeSettings>
     {
-        private static readonly DelugeSettingsValidator Validator = new ();
+        private static readonly DelugeSettingsValidator Validator = new();
 
         public DelugeSettings()
         {

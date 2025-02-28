@@ -15,7 +15,7 @@ namespace NzbDrone.Core.AutoTagging.Specifications
 
     public class QualityProfileSpecification : AutoTaggingSpecificationBase
     {
-        private static readonly QualityProfileSpecificationValidator Validator = new ();
+        private static readonly QualityProfileSpecificationValidator Validator = new();
 
         public override int Order => 1;
         public override string ImplementationName => "Quality Profile";

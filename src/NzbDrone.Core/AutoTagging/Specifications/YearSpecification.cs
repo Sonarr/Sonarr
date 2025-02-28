@@ -18,7 +18,7 @@ namespace NzbDrone.Core.AutoTagging.Specifications
 
     public class YearSpecification : AutoTaggingSpecificationBase
     {
-        private static readonly YearSpecificationValidator Validator = new ();
+        private static readonly YearSpecificationValidator Validator = new();
 
         public override int Order => 1;
         public override string ImplementationName => "Year";

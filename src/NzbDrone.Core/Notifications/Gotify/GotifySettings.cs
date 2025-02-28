@@ -43,7 +43,7 @@ namespace NzbDrone.Core.Notifications.Gotify
 
     public class GotifySettings : NotificationSettingsBase<GotifySettings>
     {
-        private static readonly GotifySettingsValidator Validator = new ();
+        private static readonly GotifySettingsValidator Validator = new();
 
         public GotifySettings()
         {

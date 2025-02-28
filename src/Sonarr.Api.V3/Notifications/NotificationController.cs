@@ -9,8 +9,8 @@ namespace Sonarr.Api.V3.Notifications
     [V3ApiController]
     public class NotificationController : ProviderControllerBase<NotificationResource, NotificationBulkResource, INotification, NotificationDefinition>
     {
-        public static readonly NotificationResourceMapper ResourceMapper = new ();
-        public static readonly NotificationBulkResourceMapper BulkResourceMapper = new ();
+        public static readonly NotificationResourceMapper ResourceMapper = new();
+        public static readonly NotificationBulkResourceMapper BulkResourceMapper = new();
 
         public NotificationController(IBroadcastSignalRMessage signalRBroadcaster, NotificationFactory notificationFactory)
             : base(signalRBroadcaster, notificationFactory, "notification", ResourceMapper, BulkResourceMapper)

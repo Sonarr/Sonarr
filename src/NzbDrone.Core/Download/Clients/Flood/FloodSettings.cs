@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Download.Clients.Flood
 
     public class FloodSettings : DownloadClientSettingsBase<FloodSettings>
     {
-        private static readonly FloodSettingsValidator Validator = new ();
+        private static readonly FloodSettingsValidator Validator = new();
 
         public FloodSettings()
         {

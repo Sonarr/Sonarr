@@ -15,7 +15,7 @@ namespace NzbDrone.Core.AutoTagging.Specifications
 
     public class TagSpecification : AutoTaggingSpecificationBase
     {
-        private static readonly TagSpecificationValidator Validator = new ();
+        private static readonly TagSpecificationValidator Validator = new();
 
         public override int Order => 1;
         public override string ImplementationName => "Tag";

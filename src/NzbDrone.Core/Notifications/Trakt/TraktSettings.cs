@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Notifications.Trakt
 
     public class TraktSettings : NotificationSettingsBase<TraktSettings>
     {
-        private static readonly TraktSettingsValidator Validator = new ();
+        private static readonly TraktSettingsValidator Validator = new();
 
         public TraktSettings()
         {

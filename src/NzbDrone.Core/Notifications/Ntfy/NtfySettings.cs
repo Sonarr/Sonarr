@@ -20,12 +20,12 @@ namespace NzbDrone.Core.Notifications.Ntfy
             RuleForEach(c => c.Topics).NotEmpty().Matches("[a-zA-Z0-9_-]+").Must(c => !InvalidTopics.Contains(c)).WithMessage("Invalid topic");
         }
 
-        private static List<string> InvalidTopics => new () { "announcements", "app", "docs", "settings", "stats", "mytopic-rw", "mytopic-ro", "mytopic-wo" };
+        private static List<string> InvalidTopics => new() { "announcements", "app", "docs", "settings", "stats", "mytopic-rw", "mytopic-ro", "mytopic-wo" };
     }
 
     public class NtfySettings : NotificationSettingsBase<NtfySettings>
     {
-        private static readonly NtfySettingsValidator Validator = new ();
+        private static readonly NtfySettingsValidator Validator = new();
 
         public NtfySettings()
         {

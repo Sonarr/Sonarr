@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Notifications.CustomScript
 
     public class CustomScriptSettings : NotificationSettingsBase<CustomScriptSettings>
     {
-        private static readonly CustomScriptSettingsValidator Validator = new ();
+        private static readonly CustomScriptSettingsValidator Validator = new();
 
         [FieldDefinition(0, Label = "Path", Type = FieldType.FilePath)]
         public string Path { get; set; }

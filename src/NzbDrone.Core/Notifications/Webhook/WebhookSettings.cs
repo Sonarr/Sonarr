@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Notifications.Webhook
 
     public class WebhookSettings : NotificationSettingsBase<WebhookSettings>
     {
-        private static readonly WebhookSettingsValidator Validator = new ();
+        private static readonly WebhookSettingsValidator Validator = new();
 
         public WebhookSettings()
         {

@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Notifications.PushBullet
 
     public class PushBulletSettings : NotificationSettingsBase<PushBulletSettings>
     {
-        private static readonly PushBulletSettingsValidator Validator = new ();
+        private static readonly PushBulletSettingsValidator Validator = new();
 
         public PushBulletSettings()
         {

@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Indexers.Torznab
             return settings.BaseUrl != null && ApiKeyWhiteList.Any(c => settings.BaseUrl.ToLowerInvariant().Contains(c));
         }
 
-        private static readonly Regex AdditionalParametersRegex = new (@"(&.+?\=.+?)+", RegexOptions.Compiled);
+        private static readonly Regex AdditionalParametersRegex = new(@"(&.+?\=.+?)+", RegexOptions.Compiled);
 
         public TorznabSettingsValidator()
         {
@@ -43,7 +43,7 @@ namespace NzbDrone.Core.Indexers.Torznab
 
     public class TorznabSettings : NewznabSettings, ITorrentIndexerSettings, IEquatable<TorznabSettings>
     {
-        private static readonly TorznabSettingsValidator Validator = new ();
+        private static readonly TorznabSettingsValidator Validator = new();
 
         private static readonly MemberwiseEqualityComparer<TorznabSettings> Comparer = MemberwiseEqualityComparer<TorznabSettings>.ByProperties;
 
@@ -56,7 +56,7 @@ namespace NzbDrone.Core.Indexers.Torznab
         public int MinimumSeeders { get; set; }
 
         [FieldDefinition(10)]
-        public SeedCriteriaSettings SeedCriteria { get; set; } = new ();
+        public SeedCriteriaSettings SeedCriteria { get; set; } = new();
 
         [FieldDefinition(11, Type = FieldType.Checkbox, Label = "IndexerSettingsRejectBlocklistedTorrentHashes", HelpText = "IndexerSettingsRejectBlocklistedTorrentHashesHelpText", Advanced = true)]
         public bool RejectBlocklistedTorrentHashesWhileGrabbing { get; set; }

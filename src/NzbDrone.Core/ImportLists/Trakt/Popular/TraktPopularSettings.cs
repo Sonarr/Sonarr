@@ -28,7 +28,7 @@ namespace NzbDrone.Core.ImportLists.Trakt.Popular
 
     public class TraktPopularSettings : TraktSettingsBase<TraktPopularSettings>
     {
-        private static readonly TraktPopularSettingsValidator Validator = new ();
+        private static readonly TraktPopularSettingsValidator Validator = new();
 
         public TraktPopularSettings()
         {

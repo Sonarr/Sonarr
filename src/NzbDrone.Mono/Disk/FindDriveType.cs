@@ -6,7 +6,7 @@ namespace NzbDrone.Mono.Disk
 {
     public static class FindDriveType
     {
-        private static readonly Dictionary<string, DriveType> DriveTypeMap = new ()
+        private static readonly Dictionary<string, DriveType> DriveTypeMap = new()
         {
             { "afpfs", DriveType.Network },
             { "apfs", DriveType.Fixed },

@@ -192,7 +192,8 @@ namespace Sonarr.Api.V5.Series
                     SeriesId = series.Id,
                     SourcePath = sourcePath,
                     DestinationPath = destinationPath
-                }, trigger: CommandTrigger.Manual);
+                },
+                    trigger: CommandTrigger.Manual);
             }
 
             var model = seriesResource.ToModel(series);

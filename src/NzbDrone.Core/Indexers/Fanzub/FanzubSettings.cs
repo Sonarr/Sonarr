@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Indexers.Fanzub
 
     public class FanzubSettings : PropertywiseEquatable<FanzubSettings>, IIndexerSettings
     {
-        private static readonly FanzubSettingsValidator Validator = new ();
+        private static readonly FanzubSettingsValidator Validator = new();
 
         public FanzubSettings()
         {

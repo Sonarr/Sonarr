@@ -97,7 +97,8 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeFileMovingServiceTests
 
             Mocker.GetMock<IEventAggregator>()
                   .Verify(s => s.PublishEvent<EpisodeFolderCreatedEvent>(It.Is<EpisodeFolderCreatedEvent>(p =>
-                      p.SeriesFolder.IsNotNullOrWhiteSpace())), Times.Once());
+                      p.SeriesFolder.IsNotNullOrWhiteSpace())),
+                      Times.Once());
         }
 
         [Test]
@@ -107,7 +108,8 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeFileMovingServiceTests
 
             Mocker.GetMock<IEventAggregator>()
                   .Verify(s => s.PublishEvent<EpisodeFolderCreatedEvent>(It.Is<EpisodeFolderCreatedEvent>(p =>
-                      p.SeasonFolder.IsNotNullOrWhiteSpace())), Times.Once());
+                      p.SeasonFolder.IsNotNullOrWhiteSpace())),
+                      Times.Once());
         }
 
         [Test]
@@ -121,7 +123,8 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeFileMovingServiceTests
 
             Mocker.GetMock<IEventAggregator>()
                   .Verify(s => s.PublishEvent<EpisodeFolderCreatedEvent>(It.Is<EpisodeFolderCreatedEvent>(p =>
-                      p.SeriesFolder.IsNotNullOrWhiteSpace())), Times.Never());
+                      p.SeriesFolder.IsNotNullOrWhiteSpace())),
+                      Times.Never());
         }
     }
 }

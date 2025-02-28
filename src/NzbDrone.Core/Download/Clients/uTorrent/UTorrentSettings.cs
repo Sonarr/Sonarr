@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
 
     public class UTorrentSettings : DownloadClientSettingsBase<UTorrentSettings>
     {
-        private static readonly UTorrentSettingsValidator Validator = new ();
+        private static readonly UTorrentSettingsValidator Validator = new();
 
         public UTorrentSettings()
         {

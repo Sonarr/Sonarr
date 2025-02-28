@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Download.Clients.NzbVortex
 
     public class NzbVortexSettings : DownloadClientSettingsBase<NzbVortexSettings>
     {
-        private static readonly NzbVortexSettingsValidator Validator = new ();
+        private static readonly NzbVortexSettingsValidator Validator = new();
 
         public NzbVortexSettings()
         {

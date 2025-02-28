@@ -16,7 +16,7 @@ namespace NzbDrone.Core.ImportLists.Trakt.User
 
     public class TraktUserSettings : TraktSettingsBase<TraktUserSettings>
     {
-        private static readonly TraktUserSettingsValidator Validator = new ();
+        private static readonly TraktUserSettingsValidator Validator = new();
 
         public TraktUserSettings()
         {

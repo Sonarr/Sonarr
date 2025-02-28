@@ -4,6 +4,11 @@
     <TargetFrameworks>net8.0</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="StyleCop.Analyzers.Unstable" Version="1.2.0.556">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="System.Security.Principal.Windows" Version="6.0.0-preview.5.21301.5" />
+    <PackageReference Remove="StyleCop.Analyzers" />
   </ItemGroup>
 </Project>
