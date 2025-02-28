@@ -14,10 +14,10 @@ interface TablePagerProps {
   totalPages?: number;
   totalRecords?: number;
   isFetching?: boolean;
-  onFirstPagePress: () => void;
-  onPreviousPagePress: () => void;
-  onNextPagePress: () => void;
-  onLastPagePress: () => void;
+  onFirstPagePress?: () => void;
+  onPreviousPagePress?: () => void;
+  onNextPagePress?: () => void;
+  onLastPagePress?: () => void;
   onPageSelect: (page: number) => void;
 }
 
@@ -26,10 +26,6 @@ function TablePager({
   totalPages,
   totalRecords = 0,
   isFetching,
-  onFirstPagePress,
-  onPreviousPagePress,
-  onNextPagePress,
-  onLastPagePress,
   onPageSelect,
 }: TablePagerProps) {
   const [isShowingPageSelect, setIsShowingPageSelect] = useState(false);
@@ -64,6 +60,34 @@ function TablePager({
     setIsShowingPageSelect(false);
   }, []);
 
+  const handleFirstPagePress = useCallback(() => {
+    onPageSelect(1);
+  }, [onPageSelect]);
+
+  const onPreviousPagePress = useCallback(() => {
+    if (!page) {
+      return;
+    }
+
+    onPageSelect(page - 1);
+  }, [onPageSelect, page]);
+
+  const onNextPagePress = useCallback(() => {
+    if (!page) {
+      return;
+    }
+
+    onPageSelect(page + 1);
+  }, [onPageSelect, page]);
+
+  const onLastPagePress = useCallback(() => {
+    if (!totalPages) {
+      return;
+    }
+
+    onPageSelect(totalPages);
+  }, [onPageSelect, totalPages]);
+
   if (!page) {
     return null;
   }
@@ -84,7 +108,7 @@ function TablePager({
               isFirstPage && styles.disabledPageButton
             )}
             isDisabled={isFirstPage}
-            onPress={onFirstPagePress}
+            onPress={handleFirstPagePress}
           >
             <Icon name={icons.PAGE_FIRST} />
           </Link>

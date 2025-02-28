@@ -14,7 +14,7 @@ interface LogsTableDetailsModalProps {
   isOpen: boolean;
   message: string;
   exception?: string;
-  onModalClose: (...args: unknown[]) => unknown;
+  onModalClose: () => void;
 }
 
 function LogsTableDetailsModal({
@@ -38,7 +38,7 @@ function LogsTableDetailsModal({
             {message}
           </Scroller>
 
-          {!!exception && (
+          {exception ? (
             <div>
               <div>{translate('Exception')}</div>
               <Scroller
@@ -48,7 +48,7 @@ function LogsTableDetailsModal({
                 {exception}
               </Scroller>
             </div>
-          )}
+          ) : null}
         </ModalBody>
 
         <ModalFooter>
