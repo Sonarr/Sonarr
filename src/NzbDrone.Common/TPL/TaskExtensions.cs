@@ -20,7 +20,8 @@ namespace NzbDrone.Common.TPL
                             Logger.Error(exception, "Task Error");
                         }
                     }
-                }, TaskContinuationOptions.OnlyOnFaulted);
+                },
+                TaskContinuationOptions.OnlyOnFaulted);
 
             return task;
         }

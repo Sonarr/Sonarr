@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Notifications.Plex.Server
 
     public class PlexServerSettings : NotificationSettingsBase<PlexServerSettings>
     {
-        private static readonly PlexServerSettingsValidator Validator = new ();
+        private static readonly PlexServerSettingsValidator Validator = new();
 
         public PlexServerSettings()
         {

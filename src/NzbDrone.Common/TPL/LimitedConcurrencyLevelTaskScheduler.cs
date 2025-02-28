@@ -94,7 +94,8 @@ namespace NzbDrone.Common.TPL
                     {
                         _currentThreadIsProcessingItems = false;
                     }
-                }, null);
+                },
+                null);
         }
 
         /// <summary>Attempts to execute the specified task on the current thread.</summary>

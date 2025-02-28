@@ -296,7 +296,7 @@ namespace NzbDrone.Common.Disk
             return _path.Split(new char[] { '\\', '/' }, StringSplitOptions.RemoveEmptyEntries);
         }
 
-        public static OsPath Null => new (null);
+        public static OsPath Null => new(null);
 
         public override string ToString()
         {

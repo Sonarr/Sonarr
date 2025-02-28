@@ -5,7 +5,7 @@ namespace NzbDrone.Core.Datastore;
 
 public static class DatabaseVersionParser
 {
-    private static readonly Regex VersionRegex = new (@"^[^ ]+", RegexOptions.Compiled);
+    private static readonly Regex VersionRegex = new(@"^[^ ]+", RegexOptions.Compiled);
 
     public static Version ParseServerVersion(string serverVersion)
     {

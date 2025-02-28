@@ -16,7 +16,7 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
 
     public class PneumaticSettings : DownloadClientSettingsBase<PneumaticSettings>
     {
-        private static readonly PneumaticSettingsValidator Validator = new ();
+        private static readonly PneumaticSettingsValidator Validator = new();
 
         [FieldDefinition(0, Label = "DownloadClientPneumaticSettingsNzbFolder", Type = FieldType.Path, HelpText = "DownloadClientPneumaticSettingsNzbFolderHelpText")]
         public string NzbFolder { get; set; }

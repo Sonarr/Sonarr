@@ -11,7 +11,7 @@ namespace NzbDrone.Core.AutoTagging.Specifications
 
     public class StatusSpecification : AutoTaggingSpecificationBase
     {
-        private static readonly StatusSpecificationValidator Validator = new ();
+        private static readonly StatusSpecificationValidator Validator = new();
 
         public override int Order => 1;
         public override string ImplementationName => "Status";

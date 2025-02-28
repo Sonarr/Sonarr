@@ -15,7 +15,7 @@ namespace NzbDrone.Core.Notifications.Join
 
     public class JoinSettings : NotificationSettingsBase<JoinSettings>
     {
-        private static readonly JoinSettingsValidator Validator = new ();
+        private static readonly JoinSettingsValidator Validator = new();
 
         public JoinSettings()
         {

@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Notifications.Mailgun
 
     public class MailgunSettings : NotificationSettingsBase<MailgunSettings>
     {
-      private static readonly  MailGunSettingsValidator Validator = new ();
+      private static readonly  MailGunSettingsValidator Validator = new();
 
       public MailgunSettings()
       {

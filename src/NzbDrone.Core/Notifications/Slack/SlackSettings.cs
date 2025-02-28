@@ -15,7 +15,7 @@ namespace NzbDrone.Core.Notifications.Slack
 
     public class SlackSettings : NotificationSettingsBase<SlackSettings>
     {
-        private static readonly SlackSettingsValidator Validator = new ();
+        private static readonly SlackSettingsValidator Validator = new();
 
         [FieldDefinition(0, Label = "NotificationsSettingsWebhookUrl", HelpText = "NotificationsSlackSettingsWebhookUrlHelpText", Type = FieldType.Url, HelpLink = "https://my.slack.com/services/new/incoming-webhook/")]
         public string WebHookUrl { get; set; }

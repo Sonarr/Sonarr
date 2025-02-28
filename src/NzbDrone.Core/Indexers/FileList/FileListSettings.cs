@@ -22,7 +22,7 @@ namespace NzbDrone.Core.Indexers.FileList
 
     public class FileListSettings : PropertywiseEquatable<FileListSettings>, ITorrentIndexerSettings
     {
-        private static readonly FileListSettingsValidator Validator = new ();
+        private static readonly FileListSettingsValidator Validator = new();
 
         public FileListSettings()
         {
@@ -63,7 +63,7 @@ namespace NzbDrone.Core.Indexers.FileList
         public int MinimumSeeders { get; set; }
 
         [FieldDefinition(7)]
-        public SeedCriteriaSettings SeedCriteria { get; set; } = new ();
+        public SeedCriteriaSettings SeedCriteria { get; set; } = new();
 
         [FieldDefinition(8, Type = FieldType.Checkbox, Label = "IndexerSettingsRejectBlocklistedTorrentHashes", HelpText = "IndexerSettingsRejectBlocklistedTorrentHashesHelpText", Advanced = true)]
         public bool RejectBlocklistedTorrentHashesWhileGrabbing { get; set; }

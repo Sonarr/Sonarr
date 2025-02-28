@@ -25,7 +25,7 @@ namespace NzbDrone.Core.Download.Clients.Blackhole
             ReadOnly = true;
         }
 
-        private static readonly TorrentBlackholeSettingsValidator Validator = new ();
+        private static readonly TorrentBlackholeSettingsValidator Validator = new();
 
         [FieldDefinition(0, Label = "TorrentBlackholeTorrentFolder", Type = FieldType.Path, HelpText = "BlackholeFolderHelpText")]
         [FieldToken(TokenField.HelpText, "TorrentBlackholeTorrentFolder", "extension", ".torrent")]

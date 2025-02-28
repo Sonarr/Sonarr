@@ -20,7 +20,7 @@ namespace NzbDrone.Core.ImportLists.AniList.List
     {
         public const string SectionImport = "Import List Status";
 
-        private static readonly AniListSettingsValidator Validator = new ();
+        private static readonly AniListSettingsValidator Validator = new();
 
         public AniListSettings()
         {

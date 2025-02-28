@@ -23,7 +23,7 @@ namespace NzbDrone.Core.Download.Clients.Hadouken
 
     public class HadoukenSettings : DownloadClientSettingsBase<HadoukenSettings>
     {
-        private static readonly HadoukenSettingsValidator Validator = new ();
+        private static readonly HadoukenSettingsValidator Validator = new();
 
         public HadoukenSettings()
         {

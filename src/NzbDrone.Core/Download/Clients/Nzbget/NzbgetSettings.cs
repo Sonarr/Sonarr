@@ -22,7 +22,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
     public class NzbgetSettings : DownloadClientSettingsBase<NzbgetSettings>
     {
-        private static readonly NzbgetSettingsValidator Validator = new ();
+        private static readonly NzbgetSettingsValidator Validator = new();
 
         public NzbgetSettings()
         {

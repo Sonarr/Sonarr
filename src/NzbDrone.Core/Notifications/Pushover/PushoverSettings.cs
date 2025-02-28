@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Notifications.Pushover
 
     public class PushoverSettings : NotificationSettingsBase<PushoverSettings>
     {
-        private static readonly PushoverSettingsValidator Validator = new ();
+        private static readonly PushoverSettingsValidator Validator = new();
 
         public PushoverSettings()
         {

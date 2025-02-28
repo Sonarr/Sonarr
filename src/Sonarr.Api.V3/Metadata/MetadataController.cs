@@ -9,8 +9,8 @@ namespace Sonarr.Api.V3.Metadata
     [V3ApiController]
     public class MetadataController : ProviderControllerBase<MetadataResource, MetadataBulkResource, IMetadata, MetadataDefinition>
     {
-        public static readonly MetadataResourceMapper ResourceMapper = new ();
-        public static readonly MetadataBulkResourceMapper BulkResourceMapper = new ();
+        public static readonly MetadataResourceMapper ResourceMapper = new();
+        public static readonly MetadataBulkResourceMapper BulkResourceMapper = new();
 
         public MetadataController(IBroadcastSignalRMessage signalRBroadcaster, IMetadataFactory metadataFactory)
             : base(signalRBroadcaster, metadataFactory, "metadata", ResourceMapper, BulkResourceMapper)

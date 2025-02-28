@@ -20,7 +20,7 @@ namespace NzbDrone.Core.Notifications.Emby
 
     public class MediaBrowserSettings : NotificationSettingsBase<MediaBrowserSettings>
     {
-        private static readonly MediaBrowserSettingsValidator Validator = new ();
+        private static readonly MediaBrowserSettingsValidator Validator = new();
 
         public MediaBrowserSettings()
         {

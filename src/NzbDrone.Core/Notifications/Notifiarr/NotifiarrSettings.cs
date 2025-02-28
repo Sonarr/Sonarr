@@ -14,7 +14,7 @@ namespace NzbDrone.Core.Notifications.Notifiarr
 
     public class NotifiarrSettings : NotificationSettingsBase<NotifiarrSettings>
     {
-        private static readonly NotifiarrSettingsValidator Validator = new ();
+        private static readonly NotifiarrSettingsValidator Validator = new();
 
         [FieldDefinition(0, Label = "ApiKey", Privacy = PrivacyLevel.ApiKey, HelpText = "NotificationsNotifiarrSettingsApiKeyHelpText", HelpLink = "https://notifiarr.com")]
         public string ApiKey { get; set; }

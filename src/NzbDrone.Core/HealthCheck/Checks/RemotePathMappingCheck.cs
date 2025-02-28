@@ -332,7 +332,8 @@ namespace NzbDrone.Core.HealthCheck.Checks
                                     { "downloadClientName", client.Definition.Name },
                                     { "path", dlpath },
                                     { "osName", _osInfo.Name }
-                                }), "#bad-remote-path-mapping");
+                                }),
+                            "#bad-remote-path-mapping");
                     }
 
                     // path mappings shouldn't be needed locally so probably a permissions issue

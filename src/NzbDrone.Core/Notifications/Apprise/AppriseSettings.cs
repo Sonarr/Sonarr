@@ -36,7 +36,7 @@ namespace NzbDrone.Core.Notifications.Apprise
 
     public class AppriseSettings : NotificationSettingsBase<AppriseSettings>
     {
-        private static readonly AppriseSettingsValidator Validator = new ();
+        private static readonly AppriseSettingsValidator Validator = new();
 
         public AppriseSettings()
         {

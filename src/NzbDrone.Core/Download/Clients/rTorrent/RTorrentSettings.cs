@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
 
     public class RTorrentSettings : DownloadClientSettingsBase<RTorrentSettings>
     {
-        private static readonly RTorrentSettingsValidator Validator = new ();
+        private static readonly RTorrentSettingsValidator Validator = new();
 
         public RTorrentSettings()
         {

@@ -14,7 +14,7 @@ namespace NzbDrone.Core.Download.Clients.Aria2
 
     public class Aria2Settings : DownloadClientSettingsBase<Aria2Settings>
     {
-        private static readonly Aria2SettingsValidator Validator = new ();
+        private static readonly Aria2SettingsValidator Validator = new();
 
         public Aria2Settings()
         {

@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
 
     public class XbmcSettings : NotificationSettingsBase<XbmcSettings>
     {
-        private static readonly XbmcSettingsValidator Validator = new ();
+        private static readonly XbmcSettingsValidator Validator = new();
 
         public XbmcSettings()
         {

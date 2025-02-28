@@ -6,6 +6,11 @@
     <PackageReference Include="FluentValidation" Version="9.5.4" />
     <PackageReference Include="ImpromptuInterface" Version="8.0.6" />
     <PackageReference Include="NLog" Version="5.3.4" />
+    <PackageReference Include="StyleCop.Analyzers.Unstable" Version="1.2.0.556">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Remove="StyleCop.Analyzers" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NzbDrone.Core\Sonarr.Core.csproj" />

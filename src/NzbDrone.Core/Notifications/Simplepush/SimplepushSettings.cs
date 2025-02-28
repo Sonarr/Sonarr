@@ -14,7 +14,7 @@ namespace NzbDrone.Core.Notifications.Simplepush
 
     public class SimplepushSettings : NotificationSettingsBase<SimplepushSettings>
     {
-        private static readonly SimplepushSettingsValidator Validator = new ();
+        private static readonly SimplepushSettingsValidator Validator = new();
 
         [FieldDefinition(0, Label = "NotificationsSimplepushSettingsKey", Privacy = PrivacyLevel.ApiKey, HelpLink = "https://simplepush.io/features")]
         public string Key { get; set; }

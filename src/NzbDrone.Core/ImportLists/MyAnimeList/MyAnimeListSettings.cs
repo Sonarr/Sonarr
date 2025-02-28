@@ -26,7 +26,7 @@ namespace NzbDrone.Core.ImportLists.MyAnimeList
 
     public class MyAnimeListSettings : ImportListSettingsBase<MyAnimeListSettings>
     {
-        private static readonly MalSettingsValidator Validator = new ();
+        private static readonly MalSettingsValidator Validator = new();
 
         public override string BaseUrl { get; set; }  = "https://api.myanimelist.net/v2";
 

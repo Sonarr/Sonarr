@@ -38,11 +38,13 @@ namespace NzbDrone.Core.Test.NotificationTests
                     new DeletedEpisodeFile(new EpisodeFile
                     {
                         RelativePath = "file1.S01E01.mkv"
-                    }, null),
+                    },
+                        null),
                     new DeletedEpisodeFile(new EpisodeFile
                     {
                         RelativePath = "file1.S01E02.mkv"
-                    }, null)
+                    },
+                        null)
                 }
             };
 

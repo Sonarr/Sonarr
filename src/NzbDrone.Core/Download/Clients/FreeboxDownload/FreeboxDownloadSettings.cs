@@ -35,7 +35,7 @@ namespace NzbDrone.Core.Download.Clients.FreeboxDownload
 
     public class FreeboxDownloadSettings : DownloadClientSettingsBase<FreeboxDownloadSettings>
     {
-        private static readonly FreeboxDownloadSettingsValidator Validator = new ();
+        private static readonly FreeboxDownloadSettingsValidator Validator = new();
 
         public FreeboxDownloadSettings()
         {

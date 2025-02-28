@@ -16,7 +16,7 @@ namespace NzbDrone.Core.ImportLists.Rss
     public class RssImportBaseSettings<TSettings> : ImportListSettingsBase<TSettings>
         where TSettings : RssImportBaseSettings<TSettings>
     {
-        private static readonly RssImportSettingsValidator<TSettings> Validator = new ();
+        private static readonly RssImportSettingsValidator<TSettings> Validator = new();
 
         public override string BaseUrl { get; set; }
 

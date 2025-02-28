@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
 
     public class BroadcastheNetSettings : PropertywiseEquatable<BroadcastheNetSettings>, ITorrentIndexerSettings
     {
-        private static readonly BroadcastheNetSettingsValidator Validator = new ();
+        private static readonly BroadcastheNetSettingsValidator Validator = new();
 
         public BroadcastheNetSettings()
         {
@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
         public int MinimumSeeders { get; set; }
 
         [FieldDefinition(3)]
-        public SeedCriteriaSettings SeedCriteria { get; set; } = new ();
+        public SeedCriteriaSettings SeedCriteria { get; set; } = new();
 
         [FieldDefinition(4, Type = FieldType.Checkbox, Label = "IndexerSettingsRejectBlocklistedTorrentHashes", HelpText = "IndexerSettingsRejectBlocklistedTorrentHashesHelpText", Advanced = true)]
         public bool RejectBlocklistedTorrentHashesWhileGrabbing { get; set; }

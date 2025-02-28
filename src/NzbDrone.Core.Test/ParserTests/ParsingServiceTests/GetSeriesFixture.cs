@@ -43,7 +43,8 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
 
             Mocker.GetMock<ISeriesService>()
                   .Verify(s => s.FindByTitle(parsedEpisodeInfo.SeriesTitleInfo.TitleWithoutYear,
-                                             parsedEpisodeInfo.SeriesTitleInfo.Year), Times.Once());
+                                             parsedEpisodeInfo.SeriesTitleInfo.Year),
+                      Times.Once());
         }
 
         [Test]

@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Notifications.Email
 
     public class EmailSettings : NotificationSettingsBase<EmailSettings>
     {
-        private static readonly EmailSettingsValidator Validator = new ();
+        private static readonly EmailSettingsValidator Validator = new();
 
         public EmailSettings()
         {

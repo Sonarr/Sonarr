@@ -76,7 +76,7 @@ namespace Sonarr.Api.V3.Indexers
 
             if (decision?.RemoteEpisode.ParsedEpisodeInfo == null)
             {
-                throw new ValidationException(new List<ValidationFailure> { new ("Title", "Unable to parse", release.Title) });
+                throw new ValidationException(new List<ValidationFailure> { new("Title", "Unable to parse", release.Title) });
             }
 
             return MapDecisions(new[] { decision });

@@ -10,7 +10,7 @@ namespace NzbDrone.Core.ImportLists.Rss.Plex
     public class PlexRssImportParser : RssImportBaseParser
     {
         private readonly Logger _logger;
-        private static readonly Regex ImdbIdRegex = new (@"(tt\d{7,8})", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+        private static readonly Regex ImdbIdRegex = new(@"(tt\d{7,8})", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         public PlexRssImportParser(Logger logger)
             : base(logger)

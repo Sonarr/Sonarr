@@ -23,7 +23,7 @@ namespace NzbDrone.Core.CustomFormats
 
     public class IndexerFlagSpecification : CustomFormatSpecificationBase
     {
-        private static readonly IndexerFlagSpecificationValidator Validator = new ();
+        private static readonly IndexerFlagSpecificationValidator Validator = new();
 
         public override int Order => 4;
         public override string ImplementationName => "Indexer Flag";

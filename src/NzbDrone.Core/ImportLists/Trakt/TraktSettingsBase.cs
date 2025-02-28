@@ -37,7 +37,7 @@ namespace NzbDrone.Core.ImportLists.Trakt
     public class TraktSettingsBase<TSettings> : ImportListSettingsBase<TSettings>
         where TSettings : TraktSettingsBase<TSettings>
     {
-        private static readonly TraktSettingsBaseValidator<TSettings> Validator = new ();
+        private static readonly TraktSettingsBaseValidator<TSettings> Validator = new();
 
         public TraktSettingsBase()
         {

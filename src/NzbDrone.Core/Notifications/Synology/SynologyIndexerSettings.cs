@@ -10,7 +10,7 @@ namespace NzbDrone.Core.Notifications.Synology
 
     public class SynologyIndexerSettings : NotificationSettingsBase<SynologyIndexerSettings>
     {
-        private static readonly SynologyIndexerSettingsValidator Validator = new ();
+        private static readonly SynologyIndexerSettingsValidator Validator = new();
 
         public SynologyIndexerSettings()
         {

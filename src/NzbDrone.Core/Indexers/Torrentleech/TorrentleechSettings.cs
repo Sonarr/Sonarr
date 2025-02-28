@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Indexers.Torrentleech
 
     public class TorrentleechSettings : PropertywiseEquatable<TorrentleechSettings>, ITorrentIndexerSettings
     {
-        private static readonly TorrentleechSettingsValidator Validator = new ();
+        private static readonly TorrentleechSettingsValidator Validator = new();
 
         public TorrentleechSettings()
         {
@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Indexers.Torrentleech
         public int MinimumSeeders { get; set; }
 
         [FieldDefinition(3)]
-        public SeedCriteriaSettings SeedCriteria { get; set; } = new ();
+        public SeedCriteriaSettings SeedCriteria { get; set; } = new();
 
         [FieldDefinition(4, Type = FieldType.Checkbox, Label = "IndexerSettingsRejectBlocklistedTorrentHashes", HelpText = "IndexerSettingsRejectBlocklistedTorrentHashesHelpText", Advanced = true)]
         public bool RejectBlocklistedTorrentHashesWhileGrabbing { get; set; }

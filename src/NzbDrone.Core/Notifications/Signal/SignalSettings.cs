@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Notifications.Signal
 
     public class SignalSettings : NotificationSettingsBase<SignalSettings>
     {
-        private static readonly SignalSettingsValidator Validator = new ();
+        private static readonly SignalSettingsValidator Validator = new();
 
         [FieldDefinition(0, Label = "Host", Type = FieldType.Textbox, Placeholder = "localhost")]
         public string Host { get; set; }

@@ -14,7 +14,7 @@ namespace NzbDrone.Core.ImportLists.Simkl.User
 
     public class SimklUserSettings : SimklSettingsBase<SimklUserSettings>
     {
-        private static readonly SimklUserSettingsValidator Validator = new ();
+        private static readonly SimklUserSettingsValidator Validator = new();
 
         public SimklUserSettings()
         {

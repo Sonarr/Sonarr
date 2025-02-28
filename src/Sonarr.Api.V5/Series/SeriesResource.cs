@@ -22,7 +22,7 @@ public class SeriesResource : RestResource
     public List<MediaCover>? Images { get; set; }
     public Language? OriginalLanguage { get; set; }
     public string? RemotePoster { get; set; }
-    public List<SeasonResource> Seasons { get; set; } = new ();
+    public List<SeasonResource> Seasons { get; set; } = new();
     public int Year { get; set; }
     public string? Path { get; set; }
     public int QualityProfileId { get; set; }
