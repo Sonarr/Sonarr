@@ -2,23 +2,25 @@ import { UndefinedInitialDataOptions, useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import fetchJson, {
   ApiError,
-  apiRoot,
   FetchJsonOptions,
 } from 'Utilities/Fetch/fetchJson';
+import getQueryPath from 'Utilities/Fetch/getQueryPath';
+import getQueryString, { QueryParams } from 'Utilities/Fetch/getQueryString';
 
-interface QueryOptions<T> extends FetchJsonOptions<unknown> {
+export interface QueryOptions<T> extends FetchJsonOptions<unknown> {
+  queryParams?: QueryParams;
   queryOptions?:
     | Omit<UndefinedInitialDataOptions<T, ApiError>, 'queryKey' | 'queryFn'>
     | undefined;
 }
 
-function useApiQuery<T>(options: QueryOptions<T>) {
+const useApiQuery = <T>(options: QueryOptions<T>) => {
   const requestOptions = useMemo(() => {
-    const { queryOptions, ...otherOptions } = options;
+    const { path: path, queryOptions, queryParams, ...otherOptions } = options;
 
     return {
       ...otherOptions,
-      path: apiRoot + options.path,
+      path: getQueryPath(path) + getQueryString(queryParams),
       headers: {
         ...options.headers,
         'X-Api-Key': window.Sonarr.apiKey,
@@ -32,6 +34,6 @@ function useApiQuery<T>(options: QueryOptions<T>) {
     queryFn: async ({ signal }) =>
       fetchJson<T, unknown>({ ...requestOptions, signal }),
   });
-}
+};
 
 export default useApiQuery;

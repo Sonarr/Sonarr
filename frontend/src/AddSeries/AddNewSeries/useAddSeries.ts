@@ -11,7 +11,10 @@ type AddSeriesPayload = AddSeries & AddSeriesOptions;
 
 export const useLookupSeries = (query: string) => {
   return useApiQuery<AddSeries[]>({
-    path: `/series/lookup?term=${query}`,
+    path: '/series/lookup',
+    queryParams: {
+      term: query,
+    },
     queryOptions: {
       enabled: !!query,
       // Disable refetch on window focus to prevent refetching when the user switch tabs

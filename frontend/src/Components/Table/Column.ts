@@ -8,7 +8,7 @@ interface Column {
   name: string;
   label: string | PropertyFunction<string> | React.ReactNode;
   className?: string;
-  columnLabel?: string;
+  columnLabel?: string | PropertyFunction<string>;
   isSortable?: boolean;
   fixedSortDirection?: SortDirection;
   isVisible: boolean;
