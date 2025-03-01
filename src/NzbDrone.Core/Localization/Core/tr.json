@@ -2152,5 +2152,7 @@
     "Minimum": "Minimum",
     "Minute": "dakika",
     "MinuteShorthand": "dk",
-    "QualityDefinitionsSizeNotice": "Boyut kısıtlamaları Kalite Profillerine taşındı"
+    "QualityDefinitionsSizeNotice": "Boyut kısıtlamaları Kalite Profillerine taşındı",
+    "NotificationsTelegramSettingsLinkPreview": "Bağlantı Önizlemesi",
+    "NotificationsTelegramSettingsLinkPreviewHelpText": "Telegram bildiriminde hangi bağlantının önizleneceğini belirler. Devre dışı bırakmak için 'Hiçbiri'ni seçin"
 }
