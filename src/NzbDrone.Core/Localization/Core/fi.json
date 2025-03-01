@@ -1715,7 +1715,7 @@
     "DownloadClientSettingsDestinationHelpText": "Määrittää manuaalisen tallennuskohteen. Käytä oletusta jättämällä tyhjäksi.",
     "DownloadClientSettingsOlderPriority": "Vanhojen painotus",
     "DownloadClientSettingsOlderPriorityEpisodeHelpText": "Yli 14 päivää sitten julkaistujen jaksojen kaappauksille käytettävä painotus.",
-    "ImportListsTraktSettingsGenresSeriesHelpText": "Suodata sarjoja Traktin lajityyppien slug-arvoilla (pilkuin eroteltuna). Koskee vain suosituimpia listoja.",
+    "ImportListsTraktSettingsGenresSeriesHelpText": "Suodata sarjoja Trakt-lajityyppien slug-arvoilla (pilkuin eroteltuna). Koskee vain suosituimpia listoja.",
     "ImportListsTraktSettingsWatchedListFilterSeriesHelpText": "Jos \"Listan tyyppi\" on \"Valvottu\", valitse tuotava sarjatyyppi.",
     "MappedNetworkDrivesWindowsService": "Yhdistetyt verkkoasemat eivät ole käytettävissä kun sovellus suoritetaan Windows-palveluna. Saat lisätietoja UKK:sta ({url}).",
     "MetadataSettingsSeriesMetadata": "Sarjojen metatiedot",
@@ -2152,5 +2152,7 @@
     "Minimum": "Pienin",
     "Minute": "minuuttia",
     "MinuteShorthand": "m",
-    "QualityDefinitionsSizeNotice": "Kokorajoitukset on siirretty laatuprofiileihin"
+    "QualityDefinitionsSizeNotice": "Kokorajoitukset on siirretty laatuprofiileihin",
+    "NotificationsTelegramSettingsLinkPreview": "Linkin esikatselu",
+    "NotificationsTelegramSettingsLinkPreviewHelpText": "Määrittää minkä linkin esikatselu Telegram-ilmoituksessa näytetään. Poista käytöstä valitsemalla \"Ei mitään\"."
 }
