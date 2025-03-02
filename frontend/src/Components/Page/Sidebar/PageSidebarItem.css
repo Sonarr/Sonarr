@@ -24,6 +24,7 @@
   composes: link;
 
   padding: 10px 24px;
+  padding-left: 35px;
 }
 
 .isActiveLink {
@@ -39,10 +40,6 @@
   margin-right: 7px;
   width: 18px;
   text-align: center;
-}
-
-.noIcon {
-  margin-left: 25px;
 }
 
 .status {

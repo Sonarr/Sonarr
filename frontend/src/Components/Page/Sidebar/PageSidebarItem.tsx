@@ -54,9 +54,7 @@ function PageSidebarItem({
           </span>
         )}
 
-        <span className={isChildItem ? styles.noIcon : undefined}>
-          {typeof title === 'function' ? title() : title}
-        </span>
+        {typeof title === 'function' ? title() : title}
 
         {!!StatusComponent && (
           <span className={styles.status}>
