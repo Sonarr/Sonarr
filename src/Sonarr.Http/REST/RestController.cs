@@ -26,6 +26,7 @@ namespace Sonarr.Http.REST
         protected ResourceValidator<TResource> PostValidator { get; private set; }
         protected ResourceValidator<TResource> PutValidator { get; private set; }
         protected ResourceValidator<TResource> SharedValidator { get; private set; }
+        private ResourceValidator<TResource> IdValidator { get; set; }
 
         protected void ValidateId(int id)
         {
@@ -42,8 +43,9 @@ namespace Sonarr.Http.REST
             PostValidator = new ResourceValidator<TResource>();
             PutValidator = new ResourceValidator<TResource>();
             SharedValidator = new ResourceValidator<TResource>();
+            IdValidator = new ResourceValidator<TResource>();
 
-            PutValidator.RuleFor(r => r.Id).ValidId();
+            IdValidator.RuleFor(r => r.Id).ValidId();
         }
 
         [RestGetById]
@@ -61,7 +63,10 @@ namespace Sonarr.Http.REST
         }
 
         #nullable enable
-        protected abstract TResource? GetResourceById(int id);
+        protected virtual TResource? GetResourceById(int id)
+        {
+            throw new NotImplementedException();
+        }
         #nullable disable
 
         public override void OnActionExecuting(ActionExecutingContext context)
@@ -71,6 +76,11 @@ namespace Sonarr.Http.REST
             var skipAttribute = (SkipValidationAttribute)Attribute.GetCustomAttribute(descriptor.MethodInfo, typeof(SkipValidationAttribute), true);
             var skipValidate = skipAttribute?.Skip ?? false;
             var skipShared = skipAttribute?.SkipShared ?? false;
+
+            var attributes = descriptor.MethodInfo.CustomAttributes as IReadOnlyCollection<CustomAttributeData> ??
+                             descriptor.MethodInfo.CustomAttributes.ToArray();
+
+            var validateId = attributes.Any(x => VALIDATE_ID_ATTRIBUTES.Contains(x.AttributeType));
 
             if (Request.Method is "POST" or "PUT")
             {
@@ -90,13 +100,11 @@ namespace Sonarr.Http.REST
                         resource.Id = Convert.ToInt32(routeId);
                     }
 
-                    ValidateResource(resource, skipValidate, skipShared);
+                    ValidateResource(resource, validateId, skipValidate, skipShared);
                 }
             }
 
-            var attributes = descriptor.MethodInfo.CustomAttributes as IReadOnlyCollection<CustomAttributeData> ??
-                             descriptor.MethodInfo.CustomAttributes.ToArray();
-            if (attributes.Any(x => VALIDATE_ID_ATTRIBUTES.Contains(x.AttributeType)) && !skipValidate)
+            if (validateId && !skipValidate)
             {
                 if (context.ActionArguments.TryGetValue("id", out var idObj))
                 {
@@ -114,7 +122,7 @@ namespace Sonarr.Http.REST
             base.OnActionExecuting(context);
         }
 
-        protected void ValidateResource(TResource resource, bool skipValidate = false, bool skipSharedValidate = false)
+        protected void ValidateResource(TResource resource, bool validateId = false, bool skipValidate = false, bool skipSharedValidate = false)
         {
             if (resource == null)
             {
@@ -135,6 +143,11 @@ namespace Sonarr.Http.REST
             else if (Request.Method.Equals("PUT", StringComparison.InvariantCultureIgnoreCase))
             {
                 errors.AddRange(PutValidator.Validate(resource).Errors);
+
+                if (validateId)
+                {
+                    errors.AddRange(IdValidator.Validate(resource).Errors);
+                }
             }
 
             if (errors.Any())
