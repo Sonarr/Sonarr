@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { createSelector } from 'reselect';
 import AppState from 'App/State/AppState';
 import * as commandNames from 'Commands/commandNames';
 import Alert from 'Components/Alert';
@@ -13,6 +12,7 @@ import ConfirmModal from 'Components/Modal/ConfirmModal';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
 import { icons, kinds } from 'Helpers/Props';
+import useUpdateSettings from 'Settings/General/useUpdateSettings';
 import { executeCommand } from 'Store/Actions/commandActions';
 import { fetchGeneralSettings } from 'Store/Actions/settingsActions';
 import { fetchUpdates } from 'Store/Actions/systemActions';
@@ -24,31 +24,10 @@ import formatDate from 'Utilities/Date/formatDate';
 import formatDateTime from 'Utilities/Date/formatDateTime';
 import translate from 'Utilities/String/translate';
 import UpdateChanges from './UpdateChanges';
+import useUpdates from './useUpdates';
 import styles from './Updates.css';
 
 const VERSION_REGEX = /\d+\.\d+\.\d+\.\d+/i;
-
-function createUpdatesSelector() {
-  return createSelector(
-    (state: AppState) => state.system.updates,
-    (state: AppState) => state.settings.general,
-    (updates, generalSettings) => {
-      const { error: updatesError, items } = updates;
-
-      const isFetching = updates.isFetching || generalSettings.isFetching;
-      const isPopulated = updates.isPopulated && generalSettings.isPopulated;
-
-      return {
-        isFetching,
-        isPopulated,
-        updatesError,
-        generalSettingsError: generalSettings.error,
-        items,
-        updateMechanism: generalSettings.item.updateMechanism,
-      };
-    }
-  );
-}
 
 function Updates() {
   const currentVersion = useSelector((state: AppState) => state.app.version);
@@ -63,19 +42,26 @@ function Updates() {
   );
 
   const {
-    isFetching,
-    isPopulated,
-    updatesError,
-    generalSettingsError,
-    items,
-    updateMechanism,
-  } = useSelector(createUpdatesSelector());
+    data: updates,
+    isFetched: isUpdatesFetched,
+    isLoading: isLoadingUpdates,
+    error: updatesError,
+  } = useUpdates();
+  const {
+    data: updateSettings,
+    isFetched: isSettingsFetched,
+    isLoading: isLoadingSettings,
+    error: settingsError,
+  } = useUpdateSettings();
 
   const dispatch = useDispatch();
   const [isMajorUpdateModalOpen, setIsMajorUpdateModalOpen] = useState(false);
-  const hasError = !!(updatesError || generalSettingsError);
-  const hasUpdates = isPopulated && !hasError && items.length > 0;
-  const noUpdates = isPopulated && !hasError && !items.length;
+  const isFetching = isLoadingUpdates || isLoadingSettings;
+  const isPopulated = isUpdatesFetched && isSettingsFetched;
+  const updateMechanism = updateSettings?.updateMechanism ?? 'builtIn';
+  const hasError = !!(updatesError || settingsError);
+  const hasUpdates = isPopulated && !hasError && updates.length > 0;
+  const noUpdates = isPopulated && !hasError && !updates.length;
 
   const externalUpdaterPrefix = translate('UpdateAppDirectlyLoadError');
   const externalUpdaterMessages: Partial<Record<UpdateMechanism, string>> = {
@@ -89,18 +75,18 @@ function Updates() {
       currentVersion.match(VERSION_REGEX)?.[0] ?? '0'
     );
 
-    const latestVersion = items[0]?.version;
+    const latestVersion = updates[0]?.version;
     const latestMajorVersion = parseInt(
       latestVersion?.match(VERSION_REGEX)?.[0] ?? '0'
     );
 
     return {
       isMajorUpdate: latestMajorVersion > majorVersion,
-      hasUpdateToInstall: items.some(
+      hasUpdateToInstall: updates.some(
         (update) => update.installable && update.latest
       ),
     };
-  }, [currentVersion, items]);
+  }, [currentVersion, updates]);
 
   const noUpdateToInstall = hasUpdates && !hasUpdateToInstall;
 
@@ -191,7 +177,7 @@ function Updates() {
 
         {hasUpdates && (
           <div>
-            {items.map((update) => {
+            {updates.map((update) => {
               return (
                 <div key={update.version} className={styles.update}>
                   <div className={styles.info}>
@@ -268,7 +254,7 @@ function Updates() {
           </Alert>
         ) : null}
 
-        {generalSettingsError ? (
+        {settingsError ? (
           <Alert kind={kinds.DANGER}>
             {translate('FailedToFetchSettings')}
           </Alert>
