@@ -8,7 +8,7 @@
     <PackageReference Include="Equ" Version="2.3.0" />
     <PackageReference Include="MailKit" Version="4.9.0" />
     <PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="8.0.12" />
-    <PackageReference Include="Microsoft.Data.SqlClient" Version="2.1.7" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="6.0.1" />
     <PackageReference Include="Polly" Version="8.5.1" />
     <PackageReference Include="Servarr.FFMpegCore" Version="4.7.0-26" />
     <PackageReference Include="Servarr.FFprobe" Version="5.1.4.112" />
