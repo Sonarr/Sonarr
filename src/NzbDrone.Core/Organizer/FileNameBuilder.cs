@@ -305,7 +305,7 @@ namespace NzbDrone.Core.Organizer
             title = ScenifyReplaceChars.Replace(title, " ");
             title = ScenifyRemoveChars.Replace(title, string.Empty);
 
-            return title;
+            return title.RemoveDiacritics();
         }
 
         public static string TitleThe(string title)
