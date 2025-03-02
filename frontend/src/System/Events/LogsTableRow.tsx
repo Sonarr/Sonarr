@@ -54,40 +54,42 @@ function LogsTableRow({
   }, []);
 
   return (
-    <TableRowButton onPress={handlePress}>
-      {columns.map((column) => {
-        const { name, isVisible } = column;
+    <>
+      <TableRowButton onPress={handlePress}>
+        {columns.map((column) => {
+          const { name, isVisible } = column;
 
-        if (!isVisible) {
+          if (!isVisible) {
+            return null;
+          }
+
+          if (name === 'level') {
+            return (
+              <TableRowCell key={name} className={styles.level}>
+                <Icon className={styles[level]} name={iconName} title={level} />
+              </TableRowCell>
+            );
+          }
+
+          if (name === 'time') {
+            return <RelativeDateCell key={name} date={time} />;
+          }
+
+          if (name === 'logger') {
+            return <TableRowCell key={name}>{logger}</TableRowCell>;
+          }
+
+          if (name === 'message') {
+            return <TableRowCell key={name}>{message}</TableRowCell>;
+          }
+
+          if (name === 'actions') {
+            return <TableRowCell key={name} className={styles.actions} />;
+          }
+
           return null;
-        }
-
-        if (name === 'level') {
-          return (
-            <TableRowCell key={name} className={styles.level}>
-              <Icon className={styles[level]} name={iconName} title={level} />
-            </TableRowCell>
-          );
-        }
-
-        if (name === 'time') {
-          return <RelativeDateCell key={name} date={time} />;
-        }
-
-        if (name === 'logger') {
-          return <TableRowCell key={name}>{logger}</TableRowCell>;
-        }
-
-        if (name === 'message') {
-          return <TableRowCell key={name}>{message}</TableRowCell>;
-        }
-
-        if (name === 'actions') {
-          return <TableRowCell key={name} className={styles.actions} />;
-        }
-
-        return null;
-      })}
+        })}
+      </TableRowButton>
 
       <LogsTableDetailsModal
         isOpen={isDetailsModalOpen}
@@ -95,7 +97,7 @@ function LogsTableRow({
         exception={exception}
         onModalClose={handleDetailsModalClose}
       />
-    </TableRowButton>
+    </>
   );
 }
 
