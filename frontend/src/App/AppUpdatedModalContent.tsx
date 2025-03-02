@@ -11,6 +11,7 @@ import usePrevious from 'Helpers/Hooks/usePrevious';
 import { kinds } from 'Helpers/Props';
 import { fetchUpdates } from 'Store/Actions/systemActions';
 import UpdateChanges from 'System/Updates/UpdateChanges';
+import useUpdates from 'System/Updates/useUpdates';
 import Update from 'typings/Update';
 import translate from 'Utilities/String/translate';
 import AppState from './State/AppState';
@@ -65,14 +66,12 @@ interface AppUpdatedModalContentProps {
 function AppUpdatedModalContent(props: AppUpdatedModalContentProps) {
   const dispatch = useDispatch();
   const { version, prevVersion } = useSelector((state: AppState) => state.app);
-  const { isPopulated, error, items } = useSelector(
-    (state: AppState) => state.system.updates
-  );
+  const { isFetched, error, data } = useUpdates();
   const previousVersion = usePrevious(version);
 
   const { onModalClose } = props;
 
-  const update = mergeUpdates(items, version, prevVersion);
+  const update = mergeUpdates(data, version, prevVersion);
 
   const handleSeeChangesPress = useCallback(() => {
     window.location.href = `${window.Sonarr.urlBase}/system/updates`;
@@ -100,7 +99,7 @@ function AppUpdatedModalContent(props: AppUpdatedModalContentProps) {
           />
         </div>
 
-        {isPopulated && !error && !!update ? (
+        {isFetched && !error && !!update ? (
           <div>
             {update.changes ? (
               <div className={styles.maintenance}>
@@ -126,7 +125,7 @@ function AppUpdatedModalContent(props: AppUpdatedModalContentProps) {
           </div>
         ) : null}
 
-        {!isPopulated && !error ? <LoadingIndicator /> : null}
+        {!isFetched && !error ? <LoadingIndicator /> : null}
       </ModalBody>
 
       <ModalFooter>
