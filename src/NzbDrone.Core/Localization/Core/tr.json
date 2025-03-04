@@ -749,7 +749,6 @@
     "ReleaseGroupFootNote": "İsteğe bağlı olarak, üç nokta (`...`) dahil olmak üzere maksimum bayt sayısına kadar kesmeyi kontrol edin. Sondan (ör. `{Release Group:30}`) veya baştan (ör. `{Release Group:-30}`) kesmenin her ikisi de desteklenir.`).",
     "RemoveCompletedDownloads": "Tamamlanan İndirmeleri Kaldır",
     "TagDetails": "Etiket Ayrıntıları - {label}",
-    "RemoveDownloadsAlert": "Kaldırma ayarları, yukarıdaki tabloda bireysel İndirme İstemcisi ayarlarına taşınmıştır.",
     "TorrentBlackholeSaveMagnetFilesExtensionHelpText": "Magnet bağlantıları için kullanılacak uzantı, varsayılan olarak '.magnet'tir",
     "TorrentBlackholeSaveMagnetFilesHelpText": ".torrent dosyası yoksa magnet bağlantısını kaydedin (yalnızca indirme istemcisi bir dosyaya kaydedilen magnetleri destekliyorsa kullanışlıdır)",
     "RemoveQueueItemsRemovalMethodHelpTextWarning": "'İndirme İstemcisinden Kaldır', indirilenleri ve dosyaları indirme istemcisinden kaldıracaktır.",

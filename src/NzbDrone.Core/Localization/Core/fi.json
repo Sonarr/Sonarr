@@ -944,7 +944,6 @@
     "QualityDefinitionsLoadError": "Virhe ladattaessa laatumäärityksiä.",
     "RemotePathMappingLocalWrongOSPathHealthCheckMessage": "Paikallinen latauspalvelu {downloadClientName} tallentaa lataukset kohteeseen \"{path}\", mutta se ei ole kelvollinen {osName}-sijainti. Tarkista latauspalvelun asetukset.",
     "RemotePathMappingFilesLocalWrongOSPathHealthCheckMessage": "Paikallinen latauspalvelu {downloadClientName} ilmoitti tiedostosijainniksi \"{path}\", mutta se ei ole kelvollinen {osName}-sijainti. Tarkista latauspalvelun asetukset.",
-    "RemoveDownloadsAlert": "Poistoasetukset on siirretty yllä olevan taulukon latauspalvelukohtaisiin asetuksiin.",
     "QualityProfile": "Laatuprofiili",
     "QualitySettingsSummary": "Laatukoot ja nimeäminen",
     "RestartSonarr": "Käynnistä {appName} uudelleen",
