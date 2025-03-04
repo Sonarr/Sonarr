@@ -773,7 +773,6 @@
     "RemotePathMappingRemotePathHelpText": "Caminho raiz para o diretório que o Cliente de Download acessa",
     "RemotePathMappings": "Mapeamentos de Caminho Remoto",
     "RemotePathMappingsLoadError": "Não é possível carregar mapeamentos de caminho remoto",
-    "RemoveDownloadsAlert": "As configurações de remoção foram movidas para as configurações individuais do cliente de download na tabela acima.",
     "RemoveFailedDownloadsHelpText": "Remova downloads com falha do histórico do cliente de download",
     "RenameEpisodes": "Renomear Episódios",
     "Reorder": "Reordenar",

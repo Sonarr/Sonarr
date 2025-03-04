@@ -670,7 +670,6 @@
     "RemotePathMappingsLoadError": "Impossible de charger les mappages de chemin distant",
     "RemoveCompleted": "Supprimer terminé",
     "RemoveCompletedDownloadsHelpText": "Supprimer les téléchargements importés de l'historique du client de téléchargement",
-    "RemoveDownloadsAlert": "Les paramètres de suppression ont été déplacés vers les paramètres individuels du client de téléchargement dans le tableau ci-dessus.",
     "RemoveFailed": "Échec de la suppression",
     "RemoveFilter": "Supprimer le filtre",
     "RemoveFromBlocklist": "Supprimer de la liste de blocage",
