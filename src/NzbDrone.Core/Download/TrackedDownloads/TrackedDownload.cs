@@ -40,6 +40,9 @@ namespace NzbDrone.Core.Download.TrackedDownloads
         {
             Status = TrackedDownloadStatus.Error;
             State = TrackedDownloadState.FailedPending;
+
+            // Set CanBeRemoved to allow the failed item to be removed from the client
+            DownloadItem.CanBeRemoved = true;
         }
     }
 
