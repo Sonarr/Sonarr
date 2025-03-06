@@ -67,7 +67,6 @@ function EditDownloadClientModalContent({
     implementationName,
     name,
     enable,
-    protocol,
     priority,
     removeCompletedDownloads,
     removeFailedDownloads,
@@ -218,19 +217,17 @@ function EditDownloadClientModalContent({
                 />
               </FormGroup>
 
-              {protocol.value === 'torrent' ? null : (
-                <FormGroup>
-                  <FormLabel>{translate('RemoveFailed')}</FormLabel>
+              <FormGroup>
+                <FormLabel>{translate('RemoveFailed')}</FormLabel>
 
-                  <FormInputGroup
-                    type={inputTypes.CHECK}
-                    name="removeFailedDownloads"
-                    helpText={translate('RemoveFailedDownloadsHelpText')}
-                    {...removeFailedDownloads}
-                    onChange={handleInputChange}
-                  />
-                </FormGroup>
-              )}
+                <FormInputGroup
+                  type={inputTypes.CHECK}
+                  name="removeFailedDownloads"
+                  helpText={translate('RemoveFailedDownloadsHelpText')}
+                  {...removeFailedDownloads}
+                  onChange={handleInputChange}
+                />
+              </FormGroup>
             </FieldSet>
           </Form>
         ) : null}
