@@ -14,6 +14,7 @@ using NzbDrone.Core.Localization;
 using NzbDrone.Core.MediaFiles.TorrentInfo;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.RemotePathMappings;
+using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Download.Clients.UTorrent
@@ -103,6 +104,8 @@ namespace NzbDrone.Core.Download.Clients.UTorrent
         }
 
         public override string Name => "uTorrent";
+
+        public override ProviderMessage Message => new (_localizationService.GetLocalizedString("DownloadClientUTorrentProviderMessage"), ProviderMessageType.Warning);
 
         public override IEnumerable<DownloadClientItem> GetItems()
         {

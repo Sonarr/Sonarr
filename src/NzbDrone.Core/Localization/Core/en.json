@@ -545,6 +545,7 @@
   "DownloadClientStatusSingleClientHealthCheckMessage": "Download clients unavailable due to failures: {downloadClientNames}",
   "DownloadClientTransmissionSettingsDirectoryHelpText": "Optional location to put downloads in, leave blank to use the default Transmission location",
   "DownloadClientTransmissionSettingsUrlBaseHelpText": "Adds a prefix to the {clientName} rpc url, eg {url}, defaults to '{defaultUrl}'",
+  "DownloadClientUTorrentProviderMessage": "uTorrent has a history of including cryptominers, malware and ads, we strongly encourage you to choose a different client.",
   "DownloadClientUTorrentTorrentStateError": "uTorrent is reporting an error",
   "DownloadClientUnavailable": "Download Client Unavailable",
   "DownloadClientValidationApiKeyIncorrect": "API Key Incorrect",
