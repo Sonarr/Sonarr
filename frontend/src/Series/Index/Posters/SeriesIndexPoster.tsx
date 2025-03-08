@@ -83,7 +83,7 @@ function SeriesIndexPoster(props: SeriesIndexPosterProps) {
     dispatch(
       executeCommand({
         name: REFRESH_SERIES,
-        seriesId,
+        seriesIds: [seriesId],
       })
     );
   }, [seriesId, dispatch]);

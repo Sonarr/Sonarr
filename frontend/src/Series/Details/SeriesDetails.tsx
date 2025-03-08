@@ -191,19 +191,21 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
   const isSaving = useSelector((state: AppState) => state.series.isSaving);
 
   const { isRefreshing, isRenaming, isSearching } = useMemo(() => {
-    const isSeriesRefreshing = isCommandExecuting(
-      findCommand(commands, {
-        name: commandNames.REFRESH_SERIES,
-        seriesId,
-      })
-    );
     const seriesRefreshingCommand = findCommand(commands, {
       name: commandNames.REFRESH_SERIES,
     });
 
+    const isSeriesRefreshingCommandExecuting = isCommandExecuting(
+      seriesRefreshingCommand
+    );
+
     const allSeriesRefreshing =
-      isCommandExecuting(seriesRefreshingCommand) &&
-      !seriesRefreshingCommand?.body.seriesId;
+      isSeriesRefreshingCommandExecuting &&
+      !seriesRefreshingCommand?.body.seriesIds?.length;
+
+    const isSeriesRefreshing =
+      isSeriesRefreshingCommandExecuting &&
+      seriesRefreshingCommand?.body.seriesIds?.includes(seriesId);
 
     const isSearchingExecuting = isCommandExecuting(
       findCommand(commands, {

@@ -15,7 +15,8 @@ function createSeriesIndexItemSelector(seriesId: number) {
     (series: Series, qualityProfile, executingCommands: Command[]) => {
       const isRefreshingSeries = executingCommands.some((command) => {
         return (
-          command.name === REFRESH_SERIES && command.body.seriesId === seriesId
+          command.name === REFRESH_SERIES &&
+          command.body.seriesIds?.includes(series.id)
         );
       });
 

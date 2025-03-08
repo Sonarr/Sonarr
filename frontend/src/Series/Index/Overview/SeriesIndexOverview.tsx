@@ -92,7 +92,7 @@ function SeriesIndexOverview(props: SeriesIndexOverviewProps) {
     dispatch(
       executeCommand({
         name: REFRESH_SERIES,
-        seriesId,
+        seriesIds: [seriesId],
       })
     );
   }, [seriesId, dispatch]);
