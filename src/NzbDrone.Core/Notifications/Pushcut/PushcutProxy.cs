@@ -12,7 +12,7 @@ namespace NzbDrone.Core.Notifications.Pushcut
 {
     public interface IPushcutProxy
     {
-        void SendNotification(string title, string message, string imageLink, string imdbLink, PushcutSettings settings);
+        void SendNotification(string title, string message, string posterUrl, string imdbLink, PushcutSettings settings);
         ValidationFailure Test(PushcutSettings settings);
     }
 
@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Notifications.Pushcut
             _logger = logger;
         }
 
-        public void SendNotification(string title, string message, string imageLink, string imdbLink, PushcutSettings settings)
+        public void SendNotification(string title, string message, string posterUrl, string imdbLink, PushcutSettings settings)
         {
             var request = new HttpRequestBuilder("https://api.pushcut.io/v1/notifications/{notificationName}")
                 .SetSegment("notificationName", settings?.NotificationName)
@@ -40,7 +40,7 @@ namespace NzbDrone.Core.Notifications.Pushcut
             {
                 Title = title,
                 Text = message,
-                Image = imageLink,
+                Image = posterUrl,
                 IsTimeSensitive = settings?.TimeSensitive,
                 Actions = new List<PushcutAction>()
             };

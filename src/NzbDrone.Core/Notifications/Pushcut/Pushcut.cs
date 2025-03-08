@@ -31,32 +31,32 @@ namespace NzbDrone.Core.Notifications.Pushcut
 
         public override void OnGrab(GrabMessage grabMessage)
         {
-            _proxy.SendNotification(EPISODE_GRABBED_TITLE, grabMessage?.Message, GetPosterLink(grabMessage.Series), GetImdbLink(grabMessage.Series), Settings);
+            _proxy.SendNotification(EPISODE_GRABBED_TITLE, grabMessage?.Message, GetPosterUrl(grabMessage.Series), GetImdbLink(grabMessage.Series), Settings);
         }
 
         public override void OnDownload(DownloadMessage downloadMessage)
         {
-            _proxy.SendNotification(EPISODE_DOWNLOADED_TITLE, downloadMessage.Message, GetPosterLink(downloadMessage.Series), GetImdbLink(downloadMessage.Series), Settings);
+            _proxy.SendNotification(EPISODE_DOWNLOADED_TITLE, downloadMessage.Message, GetPosterUrl(downloadMessage.Series), GetImdbLink(downloadMessage.Series), Settings);
         }
 
         public override void OnImportComplete(ImportCompleteMessage message)
         {
-            _proxy.SendNotification(IMPORT_COMPLETE_TITLE, message.Message, GetPosterLink(message.Series), GetImdbLink(message.Series), Settings);
+            _proxy.SendNotification(IMPORT_COMPLETE_TITLE, message.Message, GetPosterUrl(message.Series), GetImdbLink(message.Series), Settings);
         }
 
         public override void OnEpisodeFileDelete(EpisodeDeleteMessage deleteMessage)
         {
-            _proxy.SendNotification(EPISODE_DELETED_TITLE, deleteMessage.Message, GetPosterLink(deleteMessage.Series), GetImdbLink(deleteMessage.Series), Settings);
+            _proxy.SendNotification(EPISODE_DELETED_TITLE, deleteMessage.Message, GetPosterUrl(deleteMessage.Series), GetImdbLink(deleteMessage.Series), Settings);
         }
 
         public override void OnSeriesAdd(SeriesAddMessage seriesAddMessage)
         {
-            _proxy.SendNotification(SERIES_ADDED_TITLE, $"{seriesAddMessage.Series.Title} added to library", GetPosterLink(seriesAddMessage.Series), GetImdbLink(seriesAddMessage.Series), Settings);
+            _proxy.SendNotification(SERIES_ADDED_TITLE, $"{seriesAddMessage.Series.Title} added to library", GetPosterUrl(seriesAddMessage.Series), GetImdbLink(seriesAddMessage.Series), Settings);
         }
 
         public override void OnSeriesDelete(SeriesDeleteMessage deleteMessage)
         {
-            _proxy.SendNotification(SERIES_DELETED_TITLE, deleteMessage.Message, GetPosterLink(deleteMessage.Series), GetImdbLink(deleteMessage.Series), Settings);
+            _proxy.SendNotification(SERIES_DELETED_TITLE, deleteMessage.Message, GetPosterUrl(deleteMessage.Series), GetImdbLink(deleteMessage.Series), Settings);
         }
 
         public override void OnHealthIssue(HealthCheck.HealthCheck healthCheck)
@@ -84,7 +84,7 @@ namespace NzbDrone.Core.Notifications.Pushcut
             return $"https://www.imdb.com/title/{series.ImdbId}";
         }
 
-        private string GetPosterLink(Series series)
+        private string GetPosterUrl(Series series)
         {
             return series.Images.FirstOrDefault(x => x.CoverType == MediaCoverTypes.Poster)?.RemoteUrl;
         }
