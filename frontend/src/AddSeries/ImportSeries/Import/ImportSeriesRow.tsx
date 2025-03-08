@@ -75,11 +75,6 @@ function ImportSeriesRow({ id }: ImportSeriesRowProps) {
     [selectDispatch]
   );
 
-  console.info(
-    '\x1b[36m[MarkTest] is selected\x1b[0m',
-    selectState.selectedState[id]
-  );
-
   return (
     <>
       <VirtualTableSelectCell
