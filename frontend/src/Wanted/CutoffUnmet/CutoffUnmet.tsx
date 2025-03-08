@@ -212,7 +212,11 @@ function CutoffUnmet() {
       dispatch(fetchCutoffUnmet());
     };
 
-    registerPagePopulator(repopulate);
+    registerPagePopulator(repopulate, [
+      'seriesUpdated',
+      'episodeFileUpdated',
+      'episodeFileDeleted',
+    ]);
 
     return () => {
       unregisterPagePopulator(repopulate);

@@ -398,7 +398,7 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
   }, [populate]);
 
   useEffect(() => {
-    registerPagePopulator(populate);
+    registerPagePopulator(populate, ['seriesUpdated']);
 
     return () => {
       unregisterPagePopulator(populate);
