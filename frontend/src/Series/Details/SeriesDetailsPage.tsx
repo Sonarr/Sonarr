@@ -19,7 +19,11 @@ function SeriesDetailsPage() {
   const previousIndex = usePrevious(seriesIndex);
 
   useEffect(() => {
-    if (seriesIndex === -1 && previousIndex !== -1) {
+    if (
+      seriesIndex === -1 &&
+      previousIndex !== -1 &&
+      previousIndex !== undefined
+    ) {
       history.push(`${window.Sonarr.urlBase}/`);
     }
   }, [seriesIndex, previousIndex, history]);
