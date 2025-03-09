@@ -41,7 +41,7 @@ import { Image, Statistics } from 'Series/Series';
 import SeriesGenres from 'Series/SeriesGenres';
 import SeriesPoster from 'Series/SeriesPoster';
 import { getSeriesStatusDetails } from 'Series/SeriesStatus';
-import QualityProfileNameConnector from 'Settings/Profiles/Quality/QualityProfileName';
+import QualityProfileName from 'Settings/Profiles/Quality/QualityProfileName';
 import { executeCommand } from 'Store/Actions/commandActions';
 import { clearEpisodes, fetchEpisodes } from 'Store/Actions/episodeActions';
 import {
@@ -681,9 +681,7 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
                   <div>
                     <Icon name={icons.PROFILE} size={17} />
                     <span className={styles.qualityProfileName}>
-                      <QualityProfileNameConnector
-                        qualityProfileId={qualityProfileId}
-                      />
+                      <QualityProfileName qualityProfileId={qualityProfileId} />
                     </span>
                   </div>
                 </Label>
