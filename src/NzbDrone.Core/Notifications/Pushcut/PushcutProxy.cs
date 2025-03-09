@@ -31,17 +31,23 @@ namespace NzbDrone.Core.Notifications.Pushcut
 
         public void SendNotification(string title, string message, string posterUrl, List<NotificationMetadataLink> links, PushcutSettings settings)
         {
+            if (settings == null)
+            {
+                return;
+            }
+
             var request = new HttpRequestBuilder("https://api.pushcut.io/v1/notifications/{notificationName}")
                 .SetSegment("notificationName", settings?.NotificationName)
                 .SetHeader("API-Key", settings?.ApiKey)
                 .Accept(HttpAccept.Json)
                 .Build();
+
             var payload = new PushcutPayload
             {
                 Title = title,
                 Text = message,
-                Image = posterUrl,
-                IsTimeSensitive = settings?.TimeSensitive,
+                Image = settings.IncludePoster ? posterUrl : null,
+                IsTimeSensitive = settings.TimeSensitive,
                 Actions = new List<PushcutAction>()
             };
 
@@ -75,7 +81,7 @@ namespace NzbDrone.Core.Notifications.Pushcut
             {
                 const string title = "Sonarr Test Title";
                 const string message = "Success! You have properly configured your Pushcut notification settings.";
-                SendNotification(title, message, null, null, settings);
+                SendNotification(title, message, null, [], settings);
             }
             catch (PushcutException pushcutException) when (pushcutException.InnerException is HttpException httpException)
             {
