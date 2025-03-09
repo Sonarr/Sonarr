@@ -11,7 +11,7 @@ import useEpisodeFile from 'EpisodeFile/useEpisodeFile';
 import { icons, kinds, sizes } from 'Helpers/Props';
 import Series from 'Series/Series';
 import useSeries from 'Series/useSeries';
-import QualityProfileNameConnector from 'Settings/Profiles/Quality/QualityProfileName';
+import QualityProfileName from 'Settings/Profiles/Quality/QualityProfileName';
 import {
   deleteEpisodeFile,
   fetchEpisodeFile,
@@ -128,7 +128,7 @@ function EpisodeSummary(props: EpisodeSummaryProps) {
         <span className={styles.infoTitle}>{translate('QualityProfile')}</span>
 
         <Label kind={kinds.PRIMARY} size={sizes.MEDIUM}>
-          <QualityProfileNameConnector qualityProfileId={qualityProfileId} />
+          <QualityProfileName qualityProfileId={qualityProfileId} />
         </Label>
       </div>
 
