@@ -15,7 +15,7 @@ namespace NzbDrone.Core.Notifications.Telegram
 {
     public interface ITelegramProxy
     {
-        void SendNotification(string title, string message, List<TelegramLink> links, TelegramSettings settings);
+        void SendNotification(string title, string message, List<NotificationMetadataLink> links, TelegramSettings settings);
         ValidationFailure Test(TelegramSettings settings);
     }
 
@@ -36,7 +36,7 @@ namespace NzbDrone.Core.Notifications.Telegram
             _logger = logger;
         }
 
-        public void SendNotification(string title, string message, List<TelegramLink> links, TelegramSettings settings)
+        public void SendNotification(string title, string message, List<NotificationMetadataLink> links, TelegramSettings settings)
         {
             var text = new StringBuilder($"<b>{HttpUtility.HtmlEncode(title)}</b>\n");
 
@@ -77,9 +77,9 @@ namespace NzbDrone.Core.Notifications.Telegram
                 const string title = "Test Notification";
                 const string body = "This is a test message from Sonarr";
 
-                var links = new List<TelegramLink>
+                var links = new List<NotificationMetadataLink>
                     {
-                        new TelegramLink(null, "Sonarr.tv", "https://sonarr.tv")
+                        new NotificationMetadataLink(null, "Sonarr.tv", "https://sonarr.tv")
                     };
 
                 var testMessageTitle = settings.IncludeAppNameInTitle ? brandedTitle : title;

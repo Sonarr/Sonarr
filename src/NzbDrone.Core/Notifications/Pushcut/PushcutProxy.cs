@@ -12,7 +12,7 @@ namespace NzbDrone.Core.Notifications.Pushcut
 {
     public interface IPushcutProxy
     {
-        void SendNotification(string title, string message, string posterUrl, string imdbLink, PushcutSettings settings);
+        void SendNotification(string title, string message, string posterUrl, List<NotificationMetadataLink> links, PushcutSettings settings);
         ValidationFailure Test(PushcutSettings settings);
     }
 
@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Notifications.Pushcut
             _logger = logger;
         }
 
-        public void SendNotification(string title, string message, string posterUrl, string imdbLink, PushcutSettings settings)
+        public void SendNotification(string title, string message, string posterUrl, List<NotificationMetadataLink> links, PushcutSettings settings)
         {
             var request = new HttpRequestBuilder("https://api.pushcut.io/v1/notifications/{notificationName}")
                 .SetSegment("notificationName", settings?.NotificationName)
@@ -45,15 +45,13 @@ namespace NzbDrone.Core.Notifications.Pushcut
                 Actions = new List<PushcutAction>()
             };
 
-            if (imdbLink.IsNotNullOrWhiteSpace())
+            foreach (var link in links)
             {
-                var action = new PushcutAction
+                payload.Actions.Add(new PushcutAction
                 {
-                    Name = "IMDb",
-                    Url = imdbLink
-                };
-
-                payload.Actions.Add(action);
+                    Name = link.Label,
+                    Url = link.Link
+                });
             }
 
             request.Method = HttpMethod.Post;
