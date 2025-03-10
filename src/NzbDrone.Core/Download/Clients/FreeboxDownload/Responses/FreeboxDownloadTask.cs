@@ -110,7 +110,7 @@ namespace NzbDrone.Core.Download.Clients.FreeboxDownload.Responses
                 { "bt_file_error", "Error accessing torrent files." },
                 { "missing_ctx_file", "Error accessing task context file." },
                 { "nzb_no_group", "Cannot find the requested group on server." },
-                { "nzb_not_found", "Article not fount on the server." },
+                { "nzb_not_found", "Article not found on the server." },
                 { "nzb_invalid_crc", "Invalid article CRC." },
                 { "nzb_invalid_size", "Invalid article size." },
                 { "nzb_invalid_filename", "Invalid filename." },

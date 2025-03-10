@@ -130,7 +130,7 @@ namespace NzbDrone.Core.Datastore
         }
 
         /// <summary>
-        /// Visits the lamda expression.
+        /// Visits the lambda expression.
         /// </summary>
         /// <param name="lambdaExpression"></param>
         /// <returns></returns>

@@ -96,7 +96,7 @@ namespace NzbDrone.Core.Download.Clients.FreeboxDownload
                     case FreeboxDownloadTaskStatus.Starting: // task is preparing to start download
                     case FreeboxDownloadTaskStatus.Downloading:
                     case FreeboxDownloadTaskStatus.Retry: // you can set a task status to ‘retry’ to restart the download task.
-                    case FreeboxDownloadTaskStatus.Checking: // checking data before lauching download.
+                    case FreeboxDownloadTaskStatus.Checking: // checking data before launching download.
                         item.Status = DownloadItemStatus.Downloading;
                         break;
 
