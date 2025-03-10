@@ -61,7 +61,7 @@ function QueueDetails(props: QueueDetailsProps) {
         anchor={progressBar!}
         title={`${state} - ${progress.toFixed(1)}%`}
         body={<div>{title}</div>}
-        position={tooltipPositions.LEFT}
+        position="bottom-start"
       />
     );
   }
