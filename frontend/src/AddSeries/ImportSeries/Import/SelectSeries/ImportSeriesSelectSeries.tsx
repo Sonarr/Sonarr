@@ -1,5 +1,13 @@
-import React, { useCallback, useEffect, useId, useRef, useState } from 'react';
-import { Manager, Popper, Reference } from 'react-popper';
+import {
+  autoUpdate,
+  flip,
+  FloatingPortal,
+  useClick,
+  useDismiss,
+  useFloating,
+  useInteractions,
+} from '@floating-ui/react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import AppState from 'App/State/AppState';
 import FormInputButton from 'Components/Form/FormInputButton';
@@ -7,7 +15,6 @@ import TextInput from 'Components/Form/TextInput';
 import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
-import Portal from 'Components/Portal';
 import { icons, kinds } from 'Helpers/Props';
 import {
   queueLookupSeries,
@@ -47,46 +54,12 @@ function ImportSeriesSelectSeries({
     // @ts-expect-error - ignoring this for now
   } = useSelector(createImportSeriesItemSelector(id, { id }));
 
-  const buttonId = useId();
-  const contentId = useId();
-  const updater = useRef<(() => void) | null>(null);
   const seriesLookupTimeout = useRef<ReturnType<typeof setTimeout>>();
 
   const [term, setTerm] = useState('');
   const [isOpen, setIsOpen] = useState(false);
 
   const errorMessage = getErrorMessage(error);
-
-  const handleWindowClick = useCallback(
-    (event: MouseEvent) => {
-      const button = document.getElementById(buttonId);
-      const content = document.getElementById(contentId);
-      const eventTarget = event.target as HTMLElement;
-
-      if (!button || !eventTarget.isConnected) {
-        return;
-      }
-
-      if (
-        !button.contains(eventTarget) &&
-        content &&
-        !content.contains(eventTarget) &&
-        isOpen
-      ) {
-        setIsOpen(false);
-        window.removeEventListener('click', handleWindowClick);
-      }
-    },
-    [isOpen, buttonId, contentId, setIsOpen]
-  );
-
-  const addListener = useCallback(() => {
-    window.addEventListener('click', handleWindowClick);
-  }, [handleWindowClick]);
-
-  const removeListener = useCallback(() => {
-    window.removeEventListener('click', handleWindowClick);
-  }, [handleWindowClick]);
 
   const handlePress = useCallback(() => {
     setIsOpen((prevIsOpen) => !prevIsOpen);
@@ -148,156 +121,138 @@ function ImportSeriesSelectSeries({
   );
 
   useEffect(() => {
-    if (updater.current) {
-      updater.current();
-    }
-  });
-
-  useEffect(() => {
-    if (isOpen) {
-      addListener();
-    } else {
-      removeListener();
-    }
-
-    return removeListener;
-  }, [isOpen, addListener, removeListener]);
-
-  useEffect(() => {
     setTerm(itemTerm);
   }, [itemTerm]);
 
+  const { refs, context, floatingStyles } = useFloating({
+    middleware: [
+      flip({
+        crossAxis: false,
+        mainAxis: true,
+      }),
+    ],
+    open: isOpen,
+    placement: 'bottom',
+    whileElementsMounted: autoUpdate,
+    onOpenChange: setIsOpen,
+  });
+
+  const click = useClick(context);
+  const dismiss = useDismiss(context);
+
+  const { getReferenceProps, getFloatingProps } = useInteractions([
+    click,
+    dismiss,
+  ]);
+
   return (
-    <Manager>
-      <Reference>
-        {({ ref }) => (
-          <div ref={ref} id={buttonId}>
-            <Link
-              // ref={ref}
-              className={styles.button}
-              component="div"
-              onPress={handlePress}
-            >
-              {isLookingUpSeries && isQueued && !isPopulated ? (
-                <LoadingIndicator className={styles.loading} size={20} />
-              ) : null}
+    <>
+      <div ref={refs.setReference} {...getReferenceProps()}>
+        <Link className={styles.button} component="div" onPress={handlePress}>
+          {isLookingUpSeries && isQueued && !isPopulated ? (
+            <LoadingIndicator className={styles.loading} size={20} />
+          ) : null}
 
-              {isPopulated && selectedSeries && isExistingSeries ? (
-                <Icon
-                  className={styles.warningIcon}
-                  name={icons.WARNING}
-                  kind={kinds.WARNING}
-                />
-              ) : null}
+          {isPopulated && selectedSeries && isExistingSeries ? (
+            <Icon
+              className={styles.warningIcon}
+              name={icons.WARNING}
+              kind={kinds.WARNING}
+            />
+          ) : null}
 
-              {isPopulated && selectedSeries ? (
-                <ImportSeriesTitle
-                  title={selectedSeries.title}
-                  year={selectedSeries.year}
-                  network={selectedSeries.network}
-                  isExistingSeries={isExistingSeries}
-                />
-              ) : null}
+          {isPopulated && selectedSeries ? (
+            <ImportSeriesTitle
+              title={selectedSeries.title}
+              year={selectedSeries.year}
+              network={selectedSeries.network}
+              isExistingSeries={isExistingSeries}
+            />
+          ) : null}
 
-              {isPopulated && !selectedSeries ? (
-                <div>
-                  <Icon
-                    className={styles.warningIcon}
-                    name={icons.WARNING}
-                    kind={kinds.WARNING}
-                  />
+          {isPopulated && !selectedSeries ? (
+            <div>
+              <Icon
+                className={styles.warningIcon}
+                name={icons.WARNING}
+                kind={kinds.WARNING}
+              />
 
-                  {translate('NoMatchFound')}
-                </div>
-              ) : null}
+              {translate('NoMatchFound')}
+            </div>
+          ) : null}
 
-              {!isFetching && !!error ? (
-                <div>
-                  <Icon
-                    className={styles.warningIcon}
-                    title={errorMessage}
-                    name={icons.WARNING}
-                    kind={kinds.WARNING}
-                  />
+          {!isFetching && !!error ? (
+            <div>
+              <Icon
+                className={styles.warningIcon}
+                title={errorMessage}
+                name={icons.WARNING}
+                kind={kinds.WARNING}
+              />
 
-                  {translate('SearchFailedError')}
-                </div>
-              ) : null}
+              {translate('SearchFailedError')}
+            </div>
+          ) : null}
 
-              <div className={styles.dropdownArrowContainer}>
-                <Icon name={icons.CARET_DOWN} />
-              </div>
-            </Link>
+          <div className={styles.dropdownArrowContainer}>
+            <Icon name={icons.CARET_DOWN} />
           </div>
-        )}
-      </Reference>
-
-      <Portal>
-        <Popper
-          placement="bottom"
-          modifiers={{
-            preventOverflow: {
-              boundariesElement: 'viewport',
-            },
-          }}
-        >
-          {({ ref, style, scheduleUpdate }) => {
-            updater.current = scheduleUpdate;
-
-            return (
-              <div
-                ref={ref}
-                id={contentId}
-                className={styles.contentContainer}
-                style={style}
-              >
-                {isOpen ? (
-                  <div className={styles.content}>
-                    <div className={styles.searchContainer}>
-                      <div className={styles.searchIconContainer}>
-                        <Icon name={icons.SEARCH} />
-                      </div>
-
-                      <TextInput
-                        className={styles.searchInput}
-                        name={`${name}_textInput`}
-                        value={term}
-                        onChange={handleSearchInputChange}
-                      />
-
-                      <FormInputButton
-                        kind={kinds.DEFAULT}
-                        spinnerIcon={icons.REFRESH}
-                        canSpin={true}
-                        isSpinning={isFetching}
-                        onPress={handleRefreshPress}
-                      >
-                        <Icon name={icons.REFRESH} />
-                      </FormInputButton>
-                    </div>
-
-                    <div className={styles.results}>
-                      {items.map((item) => {
-                        return (
-                          <ImportSeriesSearchResult
-                            key={item.tvdbId}
-                            tvdbId={item.tvdbId}
-                            title={item.title}
-                            year={item.year}
-                            network={item.network}
-                            onPress={handleSeriesSelect}
-                          />
-                        );
-                      })}
-                    </div>
+        </Link>
+      </div>
+      {isOpen ? (
+        <FloatingPortal id="portal-root">
+          <div
+            ref={refs.setFloating}
+            className={styles.contentContainer}
+            style={floatingStyles}
+            {...getFloatingProps()}
+          >
+            {isOpen ? (
+              <div className={styles.content}>
+                <div className={styles.searchContainer}>
+                  <div className={styles.searchIconContainer}>
+                    <Icon name={icons.SEARCH} />
                   </div>
-                ) : null}
+
+                  <TextInput
+                    className={styles.searchInput}
+                    name={`${name}_textInput`}
+                    value={term}
+                    onChange={handleSearchInputChange}
+                  />
+
+                  <FormInputButton
+                    kind={kinds.DEFAULT}
+                    spinnerIcon={icons.REFRESH}
+                    canSpin={true}
+                    isSpinning={isFetching}
+                    onPress={handleRefreshPress}
+                  >
+                    <Icon name={icons.REFRESH} />
+                  </FormInputButton>
+                </div>
+
+                <div className={styles.results}>
+                  {items.map((item) => {
+                    return (
+                      <ImportSeriesSearchResult
+                        key={item.tvdbId}
+                        tvdbId={item.tvdbId}
+                        title={item.title}
+                        year={item.year}
+                        network={item.network}
+                        onPress={handleSeriesSelect}
+                      />
+                    );
+                  })}
+                </div>
               </div>
-            );
-          }}
-        </Popper>
-      </Portal>
-    </Manager>
+            ) : null}
+          </div>
+        </FloatingPortal>
+      ) : null}
+    </>
   );
 }
 
