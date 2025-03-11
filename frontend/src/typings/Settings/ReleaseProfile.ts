@@ -5,7 +5,7 @@ interface ReleaseProfile extends ModelBase {
   enabled: boolean;
   required: string[];
   ignored: string[];
-  indexerId: number;
+  indexerIds: number[];
   tags: number[];
 }
 

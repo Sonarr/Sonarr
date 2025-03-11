@@ -9,7 +9,7 @@ namespace NzbDrone.Core.Profiles.Releases
         public bool Enabled { get; set; }
         public List<string> Required { get; set; }
         public List<string> Ignored { get; set; }
-        public int IndexerId { get; set; }
+        public List<int> IndexerIds { get; set; }
         public HashSet<int> Tags { get; set; }
 
         public ReleaseProfile()
@@ -17,8 +17,8 @@ namespace NzbDrone.Core.Profiles.Releases
             Enabled = true;
             Required = new List<string>();
             Ignored = new List<string>();
+            IndexerIds = new List<int>();
             Tags = new HashSet<int>();
-            IndexerId = 0;
         }
     }
 
