@@ -39,9 +39,12 @@ namespace Sonarr.Api.V3.Profiles.Release
                     context.AddFailure(nameof(ReleaseProfile.Ignored), "'Must not contain' should not contain whitespaces or an empty string");
                 }
 
-                if (restriction.Enabled && restriction.IndexerId != 0 && !_indexerFactory.Exists(restriction.IndexerId))
+                if (restriction.Enabled && restriction.IndexerIds.Any())
                 {
-                    context.AddFailure(nameof(ReleaseProfile.IndexerId), "Indexer does not exist");
+                    foreach (var indexerId in restriction.IndexerIds.Where(indexerId => !_indexerFactory.Exists(indexerId)))
+                    {
+                        context.AddFailure(nameof(ReleaseProfile.IndexerIds), $"Indexer does not exist: {indexerId}");
+                    }
                 }
             });
         }

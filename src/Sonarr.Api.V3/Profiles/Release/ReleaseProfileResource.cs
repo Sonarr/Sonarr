@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
+using System.Text.Json.Serialization;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Profiles.Releases;
 using Sonarr.Http.REST;
 
@@ -15,11 +17,32 @@ namespace Sonarr.Api.V3.Profiles.Release
         // Is List<string>, string or JArray, we accept 'string' with POST for backward compatibility
         public object Required { get; set; }
         public object Ignored { get; set; }
-        public int IndexerId { get; set; }
+
+        [Obsolete("Use IndexerIds instead")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public int? IndexerId
+        {
+            get => IndexerIds.Count switch
+            {
+                0 => 0,
+                1 => IndexerIds[0],
+                _ => null
+            };
+            set
+            {
+                if (IndexerIds.Empty() && value is > 0)
+                {
+                    IndexerIds.Add(value.Value);
+                }
+            }
+        }
+
+        public List<int> IndexerIds { get; set; }
         public HashSet<int> Tags { get; set; }
 
         public ReleaseProfileResource()
         {
+            IndexerIds = new List<int>();
             Tags = new HashSet<int>();
         }
     }
@@ -40,7 +63,7 @@ namespace Sonarr.Api.V3.Profiles.Release
                 Enabled = model.Enabled,
                 Required = model.Required ?? new List<string>(),
                 Ignored = model.Ignored ?? new List<string>(),
-                IndexerId = model.IndexerId,
+                IndexerIds = model.IndexerIds ?? new List<int>(),
                 Tags = new HashSet<int>(model.Tags)
             };
         }
@@ -59,7 +82,7 @@ namespace Sonarr.Api.V3.Profiles.Release
                 Enabled = resource.Enabled,
                 Required = resource.MapRequired(),
                 Ignored = resource.MapIgnored(),
-                IndexerId = resource.IndexerId,
+                IndexerIds = resource.IndexerIds,
                 Tags = new HashSet<int>(resource.Tags)
             };
         }

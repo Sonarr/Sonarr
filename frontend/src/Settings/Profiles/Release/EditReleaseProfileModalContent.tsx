@@ -32,8 +32,8 @@ const newReleaseProfile: ReleaseProfile = {
   enabled: true,
   required: [],
   ignored: [],
+  indexerIds: [],
   tags: [],
-  indexerId: 0,
 };
 
 function createReleaseProfileSelector(id?: number) {
@@ -76,7 +76,7 @@ function EditReleaseProfileModalContent({
   const { item, isFetching, isSaving, error, saveError, ...otherProps } =
     useSelector(createReleaseProfileSelector(id));
 
-  const { name, enabled, required, ignored, tags, indexerId } = item;
+  const { name, enabled, required, ignored, indexerIds, tags } = item;
 
   const dispatch = useDispatch();
   const previousIsSaving = usePrevious(isSaving);
@@ -180,12 +180,12 @@ function EditReleaseProfileModalContent({
 
             <FormInputGroup
               type={inputTypes.INDEXER_SELECT}
-              name="indexerId"
+              name="indexerIds"
               helpText={translate('ReleaseProfileIndexerHelpText')}
               helpTextWarning={translate(
                 'ReleaseProfileIndexerHelpTextWarning'
               )}
-              {...indexerId}
+              {...indexerIds}
               includeAny={true}
               onChange={handleInputChange}
             />
