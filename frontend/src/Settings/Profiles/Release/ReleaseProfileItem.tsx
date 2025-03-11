@@ -28,9 +28,9 @@ function ReleaseProfileItem(props: ReleaseProfileProps) {
     enabled = true,
     required = [],
     ignored = [],
+    indexerIds = [],
     tags,
     excludedTags,
-    indexerId = 0,
     tagList,
     indexerList,
   } = props;
@@ -53,8 +53,7 @@ function ReleaseProfileItem(props: ReleaseProfileProps) {
     deleteReleaseProfile();
   }, [deleteReleaseProfile]);
 
-  const indexer =
-    indexerId !== 0 && indexerList.find((i) => i.id === indexerId);
+  const indexers = indexerList.filter((i) => indexerIds.includes(i.id));
 
   return (
     <Card
@@ -103,11 +102,11 @@ function ReleaseProfileItem(props: ReleaseProfileProps) {
           </Label>
         )}
 
-        {indexer ? (
-          <Label kind={kinds.INFO} outline={true}>
+        {indexers.map((indexer) => (
+          <Label key={indexer.id} kind={kinds.INFO} outline={true}>
             {indexer.name}
           </Label>
-        ) : null}
+        ))}
       </div>
 
       <EditReleaseProfileModal

@@ -9,7 +9,7 @@ public class ReleaseProfileResource : RestResource
     public bool Enabled { get; set; }
     public List<string> Required { get; set; } = [];
     public List<string> Ignored { get; set; } = [];
-    public int IndexerId { get; set; }
+    public List<int> IndexerIds { get; set; } = [];
     public HashSet<int> Tags { get; set; } = [];
     public HashSet<int> ExcludedTags { get; set; } = [];
 }
@@ -25,7 +25,7 @@ public static class RestrictionResourceMapper
             Enabled = model.Enabled,
             Required = model.Required ?? [],
             Ignored = model.Ignored ?? [],
-            IndexerId = model.IndexerId,
+            IndexerIds = model.IndexerIds ?? [],
             Tags = model.Tags ?? [],
             ExcludedTags = model.ExcludedTags ?? [],
         };
@@ -40,7 +40,7 @@ public static class RestrictionResourceMapper
             Enabled = resource.Enabled,
             Required = resource.Required,
             Ignored = resource.Ignored,
-            IndexerId = resource.IndexerId,
+            IndexerIds = resource.IndexerIds,
             Tags = resource.Tags,
             ExcludedTags = resource.ExcludedTags
         };

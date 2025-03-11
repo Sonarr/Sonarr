@@ -39,7 +39,7 @@ function EditReleaseProfileModalContent({
     saveProvider,
   } = useManageReleaseProfile(id ?? 0);
 
-  const { name, enabled, required, ignored, tags, excludedTags, indexerId } =
+  const { name, enabled, required, ignored, indexerIds, tags, excludedTags } =
     item;
 
   const wasSaving = usePrevious(isSaving);
@@ -136,13 +136,12 @@ function EditReleaseProfileModalContent({
 
             <FormInputGroup
               type={inputTypes.INDEXER_SELECT}
-              name="indexerId"
+              name="indexerIds"
               helpText={translate('ReleaseProfileIndexerHelpText')}
               helpTextWarning={translate(
                 'ReleaseProfileIndexerHelpTextWarning'
               )}
-              {...indexerId}
-              includeAny={true}
+              {...indexerIds}
               onChange={handleInputChange}
             />
           </FormGroup>
