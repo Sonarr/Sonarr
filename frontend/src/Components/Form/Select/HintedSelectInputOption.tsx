@@ -19,7 +19,6 @@ function HintedSelectInputOption(props: HintedSelectInputOptionProps) {
     hint,
     depth,
     isSelected = false,
-    isMultiSelect,
     isMobile,
     ...otherProps
   } = props;
