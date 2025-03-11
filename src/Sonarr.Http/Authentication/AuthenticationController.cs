@@ -1,9 +1,14 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
+using System.Xml;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NLog;
+using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Authentication;
 using NzbDrone.Core.Configuration;
@@ -16,11 +21,15 @@ namespace Sonarr.Http.Authentication
     {
         private readonly IAuthenticationService _authService;
         private readonly IConfigFileProvider _configFileProvider;
+        private readonly IAppFolderInfo _appFolderInfo;
+        private readonly Logger _logger;
 
-        public AuthenticationController(IAuthenticationService authService, IConfigFileProvider configFileProvider)
+        public AuthenticationController(IAuthenticationService authService, IConfigFileProvider configFileProvider, IAppFolderInfo appFolderInfo, Logger logger)
         {
             _authService = authService;
             _configFileProvider = configFileProvider;
+            _appFolderInfo = appFolderInfo;
+            _logger = logger;
         }
 
         [HttpPost("login")]
@@ -45,7 +54,23 @@ namespace Sonarr.Http.Authentication
                 IsPersistent = resource.RememberMe == "on"
             };
 
-            await HttpContext.SignInAsync(AuthenticationType.Forms.ToString(), new ClaimsPrincipal(new ClaimsIdentity(claims, "Cookies", "user", "identifier")), authProperties);
+            try
+            {
+                await HttpContext.SignInAsync(AuthenticationType.Forms.ToString(), new ClaimsPrincipal(new ClaimsIdentity(claims, "Cookies", "user", "identifier")), authProperties);
+            }
+            catch (CryptographicException e)
+            {
+                if (e.InnerException is XmlException)
+                {
+                    _logger.Error(e, "Failed to authenticate user due to corrupt XML. Please remove all XML files from {0} and restart Sonarr", Path.Combine(_appFolderInfo.AppDataFolder, "asp"));
+                }
+                else
+                {
+                    _logger.Error(e, "Failed to authenticate user. {0}", e.Message);
+                }
+
+                return Unauthorized();
+            }
 
             if (returnUrl.IsNullOrWhiteSpace() || !Url.IsLocalUrl(returnUrl))
             {
