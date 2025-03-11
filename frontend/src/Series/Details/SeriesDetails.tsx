@@ -188,7 +188,6 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
   } = useSelector(createEpisodeFilesSelector());
 
   const commands = useSelector(createCommandsSelector());
-  const isSaving = useSelector((state: AppState) => state.series.isSaving);
 
   const { isRefreshing, isRenaming, isSearching } = useMemo(() => {
     const isSeriesRefreshing = isCommandExecuting(
@@ -437,6 +436,7 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
     genres,
     tags,
     year,
+    isSaving = false,
   } = series;
 
   const { episodeFileCount = 0, sizeOnDisk = 0, lastAired } = statistics;
