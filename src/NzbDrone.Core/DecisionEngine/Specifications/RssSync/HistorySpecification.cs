@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Configuration;
@@ -51,7 +54,12 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
                 _logger.Debug("Checking current status of episode [{0}] in history", episode.Id);
                 var mostRecent = _historyService.MostRecentForEpisode(episode.Id);
 
-                if (mostRecent != null && mostRecent.EventType == EpisodeHistoryEventType.Grabbed)
+                if (mostRecent == null)
+                {
+                    continue;
+                }
+
+                if (mostRecent.EventType == EpisodeHistoryEventType.Grabbed)
                 {
                     var recent = mostRecent.Date.After(DateTime.UtcNow.AddHours(-12));
 
@@ -114,6 +122,41 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
 
                         case UpgradeableRejectReason.UpgradesNotAllowed:
                             return DownloadSpecDecision.Reject(DownloadRejectionReason.HistoryUpgradesNotAllowed, "{0} grab event in history and Quality Profile '{1}' does not allow upgrades", rejectionSubject, qualityProfile.Name);
+                    }
+                }
+
+                if (subject.Episodes.FirstOrDefault(x => x.Id == episode.Id) is { HasFile: true })
+                {
+                    EpisodeHistory availableUsableEpisodeHistoryForCustomFormatScore;
+
+                    var episodeHistoryEventTypeForHistoryComparison = new List<EpisodeHistoryEventType>
+                    {
+                        EpisodeHistoryEventType.Grabbed,
+                        EpisodeHistoryEventType.SeriesFolderImported,
+                    };
+
+                    if (episodeHistoryEventTypeForHistoryComparison.Contains(mostRecent.EventType))
+                    {
+                        availableUsableEpisodeHistoryForCustomFormatScore = mostRecent;
+                    }
+                    else
+                    {
+                        availableUsableEpisodeHistoryForCustomFormatScore = _historyService.MostRecentForEpisodeInEventCollection(
+                            episode.Id,
+                            new ReadOnlyCollection<EpisodeHistoryEventType>(episodeHistoryEventTypeForHistoryComparison));
+                    }
+
+                    if (availableUsableEpisodeHistoryForCustomFormatScore == null)
+                    {
+                        continue;
+                    }
+
+                    var mostRecentCustomFormat = _formatService.ParseCustomFormat(availableUsableEpisodeHistoryForCustomFormatScore, subject.Series);
+                    var mostRecentCustomFormatScore = qualityProfile.CalculateCustomFormatScore(mostRecentCustomFormat);
+
+                    if (mostRecentCustomFormatScore > subject.CustomFormatScore)
+                    {
+                        return DownloadSpecDecision.Reject(DownloadRejectionReason.HistoryCustomFormatScore, "Quality Profile '{0}' has a higher Custom Format score than the report: {1}", qualityProfile.Name, subject.CustomFormatScore);
                     }
                 }
             }
