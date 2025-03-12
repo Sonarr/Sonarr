@@ -716,7 +716,7 @@
     "ProxyPasswordHelpText": "Você só precisa digitar um nome de usuário e senha se for necessário. Caso contrário, deixe-os em branco.",
     "ProxyType": "Tipo de Proxy",
     "Qualities": "Qualidades",
-    "QualitiesHelpText": "As qualidades superiores na lista são mais preferidas. As qualidades dentro do mesmo grupo são iguais. Apenas qualidades marcadas são desejadas",
+    "QualitiesHelpText": "As qualidades mais altas na lista são mais preferidas (mesmo quando não são marcadas). As qualidades dentro do mesmo grupo são iguais. Somente qualidades marcadas são desejadas",
     "QualitiesLoadError": "Não foi possível carregar qualidades",
     "QualityDefinitions": "Definições de Qualidade",
     "QualityProfiles": "Perfis de Qualidade",
@@ -887,7 +887,7 @@
     "UpdateUiNotWritableHealthCheckMessage": "Não é possível instalar a atualização porque a pasta de IU '{uiFolder}' não pode ser salva pelo usuário '{userName}'.",
     "UpgradeUntil": "Atualizar Até",
     "UpgradeUntilCustomFormatScore": "Atualizar até pontuação de formato personalizado",
-    "UpgradeUntilEpisodeHelpText": "Quando essa qualidade for atingida, o {appName} não fará mais download de episódios",
+    "UpgradeUntilEpisodeHelpText": "Quando essa qualidade for atingida, {appName} não baixará mais episódios depois que a pontuação de corte do formato personalizado for atingida ou excedida",
     "UpgradeUntilThisQualityIsMetOrExceeded": "Atualize até que essa qualidade seja atendida ou excedida",
     "UpgradesAllowed": "Atualizações Permitidas",
     "UpgradesAllowedHelpText": "se as qualidades deshabilitadas não forem atualizadas",
@@ -916,7 +916,7 @@
     "UiSettingsLoadError": "Não foi possível carregar as configurações da UI",
     "UnmonitorDeletedEpisodesHelpText": "Os episódios excluídos do disco são deixados de ser monitorados automaticamente no {appName}",
     "UpdateScriptPathHelpText": "Caminho para um script personalizado que usa um pacote de atualização extraído e lida com o restante do processo de atualização",
-    "UpgradeUntilCustomFormatScoreEpisodeHelpText": "Assim que essa pontuação de formato personalizado for alcançada, o {appName} não baixará mais lançamentos de episódios",
+    "UpgradeUntilCustomFormatScoreEpisodeHelpText": "Quando o limite de qualidade for atingido ou excedido e essa pontuação de formato personalizado for atingida, {appName} não baixará mais lançamentos desses episódios",
     "UseHardlinksInsteadOfCopy": "Usar links rígidos ao invés de Copiar",
     "VisitTheWikiForMoreDetails": "Visite o wiki para mais detalhes: ",
     "WantMoreControlAddACustomFormat": "Quer mais controle sobre quais downloads são preferidos? Adicione um [Formato Personalizado](/settings/customformats)",
@@ -2153,5 +2153,6 @@
     "MinuteShorthand": "m",
     "QualityDefinitionsSizeNotice": "As restrições de tamanho foram transferidas para Perfis de Qualidade",
     "NotificationsTelegramSettingsLinkPreview": "Prévia do Link",
-    "NotificationsTelegramSettingsLinkPreviewHelpText": "Determina qual link será visualizado na notificação do Telegram. Escolha 'Nenhum' para desativar"
+    "NotificationsTelegramSettingsLinkPreviewHelpText": "Determina qual link será visualizado na notificação do Telegram. Escolha 'Nenhum' para desativar",
+    "DownloadClientUTorrentProviderMessage": "O uTorrent tem um histórico de incluir criptomineradores, malware e anúncios, recomendamos fortemente que você escolha um cliente diferente."
 }
