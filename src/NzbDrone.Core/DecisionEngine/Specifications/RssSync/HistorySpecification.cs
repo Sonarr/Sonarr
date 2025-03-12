@@ -125,7 +125,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
                     }
                 }
 
-                if (subject.Episodes.FirstOrDefault(x => x.Id == episode.Id) is { HasFile: true })
+                if (episode is { HasFile: true })
                 {
                     EpisodeHistory availableUsableEpisodeHistoryForCustomFormatScore;
 
