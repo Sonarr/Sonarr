@@ -1401,7 +1401,7 @@
     "ProxyType": "Proxy Türü",
     "ProxyUsernameHelpText": "Gerekirse yalnızca bir kullanıcı adı ve şifre girmeniz gerekir. Aksi takdirde boş bırakın.",
     "Qualities": "Nitelikler",
-    "QualitiesHelpText": "Listede üst sıralarda yer alan nitelikler işaretlenmese bile en çok tercih edilendir. Aynı grup içindeki nitelikler eşittir. Yalnızca kontrol edilen nitelikler aranır",
+    "QualitiesHelpText": "Listede daha üst sıralarda yer alan nitelikler daha çok tercih edilir (işaretlenmemiş olsalar bile). Aynı gruptaki nitelikler eşittir. Sadece işaretlenen nitelikler istenir",
     "Quality": "Kalite",
     "QualityDefinitions": "Kalite Tanımları",
     "QualityDefinitionsLoadError": "Kalite Tanımları yüklenemiyor",
@@ -2084,8 +2084,8 @@
     "UpdateUiNotWritableHealthCheckMessage": "UI klasörü '{uiFolder}' '{userName}' kullanıcısı tarafından yazılabilir olmadığından güncelleme yüklenemiyor.",
     "UpdatePath": "Güncelleme Yolu",
     "UpdateSeriesPath": "Dizi Yolunu Güncelle",
-    "UpgradeUntilCustomFormatScoreEpisodeHelpText": "Bu özel format puanına ulaşıldığında {appName} artık bölüm yayınlarını almayacak",
-    "UpgradeUntilEpisodeHelpText": "Bu kaliteye ulaşıldığında {appName} artık bölümleri indirmeyecek",
+    "UpgradeUntilCustomFormatScoreEpisodeHelpText": "Kalite sınırı karşılandığında veya aşıldığında ve bu özel biçim puanına ulaşıldığında {appName} artık bölüm sürümlerini almayacaktır",
+    "UpgradeUntilEpisodeHelpText": "Bu kaliteye ulaşıldığında {appName}, özel format kesme puanı karşılandıktan veya aşıldıktan sonra bölümleri artık indirmeyecektir",
     "UseSeasonFolderHelpText": "Bölümleri sezon klasörlerine ayırın",
     "VersionNumber": "Sürüm {version}",
     "WhyCantIFindMyShow": "Neden programı bulamıyorum?",
@@ -2153,5 +2153,6 @@
     "MinuteShorthand": "dk",
     "QualityDefinitionsSizeNotice": "Boyut kısıtlamaları Kalite Profillerine taşındı",
     "NotificationsTelegramSettingsLinkPreview": "Bağlantı Önizlemesi",
-    "NotificationsTelegramSettingsLinkPreviewHelpText": "Telegram bildiriminde hangi bağlantının önizleneceğini belirler. Devre dışı bırakmak için 'Hiçbiri'ni seçin"
+    "NotificationsTelegramSettingsLinkPreviewHelpText": "Telegram bildiriminde hangi bağlantının önizleneceğini belirler. Devre dışı bırakmak için 'Hiçbiri'ni seçin",
+    "DownloadClientUTorrentProviderMessage": "uTorrent'in kripto para madenciliği, kötü amaçlı yazılım ve reklam içerme geçmişi vardır, bu nedenle farklı bir istemci seçmenizi önemle tavsiye ederiz."
 }

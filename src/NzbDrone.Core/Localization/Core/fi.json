@@ -1014,7 +1014,7 @@
     "Year": "Vuosi",
     "WeekColumnHeader": "Viikkosarakkeen otsikko",
     "UpdateStartupNotWritableHealthCheckMessage": "Päivitystä ei voida asentaa, koska käyttäjällä {userName} ei ole kirjoitusoikeutta käynnistyskansioon \"{startupFolder}\".",
-    "UpgradeUntilEpisodeHelpText": "Kun tämä laatutaso on saavutettu, ei {appName} enää kaappaa jaksoja.",
+    "UpgradeUntilEpisodeHelpText": "Kun tämä laatutaso on saavutettu, ei {appName} enää kaappaa jaksoja kun mukautetun muodon katkaisutaso on saavutettu tai ylitetty.",
     "No": "Ei",
     "CustomFilters": "Omat suodattimet",
     "CopyUsingHardlinksHelpTextWarning": "Tiedostojen käsittelystä johtuvat lukitukset saattavat joskus estää jaettavien tiedostojen uudelleennimeämisen. Voit keskeyttää jakamisen väliaikaisesti ja käyttää {appName}in nimeämistoimintoa.",
@@ -1803,7 +1803,7 @@
     "CustomFilter": "Mukautettu suodatin",
     "Label": "Nimi",
     "ShowTagsHelpText": "Näytä tunnisteet julisteen alla.",
-    "UpgradeUntilCustomFormatScoreEpisodeHelpText": "Kun tämä mukautetun muodon pisteytys on saavutettu, ei {appName} enää kaappaa jaksoja.",
+    "UpgradeUntilCustomFormatScoreEpisodeHelpText": "Kun laaturajoitus on saavutettu tai ylitetty, ja tämän mukautetun muodon pisteytys saavutetaan, ei {appName} enää kaappaa jaksojulkaisuja tai tuo päivityksiä.",
     "IndexerFlags": "Hakupalvelun liput",
     "AutoTaggingSpecificationTag": "Tunniste",
     "ImportListsSimklSettingsUserListTypeCompleted": "Katsellut",
@@ -2153,5 +2153,6 @@
     "MinuteShorthand": "m",
     "QualityDefinitionsSizeNotice": "Kokorajoitukset on siirretty laatuprofiileihin",
     "NotificationsTelegramSettingsLinkPreview": "Linkin esikatselu",
-    "NotificationsTelegramSettingsLinkPreviewHelpText": "Määrittää minkä linkin esikatselu Telegram-ilmoituksessa näytetään. Poista käytöstä valitsemalla \"Ei mitään\"."
+    "NotificationsTelegramSettingsLinkPreviewHelpText": "Määrittää minkä linkin esikatselu Telegram-ilmoituksessa näytetään. Poista käytöstä valitsemalla \"Ei mitään\".",
+    "DownloadClientUTorrentProviderMessage": "Koska uTorrent on tunnettu crypto-, haitta- and mainossisällöstä ja sovelluksista, suosittelemme qBittorrentin, Delugen ja ruTorrentin kaltaisten vaihtoehtojen käyttämistä."
 }
