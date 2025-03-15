@@ -11148,7 +11148,16 @@
           },
           "indexerId": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "deprecated": true
+          },
+          "indexerIds": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
           },
           "tags": {
             "uniqueItems": true,
