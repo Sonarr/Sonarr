@@ -1,0 +1,32 @@
+FROM mcr.microsoft.com/dotnet/sdk:6.0 as BACKEND
+COPY . /source
+WORKDIR /source
+RUN ./build.sh --backend --runtime linux-musl-x64
+
+
+FROM docker.io/node:lts as FRONTEND_PACKAGE
+COPY . /source
+COPY --from=BACKEND /source/_output/ /source/_output/
+WORKDIR /source
+RUN ./build.sh --frontend --packages --runtime linux-musl-x64
+
+
+
+FROM docker.io/alpine:latest as FINAL
+RUN apk --no-cache add icu-libs sqlite-libs xmlstarlet
+
+ENV XDG_DATA_HOME="/config"
+ENV XDG_CONFIG_HOME="/config"
+
+RUN addgroup -S sonarr && adduser sonarr -G sonarr -S -D -H
+RUN mkdir -p /app
+COPY --from=FRONTEND_PACKAGE /source/_artifacts/linux-musl-x64/net6.0/Sonarr/ /app/Sonarr/
+RUN chown sonarr:sonarr -R /app
+
+USER sonarr
+VOLUME /blackhole
+VOLUME /config
+EXPOSE 8989
+
+WORKDIR /config
+ENTRYPOINT ["/app/Sonarr/Sonarr"]
