@@ -22,6 +22,7 @@ namespace NzbDrone.Core.Notifications
         public bool OnHealthRestored { get; set; }
         public bool OnApplicationUpdate { get; set; }
         public bool OnManualInteractionRequired { get; set; }
+        public int NotificationTemplateId { get; set; }
 
         [MemberwiseEqualityIgnore]
         public bool SupportsOnGrab { get; set; }
