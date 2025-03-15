@@ -343,7 +343,7 @@ namespace NzbDrone.Common.Processes
             }
             catch
             {
-                // Don't crash on gettings some log data.
+                // Don't crash on getting some log data.
             }
 
             return processes;
