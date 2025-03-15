@@ -1,12 +1,12 @@
-namespace NzbDrone.Core.Notifications.Telegram
+namespace NzbDrone.Core.Notifications
 {
-    public class TelegramLink
+    public class NotificationMetadataLink
     {
         public MetadataLinkType? Type { get; set; }
         public string Label { get; set; }
         public string Link { get; set; }
 
-        public TelegramLink(MetadataLinkType? type, string label, string link)
+        public NotificationMetadataLink(MetadataLinkType? type, string label, string link)
         {
             Type = type;
             Label = label;

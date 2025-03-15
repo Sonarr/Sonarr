@@ -12,7 +12,7 @@ public class TelegramLinkPreviewOptions
     [JsonProperty("url")]
     public string Url { get; set; }
 
-    public TelegramLinkPreviewOptions(List<TelegramLink> links, TelegramSettings settings)
+    public TelegramLinkPreviewOptions(List<NotificationMetadataLink> links, TelegramSettings settings)
     {
         IsDisabled = (MetadataLinkPreviewType)settings.LinkPreview == MetadataLinkPreviewType.None;
         Url = links.FirstOrDefault(l => l.Type.HasValue && (int)l.Type.Value == settings.LinkPreview)?.Link;
