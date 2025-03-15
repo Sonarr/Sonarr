@@ -18,6 +18,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
         public List<Language> Languages { get; set; }
         public string ReleaseGroup { get; set; }
         public int IndexerFlags { get; set; }
+        public int IndexerId { get; set; }
         public ReleaseType ReleaseType { get; set; }
         public string DownloadId { get; set; }
 
