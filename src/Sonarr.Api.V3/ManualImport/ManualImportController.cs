@@ -25,7 +25,7 @@ namespace Sonarr.Api.V3.ManualImport
         [Produces("application/json")]
         public List<ManualImportResource> GetMediaFiles(string folder, string downloadId, int? seriesId, int? seasonNumber, bool filterExistingFiles = true)
         {
-            if (seriesId.HasValue)
+            if (seriesId.HasValue && downloadId.IsNullOrWhiteSpace())
             {
                 return _manualImportService.GetMediaFiles(seriesId.Value, seasonNumber).ToResource().Select(AddQualityWeight).ToList();
             }
