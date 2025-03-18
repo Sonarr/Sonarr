@@ -50,7 +50,9 @@ function DeleteSeriesModalContent({
     dispatch(
       deleteSeries({ id: seriesId, deleteFiles, addImportListExclusion })
     );
-  }, [seriesId, addImportListExclusion, deleteFiles, dispatch]);
+
+    onModalClose();
+  }, [seriesId, addImportListExclusion, deleteFiles, dispatch, onModalClose]);
 
   const handleDeleteOptionChange = useCallback(
     ({ name, value }: CheckInputChanged) => {
