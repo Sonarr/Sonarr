@@ -39,7 +39,7 @@ namespace NzbDrone.Core.Indexers.Nyaa
         [FieldDefinition(1, Label = "IndexerSettingsAnimeStandardFormatSearch", Type = FieldType.Checkbox, HelpText = "IndexerSettingsAnimeStandardFormatSearchHelpText")]
         public bool AnimeStandardFormatSearch { get; set; }
 
-        [FieldDefinition(2, Label = "IndexerSettingsAdditionalParameters", Advanced = true, HelpText = "IndexerSettingsAdditionalNewznabParametersHelpText")]
+        [FieldDefinition(2, Label = "IndexerSettingsAdditionalParameters", Advanced = true, HelpText = "IndexerNyaaSettingsAdditionalParametersHelpText")]
         public string AdditionalParameters { get; set; }
 
         [FieldDefinition(3, Type = FieldType.Number, Label = "IndexerSettingsMinimumSeeders", HelpText = "IndexerSettingsMinimumSeedersHelpText", Advanced = true)]

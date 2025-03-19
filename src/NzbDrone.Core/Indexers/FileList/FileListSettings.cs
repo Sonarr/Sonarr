@@ -53,7 +53,7 @@ namespace NzbDrone.Core.Indexers.FileList
         [FieldDefinition(3, Label = "IndexerSettingsApiUrl", Advanced = true, HelpText = "IndexerSettingsApiUrlHelpText")]
         public string BaseUrl { get; set; }
 
-        [FieldDefinition(4, Label = "IndexerSettingsCategories", Type = FieldType.Select, SelectOptions = typeof(FileListCategories), HelpText = "IndexerSettingsCategoriesHelpText")]
+        [FieldDefinition(4, Label = "IndexerSettingsCategories", Type = FieldType.Select, SelectOptions = typeof(FileListCategories), HelpText = "IndexerSettingsStandardDailyCategoriesHelpText")]
         public IEnumerable<int> Categories { get; set; }
 
         [FieldDefinition(5, Label = "IndexerSettingsAnimeCategories", Type = FieldType.Select, SelectOptions = typeof(FileListCategories), HelpText = "IndexerSettingsAnimeCategoriesHelpText")]

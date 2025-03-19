@@ -37,7 +37,7 @@ namespace NzbDrone.Core.Indexers.TorrentRss
         [FieldDefinition(1, Label = "IndexerSettingsCookie", HelpText = "IndexerSettingsCookieHelpText")]
         public string Cookie { get; set; }
 
-        [FieldDefinition(2, Type = FieldType.Checkbox, Label = "Allow Zero Size", HelpText="IndexerSettingsAllowZeroSizeHelpText")]
+        [FieldDefinition(2, Type = FieldType.Checkbox, Label = "IndexerSettingsAllowZeroSize", HelpText="IndexerSettingsAllowZeroSizeHelpText")]
         public bool AllowZeroSize { get; set; }
 
         [FieldDefinition(3, Type = FieldType.Number, Label = "IndexerSettingsMinimumSeeders", HelpText = "IndexerSettingsMinimumSeedersHelpText", Advanced = true)]
