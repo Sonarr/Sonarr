@@ -7,6 +7,7 @@ interface CssExports {
   'implementation': string;
   'name': string;
   'priority': string;
+  'seasonSearchMaximumSingleEpisodeAge': string;
   'tags': string;
 }
 export const cssExports: CssExports;

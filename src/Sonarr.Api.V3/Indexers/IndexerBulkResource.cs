@@ -9,6 +9,7 @@ namespace Sonarr.Api.V3.Indexers
         public bool? EnableAutomaticSearch { get; set; }
         public bool? EnableInteractiveSearch { get; set; }
         public int? Priority { get; set; }
+        public int? SeasonSearchMaximumSingleEpisodeAge { get; set; }
     }
 
     public class IndexerBulkResourceMapper : ProviderBulkResourceMapper<IndexerBulkResource, IndexerDefinition>
@@ -26,6 +27,7 @@ namespace Sonarr.Api.V3.Indexers
                 existing.EnableAutomaticSearch = resource.EnableAutomaticSearch ?? existing.EnableAutomaticSearch;
                 existing.EnableInteractiveSearch = resource.EnableInteractiveSearch ?? existing.EnableInteractiveSearch;
                 existing.Priority = resource.Priority ?? existing.Priority;
+                existing.SeasonSearchMaximumSingleEpisodeAge = resource.SeasonSearchMaximumSingleEpisodeAge ?? existing.SeasonSearchMaximumSingleEpisodeAge;
             });
 
             return existingDefinitions;

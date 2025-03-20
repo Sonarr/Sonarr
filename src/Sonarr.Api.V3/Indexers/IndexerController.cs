@@ -1,3 +1,4 @@
+using FluentValidation;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Validation;
 using NzbDrone.SignalR;
@@ -16,6 +17,8 @@ namespace Sonarr.Api.V3.Indexers
             DownloadClientExistsValidator downloadClientExistsValidator)
             : base(signalRBroadcaster, indexerFactory, "indexer", ResourceMapper, BulkResourceMapper)
         {
+            SharedValidator.RuleFor(c => c.Priority).InclusiveBetween(1, 50);
+            SharedValidator.RuleFor(c => c.SeasonSearchMaximumSingleEpisodeAge).GreaterThanOrEqualTo(0);
             SharedValidator.RuleFor(c => c.DownloadClientId).SetValidator(downloadClientExistsValidator);
         }
     }
