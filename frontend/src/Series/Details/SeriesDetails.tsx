@@ -41,6 +41,7 @@ import { Image, Statistics } from 'Series/Series';
 import SeriesGenres from 'Series/SeriesGenres';
 import SeriesPoster from 'Series/SeriesPoster';
 import { getSeriesStatusDetails } from 'Series/SeriesStatus';
+import useSeries from 'Series/useSeries';
 import QualityProfileName from 'Settings/Profiles/Quality/QualityProfileName';
 import { executeCommand } from 'Store/Actions/commandActions';
 import { clearEpisodes, fetchEpisodes } from 'Store/Actions/episodeActions';
@@ -125,40 +126,6 @@ function createEpisodeFilesSelector() {
   );
 }
 
-function createSeriesSelector(seriesId: number) {
-  return createSelector(createAllSeriesSelector(), (allSeries) => {
-    const sortedSeries = [...allSeries].sort(sortByProp('sortTitle'));
-    const seriesIndex = sortedSeries.findIndex(
-      (series) => series.id === seriesId
-    );
-
-    if (seriesIndex === -1) {
-      return {
-        series: undefined,
-        nextSeries: undefined,
-        previousSeries: undefined,
-      };
-    }
-
-    const series = sortedSeries[seriesIndex];
-    const nextSeries = sortedSeries[seriesIndex + 1] ?? sortedSeries[0];
-    const previousSeries =
-      sortedSeries[seriesIndex - 1] ?? sortedSeries[sortedSeries.length - 1];
-
-    return {
-      series,
-      nextSeries: {
-        title: nextSeries.title,
-        titleSlug: nextSeries.titleSlug,
-      },
-      previousSeries: {
-        title: previousSeries.title,
-        titleSlug: previousSeries.titleSlug,
-      },
-    };
-  });
-}
-
 interface ExpandedState {
   allExpanded: boolean;
   allCollapsed: boolean;
@@ -171,9 +138,10 @@ interface SeriesDetailsProps {
 
 function SeriesDetails({ seriesId }: SeriesDetailsProps) {
   const dispatch = useDispatch();
-  const { series, nextSeries, previousSeries } = useSelector(
-    createSeriesSelector(seriesId)
-  );
+
+  const series = useSeries(seriesId);
+  const allSeries = useSelector(createAllSeriesSelector());
+
   const {
     isEpisodesFetching,
     isEpisodesPopulated,
@@ -235,6 +203,35 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
       isSearching: isSearchingExecuting,
     };
   }, [seriesId, commands]);
+
+  const { nextSeries, previousSeries } = useMemo(() => {
+    const sortedSeries = [...allSeries].sort(sortByProp('sortTitle'));
+    const seriesIndex = sortedSeries.findIndex(
+      (series) => series.id === seriesId
+    );
+
+    if (seriesIndex === -1) {
+      return {
+        nextSeries: undefined,
+        previousSeries: undefined,
+      };
+    }
+
+    const nextSeries = sortedSeries[seriesIndex + 1] ?? sortedSeries[0];
+    const previousSeries =
+      sortedSeries[seriesIndex - 1] ?? sortedSeries[sortedSeries.length - 1];
+
+    return {
+      nextSeries: {
+        title: nextSeries.title,
+        titleSlug: nextSeries.titleSlug,
+      },
+      previousSeries: {
+        title: previousSeries.title,
+        titleSlug: previousSeries.titleSlug,
+      },
+    };
+  }, [seriesId, allSeries]);
 
   const [isOrganizeModalOpen, setIsOrganizeModalOpen] = useState(false);
   const [isManageEpisodesOpen, setIsManageEpisodesOpen] = useState(false);
@@ -610,25 +607,29 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
                 </div>
 
                 <div className={styles.seriesNavigationButtons}>
-                  <IconButton
-                    className={styles.seriesNavigationButton}
-                    name={icons.ARROW_LEFT}
-                    size={30}
-                    title={translate('SeriesDetailsGoTo', {
-                      title: previousSeries.title,
-                    })}
-                    to={`/series/${previousSeries.titleSlug}`}
-                  />
+                  {previousSeries ? (
+                    <IconButton
+                      className={styles.seriesNavigationButton}
+                      name={icons.ARROW_LEFT}
+                      size={30}
+                      title={translate('SeriesDetailsGoTo', {
+                        title: previousSeries.title,
+                      })}
+                      to={`/series/${previousSeries.titleSlug}`}
+                    />
+                  ) : null}
 
-                  <IconButton
-                    className={styles.seriesNavigationButton}
-                    name={icons.ARROW_RIGHT}
-                    size={30}
-                    title={translate('SeriesDetailsGoTo', {
-                      title: nextSeries.title,
-                    })}
-                    to={`/series/${nextSeries.titleSlug}`}
-                  />
+                  {nextSeries ? (
+                    <IconButton
+                      className={styles.seriesNavigationButton}
+                      name={icons.ARROW_RIGHT}
+                      size={30}
+                      title={translate('SeriesDetailsGoTo', {
+                        title: nextSeries.title,
+                      })}
+                      to={`/series/${nextSeries.titleSlug}`}
+                    />
+                  ) : null}
                 </div>
               </div>
 
