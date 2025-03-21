@@ -443,7 +443,7 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
   } = series;
 
   const {
-    episodeCount,
+    episodeCount = 0,
     episodeFileCount = 0,
     sizeOnDisk = 0,
     lastAired,
