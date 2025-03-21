@@ -24,6 +24,7 @@ interface CssExports {
   'runtime': string;
   'seriesNavigationButton': string;
   'seriesNavigationButtons': string;
+  'seriesProgressLabel': string;
   'sizeOnDisk': string;
   'statusName': string;
   'tags': string;
