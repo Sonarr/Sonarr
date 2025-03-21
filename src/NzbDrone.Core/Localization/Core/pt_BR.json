@@ -2154,5 +2154,9 @@
     "QualityDefinitionsSizeNotice": "As restrições de tamanho foram transferidas para Perfis de Qualidade",
     "NotificationsTelegramSettingsLinkPreview": "Prévia do Link",
     "NotificationsTelegramSettingsLinkPreviewHelpText": "Determina qual link será visualizado na notificação do Telegram. Escolha 'Nenhum' para desativar",
-    "DownloadClientUTorrentProviderMessage": "O uTorrent tem um histórico de incluir criptomineradores, malware e anúncios, recomendamos fortemente que você escolha um cliente diferente."
+    "DownloadClientUTorrentProviderMessage": "O uTorrent tem um histórico de incluir criptomineradores, malware e anúncios, recomendamos fortemente que você escolha um cliente diferente.",
+    "NotificationsPushcutSettingsIncludePoster": "Incluir pôster",
+    "NotificationsPushcutSettingsMetadataLinks": "Links de metadados",
+    "NotificationsPushcutSettingsIncludePosterHelpText": "Incluir pôster com notificação",
+    "NotificationsPushcutSettingsMetadataLinksHelpText": "Adicionar links para os metadados da série ao enviar notificações"
 }
