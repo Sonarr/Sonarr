@@ -23,6 +23,7 @@ namespace NzbDrone.Core.Notifications.Webhook
             CustomFormats = remoteEpisode.CustomFormats?.Select(x => x.Name).ToList();
             CustomFormatScore = remoteEpisode.CustomFormatScore;
             Languages = remoteEpisode.Languages;
+            IndexerFlags = remoteEpisode.Release.IndexerFlags;
         }
 
         public string Quality { get; set; }
@@ -34,5 +35,6 @@ namespace NzbDrone.Core.Notifications.Webhook
         public int CustomFormatScore { get; set; }
         public List<string> CustomFormats { get; set; }
         public List<Language> Languages { get; set; }
+        public IndexerFlags IndexerFlags { get; set; }
     }
 }
