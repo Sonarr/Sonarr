@@ -133,7 +133,6 @@ namespace NzbDrone.Core.Test.HistoryTests
         [Test]
         public void should_reject_when_grabbed_history_is_old_and_cdh_enabled_when_no_quality_update()
         {
-            // Arrange
             var newQuality = new QualityModel(Quality.HDTV720p);
             var remoteEpisode = MockUpOrDownGrade(3000, 3000, newQuality, Quality.HDTV720p.Id, true);
             var history = GivenFileHistory(DateTime.UtcNow.AddHours(-13), _quality, EpisodeHistoryEventType.Grabbed);
@@ -141,34 +140,28 @@ namespace NzbDrone.Core.Test.HistoryTests
             SetupHistoryServiceMock(history);
             SetupCdh(true);
 
-            // Act
             var decision = Subject.IsSatisfiedBy(remoteEpisode, null);
 
-            // Assert
             decision.Accepted.Should().BeFalse();
         }
 
         [Test]
         public void should_accept_when_grabbed_history_is_old_and_cdh_enabled_when_quality_update()
         {
-            // Arrange
             var newQuality = new QualityModel(Quality.Bluray1080p);
             var remoteEpisode = MockUpOrDownGrade(3000, 3000, newQuality, Quality.WEBRip2160p.Id);
             var history = GivenFileHistory(DateTime.UtcNow.AddHours(-13), _quality, EpisodeHistoryEventType.Grabbed);
             SetupHistoryServiceMock(history);
             SetupCdh(true);
 
-            // Act
             var decision = Subject.IsSatisfiedBy(remoteEpisode, null);
 
-            // Assert
             decision.Accepted.Should().BeTrue();
         }
 
         [Test]
         public void should_accept_when_grabbed_history_is_old_and_cdh_enabled_when_custom_format_score_update()
         {
-            // Arrange
             var newQuality = new QualityModel(Quality.Bluray1080p);
             var remoteEpisode = MockUpOrDownGrade(3000, 8000, newQuality, Quality.WEBRip1080p.Id);
             var history = GivenFileHistory(DateTime.UtcNow.AddHours(-13), _quality, EpisodeHistoryEventType.Grabbed);
@@ -176,27 +169,22 @@ namespace NzbDrone.Core.Test.HistoryTests
             SetupHistoryServiceMock(history);
             SetupCdh(true);
 
-            // Act
             var decision = Subject.IsSatisfiedBy(remoteEpisode, null);
 
-            // Assert
             decision.Accepted.Should().BeTrue();
         }
 
         [Test]
         public void should_reject_when_grabbed_history_meets_cutoff_and_is_recent()
         {
-            // Arrange
             var betterQuality = new QualityModel(Quality.Bluray1080p);
             var history = GivenFileHistory(DateTime.UtcNow.AddHours(-1), betterQuality, EpisodeHistoryEventType.Grabbed);
             var newQuality = new QualityModel(Quality.Bluray1080p);
             var remoteEpisode = MockUpOrDownGrade(3000, 8000, newQuality, Quality.Bluray1080p.Id);
             SetupHistoryServiceMock(history);
 
-            // Act
             var decision = Subject.IsSatisfiedBy(remoteEpisode, null);
 
-            // Assert
             decision.Accepted.Should().BeFalse();
             decision.Reason.Should().Be(DownloadRejectionReason.HistoryRecentCutoffMet);
         }
@@ -204,17 +192,14 @@ namespace NzbDrone.Core.Test.HistoryTests
         [Test]
         public void should_reject_when_grabbed_history_meets_cutoff_and_cdh_disabled()
         {
-            // Arrange
             var newQuality = new QualityModel(Quality.WEBDL720p);
             var remoteEpisode = MockUpOrDownGrade(3000, 8000, newQuality, Quality.Bluray1080p.Id);
             var betterQuality = new QualityModel(Quality.Bluray1080p);
             var history = GivenFileHistory(DateTime.UtcNow.AddHours(-13), betterQuality, EpisodeHistoryEventType.Grabbed);
             SetupHistoryServiceMock(history);
 
-            // Act
             var decision = Subject.IsSatisfiedBy(remoteEpisode, null);
 
-            // Assert
             decision.Accepted.Should().BeFalse();
             decision.Reason.Should().Be(DownloadRejectionReason.HistoryCdhDisabledCutoffMet);
         }
@@ -222,80 +207,65 @@ namespace NzbDrone.Core.Test.HistoryTests
         [Test]
         public void should_accept_when_file_history_has_lower_quality_in_custom_format_score()
         {
-            // Arrange
             var newQuality = new QualityModel(Quality.SDTV);
             var remoteEpisode = MockUpOrDownGrade(3000, 8000, newQuality, Quality.WEBDL720p.Id, true);
             var history = GivenFileHistory(DateTime.UtcNow.AddDays(-5), new QualityModel(Quality.SDTV));
             SetupHistoryServiceMock(history);
 
-            // Act
             var decision = Subject.IsSatisfiedBy(remoteEpisode, null);
 
-            // Assert
             decision.Accepted.Should().BeTrue();
         }
 
         [Test]
         public void should_reject_when_file_history_has_higher_quality_in_custom_format_score()
         {
-            // Arrange
             var newQuality = new QualityModel(Quality.SDTV);
             var remoteEpisode = MockUpOrDownGrade(8000, 3000, newQuality, Quality.WEBDL720p.Id, true);
             var history = GivenFileHistory(DateTime.UtcNow.AddDays(-5), new QualityModel(Quality.SDTV));
             SetupHistoryServiceMock(history);
 
-            // Act
             var decision = Subject.IsSatisfiedBy(remoteEpisode, null);
 
-            // Assert
             decision.Accepted.Should().BeFalse();
         }
 
         [Test]
         public void should_accept_when_file_history_has_lower_quality_in_quality_profile()
         {
-            // Arrange
             var newQuality = new QualityModel(Quality.WEBDL720p);
             var remoteEpisode = MockUpOrDownGrade(3000, 3000, newQuality, Quality.WEBDL720p.Id, true);
             var history = GivenFileHistory(DateTime.UtcNow.AddDays(-5), new QualityModel(Quality.SDTV));
             SetupHistoryServiceMock(history);
 
-            // Act
             var decision = Subject.IsSatisfiedBy(remoteEpisode, null);
 
-            // Assert
             decision.Accepted.Should().BeTrue();
         }
 
         [Test]
         public void should_reject_when_file_history_has_higher_quality_in_quality_profile()
         {
-            // Arrange
             var newQuality = new QualityModel(Quality.SDTV);
             var remoteEpisode = MockUpOrDownGrade(3000, 3000, newQuality, Quality.WEBDL720p.Id, true);
             var history = GivenFileHistory(DateTime.UtcNow.AddDays(-5), new QualityModel(Quality.WEBDL720p));
             SetupHistoryServiceMock(history);
 
-            // Act
             var decision = Subject.IsSatisfiedBy(remoteEpisode, null);
 
-            // Assert
             decision.Accepted.Should().BeFalse();
         }
 
         [Test]
         public void should_reject_when_grabbed_history_has_better_custom_format()
         {
-            // Arrange
             var date = DateTime.UtcNow.AddMinutes(-10);
             var grabHistory = GivenFileHistory(date, new QualityModel(Quality.HDTV720p), EpisodeHistoryEventType.Grabbed);
             var remoteEpisode = MockUpOrDownGrade(5, 2, new QualityModel(Quality.HDTV720p), 0);
             SetupHistoryServiceMock(grabHistory);
 
-            // Act
             var decision = Subject.IsSatisfiedBy(remoteEpisode, null);
 
-            // Assert
             decision.Accepted.Should().BeFalse();
             decision.Reason.Should().Be(DownloadRejectionReason.HistoryRecentCutoffMet);
         }
