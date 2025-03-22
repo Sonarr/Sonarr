@@ -38,7 +38,7 @@ dotnet clean $slnFile -c Release
 dotnet msbuild -restore $slnFile -p:Configuration=Debug -p:Platform=$platform -p:RuntimeIdentifiers=$RUNTIME -t:PublishAllRids
 
 dotnet new tool-manifest
-dotnet tool install --version 6.6.2 Swashbuckle.AspNetCore.Cli
+dotnet tool install --version 8.0.0 Swashbuckle.AspNetCore.Cli
 
 # Remove the openapi.json file so we can check if it was created
 rm $outputFile
