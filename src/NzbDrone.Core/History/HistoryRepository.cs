@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Messaging.Events;
@@ -21,7 +20,6 @@ namespace NzbDrone.Core.History
         void DeleteForSeries(List<int> seriesIds);
         List<EpisodeHistory> Since(DateTime date, EpisodeHistoryEventType? eventType);
         PagingSpec<EpisodeHistory> GetPaged(PagingSpec<EpisodeHistory> pagingSpec, int[] languages, int[] qualities);
-        EpisodeHistory MostRecentForEpisodeInEventCollection(int id, ReadOnlyCollection<EpisodeHistoryEventType> episodeHistoryEventTypes);
     }
 
     public class HistoryRepository : BasicRepository<EpisodeHistory>, IHistoryRepository
@@ -132,11 +130,6 @@ namespace NzbDrone.Core.History
             pagingSpec.TotalRecords = GetPagedRecordCount(PagedBuilder(languages, qualities).Select(typeof(EpisodeHistory)), pagingSpec, countTemplate);
 
             return pagingSpec;
-        }
-
-        public EpisodeHistory MostRecentForEpisodeInEventCollection(int id, ReadOnlyCollection<EpisodeHistoryEventType> episodeHistoryEventTypes)
-        {
-            return Query(x => x.EpisodeId == id).Where(x => episodeHistoryEventTypes.Contains(x.EventType)).MaxBy(h => h.Date);
         }
 
         private SqlBuilder PagedBuilder(int[] languages, int[] qualities)

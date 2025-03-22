@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using NLog;
@@ -28,7 +27,6 @@ namespace NzbDrone.Core.History
         List<EpisodeHistory> FindByDownloadId(string downloadId);
         string FindDownloadId(EpisodeImportedEvent trackedDownload);
         List<EpisodeHistory> Since(DateTime date, EpisodeHistoryEventType? eventType);
-        EpisodeHistory MostRecentForEpisodeInEventCollection(int id, ReadOnlyCollection<EpisodeHistoryEventType> episodeHistoryEventTypes);
     }
 
     public class HistoryService : IHistoryService,
@@ -366,11 +364,6 @@ namespace NzbDrone.Core.History
         public List<EpisodeHistory> Since(DateTime date, EpisodeHistoryEventType? eventType)
         {
             return _historyRepository.Since(date, eventType);
-        }
-
-        public EpisodeHistory MostRecentForEpisodeInEventCollection(int id, ReadOnlyCollection<EpisodeHistoryEventType> episodeHistoryEventTypes)
-        {
-            return _historyRepository.MostRecentForEpisodeInEventCollection(id, episodeHistoryEventTypes);
         }
     }
 }
