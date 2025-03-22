@@ -62,7 +62,6 @@ namespace NzbDrone.Core.Test.HistoryTests
 
         private void SetupHistoryServiceMock(List<EpisodeHistory> history)
         {
-            // Setup mock for IHistoryService
             Mocker.GetMock<IHistoryService>()
                 .Setup(s => s.FindByEpisodeId(It.IsAny<int>()))
                 .Returns(history);
@@ -70,7 +69,6 @@ namespace NzbDrone.Core.Test.HistoryTests
 
         private void SetupCdh(bool cdhEnabled)
         {
-            // Setup mock for IHistoryService
             Mocker.GetMock<IConfigService>()
                 .Setup(s => s.EnableCompletedDownloadHandling)
                 .Returns(cdhEnabled);
@@ -191,7 +189,6 @@ namespace NzbDrone.Core.Test.HistoryTests
             // Arrange
             var betterQuality = new QualityModel(Quality.Bluray1080p);
             var history = GivenFileHistory(DateTime.UtcNow.AddHours(-1), betterQuality, EpisodeHistoryEventType.Grabbed);
-
             var newQuality = new QualityModel(Quality.Bluray1080p);
             var remoteEpisode = MockUpOrDownGrade(3000, 8000, newQuality, Quality.Bluray1080p.Id);
             SetupHistoryServiceMock(history);
