@@ -109,6 +109,7 @@ namespace Sonarr.Api.V3.EpisodeFiles
             return Accepted(episodeFile.Id);
         }
 
+        [Obsolete("Use bulk endpoint instead")]
         [HttpPut("editor")]
         [Consumes("application/json")]
         public object SetQuality([FromBody] EpisodeFileListResource resource)
