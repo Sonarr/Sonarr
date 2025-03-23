@@ -10,11 +10,11 @@ import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
+import Column from 'Components/Table/Column';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import useSelectState from 'Helpers/Hooks/useSelectState';
 import { kinds } from 'Helpers/Props';
-import { SortDirection } from 'Helpers/Props/sortDirections';
 import {
   bulkDeleteIndexers,
   bulkEditIndexers,
@@ -35,7 +35,7 @@ type OnSelectedChangeCallback = React.ComponentProps<
   typeof ManageIndexersModalRow
 >['onSelectedChange'];
 
-const COLUMNS = [
+const COLUMNS: Column[] = [
   {
     name: 'name',
     label: () => translate('Name'),
@@ -88,8 +88,6 @@ const COLUMNS = [
 
 interface ManageIndexersModalContentProps {
   onModalClose(): void;
-  sortKey?: string;
-  sortDirection?: SortDirection;
 }
 
 function ManageIndexersModalContent(props: ManageIndexersModalContentProps) {
