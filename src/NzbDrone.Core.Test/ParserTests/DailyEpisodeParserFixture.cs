@@ -108,5 +108,20 @@ namespace NzbDrone.Core.Test.ParserTests
         {
             Parser.Parser.ParseTitle(postTitle).Should().BeNull();
         }
+
+        [TestCase("Series 5th Mar 2025 1080 (Deep61)", "Series", 2025, 3, 5)]
+        [TestCase("Series 31st Jan 2025 1080 (Deep61)", "Series", 2025, 1, 31)]
+        [TestCase("Series 23rd Feb 2024 (Deep61)", "Series", 2024, 2, 23)]
+        public void should_parse_daily_episode_using_short_month_format(string postTitle, string title, int year, int month, int day)
+        {
+            var result = Parser.Parser.ParseTitle(postTitle);
+            var airDate = new DateTime(year, month, day);
+            result.Should().NotBeNull();
+            result.SeriesTitle.Should().Be(title);
+            result.AirDate.Should().Be(airDate.ToString(Episode.AIR_DATE_FORMAT));
+            result.EpisodeNumbers.Should().BeEmpty();
+            result.AbsoluteEpisodeNumbers.Should().BeEmpty();
+            result.FullSeason.Should().BeFalse();
+        }
     }
 }
