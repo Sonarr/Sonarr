@@ -394,9 +394,13 @@ namespace NzbDrone.Core.Parser
                 new Regex(@"^(?:\[(?<subgroup>.+?)\][-_. ]?)?(?<title>.+?)(?:(?:_|-|\s|\.)+(?:e|ep)(?<absoluteepisode>(\d{3}|\d{4})(\.\d{1,2})?))+[-_. ].*?(?<hash>[(\[]\w{8}[)\]])?$",
                     RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
+                // Daily episodes that use short month format instead of number
+                new Regex(@"^(?<title>.+?)[-_. ]+(?<airday>[1-2]\d|3[01]|[1-9])(?:th|st|rd)[-_. ](?<shortairmonth>jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[-_. ](?<airyear>19[4-9]\d|20\d\d)",
+                    RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
                 // Supports 1103/1113 naming
                 new Regex(@"^(?<title>.+?)?(?:(?:[-_. ](?<![()\[!]))*(?<!\d{1,2}-)(?<season>(?<!\d+|\(|\[|e|x)\d{2})(?<episode>(?<!e|x)(?:[1-9][0-9]|[0][1-9])(?!p|i|\d+|\)|\]|\W\d+|\W(?:e|ep|x)\d+)))+([-_. ]+|$)(?!\\)",
-                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
+                    RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 // Dutch/Flemish release titles
                 new Regex(@"^(?<title>.+?)[-_. ](?:Se\.(?<season>(?<!\d+)(?:\d{1,2}|\d{4})(?!\d+))(?:(?:[-_ ]?afl\.)(?<episode>\d{1,3}(?!\d+))(?:(?:[-]|[-_ ]en[-_ ])(?<episode>\d{1,3}(?!\d+)))*))",
@@ -591,6 +595,22 @@ namespace NzbDrone.Core.Parser
         private static readonly string[] Numbers = new[] { "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine" };
 
         private static readonly Regex MultiRegex = new(@"[_. ](?<multi>multi)[_. ]", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        private static readonly Dictionary<string, int> ShortMonths = new()
+        {
+            { "jan", 1 },
+            { "feb", 2 },
+            { "mar", 3 },
+            { "apr", 4 },
+            { "may", 5 },
+            { "jun", 6 },
+            { "jul", 7 },
+            { "aug", 8 },
+            { "sep", 9 },
+            { "oct", 10 },
+            { "nov", 11 },
+            { "dec", 12 },
+        };
 
         public static ParsedEpisodeInfo ParsePath(string path)
         {
@@ -1186,6 +1206,20 @@ namespace NzbDrone.Core.Parser
 
                     airmonth = ambiguousAirMonth;
                     airday = ambiguousAirDay;
+                }
+                else if (matchCollection[0].Groups["shortairmonth"].Success)
+                {
+                    var shortMonthValue = matchCollection[0].Groups["shortairmonth"].Value;
+
+                    if (ShortMonths.TryGetValue(shortMonthValue.ToLowerInvariant(), out var shortMonth))
+                    {
+                        airmonth = shortMonth;
+                        airday = Convert.ToInt32(matchCollection[0].Groups["airday"].Value);
+                    }
+                    else
+                    {
+                        throw new InvalidDateException("Unable to determine air month from month: {0}", shortMonthValue);
+                    }
                 }
                 else
                 {
