@@ -31,7 +31,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Red Series S01 E01-E02 1080p AMZN WEBRip DDP5.1 x264 monkee", null)]
         [TestCase("Series.Title.S01E05.The-Aniversary.WEBDL-1080p.mkv", null)]
         [TestCase("Series.Title.S01E05.The-Aniversary.HDTV-1080p.mkv", null)]
-        [TestCase("Series US (2010) S04 (1080p BDRip x265 10bit DTS-HD MA 5 1 - WEM)[TAoE]", null)]
+        [TestCase("Series US (2010) S04 (1080p BDRip x265 10bit DTS-HD MA 5 1 - WEM)[TAoE]", "TAoE")]
         [TestCase("The.Series.S03E04.2160p.Amazon.WEBRip.DTS-HD.MA.5.1.x264", null)]
         [TestCase("SomeShow.S20E13.1080p.BluRay.DTS-X.MA.5.1.x264", null)]
         [TestCase("SomeShow.S20E13.1080p.BluRay.DTS-MA.5.1.x264", null)]
@@ -44,7 +44,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[Erai-raws] Series - 0955 ~ 1005 [1080p]", "Erai-raws")]
         [TestCase("[Exiled-Destiny] Series Title", "Exiled-Destiny")]
         [TestCase("Series.Title.S01E09.1080p.DSNP.WEB-DL.DDP2.0.H.264-VARYG", "VARYG")]
-        [TestCase("Stargate SG-1 (1997) - S01E01-02 - Children of the Gods (Showtime) (1080p.BD.DD5.1.x265-TheSickle[TAoE])", "TheSickle")]
+        [TestCase("Series (1997) - S01E01-02 - Children of the Gods (Showtime) (1080p.BD.DD5.1.x265-TheSickle[TAoE])", "TAoE")]
         [TestCase("Series Title S01 [2160p REMUX] [HEVC DV HYBRID HDR10+ Dolby TrueHD Atmos 7 1 24-bit Audio English] [Data Lass]", null)]
         [TestCase("Series Title S01 [2160p REMUX] [HEVC DV HYBRID HDR10+ Dolby TrueHD Atmos 7 1 24-bit Audio English]-DataLass", "DataLass")]
         [TestCase("Series Title S01 REMUX Dual Audio AVC 1080p 8-Bit-ZR-", "ZR")]
@@ -93,6 +93,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series Title S02E05 2160p WEB-DL DV HDR ENG DDP5.1 Atmos H265 MP4-BEN THE MEN", "BEN THE MEN")]
         [TestCase("Series Title S02E05 2160p AMZN WEB-DL DV HDR10 PLUS DDP5 1 Atmos H265 MKV-BEN THE MEN-xpost", "BEN THE MEN")]
         [TestCase("Series.S01E05.1080p.WEB-DL.DDP5.1.H264-BEN.THE.MEN", "BEN.THE.MEN")]
+        [TestCase("Series (2022) S01 (1080p BluRay x265 SDR DDP 5.1 English - JBENT TAoE)", "TAoE")]
+        [TestCase("Series (2005) S21E12 (1080p AMZN WEB-DL x265 SDR DDP 5.1 English - Goki TAoE)", "TAoE")]
         public void should_parse_exception_release_group(string title, string expected)
         {
             Parser.Parser.ParseReleaseGroup(title).Should().Be(expected);
