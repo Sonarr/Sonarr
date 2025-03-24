@@ -34,42 +34,42 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void should_return_true_if_no_container_specified_and_does_not_match_disc_release_pattern()
         {
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeTrue();
         }
 
         [Test]
         public void should_return_true_if_mkv()
         {
             WithContainer("MKV");
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeTrue();
         }
 
         [Test]
         public void should_return_false_if_vob()
         {
             WithContainer("VOB");
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeFalse();
         }
 
         [Test]
         public void should_return_false_if_iso()
         {
             WithContainer("ISO");
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeFalse();
         }
 
         [Test]
         public void should_return_false_if_m2ts()
         {
             WithContainer("M2TS");
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeFalse();
         }
 
         [Test]
         public void should_compare_case_insensitive()
         {
             WithContainer("vob");
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeFalse();
         }
 
         [TestCase("Series Title S02 Disc 1 1080i Blu-ray DTS-HD MA 2.0 AVC-TrollHD")]
@@ -84,7 +84,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void should_return_false_if_matches_disc_format(string title)
         {
             _remoteEpisode.Release.Title = title;
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeFalse();
         }
 
         [TestCase("Series Title EP50 USLT NTSC DVDRemux DD2.0")]
@@ -92,7 +92,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void should_return_true_if_dvdrip(string title)
         {
             _remoteEpisode.Release.Title = title;
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeTrue();
         }
     }
 }

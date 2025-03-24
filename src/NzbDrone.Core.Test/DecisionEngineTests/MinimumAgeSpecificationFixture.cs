@@ -40,7 +40,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             WithMinimumAge(0);
             WithAge(100);
 
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -49,7 +49,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             WithMinimumAge(30);
             WithAge(100);
 
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -58,7 +58,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             WithMinimumAge(30);
             WithAge(10);
 
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeFalse();
         }
     }
 }

@@ -59,7 +59,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.Search
                 Title = "Series.Title.S01.720p.BluRay.X264-RlsGrp"
             };
 
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -67,7 +67,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.Search
         {
             _remoteEpisode.Release.IndexerId = 0;
 
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -77,7 +77,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.Search
                   .Setup(v => v.Get(It.IsAny<int>()))
                   .Callback<int>(i => { throw new ModelNotFoundException(typeof(IndexerDefinition), i); });
 
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -85,7 +85,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.Search
         {
             GivenReleaseSeeders(null);
 
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeTrue();
         }
 
         [TestCase(5)]
@@ -94,7 +94,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.Search
         {
             GivenReleaseSeeders(seeders);
 
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeTrue();
         }
 
         [TestCase(0)]
@@ -103,7 +103,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.Search
         {
             GivenReleaseSeeders(seeders);
 
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeFalse();
         }
     }
 }

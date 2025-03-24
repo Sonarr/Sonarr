@@ -3,7 +3,6 @@ using System.Linq;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.Configuration;
-using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
@@ -26,14 +25,14 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
         public SpecificationPriority Priority => SpecificationPriority.Disk;
         public RejectionType Type => RejectionType.Temporary;
 
-        public virtual DownloadSpecDecision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
+        public virtual DownloadSpecDecision IsSatisfiedBy(RemoteEpisode subject, ReleaseDecisionInformation information)
         {
             if (!_configService.AutoUnmonitorPreviouslyDownloadedEpisodes)
             {
                 return DownloadSpecDecision.Accept();
             }
 
-            if (searchCriteria != null)
+            if (information.SearchCriteria != null)
             {
                 _logger.Debug("Skipping deleted episodefile check during search");
                 return DownloadSpecDecision.Accept();

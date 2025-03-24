@@ -10,6 +10,7 @@ public enum DownloadRejectionReason
     Error,
     DecisionError,
     MinimumAgeDelay,
+    MinimumAgeDelayPushed,
     SeriesNotMonitored,
     EpisodeNotMonitored,
     HistoryRecentCutoffMet,

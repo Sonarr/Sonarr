@@ -52,7 +52,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             _remoteEpisode.ParsedEpisodeInfo.Quality.Quality = qualityType;
             _remoteEpisode.Series.QualityProfile.Value.Items = Qualities.QualityFixture.GetDefaultQualities(Quality.DVD, Quality.HDTV720p, Quality.Bluray1080p);
 
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -62,7 +62,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             _remoteEpisode.ParsedEpisodeInfo.Quality.Quality = qualityType;
             _remoteEpisode.Series.QualityProfile.Value.Items = Qualities.QualityFixture.GetDefaultQualities(Quality.DVD, Quality.HDTV720p, Quality.Bluray1080p);
 
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeFalse();
         }
     }
 }

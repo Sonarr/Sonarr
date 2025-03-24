@@ -110,7 +110,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void should_return_true_when_queue_is_empty()
         {
             GivenEmptyQueue();
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -124,7 +124,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                                                       .Build();
 
             GivenQueue(new List<RemoteEpisode> { remoteEpisode });
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -146,7 +146,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             GivenQueue(new List<RemoteEpisode> { remoteEpisode });
 
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeFalse();
         }
 
         [Test]
@@ -167,7 +167,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                                                       .Build();
 
             GivenQueue(new List<RemoteEpisode> { remoteEpisode });
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -188,7 +188,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                                                       .Build();
 
             GivenQueue(new List<RemoteEpisode> { remoteEpisode });
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -206,7 +206,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                                                       .Build();
 
             GivenQueue(new List<RemoteEpisode> { remoteEpisode });
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -235,7 +235,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 .Build();
 
             GivenQueue(new List<RemoteEpisode> { remoteEpisode });
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -254,7 +254,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                                                       .Build();
 
             GivenQueue(new List<RemoteEpisode> { remoteEpisode });
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeFalse();
         }
 
         [Test]
@@ -275,7 +275,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                                                       .Build();
 
             GivenQueue(new List<RemoteEpisode> { remoteEpisode });
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeFalse();
         }
 
         [Test]
@@ -294,7 +294,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                                                       .Build();
 
             GivenQueue(new List<RemoteEpisode> { remoteEpisode });
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeFalse();
         }
 
         [Test]
@@ -315,7 +315,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             _remoteEpisode.Episodes.Add(_otherEpisode);
 
             GivenQueue(new List<RemoteEpisode> { remoteEpisode });
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeFalse();
         }
 
         [Test]
@@ -336,7 +336,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             _remoteEpisode.Episodes.Add(_otherEpisode);
 
             GivenQueue(new List<RemoteEpisode> { remoteEpisode });
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeFalse();
         }
 
         [Test]
@@ -362,7 +362,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             _remoteEpisode.Episodes.Add(_otherEpisode);
             GivenQueue(remoteEpisodes);
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeFalse();
         }
 
         [Test]
@@ -384,7 +384,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             GivenQueue(new List<RemoteEpisode> { remoteEpisode });
 
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeFalse();
         }
 
         [Test]
@@ -403,7 +403,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 .Build();
 
             GivenQueue(new List<RemoteEpisode> { remoteEpisode });
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeFalse();
         }
 
         [Test]
@@ -425,7 +425,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 .Build();
 
             GivenQueue(new List<RemoteEpisode> { remoteEpisode });
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeFalse();
         }
 
         [Test]
@@ -447,7 +447,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             GivenQueue(new List<RemoteEpisode> { remoteEpisode }, TrackedDownloadState.FailedPending);
 
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -474,7 +474,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             GivenQueue(new List<RemoteEpisode> { remoteEpisode });
 
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeFalse();
         }
     }
 }

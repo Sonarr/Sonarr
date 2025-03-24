@@ -143,7 +143,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             _parseResultSingle.Episodes.First().Id = 5;
             _parseResultSingle.Episodes.First().Runtime = runtime;
 
-            Subject.IsSatisfiedBy(_parseResultSingle, null).Accepted.Should().Be(expectedResult);
+            Subject.IsSatisfiedBy(_parseResultSingle, new()).Accepted.Should().Be(expectedResult);
         }
 
         [TestCase(30, 250, true)]
@@ -158,7 +158,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             _parseResultSingle.Episodes.First().Id = _episodes.First().Id;
             _parseResultSingle.Episodes.First().Runtime = _episodes.First().Runtime;
 
-            Subject.IsSatisfiedBy(_parseResultSingle, null).Accepted.Should().Be(expectedResult);
+            Subject.IsSatisfiedBy(_parseResultSingle, new()).Accepted.Should().Be(expectedResult);
         }
 
         [TestCase(30, 250, true)]
@@ -173,7 +173,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             _parseResultSingle.Episodes.First().Id = _episodes.Last().Id;
             _parseResultSingle.Episodes.First().Runtime = _episodes.First().Runtime;
 
-            Subject.IsSatisfiedBy(_parseResultSingle, null).Accepted.Should().Be(expectedResult);
+            Subject.IsSatisfiedBy(_parseResultSingle, new()).Accepted.Should().Be(expectedResult);
         }
 
         [TestCase(30, 50 * 2, false)]
@@ -189,7 +189,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             _parseResultMulti.Release.Size = sizeInMegaBytes.Megabytes();
             _parseResultMulti.Episodes.ForEach(e => e.Runtime = runtime);
 
-            Subject.IsSatisfiedBy(_parseResultMulti, null).Accepted.Should().Be(expectedResult);
+            Subject.IsSatisfiedBy(_parseResultMulti, new()).Accepted.Should().Be(expectedResult);
         }
 
         [TestCase(30, 50 * 6, false)]
@@ -205,7 +205,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             _parseResultMultiSet.Release.Size = sizeInMegaBytes.Megabytes();
             _parseResultMultiSet.Episodes.ForEach(e => e.Runtime = runtime);
 
-            Subject.IsSatisfiedBy(_parseResultMultiSet, null).Accepted.Should().Be(expectedResult);
+            Subject.IsSatisfiedBy(_parseResultMultiSet, new()).Accepted.Should().Be(expectedResult);
         }
 
         [Test]
@@ -218,7 +218,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             _parseResultSingle.Release.Size = 0;
             _parseResultSingle.Episodes.First().Runtime = 30;
 
-            Subject.IsSatisfiedBy(_parseResultSingle, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_parseResultSingle, new()).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -231,7 +231,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             _parseResultSingle.Release.Size = 18457280000;
             _parseResultSingle.Episodes.First().Runtime = 30;
 
-            Subject.IsSatisfiedBy(_parseResultSingle, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_parseResultSingle, new()).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -244,7 +244,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             _parseResultSingle.Release.Size = 36857280000;
             _parseResultSingle.Episodes.First().Runtime = 60;
 
-            Subject.IsSatisfiedBy(_parseResultSingle, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_parseResultSingle, new()).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -256,7 +256,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             _parseResultSingle.Release.Size = 300.Megabytes();
             _parseResultSingle.Episodes.First().Runtime = 60;
 
-            Subject.IsSatisfiedBy(_parseResultSingle, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_parseResultSingle, new()).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -270,7 +270,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             _parseResultSingle.Release.Size = 500.Megabytes();
             _parseResultSingle.Episodes.First().Runtime = 30;
 
-            Subject.IsSatisfiedBy(_parseResultSingle, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_parseResultSingle, new()).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -284,7 +284,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             _parseResultSingle.Release.Size = 8000.Megabytes();
             _parseResultSingle.Episodes.First().Runtime = 30;
 
-            Subject.IsSatisfiedBy(_parseResultSingle, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_parseResultSingle, new()).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -292,7 +292,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             _parseResultSingle.ParsedEpisodeInfo.Special = true;
 
-            Subject.IsSatisfiedBy(_parseResultSingle, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_parseResultSingle, new()).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -305,7 +305,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             _parseResultSingle.Episodes.First().SeasonNumber = 2;
             _parseResultSingle.Episodes.First().Runtime = 0;
 
-            Subject.IsSatisfiedBy(_parseResultSingle, null).Accepted.Should().Be(false);
+            Subject.IsSatisfiedBy(_parseResultSingle, new()).Accepted.Should().Be(false);
         }
 
         [Test]
@@ -321,7 +321,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             _parseResultSingle.Episodes.First().AirDateUtc = _episodes.First().AirDateUtc.Value.AddDays(7);
             _parseResultSingle.Episodes.First().Runtime = 0;
 
-            Subject.IsSatisfiedBy(_parseResultSingle, null).Accepted.Should().Be(false);
+            Subject.IsSatisfiedBy(_parseResultSingle, new()).Accepted.Should().Be(false);
         }
 
         [Test]
@@ -337,7 +337,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             _parseResultSingle.Episodes.First().AirDateUtc = _episodes.First().AirDateUtc.Value.AddHours(1);
             _parseResultSingle.Episodes.First().Runtime = 0;
 
-            Subject.IsSatisfiedBy(_parseResultSingle, null).Accepted.Should().Be(true);
+            Subject.IsSatisfiedBy(_parseResultSingle, new()).Accepted.Should().Be(true);
         }
 
         [Test]
@@ -352,7 +352,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 e.Runtime = 0;
             });
 
-            Subject.IsSatisfiedBy(_parseResultMulti, null).Accepted.Should().Be(false);
+            Subject.IsSatisfiedBy(_parseResultMulti, new()).Accepted.Should().Be(false);
         }
 
         [Test]
@@ -371,7 +371,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 e.Runtime = 0;
             });
 
-            Subject.IsSatisfiedBy(_parseResultMulti, null).Accepted.Should().Be(false);
+            Subject.IsSatisfiedBy(_parseResultMulti, new()).Accepted.Should().Be(false);
         }
 
         [Test]
@@ -390,7 +390,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 e.Runtime = 0;
             });
 
-            Subject.IsSatisfiedBy(_parseResultMulti, null).Accepted.Should().Be(true);
+            Subject.IsSatisfiedBy(_parseResultMulti, new()).Accepted.Should().Be(true);
         }
 
         [Test]
@@ -409,7 +409,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 e.Runtime = 0;
             });
 
-            Subject.IsSatisfiedBy(_parseResultSingle, null).Accepted.Should().Be(true);
+            Subject.IsSatisfiedBy(_parseResultSingle, new()).Accepted.Should().Be(true);
         }
     }
 }
