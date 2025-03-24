@@ -93,7 +93,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
         [Test]
         public void should_be_true_when_user_invoked_search()
         {
-            Subject.IsSatisfiedBy(new RemoteEpisode(), new SingleEpisodeSearchCriteria { UserInvokedSearch = true }).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(new RemoteEpisode(), new ReleaseDecisionInformation(false, new SingleEpisodeSearchCriteria { UserInvokedSearch = true })).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -104,7 +104,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
 
             _delayProfile.UsenetDelay = 720;
 
-            Subject.IsSatisfiedBy(_remoteEpisode, new SingleEpisodeSearchCriteria()).Accepted.Should().BeFalse();
+            Subject.IsSatisfiedBy(_remoteEpisode, new ReleaseDecisionInformation(false, new SingleEpisodeSearchCriteria())).Accepted.Should().BeFalse();
         }
 
         [Test]
@@ -112,7 +112,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
         {
             _delayProfile.UsenetDelay = 0;
 
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -124,7 +124,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
 
             _delayProfile.UsenetDelay = 720;
 
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeFalse();
         }
 
         [Test]
@@ -137,7 +137,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
             _remoteEpisode.ParsedEpisodeInfo.Quality = new QualityModel(Quality.Bluray720p);
             _remoteEpisode.ParsedEpisodeInfo.Languages = new List<Language> { Language.French };
 
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -148,7 +148,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
 
             _delayProfile.UsenetDelay = 60;
 
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -159,7 +159,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
 
             _delayProfile.UsenetDelay = 720;
 
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeFalse();
         }
 
         [Test]
@@ -177,7 +177,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
 
             _delayProfile.UsenetDelay = 720;
 
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -195,7 +195,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
 
             _delayProfile.UsenetDelay = 720;
 
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -208,7 +208,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
 
             _delayProfile.UsenetDelay = 720;
 
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeFalse();
         }
 
         [Test]
@@ -220,7 +220,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
             _delayProfile.UsenetDelay = 720;
             _delayProfile.MinimumCustomFormatScore = 50;
 
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeFalse();
         }
 
         [Test]
@@ -233,7 +233,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
             _delayProfile.BypassIfAboveCustomFormatScore = true;
             _delayProfile.MinimumCustomFormatScore = 50;
 
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeFalse();
         }
 
         [Test]
@@ -246,7 +246,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
             _delayProfile.BypassIfAboveCustomFormatScore = true;
             _delayProfile.MinimumCustomFormatScore = 50;
 
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeTrue();
         }
     }
 }

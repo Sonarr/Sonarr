@@ -4,6 +4,7 @@ using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
@@ -21,6 +22,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         private Series _series;
         private List<Episode> _episodes;
         private SeasonSearchCriteria _multiSearch;
+        private ReleaseDecisionInformation _multiInfo;
 
         [SetUp]
         public void Setup()
@@ -39,6 +41,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             _multiSearch = new SeasonSearchCriteria();
             _multiSearch.Episodes = _episodes.ToList();
             _multiSearch.SeasonNumber = 1;
+            _multiInfo = new ReleaseDecisionInformation(false, _multiSearch);
 
             _parseResultMulti = new RemoteEpisode
             {
@@ -79,7 +82,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             _parseResultSingle.Episodes.Clear();
             _parseResultSingle.Episodes.Add(_episodes.Find(e => e.EpisodeNumber == episode));
 
-            Subject.IsSatisfiedBy(_parseResultSingle, _multiSearch).Accepted.Should().Be(expectedResult);
+            Subject.IsSatisfiedBy(_parseResultSingle, _multiInfo).Accepted.Should().Be(expectedResult);
         }
 
         // should always accept all season packs
@@ -91,7 +94,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             _parseResultMulti.Release.SeasonSearchMaximumSingleEpisodeAge = seasonSearchMaximumSingleEpisodeAge;
 
-            Subject.IsSatisfiedBy(_parseResultMulti, _multiSearch).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_parseResultMulti, _multiInfo).Accepted.Should().BeTrue();
         }
     }
 }

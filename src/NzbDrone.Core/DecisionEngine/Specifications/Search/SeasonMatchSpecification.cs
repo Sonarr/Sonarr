@@ -19,14 +19,15 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.Search
         public SpecificationPriority Priority => SpecificationPriority.Default;
         public RejectionType Type => RejectionType.Permanent;
 
-        public DownloadSpecDecision IsSatisfiedBy(RemoteEpisode remoteEpisode, SearchCriteriaBase searchCriteria)
+        public DownloadSpecDecision IsSatisfiedBy(RemoteEpisode remoteEpisode, ReleaseDecisionInformation information)
         {
-            if (searchCriteria == null)
+            if (information.SearchCriteria == null)
             {
                 return DownloadSpecDecision.Accept();
             }
 
-            var singleEpisodeSpec = searchCriteria as SeasonSearchCriteria;
+            var singleEpisodeSpec = information.SearchCriteria as SeasonSearchCriteria;
+
             if (singleEpisodeSpec == null)
             {
                 return DownloadSpecDecision.Accept();

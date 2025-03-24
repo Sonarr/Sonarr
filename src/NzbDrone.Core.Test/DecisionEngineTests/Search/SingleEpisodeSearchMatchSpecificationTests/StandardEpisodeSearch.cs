@@ -1,6 +1,7 @@
 using System;
 using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.DecisionEngine.Specifications.Search;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
@@ -11,8 +12,9 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.Search.SingleEpisodeSearchMatch
     [TestFixture]
     public class StandardEpisodeSearch : TestBase<SingleEpisodeSearchMatchSpecification>
     {
-        private RemoteEpisode _remoteEpisode = new RemoteEpisode();
-        private SingleEpisodeSearchCriteria _searchCriteria = new SingleEpisodeSearchCriteria();
+        private RemoteEpisode _remoteEpisode = new();
+        private SingleEpisodeSearchCriteria _searchCriteria = new();
+        private ReleaseDecisionInformation _information;
 
         [SetUp]
         public void Setup()
@@ -24,6 +26,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.Search.SingleEpisodeSearchMatch
 
             _searchCriteria.SeasonNumber = 5;
             _searchCriteria.EpisodeNumber = 1;
+            _information = new ReleaseDecisionInformation(false, _searchCriteria);
         }
 
         [Test]
@@ -32,7 +35,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.Search.SingleEpisodeSearchMatch
             _remoteEpisode.ParsedEpisodeInfo.SeasonNumber = 10;
             _remoteEpisode.MappedSeasonNumber = 10;
 
-            Subject.IsSatisfiedBy(_remoteEpisode, _searchCriteria).Accepted.Should().BeFalse();
+            Subject.IsSatisfiedBy(_remoteEpisode, _information).Accepted.Should().BeFalse();
         }
 
         [Test]
@@ -42,7 +45,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.Search.SingleEpisodeSearchMatch
             _remoteEpisode.MappedSeasonNumber = 5; // 10 -> 5 mapping
             _searchCriteria.SeasonNumber = 10; // searching by tvdb 5 = 10 scene
 
-            Subject.IsSatisfiedBy(_remoteEpisode, _searchCriteria).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_remoteEpisode, _information).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -52,7 +55,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.Search.SingleEpisodeSearchMatch
             _remoteEpisode.MappedSeasonNumber = 6; // 9 -> 5 mapping
             _searchCriteria.SeasonNumber = 9; // searching by tvdb 5 = 9 scene
 
-            Subject.IsSatisfiedBy(_remoteEpisode, _searchCriteria).Accepted.Should().BeFalse();
+            Subject.IsSatisfiedBy(_remoteEpisode, _information).Accepted.Should().BeFalse();
         }
 
         [Test]
@@ -60,7 +63,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.Search.SingleEpisodeSearchMatch
         {
             _remoteEpisode.ParsedEpisodeInfo.EpisodeNumbers = Array.Empty<int>();
 
-            Subject.IsSatisfiedBy(_remoteEpisode, _searchCriteria).Accepted.Should().BeFalse();
+            Subject.IsSatisfiedBy(_remoteEpisode, _information).Accepted.Should().BeFalse();
         }
 
         [Test]
@@ -68,13 +71,13 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.Search.SingleEpisodeSearchMatch
         {
             _remoteEpisode.ParsedEpisodeInfo.EpisodeNumbers = new[] { 2 };
 
-            Subject.IsSatisfiedBy(_remoteEpisode, _searchCriteria).Accepted.Should().BeFalse();
+            Subject.IsSatisfiedBy(_remoteEpisode, _information).Accepted.Should().BeFalse();
         }
 
         [Test]
         public void should_return_true_if_full_season_result_for_full_season_search()
         {
-            Subject.IsSatisfiedBy(_remoteEpisode, _searchCriteria).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_remoteEpisode, _information).Accepted.Should().BeTrue();
         }
     }
 }

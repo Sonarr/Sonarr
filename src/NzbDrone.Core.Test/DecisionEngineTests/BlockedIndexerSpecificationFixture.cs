@@ -39,7 +39,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         [Test]
         public void should_return_true_if_no_blocked_indexer()
         {
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -47,7 +47,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             WithBlockedIndexer();
 
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeFalse();
             Subject.Type.Should().Be(RejectionType.Temporary);
         }
     }

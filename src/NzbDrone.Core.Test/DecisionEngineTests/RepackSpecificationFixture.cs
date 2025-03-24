@@ -192,7 +192,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                                                       .With(e => e.Episodes = _episodes)
                                                       .Build();
 
-            Subject.IsSatisfiedBy(remoteEpisode, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(remoteEpisode, new()).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -214,7 +214,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                                                       .With(e => e.Episodes = _episodes)
                                                       .Build();
 
-            Subject.IsSatisfiedBy(remoteEpisode, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(remoteEpisode, new()).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -236,7 +236,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                                                       .With(e => e.Episodes = _episodes)
                                                       .Build();
 
-            Subject.IsSatisfiedBy(remoteEpisode, null).Accepted.Should().BeFalse();
+            Subject.IsSatisfiedBy(remoteEpisode, new()).Accepted.Should().BeFalse();
         }
     }
 }

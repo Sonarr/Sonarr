@@ -65,21 +65,21 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             _remoteEpisode.Episodes.First().EpisodeFileId = 0;
 
-            _subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
+            _subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeTrue();
         }
 
         [Test]
         public void should_be_true_if_series_is_not_anime()
         {
             GivenStandardSeries();
-            _subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
+            _subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeTrue();
         }
 
         [Test]
         public void should_be_true_if_is_not_a_version_upgrade_for_existing_file()
         {
             GivenNoVersionUpgrade();
-            _subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
+            _subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -87,27 +87,27 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             _episodeFile.ReleaseGroup = _remoteEpisode.ParsedEpisodeInfo.ReleaseGroup;
 
-            _subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
+            _subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeTrue();
         }
 
         [Test]
         public void should_be_false_when_existing_file_doesnt_have_a_release_group()
         {
             _episodeFile.ReleaseGroup = string.Empty;
-            _subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
+            _subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeFalse();
         }
 
         [Test]
         public void should_should_be_false_when_release_doesnt_have_a_release_group()
         {
             _remoteEpisode.ParsedEpisodeInfo.ReleaseGroup = string.Empty;
-            _subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
+            _subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeFalse();
         }
 
         [Test]
         public void should_be_false_when_release_group_does_not_match()
         {
-            _subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
+            _subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeFalse();
         }
 
         [Test]
@@ -117,7 +117,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                 .Setup(s => s.DownloadPropersAndRepacks)
                 .Returns(ProperDownloadTypes.DoNotPrefer);
 
-            _subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
+            _subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeTrue();
         }
     }
 }

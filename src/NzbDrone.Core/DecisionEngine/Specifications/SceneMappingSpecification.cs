@@ -1,6 +1,5 @@
 using NLog;
 using NzbDrone.Common.Extensions;
-using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications
@@ -17,7 +16,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
         public SpecificationPriority Priority => SpecificationPriority.Default;
         public RejectionType Type => RejectionType.Temporary; // Temporary till there's a mapping
 
-        public DownloadSpecDecision IsSatisfiedBy(RemoteEpisode remoteEpisode, SearchCriteriaBase searchCriteria)
+        public DownloadSpecDecision IsSatisfiedBy(RemoteEpisode remoteEpisode, ReleaseDecisionInformation information)
         {
             if (remoteEpisode.SceneMapping == null)
             {
@@ -33,7 +32,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
             var split = remoteEpisode.SceneMapping.SceneOrigin.Split(':');
 
-            var isInteractive = searchCriteria != null && searchCriteria.InteractiveSearch;
+            var isInteractive = information.SearchCriteria is { InteractiveSearch: true };
 
             if (remoteEpisode.SceneMapping.Comment.IsNotNullOrWhiteSpace())
             {

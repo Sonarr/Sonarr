@@ -56,7 +56,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             _remoteEpisode.Series.QualityProfile.Value.FormatItems = CustomFormatsTestHelpers.GetSampleFormatItems(_format1.Name);
             _remoteEpisode.CustomFormatScore = _remoteEpisode.Series.QualityProfile.Value.CalculateCustomFormatScore(_remoteEpisode.CustomFormats);
 
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -69,7 +69,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             Console.WriteLine(_remoteEpisode.CustomFormatScore);
             Console.WriteLine(_remoteEpisode.Series.QualityProfile.Value.MinFormatScore);
 
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeFalse();
         }
 
         [Test]
@@ -79,7 +79,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             _remoteEpisode.Series.QualityProfile.Value.FormatItems = CustomFormatsTestHelpers.GetSampleFormatItems(_format1.Name);
             _remoteEpisode.CustomFormatScore = _remoteEpisode.Series.QualityProfile.Value.CalculateCustomFormatScore(_remoteEpisode.CustomFormats);
 
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeFalse();
         }
 
         [Test]
@@ -89,7 +89,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             _remoteEpisode.Series.QualityProfile.Value.FormatItems = CustomFormatsTestHelpers.GetSampleFormatItems(_format1.Name, _format2.Name);
             _remoteEpisode.CustomFormatScore = _remoteEpisode.Series.QualityProfile.Value.CalculateCustomFormatScore(_remoteEpisode.CustomFormats);
 
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -99,7 +99,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             _remoteEpisode.Series.QualityProfile.Value.FormatItems = CustomFormatsTestHelpers.GetSampleFormatItems(_format1.Name, _format2.Name);
             _remoteEpisode.CustomFormatScore = _remoteEpisode.Series.QualityProfile.Value.CalculateCustomFormatScore(_remoteEpisode.CustomFormats);
 
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeFalse();
         }
 
         [Test]
@@ -110,7 +110,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
             _remoteEpisode.Series.QualityProfile.Value.MinFormatScore = 0;
             _remoteEpisode.CustomFormatScore = _remoteEpisode.Series.QualityProfile.Value.CalculateCustomFormatScore(_remoteEpisode.CustomFormats);
 
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeTrue();
         }
     }
 }

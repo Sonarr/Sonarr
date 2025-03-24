@@ -48,13 +48,13 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             _remoteEpisode.ParsedEpisodeInfo.IsMultiSeason = false;
             _remoteEpisode.Episodes.Last().AirDateUtc = DateTime.UtcNow.AddDays(+2);
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeTrue();
         }
 
         [Test]
         public void should_return_false_if_is_a_multi_season_release()
         {
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeFalse();
         }
     }
 }

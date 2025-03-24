@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
+using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.DecisionEngine.Specifications.Search;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
@@ -10,13 +11,15 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.Search.SingleEpisodeSearchMatch
     [TestFixture]
     public class AnimeSearchFixture : TestBase<SingleEpisodeSearchMatchSpecification>
     {
-        private RemoteEpisode _remoteEpisode = new RemoteEpisode();
-        private AnimeEpisodeSearchCriteria _searchCriteria = new AnimeEpisodeSearchCriteria();
+        private RemoteEpisode _remoteEpisode = new();
+        private AnimeEpisodeSearchCriteria _searchCriteria = new();
+        private ReleaseDecisionInformation _information;
 
         [SetUp]
         public void Setup()
         {
             _remoteEpisode.ParsedEpisodeInfo = new ParsedEpisodeInfo();
+            _information = new ReleaseDecisionInformation(false, _searchCriteria);
         }
 
         [Test]
@@ -24,7 +27,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.Search.SingleEpisodeSearchMatch
         {
             _remoteEpisode.ParsedEpisodeInfo.FullSeason = true;
 
-            Subject.IsSatisfiedBy(_remoteEpisode, _searchCriteria).Accepted.Should().BeFalse();
+            Subject.IsSatisfiedBy(_remoteEpisode, _information).Accepted.Should().BeFalse();
         }
 
         [Test]
@@ -32,7 +35,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.Search.SingleEpisodeSearchMatch
         {
             _remoteEpisode.ParsedEpisodeInfo.FullSeason = false;
 
-            Subject.IsSatisfiedBy(_remoteEpisode, _searchCriteria).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_remoteEpisode, _information).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -41,7 +44,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.Search.SingleEpisodeSearchMatch
             _remoteEpisode.ParsedEpisodeInfo.FullSeason = true;
             _searchCriteria.IsSeasonSearch = true;
 
-            Subject.IsSatisfiedBy(_remoteEpisode, _searchCriteria).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_remoteEpisode, _information).Accepted.Should().BeTrue();
         }
     }
 }

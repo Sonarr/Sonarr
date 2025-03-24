@@ -6,6 +6,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.DecisionEngine.Specifications.RssSync;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.MediaFiles;
@@ -94,13 +95,13 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
         {
             GivenUnmonitorDeletedEpisodes(false);
 
-            Subject.IsSatisfiedBy(_parseResultSingle, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_parseResultSingle, new()).Accepted.Should().BeTrue();
         }
 
         [Test]
         public void should_return_true_when_searching()
         {
-            Subject.IsSatisfiedBy(_parseResultSingle, new SeasonSearchCriteria()).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_parseResultSingle, new ReleaseDecisionInformation(false, new SeasonSearchCriteria())).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -108,13 +109,13 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
         {
             WithExistingFile(_firstFile);
 
-            Subject.IsSatisfiedBy(_parseResultSingle, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_parseResultSingle, new()).Accepted.Should().BeTrue();
         }
 
         [Test]
         public void should_return_false_if_file_is_missing()
         {
-            Subject.IsSatisfiedBy(_parseResultSingle, null).Accepted.Should().BeFalse();
+            Subject.IsSatisfiedBy(_parseResultSingle, new()).Accepted.Should().BeFalse();
         }
 
         [Test]
@@ -123,7 +124,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
             WithExistingFile(_firstFile);
             WithExistingFile(_secondFile);
 
-            Subject.IsSatisfiedBy(_parseResultMulti, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_parseResultMulti, new()).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -131,7 +132,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests.RssSync
         {
             WithExistingFile(_firstFile);
 
-            Subject.IsSatisfiedBy(_parseResultMulti, null).Accepted.Should().BeFalse();
+            Subject.IsSatisfiedBy(_parseResultMulti, new()).Accepted.Should().BeFalse();
         }
     }
 }

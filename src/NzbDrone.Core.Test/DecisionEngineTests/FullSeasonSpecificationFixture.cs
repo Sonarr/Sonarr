@@ -48,13 +48,13 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             _remoteEpisode.ParsedEpisodeInfo.FullSeason = false;
             _remoteEpisode.Episodes.Last().AirDateUtc = DateTime.UtcNow.AddDays(+2);
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeTrue();
         }
 
         [Test]
         public void should_return_true_if_all_episodes_have_aired()
         {
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeTrue();
         }
 
         [Test]
@@ -62,21 +62,21 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         {
             _remoteEpisode.Episodes.Last().AirDateUtc = DateTime.UtcNow.AddHours(23);
 
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeTrue();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeTrue();
         }
 
         [Test]
         public void should_return_false_if_one_episode_has_not_aired()
         {
             _remoteEpisode.Episodes.Last().AirDateUtc = DateTime.UtcNow.AddDays(+2);
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeFalse();
         }
 
         [Test]
         public void should_return_false_if_an_episode_does_not_have_an_air_date()
         {
             _remoteEpisode.Episodes.Last().AirDateUtc = null;
-            Subject.IsSatisfiedBy(_remoteEpisode, null).Accepted.Should().BeFalse();
+            Subject.IsSatisfiedBy(_remoteEpisode, new()).Accepted.Should().BeFalse();
         }
     }
 }

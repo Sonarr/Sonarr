@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using NLog;
-using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications.Search
@@ -17,14 +16,14 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.Search
         public SpecificationPriority Priority => SpecificationPriority.Default;
         public RejectionType Type => RejectionType.Permanent;
 
-        public DownloadSpecDecision IsSatisfiedBy(RemoteEpisode remoteEpisode, SearchCriteriaBase searchCriteria)
+        public DownloadSpecDecision IsSatisfiedBy(RemoteEpisode remoteEpisode, ReleaseDecisionInformation information)
         {
-            if (searchCriteria == null)
+            if (information.SearchCriteria == null)
             {
                 return DownloadSpecDecision.Accept();
             }
 
-            var criteriaEpisodes = searchCriteria.Episodes.Select(v => v.Id).ToList();
+            var criteriaEpisodes = information.SearchCriteria.Episodes.Select(v => v.Id).ToList();
             var remoteEpisodes = remoteEpisode.Episodes.Select(v => v.Id).ToList();
 
             if (!criteriaEpisodes.Intersect(remoteEpisodes).Any())
