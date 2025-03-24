@@ -10,7 +10,7 @@
   border-collapse: collapse;
 }
 
-@media only screen and (max-width: $breakpointSmall) {
+@media only screen and (max-width: $breakpointMedium) {
   .tableContainer {
     min-width: 100%;
     width: fit-content;
