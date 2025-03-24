@@ -2154,5 +2154,9 @@
     "QualityDefinitionsSizeNotice": "Boyut kısıtlamaları Kalite Profillerine taşındı",
     "NotificationsTelegramSettingsLinkPreview": "Bağlantı Önizlemesi",
     "NotificationsTelegramSettingsLinkPreviewHelpText": "Telegram bildiriminde hangi bağlantının önizleneceğini belirler. Devre dışı bırakmak için 'Hiçbiri'ni seçin",
-    "DownloadClientUTorrentProviderMessage": "uTorrent'in kripto para madenciliği, kötü amaçlı yazılım ve reklam içerme geçmişi vardır, bu nedenle farklı bir istemci seçmenizi önemle tavsiye ederiz."
+    "DownloadClientUTorrentProviderMessage": "uTorrent'in kripto para madenciliği, kötü amaçlı yazılım ve reklam içerme geçmişi vardır, bu nedenle farklı bir istemci seçmenizi önemle tavsiye ederiz.",
+    "NotificationsPushcutSettingsIncludePoster": "Posteri Dahil Et",
+    "NotificationsPushcutSettingsMetadataLinks": "Meta Veri Bağlantıları",
+    "NotificationsPushcutSettingsMetadataLinksHelpText": "Bildirim içeriğine meta verilerin bağlantılarını ekleyin",
+    "NotificationsPushcutSettingsIncludePosterHelpText": "Bildirim içeriğine poster ekleyin"
 }
