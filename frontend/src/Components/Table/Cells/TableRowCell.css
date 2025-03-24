@@ -4,7 +4,7 @@
   line-height: 1.52857143;
 }
 
-@media only screen and (max-width: $breakpointSmall) {
+@media only screen and (max-width: $breakpointMedium) {
   .cell {
     white-space: nowrap;
   }

@@ -7,7 +7,7 @@
   white-space: nowrap;
 }
 
-@media only screen and (max-width: $breakpointSmall) {
+@media only screen and (max-width: $breakpointMedium) {
   .cell {
     white-space: nowrap;
   }
