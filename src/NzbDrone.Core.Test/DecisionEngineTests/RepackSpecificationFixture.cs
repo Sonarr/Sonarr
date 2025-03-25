@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
 
             _parsedEpisodeInfo = Builder<ParsedEpisodeInfo>.CreateNew()
                                                            .With(p => p.Quality = new QualityModel(Quality.SDTV,
-                                                               new Revision(2, 0, false)))
+                                                               new Revision(2, 0, 0, false)))
                                                            .With(p => p.ReleaseGroup = "Sonarr")
                                                            .Build();
 

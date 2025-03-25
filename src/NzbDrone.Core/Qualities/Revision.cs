@@ -9,15 +9,17 @@ namespace NzbDrone.Core.Qualities
         {
         }
 
-        public Revision(int version = 1, int real = 0, bool isRepack = false)
+        public Revision(int version = 1, int real = 0, int repack = 0, bool isRepack = false)
         {
             Version = version;
             Real = real;
+            Repack = repack;
             IsRepack = isRepack;
         }
 
         public int Version { get; set; }
         public int Real { get; set; }
+        public int Repack { get; set; }
         public bool IsRepack { get; set; }
 
         public bool Equals(Revision other)
