@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Core.Languages;
@@ -23,7 +24,7 @@ namespace NzbDrone.Core.Notifications.Webhook
             CustomFormats = remoteEpisode.CustomFormats?.Select(x => x.Name).ToList();
             CustomFormatScore = remoteEpisode.CustomFormatScore;
             Languages = remoteEpisode.Languages;
-            IndexerFlags = remoteEpisode.Release.IndexerFlags;
+            IndexerFlags = Enum.GetValues(typeof(IndexerFlags)).Cast<IndexerFlags>().Where(r => (remoteEpisode.Release.IndexerFlags & r) == r).Select(r => r.ToString()).ToList();
         }
 
         public string Quality { get; set; }
@@ -35,6 +36,6 @@ namespace NzbDrone.Core.Notifications.Webhook
         public int CustomFormatScore { get; set; }
         public List<string> CustomFormats { get; set; }
         public List<Language> Languages { get; set; }
-        public IndexerFlags IndexerFlags { get; set; }
+        public List<string> IndexerFlags { get; set; }
     }
 }
