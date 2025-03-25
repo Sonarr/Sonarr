@@ -30,8 +30,11 @@ namespace Sonarr.Api.V3.RemotePathMappings
             SharedValidator.RuleFor(c => c.LocalPath)
                 .Cascade(CascadeMode.Stop)
                 .IsValidPath()
-                           .SetValidator(mappedNetworkDriveValidator)
-                           .SetValidator(pathExistsValidator);
+                .SetValidator(mappedNetworkDriveValidator)
+                .SetValidator(pathExistsValidator)
+                .SetValidator(new SystemFolderValidator())
+                .NotEqual("/")
+                .WithMessage("Cannot be set to '/'");
         }
 
         protected override RemotePathMappingResource GetResourceById(int id)
