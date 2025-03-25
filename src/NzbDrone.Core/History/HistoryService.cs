@@ -157,7 +157,7 @@ namespace NzbDrone.Core.History
                 history.Data.Add("Age", message.Episode.Release.Age.ToString());
                 history.Data.Add("AgeHours", message.Episode.Release.AgeHours.ToString());
                 history.Data.Add("AgeMinutes", message.Episode.Release.AgeMinutes.ToString());
-                history.Data.Add("PublishedDate", message.Episode.Release.PublishDate.ToString("s") + "Z");
+                history.Data.Add("PublishedDate", message.Episode.Release.PublishDate.ToUniversalTime().ToString("s") + "Z");
                 history.Data.Add("DownloadClient", message.DownloadClient);
                 history.Data.Add("DownloadClientName", message.DownloadClientName);
                 history.Data.Add("Size", message.Episode.Release.Size.ToString());
