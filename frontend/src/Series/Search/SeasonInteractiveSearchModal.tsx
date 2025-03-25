@@ -6,19 +6,19 @@ import {
   cancelFetchReleases,
   clearReleases,
 } from 'Store/Actions/releaseActions';
-import SeasonInteractiveSearchModalContent from './SeasonInteractiveSearchModalContent';
+import SeasonInteractiveSearchModalContent, {
+  SeasonInteractiveSearchModalContentProps,
+} from './SeasonInteractiveSearchModalContent';
 
-interface SeasonInteractiveSearchModalProps {
+interface SeasonInteractiveSearchModalProps
+  extends SeasonInteractiveSearchModalContentProps {
   isOpen: boolean;
-  seriesId: number;
-  seasonNumber: number;
-  onModalClose(): void;
 }
 
 function SeasonInteractiveSearchModal(
   props: SeasonInteractiveSearchModalProps
 ) {
-  const { isOpen, seriesId, seasonNumber, onModalClose } = props;
+  const { isOpen, episodeCount, seriesId, seasonNumber, onModalClose } = props;
 
   const dispatch = useDispatch();
 
@@ -44,6 +44,7 @@ function SeasonInteractiveSearchModal(
       onModalClose={handleModalClose}
     >
       <SeasonInteractiveSearchModalContent
+        episodeCount={episodeCount}
         seriesId={seriesId}
         seasonNumber={seasonNumber}
         onModalClose={handleModalClose}

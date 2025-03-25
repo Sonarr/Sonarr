@@ -649,6 +649,7 @@
   "EpisodeHistoryLoadError": "Unable to load episode history",
   "EpisodeImported": "Episode Imported",
   "EpisodeImportedTooltip": "Episode downloaded successfully and picked up from download client",
+  "EpisodesInSeason": "{episodeCount} episodes in season",
   "EpisodeInfo": "Episode Info",
   "EpisodeIsDownloading": "Episode is downloading",
   "EpisodeIsNotMonitored": "Episode is not monitored",
