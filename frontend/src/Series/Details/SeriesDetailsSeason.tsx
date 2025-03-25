@@ -562,6 +562,7 @@ function SeriesDetailsSeason({
 
       <SeasonInteractiveSearchModal
         isOpen={isInteractiveSearchModalOpen}
+        episodeCount={totalEpisodeCount}
         seriesId={seriesId}
         seasonNumber={seasonNumber}
         onModalClose={handleInteractiveSearchModalClose}
