@@ -19,10 +19,6 @@
   display: none;
 }
 
-.closeButton {
-  display: none;
-}
-
 @media only screen and (max-width: $breakpointSmall) {
   .sidebarContainer {
     position: fixed;

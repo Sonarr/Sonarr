@@ -151,7 +151,6 @@ export const DRIVE = farHdd;
 export const EDIT = fasWrench;
 export const EPISODE_FILE = farFileVideo;
 export const EXPAND = fasChevronCircleDown;
-export const EXIT = fasXmark;
 export const EXPAND_INDETERMINATE = fasChevronCircleRight;
 export const EXPORT = fasFileExport;
 export const EXTERNAL_LINK = fasExternalLinkAlt;
