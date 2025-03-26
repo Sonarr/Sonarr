@@ -11,6 +11,7 @@ namespace Sonarr.Api.V3.RootFolders
         public string Path { get; set; }
         public bool Accessible { get; set; }
         public long? FreeSpace { get; set; }
+        public long? TotalSpace { get; set; }
 
         public List<UnmappedFolder> UnmappedFolders { get; set; }
     }
@@ -31,6 +32,7 @@ namespace Sonarr.Api.V3.RootFolders
                 Path = model.Path.GetCleanPath(),
                 Accessible = model.Accessible,
                 FreeSpace = model.FreeSpace,
+                TotalSpace = model.TotalSpace,
                 UnmappedFolders = model.UnmappedFolders
             };
         }
