@@ -15,6 +15,14 @@
   color: var(--white);
 }
 
+.closeContainer {
+  display: none;
+}
+
+.closeButton {
+  display: none;
+}
+
 @media only screen and (max-width: $breakpointSmall) {
   .sidebarContainer {
     position: fixed;
@@ -29,5 +37,32 @@
     overflow-y: auto;
     width: 100%;
     height: 100%;
+  }
+
+  .closeContainer {
+    display: flex;
+    justify-content: flex-end;
+    margin: 0.5vh;
+  }
+  
+  .closeButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2vh;
+    height: 2vh;
+    border: transparent;
+    background-color: initial;
+    color: var(--sidebarColor);
+    cursor: pointer;
+  
+    &:hover {
+      border: thin;
+      background-color: var(--sidebarActiveBackgroundColor);
+      color: var(--themeBlue);
+      text-decoration: none;
+      transition: .2s cubic-bezier(0.3, 0, 0.5, 1);
+      transition-property: color, background-color, border-color;
+    }
   }
 }

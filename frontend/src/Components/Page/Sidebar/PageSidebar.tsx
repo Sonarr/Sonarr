@@ -10,7 +10,7 @@ import ReactDOM from 'react-dom';
 import { useDispatch } from 'react-redux';
 import { useLocation } from 'react-router';
 import QueueStatus from 'Activity/Queue/Status/QueueStatus';
-import { IconName } from 'Components/Icon';
+import Icon, { IconName } from 'Components/Icon';
 import OverlayScroller from 'Components/Scroller/OverlayScroller';
 import Scroller from 'Components/Scroller/Scroller';
 import usePrevious from 'Helpers/Hooks/usePrevious';
@@ -237,7 +237,7 @@ function PageSidebar({ isSidebarVisible, isSmallScreen }: PageSidebarProps) {
 
   const urlBase = window.Sonarr.urlBase;
   const pathname = urlBase
-    ? location.pathname.substr(urlBase.length) || '/'
+    ? location.pathname.slice(urlBase.length) || '/'
     : location.pathname;
 
   const activeParent = useMemo(() => {
@@ -461,6 +461,11 @@ function PageSidebar({ isSidebarVisible, isSmallScreen }: PageSidebarProps) {
         scrollDirection="vertical"
         style={sidebarStyle}
       >
+        <div className={styles.closeContainer}>
+          <button className={styles.closeButton} onClick={handleItemPress}>
+            <Icon name={icons.CLOSE} />
+          </button>
+        </div>
         <div>
           {LINKS.map((link) => {
             const childWithStatusComponent = link.children?.find((child) => {
