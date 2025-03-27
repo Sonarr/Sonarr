@@ -111,7 +111,6 @@ import {
   faUserPlus as fasUserPlus,
   faVial as fasVial,
   faWrench as fasWrench,
-  faXmark as fasXmark,
 } from '@fortawesome/free-solid-svg-icons';
 
 //
