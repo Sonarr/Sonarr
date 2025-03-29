@@ -6,6 +6,7 @@ import React, {
   useState,
 } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router';
 import { SelectProvider } from 'App/SelectContext';
 import ClientSideCollectionAppState from 'App/State/ClientSideCollectionAppState';
 import SeriesAppState, { SeriesIndexAppState } from 'App/State/SeriesAppState';
@@ -74,6 +75,8 @@ interface SeriesIndexProps {
 }
 
 const SeriesIndex = withScrollPosition((props: SeriesIndexProps) => {
+  const history = useHistory();
+
   const {
     isFetching,
     isPopulated,
@@ -103,7 +106,12 @@ const SeriesIndex = withScrollPosition((props: SeriesIndexProps) => {
   const [isSelectMode, setIsSelectMode] = useState(false);
 
   useEffect(() => {
-    dispatch(fetchSeries());
+    if (history.action === 'PUSH') {
+      dispatch(fetchSeries());
+    }
+  }, [history, dispatch]);
+
+  useEffect(() => {
     dispatch(fetchQueueDetails({ all: true }));
   }, [dispatch]);
 
