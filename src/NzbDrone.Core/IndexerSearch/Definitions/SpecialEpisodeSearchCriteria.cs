@@ -12,10 +12,10 @@ namespace NzbDrone.Core.IndexerSearch.Definitions
 
             if (episodeTitles.Count > 0)
             {
-                return string.Format("[{0}] Specials", Series.Title);
+                return $"[{Series.Title} ({Series.SeriesType})] Specials";
             }
 
-            return string.Format("[{0} : {1}]", Series.Title, string.Join(",", EpisodeQueryTitles));
+            return $"[{Series.Title} ({Series.SeriesType}): {string.Join(",", EpisodeQueryTitles)}]";
         }
     }
 }
