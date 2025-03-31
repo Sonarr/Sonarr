@@ -103,7 +103,11 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                 if (!torrent.ErrorString.IsNullOrWhiteSpace())
                 {
                     item.Status = DownloadItemStatus.Warning;
-                    item.Message = torrent.ErrorString;
+                    item.Message = _localizationService.GetLocalizedString("DownloadClientItemErrorMessage", new Dictionary<string, object>
+                    {
+                        { "clientName", Name },
+                        { "message", torrent.ErrorString }
+                    });
                 }
                 else if (torrent.TotalSize == 0)
                 {
