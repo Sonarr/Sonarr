@@ -469,6 +469,7 @@
   "DownloadClientFreeboxSettingsPortHelpText": "Port used to access Freebox interface, defaults to '{port}'",
   "DownloadClientFreeboxUnableToReachFreebox": "Unable to reach Freebox API. Verify 'Host', 'Port' or 'Use SSL' settings. (Error: {exceptionMessage})",
   "DownloadClientFreeboxUnableToReachFreeboxApi": "Unable to reach Freebox API. Verify 'API URL' setting for base URL and version.",
+  "DownloadClientItemErrorMessage": "{clientName} is reporting an error: {message}",
   "DownloadClientNzbVortexMultipleFilesMessage": "Download contains multiple files and is not in a job folder: {outputPath}",
   "DownloadClientNzbgetSettingsAddPausedHelpText": "This option requires at least NzbGet version 16.0",
   "DownloadClientNzbgetValidationKeepHistoryOverMax": "NzbGet setting KeepHistory should be less than 25000",
