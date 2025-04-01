@@ -509,6 +509,13 @@ namespace NzbDrone.Core.Test.ParserTests
             result.Languages.Should().Contain(Language.Uzbek);
         }
 
+        [TestCase("Title.the.Series.2009.S01E14.Urdu.HDTV.XviD-LOL")]
+        public void should_parse_language_urdu(string postTitle)
+        {
+            var result = LanguageParser.ParseLanguages(postTitle);
+            result.Should().Contain(Language.Urdu);
+        }
+
         [TestCase("Name (2020) - S01E20 - [AAC 2.0].testtitle.default.eng.forced.ass", new[] { "default", "forced" }, "testtitle", "English")]
         [TestCase("Name (2020) - S01E20 - [AAC 2.0].eng.default.testtitle.forced.ass", new[] { "default", "forced" }, "testtitle", "English")]
         [TestCase("Name (2020) - S01E20 - [AAC 2.0].default.eng.testtitle.forced.ass", new[] { "default", "forced" }, "testtitle", "English")]

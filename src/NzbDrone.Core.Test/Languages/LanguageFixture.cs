@@ -43,7 +43,23 @@ namespace NzbDrone.Core.Test.Languages
                 new object[] { 31, Language.Slovak },
                 new object[] { 32, Language.Thai },
                 new object[] { 33, Language.PortugueseBrazil },
-                new object[] { 34, Language.SpanishLatino }
+                new object[] { 34, Language.SpanishLatino },
+                new object[] { 35, Language.Romanian },
+                new object[] { 36, Language.Latvian },
+                new object[] { 37, Language.Persian },
+                new object[] { 38, Language.Catalan },
+                new object[] { 39, Language.Croatian },
+                new object[] { 40, Language.Serbian },
+                new object[] { 41, Language.Bosnian },
+                new object[] { 42, Language.Estonian },
+                new object[] { 43, Language.Tamil },
+                new object[] { 44, Language.Indonesian },
+                new object[] { 45, Language.Macedonian },
+                new object[] { 46, Language.Slovenian },
+                new object[] { 47, Language.Azerbaijani },
+                new object[] { 48, Language.Uzbek },
+                new object[] { 49, Language.Malay },
+                new object[] { 50, Language.Urdu }
             };
 
         public static object[] ToIntCases =
@@ -81,7 +97,23 @@ namespace NzbDrone.Core.Test.Languages
                 new object[] { Language.Slovak, 31 },
                 new object[] { Language.Thai, 32 },
                 new object[] { Language.PortugueseBrazil, 33 },
-                new object[] { Language.SpanishLatino, 34 }
+                new object[] { Language.SpanishLatino, 34 },
+                new object[] { Language.Romanian, 35 },
+                new object[] { Language.Latvian, 36 },
+                new object[] { Language.Persian, 37 },
+                new object[] { Language.Catalan, 38 },
+                new object[] { Language.Croatian, 39 },
+                new object[] { Language.Serbian, 40 },
+                new object[] { Language.Bosnian, 41 },
+                new object[] { Language.Estonian, 42 },
+                new object[] { Language.Tamil, 43 },
+                new object[] { Language.Indonesian, 44 },
+                new object[] { Language.Macedonian, 45 },
+                new object[] { Language.Slovenian, 46 },
+                new object[] { Language.Azerbaijani, 47 },
+                new object[] { Language.Uzbek, 48 },
+                new object[] { Language.Malay, 49 },
+                new object[] { Language.Urdu, 50 }
             };
 
         [Test]
