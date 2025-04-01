@@ -213,5 +213,16 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
 
             Subject.IsSample(_localEpisode).Should().Be(DetectSampleResult.Sample);
         }
+
+        [Test]
+        public void should_default_to_45_minutes_if_runtime_is_zero()
+        {
+            GivenRuntime(120);
+
+            _localEpisode.Series.Runtime = 0;
+            _localEpisode.Episodes.First().Runtime = 0;
+
+            Subject.IsSample(_localEpisode).Should().Be(DetectSampleResult.Sample);
+        }
     }
 }

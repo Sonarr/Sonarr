@@ -66,6 +66,12 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                 return DetectSampleResult.Indeterminate;
             }
 
+            if (runtime == 0)
+            {
+                _logger.Debug("Series runtime is 0, defaulting runtime to 45 minutes");
+                runtime = 45;
+            }
+
             return IsSample(localEpisode.Path, localEpisode.MediaInfo.RunTime, runtime);
         }
 
