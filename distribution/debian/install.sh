@@ -16,10 +16,6 @@
 #OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 #WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-# Environment variables (optional, for unattended install)
-# SONARR_USER - set this to the user account Sonarr should run as
-# SONARR_GROUP - set this to the group Sonarr should run as
-
 scriptversion="1.0.3"
 scriptdate="2024-01-06"
 
@@ -53,17 +49,93 @@ if [ "$installdir" == "$(dirname -- "$( readlink -f -- "$0"; )")" ] || [ "$bindi
     exit
 fi
 
-# Prompt User
-if [ -n "$SONARR_USER" ]; then
-    app_uid="$SONARR_USER"
+show_help() {
+    cat <<EOF
+Usage: $(basename "$0") [OPTIONS]
+
+Options:
+  --user <name>       What user will Sonarr run under?
+                      User will be created if it doesn't already exist.
+
+  --group <name>      What group will Sonarr run under?
+                      Group will be created if it doesn't already exist.
+
+  -u                  Unattended mode (requires --user and --group)
+
+  -h, --help          Show this help message and exit
+EOF
+}
+
+# Default values for command-line arguments
+arg_user=""
+arg_group=""
+arg_unattended=false
+
+# Parse command-line arguments
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --user=*)
+            arg_user="${1#*=}"
+            shift
+            ;;
+        --user)
+            if [[ -n "$2" && "$2" != -* ]]; then
+                arg_user="$2"
+                shift 2
+            else
+                echo "Error: --user requires a value." >&2
+                exit 1
+            fi
+            ;;
+        --group=*)
+            arg_group="${1#*=}"
+            shift
+            ;;
+        --group)
+            if [[ -n "$2" && "$2" != -* ]]; then
+                arg_group="$2"
+                shift 2
+            else
+                echo "Error: --group requires a value." >&2
+                exit 1
+            fi
+            ;;
+        -u)
+            arg_unattended=true
+            shift
+            ;;
+        -h|--help)
+            show_help
+            exit 0
+            ;;
+        *)
+            echo "Unknown option: $1" >&2
+            echo "Use --help to see valid options." >&2
+            exit 1
+            ;;
+    esac
+done
+
+# If unattended mode is requested, require user and group
+if $arg_unattended; then
+    if [[ -z "$arg_user" || -z "$arg_group" ]]; then
+        echo "Error: --user and --group are required when using -u (unattended mode)." >&2
+        exit 1
+    fi
+fi
+
+# Prompt User if necessary
+if [ -n "$arg_user" ]; then
+    app_uid="$arg_user"
 else
     read -r -p "What user should ${app^} run as? (Default: $app): " app_uid < /dev/tty
 fi
 app_uid=$(echo "$app_uid" | tr -d ' ')
 app_uid=${app_uid:-$app}
-# Prompt Group
-if [ -n "$SONARR_GROUP" ]; then
-    app_guid="$SONARR_GROUP"
+
+# Prompt Group if necessary
+if [ -n "$arg_group" ]; then
+    app_guid="$arg_group"
 else
     read -r -p "What group should ${app^} run as? (Default: media): " app_guid < /dev/tty
 fi
@@ -72,7 +144,7 @@ app_guid=${app_guid:-media}
 
 echo "This will install [${app^}] to [$bindir] and use [$datadir] for the AppData Directory"
 echo "${app^} will run as the user [$app_uid] and group [$app_guid]. By continuing, you've confirmed that the selected user and group will have READ and WRITE access to your Media Library and Download Client Completed Download directories"
-if [ -z "$SONARR_USER" ] || [ -z "$SONARR_GROUP" ]; then
+if ! $arg_unattended; then
     read -n 1 -r -s -p $'Press enter to continue or ctrl+c to exit...\n' < /dev/tty
 fi
 
