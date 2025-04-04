@@ -62,7 +62,7 @@ fi
 app_uid=$(echo "$app_uid" | tr -d ' ')
 app_uid=${app_uid:-$app}
 # Prompt Group
-if [ -n "$SONARR_USER" ]; then
+if [ -n "$SONARR_GROUP" ]; then
     app_guid="$SONARR_GROUP"
 else
     read -r -p "What group should ${app^} run as? (Default: media): " app_guid < /dev/tty
