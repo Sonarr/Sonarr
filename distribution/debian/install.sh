@@ -16,6 +16,10 @@
 #OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 #WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+# Environment variables (optional, for unattended install)
+# SONARR_USER - set this to the user account Sonarr should run as
+# SONARR_GROUP - set this to the group Sonarr should run as
+
 scriptversion="1.0.3"
 scriptdate="2024-01-06"
 
@@ -50,17 +54,27 @@ if [ "$installdir" == "$(dirname -- "$( readlink -f -- "$0"; )")" ] || [ "$bindi
 fi
 
 # Prompt User
-read -r -p "What user should ${app^} run as? (Default: $app): " app_uid < /dev/tty
+if [ -n "$SONARR_USER" ]; then
+    app_uid="$SONARR_USER"
+else
+    read -r -p "What user should ${app^} run as? (Default: $app): " app_uid < /dev/tty
+fi
 app_uid=$(echo "$app_uid" | tr -d ' ')
 app_uid=${app_uid:-$app}
 # Prompt Group
-read -r -p "What group should ${app^} run as? (Default: media): " app_guid < /dev/tty
+if [ -n "$SONARR_USER" ]; then
+    app_guid="$SONARR_GROUP"
+else
+    read -r -p "What group should ${app^} run as? (Default: media): " app_guid < /dev/tty
+fi
 app_guid=$(echo "$app_guid" | tr -d ' ')
 app_guid=${app_guid:-media}
 
 echo "This will install [${app^}] to [$bindir] and use [$datadir] for the AppData Directory"
 echo "${app^} will run as the user [$app_uid] and group [$app_guid]. By continuing, you've confirmed that the selected user and group will have READ and WRITE access to your Media Library and Download Client Completed Download directories"
-read -n 1 -r -s -p $'Press enter to continue or ctrl+c to exit...\n' < /dev/tty
+if [ -z "$SONARR_USER" ] || [ -z "$SONARR_GROUP" ]; then
+    read -n 1 -r -s -p $'Press enter to continue or ctrl+c to exit...\n' < /dev/tty
+fi
 
 # Create User / Group as needed
 if [ "$app_guid" != "$app_uid" ]; then
