@@ -6,6 +6,7 @@
 ### Version V1.0.1 2024-01-02 - StevieTV - remove UTF8-BOM
 ### Version V1.0.2 2024-01-03 - markus101 - Get user input from /dev/tty
 ### Version V1.0.3 2024-01-06 - StevieTV - exit script when it is ran from install directory
+### Version V1.0.4 2025-04-05 - kaecyra - Allow user/group to be supplied via CLI, add unattended mode
 
 ### Boilerplate Warning
 #THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
@@ -16,8 +17,8 @@
 #OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 #WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-scriptversion="1.0.3"
-scriptdate="2024-01-06"
+scriptversion="1.0.4"
+scriptdate="2025-04-05"
 
 set -euo pipefail
 
@@ -54,13 +55,15 @@ show_help() {
 Usage: $(basename "$0") [OPTIONS]
 
 Options:
-  --user <name>       What user will Sonarr run under?
+  --user <name>       What user will $app run under?
                       User will be created if it doesn't already exist.
 
-  --group <name>      What group will Sonarr run under?
+  --group <name>      What group will $app run under?
                       Group will be created if it doesn't already exist.
 
-  -u                  Unattended mode (requires --user and --group)
+  -u                  Unattended mode
+                      The installer will not prompt or pause, making it suitable for automated installations.
+                      This option requires the use of --user and --group to supply those inputs for the script.
 
   -h, --help          Show this help message and exit
 EOF
