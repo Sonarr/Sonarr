@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Core.AutoTagging;
 using NzbDrone.Core.Datastore.Events;
@@ -23,6 +25,11 @@ namespace Sonarr.Api.V3.Tags
             : base(signalRBroadcaster)
         {
             _tagService = tagService;
+
+            SharedValidator.RuleFor(c => c.Label).Cascade(CascadeMode.Stop)
+                .NotEmpty()
+                .Matches("^[a-z0-9-]+$", RegexOptions.IgnoreCase)
+                .WithMessage("Allowed characters a-z, 0-9 and -");
         }
 
         protected override TagResource GetResourceById(int id)
