@@ -1436,7 +1436,7 @@
     "ReleaseProfiles": "Julkaisuprofiilit",
     "SetReleaseGroup": "Aseta julkaisuryhmä",
     "NotificationsTraktSettingsRefreshToken": "Päivitä tunniste",
-    "IndexerSettingsAdditionalNewznabParametersHelpText": "Huomioi, että kategorian vaihdon jälkeen alaryhmiin on lisättävä pakolliset/rajoitetut aliryhmäsäännöt vieraskielisten julkaisujen välttämiseksi.",
+    "IndexerSettingsAdditionalNewznabParametersHelpText": "Huomioi, että kategorian vaihdon jälkeen alaryhmiin on lisättävä pakolliset/rajoitetut alaryhmäsäännöt vieraskielisten julkaisujen välttämiseksi.",
     "IndexerLongTermStatusUnavailableHealthCheckMessage": "Hakupalvelut eivät ole käytettävissä yli kuusi tuntia kestäneiden virheiden vuoksi: {indexerNames}.",
     "FullSeason": "Koko kausi",
     "ShowRelativeDates": "Käytä suhteellisia päiväyksiä",
@@ -1800,7 +1800,7 @@
     "CustomFormatsSpecificationFlag": "Lippu",
     "SelectIndexerFlags": "Valitse hakupalvelun liput",
     "SetIndexerFlagsModalTitle": "{modalTitle} – Aseta hakupalvelun liput",
-    "CustomFilter": "Mukautettu suodatin",
+    "CustomFilter": "Oma suodatin",
     "Label": "Nimi",
     "ShowTagsHelpText": "Näytä tunnisteet julisteen alla.",
     "UpgradeUntilCustomFormatScoreEpisodeHelpText": "Kun laaturajoitus on saavutettu tai ylitetty, ja tämän mukautetun muodon pisteytys saavutetaan, ei {appName} enää kaappaa jaksojulkaisuja tai tuo päivityksiä.",
@@ -2111,7 +2111,7 @@
     "ImportMechanismEnableCompletedDownloadHandlingIfPossibleMultiComputerHealthCheckMessage": "Ota valmistuneiden latausten käsittely käyttöön, jos mahdollista (ei tue useiden tietokoneiden ympäristöä).",
     "InvalidFormat": "Virheellinen muoto",
     "IndexerValidationUnableToConnectTimeout": "Hakupalveluun ei voitu muodostaa yhteyttä, mahdollisesti aikakatkaisun vuoksi. yritä uudelleen tai tarkista verkkoasetukset. {exceptionMessage}.",
-    "IndexerSettingsCookieHelpText": "Jos sivusto vaatii RSS-syötteen käyttöön kirjautumisevästeen, on se noudettava selaimen avulla.",
+    "IndexerSettingsCookieHelpText": "Jos sivusto vaatii kirjautumisevästeen, on se noudettava selaimen avulla.",
     "IndexerValidationUnableToConnectServerUnavailable": "Hakupalveluun ei voitu muodostaa yhteyttä, koska sen palvelin ei ole tavoitettavissa. Yritä myöhemmin uudelleen. {exceptionMessage}.",
     "IndexerValidationJackettAllNotSupportedHelpText": "Jackettin \"all\"-päätettä ei tueta. Lisää hakupalvelut yksitellen.",
     "IndexerValidationUnableToConnectInvalidCredentials": "Hakupalveluun ei voitu muodostaa yhteyttä virheellisten käyttäjätietojen vuoksi. {exceptionMessage}.",
@@ -2154,5 +2154,9 @@
     "QualityDefinitionsSizeNotice": "Kokorajoitukset on siirretty laatuprofiileihin",
     "NotificationsTelegramSettingsLinkPreview": "Linkin esikatselu",
     "NotificationsTelegramSettingsLinkPreviewHelpText": "Määrittää minkä linkin esikatselu Telegram-ilmoituksessa näytetään. Poista käytöstä valitsemalla \"Ei mitään\".",
-    "DownloadClientUTorrentProviderMessage": "Koska uTorrent on tunnettu crypto-, haitta- and mainossisällöstä ja sovelluksista, suosittelemme qBittorrentin, Delugen ja ruTorrentin kaltaisten vaihtoehtojen käyttämistä."
+    "DownloadClientUTorrentProviderMessage": "Koska uTorrent on tunnettu crypto-, haitta- and mainossisällöstä ja sovelluksista, suosittelemme qBittorrentin, Delugen ja ruTorrentin kaltaisten vaihtoehtojen käyttämistä.",
+    "NotificationsPushcutSettingsIncludePoster": "Sisällytä juliste",
+    "NotificationsPushcutSettingsIncludePosterHelpText": "Näytä juliste ilmoituksessa.",
+    "NotificationsPushcutSettingsMetadataLinks": "Metatietolinkit",
+    "NotificationsPushcutSettingsMetadataLinksHelpText": "Lisää lähetettäviin ilmoituksiin linkit sarjojen metatietoihin."
 }
