@@ -2155,5 +2155,7 @@
     "QualityDefinitionsSizeNotice": "Ограничения размеров перемещены в профили качества",
     "SkipFreeSpaceCheckHelpText": "Используйте, когда {appName} не может верно определить свободное место в вашей корневой папке",
     "UpdatePath": "Обновить путь",
-    "UpdateSeriesPath": "Обновить путь до сериала"
+    "UpdateSeriesPath": "Обновить путь до сериала",
+    "ReleasePush": "Через API",
+    "DownloadClientUTorrentProviderMessage": "Мы настоятельно советуем не использовать uTorrent, т.к. он известен как программа-шифровальщик и в целом вредоносное ПО."
 }
