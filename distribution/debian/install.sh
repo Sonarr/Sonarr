@@ -6,6 +6,7 @@
 ### Version V1.0.1 2024-01-02 - StevieTV - remove UTF8-BOM
 ### Version V1.0.2 2024-01-03 - markus101 - Get user input from /dev/tty
 ### Version V1.0.3 2024-01-06 - StevieTV - exit script when it is ran from install directory
+### Version V1.0.4 2025-04-05 - kaecyra - Allow user/group to be supplied via CLI, add unattended mode
 
 ### Boilerplate Warning
 #THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
@@ -16,8 +17,8 @@
 #OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 #WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-scriptversion="1.0.3"
-scriptdate="2024-01-06"
+scriptversion="1.0.4"
+scriptdate="2025-04-05"
 
 set -euo pipefail
 
@@ -49,18 +50,106 @@ if [ "$installdir" == "$(dirname -- "$( readlink -f -- "$0"; )")" ] || [ "$bindi
     exit
 fi
 
-# Prompt User
-read -r -p "What user should ${app^} run as? (Default: $app): " app_uid < /dev/tty
+show_help() {
+    cat <<EOF
+Usage: $(basename "$0") [OPTIONS]
+
+Options:
+  --user <name>       What user will $app run under?
+                      User will be created if it doesn't already exist.
+
+  --group <name>      What group will $app run under?
+                      Group will be created if it doesn't already exist.
+
+  -u                  Unattended mode
+                      The installer will not prompt or pause, making it suitable for automated installations.
+                      This option requires the use of --user and --group to supply those inputs for the script.
+
+  -h, --help          Show this help message and exit
+EOF
+}
+
+# Default values for command-line arguments
+arg_user=""
+arg_group=""
+arg_unattended=false
+
+# Parse command-line arguments
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --user=*)
+            arg_user="${1#*=}"
+            shift
+            ;;
+        --user)
+            if [[ -n "$2" && "$2" != -* ]]; then
+                arg_user="$2"
+                shift 2
+            else
+                echo "Error: --user requires a value." >&2
+                exit 1
+            fi
+            ;;
+        --group=*)
+            arg_group="${1#*=}"
+            shift
+            ;;
+        --group)
+            if [[ -n "$2" && "$2" != -* ]]; then
+                arg_group="$2"
+                shift 2
+            else
+                echo "Error: --group requires a value." >&2
+                exit 1
+            fi
+            ;;
+        -u)
+            arg_unattended=true
+            shift
+            ;;
+        -h|--help)
+            show_help
+            exit 0
+            ;;
+        *)
+            echo "Unknown option: $1" >&2
+            echo "Use --help to see valid options." >&2
+            exit 1
+            ;;
+    esac
+done
+
+# If unattended mode is requested, require user and group
+if $arg_unattended; then
+    if [[ -z "$arg_user" || -z "$arg_group" ]]; then
+        echo "Error: --user and --group are required when using -u (unattended mode)." >&2
+        exit 1
+    fi
+fi
+
+# Prompt User if necessary
+if [ -n "$arg_user" ]; then
+    app_uid="$arg_user"
+else
+    read -r -p "What user should ${app^} run as? (Default: $app): " app_uid < /dev/tty
+fi
 app_uid=$(echo "$app_uid" | tr -d ' ')
 app_uid=${app_uid:-$app}
-# Prompt Group
-read -r -p "What group should ${app^} run as? (Default: media): " app_guid < /dev/tty
+
+# Prompt Group if necessary
+if [ -n "$arg_group" ]; then
+    app_guid="$arg_group"
+else
+    read -r -p "What group should ${app^} run as? (Default: media): " app_guid < /dev/tty
+fi
 app_guid=$(echo "$app_guid" | tr -d ' ')
 app_guid=${app_guid:-media}
 
 echo "This will install [${app^}] to [$bindir] and use [$datadir] for the AppData Directory"
 echo "${app^} will run as the user [$app_uid] and group [$app_guid]. By continuing, you've confirmed that the selected user and group will have READ and WRITE access to your Media Library and Download Client Completed Download directories"
-read -n 1 -r -s -p $'Press enter to continue or ctrl+c to exit...\n' < /dev/tty
+if ! $arg_unattended; then
+    read -n 1 -r -s -p $'Press enter to continue or ctrl+c to exit...\n' < /dev/tty
+fi
 
 # Create User / Group as needed
 if [ "$app_guid" != "$app_uid" ]; then
