@@ -93,9 +93,10 @@ function AutoSuggestInput<T = any>(props: AutoSuggestInputProps<T>) {
         mainAxis: true,
       }),
       size({
-        apply({ rects, elements }) {
+        apply({ availableHeight, elements, rects }) {
           Object.assign(elements.floating.style, {
-            width: `${rects.reference.width}px`,
+            minWidth: `${rects.reference.width}px`,
+            maxHeight: `${Math.max(0, availableHeight)}px`,
           });
         },
       }),

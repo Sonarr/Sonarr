@@ -13,7 +13,6 @@ interface CssExports {
   'mobileCloseButton': string;
   'mobileCloseButtonContainer': string;
   'options': string;
-  'optionsContainer': string;
   'optionsInnerModalBody': string;
   'optionsModal': string;
   'optionsModalBody': string;

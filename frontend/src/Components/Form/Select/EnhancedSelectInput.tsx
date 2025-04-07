@@ -14,6 +14,7 @@ import React, {
   KeyboardEvent,
   ReactNode,
   useCallback,
+  useEffect,
   useMemo,
   useState,
 } from 'react';
@@ -180,15 +181,21 @@ function EnhancedSelectInput<T extends EnhancedSelectInputValue<V>, V>(
         mainAxis: true,
       }),
       size({
-        apply({ rects, elements }) {
+        apply({ availableHeight, elements, rects }) {
           Object.assign(elements.floating.style, {
-            'min-width': `${rects.reference.width}px`,
+            minWidth: `${rects.reference.width}px`,
+            maxHeight: `${Math.max(
+              0,
+              Math.min(window.innerHeight / 2, availableHeight)
+            )}px`,
           });
         },
       }),
     ],
+    open: isOpen,
     placement: 'bottom-start',
     whileElementsMounted: autoUpdate,
+    onOpenChange: setIsOpen,
   });
 
   const click = useClick(context);
@@ -214,12 +221,8 @@ function EnhancedSelectInput<T extends EnhancedSelectInputValue<V>, V>(
   }, [value, values, isMultiSelect]);
 
   const handlePress = useCallback(() => {
-    if (!isOpen && onOpen) {
-      onOpen();
-    }
-
-    setIsOpen(!isOpen);
-  }, [isOpen, setIsOpen, onOpen]);
+    setIsOpen((prevIsOpen) => !prevIsOpen);
+  }, []);
 
   const handleSelect = useCallback(
     (newValue: ArrayElement<V>) => {
@@ -372,6 +375,12 @@ function EnhancedSelectInput<T extends EnhancedSelectInputValue<V>, V>(
     [onChange]
   );
 
+  useEffect(() => {
+    if (isOpen) {
+      onOpen?.();
+    }
+  }, [isOpen, onOpen]);
+
   return (
     <>
       <div ref={refs.setReference} {...getReferenceProps()}>
@@ -443,46 +452,43 @@ function EnhancedSelectInput<T extends EnhancedSelectInputValue<V>, V>(
           </Link>
         )}
       </div>
-      {isOpen ? (
+
+      {!isMobile && isOpen ? (
         <FloatingPortal id="portal-root">
-          <div
+          <Scroller
             ref={refs.setFloating}
-            className={styles.optionsContainer}
+            className={styles.options}
             style={floatingStyles}
             {...getFloatingProps()}
           >
-            {isOpen && !isMobile ? (
-              <Scroller className={styles.options}>
-                {values.map((v, index) => {
-                  const hasParent = v.parentKey !== undefined;
-                  const depth = hasParent ? 1 : 0;
-                  const parentSelected =
-                    v.parentKey !== undefined &&
-                    Array.isArray(value) &&
-                    value.includes(v.parentKey);
+            {values.map((v, index) => {
+              const hasParent = v.parentKey !== undefined;
+              const depth = hasParent ? 1 : 0;
+              const parentSelected =
+                v.parentKey !== undefined &&
+                Array.isArray(value) &&
+                value.includes(v.parentKey);
 
-                  const { key, ...other } = v;
+              const { key, ...other } = v;
 
-                  return (
-                    <OptionComponent
-                      key={v.key}
-                      id={v.key}
-                      depth={depth}
-                      isSelected={isSelectedItem(index, value, values)}
-                      isDisabled={parentSelected}
-                      isMultiSelect={isMultiSelect}
-                      {...valueOptions}
-                      {...other}
-                      isMobile={false}
-                      onSelect={handleSelect}
-                    >
-                      {v.value}
-                    </OptionComponent>
-                  );
-                })}
-              </Scroller>
-            ) : null}
-          </div>
+              return (
+                <OptionComponent
+                  key={v.key}
+                  id={v.key}
+                  depth={depth}
+                  isSelected={isSelectedItem(index, value, values)}
+                  isDisabled={parentSelected}
+                  isMultiSelect={isMultiSelect}
+                  {...valueOptions}
+                  {...other}
+                  isMobile={false}
+                  onSelect={handleSelect}
+                >
+                  {v.value}
+                </OptionComponent>
+              );
+            })}
+          </Scroller>
         </FloatingPortal>
       ) : null}
 

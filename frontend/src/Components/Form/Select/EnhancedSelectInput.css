@@ -42,15 +42,10 @@
   color: var(--disabledInputColor);
 }
 
-.optionsContainer {
-  z-index: $popperZIndex;
-  max-height: vh(50);
-  width: auto;
-}
-
 .options {
   composes: scroller from '~Components/Scroller/Scroller.css';
 
+  z-index: $popperZIndex;
   border: 1px solid var(--inputBorderColor);
   border-radius: 4px;
   background-color: var(--inputBackgroundColor);
