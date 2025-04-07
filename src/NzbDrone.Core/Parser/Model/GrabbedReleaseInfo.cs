@@ -10,6 +10,7 @@ namespace NzbDrone.Core.Parser.Model
         public string Title { get; set; }
         public string Indexer { get; set; }
         public long Size { get; set; }
+        public IndexerFlags IndexerFlags { get; set; }
         public ReleaseType ReleaseType { get; set; }
 
         public List<int> EpisodeIds { get; set; }
@@ -21,6 +22,7 @@ namespace NzbDrone.Core.Parser.Model
 
             grabbedHistory.Data.TryGetValue("indexer", out var indexer);
             grabbedHistory.Data.TryGetValue("size", out var sizeString);
+            Enum.TryParse(grabbedHistory.Data.GetValueOrDefault("indexerFlags"), out IndexerFlags indexerFlags);
             Enum.TryParse(grabbedHistory.Data.GetValueOrDefault("releaseType"), out ReleaseType releaseType);
             long.TryParse(sizeString, out var size);
 
@@ -28,6 +30,7 @@ namespace NzbDrone.Core.Parser.Model
             Indexer = indexer;
             Size = size;
             EpisodeIds = episodeIds;
+            IndexerFlags = indexerFlags;
             ReleaseType = releaseType;
         }
     }
