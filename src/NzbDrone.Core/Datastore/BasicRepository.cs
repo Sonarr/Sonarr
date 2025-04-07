@@ -252,7 +252,7 @@ namespace NzbDrone.Core.Datastore
 
         protected void Delete(SqlBuilder builder)
         {
-            var sql = builder.AddDeleteTemplate(typeof(TModel)).LogQuery();
+            var sql = builder.AddDeleteTemplate(typeof(TModel));
 
             using (var conn = _database.OpenConnection())
             {
