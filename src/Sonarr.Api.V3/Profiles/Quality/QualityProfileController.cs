@@ -41,6 +41,9 @@ namespace Sonarr.Api.V3.Profiles.Quality
                     context.AddFailure("Minimum Custom Format Score can never be satisfied");
                 }
             });
+
+            SharedValidator.RuleFor(c => c)
+                .SetValidator(new QualityProfileResourceValidator());
         }
 
         [RestPostById]
