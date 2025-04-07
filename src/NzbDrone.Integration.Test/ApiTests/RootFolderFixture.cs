@@ -29,6 +29,7 @@ namespace NzbDrone.Integration.Test.ApiTests
 
             postResponse.Id.Should().NotBe(0);
             postResponse.FreeSpace.Should().NotBe(0);
+            postResponse.TotalSpace.Should().NotBe(0);
 
             RootFolders.All().Should().OnlyContain(c => c.Id == postResponse.Id);
 
