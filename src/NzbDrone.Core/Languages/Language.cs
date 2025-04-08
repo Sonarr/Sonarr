@@ -120,6 +120,7 @@ namespace NzbDrone.Core.Languages
         public static Language Azerbaijani => new Language(47, "Azerbaijani");
         public static Language Uzbek => new Language(48, "Uzbek");
         public static Language Malay => new Language(49, "Malay");
+        public static Language Urdu => new Language(50, "Urdu");
         public static Language Original => new Language(-2, "Original");
 
         public static List<Language> All
@@ -178,6 +179,7 @@ namespace NzbDrone.Core.Languages
                     Azerbaijani,
                     Uzbek,
                     Malay,
+                    Urdu,
                     Original
                 };
             }

@@ -51,5 +51,14 @@ namespace NzbDrone.Core.Test.ParserTests
             var result = IsoLanguages.Find(isoCode);
             result.Language.Should().Be(Language.Czech);
         }
+
+        [TestCase("ur")]
+        [TestCase("urd")]
+        [TestCase("ur-PK")]
+        public void should_return_urdu(string isoCode)
+        {
+            var result = IsoLanguages.Find(isoCode);
+            result.Language.Should().Be(Language.Urdu);
+        }
     }
 }
