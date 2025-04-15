@@ -2158,5 +2158,9 @@
     "NotificationsPushcutSettingsIncludePosterHelpText": "Incluir póster con notificación",
     "NotificationsPushcutSettingsMetadataLinks": "Enlaces de metadatos",
     "NotificationsPushcutSettingsMetadataLinksHelpText": "Añade un enlace a los metadatos de las series cuando se envían notificaciones",
-    "ReleasePush": "Despliegue del lanzamiento"
+    "ReleasePush": "Despliegue del lanzamiento",
+    "EpisodesInSeason": "{episodeCount} episodios en la temporada",
+    "DefaultNameCopiedImportList": "{name} - Copia",
+    "DownloadClientItemErrorMessage": "{clientName} está reportando un error: {message}",
+    "CloneImportList": "Clonar lista de importación"
 }
