@@ -2157,5 +2157,9 @@
     "UpdatePath": "Обновить путь",
     "UpdateSeriesPath": "Обновить путь до сериала",
     "ReleasePush": "Через API",
-    "DownloadClientUTorrentProviderMessage": "Мы настоятельно советуем не использовать uTorrent, т.к. он известен как программа-шифровальщик и в целом вредоносное ПО."
+    "DownloadClientUTorrentProviderMessage": "Мы настоятельно советуем не использовать uTorrent, т.к. он известен как программа-шифровальщик и в целом вредоносное ПО.",
+    "CloneImportList": "Копировать список импорта",
+    "EpisodesInSeason": "{episodeCount} эпизодов в сезоне",
+    "DefaultNameCopiedImportList": "{name} - копировать",
+    "DownloadClientItemErrorMessage": "{clientName} сообщает об ошибке: {message}"
 }

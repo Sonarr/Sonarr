@@ -2158,5 +2158,9 @@
     "NotificationsPushcutSettingsIncludePoster": "Posteri Dahil Et",
     "NotificationsPushcutSettingsMetadataLinks": "Meta Veri Bağlantıları",
     "NotificationsPushcutSettingsMetadataLinksHelpText": "Bildirim içeriğine meta verilerin bağlantılarını ekleyin",
-    "NotificationsPushcutSettingsIncludePosterHelpText": "Bildirim içeriğine poster ekleyin"
+    "NotificationsPushcutSettingsIncludePosterHelpText": "Bildirim içeriğine poster ekleyin",
+    "CloneImportList": "İçe Aktarma Listesini Klonla",
+    "DefaultNameCopiedImportList": "{name} - Kopyala",
+    "DownloadClientItemErrorMessage": "{clientName} bir hata bildiriyor: {message}",
+    "EpisodesInSeason": "Sezondaki {episodeCount} bölüm"
 }
