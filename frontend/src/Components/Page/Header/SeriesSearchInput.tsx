@@ -316,7 +316,7 @@ function SeriesSearchInput() {
         return;
       }
 
-      // If an suggestion is not selected go to the first series,
+      // If a suggestion is not selected go to the first series,
       // otherwise go to the selected series.
 
       const selectedSuggestion =

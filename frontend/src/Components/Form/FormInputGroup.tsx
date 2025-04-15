@@ -222,7 +222,7 @@ function FormInputGroup<T, C extends InputType>(
     <div className={containerClassName}>
       <div className={className}>
         <div className={styles.inputContainer}>
-          {/* @ts-expect-error - tpyes are validated already */}
+          {/* @ts-expect-error - types are validated already */}
           <InputComponent
             className={inputClassName}
             helpText={helpText}

@@ -91,11 +91,11 @@ namespace NzbDrone.Update.Test
         [Test]
         public void should_kill_nzbdrone_process_if_running()
         {
-            var proccesses = Builder<ProcessInfo>.CreateListOfSize(2).Build().ToList();
+            var processes = Builder<ProcessInfo>.CreateListOfSize(2).Build().ToList();
 
             Mocker.GetMock<IProcessProvider>()
                 .Setup(c => c.GetProcessByName(ProcessProvider.NzbDroneProcessName))
-                .Returns(proccesses);
+                .Returns(processes);
 
 
             Mocker.Resolve<InstallUpdateService>().Start(TARGET_FOLDER);
