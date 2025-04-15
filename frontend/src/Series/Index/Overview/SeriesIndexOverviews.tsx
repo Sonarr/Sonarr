@@ -80,17 +80,17 @@ function SeriesIndexOverviews(props: SeriesIndexOverviewsProps) {
   const [size, setSize] = useState({ width: 0, height: 0 });
 
   const posterWidth = useMemo(() => {
-    const maxiumPosterWidth = isSmallScreen ? 152 : 162;
+    const maximumPosterWidth = isSmallScreen ? 152 : 162;
 
     if (posterSize === 'large') {
-      return maxiumPosterWidth;
+      return maximumPosterWidth;
     }
 
     if (posterSize === 'medium') {
-      return Math.floor(maxiumPosterWidth * 0.75);
+      return Math.floor(maximumPosterWidth * 0.75);
     }
 
-    return Math.floor(maxiumPosterWidth * 0.5);
+    return Math.floor(maximumPosterWidth * 0.5);
   }, [posterSize, isSmallScreen]);
 
   const posterHeight = useMemo(() => {

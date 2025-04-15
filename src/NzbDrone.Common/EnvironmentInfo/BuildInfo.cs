@@ -15,7 +15,7 @@ namespace NzbDrone.Common.EnvironmentInfo
 
             var attributes = assembly.GetCustomAttributes(true);
 
-            Branch = "unknow";
+            Branch = "unknown";
 
             var config = attributes.OfType<AssemblyConfigurationAttribute>().FirstOrDefault();
             if (config != null)
