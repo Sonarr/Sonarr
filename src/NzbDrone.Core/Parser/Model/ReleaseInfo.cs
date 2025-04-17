@@ -38,6 +38,7 @@ namespace NzbDrone.Core.Parser.Model
         public string Resolution { get; set; }
 
         public List<Language> Languages { get; set; }
+        public List<Language> Subtitles { get; set; }
 
         [JsonIgnore]
         public IndexerFlags IndexerFlags { get; set; }

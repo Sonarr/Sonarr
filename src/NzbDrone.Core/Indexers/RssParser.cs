@@ -161,6 +161,7 @@ namespace NzbDrone.Core.Indexers
             releaseInfo.InfoUrl = GetInfoUrl(item);
             releaseInfo.CommentUrl = GetCommentUrl(item);
             releaseInfo.Languages = GetLanguages(item);
+            releaseInfo.Subtitles = GetSubtitles(item);
 
             try
             {
@@ -228,6 +229,11 @@ namespace NzbDrone.Core.Indexers
         }
 
         protected virtual List<Language> GetLanguages(XElement item)
+        {
+            return new List<Language>();
+        }
+
+        protected virtual List<Language> GetSubtitles(XElement item)
         {
             return new List<Language>();
         }
