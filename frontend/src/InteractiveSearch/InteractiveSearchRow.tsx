@@ -93,6 +93,7 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
     leechers,
     quality,
     languages,
+    subtitles,
     customFormatScore,
     customFormats,
     sceneMapping,
@@ -209,6 +210,10 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
 
       <TableRowCell className={styles.languages}>
         <EpisodeLanguages languages={languages} />
+      </TableRowCell>
+
+      <TableRowCell className={styles.languages}>
+        <EpisodeLanguages languages={subtitles} />
       </TableRowCell>
 
       <TableRowCell className={styles.quality}>

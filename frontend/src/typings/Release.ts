@@ -28,6 +28,7 @@ interface Release {
   leechers?: number;
   quality: QualityModel;
   languages: Language[];
+  subtitles: Language[];
   customFormats: CustomFormat[];
   customFormatScore: number;
   sceneMapping?: object;
