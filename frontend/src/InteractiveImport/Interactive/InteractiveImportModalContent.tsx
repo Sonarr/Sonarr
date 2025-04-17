@@ -5,7 +5,7 @@ import { createSelector } from 'reselect';
 import AppState from 'App/State/AppState';
 import InteractiveImportAppState from 'App/State/InteractiveImportAppState';
 import * as commandNames from 'Commands/commandNames';
-import SelectInput from 'Components/Form/SelectInput';
+import SelectInput, { SelectInputOption } from 'Components/Form/SelectInput';
 import Icon from 'Components/Icon';
 import Button from 'Components/Link/Button';
 import SpinnerButton from 'Components/Link/SpinnerButton';
@@ -164,7 +164,7 @@ const COLUMNS = [
   },
 ];
 
-const importModeOptions = [
+const importModeOptions: SelectInputOption[] = [
   {
     key: 'chooseImportMode',
     value: () => translate('ChooseImportMode'),
@@ -343,7 +343,7 @@ function InteractiveImportModalContent(
       }
     );
 
-    const options = [
+    const options: SelectInputOption[] = [
       {
         key: 'select',
         value: translate('SelectDropdown'),
