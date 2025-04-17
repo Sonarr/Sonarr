@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import React, { useCallback, useMemo, useState } from 'react';
-import SelectInput from 'Components/Form/SelectInput';
+import SelectInput, { SelectInputOption } from 'Components/Form/SelectInput';
 import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
@@ -34,7 +34,7 @@ function TablePager({
   const isLastPage = page === totalPages;
 
   const pages = useMemo(() => {
-    return Array.from(new Array(totalPages), (_x, i) => {
+    return Array.from(new Array(totalPages), (_x, i): SelectInputOption => {
       const pageNumber = i + 1;
 
       return {
