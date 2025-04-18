@@ -4,6 +4,7 @@ import Form from 'Components/Form/Form';
 import FormGroup from 'Components/Form/FormGroup';
 import FormInputGroup from 'Components/Form/FormInputGroup';
 import FormLabel from 'Components/Form/FormLabel';
+import { EnhancedSelectInputValue } from 'Components/Form/Select/EnhancedSelectInput';
 import Button from 'Components/Link/Button';
 import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
@@ -14,7 +15,7 @@ import selectPosterOptions from 'Series/Index/Posters/selectPosterOptions';
 import { setSeriesPosterOption } from 'Store/Actions/seriesIndexActions';
 import translate from 'Utilities/String/translate';
 
-const posterSizeOptions = [
+const posterSizeOptions: EnhancedSelectInputValue<string>[] = [
   {
     key: 'small',
     get value() {

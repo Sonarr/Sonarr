@@ -3,6 +3,7 @@ import FieldSet from 'Components/FieldSet';
 import FormGroup from 'Components/Form/FormGroup';
 import FormInputGroup from 'Components/Form/FormInputGroup';
 import FormLabel from 'Components/Form/FormLabel';
+import { EnhancedSelectInputValue } from 'Components/Form/Select/EnhancedSelectInput';
 import useShowAdvancedSettings from 'Helpers/Hooks/useShowAdvancedSettings';
 import { inputTypes, sizes } from 'Helpers/Props';
 import useSystemStatus from 'System/useSystemStatus';
@@ -38,7 +39,7 @@ function UpdateSettings({
 
   const usingExternalUpdateMechanism = packageUpdateMechanism !== 'builtIn';
 
-  const updateOptions = [];
+  const updateOptions: EnhancedSelectInputValue<string>[] = [];
 
   if (usingExternalUpdateMechanism) {
     updateOptions.push({

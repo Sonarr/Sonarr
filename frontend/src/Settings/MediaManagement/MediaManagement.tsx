@@ -7,6 +7,7 @@ import Form from 'Components/Form/Form';
 import FormGroup from 'Components/Form/FormGroup';
 import FormInputGroup from 'Components/Form/FormInputGroup';
 import FormLabel from 'Components/Form/FormLabel';
+import { EnhancedSelectInputValue } from 'Components/Form/Select/EnhancedSelectInput';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
@@ -31,7 +32,7 @@ import AddRootFolder from './RootFolder/AddRootFolder';
 
 const SECTION = 'mediaManagement';
 
-const episodeTitleRequiredOptions = [
+const episodeTitleRequiredOptions: EnhancedSelectInputValue<string>[] = [
   {
     key: 'always',
     get value() {
@@ -52,7 +53,7 @@ const episodeTitleRequiredOptions = [
   },
 ];
 
-const rescanAfterRefreshOptions = [
+const rescanAfterRefreshOptions: EnhancedSelectInputValue<string>[] = [
   {
     key: 'always',
     get value() {
@@ -73,7 +74,7 @@ const rescanAfterRefreshOptions = [
   },
 ];
 
-const downloadPropersAndRepacksOptions = [
+const downloadPropersAndRepacksOptions: EnhancedSelectInputValue<string>[] = [
   {
     key: 'preferAndUpgrade',
     get value() {
@@ -94,7 +95,7 @@ const downloadPropersAndRepacksOptions = [
   },
 ];
 
-const fileDateOptions = [
+const fileDateOptions: EnhancedSelectInputValue<string>[] = [
   {
     key: 'none',
     get value() {

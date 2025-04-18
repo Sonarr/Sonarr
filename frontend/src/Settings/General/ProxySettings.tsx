@@ -3,6 +3,7 @@ import FieldSet from 'Components/FieldSet';
 import FormGroup from 'Components/Form/FormGroup';
 import FormInputGroup from 'Components/Form/FormInputGroup';
 import FormLabel from 'Components/Form/FormLabel';
+import { EnhancedSelectInputValue } from 'Components/Form/Select/EnhancedSelectInput';
 import { inputTypes, sizes } from 'Helpers/Props';
 import { InputChanged } from 'typings/inputs';
 import { PendingSection } from 'typings/pending';
@@ -32,7 +33,7 @@ function ProxySettings({
   proxyBypassLocalAddresses,
   onInputChange,
 }: ProxySettingsProps) {
-  const proxyTypeOptions = [
+  const proxyTypeOptions: EnhancedSelectInputValue<string>[] = [
     {
       key: 'http',
       value: translate('HttpHttps'),

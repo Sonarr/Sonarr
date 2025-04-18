@@ -2,6 +2,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import FormGroup from 'Components/Form/FormGroup';
 import FormInputGroup from 'Components/Form/FormInputGroup';
 import FormLabel from 'Components/Form/FormLabel';
+import { EnhancedSelectInputValue } from 'Components/Form/Select/EnhancedSelectInput';
 import Button from 'Components/Link/Button';
 import Modal from 'Components/Modal/Modal';
 import ModalBody from 'Components/Modal/ModalBody';
@@ -79,7 +80,7 @@ function RemoveQueueItemModal(props: RemoveQueueItemModalProps) {
   }, [sourceTitle, selectedCount]);
 
   const removalMethodOptions = useMemo(() => {
-    return [
+    const options: EnhancedSelectInputValue<string>[] = [
       {
         key: 'removeFromClient',
         value: translate('RemoveFromDownloadClient'),
@@ -106,10 +107,12 @@ function RemoveQueueItemModal(props: RemoveQueueItemModalProps) {
           : translate('IgnoreDownloadHint'),
       },
     ];
+
+    return options;
   }, [canChangeCategory, canIgnore, multipleSelected]);
 
   const blocklistMethodOptions = useMemo(() => {
-    return [
+    const options: EnhancedSelectInputValue<string>[] = [
       {
         key: 'doNotBlocklist',
         value: translate('DoNotBlocklist'),
@@ -131,6 +134,8 @@ function RemoveQueueItemModal(props: RemoveQueueItemModalProps) {
           : translate('BlocklistOnlyHint'),
       },
     ];
+
+    return options;
   }, [isPending, multipleSelected]);
 
   const handleRemovalMethodChange = useCallback(
