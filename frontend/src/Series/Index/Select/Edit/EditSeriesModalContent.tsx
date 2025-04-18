@@ -2,6 +2,7 @@ import React, { useCallback, useState } from 'react';
 import FormGroup from 'Components/Form/FormGroup';
 import FormInputGroup from 'Components/Form/FormInputGroup';
 import FormLabel from 'Components/Form/FormLabel';
+import { EnhancedSelectInputValue } from 'Components/Form/Select/EnhancedSelectInput';
 import Button from 'Components/Link/Button';
 import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
@@ -31,7 +32,7 @@ interface EditSeriesModalContentProps {
 
 const NO_CHANGE = 'noChange';
 
-const monitoredOptions = [
+const monitoredOptions: EnhancedSelectInputValue<string>[] = [
   {
     key: NO_CHANGE,
     get value() {
@@ -53,7 +54,7 @@ const monitoredOptions = [
   },
 ];
 
-const seasonFolderOptions = [
+const seasonFolderOptions: EnhancedSelectInputValue<string>[] = [
   {
     key: NO_CHANGE,
     get value() {

@@ -7,6 +7,7 @@ import Form from 'Components/Form/Form';
 import FormGroup from 'Components/Form/FormGroup';
 import FormInputGroup from 'Components/Form/FormInputGroup';
 import FormLabel from 'Components/Form/FormLabel';
+import { EnhancedSelectInputValue } from 'Components/Form/Select/EnhancedSelectInput';
 import Button from 'Components/Link/Button';
 import SpinnerErrorButton from 'Components/Link/SpinnerErrorButton';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
@@ -41,7 +42,7 @@ const newDelayProfile: DelayProfile & { [key: string]: unknown } = {
   tags: [],
 };
 
-const protocolOptions = [
+const protocolOptions: EnhancedSelectInputValue<string>[] = [
   {
     key: 'preferUsenet',
     get value() {

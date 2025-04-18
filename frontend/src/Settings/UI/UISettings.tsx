@@ -6,6 +6,7 @@ import Form from 'Components/Form/Form';
 import FormGroup from 'Components/Form/FormGroup';
 import FormInputGroup from 'Components/Form/FormInputGroup';
 import FormLabel from 'Components/Form/FormLabel';
+import { EnhancedSelectInputValue } from 'Components/Form/Select/EnhancedSelectInput';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
@@ -25,7 +26,7 @@ import translate from 'Utilities/String/translate';
 
 const SECTION = 'ui';
 
-export const firstDayOfWeekOptions = [
+export const firstDayOfWeekOptions: EnhancedSelectInputValue<number>[] = [
   {
     key: 0,
     get value() {
@@ -40,14 +41,14 @@ export const firstDayOfWeekOptions = [
   },
 ];
 
-export const weekColumnOptions = [
+export const weekColumnOptions: EnhancedSelectInputValue<string>[] = [
   { key: 'ddd M/D', value: 'Tue 3/25', hint: 'ddd M/D' },
   { key: 'ddd MM/DD', value: 'Tue 03/25', hint: 'ddd MM/DD' },
   { key: 'ddd D/M', value: 'Tue 25/3', hint: 'ddd D/M' },
   { key: 'ddd DD/MM', value: 'Tue 25/03', hint: 'ddd DD/MM' },
 ];
 
-const shortDateFormatOptions = [
+const shortDateFormatOptions: EnhancedSelectInputValue<string>[] = [
   { key: 'MMM D YYYY', value: 'Mar 25 2014', hint: 'MMM D YYYY' },
   { key: 'DD MMM YYYY', value: '25 Mar 2014', hint: 'DD MMM YYYY' },
   { key: 'MM/D/YYYY', value: '03/25/2014', hint: 'MM/D/YYYY' },
@@ -56,12 +57,12 @@ const shortDateFormatOptions = [
   { key: 'YYYY-MM-DD', value: '2014-03-25', hint: 'YYYY-MM-DD' },
 ];
 
-const longDateFormatOptions = [
+const longDateFormatOptions: EnhancedSelectInputValue<string>[] = [
   { key: 'dddd, MMMM D YYYY', value: 'Tuesday, March 25, 2014' },
   { key: 'dddd, D MMMM YYYY', value: 'Tuesday, 25 March, 2014' },
 ];
 
-export const timeFormatOptions = [
+export const timeFormatOptions: EnhancedSelectInputValue<string>[] = [
   { key: 'h(:mm)a', value: '5pm/5:30pm' },
   { key: 'HH:mm', value: '17:00/17:30' },
 ];

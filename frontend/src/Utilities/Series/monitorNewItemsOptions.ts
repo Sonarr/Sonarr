@@ -1,6 +1,7 @@
+import { EnhancedSelectInputValue } from 'Components/Form/Select/EnhancedSelectInput';
 import translate from 'Utilities/String/translate';
 
-const monitorNewItemsOptions = [
+const monitorNewItemsOptions: EnhancedSelectInputValue<string>[] = [
   {
     key: 'all',
     get value() {

@@ -7,6 +7,7 @@ import Form from 'Components/Form/Form';
 import FormGroup from 'Components/Form/FormGroup';
 import FormInputGroup from 'Components/Form/FormInputGroup';
 import FormLabel from 'Components/Form/FormLabel';
+import { EnhancedSelectInputValue } from 'Components/Form/Select/EnhancedSelectInput';
 import Button from 'Components/Link/Button';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import ModalBody from 'Components/Modal/ModalBody';
@@ -69,7 +70,7 @@ function SelectQualityModalContent(props: SelectQualityModalContentProps) {
   );
 
   const qualityOptions = useMemo(() => {
-    return items.map(({ id, name }) => {
+    return items.map(({ id, name }): EnhancedSelectInputValue<number> => {
       return {
         key: id,
         value: name,
