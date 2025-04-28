@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Linq;
 using System.Xml;
@@ -15,38 +16,52 @@ namespace NzbDrone.Core.Download
     {
         public void Validate(string filename, byte[] fileContent)
         {
-            var reader = new StreamReader(new MemoryStream(fileContent));
-
-            using (var xmlTextReader = XmlReader.Create(reader, new XmlReaderSettings { DtdProcessing = DtdProcessing.Ignore, IgnoreComments = true }))
+            try
             {
-                var xDoc = XDocument.Load(xmlTextReader);
-                var nzb = xDoc.Root;
+                var reader = new StreamReader(new MemoryStream(fileContent));
 
-                if (nzb == null)
+                using (var xmlTextReader = XmlReader.Create(reader,
+                           new XmlReaderSettings { DtdProcessing = DtdProcessing.Ignore, IgnoreComments = true }))
                 {
-                    throw new InvalidNzbException("Invalid NZB: No Root element [{0}]", filename);
-                }
+                    var xDoc = XDocument.Load(xmlTextReader);
+                    var nzb = xDoc.Root;
 
-                // nZEDb has an bug in their error reporting code spitting out invalid http status codes
-                if (nzb.Name.LocalName.Equals("error") &&
-                    nzb.TryGetAttributeValue("code", out var code) &&
-                    nzb.TryGetAttributeValue("description", out var description))
-                {
-                    throw new InvalidNzbException("Invalid NZB: Contains indexer error: {0} - {1}", code, description);
-                }
+                    if (nzb == null)
+                    {
+                        throw new InvalidNzbException("Invalid NZB: No Root element [{0}]", filename);
+                    }
 
-                if (!nzb.Name.LocalName.Equals("nzb"))
-                {
-                    throw new InvalidNzbException("Invalid NZB: Unexpected root element. Expected 'nzb' found '{0}' [{1}]", nzb.Name.LocalName, filename);
-                }
+                    // nZEDb has an bug in their error reporting code spitting out invalid http status codes
+                    if (nzb.Name.LocalName.Equals("error") &&
+                        nzb.TryGetAttributeValue("code", out var code) &&
+                        nzb.TryGetAttributeValue("description", out var description))
+                    {
+                        throw new InvalidNzbException("Invalid NZB: Contains indexer error: {0} - {1}", code, description);
+                    }
 
-                var ns = nzb.Name.Namespace;
-                var files = nzb.Elements(ns + "file").ToList();
+                    if (!nzb.Name.LocalName.Equals("nzb"))
+                    {
+                        throw new InvalidNzbException(
+                            "Invalid NZB: Unexpected root element. Expected 'nzb' found '{0}' [{1}]", nzb.Name.LocalName, filename);
+                    }
 
-                if (files.Empty())
-                {
-                    throw new InvalidNzbException("Invalid NZB: No files [{0}]", filename);
+                    var ns = nzb.Name.Namespace;
+                    var files = nzb.Elements(ns + "file").ToList();
+
+                    if (files.Empty())
+                    {
+                        throw new InvalidNzbException("Invalid NZB: No files [{0}]", filename);
+                    }
                 }
+            }
+            catch (InvalidNzbException)
+            {
+                // Throw the original exception
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidNzbException("Invalid NZB: Unable to parse [{0}]", ex, filename);
             }
         }
     }
