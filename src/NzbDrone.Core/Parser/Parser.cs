@@ -263,6 +263,12 @@ namespace NzbDrone.Core.Parser
                 new Regex(@"^(?<title>.+?)?\W*(?<airyear>\d{4})[-_. ]+(?<airmonth>[0-1][0-9])[-_. ]+(?<airday>[0-3][0-9])(?![-_. ]+[0-3][0-9])[-_. ]+Part[-_. ]?(?<part>[1-9])",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
+                // 3-digit season number
+                // Single episode: Title.S001E01
+                // Multi episode: Title.S001E01-E02
+                new Regex(@"^(?<title>.+?)[-_. ]+S(?<season>(?<!\d+)\d{3}(?!\d+))E(?<episode>(?<!\d+)\d{2}(?!\d+))(?:-[ex](?<episode>(?<!\d+)\d{2}(?!\d+)))?([_. ]|$)(?!\\)",
+                    RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
                 // Mini-Series, treated as season 1, episodes are labelled as Part01, Part 01, Part.1
                 new Regex(@"^(?<title>.+?)(?:\W+(?:(?:(?<!\()Part\W?|(?<!\d+\W+)e)(?<episode>\d{1,2}(?!\d+|\))))+)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
