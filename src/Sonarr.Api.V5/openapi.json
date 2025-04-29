@@ -394,6 +394,29 @@
         }
       }
     },
+    "/api/v5/series/{id}/folder": {
+      "get": {
+        "tags": [
+          "SeriesFolder"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/v5/series/lookup": {
       "get": {
         "tags": [
