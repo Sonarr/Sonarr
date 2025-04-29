@@ -95,7 +95,7 @@ namespace NzbDrone.Core.Notifications.Apprise
             {
                 if (httpException.Response.StatusCode == HttpStatusCode.Unauthorized)
                 {
-                    _logger.Error(ex, $"HTTP Auth credentials are invalid: {0}", ex.Message);
+                    _logger.Error(ex, "HTTP Auth credentials are invalid: {0}", ex.Message);
                     return new ValidationFailure("AuthUsername", _localizationService.GetLocalizedString("NotificationsValidationInvalidHttpCredentials", new Dictionary<string, object> { { "exceptionMessage", ex.Message } }));
                 }
 
@@ -103,7 +103,7 @@ namespace NzbDrone.Core.Notifications.Apprise
                 {
                     var error = Json.Deserialize<AppriseError>(httpException.Response.Content);
 
-                    _logger.Error(ex, $"Unable to send test message. Response from API: {0}", error.Error);
+                    _logger.Error(ex, "Unable to send test message. Response from API: {0}", error.Error);
                     return new ValidationFailure(string.Empty, _localizationService.GetLocalizedString("NotificationsValidationUnableToSendTestMessageApiResponse", new Dictionary<string, object> { { "error", error.Error } }));
                 }
 
