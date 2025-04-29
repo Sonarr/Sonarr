@@ -88,13 +88,10 @@ function QualityProfileSelectInput({
   );
 
   const handleChange = useCallback(
-    ({ value: newValue }: EnhancedSelectInputChanged<string | number>) => {
-      onChange({
-        name,
-        value: newValue === 'noChange' ? value : newValue,
-      });
+    ({ value }: EnhancedSelectInputChanged<string | number>) => {
+      onChange({ name, value });
     },
-    [name, value, onChange]
+    [name, onChange]
   );
 
   useEffect(() => {
