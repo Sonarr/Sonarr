@@ -131,6 +131,7 @@
   "AutoTaggingSpecificationGenre": "Genre(s)",
   "AutoTaggingSpecificationMaximumYear": "Maximum Year",
   "AutoTaggingSpecificationMinimumYear": "Minimum Year",
+  "AutoTaggingSpecificationNetwork": "Network(s)",
   "AutoTaggingSpecificationOriginalLanguage": "Language",
   "AutoTaggingSpecificationQualityProfile": "Quality Profile",
   "AutoTaggingSpecificationRootFolder": "Root Folder",
