@@ -12,8 +12,6 @@ namespace NzbDrone.Core.Indexers
 {
     public class RssSyncService : IExecute<RssSyncCommand>
     {
-        private readonly IIndexerStatusService _indexerStatusService;
-        private readonly IIndexerFactory _indexerFactory;
         private readonly IFetchAndParseRss _rssFetcherAndParser;
         private readonly IMakeDownloadDecision _downloadDecisionMaker;
         private readonly IProcessDownloadDecisions _processDownloadDecisions;
@@ -21,17 +19,13 @@ namespace NzbDrone.Core.Indexers
         private readonly IEventAggregator _eventAggregator;
         private readonly Logger _logger;
 
-        public RssSyncService(IIndexerStatusService indexerStatusService,
-                              IIndexerFactory indexerFactory,
-                              IFetchAndParseRss rssFetcherAndParser,
+        public RssSyncService(IFetchAndParseRss rssFetcherAndParser,
                               IMakeDownloadDecision downloadDecisionMaker,
                               IProcessDownloadDecisions processDownloadDecisions,
                               IPendingReleaseService pendingReleaseService,
                               IEventAggregator eventAggregator,
                               Logger logger)
         {
-            _indexerStatusService = indexerStatusService;
-            _indexerFactory = indexerFactory;
             _rssFetcherAndParser = rssFetcherAndParser;
             _downloadDecisionMaker = downloadDecisionMaker;
             _processDownloadDecisions = processDownloadDecisions;
@@ -51,14 +45,14 @@ namespace NzbDrone.Core.Indexers
             var decisions = _downloadDecisionMaker.GetRssDecision(reports);
             var processed = await _processDownloadDecisions.ProcessDecisions(decisions);
 
-            var message = string.Format("RSS Sync Completed. Reports found: {0}, Reports grabbed: {1}", reports.Count, processed.Grabbed.Count);
-
             if (processed.Pending.Any())
             {
-                message += ", Reports pending: " + processed.Pending.Count;
+                _logger.ProgressInfo("RSS Sync Completed. Reports found: {0}, Reports grabbed: {1}, Reports pending: {2}", reports.Count, processed.Grabbed.Count, processed.Pending.Count);
             }
-
-            _logger.ProgressInfo(message);
+            else
+            {
+                _logger.ProgressInfo("RSS Sync Completed. Reports found: {0}, Reports grabbed: {1}", reports.Count, processed.Grabbed.Count);
+            }
 
             return processed;
         }
@@ -66,7 +60,6 @@ namespace NzbDrone.Core.Indexers
         public void Execute(RssSyncCommand message)
         {
             var processed = Sync().GetAwaiter().GetResult();
-            var grabbedOrPending = processed.Grabbed.Concat(processed.Pending).ToList();
 
             _eventAggregator.PublishEvent(new RssSyncCompleteEvent(processed));
         }
