@@ -57,12 +57,6 @@ namespace NzbDrone.Core.Download.Clients.Tribler
                     continue;
                 }
 
-                // skip channel downloads
-                if (download.ChannelDownload == true)
-                {
-                    continue;
-                }
-
                 var item = new DownloadClientItem
                 {
                     DownloadId = download.Infohash,
@@ -87,7 +81,7 @@ namespace NzbDrone.Core.Download.Clients.Tribler
 
                 item.TotalSize = (long)download.Size;
                 item.RemainingSize = (long)(download.Size * (1 - download.Progress)); // TODO: i expect progress to be between 0 and 1
-                item.SeedRatio = download.Ratio;
+                item.SeedRatio = download.AllTimeRatio;
 
                 if (download.Eta.HasValue)
                 {
@@ -183,7 +177,7 @@ namespace NzbDrone.Core.Download.Clients.Tribler
         public override DownloadClientInfo GetStatus()
         {
             var config = _proxy.GetConfig(Settings);
-            var destDir = config.Settings.DownloadDefaults.SaveAS;
+            var destDir = config.Settings.LibTorrent.DownloadDefaults.SaveAS;
 
             if (Settings.TvCategory.IsNotNullOrWhiteSpace())
             {
@@ -218,17 +212,17 @@ namespace NzbDrone.Core.Download.Clients.Tribler
                 return false;
             }
 
-            switch (config.Settings.DownloadDefaults.SeedingMode)
+            switch (config.Settings.LibTorrent.DownloadDefaults.SeedingMode)
             {
                 // if in ratio mode, wait for ratio to become larger than expeced. Tribler's DownloadStatus will switch from SEEDING to STOPPED
                 case DownloadDefaultsSeedingMode.Ratio:
 
-                    return torrent.Ratio.HasValue
-                        && torrent.Ratio >= config.Settings.DownloadDefaults.SeedingRatio;
+                    return torrent.AllTimeRatio.HasValue
+                        && torrent.AllTimeRatio >= config.Settings.LibTorrent.DownloadDefaults.SeedingRatio;
 
                 case DownloadDefaultsSeedingMode.Time:
                     var downloadStarted = DateTimeOffset.FromUnixTimeSeconds(torrent.TimeAdded.Value);
-                    var maxSeedingTime = TimeSpan.FromSeconds(config.Settings.DownloadDefaults.SeedingTime ?? 0);
+                    var maxSeedingTime = TimeSpan.FromSeconds(config.Settings.LibTorrent.DownloadDefaults.SeedingTime ?? 0);
 
                     return torrent.TimeAdded.HasValue
                         && downloadStarted.Add(maxSeedingTime) < DateTimeOffset.Now;
@@ -285,7 +279,7 @@ namespace NzbDrone.Core.Download.Clients.Tribler
             }
 
             var config = _proxy.GetConfig(Settings);
-            var destDir = config.Settings.DownloadDefaults.SaveAS;
+            var destDir = config.Settings.LibTorrent.DownloadDefaults.SaveAS;
 
             return $"{destDir.TrimEnd('/')}/{Settings.TvCategory}";
         }

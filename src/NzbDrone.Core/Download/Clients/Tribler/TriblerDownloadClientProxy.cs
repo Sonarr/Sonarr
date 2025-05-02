@@ -77,19 +77,19 @@ namespace NzbDrone.Core.Download.Clients.Tribler
 
         public GetTriblerSettingsResponse GetConfig(TriblerDownloadSettings settings)
         {
-            var configRequest = getRequestBuilder(settings, "settings");
+            var configRequest = getRequestBuilder(settings, "api/settings");
             return ProcessRequest<GetTriblerSettingsResponse>(configRequest);
         }
 
         public ICollection<File> GetDownloadFiles(TriblerDownloadSettings settings, Download downloadItem)
         {
-            var filesRequest = getRequestBuilder(settings, "downloads/" + downloadItem.Infohash + "/files");
+            var filesRequest = getRequestBuilder(settings, "api/downloads/" + downloadItem.Infohash + "/files");
             return ProcessRequest<GetFilesResponse>(filesRequest).Files;
         }
 
         public ICollection<Download> GetDownloads(TriblerDownloadSettings settings)
         {
-            var downloadRequest = getRequestBuilder(settings, "downloads");
+            var downloadRequest = getRequestBuilder(settings, "api/downloads");
             var downloads = ProcessRequest<DownloadsResponse>(downloadRequest);
             return downloads.Downloads;
         }
@@ -101,7 +101,7 @@ namespace NzbDrone.Core.Download.Clients.Tribler
                 RemoveData = deleteData
             };
 
-            var deleteRequestBuilder = getRequestBuilder(settings, "downloads/" + item.DownloadId.ToLower());
+            var deleteRequestBuilder = getRequestBuilder(settings, "api/downloads/" + item.DownloadId.ToLower());
             deleteRequestBuilder.Method = System.Net.Http.HttpMethod.Delete;
 
             var deleteRequest = deleteRequestBuilder.Build();
@@ -112,7 +112,7 @@ namespace NzbDrone.Core.Download.Clients.Tribler
 
         public string AddFromMagnetLink(TriblerDownloadSettings settings, AddDownloadRequest downloadRequest)
         {
-            var addDownloadRequestBuilder = getRequestBuilder(settings, "downloads");
+            var addDownloadRequestBuilder = getRequestBuilder(settings, "api/downloads");
             addDownloadRequestBuilder.Method = System.Net.Http.HttpMethod.Put;
 
             var addDownloadRequest = addDownloadRequestBuilder.Build();

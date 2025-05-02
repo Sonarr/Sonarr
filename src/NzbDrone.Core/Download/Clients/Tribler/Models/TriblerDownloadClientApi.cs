@@ -59,6 +59,9 @@ namespace NzbDrone.Core.Download.Clients.Tribler
         [JsonProperty("progress", NullValueHandling = NullValueHandling.Ignore)]
         public float? Progress { get; set; }
 
+        [JsonProperty("infohash", NullValueHandling = NullValueHandling.Ignore)]
+        public string Infohash { get; set; }
+
         [JsonProperty("anon_download", NullValueHandling = NullValueHandling.Ignore)]
         public bool? AnonDownload { get; set; }
 
@@ -74,21 +77,21 @@ namespace NzbDrone.Core.Download.Clients.Tribler
         [JsonProperty("num_seeds", NullValueHandling = NullValueHandling.Ignore)]
         public long? NumSeeds { get; set; }
 
-        [JsonProperty("total_up", NullValueHandling = NullValueHandling.Ignore)]
-        public long? TotalUp { get; set; }
+        [JsonProperty("all_time_upload", NullValueHandling = NullValueHandling.Ignore)]
+        public long? AllTimeUpload { get; set; }
+
+        [JsonProperty("all_time_download", NullValueHandling = NullValueHandling.Ignore)]
+        public long? AllTimeDownload { get; set; }
 
         [JsonProperty("status", NullValueHandling = NullValueHandling.Ignore)]
         [JsonConverter(typeof(StringEnumConverter))]
         public DownloadStatus? Status { get; set; }
 
-        [JsonProperty("infohash", NullValueHandling = NullValueHandling.Ignore)]
-        public string Infohash { get; set; }
+        [JsonProperty("status_code", NullValueHandling = NullValueHandling.Ignore)]
+        public int? StatusCode { get; set; }
 
-        [JsonProperty("ratio", NullValueHandling = NullValueHandling.Ignore)]
-        public float? Ratio { get; set; }
-
-        [JsonProperty("vod_mode", NullValueHandling = NullValueHandling.Ignore)]
-        public bool? VideoOnDemandMode { get; set; }
+        [JsonProperty("all_time_ratio", NullValueHandling = NullValueHandling.Ignore)]
+        public float? AllTimeRatio { get; set; }
 
         [JsonProperty("time_added", NullValueHandling = NullValueHandling.Ignore)]
         public long? TimeAdded { get; set; }
@@ -111,17 +114,8 @@ namespace NzbDrone.Core.Download.Clients.Tribler
         [JsonProperty("total_down", NullValueHandling = NullValueHandling.Ignore)]
         public long? TotalDown { get; set; }
 
-        [JsonProperty("vod_prebuffering_progress", NullValueHandling = NullValueHandling.Ignore)]
-        public float? VideoOnDemandPrebufferingProgress { get; set; }
-
-        [JsonProperty("trackers", NullValueHandling = NullValueHandling.Ignore)]
-        public ICollection<Trackers> Trackers { get; set; }
-
         [JsonProperty("size", NullValueHandling = NullValueHandling.Ignore)]
         public long? Size { get; set; }
-
-        [JsonProperty("peers", NullValueHandling = NullValueHandling.Ignore)]
-        public ICollection<string> Peers { get; set; }
 
         [JsonProperty("destination", NullValueHandling = NullValueHandling.Ignore)]
         public string Destination { get; set; }
@@ -132,17 +126,11 @@ namespace NzbDrone.Core.Download.Clients.Tribler
         [JsonProperty("speed_up", NullValueHandling = NullValueHandling.Ignore)]
         public float? SpeedUp { get; set; }
 
-        [JsonProperty("vod_prebuffering_progress_consec", NullValueHandling = NullValueHandling.Ignore)]
-        public float? VideoOnDemandPrebufferingProgressConsec { get; set; }
-
-        [JsonProperty("files", NullValueHandling = NullValueHandling.Ignore)]
-        public ICollection<string> Files { get; set; }
-
         [JsonProperty("num_peers", NullValueHandling = NullValueHandling.Ignore)]
         public long? NumPeers { get; set; }
 
-        [JsonProperty("channel_download", NullValueHandling = NullValueHandling.Ignore)]
-        public bool? ChannelDownload { get; set; }
+        [JsonProperty("trackers", NullValueHandling = NullValueHandling.Ignore)]
+        public ICollection<Trackers> Trackers { get; set; }
     }
 
     public class DownloadsResponse
