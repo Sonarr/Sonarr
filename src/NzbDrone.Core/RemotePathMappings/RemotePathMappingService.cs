@@ -96,6 +96,11 @@ namespace NzbDrone.Core.RemotePathMappings
                 throw new ArgumentException("Invalid Host");
             }
 
+            if (mapping.RemotePath.StartsWith(" "))
+            {
+                throw new ArgumentException("Remote Path must not start with a space");
+            }
+
             var remotePath = new OsPath(mapping.RemotePath);
             var localPath = new OsPath(mapping.LocalPath);
 
