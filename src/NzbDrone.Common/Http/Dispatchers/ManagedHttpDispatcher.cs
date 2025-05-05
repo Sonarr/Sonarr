@@ -141,7 +141,7 @@ namespace NzbDrone.Common.Http.Dispatchers
             }
             catch (OperationCanceledException ex) when (cts.IsCancellationRequested)
             {
-                throw new WebException("Http request timed out", ex.InnerException, WebExceptionStatus.Timeout, null);
+                throw new WebException("Http request timed out", ex, WebExceptionStatus.Timeout, null);
             }
         }
 
