@@ -59,7 +59,7 @@ namespace NzbDrone.Core.Download
             }
             catch (HttpException ex)
             {
-                if (ex.Response.StatusCode == HttpStatusCode.NotFound || ex.Response.StatusCode == HttpStatusCode.Gone)
+                if (ex.Response.StatusCode is HttpStatusCode.NotFound or HttpStatusCode.Gone)
                 {
                     _logger.Error(ex, "Downloading nzb file for episode '{0}' failed since it no longer exists ({1})", remoteEpisode.Release.Title, url);
                     throw new ReleaseUnavailableException(remoteEpisode.Release, "Downloading nzb failed", ex);
