@@ -60,5 +60,14 @@ namespace NzbDrone.Core.Test.ParserTests
             var result = IsoLanguages.Find(isoCode);
             result.Language.Should().Be(Language.Urdu);
         }
+
+        [TestCase("rm")]
+        [TestCase("roh")]
+        [TestCase("rm-CH")]
+        public void should_return_romansh(string isoCode)
+        {
+            var result = IsoLanguages.Find(isoCode);
+            result.Language.Should().Be(Language.Romansh);
+        }
     }
 }
