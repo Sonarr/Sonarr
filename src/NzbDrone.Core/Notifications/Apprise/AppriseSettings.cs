@@ -59,10 +59,13 @@ namespace NzbDrone.Core.Notifications.Apprise
         [FieldDefinition(5, Label = "NotificationsAppriseSettingsTags", Type = FieldType.Tag, HelpText = "NotificationsAppriseSettingsTagsHelpText")]
         public IEnumerable<string> Tags { get; set; }
 
-        [FieldDefinition(6, Label = "Username", Type = FieldType.Textbox, HelpText = "NotificationsAppriseSettingsUsernameHelpText", Privacy = PrivacyLevel.UserName)]
+        [FieldDefinition(6, Label = "NotificationsAppriseSettingsIncludePoster", Type = FieldType.Checkbox, HelpText = "NotificationsAppriseSettingsIncludePosterHelpText")]
+        public bool IncludePoster { get; set; }
+
+        [FieldDefinition(7, Label = "Username", Type = FieldType.Textbox, HelpText = "NotificationsAppriseSettingsUsernameHelpText", Privacy = PrivacyLevel.UserName)]
         public string AuthUsername { get; set; }
 
-        [FieldDefinition(7, Label = "Password", Type = FieldType.Password, HelpText = "NotificationsAppriseSettingsPasswordHelpText", Privacy = PrivacyLevel.Password)]
+        [FieldDefinition(8, Label = "Password", Type = FieldType.Password, HelpText = "NotificationsAppriseSettingsPasswordHelpText", Privacy = PrivacyLevel.Password)]
         public string AuthPassword { get; set; }
 
         public override NzbDroneValidationResult Validate()

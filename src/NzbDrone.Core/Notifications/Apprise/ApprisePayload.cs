@@ -8,6 +8,8 @@ namespace NzbDrone.Core.Notifications.Apprise
 
         public string Body { get; set; }
 
+        public string Attachment { get; set; }
+
         public AppriseNotificationType Type { get; set; }
 
         public string Tag { get; set; }
