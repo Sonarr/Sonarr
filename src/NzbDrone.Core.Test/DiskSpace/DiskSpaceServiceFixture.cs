@@ -115,6 +115,7 @@ namespace NzbDrone.Core.Test.DiskSpace
         [TestCase("/var/lib/docker")]
         [TestCase("/some/place/docker/aufs")]
         [TestCase("/etc/network")]
+        [TestCase("/Volumes/.timemachine/ABC123456-A1BC-12A3B45678C9/2025-05-13-181401.backup")]
         public void should_not_check_diskspace_for_irrelevant_mounts(string path)
         {
             var mount = new Mock<IMount>();
