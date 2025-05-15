@@ -129,12 +129,6 @@ namespace NzbDrone.Core.Indexers.Torznab
             var languages = TryGetMultipleTorznabAttributes(item, "subs");
             var results = new List<Language>();
 
-            // Try to find <language> elements for some indexers that suck at following the rules.
-            if (languages.Count == 0)
-            {
-                languages = item.Elements("language").Select(e => e.Value).ToList();
-            }
-
             foreach (var language in languages)
             {
                 var mappedLanguage = IsoLanguages.FindByName(language)?.Language ?? null;
