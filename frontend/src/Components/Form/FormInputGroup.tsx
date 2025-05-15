@@ -139,11 +139,11 @@ type PickProps<V, C extends InputType> = C extends 'text'
   ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
     EnhancedSelectInputProps<any, V>
   : C extends 'seriesTag'
-  ? SeriesTagInputProps
+  ? SeriesTagInputProps<V>
   : C extends 'seriesTypeSelect'
   ? SeriesTypeSelectInputProps
   : C extends 'tag'
-  ? SeriesTagInputProps
+  ? SeriesTagInputProps<V>
   : C extends 'tagSelect'
   ? TagSelectInputProps
   : C extends 'text'
@@ -222,7 +222,7 @@ function FormInputGroup<T, C extends InputType>(
     <div className={containerClassName}>
       <div className={className}>
         <div className={styles.inputContainer}>
-          {/* @ts-expect-error - tpyes are validated already */}
+          {/* @ts-expect-error - types are validated already */}
           <InputComponent
             className={inputClassName}
             helpText={helpText}

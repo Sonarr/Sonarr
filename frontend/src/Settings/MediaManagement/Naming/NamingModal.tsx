@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import FieldSet from 'Components/FieldSet';
-import SelectInput from 'Components/Form/SelectInput';
+import SelectInput, { SelectInputOption } from 'Components/Form/SelectInput';
 import TextInput from 'Components/Form/TextInput';
 import Button from 'Components/Link/Button';
 import InlineMarkdown from 'Components/Markdown/InlineMarkdown';
@@ -17,7 +17,15 @@ import TokenCase from './TokenCase';
 import TokenSeparator from './TokenSeparator';
 import styles from './NamingModal.css';
 
-const separatorOptions: { key: TokenSeparator; value: string }[] = [
+type SeparatorInputOption = Omit<SelectInputOption, 'key'> & {
+  key: TokenSeparator;
+};
+
+type CaseInputOption = Omit<SelectInputOption, 'key'> & {
+  key: TokenCase;
+};
+
+const separatorOptions: SeparatorInputOption[] = [
   {
     key: ' ',
     get value() {
@@ -44,7 +52,7 @@ const separatorOptions: { key: TokenSeparator; value: string }[] = [
   },
 ];
 
-const caseOptions: { key: TokenCase; value: string }[] = [
+const caseOptions: CaseInputOption[] = [
   {
     key: 'title',
     get value() {

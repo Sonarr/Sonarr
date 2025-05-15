@@ -8,6 +8,7 @@ import Form from 'Components/Form/Form';
 import FormGroup from 'Components/Form/FormGroup';
 import FormInputGroup from 'Components/Form/FormInputGroup';
 import FormLabel from 'Components/Form/FormLabel';
+import { EnhancedSelectInputValue } from 'Components/Form/Select/EnhancedSelectInput';
 import Label from 'Components/Label';
 import Button from 'Components/Link/Button';
 import ModalBody from 'Components/Modal/ModalBody';
@@ -71,7 +72,7 @@ function TagsModalContent(props: TagsModalContentProps) {
     onApplyTagsPress(tags, applyTags);
   }, [tags, applyTags, onApplyTagsPress]);
 
-  const applyTagsOptions = [
+  const applyTagsOptions: EnhancedSelectInputValue<string>[] = [
     {
       key: 'add',
       get value() {

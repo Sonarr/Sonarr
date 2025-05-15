@@ -359,34 +359,37 @@ function PageSidebar({ isSidebarVisible, isSmallScreen }: PageSidebarProps) {
     });
   }, []);
 
-  const handleTouchEnd = useCallback((event: TouchEvent) => {
-    const touches = event.changedTouches;
-    const currentTouch = touches[0].pageX;
+  const handleTouchEnd = useCallback(
+    (event: TouchEvent) => {
+      const touches = event.changedTouches;
+      const currentTouch = touches[0].pageX;
 
-    if (!touchStartX.current) {
-      return;
-    }
+      if (!touchStartX.current) {
+        return;
+      }
 
-    if (currentTouch > touchStartX.current && currentTouch > 50) {
-      setSidebarTransform({
-        transition: 'none',
-        transform: 0,
-      });
-    } else if (currentTouch < touchStartX.current && currentTouch < 80) {
-      setSidebarTransform({
-        transition: 'transform 50ms ease-in-out',
-        transform: SIDEBAR_WIDTH * -1,
-      });
-    } else {
-      setSidebarTransform({
-        transition: 'none',
-        transform: 0,
-      });
-    }
+      if (currentTouch > touchStartX.current && currentTouch > 50) {
+        setSidebarTransform({
+          transition: 'none',
+          transform: 0,
+        });
+      } else if (currentTouch < touchStartX.current && currentTouch < 80) {
+        setSidebarTransform({
+          transition: 'transform 50ms ease-in-out',
+          transform: SIDEBAR_WIDTH * -1,
+        });
+      } else {
+        setSidebarTransform({
+          transition: 'none',
+          transform: isSidebarVisible ? 0 : SIDEBAR_WIDTH * -1,
+        });
+      }
 
-    touchStartX.current = null;
-    touchStartY.current = null;
-  }, []);
+      touchStartX.current = null;
+      touchStartY.current = null;
+    },
+    [isSidebarVisible]
+  );
 
   const handleTouchCancel = useCallback(() => {
     touchStartX.current = null;

@@ -289,7 +289,7 @@ function EditQualityProfileModalContent({
       });
 
       // @ts-expect-error - actions are not typed
-      dispatch(setQualityProfileValue({ name: 'items', newItems }));
+      dispatch(setQualityProfileValue({ name: 'items', value: newItems }));
     },
     [items, dispatch]
   );

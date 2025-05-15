@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Profiles.Qualities
         QualityProfile Get(int id);
         bool Exists(int id);
         QualityProfile GetDefaultProfile(string name, Quality cutoff = null, params Quality[] allowed);
-        void UpdateALlSizeLimits(params QualityProfileSizeLimit[] sizeLimits);
+        void UpdateAllSizeLimits(params QualityProfileSizeLimit[] sizeLimits);
     }
 
     public class QualityProfileService : IQualityProfileService,
@@ -255,7 +255,7 @@ namespace NzbDrone.Core.Profiles.Qualities
             return qualityProfile;
         }
 
-        public void UpdateALlSizeLimits(params QualityProfileSizeLimit[] sizeLimits)
+        public void UpdateAllSizeLimits(params QualityProfileSizeLimit[] sizeLimits)
         {
             var all = All();
 

@@ -79,7 +79,7 @@
 }
 
 .deleteGroupButton {
-  composes: buton from '~Components/Link/IconButton.css';
+  composes: button from '~Components/Link/IconButton.css';
 
   display: flex;
   align-items: center;

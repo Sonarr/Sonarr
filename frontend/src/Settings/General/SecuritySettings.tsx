@@ -6,6 +6,7 @@ import FormGroup from 'Components/Form/FormGroup';
 import FormInputButton from 'Components/Form/FormInputButton';
 import FormInputGroup from 'Components/Form/FormInputGroup';
 import FormLabel from 'Components/Form/FormLabel';
+import { EnhancedSelectInputValue } from 'Components/Form/Select/EnhancedSelectInput';
 import Icon from 'Components/Icon';
 import ClipboardButton from 'Components/Link/ClipboardButton';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
@@ -16,7 +17,7 @@ import { PendingSection } from 'typings/pending';
 import General from 'typings/Settings/General';
 import translate from 'Utilities/String/translate';
 
-export const authenticationMethodOptions = [
+export const authenticationMethodOptions: EnhancedSelectInputValue<string>[] = [
   {
     key: 'none',
     get value() {
@@ -47,22 +48,23 @@ export const authenticationMethodOptions = [
   },
 ];
 
-export const authenticationRequiredOptions = [
-  {
-    key: 'enabled',
-    get value() {
-      return translate('Enabled');
+export const authenticationRequiredOptions: EnhancedSelectInputValue<string>[] =
+  [
+    {
+      key: 'enabled',
+      get value() {
+        return translate('Enabled');
+      },
     },
-  },
-  {
-    key: 'disabledForLocalAddresses',
-    get value() {
-      return translate('DisabledForLocalAddresses');
+    {
+      key: 'disabledForLocalAddresses',
+      get value() {
+        return translate('DisabledForLocalAddresses');
+      },
     },
-  },
-];
+  ];
 
-const certificateValidationOptions = [
+const certificateValidationOptions: EnhancedSelectInputValue<string>[] = [
   {
     key: 'enabled',
     get value() {

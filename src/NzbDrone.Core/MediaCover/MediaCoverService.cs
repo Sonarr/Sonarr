@@ -74,7 +74,7 @@ namespace NzbDrone.Core.MediaCover
         {
             if (seriesId == 0)
             {
-                // Series isn't in Sonarr yet, map via a proxy to circument referrer issues
+                // Series isn't in Sonarr yet, map via a proxy to circumvent referrer issues
                 foreach (var mediaCover in covers)
                 {
                     mediaCover.Url = _mediaCoverProxy.RegisterUrl(mediaCover.RemoteUrl);

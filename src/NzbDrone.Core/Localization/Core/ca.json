@@ -2155,5 +2155,12 @@
     "NotificationsPushoverSettingsExpireHelpText": "Temps màxim per tornar a provar les alertes d'emergència, màxim 86400 segons\"",
     "NotificationsPushoverSettingsSoundHelpText": "So de notificació, deixeu-ho en blanc per a utilitzar el predeterminat",
     "NotificationsPushoverSettingsUserKey": "Clau d'usuari",
-    "NotificationsPushcutSettingsApiKeyHelpText": "Les claus API es poden gestionar a la vista de compte de l'aplicació Pushcut"
+    "NotificationsPushcutSettingsApiKeyHelpText": "Les claus API es poden gestionar a la vista de compte de l'aplicació Pushcut",
+    "DownloadClientValidationApiKeyRequired": "Clau API requerida",
+    "ParseModalHelpTextDetails": "{appName} intentarà analitzar el títol i et mostrarà detalls sobre això",
+    "CloneImportList": "Clonar llista d'importació",
+    "DefaultNameCopiedImportList": "{name} - Còpia",
+    "DownloadClientItemErrorMessage": "{clientName} está reportant un error: {message}",
+    "EpisodesInSeason": "{episodeCount} episodis en la temporada",
+    "NotificationsPushcutSettingsNotificationName": "Nom de la notificació"
 }

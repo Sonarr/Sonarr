@@ -41,7 +41,7 @@ namespace Sonarr.Api.V3.Qualities
 
             if (model.MinSize.HasValue || model.MaxSize.HasValue || model.PreferredSize.HasValue)
             {
-                _qualityProfileService.UpdateALlSizeLimits(new QualityProfileSizeLimit(model));
+                _qualityProfileService.UpdateAllSizeLimits(new QualityProfileSizeLimit(model));
             }
 
             return Accepted(model.Id);
@@ -73,7 +73,7 @@ namespace Sonarr.Api.V3.Qualities
 
             if (toUpdate.Any())
             {
-                _qualityProfileService.UpdateALlSizeLimits(toUpdate);
+                _qualityProfileService.UpdateAllSizeLimits(toUpdate);
             }
 
             return Accepted(_qualityDefinitionService.All()

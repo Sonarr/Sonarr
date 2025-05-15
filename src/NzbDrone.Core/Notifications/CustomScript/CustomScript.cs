@@ -484,7 +484,7 @@ namespace NzbDrone.Core.Notifications.CustomScript
         {
             if (series == null)
             {
-                return null;
+                return new List<string>();
             }
 
             return _tagRepository.GetTags(series.Tags)

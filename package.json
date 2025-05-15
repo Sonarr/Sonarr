@@ -111,7 +111,7 @@
     "babel-loader": "9.2.1",
     "babel-plugin-inline-classnames": "2.0.1",
     "babel-plugin-transform-react-remove-prop-types": "0.4.24",
-    "core-js": "3.39.0",
+    "core-js": "3.41.0",
     "css-loader": "6.7.3",
     "css-modules-typescript-loader": "4.0.1",
     "eslint": "8.57.1",

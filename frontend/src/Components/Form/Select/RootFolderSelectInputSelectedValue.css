@@ -30,3 +30,11 @@
   text-align: right;
   font-size: $smallFontSize;
 }
+
+.isMissing {
+  flex: 0 0 auto;
+  margin-left: 15px;
+  color: var(--dangerColor);
+  text-align: right;
+  font-size: $smallFontSize;
+}

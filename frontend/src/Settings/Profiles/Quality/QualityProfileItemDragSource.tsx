@@ -36,7 +36,7 @@ interface ItemProps {
   preferredSize: number | null;
   isInGroup?: boolean;
   onCreateGroupPress?: (qualityId: number) => void;
-  onItemAllowedChange: (id: number, allowd: boolean) => void;
+  onItemAllowedChange: (id: number, allowed: boolean) => void;
 }
 
 interface GroupProps {
@@ -45,8 +45,8 @@ interface GroupProps {
   items: QualityProfileQualityItem[];
   qualityIndex: string;
   onDeleteGroupPress: (groupId: number) => void;
-  onItemAllowedChange: (id: number, allowd: boolean) => void;
-  onGroupAllowedChange: (id: number, allowd: boolean) => void;
+  onItemAllowedChange: (id: number, allowed: boolean) => void;
+  onGroupAllowedChange: (id: number, allowed: boolean) => void;
   onItemGroupNameChange: (groupId: number, name: string) => void;
 }
 
@@ -67,9 +67,9 @@ export type QualityProfileItemDragSourceProps = CommonProps &
 
 export interface QualityProfileItemDragSourceActionProps {
   onCreateGroupPress?: (qualityId: number) => void;
-  onItemAllowedChange: (id: number, allowd: boolean) => void;
+  onItemAllowedChange: (id: number, allowed: boolean) => void;
   onDeleteGroupPress: (groupId: number) => void;
-  onGroupAllowedChange: (id: number, allowd: boolean) => void;
+  onGroupAllowedChange: (id: number, allowed: boolean) => void;
   onItemGroupNameChange: (groupId: number, name: string) => void;
   onDragMove: (move: DragMoveState) => void;
   onDragEnd: (didDrop: boolean) => void;

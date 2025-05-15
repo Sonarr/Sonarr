@@ -8,27 +8,23 @@ import styles from './RootFolderSelectInputSelectedValue.css';
 interface RootFolderSelectInputSelectedValueProps {
   selectedValue: string;
   values: RootFolderSelectInputValue[];
-  freeSpace?: number;
   seriesFolder?: string;
   isWindows?: boolean;
   includeFreeSpace?: boolean;
 }
 
-function RootFolderSelectInputSelectedValue(
-  props: RootFolderSelectInputSelectedValueProps
-) {
-  const {
-    selectedValue,
-    values,
-    freeSpace,
-    seriesFolder,
-    includeFreeSpace = true,
-    isWindows,
-    ...otherProps
-  } = props;
-
+function RootFolderSelectInputSelectedValue({
+  selectedValue,
+  values,
+  seriesFolder,
+  includeFreeSpace = true,
+  isWindows,
+  ...otherProps
+}: RootFolderSelectInputSelectedValueProps) {
   const slashCharacter = isWindows ? '\\' : '/';
-  const value = values.find((v) => v.key === selectedValue)?.value;
+  const { value, freeSpace, isMissing } =
+    values.find((v) => v.key === selectedValue) ||
+    ({} as RootFolderSelectInputValue);
 
   return (
     <EnhancedSelectInputSelectedValue
@@ -52,6 +48,10 @@ function RootFolderSelectInputSelectedValue(
             freeSpace: formatBytes(freeSpace),
           })}
         </div>
+      ) : null}
+
+      {isMissing ? (
+        <div className={styles.isMissing}>{translate('Missing')}</div>
       ) : null}
     </EnhancedSelectInputSelectedValue>
   );

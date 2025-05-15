@@ -7,7 +7,7 @@ namespace NzbDrone.Core.Notifications.Mailgun
 {
     public interface IMailgunProxy
     {
-        void SendNotification(string tittle, string message, MailgunSettings settings);
+        void SendNotification(string title, string message, MailgunSettings settings);
     }
 
     public class MailgunProxy : IMailgunProxy
