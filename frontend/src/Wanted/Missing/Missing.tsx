@@ -72,7 +72,7 @@ function Missing() {
   } = useSelector((state: AppState) => state.wanted.missing);
 
   const isSearchingForAllEpisodes = useSelector(
-    createCommandExecutingSelector(commandNames.CUTOFF_UNMET_EPISODE_SEARCH)
+    createCommandExecutingSelector(commandNames.MISSING_EPISODE_SEARCH)
   );
   const isSearchingForSelectedEpisodes = useSelector(
     createCommandExecutingSelector(commandNames.EPISODE_SEARCH)
@@ -155,7 +155,7 @@ function Missing() {
   const handleSearchAllMissingConfirmed = useCallback(() => {
     dispatch(
       executeCommand({
-        name: commandNames.CUTOFF_UNMET_EPISODE_SEARCH,
+        name: commandNames.MISSING_EPISODE_SEARCH,
         commandFinished: () => {
           dispatch(fetchMissing());
         },
@@ -353,11 +353,11 @@ function Missing() {
             <ConfirmModal
               isOpen={isConfirmSearchAllModalOpen}
               kind={kinds.DANGER}
-              title={translate('SearchForMissingEpisodes')}
+              title={translate('SearchForAllMissingEpisodes')}
               message={
                 <div>
                   <div>
-                    {translate('SearchForMissingEpisodesConfirmationCount', {
+                    {translate('SearchForAllMissingEpisodesConfirmationCount', {
                       totalRecords,
                     })}
                   </div>
