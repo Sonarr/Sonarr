@@ -1,10 +1,13 @@
 import { keepPreviousData } from '@tanstack/react-query';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import Episode from 'Episode/Episode';
 import { setEpisodeQueryKey } from 'Episode/useEpisode';
-import { Filter } from 'Filters/Filter';
+import { Filter, FilterBuilderProp } from 'Filters/Filter';
+import { useCustomFiltersList } from 'Filters/useCustomFilters';
 import usePage from 'Helpers/Hooks/usePage';
 import usePagedApiQuery from 'Helpers/Hooks/usePagedApiQuery';
+import { filterBuilderValueTypes } from 'Helpers/Props';
+import findSelectedFilters from 'Utilities/Filter/findSelectedFilters';
 import translate from 'Utilities/String/translate';
 import { useMissingOptions } from './missingOptionsStore';
 
@@ -31,20 +34,49 @@ export const FILTERS: Filter[] = [
       },
     ],
   },
+  {
+    key: 'excludeSpecials',
+    label: () => translate('ExcludeSpecials'),
+    filters: [
+      {
+        key: 'includeSpecials',
+        value: [false],
+        type: 'equal',
+      },
+    ],
+  },
+];
+
+export const FILTER_BUILDER: FilterBuilderProp<Episode>[] = [
+  {
+    name: 'monitored',
+    label: () => translate('Monitored'),
+    type: 'exact',
+    valueType: filterBuilderValueTypes.BOOL,
+  },
+  {
+    name: 'includeSpecials',
+    label: () => translate('IncludeSpecials'),
+    type: 'equal',
+    valueType: filterBuilderValueTypes.BOOL,
+  },
 ];
 
 const useMissing = () => {
   const { page, goToPage } = usePage('missing');
   const { pageSize, selectedFilterKey, sortKey, sortDirection } =
     useMissingOptions();
+  const customFilters = useCustomFiltersList('wanted.missing');
+
+  const filters = useMemo(() => {
+    return findSelectedFilters(selectedFilterKey, FILTERS, customFilters);
+  }, [selectedFilterKey, customFilters]);
 
   const { isPlaceholderData, queryKey, ...query } = usePagedApiQuery<Episode>({
     path: '/wanted/missing',
     page,
     pageSize,
-    queryParams: {
-      monitored: selectedFilterKey === 'monitored',
-    },
+    filters,
     sortKey,
     sortDirection,
     queryOptions: {
@@ -67,3 +99,7 @@ const useMissing = () => {
 };
 
 export default useMissing;
+
+export const useFilters = () => {
+  return FILTERS;
+};
