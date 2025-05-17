@@ -1934,6 +1934,8 @@
   "ShowSeasonCount": "Show Season Count",
   "ShowSeriesTitleHelpText": "Show series title under poster",
   "ShowSizeOnDisk": "Show Size on Disk",
+  "ShowSpecials": "Show Specials",
+  "ShowSpecialMissingEpisodesHelpText": "Show special episodes in the missing list",
   "ShowTags": "Show Tags",
   "ShowTagsHelpText": "Show tags under poster",
   "ShowTitle": "Show Title",

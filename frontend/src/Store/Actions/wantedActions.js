@@ -27,6 +27,10 @@ export const defaultState = {
     error: null,
     items: [],
 
+    options: {
+      includeSpecials: true
+    },
+
     columns: [
       {
         name: 'series.sortTitle',
@@ -195,6 +199,13 @@ export const persistState = [
 ];
 
 //
+// Helpers
+
+function fetchDataAugmenter(getState, payload, data) {
+  data.includeSpecials = getState().wanted.missing.options.includeSpecials;
+}
+
+//
 // Actions Types
 
 export const FETCH_MISSING = 'wanted/missing/fetchMissing';
@@ -206,6 +217,7 @@ export const GOTO_MISSING_PAGE = 'wanted/missing/gotoMissingPage';
 export const SET_MISSING_SORT = 'wanted/missing/setMissingSort';
 export const SET_MISSING_FILTER = 'wanted/missing/setMissingFilter';
 export const SET_MISSING_TABLE_OPTION = 'wanted/missing/setMissingTableOption';
+export const SET_MISSING_OPTION = 'wanted/missing/setMissingOption';
 export const CLEAR_MISSING = 'wanted/missing/clearMissing';
 
 export const BATCH_TOGGLE_MISSING_EPISODES = 'wanted/missing/batchToggleMissingEpisodes';
@@ -235,6 +247,7 @@ export const gotoMissingPage = createThunk(GOTO_MISSING_PAGE);
 export const setMissingSort = createThunk(SET_MISSING_SORT);
 export const setMissingFilter = createThunk(SET_MISSING_FILTER);
 export const setMissingTableOption = createAction(SET_MISSING_TABLE_OPTION);
+export const setMissingOption = createAction(SET_MISSING_OPTION);
 export const clearMissing = createAction(CLEAR_MISSING);
 
 export const batchToggleMissingEpisodes = createThunk(BATCH_TOGGLE_MISSING_EPISODES);
@@ -270,7 +283,8 @@ export const actionHandlers = handleThunks({
       [serverSideCollectionHandlers.EXACT_PAGE]: GOTO_MISSING_PAGE,
       [serverSideCollectionHandlers.SORT]: SET_MISSING_SORT,
       [serverSideCollectionHandlers.FILTER]: SET_MISSING_FILTER
-    }
+    },
+    fetchDataAugmenter
   ),
 
   [BATCH_TOGGLE_MISSING_EPISODES]: createBatchToggleEpisodeMonitoredHandler('wanted.missing', fetchMissing),
@@ -325,6 +339,21 @@ export const reducers = createHandleActions({
       totalPages: 0,
       totalRecords: 0
     }
-  )
+  ),
+
+  [SET_MISSING_OPTION]: function(state, { payload }) {
+    const options = state.missing.options;
+
+    return {
+      ...state,
+      missing: {
+        ...state.missing,
+        options: {
+          ...options,
+          ...payload
+        }
+      }
+    };
+  }
 
 }, defaultState, section);

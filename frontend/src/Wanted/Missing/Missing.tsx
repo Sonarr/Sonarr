@@ -42,6 +42,7 @@ import {
 } from 'Utilities/pagePopulator';
 import translate from 'Utilities/String/translate';
 import getSelectedIds from 'Utilities/Table/getSelectedIds';
+import MissingOptions from './MissingOptions';
 import MissingRow from './MissingRow';
 
 function getMonitoredValue(
@@ -280,6 +281,7 @@ function Missing() {
           <TableOptionsModalWrapper
             columns={columns}
             pageSize={pageSize}
+            optionsComponent={MissingOptions}
             onTableOptionChange={handleTableOptionChange}
           >
             <PageToolbarButton
@@ -319,6 +321,7 @@ function Missing() {
               pageSize={pageSize}
               sortKey={sortKey}
               sortDirection={sortDirection}
+              optionsComponent={MissingOptions}
               onTableOptionChange={handleTableOptionChange}
               onSelectAllChange={handleSelectAllChange}
               onSortPress={handleSortPress}

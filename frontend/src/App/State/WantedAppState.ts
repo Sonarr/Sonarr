@@ -19,7 +19,11 @@ interface WantedMissingAppState
   extends AppSectionState<WantedEpisode>,
     AppSectionFilterState<WantedEpisode>,
     PagedAppSectionState,
-    TableAppSectionState {}
+    TableAppSectionState {
+  options: {
+    includeSpecials: boolean;
+  };
+}
 
 interface WantedAppState {
   cutoffUnmet: WantedCutoffUnmetAppState;

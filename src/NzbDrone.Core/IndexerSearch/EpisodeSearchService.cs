@@ -151,7 +151,7 @@ namespace NzbDrone.Core.IndexerSearch
                     pagingSpec.FilterExpressions.Add(v => v.Monitored == false || v.Series.Monitored == false);
                 }
 
-                episodes = _episodeService.EpisodesWithoutFiles(pagingSpec).Records.ToList();
+                episodes = _episodeService.EpisodesWithoutFiles(pagingSpec, true).Records.ToList();
             }
 
             var queue = _queueService.GetQueue().Where(q => q.Episode != null).Select(q => q.Episode.Id);
