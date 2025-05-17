@@ -3,6 +3,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.RemotePathMappings;
+using NzbDrone.Core.Validation;
 using NzbDrone.Core.Validation.Paths;
 using Sonarr.Http;
 using Sonarr.Http.REST;
@@ -31,6 +32,11 @@ namespace Sonarr.Api.V3.RemotePathMappings
             SharedValidator.RuleFor(c => c.RemotePath)
                 .Must(remotePath => !remotePath.IsNotNullOrWhiteSpace() && !remotePath.StartsWith(" "))
                 .WithMessage("Remote Path must not start with a space");
+
+            SharedValidator.RuleFor(c => c.RemotePath)
+                .Must(remotePath => !remotePath.IsNotNullOrWhiteSpace() && !remotePath.EndsWith(" "))
+                .WithMessage("Remote Path probably should not end with a space")
+                .AsWarning();
 
             SharedValidator.RuleFor(c => c.LocalPath)
                 .Cascade(CascadeMode.Stop)
