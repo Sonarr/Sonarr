@@ -48,7 +48,7 @@ namespace Sonarr.Api.V3.Wanted
                 pagingSpec.FilterExpressions.Add(v => v.Monitored == false || v.Series.Monitored == false);
             }
 
-            var resource = pagingSpec.ApplyToPage(_episodeService.EpisodesWithoutFiles, v => MapToResource(v, includeSeries, false, includeImages));
+            var resource = pagingSpec.ApplyToPage(spec => _episodeService.EpisodesWithoutFiles(spec, true), v => MapToResource(v, includeSeries, false, includeImages));
 
             return resource;
         }

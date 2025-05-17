@@ -24,7 +24,7 @@ public class MissingController : EpisodeControllerWithSignalR
 
     [HttpGet]
     [Produces("application/json")]
-    public PagingResource<EpisodeResource> GetMissingEpisodes([FromQuery] PagingRequestResource paging, bool monitored = true, [FromQuery] MissingSubresource[]? includeSubresources = null)
+    public PagingResource<EpisodeResource> GetMissingEpisodes([FromQuery] PagingRequestResource paging, bool monitored = true, bool includeSpecials = true, [FromQuery] MissingSubresource[]? includeSubresources = null)
     {
         var pagingResource = new PagingResource<EpisodeResource>(paging);
         var pagingSpec = pagingResource.MapToPagingSpec<EpisodeResource, Episode>(
@@ -49,7 +49,7 @@ public class MissingController : EpisodeControllerWithSignalR
         var includeSeries = includeSubresources.Contains(MissingSubresource.Series);
         var includeImages = includeSubresources.Contains(MissingSubresource.Images);
 
-        var resource = pagingSpec.ApplyToPage(_episodeService.EpisodesWithoutFiles, v => MapToResource(v, includeSeries, false, includeImages));
+        var resource = pagingSpec.ApplyToPage(spec => _episodeService.EpisodesWithoutFiles(spec, includeSpecials), v => MapToResource(v, includeSeries, false, includeImages));
 
         return resource;
     }
