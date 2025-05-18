@@ -136,6 +136,30 @@ namespace NzbDrone.Core.Indexers.Newznab
             return results;
         }
 
+        protected override List<Language> GetSubtitles(XElement item)
+        {
+            var languageElements = TryGetMultipleNewznabAttributes(item, "subs");
+            var results = new List<Language>();
+
+            foreach (var languageElement in languageElements)
+            {
+                var languages = languageElement.Split(',',
+                    StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+                foreach (var language in languages)
+                {
+                    var mappedLanguage = IsoLanguages.FindByName(language)?.Language ?? null;
+
+                    if (mappedLanguage != null)
+                    {
+                        results.Add(mappedLanguage);
+                    }
+                }
+            }
+
+            return results;
+        }
+
         protected override long GetSize(XElement item)
         {
             var sizeString = TryGetNewznabAttribute(item, "size");
