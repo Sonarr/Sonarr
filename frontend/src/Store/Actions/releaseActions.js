@@ -49,6 +49,14 @@ export const defaultState = {
       return item.languages[0]?.id ?? 0;
     },
 
+    subtitles: function(item, direction) {
+      if (item.languages.length > 1) {
+        return 10000;
+      }
+
+      return item.languages[0]?.id ?? 0;
+    },
+
     rejections: function(item, direction) {
       const rejections = item.rejections;
       const releaseWeight = item.releaseWeight;
@@ -112,6 +120,13 @@ export const defaultState = {
       const languages = item.languages.map((language) => language.name);
 
       return predicate(languages, filterValue);
+    },
+
+    subtitles: function(item, filterValue, type) {
+      const predicate = getFilterTypePredicate(type);
+      const subtitles = item.subtitles.map((language) => language.name);
+
+      return predicate(subtitles, filterValue);
     },
 
     rejectionCount: function(item, value, type) {
@@ -223,6 +238,25 @@ export const defaultState = {
       optionsSelector: function(items) {
         const genreList = items.reduce((acc, release) => {
           release.languages.forEach((language) => {
+            acc.push({
+              id: language.name,
+              name: language.name
+            });
+          });
+
+          return acc;
+        }, []);
+
+        return genreList.sort(sortByProp('name'));
+      }
+    },
+    {
+      name: 'subtitles',
+      label: () => translate('SubtitleLanguages'),
+      type: filterBuilderTypes.ARRAY,
+      optionsSelector: function(items) {
+        const genreList = items.reduce((acc, release) => {
+          release.subtitles.forEach((language) => {
             acc.push({
               id: language.name,
               name: language.name
