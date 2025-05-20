@@ -286,7 +286,7 @@
     "StartupDirectory": "Diretório de Inicialização",
     "Status": "Status",
     "TestAll": "Testar Tudo",
-    "TheLogLevelDefault": "O nível de registro é padronizado como 'Info' e pode ser alterado em [Configurações Gerais](/settings/general)",
+    "TheLogLevelDefault": "O nível de registro padrão é ' Debug ' e pode ser alterado em [ Configurações gerais](/ configurações/geral)",
     "Time": "Horário",
     "TotalSpace": "Espaço Total",
     "Twitter": "Twitter",
@@ -890,7 +890,7 @@
     "UpgradeUntilEpisodeHelpText": "Quando essa qualidade for atingida, {appName} não baixará mais episódios depois que a pontuação de corte do formato personalizado for atingida ou excedida",
     "UpgradeUntilThisQualityIsMetOrExceeded": "Atualize até que essa qualidade seja atendida ou excedida",
     "UpgradesAllowed": "Atualizações Permitidas",
-    "UpgradesAllowedHelpText": "se as qualidades deshabilitadas não forem atualizadas",
+    "UpgradesAllowedHelpText": "se as qualidades desabilitadas não forem atualizadas",
     "Uppercase": "Maiuscula",
     "UrlBase": "URL base",
     "UrlBaseHelpText": "Para suporte a proxy reverso, o padrão é vazio",
@@ -906,7 +906,7 @@
     "WeekColumnHeaderHelpText": "Mostrado acima de cada coluna quando a semana é a exibição ativa",
     "RemotePathMappingLocalPathHelpText": "Caminho que o {appName} deve usar para acessar o caminho remoto localmente",
     "RemoveCompletedDownloadsHelpText": "Remover downloads importados do histórico do cliente de download",
-    "RenameEpisodesHelpText": "O {appName} usará o nome do arquivo existente se a renomeação estiver deshabilitada",
+    "RenameEpisodesHelpText": "O {appName} usará o nome do arquivo existente se a renomeação estiver desabilitada",
     "ReplaceWithSpaceDashSpace": "Substituir com Espaço, Traço e Espaço",
     "RequiredHelpText": "Esta condição {implementationName} deve corresponder para que o formato personalizado seja aplicado. Caso contrário, uma única correspondência {implementationName} é suficiente.",
     "SetPermissionsLinuxHelpText": "O chmod deve ser executado quando os arquivos são importados/renomeados?",
@@ -1206,7 +1206,7 @@
     "OpenSeries": "Abrir Séries",
     "OrganizeModalHeaderSeason": "Organizar & Renomear - {season}",
     "ParseModalErrorParsing": "Erro ao analisar, tente novamente.",
-    "OrganizeRenamingDisabled": "A renomeação está deshabilitada, nada para renomear",
+    "OrganizeRenamingDisabled": "A renomeação está desabilitada, nada para renomear",
     "ParseModalHelpText": "Insira um título de lançamento na entrada acima",
     "ParseModalUnableToParse": "Não foi possível analisar o título fornecido, tente novamente.",
     "ProgressBarProgress": "Barra de progresso em {progress}%",
@@ -2162,5 +2162,6 @@
     "CloneImportList": "Clonar Lista de Importação",
     "DownloadClientItemErrorMessage": "{clientName} está relatando um erro: {message}",
     "DefaultNameCopiedImportList": "{name} - Cópia",
-    "EpisodesInSeason": "{episodeCount} episódios na temporada"
+    "EpisodesInSeason": "{episodeCount} episódios na temporada",
+    "AutoTaggingSpecificationNetwork": "Rede(s)"
 }
