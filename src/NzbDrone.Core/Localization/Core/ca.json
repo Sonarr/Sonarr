@@ -2162,5 +2162,6 @@
     "DefaultNameCopiedImportList": "{name} - Còpia",
     "DownloadClientItemErrorMessage": "{clientName} está reportant un error: {message}",
     "EpisodesInSeason": "{episodeCount} episodis en la temporada",
-    "NotificationsPushcutSettingsNotificationName": "Nom de la notificació"
+    "NotificationsPushcutSettingsNotificationName": "Nom de la notificació",
+    "AutoTaggingSpecificationNetwork": "Xarxa(es)"
 }

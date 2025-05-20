@@ -742,7 +742,7 @@
     "AutoTaggingRequiredHelpText": "Tämän \"{implementationName}\" -ehdon on täsmättävä automaattimerkinnän säännön käyttämiseksi. Muutoin yksittäinen \"{implementationName}\" -vastaavuus riittää.",
     "LibraryImportTipsSeriesUseRootFolder": "Osoita {appName}ille kansio, joka sisältää kaikki tuotavat sarjat, ei vain yksittäistä elokuvaa (esim. \"{goodFolderExample}\" ei \"{badFolderExample}\"). Lisäksi jokaisen sarjan on oltava omissa kansioissaan juuri-/kirjastokansion alla.",
     "SeriesDetailsGoTo": "Avaa {title}",
-    "SeriesEditRootFolderHelpText": "Siirtämällä sarjat samaan juurikansioon voidaan niiden kansioiden nimet päivittää vastaamaan päivittynyttä nimikettä tai nimeämiskaavaa.",
+    "SeriesEditRootFolderHelpText": "Siirtämällä sarjat niiden nykyiseen juurikansioon voidaan niiden kansioiden nimet päivittää vastaamaan päivittynyttä nimikettä tai nimeämiskaavaa.",
     "WouldYouLikeToRestoreBackup": "Haluatko palauttaa varmuuskopion \"{name}\"?",
     "SeriesLoadError": "Virhe ladattaessa sarjoja.",
     "IconForCutoffUnmetHelpText": "Näytä kuvake tiedostoille, joiden määritettyä katkaisutasoa ei ole vielä saavutettu.",
@@ -778,7 +778,7 @@
     "Search": "Haku",
     "AddSeriesWithTitle": "Lisää {title}",
     "AddNewSeriesHelpText": "Uuden sarjan lisääminen on helppoa. Aloita vain haluamasi sarjan nimen kirjoittaminen.",
-    "AddNewSeriesRootFolderHelpText": "\"{folder}\" -alikansio luodaan automaattisesti.",
+    "AddNewSeriesRootFolderHelpText": "Alikansio \"{folder}\" luodaan automaattisesti.",
     "AddNewSeriesSearchForMissingEpisodes": "Käynnistä puuttuvien jaksojen etsintä",
     "AddNewSeriesSearchForCutoffUnmetEpisodes": "Käynnistä katkaisutasoa saavuttamattomien jaksojen etsintä",
     "AddNewSeriesError": "Hakutulosten lataus epäonnistui. Yritä uudelleen.",
@@ -1787,7 +1787,7 @@
     "DownloadClientValidationApiKeyIncorrect": "Rajapinnan avain ei kelpaa",
     "HiddenClickToShow": "Piilotettu, näytä painamalla tästä",
     "ImportListsCustomListValidationAuthenticationFailure": "Tunnistautuminen epäonnistui",
-    "ImportListsSonarrSettingsApiKeyHelpText": "{appName}-instanssin, josta tuodaan, rajapinan (API) avain.",
+    "ImportListsSonarrSettingsApiKeyHelpText": "Tuotavan {appName}-instanssin rajapinnan avain.",
     "IndexerSettingsApiUrlHelpText": "Älä muuta tätä, jos et tiedä mitä teet, koska rajapinta-avaimesi lähetetään kyseiselle palvelimelle.",
     "ImportListsTraktSettingsRating": "Arvio",
     "Required": "Pakollinen",
@@ -2158,5 +2158,10 @@
     "NotificationsPushcutSettingsIncludePoster": "Sisällytä juliste",
     "NotificationsPushcutSettingsIncludePosterHelpText": "Näytä juliste ilmoituksessa.",
     "NotificationsPushcutSettingsMetadataLinks": "Metatietolinkit",
-    "NotificationsPushcutSettingsMetadataLinksHelpText": "Lisää lähetettäviin ilmoituksiin linkit sarjojen metatietoihin."
+    "NotificationsPushcutSettingsMetadataLinksHelpText": "Lisää lähetettäviin ilmoituksiin linkit sarjojen metatietoihin.",
+    "AutoTaggingSpecificationNetwork": "Verkot",
+    "DownloadClientItemErrorMessage": "{clientName} ilmoittaa virheestä: {message}",
+    "EpisodesInSeason": "Tuotantokaudessa on {episodeCount} jaksoa",
+    "CloneImportList": "Monista tuontilista",
+    "DefaultNameCopiedImportList": "{name} (kopio)"
 }

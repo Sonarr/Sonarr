@@ -2069,7 +2069,7 @@
     "Retention": "Удержание",
     "UnmonitorDeletedEpisodesHelpText": "Эпизоды, удаленные с диска, автоматически не отслеживаются в приложении {appName}",
     "Umask775Description": "{octal} - Владелец и группа - запись, другое - чтение",
-    "TheLogLevelDefault": "Уровень журналирования по умолчанию установлен на 'Информация' и может быть изменён в [Общих настройках](/settings/general)",
+    "TheLogLevelDefault": "Уровень журналирования по умолчанию установлен на 'Отладка' и может быть изменён в [Общих настройках](/settings/general)",
     "SystemTimeHealthCheckMessage": "Расхождение системного времени более чем на 1 день. Запланированные задачи могут работать некорректно, пока не будет исправлено время",
     "UiSettingsSummary": "Параметры календаря, даты и опции для слабовидящих",
     "TorrentBlackholeSaveMagnetFilesReadOnlyHelpText": "Вместо перемещения файлов это даст указание {appName} скопировать или установить жесткую ссылку (в зависимости от настроек/конфигурации системы)",
@@ -2161,5 +2161,6 @@
     "CloneImportList": "Копировать список импорта",
     "EpisodesInSeason": "{episodeCount} эпизодов в сезоне",
     "DefaultNameCopiedImportList": "{name} - копировать",
-    "DownloadClientItemErrorMessage": "{clientName} сообщает об ошибке: {message}"
+    "DownloadClientItemErrorMessage": "{clientName} сообщает об ошибке: {message}",
+    "AutoTaggingSpecificationNetwork": "Сеть(и)"
 }

@@ -73,7 +73,7 @@
     "Style": "Estilo",
     "System": "Sistema",
     "Tasks": "Tareas",
-    "Trace": "Rastro",
+    "Trace": "Traza",
     "TvdbId": "TVDB ID",
     "Torrents": "Torrents",
     "Ui": "Interfaz",
@@ -124,7 +124,7 @@
     "Age": "Antigüedad",
     "All": "Todo",
     "Certification": "Certificación",
-    "AudioInfo": "Audio Info",
+    "AudioInfo": "Información de audio",
     "AudioLanguages": "Idiomas de Audio",
     "Episode": "Episodio",
     "Activity": "Actividad",
@@ -136,7 +136,7 @@
     "Genres": "Géneros",
     "Indexer": "Indexador",
     "Imported": "Importado",
-    "Info": "Info",
+    "Info": "Información",
     "Location": "Ubicación",
     "Mode": "Modo",
     "Peers": "Pares",
@@ -602,7 +602,7 @@
     "EditQualityProfile": "Editar perfil de calidad",
     "EnableHelpText": "Habilitar la creación de un fichero de metadatos para este tipo de metadato",
     "EnableMediaInfoHelpText": "Extraer información de video como la resolución, el tiempo de ejecución y la información del códec de los archivos. Esto requiere que {appName} lea partes del archivo lo cual puede causar una alta actividad en el disco o en la red durante los escaneos.",
-    "TheLogLevelDefault": "El nivel de registro por defecto es 'Info' y puede ser cambiado en [Opciones generales](opciones/general)",
+    "TheLogLevelDefault": "El nivel de registro por defecto es 'Depuración' y puede ser cambiado en [Opciones generales](/settings/general)",
     "TorrentBlackholeSaveMagnetFilesExtensionHelpText": "Extensión a usar para enlaces magnet, predeterminado a '.magnet'",
     "DownloadIgnoredEpisodeTooltip": "Descarga de episodio ignorada",
     "EditDelayProfile": "Editar perfil de retraso",
@@ -2162,5 +2162,6 @@
     "EpisodesInSeason": "{episodeCount} episodios en la temporada",
     "DefaultNameCopiedImportList": "{name} - Copia",
     "DownloadClientItemErrorMessage": "{clientName} está reportando un error: {message}",
-    "CloneImportList": "Clonar lista de importación"
+    "CloneImportList": "Clonar lista de importación",
+    "AutoTaggingSpecificationNetwork": "Red(es)"
 }
