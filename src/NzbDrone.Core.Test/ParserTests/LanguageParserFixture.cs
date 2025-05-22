@@ -516,6 +516,15 @@ namespace NzbDrone.Core.Test.ParserTests
             result.Should().Contain(Language.Urdu);
         }
 
+        [TestCase("Title.the.Series.2025.S01.Romansh.1080p.WEB-DL.h264-RlsGrp")]
+        [TestCase("Title.the.Series.2025.S01.Rumantsch.1080p.WEB.DL.h264-RlsGrp")]
+        [TestCase("Title the Series 2025 S01 Romansch 1080p WEB DL h264-RlsGrp")]
+        public void should_parse_language_romansh(string postTitle)
+        {
+            var result = LanguageParser.ParseLanguages(postTitle);
+            result.Should().Contain(Language.Romansh);
+        }
+
         [TestCase("Name (2020) - S01E20 - [AAC 2.0].testtitle.default.eng.forced.ass", new[] { "default", "forced" }, "testtitle", "English")]
         [TestCase("Name (2020) - S01E20 - [AAC 2.0].eng.default.testtitle.forced.ass", new[] { "default", "forced" }, "testtitle", "English")]
         [TestCase("Name (2020) - S01E20 - [AAC 2.0].default.eng.testtitle.forced.ass", new[] { "default", "forced" }, "testtitle", "English")]
