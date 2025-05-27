@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import SeriesMonitoringOptionsPopoverContent from 'AddSeries/SeriesMonitoringOptionsPopoverContent';
 import AppState from 'App/State/AppState';
+import Alert from 'Components/Alert';
 import Form from 'Components/Form/Form';
 import FormGroup from 'Components/Form/FormGroup';
 import FormInputGroup from 'Components/Form/FormInputGroup';
@@ -19,7 +20,6 @@ import { icons, kinds, tooltipPositions } from 'Helpers/Props';
 import { updateSeriesMonitor } from 'Store/Actions/seriesActions';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
-import Alert from '../../Components/Alert';
 import styles from './MonitoringOptionsModalContent.css';
 
 const NO_CHANGE = 'noChange';
