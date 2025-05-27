@@ -15,10 +15,11 @@ import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import Popover from 'Components/Tooltip/Popover';
 import usePrevious from 'Helpers/Hooks/usePrevious';
-import { icons, tooltipPositions } from 'Helpers/Props';
+import { icons, kinds, tooltipPositions } from 'Helpers/Props';
 import { updateSeriesMonitor } from 'Store/Actions/seriesActions';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
+import Alert from '../../Components/Alert';
 import styles from './MonitoringOptionsModalContent.css';
 
 const NO_CHANGE = 'noChange';
@@ -66,9 +67,12 @@ function MonitoringOptionsModalContent({
 
   return (
     <ModalContent onModalClose={onModalClose}>
-      <ModalHeader>{translate('MonitorSeries')}</ModalHeader>
+      <ModalHeader>{translate('MonitorEpisodes')}</ModalHeader>
 
       <ModalBody>
+        <Alert kind={kinds.INFO}>
+          <div>{translate('MonitorEpisodesModalInfo')}</div>
+        </Alert>
         <Form>
           <FormGroup>
             <FormLabel>
