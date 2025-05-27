@@ -24,6 +24,7 @@ namespace NzbDrone.Core.Test.TvTests
         [TestCase("A.I.C.O. -Incarnation-", "aico incarnation")]
         [TestCase("A.D. The Bible Continues", "ad the bible continues")]
         [TestCase("A.P. Bio", "ap bio")]
+        [TestCase("A-Team", "ateam")]
         [TestCase("The A-Team", "ateam")]
         [TestCase("And Just Like That", "and just like that")]
         public void should_normalize_title(string title, string expected)

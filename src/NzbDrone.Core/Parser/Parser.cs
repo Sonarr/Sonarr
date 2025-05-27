@@ -900,8 +900,7 @@ namespace NzbDrone.Core.Parser
             title = PunctuationRegex.Replace(title, " ");
             title = DuplicateSpacesRegex.Replace(title, " ");
 
-            return title.Trim()
-                        .ToLower();
+            return title.Trim().ToLower();
         }
 
         public static string NormalizeTitle(string title)
