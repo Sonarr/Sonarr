@@ -99,24 +99,10 @@ namespace NzbDrone.Core.Download.Clients.Tribler
                     }
                 }
 
-                // TODO: the item's message should not be equal to Error
                 item.Message = download.Error;
 
                 // tribler always saves files unencrypted to disk.
                 item.IsEncrypted = false;
-
-                // state handling
-
-                // TODO: impossible states?
-                // Failed = 4,
-                // Warning = 5
-
-                // Queued = 0,
-                // Completed = 3,
-                // Downloading = 2,
-
-                // Paused is guesstimated
-                // Paused = 1,
 
                 switch (download.Status)
                 {
@@ -153,15 +139,11 @@ namespace NzbDrone.Core.Download.Clients.Tribler
 
                 if (download.Error != null && download.Error.Length > 0)
                 {
-                    item.Status = DownloadItemStatus.Warning; // maybe this should be an error?
+                    item.Status = DownloadItemStatus.Warning;
                     item.Message = download.Error;
                 }
 
-                // done (finished seeding & stopped, guessed)
-                item.CanBeRemoved = HasReachedSeedLimit(download, configAsync);
-
-                // seeding or done, or stopped
-                item.CanMoveFiles = download.Progress == 1.0;
+                item.CanBeRemoved = item.CanMoveFiles = HasReachedSeedLimit(download, configAsync);
 
                 items.Add(item);
             }
@@ -191,10 +173,7 @@ namespace NzbDrone.Core.Download.Clients.Tribler
             };
         }
 
-        /**
-         * this basically checks if torrent is stopped because of seeding has finished
-         */
-        protected static bool HasReachedSeedLimit(Download torrent, GetTriblerSettingsResponse config)
+        protected static bool HasReachedSeedLimit(Download torrent, TriblerSettingsResponse config)
         {
             if (config == null)
             {
@@ -214,7 +193,6 @@ namespace NzbDrone.Core.Download.Clients.Tribler
 
             switch (config.Settings.LibTorrent.DownloadDefaults.SeedingMode)
             {
-                // if in ratio mode, wait for ratio to become larger than expeced. Tribler's DownloadStatus will switch from SEEDING to STOPPED
                 case DownloadDefaultsSeedingMode.Ratio:
 
                     return torrent.AllTimeRatio.HasValue
@@ -251,19 +229,18 @@ namespace NzbDrone.Core.Download.Clients.Tribler
 
         protected override string AddFromTorrentFile(RemoteEpisode remoteEpisode, string hash, string filename, byte[] fileContent)
         {
-            // tribler api currently do not support recieving a torrent file direcly.
-            throw new NotSupportedException("Tribler download client only support magnet links currently");
+            // TODO: Tribler 8.x does support adding from a torrent file, but it's not a simple put command.
+            throw new NotSupportedException("Tribler does not support torrent files, only magnet links");
         }
 
         protected override void Test(List<ValidationFailure> failures)
         {
             failures.AddIfNotNull(TestConnection());
+
             if (failures.HasErrors())
             {
                 return;
             }
-
-            // failures.AddIfNotNull(TestGetTorrents());
         }
 
         protected string GetDownloadDirectory()

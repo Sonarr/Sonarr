@@ -5,7 +5,7 @@ using Newtonsoft.Json.Converters;
 
 namespace NzbDrone.Core.Indexers.Tribler
 {
-    public class GetTriblerSettingsResponse
+    public class TriblerSettingsResponse
     {
         [JsonProperty("settings", NullValueHandling = NullValueHandling.Ignore)]
         public Settings Settings { get; set; }

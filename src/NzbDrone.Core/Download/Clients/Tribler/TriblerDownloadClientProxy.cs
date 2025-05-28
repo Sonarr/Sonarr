@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Net.Http;
 using NLog;
 using NzbDrone.Common.Http;
 using NzbDrone.Common.Serializer;
@@ -8,9 +9,9 @@ namespace NzbDrone.Core.Download.Clients.Tribler
 {
     public interface ITriblerDownloadClientProxy
     {
-        ICollection<Download> GetDownloads(TriblerDownloadSettings settings);
-        ICollection<File> GetDownloadFiles(TriblerDownloadSettings settings, Download downloadItem);
-        GetTriblerSettingsResponse GetConfig(TriblerDownloadSettings settings);
+        List<Download> GetDownloads(TriblerDownloadSettings settings);
+        List<File> GetDownloadFiles(TriblerDownloadSettings settings, Download downloadItem);
+        TriblerSettingsResponse GetConfig(TriblerDownloadSettings settings);
         void RemoveDownload(TriblerDownloadSettings settings, DownloadClientItem item, bool deleteData);
         string AddFromMagnetLink(TriblerDownloadSettings settings, AddDownloadRequest downloadRequest);
     }
@@ -26,24 +27,18 @@ namespace NzbDrone.Core.Download.Clients.Tribler
             _logger = logger;
         }
 
-        private HttpRequestBuilder getRequestBuilder(TriblerDownloadSettings settings, string relativePath = null)
-        {
-            var requestBuilder = new HttpRequestBuilder(GetBaseUrl(settings, relativePath))
-                .Accept(HttpAccept.Json);
-
-            requestBuilder.Headers.Add("X-Api-Key", settings.ApiKey);
-
-            requestBuilder.LogResponseContent = true;
-
-            return requestBuilder;
-        }
-
-        public string GetBaseUrl(TriblerDownloadSettings settings, string relativePath = null)
+        private HttpRequestBuilder GetRequestBuilder(TriblerDownloadSettings settings, string relativePath = null)
         {
             var baseUrl = HttpRequestBuilder.BuildBaseUrl(settings.UseSsl, settings.Host, settings.Port, settings.UrlBase);
             baseUrl = HttpUri.CombinePath(baseUrl, relativePath);
 
-            return baseUrl;
+            var requestBuilder = new HttpRequestBuilder(baseUrl)
+                .Accept(HttpAccept.Json);
+
+            requestBuilder.Headers.Add("X-Api-Key", settings.ApiKey);
+            requestBuilder.LogResponseContent = true;
+
+            return requestBuilder;
         }
 
         private T ProcessRequest<T>(HttpRequestBuilder requestBuilder)
@@ -75,21 +70,21 @@ namespace NzbDrone.Core.Download.Clients.Tribler
             }
         }
 
-        public GetTriblerSettingsResponse GetConfig(TriblerDownloadSettings settings)
+        public TriblerSettingsResponse GetConfig(TriblerDownloadSettings settings)
         {
-            var configRequest = getRequestBuilder(settings, "api/settings");
-            return ProcessRequest<GetTriblerSettingsResponse>(configRequest);
+            var configRequest = GetRequestBuilder(settings, "api/settings");
+            return ProcessRequest<TriblerSettingsResponse>(configRequest);
         }
 
-        public ICollection<File> GetDownloadFiles(TriblerDownloadSettings settings, Download downloadItem)
+        public List<File> GetDownloadFiles(TriblerDownloadSettings settings, Download downloadItem)
         {
-            var filesRequest = getRequestBuilder(settings, "api/downloads/" + downloadItem.Infohash + "/files");
+            var filesRequest = GetRequestBuilder(settings, "api/downloads/" + downloadItem.Infohash + "/files");
             return ProcessRequest<GetFilesResponse>(filesRequest).Files;
         }
 
-        public ICollection<Download> GetDownloads(TriblerDownloadSettings settings)
+        public List<Download> GetDownloads(TriblerDownloadSettings settings)
         {
-            var downloadRequest = getRequestBuilder(settings, "api/downloads");
+            var downloadRequest = GetRequestBuilder(settings, "api/downloads");
             var downloads = ProcessRequest<DownloadsResponse>(downloadRequest);
             return downloads.Downloads;
         }
@@ -101,8 +96,8 @@ namespace NzbDrone.Core.Download.Clients.Tribler
                 RemoveData = deleteData
             };
 
-            var deleteRequestBuilder = getRequestBuilder(settings, "api/downloads/" + item.DownloadId.ToLower());
-            deleteRequestBuilder.Method = System.Net.Http.HttpMethod.Delete;
+            var deleteRequestBuilder = GetRequestBuilder(settings, "api/downloads/" + item.DownloadId.ToLower());
+            deleteRequestBuilder.Method = HttpMethod.Delete;
 
             var deleteRequest = deleteRequestBuilder.Build();
             deleteRequest.SetContent(Json.ToJson(deleteDownloadRequestObject));
@@ -112,8 +107,8 @@ namespace NzbDrone.Core.Download.Clients.Tribler
 
         public string AddFromMagnetLink(TriblerDownloadSettings settings, AddDownloadRequest downloadRequest)
         {
-            var addDownloadRequestBuilder = getRequestBuilder(settings, "api/downloads");
-            addDownloadRequestBuilder.Method = System.Net.Http.HttpMethod.Put;
+            var addDownloadRequestBuilder = GetRequestBuilder(settings, "api/downloads");
+            addDownloadRequestBuilder.Method = HttpMethod.Put;
 
             var addDownloadRequest = addDownloadRequestBuilder.Build();
             addDownloadRequest.SetContent(Json.ToJson(downloadRequest));

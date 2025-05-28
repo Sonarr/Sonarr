@@ -130,13 +130,13 @@ namespace NzbDrone.Core.Download.Clients.Tribler
         public long? NumPeers { get; set; }
 
         [JsonProperty("trackers", NullValueHandling = NullValueHandling.Ignore)]
-        public ICollection<Trackers> Trackers { get; set; }
+        public List<Trackers> Trackers { get; set; }
     }
 
     public class DownloadsResponse
     {
         [JsonProperty("downloads", NullValueHandling = NullValueHandling.Ignore)]
-        public ICollection<Download> Downloads { get; set; }
+        public List<Download> Downloads { get; set; }
     }
 
     public class AddDownloadRequest
@@ -185,7 +185,7 @@ namespace NzbDrone.Core.Download.Clients.Tribler
         public long? AnonHops { get; set; }
 
         [JsonProperty("selected_files", NullValueHandling = NullValueHandling.Ignore)]
-        public ICollection<int> Selected_files { get; set; }
+        public List<int> Selected_files { get; set; }
 
         [JsonProperty("state", NullValueHandling = NullValueHandling.Ignore)]
         public string State { get; set; }
@@ -221,6 +221,6 @@ namespace NzbDrone.Core.Download.Clients.Tribler
     public class GetFilesResponse
     {
         [JsonProperty("files", NullValueHandling = NullValueHandling.Ignore)]
-        public ICollection<File> Files { get; set; }
+        public List<File> Files { get; set; }
     }
 }

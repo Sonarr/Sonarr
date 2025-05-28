@@ -13,17 +13,12 @@ namespace NzbDrone.Core.Download.Clients.Tribler
         {
             RuleFor(c => c.Host).ValidHost();
             RuleFor(c => c.Port).InclusiveBetween(1, 65535);
-
             RuleFor(c => c.UrlBase).ValidUrlBase();
-
             RuleFor(c => c.ApiKey).NotEmpty();
-
             RuleFor(c => c.TvCategory).Matches(@"^\.?[-a-z]*$", RegexOptions.IgnoreCase).WithMessage("Allowed characters a-z and -");
-
             RuleFor(c => c.TvCategory).Empty()
                 .When(c => c.TvDirectory.IsNotNullOrWhiteSpace())
                 .WithMessage("Cannot use Category and Directory");
-
             RuleFor(c => c.AnonymityLevel).GreaterThanOrEqualTo(0);
         }
     }
@@ -37,7 +32,6 @@ namespace NzbDrone.Core.Download.Clients.Tribler
             Host = "localhost";
             Port = 20100;
             UrlBase = "";
-
             AnonymityLevel = 1;
             SafeSeeding = true;
         }
