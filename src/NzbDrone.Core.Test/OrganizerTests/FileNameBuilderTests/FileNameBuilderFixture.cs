@@ -575,6 +575,7 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
         [TestCase("rum", "RO")]
         [TestCase("per", "FA")]
         [TestCase("ger", "DE")]
+        [TestCase("gsw", "DE")]
         [TestCase("cze", "CS")]
         [TestCase("ice", "IS")]
         [TestCase("dut", "NL")]
