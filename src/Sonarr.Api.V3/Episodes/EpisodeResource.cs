@@ -33,8 +33,6 @@ namespace Sonarr.Api.V3.Episodes
         public int? SceneEpisodeNumber { get; set; }
         public int? SceneSeasonNumber { get; set; }
         public bool UnverifiedSceneNumbering { get; set; }
-        public DateTime? EndTime { get; set; }
-        public DateTime? GrabDate { get; set; }
         public SeriesResource Series { get; set; }
         public List<MediaCover> Images { get; set; }
 
