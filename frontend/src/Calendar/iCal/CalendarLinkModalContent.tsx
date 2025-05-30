@@ -22,7 +22,12 @@ interface CalendarLinkModalContentProps {
 function CalendarLinkModalContent({
   onModalClose,
 }: CalendarLinkModalContentProps) {
-  const [state, setState] = useState({
+  const [state, setState] = useState<{
+    unmonitored: boolean;
+    premieresOnly: boolean;
+    asAllDay: boolean;
+    tags: number[];
+  }>({
     unmonitored: false,
     premieresOnly: false,
     asAllDay: false,
