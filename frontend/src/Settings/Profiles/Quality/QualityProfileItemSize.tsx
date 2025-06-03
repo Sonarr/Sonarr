@@ -183,6 +183,7 @@ export default function QualityProfileItemSize({
         // @ts-ignore allowCross is still available in the version currently used
         allowCross={false}
         snapDragDisabled={true}
+        pearling={true}
         renderThumb={thumbRenderer}
         renderTrack={trackRenderer}
         onChange={handleSliderChange}
