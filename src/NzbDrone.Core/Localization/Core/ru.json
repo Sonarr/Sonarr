@@ -2162,5 +2162,7 @@
     "EpisodesInSeason": "{episodeCount} эпизодов в сезоне",
     "DefaultNameCopiedImportList": "{name} - копировать",
     "DownloadClientItemErrorMessage": "{clientName} сообщает об ошибке: {message}",
-    "AutoTaggingSpecificationNetwork": "Сеть(и)"
+    "AutoTaggingSpecificationNetwork": "Сеть(и)",
+    "NotificationsAppriseSettingsIncludePoster": "Добавить постер",
+    "NotificationsAppriseSettingsIncludePosterHelpText": "Добавлять постер в сообщение"
 }

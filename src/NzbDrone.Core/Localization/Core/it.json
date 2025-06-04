@@ -59,7 +59,7 @@
     "AppUpdated": "{appName} Aggiornato",
     "AppUpdatedVersion": "{appName} è stato aggiornato alla versione `{version}`, per vedere le modifiche devi ricaricare {appName} ",
     "ApplicationURL": "URL Applicazione",
-    "AuthenticationMethodHelpText": "Utilizza nome utente e password per accedere a {appName}",
+    "AuthenticationMethodHelpText": "Richiede nome utente e password per accedere a {appName}",
     "BindAddressHelpText": "Indirizzi IP validi, localhost o '*' per tutte le interfacce",
     "BeforeUpdate": "Prima dell'aggiornamento",
     "CalendarFeed": "Feed calendario {appName}",
@@ -191,7 +191,7 @@
     "AuthenticationMethod": "Metodo di Autenticazione",
     "AuthenticationRequiredPasswordHelpTextWarning": "Inserisci la nuova password",
     "AuthenticationRequiredUsernameHelpTextWarning": "Inserisci username",
-    "AuthenticationMethodHelpTextWarning": "Selezione un metodo di autenticazione valido",
+    "AuthenticationMethodHelpTextWarning": "Seleziona un metodo di autenticazione valido",
     "CalendarLegendEpisodeMissingTooltip": "Episodio trasmesso non scaricato sul disco",
     "CalendarLegendEpisodeOnAirTooltip": "L'episodio viene trasmesso",
     "CalendarLegendEpisodeUnairedTooltip": "Episodio non ancora trasmesso",
@@ -926,5 +926,6 @@
     "EpisodeFileDeleted": "File dell'Episodio Eliminato",
     "Importing": "Importando",
     "DownloadClientDelugeSettingsDirectory": "Cartella Download",
-    "CountCustomFormatsSelected": "{count} formati personalizzati selezionati"
+    "CountCustomFormatsSelected": "{count} formati personalizzati selezionati",
+    "AutoRedownloadFailedFromInteractiveSearchHelpText": "Cerca automaticamente e tenta di scaricare una versione diversa quando la release è stata trovata dalla ricerca interattiva"
 }
