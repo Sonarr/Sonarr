@@ -2163,5 +2163,7 @@
     "DefaultNameCopiedImportList": "{name} - Copia",
     "DownloadClientItemErrorMessage": "{clientName} está reportando un error: {message}",
     "CloneImportList": "Clonar lista de importación",
-    "AutoTaggingSpecificationNetwork": "Red(es)"
+    "AutoTaggingSpecificationNetwork": "Red(es)",
+    "NotificationsAppriseSettingsIncludePoster": "Incluir póster",
+    "NotificationsAppriseSettingsIncludePosterHelpText": "Incluir póster en el mensaje"
 }

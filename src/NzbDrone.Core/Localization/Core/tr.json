@@ -604,7 +604,7 @@
     "SslCertPath": "SSL Sertifika Yolu",
     "StopSelecting": "Düzenlemeden Çık",
     "TableOptionsButton": "Tablo Seçenekleri Butonu",
-    "TheLogLevelDefault": "Log seviyesi varsayılan olarak 'Bilgi' şeklindedir ve [Genel Ayarlar](/ayarlar/genel) bölümünden değiştirilebilir",
+    "TheLogLevelDefault": "Log seviyesi varsayılan olarak 'Hata Ayıklama' olarak ayarlanmıştır ve [Genel Ayarlar](/ayarlar/genel) bölümünden değiştirilebilir",
     "NotificationsTwitterSettingsAccessToken": "Erişim Token'ı",
     "AutoRedownloadFailedHelpText": "Farklı bir sürümü otomatik olarak ara ve indirmeyi dene",
     "Queue": "Kuyruk",
@@ -2163,5 +2163,7 @@
     "DefaultNameCopiedImportList": "{name} - Kopyala",
     "DownloadClientItemErrorMessage": "{clientName} bir hata bildiriyor: {message}",
     "EpisodesInSeason": "Sezondaki {episodeCount} bölüm",
-    "AutoTaggingSpecificationNetwork": "Ağ(lar)"
+    "AutoTaggingSpecificationNetwork": "Ağ(lar)",
+    "NotificationsAppriseSettingsIncludePoster": "Poster'i ekle",
+    "NotificationsAppriseSettingsIncludePosterHelpText": "Mesaja poster ekle"
 }

@@ -2163,5 +2163,7 @@
     "DownloadClientItemErrorMessage": "{clientName} está relatando um erro: {message}",
     "DefaultNameCopiedImportList": "{name} - Cópia",
     "EpisodesInSeason": "{episodeCount} episódios na temporada",
-    "AutoTaggingSpecificationNetwork": "Rede(s)"
+    "AutoTaggingSpecificationNetwork": "Rede(s)",
+    "NotificationsAppriseSettingsIncludePoster": "Incluir Pôster",
+    "NotificationsAppriseSettingsIncludePosterHelpText": "Incluir pôster na mensagem"
 }
