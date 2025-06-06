@@ -39,7 +39,10 @@ namespace NzbDrone.Core.DiskSpace
 
             var optionalRootFolders = GetFixedDisksRootPaths().Except(importantRootFolders).Distinct().ToList();
 
-            var diskSpace = GetDiskSpace(importantRootFolders).Concat(GetDiskSpace(optionalRootFolders, true)).ToList();
+            var diskSpace = GetDiskSpace(importantRootFolders)
+                .Concat(GetDiskSpace(optionalRootFolders, true))
+                .OrderBy(d => d.Path)
+                .ToList();
 
             return diskSpace;
         }
@@ -61,7 +64,7 @@ namespace NzbDrone.Core.DiskSpace
         private IEnumerable<string> GetFixedDisksRootPaths()
         {
             return _diskProvider.GetMounts()
-                .Where(d => d.DriveType == DriveType.Fixed)
+                .Where(d => d.DriveType == DriveType.Fixed || d.DriveType == DriveType.Network)
                 .Where(d => !_regexSpecialDrive.IsMatch(d.RootDirectory))
                 .Select(d => d.RootDirectory);
         }
@@ -83,11 +86,11 @@ namespace NzbDrone.Core.DiskSpace
                     }
 
                     diskSpace = new DiskSpace
-                                {
-                                    Path = path,
-                                    FreeSpace = freeSpace.Value,
-                                    TotalSpace = totalSpace.Value
-                                };
+                    {
+                        Path = path,
+                        FreeSpace = freeSpace.Value,
+                        TotalSpace = totalSpace.Value
+                    };
 
                     diskSpace.Label = _diskProvider.GetVolumeLabel(path);
                 }
