@@ -257,6 +257,12 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("EpisodeTitleRequired", value); }
         }
 
+        public string UserRejectedExtensions
+        {
+            get { return GetValue("UserRejectedExtensions", string.Empty); }
+            set { SetValue("UserRejectedExtensions", value); }
+        }
+
         public bool SetPermissionsLinux
         {
             get { return GetValueBoolean("SetPermissionsLinux", false); }

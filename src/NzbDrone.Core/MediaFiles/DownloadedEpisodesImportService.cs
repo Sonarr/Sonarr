@@ -6,6 +6,7 @@ using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
 using NzbDrone.Core.Parser;
@@ -31,6 +32,7 @@ namespace NzbDrone.Core.MediaFiles
         private readonly IImportApprovedEpisodes _importApprovedEpisodes;
         private readonly IDetectSample _detectSample;
         private readonly IRuntimeInfo _runtimeInfo;
+        private readonly IConfigService _configService;
         private readonly Logger _logger;
 
         public DownloadedEpisodesImportService(IDiskProvider diskProvider,
@@ -41,6 +43,7 @@ namespace NzbDrone.Core.MediaFiles
                                                IImportApprovedEpisodes importApprovedEpisodes,
                                                IDetectSample detectSample,
                                                IRuntimeInfo runtimeInfo,
+                                               IConfigService configService,
                                                Logger logger)
         {
             _diskProvider = diskProvider;
@@ -51,6 +54,7 @@ namespace NzbDrone.Core.MediaFiles
             _importApprovedEpisodes = importApprovedEpisodes;
             _detectSample = detectSample;
             _runtimeInfo = runtimeInfo;
+            _configService = configService;
             _logger = logger;
         }
 
@@ -277,6 +281,21 @@ namespace NzbDrone.Core.MediaFiles
                     new ImportResult(new ImportDecision(new LocalEpisode { Path = fileInfo.FullName },
                             new ImportRejection(ImportRejectionReason.ExecutableFile, $"Caution: Found executable file with extension: '{extension}'")),
                         $"Caution: Found executable file with extension: '{extension}'")
+                };
+            }
+
+            var userRejectedExtensions = _configService.UserRejectedExtensions.Split([','], StringSplitOptions.RemoveEmptyEntries)
+                                                                                        .Select(e => e.Trim(' ', '.')
+                                                                                        .Insert(0, "."))
+                                                                                        .ToList();
+
+            if (userRejectedExtensions.Contains(extension))
+            {
+                return new List<ImportResult>
+                {
+                    new ImportResult(new ImportDecision(new LocalEpisode { Path = fileInfo.FullName },
+                            new ImportRejection(ImportRejectionReason.UserRejectedExtension, $"Caution: Found file with user defined rejected extension: '{extension}'")),
+                        $"Caution: Found executable file with user defined rejected extension: '{extension}'")
                 };
             }
 

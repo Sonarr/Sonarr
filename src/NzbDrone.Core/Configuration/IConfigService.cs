@@ -41,6 +41,7 @@ namespace NzbDrone.Core.Configuration
         string ExtraFileExtensions { get; set; }
         RescanAfterRefreshType RescanAfterRefresh { get; set; }
         EpisodeTitleRequiredType EpisodeTitleRequired { get; set; }
+        string UserRejectedExtensions { get; set; }
 
         // Permissions (Media Management)
         bool SetPermissionsLinux { get; set; }

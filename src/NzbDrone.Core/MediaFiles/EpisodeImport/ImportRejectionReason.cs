@@ -7,6 +7,7 @@ public enum ImportRejectionReason
     UnknownSeries,
     DangerousFile,
     ExecutableFile,
+    UserRejectedExtension,
     ArchiveFile,
     SeriesFolder,
     InvalidFilePath,

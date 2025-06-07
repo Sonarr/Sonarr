@@ -361,6 +361,24 @@ function MediaManagement() {
                     />
                   </FormGroup>
                 ) : null}
+
+                <FormGroup
+                  advancedSettings={showAdvancedSettings}
+                  isAdvanced={true}
+                >
+                  <FormLabel>{translate('UserRejectedExtensions')}</FormLabel>
+
+                  <FormInputGroup
+                    type={inputTypes.TEXT}
+                    name="userRejectedExtensions"
+                    helpTexts={[
+                      translate('UserRejectedExtensionsHelpText'),
+                      translate('UserRejectedExtensionsTextsExamples'),
+                    ]}
+                    onChange={handleInputChange}
+                    {...settings.userRejectedExtensions}
+                  />
+                </FormGroup>
               </FieldSet>
             ) : null}
 
