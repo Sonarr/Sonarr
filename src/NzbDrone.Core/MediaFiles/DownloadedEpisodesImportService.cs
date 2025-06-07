@@ -284,19 +284,25 @@ namespace NzbDrone.Core.MediaFiles
                 };
             }
 
-            var userRejectedExtensions = _configService.UserRejectedExtensions.Split([','], StringSplitOptions.RemoveEmptyEntries)
-                                                                                        .Select(e => e.Trim(' ', '.')
-                                                                                        .Insert(0, "."))
-                                                                                        .ToList();
-
-            if (userRejectedExtensions.Contains(extension))
+            if (_configService.UserRejectedExtensions is not null)
             {
-                return new List<ImportResult>
+                var userRejectedExtensions = _configService.UserRejectedExtensions.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(e => e.Trim(' ', '.')
+                        .Insert(0, "."))
+                    .ToList();
+
+                if (userRejectedExtensions.Contains(extension))
                 {
-                    new ImportResult(new ImportDecision(new LocalEpisode { Path = fileInfo.FullName },
-                            new ImportRejection(ImportRejectionReason.UserRejectedExtension, $"Caution: Found file with user defined rejected extension: '{extension}'")),
-                        $"Caution: Found executable file with user defined rejected extension: '{extension}'")
-                };
+                    return new List<ImportResult>
+                    {
+                        new ImportResult(new ImportDecision(new LocalEpisode
+                                {
+                                    Path = fileInfo.FullName
+                                },
+                                new ImportRejection(ImportRejectionReason.UserRejectedExtension, $"Caution: Found file with user defined rejected extension: '{extension}'")),
+                            $"Caution: Found executable file with user defined rejected extension: '{extension}'")
+                    };
+                }
             }
 
             if (extension.IsNullOrWhiteSpace() || !MediaFileExtensions.Extensions.Contains(extension))
