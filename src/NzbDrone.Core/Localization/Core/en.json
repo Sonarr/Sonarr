@@ -555,6 +555,7 @@
   "DownloadClientTriblerSettingsDirectoryHelpText": "Optional location to put downloads in, leave blank to use the default Tribler location",
   "DownloadClientTriblerSettingsSafeSeeding": "Safe Seeding",
   "DownloadClientTriblerSettingsSafeSeedingHelpText": "When enabled, only seed through proxies.",
+  "DownloadClientTriblerProviderMessage": "The tribler integration here is highly experimental. Tested against {clientName} version {clientVersionRange}.",
   "DownloadClientUTorrentTorrentStateError": "uTorrent is reporting an error",
   "DownloadClientUnavailable": "Download Client Unavailable",
   "DownloadClientValidationApiKeyIncorrect": "API Key Incorrect",

@@ -14,6 +14,7 @@ using NzbDrone.Core.Localization;
 using NzbDrone.Core.MediaFiles.TorrentInfo;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.RemotePathMappings;
+ using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Download.Clients.Tribler
@@ -38,6 +39,8 @@ namespace NzbDrone.Core.Download.Clients.Tribler
         }
 
         public override string Name => "Tribler";
+
+        public override ProviderMessage Message => new ProviderMessage(_localizationService.GetLocalizedString("DownloadClientTriblerProviderMessage", new Dictionary<string, object> { { "clientName", Name }, { "clientVersionRange", "8.0.7" } }), ProviderMessageType.Warning);
 
         public override bool PreferTorrentFile => false;
 
