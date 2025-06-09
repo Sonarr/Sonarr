@@ -80,8 +80,12 @@ function PageToolbarSection({
     if (buttonCount - 1 === maxButtons) {
       const overflowItems: PageToolbarButtonProps[] = [];
 
+      const buttonsWithoutSeparators = validChildren.filter(
+        (child) => Object.keys(child.props).length > 0
+      );
+
       return {
-        buttons: validChildren,
+        buttons: buttonsWithoutSeparators,
         buttonCount,
         overflowItems,
       };
