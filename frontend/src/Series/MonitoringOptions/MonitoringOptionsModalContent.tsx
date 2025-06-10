@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import SeriesMonitoringOptionsPopoverContent from 'AddSeries/SeriesMonitoringOptionsPopoverContent';
 import AppState from 'App/State/AppState';
+import Alert from 'Components/Alert';
 import Form from 'Components/Form/Form';
 import FormGroup from 'Components/Form/FormGroup';
 import FormInputGroup from 'Components/Form/FormInputGroup';
@@ -15,7 +16,7 @@ import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import Popover from 'Components/Tooltip/Popover';
 import usePrevious from 'Helpers/Hooks/usePrevious';
-import { icons, tooltipPositions } from 'Helpers/Props';
+import { icons, kinds, tooltipPositions } from 'Helpers/Props';
 import { updateSeriesMonitor } from 'Store/Actions/seriesActions';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
@@ -66,9 +67,12 @@ function MonitoringOptionsModalContent({
 
   return (
     <ModalContent onModalClose={onModalClose}>
-      <ModalHeader>{translate('MonitorSeries')}</ModalHeader>
+      <ModalHeader>{translate('MonitorEpisodes')}</ModalHeader>
 
       <ModalBody>
+        <Alert kind={kinds.INFO}>
+          <div>{translate('MonitorEpisodesModalInfo')}</div>
+        </Alert>
         <Form>
           <FormGroup>
             <FormLabel>

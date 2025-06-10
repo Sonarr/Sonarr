@@ -523,7 +523,7 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
           <PageToolbarSeparator />
 
           <PageToolbarButton
-            label={translate('SeriesMonitoring')}
+            label={translate('EpisodeMonitoring')}
             iconName={icons.MONITORED}
             onPress={handleMonitorOptionsPress}
           />
