@@ -113,6 +113,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series Title S01 Eng Fre Ger Ita Por Spa 2160p WEBMux HDR HEVC DDP SGF")]
         [TestCase("Series Title S01 KOREAN ENG FRA GER ITA SPA MULTI 2160p NF WEB DL DDP5 1 DV HDR x265 Atmos MassModz")]
         [TestCase("Series.Title.S02E09.EpisodeName.German.DL.BD.x264-TVS")]
+        [TestCase("Series.Title.S01E10.EpisodeName.SwissGerman.WEB-DL.h264-RlsGrp")]
         public void should_parse_language_german(string postTitle)
         {
             var result = LanguageParser.ParseLanguages(postTitle);

@@ -100,6 +100,7 @@ namespace NzbDrone.Core.Organizer
             { "geo", "kat" },
             { "ger", "deu" },
             { "gre", "ell" },
+            { "gsw", "deu" },
             { "ice", "isl" },
             { "mac", "mkd" },
             { "mao", "mri" },
