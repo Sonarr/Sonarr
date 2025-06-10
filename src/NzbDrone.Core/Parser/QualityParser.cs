@@ -693,6 +693,7 @@ namespace NzbDrone.Core.Parser
             if (RepackRegex.IsMatch(normalizedName))
             {
                 result.Revision.Version = versionRegexResult.Success ? Convert.ToInt32(versionRegexResult.Groups["version"].Value) + 1 : 2;
+                result.Revision.Repack = RepackRegex.Count(normalizedName);
                 result.Revision.IsRepack = true;
                 result.RevisionDetectionSource = QualityDetectionSource.Name;
             }
