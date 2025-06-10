@@ -7,8 +7,9 @@ function formatBitrate(input: string | number) {
     return '';
   }
 
-  const { value, symbol } = filesize(size, {
+  const { value, symbol } = filesize(size / 8, {
     base: 10,
+    bits: true,
     round: 1,
     output: 'object',
   });
