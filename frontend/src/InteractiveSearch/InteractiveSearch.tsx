@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ClientSideCollectionAppState from 'App/State/ClientSideCollectionAppState';
 import ReleasesAppState from 'App/State/ReleasesAppState';
@@ -10,6 +10,8 @@ import PageMenuButton from 'Components/Menu/PageMenuButton';
 import Column from 'Components/Table/Column';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
+import TablePager from 'Components/Table/TablePager';
+import usePaging from 'Components/Table/usePaging';
 import { align, icons, kinds, sortDirections } from 'Helpers/Props';
 import { SortDirection } from 'Helpers/Props/sortDirections';
 import {
@@ -114,6 +116,8 @@ const columns: Column[] = [
   },
 ];
 
+const pageSize = 50;
+
 interface InteractiveSearchProps {
   type: InteractiveSearchType;
   searchPayload: InteractiveSearchPayload;
@@ -136,6 +140,30 @@ function InteractiveSearch({ type, searchPayload }: InteractiveSearchProps) {
   );
 
   const dispatch = useDispatch();
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const totalPages = Math.ceil(items.length / pageSize);
+
+  const {
+    handleFirstPagePress,
+    handlePreviousPagePress,
+    handleNextPagePress,
+    handleLastPagePress,
+    handlePageSelect,
+  } = usePaging({
+    page: currentPage,
+    totalPages,
+    gotoPage: ({ page }) => {
+      setCurrentPage(page);
+    },
+  });
+
+  // virtually paginate the items
+  const paginatedItems = useMemo(() => {
+    const startIndex = (currentPage - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+    return items.slice(startIndex, endIndex);
+  }, [items, currentPage]);
 
   const handleFilterSelect = useCallback(
     (selectedFilterKey: string | number) => {
@@ -217,26 +245,39 @@ function InteractiveSearch({ type, searchPayload }: InteractiveSearchProps) {
         </Alert>
       ) : null}
 
-      {isPopulated && !!items.length ? (
-        <Table
-          columns={columns}
-          sortKey={sortKey}
-          sortDirection={sortDirection}
-          onSortPress={handleSortPress}
-        >
-          <TableBody>
-            {items.map((item) => {
-              return (
-                <InteractiveSearchRow
-                  key={`${item.indexerId}-${item.guid}`}
-                  {...item}
-                  searchPayload={searchPayload}
-                  onGrabPress={handleGrabPress}
-                />
-              );
-            })}
-          </TableBody>
-        </Table>
+      {isPopulated && !!paginatedItems.length ? (
+        <div>
+          <Table
+            columns={columns}
+            sortKey={sortKey}
+            sortDirection={sortDirection}
+            onSortPress={handleSortPress}
+          >
+            <TableBody>
+              {paginatedItems.map((item) => {
+                return (
+                  <InteractiveSearchRow
+                    key={`${item.indexerId}-${item.guid}`}
+                    {...item}
+                    searchPayload={searchPayload}
+                    onGrabPress={handleGrabPress}
+                  />
+                );
+              })}
+            </TableBody>
+          </Table>
+          <TablePager
+            page={currentPage}
+            totalPages={totalPages}
+            totalRecords={totalItems}
+            isFetching={isFetching}
+            onFirstPagePress={handleFirstPagePress}
+            onPreviousPagePress={handlePreviousPagePress}
+            onNextPagePress={handleNextPagePress}
+            onLastPagePress={handleLastPagePress}
+            onPageSelect={handlePageSelect}
+          />
+        </div>
       ) : null}
 
       {totalItems !== items.length && !!items.length ? (
