@@ -55,8 +55,6 @@
     "DeleteAutoTagHelpText": "Вы уверены, что хотите удалить автоматическую метку '{name}'?",
     "DeleteImportList": "Удалить список импорта",
     "DeleteSelectedDownloadClientsMessageText": "Вы уверены, что хотите удалить выбранные клиенты загрузки: {count}?",
-    "DeleteRootFolder": "Удалить корневую папку",
-    "DeleteRootFolderMessageText": "Вы уверены, что хотите удалить корневую папку '{path}'?",
     "DeleteSelectedImportLists": "Удалить списки импорта",
     "EditSelectedIndexers": "Редактировать выбранный индексатор",
     "ImportScriptPath": "Путь к скрипту импорта",

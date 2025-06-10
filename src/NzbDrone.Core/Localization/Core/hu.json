@@ -878,8 +878,6 @@
     "CountImportListsSelected": "{count} importlista kiválasztva",
     "DeleteAutoTag": "Automatikus címke törlése",
     "DeleteSelectedDownloadClients": "Letöltési kliens(ek) törlése",
-    "DeleteRootFolder": "Gyökérmappa törlés",
-    "DeleteRootFolderMessageText": "Biztosan törli a(z) '{path}' gyökérmappát?",
     "DeleteSelectedImportLists": "Importálási lista(k) törlése",
     "DeleteSelectedImportListsMessageText": "Biztosan törölni szeretne {count} kiválasztott importlistát?",
     "DeleteSelectedIndexers": "Indexelő(k) törlése",
