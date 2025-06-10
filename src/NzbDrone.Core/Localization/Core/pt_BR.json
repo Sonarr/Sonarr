@@ -375,8 +375,6 @@
     "Save": "Salvar",
     "AddRootFolder": "Adicionar pasta raiz",
     "AutoTagging": "Etiquetas automáticas",
-    "DeleteRootFolder": "Excluir pasta raiz",
-    "DeleteRootFolderMessageText": "Tem certeza de que deseja excluir a pasta raiz \"{path}\"?",
     "RemoveTagsAutomaticallyHelpText": "Remover tags automaticamente se as condições não forem encontradas",
     "RootFolders": "Pastas Raiz",
     "AllResultsAreHiddenByTheAppliedFilter": "Todos os resultados estão ocultos pelo filtro aplicado",

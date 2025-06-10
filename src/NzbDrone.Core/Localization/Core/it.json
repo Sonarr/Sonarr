@@ -405,8 +405,6 @@
     "NotificationsValidationUnableToSendTestMessageApiResponse": "Impossibile inviare messaggio di prova. Risposta dalle API: {error}",
     "RemoveFromDownloadClientHint": "Rimuovi il download e i file dal client di download",
     "DayOfWeekAt": "{day} alle {time}",
-    "DeleteRootFolder": "Elimina Cartella Radice",
-    "DeleteRootFolderMessageText": "Sei sicuro di volere eliminare la cartella radice '{path}'?",
     "ManageIndexers": "Gestisci Indicizzatori",
     "MissingNoItems": "Nessun elemento mancante",
     "NotificationsKodiSettingsCleanLibrary": "Pulisci Libreria",

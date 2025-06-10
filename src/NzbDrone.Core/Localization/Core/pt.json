@@ -138,8 +138,6 @@
     "ConnectionLostToBackend": "O {appName} perdeu a ligação com o back-end e precisará ser recarregado para restaurar a funcionalidade.",
     "CountIndexersSelected": "{count} indexador(es) selecionado(s)",
     "DeleteImportListMessageText": "Tem a certeza de que pretende eliminar a lista '{name}'?",
-    "DeleteRootFolder": "Eliminar a Pasta Raiz",
-    "DeleteRootFolderMessageText": "Tem a certeza de que pretende eliminar a pasta de raiz '{path}'?",
     "EditSelectedDownloadClients": "Editar Clientes de Transferência Selecionados",
     "EditSelectedImportLists": "Editar Listas de Importação Selecionadas",
     "CloneAutoTag": "Clonar Etiqueta Automática",

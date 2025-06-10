@@ -312,8 +312,6 @@
     "AutoRedownloadFailed": "Opětovné stažení se nezdařilo",
     "AutoRedownloadFailedFromInteractiveSearch": "Opětovné stažení z interaktivního vyhledávání selhalo",
     "DeleteNotificationMessageText": "Opravdu chcete smazat oznámení '{name}'?",
-    "DeleteRootFolder": "Smazat kořenový adresář",
-    "DeleteRootFolderMessageText": "Opravdu chcete smazat kořenový adresář s cestou '{path}'?",
     "EditSelectedDownloadClients": "Upravit vybrané klienty pro stahování",
     "EditSelectedImportLists": "Upravit vybrané seznamy k importu",
     "FormatDateTime": "{formattedDate} {formattedTime}",
