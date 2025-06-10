@@ -33,7 +33,7 @@ fi
 
 app="sonarr"
 app_port="8989"
-app_prereq="curl sqlite3 wget libicu72"
+app_prereq="curl sqlite3 wget"
 app_umask="0002"
 branch="main"
 
