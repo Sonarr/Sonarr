@@ -98,6 +98,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                     episodeFile.ReleaseGroup = localEpisode.ReleaseGroup;
                     episodeFile.ReleaseHash = localEpisode.ReleaseHash;
                     episodeFile.Languages = localEpisode.Languages;
+                    episodeFile.IndexerId = localEpisode.IndexerId;
 
                     // Prefer the release type from the download client, folder and finally the file so we have the most accurate information.
                     episodeFile.ReleaseType = localEpisode.DownloadClientEpisodeInfo?.ReleaseType ??

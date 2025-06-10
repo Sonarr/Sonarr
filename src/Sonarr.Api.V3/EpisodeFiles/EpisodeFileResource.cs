@@ -27,6 +27,7 @@ namespace Sonarr.Api.V3.EpisodeFiles
         public List<CustomFormatResource> CustomFormats { get; set; }
         public int CustomFormatScore { get; set; }
         public int? IndexerFlags { get; set; }
+        public int IndexerId { get; set; }
         public ReleaseType? ReleaseType { get; set; }
         public MediaInfoResource MediaInfo { get; set; }
 
@@ -65,6 +66,7 @@ namespace Sonarr.Api.V3.EpisodeFiles
                 CustomFormats = customFormats.ToResource(false),
                 CustomFormatScore = customFormatScore,
                 IndexerFlags = (int)model.IndexerFlags,
+                IndexerId = model.IndexerId,
                 ReleaseType = model.ReleaseType,
             };
         }

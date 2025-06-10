@@ -292,6 +292,7 @@
   "CustomFormatsSpecificationExceptLanguage": "Except Language",
   "CustomFormatsSpecificationExceptLanguageHelpText": "Matches if any language other than the selected language is present",
   "CustomFormatsSpecificationFlag": "Flag",
+  "CustomFormatsSpecificationIndexer": "Indexer",
   "CustomFormatsSpecificationLanguage": "Language",
   "CustomFormatsSpecificationMaximumSize": "Maximum Size",
   "CustomFormatsSpecificationMaximumSizeHelpText": "Release must be less than or equal to this size",

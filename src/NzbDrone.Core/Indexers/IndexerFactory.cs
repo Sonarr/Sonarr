@@ -40,6 +40,18 @@ namespace NzbDrone.Core.Indexers
             return base.Active().Where(c => c.Enable).ToList();
         }
 
+        public virtual object RequestAction(string action, IDictionary<string, string> query)
+        {
+            _logger.Info("HELLO WORLD");
+
+            if (action == "getIndexerList")
+            {
+                return GetAvailableProviders();
+            }
+
+            return new { };
+        }
+
         public override void SetProviderCharacteristics(IIndexer provider, IndexerDefinition definition)
         {
             base.SetProviderCharacteristics(provider, definition);
