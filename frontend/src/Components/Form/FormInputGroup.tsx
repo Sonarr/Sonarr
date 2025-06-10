@@ -20,6 +20,7 @@ import EnhancedSelectInput from './Select/EnhancedSelectInput';
 import IndexerFlagsSelectInput from './Select/IndexerFlagsSelectInput';
 import IndexerSelectInput from './Select/IndexerSelectInput';
 import LanguageSelectInput from './Select/LanguageSelectInput';
+import NotificationTemplateSelectInput from './Select/NotificationTemplateSelectInput';
 import MonitorEpisodesSelectInput from './Select/MonitorEpisodesSelectInput';
 import MonitorNewItemsSelectInput from './Select/MonitorNewItemsSelectInput';
 import ProviderDataSelectInput from './Select/ProviderOptionSelectInput';
@@ -81,6 +82,9 @@ function getComponent(type: InputType) {
 
     case inputTypes.INDEXER_FLAGS_SELECT:
       return IndexerFlagsSelectInput;
+
+    case inputTypes.NOTIFICATION_TEMPLATE_SELECT:
+      return NotificationTemplateSelectInput;
 
     case inputTypes.DOWNLOAD_CLIENT_SELECT:
       return DownloadClientSelectInput;

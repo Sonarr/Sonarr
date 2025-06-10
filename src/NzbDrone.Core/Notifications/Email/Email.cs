@@ -9,6 +9,7 @@ using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http.Dispatchers;
 using NzbDrone.Core.Localization;
+using NzbDrone.Core.Notifications.NotificationTemplates;
 
 namespace NzbDrone.Core.Notifications.Email
 {
@@ -16,14 +17,16 @@ namespace NzbDrone.Core.Notifications.Email
     {
         private readonly ICertificateValidationService _certificateValidationService;
         private readonly ILocalizationService _localizationService;
+        private readonly INotificationTemplateService _notificationTemplateService;
         private readonly Logger _logger;
 
         public override string Name => _localizationService.GetLocalizedString("NotificationsEmailSettingsName");
 
-        public Email(ICertificateValidationService certificateValidationService, ILocalizationService localizationService, Logger logger)
+        public Email(ICertificateValidationService certificateValidationService, ILocalizationService localizationService, INotificationTemplateService notificationTemplateService, Logger logger)
         {
             _certificateValidationService = certificateValidationService;
             _localizationService = localizationService;
+            _notificationTemplateService = notificationTemplateService;
             _logger = logger;
         }
 
@@ -33,66 +36,98 @@ namespace NzbDrone.Core.Notifications.Email
         {
             var body = $"{grabMessage.Message} sent to queue.";
 
-            SendEmail(Settings, EPISODE_GRABBED_TITLE_BRANDED, body);
+            var notificationTemplateId = ((NotificationDefinition)this.Definition).NotificationTemplateId;
+            var processedNotificationTemplate = _notificationTemplateService.processNotificationTemplate(notificationTemplateId, grabMessage, EPISODE_GRABBED_TITLE_BRANDED, body);
+
+            SendEmail(Settings, processedNotificationTemplate.Title, processedNotificationTemplate.Body, true);
         }
 
         public override void OnDownload(DownloadMessage message)
         {
             var body = $"{message.Message} Downloaded and sorted.";
 
-            SendEmail(Settings, EPISODE_DOWNLOADED_TITLE_BRANDED, body);
+            var notificationTemplateId = ((NotificationDefinition)this.Definition).NotificationTemplateId;
+            var processedNotificationTemplate = _notificationTemplateService.processNotificationTemplate(notificationTemplateId, message, EPISODE_DOWNLOADED_TITLE_BRANDED, body);
+
+            SendEmail(Settings, processedNotificationTemplate.Title, processedNotificationTemplate.Body, true);
         }
 
         public override void OnImportComplete(ImportCompleteMessage message)
         {
             var body = $"All expected episode files in {message.Message} downloaded and sorted.";
 
-            SendEmail(Settings, IMPORT_COMPLETE_TITLE, body);
+            var notificationTemplateId = ((NotificationDefinition)this.Definition).NotificationTemplateId;
+            var processedNotificationTemplate = _notificationTemplateService.processNotificationTemplate(notificationTemplateId, message, IMPORT_COMPLETE_TITLE, body);
+
+            SendEmail(Settings, processedNotificationTemplate.Title, processedNotificationTemplate.Body, true);
         }
 
         public override void OnEpisodeFileDelete(EpisodeDeleteMessage deleteMessage)
         {
             var body = $"{deleteMessage.Message} deleted.";
 
-            SendEmail(Settings, EPISODE_DELETED_TITLE_BRANDED, body);
+            var notificationTemplateId = ((NotificationDefinition)this.Definition).NotificationTemplateId;
+            var processedNotificationTemplate = _notificationTemplateService.processNotificationTemplate(notificationTemplateId, deleteMessage, EPISODE_DELETED_TITLE_BRANDED, body);
+
+            SendEmail(Settings, processedNotificationTemplate.Title, processedNotificationTemplate.Body, true);
         }
 
         public override void OnSeriesAdd(SeriesAddMessage message)
         {
             var body = $"{message.Message}";
 
-            SendEmail(Settings, SERIES_ADDED_TITLE_BRANDED, body);
+            var notificationTemplateId = ((NotificationDefinition)this.Definition).NotificationTemplateId;
+            var processedNotificationTemplate = _notificationTemplateService.processNotificationTemplate(notificationTemplateId, message, SERIES_ADDED_TITLE_BRANDED, body);
+
+            SendEmail(Settings, processedNotificationTemplate.Title, processedNotificationTemplate.Body, true);
         }
 
         public override void OnSeriesDelete(SeriesDeleteMessage deleteMessage)
         {
-            var body = $"{deleteMessage.Message}";
+            var body = $"{deleteMessage.Message}.";
 
-            SendEmail(Settings, SERIES_DELETED_TITLE_BRANDED, body);
+            var notificationTemplateId = ((NotificationDefinition)this.Definition).NotificationTemplateId;
+            var processedNotificationTemplate = _notificationTemplateService.processNotificationTemplate(notificationTemplateId, deleteMessage, SERIES_DELETED_TITLE_BRANDED, body);
+
+            SendEmail(Settings, processedNotificationTemplate.Title, processedNotificationTemplate.Body, true);
         }
 
         public override void OnHealthIssue(HealthCheck.HealthCheck message)
         {
-            SendEmail(Settings, HEALTH_ISSUE_TITLE_BRANDED, message.Message);
+            var notificationTemplateId = ((NotificationDefinition)this.Definition).NotificationTemplateId;
+            var processedNotificationTemplate = _notificationTemplateService.processNotificationTemplate(notificationTemplateId, message, HEALTH_ISSUE_TITLE_BRANDED, message.Message);
+
+            SendEmail(Settings, processedNotificationTemplate.Title, processedNotificationTemplate.Body, true);
         }
 
         public override void OnHealthRestored(HealthCheck.HealthCheck previousMessage)
         {
-            SendEmail(Settings, HEALTH_RESTORED_TITLE_BRANDED, $"The following issue is now resolved: {previousMessage.Message}");
+            var body = $"The following issue is now resolved: {previousMessage.Message}";
+
+            var notificationTemplateId = ((NotificationDefinition)this.Definition).NotificationTemplateId;
+            var processedNotificationTemplate = _notificationTemplateService.processNotificationTemplate(notificationTemplateId, previousMessage, HEALTH_RESTORED_TITLE_BRANDED, body);
+
+            SendEmail(Settings, processedNotificationTemplate.Title, processedNotificationTemplate.Body, true);
         }
 
         public override void OnApplicationUpdate(ApplicationUpdateMessage updateMessage)
         {
             var body = $"{updateMessage.Message}";
 
-            SendEmail(Settings, APPLICATION_UPDATE_TITLE_BRANDED, body);
+            var notificationTemplateId = ((NotificationDefinition)this.Definition).NotificationTemplateId;
+            var processedNotificationTemplate = _notificationTemplateService.processNotificationTemplate(notificationTemplateId, updateMessage, APPLICATION_UPDATE_TITLE_BRANDED, body);
+
+            SendEmail(Settings, processedNotificationTemplate.Title, processedNotificationTemplate.Body, true);
         }
 
         public override void OnManualInteractionRequired(ManualInteractionRequiredMessage message)
         {
             var body = $"{message.Message} requires manual interaction.";
 
-            SendEmail(Settings, MANUAL_INTERACTION_REQUIRED_TITLE_BRANDED, body);
+            var notificationTemplateId = ((NotificationDefinition)this.Definition).NotificationTemplateId;
+            var processedNotificationTemplate = _notificationTemplateService.processNotificationTemplate(notificationTemplateId, message, MANUAL_INTERACTION_REQUIRED_TITLE_BRANDED, body);
+
+            SendEmail(Settings, processedNotificationTemplate.Title, processedNotificationTemplate.Body, true);
         }
 
         public override ValidationResult Test()

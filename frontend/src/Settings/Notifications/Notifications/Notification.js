@@ -266,6 +266,7 @@ Notification.propTypes = {
   supportsOnHealthRestored: PropTypes.bool.isRequired,
   supportsOnApplicationUpdate: PropTypes.bool.isRequired,
   supportsOnManualInteractionRequired: PropTypes.bool.isRequired,
+  notificationTemplateId: PropTypes.number.isRequired,
   tags: PropTypes.arrayOf(PropTypes.number).isRequired,
   tagList: PropTypes.arrayOf(PropTypes.object).isRequired,
   onConfirmDeleteNotification: PropTypes.func.isRequired

@@ -44,7 +44,8 @@ function EditNotificationModalContent(props) {
     name,
     tags,
     fields,
-    message
+    message,
+    notificationTemplateId
   } = item;
 
   return (
@@ -94,6 +95,23 @@ function EditNotificationModalContent(props) {
                 item={item}
                 onInputChange={onInputChange}
               />
+
+              {
+                item.implementationName === 'Email' ?
+                  <FormGroup>
+                    <FormLabel>{translate('NotificationTemplate')}</FormLabel>
+
+                    <FormInputGroup
+                      type={inputTypes.NOTIFICATION_TEMPLATE_SELECT}
+                      name="notificationTemplateId"
+                      helpText={translate('NotificationNotificationTemplateHelpText')}
+                      {...notificationTemplateId}
+                      includeAny={true}
+                      onChange={onInputChange}
+                    />
+                  </FormGroup> :
+                  null
+              }
 
               <FormGroup>
                 <FormLabel>{translate('Tags')}</FormLabel>

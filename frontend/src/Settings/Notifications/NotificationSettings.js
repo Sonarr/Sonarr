@@ -4,6 +4,7 @@ import PageContentBody from 'Components/Page/PageContentBody';
 import SettingsToolbarConnector from 'Settings/SettingsToolbarConnector';
 import translate from 'Utilities/String/translate';
 import NotificationsConnector from './Notifications/NotificationsConnector';
+import NotificationTemplates from './NotificationTemplates/NotificationTemplates';
 
 function NotificationSettings() {
   return (
@@ -14,6 +15,7 @@ function NotificationSettings() {
 
       <PageContentBody>
         <NotificationsConnector />
+        <NotificationTemplates />
       </PageContentBody>
     </PageContent>
   );
