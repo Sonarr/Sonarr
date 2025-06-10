@@ -11,7 +11,7 @@ namespace Sonarr.Http.Authentication
 {
     public static class AuthenticationBuilderExtensions
     {
-        private static readonly Regex CookieNameRegex = new Regex(@"[^a-z0-9]+", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex CookieNameRegex = new(@"[^a-z0-9]+", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public static AuthenticationBuilder AddApiKey(this AuthenticationBuilder authenticationBuilder, string name, Action<ApiKeyAuthenticationOptions> options)
         {
@@ -30,7 +30,7 @@ namespace Sonarr.Http.Authentication
 
         public static AuthenticationBuilder AddAppAuthentication(this IServiceCollection services)
         {
-            services.AddOptions<CookieAuthenticationOptions>(AuthenticationType.Forms.ToString())
+            services.AddOptions<CookieAuthenticationOptions>(nameof(AuthenticationType.Forms))
                 .Configure<IConfigFileProvider>((options, configFileProvider) =>
                 {
                     // Replace diacritics and replace non-word characters to ensure cookie name doesn't contain any valid URL characters not allowed in cookie names
@@ -47,12 +47,9 @@ namespace Sonarr.Http.Authentication
                 });
 
             return services.AddAuthentication()
-                .AddNone(AuthenticationType.None.ToString())
-                .AddExternal(AuthenticationType.External.ToString())
-#pragma warning disable CS0618 // Type or member is obsolete
-                .AddCookie(AuthenticationType.Basic.ToString())
-#pragma warning restore CS0618 // Type or member is obsolete
-                .AddCookie(AuthenticationType.Forms.ToString())
+                .AddNone(nameof(AuthenticationType.None))
+                .AddExternal(nameof(AuthenticationType.External))
+                .AddCookie(nameof(AuthenticationType.Forms))
                 .AddApiKey("API", options =>
                 {
                     options.HeaderName = "X-Api-Key";
