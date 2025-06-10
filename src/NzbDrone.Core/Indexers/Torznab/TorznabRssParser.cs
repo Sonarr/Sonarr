@@ -124,6 +124,24 @@ namespace NzbDrone.Core.Indexers.Torznab
             return results;
         }
 
+        protected override List<Language> GetSubtitles(XElement item)
+        {
+            var languages = TryGetMultipleTorznabAttributes(item, "subs");
+            var results = new List<Language>();
+
+            foreach (var language in languages)
+            {
+                var mappedLanguage = IsoLanguages.FindByName(language)?.Language ?? null;
+
+                if (mappedLanguage != null)
+                {
+                    results.Add(mappedLanguage);
+                }
+            }
+
+            return results;
+        }
+
         protected override long GetSize(XElement item)
         {
             var sizeString = TryGetTorznabAttribute(item, "size");

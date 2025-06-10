@@ -72,6 +72,12 @@ const columns: Column[] = [
     isVisible: true,
   },
   {
+    name: 'SubtitleWeight',
+    label: () => translate('SubtitleLanguages'),
+    isSortable: true,
+    isVisible: true,
+  },
+  {
     name: 'qualityWeight',
     label: () => translate('Quality'),
     isSortable: true,
