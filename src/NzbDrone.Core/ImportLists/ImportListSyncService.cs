@@ -303,7 +303,7 @@ namespace NzbDrone.Core.ImportLists
             {
                 var seriesExists = allListItems.Where(l =>
                     l.TvdbId == series.TvdbId ||
-                    l.ImdbId == series.ImdbId ||
+                    (l.ImdbId.IsNotNullOrWhiteSpace() && series.ImdbId.IsNotNullOrWhiteSpace() && l.ImdbId == series.ImdbId) ||
                     l.TmdbId == series.TmdbId ||
                     series.MalIds.Contains(l.MalId) ||
                     series.AniListIds.Contains(l.AniListId)).ToList();
