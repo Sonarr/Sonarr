@@ -1739,7 +1739,7 @@
   "RemoveQueueItemRemovalMethodHelpTextWarning": "'Remove from Download Client' will remove the download and the file(s) from the download client.",
   "RemoveQueueItemsRemovalMethodHelpTextWarning": "'Remove from Download Client' will remove the downloads and the files from the download client.",
   "RemoveRootFolder": "Remove Root Folder",
-  "RemoveRootFolderMessageText": "Are you sure you want to remove the root folder '{path}'? Files and folders will not be deleted from disk, and series in this root folder will not be removed from {appName}.",
+  "RemoveRootFolderSeriesMessageText": "Are you sure you want to remove the root folder '{path}'? Files and folders will not be deleted from disk, and series in this root folder will not be removed from {appName}.",
   "RemoveSelected": "Remove Selected",
   "RemoveSelectedBlocklistMessageText": "Are you sure you want to remove the selected items from the blocklist?",
   "RemoveSelectedItem": "Remove Selected Item",
