@@ -1,7 +1,6 @@
 import moment from 'moment';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import TextTruncate from 'react-text-truncate';
 import { createSelector } from 'reselect';
 import AppState from 'App/State/AppState';
 import * as commandNames from 'Commands/commandNames';
@@ -21,7 +20,6 @@ import PageToolbarSection from 'Components/Page/Toolbar/PageToolbarSection';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
 import Popover from 'Components/Tooltip/Popover';
 import Tooltip from 'Components/Tooltip/Tooltip';
-import useMeasure from 'Helpers/Hooks/useMeasure';
 import usePrevious from 'Helpers/Hooks/usePrevious';
 import {
   align,
@@ -56,7 +54,6 @@ import {
 import { toggleSeriesMonitored } from 'Store/Actions/seriesActions';
 import createAllSeriesSelector from 'Store/Selectors/createAllSeriesSelector';
 import createCommandsSelector from 'Store/Selectors/createCommandsSelector';
-import fonts from 'Styles/Variables/fonts';
 import sortByProp from 'Utilities/Array/sortByProp';
 import { findCommand, isCommandExecuting } from 'Utilities/Command';
 import formatBytes from 'Utilities/Number/formatBytes';
@@ -74,9 +71,6 @@ import SeriesDetailsSeason from './SeriesDetailsSeason';
 import SeriesProgressLabel from './SeriesProgressLabel';
 import SeriesTags from './SeriesTags';
 import styles from './SeriesDetails.css';
-
-const defaultFontSize = parseInt(fonts.defaultFontSize);
-const lineHeight = parseFloat(fonts.lineHeight);
 
 function getFanartUrl(images: Image[]) {
   return images.find((image) => image.coverType === 'fanart')?.url;
@@ -246,7 +240,6 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
     allCollapsed: false,
     seasons: {},
   });
-  const [overviewRef, { height: overviewHeight }] = useMeasure();
   const wasRefreshing = usePrevious(isRefreshing);
   const wasRenaming = usePrevious(isRenaming);
 
@@ -796,16 +789,7 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
                 />
               </div>
 
-              <div ref={overviewRef} className={styles.overview}>
-                <TextTruncate
-                  line={
-                    Math.floor(
-                      overviewHeight / (defaultFontSize * lineHeight)
-                    ) - 1
-                  }
-                  text={overview}
-                />
-              </div>
+              <div className={styles.overview}>{overview}</div>
 
               <MetadataAttribution />
             </div>
