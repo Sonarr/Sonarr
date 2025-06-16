@@ -17,7 +17,9 @@ namespace NzbDrone.Core.MediaFiles
         void Update(List<EpisodeFile> episodeFiles);
         void Delete(EpisodeFile episodeFile, DeleteMediaFileReason reason);
         List<EpisodeFile> GetFilesBySeries(int seriesId);
+        List<EpisodeFile> GetFilesBySeries(List<int> seriesIds);
         List<EpisodeFile> GetFilesBySeason(int seriesId, int seasonNumber);
+        List<EpisodeFile> GetFilesBySeason(List<int> seriesIds, int seasonNumber);
         List<EpisodeFile> GetFiles(IEnumerable<int> ids);
         List<EpisodeFile> GetFilesWithoutMediaInfo();
         List<string> FilterExistingFiles(List<string> files, Series series);
@@ -71,9 +73,19 @@ namespace NzbDrone.Core.MediaFiles
             return _mediaFileRepository.GetFilesBySeries(seriesId);
         }
 
+        public List<EpisodeFile> GetFilesBySeries(List<int> seriesIds)
+        {
+            return _mediaFileRepository.GetFilesBySeries(seriesIds);
+        }
+
         public List<EpisodeFile> GetFilesBySeason(int seriesId, int seasonNumber)
         {
             return _mediaFileRepository.GetFilesBySeason(seriesId, seasonNumber);
+        }
+
+        public List<EpisodeFile> GetFilesBySeason(List<int> seriesIds, int seasonNumber)
+        {
+            return _mediaFileRepository.GetFilesBySeason(seriesIds, seasonNumber);
         }
 
         public List<EpisodeFile> GetFiles(IEnumerable<int> ids)
