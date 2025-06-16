@@ -54,11 +54,11 @@ function Tag({ id, label }: TagProps) {
     setIsDeleteTagModalOpen(true);
   }, []);
 
-  const handleConfirmDeleteTag = useCallback(() => {
+  const handleDeleteTagModalClose = useCallback(() => {
     setIsDeleteTagModalOpen(false);
   }, []);
 
-  const handleDeleteTagModalClose = useCallback(() => {
+  const handleConfirmDeleteTag = useCallback(() => {
     dispatch(deleteTag({ id }));
   }, [id, dispatch]);
 
