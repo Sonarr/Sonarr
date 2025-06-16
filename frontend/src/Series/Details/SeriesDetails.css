@@ -5,7 +5,6 @@
 .header {
   position: relative;
   width: 100%;
-  height: 425px;
 }
 
 .backdrop {
@@ -27,22 +26,20 @@
 .headerContent {
   display: flex;
   padding: 30px;
+  gap: 35px;
   width: 100%;
   height: 100%;
   color: var(--white);
+  align-items: center;
 }
 
 .poster {
   flex-shrink: 0;
-  margin-right: 35px;
   width: 250px;
   height: 368px;
 }
 
 .info {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
   overflow: hidden;
 }
 
