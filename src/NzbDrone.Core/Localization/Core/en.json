@@ -2140,7 +2140,7 @@
   "UserInvokedSearch": "User Invoked Search",
   "UserRejectedExtensions": "Additional Rejected File Extensions",
   "UserRejectedExtensionsHelpText": "Comma separated list of files extensions to fail (Fail Downloads also needs to be enabled per indexer)",
-  "UserRejectedExtensionsTextsExamples": "Examples: '.001, .dog' or '001,dog'",
+  "UserRejectedExtensionsTextsExamples": "Examples: '.ext, .xyz' or 'ext,xyz'",
   "Username": "Username",
   "UtcAirDate": "UTC Air Date",
   "Version": "Version",
