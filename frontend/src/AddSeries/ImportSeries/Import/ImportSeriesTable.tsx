@@ -13,6 +13,7 @@ import {
 } from 'Store/Actions/importSeriesActions';
 import createAllSeriesSelector from 'Store/Selectors/createAllSeriesSelector';
 import createDimensionsSelector from 'Store/Selectors/createDimensionsSelector';
+import createImportSeriesAllSelectedSelector from 'Store/Selectors/createImportSeriesAllSelectedSelector';
 import { CheckInputChanged } from 'typings/inputs';
 import { SelectStateInputProps } from 'typings/props';
 import { UnmappedFolder } from 'typings/RootFolder';
@@ -54,6 +55,7 @@ function Row({ index, style, data }: ListChildComponentProps<RowItemData>) {
   );
 }
 
+const allSelectedSelector = createImportSeriesAllSelectedSelector();
 function ImportSeriesTable({
   unmappedFolders,
   scrollerRef,
@@ -78,7 +80,10 @@ function ImportSeriesTable({
   const listRef = useRef<FixedSizeList<RowItemData>>(null);
   const initialUnmappedFolders = useRef(unmappedFolders);
   const previousItems = usePrevious(items);
-  const { allSelected, allUnselected, selectedState } = selectState;
+  const { allUnselected, selectedState } = selectState;
+  const allSelected = useSelector((state: AppState) =>
+    allSelectedSelector(state, selectedState)
+  );
 
   const handleSelectAllChange = useCallback(
     ({ value }: CheckInputChanged) => {
