@@ -2163,5 +2163,9 @@
     "CloneImportList": "Clonar lista de importación",
     "AutoTaggingSpecificationNetwork": "Red(es)",
     "NotificationsAppriseSettingsIncludePoster": "Incluir póster",
-    "NotificationsAppriseSettingsIncludePosterHelpText": "Incluir póster en el mensaje"
+    "NotificationsAppriseSettingsIncludePosterHelpText": "Incluir póster en el mensaje",
+    "EpisodeMonitoring": "Monitorización de episodios",
+    "MonitorEpisodes": "Monitorizar episodios",
+    "MonitorEpisodesModalInfo": "Esta opción solo ajustará qué episodios o temporadas son monitorizados en las series. Seleccionar Ninguno dejará de monitorizar las series",
+    "RemoveRootFolderMessageText": "¿Estás seguro que quieres eliminar la carpeta raíz '{path}'? Los archivos y las carpetas no serán eliminados del disco, y las series en esta carpeta raíz no serán eliminados de {appName}."
 }

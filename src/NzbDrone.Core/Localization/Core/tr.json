@@ -1424,7 +1424,7 @@
     "Reload": "Tekrar yükle",
     "RemoveFailedDownloadsHelpText": "Başarısız indirmeleri indirme istemcisi geçmişinden kaldırın",
     "RemoveFromBlocklist": "Kara listeden kaldır",
-    "RemoveRootFolder": "Kök klasörü kaldır",
+    "RemoveRootFolder": "Kök Klasörü Kaldır",
     "RemoveSelected": "Seçilenleri Kaldır",
     "RemovingTag": "Etiket kaldırılıyor",
     "RenameFiles": "Yeniden Adlandır",
@@ -2163,5 +2163,6 @@
     "EpisodesInSeason": "Sezondaki {episodeCount} bölüm",
     "AutoTaggingSpecificationNetwork": "Ağ(lar)",
     "NotificationsAppriseSettingsIncludePoster": "Poster'i ekle",
-    "NotificationsAppriseSettingsIncludePosterHelpText": "Mesaja poster ekle"
+    "NotificationsAppriseSettingsIncludePosterHelpText": "Mesaja poster ekle",
+    "RemoveRootFolderMessageText": "'{path}' kök klasörünü kaldırmak istediğinizden emin misiniz? Dosya ve klasörler diskten silinmez ve bu kök klasördeki diziler {appName} 'den kaldırılmaz."
 }

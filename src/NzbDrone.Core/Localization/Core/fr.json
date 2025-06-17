@@ -677,7 +677,7 @@
     "RootFolderMultipleMissingHealthCheckMessage": "Plusieurs dossiers racine sont manquants : {rootFolderPaths}",
     "RssIsNotSupportedWithThisIndexer": "RSS n'est pas pris en charge avec cet indexeur",
     "RssSyncInterval": "Intervalle de synchronisation RSS",
-    "RssSyncIntervalHelpText": "Intervalle en minutes. Réglez sur zéro pour désactiver (cela arrêtera toute capture de libération automatique)",
+    "RssSyncIntervalHelpText": "Intervalle en minutes. Réglez sur zéro pour désactiver (cela arrêtera toute capture de release automatique)",
     "RssSyncIntervalHelpTextWarning": "Cela s'appliquera à tous les indexeurs, veuillez suivre les règles énoncées par eux",
     "SaveChanges": "Sauvegarder les modifications",
     "SceneNumbering": "Numérotation des scènes",
