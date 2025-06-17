@@ -2162,5 +2162,9 @@
     "DownloadClientItemErrorMessage": "{clientName} сообщает об ошибке: {message}",
     "AutoTaggingSpecificationNetwork": "Сеть(и)",
     "NotificationsAppriseSettingsIncludePoster": "Добавить постер",
-    "NotificationsAppriseSettingsIncludePosterHelpText": "Добавлять постер в сообщение"
+    "NotificationsAppriseSettingsIncludePosterHelpText": "Добавлять постер в сообщение",
+    "EpisodeMonitoring": "Отслеживание эпизода",
+    "MonitorEpisodes": "Отслеживать эпизоды",
+    "RemoveRootFolderMessageText": "Вы уверены, что хотите удалить корневой каталог '{path}'? Файлы и папки не будут удалены с диска, а сериалы в этой корневой папке не будут удалены из {appName}.",
+    "MonitorEpisodesModalInfo": "Эта настройка влияет только на отслеживание эпизодов или сезонов внутри сериала. Выбор ничего приведёт к остановке отслеживания сериала"
 }
