@@ -8,7 +8,7 @@ namespace NzbDrone.Http.Authentication
 {
     public class UiAuthorizationPolicyProvider : IAuthorizationPolicyProvider
     {
-        private const string POLICY_NAME = "UI";
+        private const string PolicyName = "UI";
         private readonly IConfigFileProvider _config;
 
         public DefaultAuthorizationPolicyProvider FallbackPolicyProvider { get; }
@@ -26,7 +26,7 @@ namespace NzbDrone.Http.Authentication
 
         public Task<AuthorizationPolicy> GetPolicyAsync(string policyName)
         {
-            if (policyName.Equals(POLICY_NAME, StringComparison.OrdinalIgnoreCase))
+            if (policyName.Equals(PolicyName, StringComparison.OrdinalIgnoreCase))
             {
                 var policy = new AuthorizationPolicyBuilder(_config.AuthenticationMethod.ToString())
                     .AddRequirements(new BypassableDenyAnonymousAuthorizationRequirement());
