@@ -55,12 +55,12 @@ function Tag({ id, label }: TagProps) {
   }, []);
 
   const handleConfirmDeleteTag = useCallback(() => {
-    setIsDeleteTagModalOpen(false);
-  }, []);
-
-  const handleDeleteTagModalClose = useCallback(() => {
     dispatch(deleteTag({ id }));
   }, [id, dispatch]);
+
+  const handleDeleteTagModalClose = useCallback(() => {
+    setIsDeleteTagModalOpen(false);
+  }, []);
 
   return (
     <Card
