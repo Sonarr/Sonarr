@@ -487,7 +487,7 @@
   "DownloadClientQbittorrentSettingsFirstAndLastFirstHelpText": "Download first and last pieces first (qBittorrent 4.1.0+)",
   "DownloadClientQbittorrentSettingsInitialStateHelpText": "Initial state for torrents added to qBittorrent. Note that Forced Torrents do not abide by seed restrictions",
   "DownloadClientQbittorrentSettingsAddSeriesTags": "Add Series Tags",
-  "DownloadClientQbittorrentSettingsAddSeriesTagsHelpText": "Add Series tags to new torrents added to the download client (qBittorrent 4.1.0+)",
+  "DownloadClientQbittorrentSettingsAddSeriesTagsHelpText": "Add series tags to new torrents added to the download client (qBittorrent 4.1.0+)",
   "DownloadClientQbittorrentSettingsSequentialOrder": "Sequential Order",
   "DownloadClientQbittorrentSettingsSequentialOrderHelpText": "Download in sequential order (qBittorrent 4.1.0+)",
   "DownloadClientQbittorrentSettingsUseSslHelpText": "Use a secure connection. See Options -> Web UI -> 'Use HTTPS instead of HTTP' in qBittorrent.",
