@@ -338,6 +338,15 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             ProcessRequest(request, settings);
         }
 
+        public void AddTags(string hash, IEnumerable<string> tags, QBittorrentSettings settings)
+        {
+            var request = BuildRequest(settings).Resource("/api/v2/torrents/addTags")
+                .Post()
+                .AddFormParameter("hashes", hash)
+                .AddFormParameter("tags", string.Join(",", tags));
+            ProcessRequest(request, settings);
+        }
+
         private HttpRequestBuilder BuildRequest(QBittorrentSettings settings)
         {
             var requestBuilder = new HttpRequestBuilder(settings.UseSsl, settings.Host, settings.Port, settings.UrlBase)
