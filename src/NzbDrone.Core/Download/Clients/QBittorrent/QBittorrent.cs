@@ -14,6 +14,7 @@ using NzbDrone.Core.Localization;
 using NzbDrone.Core.MediaFiles.TorrentInfo;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.RemotePathMappings;
+using NzbDrone.Core.Tags;
 using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Download.Clients.QBittorrent
@@ -22,6 +23,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
     {
         private readonly IQBittorrentProxySelector _proxySelector;
         private readonly ICached<SeedingTimeCacheEntry> _seedingTimeCache;
+        private readonly ITagRepository _tagRepo;
 
         private class SeedingTimeCacheEntry
         {
@@ -38,12 +40,14 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                            ICacheManager cacheManager,
                            ILocalizationService localizationService,
                            IBlocklistService blocklistService,
+                           ITagRepository tagRepo,
                            Logger logger)
             : base(torrentFileInfoReader, httpClient, configService, diskProvider, remotePathMappingService, localizationService, blocklistService, logger)
         {
             _proxySelector = proxySelector;
 
             _seedingTimeCache = cacheManager.GetCache<SeedingTimeCacheEntry>(GetType(), "seedingTime");
+            _tagRepo = tagRepo;
         }
 
         private IQBittorrentProxy Proxy => _proxySelector.GetProxy(Settings);
@@ -80,6 +84,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             var isRecentEpisode = remoteEpisode.IsRecentEpisode();
             var moveToTop = (isRecentEpisode && Settings.RecentTvPriority == (int)QBittorrentPriority.First) || (!isRecentEpisode && Settings.OlderTvPriority == (int)QBittorrentPriority.First);
             var forceStart = (QBittorrentState)Settings.InitialState == QBittorrentState.ForceStart;
+            var propagateTags = Settings.PropagateTags;
 
             Proxy.AddTorrentFromUrl(magnetLink, addHasSetShareLimits && setShareLimits ? remoteEpisode.SeedConfiguration : null, Settings);
 
@@ -125,6 +130,18 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                         _logger.Warn(ex, "Failed to set ForceStart for {0}.", hash);
                     }
                 }
+
+                if (propagateTags)
+                {
+                    try
+                    {
+                        Proxy.AddTags(hash.ToLower(), _tagRepo.GetTags(remoteEpisode.Series.Tags).Select(tag => tag.Label), Settings);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.Warn(ex, "Failed to add tags for {0}.", hash);
+                    }
+                }
             }
 
             return hash;
@@ -137,10 +154,11 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             var isRecentEpisode = remoteEpisode.IsRecentEpisode();
             var moveToTop = (isRecentEpisode && Settings.RecentTvPriority == (int)QBittorrentPriority.First) || (!isRecentEpisode && Settings.OlderTvPriority == (int)QBittorrentPriority.First);
             var forceStart = (QBittorrentState)Settings.InitialState == QBittorrentState.ForceStart;
+            var propagateTags = Settings.PropagateTags;
 
             Proxy.AddTorrentFromFile(filename, fileContent, addHasSetShareLimits ? remoteEpisode.SeedConfiguration : null, Settings);
 
-            if ((!addHasSetShareLimits && setShareLimits) || moveToTop || forceStart)
+            if ((!addHasSetShareLimits && setShareLimits) || moveToTop || forceStart || propagateTags)
             {
                 if (!WaitForTorrent(hash))
                 {
@@ -180,6 +198,18 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                     catch (Exception ex)
                     {
                         _logger.Warn(ex, "Failed to set ForceStart for {0}.", hash);
+                    }
+                }
+
+                if (propagateTags)
+                {
+                    try
+                    {
+                        Proxy.AddTags(hash.ToLower(), _tagRepo.GetTags(remoteEpisode.Series.Tags).Select(tag => tag.Label), Settings);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.Warn(ex, "Failed to add tags for {0}.", hash);
                     }
                 }
             }
