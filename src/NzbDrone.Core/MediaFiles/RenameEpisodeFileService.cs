@@ -17,8 +17,9 @@ namespace NzbDrone.Core.MediaFiles
 {
     public interface IRenameEpisodeFileService
     {
+        List<RenameEpisodeFilePreview> GetRenamePreviews(int seriesId);
+        List<RenameEpisodeFilePreview> GetRenamePreviews(int seriesId, int seasonNumber);
         List<RenameEpisodeFilePreview> GetRenamePreviews(List<int> seriesIds);
-        List<RenameEpisodeFilePreview> GetRenamePreviews(List<int> seriesIds, int seasonNumber);
     }
 
     public class RenameEpisodeFileService : IRenameEpisodeFileService,
@@ -53,6 +54,28 @@ namespace NzbDrone.Core.MediaFiles
             _logger = logger;
         }
 
+        public List<RenameEpisodeFilePreview> GetRenamePreviews(int seriesId)
+        {
+            var series = _seriesService.GetSeries(seriesId);
+            var episodes = _episodeService.GetEpisodeBySeries(seriesId);
+            var files = _mediaFileService.GetFilesBySeries(seriesId);
+
+            return GetPreviews(series, episodes, files)
+                .OrderByDescending(e => e.SeasonNumber)
+                .ThenByDescending(e => e.EpisodeNumbers.First())
+                .ToList();
+        }
+
+        public List<RenameEpisodeFilePreview> GetRenamePreviews(int seriesId, int seasonNumber)
+        {
+            var series = _seriesService.GetSeries(seriesId);
+            var episodes = _episodeService.GetEpisodesBySeason(seriesId, seasonNumber);
+            var files = _mediaFileService.GetFilesBySeason(seriesId, seasonNumber);
+
+            return GetPreviews(series, episodes, files)
+                .OrderByDescending(e => e.EpisodeNumbers.First()).ToList();
+        }
+
         public List<RenameEpisodeFilePreview> GetRenamePreviews(List<int> seriesIds)
         {
             var seriesList = _seriesService.GetSeries(seriesIds);
@@ -68,24 +91,6 @@ namespace NzbDrone.Core.MediaFiles
                 })
                 .OrderByDescending(e => e.SeriesId)
                 .ThenByDescending(e => e.SeasonNumber)
-                .ThenByDescending(e => e.EpisodeNumbers.First())
-                .ToList();
-        }
-
-        public List<RenameEpisodeFilePreview> GetRenamePreviews(List<int> seriesIds, int seasonNumber)
-        {
-            var seriesList = _seriesService.GetSeries(seriesIds);
-            var episodesList = _episodeService.GetEpisodesBySeason(seriesIds, seasonNumber).ToLookup(e => e.SeriesId);
-            var filesList = _mediaFileService.GetFilesBySeason(seriesIds, seasonNumber).ToLookup(f => f.SeriesId);
-
-            return seriesList.SelectMany(series =>
-                {
-                    var episodes = episodesList[series.Id].ToList();
-                    var files = filesList[series.Id].ToList();
-
-                    return GetPreviews(series, episodes, files);
-                })
-                .OrderByDescending(e => e.SeriesId)
                 .ThenByDescending(e => e.EpisodeNumbers.First())
                 .ToList();
         }

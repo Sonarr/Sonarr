@@ -18,16 +18,23 @@ namespace Sonarr.Api.V3.Episodes
 
         [HttpGet]
         [Produces("application/json")]
-        public List<RenameEpisodeResource> GetEpisodes([FromQuery(Name = "seriesId")] List<int> seriesIds, int? seasonNumber)
+        public List<RenameEpisodeResource> GetEpisodes(int seriesId, int? seasonNumber)
+        {
+            if (seasonNumber.HasValue)
+            {
+                return _renameEpisodeFileService.GetRenamePreviews(seriesId, seasonNumber.Value).ToResource();
+            }
+
+            return _renameEpisodeFileService.GetRenamePreviews(seriesId).ToResource();
+        }
+
+        [HttpGet("multiple")]
+        [Produces("application/json")]
+        public List<RenameEpisodeResource> GetEpisodes(List<int> seriesIds)
         {
             if (seriesIds is not { Count: not 0 })
             {
                 throw new BadRequestException("seriesIds must be provided");
-            }
-
-            if (seasonNumber.HasValue)
-            {
-                return _renameEpisodeFileService.GetRenamePreviews(seriesIds, seasonNumber.Value).ToResource();
             }
 
             return _renameEpisodeFileService.GetRenamePreviews(seriesIds).ToResource();

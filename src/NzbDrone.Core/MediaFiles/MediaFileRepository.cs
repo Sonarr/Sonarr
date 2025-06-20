@@ -10,7 +10,6 @@ namespace NzbDrone.Core.MediaFiles
         List<EpisodeFile> GetFilesBySeries(int seriesId);
         List<EpisodeFile> GetFilesBySeries(List<int> seriesIds);
         List<EpisodeFile> GetFilesBySeason(int seriesId, int seasonNumber);
-        List<EpisodeFile> GetFilesBySeason(List<int> seriesIds, int seasonNumber);
         List<EpisodeFile> GetFilesWithoutMediaInfo();
         List<EpisodeFile> GetFilesWithRelativePath(int seriesId, string relativePath);
         void DeleteForSeries(List<int> seriesIds);
@@ -36,11 +35,6 @@ namespace NzbDrone.Core.MediaFiles
         public List<EpisodeFile> GetFilesBySeason(int seriesId, int seasonNumber)
         {
             return Query(c => c.SeriesId == seriesId && c.SeasonNumber == seasonNumber).ToList();
-        }
-
-        public List<EpisodeFile> GetFilesBySeason(List<int> seriesIds, int seasonNumber)
-        {
-            return Query(c => seriesIds.Contains(c.SeriesId) && c.SeasonNumber == seasonNumber).ToList();
         }
 
         public List<EpisodeFile> GetFilesWithoutMediaInfo()

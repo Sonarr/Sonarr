@@ -19,7 +19,6 @@ namespace NzbDrone.Core.MediaFiles
         List<EpisodeFile> GetFilesBySeries(int seriesId);
         List<EpisodeFile> GetFilesBySeries(List<int> seriesIds);
         List<EpisodeFile> GetFilesBySeason(int seriesId, int seasonNumber);
-        List<EpisodeFile> GetFilesBySeason(List<int> seriesIds, int seasonNumber);
         List<EpisodeFile> GetFiles(IEnumerable<int> ids);
         List<EpisodeFile> GetFilesWithoutMediaInfo();
         List<string> FilterExistingFiles(List<string> files, Series series);
@@ -81,11 +80,6 @@ namespace NzbDrone.Core.MediaFiles
         public List<EpisodeFile> GetFilesBySeason(int seriesId, int seasonNumber)
         {
             return _mediaFileRepository.GetFilesBySeason(seriesId, seasonNumber);
-        }
-
-        public List<EpisodeFile> GetFilesBySeason(List<int> seriesIds, int seasonNumber)
-        {
-            return _mediaFileRepository.GetFilesBySeason(seriesIds, seasonNumber);
         }
 
         public List<EpisodeFile> GetFiles(IEnumerable<int> ids)
