@@ -50,6 +50,12 @@ public class RejectedImportService : IRejectedImportService
             _logger.Trace("Download '{0}' contains executable file, marking as failed", trackedDownload.DownloadItem.Title);
             trackedDownload.Fail();
         }
+        else if (rejectionReason == ImportRejectionReason.UserRejectedExtension &&
+                 indexerSettings.FailDownloads.Contains(FailDownloads.UserDefinedExtensions))
+        {
+            _logger.Trace("Download '{0}' contains user defined rejected file extension, marking as failed", trackedDownload.DownloadItem.Title);
+            trackedDownload.Fail();
+        }
         else
         {
             trackedDownload.Warn(new TrackedDownloadStatusMessage(trackedDownload.DownloadItem.Title, importResult.Errors));

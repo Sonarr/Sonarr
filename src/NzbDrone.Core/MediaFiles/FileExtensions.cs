@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace NzbDrone.Core.MediaFiles
 {
-    internal static class FileExtensions
+    public static class FileExtensions
     {
         private static List<string> _archiveExtensions = new List<string>
         {
