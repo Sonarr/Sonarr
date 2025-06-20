@@ -8,6 +8,7 @@ namespace NzbDrone.Core.MediaFiles
     public interface IMediaFileRepository : IBasicRepository<EpisodeFile>
     {
         List<EpisodeFile> GetFilesBySeries(int seriesId);
+        List<EpisodeFile> GetFilesBySeries(List<int> seriesIds);
         List<EpisodeFile> GetFilesBySeason(int seriesId, int seasonNumber);
         List<EpisodeFile> GetFilesWithoutMediaInfo();
         List<EpisodeFile> GetFilesWithRelativePath(int seriesId, string relativePath);
@@ -24,6 +25,11 @@ namespace NzbDrone.Core.MediaFiles
         public List<EpisodeFile> GetFilesBySeries(int seriesId)
         {
             return Query(c => c.SeriesId == seriesId).ToList();
+        }
+
+        public List<EpisodeFile> GetFilesBySeries(List<int> seriesIds)
+        {
+            return Query(c => seriesIds.Contains(c.SeriesId)).ToList();
         }
 
         public List<EpisodeFile> GetFilesBySeason(int seriesId, int seasonNumber)

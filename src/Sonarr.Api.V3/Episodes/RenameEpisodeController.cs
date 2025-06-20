@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Core.MediaFiles;
 using Sonarr.Http;
+using Sonarr.Http.REST;
 
 namespace Sonarr.Api.V3.Episodes
 {
@@ -25,6 +26,18 @@ namespace Sonarr.Api.V3.Episodes
             }
 
             return _renameEpisodeFileService.GetRenamePreviews(seriesId).ToResource();
+        }
+
+        [HttpGet("multiple")]
+        [Produces("application/json")]
+        public List<RenameEpisodeResource> GetEpisodes(List<int> seriesIds)
+        {
+            if (seriesIds is not { Count: not 0 })
+            {
+                throw new BadRequestException("seriesIds must be provided");
+            }
+
+            return _renameEpisodeFileService.GetRenamePreviews(seriesIds).ToResource();
         }
     }
 }
