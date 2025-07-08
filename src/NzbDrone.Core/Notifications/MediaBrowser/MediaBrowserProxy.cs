@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using NLog;
 using NzbDrone.Common.Http;
 using NzbDrone.Common.Serializer;
@@ -20,6 +19,16 @@ namespace NzbDrone.Core.Notifications.Emby
             _logger = logger;
         }
 
+        public void TestConnection(MediaBrowserSettings settings)
+        {
+            var path = "/System/Configuration";
+            var request = BuildRequest(path, settings);
+            request.Headers.Add("X-MediaBrowser-Token", settings.ApiKey);
+
+            var response = _httpClient.Get(request);
+            _logger.Trace("Response: {0}", response.Content);
+        }
+
         public void Notify(MediaBrowserSettings settings, string title, string message)
         {
             var path = "/Notifications/Admin";
@@ -34,21 +43,7 @@ namespace NzbDrone.Core.Notifications.Emby
                                ImageUrl = "https://raw.github.com/Sonarr/Sonarr/develop/Logo/64.png"
                            }.ToJson());
 
-            try
-            {
-                ProcessRequest(request, settings);
-            }
-            catch (HttpException e)
-            {
-                if (e.Response.StatusCode == HttpStatusCode.NotFound)
-                {
-                    _logger.Warn("Unable to send notification to Emby. If you're using Jellyfin disable 'Send Notifications'");
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            ProcessRequest(request, settings);
         }
 
         public HashSet<string> GetPaths(MediaBrowserSettings settings, Series series)
