@@ -263,6 +263,18 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("UserRejectedExtensions", value); }
         }
 
+        public SeasonPackUpgradeType AllowSeasonPackUpgrade
+        {
+            get { return GetValueEnum("AllowSeasonPackUpgrade", SeasonPackUpgradeType.All); }
+            set { SetValue("AllowSeasonPackUpgrade", value); }
+        }
+
+        public double SeasonPackUpgradeThreshold
+        {
+            get { return GetValueDouble("SeasonPackUpgradeThreshold", 100.0); }
+            set { SetValue("SeasonPackUpgradeThreshold", value); }
+        }
+
         public bool SetPermissionsLinux
         {
             get { return GetValueBoolean("SetPermissionsLinux", false); }
@@ -417,6 +429,11 @@ namespace NzbDrone.Core.Configuration
             return Convert.ToInt32(GetValue(key, defaultValue));
         }
 
+        private double GetValueDouble(string key, double defaultValue = 0)
+        {
+            return Convert.ToDouble(GetValue(key, defaultValue), CultureInfo.InvariantCulture);
+        }
+
         private T GetValueEnum<T>(string key, T defaultValue)
         {
             return (T)Enum.Parse(typeof(T), GetValue(key, defaultValue), true);
@@ -452,6 +469,11 @@ namespace NzbDrone.Core.Configuration
         private void SetValue(string key, int value)
         {
             SetValue(key, value.ToString());
+        }
+
+        private void SetValue(string key, double value)
+        {
+            SetValue(key, value.ToString(CultureInfo.InvariantCulture));
         }
 
         private void SetValue(string key, Enum value)

@@ -7,6 +7,7 @@ import translate from 'Utilities/String/translate';
 import AutoCompleteInput, { AutoCompleteInputProps } from './AutoCompleteInput';
 import CaptchaInput, { CaptchaInputProps } from './CaptchaInput';
 import CheckInput, { CheckInputProps } from './CheckInput';
+import FloatInput, { FloatInputProps } from './FloatInput';
 import { FormInputButtonProps } from './FormInputButton';
 import FormInputHelpText from './FormInputHelpText';
 import KeyValueListInput, { KeyValueListInputProps } from './KeyValueListInput';
@@ -65,7 +66,7 @@ const componentMap: Record<InputType, ElementType> = {
   downloadClientSelect: DownloadClientSelectInput,
   dynamicSelect: ProviderDataSelectInput,
   file: TextInput,
-  float: NumberInput,
+  float: FloatInput,
   indexerFlagsSelect: IndexerFlagsSelectInput,
   indexerSelect: IndexerSelectInput,
   keyValueList: KeyValueListInput,
@@ -110,7 +111,7 @@ type PickProps<V, C extends InputType> = C extends 'text'
   : C extends 'file'
   ? TextInputProps
   : C extends 'float'
-  ? TextInputProps
+  ? FloatInputProps
   : C extends 'indexerFlagsSelect'
   ? IndexerFlagsSelectInputProps
   : C extends 'indexerSelect'

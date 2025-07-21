@@ -5,7 +5,7 @@ import updateSectionState from 'Utilities/State/updateSectionState';
 function createSetSettingValueReducer(section) {
   return (state, { payload }) => {
     if (section === payload.section) {
-      const { name, value } = payload;
+      const { name, value, isFloat } = payload;
       const newState = getSectionState(state, section);
       newState.pendingChanges = Object.assign({}, newState.pendingChanges);
 
@@ -15,7 +15,12 @@ function createSetSettingValueReducer(section) {
       let parsedValue = null;
 
       if (_.isNumber(currentValue) && value != null) {
-        parsedValue = parseInt(value);
+        // Use isFloat property to determine parsing method
+        if (isFloat) {
+          parsedValue = parseFloat(value);
+        } else {
+          parsedValue = parseInt(value);
+        }
       } else {
         parsedValue = value;
       }

@@ -43,6 +43,10 @@ namespace NzbDrone.Core.Configuration
         EpisodeTitleRequiredType EpisodeTitleRequired { get; set; }
         string UserRejectedExtensions { get; set; }
 
+        // Season Pack Upgrade (Media Management)
+        SeasonPackUpgradeType AllowSeasonPackUpgrade { get; set; }
+        double SeasonPackUpgradeThreshold { get; set; }
+
         // Permissions (Media Management)
         bool SetPermissionsLinux { get; set; }
         string ChmodFolder { get; set; }
