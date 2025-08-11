@@ -26,7 +26,6 @@ namespace NzbDrone.Core.MediaFiles
         private readonly IConfigService _configService;
         private readonly IEpisodeService _episodeService;
         private readonly Logger _logger;
-        private static readonly DateTime EpochTime = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
         public UpdateEpisodeFileService(IDiskProvider diskProvider,
                                         IConfigService configService,
@@ -47,90 +46,48 @@ namespace NzbDrone.Core.MediaFiles
         private bool ChangeFileDate(EpisodeFile episodeFile, Series series, List<Episode> episodes)
         {
             var episodeFilePath = Path.Combine(series.Path, episodeFile.RelativePath);
+            var airDateUtc = episodes.First().AirDateUtc;
 
-            switch (_configService.FileDate)
+            if (!airDateUtc.HasValue)
             {
-                case FileDateType.LocalAirDate:
-                    {
-                        var airDate = episodes.First().AirDate;
-                        var airTime = series.AirTime;
-
-                        if (airDate.IsNullOrWhiteSpace() || airTime.IsNullOrWhiteSpace())
-                        {
-                            return false;
-                        }
-
-                        return ChangeFileDateToLocalAirDate(episodeFilePath, airDate, airTime);
-                    }
-
-                case FileDateType.UtcAirDate:
-                    {
-                        var airDateUtc = episodes.First().AirDateUtc;
-
-                        if (!airDateUtc.HasValue)
-                        {
-                            return false;
-                        }
-
-                        return ChangeFileDateToUtcAirDate(episodeFilePath, airDateUtc.Value);
-                    }
+                return false;
             }
 
-            return false;
+            return _configService.FileDate switch
+            {
+                FileDateType.LocalAirDate =>
+                    ChangeFileDateToLocalDate(episodeFilePath, airDateUtc.Value.ToLocalTime()),
+
+                // Intentionally pass UTC as local per user preference
+                FileDateType.UtcAirDate =>
+                    ChangeFileDateToLocalDate(
+                        episodeFilePath,
+                        DateTime.SpecifyKind(airDateUtc.Value, DateTimeKind.Local)),
+
+                _ => false,
+            };
         }
 
-        private bool ChangeFileDateToLocalAirDate(string filePath, string fileDate, string fileTime)
+        private bool ChangeFileDateToLocalDate(string filePath, DateTime localDate)
         {
-            if (DateTime.TryParse(fileDate + ' ' + fileTime, out var airDate))
-            {
-                // avoiding false +ve checks and set date skewing by not using UTC (Windows)
-                var oldLastWrite = _diskProvider.FileGetLastWrite(filePath);
+            // FileGetLastWrite returns UTC; convert to local to compare
+            var oldLastWrite = _diskProvider.FileGetLastWrite(filePath).ToLocalTime();
 
-                if (OsInfo.IsNotWindows && airDate < EpochTime)
-                {
-                    _logger.Debug("Setting date of file to 1970-01-01 as actual airdate is before that time and will not be set properly");
-                    airDate = EpochTime;
-                }
-
-                if (!DateTime.Equals(airDate.WithoutTicks(), oldLastWrite.WithoutTicks()))
-                {
-                    try
-                    {
-                        _diskProvider.FileSetLastWriteTime(filePath, airDate);
-                        _logger.Debug("Date of file [{0}] changed from '{1}' to '{2}'", filePath, oldLastWrite, airDate);
-
-                        return true;
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.Warn(ex, "Unable to set date of file [" + filePath + "]");
-                    }
-                }
-            }
-            else
-            {
-                _logger.Debug("Could not create valid date to change file [{0}]", filePath);
-            }
-
-            return false;
-        }
-
-        private bool ChangeFileDateToUtcAirDate(string filePath, DateTime airDateUtc)
-        {
-            var oldLastWrite = _diskProvider.FileGetLastWrite(filePath);
-
-            if (OsInfo.IsNotWindows && airDateUtc < EpochTime)
+            if (OsInfo.IsNotWindows && localDate.ToUniversalTime() < DateTimeExtensions.EpochTime)
             {
                 _logger.Debug("Setting date of file to 1970-01-01 as actual airdate is before that time and will not be set properly");
-                airDateUtc = EpochTime;
+                localDate = DateTimeExtensions.EpochTime.ToLocalTime();
             }
 
-            if (!DateTime.Equals(airDateUtc.WithoutTicks(), oldLastWrite.WithoutTicks()))
+            if (!DateTime.Equals(localDate.WithoutTicks(), oldLastWrite.WithoutTicks()))
             {
                 try
                 {
-                    _diskProvider.FileSetLastWriteTime(filePath, airDateUtc.AddMilliseconds(oldLastWrite.Millisecond));
-                    _logger.Debug("Date of file [{0}] changed from '{1}' to '{2}'", filePath, oldLastWrite, airDateUtc);
+                    // Preserve prior mtime subseconds per https://github.com/Sonarr/Sonarr/issues/7228
+                    var mtime = localDate.WithTicksFrom(oldLastWrite);
+
+                    _diskProvider.FileSetLastWriteTime(filePath, mtime);
+                    _logger.Debug("Date of file [{0}] changed from '{1}' to '{2}'", filePath, oldLastWrite, mtime);
 
                     return true;
                 }
