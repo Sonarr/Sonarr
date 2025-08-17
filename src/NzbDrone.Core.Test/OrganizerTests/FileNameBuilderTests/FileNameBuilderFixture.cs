@@ -580,6 +580,8 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
         [TestCase("ice", "IS")]
         [TestCase("dut", "NL")]
         [TestCase("nor", "NO")]
+        [TestCase("geo", "KA")]
+        [TestCase("kat", "KA")]
         public void should_format_languagecodes_properly(string language, string code)
         {
             _namingConfig.StandardEpisodeFormat = "{Series.Title}.S{season:00}E{episode:00}.{Episode.Title}.{MEDIAINFO.FULL}";

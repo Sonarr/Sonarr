@@ -69,5 +69,15 @@ namespace NzbDrone.Core.Test.ParserTests
             var result = IsoLanguages.Find(isoCode);
             result.Language.Should().Be(Language.Romansh);
         }
+
+        [TestCase("ka")]
+        [TestCase("geo")]
+        [TestCase("kat")]
+        [TestCase("ka-GE")]
+        public void should_return_georgian(string isoCode)
+        {
+            var result = IsoLanguages.Find(isoCode);
+            result.Language.Should().Be(Language.Georgian);
+        }
     }
 }

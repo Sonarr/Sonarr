@@ -529,6 +529,16 @@ namespace NzbDrone.Core.Test.ParserTests
             result.Should().Contain(Language.Romansh);
         }
 
+        [TestCase("Title.the.Series.2025.S01.Georgian.1080p.WEB-DL.h264-RlsGrp")]
+        [TestCase("Title.the.Series.2025.S01.Geo.1080p.WEB-DL.h264-RlsGrp")]
+        [TestCase("Title.the.Series.2025.S01.KA.1080p.WEB-DL.h264-RlsGrp")]
+        [TestCase("Title.the.Series.2025.S01.RU-KA.1080p.WEB-DL.h264-RlsGrp")]
+        public void should_parse_language_georgian(string postTitle)
+        {
+            var result = LanguageParser.ParseLanguages(postTitle);
+            result.Should().Contain(Language.Georgian);
+        }
+
         [TestCase("Name (2020) - S01E20 - [AAC 2.0].testtitle.default.eng.forced.ass", new[] { "default", "forced" }, "testtitle", "English")]
         [TestCase("Name (2020) - S01E20 - [AAC 2.0].eng.default.testtitle.forced.ass", new[] { "default", "forced" }, "testtitle", "English")]
         [TestCase("Name (2020) - S01E20 - [AAC 2.0].default.eng.testtitle.forced.ass", new[] { "default", "forced" }, "testtitle", "English")]

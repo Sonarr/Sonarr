@@ -122,6 +122,7 @@ namespace NzbDrone.Core.Languages
         public static Language Malay => new Language(49, "Malay");
         public static Language Urdu => new Language(50, "Urdu");
         public static Language Romansh => new Language(51, "Romansh");
+        public static Language Georgian => new Language(52, "Georgian");
         public static Language Original => new Language(-2, "Original");
 
         public static List<Language> All
@@ -182,6 +183,7 @@ namespace NzbDrone.Core.Languages
                     Malay,
                     Urdu,
                     Romansh,
+                    Georgian,
                     Original
                 };
             }
