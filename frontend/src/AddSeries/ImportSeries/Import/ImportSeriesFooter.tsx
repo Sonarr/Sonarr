@@ -14,6 +14,7 @@ import Button from 'Components/Link/Button';
 import SpinnerButton from 'Components/Link/SpinnerButton';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import PageContentFooter from 'Components/Page/PageContentFooter';
+import ProgressBar from 'Components/ProgressBar';
 import Popover from 'Components/Tooltip/Popover';
 import { icons, inputTypes, kinds, tooltipPositions } from 'Helpers/Props';
 import { SeriesMonitor, SeriesType } from 'Series/Series';
@@ -39,9 +40,35 @@ function ImportSeriesFooter() {
     seasonFolder: defaultSeasonFolder,
   } = useAddSeriesOptions();
 
-  const { isLookingUpSeries, isImporting, items, importError } = useSelector(
-    (state: AppState) => state.importSeries
+  const {
+    isLookingUpSeries,
+    isImporting,
+    items,
+    importError,
+    importingCount = 0,
+    importedCount = 0,
+  } = useSelector(
+    (
+      state: AppState & {
+        importSeries: {
+          isLookingUpSeries: boolean;
+          isImporting: boolean;
+          items: Array<{
+            isPopulated: boolean;
+            monitor: SeriesMonitor;
+            qualityProfileId: number;
+            seriesType: SeriesType;
+            seasonFolder: boolean;
+          }>;
+          importError: unknown;
+          importingCount: number;
+          importedCount: number;
+        };
+      }
+    ) => state.importSeries
   );
+  const totalItems = items.length;
+  const populatedItems = items.filter((item) => item.isPopulated).length;
 
   const [monitor, setMonitor] = useState<SeriesMonitor | MixedType>(
     defaultMonitor
@@ -279,8 +306,51 @@ function ImportSeriesFooter() {
             <LoadingIndicator className={styles.loading} size={24} />
           ) : null}
 
-          {isLookingUpSeries ? translate('ProcessingFolders') : null}
-
+          {isLookingUpSeries
+            ? translate('ProcessingFolders', { populatedItems, totalItems })
+            : null}
+          {isImporting && importingCount > 0
+            ? (() => {
+                const importProgress = (importedCount / importingCount) * 100;
+                let importText = '';
+                let importKind = kinds.INFO;
+                if (importedCount === importingCount) {
+                  importText = translate('ImportCompleted', {
+                    imported: importedCount,
+                    total: importingCount,
+                  });
+                  importKind = kinds.SUCCESS;
+                } else {
+                  importText = translate('ImportSeriesProgress', {
+                    imported: importedCount,
+                    total: importingCount,
+                  });
+                }
+                return (
+                  <div className={styles.importProgress}>
+                    <div className={styles.importProgressText}>
+                      {importText}
+                    </div>
+                    <ProgressBar
+                      progress={importProgress}
+                      showText={true}
+                      kind={
+                        importKind as
+                          | 'primary'
+                          | 'danger'
+                          | 'info'
+                          | 'purple'
+                          | 'success'
+                          | 'warning'
+                          | undefined
+                      }
+                      title={`${importProgress.toFixed(1)}%`}
+                      size="medium"
+                    />
+                  </div>
+                );
+              })()
+            : null}
           {importError ? (
             <Popover
               anchor={

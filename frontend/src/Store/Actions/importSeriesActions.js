@@ -27,6 +27,8 @@ export const defaultState = {
   isImporting: false,
   isImported: false,
   importError: null,
+  importingCount: 0,
+  importedCount: 0,
   items: []
 };
 
@@ -216,8 +218,6 @@ export const actionHandlers = handleThunks({
   },
 
   [IMPORT_SERIES]: function(getState, payload, dispatch) {
-    dispatch(set({ section, isImporting: true }));
-
     const ids = payload.ids;
     const items = getState().importSeries.items;
     const addedIds = [];
@@ -225,59 +225,84 @@ export const actionHandlers = handleThunks({
     const allNewSeries = ids.reduce((acc, id) => {
       const item = items.find((i) => i.id === id);
       const selectedSeries = item.selectedSeries;
-
-      // Make sure we have a selected series and
-      // the same series hasn't been added yet.
       if (selectedSeries && !acc.some((a) => a.tvdbId === selectedSeries.tvdbId)) {
         const newSeries = getNewSeries(_.cloneDeep(selectedSeries), item);
         newSeries.path = item.path;
-
         addedIds.push(id);
         acc.push(newSeries);
       }
-
       return acc;
     }, []);
 
-    const promise = createAjaxRequest({
-      url: '/series/import',
-      method: 'POST',
-      contentType: 'application/json',
-      data: JSON.stringify(allNewSeries)
-    }).request;
+    dispatch(set({
+      section,
+      isImporting: true,
+      importingCount: allNewSeries.length,
+      importedCount: 0
+    }));
 
-    promise.done((data) => {
-      dispatch(batchActions([
-        set({
+    let importedCount = 0;
+    const importedSeries = [];
+    let hasError = false;
+    const COMPLETION_DISPLAY_TIMEOUT = 1500;
+
+    const importNextSeries = (index) => {
+      if (index >= allNewSeries.length || hasError) {
+        setTimeout(() => {
+          dispatch(batchActions([
+            set({
+              section,
+              isImporting: false,
+              isImported: true,
+              importError: hasError ? { message: 'ImportErrors' } : null,
+              importedCount
+            }),
+            ...importedSeries.map((series) => updateItem({ section: 'series', ...series })),
+            ...addedIds.slice(0, importedCount).map((id) => removeItem({ section, id }))
+          ]));
+          dispatch(fetchRootFolders());
+        }, COMPLETION_DISPLAY_TIMEOUT);
+        return;
+      }
+
+      const seriesToImport = allNewSeries[index];
+      const promise = createAjaxRequest({
+        url: '/series/import',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify([seriesToImport])
+      }).request;
+
+      promise.done((data) => {
+        importedCount++;
+        if (data && data.length > 0) {
+          importedSeries.push(...data);
+        }
+        dispatch(set({
           section,
-          isImporting: false,
-          isImported: true,
-          importError: null
-        }),
+          importedCount
+        }));
+        importNextSeries(index + 1);
+      });
 
-        ...data.map((series) => updateItem({ section: 'series', ...series })),
+      promise.fail(() => {
+        hasError = true;
+        setTimeout(() => {
+          dispatch(batchActions([
+            set({
+              section,
+              isImporting: false,
+              isImported: true,
+              importError: { message: 'ImportErrors' },
+              importedCount
+            }),
+            ...importedSeries.map((series) => updateItem({ section: 'series', ...series }))
+          ]));
+        }, COMPLETION_DISPLAY_TIMEOUT);
+      });
+    };
 
-        ...addedIds.map((id) => removeItem({ section, id }))
-      ]));
-
-      dispatch(fetchRootFolders());
-    });
-
-    promise.fail((xhr) => {
-      dispatch(batchActions([
-        set({
-          section,
-          isImporting: false,
-          isImported: true,
-          importError: xhr
-        }),
-
-        ...addedIds.map((id) => updateItem({
-          section,
-          id
-        }))
-      ]));
-    });
+    importNextSeries(0);
   }
 });
 

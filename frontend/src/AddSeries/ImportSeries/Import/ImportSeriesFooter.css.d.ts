@@ -4,6 +4,8 @@ interface CssExports {
   'importButton': string;
   'importButtonContainer': string;
   'importError': string;
+  'importProgress': string;
+  'importProgressText': string;
   'inputContainer': string;
   'label': string;
   'loading': string;
