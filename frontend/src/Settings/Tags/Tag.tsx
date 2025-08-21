@@ -22,6 +22,7 @@ function Tag({ id, label }: TagProps) {
     importListIds = [],
     notificationIds = [],
     restrictionIds = [],
+    excludedReleaseIds = [],
     indexerIds = [],
     downloadClientIds = [],
     autoTagIds = [],
@@ -35,6 +36,7 @@ function Tag({ id, label }: TagProps) {
     importListIds.length ||
     notificationIds.length ||
     restrictionIds.length ||
+    excludedReleaseIds.length ||
     indexerIds.length ||
     downloadClientIds.length ||
     autoTagIds.length ||
@@ -99,6 +101,12 @@ function Tag({ id, label }: TagProps) {
           />
 
           <TagInUse
+            label={translate('ExcludedReleaseProfile')}
+            labelPlural={translate('ExcludedReleaseProfiles')}
+            count={excludedReleaseIds.length}
+          />
+
+          <TagInUse
             label={translate('Indexer')}
             labelPlural={translate('Indexers')}
             count={indexerIds.length}
@@ -127,6 +135,7 @@ function Tag({ id, label }: TagProps) {
         importListIds={importListIds}
         notificationIds={notificationIds}
         restrictionIds={restrictionIds}
+        excludedReleaseIds={excludedReleaseIds}
         indexerIds={indexerIds}
         downloadClientIds={downloadClientIds}
         autoTagIds={autoTagIds}
