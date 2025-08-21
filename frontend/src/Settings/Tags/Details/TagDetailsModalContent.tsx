@@ -62,6 +62,7 @@ export interface TagDetailsModalContentProps {
   importListIds: number[];
   notificationIds: number[];
   restrictionIds: number[];
+  excludedReleaseIds: number[];
   indexerIds: number[];
   downloadClientIds: number[];
   autoTagIds: number[];
@@ -77,6 +78,7 @@ function TagDetailsModalContent({
   importListIds = [],
   notificationIds = [],
   restrictionIds = [],
+  excludedReleaseIds = [],
   indexerIds = [],
   downloadClientIds = [],
   autoTagIds = [],
@@ -110,6 +112,13 @@ function TagDetailsModalContent({
   const releaseProfiles = useSelector(
     createMatchingItemSelector(
       restrictionIds,
+      (state: AppState) => state.settings.releaseProfiles.items
+    )
+  );
+
+  const excludedReleaseProfiles = useSelector(
+    createMatchingItemSelector(
+      excludedReleaseIds,
       (state: AppState) => state.settings.releaseProfiles.items
     )
   );
@@ -195,6 +204,36 @@ function TagDetailsModalContent({
         {releaseProfiles.length ? (
           <FieldSet legend={translate('ReleaseProfiles')}>
             {releaseProfiles.map((item) => {
+              return (
+                <div key={item.id} className={styles.restriction}>
+                  <div>
+                    {item.required.map((r) => {
+                      return (
+                        <Label key={r} kind={kinds.SUCCESS}>
+                          {r}
+                        </Label>
+                      );
+                    })}
+                  </div>
+
+                  <div>
+                    {item.ignored.map((i) => {
+                      return (
+                        <Label key={i} kind={kinds.DANGER}>
+                          {i}
+                        </Label>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            })}
+          </FieldSet>
+        ) : null}
+
+        {excludedReleaseProfiles.length ? (
+          <FieldSet legend={translate('ExcludedReleaseProfiles')}>
+            {excludedReleaseProfiles.map((item) => {
               return (
                 <div key={item.id} className={styles.restriction}>
                   <div>

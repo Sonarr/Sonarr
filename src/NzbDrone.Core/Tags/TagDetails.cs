@@ -10,6 +10,7 @@ namespace NzbDrone.Core.Tags
         public List<int> SeriesIds { get; set; }
         public List<int> NotificationIds { get; set; }
         public List<int> RestrictionIds { get; set; }
+        public List<int> ExcludedReleaseIds { get; set; }
         public List<int> DelayProfileIds { get; set; }
         public List<int> ImportListIds { get; set; }
         public List<int> IndexerIds { get; set; }
@@ -19,6 +20,7 @@ namespace NzbDrone.Core.Tags
         public bool InUse => SeriesIds.Any() ||
                              NotificationIds.Any() ||
                              RestrictionIds.Any() ||
+                             ExcludedReleaseIds.Any() ||
                              DelayProfileIds.Any() ||
                              ImportListIds.Any() ||
                              IndexerIds.Any() ||

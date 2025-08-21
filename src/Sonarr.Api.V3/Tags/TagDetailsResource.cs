@@ -12,6 +12,7 @@ namespace Sonarr.Api.V3.Tags
         public List<int> ImportListIds { get; set; }
         public List<int> NotificationIds { get; set; }
         public List<int> RestrictionIds { get; set; }
+        public List<int> ExcludedReleaseIds { get; set; }
         public List<int> IndexerIds { get; set; }
         public List<int> DownloadClientIds { get; set; }
         public List<int> AutoTagIds { get; set; }
@@ -35,6 +36,7 @@ namespace Sonarr.Api.V3.Tags
                 ImportListIds = model.ImportListIds,
                 NotificationIds = model.NotificationIds,
                 RestrictionIds = model.RestrictionIds,
+                ExcludedReleaseIds = model.ExcludedReleaseIds,
                 IndexerIds = model.IndexerIds,
                 DownloadClientIds = model.DownloadClientIds,
                 AutoTagIds = model.AutoTagIds,

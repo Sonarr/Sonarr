@@ -688,6 +688,8 @@
   "Example": "Example",
   "Exception": "Exception",
   "ExcludedTags": "Excluded Tags",
+  "ExcludedReleaseProfile": "Excluded Release Profile",
+  "ExcludedReleaseProfiles": "Excluded Release Profiles",
   "Existing": "Existing",
   "ExistingSeries": "Existing Series",
   "ExistingTag": "Existing tag",

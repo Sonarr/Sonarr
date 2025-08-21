@@ -92,6 +92,7 @@ namespace NzbDrone.Core.Tags
             var importLists = _importListFactory.AllForTag(tagId);
             var notifications = _notificationFactory.AllForTag(tagId);
             var restrictions = _releaseProfileService.AllForTag(tagId);
+            var excludedReleases = _releaseProfileService.AllExcludedForTag(tagId);
             var series = _seriesService.AllForTag(tagId);
             var indexers = _indexerService.AllForTag(tagId);
             var autoTags = _autoTaggingService.AllForTag(tagId);
@@ -105,6 +106,7 @@ namespace NzbDrone.Core.Tags
                 ImportListIds = importLists.Select(c => c.Id).ToList(),
                 NotificationIds = notifications.Select(c => c.Id).ToList(),
                 RestrictionIds = restrictions.Select(c => c.Id).ToList(),
+                ExcludedReleaseIds = excludedReleases.Select(c => c.Id).ToList(),
                 SeriesIds = series.Select(c => c.Id).ToList(),
                 IndexerIds = indexers.Select(c => c.Id).ToList(),
                 AutoTagIds = autoTags.Select(c => c.Id).ToList(),
@@ -119,6 +121,7 @@ namespace NzbDrone.Core.Tags
             var importLists = _importListFactory.All();
             var notifications = _notificationFactory.All();
             var restrictions = _releaseProfileService.All();
+            var excludedReleases = _releaseProfileService.All();
             var series = _seriesService.GetAllSeriesTags();
             var indexers = _indexerService.All();
             var autoTags = _autoTaggingService.All();
@@ -136,6 +139,7 @@ namespace NzbDrone.Core.Tags
                         ImportListIds = importLists.Where(c => c.Tags.Contains(tag.Id)).Select(c => c.Id).ToList(),
                         NotificationIds = notifications.Where(c => c.Tags.Contains(tag.Id)).Select(c => c.Id).ToList(),
                         RestrictionIds = restrictions.Where(c => c.Tags.Contains(tag.Id)).Select(c => c.Id).ToList(),
+                        ExcludedReleaseIds = excludedReleases.Where(c => c.ExcludedTags.Contains(tag.Id)).Select(c => c.Id).ToList(),
                         SeriesIds = series.Where(c => c.Value.Contains(tag.Id)).Select(c => c.Key).ToList(),
                         IndexerIds = indexers.Where(c => c.Tags.Contains(tag.Id)).Select(c => c.Id).ToList(),
                         AutoTagIds = GetAutoTagIds(tag, autoTags),
