@@ -72,7 +72,7 @@ namespace NzbDrone.Core.ImportLists.Custom
             }
 
             var baseUrl = settings.BaseUrl.TrimEnd('/');
-            var request = new HttpRequestBuilder(baseUrl).Accept(HttpAccept.Json).Build();
+            var request = new HttpRequestBuilder(baseUrl).Accept(HttpAccept.Json).AllowRedirect().Build();
             var response = _httpClient.Get(request);
             var results = JsonConvert.DeserializeObject<List<TResource>>(response.Content);
 
