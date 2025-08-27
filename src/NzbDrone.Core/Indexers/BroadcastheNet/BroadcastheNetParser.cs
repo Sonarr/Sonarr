@@ -123,7 +123,7 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
 
             if (item.Tags?.Contains("Subtitles") == true)
             {
-                flags |= IndexerFlags.IncludesSubtitles;
+                flags |= IndexerFlags.IncludeSubtitles;
             }
 
             return flags;
