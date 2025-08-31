@@ -9,7 +9,7 @@ using NzbDrone.Core.Datastore.Migration.Framework;
 
 namespace NzbDrone.Core.Datastore.Migration
 {
-    [Migration(229)]
+    [Migration(220)]
     public class enable_season_pack_seeding_goal : NzbDroneMigrationBase
     {
         protected override void MainDbUpgrade()
@@ -21,37 +21,45 @@ namespace NzbDrone.Core.Datastore.Migration
         {
             var updatedIndexers = new List<object>();
 
-            using var selectCommand = conn.CreateCommand();
-
-            selectCommand.Transaction = tran;
-            selectCommand.CommandText = "SELECT * FROM \"Indexers\"";
-
-            using var reader = selectCommand.ExecuteReader();
-
-            while (reader.Read())
+            using (var selectCommand = conn.CreateCommand())
             {
-                var idIndex = reader.GetOrdinal("Id");
-                var settingsIndex = reader.GetOrdinal("Settings");
+                selectCommand.Transaction = tran;
+                selectCommand.CommandText = "SELECT * FROM \"Indexers\"";
 
-                var id = reader.GetInt32(idIndex);
-                var settings = Json.Deserialize<Dictionary<string, object>>(reader.GetString(settingsIndex));
-
-                if (settings.TryGetValue("seedCriteria", out var seedCriteriaToken) && seedCriteriaToken is JObject seedCriteria)
+                using (var reader = selectCommand.ExecuteReader())
                 {
-                    if (seedCriteria?["seasonPackSeedTime"] != null)
+                    var indexerSettings = new List<(int Id, string Settings)>();
+
+                    while (reader.Read())
                     {
-                        seedCriteria["seasonPackSeedGoal"] = 1;
+                        var idIndex = reader.GetOrdinal("Id");
+                        var settingsIndex = reader.GetOrdinal("Settings");
 
-                        if (seedCriteria["seedRatio"] != null)
+                        indexerSettings.Add((reader.GetInt32(idIndex), reader.GetString(settingsIndex)));
+                    }
+
+                    foreach (var indexerSetting in indexerSettings)
+                    {
+                        var settings = Json.Deserialize<Dictionary<string, object>>(indexerSetting.Settings);
+
+                        if (settings.TryGetValue("seedCriteria", out var seedCriteriaToken) && seedCriteriaToken is JObject seedCriteria)
                         {
-                            seedCriteria["seasonPackSeedRatio"] = seedCriteria["seedRatio"];
+                            if (seedCriteria?["seasonPackSeedTime"] != null)
+                            {
+                                seedCriteria["seasonPackSeedGoal"] = 1;
+
+                                if (seedCriteria["seedRatio"] != null)
+                                {
+                                    seedCriteria["seasonPackSeedRatio"] = seedCriteria["seedRatio"];
+                                }
+
+                                updatedIndexers.Add(new
+                                {
+                                    Settings = settings.ToJson(),
+                                    Id = indexerSetting.Id,
+                                });
+                            }
                         }
-
-                        updatedIndexers.Add(new
-                        {
-                            Settings = settings.ToJson(),
-                            Id = id,
-                        });
                     }
                 }
             }
