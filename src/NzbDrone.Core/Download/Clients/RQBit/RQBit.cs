@@ -143,7 +143,7 @@ namespace NzbDrone.Core.Download.Clients.RQBit
         protected override void Test(List<ValidationFailure> failures)
         {
             failures.AddIfNotNull(TestConnection());
-            
+
             if (failures.HasErrors())
             {
                 return;
@@ -163,7 +163,7 @@ namespace NzbDrone.Core.Download.Clients.RQBit
             try
             {
                 var versionString = _proxy.GetVersion(Settings);
-                
+
                 if (string.IsNullOrWhiteSpace(versionString))
                 {
                     return new ValidationFailure("", "Unable to determine RQBit version. Please check that RQBit is running and accessible.");
