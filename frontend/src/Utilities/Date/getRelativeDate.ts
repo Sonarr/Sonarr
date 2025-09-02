@@ -1,10 +1,10 @@
-import moment from 'moment';
 import formatTime from 'Utilities/Date/formatTime';
 import isInNextWeek from 'Utilities/Date/isInNextWeek';
 import isToday from 'Utilities/Date/isToday';
 import isTomorrow from 'Utilities/Date/isTomorrow';
 import isYesterday from 'Utilities/Date/isYesterday';
 import translate from 'Utilities/String/translate';
+import { convertToTimezone } from './convertToTimezone';
 import formatDateTime from './formatDateTime';
 
 interface GetRelativeDateOptions {
@@ -12,6 +12,7 @@ interface GetRelativeDateOptions {
   shortDateFormat: string;
   showRelativeDates: boolean;
   timeFormat?: string;
+  timeZone?: string;
   includeSeconds?: boolean;
   timeForToday?: boolean;
   includeTime?: boolean;
@@ -22,6 +23,7 @@ function getRelativeDate({
   shortDateFormat,
   showRelativeDates,
   timeFormat,
+  timeZone = '',
   includeSeconds = false,
   timeForToday = false,
   includeTime = false,
@@ -41,6 +43,7 @@ function getRelativeDate({
     ? formatTime(date, timeFormat, {
         includeMinuteZero: true,
         includeSeconds,
+        timeZone,
       })
     : '';
 
@@ -49,7 +52,8 @@ function getRelativeDate({
   }
 
   if (!showRelativeDates) {
-    return moment(date).format(shortDateFormat);
+    let dateTime = convertToTimezone(date, timeZone);
+    return dateTime.format(shortDateFormat);
   }
 
   if (isYesterday(date)) {
@@ -69,14 +73,15 @@ function getRelativeDate({
   }
 
   if (isInNextWeek(date)) {
-    const day = moment(date).format('dddd');
+    let dateTime = convertToTimezone(date, timeZone);
+    const day = dateTime.format('dddd');
 
     return includeTime ? translate('DayOfWeekAt', { day, time }) : day;
   }
 
   return includeTime && timeFormat
-    ? formatDateTime(date, shortDateFormat, timeFormat, { includeSeconds })
-    : moment(date).format(shortDateFormat);
+    ? formatDateTime(date, shortDateFormat, timeFormat, { includeSeconds, timeZone })
+    : convertToTimezone(date, timeZone).format(shortDateFormat);
 }
 
 export default getRelativeDate;

@@ -116,7 +116,7 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
     onGrabPress,
   } = props;
 
-  const { longDateFormat, timeFormat } = useSelector(
+  const { longDateFormat, timeFormat, timeZone } = useSelector(
     createUISettingsSelector()
   );
 
@@ -174,6 +174,7 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
         className={styles.age}
         title={formatDateTime(publishDate, longDateFormat, timeFormat, {
           includeSeconds: true,
+          timeZone,
         })}
       >
         {formatAge(age, ageHours, ageMinutes)}

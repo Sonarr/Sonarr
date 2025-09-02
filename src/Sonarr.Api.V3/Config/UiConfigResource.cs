@@ -13,6 +13,7 @@ namespace Sonarr.Api.V3.Config
         public string ShortDateFormat { get; set; }
         public string LongDateFormat { get; set; }
         public string TimeFormat { get; set; }
+        public string TimeZone { get; set; }
         public bool ShowRelativeDates { get; set; }
 
         public bool EnableColorImpairedMode { get; set; }
@@ -32,6 +33,7 @@ namespace Sonarr.Api.V3.Config
                 ShortDateFormat = model.ShortDateFormat,
                 LongDateFormat = model.LongDateFormat,
                 TimeFormat = model.TimeFormat,
+                TimeZone = model.TimeZone,
                 ShowRelativeDates = model.ShowRelativeDates,
 
                 EnableColorImpairedMode = model.EnableColorImpairedMode,

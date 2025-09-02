@@ -1,5 +1,4 @@
 import classNames from 'classnames';
-import moment from 'moment';
 import React, { useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useQueueItemForEpisode } from 'Activity/Queue/Details/QueueDetailsProvider';
@@ -15,6 +14,7 @@ import useEpisodeFile from 'EpisodeFile/useEpisodeFile';
 import { icons, kinds } from 'Helpers/Props';
 import useSeries from 'Series/useSeries';
 import createUISettingsSelector from 'Store/Selectors/createUISettingsSelector';
+import { convertToTimezone } from 'Utilities/Date/convertToTimezone';
 import formatTime from 'Utilities/Date/formatTime';
 import padNumber from 'Utilities/Number/padNumber';
 import translate from 'Utilities/String/translate';
@@ -58,7 +58,7 @@ function AgendaEvent(props: AgendaEventProps) {
   const series = useSeries(seriesId)!;
   const episodeFile = useEpisodeFile(episodeFileId);
   const queueItem = useQueueItemForEpisode(id);
-  const { timeFormat, longDateFormat, enableColorImpairedMode } = useSelector(
+  const { timeFormat, longDateFormat, enableColorImpairedMode, timeZone } = useSelector(
     createUISettingsSelector()
   );
 
@@ -71,8 +71,8 @@ function AgendaEvent(props: AgendaEventProps) {
 
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
 
-  const startTime = moment(airDateUtc);
-  const endTime = moment(airDateUtc).add(series.runtime, 'minutes');
+  const startTime = convertToTimezone(airDateUtc, timeZone);
+  const endTime = convertToTimezone(airDateUtc, timeZone).add(series.runtime, 'minutes');
   const downloading = !!(queueItem || grabbed);
   const isMonitored = series.monitored && monitored;
   const statusStyle = getStatusStyle(
@@ -110,9 +110,10 @@ function AgendaEvent(props: AgendaEventProps) {
           )}
         >
           <div className={styles.time}>
-            {formatTime(airDateUtc, timeFormat)} -{' '}
+            {formatTime(airDateUtc, timeFormat, { timeZone })} -{' '}
             {formatTime(endTime.toISOString(), timeFormat, {
               includeMinuteZero: true,
+              timeZone,
             })}
           </div>
 

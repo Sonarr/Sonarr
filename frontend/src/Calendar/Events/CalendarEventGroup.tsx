@@ -1,5 +1,4 @@
 import classNames from 'classnames';
-import moment from 'moment';
 import React, { useCallback, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useIsDownloadingEpisodes } from 'Activity/Queue/Details/QueueDetailsProvider';
@@ -12,6 +11,7 @@ import { icons, kinds } from 'Helpers/Props';
 import useSeries from 'Series/useSeries';
 import createUISettingsSelector from 'Store/Selectors/createUISettingsSelector';
 import { CalendarItem } from 'typings/Calendar';
+import { convertToTimezone } from 'Utilities/Date/convertToTimezone';
 import formatTime from 'Utilities/Date/formatTime';
 import padNumber from 'Utilities/Number/padNumber';
 import translate from 'Utilities/String/translate';
@@ -34,7 +34,7 @@ function CalendarEventGroup({
   const isDownloading = useIsDownloadingEpisodes(episodeIds);
   const series = useSeries(seriesId)!;
 
-  const { timeFormat, enableColorImpairedMode } = useSelector(
+  const { timeFormat, enableColorImpairedMode, timeZone } = useSelector(
     createUISettingsSelector()
   );
 
@@ -46,8 +46,8 @@ function CalendarEventGroup({
   const firstEpisode = events[0];
   const lastEpisode = events[events.length - 1];
   const airDateUtc = firstEpisode.airDateUtc;
-  const startTime = moment(airDateUtc);
-  const endTime = moment(lastEpisode.airDateUtc).add(series.runtime, 'minutes');
+  const startTime = convertToTimezone(airDateUtc, timeZone);
+  const endTime = convertToTimezone(lastEpisode.airDateUtc, timeZone).add(series.runtime, 'minutes');
   const seasonNumber = firstEpisode.seasonNumber;
 
   const { allDownloaded, anyGrabbed, anyMonitored, allAbsoluteEpisodeNumbers } =
@@ -194,9 +194,10 @@ function CalendarEventGroup({
 
       <div className={styles.airingInfo}>
         <div className={styles.airTime}>
-          {formatTime(airDateUtc, timeFormat)} -{' '}
+          {formatTime(airDateUtc, timeFormat, { timeZone })} -{' '}
           {formatTime(endTime.toISOString(), timeFormat, {
             includeMinuteZero: true,
+            timeZone,
           })}
         </div>
 
