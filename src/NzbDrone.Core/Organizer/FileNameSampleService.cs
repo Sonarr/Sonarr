@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using NzbDrone.Core.CustomFormats;
 using NzbDrone.Core.MediaFiles;
@@ -80,6 +81,7 @@ namespace NzbDrone.Core.Organizer
                 EpisodeNumber = 1,
                 Title = "Episode Title (1)",
                 AirDate = "2013-10-30",
+                AirDateUtc = DateTime.Parse("2013-10-30"),
                 AbsoluteEpisodeNumber = 1,
             };
 
@@ -260,12 +262,12 @@ namespace NzbDrone.Core.Organizer
 
         public string GetSeasonFolderSample(NamingConfig nameSpec)
         {
-            return _buildFileNames.GetSeasonFolder(_standardSeries, _episode1.SeasonNumber, nameSpec);
+            return _buildFileNames.GetSeasonFolder(_standardSeries, _episode1.SeasonNumber, _episode1.AirDateUtc?.Year, nameSpec);
         }
 
         public string GetSpecialsFolderSample(NamingConfig nameSpec)
         {
-            return _buildFileNames.GetSeasonFolder(_standardSeries, 0, nameSpec);
+            return _buildFileNames.GetSeasonFolder(_standardSeries, 0, null, nameSpec);
         }
 
         private string BuildSample(List<Episode> episodes, Series series, EpisodeFile episodeFile, NamingConfig nameSpec, List<CustomFormat> customFormats)

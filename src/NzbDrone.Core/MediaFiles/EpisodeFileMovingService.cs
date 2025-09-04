@@ -73,7 +73,8 @@ namespace NzbDrone.Core.MediaFiles
         {
             var filePath = _buildFileNames.BuildFilePath(episodes, series, episodeFile, Path.GetExtension(episodeFile.RelativePath));
 
-            EnsureEpisodeFolder(episodeFile, series, episodes.Select(v => v.SeasonNumber).First(), filePath);
+            var firstEpisode = episodes.First();
+            EnsureEpisodeFolder(episodeFile, series, firstEpisode.SeasonNumber, firstEpisode.AirDateUtc?.Year, filePath);
 
             _logger.Debug("Renaming episode file: {0} to {1}", episodeFile, filePath);
 
@@ -176,13 +177,13 @@ namespace NzbDrone.Core.MediaFiles
 
         private void EnsureEpisodeFolder(EpisodeFile episodeFile, LocalEpisode localEpisode, string filePath)
         {
-            EnsureEpisodeFolder(episodeFile, localEpisode.Series, localEpisode.SeasonNumber, filePath);
+            EnsureEpisodeFolder(episodeFile, localEpisode.Series, localEpisode.SeasonNumber, localEpisode.Episodes.First().AirDateUtc?.Year, filePath);
         }
 
-        private void EnsureEpisodeFolder(EpisodeFile episodeFile, Series series, int seasonNumber, string filePath)
+        private void EnsureEpisodeFolder(EpisodeFile episodeFile, Series series, int seasonNumber, int? seasonYear, string filePath)
         {
             var episodeFolder = Path.GetDirectoryName(filePath);
-            var seasonFolder = _buildFileNames.BuildSeasonPath(series, seasonNumber);
+            var seasonFolder = _buildFileNames.BuildSeasonPath(series, seasonNumber, seasonYear);
             var seriesFolder = series.Path;
             var rootFolder = _rootFolderService.GetBestRootFolderPath(seriesFolder);
 

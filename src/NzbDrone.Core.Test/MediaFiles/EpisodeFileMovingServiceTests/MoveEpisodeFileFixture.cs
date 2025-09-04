@@ -48,7 +48,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeFileMovingServiceTests
                   .Returns(@"C:\Test\TV\Series\Season 01\File Name.avi".AsOsAgnostic());
 
             Mocker.GetMock<IBuildFileNames>()
-                  .Setup(s => s.BuildSeasonPath(It.IsAny<Series>(), It.IsAny<int>()))
+                  .Setup(s => s.BuildSeasonPath(It.IsAny<Series>(), It.IsAny<int>(), It.IsAny<int>()))
                   .Returns(@"C:\Test\TV\Series\Season 01".AsOsAgnostic());
 
             var rootFolder = @"C:\Test\TV\".AsOsAgnostic();
@@ -110,6 +110,18 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeFileMovingServiceTests
                   .Verify(s => s.PublishEvent<EpisodeFolderCreatedEvent>(It.Is<EpisodeFolderCreatedEvent>(p =>
                       p.SeasonFolder.IsNotNullOrWhiteSpace())),
                       Times.Once());
+        }
+
+        [Test]
+        public void should_use_first_episode_season_and_year()
+        {
+            Subject.MoveEpisodeFile(_episodeFile, _localEpisode);
+
+            Mocker.GetMock<IBuildFileNames>()
+                .Verify(s => s.BuildSeasonPath(
+                    _series,
+                    _localEpisode.Episodes.First().SeasonNumber,
+                    _localEpisode.Episodes.First().AirDateUtc.Value.Year));
         }
 
         [Test]

@@ -23,9 +23,9 @@ namespace NzbDrone.Core.Organizer
     {
         string BuildFileName(List<Episode> episodes, Series series, EpisodeFile episodeFile, string extension = "", NamingConfig namingConfig = null, List<CustomFormat> customFormats = null);
         string BuildFilePath(List<Episode> episodes, Series series, EpisodeFile episodeFile, string extension, NamingConfig namingConfig = null, List<CustomFormat> customFormats = null);
-        string BuildSeasonPath(Series series, int seasonNumber);
+        string BuildSeasonPath(Series series, int seasonNumber, int? seasonYear);
         string GetSeriesFolder(Series series, NamingConfig namingConfig = null);
-        string GetSeasonFolder(Series series, int seasonNumber, NamingConfig namingConfig = null);
+        string GetSeasonFolder(Series series, int seasonNumber, int? seasonYear, NamingConfig namingConfig = null);
         bool RequiresEpisodeTitle(Series series, List<Episode> episodes);
         bool RequiresAbsoluteEpisodeNumber();
     }
@@ -233,20 +233,21 @@ namespace NzbDrone.Core.Organizer
         {
             Ensure.That(extension, () => extension).IsNotNullOrWhiteSpace();
 
-            var seasonPath = BuildSeasonPath(series, episodes.First().SeasonNumber);
+            var firstEpisode = episodes.First();
+            var seasonPath = BuildSeasonPath(series, firstEpisode.SeasonNumber, firstEpisode.AirDateUtc?.Year);
             var remainingPathLength = LongPathSupport.MaxFilePathLength - seasonPath.GetByteCount() - 1;
             var fileName = BuildFileName(episodes, series, episodeFile, extension, remainingPathLength, namingConfig, customFormats);
 
             return Path.Combine(seasonPath, fileName);
         }
 
-        public string BuildSeasonPath(Series series, int seasonNumber)
+        public string BuildSeasonPath(Series series, int seasonNumber, int? seasonYear)
         {
             var path = series.Path;
 
             if (series.SeasonFolder)
             {
-                var seasonFolder = GetSeasonFolder(series, seasonNumber);
+                var seasonFolder = GetSeasonFolder(series, seasonNumber, seasonYear);
 
                 seasonFolder = CleanFileName(seasonFolder);
 
@@ -277,7 +278,7 @@ namespace NzbDrone.Core.Organizer
             return folderName;
         }
 
-        public string GetSeasonFolder(Series series, int seasonNumber, NamingConfig namingConfig = null)
+        public string GetSeasonFolder(Series series, int seasonNumber, int? seasonYear, NamingConfig namingConfig = null)
         {
             if (namingConfig == null)
             {
@@ -288,7 +289,7 @@ namespace NzbDrone.Core.Organizer
 
             AddSeriesTokens(tokenHandlers, series);
             AddIdTokens(tokenHandlers, series);
-            AddSeasonTokens(tokenHandlers, seasonNumber);
+            AddSeasonTokens(tokenHandlers, seasonNumber, seasonYear);
 
             var format = seasonNumber == 0 ? namingConfig.SpecialsFolderFormat : namingConfig.SeasonFolderFormat;
             var folderName = ReplaceTokens(format, tokenHandlers, namingConfig);
@@ -516,7 +517,9 @@ namespace NzbDrone.Core.Organizer
                 tokenHandlers[token] = m => seasonEpisodePattern;
             }
 
-            AddSeasonTokens(tokenHandlers, episodes.First().SeasonNumber);
+            var firstEpisode = episodes.First();
+
+            AddSeasonTokens(tokenHandlers, firstEpisode.SeasonNumber, firstEpisode.AirDateUtc?.Year);
 
             if (episodes.Count > 1)
             {
@@ -593,9 +596,10 @@ namespace NzbDrone.Core.Organizer
             return pattern;
         }
 
-        private void AddSeasonTokens(Dictionary<string, Func<TokenMatch, string>> tokenHandlers, int seasonNumber)
+        private void AddSeasonTokens(Dictionary<string, Func<TokenMatch, string>> tokenHandlers, int seasonNumber, int? seasonYear)
         {
             tokenHandlers["{Season}"] = m => seasonNumber.ToString(m.CustomFormat);
+            tokenHandlers["{Season Year}"] = m => seasonYear?.ToString(m.CustomFormat) ?? "Unknown";
         }
 
         private void AddEpisodeTokens(Dictionary<string, Func<TokenMatch, string>> tokenHandlers, List<Episode> episodes)

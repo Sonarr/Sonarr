@@ -70,7 +70,7 @@ namespace NzbDrone.Core.Test.OrganizerTests.FileNameBuilderTests
             _series.Title = title;
             _namingConfig.SeasonFolderFormat = "{Series.Title} - Season {Season:00}";
 
-            Subject.GetSeasonFolder(_series, 1).Should().Be($"{expected} - Season 01");
+            Subject.GetSeasonFolder(_series, 1, 2025).Should().Be($"{expected} - Season 01");
         }
 
         [TestCase("Con Game", "Con_Game")]
