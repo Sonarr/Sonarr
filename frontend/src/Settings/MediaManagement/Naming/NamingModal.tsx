@@ -200,6 +200,7 @@ const seriesIdTokens = [
 const seasonTokens = [
   { token: '{season:0}', example: '1' },
   { token: '{season:00}', example: '01' },
+  { token: '{Season Year}', example: '2010' },
 ];
 
 const episodeTokens = [
