@@ -42,7 +42,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Title.the.Italy.Series.S02E01.720p.HDTV.x264-TLA")]
         [TestCase("Series Title - S01E01 - Pilot.en.sub")]
         [TestCase("Series.Title.S01E01.SUBFRENCH.1080p.WEB.x264-GROUP")]
-
+        [TestCase("[Judas] Series Japanese Name (Series English Name) - S02E10 [1080P][HEVC x256 10bit][Eng-Subs] (Weekly)")]
         public void should_parse_language_unknown(string postTitle)
         {
             var result = LanguageParser.ParseLanguages(postTitle);
