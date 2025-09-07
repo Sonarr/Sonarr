@@ -28,7 +28,6 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="NLog" Version="5.3.4" />
     <PackageReference Include="MonoTorrent" Version="3.0.2" />
-    <PackageReference Include="System.Data.SQLite.Core.Servarr" Version="1.0.115.5-18" />
     <PackageReference Include="System.Text.Json" Version="8.0.5" />
     <PackageReference Include="Npgsql" Version="9.0.3" />
     <PackageReference Remove="StyleCop.Analyzers" />
