@@ -39,7 +39,7 @@
   "AddNewRestriction": "Add new restriction",
   "AddNewSeries": "Add New Series",
   "AddNewSeriesError": "Failed to load search results, please try again.",
-  "AddNewSeriesHelpText": "It's easy to add a new series, just start typing the name the series you want to add.",
+  "AddNewSeriesHelpText": "It's easy to add a new series, just start typing the name of the series you want to add.",
   "AddNewSeriesRootFolderHelpText": "'{folder}' subfolder will be created automatically",
   "AddNewSeriesSearchForCutoffUnmetEpisodes": "Start search for cutoff unmet episodes",
   "AddNewSeriesSearchForMissingEpisodes": "Start search for missing episodes",
