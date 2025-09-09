@@ -1,13 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SQLite;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 using Dapper;
+using NLog;
+using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Core.Messaging.Events;
+using Polly;
+using Polly.Retry;
 
 namespace NzbDrone.Core.Datastore
 {
@@ -40,11 +45,30 @@ namespace NzbDrone.Core.Datastore
     public class BasicRepository<TModel> : IBasicRepository<TModel>
         where TModel : ModelBase, new()
     {
+        private static readonly ILogger Logger = NzbDroneLogger.GetLogger(typeof(BasicRepository<TModel>));
+
         private readonly IEventAggregator _eventAggregator;
         private readonly PropertyInfo _keyProperty;
         private readonly List<PropertyInfo> _properties;
         private readonly string _updateSql;
         private readonly string _insertSql;
+
+        private static ResiliencePipeline RetryStrategy => new ResiliencePipelineBuilder()
+            .AddRetry(new RetryStrategyOptions
+            {
+                ShouldHandle = new PredicateBuilder().Handle<SQLiteException>(ex => ex.ResultCode == SQLiteErrorCode.Busy),
+                Delay = TimeSpan.FromMilliseconds(100),
+                MaxRetryAttempts = 3,
+                BackoffType = DelayBackoffType.Exponential,
+                UseJitter = true,
+                OnRetry = args =>
+                {
+                    Logger.Warn(args.Outcome.Exception, "Failed writing to database. Retry #{0}", args.AttemptNumber);
+
+                    return default;
+                }
+            })
+            .Build();
 
         protected readonly IDatabase _database;
         protected readonly string _table;
@@ -186,7 +210,9 @@ namespace NzbDrone.Core.Datastore
         private TModel Insert(IDbConnection connection, IDbTransaction transaction, TModel model)
         {
             SqlBuilderExtensions.LogQuery(_insertSql, model);
-            var multi = connection.QueryMultiple(_insertSql, model, transaction);
+
+            var multi = RetryStrategy.Execute(static (state, _) => state.connection.QueryMultiple(state._insertSql, state.model, state.transaction), (connection, _insertSql, model, transaction));
+
             var multiRead = multi.Read();
             var id = (int)(multiRead.First().id ?? multiRead.First().Id);
             _keyProperty.SetValue(model, id);
@@ -381,7 +407,7 @@ namespace NzbDrone.Core.Datastore
 
             SqlBuilderExtensions.LogQuery(sql, model);
 
-            connection.Execute(sql, model, transaction: transaction);
+            RetryStrategy.Execute(static (state, _) => state.connection.Execute(state.sql, state.model, transaction: state.transaction), (connection, sql, model, transaction));
         }
 
         private void UpdateFields(IDbConnection connection, IDbTransaction transaction, IList<TModel> models, List<PropertyInfo> propertiesToUpdate)
@@ -393,7 +419,7 @@ namespace NzbDrone.Core.Datastore
                 SqlBuilderExtensions.LogQuery(sql, model);
             }
 
-            connection.Execute(sql, models, transaction: transaction);
+            RetryStrategy.Execute(static (state, _) => state.connection.Execute(state.sql, state.models, transaction: state.transaction), (connection, sql, models, transaction));
         }
 
         protected virtual SqlBuilder PagedBuilder() => Builder();
