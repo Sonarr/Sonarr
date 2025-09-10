@@ -43,6 +43,10 @@ function Tag({ id, label }: TagProps) {
     seriesIds.length
   );
 
+  const mergedReleaseProfileIds = Array.from(
+    new Set([...restrictionIds, ...excludedReleaseIds]).values()
+  );
+
   const handleShowDetailsPress = useCallback(() => {
     setIsDetailsModalOpen(true);
   }, []);
@@ -97,13 +101,7 @@ function Tag({ id, label }: TagProps) {
           <TagInUse
             label={translate('ReleaseProfile')}
             labelPlural={translate('ReleaseProfiles')}
-            count={restrictionIds.length}
-          />
-
-          <TagInUse
-            label={translate('ExcludedReleaseProfile')}
-            labelPlural={translate('ExcludedReleaseProfiles')}
-            count={excludedReleaseIds.length}
+            count={new Set([...restrictionIds, ...excludedReleaseIds]).size}
           />
 
           <TagInUse
@@ -134,8 +132,7 @@ function Tag({ id, label }: TagProps) {
         delayProfileIds={delayProfileIds}
         importListIds={importListIds}
         notificationIds={notificationIds}
-        restrictionIds={restrictionIds}
-        excludedReleaseIds={excludedReleaseIds}
+        restrictionIds={mergedReleaseProfileIds}
         indexerIds={indexerIds}
         downloadClientIds={downloadClientIds}
         autoTagIds={autoTagIds}
