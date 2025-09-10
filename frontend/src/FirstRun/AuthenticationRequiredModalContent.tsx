@@ -54,7 +54,7 @@ export default function AuthenticationRequiredModalContent() {
     dispatch(fetchGeneralSettings());
 
     return () => {
-      dispatch(clearPendingChanges());
+      dispatch(clearPendingChanges({ section: `settings.${SECTION}` }));
     };
   }, [dispatch]);
 
