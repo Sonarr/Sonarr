@@ -77,7 +77,6 @@ function TagDetailsModalContent({
   importListIds = [],
   notificationIds = [],
   restrictionIds = [],
-  excludedReleaseIds = [],
   indexerIds = [],
   downloadClientIds = [],
   autoTagIds = [],
@@ -111,13 +110,6 @@ function TagDetailsModalContent({
   const releaseProfiles = useSelector(
     createMatchingItemSelector(
       restrictionIds,
-      (state: AppState) => state.settings.releaseProfiles.items
-    )
-  );
-
-  const excludedReleaseProfiles = useSelector(
-    createMatchingItemSelector(
-      excludedReleaseIds,
       (state: AppState) => state.settings.releaseProfiles.items
     )
   );
