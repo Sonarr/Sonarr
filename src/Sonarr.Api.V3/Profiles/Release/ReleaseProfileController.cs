@@ -51,7 +51,7 @@ namespace Sonarr.Api.V3.Profiles.Release
             SharedValidator.RuleFor(d => d.Tags.Intersect(d.ExcludedTags))
                 .Empty()
                 .WithName("ExcludedTags")
-                .WithMessage(d => string.Format("'{0}' cannot be in both 'Tags' and 'Excluded Tags'", string.Join(", ", _tagService.GetTags(d.Tags.Intersect(d.ExcludedTags)).ConvertAll(t => t.Label))));
+                .WithMessage(d => $"'{string.Join(", ", _tagService.GetTags(d.Tags.Intersect(d.ExcludedTags)).Select(t => t.Label))}' cannot be in both 'Tags' and 'Excluded Tags'");
         }
 
         [RestPostById]
