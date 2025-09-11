@@ -81,7 +81,7 @@ namespace NzbDrone.Core.Organizer
                 EpisodeNumber = 1,
                 Title = "Episode Title (1)",
                 AirDate = "2013-10-30",
-                AirDateUtc = DateTime.Parse("2013-10-30"),
+                AirDateUtc = new(2013, 10, 30, 0, 0, 0, DateTimeKind.Utc),
                 AbsoluteEpisodeNumber = 1,
             };
 

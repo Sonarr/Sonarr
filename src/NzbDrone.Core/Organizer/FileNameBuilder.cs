@@ -599,7 +599,7 @@ namespace NzbDrone.Core.Organizer
         private void AddSeasonTokens(Dictionary<string, Func<TokenMatch, string>> tokenHandlers, int seasonNumber, int? seasonYear)
         {
             tokenHandlers["{Season}"] = m => seasonNumber.ToString(m.CustomFormat);
-            tokenHandlers["{Season Year}"] = m => seasonYear?.ToString(m.CustomFormat) ?? "Unknown";
+            tokenHandlers["{Season Year}"] = m => seasonYear?.ToString(m.CustomFormat) ?? string.Empty;
         }
 
         private void AddEpisodeTokens(Dictionary<string, Func<TokenMatch, string>> tokenHandlers, List<Episode> episodes)

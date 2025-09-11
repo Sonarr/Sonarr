@@ -23,8 +23,8 @@ namespace NzbDrone.Core.Test.OrganizerTests
         [TestCase("Venture Bros.", 1, null, "{Series.Title}.{season:00}", "Venture.Bros.01")]
         [TestCase("Venture Bros.", 1, null, "{Series Title} Season {season:00}", "Venture Bros. Season 01")]
         [TestCase("Series Title?", 1, null, "{Series Title} Season {season:00}", "Series Title! Season 01")]
-        [TestCase("Series Title?", 1, null, "{Series Title} Season {season:00} ({Season Year})", "Series Title! Season 01 (Unknown)")]
-        [TestCase("Series Title?", 1, 2025, "{Series Title} Season {season:00} ({Season Year})", "Series Title! Season 01 (2025)")]
+        [TestCase("Series Title?", 1, null, "{Series Title} Season {season:00} {(Season Year)}", "Series Title! Season 01")]
+        [TestCase("Series Title?", 1, 2025, "{Series Title} Season {season:00} {(Season Year)}", "Series Title! Season 01 (2025)")]
         public void should_use_seriesFolderFormat_to_build_folder_name(string seriesTitle, int seasonNumber, int? seasonYear, string format, string expected)
         {
             _namingConfig.SeasonFolderFormat = format;
