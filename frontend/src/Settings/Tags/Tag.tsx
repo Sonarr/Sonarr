@@ -21,8 +21,8 @@ function Tag({ id, label }: TagProps) {
     delayProfileIds = [],
     importListIds = [],
     notificationIds = [],
-    restrictionIds = [],
-    excludedReleaseIds = [],
+    releaseProfileIds = [],
+    excludedReleaseProfileIds = [],
     indexerIds = [],
     downloadClientIds = [],
     autoTagIds = [],
@@ -35,8 +35,8 @@ function Tag({ id, label }: TagProps) {
     delayProfileIds.length ||
     importListIds.length ||
     notificationIds.length ||
-    restrictionIds.length ||
-    excludedReleaseIds.length ||
+    releaseProfileIds.length ||
+    excludedReleaseProfileIds.length ||
     indexerIds.length ||
     downloadClientIds.length ||
     autoTagIds.length ||
@@ -44,7 +44,7 @@ function Tag({ id, label }: TagProps) {
   );
 
   const mergedReleaseProfileIds = Array.from(
-    new Set([...restrictionIds, ...excludedReleaseIds]).values()
+    new Set([...releaseProfileIds, ...excludedReleaseProfileIds]).values()
   );
 
   const handleShowDetailsPress = useCallback(() => {
@@ -101,7 +101,7 @@ function Tag({ id, label }: TagProps) {
           <TagInUse
             label={translate('ReleaseProfile')}
             labelPlural={translate('ReleaseProfiles')}
-            count={new Set([...restrictionIds, ...excludedReleaseIds]).size}
+            count={mergedReleaseProfileIds.length}
           />
 
           <TagInUse
@@ -132,7 +132,7 @@ function Tag({ id, label }: TagProps) {
         delayProfileIds={delayProfileIds}
         importListIds={importListIds}
         notificationIds={notificationIds}
-        restrictionIds={mergedReleaseProfileIds}
+        releaseProfileIds={mergedReleaseProfileIds}
         indexerIds={indexerIds}
         downloadClientIds={downloadClientIds}
         autoTagIds={autoTagIds}

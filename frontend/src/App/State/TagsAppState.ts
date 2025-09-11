@@ -16,8 +16,8 @@ export interface TagDetail extends ModelBase {
   importListIds: number[];
   indexerIds: number[];
   notificationIds: number[];
-  restrictionIds: number[];
-  excludedReleaseIds: number[];
+  releaseProfileIds: number[];
+  excludedReleaseProfileIds: number[];
   seriesIds: number[];
 }
 
