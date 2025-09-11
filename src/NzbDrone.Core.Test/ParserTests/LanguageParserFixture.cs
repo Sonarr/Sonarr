@@ -546,6 +546,21 @@ namespace NzbDrone.Core.Test.ParserTests
             result.Should().BeEquivalentTo(new[] { Language.Russian, Language.Georgian });
         }
 
+        [TestCase("The Boys S02 Eng Fre Ger Ita Por Spa 2160p WEBMux HDR10Plus HDR HEVC DDP SGF")]
+        public void should_parse_language_english_french_german_italian_portuguese_spanish(string postTitle)
+        {
+            var result = LanguageParser.ParseLanguages(postTitle);
+            result.Should().BeEquivalentTo(new[]
+            {
+                Language.English,
+                Language.French,
+                Language.German,
+                Language.Italian,
+                Language.Portuguese,
+                Language.Spanish
+            });
+        }
+
         [TestCase("Name (2020) - S01E20 - [AAC 2.0].testtitle.default.eng.forced.ass", new[] { "default", "forced" }, "testtitle", "English")]
         [TestCase("Name (2020) - S01E20 - [AAC 2.0].eng.default.testtitle.forced.ass", new[] { "default", "forced" }, "testtitle", "English")]
         [TestCase("Name (2020) - S01E20 - [AAC 2.0].default.eng.testtitle.forced.ass", new[] { "default", "forced" }, "testtitle", "English")]
