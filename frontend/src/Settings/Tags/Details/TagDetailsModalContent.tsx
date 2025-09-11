@@ -61,7 +61,7 @@ export interface TagDetailsModalContentProps {
   delayProfileIds: number[];
   importListIds: number[];
   notificationIds: number[];
-  releaseProfileIds: number[];
+  restrictionIds: number[];
   indexerIds: number[];
   downloadClientIds: number[];
   autoTagIds: number[];
@@ -76,7 +76,7 @@ function TagDetailsModalContent({
   delayProfileIds = [],
   importListIds = [],
   notificationIds = [],
-  releaseProfileIds = [],
+  restrictionIds = [],
   indexerIds = [],
   downloadClientIds = [],
   autoTagIds = [],
@@ -109,7 +109,7 @@ function TagDetailsModalContent({
 
   const releaseProfiles = useSelector(
     createMatchingItemSelector(
-      releaseProfileIds,
+      restrictionIds,
       (state: AppState) => state.settings.releaseProfiles.items
     )
   );
