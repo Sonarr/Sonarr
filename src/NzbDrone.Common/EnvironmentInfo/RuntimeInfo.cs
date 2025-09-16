@@ -12,12 +12,14 @@ namespace NzbDrone.Common.EnvironmentInfo
     public class RuntimeInfo : IRuntimeInfo
     {
         private readonly Logger _logger;
+        private readonly IOsInfo _osInfo;
         private readonly DateTime _startTime = DateTime.UtcNow;
 
-        public RuntimeInfo(Logger logger, IHostLifetime hostLifetime = null)
+        public RuntimeInfo(Logger logger, IOsInfo osInfo, IHostLifetime hostLifetime = null)
         {
             _logger = logger;
 
+            _osInfo = osInfo;
             IsWindowsService = hostLifetime is WindowsServiceLifetime;
             IsStarting = true;
 
@@ -82,6 +84,30 @@ namespace NzbDrone.Common.EnvironmentInfo
         }
 
         public bool IsWindowsService { get; private set; }
+
+        public bool IsContainerized => _osInfo.IsContainerized;
+
+        public bool IsSystemdService
+        {
+            get
+            {
+                if (!OsInfo.IsLinux)
+                {
+                    return false;
+                }
+
+                try
+                {
+                    var invocationId = Environment.GetEnvironmentVariable("INVOCATION_ID");
+                    return !string.IsNullOrEmpty(invocationId);
+                }
+                catch (Exception ex)
+                {
+                    _logger.Warn(ex, "Error checking if system is running under systemd");
+                    return false;
+                }
+            }
+        }
 
         public bool IsStarting { get; set; }
         public bool IsExiting { get; set; }
@@ -156,12 +182,12 @@ namespace NzbDrone.Common.EnvironmentInfo
             try
             {
                 var currentAssemblyLocation = typeof(RuntimeInfo).Assembly.Location;
-                if (currentAssemblyLocation.ToLower().Contains("_output"))
+                if (currentAssemblyLocation.Contains("_output", StringComparison.OrdinalIgnoreCase))
                 {
                     return true;
                 }
 
-                if (currentAssemblyLocation.ToLower().Contains("_tests"))
+                if (currentAssemblyLocation.Contains("_tests", StringComparison.OrdinalIgnoreCase))
                 {
                     return true;
                 }

@@ -2130,6 +2130,8 @@
     "UpdateSeriesPath": "Update-Serie-Pfad",
     "UpgradeUntilCustomFormatScoreEpisodeHelpText": "Sobald dieser benutzerdefinierte Formatwert erreicht ist, wird {appName} keine Episoden-Releases mehr herunterladen",
     "UpgradesAllowedHelpText": "Wenn deaktiviert, werden Qualitäten nicht aktualisiert.",
+    "UseExternalRestartService": "Externen Neustart verwenden",
+    "UseExternalRestartServiceHelpText": "Lassen Sie die Containerruntime oder den Prozessmanager Neustarts verwalten.",
     "VideoDynamicRange": "Video-Dynamikbereich",
     "Warning": "Warnung",
     "ReleasePush": "Veröffentlichung-Push",

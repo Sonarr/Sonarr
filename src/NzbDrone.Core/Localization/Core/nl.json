@@ -175,6 +175,8 @@
     "FormatAgeMinutes": "minuten",
     "EnableInteractiveSearchHelpText": "Zal worden gebruikt wanneer interactief zoeken wordt gebruikt",
     "UsenetDelayTime": "Usenet-vertraging: {usenetDelay}",
+    "UseExternalRestartService": "Gebruik Herstartservice Service",
+    "UseExternalRestartServiceHelpText": "Laat de container runtime of procesmanager herstarts afhandelen.",
     "MinutesSixty": "60 Minuten: {sixty}",
     "RemoveFromDownloadClient": "Verwijder uit download cliënt",
     "RemoveSelectedItemsQueueMessageText": "Weet je zeker dat je {selectedCount} items van de wachtrij wilt verwijderen?",

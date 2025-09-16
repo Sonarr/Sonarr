@@ -108,7 +108,7 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
         private void GivenDocker()
         {
             Mocker.GetMock<IOsInfo>()
-                .Setup(x => x.IsDocker)
+                .Setup(x => x.IsContainerized)
                 .Returns(true);
         }
 

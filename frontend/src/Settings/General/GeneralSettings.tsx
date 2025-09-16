@@ -158,6 +158,7 @@ function GeneralSettings() {
               sslCertPath={settings.sslCertPath}
               sslCertPassword={settings.sslCertPassword}
               launchBrowser={settings.launchBrowser}
+              externalRestart={settings.externalRestart}
               onInputChange={handleInputChange}
             />
 

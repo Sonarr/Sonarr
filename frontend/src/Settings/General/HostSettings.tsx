@@ -6,6 +6,7 @@ import FormLabel from 'Components/Form/FormLabel';
 import useShowAdvancedSettings from 'Helpers/Hooks/useShowAdvancedSettings';
 import { inputTypes, sizes } from 'Helpers/Props';
 import useIsWindowsService from 'System/useIsWindowsService';
+import useIsContainerized from 'System/useIsContainerized';
 import { InputChanged } from 'typings/inputs';
 import { PendingSection } from 'typings/pending';
 import General from 'typings/Settings/General';
@@ -22,6 +23,7 @@ interface HostSettingsProps {
   sslCertPath: PendingSection<General>['sslCertPath'];
   sslCertPassword: PendingSection<General>['sslCertPassword'];
   launchBrowser: PendingSection<General>['launchBrowser'];
+  externalRestart: PendingSection<General>['externalRestart'];
   onInputChange: (change: InputChanged) => void;
 }
 
@@ -36,10 +38,12 @@ function HostSettings({
   sslCertPath,
   sslCertPassword,
   launchBrowser,
+  externalRestart,
   onInputChange,
 }: HostSettingsProps) {
   const showAdvancedSettings = useShowAdvancedSettings();
   const isWindowsService = useIsWindowsService();
+  const isContainerized = useIsContainerized();
 
   return (
     <FieldSet legend={translate('Host')}>
@@ -184,6 +188,20 @@ function HostSettings({
           />
         </FormGroup>
       )}
+
+      {isContainerized ? (
+        <FormGroup advancedSettings={showAdvancedSettings} isAdvanced={true} size={sizes.MEDIUM}>
+          <FormLabel>{translate('UseExternalRestartService')}</FormLabel>
+
+          <FormInputGroup
+            type={inputTypes.CHECK}
+            name="externalRestart"
+            helpText={translate('UseExternalRestartServiceHelpText')}
+            onChange={onInputChange}
+            {...externalRestart}
+          />
+        </FormGroup>
+      ) : null}
     </FieldSet>
   );
 }

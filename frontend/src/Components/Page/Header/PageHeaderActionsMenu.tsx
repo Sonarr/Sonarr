@@ -21,7 +21,7 @@ function PageHeaderActionsMenu(props: PageHeaderActionsMenuProps) {
 
   const dispatch = useDispatch();
 
-  const { authentication, isDocker } = useSelector(
+  const { authentication, isContainerized } = useSelector(
     (state: AppState) => state.system.status.item
   );
 
@@ -48,7 +48,7 @@ function PageHeaderActionsMenu(props: PageHeaderActionsMenuProps) {
             {translate('KeyboardShortcuts')}
           </MenuItem>
 
-          {isDocker ? null : (
+          {isContainerized ? null : (
             <>
               <MenuItemSeparator />
 

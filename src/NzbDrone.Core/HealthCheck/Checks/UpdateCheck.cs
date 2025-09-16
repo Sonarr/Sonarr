@@ -42,7 +42,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
 
             if (_configFileProvider.UpdateAutomatically &&
                 _configFileProvider.UpdateMechanism == UpdateMechanism.BuiltIn &&
-                !_osInfo.IsDocker)
+                !_osInfo.IsContainerized)
             {
                 if (OsInfo.IsOsx && startupFolder.GetAncestorFolders().Contains("AppTranslocation"))
                 {

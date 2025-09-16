@@ -82,7 +82,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
                                     "#bad-remote-path-mapping");
                             }
 
-                            if (_osInfo.IsDocker)
+                            if (_osInfo.IsContainerized)
                             {
                                 return new HealthCheck(
                                     GetType(),
@@ -114,7 +114,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
 
                         if (!_diskProvider.FolderExists(folder.FullPath))
                         {
-                            if (_osInfo.IsDocker)
+                            if (_osInfo.IsContainerized)
                             {
                                 return new HealthCheck(
                                     GetType(),
@@ -260,7 +260,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
                                 "#bad-remote-path-mapping");
                         }
 
-                        if (_osInfo.IsDocker)
+                        if (_osInfo.IsContainerized)
                         {
                             return new HealthCheck(
                                 GetType(),
@@ -305,7 +305,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
                     }
 
                     // if it's a remote client/docker, likely missing path mappings
-                    if (_osInfo.IsDocker)
+                    if (_osInfo.IsContainerized)
                     {
                         return new HealthCheck(
                             GetType(),

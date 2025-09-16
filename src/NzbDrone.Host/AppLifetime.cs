@@ -71,6 +71,13 @@ namespace NzbDrone.Host
         {
             if (_runtimeInfo.RestartPending && !_runtimeInfo.IsWindowsService)
             {
+                if (_runtimeInfo.IsSystemdService || (_runtimeInfo.IsContainerized && _configFileProvider.ExternalRestart))
+                {
+                    var restartHandler = _runtimeInfo.IsSystemdService ? "systemd" : "container runtime";
+                    _logger.Info("Skipping process spawn, letting {0} handle restart", restartHandler);
+                    return;
+                }
+
                 var restartArgs = GetRestartArgs();
 
                 _logger.Info("Attempting restart with arguments: {0}", restartArgs);

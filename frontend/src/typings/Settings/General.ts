@@ -27,6 +27,7 @@ export default interface General {
   urlBase: string;
   instanceName: string;
   applicationUrl: string;
+  externalRestart: boolean;
   updateAutomatically: boolean;
   updateMechanism: UpdateMechanism;
   updateScriptPath: string;
