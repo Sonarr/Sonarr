@@ -105,7 +105,7 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
                 .Returns(true);
         }
 
-        private void GivenDocker()
+        private void GivenContainerized()
         {
             Mocker.GetMock<IOsInfo>()
                 .Setup(x => x.IsContainerized)
@@ -167,7 +167,7 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
         [Test]
         public void should_return_docker_path_mapping_error_if_on_docker_and_root_missing()
         {
-            GivenDocker();
+            GivenContainerized();
 
             Subject.Check().ShouldBeError(wikiFragment: "docker-bad-remote-path-mapping");
         }
@@ -245,7 +245,7 @@ namespace NzbDrone.Core.Test.HealthCheck.Checks
         [Test]
         public void should_return_docker_mapping_error_on_episode_import_failed_event_inside_docker_if_folder_does_not_exist()
         {
-            GivenDocker();
+            GivenContainerized();
 
             _clientStatus.IsLocalhost = false;
             var importEvent = new EpisodeImportFailedEvent(null, null, true, _downloadItem);

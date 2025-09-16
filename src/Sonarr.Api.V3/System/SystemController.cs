@@ -75,6 +75,8 @@ namespace Sonarr.Api.V3.System
                 IsLinux = OsInfo.IsLinux,
                 IsOsx = OsInfo.IsOsx,
                 IsWindows = OsInfo.IsWindows,
+                IsDocker = _osInfo.IsDocker,
+                IsPodman = _osInfo.IsPodman,
                 IsContainerized = _osInfo.IsContainerized,
                 Mode = _runtimeInfo.Mode,
                 Branch = _configFileProvider.Branch,

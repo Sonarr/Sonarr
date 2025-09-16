@@ -16,6 +16,8 @@ namespace NzbDrone.Common.EnvironmentInfo
         public static bool IsWindows => Os == Os.Windows;
 
         // this needs to not be static so we can mock it
+        public bool IsDocker { get; }
+        public bool IsPodman { get; }
         public bool IsContainerized { get; }
 
         public string Version { get; }
@@ -81,11 +83,9 @@ namespace NzbDrone.Common.EnvironmentInfo
 
             if (IsLinux)
             {
-                IsContainerized = Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true" || // Microsoft images
-                File.Exists("/.dockerenv") || // Docker
-                File.Exists("/run/.containerenv") || // Podman
-                Environment.GetEnvironmentVariable("container") != null ||    // Podman sets container=podman
-                (File.Exists("/proc/1/cgroup") && File.ReadAllText("/proc/1/cgroup").Contains("/docker/")); // Docker cgroups;
+                IsDocker = File.Exists("/.dockerenv") || (File.Exists("/proc/1/cgroup") && File.ReadAllText("/proc/1/cgroup").Contains("/docker/"));
+                IsPodman = File.Exists("/run/.containerenv") || Environment.GetEnvironmentVariable("container") != null;
+                IsContainerized = IsDocker || IsPodman || Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true";
             }
         }
     }
@@ -95,6 +95,8 @@ namespace NzbDrone.Common.EnvironmentInfo
         string Version { get; }
         string Name { get; }
         string FullName { get; }
+        bool IsDocker { get; }
+        bool IsPodman { get; }
         bool IsContainerized { get; }
     }
 
