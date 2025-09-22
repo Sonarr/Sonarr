@@ -27,15 +27,17 @@ namespace NzbDrone.Common.EnvironmentInfo
                 _dataSpecialFolder = Environment.SpecialFolder.ApplicationData;
             }
 
-            if (startupContext.Args.ContainsKey(StartupContext.APPDATA))
+            if (startupContext.Args.TryGetValue(StartupContext.APPDATA, out var argsAppDataFolder))
             {
-                AppDataFolder = startupContext.Args[StartupContext.APPDATA];
+                AppDataFolder = argsAppDataFolder;
                 Logger.Info("Data directory is being overridden to [{0}]", AppDataFolder);
             }
             else
             {
                 AppDataFolder = Path.Combine(Environment.GetFolderPath(_dataSpecialFolder, Environment.SpecialFolderOption.DoNotVerify), "Sonarr");
-                LegacyAppDataFolder = Path.Combine(Environment.GetFolderPath(_dataSpecialFolder, Environment.SpecialFolderOption.DoNotVerify), "NzbDrone");
+                LegacyAppDataFolder = OsInfo.IsOsx
+                    ? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile, Environment.SpecialFolderOption.DoNotVerify), ".config", "NzbDrone")
+                    : Path.Combine(Environment.GetFolderPath(_dataSpecialFolder, Environment.SpecialFolderOption.DoNotVerify), "NzbDrone");
             }
 
             StartUpFolder = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory.FullName;
