@@ -15,24 +15,24 @@ namespace NzbDrone.Core.Test.Http
             return new HttpProxySettings(ProxyType.Socks5, "localhost", 8080, "*.httpbin.org,google.com,172.16.0.0/12", true, null, null);
         }
 
-        [Test]
-        public void should_bypass_proxy()
+        [TestCase("http://eu.httpbin.org/get")]
+        [TestCase("http://google.com/get")]
+        [TestCase("http://localhost:8654/get")]
+        [TestCase("http://172.21.0.1:8989/api/v3/indexer/schema")]
+        public void should_bypass_proxy(string url)
         {
             var settings = GetProxySettings();
 
-            Subject.ShouldProxyBeBypassed(settings, new HttpUri("http://eu.httpbin.org/get")).Should().BeTrue();
-            Subject.ShouldProxyBeBypassed(settings, new HttpUri("http://google.com/get")).Should().BeTrue();
-            Subject.ShouldProxyBeBypassed(settings, new HttpUri("http://localhost:8654/get")).Should().BeTrue();
-            Subject.ShouldProxyBeBypassed(settings, new HttpUri("http://172.21.0.1:8989/api/v3/indexer/schema")).Should().BeTrue();
+            Subject.ShouldProxyBeBypassed(settings, new HttpUri(url)).Should().BeTrue();
         }
 
-        [Test]
-        public void should_not_bypass_proxy()
+        [TestCase("http://bing.com/get")]
+        [TestCase("http://172.3.0.1:8989/api/v3/indexer/schema")]
+        public void should_not_bypass_proxy(string url)
         {
             var settings = GetProxySettings();
 
-            Subject.ShouldProxyBeBypassed(settings, new HttpUri("http://bing.com/get")).Should().BeFalse();
-            Subject.ShouldProxyBeBypassed(settings, new HttpUri("http://172.3.0.1:8989/api/v3/indexer/schema")).Should().BeFalse();
+            Subject.ShouldProxyBeBypassed(settings, new HttpUri(url)).Should().BeFalse();
         }
     }
 }
