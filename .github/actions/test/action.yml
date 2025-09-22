@@ -29,7 +29,7 @@ runs:
   using: 'composite'
   steps:
     - name: Setup .NET
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v5
 
     - name: Setup Postgres
       if: ${{ inputs.use_postgres }}
@@ -52,14 +52,14 @@ runs:
         echo "Sonarr__Postgres__Password=postgres" >> "$GITHUB_ENV"
 
     - name: Download Artifact
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v5
       with:
         name: ${{ inputs.artifact }}
         path: _tests
 
     - name: Download Binary Artifact
       if: ${{ inputs.integration_tests }}
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v5
       with:
         name: ${{ inputs.binary_artifact }}
         path: _output
