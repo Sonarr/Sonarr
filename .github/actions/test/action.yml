@@ -4,6 +4,8 @@ description: Runs unit/integration tests
 inputs:
   use_postgres:
     description: 'Whether postgres should be used for the database'
+  postgres-version:
+    description: 'Which postgres version should be used for the database'
   os:
     description: 'OS that the tests are running on'
     required: true
@@ -31,12 +33,14 @@ runs:
 
     - name: Setup Postgres
       if: ${{ inputs.use_postgres }}
-      uses: ikalnytskyi/action-setup-postgres@v4
+      uses: ikalnytskyi/action-setup-postgres@v7
+      with:
+        postgres-version: ${{ inputs.postgres-version }}
 
     - name: Setup Test Variables
       shell: bash
       run: |
-        echo "RESULTS_NAME=${{ inputs.integration_tests && 'integation-' || 'unit-' }}${{ inputs.artifact }}${{ inputs.use_postgres && '-postgres' }}" >> "$GITHUB_ENV"
+        echo "RESULTS_NAME=${{ inputs.integration_tests && 'integation-' || 'unit-' }}${{ inputs.artifact }}${{ inputs.use_postgres && '-postgres' }}${{ inputs.use_postgres && inputs.postgres-version && inputs.postgres-version }}" >> "$GITHUB_ENV"
 
     - name: Setup Postgres Environment Variables
       if: ${{ inputs.use_postgres }}

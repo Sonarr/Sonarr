@@ -152,6 +152,10 @@ jobs:
   unit_test_postgres:
     needs: backend
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        postgres-version: [16, 17]
     steps:
       - name: Check out
         uses: actions/checkout@v4
@@ -164,6 +168,7 @@ jobs:
           pattern: Sonarr.*.Test.dll
           filter: TestCategory!=ManualTest&TestCategory!=WINDOWS&TestCategory!=IntegrationTest&TestCategory!=AutomationTest
           use_postgres: true
+          postgres-version: ${{ matrix.postgres-version }}
 
   integration_test:
     needs: [prepare, backend]
