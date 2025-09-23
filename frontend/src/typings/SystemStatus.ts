@@ -10,7 +10,6 @@ interface SystemStatus {
   isAdmin: boolean;
   isDebug: boolean;
   isDocker: boolean;
-  isPodman: boolean;
   isContainerized: boolean;
   isLinux: boolean;
   isNetCore: boolean;

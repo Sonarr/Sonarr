@@ -25,7 +25,6 @@ namespace Sonarr.Api.V3.System
         public bool IsOsx { get; set; }
         public bool IsWindows { get; set; }
         public bool IsDocker { get; set; }
-        public bool IsPodman { get; set; }
         public bool IsContainerized { get; set; }
         public RuntimeMode Mode { get; set; }
         public string Branch { get; set; }

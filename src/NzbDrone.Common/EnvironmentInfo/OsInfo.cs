@@ -85,7 +85,9 @@ namespace NzbDrone.Common.EnvironmentInfo
             {
                 IsDocker = File.Exists("/.dockerenv") || (File.Exists("/proc/1/cgroup") && File.ReadAllText("/proc/1/cgroup").Contains("/docker/"));
                 IsPodman = File.Exists("/run/.containerenv") || Environment.GetEnvironmentVariable("container") != null;
-                IsContainerized = IsDocker || IsPodman || Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true";
+
+                var dotNetEnvironmentVariable = Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER");
+                IsContainerized = IsDocker || IsPodman || dotNetEnvironmentVariable == "true" || dotNetEnvironmentVariable == "1";
             }
         }
     }
