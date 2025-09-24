@@ -286,7 +286,7 @@ namespace NzbDrone.Host
                 }
                 else if (type == X509ContentType.Pkcs12)
                 {
-                    certificate = new X509Certificate2(cert, password, X509KeyStorageFlags.DefaultKeySet);
+                    certificate = X509CertificateLoader.LoadPkcs12FromFile(cert, password, X509KeyStorageFlags.DefaultKeySet);
                 }
                 else
                 {

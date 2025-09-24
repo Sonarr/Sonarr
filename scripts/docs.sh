@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-FRAMEWORK="net8.0"
+FRAMEWORK="net10.0"
 PLATFORM=$1
 ARCHITECTURE="${2:-x64}"
 
@@ -38,7 +38,7 @@ dotnet clean $slnFile -c Release
 dotnet msbuild -restore $slnFile -p:Configuration=Debug -p:Platform=$platform -p:RuntimeIdentifiers=$RUNTIME -t:PublishAllRids
 
 dotnet new tool-manifest
-dotnet tool install --version 8.0.0 Swashbuckle.AspNetCore.Cli
+dotnet tool install --version 10.0.1 Swashbuckle.AspNetCore.Cli
 
 # Remove the openapi.json file so we can check if it was created
 rm $outputFile

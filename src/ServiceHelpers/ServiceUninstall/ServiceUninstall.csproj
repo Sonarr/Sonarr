@@ -1,9 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFrameworks>net8.0</TargetFrameworks>
+    <TargetFrameworks>net10.0</TargetFrameworks>
   </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="System.Security.Principal.Windows" Version="6.0.0-preview.5.21301.5" />
-  </ItemGroup>
 </Project>

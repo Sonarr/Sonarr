@@ -298,15 +298,27 @@ namespace NzbDrone.Core.Datastore
             }
             else
             {
-                // Static method
-                // Must be Enumerable.Contains(source, item)
-                if (body.Method.DeclaringType != typeof(Enumerable) || body.Arguments.Count != 2)
+                // "MemoryExtensions.Contains" has an optional 3rd ComparisonType parameter, match only when it's null.
+                if (body.Method.DeclaringType == typeof(MemoryExtensions)
+                    && body.Method.Name == nameof(MemoryExtensions.Contains)
+                    && body.Arguments is [var spanArg, var valueArg, ..]
+                    && (body.Arguments.Count is 2 || (body.Arguments.Count is 3 && body.Arguments[2] is ConstantExpression { Value: null }))
+                    && TryUnwrapSpanImplicitCast(spanArg, out var unwrappedSpanArg))
+                {
+                    list = unwrappedSpanArg;
+                    item = valueArg;
+                }
+
+                // Static method. Must be Enumerable.Contains(source, item)
+                else if (body.Method.DeclaringType == typeof(Enumerable) && body.Arguments.Count == 2)
+                {
+                    list = body.Arguments[0];
+                    item = body.Arguments[1];
+                }
+                else
                 {
                     throw new NotSupportedException("Unexpected form of Enumerable.Contains");
                 }
-
-                list = body.Arguments[0];
-                item = body.Arguments[1];
             }
 
             _sb.Append('(');
