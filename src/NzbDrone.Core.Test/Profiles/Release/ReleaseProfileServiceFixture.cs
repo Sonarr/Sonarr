@@ -105,5 +105,12 @@ namespace NzbDrone.Core.Test.Profiles
             var releaseProfiles = Subject.AllForTags([_providedTag, _providedTagToExclude]);
             releaseProfiles.Should().Equal([_defaultReleaseProfile, _includedReleaseProfile]);
         }
+
+        [Test]
+        public void all_for_tags_should_return_matching_tags_that_are_not_excluded_tags()
+        {
+            var releaseProfiles = Subject.AllForTags([_providedTag]);
+            releaseProfiles.Should().Equal([_defaultReleaseProfile, _includedReleaseProfile, _excludedReleaseProfile, _includedAndExcludedReleaseProfile]);
+        }
     }
 }
