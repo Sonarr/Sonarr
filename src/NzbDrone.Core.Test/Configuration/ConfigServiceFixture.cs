@@ -85,6 +85,10 @@ namespace NzbDrone.Core.Test.Configuration
                 {
                     value = DateTime.Now.Millisecond;
                 }
+                else if (propertyInfo.PropertyType == typeof(double))
+                {
+                    value = (double)DateTime.Now.Millisecond;
+                }
                 else if (propertyInfo.PropertyType == typeof(bool))
                 {
                     value = true;
