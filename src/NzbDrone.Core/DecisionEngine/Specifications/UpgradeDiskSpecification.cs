@@ -88,11 +88,11 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                     }
                 }
 
-                var allowSeasonPackUpgrade = _configService.AllowSeasonPackUpgrade;
+                var seasonPackUpgrade = _configService.SeasonPackUpgrade;
                 var seasonPackUpgradeThreshold = _configService.SeasonPackUpgradeThreshold;
-                _logger.Debug("Total upgradable episodes: {0} out of {1}. Season import setting: {2}, Threshold: {3}%", upgradedCount, totalEpisodesInPack, allowSeasonPackUpgrade, seasonPackUpgradeThreshold);
+                _logger.Debug("Total upgradable episodes: {0} out of {1}. Season import setting: {2}, Threshold: {3}%", upgradedCount, totalEpisodesInPack, seasonPackUpgrade, seasonPackUpgradeThreshold);
                 var upgradablePercentage = (double)upgradedCount / totalEpisodesInPack * 100;
-                if (allowSeasonPackUpgrade == SeasonPackUpgradeType.Any)
+                if (seasonPackUpgrade == SeasonPackUpgradeType.Any)
                 {
                     if (upgradedCount > 0)
                     {
@@ -101,7 +101,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 }
                 else
                 {
-                    var threshold = allowSeasonPackUpgrade == SeasonPackUpgradeType.All
+                    var threshold = seasonPackUpgrade == SeasonPackUpgradeType.All
                         ? 100.0
                         : _configService.SeasonPackUpgradeThreshold;
                     if (upgradablePercentage >= threshold)
@@ -110,7 +110,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                     }
                 }
 
-                return DownloadSpecDecision.Reject(DownloadRejectionReason.DiskNotUpgrade, $"Season pack does not meet the upgrade criteria. Upgradable: {upgradedCount}/{totalEpisodesInPack} ({upgradablePercentage:0.##}%), Mode: {allowSeasonPackUpgrade}, Threshold: {seasonPackUpgradeThreshold}%");
+                return DownloadSpecDecision.Reject(DownloadRejectionReason.DiskNotUpgrade, $"Season pack does not meet the upgrade criteria. Upgradable: {upgradedCount}/{totalEpisodesInPack} ({upgradablePercentage:0.##}%), Mode: {seasonPackUpgrade}, Threshold: {seasonPackUpgradeThreshold}%");
             }
 
             foreach (var file in subject.Episodes.Where(c => c.EpisodeFileId != 0).Select(c => c.EpisodeFile.Value))

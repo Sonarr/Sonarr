@@ -20,6 +20,6 @@ export default interface MediaManagement {
   extraFileExtensions: string;
   userRejectedExtensions: string;
   enableMediaInfo: boolean;
-  allowSeasonPackUpgrade: string;
+  seasonPackUpgrade: string;
   seasonPackUpgradeThreshold: number;
 }

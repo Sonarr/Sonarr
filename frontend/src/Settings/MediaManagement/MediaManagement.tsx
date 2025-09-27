@@ -116,7 +116,7 @@ const fileDateOptions: EnhancedSelectInputValue<string>[] = [
   },
 ];
 
-const seasonImportOptions: EnhancedSelectInputValue<string>[] = [
+const seasonPackUpgradeOptions: EnhancedSelectInputValue<string>[] = [
   {
     key: 'all',
     get value() {
@@ -413,20 +413,20 @@ function MediaManagement() {
                       </FormLabel>
                       <FormInputGroup
                         type={inputTypes.SELECT}
-                        name="allowSeasonPackUpgrade"
+                        name="seasonPackUpgrade"
                         helpText={translate('SeasonPackUpgradeAllowHelpText')}
                         helpTextWarning={
-                          settings.allowSeasonPackUpgrade.value === 'any'
+                          settings.seasonPackUpgrade.value === 'any'
                             ? translate('SeasonPackUpgradeAllowAnyWarning')
                             : undefined
                         }
-                        values={seasonImportOptions}
+                        values={seasonPackUpgradeOptions}
                         onChange={handleInputChange}
-                        {...settings.allowSeasonPackUpgrade}
+                        {...settings.seasonPackUpgrade}
                       />
                     </FormGroup>
 
-                    {settings.allowSeasonPackUpgrade.value === 'threshold' && (
+                    {settings.seasonPackUpgrade.value === 'threshold' && (
                       <FormGroup
                         advancedSettings={showAdvancedSettings}
                         isAdvanced={true}
@@ -444,22 +444,28 @@ function MediaManagement() {
                           max={100}
                           helpTexts={[
                             translate('SeasonPackUpgradeThresholdHelpText'),
-                            translate('SeasonPackUpgradeThresholdHelpTextExample', { 
-                                  numberEpisodes: 2,
-                                  totalEpisodes: 8,
-                                  count: Math.ceil((100 * 2) / 8) 
+                            translate(
+                              'SeasonPackUpgradeThresholdHelpTextExample',
+                              {
+                                numberEpisodes: 2,
+                                totalEpisodes: 8,
+                                count: Math.ceil((100 * 2) / 8),
                               }
                             ),
-                            translate('SeasonPackUpgradeThresholdHelpTextExample', { 
-                                  numberEpisodes: 3,
-                                  totalEpisodes: 12,
-                                  count: Math.ceil((100 * 3) / 12) 
+                            translate(
+                              'SeasonPackUpgradeThresholdHelpTextExample',
+                              {
+                                numberEpisodes: 3,
+                                totalEpisodes: 12,
+                                count: Math.ceil((100 * 3) / 12),
                               }
                             ),
-                            translate('SeasonPackUpgradeThresholdHelpTextExample', { 
-                                  numberEpisodes: 6,
-                                  totalEpisodes: 24,
-                                  count: Math.ceil((100 * 6) / 24) 
+                            translate(
+                              'SeasonPackUpgradeThresholdHelpTextExample',
+                              {
+                                numberEpisodes: 6,
+                                totalEpisodes: 24,
+                                count: Math.ceil((100 * 6) / 24),
                               }
                             ),
                           ]}
