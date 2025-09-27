@@ -156,6 +156,7 @@ function GeneralSettings() {
               enableSsl={settings.enableSsl}
               sslPort={settings.sslPort}
               sslCertPath={settings.sslCertPath}
+              sslKeyPath={settings.sslKeyPath}
               sslCertPassword={settings.sslCertPassword}
               launchBrowser={settings.launchBrowser}
               onInputChange={handleInputChange}

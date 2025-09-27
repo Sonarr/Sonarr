@@ -47,6 +47,7 @@ namespace NzbDrone.Core.Configuration
         string Branch { get; }
         string ApiKey { get; }
         string SslCertPath { get; }
+        string SslKeyPath { get; }
         string SslCertPassword { get; }
         string UrlBase { get; }
         string UiFolder { get; }
@@ -257,6 +258,7 @@ namespace NzbDrone.Core.Configuration
         public int LogSizeLimit => Math.Min(Math.Max(_logOptions.SizeLimit ?? GetValueInt("LogSizeLimit", 1, persist: false), 0), 10);
         public bool FilterSentryEvents => _logOptions.FilterSentryEvents ?? GetValueBoolean("FilterSentryEvents", true, persist: false);
         public string SslCertPath => _serverOptions.SslCertPath ?? GetValue("SslCertPath", "");
+        public string SslKeyPath => _serverOptions.SslKeyPath ?? GetValue("SslKeyPath", "");
         public string SslCertPassword => _serverOptions.SslCertPassword ?? GetValue("SslCertPassword", "");
 
         public string UrlBase
