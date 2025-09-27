@@ -20,6 +20,7 @@ const useTheme = () => {
       setResolvedTheme(selectedTheme);
       return;
     }
+
     const applySystemTheme = () => {
       setResolvedTheme(
         window.matchMedia('(prefers-color-scheme: dark)').matches
