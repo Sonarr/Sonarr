@@ -77,7 +77,8 @@ function EditReleaseProfileModalContent({
   const { item, isFetching, isSaving, error, saveError, ...otherProps } =
     useSelector(createReleaseProfileSelector(id));
 
-  const { name, enabled, required, ignored, tags, excludedTags, indexerId } = item;
+  const { name, enabled, required, ignored, tags, excludedTags, indexerId } =
+    item;
 
   const dispatch = useDispatch();
   const previousIsSaving = usePrevious(isSaving);
