@@ -30,6 +30,10 @@ interface QualityProfile {
   cutoffFormatScore: number;
   minUpgradeFormatScore: number;
   formatItems: QualityProfileFormatItem[];
+  // Downgrade/Archive settings
+  downgradeAllowed: boolean;
+  downgradeToProfileId: number | null;
+  downgradeAfterDays: number | null;
   id: number;
 }
 

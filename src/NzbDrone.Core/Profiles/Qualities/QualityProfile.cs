@@ -22,6 +22,11 @@ namespace NzbDrone.Core.Profiles.Qualities
         public List<ProfileFormatItem> FormatItems { get; set; }
         public List<QualityProfileQualityItem> Items { get; set; }
 
+        // Downgrade/Archive settings
+        public bool DowngradeAllowed { get; set; }
+        public int? DowngradeToProfileId { get; set; }
+        public int? DowngradeAfterDays { get; set; }
+
         public Quality FirststAllowedQuality()
         {
             var firstAllowed = Items.First(q => q.Allowed);

@@ -44,6 +44,34 @@ namespace Sonarr.Api.V3.Profiles.Quality
 
             SharedValidator.RuleFor(c => c)
                 .SetValidator(new QualityProfileResourceValidator());
+
+            // Downgrade-specific validation
+            SharedValidator.RuleFor(c => c).Custom((profile, context) =>
+            {
+                if (profile.DowngradeAllowed)
+                {
+                    if (!profile.DowngradeAfterDays.HasValue || profile.DowngradeAfterDays.Value <= 0)
+                    {
+                        context.AddFailure("DowngradeAfterDays", "Downgrade After Days must be greater than 0");
+                    }
+
+                    if (!profile.DowngradeToProfileId.HasValue || profile.DowngradeToProfileId.Value <= 0)
+                    {
+                        context.AddFailure("DowngradeToProfileId", "Select a valid archive profile");
+                    }
+                    else
+                    {
+                        if (profile.DowngradeToProfileId.Value == profile.Id)
+                        {
+                            context.AddFailure("DowngradeToProfileId", "Archive profile cannot be the same as this profile");
+                        }
+                        else if (!_profileService.Exists(profile.DowngradeToProfileId.Value))
+                        {
+                            context.AddFailure("DowngradeToProfileId", "Archive profile does not exist");
+                        }
+                    }
+                }
+            });
         }
 
         [RestPostById]

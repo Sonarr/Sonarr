@@ -131,6 +131,11 @@ namespace NzbDrone.Core.Jobs
                     {
                         Interval = GetRssSyncInterval(),
                         TypeName = typeof(RssSyncCommand).FullName
+                    },
+                    new ScheduledTask
+                    {
+                        Interval = 24 * 60,
+                        TypeName = typeof(NzbDrone.Core.Profiles.Qualities.Commands.ApplyQualityProfileDowngradeCommand).FullName
                     }
                 };
 

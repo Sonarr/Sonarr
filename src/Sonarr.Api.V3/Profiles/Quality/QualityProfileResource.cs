@@ -17,6 +17,11 @@ namespace Sonarr.Api.V3.Profiles.Quality
         public int CutoffFormatScore { get; set; }
         public int MinUpgradeFormatScore { get; set; }
         public List<ProfileFormatItemResource> FormatItems { get; set; }
+
+        // Downgrade/Archive settings
+        public bool DowngradeAllowed { get; set; }
+        public int? DowngradeToProfileId { get; set; }
+        public int? DowngradeAfterDays { get; set; }
     }
 
     public class QualityProfileQualityItemResource : RestResource
@@ -61,7 +66,10 @@ namespace Sonarr.Api.V3.Profiles.Quality
                 MinFormatScore = model.MinFormatScore,
                 CutoffFormatScore = model.CutoffFormatScore,
                 MinUpgradeFormatScore = model.MinUpgradeFormatScore,
-                FormatItems = model.FormatItems.ConvertAll(ToResource)
+                FormatItems = model.FormatItems.ConvertAll(ToResource),
+                DowngradeAllowed = model.DowngradeAllowed,
+                DowngradeToProfileId = model.DowngradeToProfileId,
+                DowngradeAfterDays = model.DowngradeAfterDays
             };
         }
 
@@ -112,7 +120,10 @@ namespace Sonarr.Api.V3.Profiles.Quality
                 MinFormatScore = resource.MinFormatScore,
                 CutoffFormatScore = resource.CutoffFormatScore,
                 MinUpgradeFormatScore = resource.MinUpgradeFormatScore,
-                FormatItems = resource.FormatItems.ConvertAll(ToModel)
+                FormatItems = resource.FormatItems.ConvertAll(ToModel),
+                DowngradeAllowed = resource.DowngradeAllowed,
+                DowngradeToProfileId = resource.DowngradeToProfileId,
+                DowngradeAfterDays = resource.DowngradeAfterDays
             };
         }
 

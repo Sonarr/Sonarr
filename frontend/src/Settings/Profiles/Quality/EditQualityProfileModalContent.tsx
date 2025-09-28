@@ -101,6 +101,9 @@ function EditQualityProfileModalContent({
     cutoffFormatScore,
     items,
     formatItems,
+    downgradeAllowed,
+    downgradeToProfileId,
+    downgradeAfterDays,
   } = item;
 
   const qualities = useMemo(() => {
@@ -620,6 +623,52 @@ function EditQualityProfileModalContent({
                         values={qualities}
                         helpText={translate('UpgradeUntilEpisodeHelpText')}
                         onChange={handleCutoffChange}
+                      />
+                    </FormGroup>
+                  ) : null}
+
+                  <FormGroup size={sizes.EXTRA_SMALL}>
+                    <FormLabel size={sizes.SMALL}>
+                      {translate('DowngradeEnabled')}
+                    </FormLabel>
+
+                    <FormInputGroup
+                      type={inputTypes.CHECK}
+                      name="downgradeAllowed"
+                      {...downgradeAllowed}
+                      helpText={translate('DowngradeHelpText')}
+                      onChange={handleInputChange}
+                    />
+                  </FormGroup>
+
+                  {downgradeAllowed.value ? (
+                    <FormGroup size={sizes.EXTRA_SMALL}>
+                      <FormLabel size={sizes.SMALL}>
+                        {translate('DowngradeToProfile')}
+                      </FormLabel>
+
+                      <FormInputGroup
+                        type={inputTypes.QUALITY_PROFILE_SELECT}
+                        name="downgradeToProfileId"
+                        {...downgradeToProfileId}
+                        value={downgradeToProfileId.value ?? ''}
+                        onChange={handleInputChange}
+                      />
+                    </FormGroup>
+                  ) : null}
+
+                  {downgradeAllowed.value ? (
+                    <FormGroup size={sizes.EXTRA_SMALL}>
+                      <FormLabel size={sizes.SMALL}>
+                        {translate('DowngradeAfterDays')}
+                      </FormLabel>
+
+                      <FormInputGroup
+                        type={inputTypes.NUMBER}
+                        name="downgradeAfterDays"
+                        min={1}
+                        {...downgradeAfterDays}
+                        onChange={handleInputChange}
                       />
                     </FormGroup>
                   ) : null}
