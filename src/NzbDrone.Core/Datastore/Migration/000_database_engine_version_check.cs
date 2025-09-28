@@ -19,7 +19,7 @@ namespace NzbDrone.Core.Datastore.Migration
         public override void Up()
         {
             IfDatabase("sqlite").Execute.WithConnection(LogSqliteVersion);
-            IfDatabase("postgres").Execute.WithConnection(LogPostgresVersion);
+            IfDatabase("postgresql").Execute.WithConnection(LogPostgresVersion);
         }
 
         private void LogSqliteVersion(IDbConnection conn, IDbTransaction tran)

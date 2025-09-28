@@ -31,7 +31,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
 
             _logger.Info("*** Migrating {0} ***", connectionString);
 
-            var db = databaseType == DatabaseType.SQLite ? "sqlite" : "postgres";
+            var db = databaseType == DatabaseType.SQLite ? "sqlite" : "postgresql";
 
             var serviceProvider = new ServiceCollection()
                 .AddLogging(b => b.AddNLog())
