@@ -651,10 +651,7 @@ function EditQualityProfileModalContent({
                         type={inputTypes.QUALITY_PROFILE_SELECT}
                         name="downgradeToProfileId"
                         {...downgradeToProfileId}
-<<<<<<< HEAD
                         value={downgradeToProfileId.value ?? ''}
-=======
->>>>>>> cfedfaae4952b3aa5a2b0df3c5afd1defdd034b6
                         onChange={handleInputChange}
                       />
                     </FormGroup>
