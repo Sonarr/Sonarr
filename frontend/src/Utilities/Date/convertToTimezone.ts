@@ -5,7 +5,7 @@ export const convertToTimezone = (date: moment.MomentInput, timeZone: string) =>
     return moment(date);
   }
   
-  if (!timeZone || timeZone === '') {
+  if (!timeZone) {
     return moment(date);
   }
   
@@ -13,7 +13,7 @@ export const convertToTimezone = (date: moment.MomentInput, timeZone: string) =>
     // Use moment-timezone to convert to the specified timezone
     return moment.tz(date, timeZone);
   } catch (error) {
-    console.warn('Error converting to timezone', timeZone, '- using system timezone');
+    console.warn(`Error converting to timezone ${timeZone}. Using system timezone.`);
     return moment(date);
   }
 };
