@@ -16,7 +16,6 @@ namespace NzbDrone.Core.Test.Datastore.Migration
             {
                 c.Insert.IntoTable("Profiles").Row(new
                 {
-                    Id = 0,
                     Name = "Bluray",
                     Cutoff = 7,
                     Items = "[ { \"quality\": 7, \"allowed\": true }, { \"quality\": 19, \"allowed\": true } ]"
@@ -38,12 +37,11 @@ namespace NzbDrone.Core.Test.Datastore.Migration
             var db = WithMigrationTestDb(c =>
             {
                 c.Insert.IntoTable("Profiles").Row(new
-                                                   {
-                                                       Id = 0,
-                                                       Name = "Bluray",
-                                                       Cutoff = 7,
-                                                       Items = "[ { \"id\": 1001, \"name\": \"Why?!\", \"allowed\": true, \"items\": [{ \"quality\": 8, \"allowed\": true }, { \"quality\": 7, \"allowed\": true }] }, { \"quality\": 19, \"allowed\": true } ]"
-                                                   });
+                {
+                    Name = "Bluray",
+                    Cutoff = 7,
+                    Items = "[ { \"id\": 1001, \"name\": \"Why?!\", \"allowed\": true, \"items\": [{ \"quality\": 8, \"allowed\": true }, { \"quality\": 7, \"allowed\": true }] }, { \"quality\": 19, \"allowed\": true } ]"
+                });
             });
 
             var profiles = db.Query<Profile122>("SELECT \"Items\" FROM \"Profiles\" LIMIT 1");

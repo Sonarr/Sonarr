@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.Reflection;
+using FluentMigrator;
 using FluentMigrator.Runner;
 using FluentMigrator.Runner.Generators;
 using FluentMigrator.Runner.Initialization;
@@ -31,14 +32,19 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
 
             _logger.Info("*** Migrating {0} ***", connectionString);
 
-            var db = databaseType == DatabaseType.SQLite ? "sqlite" : "postgresql";
+            var db = databaseType switch
+            {
+                DatabaseType.SQLite => ProcessorId.SQLite,
+                DatabaseType.PostgreSQL => ProcessorId.PostgreSQL,
+                _ => throw new NotImplementedException($"Unknown database type: {databaseType}")
+            };
 
             var serviceProvider = new ServiceCollection()
                 .AddLogging(b => b.AddNLog())
                 .AddFluentMigratorCore()
                 .Configure<RunnerOptions>(cfg => cfg.IncludeUntaggedMaintenances = true)
                 .ConfigureRunner(builder => builder
-                    .AddPostgres()
+                    .AddPostgres15_0()
                     .AddNzbDroneSQLite()
                     .WithGlobalConnectionString(connectionString)
                     .ScanIn(Assembly.GetExecutingAssembly()).For.All())

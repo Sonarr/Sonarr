@@ -60,7 +60,6 @@ namespace NzbDrone.Core.Test.Datastore.Migration
 
                 c.Insert.IntoTable("EpisodeFiles").Row(new
                 {
-                    Id = 1,
                     SeriesId = 1,
                     RelativePath = episodePath,
                     Quality = new { }.ToJson(),

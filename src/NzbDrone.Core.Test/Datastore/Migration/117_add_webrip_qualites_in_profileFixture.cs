@@ -22,7 +22,6 @@ namespace NzbDrone.Core.Test.Datastore.Migration
             {
                 c.Insert.IntoTable("Profiles").Row(new
                 {
-                    Id = 0,
                     Name = "SDTV",
                     Cutoff = 1,
                     Items = $"[{GenerateQualityJson(1, true)}, {GenerateQualityJson((int)Quality.WEBRip480p, false)}, {GenerateQualityJson((int)Quality.WEBRip720p, false)}, {GenerateQualityJson((int)Quality.WEBRip1080p, false)}, {GenerateQualityJson((int)Quality.WEBRip2160p, false)}]"
@@ -45,7 +44,6 @@ namespace NzbDrone.Core.Test.Datastore.Migration
             {
                 c.Insert.IntoTable("Profiles").Row(new
                 {
-                    Id = 0,
                     Name = "SDTV",
                     Cutoff = 1,
                     Items = $"[{GenerateQualityJson(1, true)}, {GenerateQualityJson((int)Quality.DVD, false)}, {GenerateQualityJson((int)Quality.Bluray480p, false)}]"
@@ -68,7 +66,6 @@ namespace NzbDrone.Core.Test.Datastore.Migration
             {
                 c.Insert.IntoTable("Profiles").Row(new
                 {
-                    Id = 0,
                     Name = "SDTV",
                     Cutoff = 1,
                     Items = $"[{GenerateQualityJson(1, true)}, {GenerateQualityJson((int)Quality.WEBRip480p, false)}, {GenerateQualityJson((int)Quality.WEBRip720p, false)}, {GenerateQualityJson((int)Quality.WEBRip1080p, false)}]"
@@ -91,7 +88,6 @@ namespace NzbDrone.Core.Test.Datastore.Migration
             {
                 c.Insert.IntoTable("Profiles").Row(new
                 {
-                    Id = 0,
                     Name = "SDTV",
                     Cutoff = 1,
                     Items = $"[{GenerateQualityJson(1, true)}, {GenerateQualityJson((int)Quality.WEBRip480p, false)}, {GenerateQualityJson((int)Quality.WEBRip720p, false)}, {GenerateQualityJson((int)Quality.WEBRip1080p, false)}, {GenerateQualityJson((int)Quality.WEBRip2160p, false)}]"

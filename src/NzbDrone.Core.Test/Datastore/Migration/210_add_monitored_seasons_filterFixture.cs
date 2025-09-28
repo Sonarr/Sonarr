@@ -30,7 +30,6 @@ namespace NzbDrone.Core.Test.Datastore.Migration
             {
                 c.Insert.IntoTable("CustomFilters").Row(new
                 {
-                    Id = 1,
                     Type = "series",
                     Label = "Is Both",
                     Filters = filtersString
@@ -67,7 +66,6 @@ namespace NzbDrone.Core.Test.Datastore.Migration
             {
                 c.Insert.IntoTable("CustomFilters").Row(new
                 {
-                    Id = 1,
                     Type = "series",
                     Label = "Is Both",
                     Filters = filtersString
@@ -104,7 +102,6 @@ namespace NzbDrone.Core.Test.Datastore.Migration
             {
                 c.Insert.IntoTable("CustomFilters").Row(new
                 {
-                    Id = 1,
                     Type = "series",
                     Label = "Is Both",
                     Filters = filtersString
@@ -141,7 +138,6 @@ namespace NzbDrone.Core.Test.Datastore.Migration
             {
                 c.Insert.IntoTable("CustomFilters").Row(new
                 {
-                    Id = 1,
                     Type = "series",
                     Label = "Is Both",
                     Filters = filtersString
@@ -178,7 +174,6 @@ namespace NzbDrone.Core.Test.Datastore.Migration
             {
                 c.Insert.IntoTable("CustomFilters").Row(new
                 {
-                    Id = 1,
                     Type = "series",
                     Label = "Is Both",
                     Filters = filtersString
@@ -215,7 +210,6 @@ namespace NzbDrone.Core.Test.Datastore.Migration
             {
                 c.Insert.IntoTable("CustomFilters").Row(new
                 {
-                    Id = 1,
                     Type = "series",
                     Label = "Is Both",
                     Filters = filtersString
@@ -252,7 +246,6 @@ namespace NzbDrone.Core.Test.Datastore.Migration
             {
                 c.Insert.IntoTable("CustomFilters").Row(new
                 {
-                    Id = 1,
                     Type = "series",
                     Label = "Is Both",
                     Filters = filtersString
@@ -295,7 +288,6 @@ namespace NzbDrone.Core.Test.Datastore.Migration
             {
                 c.Insert.IntoTable("CustomFilters").Row(new
                 {
-                    Id = 1,
                     Type = "series",
                     Label = "Is Both",
                     Filters = filtersString
@@ -335,7 +327,6 @@ namespace NzbDrone.Core.Test.Datastore.Migration
             {
                 c.Insert.IntoTable("CustomFilters").Row(new
                 {
-                    Id = 1,
                     Type = "series",
                     Label = "Is Both",
                     Filters = filtersString

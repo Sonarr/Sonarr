@@ -50,7 +50,8 @@ namespace NzbDrone.Test.Common.Datastore
                 Port = options.Port,
                 Username = options.User,
                 Password = options.Password,
-                Enlist = false
+                Enlist = false,
+                IncludeErrorDetail = true,
             };
 
             return builder.ConnectionString;
