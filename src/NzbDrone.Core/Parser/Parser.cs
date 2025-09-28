@@ -440,6 +440,10 @@ namespace NzbDrone.Core.Parser
 
                 // Episodes without a title, Single episode numbers (S1E1, 1x1)
                 new Regex(@"^(?:S?(?<season>(?<!\d+)(?:\d{1,2}|\d{4})(?!\d+))(?:(?:[-_ ]?[ex])(?<episode>\d{1}(?!\d+))))",
+                    RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
+                // Anime OVA special
+                new Regex(@"^\[(?<subgroup>.+?)\][-_. ]?(?<title>.+?)(?:[-_. ]+(?<special>special|ova|ovd)).*?(?<hash>[(\[]\w{8}[)\]])?(?:$|\.mkv)",
                     RegexOptions.IgnoreCase | RegexOptions.Compiled)
             };
 
@@ -613,6 +617,8 @@ namespace NzbDrone.Core.Parser
                     result = null;
                 }
             }
+
+            // TODO: Skip for anime specials
 
             if (result == null)
             {
@@ -1014,6 +1020,10 @@ namespace NzbDrone.Core.Parser
                         {
                             result.SeasonPart = Convert.ToInt32(seasonPart);
                             result.IsPartialSeason = true;
+                        }
+                        else if (matchCollection[0].Groups["special"].Success)
+                        {
+                            result.Special = true;
                         }
                         else
                         {
