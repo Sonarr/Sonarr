@@ -249,7 +249,10 @@ namespace NzbDrone.Core.Profiles.Qualities
                                      MinFormatScore = 0,
                                      CutoffFormatScore = 0,
                                      MinUpgradeFormatScore = 1,
-                                     FormatItems = formatItems
+                                     FormatItems = formatItems,
+                                     DowngradeAllowed = false,
+                                     DowngradeToProfileId = null,
+                                     DowngradeAfterDays = null
                                  };
 
             return qualityProfile;
