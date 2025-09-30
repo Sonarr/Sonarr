@@ -1,9 +1,10 @@
 import React from 'react';
 import Icon from 'Components/Icon';
-import Column from 'Components/Table/Column';
-import { createOptionsStore } from 'Helpers/Hooks/useOptionsStore';
+import {
+  createOptionsStore,
+  PageableOptions,
+} from 'Helpers/Hooks/useOptionsStore';
 import { icons } from 'Helpers/Props';
-import { SortDirection } from 'Helpers/Props/sortDirections';
 import translate from 'Utilities/String/translate';
 
 interface QueueRemovalOptions {
@@ -11,13 +12,8 @@ interface QueueRemovalOptions {
   blocklistMethod: 'blocklistAndSearch' | 'blocklistOnly' | 'doNotBlocklist';
 }
 
-export interface QueueOptions {
+export interface QueueOptions extends PageableOptions {
   includeUnknownSeriesItems: boolean;
-  pageSize: number;
-  selectedFilterKey: string | number;
-  sortKey: string;
-  sortDirection: SortDirection;
-  columns: Column[];
   removalOptions: QueueRemovalOptions;
 }
 

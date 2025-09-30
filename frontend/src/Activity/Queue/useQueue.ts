@@ -1,5 +1,5 @@
 import { keepPreviousData, useQueryClient } from '@tanstack/react-query';
-import { useCallback, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { CustomFilter, Filter, FilterBuilderProp } from 'App/State/AppState';
 import useApiMutation from 'Helpers/Hooks/useApiMutation';
@@ -90,16 +90,9 @@ const useQueue = () => {
     },
   });
 
-  const handleGoToPage = useCallback(
-    (page: number) => {
-      goToPage(page);
-    },
-    [goToPage]
-  );
-
   return {
     ...query,
-    goToPage: handleGoToPage,
+    goToPage,
     page,
     refetch,
   };

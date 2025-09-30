@@ -1,5 +1,5 @@
 import { keepPreviousData } from '@tanstack/react-query';
-import { useCallback, useMemo } from 'react';
+import { useMemo } from 'react';
 import { Filter } from 'App/State/AppState';
 import usePage from 'Helpers/Hooks/usePage';
 import usePagedApiQuery from 'Helpers/Hooks/usePagedApiQuery';
@@ -69,17 +69,9 @@ const useEvents = () => {
     },
   });
 
-  const handleGoToPage = useCallback(
-    (page: number) => {
-      goToPage(page);
-      refetch();
-    },
-    [goToPage, refetch]
-  );
-
   return {
     ...query,
-    goToPage: handleGoToPage,
+    goToPage,
     page,
     refetch,
   };

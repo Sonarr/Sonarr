@@ -2,6 +2,7 @@ import { StateCreator } from 'zustand';
 import { PersistOptions } from 'zustand/middleware';
 import Column from 'Components/Table/Column';
 import { createPersist } from 'Helpers/createPersist';
+import { SortDirection } from 'Helpers/Props/sortDirections';
 
 type TSettingsWithoutColumns = object;
 
@@ -10,6 +11,14 @@ interface TSettingsWithColumns {
 }
 
 type TSettingd = TSettingsWithoutColumns | TSettingsWithColumns;
+
+export interface PageableOptions {
+  pageSize: number;
+  selectedFilterKey: string | number;
+  sortKey: string;
+  sortDirection: SortDirection;
+  columns: Column[];
+}
 
 export type OptionChanged<T> = {
   name: keyof T;

@@ -1,15 +1,10 @@
-import Column from 'Components/Table/Column';
-import { createOptionsStore } from 'Helpers/Hooks/useOptionsStore';
-import { SortDirection } from 'Helpers/Props/sortDirections';
+import {
+  createOptionsStore,
+  PageableOptions,
+} from 'Helpers/Hooks/useOptionsStore';
 import translate from 'Utilities/String/translate';
 
-export interface EventOptions {
-  pageSize: number;
-  selectedFilterKey: string | number;
-  sortKey: string;
-  sortDirection: SortDirection;
-  columns: Column[];
-}
+export type EventOptions = PageableOptions;
 
 const { useOptions, setOptions, setOption } = createOptionsStore<EventOptions>(
   'event_options',

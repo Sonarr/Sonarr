@@ -6,8 +6,7 @@ import useQueue, { FILTER_BUILDER } from './useQueue';
 type QueueFilterModalProps = FilterModalProps<History>;
 
 export default function QueueFilterModal(props: QueueFilterModalProps) {
-  const { data } = useQueue();
-  const customFilterType = 'queue';
+  const { records } = useQueue();
 
   const dispatchSetFilter = useCallback(
     ({ selectedFilterKey }: { selectedFilterKey: string | number }) => {
@@ -19,9 +18,9 @@ export default function QueueFilterModal(props: QueueFilterModalProps) {
   return (
     <FilterModal
       {...props}
-      sectionItems={data?.records ?? []}
+      sectionItems={records}
       filterBuilderProps={FILTER_BUILDER}
-      customFilterType={customFilterType}
+      customFilterType="queue"
       dispatchSetFilter={dispatchSetFilter}
     />
   );

@@ -28,10 +28,17 @@ import useEvents, { useFilters } from './useEvents';
 
 function LogsTable() {
   const dispatch = useDispatch();
-  const { data, error, isFetching, isFetched, isLoading, page, goToPage } =
-    useEvents();
-
-  const { records = [], totalPages = 0, totalRecords } = data ?? {};
+  const {
+    records,
+    totalPages,
+    totalRecords,
+    error,
+    isFetching,
+    isFetched,
+    isLoading,
+    page,
+    goToPage,
+  } = useEvents();
 
   const { columns, pageSize, sortKey, sortDirection, selectedFilterKey } =
     useEventOptions();

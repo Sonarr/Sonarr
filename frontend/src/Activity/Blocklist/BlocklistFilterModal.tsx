@@ -1,50 +1,26 @@
 import React, { useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { createSelector } from 'reselect';
-import AppState from 'App/State/AppState';
 import FilterModal, { FilterModalProps } from 'Components/Filter/FilterModal';
-import { setBlocklistFilter } from 'Store/Actions/blocklistActions';
-
-function createBlocklistSelector() {
-  return createSelector(
-    (state: AppState) => state.blocklist.items,
-    (blocklistItems) => {
-      return blocklistItems;
-    }
-  );
-}
-
-function createFilterBuilderPropsSelector() {
-  return createSelector(
-    (state: AppState) => state.blocklist.filterBuilderProps,
-    (filterBuilderProps) => {
-      return filterBuilderProps;
-    }
-  );
-}
+import { setBlocklistOption } from './blocklistOptionsStore';
+import useBlocklist, { FILTER_BUILDER } from './useBlocklist';
 
 type BlocklistFilterModalProps = FilterModalProps<History>;
 
 export default function BlocklistFilterModal(props: BlocklistFilterModalProps) {
-  const sectionItems = useSelector(createBlocklistSelector());
-  const filterBuilderProps = useSelector(createFilterBuilderPropsSelector());
-  const customFilterType = 'blocklist';
-
-  const dispatch = useDispatch();
+  const { records } = useBlocklist();
 
   const dispatchSetFilter = useCallback(
-    (payload: unknown) => {
-      dispatch(setBlocklistFilter(payload));
+    ({ selectedFilterKey }: { selectedFilterKey: string | number }) => {
+      setBlocklistOption('selectedFilterKey', selectedFilterKey);
     },
-    [dispatch]
+    []
   );
 
   return (
     <FilterModal
       {...props}
-      sectionItems={sectionItems}
-      filterBuilderProps={filterBuilderProps}
-      customFilterType={customFilterType}
+      sectionItems={records}
+      filterBuilderProps={FILTER_BUILDER}
+      customFilterType="blocklist"
       dispatchSetFilter={dispatchSetFilter}
     />
   );

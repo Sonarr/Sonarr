@@ -54,17 +54,13 @@ import useQueue, {
   useRemoveQueueItems,
 } from './useQueue';
 
-const DEFAULT_DATA = {
-  records: [],
-  totalPages: 0,
-  totalRecords: 0,
-};
-
 function Queue() {
   const dispatch = useDispatch();
 
   const {
-    data,
+    records,
+    totalPages,
+    totalRecords,
     error,
     isFetching,
     isFetched,
@@ -73,8 +69,6 @@ function Queue() {
     goToPage,
     refetch,
   } = useQueue();
-
-  const { records, totalPages = 0, totalRecords } = data ?? DEFAULT_DATA;
 
   const { columns, pageSize, sortKey, sortDirection, selectedFilterKey } =
     useQueueOptions();
