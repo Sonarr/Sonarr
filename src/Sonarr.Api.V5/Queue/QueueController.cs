@@ -76,7 +76,7 @@ namespace Sonarr.Api.V5.Queue
             {
                 Remove(pendingRelease, message, blocklist);
 
-                return Deleted();
+                return NoContent();
             }
 
             var trackedDownload = GetTrackedDownload(id);
@@ -89,7 +89,7 @@ namespace Sonarr.Api.V5.Queue
             Remove(trackedDownload, message, removeFromClient, blocklist, skipRedownload, changeCategory);
             _trackedDownloadService.StopTracking(trackedDownload.DownloadItem.DownloadId);
 
-            return Deleted();
+            return NoContent();
         }
 
         [HttpDelete("bulk")]
@@ -130,7 +130,7 @@ namespace Sonarr.Api.V5.Queue
 
             _trackedDownloadService.StopTracking(trackedDownloadIds);
 
-            return new { };
+            return NoContent();
         }
 
         [HttpGet]
