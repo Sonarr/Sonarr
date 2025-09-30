@@ -2184,5 +2184,19 @@
     "DownloadClientTriblerSettingsAnonymityLevelHelpText": "Número de proxies a usar cuando se descarga contenido. Establecer a 0 para deshabilitarlo. Los proxies reducen la velocidad de descarga/subida. Ver {url}",
     "DownloadClientTriblerProviderMessage": "La integración con Tribler es altamente experimental. Probado con {clientName} versión {clientVersionRange}.",
     "DownloadClientTriblerSettingsSafeSeedingHelpText": "Cuando se habilita, solo se siembra a través de los proxies.",
-    "DownloadClientTriblerSettingsSafeSeeding": "Sembrado seguro"
+    "DownloadClientTriblerSettingsSafeSeeding": "Sembrado seguro",
+    "EpisodeMaybePlural": "Episodio(s)",
+    "EpisodeTitles": "Títulos del episodio",
+    "EpisodeTitleMaybePlural": "Título(s) del episodio",
+    "SeasonPackUpgradeAllowAnyWarning": "Permite un pack de temporada si se actualiza cualquier episodio. Esto se aplica a todas las fuentes de capturas automáticas.",
+    "SeasonPackUpgradeAllowLabel": "Permitir actualizaciones de pack de temporada",
+    "SeasonPackUpgradeThresholdHelpText": "Se requiere un pack de temporada para obtener una actualización para al menos un X porcentaje de episodios.",
+    "SeasonPackUpgradeAllowHelpText": "Se requiere un pack de temporada para obtener una actualización de calidad o de formato personalizado para todos los episodios",
+    "SeasonPackUpgradeThresholdHelpTextExample": "{numberEpisodes} de {totalEpisodes} episodios: {count}%",
+    "SeasonPackUpgradeThresholdLabel": "Límite de actualización de pack de temporada",
+    "ExcludedTags": "Etiquetas excluidas",
+    "ExcludedReleaseProfile": "Perfil de lanzamiento excluido",
+    "ExcludedReleaseProfiles": "Perfiles de lanzamiento excluidos",
+    "MultipleEpisodes": "Episodios múltiples",
+    "ReleaseProfileExcludedTagSeriesHelpText": "Los perfiles de lanzamiento no se aplicarán a series con al menos una etiqueta coincidente."
 }

@@ -2184,5 +2184,19 @@
     "DownloadClientTriblerSettingsSafeSeeding": "Partage protégé",
     "DownloadClientTriblerSettingsSafeSeedingHelpText": "Lorsque activé, seulement partager via un proxy.",
     "DownloadClientTriblerProviderMessage": "L’intégration avec tribler est hautement expérimental. Tester sur {clientName} version {clientVersionRange}.",
-    "NotificationsAppriseSettingsIncludePoster": "Inclure le poster"
+    "NotificationsAppriseSettingsIncludePoster": "Inclure le poster",
+    "ReleaseProfileExcludedTagSeriesHelpText": "Profils de version ne d’appliqueront pas aux séries ayant au moins un tag correspondant.",
+    "SeasonPackUpgradeThresholdHelpTextExample": "{numberEpisodes} de {totalEpisodes} épisodes : {count}%",
+    "EpisodeMaybePlural": "Épisode(s)",
+    "EpisodeTitles": "Titre des Épisodes",
+    "EpisodeTitleMaybePlural": "Titre(s) d’épisode",
+    "MultipleEpisodes": "Épisodes multiples",
+    "SeasonPackUpgradeAllowAnyWarning": "Permettre un pack de saison s’il améliore au moins un épisode. Ceci s’applique à toute les sources de saisi automatique.",
+    "SeasonPackUpgradeAllowHelpText": "Obliger qu’un pack de saison soit une amélioration de qualité ou de format personnalisé pour tous les épisodes",
+    "SeasonPackUpgradeAllowLabel": "Permettre les mise à niveau via pack de saison",
+    "SeasonPackUpgradeThresholdHelpText": "Obliger que le pack de saison soit une mise à niveau pour au moins X pour-cent des épisodes.",
+    "ExcludedTags": "Tags exclus",
+    "ExcludedReleaseProfile": "Profil de version exclu",
+    "ExcludedReleaseProfiles": "Profils de version exclus",
+    "SeasonPackUpgradeThresholdLabel": "Minimum pour les mise à jour via pack de saison"
 }

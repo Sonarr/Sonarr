@@ -2184,5 +2184,19 @@
     "DownloadClientTriblerSettingsDirectoryHelpText": "Local opcional para colocar downloads, deixe em branco para usar o local padrão do Tribler",
     "DownloadClientTriblerSettingsSafeSeeding": "Semeadura Segura",
     "DownloadClientTriblerSettingsSafeSeedingHelpText": "Quando ativado, apenas semeia por meio de proxies.",
-    "DownloadClientTriblerProviderMessage": "A integração tribler é altamente experimental. Testado em {clientName} versão {clientVersionRange}."
+    "DownloadClientTriblerProviderMessage": "A integração tribler é altamente experimental. Testado em {clientName} versão {clientVersionRange}.",
+    "ExcludedTags": "Etiquetas Excluídas",
+    "EpisodeMaybePlural": "Episódio(s)",
+    "EpisodeTitles": "Títulos dos Episódios",
+    "EpisodeTitleMaybePlural": "Título(s) do(s) Episódio(s)",
+    "MultipleEpisodes": "Múltiplos Episódios",
+    "SeasonPackUpgradeAllowLabel": "Permitir Atualizações do Pacote de Temporada",
+    "SeasonPackUpgradeAllowAnyWarning": "Permita um pacote de temporada se ele atualizar qualquer episódio. Isto aplica-se a todas as fontes de obtenção automáticas.",
+    "SeasonPackUpgradeAllowHelpText": "Exigir que um pacote de temporada seja uma atualização de qualidade ou formato personalizado para todos os episódios",
+    "SeasonPackUpgradeThresholdHelpText": "Exija que um pacote de temporada seja uma atualização para pelo menos X por cento dos episódios.",
+    "SeasonPackUpgradeThresholdHelpTextExample": "{numberEpisodes} de {totalEpisodes} episódios: {count}%",
+    "SeasonPackUpgradeThresholdLabel": "Limite de Atualização do Pacote de Temporada",
+    "ExcludedReleaseProfile": "Perfil de Lançamento Excluído",
+    "ExcludedReleaseProfiles": "Perfis de Lançamentos Excluídos",
+    "ReleaseProfileExcludedTagSeriesHelpText": "Os perfis de lançamento não se aplicarão a séries com pelo menos uma etiqueta correspondente."
 }

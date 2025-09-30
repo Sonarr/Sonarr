@@ -2184,5 +2184,8 @@
     "DownloadClientTriblerSettingsDirectoryHelpText": "Не обязательный путь для сохранения загрузок. Оставьте пустым, чтобы использовать путь Tribler по умолчанию",
     "DownloadClientTriblerSettingsSafeSeeding": "Безопасная раздача",
     "DownloadClientTriblerSettingsSafeSeedingHelpText": "Если включено, раздача будет вестись только через прокси-серверы.",
-    "DownloadClientTriblerProviderMessage": "Интеграция с Tribler находится в ранней экспериментальной стадии. Тестировалось на {clientName} версии {clientVersionRange}."
+    "DownloadClientTriblerProviderMessage": "Интеграция с Tribler находится в ранней экспериментальной стадии. Тестировалось на {clientName} версии {clientVersionRange}.",
+    "EpisodeMaybePlural": "Эпизод(ы)",
+    "EpisodeTitles": "Названия эпизода",
+    "EpisodeTitleMaybePlural": "Названи(е/я) эпизода"
 }
