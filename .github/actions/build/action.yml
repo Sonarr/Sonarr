@@ -122,8 +122,8 @@ runs:
 
             echo "Adding Sonarr.Mono to UpdatePackage"
             cp $folder/Sonarr.Mono.* $folder/Sonarr.Update
-            cp $folder/Mono.Posix.NETStandard.* $folder/Sonarr.Update
-            cp $folder/libMonoPosixHelper.* $folder/Sonarr.Update
+            cp $folder/Openur.Mono.Unix.* $folder/Sonarr.Update
+            cp $folder/libMono.Unix.* $folder/Sonarr.Update
             ;;
           win)
             folder=_artifacts/$runtime/$framework/Sonarr
@@ -138,8 +138,8 @@ runs:
 
             echo "Removing Sonarr.Mono"
             rm -f $folder/Sonarr.Mono.*
-            rm -f $folder/Mono.Posix.NETStandard.*
-            rm -f $folder/libMonoPosixHelper.*
+            rm -f $folder/Openur.Mono.Unix.*
+            rm -f $folder/libMono.Unix.*
 
             echo "Adding Sonarr.Windows to UpdatePackage"
             cp $folder/Sonarr.Windows.* $folder/Sonarr.Update
@@ -164,8 +164,8 @@ runs:
 
             echo "Adding Sonarr.Mono to UpdatePackage"
             cp $folder/Sonarr.Mono.* $folder/Sonarr.Update
-            cp $folder/Mono.Posix.NETStandard.* $folder/Sonarr.Update
-            cp $folder/libMonoPosixHelper.* $folder/Sonarr.Update
+            cp $folder/Openur.Mono.Unix.* $folder/Sonarr.Update
+            cp $folder/libMono.Unix.* $folder/Sonarr.Update
             ;;
         esac
 
