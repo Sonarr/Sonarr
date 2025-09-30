@@ -9,6 +9,7 @@ using Microsoft.Extensions.Options;
 using Npgsql;
 using NUnit.Framework;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Common.Options;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Datastore.Migration.Framework;
@@ -179,6 +180,7 @@ namespace NzbDrone.Core.Test.Framework
 
             // Set up remaining container services
             Mocker.SetConstant(Options.Create(postgresOptions));
+            Mocker.GetMock<IOptions<LogOptions>>().Setup(v => v.Value).Returns(new LogOptions());
             Mocker.SetConstant<IConfigFileProvider>(Mocker.Resolve<ConfigFileProvider>());
             Mocker.SetConstant<IConnectionStringFactory>(Mocker.Resolve<ConnectionStringFactory>());
             Mocker.SetConstant<IMigrationController>(Mocker.Resolve<MigrationController>());

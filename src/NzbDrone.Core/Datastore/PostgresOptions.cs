@@ -10,6 +10,8 @@ namespace NzbDrone.Core.Datastore
         public string Password { get; set; }
         public string MainDb { get; set; }
         public string LogDb { get; set; }
+        public string MainDbConnectionString { get; set; }
+        public string LogDbConnectionString { get; set; }
 
         public static PostgresOptions GetOptions()
         {

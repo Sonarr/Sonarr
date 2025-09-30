@@ -65,6 +65,8 @@ namespace NzbDrone.Core.Configuration
         string PostgresPassword { get; }
         string PostgresMainDb { get; }
         string PostgresLogDb { get; }
+        string PostgresMainDbConnectionString { get; }
+        string PostgresLogDbConnectionString { get; }
         bool TrustCgnatIpAddresses { get; }
     }
 
@@ -251,6 +253,8 @@ namespace NzbDrone.Core.Configuration
         public string PostgresMainDb => _postgresOptions?.MainDb ?? GetValue("PostgresMainDb", "sonarr-main", persist: false);
         public string PostgresLogDb => _postgresOptions?.LogDb ?? GetValue("PostgresLogDb", "sonarr-log", persist: false);
         public int PostgresPort => (_postgresOptions?.Port ?? 0) != 0 ? _postgresOptions.Port : GetValueInt("PostgresPort", 5432, persist: false);
+        public string PostgresMainDbConnectionString => _postgresOptions?.MainDbConnectionString ?? GetValue("PostgresMainDbConnectionString", string.Empty, persist: false);
+        public string PostgresLogDbConnectionString => _postgresOptions?.LogDbConnectionString ?? GetValue("PostgresLogDbConnectionString", string.Empty, persist: false);
         public bool LogDbEnabled => _logOptions.DbEnabled ?? GetValueBoolean("LogDbEnabled", true, persist: false);
         public bool LogSql => _logOptions.Sql ?? GetValueBoolean("LogSql", false, persist: false);
         public int LogRotate => _logOptions.Rotate ?? GetValueInt("LogRotate", 50, persist: false);
