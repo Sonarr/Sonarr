@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Blocklisting
         bool Blocklisted(int seriesId, ReleaseInfo release);
         bool BlocklistedTorrentHash(int seriesId, string hash);
         PagingSpec<Blocklist> Paged(PagingSpec<Blocklist> pagingSpec);
-        void Block(RemoteEpisode remoteEpisode, string message);
+        void Block(RemoteEpisode remoteEpisode, string message, string source);
         void Delete(int id);
         void Delete(List<int> ids);
     }
@@ -71,7 +71,7 @@ namespace NzbDrone.Core.Blocklisting
             return _blocklistRepository.GetPaged(pagingSpec);
         }
 
-        public void Block(RemoteEpisode remoteEpisode, string message)
+        public void Block(RemoteEpisode remoteEpisode, string message, string source)
         {
             var blocklist = new Blocklist
                             {
@@ -85,6 +85,7 @@ namespace NzbDrone.Core.Blocklisting
                                 Indexer = remoteEpisode.Release.Indexer,
                                 Protocol = remoteEpisode.Release.DownloadProtocol,
                                 Message = message,
+                                Source = source,
                                 Languages = remoteEpisode.ParsedEpisodeInfo.Languages
                             };
 
@@ -185,6 +186,7 @@ namespace NzbDrone.Core.Blocklisting
                 Indexer = message.Data.GetValueOrDefault("indexer"),
                 Protocol = (DownloadProtocol)Convert.ToInt32(message.Data.GetValueOrDefault("protocol")),
                 Message = message.Message,
+                Source = message.Source,
                 Languages = message.Languages,
                 TorrentInfoHash = message.TrackedDownload?.Protocol == DownloadProtocol.Torrent
                     ? message.TrackedDownload.DownloadItem.DownloadId

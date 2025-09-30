@@ -37,6 +37,7 @@ function BlocklistRow(props: BlocklistRowProps) {
     protocol,
     indexer,
     message,
+    source,
     isSelected,
     columns,
     onSelectedChange,
@@ -154,6 +155,7 @@ function BlocklistRow(props: BlocklistRowProps) {
         protocol={protocol}
         indexer={indexer}
         message={message}
+        source={source}
         onModalClose={handleDetailsModalClose}
       />
     </TableRow>

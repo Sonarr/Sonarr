@@ -15,6 +15,7 @@ interface Blocklist extends ModelBase {
   seriesId?: number;
   indexer?: string;
   message?: string;
+  source?: string;
 }
 
 export default Blocklist;

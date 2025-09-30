@@ -16,13 +16,19 @@ interface BlocklistDetailsModalProps {
   protocol: DownloadProtocol;
   indexer?: string;
   message?: string;
+  source?: string;
   onModalClose: () => void;
 }
 
-function BlocklistDetailsModal(props: BlocklistDetailsModalProps) {
-  const { isOpen, sourceTitle, protocol, indexer, message, onModalClose } =
-    props;
-
+function BlocklistDetailsModal({
+  isOpen,
+  sourceTitle,
+  protocol,
+  indexer,
+  message,
+  source,
+  onModalClose,
+}: BlocklistDetailsModalProps) {
   return (
     <Modal isOpen={isOpen} onModalClose={onModalClose}>
       <ModalContent onModalClose={onModalClose}>
@@ -49,6 +55,9 @@ function BlocklistDetailsModal(props: BlocklistDetailsModalProps) {
                 title={translate('Message')}
                 data={message}
               />
+            ) : null}
+            {source ? (
+              <DescriptionListItem title={translate('Source')} data={source} />
             ) : null}
           </DescriptionList>
         </ModalBody>

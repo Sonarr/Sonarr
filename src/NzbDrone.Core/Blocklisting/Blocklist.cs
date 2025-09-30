@@ -24,6 +24,7 @@ namespace NzbDrone.Core.Blocklisting
         public IndexerFlags IndexerFlags { get; set; }
         public ReleaseType ReleaseType { get; set; }
         public string Message { get; set; }
+        public string Source { get; set; }
         public string TorrentInfoHash { get; set; }
         public List<Language> Languages { get; set; }
     }

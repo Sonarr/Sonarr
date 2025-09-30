@@ -174,7 +174,7 @@ function HistoryDetails(props: HistoryDetailsProps) {
   }
 
   if (eventType === 'downloadFailed') {
-    const { message, indexer } = data as DownloadFailedHistory;
+    const { indexer, message, source } = data as DownloadFailedHistory;
 
     return (
       <DescriptionList>
@@ -194,6 +194,10 @@ function HistoryDetails(props: HistoryDetailsProps) {
 
         {message ? (
           <DescriptionListItem title={translate('Message')} data={message} />
+        ) : null}
+
+        {source ? (
+          <DescriptionListItem title={translate('Source')} data={source} />
         ) : null}
       </DescriptionList>
     );

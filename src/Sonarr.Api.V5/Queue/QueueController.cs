@@ -68,13 +68,13 @@ namespace Sonarr.Api.V5.Queue
         }
 
         [RestDeleteById]
-        public ActionResult RemoveAction(int id, bool removeFromClient = true, bool blocklist = false, bool skipRedownload = false, bool changeCategory = false)
+        public ActionResult RemoveAction(int id, string? message = null, bool removeFromClient = true, bool blocklist = false, bool skipRedownload = false, bool changeCategory = false)
         {
             var pendingRelease = _pendingReleaseService.FindPendingQueueItem(id);
 
             if (pendingRelease != null)
             {
-                Remove(pendingRelease, blocklist);
+                Remove(pendingRelease, message, blocklist);
 
                 return Deleted();
             }
@@ -86,14 +86,14 @@ namespace Sonarr.Api.V5.Queue
                 throw new NotFoundException();
             }
 
-            Remove(trackedDownload, removeFromClient, blocklist, skipRedownload, changeCategory);
+            Remove(trackedDownload, message, removeFromClient, blocklist, skipRedownload, changeCategory);
             _trackedDownloadService.StopTracking(trackedDownload.DownloadItem.DownloadId);
 
             return Deleted();
         }
 
         [HttpDelete("bulk")]
-        public object RemoveMany([FromBody] QueueBulkResource resource, [FromQuery] bool removeFromClient = true, [FromQuery] bool blocklist = false, [FromQuery] bool skipRedownload = false, [FromQuery] bool changeCategory = false)
+        public object RemoveMany([FromBody] QueueBulkResource resource, [FromQuery] string? message, [FromQuery] bool removeFromClient = true, [FromQuery] bool blocklist = false, [FromQuery] bool skipRedownload = false, [FromQuery] bool changeCategory = false)
         {
             var trackedDownloadIds = new List<string>();
             var pendingToRemove = new List<NzbDrone.Core.Queue.Queue>();
@@ -119,12 +119,12 @@ namespace Sonarr.Api.V5.Queue
 
             foreach (var pendingRelease in pendingToRemove.DistinctBy(p => p.Id))
             {
-                Remove(pendingRelease, blocklist);
+                Remove(pendingRelease, message, blocklist);
             }
 
             foreach (var trackedDownload in trackedToRemove.DistinctBy(t => t.DownloadItem.DownloadId))
             {
-                Remove(trackedDownload, removeFromClient, blocklist, skipRedownload, changeCategory);
+                Remove(trackedDownload, message, removeFromClient, blocklist, skipRedownload, changeCategory);
                 trackedDownloadIds.Add(trackedDownload.DownloadItem.DownloadId);
             }
 
@@ -314,17 +314,17 @@ namespace Sonarr.Api.V5.Queue
             }
         }
 
-        private void Remove(NzbDrone.Core.Queue.Queue pendingRelease, bool blocklist)
+        private void Remove(NzbDrone.Core.Queue.Queue pendingRelease, string? message, bool blocklist)
         {
             if (blocklist)
             {
-                _blocklistService.Block(pendingRelease.RemoteEpisode, "Pending release manually blocklisted");
+                _blocklistService.Block(pendingRelease.RemoteEpisode, message ?? "Pending release manually blocklisted", Request.GetSource());
             }
 
             _pendingReleaseService.RemovePendingQueueItems(pendingRelease.Id);
         }
 
-        private TrackedDownload? Remove(TrackedDownload trackedDownload, bool removeFromClient, bool blocklist, bool skipRedownload, bool changeCategory)
+        private TrackedDownload? Remove(TrackedDownload trackedDownload, string? message, bool removeFromClient, bool blocklist, bool skipRedownload, bool changeCategory)
         {
             if (removeFromClient)
             {
@@ -351,7 +351,7 @@ namespace Sonarr.Api.V5.Queue
 
             if (blocklist)
             {
-                _failedDownloadService.MarkAsFailed(trackedDownload, skipRedownload);
+                _failedDownloadService.MarkAsFailed(trackedDownload, message, Request.GetSource(), skipRedownload);
             }
 
             if (!removeFromClient && !blocklist && !changeCategory)

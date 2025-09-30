@@ -323,7 +323,7 @@ namespace Sonarr.Api.V3.Queue
         {
             if (blocklist)
             {
-                _blocklistService.Block(pendingRelease.RemoteEpisode, "Pending release manually blocklisted");
+                _blocklistService.Block(pendingRelease.RemoteEpisode, "Pending release manually blocklisted", null);
             }
 
             _pendingReleaseService.RemovePendingQueueItemsObsolete(pendingRelease.Id);
@@ -356,7 +356,7 @@ namespace Sonarr.Api.V3.Queue
 
             if (blocklist)
             {
-                _failedDownloadService.MarkAsFailed(trackedDownload, skipRedownload);
+                _failedDownloadService.MarkAsFailed(trackedDownload, null, null, skipRedownload);
             }
 
             if (!removeFromClient && !blocklist && !changeCategory)

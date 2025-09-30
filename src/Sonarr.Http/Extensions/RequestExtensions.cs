@@ -97,6 +97,16 @@ namespace Sonarr.Http.Extensions
             return remoteIP.ToString();
         }
 
+        public static string GetSource(this HttpRequest request)
+        {
+            if (request.Headers.TryGetValue("X-Sonarr-Client", out var source))
+            {
+                return source;
+            }
+
+            return NzbDrone.Common.Http.UserAgentParser.ParseSource(request.Headers["User-Agent"]);
+        }
+
         public static void DisableCache(this IHeaderDictionary headers)
         {
             headers.Remove("Last-Modified");
