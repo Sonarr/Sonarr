@@ -168,10 +168,6 @@ namespace NzbDrone.Common.Instrumentation.Sentry
 
         public void UpdateScope(IOsInfo osInfo)
         {
-            // SentrySdk.ConfigureScope(scope =>
-            // {
-            //    scope.SetTag("is_docker", $"{osInfo.IsDocker}");
-            // });
             SentrySdk.ConfigureScope(scope =>
             {
                 scope.SetTag("is_containerized", $"{osInfo.IsContainerized}");
