@@ -49,38 +49,30 @@ namespace NzbDrone.Core.Notifications
         {
             var qualityString = GetQualityString(series, quality);
 
+            if (episodes.Empty())
+            {
+                return $"{series.Title} - [{qualityString}]";
+            }
+
             if (series.SeriesType == SeriesTypes.Daily)
             {
                 var episode = episodes.First();
 
-                return string.Format("{0} - {1} - {2} [{3}]",
-                                         series.Title,
-                                         episode.AirDate,
-                                         episode.Title,
-                                         qualityString);
+                return $"{series.Title} - {episode.AirDate} - {episode.Title} [{qualityString}]";
             }
 
-            var episodeNumbers = string.Concat(episodes.Select(e => e.EpisodeNumber)
-                                                       .Select(i => string.Format("x{0:00}", i)));
+            var episodeNumbers = string.Concat(episodes.Select(e => e.EpisodeNumber).Select(i => $"x{i:00}"));
 
             var episodeTitles = string.Join(" + ", episodes.Select(e => e.Title));
 
-            return string.Format("{0} - {1}{2} - {3} [{4}]",
-                                    series.Title,
-                                    episodes.First().SeasonNumber,
-                                    episodeNumbers,
-                                    episodeTitles,
-                                    qualityString);
+            return $"{series.Title} - {episodes.First().SeasonNumber}{episodeNumbers} - {episodeTitles} [{qualityString}]";
         }
 
         private string GetFullSeasonMessage(Series series, int seasonNumber, QualityModel quality)
         {
             var qualityString = GetQualityString(series, quality);
 
-            return string.Format("{0} - Season {1} [{2}]",
-                series.Title,
-                seasonNumber,
-                qualityString);
+            return $"{series.Title} - Season {seasonNumber} [{qualityString}]";
         }
 
         private string GetQualityString(Series series, QualityModel quality)

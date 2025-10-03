@@ -715,6 +715,11 @@ namespace NzbDrone.Core.Notifications.Discord
                 return null;
             }
 
+            if (episodes.Empty())
+            {
+                return series.Title.Replace("`", "\\`");
+            }
+
             if (series.SeriesType == SeriesTypes.Daily)
             {
                 var episode = episodes.First();
@@ -722,8 +727,7 @@ namespace NzbDrone.Core.Notifications.Discord
                 return $"{series.Title} - {episode.AirDate} - {episode.Title}".Replace("`", "\\`");
             }
 
-            var episodeNumbers = string.Concat(episodes.Select(e => e.EpisodeNumber)
-                                                       .Select(i => string.Format("x{0:00}", i)));
+            var episodeNumbers = string.Concat(episodes.Select(e => e.EpisodeNumber).Select(i => $"x{i:00}"));
 
             var episodeTitles = string.Join(" + ", episodes.Select(e => e.Title));
 
