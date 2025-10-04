@@ -68,8 +68,6 @@ export const timeFormatOptions: EnhancedSelectInputValue<string>[] = [
   { key: 'HH:mm', value: '17:00/17:30' },
 ];
 
-
-
 function UISettings() {
   const dispatch = useDispatch();
 

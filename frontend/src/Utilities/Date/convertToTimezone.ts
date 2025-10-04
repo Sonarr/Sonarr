@@ -2,7 +2,7 @@ import moment from 'moment-timezone';
 
 export const convertToTimezone = (date: moment.MomentInput, timeZone: string) => {
   if (!date) {
-    return moment(date);
+    return moment();
   }
   
   if (!timeZone) {

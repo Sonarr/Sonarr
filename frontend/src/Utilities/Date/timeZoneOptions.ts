@@ -1,7 +1,13 @@
 import { EnhancedSelectInputValue } from 'Components/Form/Select/EnhancedSelectInput';
+import translate from 'Utilities/String/translate';
 
 export const timeZoneOptions: EnhancedSelectInputValue<string>[] = [
-  { key: '', value: 'System Default' },
+  {
+    key: '',
+    get value() {
+      return translate('SystemDefault');
+    },
+  },
   
   // UTC
   { key: 'UTC', value: 'UTC' },
