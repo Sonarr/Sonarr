@@ -53,10 +53,10 @@ namespace Sonarr.Api.V5.Queue
             {
                 Id = model.Id,
                 SeriesId = model.Series?.Id,
-                EpisodeIds = model.Episodes.Select(e => e.Id).ToList(),
+                EpisodeIds = model.Episodes?.Select(e => e.Id).ToList() ?? new List<int>(),
                 SeasonNumbers = model.SeasonNumber.HasValue ? new List<int> { model.SeasonNumber.Value } : new List<int>(),
                 Series = includeSeries && model.Series != null ? model.Series.ToResource() : null,
-                Episodes = includeEpisodes ? model.Episodes.ToResource() : null,
+                Episodes = includeEpisodes ? model.Episodes?.ToResource() : null,
                 Languages = model.Languages,
                 Quality = model.Quality,
                 CustomFormats = customFormats?.ToResource(false) ?? [],
@@ -78,7 +78,7 @@ namespace Sonarr.Api.V5.Queue
                 DownloadClientHasPostImportCategory = model.DownloadClientHasPostImportCategory,
                 Indexer = model.Indexer,
                 OutputPath = model.OutputPath,
-                EpisodesWithFilesCount = model.Episodes.Count(e => e.HasFile),
+                EpisodesWithFilesCount = model.Episodes?.Count(e => e.HasFile) ?? 0,
                 IsFullSeason = model.RemoteEpisode?.ParsedEpisodeInfo?.FullSeason ?? false
             };
         }
