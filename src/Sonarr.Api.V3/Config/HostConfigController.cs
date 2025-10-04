@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Authentication;
 using NzbDrone.Core.Configuration;
@@ -25,7 +26,7 @@ namespace Sonarr.Api.V3.Config
         public HostConfigController(IConfigFileProvider configFileProvider,
                                     IConfigService configService,
                                     IUserService userService,
-                                    FileExistsValidator fileExistsValidator)
+                                    IDiskProvider diskProvider)
         {
             _configFileProvider = configFileProvider;
             _configService = configService;
@@ -59,14 +60,14 @@ namespace Sonarr.Api.V3.Config
                 .Cascade(CascadeMode.Stop)
                 .NotEmpty()
                 .IsValidPath()
-                .SetValidator(fileExistsValidator)
+                .SetValidator(new FileExistsValidator(diskProvider))
                 .IsValidCertificate()
                 .When(c => c.EnableSsl);
 
             SharedValidator.RuleFor(c => c.SslKeyPath)
                 .NotEmpty()
                 .IsValidPath()
-                .SetValidator(fileExistsValidator)
+                .SetValidator(new FileExistsValidator(diskProvider))
                 .When(c => c.SslKeyPath.IsNotNullOrWhiteSpace());
 
             SharedValidator.RuleFor(c => c.LogSizeLimit).InclusiveBetween(1, 10);
