@@ -881,6 +881,8 @@
   "ImportListsAniListSettingsImportWatching": "Import Watching",
   "ImportListsAniListSettingsImportWatchingHelpText": "List: Currently Watching",
   "ImportListsAniListSettingsUsernameHelpText": "Username for the List to import from",
+  "ImportListsMyAnimeListSettingsScore": "Minimum Score",
+  "ImportListsMyAnimeListSettingsScoreHelpText": "Minimum score for shows to be imported",
   "ImportListsCustomListSettingsName": "Custom List",
   "ImportListsCustomListSettingsUrl": "List URL",
   "ImportListsCustomListSettingsUrlHelpText": "The URL for the series list",

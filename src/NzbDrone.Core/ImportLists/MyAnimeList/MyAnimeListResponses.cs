@@ -21,6 +21,7 @@ namespace NzbDrone.Core.ImportLists.MyAnimeList
     public class MyAnimeListStatusResult
     {
         public string Status { get; set; }
+        public int Score { get; set; }
     }
 
     public class MyAnimeListItemInfo
