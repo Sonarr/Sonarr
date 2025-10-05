@@ -15,12 +15,8 @@ namespace NzbDrone.Core.ImportLists.MyAnimeList
                                        .WithMessage("Must authenticate with MyAnimeList");
 
             RuleFor(c => c.MinimumScore)
-                .GreaterThanOrEqualTo(0)
-                .WithMessage("Must be a positive integer");
-            RuleFor(c => c.MinimumScore)
-                .LessThanOrEqualTo(10)
-                .WithMessage("Must be 10 or less");
-
+                .InclusiveBetween(0, 10)
+                .WithMessage("Must be between 0 and 10");
             RuleFor(c => c.ListStatus).Custom((status, context) =>
             {
                 if (!Enum.IsDefined(typeof(MyAnimeListStatus), status))
