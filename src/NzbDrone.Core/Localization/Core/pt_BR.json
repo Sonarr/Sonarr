@@ -2049,8 +2049,6 @@
     "ImportListsMyAnimeListSettingsAuthenticateWithMyAnimeList": "Autenticar com MyAnimeList",
     "ImportListsMyAnimeListSettingsListStatus": "Status da lista",
     "ImportListsMyAnimeListSettingsListStatusHelpText": "Tipo de lista da qual você deseja importar, defina como \"Tudo\" para todas as listas",
-    "ImportListsMyAnimeListSettingsScore": "Pontuação Mínima",
-    "ImportListsMyAnimeListSettingsScoreHelpText": "Pontuação mínima para as séries a serem importadas",
     "CustomFormatsSettingsTriggerInfo": "Um formato personalizado será aplicado a um lançamento ou arquivo quando corresponder a pelo menos um dos diferentes tipos de condição escolhidos.",
     "EpisodeTitleFootNote": "Opcionalmente, controle o truncamento para um número máximo de bytes, incluindo reticências (`...`). Truncar do final (p. ex., `{Episode Title:30}`) ou do início (p. ex. , `{Episode Title:-30}`) é suportado. Os títulos dos episódios serão automaticamente truncados de acordo com as limitações do sistema de arquivos, se necessário.",
     "NotificationsTelegramSettingsIncludeAppNameHelpText": "Opcionalmente, adicione \"{appName}\" ao título da mensagem para diferenciar notificações de diferentes aplicativos",
