@@ -1462,6 +1462,8 @@
     "ImportListsAniListSettingsUsernameHelpText": "Nom d'usuari de la llista des de la qual importar",
     "ImportListsMyAnimeListSettingsListStatus": "Estat de la llista",
     "ImportListsMyAnimeListSettingsListStatusHelpText": "Tipus de llista des del qual voleu importar, establert a 'Tot' per a totes les llistes",
+    "ImportListsMyAnimeListSettingsScore": "Mínima puntuació",
+    "ImportListsMyAnimeListSettingsScoreHelpText": "Puntuació mínima per a les sèries que s'han d'importar",
     "ImportListsPlexSettingsAuthenticateWithPlex": "Autentica amb Plex.tv",
     "ImportListsSettingsAccessToken": "Testimoni d'accés",
     "ImportListsSettingsRefreshToken": "Actualitza el testimoni",

@@ -892,6 +892,8 @@
   "ImportListsMyAnimeListSettingsAuthenticateWithMyAnimeList": "Authenticate with MyAnimeList",
   "ImportListsMyAnimeListSettingsListStatus": "List Status",
   "ImportListsMyAnimeListSettingsListStatusHelpText": "Type of list you want to import from, set to 'All' for all lists",
+  "ImportListsMyAnimeListSettingsScore": "Minimum Score",
+  "ImportListsMyAnimeListSettingsScoreHelpText": "Minimum score for shows to be imported",
   "ImportListsPlexSettingsAuthenticateWithPlex": "Authenticate with Plex.tv",
   "ImportListsPlexSettingsWatchlistName": "Plex Watchlist",
   "ImportListsPlexSettingsWatchlistRSSName": "Plex Watchlist RSS",

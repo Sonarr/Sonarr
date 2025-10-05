@@ -10,6 +10,12 @@ namespace NzbDrone.Core.ImportLists.MyAnimeList
     public class MyAnimeListParser : IParseImportListResponse
     {
         private static readonly Logger Logger = NzbDroneLogger.GetLogger(typeof(MyAnimeListParser));
+        private MyAnimeListSettings Settings { get; set; }
+
+        public MyAnimeListParser(MyAnimeListSettings settings)
+        {
+            Settings = settings;
+        }
 
         public IList<ImportListItemInfo> ParseResponse(ImportListResponse importListResponse)
         {
@@ -18,6 +24,12 @@ namespace NzbDrone.Core.ImportLists.MyAnimeList
 
             foreach (var show in jsonResponse.Animes)
             {
+                if (show.ListStatus.Score < Settings.MinimumScore)
+                {
+                    Logger.Debug("Skipping {0} because score is below threshold", show.AnimeListInfo.Title);
+                    continue;
+                }
+
                 series.AddIfNotNull(new ImportListItemInfo
                 {
                     Title = show.AnimeListInfo.Title,

@@ -74,7 +74,7 @@ namespace NzbDrone.Core.ImportLists.MyAnimeList
 
         public override IParseImportListResponse GetParser()
         {
-            return new MyAnimeListParser();
+            return new MyAnimeListParser(Settings);
         }
 
         public override IImportListRequestGenerator GetRequestGenerator()

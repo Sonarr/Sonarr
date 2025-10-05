@@ -2048,6 +2048,8 @@
     "ReleaseProfileIndexerHelpTextWarning": "L'utilisation d'un indexeur spécifique avec des profils de version peut entraîner la saisie de publications en double.",
     "ImportListsMyAnimeListSettingsListStatus": "Statut de la liste",
     "ImportListsMyAnimeListSettingsListStatusHelpText": "Type de liste à partir de laquelle vous souhaitez importer, défini sur 'All' pour toutes les listes",
+    "ImportListsMyAnimeListSettingsScore": "Score minimum",
+    "ImportListsMyAnimeListSettingsScoreHelpText": "Score minimum pour que les séries soient importées",
     "ImportListsMyAnimeListSettingsAuthenticateWithMyAnimeList": "Authentifiez-vous avec MyAnimeList",
     "CustomFormatsSettingsTriggerInfo": "Un format personnalisé sera appliqué à une version ou à un fichier lorsqu'il correspond à au moins un de chacun des différents types de conditions choisis.",
     "ClickToChangeReleaseType": "Cliquez pour changer le type de version",

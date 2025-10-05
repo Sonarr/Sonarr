@@ -1140,6 +1140,8 @@
     "ImportListsMyAnimeListSettingsAuthenticateWithMyAnimeList": "Аутентифікація за допомогою MyAnimeList",
     "ImportListsMyAnimeListSettingsListStatus": "Статус списку",
     "ImportListsMyAnimeListSettingsListStatusHelpText": "Тип списку, з якого ви хочете імпортувати, встановіть для всіх списків значення «Всі»",
+    "ImportListsMyAnimeListSettingsScore": "Мінімальна оцінка",
+    "ImportListsMyAnimeListSettingsScoreHelpText": "Мінімальна оцінка для серіалів, які потрібно імпортувати",
     "ImportListsPlexSettingsAuthenticateWithPlex": "Аутентифікація через Plex.tv",
     "ImportListsPlexSettingsWatchlistName": "Список спостереження Plex",
     "ImportListsPlexSettingsWatchlistRSSName": "Список спостереження Plex RSS",

@@ -1810,6 +1810,8 @@
     "ImportListsCustomListValidationAuthenticationFailure": "Authentifizierungsfehler",
     "ImportListsMyAnimeListSettingsListStatus": "Listenstatus",
     "ImportListsMyAnimeListSettingsListStatusHelpText": "Art der Liste, von der importiert werden soll, setze auf 'Alle' für alle Listen",
+    "ImportListsMyAnimeListSettingsScore": "Mindestbewertung",
+    "ImportListsMyAnimeListSettingsScoreHelpText": "Mindestbewertung für Serien, die importiert werden sollen",
     "ImportListsPlexSettingsWatchlistName": "Plex Watchlist",
     "ImportListsSettingsRefreshToken": "Aktualisierungstoken",
     "ImportListsSimklSettingsListTypeHelpText": "Art der Liste, von der du importieren möchtest",

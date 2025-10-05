@@ -1645,6 +1645,8 @@
     "ImportListsAniListSettingsImportWatchingHelpText": "Liste: Şu anda izleniyor",
     "ImportListsCustomListSettingsName": "Özel Liste",
     "ImportListsMyAnimeListSettingsListStatus": "Liste Durumu",
+    "ImportListsMyAnimeListSettingsScore": "Minimum Puan",
+    "ImportListsMyAnimeListSettingsScoreHelpText": "İçe aktarılacak diziler için minimum puan",
     "ImportListsSonarrSettingsSyncSeasonMonitoring": "Sezon Sekronizasyonu Takip Et",
     "ImportListsTraktSettingsPopularListTypeAnticipatedShows": "Beklenen Gösteriler",
     "ImportListRootFolderMissingRootHealthCheckMessage": "İçe aktarma listeleri için kök klasör eksik: {rootFolderInfo}",

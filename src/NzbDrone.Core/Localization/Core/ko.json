@@ -1419,6 +1419,8 @@
     "ImportListsAniListSettingsImportWatchingHelpText": "목록: 현재 시청 중",
     "ImportListsCustomListValidationConnectionError": "해당 URL에 요청을 할 수 없습니다. StatusCode: {exceptionStatusCode}",
     "ImportListsMyAnimeListSettingsListStatusHelpText": "가져오고 싶은 목록의 유형, 모든 목록일 경우 '모두'로 설정",
+    "ImportListsMyAnimeListSettingsScore": "최소 점수",
+    "ImportListsMyAnimeListSettingsScoreHelpText": "가져올 프로그램의 최소 점수",
     "ImportListsSimklSettingsListType": "목록 유형",
     "ImportListsSimklSettingsUserListTypeDropped": "드랍함",
     "ImportListsTraktSettingsPopularListTypeRecommendedYearShows": "연도별 추천 프로그램",

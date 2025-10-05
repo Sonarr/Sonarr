@@ -14,6 +14,13 @@ namespace NzbDrone.Core.ImportLists.MyAnimeList
                                        .OverridePropertyName("SignIn")
                                        .WithMessage("Must authenticate with MyAnimeList");
 
+            RuleFor(c => c.MinimumScore)
+                .GreaterThanOrEqualTo(0)
+                .WithMessage("Must be a positive integer");
+            RuleFor(c => c.MinimumScore)
+                .LessThanOrEqualTo(10)
+                .WithMessage("Must be 10 or less");
+
             RuleFor(c => c.ListStatus).Custom((status, context) =>
             {
                 if (!Enum.IsDefined(typeof(MyAnimeListStatus), status))
@@ -32,6 +39,9 @@ namespace NzbDrone.Core.ImportLists.MyAnimeList
 
         [FieldDefinition(0, Label = "ImportListsMyAnimeListSettingsListStatus", Type = FieldType.Select, SelectOptions = typeof(MyAnimeListStatus), HelpText = "ImportListsMyAnimeListSettingsListStatusHelpText")]
         public int ListStatus { get; set; }
+
+        [FieldDefinition(0, Label = "ImportListsMyAnimeListSettingsScore", HelpText = "ImportListsMyAnimeListSettingsScoreHelpText")]
+        public int MinimumScore { get; set; } = 0;
 
         [FieldDefinition(0, Label = "ImportListsSettingsAccessToken", Type = FieldType.Textbox, Hidden = HiddenType.Hidden)]
         public string AccessToken { get; set; }

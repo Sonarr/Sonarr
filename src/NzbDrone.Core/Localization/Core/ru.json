@@ -1729,6 +1729,8 @@
     "ImportListsSimklSettingsShowType": "Показать тип",
     "ImportListsSimklSettingsUserListTypePlanToWatch": "Планирую посмотреть",
     "ImportListsMyAnimeListSettingsListStatusHelpText": "Тип списка, из которого вы хотите импортировать, установите для всех списков значение «Все»",
+    "ImportListsMyAnimeListSettingsScore": "Минимальная оценка",
+    "ImportListsMyAnimeListSettingsScoreHelpText": "Минимальная оценка для сериалов, которые нужно импортировать",
     "ImportListsTraktSettingsPopularListTypeRecommendedMonthShows": "Рекомендуемые шоу за месяц",
     "InteractiveSearchSeason": "Интерактивный поиск всех эпизодов этого сезона",
     "Label": "Метка",
