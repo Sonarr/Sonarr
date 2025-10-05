@@ -2049,8 +2049,6 @@
     "ImportListsMyAnimeListSettingsAuthenticateWithMyAnimeList": "Autenticar con MyAnimeList",
     "ImportListsMyAnimeListSettingsListStatus": "Estado de lista",
     "ImportListsMyAnimeListSettingsListStatusHelpText": "Tipo de lista desde la que quieres importar, establecer a 'Todo' para todas las listas",
-    "ImportListsMyAnimeListSettingsScore": "Mínima puntuación",
-    "ImportListsMyAnimeListSettingsScoreHelpText": "Puntuación mínima para las series que se han de importar",
     "CustomFormatsSettingsTriggerInfo": "Un formato personalizado será aplicado al lanzamiento o archivo cuando coincida con al menos uno de los diferentes tipos de condición elegidos.",
     "ClickToChangeReleaseType": "Haz clic para cambiar el tipo de lanzamiento",
     "ReleaseGroupFootNote": "Opcionalmente controla el truncamiento hasta un número máximo de bytes, incluyendo elipsis (`...`). Está soportado truncar tanto desde el final (p. ej. `{Grupo de lanzamiento:30}`) como desde el principio (p. ej. `{Grupo de lanzamiento:-30}`).",
