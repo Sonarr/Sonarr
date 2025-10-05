@@ -17,6 +17,7 @@ namespace NzbDrone.Core.ImportLists.MyAnimeList
             RuleFor(c => c.MinimumScore)
                 .InclusiveBetween(0, 10)
                 .WithMessage("Must be between 0 and 10");
+
             RuleFor(c => c.ListStatus).Custom((status, context) =>
             {
                 if (!Enum.IsDefined(typeof(MyAnimeListStatus), status))
@@ -33,10 +34,10 @@ namespace NzbDrone.Core.ImportLists.MyAnimeList
 
         public override string BaseUrl { get; set; }  = "https://api.myanimelist.net/v2";
 
-        [FieldDefinition(0, Label = "ImportListsMyAnimeListSettingsListStatus", Type = FieldType.Select, SelectOptions = typeof(MyAnimeListStatus), HelpText = "ImportListsMyAnimeListSettingsListStatusHelpText")]
+        [FieldDefinition(1, Label = "ImportListsMyAnimeListSettingsListStatus", Type = FieldType.Select, SelectOptions = typeof(MyAnimeListStatus), HelpText = "ImportListsMyAnimeListSettingsListStatusHelpText")]
         public int ListStatus { get; set; }
 
-        [FieldDefinition(0, Label = "ImportListsMyAnimeListSettingsScore", HelpText = "ImportListsMyAnimeListSettingsScoreHelpText")]
+        [FieldDefinition(2, Label = "ImportListsMyAnimeListSettingsScore", HelpText = "ImportListsMyAnimeListSettingsScoreHelpText")]
         public int MinimumScore { get; set; } = 0;
 
         [FieldDefinition(0, Label = "ImportListsSettingsAccessToken", Type = FieldType.Textbox, Hidden = HiddenType.Hidden)]
