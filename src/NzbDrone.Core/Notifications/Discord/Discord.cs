@@ -727,7 +727,7 @@ namespace NzbDrone.Core.Notifications.Discord
                 return $"{series.Title} - {episode.AirDate} - {episode.Title}".Replace("`", "\\`");
             }
 
-            var episodeNumbers = string.Concat(episodes.Select(e => e.EpisodeNumber).Select(i => $"x{i:00}"));
+            var episodeNumbers = string.Concat(episodes.Select(e => $"x{e.EpisodeNumber:00}"));
 
             var episodeTitles = string.Join(" + ", episodes.Select(e => e.Title));
 
