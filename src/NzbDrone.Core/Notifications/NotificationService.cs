@@ -61,7 +61,7 @@ namespace NzbDrone.Core.Notifications
                 return $"{series.Title} - {episode.AirDate} - {episode.Title} [{qualityString}]";
             }
 
-            var episodeNumbers = string.Concat(episodes.Select(e => e.EpisodeNumber).Select(i => $"x{i:00}"));
+            var episodeNumbers = string.Concat(episodes.Select(e => $"x{e.EpisodeNumber:00}"));
 
             var episodeTitles = string.Join(" + ", episodes.Select(e => e.Title));
 
