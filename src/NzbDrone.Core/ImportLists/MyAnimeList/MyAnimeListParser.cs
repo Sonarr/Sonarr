@@ -7,15 +7,10 @@ using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.ImportLists.MyAnimeList
 {
-    public class MyAnimeListParser : IParseImportListResponse
+    public class MyAnimeListParser(MyAnimeListSettings settings) : IParseImportListResponse
     {
         private static readonly Logger Logger = NzbDroneLogger.GetLogger(typeof(MyAnimeListParser));
-        private MyAnimeListSettings _settings { get; set; }
-
-        public MyAnimeListParser(MyAnimeListSettings settings)
-        {
-            _settings = settings;
-        }
+        private readonly MyAnimeListSettings _settings = settings;
 
         public IList<ImportListItemInfo> ParseResponse(ImportListResponse importListResponse)
         {
