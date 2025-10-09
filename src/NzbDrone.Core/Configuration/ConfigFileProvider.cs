@@ -34,7 +34,6 @@ namespace NzbDrone.Core.Configuration
         int SslPort { get; }
         bool EnableSsl { get; }
         bool LaunchBrowser { get; }
-        bool ExternalRestart { get; }
         AuthenticationType AuthenticationMethod { get; }
         AuthenticationRequiredType AuthenticationRequired { get; }
         bool AnalyticsEnabled { get; }
@@ -181,8 +180,6 @@ namespace NzbDrone.Core.Configuration
         public bool EnableSsl => _serverOptions.EnableSsl ?? GetValueBoolean("EnableSsl", false);
 
         public bool LaunchBrowser => _appOptions.LaunchBrowser ?? GetValueBoolean("LaunchBrowser", true);
-
-        public bool ExternalRestart => _appOptions.ExternalRestart ?? GetValueBoolean("ExternalRestart", true);
 
         public string ApiKey
         {

@@ -14,7 +14,6 @@ namespace Sonarr.Api.V3.Config
         public int SslPort { get; set; }
         public bool EnableSsl { get; set; }
         public bool LaunchBrowser { get; set; }
-        public bool ExternalRestart { get; set; }
         public AuthenticationType AuthenticationMethod { get; set; }
         public AuthenticationRequiredType AuthenticationRequired { get; set; }
         public bool AnalyticsEnabled { get; set; }
@@ -61,7 +60,6 @@ namespace Sonarr.Api.V3.Config
                 SslPort = model.SslPort,
                 EnableSsl = model.EnableSsl,
                 LaunchBrowser = model.LaunchBrowser,
-                ExternalRestart = model.ExternalRestart,
                 AuthenticationMethod = model.AuthenticationMethod,
                 AuthenticationRequired = model.AuthenticationRequired,
                 AnalyticsEnabled = model.AnalyticsEnabled,

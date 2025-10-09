@@ -71,11 +71,28 @@ namespace NzbDrone.Host
         {
             if (_runtimeInfo.RestartPending && !_runtimeInfo.IsWindowsService)
             {
-                if (_runtimeInfo.IsSystemdService || (_runtimeInfo.IsContainerized && _configFileProvider.ExternalRestart))
+                if (_runtimeInfo.IsSystemdService)
                 {
-                    var restartHandler = _runtimeInfo.IsSystemdService ? "systemd" : "container runtime";
-                    _logger.Info("Skipping process spawn, letting {0} handle restart", restartHandler);
+                    _logger.Info("Skipping process spawn, letting systemd handle restart");
                     return;
+                }
+
+                if (_runtimeInfo.IsContainerized)
+                {
+                    _logger.Info("Waiting for external restart in containerized environment...");
+                    const int maxWaitSeconds = 10;
+                    for (var i = 0; i < maxWaitSeconds; i++)
+                    {
+                        Thread.Sleep(1000);
+
+                        if (_processProvider.Exists(ProcessProvider.SONARR_PROCESS_NAME))
+                        {
+                            _logger.Info("Sonarr was restarted by external process.");
+                            return;
+                        }
+                    }
+
+                    _logger.Info("External restart did not occur within {0} seconds, spawning process.", maxWaitSeconds);
                 }
 
                 var restartArgs = GetRestartArgs();
