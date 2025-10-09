@@ -59,8 +59,6 @@
     "PrioritySettings": "Prioritet: {priority}",
     "RemoveSelectedItemQueueMessageText": "Er du sikker på, at du vil fjerne 1 element fra køen?",
     "UsenetDelayTime": "Usenet-forsinkelse: {usenetDelay}",
-    "UseExternalRestartService": "Brug Ekstern Genstartservice",
-    "UseExternalRestartServiceHelpText": "Lad container runtime eller procesmanager administrere genstarter.",
     "WouldYouLikeToRestoreBackup": "Vil du gendanne sikkerhedskopien »{name}«?",
     "StartupDirectory": "Startmappe",
     "DeleteTagMessageText": "Er du sikker på, at du vil slette etiketten »{label}«?",

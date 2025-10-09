@@ -2147,8 +2147,6 @@
   "UrlBaseHelpText": "For reverse proxy support, default is empty",
   "UseHardlinksInsteadOfCopy": "Use Hardlinks instead of Copy",
   "UseProxy": "Use Proxy",
-  "UseExternalRestartService": "Use External Restart Service",
-  "UseExternalRestartServiceHelpText": "Let the container runtime or process manager handle restarts.",
   "UseSeasonFolder": "Use Season Folder",
   "UseSeasonFolderHelpText": "Sort episodes into season folders",
   "UseSsl": "Use SSL",
