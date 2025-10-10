@@ -40,13 +40,13 @@ namespace NzbDrone.Core.ImportLists.MyAnimeList
         [FieldDefinition(2, Label = "ImportListsMyAnimeListSettingsScore", HelpText = "ImportListsMyAnimeListSettingsScoreHelpText")]
         public int MinimumScore { get; set; } = 0;
 
-        [FieldDefinition(0, Label = "ImportListsSettingsAccessToken", Type = FieldType.Textbox, Hidden = HiddenType.Hidden)]
+        [FieldDefinition(3, Label = "ImportListsSettingsAccessToken", Type = FieldType.Textbox, Hidden = HiddenType.Hidden)]
         public string AccessToken { get; set; }
 
-        [FieldDefinition(0, Label = "ImportListsSettingsRefreshToken", Type = FieldType.Textbox, Hidden = HiddenType.Hidden)]
+        [FieldDefinition(4, Label = "ImportListsSettingsRefreshToken", Type = FieldType.Textbox, Hidden = HiddenType.Hidden)]
         public string RefreshToken { get; set; }
 
-        [FieldDefinition(0, Label = "ImportListsSettingsExpires", Type = FieldType.Textbox, Hidden = HiddenType.Hidden)]
+        [FieldDefinition(5, Label = "ImportListsSettingsExpires", Type = FieldType.Textbox, Hidden = HiddenType.Hidden)]
         public DateTime Expires { get; set; }
 
         [FieldDefinition(99, Label = "ImportListsMyAnimeListSettingsAuthenticateWithMyAnimeList", Type = FieldType.OAuth)]
