@@ -65,10 +65,12 @@ namespace NzbDrone.Core.Test.Download.Aggregation.Aggregators
             Subject.Aggregate(_remoteEpisode).Languages.Should().Equal(_remoteEpisode.ParsedEpisodeInfo.Languages);
         }
 
-        [Test]
-        public void should_return_multi_languages_when_indexer_id_has_multi_languages_configuration()
+        [TestCase("Series.Title.S01E01.MULTi.1080p.WEB.H265-RlsGroup")]
+        [TestCase("Series Title (2025) [COMPLETA] [1080p H265 EAC3 MultiLang MultiSub][RlsGroup]")]
+        [TestCase("Series Title - Stagione 1 (2025) [COMPLETA] 720p H264 MULTILANG AAC 2.0 MULTISUB-RlsGroup")]
+        [TestCase("Series Title (2007) S01E01 [Multilang AC3 Sub Spa Eng Rus]")]
+        public void should_return_multi_languages_when_indexer_id_has_multi_languages_configuration(string releaseTitle)
         {
-            var releaseTitle = "Series.Title.S01E01.MULTi.1080p.WEB.H265-RlsGroup";
             var indexerDefinition = new IndexerDefinition
             {
                 Id = 1,
@@ -87,10 +89,12 @@ namespace NzbDrone.Core.Test.Download.Aggregation.Aggregators
             Mocker.GetMock<IIndexerFactory>().VerifyNoOtherCalls();
         }
 
-        [Test]
-        public void should_return_multi_languages_from_indexer_with_id_when_indexer_id_and_name_are_set()
+        [TestCase("Series.Title.S01E01.MULTi.1080p.WEB.H265-RlsGroup")]
+        [TestCase("Series Title (2025) [COMPLETA] [1080p H265 EAC3 MultiLang MultiSub][RlsGroup]")]
+        [TestCase("Series Title - Stagione 1 (2025) [COMPLETA] 720p H264 MULTILANG AAC 2.0 MULTISUB-RlsGroup")]
+        [TestCase("Series Title (2007) S01E01 [Multilang AC3 Sub Spa Eng Rus]")]
+        public void should_return_multi_languages_from_indexer_with_id_when_indexer_id_and_name_are_set(string releaseTitle)
         {
-            var releaseTitle = "Series.Title.S01E01.MULTi.1080p.WEB.H265-RlsGroup";
             var indexerDefinition1 = new IndexerDefinition
             {
                 Id = 1,
@@ -122,10 +126,12 @@ namespace NzbDrone.Core.Test.Download.Aggregation.Aggregators
             Mocker.GetMock<IIndexerFactory>().VerifyNoOtherCalls();
         }
 
-        [Test]
-        public void should_return_multi_languages_when_indexer_name_has_multi_languages_configuration()
+        [TestCase("Series.Title.S01E01.MULTi.1080p.WEB.H265-RlsGroup")]
+        [TestCase("Series Title (2025) [COMPLETA] [1080p H265 EAC3 MultiLang MultiSub][RlsGroup]")]
+        [TestCase("Series Title - Stagione 1 (2025) [COMPLETA] 720p H264 MULTILANG AAC 2.0 MULTISUB-RlsGroup")]
+        [TestCase("Series Title (2007) S01E01 [Multilang AC3 Sub Spa Eng Rus]")]
+        public void should_return_multi_languages_when_indexer_name_has_multi_languages_configuration(string releaseTitle)
         {
-            var releaseTitle = "Series.Title.S01E01.MULTi.1080p.WEB.H265-RlsGroup";
             var indexerDefinition = new IndexerDefinition
             {
                 Id = 1,
@@ -146,10 +152,12 @@ namespace NzbDrone.Core.Test.Download.Aggregation.Aggregators
             Mocker.GetMock<IIndexerFactory>().VerifyNoOtherCalls();
         }
 
-        [Test]
-        public void should_return_multi_languages_when_release_as_unknown_as_default_language_and_indexer_has_multi_languages_configuration()
+        [TestCase("Series.Title.S01E01.MULTi.1080p.WEB.H265-RlsGroup")]
+        [TestCase("Series Title (2025) [COMPLETA] [1080p H265 EAC3 MultiLang MultiSub][RlsGroup]")]
+        [TestCase("Series Title - Stagione 1 (2025) [COMPLETA] 720p H264 MULTILANG AAC 2.0 MULTISUB-RlsGroup")]
+        [TestCase("Series Title (2007) S01E01 [Multilang AC3 Sub Spa Eng Rus]")]
+        public void should_return_multi_languages_when_release_as_unknown_as_default_language_and_indexer_has_multi_languages_configuration(string releaseTitle)
         {
-            var releaseTitle = "Series.Title.S01E01.MULTi.1080p.WEB.H265-RlsGroup";
             var indexerDefinition = new IndexerDefinition
             {
                 Id = 1,
@@ -168,10 +176,12 @@ namespace NzbDrone.Core.Test.Download.Aggregation.Aggregators
             Mocker.GetMock<IIndexerFactory>().VerifyNoOtherCalls();
         }
 
-        [Test]
-        public void should_return_multi_languages_when_release_as_specified_language_and_indexer_has_multi_languages_configuration()
+        [TestCase("Series.Title.S01E01.MULTi.1080p.WEB.H265-RlsGroup")]
+        [TestCase("Series Title (2025) [COMPLETA] [1080p H265 EAC3 MultiLang MultiSub][RlsGroup]")]
+        [TestCase("Series Title - Stagione 1 (2025) [COMPLETA] 720p H264 MULTILANG AAC 2.0 MULTISUB-RlsGroup")]
+        [TestCase("Series Title (2007) S01E01 [Multilang AC3 Sub Spa Eng Rus]")]
+        public void should_return_multi_languages_when_release_as_specified_language_and_indexer_has_multi_languages_configuration(string releaseTitle)
         {
-            var releaseTitle = "Series.Title.S01E01.MULTi.VFF.VFQ.1080p.BluRay.DTS.HDMA.x264-RlsGroup";
             var indexerDefinition = new IndexerDefinition
             {
                 Id = 1,
@@ -190,10 +200,12 @@ namespace NzbDrone.Core.Test.Download.Aggregation.Aggregators
             Mocker.GetMock<IIndexerFactory>().VerifyNoOtherCalls();
         }
 
-        [Test]
-        public void should_return_multi_languages_when_release_as_other_language_and_indexer_has_multi_languages_configuration()
+        [TestCase("Series.Title.S01E01.MULTi.1080p.WEB.H265-RlsGroup")]
+        [TestCase("Series Title (2025) [COMPLETA] [1080p H265 EAC3 MultiLang MultiSub][RlsGroup]")]
+        [TestCase("Series Title - Stagione 1 (2025) [COMPLETA] 720p H264 MULTILANG AAC 2.0 MULTISUB-RlsGroup")]
+        [TestCase("Series Title (2007) S01E01 [Multilang AC3 Sub Spa Eng Rus]")]
+        public void should_return_multi_languages_when_release_as_other_language_and_indexer_has_multi_languages_configuration(string releaseTitle)
         {
-            var releaseTitle = "Series.Title.S01E01.MULTi.GERMAN.1080p.BluRay.DTS.HDMA.x264-RlsGroup";
             var indexerDefinition = new IndexerDefinition
             {
                 Id = 1,
@@ -212,10 +224,12 @@ namespace NzbDrone.Core.Test.Download.Aggregation.Aggregators
             Mocker.GetMock<IIndexerFactory>().VerifyNoOtherCalls();
         }
 
-        [Test]
-        public void should_return_original_when_indexer_has_no_multi_languages_configuration()
+        [TestCase("Series.Title.S01E01.MULTi.1080p.WEB.H265-RlsGroup")]
+        [TestCase("Series Title (2025) [COMPLETA] [1080p H265 EAC3 MultiLang MultiSub][RlsGroup]")]
+        [TestCase("Series Title - Stagione 1 (2025) [COMPLETA] 720p H264 MULTILANG AAC 2.0 MULTISUB-RlsGroup")]
+        [TestCase("Series Title (2007) S01E01 [Multilang AC3 Sub Spa Eng Rus]")]
+        public void should_return_original_when_indexer_has_no_multi_languages_configuration(string releaseTitle)
         {
-            var releaseTitle = "Series.Title.S01E01.MULTi.1080p.WEB.H265-RlsGroup";
             var indexerDefinition = new IndexerDefinition
             {
                 Id = 1,
@@ -234,11 +248,12 @@ namespace NzbDrone.Core.Test.Download.Aggregation.Aggregators
             Mocker.GetMock<IIndexerFactory>().VerifyNoOtherCalls();
         }
 
-        [Test]
-        public void should_return_original_when_no_indexer_value()
+        [TestCase("Series.Title.S01E01.MULTi.1080p.WEB.H265-RlsGroup")]
+        [TestCase("Series Title (2025) [COMPLETA] [1080p H265 EAC3 MultiLang MultiSub][RlsGroup]")]
+        [TestCase("Series Title - Stagione 1 (2025) [COMPLETA] 720p H264 MULTILANG AAC 2.0 MULTISUB-RlsGroup")]
+        [TestCase("Series Title (2007) S01E01 [Multilang AC3 Sub Spa Eng Rus]")]
+        public void should_return_original_when_no_indexer_value(string releaseTitle)
         {
-            var releaseTitle = "Series.Title.S01E01.MULTi.1080p.WEB.H265-RlsGroup";
-
             _remoteEpisode.ParsedEpisodeInfo = GetParsedEpisodeInfo(new List<Language> { }, releaseTitle);
             _remoteEpisode.Release.Title = releaseTitle;
 
