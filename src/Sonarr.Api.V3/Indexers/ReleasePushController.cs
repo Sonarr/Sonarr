@@ -120,20 +120,84 @@ namespace Sonarr.Api.V3.Indexers
 
         private int? ResolveDownloadClientId(ReleaseResource release)
         {
-            var downloadClientId = release.DownloadClientId.GetValueOrDefault();
+            var requestedId = release.DownloadClientId.GetValueOrDefault();
+            var requestedName = release.DownloadClient?.Trim();
+            var resolvedClientByName = default(DownloadClientDefinition);
+            var resolvedClient = default(DownloadClientDefinition);
 
-            if (downloadClientId == 0 && release.DownloadClient.IsNotNullOrWhiteSpace())
+            if (requestedName.IsNotNullOrWhiteSpace())
             {
-                var downloadClient = _downloadClientFactory.All().FirstOrDefault(v => v.Name.EqualsIgnoreCase(release.DownloadClient));
+                resolvedClientByName = _downloadClientFactory.All()
+                    .FirstOrDefault(v => v.Name.EqualsIgnoreCase(requestedName));
 
-                if (downloadClient != null)
+                if (resolvedClientByName != null)
                 {
-                    _logger.Debug("Push Release {0} associated with download client {1} - {2}.", release.Title, downloadClientId, release.DownloadClient);
+                    if (!resolvedClientByName.Enable)
+                    {
+                        throw new ValidationException(new List<ValidationFailure>
+                        {
+                            new("DownloadClient", "Download client is disabled.", requestedName)
+                        });
+                    }
 
-                    return downloadClient.Id;
+                    release.DownloadClient = resolvedClientByName.Name;
+                    resolvedClient = resolvedClientByName;
+                }
+                else if (requestedId == 0)
+                {
+                    throw new ValidationException(new List<ValidationFailure>
+                    {
+                        new("DownloadClient", "Download client does not exist.", requestedName)
+                    });
+                }
+            }
+
+            if (requestedId != 0)
+            {
+                DownloadClientDefinition clientById;
+
+                try
+                {
+                    clientById = _downloadClientFactory.Get(requestedId);
+                }
+                catch (ModelNotFoundException)
+                {
+                    throw new ValidationException(new List<ValidationFailure>
+                    {
+                        new("DownloadClientId", "Download client does not exist.", requestedId.ToString())
+                    });
                 }
 
-                _logger.Debug("Push Release {0} not associated with known download client {1}.", release.Title, release.DownloadClient);
+                if (resolvedClientByName != null && clientById.Id != resolvedClientByName.Id)
+                {
+                    throw new ValidationException(new List<ValidationFailure>
+                    {
+                        new("DownloadClientId", "Download client id does not match the provided name.", requestedId.ToString()),
+                        new("DownloadClient", "Download client name does not match the provided id.", requestedName)
+                    });
+                }
+
+                if (!clientById.Enable)
+                {
+                    throw new ValidationException(new List<ValidationFailure>
+                    {
+                        new("DownloadClientId", "Download client is disabled.", requestedId.ToString())
+                    });
+                }
+
+                if (resolvedClientByName == null && requestedName.IsNotNullOrWhiteSpace())
+                {
+                    release.DownloadClient = clientById.Name;
+                }
+
+                resolvedClient = clientById;
+            }
+
+            if (resolvedClient != null)
+            {
+                _logger.Debug("Push Release {0} associated with download client {1} - {2}.", release.Title, resolvedClient.Id, resolvedClient.Name);
+
+                return resolvedClient.Id;
             }
 
             return release.DownloadClientId;
