@@ -7,6 +7,7 @@ using NLog;
 using NUnit.Framework;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Download;
+using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Profiles.Qualities;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Test.Common;
@@ -35,7 +36,7 @@ public class ReleasePushControllerFixture : TestBase<ReleasePushController>
         Mocker.SetConstant(LogManager.GetLogger(nameof(ReleasePushControllerFixture)));
 
         Mocker.GetMock<IQualityProfileService>()
-              .Setup(x => x.GetDefaultProfile(It.IsAny<string>()))
+              .Setup(x => x.GetDefaultProfile(It.IsAny<string>(), It.IsAny<Quality>(), It.IsAny<Quality[]>()))
               .Returns(qualityProfile);
     }
 
