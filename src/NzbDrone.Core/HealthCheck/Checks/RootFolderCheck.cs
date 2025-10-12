@@ -43,6 +43,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 {
                     return new HealthCheck(GetType(),
                         HealthCheckResult.Error,
+                        HealthCheckReason.RootFolderMissing,
                         _localizationService.GetLocalizedString(
                             "RootFolderMissingHealthCheckMessage",
                             new Dictionary<string, object>
@@ -54,6 +55,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
 
                 return new HealthCheck(GetType(),
                     HealthCheckResult.Error,
+                    HealthCheckReason.RootFolderMultipleMissing,
                     _localizationService.GetLocalizedString(
                         "RootFolderMultipleMissingHealthCheckMessage",
                         new Dictionary<string, object>

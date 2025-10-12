@@ -35,6 +35,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
             {
                 return new HealthCheck(GetType(),
                     HealthCheckResult.Error,
+                    HealthCheckReason.RemovedSeriesSingle,
                     _localizationService.GetLocalizedString("RemovedSeriesSingleRemovedHealthCheckMessage", new Dictionary<string, object>
                     {
                         { "series", seriesText }
@@ -44,6 +45,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
 
             return new HealthCheck(GetType(),
                 HealthCheckResult.Error,
+                HealthCheckReason.RemovedSeriesMultiple,
                 _localizationService.GetLocalizedString("RemovedSeriesMultipleRemovedHealthCheckMessage", new Dictionary<string, object>
                 {
                     { "series", seriesText }

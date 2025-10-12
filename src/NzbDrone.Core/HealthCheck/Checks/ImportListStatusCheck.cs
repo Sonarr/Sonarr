@@ -40,12 +40,14 @@ namespace NzbDrone.Core.HealthCheck.Checks
             {
                 return new HealthCheck(GetType(),
                     HealthCheckResult.Error,
+                    HealthCheckReason.ImportListStatusAllUnavailable,
                     _localizationService.GetLocalizedString("ImportListStatusAllUnavailableHealthCheckMessage"),
                     "#import-lists-are-unavailable-due-to-failures");
             }
 
             return new HealthCheck(GetType(),
                 HealthCheckResult.Warning,
+                HealthCheckReason.ImportListStatusUnavailable,
                 _localizationService.GetLocalizedString("ImportListStatusUnavailableHealthCheckMessage", new Dictionary<string, object>
                 {
                     { "importListNames", string.Join(", ", backOffProviders.Select(v => v.ImportList.Definition.Name)) }

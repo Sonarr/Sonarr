@@ -11,6 +11,7 @@ namespace NzbDrone.Core.HealthCheck
 
         public Type Source { get; set; }
         public HealthCheckResult Type { get; set; }
+        public HealthCheckReason Reason { get; set; }
         public string Message { get; set; }
         public HttpUri WikiUrl { get; set; }
 
@@ -24,10 +25,11 @@ namespace NzbDrone.Core.HealthCheck
             Type = HealthCheckResult.Ok;
         }
 
-        public HealthCheck(Type source, HealthCheckResult type, string message, string wikiFragment = null)
+        public HealthCheck(Type source, HealthCheckResult type, HealthCheckReason reason, string message, string wikiFragment = null)
         {
             Source = source;
             Type = type;
+            Reason = reason;
             Message = message;
             WikiUrl = MakeWikiUrl(wikiFragment ?? MakeWikiFragment(message));
         }
@@ -49,5 +51,69 @@ namespace NzbDrone.Core.HealthCheck
         Notice = 1,
         Warning = 2,
         Error = 3
+    }
+
+    public enum HealthCheckReason
+    {
+        AppDataLocation,
+        DownloadClientCheckNoneAvailable,
+        DownloadClientCheckUnableToCommunicate,
+        DownloadClientRemovesCompletedDownloads,
+        DownloadClientRootFolder,
+        DownloadClientSorting,
+        DownloadClientStatusAllClients,
+        DownloadClientStatusSingleClient,
+        ImportListRootFolderMissing,
+        ImportListRootFolderMultipleMissing,
+        ImportListStatusAllUnavailable,
+        ImportListStatusUnavailable,
+        ImportMechanismEnableCompletedDownloadHandlingIfPossible,
+        ImportMechanismEnableCompletedDownloadHandlingIfPossibleMultiComputer,
+        ImportMechanismHandlingDisabled,
+        IndexerDownloadClient,
+        IndexerJackettAll,
+        IndexerLongTermStatusAllUnavailable,
+        IndexerLongTermStatusUnavailable,
+        IndexerRssNoIndexersAvailable,
+        IndexerRssNoIndexersEnabled,
+        IndexerSearchNoAutomatic,
+        IndexerSearchNoAvailableIndexers,
+        IndexerSearchNoInteractive,
+        IndexerStatusAllUnavailable,
+        IndexerStatusUnavailable,
+        MinimumApiKeyLength,
+        MountSeries,
+        NotificationStatusAll,
+        NotificationStatusSingle,
+        Package,
+        ProxyBadRequest,
+        ProxyFailed,
+        ProxyResolveIp,
+        RecycleBinUnableToWrite,
+        RemotePathMappingBadDockerPath,
+        RemotePathMappingDockerFolderMissing,
+        RemotePathMappingDownloadPermissionsEpisode,
+        RemotePathMappingFileRemoved,
+        RemotePathMappingFilesBadDockerPath,
+        RemotePathMappingFilesGenericPermissions,
+        RemotePathMappingFilesLocalWrongOSPath,
+        RemotePathMappingFilesWrongOSPath,
+        RemotePathMappingFolderPermissions,
+        RemotePathMappingGenericPermissions,
+        RemotePathMappingImportEpisodeFailed,
+        RemotePathMappingLocalFolderMissing,
+        RemotePathMappingLocalWrongOSPath,
+        RemotePathMappingRemoteDownloadClient,
+        RemotePathMappingWrongOSPath,
+        RemovedSeriesMultiple,
+        RemovedSeriesSingle,
+        RootFolderMissing,
+        RootFolderMultipleMissing,
+        ServerNotification,
+        SystemTime,
+        UpdateAvailable,
+        UpdateStartupNotWritable,
+        UpdateStartupTranslocation,
+        UpdateUiNotWritable
     }
 }

@@ -43,12 +43,14 @@ namespace NzbDrone.Core.HealthCheck.Checks
             {
                 return new HealthCheck(GetType(),
                     HealthCheckResult.Error,
+                    HealthCheckReason.IndexerLongTermStatusAllUnavailable,
                     _localizationService.GetLocalizedString("IndexerLongTermStatusAllUnavailableHealthCheckMessage"),
                     "#indexers-are-unavailable-due-to-failures");
             }
 
             return new HealthCheck(GetType(),
                 HealthCheckResult.Warning,
+                HealthCheckReason.IndexerLongTermStatusUnavailable,
                 _localizationService.GetLocalizedString("IndexerLongTermStatusUnavailableHealthCheckMessage", new Dictionary<string, object>
                 {
                     { "indexerNames", string.Join(", ", backOffProviders.Select(v => v.Provider.Definition.Name)) }

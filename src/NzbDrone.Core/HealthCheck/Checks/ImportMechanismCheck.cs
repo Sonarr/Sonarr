@@ -53,6 +53,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 {
                     return new HealthCheck(GetType(),
                         HealthCheckResult.Warning,
+                        HealthCheckReason.ImportMechanismEnableCompletedDownloadHandlingIfPossibleMultiComputer,
                         _localizationService.GetLocalizedString("ImportMechanismEnableCompletedDownloadHandlingIfPossibleMultiComputerHealthCheckMessage"),
                         "#completedfailed-download-handling");
                 }
@@ -61,6 +62,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 {
                     return new HealthCheck(GetType(),
                         HealthCheckResult.Warning,
+                        HealthCheckReason.ImportMechanismEnableCompletedDownloadHandlingIfPossible,
                         $"{_localizationService.GetLocalizedString("ImportMechanismEnableCompletedDownloadHandlingIfPossibleHealthCheckMessage")} (Sabnzbd)",
                         "#completedfailed-download-handling");
                 }
@@ -69,12 +71,14 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 {
                     return new HealthCheck(GetType(),
                         HealthCheckResult.Warning,
+                        HealthCheckReason.ImportMechanismEnableCompletedDownloadHandlingIfPossible,
                         $"{_localizationService.GetLocalizedString("ImportMechanismEnableCompletedDownloadHandlingIfPossibleHealthCheckMessage")} (Nzbget)",
                         "#completedfailed-download-handling");
                 }
 
                 return new HealthCheck(GetType(),
                     HealthCheckResult.Warning,
+                    HealthCheckReason.ImportMechanismEnableCompletedDownloadHandlingIfPossible,
                     _localizationService.GetLocalizedString("ImportMechanismEnableCompletedDownloadHandlingIfPossibleHealthCheckMessage"),
                     "#completedfailed-download-handling");
             }
@@ -83,6 +87,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
             {
                 return new HealthCheck(GetType(),
                     HealthCheckResult.Warning,
+                    HealthCheckReason.ImportMechanismHandlingDisabled,
                     _localizationService.GetLocalizedString("ImportMechanismHandlingDisabledHealthCheckMessage"),
                     "#completed-download-handling-is-disabled");
             }

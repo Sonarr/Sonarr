@@ -45,6 +45,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
                     {
                         return new HealthCheck(GetType(),
                             HealthCheckResult.Warning,
+                            HealthCheckReason.DownloadClientRemovesCompletedDownloads,
                             _localizationService.GetLocalizedString("DownloadClientRemovesCompletedDownloadsHealthCheckMessage", new Dictionary<string, object>
                             {
                                 { "downloadClientName", clientName }

@@ -40,12 +40,14 @@ namespace NzbDrone.Core.HealthCheck.Checks
             {
                 return new HealthCheck(GetType(),
                     HealthCheckResult.Error,
+                    HealthCheckReason.DownloadClientStatusAllClients,
                     _localizationService.GetLocalizedString("DownloadClientStatusAllClientHealthCheckMessage"),
                     "#download-clients-are-unavailable-due-to-failures");
             }
 
             return new HealthCheck(GetType(),
                 HealthCheckResult.Warning,
+                HealthCheckReason.DownloadClientStatusSingleClient,
                 _localizationService.GetLocalizedString("DownloadClientStatusSingleClientHealthCheckMessage", new Dictionary<string, object>
                 {
                     { "downloadClientNames", string.Join(", ", backOffProviders.Select(v => v.Provider.Definition.Name)) }

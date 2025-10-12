@@ -35,7 +35,11 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 result = HealthCheckResult.Warning;
             }
 
-            return new HealthCheck(GetType(), result, message, "#package-maintainer-message");
+            return new HealthCheck(GetType(),
+                result,
+                HealthCheckReason.Package,
+                message,
+                "#package-maintainer-message");
         }
     }
 }

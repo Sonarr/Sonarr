@@ -45,7 +45,11 @@ namespace NzbDrone.Core.HealthCheck
                 var response = _client.Execute(request);
                 var result = Json.Deserialize<List<ServerNotificationResponse>>(response.Content);
 
-                var checks = result.Select(x => new HealthCheck(GetType(), x.Type, x.Message, x.WikiUrl)).ToList();
+                var checks = result.Select(x => new HealthCheck(GetType(),
+                    x.Type,
+                    HealthCheckReason.ServerNotification,
+                    x.Message,
+                    x.WikiUrl)).ToList();
 
                 // Only one health check is supported, services returns an ordered list, so use the first one
                 return checks.FirstOrDefault() ?? new HealthCheck(GetType());

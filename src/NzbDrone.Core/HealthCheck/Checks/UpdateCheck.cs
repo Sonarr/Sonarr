@@ -48,6 +48,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 {
                     return new HealthCheck(GetType(),
                         HealthCheckResult.Error,
+                        HealthCheckReason.UpdateStartupTranslocation,
                         _localizationService.GetLocalizedString(
                             "UpdateStartupTranslocationHealthCheckMessage",
                             new Dictionary<string, object>
@@ -61,6 +62,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 {
                     return new HealthCheck(GetType(),
                         HealthCheckResult.Error,
+                        HealthCheckReason.UpdateStartupNotWritable,
                         _localizationService.GetLocalizedString(
                             "UpdateStartupNotWritableHealthCheckMessage",
                             new Dictionary<string, object>
@@ -75,6 +77,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 {
                     return new HealthCheck(GetType(),
                         HealthCheckResult.Error,
+                        HealthCheckReason.UpdateUiNotWritable,
                         _localizationService.GetLocalizedString(
                             "UpdateUiNotWritableHealthCheckMessage",
                             new Dictionary<string, object>
@@ -94,6 +97,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 {
                     return new HealthCheck(GetType(),
                         HealthCheckResult.Warning,
+                        HealthCheckReason.UpdateAvailable,
                         _localizationService.GetLocalizedString("UpdateAvailableHealthCheckMessage", new Dictionary<string, object>
                         {
                             { "version", $"v{latestAvailable.Version}" }

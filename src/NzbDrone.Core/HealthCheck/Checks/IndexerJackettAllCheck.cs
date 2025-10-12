@@ -42,6 +42,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
 
             return new HealthCheck(GetType(),
                 HealthCheckResult.Warning,
+                HealthCheckReason.IndexerJackettAll,
                 _localizationService.GetLocalizedString("IndexerJackettAllHealthCheckMessage", new Dictionary<string, object>
                 {
                     { "indexerNames", string.Join(", ", jackettAllProviders.Select(i => i.Name)) }

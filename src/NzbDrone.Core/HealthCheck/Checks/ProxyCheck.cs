@@ -43,6 +43,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
             {
                 return new HealthCheck(GetType(),
                     HealthCheckResult.Error,
+                    HealthCheckReason.ProxyResolveIp,
                     _localizationService.GetLocalizedString("ProxyResolveIpHealthCheckMessage", new Dictionary<string, object>
                     {
                         { "proxyHostName", _configService.ProxyHostname }
@@ -65,6 +66,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
 
                     return new HealthCheck(GetType(),
                         HealthCheckResult.Error,
+                        HealthCheckReason.ProxyBadRequest,
                         _localizationService.GetLocalizedString("ProxyBadRequestHealthCheckMessage", new Dictionary<string, object>
                         {
                             { "statusCode", response.StatusCode }
@@ -78,6 +80,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
 
                 return new HealthCheck(GetType(),
                     HealthCheckResult.Error,
+                    HealthCheckReason.ProxyFailed,
                     _localizationService.GetLocalizedString("ProxyFailedToTestHealthCheckMessage", new Dictionary<string, object>
                     {
                         { "url", request.Url }

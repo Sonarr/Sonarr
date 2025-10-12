@@ -25,14 +25,22 @@ namespace NzbDrone.Core.HealthCheck.Checks
 
             if (enabled.Empty())
             {
-                return new HealthCheck(GetType(), HealthCheckResult.Error, _localizationService.GetLocalizedString("IndexerRssNoIndexersEnabledHealthCheckMessage"), "#no-indexers-available-with-rss-sync-enabled-sonarr-will-not-grab-new-releases-automatically");
+                return new HealthCheck(GetType(),
+                    HealthCheckResult.Error,
+                    HealthCheckReason.IndexerRssNoIndexersEnabled,
+                    _localizationService.GetLocalizedString("IndexerRssNoIndexersEnabledHealthCheckMessage"),
+                    "#no-indexers-available-with-rss-sync-enabled-sonarr-will-not-grab-new-releases-automatically");
             }
 
             var active = _indexerFactory.RssEnabled(true);
 
             if (active.Empty())
             {
-                 return new HealthCheck(GetType(), HealthCheckResult.Warning, _localizationService.GetLocalizedString("IndexerRssNoIndexersAvailableHealthCheckMessage"), "#indexers-are-unavailable-due-to-failures");
+                 return new HealthCheck(GetType(),
+                     HealthCheckResult.Warning,
+                     HealthCheckReason.IndexerRssNoIndexersAvailable,
+                     _localizationService.GetLocalizedString("IndexerRssNoIndexersAvailableHealthCheckMessage"),
+                     "#indexers-are-unavailable-due-to-failures");
             }
 
             return new HealthCheck(GetType());

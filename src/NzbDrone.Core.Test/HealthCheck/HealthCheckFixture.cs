@@ -14,7 +14,7 @@ namespace NzbDrone.Core.Test.HealthCheck
         [TestCase("I blew up because of some weird user mistake", "custom_page#my-health-check", WikiRoot + "sonarr/custom_page#my-health-check")]
         public void should_format_wiki_url(string message, string wikiFragment, string expectedUrl)
         {
-            var subject = new NzbDrone.Core.HealthCheck.HealthCheck(typeof(HealthCheckBase), HealthCheckResult.Warning, message, wikiFragment);
+            var subject = new NzbDrone.Core.HealthCheck.HealthCheck(typeof(HealthCheckBase), HealthCheckResult.Warning, HealthCheckReason.ServerNotification, message, wikiFragment);
 
             subject.WikiUrl.Should().Be(expectedUrl);
         }

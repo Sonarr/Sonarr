@@ -40,12 +40,14 @@ namespace NzbDrone.Core.HealthCheck.Checks
             {
                 return new HealthCheck(GetType(),
                     HealthCheckResult.Error,
+                    HealthCheckReason.NotificationStatusAll,
                     _localizationService.GetLocalizedString("NotificationStatusAllClientHealthCheckMessage"),
                     "#notifications-are-unavailable-due-to-failures");
             }
 
             return new HealthCheck(GetType(),
                 HealthCheckResult.Warning,
+                HealthCheckReason.NotificationStatusSingle,
                 _localizationService.GetLocalizedString("NotificationStatusSingleClientHealthCheckMessage", new Dictionary<string, object>
                 {
                     { "notificationNames", string.Join(", ", backOffProviders.Select(v => v.Provider.Definition.Name)) }
