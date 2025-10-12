@@ -1,19 +1,16 @@
 import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import AppState from 'App/State/AppState';
 import DescriptionList from 'Components/DescriptionList/DescriptionList';
 import DescriptionListItem from 'Components/DescriptionList/DescriptionListItem';
 import FieldSet from 'Components/FieldSet';
 import InlineMarkdown from 'Components/Markdown/InlineMarkdown';
-import { fetchStatus } from 'Store/Actions/systemActions';
 import titleCase from 'Utilities/String/titleCase';
 import translate from 'Utilities/String/translate';
+import useSystemStatus from '../useSystemStatus';
 import StartTime from './StartTime';
 import styles from './About.css';
 
 function About() {
-  const dispatch = useDispatch();
-  const { item } = useSelector((state: AppState) => state.system.status);
+  const { data, refetch } = useSystemStatus();
 
   const {
     version,
@@ -29,11 +26,11 @@ function About() {
     startupPath,
     mode,
     startTime,
-  } = item;
+  } = data;
 
   useEffect(() => {
-    dispatch(fetchStatus());
-  }, [dispatch]);
+    refetch();
+  }, [refetch]);
 
   return (
     <FieldSet legend={translate('About')}>

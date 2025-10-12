@@ -1,6 +1,4 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
-import AppState from 'App/State/AppState';
 import Alert from 'Components/Alert';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import InlineMarkdown from 'Components/Markdown/InlineMarkdown';
@@ -14,6 +12,7 @@ import Column from 'Components/Table/Column';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import { icons, kinds } from 'Helpers/Props';
+import { useSystemStatusData } from 'System/Status/useSystemStatus';
 import LogFile from 'typings/LogFile';
 import combinePath from 'Utilities/String/combinePath';
 import translate from 'Utilities/String/translate';
@@ -58,9 +57,7 @@ function LogFiles({
   onDeleteFilesPress,
   ...otherProps
 }: LogFilesProps) {
-  const { appData, isWindows } = useSelector(
-    (state: AppState) => state.system.status.item
-  );
+  const { appData, isWindows } = useSystemStatusData();
 
   const currentLogView =
     type === 'update' ? translate('UpdaterLogFiles') : translate('LogFiles');

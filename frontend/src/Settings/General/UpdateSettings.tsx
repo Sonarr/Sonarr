@@ -6,7 +6,7 @@ import FormLabel from 'Components/Form/FormLabel';
 import { EnhancedSelectInputValue } from 'Components/Form/Select/EnhancedSelectInput';
 import useShowAdvancedSettings from 'Helpers/Hooks/useShowAdvancedSettings';
 import { inputTypes, sizes } from 'Helpers/Props';
-import useSystemStatus from 'System/useSystemStatus';
+import { useSystemStatusData } from 'System/Status/useSystemStatus';
 import { InputChanged } from 'typings/inputs';
 import { PendingSection } from 'typings/pending';
 import General from 'typings/Settings/General';
@@ -31,7 +31,7 @@ function UpdateSettings({
   onInputChange,
 }: UpdateSettingsProps) {
   const showAdvancedSettings = useShowAdvancedSettings();
-  const { packageUpdateMechanism } = useSystemStatus();
+  const { packageUpdateMechanism } = useSystemStatusData();
 
   if (!showAdvancedSettings) {
     return null;

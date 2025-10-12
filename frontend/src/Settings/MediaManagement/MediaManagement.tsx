@@ -23,7 +23,7 @@ import {
   setMediaManagementSettingsValue,
 } from 'Store/Actions/settingsActions';
 import createSettingsSectionSelector from 'Store/Selectors/createSettingsSectionSelector';
-import useIsWindows from 'System/useIsWindows';
+import { useIsWindows } from 'System/Status/useSystemStatus';
 import { InputChanged } from 'typings/inputs';
 import isEmpty from 'Utilities/Object/isEmpty';
 import translate from 'Utilities/String/translate';

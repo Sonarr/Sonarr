@@ -17,7 +17,7 @@ import {
   addRootFolder,
   fetchRootFolders,
 } from 'Store/Actions/rootFolderActions';
-import useIsWindows from 'System/useIsWindows';
+import { useIsWindows } from 'System/Status/useSystemStatus';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
 import styles from './ImportSeriesSelectFolder.css';

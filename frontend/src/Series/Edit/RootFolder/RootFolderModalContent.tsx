@@ -1,5 +1,4 @@
 import React, { useCallback, useState } from 'react';
-import { useSelector } from 'react-redux';
 import FormGroup from 'Components/Form/FormGroup';
 import FormInputGroup from 'Components/Form/FormInputGroup';
 import FormLabel from 'Components/Form/FormLabel';
@@ -10,7 +9,7 @@ import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import useApiQuery from 'Helpers/Hooks/useApiQuery';
 import { inputTypes } from 'Helpers/Props';
-import createSystemStatusSelector from 'Store/Selectors/createSystemStatusSelector';
+import { useIsWindows } from 'System/Status/useSystemStatus';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
 
@@ -32,7 +31,7 @@ interface SeriesFolder {
 
 function RootFolderModalContent(props: RootFolderModalContentProps) {
   const { seriesId, onSavePress, onModalClose } = props;
-  const { isWindows } = useSelector(createSystemStatusSelector());
+  const isWindows = useIsWindows();
 
   const [rootFolderPath, setRootFolderPath] = useState(props.rootFolderPath);
 

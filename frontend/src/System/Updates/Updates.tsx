@@ -16,8 +16,8 @@ import useUpdateSettings from 'Settings/General/useUpdateSettings';
 import { executeCommand } from 'Store/Actions/commandActions';
 import { fetchGeneralSettings } from 'Store/Actions/settingsActions';
 import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
-import createSystemStatusSelector from 'Store/Selectors/createSystemStatusSelector';
 import createUISettingsSelector from 'Store/Selectors/createUISettingsSelector';
+import { useSystemStatusData } from 'System/Status/useSystemStatus';
 import { UpdateMechanism } from 'typings/Settings/General';
 import formatDate from 'Utilities/Date/formatDate';
 import formatDateTime from 'Utilities/Date/formatDateTime';
@@ -30,9 +30,8 @@ const VERSION_REGEX = /\d+\.\d+\.\d+\.\d+/i;
 
 function Updates() {
   const currentVersion = useSelector((state: AppState) => state.app.version);
-  const { packageUpdateMechanismMessage } = useSelector(
-    createSystemStatusSelector()
-  );
+  const { packageUpdateMechanismMessage } = useSystemStatusData();
+
   const { shortDateFormat, longDateFormat, timeFormat } = useSelector(
     createUISettingsSelector()
   );

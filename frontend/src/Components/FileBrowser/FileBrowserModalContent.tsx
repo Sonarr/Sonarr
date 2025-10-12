@@ -16,7 +16,7 @@ import TableBody from 'Components/Table/TableBody';
 import usePrevious from 'Helpers/Hooks/usePrevious';
 import { kinds, scrollDirections } from 'Helpers/Props';
 import { clearPaths, fetchPaths } from 'Store/Actions/pathActions';
-import createSystemStatusSelector from 'Store/Selectors/createSystemStatusSelector';
+import { useSystemStatusData } from 'System/Status/useSystemStatus';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
 import createPathsSelector from './createPathsSelector';
@@ -51,7 +51,8 @@ function FileBrowserModalContent(props: FileBrowserModalContentProps) {
 
   const dispatch = useDispatch();
 
-  const { isWindows, mode } = useSelector(createSystemStatusSelector());
+  const { isWindows, mode } = useSystemStatusData();
+
   const { isFetching, isPopulated, error, parent, directories, files, paths } =
     useSelector(createPathsSelector());
 

@@ -1,12 +1,11 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { Shortcut, shortcuts } from 'Components/keyboardShortcuts';
 import Button from 'Components/Link/Button';
 import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
-import createSystemStatusSelector from 'Store/Selectors/createSystemStatusSelector';
+import { useSystemStatusData } from 'System/Status/useSystemStatus';
 import translate from 'Utilities/String/translate';
 import styles from './KeyboardShortcutsModalContent.css';
 
@@ -45,7 +44,7 @@ interface KeyboardShortcutsModalContentProps {
 function KeyboardShortcutsModalContent({
   onModalClose,
 }: KeyboardShortcutsModalContentProps) {
-  const { isOsx } = useSelector(createSystemStatusSelector());
+  const { isOsx } = useSystemStatusData();
   const allShortcuts = getShortcuts();
 
   return (

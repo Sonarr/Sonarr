@@ -19,7 +19,7 @@ import {
 import { restart } from 'Store/Actions/systemActions';
 import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
 import createSettingsSectionSelector from 'Store/Selectors/createSettingsSectionSelector';
-import useIsWindowsService from 'System/useIsWindowsService';
+import { useIsWindowsService } from 'System/Status/useSystemStatus';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
 import AnalyticSettings from './AnalyticSettings';

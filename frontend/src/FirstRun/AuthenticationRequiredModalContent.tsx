@@ -22,8 +22,8 @@ import {
   saveGeneralSettings,
   setGeneralSettingsValue,
 } from 'Store/Actions/settingsActions';
-import { fetchStatus } from 'Store/Actions/systemActions';
 import createSettingsSectionSelector from 'Store/Selectors/createSettingsSectionSelector';
+import useSystemStatus from 'System/Status/useSystemStatus';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
 import styles from './AuthenticationRequiredModalContent.css';
@@ -39,6 +39,7 @@ function onModalClose() {
 export default function AuthenticationRequiredModalContent() {
   const { isPopulated, error, isSaving, settings } = useSelector(selector);
   const dispatch = useDispatch();
+  const { refetch: refetchStatus } = useSystemStatus();
 
   const {
     authenticationMethod,
@@ -74,8 +75,8 @@ export default function AuthenticationRequiredModalContent() {
       return;
     }
 
-    dispatch(fetchStatus());
-  }, [isSaving, wasSaving, dispatch]);
+    refetchStatus();
+  }, [isSaving, wasSaving, refetchStatus]);
 
   const onPress = useCallback(() => {
     dispatch(saveGeneralSettings());

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Error } from 'App/State/AppSectionState';
+import { ApiError } from 'Utilities/Fetch/fetchJson';
 import getErrorMessage from 'Utilities/Object/getErrorMessage';
 import translate from 'Utilities/String/translate';
 import styles from './ErrorPage.css';
@@ -13,7 +14,7 @@ interface ErrorPageProps {
   tagsError?: Error;
   qualityProfilesError?: Error;
   uiSettingsError?: Error;
-  systemStatusError?: Error;
+  systemStatusError: ApiError | null;
 }
 
 function ErrorPage(props: ErrorPageProps) {

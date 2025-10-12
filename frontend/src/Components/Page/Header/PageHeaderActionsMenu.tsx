@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import AppState from 'App/State/AppState';
+import { useDispatch } from 'react-redux';
 import Icon from 'Components/Icon';
 import Menu from 'Components/Menu/Menu';
 import MenuButton from 'Components/Menu/MenuButton';
@@ -9,6 +8,7 @@ import MenuItem from 'Components/Menu/MenuItem';
 import MenuItemSeparator from 'Components/Menu/MenuItemSeparator';
 import { align, icons, kinds } from 'Helpers/Props';
 import { restart, shutdown } from 'Store/Actions/systemActions';
+import { useSystemStatusData } from 'System/Status/useSystemStatus';
 import translate from 'Utilities/String/translate';
 import styles from './PageHeaderActionsMenu.css';
 
@@ -20,10 +20,7 @@ function PageHeaderActionsMenu(props: PageHeaderActionsMenuProps) {
   const { onKeyboardShortcutsPress } = props;
 
   const dispatch = useDispatch();
-
-  const { authentication, isDocker } = useSelector(
-    (state: AppState) => state.system.status.item
-  );
+  const { authentication, isDocker } = useSystemStatusData();
 
   const formsAuth = authentication === 'forms';
 
