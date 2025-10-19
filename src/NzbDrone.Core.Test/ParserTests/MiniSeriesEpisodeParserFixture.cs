@@ -34,6 +34,7 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("백번의 추억.E12.251019.1080p-F1RST", "백번의 추억", 12, "2025-01-19")]
         [TestCase("나는 SOLO <나는 솔로>.E223.251015.1080p-F1RST", "나는 SOLO 나는 솔로", 223, "2025-10-15")]
         [TestCase("나는 SOLO 그 후, 사랑은 계속된다(나솔사계).E135.251016.1080p-F1RST", "나는 SOLO 그 후, 사랑은 계속된다(나솔사계)", 135, "2025-10-16")]
+
         // [TestCase("", "", 0, "")]
         public void should_parse_korean_series_episode(string postTitle, string title, int episodeNumber, string airdate)
         {
