@@ -31,7 +31,9 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("My Only Series Title.E37.190120.1080p-NEXT.mp4", "My Only Series Title", 37, "2019-01-20")]
         [TestCase("Series.E191.190121.720p-NEXT.mp4", "Series", 191, "2019-01-21")]
         [TestCase("The Series Title Challenge.E932.190120.720p-NEXT.mp4", "The Series Title Challenge", 932, "2019-01-20")]
-
+        [TestCase("백번의 추억.E12.251019.1080p-F1RST", "백번의 추억", 12, "2025-01-19")]
+        [TestCase("나는 SOLO <나는 솔로>.E223.251015.1080p-F1RST", "나는 SOLO 나는 솔로", 223, "2025-10-15")]
+        [TestCase("나는 SOLO 그 후, 사랑은 계속된다(나솔사계).E135.251016.1080p-F1RST", "나는 SOLO 그 후, 사랑은 계속된다(나솔사계)", 135, "2025-10-16")]
         // [TestCase("", "", 0, "")]
         public void should_parse_korean_series_episode(string postTitle, string title, int episodeNumber, string airdate)
         {
