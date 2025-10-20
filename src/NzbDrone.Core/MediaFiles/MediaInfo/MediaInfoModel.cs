@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
-using FFMpegCore;
 using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Core.MediaFiles.MediaInfo
@@ -9,7 +8,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
     public class MediaInfoModel : IEmbeddedDocument
     {
         public string RawStreamData { get; set; }
-        public string RawFrameData { get; set; }
+
         public int SchemaRevision { get; set; }
 
         public string ContainerFormat { get; set; }
@@ -26,8 +25,6 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
         public string VideoColourPrimaries { get; set; }
 
         public string VideoTransferCharacteristics { get; set; }
-
-        public DoviConfigurationRecordSideData DoviConfigurationRecord { get; set; }
 
         public HdrFormat VideoHdrFormat { get; set; }
 
