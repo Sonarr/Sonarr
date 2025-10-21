@@ -1,5 +1,6 @@
 interface EpisodeSearchPayload {
   episodeId: number;
+  searchQuery?: string;
 }
 
 interface SeasonSearchPayload {

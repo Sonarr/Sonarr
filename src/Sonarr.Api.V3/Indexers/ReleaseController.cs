@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
@@ -170,8 +171,13 @@ namespace Sonarr.Api.V3.Indexers
 
         [HttpGet]
         [Produces("application/json")]
-        public async Task<List<ReleaseResource>> GetReleases(int? seriesId, int? episodeId, int? seasonNumber)
+        public async Task<List<ReleaseResource>> GetReleases(int? seriesId, int? episodeId, int? seasonNumber, string searchQuery)
         {
+            if (episodeId.HasValue && !string.IsNullOrWhiteSpace(searchQuery))
+            {
+                return await GetManualSearchReleases(episodeId.Value, searchQuery);
+            }
+
             if (episodeId.HasValue)
             {
                 return await GetEpisodeReleases(episodeId.Value);
@@ -183,6 +189,26 @@ namespace Sonarr.Api.V3.Indexers
             }
 
             return await GetRss();
+        }
+
+        private async Task<List<ReleaseResource>> GetManualSearchReleases(int episodeId, string searchQuery)
+        {
+            try
+            {
+                var decisions = await _releaseSearchService.ManualSearch(episodeId, searchQuery);
+                var prioritizedDecisions = _prioritizeDownloadDecision.PrioritizeDecisions(decisions);
+
+                return MapDecisions(prioritizedDecisions);
+            }
+            catch (SearchFailedException ex)
+            {
+                throw new NzbDroneClientException(HttpStatusCode.BadRequest, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Manual search failed: " + ex.Message);
+                throw new NzbDroneClientException(HttpStatusCode.InternalServerError, ex.Message);
+            }
         }
 
         private async Task<List<ReleaseResource>> GetEpisodeReleases(int episodeId)

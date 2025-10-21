@@ -116,6 +116,8 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
     onGrabPress,
   } = props;
 
+  const isManualSearch = 'searchQuery' in searchPayload && searchPayload.searchQuery;
+
   const { longDateFormat, timeFormat } = useSelector(
     createUISettingsSelector()
   );
@@ -128,6 +130,7 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
       onGrabPress({
         guid,
         indexerId,
+        ...searchPayload,
       });
 
       return;
@@ -137,6 +140,7 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
   }, [
     guid,
     indexerId,
+    searchPayload,
     downloadAllowed,
     onGrabPress,
     setIsConfirmGrabModalOpen,
@@ -255,13 +259,15 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
       </TableRowCell>
 
       <TableRowCell className={styles.download}>
-        <SpinnerIconButton
-          name={getDownloadIcon(isGrabbing, isGrabbed, grabError)}
-          kind={getDownloadKind(isGrabbed, grabError)}
-          title={getDownloadTooltip(isGrabbing, isGrabbed, grabError)}
-          isSpinning={isGrabbing}
-          onPress={onGrabPressWrapper}
-        />
+        {!isManualSearch && (
+          <SpinnerIconButton
+            name={getDownloadIcon(isGrabbing, isGrabbed, grabError)}
+            kind={getDownloadKind(isGrabbed, grabError)}
+            title={getDownloadTooltip(isGrabbing, isGrabbed, grabError)}
+            isSpinning={isGrabbing}
+            onPress={onGrabPressWrapper}
+          />
+        )}
 
         <Link
           className={styles.manualDownloadContent}
@@ -309,6 +315,7 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
         protocol={protocol}
         isGrabbing={isGrabbing}
         grabError={grabError}
+        searchPayload={searchPayload}
         onModalClose={onOverrideModalClose}
       />
     </TableRow>

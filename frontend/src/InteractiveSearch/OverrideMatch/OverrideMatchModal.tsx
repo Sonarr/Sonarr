@@ -2,6 +2,7 @@ import React from 'react';
 import Modal from 'Components/Modal/Modal';
 import DownloadProtocol from 'DownloadClient/DownloadProtocol';
 import { sizes } from 'Helpers/Props';
+import InteractiveSearchPayload from 'InteractiveSearch/InteractiveSearchPayload';
 import Language from 'Language/Language';
 import { QualityModel } from 'Quality/Quality';
 import { ReleaseEpisode } from 'typings/Release';
@@ -20,6 +21,7 @@ interface OverrideMatchModalProps {
   protocol: DownloadProtocol;
   isGrabbing: boolean;
   grabError?: string;
+  searchPayload: InteractiveSearchPayload;
   onModalClose(): void;
 }
 
@@ -37,6 +39,7 @@ function OverrideMatchModal(props: OverrideMatchModalProps) {
     protocol,
     isGrabbing,
     grabError,
+    searchPayload,
     onModalClose,
   } = props;
 
@@ -54,6 +57,7 @@ function OverrideMatchModal(props: OverrideMatchModalProps) {
         protocol={protocol}
         isGrabbing={isGrabbing}
         grabError={grabError}
+        searchPayload={searchPayload}
         onModalClose={onModalClose}
       />
     </Modal>

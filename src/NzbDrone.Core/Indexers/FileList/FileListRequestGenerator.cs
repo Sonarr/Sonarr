@@ -119,6 +119,11 @@ namespace NzbDrone.Core.Indexers.FileList
             return new IndexerPageableRequestChain();
         }
 
+        public virtual IndexerPageableRequestChain GetSearchRequests(ManualSearchCriteria searchCriteria)
+        {
+            return new IndexerPageableRequestChain();
+        }
+
         private void AddImdbRequests(IndexerPageableRequestChain chain, SearchCriteriaBase searchCriteria, string searchType, IEnumerable<int> categories, string parameters)
         {
             if (searchCriteria.Series.ImdbId.IsNotNullOrWhiteSpace())

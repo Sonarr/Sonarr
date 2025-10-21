@@ -49,6 +49,7 @@ function EditSeriesModalContent({
     monitored,
     monitorNewItems,
     seasonFolder,
+    enableManualSearch,
     qualityProfileId,
     seriesType,
     path,
@@ -76,6 +77,7 @@ function EditSeriesModalContent({
         monitored,
         monitorNewItems,
         seasonFolder,
+        enableManualSearch,
         qualityProfileId,
         seriesType,
         path,
@@ -88,6 +90,7 @@ function EditSeriesModalContent({
     monitored,
     monitorNewItems,
     seasonFolder,
+    enableManualSearch,
     qualityProfileId,
     seriesType,
     path,
@@ -206,6 +209,18 @@ function EditSeriesModalContent({
               name="seasonFolder"
               helpText={translate('UseSeasonFolderHelpText')}
               {...settings.seasonFolder}
+              onChange={handleInputChange}
+            />
+          </FormGroup>
+
+          <FormGroup size={sizes.MEDIUM}>
+            <FormLabel>{translate('EnableManualSearch')}</FormLabel>
+
+            <FormInputGroup
+              type={inputTypes.CHECK}
+              name="enableManualSearch"
+              helpText={translate('EnableManualSearchHelpText')}
+              {...settings.enableManualSearch}
               onChange={handleInputChange}
             />
           </FormGroup>

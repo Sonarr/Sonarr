@@ -92,6 +92,9 @@ namespace Sonarr.Api.V3.Indexers
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public bool? ShouldOverride { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public string SearchQuery { get; set; }
     }
 
     public static class ReleaseResourceMapper

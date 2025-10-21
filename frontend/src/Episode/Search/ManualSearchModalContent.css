@@ -1,0 +1,9 @@
+.searchInputContainer {
+  padding: 20px 0;
+}
+
+.helpText {
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--helpTextColor);
+}

@@ -45,6 +45,7 @@ namespace Sonarr.Api.V3.Series
         public bool SeasonFolder { get; set; }
         public bool Monitored { get; set; }
         public NewItemMonitorTypes MonitorNewItems { get; set; }
+        public bool EnableManualSearch { get; set; }
 
         public bool UseSceneNumbering { get; set; }
         public int Runtime { get; set; }
@@ -118,6 +119,7 @@ namespace Sonarr.Api.V3.Series
                        SeasonFolder = model.SeasonFolder,
                        Monitored = model.Monitored,
                        MonitorNewItems = model.MonitorNewItems,
+                       EnableManualSearch = model.EnableManualSearch,
 
                        UseSceneNumbering = model.UseSceneNumbering,
                        Runtime = model.Runtime,
@@ -183,6 +185,7 @@ namespace Sonarr.Api.V3.Series
                        SeasonFolder = resource.SeasonFolder,
                        Monitored = resource.Monitored,
                        MonitorNewItems = resource.MonitorNewItems,
+                       EnableManualSearch = resource.EnableManualSearch,
 
                        UseSceneNumbering = resource.UseSceneNumbering,
                        Runtime = resource.Runtime,

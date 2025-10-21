@@ -23,6 +23,7 @@ namespace NzbDrone.Core.IndexerSearch
         Task<List<DownloadDecision>> EpisodeSearch(Episode episode, bool userInvokedSearch, bool interactiveSearch);
         Task<List<DownloadDecision>> SeasonSearch(int seriesId, int seasonNumber, bool missingOnly, bool monitoredOnly, bool userInvokedSearch, bool interactiveSearch);
         Task<List<DownloadDecision>> SeasonSearch(int seriesId, int seasonNumber, List<Episode> episodes, bool monitoredOnly, bool userInvokedSearch, bool interactiveSearch);
+        Task<List<DownloadDecision>> ManualSearch(int episodeId, string searchQuery);
     }
 
     public class ReleaseSearchService : ISearchForReleases
@@ -555,6 +556,27 @@ namespace NzbDrone.Core.IndexerSearch
             }
 
             return Array.Empty<ReleaseInfo>();
+        }
+
+        public async Task<List<DownloadDecision>> ManualSearch(int episodeId, string searchQuery)
+        {
+            var episode = _episodeService.GetEpisode(episodeId);
+            var series = _seriesService.GetSeries(episode.SeriesId);
+
+            var searchSpec = new ManualSearchCriteria
+            {
+                Series = series,
+                Episodes = new List<Episode> { episode },
+                SearchQuery = searchQuery,
+                MonitoredEpisodesOnly = false,
+                UserInvokedSearch = true,
+                InteractiveSearch = true,
+                SceneTitles = new List<string>()
+            };
+
+            var downloadDecisions = await Dispatch(indexer => indexer.Fetch(searchSpec), searchSpec);
+
+            return DeDupeDecisions(downloadDecisions);
         }
 
         private List<DownloadDecision> DeDupeDecisions(List<DownloadDecision> decisions)

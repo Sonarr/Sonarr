@@ -9,9 +9,13 @@ import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import DownloadProtocol from 'DownloadClient/DownloadProtocol';
+import Episode from 'Episode/Episode';
+import episodeEntities from 'Episode/episodeEntities';
+import useEpisode from 'Episode/useEpisode';
 import EpisodeLanguages from 'Episode/EpisodeLanguages';
 import EpisodeQuality from 'Episode/EpisodeQuality';
 import usePrevious from 'Helpers/Hooks/usePrevious';
+import InteractiveSearchPayload from 'InteractiveSearch/InteractiveSearchPayload';
 import SelectEpisodeModal from 'InteractiveImport/Episode/SelectEpisodeModal';
 import { SelectedEpisode } from 'InteractiveImport/Episode/SelectEpisodeModalContent';
 import SelectLanguageModal from 'InteractiveImport/Language/SelectLanguageModal';
@@ -52,6 +56,7 @@ interface OverrideMatchModalContentProps {
   protocol: DownloadProtocol;
   isGrabbing: boolean;
   grabError?: string;
+  searchPayload: InteractiveSearchPayload;
   onModalClose(): void;
 }
 
@@ -64,8 +69,13 @@ function OverrideMatchModalContent(props: OverrideMatchModalContentProps) {
     protocol,
     isGrabbing,
     grabError,
+    searchPayload,
     onModalClose,
   } = props;
+
+  const isManualSearch = 'searchQuery' in searchPayload && !!searchPayload.searchQuery;
+  const manualSearchEpisodeId = isManualSearch && 'episodeId' in searchPayload ? searchPayload.episodeId : undefined;
+  const manualSearchEpisode = useEpisode(manualSearchEpisodeId, episodeEntities.EPISODES) as Episode | undefined;
 
   const [seriesId, setSeriesId] = useState(props.seriesId);
   const [seasonNumber, setSeasonNumber] = useState(props.seasonNumber);
@@ -198,18 +208,23 @@ function OverrideMatchModalContent(props: OverrideMatchModalContentProps) {
       return;
     }
 
-    dispatch(
-      grabRelease({
-        indexerId,
-        guid,
-        seriesId,
-        episodeIds: episodes.map((e) => e.id),
-        quality,
-        languages,
-        downloadClientId,
-        shouldOverride: true,
-      })
-    );
+    const grabPayload: any = {
+      indexerId,
+      guid,
+      seriesId,
+      episodeIds: episodes.map((e) => e.id),
+      quality,
+      languages,
+      downloadClientId,
+      shouldOverride: true,
+    };
+
+    // Include searchQuery for manual searches to enable better import matching
+    if (isManualSearch && 'searchQuery' in searchPayload) {
+      grabPayload.searchQuery = searchPayload.searchQuery;
+    }
+
+    dispatch(grabRelease(grabPayload));
   }, [
     indexerId,
     guid,
@@ -218,15 +233,17 @@ function OverrideMatchModalContent(props: OverrideMatchModalContentProps) {
     quality,
     languages,
     downloadClientId,
+    isManualSearch,
+    searchPayload,
     setError,
     dispatch,
   ]);
 
   useEffect(() => {
-    if (!isGrabbing && previousIsGrabbing) {
+    if (!isGrabbing && previousIsGrabbing && !grabError) {
       onModalClose();
     }
-  }, [isGrabbing, previousIsGrabbing, onModalClose]);
+  }, [isGrabbing, previousIsGrabbing, grabError, onModalClose]);
 
   useEffect(
     () => {
@@ -235,6 +252,21 @@ function OverrideMatchModalContent(props: OverrideMatchModalContentProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
+
+  useEffect(() => {
+    if (isManualSearch && manualSearchEpisode) {
+      setSeriesId(manualSearchEpisode.seriesId);
+      setSeasonNumber(manualSearchEpisode.seasonNumber);
+      setEpisodes([{
+        id: manualSearchEpisode.id,
+        episodeFileId: manualSearchEpisode.episodeFileId,
+        episodeNumber: manualSearchEpisode.episodeNumber,
+        seasonNumber: manualSearchEpisode.seasonNumber,
+        title: manualSearchEpisode.title,
+        absoluteEpisodeNumber: manualSearchEpisode.absoluteEpisodeNumber,
+      }]);
+    }
+  }, [isManualSearch, manualSearchEpisode]);
 
   return (
     <ModalContent onModalClose={onModalClose}>
@@ -250,6 +282,7 @@ function OverrideMatchModalContent(props: OverrideMatchModalContentProps) {
             data={
               <OverrideMatchData
                 value={series?.title}
+                isDisabled={isManualSearch}
                 onPress={onSelectSeriesPress}
               />
             }
@@ -261,7 +294,7 @@ function OverrideMatchModalContent(props: OverrideMatchModalContentProps) {
             data={
               <OverrideMatchData
                 value={seasonNumber}
-                isDisabled={!series}
+                isDisabled={isManualSearch || !series}
                 onPress={onSelectSeasonPress}
               />
             }
@@ -273,7 +306,7 @@ function OverrideMatchModalContent(props: OverrideMatchModalContentProps) {
             data={
               <OverrideMatchData
                 value={episodeInfo}
-                isDisabled={!series || isNaN(Number(seasonNumber))}
+                isDisabled={isManualSearch || !series || isNaN(Number(seasonNumber))}
                 onPress={onSelectEpisodePress}
               />
             }

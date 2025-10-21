@@ -91,6 +91,11 @@ namespace NzbDrone.Core.Indexers.Fanzub
             return new IndexerPageableRequestChain();
         }
 
+        public virtual IndexerPageableRequestChain GetSearchRequests(ManualSearchCriteria searchCriteria)
+        {
+            return new IndexerPageableRequestChain();
+        }
+
         private IEnumerable<IndexerRequest> GetPagedRequests(string query)
         {
             var url = new StringBuilder();

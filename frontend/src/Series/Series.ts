@@ -77,6 +77,7 @@ interface Series extends ModelBase {
   imdbId?: string;
   monitored: boolean;
   monitorNewItems: MonitorNewItems;
+  enableManualSearch: boolean;
   network: string;
   originalLanguage: Language;
   overview: string;

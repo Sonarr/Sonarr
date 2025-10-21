@@ -14,3 +14,13 @@
 .buttonIcon {
   margin-right: 5px;
 }
+
+.manualSearchContainer {
+  padding: 20px 40px;
+}
+
+.manualSearchHelp {
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--helpTextColor);
+}

@@ -304,13 +304,41 @@ export const setSeasonReleasesFilter = createAction(SET_SEASON_RELEASES_FILTER);
 
 const fetchReleasesHelper = createFetchHandler(section, '/release');
 
+function buildReleaseUrl(payload) {
+  const params = new URLSearchParams();
+  
+  if (payload.episodeId) {
+    params.append('episodeId', payload.episodeId);
+  }
+  
+  if (payload.seriesId) {
+    params.append('seriesId', payload.seriesId);
+  }
+  
+  if (payload.seasonNumber !== undefined) {
+    params.append('seasonNumber', payload.seasonNumber);
+  }
+  
+  if (payload.searchQuery) {
+    params.append('searchQuery', payload.searchQuery);
+  }
+  
+  return `/release?${params.toString()}`;
+}
+
 //
 // Action Handlers
 
 export const actionHandlers = handleThunks({
 
   [FETCH_RELEASES]: function(getState, payload, dispatch) {
-    const abortRequest = fetchReleasesHelper(getState, payload, dispatch);
+    const modifiedPayload = { ...payload };
+    
+    if (payload.searchQuery || payload.episodeId || payload.seriesId) {
+      modifiedPayload.url = buildReleaseUrl(payload);
+    }
+    
+    const abortRequest = fetchReleasesHelper(getState, modifiedPayload, dispatch);
 
     abortCurrentRequest = abortRequest;
   },

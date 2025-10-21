@@ -224,6 +224,11 @@ namespace NzbDrone.Core.Indexers.BroadcastheNet
             return pageableRequests;
         }
 
+        public virtual IndexerPageableRequestChain GetSearchRequests(ManualSearchCriteria searchCriteria)
+        {
+            return new IndexerPageableRequestChain();
+        }
+
         private bool AddSeriesSearchParameters(BroadcastheNetTorrentQuery parameters, SearchCriteriaBase searchCriteria)
         {
             if (searchCriteria.Series.TvdbId != 0)

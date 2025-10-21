@@ -9,8 +9,10 @@ import useModalOpenState from 'Helpers/Hooks/useModalOpenState';
 import { icons } from 'Helpers/Props';
 import { executeCommand } from 'Store/Actions/commandActions';
 import createExecutingCommandsSelector from 'Store/Selectors/createExecutingCommandsSelector';
+import useSeries from 'Series/useSeries';
 import translate from 'Utilities/String/translate';
 import EpisodeDetailsModal from './EpisodeDetailsModal';
+import ManualSearchModal from './Search/ManualSearchModal';
 import styles from './EpisodeSearchCell.css';
 
 interface EpisodeSearchCellProps {
@@ -28,6 +30,9 @@ function EpisodeSearchCell({
   episodeTitle,
   showOpenSeriesButton,
 }: EpisodeSearchCellProps) {
+  const series = useSeries(seriesId);
+  const enableManualSearch = series?.enableManualSearch ?? false;
+  
   const executingCommands = useSelector(createExecutingCommandsSelector());
   const isSearching = executingCommands.some(({ name, body }) => {
     const { episodeIds = [] } = body;
@@ -37,6 +42,9 @@ function EpisodeSearchCell({
   const dispatch = useDispatch();
 
   const [isDetailsModalOpen, setDetailsModalOpen, setDetailsModalClosed] =
+    useModalOpenState(false);
+
+  const [isManualSearchModalOpen, setManualSearchModalOpen, setManualSearchModalClosed] =
     useModalOpenState(false);
 
   const handleSearchPress = useCallback(() => {
@@ -63,6 +71,14 @@ function EpisodeSearchCell({
         onPress={setDetailsModalOpen}
       />
 
+      {enableManualSearch && (
+        <IconButton
+          name={icons.EDIT}
+          title={translate('ManualSearch')}
+          onPress={setManualSearchModalOpen}
+        />
+      )}
+
       <EpisodeDetailsModal
         isOpen={isDetailsModalOpen}
         episodeId={episodeId}
@@ -74,6 +90,15 @@ function EpisodeSearchCell({
         showOpenSeriesButton={showOpenSeriesButton}
         onModalClose={setDetailsModalClosed}
       />
+
+      {enableManualSearch && (
+        <ManualSearchModal
+          isOpen={isManualSearchModalOpen}
+          episodeId={episodeId}
+          episodeTitle={episodeTitle}
+          onModalClose={setManualSearchModalClosed}
+        />
+      )}
     </TableRowCell>
   );
 }

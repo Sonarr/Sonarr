@@ -110,6 +110,11 @@ namespace NzbDrone.Core.Indexers.Nyaa
             return pageableRequests;
         }
 
+        public virtual IndexerPageableRequestChain GetSearchRequests(ManualSearchCriteria searchCriteria)
+        {
+            return new IndexerPageableRequestChain();
+        }
+
         private IEnumerable<IndexerRequest> GetPagedRequests(string term)
         {
             var baseUrl = $"{Settings.BaseUrl.TrimEnd('/')}/?page=rss{Settings.AdditionalParameters}";

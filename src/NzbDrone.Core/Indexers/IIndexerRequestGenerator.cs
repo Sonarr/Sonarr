@@ -12,5 +12,6 @@ namespace NzbDrone.Core.Indexers
         IndexerPageableRequestChain GetSearchRequests(AnimeEpisodeSearchCriteria searchCriteria);
         IndexerPageableRequestChain GetSearchRequests(AnimeSeasonSearchCriteria searchCriteria);
         IndexerPageableRequestChain GetSearchRequests(SpecialEpisodeSearchCriteria searchCriteria);
+        IndexerPageableRequestChain GetSearchRequests(ManualSearchCriteria searchCriteria);
     }
 }

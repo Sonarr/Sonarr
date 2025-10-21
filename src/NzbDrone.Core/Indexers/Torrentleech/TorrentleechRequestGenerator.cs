@@ -52,6 +52,11 @@ namespace NzbDrone.Core.Indexers.Torrentleech
             return new IndexerPageableRequestChain();
         }
 
+        public virtual IndexerPageableRequestChain GetSearchRequests(ManualSearchCriteria searchCriteria)
+        {
+            return new IndexerPageableRequestChain();
+        }
+
         private IEnumerable<IndexerRequest> GetRssRequests(string searchParameters)
         {
             yield return new IndexerRequest(string.Format("{0}/{1}{2}", Settings.BaseUrl.Trim().TrimEnd('/'), Settings.ApiKey, searchParameters), HttpAccept.Rss);

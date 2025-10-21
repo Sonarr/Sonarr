@@ -494,6 +494,25 @@ namespace NzbDrone.Core.Indexers.Newznab
             return pageableRequests;
         }
 
+        public virtual IndexerPageableRequestChain GetSearchRequests(ManualSearchCriteria searchCriteria)
+        {
+            var pageableRequests = new IndexerPageableRequestChain();
+
+            if (SupportsSearch)
+            {
+                var categories = GetSearchCategories(searchCriteria);
+                var query = searchCriteria.SearchQuery?.Replace('+', ' ') ?? string.Empty;
+                query = System.Web.HttpUtility.UrlEncode(query);
+
+                pageableRequests.Add(GetPagedRequests(MaxPages,
+                    categories,
+                    "search",
+                    $"&q={query}"));
+            }
+
+            return pageableRequests;
+        }
+
         private void AddTvIdPageableRequests(IndexerPageableRequestChain chain, IEnumerable<int> categories, SearchCriteriaBase searchCriteria, string parameters)
         {
             var includeTvdbSearch = SupportsTvdbSearch && searchCriteria.Series.TvdbId > 0;
