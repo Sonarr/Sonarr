@@ -34,19 +34,19 @@ namespace NzbDrone.Core.ImportLists.MyAnimeList
 
         public override string BaseUrl { get; set; }  = "https://api.myanimelist.net/v2";
 
-        [FieldDefinition(1, Label = "ImportListsMyAnimeListSettingsListStatus", Type = FieldType.Select, SelectOptions = typeof(MyAnimeListStatus), HelpText = "ImportListsMyAnimeListSettingsListStatusHelpText")]
+        [FieldDefinition(0, Label = "ImportListsMyAnimeListSettingsListStatus", Type = FieldType.Select, SelectOptions = typeof(MyAnimeListStatus), HelpText = "ImportListsMyAnimeListSettingsListStatusHelpText")]
         public int ListStatus { get; set; }
 
-        [FieldDefinition(2, Label = "ImportListsMyAnimeListSettingsScore", HelpText = "ImportListsMyAnimeListSettingsScoreHelpText")]
+        [FieldDefinition(1, Label = "ImportListsMyAnimeListSettingsScore", HelpText = "ImportListsMyAnimeListSettingsScoreHelpText")]
         public int MinimumScore { get; set; } = 0;
 
-        [FieldDefinition(3, Label = "ImportListsSettingsAccessToken", Type = FieldType.Textbox, Hidden = HiddenType.Hidden)]
+        [FieldDefinition(0, Label = "ImportListsSettingsAccessToken", Type = FieldType.Textbox, Hidden = HiddenType.Hidden)]
         public string AccessToken { get; set; }
 
-        [FieldDefinition(4, Label = "ImportListsSettingsRefreshToken", Type = FieldType.Textbox, Hidden = HiddenType.Hidden)]
+        [FieldDefinition(0, Label = "ImportListsSettingsRefreshToken", Type = FieldType.Textbox, Hidden = HiddenType.Hidden)]
         public string RefreshToken { get; set; }
 
-        [FieldDefinition(5, Label = "ImportListsSettingsExpires", Type = FieldType.Textbox, Hidden = HiddenType.Hidden)]
+        [FieldDefinition(0, Label = "ImportListsSettingsExpires", Type = FieldType.Textbox, Hidden = HiddenType.Hidden)]
         public DateTime Expires { get; set; }
 
         [FieldDefinition(99, Label = "ImportListsMyAnimeListSettingsAuthenticateWithMyAnimeList", Type = FieldType.OAuth)]
