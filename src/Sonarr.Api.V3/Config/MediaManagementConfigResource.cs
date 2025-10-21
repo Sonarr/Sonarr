@@ -21,6 +21,14 @@ namespace Sonarr.Api.V3.Config
         public string ChmodFolder { get; set; }
         public string ChownGroup { get; set; }
 
+        public bool EnableFfmpegEncoding { get; set; }
+        public string FfmpegPath { get; set; }
+        public string FfmpegArguments { get; set; }
+        public bool FfmpegDeleteOriginal { get; set; }
+        public int FfmpegMinimumSize { get; set; }
+        public bool FfmpegSkipHevc { get; set; }
+        public int FfmpegTimeout { get; set; }
+
         public EpisodeTitleRequiredType EpisodeTitleRequired { get; set; }
         public bool SkipFreeSpaceCheckWhenImporting { get; set; }
         public int MinimumFreeSpaceWhenImporting { get; set; }
@@ -53,6 +61,14 @@ namespace Sonarr.Api.V3.Config
                 SetPermissionsLinux = model.SetPermissionsLinux,
                 ChmodFolder = model.ChmodFolder,
                 ChownGroup = model.ChownGroup,
+
+                EnableFfmpegEncoding = model.EnableFfmpegEncoding,
+                FfmpegPath = model.FfmpegPath,
+                FfmpegArguments = model.FfmpegArguments,
+                FfmpegDeleteOriginal = model.FfmpegDeleteOriginal,
+                FfmpegMinimumSize = model.FfmpegMinimumSize,
+                FfmpegSkipHevc = model.FfmpegSkipHevc,
+                FfmpegTimeout = model.FfmpegTimeout,
 
                 EpisodeTitleRequired = model.EpisodeTitleRequired,
                 SkipFreeSpaceCheckWhenImporting = model.SkipFreeSpaceCheckWhenImporting,

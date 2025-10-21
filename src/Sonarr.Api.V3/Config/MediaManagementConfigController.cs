@@ -39,6 +39,10 @@ namespace Sonarr.Api.V3.Config
 
             SharedValidator.RuleFor(c => c.ScriptImportPath).IsValidPath().When(c => c.UseScriptImport);
 
+            SharedValidator.RuleFor(c => c.FfmpegPath).NotEmpty().When(c => c.EnableFfmpegEncoding);
+            SharedValidator.RuleFor(c => c.FfmpegMinimumSize).GreaterThanOrEqualTo(0);
+            SharedValidator.RuleFor(c => c.FfmpegTimeout).GreaterThanOrEqualTo(0);
+
             SharedValidator.RuleFor(c => c.MinimumFreeSpaceWhenImporting).GreaterThanOrEqualTo(100);
 
             SharedValidator.RuleFor(c => c.UserRejectedExtensions).Custom((extensions, context) =>

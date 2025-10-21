@@ -296,6 +296,55 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("ChownGroup", value); }
         }
 
+        public bool EnableFfmpegEncoding
+        {
+            get { return GetValueBoolean("EnableFfmpegEncoding", false); }
+
+            set { SetValue("EnableFfmpegEncoding", value); }
+        }
+
+        public string FfmpegPath
+        {
+            get { return GetValue("FfmpegPath", "ffmpeg"); }
+
+            set { SetValue("FfmpegPath", value); }
+        }
+
+        public string FfmpegArguments
+        {
+            get { return GetValue("FfmpegArguments", "-c:v hevc_nvenc -preset p1 -b:v 4M -c:a libopus -b:a 128k"); }
+
+            set { SetValue("FfmpegArguments", value); }
+        }
+
+        public bool FfmpegDeleteOriginal
+        {
+            get { return GetValueBoolean("FfmpegDeleteOriginal", false); }
+
+            set { SetValue("FfmpegDeleteOriginal", value); }
+        }
+
+        public int FfmpegMinimumSize
+        {
+            get { return GetValueInt("FfmpegMinimumSize", 0); }
+
+            set { SetValue("FfmpegMinimumSize", value); }
+        }
+
+        public bool FfmpegSkipHevc
+        {
+            get { return GetValueBoolean("FfmpegSkipHevc", true); }
+
+            set { SetValue("FfmpegSkipHevc", value); }
+        }
+
+        public int FfmpegTimeout
+        {
+            get { return GetValueInt("FfmpegTimeout", 0); }
+
+            set { SetValue("FfmpegTimeout", value); }
+        }
+
         public ListSyncLevelType ListSyncLevel
         {
             get { return GetValueEnum("ListSyncLevel", ListSyncLevelType.Disabled); }

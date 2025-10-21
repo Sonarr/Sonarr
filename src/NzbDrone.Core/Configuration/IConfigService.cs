@@ -52,6 +52,15 @@ namespace NzbDrone.Core.Configuration
         string ChmodFolder { get; set; }
         string ChownGroup { get; set; }
 
+        // FFmpeg Encoding (Media Management)
+        bool EnableFfmpegEncoding { get; set; }
+        string FfmpegPath { get; set; }
+        string FfmpegArguments { get; set; }
+        bool FfmpegDeleteOriginal { get; set; }
+        int FfmpegMinimumSize { get; set; }
+        bool FfmpegSkipHevc { get; set; }
+        int FfmpegTimeout { get; set; }
+
         // Indexers
         int Retention { get; set; }
         int RssSyncInterval { get; set; }

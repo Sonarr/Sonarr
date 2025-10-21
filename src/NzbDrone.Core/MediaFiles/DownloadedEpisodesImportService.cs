@@ -8,7 +8,9 @@ using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Download;
+using NzbDrone.Core.MediaFiles.Encoding;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
+using NzbDrone.Core.MediaFiles.MediaInfo;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
@@ -33,6 +35,8 @@ namespace NzbDrone.Core.MediaFiles
         private readonly IDetectSample _detectSample;
         private readonly IRuntimeInfo _runtimeInfo;
         private readonly IConfigService _configService;
+        private readonly IVideoFileInfoReader _videoFileInfoReader;
+        private readonly IFfmpegEncodingService _ffmpegEncodingService;
         private readonly Logger _logger;
 
         public DownloadedEpisodesImportService(IDiskProvider diskProvider,
@@ -44,6 +48,8 @@ namespace NzbDrone.Core.MediaFiles
                                                IDetectSample detectSample,
                                                IRuntimeInfo runtimeInfo,
                                                IConfigService configService,
+                                               IVideoFileInfoReader videoFileInfoReader,
+                                               IFfmpegEncodingService ffmpegEncodingService,
                                                Logger logger)
         {
             _diskProvider = diskProvider;
@@ -55,6 +61,8 @@ namespace NzbDrone.Core.MediaFiles
             _detectSample = detectSample;
             _runtimeInfo = runtimeInfo;
             _configService = configService;
+            _videoFileInfoReader = videoFileInfoReader;
+            _ffmpegEncodingService = ffmpegEncodingService;
             _logger = logger;
         }
 
@@ -328,7 +336,42 @@ namespace NzbDrone.Core.MediaFiles
                 }
             }
 
-            var decisions = _importDecisionMaker.GetImportDecisions(new List<string>() { fileInfo.FullName }, series, downloadClientItem, null, true);
+            // FFmpeg encoding integration - encode file if configured
+            var processedFilePath = fileInfo.FullName;
+            if (_configService.EnableFfmpegEncoding)
+            {
+                try
+                {
+                    _logger.Debug("FFmpeg encoding is enabled, checking if file should be encoded: {0}", fileInfo.FullName);
+
+                    // Get media info for codec detection
+                    MediaInfoModel mediaInfo = null;
+                    try
+                    {
+                        mediaInfo = _videoFileInfoReader.GetMediaInfo(fileInfo.FullName);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.Warn(ex, "Failed to get media info for FFmpeg encoding decision: {0}", fileInfo.FullName);
+                    }
+
+                    // Attempt encoding
+                    var encodedPath = _ffmpegEncodingService.EncodeFile(fileInfo.FullName, mediaInfo);
+
+                    if (encodedPath != fileInfo.FullName)
+                    {
+                        _logger.Info("File was encoded by FFmpeg, using encoded file for import: {0}", encodedPath);
+                        processedFilePath = encodedPath;
+                        fileInfo = new FileInfo(encodedPath);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.Error(ex, "Error during FFmpeg encoding, continuing with original file: {0}", fileInfo.FullName);
+                }
+            }
+
+            var decisions = _importDecisionMaker.GetImportDecisions(new List<string>() { processedFilePath }, series, downloadClientItem, null, true);
 
             return _importApprovedEpisodes.Import(decisions, true, downloadClientItem, importMode);
         }

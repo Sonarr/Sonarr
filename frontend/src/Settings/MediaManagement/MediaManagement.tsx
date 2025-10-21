@@ -659,6 +659,94 @@ function MediaManagement() {
                   />
                 </FormGroup>
               </FieldSet>
+
+              <FieldSet legend={translate('FfmpegEncoding')}>
+                <FormGroup size={sizes.MEDIUM}>
+                  <FormLabel>{translate('EnableFfmpegEncoding')}</FormLabel>
+
+                  <FormInputGroup
+                    type={inputTypes.CHECK}
+                    name="enableFfmpegEncoding"
+                    helpText={translate('EnableFfmpegEncodingHelpText')}
+                    onChange={handleInputChange}
+                    {...settings.enableFfmpegEncoding}
+                  />
+                </FormGroup>
+
+                <FormGroup size={sizes.LARGE}>
+                  <FormLabel>{translate('FfmpegPath')}</FormLabel>
+
+                  <FormInputGroup
+                    type={inputTypes.TEXT}
+                    name="ffmpegPath"
+                    helpText={translate('FfmpegPathHelpText')}
+                    onChange={handleInputChange}
+                    {...settings.ffmpegPath}
+                  />
+                </FormGroup>
+
+                <FormGroup size={sizes.EXTRA_LARGE}>
+                  <FormLabel>{translate('FfmpegArguments')}</FormLabel>
+
+                  <FormInputGroup
+                    type={inputTypes.TEXT}
+                    name="ffmpegArguments"
+                    helpText={translate('FfmpegArgumentsHelpText')}
+                    onChange={handleInputChange}
+                    {...settings.ffmpegArguments}
+                  />
+                </FormGroup>
+
+                <FormGroup size={sizes.MEDIUM}>
+                  <FormLabel>{translate('FfmpegDeleteOriginal')}</FormLabel>
+
+                  <FormInputGroup
+                    type={inputTypes.CHECK}
+                    name="ffmpegDeleteOriginal"
+                    helpText={translate('FfmpegDeleteOriginalHelpText')}
+                    onChange={handleInputChange}
+                    {...settings.ffmpegDeleteOriginal}
+                  />
+                </FormGroup>
+
+                <FormGroup size={sizes.MEDIUM}>
+                  <FormLabel>{translate('FfmpegMinimumSize')}</FormLabel>
+
+                  <FormInputGroup
+                    type={inputTypes.NUMBER}
+                    name="ffmpegMinimumSize"
+                    unit="GB"
+                    helpText={translate('FfmpegMinimumSizeHelpText')}
+                    onChange={handleInputChange}
+                    {...settings.ffmpegMinimumSize}
+                  />
+                </FormGroup>
+
+                <FormGroup size={sizes.MEDIUM}>
+                  <FormLabel>{translate('FfmpegSkipHevc')}</FormLabel>
+
+                  <FormInputGroup
+                    type={inputTypes.CHECK}
+                    name="ffmpegSkipHevc"
+                    helpText={translate('FfmpegSkipHevcHelpText')}
+                    onChange={handleInputChange}
+                    {...settings.ffmpegSkipHevc}
+                  />
+                </FormGroup>
+
+                <FormGroup size={sizes.MEDIUM}>
+                  <FormLabel>{translate('FfmpegTimeout')}</FormLabel>
+
+                  <FormInputGroup
+                    type={inputTypes.NUMBER}
+                    name="ffmpegTimeout"
+                    unit={translate('Minutes')}
+                    helpText={translate('FfmpegTimeoutHelpText')}
+                    onChange={handleInputChange}
+                    {...settings.ffmpegTimeout}
+                  />
+                </FormGroup>
+              </FieldSet>
             ) : null}
           </Form>
         ) : null}
