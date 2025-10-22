@@ -52,7 +52,7 @@ function getRelativeDate({
   }
 
   if (!showRelativeDates) {
-    let dateTime = convertToTimezone(date, timeZone);
+    const dateTime = convertToTimezone(date, timeZone);
     return dateTime.format(shortDateFormat);
   }
 
@@ -73,14 +73,17 @@ function getRelativeDate({
   }
 
   if (isInNextWeek(date)) {
-    let dateTime = convertToTimezone(date, timeZone);
+    const dateTime = convertToTimezone(date, timeZone);
     const day = dateTime.format('dddd');
 
     return includeTime ? translate('DayOfWeekAt', { day, time }) : day;
   }
 
   return includeTime && timeFormat
-    ? formatDateTime(date, shortDateFormat, timeFormat, { includeSeconds, timeZone })
+    ? formatDateTime(date, shortDateFormat, timeFormat, {
+        includeSeconds,
+        timeZone,
+      })
     : convertToTimezone(date, timeZone).format(shortDateFormat);
 }
 

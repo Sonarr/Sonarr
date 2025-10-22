@@ -6,7 +6,10 @@ import isToday from './isToday';
 import isTomorrow from './isTomorrow';
 import isYesterday from './isYesterday';
 
-function getRelativeDay(date: moment.MomentInput, includeRelativeDate: boolean) {
+function getRelativeDay(
+  date: moment.MomentInput,
+  includeRelativeDate: boolean
+) {
   if (!includeRelativeDate) {
     return '';
   }
@@ -36,7 +39,7 @@ function formatDateTime(
     return '';
   }
 
-  let dateTime = convertToTimezone(date, timeZone);
+  const dateTime = convertToTimezone(date, timeZone);
 
   const relativeDay = getRelativeDay(dateTime, includeRelativeDay);
   const formattedDate = dateTime.format(dateFormat);

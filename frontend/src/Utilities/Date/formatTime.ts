@@ -10,7 +10,7 @@ function formatTime(
     return '';
   }
 
-  let time = convertToTimezone(date, timeZone);
+  const time = convertToTimezone(date, timeZone);
 
   if (includeSeconds) {
     timeFormat = timeFormat.replace(/\(?:mm\)?/, ':mm:ss');

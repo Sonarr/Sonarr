@@ -58,9 +58,8 @@ function AgendaEvent(props: AgendaEventProps) {
   const series = useSeries(seriesId)!;
   const episodeFile = useEpisodeFile(episodeFileId);
   const queueItem = useQueueItemForEpisode(id);
-  const { timeFormat, longDateFormat, enableColorImpairedMode, timeZone } = useSelector(
-    createUISettingsSelector()
-  );
+  const { timeFormat, longDateFormat, enableColorImpairedMode, timeZone } =
+    useSelector(createUISettingsSelector());
 
   const {
     showEpisodeInformation,
@@ -72,7 +71,10 @@ function AgendaEvent(props: AgendaEventProps) {
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
 
   const startTime = convertToTimezone(airDateUtc, timeZone);
-  const endTime = convertToTimezone(airDateUtc, timeZone).add(series.runtime, 'minutes');
+  const endTime = convertToTimezone(airDateUtc, timeZone).add(
+    series.runtime,
+    'minutes'
+  );
   const downloading = !!(queueItem || grabbed);
   const isMonitored = series.monitored && monitored;
   const statusStyle = getStatusStyle(

@@ -47,7 +47,10 @@ function CalendarEventGroup({
   const lastEpisode = events[events.length - 1];
   const airDateUtc = firstEpisode.airDateUtc;
   const startTime = convertToTimezone(airDateUtc, timeZone);
-  const endTime = convertToTimezone(lastEpisode.airDateUtc, timeZone).add(series.runtime, 'minutes');
+  const endTime = convertToTimezone(lastEpisode.airDateUtc, timeZone).add(
+    series.runtime,
+    'minutes'
+  );
   const seasonNumber = firstEpisode.seasonNumber;
 
   const { allDownloaded, anyGrabbed, anyMonitored, allAbsoluteEpisodeNumbers } =

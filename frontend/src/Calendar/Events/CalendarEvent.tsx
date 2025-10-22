@@ -89,7 +89,10 @@ function CalendarEvent(props: CalendarEventProps) {
   }
 
   const startTime = convertToTimezone(airDateUtc, timeZone);
-  const endTime = convertToTimezone(airDateUtc, timeZone).add(series.runtime, 'minutes');
+  const endTime = convertToTimezone(airDateUtc, timeZone).add(
+    series.runtime,
+    'minutes'
+  );
   const isDownloading = !!(queueItem || grabbed);
   const isMonitored = series.monitored && monitored;
   const statusStyle = getStatusStyle(

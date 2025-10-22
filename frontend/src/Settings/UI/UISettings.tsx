@@ -21,9 +21,9 @@ import createLanguagesSelector from 'Store/Selectors/createLanguagesSelector';
 import createSettingsSectionSelector from 'Store/Selectors/createSettingsSectionSelector';
 import themes from 'Styles/Themes';
 import { InputChanged } from 'typings/inputs';
+import timeZoneOptions from 'Utilities/Date/timeZoneOptions';
 import titleCase from 'Utilities/String/titleCase';
 import translate from 'Utilities/String/translate';
-import timeZoneOptions from 'Utilities/Date/timeZoneOptions';
 
 const SECTION = 'ui';
 
