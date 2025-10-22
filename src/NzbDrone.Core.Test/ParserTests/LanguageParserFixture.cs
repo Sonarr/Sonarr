@@ -148,6 +148,11 @@ namespace NzbDrone.Core.Test.ParserTests
 
         [TestCase("Title.the.Series.2009.S01E14.Japanese.HDTV.XviD-LOL")]
         [TestCase("[Erai-raws] To Be Series - 14 (JA) [1080p CR WEB-DL AVC AAC][MultiSub]")]
+        [TestCase("Spicchi di Series [Stagione 1] [COMPLETA] [1080p H265 ITA AAC JAP AC3 SUB ITA ENG] [by oldbelle]")]
+        [TestCase("Detective Series - Stagione 1 e01-29 (1996) [COMPLETA] 1080p H265 Ita Ac3 Jap Aac Sub Ita Eng [BDmux by thegatto][T7ST]")]
+        [TestCase("7th Series (2024) [Stagione 1] [COMPLETA] [1080p H265 JAP AAC 2.0 SUB ITA-ENG] [By Seregorn]\nand")]
+        [TestCase("Solo Series (2025) Stagione 1 [01/24] [IN CORSO] [1080p H265 JPN AAC SUB ITA ENG] [WebRip]")]
+        [TestCase("Le Series - Stagione 5 [COMPLETA] 1080p H264 ITA JPN EAC3 AAC SUB ITA JPN - UBI CreW")]
         public void should_parse_language_japanese(string postTitle)
         {
             var result = LanguageParser.ParseLanguages(postTitle);
