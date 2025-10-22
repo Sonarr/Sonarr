@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import AppState from 'App/State/AppState';
 import Alert from 'Components/Alert';
@@ -18,11 +18,10 @@ import {
   testAllDownloadClients,
   testAllIndexers,
 } from 'Store/Actions/settingsActions';
-import { fetchHealth } from 'Store/Actions/systemActions';
 import titleCase from 'Utilities/String/titleCase';
 import translate from 'Utilities/String/translate';
-import createHealthSelector from './createHealthSelector';
 import HealthItemLink from './HealthItemLink';
+import useHealth from './useHealth';
 import styles from './Health.css';
 
 const columns: Column[] = [
@@ -46,9 +45,7 @@ const columns: Column[] = [
 
 function Health() {
   const dispatch = useDispatch();
-  const { isFetching, isPopulated, items } = useSelector(
-    createHealthSelector()
-  );
+  const { data, isFetched, isFetching, isLoading } = useHealth();
   const isTestingAllDownloadClients = useSelector(
     (state: AppState) => state.settings.downloadClients.isTestingAll
   );
@@ -56,7 +53,7 @@ function Health() {
     (state: AppState) => state.settings.indexers.isTestingAll
   );
 
-  const healthIssues = !!items.length;
+  const healthIssues = !!data.length;
 
   const handleTestAllDownloadClientsPress = useCallback(() => {
     dispatch(testAllDownloadClients());
@@ -66,25 +63,21 @@ function Health() {
     dispatch(testAllIndexers());
   }, [dispatch]);
 
-  useEffect(() => {
-    dispatch(fetchHealth());
-  }, [dispatch]);
-
   return (
     <FieldSet
       legend={
         <div className={styles.legend}>
           {translate('Health')}
 
-          {isFetching && isPopulated ? (
+          {isFetching && !isFetched ? (
             <LoadingIndicator className={styles.loading} size={20} />
           ) : null}
         </div>
       }
     >
-      {isFetching && !isPopulated ? <LoadingIndicator /> : null}
+      {isLoading ? <LoadingIndicator /> : null}
 
-      {isPopulated && !healthIssues ? (
+      {isFetched && !healthIssues ? (
         <div className={styles.healthOk}>
           {translate('NoIssuesWithYourConfiguration')}
         </div>
@@ -94,7 +87,7 @@ function Health() {
         <>
           <Table columns={columns}>
             <TableBody>
-              {items.map((item) => {
+              {data.map((item) => {
                 const source = item.source;
 
                 let kind: IconKind = kinds.WARNING;
