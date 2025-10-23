@@ -34,13 +34,6 @@ export const defaultState = {
     isDeleting: false,
     deleteError: null,
     items: []
-  },
-
-  updates: {
-    isFetching: false,
-    isPopulated: false,
-    error: null,
-    items: []
   }
 };
 
