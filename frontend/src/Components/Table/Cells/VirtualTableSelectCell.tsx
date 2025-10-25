@@ -7,22 +7,23 @@ import VirtualTableRowCell, {
 } from './VirtualTableRowCell';
 import styles from './VirtualTableSelectCell.css';
 
-interface VirtualTableSelectCellProps extends VirtualTableRowCellProps {
+interface VirtualTableSelectCellProps<T extends number | string = number>
+  extends VirtualTableRowCellProps {
   inputClassName?: string;
-  id: number | string;
+  id: T;
   isSelected?: boolean;
   isDisabled: boolean;
-  onSelectedChange: (options: SelectStateInputProps) => void;
+  onSelectedChange: (options: SelectStateInputProps<T>) => void;
 }
 
-function VirtualTableSelectCell({
+function VirtualTableSelectCell<T extends number | string = number>({
   inputClassName = styles.input,
   id,
   isSelected = false,
   isDisabled,
   onSelectedChange,
   ...otherProps
-}: VirtualTableSelectCellProps) {
+}: VirtualTableSelectCellProps<T>) {
   const handleChange = useCallback(
     ({ value, shiftKey }: CheckInputChanged) => {
       onSelectedChange({ id, value, shiftKey });

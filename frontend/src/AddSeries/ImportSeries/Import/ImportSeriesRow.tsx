@@ -1,7 +1,7 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
-import { useSelect } from 'App/SelectContext';
+import { useSelect } from 'App/Select/SelectContext';
 import AppState from 'App/State/AppState';
 import { ImportSeries } from 'App/State/ImportSeriesAppState';
 import FormInputGroup from 'Components/Form/FormInputGroup';
@@ -48,7 +48,8 @@ function ImportSeriesRow({ id }: ImportSeriesRowProps) {
     createExistingSeriesSelector(selectedSeries?.tvdbId)
   );
 
-  const [selectState, selectDispatch] = useSelect();
+  const { getIsSelected, toggleSelected, toggleDisabled } =
+    useSelect<ImportSeries>();
 
   const handleInputChange = useCallback(
     ({ name, value }: InputChanged) => {
@@ -64,23 +65,26 @@ function ImportSeriesRow({ id }: ImportSeriesRowProps) {
   );
 
   const handleSelectedChange = useCallback(
-    ({ id, value, shiftKey }: SelectStateInputProps) => {
-      selectDispatch({
-        type: 'toggleSelected',
+    ({ id, value, shiftKey }: SelectStateInputProps<string>) => {
+      toggleSelected({
         id,
         isSelected: value,
         shiftKey,
       });
     },
-    [selectDispatch]
+    [toggleSelected]
   );
+
+  useEffect(() => {
+    toggleDisabled(id, !selectedSeries || isExistingSeries);
+  }, [id, selectedSeries, isExistingSeries, toggleDisabled]);
 
   return (
     <>
-      <VirtualTableSelectCell
+      <VirtualTableSelectCell<string>
         inputClassName={styles.selectInput}
         id={id}
-        isSelected={selectState.selectedState[id]}
+        isSelected={getIsSelected(id)}
         isDisabled={!selectedSeries || isExistingSeries}
         onSelectedChange={handleSelectedChange}
       />

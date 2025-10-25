@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import React, { useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useSelect } from 'App/SelectContext';
+import { useSelect } from 'App/Select/SelectContext';
 import { REFRESH_SERIES, SERIES_SEARCH } from 'Commands/commandNames';
 import CheckInput from 'Components/Form/CheckInput';
 import HeartRating from 'Components/HeartRating';
@@ -91,7 +91,7 @@ function SeriesIndexRow(props: SeriesIndexRowProps) {
   const [hasBannerError, setHasBannerError] = useState(false);
   const [isEditSeriesModalOpen, setIsEditSeriesModalOpen] = useState(false);
   const [isDeleteSeriesModalOpen, setIsDeleteSeriesModalOpen] = useState(false);
-  const [selectState, selectDispatch] = useSelect();
+  const { getIsSelected, toggleSelected } = useSelect();
 
   const onRefreshPress = useCallback(() => {
     dispatch(
@@ -142,14 +142,13 @@ function SeriesIndexRow(props: SeriesIndexRowProps) {
 
   const onSelectedChange = useCallback(
     ({ id, value, shiftKey }: SelectStateInputProps) => {
-      selectDispatch({
-        type: 'toggleSelected',
+      toggleSelected({
         id,
         isSelected: value,
         shiftKey,
       });
     },
-    [selectDispatch]
+    [toggleSelected]
   );
 
   return (
@@ -157,7 +156,7 @@ function SeriesIndexRow(props: SeriesIndexRowProps) {
       {isSelectMode ? (
         <VirtualTableSelectCell
           id={seriesId}
-          isSelected={selectState.selectedState[seriesId]}
+          isSelected={getIsSelected(seriesId)}
           isDisabled={false}
           onSelectedChange={onSelectedChange}
         />

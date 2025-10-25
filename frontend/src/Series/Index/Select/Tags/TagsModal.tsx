@@ -1,12 +1,9 @@
 import React from 'react';
 import Modal from 'Components/Modal/Modal';
-import TagsModalContent from './TagsModalContent';
+import TagsModalContent, { TagsModalContentProps } from './TagsModalContent';
 
-interface TagsModalProps {
+interface TagsModalProps extends TagsModalContentProps {
   isOpen: boolean;
-  seriesIds: number[];
-  onApplyTagsPress: (tags: number[], applyTags: string) => void;
-  onModalClose: () => void;
 }
 
 function TagsModal(props: TagsModalProps) {

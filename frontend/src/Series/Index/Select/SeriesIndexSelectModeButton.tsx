@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { useSelect } from 'App/SelectContext';
+import { useSelect } from 'App/Select/SelectContext';
 import PageToolbarButton, {
   PageToolbarButtonProps,
 } from 'Components/Page/Toolbar/PageToolbarButton';
@@ -11,17 +11,15 @@ interface SeriesIndexSelectModeButtonProps extends PageToolbarButtonProps {
 
 function SeriesIndexSelectModeButton(props: SeriesIndexSelectModeButtonProps) {
   const { label, iconName, isSelectMode, overflowComponent, onPress } = props;
-  const [, selectDispatch] = useSelect();
+  const { reset } = useSelect();
 
   const onPressWrapper = useCallback(() => {
     if (isSelectMode) {
-      selectDispatch({
-        type: 'reset',
-      });
+      reset();
     }
 
     onPress();
-  }, [isSelectMode, onPress, selectDispatch]);
+  }, [isSelectMode, onPress, reset]);
 
   return (
     <PageToolbarButton

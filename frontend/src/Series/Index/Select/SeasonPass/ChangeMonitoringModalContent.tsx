@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import SeriesMonitoringOptionsPopoverContent from 'AddSeries/SeriesMonitoringOptionsPopoverContent';
+import { useSelect } from 'App/Select/SelectContext';
 import Alert from 'Components/Alert';
 import Form from 'Components/Form/Form';
 import FormGroup from 'Components/Form/FormGroup';
@@ -18,19 +19,19 @@ import styles from './ChangeMonitoringModalContent.css';
 
 const NO_CHANGE = 'noChange';
 
-interface ChangeMonitoringModalContentProps {
-  seriesIds: number[];
+export interface ChangeMonitoringModalContentProps {
   saveError?: object;
   onSavePress(monitor: string): void;
   onModalClose(): void;
 }
 
-function ChangeMonitoringModalContent(
-  props: ChangeMonitoringModalContentProps
-) {
-  const { seriesIds, onSavePress, onModalClose, ...otherProps } = props;
-
+function ChangeMonitoringModalContent({
+  onSavePress,
+  onModalClose,
+  ...otherProps
+}: ChangeMonitoringModalContentProps) {
   const [monitor, setMonitor] = useState(NO_CHANGE);
+  const { selectedCount } = useSelect();
 
   const onInputChange = useCallback(
     ({ value }: { value: string }) => {
@@ -42,8 +43,6 @@ function ChangeMonitoringModalContent(
   const onSavePressWrapper = useCallback(() => {
     onSavePress(monitor);
   }, [monitor, onSavePress]);
-
-  const selectedCount = seriesIds.length;
 
   return (
     <ModalContent onModalClose={onModalClose}>

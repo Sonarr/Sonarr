@@ -1,6 +1,7 @@
 import { uniq } from 'lodash';
 import React, { useCallback, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useSelect } from 'App/Select/SelectContext';
 import { Tag } from 'App/State/TagsAppState';
 import Form from 'Components/Form/Form';
 import FormGroup from 'Components/Form/FormGroup';
@@ -20,20 +21,22 @@ import createTagsSelector from 'Store/Selectors/createTagsSelector';
 import translate from 'Utilities/String/translate';
 import styles from './TagsModalContent.css';
 
-interface TagsModalContentProps {
-  seriesIds: number[];
+export interface TagsModalContentProps {
   onApplyTagsPress: (tags: number[], applyTags: string) => void;
   onModalClose: () => void;
 }
 
-function TagsModalContent(props: TagsModalContentProps) {
-  const { seriesIds, onModalClose, onApplyTagsPress } = props;
-
+function TagsModalContent({
+  onModalClose,
+  onApplyTagsPress,
+}: TagsModalContentProps) {
   const allSeries: Series[] = useSelector(createAllSeriesSelector());
   const tagList: Tag[] = useSelector(createTagsSelector());
 
   const [tags, setTags] = useState<number[]>([]);
   const [applyTags, setApplyTags] = useState('add');
+  const { useSelectedIds } = useSelect<Series>();
+  const seriesIds = useSelectedIds();
 
   const seriesTags = useMemo(() => {
     const tags = seriesIds.reduce((acc: number[], id) => {
@@ -47,7 +50,7 @@ function TagsModalContent(props: TagsModalContentProps) {
     }, []);
 
     return uniq(tags);
-  }, [seriesIds, allSeries]);
+  }, [allSeries, seriesIds]);
 
   const onTagsChange = useCallback(
     ({ value }: { value: number[] }) => {

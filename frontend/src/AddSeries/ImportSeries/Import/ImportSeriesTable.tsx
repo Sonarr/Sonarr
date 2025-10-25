@@ -2,7 +2,7 @@ import React, { RefObject, useCallback, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FixedSizeList, ListChildComponentProps } from 'react-window';
 import { useAddSeriesOptions } from 'AddSeries/addSeriesOptionsStore';
-import { useSelect } from 'App/SelectContext';
+import { useSelect } from 'App/Select/SelectContext';
 import AppState from 'App/State/AppState';
 import { ImportSeries } from 'App/State/ImportSeriesAppState';
 import VirtualTable from 'Components/Table/VirtualTable';
@@ -66,7 +66,14 @@ function ImportSeriesTable({
   const items = useSelector((state: AppState) => state.importSeries.items);
   const { isSmallScreen } = useSelector(createDimensionsSelector());
   const allSeries = useSelector(createAllSeriesSelector());
-  const [selectState, selectDispatch] = useSelect();
+  const {
+    allSelected,
+    allUnselected,
+    getIsSelected,
+    toggleSelected,
+    selectAll,
+    unselectAll,
+  } = useSelect();
 
   const defaultValues = useRef({
     monitor,
@@ -78,38 +85,36 @@ function ImportSeriesTable({
   const listRef = useRef<FixedSizeList<RowItemData>>(null);
   const initialUnmappedFolders = useRef(unmappedFolders);
   const previousItems = usePrevious(items);
-  const { allSelected, allUnselected, selectedState } = selectState;
 
   const handleSelectAllChange = useCallback(
     ({ value }: CheckInputChanged) => {
-      selectDispatch({
-        type: value ? 'selectAll' : 'unselectAll',
-      });
+      if (value) {
+        selectAll();
+      } else {
+        unselectAll();
+      }
     },
-    [selectDispatch]
+    [selectAll, unselectAll]
   );
 
   const handleSelectedChange = useCallback(
-    ({ id, value, shiftKey }: SelectStateInputProps) => {
-      selectDispatch({
-        type: 'toggleSelected',
+    ({ id, value, shiftKey }: SelectStateInputProps<string>) => {
+      toggleSelected({
         id,
         isSelected: value,
         shiftKey,
       });
     },
-    [selectDispatch]
+    [toggleSelected]
   );
 
-  const handleRemoveSelectedStateItem = useCallback(
-    (id: string) => {
-      selectDispatch({
-        type: 'removeItem',
-        id,
-      });
-    },
-    [selectDispatch]
-  );
+  // TODO: Check if this is still needed
+  const handleRemoveSelectedStateItem = useCallback((_id: string) => {
+    // selectDispatch({
+    //   type: 'removeItem',
+    //   id,
+    // });
+  }, []);
 
   useEffect(() => {
     initialUnmappedFolders.current.forEach(({ name, path, relativePath }) => {
@@ -144,7 +149,7 @@ function ImportSeriesTable({
       }
 
       const selectedSeries = item.selectedSeries;
-      const isSelected = selectedState[id];
+      const isSelected = getIsSelected(id);
 
       const isExistingSeries =
         !!selectedSeries &&
@@ -175,9 +180,9 @@ function ImportSeriesTable({
     allSeries,
     items,
     previousItems,
-    selectedState,
     handleRemoveSelectedStateItem,
     handleSelectedChange,
+    getIsSelected,
   ]);
 
   if (!items.length) {

@@ -5,7 +5,7 @@ import {
   setAddSeriesOption,
   useAddSeriesOptions,
 } from 'AddSeries/addSeriesOptionsStore';
-import { useSelect } from 'App/SelectContext';
+import { useSelect } from 'App/Select/SelectContext';
 import AppState from 'App/State/AppState';
 import CheckInput from 'Components/Form/CheckInput';
 import FormInputGroup from 'Components/Form/FormInputGroup';
@@ -25,7 +25,6 @@ import {
 } from 'Store/Actions/importSeriesActions';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
-import getSelectedIds from 'Utilities/Table/getSelectedIds';
 import styles from './ImportSeriesFooter.css';
 
 type MixedType = 'mixed';
@@ -56,11 +55,7 @@ function ImportSeriesFooter() {
     defaultSeasonFolder
   );
 
-  const [selectState] = useSelect();
-
-  const selectedIds = useMemo(() => {
-    return getSelectedIds(selectState.selectedState, (id) => id);
-  }, [selectState.selectedState]);
+  const { selectedCount, getSelectedIds } = useSelect();
 
   const {
     hasUnsearchedItems,
@@ -127,7 +122,7 @@ function ImportSeriesFooter() {
 
       setAddSeriesOption(name as keyof AddSeriesOptions, value);
 
-      selectedIds.forEach((id) => {
+      getSelectedIds().forEach((id) => {
         dispatch(
           // @ts-expect-error - actions are not typed
           setImportSeriesValue({
@@ -137,7 +132,7 @@ function ImportSeriesFooter() {
         );
       });
     },
-    [selectedIds, dispatch]
+    [getSelectedIds, dispatch]
   );
 
   const handleLookupPress = useCallback(() => {
@@ -149,8 +144,8 @@ function ImportSeriesFooter() {
   }, [dispatch]);
 
   const handleImportPress = useCallback(() => {
-    dispatch(importSeries({ ids: selectedIds }));
-  }, [selectedIds, dispatch]);
+    dispatch(importSeries({ ids: getSelectedIds() }));
+  }, [getSelectedIds, dispatch]);
 
   useEffect(() => {
     if (isMonitorMixed && monitor !== 'mixed') {
@@ -186,8 +181,6 @@ function ImportSeriesFooter() {
       setSeasonFolder(defaultSeasonFolder);
     }
   }, [defaultSeasonFolder, isSeasonFolderMixed, seasonFolder]);
-
-  const selectedCount = selectedIds.length;
 
   return (
     <PageContentFooter>

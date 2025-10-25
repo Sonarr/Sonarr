@@ -1,11 +1,11 @@
 import React from 'react';
 import Modal from 'Components/Modal/Modal';
-import OrganizeSeriesModalContent from './OrganizeSeriesModalContent';
+import OrganizeSeriesModalContent, {
+  OrganizeSeriesModalContentProps,
+} from './OrganizeSeriesModalContent';
 
-interface OrganizeSeriesModalProps {
+interface OrganizeSeriesModalProps extends OrganizeSeriesModalContentProps {
   isOpen: boolean;
-  seriesIds: number[];
-  onModalClose: () => void;
 }
 
 function OrganizeSeriesModal(props: OrganizeSeriesModalProps) {

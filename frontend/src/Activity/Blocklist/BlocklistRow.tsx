@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react';
+import { useSelect } from 'App/Select/SelectContext';
 import IconButton from 'Components/Link/IconButton';
 import RelativeDateCell from 'Components/Table/Cells/RelativeDateCell';
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
@@ -19,9 +20,7 @@ import { useRemoveBlocklistItem } from './useBlocklist';
 import styles from './BlocklistRow.css';
 
 interface BlocklistRowProps extends Blocklist {
-  isSelected: boolean;
   columns: Column[];
-  onSelectedChange: (options: SelectStateInputProps) => void;
 }
 
 function BlocklistRow({
@@ -36,13 +35,20 @@ function BlocklistRow({
   indexer,
   message,
   source,
-  isSelected,
   columns,
-  onSelectedChange,
 }: BlocklistRowProps) {
   const series = useSeries(seriesId);
   const { isRemoving, removeBlocklistItem } = useRemoveBlocklistItem(id);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
+  const { toggleSelected, useIsSelected } = useSelect<Blocklist>();
+  const isSelected = useIsSelected(id);
+
+  const handleSelectedChange = useCallback(
+    ({ id, value, shiftKey = false }: SelectStateInputProps) => {
+      toggleSelected({ id, isSelected: value, shiftKey });
+    },
+    [toggleSelected]
+  );
 
   const handleDetailsPress = useCallback(() => {
     setIsDetailsModalOpen(true);
@@ -65,7 +71,7 @@ function BlocklistRow({
       <TableSelectCell
         id={id}
         isSelected={isSelected}
-        onSelectedChange={onSelectedChange}
+        onSelectedChange={handleSelectedChange}
       />
 
       {columns.map((column) => {

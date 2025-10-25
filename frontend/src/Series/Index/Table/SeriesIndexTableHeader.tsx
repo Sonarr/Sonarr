@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import React, { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
-import { useSelect } from 'App/SelectContext';
+import { useSelect } from 'App/Select/SelectContext';
 import IconButton from 'Components/Link/IconButton';
 import Column from 'Components/Table/Column';
 import TableOptionsModalWrapper from 'Components/Table/TableOptions/TableOptionsModalWrapper';
@@ -30,7 +30,7 @@ interface SeriesIndexTableHeaderProps {
 function SeriesIndexTableHeader(props: SeriesIndexTableHeaderProps) {
   const { showBanners, columns, sortKey, sortDirection, isSelectMode } = props;
   const dispatch = useDispatch();
-  const [selectState, selectDispatch] = useSelect();
+  const { allSelected, allUnselected, selectAll, unselectAll } = useSelect();
 
   const onSortPress = useCallback(
     (value: string) => {
@@ -48,19 +48,21 @@ function SeriesIndexTableHeader(props: SeriesIndexTableHeaderProps) {
 
   const onSelectAllChange = useCallback(
     ({ value }: CheckInputChanged) => {
-      selectDispatch({
-        type: value ? 'selectAll' : 'unselectAll',
-      });
+      if (value) {
+        selectAll();
+      } else {
+        unselectAll();
+      }
     },
-    [selectDispatch]
+    [selectAll, unselectAll]
   );
 
   return (
     <VirtualTableHeader>
       {isSelectMode ? (
         <VirtualTableSelectAllHeaderCell
-          allSelected={selectState.allSelected}
-          allUnselected={selectState.allUnselected}
+          allSelected={allSelected}
+          allUnselected={allUnselected}
           onSelectAllChange={onSelectAllChange}
         />
       ) : null}

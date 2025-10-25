@@ -1,5 +1,5 @@
 import React, { SyntheticEvent, useCallback } from 'react';
-import { useSelect } from 'App/SelectContext';
+import { useSelect } from 'App/Select/SelectContext';
 import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
 import { icons } from 'Helpers/Props';
@@ -14,8 +14,8 @@ function SeriesIndexPosterSelect({
   seriesId,
   titleSlug,
 }: SeriesIndexPosterSelectProps) {
-  const [selectState, selectDispatch] = useSelect();
-  const isSelected = selectState.selectedState[seriesId];
+  const { toggleSelected, useIsSelected } = useSelect();
+  const isSelected = useIsSelected(seriesId);
 
   const onSelectPress = useCallback(
     (event: SyntheticEvent<HTMLElement, PointerEvent>) => {
@@ -26,14 +26,13 @@ function SeriesIndexPosterSelect({
 
       const shiftKey = event.nativeEvent.shiftKey;
 
-      selectDispatch({
-        type: 'toggleSelected',
+      toggleSelected({
         id: seriesId,
         isSelected: !isSelected,
         shiftKey,
       });
     },
-    [seriesId, titleSlug, isSelected, selectDispatch]
+    [seriesId, titleSlug, isSelected, toggleSelected]
   );
 
   return (

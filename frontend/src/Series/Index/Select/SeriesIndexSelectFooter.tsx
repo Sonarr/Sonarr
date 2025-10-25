@@ -1,13 +1,14 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
-import { useSelect } from 'App/SelectContext';
+import { useSelect } from 'App/Select/SelectContext';
 import AppState from 'App/State/AppState';
 import { RENAME_SERIES } from 'Commands/commandNames';
 import SpinnerButton from 'Components/Link/SpinnerButton';
 import PageContentFooter from 'Components/Page/PageContentFooter';
 import usePrevious from 'Helpers/Hooks/usePrevious';
 import { kinds } from 'Helpers/Props';
+import Series from 'Series/Series';
 import { fetchRootFolders } from 'Store/Actions/rootFolderActions';
 import {
   saveSeriesEditor,
@@ -15,7 +16,6 @@ import {
 } from 'Store/Actions/seriesActions';
 import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
 import translate from 'Utilities/String/translate';
-import getSelectedIds from 'Utilities/Table/getSelectedIds';
 import DeleteSeriesModal from './Delete/DeleteSeriesModal';
 import EditSeriesModal from './Edit/EditSeriesModal';
 import OrganizeSeriesModal from './Organize/OrganizeSeriesModal';
@@ -64,15 +64,8 @@ function SeriesIndexSelectFooter() {
   const [isSavingTags, setIsSavingTags] = useState(false);
   const [isSavingMonitoring, setIsSavingMonitoring] = useState(false);
   const previousIsDeleting = usePrevious(isDeleting);
-
-  const [selectState, selectDispatch] = useSelect();
-  const { selectedState } = selectState;
-
-  const seriesIds = useMemo(() => {
-    return getSelectedIds(selectedState);
-  }, [selectedState]);
-
-  const selectedCount = seriesIds.length;
+  const { selectedCount, unselectAll, useSelectedIds } = useSelect<Series>();
+  const seriesIds = useSelectedIds();
 
   const onEditPress = useCallback(() => {
     setIsEditModalOpen(true);
@@ -170,9 +163,9 @@ function SeriesIndexSelectFooter() {
 
   useEffect(() => {
     if (previousIsDeleting && !isDeleting && !deleteError) {
-      selectDispatch({ type: 'unselectAll' });
+      unselectAll();
     }
-  }, [previousIsDeleting, isDeleting, deleteError, selectDispatch]);
+  }, [previousIsDeleting, isDeleting, deleteError, unselectAll]);
 
   useEffect(() => {
     dispatch(fetchRootFolders());
@@ -236,34 +229,29 @@ function SeriesIndexSelectFooter() {
 
       <EditSeriesModal
         isOpen={isEditModalOpen}
-        seriesIds={seriesIds}
         onSavePress={onSavePress}
         onModalClose={onEditModalClose}
       />
 
       <TagsModal
         isOpen={isTagsModalOpen}
-        seriesIds={seriesIds}
         onApplyTagsPress={onApplyTagsPress}
         onModalClose={onTagsModalClose}
       />
 
       <ChangeMonitoringModal
         isOpen={isMonitoringModalOpen}
-        seriesIds={seriesIds}
         onSavePress={onMonitoringSavePress}
         onModalClose={onMonitoringClose}
       />
 
       <OrganizeSeriesModal
         isOpen={isOrganizeModalOpen}
-        seriesIds={seriesIds}
         onModalClose={onOrganizeModalClose}
       />
 
       <DeleteSeriesModal
         isOpen={isDeleteModalOpen}
-        seriesIds={seriesIds}
         onModalClose={onDeleteModalClose}
       />
     </PageContentFooter>

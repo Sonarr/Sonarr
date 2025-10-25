@@ -5,7 +5,7 @@ import {
   setAddSeriesOption,
   useAddSeriesOption,
 } from 'AddSeries/addSeriesOptionsStore';
-import { SelectProvider } from 'App/SelectContext';
+import { SelectProvider } from 'App/Select/SelectContext';
 import AppState from 'App/State/AppState';
 import Alert from 'Components/Alert';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';

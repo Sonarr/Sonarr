@@ -1,21 +1,21 @@
 import React from 'react';
 import Modal from 'Components/Modal/Modal';
-import ChangeMonitoringModalContent from './ChangeMonitoringModalContent';
+import ChangeMonitoringModalContent, {
+  ChangeMonitoringModalContentProps,
+} from './ChangeMonitoringModalContent';
 
-interface ChangeMonitoringModalProps {
+interface ChangeMonitoringModalProps extends ChangeMonitoringModalContentProps {
   isOpen: boolean;
-  seriesIds: number[];
-  onSavePress(monitor: string): void;
-  onModalClose(): void;
 }
 
-function ChangeMonitoringModal(props: ChangeMonitoringModalProps) {
-  const { isOpen, seriesIds, onSavePress, onModalClose } = props;
-
+function ChangeMonitoringModal({
+  isOpen,
+  onSavePress,
+  onModalClose,
+}: ChangeMonitoringModalProps) {
   return (
     <Modal isOpen={isOpen} onModalClose={onModalClose}>
       <ChangeMonitoringModalContent
-        seriesIds={seriesIds}
         onSavePress={onSavePress}
         onModalClose={onModalClose}
       />
