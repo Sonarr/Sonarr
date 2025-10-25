@@ -9,7 +9,7 @@ internal static class ParserCommon
     internal static readonly RegexReplace[] PreSubstitutionRegex = new[]
     {
         // Korean series without season number, replace with S01Exxx and remove airdate
-        new RegexReplace(@"\.E(\d{2,4})\.\d{6}\.(.*-(F1RST|NEXT|STORM|TIGER|GHOST|KOREA))$", ".S01E$1.$2", RegexOptions.Compiled),
+        new RegexReplace(@"\.E(\d{2,4})\.\d{6}\.(.*-(F1RST|NEXT))$", ".S01E$1.$2", RegexOptions.Compiled),
 
         // Some Chinese anime releases contain both English and Chinese titles, remove the Chinese title and replace with normal anime pattern
         new RegexReplace(@"^\[(?:(?<subgroup>[^\]]+?)(?:[\u4E00-\u9FCC]+)?)\]\[(?<title>[^\]]+?)(?:\s(?<chinesetitle>[\u4E00-\u9FCC][^\]]*?))\]\[(?:(?:[\u4E00-\u9FCC]+?)?(?<episode>\d{1,4})(?:[\u4E00-\u9FCC]+?)?)\]", "[${subgroup}] ${title} - ${episode} - ", RegexOptions.Compiled),
