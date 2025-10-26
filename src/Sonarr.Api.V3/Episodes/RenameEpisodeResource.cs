@@ -25,6 +25,7 @@ namespace Sonarr.Api.V3.Episodes
 
             return new RenameEpisodeResource
             {
+                Id = model.EpisodeFileId,
                 SeriesId = model.SeriesId,
                 SeasonNumber = model.SeasonNumber,
                 EpisodeNumbers = model.EpisodeNumbers.ToList(),

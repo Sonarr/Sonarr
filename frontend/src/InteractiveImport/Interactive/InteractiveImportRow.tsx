@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { useSelect } from 'App/Select/SelectContext';
 import Icon from 'Components/Icon';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
@@ -18,6 +19,7 @@ import { icons, kinds, tooltipPositions } from 'Helpers/Props';
 import SelectEpisodeModal from 'InteractiveImport/Episode/SelectEpisodeModal';
 import { SelectedEpisode } from 'InteractiveImport/Episode/SelectEpisodeModalContent';
 import SelectIndexerFlagsModal from 'InteractiveImport/IndexerFlags/SelectIndexerFlagsModal';
+import InteractiveImport from 'InteractiveImport/InteractiveImport';
 import SelectLanguageModal from 'InteractiveImport/Language/SelectLanguageModal';
 import SelectQualityModal from 'InteractiveImport/Quality/SelectQualityModal';
 import SelectReleaseGroupModal from 'InteractiveImport/ReleaseGroup/SelectReleaseGroupModal';
@@ -74,7 +76,6 @@ interface InteractiveImportRowProps {
   columns: Column[];
   episodeFileId?: number;
   isReprocessing?: boolean;
-  isSelected?: boolean;
   modalTitle: string;
   onSelectedChange(result: SelectedChangeProps): void;
   onValidRowChange(id: number, isValid: boolean): void;
@@ -98,7 +99,6 @@ function InteractiveImportRow(props: InteractiveImportRowProps) {
     indexerFlags,
     rejections,
     isReprocessing,
-    isSelected,
     modalTitle,
     episodeFileId,
     columns,
@@ -107,6 +107,8 @@ function InteractiveImportRow(props: InteractiveImportRowProps) {
   } = props;
 
   const dispatch = useDispatch();
+  const { useIsSelected } = useSelect<InteractiveImport>();
+  const isSelected = useIsSelected(id);
 
   const isSeriesColumnVisible = useMemo(
     () => columns.find((c) => c.name === 'series')?.isVisible ?? false,

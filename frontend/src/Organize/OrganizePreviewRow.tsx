@@ -1,36 +1,44 @@
 import React, { useCallback, useEffect } from 'react';
+import { useSelect } from 'App/Select/SelectContext';
+import { OrganizePreviewModel } from 'App/State/OrganizePreviewAppState';
 import CheckInput from 'Components/Form/CheckInput';
 import Icon from 'Components/Icon';
 import { icons, kinds } from 'Helpers/Props';
 import { CheckInputChanged } from 'typings/inputs';
-import { SelectStateInputProps } from 'typings/props';
 import styles from './OrganizePreviewRow.css';
 
 interface OrganizePreviewRowProps {
   id: number;
   existingPath: string;
   newPath: string;
-  isSelected?: boolean;
-  onSelectedChange: (props: SelectStateInputProps) => void;
 }
 
 function OrganizePreviewRow({
   id,
   existingPath,
   newPath,
-  isSelected,
-  onSelectedChange,
 }: OrganizePreviewRowProps) {
+  const { toggleSelected, useIsSelected } = useSelect<OrganizePreviewModel>();
+  const isSelected = useIsSelected(id);
+
   const handleSelectedChange = useCallback(
     ({ value, shiftKey }: CheckInputChanged) => {
-      onSelectedChange({ id, value, shiftKey });
+      toggleSelected({
+        id,
+        isSelected: value,
+        shiftKey,
+      });
     },
-    [id, onSelectedChange]
+    [id, toggleSelected]
   );
 
   useEffect(() => {
-    onSelectedChange({ id, value: true, shiftKey: false });
-  }, [id, onSelectedChange]);
+    toggleSelected({
+      id,
+      isSelected: true,
+      shiftKey: false,
+    });
+  }, [id, toggleSelected]);
 
   return (
     <div className={styles.row}>

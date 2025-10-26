@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { SelectProvider, useSelect } from 'App/Select/SelectContext';
 import AppState, { Filter } from 'App/State/AppState';
 import * as commandNames from 'Commands/commandNames';
 import Alert from 'Components/Alert';
@@ -17,8 +18,8 @@ import TableBody from 'Components/Table/TableBody';
 import TableOptionsModalWrapper from 'Components/Table/TableOptions/TableOptionsModalWrapper';
 import TablePager from 'Components/Table/TablePager';
 import usePaging from 'Components/Table/usePaging';
+import Episode from 'Episode/Episode';
 import useCurrentPage from 'Helpers/Hooks/useCurrentPage';
-import useSelectState from 'Helpers/Hooks/useSelectState';
 import { align, icons, kinds } from 'Helpers/Props';
 import { executeCommand } from 'Store/Actions/commandActions';
 import {
@@ -32,7 +33,6 @@ import {
 } from 'Store/Actions/wantedActions';
 import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
 import { CheckInputChanged } from 'typings/inputs';
-import { SelectStateInputProps } from 'typings/props';
 import { TableOptionsChangePayload } from 'typings/Table';
 import getFilterValue from 'Utilities/Filter/getFilterValue';
 import {
@@ -40,7 +40,6 @@ import {
   unregisterPagePopulator,
 } from 'Utilities/pagePopulator';
 import translate from 'Utilities/String/translate';
-import getSelectedIds from 'Utilities/Table/getSelectedIds';
 import CutoffUnmetRow from './CutoffUnmetRow';
 
 function getMonitoredValue(
@@ -50,7 +49,7 @@ function getMonitoredValue(
   return !!getFilterValue(filters, selectedFilterKey, 'monitored', false);
 }
 
-function CutoffUnmet() {
+function CutoffUnmetContent() {
   const dispatch = useDispatch();
   const requestCurrentPage = useCurrentPage();
 
@@ -77,8 +76,14 @@ function CutoffUnmet() {
     createCommandExecutingSelector(commandNames.EPISODE_SEARCH)
   );
 
-  const [selectState, setSelectState] = useSelectState();
-  const { allSelected, allUnselected, selectedState } = selectState;
+  const {
+    allSelected,
+    allUnselected,
+    anySelected,
+    getSelectedIds,
+    selectAll,
+    unselectAll,
+  } = useSelect<Episode>();
 
   const [isConfirmSearchAllModalOpen, setIsConfirmSearchAllModalOpen] =
     useState(false);
@@ -95,50 +100,36 @@ function CutoffUnmet() {
     gotoPage: gotoCutoffUnmetPage,
   });
 
-  const selectedIds = useMemo(() => {
-    return getSelectedIds(selectedState);
-  }, [selectedState]);
-
   const isSaving = useMemo(() => {
     return items.filter((m) => m.isSaving).length > 1;
   }, [items]);
 
-  const itemsSelected = !!selectedIds.length;
   const isShowingMonitored = getMonitoredValue(filters, selectedFilterKey);
   const isSearchingForEpisodes =
     isSearchingForAllEpisodes || isSearchingForSelectedEpisodes;
 
   const handleSelectAllChange = useCallback(
     ({ value }: CheckInputChanged) => {
-      setSelectState({ type: value ? 'selectAll' : 'unselectAll', items });
+      if (value) {
+        selectAll();
+      } else {
+        unselectAll();
+      }
     },
-    [items, setSelectState]
-  );
-
-  const handleSelectedChange = useCallback(
-    ({ id, value, shiftKey = false }: SelectStateInputProps) => {
-      setSelectState({
-        type: 'toggleSelected',
-        items,
-        id,
-        isSelected: value,
-        shiftKey,
-      });
-    },
-    [items, setSelectState]
+    [selectAll, unselectAll]
   );
 
   const handleSearchSelectedPress = useCallback(() => {
     dispatch(
       executeCommand({
         name: commandNames.EPISODE_SEARCH,
-        episodeIds: selectedIds,
+        episodeIds: getSelectedIds(),
         commandFinished: () => {
           dispatch(fetchCutoffUnmet());
         },
       })
     );
-  }, [selectedIds, dispatch]);
+  }, [getSelectedIds, dispatch]);
 
   const handleSearchAllPress = useCallback(() => {
     setIsConfirmSearchAllModalOpen(true);
@@ -164,11 +155,11 @@ function CutoffUnmet() {
   const handleToggleSelectedPress = useCallback(() => {
     dispatch(
       batchToggleCutoffUnmetEpisodes({
-        episodeIds: selectedIds,
+        episodeIds: getSelectedIds(),
         monitored: !isShowingMonitored,
       })
     );
-  }, [isShowingMonitored, selectedIds, dispatch]);
+  }, [isShowingMonitored, getSelectedIds, dispatch]);
 
   const handleFilterSelect = useCallback(
     (filterKey: number | string) => {
@@ -229,15 +220,13 @@ function CutoffUnmet() {
         <PageToolbarSection>
           <PageToolbarButton
             label={
-              itemsSelected
-                ? translate('SearchSelected')
-                : translate('SearchAll')
+              anySelected ? translate('SearchSelected') : translate('SearchAll')
             }
             iconName={icons.SEARCH}
             isDisabled={isSearchingForEpisodes}
             isSpinning={isSearchingForEpisodes}
             onPress={
-              itemsSelected ? handleSearchSelectedPress : handleSearchAllPress
+              anySelected ? handleSearchSelectedPress : handleSearchAllPress
             }
           />
 
@@ -250,7 +239,7 @@ function CutoffUnmet() {
                 : translate('MonitorSelected')
             }
             iconName={icons.MONITORED}
-            isDisabled={!itemsSelected}
+            isDisabled={!anySelected}
             isSpinning={isSaving}
             onPress={handleToggleSelectedPress}
           />
@@ -306,13 +295,7 @@ function CutoffUnmet() {
               <TableBody>
                 {items.map((item) => {
                   return (
-                    <CutoffUnmetRow
-                      key={item.id}
-                      isSelected={selectedState[item.id]}
-                      columns={columns}
-                      {...item}
-                      onSelectedChange={handleSelectedChange}
-                    />
+                    <CutoffUnmetRow key={item.id} columns={columns} {...item} />
                   );
                 })}
               </TableBody>
@@ -356,4 +339,12 @@ function CutoffUnmet() {
   );
 }
 
-export default CutoffUnmet;
+export default function CutoffUnmet() {
+  const { items } = useSelector((state: AppState) => state.wanted.cutoffUnmet);
+
+  return (
+    <SelectProvider<Episode> items={items}>
+      <CutoffUnmetContent />
+    </SelectProvider>
+  );
+}

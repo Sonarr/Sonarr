@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
 import ProtocolLabel from 'Activity/Queue/ProtocolLabel';
+import { useSelect } from 'App/Select/SelectContext';
 import IconButton from 'Components/Link/IconButton';
 import SpinnerIconButton from 'Components/Link/SpinnerIconButton';
 import ProgressBar from 'Components/ProgressBar';
@@ -24,7 +25,7 @@ import useSeries from 'Series/useSeries';
 import createUISettingsSelector from 'Store/Selectors/createUISettingsSelector';
 import CustomFormat from 'typings/CustomFormat';
 import { SelectStateInputProps } from 'typings/props';
-import {
+import Queue, {
   QueueTrackedDownloadState,
   QueueTrackedDownloadStatus,
   StatusMessage,
@@ -68,9 +69,7 @@ interface QueueRowProps {
   size: number;
   sizeLeft: number;
   isRemoving?: boolean;
-  isSelected?: boolean;
   columns: Column[];
-  onSelectedChange: (options: SelectStateInputProps) => void;
   onQueueRowModalOpenOrClose: (isOpen: boolean) => void;
 }
 
@@ -102,9 +101,7 @@ function QueueRow(props: QueueRowProps) {
     timeLeft,
     size,
     sizeLeft,
-    isSelected,
     columns,
-    onSelectedChange,
     onQueueRowModalOpenOrClose,
   } = props;
 
@@ -115,6 +112,8 @@ function QueueRow(props: QueueRowProps) {
   );
   const { removeQueueItem, isRemoving } = useRemoveQueueItem(id);
   const { grabQueueItem, isGrabbing, grabError } = useGrabQueueItem(id);
+  const { toggleSelected, useIsSelected } = useSelect<Queue>();
+  const isSelected = useIsSelected(id);
 
   const [isRemoveQueueItemModalOpen, setIsRemoveQueueItemModalOpen] =
     useState(false);
@@ -156,6 +155,17 @@ function QueueRow(props: QueueRowProps) {
     setIsRemoveQueueItemModalOpen(false);
   }, [setIsRemoveQueueItemModalOpen, onQueueRowModalOpenOrClose]);
 
+  const handleSelectedChange = useCallback(
+    ({ id, value, shiftKey = false }: SelectStateInputProps) => {
+      toggleSelected({
+        id,
+        isSelected: value,
+        shiftKey,
+      });
+    },
+    [toggleSelected]
+  );
+
   const progress = 100 - (sizeLeft / size) * 100;
   const showInteractiveImport =
     status === 'completed' && trackedDownloadStatus === 'warning';
@@ -167,7 +177,7 @@ function QueueRow(props: QueueRowProps) {
       <TableSelectCell
         id={id}
         isSelected={isSelected}
-        onSelectedChange={onSelectedChange}
+        onSelectedChange={handleSelectedChange}
       />
 
       {columns.map((column) => {

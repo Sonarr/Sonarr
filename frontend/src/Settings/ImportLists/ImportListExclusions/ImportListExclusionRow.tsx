@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
+import { useSelect } from 'App/Select/SelectContext';
 import IconButton from 'Components/Link/IconButton';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
@@ -14,13 +15,26 @@ import translate from 'Utilities/String/translate';
 import EditImportListExclusionModal from './EditImportListExclusionModal';
 import styles from './ImportListExclusionRow.css';
 
-interface ImportListExclusionRowProps extends ImportListExclusion {
-  isSelected: boolean;
-  onSelectedChange: (options: SelectStateInputProps) => void;
-}
+type ImportListExclusionRowProps = ImportListExclusion;
 
-function ImportListExclusionRow(props: ImportListExclusionRowProps) {
-  const { id, tvdbId, title, isSelected, onSelectedChange } = props;
+function ImportListExclusionRow({
+  id,
+  tvdbId,
+  title,
+}: ImportListExclusionRowProps) {
+  const { toggleSelected, useIsSelected } = useSelect<ImportListExclusion>();
+  const isSelected = useIsSelected(id);
+
+  const handleSelectedChange = useCallback(
+    ({ id, value, shiftKey = false }: SelectStateInputProps) => {
+      toggleSelected({
+        id,
+        isSelected: value,
+        shiftKey,
+      });
+    },
+    [toggleSelected]
+  );
 
   const dispatch = useDispatch();
 
@@ -45,7 +59,7 @@ function ImportListExclusionRow(props: ImportListExclusionRowProps) {
       <TableSelectCell
         id={id}
         isSelected={isSelected}
-        onSelectedChange={onSelectedChange}
+        onSelectedChange={handleSelectedChange}
       />
 
       <TableRowCell>{title}</TableRowCell>

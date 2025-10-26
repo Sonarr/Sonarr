@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useCallback } from 'react';
+import { useSelect } from 'App/Select/SelectContext';
 import RelativeDateCell from 'Components/Table/Cells/RelativeDateCell';
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
 import TableSelectCell from 'Components/Table/Cells/TableSelectCell';
 import Column from 'Components/Table/Column';
 import TableRow from 'Components/Table/TableRow';
+import Episode from 'Episode/Episode';
 import EpisodeSearchCell from 'Episode/EpisodeSearchCell';
 import EpisodeStatus from 'Episode/EpisodeStatus';
 import EpisodeTitleLink from 'Episode/EpisodeTitleLink';
@@ -27,9 +29,7 @@ interface MissingRowProps {
   airDateUtc?: string;
   lastSearchTime?: string;
   title: string;
-  isSelected?: boolean;
   columns: Column[];
-  onSelectedChange: (options: SelectStateInputProps) => void;
 }
 
 function MissingRow({
@@ -46,11 +46,22 @@ function MissingRow({
   airDateUtc,
   lastSearchTime,
   title,
-  isSelected,
   columns,
-  onSelectedChange,
 }: MissingRowProps) {
   const series = useSeries(seriesId);
+  const { toggleSelected, useIsSelected } = useSelect<Episode>();
+  const isSelected = useIsSelected(id);
+
+  const handleSelectedChange = useCallback(
+    ({ id, value, shiftKey = false }: SelectStateInputProps) => {
+      toggleSelected({
+        id,
+        isSelected: value,
+        shiftKey,
+      });
+    },
+    [toggleSelected]
+  );
 
   if (!series) {
     return null;
@@ -61,7 +72,7 @@ function MissingRow({
       <TableSelectCell
         id={id}
         isSelected={isSelected}
-        onSelectedChange={onSelectedChange}
+        onSelectedChange={handleSelectedChange}
       />
 
       {columns.map((column) => {

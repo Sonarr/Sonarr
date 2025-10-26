@@ -1,6 +1,35 @@
-import { SelectState, SelectStateModel } from 'Helpers/Hooks/useSelectState';
-import areAllSelected from './areAllSelected';
 import getToggledRange from './getToggledRange';
+
+interface SelectState {
+  allSelected: boolean;
+  allUnselected: boolean;
+  lastToggled: number | string | null;
+  selectedState: SelectedState;
+}
+
+type SelectedState = Record<number | string, boolean>;
+
+interface SelectStateModel {
+  id: number | string;
+}
+
+function areAllSelected(selectedState: SelectedState) {
+  let allSelected = true;
+  let allUnselected = true;
+
+  Object.values(selectedState).forEach((value) => {
+    if (value) {
+      allUnselected = false;
+    } else {
+      allSelected = false;
+    }
+  });
+
+  return {
+    allSelected,
+    allUnselected,
+  };
+}
 
 function toggleSelected<T extends SelectStateModel>(
   selectState: SelectState,

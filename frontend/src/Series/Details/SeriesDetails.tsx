@@ -60,7 +60,6 @@ import {
 } from 'Utilities/pagePopulator';
 import filterAlternateTitles from 'Utilities/Series/filterAlternateTitles';
 import translate from 'Utilities/String/translate';
-import selectAll from 'Utilities/Table/selectAll';
 import toggleSelected from 'Utilities/Table/toggleSelected';
 import SeriesAlternateTitles from './SeriesAlternateTitles';
 import SeriesDetailsLinks from './SeriesDetailsLinks';
@@ -302,15 +301,19 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
   }, []);
 
   const handleExpandAllPress = useCallback(() => {
-    const updated = selectAll(
-      expandedState.seasons,
-      !expandedState.allExpanded
-    );
+    const expandAll = !expandedState.allExpanded;
+
+    const newSeasons = Object.keys(expandedState.seasons).reduce<
+      Record<number | string, boolean>
+    >((acc, item) => {
+      acc[item] = expandAll;
+      return acc;
+    }, {});
 
     setExpandedState({
-      allExpanded: updated.allSelected,
-      allCollapsed: updated.allUnselected,
-      seasons: updated.selectedState,
+      allExpanded: expandAll,
+      allCollapsed: !expandAll,
+      seasons: newSeasons,
     });
   }, [expandedState]);
 

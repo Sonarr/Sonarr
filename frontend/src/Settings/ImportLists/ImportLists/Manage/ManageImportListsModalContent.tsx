@@ -1,5 +1,6 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { SelectProvider, useSelect } from 'App/Select/SelectContext';
 import { ImportListAppState } from 'App/State/SettingsAppState';
 import Alert from 'Components/Alert';
 import Button from 'Components/Link/Button';
@@ -12,26 +13,20 @@ import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
-import useSelectState from 'Helpers/Hooks/useSelectState';
 import { kinds } from 'Helpers/Props';
 import {
   bulkDeleteImportLists,
   bulkEditImportLists,
 } from 'Store/Actions/settingsActions';
 import createClientSideCollectionSelector from 'Store/Selectors/createClientSideCollectionSelector';
+import ImportList from 'typings/ImportList';
 import { CheckInputChanged } from 'typings/inputs';
 import getErrorMessage from 'Utilities/Object/getErrorMessage';
 import translate from 'Utilities/String/translate';
-import getSelectedIds from 'Utilities/Table/getSelectedIds';
 import ManageImportListsEditModal from './Edit/ManageImportListsEditModal';
 import ManageImportListsModalRow from './ManageImportListsModalRow';
 import TagsModal from './Tags/TagsModal';
 import styles from './ManageImportListsModalContent.css';
-
-// TODO: This feels janky to do, but not sure of a better way currently
-type OnSelectedChangeCallback = React.ComponentProps<
-  typeof ManageImportListsModalRow
->['onSelectedChange'];
 
 const COLUMNS = [
   {
@@ -76,8 +71,12 @@ interface ManageImportListsModalContentProps {
   onModalClose(): void;
 }
 
-function ManageImportListsModalContent(
-  props: ManageImportListsModalContentProps
+interface ManageImportListsModalContentInnerProps {
+  onModalClose(): void;
+}
+
+function ManageImportListsModalContentInner(
+  props: ManageImportListsModalContentInnerProps
 ) {
   const { onModalClose } = props;
 
@@ -98,15 +97,16 @@ function ManageImportListsModalContent(
   const [isTagsModalOpen, setIsTagsModalOpen] = useState(false);
   const [isSavingTags, setIsSavingTags] = useState(false);
 
-  const [selectState, setSelectState] = useSelectState();
+  const {
+    allSelected,
+    allUnselected,
+    anySelected,
+    selectAll,
+    unselectAll,
+    useSelectedIds,
+  } = useSelect<ImportList>();
 
-  const { allSelected, allUnselected, selectedState } = selectState;
-
-  const selectedIds: number[] = useMemo(() => {
-    return getSelectedIds(selectedState);
-  }, [selectedState]);
-
-  const selectedCount = selectedIds.length;
+  const selectedIds = useSelectedIds();
 
   const onDeletePress = useCallback(() => {
     setIsDeleteModalOpen(true);
@@ -169,26 +169,16 @@ function ManageImportListsModalContent(
 
   const onSelectAllChange = useCallback(
     ({ value }: CheckInputChanged) => {
-      setSelectState({ type: value ? 'selectAll' : 'unselectAll', items });
+      if (value) {
+        selectAll();
+      } else {
+        unselectAll();
+      }
     },
-    [items, setSelectState]
-  );
-
-  const onSelectedChange = useCallback<OnSelectedChangeCallback>(
-    ({ id, value, shiftKey = false }) => {
-      setSelectState({
-        type: 'toggleSelected',
-        items,
-        id,
-        isSelected: value,
-        shiftKey,
-      });
-    },
-    [items, setSelectState]
+    [selectAll, unselectAll]
   );
 
   const errorMessage = getErrorMessage(error, 'Unable to load import lists.');
-  const anySelected = selectedCount > 0;
 
   return (
     <ModalContent onModalClose={onModalClose}>
@@ -216,10 +206,8 @@ function ManageImportListsModalContent(
                 return (
                   <ManageImportListsModalRow
                     key={item.id}
-                    isSelected={selectedState[item.id]}
                     {...item}
                     columns={COLUMNS}
-                    onSelectedChange={onSelectedChange}
                   />
                 );
               })}
@@ -285,6 +273,20 @@ function ManageImportListsModalContent(
         onCancel={onDeleteModalClose}
       />
     </ModalContent>
+  );
+}
+
+function ManageImportListsModalContent(
+  props: ManageImportListsModalContentProps
+) {
+  const { items }: ImportListAppState = useSelector(
+    createClientSideCollectionSelector('settings.importLists')
+  );
+
+  return (
+    <SelectProvider items={items}>
+      <ManageImportListsModalContentInner {...props} />
+    </SelectProvider>
   );
 }
 

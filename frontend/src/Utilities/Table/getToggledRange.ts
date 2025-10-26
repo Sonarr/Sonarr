@@ -1,6 +1,6 @@
-import { SelectStateModel } from 'Helpers/Hooks/useSelectState';
+import { Id, SelectStoreModel } from 'App/Select/useSelectStore';
 
-function getToggledRange<T extends SelectStateModel>(
+function getToggledRange<T extends SelectStoreModel<Id>>(
   items: T[],
   id: number | string,
   lastToggled: number | string

@@ -1,5 +1,6 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { SelectProvider, useSelect } from 'App/Select/SelectContext';
 import { IndexerAppState } from 'App/State/SettingsAppState';
 import Alert from 'Components/Alert';
 import Button from 'Components/Link/Button';
@@ -13,7 +14,6 @@ import ModalHeader from 'Components/Modal/ModalHeader';
 import Column from 'Components/Table/Column';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
-import useSelectState from 'Helpers/Hooks/useSelectState';
 import { kinds } from 'Helpers/Props';
 import {
   bulkDeleteIndexers,
@@ -21,19 +21,14 @@ import {
   setManageIndexersSort,
 } from 'Store/Actions/settingsActions';
 import createClientSideCollectionSelector from 'Store/Selectors/createClientSideCollectionSelector';
+import Indexer from 'typings/Indexer';
 import { CheckInputChanged } from 'typings/inputs';
 import getErrorMessage from 'Utilities/Object/getErrorMessage';
 import translate from 'Utilities/String/translate';
-import getSelectedIds from 'Utilities/Table/getSelectedIds';
 import ManageIndexersEditModal from './Edit/ManageIndexersEditModal';
 import ManageIndexersModalRow from './ManageIndexersModalRow';
 import TagsModal from './Tags/TagsModal';
 import styles from './ManageIndexersModalContent.css';
-
-// TODO: This feels janky to do, but not sure of a better way currently
-type OnSelectedChangeCallback = React.ComponentProps<
-  typeof ManageIndexersModalRow
->['onSelectedChange'];
 
 const COLUMNS: Column[] = [
   {
@@ -90,7 +85,13 @@ interface ManageIndexersModalContentProps {
   onModalClose(): void;
 }
 
-function ManageIndexersModalContent(props: ManageIndexersModalContentProps) {
+interface ManageIndexersModalContentInnerProps {
+  onModalClose(): void;
+}
+
+function ManageIndexersModalContentInner(
+  props: ManageIndexersModalContentInnerProps
+) {
   const { onModalClose } = props;
 
   const {
@@ -112,15 +113,15 @@ function ManageIndexersModalContent(props: ManageIndexersModalContentProps) {
   const [isTagsModalOpen, setIsTagsModalOpen] = useState(false);
   const [isSavingTags, setIsSavingTags] = useState(false);
 
-  const [selectState, setSelectState] = useSelectState();
-
-  const { allSelected, allUnselected, selectedState } = selectState;
-
-  const selectedIds: number[] = useMemo(() => {
-    return getSelectedIds(selectedState);
-  }, [selectedState]);
-
-  const selectedCount = selectedIds.length;
+  const {
+    allSelected,
+    allUnselected,
+    anySelected,
+    getSelectedIds,
+    selectAll,
+    unselectAll,
+    useSelectedIds,
+  } = useSelect<Indexer>();
 
   const onSortPress = useCallback(
     (value: string) => {
@@ -146,9 +147,9 @@ function ManageIndexersModalContent(props: ManageIndexersModalContentProps) {
   }, [setIsEditModalOpen]);
 
   const onConfirmDelete = useCallback(() => {
-    dispatch(bulkDeleteIndexers({ ids: selectedIds }));
+    dispatch(bulkDeleteIndexers({ ids: getSelectedIds() }));
     setIsDeleteModalOpen(false);
-  }, [selectedIds, dispatch]);
+  }, [getSelectedIds, dispatch]);
 
   const onSavePress = useCallback(
     (payload: object) => {
@@ -156,12 +157,12 @@ function ManageIndexersModalContent(props: ManageIndexersModalContentProps) {
 
       dispatch(
         bulkEditIndexers({
-          ids: selectedIds,
+          ids: getSelectedIds(),
           ...payload,
         })
       );
     },
-    [selectedIds, dispatch]
+    [getSelectedIds, dispatch]
   );
 
   const onTagsPress = useCallback(() => {
@@ -179,37 +180,28 @@ function ManageIndexersModalContent(props: ManageIndexersModalContentProps) {
 
       dispatch(
         bulkEditIndexers({
-          ids: selectedIds,
+          ids: getSelectedIds(),
           tags,
           applyTags,
         })
       );
     },
-    [selectedIds, dispatch]
+    [getSelectedIds, dispatch]
   );
 
   const onSelectAllChange = useCallback(
     ({ value }: CheckInputChanged) => {
-      setSelectState({ type: value ? 'selectAll' : 'unselectAll', items });
+      if (value) {
+        selectAll();
+      } else {
+        unselectAll();
+      }
     },
-    [items, setSelectState]
+    [selectAll, unselectAll]
   );
 
-  const onSelectedChange = useCallback<OnSelectedChangeCallback>(
-    ({ id, value, shiftKey = false }) => {
-      setSelectState({
-        type: 'toggleSelected',
-        items,
-        id,
-        isSelected: value,
-        shiftKey,
-      });
-    },
-    [items, setSelectState]
-  );
-
+  const selectedIds = useSelectedIds();
   const errorMessage = getErrorMessage(error, 'Unable to load indexers.');
-  const anySelected = selectedCount > 0;
 
   return (
     <ModalContent onModalClose={onModalClose}>
@@ -240,10 +232,8 @@ function ManageIndexersModalContent(props: ManageIndexersModalContentProps) {
                 return (
                   <ManageIndexersModalRow
                     key={item.id}
-                    isSelected={selectedState[item.id]}
                     {...item}
                     columns={COLUMNS}
-                    onSelectedChange={onSelectedChange}
                   />
                 );
               })}
@@ -309,6 +299,18 @@ function ManageIndexersModalContent(props: ManageIndexersModalContentProps) {
         onCancel={onDeleteModalClose}
       />
     </ModalContent>
+  );
+}
+
+function ManageIndexersModalContent(props: ManageIndexersModalContentProps) {
+  const { items }: IndexerAppState = useSelector(
+    createClientSideCollectionSelector('settings.indexers', 'manageIndexers')
+  );
+
+  return (
+    <SelectProvider items={items}>
+      <ManageIndexersModalContentInner {...props} />
+    </SelectProvider>
   );
 }
 

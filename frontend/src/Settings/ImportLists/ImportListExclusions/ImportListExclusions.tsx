@@ -1,6 +1,7 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
+import { SelectProvider, useSelect } from 'App/Select/SelectContext';
 import AppState from 'App/State/AppState';
 import FieldSet from 'Components/FieldSet';
 import IconButton from 'Components/Link/IconButton';
@@ -17,7 +18,6 @@ import usePaging from 'Components/Table/usePaging';
 import useCurrentPage from 'Helpers/Hooks/useCurrentPage';
 import useModalOpenState from 'Helpers/Hooks/useModalOpenState';
 import usePrevious from 'Helpers/Hooks/usePrevious';
-import useSelectState from 'Helpers/Hooks/useSelectState';
 import { icons, kinds } from 'Helpers/Props';
 import { SortDirection } from 'Helpers/Props/sortDirections';
 import {
@@ -28,15 +28,14 @@ import {
   setImportListExclusionSort,
   setImportListExclusionTableOption,
 } from 'Store/Actions/Settings/importListExclusions';
+import ImportListExclusion from 'typings/ImportListExclusion';
 import { CheckInputChanged } from 'typings/inputs';
-import { SelectStateInputProps } from 'typings/props';
 import { TableOptionsChangePayload } from 'typings/Table';
 import {
   registerPagePopulator,
   unregisterPagePopulator,
 } from 'Utilities/pagePopulator';
 import translate from 'Utilities/String/translate';
-import getSelectedIds from 'Utilities/Table/getSelectedIds';
 import EditImportListExclusionModal from './EditImportListExclusionModal';
 import ImportListExclusionRow from './ImportListExclusionRow';
 import styles from './ImportListExclusions.css';
@@ -74,7 +73,7 @@ function createImportListExclusionsSelector() {
   );
 }
 
-function ImportListExclusions() {
+function ImportListExclusionsContent() {
   const requestCurrentPage = useCurrentPage();
 
   const {
@@ -98,31 +97,24 @@ function ImportListExclusions() {
     useState(false);
   const previousIsDeleting = usePrevious(isDeleting);
 
-  const [selectState, setSelectState] = useSelectState();
-  const { allSelected, allUnselected, selectedState } = selectState;
-
-  const selectedIds = useMemo(() => {
-    return getSelectedIds(selectedState);
-  }, [selectedState]);
+  const {
+    allSelected,
+    allUnselected,
+    anySelected,
+    getSelectedIds,
+    selectAll,
+    unselectAll,
+  } = useSelect<ImportListExclusion>();
 
   const handleSelectAllChange = useCallback(
     ({ value }: CheckInputChanged) => {
-      setSelectState({ type: value ? 'selectAll' : 'unselectAll', items });
+      if (value) {
+        selectAll();
+      } else {
+        unselectAll();
+      }
     },
-    [items, setSelectState]
-  );
-
-  const handleSelectedChange = useCallback(
-    ({ id, value, shiftKey = false }: SelectStateInputProps) => {
-      setSelectState({
-        type: 'toggleSelected',
-        items,
-        id,
-        isSelected: value,
-        shiftKey,
-      });
-    },
-    [items, setSelectState]
+    [selectAll, unselectAll]
   );
 
   const handleDeleteSelectedPress = useCallback(() => {
@@ -130,9 +122,9 @@ function ImportListExclusions() {
   }, [setIsConfirmDeleteModalOpen]);
 
   const handleDeleteSelectedConfirmed = useCallback(() => {
-    dispatch(bulkDeleteImportListExclusions({ ids: selectedIds }));
+    dispatch(bulkDeleteImportListExclusions({ ids: getSelectedIds() }));
     setIsConfirmDeleteModalOpen(false);
-  }, [selectedIds, setIsConfirmDeleteModalOpen, dispatch]);
+  }, [getSelectedIds, setIsConfirmDeleteModalOpen, dispatch]);
 
   const handleConfirmDeleteModalClose = useCallback(() => {
     setIsConfirmDeleteModalOpen(false);
@@ -194,7 +186,7 @@ function ImportListExclusions() {
 
   useEffect(() => {
     if (previousIsDeleting && !isDeleting && !deleteError) {
-      setSelectState({ type: 'unselectAll', items });
+      unselectAll();
 
       dispatch(fetchImportListExclusions());
     }
@@ -204,7 +196,7 @@ function ImportListExclusions() {
     deleteError,
     items,
     dispatch,
-    setSelectState,
+    unselectAll,
   ]);
 
   const [
@@ -238,14 +230,7 @@ function ImportListExclusions() {
         >
           <TableBody>
             {items.map((item) => {
-              return (
-                <ImportListExclusionRow
-                  key={item.id}
-                  {...item}
-                  isSelected={selectedState[item.id] || false}
-                  onSelectedChange={handleSelectedChange}
-                />
-              );
+              return <ImportListExclusionRow key={item.id} {...item} />;
             })}
 
             <TableRow>
@@ -253,7 +238,7 @@ function ImportListExclusions() {
                 <SpinnerButton
                   kind={kinds.DANGER}
                   isSpinning={isDeleting}
-                  isDisabled={!selectedIds.length}
+                  isDisabled={!anySelected}
                   onPress={handleDeleteSelectedPress}
                 >
                   {translate('Delete')}
@@ -298,6 +283,16 @@ function ImportListExclusions() {
         />
       </PageSectionContent>
     </FieldSet>
+  );
+}
+
+function ImportListExclusions() {
+  const { items } = useSelector(createImportListExclusionsSelector());
+
+  return (
+    <SelectProvider items={items}>
+      <ImportListExclusionsContent />
+    </SelectProvider>
   );
 }
 

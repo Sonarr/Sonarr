@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
+import { useSelect } from 'App/Select/SelectContext';
 import AppState from 'App/State/AppState';
 import IconButton from 'Components/Link/IconButton';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
@@ -10,6 +11,7 @@ import Column from 'Components/Table/Column';
 import TableRow from 'Components/Table/TableRow';
 import { icons } from 'Helpers/Props';
 import { deleteCustomFormat } from 'Store/Actions/settingsActions';
+import CustomFormat from 'typings/CustomFormat';
 import { SelectStateInputProps } from 'typings/props';
 import translate from 'Utilities/String/translate';
 import EditCustomFormatModal from '../EditCustomFormatModal';
@@ -20,8 +22,6 @@ interface ManageCustomFormatsModalRowProps {
   name: string;
   includeCustomFormatWhenRenaming: boolean;
   columns: Column[];
-  isSelected?: boolean;
-  onSelectedChange(result: SelectStateInputProps): void;
 }
 
 function isDeletingSelector() {
@@ -33,15 +33,13 @@ function isDeletingSelector() {
   );
 }
 
-function ManageCustomFormatsModalRow(props: ManageCustomFormatsModalRowProps) {
-  const {
-    id,
-    isSelected,
-    name,
-    includeCustomFormatWhenRenaming,
-    onSelectedChange,
-  } = props;
-
+function ManageCustomFormatsModalRow({
+  id,
+  name,
+  includeCustomFormatWhenRenaming,
+}: ManageCustomFormatsModalRowProps) {
+  const { toggleSelected, useIsSelected } = useSelect<CustomFormat>();
+  const isSelected = useIsSelected(id);
   const dispatch = useDispatch();
   const isDeleting = useSelector(isDeletingSelector());
 
@@ -52,12 +50,10 @@ function ManageCustomFormatsModalRow(props: ManageCustomFormatsModalRowProps) {
     useState(false);
 
   const handlelectedChange = useCallback(
-    (result: SelectStateInputProps) => {
-      onSelectedChange({
-        ...result,
-      });
+    ({ id, value, shiftKey }: SelectStateInputProps) => {
+      toggleSelected({ id, isSelected: value, shiftKey });
     },
-    [onSelectedChange]
+    [toggleSelected]
   );
 
   const handleEditCustomFormatModalOpen = useCallback(() => {

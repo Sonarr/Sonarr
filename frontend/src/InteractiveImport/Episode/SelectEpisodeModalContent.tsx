@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
+import { SelectProvider, useSelect } from 'App/Select/SelectContext';
 import EpisodesAppState from 'App/State/EpisodesAppState';
 import TextInput from 'Components/Form/TextInput';
 import Button from 'Components/Link/Button';
@@ -13,7 +14,6 @@ import Scroller from 'Components/Scroller/Scroller';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import Episode from 'Episode/Episode';
-import useSelectState from 'Helpers/Hooks/useSelectState';
 import { kinds, scrollDirections } from 'Helpers/Props';
 import { SortDirection } from 'Helpers/Props/sortDirections';
 import {
@@ -23,10 +23,8 @@ import {
 } from 'Store/Actions/episodeSelectionActions';
 import createClientSideCollectionSelector from 'Store/Selectors/createClientSideCollectionSelector';
 import { CheckInputChanged, InputChanged } from 'typings/inputs';
-import { SelectStateInputProps } from 'typings/props';
 import getErrorMessage from 'Utilities/Object/getErrorMessage';
 import translate from 'Utilities/String/translate';
-import getSelectedIds from 'Utilities/Table/getSelectedIds';
 import SelectEpisodeRow from './SelectEpisodeRow';
 import styles from './SelectEpisodeModalContent.css';
 
@@ -74,7 +72,20 @@ interface SelectEpisodeModalContentProps {
   onModalClose(): unknown;
 }
 
-function SelectEpisodeModalContent(props: SelectEpisodeModalContentProps) {
+interface SelectEpisodeModalContentInnerProps {
+  selectedIds: number[] | string[];
+  seriesId?: number;
+  seasonNumber?: number;
+  selectedDetails?: string;
+  isAnime: boolean;
+  modalTitle: string;
+  onEpisodesSelect(selectedEpisodes: SelectedEpisode[]): unknown;
+  onModalClose(): unknown;
+}
+
+function SelectEpisodeModalContentInner(
+  props: SelectEpisodeModalContentInnerProps
+) {
   const {
     selectedIds,
     seriesId,
@@ -87,17 +98,22 @@ function SelectEpisodeModalContent(props: SelectEpisodeModalContentProps) {
   } = props;
 
   const [filter, setFilter] = useState('');
-  const [selectState, setSelectState] = useSelectState();
 
-  const { allSelected, allUnselected, selectedState } = selectState;
   const { isFetching, isPopulated, items, error, sortKey, sortDirection } =
     useSelector(episodesSelector());
   const dispatch = useDispatch();
+  const {
+    allSelected,
+    allUnselected,
+    selectedCount: selectedEpisodesCount,
+    getSelectedIds,
+    selectAll,
+    unselectAll,
+  } = useSelect<Episode>();
 
   const filterEpisodeNumber = parseInt(filter);
   const errorMessage = getErrorMessage(error, translate('EpisodesLoadError'));
   const selectedCount = selectedIds.length;
-  const selectedEpisodesCount = getSelectedIds(selectedState).length;
   const selectionIsValid =
     selectedEpisodesCount > 0 && selectedEpisodesCount % selectedCount === 0;
 
@@ -110,22 +126,13 @@ function SelectEpisodeModalContent(props: SelectEpisodeModalContentProps) {
 
   const onSelectAllChange = useCallback(
     ({ value }: CheckInputChanged) => {
-      setSelectState({ type: value ? 'selectAll' : 'unselectAll', items });
+      if (value) {
+        selectAll();
+      } else {
+        unselectAll();
+      }
     },
-    [items, setSelectState]
-  );
-
-  const onSelectedChange = useCallback(
-    ({ id, value, shiftKey = false }: SelectStateInputProps) => {
-      setSelectState({
-        type: 'toggleSelected',
-        items,
-        id,
-        isSelected: value,
-        shiftKey,
-      });
-    },
-    [items, setSelectState]
+    [selectAll, unselectAll]
   );
 
   const onSortPress = useCallback(
@@ -141,7 +148,7 @@ function SelectEpisodeModalContent(props: SelectEpisodeModalContentProps) {
   );
 
   const onEpisodesSelectWrapper = useCallback(() => {
-    const episodeIds: number[] = getSelectedIds(selectedState);
+    const episodeIds: number[] = getSelectedIds();
 
     const selectedEpisodes = items.reduce((acc: Episode[], item) => {
       if (episodeIds.indexOf(item.id) > -1) {
@@ -170,7 +177,7 @@ function SelectEpisodeModalContent(props: SelectEpisodeModalContentProps) {
     });
 
     onEpisodesSelect(mappedEpisodes);
-  }, [selectedIds, items, selectedState, onEpisodesSelect]);
+  }, [selectedIds, items, getSelectedIds, onEpisodesSelect]);
 
   useEffect(
     () => {
@@ -240,8 +247,6 @@ function SelectEpisodeModalContent(props: SelectEpisodeModalContentProps) {
                       title={item.title}
                       airDate={item.airDate}
                       isAnime={isAnime}
-                      isSelected={selectedState[item.id]}
-                      onSelectedChange={onSelectedChange}
                     />
                   ) : null;
                 })}
@@ -271,6 +276,16 @@ function SelectEpisodeModalContent(props: SelectEpisodeModalContentProps) {
         </div>
       </ModalFooter>
     </ModalContent>
+  );
+}
+
+function SelectEpisodeModalContent(props: SelectEpisodeModalContentProps) {
+  const { items } = useSelector(episodesSelector());
+
+  return (
+    <SelectProvider items={items}>
+      <SelectEpisodeModalContentInner {...props} />
+    </SelectProvider>
   );
 }
 

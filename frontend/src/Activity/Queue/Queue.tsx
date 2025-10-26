@@ -7,6 +7,7 @@ import React, {
   useState,
 } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { SelectProvider, useSelect } from 'App/Select/SelectContext';
 import * as commandNames from 'Commands/commandNames';
 import Alert from 'Components/Alert';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
@@ -22,14 +23,13 @@ import TableBody from 'Components/Table/TableBody';
 import TableOptionsModalWrapper from 'Components/Table/TableOptions/TableOptionsModalWrapper';
 import TablePager from 'Components/Table/TablePager';
 import createEpisodesFetchingSelector from 'Episode/createEpisodesFetchingSelector';
-import useSelectState from 'Helpers/Hooks/useSelectState';
 import { align, icons, kinds } from 'Helpers/Props';
 import { executeCommand } from 'Store/Actions/commandActions';
 import { clearEpisodes, fetchEpisodes } from 'Store/Actions/episodeActions';
 import { createCustomFiltersSelector } from 'Store/Selectors/createClientSideCollectionSelector';
 import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
 import { CheckInputChanged } from 'typings/inputs';
-import { SelectStateInputProps } from 'typings/props';
+import QueueModel from 'typings/Queue';
 import { TableOptionsChangePayload } from 'typings/Table';
 import selectUniqueIds from 'Utilities/Object/selectUniqueIds';
 import {
@@ -37,7 +37,6 @@ import {
   unregisterPagePopulator,
 } from 'Utilities/pagePopulator';
 import translate from 'Utilities/String/translate';
-import getSelectedIds from 'Utilities/Table/getSelectedIds';
 import QueueFilterModal from './QueueFilterModal';
 import QueueOptions from './QueueOptions';
 import {
@@ -54,7 +53,7 @@ import useQueue, {
   useRemoveQueueItems,
 } from './useQueue';
 
-function Queue() {
+function QueueContent() {
   const dispatch = useDispatch();
 
   const {
@@ -89,13 +88,10 @@ function Queue() {
   const shouldBlockRefresh = useRef(false);
   const currentQueue = useRef<ReactElement | null>(null);
 
-  const [selectState, setSelectState] = useSelectState();
-  const { allSelected, allUnselected, selectedState } = selectState;
+  const { allSelected, allUnselected, selectAll, unselectAll, useSelectedIds } =
+    useSelect<QueueModel>();
 
-  const selectedIds = useMemo(() => {
-    return getSelectedIds(selectedState);
-  }, [selectedState]);
-
+  const selectedIds = useSelectedIds();
   const isPendingSelected = useMemo(() => {
     return records.some((item) => {
       return selectedIds.indexOf(item.id) > -1 && item.status === 'delay';
@@ -120,25 +116,13 @@ function Queue() {
 
   const handleSelectAllChange = useCallback(
     ({ value }: CheckInputChanged) => {
-      setSelectState({
-        type: value ? 'selectAll' : 'unselectAll',
-        items: records,
-      });
+      if (value) {
+        selectAll();
+      } else {
+        unselectAll();
+      }
     },
-    [records, setSelectState]
-  );
-
-  const handleSelectedChange = useCallback(
-    ({ id, value, shiftKey = false }: SelectStateInputProps) => {
-      setSelectState({
-        type: 'toggleSelected',
-        items: records,
-        id,
-        isSelected: value,
-        shiftKey,
-      });
-    },
-    [records, setSelectState]
+    [selectAll, unselectAll]
   );
 
   const handleRefreshPress = useCallback(() => {
@@ -254,10 +238,8 @@ function Queue() {
                   return (
                     <QueueRow
                       key={item.id}
-                      isSelected={selectedState[item.id]}
                       columns={columns}
                       {...item}
-                      onSelectedChange={handleSelectedChange}
                       onQueueRowModalOpenOrClose={
                         handleQueueRowModalOpenOrClose
                       }
@@ -342,7 +324,7 @@ function Queue() {
         selectedCount={selectedCount}
         canChangeCategory={
           isConfirmRemoveModalOpen &&
-          selectedIds.every((id) => {
+          selectedIds.every((id: number) => {
             const item = records.find((i) => i.id === id);
 
             return !!(item && item.downloadClientHasPostImportCategory);
@@ -350,7 +332,7 @@ function Queue() {
         }
         canIgnore={
           isConfirmRemoveModalOpen &&
-          selectedIds.every((id) => {
+          selectedIds.every((id: number) => {
             const item = records.find((i) => i.id === id);
 
             return !!(item && item.seriesId && item.episodeId);
@@ -358,7 +340,7 @@ function Queue() {
         }
         isPending={
           isConfirmRemoveModalOpen &&
-          selectedIds.every((id) => {
+          selectedIds.every((id: number) => {
             const item = records.find((i) => i.id === id);
 
             if (!item) {
@@ -375,6 +357,16 @@ function Queue() {
         onModalClose={handleConfirmRemoveModalClose}
       />
     </PageContent>
+  );
+}
+
+function Queue() {
+  const { records } = useQueue();
+
+  return (
+    <SelectProvider<QueueModel> items={records}>
+      <QueueContent />
+    </SelectProvider>
   );
 }
 

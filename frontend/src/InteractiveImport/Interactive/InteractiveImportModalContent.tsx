@@ -2,6 +2,7 @@ import { cloneDeep, without } from 'lodash';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
+import { SelectProvider, useSelect } from 'App/Select/SelectContext';
 import AppState from 'App/State/AppState';
 import InteractiveImportAppState from 'App/State/InteractiveImportAppState';
 import * as commandNames from 'Commands/commandNames';
@@ -24,7 +25,6 @@ import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import { EpisodeFile } from 'EpisodeFile/EpisodeFile';
 import usePrevious from 'Helpers/Hooks/usePrevious';
-import useSelectState from 'Helpers/Hooks/useSelectState';
 import { align, icons, kinds, scrollDirections } from 'Helpers/Props';
 import SelectEpisodeModal from 'InteractiveImport/Episode/SelectEpisodeModal';
 import { SelectedEpisode } from 'InteractiveImport/Episode/SelectEpisodeModalContent';
@@ -62,7 +62,6 @@ import { CheckInputChanged } from 'typings/inputs';
 import getErrorMessage from 'Utilities/Object/getErrorMessage';
 import hasDifferentItems from 'Utilities/Object/hasDifferentItems';
 import translate from 'Utilities/String/translate';
-import getSelectedIds from 'Utilities/Table/getSelectedIds';
 import InteractiveImportRow from './InteractiveImportRow';
 import styles from './InteractiveImportModalContent.css';
 
@@ -238,7 +237,7 @@ export interface InteractiveImportModalContentProps {
   onModalClose(): void;
 }
 
-function InteractiveImportModalContent(
+function InteractiveImportModalContentInner(
   props: InteractiveImportModalContentProps
 ) {
   const {
@@ -286,10 +285,17 @@ function InteractiveImportModalContent(
   const [filterExistingFiles, setFilterExistingFiles] = useState(false);
   const [interactiveImportErrorMessage, setInteractiveImportErrorMessage] =
     useState<string | null>(null);
-  const [selectState, setSelectState] = useSelectState();
-  const { allSelected, allUnselected, selectedState } = selectState;
   const previousIsDeleting = usePrevious(isDeleting);
   const dispatch = useDispatch();
+
+  const {
+    allSelected,
+    allUnselected,
+    selectAll,
+    unselectAll,
+    toggleSelected,
+    useSelectedIds,
+  } = useSelect<InteractiveImport>();
 
   const columns: Column[] = useMemo(() => {
     const result: Column[] = cloneDeep(COLUMNS);
@@ -315,9 +321,7 @@ function InteractiveImportModalContent(
     return result;
   }, [showSeries, items]);
 
-  const selectedIds: number[] = useMemo(() => {
-    return getSelectedIds(selectedState);
-  }, [selectedState]);
+  const selectedIds = useSelectedIds();
 
   const bulkSelectOptions = useMemo(() => {
     const { seasonSelectDisabled, episodeSelectDisabled } = items.reduce(
@@ -432,16 +436,18 @@ function InteractiveImportModalContent(
 
   const onSelectAllChange = useCallback(
     ({ value }: CheckInputChanged) => {
-      setSelectState({ type: value ? 'selectAll' : 'unselectAll', items });
+      if (value) {
+        selectAll();
+      } else {
+        unselectAll();
+      }
     },
-    [items, setSelectState]
+    [selectAll, unselectAll]
   );
 
   const onSelectedChange = useCallback<OnSelectedChangeCallback>(
     ({ id, value, hasEpisodeFileId, shiftKey = false }) => {
-      setSelectState({
-        type: 'toggleSelected',
-        items,
+      toggleSelected({
         id,
         isSelected: value,
         shiftKey,
@@ -454,10 +460,9 @@ function InteractiveImportModalContent(
       );
     },
     [
-      items,
       withoutEpisodeFileIdRowsSelected,
-      setSelectState,
       setWithoutEpisodeFileIdRowsSelected,
+      toggleSelected,
     ]
   );
 
@@ -893,7 +898,6 @@ function InteractiveImportModalContent(
                 return (
                   <InteractiveImportRow
                     key={item.id}
-                    isSelected={selectedState[item.id]}
                     {...item}
                     allowSeriesChange={allowSeriesChange}
                     columns={columns}
@@ -1045,6 +1049,20 @@ function InteractiveImportModalContent(
         onCancel={onConfirmDeleteModalClose}
       />
     </ModalContent>
+  );
+}
+
+function InteractiveImportModalContent(
+  props: InteractiveImportModalContentProps
+) {
+  const { items }: InteractiveImportAppState = useSelector(
+    createClientSideCollectionSelector('interactiveImport')
+  );
+
+  return (
+    <SelectProvider<InteractiveImport> items={items}>
+      <InteractiveImportModalContentInner {...props} />
+    </SelectProvider>
   );
 }
 
