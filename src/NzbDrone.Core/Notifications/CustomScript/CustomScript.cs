@@ -84,6 +84,7 @@ namespace NzbDrone.Core.Notifications.CustomScript
             environmentVariables.Add("Sonarr_Release_EpisodeAirDatesUtc", string.Join(",", remoteEpisode.Episodes.Select(e => e.AirDateUtc)));
             environmentVariables.Add("Sonarr_Release_EpisodeTitles", string.Join("|", remoteEpisode.Episodes.Select(e => e.Title)));
             environmentVariables.Add("Sonarr_Release_EpisodeOverviews", string.Join("|", remoteEpisode.Episodes.Select(e => e.Overview)));
+            environmentVariables.Add("Sonarr_Release_FinaleTypes", string.Join("|", remoteEpisode.Episodes.Select(e => e.FinaleType)));
             environmentVariables.Add("Sonarr_Release_Title", remoteEpisode.Release.Title);
             environmentVariables.Add("Sonarr_Release_Indexer", remoteEpisode.Release.Indexer ?? string.Empty);
             environmentVariables.Add("Sonarr_Release_Size", remoteEpisode.Release.Size.ToString());
