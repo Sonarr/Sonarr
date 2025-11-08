@@ -1,5 +1,4 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import Icon from 'Components/Icon';
 import IconButton from 'Components/Link/IconButton';
 import Link from 'Components/Link/Link';
@@ -8,11 +7,11 @@ import RelativeDateCell from 'Components/Table/Cells/RelativeDateCell';
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
 import TableRow from 'Components/Table/TableRow';
 import { icons, kinds } from 'Helpers/Props';
-import { deleteBackup } from 'Store/Actions/systemActions';
 import { BackupType } from 'typings/Backup';
 import formatBytes from 'Utilities/Number/formatBytes';
 import translate from 'Utilities/String/translate';
 import RestoreBackupModal from './RestoreBackupModal';
+import { useDeleteBackup } from './useBackups';
 import styles from './BackupRow.css';
 
 interface BackupRowProps {
@@ -25,7 +24,7 @@ interface BackupRowProps {
 }
 
 function BackupRow({ id, type, name, path, size, time }: BackupRowProps) {
-  const dispatch = useDispatch();
+  const deleteBackupMutation = useDeleteBackup(id);
   const [isRestoreModalOpen, setIsRestoreModalOpen] = useState(false);
   const [isConfirmDeleteModalOpen, setIsConfirmDeleteModalOpen] =
     useState(false);
@@ -68,9 +67,15 @@ function BackupRow({ id, type, name, path, size, time }: BackupRowProps) {
   }, []);
 
   const handleConfirmDeletePress = useCallback(() => {
-    dispatch(deleteBackup({ id }));
-    setIsConfirmDeleteModalOpen(false);
-  }, [id, dispatch]);
+    deleteBackupMutation.mutate(undefined, {
+      onSuccess: () => {
+        setIsConfirmDeleteModalOpen(false);
+      },
+      onError: (error) => {
+        console.error('Failed to delete backup:', error);
+      },
+    });
+  }, [deleteBackupMutation]);
 
   return (
     <TableRow key={id}>

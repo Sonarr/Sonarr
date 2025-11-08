@@ -22,7 +22,6 @@ import ReleasesAppState from './ReleasesAppState';
 import RootFolderAppState from './RootFolderAppState';
 import SeriesAppState, { SeriesIndexAppState } from './SeriesAppState';
 import SettingsAppState from './SettingsAppState';
-import SystemAppState from './SystemAppState';
 import TagsAppState from './TagsAppState';
 import WantedAppState from './WantedAppState';
 
@@ -103,7 +102,6 @@ interface AppState {
   seriesHistory: SeriesHistoryAppState;
   seriesIndex: SeriesIndexAppState;
   settings: SettingsAppState;
-  system: SystemAppState;
   tags: TagsAppState;
   wanted: WantedAppState;
 }

@@ -16,10 +16,10 @@ import {
   saveGeneralSettings,
   setGeneralSettingsValue,
 } from 'Store/Actions/settingsActions';
-import { restart } from 'Store/Actions/systemActions';
 import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
 import createSettingsSectionSelector from 'Store/Selectors/createSettingsSectionSelector';
 import { useIsWindowsService } from 'System/Status/useSystemStatus';
+import { useRestart } from 'System/useSystem';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
 import AnalyticSettings from './AnalyticSettings';
@@ -46,6 +46,7 @@ const requiresRestartKeys = [
 function GeneralSettings() {
   const dispatch = useDispatch();
   const isWindowsService = useIsWindowsService();
+  const { mutate: restart } = useRestart();
   const isResettingApiKey = useSelector(
     createCommandExecutingSelector(commandNames.RESET_API_KEY)
   );
@@ -85,8 +86,8 @@ function GeneralSettings() {
 
   const handleConfirmRestart = useCallback(() => {
     setIsRestartRequiredModalOpen(false);
-    dispatch(restart());
-  }, [dispatch]);
+    restart();
+  }, [restart]);
 
   const handleCloseRestartRequiredModalOpen = useCallback(() => {
     setIsRestartRequiredModalOpen(false);

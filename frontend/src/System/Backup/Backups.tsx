@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import AppState from 'App/State/AppState';
 import * as commandNames from 'Commands/commandNames';
 import Alert from 'Components/Alert';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
@@ -15,11 +14,11 @@ import TableBody from 'Components/Table/TableBody';
 import usePrevious from 'Helpers/Hooks/usePrevious';
 import { icons, kinds } from 'Helpers/Props';
 import { executeCommand } from 'Store/Actions/commandActions';
-import { fetchBackups } from 'Store/Actions/systemActions';
 import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
 import translate from 'Utilities/String/translate';
 import BackupRow from './BackupRow';
 import RestoreBackupModal from './RestoreBackupModal';
+import useBackups from './useBackups';
 
 const columns: Column[] = [
   {
@@ -51,10 +50,7 @@ const columns: Column[] = [
 
 function Backups() {
   const dispatch = useDispatch();
-
-  const { isFetching, isPopulated, error, items } = useSelector(
-    (state: AppState) => state.system.backups
-  );
+  const { data: items, isLoading: isFetching, error, refetch } = useBackups();
 
   const isBackupExecuting = useSelector(
     createCommandExecutingSelector(commandNames.BACKUP)
@@ -63,8 +59,8 @@ function Backups() {
   const [isRestoreModalOpen, setIsRestoreModalOpen] = useState(false);
 
   const wasBackupExecuting = usePrevious(isBackupExecuting);
-  const hasBackups = isPopulated && !!items.length;
-  const noBackups = isPopulated && !items.length;
+  const hasBackups = !!items.length;
+  const noBackups = !items.length && !isFetching && !error;
 
   const handleBackupPress = useCallback(() => {
     dispatch(
@@ -83,14 +79,10 @@ function Backups() {
   }, []);
 
   useEffect(() => {
-    dispatch(fetchBackups());
-  }, [dispatch]);
-
-  useEffect(() => {
     if (wasBackupExecuting && !isBackupExecuting) {
-      dispatch(fetchBackups());
+      refetch();
     }
-  }, [isBackupExecuting, wasBackupExecuting, dispatch]);
+  }, [isBackupExecuting, wasBackupExecuting, refetch]);
 
   return (
     <PageContent title={translate('Backups')}>
@@ -112,7 +104,7 @@ function Backups() {
       </PageToolbar>
 
       <PageContentBody>
-        {isFetching && !isPopulated ? <LoadingIndicator /> : null}
+        {isFetching ? <LoadingIndicator /> : null}
 
         {!isFetching && !!error ? (
           <Alert kind={kinds.DANGER}>{translate('BackupsLoadError')}</Alert>
