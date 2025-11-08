@@ -450,7 +450,7 @@
   "DownloadClientFloodSettingsAdditionalTags": "Additional Tags",
   "DownloadClientFloodSettingsAdditionalTagsHelpText": "Adds properties of media as tags. Hints are examples.",
   "DownloadClientFloodSettingsPostImportTags": "Post-Import Tags",
-  "DownloadClientFloodSettingsPostImportTagsHelpText": "Appends tags after a download is imported.",
+  "DownloadClientFloodSettingsPostImportTagsHelpText": "Appends tags after a download is imported. Torrents with all these tags will be filtered from the queue and will not removed automatically.",
   "DownloadClientFloodSettingsRemovalInfo": "{appName} will handle automatic removal of torrents based on the current seed criteria in Settings -> Indexers",
   "DownloadClientFloodSettingsStartOnAdd": "Start on Add",
   "DownloadClientFloodSettingsTagsHelpText": "Initial tags of a download. To be recognized, a download must have all initial tags. This avoids conflicts with unrelated downloads.",
