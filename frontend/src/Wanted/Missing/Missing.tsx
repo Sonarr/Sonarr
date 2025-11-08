@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import QueueDetailsProvider from 'Activity/Queue/Details/QueueDetailsProvider';
 import { SelectProvider, useSelect } from 'App/Select/SelectContext';
 import AppState, { Filter } from 'App/State/AppState';
 import * as commandNames from 'Commands/commandNames';
@@ -36,6 +37,7 @@ import createCommandExecutingSelector from 'Store/Selectors/createCommandExecuti
 import { CheckInputChanged } from 'typings/inputs';
 import { TableOptionsChangePayload } from 'typings/Table';
 import getFilterValue from 'Utilities/Filter/getFilterValue';
+import selectUniqueIds from 'Utilities/Object/selectUniqueIds';
 import {
   registerPagePopulator,
   unregisterPagePopulator,
@@ -111,6 +113,10 @@ function MissingContent() {
   const isShowingMonitored = getMonitoredValue(filters, selectedFilterKey);
   const isSearchingForEpisodes =
     isSearchingForAllEpisodes || isSearchingForSelectedEpisodes;
+
+  const episodeIds = useMemo(() => {
+    return selectUniqueIds<Episode, number>(items, 'id');
+  }, [items]);
 
   const handleSelectAllChange = useCallback(
     ({ value }: CheckInputChanged) => {
@@ -227,139 +233,146 @@ function MissingContent() {
   }, [dispatch]);
 
   return (
-    <PageContent title={translate('Missing')}>
-      <PageToolbar>
-        <PageToolbarSection>
-          <PageToolbarButton
-            label={
-              anySelected ? translate('SearchSelected') : translate('SearchAll')
-            }
-            iconName={icons.SEARCH}
-            isDisabled={isSearchingForEpisodes}
-            isSpinning={isSearchingForEpisodes}
-            onPress={
-              anySelected ? handleSearchSelectedPress : handleSearchAllPress
-            }
-          />
-
-          <PageToolbarSeparator />
-
-          <PageToolbarButton
-            label={
-              isShowingMonitored
-                ? translate('UnmonitorSelected')
-                : translate('MonitorSelected')
-            }
-            iconName={icons.MONITORED}
-            isDisabled={!anySelected}
-            isSpinning={isSaving}
-            onPress={handleToggleSelectedPress}
-          />
-
-          <PageToolbarSeparator />
-
-          <PageToolbarButton
-            label={translate('ManualImport')}
-            iconName={icons.INTERACTIVE}
-            onPress={handleInteractiveImportPress}
-          />
-        </PageToolbarSection>
-
-        <PageToolbarSection alignContent={align.RIGHT}>
-          <TableOptionsModalWrapper
-            columns={columns}
-            pageSize={pageSize}
-            onTableOptionChange={handleTableOptionChange}
-          >
+    <QueueDetailsProvider episodeIds={episodeIds}>
+      <PageContent title={translate('Missing')}>
+        <PageToolbar>
+          <PageToolbarSection>
             <PageToolbarButton
-              label={translate('Options')}
-              iconName={icons.TABLE}
+              label={
+                anySelected
+                  ? translate('SearchSelected')
+                  : translate('SearchAll')
+              }
+              iconName={icons.SEARCH}
+              isDisabled={isSearchingForEpisodes}
+              isSpinning={isSearchingForEpisodes}
+              onPress={
+                anySelected ? handleSearchSelectedPress : handleSearchAllPress
+              }
             />
-          </TableOptionsModalWrapper>
 
-          <FilterMenu
-            alignMenu={align.RIGHT}
-            selectedFilterKey={selectedFilterKey}
-            filters={filters}
-            customFilters={[]}
-            onFilterSelect={handleFilterSelect}
-          />
-        </PageToolbarSection>
-      </PageToolbar>
+            <PageToolbarSeparator />
 
-      <PageContentBody>
-        {isFetching && !isPopulated ? <LoadingIndicator /> : null}
+            <PageToolbarButton
+              label={
+                isShowingMonitored
+                  ? translate('UnmonitorSelected')
+                  : translate('MonitorSelected')
+              }
+              iconName={icons.MONITORED}
+              isDisabled={!anySelected}
+              isSpinning={isSaving}
+              onPress={handleToggleSelectedPress}
+            />
 
-        {!isFetching && error ? (
-          <Alert kind={kinds.DANGER}>{translate('MissingLoadError')}</Alert>
-        ) : null}
+            <PageToolbarSeparator />
 
-        {isPopulated && !error && !items.length ? (
-          <Alert kind={kinds.INFO}>{translate('MissingNoItems')}</Alert>
-        ) : null}
+            <PageToolbarButton
+              label={translate('ManualImport')}
+              iconName={icons.INTERACTIVE}
+              onPress={handleInteractiveImportPress}
+            />
+          </PageToolbarSection>
 
-        {isPopulated && !error && !!items.length ? (
-          <div>
-            <Table
-              selectAll={true}
-              allSelected={allSelected}
-              allUnselected={allUnselected}
+          <PageToolbarSection alignContent={align.RIGHT}>
+            <TableOptionsModalWrapper
               columns={columns}
               pageSize={pageSize}
-              sortKey={sortKey}
-              sortDirection={sortDirection}
               onTableOptionChange={handleTableOptionChange}
-              onSelectAllChange={handleSelectAllChange}
-              onSortPress={handleSortPress}
             >
-              <TableBody>
-                {items.map((item) => {
-                  return (
-                    <MissingRow key={item.id} columns={columns} {...item} />
-                  );
-                })}
-              </TableBody>
-            </Table>
+              <PageToolbarButton
+                label={translate('Options')}
+                iconName={icons.TABLE}
+              />
+            </TableOptionsModalWrapper>
 
-            <TablePager
-              page={page}
-              totalPages={totalPages}
-              totalRecords={totalRecords}
-              isFetching={isFetching}
-              onFirstPagePress={handleFirstPagePress}
-              onPreviousPagePress={handlePreviousPagePress}
-              onNextPagePress={handleNextPagePress}
-              onLastPagePress={handleLastPagePress}
-              onPageSelect={handlePageSelect}
+            <FilterMenu
+              alignMenu={align.RIGHT}
+              selectedFilterKey={selectedFilterKey}
+              filters={filters}
+              customFilters={[]}
+              onFilterSelect={handleFilterSelect}
             />
+          </PageToolbarSection>
+        </PageToolbar>
 
-            <ConfirmModal
-              isOpen={isConfirmSearchAllModalOpen}
-              kind={kinds.DANGER}
-              title={translate('SearchForAllMissingEpisodes')}
-              message={
-                <div>
+        <PageContentBody>
+          {isFetching && !isPopulated ? <LoadingIndicator /> : null}
+
+          {!isFetching && error ? (
+            <Alert kind={kinds.DANGER}>{translate('MissingLoadError')}</Alert>
+          ) : null}
+
+          {isPopulated && !error && !items.length ? (
+            <Alert kind={kinds.INFO}>{translate('MissingNoItems')}</Alert>
+          ) : null}
+
+          {isPopulated && !error && !!items.length ? (
+            <div>
+              <Table
+                selectAll={true}
+                allSelected={allSelected}
+                allUnselected={allUnselected}
+                columns={columns}
+                pageSize={pageSize}
+                sortKey={sortKey}
+                sortDirection={sortDirection}
+                onTableOptionChange={handleTableOptionChange}
+                onSelectAllChange={handleSelectAllChange}
+                onSortPress={handleSortPress}
+              >
+                <TableBody>
+                  {items.map((item) => {
+                    return (
+                      <MissingRow key={item.id} columns={columns} {...item} />
+                    );
+                  })}
+                </TableBody>
+              </Table>
+
+              <TablePager
+                page={page}
+                totalPages={totalPages}
+                totalRecords={totalRecords}
+                isFetching={isFetching}
+                onFirstPagePress={handleFirstPagePress}
+                onPreviousPagePress={handlePreviousPagePress}
+                onNextPagePress={handleNextPagePress}
+                onLastPagePress={handleLastPagePress}
+                onPageSelect={handlePageSelect}
+              />
+
+              <ConfirmModal
+                isOpen={isConfirmSearchAllModalOpen}
+                kind={kinds.DANGER}
+                title={translate('SearchForAllMissingEpisodes')}
+                message={
                   <div>
-                    {translate('SearchForAllMissingEpisodesConfirmationCount', {
-                      totalRecords,
-                    })}
+                    <div>
+                      {translate(
+                        'SearchForAllMissingEpisodesConfirmationCount',
+                        {
+                          totalRecords,
+                        }
+                      )}
+                    </div>
+                    <div>{translate('MassSearchCancelWarning')}</div>
                   </div>
-                  <div>{translate('MassSearchCancelWarning')}</div>
-                </div>
-              }
-              confirmLabel={translate('Search')}
-              onConfirm={handleSearchAllMissingConfirmed}
-              onCancel={handleConfirmSearchAllMissingModalClose}
-            />
-          </div>
-        ) : null}
-      </PageContentBody>
+                }
+                confirmLabel={translate('Search')}
+                onConfirm={handleSearchAllMissingConfirmed}
+                onCancel={handleConfirmSearchAllMissingModalClose}
+              />
+            </div>
+          ) : null}
+        </PageContentBody>
 
-      <InteractiveImportModal
-        isOpen={isInteractiveImportModalOpen}
-        onModalClose={handleInteractiveImportModalClose}
-      />
-    </PageContent>
+        <InteractiveImportModal
+          isOpen={isInteractiveImportModalOpen}
+          onModalClose={handleInteractiveImportModalClose}
+        />
+      </PageContent>
+    </QueueDetailsProvider>
   );
 }
 
