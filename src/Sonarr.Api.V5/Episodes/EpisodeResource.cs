@@ -15,7 +15,7 @@ namespace Sonarr.Api.V5.Episodes
         public int EpisodeFileId { get; set; }
         public int SeasonNumber { get; set; }
         public int EpisodeNumber { get; set; }
-        public required string Title { get; set; }
+        public string? Title { get; set; }
         public string? AirDate { get; set; }
         public DateTime? AirDateUtc { get; set; }
         public DateTime? LastSearchTime { get; set; }
