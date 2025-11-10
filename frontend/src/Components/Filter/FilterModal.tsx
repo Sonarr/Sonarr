@@ -3,6 +3,7 @@ import { CustomFilter, FilterBuilderProp } from 'App/State/AppState';
 import Modal from 'Components/Modal/Modal';
 import FilterBuilderModalContent from './Builder/FilterBuilderModalContent';
 import CustomFiltersModalContent from './CustomFilters/CustomFiltersModalContent';
+import { SetFilter } from './Filter';
 
 export interface FilterModalProps<T> {
   isOpen: boolean;
@@ -10,7 +11,7 @@ export interface FilterModalProps<T> {
   customFilterType: string;
   filterBuilderProps: FilterBuilderProp<T>[];
   sectionItems: T[];
-  dispatchSetFilter: (payload: { selectedFilterKey: string | number }) => void;
+  dispatchSetFilter: (payload: SetFilter) => void;
   onModalClose: () => void;
 }
 

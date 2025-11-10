@@ -109,7 +109,7 @@ function QueueRow(props: QueueRowProps) {
   } = props;
 
   const series = useSeries(seriesId);
-  const episodes = useEpisodes(episodeIds, 'episodes');
+  const episodes = useEpisodes(episodeIds);
   const { showRelativeDates, shortDateFormat, timeFormat } = useSelector(
     createUISettingsSelector()
   );

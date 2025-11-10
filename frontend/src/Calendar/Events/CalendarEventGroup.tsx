@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import React, { useCallback, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useIsDownloadingEpisodes } from 'Activity/Queue/Details/QueueDetailsProvider';
-import AppState from 'App/State/AppState';
+import { useCalendarOptions } from 'Calendar/calendarOptionsStore';
 import getStatusStyle from 'Calendar/getStatusStyle';
 import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
@@ -39,7 +39,7 @@ function CalendarEventGroup({
   );
 
   const { showEpisodeInformation, showFinaleIcon, fullColorEvents } =
-    useSelector((state: AppState) => state.calendar.options);
+    useCalendarOptions();
 
   const [isExpanded, setIsExpanded] = useState(false);
 

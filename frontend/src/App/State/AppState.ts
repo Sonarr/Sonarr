@@ -3,7 +3,6 @@ import { FilterBuilderTypes } from 'Helpers/Props/filterBuilderTypes';
 import { DateFilterValue, FilterType } from 'Helpers/Props/filterTypes';
 import { Error } from './AppSectionState';
 import BlocklistAppState from './BlocklistAppState';
-import CalendarAppState from './CalendarAppState';
 import CaptchaAppState from './CaptchaAppState';
 import CommandAppState from './CommandAppState';
 import CustomFiltersAppState from './CustomFiltersAppState';
@@ -82,7 +81,6 @@ export interface AppSectionState {
 interface AppState {
   app: AppSectionState;
   blocklist: BlocklistAppState;
-  calendar: CalendarAppState;
   captcha: CaptchaAppState;
   commands: CommandAppState;
   customFilters: CustomFiltersAppState;

@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import React, { useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useQueueItemForEpisode } from 'Activity/Queue/Details/QueueDetailsProvider';
-import AppState from 'App/State/AppState';
+import { useCalendarOptions } from 'Calendar/calendarOptionsStore';
 import CalendarEventQueueDetails from 'Calendar/Events/CalendarEventQueueDetails';
 import getStatusStyle from 'Calendar/getStatusStyle';
 import Icon from 'Components/Icon';
@@ -66,7 +66,7 @@ function AgendaEvent(props: AgendaEventProps) {
     showFinaleIcon,
     showSpecialIcon,
     showCutoffUnmetIcon,
-  } = useSelector((state: AppState) => state.calendar.options);
+  } = useCalendarOptions();
 
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
 

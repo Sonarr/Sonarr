@@ -1,49 +1,24 @@
 import React, { useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { createSelector } from 'reselect';
-import AppState from 'App/State/AppState';
+import { SetFilter } from 'Components/Filter/Filter';
 import FilterModal, { FilterModalProps } from 'Components/Filter/FilterModal';
-import { setCalendarFilter } from 'Store/Actions/calendarActions';
-
-function createCalendarSelector() {
-  return createSelector(
-    (state: AppState) => state.calendar.items,
-    (calendar) => {
-      return calendar;
-    }
-  );
-}
-
-function createFilterBuilderPropsSelector() {
-  return createSelector(
-    (state: AppState) => state.calendar.filterBuilderProps,
-    (filterBuilderProps) => {
-      return filterBuilderProps;
-    }
-  );
-}
+import { setCalendarOption } from './calendarOptionsStore';
+import useCalendar, { FILTER_BUILDER } from './useCalendar';
 
 type CalendarFilterModalProps = FilterModalProps<History>;
 
 export default function CalendarFilterModal(props: CalendarFilterModalProps) {
-  const sectionItems = useSelector(createCalendarSelector());
-  const filterBuilderProps = useSelector(createFilterBuilderPropsSelector());
+  const { data } = useCalendar();
   const customFilterType = 'calendar';
 
-  const dispatch = useDispatch();
-
-  const dispatchSetFilter = useCallback(
-    (payload: unknown) => {
-      dispatch(setCalendarFilter(payload));
-    },
-    [dispatch]
-  );
+  const dispatchSetFilter = useCallback(({ selectedFilterKey }: SetFilter) => {
+    setCalendarOption('selectedFilterKey', selectedFilterKey);
+  }, []);
 
   return (
     <FilterModal
       {...props}
-      sectionItems={sectionItems}
-      filterBuilderProps={filterBuilderProps}
+      sectionItems={data}
+      filterBuilderProps={FILTER_BUILDER}
       customFilterType={customFilterType}
       dispatchSetFilter={dispatchSetFilter}
     />

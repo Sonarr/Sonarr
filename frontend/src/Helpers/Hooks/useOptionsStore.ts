@@ -43,6 +43,14 @@ export const createOptionsStore = <T extends TSettingd>(
     return store((state) => state[key]);
   };
 
+  const getOptions = () => {
+    return store.getState();
+  };
+
+  const getOption = <K extends keyof T>(key: K) => {
+    return store.getState()[key];
+  };
+
   const setOptions = (options: Partial<T>) => {
     store.setState((state) => ({
       ...state,
@@ -61,6 +69,8 @@ export const createOptionsStore = <T extends TSettingd>(
     store,
     useOptions,
     useOption,
+    getOptions,
+    getOption,
     setOptions,
     setOption,
   };

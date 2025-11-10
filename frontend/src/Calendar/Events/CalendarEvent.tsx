@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import React, { useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useQueueItemForEpisode } from 'Activity/Queue/Details/QueueDetailsProvider';
-import AppState from 'App/State/AppState';
+import { useCalendarOptions } from 'Calendar/calendarOptionsStore';
 import getStatusStyle from 'Calendar/getStatusStyle';
 import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
@@ -70,7 +70,7 @@ function CalendarEvent(props: CalendarEventProps) {
     showSpecialIcon,
     showCutoffUnmetIcon,
     fullColorEvents,
-  } = useSelector((state: AppState) => state.calendar.options);
+  } = useCalendarOptions();
 
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
 

@@ -1,6 +1,9 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import AppState from 'App/State/AppState';
+import {
+  useCalendarOption,
+  useCalendarOptions,
+} from 'Calendar/calendarOptionsStore';
 import { icons, kinds } from 'Helpers/Props';
 import createUISettingsSelector from 'Store/Selectors/createUISettingsSelector';
 import translate from 'Utilities/String/translate';
@@ -9,13 +12,13 @@ import LegendItem from './LegendItem';
 import styles from './Legend.css';
 
 function Legend() {
-  const view = useSelector((state: AppState) => state.calendar.view);
+  const view = useCalendarOption('view');
   const {
     showFinaleIcon,
     showSpecialIcon,
     showCutoffUnmetIcon,
     fullColorEvents,
-  } = useSelector((state: AppState) => state.calendar.options);
+  } = useCalendarOptions();
   const { enableColorImpairedMode } = useSelector(createUISettingsSelector());
 
   const iconsToShow = [];

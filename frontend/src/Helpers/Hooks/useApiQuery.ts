@@ -32,12 +32,15 @@ const useApiQuery = <T>(options: QueryOptions<T>) => {
     };
   }, [options]);
 
-  return useQuery({
-    ...options.queryOptions,
+  return {
     queryKey,
-    queryFn: async ({ signal }) =>
-      fetchJson<T, unknown>({ ...requestOptions, signal }),
-  });
+    ...useQuery({
+      ...options.queryOptions,
+      queryKey,
+      queryFn: async ({ signal }) =>
+        fetchJson<T, unknown>({ ...requestOptions, signal }),
+    }),
+  };
 };
 
 export default useApiQuery;

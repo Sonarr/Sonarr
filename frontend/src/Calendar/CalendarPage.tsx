@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QueueDetails from 'Activity/Queue/Details/QueueDetailsProvider';
-import AppState from 'App/State/AppState';
 import * as commandNames from 'Commands/commandNames';
 import FilterMenu from 'Components/Menu/FilterMenu';
 import PageContent from 'Components/Page/PageContent';
@@ -14,10 +13,6 @@ import Episode from 'Episode/Episode';
 import useMeasure from 'Helpers/Hooks/useMeasure';
 import { align, icons } from 'Helpers/Props';
 import NoSeries from 'Series/NoSeries';
-import {
-  setCalendarDaysCount,
-  setCalendarFilter,
-} from 'Store/Actions/calendarActions';
 import { executeCommand } from 'Store/Actions/commandActions';
 import { createCustomFiltersSelector } from 'Store/Selectors/createClientSideCollectionSelector';
 import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
@@ -27,9 +22,15 @@ import translate from 'Utilities/String/translate';
 import Calendar from './Calendar';
 import CalendarFilterModal from './CalendarFilterModal';
 import CalendarMissingEpisodeSearchButton from './CalendarMissingEpisodeSearchButton';
+import { setCalendarOption, useCalendarOption } from './calendarOptionsStore';
 import CalendarLinkModal from './iCal/CalendarLinkModal';
 import Legend from './Legend/Legend';
 import CalendarOptionsModal from './Options/CalendarOptionsModal';
+import useCalendar, {
+  FILTERS,
+  setCalendarDayCount,
+  useCalendarPage,
+} from './useCalendar';
 import styles from './CalendarPage.css';
 
 const MINIMUM_DAY_WIDTH = 120;
@@ -37,9 +38,11 @@ const MINIMUM_DAY_WIDTH = 120;
 function CalendarPage() {
   const dispatch = useDispatch();
 
-  const { selectedFilterKey, filters, items } = useSelector(
-    (state: AppState) => state.calendar
-  );
+  const selectedFilterKey = useCalendarOption('selectedFilterKey');
+  const { data } = useCalendar();
+
+  useCalendarPage();
+
   const isRssSyncExecuting = useSelector(
     createCommandExecutingSelector(commandNames.RSS_SYNC)
   );
@@ -77,16 +80,13 @@ function CalendarPage() {
     );
   }, [dispatch]);
 
-  const handleFilterSelect = useCallback(
-    (key: string | number) => {
-      dispatch(setCalendarFilter({ selectedFilterKey: key }));
-    },
-    [dispatch]
-  );
+  const handleFilterSelect = useCallback((key: string | number) => {
+    setCalendarOption('selectedFilterKey', key);
+  }, []);
 
   const episodeIds = useMemo(() => {
-    return selectUniqueIds<Episode, number>(items, 'id');
-  }, [items]);
+    return selectUniqueIds<Episode, number>(data, 'id');
+  }, [data]);
 
   useEffect(() => {
     if (width === 0) {
@@ -98,8 +98,8 @@ function CalendarPage() {
       Math.min(7, Math.floor(width / MINIMUM_DAY_WIDTH))
     );
 
-    dispatch(setCalendarDaysCount({ dayCount }));
-  }, [width, dispatch]);
+    setCalendarDayCount(dayCount);
+  }, [width]);
 
   return (
     <QueueDetails episodeIds={episodeIds}>
@@ -135,7 +135,7 @@ function CalendarPage() {
               alignMenu={align.RIGHT}
               isDisabled={!hasSeries}
               selectedFilterKey={selectedFilterKey}
-              filters={filters}
+              filters={FILTERS}
               customFilters={customFilters}
               filterModalConnectorComponent={CalendarFilterModal}
               onFilterSelect={handleFilterSelect}

@@ -1,5 +1,4 @@
 import * as app from './appActions';
-import * as calendar from './calendarActions';
 import * as captcha from './captchaActions';
 import * as commands from './commandActions';
 import * as customFilters from './customFilterActions';
@@ -26,7 +25,6 @@ import * as wanted from './wantedActions';
 
 export default [
   app,
-  calendar,
   captcha,
   commands,
   customFilters,

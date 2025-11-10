@@ -1,6 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import AppState from 'App/State/AppState';
+import {
+  CalendarOptions,
+  setCalendarOption,
+  useCalendarOptions,
+} from 'Calendar/calendarOptionsStore';
 import FieldSet from 'Components/FieldSet';
 import Form from 'Components/Form/Form';
 import FormGroup from 'Components/Form/FormGroup';
@@ -11,13 +15,13 @@ import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
+import { OptionChanged } from 'Helpers/Hooks/useOptionsStore';
 import { inputTypes } from 'Helpers/Props';
 import {
   firstDayOfWeekOptions,
   timeFormatOptions,
   weekColumnOptions,
 } from 'Settings/UI/UISettings';
-import { setCalendarOption } from 'Store/Actions/calendarActions';
 import { saveUISettings } from 'Store/Actions/settingsActions';
 import createUISettingsSelector from 'Store/Selectors/createUISettingsSelector';
 import { InputChanged } from 'typings/inputs';
@@ -40,7 +44,7 @@ function CalendarOptionsModalContent({
     showSpecialIcon,
     showCutoffUnmetIcon,
     fullColorEvents,
-  } = useSelector((state: AppState) => state.calendar.options);
+  } = useCalendarOptions();
 
   const uiSettings = useSelector(createUISettingsSelector());
 
@@ -59,10 +63,10 @@ function CalendarOptionsModalContent({
   } = state;
 
   const handleOptionInputChange = useCallback(
-    ({ name, value }: InputChanged) => {
-      dispatch(setCalendarOption({ [name]: value }));
+    ({ name, value }: OptionChanged<CalendarOptions>) => {
+      setCalendarOption(name, value);
     },
-    [dispatch]
+    []
   );
 
   const handleGlobalInputChange = useCallback(
@@ -98,6 +102,7 @@ function CalendarOptionsModalContent({
                 name="collapseMultipleEpisodes"
                 value={collapseMultipleEpisodes}
                 helpText={translate('CollapseMultipleEpisodesHelpText')}
+                // @ts-expect-error - The typing for inputs needs more work
                 onChange={handleOptionInputChange}
               />
             </FormGroup>
@@ -110,6 +115,7 @@ function CalendarOptionsModalContent({
                 name="showEpisodeInformation"
                 value={showEpisodeInformation}
                 helpText={translate('ShowEpisodeInformationHelpText')}
+                // @ts-expect-error - The typing for inputs needs more work
                 onChange={handleOptionInputChange}
               />
             </FormGroup>
@@ -122,6 +128,7 @@ function CalendarOptionsModalContent({
                 name="showFinaleIcon"
                 value={showFinaleIcon}
                 helpText={translate('IconForFinalesHelpText')}
+                // @ts-expect-error - The typing for inputs needs more work
                 onChange={handleOptionInputChange}
               />
             </FormGroup>
@@ -134,6 +141,7 @@ function CalendarOptionsModalContent({
                 name="showSpecialIcon"
                 value={showSpecialIcon}
                 helpText={translate('IconForSpecialsHelpText')}
+                // @ts-expect-error - The typing for inputs needs more work
                 onChange={handleOptionInputChange}
               />
             </FormGroup>
@@ -146,6 +154,7 @@ function CalendarOptionsModalContent({
                 name="showCutoffUnmetIcon"
                 value={showCutoffUnmetIcon}
                 helpText={translate('IconForCutoffUnmetHelpText')}
+                // @ts-expect-error - The typing for inputs needs more work
                 onChange={handleOptionInputChange}
               />
             </FormGroup>
@@ -158,6 +167,7 @@ function CalendarOptionsModalContent({
                 name="fullColorEvents"
                 value={fullColorEvents}
                 helpText={translate('FullColorEventsHelpText')}
+                // @ts-expect-error - The typing for inputs needs more work
                 onChange={handleOptionInputChange}
               />
             </FormGroup>

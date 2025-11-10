@@ -3,17 +3,20 @@ import moment from 'moment';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import AppState from 'App/State/AppState';
+import { useCalendarOption } from 'Calendar/calendarOptionsStore';
 import * as calendarViews from 'Calendar/calendarViews';
 import {
-  gotoCalendarNextRange,
-  gotoCalendarPreviousRange,
-} from 'Store/Actions/calendarActions';
+  goToNextRange,
+  goToPreviousRange,
+  useCalendarDates,
+} from 'Calendar/useCalendar';
 import CalendarDay from './CalendarDay';
 import styles from './CalendarDays.css';
 
 function CalendarDays() {
   const dispatch = useDispatch();
-  const { dates, view } = useSelector((state: AppState) => state.calendar);
+  const view = useCalendarOption('view');
+  const dates = useCalendarDates();
   const isSidebarVisible = useSelector(
     (state: AppState) => state.app.isSidebarVisible
   );
@@ -71,12 +74,12 @@ function CalendarDays() {
         currentTouch > touchStart.current &&
         currentTouch - touchStart.current > 100
       ) {
-        dispatch(gotoCalendarPreviousRange());
+        dispatch(goToPreviousRange());
       } else if (
         currentTouch < touchStart.current &&
         touchStart.current - currentTouch > 100
       ) {
-        dispatch(gotoCalendarNextRange());
+        dispatch(goToNextRange());
       }
 
       touchStart.current = null;
