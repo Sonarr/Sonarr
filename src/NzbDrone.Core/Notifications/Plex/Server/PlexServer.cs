@@ -128,6 +128,22 @@ namespace NzbDrone.Core.Notifications.Plex.Server
 
                 return _plexTvService.GetSignInUrl(query["callbackUrl"], Convert.ToInt32(query["id"]), query["code"]);
             }
+            else if (action == "pollOAuth")
+            {
+                Settings.Validate().Filter("ConsumerKey", "ConsumerSecret").ThrowOnError();
+
+                if (query["pinId"].IsNullOrWhiteSpace())
+                {
+                    throw new BadRequestException("QueryParam pinId invalid.");
+                }
+
+                var authToken = _plexTvService.GetAuthToken(Convert.ToInt32(query["pinId"]));
+
+                return new
+                {
+                    success = authToken.IsNotNullOrWhiteSpace()
+                };
+            }
             else if (action == "getOAuthToken")
             {
                 Settings.Validate().Filter("ConsumerKey", "ConsumerSecret").ThrowOnError();

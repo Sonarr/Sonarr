@@ -52,6 +52,7 @@ namespace NzbDrone.Core.Notifications.Plex.PlexTv
 
             return new PlexTvPinUrlResponse
                    {
+                       Poll = true,
                        Url = request.Url.ToString(),
                        Headers = request.Headers.ToDictionary(h => h.Key, h => h.Value)
                    };

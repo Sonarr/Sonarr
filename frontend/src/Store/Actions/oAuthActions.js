@@ -41,7 +41,7 @@ export const resetOAuth = createAction(RESET_OAUTH);
 //
 // Helpers
 
-function showOAuthWindow(url, payload) {
+function showOAuthWindow(url, payload, poll = false, ajaxOptions = undefined) {
   const deferred = $.Deferred();
   const selfWindow = window;
 
@@ -67,23 +67,45 @@ function showOAuthWindow(url, payload) {
     return deferred.reject(error).promise();
   }
 
-  selfWindow.onCompleteOauth = function(query, onComplete) {
-    delete selfWindow.onCompleteOauth;
+  if (poll) {
+    const pollAction = () => {
+      requestAction({
+        action: 'pollOAuth',
+        queryParams: ajaxOptions,
+        ...payload
+      }).then((response) => {
+        if (response.success) {
+          deferred.resolve({});
+        } else {
+          setTimeout(() => {
+            pollAction();
+          }, 5000);
+        }
+      });
+    };
 
-    const queryParams = {};
-    const splitQuery = query.substring(1).split('&');
+    setTimeout(() => {
+      pollAction();
+    }, 5000);
+  } else {
+    selfWindow.onCompleteOauth = function(query, onComplete) {
+      delete selfWindow.onCompleteOauth;
 
-    splitQuery.forEach((param) => {
-      if (param) {
-        const paramSplit = param.split('=');
+      const queryParams = {};
+      const splitQuery = query.substring(1).split('&');
 
-        queryParams[paramSplit[0]] = paramSplit[1];
-      }
-    });
+      splitQuery.forEach((param) => {
+        if (param) {
+          const paramSplit = param.split('=');
 
-    onComplete();
-    deferred.resolve(queryParams);
-  };
+          queryParams[paramSplit[0]] = paramSplit[1];
+        }
+      });
+
+      onComplete();
+      deferred.resolve(queryParams);
+    };
+  }
 
   return deferred.promise();
 }
@@ -133,11 +155,14 @@ export const actionHandlers = handleThunks({
           return showOAuthWindow(response.oauthUrl, payload);
         }
 
-        return executeIntermediateRequest(otherPayload, response).then((intermediateResponse) => {
-          startResponse = intermediateResponse;
+        const { poll, ...ajaxOptions } = response;
 
-          return showOAuthWindow(intermediateResponse.oauthUrl, payload);
-        });
+        return executeIntermediateRequest(otherPayload, ajaxOptions)
+          .then((intermediateResponse) => {
+            startResponse = intermediateResponse;
+
+            return showOAuthWindow(intermediateResponse.oauthUrl, payload, poll, intermediateResponse);
+          });
       })
       .then((queryParams) => {
         return requestAction({
