@@ -241,6 +241,50 @@
         }
       }
     },
+    "/api/v5/diskspace": {
+      "get": {
+        "tags": [
+          "DiskSpace"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DiskSpaceResource"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/health": {
+      "get": {
+        "tags": [
+          "Health"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HealthResource"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v5/history": {
       "get": {
         "tags": [
@@ -1355,6 +1399,73 @@
         }
       }
     },
+    "/api/v5/system/status": {
+      "get": {
+        "tags": [
+          "System"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SystemResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/system/routes": {
+      "get": {
+        "tags": [
+          "System"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v5/system/routes/duplicate": {
+      "get": {
+        "tags": [
+          "System"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v5/system/shutdown": {
+      "post": {
+        "tags": [
+          "System"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v5/system/restart": {
+      "post": {
+        "tags": [
+          "System"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/v5/update": {
       "get": {
         "tags": [
@@ -1579,6 +1690,15 @@
         },
         "additionalProperties": false
       },
+      "AuthenticationType": {
+        "enum": [
+          "none",
+          "basic",
+          "forms",
+          "external"
+        ],
+        "type": "string"
+      },
       "BlocklistBulkResource": {
         "required": [
           "ids"
@@ -1778,6 +1898,43 @@
               "$ref": "#/components/schemas/CustomFormatSpecificationSchema"
             },
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DatabaseType": {
+        "enum": [
+          "sqLite",
+          "postgreSQL"
+        ],
+        "type": "string"
+      },
+      "DiskSpaceResource": {
+        "required": [
+          "label",
+          "path"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "path": {
+            "type": "string",
+            "nullable": true
+          },
+          "label": {
+            "type": "string",
+            "nullable": true
+          },
+          "freeSpace": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalSpace": {
+            "type": "integer",
+            "format": "int64"
           }
         },
         "additionalProperties": false
@@ -2069,6 +2226,108 @@
           },
           "isFloat": {
             "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "HealthCheckReason": {
+        "enum": [
+          "appDataLocation",
+          "downloadClientCheckNoneAvailable",
+          "downloadClientCheckUnableToCommunicate",
+          "downloadClientRemovesCompletedDownloads",
+          "downloadClientRootFolder",
+          "downloadClientSorting",
+          "downloadClientStatusAllClients",
+          "downloadClientStatusSingleClient",
+          "importListRootFolderMissing",
+          "importListRootFolderMultipleMissing",
+          "importListStatusAllUnavailable",
+          "importListStatusUnavailable",
+          "importMechanismEnableCompletedDownloadHandlingIfPossible",
+          "importMechanismEnableCompletedDownloadHandlingIfPossibleMultiComputer",
+          "importMechanismHandlingDisabled",
+          "indexerDownloadClient",
+          "indexerJackettAll",
+          "indexerLongTermStatusAllUnavailable",
+          "indexerLongTermStatusUnavailable",
+          "indexerRssNoIndexersAvailable",
+          "indexerRssNoIndexersEnabled",
+          "indexerSearchNoAutomatic",
+          "indexerSearchNoAvailableIndexers",
+          "indexerSearchNoInteractive",
+          "indexerStatusAllUnavailable",
+          "indexerStatusUnavailable",
+          "minimumApiKeyLength",
+          "mountSeries",
+          "notificationStatusAll",
+          "notificationStatusSingle",
+          "package",
+          "proxyBadRequest",
+          "proxyFailed",
+          "proxyResolveIp",
+          "recycleBinUnableToWrite",
+          "remotePathMappingBadDockerPath",
+          "remotePathMappingDockerFolderMissing",
+          "remotePathMappingDownloadPermissionsEpisode",
+          "remotePathMappingFileRemoved",
+          "remotePathMappingFilesBadDockerPath",
+          "remotePathMappingFilesGenericPermissions",
+          "remotePathMappingFilesLocalWrongOSPath",
+          "remotePathMappingFilesWrongOSPath",
+          "remotePathMappingFolderPermissions",
+          "remotePathMappingGenericPermissions",
+          "remotePathMappingImportEpisodeFailed",
+          "remotePathMappingLocalFolderMissing",
+          "remotePathMappingLocalWrongOSPath",
+          "remotePathMappingRemoteDownloadClient",
+          "remotePathMappingWrongOSPath",
+          "removedSeriesMultiple",
+          "removedSeriesSingle",
+          "rootFolderMissing",
+          "rootFolderMultipleMissing",
+          "serverNotification",
+          "systemTime",
+          "updateAvailable",
+          "updateStartupNotWritable",
+          "updateStartupTranslocation",
+          "updateUiNotWritable"
+        ],
+        "type": "string"
+      },
+      "HealthCheckResult": {
+        "enum": [
+          "ok",
+          "notice",
+          "warning",
+          "error"
+        ],
+        "type": "string"
+      },
+      "HealthResource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "source": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "$ref": "#/components/schemas/HealthCheckResult"
+          },
+          "reason": {
+            "$ref": "#/components/schemas/HealthCheckReason"
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "wikiUrl": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -2765,6 +3024,14 @@
         },
         "additionalProperties": false
       },
+      "RuntimeMode": {
+        "enum": [
+          "console",
+          "service",
+          "tray"
+        ],
+        "type": "string"
+      },
       "SeasonResource": {
         "type": "object",
         "properties": {
@@ -3127,6 +3394,140 @@
           "descending"
         ],
         "type": "string"
+      },
+      "SystemResource": {
+        "required": [
+          "appData",
+          "appName",
+          "branch",
+          "databaseVersion",
+          "instanceName",
+          "osName",
+          "osVersion",
+          "packageAuthor",
+          "packageUpdateMechanismMessage",
+          "packageVersion",
+          "runtimeName",
+          "runtimeVersion",
+          "startupPath",
+          "urlBase",
+          "version"
+        ],
+        "type": "object",
+        "properties": {
+          "appName": {
+            "type": "string",
+            "nullable": true
+          },
+          "instanceName": {
+            "type": "string",
+            "nullable": true
+          },
+          "version": {
+            "type": "string",
+            "nullable": true
+          },
+          "buildTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "isDebug": {
+            "type": "boolean"
+          },
+          "isProduction": {
+            "type": "boolean"
+          },
+          "isAdmin": {
+            "type": "boolean"
+          },
+          "isUserInteractive": {
+            "type": "boolean"
+          },
+          "startupPath": {
+            "type": "string",
+            "nullable": true
+          },
+          "appData": {
+            "type": "string",
+            "nullable": true
+          },
+          "osName": {
+            "type": "string",
+            "nullable": true
+          },
+          "osVersion": {
+            "type": "string",
+            "nullable": true
+          },
+          "isNetCore": {
+            "type": "boolean"
+          },
+          "isLinux": {
+            "type": "boolean"
+          },
+          "isOsx": {
+            "type": "boolean"
+          },
+          "isWindows": {
+            "type": "boolean"
+          },
+          "isDocker": {
+            "type": "boolean"
+          },
+          "mode": {
+            "$ref": "#/components/schemas/RuntimeMode"
+          },
+          "branch": {
+            "type": "string",
+            "nullable": true
+          },
+          "authentication": {
+            "$ref": "#/components/schemas/AuthenticationType"
+          },
+          "migrationVersion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "urlBase": {
+            "type": "string",
+            "nullable": true
+          },
+          "runtimeVersion": {
+            "type": "string",
+            "nullable": true
+          },
+          "runtimeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "startTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "packageVersion": {
+            "type": "string",
+            "nullable": true
+          },
+          "packageAuthor": {
+            "type": "string",
+            "nullable": true
+          },
+          "packageUpdateMechanism": {
+            "$ref": "#/components/schemas/UpdateMechanism"
+          },
+          "packageUpdateMechanismMessage": {
+            "type": "string",
+            "nullable": true
+          },
+          "databaseVersion": {
+            "type": "string",
+            "nullable": true
+          },
+          "databaseType": {
+            "$ref": "#/components/schemas/DatabaseType"
+          }
+        },
+        "additionalProperties": false
       },
       "TrackedDownloadState": {
         "enum": [
