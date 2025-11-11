@@ -1,9 +1,9 @@
 import React from 'react';
-import { ParseModel } from 'App/State/ParseAppState';
 import FieldSet from 'Components/FieldSet';
 import EpisodeFormats from 'Episode/EpisodeFormats';
 import SeriesTitleLink from 'Series/SeriesTitleLink';
 import translate from 'Utilities/String/translate';
+import { ParseModel } from './ParseModel';
 import ParseResultItem from './ParseResultItem';
 import styles from './ParseResult.css';
 

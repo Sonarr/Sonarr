@@ -1,5 +1,4 @@
 import ModelBase from 'App/ModelBase';
-import { AppSectionItemState } from 'App/State/AppSectionState';
 import Episode from 'Episode/Episode';
 import Language from 'Language/Language';
 import { QualityModel } from 'Quality/Quality';
@@ -48,7 +47,3 @@ export interface ParseModel extends ModelBase {
   customFormats?: CustomFormat[];
   customFormatScore?: number;
 }
-
-type ParseAppState = AppSectionItemState<ParseModel>;
-
-export default ParseAppState;

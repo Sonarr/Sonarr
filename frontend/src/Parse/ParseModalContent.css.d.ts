@@ -6,7 +6,9 @@ interface CssExports {
   'input': string;
   'inputContainer': string;
   'inputIconContainer': string;
+  'loading': string;
   'message': string;
+  'modalFooter': string;
 }
 export const cssExports: CssExports;
 export default cssExports;

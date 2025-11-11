@@ -43,3 +43,15 @@
   margin-bottom: 10px;
   font-size: 24px;
 }
+
+.modalFooter {
+  composes: modalFooter from '~Components/Modal/ModalFooter.css';
+
+  justify-content: space-between;
+}
+
+.loading {
+  composes: loading from '~Components/Loading/LoadingIndicator.css';
+
+  margin-top: 0;
+}

@@ -15,7 +15,6 @@ import InteractiveImportAppState from './InteractiveImportAppState';
 import MessagesAppState from './MessagesAppState';
 import OAuthAppState from './OAuthAppState';
 import OrganizePreviewAppState from './OrganizePreviewAppState';
-import ParseAppState from './ParseAppState';
 import PathsAppState from './PathsAppState';
 import ProviderOptionsAppState from './ProviderOptionsAppState';
 import ReleasesAppState from './ReleasesAppState';
@@ -94,7 +93,6 @@ interface AppState {
   interactiveImport: InteractiveImportAppState;
   oAuth: OAuthAppState;
   organizePreview: OrganizePreviewAppState;
-  parse: ParseAppState;
   paths: PathsAppState;
   providerOptions: ProviderOptionsAppState;
   releases: ReleasesAppState;
