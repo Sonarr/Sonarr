@@ -30,21 +30,6 @@ public class TaskController : RestControllerWithSignalR<TaskResource, ScheduledT
                                .ToList();
     }
 
-    [HttpGet("{id:int}")]
-    [Produces("application/json")]
-    public ActionResult<TaskResource> GetById(int id)
-    {
-        var task = _taskManager.GetAll()
-                               .SingleOrDefault(t => t.Id == id);
-
-        if (task == null)
-        {
-            return NotFound();
-        }
-
-        return ConvertToResource(task);
-    }
-
     protected override TaskResource? GetResourceById(int id)
     {
         var task = _taskManager.GetAll()
