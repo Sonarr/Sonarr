@@ -46,6 +46,11 @@ namespace NzbDrone.Core.Notifications.Pushover
                 requestBuilder.AddFormParameter("expire", settings.Expire);
             }
 
+            if (settings.Ttl > 0)
+            {
+                requestBuilder.AddFormParameter("ttl", settings.Ttl);
+            }
+
             if (!settings.Sound.IsNullOrWhiteSpace())
             {
                 requestBuilder.AddFormParameter("sound", settings.Sound);

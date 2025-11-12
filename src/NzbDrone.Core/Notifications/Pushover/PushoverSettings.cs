@@ -13,6 +13,7 @@ namespace NzbDrone.Core.Notifications.Pushover
             RuleFor(c => c.UserKey).NotEmpty();
             RuleFor(c => c.Retry).GreaterThanOrEqualTo(30).LessThanOrEqualTo(86400).When(c => (PushoverPriority)c.Priority == PushoverPriority.Emergency);
             RuleFor(c => c.Retry).GreaterThanOrEqualTo(0).LessThanOrEqualTo(86400).When(c => (PushoverPriority)c.Priority == PushoverPriority.Emergency);
+            RuleFor(c => c.Ttl).GreaterThanOrEqualTo(0);
         }
     }
 
@@ -45,7 +46,10 @@ namespace NzbDrone.Core.Notifications.Pushover
         [FieldDefinition(5, Label = "NotificationsPushoverSettingsExpire", Type = FieldType.Textbox, HelpText = "NotificationsPushoverSettingsExpireHelpText")]
         public int Expire { get; set; }
 
-        [FieldDefinition(6, Label = "NotificationsPushoverSettingsSound", Type = FieldType.Textbox, HelpText = "NotificationsPushoverSettingsSoundHelpText", HelpLink = "https://pushover.net/api#sounds")]
+        [FieldDefinition(6, Label = "NotificationsPushoverSettingsTtl", Type = FieldType.Textbox, HelpText = "NotificationsPushoverSettingsTtlHelpText", Advanced = true)]
+        public int Ttl { get; set; }
+
+        [FieldDefinition(7, Label = "NotificationsPushoverSettingsSound", Type = FieldType.Textbox, HelpText = "NotificationsPushoverSettingsSoundHelpText", HelpLink = "https://pushover.net/api#sounds")]
         public string Sound { get; set; }
 
         public bool IsValid => !string.IsNullOrWhiteSpace(UserKey) && Priority >= -1 && Priority <= 2;
