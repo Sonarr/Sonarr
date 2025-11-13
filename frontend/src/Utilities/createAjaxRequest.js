@@ -27,6 +27,7 @@ function addContentType(ajaxOptions) {
 
 export default function createAjaxRequest(originalAjaxOptions) {
   const requestXHR = new window.XMLHttpRequest();
+  requestXHR.withCredentials = true; // Needed for CORS requests with cookies, which some reverse proxies with forward auth require
   let aborted = false;
   let complete = false;
 
