@@ -61,6 +61,8 @@ async function fetchJson<T, TData>({
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
+    credentials: 'include', // Needed for CORS requests with cookies, which some reverse proxies with forward auth require
+    mode: 'cors',
     signal: anySignal(abortController.signal, signal),
   });
 
