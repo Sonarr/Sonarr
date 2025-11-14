@@ -1,14 +1,15 @@
 {
-    "Added": "נוסף",
-    "ApiKeyValidationHealthCheckMessage": "עדכן בבקשה את מפתח ה־API שלך כדי שיהיה באורך של לפחות {length} תווים. תוכל לעשות זאת בהגדרות או דרך קובץ הקונפיגורציה.",
-    "Add": "הוסף",
-    "Activity": "פעילות",
-    "Indexer": "אינדקסר",
-    "AddAutoTag": "הוסף תג אוטומטית",
     "About": "אודות",
     "Actions": "פעולות",
-    "AddConditionError": "לא ניתן להוסיף תנאי חדש, נסה שנית.",
+    "Activity": "פעילות",
+    "Add": "הוסף",
+    "AddANewPath": "הוסף נתיב חדש",
+    "AddAutoTag": "הוסף תג אוטומטית",
     "AddAutoTagError": "לא ניתן להוסיף תג חדש, נסה שנית.",
     "AddCondition": "הוסף תנאי",
-    "AddANewPath": "הוסף נתיב חדש"
+    "AddConditionError": "לא ניתן להוסיף תנאי חדש, נסה שנית.",
+    "AddConnection": "הוסף חיבור",
+    "Added": "נוסף",
+    "ApiKeyValidationHealthCheckMessage": "עדכן בבקשה את מפתח ה־API שלך כדי שיהיה באורך של לפחות {length} תווים. תוכל לעשות זאת בהגדרות או דרך קובץ הקונפיגורציה.",
+    "Indexer": "אינדקסר"
 }

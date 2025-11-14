@@ -450,7 +450,7 @@
     "DownloadClientFloodSettingsAdditionalTags": "Etiquetas adicionais",
     "DownloadClientFloodSettingsAdditionalTagsHelpText": "Adiciona propriedades de mídia como etiquetas. As dicas são exemplos.",
     "DownloadClientFloodSettingsPostImportTags": "Etiquetas pós-importação",
-    "DownloadClientFloodSettingsPostImportTagsHelpText": "Acrescenta etiquetas após a importação de um download.",
+    "DownloadClientFloodSettingsPostImportTagsHelpText": "Adiciona etiquetas após a importação de um download. Torrents com todas essas etiquetas serão filtrados da fila e não serão removidos automaticamente.",
     "DownloadClientFloodSettingsRemovalInfo": "O {appName} cuidará da remoção automática de torrents com base nos critérios de semeadura atuais em Configurações -> Indexadores",
     "DownloadClientFloodSettingsStartOnAdd": "Começar ao adicionar",
     "DownloadClientFloodSettingsTagsHelpText": "Etiquetas iniciais de um download. Para ser reconhecido, um download deve ter todas as etiquetas iniciais. Isso evita conflitos com downloads não relacionados.",
