@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QueueDetailsProvider from 'Activity/Queue/Details/QueueDetailsProvider';
 import { SelectProvider, useSelect } from 'App/Select/SelectContext';
-import AppState, { Filter } from 'App/State/AppState';
+import { Filter } from 'App/State/AppState';
 import * as commandNames from 'Commands/commandNames';
 import Alert from 'Components/Alert';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
@@ -18,21 +18,11 @@ import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import TableOptionsModalWrapper from 'Components/Table/TableOptions/TableOptionsModalWrapper';
 import TablePager from 'Components/Table/TablePager';
-import usePaging from 'Components/Table/usePaging';
 import Episode from 'Episode/Episode';
-import useCurrentPage from 'Helpers/Hooks/useCurrentPage';
+import { useToggleEpisodesMonitored } from 'Episode/useEpisode';
 import { align, icons, kinds } from 'Helpers/Props';
 import { executeCommand } from 'Store/Actions/commandActions';
 import { fetchEpisodeFiles } from 'Store/Actions/episodeFileActions';
-import {
-  batchToggleCutoffUnmetEpisodes,
-  clearCutoffUnmet,
-  fetchCutoffUnmet,
-  gotoCutoffUnmetPage,
-  setCutoffUnmetFilter,
-  setCutoffUnmetSort,
-  setCutoffUnmetTableOption,
-} from 'Store/Actions/wantedActions';
 import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
 import { CheckInputChanged } from 'typings/inputs';
 import { TableOptionsChangePayload } from 'typings/Table';
@@ -43,34 +33,38 @@ import {
   unregisterPagePopulator,
 } from 'Utilities/pagePopulator';
 import translate from 'Utilities/String/translate';
+import {
+  setCutoffUnmetOption,
+  setCutoffUnmetOptions,
+  useCutoffUnmetOptions,
+} from './cutoffUnmetOptionsStore';
 import CutoffUnmetRow from './CutoffUnmetRow';
+import useCutoffUnmet, { FILTERS } from './useCutoffUnmet';
 
 function getMonitoredValue(
   filters: Filter[],
-  selectedFilterKey: string
+  selectedFilterKey: string | number
 ): boolean {
   return !!getFilterValue(filters, selectedFilterKey, 'monitored', false);
 }
 
 function CutoffUnmetContent() {
   const dispatch = useDispatch();
-  const requestCurrentPage = useCurrentPage();
 
   const {
-    isFetching,
-    isPopulated,
-    error,
-    items,
-    columns,
-    selectedFilterKey,
-    filters,
-    sortKey,
-    sortDirection,
-    page,
-    pageSize,
+    records,
     totalPages,
-    totalRecords = 0,
-  } = useSelector((state: AppState) => state.wanted.cutoffUnmet);
+    totalRecords,
+    error,
+    isFetching,
+    isLoading,
+    page,
+    goToPage,
+    refetch,
+  } = useCutoffUnmet();
+
+  const { columns, pageSize, sortKey, sortDirection, selectedFilterKey } =
+    useCutoffUnmetOptions();
 
   const isSearchingForAllEpisodes = useSelector(
     createCommandExecutingSelector(commandNames.CUTOFF_UNMET_EPISODE_SEARCH)
@@ -91,33 +85,21 @@ function CutoffUnmetContent() {
   const [isConfirmSearchAllModalOpen, setIsConfirmSearchAllModalOpen] =
     useState(false);
 
-  const {
-    handleFirstPagePress,
-    handlePreviousPagePress,
-    handleNextPagePress,
-    handleLastPagePress,
-    handlePageSelect,
-  } = usePaging({
-    page,
-    totalPages,
-    gotoPage: gotoCutoffUnmetPage,
-  });
+  const { toggleEpisodesMonitored, isToggling } = useToggleEpisodesMonitored([
+    '/wanted/cutoff',
+  ]);
 
-  const isSaving = useMemo(() => {
-    return items.filter((m) => m.isSaving).length > 1;
-  }, [items]);
-
-  const isShowingMonitored = getMonitoredValue(filters, selectedFilterKey);
+  const isShowingMonitored = getMonitoredValue(FILTERS, selectedFilterKey);
   const isSearchingForEpisodes =
     isSearchingForAllEpisodes || isSearchingForSelectedEpisodes;
 
   const episodeIds = useMemo(() => {
-    return selectUniqueIds<Episode, number>(items, 'id');
-  }, [items]);
+    return selectUniqueIds<Episode, number>(records, 'id');
+  }, [records]);
 
   const episodeFileIds = useMemo(() => {
-    return selectUniqueIds<Episode, number>(items, 'episodeFileId');
-  }, [items]);
+    return selectUniqueIds<Episode, number>(records, 'episodeFileId');
+  }, [records]);
 
   const handleSelectAllChange = useCallback(
     ({ value }: CheckInputChanged) => {
@@ -136,11 +118,11 @@ function CutoffUnmetContent() {
         name: commandNames.EPISODE_SEARCH,
         episodeIds: getSelectedIds(),
         commandFinished: () => {
-          dispatch(fetchCutoffUnmet());
+          refetch();
         },
       })
     );
-  }, [getSelectedIds, dispatch]);
+  }, [getSelectedIds, dispatch, refetch]);
 
   const handleSearchAllPress = useCallback(() => {
     setIsConfirmSearchAllModalOpen(true);
@@ -155,63 +137,43 @@ function CutoffUnmetContent() {
       executeCommand({
         name: commandNames.CUTOFF_UNMET_EPISODE_SEARCH,
         commandFinished: () => {
-          dispatch(fetchCutoffUnmet());
+          refetch();
         },
       })
     );
 
     setIsConfirmSearchAllModalOpen(false);
-  }, [dispatch]);
+  }, [dispatch, refetch]);
 
   const handleToggleSelectedPress = useCallback(() => {
-    dispatch(
-      batchToggleCutoffUnmetEpisodes({
-        episodeIds: getSelectedIds(),
-        monitored: !isShowingMonitored,
-      })
-    );
-  }, [isShowingMonitored, getSelectedIds, dispatch]);
+    toggleEpisodesMonitored({
+      episodeIds: getSelectedIds(),
+      monitored: !isShowingMonitored,
+    });
+  }, [isShowingMonitored, getSelectedIds, toggleEpisodesMonitored]);
 
-  const handleFilterSelect = useCallback(
-    (filterKey: number | string) => {
-      dispatch(setCutoffUnmetFilter({ selectedFilterKey: filterKey }));
-    },
-    [dispatch]
-  );
+  const handleFilterSelect = useCallback((filterKey: number | string) => {
+    setCutoffUnmetOption('selectedFilterKey', filterKey);
+  }, []);
 
-  const handleSortPress = useCallback(
-    (sortKey: string) => {
-      dispatch(setCutoffUnmetSort({ sortKey }));
-    },
-    [dispatch]
-  );
+  const handleSortPress = useCallback((sortKey: string) => {
+    setCutoffUnmetOption('sortKey', sortKey);
+  }, []);
 
   const handleTableOptionChange = useCallback(
     (payload: TableOptionsChangePayload) => {
-      dispatch(setCutoffUnmetTableOption(payload));
+      setCutoffUnmetOptions(payload);
 
       if (payload.pageSize) {
-        dispatch(gotoCutoffUnmetPage({ page: 1 }));
+        goToPage(1);
       }
     },
-    [dispatch]
+    [goToPage]
   );
 
   useEffect(() => {
-    if (requestCurrentPage) {
-      dispatch(fetchCutoffUnmet());
-    } else {
-      dispatch(gotoCutoffUnmetPage({ page: 1 }));
-    }
-
-    return () => {
-      dispatch(clearCutoffUnmet());
-    };
-  }, [requestCurrentPage, dispatch]);
-
-  useEffect(() => {
     const repopulate = () => {
-      dispatch(fetchCutoffUnmet());
+      refetch();
     };
 
     registerPagePopulator(repopulate, [
@@ -223,7 +185,7 @@ function CutoffUnmetContent() {
     return () => {
       unregisterPagePopulator(repopulate);
     };
-  }, [dispatch]);
+  }, [refetch]);
 
   useEffect(() => {
     if (episodeFileIds.length) {
@@ -260,7 +222,7 @@ function CutoffUnmetContent() {
               }
               iconName={icons.MONITORED}
               isDisabled={!anySelected}
-              isSpinning={isSaving}
+              isSpinning={isToggling}
               onPress={handleToggleSelectedPress}
             />
           </PageToolbarSection>
@@ -280,7 +242,7 @@ function CutoffUnmetContent() {
             <FilterMenu
               alignMenu={align.RIGHT}
               selectedFilterKey={selectedFilterKey}
-              filters={filters}
+              filters={FILTERS}
               customFilters={[]}
               onFilterSelect={handleFilterSelect}
             />
@@ -288,7 +250,7 @@ function CutoffUnmetContent() {
         </PageToolbar>
 
         <PageContentBody>
-          {isFetching && !isPopulated ? <LoadingIndicator /> : null}
+          {isFetching && isLoading ? <LoadingIndicator /> : null}
 
           {!isFetching && error ? (
             <Alert kind={kinds.DANGER}>
@@ -296,11 +258,11 @@ function CutoffUnmetContent() {
             </Alert>
           ) : null}
 
-          {isPopulated && !error && !items.length ? (
+          {!isLoading && !error && !records.length ? (
             <Alert kind={kinds.INFO}>{translate('CutoffUnmetNoItems')}</Alert>
           ) : null}
 
-          {isPopulated && !error && !!items.length ? (
+          {!isLoading && !error && !!records.length ? (
             <div>
               <Table
                 selectAll={true}
@@ -315,7 +277,7 @@ function CutoffUnmetContent() {
                 onSortPress={handleSortPress}
               >
                 <TableBody>
-                  {items.map((item) => {
+                  {records.map((item) => {
                     return (
                       <CutoffUnmetRow
                         key={item.id}
@@ -332,11 +294,7 @@ function CutoffUnmetContent() {
                 totalPages={totalPages}
                 totalRecords={totalRecords}
                 isFetching={isFetching}
-                onFirstPagePress={handleFirstPagePress}
-                onPreviousPagePress={handlePreviousPagePress}
-                onNextPagePress={handleNextPagePress}
-                onLastPagePress={handleLastPagePress}
-                onPageSelect={handlePageSelect}
+                onPageSelect={goToPage}
               />
 
               <ConfirmModal
@@ -367,10 +325,10 @@ function CutoffUnmetContent() {
 }
 
 export default function CutoffUnmet() {
-  const { items } = useSelector((state: AppState) => state.wanted.cutoffUnmet);
+  const { records } = useCutoffUnmet();
 
   return (
-    <SelectProvider<Episode> items={items}>
+    <SelectProvider<Episode> items={records}>
       <CutoffUnmetContent />
     </SelectProvider>
   );

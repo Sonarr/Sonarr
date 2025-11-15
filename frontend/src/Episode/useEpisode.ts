@@ -3,7 +3,10 @@ import { useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
 import { create } from 'zustand';
 import AppState from 'App/State/AppState';
+import useApiMutation from 'Helpers/Hooks/useApiMutation';
+import { PagedQueryResponse } from 'Helpers/Hooks/usePagedApiQuery';
 import { CalendarItem } from 'typings/Calendar';
+import Episode from './Episode';
 
 export type EpisodeEntity =
   | 'calendar'
@@ -14,10 +17,14 @@ export type EpisodeEntity =
 
 interface EpisodeQueryKeyStore {
   calendar: QueryKey | null;
+  cutoffUnmet: QueryKey | null;
+  missing: QueryKey | null;
 }
 
 const episodeQueryKeyStore = create<EpisodeQueryKeyStore>(() => ({
   calendar: null,
+  cutoffUnmet: null,
+  missing: null,
 }));
 
 function createEpisodeSelector(episodeId?: number) {
@@ -30,7 +37,7 @@ function createEpisodeSelector(episodeId?: number) {
 }
 
 // No-op...ish
-function createCalendarEpisodeSelector(_episodeId?: number) {
+function createNoOpEpisodeSelector(_episodeId?: number) {
   return createSelector(
     (state: AppState) => state.episodes.items,
     (_episodes) => {
@@ -39,23 +46,18 @@ function createCalendarEpisodeSelector(_episodeId?: number) {
   );
 }
 
-function createWantedCutoffUnmetEpisodeSelector(episodeId?: number) {
-  return createSelector(
-    (state: AppState) => state.wanted.cutoffUnmet.items,
-    (episodes) => {
-      return episodes.find(({ id }) => id === episodeId);
-    }
-  );
-}
-
-function createWantedMissingEpisodeSelector(episodeId?: number) {
-  return createSelector(
-    (state: AppState) => state.wanted.missing.items,
-    (episodes) => {
-      return episodes.find(({ id }) => id === episodeId);
-    }
-  );
-}
+const getQueryKey = (episodeEntity: EpisodeEntity) => {
+  switch (episodeEntity) {
+    case 'calendar':
+      return episodeQueryKeyStore.getState().calendar;
+    case 'wanted.cutoffUnmet':
+      return episodeQueryKeyStore.getState().cutoffUnmet;
+    case 'wanted.missing':
+      return episodeQueryKeyStore.getState().missing;
+    default:
+      return null;
+  }
+};
 
 export const setEpisodeQueryKey = (
   episodeEntity: EpisodeEntity,
@@ -64,6 +66,12 @@ export const setEpisodeQueryKey = (
   switch (episodeEntity) {
     case 'calendar':
       episodeQueryKeyStore.setState({ calendar: queryKey });
+      break;
+    case 'wanted.cutoffUnmet':
+      episodeQueryKeyStore.setState({ cutoffUnmet: queryKey });
+      break;
+    case 'wanted.missing':
+      episodeQueryKeyStore.setState({ missing: queryKey });
       break;
     default:
       break;
@@ -79,27 +87,31 @@ const useEpisode = (
 
   switch (episodeEntity) {
     case 'calendar':
-      selector = createCalendarEpisodeSelector;
-      break;
     case 'wanted.cutoffUnmet':
-      selector = createWantedCutoffUnmetEpisodeSelector;
-      break;
     case 'wanted.missing':
-      selector = createWantedMissingEpisodeSelector;
+      selector = createNoOpEpisodeSelector;
       break;
     default:
       break;
   }
 
   const result = useSelector(selector(episodeId));
+  const queryKey = getQueryKey(episodeEntity);
 
   if (episodeEntity === 'calendar') {
-    const queryKey = episodeQueryKeyStore((state) => state.calendar);
-
     return queryKey
       ? queryClient
           .getQueryData<CalendarItem[]>(queryKey)
           ?.find((e) => e.id === episodeId)
+      : undefined;
+  } else if (
+    episodeEntity === 'wanted.cutoffUnmet' ||
+    episodeEntity === 'wanted.missing'
+  ) {
+    return queryKey
+      ? queryClient
+          .getQueryData<PagedQueryResponse<Episode>>(queryKey)
+          ?.records?.find((e) => e.id === episodeId)
       : undefined;
   }
 
@@ -107,3 +119,30 @@ const useEpisode = (
 };
 
 export default useEpisode;
+
+interface ToggleEpisodesMonitored {
+  episodeIds: number[];
+  monitored: boolean;
+}
+
+export const useToggleEpisodesMonitored = (queryKey: QueryKey) => {
+  const queryClient = useQueryClient();
+
+  const { mutate, isPending } = useApiMutation<
+    unknown,
+    ToggleEpisodesMonitored
+  >({
+    path: '/episode/monitor',
+    method: 'PUT',
+    mutationOptions: {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey });
+      },
+    },
+  });
+
+  return {
+    toggleEpisodesMonitored: mutate,
+    isToggling: isPending,
+  };
+};

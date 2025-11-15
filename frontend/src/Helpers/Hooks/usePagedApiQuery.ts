@@ -15,7 +15,7 @@ interface PagedQueryOptions<T> extends QueryOptions<PagedQueryResponse<T>> {
   filters?: PropertyFilter[];
 }
 
-interface PagedQueryResponse<T> {
+export interface PagedQueryResponse<T> {
   page: number;
   pageSize: number;
   sortKey: string;
@@ -94,6 +94,7 @@ const usePagedApiQuery = <T>(options: PagedQueryOptions<T>) => {
 
   return {
     ...query,
+    queryKey,
     records: data?.records ?? DEFAULT_RECORDS,
     totalRecords: data?.totalRecords ?? 0,
     totalPages: data?.totalPages ?? 0,

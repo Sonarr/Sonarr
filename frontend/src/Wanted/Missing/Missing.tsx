@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QueueDetailsProvider from 'Activity/Queue/Details/QueueDetailsProvider';
 import { SelectProvider, useSelect } from 'App/Select/SelectContext';
-import AppState, { Filter } from 'App/State/AppState';
+import { Filter } from 'App/State/AppState';
 import * as commandNames from 'Commands/commandNames';
 import Alert from 'Components/Alert';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
@@ -18,21 +18,11 @@ import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import TableOptionsModalWrapper from 'Components/Table/TableOptions/TableOptionsModalWrapper';
 import TablePager from 'Components/Table/TablePager';
-import usePaging from 'Components/Table/usePaging';
 import Episode from 'Episode/Episode';
-import useCurrentPage from 'Helpers/Hooks/useCurrentPage';
+import { useToggleEpisodesMonitored } from 'Episode/useEpisode';
 import { align, icons, kinds } from 'Helpers/Props';
 import InteractiveImportModal from 'InteractiveImport/InteractiveImportModal';
 import { executeCommand } from 'Store/Actions/commandActions';
-import {
-  batchToggleMissingEpisodes,
-  clearMissing,
-  fetchMissing,
-  gotoMissingPage,
-  setMissingFilter,
-  setMissingSort,
-  setMissingTableOption,
-} from 'Store/Actions/wantedActions';
 import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
 import { CheckInputChanged } from 'typings/inputs';
 import { TableOptionsChangePayload } from 'typings/Table';
@@ -43,34 +33,38 @@ import {
   unregisterPagePopulator,
 } from 'Utilities/pagePopulator';
 import translate from 'Utilities/String/translate';
+import {
+  setMissingOption,
+  setMissingOptions,
+  useMissingOptions,
+} from './missingOptionsStore';
 import MissingRow from './MissingRow';
+import useMissing, { FILTERS } from './useMissing';
 
 function getMonitoredValue(
   filters: Filter[],
-  selectedFilterKey: string
+  selectedFilterKey: string | number
 ): boolean {
   return !!getFilterValue(filters, selectedFilterKey, 'monitored', false);
 }
 
 function MissingContent() {
   const dispatch = useDispatch();
-  const requestCurrentPage = useCurrentPage();
 
   const {
-    isFetching,
-    isPopulated,
-    error,
-    items,
-    columns,
-    selectedFilterKey,
-    filters,
-    sortKey,
-    sortDirection,
-    page,
-    pageSize,
+    records,
     totalPages,
-    totalRecords = 0,
-  } = useSelector((state: AppState) => state.wanted.missing);
+    totalRecords,
+    error,
+    isFetching,
+    isLoading,
+    page,
+    goToPage,
+    refetch,
+  } = useMissing();
+
+  const { columns, pageSize, sortKey, sortDirection, selectedFilterKey } =
+    useMissingOptions();
 
   const isSearchingForAllEpisodes = useSelector(
     createCommandExecutingSelector(commandNames.MISSING_EPISODE_SEARCH)
@@ -94,29 +88,17 @@ function MissingContent() {
   const [isInteractiveImportModalOpen, setIsInteractiveImportModalOpen] =
     useState(false);
 
-  const {
-    handleFirstPagePress,
-    handlePreviousPagePress,
-    handleNextPagePress,
-    handleLastPagePress,
-    handlePageSelect,
-  } = usePaging({
-    page,
-    totalPages,
-    gotoPage: gotoMissingPage,
-  });
+  const { toggleEpisodesMonitored, isToggling } = useToggleEpisodesMonitored([
+    '/wanted/missing',
+  ]);
 
-  const isSaving = useMemo(() => {
-    return items.filter((m) => m.isSaving).length > 1;
-  }, [items]);
-
-  const isShowingMonitored = getMonitoredValue(filters, selectedFilterKey);
+  const isShowingMonitored = getMonitoredValue(FILTERS, selectedFilterKey);
   const isSearchingForEpisodes =
     isSearchingForAllEpisodes || isSearchingForSelectedEpisodes;
 
   const episodeIds = useMemo(() => {
-    return selectUniqueIds<Episode, number>(items, 'id');
-  }, [items]);
+    return selectUniqueIds<Episode, number>(records, 'id');
+  }, [records]);
 
   const handleSelectAllChange = useCallback(
     ({ value }: CheckInputChanged) => {
@@ -135,11 +117,11 @@ function MissingContent() {
         name: commandNames.EPISODE_SEARCH,
         episodeIds: getSelectedIds(),
         commandFinished: () => {
-          dispatch(fetchMissing());
+          refetch();
         },
       })
     );
-  }, [getSelectedIds, dispatch]);
+  }, [getSelectedIds, dispatch, refetch]);
 
   const handleSearchAllPress = useCallback(() => {
     setIsConfirmSearchAllModalOpen(true);
@@ -154,22 +136,20 @@ function MissingContent() {
       executeCommand({
         name: commandNames.MISSING_EPISODE_SEARCH,
         commandFinished: () => {
-          dispatch(fetchMissing());
+          refetch();
         },
       })
     );
 
     setIsConfirmSearchAllModalOpen(false);
-  }, [dispatch]);
+  }, [dispatch, refetch]);
 
   const handleToggleSelectedPress = useCallback(() => {
-    dispatch(
-      batchToggleMissingEpisodes({
-        episodeIds: getSelectedIds(),
-        monitored: !isShowingMonitored,
-      })
-    );
-  }, [isShowingMonitored, getSelectedIds, dispatch]);
+    toggleEpisodesMonitored({
+      episodeIds: getSelectedIds(),
+      monitored: !isShowingMonitored,
+    });
+  }, [isShowingMonitored, getSelectedIds, toggleEpisodesMonitored]);
 
   const handleInteractiveImportPress = useCallback(() => {
     setIsInteractiveImportModalOpen(true);
@@ -179,46 +159,28 @@ function MissingContent() {
     setIsInteractiveImportModalOpen(false);
   }, []);
 
-  const handleFilterSelect = useCallback(
-    (filterKey: number | string) => {
-      dispatch(setMissingFilter({ selectedFilterKey: filterKey }));
-    },
-    [dispatch]
-  );
+  const handleFilterSelect = useCallback((filterKey: number | string) => {
+    setMissingOption('selectedFilterKey', filterKey);
+  }, []);
 
-  const handleSortPress = useCallback(
-    (sortKey: string) => {
-      dispatch(setMissingSort({ sortKey }));
-    },
-    [dispatch]
-  );
+  const handleSortPress = useCallback((sortKey: string) => {
+    setMissingOption('sortKey', sortKey);
+  }, []);
 
   const handleTableOptionChange = useCallback(
     (payload: TableOptionsChangePayload) => {
-      dispatch(setMissingTableOption(payload));
+      setMissingOptions(payload);
 
       if (payload.pageSize) {
-        dispatch(gotoMissingPage({ page: 1 }));
+        goToPage(1);
       }
     },
-    [dispatch]
+    [goToPage]
   );
 
   useEffect(() => {
-    if (requestCurrentPage) {
-      dispatch(fetchMissing());
-    } else {
-      dispatch(gotoMissingPage({ page: 1 }));
-    }
-
-    return () => {
-      dispatch(clearMissing());
-    };
-  }, [requestCurrentPage, dispatch]);
-
-  useEffect(() => {
     const repopulate = () => {
-      dispatch(fetchMissing());
+      refetch();
     };
 
     registerPagePopulator(repopulate, [
@@ -230,7 +192,7 @@ function MissingContent() {
     return () => {
       unregisterPagePopulator(repopulate);
     };
-  }, [dispatch]);
+  }, [refetch]);
 
   return (
     <QueueDetailsProvider episodeIds={episodeIds}>
@@ -261,7 +223,7 @@ function MissingContent() {
               }
               iconName={icons.MONITORED}
               isDisabled={!anySelected}
-              isSpinning={isSaving}
+              isSpinning={isToggling}
               onPress={handleToggleSelectedPress}
             />
 
@@ -289,7 +251,7 @@ function MissingContent() {
             <FilterMenu
               alignMenu={align.RIGHT}
               selectedFilterKey={selectedFilterKey}
-              filters={filters}
+              filters={FILTERS}
               customFilters={[]}
               onFilterSelect={handleFilterSelect}
             />
@@ -297,17 +259,17 @@ function MissingContent() {
         </PageToolbar>
 
         <PageContentBody>
-          {isFetching && !isPopulated ? <LoadingIndicator /> : null}
+          {isFetching && isLoading ? <LoadingIndicator /> : null}
 
           {!isFetching && error ? (
             <Alert kind={kinds.DANGER}>{translate('MissingLoadError')}</Alert>
           ) : null}
 
-          {isPopulated && !error && !items.length ? (
+          {!isLoading && !error && !records.length ? (
             <Alert kind={kinds.INFO}>{translate('MissingNoItems')}</Alert>
           ) : null}
 
-          {isPopulated && !error && !!items.length ? (
+          {!isLoading && !error && !!records.length ? (
             <div>
               <Table
                 selectAll={true}
@@ -322,7 +284,7 @@ function MissingContent() {
                 onSortPress={handleSortPress}
               >
                 <TableBody>
-                  {items.map((item) => {
+                  {records.map((item) => {
                     return (
                       <MissingRow key={item.id} columns={columns} {...item} />
                     );
@@ -335,11 +297,7 @@ function MissingContent() {
                 totalPages={totalPages}
                 totalRecords={totalRecords}
                 isFetching={isFetching}
-                onFirstPagePress={handleFirstPagePress}
-                onPreviousPagePress={handlePreviousPagePress}
-                onNextPagePress={handleNextPagePress}
-                onLastPagePress={handleLastPagePress}
-                onPageSelect={handlePageSelect}
+                onPageSelect={goToPage}
               />
 
               <ConfirmModal
@@ -377,10 +335,10 @@ function MissingContent() {
 }
 
 function Missing() {
-  const { items } = useSelector((state: AppState) => state.wanted.missing);
+  const { records } = useMissing();
 
   return (
-    <SelectProvider<Episode> items={items}>
+    <SelectProvider<Episode> items={records}>
       <MissingContent />
     </SelectProvider>
   );

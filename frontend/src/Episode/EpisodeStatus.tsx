@@ -3,7 +3,6 @@ import { useQueueItemForEpisode } from 'Activity/Queue/Details/QueueDetailsProvi
 import QueueDetails from 'Activity/Queue/QueueDetails';
 import Icon from 'Components/Icon';
 import ProgressBar from 'Components/ProgressBar';
-import Episode from 'Episode/Episode';
 import useEpisode, { EpisodeEntity } from 'Episode/useEpisode';
 import useEpisodeFile from 'EpisodeFile/useEpisodeFile';
 import { icons, kinds, sizes } from 'Helpers/Props';
@@ -23,18 +22,18 @@ function EpisodeStatus({
   episodeEntity = 'episodes',
   episodeFileId,
 }: EpisodeStatusProps) {
-  const {
-    airDateUtc,
-    monitored,
-    grabbed = false,
-  } = useEpisode(episodeId, episodeEntity) as Episode;
-
+  const episode = useEpisode(episodeId, episodeEntity);
   const queueItem = useQueueItemForEpisode(episodeId);
   const episodeFile = useEpisodeFile(episodeFileId);
 
+  const { airDateUtc, grabbed, monitored } = episode || {};
   const hasEpisodeFile = !!episodeFile;
   const isQueued = !!queueItem;
   const hasAired = isBefore(airDateUtc);
+
+  if (!episode) {
+    return null;
+  }
 
   if (isQueued) {
     const { sizeLeft, size } = queueItem;
