@@ -13,7 +13,7 @@ import {
   fetchAutoTaggings,
 } from 'Store/Actions/settingsActions';
 import createSortedSectionSelector from 'Store/Selectors/createSortedSectionSelector';
-import createTagsSelector from 'Store/Selectors/createTagsSelector';
+import { useTagList } from 'Tags/useTags';
 import AutoTaggingModel from 'typings/AutoTagging';
 import sortByProp from 'Utilities/Array/sortByProp';
 import translate from 'Utilities/String/translate';
@@ -29,7 +29,7 @@ export default function AutoTaggings() {
     )
   );
 
-  const tagList = useSelector(createTagsSelector());
+  const tagList = useTagList();
   const dispatch = useDispatch();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [tagsFromId, setTagsFromId] = useState<number>();

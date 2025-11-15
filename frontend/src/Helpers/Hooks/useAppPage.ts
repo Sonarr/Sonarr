@@ -12,19 +12,20 @@ import {
   fetchQualityProfiles,
   fetchUISettings,
 } from 'Store/Actions/settingsActions';
-import { fetchTags } from 'Store/Actions/tagActions';
 import useSystemStatus from 'System/Status/useSystemStatus';
+import useTags from 'Tags/useTags';
 import { ApiError } from 'Utilities/Fetch/fetchJson';
 
 const createErrorsSelector = ({
   systemStatusError,
+  tagsError,
 }: {
   systemStatusError: ApiError | null;
+  tagsError: ApiError | null;
 }) =>
   createSelector(
     (state: AppState) => state.series.error,
     (state: AppState) => state.customFilters.error,
-    (state: AppState) => state.tags.error,
     (state: AppState) => state.settings.ui.error,
     (state: AppState) => state.settings.qualityProfiles.error,
     (state: AppState) => state.settings.languages.error,
@@ -34,7 +35,6 @@ const createErrorsSelector = ({
     (
       seriesError,
       customFiltersError,
-      tagsError,
       uiSettingsError,
       qualityProfilesError,
       languagesError,
@@ -45,13 +45,13 @@ const createErrorsSelector = ({
       const hasError = !!(
         seriesError ||
         customFiltersError ||
-        tagsError ||
         uiSettingsError ||
         qualityProfilesError ||
         languagesError ||
         importListsError ||
         indexerFlagsError ||
         systemStatusError ||
+        tagsError ||
         translationsError
       );
 
@@ -78,22 +78,25 @@ const useAppPage = () => {
   const { isFetched: isSystemStatusFetched, error: systemStatusError } =
     useSystemStatus();
 
+  const { isFetched: isTagsFetched, error: tagsError } = useTags();
+
+  const isAppStatePopulated = useSelector(
+    (state: AppState) =>
+      state.series.isPopulated &&
+      state.customFilters.isPopulated &&
+      state.settings.ui.isPopulated &&
+      state.settings.qualityProfiles.isPopulated &&
+      state.settings.languages.isPopulated &&
+      state.settings.importLists.isPopulated &&
+      state.settings.indexerFlags.isPopulated &&
+      state.app.translations.isPopulated
+  );
+
   const isPopulated =
-    useSelector(
-      (state: AppState) =>
-        state.series.isPopulated &&
-        state.customFilters.isPopulated &&
-        state.tags.isPopulated &&
-        state.settings.ui.isPopulated &&
-        state.settings.qualityProfiles.isPopulated &&
-        state.settings.languages.isPopulated &&
-        state.settings.importLists.isPopulated &&
-        state.settings.indexerFlags.isPopulated &&
-        state.app.translations.isPopulated
-    ) && isSystemStatusFetched;
+    isAppStatePopulated && isSystemStatusFetched && isTagsFetched;
 
   const { hasError, errors } = useSelector(
-    createErrorsSelector({ systemStatusError })
+    createErrorsSelector({ systemStatusError, tagsError })
   );
 
   const isLocalStorageSupported = useMemo(() => {
@@ -112,7 +115,6 @@ const useAppPage = () => {
   useEffect(() => {
     dispatch(fetchSeries());
     dispatch(fetchCustomFilters());
-    dispatch(fetchTags());
     dispatch(fetchQualityProfiles());
     dispatch(fetchLanguages());
     dispatch(fetchImportLists());

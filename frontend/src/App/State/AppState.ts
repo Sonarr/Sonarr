@@ -20,7 +20,6 @@ import ReleasesAppState from './ReleasesAppState';
 import RootFolderAppState from './RootFolderAppState';
 import SeriesAppState, { SeriesIndexAppState } from './SeriesAppState';
 import SettingsAppState from './SettingsAppState';
-import TagsAppState from './TagsAppState';
 
 export interface FilterBuilderPropOption {
   id: string;
@@ -97,7 +96,6 @@ interface AppState {
   seriesHistory: SeriesHistoryAppState;
   seriesIndex: SeriesIndexAppState;
   settings: SettingsAppState;
-  tags: TagsAppState;
 }
 
 export default AppState;

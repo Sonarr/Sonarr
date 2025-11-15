@@ -18,7 +18,6 @@ import * as series from './seriesActions';
 import * as seriesHistory from './seriesHistoryActions';
 import * as seriesIndex from './seriesIndexActions';
 import * as settings from './settingsActions';
-import * as tags from './tagActions';
 
 export default [
   app,
@@ -40,6 +39,5 @@ export default [
   series,
   seriesHistory,
   seriesIndex,
-  settings,
-  tags
+  settings
 ];

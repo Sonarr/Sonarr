@@ -7,7 +7,7 @@ import ConfirmModal from 'Components/Modal/ConfirmModal';
 import TagList from 'Components/TagList';
 import { icons, kinds } from 'Helpers/Props';
 import { deleteImportList } from 'Store/Actions/settingsActions';
-import useTags from 'Tags/useTags';
+import { useTagList } from 'Tags/useTags';
 import formatShortTimeSpan from 'Utilities/Date/formatShortTimeSpan';
 import translate from 'Utilities/String/translate';
 import EditImportListModal from './EditImportListModal';
@@ -31,7 +31,7 @@ function ImportList({
   onCloneImportListPress,
 }: ImportListProps) {
   const dispatch = useDispatch();
-  const tagList = useTags();
+  const tagList = useTagList();
 
   const [isEditImportListModalOpen, setIsEditImportListModalOpen] =
     useState(false);

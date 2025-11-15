@@ -6,7 +6,7 @@ import ConfirmModal from 'Components/Modal/ConfirmModal';
 import TagList from 'Components/TagList';
 import { kinds } from 'Helpers/Props';
 import { deleteDownloadClient } from 'Store/Actions/settingsActions';
-import useTags from 'Tags/useTags';
+import { useTagList } from 'Tags/useTags';
 import translate from 'Utilities/String/translate';
 import EditDownloadClientModal from './EditDownloadClientModal';
 import styles from './DownloadClient.css';
@@ -27,7 +27,7 @@ function DownloadClient({
   tags,
 }: DownloadClientProps) {
   const dispatch = useDispatch();
-  const tagList = useTags();
+  const tagList = useTagList();
 
   const [isEditDownloadClientModalOpen, setIsEditDownloadClientModalOpen] =
     useState(false);

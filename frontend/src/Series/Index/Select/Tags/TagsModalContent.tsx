@@ -2,7 +2,6 @@ import { uniq } from 'lodash';
 import React, { useCallback, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useSelect } from 'App/Select/SelectContext';
-import { Tag } from 'App/State/TagsAppState';
 import Form from 'Components/Form/Form';
 import FormGroup from 'Components/Form/FormGroup';
 import FormInputGroup from 'Components/Form/FormInputGroup';
@@ -17,7 +16,7 @@ import ModalHeader from 'Components/Modal/ModalHeader';
 import { inputTypes, kinds, sizes } from 'Helpers/Props';
 import Series from 'Series/Series';
 import createAllSeriesSelector from 'Store/Selectors/createAllSeriesSelector';
-import createTagsSelector from 'Store/Selectors/createTagsSelector';
+import { Tag, useTagList } from 'Tags/useTags';
 import translate from 'Utilities/String/translate';
 import styles from './TagsModalContent.css';
 
@@ -31,7 +30,7 @@ function TagsModalContent({
   onApplyTagsPress,
 }: TagsModalContentProps) {
   const allSeries: Series[] = useSelector(createAllSeriesSelector());
-  const tagList: Tag[] = useSelector(createTagsSelector());
+  const tagList: Tag[] = useTagList();
 
   const [tags, setTags] = useState<number[]>([]);
   const [applyTags, setApplyTags] = useState('add');

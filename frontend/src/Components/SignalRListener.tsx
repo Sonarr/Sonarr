@@ -20,7 +20,6 @@ import {
 import { fetchRootFolders } from 'Store/Actions/rootFolderActions';
 import { fetchSeries } from 'Store/Actions/seriesActions';
 import { fetchQualityDefinitions } from 'Store/Actions/settingsActions';
-import { fetchTagDetails, fetchTags } from 'Store/Actions/tagActions';
 import { repopulatePage } from 'Utilities/pagePopulator';
 import SignalRLogger from 'Utilities/SignalRLogger';
 
@@ -303,10 +302,12 @@ function SignalRListener() {
     }
 
     if (name === 'tag') {
-      if (body.action === 'sync') {
-        dispatch(fetchTags());
-        dispatch(fetchTagDetails());
+      if (version < 5 || body.action !== 'sync') {
+        return;
       }
+
+      queryClient.invalidateQueries({ queryKey: ['/tag'] });
+      queryClient.invalidateQueries({ queryKey: ['/tag/detail'] });
 
       return;
     }

@@ -20,6 +20,7 @@ import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import Popover from 'Components/Tooltip/Popover';
+import { getValidationFailures } from 'Helpers/Hooks/useApiMutation';
 import { icons, inputTypes, kinds, tooltipPositions } from 'Helpers/Props';
 import { SeriesType } from 'Series/Series';
 import SeriesPoster from 'Series/SeriesPoster';
@@ -50,7 +51,10 @@ function AddNewSeriesModalContent({
   const { isAdding, addError, addSeries } = useAddSeries();
 
   const { settings, validationErrors, validationWarnings } = useMemo(() => {
-    return selectSettings(options, {}, addError);
+    return {
+      ...selectSettings(options, {}),
+      ...getValidationFailures(addError),
+    };
   }, [options, addError]);
 
   const [seriesType, setSeriesType] = useState<SeriesType>(

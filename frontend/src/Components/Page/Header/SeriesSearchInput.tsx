@@ -14,7 +14,6 @@ import Autosuggest from 'react-autosuggest';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
 import { useDebouncedCallback } from 'use-debounce';
-import { Tag } from 'App/State/TagsAppState';
 import Icon from 'Components/Icon';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import useKeyboardShortcuts from 'Helpers/Hooks/useKeyboardShortcuts';
@@ -22,7 +21,7 @@ import { icons } from 'Helpers/Props';
 import Series from 'Series/Series';
 import createAllSeriesSelector from 'Store/Selectors/createAllSeriesSelector';
 import createDeepEqualSelector from 'Store/Selectors/createDeepEqualSelector';
-import createTagsSelector from 'Store/Selectors/createTagsSelector';
+import { Tag, useTagList } from 'Tags/useTags';
 import translate from 'Utilities/String/translate';
 import SeriesSearchResult from './SeriesSearchResult';
 import styles from './SeriesSearchInput.css';
@@ -70,60 +69,57 @@ interface Section {
   suggestions: SeriesSuggestion[] | AddNewSeriesSuggestion[];
 }
 
-function createUnoptimizedSelector() {
-  return createSelector(
-    createAllSeriesSelector(),
-    createTagsSelector(),
-    (allSeries, allTags) => {
-      return allSeries.map((series): SuggestedSeries => {
-        const {
-          title,
-          titleSlug,
-          sortTitle,
-          images,
-          alternateTitles = [],
-          tvdbId,
-          tvMazeId,
-          imdbId,
-          tmdbId,
-          tags = [],
-        } = series;
+function createUnoptimizedSelector(tagList: Tag[]) {
+  return createSelector(createAllSeriesSelector(), (allSeries) => {
+    return allSeries.map((series): SuggestedSeries => {
+      const {
+        title,
+        titleSlug,
+        sortTitle,
+        images,
+        alternateTitles = [],
+        tvdbId,
+        tvMazeId,
+        imdbId,
+        tmdbId,
+        tags = [],
+      } = series;
 
-        return {
-          title,
-          titleSlug,
-          sortTitle,
-          images,
-          alternateTitles,
-          tvdbId,
-          tvMazeId,
-          imdbId,
-          tmdbId,
-          firstCharacter: title.charAt(0).toLowerCase(),
-          tags: tags.reduce<Tag[]>((acc, id) => {
-            const matchingTag = allTags.find((tag) => tag.id === id);
+      return {
+        title,
+        titleSlug,
+        sortTitle,
+        images,
+        alternateTitles,
+        tvdbId,
+        tvMazeId,
+        imdbId,
+        tmdbId,
+        firstCharacter: title.charAt(0).toLowerCase(),
+        tags: tags.reduce<Tag[]>((acc, id) => {
+          const matchingTag = tagList.find((tag) => tag.id === id);
 
-            if (matchingTag) {
-              acc.push(matchingTag);
-            }
+          if (matchingTag) {
+            acc.push(matchingTag);
+          }
 
-            return acc;
-          }, []),
-        };
-      });
-    }
-  );
+          return acc;
+        }, []),
+      };
+    });
+  });
 }
 
-function createSeriesSelector() {
+function createSeriesSelector(tagList: Tag[]) {
   return createDeepEqualSelector(
-    createUnoptimizedSelector(),
+    createUnoptimizedSelector(tagList),
     (series) => series
   );
 }
 
 function SeriesSearchInput() {
-  const series = useSelector(createSeriesSelector());
+  const tagList = useTagList();
+  const series = useSelector(createSeriesSelector(tagList));
   const dispatch = useDispatch();
   const { bindShortcut, unbindShortcut } = useKeyboardShortcuts();
 

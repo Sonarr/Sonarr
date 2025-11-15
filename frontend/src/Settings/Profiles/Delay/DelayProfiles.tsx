@@ -12,7 +12,7 @@ import {
   fetchDelayProfiles,
   reorderDelayProfile,
 } from 'Store/Actions/settingsActions';
-import createTagsSelector from 'Store/Selectors/createTagsSelector';
+import { useTagList } from 'Tags/useTags';
 import DelayProfileModel from 'typings/DelayProfile';
 import translate from 'Utilities/String/translate';
 import DelayProfile from './DelayProfile';
@@ -60,7 +60,7 @@ function DelayProfiles() {
     createDisplayProfilesSelector()
   );
 
-  const tagList = useSelector(createTagsSelector());
+  const tagList = useTagList();
 
   const [dragIndex, setDragIndex] = useState<number | null>(null);
   const [dropIndex, setDropIndex] = useState<number | null>(null);

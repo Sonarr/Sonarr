@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
-import { useSelector } from 'react-redux';
-import createTagsSelector from 'Store/Selectors/createTagsSelector';
+import { useTagList } from 'Tags/useTags';
 import FilterBuilderRowValue, {
   FilterBuilderRowValueProps,
 } from './FilterBuilderRowValue';
@@ -11,7 +10,7 @@ type TagFilterBuilderRowValueProps<T> = Omit<
 >;
 
 function TagFilterBuilderRowValue<T>(props: TagFilterBuilderRowValueProps<T>) {
-  const tags = useSelector(createTagsSelector());
+  const tags = useTagList();
 
   const tagList = useMemo(() => {
     return tags.map((tag) => {

@@ -1,10 +1,9 @@
 import React, { useCallback, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import Card from 'Components/Card';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import { kinds } from 'Helpers/Props';
-import { deleteTag } from 'Store/Actions/tagActions';
-import createTagDetailsSelector from 'Store/Selectors/createTagDetailsSelector';
+import { useTagDetail } from 'Tags/useTagDetails';
+import { useDeleteTag } from 'Tags/useTags';
 import translate from 'Utilities/String/translate';
 import TagDetailsModal from './Details/TagDetailsModal';
 import TagInUse from './TagInUse';
@@ -16,18 +15,18 @@ interface TagProps {
 }
 
 function Tag({ id, label }: TagProps) {
-  const dispatch = useDispatch();
+  const { deleteTag } = useDeleteTag(id);
   const {
-    delayProfileIds = [],
-    importListIds = [],
-    notificationIds = [],
-    restrictionIds = [],
-    excludedReleaseProfileIds = [],
-    indexerIds = [],
-    downloadClientIds = [],
-    autoTagIds = [],
-    seriesIds = [],
-  } = useSelector(createTagDetailsSelector(id)) ?? {};
+    delayProfileIds,
+    importListIds,
+    notificationIds,
+    restrictionIds,
+    excludedReleaseProfileIds,
+    indexerIds,
+    downloadClientIds,
+    autoTagIds,
+    seriesIds,
+  } = useTagDetail(id);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
   const [isDeleteTagModalOpen, setIsDeleteTagModalOpen] = useState(false);
 
@@ -61,8 +60,8 @@ function Tag({ id, label }: TagProps) {
   }, []);
 
   const handleConfirmDeleteTag = useCallback(() => {
-    dispatch(deleteTag({ id }));
-  }, [id, dispatch]);
+    deleteTag();
+  }, [deleteTag]);
 
   const handleDeleteTagModalClose = useCallback(() => {
     setIsDeleteTagModalOpen(false);

@@ -1,4 +1,4 @@
-import React, { ElementType, ReactNode } from 'react';
+import React, { ElementType, ReactNode, useMemo, useState } from 'react';
 import Link from 'Components/Link/Link';
 import { inputTypes } from 'Helpers/Props';
 import { InputType } from 'Helpers/Props/inputTypes';
@@ -9,6 +9,7 @@ import CaptchaInput, { CaptchaInputProps } from './CaptchaInput';
 import CheckInput, { CheckInputProps } from './CheckInput';
 import FloatInput, { FloatInputProps } from './FloatInput';
 import { FormInputButtonProps } from './FormInputButton';
+import { FormInputGroupProvider } from './FormInputGroupContext';
 import FormInputHelpText from './FormInputHelpText';
 import KeyValueListInput, { KeyValueListInputProps } from './KeyValueListInput';
 import NumberInput, { NumberInputProps } from './NumberInput';
@@ -206,10 +207,26 @@ function FormInputGroup<T, C extends InputType>(
     helpTextWarning,
     helpLink,
     pending,
-    errors = [],
-    warnings = [],
+    errors: serverErrors = [],
+    warnings: serverWarnings = [],
     ...otherProps
   } = props;
+
+  const [clientErrors, setClientErrors] = useState<
+    (ValidationMessage | ValidationError)[]
+  >([]);
+
+  const [clientWarnings, setClientWarnings] = useState<
+    (ValidationMessage | ValidationWarning)[]
+  >([]);
+
+  const errors = useMemo(() => {
+    return [...clientErrors, ...serverErrors];
+  }, [clientErrors, serverErrors]);
+
+  const warnings = useMemo(() => {
+    return [...clientWarnings, ...serverWarnings];
+  }, [clientWarnings, serverWarnings]);
 
   const InputComponent = componentMap[type];
   const checkInput = type === inputTypes.CHECK;
@@ -220,44 +237,48 @@ function FormInputGroup<T, C extends InputType>(
   const hasButton = !!buttonsArray.length;
 
   return (
-    <div className={containerClassName}>
-      <div className={className}>
-        <div className={styles.inputContainer}>
-          {/* @ts-expect-error - types are validated already */}
-          <InputComponent
-            className={inputClassName}
-            helpText={helpText}
-            helpTextWarning={helpTextWarning}
-            hasError={hasError}
-            hasWarning={hasWarning}
-            hasButton={hasButton}
-            {...otherProps}
-          />
+    <FormInputGroupProvider
+      setClientErrors={setClientErrors}
+      setClientWarnings={setClientWarnings}
+    >
+      <div className={containerClassName}>
+        <div className={className}>
+          <div className={styles.inputContainer}>
+            {/* @ts-expect-error - types are validated already */}
+            <InputComponent
+              className={inputClassName}
+              helpText={helpText}
+              helpTextWarning={helpTextWarning}
+              hasError={hasError}
+              hasWarning={hasWarning}
+              hasButton={hasButton}
+              {...otherProps}
+            />
 
-          {unit && (
-            <div
-              className={
-                type === inputTypes.NUMBER
-                  ? styles.inputUnitNumber
-                  : styles.inputUnit
-              }
-            >
-              {unit}
-            </div>
-          )}
-        </div>
+            {unit && (
+              <div
+                className={
+                  type === inputTypes.NUMBER
+                    ? styles.inputUnitNumber
+                    : styles.inputUnit
+                }
+              >
+                {unit}
+              </div>
+            )}
+          </div>
 
-        {buttonsArray.map((button, index) => {
-          if (!React.isValidElement<FormInputButtonProps>(button)) {
-            return button;
-          }
+          {buttonsArray.map((button, index) => {
+            if (!React.isValidElement<FormInputButtonProps>(button)) {
+              return button;
+            }
 
-          return React.cloneElement(button, {
-            isLastButton: index === lastButtonIndex,
-          });
-        })}
+            return React.cloneElement(button, {
+              isLastButton: index === lastButtonIndex,
+            });
+          })}
 
-        {/* <div className={styles.pendingChangesContainer}>
+          {/* <div className={styles.pendingChangesContainer}>
           {
           pending &&
           <Icon
@@ -267,70 +288,71 @@ function FormInputGroup<T, C extends InputType>(
           />
           }
         </div> */}
-      </div>
-
-      {!checkInput && helpText ? <FormInputHelpText text={helpText} /> : null}
-
-      {!checkInput && helpTexts ? (
-        <div>
-          {helpTexts.map((text, index) => {
-            return (
-              <FormInputHelpText
-                key={index}
-                text={text}
-                isCheckInput={checkInput}
-              />
-            );
-          })}
         </div>
-      ) : null}
 
-      {(!checkInput || helpText) && helpTextWarning ? (
-        <FormInputHelpText text={helpTextWarning} isWarning={true} />
-      ) : null}
+        {!checkInput && helpText ? <FormInputHelpText text={helpText} /> : null}
 
-      {helpLink ? <Link to={helpLink}>{translate('MoreInfo')}</Link> : null}
+        {!checkInput && helpTexts ? (
+          <div>
+            {helpTexts.map((text, index) => {
+              return (
+                <FormInputHelpText
+                  key={index}
+                  text={text}
+                  isCheckInput={checkInput}
+                />
+              );
+            })}
+          </div>
+        ) : null}
 
-      {errors.map((error, index) => {
-        return 'errorMessage' in error ? (
-          <FormInputHelpText
-            key={index}
-            text={error.errorMessage}
-            link={error.infoLink}
-            tooltip={error.detailedDescription}
-            isError={true}
-            isCheckInput={checkInput}
-          />
-        ) : (
-          <FormInputHelpText
-            key={index}
-            text={error.message}
-            isError={true}
-            isCheckInput={checkInput}
-          />
-        );
-      })}
+        {(!checkInput || helpText) && helpTextWarning ? (
+          <FormInputHelpText text={helpTextWarning} isWarning={true} />
+        ) : null}
 
-      {warnings.map((warning, index) => {
-        return 'errorMessage' in warning ? (
-          <FormInputHelpText
-            key={index}
-            text={warning.errorMessage}
-            link={warning.infoLink}
-            tooltip={warning.detailedDescription}
-            isWarning={true}
-            isCheckInput={checkInput}
-          />
-        ) : (
-          <FormInputHelpText
-            key={index}
-            text={warning.message}
-            isWarning={true}
-            isCheckInput={checkInput}
-          />
-        );
-      })}
-    </div>
+        {helpLink ? <Link to={helpLink}>{translate('MoreInfo')}</Link> : null}
+
+        {errors.map((error, index) => {
+          return 'errorMessage' in error ? (
+            <FormInputHelpText
+              key={index}
+              text={error.errorMessage}
+              link={error.infoLink}
+              tooltip={error.detailedDescription}
+              isError={true}
+              isCheckInput={checkInput}
+            />
+          ) : (
+            <FormInputHelpText
+              key={index}
+              text={error.message}
+              isError={true}
+              isCheckInput={checkInput}
+            />
+          );
+        })}
+
+        {warnings.map((warning, index) => {
+          return 'errorMessage' in warning ? (
+            <FormInputHelpText
+              key={index}
+              text={warning.errorMessage}
+              link={warning.infoLink}
+              tooltip={warning.detailedDescription}
+              isWarning={true}
+              isCheckInput={checkInput}
+            />
+          ) : (
+            <FormInputHelpText
+              key={index}
+              text={warning.message}
+              isWarning={true}
+              isCheckInput={checkInput}
+            />
+          );
+        })}
+      </div>
+    </FormInputGroupProvider>
   );
 }
 

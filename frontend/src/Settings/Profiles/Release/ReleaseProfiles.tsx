@@ -11,7 +11,7 @@ import { icons } from 'Helpers/Props';
 import { fetchIndexers } from 'Store/Actions/Settings/indexers';
 import { fetchReleaseProfiles } from 'Store/Actions/Settings/releaseProfiles';
 import createClientSideCollectionSelector from 'Store/Selectors/createClientSideCollectionSelector';
-import createTagsSelector from 'Store/Selectors/createTagsSelector';
+import { useTagList } from 'Tags/useTags';
 import translate from 'Utilities/String/translate';
 import EditReleaseProfileModal from './EditReleaseProfileModal';
 import ReleaseProfileItem from './ReleaseProfileItem';
@@ -21,7 +21,7 @@ function ReleaseProfiles() {
   const { items, isFetching, isPopulated, error }: ReleaseProfilesAppState =
     useSelector(createClientSideCollectionSelector('settings.releaseProfiles'));
 
-  const tagList = useSelector(createTagsSelector());
+  const tagList = useTagList();
   const indexerList = useSelector(
     (state: AppState) => state.settings.indexers.items
   );

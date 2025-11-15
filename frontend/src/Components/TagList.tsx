@@ -1,7 +1,7 @@
 import React from 'react';
-import { Tag } from 'App/State/TagsAppState';
 import { kinds } from 'Helpers/Props';
 import { Kind } from 'Helpers/Props/kinds';
+import { Tag } from 'Tags/useTags';
 import sortByProp from 'Utilities/Array/sortByProp';
 import Label, { LabelProps } from './Label';
 import styles from './TagList.css';

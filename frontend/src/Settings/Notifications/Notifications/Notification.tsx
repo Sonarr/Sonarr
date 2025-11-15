@@ -6,7 +6,7 @@ import ConfirmModal from 'Components/Modal/ConfirmModal';
 import TagList from 'Components/TagList';
 import { kinds } from 'Helpers/Props';
 import { deleteNotification } from 'Store/Actions/settingsActions';
-import useTags from 'Tags/useTags';
+import { useTagList } from 'Tags/useTags';
 import NotificationModel from 'typings/Notification';
 import translate from 'Utilities/String/translate';
 import EditNotificationModal from './EditNotificationModal';
@@ -44,7 +44,7 @@ function Notification({
   tags,
 }: NotificationModel) {
   const dispatch = useDispatch();
-  const tagList = useTags();
+  const tagList = useTagList();
 
   const [isEditNotificationModalOpen, setIsEditNotificationModalOpen] =
     useState(false);

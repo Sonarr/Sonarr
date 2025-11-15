@@ -3,11 +3,12 @@ import { Error } from 'App/State/AppSectionState';
 import Alert from 'Components/Alert';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import { kinds } from 'Helpers/Props';
+import { ApiError } from 'Utilities/Fetch/fetchJson';
 
 interface PageSectionContentProps {
   isFetching: boolean;
   isPopulated: boolean;
-  error?: Error;
+  error?: Error | ApiError | null;
   errorMessage: string;
   children: React.ReactNode;
 }

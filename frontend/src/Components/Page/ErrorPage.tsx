@@ -11,7 +11,7 @@ interface ErrorPageProps {
   translationsError?: Error;
   seriesError?: Error;
   customFiltersError?: Error;
-  tagsError?: Error;
+  tagsError: ApiError | null;
   qualityProfilesError?: Error;
   uiSettingsError?: Error;
   systemStatusError: ApiError | null;

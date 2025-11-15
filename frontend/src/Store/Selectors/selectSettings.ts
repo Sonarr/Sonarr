@@ -12,12 +12,14 @@ import {
 } from 'typings/pending';
 import isEmpty from 'Utilities/Object/isEmpty';
 
-interface ValidationFailures {
+export interface ValidationFailures {
   errors: ValidationError[];
   warnings: ValidationWarning[];
 }
 
-function getValidationFailures(saveError?: Error | null): ValidationFailures {
+export function getValidationFailures(
+  saveError?: Error | null
+): ValidationFailures {
   if (!saveError || saveError.status !== 400) {
     return {
       errors: [],
