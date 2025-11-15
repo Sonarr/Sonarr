@@ -1,0 +1,44 @@
+using NzbDrone.Core.Tags;
+using Sonarr.Http.REST;
+
+namespace Sonarr.Api.V5.Tags;
+
+public class TagDetailsResource : RestResource
+{
+    public string? Label { get; set; }
+    public List<int> DelayProfileIds { get; set; } = [];
+    public List<int> ImportListIds { get; set; } = [];
+    public List<int> NotificationIds { get; set; } = [];
+    public List<int> RestrictionIds { get; set; } = [];
+    public List<int> ExcludedReleaseProfileIds { get; set; } = [];
+    public List<int> IndexerIds { get; set; } = [];
+    public List<int> DownloadClientIds { get; set; } = [];
+    public List<int> AutoTagIds { get; set; } = [];
+    public List<int> SeriesIds { get; set; } = [];
+}
+
+public static class TagDetailsResourceMapper
+{
+    public static TagDetailsResource ToResource(this TagDetails model)
+    {
+        return new TagDetailsResource
+        {
+            Id = model.Id,
+            Label = model.Label,
+            DelayProfileIds = model.DelayProfileIds,
+            ImportListIds = model.ImportListIds,
+            NotificationIds = model.NotificationIds,
+            RestrictionIds = model.RestrictionIds,
+            ExcludedReleaseProfileIds = model.ExcludedReleaseProfileIds,
+            IndexerIds = model.IndexerIds,
+            DownloadClientIds = model.DownloadClientIds,
+            AutoTagIds = model.AutoTagIds,
+            SeriesIds = model.SeriesIds
+        };
+    }
+
+    public static List<TagDetailsResource> ToResource(this IEnumerable<TagDetails> models)
+    {
+        return models.Select(ToResource).ToList();
+    }
+}
