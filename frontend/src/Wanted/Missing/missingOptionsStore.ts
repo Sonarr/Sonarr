@@ -4,7 +4,7 @@ import {
 } from 'Helpers/Hooks/useOptionsStore';
 import translate from 'Utilities/String/translate';
 
-const { useOptions, useOption, setOptions, setOption } =
+const { useOptions, useOption, setOptions, setOption, setSort } =
   createOptionsStore<PageableOptions>('missing_options', () => {
     return {
       pageSize: 20,
@@ -60,3 +60,4 @@ export const useMissingOptions = useOptions;
 export const setMissingOptions = setOptions;
 export const useMissingOption = useOption;
 export const setMissingOption = setOption;
+export const setMissingSort = setSort;

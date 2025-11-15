@@ -17,6 +17,7 @@ import TableBody from 'Components/Table/TableBody';
 import TableOptionsModalWrapper from 'Components/Table/TableOptions/TableOptionsModalWrapper';
 import TablePager from 'Components/Table/TablePager';
 import { align, icons, kinds } from 'Helpers/Props';
+import { SortDirection } from 'Helpers/Props/sortDirections';
 import { executeCommand } from 'Store/Actions/commandActions';
 import { createCustomFiltersSelector } from 'Store/Selectors/createClientSideCollectionSelector';
 import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
@@ -31,6 +32,7 @@ import translate from 'Utilities/String/translate';
 import BlocklistFilterModal from './BlocklistFilterModal';
 import {
   setBlocklistOption,
+  setBlocklistSort,
   useBlocklistOptions,
 } from './blocklistOptionsStore';
 import BlocklistRow from './BlocklistRow';
@@ -129,9 +131,15 @@ function BlocklistContent() {
     []
   );
 
-  const handleSortPress = useCallback((sortKey: string) => {
-    setBlocklistOption('sortKey', sortKey);
-  }, []);
+  const handleSortPress = useCallback(
+    (sortKey: string, sortDirection?: SortDirection) => {
+      setBlocklistSort({
+        sortKey,
+        sortDirection,
+      });
+    },
+    []
+  );
 
   const handleTableOptionChange = useCallback(
     (payload: TableOptionsChangePayload) => {

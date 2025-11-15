@@ -1,9 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  setQueueOption,
-  setQueueOptions,
-} from 'Activity/Queue/queueOptionsStore';
 import Alert from 'Components/Alert';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import FilterMenu from 'Components/Menu/FilterMenu';
@@ -19,6 +15,7 @@ import TablePager from 'Components/Table/TablePager';
 import createEpisodesFetchingSelector from 'Episode/createEpisodesFetchingSelector';
 import useCurrentPage from 'Helpers/Hooks/useCurrentPage';
 import { align, icons, kinds } from 'Helpers/Props';
+import { SortDirection } from 'Helpers/Props/sortDirections';
 import { clearEpisodes, fetchEpisodes } from 'Store/Actions/episodeActions';
 import { clearEpisodeFiles } from 'Store/Actions/episodeFileActions';
 import { createCustomFiltersSelector } from 'Store/Selectors/createClientSideCollectionSelector';
@@ -31,7 +28,12 @@ import {
 } from 'Utilities/pagePopulator';
 import translate from 'Utilities/String/translate';
 import HistoryFilterModal from './HistoryFilterModal';
-import { useHistoryOptions } from './historyOptionsStore';
+import {
+  setHistoryOption,
+  setHistoryOptions,
+  setHistorySort,
+  useHistoryOptions,
+} from './historyOptionsStore';
 import HistoryRow from './HistoryRow';
 import useHistory, { useFilters } from './useHistory';
 
@@ -67,18 +69,24 @@ function History() {
 
   const handleFilterSelect = useCallback(
     (selectedFilterKey: string | number) => {
-      setQueueOption('selectedFilterKey', selectedFilterKey);
+      setHistoryOption('selectedFilterKey', selectedFilterKey);
     },
     []
   );
 
-  const handleSortPress = useCallback((sortKey: string) => {
-    setQueueOption('sortKey', sortKey);
-  }, []);
+  const handleSortPress = useCallback(
+    (sortKey: string, sortDirection?: SortDirection) => {
+      setHistorySort({
+        sortKey,
+        sortDirection,
+      });
+    },
+    []
+  );
 
   const handleTableOptionChange = useCallback(
     (payload: TableOptionsChangePayload) => {
-      setQueueOptions(payload);
+      setHistoryOptions(payload);
 
       if (payload.pageSize) {
         goToPage(1);

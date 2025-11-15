@@ -17,7 +17,7 @@ export interface QueueOptions extends PageableOptions {
   removalOptions: QueueRemovalOptions;
 }
 
-const { useOptions, useOption, setOptions, setOption } =
+const { useOptions, useOption, setOptions, setOption, setSort } =
   createOptionsStore<QueueOptions>('queue_options', () => {
     return {
       includeUnknownSeriesItems: true,
@@ -158,3 +158,4 @@ export const useQueueOptions = useOptions;
 export const setQueueOptions = setOptions;
 export const useQueueOption = useOption;
 export const setQueueOption = setOption;
+export const setQueueSort = setSort;

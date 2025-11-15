@@ -8,9 +8,12 @@ type TSettingsWithoutColumns = object;
 
 interface TSettingsWithColumns {
   columns: Column[];
+  selectedFilterKey: string | number;
+  sortKey: string;
+  sortDirection: SortDirection;
 }
 
-type TSettingd = TSettingsWithoutColumns | TSettingsWithColumns;
+type TSettings = TSettingsWithoutColumns | TSettingsWithColumns;
 
 export interface PageableOptions {
   pageSize: number;
@@ -25,7 +28,7 @@ export type OptionChanged<T> = {
   value: T[keyof T];
 };
 
-export const createOptionsStore = <T extends TSettingd>(
+export const createOptionsStore = <T extends TSettings>(
   name: string,
   state: StateCreator<T>,
   options: Omit<PersistOptions<T>, 'name' | 'storage'> = {}
@@ -52,6 +55,10 @@ export const createOptionsStore = <T extends TSettingd>(
   };
 
   const setOptions = (options: Partial<T>) => {
+    if ('sortKey' in options || 'sortDirection' in options) {
+      throw new Error('Use setSort to set sortKey and sortDirection');
+    }
+
     store.setState((state) => ({
       ...state,
       ...options,
@@ -59,10 +66,45 @@ export const createOptionsStore = <T extends TSettingd>(
   };
 
   const setOption = <K extends keyof T>(key: K, value: T[K]) => {
+    if (key === 'sortKey' || key === 'sortDirection') {
+      throw new Error('Use setSort to set sortKey and sortDirection');
+    }
+
     store.setState((state) => ({
       ...state,
       [key]: value,
     }));
+  };
+
+  const setSort = ({
+    sortKey,
+    sortDirection,
+  }: {
+    sortKey: string;
+    sortDirection: SortDirection | undefined;
+  }) => {
+    // @ts-expect-error - Cannot verify if T has sortKey and sortDirection
+    store.setState((state) => {
+      if ('sortKey' in state === false || 'sortDirection' in state === false) {
+        return state;
+      }
+
+      let newSortDirection = sortDirection;
+
+      if (sortDirection == null) {
+        if (state.sortKey === sortKey) {
+          newSortDirection =
+            state.sortDirection === 'ascending' ? 'descending' : 'ascending';
+        } else {
+          newSortDirection = state.sortDirection;
+        }
+      }
+
+      return {
+        sortKey,
+        sortDirection: newSortDirection,
+      };
+    });
   };
 
   return {
@@ -73,10 +115,11 @@ export const createOptionsStore = <T extends TSettingd>(
     getOption,
     setOptions,
     setOption,
+    setSort,
   };
 };
 
-const merge = <T extends TSettingd>(
+const merge = <T extends TSettings>(
   persistedState: unknown,
   currentState: T
 ) => {

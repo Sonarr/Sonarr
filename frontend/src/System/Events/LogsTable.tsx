@@ -14,6 +14,7 @@ import TableBody from 'Components/Table/TableBody';
 import TableOptionsModalWrapper from 'Components/Table/TableOptions/TableOptionsModalWrapper';
 import TablePager from 'Components/Table/TablePager';
 import { align, icons, kinds } from 'Helpers/Props';
+import { SortDirection } from 'Helpers/Props/sortDirections';
 import { executeCommand } from 'Store/Actions/commandActions';
 import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
 import { TableOptionsChangePayload } from 'typings/Table';
@@ -21,6 +22,7 @@ import translate from 'Utilities/String/translate';
 import {
   setEventOption,
   setEventOptions,
+  setEventSort,
   useEventOptions,
 } from './eventOptionsStore';
 import LogsTableRow from './LogsTableRow';
@@ -56,9 +58,15 @@ function LogsTable() {
     []
   );
 
-  const handleSortPress = useCallback((sortKey: string) => {
-    setEventOption('sortKey', sortKey);
-  }, []);
+  const handleSortPress = useCallback(
+    (sortKey: string, sortDirection?: SortDirection) => {
+      setEventSort({
+        sortKey,
+        sortDirection,
+      });
+    },
+    []
+  );
 
   const handleTableOptionChange = useCallback(
     (payload: TableOptionsChangePayload) => {

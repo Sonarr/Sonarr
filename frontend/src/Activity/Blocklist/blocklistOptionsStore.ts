@@ -6,7 +6,7 @@ import translate from 'Utilities/String/translate';
 
 export type BlocklistOptions = PageableOptions;
 
-const { useOptions, useOption, setOptions, setOption } =
+const { useOptions, useOption, setOptions, setOption, setSort } =
   createOptionsStore<BlocklistOptions>('blocklist_options', () => {
     return {
       pageSize: 20,
@@ -69,3 +69,4 @@ export const useBlocklistOptions = useOptions;
 export const setBlocklistOptions = setOptions;
 export const useBlocklistOption = useOption;
 export const setBlocklistOption = setOption;
+export const setBlocklistSort = setSort;

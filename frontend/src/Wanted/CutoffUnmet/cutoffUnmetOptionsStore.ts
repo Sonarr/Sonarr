@@ -4,7 +4,7 @@ import {
 } from 'Helpers/Hooks/useOptionsStore';
 import translate from 'Utilities/String/translate';
 
-const { useOptions, useOption, setOptions, setOption } =
+const { useOptions, useOption, setOptions, setOption, setSort } =
   createOptionsStore<PageableOptions>('cutoffUnmet_options', () => {
     return {
       pageSize: 20,
@@ -65,3 +65,4 @@ export const useCutoffUnmetOptions = useOptions;
 export const setCutoffUnmetOptions = setOptions;
 export const useCutoffUnmetOption = useOption;
 export const setCutoffUnmetOption = setOption;
+export const setCutoffUnmetSort = setSort;

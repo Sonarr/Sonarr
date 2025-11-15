@@ -21,6 +21,7 @@ import TablePager from 'Components/Table/TablePager';
 import Episode from 'Episode/Episode';
 import { useToggleEpisodesMonitored } from 'Episode/useEpisode';
 import { align, icons, kinds } from 'Helpers/Props';
+import { SortDirection } from 'Helpers/Props/sortDirections';
 import InteractiveImportModal from 'InteractiveImport/InteractiveImportModal';
 import { executeCommand } from 'Store/Actions/commandActions';
 import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
@@ -36,6 +37,7 @@ import translate from 'Utilities/String/translate';
 import {
   setMissingOption,
   setMissingOptions,
+  setMissingSort,
   useMissingOptions,
 } from './missingOptionsStore';
 import MissingRow from './MissingRow';
@@ -163,9 +165,15 @@ function MissingContent() {
     setMissingOption('selectedFilterKey', filterKey);
   }, []);
 
-  const handleSortPress = useCallback((sortKey: string) => {
-    setMissingOption('sortKey', sortKey);
-  }, []);
+  const handleSortPress = useCallback(
+    (sortKey: string, sortDirection?: SortDirection) => {
+      setMissingSort({
+        sortKey,
+        sortDirection,
+      });
+    },
+    []
+  );
 
   const handleTableOptionChange = useCallback(
     (payload: TableOptionsChangePayload) => {

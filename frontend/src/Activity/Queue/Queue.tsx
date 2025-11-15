@@ -24,6 +24,7 @@ import TableOptionsModalWrapper from 'Components/Table/TableOptions/TableOptions
 import TablePager from 'Components/Table/TablePager';
 import createEpisodesFetchingSelector from 'Episode/createEpisodesFetchingSelector';
 import { align, icons, kinds } from 'Helpers/Props';
+import { SortDirection } from 'Helpers/Props/sortDirections';
 import { executeCommand } from 'Store/Actions/commandActions';
 import { clearEpisodes, fetchEpisodes } from 'Store/Actions/episodeActions';
 import { createCustomFiltersSelector } from 'Store/Selectors/createClientSideCollectionSelector';
@@ -42,6 +43,7 @@ import QueueOptions from './QueueOptions';
 import {
   setQueueOption,
   setQueueOptions,
+  setQueueSort,
   useQueueOptions,
 } from './queueOptionsStore';
 import QueueRow from './QueueRow';
@@ -164,9 +166,15 @@ function QueueContent() {
     []
   );
 
-  const handleSortPress = useCallback((sortKey: string) => {
-    setQueueOption('sortKey', sortKey);
-  }, []);
+  const handleSortPress = useCallback(
+    (sortKey: string, sortDirection?: SortDirection) => {
+      setQueueSort({
+        sortKey,
+        sortDirection,
+      });
+    },
+    []
+  );
 
   const handleTableOptionChange = useCallback(
     (payload: TableOptionsChangePayload) => {

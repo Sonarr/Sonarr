@@ -6,9 +6,8 @@ import translate from 'Utilities/String/translate';
 
 export type EventOptions = PageableOptions;
 
-const { useOptions, setOptions, setOption } = createOptionsStore<EventOptions>(
-  'event_options',
-  () => {
+const { useOptions, setOptions, setOption, setSort } =
+  createOptionsStore<EventOptions>('event_options', () => {
     return {
       pageSize: 50,
       selectedFilterKey: 'all',
@@ -52,9 +51,9 @@ const { useOptions, setOptions, setOption } = createOptionsStore<EventOptions>(
         },
       ],
     };
-  }
-);
+  });
 
 export const useEventOptions = useOptions;
 export const setEventOptions = setOptions;
 export const setEventOption = setOption;
+export const setEventSort = setSort;

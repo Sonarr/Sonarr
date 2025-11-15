@@ -9,7 +9,7 @@ import translate from 'Utilities/String/translate';
 
 export type HistoryOptions = PageableOptions;
 
-const { useOptions, useOption, setOptions, setOption } =
+const { useOptions, useOption, setOptions, setOption, setSort } =
   createOptionsStore<HistoryOptions>('history_options', () => {
     return {
       includeUnknownSeriesItems: true,
@@ -107,3 +107,4 @@ export const useHistoryOptions = useOptions;
 export const setHistoryOptions = setOptions;
 export const useHistoryOption = useOption;
 export const setHistoryOption = setOption;
+export const setHistorySort = setSort;

@@ -21,6 +21,7 @@ import TablePager from 'Components/Table/TablePager';
 import Episode from 'Episode/Episode';
 import { useToggleEpisodesMonitored } from 'Episode/useEpisode';
 import { align, icons, kinds } from 'Helpers/Props';
+import { SortDirection } from 'Helpers/Props/sortDirections';
 import { executeCommand } from 'Store/Actions/commandActions';
 import { fetchEpisodeFiles } from 'Store/Actions/episodeFileActions';
 import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
@@ -36,6 +37,7 @@ import translate from 'Utilities/String/translate';
 import {
   setCutoffUnmetOption,
   setCutoffUnmetOptions,
+  setCutoffUnmetSort,
   useCutoffUnmetOptions,
 } from './cutoffUnmetOptionsStore';
 import CutoffUnmetRow from './CutoffUnmetRow';
@@ -156,9 +158,15 @@ function CutoffUnmetContent() {
     setCutoffUnmetOption('selectedFilterKey', filterKey);
   }, []);
 
-  const handleSortPress = useCallback((sortKey: string) => {
-    setCutoffUnmetOption('sortKey', sortKey);
-  }, []);
+  const handleSortPress = useCallback(
+    (sortKey: string, sortDirection?: SortDirection) => {
+      setCutoffUnmetSort({
+        sortKey,
+        sortDirection,
+      });
+    },
+    []
+  );
 
   const handleTableOptionChange = useCallback(
     (payload: TableOptionsChangePayload) => {
