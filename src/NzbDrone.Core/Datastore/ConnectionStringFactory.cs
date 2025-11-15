@@ -17,32 +17,28 @@ namespace NzbDrone.Core.Datastore
     public class ConnectionStringFactory : IConnectionStringFactory
     {
         private readonly IConfigFileProvider _configFileProvider;
-        private bool _usePostgres;
-        private bool _usePostgresConnectionStrings;
 
         public ConnectionStringFactory(IAppFolderInfo appFolderInfo, IConfigFileProvider configFileProvider)
         {
             _configFileProvider = configFileProvider;
 
-            ValidatePostgresOptions();
-
-            if (_usePostgres)
+            switch (GetConnectionStringType())
             {
-                if (_usePostgresConnectionStrings)
-                {
+                case ConnectionStringType.PostgreSQLVars:
+                    MainDbConnection = GetPostgresConnectionString(_configFileProvider.PostgresMainDb);
+                    LogDbConnection = GetPostgresConnectionString(_configFileProvider.PostgresLogDb);
+                    break;
+                case ConnectionStringType.PostgreSQLConnectionString:
                     MainDbConnection = GetPostgresConnectionInfoFromConnectionString(_configFileProvider.PostgresMainDbConnectionString);
                     LogDbConnection = GetPostgresConnectionInfoFromConnectionString(_configFileProvider.PostgresLogDbConnectionString);
-                    return;
-                }
-
-                MainDbConnection = GetPostgresConnectionInfoFromIndividualValues(_configFileProvider.PostgresMainDb);
-                LogDbConnection = GetPostgresConnectionInfoFromIndividualValues(_configFileProvider.PostgresLogDb);
-                return;
+                    break;
+                case ConnectionStringType.SQLite:
+                    MainDbConnection = GetConnectionString(appFolderInfo.GetDatabase());
+                    LogDbConnection = GetConnectionString(appFolderInfo.GetLogDatabase());
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
-
-            // Default to sqlite
-            MainDbConnection = GetConnectionString(appFolderInfo.GetDatabase());
-            LogDbConnection = GetConnectionString(appFolderInfo.GetLogDatabase());
         }
 
         public DatabaseConnectionInfo MainDbConnection { get; private set; }
@@ -76,7 +72,7 @@ namespace NzbDrone.Core.Datastore
             return new DatabaseConnectionInfo(DatabaseType.SQLite, connectionBuilder.ConnectionString);
         }
 
-        private DatabaseConnectionInfo GetPostgresConnectionInfoFromIndividualValues(string dbName)
+        private DatabaseConnectionInfo GetPostgresConnectionString(string dbName)
         {
             var connectionBuilder = new NpgsqlConnectionStringBuilder()
             {
@@ -101,24 +97,24 @@ namespace NzbDrone.Core.Datastore
             return new DatabaseConnectionInfo(DatabaseType.PostgreSQL, connectionBuilder.ConnectionString);
         }
 
-        /// <summary>
-        /// Validates that either Postgres connection strings are both set or neither are set, and that either connection strings or
-        /// other Postgres settings are set, but not both.
-        /// </summary>
-        /// <exception cref="ArgumentException">Thrown when configuration is invalid.</exception>
-        private void ValidatePostgresOptions()
+        private enum ConnectionStringType
         {
-            var isMainDBConnectionStringSet = !string.IsNullOrWhiteSpace(_configFileProvider.PostgresMainDbConnectionString);
-            var isLogDBConnectionStringSet = !string.IsNullOrWhiteSpace(_configFileProvider.PostgresLogDbConnectionString);
-            var isHostSet = !string.IsNullOrWhiteSpace(_configFileProvider.PostgresHost);
+            SQLite,
+            PostgreSQLVars,
+            PostgreSQLConnectionString
+        }
+
+        private ConnectionStringType GetConnectionStringType()
+        {
+            var isMainDBConnectionStringSet = !_configFileProvider.PostgresMainDbConnectionString.IsNullOrWhiteSpace();
+            var isLogDBConnectionStringSet = !_configFileProvider.PostgresLogDbConnectionString.IsNullOrWhiteSpace();
+            var isHostSet = !_configFileProvider.PostgresHost.IsNullOrWhiteSpace();
 
             if (!isHostSet && !isMainDBConnectionStringSet && !isLogDBConnectionStringSet)
             {
                 // No Postgres settings are set, so nothing to validate
-                return;
+                return ConnectionStringType.SQLite;
             }
-
-            _usePostgres = true;
 
             if (_configFileProvider.LogDbEnabled)
             {
@@ -133,18 +129,12 @@ namespace NzbDrone.Core.Datastore
                 }
             }
 
-            // At this point either all required connection strings are set or neither, so only one needs to be checked
-            var areConnectionStringConfigsSet = isMainDBConnectionStringSet;
-
-            // This one _must_ be set if connection strings are not being used, so it is used as a test to see if the user attempted configuration via individual settings
-            var areOtherPostgresConfigsSet = _configFileProvider.PostgresHost.IsNotNullOrWhiteSpace();
-
-            if (areConnectionStringConfigsSet && areOtherPostgresConfigsSet)
+            if (isMainDBConnectionStringSet && _configFileProvider.PostgresHost.IsNotNullOrWhiteSpace())
             {
                 throw new ArgumentException($"Either both Postgres connection strings must be set, or the other Postgres settings must be set, but not both.");
             }
 
-            _usePostgresConnectionStrings = areConnectionStringConfigsSet;
+            return isMainDBConnectionStringSet ? ConnectionStringType.PostgreSQLConnectionString : ConnectionStringType.PostgreSQLVars;
         }
     }
 }
