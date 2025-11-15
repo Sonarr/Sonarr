@@ -1,61 +1,22 @@
 import React from 'react';
 import Modal from 'Components/Modal/Modal';
-import DownloadProtocol from 'DownloadClient/DownloadProtocol';
 import { sizes } from 'Helpers/Props';
-import Language from 'Language/Language';
-import { QualityModel } from 'Quality/Quality';
-import { ReleaseEpisode } from 'typings/Release';
-import OverrideMatchModalContent from './OverrideMatchModalContent';
+import OverrideMatchModalContent, {
+  OverrideMatchModalContentProps,
+} from './OverrideMatchModalContent';
 
-interface OverrideMatchModalProps {
+interface OverrideMatchModalProps extends OverrideMatchModalContentProps {
   isOpen: boolean;
-  title: string;
-  indexerId: number;
-  guid: string;
-  seriesId?: number;
-  seasonNumber?: number;
-  episodes: ReleaseEpisode[];
-  languages: Language[];
-  quality: QualityModel;
-  protocol: DownloadProtocol;
-  isGrabbing: boolean;
-  grabError?: string;
-  onModalClose(): void;
 }
 
-function OverrideMatchModal(props: OverrideMatchModalProps) {
-  const {
-    isOpen,
-    title,
-    indexerId,
-    guid,
-    seriesId,
-    seasonNumber,
-    episodes,
-    languages,
-    quality,
-    protocol,
-    isGrabbing,
-    grabError,
-    onModalClose,
-  } = props;
-
+function OverrideMatchModal({
+  isOpen,
+  onModalClose,
+  ...otherProps
+}: OverrideMatchModalProps) {
   return (
     <Modal isOpen={isOpen} size={sizes.LARGE} onModalClose={onModalClose}>
-      <OverrideMatchModalContent
-        title={title}
-        indexerId={indexerId}
-        guid={guid}
-        seriesId={seriesId}
-        seasonNumber={seasonNumber}
-        episodes={episodes}
-        languages={languages}
-        quality={quality}
-        protocol={protocol}
-        isGrabbing={isGrabbing}
-        grabError={grabError}
-        onModalClose={onModalClose}
-      />
+      <OverrideMatchModalContent {...otherProps} onModalClose={onModalClose} />
     </Modal>
   );
 }

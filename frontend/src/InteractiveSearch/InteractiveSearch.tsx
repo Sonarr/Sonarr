@@ -1,118 +1,23 @@
-import React, { useCallback, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import ClientSideCollectionAppState from 'App/State/ClientSideCollectionAppState';
-import ReleasesAppState from 'App/State/ReleasesAppState';
+import React, { useCallback } from 'react';
+import { useSelector } from 'react-redux';
 import Alert from 'Components/Alert';
-import Icon from 'Components/Icon';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import FilterMenu from 'Components/Menu/FilterMenu';
 import PageMenuButton from 'Components/Menu/PageMenuButton';
-import Column from 'Components/Table/Column';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
-import { align, icons, kinds, sortDirections } from 'Helpers/Props';
+import { align, kinds } from 'Helpers/Props';
 import { SortDirection } from 'Helpers/Props/sortDirections';
-import {
-  fetchReleases,
-  grabRelease,
-  setEpisodeReleasesFilter,
-  setReleasesSort,
-  setSeasonReleasesFilter,
-} from 'Store/Actions/releaseActions';
-import createClientSideCollectionSelector from 'Store/Selectors/createClientSideCollectionSelector';
+import { createCustomFiltersSelector } from 'Store/Selectors/createClientSideCollectionSelector';
 import getErrorMessage from 'Utilities/Object/getErrorMessage';
 import translate from 'Utilities/String/translate';
 import InteractiveSearchFilterModal from './InteractiveSearchFilterModal';
 import InteractiveSearchPayload from './InteractiveSearchPayload';
 import InteractiveSearchRow from './InteractiveSearchRow';
 import InteractiveSearchType from './InteractiveSearchType';
+import { setReleaseOption, useReleaseOptions } from './releaseOptionsStore';
+import useReleases, { FILTERS, setReleaseSort } from './useReleases';
 import styles from './InteractiveSearch.css';
-
-const columns: Column[] = [
-  {
-    name: 'protocol',
-    label: () => translate('Source'),
-    isSortable: true,
-    isVisible: true,
-  },
-  {
-    name: 'age',
-    label: () => translate('Age'),
-    isSortable: true,
-    isVisible: true,
-  },
-  {
-    name: 'title',
-    label: () => translate('Title'),
-    isSortable: true,
-    isVisible: true,
-  },
-  {
-    name: 'indexer',
-    label: () => translate('Indexer'),
-    isSortable: true,
-    isVisible: true,
-  },
-  {
-    name: 'size',
-    label: () => translate('Size'),
-    isSortable: true,
-    isVisible: true,
-  },
-  {
-    name: 'peers',
-    label: () => translate('Peers'),
-    isSortable: true,
-    isVisible: true,
-  },
-  {
-    name: 'languageWeight',
-    label: () => translate('Languages'),
-    isSortable: true,
-    isVisible: true,
-  },
-  {
-    name: 'qualityWeight',
-    label: () => translate('Quality'),
-    isSortable: true,
-    isVisible: true,
-  },
-  {
-    name: 'customFormatScore',
-    label: React.createElement(Icon, {
-      name: icons.SCORE,
-      title: () => translate('CustomFormatScore'),
-    }),
-    isSortable: true,
-    isVisible: true,
-  },
-  {
-    name: 'indexerFlags',
-    label: React.createElement(Icon, {
-      name: icons.FLAG,
-      title: () => translate('IndexerFlags'),
-    }),
-    isSortable: true,
-    isVisible: true,
-  },
-  {
-    name: 'rejections',
-    label: React.createElement(Icon, {
-      name: icons.DANGER,
-      title: () => translate('Rejections'),
-    }),
-    isSortable: true,
-    fixedSortDirection: sortDirections.ASCENDING,
-    isVisible: true,
-  },
-  {
-    name: 'releaseWeight',
-    label: React.createElement(Icon, { name: icons.DOWNLOAD }),
-    isSortable: true,
-    fixedSortDirection: sortDirections.ASCENDING,
-    isVisible: true,
-  },
-];
 
 interface InteractiveSearchProps {
   type: InteractiveSearchType;
@@ -120,56 +25,35 @@ interface InteractiveSearchProps {
 }
 
 function InteractiveSearch({ type, searchPayload }: InteractiveSearchProps) {
+  const customFilters = useSelector(createCustomFiltersSelector('releases'));
+  const { columns } = useReleaseOptions();
+
   const {
     isFetching,
-    isPopulated,
+    isFetched,
     error,
-    items,
+    data,
     totalItems,
     selectedFilterKey,
-    filters,
-    customFilters,
     sortKey,
     sortDirection,
-  }: ReleasesAppState & ClientSideCollectionAppState = useSelector(
-    createClientSideCollectionSelector('releases', `releases.${type}`)
-  );
-
-  const dispatch = useDispatch();
+  } = useReleases(searchPayload);
 
   const handleFilterSelect = useCallback(
     (selectedFilterKey: string | number) => {
-      const action =
-        type === 'episode' ? setEpisodeReleasesFilter : setSeasonReleasesFilter;
-
-      dispatch(action({ selectedFilterKey }));
+      if (type === 'episode') {
+        setReleaseOption('episodeSelectedFilterKey', selectedFilterKey);
+      } else {
+        setReleaseOption('seasonSelectedFilterKey', selectedFilterKey);
+      }
     },
-    [type, dispatch]
+    [type]
   );
 
   const handleSortPress = useCallback(
     (sortKey: string, sortDirection?: SortDirection) => {
-      dispatch(setReleasesSort({ sortKey, sortDirection }));
+      setReleaseSort(sortKey, sortDirection);
     },
-    [dispatch]
-  );
-
-  const handleGrabPress = useCallback(
-    (payload: object) => {
-      dispatch(grabRelease(payload));
-    },
-    [dispatch]
-  );
-
-  useEffect(
-    () => {
-      // Only fetch releases if they are not already being fetched and not yet populated.
-
-      if (!isFetching && !isPopulated) {
-        dispatch(fetchReleases(searchPayload));
-      }
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 
@@ -181,11 +65,11 @@ function InteractiveSearch({ type, searchPayload }: InteractiveSearchProps) {
         <FilterMenu
           alignMenu={align.RIGHT}
           selectedFilterKey={selectedFilterKey}
-          filters={filters}
+          filters={FILTERS}
           customFilters={customFilters}
           buttonComponent={PageMenuButton}
           filterModalConnectorComponent={InteractiveSearchFilterModal}
-          filterModalConnectorComponentProps={{ type }}
+          filterModalConnectorComponentProps={{ type, searchPayload }}
           onFilterSelect={handleFilterSelect}
         />
       </div>
@@ -207,17 +91,17 @@ function InteractiveSearch({ type, searchPayload }: InteractiveSearchProps) {
         </div>
       ) : null}
 
-      {!isFetching && isPopulated && !totalItems ? (
+      {!isFetching && isFetched && !totalItems ? (
         <Alert kind={kinds.INFO}>{translate('NoResultsFound')}</Alert>
       ) : null}
 
-      {!!totalItems && isPopulated && !items.length ? (
+      {!!totalItems && !isFetching && !data.length ? (
         <Alert kind={kinds.WARNING}>
           {translate('AllResultsAreHiddenByTheAppliedFilter')}
         </Alert>
       ) : null}
 
-      {isPopulated && !!items.length ? (
+      {!isFetching && !!data.length ? (
         <Table
           columns={columns}
           sortKey={sortKey}
@@ -225,13 +109,12 @@ function InteractiveSearch({ type, searchPayload }: InteractiveSearchProps) {
           onSortPress={handleSortPress}
         >
           <TableBody>
-            {items.map((item) => {
+            {data.map((item) => {
               return (
                 <InteractiveSearchRow
-                  key={`${item.indexerId}-${item.guid}`}
+                  key={`${item.release.indexerId}-${item.release.guid}`}
                   {...item}
                   searchPayload={searchPayload}
-                  onGrabPress={handleGrabPress}
                 />
               );
             })}
@@ -239,7 +122,7 @@ function InteractiveSearch({ type, searchPayload }: InteractiveSearchProps) {
         </Table>
       ) : null}
 
-      {totalItems !== items.length && !!items.length ? (
+      {!isFetching && totalItems !== data.length && !!data.length ? (
         <div className={styles.filteredMessage}>
           {translate('SomeResultsAreHiddenByTheAppliedFilter')}
         </div>

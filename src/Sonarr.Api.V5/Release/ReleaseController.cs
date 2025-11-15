@@ -15,12 +15,13 @@ using NzbDrone.Core.Profiles.Qualities;
 using NzbDrone.Core.Tv;
 using NzbDrone.Core.Validation;
 using Sonarr.Http;
+using Sonarr.Http.REST;
 using HttpStatusCode = System.Net.HttpStatusCode;
 
 namespace Sonarr.Api.V5.Release;
 
 [V5ApiController]
-public class ReleaseController : ReleaseControllerBase
+public class ReleaseController : RestController<ReleaseResource>
 {
     private readonly IFetchAndParseRss _rssFetcherAndParser;
     private readonly ISearchForReleases _releaseSearchService;
@@ -32,6 +33,7 @@ public class ReleaseController : ReleaseControllerBase
     private readonly IParsingService _parsingService;
     private readonly Logger _logger;
 
+    private readonly QualityProfile _qualityProfile;
     private readonly ICached<RemoteEpisode> _remoteEpisodeCache;
 
     public ReleaseController(IFetchAndParseRss rssFetcherAndParser,
@@ -45,7 +47,6 @@ public class ReleaseController : ReleaseControllerBase
                          ICacheManager cacheManager,
                          IQualityProfileService qualityProfileService,
                          Logger logger)
-        : base(qualityProfileService)
     {
         _rssFetcherAndParser = rssFetcherAndParser;
         _releaseSearchService = releaseSearchService;
@@ -57,11 +58,23 @@ public class ReleaseController : ReleaseControllerBase
         _parsingService = parsingService;
         _logger = logger;
 
+        _qualityProfile = qualityProfileService.GetDefaultProfile(string.Empty);
+        _remoteEpisodeCache = cacheManager.GetCache<RemoteEpisode>(GetType(), "remoteEpisodes");
+
         PostValidator.RuleFor(s => s.Release).NotNull();
         PostValidator.RuleFor(s => s.Release!.IndexerId).ValidId();
         PostValidator.RuleFor(s => s.Release!.Guid).NotEmpty();
+    }
 
-        _remoteEpisodeCache = cacheManager.GetCache<RemoteEpisode>(GetType(), "remoteEpisodes");
+    [NonAction]
+    public override ActionResult<ReleaseResource> GetResourceByIdWithErrorHandler(int id)
+    {
+        return base.GetResourceByIdWithErrorHandler(id);
+    }
+
+    protected override ReleaseResource GetResourceById(int id)
+    {
+        throw new NotImplementedException();
     }
 
     [HttpPost]
@@ -234,14 +247,6 @@ public class ReleaseController : ReleaseControllerBase
         return MapDecisions(prioritizedDecisions);
     }
 
-    protected override ReleaseResource MapDecision(DownloadDecision decision, int initialWeight)
-    {
-        var resource = base.MapDecision(decision, initialWeight);
-        _remoteEpisodeCache.Set(GetCacheKey(resource), decision.RemoteEpisode, TimeSpan.FromMinutes(30));
-
-        return resource;
-    }
-
     private string GetCacheKey(ReleaseResource resource)
     {
         return string.Concat(resource.Release!.IndexerId, "_", resource.Release!.Guid);
@@ -250,5 +255,19 @@ public class ReleaseController : ReleaseControllerBase
     private string GetCacheKey(ReleaseGrabResource resource)
     {
         return string.Concat(resource.IndexerId, "_", resource.Guid);
+    }
+
+    private List<ReleaseResource> MapDecisions(IEnumerable<DownloadDecision> decisions)
+    {
+        var result = new List<ReleaseResource>();
+
+        foreach (var downloadDecision in decisions)
+        {
+            var release = downloadDecision.MapDecision(result.Count, _qualityProfile);
+
+            result.Add(release);
+        }
+
+        return result;
     }
 }

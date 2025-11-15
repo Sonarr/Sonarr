@@ -1,11 +1,11 @@
 import React, { useCallback, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import AppState from 'App/State/AppState';
+import { useDispatch } from 'react-redux';
 import * as commandNames from 'Commands/commandNames';
 import Icon from 'Components/Icon';
 import Button from 'Components/Link/Button';
 import { icons, kinds, sizes } from 'Helpers/Props';
 import InteractiveSearch from 'InteractiveSearch/InteractiveSearch';
+import useReleases from 'InteractiveSearch/useReleases';
 import { executeCommand } from 'Store/Actions/commandActions';
 import translate from 'Utilities/String/translate';
 import styles from './EpisodeSearch.css';
@@ -22,10 +22,10 @@ function EpisodeSearch({
   onModalClose,
 }: EpisodeSearchProps) {
   const dispatch = useDispatch();
-  const { isPopulated } = useSelector((state: AppState) => state.releases);
+  const { isFetched } = useReleases({ episodeId });
 
   const [isInteractiveSearchOpen, setIsInteractiveSearchOpen] = useState(
-    startInteractiveSearch || isPopulated
+    startInteractiveSearch || isFetched
   );
 
   const handleQuickSearchPress = useCallback(() => {

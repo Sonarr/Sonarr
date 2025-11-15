@@ -8,7 +8,7 @@ import FilterBuilderRowValue, {
 } from './FilterBuilderRowValue';
 
 type SeriesFilterBuilderRowValueProps<T> = Omit<
-  FilterBuilderRowValueProps<T, number>,
+  FilterBuilderRowValueProps<T, number, string>,
   'tagList'
 >;
 

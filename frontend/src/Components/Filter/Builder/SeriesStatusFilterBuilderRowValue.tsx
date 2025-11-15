@@ -32,7 +32,7 @@ const statusTagList = [
 ];
 
 type SeriesStatusFilterBuilderRowValueProps<T> = Omit<
-  FilterBuilderRowValueProps<T, string>,
+  FilterBuilderRowValueProps<T, string, string>,
   'tagList'
 >;
 

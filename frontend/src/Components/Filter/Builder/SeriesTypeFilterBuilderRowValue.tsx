@@ -26,7 +26,7 @@ const seriesTypeList = [
 ];
 
 type SeriesTypeFilterBuilderRowValueProps<T> = Omit<
-  FilterBuilderRowValueProps<T, string>,
+  FilterBuilderRowValueProps<T, string, string>,
   'tagList'
 >;
 

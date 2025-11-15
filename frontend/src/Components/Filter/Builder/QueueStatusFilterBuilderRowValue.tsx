@@ -62,7 +62,7 @@ const statusTagList = [
 ];
 
 type QueueStatusFilterBuilderRowValueProps<T> = Omit<
-  FilterBuilderRowValueProps<T, string>,
+  FilterBuilderRowValueProps<T, string, string>,
   'tagList'
 >;
 

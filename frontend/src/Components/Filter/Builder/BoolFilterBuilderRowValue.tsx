@@ -9,7 +9,7 @@ const protocols = [
 ];
 
 type BoolFilterBuilderRowValueProps<T> = Omit<
-  FilterBuilderRowValueProps<T, boolean>,
+  FilterBuilderRowValueProps<T, boolean, string>,
   'tagList'
 >;
 

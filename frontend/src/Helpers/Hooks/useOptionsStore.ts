@@ -85,25 +85,7 @@ export const createOptionsStore = <T extends TSettings>(
   }) => {
     // @ts-expect-error - Cannot verify if T has sortKey and sortDirection
     store.setState((state) => {
-      if ('sortKey' in state === false || 'sortDirection' in state === false) {
-        return state;
-      }
-
-      let newSortDirection = sortDirection;
-
-      if (sortDirection == null) {
-        if (state.sortKey === sortKey) {
-          newSortDirection =
-            state.sortDirection === 'ascending' ? 'descending' : 'ascending';
-        } else {
-          newSortDirection = state.sortDirection;
-        }
-      }
-
-      return {
-        sortKey,
-        sortDirection: newSortDirection,
-      };
+      return applySort(state, sortKey, sortDirection);
     });
   };
 
@@ -186,5 +168,31 @@ const mergeColumns = <T extends { columns: Column[] }>(
   return {
     ...(persistedState as T),
     columns,
+  };
+};
+
+export const applySort = <T extends TSettings>(
+  state: T,
+  sortKey: string,
+  sortDirection: SortDirection | undefined
+) => {
+  if ('sortKey' in state === false || 'sortDirection' in state === false) {
+    return state;
+  }
+
+  let newSortDirection = sortDirection;
+
+  if (sortDirection == null) {
+    if (state.sortKey === sortKey) {
+      newSortDirection =
+        state.sortDirection === 'ascending' ? 'descending' : 'ascending';
+    } else {
+      newSortDirection = state.sortDirection;
+    }
+  }
+
+  return {
+    sortKey,
+    sortDirection: newSortDirection,
   };
 };

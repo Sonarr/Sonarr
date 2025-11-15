@@ -44,7 +44,7 @@ const EVENT_TYPE_OPTIONS = [
 ];
 
 type QualityProfileFilterBuilderRowValueProps<T> = Omit<
-  FilterBuilderRowValueProps<T, number>,
+  FilterBuilderRowValueProps<T, number, string>,
   'tagList'
 >;
 

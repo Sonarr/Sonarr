@@ -80,34 +80,41 @@ function getValue<T>(
   return input;
 }
 
-interface FreeFormValue {
+export interface FreeFormValue {
   name: string;
 }
 
-export interface FilterBuilderTag<V extends string | number | boolean>
-  extends TagBase {
-  id: V;
-  name: string | number;
+export interface FilterBuilderTag<
+  TId extends string | number | boolean,
+  TName extends string | number
+> extends TagBase {
+  id: TId;
+  name: TName;
 }
 
 export interface FilterBuilderRowValueProps<
   T,
-  V extends string | number | boolean
+  V extends string | number | boolean,
+  TagName extends string | number
 > {
   filterType: FilterType;
   filterValue: V[];
   sectionItems: T[];
   selectedFilterBuilderProp: FilterBuilderProp<T>;
-  tagList: FilterBuilderTag<V>[];
+  tagList: FilterBuilderTag<V, TagName>[];
   onChange: InputOnChange<V[]>;
 }
 
-function FilterBuilderRowValue<T, V extends string | number | boolean>({
+function FilterBuilderRowValue<
+  T,
+  V extends string | number | boolean,
+  TagName extends string | number
+>({
   filterValue = [],
   selectedFilterBuilderProp,
   tagList,
   onChange,
-}: FilterBuilderRowValueProps<T, V>) {
+}: FilterBuilderRowValueProps<T, V, TagName>) {
   const hasItems = !!tagList.length;
 
   const tags = useMemo(() => {
@@ -129,7 +136,7 @@ function FilterBuilderRowValue<T, V extends string | number | boolean>({
   }, [filterValue, tagList, selectedFilterBuilderProp, hasItems]);
 
   const handleTagAdd = useCallback(
-    (tag: FilterBuilderTag<V> | FreeFormValue) => {
+    (tag: FilterBuilderTag<V, TagName> | FreeFormValue) => {
       if ('id' in tag) {
         onChange({
           name: NAME,
@@ -172,6 +179,7 @@ function FilterBuilderRowValue<T, V extends string | number | boolean>({
       delimiters={['Tab', 'Enter']}
       minQueryLength={0}
       tagComponent={FilterBuilderRowValueTag}
+      // @ts-expect-error - TS is having trouble inferring the generic type here
       onTagAdd={handleTagAdd}
       onTagDelete={handleTagDelete}
     />

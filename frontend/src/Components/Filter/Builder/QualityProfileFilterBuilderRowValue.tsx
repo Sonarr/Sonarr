@@ -17,7 +17,7 @@ function createQualityProfilesSelector() {
 }
 
 type QualityProfileFilterBuilderRowValueProps<T> = Omit<
-  FilterBuilderRowValueProps<T, number>,
+  FilterBuilderRowValueProps<T, number, string>,
   'tagList'
 >;
 

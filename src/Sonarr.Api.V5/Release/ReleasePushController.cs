@@ -21,8 +21,9 @@ public class ReleasePushController : RestController<ReleasePushResource>
     private readonly IProcessDownloadDecisions _downloadDecisionProcessor;
     private readonly IIndexerFactory _indexerFactory;
     private readonly IDownloadClientFactory _downloadClientFactory;
-    private readonly IQualityProfileService _qualityProfileService;
     private readonly Logger _logger;
+
+    private readonly QualityProfile _qualityProfile;
 
     private static readonly object PushLock = new object();
 
@@ -37,8 +38,9 @@ public class ReleasePushController : RestController<ReleasePushResource>
         _downloadDecisionProcessor = downloadDecisionProcessor;
         _indexerFactory = indexerFactory;
         _downloadClientFactory = downloadClientFactory;
-        _qualityProfileService = qualityProfileService;
         _logger = logger;
+
+        _qualityProfile = qualityProfileService.GetDefaultProfile(string.Empty);
 
         PostValidator.RuleFor(s => s.Title).NotEmpty();
         PostValidator.RuleFor(s => s.DownloadUrl).NotEmpty().When(s => s.MagnetUrl.IsNullOrWhiteSpace());
@@ -79,7 +81,7 @@ public class ReleasePushController : RestController<ReleasePushResource>
             throw new ValidationException(new List<ValidationFailure> { new("Title", "Unable to parse", release.Title) });
         }
 
-        return decision.MapDecision(1, _qualityProfileService.GetDefaultProfile(string.Empty));
+        return decision.MapDecision(1, _qualityProfile);
     }
 
     private void ResolveIndexer(ReleaseInfo release)

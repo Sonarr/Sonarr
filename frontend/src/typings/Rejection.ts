@@ -1,11 +1,7 @@
-export enum RejectionType {
-  Permanent = 'permanent',
-  Temporary = 'temporary',
-}
-
 interface Rejection {
+  message: string;
   reason: string;
-  type: RejectionType;
+  type: 'permanent' | 'temporary';
 }
 
 export default Rejection;

@@ -7,7 +7,7 @@ import FilterBuilderRowValue, {
 } from './FilterBuilderRowValue';
 
 type IndexerFilterBuilderRowValueProps<T> = Omit<
-  FilterBuilderRowValueProps<T, number>,
+  FilterBuilderRowValueProps<T, number, string>,
   'tagList'
 >;
 

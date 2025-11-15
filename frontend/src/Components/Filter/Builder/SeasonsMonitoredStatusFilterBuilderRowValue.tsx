@@ -26,7 +26,7 @@ const seasonsMonitoredStatusList = [
 ];
 
 type SeasonsMonitoredStatusFilterBuilderRowValueProps<T> = Omit<
-  FilterBuilderRowValueProps<T, string>,
+  FilterBuilderRowValueProps<T, string, string>,
   'tagList'
 >;
 

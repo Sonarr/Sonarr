@@ -33,7 +33,7 @@ function isInFilter(filterType: FilterType) {
 
 interface DateFilterBuilderRowValueProps<T>
   extends Omit<
-    FilterBuilderRowValueProps<T, string>,
+    FilterBuilderRowValueProps<T, string, string>,
     'filterValue' | 'onChange'
   > {
   filterValue: string | DateFilterValue;

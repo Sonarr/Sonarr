@@ -6,7 +6,7 @@ import FilterBuilderRowValue, {
 } from './FilterBuilderRowValue';
 
 type LanguageFilterBuilderRowValueProps<T> = Omit<
-  FilterBuilderRowValueProps<T, number>,
+  FilterBuilderRowValueProps<T, number, string>,
   'tagList'
 >;
 

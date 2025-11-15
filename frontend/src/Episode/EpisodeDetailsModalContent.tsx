@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import Button from 'Components/Link/Button';
@@ -14,10 +14,6 @@ import useEpisode, { EpisodeEntity } from 'Episode/useEpisode';
 import Series from 'Series/Series';
 import useSeries from 'Series/useSeries';
 import { toggleEpisodeMonitored } from 'Store/Actions/episodeActions';
-import {
-  cancelFetchReleases,
-  clearReleases,
-} from 'Store/Actions/releaseActions';
 import translate from 'Utilities/String/translate';
 import EpisodeHistory from './History/EpisodeHistory';
 import EpisodeSearch from './Search/EpisodeSearch';
@@ -95,15 +91,6 @@ function EpisodeDetailsModalContent(props: EpisodeDetailsModalContentProps) {
     },
     [episodeEntity, episodeId, dispatch]
   );
-
-  useEffect(() => {
-    return () => {
-      // Clear pending releases here, so we can reshow the search
-      // results even after switching tabs.
-      dispatch(cancelFetchReleases());
-      dispatch(clearReleases());
-    };
-  }, [dispatch]);
 
   const seriesLink = `/series/${titleSlug}`;
 
