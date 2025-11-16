@@ -2,6 +2,7 @@ using System;
 using System.Data.SQLite;
 using Npgsql;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Common.Exceptions;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Configuration;
 
@@ -24,20 +25,20 @@ namespace NzbDrone.Core.Datastore
 
             switch (GetConnectionStringType())
             {
-                case ConnectionStringType.PostgreSQLVars:
+                case ConnectionStringType.PostgreSqlVars:
                     MainDbConnection = GetPostgresConnectionString(_configFileProvider.PostgresMainDb);
                     LogDbConnection = GetPostgresConnectionString(_configFileProvider.PostgresLogDb);
                     break;
-                case ConnectionStringType.PostgreSQLConnectionString:
+                case ConnectionStringType.PostgreSqlConnectionString:
                     MainDbConnection = GetPostgresConnectionInfoFromConnectionString(_configFileProvider.PostgresMainDbConnectionString);
                     LogDbConnection = GetPostgresConnectionInfoFromConnectionString(_configFileProvider.PostgresLogDbConnectionString);
                     break;
-                case ConnectionStringType.SQLite:
+                case ConnectionStringType.Sqlite:
                     MainDbConnection = GetConnectionString(appFolderInfo.GetDatabase());
                     LogDbConnection = GetConnectionString(appFolderInfo.GetLogDatabase());
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    throw new SonarrStartupException("Unable to determine database connection string for type {0}.", value.ToString());
             }
         }
 
@@ -74,7 +75,7 @@ namespace NzbDrone.Core.Datastore
 
         private DatabaseConnectionInfo GetPostgresConnectionString(string dbName)
         {
-            var connectionBuilder = new NpgsqlConnectionStringBuilder()
+            var connectionBuilder = new NpgsqlConnectionStringBuilder
             {
                 Database = dbName,
                 Host = _configFileProvider.PostgresHost,
@@ -97,13 +98,6 @@ namespace NzbDrone.Core.Datastore
             return new DatabaseConnectionInfo(DatabaseType.PostgreSQL, connectionBuilder.ConnectionString);
         }
 
-        private enum ConnectionStringType
-        {
-            SQLite,
-            PostgreSQLVars,
-            PostgreSQLConnectionString
-        }
-
         private ConnectionStringType GetConnectionStringType()
         {
             var isMainDBConnectionStringSet = !_configFileProvider.PostgresMainDbConnectionString.IsNullOrWhiteSpace();
@@ -113,28 +107,35 @@ namespace NzbDrone.Core.Datastore
             if (!isHostSet && !isMainDBConnectionStringSet && !isLogDBConnectionStringSet)
             {
                 // No Postgres settings are set, so nothing to validate
-                return ConnectionStringType.SQLite;
+                return ConnectionStringType.Sqlite;
             }
 
             if (_configFileProvider.LogDbEnabled)
             {
                 if (!isMainDBConnectionStringSet && isLogDBConnectionStringSet)
                 {
-                    throw new ArgumentException("Postgres MainDbConnectionString is set but LogDbConnectionString is not. Both must be set or neither.");
+                    throw new SonarrStartupException("Postgres MainDbConnectionString is set but LogDbConnectionString is not. Both must be set or neither.");
                 }
 
                 if (isLogDBConnectionStringSet && !isMainDBConnectionStringSet)
                 {
-                    throw new ArgumentException("Postgres LogDbConnectionString is set but MainDbConnectionString is not. Both must be set or neither.");
+                    throw new SonarrStartupException("Postgres LogDbConnectionString is set but MainDbConnectionString is not. Both must be set or neither.");
                 }
             }
 
             if (isMainDBConnectionStringSet && _configFileProvider.PostgresHost.IsNotNullOrWhiteSpace())
             {
-                throw new ArgumentException($"Either both Postgres connection strings must be set, or the other Postgres settings must be set, but not both.");
+                throw new SonarrStartupException($"Either both Postgres connection strings must be set, or the other Postgres settings must be set, but not both.");
             }
 
-            return isMainDBConnectionStringSet ? ConnectionStringType.PostgreSQLConnectionString : ConnectionStringType.PostgreSQLVars;
+            return isMainDBConnectionStringSet ? ConnectionStringType.PostgreSqlConnectionString : ConnectionStringType.PostgreSqlVars;
+        }
+
+        private enum ConnectionStringType
+        {
+            Sqlite,
+            PostgreSqlVars,
+            PostgreSqlConnectionString
         }
     }
 }
