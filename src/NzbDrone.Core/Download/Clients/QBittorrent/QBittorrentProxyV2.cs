@@ -352,7 +352,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             var requestBuilder = new HttpRequestBuilder(settings.UseSsl, settings.Host, settings.Port, settings.UrlBase)
             {
                 LogResponseContent = true,
-                NetworkCredential = new BasicNetworkCredential(settings.Username, settings.Password)
+                StoreRequestCookie = false
             };
             return requestBuilder;
         }
@@ -413,7 +413,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                 return;
             }
 
-            var authKey = string.Format("{0}:{1}", requestBuilder.BaseUrl, settings.Password);
+            var authKey = $"{requestBuilder.BaseUrl}:{settings.Username}:{settings.Password}";
 
             var cookies = _authCookieCache.Find(authKey);
 
@@ -421,7 +421,10 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
             {
                 _authCookieCache.Remove(authKey);
 
-                var authLoginRequest = BuildRequest(settings).Resource("/api/v2/auth/login")
+                var authRequestBuilder = BuildRequest(settings);
+                authRequestBuilder.NetworkCredential = new BasicNetworkCredential(settings.Username, settings.Password);
+
+                var authLoginRequest = authRequestBuilder.Resource("/api/v2/auth/login")
                                                              .Post()
                                                              .AddFormParameter("username", settings.Username ?? string.Empty)
                                                              .AddFormParameter("password", settings.Password ?? string.Empty)
