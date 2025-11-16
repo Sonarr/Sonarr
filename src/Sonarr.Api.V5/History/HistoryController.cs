@@ -21,18 +21,21 @@ public class HistoryController : Controller
     private readonly IUpgradableSpecification _upgradableSpecification;
     private readonly IFailedDownloadService _failedDownloadService;
     private readonly ISeriesService _seriesService;
+    private readonly IEpisodeService _episodeService;
 
     public HistoryController(IHistoryService historyService,
                          ICustomFormatCalculationService formatCalculator,
                          IUpgradableSpecification upgradableSpecification,
                          IFailedDownloadService failedDownloadService,
-                         ISeriesService seriesService)
+                         ISeriesService seriesService,
+                         IEpisodeService episodeService)
     {
         _historyService = historyService;
         _formatCalculator = formatCalculator;
         _upgradableSpecification = upgradableSpecification;
         _failedDownloadService = failedDownloadService;
         _seriesService = seriesService;
+        _episodeService = episodeService;
     }
 
     protected HistoryResource MapToResource(EpisodeHistory model, bool includeSeries, bool includeEpisode)
@@ -103,19 +106,9 @@ public class HistoryController : Controller
 
     [HttpGet("series")]
     [Produces("application/json")]
-    public List<HistoryResource> GetSeriesHistory(int seriesId, int? seasonNumber, EpisodeHistoryEventType? eventType = null, bool includeSeries = false, bool includeEpisode = false)
+    public List<HistoryResource> GetSeriesHistory(int seriesId, EpisodeHistoryEventType? eventType = null, bool includeSeries = false, bool includeEpisode = false)
     {
         var series = _seriesService.GetSeries(seriesId);
-
-        if (seasonNumber.HasValue)
-        {
-            return _historyService.GetBySeason(seriesId, seasonNumber.Value, eventType).Select(h =>
-            {
-                h.Series = series;
-
-                return MapToResource(h, includeSeries, includeEpisode);
-            }).ToList();
-        }
 
         return _historyService.GetBySeries(seriesId, eventType).Select(h =>
         {
@@ -123,6 +116,37 @@ public class HistoryController : Controller
 
             return MapToResource(h, includeSeries, includeEpisode);
         }).ToList();
+    }
+
+    [HttpGet("season")]
+    [Produces("application/json")]
+    public List<HistoryResource> GetSeasonHistory(int seriesId, int seasonNumber, EpisodeHistoryEventType? eventType = null, bool includeSeries = false, bool includeEpisode = false)
+    {
+        var series = _seriesService.GetSeries(seriesId);
+
+        return _historyService.GetBySeason(seriesId, seasonNumber, eventType).Select(h =>
+        {
+            h.Series = series;
+
+            return MapToResource(h, includeSeries, includeEpisode);
+        }).ToList();
+    }
+
+    [HttpGet("episode")]
+    [Produces("application/json")]
+    public List<HistoryResource> GetEpisodeHistory(int episodeId, EpisodeHistoryEventType? eventType = null, bool includeSeries = false, bool includeEpisode = false)
+    {
+        var episode = _episodeService.GetEpisode(episodeId);
+        var series = _seriesService.GetSeries(episode.SeriesId);
+
+        return _historyService.GetByEpisode(episodeId, eventType)
+            .Select(h =>
+            {
+                h.Series = series;
+                h.Episode = episode;
+
+                return MapToResource(h, includeSeries, includeEpisode);
+            }).ToList();
     }
 
     [HttpPost("failed/{id}")]

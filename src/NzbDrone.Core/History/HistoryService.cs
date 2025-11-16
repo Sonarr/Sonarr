@@ -23,6 +23,7 @@ namespace NzbDrone.Core.History
         EpisodeHistory Get(int historyId);
         List<EpisodeHistory> GetBySeries(int seriesId, EpisodeHistoryEventType? eventType);
         List<EpisodeHistory> GetBySeason(int seriesId, int seasonNumber, EpisodeHistoryEventType? eventType);
+        List<EpisodeHistory> GetByEpisode(int episodeId, EpisodeHistoryEventType? eventType);
         List<EpisodeHistory> Find(string downloadId, EpisodeHistoryEventType eventType);
         List<EpisodeHistory> FindByDownloadId(string downloadId);
         string FindDownloadId(EpisodeImportedEvent trackedDownload);
@@ -80,6 +81,11 @@ namespace NzbDrone.Core.History
         public List<EpisodeHistory> GetBySeason(int seriesId, int seasonNumber, EpisodeHistoryEventType? eventType)
         {
             return _historyRepository.GetBySeason(seriesId, seasonNumber, eventType);
+        }
+
+        public List<EpisodeHistory> GetByEpisode(int episodeId, EpisodeHistoryEventType? eventType)
+        {
+            return _historyRepository.GetByEpisode(episodeId, eventType);
         }
 
         public List<EpisodeHistory> Find(string downloadId, EpisodeHistoryEventType eventType)
