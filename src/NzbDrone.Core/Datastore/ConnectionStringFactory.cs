@@ -23,7 +23,8 @@ namespace NzbDrone.Core.Datastore
         {
             _configFileProvider = configFileProvider;
 
-            switch (GetConnectionStringType())
+            var connectionStringType = GetConnectionStringType();
+            switch (connectionStringType)
             {
                 case ConnectionStringType.PostgreSqlVars:
                     MainDbConnection = GetPostgresConnectionString(_configFileProvider.PostgresMainDb);
@@ -38,7 +39,7 @@ namespace NzbDrone.Core.Datastore
                     LogDbConnection = GetConnectionString(appFolderInfo.GetLogDatabase());
                     break;
                 default:
-                    throw new SonarrStartupException("Unable to determine database connection string for type {0}.", value.ToString());
+                    throw new SonarrStartupException("Unable to determine database connection string for type {0}.", connectionStringType.ToString());
             }
         }
 
