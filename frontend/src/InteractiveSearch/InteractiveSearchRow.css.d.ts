@@ -2,9 +2,11 @@
 // Please do not change this file!
 interface CssExports {
   'age': string;
+  'blocklistIconContainer': string;
   'customFormatScore': string;
   'download': string;
   'downloadIcon': string;
+  'history': string;
   'indexer': string;
   'indexerFlags': string;
   'interactiveIcon': string;

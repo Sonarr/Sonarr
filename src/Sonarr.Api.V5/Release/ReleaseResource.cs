@@ -13,6 +13,7 @@ public class ReleaseResource : RestResource
     public ParsedEpisodeInfoResource? ParsedInfo { get; set; }
     public ReleaseInfoResource? Release { get; set; }
     public ReleaseDecisionResource? Decision { get; set; }
+    public ReleaseHistoryResource? History { get; set; }
     public int QualityWeight { get; set; }
     public List<Language> Languages { get; set; } = [];
     public int? MappedSeasonNumber { get; set; }
@@ -54,20 +55,6 @@ public static class ReleaseResourceMapper
             CustomFormats = remoteEpisode.CustomFormats?.ToResource(false),
             SceneMapping = remoteEpisode.SceneMapping?.ToResource(),
         };
-    }
-
-    public static List<ReleaseResource> MapDecisions(this IEnumerable<DownloadDecision> decisions, QualityProfile profile)
-    {
-        var result = new List<ReleaseResource>();
-
-        foreach (var downloadDecision in decisions)
-        {
-            var release = MapDecision(downloadDecision, result.Count, profile);
-
-            result.Add(release);
-        }
-
-        return result;
     }
 
     public static ReleaseResource MapDecision(this DownloadDecision decision, int initialWeight, QualityProfile profile)

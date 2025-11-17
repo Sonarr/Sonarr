@@ -7,6 +7,7 @@ using NzbDrone.Core.Download;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
+using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv.Events;
 
@@ -109,62 +110,12 @@ namespace NzbDrone.Core.Blocklisting
 
         private bool SameNzb(Blocklist item, ReleaseInfo release)
         {
-            if (item.PublishedDate == release.PublishDate)
-            {
-                return true;
-            }
-
-            if (!HasSameIndexer(item, release.Indexer) &&
-                HasSamePublishedDate(item, release.PublishDate) &&
-                HasSameSize(item, release.Size))
-            {
-                return true;
-            }
-
-            return false;
+            return ReleaseComparer.SameNzb(new ReleaseComparerModel(item), release);
         }
 
         private bool SameTorrent(Blocklist item, TorrentInfo release)
         {
-            if (release.InfoHash.IsNotNullOrWhiteSpace())
-            {
-                return release.InfoHash.Equals(item.TorrentInfoHash, StringComparison.InvariantCultureIgnoreCase);
-            }
-
-            return HasSameIndexer(item, release.Indexer);
-        }
-
-        private bool HasSameIndexer(Blocklist item, string indexer)
-        {
-            if (item.Indexer.IsNullOrWhiteSpace())
-            {
-                return true;
-            }
-
-            return item.Indexer.Equals(indexer, StringComparison.InvariantCultureIgnoreCase);
-        }
-
-        private bool HasSamePublishedDate(Blocklist item, DateTime publishedDate)
-        {
-            if (!item.PublishedDate.HasValue)
-            {
-                return true;
-            }
-
-            return item.PublishedDate.Value.AddMinutes(-2) <= publishedDate &&
-                   item.PublishedDate.Value.AddMinutes(2) >= publishedDate;
-        }
-
-        private bool HasSameSize(Blocklist item, long size)
-        {
-            if (!item.Size.HasValue)
-            {
-                return true;
-            }
-
-            var difference = Math.Abs(item.Size.Value - size);
-
-            return difference <= 2.Megabytes();
+            return ReleaseComparer.SameTorrent(new ReleaseComparerModel(item), release);
         }
 
         public void Execute(ClearBlocklistCommand message)

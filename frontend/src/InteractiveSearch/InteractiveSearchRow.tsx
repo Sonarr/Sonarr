@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import ProtocolLabel from 'Activity/Queue/ProtocolLabel';
 import Icon from 'Components/Icon';
@@ -78,6 +78,7 @@ interface InteractiveSearchRowProps extends Release {
 function InteractiveSearchRow(props: InteractiveSearchRowProps) {
   const {
     decision,
+    history,
     parsedInfo,
     release,
     publishDate,
@@ -128,6 +129,12 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
   const [isConfirmGrabModalOpen, setIsConfirmGrabModalOpen] = useState(false);
   const [isOverrideModalOpen, setIsOverrideModalOpen] = useState(false);
   const { isGrabbing, isGrabbed, grabError, grabRelease } = useGrabRelease();
+
+  const isBlocklisted = useMemo(() => {
+    return (
+      decision.rejections.findIndex((r) => r.reason === 'blocklisted') >= 0
+    );
+  }, [decision]);
 
   const handleGrabPress = useCallback(() => {
     if (downloadAllowed) {
@@ -205,6 +212,56 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
       </TableRowCell>
 
       <TableRowCell className={styles.indexer}>{indexer}</TableRowCell>
+
+      <TableRowCell className={styles.history}>
+        {history ? (
+          <Icon
+            name={icons.DOWNLOADING}
+            kind={history.failed ? kinds.DANGER : kinds.DEFAULT}
+            title={`${
+              history.failed
+                ? translate('FailedAt', {
+                    date: formatDateTime(
+                      history.failed,
+                      longDateFormat,
+                      timeFormat,
+                      { includeSeconds: true }
+                    ),
+                  })
+                : translate('GrabbedAt', {
+                    date: formatDateTime(
+                      history.grabbed,
+                      longDateFormat,
+                      timeFormat,
+                      { includeSeconds: true }
+                    ),
+                  })
+            }`}
+          />
+        ) : null}
+
+        {isBlocklisted ? (
+          <Icon
+            containerClassName={
+              history ? styles.blocklistIconContainer : undefined
+            }
+            name={icons.BLOCKLIST}
+            kind={kinds.DANGER}
+            title={
+              history?.failed
+                ? `${translate('BlockListedAt', {
+                    date: formatDateTime(
+                      history.failed,
+                      longDateFormat,
+                      timeFormat,
+                      { includeSeconds: true }
+                    ),
+                  })}`
+                : translate('Blocklisted')
+            }
+          />
+        ) : null}
+      </TableRowCell>
 
       <TableRowCell className={styles.size}>{formatBytes(size)}</TableRowCell>
 

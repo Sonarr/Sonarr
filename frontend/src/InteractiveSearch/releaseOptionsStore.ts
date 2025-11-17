@@ -51,6 +51,13 @@ const { useOptions, useOption, getOptions, getOption, setOptions, setOption } =
           isVisible: true,
         },
         {
+          name: 'history',
+          label: translate('History'),
+          isSortable: true,
+          fixedSortDirection: 'ascending',
+          isVisible: true,
+        },
+        {
           name: 'size',
           label: () => translate('Size'),
           isSortable: true,

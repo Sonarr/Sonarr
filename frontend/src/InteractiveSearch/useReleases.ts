@@ -42,6 +42,7 @@ export interface Release extends ModelBase {
   parsedInfo: ParsedInfo;
   release: ReleaseInfo;
   decision: Decision;
+  history?: ReleaseHistory;
   qualityWeight: number;
   languages: Language[];
   mappedSeriesId?: number;
@@ -102,6 +103,11 @@ export interface Decision {
   temporarilyRejected: boolean;
   rejected: boolean;
   rejections: Rejection[];
+}
+
+export interface ReleaseHistory {
+  grabbed: string;
+  failed: string;
 }
 
 export const FILTERS: Filter[] = [

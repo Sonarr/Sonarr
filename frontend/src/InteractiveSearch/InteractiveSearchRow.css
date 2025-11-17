@@ -51,6 +51,16 @@
   width: 50px;
 }
 
+.history {
+  composes: cell from '~Components/Table/Cells/TableRowCell.css';
+
+  width: 75px;
+}
+
+.blocklistIconContainer {
+  margin-left: 5px;
+}
+
 .age,
 .size {
   composes: cell from '~Components/Table/Cells/TableRowCell.css';
