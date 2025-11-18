@@ -956,7 +956,7 @@ function InteractiveImportModalContentInner(
             isDisabled={!selectedIds.length || !!invalidRowsSelected.length}
             onPress={onImportSelectedPress}
           >
-            {translate('Import')}
+            {folder ? translate('Apply') : translate('Import')}
           </Button>
         </div>
       </ModalFooter>
