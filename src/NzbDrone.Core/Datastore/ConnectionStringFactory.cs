@@ -24,6 +24,7 @@ namespace NzbDrone.Core.Datastore
             _configFileProvider = configFileProvider;
 
             var connectionStringType = GetConnectionStringType();
+
             switch (connectionStringType)
             {
                 case ConnectionStringType.PostgreSqlVars:
