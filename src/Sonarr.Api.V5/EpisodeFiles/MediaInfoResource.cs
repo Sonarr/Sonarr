@@ -25,8 +25,13 @@ namespace Sonarr.Api.V5.EpisodeFiles
 
     public static class MediaInfoResourceMapper
     {
-        public static MediaInfoResource ToResource(this MediaInfoModel model, string sceneName)
+        public static MediaInfoResource? ToResource(this MediaInfoModel? model, string sceneName)
         {
+            if (model == null)
+            {
+                return null;
+            }
+
             return new MediaInfoResource
             {
                 AudioBitrate = model.AudioBitrate,

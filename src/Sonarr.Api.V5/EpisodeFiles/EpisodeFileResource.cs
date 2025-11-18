@@ -19,9 +19,9 @@ namespace Sonarr.Api.V5.EpisodeFiles
         public DateTime DateAdded { get; set; }
         public string? SceneName { get; set; }
         public string? ReleaseGroup { get; set; }
-        public required List<Language> Languages { get; set; }
-        public required QualityModel Quality { get; set; }
-        public required List<CustomFormatResource> CustomFormats { get; set; }
+        public List<Language> Languages { get; set; } = [];
+        public QualityModel? Quality { get; set; }
+        public List<CustomFormatResource> CustomFormats { get; set; } = [];
         public int CustomFormatScore { get; set; }
         public int? IndexerFlags { get; set; }
         public ReleaseType? ReleaseType { get; set; }
