@@ -10,7 +10,7 @@ import Link from 'Components/Link/Link';
 import EpisodeDetailsModal from 'Episode/EpisodeDetailsModal';
 import episodeEntities from 'Episode/episodeEntities';
 import getFinaleTypeName from 'Episode/getFinaleTypeName';
-import useEpisodeFile from 'EpisodeFile/useEpisodeFile';
+import { useEpisodeFile } from 'EpisodeFile/EpisodeFileProvider';
 import { icons, kinds } from 'Helpers/Props';
 import useSeries from 'Series/useSeries';
 import createUISettingsSelector from 'Store/Selectors/createUISettingsSelector';

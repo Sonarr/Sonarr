@@ -3,16 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as commandNames from 'Commands/commandNames';
 import Alert from 'Components/Alert';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
-import Episode from 'Episode/Episode';
 import useCurrentPage from 'Helpers/Hooks/useCurrentPage';
 import usePrevious from 'Helpers/Hooks/usePrevious';
 import { kinds } from 'Helpers/Props';
-import {
-  clearEpisodeFiles,
-  fetchEpisodeFiles,
-} from 'Store/Actions/episodeFileActions';
 import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
-import selectUniqueIds from 'Utilities/Object/selectUniqueIds';
 import {
   registerPagePopulator,
   unregisterPagePopulator,
@@ -33,7 +27,7 @@ function Calendar() {
   const requestCurrentPage = useCurrentPage();
   const updateTimeout = useRef<ReturnType<typeof setTimeout>>();
 
-  const { data, isFetching, isLoading, error, refetch } = useCalendar();
+  const { isFetching, isLoading, error, refetch } = useCalendar();
   const view = useCalendarOption('view');
 
   const isRefreshingSeries = useSelector(
@@ -57,10 +51,9 @@ function Calendar() {
     handleScheduleUpdate();
 
     return () => {
-      dispatch(clearEpisodeFiles());
       clearTimeout(updateTimeout.current);
     };
-  }, [dispatch, handleScheduleUpdate]);
+  }, [handleScheduleUpdate]);
 
   useEffect(() => {
     if (!requestCurrentPage) {
@@ -92,17 +85,6 @@ function Calendar() {
       refetch();
     }
   }, [isRefreshingSeries, wasRefreshingSeries, refetch]);
-
-  useEffect(() => {
-    const episodeFileIds = selectUniqueIds<Episode, number>(
-      data,
-      'episodeFileId'
-    );
-
-    if (episodeFileIds.length) {
-      dispatch(fetchEpisodeFiles({ episodeFileIds }));
-    }
-  }, [data, dispatch]);
 
   return (
     <div className={styles.calendar}>

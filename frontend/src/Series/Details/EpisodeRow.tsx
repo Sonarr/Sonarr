@@ -14,9 +14,8 @@ import EpisodeStatus from 'Episode/EpisodeStatus';
 import EpisodeTitleLink from 'Episode/EpisodeTitleLink';
 import IndexerFlags from 'Episode/IndexerFlags';
 import EpisodeFileLanguages from 'EpisodeFile/EpisodeFileLanguages';
+import { useEpisodeFile } from 'EpisodeFile/EpisodeFileProvider';
 import MediaInfo from 'EpisodeFile/MediaInfo';
-import * as mediaInfoTypes from 'EpisodeFile/mediaInfoTypes';
-import useEpisodeFile from 'EpisodeFile/useEpisodeFile';
 import { icons } from 'Helpers/Props';
 import useSeries from 'Series/useSeries';
 import MediaInfoModel from 'typings/MediaInfo';
@@ -223,10 +222,7 @@ function EpisodeRow({
         if (name === 'audioInfo') {
           return (
             <TableRowCell key={name} className={styles.audio}>
-              <MediaInfo
-                type={mediaInfoTypes.AUDIO}
-                episodeFileId={episodeFileId}
-              />
+              <MediaInfo type="audio" episodeFileId={episodeFileId} />
             </TableRowCell>
           );
         }
@@ -234,10 +230,7 @@ function EpisodeRow({
         if (name === 'audioLanguages') {
           return (
             <TableRowCell key={name} className={styles.audioLanguages}>
-              <MediaInfo
-                type={mediaInfoTypes.AUDIO_LANGUAGES}
-                episodeFileId={episodeFileId}
-              />
+              <MediaInfo type="audioLanguages" episodeFileId={episodeFileId} />
             </TableRowCell>
           );
         }
@@ -245,10 +238,7 @@ function EpisodeRow({
         if (name === 'subtitleLanguages') {
           return (
             <TableRowCell key={name} className={styles.subtitles}>
-              <MediaInfo
-                type={mediaInfoTypes.SUBTITLES}
-                episodeFileId={episodeFileId}
-              />
+              <MediaInfo type="subtitles" episodeFileId={episodeFileId} />
             </TableRowCell>
           );
         }
@@ -256,10 +246,7 @@ function EpisodeRow({
         if (name === 'videoCodec') {
           return (
             <TableRowCell key={name} className={styles.video}>
-              <MediaInfo
-                type={mediaInfoTypes.VIDEO}
-                episodeFileId={episodeFileId}
-              />
+              <MediaInfo type="video" episodeFileId={episodeFileId} />
             </TableRowCell>
           );
         }
@@ -268,7 +255,7 @@ function EpisodeRow({
           return (
             <TableRowCell key={name} className={styles.videoDynamicRangeType}>
               <MediaInfo
-                type={mediaInfoTypes.VIDEO_DYNAMIC_RANGE_TYPE}
+                type="videoDynamicRangeType"
                 episodeFileId={episodeFileId}
               />
             </TableRowCell>

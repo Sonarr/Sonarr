@@ -1,4 +1,9 @@
-import React, { createContext, ReactNode, useContext, useMemo } from 'react';
+import React, {
+  createContext,
+  PropsWithChildren,
+  useContext,
+  useMemo,
+} from 'react';
 import useApiQuery from 'Helpers/Hooks/useApiQuery';
 import Queue from 'typings/Queue';
 
@@ -16,16 +21,12 @@ interface AllDetails {
 
 type QueueDetailsFilter = AllDetails | EpisodeDetails | SeriesDetails;
 
-interface QueueDetailsProps {
-  children: ReactNode;
-}
-
 const QueueDetailsContext = createContext<Queue[] | undefined>(undefined);
 
 export default function QueueDetailsProvider({
   children,
   ...filter
-}: QueueDetailsProps & QueueDetailsFilter) {
+}: PropsWithChildren<QueueDetailsFilter>) {
   const { data } = useApiQuery<Queue[]>({
     path: '/queue/details',
     queryParams: { ...filter },

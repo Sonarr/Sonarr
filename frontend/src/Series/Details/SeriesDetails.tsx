@@ -2,7 +2,6 @@ import moment from 'moment';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
-import QueueDetailsProvider from 'Activity/Queue/Details/QueueDetailsProvider';
 import AppState from 'App/State/AppState';
 import * as commandNames from 'Commands/commandNames';
 import Alert from 'Components/Alert';
@@ -21,6 +20,7 @@ import PageToolbarSection from 'Components/Page/Toolbar/PageToolbarSection';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
 import Popover from 'Components/Tooltip/Popover';
 import Tooltip from 'Components/Tooltip/Tooltip';
+import useEpisodeFiles from 'EpisodeFile/useEpisodeFiles';
 import usePrevious from 'Helpers/Hooks/usePrevious';
 import {
   align,
@@ -44,10 +44,6 @@ import useSeries from 'Series/useSeries';
 import QualityProfileName from 'Settings/Profiles/Quality/QualityProfileName';
 import { executeCommand } from 'Store/Actions/commandActions';
 import { clearEpisodes, fetchEpisodes } from 'Store/Actions/episodeActions';
-import {
-  clearEpisodeFiles,
-  fetchEpisodeFiles,
-} from 'Store/Actions/episodeFileActions';
 import { toggleSeriesMonitored } from 'Store/Actions/seriesActions';
 import createAllSeriesSelector from 'Store/Selectors/createAllSeriesSelector';
 import createCommandsSelector from 'Store/Selectors/createCommandsSelector';
@@ -63,6 +59,7 @@ import translate from 'Utilities/String/translate';
 import toggleSelected from 'Utilities/Table/toggleSelected';
 import SeriesAlternateTitles from './SeriesAlternateTitles';
 import SeriesDetailsLinks from './SeriesDetailsLinks';
+import SeriesDetailsProvider from './SeriesDetailsProvider';
 import SeriesDetailsSeason from './SeriesDetailsSeason';
 import SeriesProgressLabel from './SeriesProgressLabel';
 import SeriesTags from './SeriesTags';
@@ -98,24 +95,6 @@ function createEpisodesSelector() {
   );
 }
 
-function createEpisodeFilesSelector() {
-  return createSelector(
-    (state: AppState) => state.episodeFiles,
-    (episodeFiles) => {
-      const { items, isFetching, isPopulated, error } = episodeFiles;
-
-      const hasEpisodeFiles = !!items.length;
-
-      return {
-        isEpisodeFilesFetching: isFetching,
-        isEpisodeFilesPopulated: isPopulated,
-        episodeFilesError: error,
-        hasEpisodeFiles,
-      };
-    }
-  );
-}
-
 interface ExpandedState {
   allExpanded: boolean;
   allCollapsed: boolean;
@@ -139,12 +118,13 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
     hasEpisodes,
     hasMonitoredEpisodes,
   } = useSelector(createEpisodesSelector());
+
   const {
-    isEpisodeFilesFetching,
-    isEpisodeFilesPopulated,
-    episodeFilesError,
+    isFetching: isEpisodeFilesFetching,
+    isFetched: isEpisodeFilesFetched,
+    error: episodeFilesError,
     hasEpisodeFiles,
-  } = useSelector(createEpisodeFilesSelector());
+  } = useEpisodeFiles({ seriesId });
 
   const commands = useSelector(createCommandsSelector());
 
@@ -379,7 +359,6 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
 
   const populate = useCallback(() => {
     dispatch(fetchEpisodes({ seriesId }));
-    dispatch(fetchEpisodeFiles({ seriesId }));
   }, [seriesId, dispatch]);
 
   useEffect(() => {
@@ -392,7 +371,6 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
     return () => {
       unregisterPagePopulator(populate);
       dispatch(clearEpisodes());
-      dispatch(clearEpisodeFiles());
     };
   }, [populate, dispatch]);
 
@@ -461,10 +439,10 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
 
   const fanartUrl = getFanartUrl(images);
   const isFetching = isEpisodesFetching || isEpisodeFilesFetching;
-  const isPopulated = isEpisodesPopulated && isEpisodeFilesPopulated;
+  const isPopulated = isEpisodesPopulated && isEpisodeFilesFetched;
 
   return (
-    <QueueDetailsProvider seriesId={seriesId}>
+    <SeriesDetailsProvider seriesId={seriesId}>
       <PageContent title={title}>
         <PageToolbar>
           <PageToolbarSection>
@@ -892,7 +870,7 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
           />
         </PageContentBody>
       </PageContent>
-    </QueueDetailsProvider>
+    </SeriesDetailsProvider>
   );
 }
 

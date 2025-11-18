@@ -1,6 +1,12 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, {
+  PropsWithChildren,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import QueueDetails from 'Activity/Queue/Details/QueueDetailsProvider';
+import QueueDetailsProvider from 'Activity/Queue/Details/QueueDetailsProvider';
 import * as commandNames from 'Commands/commandNames';
 import FilterMenu from 'Components/Menu/FilterMenu';
 import PageContent from 'Components/Page/PageContent';
@@ -10,6 +16,7 @@ import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
 import PageToolbarSection from 'Components/Page/Toolbar/PageToolbarSection';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
 import Episode from 'Episode/Episode';
+import EpisodeFileProvider from 'EpisodeFile/EpisodeFileProvider';
 import useMeasure from 'Helpers/Hooks/useMeasure';
 import { align, icons } from 'Helpers/Props';
 import NoSeries from 'Series/NoSeries';
@@ -88,6 +95,10 @@ function CalendarPage() {
     return selectUniqueIds<Episode, number>(data, 'id');
   }, [data]);
 
+  const episodeFileIds = useMemo(() => {
+    return selectUniqueIds<Episode, number>(data, 'episodeFileId');
+  }, [data]);
+
   useEffect(() => {
     if (width === 0) {
       return;
@@ -102,7 +113,10 @@ function CalendarPage() {
   }, [width]);
 
   return (
-    <QueueDetails episodeIds={episodeIds}>
+    <CalendarPageProvider
+      episodeIds={episodeIds}
+      episodeFileIds={episodeFileIds}
+    >
       <PageContent title={translate('Calendar')}>
         <PageToolbar>
           <PageToolbarSection>
@@ -162,8 +176,22 @@ function CalendarPage() {
           onModalClose={handleOptionsModalClose}
         />
       </PageContent>
-    </QueueDetails>
+    </CalendarPageProvider>
   );
 }
 
 export default CalendarPage;
+
+function CalendarPageProvider({
+  episodeIds,
+  episodeFileIds,
+  children,
+}: PropsWithChildren<{ episodeIds: number[]; episodeFileIds: number[] }>) {
+  return (
+    <QueueDetailsProvider episodeIds={episodeIds}>
+      <EpisodeFileProvider episodeFileIds={episodeFileIds}>
+        {children}
+      </EpisodeFileProvider>
+    </QueueDetailsProvider>
+  );
+}

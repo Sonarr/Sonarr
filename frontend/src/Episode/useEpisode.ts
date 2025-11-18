@@ -46,7 +46,7 @@ function createNoOpEpisodeSelector(_episodeId?: number) {
   );
 }
 
-const getQueryKey = (episodeEntity: EpisodeEntity) => {
+export const getQueryKey = (episodeEntity: EpisodeEntity) => {
   switch (episodeEntity) {
     case 'calendar':
       return episodeQueryKeyStore.getState().calendar;

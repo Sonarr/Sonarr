@@ -20,7 +20,6 @@ import createEpisodesFetchingSelector from 'Episode/createEpisodesFetchingSelect
 import useCurrentPage from 'Helpers/Hooks/useCurrentPage';
 import { align, icons, kinds } from 'Helpers/Props';
 import { clearEpisodes, fetchEpisodes } from 'Store/Actions/episodeActions';
-import { clearEpisodeFiles } from 'Store/Actions/episodeFileActions';
 import { createCustomFiltersSelector } from 'Store/Selectors/createClientSideCollectionSelector';
 import HistoryItem from 'typings/History';
 import { TableOptionsChangePayload } from 'typings/Table';
@@ -95,7 +94,6 @@ function History() {
   useEffect(() => {
     return () => {
       dispatch(clearEpisodes());
-      dispatch(clearEpisodeFiles());
     };
   }, [requestCurrentPage, dispatch]);
 

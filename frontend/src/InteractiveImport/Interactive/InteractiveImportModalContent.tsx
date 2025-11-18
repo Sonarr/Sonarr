@@ -24,6 +24,10 @@ import Column from 'Components/Table/Column';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import { EpisodeFile } from 'EpisodeFile/EpisodeFile';
+import {
+  useDeleteEpisodeFiles,
+  useUpdateEpisodeFiles,
+} from 'EpisodeFile/useEpisodeFiles';
 import usePrevious from 'Helpers/Hooks/usePrevious';
 import { align, icons, kinds, scrollDirections } from 'Helpers/Props';
 import SelectEpisodeModal from 'InteractiveImport/Episode/SelectEpisodeModal';
@@ -43,10 +47,6 @@ import Language from 'Language/Language';
 import { QualityModel } from 'Quality/Quality';
 import Series from 'Series/Series';
 import { executeCommand } from 'Store/Actions/commandActions';
-import {
-  deleteEpisodeFiles,
-  updateEpisodeFiles,
-} from 'Store/Actions/episodeFileActions';
 import {
   clearInteractiveImport,
   fetchInteractiveImportItems,
@@ -200,17 +200,6 @@ function isSameEpisodeFile(
   return !hasDifferentItems(originalFile.episodes, episodes);
 }
 
-const episodeFilesInfoSelector = createSelector(
-  (state: AppState) => state.episodeFiles.isDeleting,
-  (state: AppState) => state.episodeFiles.deleteError,
-  (isDeleting, deleteError) => {
-    return {
-      isDeleting,
-      deleteError,
-    };
-  }
-);
-
 const importModeSelector = createSelector(
   (state: AppState) => state.interactiveImport.importMode,
   (importMode) => {
@@ -269,7 +258,11 @@ function InteractiveImportModalContentInner(
     createClientSideCollectionSelector('interactiveImport')
   );
 
-  const { isDeleting, deleteError } = useSelector(episodeFilesInfoSelector);
+  const { isDeleting, deleteEpisodeFiles, deleteError } =
+    useDeleteEpisodeFiles();
+
+  const { updateEpisodeFiles } = useUpdateEpisodeFiles();
+
   const importMode = useSelector(importModeSelector);
 
   const [invalidRowsSelected, setInvalidRowsSelected] = useState<number[]>([]);
@@ -492,8 +485,8 @@ function InteractiveImportModalContentInner(
       return acc;
     }, []);
 
-    dispatch(deleteEpisodeFiles({ episodeFileIds }));
-  }, [items, selectedIds, setIsConfirmDeleteModalOpen, dispatch]);
+    deleteEpisodeFiles({ episodeFileIds });
+  }, [items, selectedIds, setIsConfirmDeleteModalOpen, deleteEpisodeFiles]);
 
   const onConfirmDeleteModalClose = useCallback(() => {
     setIsConfirmDeleteModalOpen(false);
@@ -602,11 +595,7 @@ function InteractiveImportModalContentInner(
     let shouldClose = false;
 
     if (existingFiles.length) {
-      dispatch(
-        updateEpisodeFiles({
-          files: existingFiles,
-        })
-      );
+      updateEpisodeFiles(existingFiles);
 
       shouldClose = true;
     }
@@ -635,6 +624,7 @@ function InteractiveImportModalContentInner(
     selectedIds,
     onModalClose,
     dispatch,
+    updateEpisodeFiles,
   ]);
 
   const onSortPress = useCallback<SortCallback>(

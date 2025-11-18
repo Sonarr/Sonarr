@@ -1,5 +1,5 @@
+import { useQueryClient } from '@tanstack/react-query';
 import React, { useCallback, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 import Icon from 'Components/Icon';
 import Label from 'Components/Label';
 import Column from 'Components/Table/Column';
@@ -7,15 +7,12 @@ import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import Episode from 'Episode/Episode';
 import useEpisode, { EpisodeEntity } from 'Episode/useEpisode';
-import useEpisodeFile from 'EpisodeFile/useEpisodeFile';
+import { useEpisodeFile } from 'EpisodeFile/EpisodeFileProvider';
+import { useDeleteEpisodeFile } from 'EpisodeFile/useEpisodeFiles';
 import { icons, kinds, sizes } from 'Helpers/Props';
 import Series from 'Series/Series';
 import useSeries from 'Series/useSeries';
 import QualityProfileName from 'Settings/Profiles/Quality/QualityProfileName';
-import {
-  deleteEpisodeFile,
-  fetchEpisodeFile,
-} from 'Store/Actions/episodeFileActions';
 import translate from 'Utilities/String/translate';
 import EpisodeAiring from './EpisodeAiring';
 import EpisodeFileRow from './EpisodeFileRow';
@@ -76,11 +73,13 @@ interface EpisodeSummaryProps {
   episodeFileId?: number;
 }
 
-function EpisodeSummary(props: EpisodeSummaryProps) {
-  const { seriesId, episodeId, episodeEntity, episodeFileId } = props;
-
-  const dispatch = useDispatch();
-
+function EpisodeSummary({
+  seriesId,
+  episodeId,
+  episodeEntity,
+  episodeFileId,
+}: EpisodeSummaryProps) {
+  const queryClient = useQueryClient();
   const { qualityProfileId, network } = useSeries(seriesId) as Series;
 
   const { airDateUtc, overview } = useEpisode(
@@ -97,22 +96,22 @@ function EpisodeSummary(props: EpisodeSummaryProps) {
     qualityCutoffNotMet,
     customFormats,
     customFormatScore,
-  } = useEpisodeFile(episodeFileId) || {};
+  } = useEpisodeFile(episodeFileId) ?? {};
+
+  const { deleteEpisodeFile } = useDeleteEpisodeFile(
+    episodeFileId!,
+    episodeEntity
+  );
 
   const handleDeleteEpisodeFile = useCallback(() => {
-    dispatch(
-      deleteEpisodeFile({
-        id: episodeFileId,
-        episodeEntity,
-      })
-    );
-  }, [episodeFileId, episodeEntity, dispatch]);
+    deleteEpisodeFile();
+  }, [deleteEpisodeFile]);
 
   useEffect(() => {
     if (episodeFileId && !path) {
-      dispatch(fetchEpisodeFile({ id: episodeFileId }));
+      queryClient.invalidateQueries({ queryKey: ['/episodeFile'] });
     }
-  }, [episodeFileId, path, dispatch]);
+  }, [episodeFileId, path, queryClient]);
 
   const hasOverview = !!overview;
 

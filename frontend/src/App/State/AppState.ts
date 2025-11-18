@@ -6,7 +6,6 @@ import BlocklistAppState from './BlocklistAppState';
 import CaptchaAppState from './CaptchaAppState';
 import CommandAppState from './CommandAppState';
 import CustomFiltersAppState from './CustomFiltersAppState';
-import EpisodeFilesAppState from './EpisodeFilesAppState';
 import EpisodesAppState from './EpisodesAppState';
 import HistoryAppState, { SeriesHistoryAppState } from './HistoryAppState';
 import ImportSeriesAppState from './ImportSeriesAppState';
@@ -80,7 +79,6 @@ interface AppState {
   captcha: CaptchaAppState;
   commands: CommandAppState;
   customFilters: CustomFiltersAppState;
-  episodeFiles: EpisodeFilesAppState;
   episodeHistory: HistoryAppState;
   episodes: EpisodesAppState;
   episodesSelection: EpisodesAppState;

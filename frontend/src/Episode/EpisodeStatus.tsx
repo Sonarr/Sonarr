@@ -4,7 +4,7 @@ import QueueDetails from 'Activity/Queue/QueueDetails';
 import Icon from 'Components/Icon';
 import ProgressBar from 'Components/ProgressBar';
 import useEpisode, { EpisodeEntity } from 'Episode/useEpisode';
-import useEpisodeFile from 'EpisodeFile/useEpisodeFile';
+import { useEpisodeFile } from 'EpisodeFile/EpisodeFileProvider';
 import { icons, kinds, sizes } from 'Helpers/Props';
 import isBefore from 'Utilities/Date/isBefore';
 import translate from 'Utilities/String/translate';

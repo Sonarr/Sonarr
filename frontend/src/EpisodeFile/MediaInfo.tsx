@@ -1,7 +1,7 @@
 import React from 'react';
 import getLanguageName from 'Utilities/String/getLanguageName';
 import translate from 'Utilities/String/translate';
-import useEpisodeFile from './useEpisodeFile';
+import { useEpisodeFile } from './EpisodeFileProvider';
 
 function formatLanguages(languages: string | undefined) {
   if (!languages) {
