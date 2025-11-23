@@ -3,14 +3,15 @@ import moment from 'moment';
 import { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { create } from 'zustand';
-import AppState, { Filter, FilterBuilderProp } from 'App/State/AppState';
+import AppState from 'App/State/AppState';
 import Command from 'Commands/Command';
 import * as commandNames from 'Commands/commandNames';
 import { setEpisodeQueryKey } from 'Episode/useEpisode';
+import { Filter, FilterBuilderProp } from 'Filters/Filter';
+import { useCustomFiltersList } from 'Filters/useCustomFilters';
 import useApiQuery from 'Helpers/Hooks/useApiQuery';
 import { filterBuilderValueTypes } from 'Helpers/Props';
 import { executeCommandHelper } from 'Store/Actions/commandActions';
-import { createCustomFiltersSelector } from 'Store/Selectors/createClientSideCollectionSelector';
 import { CalendarItem } from 'typings/Calendar';
 import findSelectedFilters from 'Utilities/Filter/findSelectedFilters';
 import translate from 'Utilities/String/translate';
@@ -81,7 +82,7 @@ const useCalendar = () => {
   const time = useCalendarTime();
   const selectedFilterKey = useCalendarOption('selectedFilterKey');
   const view = useCalendarOption('view');
-  const customFilters = useSelector(createCustomFiltersSelector('calendar'));
+  const customFilters = useCustomFiltersList('calendar');
 
   const { start, end } = useMemo(() => {
     return getPopulatableRange(dates[0], dates[dates.length - 1], view);

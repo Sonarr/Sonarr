@@ -1,5 +1,5 @@
 import React from 'react';
-import { CustomFilter, Filter } from 'App/State/AppState';
+import { CustomFilter, Filter } from 'Filters/Filter';
 import sortByProp from 'Utilities/Array/sortByProp';
 import translate from 'Utilities/String/translate';
 import FilterMenuItem from './FilterMenuItem';

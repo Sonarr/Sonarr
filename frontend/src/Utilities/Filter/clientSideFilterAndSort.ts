@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import ModelBase from 'App/ModelBase';
-import { CustomFilter, Filter } from 'App/State/AppState';
+import { CustomFilter, Filter } from 'Filters/Filter';
 import { filterTypes, sortDirections } from 'Helpers/Props';
 import { FilterType } from 'Helpers/Props/filterTypes';
 import getFilterTypePredicate from 'Helpers/Props/getFilterTypePredicate';

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { FilterBuilderProp, PropertyFilter } from 'App/State/AppState';
 import SelectInput from 'Components/Form/SelectInput';
 import IconButton from 'Components/Link/IconButton';
+import { FilterBuilderProp, PropertyFilter } from 'Filters/Filter';
 import { filterBuilderValueTypes, icons } from 'Helpers/Props';
 import {
   FilterBuilderTypes,

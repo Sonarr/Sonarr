@@ -1,6 +1,6 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
-import { PropertyFilter } from 'App/State/AppState';
+import { PropertyFilter } from 'Filters/Filter';
 import { SortDirection } from 'Helpers/Props/sortDirections';
 import fetchJson from 'Utilities/Fetch/fetchJson';
 import getQueryPath from 'Utilities/Fetch/getQueryPath';

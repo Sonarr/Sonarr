@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { CustomFilter, Filter } from 'App/State/AppState';
+import { CustomFilter, Filter } from 'Filters/Filter';
 import { icons } from 'Helpers/Props';
 import translate from 'Utilities/String/translate';
 import FilterMenuContent from './FilterMenuContent';

@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
-import { FilterBuilderProp } from 'App/State/AppState';
 import TagInput, { TagBase } from 'Components/Form/Tag/TagInput';
+import { FilterBuilderProp } from 'Filters/Filter';
 import {
   filterBuilderTypes,
   filterBuilderValueTypes,

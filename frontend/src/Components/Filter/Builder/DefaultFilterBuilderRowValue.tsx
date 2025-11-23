@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { FilterBuilderPropOption } from 'App/State/AppState';
+import { FilterBuilderPropOption } from 'Filters/Filter';
 import { filterBuilderTypes } from 'Helpers/Props';
 import * as filterTypes from 'Helpers/Props/filterTypes';
 import sortByProp from 'Utilities/Array/sortByProp';

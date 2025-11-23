@@ -1,4 +1,4 @@
-import { Filter } from 'App/State/AppState';
+import { Filter } from 'Filters/Filter';
 
 export default function getFilterValue<T>(
   filters: Filter[],

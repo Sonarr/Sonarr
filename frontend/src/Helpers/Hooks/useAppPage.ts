@@ -2,6 +2,7 @@ import { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
 import AppState from 'App/State/AppState';
+import useCustomFilters from 'Filters/useCustomFilters';
 import { fetchTranslations } from 'Store/Actions/appActions';
 import { fetchCustomFilters } from 'Store/Actions/customFilterActions';
 import { fetchSeries } from 'Store/Actions/seriesActions';
@@ -17,15 +18,16 @@ import useTags from 'Tags/useTags';
 import { ApiError } from 'Utilities/Fetch/fetchJson';
 
 const createErrorsSelector = ({
+  customFiltersError,
   systemStatusError,
   tagsError,
 }: {
+  customFiltersError: ApiError | null;
   systemStatusError: ApiError | null;
   tagsError: ApiError | null;
 }) =>
   createSelector(
     (state: AppState) => state.series.error,
-    (state: AppState) => state.customFilters.error,
     (state: AppState) => state.settings.ui.error,
     (state: AppState) => state.settings.qualityProfiles.error,
     (state: AppState) => state.settings.languages.error,
@@ -34,7 +36,6 @@ const createErrorsSelector = ({
     (state: AppState) => state.app.translations.error,
     (
       seriesError,
-      customFiltersError,
       uiSettingsError,
       qualityProfilesError,
       languagesError,
@@ -43,8 +44,8 @@ const createErrorsSelector = ({
       translationsError
     ) => {
       const hasError = !!(
-        seriesError ||
         customFiltersError ||
+        seriesError ||
         uiSettingsError ||
         qualityProfilesError ||
         languagesError ||
@@ -75,6 +76,10 @@ const createErrorsSelector = ({
 
 const useAppPage = () => {
   const dispatch = useDispatch();
+
+  const { isFetched: isCustomFiltersFetched, error: customFiltersError } =
+    useCustomFilters();
+
   const { isFetched: isSystemStatusFetched, error: systemStatusError } =
     useSystemStatus();
 
@@ -83,7 +88,6 @@ const useAppPage = () => {
   const isAppStatePopulated = useSelector(
     (state: AppState) =>
       state.series.isPopulated &&
-      state.customFilters.isPopulated &&
       state.settings.ui.isPopulated &&
       state.settings.qualityProfiles.isPopulated &&
       state.settings.languages.isPopulated &&
@@ -93,10 +97,13 @@ const useAppPage = () => {
   );
 
   const isPopulated =
-    isAppStatePopulated && isSystemStatusFetched && isTagsFetched;
+    isAppStatePopulated &&
+    isCustomFiltersFetched &&
+    isSystemStatusFetched &&
+    isTagsFetched;
 
   const { hasError, errors } = useSelector(
-    createErrorsSelector({ systemStatusError, tagsError })
+    createErrorsSelector({ customFiltersError, systemStatusError, tagsError })
   );
 
   const isLocalStorageSupported = useMemo(() => {

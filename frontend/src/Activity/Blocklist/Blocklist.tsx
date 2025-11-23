@@ -16,10 +16,10 @@ import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import TableOptionsModalWrapper from 'Components/Table/TableOptions/TableOptionsModalWrapper';
 import TablePager from 'Components/Table/TablePager';
+import { useCustomFiltersList } from 'Filters/useCustomFilters';
 import { align, icons, kinds } from 'Helpers/Props';
 import { SortDirection } from 'Helpers/Props/sortDirections';
 import { executeCommand } from 'Store/Actions/commandActions';
-import { createCustomFiltersSelector } from 'Store/Selectors/createClientSideCollectionSelector';
 import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
 import BlockListModel from 'typings/Blocklist';
 import { CheckInputChanged } from 'typings/inputs';
@@ -61,7 +61,7 @@ function BlocklistContent() {
   const filters = useFilters();
   const { isRemoving, removeBlocklistItems } = useRemoveBlocklistItems();
 
-  const customFilters = useSelector(createCustomFiltersSelector('blocklist'));
+  const customFilters = useCustomFiltersList('blocklist');
   const isClearingBlocklistExecuting = useSelector(
     createCommandExecutingSelector(commandNames.CLEAR_BLOCKLIST)
   );

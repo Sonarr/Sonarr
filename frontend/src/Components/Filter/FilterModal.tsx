@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
-import { CustomFilter, FilterBuilderProp } from 'App/State/AppState';
 import Modal from 'Components/Modal/Modal';
+import { CustomFilter, FilterBuilderProp } from 'Filters/Filter';
 import FilterBuilderModalContent from './Builder/FilterBuilderModalContent';
 import CustomFiltersModalContent from './CustomFilters/CustomFiltersModalContent';
 import { SetFilter } from './Filter';

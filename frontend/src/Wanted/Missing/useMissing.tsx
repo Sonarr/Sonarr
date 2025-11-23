@@ -1,8 +1,8 @@
 import { keepPreviousData } from '@tanstack/react-query';
 import { useEffect } from 'react';
-import { Filter } from 'App/State/AppState';
 import Episode from 'Episode/Episode';
 import { setEpisodeQueryKey } from 'Episode/useEpisode';
+import { Filter } from 'Filters/Filter';
 import usePage from 'Helpers/Hooks/usePage';
 import usePagedApiQuery from 'Helpers/Hooks/usePagedApiQuery';
 import translate from 'Utilities/String/translate';

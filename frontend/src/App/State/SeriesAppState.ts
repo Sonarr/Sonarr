@@ -3,9 +3,9 @@ import AppSectionState, {
   AppSectionSaveState,
 } from 'App/State/AppSectionState';
 import Column from 'Components/Table/Column';
+import { Filter, FilterBuilderProp } from 'Filters/Filter';
 import { SortDirection } from 'Helpers/Props/sortDirections';
 import Series from 'Series/Series';
-import { Filter, FilterBuilderProp } from './AppState';
 
 export interface SeriesIndexAppState {
   sortKey: string;

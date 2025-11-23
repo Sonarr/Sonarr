@@ -1,4 +1,4 @@
-import { PropertyFilter } from 'App/State/AppState';
+import { PropertyFilter } from 'Filters/Filter';
 
 export interface QueryParams {
   [key: string]:

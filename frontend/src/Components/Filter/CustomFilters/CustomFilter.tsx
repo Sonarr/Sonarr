@@ -1,19 +1,16 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Error } from 'App/State/AppSectionState';
 import IconButton from 'Components/Link/IconButton';
 import SpinnerIconButton from 'Components/Link/SpinnerIconButton';
+import { useDeleteCustomFilter } from 'Filters/useCustomFilters';
 import usePrevious from 'Helpers/Hooks/usePrevious';
 import { icons } from 'Helpers/Props';
-import { deleteCustomFilter } from 'Store/Actions/customFilterActions';
 import translate from 'Utilities/String/translate';
 import styles from './CustomFilter.css';
 
 interface CustomFilterProps {
   id: number;
   label: string;
-  isDeleting: boolean;
-  deleteError?: Error;
   dispatchSetFilter: (payload: { selectedFilterKey: string | number }) => void;
   onEditPress: (id: number) => void;
 }
@@ -21,11 +18,11 @@ interface CustomFilterProps {
 function CustomFilter({
   id,
   label,
-  isDeleting,
-  deleteError,
   dispatchSetFilter,
   onEditPress,
 }: CustomFilterProps) {
+  const { deleteCustomFilter, isDeleting, deleteError } =
+    useDeleteCustomFilter(id);
   const dispatch = useDispatch();
   const wasDeleting = usePrevious(isDeleting);
   const [isDeletingInternal, setIsDeletingInternal] = useState(false);
@@ -37,8 +34,8 @@ function CustomFilter({
   const handleRemovePress = useCallback(() => {
     setIsDeletingInternal(true);
 
-    dispatch(deleteCustomFilter({ id }));
-  }, [id, dispatch]);
+    deleteCustomFilter();
+  }, [deleteCustomFilter]);
 
   useEffect(() => {
     if (wasDeleting && !isDeleting && isDeletingInternal && deleteError) {

@@ -13,11 +13,11 @@ import TableBody from 'Components/Table/TableBody';
 import TableOptionsModalWrapper from 'Components/Table/TableOptions/TableOptionsModalWrapper';
 import TablePager from 'Components/Table/TablePager';
 import createEpisodesFetchingSelector from 'Episode/createEpisodesFetchingSelector';
+import { useCustomFiltersList } from 'Filters/useCustomFilters';
 import useCurrentPage from 'Helpers/Hooks/useCurrentPage';
 import { align, icons, kinds } from 'Helpers/Props';
 import { SortDirection } from 'Helpers/Props/sortDirections';
 import { clearEpisodes, fetchEpisodes } from 'Store/Actions/episodeActions';
-import { createCustomFiltersSelector } from 'Store/Selectors/createClientSideCollectionSelector';
 import HistoryItem from 'typings/History';
 import { TableOptionsChangePayload } from 'typings/Table';
 import selectUniqueIds from 'Utilities/Object/selectUniqueIds';
@@ -59,7 +59,7 @@ function History() {
 
   const { isEpisodesFetching, isEpisodesPopulated, episodesError } =
     useSelector(createEpisodesFetchingSelector());
-  const customFilters = useSelector(createCustomFiltersSelector('history'));
+  const customFilters = useCustomFiltersList('history');
   const dispatch = useDispatch();
 
   const isFetchingAny = isLoading || isEpisodesFetching;

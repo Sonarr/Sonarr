@@ -46,8 +46,10 @@ public class CustomFilterController : RestController<CustomFilterResource>
     }
 
     [RestDeleteById]
-    public void DeleteCustomResource(int id)
+    public ActionResult DeleteCustomResource(int id)
     {
         _customFilterService.Delete(id);
+
+        return NoContent();
     }
 }

@@ -1,14 +1,13 @@
 import React, { useCallback } from 'react';
-import { useSelector } from 'react-redux';
 import Alert from 'Components/Alert';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import FilterMenu from 'Components/Menu/FilterMenu';
 import PageMenuButton from 'Components/Menu/PageMenuButton';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
+import { useCustomFiltersList } from 'Filters/useCustomFilters';
 import { align, kinds } from 'Helpers/Props';
 import { SortDirection } from 'Helpers/Props/sortDirections';
-import { createCustomFiltersSelector } from 'Store/Selectors/createClientSideCollectionSelector';
 import getErrorMessage from 'Utilities/Object/getErrorMessage';
 import translate from 'Utilities/String/translate';
 import InteractiveSearchFilterModal from './InteractiveSearchFilterModal';
@@ -25,7 +24,7 @@ interface InteractiveSearchProps {
 }
 
 function InteractiveSearch({ type, searchPayload }: InteractiveSearchProps) {
-  const customFilters = useSelector(createCustomFiltersSelector('releases'));
+  const customFilters = useCustomFiltersList('releases');
   const { columns } = useReleaseOptions();
 
   const {

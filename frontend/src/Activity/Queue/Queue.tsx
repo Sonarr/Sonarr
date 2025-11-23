@@ -23,11 +23,11 @@ import TableBody from 'Components/Table/TableBody';
 import TableOptionsModalWrapper from 'Components/Table/TableOptions/TableOptionsModalWrapper';
 import TablePager from 'Components/Table/TablePager';
 import createEpisodesFetchingSelector from 'Episode/createEpisodesFetchingSelector';
+import { useCustomFiltersList } from 'Filters/useCustomFilters';
 import { align, icons, kinds } from 'Helpers/Props';
 import { SortDirection } from 'Helpers/Props/sortDirections';
 import { executeCommand } from 'Store/Actions/commandActions';
 import { clearEpisodes, fetchEpisodes } from 'Store/Actions/episodeActions';
-import { createCustomFiltersSelector } from 'Store/Selectors/createClientSideCollectionSelector';
 import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
 import { CheckInputChanged } from 'typings/inputs';
 import QueueModel from 'typings/Queue';
@@ -81,7 +81,7 @@ function QueueContent() {
   const { count } = useQueueStatus();
   const { isEpisodesFetching, isEpisodesPopulated, episodesError } =
     useSelector(createEpisodesFetchingSelector());
-  const customFilters = useSelector(createCustomFiltersSelector('queue'));
+  const customFilters = useCustomFiltersList('queue');
 
   const isRefreshMonitoredDownloadsExecuting = useSelector(
     createCommandExecutingSelector(commandNames.REFRESH_MONITORED_DOWNLOADS)

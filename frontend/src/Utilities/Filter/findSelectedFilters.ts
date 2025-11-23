@@ -1,4 +1,4 @@
-import { CustomFilter, Filter } from 'App/State/AppState';
+import { CustomFilter, Filter } from 'Filters/Filter';
 
 export default function findSelectedFilters(
   selectedFilterKey: string | number,

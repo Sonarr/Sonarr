@@ -1,6 +1,6 @@
 import { keepPreviousData } from '@tanstack/react-query';
 import { useMemo } from 'react';
-import { Filter } from 'App/State/AppState';
+import { Filter } from 'Filters/Filter';
 import usePage from 'Helpers/Hooks/usePage';
 import usePagedApiQuery from 'Helpers/Hooks/usePagedApiQuery';
 import LogEvent from 'typings/LogEvent';

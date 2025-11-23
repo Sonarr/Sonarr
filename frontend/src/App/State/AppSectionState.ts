@@ -1,7 +1,7 @@
 import Column from 'Components/Table/Column';
+import { Filter, FilterBuilderProp } from 'Filters/Filter';
 import { SortDirection } from 'Helpers/Props/sortDirections';
 import { ValidationFailure } from 'typings/pending';
-import { Filter, FilterBuilderProp } from './AppState';
 
 export interface Error {
   status?: number;

@@ -1,11 +1,5 @@
 import { maxBy } from 'lodash';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import AppState, {
-  CustomFilter,
-  FilterBuilderProp,
-  PropertyFilter,
-} from 'App/State/AppState';
 import FormInputGroup, {
   ValidationMessage,
 } from 'Components/Form/FormInputGroup';
@@ -15,9 +9,14 @@ import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
+import {
+  CustomFilter,
+  FilterBuilderProp,
+  PropertyFilter,
+} from 'Filters/Filter';
+import { useSaveCustomFilter } from 'Filters/useCustomFilters';
 import usePrevious from 'Helpers/Hooks/usePrevious';
 import { inputTypes } from 'Helpers/Props';
-import { saveCustomFilter } from 'Store/Actions/customFilterActions';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
 import FilterBuilderRow from './FilterBuilderRow';
@@ -50,10 +49,8 @@ function FilterBuilderModalContent<T>({
   onCancelPress,
   onModalClose,
 }: FilterBuilderModalContentProps<T>) {
-  const dispatch = useDispatch();
-  const { isSaving, saveError } = useSelector(
-    (state: AppState) => state.customFilters
-  );
+  const { newCustomFilter, saveCustomFilter, isSaving, saveError } =
+    useSaveCustomFilter(id);
 
   const { initialLabel, initialFilters } = useMemo(() => {
     if (id) {
@@ -121,13 +118,15 @@ function FilterBuilderModalContent<T>({
       return;
     }
 
-    dispatch(saveCustomFilter({ id, type: customFilterType, label, filters }));
-  }, [id, customFilterType, label, filters, dispatch]);
+    saveCustomFilter({ type: customFilterType, label, filters });
+  }, [customFilterType, label, filters, saveCustomFilter]);
 
   useEffect(() => {
     if (wasSaving && !isSaving && !saveError) {
       if (id) {
         dispatchSetFilter({ selectedFilterKey: id });
+      } else if (newCustomFilter) {
+        dispatchSetFilter({ selectedFilterKey: newCustomFilter.id });
       } else {
         const last = maxBy(customFilters, 'id');
 
@@ -141,6 +140,7 @@ function FilterBuilderModalContent<T>({
   }, [
     id,
     customFilters,
+    newCustomFilter,
     isSaving,
     wasSaving,
     saveError,

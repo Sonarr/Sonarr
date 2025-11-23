@@ -1,14 +1,10 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
-import AppState, {
-  CustomFilter as CustomFilterModel,
-} from 'App/State/AppState';
 import Button from 'Components/Link/Button';
 import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
-import sortByProp from 'Utilities/Array/sortByProp';
+import { CustomFilter as CustomFilterModel } from 'Filters/Filter';
 import translate from 'Utilities/String/translate';
 import CustomFilter from './CustomFilter';
 import styles from './CustomFiltersModalContent.css';
@@ -28,23 +24,17 @@ function CustomFiltersModalContent({
   onEditCustomFilter,
   onModalClose,
 }: CustomFiltersModalContentProps) {
-  const { isDeleting, deleteError } = useSelector(
-    (state: AppState) => state.customFilters
-  );
-
   return (
     <ModalContent onModalClose={onModalClose}>
       <ModalHeader>{translate('CustomFilters')}</ModalHeader>
 
       <ModalBody>
-        {customFilters.sort(sortByProp('label')).map((customFilter) => {
+        {customFilters.map((customFilter) => {
           return (
             <CustomFilter
               key={customFilter.id}
               id={customFilter.id}
               label={customFilter.label}
-              isDeleting={isDeleting}
-              deleteError={deleteError}
               dispatchSetFilter={dispatchSetFilter}
               onEditPress={onEditCustomFilter}
             />

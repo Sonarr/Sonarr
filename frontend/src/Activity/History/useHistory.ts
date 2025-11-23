@@ -1,12 +1,11 @@
 import { keepPreviousData, useQueryClient } from '@tanstack/react-query';
 import { useCallback, useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { CustomFilter, Filter, FilterBuilderProp } from 'App/State/AppState';
+import { Filter, FilterBuilderProp } from 'Filters/Filter';
+import { useCustomFiltersList } from 'Filters/useCustomFilters';
 import useApiMutation from 'Helpers/Hooks/useApiMutation';
 import usePage from 'Helpers/Hooks/usePage';
 import usePagedApiQuery from 'Helpers/Hooks/usePagedApiQuery';
 import { filterBuilderValueTypes } from 'Helpers/Props';
-import { createCustomFiltersSelector } from 'Store/Selectors/createClientSideCollectionSelector';
 import History from 'typings/History';
 import findSelectedFilters from 'Utilities/Filter/findSelectedFilters';
 import translate from 'Utilities/String/translate';
@@ -117,9 +116,7 @@ const useHistory = () => {
   const { page, goToPage } = usePage('history');
   const { pageSize, selectedFilterKey, sortKey, sortDirection } =
     useHistoryOptions();
-  const customFilters = useSelector(
-    createCustomFiltersSelector('history')
-  ) as CustomFilter[];
+  const customFilters = useCustomFiltersList('history');
 
   const filters = useMemo(() => {
     return findSelectedFilters(selectedFilterKey, FILTERS, customFilters);

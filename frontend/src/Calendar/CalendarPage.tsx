@@ -17,11 +17,11 @@ import PageToolbarSection from 'Components/Page/Toolbar/PageToolbarSection';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
 import Episode from 'Episode/Episode';
 import EpisodeFileProvider from 'EpisodeFile/EpisodeFileProvider';
+import { useCustomFiltersList } from 'Filters/useCustomFilters';
 import useMeasure from 'Helpers/Hooks/useMeasure';
 import { align, icons } from 'Helpers/Props';
 import NoSeries from 'Series/NoSeries';
 import { executeCommand } from 'Store/Actions/commandActions';
-import { createCustomFiltersSelector } from 'Store/Selectors/createClientSideCollectionSelector';
 import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
 import createSeriesCountSelector from 'Store/Selectors/createSeriesCountSelector';
 import selectUniqueIds from 'Utilities/Object/selectUniqueIds';
@@ -53,7 +53,7 @@ function CalendarPage() {
   const isRssSyncExecuting = useSelector(
     createCommandExecutingSelector(commandNames.RSS_SYNC)
   );
-  const customFilters = useSelector(createCustomFiltersSelector('calendar'));
+  const customFilters = useCustomFiltersList('calendar');
   const hasSeries = !!useSelector(createSeriesCountSelector());
 
   const [pageContentRef, { width }] = useMeasure();

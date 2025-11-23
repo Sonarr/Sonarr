@@ -22,6 +22,7 @@ import PageToolbarSection from 'Components/Page/Toolbar/PageToolbarSection';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
 import TableOptionsModalWrapper from 'Components/Table/TableOptions/TableOptionsModalWrapper';
 import withScrollPosition from 'Components/withScrollPosition';
+import { useCustomFiltersList } from 'Filters/useCustomFilters';
 import { align, icons, kinds } from 'Helpers/Props';
 import { DESCENDING } from 'Helpers/Props/sortDirections';
 import ParseToolbarButton from 'Parse/ParseToolbarButton';
@@ -83,12 +84,13 @@ const SeriesIndex = withScrollPosition((props: SeriesIndexProps) => {
     columns,
     selectedFilterKey,
     filters,
-    customFilters,
     sortKey,
     sortDirection,
     view,
   }: SeriesAppState & SeriesIndexAppState & ClientSideCollectionAppState =
     useSelector(createSeriesClientSideCollectionItemsSelector('seriesIndex'));
+
+  const customFilters = useCustomFiltersList('series');
 
   const isRssSyncExecuting = useSelector(
     createCommandExecutingSelector(RSS_SYNC)

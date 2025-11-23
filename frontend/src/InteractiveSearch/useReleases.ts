@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { create } from 'zustand';
 import ModelBase from 'App/ModelBase';
-import { Filter, FilterBuilderProp } from 'App/State/AppState';
 import { FilterBuilderTag } from 'Components/Filter/Builder/FilterBuilderRowValue';
 import type DownloadProtocol from 'DownloadClient/DownloadProtocol';
+import { Filter, FilterBuilderProp } from 'Filters/Filter';
+import { useCustomFiltersList } from 'Filters/useCustomFilters';
 import useApiMutation from 'Helpers/Hooks/useApiMutation';
 import useApiQuery from 'Helpers/Hooks/useApiQuery';
 import { applySort } from 'Helpers/Hooks/useOptionsStore';
@@ -15,7 +15,6 @@ import { SortDirection } from 'Helpers/Props/sortDirections';
 import Language from 'Language/Language';
 import { QualityModel } from 'Quality/Quality';
 import { AlternateTitle } from 'Series/Series';
-import { createCustomFiltersSelector } from 'Store/Selectors/createClientSideCollectionSelector';
 import CustomFormat from 'typings/CustomFormat';
 import Rejection from 'typings/Rejection';
 import sortByProp from 'Utilities/Array/sortByProp';
@@ -379,7 +378,7 @@ const DEFAULT_RELEASES: Release[] = [];
 const THIRTY_MINUTES = 30 * 60 * 1000;
 
 const useReleases = (payload: InteractiveSearchPayload) => {
-  const customFilters = useSelector(createCustomFiltersSelector('releases'));
+  const customFilters = useCustomFiltersList('releases');
   const { episodeSelectedFilterKey, seasonSelectedFilterKey } =
     useReleaseOptions();
 

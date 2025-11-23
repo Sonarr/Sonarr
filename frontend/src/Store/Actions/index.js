@@ -1,7 +1,6 @@
 import * as app from './appActions';
 import * as captcha from './captchaActions';
 import * as commands from './commandActions';
-import * as customFilters from './customFilterActions';
 import * as episodes from './episodeActions';
 import * as episodeHistory from './episodeHistoryActions';
 import * as episodeSelection from './episodeSelectionActions';
@@ -20,7 +19,6 @@ export default [
   app,
   captcha,
   commands,
-  customFilters,
   episodes,
   episodeHistory,
   episodeSelection,
