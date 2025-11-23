@@ -12,10 +12,6 @@
     <PackageReference Include="Polly" Version="8.5.2" />
     <PackageReference Include="Servarr.FFMpegCore" Version="4.7.0-26" />
     <PackageReference Include="Servarr.FFprobe" Version="5.1.4.112" />
-    <PackageReference Include="StyleCop.Analyzers.Unstable" Version="1.2.0.556">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
     <PackageReference Include="System.Drawing.Common" Version="8.0.20" />
     <PackageReference Include="System.Memory" Version="4.6.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
@@ -31,7 +27,6 @@
     <PackageReference Include="MonoTorrent" Version="3.0.2" />
     <PackageReference Include="System.Text.Json" Version="8.0.5" />
     <PackageReference Include="Npgsql" Version="9.0.3" />
-    <PackageReference Remove="StyleCop.Analyzers" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NzbDrone.Common\Sonarr.Common.csproj" />
