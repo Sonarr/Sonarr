@@ -4,7 +4,6 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.1.66" />
-    <PackageReference Include="GitHubActionsTestLogger" Version="2.4.1" />
     <PackageReference Include="NBuilder" Version="6.1.0" />
   </ItemGroup>
   <ItemGroup>

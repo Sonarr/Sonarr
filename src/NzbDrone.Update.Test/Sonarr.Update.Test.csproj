@@ -3,9 +3,6 @@
     <TargetFrameworks>net8.0</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="GitHubActionsTestLogger" Version="2.4.1" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\NzbDrone.Test.Common\Sonarr.Test.Common.csproj" />
     <ProjectReference Include="..\NzbDrone.Update\Sonarr.Update.csproj" />
   </ItemGroup>

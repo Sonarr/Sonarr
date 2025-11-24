@@ -3,7 +3,6 @@
     <TargetFrameworks>net8.0</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="GitHubActionsTestLogger" Version="2.4.1" />
     <PackageReference Include="NBuilder" Version="6.1.0" />
   </ItemGroup>
   <ItemGroup>
