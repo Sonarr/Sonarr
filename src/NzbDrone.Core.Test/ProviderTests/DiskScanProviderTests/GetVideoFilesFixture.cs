@@ -90,6 +90,7 @@ namespace NzbDrone.Core.Test.ProviderTests.DiskScanProviderTests
         [TestCase(".secret")]
         [TestCase(".hidden")]
         [TestCase(".unwanted")]
+        [TestCase("theme-music")]
         public void should_filter_certain_sub_folders(string subFolder)
         {
             var path = @"C:\Test\";
