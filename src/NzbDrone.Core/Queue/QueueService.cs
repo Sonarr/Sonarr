@@ -51,7 +51,7 @@ namespace NzbDrone.Core.Queue
             }
             else
             {
-                yield return MapQueueItem(trackedDownload, null);
+                yield return MapQueueItem(trackedDownload, []);
             }
         }
 
