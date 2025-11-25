@@ -204,6 +204,7 @@ namespace NzbDrone.Core.RootFolders
                 if (_diskProvider.FolderExists(rootFolder.Path))
                 {
                     rootFolder.Accessible = true;
+                    rootFolder.IsEmpty = _diskProvider.FolderEmpty(rootFolder.Path);
                     rootFolder.FreeSpace = _diskProvider.GetAvailableSpace(rootFolder.Path);
                     rootFolder.TotalSpace = _diskProvider.GetTotalSize(rootFolder.Path);
                     rootFolder.UnmappedFolders = GetUnmappedFolders(rootFolder.Path, seriesPaths);
