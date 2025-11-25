@@ -6,7 +6,6 @@ import FieldSet from 'Components/FieldSet';
 import Icon from 'Components/Icon';
 import PageSectionContent from 'Components/Page/PageSectionContent';
 import { icons } from 'Helpers/Props';
-import { fetchRootFolders } from 'Store/Actions/rootFolderActions';
 import {
   cloneImportList,
   fetchImportLists,
@@ -62,7 +61,6 @@ function ImportLists() {
 
   useEffect(() => {
     dispatch(fetchImportLists());
-    dispatch(fetchRootFolders());
   }, [dispatch]);
 
   return (

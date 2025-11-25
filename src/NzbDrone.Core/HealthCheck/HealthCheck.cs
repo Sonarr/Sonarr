@@ -107,6 +107,7 @@ namespace NzbDrone.Core.HealthCheck
         RemotePathMappingWrongOSPath,
         RemovedSeriesMultiple,
         RemovedSeriesSingle,
+        RootFolderEmpty,
         RootFolderMissing,
         RootFolderMultipleMissing,
         ServerNotification,

@@ -3,9 +3,9 @@
 interface CssExports {
   'actions': string;
   'freeSpace': string;
+  'label': string;
   'link': string;
-  'unavailableLabel': string;
-  'unavailablePath': string;
+  'pathContainer': string;
   'unmappedFolders': string;
 }
 export const cssExports: CssExports;

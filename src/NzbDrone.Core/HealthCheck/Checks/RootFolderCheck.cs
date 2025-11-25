@@ -32,7 +32,8 @@ namespace NzbDrone.Core.HealthCheck.Checks
         {
             var rootFolders = _seriesService.GetAllSeriesPaths()
                 .Select(s => _rootFolderService.GetBestRootFolderPath(s.Value))
-                .Distinct();
+                .Distinct()
+                .ToList();
 
             var missingRootFolders = rootFolders.Where(s => !s.IsPathValid(PathValidationType.CurrentOs) || !_diskProvider.FolderExists(s))
                 .ToList();
@@ -63,6 +64,38 @@ namespace NzbDrone.Core.HealthCheck.Checks
                             { "rootFolderPaths", string.Join(" | ", missingRootFolders) }
                         }),
                     "#missing-root-folder");
+            }
+
+            var emptyRootFolders = rootFolders
+                .Where(r => _diskProvider.FolderEmpty(r))
+                .ToList();
+
+            if (emptyRootFolders.Any())
+            {
+                if (emptyRootFolders.Count == 1)
+                {
+                    return new HealthCheck(GetType(),
+                        HealthCheckResult.Warning,
+                        HealthCheckReason.RootFolderEmpty,
+                        _localizationService.GetLocalizedString(
+                            "RootFolderEmptyHealthCheckMessage",
+                            new Dictionary<string, object>
+                            {
+                                { "rootFolderPath", emptyRootFolders.First() }
+                            }),
+                        "#empty-root-folder");
+                }
+
+                return new HealthCheck(GetType(),
+                    HealthCheckResult.Warning,
+                    HealthCheckReason.RootFolderEmpty,
+                    _localizationService.GetLocalizedString(
+                        "RootFolderMultipleEmptyHealthCheckMessage",
+                        new Dictionary<string, object>
+                        {
+                            { "rootFolderPaths", string.Join(" | ", emptyRootFolders) }
+                        }),
+                    "#empty-root-folder");
             }
 
             return new HealthCheck(GetType());

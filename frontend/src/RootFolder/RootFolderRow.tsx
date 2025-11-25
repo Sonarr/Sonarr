@@ -1,5 +1,4 @@
 import React, { useCallback, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import Label from 'Components/Label';
 import IconButton from 'Components/Link/IconButton';
 import Link from 'Components/Link/Link';
@@ -7,27 +6,26 @@ import ConfirmModal from 'Components/Modal/ConfirmModal';
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
 import TableRow from 'Components/Table/TableRow';
 import { icons, kinds } from 'Helpers/Props';
-import { deleteRootFolder } from 'Store/Actions/rootFolderActions';
 import formatBytes from 'Utilities/Number/formatBytes';
 import translate from 'Utilities/String/translate';
+import { RootFolder, useDeleteRootFolder } from './useRootFolders';
 import styles from './RootFolderRow.css';
 
-interface RootFolderRowProps {
-  id: number;
-  path: string;
-  accessible: boolean;
-  freeSpace?: number;
-  unmappedFolders: object[];
-}
+type RootFolderRowProps = RootFolder;
 
 function RootFolderRow(props: RootFolderRowProps) {
-  const { id, path, accessible, freeSpace = 0, unmappedFolders = [] } = props;
+  const {
+    id,
+    path,
+    accessible,
+    isEmpty,
+    freeSpace = 0,
+    unmappedFolders = [],
+  } = props;
 
   const isUnavailable = !accessible;
-
-  const dispatch = useDispatch();
-
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const { deleteRootFolder } = useDeleteRootFolder(id);
 
   const onDeletePress = useCallback(() => {
     setIsDeleteModalOpen(true);
@@ -38,27 +36,38 @@ function RootFolderRow(props: RootFolderRowProps) {
   }, [setIsDeleteModalOpen]);
 
   const onConfirmDelete = useCallback(() => {
-    dispatch(deleteRootFolder({ id }));
-
+    deleteRootFolder();
     setIsDeleteModalOpen(false);
-  }, [dispatch, id]);
+  }, [deleteRootFolder]);
 
   return (
     <TableRow>
       <TableRowCell>
-        {isUnavailable ? (
-          <div className={styles.unavailablePath}>
-            {path}
+        <div className={styles.pathContainer}>
+          {isUnavailable ? (
+            path
+          ) : (
+            <Link className={styles.link} to={`/add/import/${id}`}>
+              {path}
+            </Link>
+          )}
 
-            <Label className={styles.unavailableLabel} kind={kinds.DANGER}>
+          {isUnavailable ? (
+            <Label className={styles.label} kind={kinds.DANGER}>
               {translate('Unavailable')}
             </Label>
-          </div>
-        ) : (
-          <Link className={styles.link} to={`/add/import/${id}`}>
-            {path}
-          </Link>
-        )}
+          ) : null}
+
+          {accessible && isEmpty ? (
+            <Label
+              className={styles.label}
+              kind={kinds.WARNING}
+              title={translate('EmptyRootFolderTooltip')}
+            >
+              {translate('Empty')}
+            </Label>
+          ) : null}
+        </div>
       </TableRowCell>
 
       <TableRowCell className={styles.freeSpace}>

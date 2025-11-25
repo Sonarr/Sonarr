@@ -2,12 +2,12 @@
   composes: link from '~Components/Link/Link.css';
 }
 
-.unavailablePath {
+.pathContainer {
   display: flex;
   align-items: center;
 }
 
-.unavailableLabel {
+.label {
   composes: label from '~Components/Label.css';
 
   margin-left: 10px;

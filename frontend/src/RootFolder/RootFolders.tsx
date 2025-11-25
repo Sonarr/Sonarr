@@ -1,15 +1,13 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
 import Alert from 'Components/Alert';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import Column from 'Components/Table/Column';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import { kinds } from 'Helpers/Props';
-import { fetchRootFolders } from 'Store/Actions/rootFolderActions';
-import createRootFoldersSelector from 'Store/Selectors/createRootFoldersSelector';
 import translate from 'Utilities/String/translate';
 import RootFolderRow from './RootFolderRow';
+import useRootFolders from './useRootFolders';
 
 const rootFolderColumns: Column[] = [
   {
@@ -35,17 +33,9 @@ const rootFolderColumns: Column[] = [
 ];
 
 function RootFolders() {
-  const { isFetching, isPopulated, error, items } = useSelector(
-    createRootFoldersSelector()
-  );
+  const { isFetching, isFetched, error, data } = useRootFolders();
 
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(fetchRootFolders());
-  }, [dispatch]);
-
-  if (isFetching && !isPopulated) {
+  if (isFetching && !isFetched) {
     return <LoadingIndicator />;
   }
 
@@ -58,13 +48,14 @@ function RootFolders() {
   return (
     <Table columns={rootFolderColumns}>
       <TableBody>
-        {items.map((rootFolder) => {
+        {data.map((rootFolder) => {
           return (
             <RootFolderRow
               key={rootFolder.id}
               id={rootFolder.id}
               path={rootFolder.path}
               accessible={rootFolder.accessible}
+              isEmpty={rootFolder.isEmpty}
               freeSpace={rootFolder.freeSpace}
               unmappedFolders={rootFolder.unmappedFolders}
             />

@@ -1,6 +1,4 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import AppState from 'App/State/AppState';
 import Alert from 'Components/Alert';
 import FieldSet from 'Components/FieldSet';
 import FileBrowserModal from 'Components/FileBrowser/FileBrowserModal';
@@ -13,28 +11,24 @@ import PageContentBody from 'Components/Page/PageContentBody';
 import usePrevious from 'Helpers/Hooks/usePrevious';
 import { icons, kinds, sizes } from 'Helpers/Props';
 import RootFolders from 'RootFolder/RootFolders';
-import {
-  addRootFolder,
-  fetchRootFolders,
-} from 'Store/Actions/rootFolderActions';
+import useRootFolders, { useAddRootFolder } from 'RootFolder/useRootFolders';
 import { useIsWindows } from 'System/Status/useSystemStatus';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
 import styles from './ImportSeriesSelectFolder.css';
 
 function ImportSeriesSelectFolder() {
-  const dispatch = useDispatch();
-  const { isFetching, isPopulated, isSaving, error, saveError, items } =
-    useSelector((state: AppState) => state.rootFolders);
+  const { isFetching, isFetched, error, data } = useRootFolders();
+  const { addRootFolder, isAdding, addError } = useAddRootFolder();
 
   const isWindows = useIsWindows();
 
   const [isAddNewRootFolderModalOpen, setIsAddNewRootFolderModalOpen] =
     useState(false);
 
-  const wasSaving = usePrevious(isSaving);
+  const wasAdding = usePrevious(isAdding);
 
-  const hasRootFolders = items.length > 0;
+  const hasRootFolders = data.length > 0;
   const goodFolderExample = isWindows ? 'C:\\tv shows' : '/tv shows';
   const badFolderExample = isWindows
     ? 'C:\\tv shows\\the simpsons'
@@ -50,18 +44,14 @@ function ImportSeriesSelectFolder() {
 
   const handleNewRootFolderSelect = useCallback(
     ({ value }: InputChanged<string>) => {
-      dispatch(addRootFolder({ path: value }));
+      addRootFolder({ path: value });
     },
-    [dispatch]
+    [addRootFolder]
   );
 
   useEffect(() => {
-    dispatch(fetchRootFolders());
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (!isSaving && wasSaving && !saveError) {
-      items.reduce((acc, item) => {
+    if (!isAdding && wasAdding && !addError) {
+      data.reduce((acc, item) => {
         if (item.id > acc) {
           return item.id;
         }
@@ -69,18 +59,18 @@ function ImportSeriesSelectFolder() {
         return acc;
       }, 0);
     }
-  }, [isSaving, wasSaving, saveError, items]);
+  }, [isAdding, wasAdding, addError, data]);
 
   return (
     <PageContent title={translate('ImportSeries')}>
       <PageContentBody>
-        {isFetching && !isPopulated ? <LoadingIndicator /> : null}
+        {isFetching && !isFetched ? <LoadingIndicator /> : null}
 
         {!isFetching && error ? (
           <Alert kind={kinds.DANGER}>{translate('RootFoldersLoadError')}</Alert>
         ) : null}
 
-        {!error && isPopulated && (
+        {!error && isFetched && (
           <div>
             <div className={styles.header}>
               {translate('LibraryImportSeriesHeader')}
@@ -118,17 +108,17 @@ function ImportSeriesSelectFolder() {
               </div>
             ) : null}
 
-            {!isSaving && saveError ? (
+            {!isAdding && addError ? (
               <Alert className={styles.addErrorAlert} kind={kinds.DANGER}>
                 {translate('AddRootFolderError')}
 
                 <ul>
-                  {Array.isArray(saveError.responseJSON) ? (
-                    saveError.responseJSON.map((e, index) => {
+                  {Array.isArray(addError.statusBody) ? (
+                    addError.statusBody.map((e, index) => {
                       return <li key={index}>{e.errorMessage}</li>;
                     })
                   ) : (
-                    <li>{JSON.stringify(saveError.responseJSON)}</li>
+                    <li>{JSON.stringify(addError.statusBody)}</li>
                   )}
                 </ul>
               </Alert>

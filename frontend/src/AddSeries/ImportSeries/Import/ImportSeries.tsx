@@ -12,8 +12,8 @@ import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
 import { kinds } from 'Helpers/Props';
+import useRootFolders, { useRootFolder } from 'RootFolder/useRootFolders';
 import { clearImportSeries } from 'Store/Actions/importSeriesActions';
-import { fetchRootFolders } from 'Store/Actions/rootFolderActions';
 import translate from 'Utilities/String/translate';
 import ImportSeriesFooter from './ImportSeriesFooter';
 import ImportSeriesTable from './ImportSeriesTable';
@@ -27,10 +27,12 @@ function ImportSeries() {
 
   const {
     isFetching: rootFoldersFetching,
-    isPopulated: rootFoldersPopulated,
+    isFetched: rootFoldersFetched,
     error: rootFoldersError,
-    items: rootFolders,
-  } = useSelector((state: AppState) => state.rootFolders);
+    data: rootFolders,
+  } = useRootFolders();
+
+  useRootFolder(rootFolderId, false);
 
   const { path, unmappedFolders } = useMemo(() => {
     const rootFolder = rootFolders.find((r) => r.id === rootFolderId);
@@ -65,8 +67,6 @@ function ImportSeries() {
   }, [unmappedFolders]);
 
   useEffect(() => {
-    dispatch(fetchRootFolders({ id: rootFolderId, timeout: false }));
-
     return () => {
       dispatch(clearImportSeries());
     };
@@ -95,7 +95,7 @@ function ImportSeries() {
 
           {!rootFoldersError &&
           !rootFoldersFetching &&
-          rootFoldersPopulated &&
+          rootFoldersFetched &&
           !unmappedFolders.length ? (
             <Alert kind={kinds.INFO}>
               {translate('AllSeriesInRootFolderHaveBeenImported', { path })}
@@ -104,7 +104,7 @@ function ImportSeries() {
 
           {!rootFoldersError &&
           !rootFoldersFetching &&
-          rootFoldersPopulated &&
+          rootFoldersFetched &&
           !!unmappedFolders.length &&
           scrollerRef.current ? (
             <ImportSeriesTable

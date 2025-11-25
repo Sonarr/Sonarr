@@ -9,7 +9,6 @@ import getSectionState from 'Utilities/State/getSectionState';
 import updateSectionState from 'Utilities/State/updateSectionState';
 import { removeItem, set, updateItem } from './baseActions';
 import createHandleActions from './Creators/createHandleActions';
-import { fetchRootFolders } from './rootFolderActions';
 
 //
 // Variables
@@ -259,8 +258,6 @@ export const actionHandlers = handleThunks({
 
         ...addedIds.map((id) => removeItem({ section, id }))
       ]));
-
-      dispatch(fetchRootFolders());
     });
 
     promise.fail((xhr) => {

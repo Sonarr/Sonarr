@@ -17,7 +17,6 @@ import OrganizePreviewAppState from './OrganizePreviewAppState';
 import PathsAppState from './PathsAppState';
 import ProviderOptionsAppState from './ProviderOptionsAppState';
 import ReleasesAppState from './ReleasesAppState';
-import RootFolderAppState from './RootFolderAppState';
 import SeriesAppState, { SeriesIndexAppState } from './SeriesAppState';
 import SettingsAppState from './SettingsAppState';
 
@@ -91,7 +90,6 @@ interface AppState {
   paths: PathsAppState;
   providerOptions: ProviderOptionsAppState;
   releases: ReleasesAppState;
-  rootFolders: RootFolderAppState;
   series: SeriesAppState;
   seriesHistory: SeriesHistoryAppState;
   seriesIndex: SeriesIndexAppState;

@@ -9,7 +9,6 @@ import PageContentFooter from 'Components/Page/PageContentFooter';
 import usePrevious from 'Helpers/Hooks/usePrevious';
 import { kinds } from 'Helpers/Props';
 import Series from 'Series/Series';
-import { fetchRootFolders } from 'Store/Actions/rootFolderActions';
 import {
   saveSeriesEditor,
   updateSeriesMonitor,
@@ -166,10 +165,6 @@ function SeriesIndexSelectFooter() {
       unselectAll();
     }
   }, [previousIsDeleting, isDeleting, deleteError, unselectAll]);
-
-  useEffect(() => {
-    dispatch(fetchRootFolders());
-  }, [dispatch]);
 
   const anySelected = selectedCount > 0;
 
