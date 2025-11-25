@@ -109,10 +109,6 @@
     <SentryUrl></SentryUrl> <!--  If empty, assumed to be sentry.io -->
     <SentryAuthToken></SentryAuthToken> <!-- Use env var instead: SENTRY_AUTH_TOKEN -->
 
-    <!-- Upload PDBs to Sentry, enabling stack traces with line numbers and file paths
-      without the need to deploy the application with PDBs -->
-    <SentryUploadSymbols>true</SentryUploadSymbols>
-
     <!-- Source Link settings -->
     <!-- https://github.com/dotnet/sourcelink/blob/main/docs/README.md#publishrepositoryurl -->
     <PublishRepositoryUrl>true</PublishRepositoryUrl>

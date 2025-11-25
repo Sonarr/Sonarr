@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using NzbDrone.Common.TPL;
 using NzbDrone.Core.Datastore.Events;
 using NzbDrone.Core.Download.Pending;
 using NzbDrone.Core.Download.TrackedDownloads;
@@ -8,6 +7,7 @@ using NzbDrone.Core.Queue;
 using NzbDrone.SignalR;
 using Sonarr.Http;
 using Sonarr.Http.REST;
+using Debouncer = NzbDrone.Common.TPL.Debouncer;
 
 namespace Sonarr.Api.V5.Queue
 {
