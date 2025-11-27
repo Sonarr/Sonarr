@@ -13,7 +13,6 @@ import InteractiveImportAppState from './InteractiveImportAppState';
 import MessagesAppState from './MessagesAppState';
 import OAuthAppState from './OAuthAppState';
 import OrganizePreviewAppState from './OrganizePreviewAppState';
-import PathsAppState from './PathsAppState';
 import ProviderOptionsAppState from './ProviderOptionsAppState';
 import SeriesAppState, { SeriesIndexAppState } from './SeriesAppState';
 import SettingsAppState from './SettingsAppState';
@@ -85,7 +84,6 @@ interface AppState {
   interactiveImport: InteractiveImportAppState;
   oAuth: OAuthAppState;
   organizePreview: OrganizePreviewAppState;
-  paths: PathsAppState;
   providerOptions: ProviderOptionsAppState;
   series: SeriesAppState;
   seriesHistory: SeriesHistoryAppState;

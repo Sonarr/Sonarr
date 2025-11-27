@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import Alert from 'Components/Alert';
 import { PathInputInternal } from 'Components/Form/PathInput';
 import Button from 'Components/Link/Button';
@@ -15,11 +14,10 @@ import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import usePrevious from 'Helpers/Hooks/usePrevious';
 import { kinds, scrollDirections } from 'Helpers/Props';
-import { clearPaths, fetchPaths } from 'Store/Actions/pathActions';
+import usePaths from 'Path/usePaths';
 import { useSystemStatusData } from 'System/Status/useSystemStatus';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
-import createPathsSelector from './createPathsSelector';
 import FileBrowserRow from './FileBrowserRow';
 import styles from './FileBrowserModalContent.css';
 
@@ -46,19 +44,25 @@ export interface FileBrowserModalContentProps {
   onModalClose: () => void;
 }
 
-function FileBrowserModalContent(props: FileBrowserModalContentProps) {
-  const { name, value, includeFiles = true, onChange, onModalClose } = props;
-
-  const dispatch = useDispatch();
-
-  const { isWindows, mode } = useSystemStatusData();
-
-  const { isFetching, isPopulated, error, parent, directories, files, paths } =
-    useSelector(createPathsSelector());
-
+function FileBrowserModalContent({
+  name,
+  value,
+  includeFiles = true,
+  onChange,
+  onModalClose,
+}: FileBrowserModalContentProps) {
   const [currentPath, setCurrentPath] = useState(value);
   const scrollerRef = useRef(null);
   const previousValue = usePrevious(value);
+  const { isWindows, mode } = useSystemStatusData();
+
+  const { isFetching, isFetched, error, data } = usePaths({
+    path: currentPath,
+    allowFoldersWithoutTrailingSlashes: true,
+    includeFiles,
+  });
+
+  const { directories, files, parent, paths } = data;
 
   const emptyParent = parent === '';
   const isWindowsService = isWindows && mode === 'service';
@@ -70,20 +74,9 @@ function FileBrowserModalContent(props: FileBrowserModalContentProps) {
     []
   );
 
-  const handleRowPress = useCallback(
-    (path: string) => {
-      setCurrentPath(path);
-
-      dispatch(
-        fetchPaths({
-          path,
-          allowFoldersWithoutTrailingSlashes: true,
-          includeFiles,
-        })
-      );
-    },
-    [includeFiles, dispatch, setCurrentPath]
-  );
+  const handleRowPress = useCallback((path: string) => {
+    setCurrentPath(path);
+  }, []);
 
   const handleOkPress = useCallback(() => {
     onChange({
@@ -91,48 +84,18 @@ function FileBrowserModalContent(props: FileBrowserModalContentProps) {
       value: currentPath,
     });
 
-    dispatch(clearPaths());
     onModalClose();
-  }, [name, currentPath, dispatch, onChange, onModalClose]);
+  }, [name, currentPath, onChange, onModalClose]);
 
-  const handleFetchPaths = useCallback(
-    (path: string) => {
-      dispatch(
-        fetchPaths({
-          path,
-          allowFoldersWithoutTrailingSlashes: true,
-          includeFiles,
-        })
-      );
-    },
-    [includeFiles, dispatch]
-  );
+  const handleFetchPaths = useCallback((path: string) => {
+    setCurrentPath(path);
+  }, []);
 
   useEffect(() => {
     if (value !== previousValue && value !== currentPath) {
       setCurrentPath(value);
     }
   }, [value, previousValue, currentPath, setCurrentPath]);
-
-  useEffect(
-    () => {
-      dispatch(
-        fetchPaths({
-          path: currentPath,
-          allowFoldersWithoutTrailingSlashes: true,
-          includeFiles,
-        })
-      );
-
-      return () => {
-        dispatch(clearPaths());
-      };
-    },
-    // This should only run once when the component mounts,
-    // so we don't need to include the other dependencies.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [dispatch]
-  );
 
   return (
     <ModalContent onModalClose={onModalClose}>
@@ -172,7 +135,7 @@ function FileBrowserModalContent(props: FileBrowserModalContentProps) {
         >
           {error ? <div>{translate('ErrorLoadingContents')}</div> : null}
 
-          {isPopulated && !error ? (
+          {isFetched && !error ? (
             <Table horizontalScroll={false} columns={columns}>
               <TableBody>
                 {emptyParent ? (

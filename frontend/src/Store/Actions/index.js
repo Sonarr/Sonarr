@@ -9,7 +9,6 @@ import * as importSeries from './importSeriesActions';
 import * as interactiveImportActions from './interactiveImportActions';
 import * as oAuth from './oAuthActions';
 import * as organizePreview from './organizePreviewActions';
-import * as paths from './pathActions';
 import * as providerOptions from './providerOptionActions';
 import * as series from './seriesActions';
 import * as seriesHistory from './seriesHistoryActions';
@@ -28,7 +27,6 @@ export default [
   interactiveImportActions,
   oAuth,
   organizePreview,
-  paths,
   providerOptions,
   series,
   seriesHistory,
