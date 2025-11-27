@@ -82,16 +82,10 @@ function RestoreBackupModalContent({
   const { isRestarting } = useSelector((state: AppState) => state.app);
   const dispatch = useDispatch();
 
-  const {
-    mutate: restoreBackupById,
-    isPending: isRestoreBackupPending,
-    error: restoreBackupError,
-  } = useRestoreBackup(id || 0);
-  const {
-    mutate: uploadBackupFile,
-    isPending: isUploadBackupPending,
-    error: uploadBackupError,
-  } = useRestoreBackupUpload();
+  const { restoreBackupById, isRestoringBackup, restoreBackupError } =
+    useRestoreBackup(id || 0);
+  const { uploadBackup, isUploadingBackup, uploadBackupError } =
+    useRestoreBackupUpload();
   const { mutate: restart } = useRestart();
 
   const [path, setPath] = useState('');
@@ -100,7 +94,7 @@ function RestoreBackupModalContent({
   const [isRestarted, setIsRestarted] = useState(false);
   const [isReloading, setIsReloading] = useState(false);
 
-  const isRestoring = isRestoreBackupPending || isUploadBackupPending;
+  const isRestoring = isRestoringBackup || isUploadingBackup;
   const restoreError = restoreBackupError || uploadBackupError;
   const wasRestoring = usePrevious(isRestoring);
   const wasRestarting = usePrevious(isRestarting);
@@ -123,9 +117,9 @@ function RestoreBackupModalContent({
     } else if (file) {
       const formData = new FormData();
       formData.append('restore', file);
-      uploadBackupFile(formData);
+      uploadBackup(formData);
     }
-  }, [id, file, restoreBackupById, uploadBackupFile]);
+  }, [id, file, restoreBackupById, uploadBackup]);
 
   useEffect(() => {
     if (wasRestoring && !isRestoring && !restoreError) {

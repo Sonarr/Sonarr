@@ -22,7 +22,7 @@ export default useBackups;
 export const useDeleteBackup = (id: number) => {
   const queryClient = useQueryClient();
 
-  return useApiMutation<object, void>({
+  const { mutate, isPending, error } = useApiMutation<object, void>({
     path: `/system/backup/${id}`,
     method: 'DELETE',
     mutationOptions: {
@@ -31,6 +31,12 @@ export const useDeleteBackup = (id: number) => {
       },
     },
   });
+
+  return {
+    deleteBackup: mutate,
+    isDeleting: isPending,
+    deleteError: error,
+  };
 };
 
 interface RestoreBackupResponse {
@@ -40,7 +46,10 @@ interface RestoreBackupResponse {
 export const useRestoreBackup = (id: number) => {
   const queryClient = useQueryClient();
 
-  return useApiMutation<RestoreBackupResponse, void>({
+  const { mutate, isPending, error } = useApiMutation<
+    RestoreBackupResponse,
+    void
+  >({
     path: `/system/backup/restore/${id}`,
     method: 'POST',
     mutationOptions: {
@@ -49,12 +58,22 @@ export const useRestoreBackup = (id: number) => {
       },
     },
   });
+
+  return {
+    restoreBackupById: mutate,
+    isRestoringBackup: isPending,
+    restoreBackupError: error,
+  };
 };
 
 export const useRestoreBackupUpload = () => {
   const queryClient = useQueryClient();
 
-  return useMutation<RestoreBackupResponse, Error, FormData>({
+  const { mutate, isPending, error } = useMutation<
+    RestoreBackupResponse,
+    Error,
+    FormData
+  >({
     mutationFn: async (formData: FormData) => {
       const response = await fetch(
         `${window.Sonarr.urlBase}/api/v5/system/backup/restore/upload`,
@@ -79,4 +98,10 @@ export const useRestoreBackupUpload = () => {
       queryClient.invalidateQueries({ queryKey: ['/system/backup'] });
     },
   });
+
+  return {
+    uploadBackup: mutate,
+    isUploadingBackup: isPending,
+    uploadBackupError: error,
+  };
 };

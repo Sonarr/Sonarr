@@ -24,7 +24,7 @@ interface BackupRowProps {
 }
 
 function BackupRow({ id, type, name, path, size, time }: BackupRowProps) {
-  const deleteBackupMutation = useDeleteBackup(id);
+  const { deleteBackup } = useDeleteBackup(id);
   const [isRestoreModalOpen, setIsRestoreModalOpen] = useState(false);
   const [isConfirmDeleteModalOpen, setIsConfirmDeleteModalOpen] =
     useState(false);
@@ -67,7 +67,7 @@ function BackupRow({ id, type, name, path, size, time }: BackupRowProps) {
   }, []);
 
   const handleConfirmDeletePress = useCallback(() => {
-    deleteBackupMutation.mutate(undefined, {
+    deleteBackup(undefined, {
       onSuccess: () => {
         setIsConfirmDeleteModalOpen(false);
       },
@@ -75,7 +75,7 @@ function BackupRow({ id, type, name, path, size, time }: BackupRowProps) {
         console.error('Failed to delete backup:', error);
       },
     });
-  }, [deleteBackupMutation]);
+  }, [deleteBackup]);
 
   return (
     <TableRow key={id}>
