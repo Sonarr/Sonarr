@@ -495,6 +495,161 @@
         }
       }
     },
+    "/api/v5/customfilter": {
+      "get": {
+        "tags": [
+          "CustomFilter"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CustomFilterResource"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "CustomFilter"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CustomFilterResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomFilterResource"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomFilterResource"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomFilterResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/customfilter/{id}": {
+      "put": {
+        "tags": [
+          "CustomFilter"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CustomFilterResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomFilterResource"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomFilterResource"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomFilterResource"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "CustomFilter"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "CustomFilter"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomFilterResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v5/wanted/cutoff": {
       "get": {
         "tags": [
@@ -823,6 +978,189 @@
         }
       }
     },
+    "/api/v5/episodefile": {
+      "get": {
+        "tags": [
+          "EpisodeFile"
+        ],
+        "parameters": [
+          {
+            "name": "seriesId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "episodeFileIds",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EpisodeFileResource"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/episodefile/{id}": {
+      "put": {
+        "tags": [
+          "EpisodeFile"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EpisodeFileResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/EpisodeFileResource"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EpisodeFileResource"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EpisodeFileResource"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "EpisodeFile"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "EpisodeFile"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EpisodeFileResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/episodefile/bulk": {
+      "delete": {
+        "tags": [
+          "EpisodeFile"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EpisodeFileListResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "EpisodeFile"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/EpisodeFileResource"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/v5/health": {
       "get": {
         "tags": [
@@ -1041,7 +1379,117 @@
             }
           },
           {
+            "name": "eventType",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/EpisodeHistoryEventType"
+            }
+          },
+          {
+            "name": "includeSeries",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "includeEpisode",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HistoryResource"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/history/season": {
+      "get": {
+        "tags": [
+          "History"
+        ],
+        "parameters": [
+          {
+            "name": "seriesId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
             "name": "seasonNumber",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "eventType",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/EpisodeHistoryEventType"
+            }
+          },
+          {
+            "name": "includeSeries",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "includeEpisode",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HistoryResource"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/history/episode": {
+      "get": {
+        "tags": [
+          "History"
+        ],
+        "parameters": [
+          {
+            "name": "episodeId",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -1771,6 +2219,250 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/QueueStatusResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/release": {
+      "post": {
+        "tags": [
+          "Release"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReleaseGrabResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Release"
+        ],
+        "parameters": [
+          {
+            "name": "seriesId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "episodeId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "seasonNumber",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ReleaseResource"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/release/push": {
+      "post": {
+        "tags": [
+          "ReleasePush"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReleasePushResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReleaseResource"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReleaseResource"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReleaseResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/release/push/{id}": {
+      "get": {
+        "tags": [
+          "ReleasePush"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReleasePushResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/rootfolder": {
+      "post": {
+        "tags": [
+          "RootFolder"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RootFolderResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/RootFolderResource"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RootFolderResource"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RootFolderResource"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "RootFolder"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RootFolderResource"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/rootfolder/{id}": {
+      "delete": {
+        "tags": [
+          "RootFolder"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "RootFolder"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RootFolderResource"
                 }
               }
             }
@@ -2823,6 +3515,32 @@
         },
         "additionalProperties": false
       },
+      "CustomFilterResource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "label": {
+            "type": "string",
+            "nullable": true
+          },
+          "filters": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": { }
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "CustomFormatResource": {
         "required": [
           "name"
@@ -2949,12 +3667,116 @@
         ],
         "type": "string"
       },
-      "EpisodeFileResource": {
-        "required": [
-          "customFormats",
-          "languages",
-          "quality"
+      "DownloadRejectionReason": {
+        "enum": [
+          "unknown",
+          "unknownSeries",
+          "unknownEpisode",
+          "matchesAnotherSeries",
+          "unableToParse",
+          "error",
+          "decisionError",
+          "minimumAgeDelay",
+          "minimumAgeDelayPushed",
+          "seriesNotMonitored",
+          "episodeNotMonitored",
+          "historyRecentCutoffMet",
+          "historyCdhDisabledCutoffMet",
+          "historyHigherPreference",
+          "historyHigherRevision",
+          "historyCutoffMet",
+          "historyCustomFormatCutoffMet",
+          "historyCustomFormatScore",
+          "historyCustomFormatScoreIncrement",
+          "historyUpgradesNotAllowed",
+          "noMatchingTag",
+          "propersDisabled",
+          "properForOldFile",
+          "wrongEpisode",
+          "wrongSeason",
+          "wrongSeries",
+          "fullSeason",
+          "unknownRuntime",
+          "belowMinimumSize",
+          "aboveMaximumSize",
+          "alreadyImportedSameHash",
+          "alreadyImportedSameName",
+          "unknownReleaseGroup",
+          "releaseGroupDoesNotMatch",
+          "indexerDisabled",
+          "blocklisted",
+          "customFormatMinimumScore",
+          "minimumFreeSpace",
+          "fullSeasonNotAired",
+          "maximumSizeExceeded",
+          "minimumAge",
+          "maximumAge",
+          "multiSeason",
+          "sample",
+          "protocolDisabled",
+          "qualityNotWanted",
+          "qualityUpgradesDisabled",
+          "queueHigherPreference",
+          "queueHigherRevision",
+          "queueCutoffMet",
+          "queueCustomFormatCutoffMet",
+          "queueCustomFormatScore",
+          "queueCustomFormatScoreIncrement",
+          "queueUpgradesNotAllowed",
+          "queuePropersDisabled",
+          "raw",
+          "mustContainMissing",
+          "mustNotContainPresent",
+          "repackDisabled",
+          "repackUnknownReleaseGroup",
+          "repackReleaseGroupDoesNotMatch",
+          "existingFileHasMoreEpisodes",
+          "ambiguousNumbering",
+          "notSeasonPack",
+          "splitEpisode",
+          "minimumSeeders",
+          "diskHigherPreference",
+          "diskHigherRevision",
+          "diskCutoffMet",
+          "diskCustomFormatCutoffMet",
+          "diskCustomFormatScore",
+          "diskCustomFormatScoreIncrement",
+          "diskUpgradesNotAllowed",
+          "diskNotUpgrade"
         ],
+        "type": "string"
+      },
+      "DownloadRejectionResource": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "reason": {
+            "$ref": "#/components/schemas/DownloadRejectionReason"
+          },
+          "type": {
+            "$ref": "#/components/schemas/RejectionType"
+          }
+        },
+        "additionalProperties": false
+      },
+      "EpisodeFileListResource": {
+        "type": "object",
+        "properties": {
+          "episodeFileIds": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "EpisodeFileResource": {
         "type": "object",
         "properties": {
           "id": {
@@ -3335,6 +4157,7 @@
           "remotePathMappingWrongOSPath",
           "removedSeriesMultiple",
           "removedSeriesSingle",
+          "rootFolderEmpty",
           "rootFolderMissing",
           "rootFolderMultipleMissing",
           "serverNotification",
@@ -3734,6 +4557,40 @@
         ],
         "type": "string"
       },
+      "OverrideReleaseResource": {
+        "type": "object",
+        "properties": {
+          "seriesId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "episodeIds": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          },
+          "downloadClientId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "quality": {
+            "$ref": "#/components/schemas/QualityModel"
+          },
+          "languages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Language"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "ParseResource": {
         "type": "object",
         "properties": {
@@ -3895,6 +4752,66 @@
           },
           "releaseType": {
             "$ref": "#/components/schemas/ReleaseType"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ParsedEpisodeInfoResource": {
+        "type": "object",
+        "properties": {
+          "quality": {
+            "$ref": "#/components/schemas/QualityModel"
+          },
+          "releaseGroup": {
+            "type": "string",
+            "nullable": true
+          },
+          "releaseHash": {
+            "type": "string",
+            "nullable": true
+          },
+          "fullSeason": {
+            "type": "boolean"
+          },
+          "seasonNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "airDate": {
+            "type": "string",
+            "nullable": true
+          },
+          "seriesTitle": {
+            "type": "string",
+            "nullable": true
+          },
+          "episodeNumbers": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          },
+          "absoluteEpisodeNumbers": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          },
+          "isDaily": {
+            "type": "boolean"
+          },
+          "isAbsoluteNumbering": {
+            "type": "boolean"
+          },
+          "isPossibleSpecialEpisode": {
+            "type": "boolean"
+          },
+          "special": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -4214,6 +5131,389 @@
         },
         "additionalProperties": false
       },
+      "RejectionType": {
+        "enum": [
+          "permanent",
+          "temporary"
+        ],
+        "type": "string"
+      },
+      "ReleaseDecisionResource": {
+        "type": "object",
+        "properties": {
+          "approved": {
+            "type": "boolean"
+          },
+          "temporarilyRejected": {
+            "type": "boolean"
+          },
+          "rejected": {
+            "type": "boolean"
+          },
+          "rejections": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DownloadRejectionResource"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ReleaseEpisodeResource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "seasonNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "episodeNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "absoluteEpisodeNumber": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ReleaseGrabResource": {
+        "required": [
+          "guid",
+          "indexerId"
+        ],
+        "type": "object",
+        "properties": {
+          "guid": {
+            "type": "string",
+            "nullable": true
+          },
+          "indexerId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "override": {
+            "$ref": "#/components/schemas/OverrideReleaseResource"
+          },
+          "searchInfo": {
+            "$ref": "#/components/schemas/SearchInfoResource"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ReleaseHistoryResource": {
+        "type": "object",
+        "properties": {
+          "grabbed": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "failed": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ReleaseInfoResource": {
+        "type": "object",
+        "properties": {
+          "guid": {
+            "type": "string",
+            "nullable": true
+          },
+          "age": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ageHours": {
+            "type": "number",
+            "format": "double"
+          },
+          "ageMinutes": {
+            "type": "number",
+            "format": "double"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "indexerId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "indexer": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "tvdbId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tvRageId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "imdbId": {
+            "type": "string",
+            "nullable": true
+          },
+          "rejections": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "publishDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "commentUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "downloadUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "infoUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "magnetUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "infoHash": {
+            "type": "string",
+            "nullable": true
+          },
+          "seeders": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "leechers": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "protocol": {
+            "$ref": "#/components/schemas/DownloadProtocol"
+          },
+          "indexerFlags": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ReleasePushResource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "guid": {
+            "type": "string",
+            "nullable": true
+          },
+          "size": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "indexerId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "indexer": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "tvdbId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tvRageId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "imdbId": {
+            "type": "string",
+            "nullable": true
+          },
+          "rejections": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "publishDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "commentUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "downloadUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "infoUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "magnetUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "infoHash": {
+            "type": "string",
+            "nullable": true
+          },
+          "seeders": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "leechers": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "protocol": {
+            "$ref": "#/components/schemas/DownloadProtocol"
+          },
+          "indexerFlags": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "downloadClientId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "downloadClientName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ReleaseResource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "parsedInfo": {
+            "$ref": "#/components/schemas/ParsedEpisodeInfoResource"
+          },
+          "release": {
+            "$ref": "#/components/schemas/ReleaseInfoResource"
+          },
+          "decision": {
+            "$ref": "#/components/schemas/ReleaseDecisionResource"
+          },
+          "history": {
+            "$ref": "#/components/schemas/ReleaseHistoryResource"
+          },
+          "qualityWeight": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "languages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Language"
+            },
+            "nullable": true
+          },
+          "mappedSeasonNumber": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "mappedEpisodeNumbers": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          },
+          "mappedAbsoluteEpisodeNumbers": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          },
+          "mappedSeriesId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "mappedEpisodeInfo": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ReleaseEpisodeResource"
+            },
+            "nullable": true
+          },
+          "episodeRequested": {
+            "type": "boolean"
+          },
+          "downloadAllowed": {
+            "type": "boolean"
+          },
+          "releaseWeight": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "customFormats": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CustomFormatResource"
+            },
+            "nullable": true
+          },
+          "customFormatScore": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sceneMapping": {
+            "$ref": "#/components/schemas/AlternateTitleResource"
+          }
+        },
+        "additionalProperties": false
+      },
       "ReleaseType": {
         "enum": [
           "unknown",
@@ -4240,6 +5540,43 @@
         },
         "additionalProperties": false
       },
+      "RootFolderResource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "path": {
+            "type": "string",
+            "nullable": true
+          },
+          "accessible": {
+            "type": "boolean"
+          },
+          "isEmpty": {
+            "type": "boolean"
+          },
+          "freeSpace": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "totalSpace": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "unmappedFolders": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UnmappedFolder"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "RuntimeMode": {
         "enum": [
           "console",
@@ -4247,6 +5584,27 @@
           "tray"
         ],
         "type": "string"
+      },
+      "SearchInfoResource": {
+        "type": "object",
+        "properties": {
+          "seriesId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "seasonNumber": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "episodeId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
       },
       "SeasonResource": {
         "type": "object",
@@ -4941,6 +6299,24 @@
             "items": {
               "type": "string"
             },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UnmappedFolder": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "path": {
+            "type": "string",
+            "nullable": true
+          },
+          "relativePath": {
+            "type": "string",
             "nullable": true
           }
         },
