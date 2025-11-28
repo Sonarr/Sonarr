@@ -1,29 +1,47 @@
-import { useSelector } from 'react-redux';
-import { createSelector } from 'reselect';
-import AppState from 'App/State/AppState';
+import useApiQuery from 'Helpers/Hooks/useApiQuery';
 import Episode from './Episode';
 
-function getEpisodes(episodeIds: number[], episodes: Episode[]) {
-  return episodeIds.reduce<Episode[]>((acc, id) => {
-    const episode = episodes.find((episode) => episode.id === id);
+const DEFAULT_EPISODES: Episode[] = [];
 
-    if (episode) {
-      acc.push(episode);
-    }
-
-    return acc;
-  }, []);
+interface SeriesEpisodes {
+  seriesId: number;
 }
 
-function createEpisodeSelector(episodeIds: number[]) {
-  return createSelector(
-    (state: AppState) => state.episodes.items,
-    (episodes) => {
-      return getEpisodes(episodeIds, episodes);
-    }
-  );
+interface SeasonEpisodes {
+  seriesId: number | undefined;
+  seasonNumber: number | undefined;
 }
 
-export default function useEpisodes(episodeIds: number[]) {
-  return useSelector(createEpisodeSelector(episodeIds));
+interface EpisodeIds {
+  episodeIds: number[];
 }
+
+interface EpisodeFileId {
+  episodeFileId: number;
+}
+
+export type EpisodeFilter =
+  | SeriesEpisodes
+  | SeasonEpisodes
+  | EpisodeIds
+  | EpisodeFileId;
+
+const useEpisodes = (params: EpisodeFilter) => {
+  const result = useApiQuery<Episode[]>({
+    path: '/episode',
+    queryParams: { ...params },
+    queryOptions: {
+      enabled:
+        ('seriesId' in params && params.seriesId !== undefined) ||
+        ('episodeIds' in params && params.episodeIds?.length > 0) ||
+        ('episodeFileId' in params && params.episodeFileId !== undefined),
+    },
+  });
+
+  return {
+    ...result,
+    data: result.data ?? DEFAULT_EPISODES,
+  };
+};
+
+export default useEpisodes;

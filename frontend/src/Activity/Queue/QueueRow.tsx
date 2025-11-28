@@ -15,7 +15,7 @@ import DownloadProtocol from 'DownloadClient/DownloadProtocol';
 import EpisodeFormats from 'Episode/EpisodeFormats';
 import EpisodeLanguages from 'Episode/EpisodeLanguages';
 import EpisodeQuality from 'Episode/EpisodeQuality';
-import useEpisodes from 'Episode/useEpisodes';
+import useEpisodesWithIds from 'Episode/useEpisodesWithIds';
 import { icons, kinds, tooltipPositions } from 'Helpers/Props';
 import InteractiveImportModal from 'InteractiveImport/InteractiveImportModal';
 import Language from 'Language/Language';
@@ -106,7 +106,7 @@ function QueueRow(props: QueueRowProps) {
   } = props;
 
   const series = useSeries(seriesId);
-  const episodes = useEpisodes(episodeIds);
+  const episodes = useEpisodesWithIds(episodeIds);
   const { showRelativeDates, shortDateFormat, timeFormat } = useSelector(
     createUISettingsSelector()
   );

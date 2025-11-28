@@ -128,14 +128,14 @@ const sort = <T extends ModelBase, TFilter = null, TSort = null>(
 };
 
 interface ClientSideFilterAndSortOptions<T extends ModelBase, TFilter, TSort> {
-  selectedFilterKey: string | number;
-  filters: Filter[];
+  selectedFilterKey?: string | number;
+  filters?: Filter[];
   filterPredicates?: Record<
     keyof TFilter,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (item: T, value: any, type: FilterType) => boolean
   >;
-  customFilters: CustomFilter[];
+  customFilters?: CustomFilter[];
   sortKey: string;
   sortDirection: SortDirection;
   secondarySortKey?: string;

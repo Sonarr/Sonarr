@@ -3,7 +3,6 @@ import * as captcha from './captchaActions';
 import * as commands from './commandActions';
 import * as episodes from './episodeActions';
 import * as episodeHistory from './episodeHistoryActions';
-import * as episodeSelection from './episodeSelectionActions';
 import * as importSeries from './importSeriesActions';
 import * as interactiveImportActions from './interactiveImportActions';
 import * as oAuth from './oAuthActions';
@@ -20,7 +19,6 @@ export default [
   commands,
   episodes,
   episodeHistory,
-  episodeSelection,
   importSeries,
   interactiveImportActions,
   oAuth,

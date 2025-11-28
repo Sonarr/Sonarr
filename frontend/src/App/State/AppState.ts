@@ -42,7 +42,6 @@ interface AppState {
   commands: CommandAppState;
   episodeHistory: HistoryAppState;
   episodes: EpisodesAppState;
-  episodesSelection: EpisodesAppState;
   importSeries: ImportSeriesAppState;
   interactiveImport: InteractiveImportAppState;
   oAuth: OAuthAppState;
