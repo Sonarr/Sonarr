@@ -1,8 +1,5 @@
 import { QueryKey, useQueryClient } from '@tanstack/react-query';
-import { useSelector } from 'react-redux';
-import { createSelector } from 'reselect';
 import { create } from 'zustand';
-import AppState from 'App/State/AppState';
 import useApiMutation from 'Helpers/Hooks/useApiMutation';
 import { PagedQueryResponse } from 'Helpers/Hooks/usePagedApiQuery';
 import { CalendarItem } from 'typings/Calendar';
@@ -17,39 +14,24 @@ export type EpisodeEntity =
 
 interface EpisodeQueryKeyStore {
   calendar: QueryKey | null;
+  episodes: QueryKey | null;
   cutoffUnmet: QueryKey | null;
   missing: QueryKey | null;
 }
 
 const episodeQueryKeyStore = create<EpisodeQueryKeyStore>(() => ({
   calendar: null,
+  episodes: null,
   cutoffUnmet: null,
   missing: null,
 }));
-
-function createEpisodeSelector(episodeId?: number) {
-  return createSelector(
-    (state: AppState) => state.episodes.items,
-    (episodes) => {
-      return episodes.find(({ id }) => id === episodeId);
-    }
-  );
-}
-
-// No-op...ish
-function createNoOpEpisodeSelector(_episodeId?: number) {
-  return createSelector(
-    (state: AppState) => state.episodes.items,
-    (_episodes) => {
-      return undefined;
-    }
-  );
-}
 
 export const getQueryKey = (episodeEntity: EpisodeEntity) => {
   switch (episodeEntity) {
     case 'calendar':
       return episodeQueryKeyStore.getState().calendar;
+    case 'episodes':
+      return episodeQueryKeyStore.getState().episodes;
     case 'wanted.cutoffUnmet':
       return episodeQueryKeyStore.getState().cutoffUnmet;
     case 'wanted.missing':
@@ -67,6 +49,9 @@ export const setEpisodeQueryKey = (
     case 'calendar':
       episodeQueryKeyStore.setState({ calendar: queryKey });
       break;
+    case 'episodes':
+      episodeQueryKeyStore.setState({ episodes: queryKey });
+      break;
     case 'wanted.cutoffUnmet':
       episodeQueryKeyStore.setState({ cutoffUnmet: queryKey });
       break;
@@ -83,19 +68,6 @@ const useEpisode = (
   episodeEntity: EpisodeEntity
 ) => {
   const queryClient = useQueryClient();
-  let selector = createEpisodeSelector;
-
-  switch (episodeEntity) {
-    case 'calendar':
-    case 'wanted.cutoffUnmet':
-    case 'wanted.missing':
-      selector = createNoOpEpisodeSelector;
-      break;
-    default:
-      break;
-  }
-
-  const result = useSelector(selector(episodeId));
   const queryKey = getQueryKey(episodeEntity);
 
   if (episodeEntity === 'calendar') {
@@ -104,7 +76,17 @@ const useEpisode = (
           .getQueryData<CalendarItem[]>(queryKey)
           ?.find((e) => e.id === episodeId)
       : undefined;
-  } else if (
+  }
+
+  if (episodeEntity === 'episodes') {
+    return queryKey
+      ? queryClient
+          .getQueryData<Episode[]>(queryKey)
+          ?.find((e) => e.id === episodeId)
+      : undefined;
+  }
+
+  if (
     episodeEntity === 'wanted.cutoffUnmet' ||
     episodeEntity === 'wanted.missing'
   ) {
@@ -115,7 +97,7 @@ const useEpisode = (
       : undefined;
   }
 
-  return result;
+  return undefined;
 };
 
 export default useEpisode;
@@ -128,15 +110,33 @@ interface ToggleEpisodesMonitored {
 export const useToggleEpisodesMonitored = (queryKey: QueryKey) => {
   const queryClient = useQueryClient();
 
-  const { mutate, isPending } = useApiMutation<
+  const { mutate, isPending, variables } = useApiMutation<
     unknown,
     ToggleEpisodesMonitored
   >({
     path: '/episode/monitor',
     method: 'PUT',
     mutationOptions: {
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey });
+      onSuccess: (_data, variables) => {
+        queryClient.setQueryData<Episode[] | undefined>(
+          queryKey,
+          (oldEpisodes) => {
+            if (!oldEpisodes) {
+              return oldEpisodes;
+            }
+
+            return oldEpisodes.map((oldEpisode) => {
+              if (variables.episodeIds.includes(oldEpisode.id)) {
+                return {
+                  ...oldEpisode,
+                  monitored: variables.monitored,
+                };
+              }
+
+              return oldEpisode;
+            });
+          }
+        );
       },
     },
   });
@@ -144,5 +144,20 @@ export const useToggleEpisodesMonitored = (queryKey: QueryKey) => {
   return {
     toggleEpisodesMonitored: mutate,
     isToggling: isPending,
+    togglingEpisodeIds: variables?.episodeIds ?? [],
+    togglingMonitored: variables?.monitored,
   };
+};
+
+const DEFAULT_EPISODES: Episode[] = [];
+
+export const useEpisodesWithIds = (episodeIds: number[]) => {
+  const queryClient = useQueryClient();
+  const queryKey = getQueryKey('episodes');
+
+  return queryKey
+    ? queryClient
+        .getQueryData<Episode[]>(queryKey)
+        ?.filter((e) => episodeIds.includes(e.id)) ?? DEFAULT_EPISODES
+    : DEFAULT_EPISODES;
 };

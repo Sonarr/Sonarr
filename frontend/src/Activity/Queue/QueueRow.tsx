@@ -15,7 +15,7 @@ import DownloadProtocol from 'DownloadClient/DownloadProtocol';
 import EpisodeFormats from 'Episode/EpisodeFormats';
 import EpisodeLanguages from 'Episode/EpisodeLanguages';
 import EpisodeQuality from 'Episode/EpisodeQuality';
-import useEpisodesWithIds from 'Episode/useEpisodesWithIds';
+import { useEpisodesWithIds } from 'Episode/useEpisode';
 import { icons, kinds, tooltipPositions } from 'Helpers/Props';
 import InteractiveImportModal from 'InteractiveImport/InteractiveImportModal';
 import Language from 'Language/Language';

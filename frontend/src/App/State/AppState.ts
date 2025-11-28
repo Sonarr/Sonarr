@@ -2,7 +2,6 @@ import { Error } from './AppSectionState';
 import BlocklistAppState from './BlocklistAppState';
 import CaptchaAppState from './CaptchaAppState';
 import CommandAppState from './CommandAppState';
-import EpisodesAppState from './EpisodesAppState';
 import HistoryAppState, { SeriesHistoryAppState } from './HistoryAppState';
 import ImportSeriesAppState from './ImportSeriesAppState';
 import InteractiveImportAppState from './InteractiveImportAppState';
@@ -41,7 +40,6 @@ interface AppState {
   captcha: CaptchaAppState;
   commands: CommandAppState;
   episodeHistory: HistoryAppState;
-  episodes: EpisodesAppState;
   importSeries: ImportSeriesAppState;
   interactiveImport: InteractiveImportAppState;
   oAuth: OAuthAppState;

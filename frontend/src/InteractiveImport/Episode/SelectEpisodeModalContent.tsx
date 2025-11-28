@@ -77,6 +77,7 @@ function SelectEpisodeModalContentInner(props: SelectEpisodeModalContentProps) {
   const { isFetching, isFetched, data, error } = useEpisodes({
     seriesId,
     seasonNumber,
+    isSelection: true,
   });
 
   const { sortKey, sortDirection } = useEpisodeSelectionOptions();
@@ -255,6 +256,7 @@ function SelectEpisodeModalContent(props: SelectEpisodeModalContentProps) {
   const { data } = useEpisodes({
     seriesId: props.seriesId,
     seasonNumber: props.seasonNumber,
+    isSelection: true,
   });
 
   return (

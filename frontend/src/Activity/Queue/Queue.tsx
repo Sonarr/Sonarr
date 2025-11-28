@@ -22,12 +22,11 @@ import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import TableOptionsModalWrapper from 'Components/Table/TableOptions/TableOptionsModalWrapper';
 import TablePager from 'Components/Table/TablePager';
-import createEpisodesFetchingSelector from 'Episode/createEpisodesFetchingSelector';
+import useEpisodes from 'Episode/useEpisodes';
 import { useCustomFiltersList } from 'Filters/useCustomFilters';
 import { align, icons, kinds } from 'Helpers/Props';
 import { SortDirection } from 'Helpers/Props/sortDirections';
 import { executeCommand } from 'Store/Actions/commandActions';
-import { clearEpisodes, fetchEpisodes } from 'Store/Actions/episodeActions';
 import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
 import { CheckInputChanged } from 'typings/inputs';
 import QueueModel from 'typings/Queue';
@@ -79,8 +78,17 @@ function QueueContent() {
   const { isGrabbing, grabQueueItems } = useGrabQueueItems();
 
   const { count } = useQueueStatus();
-  const { isEpisodesFetching, isEpisodesPopulated, episodesError } =
-    useSelector(createEpisodesFetchingSelector());
+
+  const episodeIds = useMemo(() => {
+    return selectUniqueIds<QueueModel, number>(records, 'episodeIds');
+  }, [records]);
+
+  const {
+    isFetching: isEpisodesFetching,
+    isFetched: isEpisodesFetched,
+    error: episodesError,
+  } = useEpisodes({ episodeIds });
+
   const customFilters = useCustomFiltersList('queue');
 
   const isRefreshMonitoredDownloadsExecuting = useSelector(
@@ -109,7 +117,7 @@ function QueueContent() {
   // Use isLoading over isFetched to avoid losing the table UI when switching pages
   const isAllPopulated =
     !isLoading &&
-    (isEpisodesPopulated ||
+    (isEpisodesFetched ||
       !records.length ||
       records.every((e) => !e.episodeIds?.length));
   const hasError = error || episodesError;
@@ -186,16 +194,6 @@ function QueueContent() {
     },
     [goToPage]
   );
-
-  useEffect(() => {
-    const episodeIds = selectUniqueIds(records, 'episodeIds');
-
-    if (episodeIds.length) {
-      dispatch(fetchEpisodes({ episodeIds }));
-    } else {
-      dispatch(clearEpisodes());
-    }
-  }, [records, dispatch]);
 
   useEffect(() => {
     const repopulate = () => {

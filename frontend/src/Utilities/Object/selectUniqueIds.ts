@@ -1,6 +1,9 @@
 import KeysMatching from 'typings/Helpers/KeysMatching';
 
-function selectUniqueIds<T, K>(items: T[], idProp: KeysMatching<T, K>) {
+function selectUniqueIds<T, K>(
+  items: T[],
+  idProp: KeysMatching<T, K | K[]>
+): K[] {
   const result = items.reduce((acc: Set<K>, item) => {
     if (!item[idProp]) {
       return acc;

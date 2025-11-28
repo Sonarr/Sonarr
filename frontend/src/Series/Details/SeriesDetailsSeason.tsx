@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
-import EpisodesAppState from 'App/State/EpisodesAppState';
 import * as commandNames from 'Commands/commandNames';
 import Icon from 'Components/Icon';
 import Label from 'Components/Label';
@@ -18,6 +17,13 @@ import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import Popover from 'Components/Tooltip/Popover';
 import Episode from 'Episode/Episode';
+import {
+  setEpisodeOptions,
+  setEpisodeSort,
+  useEpisodeOptions,
+} from 'Episode/episodeOptionsStore';
+import { getQueryKey, useToggleEpisodesMonitored } from 'Episode/useEpisode';
+import { useSeasonEpisodes } from 'Episode/useEpisodes';
 import usePrevious from 'Helpers/Hooks/usePrevious';
 import { align, icons, sortDirections, tooltipPositions } from 'Helpers/Props';
 import { SortDirection } from 'Helpers/Props/sortDirections';
@@ -27,13 +33,7 @@ import SeriesHistoryModal from 'Series/History/SeriesHistoryModal';
 import SeasonInteractiveSearchModal from 'Series/Search/SeasonInteractiveSearchModal';
 import { Statistics } from 'Series/Series';
 import useSeries from 'Series/useSeries';
-import {
-  setEpisodesSort,
-  setEpisodesTableOption,
-  toggleEpisodesMonitored,
-} from 'Store/Actions/episodeActions';
 import { toggleSeasonMonitored } from 'Store/Actions/seriesActions';
-import createClientSideCollectionSelector from 'Store/Selectors/createClientSideCollectionSelector';
 import createCommandsSelector from 'Store/Selectors/createCommandsSelector';
 import createDimensionsSelector from 'Store/Selectors/createDimensionsSelector';
 import { TableOptionsChangePayload } from 'typings/Table';
@@ -86,21 +86,6 @@ function getSeasonStatistics(episodes: Episode[]) {
   };
 }
 
-function createEpisodesSelector(seasonNumber: number) {
-  return createSelector(
-    createClientSideCollectionSelector('episodes'),
-    (episodes: EpisodesAppState) => {
-      const { items, columns, sortKey, sortDirection } = episodes;
-
-      const episodesInSeason = items.filter(
-        (episode) => episode.seasonNumber === seasonNumber
-      );
-
-      return { items: episodesInSeason, columns, sortKey, sortDirection };
-    }
-  );
-}
-
 function createIsSearchingSelector(seriesId: number, seasonNumber: number) {
   return createSelector(createCommandsSelector(), (commands) => {
     return isCommandExecuting(
@@ -134,10 +119,9 @@ function SeriesDetailsSeason({
 }: SeriesDetailsSeasonProps) {
   const dispatch = useDispatch();
   const { monitored: seriesMonitored, path } = useSeries(seriesId)!;
+  const { data: items } = useSeasonEpisodes(seriesId, seasonNumber);
 
-  const { items, columns, sortKey, sortDirection } = useSelector(
-    createEpisodesSelector(seasonNumber)
-  );
+  const { columns, sortKey, sortDirection } = useEpisodeOptions();
 
   const { isSmallScreen } = useSelector(createDimensionsSelector());
   const isSearching = useSelector(
@@ -162,10 +146,11 @@ function SeriesDetailsSeason({
   const [isInteractiveSearchModalOpen, setIsInteractiveSearchModalOpen] =
     useState(false);
 
-  const lastToggledEpisode = useRef<number | null>(null);
-  const itemsRef = useRef(items);
+  const { toggleEpisodesMonitored, isToggling, togglingEpisodeIds } =
+    useToggleEpisodesMonitored(getQueryKey('episodes')!);
 
-  itemsRef.current = items;
+  const lastToggledEpisode = useRef<number | null>(null);
+  const hasSetInitalExpand = useRef(false);
 
   const seasonNumberTitle =
     seasonNumber === 0
@@ -196,25 +181,23 @@ function SeriesDetailsSeason({
       { shiftKey }: { shiftKey: boolean }
     ) => {
       const lastToggled = lastToggledEpisode.current;
-      const episodeIds = [episodeId];
+      const episodeIds = new Set([episodeId]);
 
       if (shiftKey && lastToggled) {
         const { lower, upper } = getToggledRange(items, episodeId, lastToggled);
         for (let i = lower; i < upper; i++) {
-          episodeIds.push(items[i].id);
+          episodeIds.add(items[i].id);
         }
       }
 
       lastToggledEpisode.current = episodeId;
 
-      dispatch(
-        toggleEpisodesMonitored({
-          episodeIds,
-          monitored: value,
-        })
-      );
+      toggleEpisodesMonitored({
+        episodeIds: Array.from(episodeIds),
+        monitored: value,
+      });
     },
-    [items, dispatch]
+    [items, toggleEpisodesMonitored]
   );
 
   const handleSearchPress = useCallback(() => {
@@ -259,32 +242,36 @@ function SeriesDetailsSeason({
 
   const handleSortPress = useCallback(
     (sortKey: string, sortDirection?: SortDirection) => {
-      dispatch(
-        setEpisodesSort({
-          sortKey,
-          sortDirection,
-        })
-      );
+      setEpisodeSort({
+        sortKey,
+        sortDirection,
+      });
     },
-    [dispatch]
+    []
   );
 
   const handleTableOptionChange = useCallback(
     (payload: TableOptionsChangePayload) => {
-      dispatch(setEpisodesTableOption(payload));
+      setEpisodeOptions(payload);
     },
-    [dispatch]
+    []
   );
 
   useEffect(() => {
+    if (hasSetInitalExpand.current || items.length === 0) {
+      return;
+    }
+
+    hasSetInitalExpand.current = true;
+
     const expand =
-      itemsRef.current.some(
+      items.some(
         (item) =>
           isAfter(item.airDateUtc) || isAfter(item.airDateUtc, { days: -30 })
-      ) || itemsRef.current.every((item) => !item.airDateUtc);
+      ) || items.every((item) => !item.airDateUtc);
 
     onExpandPress(seasonNumber, expand && seasonNumber > 0);
-  }, [seriesId, seasonNumber, onExpandPress]);
+  }, [items, seriesId, seasonNumber, onExpandPress]);
 
   useEffect(() => {
     if ((previousEpisodeFileCount ?? 0) > 0 && episodeFileCount === 0) {
@@ -505,6 +492,9 @@ function SeriesDetailsSeason({
                         key={item.id}
                         columns={columns}
                         {...item}
+                        isSaving={
+                          isToggling && togglingEpisodeIds.includes(item.id)
+                        }
                         onMonitorEpisodePress={handleMonitorEpisodePress}
                       />
                     );

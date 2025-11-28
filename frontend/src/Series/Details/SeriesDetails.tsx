@@ -1,8 +1,6 @@
 import moment from 'moment';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { createSelector } from 'reselect';
-import AppState from 'App/State/AppState';
 import * as commandNames from 'Commands/commandNames';
 import Alert from 'Components/Alert';
 import HeartRating from 'Components/HeartRating';
@@ -20,6 +18,7 @@ import PageToolbarSection from 'Components/Page/Toolbar/PageToolbarSection';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
 import Popover from 'Components/Tooltip/Popover';
 import Tooltip from 'Components/Tooltip/Tooltip';
+import useEpisodes from 'Episode/useEpisodes';
 import useEpisodeFiles from 'EpisodeFile/useEpisodeFiles';
 import usePrevious from 'Helpers/Hooks/usePrevious';
 import {
@@ -43,7 +42,6 @@ import { getSeriesStatusDetails } from 'Series/SeriesStatus';
 import useSeries from 'Series/useSeries';
 import QualityProfileName from 'Settings/Profiles/Quality/QualityProfileName';
 import { executeCommand } from 'Store/Actions/commandActions';
-import { clearEpisodes, fetchEpisodes } from 'Store/Actions/episodeActions';
 import { toggleSeriesMonitored } from 'Store/Actions/seriesActions';
 import createAllSeriesSelector from 'Store/Selectors/createAllSeriesSelector';
 import createCommandsSelector from 'Store/Selectors/createCommandsSelector';
@@ -75,26 +73,6 @@ function getDateYear(date: string | undefined) {
   return dateDate.format('YYYY');
 }
 
-function createEpisodesSelector() {
-  return createSelector(
-    (state: AppState) => state.episodes,
-    (episodes) => {
-      const { items, isFetching, isPopulated, error } = episodes;
-
-      const hasEpisodes = !!items.length;
-      const hasMonitoredEpisodes = items.some((e) => e.monitored);
-
-      return {
-        isEpisodesFetching: isFetching,
-        isEpisodesPopulated: isPopulated,
-        episodesError: error,
-        hasEpisodes,
-        hasMonitoredEpisodes,
-      };
-    }
-  );
-}
-
 interface ExpandedState {
   allExpanded: boolean;
   allCollapsed: boolean;
@@ -112,12 +90,19 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
   const allSeries = useSelector(createAllSeriesSelector());
 
   const {
-    isEpisodesFetching,
-    isEpisodesPopulated,
-    episodesError,
-    hasEpisodes,
-    hasMonitoredEpisodes,
-  } = useSelector(createEpisodesSelector());
+    isFetching: isEpisodesFetching,
+    isFetched: isEpisodesFetched,
+    error: episodesError,
+    data,
+    refetch: refetchEpisodes,
+  } = useEpisodes({ seriesId });
+
+  const { hasEpisodes, hasMonitoredEpisodes } = useMemo(() => {
+    return {
+      hasEpisodes: data.length > 0,
+      hasMonitoredEpisodes: data.some((e) => e.monitored),
+    };
+  }, [data]);
 
   const {
     isFetching: isEpisodeFilesFetching,
@@ -358,8 +343,8 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
   }, [seriesId, dispatch]);
 
   const populate = useCallback(() => {
-    dispatch(fetchEpisodes({ seriesId }));
-  }, [seriesId, dispatch]);
+    refetchEpisodes();
+  }, [refetchEpisodes]);
 
   useEffect(() => {
     populate();
@@ -370,7 +355,6 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
 
     return () => {
       unregisterPagePopulator(populate);
-      dispatch(clearEpisodes());
     };
   }, [populate, dispatch]);
 
@@ -439,7 +423,7 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
 
   const fanartUrl = getFanartUrl(images);
   const isFetching = isEpisodesFetching || isEpisodeFilesFetching;
-  const isPopulated = isEpisodesPopulated && isEpisodeFilesFetched;
+  const isPopulated = isEpisodesFetched && isEpisodeFilesFetched;
 
   return (
     <SeriesDetailsProvider seriesId={seriesId}>

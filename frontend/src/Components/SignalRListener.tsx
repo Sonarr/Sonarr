@@ -150,13 +150,37 @@ function SignalRListener() {
     }
 
     if (name === 'episode') {
+      if (version < 5) {
+        return;
+      }
+
       if (body.action === 'updated') {
-        dispatch(
-          updateItem({
-            section: 'episodes',
-            updateOnly: true,
-            ...body.resource,
-          })
+        const updatedItem = body.resource as Episode;
+
+        queryClient.setQueriesData(
+          { queryKey: ['/episode'] },
+          (oldData: Episode[] | undefined) => {
+            if (!oldData) {
+              return oldData;
+            }
+
+            const itemIndex = oldData.findIndex(
+              (item) => item.id === updatedItem.id
+            );
+
+            // Don't add episode if not found
+            if (itemIndex === -1) {
+              return oldData;
+            }
+
+            return oldData.map((item) => {
+              if (item.id === updatedItem.id) {
+                return updatedItem;
+              }
+
+              return item;
+            });
+          }
         );
       }
 

@@ -1,5 +1,4 @@
 import React, { useCallback, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import Button from 'Components/Link/Button';
 import ModalBody from 'Components/Modal/ModalBody';
@@ -10,10 +9,13 @@ import MonitorToggleButton from 'Components/MonitorToggleButton';
 import Episode from 'Episode/Episode';
 import EpisodeDetailsTab from 'Episode/EpisodeDetailsTab';
 import episodeEntities from 'Episode/episodeEntities';
-import useEpisode, { EpisodeEntity } from 'Episode/useEpisode';
+import useEpisode, {
+  EpisodeEntity,
+  getQueryKey,
+  useToggleEpisodesMonitored,
+} from 'Episode/useEpisode';
 import Series from 'Series/Series';
 import useSeries from 'Series/useSeries';
-import { toggleEpisodeMonitored } from 'Store/Actions/episodeActions';
 import translate from 'Utilities/String/translate';
 import EpisodeHistory from './History/EpisodeHistory';
 import EpisodeSearch from './Search/EpisodeSearch';
@@ -28,7 +30,6 @@ export interface EpisodeDetailsModalContentProps {
   episodeEntity: EpisodeEntity;
   seriesId: number;
   episodeTitle: string;
-  isSaving?: boolean;
   showOpenSeriesButton?: boolean;
   selectedTab?: EpisodeDetailsTab;
   startInteractiveSearch?: boolean;
@@ -36,22 +37,17 @@ export interface EpisodeDetailsModalContentProps {
   onModalClose(): void;
 }
 
-function EpisodeDetailsModalContent(props: EpisodeDetailsModalContentProps) {
-  const {
-    episodeId,
-    episodeEntity = episodeEntities.EPISODES,
-    seriesId,
-    episodeTitle,
-    isSaving = false,
-    showOpenSeriesButton = false,
-    startInteractiveSearch = false,
-    selectedTab = 'details',
-    onTabChange,
-    onModalClose,
-  } = props;
-
-  const dispatch = useDispatch();
-
+function EpisodeDetailsModalContent({
+  episodeId,
+  episodeEntity = episodeEntities.EPISODES,
+  seriesId,
+  episodeTitle,
+  showOpenSeriesButton = false,
+  startInteractiveSearch = false,
+  selectedTab = 'details',
+  onTabChange,
+  onModalClose,
+}: EpisodeDetailsModalContentProps) {
   const [currentlySelectedTab, setCurrentlySelectedTab] = useState(selectedTab);
 
   const {
@@ -70,6 +66,10 @@ function EpisodeDetailsModalContent(props: EpisodeDetailsModalContentProps) {
     monitored,
   } = useEpisode(episodeId, episodeEntity) as Episode;
 
+  const { toggleEpisodesMonitored, isToggling } = useToggleEpisodesMonitored(
+    getQueryKey(episodeEntity)!
+  );
+
   const handleTabSelect = useCallback(
     (selectedIndex: number) => {
       const tab = TABS[selectedIndex];
@@ -81,15 +81,12 @@ function EpisodeDetailsModalContent(props: EpisodeDetailsModalContentProps) {
 
   const handleMonitorEpisodePress = useCallback(
     (monitored: boolean) => {
-      dispatch(
-        toggleEpisodeMonitored({
-          episodeEntity,
-          episodeId,
-          monitored,
-        })
-      );
+      toggleEpisodesMonitored({
+        episodeIds: [episodeId],
+        monitored,
+      });
     },
-    [episodeEntity, episodeId, dispatch]
+    [episodeId, toggleEpisodesMonitored]
   );
 
   const seriesLink = `/series/${titleSlug}`;
@@ -101,7 +98,7 @@ function EpisodeDetailsModalContent(props: EpisodeDetailsModalContentProps) {
           monitored={monitored}
           size={18}
           isDisabled={!seriesMonitored}
-          isSaving={isSaving}
+          isSaving={isToggling}
           onPress={handleMonitorEpisodePress}
         />
 

@@ -1,7 +1,6 @@
 import * as app from './appActions';
 import * as captcha from './captchaActions';
 import * as commands from './commandActions';
-import * as episodes from './episodeActions';
 import * as episodeHistory from './episodeHistoryActions';
 import * as importSeries from './importSeriesActions';
 import * as interactiveImportActions from './interactiveImportActions';
@@ -17,7 +16,6 @@ export default [
   app,
   captcha,
   commands,
-  episodes,
   episodeHistory,
   importSeries,
   interactiveImportActions,

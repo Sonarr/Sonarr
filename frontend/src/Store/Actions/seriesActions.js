@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import { createAction } from 'redux-actions';
 import { batchActions } from 'redux-batched-actions';
+import { queryClient } from 'App/queryClient';
 import { filterBuilderTypes, filterBuilderValueTypes, filterTypes, sortDirections } from 'Helpers/Props';
 import getFilterTypePredicate from 'Helpers/Props/getFilterTypePredicate';
 import { createThunk, handleThunks } from 'Store/thunks';
@@ -14,7 +15,6 @@ import createHandleActions from './Creators/createHandleActions';
 import createRemoveItemHandler from './Creators/createRemoveItemHandler';
 import createSaveProviderHandler from './Creators/createSaveProviderHandler';
 import createSetSettingValueReducer from './Creators/Reducers/createSetSettingValueReducer';
-import { fetchEpisodes } from './episodeActions';
 
 //
 // Local
@@ -720,7 +720,7 @@ export const actionHandlers = handleThunks({
 
     promise.done((data) => {
       if (shouldFetchEpisodesAfterUpdate) {
-        dispatch(fetchEpisodes({ seriesId: seriesIds[0] }));
+        queryClient.invalidateQueries({ queryKey: ['/episode'] });
       }
 
       dispatch(set({

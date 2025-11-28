@@ -1,5 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import Alert from 'Components/Alert';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import FilterMenu from 'Components/Menu/FilterMenu';
@@ -12,12 +11,10 @@ import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import TableOptionsModalWrapper from 'Components/Table/TableOptions/TableOptionsModalWrapper';
 import TablePager from 'Components/Table/TablePager';
-import createEpisodesFetchingSelector from 'Episode/createEpisodesFetchingSelector';
+import useEpisodes from 'Episode/useEpisodes';
 import { useCustomFiltersList } from 'Filters/useCustomFilters';
-import useCurrentPage from 'Helpers/Hooks/useCurrentPage';
 import { align, icons, kinds } from 'Helpers/Props';
 import { SortDirection } from 'Helpers/Props/sortDirections';
-import { clearEpisodes, fetchEpisodes } from 'Store/Actions/episodeActions';
 import HistoryItem from 'typings/History';
 import { TableOptionsChangePayload } from 'typings/Table';
 import selectUniqueIds from 'Utilities/Object/selectUniqueIds';
@@ -53,17 +50,22 @@ function History() {
   const { columns, pageSize, sortKey, sortDirection, selectedFilterKey } =
     useHistoryOptions();
 
+  const episodeIds = useMemo(() => {
+    return selectUniqueIds<HistoryItem, number>(records, 'episodeId');
+  }, [records]);
+
+  const {
+    isFetching: isEpisodesFetching,
+    isFetched: isEpisodesFetched,
+    error: episodesError,
+  } = useEpisodes({ episodeIds });
+
   const filters = useFilters();
 
-  const requestCurrentPage = useCurrentPage();
-
-  const { isEpisodesFetching, isEpisodesPopulated, episodesError } =
-    useSelector(createEpisodesFetchingSelector());
   const customFilters = useCustomFiltersList('history');
-  const dispatch = useDispatch();
 
   const isFetchingAny = isLoading || isEpisodesFetching;
-  const isAllPopulated = isFetched && (isEpisodesPopulated || !records.length);
+  const isAllPopulated = isFetched && (isEpisodesFetched || !records.length);
   const hasError = error || episodesError;
 
   const handleFilterSelect = useCallback(
@@ -98,25 +100,6 @@ function History() {
     goToPage(1);
     refetch();
   }, [goToPage, refetch]);
-
-  useEffect(() => {
-    return () => {
-      dispatch(clearEpisodes());
-    };
-  }, [requestCurrentPage, dispatch]);
-
-  useEffect(() => {
-    const episodeIds = selectUniqueIds<HistoryItem, number>(
-      records,
-      'episodeId'
-    );
-
-    if (episodeIds.length) {
-      dispatch(fetchEpisodes({ episodeIds }));
-    } else {
-      dispatch(clearEpisodes());
-    }
-  }, [records, dispatch]);
 
   useEffect(() => {
     const repopulate = () => {
