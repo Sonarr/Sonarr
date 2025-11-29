@@ -11,6 +11,7 @@ import Command from 'Commands/Command';
 import Episode from 'Episode/Episode';
 import { EpisodeFile } from 'EpisodeFile/EpisodeFile';
 import { PagedQueryResponse } from 'Helpers/Hooks/usePagedApiQuery';
+import Series from 'Series/Series';
 import { setAppValue, setVersion } from 'Store/Actions/appActions';
 import { removeItem, updateItem } from 'Store/Actions/baseActions';
 import {
@@ -18,7 +19,6 @@ import {
   finishCommand,
   updateCommand,
 } from 'Store/Actions/commandActions';
-import { fetchSeries } from 'Store/Actions/seriesActions';
 import { fetchQualityDefinitions } from 'Store/Actions/settingsActions';
 import { repopulatePage } from 'Utilities/pagePopulator';
 import SignalRLogger from 'Utilities/SignalRLogger';
@@ -84,7 +84,7 @@ function SignalRListener() {
 
     // Repopulate the page (if a repopulator is set) to ensure things
     // are in sync after reconnecting.
-    dispatch(fetchSeries());
+    queryClient.invalidateQueries({ queryKey: ['/series'] });
     dispatch(fetchCommands());
     repopulatePage();
   });
@@ -355,12 +355,49 @@ function SignalRListener() {
     }
 
     if (name === 'series') {
+      if (version < 5) {
+        return;
+      }
+
       if (body.action === 'updated') {
-        dispatch(updateItem({ section: 'series', ...body.resource }));
+        const updatedItem = body.resource as Series;
+
+        queryClient.setQueryData<Series[]>(
+          ['/series'],
+          (oldData: Series[] | undefined) => {
+            if (!oldData) {
+              return oldData;
+            }
+
+            return oldData.map((item) => {
+              if (item.id === updatedItem.id) {
+                return {
+                  ...item,
+                  ...updatedItem,
+                };
+              }
+
+              return item;
+            });
+          }
+        );
 
         repopulatePage('seriesUpdated');
       } else if (body.action === 'deleted') {
         dispatch(removeItem({ section: 'series', id: body.resource.id }));
+
+        queryClient.setQueriesData(
+          { queryKey: ['/series'] },
+          (oldData: Series[] | undefined) => {
+            if (!oldData) {
+              return oldData;
+            }
+
+            return oldData.filter((item) => {
+              return item.id !== body.resource.id;
+            });
+          }
+        );
       }
 
       return;

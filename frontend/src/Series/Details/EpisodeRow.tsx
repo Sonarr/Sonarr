@@ -17,7 +17,7 @@ import EpisodeFileLanguages from 'EpisodeFile/EpisodeFileLanguages';
 import { useEpisodeFile } from 'EpisodeFile/EpisodeFileProvider';
 import MediaInfo from 'EpisodeFile/MediaInfo';
 import { icons } from 'Helpers/Props';
-import useSeries from 'Series/useSeries';
+import { useSingleSeries } from 'Series/useSeries';
 import MediaInfoModel from 'typings/MediaInfo';
 import formatBytes from 'Utilities/Number/formatBytes';
 import formatCustomFormatScore from 'Utilities/Number/formatCustomFormatScore';
@@ -90,7 +90,7 @@ function EpisodeRow({
     monitored: seriesMonitored,
     seriesType,
     alternateTitles = [],
-  } = useSeries(seriesId)!;
+  } = useSingleSeries(seriesId)!;
   const episodeFile = useEpisodeFile(episodeFileId);
 
   const customFormats = episodeFile?.customFormats ?? [];

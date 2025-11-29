@@ -21,7 +21,7 @@ import InteractiveImportModal from 'InteractiveImport/InteractiveImportModal';
 import Language from 'Language/Language';
 import { QualityModel } from 'Quality/Quality';
 import SeriesTitleLink from 'Series/SeriesTitleLink';
-import useSeries from 'Series/useSeries';
+import { useSingleSeries } from 'Series/useSeries';
 import createUISettingsSelector from 'Store/Selectors/createUISettingsSelector';
 import CustomFormat from 'typings/CustomFormat';
 import { SelectStateInputProps } from 'typings/props';
@@ -105,7 +105,7 @@ function QueueRow(props: QueueRowProps) {
     onQueueRowModalOpenOrClose,
   } = props;
 
-  const series = useSeries(seriesId);
+  const series = useSingleSeries(seriesId);
   const episodes = useEpisodesWithIds(episodeIds);
   const { showRelativeDates, shortDateFormat, timeFormat } = useSelector(
     createUISettingsSelector()

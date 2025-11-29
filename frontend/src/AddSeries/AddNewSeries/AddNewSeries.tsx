@@ -1,6 +1,4 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import AppState from 'App/State/AppState';
 import Alert from 'Components/Alert';
 import TextInput from 'Components/Form/TextInput';
 import Icon from 'Components/Icon';
@@ -12,6 +10,7 @@ import PageContentBody from 'Components/Page/PageContentBody';
 import useDebounce from 'Helpers/Hooks/useDebounce';
 import useQueryParams from 'Helpers/Hooks/useQueryParams';
 import { icons, kinds } from 'Helpers/Props';
+import { useHasSeries } from 'Series/useSeries';
 import { InputChanged } from 'typings/inputs';
 import getErrorMessage from 'Utilities/Object/getErrorMessage';
 import translate from 'Utilities/String/translate';
@@ -21,11 +20,7 @@ import styles from './AddNewSeries.css';
 
 function AddNewSeries() {
   const { term: initialTerm = '' } = useQueryParams<{ term: string }>();
-
-  const seriesCount = useSelector(
-    (state: AppState) => state.series.items.length
-  );
-
+  const hasSeries = useHasSeries();
   const [term, setTerm] = useState(initialTerm);
   const [isFetching, setIsFetching] = useState(false);
   const query = useDebounce(term, term ? 300 : 0);
@@ -127,7 +122,7 @@ function AddNewSeries() {
           </div>
         )}
 
-        {!term && !seriesCount ? (
+        {!term && !hasSeries ? (
           <div className={styles.message}>
             <div className={styles.noSeriesText}>
               {translate('NoSeriesHaveBeenAdded')}

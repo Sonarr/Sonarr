@@ -1,8 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { createSelector } from 'reselect';
+import { useSelector } from 'react-redux';
 import { useSelect } from 'App/Select/SelectContext';
-import AppState from 'App/State/AppState';
 import { RENAME_SERIES } from 'Commands/commandNames';
 import SpinnerButton from 'Components/Link/SpinnerButton';
 import PageContentFooter from 'Components/Page/PageContentFooter';
@@ -10,9 +8,10 @@ import usePrevious from 'Helpers/Hooks/usePrevious';
 import { kinds } from 'Helpers/Props';
 import Series from 'Series/Series';
 import {
-  saveSeriesEditor,
-  updateSeriesMonitor,
-} from 'Store/Actions/seriesActions';
+  useBulkDeleteSeries,
+  useSaveSeriesEditor,
+  useUpdateSeriesMonitor,
+} from 'Series/useSeries';
 import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
 import translate from 'Utilities/String/translate';
 import DeleteSeriesModal from './Delete/DeleteSeriesModal';
@@ -31,28 +30,19 @@ interface SavePayload {
   moveFiles?: boolean;
 }
 
-const seriesEditorSelector = createSelector(
-  (state: AppState) => state.series,
-  (series) => {
-    const { isSaving, isDeleting, deleteError } = series;
-
-    return {
-      isSaving,
-      isDeleting,
-      deleteError,
-    };
-  }
-);
-
 function SeriesIndexSelectFooter() {
-  const { isSaving, isDeleting, deleteError } =
-    useSelector(seriesEditorSelector);
+  const { saveSeriesEditor, isSavingSeriesEditor } = useSaveSeriesEditor();
+  const { updateSeriesMonitor, isUpdatingSeriesMonitor } =
+    useUpdateSeriesMonitor();
+  const { isBulkDeleting, bulkDeleteError } = useBulkDeleteSeries();
 
   const isOrganizingSeries = useSelector(
     createCommandExecutingSelector(RENAME_SERIES)
   );
 
-  const dispatch = useDispatch();
+  const isSaving = isSavingSeriesEditor || isUpdatingSeriesMonitor;
+  const isDeleting = isBulkDeleting;
+  const deleteError = bulkDeleteError;
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isOrganizeModalOpen, setIsOrganizeModalOpen] = useState(false);
@@ -79,14 +69,12 @@ function SeriesIndexSelectFooter() {
       setIsSavingSeries(true);
       setIsEditModalOpen(false);
 
-      dispatch(
-        saveSeriesEditor({
-          ...payload,
-          seriesIds,
-        })
-      );
+      saveSeriesEditor({
+        ...payload,
+        seriesIds,
+      });
     },
-    [seriesIds, dispatch]
+    [seriesIds, saveSeriesEditor]
   );
 
   const onOrganizePress = useCallback(() => {
@@ -106,19 +94,16 @@ function SeriesIndexSelectFooter() {
   }, [setIsTagsModalOpen]);
 
   const onApplyTagsPress = useCallback(
-    (tags: number[], applyTags: string) => {
+    (tags: number[], _applyTags: string) => {
       setIsSavingTags(true);
       setIsTagsModalOpen(false);
 
-      dispatch(
-        saveSeriesEditor({
-          seriesIds,
-          tags,
-          applyTags,
-        })
-      );
+      saveSeriesEditor({
+        seriesIds,
+        tags,
+      });
     },
-    [seriesIds, dispatch]
+    [seriesIds, saveSeriesEditor]
   );
 
   const onMonitoringPress = useCallback(() => {
@@ -134,14 +119,12 @@ function SeriesIndexSelectFooter() {
       setIsSavingMonitoring(true);
       setIsMonitoringModalOpen(false);
 
-      dispatch(
-        updateSeriesMonitor({
-          seriesIds,
-          monitor,
-        })
-      );
+      updateSeriesMonitor({
+        series: seriesIds.map((id) => ({ id })),
+        monitoringOptions: { monitor },
+      });
     },
-    [seriesIds, dispatch]
+    [seriesIds, updateSeriesMonitor]
   );
 
   const onDeletePress = useCallback(() => {

@@ -16,13 +16,13 @@ import ModalHeader from 'Components/Modal/ModalHeader';
 import useMeasure from 'Helpers/Hooks/useMeasure';
 import usePrevious from 'Helpers/Hooks/usePrevious';
 import { inputTypes, kinds, sizes } from 'Helpers/Props';
+import useQualityProfileInUse from 'Settings/Profiles/Quality/useQualityProfileInUse';
 import {
   fetchQualityProfileSchema,
   saveQualityProfile,
   setQualityProfileValue,
 } from 'Store/Actions/settingsActions';
 import { createProviderSettingsSelectorHook } from 'Store/Selectors/createProviderSettingsSelector';
-import createQualityProfileInUseSelector from 'Store/Selectors/createQualityProfileInUseSelector';
 import dimensions from 'Styles/Variables/dimensions';
 import { InputChanged } from 'typings/inputs';
 import QualityProfile, {
@@ -73,7 +73,7 @@ function EditQualityProfileModalContent({
       >('qualityProfiles', id)
     );
 
-  const isInUse = useSelector(createQualityProfileInUseSelector(id));
+  const isInUse = useQualityProfileInUse(id);
 
   const [measureHeaderRef, { height: headerHeight }] = useMeasure();
   const [measureBodyRef, { height: bodyHeight }] = useMeasure();

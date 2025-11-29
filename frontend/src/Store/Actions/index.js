@@ -7,9 +7,7 @@ import * as interactiveImportActions from './interactiveImportActions';
 import * as oAuth from './oAuthActions';
 import * as organizePreview from './organizePreviewActions';
 import * as providerOptions from './providerOptionActions';
-import * as series from './seriesActions';
 import * as seriesHistory from './seriesHistoryActions';
-import * as seriesIndex from './seriesIndexActions';
 import * as settings from './settingsActions';
 
 export default [
@@ -22,8 +20,6 @@ export default [
   oAuth,
   organizePreview,
   providerOptions,
-  series,
   seriesHistory,
-  seriesIndex,
   settings
 ];

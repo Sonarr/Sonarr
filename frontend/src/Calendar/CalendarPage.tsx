@@ -21,9 +21,9 @@ import { useCustomFiltersList } from 'Filters/useCustomFilters';
 import useMeasure from 'Helpers/Hooks/useMeasure';
 import { align, icons } from 'Helpers/Props';
 import NoSeries from 'Series/NoSeries';
+import { useHasSeries } from 'Series/useSeries';
 import { executeCommand } from 'Store/Actions/commandActions';
 import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
-import createSeriesCountSelector from 'Store/Selectors/createSeriesCountSelector';
 import selectUniqueIds from 'Utilities/Object/selectUniqueIds';
 import translate from 'Utilities/String/translate';
 import Calendar from './Calendar';
@@ -54,7 +54,7 @@ function CalendarPage() {
     createCommandExecutingSelector(commandNames.RSS_SYNC)
   );
   const customFilters = useCustomFiltersList('calendar');
-  const hasSeries = !!useSelector(createSeriesCountSelector());
+  const hasSeries = useHasSeries();
 
   const [pageContentRef, { width }] = useMeasure();
   const [isCalendarLinkModalOpen, setIsCalendarLinkModalOpen] = useState(false);

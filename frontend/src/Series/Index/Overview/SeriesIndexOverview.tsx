@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import React, { useCallback, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import TextTruncate from 'react-text-truncate';
 import { REFRESH_SERIES, SERIES_SEARCH } from 'Commands/commandNames';
 import IconButton from 'Components/Link/IconButton';
@@ -13,13 +13,13 @@ import EditSeriesModal from 'Series/Edit/EditSeriesModal';
 import SeriesIndexProgressBar from 'Series/Index/ProgressBar/SeriesIndexProgressBar';
 import SeriesIndexPosterSelect from 'Series/Index/Select/SeriesIndexPosterSelect';
 import { Statistics } from 'Series/Series';
+import { useSeriesOverviewOptions } from 'Series/seriesOptionsStore';
 import SeriesPoster from 'Series/SeriesPoster';
 import { executeCommand } from 'Store/Actions/commandActions';
 import dimensions from 'Styles/Variables/dimensions';
 import fonts from 'Styles/Variables/fonts';
 import translate from 'Utilities/String/translate';
-import createSeriesIndexItemSelector from '../createSeriesIndexItemSelector';
-import selectOverviewOptions from './selectOverviewOptions';
+import useSeriesIndexItem from '../useSeriesIndexItem';
 import SeriesIndexOverviewInfo from './SeriesIndexOverviewInfo';
 import styles from './SeriesIndexOverview.css';
 
@@ -56,9 +56,9 @@ function SeriesIndexOverview(props: SeriesIndexOverviewProps) {
   } = props;
 
   const { series, qualityProfile, isRefreshingSeries, isSearchingSeries } =
-    useSelector(createSeriesIndexItemSelector(props.seriesId));
+    useSeriesIndexItem(seriesId);
 
-  const overviewOptions = useSelector(selectOverviewOptions);
+  const overviewOptions = useSeriesOverviewOptions();
 
   const {
     title,

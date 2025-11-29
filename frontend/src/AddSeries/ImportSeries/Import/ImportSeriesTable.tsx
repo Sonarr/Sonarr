@@ -7,11 +7,11 @@ import AppState from 'App/State/AppState';
 import { ImportSeries } from 'App/State/ImportSeriesAppState';
 import VirtualTable from 'Components/Table/VirtualTable';
 import usePrevious from 'Helpers/Hooks/usePrevious';
+import useSeries from 'Series/useSeries';
 import {
   queueLookupSeries,
   setImportSeriesValue,
 } from 'Store/Actions/importSeriesActions';
-import createAllSeriesSelector from 'Store/Selectors/createAllSeriesSelector';
 import createDimensionsSelector from 'Store/Selectors/createDimensionsSelector';
 import { CheckInputChanged } from 'typings/inputs';
 import { SelectStateInputProps } from 'typings/props';
@@ -65,7 +65,7 @@ function ImportSeriesTable({
 
   const items = useSelector((state: AppState) => state.importSeries.items);
   const { isSmallScreen } = useSelector(createDimensionsSelector());
-  const allSeries = useSelector(createAllSeriesSelector());
+  const { data: allSeries } = useSeries();
   const {
     allSelected,
     allUnselected,

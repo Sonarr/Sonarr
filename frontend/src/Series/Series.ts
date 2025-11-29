@@ -43,7 +43,6 @@ export interface Season {
   monitored: boolean;
   seasonNumber: number;
   statistics: Statistics;
-  isSaving?: boolean;
 }
 
 export interface Ratings {
@@ -102,7 +101,6 @@ interface Series extends ModelBase {
   tmdbId: number;
   useSceneNumbering: boolean;
   year: number;
-  isSaving?: boolean;
   addOptions: SeriesAddOptions;
 }
 

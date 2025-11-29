@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import Form from 'Components/Form/Form';
 import FormGroup from 'Components/Form/FormGroup';
 import FormInputGroup from 'Components/Form/FormInputGroup';
@@ -11,9 +10,11 @@ import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import { inputTypes } from 'Helpers/Props';
-import { setSeriesOverviewOption } from 'Store/Actions/seriesIndexActions';
+import {
+  setSeriesOverviewOptions,
+  useSeriesOverviewOptions,
+} from 'Series/seriesOptionsStore';
 import translate from 'Utilities/String/translate';
-import selectOverviewOptions from '../selectOverviewOptions';
 
 const posterSizeOptions: EnhancedSelectInputValue<string>[] = [
   {
@@ -40,11 +41,9 @@ interface SeriesIndexOverviewOptionsModalContentProps {
   onModalClose(...args: unknown[]): void;
 }
 
-function SeriesIndexOverviewOptionsModalContent(
-  props: SeriesIndexOverviewOptionsModalContentProps
-) {
-  const { onModalClose } = props;
-
+function SeriesIndexOverviewOptionsModalContent({
+  onModalClose,
+}: SeriesIndexOverviewOptionsModalContentProps) {
   const {
     detailedProgressBar,
     size,
@@ -58,15 +57,13 @@ function SeriesIndexOverviewOptionsModalContent(
     showSizeOnDisk,
     showTags,
     showSearchAction,
-  } = useSelector(selectOverviewOptions);
-
-  const dispatch = useDispatch();
+  } = useSeriesOverviewOptions();
 
   const onOverviewOptionChange = useCallback(
     ({ name, value }: { name: string; value: unknown }) => {
-      dispatch(setSeriesOverviewOption({ [name]: value }));
+      setSeriesOverviewOptions({ [name]: value });
     },
-    [dispatch]
+    []
   );
 
   return (

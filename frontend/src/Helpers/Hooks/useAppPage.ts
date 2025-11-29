@@ -3,9 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
 import AppState from 'App/State/AppState';
 import useCustomFilters from 'Filters/useCustomFilters';
+import useSeries from 'Series/useSeries';
 import { fetchTranslations } from 'Store/Actions/appActions';
 import { fetchCustomFilters } from 'Store/Actions/customFilterActions';
-import { fetchSeries } from 'Store/Actions/seriesActions';
 import {
   fetchImportLists,
   fetchIndexerFlags,
@@ -21,13 +21,14 @@ const createErrorsSelector = ({
   customFiltersError,
   systemStatusError,
   tagsError,
+  seriesError,
 }: {
   customFiltersError: ApiError | null;
   systemStatusError: ApiError | null;
   tagsError: ApiError | null;
+  seriesError: ApiError | null;
 }) =>
   createSelector(
-    (state: AppState) => state.series.error,
     (state: AppState) => state.settings.ui.error,
     (state: AppState) => state.settings.qualityProfiles.error,
     (state: AppState) => state.settings.languages.error,
@@ -35,7 +36,6 @@ const createErrorsSelector = ({
     (state: AppState) => state.settings.indexerFlags.error,
     (state: AppState) => state.app.translations.error,
     (
-      seriesError,
       uiSettingsError,
       qualityProfilesError,
       languagesError,
@@ -80,6 +80,8 @@ const useAppPage = () => {
   const { isFetched: isCustomFiltersFetched, error: customFiltersError } =
     useCustomFilters();
 
+  const { isSuccess: isSeriesFetched, error: seriesError } = useSeries();
+
   const { isFetched: isSystemStatusFetched, error: systemStatusError } =
     useSystemStatus();
 
@@ -87,7 +89,6 @@ const useAppPage = () => {
 
   const isAppStatePopulated = useSelector(
     (state: AppState) =>
-      state.series.isPopulated &&
       state.settings.ui.isPopulated &&
       state.settings.qualityProfiles.isPopulated &&
       state.settings.languages.isPopulated &&
@@ -99,11 +100,17 @@ const useAppPage = () => {
   const isPopulated =
     isAppStatePopulated &&
     isCustomFiltersFetched &&
+    isSeriesFetched &&
     isSystemStatusFetched &&
     isTagsFetched;
 
   const { hasError, errors } = useSelector(
-    createErrorsSelector({ customFiltersError, systemStatusError, tagsError })
+    createErrorsSelector({
+      customFiltersError,
+      seriesError,
+      systemStatusError,
+      tagsError,
+    })
   );
 
   const isLocalStorageSupported = useMemo(() => {
@@ -120,7 +127,6 @@ const useAppPage = () => {
   }, []);
 
   useEffect(() => {
-    dispatch(fetchSeries());
     dispatch(fetchCustomFilters());
     dispatch(fetchQualityProfiles());
     dispatch(fetchLanguages());

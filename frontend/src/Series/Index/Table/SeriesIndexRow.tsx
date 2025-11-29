@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import React, { useCallback, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useSelect } from 'App/Select/SelectContext';
 import { REFRESH_SERIES, SERIES_SEARCH } from 'Commands/commandNames';
 import CheckInput from 'Components/Form/CheckInput';
@@ -16,9 +16,9 @@ import Column from 'Components/Table/Column';
 import { icons } from 'Helpers/Props';
 import DeleteSeriesModal from 'Series/Delete/DeleteSeriesModal';
 import EditSeriesModal from 'Series/Edit/EditSeriesModal';
-import createSeriesIndexItemSelector from 'Series/Index/createSeriesIndexItemSelector';
 import { Statistics } from 'Series/Series';
 import SeriesBanner from 'Series/SeriesBanner';
+import { useSeriesTableOptions } from 'Series/seriesOptionsStore';
 import SeriesTitleLink from 'Series/SeriesTitleLink';
 import { executeCommand } from 'Store/Actions/commandActions';
 import { SelectStateInputProps } from 'typings/props';
@@ -26,9 +26,9 @@ import formatBytes from 'Utilities/Number/formatBytes';
 import titleCase from 'Utilities/String/titleCase';
 import translate from 'Utilities/String/translate';
 import SeriesIndexProgressBar from '../ProgressBar/SeriesIndexProgressBar';
+import useSeriesIndexItem from '../useSeriesIndexItem';
 import hasGrowableColumns from './hasGrowableColumns';
 import SeasonsCell from './SeasonsCell';
-import selectTableOptions from './selectTableOptions';
 import SeriesStatusCell from './SeriesStatusCell';
 import styles from './SeriesIndexRow.css';
 
@@ -48,9 +48,9 @@ function SeriesIndexRow(props: SeriesIndexRowProps) {
     latestSeason,
     isRefreshingSeries,
     isSearchingSeries,
-  } = useSelector(createSeriesIndexItemSelector(props.seriesId));
+  } = useSeriesIndexItem(seriesId);
 
-  const { showBanners, showSearchAction } = useSelector(selectTableOptions);
+  const { showBanners, showSearchAction } = useSeriesTableOptions();
 
   const {
     title,
@@ -75,7 +75,6 @@ function SeriesIndexRow(props: SeriesIndexRowProps) {
     ratings,
     seasons = [],
     tags = [],
-    isSaving = false,
   } = series;
 
   const {
@@ -178,7 +177,6 @@ function SeriesIndexRow(props: SeriesIndexRowProps) {
               monitored={monitored}
               status={status}
               isSelectMode={isSelectMode}
-              isSaving={isSaving}
               component={VirtualTableRowCell}
             />
           );

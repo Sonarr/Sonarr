@@ -1,6 +1,5 @@
 import classNames from 'classnames';
 import React, { useCallback } from 'react';
-import { useDispatch } from 'react-redux';
 import { useSelect } from 'App/Select/SelectContext';
 import IconButton from 'Components/Link/IconButton';
 import Column from 'Components/Table/Column';
@@ -12,9 +11,10 @@ import { icons } from 'Helpers/Props';
 import { SortDirection } from 'Helpers/Props/sortDirections';
 import {
   setSeriesSort,
-  setSeriesTableOption,
-} from 'Store/Actions/seriesIndexActions';
+  setSeriesTableOptions,
+} from 'Series/seriesOptionsStore';
 import { CheckInputChanged } from 'typings/inputs';
+import { TableOptionsChangePayload } from 'typings/Table';
 import hasGrowableColumns from './hasGrowableColumns';
 import SeriesIndexTableOptions from './SeriesIndexTableOptions';
 import styles from './SeriesIndexTableHeader.css';
@@ -29,21 +29,29 @@ interface SeriesIndexTableHeaderProps {
 
 function SeriesIndexTableHeader(props: SeriesIndexTableHeaderProps) {
   const { showBanners, columns, sortKey, sortDirection, isSelectMode } = props;
-  const dispatch = useDispatch();
   const { allSelected, allUnselected, selectAll, unselectAll } = useSelect();
 
   const onSortPress = useCallback(
-    (value: string) => {
-      dispatch(setSeriesSort({ sortKey: value }));
+    (sortKey: string, sortDirection?: SortDirection) => {
+      setSeriesSort({ sortKey, sortDirection });
     },
-    [dispatch]
+    []
   );
 
   const onTableOptionChange = useCallback(
-    (payload: unknown) => {
-      dispatch(setSeriesTableOption(payload));
+    (
+      payload: TableOptionsChangePayload & {
+        tableOptions?: { showBanners?: boolean; showSearchAction?: boolean };
+      }
+    ) => {
+      if (payload.tableOptions) {
+        setSeriesTableOptions(payload.tableOptions);
+      } else {
+        // Handle standard table options like columns - for now just ignore
+        // as series table only uses the tableOptions property
+      }
     },
-    [dispatch]
+    []
   );
 
   const onSelectAllChange = useCallback(

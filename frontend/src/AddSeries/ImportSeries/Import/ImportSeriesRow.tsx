@@ -8,8 +8,8 @@ import FormInputGroup from 'Components/Form/FormInputGroup';
 import VirtualTableRowCell from 'Components/Table/Cells/VirtualTableRowCell';
 import VirtualTableSelectCell from 'Components/Table/Cells/VirtualTableSelectCell';
 import { inputTypes } from 'Helpers/Props';
+import useExistingSeries from 'Series/useExistingSeries';
 import { setImportSeriesValue } from 'Store/Actions/importSeriesActions';
-import createExistingSeriesSelector from 'Store/Selectors/createExistingSeriesSelector';
 import { InputChanged } from 'typings/inputs';
 import { SelectStateInputProps } from 'typings/props';
 import ImportSeriesSelectSeries from './SelectSeries/ImportSeriesSelectSeries';
@@ -44,9 +44,7 @@ function ImportSeriesRow({ id }: ImportSeriesRowProps) {
     selectedSeries,
   } = useSelector(createItemSelector(id));
 
-  const isExistingSeries = useSelector(
-    createExistingSeriesSelector(selectedSeries?.tvdbId)
-  );
+  const isExistingSeries = useExistingSeries(selectedSeries?.tvdbId);
 
   const { getIsSelected, toggleSelected, toggleDisabled } =
     useSelect<ImportSeries>();

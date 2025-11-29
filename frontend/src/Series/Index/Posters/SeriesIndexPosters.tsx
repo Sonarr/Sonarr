@@ -1,13 +1,11 @@
 import { throttle } from 'lodash';
 import React, { RefObject, useEffect, useMemo, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { FixedSizeGrid as Grid, GridChildComponentProps } from 'react-window';
-import { createSelector } from 'reselect';
-import AppState from 'App/State/AppState';
 import useMeasure from 'Helpers/Hooks/useMeasure';
 import { SortDirection } from 'Helpers/Props/sortDirections';
 import SeriesIndexPoster from 'Series/Index/Posters/SeriesIndexPoster';
 import Series from 'Series/Series';
+import { useSeriesPosterOptions } from 'Series/seriesOptionsStore';
 import dimensions from 'Styles/Variables/dimensions';
 import getIndexOfFirstCharacter from 'Utilities/Array/getIndexOfFirstCharacter';
 
@@ -51,15 +49,6 @@ interface SeriesIndexPostersProps {
   isSmallScreen: boolean;
 }
 
-const seriesIndexSelector = createSelector(
-  (state: AppState) => state.seriesIndex.posterOptions,
-  (posterOptions) => {
-    return {
-      posterOptions,
-    };
-  }
-);
-
 function Cell({
   columnIndex,
   rowIndex,
@@ -98,17 +87,22 @@ function getWindowScrollTopPosition() {
   return document.documentElement.scrollTop || document.body.scrollTop || 0;
 }
 
-export default function SeriesIndexPosters(props: SeriesIndexPostersProps) {
+export default function SeriesIndexPosters({
+  scrollerRef,
+  items,
+  sortKey,
+  jumpToCharacter,
+  isSelectMode,
+  isSmallScreen,
+}: SeriesIndexPostersProps) {
   const {
-    scrollerRef,
-    items,
-    sortKey,
-    jumpToCharacter,
-    isSelectMode,
-    isSmallScreen,
-  } = props;
-
-  const { posterOptions } = useSelector(seriesIndexSelector);
+    detailedProgressBar,
+    showTitle,
+    showMonitored,
+    showQualityProfile,
+    showTags,
+    size: posterSize,
+  } = useSeriesPosterOptions();
   const ref = useRef<Grid>(null);
   const [measureRef, bounds] = useMeasure();
   const [size, setSize] = useState({ width: 0, height: 0 });
@@ -120,30 +114,18 @@ export default function SeriesIndexPosters(props: SeriesIndexPostersProps) {
     const remainder = width % maximumColumnWidth;
     return remainder === 0
       ? maximumColumnWidth
-      : Math.floor(
-          width / (columns + ADDITIONAL_COLUMN_COUNT[posterOptions.size])
-        );
-  }, [isSmallScreen, posterOptions, size]);
+      : Math.floor(width / (columns + ADDITIONAL_COLUMN_COUNT[posterSize]));
+  }, [isSmallScreen, posterSize, size]);
 
   const columnCount = useMemo(
     () => Math.max(Math.floor(size.width / columnWidth), 1),
     [size, columnWidth]
   );
-  const padding = props.isSmallScreen
-    ? columnPaddingSmallScreen
-    : columnPadding;
+  const padding = isSmallScreen ? columnPaddingSmallScreen : columnPadding;
   const posterWidth = columnWidth - padding * 2;
   const posterHeight = Math.ceil((250 / 170) * posterWidth);
 
   const rowHeight = useMemo(() => {
-    const {
-      detailedProgressBar,
-      showTitle,
-      showMonitored,
-      showQualityProfile,
-      showTags,
-    } = posterOptions;
-
     const nextAiringHeight = 19;
 
     const heights = [
@@ -193,7 +175,16 @@ export default function SeriesIndexPosters(props: SeriesIndexPostersProps) {
     }
 
     return heights.reduce((acc, height) => acc + height, 0);
-  }, [isSmallScreen, posterOptions, sortKey, posterHeight]);
+  }, [
+    isSmallScreen,
+    detailedProgressBar,
+    showTitle,
+    showMonitored,
+    showQualityProfile,
+    showTags,
+    sortKey,
+    posterHeight,
+  ]);
 
   useEffect(() => {
     const current = scrollerRef.current;

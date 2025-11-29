@@ -9,6 +9,7 @@ import {
 } from '@floating-ui/react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import useImportSeriesItem from 'AddSeries/ImportSeries/Import/useImportSeriesItem';
 import AppState from 'App/State/AppState';
 import FormInputButton from 'Components/Form/FormInputButton';
 import TextInput from 'Components/Form/TextInput';
@@ -20,7 +21,6 @@ import {
   queueLookupSeries,
   setImportSeriesValue,
 } from 'Store/Actions/importSeriesActions';
-import createImportSeriesItemSelector from 'Store/Selectors/createImportSeriesItemSelector';
 import { InputChanged } from 'typings/inputs';
 import getErrorMessage from 'Utilities/Object/getErrorMessage';
 import translate from 'Utilities/String/translate';
@@ -51,8 +51,7 @@ function ImportSeriesSelectSeries({
     selectedSeries,
     isExistingSeries,
     term: itemTerm,
-    // @ts-expect-error - ignoring this for now
-  } = useSelector(createImportSeriesItemSelector(id, { id }));
+  } = useImportSeriesItem(id);
 
   const seriesLookupTimeout = useRef<ReturnType<typeof setTimeout>>();
 

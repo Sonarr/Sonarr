@@ -1,7 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import SeriesMonitoringOptionsPopoverContent from 'AddSeries/SeriesMonitoringOptionsPopoverContent';
-import AppState from 'App/State/AppState';
 import Alert from 'Components/Alert';
 import Form from 'Components/Form/Form';
 import FormGroup from 'Components/Form/FormGroup';
@@ -17,7 +15,7 @@ import ModalHeader from 'Components/Modal/ModalHeader';
 import Popover from 'Components/Tooltip/Popover';
 import usePrevious from 'Helpers/Hooks/usePrevious';
 import { icons, kinds, tooltipPositions } from 'Helpers/Props';
-import { updateSeriesMonitor } from 'Store/Actions/seriesActions';
+import { useUpdateSeriesMonitor } from 'Series/useSeries';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
 import styles from './MonitoringOptionsModalContent.css';
@@ -33,13 +31,14 @@ function MonitoringOptionsModalContent({
   seriesId,
   onModalClose,
 }: MonitoringOptionsModalContentProps) {
-  const dispatch = useDispatch();
-  const { isSaving, saveError } = useSelector(
-    (state: AppState) => state.series
-  );
+  const {
+    updateSeriesMonitor,
+    isUpdatingSeriesMonitor,
+    updateSeriesMonitorError,
+  } = useUpdateSeriesMonitor(true);
 
   const [monitor, setMonitor] = useState(NO_CHANGE);
-  const wasSaving = usePrevious(isSaving);
+  const wasSaving = usePrevious(isUpdatingSeriesMonitor);
 
   const handleMonitorChange = useCallback(({ value }: InputChanged<string>) => {
     setMonitor(value);
@@ -50,20 +49,26 @@ function MonitoringOptionsModalContent({
       return;
     }
 
-    dispatch(
-      updateSeriesMonitor({
-        seriesIds: [seriesId],
-        monitor,
-        shouldFetchEpisodesAfterUpdate: true,
-      })
-    );
-  }, [monitor, seriesId, dispatch]);
+    updateSeriesMonitor({
+      series: [
+        {
+          id: seriesId,
+        },
+      ],
+      monitoringOptions: { monitor },
+    });
+  }, [monitor, seriesId, updateSeriesMonitor]);
 
   useEffect(() => {
-    if (!isSaving && wasSaving && !saveError) {
+    if (!isUpdatingSeriesMonitor && wasSaving && !updateSeriesMonitorError) {
       onModalClose();
     }
-  }, [isSaving, wasSaving, saveError, onModalClose]);
+  }, [
+    isUpdatingSeriesMonitor,
+    wasSaving,
+    updateSeriesMonitorError,
+    onModalClose,
+  ]);
 
   return (
     <ModalContent onModalClose={onModalClose}>
@@ -100,7 +105,10 @@ function MonitoringOptionsModalContent({
       <ModalFooter>
         <Button onPress={onModalClose}>{translate('Cancel')}</Button>
 
-        <SpinnerButton isSpinning={isSaving} onPress={handleSavePress}>
+        <SpinnerButton
+          isSpinning={isUpdatingSeriesMonitor}
+          onPress={handleSavePress}
+        >
           {translate('Save')}
         </SpinnerButton>
       </ModalFooter>

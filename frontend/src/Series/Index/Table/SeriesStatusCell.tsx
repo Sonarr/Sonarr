@@ -1,12 +1,11 @@
 import React, { useCallback } from 'react';
-import { useDispatch } from 'react-redux';
 import Icon from 'Components/Icon';
 import MonitorToggleButton from 'Components/MonitorToggleButton';
 import VirtualTableRowCell from 'Components/Table/Cells/TableRowCell';
 import { icons } from 'Helpers/Props';
 import { SeriesStatus } from 'Series/Series';
 import { getSeriesStatusDetails } from 'Series/SeriesStatus';
-import { toggleSeriesMonitored } from 'Store/Actions/seriesActions';
+import { useToggleSeriesMonitored } from 'Series/useSeries';
 import translate from 'Utilities/String/translate';
 import styles from './SeriesStatusCell.css';
 
@@ -16,28 +15,25 @@ interface SeriesStatusCellProps {
   monitored: boolean;
   status: SeriesStatus;
   isSelectMode: boolean;
-  isSaving: boolean;
   component?: React.ElementType;
 }
 
-function SeriesStatusCell(props: SeriesStatusCellProps) {
-  const {
-    className,
-    seriesId,
-    monitored,
-    status,
-    isSelectMode,
-    isSaving,
-    component: Component = VirtualTableRowCell,
-    ...otherProps
-  } = props;
-
+function SeriesStatusCell({
+  className,
+  seriesId,
+  monitored,
+  status,
+  isSelectMode,
+  component: Component = VirtualTableRowCell,
+  ...otherProps
+}: SeriesStatusCellProps) {
   const statusDetails = getSeriesStatusDetails(status);
-  const dispatch = useDispatch();
+  const { toggleSeriesMonitored, isTogglingSeriesMonitored } =
+    useToggleSeriesMonitored(seriesId);
 
   const onMonitoredPress = useCallback(() => {
-    dispatch(toggleSeriesMonitored({ seriesId, monitored: !monitored }));
-  }, [seriesId, monitored, dispatch]);
+    toggleSeriesMonitored({ monitored: !monitored });
+  }, [monitored, toggleSeriesMonitored]);
 
   return (
     <Component className={className} {...otherProps}>
@@ -45,7 +41,7 @@ function SeriesStatusCell(props: SeriesStatusCellProps) {
         <MonitorToggleButton
           className={styles.statusIcon}
           monitored={monitored}
-          isSaving={isSaving}
+          isSaving={isTogglingSeriesMonitored}
           onPress={onMonitoredPress}
         />
       ) : (

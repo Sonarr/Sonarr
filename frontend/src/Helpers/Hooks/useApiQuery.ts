@@ -19,7 +19,7 @@ const useApiQuery = <T>(options: QueryOptions<T>) => {
     const { path: path, queryOptions, queryParams, ...otherOptions } = options;
 
     return {
-      queryKey: [path, queryParams],
+      queryKey: queryParams ? [path, queryParams] : [path],
       requestOptions: {
         ...otherOptions,
         path: getQueryPath(path) + getQueryString(queryParams),

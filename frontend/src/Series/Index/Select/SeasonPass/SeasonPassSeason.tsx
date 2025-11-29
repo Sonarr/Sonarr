@@ -1,10 +1,9 @@
 import classNames from 'classnames';
 import React, { useCallback } from 'react';
-import { useDispatch } from 'react-redux';
 import MonitorToggleButton from 'Components/MonitorToggleButton';
 import formatSeason from 'Season/formatSeason';
 import { Statistics } from 'Series/Series';
-import { toggleSeasonMonitored } from 'Store/Actions/seriesActions';
+import { useToggleSeasonMonitored } from 'Series/useSeries';
 import translate from 'Utilities/String/translate';
 import styles from './SeasonPassSeason.css';
 
@@ -13,7 +12,6 @@ interface SeasonPassSeasonProps {
   seasonNumber: number;
   monitored: boolean;
   statistics: Statistics;
-  isSaving: boolean;
 }
 
 function SeasonPassSeason(props: SeasonPassSeasonProps) {
@@ -26,24 +24,22 @@ function SeasonPassSeason(props: SeasonPassSeasonProps) {
       totalEpisodeCount: 0,
       percentOfEpisodes: 0,
     },
-    isSaving = false,
   } = props;
 
   const { episodeFileCount, totalEpisodeCount, percentOfEpisodes } = statistics;
 
-  const dispatch = useDispatch();
+  const { toggleSeasonMonitored, isTogglingSeasonMonitored } =
+    useToggleSeasonMonitored(seriesId);
   const onSeasonMonitoredPress = useCallback(() => {
-    dispatch(
-      toggleSeasonMonitored({ seriesId, seasonNumber, monitored: !monitored })
-    );
-  }, [seriesId, seasonNumber, monitored, dispatch]);
+    toggleSeasonMonitored({ seasonNumber, monitored: !monitored });
+  }, [seasonNumber, monitored, toggleSeasonMonitored]);
 
   return (
     <div className={styles.season}>
       <div className={styles.info}>
         <MonitorToggleButton
           monitored={monitored}
-          isSaving={isSaving}
+          isSaving={isTogglingSeasonMonitored}
           onPress={onSeasonMonitoredPress}
         />
 

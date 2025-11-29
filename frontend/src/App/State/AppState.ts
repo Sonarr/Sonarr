@@ -9,7 +9,6 @@ import MessagesAppState from './MessagesAppState';
 import OAuthAppState from './OAuthAppState';
 import OrganizePreviewAppState from './OrganizePreviewAppState';
 import ProviderOptionsAppState from './ProviderOptionsAppState';
-import SeriesAppState, { SeriesIndexAppState } from './SeriesAppState';
 import SettingsAppState from './SettingsAppState';
 
 export interface AppSectionState {
@@ -45,9 +44,7 @@ interface AppState {
   oAuth: OAuthAppState;
   organizePreview: OrganizePreviewAppState;
   providerOptions: ProviderOptionsAppState;
-  series: SeriesAppState;
   seriesHistory: SeriesHistoryAppState;
-  seriesIndex: SeriesIndexAppState;
   settings: SettingsAppState;
 }
 

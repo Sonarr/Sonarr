@@ -15,7 +15,7 @@ import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import { kinds } from 'Helpers/Props';
 import formatSeason from 'Season/formatSeason';
-import useSeries from 'Series/useSeries';
+import { useSingleSeries } from 'Series/useSeries';
 import { executeCommand } from 'Store/Actions/commandActions';
 import { fetchOrganizePreview } from 'Store/Actions/organizePreviewActions';
 import { fetchNamingSettings } from 'Store/Actions/settingsActions';
@@ -60,7 +60,7 @@ function OrganizePreviewModalContentInner({
     item: naming,
   } = useSelector((state: AppState) => state.settings.naming);
 
-  const series = useSeries(seriesId)!;
+  const series = useSingleSeries(seriesId)!;
 
   const { allSelected, allUnselected, getSelectedIds, selectAll, unselectAll } =
     useSelect<OrganizePreviewModel>();

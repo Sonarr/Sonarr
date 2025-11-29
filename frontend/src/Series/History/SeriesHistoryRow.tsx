@@ -17,7 +17,7 @@ import useEpisode from 'Episode/useEpisode';
 import { icons, kinds, tooltipPositions } from 'Helpers/Props';
 import Language from 'Language/Language';
 import { QualityModel } from 'Quality/Quality';
-import useSeries from 'Series/useSeries';
+import { useSingleSeries } from 'Series/useSeries';
 import CustomFormat from 'typings/CustomFormat';
 import { HistoryData, HistoryEventType } from 'typings/History';
 import formatCustomFormatScore from 'Utilities/Number/formatCustomFormatScore';
@@ -59,7 +59,7 @@ function SeriesHistoryRow({
   customFormatScore,
   onMarkAsFailedPress,
 }: SeriesHistoryRowProps) {
-  const series = useSeries(seriesId);
+  const series = useSingleSeries(seriesId);
   const episode = useEpisode(episodeId, 'episodes');
 
   const [isMarkAsFailedModalOpen, setIsMarkAsFailedModalOpen] = useState(false);

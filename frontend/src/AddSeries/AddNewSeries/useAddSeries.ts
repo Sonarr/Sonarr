@@ -1,11 +1,9 @@
-import { useCallback } from 'react';
-import { useDispatch } from 'react-redux';
+import { useQueryClient } from '@tanstack/react-query';
 import AddSeries from 'AddSeries/AddSeries';
 import { AddSeriesOptions } from 'AddSeries/addSeriesOptionsStore';
 import useApiMutation from 'Helpers/Hooks/useApiMutation';
 import useApiQuery from 'Helpers/Hooks/useApiQuery';
 import Series from 'Series/Series';
-import { updateItem } from 'Store/Actions/baseActions';
 
 type AddSeriesPayload = AddSeries & AddSeriesOptions;
 
@@ -24,21 +22,22 @@ export const useLookupSeries = (query: string) => {
 };
 
 export const useAddSeries = () => {
-  const dispatch = useDispatch();
-
-  const onAddSuccess = useCallback(
-    (data: Series) => {
-      dispatch(updateItem({ section: 'series', ...data }));
-    },
-    [dispatch]
-  );
+  const queryClient = useQueryClient();
 
   const { isPending, error, mutate } = useApiMutation<Series, AddSeriesPayload>(
     {
       path: '/series',
       method: 'POST',
       mutationOptions: {
-        onSuccess: onAddSuccess,
+        onSuccess: (newSeries) => {
+          queryClient.setQueryData<Series[]>(['/series'], (oldSeries) => {
+            if (!oldSeries) {
+              return [newSeries];
+            }
+
+            return [...oldSeries, newSeries];
+          });
+        },
       },
     }
   );

@@ -1,7 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import SeriesMonitorNewItemsOptionsPopoverContent from 'AddSeries/SeriesMonitorNewItemsOptionsPopoverContent';
-import AppState from 'App/State/AppState';
 import Form from 'Components/Form/Form';
 import FormGroup from 'Components/Form/FormGroup';
 import FormInputButton from 'Components/Form/FormInputButton';
@@ -15,6 +13,7 @@ import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import Popover from 'Components/Tooltip/Popover';
+import { usePendingChangesStore } from 'Helpers/Hooks/usePendingChangesStore';
 import usePrevious from 'Helpers/Hooks/usePrevious';
 import {
   icons,
@@ -24,8 +23,8 @@ import {
   tooltipPositions,
 } from 'Helpers/Props';
 import MoveSeriesModal from 'Series/MoveSeries/MoveSeriesModal';
-import useSeries from 'Series/useSeries';
-import { saveSeries, setSeriesValue } from 'Store/Actions/seriesActions';
+import Series from 'Series/Series';
+import { useSaveSeries, useSingleSeries } from 'Series/useSeries';
 import selectSettings from 'Store/Selectors/selectSettings';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
@@ -43,7 +42,8 @@ function EditSeriesModalContent({
   onModalClose,
   onDeleteSeriesPress,
 }: EditSeriesModalContentProps) {
-  const dispatch = useDispatch();
+  const series = useSingleSeries(seriesId)!;
+
   const {
     title,
     monitored,
@@ -54,21 +54,21 @@ function EditSeriesModalContent({
     path,
     tags,
     rootFolderPath: initialRootFolderPath,
-  } = useSeries(seriesId)!;
+  } = series;
 
-  const { isSaving, saveError, pendingChanges } = useSelector(
-    (state: AppState) => state.series
+  const { pendingChanges, setPendingChange } = usePendingChangesStore<Series>(
+    {}
   );
 
-  const wasSaving = usePrevious(isSaving);
-
   const [isRootFolderModalOpen, setIsRootFolderModalOpen] = useState(false);
-
   const [rootFolderPath, setRootFolderPath] = useState(initialRootFolderPath);
-
-  const isPathChanging = pendingChanges.path && path !== pendingChanges.path;
-
+  const isPathChanging = !!(
+    pendingChanges.path && path !== pendingChanges.path
+  );
   const [isConfirmMoveModalOpen, setIsConfirmMoveModalOpen] = useState(false);
+
+  const { saveSeries, isSaving, saveError } = useSaveSeries(isPathChanging);
+  const wasSaving = usePrevious(isSaving);
 
   const { settings, ...otherSettings } = useMemo(() => {
     return selectSettings(
@@ -98,10 +98,10 @@ function EditSeriesModalContent({
 
   const handleInputChange = useCallback(
     ({ name, value }: InputChanged) => {
-      // @ts-expect-error actions aren't typed
-      dispatch(setSeriesValue({ name, value }));
+      // @ts-expect-error name needs to be keyof Series
+      setPendingChange(name, value);
     },
-    [dispatch]
+    [setPendingChange]
   );
 
   const handleRootFolderPress = useCallback(() => {
@@ -134,25 +134,27 @@ function EditSeriesModalContent({
     } else {
       setIsConfirmMoveModalOpen(false);
 
-      dispatch(
-        saveSeries({
-          id: seriesId,
-          moveFiles: false,
-        })
-      );
+      saveSeries({
+        ...series,
+        ...pendingChanges,
+      });
     }
-  }, [seriesId, isPathChanging, isConfirmMoveModalOpen, dispatch]);
+  }, [
+    series,
+    isPathChanging,
+    isConfirmMoveModalOpen,
+    pendingChanges,
+    saveSeries,
+  ]);
 
   const handleMoveSeriesPress = useCallback(() => {
     setIsConfirmMoveModalOpen(false);
 
-    dispatch(
-      saveSeries({
-        id: seriesId,
-        moveFiles: true,
-      })
-    );
-  }, [seriesId, dispatch]);
+    saveSeries({
+      ...series,
+      ...pendingChanges,
+    });
+  }, [series, pendingChanges, saveSeries]);
 
   useEffect(() => {
     if (!isSaving && wasSaving && !saveError) {

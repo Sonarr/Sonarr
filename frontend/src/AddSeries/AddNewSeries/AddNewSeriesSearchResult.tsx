@@ -10,8 +10,8 @@ import { icons, kinds, sizes } from 'Helpers/Props';
 import { Statistics } from 'Series/Series';
 import SeriesGenres from 'Series/SeriesGenres';
 import SeriesPoster from 'Series/SeriesPoster';
+import useExistingSeries from 'Series/useExistingSeries';
 import createDimensionsSelector from 'Store/Selectors/createDimensionsSelector';
-import createExistingSeriesSelector from 'Store/Selectors/createExistingSeriesSelector';
 import translate from 'Utilities/String/translate';
 import AddNewSeriesModal from './AddNewSeriesModal';
 import styles from './AddNewSeriesSearchResult.css';
@@ -37,7 +37,7 @@ function AddNewSeriesSearchResult({ series }: AddNewSeriesSearchResultProps) {
     images,
   } = series;
 
-  const isExistingSeries = useSelector(createExistingSeriesSelector(tvdbId));
+  const isExistingSeries = useExistingSeries(tvdbId);
   const { isSmallScreen } = useSelector(createDimensionsSelector());
   const [isNewAddSeriesModalOpen, setIsNewAddSeriesModalOpen] = useState(false);
 

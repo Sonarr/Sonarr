@@ -11,16 +11,14 @@ import React, {
   useState,
 } from 'react';
 import Autosuggest from 'react-autosuggest';
-import { useDispatch, useSelector } from 'react-redux';
-import { createSelector } from 'reselect';
+import { useDispatch } from 'react-redux';
 import { useDebouncedCallback } from 'use-debounce';
 import Icon from 'Components/Icon';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import useKeyboardShortcuts from 'Helpers/Hooks/useKeyboardShortcuts';
 import { icons } from 'Helpers/Props';
 import Series from 'Series/Series';
-import createAllSeriesSelector from 'Store/Selectors/createAllSeriesSelector';
-import createDeepEqualSelector from 'Store/Selectors/createDeepEqualSelector';
+import useSeries from 'Series/useSeries';
 import { Tag, useTagList } from 'Tags/useTags';
 import translate from 'Utilities/String/translate';
 import SeriesSearchResult from './SeriesSearchResult';
@@ -69,8 +67,10 @@ interface Section {
   suggestions: SeriesSuggestion[] | AddNewSeriesSuggestion[];
 }
 
-function createUnoptimizedSelector(tagList: Tag[]) {
-  return createSelector(createAllSeriesSelector(), (allSeries) => {
+function useSeriesSuggestions(tagList: Tag[]) {
+  const { data: allSeries = [] } = useSeries();
+
+  return useMemo(() => {
     return allSeries.map((series): SuggestedSeries => {
       const {
         title,
@@ -107,19 +107,12 @@ function createUnoptimizedSelector(tagList: Tag[]) {
         }, []),
       };
     });
-  });
-}
-
-function createSeriesSelector(tagList: Tag[]) {
-  return createDeepEqualSelector(
-    createUnoptimizedSelector(tagList),
-    (series) => series
-  );
+  }, [allSeries, tagList]);
 }
 
 function SeriesSearchInput() {
   const tagList = useTagList();
-  const series = useSelector(createSeriesSelector(tagList));
+  const series = useSeriesSuggestions(tagList);
   const dispatch = useDispatch();
   const { bindShortcut, unbindShortcut } = useKeyboardShortcuts();
 

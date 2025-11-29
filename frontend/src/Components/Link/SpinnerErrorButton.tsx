@@ -28,36 +28,7 @@ function getTestResult(error: ApiError | Error | string | undefined | null) {
     };
   }
 
-  if ('status' in error) {
-    if (error.status !== 400) {
-      return {
-        wasSuccessful: false,
-        hasWarning: false,
-        hasError: true,
-      };
-    }
-
-    const failures = error.responseJSON as ValidationFailure[];
-
-    const { hasError, hasWarning } = failures.reduce(
-      (acc, failure) => {
-        if (failure.isWarning) {
-          acc.hasWarning = true;
-        } else {
-          acc.hasError = true;
-        }
-
-        return acc;
-      },
-      { hasWarning: false, hasError: false }
-    );
-
-    return {
-      wasSuccessful: false,
-      hasWarning,
-      hasError,
-    };
-  } else if ('statusCode' in error) {
+  if (error instanceof ApiError) {
     if (error.statusCode !== 400 || error.statusBody == null) {
       return {
         wasSuccessful: false,
@@ -75,10 +46,33 @@ function getTestResult(error: ApiError | Error | string | undefined | null) {
     };
   }
 
+  if (error.status !== 400) {
+    return {
+      wasSuccessful: false,
+      hasWarning: false,
+      hasError: true,
+    };
+  }
+
+  const failures = error.responseJSON as ValidationFailure[];
+
+  const { hasError, hasWarning } = failures.reduce(
+    (acc, failure) => {
+      if (failure.isWarning) {
+        acc.hasWarning = true;
+      } else {
+        acc.hasError = true;
+      }
+
+      return acc;
+    },
+    { hasWarning: false, hasError: false }
+  );
+
   return {
     wasSuccessful: false,
-    hasWarning: false,
-    hasError: true,
+    hasWarning,
+    hasError,
   };
 }
 

@@ -39,11 +39,12 @@ import { Image, Statistics } from 'Series/Series';
 import SeriesGenres from 'Series/SeriesGenres';
 import SeriesPoster from 'Series/SeriesPoster';
 import { getSeriesStatusDetails } from 'Series/SeriesStatus';
-import useSeries from 'Series/useSeries';
+import useSeries, {
+  useSingleSeries,
+  useToggleSeriesMonitored,
+} from 'Series/useSeries';
 import QualityProfileName from 'Settings/Profiles/Quality/QualityProfileName';
 import { executeCommand } from 'Store/Actions/commandActions';
-import { toggleSeriesMonitored } from 'Store/Actions/seriesActions';
-import createAllSeriesSelector from 'Store/Selectors/createAllSeriesSelector';
 import createCommandsSelector from 'Store/Selectors/createCommandsSelector';
 import sortByProp from 'Utilities/Array/sortByProp';
 import { findCommand, isCommandExecuting } from 'Utilities/Command';
@@ -86,8 +87,10 @@ interface SeriesDetailsProps {
 function SeriesDetails({ seriesId }: SeriesDetailsProps) {
   const dispatch = useDispatch();
 
-  const series = useSeries(seriesId);
-  const allSeries = useSelector(createAllSeriesSelector());
+  const series = useSingleSeries(seriesId);
+  const { toggleSeriesMonitored, isTogglingSeriesMonitored } =
+    useToggleSeriesMonitored(seriesId);
+  const { data: allSeries } = useSeries();
 
   const {
     isFetching: isEpisodesFetching,
@@ -314,14 +317,11 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
 
   const handleMonitorTogglePress = useCallback(
     (value: boolean) => {
-      dispatch(
-        toggleSeriesMonitored({
-          seriesId,
-          monitored: value,
-        })
-      );
+      toggleSeriesMonitored({
+        monitored: value,
+      });
     },
-    [seriesId, dispatch]
+    [toggleSeriesMonitored]
   );
 
   const handleRefreshPress = useCallback(() => {
@@ -389,7 +389,6 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
     genres,
     tags,
     year,
-    isSaving = false,
   } = series;
 
   const {
@@ -534,7 +533,7 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
                       <MonitorToggleButton
                         className={styles.monitorToggleButton}
                         monitored={monitored}
-                        isSaving={isSaving}
+                        isSaving={isTogglingSeriesMonitored}
                         size={40}
                         onPress={handleMonitorTogglePress}
                       />

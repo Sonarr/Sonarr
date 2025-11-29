@@ -1,6 +1,6 @@
 import { orderBy } from 'lodash';
 import React, { useCallback, useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useSelect } from 'App/Select/SelectContext';
 import { RENAME_SERIES } from 'Commands/commandNames';
 import Alert from 'Components/Alert';
@@ -12,8 +12,8 @@ import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import { icons, kinds } from 'Helpers/Props';
 import Series from 'Series/Series';
+import useSeries from 'Series/useSeries';
 import { executeCommand } from 'Store/Actions/commandActions';
-import createAllSeriesSelector from 'Store/Selectors/createAllSeriesSelector';
 import translate from 'Utilities/String/translate';
 import styles from './OrganizeSeriesModalContent.css';
 
@@ -24,7 +24,7 @@ export interface OrganizeSeriesModalContentProps {
 function OrganizeSeriesModalContent({
   onModalClose,
 }: OrganizeSeriesModalContentProps) {
-  const allSeries: Series[] = useSelector(createAllSeriesSelector());
+  const { data: allSeries } = useSeries();
   const dispatch = useDispatch();
   const { useSelectedIds } = useSelect<Series>();
   const seriesIds = useSelectedIds();
