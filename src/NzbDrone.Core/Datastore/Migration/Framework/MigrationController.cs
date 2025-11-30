@@ -8,6 +8,7 @@ using FluentMigrator.Runner.Processors;
 using Microsoft.Extensions.DependencyInjection;
 using NLog;
 using NLog.Extensions.Logging;
+using NzbDrone.Common.Instrumentation;
 
 namespace NzbDrone.Core.Datastore.Migration.Framework
 {
@@ -29,7 +30,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
         {
             var sw = Stopwatch.StartNew();
 
-            _logger.Info("*** Migrating {0} ***", connectionString);
+            _logger.Info("*** Migrating {0} ***", CleanseLogMessage.Cleanse(connectionString));
 
             var db = databaseType == DatabaseType.SQLite ? "sqlite" : "postgres";
 
