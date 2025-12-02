@@ -4,7 +4,6 @@ import { createThunk, handleThunks } from 'Store/thunks';
 import createAjaxRequest from 'Utilities/createAjaxRequest';
 import getSectionState from 'Utilities/State/getSectionState';
 import updateSectionState from 'Utilities/State/updateSectionState';
-import { fetchTranslations as fetchAppTranslations } from 'Utilities/String/translate';
 import createHandleActions from './Creators/createHandleActions';
 
 function getDimensions(width, height) {
@@ -42,12 +41,7 @@ export const defaultState = {
   isReconnecting: false,
   isDisconnected: false,
   isRestarting: false,
-  isSidebarVisible: !getDimensions(window.innerWidth, window.innerHeight).isSmallScreen,
-  translations: {
-    isFetching: true,
-    isPopulated: false,
-    error: null
-  }
+  isSidebarVisible: !getDimensions(window.innerWidth, window.innerHeight).isSmallScreen
 };
 
 //
@@ -59,7 +53,6 @@ export const SAVE_DIMENSIONS = 'app/saveDimensions';
 export const SET_VERSION = 'app/setVersion';
 export const SET_APP_VALUE = 'app/setAppValue';
 export const SET_IS_SIDEBAR_VISIBLE = 'app/setIsSidebarVisible';
-export const FETCH_TRANSLATIONS = 'app/fetchTranslations';
 
 export const PING_SERVER = 'app/pingServer';
 
@@ -73,7 +66,6 @@ export const setAppValue = createAction(SET_APP_VALUE);
 export const showMessage = createAction(SHOW_MESSAGE);
 export const hideMessage = createAction(HIDE_MESSAGE);
 export const pingServer = createThunk(PING_SERVER);
-export const fetchTranslations = createThunk(FETCH_TRANSLATIONS);
 
 //
 // Helpers
@@ -135,17 +127,6 @@ function pingServerAfterTimeout(getState, dispatch) {
 export const actionHandlers = handleThunks({
   [PING_SERVER]: function(getState, payload, dispatch) {
     pingServerAfterTimeout(getState, dispatch);
-  },
-  [FETCH_TRANSLATIONS]: async function(getState, payload, dispatch) {
-    const isFetchingComplete = await fetchAppTranslations();
-
-    dispatch(setAppValue({
-      translations: {
-        isFetching: false,
-        isPopulated: isFetchingComplete,
-        error: isFetchingComplete ? null : 'Failed to load translations from API'
-      }
-    }));
   }
 });
 

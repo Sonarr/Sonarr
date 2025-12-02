@@ -2,9 +2,9 @@ import { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
 import AppState from 'App/State/AppState';
+import { useTranslations } from 'App/useTranslations';
 import useCustomFilters from 'Filters/useCustomFilters';
 import useSeries from 'Series/useSeries';
-import { fetchTranslations } from 'Store/Actions/appActions';
 import { fetchCustomFilters } from 'Store/Actions/customFilterActions';
 import {
   fetchImportLists,
@@ -21,11 +21,13 @@ const createErrorsSelector = ({
   customFiltersError,
   systemStatusError,
   tagsError,
+  translationsError,
   seriesError,
 }: {
   customFiltersError: ApiError | null;
   systemStatusError: ApiError | null;
   tagsError: ApiError | null;
+  translationsError: ApiError | null;
   seriesError: ApiError | null;
 }) =>
   createSelector(
@@ -34,14 +36,12 @@ const createErrorsSelector = ({
     (state: AppState) => state.settings.languages.error,
     (state: AppState) => state.settings.importLists.error,
     (state: AppState) => state.settings.indexerFlags.error,
-    (state: AppState) => state.app.translations.error,
     (
       uiSettingsError,
       qualityProfilesError,
       languagesError,
       importListsError,
-      indexerFlagsError,
-      translationsError
+      indexerFlagsError
     ) => {
       const hasError = !!(
         customFiltersError ||
@@ -87,14 +87,16 @@ const useAppPage = () => {
 
   const { isFetched: isTagsFetched, error: tagsError } = useTags();
 
+  const { isFetched: isTranslationsFetched, error: translationsError } =
+    useTranslations();
+
   const isAppStatePopulated = useSelector(
     (state: AppState) =>
       state.settings.ui.isPopulated &&
       state.settings.qualityProfiles.isPopulated &&
       state.settings.languages.isPopulated &&
       state.settings.importLists.isPopulated &&
-      state.settings.indexerFlags.isPopulated &&
-      state.app.translations.isPopulated
+      state.settings.indexerFlags.isPopulated
   );
 
   const isPopulated =
@@ -102,7 +104,8 @@ const useAppPage = () => {
     isCustomFiltersFetched &&
     isSeriesFetched &&
     isSystemStatusFetched &&
-    isTagsFetched;
+    isTagsFetched &&
+    isTranslationsFetched;
 
   const { hasError, errors } = useSelector(
     createErrorsSelector({
@@ -110,6 +113,7 @@ const useAppPage = () => {
       seriesError,
       systemStatusError,
       tagsError,
+      translationsError,
     })
   );
 
@@ -133,7 +137,6 @@ const useAppPage = () => {
     dispatch(fetchImportLists());
     dispatch(fetchIndexerFlags());
     dispatch(fetchUISettings());
-    dispatch(fetchTranslations());
   }, [dispatch]);
 
   return useMemo(() => {

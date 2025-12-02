@@ -1,4 +1,3 @@
-import { Error } from './AppSectionState';
 import BlocklistAppState from './BlocklistAppState';
 import CaptchaAppState from './CaptchaAppState';
 import CommandAppState from './CommandAppState';
@@ -25,10 +24,6 @@ export interface AppSectionState {
     isLargeScreen: boolean;
     width: number;
     height: number;
-  };
-  translations: {
-    error?: Error;
-    isPopulated: boolean;
   };
   messages: MessagesAppState;
 }

@@ -8,7 +8,7 @@ import styles from './ErrorPage.css';
 interface ErrorPageProps {
   version: string;
   isLocalStorageSupported: boolean;
-  translationsError?: Error;
+  translationsError: ApiError | null;
   seriesError: ApiError | null;
   customFiltersError: ApiError | null;
   tagsError: ApiError | null;
