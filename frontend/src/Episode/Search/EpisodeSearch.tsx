@@ -1,12 +1,11 @@
 import React, { useCallback, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import * as commandNames from 'Commands/commandNames';
+import CommandNames from 'Commands/CommandNames';
+import { useExecuteCommand } from 'Commands/useCommands';
 import Icon from 'Components/Icon';
 import Button from 'Components/Link/Button';
 import { icons, kinds, sizes } from 'Helpers/Props';
 import InteractiveSearch from 'InteractiveSearch/InteractiveSearch';
 import useReleases from 'InteractiveSearch/useReleases';
-import { executeCommand } from 'Store/Actions/commandActions';
 import translate from 'Utilities/String/translate';
 import styles from './EpisodeSearch.css';
 
@@ -21,7 +20,7 @@ function EpisodeSearch({
   startInteractiveSearch,
   onModalClose,
 }: EpisodeSearchProps) {
-  const dispatch = useDispatch();
+  const executeCommand = useExecuteCommand();
   const { isFetched } = useReleases({ episodeId });
 
   const [isInteractiveSearchOpen, setIsInteractiveSearchOpen] = useState(
@@ -29,15 +28,13 @@ function EpisodeSearch({
   );
 
   const handleQuickSearchPress = useCallback(() => {
-    dispatch(
-      executeCommand({
-        name: commandNames.EPISODE_SEARCH,
-        episodeIds: [episodeId],
-      })
-    );
+    executeCommand({
+      name: CommandNames.EpisodeSearch,
+      episodeIds: [episodeId],
+    });
 
     onModalClose();
-  }, [episodeId, dispatch, onModalClose]);
+  }, [episodeId, executeCommand, onModalClose]);
 
   const handleInteractiveSearchPress = useCallback(() => {
     setIsInteractiveSearchOpen(true);

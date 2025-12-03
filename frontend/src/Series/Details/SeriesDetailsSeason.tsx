@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { createSelector } from 'reselect';
+import { useDispatch } from 'react-redux';
 import { useAppDimension } from 'App/appStore';
-import * as commandNames from 'Commands/commandNames';
+import CommandNames from 'Commands/CommandNames';
+import { useCommands } from 'Commands/useCommands';
 import Icon from 'Components/Icon';
 import Label from 'Components/Label';
 import IconButton from 'Components/Link/IconButton';
@@ -34,7 +34,6 @@ import SeriesHistoryModal from 'Series/History/SeriesHistoryModal';
 import SeasonInteractiveSearchModal from 'Series/Search/SeasonInteractiveSearchModal';
 import { Statistics } from 'Series/Series';
 import { useSingleSeries, useToggleSeasonMonitored } from 'Series/useSeries';
-import createCommandsSelector from 'Store/Selectors/createCommandsSelector';
 import { TableOptionsChangePayload } from 'typings/Table';
 import { findCommand, isCommandExecuting } from 'Utilities/Command';
 import isAfter from 'Utilities/Date/isAfter';
@@ -85,16 +84,15 @@ function getSeasonStatistics(episodes: Episode[]) {
   };
 }
 
-function createIsSearchingSelector(seriesId: number, seasonNumber: number) {
-  return createSelector(createCommandsSelector(), (commands) => {
-    return isCommandExecuting(
-      findCommand(commands, {
-        name: commandNames.SEASON_SEARCH,
-        seriesId,
-        seasonNumber,
-      })
-    );
-  });
+function useIsSearching(seriesId: number, seasonNumber: number) {
+  const { data: commands } = useCommands();
+  return isCommandExecuting(
+    findCommand(commands, {
+      name: CommandNames.SeasonSearch,
+      seriesId,
+      seasonNumber,
+    })
+  );
 }
 
 interface SeriesDetailsSeasonProps {
@@ -121,9 +119,7 @@ function SeriesDetailsSeason({
   const { columns, sortKey, sortDirection } = useEpisodeOptions();
 
   const isSmallScreen = useAppDimension('isSmallScreen');
-  const isSearching = useSelector(
-    createIsSearchingSelector(seriesId, seasonNumber)
-  );
+  const isSearching = useIsSearching(seriesId, seasonNumber);
 
   const { sizeOnDisk = 0 } = statistics;
 
@@ -199,7 +195,7 @@ function SeriesDetailsSeason({
 
   const handleSearchPress = useCallback(() => {
     dispatch({
-      name: commandNames.SEASON_SEARCH,
+      name: CommandNames.SeasonSearch,
       seriesId,
       seasonNumber,
     });

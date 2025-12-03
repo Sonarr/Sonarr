@@ -1,17 +1,14 @@
 import { keepPreviousData } from '@tanstack/react-query';
 import moment from 'moment';
 import { useEffect, useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { create } from 'zustand';
 import AppState from 'App/State/AppState';
-import Command from 'Commands/Command';
-import * as commandNames from 'Commands/commandNames';
 import { setEpisodeQueryKey } from 'Episode/useEpisode';
 import { Filter, FilterBuilderProp } from 'Filters/Filter';
 import { useCustomFiltersList } from 'Filters/useCustomFilters';
 import useApiQuery from 'Helpers/Hooks/useApiQuery';
 import { filterBuilderValueTypes } from 'Helpers/Props';
-import { executeCommandHelper } from 'Store/Actions/commandActions';
 import { CalendarItem } from 'typings/Calendar';
 import findSelectedFilters from 'Utilities/Filter/findSelectedFilters';
 import translate from 'Utilities/String/translate';
@@ -180,19 +177,6 @@ export const useCalendarRange = () => {
 
 export const useCalendarSearchMissingCommandId = () => {
   return calendarStore((state) => state.searchMissingCommandId);
-};
-
-export const useSearchMissing = (episodeIds: number[]) => {
-  const dispatch = useDispatch();
-
-  const commandPayload = {
-    name: commandNames.EPISODE_SEARCH,
-    episodeIds,
-  };
-
-  executeCommandHelper(commandPayload, dispatch).then((data: Command) => {
-    calendarStore.setState({ searchMissingCommandId: data.id });
-  });
 };
 
 export const setCalendarDayCount = (dayCount: number) => {

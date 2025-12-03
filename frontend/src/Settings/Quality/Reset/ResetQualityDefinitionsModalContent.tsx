@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import * as commandNames from 'Commands/commandNames';
+import CommandNames from 'Commands/CommandNames';
+import { useCommandExecuting, useExecuteCommand } from 'Commands/useCommands';
 import FormGroup from 'Components/Form/FormGroup';
 import FormInputGroup from 'Components/Form/FormInputGroup';
 import FormLabel from 'Components/Form/FormLabel';
@@ -10,8 +10,6 @@ import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import { inputTypes, kinds } from 'Helpers/Props';
-import { executeCommand } from 'Store/Actions/commandActions';
-import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
 import styles from './ResetQualityDefinitionsModalContent.css';
@@ -23,10 +21,9 @@ interface ResetQualityDefinitionsModalContentProps {
 function ResetQualityDefinitionsModalContent({
   onModalClose,
 }: ResetQualityDefinitionsModalContentProps) {
-  const dispatch = useDispatch();
-
-  const isResettingQualityDefinitions = useSelector(
-    createCommandExecutingSelector(commandNames.RESET_QUALITY_DEFINITIONS)
+  const executeCommand = useExecuteCommand();
+  const isResettingQualityDefinitions = useCommandExecuting(
+    CommandNames.ResetQualityDefinitions
   );
 
   const [resetDefinitionTitles, setResetDefinitionTitles] = useState(false);
@@ -43,14 +40,12 @@ function ResetQualityDefinitionsModalContent({
 
     setResetDefinitionTitles(false);
 
-    dispatch(
-      executeCommand({
-        name: commandNames.RESET_QUALITY_DEFINITIONS,
-        resetTitles,
-      })
-    );
+    executeCommand({
+      name: CommandNames.ResetQualityDefinitions,
+      resetTitles,
+    });
     onModalClose();
-  }, [resetDefinitionTitles, dispatch, onModalClose]);
+  }, [resetDefinitionTitles, executeCommand, onModalClose]);
 
   return (
     <ModalContent onModalClose={onModalClose}>

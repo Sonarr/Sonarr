@@ -1,8 +1,8 @@
 import classNames from 'classnames';
 import React, { useCallback, useMemo, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import TextTruncate from 'react-text-truncate';
-import { REFRESH_SERIES, SERIES_SEARCH } from 'Commands/commandNames';
+import CommandNames from 'Commands/CommandNames';
+import { useExecuteCommand } from 'Commands/useCommands';
 import IconButton from 'Components/Link/IconButton';
 import Link from 'Components/Link/Link';
 import SpinnerIconButton from 'Components/Link/SpinnerIconButton';
@@ -15,7 +15,6 @@ import SeriesIndexPosterSelect from 'Series/Index/Select/SeriesIndexPosterSelect
 import { Statistics } from 'Series/Series';
 import { useSeriesOverviewOptions } from 'Series/seriesOptionsStore';
 import SeriesPoster from 'Series/SeriesPoster';
-import { executeCommand } from 'Store/Actions/commandActions';
 import dimensions from 'Styles/Variables/dimensions';
 import fonts from 'Styles/Variables/fonts';
 import translate from 'Utilities/String/translate';
@@ -60,6 +59,53 @@ function SeriesIndexOverview(props: SeriesIndexOverviewProps) {
 
   const overviewOptions = useSeriesOverviewOptions();
 
+  const executeCommand = useExecuteCommand();
+  const [isEditSeriesModalOpen, setIsEditSeriesModalOpen] = useState(false);
+  const [isDeleteSeriesModalOpen, setIsDeleteSeriesModalOpen] = useState(false);
+
+  const onRefreshPress = useCallback(() => {
+    executeCommand({
+      name: CommandNames.RefreshSeries,
+      seriesIds: [seriesId],
+    });
+  }, [seriesId, executeCommand]);
+
+  const onSearchPress = useCallback(() => {
+    executeCommand({
+      name: CommandNames.SeriesSearch,
+      seriesId,
+    });
+  }, [seriesId, executeCommand]);
+
+  const onEditSeriesPress = useCallback(() => {
+    setIsEditSeriesModalOpen(true);
+  }, [setIsEditSeriesModalOpen]);
+
+  const onEditSeriesModalClose = useCallback(() => {
+    setIsEditSeriesModalOpen(false);
+  }, [setIsEditSeriesModalOpen]);
+
+  const onDeleteSeriesPress = useCallback(() => {
+    setIsEditSeriesModalOpen(false);
+    setIsDeleteSeriesModalOpen(true);
+  }, [setIsDeleteSeriesModalOpen]);
+
+  const onDeleteSeriesModalClose = useCallback(() => {
+    setIsDeleteSeriesModalOpen(false);
+  }, [setIsDeleteSeriesModalOpen]);
+
+  const contentHeight = useMemo(() => {
+    const padding = isSmallScreen ? columnPaddingSmallScreen : columnPadding;
+
+    return rowHeight - padding;
+  }, [rowHeight, isSmallScreen]);
+
+  const overviewHeight = contentHeight - TITLE_HEIGHT;
+
+  if (!series) {
+    return null;
+  }
+
   const {
     title,
     monitored,
@@ -84,59 +130,12 @@ function SeriesIndexOverview(props: SeriesIndexOverviewProps) {
     sizeOnDisk = 0,
   } = statistics;
 
-  const dispatch = useDispatch();
-  const [isEditSeriesModalOpen, setIsEditSeriesModalOpen] = useState(false);
-  const [isDeleteSeriesModalOpen, setIsDeleteSeriesModalOpen] = useState(false);
-
-  const onRefreshPress = useCallback(() => {
-    dispatch(
-      executeCommand({
-        name: REFRESH_SERIES,
-        seriesIds: [seriesId],
-      })
-    );
-  }, [seriesId, dispatch]);
-
-  const onSearchPress = useCallback(() => {
-    dispatch(
-      executeCommand({
-        name: SERIES_SEARCH,
-        seriesId,
-      })
-    );
-  }, [seriesId, dispatch]);
-
-  const onEditSeriesPress = useCallback(() => {
-    setIsEditSeriesModalOpen(true);
-  }, [setIsEditSeriesModalOpen]);
-
-  const onEditSeriesModalClose = useCallback(() => {
-    setIsEditSeriesModalOpen(false);
-  }, [setIsEditSeriesModalOpen]);
-
-  const onDeleteSeriesPress = useCallback(() => {
-    setIsEditSeriesModalOpen(false);
-    setIsDeleteSeriesModalOpen(true);
-  }, [setIsDeleteSeriesModalOpen]);
-
-  const onDeleteSeriesModalClose = useCallback(() => {
-    setIsDeleteSeriesModalOpen(false);
-  }, [setIsDeleteSeriesModalOpen]);
-
   const link = `/series/${titleSlug}`;
 
   const elementStyle = {
     width: `${posterWidth}px`,
     height: `${posterHeight}px`,
   };
-
-  const contentHeight = useMemo(() => {
-    const padding = isSmallScreen ? columnPaddingSmallScreen : columnPadding;
-
-    return rowHeight - padding;
-  }, [rowHeight, isSmallScreen]);
-
-  const overviewHeight = contentHeight - TITLE_HEIGHT;
 
   return (
     <div>

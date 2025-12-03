@@ -1,13 +1,12 @@
 import React, { useCallback, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
-import * as commandNames from 'Commands/commandNames';
+import CommandNames from 'Commands/CommandNames';
+import { useCommandExecuting } from 'Commands/useCommands';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
 import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
 import PageToolbarSeparator from 'Components/Page/Toolbar/PageToolbarSeparator';
 import { icons } from 'Helpers/Props';
 import SettingsToolbar from 'Settings/SettingsToolbar';
-import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
 import {
   SaveCallback,
   SettingsStateChange,
@@ -17,8 +16,8 @@ import QualityDefinitions from './Definition/QualityDefinitions';
 import ResetQualityDefinitionsModal from './Reset/ResetQualityDefinitionsModal';
 
 function Quality() {
-  const isResettingQualityDefinitions = useSelector(
-    createCommandExecutingSelector(commandNames.RESET_QUALITY_DEFINITIONS)
+  const isResettingQualityDefinitions = useCommandExecuting(
+    CommandNames.ResetQualityDefinitions
   );
 
   const saveDefinitions = useRef<() => void>();

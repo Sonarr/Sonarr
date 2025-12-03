@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import QueueDetailsProvider from 'Activity/Queue/Details/QueueDetailsProvider';
 import { SelectProvider, useSelect } from 'App/Select/SelectContext';
-import * as commandNames from 'Commands/commandNames';
+import CommandNames from 'Commands/CommandNames';
+import { useCommandExecuting, useExecuteCommand } from 'Commands/useCommands';
 import Alert from 'Components/Alert';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import FilterMenu from 'Components/Menu/FilterMenu';
@@ -23,8 +23,6 @@ import { Filter } from 'Filters/Filter';
 import { align, icons, kinds } from 'Helpers/Props';
 import { SortDirection } from 'Helpers/Props/sortDirections';
 import InteractiveImportModal from 'InteractiveImport/InteractiveImportModal';
-import { executeCommand } from 'Store/Actions/commandActions';
-import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
 import { CheckInputChanged } from 'typings/inputs';
 import { TableOptionsChangePayload } from 'typings/Table';
 import getFilterValue from 'Utilities/Filter/getFilterValue';
@@ -51,7 +49,7 @@ function getMonitoredValue(
 }
 
 function MissingContent() {
-  const dispatch = useDispatch();
+  const executeCommand = useExecuteCommand();
 
   const {
     records,
@@ -68,11 +66,11 @@ function MissingContent() {
   const { columns, pageSize, sortKey, sortDirection, selectedFilterKey } =
     useMissingOptions();
 
-  const isSearchingForAllEpisodes = useSelector(
-    createCommandExecutingSelector(commandNames.MISSING_EPISODE_SEARCH)
+  const isSearchingForAllEpisodes = useCommandExecuting(
+    CommandNames.MissingEpisodeSearch
   );
-  const isSearchingForSelectedEpisodes = useSelector(
-    createCommandExecutingSelector(commandNames.EPISODE_SEARCH)
+  const isSearchingForSelectedEpisodes = useCommandExecuting(
+    CommandNames.EpisodeSearch
   );
 
   const {
@@ -114,16 +112,16 @@ function MissingContent() {
   );
 
   const handleSearchSelectedPress = useCallback(() => {
-    dispatch(
-      executeCommand({
-        name: commandNames.EPISODE_SEARCH,
+    executeCommand(
+      {
+        name: CommandNames.EpisodeSearch,
         episodeIds: getSelectedIds(),
-        commandFinished: () => {
-          refetch();
-        },
-      })
+      },
+      () => {
+        refetch();
+      }
     );
-  }, [getSelectedIds, dispatch, refetch]);
+  }, [getSelectedIds, executeCommand, refetch]);
 
   const handleSearchAllPress = useCallback(() => {
     setIsConfirmSearchAllModalOpen(true);
@@ -134,17 +132,17 @@ function MissingContent() {
   }, []);
 
   const handleSearchAllMissingConfirmed = useCallback(() => {
-    dispatch(
-      executeCommand({
-        name: commandNames.MISSING_EPISODE_SEARCH,
-        commandFinished: () => {
-          refetch();
-        },
-      })
+    executeCommand(
+      {
+        name: CommandNames.MissingEpisodeSearch,
+      },
+      () => {
+        refetch();
+      }
     );
 
     setIsConfirmSearchAllModalOpen(false);
-  }, [dispatch, refetch]);
+  }, [executeCommand, refetch]);
 
   const handleToggleSelectedPress = useCallback(() => {
     toggleEpisodesMonitored({

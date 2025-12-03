@@ -1,7 +1,8 @@
 import classNames from 'classnames';
 import React, { useCallback, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { REFRESH_SERIES, SERIES_SEARCH } from 'Commands/commandNames';
+import { useSelector } from 'react-redux';
+import CommandNames from 'Commands/CommandNames';
+import { useExecuteCommand } from 'Commands/useCommands';
 import Label from 'Components/Label';
 import IconButton from 'Components/Link/IconButton';
 import Link from 'Components/Link/Link';
@@ -15,7 +16,6 @@ import SeriesIndexPosterSelect from 'Series/Index/Select/SeriesIndexPosterSelect
 import { Statistics } from 'Series/Series';
 import { useSeriesPosterOptions } from 'Series/seriesOptionsStore';
 import SeriesPoster from 'Series/SeriesPoster';
-import { executeCommand } from 'Store/Actions/commandActions';
 import createUISettingsSelector from 'Store/Selectors/createUISettingsSelector';
 import formatDateTime from 'Utilities/Date/formatDateTime';
 import getRelativeDate from 'Utilities/Date/getRelativeDate';
@@ -50,52 +50,24 @@ function SeriesIndexPoster(props: SeriesIndexPosterProps) {
   const { showRelativeDates, shortDateFormat, longDateFormat, timeFormat } =
     useSelector(createUISettingsSelector());
 
-  const {
-    title,
-    monitored,
-    status,
-    path,
-    titleSlug,
-    originalLanguage,
-    network,
-    nextAiring,
-    previousAiring,
-    added,
-    statistics = {} as Statistics,
-    images,
-    tags,
-  } = series;
-
-  const {
-    seasonCount = 0,
-    episodeCount = 0,
-    episodeFileCount = 0,
-    totalEpisodeCount = 0,
-    sizeOnDisk = 0,
-  } = statistics;
-
-  const dispatch = useDispatch();
+  const executeCommand = useExecuteCommand();
   const [hasPosterError, setHasPosterError] = useState(false);
   const [isEditSeriesModalOpen, setIsEditSeriesModalOpen] = useState(false);
   const [isDeleteSeriesModalOpen, setIsDeleteSeriesModalOpen] = useState(false);
 
   const onRefreshPress = useCallback(() => {
-    dispatch(
-      executeCommand({
-        name: REFRESH_SERIES,
-        seriesIds: [seriesId],
-      })
-    );
-  }, [seriesId, dispatch]);
+    executeCommand({
+      name: CommandNames.RefreshSeries,
+      seriesIds: [seriesId],
+    });
+  }, [seriesId, executeCommand]);
 
   const onSearchPress = useCallback(() => {
-    dispatch(
-      executeCommand({
-        name: SERIES_SEARCH,
-        seriesId,
-      })
-    );
-  }, [seriesId, dispatch]);
+    executeCommand({
+      name: CommandNames.SeriesSearch,
+      seriesId,
+    });
+  }, [seriesId, executeCommand]);
 
   const onPosterLoadError = useCallback(() => {
     setHasPosterError(true);
@@ -121,6 +93,34 @@ function SeriesIndexPoster(props: SeriesIndexPosterProps) {
   const onDeleteSeriesModalClose = useCallback(() => {
     setIsDeleteSeriesModalOpen(false);
   }, [setIsDeleteSeriesModalOpen]);
+
+  if (!series) {
+    return null;
+  }
+
+  const {
+    title,
+    monitored,
+    status,
+    path,
+    titleSlug,
+    originalLanguage,
+    network,
+    nextAiring,
+    previousAiring,
+    added,
+    statistics = {} as Statistics,
+    images,
+    tags,
+  } = series;
+
+  const {
+    seasonCount = 0,
+    episodeCount = 0,
+    episodeFileCount = 0,
+    totalEpisodeCount = 0,
+    sizeOnDisk = 0,
+  } = statistics;
 
   const link = `/series/${titleSlug}`;
 

@@ -32,9 +32,9 @@ export default function QueuedTaskRowNameCell(
   props: QueuedTaskRowNameCellProps
 ) {
   const { commandName, body, clientUserAgent } = props;
-  const seriesIds = [...(body.seriesIds ?? [])];
+  const seriesIds = 'seriesIds' in body ? [...body.seriesIds] : [];
 
-  if (body.seriesId) {
+  if ('seriesId' in body && body.seriesId) {
     seriesIds.push(body.seriesId);
   }
 
@@ -48,7 +48,7 @@ export default function QueuedTaskRowNameCell(
         {sortedSeries.length ? (
           <span> - {formatTitles(sortedSeries.map((s) => s.title))}</span>
         ) : null}
-        {body.seasonNumber ? (
+        {'seasonNumber' in body && body.seasonNumber ? (
           <span>
             {' '}
             {translate('SeasonNumberToken', {

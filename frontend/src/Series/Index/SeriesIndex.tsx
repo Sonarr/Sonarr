@@ -1,9 +1,9 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import QueueDetailsProvider from 'Activity/Queue/Details/QueueDetailsProvider';
 import { useAppDimension } from 'App/appStore';
 import { SelectProvider } from 'App/Select/SelectContext';
-import { RSS_SYNC } from 'Commands/commandNames';
+import CommandNames from 'Commands/CommandNames';
+import { useCommandExecuting, useExecuteCommand } from 'Commands/useCommands';
 import Alert from 'Components/Alert';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import PageContent from 'Components/Page/PageContent';
@@ -27,9 +27,7 @@ import {
   useSeriesOptions,
 } from 'Series/seriesOptionsStore';
 import { FILTERS, useSeriesIndex } from 'Series/useSeries';
-import { executeCommand } from 'Store/Actions/commandActions';
 import scrollPositions from 'Store/scrollPositions';
-import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
 import translate from 'Utilities/String/translate';
 import SeriesIndexFilterMenu from './Menus/SeriesIndexFilterMenu';
 import SeriesIndexSortMenu from './Menus/SeriesIndexSortMenu';
@@ -80,11 +78,9 @@ const SeriesIndex = withScrollPosition((props: SeriesIndexProps) => {
 
   const customFilters = useCustomFiltersList('series');
 
-  const isRssSyncExecuting = useSelector(
-    createCommandExecutingSelector(RSS_SYNC)
-  );
+  const executeCommand = useExecuteCommand();
+  const isRssSyncExecuting = useCommandExecuting(CommandNames.RssSync);
   const isSmallScreen = useAppDimension('isSmallScreen');
-  const dispatch = useDispatch();
   const scrollerRef = useRef<HTMLDivElement>(null);
   const [isOptionsModalOpen, setIsOptionsModalOpen] = useState(false);
   const [jumpToCharacter, setJumpToCharacter] = useState<string | undefined>(
@@ -93,12 +89,10 @@ const SeriesIndex = withScrollPosition((props: SeriesIndexProps) => {
   const [isSelectMode, setIsSelectMode] = useState(false);
 
   const onRssSyncPress = useCallback(() => {
-    dispatch(
-      executeCommand({
-        name: RSS_SYNC,
-      })
-    );
-  }, [dispatch]);
+    executeCommand({
+      name: CommandNames.RssSync,
+    });
+  }, [executeCommand]);
 
   const onSelectModePress = useCallback(() => {
     setIsSelectMode(!isSelectMode);

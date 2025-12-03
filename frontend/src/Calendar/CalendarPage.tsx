@@ -5,9 +5,9 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import QueueDetailsProvider from 'Activity/Queue/Details/QueueDetailsProvider';
-import * as commandNames from 'Commands/commandNames';
+import CommandNames from 'Commands/CommandNames';
+import { useCommandExecuting, useExecuteCommand } from 'Commands/useCommands';
 import FilterMenu from 'Components/Menu/FilterMenu';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
@@ -22,8 +22,6 @@ import useMeasure from 'Helpers/Hooks/useMeasure';
 import { align, icons } from 'Helpers/Props';
 import NoSeries from 'Series/NoSeries';
 import { useHasSeries } from 'Series/useSeries';
-import { executeCommand } from 'Store/Actions/commandActions';
-import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
 import selectUniqueIds from 'Utilities/Object/selectUniqueIds';
 import translate from 'Utilities/String/translate';
 import Calendar from './Calendar';
@@ -43,16 +41,14 @@ import styles from './CalendarPage.css';
 const MINIMUM_DAY_WIDTH = 120;
 
 function CalendarPage() {
-  const dispatch = useDispatch();
+  const executeCommand = useExecuteCommand();
 
   const selectedFilterKey = useCalendarOption('selectedFilterKey');
   const { data } = useCalendar();
 
   useCalendarPage();
 
-  const isRssSyncExecuting = useSelector(
-    createCommandExecutingSelector(commandNames.RSS_SYNC)
-  );
+  const isRssSyncExecuting = useCommandExecuting(CommandNames.RssSync);
   const customFilters = useCustomFiltersList('calendar');
   const hasSeries = useHasSeries();
 
@@ -80,12 +76,10 @@ function CalendarPage() {
   }, []);
 
   const handleRssSyncPress = useCallback(() => {
-    dispatch(
-      executeCommand({
-        name: commandNames.RSS_SYNC,
-      })
-    );
-  }, [dispatch]);
+    executeCommand({
+      name: CommandNames.RssSync,
+    });
+  }, [executeCommand]);
 
   const handleFilterSelect = useCallback((key: string | number) => {
     setCalendarOption('selectedFilterKey', key);

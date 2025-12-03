@@ -1,11 +1,9 @@
 import moment from 'moment';
 import React, { useCallback } from 'react';
-import { useSelector } from 'react-redux';
-import { createSelector } from 'reselect';
 import { useQueueDetails } from 'Activity/Queue/Details/QueueDetailsProvider';
+import { useCommands } from 'Commands/useCommands';
 import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
 import { icons } from 'Helpers/Props';
-import createCommandsSelector from 'Store/Selectors/createCommandsSelector';
 import { isCommandExecuting } from 'Utilities/Command';
 import isBefore from 'Utilities/Date/isBefore';
 import translate from 'Utilities/String/translate';
@@ -14,18 +12,18 @@ import useCalendar, {
   useCalendarSearchMissingCommandId,
 } from './useCalendar';
 
-function createIsSearchingSelector(searchMissingCommandId: number | undefined) {
-  return createSelector(createCommandsSelector(), (commands) => {
-    if (searchMissingCommandId == null) {
-      return false;
-    }
+function useIsSearching(searchMissingCommandId: number | undefined) {
+  const { data: commands } = useCommands();
 
-    return isCommandExecuting(
-      commands.find((command) => {
-        return command.id === searchMissingCommandId;
-      })
-    );
-  });
+  if (searchMissingCommandId == null) {
+    return false;
+  }
+
+  return isCommandExecuting(
+    commands.find((command) => {
+      return command.id === searchMissingCommandId;
+    })
+  );
 }
 
 const useMissingEpisodeIdsSelector = () => {
@@ -55,9 +53,7 @@ const useMissingEpisodeIdsSelector = () => {
 export default function CalendarMissingEpisodeSearchButton() {
   const searchMissingCommandId = useCalendarSearchMissingCommandId();
   const missingEpisodeIds = useMissingEpisodeIdsSelector();
-  const isSearchingForMissing = useSelector(
-    createIsSearchingSelector(searchMissingCommandId)
-  );
+  const isSearchingForMissing = useIsSearching(searchMissingCommandId);
 
   const handlePress = useCallback(() => {}, []);
 

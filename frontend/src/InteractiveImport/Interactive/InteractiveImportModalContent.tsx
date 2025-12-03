@@ -5,7 +5,8 @@ import { createSelector } from 'reselect';
 import { SelectProvider, useSelect } from 'App/Select/SelectContext';
 import AppState from 'App/State/AppState';
 import InteractiveImportAppState from 'App/State/InteractiveImportAppState';
-import * as commandNames from 'Commands/commandNames';
+import CommandNames from 'Commands/CommandNames';
+import { useExecuteCommand } from 'Commands/useCommands';
 import SelectInput, { SelectInputOption } from 'Components/Form/SelectInput';
 import Icon from 'Components/Icon';
 import Button from 'Components/Link/Button';
@@ -46,7 +47,6 @@ import SelectSeriesModal from 'InteractiveImport/Series/SelectSeriesModal';
 import Language from 'Language/Language';
 import { QualityModel } from 'Quality/Quality';
 import Series from 'Series/Series';
-import { executeCommand } from 'Store/Actions/commandActions';
 import {
   clearInteractiveImport,
   fetchInteractiveImportItems,
@@ -280,6 +280,7 @@ function InteractiveImportModalContentInner(
     useState<string | null>(null);
   const previousIsDeleting = usePrevious(isDeleting);
   const dispatch = useDispatch();
+  const executeCommand = useExecuteCommand();
 
   const {
     allSelected,
@@ -601,13 +602,11 @@ function InteractiveImportModalContentInner(
     }
 
     if (files.length) {
-      dispatch(
-        executeCommand({
-          name: commandNames.INTERACTIVE_IMPORT,
-          files,
-          importMode: finalImportMode,
-        })
-      );
+      executeCommand({
+        name: CommandNames.ManualImport,
+        files,
+        importMode: finalImportMode,
+      });
 
       shouldClose = true;
     }
@@ -623,7 +622,7 @@ function InteractiveImportModalContentInner(
     originalItems,
     selectedIds,
     onModalClose,
-    dispatch,
+    executeCommand,
     updateEpisodeFiles,
   ]);
 

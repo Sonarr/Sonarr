@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
 import AppState from 'App/State/AppState';
 import { useTranslations } from 'App/useTranslations';
+import useCommands from 'Commands/useCommands';
 import useCustomFilters from 'Filters/useCustomFilters';
 import useSeries from 'Series/useSeries';
 import { fetchCustomFilters } from 'Store/Actions/customFilterActions';
@@ -76,6 +77,8 @@ const createErrorsSelector = ({
 
 const useAppPage = () => {
   const dispatch = useDispatch();
+
+  useCommands();
 
   const { isFetched: isCustomFiltersFetched, error: customFiltersError } =
     useCustomFilters();

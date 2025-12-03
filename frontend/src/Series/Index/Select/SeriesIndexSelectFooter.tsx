@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useSelect } from 'App/Select/SelectContext';
-import { RENAME_SERIES } from 'Commands/commandNames';
+import CommandNames from 'Commands/CommandNames';
+import { useCommandExecuting } from 'Commands/useCommands';
 import SpinnerButton from 'Components/Link/SpinnerButton';
 import PageContentFooter from 'Components/Page/PageContentFooter';
 import usePrevious from 'Helpers/Hooks/usePrevious';
@@ -12,7 +12,6 @@ import {
   useSaveSeriesEditor,
   useUpdateSeriesMonitor,
 } from 'Series/useSeries';
-import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
 import translate from 'Utilities/String/translate';
 import DeleteSeriesModal from './Delete/DeleteSeriesModal';
 import EditSeriesModal from './Edit/EditSeriesModal';
@@ -36,9 +35,7 @@ function SeriesIndexSelectFooter() {
     useUpdateSeriesMonitor();
   const { isBulkDeleting, bulkDeleteError } = useBulkDeleteSeries();
 
-  const isOrganizingSeries = useSelector(
-    createCommandExecutingSelector(RENAME_SERIES)
-  );
+  const isOrganizingSeries = useCommandExecuting(CommandNames.RenameSeries);
 
   const isSaving = isSavingSeriesEditor || isUpdatingSeriesMonitor;
   const isDeleting = isBulkDeleting;

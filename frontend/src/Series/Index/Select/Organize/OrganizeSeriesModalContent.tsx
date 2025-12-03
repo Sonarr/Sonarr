@@ -1,8 +1,8 @@
 import { orderBy } from 'lodash';
 import React, { useCallback, useMemo } from 'react';
-import { useDispatch } from 'react-redux';
 import { useSelect } from 'App/Select/SelectContext';
-import { RENAME_SERIES } from 'Commands/commandNames';
+import CommandNames from 'Commands/CommandNames';
+import { useExecuteCommand } from 'Commands/useCommands';
 import Alert from 'Components/Alert';
 import Icon from 'Components/Icon';
 import Button from 'Components/Link/Button';
@@ -13,7 +13,6 @@ import ModalHeader from 'Components/Modal/ModalHeader';
 import { icons, kinds } from 'Helpers/Props';
 import Series from 'Series/Series';
 import useSeries from 'Series/useSeries';
-import { executeCommand } from 'Store/Actions/commandActions';
 import translate from 'Utilities/String/translate';
 import styles from './OrganizeSeriesModalContent.css';
 
@@ -25,7 +24,7 @@ function OrganizeSeriesModalContent({
   onModalClose,
 }: OrganizeSeriesModalContentProps) {
   const { data: allSeries } = useSeries();
-  const dispatch = useDispatch();
+  const executeCommand = useExecuteCommand();
   const { useSelectedIds } = useSelect<Series>();
   const seriesIds = useSelectedIds();
 
@@ -46,15 +45,13 @@ function OrganizeSeriesModalContent({
   }, [allSeries, seriesIds]);
 
   const onOrganizePress = useCallback(() => {
-    dispatch(
-      executeCommand({
-        name: RENAME_SERIES,
-        seriesIds,
-      })
-    );
+    executeCommand({
+      name: CommandNames.RenameSeries,
+      seriesIds,
+    });
 
     onModalClose();
-  }, [seriesIds, onModalClose, dispatch]);
+  }, [seriesIds, onModalClose, executeCommand]);
 
   return (
     <ModalContent onModalClose={onModalClose}>

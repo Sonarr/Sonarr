@@ -6,9 +6,9 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { SelectProvider, useSelect } from 'App/Select/SelectContext';
-import * as commandNames from 'Commands/commandNames';
+import CommandNames from 'Commands/CommandNames';
+import { useCommandExecuting, useExecuteCommand } from 'Commands/useCommands';
 import Alert from 'Components/Alert';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import FilterMenu from 'Components/Menu/FilterMenu';
@@ -26,8 +26,6 @@ import useEpisodes from 'Episode/useEpisodes';
 import { useCustomFiltersList } from 'Filters/useCustomFilters';
 import { align, icons, kinds } from 'Helpers/Props';
 import { SortDirection } from 'Helpers/Props/sortDirections';
-import { executeCommand } from 'Store/Actions/commandActions';
-import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
 import { CheckInputChanged } from 'typings/inputs';
 import QueueModel from 'typings/Queue';
 import { TableOptionsChangePayload } from 'typings/Table';
@@ -55,7 +53,7 @@ import useQueue, {
 } from './useQueue';
 
 function QueueContent() {
-  const dispatch = useDispatch();
+  const executeCommand = useExecuteCommand();
 
   const {
     records,
@@ -91,8 +89,8 @@ function QueueContent() {
 
   const customFilters = useCustomFiltersList('queue');
 
-  const isRefreshMonitoredDownloadsExecuting = useSelector(
-    createCommandExecutingSelector(commandNames.REFRESH_MONITORED_DOWNLOADS)
+  const isRefreshMonitoredDownloadsExecuting = useCommandExecuting(
+    CommandNames.RefreshMonitoredDownloads
   );
 
   const shouldBlockRefresh = useRef(false);
@@ -136,12 +134,10 @@ function QueueContent() {
   );
 
   const handleRefreshPress = useCallback(() => {
-    dispatch(
-      executeCommand({
-        name: commandNames.REFRESH_MONITORED_DOWNLOADS,
-      })
-    );
-  }, [dispatch]);
+    executeCommand({
+      name: CommandNames.RefreshMonitoredDownloads,
+    });
+  }, [executeCommand]);
 
   const handleQueueRowModalOpenOrClose = useCallback((isOpen: boolean) => {
     shouldBlockRefresh.current = isOpen;

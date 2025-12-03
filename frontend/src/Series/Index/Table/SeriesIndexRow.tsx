@@ -1,8 +1,8 @@
 import classNames from 'classnames';
 import React, { useCallback, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { useSelect } from 'App/Select/SelectContext';
-import { REFRESH_SERIES, SERIES_SEARCH } from 'Commands/commandNames';
+import CommandNames from 'Commands/CommandNames';
+import { useExecuteCommand } from 'Commands/useCommands';
 import CheckInput from 'Components/Form/CheckInput';
 import HeartRating from 'Components/HeartRating';
 import IconButton from 'Components/Link/IconButton';
@@ -20,7 +20,6 @@ import { Statistics } from 'Series/Series';
 import SeriesBanner from 'Series/SeriesBanner';
 import { useSeriesTableOptions } from 'Series/seriesOptionsStore';
 import SeriesTitleLink from 'Series/SeriesTitleLink';
-import { executeCommand } from 'Store/Actions/commandActions';
 import { SelectStateInputProps } from 'typings/props';
 import formatBytes from 'Utilities/Number/formatBytes';
 import titleCase from 'Utilities/String/titleCase';
@@ -52,63 +51,25 @@ function SeriesIndexRow(props: SeriesIndexRowProps) {
 
   const { showBanners, showSearchAction } = useSeriesTableOptions();
 
-  const {
-    title,
-    monitored,
-    monitorNewItems,
-    status,
-    path,
-    titleSlug,
-    nextAiring,
-    previousAiring,
-    added,
-    statistics = {} as Statistics,
-    seasonFolder,
-    images,
-    seriesType,
-    network,
-    originalLanguage,
-    certification,
-    year,
-    useSceneNumbering,
-    genres = [],
-    ratings,
-    seasons = [],
-    tags = [],
-  } = series;
-
-  const {
-    seasonCount = 0,
-    episodeCount = 0,
-    episodeFileCount = 0,
-    totalEpisodeCount = 0,
-    sizeOnDisk = 0,
-    releaseGroups = [],
-  } = statistics;
-
-  const dispatch = useDispatch();
+  const executeCommand = useExecuteCommand();
   const [hasBannerError, setHasBannerError] = useState(false);
   const [isEditSeriesModalOpen, setIsEditSeriesModalOpen] = useState(false);
   const [isDeleteSeriesModalOpen, setIsDeleteSeriesModalOpen] = useState(false);
   const { getIsSelected, toggleSelected } = useSelect();
 
   const onRefreshPress = useCallback(() => {
-    dispatch(
-      executeCommand({
-        name: REFRESH_SERIES,
-        seriesIds: [seriesId],
-      })
-    );
-  }, [seriesId, dispatch]);
+    executeCommand({
+      name: CommandNames.RefreshSeries,
+      seriesIds: [seriesId],
+    });
+  }, [seriesId, executeCommand]);
 
   const onSearchPress = useCallback(() => {
-    dispatch(
-      executeCommand({
-        name: SERIES_SEARCH,
-        seriesId,
-      })
-    );
-  }, [seriesId, dispatch]);
+    executeCommand({
+      name: CommandNames.SeriesSearch,
+      seriesId,
+    });
+  }, [seriesId, executeCommand]);
 
   const onBannerLoadError = useCallback(() => {
     setHasBannerError(true);
@@ -149,6 +110,44 @@ function SeriesIndexRow(props: SeriesIndexRowProps) {
     },
     [toggleSelected]
   );
+
+  if (!series) {
+    return null;
+  }
+
+  const {
+    title,
+    monitored,
+    monitorNewItems,
+    status,
+    path,
+    titleSlug,
+    nextAiring,
+    previousAiring,
+    added,
+    statistics = {} as Statistics,
+    seasonFolder,
+    images,
+    seriesType,
+    network,
+    originalLanguage,
+    certification,
+    year,
+    useSceneNumbering,
+    genres = [],
+    ratings,
+    seasons = [],
+    tags = [],
+  } = series;
+
+  const {
+    seasonCount = 0,
+    episodeCount = 0,
+    episodeFileCount = 0,
+    totalEpisodeCount = 0,
+    sizeOnDisk = 0,
+    releaseGroups = [],
+  } = statistics;
 
   return (
     <>

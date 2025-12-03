@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useAppValue } from 'App/appStore';
-import * as commandNames from 'Commands/commandNames';
+import CommandNames from 'Commands/CommandNames';
+import { useCommandExecuting, useExecuteCommand } from 'Commands/useCommands';
 import Alert from 'Components/Alert';
 import Icon from 'Components/Icon';
 import Label from 'Components/Label';
@@ -13,9 +14,7 @@ import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
 import { icons, kinds } from 'Helpers/Props';
 import useUpdateSettings from 'Settings/General/useUpdateSettings';
-import { executeCommand } from 'Store/Actions/commandActions';
 import { fetchGeneralSettings } from 'Store/Actions/settingsActions';
-import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
 import createUISettingsSelector from 'Store/Selectors/createUISettingsSelector';
 import { useSystemStatusData } from 'System/Status/useSystemStatus';
 import { UpdateMechanism } from 'typings/Settings/General';
@@ -35,8 +34,8 @@ function Updates() {
   const { shortDateFormat, longDateFormat, timeFormat } = useSelector(
     createUISettingsSelector()
   );
-  const isInstallingUpdate = useSelector(
-    createCommandExecutingSelector(commandNames.APPLICATION_UPDATE)
+  const isInstallingUpdate = useCommandExecuting(
+    CommandNames.ApplicationUpdate
   );
 
   const {
@@ -53,6 +52,7 @@ function Updates() {
   } = useUpdateSettings();
 
   const dispatch = useDispatch();
+  const executeCommand = useExecuteCommand();
   const [isMajorUpdateModalOpen, setIsMajorUpdateModalOpen] = useState(false);
   const isFetching = isLoadingUpdates || isLoadingSettings;
   const isPopulated = isUpdatesFetched && isSettingsFetched;
@@ -92,20 +92,18 @@ function Updates() {
     if (isMajorUpdate) {
       setIsMajorUpdateModalOpen(true);
     } else {
-      dispatch(executeCommand({ name: commandNames.APPLICATION_UPDATE }));
+      executeCommand({ name: CommandNames.ApplicationUpdate });
     }
-  }, [isMajorUpdate, setIsMajorUpdateModalOpen, dispatch]);
+  }, [isMajorUpdate, setIsMajorUpdateModalOpen, executeCommand]);
 
   const handleInstallLatestMajorVersionPress = useCallback(() => {
     setIsMajorUpdateModalOpen(false);
 
-    dispatch(
-      executeCommand({
-        name: commandNames.APPLICATION_UPDATE,
-        installMajorUpdate: true,
-      })
-    );
-  }, [setIsMajorUpdateModalOpen, dispatch]);
+    executeCommand({
+      name: CommandNames.ApplicationUpdate,
+      installMajorUpdate: true,
+    });
+  }, [setIsMajorUpdateModalOpen, executeCommand]);
 
   const handleCancelMajorVersionPress = useCallback(() => {
     setIsMajorUpdateModalOpen(false);

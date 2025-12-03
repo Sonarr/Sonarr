@@ -9,16 +9,12 @@ import { useDispatch } from 'react-redux';
 import { setAppValue, setVersion } from 'App/appStore';
 import ModelBase from 'App/ModelBase';
 import Command from 'Commands/Command';
+import { useUpdateCommand } from 'Commands/useCommands';
 import Episode from 'Episode/Episode';
 import { EpisodeFile } from 'EpisodeFile/EpisodeFile';
 import { PagedQueryResponse } from 'Helpers/Hooks/usePagedApiQuery';
 import Series from 'Series/Series';
 import { removeItem, updateItem } from 'Store/Actions/baseActions';
-import {
-  fetchCommands,
-  finishCommand,
-  updateCommand,
-} from 'Store/Actions/commandActions';
 import { fetchQualityDefinitions } from 'Store/Actions/settingsActions';
 import { repopulatePage } from 'Utilities/pagePopulator';
 import SignalRLogger from 'Utilities/SignalRLogger';
@@ -37,6 +33,7 @@ interface SignalRMessage {
 
 function SignalRListener() {
   const queryClient = useQueryClient();
+  const updateCommand = useUpdateCommand();
   const dispatch = useDispatch();
 
   const connection = useRef<HubConnection | null>(null);
@@ -79,7 +76,9 @@ function SignalRListener() {
     // Repopulate the page (if a repopulator is set) to ensure things
     // are in sync after reconnecting.
     queryClient.invalidateQueries({ queryKey: ['/series'] });
-    dispatch(fetchCommands());
+
+    queryClient.invalidateQueries({ queryKey: ['/command'] });
+
     repopulatePage();
   });
 
@@ -112,21 +111,13 @@ function SignalRListener() {
 
     if (name === 'command') {
       if (body.action === 'sync') {
-        dispatch(fetchCommands());
+        queryClient.invalidateQueries({ queryKey: ['/command'] });
         return;
       }
 
       const resource = body.resource as Command;
-      const status = resource.status;
 
-      // Both successful and failed commands need to be
-      // completed, otherwise they spin until they time out.
-
-      if (status === 'completed' || status === 'failed') {
-        dispatch(finishCommand(resource));
-      } else {
-        dispatch(updateCommand(resource));
-      }
+      updateCommand(resource);
 
       return;
     }

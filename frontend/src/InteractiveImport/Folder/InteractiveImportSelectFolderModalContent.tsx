@@ -2,7 +2,8 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
 import AppState from 'App/State/AppState';
-import * as commandNames from 'Commands/commandNames';
+import CommandNames from 'Commands/CommandNames';
+import { useExecuteCommand } from 'Commands/useCommands';
 import PathInput from 'Components/Form/PathInput';
 import Icon from 'Components/Icon';
 import Button from 'Components/Link/Button';
@@ -14,7 +15,6 @@ import Column from 'Components/Table/Column';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import { icons, kinds, sizes } from 'Helpers/Props';
-import { executeCommand } from 'Store/Actions/commandActions';
 import { addRecentFolder } from 'Store/Actions/interactiveImportActions';
 import translate from 'Utilities/String/translate';
 import FavoriteFolderRow from './FavoriteFolderRow';
@@ -64,6 +64,8 @@ function InteractiveImportSelectFolderModalContent(
   const { modalTitle, onFolderSelect, onModalClose } = props;
   const [folder, setFolder] = useState('');
   const dispatch = useDispatch();
+  const executeCommand = useExecuteCommand();
+
   const { favoriteFolders, recentFolders } = useSelector(
     createSelector(
       (state: AppState) => state.interactiveImport,
@@ -97,15 +99,13 @@ function InteractiveImportSelectFolderModalContent(
   const onQuickImportPress = useCallback(() => {
     dispatch(addRecentFolder({ folder }));
 
-    dispatch(
-      executeCommand({
-        name: commandNames.DOWNLOADED_EPISODES_SCAN,
-        path: folder,
-      })
-    );
+    executeCommand({
+      name: CommandNames.DownloadedEpisodesScan,
+      path: folder,
+    });
 
     onModalClose();
-  }, [folder, onModalClose, dispatch]);
+  }, [folder, onModalClose, dispatch, executeCommand]);
 
   const onInteractiveImportPress = useCallback(() => {
     dispatch(addRecentFolder({ folder }));

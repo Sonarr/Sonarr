@@ -1,12 +1,11 @@
 import React, { useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useSelect } from 'App/Select/SelectContext';
-import { REFRESH_SERIES } from 'Commands/commandNames';
+import CommandNames from 'Commands/CommandNames';
+import { useCommandExecuting, useExecuteCommand } from 'Commands/useCommands';
 import PageToolbarButton from 'Components/Page/Toolbar/PageToolbarButton';
 import { icons } from 'Helpers/Props';
+import Series from 'Series/Series';
 import { useSeriesIndex } from 'Series/useSeries';
-import { executeCommand } from 'Store/Actions/commandActions';
-import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
 import translate from 'Utilities/String/translate';
 
 interface SeriesIndexRefreshSeriesButtonProps {
@@ -17,14 +16,12 @@ interface SeriesIndexRefreshSeriesButtonProps {
 function SeriesIndexRefreshSeriesButton(
   props: SeriesIndexRefreshSeriesButtonProps
 ) {
-  const isRefreshing = useSelector(
-    createCommandExecutingSelector(REFRESH_SERIES)
-  );
+  const isRefreshing = useCommandExecuting(CommandNames.RefreshSeries);
   const { data, totalItems } = useSeriesIndex();
 
-  const dispatch = useDispatch();
+  const executeCommand = useExecuteCommand();
   const { isSelectMode, selectedFilterKey } = props;
-  const { anySelected, getSelectedIds } = useSelect();
+  const { anySelected, getSelectedIds } = useSelect<Series>();
 
   let refreshLabel = translate('UpdateAll');
 
@@ -38,13 +35,11 @@ function SeriesIndexRefreshSeriesButton(
     const seriesToRefresh =
       isSelectMode && anySelected ? getSelectedIds() : data.map((m) => m.id);
 
-    dispatch(
-      executeCommand({
-        name: REFRESH_SERIES,
-        seriesIds: seriesToRefresh,
-      })
-    );
-  }, [dispatch, anySelected, isSelectMode, data, getSelectedIds]);
+    executeCommand({
+      name: CommandNames.RefreshSeries,
+      seriesIds: seriesToRefresh,
+    });
+  }, [executeCommand, anySelected, isSelectMode, data, getSelectedIds]);
 
   return (
     <PageToolbarButton

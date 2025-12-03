@@ -3,7 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { SelectProvider, useSelect } from 'App/Select/SelectContext';
 import AppState from 'App/State/AppState';
 import { OrganizePreviewModel } from 'App/State/OrganizePreviewAppState';
-import * as commandNames from 'Commands/commandNames';
+import CommandNames from 'Commands/CommandNames';
+import { useExecuteCommand } from 'Commands/useCommands';
 import Alert from 'Components/Alert';
 import CheckInput from 'Components/Form/CheckInput';
 import Button from 'Components/Link/Button';
@@ -16,7 +17,6 @@ import ModalHeader from 'Components/Modal/ModalHeader';
 import { kinds } from 'Helpers/Props';
 import formatSeason from 'Season/formatSeason';
 import { useSingleSeries } from 'Series/useSeries';
-import { executeCommand } from 'Store/Actions/commandActions';
 import { fetchOrganizePreview } from 'Store/Actions/organizePreviewActions';
 import { fetchNamingSettings } from 'Store/Actions/settingsActions';
 import { CheckInputChanged } from 'typings/inputs';
@@ -46,6 +46,7 @@ function OrganizePreviewModalContentInner({
   onModalClose,
 }: OrganizePreviewModalContentProps) {
   const dispatch = useDispatch();
+  const executeCommand = useExecuteCommand();
   const {
     items,
     isFetching: isPreviewFetching,
@@ -87,16 +88,14 @@ function OrganizePreviewModalContentInner({
   const handleOrganizePress = useCallback(() => {
     const files = getSelectedIds();
 
-    dispatch(
-      executeCommand({
-        name: commandNames.RENAME_FILES,
-        files,
-        seriesId,
-      })
-    );
+    executeCommand({
+      name: CommandNames.RenameFiles,
+      files,
+      seriesId,
+    });
 
     onModalClose();
-  }, [seriesId, getSelectedIds, dispatch, onModalClose]);
+  }, [seriesId, getSelectedIds, executeCommand, onModalClose]);
 
   useEffect(() => {
     dispatch(fetchOrganizePreview({ seriesId, seasonNumber }));

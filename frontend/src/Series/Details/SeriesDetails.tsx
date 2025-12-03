@@ -1,7 +1,7 @@
 import moment from 'moment';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import * as commandNames from 'Commands/commandNames';
+import CommandNames from 'Commands/CommandNames';
+import { useCommands, useExecuteCommand } from 'Commands/useCommands';
 import Alert from 'Components/Alert';
 import HeartRating from 'Components/HeartRating';
 import Icon from 'Components/Icon';
@@ -44,8 +44,6 @@ import useSeries, {
   useToggleSeriesMonitored,
 } from 'Series/useSeries';
 import QualityProfileName from 'Settings/Profiles/Quality/QualityProfileName';
-import { executeCommand } from 'Store/Actions/commandActions';
-import createCommandsSelector from 'Store/Selectors/createCommandsSelector';
 import sortByProp from 'Utilities/Array/sortByProp';
 import { findCommand, isCommandExecuting } from 'Utilities/Command';
 import formatBytes from 'Utilities/Number/formatBytes';
@@ -85,7 +83,7 @@ interface SeriesDetailsProps {
 }
 
 function SeriesDetails({ seriesId }: SeriesDetailsProps) {
-  const dispatch = useDispatch();
+  const executeCommand = useExecuteCommand();
 
   const series = useSingleSeries(seriesId);
   const { toggleSeriesMonitored, isTogglingSeriesMonitored } =
@@ -114,11 +112,11 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
     hasEpisodeFiles,
   } = useEpisodeFiles({ seriesId });
 
-  const commands = useSelector(createCommandsSelector());
+  const { data: commands } = useCommands();
 
   const { isRefreshing, isRenaming, isSearching } = useMemo(() => {
     const seriesRefreshingCommand = findCommand(commands, {
-      name: commandNames.REFRESH_SERIES,
+      name: CommandNames.RefreshSeries,
     });
 
     const isSeriesRefreshingCommandExecuting = isCommandExecuting(
@@ -127,33 +125,39 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
 
     const allSeriesRefreshing =
       isSeriesRefreshingCommandExecuting &&
-      !seriesRefreshingCommand?.body.seriesIds?.length;
+      seriesRefreshingCommand &&
+      (!('seriesIds' in seriesRefreshingCommand.body) ||
+        seriesRefreshingCommand.body.seriesIds.length === 0);
 
     const isSeriesRefreshing =
       isSeriesRefreshingCommandExecuting &&
-      seriesRefreshingCommand?.body.seriesIds?.includes(seriesId);
+      seriesRefreshingCommand &&
+      'seriesIds' in seriesRefreshingCommand.body &&
+      seriesRefreshingCommand.body.seriesIds.includes(seriesId);
 
     const isSearchingExecuting = isCommandExecuting(
       findCommand(commands, {
-        name: commandNames.SERIES_SEARCH,
+        name: CommandNames.SeriesSearch,
         seriesId,
       })
     );
 
     const isRenamingFiles = isCommandExecuting(
       findCommand(commands, {
-        name: commandNames.RENAME_FILES,
+        name: CommandNames.RenameFiles,
         seriesId,
       })
     );
 
     const isRenamingSeriesCommand = findCommand(commands, {
-      name: commandNames.RENAME_SERIES,
+      name: CommandNames.RenameSeries,
     });
 
     const isRenamingSeries =
       isCommandExecuting(isRenamingSeriesCommand) &&
-      isRenamingSeriesCommand?.body?.seriesIds?.includes(seriesId);
+      isRenamingSeriesCommand &&
+      'seriesIds' in isRenamingSeriesCommand.body &&
+      isRenamingSeriesCommand.body.seriesIds.includes(seriesId);
 
     return {
       isRefreshing: isSeriesRefreshing || allSeriesRefreshing,
@@ -325,22 +329,18 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
   );
 
   const handleRefreshPress = useCallback(() => {
-    dispatch(
-      executeCommand({
-        name: commandNames.REFRESH_SERIES,
-        seriesId,
-      })
-    );
-  }, [seriesId, dispatch]);
+    executeCommand({
+      name: CommandNames.RefreshSeries,
+      seriesId,
+    });
+  }, [seriesId, executeCommand]);
 
   const handleSearchPress = useCallback(() => {
-    dispatch(
-      executeCommand({
-        name: commandNames.SERIES_SEARCH,
-        seriesId,
-      })
-    );
-  }, [seriesId, dispatch]);
+    executeCommand({
+      name: CommandNames.SeriesSearch,
+      seriesId,
+    });
+  }, [seriesId, executeCommand]);
 
   const populate = useCallback(() => {
     refetchEpisodes();
@@ -356,7 +356,7 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
     return () => {
       unregisterPagePopulator(populate);
     };
-  }, [populate, dispatch]);
+  }, [populate]);
 
   useEffect(() => {
     if ((!isRefreshing && wasRefreshing) || (!isRenaming && wasRenaming)) {

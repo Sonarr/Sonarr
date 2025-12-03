@@ -1,17 +1,15 @@
 import React, { useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import * as commandNames from 'Commands/commandNames';
-import { executeCommand } from 'Store/Actions/commandActions';
-import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
+import CommandNames from 'Commands/CommandNames';
+import { useCommandExecuting, useExecuteCommand } from 'Commands/useCommands';
 import LogFiles from '../LogFiles';
 import { useUpdateLogFiles } from '../useLogFiles';
 
 function UpdateLogFiles() {
-  const dispatch = useDispatch();
+  const executeCommand = useExecuteCommand();
   const { data = [], isFetching, refetch } = useUpdateLogFiles();
 
-  const isDeleteFilesExecuting = useSelector(
-    createCommandExecutingSelector(commandNames.DELETE_UPDATE_LOG_FILES)
+  const isDeleteFilesExecuting = useCommandExecuting(
+    CommandNames.DeleteUpdateLogFiles
   );
 
   const handleRefreshPress = useCallback(() => {
@@ -19,15 +17,15 @@ function UpdateLogFiles() {
   }, [refetch]);
 
   const handleDeleteFilesPress = useCallback(() => {
-    dispatch(
-      executeCommand({
-        name: commandNames.DELETE_UPDATE_LOG_FILES,
-        commandFinished: () => {
-          refetch();
-        },
-      })
+    executeCommand(
+      {
+        name: CommandNames.DeleteUpdateLogFiles,
+      },
+      () => {
+        refetch();
+      }
     );
-  }, [dispatch, refetch]);
+  }, [executeCommand, refetch]);
 
   return (
     <LogFiles
