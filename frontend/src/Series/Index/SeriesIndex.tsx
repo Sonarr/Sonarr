@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QueueDetailsProvider from 'Activity/Queue/Details/QueueDetailsProvider';
+import { useAppDimension } from 'App/appStore';
 import { SelectProvider } from 'App/Select/SelectContext';
 import { RSS_SYNC } from 'Commands/commandNames';
 import Alert from 'Components/Alert';
@@ -29,7 +30,6 @@ import { FILTERS, useSeriesIndex } from 'Series/useSeries';
 import { executeCommand } from 'Store/Actions/commandActions';
 import scrollPositions from 'Store/scrollPositions';
 import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
-import createDimensionsSelector from 'Store/Selectors/createDimensionsSelector';
 import translate from 'Utilities/String/translate';
 import SeriesIndexFilterMenu from './Menus/SeriesIndexFilterMenu';
 import SeriesIndexSortMenu from './Menus/SeriesIndexSortMenu';
@@ -83,7 +83,7 @@ const SeriesIndex = withScrollPosition((props: SeriesIndexProps) => {
   const isRssSyncExecuting = useSelector(
     createCommandExecutingSelector(RSS_SYNC)
   );
-  const { isSmallScreen } = useSelector(createDimensionsSelector());
+  const isSmallScreen = useAppDimension('isSmallScreen');
   const dispatch = useDispatch();
   const scrollerRef = useRef<HTMLDivElement>(null);
   const [isOptionsModalOpen, setIsOptionsModalOpen] = useState(false);

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import AppState from 'App/State/AppState';
+import { useAppValue } from 'App/appStore';
 import * as commandNames from 'Commands/commandNames';
 import Alert from 'Components/Alert';
 import Icon from 'Components/Icon';
@@ -29,7 +29,7 @@ import styles from './Updates.css';
 const VERSION_REGEX = /\d+\.\d+\.\d+\.\d+/i;
 
 function Updates() {
-  const currentVersion = useSelector((state: AppState) => state.app.version);
+  const currentVersion = useAppValue('version');
   const { packageUpdateMechanismMessage } = useSystemStatusData();
 
   const { shortDateFormat, longDateFormat, timeFormat } = useSelector(

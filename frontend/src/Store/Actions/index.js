@@ -1,4 +1,3 @@
-import * as app from './appActions';
 import * as captcha from './captchaActions';
 import * as commands from './commandActions';
 import * as episodeHistory from './episodeHistoryActions';
@@ -11,7 +10,6 @@ import * as seriesHistory from './seriesHistoryActions';
 import * as settings from './settingsActions';
 
 export default [
-  app,
   captcha,
   commands,
   episodeHistory,

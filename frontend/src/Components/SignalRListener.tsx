@@ -6,13 +6,13 @@ import {
 import { QueryKey, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
+import { setAppValue, setVersion } from 'App/appStore';
 import ModelBase from 'App/ModelBase';
 import Command from 'Commands/Command';
 import Episode from 'Episode/Episode';
 import { EpisodeFile } from 'EpisodeFile/EpisodeFile';
 import { PagedQueryResponse } from 'Helpers/Hooks/usePagedApiQuery';
 import Series from 'Series/Series';
-import { setAppValue, setVersion } from 'Store/Actions/appActions';
 import { removeItem, updateItem } from 'Store/Actions/baseActions';
 import {
   fetchCommands,
@@ -45,42 +45,36 @@ function SignalRListener() {
     console.error('[signalR] failed to connect');
     console.error(error);
 
-    dispatch(
-      setAppValue({
-        isConnected: false,
-        isReconnecting: false,
-        isDisconnected: false,
-        isRestarting: false,
-      })
-    );
+    setAppValue({
+      isConnected: false,
+      isReconnecting: false,
+      isDisconnected: false,
+      isRestarting: false,
+    });
   });
 
   const handleStart = useRef(() => {
     console.debug('[signalR] connected');
 
-    dispatch(
-      setAppValue({
-        isConnected: true,
-        isReconnecting: false,
-        isDisconnected: false,
-        isRestarting: false,
-      })
-    );
+    setAppValue({
+      isConnected: true,
+      isReconnecting: false,
+      isDisconnected: false,
+      isRestarting: false,
+    });
   });
 
   const handleReconnecting = useRef(() => {
-    dispatch(setAppValue({ isReconnecting: true }));
+    setAppValue({ isReconnecting: true });
   });
 
   const handleReconnected = useRef(() => {
-    dispatch(
-      setAppValue({
-        isConnected: true,
-        isReconnecting: false,
-        isDisconnected: false,
-        isRestarting: false,
-      })
-    );
+    setAppValue({
+      isConnected: true,
+      isReconnecting: false,
+      isDisconnected: false,
+      isRestarting: false,
+    });
 
     // Repopulate the page (if a repopulator is set) to ensure things
     // are in sync after reconnecting.
@@ -424,7 +418,7 @@ function SignalRListener() {
     }
 
     if (name === 'version') {
-      dispatch(setVersion({ version: body.version }));
+      setVersion({ version: body.version });
       return;
     }
 
@@ -472,7 +466,7 @@ function SignalRListener() {
       .withAutomaticReconnect({
         nextRetryDelayInMilliseconds: (retryContext) => {
           if (retryContext.elapsedMilliseconds > 180000) {
-            dispatch(setAppValue({ isDisconnected: true }));
+            setAppValue({ isDisconnected: true });
           }
           return Math.min(retryContext.previousRetryCount, 10) * 1000;
         },

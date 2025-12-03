@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
-import { useSelector } from 'react-redux';
 import AddSeries from 'AddSeries/AddSeries';
+import { useAppDimension } from 'App/appStore';
 import HeartRating from 'Components/HeartRating';
 import Icon from 'Components/Icon';
 import Label from 'Components/Label';
@@ -11,7 +11,6 @@ import { Statistics } from 'Series/Series';
 import SeriesGenres from 'Series/SeriesGenres';
 import SeriesPoster from 'Series/SeriesPoster';
 import useExistingSeries from 'Series/useExistingSeries';
-import createDimensionsSelector from 'Store/Selectors/createDimensionsSelector';
 import translate from 'Utilities/String/translate';
 import AddNewSeriesModal from './AddNewSeriesModal';
 import styles from './AddNewSeriesSearchResult.css';
@@ -38,7 +37,7 @@ function AddNewSeriesSearchResult({ series }: AddNewSeriesSearchResultProps) {
   } = series;
 
   const isExistingSeries = useExistingSeries(tvdbId);
-  const { isSmallScreen } = useSelector(createDimensionsSelector());
+  const isSmallScreen = useAppDimension('isSmallScreen');
   const [isNewAddSeriesModalOpen, setIsNewAddSeriesModalOpen] = useState(false);
 
   const seasonCount = statistics.seasonCount;

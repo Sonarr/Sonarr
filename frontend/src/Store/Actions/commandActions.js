@@ -1,9 +1,9 @@
 import { batchActions } from 'redux-batched-actions';
+import { hideMessage, showMessage } from 'App/messagesStore';
 import { messageTypes } from 'Helpers/Props';
 import { createThunk, handleThunks } from 'Store/thunks';
 import { isSameCommand } from 'Utilities/Command';
 import createAjaxRequest from 'Utilities/createAjaxRequest';
-import { hideMessage, showMessage } from './appActions';
 import { removeItem, updateItem } from './baseActions';
 import createFetchHandler from './Creators/createFetchHandler';
 import createHandleActions from './Creators/createHandleActions';
@@ -85,13 +85,13 @@ function showCommandMessage(payload, dispatch) {
     hideAfter = trigger === 'manual' ? 10 : 4;
   }
 
-  dispatch(showMessage({
+  showMessage({
     id,
     name,
     message,
     type,
     hideAfter
-  }));
+  });
 }
 
 function scheduleRemoveCommand(command, dispatch) {
@@ -112,9 +112,10 @@ function scheduleRemoveCommand(command, dispatch) {
 
   removeCommandTimeoutIds[id] = setTimeout(() => {
     dispatch(batchActions([
-      removeCommand({ section: 'commands', id }),
-      hideMessage({ id })
+      removeCommand({ section: 'commands', id })
     ]));
+
+    hideMessage({ id });
 
     delete removeCommandTimeoutIds[id];
   }, 60000 * 5);

@@ -1,13 +1,13 @@
 import React, { useEffect, useMemo } from 'react';
-import { useSelector } from 'react-redux';
-import AppState from 'App/State/AppState';
+import { useAppValues } from 'App/appStore';
 import PageSidebarStatus from 'Components/Page/Sidebar/PageSidebarStatus';
 import usePrevious from 'Helpers/Hooks/usePrevious';
 import useHealth from './useHealth';
 
 function HealthStatus() {
-  const { isConnected, isReconnecting } = useSelector(
-    (state: AppState) => state.app
+  const { isConnected, isReconnecting } = useAppValues(
+    'isConnected',
+    'isReconnecting'
   );
   const { data, refetch } = useHealth();
 

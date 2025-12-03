@@ -1,40 +1,30 @@
-import { useMutation } from '@tanstack/react-query';
-import { useDispatch } from 'react-redux';
-import { pingServer, setAppValue } from 'Store/Actions/appActions';
+import { pingServer, setAppValue } from 'App/appStore';
+import useApiMutation from 'Helpers/Hooks/useApiMutation';
 
-const createSystemMutationFn = (endpoint: string) => {
-  return async () => {
-    const response = await fetch(
-      `${window.Sonarr.urlBase}/system/${endpoint}`,
-      {
-        method: 'POST',
-        headers: {
-          'X-Api-Key': window.Sonarr.apiKey,
-          'X-Sonarr-Client': 'Sonarr',
-        },
-      }
-    );
+export const useRestart = () => {
+  const mutation = useApiMutation<void, void>({
+    method: 'POST',
+    path: '/system/restart',
+  });
 
-    if (!response.ok) {
-      throw new Error(`Failed to ${endpoint}: ${response.statusText}`);
-    }
+  const restart = () => {
+    mutation.mutate(undefined, {
+      onSuccess: () => {
+        setAppValue({ isRestarting: true });
+        pingServer();
+      },
+    });
+  };
+
+  return {
+    ...mutation,
+    mutate: restart,
   };
 };
 
-export const useRestart = () => {
-  const dispatch = useDispatch();
-
-  return useMutation<void, Error, void>({
-    mutationFn: createSystemMutationFn('restart'),
-    onSuccess: () => {
-      dispatch(setAppValue({ isRestarting: true }));
-      dispatch(pingServer());
-    },
-  });
-};
-
 export const useShutdown = () => {
-  return useMutation<void, Error, void>({
-    mutationFn: createSystemMutationFn('shutdown'),
+  return useApiMutation<void, void>({
+    method: 'POST',
+    path: '/system/shutdown',
   });
 };

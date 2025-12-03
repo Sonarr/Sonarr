@@ -2,6 +2,7 @@ import React, { RefObject, useCallback, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FixedSizeList, ListChildComponentProps } from 'react-window';
 import { useAddSeriesOptions } from 'AddSeries/addSeriesOptionsStore';
+import { useAppDimension } from 'App/appStore';
 import { useSelect } from 'App/Select/SelectContext';
 import AppState from 'App/State/AppState';
 import { ImportSeries } from 'App/State/ImportSeriesAppState';
@@ -12,7 +13,6 @@ import {
   queueLookupSeries,
   setImportSeriesValue,
 } from 'Store/Actions/importSeriesActions';
-import createDimensionsSelector from 'Store/Selectors/createDimensionsSelector';
 import { CheckInputChanged } from 'typings/inputs';
 import { SelectStateInputProps } from 'typings/props';
 import { UnmappedFolder } from 'typings/RootFolder';
@@ -64,7 +64,7 @@ function ImportSeriesTable({
     useAddSeriesOptions();
 
   const items = useSelector((state: AppState) => state.importSeries.items);
-  const { isSmallScreen } = useSelector(createDimensionsSelector());
+  const isSmallScreen = useAppDimension('isSmallScreen');
   const { data: allSeries } = useSeries();
   const {
     allSelected,

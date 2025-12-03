@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
+import { useAppDimension } from 'App/appStore';
 import * as commandNames from 'Commands/commandNames';
 import Icon from 'Components/Icon';
 import Label from 'Components/Label';
@@ -34,7 +35,6 @@ import SeasonInteractiveSearchModal from 'Series/Search/SeasonInteractiveSearchM
 import { Statistics } from 'Series/Series';
 import { useSingleSeries, useToggleSeasonMonitored } from 'Series/useSeries';
 import createCommandsSelector from 'Store/Selectors/createCommandsSelector';
-import createDimensionsSelector from 'Store/Selectors/createDimensionsSelector';
 import { TableOptionsChangePayload } from 'typings/Table';
 import { findCommand, isCommandExecuting } from 'Utilities/Command';
 import isAfter from 'Utilities/Date/isAfter';
@@ -120,7 +120,7 @@ function SeriesDetailsSeason({
 
   const { columns, sortKey, sortDirection } = useEpisodeOptions();
 
-  const { isSmallScreen } = useSelector(createDimensionsSelector());
+  const isSmallScreen = useAppDimension('isSmallScreen');
   const isSearching = useSelector(
     createIsSearchingSelector(seriesId, seasonNumber)
   );
