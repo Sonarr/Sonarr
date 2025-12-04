@@ -33,7 +33,7 @@ runs:
 
     - name: Setup Postgres
       if: ${{ inputs.use_postgres }}
-      uses: ikalnytskyi/action-setup-postgres@v7
+      uses: ikalnytskyi/action-setup-postgres@v8
       with:
         postgres-version: ${{ inputs.postgres-version }}
 

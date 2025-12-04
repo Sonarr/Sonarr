@@ -155,7 +155,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        postgres-version: [16, 17]
+        postgres-version: [16, 17, 18]
     steps:
       - name: Check out
         uses: actions/checkout@v5
