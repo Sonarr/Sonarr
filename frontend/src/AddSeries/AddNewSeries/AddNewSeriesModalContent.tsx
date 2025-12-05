@@ -92,12 +92,14 @@ function AddNewSeriesModalContent({
     addSeries({
       ...series,
       rootFolderPath: rootFolderPath.value,
-      monitor: monitor.value,
+      addOptions: {
+        monitor: monitor.value,
+        searchForMissingEpisodes: searchForMissingEpisodes.value,
+        searchForCutoffUnmetEpisodes: searchForCutoffUnmetEpisodes.value,
+      },
       qualityProfileId: qualityProfileId.value,
       seriesType,
       seasonFolder: seasonFolder.value,
-      searchForMissingEpisodes: searchForMissingEpisodes.value,
-      searchForCutoffUnmetEpisodes: searchForCutoffUnmetEpisodes.value,
       tags: tags.value,
     });
   }, [

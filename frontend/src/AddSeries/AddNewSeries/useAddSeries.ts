@@ -5,7 +5,12 @@ import useApiMutation from 'Helpers/Hooks/useApiMutation';
 import useApiQuery from 'Helpers/Hooks/useApiQuery';
 import Series from 'Series/Series';
 
-type AddSeriesPayload = AddSeries & AddSeriesOptions;
+interface AddSeriesPayload
+  extends AddSeries,
+    Omit<
+      AddSeriesOptions,
+      'monitor' | 'searchForMissingEpisodes' | 'searchForCutoffUnmetEpisodes'
+    > {}
 
 export const useLookupSeries = (query: string) => {
   return useApiQuery<AddSeries[]>({
