@@ -75,5 +75,20 @@ namespace NzbDrone.Core.Parser.Model
         {
             return Path;
         }
+
+        public string GetSceneOrFileName()
+        {
+            if (SceneName.IsNotNullOrWhiteSpace())
+            {
+                return SceneName;
+            }
+
+            if (Path.IsNotNullOrWhiteSpace())
+            {
+                return System.IO.Path.GetFileNameWithoutExtension(Path);
+            }
+
+            return string.Empty;
+        }
     }
 }

@@ -19,7 +19,7 @@ namespace NzbDrone.Core.CustomFormats
         List<CustomFormat> ParseCustomFormat(EpisodeFile episodeFile);
         List<CustomFormat> ParseCustomFormat(Blocklist blocklist, Series series);
         List<CustomFormat> ParseCustomFormat(EpisodeHistory history, Series series);
-        List<CustomFormat> ParseCustomFormat(LocalEpisode localEpisode);
+        List<CustomFormat> ParseCustomFormat(LocalEpisode localEpisode, string postRenameFileName);
     }
 
     public class CustomFormatCalculationService : ICustomFormatCalculationService
@@ -114,7 +114,7 @@ namespace NzbDrone.Core.CustomFormats
             return ParseCustomFormat(input);
         }
 
-        public List<CustomFormat> ParseCustomFormat(LocalEpisode localEpisode)
+        public List<CustomFormat> ParseCustomFormat(LocalEpisode localEpisode, string postRenameFileName)
         {
             var episodeInfo = new ParsedEpisodeInfo
             {
@@ -133,7 +133,7 @@ namespace NzbDrone.Core.CustomFormats
                 Languages = localEpisode.Languages,
                 IndexerFlags = localEpisode.IndexerFlags,
                 ReleaseType = localEpisode.ReleaseType,
-                Filename = Path.GetFileName(localEpisode.Path)
+                Filename = postRenameFileName ?? Path.GetFileName(localEpisode.Path)
             };
 
             return ParseCustomFormat(input);
