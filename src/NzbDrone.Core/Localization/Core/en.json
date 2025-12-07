@@ -1915,7 +1915,7 @@
   "SelectSeries": "Select Series",
   "SendAnonymousUsageData": "Send Anonymous Usage Data",
   "Series": "Series",
-  "SeriesAndEpisodeInformationIsProvidedByTheTVDB": "Series and episode information is provided by TheTVDB.com. [Please consider supporting them]({url}) .",
+  "SeriesAndEpisodeInformationIsProvidedByTheTVDB": "Series and episode information is provided by TheTVDB.com. [Please consider supporting them]({url}).",
   "SeriesCannotBeFound": "Sorry, that series cannot be found.",
   "SeriesDetailsCountEpisodeFiles": "{episodeFileCount} episode files",
   "SeriesDetailsGoTo": "Go to {title}",
