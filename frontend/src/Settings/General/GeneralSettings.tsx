@@ -148,6 +148,11 @@ function GeneralSettings() {
               username={settings.username}
               password={settings.password}
               passwordConfirmation={settings.passwordConfirmation}
+              oidcAuthority={settings.oidcAuthority}
+              oidcClientId={settings.oidcClientId}
+              oidcClientSecret={settings.oidcClientSecret}
+              oidcUserIdentifier={settings.oidcUserIdentifier}
+              oidcScopes={settings.oidcScopes}
               apiKey={settings.apiKey}
               certificateValidation={settings.certificateValidation}
               trustedNetworks={settings.trustedNetworks}

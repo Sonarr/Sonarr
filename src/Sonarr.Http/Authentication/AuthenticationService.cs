@@ -16,19 +16,18 @@ namespace Sonarr.Http.Authentication
     public class AuthenticationService : IAuthenticationService
     {
         private static readonly Logger _authLogger = LogManager.GetLogger("Auth");
+        private readonly IConfigFileProvider _configFileProvider;
         private readonly IUserService _userService;
-
-        private static AuthenticationType AUTH_METHOD;
 
         public AuthenticationService(IConfigFileProvider configFileProvider, IUserService userService)
         {
+            _configFileProvider = configFileProvider;
             _userService = userService;
-            AUTH_METHOD = configFileProvider.AuthenticationMethod;
         }
 
         public User Login(HttpRequest request, string username, string password)
         {
-            if (AUTH_METHOD == AuthenticationType.None)
+            if (_configFileProvider.EffectiveAuthenticationMethod() != AuthenticationType.Forms)
             {
                 return null;
             }
@@ -49,14 +48,14 @@ namespace Sonarr.Http.Authentication
 
         public void Logout(HttpContext context)
         {
-            if (AUTH_METHOD == AuthenticationType.None)
+            if (_configFileProvider.AuthenticationMethod == AuthenticationType.None)
             {
                 return;
             }
 
             if (context.User != null)
             {
-                LogLogout(context.Request, context.User.Identity.Name);
+                LogLogout(context.Request, context.User.FindFirst("user")?.Value ?? context.User.Identity?.Name);
             }
         }
 

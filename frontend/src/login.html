@@ -135,6 +135,7 @@
       }
 
       .button {
+        display: block;
         overflow: hidden;
         margin-top: 20px;
         padding: 10px 0;
@@ -144,10 +145,11 @@
         border-radius: 4px;
         background-color: var(--primaryBackgroundColor);
         color: var(--white);
-        vertical-align: middle;
         text-align: center;
+        text-decoration: none;
         white-space: nowrap;
         line-height: normal;
+        font-size: 13px;
       }
 
       .button:hover {
@@ -200,6 +202,34 @@
         display: none;
       }
 
+      .oidc-misconfigured-message {
+        display: none;
+        line-height: 1.4;
+        text-align: center;
+      }
+
+      .oidc-misconfigured .oidc-misconfigured-message {
+        display: block;
+      }
+
+      .oidc-only {
+        display: none;
+      }
+
+      .auth-oidc .forms-only {
+        display: none;
+      }
+
+      .auth-oidc .oidc-only {
+        display: block;
+      }
+
+      .oidc-misconfigured #sso-login {
+        opacity: 0.5;
+        cursor: default;
+        pointer-events: none;
+      }
+
       @media only screen and (min-device-width: 375px) and (max-device-width: 812px) {
         .form-input {
           font-size: 16px;
@@ -208,7 +238,7 @@
     </style>
   </head>
 
-  <body>
+  <body class="auth-_AUTH_METHOD_">
     <div class="center">
       <div class="content">
         <div class="panel">
@@ -223,7 +253,7 @@
               role="form"
               data-parsley-validate=""
               novalidate=""
-              class="mb-lg"
+              class="mb-lg forms-only"
               method="POST"
             >
               <div class="form-group">
@@ -274,6 +304,21 @@
                 Incorrect Username or Password
               </div>
             </form>
+
+            <div class="oidc-only">
+              <a id="sso-login" class="button" href="__URL_BASE__/login/sso"
+                >Login</a
+              >
+
+              <div class="login-failed oidc-misconfigured-message">
+                OIDC authentication is enabled, but isn't configured correctly.
+                Update the OIDC settings in your config file to continue.
+              </div>
+
+              <div id="sso-failed" class="login-failed hidden">
+                Unable to sign in with your identity provider
+              </div>
+            </div>
           </div>
         </div>
 
@@ -298,6 +343,22 @@
       var loginFailedDiv = document.getElementById('login-failed');
 
       loginFailedDiv.classList.remove('hidden');
+    }
+
+    if (window.location.search.indexOf('ssoFailed=true') > -1) {
+      var ssoFailedDiv = document.getElementById('sso-failed');
+
+      ssoFailedDiv.classList.remove('hidden');
+    }
+
+    var ssoButton = document.getElementById('sso-login');
+
+    if (ssoButton) {
+      var params = new URLSearchParams(window.location.search);
+      var returnUrl = params.get('returnUrl');
+      if (returnUrl) {
+        ssoButton.href = ssoButton.href + '?returnUrl=' + encodeURIComponent(returnUrl);
+      }
     }
 
     var light = {

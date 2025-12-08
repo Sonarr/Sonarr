@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Claims;
@@ -5,6 +6,7 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Xml;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -32,6 +34,27 @@ namespace Sonarr.Http.Authentication
             _configFileProvider = configFileProvider;
             _appFolderInfo = appFolderInfo;
             _logger = logger;
+        }
+
+        [HttpGet("login/sso")]
+        [ProducesResponseType(StatusCodes.Status302Found)]
+        public Results<RedirectHttpResult, ChallengeHttpResult> LoginSso([FromQuery] string returnUrl = null)
+        {
+            if (_configFileProvider.AuthenticationMethod != AuthenticationType.Oidc)
+            {
+                return TypedResults.Redirect(_configFileProvider.UrlBase + "/login");
+            }
+
+            if (!_configFileProvider.IsOidcConfigured())
+            {
+                _logger.Error("OIDC authentication is enabled, but Authority, Client ID, Client Secret, User and Scopes are not all configured");
+
+                return TypedResults.Redirect(_configFileProvider.UrlBase + "/login");
+            }
+
+            return TypedResults.Challenge(
+                new AuthenticationProperties { RedirectUri = GetRedirectUrl(returnUrl) },
+                [nameof(AuthenticationType.Oidc)]);
         }
 
         [HttpPost("login")]
@@ -76,26 +99,65 @@ namespace Sonarr.Http.Authentication
                 return TypedResults.Unauthorized();
             }
 
-            if (returnUrl.IsNullOrWhiteSpace() || !Url.IsLocalUrl(returnUrl))
-            {
-                return TypedResults.Redirect(_configFileProvider.UrlBase + "/");
-            }
-
-            if (_configFileProvider.UrlBase.IsNullOrWhiteSpace() || returnUrl.StartsWith(_configFileProvider.UrlBase))
-            {
-                return TypedResults.Redirect(returnUrl);
-            }
-
-            return TypedResults.Redirect(_configFileProvider.UrlBase + returnUrl);
+            return TypedResults.Redirect(GetRedirectUrl(returnUrl));
         }
 
         [HttpGet("logout")]
         [ProducesResponseType(StatusCodes.Status302Found)]
-        public async Task<RedirectHttpResult> Logout()
+        public async Task<Results<RedirectHttpResult, EmptyHttpResult>> Logout()
         {
             _authService.Logout(HttpContext);
+
+            if (_configFileProvider.EffectiveAuthenticationMethod() == AuthenticationType.Oidc)
+            {
+                var loggedOutUrl = _configFileProvider.UrlBase + "/loggedout";
+                var signedOut = false;
+
+                try
+                {
+                    await HttpContext.SignOutAsync(nameof(AuthenticationType.Oidc), new AuthenticationProperties { RedirectUri = loggedOutUrl });
+
+                    signedOut = true;
+                }
+                catch (Exception e)
+                {
+                    _logger.Warn(e, "Unable to sign out of the OIDC provider, signing out locally only");
+                }
+
+                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                await HttpContext.SignOutAsync(AuthenticationType.Forms.ToString());
+
+                if (signedOut || Response.HasStarted)
+                {
+                    return TypedResults.Empty;
+                }
+
+                return TypedResults.Redirect(loggedOutUrl);
+            }
+
             await HttpContext.SignOutAsync(AuthenticationType.Forms.ToString());
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
             return TypedResults.Redirect(_configFileProvider.UrlBase + "/");
+        }
+
+        private string GetRedirectUrl(string returnUrl)
+        {
+            var urlBase = _configFileProvider.UrlBase;
+
+            if (returnUrl.IsNullOrWhiteSpace() || !Url.IsLocalUrl(returnUrl))
+            {
+                return urlBase + "/";
+            }
+
+            if (urlBase.IsNullOrWhiteSpace() ||
+                returnUrl.Equals(urlBase, StringComparison.OrdinalIgnoreCase) ||
+                returnUrl.StartsWith(urlBase + "/", StringComparison.OrdinalIgnoreCase))
+            {
+                return returnUrl;
+            }
+
+            return urlBase + returnUrl;
         }
     }
 }
