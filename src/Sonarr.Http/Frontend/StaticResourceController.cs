@@ -33,6 +33,13 @@ namespace Sonarr.Http.Frontend
             return await MapResource("login");
         }
 
+        [AllowAnonymous]
+        [HttpGet("loggedout")]
+        public async Task<IActionResult> LogoutPage()
+        {
+            return await MapResource("logout");
+        }
+
         [EnableCors("AllowGet")]
         [AllowAnonymous]
         [HttpGet("/content/{**path:regex(^(?!api/).*)}")]

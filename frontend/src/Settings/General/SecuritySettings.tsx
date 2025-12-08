@@ -14,6 +14,7 @@ import { icons, inputTypes, kinds } from 'Helpers/Props';
 import { InputChanged } from 'typings/inputs';
 import { PendingSection } from 'typings/pending';
 import translate from 'Utilities/String/translate';
+import AuthenticationMethodSettings from './AuthenticationMethodSettings';
 import { GeneralSettingsModel } from './useGeneralSettings';
 
 export const authenticationMethodOptions: EnhancedSelectInputValue<string>[] = [
@@ -30,6 +31,12 @@ export const authenticationMethodOptions: EnhancedSelectInputValue<string>[] = [
       return translate('External');
     },
     isHidden: true,
+  },
+  {
+    key: 'oidc',
+    get value() {
+      return translate('Oidc');
+    },
   },
   {
     key: 'basic',
@@ -96,6 +103,11 @@ interface SecuritySettingsProps {
   username: PendingSection<GeneralSettingsModel>['username'];
   password: PendingSection<GeneralSettingsModel>['password'];
   passwordConfirmation: PendingSection<GeneralSettingsModel>['passwordConfirmation'];
+  oidcAuthority: PendingSection<GeneralSettingsModel>['oidcAuthority'];
+  oidcClientId: PendingSection<GeneralSettingsModel>['oidcClientId'];
+  oidcClientSecret: PendingSection<GeneralSettingsModel>['oidcClientSecret'];
+  oidcUserIdentifier: PendingSection<GeneralSettingsModel>['oidcUserIdentifier'];
+  oidcScopes: PendingSection<GeneralSettingsModel>['oidcScopes'];
   apiKey: PendingSection<GeneralSettingsModel>['apiKey'];
   certificateValidation: PendingSection<GeneralSettingsModel>['certificateValidation'];
   trustedNetworks: PendingSection<GeneralSettingsModel>['trustedNetworks'];
@@ -109,6 +121,11 @@ function SecuritySettings({
   username,
   password,
   passwordConfirmation,
+  oidcAuthority,
+  oidcClientId,
+  oidcClientSecret,
+  oidcUserIdentifier,
+  oidcScopes,
   apiKey,
   certificateValidation,
   trustedNetworks,
@@ -177,44 +194,18 @@ function SecuritySettings({
         </FormGroup>
       ) : null}
 
-      {authenticationEnabled ? (
-        <FormGroup>
-          <FormLabel>{translate('Username')}</FormLabel>
-
-          <FormInputGroup
-            type={inputTypes.TEXT}
-            name="username"
-            onChange={onInputChange}
-            {...username}
-          />
-        </FormGroup>
-      ) : null}
-
-      {authenticationEnabled ? (
-        <FormGroup>
-          <FormLabel>{translate('Password')}</FormLabel>
-
-          <FormInputGroup
-            type={inputTypes.PASSWORD}
-            name="password"
-            onChange={onInputChange}
-            {...password}
-          />
-        </FormGroup>
-      ) : null}
-
-      {authenticationEnabled ? (
-        <FormGroup>
-          <FormLabel>{translate('PasswordConfirmation')}</FormLabel>
-
-          <FormInputGroup
-            type={inputTypes.PASSWORD}
-            name="passwordConfirmation"
-            onChange={onInputChange}
-            {...passwordConfirmation}
-          />
-        </FormGroup>
-      ) : null}
+      <AuthenticationMethodSettings
+        authenticationMethod={authenticationMethod}
+        username={username}
+        password={password}
+        passwordConfirmation={passwordConfirmation}
+        oidcAuthority={oidcAuthority}
+        oidcClientId={oidcClientId}
+        oidcClientSecret={oidcClientSecret}
+        oidcUserIdentifier={oidcUserIdentifier}
+        oidcScopes={oidcScopes}
+        onInputChange={onInputChange}
+      />
 
       <FormGroup>
         <FormLabel>{translate('ApiKey')}</FormLabel>
