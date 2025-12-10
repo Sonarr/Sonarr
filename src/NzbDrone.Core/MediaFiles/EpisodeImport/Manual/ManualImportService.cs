@@ -159,7 +159,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                     ? Parser.ReleaseGroupParser.ParseReleaseGroup(path)
                     : releaseGroup;
                 var finalQuality = quality.Quality == Quality.Unknown ? QualityParser.ParseQuality(path) : quality;
-                var finalLanguges =
+                var finalLanguages =
                     languages?.Count <= 1 && (languages?.SingleOrDefault() ?? Language.Unknown) == Language.Unknown
                         ? languageParse
                         : languages;
@@ -175,7 +175,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                 localEpisode.ExistingFile = series.Path.IsParentPath(path);
                 localEpisode.Size = _diskProvider.GetFileSize(path);
                 localEpisode.ReleaseGroup = finalReleaseGroup;
-                localEpisode.Languages = finalLanguges;
+                localEpisode.Languages = finalLanguages;
                 localEpisode.Quality = finalQuality;
                 localEpisode.IndexerFlags = (IndexerFlags)indexerFlags;
                 localEpisode.ReleaseType = releaseType;
@@ -191,7 +191,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                 localEpisode.Episodes = episodes;
                 localEpisode.ReleaseGroup = finalReleaseGroup;
                 localEpisode.Quality = finalQuality;
-                localEpisode.Languages = finalLanguges;
+                localEpisode.Languages = finalLanguages;
                 localEpisode.IndexerFlags = (IndexerFlags)indexerFlags;
                 localEpisode.ReleaseType = releaseType;
 

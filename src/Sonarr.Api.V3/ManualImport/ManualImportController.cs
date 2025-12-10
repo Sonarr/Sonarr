@@ -67,7 +67,7 @@ namespace Sonarr.Api.V3.ManualImport
                     item.Quality = processedItem.Quality;
                 }
 
-                if (item.ReleaseGroup.IsNotNullOrWhiteSpace())
+                if (item.ReleaseGroup.IsNullOrWhiteSpace())
                 {
                     item.ReleaseGroup = processedItem.ReleaseGroup;
                 }
