@@ -1087,6 +1087,7 @@
     "InteractiveImportNoSeason": "Сезон необходимо выбрать для каждого выбранного файла",
     "InteractiveImportNoSeries": "Сериал необходимо выбирать для каждого выбранного файла",
     "InteractiveSearch": "Интерактивный поиск",
+    "InteractiveSearchGrabError": "Не удалось добавить в очередь загрузок",
     "InteractiveSearchModalHeader": "Интерактивный поиск",
     "InteractiveSearchModalHeaderSeason": "Интерактивный поиск – {season}",
     "InteractiveSearchResultsSeriesFailedErrorMessage": "Поиск не удался, поскольку это {message}. Попробуйте обновить информацию о сериале и убедитесь, что необходимая информация присутствует, прежде чем продолжить поиск.",

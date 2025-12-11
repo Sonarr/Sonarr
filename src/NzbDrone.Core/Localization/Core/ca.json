@@ -1461,6 +1461,8 @@
     "NotificationsPushoverSettingsRetryHelpText": "Interval per tornar a provar les alertes d'emergència, mínim 30 segons",
     "NotificationsPushoverSettingsSound": "So",
     "NotificationsPushoverSettingsSoundHelpText": "So de notificació, deixeu-ho en blanc per a utilitzar el predeterminat",
+    "NotificationsPushoverSettingsTtl": "Temps de vida",
+    "NotificationsPushoverSettingsTtlHelpText": "Temps en segons abans que el missatge caduqui. Establiu-lo a 0 per a una durada il·limitada",
     "NotificationsPushoverSettingsUserKey": "Clau d'usuari",
     "NotificationsSendGridSettingsApiKeyHelpText": "La clau API generada per SendGrid",
     "NotificationsSettingsUpdateLibrary": "Actualitza la biblioteca",
