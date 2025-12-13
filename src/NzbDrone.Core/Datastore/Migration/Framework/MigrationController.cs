@@ -34,8 +34,8 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
 
             var db = databaseType switch
             {
-                DatabaseType.SQLite => ProcessorId.SQLite,
-                DatabaseType.PostgreSQL => ProcessorId.PostgreSQL,
+                DatabaseType.SQLite => ProcessorIdConstants.SQLite,
+                DatabaseType.PostgreSQL => ProcessorIdConstants.PostgreSQL,
                 _ => throw new NotImplementedException($"Unknown database type: {databaseType}")
             };
 
