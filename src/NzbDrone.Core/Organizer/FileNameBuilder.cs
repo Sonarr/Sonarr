@@ -148,11 +148,6 @@ namespace NzbDrone.Core.Organizer
                 return GetOriginalTitle(episodeFile, true) + extension;
             }
 
-            return BuildRenamedFileName(episodes, series, extension, maxPath, namingConfig, customFormats, episodeFile);
-        }
-
-        private string BuildRenamedFileName(List<Episode> episodes, Series series, string extension, int maxPath, NamingConfig namingConfig, List<CustomFormat> customFormats, EpisodeFile episodeFile = null, LocalEpisode localEpisode = null)
-        {
             if (namingConfig.StandardEpisodeFormat.IsNullOrWhiteSpace() && series.SeriesType == SeriesTypes.Standard)
             {
                 throw new NamingFormatException("Standard episode format cannot be empty");
@@ -197,36 +192,16 @@ namespace NzbDrone.Core.Organizer
                 splitPattern = AddAbsoluteNumberingTokens(splitPattern, tokenHandlers, series, episodes, namingConfig);
                 splitPattern = splitPattern.Replace("...", "{{ellipsis}}");
 
-                if (episodeFile != null)
-                {
-                    UpdateMediaInfoIfNeeded(splitPattern, episodeFile, series);
-                }
+                UpdateMediaInfoIfNeeded(splitPattern, episodeFile, series);
 
                 AddSeriesTokens(tokenHandlers, series);
                 AddIdTokens(tokenHandlers, series);
                 AddEpisodeTokens(tokenHandlers, episodes);
                 AddEpisodeTitlePlaceholderTokens(tokenHandlers);
-                var episodeFileCustomFormats = customFormats;
-                if (episodeFile != null)
-                {
-                    AddEpisodeFileTokens(tokenHandlers, episodeFile, !patternHasEpisodeIdentifier || episodeFile.Id == 0);
-
-                    if (episodeFile.MediaInfo == null)
-                    {
-                        _logger.Trace("Media info is unavailable for {0}", episodeFile);
-                    }
-
-                    if (episodeFileCustomFormats == null)
-                    {
-                        episodeFile.Series = series;
-                        episodeFileCustomFormats = _formatCalculator.ParseCustomFormat(episodeFile, series);
-                    }
-                }
-
-                AddReleaseTokens(tokenHandlers, episodeFile?.ReleaseGroup ?? localEpisode?.ReleaseGroup, episodeFile?.ReleaseHash ?? localEpisode?.ReleaseHash);
-                AddQualityTokens(tokenHandlers, series, episodeFile?.Quality ?? localEpisode?.Quality);
-                AddMediaInfoTokens(tokenHandlers, episodeFile?.MediaInfo ?? localEpisode?.MediaInfo, episodeFile?.GetSceneOrFileName() ?? localEpisode?.GetSceneOrFileName());
-                AddCustomFormats(tokenHandlers, episodeFileCustomFormats);
+                AddEpisodeFileTokens(tokenHandlers, episodeFile, !patternHasEpisodeIdentifier || episodeFile.Id == 0);
+                AddQualityTokens(tokenHandlers, series, episodeFile);
+                AddMediaInfoTokens(tokenHandlers, episodeFile);
+                AddCustomFormats(tokenHandlers, series, episodeFile, customFormats);
 
                 var component = ReplaceTokens(splitPattern, tokenHandlers, namingConfig, true).Trim();
                 var maxPathSegmentLength = Math.Min(LongPathSupport.MaxFileNameLength, maxPath);
@@ -253,17 +228,7 @@ namespace NzbDrone.Core.Organizer
 
         public string BuildFileName(LocalEpisode localEpisode, string extension = "", NamingConfig namingConfig = null, List<CustomFormat> customFormats = null)
         {
-            if (namingConfig == null)
-            {
-                namingConfig = _namingConfigService.GetConfig();
-            }
-
-            if (!namingConfig.RenameEpisodes)
-            {
-                return CleanFileName(localEpisode.SceneName) + extension;
-            }
-
-            return BuildRenamedFileName(localEpisode.Episodes, localEpisode.Series, extension, LongPathSupport.MaxFilePathLength, namingConfig, customFormats, null, localEpisode);
+            return BuildFileName(localEpisode.Episodes, localEpisode.Series, localEpisode.ToEpisodeFile(), extension, namingConfig, customFormats);
         }
 
         public string BuildFileName(List<Episode> episodes, Series series, EpisodeFile episodeFile, string extension = "", NamingConfig namingConfig = null, List<CustomFormat> customFormats = null)
@@ -668,19 +633,15 @@ namespace NzbDrone.Core.Organizer
         {
             tokenHandlers["{Original Title}"] = m => GetOriginalTitle(episodeFile, useCurrentFilenameAsFallback);
             tokenHandlers["{Original Filename}"] = m => GetOriginalFileName(episodeFile, useCurrentFilenameAsFallback);
+            tokenHandlers["{Release Group}"] = m => episodeFile.ReleaseGroup.IsNullOrWhiteSpace() ? m.DefaultValue("Sonarr") : Truncate(episodeFile.ReleaseGroup, m.CustomFormat);
+            tokenHandlers["{Release Hash}"] = m => episodeFile.ReleaseHash ?? string.Empty;
         }
 
-        private void AddReleaseTokens(Dictionary<string, Func<TokenMatch, string>> tokenHandlers, string releaseGroup, string releaseHash)
+        private void AddQualityTokens(Dictionary<string, Func<TokenMatch, string>> tokenHandlers, Series series, EpisodeFile episodeFile)
         {
-            tokenHandlers["{Release Group}"] = m => releaseGroup.IsNullOrWhiteSpace() ? m.DefaultValue("Sonarr") : Truncate(releaseGroup, m.CustomFormat);
-            tokenHandlers["{Release Hash}"] = m => releaseHash ?? string.Empty;
-        }
-
-        private void AddQualityTokens(Dictionary<string, Func<TokenMatch, string>> tokenHandlers, Series series, QualityModel quality)
-        {
-            var qualityTitle = _qualityDefinitionService.Get(quality.Quality).Title;
-            var qualityProper = GetQualityProper(series, quality);
-            var qualityReal = GetQualityReal(series, quality);
+            var qualityTitle = _qualityDefinitionService.Get(episodeFile.Quality.Quality).Title;
+            var qualityProper = GetQualityProper(series, episodeFile.Quality);
+            var qualityReal = GetQualityReal(series, episodeFile.Quality);
 
             tokenHandlers["{Quality Full}"] = m => string.Format("{0} {1} {2}", qualityTitle, qualityProper, qualityReal);
             tokenHandlers["{Quality Title}"] = m => qualityTitle;
@@ -695,20 +656,24 @@ namespace NzbDrone.Core.Organizer
             { MediaInfoVideoDynamicRangeTypeToken, 11 }
         };
 
-        private void AddMediaInfoTokens(Dictionary<string, Func<TokenMatch, string>> tokenHandlers, MediaInfoModel mediaInfo, string sceneName)
+        private void AddMediaInfoTokens(Dictionary<string, Func<TokenMatch, string>> tokenHandlers, EpisodeFile episodeFile)
         {
-            if (mediaInfo == null)
+            if (episodeFile.MediaInfo == null)
             {
+                _logger.Trace("Media info is unavailable for {0}", episodeFile);
+
                 return;
             }
 
-            var videoCodec = MediaInfoFormatter.FormatVideoCodec(mediaInfo, sceneName);
-            var audioCodec = MediaInfoFormatter.FormatAudioCodec(mediaInfo, sceneName);
-            var audioChannels = MediaInfoFormatter.FormatAudioChannels(mediaInfo);
-            var audioLanguages = mediaInfo.AudioLanguages ?? new List<string>();
-            var subtitles = mediaInfo.Subtitles ?? new List<string>();
+            var sceneName = episodeFile.GetSceneOrFileName();
 
-            var videoBitDepth = mediaInfo.VideoBitDepth > 0 ? mediaInfo.VideoBitDepth.ToString() : 8.ToString();
+            var videoCodec = MediaInfoFormatter.FormatVideoCodec(episodeFile.MediaInfo, sceneName);
+            var audioCodec = MediaInfoFormatter.FormatAudioCodec(episodeFile.MediaInfo, sceneName);
+            var audioChannels = MediaInfoFormatter.FormatAudioChannels(episodeFile.MediaInfo);
+            var audioLanguages = episodeFile.MediaInfo.AudioLanguages ?? new List<string>();
+            var subtitles = episodeFile.MediaInfo.Subtitles ?? new List<string>();
+
+            var videoBitDepth = episodeFile.MediaInfo.VideoBitDepth > 0 ? episodeFile.MediaInfo.VideoBitDepth.ToString() : 8.ToString();
             var audioChannelsFormatted = audioChannels > 0 ?
                                 audioChannels.ToString("F1", CultureInfo.InvariantCulture) :
                                 string.Empty;
@@ -731,13 +696,19 @@ namespace NzbDrone.Core.Organizer
             tokenHandlers["{MediaInfo Full}"] = m => $"{videoCodec} {audioCodec}{GetLanguagesToken(audioLanguages, m.CustomFormat, true, true)} {GetLanguagesToken(subtitles, m.CustomFormat, false, true)}";
 
             tokenHandlers[MediaInfoVideoDynamicRangeToken] =
-                m => MediaInfoFormatter.FormatVideoDynamicRange(mediaInfo);
+                m => MediaInfoFormatter.FormatVideoDynamicRange(episodeFile.MediaInfo);
             tokenHandlers[MediaInfoVideoDynamicRangeTypeToken] =
-                m => MediaInfoFormatter.FormatVideoDynamicRangeType(mediaInfo);
+                m => MediaInfoFormatter.FormatVideoDynamicRangeType(episodeFile.MediaInfo);
         }
 
-        private void AddCustomFormats(Dictionary<string, Func<TokenMatch, string>> tokenHandlers, List<CustomFormat> customFormats)
+        private void AddCustomFormats(Dictionary<string, Func<TokenMatch, string>> tokenHandlers, Series series, EpisodeFile episodeFile, List<CustomFormat> customFormats = null)
         {
+            if (customFormats == null)
+            {
+                episodeFile.Series = series;
+                customFormats = _formatCalculator.ParseCustomFormat(episodeFile, series);
+            }
+
             tokenHandlers["{Custom Formats}"] = m => GetCustomFormatsToken(customFormats, m.CustomFormat);
             tokenHandlers["{Custom Format}"] = m =>
             {

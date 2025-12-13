@@ -4,11 +4,9 @@ using System.Linq;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
-using NzbDrone.Core.CustomFormats;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.TrackedDownloads;
 using NzbDrone.Core.MediaFiles.EpisodeImport.Aggregation;
-using NzbDrone.Core.Organizer;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
 
@@ -31,8 +29,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
         private readonly IDiskProvider _diskProvider;
         private readonly IDetectSample _detectSample;
         private readonly ITrackedDownloadService _trackedDownloadService;
-        private readonly ICustomFormatCalculationService _formatCalculator;
-        private readonly IBuildFileNames _fileNameBuilder;
+        private readonly ILocalEpisodeCustomFormatCalculationService _formatCalculator;
         private readonly Logger _logger;
 
         public ImportDecisionMaker(IEnumerable<IImportDecisionEngineSpecification> specifications,
@@ -41,8 +38,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                                    IDiskProvider diskProvider,
                                    IDetectSample detectSample,
                                    ITrackedDownloadService trackedDownloadService,
-                                   ICustomFormatCalculationService formatCalculator,
-                                   IBuildFileNames fileNameBuilder,
+                                   ILocalEpisodeCustomFormatCalculationService formatCalculator,
                                    Logger logger)
         {
             _specifications = specifications;
@@ -52,7 +48,6 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
             _detectSample = detectSample;
             _trackedDownloadService = trackedDownloadService;
             _formatCalculator = formatCalculator;
-            _fileNameBuilder = fileNameBuilder;
             _logger = logger;
         }
 
@@ -162,8 +157,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
                         }
                     }
 
-                    localEpisode.CustomFormats = _formatCalculator.ParseCustomFormat(localEpisode, _fileNameBuilder.BuildFileName(localEpisode));
-                    localEpisode.CustomFormatScore = localEpisode.Series.QualityProfile?.Value.CalculateCustomFormatScore(localEpisode.CustomFormats) ?? 0;
+                    _formatCalculator.UpdateEpisodeCustomFormats(localEpisode);
 
                     decision = GetDecision(localEpisode, downloadClientItem);
                 }
