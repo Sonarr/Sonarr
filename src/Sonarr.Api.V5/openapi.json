@@ -1639,6 +1639,74 @@
         }
       }
     },
+    "/api/v5/localization": {
+      "get": {
+        "tags": [
+          "Localization"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LocalizationResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/localization/language": {
+      "get": {
+        "tags": [
+          "Localization"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LocalizationLanguageResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/localization/{id}": {
+      "get": {
+        "tags": [
+          "Localization"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LocalizationResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v5/log": {
       "get": {
         "tags": [
@@ -2549,6 +2617,27 @@
         }
       }
     },
+    "/api/v5/seasonpass": {
+      "post": {
+        "tags": [
+          "SeasonPass"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SeasonPassResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/v5/series": {
       "get": {
         "tags": [
@@ -2727,6 +2816,105 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v5/series/{id}/season": {
+      "put": {
+        "tags": [
+          "Series"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SeasonResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SeasonResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/series/editor": {
+      "put": {
+        "tags": [
+          "SeriesEditor"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SeriesEditorResource"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SeriesEditorResource"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SeriesEditorResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "SeriesEditor"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SeriesEditorResource"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SeriesEditorResource"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SeriesEditorResource"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "OK"
@@ -3421,6 +3609,14 @@
           }
         },
         "additionalProperties": false
+      },
+      "ApplyTags": {
+        "enum": [
+          "add",
+          "remove",
+          "replace"
+        ],
+        "type": "string"
       },
       "AuthenticationType": {
         "enum": [
@@ -4408,6 +4604,33 @@
         },
         "additionalProperties": false
       },
+      "LocalizationLanguageResource": {
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "LocalizationResource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "strings": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "LogFileResource": {
         "required": [
           "contentsUrl",
@@ -4628,6 +4851,15 @@
           "skip"
         ],
         "type": "string"
+      },
+      "MonitoringOptionsResource": {
+        "type": "object",
+        "properties": {
+          "monitor": {
+            "$ref": "#/components/schemas/MonitorTypes"
+          }
+        },
+        "additionalProperties": false
       },
       "NewItemMonitorTypes": {
         "enum": [
@@ -5685,6 +5917,43 @@
         },
         "additionalProperties": false
       },
+      "SeasonPassResource": {
+        "type": "object",
+        "properties": {
+          "series": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SeasonPassSeriesResource"
+            },
+            "nullable": true
+          },
+          "monitoringOptions": {
+            "$ref": "#/components/schemas/MonitoringOptionsResource"
+          }
+        },
+        "additionalProperties": false
+      },
+      "SeasonPassSeriesResource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "monitored": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "seasons": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SeasonResource"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "SeasonResource": {
         "type": "object",
         "properties": {
@@ -5770,6 +6039,63 @@
           "hint": {
             "type": "string",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SeriesEditorResource": {
+        "type": "object",
+        "properties": {
+          "seriesIds": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          },
+          "monitored": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "monitorNewItems": {
+            "$ref": "#/components/schemas/NewItemMonitorTypes"
+          },
+          "qualityProfileId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "seriesType": {
+            "$ref": "#/components/schemas/SeriesTypes"
+          },
+          "seasonFolder": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "rootFolderPath": {
+            "type": "string",
+            "nullable": true
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          },
+          "applyTags": {
+            "$ref": "#/components/schemas/ApplyTags"
+          },
+          "moveFiles": {
+            "type": "boolean"
+          },
+          "deleteFiles": {
+            "type": "boolean"
+          },
+          "addImportListExclusion": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -6536,6 +6862,128 @@
     },
     {
       "apikey": [ ]
+    }
+  ],
+  "tags": [
+    {
+      "name": "ApiInfo"
+    },
+    {
+      "name": "Authentication"
+    },
+    {
+      "name": "StaticResource"
+    },
+    {
+      "name": "Backup"
+    },
+    {
+      "name": "Blocklist"
+    },
+    {
+      "name": "Calendar"
+    },
+    {
+      "name": "CalendarFeed"
+    },
+    {
+      "name": "CustomFilter"
+    },
+    {
+      "name": "Cutoff"
+    },
+    {
+      "name": "DiskSpace"
+    },
+    {
+      "name": "Episode"
+    },
+    {
+      "name": "EpisodeFile"
+    },
+    {
+      "name": "FileSystem"
+    },
+    {
+      "name": "Health"
+    },
+    {
+      "name": "History"
+    },
+    {
+      "name": "Localization"
+    },
+    {
+      "name": "Log"
+    },
+    {
+      "name": "LogFile"
+    },
+    {
+      "name": "Missing"
+    },
+    {
+      "name": "Parse"
+    },
+    {
+      "name": "Ping"
+    },
+    {
+      "name": "Queue"
+    },
+    {
+      "name": "QueueAction"
+    },
+    {
+      "name": "QueueDetails"
+    },
+    {
+      "name": "QueueStatus"
+    },
+    {
+      "name": "Release"
+    },
+    {
+      "name": "ReleasePush"
+    },
+    {
+      "name": "RootFolder"
+    },
+    {
+      "name": "SeasonPass"
+    },
+    {
+      "name": "Series"
+    },
+    {
+      "name": "SeriesEditor"
+    },
+    {
+      "name": "SeriesFolder"
+    },
+    {
+      "name": "SeriesLookup"
+    },
+    {
+      "name": "System"
+    },
+    {
+      "name": "Tag"
+    },
+    {
+      "name": "TagDetails"
+    },
+    {
+      "name": "Task"
+    },
+    {
+      "name": "Update"
+    },
+    {
+      "name": "UpdateLogFile"
+    },
+    {
+      "name": "UpdateSettings"
     }
   ]
 }
