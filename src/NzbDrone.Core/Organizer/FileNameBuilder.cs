@@ -14,7 +14,6 @@ using NzbDrone.Common.Extensions;
 using NzbDrone.Core.CustomFormats;
 using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.MediaInfo;
-using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 
@@ -22,7 +21,6 @@ namespace NzbDrone.Core.Organizer
 {
     public interface IBuildFileNames
     {
-        string BuildFileName(LocalEpisode localEpisode, string extension = "", NamingConfig namingConfig = null, List<CustomFormat> customFormats = null);
         string BuildFileName(List<Episode> episodes, Series series, EpisodeFile episodeFile, string extension = "", NamingConfig namingConfig = null, List<CustomFormat> customFormats = null);
         string BuildFilePath(List<Episode> episodes, Series series, EpisodeFile episodeFile, string extension, NamingConfig namingConfig = null, List<CustomFormat> customFormats = null);
         string BuildSeasonPath(Series series, int seasonNumber);
@@ -224,11 +222,6 @@ namespace NzbDrone.Core.Organizer
             }
 
             return string.Join(Path.DirectorySeparatorChar.ToString(), components) + extension;
-        }
-
-        public string BuildFileName(LocalEpisode localEpisode, string extension = "", NamingConfig namingConfig = null, List<CustomFormat> customFormats = null)
-        {
-            return BuildFileName(localEpisode.Episodes, localEpisode.Series, localEpisode.ToEpisodeFile(), extension, namingConfig, customFormats);
         }
 
         public string BuildFileName(List<Episode> episodes, Series series, EpisodeFile episodeFile, string extension = "", NamingConfig namingConfig = null, List<CustomFormat> customFormats = null)

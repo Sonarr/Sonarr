@@ -25,7 +25,7 @@ public class LocalEpisodeCustomFormatCalculationService : ILocalEpisodeCustomFor
 
     public List<CustomFormat> ParseEpisodeCustomFormats(LocalEpisode localEpisode, out string fileNameUsedForCustomFormatCalculation)
     {
-        fileNameUsedForCustomFormatCalculation = _fileNameBuilder.BuildFileName(localEpisode);
+        fileNameUsedForCustomFormatCalculation = _fileNameBuilder.BuildFileName(localEpisode.Episodes, localEpisode.Series, localEpisode.ToEpisodeFile());
         return _formatCalculator.ParseCustomFormat(localEpisode, fileNameUsedForCustomFormatCalculation);
     }
 
