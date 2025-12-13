@@ -118,7 +118,8 @@ namespace NzbDrone.Core.Parser.Model
             {
                 episodeFile.ReleaseType = DownloadClientEpisodeInfo?.ReleaseType ??
                                           FolderEpisodeInfo?.ReleaseType ??
-                                          FileEpisodeInfo.ReleaseType;
+                                          FileEpisodeInfo?.ReleaseType ??
+                                          ReleaseType.Unknown;
             }
 
             return episodeFile;
