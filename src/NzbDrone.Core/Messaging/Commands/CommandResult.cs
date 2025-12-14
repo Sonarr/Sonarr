@@ -4,6 +4,7 @@ namespace NzbDrone.Core.Messaging.Commands
     {
         Unknown = 0,
         Successful = 1,
-        Unsuccessful = 2
+        Unsuccessful = 2,
+        Indeterminate = 3
     }
 }

@@ -253,7 +253,7 @@ namespace NzbDrone.Core.Test.TvTests
                   .Setup(s => s.GetSeriesInfo(_series.Id))
                   .Throws(new IOException());
 
-            Assert.Throws<IOException>(() => Subject.Execute(new RefreshSeriesCommand(new List<int> { _series.Id })));
+            Subject.Execute(new RefreshSeriesCommand(new List<int> { _series.Id }));
 
             Mocker.GetMock<IDiskScanService>()
                   .Verify(v => v.Scan(_series), Times.Once());
