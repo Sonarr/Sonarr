@@ -6,12 +6,13 @@ using NzbDrone.Common.Extensions;
 
 namespace NzbDrone.Common.Http
 {
-    public class HttpUri : IEquatable<HttpUri>
+    public partial class HttpUri : IEquatable<HttpUri>
     {
-        private static readonly Regex RegexUri = new Regex(@"^(?:(?<scheme>[a-z]+):)?(?://(?<host>[-_A-Z0-9.]+|\[[[A-F0-9:]+\])(?::(?<port>[0-9]{1,5}))?)?(?<path>(?:(?:(?<=^)|/+)[^/?#\r\n]+)+/*|/+)?(?:\?(?<query>[^#\r\n]*))?(?:\#(?<fragment>.*))?$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-
         private readonly string _uri;
         public string FullUri => _uri;
+
+        [GeneratedRegex(@"^(?:(?<scheme>[a-z]+):)?(?://(?<host>[-_A-Z0-9.]+|\[[[A-F0-9:]+\])(?::(?<port>[0-9]{1,5}))?)?(?<path>(?:(?:(?<=^)|/+)[^/?#\r\n]+)+/*|/+)?(?:\?(?<query>[^#\r\n]*))?(?:\#(?<fragment>.*))?$", RegexOptions.IgnoreCase | RegexOptions.Compiled)]
+        private static partial Regex UriRegex();
 
         public HttpUri(string uri)
         {
@@ -70,9 +71,9 @@ namespace NzbDrone.Common.Http
 
         private void Parse()
         {
-            var parseSuccess = Uri.TryCreate(_uri, UriKind.RelativeOrAbsolute, out var uri);
+            var parseSuccess = Uri.TryCreate(_uri, UriKind.RelativeOrAbsolute, out _);
 
-            var match = RegexUri.Match(_uri);
+            var match = UriRegex().Match(_uri);
 
             var scheme = match.Groups["scheme"];
             var host = match.Groups["host"];
