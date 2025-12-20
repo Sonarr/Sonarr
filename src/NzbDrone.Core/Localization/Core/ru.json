@@ -1904,7 +1904,7 @@
     "SelectSeries": "Выберите сериал",
     "SendAnonymousUsageData": "Отправка анонимных данных об использовании",
     "Series": "Сериалы",
-    "SeriesAndEpisodeInformationIsProvidedByTheTVDB": "Информация о сериалах и эпизодах предоставлена TheTVDB.com. [Пожалуйста, рассмотрите возможность их поддержки]({url}) .",
+    "SeriesAndEpisodeInformationIsProvidedByTheTVDB": "Информация о сериалах и эпизодах предоставлена TheTVDB.com. [Пожалуйста, рассмотрите возможность их поддержки]({url}).",
     "SeriesCannotBeFound": "К сожалению, невозможно найти этот сериал.",
     "SeriesDetailsCountEpisodeFiles": "{episodeFileCount} файлов эпизодов",
     "SeriesDetailsGoTo": "Перейти к {title}",

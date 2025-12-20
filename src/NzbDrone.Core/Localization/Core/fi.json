@@ -1915,7 +1915,7 @@
     "SelectSeries": "Sarjojen monivalinta",
     "SendAnonymousUsageData": "Lähetä nimettömiä käyttötietoja",
     "Series": "Sarjat",
-    "SeriesAndEpisodeInformationIsProvidedByTheTVDB": "Sarjojen ja jaksojen tiedot tarjoaa TheTVDB.com. [Harkitse palvelun tukemista]({url})",
+    "SeriesAndEpisodeInformationIsProvidedByTheTVDB": "Sarjojen ja jaksojen tiedot tarjoaa TheTVDB.com. [Harkitse palvelun tukemista]({url}).",
     "SeriesCannotBeFound": "Valitettavasti etsimääsi sarjaa ei löydy.",
     "SeriesDetailsCountEpisodeFiles": "{episodeFileCount} jaksotiedostoa",
     "SeriesDetailsGoTo": "Avaa {title}",
