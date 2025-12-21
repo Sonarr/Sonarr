@@ -48,6 +48,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series Title S01 [2160p REMUX] [HEVC DV HYBRID HDR10+ Dolby TrueHD Atmos 7 1 24-bit Audio English] [Data Lass]", null)]
         [TestCase("Series Title S01 [2160p REMUX] [HEVC DV HYBRID HDR10+ Dolby TrueHD Atmos 7 1 24-bit Audio English]-DataLass", "DataLass")]
         [TestCase("Series Title S01 REMUX Dual Audio AVC 1080p 8-Bit-ZR-", "ZR")]
+        [TestCase("Series (2008) S05E01 (1080p BDRip DDP2.0 x265) - Vialle", "Vialle")]
+        [TestCase("The Series (2023) S03E01 (1080p DS4K NF Webrip DV HDR DDP5.1 x265) - Vialle.mkv", "Vialle")]
         public void should_parse_release_group(string title, string expected)
         {
             Parser.ReleaseGroupParser.ParseReleaseGroup(title).Should().Be(expected);

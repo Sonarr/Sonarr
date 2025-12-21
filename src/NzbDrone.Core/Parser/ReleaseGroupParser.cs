@@ -16,7 +16,7 @@ public static class ReleaseGroupParser
 
     // Handle Exception Release Groups that don't follow -RlsGrp; Manual List
     // name only...be very careful with this last; high chance of false positives
-    private static readonly Regex ExceptionReleaseGroupRegexExact = new(@"(?<releasegroup>(?:D\-Z0N3|Fight-BB|VARYG|E\.N\.D|KRaLiMaRKo|BluDragon|DarQ|KCRT|BEN[_. ]THE[_. ]MEN|TAoE|QxR)\b)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+    private static readonly Regex ExceptionReleaseGroupRegexExact = new(@"(?<releasegroup>(?:D\-Z0N3|Fight-BB|VARYG|E\.N\.D|KRaLiMaRKo|BluDragon|DarQ|KCRT|BEN[_. ]THE[_. ]MEN|TAoE|QxR)|Vialle\b)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
     // groups whose releases end with RlsGroup) or RlsGroup]
     private static readonly Regex ExceptionReleaseGroupRegex = new(@"(?<=[._ \[])(?<releasegroup>(Joy|ImE|UTR|t3nzin|Anime Time|Project Angel|Hakata Ramen|HONE|Vyndros|SEV|Garshasp|Kappa|Natty|RCVR|SAMPA|YOGI|r00t|EDGE2020)(?=\]|\)))", RegexOptions.IgnoreCase | RegexOptions.Compiled);
