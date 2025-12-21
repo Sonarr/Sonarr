@@ -75,7 +75,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
                 .Setup(s => s.BuildFileName(It.IsAny<List<Episode>>(), It.IsAny<Series>(), It.IsAny<EpisodeFile>(), "", null, null))
                 .Returns(renamedFileName);
 
-            Subject.ParseEpisodeCustomFormats(_localEpisode, out var fileName).Should().BeEquivalentTo([_englishCustomFormat]);
+            Subject.ParseEpisodeCustomFormats(_localEpisode).Should().BeEquivalentTo([_englishCustomFormat]);
         }
 
         [Test]

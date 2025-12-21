@@ -447,7 +447,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
             if (decision.LocalEpisode.Series != null)
             {
                 item.Series = decision.LocalEpisode.Series;
-                item.CustomFormats = _localEpisodeFormatCalculator.ParseEpisodeCustomFormats(decision.LocalEpisode, out _);
+                item.CustomFormats = _localEpisodeFormatCalculator.ParseEpisodeCustomFormats(decision.LocalEpisode);
                 item.CustomFormatScore = item.Series.QualityProfile?.Value.CalculateCustomFormatScore(item.CustomFormats) ?? 0;
             }
 
