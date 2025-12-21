@@ -1,6 +1,5 @@
-import React, { useCallback, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import AppState from 'App/State/AppState';
+import React from 'react';
+import useSeriesHistory from 'Activity/History/useSeriesHistory';
 import Alert from 'Components/Alert';
 import Icon from 'Components/Icon';
 import Button from 'Components/Link/Button';
@@ -14,11 +13,6 @@ import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import { icons, kinds } from 'Helpers/Props';
 import formatSeason from 'Season/formatSeason';
-import {
-  clearSeriesHistory,
-  fetchSeriesHistory,
-  seriesHistoryMarkAsFailed,
-} from 'Store/Actions/seriesHistoryActions';
 import translate from 'Utilities/String/translate';
 import SeriesHistoryRow from './SeriesHistoryRow';
 
@@ -86,40 +80,13 @@ function SeriesHistoryModalContent({
   seasonNumber,
   onModalClose,
 }: SeriesHistoryModalContentProps) {
-  const dispatch = useDispatch();
-
-  const { isFetching, isPopulated, error, items } = useSelector(
-    (state: AppState) => state.seriesHistory
+  const { isFetching, isFetched, error, data } = useSeriesHistory(
+    seriesId,
+    seasonNumber
   );
 
   const fullSeries = seasonNumber == null;
-  const hasItems = !!items.length;
-
-  const handleMarkAsFailedPress = useCallback(
-    (historyId: number) => {
-      dispatch(
-        seriesHistoryMarkAsFailed({
-          historyId,
-          seriesId,
-          seasonNumber,
-        })
-      );
-    },
-    [seriesId, seasonNumber, dispatch]
-  );
-
-  useEffect(() => {
-    dispatch(
-      fetchSeriesHistory({
-        seriesId,
-        seasonNumber,
-      })
-    );
-
-    return () => {
-      dispatch(clearSeriesHistory());
-    };
-  }, [seriesId, seasonNumber, dispatch]);
+  const hasItems = !!data.length;
 
   return (
     <ModalContent onModalClose={onModalClose}>
@@ -132,26 +99,25 @@ function SeriesHistoryModalContent({
       </ModalHeader>
 
       <ModalBody>
-        {isFetching && !isPopulated ? <LoadingIndicator /> : null}
+        {isFetching && !isFetched ? <LoadingIndicator /> : null}
 
         {!isFetching && !!error ? (
           <Alert kind={kinds.DANGER}>{translate('HistoryLoadError')}</Alert>
         ) : null}
 
-        {isPopulated && !hasItems && !error ? (
+        {isFetched && !hasItems && !error ? (
           <div>{translate('NoHistory')}</div>
         ) : null}
 
-        {isPopulated && hasItems && !error ? (
+        {isFetched && hasItems && !error ? (
           <Table columns={columns}>
             <TableBody>
-              {items.map((item) => {
+              {data.map((item) => {
                 return (
                   <SeriesHistoryRow
                     key={item.id}
                     fullSeries={fullSeries}
                     {...item}
-                    onMarkAsFailedPress={handleMarkAsFailedPress}
                   />
                 );
               })}
