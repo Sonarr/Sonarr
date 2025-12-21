@@ -41,6 +41,8 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("[GROUP] Series: Title (2023) (Season 1) [BDRip] [1080p Dual Audio HEVC 10-bit DDP] (serie) (Batch)", "Series: Title (2023)", 1)]
         [TestCase("Seriesless (2016/S01/WEB-DL/1080p/AC3 5.1/DUAL/SUB)", "Seriesless (2016)", 1)]
         [TestCase("Series (1994) - Temporada 10", "Series (1994)", 10)]
+        [TestCase("Series S01 1080p HMAX WEB-DL DD+ 5.1 H.265", "Series", 1)]
+        [TestCase("Series S01 1440p HMAX WEB-DL DD+ 5.1 H.265", "Series", 1)]
         public void should_parse_full_season_release(string postTitle, string title, int season)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
