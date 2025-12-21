@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect } from 'react';
 import { useSelect } from 'App/Select/SelectContext';
-import { OrganizePreviewModel } from 'App/State/OrganizePreviewAppState';
 import CheckInput from 'Components/Form/CheckInput';
 import Icon from 'Components/Icon';
 import { icons, kinds } from 'Helpers/Props';
 import { CheckInputChanged } from 'typings/inputs';
+import { OrganizePreviewModel } from './useOrganizePreview';
 import styles from './OrganizePreviewRow.css';
 
 interface OrganizePreviewRowProps {
