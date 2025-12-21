@@ -495,6 +495,105 @@
         }
       }
     },
+    "/api/v5/command": {
+      "post": {
+        "tags": [
+          "Command"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CommandResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommandResource"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Command"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CommandResource"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/command/{id}": {
+      "delete": {
+        "tags": [
+          "Command"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Command"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommandResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v5/customfilter": {
       "get": {
         "tags": [
@@ -3790,6 +3889,178 @@
         },
         "additionalProperties": false
       },
+      "Command": {
+        "type": "object",
+        "properties": {
+          "sendUpdatesToClient": {
+            "type": "boolean"
+          },
+          "updateScheduledTask": {
+            "type": "boolean",
+            "readOnly": true
+          },
+          "completionMessage": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "requiresDiskAccess": {
+            "type": "boolean",
+            "readOnly": true
+          },
+          "isExclusive": {
+            "type": "boolean",
+            "readOnly": true
+          },
+          "isLongRunning": {
+            "type": "boolean",
+            "readOnly": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "lastExecutionTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "lastStartTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "trigger": {
+            "$ref": "#/components/schemas/CommandTrigger"
+          },
+          "suppressMessages": {
+            "type": "boolean"
+          },
+          "clientUserAgent": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CommandPriority": {
+        "enum": [
+          "normal",
+          "high",
+          "low"
+        ],
+        "type": "string"
+      },
+      "CommandResource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "commandName": {
+            "type": "string",
+            "nullable": true
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "body": {
+            "$ref": "#/components/schemas/Command"
+          },
+          "priority": {
+            "$ref": "#/components/schemas/CommandPriority"
+          },
+          "status": {
+            "$ref": "#/components/schemas/CommandStatus"
+          },
+          "result": {
+            "$ref": "#/components/schemas/CommandResult"
+          },
+          "queued": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "started": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "ended": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "duration": {
+            "type": "string",
+            "format": "date-span",
+            "nullable": true
+          },
+          "exception": {
+            "type": "string",
+            "nullable": true
+          },
+          "trigger": {
+            "$ref": "#/components/schemas/CommandTrigger"
+          },
+          "clientUserAgent": {
+            "type": "string",
+            "nullable": true
+          },
+          "stateChangeTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "sendUpdatesToClient": {
+            "type": "boolean"
+          },
+          "updateScheduledTask": {
+            "type": "boolean"
+          },
+          "lastExecutionTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CommandResult": {
+        "enum": [
+          "unknown",
+          "successful",
+          "unsuccessful",
+          "indeterminate"
+        ],
+        "type": "string"
+      },
+      "CommandStatus": {
+        "enum": [
+          "queued",
+          "started",
+          "completed",
+          "failed",
+          "aborted",
+          "cancelled",
+          "orphaned"
+        ],
+        "type": "string"
+      },
+      "CommandTrigger": {
+        "enum": [
+          "unspecified",
+          "manual",
+          "scheduled"
+        ],
+        "type": "string"
+      },
       "CustomFilterResource": {
         "type": "object",
         "properties": {
@@ -6885,6 +7156,9 @@
     },
     {
       "name": "CalendarFeed"
+    },
+    {
+      "name": "Command"
     },
     {
       "name": "CustomFilter"
