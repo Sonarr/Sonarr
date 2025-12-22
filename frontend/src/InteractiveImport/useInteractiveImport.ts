@@ -13,7 +13,7 @@ import ReleaseType from './ReleaseType';
 const DEFAULT_ITEMS: InteractiveImport[] = [];
 
 interface InteractiveImportParams {
-  downloadId?: string;
+  downloadIds?: string[];
   seriesId?: number;
   seasonNumber?: number;
   folder?: string;

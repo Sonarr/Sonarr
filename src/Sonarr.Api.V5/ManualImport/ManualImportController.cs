@@ -20,14 +20,34 @@ public class ManualImportController : Controller
 
     [HttpGet]
     [Produces("application/json")]
-    public List<ManualImportResource> GetMediaFiles(string? folder, string? downloadId, int? seriesId, int? seasonNumber, bool filterExistingFiles = true)
+    public List<ManualImportResource> GetMediaFiles(string? folder, [FromQuery] string[]? downloadIds, int? seriesId, int? seasonNumber, bool filterExistingFiles = true)
     {
-        if (seriesId.HasValue && downloadId.IsNullOrWhiteSpace())
+        if (seriesId.HasValue && downloadIds == null)
         {
-            return _manualImportService.GetMediaFiles(seriesId.Value, seasonNumber).ToResource().Select(AddQualityWeight).ToList();
+            return _manualImportService.GetMediaFiles(seriesId.Value, seasonNumber)
+                .ToResource()
+                .Select(AddQualityWeight)
+                .ToList();
         }
 
-        return _manualImportService.GetMediaFiles(folder, downloadId, seriesId, filterExistingFiles).ToResource().Select(AddQualityWeight).ToList();
+        if (downloadIds != null && downloadIds.Any())
+        {
+            var files = new List<ManualImportItem>();
+
+            foreach (var downloadId in downloadIds.Distinct())
+            {
+                files.AddRange(_manualImportService.GetMediaFiles(null, downloadId, seriesId, filterExistingFiles));
+            }
+
+            return files.ToResource()
+                .Select(AddQualityWeight)
+                .ToList();
+        }
+
+        return _manualImportService.GetMediaFiles(folder, null, seriesId, filterExistingFiles)
+            .ToResource()
+            .Select(AddQualityWeight)
+            .ToList();
     }
 
     [HttpPost]

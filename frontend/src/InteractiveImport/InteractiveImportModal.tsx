@@ -12,7 +12,7 @@ interface InteractiveImportModalProps
   extends Omit<InteractiveImportModalContentProps, 'modalTitle'> {
   isOpen: boolean;
   folder?: string;
-  downloadId?: string;
+  downloadIds?: string[];
   modalTitle?: string;
   onModalClose(): void;
 }
@@ -21,7 +21,7 @@ function InteractiveImportModal(props: InteractiveImportModalProps) {
   const {
     isOpen,
     folder,
-    downloadId,
+    downloadIds,
     modalTitle = translate('ManualImport'),
     onModalClose,
     ...otherProps
@@ -54,11 +54,11 @@ function InteractiveImportModal(props: InteractiveImportModalProps) {
       closeOnBackgroundClick={false}
       onModalClose={onModalClose}
     >
-      {folderPath || downloadId ? (
+      {folderPath || downloadIds ? (
         <InteractiveImportModalContent
           {...otherProps}
           folder={folderPath}
-          downloadId={downloadId}
+          downloadIds={downloadIds}
           modalTitle={modalTitle}
           onModalClose={onModalClose}
         />

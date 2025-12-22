@@ -45,7 +45,7 @@ interface QueueRowProps {
   id: number;
   seriesId?: number;
   episodeIds: number[];
-  downloadId?: string;
+  downloadId: string;
   title: string;
   status: string;
   trackedDownloadStatus?: QueueTrackedDownloadStatus;
@@ -399,7 +399,7 @@ function QueueRow(props: QueueRowProps) {
 
       <InteractiveImportModal
         isOpen={isInteractiveImportModalOpen}
-        downloadId={downloadId}
+        downloadIds={[downloadId]}
         title={title}
         onModalClose={handleInteractiveImportModalClose}
       />

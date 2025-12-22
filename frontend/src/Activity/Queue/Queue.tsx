@@ -26,6 +26,7 @@ import useEpisodes from 'Episode/useEpisodes';
 import { useCustomFiltersList } from 'Filters/useCustomFilters';
 import { align, icons, kinds } from 'Helpers/Props';
 import { SortDirection } from 'Helpers/Props/sortDirections';
+import InteractiveImportModal from 'InteractiveImport/InteractiveImportModal';
 import { CheckInputChanged } from 'typings/inputs';
 import QueueModel from 'typings/Queue';
 import { TableOptionsChangePayload } from 'typings/Table';
@@ -109,6 +110,9 @@ function QueueContent() {
   const [isConfirmRemoveModalOpen, setIsConfirmRemoveModalOpen] =
     useState(false);
 
+  const [isInteractiveImportDownloadIds, setIsInteractiveImportDownloadIds] =
+    useState<string[]>(() => []);
+
   const isRefreshing =
     isLoading || isEpisodesFetching || isRefreshMonitoredDownloadsExecuting;
 
@@ -156,12 +160,30 @@ function QueueContent() {
     shouldBlockRefresh.current = false;
     removeQueueItems({ ids: selectedIds });
     setIsConfirmRemoveModalOpen(false);
-  }, [selectedIds, setIsConfirmRemoveModalOpen, removeQueueItems]);
+  }, [selectedIds, removeQueueItems]);
 
   const handleConfirmRemoveModalClose = useCallback(() => {
     shouldBlockRefresh.current = false;
     setIsConfirmRemoveModalOpen(false);
-  }, [setIsConfirmRemoveModalOpen]);
+  }, []);
+
+  const handleImportSelectedPress = useCallback(() => {
+    shouldBlockRefresh.current = true;
+    setIsInteractiveImportDownloadIds(
+      selectedIds
+        .map((id) => {
+          const item = records.find((i) => i.id === id);
+
+          return item?.downloadId;
+        })
+        .filter((id): id is string => !!id)
+    );
+  }, [records, selectedIds]);
+
+  const handleImportSelectedModalClose = useCallback(() => {
+    shouldBlockRefresh.current = false;
+    setIsInteractiveImportDownloadIds([]);
+  }, []);
 
   const handleFilterSelect = useCallback(
     (selectedFilterKey: string | number) => {
@@ -292,6 +314,15 @@ function QueueContent() {
             isSpinning={isRemoving}
             onPress={handleRemoveSelectedPress}
           />
+
+          <PageToolbarSeparator />
+
+          <PageToolbarButton
+            label={translate('ImportSelected')}
+            iconName={icons.INTERACTIVE}
+            isDisabled={disableSelectedActions}
+            onPress={handleImportSelectedPress}
+          />
         </PageToolbarSection>
 
         <PageToolbarSection alignContent={align.RIGHT}>
@@ -357,6 +388,13 @@ function QueueContent() {
         }
         onRemovePress={handleRemoveSelectedConfirmed}
         onModalClose={handleConfirmRemoveModalClose}
+      />
+
+      <InteractiveImportModal
+        isOpen={isInteractiveImportDownloadIds.length > 0}
+        downloadIds={isInteractiveImportDownloadIds}
+        title={translate('InteractiveImportMultipleQueueItems')}
+        onModalClose={handleImportSelectedModalClose}
       />
     </PageContent>
   );

@@ -202,7 +202,7 @@ function isSameEpisodeFile(
 const filterExistingFilesStore = create<boolean>(() => false);
 
 export interface InteractiveImportModalContentProps {
-  downloadId?: string;
+  downloadIds?: string[];
   seriesId?: number;
   seasonNumber?: number;
   showSeries?: boolean;
@@ -224,7 +224,7 @@ function InteractiveImportModalContentInner(
   props: InteractiveImportModalContentProps
 ) {
   const {
-    downloadId,
+    downloadIds,
     seriesId,
     seasonNumber,
     allowSeriesChange = true,
@@ -252,7 +252,7 @@ function InteractiveImportModalContentInner(
     data,
     originalItems,
   } = useInteractiveImport({
-    downloadId,
+    downloadIds,
     seriesId,
     seasonNumber,
     folder,
@@ -484,7 +484,8 @@ function InteractiveImportModalContentInner(
   }, [setIsConfirmDeleteModalOpen]);
 
   const handleImportSelectedPress = useCallback(() => {
-    const finalImportMode = downloadId || !showImportMode ? 'auto' : importMode;
+    const finalImportMode =
+      downloadIds || !showImportMode ? 'auto' : importMode;
 
     const existingFiles: Partial<EpisodeFile>[] = [];
     const files: InteractiveImportCommandOptions[] = [];
@@ -502,6 +503,7 @@ function InteractiveImportModalContentInner(
 
       if (isSelected) {
         const {
+          downloadId,
           series,
           seasonNumber,
           episodes,
@@ -605,7 +607,7 @@ function InteractiveImportModalContentInner(
       onModalClose();
     }
   }, [
-    downloadId,
+    downloadIds,
     showImportMode,
     importMode,
     items,
@@ -921,7 +923,7 @@ function InteractiveImportModalContentInner(
             </SpinnerButton>
           ) : null}
 
-          {!downloadId && showImportMode ? (
+          {!downloadIds && showImportMode ? (
             <SelectInput
               className={styles.importMode}
               name="importMode"
@@ -1046,9 +1048,9 @@ function InteractiveImportModalContent(
 ) {
   const filterExistingFiles = filterExistingFilesStore((state) => state);
 
-  const { downloadId, seriesId, seasonNumber, folder } = props;
+  const { downloadIds, seriesId, seasonNumber, folder } = props;
   const { data } = useInteractiveImport({
-    downloadId,
+    downloadIds,
     seriesId,
     seasonNumber,
     folder,

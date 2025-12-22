@@ -52,7 +52,7 @@ public static class ManualImportResourceMapper
             Size = model.Size,
             Series = model.Series?.ToResource(),
             SeasonNumber = model.SeasonNumber,
-            Episodes = model.Episodes.ToResource(),
+            Episodes = model.Episodes?.ToResource() ?? [],
             EpisodeFileId = model.EpisodeFileId,
             ReleaseGroup = model.ReleaseGroup,
             Quality = model.Quality,
