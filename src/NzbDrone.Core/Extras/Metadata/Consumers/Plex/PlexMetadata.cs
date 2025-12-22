@@ -73,7 +73,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Plex
 
                     if (episodeFile.SeasonNumber == 0)
                     {
-                        episodeFormat = $"SP{episodesInFile.First():00}";
+                        episodeFormat = $"SP{episodesInFile.First().EpisodeNumber:00}";
                     }
 
                     content.AppendLine($"Episode: {episodeFormat}: {episodeFile.RelativePath}");
