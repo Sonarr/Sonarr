@@ -110,6 +110,7 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
     isFetched: isEpisodeFilesFetched,
     error: episodeFilesError,
     hasEpisodeFiles,
+    refetch: refetchEpisodeFiles,
   } = useEpisodeFiles({ seriesId });
 
   const { data: commands } = useCommands();
@@ -344,7 +345,8 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
 
   const populate = useCallback(() => {
     refetchEpisodes();
-  }, [refetchEpisodes]);
+    refetchEpisodeFiles();
+  }, [refetchEpisodes, refetchEpisodeFiles]);
 
   useEffect(() => {
     populate();
