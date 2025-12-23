@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
         [Test]
         public void should_get_episodes()
         {
-            var episodes = Subject.EpisodesBetweenDates(DateTime.Today.AddDays(-1), DateTime.Today.AddDays(3), false);
+            var episodes = Subject.EpisodesBetweenDates(DateTime.Today.AddDays(-1), DateTime.Today.AddDays(3), false, true);
             episodes.Should().HaveCount(1);
         }
     }

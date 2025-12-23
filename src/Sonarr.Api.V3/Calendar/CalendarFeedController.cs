@@ -39,7 +39,7 @@ namespace Sonarr.Api.V3.Calendar
                 parsedTags.AddRange(tags.Split(',').Select(_tagService.GetTag).Select(t => t.Id));
             }
 
-            var episodes = _episodeService.EpisodesBetweenDates(start, end, unmonitored);
+            var episodes = _episodeService.EpisodesBetweenDates(start, end, unmonitored, true);
             var allSeries = _seriesService.GetAllSeries();
             var calendar = new Ical.Net.Calendar
             {

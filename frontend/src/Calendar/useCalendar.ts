@@ -42,6 +42,12 @@ export const FILTER_BUILDER: FilterBuilderProp<CalendarItem>[] = [
     valueType: filterBuilderValueTypes.BOOL,
   },
   {
+    name: 'includeSpecials',
+    label: () => translate('IncludeSpecials'),
+    type: 'equal',
+    valueType: filterBuilderValueTypes.BOOL,
+  },
+  {
     name: 'tags',
     label: () => translate('Tags'),
     type: 'contains',
@@ -85,7 +91,7 @@ const useCalendar = () => {
     return getPopulatableRange(dates[0], dates[dates.length - 1], view);
   }, [dates, view]);
 
-  const { unmonitored, tags } = useMemo(() => {
+  const { includeUnmonitored, includeSpecials, tags } = useMemo(() => {
     const selectedFilters = findSelectedFilters(
       selectedFilterKey,
       FILTERS,
@@ -93,12 +99,17 @@ const useCalendar = () => {
     );
 
     return selectedFilters.reduce<{
-      unmonitored: boolean;
+      includeUnmonitored: boolean;
+      includeSpecials: boolean;
       tags?: number[] | undefined;
     }>(
       (acc, filter) => {
         if (filter.key === 'unmonitored' && Array.isArray(filter.value)) {
-          acc.unmonitored = (filter.value as boolean[]).includes(true);
+          acc.includeUnmonitored = (filter.value as boolean[]).includes(true);
+        }
+
+        if (filter.key === 'includeSpecials' && Array.isArray(filter.value)) {
+          acc.includeSpecials = (filter.value as boolean[]).includes(true);
         }
 
         if (filter.key === 'tags' && filter.type === 'contains') {
@@ -108,7 +119,8 @@ const useCalendar = () => {
         return acc;
       },
       {
-        unmonitored: false,
+        includeUnmonitored: false,
+        includeSpecials: true,
       }
     );
   }, [customFilters, selectedFilterKey]);
@@ -118,7 +130,8 @@ const useCalendar = () => {
     queryParams: {
       start,
       end,
-      unmonitored,
+      includeUnmonitored,
+      includeSpecials,
       tags,
     },
     queryOptions: {

@@ -35,7 +35,7 @@ namespace Sonarr.Api.V3.Calendar
         {
             var startUse = start ?? DateTime.Today;
             var endUse = end ?? DateTime.Today.AddDays(2);
-            var episodes = _episodeService.EpisodesBetweenDates(startUse, endUse, unmonitored);
+            var episodes = _episodeService.EpisodesBetweenDates(startUse, endUse, unmonitored, true);
             var allSeries = _seriesService.GetAllSeries();
             var parsedTags = new List<int>();
             var result = new List<Episode>();

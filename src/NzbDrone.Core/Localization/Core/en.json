@@ -986,6 +986,7 @@
   "IncludeCustomFormatWhenRenamingHelpText": "Include in {Custom Formats} renaming format",
   "IncludeHealthWarnings": "Include Health Warnings",
   "IncludeUnmonitored": "Include Unmonitored",
+  "IncludeSpecials": "Include Specials",
   "Indexer": "Indexer",
   "IndexerDownloadClientHealthCheckMessage": "Indexers with invalid download clients: {indexerNames}.",
   "IndexerDownloadClientHelpText": "Specify which download client is used for grabs from this indexer",
