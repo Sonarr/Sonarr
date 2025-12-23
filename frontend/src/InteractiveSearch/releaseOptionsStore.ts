@@ -52,7 +52,7 @@ const { useOptions, useOption, getOptions, getOption, setOptions, setOption } =
         },
         {
           name: 'history',
-          label: translate('History'),
+          label: () => translate('History'),
           isSortable: true,
           fixedSortDirection: 'ascending',
           isVisible: true,
