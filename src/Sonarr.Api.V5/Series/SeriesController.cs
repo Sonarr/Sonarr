@@ -19,7 +19,6 @@ using NzbDrone.Core.Validation;
 using NzbDrone.Core.Validation.Paths;
 using NzbDrone.SignalR;
 using Sonarr.Http;
-using Sonarr.Http.Extensions;
 using Sonarr.Http.REST;
 using Sonarr.Http.REST.Attributes;
 
@@ -108,10 +107,11 @@ public class SeriesController : RestControllerWithSignalR<SeriesResource, NzbDro
 
     [HttpGet]
     [Produces("application/json")]
-    public List<SeriesResource> AllSeries(int? tvdbId, bool includeSeasonImages = false)
+    public List<SeriesResource> AllSeries(int? tvdbId, [FromQuery] SeriesSubresource[]? includeSubresources = null)
     {
         var seriesStats = _seriesStatisticsService.SeriesStatistics();
         var seriesResources = new List<SeriesResource>();
+        var includeSeasonImages = includeSubresources.Contains(SeriesSubresource.SeasonImages);
 
         if (tvdbId.HasValue)
         {
@@ -138,8 +138,10 @@ public class SeriesController : RestControllerWithSignalR<SeriesResource, NzbDro
 
     [RestGetById]
     [Produces("application/json")]
-    public ActionResult<SeriesResource> GetResourceByIdWithErrorHandler(int id, [FromQuery]bool includeSeasonImages = false)
+    public ActionResult<SeriesResource> GetResourceByIdWithErrorHandler(int id, [FromQuery] SeriesSubresource[]? includeSubresources = null)
     {
+        var includeSeasonImages = includeSubresources.Contains(SeriesSubresource.SeasonImages);
+
         try
         {
             var series = GetSeriesResourceById(id, includeSeasonImages);
@@ -154,17 +156,25 @@ public class SeriesController : RestControllerWithSignalR<SeriesResource, NzbDro
 
     protected override SeriesResource? GetResourceById(int id)
     {
-        var includeSeasonImages = Request?.GetBooleanQueryParameter("includeSeasonImages", false) ?? false;
+        var includeSubresources = Request.Query["includeSubresources"].Select(v =>
+        {
+            if (Enum.TryParse<SeriesSubresource>(v, true, out var enumValue))
+            {
+                return enumValue;
+            }
 
-        // Parse IncludeImages and use it
+            throw new BadRequestException($"The value '{v}' is not valid.");
+        });
+
+        var includeSeasonImages = includeSubresources.Contains(SeriesSubresource.SeasonImages);
+
         return GetSeriesResourceById(id, includeSeasonImages);
     }
 
-    private SeriesResource? GetSeriesResourceById(int id, bool includeSeasonImages = false)
+    private SeriesResource? GetSeriesResourceById(int id, bool includeSeasonImages)
     {
         var series = _seriesService.GetSeries(id);
 
-        // Parse IncludeImages and use it
         return GetSeriesResource(series, includeSeasonImages);
     }
 
