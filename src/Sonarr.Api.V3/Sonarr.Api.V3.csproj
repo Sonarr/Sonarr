@@ -6,7 +6,7 @@
     <PackageReference Include="FluentValidation" Version="9.5.4" />
     <PackageReference Include="Ical.Net" Version="4.3.1" />
     <PackageReference Include="NLog" Version="5.5.1" />
-    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="10.0.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="10.1.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NzbDrone.Core\Sonarr.Core.csproj" />
