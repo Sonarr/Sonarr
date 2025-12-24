@@ -641,7 +641,7 @@
     "EnableProfileHelpText": "Käytä julkaisuprofiilia merkitsemällä tämä.",
     "EnableRss": "Käytä RSS-syötettä",
     "EnableRssHelpText": "Käytetään {appName}in etsiessä julkaisuja ajoitetusti RSS-synkronoinnilla.",
-    "EnableSsl": "Käytä RSS-yhteyttä",
+    "EnableSsl": "SSL-salaus",
     "EnableSslHelpText": "Käyttöönotto vaatii in uudelleenkäynnistyksen järjestelmänvalvojan oikeuksilla.",
     "Enabled": "Käytössä",
     "Ended": "Päättynyt",
