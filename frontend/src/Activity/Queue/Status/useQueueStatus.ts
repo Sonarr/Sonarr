@@ -1,5 +1,4 @@
 import useApiQuery from 'Helpers/Hooks/useApiQuery';
-import { useQueueOption } from '../queueOptionsStore';
 
 export interface QueueStatus {
   totalCount: number;
@@ -12,13 +11,8 @@ export interface QueueStatus {
 }
 
 export default function useQueueStatus() {
-  const includeUnknownSeriesItems = useQueueOption('includeUnknownSeriesItems');
-
   const { data } = useApiQuery<QueueStatus>({
     path: '/queue/status',
-    queryParams: {
-      includeUnknownSeriesItems,
-    },
   });
 
   if (!data) {
@@ -29,26 +23,11 @@ export default function useQueueStatus() {
     };
   }
 
-  const {
-    errors,
-    warnings,
-    unknownErrors,
-    unknownWarnings,
-    count,
-    totalCount,
-  } = data;
-
-  if (includeUnknownSeriesItems) {
-    return {
-      count: totalCount,
-      errors: errors || unknownErrors,
-      warnings: warnings || unknownWarnings,
-    };
-  }
+  const { errors, warnings, unknownErrors, unknownWarnings, totalCount } = data;
 
   return {
-    count,
-    errors,
-    warnings,
+    count: totalCount,
+    errors: errors || unknownErrors,
+    warnings: warnings || unknownWarnings,
   };
 }

@@ -37,7 +37,6 @@ import {
 } from 'Utilities/pagePopulator';
 import translate from 'Utilities/String/translate';
 import QueueFilterModal from './QueueFilterModal';
-import QueueOptions from './QueueOptions';
 import {
   setQueueOption,
   setQueueOptions,
@@ -252,7 +251,6 @@ function QueueContent() {
               pageSize={pageSize}
               sortKey={sortKey}
               sortDirection={sortDirection}
-              optionsComponent={QueueOptions}
               onTableOptionChange={handleTableOptionChange}
               onSelectAllChange={handleSelectAllChange}
               onSortPress={handleSortPress}
@@ -330,7 +328,6 @@ function QueueContent() {
             columns={columns}
             pageSize={pageSize}
             maxPageSize={200}
-            optionsComponent={QueueOptions}
             onTableOptionChange={handleTableOptionChange}
           >
             <PageToolbarButton
