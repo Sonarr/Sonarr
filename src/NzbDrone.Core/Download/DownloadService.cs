@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Common.EnsureThat;
@@ -56,11 +58,64 @@ namespace NzbDrone.Core.Download
 
             var tags = remoteEpisode.Series?.Tags;
 
-            var downloadClient = downloadClientId.HasValue
-                ? _downloadClientProvider.Get(downloadClientId.Value)
-                : _downloadClientProvider.GetDownloadClient(remoteEpisode.Release.DownloadProtocol, remoteEpisode.Release.IndexerId, filterBlockedClients, tags);
+            if (downloadClientId.HasValue)
+            {
+                var specificClient = _downloadClientProvider.Get(downloadClientId.Value);
+                await DownloadReport(remoteEpisode, specificClient);
 
-            await DownloadReport(remoteEpisode, downloadClient);
+                return;
+            }
+
+            var availableClients = _downloadClientProvider.GetDownloadClients(
+                remoteEpisode.Release.DownloadProtocol,
+                remoteEpisode.Release.IndexerId,
+                filterBlockedClients,
+                tags).ToList();
+
+            if (!availableClients.Any())
+            {
+                throw new DownloadClientUnavailableException($"No {remoteEpisode.Release.DownloadProtocol} download client available");
+            }
+
+            var triedClients = new HashSet<int>();
+
+            foreach (var downloadClient in availableClients)
+            {
+                if (triedClients.Contains(downloadClient.Definition.Id))
+                {
+                    continue;
+                }
+
+                try
+                {
+                    _logger.Debug("Attempting download with client: {0}", downloadClient.Definition.Name);
+                    await DownloadReport(remoteEpisode, downloadClient);
+
+                    _downloadClientProvider.ReportSuccessfulDownloadClient(
+                        remoteEpisode.Release.DownloadProtocol,
+                        downloadClient.Definition.Id);
+
+                    return;
+                }
+                catch (DownloadClientException ex)
+                {
+                    _logger.Trace(ex, "Unable to add report to download client: {0}", downloadClient.Definition.Name);
+                    triedClients.Add(downloadClient.Definition.Id);
+                }
+                catch (Exception ex)
+                {
+                    // Rethrow specific exceptions that should not trigger a fallback
+                    if (ex is ReleaseDownloadException)
+                    {
+                        throw;
+                    }
+
+                    _logger.Trace(ex, "Unable to add report to download client: {0}", downloadClient.Definition.Name);
+                    triedClients.Add(downloadClient.Definition.Id);
+                }
+            }
+
+            throw new DownloadClientUnavailableException("All '{0}' download clients failed", remoteEpisode.Release.DownloadProtocol);
         }
 
         private async Task DownloadReport(RemoteEpisode remoteEpisode, IDownloadClient downloadClient)

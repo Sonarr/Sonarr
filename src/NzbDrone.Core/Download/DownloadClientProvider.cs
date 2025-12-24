@@ -12,7 +12,9 @@ namespace NzbDrone.Core.Download
     {
         IDownloadClient GetDownloadClient(DownloadProtocol downloadProtocol, int indexerId = 0, bool filterBlockedClients = false, HashSet<int> tags = null);
         IEnumerable<IDownloadClient> GetDownloadClients(bool filterBlockedClients = false);
+        IEnumerable<IDownloadClient> GetDownloadClients(DownloadProtocol downloadProtocol, int indexerId = 0, bool filterBlockedClients = false, HashSet<int> tags = null);
         IDownloadClient Get(int id);
+        void ReportSuccessfulDownloadClient(DownloadProtocol downloadProtocol, int downloadClientId);
     }
 
     public class DownloadClientProvider : IProvideDownloadClient
@@ -38,67 +40,11 @@ namespace NzbDrone.Core.Download
 
         public IDownloadClient GetDownloadClient(DownloadProtocol downloadProtocol, int indexerId = 0, bool filterBlockedClients = false, HashSet<int> tags = null)
         {
-            // Tags aren't required, but download clients with tags should not be picked unless there is at least one matching tag.
-            // Defaulting to an empty HashSet ensures this is always checked.
-            tags ??= new HashSet<int>();
-
-            var blockedProviders = new HashSet<int>(_downloadClientStatusService.GetBlockedProviders().Select(v => v.ProviderId));
-            var availableProviders = _downloadClientFactory.GetAvailableProviders().Where(v => v.Protocol == downloadProtocol).ToList();
+            var availableProviders = GetFilteredDownloadClients(downloadProtocol, indexerId, filterBlockedClients, tags, forSingleClient: true).ToList();
 
             if (!availableProviders.Any())
             {
                 return null;
-            }
-
-            var matchingTagsClients = availableProviders.Where(i => i.Definition.Tags.Intersect(tags).Any()).ToList();
-
-            availableProviders = matchingTagsClients.Count > 0 ?
-                matchingTagsClients :
-                availableProviders.Where(i => i.Definition.Tags.Empty()).ToList();
-
-            if (!availableProviders.Any())
-            {
-                throw new DownloadClientUnavailableException("No download client was found without tags or a matching series tag. Please check your settings.");
-            }
-
-            if (indexerId > 0)
-            {
-                var indexer = _indexerFactory.Find(indexerId);
-
-                if (indexer is { DownloadClientId: > 0 })
-                {
-                    var client = availableProviders.SingleOrDefault(d => d.Definition.Id == indexer.DownloadClientId);
-
-                    if (client == null)
-                    {
-                        throw new DownloadClientUnavailableException($"Indexer specified download client does not exist for {indexer.Name}");
-                    }
-
-                    if (filterBlockedClients && blockedProviders.Contains(client.Definition.Id))
-                    {
-                        throw new DownloadClientUnavailableException($"Indexer specified download client is not available due to recent failures for {indexer.Name}");
-                    }
-
-                    return client;
-                }
-            }
-
-            if (blockedProviders.Any())
-            {
-                var nonBlockedProviders = availableProviders.Where(v => !blockedProviders.Contains(v.Definition.Id)).ToList();
-
-                if (nonBlockedProviders.Any())
-                {
-                    availableProviders = nonBlockedProviders;
-                }
-                else if (filterBlockedClients)
-                {
-                    throw new DownloadClientUnavailableException($"All download clients for {downloadProtocol} are not available");
-                }
-                else
-                {
-                    _logger.Trace("No non-blocked Download Client available, retrying blocked one.");
-                }
             }
 
             // Use the first priority clients first
@@ -127,9 +73,52 @@ namespace NzbDrone.Core.Download
             return enabledClients;
         }
 
+        public IEnumerable<IDownloadClient> GetDownloadClients(DownloadProtocol downloadProtocol, int indexerId = 0, bool filterBlockedClients = false, HashSet<int> tags = null)
+        {
+            var filteredClients = GetFilteredDownloadClients(downloadProtocol, indexerId, filterBlockedClients, tags, forSingleClient: false).ToList();
+
+            if (filteredClients.Empty())
+            {
+                return Enumerable.Empty<IDownloadClient>();
+            }
+
+            var lastUsedId = _lastUsedDownloadClient.Find(downloadProtocol.ToString());
+
+            var clientsByPriority = filteredClients
+                .GroupBy(v => (v.Definition as DownloadClientDefinition).Priority)
+                .OrderBy(g => g.Key)
+                .ToList();
+
+            var orderedClients = new List<IDownloadClient>();
+
+            foreach (var priorityGroup in clientsByPriority)
+            {
+                var clientsInGroup = priorityGroup.OrderBy(v => v.Definition.Id).ToList();
+                var lastUsedIndex = clientsInGroup.FindIndex(v => v.Definition.Id == lastUsedId);
+
+                if (lastUsedIndex >= 0)
+                {
+                    orderedClients.AddRange(clientsInGroup.Skip(lastUsedIndex + 1));
+                    orderedClients.AddRange(clientsInGroup.Take(lastUsedIndex));
+                    orderedClients.Add(clientsInGroup[lastUsedIndex]);
+                }
+                else
+                {
+                    orderedClients.AddRange(clientsInGroup);
+                }
+            }
+
+            return orderedClients;
+        }
+
         public IDownloadClient Get(int id)
         {
             return _downloadClientFactory.GetAvailableProviders().Single(d => d.Definition.Id == id);
+        }
+
+        public void ReportSuccessfulDownloadClient(DownloadProtocol downloadProtocol, int downloadClientId)
+        {
+            _lastUsedDownloadClient.Set(downloadProtocol.ToString(), downloadClientId);
         }
 
         private IEnumerable<IDownloadClient> FilterBlockedDownloadClients(IEnumerable<IDownloadClient> clients)
@@ -146,6 +135,74 @@ namespace NzbDrone.Core.Download
 
                 yield return client;
             }
+        }
+
+        private IEnumerable<IDownloadClient> GetFilteredDownloadClients(DownloadProtocol downloadProtocol, int indexerId, bool filterBlockedClients, HashSet<int> tags, bool forSingleClient)
+        {
+            // Tags aren't required, but download clients with tags should not be picked unless there is at least one matching tag.
+            // Defaulting to an empty HashSet ensures this is always checked.
+            tags ??= new HashSet<int>();
+
+            var blockedProviders = new HashSet<int>(_downloadClientStatusService.GetBlockedProviders().Select(v => v.ProviderId));
+            var availableProviders = _downloadClientFactory.GetAvailableProviders().Where(v => v.Protocol == downloadProtocol).ToList();
+
+            if (availableProviders.Empty())
+            {
+                return Enumerable.Empty<IDownloadClient>();
+            }
+
+            var matchingTagsClients = availableProviders.Where(i => i.Definition.Tags.Intersect(tags).Any()).ToList();
+
+            availableProviders = matchingTagsClients.Count > 0 ?
+                matchingTagsClients :
+                availableProviders.Where(i => i.Definition.Tags.Empty()).ToList();
+
+            if (availableProviders.Empty())
+            {
+                throw new DownloadClientUnavailableException("No download client was found without tags or a matching series tag. Please check your settings.");
+            }
+
+            if (indexerId > 0)
+            {
+                var indexer = _indexerFactory.Find(indexerId);
+
+                if (indexer is { DownloadClientId: > 0 })
+                {
+                    var client = availableProviders.SingleOrDefault(d => d.Definition.Id == indexer.DownloadClientId);
+
+                    if (client == null)
+                    {
+                        throw new DownloadClientUnavailableException($"Indexer specified download client does not exist for {indexer.Name}");
+                    }
+
+                    if (filterBlockedClients && blockedProviders.Contains(client.Definition.Id))
+                    {
+                        throw new DownloadClientUnavailableException($"Indexer specified download client is not available due to recent failures for {indexer.Name}");
+                    }
+
+                    return [client];
+                }
+            }
+
+            if (blockedProviders.Any())
+            {
+                var nonBlockedProviders = availableProviders.Where(v => !blockedProviders.Contains(v.Definition.Id)).ToList();
+
+                if (nonBlockedProviders.Any())
+                {
+                    availableProviders = nonBlockedProviders;
+                }
+                else if (filterBlockedClients)
+                {
+                    throw new DownloadClientUnavailableException($"All download clients for {downloadProtocol} are not available");
+                }
+                else
+                {
+                    _logger.Trace("No non-blocked Download Client available{0}.", forSingleClient ? ", retrying blocked one" : $" for {downloadProtocol}, returning all clients");
+                }
+            }
+
+            return availableProviders;
         }
     }
 }
