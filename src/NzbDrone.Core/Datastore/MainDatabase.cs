@@ -1,5 +1,8 @@
-﻿using System;
+using System;
 using System.Data;
+using System.Data.Common;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace NzbDrone.Core.Datastore
 {
@@ -23,6 +26,11 @@ namespace NzbDrone.Core.Datastore
             return _database.OpenConnection();
         }
 
+        public Task<DbConnection> OpenConnectionAsync(CancellationToken cancellationToken = default)
+        {
+            return _database.OpenConnectionAsync(cancellationToken);
+        }
+
         public Version Version => _database.Version;
 
         public int Migration => _database.Migration;
@@ -32,6 +40,11 @@ namespace NzbDrone.Core.Datastore
         public void Vacuum()
         {
             _database.Vacuum();
+        }
+
+        public Task VacuumAsync(CancellationToken cancellationToken = default)
+        {
+            return _database.VacuumAsync(cancellationToken);
         }
     }
 }

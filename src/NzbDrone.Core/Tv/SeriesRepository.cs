@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Dapper;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Messaging.Events;
@@ -19,6 +21,19 @@ namespace NzbDrone.Core.Tv
         List<int> AllSeriesTvdbIds();
         Dictionary<int, string> AllSeriesPaths();
         Dictionary<int, List<int>> AllSeriesTags();
+
+        // Async
+        Task<bool> SeriesPathExistsAsync(string path, CancellationToken cancellationToken = default);
+        Task<Series> FindByTitleAsync(string cleanTitle, CancellationToken cancellationToken = default);
+        Task<Series> FindByTitleAsync(string cleanTitle, int year, CancellationToken cancellationToken = default);
+        Task<List<Series>> FindByTitleInexactAsync(string cleanTitle, CancellationToken cancellationToken = default);
+        Task<Series> FindByTvdbIdAsync(int tvdbId, CancellationToken cancellationToken = default);
+        Task<Series> FindByTvRageIdAsync(int tvRageId, CancellationToken cancellationToken = default);
+        Task<Series> FindByImdbIdAsync(string imdbId, CancellationToken cancellationToken = default);
+        Task<Series> FindByPathAsync(string path, CancellationToken cancellationToken = default);
+        Task<List<int>> AllSeriesTvdbIdsAsync(CancellationToken cancellationToken = default);
+        Task<Dictionary<int, string>> AllSeriesPathsAsync(CancellationToken cancellationToken = default);
+        Task<Dictionary<int, List<int>>> AllSeriesTagsAsync(CancellationToken cancellationToken = default);
     }
 
     public class SeriesRepository : BasicRepository<Series>, ISeriesRepository
@@ -124,6 +139,92 @@ namespace NzbDrone.Core.Tv
             }
 
             throw new MultipleSeriesFoundException(series, "Expected one series, but found {0}. Matching series: {1}", series.Count, string.Join(", ", series));
+        }
+
+        // Async
+
+        public async Task<bool> SeriesPathExistsAsync(string path, CancellationToken cancellationToken = default)
+        {
+            var results = await QueryAsync(c => c.Path == path, cancellationToken).ConfigureAwait(false);
+            return results.Any();
+        }
+
+        public async Task<Series> FindByTitleAsync(string cleanTitle, CancellationToken cancellationToken = default)
+        {
+            cleanTitle = cleanTitle.ToLowerInvariant();
+
+            var series = await QueryAsync(s => s.CleanTitle == cleanTitle, cancellationToken).ConfigureAwait(false);
+
+            return ReturnSingleSeriesOrThrow(series);
+        }
+
+        public async Task<Series> FindByTitleAsync(string cleanTitle, int year, CancellationToken cancellationToken = default)
+        {
+            cleanTitle = cleanTitle.ToLowerInvariant();
+
+            var series = await QueryAsync(s => s.CleanTitle == cleanTitle && s.Year == year, cancellationToken).ConfigureAwait(false);
+
+            return ReturnSingleSeriesOrThrow(series);
+        }
+
+        public async Task<List<Series>> FindByTitleInexactAsync(string cleanTitle, CancellationToken cancellationToken = default)
+        {
+            var builder = Builder().Where($"instr(@cleanTitle, \"Series\".\"CleanTitle\")", new { cleanTitle = cleanTitle });
+
+            if (_database.DatabaseType == DatabaseType.PostgreSQL)
+            {
+                builder = Builder().Where($"(strpos(@cleanTitle, \"Series\".\"CleanTitle\") > 0)", new { cleanTitle = cleanTitle });
+            }
+
+            return await QueryAsync(builder, cancellationToken).ConfigureAwait(false);
+        }
+
+        public async Task<Series> FindByTvdbIdAsync(int tvdbId, CancellationToken cancellationToken = default)
+        {
+            var results = await QueryAsync(s => s.TvdbId == tvdbId, cancellationToken).ConfigureAwait(false);
+            return results.SingleOrDefault();
+        }
+
+        public async Task<Series> FindByTvRageIdAsync(int tvRageId, CancellationToken cancellationToken = default)
+        {
+            var results = await QueryAsync(s => s.TvRageId == tvRageId, cancellationToken).ConfigureAwait(false);
+            return results.SingleOrDefault();
+        }
+
+        public async Task<Series> FindByImdbIdAsync(string imdbId, CancellationToken cancellationToken = default)
+        {
+            var results = await QueryAsync(s => s.ImdbId == imdbId, cancellationToken).ConfigureAwait(false);
+            return results.SingleOrDefault();
+        }
+
+        public async Task<Series> FindByPathAsync(string path, CancellationToken cancellationToken = default)
+        {
+            var results = await QueryAsync(s => s.Path == path, cancellationToken).ConfigureAwait(false);
+            return results.FirstOrDefault();
+        }
+
+        public async Task<List<int>> AllSeriesTvdbIdsAsync(CancellationToken cancellationToken = default)
+        {
+            using var conn = await _database.OpenConnectionAsync(cancellationToken).ConfigureAwait(false);
+            var cmd = new CommandDefinition("SELECT \"TvdbId\" FROM \"Series\"", cancellationToken: cancellationToken);
+            var results = await conn.QueryAsync<int>(cmd).ConfigureAwait(false);
+            return results.ToList();
+        }
+
+        public async Task<Dictionary<int, string>> AllSeriesPathsAsync(CancellationToken cancellationToken = default)
+        {
+            using var conn = await _database.OpenConnectionAsync(cancellationToken).ConfigureAwait(false);
+            var cmd = new CommandDefinition("SELECT \"Id\" AS Key, \"Path\" AS Value FROM \"Series\"", cancellationToken: cancellationToken);
+            var results = await conn.QueryAsync<KeyValuePair<int, string>>(cmd).ConfigureAwait(false);
+            return results.ToDictionary(x => x.Key, x => x.Value);
+        }
+
+        public async Task<Dictionary<int, List<int>>> AllSeriesTagsAsync(CancellationToken cancellationToken = default)
+        {
+            using var conn = await _database.OpenConnectionAsync(cancellationToken).ConfigureAwait(false);
+            var cmd = new CommandDefinition("SELECT \"Id\" AS Key, \"Tags\" AS Value FROM \"Series\" WHERE \"Tags\" IS NOT NULL", cancellationToken: cancellationToken);
+            var results = await conn.QueryAsync<KeyValuePair<int, List<int>>>(cmd).ConfigureAwait(false);
+            return results.ToDictionary(x => x.Key, x => x.Value);
         }
     }
 }

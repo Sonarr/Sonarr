@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
@@ -42,30 +43,30 @@ namespace NzbDrone.Core.Test.Blocklisting
         }
 
         [Test]
-        public void should_be_able_to_write_to_database()
+        public async Task should_be_able_to_write_to_database()
         {
-            Subject.Insert(_blocklist);
-            Subject.All().Should().HaveCount(1);
+            await Subject.InsertAsync(_blocklist);
+            (await Subject.AllAsync()).Should().HaveCount(1);
         }
 
         [Test]
-        public void should_should_have_episode_ids()
+        public async Task should_should_have_episode_ids()
         {
-            Subject.Insert(_blocklist);
+            await Subject.InsertAsync(_blocklist);
 
-            Subject.All().First().EpisodeIds.Should().Contain(_blocklist.EpisodeIds);
+            (await Subject.AllAsync()).First().EpisodeIds.Should().Contain(_blocklist.EpisodeIds);
         }
 
         [Test]
-        public void should_check_for_blocklisted_title_case_insensative()
+        public async Task should_check_for_blocklisted_title_case_insensative()
         {
-            Subject.Insert(_blocklist);
+            await Subject.InsertAsync(_blocklist);
 
-            Subject.BlocklistedByTitle(_blocklist.SeriesId, _blocklist.SourceTitle.ToUpperInvariant()).Should().HaveCount(1);
+            (await Subject.BlocklistedByTitleAsync(_blocklist.SeriesId, _blocklist.SourceTitle.ToUpperInvariant())).Should().HaveCount(1);
         }
 
         [Test]
-        public void should_delete_blocklists_by_seriesId()
+        public async Task should_delete_blocklists_by_seriesId()
         {
             var blocklistItems = Builder<Blocklist>.CreateListOfSize(5)
                 .TheFirst(1)
@@ -80,10 +81,10 @@ namespace NzbDrone.Core.Test.Blocklisting
 
             Db.InsertMany(blocklistItems);
 
-            Subject.DeleteForSeriesIds(new List<int> { _series1.Id });
+            await Subject.DeleteForSeriesIdsAsync(new List<int> { _series1.Id });
 
-            var removedSeriesBlocklists = Subject.BlocklistedBySeries(_series1.Id);
-            var nonRemovedSeriesBlocklists = Subject.BlocklistedBySeries(_series2.Id);
+            var removedSeriesBlocklists = await Subject.BlocklistedBySeriesAsync(_series1.Id);
+            var nonRemovedSeriesBlocklists = await Subject.BlocklistedBySeriesAsync(_series2.Id);
 
             removedSeriesBlocklists.Should().HaveCount(0);
             nonRemovedSeriesBlocklists.Should().HaveCount(1);

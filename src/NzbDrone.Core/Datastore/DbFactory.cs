@@ -87,23 +87,42 @@ namespace NzbDrone.Core.Datastore
                     }
             }
 
-            var db = new Database(migrationContext.MigrationType.ToString(), () =>
-            {
-                DbConnection conn;
-
-                if (connectionInfo.DatabaseType == DatabaseType.SQLite)
+            var db = new Database(
+                migrationContext.MigrationType.ToString(),
+                () =>
                 {
-                    conn = SQLiteFactory.Instance.CreateConnection();
-                    conn.ConnectionString = connectionInfo.ConnectionString;
-                }
-                else
-                {
-                    conn = new NpgsqlConnection(connectionInfo.ConnectionString);
-                }
+                    DbConnection conn;
 
-                conn.Open();
-                return conn;
-            });
+                    if (connectionInfo.DatabaseType == DatabaseType.SQLite)
+                    {
+                        conn = SQLiteFactory.Instance.CreateConnection();
+                        conn.ConnectionString = connectionInfo.ConnectionString;
+                    }
+                    else
+                    {
+                        conn = new NpgsqlConnection(connectionInfo.ConnectionString);
+                    }
+
+                    conn.Open();
+                    return conn;
+                },
+                async (cancellationToken) =>
+                {
+                    DbConnection conn;
+
+                    if (connectionInfo.DatabaseType == DatabaseType.SQLite)
+                    {
+                        conn = SQLiteFactory.Instance.CreateConnection();
+                        conn.ConnectionString = connectionInfo.ConnectionString;
+                    }
+                    else
+                    {
+                        conn = new NpgsqlConnection(connectionInfo.ConnectionString);
+                    }
+
+                    await conn.OpenAsync(cancellationToken).ConfigureAwait(false);
+                    return conn;
+                });
 
             return db;
         }

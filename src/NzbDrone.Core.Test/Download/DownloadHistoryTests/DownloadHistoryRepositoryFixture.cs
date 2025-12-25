@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
@@ -28,7 +29,7 @@ namespace NzbDrone.Core.Test.Download.DownloadHistoryTests
         }
 
         [Test]
-        public void should_delete_history_items_by_seriesId()
+        public async Task should_delete_history_items_by_seriesId()
         {
             var items = Builder<DownloadHistory>.CreateListOfSize(5)
                 .TheFirst(1)
@@ -41,10 +42,11 @@ namespace NzbDrone.Core.Test.Download.DownloadHistoryTests
 
             Db.InsertMany(items);
 
-            Subject.DeleteBySeriesIds(new List<int> { _series1.Id });
+            await Subject.DeleteBySeriesIdsAsync(new List<int> { _series1.Id });
 
-            var removedItems = Subject.All().Where(h => h.SeriesId == _series1.Id);
-            var nonRemovedItems = Subject.All().Where(h => h.SeriesId == _series2.Id);
+            var allItems = await Subject.AllAsync();
+            var removedItems = allItems.Where(h => h.SeriesId == _series1.Id);
+            var nonRemovedItems = allItems.Where(h => h.SeriesId == _series2.Id);
 
             removedItems.Should().HaveCount(0);
             nonRemovedItems.Should().HaveCount(1);

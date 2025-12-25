@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Threading.Tasks;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
@@ -14,7 +15,7 @@ namespace NzbDrone.Core.Test.TvTests.SeriesRepositoryTests
     public class SeriesRepositoryFixture : DbTest<SeriesRepository, Series>
     {
         [Test]
-        public void should_lazyload_quality_profile()
+        public async Task should_lazyload_quality_profile()
         {
             var profile = new QualityProfile
                 {
@@ -24,17 +25,17 @@ namespace NzbDrone.Core.Test.TvTests.SeriesRepositoryTests
                     Name = "TestProfile"
                 };
 
-            Mocker.Resolve<QualityProfileRepository>().Insert(profile);
+            await Mocker.Resolve<QualityProfileRepository>().InsertAsync(profile);
 
             var series = Builder<Series>.CreateNew().BuildNew();
             series.QualityProfileId = profile.Id;
 
-            Subject.Insert(series);
+            await Subject.InsertAsync(series);
 
             StoredModel.QualityProfile.Should().NotBeNull();
         }
 
-        private void GivenSeries()
+        private async Task GivenSeries()
         {
             var series = Builder<Series>.CreateListOfSize(2)
                 .All()
@@ -45,27 +46,27 @@ namespace NzbDrone.Core.Test.TvTests.SeriesRepositoryTests
                 .With(x => x.CleanTitle = "crownextralong")
                 .BuildList();
 
-            Subject.InsertMany(series);
+            await Subject.InsertManyAsync(series);
         }
 
         [TestCase("crow")]
         [TestCase("rownc")]
-        public void should_find_no_inexact_matches(string cleanTitle)
+        public async Task should_find_no_inexact_matches(string cleanTitle)
         {
-            GivenSeries();
+            await GivenSeries();
 
-            var found = Subject.FindByTitleInexact(cleanTitle);
+            var found = await Subject.FindByTitleInexactAsync(cleanTitle);
             found.Should().BeEmpty();
         }
 
         [TestCase("crowna")]
         [TestCase("acrown")]
         [TestCase("acrowna")]
-        public void should_find_one_inexact_match(string cleanTitle)
+        public async Task should_find_one_inexact_match(string cleanTitle)
         {
-            GivenSeries();
+            await GivenSeries();
 
-            var found = Subject.FindByTitleInexact(cleanTitle);
+            var found = await Subject.FindByTitleInexactAsync(cleanTitle);
             found.Should().HaveCount(1);
             found.First().CleanTitle.Should().Be("crown");
         }
@@ -74,11 +75,11 @@ namespace NzbDrone.Core.Test.TvTests.SeriesRepositoryTests
         [TestCase("crownextralonga")]
         [TestCase("acrownextralong")]
         [TestCase("acrownextralonga")]
-        public void should_find_two_inexact_matches(string cleanTitle)
+        public async Task should_find_two_inexact_matches(string cleanTitle)
         {
-            GivenSeries();
+            await GivenSeries();
 
-            var found = Subject.FindByTitleInexact(cleanTitle);
+            var found = await Subject.FindByTitleInexactAsync(cleanTitle);
             found.Should().HaveCount(2);
             found.Select(x => x.CleanTitle).Should().BeEquivalentTo(new[] { "crown", "crownextralong" });
         }

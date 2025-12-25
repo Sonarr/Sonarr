@@ -1,4 +1,5 @@
-﻿using FizzWare.NBuilder;
+﻿using System.Threading.Tasks;
+using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Indexers;
@@ -9,7 +10,7 @@ namespace NzbDrone.Core.Test.Indexers
     [TestFixture]
     public class IndexerRepositoryFixture : DbTest<IndexerRepository, IndexerDefinition>
     {
-        private void GivenIndexers()
+        private async Task GivenIndexers()
         {
             var indexers = Builder<IndexerDefinition>.CreateListOfSize(2)
                 .All()
@@ -20,24 +21,24 @@ namespace NzbDrone.Core.Test.Indexers
                 .With(x => x.Name = "My Second Indexer (Prowlarr)")
                 .BuildList();
 
-            Subject.InsertMany(indexers);
+            await Subject.InsertManyAsync(indexers);
         }
 
         [Test]
-        public void should_finds_with_name()
+        public async Task should_finds_with_name()
         {
-            GivenIndexers();
-            var found = Subject.FindByName("MyIndexer (Prowlarr)");
+            await GivenIndexers();
+            var found = await Subject.FindByNameAsync("MyIndexer (Prowlarr)");
             found.Should().NotBeNull();
             found.Name.Should().Be("MyIndexer (Prowlarr)");
             found.Id.Should().Be(1);
         }
 
         [Test]
-        public void should_not_find_with_incorrect_case_name()
+        public async Task should_not_find_with_incorrect_case_name()
         {
-            GivenIndexers();
-            var found = Subject.FindByName("myindexer (prowlarr)");
+            await GivenIndexers();
+            var found = await Subject.FindByNameAsync("myindexer (prowlarr)");
             found.Should().BeNull();
         }
     }

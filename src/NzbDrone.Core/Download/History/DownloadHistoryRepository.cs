@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Messaging.Events;
 
@@ -9,6 +11,10 @@ namespace NzbDrone.Core.Download.History
     {
         List<DownloadHistory> FindByDownloadId(string downloadId);
         void DeleteBySeriesIds(List<int> seriesIds);
+
+        // Async methods
+        Task<List<DownloadHistory>> FindByDownloadIdAsync(string downloadId, CancellationToken cancellationToken = default);
+        Task DeleteBySeriesIdsAsync(List<int> seriesIds, CancellationToken cancellationToken = default);
     }
 
     public class DownloadHistoryRepository : BasicRepository<DownloadHistory>, IDownloadHistoryRepository
@@ -26,6 +32,18 @@ namespace NzbDrone.Core.Download.History
         public void DeleteBySeriesIds(List<int> seriesIds)
         {
             Delete(r => seriesIds.Contains(r.SeriesId));
+        }
+
+        // Async methods
+        public async Task<List<DownloadHistory>> FindByDownloadIdAsync(string downloadId, CancellationToken cancellationToken = default)
+        {
+            var downloadHistories = await QueryAsync(h => h.DownloadId == downloadId, cancellationToken).ConfigureAwait(false);
+            return downloadHistories.OrderByDescending(h => h.Date).ToList();
+        }
+
+        public async Task DeleteBySeriesIdsAsync(List<int> seriesIds, CancellationToken cancellationToken = default)
+        {
+            await DeleteAsync(r => seriesIds.Contains(r.SeriesId), cancellationToken).ConfigureAwait(false);
         }
     }
 }

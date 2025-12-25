@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
@@ -30,7 +31,7 @@ namespace NzbDrone.Core.Test.HistoryTests
         }
 
         [Test]
-        public void should_read_write_dictionary()
+        public async Task should_read_write_dictionary()
         {
             var history = Builder<EpisodeHistory>.CreateNew()
                 .With(c => c.Languages = new List<Language> { Language.English })
@@ -40,13 +41,15 @@ namespace NzbDrone.Core.Test.HistoryTests
             history.Data.Add("key1", "value1");
             history.Data.Add("key2", "value2");
 
-            Subject.Insert(history);
+            await Subject.InsertAsync(history);
 
-            StoredModel.Data.Should().HaveCount(2);
+            var enumerable = await Subject.AllAsync();
+            var storedModel = enumerable.Single();
+            storedModel.Data.Should().HaveCount(2);
         }
 
         [Test]
-        public void should_get_download_history()
+        public async Task should_get_download_history()
         {
             var historyBluray = Builder<EpisodeHistory>.CreateNew()
                 .With(c => c.Languages = new List<Language> { Language.English })
@@ -62,16 +65,16 @@ namespace NzbDrone.Core.Test.HistoryTests
                 .With(c => c.EventType = EpisodeHistoryEventType.Grabbed)
              .BuildNew();
 
-            Subject.Insert(historyBluray);
-            Subject.Insert(historyDvd);
+            await Subject.InsertAsync(historyBluray);
+            await Subject.InsertAsync(historyDvd);
 
-            var downloadHistory = Subject.FindDownloadHistory(12, new QualityModel(Quality.Bluray1080p));
+            var downloadHistory = await Subject.FindDownloadHistoryAsync(12, new QualityModel(Quality.Bluray1080p));
 
             downloadHistory.Should().HaveCount(1);
         }
 
         [Test]
-        public void should_delete_history_items_by_seriesId()
+        public async Task should_delete_history_items_by_seriesId()
         {
             var items = Builder<EpisodeHistory>.CreateListOfSize(5)
                 .TheFirst(1)
@@ -87,9 +90,9 @@ namespace NzbDrone.Core.Test.HistoryTests
 
             Db.InsertMany(items);
 
-            Subject.DeleteForSeries(new List<int> { _series1.Id });
+            await Subject.DeleteForSeriesAsync(new List<int> { _series1.Id });
 
-            var dbItems = Subject.All();
+            var dbItems = await Subject.AllAsync();
             var removedItems = dbItems.Where(h => h.SeriesId == _series1.Id);
             var nonRemovedItems = dbItems.Where(h => h.SeriesId == _series2.Id);
 

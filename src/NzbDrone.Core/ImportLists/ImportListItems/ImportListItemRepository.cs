@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Parser.Model;
@@ -8,6 +10,9 @@ namespace NzbDrone.Core.ImportLists.ImportListItems
     public interface IImportListItemRepository : IBasicRepository<ImportListItemInfo>
     {
         List<ImportListItemInfo> GetAllForLists(List<int> listIds);
+
+        // Async methods
+        Task<List<ImportListItemInfo>> GetAllForListsAsync(List<int> listIds, CancellationToken cancellationToken = default);
     }
 
     public class ImportListItemRepository : BasicRepository<ImportListItemInfo>, IImportListItemRepository
@@ -20,6 +25,11 @@ namespace NzbDrone.Core.ImportLists.ImportListItems
         public List<ImportListItemInfo> GetAllForLists(List<int> listIds)
         {
             return Query(x => listIds.Contains(x.ImportListId));
+        }
+
+        public async Task<List<ImportListItemInfo>> GetAllForListsAsync(List<int> listIds, CancellationToken cancellationToken = default)
+        {
+            return await QueryAsync(x => listIds.Contains(x.ImportListId), cancellationToken).ConfigureAwait(false);
         }
     }
 }

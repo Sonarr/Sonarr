@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
@@ -29,7 +30,7 @@ namespace NzbDrone.Core.Test.MediaFiles
         }
 
         [Test]
-        public void get_files_by_series()
+        public async Task get_files_by_series()
         {
             var files = Builder<EpisodeFile>.CreateListOfSize(10)
                 .All()
@@ -42,14 +43,14 @@ namespace NzbDrone.Core.Test.MediaFiles
 
             Db.InsertMany(files);
 
-            var seriesFiles = Subject.GetFilesBySeries(12);
+            var seriesFiles = await Subject.GetFilesBySeriesAsync(12);
 
             seriesFiles.Should().HaveCount(4);
             seriesFiles.Should().OnlyContain(c => c.SeriesId == 12);
         }
 
         [Test]
-        public void should_delete_files_by_seriesId()
+        public async Task should_delete_files_by_seriesId()
         {
             var items = Builder<EpisodeFile>.CreateListOfSize(5)
                 .TheFirst(1)
@@ -64,10 +65,10 @@ namespace NzbDrone.Core.Test.MediaFiles
 
             Db.InsertMany(items);
 
-            Subject.DeleteForSeries(new List<int> { _series1.Id });
+            await Subject.DeleteForSeriesAsync(new List<int> { _series1.Id });
 
-            var removedItems = Subject.GetFilesBySeries(_series1.Id);
-            var nonRemovedItems = Subject.GetFilesBySeries(_series2.Id);
+            var removedItems = await Subject.GetFilesBySeriesAsync(_series1.Id);
+            var nonRemovedItems = await Subject.GetFilesBySeriesAsync(_series2.Id);
 
             removedItems.Should().HaveCount(0);
             nonRemovedItems.Should().HaveCount(1);

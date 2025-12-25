@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Dapper;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.MediaFiles;
@@ -12,6 +14,10 @@ namespace NzbDrone.Core.SeriesStats
     {
         List<SeasonStatistics> SeriesStatistics();
         List<SeasonStatistics> SeriesStatistics(int seriesId);
+
+        // Async methods
+        Task<List<SeasonStatistics>> SeriesStatisticsAsync(CancellationToken cancellationToken = default);
+        Task<List<SeasonStatistics>> SeriesStatisticsAsync(int seriesId, CancellationToken cancellationToken = default);
     }
 
     public class SeriesStatisticsRepository : ISeriesStatisticsRepository
@@ -107,6 +113,37 @@ namespace NzbDrone.Core.SeriesStats
                             string_agg(""ReleaseGroup"", '|') AS ReleaseGroupsString")
                 .GroupBy<EpisodeFile>(x => x.SeriesId)
                 .GroupBy<EpisodeFile>(x => x.SeasonNumber);
+        }
+
+        // Async methods
+
+        public async Task<List<SeasonStatistics>> SeriesStatisticsAsync(CancellationToken cancellationToken = default)
+        {
+            var time = DateTime.UtcNow;
+            var episodesResult = await QueryAsync(EpisodesBuilder(time), _selectEpisodesTemplate, cancellationToken).ConfigureAwait(false);
+            var filesResult = await QueryAsync(EpisodeFilesBuilder(), _selectEpisodeFilesTemplate, cancellationToken).ConfigureAwait(false);
+
+            return MapResults(episodesResult, filesResult);
+        }
+
+        public async Task<List<SeasonStatistics>> SeriesStatisticsAsync(int seriesId, CancellationToken cancellationToken = default)
+        {
+            var time = DateTime.UtcNow;
+
+            var episodesResult = await QueryAsync(EpisodesBuilder(time).Where<Episode>(x => x.SeriesId == seriesId), _selectEpisodesTemplate, cancellationToken).ConfigureAwait(false);
+            var filesResult = await QueryAsync(EpisodeFilesBuilder().Where<EpisodeFile>(x => x.SeriesId == seriesId), _selectEpisodeFilesTemplate, cancellationToken).ConfigureAwait(false);
+
+            return MapResults(episodesResult, filesResult);
+        }
+
+        private async Task<List<SeasonStatistics>> QueryAsync(SqlBuilder builder, string template, CancellationToken cancellationToken = default)
+        {
+            var sql = builder.AddTemplate(template).LogQuery();
+
+            using var conn = await _database.OpenConnectionAsync(cancellationToken).ConfigureAwait(false);
+            var cmd = new CommandDefinition(sql.RawSql, sql.Parameters, cancellationToken: cancellationToken);
+            var results = await conn.QueryAsync<SeasonStatistics>(cmd).ConfigureAwait(false);
+            return results.ToList();
         }
     }
 }
