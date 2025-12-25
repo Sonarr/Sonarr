@@ -17,7 +17,7 @@ import { SortDirection } from 'Helpers/Props/sortDirections';
 import sortByProp from 'Utilities/Array/sortByProp';
 import clientSideFilterAndSort from 'Utilities/Filter/clientSideFilterAndSort';
 import translate from 'Utilities/String/translate';
-import Series from './Series';
+import Series, { Statistics } from './Series';
 import { useSeriesOptions } from './seriesOptionsStore';
 
 // Date filter predicate helper
@@ -315,6 +315,37 @@ const FILTER_PREDICATES = {
 
     return predicate(seasonsMonitoredStatus, filterValue);
   },
+
+  episodesMonitoredStatus: (
+    item: Series,
+    filterValue: string,
+    type: FilterType
+  ) => {
+    const predicate = getFilterTypePredicate(type);
+    const { seasons, statistics = {} as Statistics } = item;
+    const { monitoredEpisodeCount = 0, totalEpisodeCount = 0 } = statistics;
+    const specials = seasons?.find((s) => s.seasonNumber === 0);
+
+    // The monitored count and total count include specials, but those areskipped
+    // for seasons monitored status so we should to exclude them here too.
+
+    const monitoredCount =
+      monitoredEpisodeCount -
+      (specials?.statistics?.monitoredEpisodeCount ?? 0);
+
+    const totalCount =
+      totalEpisodeCount - (specials?.statistics?.totalEpisodeCount ?? 0);
+
+    let episodesMonitoredStatus = 'partial';
+
+    if (monitoredCount === 0) {
+      episodesMonitoredStatus = 'none';
+    } else if (totalCount - monitoredCount === 0) {
+      episodesMonitoredStatus = 'all';
+    }
+
+    return predicate(episodesMonitoredStatus, filterValue);
+  },
 } as const;
 
 export const FILTER_BUILDER: FilterBuilderProp<Series>[] = [
@@ -498,7 +529,13 @@ export const FILTER_BUILDER: FilterBuilderProp<Series>[] = [
     name: 'seasonsMonitoredStatus',
     label: () => translate('SeasonsMonitoredStatus'),
     type: filterBuilderTypes.EXACT,
-    valueType: filterBuilderValueTypes.SEASONS_MONITORED_STATUS,
+    valueType: filterBuilderValueTypes.MONITORED_STATUS,
+  },
+  {
+    name: 'episodesMonitoredStatus',
+    label: () => translate('EpisodesMonitoredStatus'),
+    type: filterBuilderTypes.EXACT,
+    valueType: filterBuilderValueTypes.MONITORED_STATUS,
   },
   {
     name: 'year',

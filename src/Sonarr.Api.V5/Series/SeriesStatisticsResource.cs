@@ -8,6 +8,7 @@ public class SeriesStatisticsResource
     public int EpisodeFileCount { get; set; }
     public int EpisodeCount { get; set; }
     public int TotalEpisodeCount { get; set; }
+    public int MonitoredEpisodeCount { get; set; }
     public long SizeOnDisk { get; set; }
     public List<string>? ReleaseGroups { get; set; }
 
@@ -35,6 +36,7 @@ public static class SeriesStatisticsResourceMapper
             EpisodeFileCount = model.EpisodeFileCount,
             EpisodeCount = model.EpisodeCount,
             TotalEpisodeCount = model.TotalEpisodeCount,
+            MonitoredEpisodeCount = model.MonitoredEpisodeCount,
             SizeOnDisk = model.SizeOnDisk,
             ReleaseGroups = model.ReleaseGroups
         };

@@ -36,6 +36,7 @@ export interface Statistics {
   releaseGroups: string[];
   sizeOnDisk: number;
   totalEpisodeCount: number;
+  monitoredEpisodeCount: number;
   lastAired?: string;
 }
 
