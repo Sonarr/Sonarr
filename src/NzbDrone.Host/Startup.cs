@@ -281,7 +281,8 @@ namespace NzbDrone.Host
                 Console.CancelKeyPress += (sender, eventArgs) => NLog.LogManager.Configuration = null;
             }
 
-            eventAggregator.PublishEvent(new ApplicationStartingEvent());
+            // TODO: Antipattern we need async here (startup main)
+            eventAggregator.PublishEventAsync(new ApplicationStartingEvent()).GetAwaiter().GetResult();
 
             if (OsInfo.IsWindows && runtimeInfo.IsAdmin)
             {

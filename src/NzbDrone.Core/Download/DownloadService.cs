@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Common.EnsureThat;
@@ -19,7 +20,7 @@ namespace NzbDrone.Core.Download
 {
     public interface IDownloadService
     {
-        Task DownloadReport(RemoteEpisode remoteEpisode, int? downloadClientId);
+        Task DownloadReport(RemoteEpisode remoteEpisode, int? downloadClientId, CancellationToken cancellationToken = default);
     }
 
     public class DownloadService : IDownloadService
@@ -52,7 +53,7 @@ namespace NzbDrone.Core.Download
             _logger = logger;
         }
 
-        public async Task DownloadReport(RemoteEpisode remoteEpisode, int? downloadClientId)
+        public async Task DownloadReport(RemoteEpisode remoteEpisode, int? downloadClientId, CancellationToken cancellationToken = default)
         {
             var filterBlockedClients = remoteEpisode.Release.PendingReleaseReason == PendingReleaseReason.DownloadClientUnavailable;
 
@@ -61,7 +62,7 @@ namespace NzbDrone.Core.Download
             if (downloadClientId.HasValue)
             {
                 var specificClient = _downloadClientProvider.Get(downloadClientId.Value);
-                await DownloadReport(remoteEpisode, specificClient);
+                await DownloadReportAsync(remoteEpisode, specificClient, cancellationToken).ConfigureAwait(false);
 
                 return;
             }
@@ -89,7 +90,7 @@ namespace NzbDrone.Core.Download
                 try
                 {
                     _logger.Debug("Attempting download with client: {0}", downloadClient.Definition.Name);
-                    await DownloadReport(remoteEpisode, downloadClient);
+                    await DownloadReportAsync(remoteEpisode, downloadClient, cancellationToken);
 
                     _downloadClientProvider.ReportSuccessfulDownloadClient(
                         remoteEpisode.Release.DownloadProtocol,
@@ -118,7 +119,7 @@ namespace NzbDrone.Core.Download
             throw new DownloadClientUnavailableException("All '{0}' download clients failed", remoteEpisode.Release.DownloadProtocol);
         }
 
-        private async Task DownloadReport(RemoteEpisode remoteEpisode, IDownloadClient downloadClient)
+        private async Task DownloadReportAsync(RemoteEpisode remoteEpisode, IDownloadClient downloadClient, CancellationToken cancellationToken = default)
         {
             Ensure.That(remoteEpisode.Series, () => remoteEpisode.Series).IsNotNull();
             Ensure.That(remoteEpisode.Episodes, () => remoteEpisode.Episodes).HasItems();
@@ -194,7 +195,7 @@ namespace NzbDrone.Core.Download
             }
 
             _logger.ProgressInfo("Report sent to {0}. Indexer {1}. {2}", downloadClient.Definition.Name, remoteEpisode.Release.Indexer, downloadTitle);
-            _eventAggregator.PublishEvent(episodeGrabbedEvent);
+            await _eventAggregator.PublishEventAsync(episodeGrabbedEvent, cancellationToken).ConfigureAwait(false);
         }
     }
 }

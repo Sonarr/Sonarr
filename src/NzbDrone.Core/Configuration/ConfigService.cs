@@ -72,7 +72,7 @@ namespace NzbDrone.Core.Configuration
                 }
             }
 
-            _eventAggregator.PublishEvent(new ConfigSavedEvent());
+            _eventAggregator.PublishEventAsync(new ConfigSavedEvent()).GetAwaiter().GetResult();
         }
 
         public bool IsDefined(string key)

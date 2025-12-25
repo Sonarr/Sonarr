@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Blocklisting;
@@ -26,7 +28,7 @@ namespace Sonarr.Api.V3.Queue
 {
     [V3ApiController]
     public class QueueController : RestControllerWithSignalR<QueueResource, NzbDrone.Core.Queue.Queue>,
-                               IHandle<ObsoleteQueueUpdatedEvent>, IHandle<PendingReleasesUpdatedEvent>
+                               IHandleBackgroundAsync<ObsoleteQueueUpdatedEvent>, IHandleBackgroundAsync<PendingReleasesUpdatedEvent>
     {
         private readonly IObsoleteQueueService _queueService;
         private readonly IPendingReleaseService _pendingReleaseService;
@@ -395,15 +397,17 @@ namespace Sonarr.Api.V3.Queue
         }
 
         [NonAction]
-        public void Handle(ObsoleteQueueUpdatedEvent message)
+        public async Task HandleAsync(ObsoleteQueueUpdatedEvent message, CancellationToken cancellationToken)
         {
-            BroadcastResourceChange(ModelAction.Sync);
+            // TODO: BroadcastResourceChange is synchronous, wrapping in Task.Run for background execution
+            await Task.Run(() => BroadcastResourceChange(ModelAction.Sync), cancellationToken).ConfigureAwait(false);
         }
 
         [NonAction]
-        public void Handle(PendingReleasesUpdatedEvent message)
+        public async Task HandleAsync(PendingReleasesUpdatedEvent message, CancellationToken cancellationToken)
         {
-            BroadcastResourceChange(ModelAction.Sync);
+            // TODO: BroadcastResourceChange is synchronous, wrapping in Task.Run for background execution
+            await Task.Run(() => BroadcastResourceChange(ModelAction.Sync), cancellationToken).ConfigureAwait(false);
         }
     }
 }

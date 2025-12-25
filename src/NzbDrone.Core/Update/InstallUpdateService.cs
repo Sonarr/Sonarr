@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Disk;
@@ -20,7 +21,7 @@ using NzbDrone.Core.Update.Commands;
 
 namespace NzbDrone.Core.Update
 {
-    public class InstallUpdateService : IExecute<ApplicationUpdateCommand>, IExecute<ApplicationUpdateCheckCommand>, IHandle<ApplicationStartingEvent>
+    public class InstallUpdateService : IExecute<ApplicationUpdateCommand>, IExecute<ApplicationUpdateCheckCommand>, IHandleAsync<ApplicationStartingEvent>
     {
         private readonly ICheckUpdateService _checkUpdateService;
         private readonly Logger _logger;
@@ -56,11 +57,6 @@ namespace NzbDrone.Core.Update
                                     IOsInfo osInfo,
                                     Logger logger)
         {
-            if (configFileProvider == null)
-            {
-                throw new ArgumentNullException(nameof(configFileProvider));
-            }
-
             _checkUpdateService = checkUpdateService;
             _appFolderInfo = appFolderInfo;
             _commandQueueManager = commandQueueManager;
@@ -72,7 +68,7 @@ namespace NzbDrone.Core.Update
             _updateVerifier = updateVerifier;
             _startupContext = startupContext;
             _deploymentInfoProvider = deploymentInfoProvider;
-            _configFileProvider = configFileProvider;
+            _configFileProvider = configFileProvider ?? throw new ArgumentNullException(nameof(configFileProvider));
             _runtimeInfo = runtimeInfo;
             _backupService = backupService;
             _osInfo = osInfo;
@@ -313,64 +309,69 @@ namespace NzbDrone.Core.Update
             }
         }
 
-        public void Handle(ApplicationStartingEvent message)
+        public async Task HandleAsync(ApplicationStartingEvent message, CancellationToken cancellationToken)
         {
-            // Check if we have to do an application update on startup
-
-            try
+            // TODO: Make HTTP calls and file I/O operations async
+            await Task.Run(() =>
             {
-                var updateMarker = Path.Combine(_appFolderInfo.AppDataFolder, "update_required");
-                if (!_diskProvider.FileExists(updateMarker))
+                // Check if we have to do an application update on startup
+
+                try
                 {
-                    return;
-                }
-
-                _logger.Debug("Post-install update check requested");
-
-                // Don't do a prestartup update check unless BuiltIn update is enabled
-                if (!_configFileProvider.UpdateAutomatically ||
-                    _configFileProvider.UpdateMechanism != UpdateMechanism.BuiltIn ||
-                    _deploymentInfoProvider.IsExternalUpdateMechanism)
-                {
-                    _logger.Debug("Built-in updater disabled, skipping post-install update check");
-                    return;
-                }
-
-                var latestAvailable = _checkUpdateService.AvailableUpdate();
-                if (latestAvailable == null)
-                {
-                    _logger.Debug("No post-install update available");
-                    _diskProvider.DeleteFile(updateMarker);
-                    return;
-                }
-
-                _logger.Info("Installing post-install update from {0} to {1}", BuildInfo.Version, latestAvailable.Version);
-                _diskProvider.DeleteFile(updateMarker);
-
-                var installing = InstallUpdate(latestAvailable);
-
-                if (installing)
-                {
-                    _logger.Debug("Install in progress, giving installer 30 seconds.");
-
-                    var watch = Stopwatch.StartNew();
-
-                    while (watch.Elapsed < TimeSpan.FromSeconds(30))
+                    var updateMarker = Path.Combine(_appFolderInfo.AppDataFolder, "update_required");
+                    if (!_diskProvider.FileExists(updateMarker))
                     {
-                        Thread.Sleep(1000);
+                        return;
                     }
 
-                    _logger.Error("Post-install update not completed within 30 seconds. Attempting to continue normal operation.");
+                    _logger.Debug("Post-install update check requested");
+
+                    // Don't do a prestartup update check unless BuiltIn update is enabled
+                    if (!_configFileProvider.UpdateAutomatically ||
+                        _configFileProvider.UpdateMechanism != UpdateMechanism.BuiltIn ||
+                        _deploymentInfoProvider.IsExternalUpdateMechanism)
+                    {
+                        _logger.Debug("Built-in updater disabled, skipping post-install update check");
+                        return;
+                    }
+
+                    var latestAvailable = _checkUpdateService.AvailableUpdate();
+                    if (latestAvailable == null)
+                    {
+                        _logger.Debug("No post-install update available");
+                        _diskProvider.DeleteFile(updateMarker);
+                        return;
+                    }
+
+                    _logger.Info("Installing post-install update from {0} to {1}", BuildInfo.Version, latestAvailable.Version);
+                    _diskProvider.DeleteFile(updateMarker);
+
+                    var installing = InstallUpdate(latestAvailable);
+
+                    if (installing)
+                    {
+                        _logger.Debug("Install in progress, giving installer 30 seconds.");
+
+                        var watch = Stopwatch.StartNew();
+
+                        while (watch.Elapsed < TimeSpan.FromSeconds(30))
+                        {
+                            Thread.Sleep(1000);
+                        }
+
+                        _logger.Error("Post-install update not completed within 30 seconds. Attempting to continue normal operation.");
+                    }
+                    else
+                    {
+                        _logger.Debug("Post-install update cancelled for unknown reason. Attempting to continue normal operation.");
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    _logger.Debug("Post-install update cancelled for unknown reason. Attempting to continue normal operation.");
+                    _logger.Error(ex, "Failed to perform the post-install update check. Attempting to continue normal operation.");
                 }
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex, "Failed to perform the post-install update check. Attempting to continue normal operation.");
-            }
+            },
+            cancellationToken);
         }
     }
 }

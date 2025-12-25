@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Tv.Events;
@@ -67,32 +69,37 @@ namespace NzbDrone.Core.ImportLists.Exclusions
             return _repo.GetPaged(pagingSpec);
         }
 
-        public void HandleAsync(SeriesDeletedEvent message)
+        // TODO: Repo to async
+        public async Task HandleAsync(SeriesDeletedEvent message, CancellationToken cancellationToken)
         {
-            if (!message.AddImportListExclusion)
+            await Task.Run(() =>
             {
-                return;
-            }
-
-            var exclusionsToAdd = new List<ImportListExclusion>();
-
-            foreach (var series in message.Series.DistinctBy(s => s.TvdbId))
-            {
-                var existingExclusion = _repo.FindByTvdbId(series.TvdbId);
-
-                if (existingExclusion != null)
+                if (!message.AddImportListExclusion)
                 {
-                    continue;
+                    return;
                 }
 
-                exclusionsToAdd.Add(new ImportListExclusion
-                {
-                    TvdbId = series.TvdbId,
-                    Title = series.Title
-                });
-            }
+                var exclusionsToAdd = new List<ImportListExclusion>();
 
-            _repo.InsertMany(exclusionsToAdd);
+                foreach (var series in message.Series.DistinctBy(s => s.TvdbId))
+                {
+                    var existingExclusion = _repo.FindByTvdbId(series.TvdbId);
+
+                    if (existingExclusion != null)
+                    {
+                        continue;
+                    }
+
+                    exclusionsToAdd.Add(new ImportListExclusion
+                    {
+                        TvdbId = series.TvdbId,
+                        Title = series.Title
+                    });
+                }
+
+                _repo.InsertMany(exclusionsToAdd);
+            },
+            cancellationToken).ConfigureAwait(false);
         }
     }
 }

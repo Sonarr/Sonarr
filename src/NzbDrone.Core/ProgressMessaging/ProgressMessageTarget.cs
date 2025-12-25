@@ -1,4 +1,4 @@
-﻿using NLog;
+using NLog;
 using NLog.Config;
 using NLog.Targets;
 using NzbDrone.Core.Lifecycle;
@@ -36,7 +36,7 @@ namespace NzbDrone.Core.ProgressMessaging
             try
             {
                 _commandQueueManager.SetMessage(command, logEvent.FormattedMessage);
-                _eventAggregator.PublishEvent(new CommandUpdatedEvent(command));
+                _eventAggregator.PublishEventAsync(new CommandUpdatedEvent(command)).GetAwaiter().GetResult();
             }
             finally
             {

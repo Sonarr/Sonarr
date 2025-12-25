@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Common.Cache;
 using NzbDrone.Common.Extensions;
@@ -27,11 +29,11 @@ namespace NzbDrone.Core.Download.TrackedDownloads
     }
 
     public class TrackedDownloadService : ITrackedDownloadService,
-                                          IHandle<EpisodeInfoRefreshedEvent>,
-                                          IHandle<SeriesAddedEvent>,
-                                          IHandle<SeriesEditedEvent>,
-                                          IHandle<SeriesBulkEditedEvent>,
-                                          IHandle<SeriesDeletedEvent>
+                                          IHandleAsync<EpisodeInfoRefreshedEvent>,
+                                          IHandleAsync<SeriesAddedEvent>,
+                                          IHandleAsync<SeriesEditedEvent>,
+                                          IHandleAsync<SeriesBulkEditedEvent>,
+                                          IHandleAsync<SeriesDeletedEvent>
     {
         private readonly IParsingService _parsingService;
         private readonly IHistoryService _historyService;
@@ -71,7 +73,7 @@ namespace NzbDrone.Core.Download.TrackedDownloads
             var trackedDownload = _cache.Find(downloadId);
 
             _cache.Remove(downloadId);
-            _eventAggregator.PublishEvent(new TrackedDownloadsRemovedEvent(new List<TrackedDownload> { trackedDownload }));
+            _eventAggregator.PublishEventAsync(new TrackedDownloadsRemovedEvent(new List<TrackedDownload> { trackedDownload })).GetAwaiter().GetResult();
         }
 
         public void StopTracking(List<string> downloadIds)
@@ -85,7 +87,7 @@ namespace NzbDrone.Core.Download.TrackedDownloads
                 trackedDownloads.Add(trackedDownload);
             }
 
-            _eventAggregator.PublishEvent(new TrackedDownloadsRemovedEvent(trackedDownloads));
+            _eventAggregator.PublishEventAsync(new TrackedDownloadsRemovedEvent(trackedDownloads)).GetAwaiter().GetResult();
         }
 
         public TrackedDownload TrackDownload(DownloadClientDefinition downloadClient, DownloadClientItem downloadItem)
@@ -266,7 +268,7 @@ namespace NzbDrone.Core.Download.TrackedDownloads
             }
         }
 
-        public void Handle(EpisodeInfoRefreshedEvent message)
+        public async Task HandleAsync(EpisodeInfoRefreshedEvent message, CancellationToken cancellationToken)
         {
             var needsToUpdate = false;
 
@@ -287,11 +289,11 @@ namespace NzbDrone.Core.Download.TrackedDownloads
 
             if (needsToUpdate)
             {
-                _eventAggregator.PublishEvent(new TrackedDownloadRefreshedEvent(GetTrackedDownloads()));
+                await _eventAggregator.PublishEventAsync(new TrackedDownloadRefreshedEvent(GetTrackedDownloads()), cancellationToken).ConfigureAwait(false);
             }
         }
 
-        public void Handle(SeriesAddedEvent message)
+        public async Task HandleAsync(SeriesAddedEvent message, CancellationToken cancellationToken)
         {
             var cachedItems = _cache.Values
                 .Where(t =>
@@ -303,11 +305,11 @@ namespace NzbDrone.Core.Download.TrackedDownloads
             {
                 cachedItems.ForEach(UpdateCachedItem);
 
-                _eventAggregator.PublishEvent(new TrackedDownloadRefreshedEvent(GetTrackedDownloads()));
+                await _eventAggregator.PublishEventAsync(new TrackedDownloadRefreshedEvent(GetTrackedDownloads()), cancellationToken).ConfigureAwait(false);
             }
         }
 
-        public void Handle(SeriesEditedEvent message)
+        public async Task HandleAsync(SeriesEditedEvent message, CancellationToken cancellationToken)
         {
             var cachedItems = _cache.Values
                 .Where(t =>
@@ -319,11 +321,11 @@ namespace NzbDrone.Core.Download.TrackedDownloads
             {
                 cachedItems.ForEach(UpdateCachedItem);
 
-                _eventAggregator.PublishEvent(new TrackedDownloadRefreshedEvent(GetTrackedDownloads()));
+                await _eventAggregator.PublishEventAsync(new TrackedDownloadRefreshedEvent(GetTrackedDownloads()), cancellationToken).ConfigureAwait(false);
             }
         }
 
-        public void Handle(SeriesBulkEditedEvent message)
+        public async Task HandleAsync(SeriesBulkEditedEvent message, CancellationToken cancellationToken)
         {
             var cachedItems = _cache.Values
                 .Where(t =>
@@ -335,11 +337,11 @@ namespace NzbDrone.Core.Download.TrackedDownloads
             {
                 cachedItems.ForEach(UpdateCachedItem);
 
-                _eventAggregator.PublishEvent(new TrackedDownloadRefreshedEvent(GetTrackedDownloads()));
+                await _eventAggregator.PublishEventAsync(new TrackedDownloadRefreshedEvent(GetTrackedDownloads()), cancellationToken).ConfigureAwait(false);
             }
         }
 
-        public void Handle(SeriesDeletedEvent message)
+        public async Task HandleAsync(SeriesDeletedEvent message, CancellationToken cancellationToken)
         {
             var cachedItems = _cache.Values
                 .Where(t =>
@@ -351,7 +353,7 @@ namespace NzbDrone.Core.Download.TrackedDownloads
             {
                 cachedItems.ForEach(UpdateCachedItem);
 
-                _eventAggregator.PublishEvent(new TrackedDownloadRefreshedEvent(GetTrackedDownloads()));
+                await _eventAggregator.PublishEventAsync(new TrackedDownloadRefreshedEvent(GetTrackedDownloads()), cancellationToken).ConfigureAwait(false);
             }
         }
     }

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Download;
@@ -17,22 +19,22 @@ using NzbDrone.Core.Update.History.Events;
 namespace NzbDrone.Core.Notifications
 {
     public class NotificationService
-        : IHandle<EpisodeGrabbedEvent>,
-          IHandle<EpisodeImportedEvent>,
-          IHandle<DownloadCompletedEvent>,
-          IHandle<UntrackedDownloadCompletedEvent>,
-          IHandle<SeriesRenamedEvent>,
-          IHandle<SeriesAddCompletedEvent>,
-          IHandle<SeriesDeletedEvent>,
-          IHandle<EpisodeFileDeletedEvent>,
-          IHandle<HealthCheckFailedEvent>,
-          IHandle<HealthCheckRestoredEvent>,
-          IHandle<UpdateInstalledEvent>,
-          IHandle<ManualInteractionRequiredEvent>,
-          IHandleAsync<DeleteCompletedEvent>,
-          IHandleAsync<DownloadsProcessedEvent>,
-          IHandleAsync<RenameCompletedEvent>,
-          IHandleAsync<HealthCheckCompleteEvent>
+        : IHandleBackgroundAsync<EpisodeGrabbedEvent>,
+          IHandleBackgroundAsync<EpisodeImportedEvent>,
+          IHandleBackgroundAsync<DownloadCompletedEvent>,
+          IHandleBackgroundAsync<UntrackedDownloadCompletedEvent>,
+          IHandleBackgroundAsync<SeriesRenamedEvent>,
+          IHandleBackgroundAsync<SeriesAddCompletedEvent>,
+          IHandleBackgroundAsync<SeriesDeletedEvent>,
+          IHandleBackgroundAsync<EpisodeFileDeletedEvent>,
+          IHandleBackgroundAsync<HealthCheckFailedEvent>,
+          IHandleBackgroundAsync<HealthCheckRestoredEvent>,
+          IHandleBackgroundAsync<UpdateInstalledEvent>,
+          IHandleBackgroundAsync<ManualInteractionRequiredEvent>,
+          IHandleBackgroundAsync<DeleteCompletedEvent>,
+          IHandleBackgroundAsync<DownloadsProcessedEvent>,
+          IHandleBackgroundAsync<RenameCompletedEvent>,
+          IHandleBackgroundAsync<HealthCheckCompleteEvent>
     {
         private readonly INotificationFactory _notificationFactory;
         private readonly INotificationStatusService _notificationStatusService;
@@ -127,7 +129,7 @@ namespace NzbDrone.Core.Notifications
             return false;
         }
 
-        public void Handle(EpisodeGrabbedEvent message)
+        public async Task HandleAsync(EpisodeGrabbedEvent message, CancellationToken cancellationToken)
         {
             var grabMessage = new GrabMessage
             {
@@ -160,7 +162,7 @@ namespace NzbDrone.Core.Notifications
             }
         }
 
-        public void Handle(EpisodeImportedEvent message)
+        public async Task HandleAsync(EpisodeImportedEvent message, CancellationToken cancellationToken)
         {
             if (!message.NewDownload)
             {
@@ -201,7 +203,7 @@ namespace NzbDrone.Core.Notifications
             }
         }
 
-        public void Handle(DownloadCompletedEvent message)
+        public async Task HandleAsync(DownloadCompletedEvent message, CancellationToken cancellationToken)
         {
             var series = message.TrackedDownload.RemoteEpisode.Series;
             var episodes = message.TrackedDownload.RemoteEpisode.Episodes;
@@ -245,7 +247,7 @@ namespace NzbDrone.Core.Notifications
             }
         }
 
-        public void Handle(UntrackedDownloadCompletedEvent message)
+        public async Task HandleAsync(UntrackedDownloadCompletedEvent message, CancellationToken cancellationToken)
         {
             var series = message.Series;
             var episodes = message.Episodes;
@@ -287,7 +289,7 @@ namespace NzbDrone.Core.Notifications
             }
         }
 
-        public void Handle(SeriesRenamedEvent message)
+        public async Task HandleAsync(SeriesRenamedEvent message, CancellationToken cancellationToken)
         {
             foreach (var notification in _notificationFactory.OnRenameEnabled())
             {
@@ -307,7 +309,7 @@ namespace NzbDrone.Core.Notifications
             }
         }
 
-        public void Handle(UpdateInstalledEvent message)
+        public async Task HandleAsync(UpdateInstalledEvent message, CancellationToken cancellationToken)
         {
             var updateMessage = new ApplicationUpdateMessage();
             updateMessage.Message = $"Sonarr updated from {message.PreviousVerison.ToString()} to {message.NewVersion.ToString()}";
@@ -329,7 +331,7 @@ namespace NzbDrone.Core.Notifications
             }
         }
 
-        public void Handle(ManualInteractionRequiredEvent message)
+        public async Task HandleAsync(ManualInteractionRequiredEvent message, CancellationToken cancellationToken)
         {
             var series = message.Episode?.Series;
             var mess = "";
@@ -381,7 +383,7 @@ namespace NzbDrone.Core.Notifications
             }
         }
 
-        public void Handle(EpisodeFileDeletedEvent message)
+        public async Task HandleAsync(EpisodeFileDeletedEvent message, CancellationToken cancellationToken)
         {
             if (message.EpisodeFile.Episodes.Value.Empty())
             {
@@ -417,7 +419,7 @@ namespace NzbDrone.Core.Notifications
             }
         }
 
-        public void Handle(SeriesAddCompletedEvent message)
+        public async Task HandleAsync(SeriesAddCompletedEvent message, CancellationToken cancellationToken)
         {
             var series = message.Series;
             var addMessage = new SeriesAddMessage
@@ -444,7 +446,7 @@ namespace NzbDrone.Core.Notifications
             }
         }
 
-        public void Handle(SeriesDeletedEvent message)
+        public async Task HandleAsync(SeriesDeletedEvent message, CancellationToken cancellationToken)
         {
             foreach (var series in message.Series)
             {
@@ -469,7 +471,7 @@ namespace NzbDrone.Core.Notifications
             }
         }
 
-        public void Handle(HealthCheckFailedEvent message)
+        public async Task HandleAsync(HealthCheckFailedEvent message, CancellationToken cancellationToken)
         {
             // Don't send health check notifications during the start up grace period,
             // once that duration expires they they'll be retested and fired off if necessary.
@@ -497,7 +499,7 @@ namespace NzbDrone.Core.Notifications
             }
         }
 
-        public void Handle(HealthCheckRestoredEvent message)
+        public async Task HandleAsync(HealthCheckRestoredEvent message, CancellationToken cancellationToken)
         {
             if (message.IsInStartupGracePeriod)
             {
@@ -522,22 +524,22 @@ namespace NzbDrone.Core.Notifications
             }
         }
 
-        public void HandleAsync(DeleteCompletedEvent message)
+        public async Task HandleAsync(DeleteCompletedEvent message, CancellationToken cancellationToken)
         {
             ProcessQueue();
         }
 
-        public void HandleAsync(DownloadsProcessedEvent message)
+        public async Task HandleAsync(DownloadsProcessedEvent message, CancellationToken cancellationToken)
         {
             ProcessQueue();
         }
 
-        public void HandleAsync(RenameCompletedEvent message)
+        public async Task HandleAsync(RenameCompletedEvent message, CancellationToken cancellationToken)
         {
             ProcessQueue();
         }
 
-        public void HandleAsync(HealthCheckCompleteEvent message)
+        public async Task HandleAsync(HealthCheckCompleteEvent message, CancellationToken cancellationToken)
         {
             ProcessQueue();
         }

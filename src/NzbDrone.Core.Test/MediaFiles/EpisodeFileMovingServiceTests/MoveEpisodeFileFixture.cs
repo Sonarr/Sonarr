@@ -96,8 +96,10 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeFileMovingServiceTests
             Subject.MoveEpisodeFile(_episodeFile, _localEpisode);
 
             Mocker.GetMock<IEventAggregator>()
-                  .Verify(s => s.PublishEvent<EpisodeFolderCreatedEvent>(It.Is<EpisodeFolderCreatedEvent>(p =>
-                      p.SeriesFolder.IsNotNullOrWhiteSpace())),
+                  .Verify(
+                      s => s.PublishEventAsync<EpisodeFolderCreatedEvent>(
+                          It.Is<EpisodeFolderCreatedEvent>(p => p.SeriesFolder.IsNotNullOrWhiteSpace()),
+                          It.IsAny<System.Threading.CancellationToken>()),
                       Times.Once());
         }
 
@@ -107,8 +109,10 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeFileMovingServiceTests
             Subject.MoveEpisodeFile(_episodeFile, _localEpisode);
 
             Mocker.GetMock<IEventAggregator>()
-                  .Verify(s => s.PublishEvent<EpisodeFolderCreatedEvent>(It.Is<EpisodeFolderCreatedEvent>(p =>
-                      p.SeasonFolder.IsNotNullOrWhiteSpace())),
+                  .Verify(
+                      s => s.PublishEventAsync<EpisodeFolderCreatedEvent>(
+                          It.Is<EpisodeFolderCreatedEvent>(p => p.SeasonFolder.IsNotNullOrWhiteSpace()),
+                          It.IsAny<System.Threading.CancellationToken>()),
                       Times.Once());
         }
 
@@ -122,8 +126,10 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeFileMovingServiceTests
             Subject.MoveEpisodeFile(_episodeFile, _localEpisode);
 
             Mocker.GetMock<IEventAggregator>()
-                  .Verify(s => s.PublishEvent<EpisodeFolderCreatedEvent>(It.Is<EpisodeFolderCreatedEvent>(p =>
-                      p.SeriesFolder.IsNotNullOrWhiteSpace())),
+                  .Verify(
+                      s => s.PublishEventAsync<EpisodeFolderCreatedEvent>(
+                          It.Is<EpisodeFolderCreatedEvent>(p => p.SeriesFolder.IsNotNullOrWhiteSpace()),
+                          It.IsAny<System.Threading.CancellationToken>()),
                       Times.Never());
         }
     }

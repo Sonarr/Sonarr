@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
@@ -24,13 +26,13 @@ namespace NzbDrone.Core.Test.Profiles
         }
 
         [Test]
-        public void init_should_add_default_profiles()
+        public async Task init_should_add_default_profiles()
         {
             Mocker.GetMock<ICustomFormatService>()
                   .Setup(s => s.All())
                   .Returns(new List<CustomFormat>());
 
-            Subject.Handle(new ApplicationStartedEvent());
+            await Subject.HandleAsync(new ApplicationStartedEvent(), CancellationToken.None);
 
             Mocker.GetMock<IQualityProfileRepository>()
                 .Verify(v => v.Insert(It.IsAny<QualityProfile>()), Times.Exactly(6));
@@ -40,13 +42,13 @@ namespace NzbDrone.Core.Test.Profiles
 
         // This confirms that new profiles are added only if no other profiles exists.
         // We don't want to keep adding them back if a user deleted them on purpose.
-        public void Init_should_skip_if_any_profiles_already_exist()
+        public async Task Init_should_skip_if_any_profiles_already_exist()
         {
             Mocker.GetMock<IQualityProfileRepository>()
                   .Setup(s => s.All())
                   .Returns(Builder<QualityProfile>.CreateListOfSize(2).Build().ToList());
 
-            Subject.Handle(new ApplicationStartedEvent());
+            await Subject.HandleAsync(new ApplicationStartedEvent(), CancellationToken.None);
 
             Mocker.GetMock<IQualityProfileRepository>()
                 .Verify(v => v.Insert(It.IsAny<QualityProfile>()), Times.Never());

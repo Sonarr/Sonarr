@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -30,25 +32,25 @@ namespace NzbDrone.Core.Test.HealthCheck
         }
 
         [Test]
-        public void should_not_execute_conditional()
+        public async Task should_not_execute_conditional()
         {
-            Subject.HandleAsync(new FakeEvent());
+            await Subject.HandleAsync(new FakeEvent(), CancellationToken.None);
 
             _healthCheck.Executed.Should().BeFalse();
         }
 
         [Test]
-        public void should_execute_conditional()
+        public async Task should_execute_conditional()
         {
-            Subject.HandleAsync(new FakeEvent() { ShouldExecute = true });
+            await Subject.HandleAsync(new FakeEvent() { ShouldExecute = true }, CancellationToken.None);
 
             _healthCheck.Executed.Should().BeTrue();
         }
 
         [Test]
-        public void should_execute_unconditional()
+        public async Task should_execute_unconditional()
         {
-            Subject.HandleAsync(new FakeEvent2());
+            await Subject.HandleAsync(new FakeEvent2(), CancellationToken.None);
 
             _healthCheck.Executed.Should().BeTrue();
         }

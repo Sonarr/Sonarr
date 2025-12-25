@@ -1,5 +1,7 @@
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
@@ -16,7 +18,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
         bool UpdateMediaInfo(EpisodeFile episodeFile, Series series);
     }
 
-    public class UpdateMediaInfoService : IUpdateMediaInfo, IHandle<SeriesScannedEvent>
+    public class UpdateMediaInfoService : IUpdateMediaInfo, IHandleAsync<SeriesScannedEvent>
     {
         private readonly IDiskProvider _diskProvider;
         private readonly IMediaFileService _mediaFileService;
@@ -37,7 +39,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
             _logger = logger;
         }
 
-        public void Handle(SeriesScannedEvent message)
+        public async Task HandleAsync(SeriesScannedEvent message, CancellationToken cancellationToken)
         {
             if (!_configService.EnableMediaInfo)
             {
@@ -50,10 +52,15 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                 c.MediaInfo == null ||
                 c.MediaInfo.SchemaRevision < VideoFileInfoReader.MINIMUM_MEDIA_INFO_SCHEMA_REVISION).ToList();
 
-            foreach (var mediaFile in filteredMediaFiles)
+            // TODO: Add async disk provider method
+            await Task.Run(() =>
             {
-                UpdateMediaInfo(mediaFile, message.Series);
-            }
+                foreach (var mediaFile in filteredMediaFiles)
+                {
+                    UpdateMediaInfo(mediaFile, message.Series);
+                }
+            },
+            cancellationToken);
         }
 
         public bool Update(EpisodeFile episodeFile, Series series)

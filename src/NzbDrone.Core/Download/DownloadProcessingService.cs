@@ -1,5 +1,7 @@
 using System;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Download.TrackedDownloads;
@@ -32,7 +34,7 @@ namespace NzbDrone.Core.Download
             _logger = logger;
         }
 
-        private void RemoveCompletedDownloads()
+        private async Task RemoveCompletedDownloadsAsync(CancellationToken cancellationToken = default)
         {
             var trackedDownloads = _trackedDownloadService.GetTrackedDownloads()
                                                           .Where(t => !t.DownloadItem.Removed && t.DownloadItem.CanBeRemoved && t.State == TrackedDownloadState.Imported)
@@ -40,7 +42,7 @@ namespace NzbDrone.Core.Download
 
             foreach (var trackedDownload in trackedDownloads)
             {
-                _eventAggregator.PublishEvent(new DownloadCanBeRemovedEvent(trackedDownload));
+                await _eventAggregator.PublishEventAsync(new DownloadCanBeRemovedEvent(trackedDownload), cancellationToken).ConfigureAwait(false);
             }
         }
 
@@ -75,9 +77,9 @@ namespace NzbDrone.Core.Download
             }
 
             // Imported downloads are no longer trackable so process them after processing trackable downloads
-            RemoveCompletedDownloads();
+            RemoveCompletedDownloadsAsync().GetAwaiter().GetResult();
 
-            _eventAggregator.PublishEvent(new DownloadsProcessedEvent());
+            _eventAggregator.PublishEventAsync(new DownloadsProcessedEvent()).GetAwaiter().GetResult();
         }
     }
 }

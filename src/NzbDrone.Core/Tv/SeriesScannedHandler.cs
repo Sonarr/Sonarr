@@ -1,3 +1,5 @@
+using System.Threading;
+using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Core.IndexerSearch;
 using NzbDrone.Core.MediaFiles.Events;
@@ -7,8 +9,8 @@ using NzbDrone.Core.Tv.Events;
 
 namespace NzbDrone.Core.Tv
 {
-    public class SeriesScannedHandler : IHandle<SeriesScannedEvent>,
-                                        IHandle<SeriesScanSkippedEvent>
+    public class SeriesScannedHandler : IHandleAsync<SeriesScannedEvent>,
+                                        IHandleAsync<SeriesScanSkippedEvent>
     {
         private readonly IEpisodeMonitoredService _episodeMonitoredService;
         private readonly ISeriesService _seriesService;
@@ -46,7 +48,7 @@ namespace NzbDrone.Core.Tv
             _logger.Info("[{0}] was recently added, performing post-add actions", series.Title);
             _episodeMonitoredService.SetEpisodeMonitoredStatus(series, addOptions);
 
-            _eventAggregator.PublishEvent(new SeriesAddCompletedEvent(series));
+            _eventAggregator.PublishEventAsync(new SeriesAddCompletedEvent(series)).GetAwaiter().GetResult();
 
             // If both options are enabled search for the whole series, which will only include monitored episodes.
             // This way multiple searches for the same season are skipped, though a season that can't be upgraded may be
@@ -73,14 +75,24 @@ namespace NzbDrone.Core.Tv
             _seriesService.RemoveAddOptions(series);
         }
 
-        public void Handle(SeriesScannedEvent message)
+        public async Task HandleAsync(SeriesScannedEvent message, CancellationToken cancellationToken)
         {
-            HandleScanEvents(message.Series);
+            // TODO: Make database and command queue operations async
+            await Task.Run(() =>
+            {
+                HandleScanEvents(message.Series);
+            },
+            cancellationToken);
         }
 
-        public void Handle(SeriesScanSkippedEvent message)
+        public async Task HandleAsync(SeriesScanSkippedEvent message, CancellationToken cancellationToken)
         {
-            HandleScanEvents(message.Series);
+            // TODO: Make database and command queue operations async
+            await Task.Run(() =>
+            {
+                HandleScanEvents(message.Series);
+            },
+            cancellationToken);
         }
     }
 }

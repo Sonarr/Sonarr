@@ -64,7 +64,8 @@ namespace NzbDrone.Host
                 _browserService.LaunchWebUI();
             }
 
-            _eventAggregator.PublishEvent(new ApplicationStartedEvent());
+            // TODO: Antipattern we need async here (startup main)
+            _eventAggregator.PublishEventAsync(new ApplicationStartedEvent()).GetAwaiter().GetResult();
         }
 
         private void OnAppStopped()

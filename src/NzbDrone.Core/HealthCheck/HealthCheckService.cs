@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Common.Cache;
 using NzbDrone.Common.EnvironmentInfo;
@@ -93,13 +95,13 @@ namespace NzbDrone.Core.HealthCheck
             try
             {
                 var results = healthChecks.Select(c =>
-                    {
-                        _logger.Trace("Check health -> {0}", c.GetType().Name);
-                        var result = c.Check();
-                        _logger.Trace("Check health <- {0}", c.GetType().Name);
+                {
+                    _logger.Trace("Check health -> {0}", c.GetType().Name);
+                    var result = c.Check();
+                    _logger.Trace("Check health <- {0}", c.GetType().Name);
 
-                        return result;
-                    })
+                    return result;
+                })
                     .ToList();
 
                 foreach (var result in results)
@@ -110,7 +112,7 @@ namespace NzbDrone.Core.HealthCheck
 
                         if (previous != null)
                         {
-                            _eventAggregator.PublishEvent(new HealthCheckRestoredEvent(previous, !_hasRunHealthChecksAfterGracePeriod));
+                            _eventAggregator.PublishEventAsync(new HealthCheckRestoredEvent(previous, !_hasRunHealthChecksAfterGracePeriod)).GetAwaiter().GetResult();
                         }
 
                         _healthCheckResults.Remove(result.Source.Name);
@@ -119,7 +121,7 @@ namespace NzbDrone.Core.HealthCheck
                     {
                         if (_healthCheckResults.Find(result.Source.Name) == null)
                         {
-                            _eventAggregator.PublishEvent(new HealthCheckFailedEvent(result, !_hasRunHealthChecksAfterGracePeriod));
+                            _eventAggregator.PublishEventAsync(new HealthCheckFailedEvent(result, !_hasRunHealthChecksAfterGracePeriod)).GetAwaiter().GetResult();
                         }
 
                         _healthCheckResults.Set(result.Source.Name, result);
@@ -131,12 +133,12 @@ namespace NzbDrone.Core.HealthCheck
                 _debounce.Resume();
             }
 
-            _eventAggregator.PublishEvent(new HealthCheckCompleteEvent());
+            _eventAggregator.PublishEventAsync(new HealthCheckCompleteEvent()).GetAwaiter().GetResult();
         }
 
         public void Execute(CheckHealthCommand message)
         {
-            var healthChecks = message.Trigger == CommandTrigger.Manual ? _healthChecks  : _scheduledHealthChecks;
+            var healthChecks = message.Trigger == CommandTrigger.Manual ? _healthChecks : _scheduledHealthChecks;
 
             lock (_pendingHealthChecks)
             {
@@ -149,20 +151,29 @@ namespace NzbDrone.Core.HealthCheck
             ProcessHealthChecks();
         }
 
-        public void HandleAsync(ApplicationStartedEvent message)
+        public async Task HandleAsync(ApplicationStartedEvent message, CancellationToken cancellationToken)
         {
-            lock (_pendingHealthChecks)
+            await Task.Run(() =>
             {
-                foreach (var healthCheck in _startupHealthChecks)
+                lock (_pendingHealthChecks)
                 {
-                    _pendingHealthChecks.Add(healthCheck);
+                    foreach (var healthCheck in _startupHealthChecks)
+                    {
+                        _pendingHealthChecks.Add(healthCheck);
+                    }
                 }
-            }
 
-            ProcessHealthChecks();
+                ProcessHealthChecks();
+            },
+            cancellationToken).ConfigureAwait(false);
         }
 
-        public void HandleAsync(IEvent message)
+        public async Task HandleAsync(IEvent message, CancellationToken cancellationToken)
+        {
+            await HandleEventAsync(message, cancellationToken).ConfigureAwait(false);
+        }
+
+        private async Task HandleEventAsync(IEvent message, CancellationToken cancellationToken)
         {
             if (message is HealthCheckCompleteEvent || message is ApplicationStartedEvent)
             {
@@ -195,7 +206,7 @@ namespace NzbDrone.Core.HealthCheck
 
                 foreach (var result in results)
                 {
-                    _eventAggregator.PublishEvent(new HealthCheckFailedEvent(result, false));
+                    await _eventAggregator.PublishEventAsync(new HealthCheckFailedEvent(result, false), cancellationToken).ConfigureAwait(false);
                 }
 
                 _isRunningHealthChecksAfterGracePeriod = false;

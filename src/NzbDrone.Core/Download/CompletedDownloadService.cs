@@ -200,9 +200,9 @@ namespace NzbDrone.Core.Download
         public bool VerifyImport(TrackedDownload trackedDownload, List<ImportResult> importResults)
         {
             var allEpisodesImported = importResults.Where(c => c.Result == ImportResultType.Imported)
-                                                   .SelectMany(c => c.ImportDecision.LocalEpisode.Episodes)
-                                                   .Count() >= Math.Max(1,
-                                          trackedDownload.RemoteEpisode.Episodes.Count);
+                                                 .SelectMany(c => c.ImportDecision.LocalEpisode.Episodes)
+                                                 .Count() >= Math.Max(1,
+                                        trackedDownload.RemoteEpisode.Episodes.Count);
 
             var historyItems = _historyService.FindByDownloadId(trackedDownload.DownloadItem.DownloadId)
                 .OrderByDescending(h => h.Date)
@@ -216,10 +216,10 @@ namespace NzbDrone.Core.Download
                 _logger.Debug("All episodes were imported for {0}", trackedDownload.DownloadItem.Title);
                 trackedDownload.State = TrackedDownloadState.Imported;
 
-                _eventAggregator.PublishEvent(new DownloadCompletedEvent(trackedDownload,
+                _eventAggregator.PublishEventAsync(new DownloadCompletedEvent(trackedDownload,
                     trackedDownload.RemoteEpisode.Series.Id,
                     importResults.Where(c => c.Result == ImportResultType.Imported).Select(c => c.EpisodeFile).ToList(),
-                    releaseInfo));
+                    releaseInfo)).GetAwaiter().GetResult();
 
                 return true;
             }
@@ -261,7 +261,7 @@ namespace NzbDrone.Core.Download
                 var files = _mediaFileService.GetFiles(episodes.Select(e => e.EpisodeFileId).Where(i => i > 0).Distinct());
 
                 trackedDownload.State = TrackedDownloadState.Imported;
-                _eventAggregator.PublishEvent(new DownloadCompletedEvent(trackedDownload, trackedDownload.RemoteEpisode.Series.Id, files, releaseInfo));
+                _eventAggregator.PublishEventAsync(new DownloadCompletedEvent(trackedDownload, trackedDownload.RemoteEpisode.Series.Id, files, releaseInfo)).GetAwaiter().GetResult();
 
                 return true;
             }
@@ -283,7 +283,7 @@ namespace NzbDrone.Core.Download
                 var releaseInfo = grabbedHistories.Count > 0 ? new GrabbedReleaseInfo(grabbedHistories) : null;
                 var manualInteractionEvent = new ManualInteractionRequiredEvent(trackedDownload, releaseInfo);
 
-                _eventAggregator.PublishEvent(manualInteractionEvent);
+                _eventAggregator.PublishEventAsync(manualInteractionEvent).GetAwaiter().GetResult();
             }
         }
 

@@ -1,6 +1,8 @@
 using System;
 using System.IO;
 using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
@@ -21,7 +23,7 @@ namespace NzbDrone.Core.MediaFiles
 
     public class MediaFileDeletionService : IDeleteMediaFiles,
                                             IHandleAsync<SeriesDeletedEvent>,
-                                            IHandle<EpisodeFileDeletedEvent>
+                                            IHandleAsync<EpisodeFileDeletedEvent>
     {
         private readonly IDiskProvider _diskProvider;
         private readonly IRecycleBinProvider _recycleBinProvider;
@@ -85,10 +87,10 @@ namespace NzbDrone.Core.MediaFiles
             // Delete the episode file from the database to clean it up even if the file was already deleted
             _mediaFileService.Delete(episodeFile, DeleteMediaFileReason.Manual);
 
-            _eventAggregator.PublishEvent(new DeleteCompletedEvent());
+            _eventAggregator.PublishEventAsync(new DeleteCompletedEvent()).GetAwaiter().GetResult();
         }
 
-        public void HandleAsync(SeriesDeletedEvent message)
+        public async Task HandleAsync(SeriesDeletedEvent message, CancellationToken cancellationToken)
         {
             if (message.DeleteFiles)
             {
@@ -116,18 +118,23 @@ namespace NzbDrone.Core.MediaFiles
                         }
                     }
 
-                    if (_diskProvider.FolderExists(series.Path))
+                    // TODO: Add async disk provider method
+                    await Task.Run(() =>
                     {
-                        _recycleBinProvider.DeleteFolder(series.Path);
-                    }
+                        if (_diskProvider.FolderExists(series.Path))
+                        {
+                            _recycleBinProvider.DeleteFolder(series.Path);
+                        }
+                    },
+                    cancellationToken);
 
-                    _eventAggregator.PublishEvent(new DeleteCompletedEvent());
+                    await _eventAggregator.PublishEventAsync(new DeleteCompletedEvent(), cancellationToken).ConfigureAwait(false);
                 }
             }
         }
 
         [EventHandleOrder(EventHandleOrder.Last)]
-        public void Handle(EpisodeFileDeletedEvent message)
+        public async Task HandleAsync(EpisodeFileDeletedEvent message, CancellationToken cancellationToken)
         {
             if (!_configService.DeleteEmptyFolders || message.Reason == DeleteMediaFileReason.MissingFromDisk)
             {
@@ -138,22 +145,27 @@ namespace NzbDrone.Core.MediaFiles
             var seriesPath = series.Path;
             var folder = message.EpisodeFile.Path.GetParentPath();
 
-            while (seriesPath.IsParentPath(folder))
+            // TODO: Add async disk provider method
+            await Task.Run(() =>
             {
-                if (_diskProvider.FolderExists(folder))
+                while (seriesPath.IsParentPath(folder))
                 {
-                    _diskProvider.RemoveEmptySubfolders(folder);
+                    if (_diskProvider.FolderExists(folder))
+                    {
+                        _diskProvider.RemoveEmptySubfolders(folder);
+                    }
+
+                    folder = folder.GetParentPath();
                 }
 
-                folder = folder.GetParentPath();
-            }
+                _diskProvider.RemoveEmptySubfolders(seriesPath);
 
-            _diskProvider.RemoveEmptySubfolders(seriesPath);
-
-            if (_diskProvider.FolderEmpty(seriesPath))
-            {
-                _diskProvider.DeleteFolder(seriesPath, true);
-            }
+                if (_diskProvider.FolderEmpty(seriesPath))
+                {
+                    _diskProvider.DeleteFolder(seriesPath, true);
+                }
+            },
+            cancellationToken);
         }
     }
 }

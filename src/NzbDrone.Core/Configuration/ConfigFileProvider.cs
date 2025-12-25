@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using Microsoft.Extensions.Options;
@@ -157,7 +159,7 @@ namespace NzbDrone.Core.Configuration
                 }
             }
 
-            _eventAggregator.PublishEvent(new ConfigFileSavedEvent());
+            _eventAggregator.PublishEventAsync(new ConfigFileSavedEvent()).GetAwaiter().GetResult();
         }
 
         public string BindAddress
@@ -488,11 +490,15 @@ namespace NzbDrone.Core.Configuration
             return Guid.NewGuid().ToString().Replace("-", "");
         }
 
-        public void HandleAsync(ApplicationStartedEvent message)
+        public async Task HandleAsync(ApplicationStartedEvent message, CancellationToken cancellationToken)
         {
-            MigrateConfigFile();
-            EnsureDefaultConfigFile();
-            DeleteOldValues();
+            await Task.Run(() =>
+            {
+                MigrateConfigFile();
+                EnsureDefaultConfigFile();
+                DeleteOldValues();
+            },
+            cancellationToken).ConfigureAwait(false);
         }
 
         public void Execute(ResetApiKeyCommand message)

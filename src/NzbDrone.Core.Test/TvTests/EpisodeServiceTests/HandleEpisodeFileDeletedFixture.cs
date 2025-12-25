@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
@@ -64,29 +66,29 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeServiceTests
         }
 
         [Test]
-        public void should_set_EpisodeFileId_to_zero()
+        public async Task should_set_EpisodeFileId_to_zero()
         {
             GivenSingleEpisodeFile();
 
-            Subject.Handle(new EpisodeFileDeletedEvent(_episodeFile, DeleteMediaFileReason.MissingFromDisk));
+            await Subject.HandleAsync(new EpisodeFileDeletedEvent(_episodeFile, DeleteMediaFileReason.MissingFromDisk), CancellationToken.None);
 
             Mocker.GetMock<IEpisodeRepository>()
                 .Verify(v => v.ClearFileId(It.IsAny<Episode>(), It.IsAny<bool>()), Times.Once());
         }
 
         [Test]
-        public void should_update_each_episode_for_file()
+        public async Task should_update_each_episode_for_file()
         {
             GivenMultiEpisodeFile();
 
-            Subject.Handle(new EpisodeFileDeletedEvent(_episodeFile, DeleteMediaFileReason.MissingFromDisk));
+            await Subject.HandleAsync(new EpisodeFileDeletedEvent(_episodeFile, DeleteMediaFileReason.MissingFromDisk), CancellationToken.None);
 
             Mocker.GetMock<IEpisodeRepository>()
                 .Verify(v => v.ClearFileId(It.IsAny<Episode>(), It.IsAny<bool>()), Times.Exactly(2));
         }
 
         [Test]
-        public void should_set_monitored_to_false_if_autoUnmonitor_is_true_and_is_not_for_an_upgrade()
+        public async Task should_set_monitored_to_false_if_autoUnmonitor_is_true_and_is_not_for_an_upgrade()
         {
             GivenSingleEpisodeFile();
 
@@ -94,15 +96,15 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeServiceTests
                   .SetupGet(s => s.AutoUnmonitorPreviouslyDownloadedEpisodes)
                   .Returns(true);
 
-            Subject.Handle(new EpisodeFileDeletedEvent(_episodeFile, DeleteMediaFileReason.MissingFromDisk));
-            Subject.HandleAsync(new SeriesScannedEvent(_series, new List<string>()));
+            await Subject.HandleAsync(new EpisodeFileDeletedEvent(_episodeFile, DeleteMediaFileReason.MissingFromDisk), CancellationToken.None);
+            await Subject.HandleAsync(new SeriesScannedEvent(_series, new List<string>()), CancellationToken.None);
 
             Mocker.GetMock<IEpisodeRepository>()
                 .Verify(v => v.SetMonitored(It.IsAny<IEnumerable<int>>(), false), Times.Once());
         }
 
         [Test]
-        public void should_leave_monitored_if_autoUnmonitor_is_true_and_missing_episode_is_replaced()
+        public async Task should_leave_monitored_if_autoUnmonitor_is_true_and_missing_episode_is_replaced()
         {
             GivenSingleEpisodeFile();
 
@@ -114,16 +116,16 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeServiceTests
                 .SetupGet(s => s.AutoUnmonitorPreviouslyDownloadedEpisodes)
                 .Returns(true);
 
-            Subject.Handle(new EpisodeFileDeletedEvent(_episodeFile, DeleteMediaFileReason.MissingFromDisk));
-            Subject.Handle(new EpisodeFileAddedEvent(newEpisodeFile));
-            Subject.HandleAsync(new SeriesScannedEvent(_series, new List<string>()));
+            await Subject.HandleAsync(new EpisodeFileDeletedEvent(_episodeFile, DeleteMediaFileReason.MissingFromDisk), CancellationToken.None);
+            await Subject.HandleAsync(new EpisodeFileAddedEvent(newEpisodeFile), CancellationToken.None);
+            await Subject.HandleAsync(new SeriesScannedEvent(_series, new List<string>()), CancellationToken.None);
 
             Mocker.GetMock<IEpisodeRepository>()
                 .Verify(v => v.SetMonitored(It.IsAny<IEnumerable<int>>(), false), Times.Never());
         }
 
         [Test]
-        public void should_leave_monitored_to_true_if_autoUnmonitor_is_false()
+        public async Task should_leave_monitored_to_true_if_autoUnmonitor_is_false()
         {
             GivenSingleEpisodeFile();
 
@@ -131,14 +133,14 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeServiceTests
                   .SetupGet(s => s.AutoUnmonitorPreviouslyDownloadedEpisodes)
                   .Returns(false);
 
-            Subject.Handle(new EpisodeFileDeletedEvent(_episodeFile, DeleteMediaFileReason.Upgrade));
+            await Subject.HandleAsync(new EpisodeFileDeletedEvent(_episodeFile, DeleteMediaFileReason.Upgrade), CancellationToken.None);
 
             Mocker.GetMock<IEpisodeRepository>()
                 .Verify(v => v.ClearFileId(It.IsAny<Episode>(), false), Times.Once());
         }
 
         [Test]
-        public void should_leave_monitored_to_true_if_autoUnmonitor_is_true_and_is_for_an_upgrade()
+        public async Task should_leave_monitored_to_true_if_autoUnmonitor_is_true_and_is_for_an_upgrade()
         {
             GivenSingleEpisodeFile();
 
@@ -146,14 +148,14 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeServiceTests
                   .SetupGet(s => s.AutoUnmonitorPreviouslyDownloadedEpisodes)
                   .Returns(true);
 
-            Subject.Handle(new EpisodeFileDeletedEvent(_episodeFile, DeleteMediaFileReason.Upgrade));
+            await Subject.HandleAsync(new EpisodeFileDeletedEvent(_episodeFile, DeleteMediaFileReason.Upgrade), CancellationToken.None);
 
             Mocker.GetMock<IEpisodeRepository>()
                 .Verify(v => v.ClearFileId(It.IsAny<Episode>(), false), Times.Once());
         }
 
         [Test]
-        public void should_leave_monitored_to_true_if_autoUnmonitor_is_true_and_is_for_manual_override()
+        public async Task should_leave_monitored_to_true_if_autoUnmonitor_is_true_and_is_for_manual_override()
         {
             GivenSingleEpisodeFile();
 
@@ -161,7 +163,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeServiceTests
                   .SetupGet(s => s.AutoUnmonitorPreviouslyDownloadedEpisodes)
                   .Returns(true);
 
-            Subject.Handle(new EpisodeFileDeletedEvent(_episodeFile, DeleteMediaFileReason.ManualOverride));
+            await Subject.HandleAsync(new EpisodeFileDeletedEvent(_episodeFile, DeleteMediaFileReason.ManualOverride), CancellationToken.None);
 
             Mocker.GetMock<IEpisodeRepository>()
                   .Verify(v => v.ClearFileId(It.IsAny<Episode>(), false), Times.Once());

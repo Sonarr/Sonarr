@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Common.Cache;
 using NzbDrone.Core.Lifecycle;
@@ -19,7 +21,7 @@ namespace NzbDrone.Core.Qualities
         QualityDefinition Get(Quality quality);
     }
 
-    public class QualityDefinitionService : IQualityDefinitionService, IExecute<ResetQualityDefinitionsCommand>, IHandle<ApplicationStartedEvent>
+    public class QualityDefinitionService : IQualityDefinitionService, IExecute<ResetQualityDefinitionsCommand>, IHandleAsync<ApplicationStartedEvent>
     {
         private readonly IQualityDefinitionRepository _repo;
         private readonly ICached<Dictionary<Quality, QualityDefinition>> _cache;
@@ -102,11 +104,16 @@ namespace NzbDrone.Core.Qualities
             return definition;
         }
 
-        public void Handle(ApplicationStartedEvent message)
+        public async Task HandleAsync(ApplicationStartedEvent message, CancellationToken cancellationToken)
         {
-            _logger.Debug("Setting up default quality config");
+            // TODO: Make repository operations async
+            await Task.Run(() =>
+            {
+                _logger.Debug("Setting up default quality config");
 
-            InsertMissingDefinitions();
+                InsertMissingDefinitions();
+            },
+            cancellationToken);
         }
 
         public void Execute(ResetQualityDefinitionsCommand message)

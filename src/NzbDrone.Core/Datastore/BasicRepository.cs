@@ -6,6 +6,8 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using Dapper;
 using NLog;
 using NzbDrone.Common.Instrumentation;
@@ -480,26 +482,42 @@ namespace NzbDrone.Core.Datastore
             }
         }
 
+        protected async Task ModelCreatedAsync(TModel model, bool forcePublish = false, CancellationToken cancellationToken = default)
+        {
+            await PublishModelEventAsync(model, ModelAction.Created, forcePublish, cancellationToken).ConfigureAwait(false);
+        }
+
+        protected async Task ModelUpdatedAsync(TModel model, bool forcePublish = false, CancellationToken cancellationToken = default)
+        {
+            await PublishModelEventAsync(model, ModelAction.Updated, forcePublish, cancellationToken).ConfigureAwait(false);
+        }
+
+        protected async Task ModelDeletedAsync(TModel model, bool forcePublish = false, CancellationToken cancellationToken = default)
+        {
+            await PublishModelEventAsync(model, ModelAction.Deleted, forcePublish, cancellationToken).ConfigureAwait(false);
+        }
+
+        // TODO: Remove these once all callers are migrated to async versions
         protected void ModelCreated(TModel model, bool forcePublish = false)
         {
-            PublishModelEvent(model, ModelAction.Created, forcePublish);
+            PublishModelEventAsync(model, ModelAction.Created, forcePublish).GetAwaiter().GetResult();
         }
 
         protected void ModelUpdated(TModel model, bool forcePublish = false)
         {
-            PublishModelEvent(model, ModelAction.Updated, forcePublish);
+            PublishModelEventAsync(model, ModelAction.Updated, forcePublish).GetAwaiter().GetResult();
         }
 
         protected void ModelDeleted(TModel model, bool forcePublish = false)
         {
-            PublishModelEvent(model, ModelAction.Deleted, forcePublish);
+            PublishModelEventAsync(model, ModelAction.Deleted, forcePublish).GetAwaiter().GetResult();
         }
 
-        private void PublishModelEvent(TModel model, ModelAction action, bool forcePublish)
+        private async Task PublishModelEventAsync(TModel model, ModelAction action, bool forcePublish, CancellationToken cancellationToken = default)
         {
             if (PublishModelEvents || forcePublish)
             {
-                _eventAggregator.PublishEvent(new ModelEvent<TModel>(model, action));
+                await _eventAggregator.PublishEventAsync(new ModelEvent<TModel>(model, action), cancellationToken).ConfigureAwait(false);
             }
         }
 

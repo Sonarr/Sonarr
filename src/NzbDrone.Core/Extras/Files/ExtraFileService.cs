@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
@@ -27,7 +29,7 @@ namespace NzbDrone.Core.Extras.Files
 
     public abstract class ExtraFileService<TExtraFile> : IExtraFileService<TExtraFile>,
                                                          IHandleAsync<SeriesDeletedEvent>,
-                                                         IHandle<EpisodeFileDeletedEvent>
+                                                         IHandleAsync<EpisodeFileDeletedEvent>
         where TExtraFile : ExtraFile, new()
     {
         private readonly IExtraFileRepository<TExtraFile> _repository;
@@ -95,13 +97,15 @@ namespace NzbDrone.Core.Extras.Files
             _repository.DeleteMany(ids);
         }
 
-        public void HandleAsync(SeriesDeletedEvent message)
+        public async Task HandleAsync(SeriesDeletedEvent message, CancellationToken cancellationToken)
         {
             _logger.Debug("Deleting Extra from database for series: {0}", string.Join(',', message.Series));
-            _repository.DeleteForSeriesIds(message.Series.Select(m => m.Id).ToList());
+
+            // TODO: Add async repository method
+            await Task.Run(() => _repository.DeleteForSeriesIds(message.Series.Select(m => m.Id).ToList()), cancellationToken);
         }
 
-        public void Handle(EpisodeFileDeletedEvent message)
+        public async Task HandleAsync(EpisodeFileDeletedEvent message, CancellationToken cancellationToken)
         {
             var episodeFile = message.EpisodeFile;
 
@@ -113,21 +117,28 @@ namespace NzbDrone.Core.Extras.Files
             {
                 var series = _seriesService.GetSeries(message.EpisodeFile.SeriesId);
 
-                foreach (var extra in _repository.GetFilesByEpisodeFile(episodeFile.Id))
+                // TODO: Add async disk provider method
+                await Task.Run(() =>
                 {
-                    var path = Path.Combine(series.Path, extra.RelativePath);
-
-                    if (_diskProvider.FileExists(path))
+                    foreach (var extra in _repository.GetFilesByEpisodeFile(episodeFile.Id))
                     {
-                        // Send to the recycling bin so they can be recovered if necessary
-                        var subfolder = _diskProvider.GetParentFolder(series.Path).GetRelativePath(_diskProvider.GetParentFolder(path));
-                        _recycleBinProvider.DeleteFile(path, subfolder);
+                        var path = Path.Combine(series.Path, extra.RelativePath);
+
+                        if (_diskProvider.FileExists(path))
+                        {
+                            // Send to the recycling bin so they can be recovered if necessary
+                            var subfolder = _diskProvider.GetParentFolder(series.Path).GetRelativePath(_diskProvider.GetParentFolder(path));
+                            _recycleBinProvider.DeleteFile(path, subfolder);
+                        }
                     }
-                }
+                },
+                cancellationToken);
             }
 
             _logger.Debug("Deleting Extra from database for episode file: {0}", episodeFile);
-            _repository.DeleteForEpisodeFile(episodeFile.Id);
+
+            // TODO: Add async repository method
+            await Task.Run(() => _repository.DeleteForEpisodeFile(episodeFile.Id), cancellationToken);
         }
     }
 }

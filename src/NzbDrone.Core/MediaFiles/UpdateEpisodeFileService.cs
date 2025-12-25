@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
@@ -20,7 +22,7 @@ namespace NzbDrone.Core.MediaFiles
     }
 
     public class UpdateEpisodeFileService : IUpdateEpisodeFileService,
-                                            IHandle<SeriesScannedEvent>
+                                            IHandleAsync<SeriesScannedEvent>
     {
         private readonly IDiskProvider _diskProvider;
         private readonly IConfigService _configService;
@@ -100,7 +102,7 @@ namespace NzbDrone.Core.MediaFiles
             return false;
         }
 
-        public void Handle(SeriesScannedEvent message)
+        public async Task HandleAsync(SeriesScannedEvent message, CancellationToken cancellationToken)
         {
             if (_configService.FileDate == FileDateType.None)
             {
@@ -112,18 +114,23 @@ namespace NzbDrone.Core.MediaFiles
             var episodeFiles = new List<EpisodeFile>();
             var updated = new List<EpisodeFile>();
 
-            foreach (var group in episodes.GroupBy(e => e.EpisodeFileId))
+            // TODO: Add async disk provider method
+            await Task.Run(() =>
             {
-                var episodesInFile = group.Select(e => e).ToList();
-                var episodeFile = episodesInFile.First().EpisodeFile;
-
-                episodeFiles.Add(episodeFile);
-
-                if (ChangeFileDate(episodeFile, message.Series, episodesInFile))
+                foreach (var group in episodes.GroupBy(e => e.EpisodeFileId))
                 {
-                    updated.Add(episodeFile);
+                    var episodesInFile = group.Select(e => e).ToList();
+                    var episodeFile = episodesInFile.First().EpisodeFile;
+
+                    episodeFiles.Add(episodeFile);
+
+                    if (ChangeFileDate(episodeFile, message.Series, episodesInFile))
+                    {
+                        updated.Add(episodeFile);
+                    }
                 }
-            }
+            },
+            cancellationToken);
 
             if (updated.Any())
             {

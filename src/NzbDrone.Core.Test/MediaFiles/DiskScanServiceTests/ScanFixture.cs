@@ -479,7 +479,7 @@ namespace NzbDrone.Core.Test.MediaFiles.DiskScanServiceTests
                 .Verify(v => v.GetImportDecisions(It.Is<List<string>>(l => l.Count == 1), _series, false), Times.Once());
 
             Mocker.GetMock<IEventAggregator>()
-                .Verify(v => v.PublishEvent(It.Is<SeriesScannedEvent>(c => c.Series != null && c.PossibleExtraFiles.Count == 0)), Times.Once());
+                .Verify(v => v.PublishEventAsync(It.Is<SeriesScannedEvent>(c => c.Series != null && c.PossibleExtraFiles.Count == 0)), Times.Once());
         }
     }
 }

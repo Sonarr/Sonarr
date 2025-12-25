@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Common.Composition;
 using NzbDrone.Common.Serializer;
@@ -20,7 +22,7 @@ using Sonarr.Http.Validation;
 namespace Sonarr.Api.V3.Commands
 {
     [V3ApiController]
-    public class CommandController : RestControllerWithSignalR<CommandResource, CommandModel>, IHandle<CommandUpdatedEvent>
+    public class CommandController : RestControllerWithSignalR<CommandResource, CommandModel>, IHandleBackgroundAsync<CommandUpdatedEvent>
     {
         private readonly IManageCommandQueue _commandQueueManager;
         private readonly KnownTypes _knownTypes;
@@ -95,7 +97,7 @@ namespace Sonarr.Api.V3.Commands
         }
 
         [NonAction]
-        public void Handle(CommandUpdatedEvent message)
+        public async Task HandleAsync(CommandUpdatedEvent message, CancellationToken cancellationToken)
         {
             if (message.Command.Body.SendUpdatesToClient)
             {
@@ -106,6 +108,8 @@ namespace Sonarr.Api.V3.Commands
 
                 _debouncer.Execute();
             }
+
+            await Task.CompletedTask.ConfigureAwait(false);
         }
 
         private void SendUpdates()

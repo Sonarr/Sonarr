@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
@@ -39,16 +41,16 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
                                        .Build();
 
             _profile = new QualityProfile
-                       {
-                           Name = "Test",
-                           Cutoff = Quality.HDTV720p.Id,
-                           Items = new List<QualityProfileQualityItem>
+            {
+                Name = "Test",
+                Cutoff = Quality.HDTV720p.Id,
+                Items = new List<QualityProfileQualityItem>
                                    {
                                        new QualityProfileQualityItem { Allowed = true, Quality = Quality.HDTV720p },
                                        new QualityProfileQualityItem { Allowed = true, Quality = Quality.WEBDL720p },
                                        new QualityProfileQualityItem { Allowed = true, Quality = Quality.Bluray720p }
                                    },
-                       };
+            };
 
             _series.QualityProfile = _profile;
 
@@ -113,40 +115,40 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
             _heldReleases.AddRange(heldReleases);
         }
 
-        private void InitializeReleases()
+        private async Task InitializeReleases()
         {
-            Subject.Handle(new ApplicationStartedEvent());
+            await Subject.HandleAsync(new ApplicationStartedEvent(), CancellationToken.None);
         }
 
         [Test]
-        public void should_delete_if_the_grabbed_quality_is_the_same()
+        public async Task should_delete_if_the_grabbed_quality_is_the_same()
         {
             GivenHeldRelease(_parsedEpisodeInfo.Quality);
 
-            InitializeReleases();
-            Subject.Handle(new EpisodeGrabbedEvent(_remoteEpisode));
+            await InitializeReleases();
+            await Subject.HandleAsync(new EpisodeGrabbedEvent(_remoteEpisode), CancellationToken.None);
 
             VerifyDelete();
         }
 
         [Test]
-        public void should_delete_if_the_grabbed_quality_is_the_higher()
+        public async Task should_delete_if_the_grabbed_quality_is_the_higher()
         {
             GivenHeldRelease(new QualityModel(Quality.SDTV));
 
-            InitializeReleases();
-            Subject.Handle(new EpisodeGrabbedEvent(_remoteEpisode));
+            await InitializeReleases();
+            await Subject.HandleAsync(new EpisodeGrabbedEvent(_remoteEpisode), CancellationToken.None);
 
             VerifyDelete();
         }
 
         [Test]
-        public void should_not_delete_if_the_grabbed_quality_is_the_lower()
+        public async Task should_not_delete_if_the_grabbed_quality_is_the_lower()
         {
             GivenHeldRelease(new QualityModel(Quality.Bluray720p));
 
-            InitializeReleases();
-            Subject.Handle(new EpisodeGrabbedEvent(_remoteEpisode));
+            await InitializeReleases();
+            await Subject.HandleAsync(new EpisodeGrabbedEvent(_remoteEpisode), CancellationToken.None);
 
             VerifyNoDelete();
         }

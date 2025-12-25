@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
@@ -40,16 +42,16 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
                                        .Build();
 
             _profile = new QualityProfile
-                       {
-                           Name = "Test",
-                           Cutoff = Quality.HDTV720p.Id,
-                           Items = new List<QualityProfileQualityItem>
+            {
+                Name = "Test",
+                Cutoff = Quality.HDTV720p.Id,
+                Items = new List<QualityProfileQualityItem>
                                    {
                                        new QualityProfileQualityItem { Allowed = true, Quality = Quality.HDTV720p },
                                        new QualityProfileQualityItem { Allowed = true, Quality = Quality.WEBDL720p },
                                        new QualityProfileQualityItem { Allowed = true, Quality = Quality.Bluray720p }
                                    },
-                       };
+            };
 
             _series.QualityProfile = new LazyLoaded<QualityProfile>(_profile);
 
@@ -117,50 +119,50 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
             _heldReleases.AddRange(heldReleases);
         }
 
-        private void InitializeReleases()
+        private async Task InitializeReleases()
         {
-            Subject.Handle(new ApplicationStartedEvent());
+            await Subject.HandleAsync(new ApplicationStartedEvent(), CancellationToken.None);
         }
 
         [Test]
-        public void should_add()
+        public async Task should_add()
         {
-            InitializeReleases();
+            await InitializeReleases();
             Subject.Add(_temporarilyRejected, PendingReleaseReason.Delay);
 
             VerifyInsert();
         }
 
         [Test]
-        public void should_not_add_if_it_is_the_same_release_from_the_same_indexer()
+        public async Task should_not_add_if_it_is_the_same_release_from_the_same_indexer()
         {
             GivenHeldRelease(_release.Title, _release.Indexer, _release.PublishDate);
 
-            InitializeReleases();
+            await InitializeReleases();
             Subject.Add(_temporarilyRejected, PendingReleaseReason.Delay);
 
             VerifyNoInsert();
         }
 
         [Test]
-        public void should_not_add_if_it_is_the_same_release_from_the_same_indexer_twice()
+        public async Task should_not_add_if_it_is_the_same_release_from_the_same_indexer_twice()
         {
             GivenHeldRelease(_release.Title, _release.Indexer, _release.PublishDate, PendingReleaseReason.DownloadClientUnavailable);
             GivenHeldRelease(_release.Title, _release.Indexer, _release.PublishDate, PendingReleaseReason.Fallback);
 
-            InitializeReleases();
+            await InitializeReleases();
             Subject.Add(_temporarilyRejected, PendingReleaseReason.Delay);
 
             VerifyNoInsert();
         }
 
         [Test]
-        public void should_remove_duplicate_if_it_is_the_same_release_from_the_same_indexer_twice()
+        public async Task should_remove_duplicate_if_it_is_the_same_release_from_the_same_indexer_twice()
         {
             GivenHeldRelease(_release.Title, _release.Indexer, _release.PublishDate, PendingReleaseReason.DownloadClientUnavailable);
             GivenHeldRelease(_release.Title, _release.Indexer, _release.PublishDate, PendingReleaseReason.Fallback);
 
-            InitializeReleases();
+            await InitializeReleases();
             Subject.Add(_temporarilyRejected, PendingReleaseReason.Fallback);
 
             Mocker.GetMock<IPendingReleaseRepository>()
@@ -168,33 +170,33 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
         }
 
         [Test]
-        public void should_add_if_title_is_different()
+        public async Task should_add_if_title_is_different()
         {
             GivenHeldRelease(_release.Title + "-RP", _release.Indexer, _release.PublishDate);
 
-            InitializeReleases();
+            await InitializeReleases();
             Subject.Add(_temporarilyRejected, PendingReleaseReason.Delay);
 
             VerifyInsert();
         }
 
         [Test]
-        public void should_add_if_indexer_is_different()
+        public async Task should_add_if_indexer_is_different()
         {
             GivenHeldRelease(_release.Title, "AnotherIndexer", _release.PublishDate);
 
-            InitializeReleases();
+            await InitializeReleases();
             Subject.Add(_temporarilyRejected, PendingReleaseReason.Delay);
 
             VerifyInsert();
         }
 
         [Test]
-        public void should_add_if_publish_date_is_different()
+        public async Task should_add_if_publish_date_is_different()
         {
             GivenHeldRelease(_release.Title, _release.Indexer, _release.PublishDate.AddHours(1));
 
-            InitializeReleases();
+            await InitializeReleases();
             Subject.Add(_temporarilyRejected, PendingReleaseReason.Delay);
 
             VerifyInsert();

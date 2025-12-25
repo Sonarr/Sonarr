@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Download;
@@ -25,7 +27,7 @@ namespace NzbDrone.Core.Blocklisting
 
     public class BlocklistService : IBlocklistService,
                                     IExecute<ClearBlocklistCommand>,
-                                    IHandle<DownloadFailedEvent>,
+                                    IHandleAsync<DownloadFailedEvent>,
                                     IHandleAsync<SeriesDeletedEvent>
     {
         private readonly IBlocklistRepository _blocklistRepository;
@@ -75,20 +77,20 @@ namespace NzbDrone.Core.Blocklisting
         public void Block(RemoteEpisode remoteEpisode, string message, string source)
         {
             var blocklist = new Blocklist
-                            {
-                                SeriesId = remoteEpisode.Series.Id,
-                                EpisodeIds = remoteEpisode.Episodes.Select(e => e.Id).ToList(),
-                                SourceTitle =  remoteEpisode.Release.Title,
-                                Quality = remoteEpisode.ParsedEpisodeInfo.Quality,
-                                Date = DateTime.UtcNow,
-                                PublishedDate = remoteEpisode.Release.PublishDate,
-                                Size = remoteEpisode.Release.Size,
-                                Indexer = remoteEpisode.Release.Indexer,
-                                Protocol = remoteEpisode.Release.DownloadProtocol,
-                                Message = message,
-                                Source = source,
-                                Languages = remoteEpisode.ParsedEpisodeInfo.Languages
-                            };
+            {
+                SeriesId = remoteEpisode.Series.Id,
+                EpisodeIds = remoteEpisode.Episodes.Select(e => e.Id).ToList(),
+                SourceTitle = remoteEpisode.Release.Title,
+                Quality = remoteEpisode.ParsedEpisodeInfo.Quality,
+                Date = DateTime.UtcNow,
+                PublishedDate = remoteEpisode.Release.PublishDate,
+                Size = remoteEpisode.Release.Size,
+                Indexer = remoteEpisode.Release.Indexer,
+                Protocol = remoteEpisode.Release.DownloadProtocol,
+                Message = message,
+                Source = source,
+                Languages = remoteEpisode.ParsedEpisodeInfo.Languages
+            };
 
             if (remoteEpisode.Release is TorrentInfo torrentRelease)
             {
@@ -123,43 +125,53 @@ namespace NzbDrone.Core.Blocklisting
             _blocklistRepository.Purge();
         }
 
-        public void Handle(DownloadFailedEvent message)
+        public async Task HandleAsync(DownloadFailedEvent message, CancellationToken cancellationToken)
         {
-            var blocklist = new Blocklist
+            // TODO: Make repository operations async
+            await Task.Run(() =>
             {
-                SeriesId = message.SeriesId,
-                EpisodeIds = message.EpisodeIds,
-                SourceTitle = message.SourceTitle,
-                Quality = message.Quality,
-                Date = DateTime.UtcNow,
-                PublishedDate = DateTime.Parse(message.Data.GetValueOrDefault("publishedDate")),
-                Size = long.Parse(message.Data.GetValueOrDefault("size", "0")),
-                Indexer = message.Data.GetValueOrDefault("indexer"),
-                Protocol = (DownloadProtocol)Convert.ToInt32(message.Data.GetValueOrDefault("protocol")),
-                Message = message.Message,
-                Source = message.Source,
-                Languages = message.Languages,
-                TorrentInfoHash = message.TrackedDownload?.Protocol == DownloadProtocol.Torrent
-                    ? message.TrackedDownload.DownloadItem.DownloadId
-                    : message.Data.GetValueOrDefault("torrentInfoHash", null)
-            };
+                var blocklist = new Blocklist
+                {
+                    SeriesId = message.SeriesId,
+                    EpisodeIds = message.EpisodeIds,
+                    SourceTitle = message.SourceTitle,
+                    Quality = message.Quality,
+                    Date = DateTime.UtcNow,
+                    PublishedDate = DateTime.Parse(message.Data.GetValueOrDefault("publishedDate")),
+                    Size = long.Parse(message.Data.GetValueOrDefault("size", "0")),
+                    Indexer = message.Data.GetValueOrDefault("indexer"),
+                    Protocol = (DownloadProtocol)Convert.ToInt32(message.Data.GetValueOrDefault("protocol")),
+                    Message = message.Message,
+                    Source = message.Source,
+                    Languages = message.Languages,
+                    TorrentInfoHash = message.TrackedDownload?.Protocol == DownloadProtocol.Torrent
+                        ? message.TrackedDownload.DownloadItem.DownloadId
+                        : message.Data.GetValueOrDefault("torrentInfoHash", null)
+                };
 
-            if (Enum.TryParse(message.Data.GetValueOrDefault("indexerFlags"), true, out IndexerFlags flags))
-            {
-                blocklist.IndexerFlags = flags;
-            }
+                if (Enum.TryParse(message.Data.GetValueOrDefault("indexerFlags"), true, out IndexerFlags flags))
+                {
+                    blocklist.IndexerFlags = flags;
+                }
 
-            if (Enum.TryParse(message.Data.GetValueOrDefault("releaseType"), true, out ReleaseType releaseType))
-            {
-                blocklist.ReleaseType = releaseType;
-            }
+                if (Enum.TryParse(message.Data.GetValueOrDefault("releaseType"), true, out ReleaseType releaseType))
+                {
+                    blocklist.ReleaseType = releaseType;
+                }
 
-            _blocklistRepository.Insert(blocklist);
+                _blocklistRepository.Insert(blocklist);
+            },
+            cancellationToken);
         }
 
-        public void HandleAsync(SeriesDeletedEvent message)
+        public async Task HandleAsync(SeriesDeletedEvent message, CancellationToken cancellationToken)
         {
-            _blocklistRepository.DeleteForSeriesIds(message.Series.Select(m => m.Id).ToList());
+            // TODO: Make repository operations async
+            await Task.Run(() =>
+            {
+                _blocklistRepository.DeleteForSeriesIds(message.Series.Select(m => m.Id).ToList());
+            },
+            cancellationToken);
         }
     }
 }

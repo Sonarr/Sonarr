@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Parser.Model;
@@ -71,10 +73,14 @@ namespace NzbDrone.Core.ImportLists.ImportListItems
             return _importListItemRepository.GetAllForLists(listIds).ToList();
         }
 
-        public void HandleAsync(ProviderDeletedEvent<IImportList> message)
+        public async Task HandleAsync(ProviderDeletedEvent<IImportList> message, CancellationToken cancellationToken)
         {
-            var seriesOnList = _importListItemRepository.GetAllForLists(new List<int> { message.ProviderId });
-            _importListItemRepository.DeleteMany(seriesOnList);
+            await Task.Run(() =>
+            {
+                var seriesOnList = _importListItemRepository.GetAllForLists(new List<int> { message.ProviderId });
+                _importListItemRepository.DeleteMany(seriesOnList);
+            },
+            cancellationToken).ConfigureAwait(false);
         }
 
         private ImportListItemInfo FindItem(List<ImportListItemInfo> existingItems, ImportListItemInfo item)

@@ -222,7 +222,8 @@ namespace NzbDrone.Core.MediaFiles
 
             if (changed)
             {
-                _eventAggregator.PublishEvent(newEvent);
+                // TODO: Antipattern use async
+                _eventAggregator.PublishEventAsync(newEvent).GetAwaiter().GetResult();
             }
         }
 

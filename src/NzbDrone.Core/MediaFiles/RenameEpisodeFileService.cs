@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -144,15 +144,15 @@ namespace NzbDrone.Core.MediaFiles
                     _mediaFileService.Update(episodeFile);
 
                     renamed.Add(new RenamedEpisodeFile
-                                {
-                                    EpisodeFile = episodeFile,
-                                    PreviousRelativePath = previousRelativePath,
-                                    PreviousPath = previousPath
-                                });
+                    {
+                        EpisodeFile = episodeFile,
+                        PreviousRelativePath = previousRelativePath,
+                        PreviousPath = previousPath
+                    });
 
                     _logger.Debug("Renamed episode file: {0}", episodeFile);
 
-                    _eventAggregator.PublishEvent(new EpisodeFileRenamedEvent(series, episodeFile, previousPath));
+                    _eventAggregator.PublishEventAsync(new EpisodeFileRenamedEvent(series, episodeFile, previousPath)).GetAwaiter().GetResult();
                 }
                 catch (FileAlreadyExistsException ex)
                 {
@@ -172,7 +172,7 @@ namespace NzbDrone.Core.MediaFiles
             {
                 _diskProvider.RemoveEmptySubfolders(series.Path);
 
-                _eventAggregator.PublishEvent(new SeriesRenamedEvent(series, renamed));
+                _eventAggregator.PublishEventAsync(new SeriesRenamedEvent(series, renamed)).GetAwaiter().GetResult();
             }
 
             return renamed;
@@ -187,7 +187,7 @@ namespace NzbDrone.Core.MediaFiles
             var renamedFiles = RenameFiles(episodeFiles, series);
             _logger.ProgressInfo("{0} selected episode files renamed for {1}", renamedFiles.Count, series.Title);
 
-            _eventAggregator.PublishEvent(new RenameCompletedEvent());
+            _eventAggregator.PublishEventAsync(new RenameCompletedEvent()).GetAwaiter().GetResult();
         }
 
         public void Execute(RenameSeriesCommand message)
@@ -203,7 +203,7 @@ namespace NzbDrone.Core.MediaFiles
                 _logger.ProgressInfo("{0} episode files renamed for {1}", renamedFiles.Count, series.Title);
             }
 
-            _eventAggregator.PublishEvent(new RenameCompletedEvent());
+            _eventAggregator.PublishEventAsync(new RenameCompletedEvent()).GetAwaiter().GetResult();
         }
     }
 }

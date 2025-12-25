@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
@@ -55,34 +57,34 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
         private void AddPending(int id, int seasonNumber, int[] episodes)
         {
             _pending.Add(new PendingRelease
-             {
-                 Id = id,
-                 Title = "Series.Title.S01E05.abc-Sonarr",
-                 ParsedEpisodeInfo = new ParsedEpisodeInfo { SeasonNumber = seasonNumber, EpisodeNumbers = episodes },
-                 Release = Builder<ReleaseInfo>.CreateNew().Build()
-             });
+            {
+                Id = id,
+                Title = "Series.Title.S01E05.abc-Sonarr",
+                ParsedEpisodeInfo = new ParsedEpisodeInfo { SeasonNumber = seasonNumber, EpisodeNumbers = episodes },
+                Release = Builder<ReleaseInfo>.CreateNew().Build()
+            });
         }
 
-        private void InitializeReleases()
+        private async Task InitializeReleases()
         {
-            Subject.Handle(new ApplicationStartedEvent());
+            await Subject.HandleAsync(new ApplicationStartedEvent(), CancellationToken.None);
         }
 
         [Test]
-        public void should_remove_same_release()
+        public async Task should_remove_same_release()
         {
             AddPending(id: 1, seasonNumber: 2, episodes: new[] { 3 });
 
             var queueId = HashConverter.GetHashInt31($"pending-{1}");
 
-            InitializeReleases();
+            await InitializeReleases();
             Subject.RemovePendingQueueItems(queueId);
 
             AssertRemoved(1);
         }
 
         [Test]
-        public void should_remove_multiple_releases_release()
+        public async Task should_remove_multiple_releases_release()
         {
             AddPending(id: 1, seasonNumber: 2, episodes: new[] { 1 });
             AddPending(id: 2, seasonNumber: 2, episodes: new[] { 2 });
@@ -91,14 +93,14 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
 
             var queueId = HashConverter.GetHashInt31($"pending-{3}");
 
-            InitializeReleases();
+            await InitializeReleases();
             Subject.RemovePendingQueueItems(queueId);
 
             AssertRemoved(3, 4);
         }
 
         [Test]
-        public void should_not_remove_different_season()
+        public async Task should_not_remove_different_season()
         {
             AddPending(id: 1, seasonNumber: 2, episodes: new[] { 1 });
             AddPending(id: 2, seasonNumber: 2, episodes: new[] { 1 });
@@ -107,14 +109,14 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
 
             var queueId = HashConverter.GetHashInt31($"pending-{1}");
 
-            InitializeReleases();
+            await InitializeReleases();
             Subject.RemovePendingQueueItems(queueId);
 
             AssertRemoved(1, 2);
         }
 
         [Test]
-        public void should_not_remove_different_episodes()
+        public async Task should_not_remove_different_episodes()
         {
             AddPending(id: 1, seasonNumber: 2, episodes: new[] { 1 });
             AddPending(id: 2, seasonNumber: 2, episodes: new[] { 1 });
@@ -123,35 +125,35 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
 
             var queueId = HashConverter.GetHashInt31($"pending-{1}");
 
-            InitializeReleases();
+            await InitializeReleases();
             Subject.RemovePendingQueueItems(queueId);
 
             AssertRemoved(1, 2);
         }
 
         [Test]
-        public void should_not_remove_multiepisodes()
+        public async Task should_not_remove_multiepisodes()
         {
             AddPending(id: 1, seasonNumber: 2, episodes: new[] { 1 });
             AddPending(id: 2, seasonNumber: 2, episodes: new[] { 1, 2 });
 
             var queueId = HashConverter.GetHashInt31($"pending-{1}");
 
-            InitializeReleases();
+            await InitializeReleases();
             Subject.RemovePendingQueueItems(queueId);
 
             AssertRemoved(1);
         }
 
         [Test]
-        public void should_not_remove_singleepisodes()
+        public async Task should_not_remove_singleepisodes()
         {
             AddPending(id: 1, seasonNumber: 2, episodes: new[] { 1 });
             AddPending(id: 2, seasonNumber: 2, episodes: new[] { 1, 2 });
 
             var queueId = HashConverter.GetHashInt31($"pending-{2}");
 
-            InitializeReleases();
+            await InitializeReleases();
             Subject.RemovePendingQueueItems(queueId);
 
             AssertRemoved(2);

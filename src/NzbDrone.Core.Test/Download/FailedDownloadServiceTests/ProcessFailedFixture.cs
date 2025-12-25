@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
@@ -77,7 +77,7 @@ namespace NzbDrone.Core.Test.Download.FailedDownloadServiceTests
             Subject.ProcessFailed(_trackedDownload);
 
             Mocker.GetMock<IEventAggregator>()
-                  .Verify(v => v.PublishEvent(It.Is<DownloadFailedEvent>(c => c.TrackedDownload != null)), Times.Once());
+                  .Verify(v => v.PublishEventAsync(It.Is<DownloadFailedEvent>(c => c.TrackedDownload != null)), Times.Once());
 
             AssertDownloadFailed();
         }
@@ -85,7 +85,7 @@ namespace NzbDrone.Core.Test.Download.FailedDownloadServiceTests
         private void AssertDownloadNotFailed()
         {
             Mocker.GetMock<IEventAggregator>()
-               .Verify(v => v.PublishEvent(It.IsAny<DownloadFailedEvent>()), Times.Never());
+               .Verify(v => v.PublishEventAsync(It.IsAny<DownloadFailedEvent>()), Times.Never());
 
             _trackedDownload.State.Should().NotBe(TrackedDownloadState.Failed);
         }
@@ -93,7 +93,7 @@ namespace NzbDrone.Core.Test.Download.FailedDownloadServiceTests
         private void AssertDownloadFailed()
         {
             Mocker.GetMock<IEventAggregator>()
-            .Verify(v => v.PublishEvent(It.IsAny<DownloadFailedEvent>()), Times.Once());
+            .Verify(v => v.PublishEventAsync(It.IsAny<DownloadFailedEvent>()), Times.Once());
 
             _trackedDownload.State.Should().Be(TrackedDownloadState.Failed);
         }

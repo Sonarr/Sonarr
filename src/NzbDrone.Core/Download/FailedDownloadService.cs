@@ -143,7 +143,7 @@ namespace NzbDrone.Core.Download
                 ReleaseSource = releaseSource,
             };
 
-            _eventAggregator.PublishEvent(downloadFailedEvent);
+            _eventAggregator.PublishEventAsync(downloadFailedEvent).GetAwaiter().GetResult();
         }
 
         private List<int> GetEpisodeIds(List<EpisodeHistory> historyItems)

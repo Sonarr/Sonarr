@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
@@ -40,16 +42,16 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
                                        .Build();
 
             _profile = new QualityProfile
-                       {
-                           Name = "Test",
-                           Cutoff = Quality.HDTV720p.Id,
-                           Items = new List<QualityProfileQualityItem>
+            {
+                Name = "Test",
+                Cutoff = Quality.HDTV720p.Id,
+                Items = new List<QualityProfileQualityItem>
                                    {
                                        new QualityProfileQualityItem { Allowed = true, Quality = Quality.HDTV720p },
                                        new QualityProfileQualityItem { Allowed = true, Quality = Quality.WEBDL720p },
                                        new QualityProfileQualityItem { Allowed = true, Quality = Quality.Bluray720p }
                                    },
-                       };
+            };
 
             _series.QualityProfile = new LazyLoaded<QualityProfile>(_profile);
 
@@ -110,59 +112,71 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
                   .Returns(heldReleases);
         }
 
-        private void InitializeReleases()
+        private async Task InitializeReleases()
         {
-            Subject.Handle(new ApplicationStartedEvent());
+            await Subject.HandleAsync(new ApplicationStartedEvent(), CancellationToken.None);
         }
 
         [Test]
-        public void should_remove_if_it_is_the_same_release_from_the_same_indexer()
+        public async Task should_remove_if_it_is_the_same_release_from_the_same_indexer()
         {
             GivenHeldRelease(_release.Title, _release.Indexer, _release.PublishDate);
 
-            InitializeReleases();
-            Subject.Handle(new RssSyncCompleteEvent(new ProcessedDecisions(new List<DownloadDecision>(),
-                                                                           new List<DownloadDecision>(),
-                                                                           new List<DownloadDecision> { _temporarilyRejected })));
+            await InitializeReleases();
+            await Subject.HandleAsync(
+                new RssSyncCompleteEvent(new ProcessedDecisions(
+                    new List<DownloadDecision>(),
+                    new List<DownloadDecision>(),
+                    new List<DownloadDecision> { _temporarilyRejected })),
+                CancellationToken.None);
 
             VerifyDelete();
         }
 
         [Test]
-        public void should_not_remove_if_title_is_different()
+        public async Task should_not_remove_if_title_is_different()
         {
             GivenHeldRelease(_release.Title + "-RP", _release.Indexer, _release.PublishDate);
 
-            InitializeReleases();
-            Subject.Handle(new RssSyncCompleteEvent(new ProcessedDecisions(new List<DownloadDecision>(),
-                                                                           new List<DownloadDecision>(),
-                                                                           new List<DownloadDecision> { _temporarilyRejected })));
+            await InitializeReleases();
+            await Subject.HandleAsync(
+                new RssSyncCompleteEvent(new ProcessedDecisions(
+                    new List<DownloadDecision>(),
+                    new List<DownloadDecision>(),
+                    new List<DownloadDecision> { _temporarilyRejected })),
+                CancellationToken.None);
 
             VerifyNoDelete();
         }
 
         [Test]
-        public void should_not_remove_if_indexer_is_different()
+        public async Task should_not_remove_if_indexer_is_different()
         {
             GivenHeldRelease(_release.Title, "AnotherIndexer", _release.PublishDate);
 
-            InitializeReleases();
-            Subject.Handle(new RssSyncCompleteEvent(new ProcessedDecisions(new List<DownloadDecision>(),
-                                                                           new List<DownloadDecision>(),
-                                                                           new List<DownloadDecision> { _temporarilyRejected })));
+            await InitializeReleases();
+            await Subject.HandleAsync(
+                new RssSyncCompleteEvent(new ProcessedDecisions(
+                    new List<DownloadDecision>(),
+                    new List<DownloadDecision>(),
+                    new List<DownloadDecision> { _temporarilyRejected })),
+                CancellationToken.None);
 
             VerifyNoDelete();
         }
 
         [Test]
-        public void should_not_remove_if_publish_date_is_different()
+        public async Task should_not_remove_if_publish_date_is_different()
         {
             GivenHeldRelease(_release.Title, _release.Indexer, _release.PublishDate.AddHours(1));
 
-            InitializeReleases();
-            Subject.Handle(new RssSyncCompleteEvent(new ProcessedDecisions(new List<DownloadDecision>(),
-                                                                           new List<DownloadDecision>(),
-                                                                           new List<DownloadDecision> { _temporarilyRejected })));
+            await InitializeReleases();
+            await Subject.HandleAsync(
+                new RssSyncCompleteEvent(new ProcessedDecisions(
+                    new List<DownloadDecision>(),
+                    new List<DownloadDecision>(),
+                    new List<DownloadDecision> { _temporarilyRejected })),
+                CancellationToken.None);
 
             VerifyNoDelete();
         }

@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Core.MediaFiles.Events;
@@ -43,7 +45,7 @@ namespace NzbDrone.Core.MediaFiles
         public EpisodeFile Add(EpisodeFile episodeFile)
         {
             var addedFile = _mediaFileRepository.Insert(episodeFile);
-            _eventAggregator.PublishEvent(new EpisodeFileAddedEvent(addedFile));
+            _eventAggregator.PublishEventAsync(new EpisodeFileAddedEvent(addedFile)).GetAwaiter().GetResult();
             return addedFile;
         }
 
@@ -64,7 +66,7 @@ namespace NzbDrone.Core.MediaFiles
             episodeFile.Path = Path.Combine(episodeFile.Series.Value.Path, episodeFile.RelativePath);
 
             _mediaFileRepository.Delete(episodeFile);
-            _eventAggregator.PublishEvent(new EpisodeFileDeletedEvent(episodeFile, reason));
+            _eventAggregator.PublishEventAsync(new EpisodeFileDeletedEvent(episodeFile, reason)).GetAwaiter().GetResult();
         }
 
         public List<EpisodeFile> GetFilesBySeries(int seriesId)
@@ -114,9 +116,13 @@ namespace NzbDrone.Core.MediaFiles
             return _mediaFileRepository.GetFilesWithRelativePath(seriesId, relativePath);
         }
 
-        public void HandleAsync(SeriesDeletedEvent message)
+        public async Task HandleAsync(SeriesDeletedEvent message, CancellationToken cancellationToken)
         {
-            _mediaFileRepository.DeleteForSeries(message.Series.Select(s => s.Id).ToList());
+            await Task.Run(() =>
+            {
+                _mediaFileRepository.DeleteForSeries(message.Series.Select(s => s.Id).ToList());
+            },
+            cancellationToken).ConfigureAwait(false);
         }
 
         public static List<string> FilterExistingFiles(List<string> files, List<EpisodeFile> seriesFiles, Series series)

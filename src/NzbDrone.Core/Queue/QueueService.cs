@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using NzbDrone.Common.Crypto;
 using NzbDrone.Core.Download.TrackedDownloads;
 using NzbDrone.Core.Languages;
@@ -18,7 +20,7 @@ namespace NzbDrone.Core.Queue
         void Remove(int id);
     }
 
-    public class QueueService : IQueueService, IHandle<TrackedDownloadRefreshedEvent>
+    public class QueueService : IQueueService, IHandleAsync<TrackedDownloadRefreshedEvent>
     {
         private readonly IEventAggregator _eventAggregator;
         private static List<Queue> _queue = new();
@@ -93,7 +95,7 @@ namespace NzbDrone.Core.Queue
             return queue;
         }
 
-        public void Handle(TrackedDownloadRefreshedEvent message)
+        public async Task HandleAsync(TrackedDownloadRefreshedEvent message, CancellationToken cancellationToken)
         {
             _queue = message.TrackedDownloads
                 .Where(t => t.IsTrackable)
@@ -101,7 +103,7 @@ namespace NzbDrone.Core.Queue
                 .SelectMany(MapQueue)
                 .ToList();
 
-            _eventAggregator.PublishEvent(new QueueUpdatedEvent());
+            await _eventAggregator.PublishEventAsync(new QueueUpdatedEvent(), cancellationToken).ConfigureAwait(false);
         }
     }
 }

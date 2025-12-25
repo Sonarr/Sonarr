@@ -132,19 +132,19 @@ namespace NzbDrone.Core.Tags
             foreach (var tag in tags)
             {
                 details.Add(new TagDetails
-                    {
-                        Id = tag.Id,
-                        Label = tag.Label,
-                        DelayProfileIds = delayProfiles.Where(c => c.Tags.Contains(tag.Id)).Select(c => c.Id).ToList(),
-                        ImportListIds = importLists.Where(c => c.Tags.Contains(tag.Id)).Select(c => c.Id).ToList(),
-                        NotificationIds = notifications.Where(c => c.Tags.Contains(tag.Id)).Select(c => c.Id).ToList(),
-                        RestrictionIds = releaseProfiles.Where(c => c.Tags.Contains(tag.Id)).Select(c => c.Id).ToList(),
-                        ExcludedReleaseProfileIds = excludedReleaseProfiles.Where(c => c.ExcludedTags.Contains(tag.Id)).Select(c => c.Id).ToList(),
-                        SeriesIds = series.Where(c => c.Value.Contains(tag.Id)).Select(c => c.Key).ToList(),
-                        IndexerIds = indexers.Where(c => c.Tags.Contains(tag.Id)).Select(c => c.Id).ToList(),
-                        AutoTagIds = GetAutoTagIds(tag, autoTags),
-                        DownloadClientIds = downloadClients.Where(c => c.Tags.Contains(tag.Id)).Select(c => c.Id).ToList(),
-                    });
+                {
+                    Id = tag.Id,
+                    Label = tag.Label,
+                    DelayProfileIds = delayProfiles.Where(c => c.Tags.Contains(tag.Id)).Select(c => c.Id).ToList(),
+                    ImportListIds = importLists.Where(c => c.Tags.Contains(tag.Id)).Select(c => c.Id).ToList(),
+                    NotificationIds = notifications.Where(c => c.Tags.Contains(tag.Id)).Select(c => c.Id).ToList(),
+                    RestrictionIds = releaseProfiles.Where(c => c.Tags.Contains(tag.Id)).Select(c => c.Id).ToList(),
+                    ExcludedReleaseProfileIds = excludedReleaseProfiles.Where(c => c.ExcludedTags.Contains(tag.Id)).Select(c => c.Id).ToList(),
+                    SeriesIds = series.Where(c => c.Value.Contains(tag.Id)).Select(c => c.Key).ToList(),
+                    IndexerIds = indexers.Where(c => c.Tags.Contains(tag.Id)).Select(c => c.Id).ToList(),
+                    AutoTagIds = GetAutoTagIds(tag, autoTags),
+                    DownloadClientIds = downloadClients.Where(c => c.Tags.Contains(tag.Id)).Select(c => c.Id).ToList(),
+                });
             }
 
             return details;
@@ -167,7 +167,7 @@ namespace NzbDrone.Core.Tags
             tag.Label = tag.Label.ToLowerInvariant();
 
             _repo.Insert(tag);
-            _eventAggregator.PublishEvent(new TagsUpdatedEvent());
+            _eventAggregator.PublishEventAsync(new TagsUpdatedEvent()).GetAwaiter().GetResult();
 
             return tag;
         }
@@ -177,7 +177,7 @@ namespace NzbDrone.Core.Tags
             tag.Label = tag.Label.ToLowerInvariant();
 
             _repo.Update(tag);
-            _eventAggregator.PublishEvent(new TagsUpdatedEvent());
+            _eventAggregator.PublishEventAsync(new TagsUpdatedEvent()).GetAwaiter().GetResult();
 
             return tag;
         }
@@ -191,7 +191,7 @@ namespace NzbDrone.Core.Tags
             }
 
             _repo.Delete(tagId);
-            _eventAggregator.PublishEvent(new TagsUpdatedEvent());
+            _eventAggregator.PublishEventAsync(new TagsUpdatedEvent()).GetAwaiter().GetResult();
         }
 
         private List<int> GetAutoTagIds(Tag tag, List<AutoTag> autoTags)

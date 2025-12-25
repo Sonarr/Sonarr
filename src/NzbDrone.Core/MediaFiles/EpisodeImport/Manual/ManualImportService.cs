@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
@@ -477,7 +479,13 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
             return item;
         }
 
+        // TODO: Refactor to async
         public void Execute(ManualImportCommand message)
+        {
+            ExecuteAsync(message, CancellationToken.None).GetAwaiter().GetResult();
+        }
+
+        private async Task ExecuteAsync(ManualImportCommand message, CancellationToken cancellationToken)
         {
             _logger.ProgressTrace("Manually importing {0} files using mode {1}", message.Files.Count, message.ImportMode);
 
@@ -584,7 +592,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                     var episodes = localEpisodes.SelectMany(l => l.Episodes).ToList();
                     var parsedEpisodeInfo = localEpisode.FolderEpisodeInfo ?? localEpisode.FileEpisodeInfo;
 
-                    _eventAggregator.PublishEvent(new UntrackedDownloadCompletedEvent(series, episodes, episodeFiles, parsedEpisodeInfo, sourcePath));
+                    await _eventAggregator.PublishEventAsync(new UntrackedDownloadCompletedEvent(series, episodes, episodeFiles, parsedEpisodeInfo, sourcePath), cancellationToken).ConfigureAwait(false);
                 }
             }
 
@@ -617,7 +625,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                     var episodeFiles = importedResults.Select(i => i.EpisodeFile).ToList();
 
                     trackedDownload.State = TrackedDownloadState.Imported;
-                    _eventAggregator.PublishEvent(new DownloadCompletedEvent(trackedDownload, importedSeries.Id, episodeFiles, importedResults.First().ImportDecision.LocalEpisode.Release));
+                    await _eventAggregator.PublishEventAsync(new DownloadCompletedEvent(trackedDownload, importedSeries.Id, episodeFiles, importedResults.First().ImportDecision.LocalEpisode.Release), cancellationToken).ConfigureAwait(false);
                 }
             }
         }

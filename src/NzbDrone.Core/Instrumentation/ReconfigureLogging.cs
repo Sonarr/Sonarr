@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
@@ -155,9 +157,9 @@ namespace NzbDrone.Core.Instrumentation
                        };
         }
 
-        public void HandleAsync(ConfigFileSavedEvent message)
+        public async Task HandleAsync(ConfigFileSavedEvent message, CancellationToken cancellationToken)
         {
-            Reconfigure();
+            await Task.Run(() => Reconfigure(), cancellationToken).ConfigureAwait(false);
         }
     }
 }

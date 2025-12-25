@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Common.Cache;
@@ -190,9 +191,9 @@ namespace NzbDrone.Core.Localization
             return culture + ".json";
         }
 
-        public void HandleAsync(ConfigSavedEvent message)
+        public async Task HandleAsync(ConfigSavedEvent message, CancellationToken cancellationToken)
         {
-            _cache.Clear();
+            await Task.Run(() => _cache.Clear(), cancellationToken).ConfigureAwait(false);
         }
     }
 }

@@ -128,7 +128,7 @@ namespace NzbDrone.Core.Tv
             _episodeService.UpdateMany(updateList);
             _episodeService.InsertMany(newList);
 
-            _eventAggregator.PublishEvent(new EpisodeInfoRefreshedEvent(series, newList, updateList, existingEpisodes));
+            _eventAggregator.PublishEventAsync(new EpisodeInfoRefreshedEvent(series, newList, updateList, existingEpisodes)).GetAwaiter().GetResult();
 
             if (failCount != 0)
             {

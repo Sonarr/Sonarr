@@ -74,7 +74,7 @@ namespace NzbDrone.Core.Tv
                     series.Status = SeriesStatusType.Deleted;
                     _seriesService.UpdateSeries(series, publishUpdatedEvent: false);
                     _logger.Debug("Series marked as deleted on tvdb for {0}", series.Title);
-                    _eventAggregator.PublishEvent(new SeriesUpdatedEvent(series));
+                    _eventAggregator.PublishEventAsync(new SeriesUpdatedEvent(series)).GetAwaiter().GetResult();
                 }
 
                 throw;
@@ -128,7 +128,7 @@ namespace NzbDrone.Core.Tv
             _refreshEpisodeService.RefreshEpisodeInfo(series, episodes);
 
             _logger.Debug("Finished series refresh for {0}", series.Title);
-            _eventAggregator.PublishEvent(new SeriesUpdatedEvent(series));
+            _eventAggregator.PublishEventAsync(new SeriesUpdatedEvent(series)).GetAwaiter().GetResult();
 
             return series;
         }
@@ -175,14 +175,14 @@ namespace NzbDrone.Core.Tv
             else if (rescanAfterRefresh == RescanAfterRefreshType.Never)
             {
                 _logger.Trace("Skipping rescan of {0}. Reason: never rescan after refresh", series);
-                _eventAggregator.PublishEvent(new SeriesScanSkippedEvent(series, SeriesScanSkippedReason.NeverRescanAfterRefresh));
+                _eventAggregator.PublishEventAsync(new SeriesScanSkippedEvent(series, SeriesScanSkippedReason.NeverRescanAfterRefresh)).GetAwaiter().GetResult();
 
                 return;
             }
             else if (rescanAfterRefresh == RescanAfterRefreshType.AfterManual && trigger != CommandTrigger.Manual)
             {
                 _logger.Trace("Skipping rescan of {0}. Reason: not after automatic scans", series);
-                _eventAggregator.PublishEvent(new SeriesScanSkippedEvent(series, SeriesScanSkippedReason.RescanAfterManualRefreshOnly));
+                _eventAggregator.PublishEventAsync(new SeriesScanSkippedEvent(series, SeriesScanSkippedReason.RescanAfterManualRefreshOnly)).GetAwaiter().GetResult();
 
                 return;
             }
@@ -211,7 +211,7 @@ namespace NzbDrone.Core.Tv
         {
             var trigger = message.Trigger;
             var isNew = message.IsNewSeries;
-            _eventAggregator.PublishEvent(new SeriesRefreshStartingEvent(trigger == CommandTrigger.Manual));
+            _eventAggregator.PublishEventAsync(new SeriesRefreshStartingEvent(trigger == CommandTrigger.Manual)).GetAwaiter().GetResult();
 
             if (message.SeriesIds.Any())
             {
@@ -280,7 +280,7 @@ namespace NzbDrone.Core.Tv
                 }
             }
 
-            _eventAggregator.PublishEvent(new SeriesRefreshCompleteEvent());
+            _eventAggregator.PublishEventAsync(new SeriesRefreshCompleteEvent()).GetAwaiter().GetResult();
         }
     }
 }

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Common.Cache;
 using NzbDrone.Core.Configuration;
@@ -42,8 +44,8 @@ namespace NzbDrone.Core.Tv
     }
 
     public class EpisodeService : IEpisodeService,
-                                  IHandle<EpisodeFileDeletedEvent>,
-                                  IHandle<EpisodeFileAddedEvent>,
+                                  IHandleAsync<EpisodeFileDeletedEvent>,
+                                  IHandleAsync<EpisodeFileAddedEvent>,
                                   IHandleAsync<SeriesDeletedEvent>,
                                   IHandleAsync<SeriesScannedEvent>
     {
@@ -260,7 +262,7 @@ namespace NzbDrone.Core.Tv
             throw new InvalidOperationException($"Multiple episodes with the same air date found. Date: {date}");
         }
 
-        public void Handle(EpisodeFileDeletedEvent message)
+        public async Task HandleAsync(EpisodeFileDeletedEvent message, CancellationToken cancellationToken)
         {
             foreach (var episode in GetEpisodesByFileId(message.EpisodeFile.Id))
             {
@@ -283,15 +285,17 @@ namespace NzbDrone.Core.Tv
                     }
                 }
 
-                _episodeRepository.ClearFileId(episode, unmonitorForReason && unmonitorEpisodes);
+                // TODO: Add async repository method
+                await Task.Run(() => _episodeRepository.ClearFileId(episode, unmonitorForReason && unmonitorEpisodes), cancellationToken);
             }
         }
 
-        public void Handle(EpisodeFileAddedEvent message)
+        public async Task HandleAsync(EpisodeFileAddedEvent message, CancellationToken cancellationToken)
         {
             foreach (var episode in message.EpisodeFile.Episodes.Value)
             {
-                _episodeRepository.SetFileId(episode, message.EpisodeFile.Id);
+                // TODO: Add async repository method
+                await Task.Run(() => _episodeRepository.SetFileId(episode, message.EpisodeFile.Id), cancellationToken);
 
                 lock (_cache)
                 {
@@ -307,23 +311,37 @@ namespace NzbDrone.Core.Tv
             }
         }
 
-        public void HandleAsync(SeriesDeletedEvent message)
+        public async Task HandleAsync(SeriesDeletedEvent message, CancellationToken cancellationToken)
         {
-            var episodes = _episodeRepository.GetEpisodesBySeriesIds(message.Series.Select(s => s.Id).ToList());
-            _episodeRepository.DeleteMany(episodes);
+            // TODO: Add async repository method
+            await Task.Run(() =>
+            {
+                var episodes = _episodeRepository.GetEpisodesBySeriesIds(message.Series.Select(s => s.Id).ToList());
+                _episodeRepository.DeleteMany(episodes);
+            },
+            cancellationToken);
         }
 
-        public void HandleAsync(SeriesScannedEvent message)
+        public async Task HandleAsync(SeriesScannedEvent message, CancellationToken cancellationToken)
         {
+            HashSet<int> ids;
+
             lock (_cache)
             {
-                var ids = _cache.Find(message.Series.Id.ToString());
+                ids = _cache.Find(message.Series.Id.ToString());
 
-                if (ids?.Any() == true)
+                if (ids?.Any() != true)
                 {
-                    _episodeRepository.SetMonitored(ids, false);
+                    _cache.Remove(message.Series.Id.ToString());
+                    return;
                 }
+            }
 
+            // TODO: Add async repository method
+            await Task.Run(() => _episodeRepository.SetMonitored(ids, false), cancellationToken);
+
+            lock (_cache)
+            {
                 _cache.Remove(message.Series.Id.ToString());
             }
         }

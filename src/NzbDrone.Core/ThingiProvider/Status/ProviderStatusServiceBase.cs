@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Messaging.Events;
@@ -57,7 +59,12 @@ namespace NzbDrone.Core.ThingiProvider.Status
             return TimeSpan.FromSeconds(EscalationBackOff.Periods[level]);
         }
 
-        public virtual void RecordSuccess(int providerId)
+        public virtual async void RecordSuccess(int providerId)
+        {
+            await RecordSuccessAsync(providerId).ConfigureAwait(false);
+        }
+
+        protected virtual async Task RecordSuccessAsync(int providerId, CancellationToken cancellationToken = default)
         {
             if (providerId <= 0)
             {
@@ -78,7 +85,7 @@ namespace NzbDrone.Core.ThingiProvider.Status
 
                 _providerStatusRepository.Upsert(status);
 
-                _eventAggregator.PublishEvent(new ProviderStatusChangedEvent<TProvider>(providerId, status));
+                _eventAggregator.PublishEventAsync(new ProviderStatusChangedEvent<TProvider>(providerId, status), cancellationToken).GetAwaiter().GetResult();
             }
         }
 
@@ -135,7 +142,7 @@ namespace NzbDrone.Core.ThingiProvider.Status
 
                 _providerStatusRepository.Upsert(status);
 
-                _eventAggregator.PublishEvent(new ProviderStatusChangedEvent<TProvider>(providerId, status));
+                _eventAggregator.PublishEventAsync(new ProviderStatusChangedEvent<TProvider>(providerId, status)).GetAwaiter().GetResult();
             }
         }
 
@@ -149,9 +156,13 @@ namespace NzbDrone.Core.ThingiProvider.Status
             RecordFailure(providerId, default(TimeSpan), false);
         }
 
-        public virtual void HandleAsync(ProviderDeletedEvent<TProvider> message)
+        public virtual async Task HandleAsync(ProviderDeletedEvent<TProvider> message, CancellationToken cancellationToken)
         {
-            _providerStatusRepository.DeleteByProviderId(message.ProviderId);
+            await Task.Run(() =>
+            {
+                _providerStatusRepository.DeleteByProviderId(message.ProviderId);
+            },
+            cancellationToken).ConfigureAwait(false);
         }
     }
 }

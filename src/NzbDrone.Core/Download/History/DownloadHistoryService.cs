@@ -1,6 +1,8 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.History;
 using NzbDrone.Core.MediaFiles.Events;
@@ -17,12 +19,12 @@ namespace NzbDrone.Core.Download.History
     }
 
     public class DownloadHistoryService : IDownloadHistoryService,
-                                          IHandle<EpisodeGrabbedEvent>,
-                                          IHandle<EpisodeImportedEvent>,
-                                          IHandle<DownloadCompletedEvent>,
-                                          IHandle<DownloadFailedEvent>,
-                                          IHandle<DownloadIgnoredEvent>,
-                                          IHandle<SeriesDeletedEvent>
+                                          IHandleAsync<EpisodeGrabbedEvent>,
+                                          IHandleAsync<EpisodeImportedEvent>,
+                                          IHandleAsync<DownloadCompletedEvent>,
+                                          IHandleAsync<DownloadFailedEvent>,
+                                          IHandleAsync<DownloadIgnoredEvent>,
+                                          IHandleAsync<SeriesDeletedEvent>
     {
         private readonly IDownloadHistoryRepository _repository;
         private readonly IHistoryService _historyService;
@@ -92,7 +94,7 @@ namespace NzbDrone.Core.Download.History
                               .FirstOrDefault(d => d.EventType == DownloadHistoryEventType.DownloadGrabbed);
         }
 
-        public void Handle(EpisodeGrabbedEvent message)
+        public async Task HandleAsync(EpisodeGrabbedEvent message, CancellationToken cancellationToken)
         {
             // Don't store grabbed events for clients that don't download IDs
             if (message.DownloadId.IsNullOrWhiteSpace())
@@ -110,7 +112,7 @@ namespace NzbDrone.Core.Download.History
                 Protocol = message.Episode.Release.DownloadProtocol,
                 IndexerId = message.Episode.Release.IndexerId,
                 DownloadClientId = message.DownloadClientId,
-                Release =  message.Episode.Release
+                Release = message.Episode.Release
             };
 
             history.Data.Add("Indexer", message.Episode.Release.Indexer);
@@ -118,10 +120,11 @@ namespace NzbDrone.Core.Download.History
             history.Data.Add("DownloadClientName", message.DownloadClientName);
             history.Data.Add("CustomFormatScore", message.Episode.CustomFormatScore.ToString());
 
-            _repository.Insert(history);
+            // TODO: Add InsertAsync to IDownloadHistoryRepository for proper async implementation
+            await Task.Run(() => _repository.Insert(history), cancellationToken);
         }
 
-        public void Handle(EpisodeImportedEvent message)
+        public async Task HandleAsync(EpisodeImportedEvent message, CancellationToken cancellationToken)
         {
             if (!message.NewDownload)
             {
@@ -159,10 +162,11 @@ namespace NzbDrone.Core.Download.History
             history.Data.Add("SourcePath", message.EpisodeInfo.Path);
             history.Data.Add("DestinationPath", Path.Combine(message.EpisodeInfo.Series.Path, message.ImportedEpisode.RelativePath));
 
-            _repository.Insert(history);
+            // TODO: Add InsertAsync to IDownloadHistoryRepository for proper async implementation
+            await Task.Run(() => _repository.Insert(history), cancellationToken);
         }
 
-        public void Handle(DownloadCompletedEvent message)
+        public async Task HandleAsync(DownloadCompletedEvent message, CancellationToken cancellationToken)
         {
             var downloadItem = message.TrackedDownload.DownloadItem;
 
@@ -180,10 +184,11 @@ namespace NzbDrone.Core.Download.History
             history.Data.Add("DownloadClient", downloadItem.DownloadClientInfo.Type);
             history.Data.Add("DownloadClientName", downloadItem.DownloadClientInfo.Name);
 
-            _repository.Insert(history);
+            // TODO: Add InsertAsync to IDownloadHistoryRepository for proper async implementation
+            await Task.Run(() => _repository.Insert(history), cancellationToken);
         }
 
-        public void Handle(DownloadFailedEvent message)
+        public async Task HandleAsync(DownloadFailedEvent message, CancellationToken cancellationToken)
         {
             // Don't track failed download for an unknown download
             if (message.TrackedDownload == null)
@@ -205,10 +210,11 @@ namespace NzbDrone.Core.Download.History
             history.Data.Add("DownloadClient", message.TrackedDownload.DownloadItem.DownloadClientInfo.Type);
             history.Data.Add("DownloadClientName", message.TrackedDownload.DownloadItem.DownloadClientInfo.Name);
 
-            _repository.Insert(history);
+            // TODO: Add InsertAsync to IDownloadHistoryRepository for proper async implementation
+            await Task.Run(() => _repository.Insert(history), cancellationToken);
         }
 
-        public void Handle(DownloadIgnoredEvent message)
+        public async Task HandleAsync(DownloadIgnoredEvent message, CancellationToken cancellationToken)
         {
             var history = new DownloadHistory
             {
@@ -224,12 +230,14 @@ namespace NzbDrone.Core.Download.History
             history.Data.Add("DownloadClient", message.DownloadClientInfo.Type);
             history.Data.Add("DownloadClientName", message.DownloadClientInfo.Name);
 
-            _repository.Insert(history);
+            // TODO: Add InsertAsync to IDownloadHistoryRepository for proper async implementation
+            await Task.Run(() => _repository.Insert(history), cancellationToken);
         }
 
-        public void Handle(SeriesDeletedEvent message)
+        public async Task HandleAsync(SeriesDeletedEvent message, CancellationToken cancellationToken)
         {
-            _repository.DeleteBySeriesIds(message.Series.Select(m => m.Id).ToList());
+            // TODO: Add DeleteBySeriesIdsAsync to IDownloadHistoryRepository for proper async implementation
+            await Task.Run(() => _repository.DeleteBySeriesIds(message.Series.Select(m => m.Id).ToList()), cancellationToken);
         }
     }
 }

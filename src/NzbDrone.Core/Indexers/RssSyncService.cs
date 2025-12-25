@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Common.Instrumentation.Extensions;
@@ -61,7 +61,7 @@ namespace NzbDrone.Core.Indexers
         {
             var processed = Sync().GetAwaiter().GetResult();
 
-            _eventAggregator.PublishEvent(new RssSyncCompleteEvent(processed));
+            _eventAggregator.PublishEventAsync(new RssSyncCompleteEvent(processed)).GetAwaiter().GetResult();
         }
     }
 }

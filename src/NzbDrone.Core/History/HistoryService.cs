@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Datastore;
@@ -31,13 +33,13 @@ namespace NzbDrone.Core.History
     }
 
     public class HistoryService : IHistoryService,
-                                  IHandle<EpisodeGrabbedEvent>,
-                                  IHandle<EpisodeImportedEvent>,
-                                  IHandle<DownloadFailedEvent>,
-                                  IHandle<EpisodeFileDeletedEvent>,
-                                  IHandle<EpisodeFileRenamedEvent>,
-                                  IHandle<SeriesDeletedEvent>,
-                                  IHandle<DownloadIgnoredEvent>
+                                  IHandleAsync<EpisodeGrabbedEvent>,
+                                  IHandleAsync<EpisodeImportedEvent>,
+                                  IHandleAsync<DownloadFailedEvent>,
+                                  IHandleAsync<EpisodeFileDeletedEvent>,
+                                  IHandleAsync<EpisodeFileRenamedEvent>,
+                                  IHandleAsync<SeriesDeletedEvent>,
+                                  IHandleAsync<DownloadIgnoredEvent>
     {
         private readonly IHistoryRepository _historyRepository;
         private readonly Logger _logger;
@@ -141,7 +143,7 @@ namespace NzbDrone.Core.History
             return downloadId;
         }
 
-        public void Handle(EpisodeGrabbedEvent message)
+        public async Task HandleAsync(EpisodeGrabbedEvent message, CancellationToken cancellationToken)
         {
             foreach (var episode in message.Episode.Episodes)
             {
@@ -189,11 +191,12 @@ namespace NzbDrone.Core.History
                     history.Data.Add("TorrentInfoHash", torrentRelease.InfoHash);
                 }
 
-                _historyRepository.Insert(history);
+                // TODO: Add InsertAsync to IHistoryRepository for proper async implementation
+                await Task.Run(() => _historyRepository.Insert(history), cancellationToken);
             }
         }
 
-        public void Handle(EpisodeImportedEvent message)
+        public async Task HandleAsync(EpisodeImportedEvent message, CancellationToken cancellationToken)
         {
             if (!message.NewDownload)
             {
@@ -232,11 +235,12 @@ namespace NzbDrone.Core.History
                 history.Data.Add("IndexerFlags", message.ImportedEpisode.IndexerFlags.ToString());
                 history.Data.Add("ReleaseType", message.ImportedEpisode.ReleaseType.ToString());
 
-                _historyRepository.Insert(history);
+                // TODO: Add InsertAsync to IHistoryRepository for proper async implementation
+                await Task.Run(() => _historyRepository.Insert(history), cancellationToken);
             }
         }
 
-        public void Handle(DownloadFailedEvent message)
+        public async Task HandleAsync(DownloadFailedEvent message, CancellationToken cancellationToken)
         {
             foreach (var episodeId in message.EpisodeIds)
             {
@@ -260,11 +264,12 @@ namespace NzbDrone.Core.History
                 history.Data.Add("Size", message.TrackedDownload?.DownloadItem.TotalSize.ToString() ?? message.Data.GetValueOrDefault(EpisodeHistory.SIZE));
                 history.Data.Add("Indexer", message.TrackedDownload?.RemoteEpisode?.Release?.Indexer ?? message.Data.GetValueOrDefault(EpisodeHistory.INDEXER));
 
-                _historyRepository.Insert(history);
+                // TODO: Add InsertAsync to IHistoryRepository for proper async implementation
+                await Task.Run(() => _historyRepository.Insert(history), cancellationToken);
             }
         }
 
-        public void Handle(EpisodeFileDeletedEvent message)
+        public async Task HandleAsync(EpisodeFileDeletedEvent message, CancellationToken cancellationToken)
         {
             if (message.Reason == DeleteMediaFileReason.NoLinkedEpisodes)
             {
@@ -296,11 +301,12 @@ namespace NzbDrone.Core.History
                 history.Data.Add("IndexerFlags", message.EpisodeFile.IndexerFlags.ToString());
                 history.Data.Add("ReleaseType", message.EpisodeFile.ReleaseType.ToString());
 
-                _historyRepository.Insert(history);
+                // TODO: Add InsertAsync to IHistoryRepository for proper async implementation
+                await Task.Run(() => _historyRepository.Insert(history), cancellationToken);
             }
         }
 
-        public void Handle(EpisodeFileRenamedEvent message)
+        public async Task HandleAsync(EpisodeFileRenamedEvent message, CancellationToken cancellationToken)
         {
             var sourcePath = message.OriginalPath;
             var sourceRelativePath = message.Series.Path.GetRelativePath(message.OriginalPath);
@@ -329,11 +335,12 @@ namespace NzbDrone.Core.History
                 history.Data.Add("IndexerFlags", message.EpisodeFile.IndexerFlags.ToString());
                 history.Data.Add("ReleaseType", message.EpisodeFile.ReleaseType.ToString());
 
-                _historyRepository.Insert(history);
+                // TODO: Add InsertAsync to IHistoryRepository for proper async implementation
+                await Task.Run(() => _historyRepository.Insert(history), cancellationToken);
             }
         }
 
-        public void Handle(DownloadIgnoredEvent message)
+        public async Task HandleAsync(DownloadIgnoredEvent message, CancellationToken cancellationToken)
         {
             var historyToAdd = new List<EpisodeHistory>();
 
@@ -362,12 +369,14 @@ namespace NzbDrone.Core.History
                 historyToAdd.Add(history);
             }
 
-            _historyRepository.InsertMany(historyToAdd);
+            // TODO: Add InsertManyAsync to IHistoryRepository for proper async implementation
+            await Task.Run(() => _historyRepository.InsertMany(historyToAdd), cancellationToken);
         }
 
-        public void Handle(SeriesDeletedEvent message)
+        public async Task HandleAsync(SeriesDeletedEvent message, CancellationToken cancellationToken)
         {
-            _historyRepository.DeleteForSeries(message.Series.Select(m => m.Id).ToList());
+            // TODO: Add DeleteForSeriesAsync to IHistoryRepository for proper async implementation
+            await Task.Run(() => _historyRepository.DeleteForSeries(message.Series.Select(m => m.Id).ToList()), cancellationToken);
         }
 
         public List<EpisodeHistory> Since(DateTime date, EpisodeHistoryEventType? eventType)

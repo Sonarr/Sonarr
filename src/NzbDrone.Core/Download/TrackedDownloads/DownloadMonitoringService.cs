@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.TPL;
@@ -16,8 +18,8 @@ namespace NzbDrone.Core.Download.TrackedDownloads
                                              IHandle<EpisodeGrabbedEvent>,
                                              IHandle<EpisodeImportedEvent>,
                                              IHandle<ManualInteractionRequiredEvent>,
-                                             IHandle<DownloadsProcessedEvent>,
-                                             IHandle<TrackedDownloadsRemovedEvent>
+                                             IHandleAsync<DownloadsProcessedEvent>,
+                                             IHandleAsync<TrackedDownloadsRemovedEvent>
     {
         private readonly IDownloadClientStatusService _downloadClientStatusService;
         private readonly IDownloadClientFactory _downloadClientFactory;
@@ -75,7 +77,7 @@ namespace NzbDrone.Core.Download.TrackedDownloads
                 }
 
                 _trackedDownloadService.UpdateTrackable(trackedDownloads);
-                _eventAggregator.PublishEvent(new TrackedDownloadRefreshedEvent(trackedDownloads));
+                _eventAggregator.PublishEventAsync(new TrackedDownloadRefreshedEvent(trackedDownloads)).GetAwaiter().GetResult();
                 _manageCommandQueue.Push(new ProcessMonitoredDownloadsCommand(), CommandPriority.High);
             }
             finally
@@ -181,18 +183,18 @@ namespace NzbDrone.Core.Download.TrackedDownloads
             _refreshDebounce.Execute();
         }
 
-        public void Handle(DownloadsProcessedEvent message)
+        public async Task HandleAsync(DownloadsProcessedEvent message, CancellationToken cancellationToken)
         {
             var trackedDownloads = _trackedDownloadService.GetTrackedDownloads().Where(t => t.IsTrackable && DownloadIsTrackable(t)).ToList();
 
-            _eventAggregator.PublishEvent(new TrackedDownloadRefreshedEvent(trackedDownloads));
+            await _eventAggregator.PublishEventAsync(new TrackedDownloadRefreshedEvent(trackedDownloads), cancellationToken).ConfigureAwait(false);
         }
 
-        public void Handle(TrackedDownloadsRemovedEvent message)
+        public async Task HandleAsync(TrackedDownloadsRemovedEvent message, CancellationToken cancellationToken)
         {
             var trackedDownloads = _trackedDownloadService.GetTrackedDownloads().Where(t => t.IsTrackable && DownloadIsTrackable(t)).ToList();
 
-            _eventAggregator.PublishEvent(new TrackedDownloadRefreshedEvent(trackedDownloads));
+            await _eventAggregator.PublishEventAsync(new TrackedDownloadRefreshedEvent(trackedDownloads), cancellationToken).ConfigureAwait(false);
         }
     }
 }

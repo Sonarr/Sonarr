@@ -114,7 +114,7 @@ namespace NzbDrone.Core.ThingiProvider
         public virtual TProviderDefinition Create(TProviderDefinition definition)
         {
             var result = _providerRepository.Insert(definition);
-            _eventAggregator.PublishEvent(new ProviderAddedEvent<TProvider>(result));
+            _eventAggregator.PublishEventAsync(new ProviderAddedEvent<TProvider>(result)).GetAwaiter().GetResult();
 
             return result;
         }
@@ -122,7 +122,7 @@ namespace NzbDrone.Core.ThingiProvider
         public virtual void Update(TProviderDefinition definition)
         {
             _providerRepository.Update(definition);
-            _eventAggregator.PublishEvent(new ProviderUpdatedEvent<TProvider>(definition));
+            _eventAggregator.PublishEventAsync(new ProviderUpdatedEvent<TProvider>(definition)).GetAwaiter().GetResult();
         }
 
         public virtual IEnumerable<TProviderDefinition> Update(IEnumerable<TProviderDefinition> definitions)
@@ -131,7 +131,7 @@ namespace NzbDrone.Core.ThingiProvider
 
             foreach (var definition in definitions)
             {
-                _eventAggregator.PublishEvent(new ProviderUpdatedEvent<TProvider>(definition));
+                _eventAggregator.PublishEventAsync(new ProviderUpdatedEvent<TProvider>(definition)).GetAwaiter().GetResult();
             }
 
             return definitions;
@@ -140,7 +140,7 @@ namespace NzbDrone.Core.ThingiProvider
         public void Delete(int id)
         {
             _providerRepository.Delete(id);
-            _eventAggregator.PublishEvent(new ProviderDeletedEvent<TProvider>(id));
+            _eventAggregator.PublishEventAsync(new ProviderDeletedEvent<TProvider>(id)).GetAwaiter().GetResult();
         }
 
         public void Delete(IEnumerable<int> ids)
@@ -149,7 +149,7 @@ namespace NzbDrone.Core.ThingiProvider
 
             foreach (var id in ids)
             {
-                _eventAggregator.PublishEvent(new ProviderDeletedEvent<TProvider>(id));
+                _eventAggregator.PublishEventAsync(new ProviderDeletedEvent<TProvider>(id)).GetAwaiter().GetResult();
             }
         }
 

@@ -1,5 +1,7 @@
 using System;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Common.TPL;
 using NzbDrone.Core.Datastore.Events;
@@ -15,7 +17,7 @@ namespace Sonarr.Api.V3.Queue
 {
     [V3ApiController("queue/status")]
     public class QueueStatusController : RestControllerWithSignalR<QueueStatusResource, NzbDrone.Core.Queue.Queue>,
-                               IHandle<ObsoleteQueueUpdatedEvent>, IHandle<PendingReleasesUpdatedEvent>
+                               IHandleBackgroundAsync<ObsoleteQueueUpdatedEvent>, IHandleBackgroundAsync<PendingReleasesUpdatedEvent>
     {
         private readonly IObsoleteQueueService _queueService;
         private readonly IPendingReleaseService _pendingReleaseService;
@@ -72,15 +74,15 @@ namespace Sonarr.Api.V3.Queue
         }
 
         [NonAction]
-        public void Handle(ObsoleteQueueUpdatedEvent message)
+        public async Task HandleAsync(ObsoleteQueueUpdatedEvent message, CancellationToken cancellationToken)
         {
-            _broadcastDebounce.Execute();
+            await Task.Run(() => _broadcastDebounce.Execute(), cancellationToken).ConfigureAwait(false);
         }
 
         [NonAction]
-        public void Handle(PendingReleasesUpdatedEvent message)
+        public async Task HandleAsync(PendingReleasesUpdatedEvent message, CancellationToken cancellationToken)
         {
-            _broadcastDebounce.Execute();
+            await Task.Run(() => _broadcastDebounce.Execute(), cancellationToken).ConfigureAwait(false);
         }
     }
 }

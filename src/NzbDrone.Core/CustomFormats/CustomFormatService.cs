@@ -61,11 +61,10 @@ namespace NzbDrone.Core.CustomFormats
 
         public CustomFormat Insert(CustomFormat customFormat)
         {
-            // Add to DB then insert into profiles
             var result = _formatRepository.Insert(customFormat);
             _cache.Clear();
 
-            _eventAggregator.PublishEvent(new CustomFormatAddedEvent(result));
+            _eventAggregator.PublishEventAsync(new CustomFormatAddedEvent(result)).GetAwaiter().GetResult();
 
             return result;
         }
@@ -74,8 +73,7 @@ namespace NzbDrone.Core.CustomFormats
         {
             var format = _formatRepository.Get(id);
 
-            // Remove from profiles before removing from DB
-            _eventAggregator.PublishEvent(new CustomFormatDeletedEvent(format));
+            _eventAggregator.PublishEventAsync(new CustomFormatDeletedEvent(format)).GetAwaiter().GetResult();
 
             _formatRepository.Delete(id);
             _cache.Clear();
@@ -87,8 +85,7 @@ namespace NzbDrone.Core.CustomFormats
             {
                 var format = _formatRepository.Get(id);
 
-                // Remove from profiles before removing from DB
-                _eventAggregator.PublishEvent(new CustomFormatDeletedEvent(format));
+                _eventAggregator.PublishEventAsync(new CustomFormatDeletedEvent(format)).GetAwaiter().GetResult();
 
                 _formatRepository.Delete(id);
             }

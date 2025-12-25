@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Common.Crypto;
 using NzbDrone.Common.Extensions;
@@ -40,14 +42,14 @@ namespace NzbDrone.Core.Download.Pending
     }
 
     public class PendingReleaseService : IPendingReleaseService,
-                                         IHandle<SeriesEditedEvent>,
-                                         IHandle<SeriesUpdatedEvent>,
-                                         IHandle<SeriesDeletedEvent>,
-                                         IHandle<EpisodeGrabbedEvent>,
-                                         IHandle<RssSyncCompleteEvent>,
-                                         IHandle<QualityProfileUpdatedEvent>,
-                                         IHandle<ConfigSavedEvent>,
-                                         IHandle<ApplicationStartedEvent>
+                                         IHandleAsync<SeriesEditedEvent>,
+                                         IHandleAsync<SeriesUpdatedEvent>,
+                                         IHandleAsync<SeriesDeletedEvent>,
+                                         IHandleAsync<EpisodeGrabbedEvent>,
+                                         IHandleAsync<RssSyncCompleteEvent>,
+                                         IHandleAsync<QualityProfileUpdatedEvent>,
+                                         IHandleAsync<ConfigSavedEvent>,
+                                         IHandleAsync<ApplicationStartedEvent>
     {
         private readonly IIndexerStatusService _indexerStatusService;
         private readonly IPendingReleaseRepository _repository;
@@ -527,7 +529,7 @@ namespace NzbDrone.Core.Download.Pending
             return queue;
         }
 
-        private void Insert(DownloadDecision decision, PendingReleaseReason reason)
+        private async Task InsertAsync(DownloadDecision decision, PendingReleaseReason reason, CancellationToken cancellationToken = default)
         {
             _repository.Insert(new PendingRelease
             {
@@ -544,13 +546,23 @@ namespace NzbDrone.Core.Download.Pending
                 }
             });
 
-            _eventAggregator.PublishEvent(new PendingReleasesUpdatedEvent());
+            await _eventAggregator.PublishEventAsync(new PendingReleasesUpdatedEvent(), cancellationToken).ConfigureAwait(false);
+        }
+
+        private void Insert(DownloadDecision decision, PendingReleaseReason reason)
+        {
+            InsertAsync(decision, reason).GetAwaiter().GetResult();
+        }
+
+        private async Task DeleteAsync(PendingRelease pendingRelease, CancellationToken cancellationToken = default)
+        {
+            _repository.Delete(pendingRelease);
+            await _eventAggregator.PublishEventAsync(new PendingReleasesUpdatedEvent(), cancellationToken).ConfigureAwait(false);
         }
 
         private void Delete(PendingRelease pendingRelease)
         {
-            _repository.Delete(pendingRelease);
-            _eventAggregator.PublishEvent(new PendingReleasesUpdatedEvent());
+            DeleteAsync(pendingRelease).GetAwaiter().GetResult();
         }
 
         private int GetDelay(RemoteEpisode remoteEpisode)
@@ -648,47 +660,87 @@ namespace NzbDrone.Core.Download.Pending
             _pendingReleases = IncludeRemoteEpisodes(_repository.All().ToList());
         }
 
-        public void Handle(SeriesEditedEvent message)
+        public async Task HandleAsync(SeriesEditedEvent message, CancellationToken cancellationToken)
         {
-            UpdatePendingReleases();
+            // TODO: Make repository operations async
+            await Task.Run(() =>
+            {
+                UpdatePendingReleases();
+            },
+            cancellationToken);
         }
 
-        public void Handle(SeriesUpdatedEvent message)
+        public async Task HandleAsync(SeriesUpdatedEvent message, CancellationToken cancellationToken)
         {
-            UpdatePendingReleases();
+            // TODO: Make repository operations async
+            await Task.Run(() =>
+            {
+                UpdatePendingReleases();
+            },
+            cancellationToken);
         }
 
-        public void Handle(SeriesDeletedEvent message)
+        public async Task HandleAsync(SeriesDeletedEvent message, CancellationToken cancellationToken)
         {
-            _repository.DeleteBySeriesIds(message.Series.Select(m => m.Id).ToList());
-            UpdatePendingReleases();
+            // TODO: Make repository operations async
+            await Task.Run(() =>
+            {
+                _repository.DeleteBySeriesIds(message.Series.Select(m => m.Id).ToList());
+                UpdatePendingReleases();
+            },
+            cancellationToken);
         }
 
-        public void Handle(EpisodeGrabbedEvent message)
+        public async Task HandleAsync(EpisodeGrabbedEvent message, CancellationToken cancellationToken)
         {
-            RemoveGrabbed(message.Episode);
-            UpdatePendingReleases();
+            // TODO: Make repository operations async
+            await Task.Run(() =>
+            {
+                RemoveGrabbed(message.Episode);
+                UpdatePendingReleases();
+            },
+            cancellationToken);
         }
 
-        public void Handle(RssSyncCompleteEvent message)
+        public async Task HandleAsync(RssSyncCompleteEvent message, CancellationToken cancellationToken)
         {
-            RemoveRejected(message.ProcessedDecisions.Rejected);
-            UpdatePendingReleases();
+            // TODO: Make repository operations async
+            await Task.Run(() =>
+            {
+                RemoveRejected(message.ProcessedDecisions.Rejected);
+                UpdatePendingReleases();
+            },
+            cancellationToken);
         }
 
-        public void Handle(QualityProfileUpdatedEvent message)
+        public async Task HandleAsync(QualityProfileUpdatedEvent message, CancellationToken cancellationToken)
         {
-            UpdatePendingReleases();
+            // TODO: Make repository operations async
+            await Task.Run(() =>
+            {
+                UpdatePendingReleases();
+            },
+            cancellationToken);
         }
 
-        public void Handle(ApplicationStartedEvent message)
+        public async Task HandleAsync(ApplicationStartedEvent message, CancellationToken cancellationToken)
         {
-            UpdatePendingReleases();
+            // TODO: Make repository operations async
+            await Task.Run(() =>
+            {
+                UpdatePendingReleases();
+            },
+            cancellationToken);
         }
 
-        public void Handle(ConfigSavedEvent message)
+        public async Task HandleAsync(ConfigSavedEvent message, CancellationToken cancellationToken)
         {
-            UpdatePendingReleases();
+            // TODO: Make repository operations async
+            await Task.Run(() =>
+            {
+                UpdatePendingReleases();
+            },
+            cancellationToken);
         }
 
         private static Func<PendingRelease, bool> MatchingReleasePredicate(ReleaseInfo release)

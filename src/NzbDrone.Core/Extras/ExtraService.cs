@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.Configuration;
@@ -23,11 +25,11 @@ namespace NzbDrone.Core.Extras
     }
 
     public class ExtraService : IExtraService,
-                                IHandle<MediaCoversUpdatedEvent>,
-                                IHandle<EpisodeFolderCreatedEvent>,
-                                IHandle<SeriesScannedEvent>,
-                                IHandle<SeriesRenamedEvent>,
-                                IHandle<DownloadsProcessedEvent>
+                                IHandleAsync<MediaCoversUpdatedEvent>,
+                                IHandleAsync<EpisodeFolderCreatedEvent>,
+                                IHandleAsync<SeriesScannedEvent>,
+                                IHandleAsync<SeriesRenamedEvent>,
+                                IHandleAsync<DownloadsProcessedEvent>
     {
         private readonly IMediaFileService _mediaFileService;
         private readonly IEpisodeService _episodeService;
@@ -115,38 +117,53 @@ namespace NzbDrone.Core.Extras
             }
         }
 
-        public void Handle(MediaCoversUpdatedEvent message)
+        public async Task HandleAsync(MediaCoversUpdatedEvent message, CancellationToken cancellationToken)
         {
             if (message.Updated)
             {
                 var series = message.Series;
 
-                foreach (var extraFileManager in _extraFileManagers)
+                // TODO: Add async disk provider method
+                await Task.Run(() =>
                 {
-                    extraFileManager.CreateAfterMediaCoverUpdate(series);
-                }
+                    foreach (var extraFileManager in _extraFileManagers)
+                    {
+                        extraFileManager.CreateAfterMediaCoverUpdate(series);
+                    }
+                },
+                cancellationToken);
             }
         }
 
-        public void Handle(SeriesScannedEvent message)
+        public async Task HandleAsync(SeriesScannedEvent message, CancellationToken cancellationToken)
         {
             var series = message.Series;
             var episodeFiles = GetEpisodeFiles(series.Id);
 
-            foreach (var extraFileManager in _extraFileManagers)
+            // TODO: Add async disk provider method
+            await Task.Run(() =>
             {
-                extraFileManager.CreateAfterSeriesScan(series, episodeFiles);
-            }
+                foreach (var extraFileManager in _extraFileManagers)
+                {
+                    extraFileManager.CreateAfterSeriesScan(series, episodeFiles);
+                }
+            },
+            cancellationToken);
         }
 
-        public void Handle(EpisodeFolderCreatedEvent message)
+        public async Task HandleAsync(EpisodeFolderCreatedEvent message, CancellationToken cancellationToken)
         {
             var series = message.Series;
 
-            foreach (var extraFileManager in _extraFileManagers)
+            // TODO: Add async disk provider method
+            await Task.Run(() =>
             {
-                extraFileManager.CreateAfterEpisodeFolder(series, message.SeriesFolder, message.SeasonFolder);
-            }
+                foreach (var extraFileManager in _extraFileManagers)
+                {
+                    extraFileManager.CreateAfterEpisodeFolder(series, message.SeriesFolder, message.SeasonFolder);
+                }
+            },
+            cancellationToken);
         }
 
         public void MoveFilesAfterRename(Series series, EpisodeFile episodeFile)
@@ -159,18 +176,23 @@ namespace NzbDrone.Core.Extras
             }
         }
 
-        public void Handle(SeriesRenamedEvent message)
+        public async Task HandleAsync(SeriesRenamedEvent message, CancellationToken cancellationToken)
         {
             var series = message.Series;
             var episodeFiles = GetEpisodeFiles(series.Id);
 
-            foreach (var extraFileManager in _extraFileManagers)
+            // TODO: Add async disk provider method
+            await Task.Run(() =>
             {
-                extraFileManager.MoveFilesAfterRename(series, episodeFiles);
-            }
+                foreach (var extraFileManager in _extraFileManagers)
+                {
+                    extraFileManager.MoveFilesAfterRename(series, episodeFiles);
+                }
+            },
+            cancellationToken);
         }
 
-        public void Handle(DownloadsProcessedEvent message)
+        public async Task HandleAsync(DownloadsProcessedEvent message, CancellationToken cancellationToken)
         {
             var allSeries = new List<Series>();
 
@@ -181,13 +203,18 @@ namespace NzbDrone.Core.Extras
                 _seriesWithImportedFiles.Clear();
             }
 
-            foreach (var series in allSeries)
+            // TODO: Add async disk provider method
+            await Task.Run(() =>
             {
-                foreach (var extraFileManager in _extraFileManagers)
+                foreach (var series in allSeries)
                 {
-                    extraFileManager.CreateAfterEpisodesImported(series);
+                    foreach (var extraFileManager in _extraFileManagers)
+                    {
+                        extraFileManager.CreateAfterEpisodesImported(series);
+                    }
                 }
-            }
+            },
+            cancellationToken);
         }
 
         private List<EpisodeFile> GetEpisodeFiles(int seriesId)

@@ -1,5 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Blocklisting;
@@ -18,14 +20,14 @@ namespace NzbDrone.Core.Test.Blocklisting
         public void Setup()
         {
             _event = new DownloadFailedEvent
-                     {
-                         SeriesId = 12345,
-                         EpisodeIds = new List<int> { 1 },
-                         Quality = new QualityModel(Quality.Bluray720p),
-                         SourceTitle = "series.title.s01e01",
-                         DownloadClient = "SabnzbdClient",
-                         DownloadId = "Sabnzbd_nzo_2dfh73k"
-                     };
+            {
+                SeriesId = 12345,
+                EpisodeIds = new List<int> { 1 },
+                Quality = new QualityModel(Quality.Bluray720p),
+                SourceTitle = "series.title.s01e01",
+                DownloadClient = "SabnzbdClient",
+                DownloadId = "Sabnzbd_nzo_2dfh73k"
+            };
 
             _event.Data.Add("publishedDate", DateTime.UtcNow.ToString("s") + "Z");
             _event.Data.Add("size", "1000");
@@ -35,18 +37,18 @@ namespace NzbDrone.Core.Test.Blocklisting
         }
 
         [Test]
-        public void should_add_to_repository()
+        public async Task should_add_to_repository()
         {
-            Subject.Handle(_event);
+            await Subject.HandleAsync(_event, CancellationToken.None);
 
             Mocker.GetMock<IBlocklistRepository>()
                 .Verify(v => v.Insert(It.Is<Blocklist>(b => b.EpisodeIds == _event.EpisodeIds)), Times.Once());
         }
 
         [Test]
-        public void should_add_to_repository_missing_size_and_protocol()
+        public async Task should_add_to_repository_missing_size_and_protocol()
         {
-            Subject.Handle(_event);
+            await Subject.HandleAsync(_event, CancellationToken.None);
 
             _event.Data.Remove("size");
             _event.Data.Remove("protocol");

@@ -64,7 +64,7 @@ namespace NzbDrone.Core.Test.Messaging.Commands
                   .Callback(() => waitEventComplete.Set());
 
             Mocker.GetMock<IEventAggregator>()
-                  .Setup(s => s.PublishEvent<CommandExecutedEvent>(It.IsAny<CommandExecutedEvent>()))
+                  .Setup(s => s.PublishEventAsync(It.IsAny<CommandExecutedEvent>(), It.IsAny<CancellationToken>()))
                   .Callback(() => waitEventPublish.Set());
 
             _commandQueue.Add(commandModel);
@@ -95,9 +95,9 @@ namespace NzbDrone.Core.Test.Messaging.Commands
             GivenCommandQueue();
             var commandA = new CommandA();
             var commandModel = new CommandModel
-                               {
-                                   Body = commandA
-                               };
+            {
+                Body = commandA
+            };
 
             Subject.Handle(new ApplicationStartedEvent());
 

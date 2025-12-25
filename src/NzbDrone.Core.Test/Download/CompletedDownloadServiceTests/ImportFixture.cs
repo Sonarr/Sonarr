@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
@@ -135,7 +136,7 @@ namespace NzbDrone.Core.Test.Download.CompletedDownloadServiceTests
             Subject.Import(_trackedDownload);
 
             Mocker.GetMock<IEventAggregator>()
-                .Verify(v => v.PublishEvent<DownloadCompletedEvent>(It.IsAny<DownloadCompletedEvent>()), Times.Never());
+                .Verify(v => v.PublishEventAsync<DownloadCompletedEvent>(It.IsAny<DownloadCompletedEvent>(), It.IsAny<CancellationToken>()), Times.Never());
 
             AssertNotImported();
         }
@@ -381,7 +382,7 @@ namespace NzbDrone.Core.Test.Download.CompletedDownloadServiceTests
         private void AssertNotImported()
         {
             Mocker.GetMock<IEventAggregator>()
-                  .Verify(v => v.PublishEvent(It.IsAny<DownloadCompletedEvent>()), Times.Never());
+                  .Verify(v => v.PublishEventAsync(It.IsAny<DownloadCompletedEvent>(), It.IsAny<CancellationToken>()), Times.Never());
 
             _trackedDownload.State.Should().Be(TrackedDownloadState.ImportBlocked);
         }
@@ -392,7 +393,7 @@ namespace NzbDrone.Core.Test.Download.CompletedDownloadServiceTests
                 .Verify(v => v.ProcessPath(_trackedDownload.DownloadItem.OutputPath.FullPath, ImportMode.Auto, _trackedDownload.RemoteEpisode.Series, _trackedDownload.DownloadItem), Times.Once());
 
             Mocker.GetMock<IEventAggregator>()
-                  .Verify(v => v.PublishEvent(It.IsAny<DownloadCompletedEvent>()), Times.Once());
+                  .Verify(v => v.PublishEventAsync(It.IsAny<DownloadCompletedEvent>(), It.IsAny<CancellationToken>()), Times.Once());
 
             _trackedDownload.State.Should().Be(TrackedDownloadState.Imported);
         }

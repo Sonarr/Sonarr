@@ -8,6 +8,7 @@ using NzbDrone.Core.ProgressMessaging;
 
 namespace NzbDrone.Core.Messaging.Commands
 {
+    // TODO: Rewrite to use async
     public class CommandExecutor : IHandle<ApplicationStartedEvent>,
                                    IHandle<ApplicationShutdownRequested>
     {
@@ -101,7 +102,7 @@ namespace NzbDrone.Core.Messaging.Commands
             {
                 BroadcastCommandUpdate(commandModel);
 
-                _eventAggregator.PublishEvent(new CommandExecutedEvent(commandModel));
+                _eventAggregator.PublishEventAsync(new CommandExecutedEvent(commandModel)).GetAwaiter().GetResult();
 
                 if (ProgressMessageContext.CommandModel == commandModel)
                 {
@@ -119,7 +120,7 @@ namespace NzbDrone.Core.Messaging.Commands
         {
             if (command.Body.SendUpdatesToClient)
             {
-                _eventAggregator.PublishEvent(new CommandUpdatedEvent(command));
+                _eventAggregator.PublishEventAsync(new CommandUpdatedEvent(command)).GetAwaiter().GetResult();
             }
         }
 

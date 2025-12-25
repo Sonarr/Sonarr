@@ -35,19 +35,19 @@ namespace NzbDrone.Core.Download
             var episodes = trackedDownload.RemoteEpisode.Episodes;
 
             var downloadIgnoredEvent = new DownloadIgnoredEvent
-                                      {
-                                          SeriesId = series.Id,
-                                          EpisodeIds = episodes.Select(e => e.Id).ToList(),
-                                          Languages = trackedDownload.RemoteEpisode.Languages,
-                                          Quality = trackedDownload.RemoteEpisode.ParsedEpisodeInfo.Quality,
-                                          SourceTitle = trackedDownload.DownloadItem.Title,
-                                          DownloadClientInfo = trackedDownload.DownloadItem.DownloadClientInfo,
-                                          DownloadId = trackedDownload.DownloadItem.DownloadId,
-                                          TrackedDownload = trackedDownload,
-                                          Message = "Manually ignored"
-                                      };
+            {
+                SeriesId = series.Id,
+                EpisodeIds = episodes.Select(e => e.Id).ToList(),
+                Languages = trackedDownload.RemoteEpisode.Languages,
+                Quality = trackedDownload.RemoteEpisode.ParsedEpisodeInfo.Quality,
+                SourceTitle = trackedDownload.DownloadItem.Title,
+                DownloadClientInfo = trackedDownload.DownloadItem.DownloadClientInfo,
+                DownloadId = trackedDownload.DownloadItem.DownloadId,
+                TrackedDownload = trackedDownload,
+                Message = "Manually ignored"
+            };
 
-            _eventAggregator.PublishEvent(downloadIgnoredEvent);
+            _eventAggregator.PublishEventAsync(downloadIgnoredEvent).GetAwaiter().GetResult();
             return true;
         }
     }

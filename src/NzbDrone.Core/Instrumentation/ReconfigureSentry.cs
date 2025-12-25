@@ -1,4 +1,6 @@
-﻿using System.Linq;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Instrumentation.Sentry;
@@ -34,9 +36,9 @@ namespace NzbDrone.Core.Instrumentation
             }
         }
 
-        public void HandleAsync(ApplicationStartedEvent message)
+        public async Task HandleAsync(ApplicationStartedEvent message, CancellationToken cancellationToken)
         {
-            Reconfigure();
+            await Task.Run(() => Reconfigure(), cancellationToken).ConfigureAwait(false);
         }
     }
 }

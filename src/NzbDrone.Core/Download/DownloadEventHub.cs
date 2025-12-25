@@ -1,4 +1,6 @@
-﻿using System;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Download.TrackedDownloads;
@@ -6,9 +8,9 @@ using NzbDrone.Core.Messaging.Events;
 
 namespace NzbDrone.Core.Download
 {
-    public class DownloadEventHub : IHandle<DownloadFailedEvent>,
-                                    IHandle<DownloadCompletedEvent>,
-                                    IHandle<DownloadCanBeRemovedEvent>
+    public class DownloadEventHub : IHandleAsync<DownloadFailedEvent>,
+                                    IHandleAsync<DownloadCompletedEvent>,
+                                    IHandleAsync<DownloadCanBeRemovedEvent>
     {
         private readonly IConfigService _configService;
         private readonly IProvideDownloadClient _downloadClientProvider;
@@ -23,65 +25,80 @@ namespace NzbDrone.Core.Download
             _logger = logger;
         }
 
-        public void Handle(DownloadFailedEvent message)
+        public async Task HandleAsync(DownloadFailedEvent message, CancellationToken cancellationToken)
         {
-            var trackedDownload = message.TrackedDownload;
-
-            if (trackedDownload == null ||
-                message.TrackedDownload.DownloadItem.Removed ||
-                !trackedDownload.DownloadItem.CanBeRemoved)
+            // TODO: Make download client HTTP calls async
+            await Task.Run(() =>
             {
-                return;
-            }
+                var trackedDownload = message.TrackedDownload;
 
-            var downloadClient = _downloadClientProvider.Get(message.TrackedDownload.DownloadClient);
-            var definition = downloadClient.Definition as DownloadClientDefinition;
+                if (trackedDownload == null ||
+                    message.TrackedDownload.DownloadItem.Removed ||
+                    !trackedDownload.DownloadItem.CanBeRemoved)
+                {
+                    return;
+                }
 
-            if (!definition.RemoveFailedDownloads)
-            {
-                return;
-            }
+                var downloadClient = _downloadClientProvider.Get(message.TrackedDownload.DownloadClient);
+                var definition = downloadClient.Definition as DownloadClientDefinition;
 
-            RemoveFromDownloadClient(trackedDownload, downloadClient);
+                if (!definition.RemoveFailedDownloads)
+                {
+                    return;
+                }
+
+                RemoveFromDownloadClient(trackedDownload, downloadClient);
+            },
+            cancellationToken);
         }
 
-        public void Handle(DownloadCompletedEvent message)
+        public async Task HandleAsync(DownloadCompletedEvent message, CancellationToken cancellationToken)
         {
-            var trackedDownload = message.TrackedDownload;
-            var downloadClient = _downloadClientProvider.Get(trackedDownload.DownloadClient);
-            var definition = downloadClient.Definition as DownloadClientDefinition;
-
-            MarkItemAsImported(trackedDownload, downloadClient);
-
-            if (trackedDownload.DownloadItem.Removed ||
-                !trackedDownload.DownloadItem.CanBeRemoved ||
-                trackedDownload.DownloadItem.Status == DownloadItemStatus.Downloading)
+            // TODO: Make download client HTTP calls async
+            await Task.Run(() =>
             {
-                return;
-            }
+                var trackedDownload = message.TrackedDownload;
+                var downloadClient = _downloadClientProvider.Get(trackedDownload.DownloadClient);
+                var definition = downloadClient.Definition as DownloadClientDefinition;
 
-            if (!definition.RemoveCompletedDownloads)
-            {
-                return;
-            }
+                MarkItemAsImported(trackedDownload, downloadClient);
 
-            RemoveFromDownloadClient(message.TrackedDownload, downloadClient);
+                if (trackedDownload.DownloadItem.Removed ||
+                    !trackedDownload.DownloadItem.CanBeRemoved ||
+                    trackedDownload.DownloadItem.Status == DownloadItemStatus.Downloading)
+                {
+                    return;
+                }
+
+                if (!definition.RemoveCompletedDownloads)
+                {
+                    return;
+                }
+
+                RemoveFromDownloadClient(message.TrackedDownload, downloadClient);
+            },
+            cancellationToken);
         }
 
-        public void Handle(DownloadCanBeRemovedEvent message)
+        public async Task HandleAsync(DownloadCanBeRemovedEvent message, CancellationToken cancellationToken)
         {
-            var trackedDownload = message.TrackedDownload;
-            var downloadClient = _downloadClientProvider.Get(trackedDownload.DownloadClient);
-            var definition = downloadClient.Definition as DownloadClientDefinition;
-
-            if (trackedDownload.DownloadItem.Removed ||
-                !trackedDownload.DownloadItem.CanBeRemoved ||
-                !definition.RemoveCompletedDownloads)
+            // TODO: Make download client HTTP calls async
+            await Task.Run(() =>
             {
-                return;
-            }
+                var trackedDownload = message.TrackedDownload;
+                var downloadClient = _downloadClientProvider.Get(trackedDownload.DownloadClient);
+                var definition = downloadClient.Definition as DownloadClientDefinition;
 
-            RemoveFromDownloadClient(message.TrackedDownload, downloadClient);
+                if (trackedDownload.DownloadItem.Removed ||
+                    !trackedDownload.DownloadItem.CanBeRemoved ||
+                    !definition.RemoveCompletedDownloads)
+                {
+                    return;
+                }
+
+                RemoveFromDownloadClient(message.TrackedDownload, downloadClient);
+            },
+            cancellationToken);
         }
 
         private void RemoveFromDownloadClient(TrackedDownload trackedDownload, IDownloadClient downloadClient)

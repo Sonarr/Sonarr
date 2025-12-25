@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using FluentValidation.Results;
 using NLog;
 using NLog.Config;
@@ -19,11 +20,11 @@ namespace NzbDrone.Core.Test.IndexerTests.TorrentRssIndexerTests
         {
         }
 
-        public List<ValidationFailure> TestPublic()
+        public async Task<List<ValidationFailure>> TestPublic()
         {
             var result = new List<ValidationFailure>();
             SetupNLog(); // Enable this to enable trace logging with nlog for debugging purposes
-            Test(result).GetAwaiter().GetResult();
+            await Test(result);
             return result;
         }
 

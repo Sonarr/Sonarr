@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Instrumentation.Extensions;
@@ -335,9 +337,10 @@ namespace NzbDrone.Core.ImportLists
             _importListStatusService.MarkListsAsCleaned();
         }
 
-        public void HandleAsync(ProviderDeletedEvent<IImportList> message)
+        // TODO: Use async Clean Library
+        public async Task HandleAsync(ProviderDeletedEvent<IImportList> message, CancellationToken cancellationToken)
         {
-            TryCleanLibrary();
+            await Task.Run(() => TryCleanLibrary(), cancellationToken).ConfigureAwait(false);
         }
     }
 }

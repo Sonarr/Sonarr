@@ -58,7 +58,7 @@ namespace NzbDrone.Core.AutoTagging
             _repository.Update(autoTag);
 
             _cache.Clear();
-            _eventAggregator.PublishEvent(new AutoTagsUpdatedEvent());
+            _eventAggregator.PublishEventAsync(new AutoTagsUpdatedEvent()).GetAwaiter().GetResult();
         }
 
         public AutoTag Insert(AutoTag autoTag)
@@ -66,7 +66,7 @@ namespace NzbDrone.Core.AutoTagging
             var result = _repository.Insert(autoTag);
 
             _cache.Clear();
-            _eventAggregator.PublishEvent(new AutoTagsUpdatedEvent());
+            _eventAggregator.PublishEventAsync(new AutoTagsUpdatedEvent()).GetAwaiter().GetResult();
 
             return result;
         }
@@ -76,7 +76,7 @@ namespace NzbDrone.Core.AutoTagging
             _repository.Delete(id);
 
             _cache.Clear();
-            _eventAggregator.PublishEvent(new AutoTagsUpdatedEvent());
+            _eventAggregator.PublishEventAsync(new AutoTagsUpdatedEvent()).GetAwaiter().GetResult();
         }
 
         public List<AutoTag> AllForTag(int tagId)

@@ -1,10 +1,13 @@
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 using NzbDrone.Common.Messaging;
 
 namespace NzbDrone.Core.Messaging.Events
 {
-    public interface IEventAggregator
+    public interface IEventAggregator : IAsyncDisposable
     {
-        void PublishEvent<TEvent>(TEvent @event)
-            where TEvent : class,  IEvent;
+        Task PublishEventAsync<TEvent>(TEvent @event, CancellationToken cancellationToken = default)
+            where TEvent : class, IEvent;
     }
 }

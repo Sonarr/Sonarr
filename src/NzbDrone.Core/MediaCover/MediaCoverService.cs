@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Threading;
+using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
@@ -39,7 +40,7 @@ namespace NzbDrone.Core.MediaCover
 
         // ImageSharp is slow on ARM (no hardware acceleration on mono yet)
         // So limit the number of concurrent resizing tasks
-        private static SemaphoreSlim _semaphore = new SemaphoreSlim((int)Math.Ceiling(Environment.ProcessorCount / 2.0));
+        private static readonly SemaphoreSlim _semaphore = new SemaphoreSlim((int)Math.Ceiling(Environment.ProcessorCount / 2.0));
 
         public MediaCoverService(IMediaCoverProxy mediaCoverProxy,
                                  IImageResizer resizer,
@@ -230,23 +231,32 @@ namespace NzbDrone.Core.MediaCover
             }
         }
 
-        public void HandleAsync(SeriesUpdatedEvent message)
+        public async Task HandleAsync(SeriesUpdatedEvent message, CancellationToken cancellationToken)
+        {
+            await HandleSeriesUpdatedAsync(message, cancellationToken).ConfigureAwait(false);
+        }
+
+        private async Task HandleSeriesUpdatedAsync(SeriesUpdatedEvent message, CancellationToken cancellationToken = default)
         {
             var updated = EnsureCovers(message.Series);
 
-            _eventAggregator.PublishEvent(new MediaCoversUpdatedEvent(message.Series, updated));
+            await _eventAggregator.PublishEventAsync(new MediaCoversUpdatedEvent(message.Series, updated), cancellationToken).ConfigureAwait(false);
         }
 
-        public void HandleAsync(SeriesDeletedEvent message)
+        public async Task HandleAsync(SeriesDeletedEvent message, CancellationToken cancellationToken)
         {
-            foreach (var series in message.Series)
+            await Task.Run(() =>
             {
-                var path = GetSeriesCoverPath(series.Id);
-                if (_diskProvider.FolderExists(path))
+                foreach (var series in message.Series)
                 {
-                    _diskProvider.DeleteFolder(path, true);
+                    var path = GetSeriesCoverPath(series.Id);
+                    if (_diskProvider.FolderExists(path))
+                    {
+                        _diskProvider.DeleteFolder(path, true);
+                    }
                 }
-            }
+            },
+            cancellationToken).ConfigureAwait(false);
         }
     }
 }

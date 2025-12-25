@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.CustomFormats;
@@ -25,9 +27,9 @@ namespace NzbDrone.Core.Profiles.Qualities
     }
 
     public class QualityProfileService : IQualityProfileService,
-                                         IHandle<ApplicationStartedEvent>,
-                                         IHandle<CustomFormatAddedEvent>,
-                                         IHandle<CustomFormatDeletedEvent>
+                                         IHandleAsync<ApplicationStartedEvent>,
+                                         IHandleAsync<CustomFormatAddedEvent>,
+                                         IHandleAsync<CustomFormatDeletedEvent>
     {
         private readonly IQualityProfileRepository _qualityProfileRepository;
         private readonly IImportListFactory _importListFactory;
@@ -56,10 +58,15 @@ namespace NzbDrone.Core.Profiles.Qualities
             return _qualityProfileRepository.Insert(profile);
         }
 
-        public void Update(QualityProfile profile)
+        public async void Update(QualityProfile profile)
+        {
+            await UpdateAsync(profile).ConfigureAwait(false);
+        }
+
+        private async Task UpdateAsync(QualityProfile profile, CancellationToken cancellationToken = default)
         {
             _qualityProfileRepository.Update(profile);
-            _eventAggregator.PublishEvent(new QualityProfileUpdatedEvent(profile.Id));
+            await _eventAggregator.PublishEventAsync(new QualityProfileUpdatedEvent(profile.Id), cancellationToken).ConfigureAwait(false);
         }
 
         public void Delete(int id)
@@ -88,106 +95,121 @@ namespace NzbDrone.Core.Profiles.Qualities
             return _qualityProfileRepository.Exists(id);
         }
 
-        public void Handle(ApplicationStartedEvent message)
+        public async Task HandleAsync(ApplicationStartedEvent message, CancellationToken cancellationToken)
         {
-            if (All().Any())
+            // TODO: Make repository operations async
+            await Task.Run(() =>
             {
-                return;
-            }
-
-            _logger.Info("Setting up default quality profiles");
-
-            AddDefaultProfile("Any",
-                Quality.SDTV,
-                Quality.SDTV,
-                Quality.WEBRip480p,
-                Quality.WEBDL480p,
-                Quality.DVD,
-                Quality.Bluray480p,
-                Quality.Bluray576p,
-                Quality.HDTV720p,
-                Quality.HDTV1080p,
-                Quality.WEBRip720p,
-                Quality.WEBDL720p,
-                Quality.WEBRip1080p,
-                Quality.WEBDL1080p,
-                Quality.Bluray720p,
-                Quality.Bluray1080p);
-
-            AddDefaultProfile("SD",
-                Quality.SDTV,
-                Quality.SDTV,
-                Quality.WEBRip480p,
-                Quality.WEBDL480p,
-                Quality.DVD,
-                Quality.Bluray480p,
-                Quality.Bluray576p);
-
-            AddDefaultProfile("HD-720p",
-                Quality.HDTV720p,
-                Quality.HDTV720p,
-                Quality.WEBRip720p,
-                Quality.WEBDL720p,
-                Quality.Bluray720p);
-
-            AddDefaultProfile("HD-1080p",
-                Quality.HDTV1080p,
-                Quality.HDTV1080p,
-                Quality.WEBRip1080p,
-                Quality.WEBDL1080p,
-                Quality.Bluray1080p);
-
-            AddDefaultProfile("Ultra-HD",
-                Quality.HDTV2160p,
-                Quality.HDTV2160p,
-                Quality.WEBRip2160p,
-                Quality.WEBDL2160p,
-                Quality.Bluray2160p);
-
-            AddDefaultProfile("HD - 720p/1080p",
-                Quality.HDTV720p,
-                Quality.HDTV720p,
-                Quality.HDTV1080p,
-                Quality.WEBRip720p,
-                Quality.WEBDL720p,
-                Quality.WEBRip1080p,
-                Quality.WEBDL1080p,
-                Quality.Bluray720p,
-                Quality.Bluray1080p);
-        }
-
-        public void Handle(CustomFormatAddedEvent message)
-        {
-            var all = All();
-
-            foreach (var profile in all)
-            {
-                profile.FormatItems.Insert(0, new ProfileFormatItem
+                if (All().Any())
                 {
-                    Score = 0,
-                    Format = message.CustomFormat
-                });
-
-                Update(profile);
-            }
-        }
-
-        public void Handle(CustomFormatDeletedEvent message)
-        {
-            var all = All();
-            foreach (var profile in all)
-            {
-                profile.FormatItems = profile.FormatItems.Where(c => c.Format.Id != message.CustomFormat.Id).ToList();
-
-                if (profile.FormatItems.Empty())
-                {
-                    profile.MinFormatScore = 0;
-                    profile.CutoffFormatScore = 0;
-                    profile.MinUpgradeFormatScore = 1;
+                    return;
                 }
 
-                Update(profile);
-            }
+                _logger.Info("Setting up default quality profiles");
+
+                AddDefaultProfile("Any",
+                    Quality.SDTV,
+                    Quality.SDTV,
+                    Quality.WEBRip480p,
+                    Quality.WEBDL480p,
+                    Quality.DVD,
+                    Quality.Bluray480p,
+                    Quality.Bluray576p,
+                    Quality.HDTV720p,
+                    Quality.HDTV1080p,
+                    Quality.WEBRip720p,
+                    Quality.WEBDL720p,
+                    Quality.WEBRip1080p,
+                    Quality.WEBDL1080p,
+                    Quality.Bluray720p,
+                    Quality.Bluray1080p);
+
+                AddDefaultProfile("SD",
+                    Quality.SDTV,
+                    Quality.SDTV,
+                    Quality.WEBRip480p,
+                    Quality.WEBDL480p,
+                    Quality.DVD,
+                    Quality.Bluray480p,
+                    Quality.Bluray576p);
+
+                AddDefaultProfile("HD-720p",
+                    Quality.HDTV720p,
+                    Quality.HDTV720p,
+                    Quality.WEBRip720p,
+                    Quality.WEBDL720p,
+                    Quality.Bluray720p);
+
+                AddDefaultProfile("HD-1080p",
+                    Quality.HDTV1080p,
+                    Quality.HDTV1080p,
+                    Quality.WEBRip1080p,
+                    Quality.WEBDL1080p,
+                    Quality.Bluray1080p);
+
+                AddDefaultProfile("Ultra-HD",
+                    Quality.HDTV2160p,
+                    Quality.HDTV2160p,
+                    Quality.WEBRip2160p,
+                    Quality.WEBDL2160p,
+                    Quality.Bluray2160p);
+
+                AddDefaultProfile("HD - 720p/1080p",
+                    Quality.HDTV720p,
+                    Quality.HDTV720p,
+                    Quality.HDTV1080p,
+                    Quality.WEBRip720p,
+                    Quality.WEBDL720p,
+                    Quality.WEBRip1080p,
+                    Quality.WEBDL1080p,
+                    Quality.Bluray720p,
+                    Quality.Bluray1080p);
+            },
+            cancellationToken);
+        }
+
+        public async Task HandleAsync(CustomFormatAddedEvent message, CancellationToken cancellationToken)
+        {
+            // TODO: Make repository operations async
+            await Task.Run(() =>
+            {
+                var all = All();
+
+                foreach (var profile in all)
+                {
+                    profile.FormatItems.Insert(0, new ProfileFormatItem
+                    {
+                        Score = 0,
+                        Format = message.CustomFormat
+                    });
+
+                    Update(profile);
+                }
+            },
+            cancellationToken);
+        }
+
+        public async Task HandleAsync(CustomFormatDeletedEvent message, CancellationToken cancellationToken)
+        {
+            // TODO: Make repository operations async
+            await Task.Run(() =>
+            {
+                var all = All();
+                foreach (var profile in all)
+                {
+                    profile.FormatItems = profile.FormatItems.Where(c => c.Format.Id != message.CustomFormat.Id).ToList();
+
+                    if (profile.FormatItems.Empty())
+                    {
+                        profile.MinFormatScore = 0;
+                        profile.CutoffFormatScore = 0;
+                        profile.MinUpgradeFormatScore = 1;
+                    }
+
+                    Update(profile);
+                }
+            },
+            cancellationToken);
         }
 
         public QualityProfile GetDefaultProfile(string name, Quality cutoff = null, params Quality[] allowed)
@@ -246,15 +268,15 @@ namespace NzbDrone.Core.Profiles.Qualities
             }).ToList();
 
             var qualityProfile = new QualityProfile
-                                 {
-                                     Name = name,
-                                     Cutoff = profileCutoff,
-                                     Items = items,
-                                     MinFormatScore = 0,
-                                     CutoffFormatScore = 0,
-                                     MinUpgradeFormatScore = 1,
-                                     FormatItems = formatItems
-                                 };
+            {
+                Name = name,
+                Cutoff = profileCutoff,
+                Items = items,
+                MinFormatScore = 0,
+                CutoffFormatScore = 0,
+                MinUpgradeFormatScore = 1,
+                FormatItems = formatItems
+            };
 
             return qualityProfile;
         }
@@ -267,13 +289,13 @@ namespace NzbDrone.Core.Profiles.Qualities
             {
                 foreach (var sizeLimit in sizeLimits)
                 {
-                        var qualityIndex = qualityProfile.GetIndex(sizeLimit.Quality, true);
-                        var qualityOrGroup = qualityProfile.Items[qualityIndex.Index];
-                        var item = qualityOrGroup.Quality == null ? qualityOrGroup.Items[qualityIndex.GroupIndex] : qualityOrGroup;
+                    var qualityIndex = qualityProfile.GetIndex(sizeLimit.Quality, true);
+                    var qualityOrGroup = qualityProfile.Items[qualityIndex.Index];
+                    var item = qualityOrGroup.Quality == null ? qualityOrGroup.Items[qualityIndex.GroupIndex] : qualityOrGroup;
 
-                        item.MinSize = sizeLimit.MinSize;
-                        item.MaxSize = sizeLimit.MaxSize;
-                        item.PreferredSize = sizeLimit.PreferredSize;
+                    item.MinSize = sizeLimit.MinSize;
+                    item.MaxSize = sizeLimit.MaxSize;
+                    item.PreferredSize = sizeLimit.PreferredSize;
                 }
             }
 

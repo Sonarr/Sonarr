@@ -1,5 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Configuration;
@@ -80,23 +82,28 @@ namespace NzbDrone.Core.Update.History
             }
 
             if (history == null || history.Version != BuildInfo.Version)
-                {
-                    _prevVersion = history?.Version;
+            {
+                _prevVersion = history?.Version;
 
-                    _repository.Insert(new UpdateHistory
-                    {
-                        Date = DateTime.UtcNow,
-                        Version = BuildInfo.Version,
-                        EventType = UpdateHistoryEventType.Installed
-                    });
-                }
+                _repository.Insert(new UpdateHistory
+                {
+                    Date = DateTime.UtcNow,
+                    Version = BuildInfo.Version,
+                    EventType = UpdateHistoryEventType.Installed
+                });
+            }
         }
 
-        public void HandleAsync(ApplicationStartedEvent message)
+        public async Task HandleAsync(ApplicationStartedEvent message, CancellationToken cancellationToken)
+        {
+            await HandleApplicationStartedAsync(message, cancellationToken).ConfigureAwait(false);
+        }
+
+        private async Task HandleApplicationStartedAsync(ApplicationStartedEvent message, CancellationToken cancellationToken = default)
         {
             if (_prevVersion != null)
             {
-                _eventAggregator.PublishEvent(new UpdateInstalledEvent(_prevVersion, BuildInfo.Version));
+                await _eventAggregator.PublishEventAsync(new UpdateInstalledEvent(_prevVersion, BuildInfo.Version), cancellationToken).ConfigureAwait(false);
             }
         }
     }

@@ -72,7 +72,7 @@ namespace NzbDrone.Core.Tv
         public Series AddSeries(Series newSeries)
         {
             _seriesRepository.Insert(newSeries);
-            _eventAggregator.PublishEvent(new SeriesAddedEvent(GetSeries(newSeries.Id)));
+            _eventAggregator.PublishEventAsync(new SeriesAddedEvent(GetSeries(newSeries.Id))).GetAwaiter().GetResult();
 
             return newSeries;
         }
@@ -80,7 +80,7 @@ namespace NzbDrone.Core.Tv
         public List<Series> AddSeries(List<Series> newSeries)
         {
             _seriesRepository.InsertMany(newSeries);
-            _eventAggregator.PublishEvent(new SeriesImportedEvent(newSeries.Select(s => s.Id).ToList()));
+            _eventAggregator.PublishEventAsync(new SeriesImportedEvent(newSeries.Select(s => s.Id).ToList())).GetAwaiter().GetResult();
 
             return newSeries;
         }
@@ -163,7 +163,7 @@ namespace NzbDrone.Core.Tv
         {
             var series = _seriesRepository.Get(seriesIds).ToList();
             _seriesRepository.DeleteMany(seriesIds);
-            _eventAggregator.PublishEvent(new SeriesDeletedEvent(series, deleteFiles, addImportListExclusion));
+            _eventAggregator.PublishEventAsync(new SeriesDeletedEvent(series, deleteFiles, addImportListExclusion)).GetAwaiter().GetResult();
         }
 
         public List<Series> GetAllSeries()
@@ -193,7 +193,6 @@ namespace NzbDrone.Core.Tv
         }
 
         // updateEpisodesToMatchSeason is an override for EpisodeMonitoredService to use so a change via Season pass doesn't get nuked by the seasons loop.
-        // TODO: Remove when seasons are split from series (or we come up with a better way to address this)
         public Series UpdateSeries(Series series, bool updateEpisodesToMatchSeason = true, bool publishUpdatedEvent = true)
         {
             var storedSeries = GetSeries(series.Id);
@@ -221,7 +220,7 @@ namespace NzbDrone.Core.Tv
             var updatedSeries = _seriesRepository.Update(series);
             if (publishUpdatedEvent)
             {
-                _eventAggregator.PublishEvent(new SeriesEditedEvent(updatedSeries, storedSeries, episodeMonitoredChanged));
+                _eventAggregator.PublishEventAsync(new SeriesEditedEvent(updatedSeries, storedSeries, episodeMonitoredChanged)).GetAwaiter().GetResult();
             }
 
             return updatedSeries;
@@ -251,7 +250,7 @@ namespace NzbDrone.Core.Tv
 
             _seriesRepository.UpdateMany(series);
             _logger.Debug("{0} series updated", series.Count);
-            _eventAggregator.PublishEvent(new SeriesBulkEditedEvent(series));
+            _eventAggregator.PublishEventAsync(new SeriesBulkEditedEvent(series)).GetAwaiter().GetResult();
 
             return series;
         }

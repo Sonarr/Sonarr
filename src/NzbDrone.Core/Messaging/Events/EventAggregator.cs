@@ -1,129 +1,157 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.Messaging;
-using NzbDrone.Common.TPL;
 
 namespace NzbDrone.Core.Messaging.Events
 {
-    public class EventAggregator : IEventAggregator
+    public sealed class EventAggregator : IEventAggregator
     {
         private readonly Logger _logger;
         private readonly IServiceFactory _serviceFactory;
-        private readonly TaskFactory _taskFactory;
-        private readonly Dictionary<string, object> _eventSubscribers;
+        private readonly IBackgroundEventProcessor _backgroundProcessor;
+        private readonly Dictionary<string, object> _subscriberCache;
+        private readonly object _cacheLock = new();
 
-        private class EventSubscribers<TEvent>
-            where TEvent : class, IEvent
-        {
-            public IHandle<TEvent>[] _syncHandlers;
-            public IHandleAsync<TEvent>[] _asyncHandlers;
-            public IHandleAsync<IEvent>[] _globalHandlers;
-
-            public EventSubscribers(IServiceFactory serviceFactory)
-            {
-                _syncHandlers = serviceFactory.BuildAll<IHandle<TEvent>>()
-                                              .OrderBy(GetEventHandleOrder)
-                                              .ToArray();
-
-                _globalHandlers = serviceFactory.BuildAll<IHandleAsync<IEvent>>()
-                                              .ToArray();
-
-                _asyncHandlers = serviceFactory.BuildAll<IHandleAsync<TEvent>>()
-                                               .ToArray();
-            }
-        }
-
-        public EventAggregator(Logger logger, IServiceFactory serviceFactory)
+        public EventAggregator(Logger logger, IServiceFactory serviceFactory, IBackgroundEventProcessor backgroundProcessor)
         {
             _logger = logger;
             _serviceFactory = serviceFactory;
-            _taskFactory = new TaskFactory();
-            _eventSubscribers = new Dictionary<string, object>();
+            _backgroundProcessor = backgroundProcessor;
+            _subscriberCache = new Dictionary<string, object>();
         }
 
-        public void PublishEvent<TEvent>(TEvent @event)
+        public async Task PublishEventAsync<TEvent>(TEvent @event, CancellationToken cancellationToken = default)
             where TEvent : class, IEvent
         {
             Ensure.That(@event, () => @event).IsNotNull();
 
-            var eventName = GetEventName(@event.GetType());
-
-            /*
-                        int workerThreads;
-                        int completionPortThreads;
-                        ThreadPool.GetAvailableThreads(out workerThreads, out completionPortThreads);
-
-                        int maxCompletionPortThreads;
-                        int maxWorkerThreads;
-                        ThreadPool.GetMaxThreads(out maxWorkerThreads, out maxCompletionPortThreads);
-
-
-                        int minCompletionPortThreads;
-                        int minWorkerThreads;
-                        ThreadPool.GetMinThreads(out minWorkerThreads, out minCompletionPortThreads);
-
-                        _logger.Warn("Thread pool state WT:{0} PT:{1}  MAXWT:{2} MAXPT:{3} MINWT:{4} MINPT:{5}", workerThreads, completionPortThreads, maxWorkerThreads, maxCompletionPortThreads, minWorkerThreads, minCompletionPortThreads);
-            */
-
+            var eventName = GetEventName(typeof(TEvent));
             _logger.Trace("Publishing {0}", eventName);
 
-            EventSubscribers<TEvent> subscribers;
-            lock (_eventSubscribers)
+            var subscribers = GetOrCreateSubscribers<TEvent>(eventName);
+
+            // -> Synchronous handlers (ordered)
+            ProcessSyncHandlers(subscribers.SyncHandlers, @event, eventName);
+
+            // ~> Async handlers (parallel)
+            await ProcessAsyncHandlersAsync(subscribers.AsyncHandlers, subscribers.GlobalHandlers, @event, eventName, cancellationToken)
+                .ConfigureAwait(false);
+
+            // => Background handlers (non-blocking)
+            await QueueBackgroundHandlersAsync(subscribers.BackgroundHandlers, @event, eventName, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        private EventSubscribers<TEvent> GetOrCreateSubscribers<TEvent>(string eventName)
+            where TEvent : class, IEvent
+        {
+            lock (_cacheLock)
             {
-                if (!_eventSubscribers.TryGetValue(eventName, out var target))
+                if (!_subscriberCache.TryGetValue(eventName, out var cached))
                 {
-                    _eventSubscribers[eventName] = target = new EventSubscribers<TEvent>(_serviceFactory);
+                    cached = new EventSubscribers<TEvent>(_serviceFactory);
+                    _subscriberCache[eventName] = cached;
                 }
 
-                subscribers = target as EventSubscribers<TEvent>;
+                return (EventSubscribers<TEvent>)cached;
             }
+        }
 
-            // call synchronous handlers first.
-            var handlers = subscribers._syncHandlers;
+        private void ProcessSyncHandlers<TEvent>(IHandle<TEvent>[] handlers, TEvent @event, string eventName)
+            where TEvent : class, IEvent
+        {
             foreach (var handler in handlers)
             {
                 try
                 {
-                    _logger.Trace("{0} -> {1}", eventName, handler.GetType().Name);
+                    var handlerName = handler.GetType().Name;
+                    _logger.Trace("{0} -> {1}", eventName, handlerName);
+
                     handler.Handle(@event);
-                    _logger.Trace("{0} <- {1}", eventName, handler.GetType().Name);
+
+                    _logger.Trace("{0} <- {1}", eventName, handlerName);
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    _logger.Error(e, "{0} failed while processing [{1}]", handler.GetType().Name, eventName);
+                    _logger.Error(ex, "{0} failed while processing [{1}]", handler.GetType().Name, eventName);
                 }
             }
+        }
 
-            foreach (var handler in subscribers._globalHandlers)
+        private async Task ProcessAsyncHandlersAsync<TEvent>(
+            IHandleAsync<TEvent>[] typedHandlers,
+            IHandleAsync<IEvent>[] globalHandlers,
+            TEvent @event,
+            string eventName,
+            CancellationToken cancellationToken)
+            where TEvent : class, IEvent
+        {
+            if (typedHandlers.Length == 0 && globalHandlers.Length == 0)
             {
-                var handlerLocal = handler;
-
-                _taskFactory.StartNew(() =>
-                {
-                    handlerLocal.HandleAsync(@event);
-                },
-                        TaskCreationOptions.PreferFairness)
-                .LogExceptions();
+                return;
             }
 
-            foreach (var handler in subscribers._asyncHandlers)
-            {
-                var handlerLocal = handler;
+            var allHandlers = new List<object>(typedHandlers.Length + globalHandlers.Length);
+            allHandlers.AddRange(typedHandlers);
+            allHandlers.AddRange(globalHandlers);
 
-                _taskFactory.StartNew(() =>
+            await Parallel.ForEachAsync(allHandlers, cancellationToken, async (handler, ct) =>
+            {
+                try
                 {
-                    _logger.Trace("{0} ~> {1}", eventName, handlerLocal.GetType().Name);
-                    handlerLocal.HandleAsync(@event);
-                    _logger.Trace("{0} <~ {1}", eventName, handlerLocal.GetType().Name);
-                },
-                        TaskCreationOptions.PreferFairness)
-                .LogExceptions();
+                    var handlerName = handler.GetType().Name;
+                    _logger.Trace("{0} ~> {1}", eventName, handlerName);
+
+                    if (handler is IHandleAsync<TEvent> typedHandler)
+                    {
+                        await typedHandler.HandleAsync(@event, ct).ConfigureAwait(false);
+                    }
+                    else if (handler is IHandleAsync<IEvent> globalHandler)
+                    {
+                        await globalHandler.HandleAsync(@event, ct).ConfigureAwait(false);
+                    }
+
+                    _logger.Trace("{0} <~ {1}", eventName, handlerName);
+                }
+                catch (Exception ex)
+                {
+                    _logger.Error(ex, "{0} failed while processing [{1}]", handler.GetType().Name, eventName);
+                }
+            }).ConfigureAwait(false);
+        }
+
+        private async Task QueueBackgroundHandlersAsync<TEvent>(
+            IHandleBackgroundAsync<TEvent>[] handlers,
+            TEvent @event,
+            string eventName,
+            CancellationToken cancellationToken)
+            where TEvent : class, IEvent
+        {
+            foreach (var handler in handlers)
+            {
+                try
+                {
+                    await _backgroundProcessor.QueueEventAsync(@event, handler, cancellationToken)
+                        .ConfigureAwait(false);
+                }
+                catch (OperationCanceledException)
+                {
+                    _logger.Debug("Queuing background handler {0} for [{1}] was cancelled", handler.GetType().Name, eventName);
+                    throw;
+                }
             }
+        }
+
+        public async ValueTask DisposeAsync()
+        {
+            _logger.Debug("EventAggregator shutdown initiated");
+            await _backgroundProcessor.DisposeAsync().ConfigureAwait(false);
         }
 
         private static string GetEventName(Type eventType)
@@ -133,13 +161,14 @@ namespace NzbDrone.Core.Messaging.Events
                 return eventType.Name;
             }
 
-            return string.Format("{0}<{1}>", eventType.Name.Remove(eventType.Name.IndexOf('`')), eventType.GetGenericArguments()[0].Name);
+            var genericArgs = string.Join(", ", eventType.GetGenericArguments().Select(t => t.Name));
+            return $"{eventType.Name[..eventType.Name.IndexOf('`')]}<{genericArgs}>";
         }
 
         internal static int GetEventHandleOrder<TEvent>(IHandle<TEvent> eventHandler)
             where TEvent : class, IEvent
         {
-            var method = eventHandler.GetType().GetMethod(nameof(eventHandler.Handle), new Type[] { typeof(TEvent) });
+            var method = eventHandler.GetType().GetMethod(nameof(eventHandler.Handle), [typeof(TEvent)]);
 
             if (method == null)
             {
@@ -148,12 +177,16 @@ namespace NzbDrone.Core.Messaging.Events
 
             var attribute = method.GetCustomAttributes(typeof(EventHandleOrderAttribute), true).FirstOrDefault() as EventHandleOrderAttribute;
 
-            if (attribute == null)
-            {
-                return (int)EventHandleOrder.Any;
-            }
+            return attribute?.EventHandleOrder is { } order ? (int)order : (int)EventHandleOrder.Any;
+        }
 
-            return (int)attribute.EventHandleOrder;
+        private class EventSubscribers<TEvent>(IServiceFactory serviceFactory)
+            where TEvent : class, IEvent
+        {
+            public IHandle<TEvent>[] SyncHandlers { get; } = [.. serviceFactory.BuildAll<IHandle<TEvent>>().OrderBy(GetEventHandleOrder)];
+            public IHandleAsync<TEvent>[] AsyncHandlers { get; } = [.. serviceFactory.BuildAll<IHandleAsync<TEvent>>()];
+            public IHandleBackgroundAsync<TEvent>[] BackgroundHandlers { get; } = [.. serviceFactory.BuildAll<IHandleBackgroundAsync<TEvent>>()];
+            public IHandleAsync<IEvent>[] GlobalHandlers { get; } = [.. serviceFactory.BuildAll<IHandleAsync<IEvent>>()];
         }
     }
 }

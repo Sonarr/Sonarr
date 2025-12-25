@@ -1,7 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Common.Cache;
 using NzbDrone.Common.Extensions;
@@ -22,9 +24,9 @@ namespace NzbDrone.Core.DataAugmentation.Scene
     }
 
     public class SceneMappingService : ISceneMappingService,
-                                       IHandle<SeriesRefreshStartingEvent>,
-                                       IHandle<SeriesAddedEvent>,
-                                       IHandle<SeriesImportedEvent>,
+                                       IHandleAsync<SeriesRefreshStartingEvent>,
+                                       IHandleAsync<SeriesAddedEvent>,
+                                       IHandleAsync<SeriesImportedEvent>,
                                        IExecute<UpdateSceneMappingCommand>
     {
         private readonly ISceneMappingRepository _repository;
@@ -179,7 +181,7 @@ namespace NzbDrone.Core.DataAugmentation.Scene
 
             RefreshCache();
 
-            _eventAggregator.PublishEvent(new SceneMappingsUpdatedEvent());
+            _eventAggregator.PublishEventAsync(new SceneMappingsUpdatedEvent()).GetAwaiter().GetResult();
         }
 
         private List<SceneMapping> FindMappings(string seriesTitle, string releaseTitle)
@@ -279,28 +281,43 @@ namespace NzbDrone.Core.DataAugmentation.Scene
             return title.All(c => c <= 255);
         }
 
-        public void Handle(SeriesRefreshStartingEvent message)
+        public async Task HandleAsync(SeriesRefreshStartingEvent message, CancellationToken cancellationToken)
         {
-            if (message.ManualTrigger && (_findByTvdbIdCache.IsExpired(TimeSpan.FromMinutes(1)) || !_updatedAfterStartup))
+            // TODO: Make HTTP calls and repository operations async
+            await Task.Run(() =>
             {
-                UpdateMappings();
-            }
+                if (message.ManualTrigger && (_findByTvdbIdCache.IsExpired(TimeSpan.FromMinutes(1)) || !_updatedAfterStartup))
+                {
+                    UpdateMappings();
+                }
+            },
+            cancellationToken);
         }
 
-        public void Handle(SeriesAddedEvent message)
+        public async Task HandleAsync(SeriesAddedEvent message, CancellationToken cancellationToken)
         {
-            if (!_updatedAfterStartup)
+            // TODO: Make HTTP calls and repository operations async
+            await Task.Run(() =>
             {
-                UpdateMappings();
-            }
+                if (!_updatedAfterStartup)
+                {
+                    UpdateMappings();
+                }
+            },
+            cancellationToken);
         }
 
-        public void Handle(SeriesImportedEvent message)
+        public async Task HandleAsync(SeriesImportedEvent message, CancellationToken cancellationToken)
         {
-            if (!_updatedAfterStartup)
+            // TODO: Make HTTP calls and repository operations async
+            await Task.Run(() =>
             {
-                UpdateMappings();
-            }
+                if (!_updatedAfterStartup)
+                {
+                    UpdateMappings();
+                }
+            },
+            cancellationToken);
         }
 
         public void Execute(UpdateSceneMappingCommand message)

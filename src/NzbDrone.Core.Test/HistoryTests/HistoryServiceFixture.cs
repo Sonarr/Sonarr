@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using FizzWare.NBuilder;
 using Moq;
 using NUnit.Framework;
@@ -27,20 +29,20 @@ namespace NzbDrone.Core.Test.HistoryTests
         public void Setup()
         {
             _profile = new QualityProfile
-                {
-                    Cutoff = Quality.WEBDL720p.Id,
-                    Items = QualityFixture.GetDefaultQualities(),
-                };
+            {
+                Cutoff = Quality.WEBDL720p.Id,
+                Items = QualityFixture.GetDefaultQualities(),
+            };
 
             _profileCustom = new QualityProfile
-                {
-                    Cutoff = Quality.WEBDL720p.Id,
-                    Items = QualityFixture.GetDefaultQualities(Quality.DVD),
-                };
+            {
+                Cutoff = Quality.WEBDL720p.Id,
+                Items = QualityFixture.GetDefaultQualities(Quality.DVD),
+            };
         }
 
         [Test]
-        public void should_use_file_name_for_source_title_if_scene_name_is_null()
+        public async Task should_use_file_name_for_source_title_if_scene_name_is_null()
         {
             var series = Builder<Series>.CreateNew().Build();
             var episodes = Builder<Episode>.CreateListOfSize(1).Build().ToList();
@@ -49,24 +51,24 @@ namespace NzbDrone.Core.Test.HistoryTests
                                                   .Build();
 
             var localEpisode = new LocalEpisode
-                               {
-                                   Series = series,
-                                   Episodes = episodes,
-                                   Path = @"C:\Test\Unsorted\Series.s01e01.mkv"
-                               };
+            {
+                Series = series,
+                Episodes = episodes,
+                Path = @"C:\Test\Unsorted\Series.s01e01.mkv"
+            };
 
             var downloadClientItem = new DownloadClientItem
-                                     {
-                                         DownloadClientInfo = new DownloadClientItemClientInfo
-                                         {
-                                             Protocol = DownloadProtocol.Usenet,
-                                             Id = 1,
-                                             Name = "sab"
-                                         },
-                                         DownloadId = "abcd"
-                                     };
+            {
+                DownloadClientInfo = new DownloadClientItemClientInfo
+                {
+                    Protocol = DownloadProtocol.Usenet,
+                    Id = 1,
+                    Name = "sab"
+                },
+                DownloadId = "abcd"
+            };
 
-            Subject.Handle(new EpisodeImportedEvent(localEpisode, episodeFile, new List<DeletedEpisodeFile>(), true, downloadClientItem));
+            await Subject.HandleAsync(new EpisodeImportedEvent(localEpisode, episodeFile, new List<DeletedEpisodeFile>(), true, downloadClientItem), CancellationToken.None);
 
             Mocker.GetMock<IHistoryRepository>()
                 .Verify(v => v.Insert(It.Is<EpisodeHistory>(h => h.SourceTitle == Path.GetFileNameWithoutExtension(localEpisode.Path))));

@@ -1,4 +1,4 @@
-﻿using NLog;
+using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Lifecycle.Commands;
@@ -35,7 +35,7 @@ namespace NzbDrone.Core.Lifecycle
         public void Shutdown()
         {
             _logger.Info("Shutdown requested.");
-            _eventAggregator.PublishEvent(new ApplicationShutdownRequested());
+            _eventAggregator.PublishEventAsync(new ApplicationShutdownRequested()).GetAwaiter().GetResult();
 
             if (_runtimeInfo.IsWindowsService)
             {
@@ -47,7 +47,7 @@ namespace NzbDrone.Core.Lifecycle
         {
             _logger.Info("Restart requested.");
 
-            _eventAggregator.PublishEvent(new ApplicationShutdownRequested(true));
+            _eventAggregator.PublishEventAsync(new ApplicationShutdownRequested(true)).GetAwaiter().GetResult();
 
             if (_runtimeInfo.IsWindowsService)
             {

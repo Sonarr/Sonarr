@@ -55,14 +55,14 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
             {
                 _approvedDecisions.Add(new ImportDecision(
                                            new LocalEpisode
-                                               {
-                                                   Series = series,
-                                                   Episodes = new List<Episode> { episode },
-                                                   Path = Path.Combine(series.Path, "30 Rock - S01E01 - Pilot.avi"),
-                                                   Quality = new QualityModel(Quality.Bluray720p),
-                                                   ReleaseGroup = "DRONE",
-                                                   FileEpisodeInfo = new ParsedEpisodeInfo()
-                                               }));
+                                           {
+                                               Series = series,
+                                               Episodes = new List<Episode> { episode },
+                                               Path = Path.Combine(series.Path, "30 Rock - S01E01 - Pilot.avi"),
+                                               Quality = new QualityModel(Quality.Bluray720p),
+                                               ReleaseGroup = "DRONE",
+                                               FileEpisodeInfo = new ParsedEpisodeInfo()
+                                           }));
             }
 
             Mocker.GetMock<IUpgradeMediaFiles>()
@@ -151,7 +151,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
             Subject.Import(new List<ImportDecision> { _approvedDecisions.First() }, true);
 
             Mocker.GetMock<IEventAggregator>()
-                .Verify(v => v.PublishEvent(It.IsAny<EpisodeImportedEvent>()), Times.Once());
+                .Verify(v => v.PublishEventAsync(It.IsAny<EpisodeImportedEvent>()), Times.Once());
         }
 
         [Test]
@@ -176,13 +176,13 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
 
             var sampleDecision = new ImportDecision(
                 new LocalEpisode
-                 {
-                     Series = fileDecision.LocalEpisode.Series,
-                     Episodes = new List<Episode> { fileDecision.LocalEpisode.Episodes.First() },
-                     Path = @"C:\Test\TV\30 Rock\30 Rock - S01E01 - Pilot.avi".AsOsAgnostic(),
-                     Quality = new QualityModel(Quality.Bluray720p),
-                     Size = 80.Megabytes()
-                 });
+                {
+                    Series = fileDecision.LocalEpisode.Series,
+                    Episodes = new List<Episode> { fileDecision.LocalEpisode.Episodes.First() },
+                    Path = @"C:\Test\TV\30 Rock\30 Rock - S01E01 - Pilot.avi".AsOsAgnostic(),
+                    Quality = new QualityModel(Quality.Bluray720p),
+                    Size = 80.Megabytes()
+                });
 
             var all = new List<ImportDecision>();
             all.Add(fileDecision);

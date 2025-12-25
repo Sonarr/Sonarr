@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Threading;
 using FluentAssertions;
@@ -207,13 +207,13 @@ namespace NzbDrone.Test.Common
         protected void VerifyEventPublished<TEvent>(Times times)
             where TEvent : class, IEvent
         {
-            Mocker.GetMock<IEventAggregator>().Verify(c => c.PublishEvent(It.IsAny<TEvent>()), times);
+            Mocker.GetMock<IEventAggregator>().Verify(c => c.PublishEventAsync(It.IsAny<TEvent>()), times);
         }
 
         protected void VerifyEventNotPublished<TEvent>()
             where TEvent : class, IEvent
         {
-            Mocker.GetMock<IEventAggregator>().Verify(c => c.PublishEvent(It.IsAny<TEvent>()), Times.Never());
+            Mocker.GetMock<IEventAggregator>().Verify(c => c.PublishEventAsync(It.IsAny<TEvent>()), Times.Never());
         }
     }
 }

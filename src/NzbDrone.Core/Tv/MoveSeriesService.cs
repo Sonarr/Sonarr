@@ -73,7 +73,7 @@ namespace NzbDrone.Core.Tv
 
                 _logger.ProgressInfo("{0} moved successfully to {1}", series.Title, destinationPath);
 
-                _eventAggregator.PublishEvent(new SeriesMovedEvent(series, sourcePath, destinationPath));
+                _eventAggregator.PublishEventAsync(new SeriesMovedEvent(series, sourcePath, destinationPath)).GetAwaiter().GetResult();
             }
             catch (IOException ex)
             {
