@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Indexers
 
                 status.LastRssSyncReleaseInfo = releaseInfo;
 
-                _providerStatusRepository.Upsert(status);
+                _providerStatusRepository.UpsertAsync(status).GetAwaiter().GetResult();
             }
         }
     }

@@ -140,24 +140,24 @@ namespace NzbDrone.Core.Test.Datastore
         public async Task should_be_able_to_delete_model_by_id()
         {
             await Subject.InsertManyAsync(_basicList);
-            var enumerable1 = await Subject.AllAsync();
-            enumerable1.Should().HaveCount(5);
+            var insertEnumerable = await Subject.AllAsync();
+            insertEnumerable.Should().HaveCount(5);
 
             await Subject.DeleteAsync(_basicList[0].Id);
-            var enumerable2 = await Subject.AllAsync();
-            enumerable2.Select(x => x.Id).Should().BeEquivalentTo(_basicList.Skip(1).Select(x => x.Id));
+            var deleteEnumerable = await Subject.AllAsync();
+            deleteEnumerable.Select(x => x.Id).Should().BeEquivalentTo(_basicList.Skip(1).Select(x => x.Id));
         }
 
         [Test]
         public async Task should_be_able_to_delete_model_by_object()
         {
             await Subject.InsertManyAsync(_basicList);
-            var enumerable1 = await Subject.AllAsync();
-            enumerable1.Should().HaveCount(5);
+            var insertEnumerable = await Subject.AllAsync();
+            insertEnumerable.Should().HaveCount(5);
 
             await Subject.DeleteAsync(_basicList[0]);
-            var enumerable2 = await Subject.AllAsync();
-            enumerable2.Select(x => x.Id).Should().BeEquivalentTo(_basicList.Skip(1).Select(x => x.Id));
+            var deleteEnumerable = await Subject.AllAsync();
+            deleteEnumerable.Select(x => x.Id).Should().BeEquivalentTo(_basicList.Skip(1).Select(x => x.Id));
         }
 
         [Test]
@@ -189,7 +189,8 @@ namespace NzbDrone.Core.Test.Datastore
             _basicList.ForEach(x => x.Interval = 999);
 
             await Subject.UpdateManyAsync(_basicList);
-            (await Subject.AllAsync()).Should().BeEquivalentTo(_basicList);
+            var enumerable = await Subject.AllAsync();
+            enumerable.Should().BeEquivalentTo(_basicList);
         }
 
         [Test]
@@ -216,7 +217,8 @@ namespace NzbDrone.Core.Test.Datastore
                 _basicList[i].LastExecution = executionBackup[i];
             }
 
-            (await Subject.AllAsync()).Should().BeEquivalentTo(_basicList);
+            var enumerable = await Subject.AllAsync();
+            enumerable.Should().BeEquivalentTo(_basicList);
         }
 
         [Test]
@@ -233,24 +235,24 @@ namespace NzbDrone.Core.Test.Datastore
         public async Task should_be_able_to_delete_many_by_model()
         {
             await Subject.InsertManyAsync(_basicList);
-            var enumerable1 = await Subject.AllAsync();
-            enumerable1.Should().HaveCount(5);
+            var insertEnumerable = await Subject.AllAsync();
+            insertEnumerable.Should().HaveCount(5);
 
             await Subject.DeleteManyAsync(_basicList.Take(2).ToList());
-            var enumerable2 = await Subject.AllAsync();
-            enumerable2.Select(x => x.Id).Should().BeEquivalentTo(_basicList.Skip(2).Select(x => x.Id));
+            var deleteEnumerable = await Subject.AllAsync();
+            deleteEnumerable.Select(x => x.Id).Should().BeEquivalentTo(_basicList.Skip(2).Select(x => x.Id));
         }
 
         [Test]
         public async Task should_be_able_to_delete_many_by_id()
         {
             await Subject.InsertManyAsync(_basicList);
-            var enumerable1 = await Subject.AllAsync();
-            enumerable1.Should().HaveCount(5);
+            var insertEnumerable = await Subject.AllAsync();
+            insertEnumerable.Should().HaveCount(5);
 
             await Subject.DeleteManyAsync(_basicList.Take(2).Select(x => x.Id).ToList());
-            var enumerable2 = await Subject.AllAsync();
-            enumerable2.Select(x => x.Id).Should().BeEquivalentTo(_basicList.Skip(2).Select(x => x.Id));
+            var deleteEnumerable = await Subject.AllAsync();
+            deleteEnumerable.Select(x => x.Id).Should().BeEquivalentTo(_basicList.Skip(2).Select(x => x.Id));
         }
 
         [Test]
@@ -258,17 +260,20 @@ namespace NzbDrone.Core.Test.Datastore
         {
             await Subject.InsertManyAsync(_basicList);
 
-            AllStoredModels.Should().HaveCount(5);
+            var scheduledTasks1 = await GetAllStoredModelsAsync();
+            scheduledTasks1.Should().HaveCount(5);
 
             await Subject.PurgeAsync();
 
-            AllStoredModels.Should().BeEmpty();
+            var scheduledTasks2 = await GetAllStoredModelsAsync();
+            scheduledTasks2.Should().BeEmpty();
         }
 
         [Test]
         public async Task has_items_should_return_false_with_no_items()
         {
-            (await Subject.HasItemsAsync()).Should().BeFalse();
+            var hasItems = await Subject.HasItemsAsync();
+            hasItems.Should().BeFalse();
         }
 
         [Test]

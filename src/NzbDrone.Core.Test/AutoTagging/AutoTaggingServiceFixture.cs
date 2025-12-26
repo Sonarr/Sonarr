@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
+using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.AutoTagging;
 using NzbDrone.Core.AutoTagging.Specifications;
@@ -24,9 +25,9 @@ namespace NzbDrone.Core.Test.AutoTagging
                                      .Build();
 
             _tag = new AutoTag
-                           {
-                               Name = "Test",
-                               Specifications = new List<IAutoTaggingSpecification>
+            {
+                Name = "Test",
+                Specifications = new List<IAutoTaggingSpecification>
                                                 {
                                                     new GenreSpecification
                                                     {
@@ -37,16 +38,16 @@ namespace NzbDrone.Core.Test.AutoTagging
                                                                 }
                                                     }
                                                 },
-                               Tags = new HashSet<int> { 1 },
-                               RemoveTagsAutomatically = false
-                           };
+                Tags = new HashSet<int> { 1 },
+                RemoveTagsAutomatically = false
+            };
         }
 
         private void GivenAutoTags(List<AutoTag> autoTags)
         {
             Mocker.GetMock<IAutoTaggingRepository>()
-                  .Setup(s => s.All())
-                  .Returns(autoTags);
+                  .Setup(s => s.AllAsync())
+                  .ReturnsAsync(autoTags.AsEnumerable());
         }
 
         [Test]
@@ -107,10 +108,10 @@ namespace NzbDrone.Core.Test.AutoTagging
         public void should_have_tags_to_add_if_series_does_not_have_match_tag_and_series_matches_all_rules()
         {
             _tag.Specifications.Add(new SeriesTypeSpecification
-                                    {
-                                        Name = "Series Type",
-                                        Value = (int)_series.SeriesType
-                                    });
+            {
+                Name = "Series Type",
+                Value = (int)_series.SeriesType
+            });
 
             GivenAutoTags(new List<AutoTag> { _tag });
 

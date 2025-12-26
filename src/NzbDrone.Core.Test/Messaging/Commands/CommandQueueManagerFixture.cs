@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -20,21 +22,21 @@ namespace NzbDrone.Core.Test.Messaging.Commands
             var commands = new List<CommandModel>();
 
             Mocker.GetMock<ICommandRepository>()
-                  .Setup(s => s.Insert(It.IsAny<CommandModel>()))
-                  .Returns<CommandModel>(c =>
+                  .Setup(s => s.InsertAsync(It.IsAny<CommandModel>(), It.IsAny<CancellationToken>()))
+                  .Returns<CommandModel, CancellationToken>((c, ct) =>
                   {
                       c.Id = id + 1;
                       commands.Add(c);
                       id++;
 
-                      return c;
+                      return Task.FromResult(c);
                   });
 
             Mocker.GetMock<ICommandRepository>()
-                  .Setup(s => s.Get(It.IsAny<int>()))
-                  .Returns<int>(c =>
+                  .Setup(s => s.GetAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
+                  .Returns<int, CancellationToken>((c, ct) =>
                   {
-                      return commands.SingleOrDefault(e => e.Id == c);
+                      return Task.FromResult(commands.SingleOrDefault(e => e.Id == c));
                   });
         }
 
@@ -54,7 +56,7 @@ namespace NzbDrone.Core.Test.Messaging.Commands
             Subject.Get(command.Id).Should().NotBeNull();
 
             Mocker.GetMock<ICommandRepository>()
-                  .Verify(v => v.Get(It.IsAny<int>()), Times.Never());
+                  .Verify(v => v.GetAsync(It.IsAny<int>()), Times.Never());
         }
     }
 }

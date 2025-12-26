@@ -26,24 +26,24 @@ namespace NzbDrone.Core.Test.ImportListTests
         private void WithStatus(ImportListStatus status)
         {
             Mocker.GetMock<IImportListStatusRepository>()
-                  .Setup(v => v.FindByProviderId(1))
-                  .Returns(status);
+                  .Setup(v => v.FindByProviderIdAsync(1))
+                  .ReturnsAsync(status);
 
             Mocker.GetMock<IImportListStatusRepository>()
-                  .Setup(v => v.All())
-                  .Returns(new[] { status });
+                  .Setup(v => v.AllAsync())
+                  .ReturnsAsync(new[] { status });
         }
 
         private void VerifyUpdate()
         {
             Mocker.GetMock<IImportListStatusRepository>()
-                  .Verify(v => v.Upsert(It.IsAny<ImportListStatus>()), Times.Once());
+                  .Verify(v => v.UpsertAsync(It.IsAny<ImportListStatus>()), Times.Once());
         }
 
         private void VerifyNoUpdate()
         {
             Mocker.GetMock<IImportListStatusRepository>()
-                  .Verify(v => v.Upsert(It.IsAny<ImportListStatus>()), Times.Never());
+                  .Verify(v => v.UpsertAsync(It.IsAny<ImportListStatus>()), Times.Never());
         }
 
         [Test]

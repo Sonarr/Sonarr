@@ -55,7 +55,7 @@ namespace NzbDrone.Core.Profiles.Qualities
 
         public QualityProfile Add(QualityProfile profile)
         {
-            return _qualityProfileRepository.Insert(profile);
+            return _qualityProfileRepository.InsertAsync(profile).GetAwaiter().GetResult();
         }
 
         public async void Update(QualityProfile profile)
@@ -65,7 +65,7 @@ namespace NzbDrone.Core.Profiles.Qualities
 
         private async Task UpdateAsync(QualityProfile profile, CancellationToken cancellationToken = default)
         {
-            _qualityProfileRepository.Update(profile);
+            await _qualityProfileRepository.UpdateAsync(profile, cancellationToken).ConfigureAwait(false);
             await _eventAggregator.PublishEventAsync(new QualityProfileUpdatedEvent(profile.Id), cancellationToken).ConfigureAwait(false);
         }
 
@@ -73,26 +73,26 @@ namespace NzbDrone.Core.Profiles.Qualities
         {
             if (_seriesService.GetAllSeries().Any(c => c.QualityProfileId == id) || _importListFactory.All().Any(c => c.QualityProfileId == id))
             {
-                var profile = _qualityProfileRepository.Get(id);
+                var profile = _qualityProfileRepository.GetAsync(id).GetAwaiter().GetResult();
                 throw new QualityProfileInUseException(profile.Name);
             }
 
-            _qualityProfileRepository.Delete(id);
+            _qualityProfileRepository.DeleteAsync(id).GetAwaiter().GetResult();
         }
 
         public List<QualityProfile> All()
         {
-            return _qualityProfileRepository.All().ToList();
+            return _qualityProfileRepository.AllAsync().GetAwaiter().GetResult().ToList();
         }
 
         public QualityProfile Get(int id)
         {
-            return _qualityProfileRepository.Get(id);
+            return _qualityProfileRepository.GetAsync(id).GetAwaiter().GetResult();
         }
 
         public bool Exists(int id)
         {
-            return _qualityProfileRepository.Exists(id);
+            return _qualityProfileRepository.ExistsAsync(id).GetAwaiter().GetResult();
         }
 
         public async Task HandleAsync(ApplicationStartedEvent message, CancellationToken cancellationToken)
@@ -299,7 +299,7 @@ namespace NzbDrone.Core.Profiles.Qualities
                 }
             }
 
-            _qualityProfileRepository.UpdateMany(all);
+            _qualityProfileRepository.UpdateManyAsync(all).GetAwaiter().GetResult();
         }
 
         private QualityProfile AddDefaultProfile(string name, Quality cutoff, params Quality[] allowed)

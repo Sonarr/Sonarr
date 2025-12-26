@@ -26,12 +26,12 @@ namespace NzbDrone.Core.Test.NotificationTests
         private NotificationStatus WithStatus(NotificationStatus status)
         {
             Mocker.GetMock<INotificationStatusRepository>()
-                .Setup(v => v.FindByProviderId(1))
-                .Returns(status);
+                .Setup(v => v.FindByProviderIdAsync(1))
+                .ReturnsAsync(status);
 
             Mocker.GetMock<INotificationStatusRepository>()
-                .Setup(v => v.All())
-                .Returns(new[] { status });
+                .Setup(v => v.AllAsync())
+                .ReturnsAsync(new[] { status });
 
             return status;
         }
@@ -39,13 +39,13 @@ namespace NzbDrone.Core.Test.NotificationTests
         private void VerifyUpdate()
         {
             Mocker.GetMock<INotificationStatusRepository>()
-                .Verify(v => v.Upsert(It.IsAny<NotificationStatus>()), Times.Once());
+                .Verify(v => v.UpsertAsync(It.IsAny<NotificationStatus>()), Times.Once());
         }
 
         private void VerifyNoUpdate()
         {
             Mocker.GetMock<INotificationStatusRepository>()
-                .Verify(v => v.Upsert(It.IsAny<NotificationStatus>()), Times.Never());
+                .Verify(v => v.UpsertAsync(It.IsAny<NotificationStatus>()), Times.Never());
         }
 
         [Test]

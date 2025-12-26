@@ -98,7 +98,7 @@ namespace NzbDrone.Core.ImportLists.AniList
 
                         if (Definition.Id > 0)
                         {
-                            _importListRepository.UpdateSettings((ImportListDefinition)Definition);
+                            _importListRepository.UpdateSettingsAsync((ImportListDefinition)Definition).GetAwaiter().GetResult();
                         }
                     }
                 }

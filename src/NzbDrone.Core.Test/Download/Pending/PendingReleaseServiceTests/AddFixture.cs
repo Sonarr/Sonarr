@@ -73,12 +73,12 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
             _heldReleases = new List<PendingRelease>();
 
             Mocker.GetMock<IPendingReleaseRepository>()
-                  .Setup(s => s.All())
-                  .Returns(_heldReleases);
+                  .Setup(s => s.AllAsync())
+                  .ReturnsAsync(_heldReleases);
 
             Mocker.GetMock<IPendingReleaseRepository>()
-                  .Setup(s => s.AllBySeriesId(It.IsAny<int>()))
-                  .Returns<int>(i => _heldReleases.Where(v => v.SeriesId == i).ToList());
+                  .Setup(s => s.AllBySeriesIdAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
+                  .Returns<int, CancellationToken>((i, ct) => Task.FromResult(_heldReleases.Where(v => v.SeriesId == i).ToList()));
 
             Mocker.GetMock<ISeriesService>()
                   .Setup(s => s.GetSeries(It.IsAny<int>()))
@@ -166,7 +166,7 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
             Subject.Add(_temporarilyRejected, PendingReleaseReason.Fallback);
 
             Mocker.GetMock<IPendingReleaseRepository>()
-                  .Verify(v => v.Delete(It.IsAny<int>()), Times.Once());
+                  .Verify(v => v.DeleteAsync(It.IsAny<int>()), Times.Once());
         }
 
         [Test]
@@ -205,13 +205,13 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
         private void VerifyInsert()
         {
             Mocker.GetMock<IPendingReleaseRepository>()
-                .Verify(v => v.Insert(It.IsAny<PendingRelease>()), Times.Once());
+                .Verify(v => v.InsertAsync(It.IsAny<PendingRelease>()), Times.Once());
         }
 
         private void VerifyNoInsert()
         {
             Mocker.GetMock<IPendingReleaseRepository>()
-                .Verify(v => v.Insert(It.IsAny<PendingRelease>()), Times.Never());
+                .Verify(v => v.InsertAsync(It.IsAny<PendingRelease>()), Times.Never());
         }
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
 using Moq;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Messaging.Events;
@@ -9,17 +10,17 @@ namespace NzbDrone.Core.Test.Framework
 {
     public interface ITestDatabase
     {
-        void InsertMany<T>(IEnumerable<T> items)
+        Task InsertManyAsync<T>(IEnumerable<T> items)
             where T : ModelBase, new();
-        T Insert<T>(T item)
+        Task<T> InsertAsync<T>(T item)
             where T : ModelBase, new();
-        List<T> All<T>()
+        Task<List<T>> AllAsync<T>()
             where T : ModelBase, new();
-        T Single<T>()
+        Task<T> SingleAsync<T>()
             where T : ModelBase, new();
-        void Update<T>(T childModel)
+        Task UpdateAsync<T>(T childModel)
             where T : ModelBase, new();
-        void Delete<T>(T childModel)
+        Task DeleteAsync<T>(T childModel)
             where T : ModelBase, new();
         IDirectDataMapper GetDirectDataMapper();
         IDbConnection OpenConnection();
@@ -39,40 +40,42 @@ namespace NzbDrone.Core.Test.Framework
             _dbConnection = dbConnection;
         }
 
-        public void InsertMany<T>(IEnumerable<T> items)
+        public async Task InsertManyAsync<T>(IEnumerable<T> items)
             where T : ModelBase, new()
         {
-            new BasicRepository<T>(_dbConnection, _eventAggregator).InsertMany(items.ToList());
+            await new BasicRepository<T>(_dbConnection, _eventAggregator).InsertManyAsync(items.ToList());
         }
 
-        public T Insert<T>(T item)
+        public async Task<T> InsertAsync<T>(T item)
             where T : ModelBase, new()
         {
-            return new BasicRepository<T>(_dbConnection, _eventAggregator).Insert(item);
+            return await new BasicRepository<T>(_dbConnection, _eventAggregator).InsertAsync(item);
         }
 
-        public List<T> All<T>()
+        public async Task<List<T>> AllAsync<T>()
             where T : ModelBase, new()
         {
-            return new BasicRepository<T>(_dbConnection, _eventAggregator).All().ToList();
+            var enumerable = await new BasicRepository<T>(_dbConnection, _eventAggregator).AllAsync();
+            return enumerable.ToList();
         }
 
-        public T Single<T>()
+        public async Task<T> SingleAsync<T>()
             where T : ModelBase, new()
         {
-            return All<T>().SingleOrDefault();
+            var items = await AllAsync<T>();
+            return items.SingleOrDefault();
         }
 
-        public void Update<T>(T childModel)
+        public async Task UpdateAsync<T>(T childModel)
             where T : ModelBase, new()
         {
-            new BasicRepository<T>(_dbConnection, _eventAggregator).Update(childModel);
+            await new BasicRepository<T>(_dbConnection, _eventAggregator).UpdateAsync(childModel);
         }
 
-        public void Delete<T>(T childModel)
+        public async Task DeleteAsync<T>(T childModel)
             where T : ModelBase, new()
         {
-            new BasicRepository<T>(_dbConnection, _eventAggregator).Delete(childModel);
+            await new BasicRepository<T>(_dbConnection, _eventAggregator).DeleteAsync(childModel);
         }
 
         public IDirectDataMapper GetDirectDataMapper()

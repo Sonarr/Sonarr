@@ -40,7 +40,7 @@ namespace NzbDrone.Core.Test.TvTests.SeriesServiceTests
         {
             Subject.UpdateSeries(_series, false);
 
-            Mocker.GetMock<ISeriesRepository>().Verify(v => v.UpdateMany(_series), Times.Once());
+            Mocker.GetMock<ISeriesRepository>().Verify(v => v.UpdateManyAsync(_series), Times.Once());
         }
 
         [Test]

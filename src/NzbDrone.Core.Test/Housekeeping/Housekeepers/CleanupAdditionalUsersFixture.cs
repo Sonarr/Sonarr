@@ -1,4 +1,5 @@
-﻿using FizzWare.NBuilder;
+using System.Threading.Tasks;
+using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Authentication;
@@ -11,27 +12,29 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
     public class CleanupAdditionalUsersFixture : DbTest<CleanupAdditionalUsers, User>
     {
         [Test]
-        public void should_delete_additional_users()
+        public async Task should_delete_additional_users()
         {
             var specs = Builder<User>.CreateListOfSize(5)
                                              .BuildListOfNew();
 
-            Db.InsertMany(specs);
+            await Db.InsertManyAsync(specs);
 
             Subject.Clean();
-            AllStoredModels.Should().HaveCount(1);
+            var users = await GetAllStoredModelsAsync();
+            users.Should().HaveCount(1);
         }
 
         [Test]
-        public void should_not_delete_if_only_one_user()
+        public async Task should_not_delete_if_only_one_user()
         {
             var spec = Builder<User>.CreateNew()
                                             .BuildNew();
 
-            Db.Insert(spec);
+            await Db.InsertAsync(spec);
 
             Subject.Clean();
-            AllStoredModels.Should().HaveCount(1);
+            var users = await GetAllStoredModelsAsync();
+            users.Should().HaveCount(1);
         }
     }
 }

@@ -26,24 +26,24 @@ namespace NzbDrone.Core.Test.IndexerTests
         private void WithStatus(IndexerStatus status)
         {
             Mocker.GetMock<IIndexerStatusRepository>()
-                .Setup(v => v.FindByProviderId(1))
-                .Returns(status);
+                .Setup(v => v.FindByProviderIdAsync(1))
+                .ReturnsAsync(status);
 
             Mocker.GetMock<IIndexerStatusRepository>()
-                .Setup(v => v.All())
-                .Returns(new[] { status });
+                .Setup(v => v.AllAsync())
+                .ReturnsAsync(new[] { status });
         }
 
         private void VerifyUpdate()
         {
             Mocker.GetMock<IIndexerStatusRepository>()
-                .Verify(v => v.Upsert(It.IsAny<IndexerStatus>()), Times.Once());
+                .Verify(v => v.UpsertAsync(It.IsAny<IndexerStatus>()), Times.Once());
         }
 
         private void VerifyNoUpdate()
         {
             Mocker.GetMock<IIndexerStatusRepository>()
-                .Verify(v => v.Upsert(It.IsAny<IndexerStatus>()), Times.Never());
+                .Verify(v => v.UpsertAsync(It.IsAny<IndexerStatus>()), Times.Never());
         }
 
         [Test]
@@ -75,7 +75,7 @@ namespace NzbDrone.Core.Test.IndexerTests
             Subject.RecordFailure(0);
 
             Mocker.GetMock<IIndexerStatusRepository>()
-                .Verify(v => v.FindByProviderId(1), Times.Never);
+                .Verify(v => v.FindByProviderIdAsync(1), Times.Never);
 
             VerifyNoUpdate();
         }

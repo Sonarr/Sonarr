@@ -66,11 +66,8 @@ namespace NzbDrone.Core.Jobs
 
         public async Task HandleAsync(ApplicationStartedEvent message, CancellationToken cancellationToken)
         {
-            // TODO: Make repository operations async
-            await Task.Run(() =>
-            {
-                // TODO: Move task out of this method
-                var defaultTasks = new List<ScheduledTask>
+            // TODO: Move tasks out of this method
+            var defaultTasks = new List<ScheduledTask>
                     {
                         new ScheduledTask
                         {
@@ -140,37 +137,35 @@ namespace NzbDrone.Core.Jobs
                         }
                     };
 
-                var currentTasks = _scheduledTaskRepository.All().ToList();
+            var currentTasksEnumerable = await _scheduledTaskRepository.AllAsync(cancellationToken).ConfigureAwait(false);
+            var currentTasks = currentTasksEnumerable.ToList();
+            _logger.Trace("Initializing jobs. Available: {0} Existing: {1}", defaultTasks.Count, currentTasks.Count);
 
-                _logger.Trace("Initializing jobs. Available: {0} Existing: {1}", defaultTasks.Count, currentTasks.Count);
-
-                foreach (var job in currentTasks)
+            foreach (var job in currentTasks)
+            {
+                if (!defaultTasks.Any(c => c.TypeName == job.TypeName))
                 {
-                    if (!defaultTasks.Any(c => c.TypeName == job.TypeName))
-                    {
-                        _logger.Trace("Removing job from database '{0}'", job.TypeName);
-                        _scheduledTaskRepository.Delete(job.Id);
-                    }
+                    _logger.Trace("Removing job from database '{0}'", job.TypeName);
+                    await _scheduledTaskRepository.DeleteAsync(job.Id, cancellationToken).ConfigureAwait(false);
+                }
+            }
+
+            foreach (var defaultTask in defaultTasks)
+            {
+                var currentDefinition = currentTasks.SingleOrDefault(c => c.TypeName == defaultTask.TypeName) ?? defaultTask;
+
+                currentDefinition.Interval = defaultTask.Interval;
+
+                if (currentDefinition.Id == 0)
+                {
+                    currentDefinition.LastExecution = DateTime.UtcNow;
                 }
 
-                foreach (var defaultTask in defaultTasks)
-                {
-                    var currentDefinition = currentTasks.SingleOrDefault(c => c.TypeName == defaultTask.TypeName) ?? defaultTask;
+                currentDefinition.Priority = defaultTask.Priority;
 
-                    currentDefinition.Interval = defaultTask.Interval;
-
-                    if (currentDefinition.Id == 0)
-                    {
-                        currentDefinition.LastExecution = DateTime.UtcNow;
-                    }
-
-                    currentDefinition.Priority = defaultTask.Priority;
-
-                    _cache.Set(currentDefinition.TypeName, currentDefinition);
-                    _scheduledTaskRepository.Upsert(currentDefinition);
-                }
-            },
-            cancellationToken);
+                _cache.Set(currentDefinition.TypeName, currentDefinition);
+                await _scheduledTaskRepository.UpsertAsync(currentDefinition, cancellationToken).ConfigureAwait(false);
+            }
         }
 
         private int GetBackupInterval()
@@ -209,46 +204,37 @@ namespace NzbDrone.Core.Jobs
 
         public async Task HandleAsync(CommandExecutedEvent message, CancellationToken cancellationToken)
         {
-            // TODO: Make repository operations async
-            await Task.Run(() =>
+            var scheduledTasks = await _scheduledTaskRepository.AllAsync(cancellationToken);
+            var scheduledTask = scheduledTasks.SingleOrDefault(c => c.TypeName == message.Command.Body.GetType().FullName);
+
+            if (scheduledTask != null && message.Command.Body.UpdateScheduledTask)
             {
-                var scheduledTask = _scheduledTaskRepository.All().SingleOrDefault(c => c.TypeName == message.Command.Body.GetType().FullName);
+                _logger.Trace("Updating last run time for: {0}", scheduledTask.TypeName);
 
-                if (scheduledTask != null && message.Command.Body.UpdateScheduledTask)
-                {
-                    _logger.Trace("Updating last run time for: {0}", scheduledTask.TypeName);
+                var lastExecution = DateTime.UtcNow;
+                var startTime = message.Command.StartedAt.Value;
 
-                    var lastExecution = DateTime.UtcNow;
-                    var startTime = message.Command.StartedAt.Value;
+                await _scheduledTaskRepository.SetLastExecutionTimeAsync(scheduledTask.Id, lastExecution, startTime, cancellationToken).ConfigureAwait(false);
 
-                    _scheduledTaskRepository.SetLastExecutionTime(scheduledTask.Id, lastExecution, startTime);
+                var cached = _cache.Find(scheduledTask.TypeName);
 
-                    var cached = _cache.Find(scheduledTask.TypeName);
-
-                    cached.LastExecution = lastExecution;
-                    cached.LastStartTime = startTime;
-                }
-            },
-            cancellationToken);
+                cached.LastExecution = lastExecution;
+                cached.LastStartTime = startTime;
+            }
         }
 
         public async Task HandleAsync(ConfigSavedEvent message, CancellationToken cancellationToken)
         {
-            // TODO: Make repository operations async
-            await Task.Run(() =>
-            {
-                var rss = _scheduledTaskRepository.GetDefinition(typeof(RssSyncCommand));
-                rss.Interval = GetRssSyncInterval();
+            var rss = await _scheduledTaskRepository.GetDefinitionAsync(typeof(RssSyncCommand), cancellationToken).ConfigureAwait(false);
+            rss.Interval = GetRssSyncInterval();
 
-                var backup = _scheduledTaskRepository.GetDefinition(typeof(BackupCommand));
-                backup.Interval = GetBackupInterval();
+            var backup = await _scheduledTaskRepository.GetDefinitionAsync(typeof(BackupCommand), cancellationToken).ConfigureAwait(false);
+            backup.Interval = GetBackupInterval();
 
-                _scheduledTaskRepository.UpdateMany(new List<ScheduledTask> { rss, backup });
+            await _scheduledTaskRepository.UpdateManyAsync(new List<ScheduledTask> { rss, backup }, cancellationToken).ConfigureAwait(false);
 
-                _cache.Find(rss.TypeName).Interval = rss.Interval;
-                _cache.Find(backup.TypeName).Interval = backup.Interval;
-            },
-            cancellationToken);
+            _cache.Find(rss.TypeName).Interval = rss.Interval;
+            _cache.Find(backup.TypeName).Interval = backup.Interval;
         }
     }
 }

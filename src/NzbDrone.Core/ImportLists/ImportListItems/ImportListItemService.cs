@@ -56,31 +56,27 @@ namespace NzbDrone.Core.ImportLists.ImportListItems
                 existingItem.ReleaseDate = item.ReleaseDate;
             });
 
-            _importListItemRepository.InsertMany(toAdd);
-            _importListItemRepository.UpdateMany(toUpdate);
-            _importListItemRepository.DeleteMany(existingListSeries);
+            _importListItemRepository.InsertManyAsync(toAdd).GetAwaiter().GetResult();
+            _importListItemRepository.UpdateManyAsync(toUpdate).GetAwaiter().GetResult();
+            _importListItemRepository.DeleteManyAsync(existingListSeries).GetAwaiter().GetResult();
 
             return existingListSeries.Count;
         }
 
         public List<ImportListItemInfo> All()
         {
-            return _importListItemRepository.All().ToList();
+            return _importListItemRepository.AllAsync().GetAwaiter().GetResult().ToList();
         }
 
         public List<ImportListItemInfo> GetAllForLists(List<int> listIds)
         {
-            return _importListItemRepository.GetAllForLists(listIds).ToList();
+            return _importListItemRepository.GetAllForListsAsync(listIds).GetAwaiter().GetResult().ToList();
         }
 
         public async Task HandleAsync(ProviderDeletedEvent<IImportList> message, CancellationToken cancellationToken)
         {
-            await Task.Run(() =>
-            {
-                var seriesOnList = _importListItemRepository.GetAllForLists(new List<int> { message.ProviderId });
-                _importListItemRepository.DeleteMany(seriesOnList);
-            },
-            cancellationToken).ConfigureAwait(false);
+            var seriesOnList = await _importListItemRepository.GetAllForListsAsync(new List<int> { message.ProviderId }, cancellationToken).ConfigureAwait(false);
+            await _importListItemRepository.DeleteManyAsync(seriesOnList, cancellationToken).ConfigureAwait(false);
         }
 
         private ImportListItemInfo FindItem(List<ImportListItemInfo> existingItems, ImportListItemInfo item)

@@ -1,4 +1,5 @@
-﻿using FizzWare.NBuilder;
+using System.Threading.Tasks;
+using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Download.Pending;
@@ -13,24 +14,25 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
     public class CleanupOrphanedPendingReleasesFixture : DbTest<CleanupOrphanedPendingReleases, PendingRelease>
     {
         [Test]
-        public void should_delete_orphaned_pending_items()
+        public async Task should_delete_orphaned_pending_items()
         {
             var pendingRelease = Builder<PendingRelease>.CreateNew()
                 .With(h => h.ParsedEpisodeInfo = new ParsedEpisodeInfo())
                 .With(h => h.Release = new ReleaseInfo())
                 .BuildNew();
 
-            Db.Insert(pendingRelease);
+            await Db.InsertAsync(pendingRelease);
             Subject.Clean();
-            AllStoredModels.Should().BeEmpty();
+            var pendingReleases = await GetAllStoredModelsAsync();
+            pendingReleases.Should().BeEmpty();
         }
 
         [Test]
-        public void should_not_delete_unorphaned_pending_items()
+        public async Task should_not_delete_unorphaned_pending_items()
         {
             var series = Builder<Series>.CreateNew().BuildNew();
 
-            Db.Insert(series);
+            await Db.InsertAsync(series);
 
             var pendingRelease = Builder<PendingRelease>.CreateNew()
                 .With(h => h.SeriesId = series.Id)
@@ -38,10 +40,11 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
                 .With(h => h.Release = new ReleaseInfo())
                 .BuildNew();
 
-            Db.Insert(pendingRelease);
+            await Db.InsertAsync(pendingRelease);
 
             Subject.Clean();
-            AllStoredModels.Should().HaveCount(1);
+            var pendingReleases = await GetAllStoredModelsAsync();
+            pendingReleases.Should().HaveCount(1);
         }
     }
 }

@@ -490,7 +490,7 @@ namespace NzbDrone.Core.Notifications.CustomScript
                 return new List<string>();
             }
 
-            return _tagRepository.GetTags(series.Tags)
+            return _tagRepository.GetTagsAsync(series.Tags).GetAwaiter().GetResult()
                 .Select(s => s.Label)
                 .Where(l => l.IsNotNullOrWhiteSpace())
                 .OrderBy(l => l)

@@ -48,7 +48,7 @@ namespace NzbDrone.Core.Tv
                 return pagingSpec;
             }
 
-            return _episodeRepository.EpisodesWhereCutoffUnmet(pagingSpec, qualitiesBelowCutoff, false);
+            return _episodeRepository.EpisodesWhereCutoffUnmetAsync(pagingSpec, qualitiesBelowCutoff, false).GetAwaiter().GetResult();
         }
     }
 }

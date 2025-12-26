@@ -36,7 +36,7 @@ namespace NzbDrone.Core.ImportLists
                 status.LastInfoSync = DateTime.UtcNow;
                 status.HasRemovedItemSinceLastClean |= removedItems;
 
-                _providerStatusRepository.Upsert(status);
+                _providerStatusRepository.UpsertAsync(status).GetAwaiter().GetResult();
             }
         }
 
@@ -46,13 +46,13 @@ namespace NzbDrone.Core.ImportLists
             {
                 var toUpdate = new List<ImportListStatus>();
 
-                foreach (var status in _providerStatusRepository.All())
+                foreach (var status in _providerStatusRepository.AllAsync().GetAwaiter().GetResult())
                 {
                     status.HasRemovedItemSinceLastClean = false;
                     toUpdate.Add(status);
                 }
 
-                _providerStatusRepository.UpdateMany(toUpdate);
+                _providerStatusRepository.UpdateManyAsync(toUpdate).GetAwaiter().GetResult();
             }
         }
     }

@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using FizzWare.NBuilder;
 using FluentAssertions;
+using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.AutoTagging;
 using NzbDrone.Core.AutoTagging.Specifications;
@@ -15,7 +17,7 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
     public class CleanupUnusedTagsFixture : DbTest<CleanupUnusedTags, Tag>
     {
         [Test]
-        public void should_delete_unused_tags()
+        public async Task should_delete_unused_tags()
         {
             var tags = Builder<Tag>
                 .CreateListOfSize(2)
@@ -23,41 +25,43 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
                 .With(x => x.Id = 0)
                 .BuildList();
 
-            Db.InsertMany(tags);
+            await Db.InsertManyAsync(tags);
             Subject.Clean();
-            AllStoredModels.Should().BeEmpty();
+            var loadedTags = await GetAllStoredModelsAsync();
+            loadedTags.Should().BeEmpty();
         }
 
         [Test]
-        public void should_not_delete_used_tags()
+        public async Task should_not_delete_used_tags()
         {
             var tags = Builder<Tag>
                 .CreateListOfSize(2)
                 .All()
                 .With(x => x.Id = 0)
                 .BuildList();
-            Db.InsertMany(tags);
+            await Db.InsertManyAsync(tags);
 
             var restrictions = Builder<ReleaseProfile>.CreateListOfSize(2)
                 .All()
                 .With(x => x.Id = 0)
                 .With(v => v.Tags.Add(tags[0].Id))
                 .BuildList();
-            Db.InsertMany(restrictions);
+            await Db.InsertManyAsync(restrictions);
 
             Subject.Clean();
-            AllStoredModels.Should().HaveCount(1);
+            var loadedTags = await GetAllStoredModelsAsync();
+            loadedTags.Should().HaveCount(1);
         }
 
         [Test]
-        public void should_not_delete_used_auto_tagging_tag_specification_tags()
+        public async Task should_not_delete_used_auto_tagging_tag_specification_tags()
         {
             var tags = Builder<Tag>
                 .CreateListOfSize(2)
                 .All()
                 .With(x => x.Id = 0)
                 .BuildList();
-            Db.InsertMany(tags);
+            await Db.InsertManyAsync(tags);
 
             var autoTags = Builder<AutoTag>.CreateListOfSize(1)
                 .All()
@@ -72,11 +76,12 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
                 })
                 .BuildList();
 
-            Mocker.GetMock<IAutoTaggingRepository>().Setup(s => s.All())
-                .Returns(autoTags);
+            Mocker.GetMock<IAutoTaggingRepository>().Setup(s => s.AllAsync())
+                .ReturnsAsync(autoTags);
 
             Subject.Clean();
-            AllStoredModels.Should().HaveCount(1);
+            var loadedTags = await GetAllStoredModelsAsync();
+            loadedTags.Should().HaveCount(1);
         }
     }
 }

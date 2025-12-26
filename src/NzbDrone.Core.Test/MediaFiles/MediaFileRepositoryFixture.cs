@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Test.MediaFiles
                 .With(s => s.SeriesId = 12)
                 .BuildListOfNew();
 
-            Db.InsertMany(files);
+            await Db.InsertManyAsync(files);
 
             var seriesFiles = await Subject.GetFilesBySeriesAsync(12);
 
@@ -63,7 +63,7 @@ namespace NzbDrone.Core.Test.MediaFiles
                 .With(c => c.Languages = new List<Language> { Language.English })
                 .BuildListOfNew();
 
-            Db.InsertMany(items);
+            await Db.InsertManyAsync(items);
 
             await Subject.DeleteForSeriesAsync(new List<int> { _series1.Id });
 

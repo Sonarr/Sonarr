@@ -146,7 +146,7 @@ namespace NzbDrone.Core.DataAugmentation.Scene
 
                     if (mappings.Any())
                     {
-                        _repository.Clear(sceneMappingProvider.GetType().Name);
+                        _repository.ClearAsync(sceneMappingProvider.GetType().Name).GetAwaiter().GetResult();
 
                         mappings.RemoveAll(sceneMapping =>
                         {
@@ -166,7 +166,7 @@ namespace NzbDrone.Core.DataAugmentation.Scene
                             sceneMapping.Type = sceneMappingProvider.GetType().Name;
                         }
 
-                        _repository.InsertMany(mappings.ToList());
+                        _repository.InsertManyAsync(mappings.ToList()).GetAwaiter().GetResult();
                     }
                     else
                     {
@@ -223,7 +223,7 @@ namespace NzbDrone.Core.DataAugmentation.Scene
 
         private void RefreshCache()
         {
-            var mappings = _repository.All().ToList();
+            var mappings = _repository.AllAsync().GetAwaiter().GetResult().ToList();
 
             _getTvdbIdCache.Update(mappings.GroupBy(v => v.ParseTerm).ToDictionary(v => v.Key, v => v.ToList()));
             _findByTvdbIdCache.Update(mappings.GroupBy(v => v.TvdbId).ToDictionary(v => v.Key.ToString(), v => v.ToList()));

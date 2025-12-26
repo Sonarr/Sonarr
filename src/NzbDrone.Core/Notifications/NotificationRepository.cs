@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Notifications
 
         public void UpdateSettings(NotificationDefinition model)
         {
-            SetFields(model, m => m.Settings);
+            SetFieldsAsync(model, default, m => m.Settings).GetAwaiter().GetResult();
         }
     }
 }

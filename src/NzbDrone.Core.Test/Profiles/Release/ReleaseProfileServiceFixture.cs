@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
+using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Profiles.Releases;
 using NzbDrone.Core.Test.Framework;
@@ -59,8 +60,8 @@ namespace NzbDrone.Core.Test.Profiles
             _releaseProfilesWithProvidedTagOrWithoutTags = [_defaultReleaseProfile, _includedReleaseProfile, _excludedReleaseProfile, _includedAndExcludedReleaseProfile];
 
             Mocker.GetMock<IRestrictionRepository>()
-                  .Setup(s => s.All())
-                  .Returns(_releaseProfiles);
+                  .Setup(s => s.AllAsync())
+                  .ReturnsAsync(_releaseProfiles);
         }
 
         [Test]

@@ -1,4 +1,5 @@
-﻿using FizzWare.NBuilder;
+using System.Threading.Tasks;
+using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Common.Extensions;
@@ -13,52 +14,56 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
     public class CleanupAbsolutePathMetadataFilesFixture : DbTest<CleanupAbsolutePathMetadataFiles, MetadataFile>
     {
         [Test]
-        public void should_not_delete_metadata_files_that_have_a_relative_path()
+        public async Task should_not_delete_metadata_files_that_have_a_relative_path()
         {
             var relativePath = @"C:\Test\".AsOsAgnostic().GetRelativePath(@"C:\Test\Relative\Path".AsOsAgnostic());
             var file = Builder<MetadataFile>.CreateNew()
                                             .With(m => m.RelativePath = relativePath)
                                             .BuildNew();
 
-            Db.Insert(file);
+            await Db.InsertAsync(file);
             Subject.Clean();
-            AllStoredModels.Count.Should().Be(1);
+            var metadataFiles = await GetAllStoredModelsAsync();
+            metadataFiles.Count.Should().Be(1);
         }
 
         [Test]
-        public void should_delete_metadata_files_that_start_with_a_drive_letter()
+        public async Task should_delete_metadata_files_that_start_with_a_drive_letter()
         {
             var file = Builder<MetadataFile>.CreateNew()
                                             .With(m => m.RelativePath = @"C:\Relative\Path")
                                             .BuildNew();
 
-            Db.Insert(file);
+            await Db.InsertAsync(file);
             Subject.Clean();
-            AllStoredModels.Count.Should().Be(0);
+            var metadataFiles = await GetAllStoredModelsAsync();
+            metadataFiles.Count.Should().Be(0);
         }
 
         [Test]
-        public void should_delete_metadata_files_that_start_with_a_forward_slash()
+        public async Task should_delete_metadata_files_that_start_with_a_forward_slash()
         {
             var file = Builder<MetadataFile>.CreateNew()
                                             .With(m => m.RelativePath = @"/Relative/Path")
                                             .BuildNew();
 
-            Db.Insert(file);
+            await Db.InsertAsync(file);
             Subject.Clean();
-            AllStoredModels.Count.Should().Be(0);
+            var metadataFiles = await GetAllStoredModelsAsync();
+            metadataFiles.Count.Should().Be(0);
         }
 
         [Test]
-        public void should_delete_metadata_files_that_start_with_a_backslash()
+        public async Task should_delete_metadata_files_that_start_with_a_backslash()
         {
             var file = Builder<MetadataFile>.CreateNew()
                                             .With(m => m.RelativePath = @"\\Relative\Path")
                                             .BuildNew();
 
-            Db.Insert(file);
+            await Db.InsertAsync(file);
             Subject.Clean();
-            AllStoredModels.Count.Should().Be(0);
+            var metadataFiles = await GetAllStoredModelsAsync();
+            metadataFiles.Count.Should().Be(0);
         }
     }
 }

@@ -40,7 +40,7 @@ namespace NzbDrone.Core.Test.Download.DownloadHistoryTests
                 .With(c => c.SeriesId = _series1.Id)
                 .BuildListOfNew();
 
-            Db.InsertMany(items);
+            await Db.InsertManyAsync(items);
 
             await Subject.DeleteBySeriesIdsAsync(new List<int> { _series1.Id });
 

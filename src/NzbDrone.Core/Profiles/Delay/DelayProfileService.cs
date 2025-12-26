@@ -32,9 +32,9 @@ namespace NzbDrone.Core.Profiles.Delay
 
         public DelayProfile Add(DelayProfile profile)
         {
-            profile.Order = _repo.Count();
+            profile.Order = _repo.CountAsync().GetAwaiter().GetResult();
 
-            var result = _repo.Insert(profile);
+            var result = _repo.InsertAsync(profile).GetAwaiter().GetResult();
             _bestForTagsCache.Clear();
 
             return result;
@@ -42,14 +42,14 @@ namespace NzbDrone.Core.Profiles.Delay
 
         public DelayProfile Update(DelayProfile profile)
         {
-            var result = _repo.Update(profile);
+            var result = _repo.UpdateAsync(profile).GetAwaiter().GetResult();
             _bestForTagsCache.Clear();
             return result;
         }
 
         public void Delete(int id)
         {
-            _repo.Delete(id);
+            _repo.DeleteAsync(id).GetAwaiter().GetResult();
 
             var all = All().OrderBy(d => d.Order).ToList();
 
@@ -63,18 +63,18 @@ namespace NzbDrone.Core.Profiles.Delay
                 all[i].Order = i + 1;
             }
 
-            _repo.UpdateMany(all);
+            _repo.UpdateManyAsync(all).GetAwaiter().GetResult();
             _bestForTagsCache.Clear();
         }
 
         public List<DelayProfile> All()
         {
-            return _repo.All().ToList();
+            return _repo.AllAsync().GetAwaiter().GetResult().ToList();
         }
 
         public DelayProfile Get(int id)
         {
-            return _repo.Get(id);
+            return _repo.GetAsync(id).GetAwaiter().GetResult();
         }
 
         public List<DelayProfile> AllForTag(int tagId)
@@ -96,7 +96,7 @@ namespace NzbDrone.Core.Profiles.Delay
 
         private DelayProfile FetchBestForTags(HashSet<int> tagIds)
         {
-            return _repo.All()
+            return _repo.AllAsync().GetAwaiter().GetResult()
                         .Where(r => r.Tags.Intersect(tagIds).Any() || r.Tags.Empty())
                         .OrderBy(d => d.Order).First();
         }
@@ -145,7 +145,7 @@ namespace NzbDrone.Core.Profiles.Delay
                 }
             }
 
-            _repo.UpdateMany(all);
+            _repo.UpdateManyAsync(all).GetAwaiter().GetResult();
 
             return All();
         }

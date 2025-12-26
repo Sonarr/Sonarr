@@ -17,18 +17,18 @@ namespace NzbDrone.Core.Organizer
 
         public NamingConfig GetConfig()
         {
-            var config = _repository.SingleOrDefault();
+            var config = _repository.SingleOrDefaultAsync().GetAwaiter().GetResult();
 
             if (config == null)
             {
                 lock (_repository)
                 {
-                    config = _repository.SingleOrDefault();
+                    config = _repository.SingleOrDefaultAsync().GetAwaiter().GetResult();
 
                     if (config == null)
                     {
-                        _repository.Insert(NamingConfig.Default);
-                        config = _repository.Single();
+                        _repository.InsertAsync(NamingConfig.Default).GetAwaiter().GetResult();
+                        config = _repository.SingleAsync().GetAwaiter().GetResult();
                     }
                 }
             }
@@ -38,7 +38,7 @@ namespace NzbDrone.Core.Organizer
 
         public void Save(NamingConfig namingConfig)
         {
-            _repository.Upsert(namingConfig);
+            _repository.UpsertAsync(namingConfig).GetAwaiter().GetResult();
         }
     }
 }

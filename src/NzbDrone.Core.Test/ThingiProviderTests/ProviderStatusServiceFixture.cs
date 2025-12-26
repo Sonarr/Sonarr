@@ -57,12 +57,12 @@ namespace NzbDrone.Core.Test.ThingiProviderTests
         private MockProviderStatus WithStatus(MockProviderStatus status)
         {
             Mocker.GetMock<IMockProviderStatusRepository>()
-                .Setup(v => v.FindByProviderId(1))
-                .Returns(status);
+                .Setup(v => v.FindByProviderIdAsync(1))
+                .ReturnsAsync(status);
 
             Mocker.GetMock<IMockProviderStatusRepository>()
-                .Setup(v => v.All())
-                .Returns(new[] { status });
+                .Setup(v => v.AllAsync())
+                .ReturnsAsync(new[] { status });
 
             return status;
         }
@@ -70,13 +70,13 @@ namespace NzbDrone.Core.Test.ThingiProviderTests
         private void VerifyUpdate()
         {
             Mocker.GetMock<IMockProviderStatusRepository>()
-                .Verify(v => v.Upsert(It.IsAny<MockProviderStatus>()), Times.Once());
+                .Verify(v => v.UpsertAsync(It.IsAny<MockProviderStatus>()), Times.Once());
         }
 
         private void VerifyNoUpdate()
         {
             Mocker.GetMock<IMockProviderStatusRepository>()
-                .Verify(v => v.Upsert(It.IsAny<MockProviderStatus>()), Times.Never());
+                .Verify(v => v.UpsertAsync(It.IsAny<MockProviderStatus>()), Times.Never());
         }
 
         [Test]

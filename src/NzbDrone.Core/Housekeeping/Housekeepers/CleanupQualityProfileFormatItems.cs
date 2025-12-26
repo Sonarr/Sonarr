@@ -23,8 +23,8 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
 
         public void Clean()
         {
-            var customFormats = _customFormatRepository.All().ToDictionary(c => c.Id);
-            var profiles = _repository.All();
+            var customFormats = _customFormatRepository.AllAsync().GetAwaiter().GetResult().ToDictionary(c => c.Id);
+            var profiles = _repository.AllAsync().GetAwaiter().GetResult();
             var updatedProfiles = new List<QualityProfile>();
 
             foreach (var profile in profiles)
@@ -74,7 +74,7 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
 
             if (updatedProfiles.Any())
             {
-                _repository.SetFields(updatedProfiles, p => p.FormatItems, p => p.MinFormatScore, p => p.CutoffFormatScore, p => p.MinUpgradeFormatScore);
+                _repository.SetFieldsAsync(updatedProfiles, default, p => p.FormatItems, p => p.MinFormatScore, p => p.CutoffFormatScore, p => p.MinUpgradeFormatScore).GetAwaiter().GetResult();
             }
         }
     }

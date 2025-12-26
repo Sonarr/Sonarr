@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
@@ -27,7 +28,7 @@ namespace NzbDrone.Core.Test.IndexerTests
         }
 
         [Test]
-        public void should_remove_missing_indexers_on_startup()
+        public async Task should_remove_missing_indexers_on_startup()
         {
             var repo = Mocker.Resolve<IndexerRepository>();
 
@@ -36,11 +37,12 @@ namespace NzbDrone.Core.Test.IndexerTests
             var existingIndexers = Builder<IndexerDefinition>.CreateNew().BuildNew();
             existingIndexers.ConfigContract = nameof(NewznabSettings);
 
-            repo.Insert(existingIndexers);
+            await repo.InsertAsync(existingIndexers);
 
             Subject.Handle(new ApplicationStartedEvent());
 
-            AllStoredModels.Should().NotContain(c => c.Id == existingIndexers.Id);
+            var indexerDefinitions = await GetAllStoredModelsAsync();
+            indexerDefinitions.Should().NotContain(c => c.Id == existingIndexers.Id);
 
             ExceptionVerification.ExpectedWarns(1);
         }

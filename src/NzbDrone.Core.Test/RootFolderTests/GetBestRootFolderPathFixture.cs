@@ -1,5 +1,6 @@
 using System.Linq;
 using FluentAssertions;
+using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.RootFolders;
 using NzbDrone.Core.Test.Framework;
@@ -13,8 +14,8 @@ namespace NzbDrone.Core.Test.RootFolderTests
         private void GivenRootFolders(params string[] paths)
         {
             Mocker.GetMock<IRootFolderRepository>()
-                .Setup(s => s.All())
-                .Returns(paths.Select(p => new RootFolder { Path = p }));
+                .Setup(s => s.AllAsync())
+                .ReturnsAsync(paths.Select(p => new RootFolder { Path = p }));
         }
 
         [Test]

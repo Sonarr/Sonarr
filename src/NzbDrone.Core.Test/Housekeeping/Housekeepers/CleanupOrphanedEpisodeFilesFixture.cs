@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
@@ -16,20 +17,21 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
     public class CleanupOrphanedEpisodeFilesFixture : DbTest<CleanupOrphanedEpisodeFiles, EpisodeFile>
     {
         [Test]
-        public void should_delete_orphaned_episode_files()
+        public async Task should_delete_orphaned_episode_files()
         {
             var episodeFile = Builder<EpisodeFile>.CreateNew()
                 .With(h => h.Languages = new List<Language> { Language.English })
                 .With(h => h.Quality = new QualityModel())
                 .BuildNew();
 
-            Db.Insert(episodeFile);
+            await Db.InsertAsync(episodeFile);
             Subject.Clean();
-            AllStoredModels.Should().BeEmpty();
+            var episodeFiles = await GetAllStoredModelsAsync();
+            episodeFiles.Should().BeEmpty();
         }
 
         [Test]
-        public void should_not_delete_unorphaned_episode_files()
+        public async Task should_not_delete_unorphaned_episode_files()
         {
             var episodeFiles = Builder<EpisodeFile>.CreateListOfSize(2)
                 .All()
@@ -37,17 +39,19 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
                 .With(h => h.Quality = new QualityModel())
                 .BuildListOfNew();
 
-            Db.InsertMany(episodeFiles);
+            await Db.InsertManyAsync(episodeFiles);
 
             var episode = Builder<Episode>.CreateNew()
                 .With(e => e.EpisodeFileId = episodeFiles.First().Id)
                 .BuildNew();
 
-            Db.Insert(episode);
+            await Db.InsertAsync(episode);
 
             Subject.Clean();
-            AllStoredModels.Should().HaveCount(1);
-            Db.All<Episode>().Should().Contain(e => e.EpisodeFileId == AllStoredModels.First().Id);
+            var allStoredModels = await GetAllStoredModelsAsync();
+            allStoredModels.Should().HaveCount(1);
+            var episodes = await Db.AllAsync<Episode>();
+            episodes.Should().Contain(e => e.EpisodeFileId == allStoredModels.First().Id);
         }
     }
 }

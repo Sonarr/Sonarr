@@ -65,24 +65,24 @@ namespace NzbDrone.Core.Tags
 
         public Tag GetTag(int tagId)
         {
-            return _repo.Get(tagId);
+            return _repo.GetAsync(tagId).GetAwaiter().GetResult();
         }
 
         public Tag GetTag(string tag)
         {
             if (tag.All(char.IsDigit))
             {
-                return _repo.Get(int.Parse(tag));
+                return _repo.GetAsync(int.Parse(tag)).GetAwaiter().GetResult();
             }
             else
             {
-                return _repo.GetByLabel(tag);
+                return _repo.GetByLabelAsync(tag).GetAwaiter().GetResult();
             }
         }
 
         public List<Tag> GetTags(IEnumerable<int> ids)
         {
-            return _repo.Get(ids).ToList();
+            return _repo.GetAsync(ids).GetAwaiter().GetResult().ToList();
         }
 
         public TagDetails Details(int tagId)
@@ -152,12 +152,12 @@ namespace NzbDrone.Core.Tags
 
         public List<Tag> All()
         {
-            return _repo.All().OrderBy(t => t.Label).ToList();
+            return _repo.AllAsync().GetAwaiter().GetResult().OrderBy(t => t.Label).ToList();
         }
 
         public Tag Add(Tag tag)
         {
-            var existingTag = _repo.FindByLabel(tag.Label);
+            var existingTag = _repo.FindByLabelAsync(tag.Label).GetAwaiter().GetResult();
 
             if (existingTag != null)
             {
@@ -166,7 +166,7 @@ namespace NzbDrone.Core.Tags
 
             tag.Label = tag.Label.ToLowerInvariant();
 
-            _repo.Insert(tag);
+            _repo.DeleteAsync(tag).GetAwaiter().GetResult();
             _eventAggregator.PublishEventAsync(new TagsUpdatedEvent()).GetAwaiter().GetResult();
 
             return tag;
@@ -176,7 +176,7 @@ namespace NzbDrone.Core.Tags
         {
             tag.Label = tag.Label.ToLowerInvariant();
 
-            _repo.Update(tag);
+            _repo.DeleteAsync(tag).GetAwaiter().GetResult();
             _eventAggregator.PublishEventAsync(new TagsUpdatedEvent()).GetAwaiter().GetResult();
 
             return tag;
@@ -190,7 +190,7 @@ namespace NzbDrone.Core.Tags
                 throw new ModelConflictException(typeof(Tag), tagId, $"'{details.Label}' cannot be deleted since it's still in use");
             }
 
-            _repo.Delete(tagId);
+            _repo.DeleteAsync(tagId).GetAwaiter().GetResult();
             _eventAggregator.PublishEventAsync(new TagsUpdatedEvent()).GetAwaiter().GetResult();
         }
 

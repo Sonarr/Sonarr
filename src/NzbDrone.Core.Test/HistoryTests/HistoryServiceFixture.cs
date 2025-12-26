@@ -71,7 +71,7 @@ namespace NzbDrone.Core.Test.HistoryTests
             await Subject.HandleAsync(new EpisodeImportedEvent(localEpisode, episodeFile, new List<DeletedEpisodeFile>(), true, downloadClientItem), CancellationToken.None);
 
             Mocker.GetMock<IHistoryRepository>()
-                .Verify(v => v.Insert(It.Is<EpisodeHistory>(h => h.SourceTitle == Path.GetFileNameWithoutExtension(localEpisode.Path))));
+                .Verify(v => v.InsertAsync(It.Is<EpisodeHistory>(h => h.SourceTitle == Path.GetFileNameWithoutExtension(localEpisode.Path))));
         }
     }
 }

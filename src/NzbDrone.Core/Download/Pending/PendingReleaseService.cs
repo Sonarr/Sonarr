@@ -140,7 +140,7 @@ namespace NzbDrone.Core.Download.Pending
                             {
                                 _logger.Debug("The release {0} is already pending with reason {1}, changing to {2}", decision.RemoteEpisode, matchingReport.Reason, reason);
                                 matchingReport.Reason = reason;
-                                _repository.Update(matchingReport);
+                                _repository.UpdateAsync(matchingReport).GetAwaiter().GetResult();
                             }
                         }
                         else
@@ -154,7 +154,7 @@ namespace NzbDrone.Core.Download.Pending
 
                             foreach (var duplicate in matchingReports.Skip(1))
                             {
-                                _repository.Delete(duplicate.Id);
+                                _repository.DeleteAsync(duplicate.Id).GetAwaiter().GetResult();
                                 alreadyPending.Remove(duplicate);
                                 alreadyPendingByEpisode = CreateEpisodeLookup(alreadyPending);
                             }
@@ -173,7 +173,7 @@ namespace NzbDrone.Core.Download.Pending
 
         public List<ReleaseInfo> GetPending()
         {
-            var releases = _repository.All().Select(p =>
+            var releases = _repository.AllAsync().GetAwaiter().GetResult().Select(p =>
             {
                 var release = p.Release;
 
@@ -284,25 +284,25 @@ namespace NzbDrone.Core.Download.Pending
         public void RemovePendingQueueItems(int queueId)
         {
             var targetItem = FindPendingRelease(queueId);
-            var seriesReleases = _repository.AllBySeriesId(targetItem.SeriesId);
+            var seriesReleases = _repository.AllBySeriesIdAsync(targetItem.SeriesId).GetAwaiter().GetResult();
 
             var releasesToRemove = seriesReleases.Where(
                 c => c.ParsedEpisodeInfo.SeasonNumber == targetItem.ParsedEpisodeInfo.SeasonNumber &&
                      c.ParsedEpisodeInfo.EpisodeNumbers.SequenceEqual(targetItem.ParsedEpisodeInfo.EpisodeNumbers));
 
-            _repository.DeleteMany(releasesToRemove.Select(c => c.Id));
+            _repository.DeleteManyAsync(releasesToRemove.Select(c => c.Id)).GetAwaiter().GetResult();
         }
 
         public void RemovePendingQueueItemsObsolete(int queueId)
         {
             var targetItem = FindPendingReleaseObsolete(queueId);
-            var seriesReleases = _repository.AllBySeriesId(targetItem.SeriesId);
+            var seriesReleases = _repository.AllBySeriesIdAsync(targetItem.SeriesId).GetAwaiter().GetResult();
 
             var releasesToRemove = seriesReleases.Where(
                 c => c.ParsedEpisodeInfo.SeasonNumber == targetItem.ParsedEpisodeInfo.SeasonNumber &&
                      c.ParsedEpisodeInfo.EpisodeNumbers.SequenceEqual(targetItem.ParsedEpisodeInfo.EpisodeNumbers));
 
-            _repository.DeleteMany(releasesToRemove.Select(c => c.Id));
+            _repository.DeleteManyAsync(releasesToRemove.Select(c => c.Id)).GetAwaiter().GetResult();
         }
 
         public RemoteEpisode OldestPendingRelease(int seriesId, int[] episodeIds)
@@ -531,7 +531,7 @@ namespace NzbDrone.Core.Download.Pending
 
         private async Task InsertAsync(DownloadDecision decision, PendingReleaseReason reason, CancellationToken cancellationToken = default)
         {
-            _repository.Insert(new PendingRelease
+            await _repository.InsertAsync(new PendingRelease
             {
                 SeriesId = decision.RemoteEpisode.Series.Id,
                 ParsedEpisodeInfo = decision.RemoteEpisode.ParsedEpisodeInfo,
@@ -544,7 +544,8 @@ namespace NzbDrone.Core.Download.Pending
                     SeriesMatchType = decision.RemoteEpisode.SeriesMatchType,
                     ReleaseSource = decision.RemoteEpisode.ReleaseSource
                 }
-            });
+            },
+            cancellationToken).ConfigureAwait(false);
 
             await _eventAggregator.PublishEventAsync(new PendingReleasesUpdatedEvent(), cancellationToken).ConfigureAwait(false);
         }
@@ -556,7 +557,7 @@ namespace NzbDrone.Core.Download.Pending
 
         private async Task DeleteAsync(PendingRelease pendingRelease, CancellationToken cancellationToken = default)
         {
-            _repository.Delete(pendingRelease);
+            await _repository.DeleteAsync(pendingRelease, cancellationToken).ConfigureAwait(false);
             await _eventAggregator.PublishEventAsync(new PendingReleasesUpdatedEvent(), cancellationToken).ConfigureAwait(false);
         }
 
@@ -657,7 +658,7 @@ namespace NzbDrone.Core.Download.Pending
 
         private void UpdatePendingReleases()
         {
-            _pendingReleases = IncludeRemoteEpisodes(_repository.All().ToList());
+            _pendingReleases = IncludeRemoteEpisodes(_repository.AllAsync().GetAwaiter().GetResult().ToList());
         }
 
         public async Task HandleAsync(SeriesEditedEvent message, CancellationToken cancellationToken)
@@ -682,13 +683,8 @@ namespace NzbDrone.Core.Download.Pending
 
         public async Task HandleAsync(SeriesDeletedEvent message, CancellationToken cancellationToken)
         {
-            // TODO: Make repository operations async
-            await Task.Run(() =>
-            {
-                _repository.DeleteBySeriesIds(message.Series.Select(m => m.Id).ToList());
-                UpdatePendingReleases();
-            },
-            cancellationToken);
+            await _repository.DeleteBySeriesIdsAsync(message.Series.Select(m => m.Id).ToList(), cancellationToken).ConfigureAwait(false);
+            UpdatePendingReleases();
         }
 
         public async Task HandleAsync(EpisodeGrabbedEvent message, CancellationToken cancellationToken)

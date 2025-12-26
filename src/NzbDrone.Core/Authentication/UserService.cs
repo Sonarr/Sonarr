@@ -1,6 +1,8 @@
 using System;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using NzbDrone.Common.Disk;
@@ -21,7 +23,7 @@ namespace NzbDrone.Core.Authentication
         User FindUser(Guid identifier);
     }
 
-    public class UserService : IUserService, IHandle<ApplicationStartedEvent>
+    public class UserService : IUserService, IHandleAsync<ApplicationStartedEvent>
     {
         private const int ITERATIONS = 10000;
         private const int SALT_SIZE = 128 / 8;
@@ -48,12 +50,12 @@ namespace NzbDrone.Core.Authentication
 
             SetUserHashedPassword(user, password);
 
-            return _repo.Insert(user);
+            return _repo.InsertAsync(user).GetAwaiter().GetResult();
         }
 
         public User Update(User user)
         {
-            return _repo.Update(user);
+            return _repo.UpdateAsync(user).GetAwaiter().GetResult();
         }
 
         public User Upsert(string username, string password)
@@ -77,7 +79,7 @@ namespace NzbDrone.Core.Authentication
 
         public User FindUser()
         {
-            return _repo.SingleOrDefault();
+            return _repo.SingleOrDefaultAsync().GetAwaiter().GetResult();
         }
 
         public User FindUser(string username, string password)
@@ -87,7 +89,7 @@ namespace NzbDrone.Core.Authentication
                 return null;
             }
 
-            var user = _repo.FindUser(username.ToLowerInvariant());
+            var user = _repo.FindUserAsync(username.ToLowerInvariant()).GetAwaiter().GetResult();
 
             if (user == null)
             {
@@ -117,7 +119,7 @@ namespace NzbDrone.Core.Authentication
 
         public User FindUser(Guid identifier)
         {
-            return _repo.FindUser(identifier);
+            return _repo.FindUserAsync(identifier).GetAwaiter().GetResult();
         }
 
         private User SetUserHashedPassword(User user, string password)
@@ -157,9 +159,10 @@ namespace NzbDrone.Core.Authentication
             return user.Password == hashedPassword;
         }
 
-        public void Handle(ApplicationStartedEvent message)
+        public async Task HandleAsync(ApplicationStartedEvent message, CancellationToken cancellationToken)
         {
-            if (_repo.All().Any())
+            var users = await _repo.AllAsync(cancellationToken).ConfigureAwait(false);
+            if (users.Any())
             {
                 return;
             }
@@ -171,7 +174,7 @@ namespace NzbDrone.Core.Authentication
                 return;
             }
 
-            var xDoc = XDocument.Load(configFile);
+            var xDoc = XDocument.Load(configFile); // TODO: to async
             var config = xDoc.Descendants("Config").Single();
             var usernameElement = config.Descendants("Username").FirstOrDefault();
             var passwordElement = config.Descendants("Password").FirstOrDefault();

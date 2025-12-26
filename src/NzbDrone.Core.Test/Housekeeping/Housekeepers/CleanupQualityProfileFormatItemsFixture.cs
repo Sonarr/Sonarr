@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
@@ -27,7 +28,7 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
         }
 
         [Test]
-        public void should_remove_orphaned_custom_formats()
+        public async Task should_remove_orphaned_custom_formats()
         {
             var qualityProfile = Builder<QualityProfile>.CreateNew()
                 .With(h => h.Items = Qualities.QualityFixture.GetDefaultQualities())
@@ -41,10 +42,10 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
                 })
                 .BuildNew();
 
-            Db.Insert(qualityProfile);
+            await Db.InsertAsync(qualityProfile);
             Subject.Clean();
 
-            var result = AllStoredModels;
+            var result = await GetAllStoredModelsAsync();
 
             result.Should().HaveCount(1);
             result.First().FormatItems.Should().BeEmpty();
@@ -53,7 +54,7 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
         }
 
         [Test]
-        public void should_not_remove_unorphaned_custom_formats()
+        public async Task should_not_remove_unorphaned_custom_formats()
         {
             var minFormatScore = 50;
             var cutoffFormatScore = 100;
@@ -62,7 +63,7 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
                 .With(h => h.Specifications = new List<ICustomFormatSpecification>())
                 .BuildNew();
 
-            Db.Insert(customFormat);
+            await Db.InsertAsync(customFormat);
 
             var qualityProfile = Builder<QualityProfile>.CreateNew()
                 .With(h => h.Items = Qualities.QualityFixture.GetDefaultQualities())
@@ -76,10 +77,10 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
                 })
                 .BuildNew();
 
-            Db.Insert(qualityProfile);
+            await Db.InsertAsync(qualityProfile);
 
             Subject.Clean();
-            var result = AllStoredModels;
+            var result = await GetAllStoredModelsAsync();
 
             result.Should().HaveCount(1);
             result.First().FormatItems.Should().HaveCount(1);
@@ -88,7 +89,7 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
         }
 
         [Test]
-        public void should_add_missing_custom_formats()
+        public async Task should_add_missing_custom_formats()
         {
             var minFormatScore = 50;
             var cutoffFormatScore = 100;
@@ -105,8 +106,8 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
                 .With(h => h.Specifications = new List<ICustomFormatSpecification>())
                 .BuildNew();
 
-            Db.Insert(customFormat1);
-            Db.Insert(customFormat2);
+            await Db.InsertAsync(customFormat1);
+            await Db.InsertAsync(customFormat2);
 
             var qualityProfile = Builder<QualityProfile>.CreateNew()
                 .With(h => h.Items = Qualities.QualityFixture.GetDefaultQualities())
@@ -120,10 +121,10 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
                 })
                 .BuildNew();
 
-            Db.Insert(qualityProfile);
+            await Db.InsertAsync(qualityProfile);
 
             Subject.Clean();
-            var result = AllStoredModels;
+            var result = await GetAllStoredModelsAsync();
 
             result.Should().HaveCount(1);
             result.First().FormatItems.Should().HaveCount(2);

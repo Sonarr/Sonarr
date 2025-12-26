@@ -40,7 +40,7 @@ namespace NzbDrone.Core.AutoTagging
 
         private Dictionary<int, AutoTag> AllDictionary()
         {
-            return _cache.Get("all", () => _repository.All().ToDictionary(m => m.Id));
+            return _cache.Get("all", () => _repository.AllAsync().GetAwaiter().GetResult().ToDictionary(m => m.Id));
         }
 
         public List<AutoTag> All()
@@ -55,7 +55,7 @@ namespace NzbDrone.Core.AutoTagging
 
         public void Update(AutoTag autoTag)
         {
-            _repository.Update(autoTag);
+            _repository.UpdateAsync(autoTag).GetAwaiter().GetResult();
 
             _cache.Clear();
             _eventAggregator.PublishEventAsync(new AutoTagsUpdatedEvent()).GetAwaiter().GetResult();
@@ -63,7 +63,7 @@ namespace NzbDrone.Core.AutoTagging
 
         public AutoTag Insert(AutoTag autoTag)
         {
-            var result = _repository.Insert(autoTag);
+            var result = _repository.InsertAsync(autoTag).GetAwaiter().GetResult();
 
             _cache.Clear();
             _eventAggregator.PublishEventAsync(new AutoTagsUpdatedEvent()).GetAwaiter().GetResult();
@@ -73,7 +73,7 @@ namespace NzbDrone.Core.AutoTagging
 
         public void Delete(int id)
         {
-            _repository.Delete(id);
+            _repository.DeleteAsync(id).GetAwaiter().GetResult();
 
             _cache.Clear();
             _eventAggregator.PublishEventAsync(new AutoTagsUpdatedEvent()).GetAwaiter().GetResult();

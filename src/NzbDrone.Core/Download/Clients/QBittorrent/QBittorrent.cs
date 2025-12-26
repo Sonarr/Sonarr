@@ -134,7 +134,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                 {
                     try
                     {
-                        Proxy.AddTags(hash.ToLower(), _tagRepository.GetTags(remoteEpisode.Series.Tags).Select(tag => tag.Label), Settings);
+                        Proxy.AddTags(hash.ToLower(), _tagRepository.GetTagsAsync(remoteEpisode.Series.Tags).GetAwaiter().GetResult().Select(tag => tag.Label), Settings);
                     }
                     catch (Exception ex)
                     {
@@ -203,7 +203,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                 {
                     try
                     {
-                        Proxy.AddTags(hash.ToLower(), _tagRepository.GetTags(remoteEpisode.Series.Tags).Select(tag => tag.Label), Settings);
+                        Proxy.AddTags(hash.ToLower(), _tagRepository.GetTagsAsync(remoteEpisode.Series.Tags).GetAwaiter().GetResult().Select(tag => tag.Label), Settings);
                     }
                     catch (Exception ex)
                     {

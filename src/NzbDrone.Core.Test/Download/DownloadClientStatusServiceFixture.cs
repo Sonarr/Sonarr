@@ -26,12 +26,12 @@ namespace NzbDrone.Core.Test.Download
         private DownloadClientStatus WithStatus(DownloadClientStatus status)
         {
             Mocker.GetMock<IDownloadClientStatusRepository>()
-                .Setup(v => v.FindByProviderId(1))
-                .Returns(status);
+                .Setup(v => v.FindByProviderIdAsync(1))
+                .ReturnsAsync(status);
 
             Mocker.GetMock<IDownloadClientStatusRepository>()
-                .Setup(v => v.All())
-                .Returns(new[] { status });
+                .Setup(v => v.AllAsync())
+                .ReturnsAsync(new[] { status });
 
             return status;
         }
@@ -39,13 +39,13 @@ namespace NzbDrone.Core.Test.Download
         private void VerifyUpdate()
         {
             Mocker.GetMock<IDownloadClientStatusRepository>()
-                .Verify(v => v.Upsert(It.IsAny<DownloadClientStatus>()), Times.Once());
+                .Verify(v => v.UpsertAsync(It.IsAny<DownloadClientStatus>()), Times.Once());
         }
 
         private void VerifyNoUpdate()
         {
             Mocker.GetMock<IDownloadClientStatusRepository>()
-                .Verify(v => v.Upsert(It.IsAny<DownloadClientStatus>()), Times.Never());
+                .Verify(v => v.UpsertAsync(It.IsAny<DownloadClientStatus>()), Times.Never());
         }
 
         [Test]

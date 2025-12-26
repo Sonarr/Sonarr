@@ -21,7 +21,7 @@ namespace NzbDrone.Core.ImportLists.Trakt
         public const string RenewUri = "https://auth.servarr.com/v1/trakt_sonarr/renew";
         public const string ClientId = "d44ba57cab40c31eb3f797dcfccd203500796539125b333883ec1d94aa62ed4c";
 
-        private IImportListRepository _importListRepository;
+        private readonly IImportListRepository _importListRepository;
 
         protected TraktImportBase(IImportListRepository netImportRepository,
                            IHttpClient httpClient,
@@ -138,7 +138,7 @@ namespace NzbDrone.Core.ImportLists.Trakt
 
                     if (Definition.Id > 0)
                     {
-                        _importListRepository.UpdateSettings((ImportListDefinition)Definition);
+                        _importListRepository.UpdateSettingsAsync((ImportListDefinition)Definition).GetAwaiter().GetResult();
                     }
                 }
             }

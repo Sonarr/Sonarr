@@ -1,5 +1,6 @@
 using System;
 using System.Threading;
+using System.Threading.Tasks;
 using FluentAssertions;
 using NLog;
 using NUnit.Framework;
@@ -34,18 +35,19 @@ namespace NzbDrone.Core.Test.InstrumentationTests
         }
 
         [Test]
-        public void write_log()
+        public async Task write_log()
         {
             _logger.Info(_uniqueMessage);
 
             Thread.Sleep(1000);
 
-            StoredModel.Message.Should().Be(_uniqueMessage);
-            VerifyLog(StoredModel, LogLevel.Info);
+            var storedModel = await GetStoredModelAsync();
+            storedModel.Message.Should().Be(_uniqueMessage);
+            VerifyLog(storedModel, LogLevel.Info);
         }
 
         [Test]
-        public void write_long_log()
+        public async Task write_long_log()
         {
             var message = string.Empty;
             for (var i = 0; i < 100; i++)
@@ -57,13 +59,14 @@ namespace NzbDrone.Core.Test.InstrumentationTests
 
             Thread.Sleep(1000);
 
-            StoredModel.Message.Should().HaveLength(message.Length);
-            StoredModel.Message.Should().Be(message);
-            VerifyLog(StoredModel, LogLevel.Info);
+            var storedModel = await GetStoredModelAsync();
+            storedModel.Message.Should().HaveLength(message.Length);
+            storedModel.Message.Should().Be(message);
+            VerifyLog(storedModel, LogLevel.Info);
         }
 
         [Test]
-        public void write_log_exception()
+        public async Task write_log_exception()
         {
             var ex = new InvalidOperationException("Fake Exception");
 
@@ -71,16 +74,17 @@ namespace NzbDrone.Core.Test.InstrumentationTests
 
             Thread.Sleep(1000);
 
-            VerifyLog(StoredModel, LogLevel.Error);
-            StoredModel.Message.Should().Be(_uniqueMessage + ": " + ex.Message);
-            StoredModel.ExceptionType.Should().Be(ex.GetType().ToString());
-            StoredModel.Exception.Should().Be(ex.ToString());
+            var storedModel = await GetStoredModelAsync();
+            VerifyLog(storedModel, LogLevel.Error);
+            storedModel.Message.Should().Be(_uniqueMessage + ": " + ex.Message);
+            storedModel.ExceptionType.Should().Be(ex.GetType().ToString());
+            storedModel.Exception.Should().Be(ex.ToString());
 
             ExceptionVerification.ExpectedErrors(1);
         }
 
         [Test]
-        public void exception_log_with_no_message_should_use_exceptions_message()
+        public async Task exception_log_with_no_message_should_use_exceptions_message()
         {
             var ex = new InvalidOperationException("Fake Exception");
             _uniqueMessage = string.Empty;
@@ -89,9 +93,10 @@ namespace NzbDrone.Core.Test.InstrumentationTests
 
             Thread.Sleep(1000);
 
-            StoredModel.Message.Should().Be(ex.Message);
+            var storedModel = await GetStoredModelAsync();
+            storedModel.Message.Should().Be(ex.Message);
 
-            VerifyLog(StoredModel, LogLevel.Error);
+            VerifyLog(storedModel, LogLevel.Error);
 
             ExceptionVerification.ExpectedErrors(1);
         }

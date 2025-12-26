@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
@@ -39,15 +40,15 @@ namespace NzbDrone.Core.Test.TvTests.SeriesServiceTests
                 .Returns(new AutoTaggingChanges());
 
             Mocker.GetMock<ISeriesRepository>()
-                .Setup(s => s.Update(It.IsAny<Series>()))
-                .Returns<Series>(r => r);
+                .Setup(s => s.UpdateAsync(It.IsAny<Series>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync((Series r, CancellationToken ct) => r);
         }
 
         private void GivenExistingSeries()
         {
             Mocker.GetMock<ISeriesRepository>()
-                  .Setup(s => s.Get(It.IsAny<int>()))
-                  .Returns(_existingSeries);
+                  .Setup(s => s.GetAsync(It.IsAny<int>()))
+                  .ReturnsAsync(_existingSeries);
         }
 
         [Test]

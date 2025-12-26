@@ -64,32 +64,32 @@ namespace NzbDrone.Core.Tv
 
         public Episode GetEpisode(int id)
         {
-            return _episodeRepository.Get(id);
+            return _episodeRepository.GetAsync(id).GetAwaiter().GetResult();
         }
 
         public List<Episode> GetEpisodes(IEnumerable<int> ids)
         {
-            return _episodeRepository.Get(ids).ToList();
+            return _episodeRepository.GetAsync(ids).GetAwaiter().GetResult().ToList();
         }
 
         public Episode FindEpisode(int seriesId, int seasonNumber, int episodeNumber)
         {
-            return _episodeRepository.Find(seriesId, seasonNumber, episodeNumber);
+            return _episodeRepository.FindAsync(seriesId, seasonNumber, episodeNumber).GetAwaiter().GetResult();
         }
 
         public Episode FindEpisode(int seriesId, int absoluteEpisodeNumber)
         {
-            return _episodeRepository.Find(seriesId, absoluteEpisodeNumber);
+            return _episodeRepository.FindAsync(seriesId, absoluteEpisodeNumber).GetAwaiter().GetResult();
         }
 
         public List<Episode> FindEpisodesBySceneNumbering(int seriesId, int seasonNumber, int episodeNumber)
         {
-            return _episodeRepository.FindEpisodesBySceneNumbering(seriesId, seasonNumber, episodeNumber);
+            return _episodeRepository.FindEpisodesBySceneNumberingAsync(seriesId, seasonNumber, episodeNumber).GetAwaiter().GetResult();
         }
 
         public List<Episode> FindEpisodesBySceneNumbering(int seriesId, int sceneAbsoluteEpisodeNumber)
         {
-            return _episodeRepository.FindEpisodesBySceneNumbering(seriesId, sceneAbsoluteEpisodeNumber);
+            return _episodeRepository.FindEpisodesBySceneNumberingAsync(seriesId, sceneAbsoluteEpisodeNumber).GetAwaiter().GetResult();
         }
 
         public Episode FindEpisode(int seriesId, string date, int? part)
@@ -99,22 +99,22 @@ namespace NzbDrone.Core.Tv
 
         public List<Episode> GetEpisodeBySeries(int seriesId)
         {
-            return _episodeRepository.GetEpisodes(seriesId).ToList();
+            return _episodeRepository.GetEpisodesAsync(seriesId).GetAwaiter().GetResult().ToList();
         }
 
         public List<Episode> GetEpisodesBySeries(List<int> seriesIds)
         {
-            return _episodeRepository.GetEpisodesBySeriesIds(seriesIds).ToList();
+            return _episodeRepository.GetEpisodesBySeriesIdsAsync(seriesIds).GetAwaiter().GetResult().ToList();
         }
 
         public List<Episode> GetEpisodesBySeason(int seriesId, int seasonNumber)
         {
-            return _episodeRepository.GetEpisodes(seriesId, seasonNumber);
+            return _episodeRepository.GetEpisodesAsync(seriesId, seasonNumber).GetAwaiter().GetResult();
         }
 
         public List<Episode> GetEpisodesBySceneSeason(int seriesId, int sceneSeasonNumber)
         {
-            return _episodeRepository.GetEpisodesBySceneSeason(seriesId, sceneSeasonNumber);
+            return _episodeRepository.GetEpisodesBySceneSeasonAsync(seriesId, sceneSeasonNumber).GetAwaiter().GetResult();
         }
 
         public Episode FindEpisodeByTitle(int seriesId, int seasonNumber, string releaseTitle)
@@ -122,7 +122,7 @@ namespace NzbDrone.Core.Tv
             // TODO: can replace this search mechanism with something smarter/faster/better
             var normalizedReleaseTitle = Parser.Parser.NormalizeEpisodeTitle(releaseTitle);
             var cleanNormalizedReleaseTitle = Parser.Parser.CleanSeriesTitle(normalizedReleaseTitle);
-            var episodes = _episodeRepository.GetEpisodes(seriesId, seasonNumber);
+            var episodes = _episodeRepository.GetEpisodesAsync(seriesId, seasonNumber).GetAwaiter().GetResult();
 
             var possibleMatches = episodes.SelectMany(
                 episode => new[]
@@ -157,79 +157,77 @@ namespace NzbDrone.Core.Tv
 
         public List<Episode> EpisodesWithFiles(int seriesId)
         {
-            return _episodeRepository.EpisodesWithFiles(seriesId);
+            return _episodeRepository.EpisodesWithFilesAsync(seriesId).GetAwaiter().GetResult();
         }
 
         public PagingSpec<Episode> EpisodesWithoutFiles(PagingSpec<Episode> pagingSpec)
         {
-            var episodeResult = _episodeRepository.EpisodesWithoutFiles(pagingSpec, true);
+            var episodeResult = _episodeRepository.EpisodesWithoutFilesAsync(pagingSpec, true).GetAwaiter().GetResult();
 
             return episodeResult;
         }
 
         public List<Episode> GetEpisodesByFileId(int episodeFileId)
         {
-            return _episodeRepository.GetEpisodeByFileId(episodeFileId);
+            return _episodeRepository.GetEpisodeByFileIdAsync(episodeFileId).GetAwaiter().GetResult();
         }
 
         public void UpdateEpisode(Episode episode)
         {
-            _episodeRepository.Update(episode);
+            _episodeRepository.UpdateAsync(episode).GetAwaiter().GetResult();
         }
 
         public void SetEpisodeMonitored(int episodeId, bool monitored)
         {
-            var episode = _episodeRepository.Get(episodeId);
-            _episodeRepository.SetMonitoredFlat(episode, monitored);
+            var episode = _episodeRepository.GetAsync(episodeId).GetAwaiter().GetResult();
+            _episodeRepository.SetMonitoredFlatAsync(episode, monitored).GetAwaiter().GetResult();
 
             _logger.Debug("Monitored flag for Episode:{0} was set to {1}", episodeId, monitored);
         }
 
         public void SetMonitored(IEnumerable<int> ids, bool monitored)
         {
-            _episodeRepository.SetMonitored(ids, monitored);
+            _episodeRepository.SetMonitoredAsync(ids, monitored).GetAwaiter().GetResult();
         }
 
         public void SetEpisodeMonitoredBySeason(int seriesId, int seasonNumber, bool monitored)
         {
-            _episodeRepository.SetMonitoredBySeason(seriesId, seasonNumber, monitored);
+            _episodeRepository.SetMonitoredBySeasonAsync(seriesId, seasonNumber, monitored).GetAwaiter().GetResult();
         }
 
         public void UpdateEpisodes(List<Episode> episodes)
         {
-            _episodeRepository.UpdateMany(episodes);
+            _episodeRepository.UpdateManyAsync(episodes).GetAwaiter().GetResult();
         }
 
         public void UpdateLastSearchTime(List<Episode> episodes)
         {
-            _episodeRepository.SetFields(episodes, e => e.LastSearchTime);
+            _episodeRepository.SetFieldsAsync(episodes, default, e => e.LastSearchTime).GetAwaiter().GetResult();
         }
 
         public List<Episode> EpisodesBetweenDates(DateTime start, DateTime end, bool includeUnmonitored, bool includeSpecials)
         {
-            var episodes = _episodeRepository.EpisodesBetweenDates(start.ToUniversalTime(), end.ToUniversalTime(), includeUnmonitored, includeSpecials);
-
-            return episodes;
+            return _episodeRepository.EpisodesBetweenDatesAsync(start.ToUniversalTime(), end.ToUniversalTime(), includeUnmonitored, includeSpecials).GetAwaiter().GetResult();
         }
 
         public void InsertMany(List<Episode> episodes)
         {
-            _episodeRepository.InsertMany(episodes);
+            _episodeRepository.InsertManyAsync(episodes).GetAwaiter().GetResult();
         }
 
         public void UpdateMany(List<Episode> episodes)
         {
-            _episodeRepository.UpdateMany(episodes);
+            _episodeRepository.UpdateManyAsync(episodes).GetAwaiter().GetResult();
         }
 
         public void DeleteMany(List<Episode> episodes)
         {
-            _episodeRepository.DeleteMany(episodes);
+            _episodeRepository.DeleteManyAsync(episodes).GetAwaiter().GetResult();
         }
 
         private Episode FindOneByAirDate(int seriesId, string date, int? part)
         {
-            var episodes = _episodeRepository.Find(seriesId, date);
+            var episodes = _episodeRepository.FindAsync(seriesId, date).GetAwaiter().GetResult();
 
             if (!episodes.Any())
             {
@@ -285,8 +283,7 @@ namespace NzbDrone.Core.Tv
                     }
                 }
 
-                // TODO: Add async repository method
-                await Task.Run(() => _episodeRepository.ClearFileId(episode, unmonitorForReason && unmonitorEpisodes), cancellationToken);
+                await _episodeRepository.ClearFileIdAsync(episode, unmonitorForReason && unmonitorEpisodes, cancellationToken).ConfigureAwait(false);
             }
         }
 
@@ -294,8 +291,7 @@ namespace NzbDrone.Core.Tv
         {
             foreach (var episode in message.EpisodeFile.Episodes.Value)
             {
-                // TODO: Add async repository method
-                await Task.Run(() => _episodeRepository.SetFileId(episode, message.EpisodeFile.Id), cancellationToken);
+                await _episodeRepository.SetFileIdAsync(episode, message.EpisodeFile.Id, cancellationToken).ConfigureAwait(false);
 
                 lock (_cache)
                 {
@@ -313,13 +309,8 @@ namespace NzbDrone.Core.Tv
 
         public async Task HandleAsync(SeriesDeletedEvent message, CancellationToken cancellationToken)
         {
-            // TODO: Add async repository method
-            await Task.Run(() =>
-            {
-                var episodes = _episodeRepository.GetEpisodesBySeriesIds(message.Series.Select(s => s.Id).ToList());
-                _episodeRepository.DeleteMany(episodes);
-            },
-            cancellationToken);
+            var episodes = await _episodeRepository.GetEpisodesBySeriesIdsAsync(message.Series.Select(s => s.Id).ToList(), cancellationToken).ConfigureAwait(false);
+            await _episodeRepository.DeleteManyAsync(episodes, cancellationToken).ConfigureAwait(false);
         }
 
         public async Task HandleAsync(SeriesScannedEvent message, CancellationToken cancellationToken)
@@ -337,8 +328,7 @@ namespace NzbDrone.Core.Tv
                 }
             }
 
-            // TODO: Add async repository method
-            await Task.Run(() => _episodeRepository.SetMonitored(ids, false), cancellationToken);
+            await _episodeRepository.SetMonitoredAsync(ids, false, cancellationToken).ConfigureAwait(false);
 
             lock (_cache)
             {

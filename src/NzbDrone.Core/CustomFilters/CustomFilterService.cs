@@ -23,27 +23,27 @@ namespace NzbDrone.Core.CustomFilters
 
         public CustomFilter Add(CustomFilter customFilter)
         {
-            return _repo.Insert(customFilter);
+            return _repo.InsertAsync(customFilter).GetAwaiter().GetResult();
         }
 
         public CustomFilter Update(CustomFilter customFilter)
         {
-            return _repo.Update(customFilter);
+            return _repo.UpdateAsync(customFilter).GetAwaiter().GetResult();
         }
 
         public void Delete(int id)
         {
-            _repo.Delete(id);
+            _repo.DeleteAsync(id).GetAwaiter().GetResult();
         }
 
         public CustomFilter Get(int id)
         {
-            return _repo.Get(id);
+            return _repo.GetAsync(id).GetAwaiter().GetResult();
         }
 
         public List<CustomFilter> All()
         {
-            return _repo.All().ToList();
+            return _repo.AllAsync().GetAwaiter().GetResult().ToList();
         }
     }
 }

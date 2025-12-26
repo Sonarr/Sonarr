@@ -21,7 +21,7 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
                 return;
             }
 
-            _logRepo.Trim();
+            _logRepo.TrimAsync().GetAwaiter().GetResult();
         }
     }
 }

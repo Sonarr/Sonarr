@@ -19,13 +19,13 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
                                         .Build();
 
             Mocker.GetMock<ISeriesRepository>()
-                 .Setup(s => s.All())
-                 .Returns(new[] { series });
+                 .Setup(s => s.AllAsync())
+                 .ReturnsAsync(new[] { series });
 
             Subject.Clean();
 
             Mocker.GetMock<ISeriesRepository>()
-                .Verify(v => v.Update(It.Is<Series>(s => s.CleanTitle == "fulltitle")), Times.Once());
+                .Verify(v => v.UpdateAsync(It.Is<Series>(s => s.CleanTitle == "fulltitle")), Times.Once());
         }
 
         [Test]
@@ -37,13 +37,13 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
                                         .Build();
 
             Mocker.GetMock<ISeriesRepository>()
-                 .Setup(s => s.All())
-                 .Returns(new[] { series });
+                 .Setup(s => s.AllAsync())
+                 .ReturnsAsync(new[] { series });
 
             Subject.Clean();
 
             Mocker.GetMock<ISeriesRepository>()
-                .Verify(v => v.Update(It.Is<Series>(s => s.CleanTitle == "fulltitle")), Times.Never());
+                .Verify(v => v.UpdateAsync(It.Is<Series>(s => s.CleanTitle == "fulltitle")), Times.Never());
         }
     }
 }

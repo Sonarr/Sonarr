@@ -43,7 +43,7 @@ namespace NzbDrone.Core.Extras.Metadata
 
             if (newProviders.Any())
             {
-                _providerRepository.InsertMany(newProviders.Cast<MetadataDefinition>().ToList());
+                _providerRepository.InsertManyAsync(newProviders.Cast<MetadataDefinition>().ToList()).GetAwaiter().GetResult();
             }
         }
 

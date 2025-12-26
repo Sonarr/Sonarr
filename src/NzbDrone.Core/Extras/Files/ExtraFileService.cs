@@ -53,17 +53,17 @@ namespace NzbDrone.Core.Extras.Files
 
         public List<TExtraFile> GetFilesBySeries(int seriesId)
         {
-            return _repository.GetFilesBySeries(seriesId);
+            return _repository.GetFilesBySeriesAsync(seriesId).GetAwaiter().GetResult();
         }
 
         public List<TExtraFile> GetFilesByEpisodeFile(int episodeFileId)
         {
-            return _repository.GetFilesByEpisodeFile(episodeFileId);
+            return _repository.GetFilesByEpisodeFileAsync(episodeFileId).GetAwaiter().GetResult();
         }
 
         public TExtraFile FindByPath(int seriesId, string path)
         {
-            return _repository.FindByPath(seriesId, path);
+            return _repository.FindByPathAsync(seriesId, path).GetAwaiter().GetResult();
         }
 
         public void Upsert(TExtraFile extraFile)
@@ -83,26 +83,24 @@ namespace NzbDrone.Core.Extras.Files
                 }
             });
 
-            _repository.InsertMany(extraFiles.Where(m => m.Id == 0).ToList());
-            _repository.UpdateMany(extraFiles.Where(m => m.Id > 0).ToList());
+            _repository.InsertManyAsync(extraFiles.Where(m => m.Id == 0).ToList()).GetAwaiter().GetResult();
+            _repository.UpdateManyAsync(extraFiles.Where(m => m.Id > 0).ToList()).GetAwaiter().GetResult();
         }
 
         public void Delete(int id)
         {
-            _repository.Delete(id);
+            _repository.DeleteAsync(id).GetAwaiter().GetResult();
         }
 
         public void DeleteMany(IEnumerable<int> ids)
         {
-            _repository.DeleteMany(ids);
+            _repository.DeleteManyAsync(ids).GetAwaiter().GetResult();
         }
 
         public async Task HandleAsync(SeriesDeletedEvent message, CancellationToken cancellationToken)
         {
             _logger.Debug("Deleting Extra from database for series: {0}", string.Join(',', message.Series));
-
-            // TODO: Add async repository method
-            await Task.Run(() => _repository.DeleteForSeriesIds(message.Series.Select(m => m.Id).ToList()), cancellationToken);
+            await _repository.DeleteForSeriesIdsAsync(message.Series.Select(m => m.Id).ToList(), cancellationToken).ConfigureAwait(false);
         }
 
         public async Task HandleAsync(EpisodeFileDeletedEvent message, CancellationToken cancellationToken)
@@ -118,27 +116,22 @@ namespace NzbDrone.Core.Extras.Files
                 var series = _seriesService.GetSeries(message.EpisodeFile.SeriesId);
 
                 // TODO: Add async disk provider method
-                await Task.Run(() =>
+                foreach (var extra in await _repository.GetFilesByEpisodeFileAsync(episodeFile.Id, cancellationToken))
                 {
-                    foreach (var extra in _repository.GetFilesByEpisodeFile(episodeFile.Id))
-                    {
-                        var path = Path.Combine(series.Path, extra.RelativePath);
+                    var path = Path.Combine(series.Path, extra.RelativePath);
 
-                        if (_diskProvider.FileExists(path))
-                        {
-                            // Send to the recycling bin so they can be recovered if necessary
-                            var subfolder = _diskProvider.GetParentFolder(series.Path).GetRelativePath(_diskProvider.GetParentFolder(path));
-                            _recycleBinProvider.DeleteFile(path, subfolder);
-                        }
+                    if (_diskProvider.FileExists(path))
+                    {
+                        // Send to the recycling bin so they can be recovered if necessary
+                        var subfolder = _diskProvider.GetParentFolder(series.Path).GetRelativePath(_diskProvider.GetParentFolder(path));
+                        _recycleBinProvider.DeleteFile(path, subfolder);
                     }
-                },
-                cancellationToken);
+                }
             }
 
             _logger.Debug("Deleting Extra from database for episode file: {0}", episodeFile);
 
-            // TODO: Add async repository method
-            await Task.Run(() => _repository.DeleteForEpisodeFile(episodeFile.Id), cancellationToken);
+            await _repository.DeleteForEpisodeFileAsync(episodeFile.Id, cancellationToken).ConfigureAwait(false);
         }
     }
 }

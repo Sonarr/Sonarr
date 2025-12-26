@@ -34,7 +34,7 @@ namespace NzbDrone.Core.CustomFormats
 
         private Dictionary<int, CustomFormat> AllDictionary()
         {
-            return _cache.Get("all", () => _formatRepository.All().ToDictionary(m => m.Id));
+            return _cache.Get("all", () => _formatRepository.AllAsync().GetAwaiter().GetResult().ToDictionary(m => m.Id));
         }
 
         public List<CustomFormat> All()
@@ -49,19 +49,19 @@ namespace NzbDrone.Core.CustomFormats
 
         public void Update(CustomFormat customFormat)
         {
-            _formatRepository.Update(customFormat);
+            _formatRepository.UpdateAsync(customFormat);
             _cache.Clear();
         }
 
         public void Update(List<CustomFormat> customFormat)
         {
-            _formatRepository.UpdateMany(customFormat);
+            _formatRepository.UpdateManyAsync(customFormat);
             _cache.Clear();
         }
 
         public CustomFormat Insert(CustomFormat customFormat)
         {
-            var result = _formatRepository.Insert(customFormat);
+            var result = _formatRepository.InsertAsync(customFormat).GetAwaiter().GetResult();
             _cache.Clear();
 
             _eventAggregator.PublishEventAsync(new CustomFormatAddedEvent(result)).GetAwaiter().GetResult();
@@ -71,11 +71,11 @@ namespace NzbDrone.Core.CustomFormats
 
         public void Delete(int id)
         {
-            var format = _formatRepository.Get(id);
+            var format = _formatRepository.GetAsync(id).GetAwaiter().GetResult();
 
             _eventAggregator.PublishEventAsync(new CustomFormatDeletedEvent(format)).GetAwaiter().GetResult();
 
-            _formatRepository.Delete(id);
+            _formatRepository.DeleteAsync(id).GetAwaiter().GetResult();
             _cache.Clear();
         }
 
@@ -83,11 +83,11 @@ namespace NzbDrone.Core.CustomFormats
         {
             foreach (var id in ids)
             {
-                var format = _formatRepository.Get(id);
+                var format = _formatRepository.GetAsync(id).GetAwaiter().GetResult();
 
                 _eventAggregator.PublishEventAsync(new CustomFormatDeletedEvent(format)).GetAwaiter().GetResult();
 
-                _formatRepository.Delete(id);
+                _formatRepository.DeleteAsync(id).GetAwaiter().GetResult();
             }
 
             _cache.Clear();

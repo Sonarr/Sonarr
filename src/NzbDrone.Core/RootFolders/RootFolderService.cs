@@ -64,15 +64,15 @@ namespace NzbDrone.Core.RootFolders
 
         public List<RootFolder> All()
         {
-            var rootFolders = _rootFolderRepository.All().ToList();
+            var rootFolders = _rootFolderRepository.AllAsync().GetAwaiter().GetResult().ToList();
 
             return rootFolders;
         }
 
         public List<RootFolder> AllWithUnmappedFolders()
         {
-            var rootFolders = _rootFolderRepository.All().ToList();
-            var seriesPaths = _seriesRepository.AllSeriesPaths();
+            var rootFolders = _rootFolderRepository.AllAsync().GetAwaiter().GetResult().ToList();
+            var seriesPaths = _seriesRepository.AllSeriesPathsAsync().GetAwaiter().GetResult();
 
             rootFolders.ForEach(folder =>
             {
@@ -119,8 +119,8 @@ namespace NzbDrone.Core.RootFolders
                 throw new UnauthorizedAccessException($"Root folder path '{rootFolder.Path}' is not writable by user '{Environment.UserName}'");
             }
 
-            _rootFolderRepository.Insert(rootFolder);
-            var seriesPaths = _seriesRepository.AllSeriesPaths();
+            _rootFolderRepository.InsertAsync(rootFolder).GetAwaiter().GetResult();
+            var seriesPaths = _seriesRepository.AllSeriesPathsAsync().GetAwaiter().GetResult();
 
             GetDetails(rootFolder, seriesPaths, true);
             _cache.Clear();
@@ -130,7 +130,7 @@ namespace NzbDrone.Core.RootFolders
 
         public void Remove(int id)
         {
-            _rootFolderRepository.Delete(id);
+            _rootFolderRepository.DeleteAsync(id).GetAwaiter().GetResult();
             _cache.Clear();
         }
 
@@ -184,8 +184,8 @@ namespace NzbDrone.Core.RootFolders
 
         public RootFolder Get(int id, bool timeout)
         {
-            var rootFolder = _rootFolderRepository.Get(id);
-            var seriesPaths = _seriesRepository.AllSeriesPaths();
+            var rootFolder = _rootFolderRepository.GetAsync(id).GetAwaiter().GetResult();
+            var seriesPaths = _seriesRepository.AllSeriesPathsAsync().GetAwaiter().GetResult();
 
             GetDetails(rootFolder, seriesPaths, timeout);
 

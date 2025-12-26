@@ -121,7 +121,7 @@ namespace NzbDrone.Core.Datastore
             Mapper.Entity<EpisodeFile>("EpisodeFiles").RegisterModel()
                   .HasOne(f => f.Series, f => f.SeriesId)
                   .LazyLoad(x => x.Episodes,
-                            (db, parent) => db.Query<Episode>(new SqlBuilder(db.DatabaseType).Where<Episode>(c => c.EpisodeFileId == parent.Id)).ToList(),
+                            (db, parent) => db.QueryAsync<Episode>(new SqlBuilder(db.DatabaseType).Where<Episode>(c => c.EpisodeFileId == parent.Id)).GetAwaiter().GetResult().ToList(),
                             t => t.Id > 0)
                   .Ignore(f => f.Path);
 

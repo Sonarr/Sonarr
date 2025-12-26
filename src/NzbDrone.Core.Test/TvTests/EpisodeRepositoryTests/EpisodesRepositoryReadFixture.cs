@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
@@ -16,24 +17,24 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
         private Series _series;
 
         [SetUp]
-        public void Setup()
+        public async Task Setup()
         {
             _series = Builder<Series>.CreateNew()
                                         .With(s => s.Runtime = 30)
                                         .BuildNew();
 
-            Db.Insert(_series);
+            await Db.InsertAsync(_series);
         }
 
         [Test]
-        public void should_get_episodes_by_file()
+        public async Task should_get_episodes_by_file()
         {
             var episodeFile = Builder<EpisodeFile>.CreateNew()
                 .With(h => h.Quality = new QualityModel())
                 .With(h => h.Languages = new List<Language> { Language.English })
                 .BuildNew();
 
-            Db.Insert(episodeFile);
+            await Db.InsertAsync(episodeFile);
 
             var episode = Builder<Episode>.CreateListOfSize(2)
                                         .All()
@@ -41,9 +42,9 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
                                         .With(e => e.EpisodeFileId = episodeFile.Id)
                                         .BuildListOfNew();
 
-            Db.InsertMany(episode);
+            await Db.InsertManyAsync(episode);
 
-            var episodes = Subject.GetEpisodeByFileId(episodeFile.Id);
+            var episodes = await Subject.GetEpisodeByFileIdAsync(episodeFile.Id);
             episodes.Should().HaveCount(2);
         }
     }

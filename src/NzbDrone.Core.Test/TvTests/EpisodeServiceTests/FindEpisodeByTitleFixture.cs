@@ -30,8 +30,8 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeServiceTests
             }
 
             Mocker.GetMock<IEpisodeRepository>()
-                  .Setup(s => s.GetEpisodes(It.IsAny<int>(), It.IsAny<int>()))
-                  .Returns(_episodes);
+                  .Setup(s => s.GetEpisodesAsync(It.IsAny<int>(), It.IsAny<int>()))
+                  .ReturnsAsync(_episodes);
         }
 
         [Test]

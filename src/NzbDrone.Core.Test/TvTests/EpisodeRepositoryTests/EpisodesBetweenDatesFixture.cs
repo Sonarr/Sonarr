@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Threading.Tasks;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
@@ -11,7 +12,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
     public class EpisodesBetweenDatesFixture : DbTest<EpisodeRepository, Episode>
     {
         [SetUp]
-        public void Setup()
+        public async Task Setup()
         {
             var series = Builder<Series>.CreateNew()
                                         .With(s => s.Id = 0)
@@ -19,7 +20,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
                                         .With(s => s.Monitored = true)
                                         .Build();
 
-            series.Id = Db.Insert(series).Id;
+            series.Id = (await Db.InsertAsync(series)).Id;
 
             var episode = Builder<Episode>.CreateNew()
                                           .With(e => e.Id = 0)
@@ -27,13 +28,13 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
                                           .With(e => e.Monitored = true)
                                           .Build();
 
-            Db.Insert(episode);
+            await Db.InsertAsync(episode);
         }
 
         [Test]
-        public void should_get_episodes()
+        public async Task should_get_episodes()
         {
-            var episodes = Subject.EpisodesBetweenDates(DateTime.Today.AddDays(-1), DateTime.Today.AddDays(3), false, true);
+            var episodes = await Subject.EpisodesBetweenDatesAsync(DateTime.Today.AddDays(-1), DateTime.Today.AddDays(3), false, true);
             episodes.Should().HaveCount(1);
         }
     }

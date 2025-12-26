@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
@@ -58,7 +60,7 @@ namespace NzbDrone.Core.Test.DataAugmentation.Scene
         {
             GivenProviders(new[] { _provider1 });
 
-            Mocker.GetMock<ISceneMappingRepository>().Setup(c => c.All()).Returns(_fakeMappings);
+            Mocker.GetMock<ISceneMappingRepository>().Setup(c => c.AllAsync()).ReturnsAsync(_fakeMappings);
 
             Subject.Execute(new UpdateSceneMappingCommand());
 
@@ -98,7 +100,7 @@ namespace NzbDrone.Core.Test.DataAugmentation.Scene
         {
             GivenProviders(new[] { _provider1, _provider2 });
 
-            Mocker.GetMock<ISceneMappingRepository>().Setup(c => c.All()).Returns(_fakeMappings);
+            Mocker.GetMock<ISceneMappingRepository>().Setup(c => c.AllAsync()).ReturnsAsync(_fakeMappings);
 
             Subject.Execute(new UpdateSceneMappingCommand());
 
@@ -107,32 +109,32 @@ namespace NzbDrone.Core.Test.DataAugmentation.Scene
         }
 
         [Test]
-        public void should_refresh_cache_if_cache_is_empty_when_looking_for_tvdb_id()
+        public async Task should_refresh_cache_if_cache_is_empty_when_looking_for_tvdb_id()
         {
             Subject.FindTvdbId("title", null, -1);
 
             Mocker.GetMock<ISceneMappingRepository>()
-                  .Verify(v => v.All(), Times.Once());
+                  .Verify(v => v.AllAsync(), Times.Once());
         }
 
         [Test]
-        public void should_not_refresh_cache_if_cache_is_not_empty_when_looking_for_tvdb_id()
+        public async Task should_not_refresh_cache_if_cache_is_not_empty_when_looking_for_tvdb_id()
         {
             GivenProviders(new[] { _provider1 });
 
             Mocker.GetMock<ISceneMappingRepository>()
-                  .Setup(s => s.All())
-                  .Returns(Builder<SceneMapping>.CreateListOfSize(1).Build());
+                  .Setup(s => s.AllAsync())
+                  .ReturnsAsync(Builder<SceneMapping>.CreateListOfSize(1).Build().AsEnumerable());
 
             Subject.Execute(new UpdateSceneMappingCommand());
 
             Mocker.GetMock<ISceneMappingRepository>()
-                  .Verify(v => v.All(), Times.Once());
+                  .Verify(v => v.AllAsync(), Times.Once());
 
             Subject.FindTvdbId("title", null, -1);
 
             Mocker.GetMock<ISceneMappingRepository>()
-                  .Verify(v => v.All(), Times.Once());
+                  .Verify(v => v.AllAsync(), Times.Once());
         }
 
         [Test]
@@ -148,11 +150,11 @@ namespace NzbDrone.Core.Test.DataAugmentation.Scene
 
             _provider1.Setup(s => s.GetSceneMappings()).Returns(fakeMappings);
 
-            Mocker.GetMock<ISceneMappingRepository>().Setup(c => c.All()).Returns(_fakeMappings);
+            Mocker.GetMock<ISceneMappingRepository>().Setup(c => c.AllAsync()).ReturnsAsync(_fakeMappings);
 
             Subject.Execute(new UpdateSceneMappingCommand());
 
-            Mocker.GetMock<ISceneMappingRepository>().Verify(c => c.InsertMany(It.Is<IList<SceneMapping>>(m => !m.Any(s => s.Title.IsNullOrWhiteSpace()))), Times.Once());
+            Mocker.GetMock<ISceneMappingRepository>().Verify(c => c.InsertManyAsync(It.Is<IList<SceneMapping>>(m => !m.Any(s => s.Title.IsNullOrWhiteSpace()))), Times.Once());
             ExceptionVerification.ExpectedWarns(1);
         }
 
@@ -169,11 +171,11 @@ namespace NzbDrone.Core.Test.DataAugmentation.Scene
 
             _provider1.Setup(s => s.GetSceneMappings()).Returns(fakeMappings);
 
-            Mocker.GetMock<ISceneMappingRepository>().Setup(c => c.All()).Returns(_fakeMappings);
+            Mocker.GetMock<ISceneMappingRepository>().Setup(c => c.AllAsync()).ReturnsAsync(_fakeMappings);
 
             Subject.Execute(new UpdateSceneMappingCommand());
 
-            Mocker.GetMock<ISceneMappingRepository>().Verify(c => c.InsertMany(It.Is<IList<SceneMapping>>(m => !m.Any(s => s.SearchTerm.IsNullOrWhiteSpace()))), Times.Once());
+            Mocker.GetMock<ISceneMappingRepository>().Verify(c => c.InsertManyAsync(It.Is<IList<SceneMapping>>(m => !m.Any(s => s.SearchTerm.IsNullOrWhiteSpace()))), Times.Once());
             ExceptionVerification.ExpectedWarns(1);
         }
 
@@ -191,7 +193,7 @@ namespace NzbDrone.Core.Test.DataAugmentation.Scene
                 new SceneMapping { Title = "Working!!!", ParseTerm = "working", SearchTerm = "Working!!!", TvdbId = 100, SceneSeasonNumber = 3 },
             };
 
-            Mocker.GetMock<ISceneMappingRepository>().Setup(c => c.All()).Returns(mappings);
+            Mocker.GetMock<ISceneMappingRepository>().Setup(c => c.AllAsync()).ReturnsAsync(mappings);
 
             var tvdbId = Subject.FindTvdbId(parseTitle, null, -1);
             var seasonNumber = Subject.GetSceneSeasonNumber(parseTitle, null);
@@ -211,7 +213,7 @@ namespace NzbDrone.Core.Test.DataAugmentation.Scene
                 new SceneMapping { Title = "Fudanshi Koukou Seikatsu 4", ParseTerm = "fudanshikoukouseikatsu4", SearchTerm = "Fudanshi Koukou Seikatsu 4", TvdbId = 100, SeasonNumber = -1, SceneSeasonNumber = -1 },
             };
 
-            Mocker.GetMock<ISceneMappingRepository>().Setup(c => c.All()).Returns(mappings);
+            Mocker.GetMock<ISceneMappingRepository>().Setup(c => c.AllAsync()).ReturnsAsync(mappings);
 
             var names = Subject.GetSceneNames(100, new List<int> { 10 }, new List<int> { 10 });
             names.Should().HaveCount(4);
@@ -225,7 +227,7 @@ namespace NzbDrone.Core.Test.DataAugmentation.Scene
                 new SceneMapping { Title = "Fudanshi Koukou Seikatsu", ParseTerm = "fudanshikoukouseikatsu", SearchTerm = "Fudanshi Koukou Seikatsu", TvdbId = 100, SeasonNumber = 1, SceneSeasonNumber = null }
             };
 
-            Mocker.GetMock<ISceneMappingRepository>().Setup(c => c.All()).Returns(mappings);
+            Mocker.GetMock<ISceneMappingRepository>().Setup(c => c.AllAsync()).ReturnsAsync(mappings);
 
             var names = Subject.GetSceneNames(100, new List<int> { 1 }, new List<int> { 10 });
             names.Should().HaveCount(1);
@@ -239,7 +241,7 @@ namespace NzbDrone.Core.Test.DataAugmentation.Scene
                 new SceneMapping { Title = "Fudanshi Koukou Seikatsu", ParseTerm = "fudanshikoukouseikatsu", SearchTerm = "Fudanshi Koukou Seikatsu", TvdbId = 100, SeasonNumber = 1, SceneSeasonNumber = null }
             };
 
-            Mocker.GetMock<ISceneMappingRepository>().Setup(c => c.All()).Returns(mappings);
+            Mocker.GetMock<ISceneMappingRepository>().Setup(c => c.AllAsync()).ReturnsAsync(mappings);
 
             var names = Subject.GetSceneNames(100, new List<int> { 2 }, new List<int> { 10 });
             names.Should().BeEmpty();
@@ -253,7 +255,7 @@ namespace NzbDrone.Core.Test.DataAugmentation.Scene
                 new SceneMapping { Title = "Fudanshi Koukou Seikatsu", ParseTerm = "fudanshikoukouseikatsu", SearchTerm = "Fudanshi Koukou Seikatsu", TvdbId = 100, SeasonNumber = null, SceneSeasonNumber = 1 }
             };
 
-            Mocker.GetMock<ISceneMappingRepository>().Setup(c => c.All()).Returns(mappings);
+            Mocker.GetMock<ISceneMappingRepository>().Setup(c => c.AllAsync()).ReturnsAsync(mappings);
 
             var names = Subject.GetSceneNames(100, new List<int> { 10 }, new List<int> { 1 });
             names.Should().HaveCount(1);
@@ -267,7 +269,7 @@ namespace NzbDrone.Core.Test.DataAugmentation.Scene
                 new SceneMapping { Title = "Fudanshi Koukou Seikatsu", ParseTerm = "fudanshikoukouseikatsu", SearchTerm = "Fudanshi Koukou Seikatsu", TvdbId = 100, SeasonNumber = null, SceneSeasonNumber = 1 }
             };
 
-            Mocker.GetMock<ISceneMappingRepository>().Setup(c => c.All()).Returns(mappings);
+            Mocker.GetMock<ISceneMappingRepository>().Setup(c => c.AllAsync()).ReturnsAsync(mappings);
 
             var names = Subject.GetSceneNames(100, new List<int> { 10 }, new List<int> { 2 });
             names.Should().BeEmpty();
@@ -281,7 +283,7 @@ namespace NzbDrone.Core.Test.DataAugmentation.Scene
                 new SceneMapping { Title = "Fairy Tail S2", ParseTerm = "fairytails2", SearchTerm = "Fairy Tail S2", TvdbId = 100, SeasonNumber = null, SceneSeasonNumber = 2 }
             };
 
-            Mocker.GetMock<ISceneMappingRepository>().Setup(c => c.All()).Returns(mappings);
+            Mocker.GetMock<ISceneMappingRepository>().Setup(c => c.AllAsync()).ReturnsAsync(mappings);
 
             Subject.GetSceneNames(100, new List<int> { 4 }, new List<int> { 20 }).Should().BeEmpty();
             Subject.GetSceneNames(100, new List<int> { 5 }, new List<int> { 20 }).Should().BeEmpty();
@@ -302,7 +304,7 @@ namespace NzbDrone.Core.Test.DataAugmentation.Scene
                 new SceneMapping { Title = "Fudanshi Koukou Seikatsu", ParseTerm = "fudanshikoukouseikatsu", SearchTerm = "Fudanshi Koukou Seikatsu", TvdbId = 100, SeasonNumber = null, SceneSeasonNumber = 1 }
             };
 
-            Mocker.GetMock<ISceneMappingRepository>().Setup(c => c.All()).Returns(mappings);
+            Mocker.GetMock<ISceneMappingRepository>().Setup(c => c.AllAsync()).ReturnsAsync(mappings);
 
             Subject.GetSceneNames(100, new List<int> { 1 }, new List<int> { 20 }).Should().BeEmpty();
             Subject.GetSceneNames(100, new List<int> { 2 }, new List<int> { 20 }).Should().BeEmpty();
@@ -324,7 +326,7 @@ namespace NzbDrone.Core.Test.DataAugmentation.Scene
                 new SceneMapping { Title = "Amareto", ParseTerm = "amareto", SearchTerm = "Amareto", TvdbId = 101, FilterRegex = "-Viva$" }
             };
 
-            Mocker.GetMock<ISceneMappingRepository>().Setup(c => c.All()).Returns(mappings);
+            Mocker.GetMock<ISceneMappingRepository>().Setup(c => c.AllAsync()).ReturnsAsync(mappings);
 
             Subject.FindTvdbId("Amareto", "Amareto.S01E01.720p.WEB-DL-Viva", -1).Should().Be(101);
             Subject.FindTvdbId("Amareto", "Amareto.S01E01.720p.WEB-DL-DMO", -1).Should().Be(100);
@@ -339,7 +341,7 @@ namespace NzbDrone.Core.Test.DataAugmentation.Scene
                 new SceneMapping { Title = "Amareto", ParseTerm = "amareto", SearchTerm = "Amareto", TvdbId = 101 }
             };
 
-            Mocker.GetMock<ISceneMappingRepository>().Setup(c => c.All()).Returns(mappings);
+            Mocker.GetMock<ISceneMappingRepository>().Setup(c => c.AllAsync()).ReturnsAsync(mappings);
 
             Assert.Throws<InvalidSceneMappingException>(() => Subject.FindTvdbId("Amareto", "Amareto.S01E01.720p.WEB-DL-Viva", -1));
         }
@@ -353,7 +355,7 @@ namespace NzbDrone.Core.Test.DataAugmentation.Scene
                 new SceneMapping { Title = "Amareto", ParseTerm = "amareto", SearchTerm = "Amareto", TvdbId = 100 }
             };
 
-            Mocker.GetMock<ISceneMappingRepository>().Setup(c => c.All()).Returns(mappings);
+            Mocker.GetMock<ISceneMappingRepository>().Setup(c => c.AllAsync()).ReturnsAsync(mappings);
 
             Subject.FindTvdbId("Amareto", "Amareto.S01E01.720p.WEB-DL-Viva", -1).Should().Be(100);
         }
@@ -367,7 +369,7 @@ namespace NzbDrone.Core.Test.DataAugmentation.Scene
                 new SceneMapping { Title = "Amareto", ParseTerm = "amareto", SearchTerm = "Amareto", SceneSeasonNumber = 3, SeasonNumber = 3, TvdbId = 101 }
             };
 
-            Mocker.GetMock<ISceneMappingRepository>().Setup(c => c.All()).Returns(mappings);
+            Mocker.GetMock<ISceneMappingRepository>().Setup(c => c.AllAsync()).ReturnsAsync(mappings);
 
             Subject.FindTvdbId("Amareto", "Amareto.S01E01.720p.WEB-DL-Viva", 4).Should().Be(101);
         }
@@ -375,15 +377,15 @@ namespace NzbDrone.Core.Test.DataAugmentation.Scene
         private void AssertNoUpdate()
         {
             _provider1.Verify(c => c.GetSceneMappings(), Times.Once());
-            Mocker.GetMock<ISceneMappingRepository>().Verify(c => c.Clear(It.IsAny<string>()), Times.Never());
-            Mocker.GetMock<ISceneMappingRepository>().Verify(c => c.InsertMany(_fakeMappings), Times.Never());
+            Mocker.GetMock<ISceneMappingRepository>().Verify(c => c.ClearAsync(It.IsAny<string>()), Times.Never());
+            Mocker.GetMock<ISceneMappingRepository>().Verify(c => c.InsertManyAsync(_fakeMappings, It.IsAny<CancellationToken>()), Times.Never());
         }
 
         private void AssertMappingUpdated()
         {
             _provider1.Verify(c => c.GetSceneMappings(), Times.Once());
-            Mocker.GetMock<ISceneMappingRepository>().Verify(c => c.Clear(It.IsAny<string>()), Times.Once());
-            Mocker.GetMock<ISceneMappingRepository>().Verify(c => c.InsertMany(_fakeMappings), Times.Once());
+            Mocker.GetMock<ISceneMappingRepository>().Verify(c => c.ClearAsync(It.IsAny<string>()), Times.Once());
+            Mocker.GetMock<ISceneMappingRepository>().Verify(c => c.InsertManyAsync(_fakeMappings, It.IsAny<CancellationToken>()), Times.Once());
 
             foreach (var sceneMapping in _fakeMappings)
             {

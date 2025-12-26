@@ -88,7 +88,7 @@ namespace NzbDrone.Core.Test.HistoryTests
                 .With(c => c.EventType = EpisodeHistoryEventType.Grabbed)
                 .BuildListOfNew();
 
-            Db.InsertMany(items);
+            await Db.InsertManyAsync(items);
 
             await Subject.DeleteForSeriesAsync(new List<int> { _series1.Id });
 

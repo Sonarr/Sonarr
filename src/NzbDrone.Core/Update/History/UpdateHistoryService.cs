@@ -17,7 +17,7 @@ namespace NzbDrone.Core.Update.History
         List<UpdateHistory> InstalledSince(DateTime dateTime);
     }
 
-    public class UpdateHistoryService : IUpdateHistoryService, IHandle<ApplicationStartedEvent>, IHandleAsync<ApplicationStartedEvent>
+    public class UpdateHistoryService : IUpdateHistoryService, IHandleAsync<ApplicationStartedEvent>
     {
         private readonly IUpdateHistoryRepository _repository;
         private readonly IEventAggregator _eventAggregator;
@@ -37,7 +37,7 @@ namespace NzbDrone.Core.Update.History
         {
             try
             {
-                var history = _repository.PreviouslyInstalled();
+                var history = _repository.PreviouslyInstalledAsync().GetAwaiter().GetResult();
 
                 return history?.Version;
             }
@@ -52,7 +52,7 @@ namespace NzbDrone.Core.Update.History
         {
             try
             {
-                return _repository.InstalledSince(dateTime);
+                return _repository.InstalledSinceAsync(dateTime).GetAwaiter().GetResult();
             }
             catch (Exception ex)
             {
@@ -61,7 +61,7 @@ namespace NzbDrone.Core.Update.History
             }
         }
 
-        public void Handle(ApplicationStartedEvent message)
+        public async Task HandleAsync(ApplicationStartedEvent message, CancellationToken cancellationToken)
         {
             if (BuildInfo.Version.Major == 10 || !_configFileProvider.LogDbEnabled)
             {
@@ -72,12 +72,12 @@ namespace NzbDrone.Core.Update.History
             UpdateHistory history;
             try
             {
-                history = _repository.LastInstalled();
+                history = await _repository.LastInstalledAsync(cancellationToken).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
                 _logger.Warn(ex, "Cleaning corrupted update history");
-                _repository.Purge();
+                await _repository.PurgeAsync(false, cancellationToken).ConfigureAwait(false);
                 history = null;
             }
 
@@ -85,22 +85,15 @@ namespace NzbDrone.Core.Update.History
             {
                 _prevVersion = history?.Version;
 
-                _repository.Insert(new UpdateHistory
+                await _repository.InsertAsync(new UpdateHistory
                 {
                     Date = DateTime.UtcNow,
                     Version = BuildInfo.Version,
                     EventType = UpdateHistoryEventType.Installed
-                });
+                },
+                cancellationToken).ConfigureAwait(false);
             }
-        }
 
-        public async Task HandleAsync(ApplicationStartedEvent message, CancellationToken cancellationToken)
-        {
-            await HandleApplicationStartedAsync(message, cancellationToken).ConfigureAwait(false);
-        }
-
-        private async Task HandleApplicationStartedAsync(ApplicationStartedEvent message, CancellationToken cancellationToken = default)
-        {
             if (_prevVersion != null)
             {
                 await _eventAggregator.PublishEventAsync(new UpdateInstalledEvent(_prevVersion, BuildInfo.Version), cancellationToken).ConfigureAwait(false);

@@ -44,19 +44,19 @@ namespace NzbDrone.Core.MediaFiles
 
         public EpisodeFile Add(EpisodeFile episodeFile)
         {
-            var addedFile = _mediaFileRepository.Insert(episodeFile);
+            var addedFile = _mediaFileRepository.InsertAsync(episodeFile).GetAwaiter().GetResult();
             _eventAggregator.PublishEventAsync(new EpisodeFileAddedEvent(addedFile)).GetAwaiter().GetResult();
             return addedFile;
         }
 
         public void Update(EpisodeFile episodeFile)
         {
-            _mediaFileRepository.Update(episodeFile);
+            _mediaFileRepository.UpdateAsync(episodeFile).GetAwaiter().GetResult();
         }
 
         public void Update(List<EpisodeFile> episodeFiles)
         {
-            _mediaFileRepository.UpdateMany(episodeFiles);
+            _mediaFileRepository.UpdateManyAsync(episodeFiles).GetAwaiter().GetResult();
         }
 
         public void Delete(EpisodeFile episodeFile, DeleteMediaFileReason reason)
@@ -65,33 +65,33 @@ namespace NzbDrone.Core.MediaFiles
             episodeFile.Episodes.LazyLoad();
             episodeFile.Path = Path.Combine(episodeFile.Series.Value.Path, episodeFile.RelativePath);
 
-            _mediaFileRepository.Delete(episodeFile);
+            _mediaFileRepository.DeleteAsync(episodeFile).GetAwaiter().GetResult();
             _eventAggregator.PublishEventAsync(new EpisodeFileDeletedEvent(episodeFile, reason)).GetAwaiter().GetResult();
         }
 
         public List<EpisodeFile> GetFilesBySeries(int seriesId)
         {
-            return _mediaFileRepository.GetFilesBySeries(seriesId);
+            return _mediaFileRepository.GetFilesBySeriesAsync(seriesId).GetAwaiter().GetResult();
         }
 
         public List<EpisodeFile> GetFilesBySeriesIds(List<int> seriesIds)
         {
-            return _mediaFileRepository.GetFilesBySeriesIds(seriesIds);
+            return _mediaFileRepository.GetFilesBySeriesIdsAsync(seriesIds).GetAwaiter().GetResult();
         }
 
         public List<EpisodeFile> GetFilesBySeason(int seriesId, int seasonNumber)
         {
-            return _mediaFileRepository.GetFilesBySeason(seriesId, seasonNumber);
+            return _mediaFileRepository.GetFilesBySeasonAsync(seriesId, seasonNumber).GetAwaiter().GetResult();
         }
 
         public List<EpisodeFile> GetFiles(IEnumerable<int> ids)
         {
-            return _mediaFileRepository.Get(ids).ToList();
+            return _mediaFileRepository.GetAsync(ids).GetAwaiter().GetResult().ToList();
         }
 
         public List<EpisodeFile> GetFilesWithoutMediaInfo()
         {
-            return _mediaFileRepository.GetFilesWithoutMediaInfo();
+            return _mediaFileRepository.GetFilesWithoutMediaInfoAsync().GetAwaiter().GetResult();
         }
 
         public List<string> FilterExistingFiles(List<string> files, Series series)
@@ -103,26 +103,22 @@ namespace NzbDrone.Core.MediaFiles
 
         public EpisodeFile Get(int id)
         {
-            return _mediaFileRepository.Get(id);
+            return _mediaFileRepository.GetAsync(id).GetAwaiter().GetResult();
         }
 
         public List<EpisodeFile> Get(IEnumerable<int> ids)
         {
-            return _mediaFileRepository.Get(ids).ToList();
+            return _mediaFileRepository.GetAsync(ids).GetAwaiter().GetResult().ToList();
         }
 
         public List<EpisodeFile> GetFilesWithRelativePath(int seriesId, string relativePath)
         {
-            return _mediaFileRepository.GetFilesWithRelativePath(seriesId, relativePath);
+            return _mediaFileRepository.GetFilesWithRelativePathAsync(seriesId, relativePath).GetAwaiter().GetResult();
         }
 
         public async Task HandleAsync(SeriesDeletedEvent message, CancellationToken cancellationToken)
         {
-            await Task.Run(() =>
-            {
-                _mediaFileRepository.DeleteForSeries(message.Series.Select(s => s.Id).ToList());
-            },
-            cancellationToken).ConfigureAwait(false);
+            await _mediaFileRepository.DeleteForSeriesAsync(message.Series.Select(s => s.Id).ToList(), cancellationToken).ConfigureAwait(false);
         }
 
         public static List<string> FilterExistingFiles(List<string> files, List<EpisodeFile> seriesFiles, Series series)

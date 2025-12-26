@@ -44,12 +44,12 @@ namespace NzbDrone.Core.ThingiProvider.Status
 
         public virtual List<TModel> GetBlockedProviders()
         {
-            return _providerStatusRepository.All().Where(v => v.IsDisabled()).ToList();
+            return _providerStatusRepository.AllAsync().GetAwaiter().GetResult().Where(v => v.IsDisabled()).ToList();
         }
 
         protected virtual TModel GetProviderStatus(int providerId)
         {
-            return _providerStatusRepository.FindByProviderId(providerId) ?? new TModel { ProviderId = providerId };
+            return _providerStatusRepository.FindByProviderIdAsync(providerId).GetAwaiter().GetResult() ?? new TModel { ProviderId = providerId };
         }
 
         protected virtual TimeSpan CalculateBackOffPeriod(TModel status)
@@ -83,7 +83,7 @@ namespace NzbDrone.Core.ThingiProvider.Status
                 status.EscalationLevel--;
                 status.DisabledTill = null;
 
-                _providerStatusRepository.Upsert(status);
+                _providerStatusRepository.UpsertAsync(status, cancellationToken).GetAwaiter().GetResult();
 
                 _eventAggregator.PublishEventAsync(new ProviderStatusChangedEvent<TProvider>(providerId, status), cancellationToken).GetAwaiter().GetResult();
             }
@@ -140,7 +140,7 @@ namespace NzbDrone.Core.ThingiProvider.Status
                     }
                 }
 
-                _providerStatusRepository.Upsert(status);
+                _providerStatusRepository.UpsertAsync(status).GetAwaiter().GetResult();
 
                 _eventAggregator.PublishEventAsync(new ProviderStatusChangedEvent<TProvider>(providerId, status)).GetAwaiter().GetResult();
             }
@@ -158,11 +158,7 @@ namespace NzbDrone.Core.ThingiProvider.Status
 
         public virtual async Task HandleAsync(ProviderDeletedEvent<TProvider> message, CancellationToken cancellationToken)
         {
-            await Task.Run(() =>
-            {
-                _providerStatusRepository.DeleteByProviderId(message.ProviderId);
-            },
-            cancellationToken).ConfigureAwait(false);
+            await _providerStatusRepository.DeleteByProviderIdAsync(message.ProviderId, cancellationToken).ConfigureAwait(false);
         }
     }
 }

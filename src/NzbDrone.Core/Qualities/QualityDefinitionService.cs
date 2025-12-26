@@ -36,19 +36,19 @@ namespace NzbDrone.Core.Qualities
 
         private Dictionary<Quality, QualityDefinition> GetAll()
         {
-            return _cache.Get("all", () => _repo.All().Select(WithWeight).ToDictionary(v => v.Quality), TimeSpan.FromSeconds(5.0));
+            return _cache.Get("all", () => _repo.AllAsync().GetAwaiter().GetResult().Select(WithWeight).ToDictionary(v => v.Quality), TimeSpan.FromSeconds(5.0));
         }
 
         public void Update(QualityDefinition qualityDefinition)
         {
-            _repo.Update(qualityDefinition);
+            _repo.UpdateAsync(qualityDefinition).GetAwaiter().GetResult();
 
             _cache.Clear();
         }
 
         public void UpdateMany(List<QualityDefinition> qualityDefinitions)
         {
-            _repo.UpdateMany(qualityDefinitions);
+            _repo.UpdateManyAsync(qualityDefinitions).GetAwaiter().GetResult();
             _cache.Clear();
         }
 
@@ -73,7 +73,7 @@ namespace NzbDrone.Core.Qualities
             var updateList = new List<QualityDefinition>();
 
             var allDefinitions = Quality.DefaultQualityDefinitions.OrderBy(d => d.Weight).ToList();
-            var existingDefinitions = _repo.All().ToList();
+            var existingDefinitions = _repo.AllAsync().GetAwaiter().GetResult().ToList();
 
             foreach (var definition in allDefinitions)
             {
@@ -90,9 +90,9 @@ namespace NzbDrone.Core.Qualities
                 }
             }
 
-            _repo.InsertMany(insertList);
-            _repo.UpdateMany(updateList);
-            _repo.DeleteMany(existingDefinitions);
+            _repo.InsertManyAsync(insertList).GetAwaiter().GetResult();
+            _repo.UpdateManyAsync(updateList).GetAwaiter().GetResult();
+            _repo.DeleteManyAsync(existingDefinitions).GetAwaiter().GetResult();
 
             _cache.Clear();
         }
@@ -121,7 +121,7 @@ namespace NzbDrone.Core.Qualities
             var updateList = new List<QualityDefinition>();
 
             var allDefinitions = Quality.DefaultQualityDefinitions.OrderBy(d => d.Weight).ToList();
-            var existingDefinitions = _repo.All().ToList();
+            var existingDefinitions = _repo.AllAsync().GetAwaiter().GetResult().ToList();
 
             foreach (var definition in allDefinitions)
             {
@@ -132,7 +132,7 @@ namespace NzbDrone.Core.Qualities
                 updateList.Add(existing);
             }
 
-            _repo.UpdateMany(updateList);
+            _repo.UpdateManyAsync(updateList).GetAwaiter().GetResult();
 
             _cache.Clear();
         }

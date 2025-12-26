@@ -28,7 +28,7 @@ namespace NzbDrone.Http
         {
             try
             {
-                _cache.Get("ping", _configRepository.All, TimeSpan.FromSeconds(5));
+                _cache.Get("ping", () => _configRepository.AllAsync().GetAwaiter().GetResult(), TimeSpan.FromSeconds(5));
             }
             catch (Exception)
             {

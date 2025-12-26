@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SQLite;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
@@ -25,9 +26,17 @@ namespace NzbDrone.Core.Test.Framework
 
         protected BasicRepository<TModel> Storage { get; private set; }
 
-        protected IList<TModel> AllStoredModels => Storage.All().ToList();
+        protected async Task<IList<TModel>> GetAllStoredModelsAsync()
+        {
+            var enumerable = await Storage.AllAsync();
+            return enumerable.ToList();
+        }
 
-        protected TModel StoredModel => Storage.All().Single();
+        protected async Task<TModel> GetStoredModelAsync()
+        {
+            var items = await Storage.AllAsync();
+            return items.Single();
+        }
 
         [SetUp]
         public void CoreTestSetup()

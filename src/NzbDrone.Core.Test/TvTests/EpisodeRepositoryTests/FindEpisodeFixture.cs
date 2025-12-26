@@ -1,4 +1,5 @@
-﻿using System.Linq;
+using System.Linq;
+using System.Threading.Tasks;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
@@ -14,7 +15,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
         private Episode _episode2;
 
         [SetUp]
-        public void Setup()
+        public async Task Setup()
         {
             _episode1 = Builder<Episode>.CreateNew()
                                        .With(e => e.SeriesId = 1)
@@ -33,52 +34,52 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
                                         .With(e => e.SceneEpisodeNumber = 4)
                                         .BuildNew();
 
-            _episode1 = Db.Insert(_episode1);
+            _episode1 = await Db.InsertAsync(_episode1);
         }
 
         [Test]
-        public void should_find_episode_by_scene_numbering()
+        public async Task should_find_episode_by_scene_numbering()
         {
-            Subject.FindEpisodesBySceneNumbering(_episode1.SeriesId, _episode1.SceneSeasonNumber.Value, _episode1.SceneEpisodeNumber.Value)
-                   .First()
+            var episodes = await Subject.FindEpisodesBySceneNumberingAsync(_episode1.SeriesId, _episode1.SceneSeasonNumber.Value, _episode1.SceneEpisodeNumber.Value);
+            episodes.First()
                    .Id
                    .Should()
                    .Be(_episode1.Id);
         }
 
         [Test]
-        public void should_find_episode_by_standard_numbering()
+        public async Task should_find_episode_by_standard_numbering()
         {
-            Subject.Find(_episode1.SeriesId, _episode1.SeasonNumber, _episode1.EpisodeNumber)
-                   .Id
+            var episode = await Subject.FindAsync(_episode1.SeriesId, _episode1.SeasonNumber, _episode1.EpisodeNumber);
+            episode.Id
                    .Should()
                    .Be(_episode1.Id);
         }
 
         [Test]
-        public void should_not_find_episode_that_does_not_exist()
+        public async Task should_not_find_episode_that_does_not_exist()
         {
-            Subject.Find(_episode1.SeriesId, _episode1.SeasonNumber + 1, _episode1.EpisodeNumber)
-                   .Should()
+            var episode = await Subject.FindAsync(_episode1.SeriesId, _episode1.SeasonNumber + 1, _episode1.EpisodeNumber);
+            episode.Should()
                    .BeNull();
         }
 
         [Test]
-        public void should_find_episode_by_absolute_numbering()
+        public async Task should_find_episode_by_absolute_numbering()
         {
-            Subject.Find(_episode1.SeriesId, _episode1.AbsoluteEpisodeNumber.Value)
-                .Id
+            var episode = await Subject.FindAsync(_episode1.SeriesId, _episode1.AbsoluteEpisodeNumber.Value);
+            episode.Id
                 .Should()
                 .Be(_episode1.Id);
         }
 
         [Test]
-        public void should_return_multiple_episode_if_multiple_match_by_scene_numbering()
+        public async Task should_return_multiple_episode_if_multiple_match_by_scene_numbering()
         {
-            _episode2 = Db.Insert(_episode2);
+            _episode2 = await Db.InsertAsync(_episode2);
 
-            Subject.FindEpisodesBySceneNumbering(_episode1.SeriesId, _episode1.SceneSeasonNumber.Value, _episode1.SceneEpisodeNumber.Value)
-                   .Should()
+            var episodes = await Subject.FindEpisodesBySceneNumberingAsync(_episode1.SeriesId, _episode1.SceneSeasonNumber.Value, _episode1.SceneEpisodeNumber.Value);
+            episodes.Should()
                    .HaveCount(2);
         }
     }

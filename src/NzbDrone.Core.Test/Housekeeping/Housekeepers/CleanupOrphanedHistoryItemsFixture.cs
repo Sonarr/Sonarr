@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
@@ -27,53 +28,55 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
                                        .BuildNew();
         }
 
-        private void GivenSeries()
+        private async Task GivenSeries()
         {
-            Db.Insert(_series);
+            await Db.InsertAsync(_series);
         }
 
-        private void GivenEpisode()
+        private async Task GivenEpisode()
         {
-            Db.Insert(_episode);
+            await Db.InsertAsync(_episode);
         }
 
         [Test]
-        public void should_delete_orphaned_items_by_series()
+        public async Task should_delete_orphaned_items_by_series()
         {
-            GivenEpisode();
+            await GivenEpisode();
 
             var history = Builder<EpisodeHistory>.CreateNew()
                 .With(h => h.Languages = new List<Language> { Language.English })
                 .With(h => h.Quality = new QualityModel())
                 .With(h => h.EpisodeId = _episode.Id)
                 .BuildNew();
-            Db.Insert(history);
+            await Db.InsertAsync(history);
 
             Subject.Clean();
-            AllStoredModels.Should().BeEmpty();
+            var episodeHistories = await GetAllStoredModelsAsync();
+            episodeHistories.Should().BeEmpty();
         }
 
         [Test]
-        public void should_delete_orphaned_items_by_episode()
+        public async Task should_delete_orphaned_items_by_episode()
         {
-            GivenSeries();
+            await GivenSeries();
 
             var history = Builder<EpisodeHistory>.CreateNew()
                 .With(h => h.Languages = new List<Language> { Language.English })
                 .With(h => h.Quality = new QualityModel())
                 .With(h => h.SeriesId = _series.Id)
                 .BuildNew();
-            Db.Insert(history);
+            await Db.InsertAsync(history);
 
             Subject.Clean();
-            AllStoredModels.Should().BeEmpty();
+            var episodeHistories = await GetAllStoredModelsAsync();
+            episodeHistories.Should().BeEmpty();
         }
 
         [Test]
-        public void should_not_delete_unorphaned_data_by_series()
+        public async Task should_not_delete_unorphaned_data_by_series()
         {
-            GivenSeries();
-            GivenEpisode();
+            await GivenSeries();
+            await GivenEpisode();
 
             var history = Builder<EpisodeHistory>.CreateListOfSize(2)
                 .All()
@@ -84,18 +87,19 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
                 .With(h => h.SeriesId = _series.Id)
                 .BuildListOfNew();
 
-            Db.InsertMany(history);
+            await Db.InsertManyAsync(history);
 
             Subject.Clean();
-            AllStoredModels.Should().HaveCount(1);
-            AllStoredModels.Should().Contain(h => h.SeriesId == _series.Id);
+            var allModels = await GetAllStoredModelsAsync();
+            allModels.Should().HaveCount(1);
+            allModels.Should().Contain(h => h.SeriesId == _series.Id);
         }
 
         [Test]
-        public void should_not_delete_unorphaned_data_by_episode()
+        public async Task should_not_delete_unorphaned_data_by_episode()
         {
-            GivenSeries();
-            GivenEpisode();
+            await GivenSeries();
+            await GivenEpisode();
 
             var history = Builder<EpisodeHistory>.CreateListOfSize(2)
                 .All()
@@ -106,11 +110,12 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
                 .With(h => h.EpisodeId = _episode.Id)
                 .BuildListOfNew();
 
-            Db.InsertMany(history);
+            await Db.InsertManyAsync(history);
 
             Subject.Clean();
-            AllStoredModels.Should().HaveCount(1);
-            AllStoredModels.Should().Contain(h => h.EpisodeId == _episode.Id);
+            var allModels = await GetAllStoredModelsAsync();
+            allModels.Should().HaveCount(1);
+            allModels.Should().Contain(h => h.EpisodeId == _episode.Id);
         }
     }
 }

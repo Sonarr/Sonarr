@@ -30,12 +30,12 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
                                        .Build();
 
             Mocker.GetMock<IPendingReleaseRepository>()
-                 .Setup(s => s.AllBySeriesId(It.IsAny<int>()))
-                 .Returns(_pending);
+                 .Setup(s => s.AllBySeriesIdAsync(It.IsAny<int>()))
+                 .ReturnsAsync(_pending);
 
             Mocker.GetMock<IPendingReleaseRepository>()
-                  .Setup(s => s.All())
-                  .Returns(_pending);
+                  .Setup(s => s.AllAsync())
+                  .ReturnsAsync(_pending);
 
             Mocker.GetMock<ISeriesService>()
                   .Setup(s => s.GetSeries(It.IsAny<int>()))
@@ -161,7 +161,7 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
 
         private void AssertRemoved(params int[] ids)
         {
-            Mocker.GetMock<IPendingReleaseRepository>().Verify(c => c.DeleteMany(It.Is<IEnumerable<int>>(s => s.SequenceEqual(ids))));
+            Mocker.GetMock<IPendingReleaseRepository>().Verify(c => c.DeleteManyAsync(It.Is<IEnumerable<int>>(s => s.SequenceEqual(ids))));
         }
     }
 }

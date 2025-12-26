@@ -32,7 +32,8 @@ namespace NzbDrone.Core.Test.TvTests.SeriesRepositoryTests
 
             await Subject.InsertAsync(series);
 
-            StoredModel.QualityProfile.Should().NotBeNull();
+            var storedModel = await GetStoredModelAsync();
+            storedModel.QualityProfile.Should().NotBeNull();
         }
 
         private async Task GivenSeries()

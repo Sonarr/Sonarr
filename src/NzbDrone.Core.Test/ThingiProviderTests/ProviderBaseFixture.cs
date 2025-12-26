@@ -1,4 +1,5 @@
-﻿using FizzWare.NBuilder;
+using System.Threading.Tasks;
+using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Indexers;
@@ -10,14 +11,14 @@ namespace NzbDrone.Core.Test.ThingiProviderTests
     public class ProviderRepositoryFixture : DbTest<IndexerRepository, IndexerDefinition>
     {
         [Test]
-        public void should_read_write_download_provider()
+        public async Task should_read_write_download_provider()
         {
             var model = Builder<IndexerDefinition>.CreateNew().BuildNew();
             var newznabSettings = Builder<NewznabSettings>.CreateNew().Build();
             model.Settings = newznabSettings;
-            Subject.Insert(model);
+            await Subject.InsertAsync(model);
 
-            var storedProvider = Subject.Single();
+            var storedProvider = await Subject.SingleAsync();
 
             storedProvider.Settings.Should().BeOfType<NewznabSettings>();
 

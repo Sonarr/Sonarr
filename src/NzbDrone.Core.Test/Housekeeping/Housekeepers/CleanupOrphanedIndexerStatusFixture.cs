@@ -1,4 +1,5 @@
-﻿using FizzWare.NBuilder;
+using System.Threading.Tasks;
+using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Housekeeping.Housekeepers;
@@ -19,36 +20,38 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
                                                  .BuildNew();
         }
 
-        private void GivenIndexer()
+        private async Task GivenIndexer()
         {
-            Db.Insert(_indexer);
+            await Db.InsertAsync(_indexer);
         }
 
         [Test]
-        public void should_delete_orphaned_indexerstatus()
+        public async Task should_delete_orphaned_indexerstatus()
         {
             var status = Builder<IndexerStatus>.CreateNew()
                                                .With(h => h.ProviderId = _indexer.Id)
                                                .BuildNew();
-            Db.Insert(status);
+            await Db.InsertAsync(status);
 
             Subject.Clean();
-            AllStoredModels.Should().BeEmpty();
+            var indexerStatuses = await GetAllStoredModelsAsync();
+            indexerStatuses.Should().BeEmpty();
         }
 
         [Test]
-        public void should_not_delete_unorphaned_indexerstatus()
+        public async Task should_not_delete_unorphaned_indexerstatus()
         {
-            GivenIndexer();
+            await GivenIndexer();
 
             var status = Builder<IndexerStatus>.CreateNew()
                                                .With(h => h.ProviderId = _indexer.Id)
                                                .BuildNew();
-            Db.Insert(status);
+            await Db.InsertAsync(status);
 
             Subject.Clean();
-            AllStoredModels.Should().HaveCount(1);
-            AllStoredModels.Should().Contain(h => h.ProviderId == _indexer.Id);
+            var indexerStatuses = await GetAllStoredModelsAsync();
+            indexerStatuses.Should().HaveCount(1);
+            indexerStatuses.Should().Contain(h => h.ProviderId == _indexer.Id);
         }
     }
 }

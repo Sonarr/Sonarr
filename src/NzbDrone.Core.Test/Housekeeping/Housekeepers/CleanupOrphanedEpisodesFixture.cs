@@ -1,4 +1,5 @@
-﻿using FizzWare.NBuilder;
+using System.Threading.Tasks;
+using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Housekeeping.Housekeepers;
@@ -11,33 +12,35 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
     public class CleanupOrphanedEpisodesFixture : DbTest<CleanupOrphanedEpisodes, Episode>
     {
         [Test]
-        public void should_delete_orphaned_episodes()
+        public async Task should_delete_orphaned_episodes()
         {
             var episode = Builder<Episode>.CreateNew()
                                           .BuildNew();
 
-            Db.Insert(episode);
+            await Db.InsertAsync(episode);
             Subject.Clean();
-            AllStoredModels.Should().BeEmpty();
+            var episodes = await GetAllStoredModelsAsync();
+            episodes.Should().BeEmpty();
         }
 
         [Test]
-        public void should_not_delete_unorphaned_episodes()
+        public async Task should_not_delete_unorphaned_episodes()
         {
             var series = Builder<Series>.CreateNew()
                                         .BuildNew();
 
-            Db.Insert(series);
+            await Db.InsertAsync(series);
 
             var episodes = Builder<Episode>.CreateListOfSize(2)
                                           .TheFirst(1)
                                           .With(e => e.SeriesId = series.Id)
                                           .BuildListOfNew();
 
-            Db.InsertMany(episodes);
+            await Db.InsertManyAsync(episodes);
             Subject.Clean();
-            AllStoredModels.Should().HaveCount(1);
-            AllStoredModels.Should().Contain(e => e.SeriesId == series.Id);
+            var loadedEpisode = await GetAllStoredModelsAsync();
+            loadedEpisode.Should().HaveCount(1);
+            loadedEpisode.Should().Contain(e => e.SeriesId == series.Id);
         }
     }
 }

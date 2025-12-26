@@ -87,7 +87,7 @@ namespace NzbDrone.Core.Indexers
 
         public IndexerDefinition FindByName(string name)
         {
-            return _indexerRepository.FindByName(name);
+            return _indexerRepository.FindByNameAsync(name).GetAwaiter().GetResult();
         }
 
         private IEnumerable<IIndexer> FilterBlockedIndexers(IEnumerable<IIndexer> indexers)

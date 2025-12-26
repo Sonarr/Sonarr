@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
@@ -17,55 +18,58 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
     public class CleanupOrphanedMetadataFilesFixture : DbTest<CleanupOrphanedMetadataFiles, MetadataFile>
     {
         [Test]
-        public void should_delete_metadata_files_that_dont_have_a_coresponding_series()
+        public async Task should_delete_metadata_files_that_dont_have_a_coresponding_series()
         {
             var metadataFile = Builder<MetadataFile>.CreateNew()
                                                     .With(m => m.EpisodeFileId = null)
                                                     .BuildNew();
 
-            Db.Insert(metadataFile);
+            await Db.InsertAsync(metadataFile);
             Subject.Clean();
-            AllStoredModels.Should().BeEmpty();
+            var metadataFiles = await GetAllStoredModelsAsync();
+            metadataFiles.Should().BeEmpty();
         }
 
         [Test]
-        public void should_not_delete_metadata_files_that_have_a_coresponding_series()
+        public async Task should_not_delete_metadata_files_that_have_a_coresponding_series()
         {
             var series = Builder<Series>.CreateNew()
                                         .BuildNew();
 
-            Db.Insert(series);
+            await Db.InsertAsync(series);
 
             var metadataFile = Builder<MetadataFile>.CreateNew()
                                                     .With(m => m.SeriesId = series.Id)
                                                     .With(m => m.EpisodeFileId = null)
                                                     .BuildNew();
 
-            Db.Insert(metadataFile);
+            await Db.InsertAsync(metadataFile);
             Subject.Clean();
-            AllStoredModels.Should().HaveCount(1);
+            var metadataFiles = await GetAllStoredModelsAsync();
+            metadataFiles.Should().HaveCount(1);
         }
 
         [Test]
-        public void should_delete_metadata_files_that_dont_have_a_coresponding_episode_file()
+        public async Task should_delete_metadata_files_that_dont_have_a_coresponding_episode_file()
         {
             var series = Builder<Series>.CreateNew()
                                         .BuildNew();
 
-            Db.Insert(series);
+            await Db.InsertAsync(series);
 
             var metadataFile = Builder<MetadataFile>.CreateNew()
                                                     .With(m => m.SeriesId = series.Id)
                                                     .With(m => m.EpisodeFileId = 10)
                                                     .BuildNew();
 
-            Db.Insert(metadataFile);
+            await Db.InsertAsync(metadataFile);
             Subject.Clean();
-            AllStoredModels.Should().BeEmpty();
+            var metadataFiles = await GetAllStoredModelsAsync();
+            metadataFiles.Should().BeEmpty();
         }
 
         [Test]
-        public void should_not_delete_metadata_files_that_have_a_coresponding_episode_file()
+        public async Task should_not_delete_metadata_files_that_have_a_coresponding_episode_file()
         {
             var series = Builder<Series>.CreateNew()
                                         .BuildNew();
@@ -75,26 +79,27 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
                 .With(h => h.Languages = new List<Language> { Language.English })
                 .BuildNew();
 
-            Db.Insert(series);
-            Db.Insert(episodeFile);
+            await Db.InsertAsync(series);
+            await Db.InsertAsync(episodeFile);
 
             var metadataFile = Builder<MetadataFile>.CreateNew()
                                                     .With(m => m.SeriesId = series.Id)
                                                     .With(m => m.EpisodeFileId = episodeFile.Id)
                                                     .BuildNew();
 
-            Db.Insert(metadataFile);
+            await Db.InsertAsync(metadataFile);
             Subject.Clean();
-            AllStoredModels.Should().HaveCount(1);
+            var metadataFiles = await GetAllStoredModelsAsync();
+            metadataFiles.Should().HaveCount(1);
         }
 
         [Test]
-        public void should_delete_episode_metadata_files_that_have_episodefileid_of_zero()
+        public async Task should_delete_episode_metadata_files_that_have_episodefileid_of_zero()
         {
             var series = Builder<Series>.CreateNew()
                                         .BuildNew();
 
-            Db.Insert(series);
+            await Db.InsertAsync(series);
 
             var metadataFile = Builder<MetadataFile>.CreateNew()
                                                  .With(m => m.SeriesId = series.Id)
@@ -102,18 +107,19 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
                                                  .With(m => m.EpisodeFileId = 0)
                                                  .BuildNew();
 
-            Db.Insert(metadataFile);
+            await Db.InsertAsync(metadataFile);
             Subject.Clean();
-            AllStoredModels.Should().HaveCount(0);
+            var metadataFiles = await GetAllStoredModelsAsync();
+            metadataFiles.Should().HaveCount(0);
         }
 
         [Test]
-        public void should_delete_episode_image_files_that_have_episodefileid_of_zero()
+        public async Task should_delete_episode_image_files_that_have_episodefileid_of_zero()
         {
             var series = Builder<Series>.CreateNew()
                                         .BuildNew();
 
-            Db.Insert(series);
+            await Db.InsertAsync(series);
 
             var metadataFile = Builder<MetadataFile>.CreateNew()
                                                     .With(m => m.SeriesId = series.Id)
@@ -121,9 +127,10 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
                                                     .With(m => m.EpisodeFileId = 0)
                                                     .BuildNew();
 
-            Db.Insert(metadataFile);
+            await Db.InsertAsync(metadataFile);
             Subject.Clean();
-            AllStoredModels.Should().HaveCount(0);
+            var metadataFiles = await GetAllStoredModelsAsync();
+            metadataFiles.Should().HaveCount(0);
         }
     }
 }

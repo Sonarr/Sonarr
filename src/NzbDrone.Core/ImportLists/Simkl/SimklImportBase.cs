@@ -22,7 +22,7 @@ namespace NzbDrone.Core.ImportLists.Simkl
         public const string RenewUri = "https://auth.servarr.com/v1/simkl_sonarr/renew";
         public const string ClientId = "3281c139f576b2f59c1389b22337140b6b087ee17e000e89dbafdcf20af6dac7";
 
-        private IImportListRepository _importListRepository;
+        private readonly IImportListRepository _importListRepository;
 
         protected SimklImportBase(IImportListRepository netImportRepository,
                            IHttpClient httpClient,
@@ -173,7 +173,7 @@ namespace NzbDrone.Core.ImportLists.Simkl
 
                     if (Definition.Id > 0)
                     {
-                        _importListRepository.UpdateSettings((ImportListDefinition)Definition);
+                        _importListRepository.UpdateSettingsAsync((ImportListDefinition)Definition).GetAwaiter().GetResult();
                     }
                 }
             }

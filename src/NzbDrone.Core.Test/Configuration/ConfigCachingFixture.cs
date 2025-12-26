@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -13,8 +13,8 @@ namespace NzbDrone.Core.Test.Configuration
         [SetUp]
         public void Setup()
         {
-            Mocker.GetMock<IConfigRepository>().Setup(c => c.All())
-                    .Returns(new List<Config> { new Config { Key = "key1", Value = "Value1" } });
+            Mocker.GetMock<IConfigRepository>().Setup(c => c.AllAsync())
+                    .ReturnsAsync(new List<Config> { new Config { Key = "key1", Value = "Value1" } });
         }
 
         [Test]
@@ -24,7 +24,7 @@ namespace NzbDrone.Core.Test.Configuration
             Subject.GetValue("Key1", null).Should().Be("Value1");
             Subject.GetValue("Key1", null).Should().Be("Value1");
 
-            Mocker.GetMock<IConfigRepository>().Verify(c => c.All(), Times.Once());
+            Mocker.GetMock<IConfigRepository>().Verify(c => c.AllAsync(), Times.Once());
         }
     }
 }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
@@ -15,7 +16,7 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
     public class CleanupOrphanedBlocklistFixture : DbTest<CleanupOrphanedBlocklist, Blocklist>
     {
         [Test]
-        public void should_delete_orphaned_blocklist_items()
+        public async Task should_delete_orphaned_blocklist_items()
         {
             var blocklist = Builder<Blocklist>.CreateNew()
                 .With(h => h.Languages = new List<Language> { Language.English })
@@ -23,17 +24,18 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
                 .With(h => h.Quality = new QualityModel())
                 .BuildNew();
 
-            Db.Insert(blocklist);
+            await Db.InsertAsync(blocklist);
             Subject.Clean();
-            AllStoredModels.Should().BeEmpty();
+            var blocklists = await GetAllStoredModelsAsync();
+            blocklists.Should().BeEmpty();
         }
 
         [Test]
-        public void should_not_delete_unorphaned_blocklist_items()
+        public async Task should_not_delete_unorphaned_blocklist_items()
         {
             var series = Builder<Series>.CreateNew().BuildNew();
 
-            Db.Insert(series);
+            await Db.InsertAsync(series);
 
             var blocklist = Builder<Blocklist>.CreateNew()
                 .With(h => h.Languages = new List<Language> { Language.English })
@@ -42,10 +44,11 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
                 .With(b => b.SeriesId = series.Id)
                 .BuildNew();
 
-            Db.Insert(blocklist);
+            await Db.InsertAsync(blocklist);
 
             Subject.Clean();
-            AllStoredModels.Should().HaveCount(1);
+            var blocklists = await GetAllStoredModelsAsync();
+            blocklists.Should().HaveCount(1);
         }
     }
 }

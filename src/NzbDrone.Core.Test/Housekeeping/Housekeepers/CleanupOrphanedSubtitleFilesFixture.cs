@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
@@ -16,27 +17,28 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
     public class CleanupOrphanedSubtitleFilesFixture : DbTest<CleanupOrphanedSubtitleFiles, SubtitleFile>
     {
         [Test]
-        public void should_delete_subtitle_files_that_dont_have_a_coresponding_series()
+        public async Task should_delete_subtitle_files_that_dont_have_a_coresponding_series()
         {
             var episodeFile = Builder<EpisodeFile>.CreateNew()
                 .With(h => h.Quality = new QualityModel())
                 .With(h => h.Languages = new List<Language> { Language.English })
                 .BuildNew();
 
-            Db.Insert(episodeFile);
+            await Db.InsertAsync(episodeFile);
 
             var subtitleFile = Builder<SubtitleFile>.CreateNew()
                                                     .With(m => m.EpisodeFileId = episodeFile.Id)
                                                     .With(m => m.Language = Language.English)
                                                     .BuildNew();
 
-            Db.Insert(subtitleFile);
+            await Db.InsertAsync(subtitleFile);
             Subject.Clean();
-            AllStoredModels.Should().BeEmpty();
+            var subtitleFiles = await GetAllStoredModelsAsync();
+            subtitleFiles.Should().BeEmpty();
         }
 
         [Test]
-        public void should_not_delete_subtitle_files_that_have_a_coresponding_series()
+        public async Task should_not_delete_subtitle_files_that_have_a_coresponding_series()
         {
             var series = Builder<Series>.CreateNew()
                                         .BuildNew();
@@ -46,8 +48,8 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
                 .With(h => h.Languages = new List<Language> { Language.English })
                 .BuildNew();
 
-            Db.Insert(series);
-            Db.Insert(episodeFile);
+            await Db.InsertAsync(series);
+            await Db.InsertAsync(episodeFile);
 
             var subtitleFile = Builder<SubtitleFile>.CreateNew()
                                                     .With(m => m.SeriesId = series.Id)
@@ -55,18 +57,19 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
                                                     .With(m => m.Language = Language.English)
                                                     .BuildNew();
 
-            Db.Insert(subtitleFile);
+            await Db.InsertAsync(subtitleFile);
             Subject.Clean();
-            AllStoredModels.Should().HaveCount(1);
+            var subtitleFiles = await GetAllStoredModelsAsync();
+            subtitleFiles.Should().HaveCount(1);
         }
 
         [Test]
-        public void should_delete_subtitle_files_that_dont_have_a_coresponding_episode_file()
+        public async Task should_delete_subtitle_files_that_dont_have_a_coresponding_episode_file()
         {
             var series = Builder<Series>.CreateNew()
                                         .BuildNew();
 
-            Db.Insert(series);
+            await Db.InsertAsync(series);
 
             var subtitleFile = Builder<SubtitleFile>.CreateNew()
                                                     .With(m => m.SeriesId = series.Id)
@@ -74,13 +77,14 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
                                                     .With(m => m.Language = Language.English)
                                                     .BuildNew();
 
-            Db.Insert(subtitleFile);
+            await Db.InsertAsync(subtitleFile);
             Subject.Clean();
-            AllStoredModels.Should().BeEmpty();
+            var subtitleFiles = await GetAllStoredModelsAsync();
+            subtitleFiles.Should().BeEmpty();
         }
 
         [Test]
-        public void should_not_delete_subtitle_files_that_have_a_coresponding_episode_file()
+        public async Task should_not_delete_subtitle_files_that_have_a_coresponding_episode_file()
         {
             var series = Builder<Series>.CreateNew()
                                         .BuildNew();
@@ -90,8 +94,8 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
                 .With(h => h.Languages = new List<Language> { Language.English })
                 .BuildNew();
 
-            Db.Insert(series);
-            Db.Insert(episodeFile);
+            await Db.InsertAsync(series);
+            await Db.InsertAsync(episodeFile);
 
             var subtitleFile = Builder<SubtitleFile>.CreateNew()
                                                     .With(m => m.SeriesId = series.Id)
@@ -99,18 +103,19 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
                                                     .With(m => m.Language = Language.English)
                                                     .BuildNew();
 
-            Db.Insert(subtitleFile);
+            await Db.InsertAsync(subtitleFile);
             Subject.Clean();
-            AllStoredModels.Should().HaveCount(1);
+            var subtitleFiles = await GetAllStoredModelsAsync();
+            subtitleFiles.Should().HaveCount(1);
         }
 
         [Test]
-        public void should_delete_subtitle_files_that_have_episodefileid_of_zero()
+        public async Task should_delete_subtitle_files_that_have_episodefileid_of_zero()
         {
             var series = Builder<Series>.CreateNew()
                                         .BuildNew();
 
-            Db.Insert(series);
+            await Db.InsertAsync(series);
 
             var subtitleFile = Builder<SubtitleFile>.CreateNew()
                                                  .With(m => m.SeriesId = series.Id)
@@ -118,9 +123,10 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
                                                  .With(m => m.Language = Language.English)
                                                  .BuildNew();
 
-            Db.Insert(subtitleFile);
+            await Db.InsertAsync(subtitleFile);
             Subject.Clean();
-            AllStoredModels.Should().HaveCount(0);
+            var subtitleFiles = await GetAllStoredModelsAsync();
+            subtitleFiles.Should().HaveCount(0);
         }
     }
 }

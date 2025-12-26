@@ -142,7 +142,7 @@ namespace NzbDrone.Core.MediaFiles
             environmentVariables.Add("Sonarr_Series_Type", series.SeriesType.ToString());
             environmentVariables.Add("Sonarr_Series_OriginalLanguage", IsoLanguages.Get(series.OriginalLanguage).ThreeLetterCode);
             environmentVariables.Add("Sonarr_Series_Genres", string.Join("|", series.Genres));
-            environmentVariables.Add("Sonarr_Series_Tags", string.Join("|", series.Tags.Select(t => _tagRepository.Get(t).Label)));
+            environmentVariables.Add("Sonarr_Series_Tags", string.Join("|", series.Tags.Select(t => _tagRepository.GetAsync(t).GetAwaiter().GetResult().Label)));
 
             environmentVariables.Add("Sonarr_EpisodeFile_EpisodeCount", localEpisode.Episodes.Count.ToString());
             environmentVariables.Add("Sonarr_EpisodeFile_EpisodeIds", string.Join(",", localEpisode.Episodes.Select(e => e.Id)));

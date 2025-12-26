@@ -87,7 +87,7 @@ namespace NzbDrone.Core.Messaging.Commands
                     commandModels.Add(commandModel);
                 }
 
-                _repo.InsertMany(commandModels);
+                _repo.InsertManyAsync(commandModels).GetAwaiter().GetResult();
 
                 foreach (var commandModel in commandModels)
                 {
@@ -132,7 +132,7 @@ namespace NzbDrone.Core.Messaging.Commands
 
                 _logger.Trace("Inserting new command: {0}", commandModel.Name);
 
-                _repo.Insert(commandModel);
+                _repo.InsertAsync(commandModel).GetAwaiter().GetResult();
                 _commandQueue.Add(commandModel);
 
                 return commandModel;
@@ -165,7 +165,7 @@ namespace NzbDrone.Core.Messaging.Commands
 
             if (command == null)
             {
-                command = _repo.Get(id);
+                command = _repo.GetAsync(id).GetAwaiter().GetResult();
             }
 
             return command;
@@ -191,7 +191,7 @@ namespace NzbDrone.Core.Messaging.Commands
         {
             // Marks the command as started in the DB, the queue takes care of marking it as started on it's own
             _logger.Trace("Marking command as started: {0}", command.Name);
-            _repo.Start(command);
+            _repo.StartAsync(command).GetAwaiter().GetResult();
         }
 
         public void Complete(CommandModel command, string message)
@@ -218,7 +218,7 @@ namespace NzbDrone.Core.Messaging.Commands
 
         public void Requeue()
         {
-            foreach (var command in _repo.Queued())
+            foreach (var command in _repo.QueuedAsync().GetAwaiter().GetResult())
             {
                 _commandQueue.Add(command);
             }
@@ -242,7 +242,7 @@ namespace NzbDrone.Core.Messaging.Commands
 
             _commandQueue.RemoveMany(commands);
 
-            _repo.Trim();
+            _repo.TrimAsync().GetAwaiter().GetResult();
         }
 
         private Command GetCommand(string commandName)
@@ -263,7 +263,7 @@ namespace NzbDrone.Core.Messaging.Commands
             command.Status = status;
 
             _logger.Trace("Updating command status");
-            _repo.End(command);
+            _repo.EndAsync(command).GetAwaiter().GetResult();
         }
 
         private List<CommandModel> QueuedOrStarted(string name)
@@ -276,7 +276,7 @@ namespace NzbDrone.Core.Messaging.Commands
         public void Handle(ApplicationStartedEvent message)
         {
             _logger.Trace("Orphaning incomplete commands");
-            _repo.OrphanStarted();
+            _repo.OrphanStartedAsync().GetAwaiter().GetResult();
             Requeue();
         }
     }

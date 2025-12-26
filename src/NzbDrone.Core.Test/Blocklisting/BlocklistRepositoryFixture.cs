@@ -24,14 +24,14 @@ namespace NzbDrone.Core.Test.Blocklisting
         public void Setup()
         {
             _blocklist = new Blocklist
-                     {
-                         SeriesId = 12345,
-                         EpisodeIds = new List<int> { 1 },
-                         Quality = new QualityModel(Quality.Bluray720p),
-                         Languages = new List<Language> { Language.English },
-                         SourceTitle = "series.title.s01e01",
-                         Date = DateTime.UtcNow
-                     };
+            {
+                SeriesId = 12345,
+                EpisodeIds = new List<int> { 1 },
+                Quality = new QualityModel(Quality.Bluray720p),
+                Languages = new List<Language> { Language.English },
+                SourceTitle = "series.title.s01e01",
+                Date = DateTime.UtcNow
+            };
 
             _series1 = Builder<Series>.CreateNew()
                                       .With(s => s.Id = 7)
@@ -46,7 +46,8 @@ namespace NzbDrone.Core.Test.Blocklisting
         public async Task should_be_able_to_write_to_database()
         {
             await Subject.InsertAsync(_blocklist);
-            (await Subject.AllAsync()).Should().HaveCount(1);
+            var enumerable = await Subject.AllAsync();
+            enumerable.Should().HaveCount(1);
         }
 
         [Test]
@@ -54,7 +55,8 @@ namespace NzbDrone.Core.Test.Blocklisting
         {
             await Subject.InsertAsync(_blocklist);
 
-            (await Subject.AllAsync()).First().EpisodeIds.Should().Contain(_blocklist.EpisodeIds);
+            var enumerable = await Subject.AllAsync();
+            enumerable.First().EpisodeIds.Should().Contain(_blocklist.EpisodeIds);
         }
 
         [Test]
@@ -62,7 +64,8 @@ namespace NzbDrone.Core.Test.Blocklisting
         {
             await Subject.InsertAsync(_blocklist);
 
-            (await Subject.BlocklistedByTitleAsync(_blocklist.SeriesId, _blocklist.SourceTitle.ToUpperInvariant())).Should().HaveCount(1);
+            var blocklists = await Subject.BlocklistedByTitleAsync(_blocklist.SeriesId, _blocklist.SourceTitle.ToUpperInvariant());
+            blocklists.Should().HaveCount(1);
         }
 
         [Test]
@@ -79,7 +82,7 @@ namespace NzbDrone.Core.Test.Blocklisting
                 .With(c => c.EpisodeIds = new List<int> { 1 })
                 .BuildListOfNew();
 
-            Db.InsertMany(blocklistItems);
+            await Db.InsertManyAsync(blocklistItems);
 
             await Subject.DeleteForSeriesIdsAsync(new List<int> { _series1.Id });
 

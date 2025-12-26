@@ -36,7 +36,7 @@ namespace NzbDrone.Core.ThingiProvider
 
         public List<TProviderDefinition> All()
         {
-            return _providerRepository.All().ToList();
+            return _providerRepository.AllAsync().GetAwaiter().GetResult().ToList();
         }
 
         public IEnumerable<TProviderDefinition> GetDefaultDefinitions()
@@ -93,27 +93,27 @@ namespace NzbDrone.Core.ThingiProvider
 
         public bool Exists(int id)
         {
-            return _providerRepository.Find(id) != null;
+            return _providerRepository.FindAsync(id).GetAwaiter().GetResult() != null;
         }
 
         public TProviderDefinition Get(int id)
         {
-            return _providerRepository.Get(id);
+            return _providerRepository.GetAsync(id).GetAwaiter().GetResult();
         }
 
         public IEnumerable<TProviderDefinition> Get(IEnumerable<int> ids)
         {
-            return _providerRepository.Get(ids);
+            return _providerRepository.GetAsync(ids).GetAwaiter().GetResult();
         }
 
         public TProviderDefinition Find(int id)
         {
-            return _providerRepository.Find(id);
+            return _providerRepository.FindAsync(id).GetAwaiter().GetResult();
         }
 
         public virtual TProviderDefinition Create(TProviderDefinition definition)
         {
-            var result = _providerRepository.Insert(definition);
+            var result = _providerRepository.InsertAsync(definition).GetAwaiter().GetResult();
             _eventAggregator.PublishEventAsync(new ProviderAddedEvent<TProvider>(result)).GetAwaiter().GetResult();
 
             return result;
@@ -121,13 +121,13 @@ namespace NzbDrone.Core.ThingiProvider
 
         public virtual void Update(TProviderDefinition definition)
         {
-            _providerRepository.Update(definition);
+            _providerRepository.DeleteAsync(definition).GetAwaiter().GetResult();
             _eventAggregator.PublishEventAsync(new ProviderUpdatedEvent<TProvider>(definition)).GetAwaiter().GetResult();
         }
 
         public virtual IEnumerable<TProviderDefinition> Update(IEnumerable<TProviderDefinition> definitions)
         {
-            _providerRepository.UpdateMany(definitions.ToList());
+            _providerRepository.UpdateManyAsync(definitions.ToList()).GetAwaiter().GetResult();
 
             foreach (var definition in definitions)
             {
@@ -139,13 +139,13 @@ namespace NzbDrone.Core.ThingiProvider
 
         public void Delete(int id)
         {
-            _providerRepository.Delete(id);
+            _providerRepository.DeleteAsync(id).GetAwaiter().GetResult();
             _eventAggregator.PublishEventAsync(new ProviderDeletedEvent<TProvider>(id)).GetAwaiter().GetResult();
         }
 
         public void Delete(IEnumerable<int> ids)
         {
-            _providerRepository.DeleteMany(ids);
+            _providerRepository.DeleteManyAsync(ids).GetAwaiter().GetResult();
 
             foreach (var id in ids)
             {
@@ -198,12 +198,12 @@ namespace NzbDrone.Core.ThingiProvider
 
         private void RemoveMissingImplementations()
         {
-            var storedProvider = _providerRepository.All();
+            var storedProvider = _providerRepository.AllAsync().GetAwaiter().GetResult();
 
             foreach (var invalidDefinition in storedProvider.Where(def => GetImplementation(def) == null))
             {
                 _logger.Warn("Removing {0}", invalidDefinition.Name);
-                _providerRepository.Delete(invalidDefinition);
+                _providerRepository.DeleteAsync(invalidDefinition).GetAwaiter().GetResult();
             }
         }
 

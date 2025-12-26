@@ -17,8 +17,8 @@ namespace NzbDrone.Core.Test.Download.Pending.PendingReleaseServiceTests
         private void GivenPendingRelease()
         {
             Mocker.GetMock<IPendingReleaseRepository>()
-                              .Setup(v => v.All())
-                              .Returns(new List<PendingRelease>
+                              .Setup(v => v.AllAsync())
+                              .ReturnsAsync(new List<PendingRelease>
                                 {
                                       new PendingRelease { Release = new ReleaseInfo { IndexerId = 1 } }
                                 });

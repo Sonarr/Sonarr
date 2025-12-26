@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
+using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.Profiles.Delay;
 using NzbDrone.Core.Test.Framework;
@@ -34,8 +35,8 @@ namespace NzbDrone.Core.Test.Profiles.Delay
             _last = _delayProfiles.Last();
 
             Mocker.GetMock<IDelayProfileRepository>()
-                  .Setup(s => s.All())
-                  .Returns(_delayProfiles);
+                  .Setup(s => s.AllAsync())
+                  .ReturnsAsync(_delayProfiles);
         }
 
         [Test]

@@ -37,7 +37,7 @@ namespace NzbDrone.Core.Download.History
 
         public bool DownloadAlreadyImported(string downloadId)
         {
-            var events = _repository.FindByDownloadId(downloadId);
+            var events = _repository.FindByDownloadIdAsync(downloadId).GetAwaiter().GetResult();
 
             // Events are ordered by date descending, if a grabbed event comes before an imported event then it was never imported
             // or grabbed again after importing and should be reprocessed.
@@ -59,7 +59,7 @@ namespace NzbDrone.Core.Download.History
 
         public DownloadHistory GetLatestDownloadHistoryItem(string downloadId)
         {
-            var events = _repository.FindByDownloadId(downloadId);
+            var events = _repository.FindByDownloadIdAsync(downloadId).GetAwaiter().GetResult();
 
             // Events are ordered by date descending. We'll return the most recent expected event.
             foreach (var e in events)
@@ -90,7 +90,7 @@ namespace NzbDrone.Core.Download.History
 
         public DownloadHistory GetLatestGrab(string downloadId)
         {
-            return _repository.FindByDownloadId(downloadId)
+            return _repository.FindByDownloadIdAsync(downloadId).GetAwaiter().GetResult()
                               .FirstOrDefault(d => d.EventType == DownloadHistoryEventType.DownloadGrabbed);
         }
 
@@ -120,8 +120,7 @@ namespace NzbDrone.Core.Download.History
             history.Data.Add("DownloadClientName", message.DownloadClientName);
             history.Data.Add("CustomFormatScore", message.Episode.CustomFormatScore.ToString());
 
-            // TODO: Add InsertAsync to IDownloadHistoryRepository for proper async implementation
-            await Task.Run(() => _repository.Insert(history), cancellationToken);
+            await _repository.InsertAsync(history, cancellationToken).ConfigureAwait(false);
         }
 
         public async Task HandleAsync(EpisodeImportedEvent message, CancellationToken cancellationToken)
@@ -162,8 +161,7 @@ namespace NzbDrone.Core.Download.History
             history.Data.Add("SourcePath", message.EpisodeInfo.Path);
             history.Data.Add("DestinationPath", Path.Combine(message.EpisodeInfo.Series.Path, message.ImportedEpisode.RelativePath));
 
-            // TODO: Add InsertAsync to IDownloadHistoryRepository for proper async implementation
-            await Task.Run(() => _repository.Insert(history), cancellationToken);
+            await _repository.InsertAsync(history, cancellationToken).ConfigureAwait(false);
         }
 
         public async Task HandleAsync(DownloadCompletedEvent message, CancellationToken cancellationToken)
@@ -184,8 +182,7 @@ namespace NzbDrone.Core.Download.History
             history.Data.Add("DownloadClient", downloadItem.DownloadClientInfo.Type);
             history.Data.Add("DownloadClientName", downloadItem.DownloadClientInfo.Name);
 
-            // TODO: Add InsertAsync to IDownloadHistoryRepository for proper async implementation
-            await Task.Run(() => _repository.Insert(history), cancellationToken);
+            await _repository.InsertAsync(history, cancellationToken).ConfigureAwait(false);
         }
 
         public async Task HandleAsync(DownloadFailedEvent message, CancellationToken cancellationToken)
@@ -210,8 +207,7 @@ namespace NzbDrone.Core.Download.History
             history.Data.Add("DownloadClient", message.TrackedDownload.DownloadItem.DownloadClientInfo.Type);
             history.Data.Add("DownloadClientName", message.TrackedDownload.DownloadItem.DownloadClientInfo.Name);
 
-            // TODO: Add InsertAsync to IDownloadHistoryRepository for proper async implementation
-            await Task.Run(() => _repository.Insert(history), cancellationToken);
+            await _repository.InsertAsync(history, cancellationToken).ConfigureAwait(false);
         }
 
         public async Task HandleAsync(DownloadIgnoredEvent message, CancellationToken cancellationToken)
@@ -230,14 +226,12 @@ namespace NzbDrone.Core.Download.History
             history.Data.Add("DownloadClient", message.DownloadClientInfo.Type);
             history.Data.Add("DownloadClientName", message.DownloadClientInfo.Name);
 
-            // TODO: Add InsertAsync to IDownloadHistoryRepository for proper async implementation
-            await Task.Run(() => _repository.Insert(history), cancellationToken);
+            await _repository.InsertAsync(history, cancellationToken).ConfigureAwait(false);
         }
 
         public async Task HandleAsync(SeriesDeletedEvent message, CancellationToken cancellationToken)
         {
-            // TODO: Add DeleteBySeriesIdsAsync to IDownloadHistoryRepository for proper async implementation
-            await Task.Run(() => _repository.DeleteBySeriesIds(message.Series.Select(m => m.Id).ToList()), cancellationToken);
+            await _repository.DeleteBySeriesIdsAsync(message.Series.Select(m => m.Id).ToList(), cancellationToken).ConfigureAwait(false);
         }
     }
 }

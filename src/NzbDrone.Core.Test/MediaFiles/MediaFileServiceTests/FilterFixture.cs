@@ -20,10 +20,10 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaFileServiceTests
         public void Setup()
         {
             _series = new Series
-                      {
-                          Id = 10,
-                          Path = @"C:\".AsOsAgnostic()
-                      };
+            {
+                Id = 10,
+                Path = @"C:\".AsOsAgnostic()
+            };
         }
 
         [Test]
@@ -37,8 +37,8 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaFileServiceTests
             };
 
             Mocker.GetMock<IMediaFileRepository>()
-                .Setup(c => c.GetFilesBySeries(It.IsAny<int>()))
-                .Returns(new List<EpisodeFile>());
+                .Setup(c => c.GetFilesBySeriesAsync(It.IsAny<int>()))
+                .ReturnsAsync(new List<EpisodeFile>());
 
             Subject.FilterExistingFiles(files, _series).Should().BeEquivalentTo(files);
         }
@@ -54,8 +54,8 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaFileServiceTests
             };
 
             Mocker.GetMock<IMediaFileRepository>()
-                .Setup(c => c.GetFilesBySeries(It.IsAny<int>()))
-                .Returns(files.Select(f => new EpisodeFile { RelativePath = Path.GetFileName(f) }).ToList());
+                .Setup(c => c.GetFilesBySeriesAsync(It.IsAny<int>()))
+                .ReturnsAsync(files.Select(f => new EpisodeFile { RelativePath = Path.GetFileName(f) }).ToList());
 
             Subject.FilterExistingFiles(files, _series).Should().BeEmpty();
         }
@@ -71,8 +71,8 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaFileServiceTests
             };
 
             Mocker.GetMock<IMediaFileRepository>()
-                .Setup(c => c.GetFilesBySeries(It.IsAny<int>()))
-                .Returns(new List<EpisodeFile>
+                .Setup(c => c.GetFilesBySeriesAsync(It.IsAny<int>()))
+                .ReturnsAsync(new List<EpisodeFile>
                 {
                     new EpisodeFile { RelativePath = "file2.avi".AsOsAgnostic() }
                 });
@@ -94,8 +94,8 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaFileServiceTests
             };
 
             Mocker.GetMock<IMediaFileRepository>()
-                .Setup(c => c.GetFilesBySeries(It.IsAny<int>()))
-                .Returns(new List<EpisodeFile>
+                .Setup(c => c.GetFilesBySeriesAsync(It.IsAny<int>()))
+                .ReturnsAsync(new List<EpisodeFile>
                 {
                     new EpisodeFile { RelativePath = "file2.avi".AsOsAgnostic() }
                 });
@@ -117,8 +117,8 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaFileServiceTests
             };
 
             Mocker.GetMock<IMediaFileRepository>()
-                .Setup(c => c.GetFilesBySeries(It.IsAny<int>()))
-                .Returns(new List<EpisodeFile>
+                .Setup(c => c.GetFilesBySeriesAsync(It.IsAny<int>()))
+                .ReturnsAsync(new List<EpisodeFile>
                 {
                     new EpisodeFile { RelativePath = "file2.avi".AsOsAgnostic() }
                 });
@@ -135,8 +135,8 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaFileServiceTests
             };
 
             Mocker.GetMock<IMediaFileRepository>()
-                .Setup(c => c.GetFilesBySeries(It.IsAny<int>()))
-                .Returns(new List<EpisodeFile>());
+                .Setup(c => c.GetFilesBySeriesAsync(It.IsAny<int>()))
+                .ReturnsAsync(new List<EpisodeFile>());
 
             Subject.FilterExistingFiles(files, _series).Should().HaveCount(1);
             Subject.FilterExistingFiles(files, _series).Should().NotContain(files.First().ToLower());

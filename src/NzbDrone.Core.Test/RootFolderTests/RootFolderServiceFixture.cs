@@ -34,8 +34,8 @@ namespace NzbDrone.Core.Test.RootFolderTests
                   .Returns(true);
 
             Mocker.GetMock<IRootFolderRepository>()
-                  .Setup(s => s.All())
-                  .Returns(new List<RootFolder>());
+                  .Setup(s => s.AllAsync())
+                  .ReturnsAsync(new List<RootFolder>());
 
             Mocker.GetMock<INamingConfigService>()
                   .Setup(c => c.GetConfig())
@@ -54,14 +54,14 @@ namespace NzbDrone.Core.Test.RootFolderTests
         public void should_be_able_to_add_root_dir(string path)
         {
             Mocker.GetMock<ISeriesRepository>()
-                  .Setup(s => s.AllSeriesPaths())
-                  .Returns(new Dictionary<int, string>());
+                  .Setup(s => s.AllSeriesPathsAsync())
+                  .ReturnsAsync(new Dictionary<int, string>());
 
             var root = new RootFolder { Path = path.AsOsAgnostic() };
 
             Subject.Add(root);
 
-            Mocker.GetMock<IRootFolderRepository>().Verify(c => c.Insert(root), Times.Once());
+            Mocker.GetMock<IRootFolderRepository>().Verify(c => c.InsertAsync(root), Times.Once());
         }
 
         [Test]
@@ -76,7 +76,7 @@ namespace NzbDrone.Core.Test.RootFolderTests
         public void should_be_able_to_remove_root_dir()
         {
             Subject.Remove(1);
-            Mocker.GetMock<IRootFolderRepository>().Verify(c => c.Delete(1), Times.Once());
+            Mocker.GetMock<IRootFolderRepository>().Verify(c => c.DeleteAsync(1), Times.Once());
         }
 
         [TestCase("")]
@@ -91,7 +91,7 @@ namespace NzbDrone.Core.Test.RootFolderTests
         [Test]
         public void adding_duplicated_root_folder_should_throw()
         {
-            Mocker.GetMock<IRootFolderRepository>().Setup(c => c.All()).Returns(new List<RootFolder> { new RootFolder { Path = "C:\\TV".AsOsAgnostic() } });
+            Mocker.GetMock<IRootFolderRepository>().Setup(c => c.AllAsync()).ReturnsAsync(new List<RootFolder> { new RootFolder { Path = "C:\\TV".AsOsAgnostic() } });
 
             Assert.Throws<InvalidOperationException>(() => Subject.Add(new RootFolder { Path = @"C:\TV".AsOsAgnostic() }));
         }
@@ -133,12 +133,12 @@ namespace NzbDrone.Core.Test.RootFolderTests
             var folders = subFolders.Select(f => Path.Combine(rootFolderPath, f)).ToArray();
 
             Mocker.GetMock<IRootFolderRepository>()
-                  .Setup(s => s.Get(It.IsAny<int>()))
-                  .Returns(rootFolder);
+                  .Setup(s => s.GetAsync(It.IsAny<int>()))
+                  .ReturnsAsync(rootFolder);
 
             Mocker.GetMock<ISeriesRepository>()
-                  .Setup(s => s.AllSeriesPaths())
-                  .Returns(new Dictionary<int, string>());
+                  .Setup(s => s.AllSeriesPathsAsync())
+                  .ReturnsAsync(new Dictionary<int, string>());
 
             Mocker.GetMock<IDiskProvider>()
                   .Setup(s => s.GetDirectories(rootFolder.Path))
@@ -172,12 +172,12 @@ namespace NzbDrone.Core.Test.RootFolderTests
             var folders = subFolders.Select(f => Path.Combine(subFolderPath, f)).ToArray();
 
             Mocker.GetMock<IRootFolderRepository>()
-                .Setup(s => s.Get(It.IsAny<int>()))
-                .Returns(rootFolder);
+                .Setup(s => s.GetAsync(It.IsAny<int>()))
+                .ReturnsAsync(rootFolder);
 
             Mocker.GetMock<ISeriesRepository>()
-                .Setup(s => s.AllSeriesPaths())
-                .Returns(new Dictionary<int, string>());
+                .Setup(s => s.AllSeriesPathsAsync())
+                .ReturnsAsync(new Dictionary<int, string>());
 
             Mocker.GetMock<IDiskProvider>()
                 .Setup(s => s.GetDirectories(rootFolder.Path))

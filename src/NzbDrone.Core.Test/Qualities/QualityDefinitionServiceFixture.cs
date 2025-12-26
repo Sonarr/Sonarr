@@ -18,15 +18,15 @@ namespace NzbDrone.Core.Test.Qualities
             await Subject.HandleAsync(new ApplicationStartedEvent(), CancellationToken.None);
 
             Mocker.GetMock<IQualityDefinitionRepository>()
-                .Verify(v => v.InsertMany(It.Is<List<QualityDefinition>>(d => d.Count == Quality.All.Count)), Times.Once());
+                .Verify(v => v.InsertManyAsync(It.Is<List<QualityDefinition>>(d => d.Count == Quality.All.Count)), Times.Once());
         }
 
         [Test]
         public async Task init_should_insert_any_missing_definitions()
         {
             Mocker.GetMock<IQualityDefinitionRepository>()
-                  .Setup(s => s.All())
-                  .Returns(new List<QualityDefinition>
+                  .Setup(s => s.AllAsync())
+                  .ReturnsAsync(new List<QualityDefinition>
                       {
                               new QualityDefinition(Quality.SDTV) { Weight = 1, MinSize = 0, MaxSize = 100, Id = 20 }
                       });
@@ -34,15 +34,15 @@ namespace NzbDrone.Core.Test.Qualities
             await Subject.HandleAsync(new ApplicationStartedEvent(), CancellationToken.None);
 
             Mocker.GetMock<IQualityDefinitionRepository>()
-                .Verify(v => v.InsertMany(It.Is<List<QualityDefinition>>(d => d.Count == Quality.All.Count - 1)), Times.Once());
+                .Verify(v => v.InsertManyAsync(It.Is<List<QualityDefinition>>(d => d.Count == Quality.All.Count - 1)), Times.Once());
         }
 
         [Test]
         public async Task init_should_update_existing_definitions()
         {
             Mocker.GetMock<IQualityDefinitionRepository>()
-                  .Setup(s => s.All())
-                  .Returns(new List<QualityDefinition>
+                  .Setup(s => s.AllAsync())
+                  .ReturnsAsync(new List<QualityDefinition>
                       {
                               new QualityDefinition(Quality.SDTV) { Weight = 1, MinSize = 0, MaxSize = 100, Id = 20 }
                       });
@@ -50,15 +50,15 @@ namespace NzbDrone.Core.Test.Qualities
             await Subject.HandleAsync(new ApplicationStartedEvent(), CancellationToken.None);
 
             Mocker.GetMock<IQualityDefinitionRepository>()
-                .Verify(v => v.UpdateMany(It.Is<List<QualityDefinition>>(d => d.Count == 1)), Times.Once());
+                .Verify(v => v.UpdateManyAsync(It.Is<List<QualityDefinition>>(d => d.Count == 1)), Times.Once());
         }
 
         [Test]
         public async Task init_should_remove_old_definitions()
         {
             Mocker.GetMock<IQualityDefinitionRepository>()
-                  .Setup(s => s.All())
-                  .Returns(new List<QualityDefinition>
+                  .Setup(s => s.AllAsync())
+                  .ReturnsAsync(new List<QualityDefinition>
                       {
                               new QualityDefinition(new Quality { Id = 100, Name = "Test" }) { Weight = 1, MinSize = 0, MaxSize = 100, Id = 20 }
                       });
@@ -66,7 +66,7 @@ namespace NzbDrone.Core.Test.Qualities
             await Subject.HandleAsync(new ApplicationStartedEvent(), CancellationToken.None);
 
             Mocker.GetMock<IQualityDefinitionRepository>()
-                .Verify(v => v.DeleteMany(It.Is<List<QualityDefinition>>(d => d.Count == 1)), Times.Once());
+                .Verify(v => v.DeleteManyAsync(It.Is<List<QualityDefinition>>(d => d.Count == 1)), Times.Once());
         }
     }
 }

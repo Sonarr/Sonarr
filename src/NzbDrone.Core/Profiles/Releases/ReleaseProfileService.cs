@@ -31,24 +31,24 @@ namespace NzbDrone.Core.Profiles.Releases
 
         public List<ReleaseProfile> All()
         {
-            var all = _repo.All().ToList();
+            var all = _repo.AllAsync().GetAwaiter().GetResult().ToList();
 
             return all;
         }
 
         public List<ReleaseProfile> AllExcludedForTag(int tagId)
         {
-            return _repo.All().Where(r => r.ExcludedTags.Contains(tagId)).ToList();
+            return _repo.AllAsync().GetAwaiter().GetResult().Where(r => r.ExcludedTags.Contains(tagId)).ToList();
         }
 
         public List<ReleaseProfile> AllForTag(int tagId)
         {
-            return _repo.All().Where(r => r.Tags.Contains(tagId)).ToList();
+            return _repo.AllAsync().GetAwaiter().GetResult().Where(r => r.Tags.Contains(tagId)).ToList();
         }
 
         public List<ReleaseProfile> AllForTags(HashSet<int> tagIds)
         {
-            return _repo.All().Where(r => (r.Tags.Intersect(tagIds).Any() || r.Tags.Empty()) && !r.ExcludedTags.Intersect(tagIds).Any()).ToList();
+            return _repo.AllAsync().GetAwaiter().GetResult().Where(r => (r.Tags.Intersect(tagIds).Any() || r.Tags.Empty()) && !r.ExcludedTags.Intersect(tagIds).Any()).ToList();
         }
 
         public List<ReleaseProfile> EnabledForTags(HashSet<int> tagIds, int indexerId)
@@ -60,22 +60,22 @@ namespace NzbDrone.Core.Profiles.Releases
 
         public ReleaseProfile Get(int id)
         {
-            return _repo.Get(id);
+            return _repo.GetAsync(id).GetAwaiter().GetResult();
         }
 
         public void Delete(int id)
         {
-            _repo.Delete(id);
+            _repo.DeleteAsync(id).GetAwaiter().GetResult();
         }
 
         public ReleaseProfile Add(ReleaseProfile restriction)
         {
-            return _repo.Insert(restriction);
+            return _repo.InsertAsync(restriction).GetAwaiter().GetResult();
         }
 
         public ReleaseProfile Update(ReleaseProfile restriction)
         {
-            return _repo.Update(restriction);
+            return _repo.UpdateAsync(restriction).GetAwaiter().GetResult();
         }
     }
 }

@@ -1,5 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using Moq;
@@ -22,12 +24,12 @@ namespace NzbDrone.Core.Test.RemotePathMappingsTests
                   .Returns(true);
 
             Mocker.GetMock<IRemotePathMappingRepository>()
-                  .Setup(s => s.All())
-                  .Returns(new List<RemotePathMapping>());
+                  .Setup(s => s.AllAsync())
+                  .ReturnsAsync(new List<RemotePathMapping>());
 
             Mocker.GetMock<IRemotePathMappingRepository>()
-                  .Setup(s => s.Insert(It.IsAny<RemotePathMapping>()))
-                  .Returns<RemotePathMapping>(m => m);
+                  .Setup(s => s.InsertAsync(It.IsAny<RemotePathMapping>(), It.IsAny<CancellationToken>()))
+                  .Returns<RemotePathMapping, CancellationToken>((m, ct) => Task.FromResult(m));
         }
 
         private void GivenMapping()
@@ -40,8 +42,8 @@ namespace NzbDrone.Core.Test.RemotePathMappingsTests
                 .BuildListOfNew();
 
             Mocker.GetMock<IRemotePathMappingRepository>()
-                  .Setup(s => s.All())
-                  .Returns(mappings);
+                  .Setup(s => s.AllAsync())
+                  .ReturnsAsync(mappings);
         }
 
         private void WithNonExistingFolder()
@@ -63,14 +65,14 @@ namespace NzbDrone.Core.Test.RemotePathMappingsTests
 
             Subject.Add(mapping);
 
-            Mocker.GetMock<IRemotePathMappingRepository>().Verify(c => c.Insert(mapping), Times.Once());
+            Mocker.GetMock<IRemotePathMappingRepository>().Verify(c => c.InsertAsync(mapping), Times.Once());
         }
 
         [Test]
         public void should_be_able_to_remove_mapping()
         {
             Subject.Remove(1);
-            Mocker.GetMock<IRemotePathMappingRepository>().Verify(c => c.Delete(1), Times.Once());
+            Mocker.GetMock<IRemotePathMappingRepository>().Verify(c => c.DeleteAsync(1), Times.Once());
         }
 
         [TestCase("my-server.localdomain", "/mnt/storage", @"D:\mountedstorage")]

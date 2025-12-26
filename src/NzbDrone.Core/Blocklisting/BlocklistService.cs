@@ -48,30 +48,30 @@ namespace NzbDrone.Core.Blocklisting
 
                 if (torrentInfo.InfoHash.IsNotNullOrWhiteSpace())
                 {
-                    var blocklistedByTorrentInfohash = _blocklistRepository.BlocklistedByTorrentInfoHash(seriesId, torrentInfo.InfoHash);
+                    var blocklistedByTorrentInfohash = _blocklistRepository.BlocklistedByTorrentInfoHashAsync(seriesId, torrentInfo.InfoHash).GetAwaiter().GetResult();
 
                     return blocklistedByTorrentInfohash.Any(b => SameTorrent(b, torrentInfo));
                 }
 
-                return _blocklistRepository.BlocklistedByTitle(seriesId, release.Title)
+                return _blocklistRepository.BlocklistedByTitleAsync(seriesId, release.Title).GetAwaiter().GetResult()
                     .Where(b => b.Protocol == DownloadProtocol.Torrent)
                     .Any(b => SameTorrent(b, torrentInfo));
             }
 
-            return _blocklistRepository.BlocklistedByTitle(seriesId, release.Title)
+            return _blocklistRepository.BlocklistedByTitleAsync(seriesId, release.Title).GetAwaiter().GetResult()
                 .Where(b => b.Protocol == DownloadProtocol.Usenet)
                 .Any(b => SameNzb(b, release));
         }
 
         public bool BlocklistedTorrentHash(int seriesId, string hash)
         {
-            return _blocklistRepository.BlocklistedByTorrentInfoHash(seriesId, hash).Any(b =>
+            return _blocklistRepository.BlocklistedByTorrentInfoHashAsync(seriesId, hash).GetAwaiter().GetResult().Any(b =>
                 b.TorrentInfoHash.Equals(hash, StringComparison.InvariantCultureIgnoreCase));
         }
 
         public PagingSpec<Blocklist> Paged(PagingSpec<Blocklist> pagingSpec)
         {
-            return _blocklistRepository.GetPaged(pagingSpec);
+            return _blocklistRepository.GetPagedAsync(pagingSpec).GetAwaiter().GetResult();
         }
 
         public void Block(RemoteEpisode remoteEpisode, string message, string source)
@@ -97,17 +97,17 @@ namespace NzbDrone.Core.Blocklisting
                 blocklist.TorrentInfoHash = torrentRelease.InfoHash;
             }
 
-            _blocklistRepository.Insert(blocklist);
+            _blocklistRepository.InsertAsync(blocklist).GetAwaiter().GetResult();
         }
 
         public void Delete(int id)
         {
-            _blocklistRepository.Delete(id);
+            _blocklistRepository.DeleteAsync(id).GetAwaiter().GetResult();
         }
 
         public void Delete(List<int> ids)
         {
-            _blocklistRepository.DeleteMany(ids);
+            _blocklistRepository.DeleteManyAsync(ids).GetAwaiter().GetResult();
         }
 
         private bool SameNzb(Blocklist item, ReleaseInfo release)
@@ -122,56 +122,46 @@ namespace NzbDrone.Core.Blocklisting
 
         public void Execute(ClearBlocklistCommand message)
         {
-            _blocklistRepository.Purge();
+            _blocklistRepository.PurgeAsync().GetAwaiter().GetResult();
         }
 
         public async Task HandleAsync(DownloadFailedEvent message, CancellationToken cancellationToken)
         {
-            // TODO: Make repository operations async
-            await Task.Run(() =>
+            var blocklist = new Blocklist
             {
-                var blocklist = new Blocklist
-                {
-                    SeriesId = message.SeriesId,
-                    EpisodeIds = message.EpisodeIds,
-                    SourceTitle = message.SourceTitle,
-                    Quality = message.Quality,
-                    Date = DateTime.UtcNow,
-                    PublishedDate = DateTime.Parse(message.Data.GetValueOrDefault("publishedDate")),
-                    Size = long.Parse(message.Data.GetValueOrDefault("size", "0")),
-                    Indexer = message.Data.GetValueOrDefault("indexer"),
-                    Protocol = (DownloadProtocol)Convert.ToInt32(message.Data.GetValueOrDefault("protocol")),
-                    Message = message.Message,
-                    Source = message.Source,
-                    Languages = message.Languages,
-                    TorrentInfoHash = message.TrackedDownload?.Protocol == DownloadProtocol.Torrent
-                        ? message.TrackedDownload.DownloadItem.DownloadId
-                        : message.Data.GetValueOrDefault("torrentInfoHash", null)
-                };
+                SeriesId = message.SeriesId,
+                EpisodeIds = message.EpisodeIds,
+                SourceTitle = message.SourceTitle,
+                Quality = message.Quality,
+                Date = DateTime.UtcNow,
+                PublishedDate = DateTime.Parse(message.Data.GetValueOrDefault("publishedDate")),
+                Size = long.Parse(message.Data.GetValueOrDefault("size", "0")),
+                Indexer = message.Data.GetValueOrDefault("indexer"),
+                Protocol = (DownloadProtocol)Convert.ToInt32(message.Data.GetValueOrDefault("protocol")),
+                Message = message.Message,
+                Source = message.Source,
+                Languages = message.Languages,
+                TorrentInfoHash = message.TrackedDownload?.Protocol == DownloadProtocol.Torrent
+                    ? message.TrackedDownload.DownloadItem.DownloadId
+                    : message.Data.GetValueOrDefault("torrentInfoHash", null)
+            };
 
-                if (Enum.TryParse(message.Data.GetValueOrDefault("indexerFlags"), true, out IndexerFlags flags))
-                {
-                    blocklist.IndexerFlags = flags;
-                }
+            if (Enum.TryParse(message.Data.GetValueOrDefault("indexerFlags"), true, out IndexerFlags flags))
+            {
+                blocklist.IndexerFlags = flags;
+            }
 
-                if (Enum.TryParse(message.Data.GetValueOrDefault("releaseType"), true, out ReleaseType releaseType))
-                {
-                    blocklist.ReleaseType = releaseType;
-                }
+            if (Enum.TryParse(message.Data.GetValueOrDefault("releaseType"), true, out ReleaseType releaseType))
+            {
+                blocklist.ReleaseType = releaseType;
+            }
 
-                _blocklistRepository.Insert(blocklist);
-            },
-            cancellationToken);
+            await _blocklistRepository.InsertAsync(blocklist, cancellationToken).ConfigureAwait(false);
         }
 
         public async Task HandleAsync(SeriesDeletedEvent message, CancellationToken cancellationToken)
         {
-            // TODO: Make repository operations async
-            await Task.Run(() =>
-            {
-                _blocklistRepository.DeleteForSeriesIds(message.Series.Select(m => m.Id).ToList());
-            },
-            cancellationToken);
+            await _blocklistRepository.DeleteForSeriesIdsAsync(message.Series.Select(m => m.Id).ToList(), cancellationToken).ConfigureAwait(false);
         }
     }
 }

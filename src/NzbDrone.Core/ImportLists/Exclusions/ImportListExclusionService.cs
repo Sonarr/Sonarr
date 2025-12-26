@@ -31,75 +31,70 @@ namespace NzbDrone.Core.ImportLists.Exclusions
 
         public ImportListExclusion Add(ImportListExclusion importListExclusion)
         {
-            return _repo.Insert(importListExclusion);
+            return _repo.InsertAsync(importListExclusion).GetAwaiter().GetResult();
         }
 
         public ImportListExclusion Update(ImportListExclusion importListExclusion)
         {
-            return _repo.Update(importListExclusion);
+            return _repo.UpdateAsync(importListExclusion).GetAwaiter().GetResult();
         }
 
         public void Delete(int id)
         {
-            _repo.Delete(id);
+            _repo.DeleteAsync(id).GetAwaiter().GetResult();
         }
 
         public void Delete(List<int> ids)
         {
-            _repo.DeleteMany(ids);
+            _repo.DeleteManyAsync(ids).GetAwaiter().GetResult();
         }
 
         public ImportListExclusion Get(int id)
         {
-            return _repo.Get(id);
+            return _repo.GetAsync(id).GetAwaiter().GetResult();
         }
 
         public ImportListExclusion FindByTvdbId(int tvdbId)
         {
-            return _repo.FindByTvdbId(tvdbId);
+            return _repo.FindByTvdbIdAsync(tvdbId).GetAwaiter().GetResult();
         }
 
         public List<ImportListExclusion> All()
         {
-            return _repo.All().ToList();
+            return _repo.AllAsync().GetAwaiter().GetResult().ToList();
         }
 
         public PagingSpec<ImportListExclusion> Paged(PagingSpec<ImportListExclusion> pagingSpec)
         {
-            return _repo.GetPaged(pagingSpec);
+            return _repo.GetPagedAsync(pagingSpec).GetAwaiter().GetResult();
         }
 
-        // TODO: Repo to async
         public async Task HandleAsync(SeriesDeletedEvent message, CancellationToken cancellationToken)
         {
-            await Task.Run(() =>
+            if (!message.AddImportListExclusion)
             {
-                if (!message.AddImportListExclusion)
+                return;
+            }
+
+            var exclusionsToAdd = new List<ImportListExclusion>();
+
+            foreach (var series in message.Series.DistinctBy(s => s.TvdbId))
+            {
+                var existingExclusion = await _repo.FindByTvdbIdAsync(series.TvdbId, cancellationToken).ConfigureAwait(false);
+
+                if (existingExclusion != null)
                 {
-                    return;
+                    continue;
                 }
 
-                var exclusionsToAdd = new List<ImportListExclusion>();
-
-                foreach (var series in message.Series.DistinctBy(s => s.TvdbId))
+                exclusionsToAdd.Add(new ImportListExclusion
                 {
-                    var existingExclusion = _repo.FindByTvdbId(series.TvdbId);
+                    TvdbId = series.TvdbId,
+                    Title = series.Title
+                });
+            }
 
-                    if (existingExclusion != null)
-                    {
-                        continue;
-                    }
-
-                    exclusionsToAdd.Add(new ImportListExclusion
-                    {
-                        TvdbId = series.TvdbId,
-                        Title = series.Title
-                    });
-                }
-
-                _repo.InsertMany(exclusionsToAdd);
-            },
-            cancellationToken).ConfigureAwait(false);
+            await _repo.InsertManyAsync(exclusionsToAdd, cancellationToken).ConfigureAwait(false);
         }
     }
 }

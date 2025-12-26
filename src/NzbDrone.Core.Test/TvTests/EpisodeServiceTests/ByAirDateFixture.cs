@@ -30,8 +30,8 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeServiceTests
         private void GivenEpisodes(params Episode[] episodes)
         {
             Mocker.GetMock<IEpisodeRepository>()
-                  .Setup(s => s.Find(It.IsAny<int>(), It.IsAny<string>()))
-                  .Returns(episodes.ToList());
+                  .Setup(s => s.FindAsync(It.IsAny<int>(), It.IsAny<string>(), default))
+                  .ReturnsAsync(episodes.ToList());
         }
 
         [Test]

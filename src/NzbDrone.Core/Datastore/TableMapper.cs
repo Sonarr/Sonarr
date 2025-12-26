@@ -178,7 +178,7 @@ namespace NzbDrone.Core.Datastore
                             (db, parent) =>
                             {
                                 var id = childIdSelector(parent);
-                                return db.Query<TChild>(new SqlBuilder(db.DatabaseType).Where<TChild>(x => x.Id == id)).SingleOrDefault();
+                                return db.QueryAsync<TChild>(new SqlBuilder(db.DatabaseType).Where<TChild>(x => x.Id == id)).GetAwaiter().GetResult().SingleOrDefault();
                             },
                             parent => childIdSelector(parent) > 0);
         }

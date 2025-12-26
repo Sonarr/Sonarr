@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
         public void Clean()
         {
             var now = DateTime.UtcNow;
-            var statuses = _repo.All().ToList();
+            var statuses = _repo.AllAsync().GetAwaiter().GetResult().ToList();
             var toUpdate = new List<TModel>();
 
             foreach (var status in statuses)
@@ -51,7 +51,7 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
                 }
             }
 
-            _repo.UpdateMany(toUpdate);
+            _repo.UpdateManyAsync(toUpdate).GetAwaiter().GetResult();
         }
     }
 }

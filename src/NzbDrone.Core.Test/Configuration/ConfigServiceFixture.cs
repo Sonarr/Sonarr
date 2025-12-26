@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -47,12 +48,12 @@ namespace NzbDrone.Core.Test.Configuration
         {
             var interval = Subject.RssSyncInterval;
             interval.Should().Be(15);
-            Mocker.GetMock<IConfigRepository>().Verify(c => c.Insert(It.IsAny<Config>()), Times.Never());
+            Mocker.GetMock<IConfigRepository>().Verify(c => c.InsertAsync(It.IsAny<Config>()), Times.Never());
         }
 
         private void AssertUpsert(string key, object value)
         {
-            Mocker.GetMock<IConfigRepository>().Verify(c => c.Upsert(key.ToLowerInvariant(), value.ToString()));
+            Mocker.GetMock<IConfigRepository>().Verify(c => c.UpsertAsync(key.ToLowerInvariant(), value.ToString()));
         }
 
         [Test]
@@ -65,13 +66,13 @@ namespace NzbDrone.Core.Test.Configuration
             var keys = new List<string>();
             var values = new List<Config>();
 
-            Mocker.GetMock<IConfigRepository>().Setup(c => c.Upsert(It.IsAny<string>(), It.IsAny<string>())).Callback<string, string>((key, value) =>
+            Mocker.GetMock<IConfigRepository>().Setup(c => c.UpsertAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>())).Callback<string, string, CancellationToken>((key, value, ct) =>
             {
                 keys.Add(key);
                 values.Add(new Config { Key = key, Value = value });
             });
 
-            Mocker.GetMock<IConfigRepository>().Setup(c => c.All()).Returns(values);
+            Mocker.GetMock<IConfigRepository>().Setup(c => c.AllAsync()).ReturnsAsync(values);
 
             foreach (var propertyInfo in allProperties)
             {
@@ -116,14 +117,14 @@ namespace NzbDrone.Core.Test.Configuration
         public void should_ignore_null_properties()
         {
             Mocker.GetMock<IConfigRepository>()
-                  .Setup(v => v.Get("downloadedepisodesfolder"))
-                  .Returns(new Config { Id = 1, Key = "DownloadedEpisodesFolder", Value = @"C:\test".AsOsAgnostic() });
+                  .Setup(v => v.GetAsync("downloadedepisodesfolder"))
+                  .ReturnsAsync(new Config { Id = 1, Key = "DownloadedEpisodesFolder", Value = @"C:\test".AsOsAgnostic() });
 
             var dict = new Dictionary<string, object>();
             dict.Add("DownloadedEpisodesFolder", null);
             Subject.SaveConfigDictionary(dict);
 
-            Mocker.GetMock<IConfigRepository>().Verify(c => c.Upsert("downloadedepisodesfolder", It.IsAny<string>()), Times.Never());
+            Mocker.GetMock<IConfigRepository>().Verify(c => c.UpsertAsync("downloadedepisodesfolder", It.IsAny<string>()), Times.Never());
         }
     }
 }

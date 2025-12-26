@@ -61,17 +61,17 @@ namespace NzbDrone.Core.Tv
 
         public Series GetSeries(int seriesId)
         {
-            return _seriesRepository.Get(seriesId);
+            return _seriesRepository.GetAsync(seriesId).GetAwaiter().GetResult();
         }
 
         public List<Series> GetSeries(IEnumerable<int> seriesIds)
         {
-            return _seriesRepository.Get(seriesIds).ToList();
+            return _seriesRepository.GetAsync(seriesIds).GetAwaiter().GetResult().ToList();
         }
 
         public Series AddSeries(Series newSeries)
         {
-            _seriesRepository.Insert(newSeries);
+            _seriesRepository.InsertAsync(newSeries).GetAwaiter().GetResult();
             _eventAggregator.PublishEventAsync(new SeriesAddedEvent(GetSeries(newSeries.Id))).GetAwaiter().GetResult();
 
             return newSeries;
@@ -79,7 +79,7 @@ namespace NzbDrone.Core.Tv
 
         public List<Series> AddSeries(List<Series> newSeries)
         {
-            _seriesRepository.InsertMany(newSeries);
+            _seriesRepository.InsertManyAsync(newSeries).GetAwaiter().GetResult();
             _eventAggregator.PublishEventAsync(new SeriesImportedEvent(newSeries.Select(s => s.Id).ToList())).GetAwaiter().GetResult();
 
             return newSeries;
@@ -87,29 +87,29 @@ namespace NzbDrone.Core.Tv
 
         public Series FindByTvdbId(int tvRageId)
         {
-            return _seriesRepository.FindByTvdbId(tvRageId);
+            return _seriesRepository.FindByTvdbIdAsync(tvRageId).GetAwaiter().GetResult();
         }
 
         public Series FindByTvRageId(int tvRageId)
         {
-            return _seriesRepository.FindByTvRageId(tvRageId);
+            return _seriesRepository.FindByTvRageIdAsync(tvRageId).GetAwaiter().GetResult();
         }
 
         public Series FindByImdbId(string imdbId)
         {
-            return _seriesRepository.FindByImdbId(imdbId);
+            return _seriesRepository.FindByImdbIdAsync(imdbId).GetAwaiter().GetResult();
         }
 
         public Series FindByTitle(string title)
         {
-            return _seriesRepository.FindByTitle(title.CleanSeriesTitle());
+            return _seriesRepository.FindByTitleAsync(title.CleanSeriesTitle()).GetAwaiter().GetResult();
         }
 
         public Series FindByTitleInexact(string title)
         {
             // find any series clean title within the provided release title
             var cleanTitle = title.CleanSeriesTitle();
-            var list = _seriesRepository.FindByTitleInexact(cleanTitle);
+            var list = _seriesRepository.FindByTitleInexactAsync(cleanTitle).GetAwaiter().GetResult();
             if (!list.Any())
             {
                 // no series matched
@@ -151,39 +151,39 @@ namespace NzbDrone.Core.Tv
 
         public Series FindByPath(string path)
         {
-            return _seriesRepository.FindByPath(path);
+            return _seriesRepository.FindByPathAsync(path).GetAwaiter().GetResult();
         }
 
         public Series FindByTitle(string title, int year)
         {
-            return _seriesRepository.FindByTitle(title.CleanSeriesTitle(), year);
+            return _seriesRepository.FindByTitleAsync(title.CleanSeriesTitle(), year).GetAwaiter().GetResult();
         }
 
         public void DeleteSeries(List<int> seriesIds, bool deleteFiles, bool addImportListExclusion)
         {
-            var series = _seriesRepository.Get(seriesIds).ToList();
-            _seriesRepository.DeleteMany(seriesIds);
+            var series = _seriesRepository.GetAsync(seriesIds).GetAwaiter().GetResult().ToList();
+            _seriesRepository.DeleteManyAsync(seriesIds).GetAwaiter().GetResult();
             _eventAggregator.PublishEventAsync(new SeriesDeletedEvent(series, deleteFiles, addImportListExclusion)).GetAwaiter().GetResult();
         }
 
         public List<Series> GetAllSeries()
         {
-            return _seriesRepository.All().ToList();
+            return _seriesRepository.AllAsync().GetAwaiter().GetResult().ToList();
         }
 
         public List<int> AllSeriesTvdbIds()
         {
-            return _seriesRepository.AllSeriesTvdbIds().ToList();
+            return _seriesRepository.AllSeriesTvdbIdsAsync().GetAwaiter().GetResult().ToList();
         }
 
         public Dictionary<int, string> GetAllSeriesPaths()
         {
-            return _seriesRepository.AllSeriesPaths();
+            return _seriesRepository.AllSeriesPathsAsync().GetAwaiter().GetResult();
         }
 
         public Dictionary<int, List<int>> GetAllSeriesTags()
         {
-            return _seriesRepository.AllSeriesTags();
+            return _seriesRepository.AllSeriesTagsAsync().GetAwaiter().GetResult();
         }
 
         public List<Series> AllForTag(int tagId)
@@ -217,7 +217,7 @@ namespace NzbDrone.Core.Tv
             series.AddOptions = storedSeries.AddOptions;
             UpdateTags(series);
 
-            var updatedSeries = _seriesRepository.Update(series);
+            var updatedSeries = _seriesRepository.UpdateAsync(series).GetAwaiter().GetResult();
             if (publishUpdatedEvent)
             {
                 _eventAggregator.PublishEventAsync(new SeriesEditedEvent(updatedSeries, storedSeries, episodeMonitoredChanged)).GetAwaiter().GetResult();
@@ -248,7 +248,7 @@ namespace NzbDrone.Core.Tv
                 UpdateTags(s);
             }
 
-            _seriesRepository.UpdateMany(series);
+            _seriesRepository.UpdateManyAsync(series).GetAwaiter().GetResult();
             _logger.Debug("{0} series updated", series.Count);
             _eventAggregator.PublishEventAsync(new SeriesBulkEditedEvent(series)).GetAwaiter().GetResult();
 
@@ -257,12 +257,12 @@ namespace NzbDrone.Core.Tv
 
         public bool SeriesPathExists(string folder)
         {
-            return _seriesRepository.SeriesPathExists(folder);
+            return _seriesRepository.SeriesPathExistsAsync(folder).GetAwaiter().GetResult();
         }
 
         public void RemoveAddOptions(Series series)
         {
-            _seriesRepository.SetFields(series, s => s.AddOptions);
+            _seriesRepository.SetFieldsAsync(series, default, s => s.AddOptions).GetAwaiter().GetResult();
         }
 
         public bool UpdateTags(Series series)

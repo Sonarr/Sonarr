@@ -77,7 +77,7 @@ namespace NzbDrone.Core.Configuration
 
         public bool IsDefined(string key)
         {
-            return _repository.Get(key.ToLower()) != null;
+            return _repository.GetAsync(key.ToLower()).GetAwaiter().GetResult() != null;
         }
 
         public bool AutoUnmonitorPreviouslyDownloadedEpisodes
@@ -493,7 +493,7 @@ namespace NzbDrone.Core.Configuration
             key = key.ToLowerInvariant();
 
             _logger.Trace("Writing Setting to database. Key:'{0}' Value:'{1}'", key, value);
-            _repository.Upsert(key, value);
+            _repository.UpsertAsync(key, value).GetAwaiter().GetResult();
 
             ClearCache();
         }
@@ -504,7 +504,7 @@ namespace NzbDrone.Core.Configuration
             {
                 if (!_cache.Any())
                 {
-                    var all = _repository.All();
+                    var all = _repository.AllAsync().GetAwaiter().GetResult();
                     _cache = all.ToDictionary(c => c.Key.ToLower(), c => c.Value);
                 }
             }

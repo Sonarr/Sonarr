@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using FizzWare.NBuilder;
@@ -27,13 +27,13 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
                                                         .BuildListOfNew();
 
             Mocker.GetMock<IDownloadClientStatusRepository>()
-                  .Setup(s => s.All())
-                  .Returns(downloadClientStatuses);
+                  .Setup(s => s.AllAsync())
+                  .ReturnsAsync(downloadClientStatuses);
 
             Subject.Clean();
 
             Mocker.GetMock<IDownloadClientStatusRepository>()
-                  .Verify(v => v.UpdateMany(
+                  .Verify(v => v.UpdateManyAsync(
                           It.Is<List<DownloadClientStatus>>(i => i.All(
                               s => s.DisabledTill.Value <= DateTime.UtcNow.AddMinutes(disabledTillTime)))));
         }
@@ -50,13 +50,13 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
                                                         .BuildListOfNew();
 
             Mocker.GetMock<IDownloadClientStatusRepository>()
-                  .Setup(s => s.All())
-                  .Returns(downloadClientStatuses);
+                  .Setup(s => s.AllAsync())
+                  .ReturnsAsync(downloadClientStatuses);
 
             Subject.Clean();
 
             Mocker.GetMock<IDownloadClientStatusRepository>()
-                  .Verify(v => v.UpdateMany(
+                  .Verify(v => v.UpdateManyAsync(
                           It.Is<List<DownloadClientStatus>>(i => i.All(
                               s => s.InitialFailure.Value <= DateTime.UtcNow))));
         }
@@ -73,13 +73,13 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
                                                         .BuildListOfNew();
 
             Mocker.GetMock<IDownloadClientStatusRepository>()
-                  .Setup(s => s.All())
-                  .Returns(downloadClientStatuses);
+                  .Setup(s => s.AllAsync())
+                  .ReturnsAsync(downloadClientStatuses);
 
             Subject.Clean();
 
             Mocker.GetMock<IDownloadClientStatusRepository>()
-                  .Verify(v => v.UpdateMany(
+                  .Verify(v => v.UpdateManyAsync(
                           It.Is<List<DownloadClientStatus>>(i => i.All(
                               s => s.MostRecentFailure.Value <= DateTime.UtcNow))));
         }
@@ -96,13 +96,13 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
                                                         .BuildListOfNew();
 
             Mocker.GetMock<IDownloadClientStatusRepository>()
-                  .Setup(s => s.All())
-                  .Returns(downloadClientStatuses);
+                   .Setup(s => s.AllAsync())
+                   .ReturnsAsync(downloadClientStatuses);
 
             Subject.Clean();
 
             Mocker.GetMock<IDownloadClientStatusRepository>()
-                  .Verify(v => v.UpdateMany(
+                  .Verify(v => v.UpdateManyAsync(
                           It.Is<List<DownloadClientStatus>>(i => i.Count == 0)));
         }
     }

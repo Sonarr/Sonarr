@@ -57,7 +57,7 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
         private List<int> GetAutoTaggingTagSpecificationTags(IDbConnection mapper)
         {
             var tags = new List<int>();
-            var autoTags = _autoTaggingRepository.All();
+            var autoTags = _autoTaggingRepository.AllAsync().GetAwaiter().GetResult();
 
             foreach (var autoTag in autoTags)
             {

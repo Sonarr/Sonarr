@@ -42,7 +42,7 @@ namespace NzbDrone.Core.Test.Blocklisting
             await Subject.HandleAsync(_event, CancellationToken.None);
 
             Mocker.GetMock<IBlocklistRepository>()
-                .Verify(v => v.Insert(It.Is<Blocklist>(b => b.EpisodeIds == _event.EpisodeIds)), Times.Once());
+                .Verify(v => v.InsertAsync(It.Is<Blocklist>(b => b.EpisodeIds == _event.EpisodeIds), It.IsAny<CancellationToken>()), Times.Once());
         }
 
         [Test]
@@ -54,7 +54,7 @@ namespace NzbDrone.Core.Test.Blocklisting
             _event.Data.Remove("protocol");
 
             Mocker.GetMock<IBlocklistRepository>()
-                .Verify(v => v.Insert(It.Is<Blocklist>(b => b.EpisodeIds == _event.EpisodeIds)), Times.Once());
+                .Verify(v => v.InsertAsync(It.Is<Blocklist>(b => b.EpisodeIds == _event.EpisodeIds), It.IsAny<CancellationToken>()), Times.Once());
         }
     }
 }

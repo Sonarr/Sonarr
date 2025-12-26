@@ -52,52 +52,52 @@ namespace NzbDrone.Core.History
 
         public PagingSpec<EpisodeHistory> Paged(PagingSpec<EpisodeHistory> pagingSpec, int[] languages, int[] qualities)
         {
-            return _historyRepository.GetPaged(pagingSpec, languages, qualities);
+            return _historyRepository.GetPagedAsync(pagingSpec, languages, qualities).GetAwaiter().GetResult();
         }
 
         public EpisodeHistory MostRecentForEpisode(int episodeId)
         {
-            return _historyRepository.MostRecentForEpisode(episodeId);
+            return _historyRepository.MostRecentForEpisodeAsync(episodeId).GetAwaiter().GetResult();
         }
 
         public List<EpisodeHistory> FindByEpisodeId(int episodeId)
         {
-            return _historyRepository.FindByEpisodeId(episodeId);
+            return _historyRepository.FindByEpisodeIdAsync(episodeId).GetAwaiter().GetResult();
         }
 
         public EpisodeHistory MostRecentForDownloadId(string downloadId)
         {
-            return _historyRepository.MostRecentForDownloadId(downloadId);
+            return _historyRepository.MostRecentForDownloadIdAsync(downloadId).GetAwaiter().GetResult();
         }
 
         public EpisodeHistory Get(int historyId)
         {
-            return _historyRepository.Get(historyId);
+            return _historyRepository.GetAsync(historyId).GetAwaiter().GetResult();
         }
 
         public List<EpisodeHistory> GetBySeries(int seriesId, EpisodeHistoryEventType? eventType)
         {
-            return _historyRepository.GetBySeries(seriesId, eventType);
+            return _historyRepository.GetBySeriesAsync(seriesId, eventType).GetAwaiter().GetResult();
         }
 
         public List<EpisodeHistory> GetBySeason(int seriesId, int seasonNumber, EpisodeHistoryEventType? eventType)
         {
-            return _historyRepository.GetBySeason(seriesId, seasonNumber, eventType);
+            return _historyRepository.GetBySeasonAsync(seriesId, seasonNumber, eventType).GetAwaiter().GetResult();
         }
 
         public List<EpisodeHistory> GetByEpisode(int episodeId, EpisodeHistoryEventType? eventType)
         {
-            return _historyRepository.GetByEpisode(episodeId, eventType);
+            return _historyRepository.GetByEpisodeAsync(episodeId, eventType).GetAwaiter().GetResult();
         }
 
         public List<EpisodeHistory> Find(string downloadId, EpisodeHistoryEventType eventType)
         {
-            return _historyRepository.FindByDownloadId(downloadId).Where(c => c.EventType == eventType).ToList();
+            return _historyRepository.FindByDownloadIdAsync(downloadId).GetAwaiter().GetResult().Where(c => c.EventType == eventType).ToList();
         }
 
         public List<EpisodeHistory> FindByDownloadId(string downloadId)
         {
-            return _historyRepository.FindByDownloadId(downloadId);
+            return _historyRepository.FindByDownloadIdAsync(downloadId).GetAwaiter().GetResult();
         }
 
         public string FindDownloadId(EpisodeImportedEvent trackedDownload)
@@ -105,7 +105,7 @@ namespace NzbDrone.Core.History
             _logger.Debug("Trying to find downloadId for {0} from history", trackedDownload.ImportedEpisode.Path);
 
             var episodeIds = trackedDownload.EpisodeInfo.Episodes.Select(c => c.Id).ToList();
-            var allHistory = _historyRepository.FindDownloadHistory(trackedDownload.EpisodeInfo.Series.Id, trackedDownload.ImportedEpisode.Quality);
+            var allHistory = _historyRepository.FindDownloadHistoryAsync(trackedDownload.EpisodeInfo.Series.Id, trackedDownload.ImportedEpisode.Quality).GetAwaiter().GetResult();
 
             // Find download related items for these episodes
             var episodesHistory = allHistory.Where(h => episodeIds.Contains(h.EpisodeId)).ToList();
@@ -191,8 +191,7 @@ namespace NzbDrone.Core.History
                     history.Data.Add("TorrentInfoHash", torrentRelease.InfoHash);
                 }
 
-                // TODO: Add InsertAsync to IHistoryRepository for proper async implementation
-                await Task.Run(() => _historyRepository.Insert(history), cancellationToken);
+                await _historyRepository.InsertAsync(history, cancellationToken).ConfigureAwait(false);
             }
         }
 
@@ -235,8 +234,7 @@ namespace NzbDrone.Core.History
                 history.Data.Add("IndexerFlags", message.ImportedEpisode.IndexerFlags.ToString());
                 history.Data.Add("ReleaseType", message.ImportedEpisode.ReleaseType.ToString());
 
-                // TODO: Add InsertAsync to IHistoryRepository for proper async implementation
-                await Task.Run(() => _historyRepository.Insert(history), cancellationToken);
+                await _historyRepository.InsertAsync(history, cancellationToken).ConfigureAwait(false);
             }
         }
 
@@ -264,8 +262,7 @@ namespace NzbDrone.Core.History
                 history.Data.Add("Size", message.TrackedDownload?.DownloadItem.TotalSize.ToString() ?? message.Data.GetValueOrDefault(EpisodeHistory.SIZE));
                 history.Data.Add("Indexer", message.TrackedDownload?.RemoteEpisode?.Release?.Indexer ?? message.Data.GetValueOrDefault(EpisodeHistory.INDEXER));
 
-                // TODO: Add InsertAsync to IHistoryRepository for proper async implementation
-                await Task.Run(() => _historyRepository.Insert(history), cancellationToken);
+                await _historyRepository.InsertAsync(history, cancellationToken).ConfigureAwait(false);
             }
         }
 
@@ -301,8 +298,7 @@ namespace NzbDrone.Core.History
                 history.Data.Add("IndexerFlags", message.EpisodeFile.IndexerFlags.ToString());
                 history.Data.Add("ReleaseType", message.EpisodeFile.ReleaseType.ToString());
 
-                // TODO: Add InsertAsync to IHistoryRepository for proper async implementation
-                await Task.Run(() => _historyRepository.Insert(history), cancellationToken);
+                await _historyRepository.InsertAsync(history, cancellationToken).ConfigureAwait(false);
             }
         }
 
@@ -335,8 +331,7 @@ namespace NzbDrone.Core.History
                 history.Data.Add("IndexerFlags", message.EpisodeFile.IndexerFlags.ToString());
                 history.Data.Add("ReleaseType", message.EpisodeFile.ReleaseType.ToString());
 
-                // TODO: Add InsertAsync to IHistoryRepository for proper async implementation
-                await Task.Run(() => _historyRepository.Insert(history), cancellationToken);
+                await _historyRepository.InsertAsync(history, cancellationToken).ConfigureAwait(false);
             }
         }
 
@@ -369,19 +364,17 @@ namespace NzbDrone.Core.History
                 historyToAdd.Add(history);
             }
 
-            // TODO: Add InsertManyAsync to IHistoryRepository for proper async implementation
-            await Task.Run(() => _historyRepository.InsertMany(historyToAdd), cancellationToken);
+            await _historyRepository.InsertManyAsync(historyToAdd, cancellationToken).ConfigureAwait(false);
         }
 
         public async Task HandleAsync(SeriesDeletedEvent message, CancellationToken cancellationToken)
         {
-            // TODO: Add DeleteForSeriesAsync to IHistoryRepository for proper async implementation
-            await Task.Run(() => _historyRepository.DeleteForSeries(message.Series.Select(m => m.Id).ToList()), cancellationToken);
+            await _historyRepository.DeleteForSeriesAsync(message.Series.Select(m => m.Id).ToList(), cancellationToken).ConfigureAwait(false);
         }
 
         public List<EpisodeHistory> Since(DateTime date, EpisodeHistoryEventType? eventType)
         {
-            return _historyRepository.Since(date, eventType);
+            return _historyRepository.SinceAsync(date, eventType).GetAwaiter().GetResult();
         }
     }
 }

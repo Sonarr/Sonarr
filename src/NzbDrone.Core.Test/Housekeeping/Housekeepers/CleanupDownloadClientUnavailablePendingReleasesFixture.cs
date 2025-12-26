@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Threading.Tasks;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
@@ -13,7 +14,7 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
     public class CleanupDownloadClientUnavailablePendingReleasesFixture : DbTest<CleanupDownloadClientUnavailablePendingReleases, PendingRelease>
     {
         [Test]
-        public void should_delete_old_DownloadClientUnavailable_pending_items()
+        public async Task should_delete_old_DownloadClientUnavailable_pending_items()
         {
             var pendingRelease = Builder<PendingRelease>.CreateNew()
                 .With(h => h.Reason = PendingReleaseReason.DownloadClientUnavailable)
@@ -22,13 +23,14 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
                 .With(h => h.Release = new ReleaseInfo())
                 .BuildNew();
 
-            Db.Insert(pendingRelease);
+            await Db.InsertAsync(pendingRelease);
             Subject.Clean();
-            AllStoredModels.Should().BeEmpty();
+            var pendingReleases = await GetAllStoredModelsAsync();
+            pendingReleases.Should().BeEmpty();
         }
 
         [Test]
-        public void should_delete_old_Fallback_pending_items()
+        public async Task should_delete_old_Fallback_pending_items()
         {
             var pendingRelease = Builder<PendingRelease>.CreateNew()
                 .With(h => h.Reason = PendingReleaseReason.Fallback)
@@ -37,13 +39,14 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
                 .With(h => h.Release = new ReleaseInfo())
                 .BuildNew();
 
-            Db.Insert(pendingRelease);
+            await Db.InsertAsync(pendingRelease);
             Subject.Clean();
-            AllStoredModels.Should().BeEmpty();
+            var pendingReleases = await GetAllStoredModelsAsync();
+            pendingReleases.Should().BeEmpty();
         }
 
         [Test]
-        public void should_not_delete_old_Delay_pending_items()
+        public async Task should_not_delete_old_Delay_pending_items()
         {
             var pendingRelease = Builder<PendingRelease>.CreateNew()
                 .With(h => h.Reason = PendingReleaseReason.Delay)
@@ -52,9 +55,10 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
                 .With(h => h.Release = new ReleaseInfo())
                 .BuildNew();
 
-            Db.Insert(pendingRelease);
+            await Db.InsertAsync(pendingRelease);
             Subject.Clean();
-            AllStoredModels.Should().HaveCount(1);
+            var pendingReleases = await GetAllStoredModelsAsync();
+            pendingReleases.Should().HaveCount(1);
         }
     }
 }

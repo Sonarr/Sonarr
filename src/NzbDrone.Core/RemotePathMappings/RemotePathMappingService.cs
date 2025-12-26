@@ -45,7 +45,7 @@ namespace NzbDrone.Core.RemotePathMappings
 
         public List<RemotePathMapping> All()
         {
-            return _cache.Get("all", () => _remotePathMappingRepository.All().ToList(), TimeSpan.FromSeconds(10));
+            return _cache.Get("all", () => _remotePathMappingRepository.AllAsync().GetAwaiter().GetResult().ToList(), TimeSpan.FromSeconds(10));
         }
 
         public RemotePathMapping Add(RemotePathMapping mapping)
@@ -57,7 +57,7 @@ namespace NzbDrone.Core.RemotePathMappings
 
             ValidateMapping(all, mapping);
 
-            var result = _remotePathMappingRepository.Insert(mapping);
+            var result = _remotePathMappingRepository.InsertAsync(mapping).GetAwaiter().GetResult();
 
             _cache.Clear();
 
@@ -66,14 +66,14 @@ namespace NzbDrone.Core.RemotePathMappings
 
         public void Remove(int id)
         {
-            _remotePathMappingRepository.Delete(id);
+            _remotePathMappingRepository.DeleteAsync(id).GetAwaiter().GetResult();
 
             _cache.Clear();
         }
 
         public RemotePathMapping Get(int id)
         {
-            return _remotePathMappingRepository.Get(id);
+            return _remotePathMappingRepository.GetAsync(id).GetAwaiter().GetResult();
         }
 
         public RemotePathMapping Update(RemotePathMapping mapping)
@@ -82,7 +82,7 @@ namespace NzbDrone.Core.RemotePathMappings
 
             ValidateMapping(existing, mapping);
 
-            var result = _remotePathMappingRepository.Update(mapping);
+            var result = _remotePathMappingRepository.UpdateAsync(mapping).GetAwaiter().GetResult();
 
             _cache.Clear();
 

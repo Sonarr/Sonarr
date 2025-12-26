@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
@@ -21,36 +22,38 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
                                                            .BuildNew();
         }
 
-        private void GivenNotification()
+        private async Task GivenNotification()
         {
-            Db.Insert(_notification);
+            await Db.InsertAsync(_notification);
         }
 
         [Test]
-        public void should_delete_orphaned_notificationstatus()
+        public async Task should_delete_orphaned_notificationstatus()
         {
             var status = Builder<NotificationStatus>.CreateNew()
                                                     .With(h => h.ProviderId = _notification.Id)
                                                     .BuildNew();
-            Db.Insert(status);
+            await Db.InsertAsync(status);
 
             Subject.Clean();
-            AllStoredModels.Should().BeEmpty();
+            var notificationStatuses = await GetAllStoredModelsAsync();
+            notificationStatuses.Should().BeEmpty();
         }
 
         [Test]
-        public void should_not_delete_unorphaned_notificationstatus()
+        public async Task should_not_delete_unorphaned_notificationstatus()
         {
-            GivenNotification();
+            await GivenNotification();
 
             var status = Builder<NotificationStatus>.CreateNew()
                                                     .With(h => h.ProviderId = _notification.Id)
                                                     .BuildNew();
-            Db.Insert(status);
+            await Db.InsertAsync(status);
 
             Subject.Clean();
-            AllStoredModels.Should().HaveCount(1);
-            AllStoredModels.Should().Contain(h => h.ProviderId == _notification.Id);
+            var notificationStatuses = await GetAllStoredModelsAsync();
+            notificationStatuses.Should().HaveCount(1);
+            notificationStatuses.Should().Contain(h => h.ProviderId == _notification.Id);
         }
     }
 }

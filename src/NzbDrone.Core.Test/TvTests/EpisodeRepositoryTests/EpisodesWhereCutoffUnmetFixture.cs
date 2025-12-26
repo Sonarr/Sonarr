@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
@@ -24,7 +25,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
         private List<Episode> _unairedEpisodes;
 
         [SetUp]
-        public void Setup()
+        public async Task Setup()
         {
             var profile = new QualityProfile
             {
@@ -54,16 +55,18 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
                                                 .With(s => s.QualityProfileId = profile.Id)
                                                 .BuildNew();
 
-            _monitoredSeries.Id = Db.Insert(_monitoredSeries).Id;
-            _unmonitoredSeries.Id = Db.Insert(_unmonitoredSeries).Id;
+            var monitoredSeries = await Db.InsertAsync(_monitoredSeries);
+            _monitoredSeries.Id = monitoredSeries.Id;
+            var unmonitoredSeries = await Db.InsertAsync(_unmonitoredSeries);
+            _unmonitoredSeries.Id = unmonitoredSeries.Id;
 
             _pagingSpec = new PagingSpec<Episode>
-                              {
-                                  Page = 1,
-                                  PageSize = 10,
-                                  SortKey = "AirDate",
-                                  SortDirection = SortDirection.Ascending
-                              };
+            {
+                Page = 1,
+                PageSize = 10,
+                SortKey = "AirDate",
+                SortDirection = SortDirection.Ascending
+            };
 
             _qualitiesBelowCutoff = new List<QualitiesBelowCutoff>
                                     {
@@ -82,15 +85,15 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
 
             var fileRepository = Mocker.Resolve<MediaFileRepository>();
 
-            qualityMetLanguageUnmet = fileRepository.Insert(qualityMetLanguageUnmet);
-            qualityMetLanguageMet = fileRepository.Insert(qualityMetLanguageMet);
-            qualityMetLanguageExceed = fileRepository.Insert(qualityMetLanguageExceed);
-            qualityUnmetLanguageUnmet = fileRepository.Insert(qualityUnmetLanguageUnmet);
-            qualityUnmetLanguageMet = fileRepository.Insert(qualityUnmetLanguageMet);
-            qualityUnmetLanguageExceed = fileRepository.Insert(qualityUnmetLanguageExceed);
-            qualityRawHDLanguageUnmet = fileRepository.Insert(qualityRawHDLanguageUnmet);
-            qualityRawHDLanguageMet = fileRepository.Insert(qualityRawHDLanguageMet);
-            qualityRawHDLanguageExceed = fileRepository.Insert(qualityRawHDLanguageExceed);
+            qualityMetLanguageUnmet = await fileRepository.InsertAsync(qualityMetLanguageUnmet);
+            qualityMetLanguageMet = await fileRepository.InsertAsync(qualityMetLanguageMet);
+            qualityMetLanguageExceed = await fileRepository.InsertAsync(qualityMetLanguageExceed);
+            qualityUnmetLanguageUnmet = await fileRepository.InsertAsync(qualityUnmetLanguageUnmet);
+            qualityUnmetLanguageMet = await fileRepository.InsertAsync(qualityUnmetLanguageMet);
+            qualityUnmetLanguageExceed = await fileRepository.InsertAsync(qualityUnmetLanguageExceed);
+            qualityRawHDLanguageUnmet = await fileRepository.InsertAsync(qualityRawHDLanguageUnmet);
+            qualityRawHDLanguageMet = await fileRepository.InsertAsync(qualityRawHDLanguageMet);
+            qualityRawHDLanguageExceed = await fileRepository.InsertAsync(qualityRawHDLanguageExceed);
 
             var monitoredSeriesEpisodes = Builder<Episode>.CreateListOfSize(4)
                                            .All()
@@ -122,7 +125,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
                                            .With(e => e.SeasonNumber = 0)
                                            .Build();
 
-            _unairedEpisodes             = Builder<Episode>.CreateListOfSize(1)
+            _unairedEpisodes = Builder<Episode>.CreateListOfSize(1)
                                            .All()
                                            .With(e => e.Id = 0)
                                            .With(e => e.SeriesId = _monitoredSeries.Id)
@@ -132,8 +135,8 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
                                            .Build()
                                            .ToList();
 
-            Db.InsertMany(monitoredSeriesEpisodes);
-            Db.InsertMany(unmonitoredSeriesEpisodes);
+            await Db.InsertManyAsync(monitoredSeriesEpisodes);
+            await Db.InsertManyAsync(unmonitoredSeriesEpisodes);
         }
 
         private void GivenMonitoredFilterExpression()
@@ -147,46 +150,46 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeRepositoryTests
         }
 
         [Test]
-        public void should_include_episodes_where_cutoff_has_not_be_met()
+        public async Task should_include_episodes_where_cutoff_has_not_be_met()
         {
             GivenMonitoredFilterExpression();
 
-            var spec = Subject.EpisodesWhereCutoffUnmet(_pagingSpec, _qualitiesBelowCutoff, false);
+            var spec = await Subject.EpisodesWhereCutoffUnmetAsync(_pagingSpec, _qualitiesBelowCutoff, false);
 
             spec.Records.Should().HaveCount(1);
             spec.Records.Should().OnlyContain(e => e.EpisodeFile.Value.Quality.Quality == Quality.SDTV);
         }
 
         [Test]
-        public void should_only_contain_monitored_episodes()
+        public async Task should_only_contain_monitored_episodes()
         {
             GivenMonitoredFilterExpression();
 
-            var spec = Subject.EpisodesWhereCutoffUnmet(_pagingSpec, _qualitiesBelowCutoff, false);
+            var spec = await Subject.EpisodesWhereCutoffUnmetAsync(_pagingSpec, _qualitiesBelowCutoff, false);
 
             spec.Records.Should().HaveCount(1);
             spec.Records.Should().OnlyContain(e => e.Monitored);
         }
 
         [Test]
-        public void should_only_contain_episode_with_monitored_series()
+        public async Task should_only_contain_episode_with_monitored_series()
         {
             GivenMonitoredFilterExpression();
 
-            var spec = Subject.EpisodesWhereCutoffUnmet(_pagingSpec, _qualitiesBelowCutoff, false);
+            var spec = await Subject.EpisodesWhereCutoffUnmetAsync(_pagingSpec, _qualitiesBelowCutoff, false);
 
             spec.Records.Should().HaveCount(1);
             spec.Records.Should().OnlyContain(e => e.Series.Monitored);
         }
 
         [Test]
-        public void should_contain_unaired_episodes_if_file_does_not_meet_cutoff()
+        public async Task should_contain_unaired_episodes_if_file_does_not_meet_cutoff()
         {
-            Db.InsertMany(_unairedEpisodes);
+            await Db.InsertManyAsync(_unairedEpisodes);
 
             GivenMonitoredFilterExpression();
 
-            var spec = Subject.EpisodesWhereCutoffUnmet(_pagingSpec, _qualitiesBelowCutoff, false);
+            var spec = await Subject.EpisodesWhereCutoffUnmetAsync(_pagingSpec, _qualitiesBelowCutoff, false);
 
             spec.Records.Should().HaveCount(2);
             spec.Records.Should().OnlyContain(e => e.Series.Monitored);

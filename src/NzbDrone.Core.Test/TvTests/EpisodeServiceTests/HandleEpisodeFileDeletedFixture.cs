@@ -46,8 +46,8 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeServiceTests
                 .ToList();
 
             Mocker.GetMock<IEpisodeRepository>()
-                  .Setup(s => s.GetEpisodeByFileId(_episodeFile.Id))
-                  .Returns(_episodes);
+                  .Setup(s => s.GetEpisodeByFileIdAsync(_episodeFile.Id))
+                  .ReturnsAsync(_episodes);
         }
 
         private void GivenMultiEpisodeFile()
@@ -61,8 +61,8 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeServiceTests
                 .ToList();
 
             Mocker.GetMock<IEpisodeRepository>()
-                  .Setup(s => s.GetEpisodeByFileId(_episodeFile.Id))
-                  .Returns(_episodes);
+                  .Setup(s => s.GetEpisodeByFileIdAsync(_episodeFile.Id))
+                  .ReturnsAsync(_episodes);
         }
 
         [Test]
@@ -73,7 +73,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeServiceTests
             await Subject.HandleAsync(new EpisodeFileDeletedEvent(_episodeFile, DeleteMediaFileReason.MissingFromDisk), CancellationToken.None);
 
             Mocker.GetMock<IEpisodeRepository>()
-                .Verify(v => v.ClearFileId(It.IsAny<Episode>(), It.IsAny<bool>()), Times.Once());
+                .Verify(v => v.ClearFileIdAsync(It.IsAny<Episode>(), It.IsAny<bool>()), Times.Once());
         }
 
         [Test]
@@ -84,7 +84,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeServiceTests
             await Subject.HandleAsync(new EpisodeFileDeletedEvent(_episodeFile, DeleteMediaFileReason.MissingFromDisk), CancellationToken.None);
 
             Mocker.GetMock<IEpisodeRepository>()
-                .Verify(v => v.ClearFileId(It.IsAny<Episode>(), It.IsAny<bool>()), Times.Exactly(2));
+                .Verify(v => v.ClearFileIdAsync(It.IsAny<Episode>(), It.IsAny<bool>()), Times.Exactly(2));
         }
 
         [Test]
@@ -100,7 +100,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeServiceTests
             await Subject.HandleAsync(new SeriesScannedEvent(_series, new List<string>()), CancellationToken.None);
 
             Mocker.GetMock<IEpisodeRepository>()
-                .Verify(v => v.SetMonitored(It.IsAny<IEnumerable<int>>(), false), Times.Once());
+                .Verify(v => v.SetMonitoredAsync(It.IsAny<IEnumerable<int>>(), false), Times.Once());
         }
 
         [Test]
@@ -121,7 +121,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeServiceTests
             await Subject.HandleAsync(new SeriesScannedEvent(_series, new List<string>()), CancellationToken.None);
 
             Mocker.GetMock<IEpisodeRepository>()
-                .Verify(v => v.SetMonitored(It.IsAny<IEnumerable<int>>(), false), Times.Never());
+                .Verify(v => v.SetMonitoredAsync(It.IsAny<IEnumerable<int>>(), false), Times.Never());
         }
 
         [Test]
@@ -136,7 +136,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeServiceTests
             await Subject.HandleAsync(new EpisodeFileDeletedEvent(_episodeFile, DeleteMediaFileReason.Upgrade), CancellationToken.None);
 
             Mocker.GetMock<IEpisodeRepository>()
-                .Verify(v => v.ClearFileId(It.IsAny<Episode>(), false), Times.Once());
+                .Verify(v => v.ClearFileIdAsync(It.IsAny<Episode>(), false), Times.Once());
         }
 
         [Test]
@@ -151,7 +151,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeServiceTests
             await Subject.HandleAsync(new EpisodeFileDeletedEvent(_episodeFile, DeleteMediaFileReason.Upgrade), CancellationToken.None);
 
             Mocker.GetMock<IEpisodeRepository>()
-                .Verify(v => v.ClearFileId(It.IsAny<Episode>(), false), Times.Once());
+                .Verify(v => v.ClearFileIdAsync(It.IsAny<Episode>(), false), Times.Once());
         }
 
         [Test]
@@ -166,7 +166,7 @@ namespace NzbDrone.Core.Test.TvTests.EpisodeServiceTests
             await Subject.HandleAsync(new EpisodeFileDeletedEvent(_episodeFile, DeleteMediaFileReason.ManualOverride), CancellationToken.None);
 
             Mocker.GetMock<IEpisodeRepository>()
-                  .Verify(v => v.ClearFileId(It.IsAny<Episode>(), false), Times.Once());
+                  .Verify(v => v.ClearFileIdAsync(It.IsAny<Episode>(), false), Times.Once());
         }
     }
 }

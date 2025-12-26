@@ -20,12 +20,12 @@ namespace NzbDrone.Core.Instrumentation
 
         public PagingSpec<Log> Paged(PagingSpec<Log> pagingSpec)
         {
-            return _logRepository.GetPaged(pagingSpec);
+            return _logRepository.GetPagedAsync(pagingSpec).GetAwaiter().GetResult();
         }
 
         public void Execute(ClearLogCommand message)
         {
-            _logRepository.Purge(vacuum: true);
+            _logRepository.PurgeAsync(vacuum: true).GetAwaiter().GetResult();
         }
     }
 }

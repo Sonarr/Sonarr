@@ -27,13 +27,13 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
                                                         .BuildListOfNew();
 
             Mocker.GetMock<IIndexerStatusRepository>()
-                  .Setup(s => s.All())
-                  .Returns(indexerStatuses);
+                  .Setup(s => s.AllAsync())
+                  .ReturnsAsync(indexerStatuses);
 
             Subject.Clean();
 
             Mocker.GetMock<IIndexerStatusRepository>()
-                  .Verify(v => v.UpdateMany(
+                  .Verify(v => v.UpdateManyAsync(
                           It.Is<List<IndexerStatus>>(i => i.All(
                               s => s.DisabledTill.Value < DateTime.UtcNow.AddMinutes(disabledTillTime)))));
         }
@@ -50,13 +50,13 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
                                                         .BuildListOfNew();
 
             Mocker.GetMock<IIndexerStatusRepository>()
-                  .Setup(s => s.All())
-                  .Returns(indexerStatuses);
+                  .Setup(s => s.AllAsync())
+                  .ReturnsAsync(indexerStatuses);
 
             Subject.Clean();
 
             Mocker.GetMock<IIndexerStatusRepository>()
-                  .Verify(v => v.UpdateMany(
+                  .Verify(v => v.UpdateManyAsync(
                           It.Is<List<IndexerStatus>>(i => i.All(
                               s => s.InitialFailure.Value <= DateTime.UtcNow))));
         }
@@ -73,13 +73,13 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
                                                         .BuildListOfNew();
 
             Mocker.GetMock<IIndexerStatusRepository>()
-                  .Setup(s => s.All())
-                  .Returns(indexerStatuses);
+                  .Setup(s => s.AllAsync())
+                  .ReturnsAsync(indexerStatuses);
 
             Subject.Clean();
 
             Mocker.GetMock<IIndexerStatusRepository>()
-                  .Verify(v => v.UpdateMany(
+                  .Verify(v => v.UpdateManyAsync(
                           It.Is<List<IndexerStatus>>(i => i.All(
                               s => s.MostRecentFailure.Value <= DateTime.UtcNow))));
         }
@@ -96,13 +96,13 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
                                                         .BuildListOfNew();
 
             Mocker.GetMock<IIndexerStatusRepository>()
-                  .Setup(s => s.All())
-                  .Returns(indexerStatuses);
+                  .Setup(s => s.AllAsync())
+                  .ReturnsAsync(indexerStatuses);
 
             Subject.Clean();
 
             Mocker.GetMock<IIndexerStatusRepository>()
-                  .Verify(v => v.UpdateMany(
+                  .Verify(v => v.UpdateManyAsync(
                           It.Is<List<IndexerStatus>>(i => i.Count == 0)));
         }
     }

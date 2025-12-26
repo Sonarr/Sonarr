@@ -20,14 +20,14 @@ namespace NzbDrone.Core.SeriesStats
 
         public List<SeriesStatistics> SeriesStatistics()
         {
-            var seasonStatistics = _seriesStatisticsRepository.SeriesStatistics();
+            var seasonStatistics = _seriesStatisticsRepository.SeriesStatisticsAsync().GetAwaiter().GetResult();
 
             return seasonStatistics.GroupBy(s => s.SeriesId).Select(s => MapSeriesStatistics(s.ToList())).ToList();
         }
 
         public SeriesStatistics SeriesStatistics(int seriesId)
         {
-            var stats = _seriesStatisticsRepository.SeriesStatistics(seriesId);
+            var stats = _seriesStatisticsRepository.SeriesStatisticsAsync(seriesId).GetAwaiter().GetResult();
 
             if (stats == null || stats.Count == 0)
             {

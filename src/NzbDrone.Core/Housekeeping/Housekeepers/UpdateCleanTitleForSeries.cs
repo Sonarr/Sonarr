@@ -15,7 +15,7 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
 
         public void Clean()
         {
-            var series = _seriesRepository.All().ToList();
+            var series = _seriesRepository.AllAsync().GetAwaiter().GetResult().ToList();
 
             series.ForEach(s =>
             {
@@ -23,7 +23,7 @@ namespace NzbDrone.Core.Housekeeping.Housekeepers
                 if (s.CleanTitle != cleanTitle)
                 {
                     s.CleanTitle = cleanTitle;
-                    _seriesRepository.Update(s);
+                    _seriesRepository.UpdateAsync(s).GetAwaiter().GetResult();
                 }
             });
         }

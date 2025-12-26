@@ -1,4 +1,5 @@
-﻿using FizzWare.NBuilder;
+using System.Threading.Tasks;
+using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
 using NzbDrone.Core.Housekeeping.Housekeepers;
@@ -19,36 +20,38 @@ namespace NzbDrone.Core.Test.Housekeeping.Housekeepers
                                                  .BuildNew();
         }
 
-        private void GivenIndexer()
+        private async Task GivenIndexer()
         {
-            Db.Insert(_importList);
+            await Db.InsertAsync(_importList);
         }
 
         [Test]
-        public void should_delete_orphaned_indexerstatus()
+        public async Task should_delete_orphaned_indexerstatus()
         {
             var status = Builder<ImportListStatus>.CreateNew()
                                                   .With(h => h.ProviderId = _importList.Id)
                                                   .BuildNew();
-            Db.Insert(status);
+            await Db.InsertAsync(status);
 
             Subject.Clean();
-            AllStoredModels.Should().BeEmpty();
+            var importListStatuses = await GetAllStoredModelsAsync();
+            importListStatuses.Should().BeEmpty();
         }
 
         [Test]
-        public void should_not_delete_unorphaned_indexerstatus()
+        public async Task should_not_delete_unorphaned_indexerstatus()
         {
-            GivenIndexer();
+            await GivenIndexer();
 
             var status = Builder<ImportListStatus>.CreateNew()
                                                   .With(h => h.ProviderId = _importList.Id)
                                                   .BuildNew();
-            Db.Insert(status);
+            await Db.InsertAsync(status);
 
             Subject.Clean();
-            AllStoredModels.Should().HaveCount(1);
-            AllStoredModels.Should().Contain(h => h.ProviderId == _importList.Id);
+            var importListStatuses = await GetAllStoredModelsAsync();
+            importListStatuses.Should().HaveCount(1);
+            importListStatuses.Should().Contain(h => h.ProviderId == _importList.Id);
         }
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using FizzWare.NBuilder;
 using FluentAssertions;
 using NUnit.Framework;
@@ -22,13 +23,14 @@ namespace NzbDrone.Core.Test.SeriesStatsTests
         private EpisodeFile _episodeFile;
 
         [SetUp]
-        public void Setup()
+        public async Task Setup()
         {
             _series = Builder<Series>.CreateNew()
                                         .With(s => s.Runtime = 30)
                                         .BuildNew();
 
-            _series.Id = Db.Insert(_series).Id;
+            var series = await Db.InsertAsync(_series);
+            _series.Id = series.Id;
 
             _episode = Builder<Episode>.CreateNew()
                                           .With(e => e.EpisodeFileId = 0)
@@ -59,23 +61,23 @@ namespace NzbDrone.Core.Test.SeriesStatsTests
             _episode.Monitored = true;
         }
 
-        private void GivenEpisode()
+        private async Task GivenEpisodeAsync()
         {
-            Db.Insert(_episode);
+            await Db.InsertAsync(_episode);
         }
 
-        private void GivenEpisodeFile()
+        private async Task GivenEpisodeFileAsync()
         {
-            Db.Insert(_episodeFile);
+            await Db.InsertAsync(_episodeFile);
         }
 
         [Test]
-        public void should_get_stats_for_series()
+        public async Task should_get_stats_for_series()
         {
             GivenMonitoredEpisode();
-            GivenEpisode();
+            await GivenEpisodeAsync();
 
-            var stats = Subject.SeriesStatistics();
+            var stats = await Subject.SeriesStatisticsAsync();
 
             stats.Should().HaveCount(1);
             stats.First().NextAiring.Should().BeCloseTo(_episode.AirDateUtc.Value, TimeSpan.FromMilliseconds(1000));
@@ -83,25 +85,25 @@ namespace NzbDrone.Core.Test.SeriesStatsTests
         }
 
         [Test]
-        public void should_not_have_next_airing_for_episode_with_file()
+        public async Task should_not_have_next_airing_for_episode_with_file()
         {
             GivenEpisodeWithFile();
-            GivenEpisode();
+            await GivenEpisodeAsync();
 
-            var stats = Subject.SeriesStatistics();
+            var stats = await Subject.SeriesStatisticsAsync();
 
             stats.Should().HaveCount(1);
             stats.First().NextAiring.Should().NotHaveValue();
         }
 
         [Test]
-        public void should_have_previous_airing_for_old_episode_without_file_monitored()
+        public async Task should_have_previous_airing_for_old_episode_without_file_monitored()
         {
             GivenMonitoredEpisode();
             GivenOldEpisode();
-            GivenEpisode();
+            await GivenEpisodeAsync();
 
-            var stats = Subject.SeriesStatistics();
+            var stats = await Subject.SeriesStatisticsAsync();
 
             stats.Should().HaveCount(1);
             stats.First().NextAiring.Should().NotHaveValue();
@@ -109,12 +111,12 @@ namespace NzbDrone.Core.Test.SeriesStatsTests
         }
 
         [Test]
-        public void should_not_have_previous_airing_for_old_episode_without_file_unmonitored()
+        public async Task should_not_have_previous_airing_for_old_episode_without_file_unmonitored()
         {
             GivenOldEpisode();
-            GivenEpisode();
+            await GivenEpisodeAsync();
 
-            var stats = Subject.SeriesStatistics();
+            var stats = await Subject.SeriesStatisticsAsync();
 
             stats.Should().HaveCount(1);
             stats.First().NextAiring.Should().NotHaveValue();
@@ -122,67 +124,67 @@ namespace NzbDrone.Core.Test.SeriesStatsTests
         }
 
         [Test]
-        public void should_not_include_unmonitored_episode_in_episode_count()
+        public async Task should_not_include_unmonitored_episode_in_episode_count()
         {
-            GivenEpisode();
+            await GivenEpisodeAsync();
 
-            var stats = Subject.SeriesStatistics();
+            var stats = await Subject.SeriesStatisticsAsync();
 
             stats.Should().HaveCount(1);
             stats.First().EpisodeCount.Should().Be(0);
         }
 
         [Test]
-        public void should_include_unmonitored_episode_with_file_in_episode_count()
+        public async Task should_include_unmonitored_episode_with_file_in_episode_count()
         {
             GivenEpisodeWithFile();
-            GivenEpisode();
+            await GivenEpisodeAsync();
 
-            var stats = Subject.SeriesStatistics();
+            var stats = await Subject.SeriesStatisticsAsync();
 
             stats.Should().HaveCount(1);
             stats.First().EpisodeCount.Should().Be(1);
         }
 
         [Test]
-        public void should_have_size_on_disk_of_zero_when_no_episode_file()
+        public async Task should_have_size_on_disk_of_zero_when_no_episode_file()
         {
-            GivenEpisode();
+            await GivenEpisodeAsync();
 
-            var stats = Subject.SeriesStatistics();
+            var stats = await Subject.SeriesStatisticsAsync();
 
             stats.Should().HaveCount(1);
             stats.First().SizeOnDisk.Should().Be(0);
         }
 
         [Test]
-        public void should_have_size_on_disk_when_episode_file_exists()
+        public async Task should_have_size_on_disk_when_episode_file_exists()
         {
             GivenEpisodeWithFile();
-            GivenEpisode();
-            GivenEpisodeFile();
+            await GivenEpisodeAsync();
+            await GivenEpisodeFileAsync();
 
-            var stats = Subject.SeriesStatistics();
+            var stats = await Subject.SeriesStatisticsAsync();
 
             stats.Should().HaveCount(1);
             stats.First().SizeOnDisk.Should().Be(_episodeFile.Size);
         }
 
         [Test]
-        public void should_not_duplicate_size_for_multi_episode_files()
+        public async Task should_not_duplicate_size_for_multi_episode_files()
         {
             GivenEpisodeWithFile();
-            GivenEpisode();
-            GivenEpisodeFile();
+            await GivenEpisodeAsync();
+            await GivenEpisodeFileAsync();
 
             var episode2 = _episode.JsonClone();
 
             episode2.Id = 0;
             episode2.EpisodeNumber += 1;
 
-            Db.Insert(episode2);
+            await Db.InsertAsync(episode2);
 
-            var stats = Subject.SeriesStatistics();
+            var stats = await Subject.SeriesStatisticsAsync();
 
             stats.Should().HaveCount(1);
             stats.First().SizeOnDisk.Should().Be(_episodeFile.Size);
