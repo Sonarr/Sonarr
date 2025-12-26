@@ -56,6 +56,13 @@
       window.Sonarr = {
         urlBase: '__URL_BASE__'
       };
+
+      var theme = '_THEME_';
+      var defaultDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      var finalTheme =
+        theme === 'dark' || (theme === 'auto' && defaultDark) ? 'dark' : 'light';
+
+      document.documentElement.style.setProperty('--pageBackground', finalTheme === 'dark' ? '#202020' : '#f5f7fa');
     </script>
 
     __MINI_PROFILER__
@@ -70,6 +77,10 @@
       saves fighting with CSS Modules for ~10 lines
     -->
     <style>
+      html {
+        background-color: var(--pageBackground);
+      }
+
       .root {
         overflow: hidden;
         height: 100%; /* needed for proper layout */

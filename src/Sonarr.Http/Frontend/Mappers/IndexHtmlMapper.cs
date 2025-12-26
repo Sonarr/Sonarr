@@ -45,6 +45,9 @@ namespace Sonarr.Http.Frontend.Mappers
         protected override string GetHtmlText(HttpContext context)
         {
             var html = base.GetHtmlText(context);
+            var theme = _configFileProvider.Theme;
+
+            html = html.Replace("_THEME_", theme);
 
             if (_configFileProvider.ProfilerEnabled)
             {
