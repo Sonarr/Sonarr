@@ -20,12 +20,12 @@ import { inputTypes, kinds } from 'Helpers/Props';
 import AdvancedSettingsButton from 'Settings/AdvancedSettingsButton';
 import {
   saveNotification,
-  setNotificationFieldValue,
+  setNotificationFieldValues,
   setNotificationValue,
   testNotification,
 } from 'Store/Actions/settingsActions';
 import { createProviderSettingsSelectorHook } from 'Store/Selectors/createProviderSettingsSelector';
-import { InputChanged } from 'typings/inputs';
+import { EnhancedSelectInputChanged, InputChanged } from 'typings/inputs';
 import Notification from 'typings/Notification';
 import translate from 'Utilities/String/translate';
 import NotificationEventItems from './NotificationEventItems';
@@ -74,9 +74,17 @@ function EditNotificationModalContent({
   );
 
   const handleFieldChange = useCallback(
-    (change: InputChanged) => {
-      // @ts-expect-error - actions are not typed
-      dispatch(setNotificationFieldValue(change));
+    ({
+      name,
+      value,
+      additionalProperties,
+    }: EnhancedSelectInputChanged<unknown>) => {
+      dispatch(
+        // @ts-expect-error - actions are not typed
+        setNotificationFieldValues({
+          properties: { [name]: value, ...additionalProperties },
+        })
+      );
     },
     [dispatch]
   );

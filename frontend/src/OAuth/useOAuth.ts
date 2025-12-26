@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { Error } from 'App/State/AppSectionState';
+import { type Error } from 'App/State/AppSectionState';
 import createAjaxRequest from 'Utilities/createAjaxRequest';
 import requestAction from 'Utilities/requestAction';
 

@@ -408,9 +408,9 @@ function EnhancedSelectInput<T extends EnhancedSelectInputValue<V>, V>(
             >
               {isFetching ? (
                 <LoadingIndicator className={styles.loading} size={20} />
-              ) : null}
-
-              {isFetching ? null : <Icon name={icons.CARET_DOWN} />}
+              ) : (
+                <Icon name={icons.CARET_DOWN} />
+              )}
             </Link>
           </div>
         ) : (
@@ -445,9 +445,9 @@ function EnhancedSelectInput<T extends EnhancedSelectInputValue<V>, V>(
             >
               {isFetching ? (
                 <LoadingIndicator className={styles.loading} size={20} />
-              ) : null}
-
-              {isFetching ? null : <Icon name={icons.CARET_DOWN} />}
+              ) : (
+                <Icon name={icons.CARET_DOWN} />
+              )}
             </div>
           </Link>
         )}
