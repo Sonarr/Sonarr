@@ -54,7 +54,7 @@ namespace Sonarr.Http.Frontend
 
             if (mapper != null)
             {
-                var result = await mapper.GetResponse(path);
+                var result = await mapper.GetResponse(Request.HttpContext, path);
 
                 if (result != null)
                 {

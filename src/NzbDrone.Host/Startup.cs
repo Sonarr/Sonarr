@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using DryIoc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -35,6 +36,7 @@ using Sonarr.Http.ClientSchema;
 using Sonarr.Http.ErrorManagement;
 using Sonarr.Http.Frontend;
 using Sonarr.Http.Middleware;
+using StackExchange.Profiling;
 using IPNetwork = System.Net.IPNetwork;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
@@ -236,6 +238,45 @@ namespace NzbDrone.Host
             });
 
             services.AddAppAuthentication();
+
+            services.AddOptions<MiniProfilerOptions>()
+                .Configure<IConfigFileProvider>((options, configFileProvider) =>
+                {
+                    options.RouteBasePath = "/profiler";
+
+                    switch (configFileProvider.Theme)
+                    {
+                        case "light":
+                            options.ColorScheme = ColorScheme.Light;
+                            break;
+                        case "dark":
+                            options.ColorScheme = ColorScheme.Dark;
+                            break;
+                        default:
+                            options.ColorScheme = ColorScheme.Auto;
+                            break;
+                    }
+
+                    switch (configFileProvider.ProfilerPosition)
+                    {
+                        case "top-left":
+                            options.PopupRenderPosition = RenderPosition.Left;
+                            break;
+                        case "top-right":
+                            options.PopupRenderPosition = RenderPosition.Right;
+                            break;
+                        case "bottom-left":
+                            options.PopupRenderPosition = RenderPosition.BottomLeft;
+                            break;
+                        default:
+                            options.PopupRenderPosition = RenderPosition.BottomRight;
+                            break;
+                    }
+
+                    options.IgnoredPaths.Add("/MediaCover");
+                });
+
+            services.AddMiniProfiler();
         }
 
         public void Configure(IApplicationBuilder app,
@@ -312,6 +353,7 @@ namespace NzbDrone.Host
             app.UseMiddleware<BufferingMiddleware>(new List<string> { "/api/v3/command", "/api/v5/command" });
 
             app.UseWebSockets();
+            app.UseMiniProfiler();
 
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             if (BuildInfo.IsDebug)
@@ -325,6 +367,7 @@ namespace NzbDrone.Host
             app.UseEndpoints(x =>
             {
                 x.MapHub<MessageHub>("/signalr/messages").RequireAuthorization("SignalR");
+                x.MapPost("/profiler/results", context => Task.CompletedTask).RequireAuthorization("UI");
                 x.MapControllers();
             });
         }

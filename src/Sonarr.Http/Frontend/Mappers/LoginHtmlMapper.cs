@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using Microsoft.AspNetCore.Http;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
@@ -33,9 +34,9 @@ namespace Sonarr.Http.Frontend.Mappers
             return resourceUrl.StartsWith("/login");
         }
 
-        protected override string GetHtmlText()
+        protected override string GetHtmlText(HttpContext context)
         {
-            var html = base.GetHtmlText();
+            var html = base.GetHtmlText(context);
             var theme = _configFileProvider.Theme;
 
             html = html.Replace("_THEME_", theme);

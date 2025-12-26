@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Http;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
@@ -27,9 +28,9 @@ namespace Sonarr.Http.Frontend.Mappers
         protected string HtmlPath;
         protected string UrlBase;
 
-        protected override Stream GetContentStream(string filePath)
+        protected override Stream GetContentStream(HttpContext context, string filePath)
         {
-            var text = GetHtmlText();
+            var text = GetHtmlText(context);
 
             var stream = new MemoryStream();
             var writer = new StreamWriter(stream);
@@ -39,7 +40,7 @@ namespace Sonarr.Http.Frontend.Mappers
             return stream;
         }
 
-        protected virtual string GetHtmlText()
+        protected virtual string GetHtmlText(HttpContext context)
         {
             if (RuntimeInfo.IsProduction && _generatedContent != null)
             {

@@ -9,6 +9,7 @@
     <PackageReference Include="MailKit" Version="4.14.1" />
     <PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="10.0.1" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.3" />
+    <PackageReference Include="MiniProfiler.AspNetCore" Version="4.5.4" />
     <PackageReference Include="Openur.FFMpegCore" Version="5.4.0.31" />
     <PackageReference Include="Openur.FFprobeStatic" Version="8.0.1.289" />
     <PackageReference Include="Polly" Version="8.6.5" />

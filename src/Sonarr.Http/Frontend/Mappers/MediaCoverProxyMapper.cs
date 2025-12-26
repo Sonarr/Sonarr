@@ -2,6 +2,7 @@ using System;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using NzbDrone.Core.MediaCover;
@@ -31,7 +32,7 @@ namespace Sonarr.Http.Frontend.Mappers
             return resourceUrl.StartsWith("/MediaCoverProxy/", StringComparison.InvariantCultureIgnoreCase);
         }
 
-        public async Task<IActionResult> GetResponse(string resourceUrl)
+        public async Task<IActionResult> GetResponse(HttpContext context, string resourceUrl)
         {
             var match = _regex.Match(resourceUrl);
 

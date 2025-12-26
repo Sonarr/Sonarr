@@ -5,6 +5,7 @@
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="9.5.4" />
     <PackageReference Include="ImpromptuInterface" Version="8.0.6" />
+    <PackageReference Include="MiniProfiler.AspNetCore" Version="4.5.4" />
     <PackageReference Include="NLog" Version="5.5.1" />
   </ItemGroup>
   <ItemGroup>
