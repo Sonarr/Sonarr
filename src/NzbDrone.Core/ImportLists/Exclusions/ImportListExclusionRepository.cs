@@ -8,9 +8,6 @@ namespace NzbDrone.Core.ImportLists.Exclusions
 {
     public interface IImportListExclusionRepository : IBasicRepository<ImportListExclusion>
     {
-        ImportListExclusion FindByTvdbId(int tvdbId);
-
-        // Async
         Task<ImportListExclusion> FindByTvdbIdAsync(int tvdbId, CancellationToken cancellationToken = default);
     }
 
@@ -19,11 +16,6 @@ namespace NzbDrone.Core.ImportLists.Exclusions
         public ImportListExclusionRepository(IMainDatabase database, IEventAggregator eventAggregator)
             : base(database, eventAggregator)
         {
-        }
-
-        public ImportListExclusion FindByTvdbId(int tvdbId)
-        {
-            return Query(m => m.TvdbId == tvdbId).SingleOrDefault();
         }
 
         public async Task<ImportListExclusion> FindByTvdbIdAsync(int tvdbId, CancellationToken cancellationToken = default)

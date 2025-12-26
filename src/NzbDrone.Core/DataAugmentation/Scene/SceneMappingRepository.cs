@@ -8,10 +8,6 @@ namespace NzbDrone.Core.DataAugmentation.Scene
 {
     public interface ISceneMappingRepository : IBasicRepository<SceneMapping>
     {
-        List<SceneMapping> FindByTvdbid(int tvdbId);
-        void Clear(string type);
-
-        // Async methods
         Task<List<SceneMapping>> FindByTvdbidAsync(int tvdbId, CancellationToken cancellationToken = default);
         Task ClearAsync(string type, CancellationToken cancellationToken = default);
     }
@@ -23,17 +19,6 @@ namespace NzbDrone.Core.DataAugmentation.Scene
         {
         }
 
-        public List<SceneMapping> FindByTvdbid(int tvdbId)
-        {
-            return Query(x => x.TvdbId == tvdbId);
-        }
-
-        public void Clear(string type)
-        {
-            Delete(s => s.Type == type);
-        }
-
-        // Async methods
         public async Task<List<SceneMapping>> FindByTvdbidAsync(int tvdbId, CancellationToken cancellationToken = default)
         {
             return await QueryAsync(x => x.TvdbId == tvdbId, cancellationToken).ConfigureAwait(false);

@@ -9,9 +9,6 @@ namespace NzbDrone.Core.ImportLists.ImportListItems
 {
     public interface IImportListItemRepository : IBasicRepository<ImportListItemInfo>
     {
-        List<ImportListItemInfo> GetAllForLists(List<int> listIds);
-
-        // Async methods
         Task<List<ImportListItemInfo>> GetAllForListsAsync(List<int> listIds, CancellationToken cancellationToken = default);
     }
 
@@ -20,11 +17,6 @@ namespace NzbDrone.Core.ImportLists.ImportListItems
         public ImportListItemRepository(IMainDatabase database, IEventAggregator eventAggregator)
             : base(database, eventAggregator)
         {
-        }
-
-        public List<ImportListItemInfo> GetAllForLists(List<int> listIds)
-        {
-            return Query(x => listIds.Contains(x.ImportListId));
         }
 
         public async Task<List<ImportListItemInfo>> GetAllForListsAsync(List<int> listIds, CancellationToken cancellationToken = default)

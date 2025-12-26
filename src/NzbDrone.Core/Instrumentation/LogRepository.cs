@@ -8,7 +8,6 @@ namespace NzbDrone.Core.Instrumentation
 {
     public interface ILogRepository : IBasicRepository<Log>
     {
-        void Trim();
         Task TrimAsync(CancellationToken cancellationToken = default);
     }
 
@@ -17,13 +16,6 @@ namespace NzbDrone.Core.Instrumentation
         public LogRepository(ILogDatabase database, IEventAggregator eventAggregator)
             : base(database, eventAggregator)
         {
-        }
-
-        public void Trim()
-        {
-            var trimDate = DateTime.UtcNow.AddDays(-7).Date;
-            Delete(c => c.Time <= trimDate);
-            Vacuum();
         }
 
         public async Task TrimAsync(CancellationToken cancellationToken = default)

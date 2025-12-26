@@ -10,13 +10,6 @@ namespace NzbDrone.Core.Messaging.Commands
 {
     public interface ICommandRepository : IBasicRepository<CommandModel>
     {
-        void Trim();
-        void OrphanStarted();
-        List<CommandModel> Queued();
-        void Start(CommandModel command);
-        void End(CommandModel command);
-
-        // Async
         Task TrimAsync(CancellationToken cancellationToken = default);
         Task OrphanStartedAsync(CancellationToken cancellationToken = default);
         Task<List<CommandModel>> QueuedAsync(CancellationToken cancellationToken = default);
@@ -31,45 +24,6 @@ namespace NzbDrone.Core.Messaging.Commands
         {
         }
 
-        public void Trim()
-        {
-            var date = DateTime.UtcNow.AddDays(-1);
-
-            Delete(c => c.EndedAt < date);
-        }
-
-        public void OrphanStarted()
-        {
-            var sql = @"UPDATE ""Commands"" SET ""Status"" = @Orphaned, ""EndedAt"" = @Ended WHERE ""Status"" = @Started";
-            var args = new
-            {
-                Orphaned = (int)CommandStatus.Orphaned,
-                Started = (int)CommandStatus.Started,
-                Ended = DateTime.UtcNow
-            };
-
-            using (var conn = _database.OpenConnection())
-            {
-                conn.Execute(sql, args);
-            }
-        }
-
-        public List<CommandModel> Queued()
-        {
-            return Query(x => x.Status == CommandStatus.Queued);
-        }
-
-        public void Start(CommandModel command)
-        {
-            SetFields(command, c => c.StartedAt, c => c.Status);
-        }
-
-        public void End(CommandModel command)
-        {
-            SetFields(command, c => c.EndedAt, c => c.Status, c => c.Duration, c => c.Exception);
-        }
-
-        // Async
         public async Task TrimAsync(CancellationToken cancellationToken = default)
         {
             var date = DateTime.UtcNow.AddDays(-1);

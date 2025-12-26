@@ -10,19 +10,6 @@ namespace NzbDrone.Core.Tv
 {
     public interface ISeriesRepository : IBasicRepository<Series>
     {
-        bool SeriesPathExists(string path);
-        Series FindByTitle(string cleanTitle);
-        Series FindByTitle(string cleanTitle, int year);
-        List<Series> FindByTitleInexact(string cleanTitle);
-        Series FindByTvdbId(int tvdbId);
-        Series FindByTvRageId(int tvRageId);
-        Series FindByImdbId(string imdbId);
-        Series FindByPath(string path);
-        List<int> AllSeriesTvdbIds();
-        Dictionary<int, string> AllSeriesPaths();
-        Dictionary<int, List<int>> AllSeriesTags();
-
-        // Async
         Task<bool> SeriesPathExistsAsync(string path, CancellationToken cancellationToken = default);
         Task<Series> FindByTitleAsync(string cleanTitle, CancellationToken cancellationToken = default);
         Task<Series> FindByTitleAsync(string cleanTitle, int year, CancellationToken cancellationToken = default);
@@ -43,89 +30,6 @@ namespace NzbDrone.Core.Tv
         {
         }
 
-        public bool SeriesPathExists(string path)
-        {
-            return Query(c => c.Path == path).Any();
-        }
-
-        public Series FindByTitle(string cleanTitle)
-        {
-            cleanTitle = cleanTitle.ToLowerInvariant();
-
-            var series = Query(s => s.CleanTitle == cleanTitle)
-                                        .ToList();
-
-            return ReturnSingleSeriesOrThrow(series);
-        }
-
-        public Series FindByTitle(string cleanTitle, int year)
-        {
-            cleanTitle = cleanTitle.ToLowerInvariant();
-
-            var series = Query(s => s.CleanTitle == cleanTitle && s.Year == year).ToList();
-
-            return ReturnSingleSeriesOrThrow(series);
-        }
-
-        public List<Series> FindByTitleInexact(string cleanTitle)
-        {
-            var builder = Builder().Where($"instr(@cleanTitle, \"Series\".\"CleanTitle\")", new { cleanTitle = cleanTitle });
-
-            if (_database.DatabaseType == DatabaseType.PostgreSQL)
-            {
-                builder = Builder().Where($"(strpos(@cleanTitle, \"Series\".\"CleanTitle\") > 0)", new { cleanTitle = cleanTitle });
-            }
-
-            return Query(builder).ToList();
-        }
-
-        public Series FindByTvdbId(int tvdbId)
-        {
-            return Query(s => s.TvdbId == tvdbId).SingleOrDefault();
-        }
-
-        public Series FindByTvRageId(int tvRageId)
-        {
-            return Query(s => s.TvRageId == tvRageId).SingleOrDefault();
-        }
-
-        public Series FindByImdbId(string imdbId)
-        {
-            return Query(s => s.ImdbId == imdbId).SingleOrDefault();
-        }
-
-        public Series FindByPath(string path)
-        {
-            return Query(s => s.Path == path)
-                        .FirstOrDefault();
-        }
-
-        public List<int> AllSeriesTvdbIds()
-        {
-            using (var conn = _database.OpenConnection())
-            {
-                return conn.Query<int>("SELECT \"TvdbId\" FROM \"Series\"").ToList();
-            }
-        }
-
-        public Dictionary<int, string> AllSeriesPaths()
-        {
-            using (var conn = _database.OpenConnection())
-            {
-                var strSql = "SELECT \"Id\" AS Key, \"Path\" AS Value FROM \"Series\"";
-                return conn.Query<KeyValuePair<int, string>>(strSql).ToDictionary(x => x.Key, x => x.Value);
-            }
-        }
-
-        public Dictionary<int, List<int>> AllSeriesTags()
-        {
-            using (var conn = _database.OpenConnection())
-            {
-                var strSql = "SELECT \"Id\" AS Key, \"Tags\" AS Value FROM \"Series\" WHERE \"Tags\" IS NOT NULL";
-                return conn.Query<KeyValuePair<int, List<int>>>(strSql).ToDictionary(x => x.Key, x => x.Value);
-            }
-        }
-
         private Series ReturnSingleSeriesOrThrow(List<Series> series)
         {
             if (series.Count == 0)
@@ -140,8 +44,6 @@ namespace NzbDrone.Core.Tv
 
             throw new MultipleSeriesFoundException(series, "Expected one series, but found {0}. Matching series: {1}", series.Count, string.Join(", ", series));
         }
-
-        // Async
 
         public async Task<bool> SeriesPathExistsAsync(string path, CancellationToken cancellationToken = default)
         {

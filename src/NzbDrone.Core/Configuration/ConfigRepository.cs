@@ -8,10 +8,6 @@ namespace NzbDrone.Core.Configuration
 {
     public interface IConfigRepository : IBasicRepository<Config>
     {
-        Config Get(string key);
-        Config Upsert(string key, string value);
-
-        // Async methods
         Task<Config> GetAsync(string key, CancellationToken cancellationToken = default);
         Task<Config> UpsertAsync(string key, string value, CancellationToken cancellationToken = default);
     }
@@ -23,26 +19,6 @@ namespace NzbDrone.Core.Configuration
         {
         }
 
-        public Config Get(string key)
-        {
-            return Query(c => c.Key == key).SingleOrDefault();
-        }
-
-        public Config Upsert(string key, string value)
-        {
-            var dbValue = Get(key);
-
-            if (dbValue == null)
-            {
-                return Insert(new Config { Key = key, Value = value });
-            }
-
-            dbValue.Value = value;
-
-            return Update(dbValue);
-        }
-
-        // Async methods
         public async Task<Config> GetAsync(string key, CancellationToken cancellationToken = default)
         {
             var results = await QueryAsync(c => c.Key == key, cancellationToken).ConfigureAwait(false);

@@ -12,19 +12,6 @@ namespace NzbDrone.Core.History
 {
     public interface IHistoryRepository : IBasicRepository<EpisodeHistory>
     {
-        EpisodeHistory MostRecentForEpisode(int episodeId);
-        List<EpisodeHistory> FindByEpisodeId(int episodeId);
-        EpisodeHistory MostRecentForDownloadId(string downloadId);
-        List<EpisodeHistory> FindByDownloadId(string downloadId);
-        List<EpisodeHistory> GetBySeries(int seriesId, EpisodeHistoryEventType? eventType);
-        List<EpisodeHistory> GetBySeason(int seriesId, int seasonNumber, EpisodeHistoryEventType? eventType);
-        List<EpisodeHistory> GetByEpisode(int episodeId, EpisodeHistoryEventType? eventType);
-        List<EpisodeHistory> FindDownloadHistory(int idSeriesId, QualityModel quality);
-        void DeleteForSeries(List<int> seriesIds);
-        List<EpisodeHistory> Since(DateTime date, EpisodeHistoryEventType? eventType);
-        PagingSpec<EpisodeHistory> GetPaged(PagingSpec<EpisodeHistory> pagingSpec, int[] languages, int[] qualities);
-
-        // Async methods
         Task<EpisodeHistory> MostRecentForEpisodeAsync(int episodeId, CancellationToken cancellationToken = default);
         Task<List<EpisodeHistory>> FindByEpisodeIdAsync(int episodeId, CancellationToken cancellationToken = default);
         Task<EpisodeHistory> MostRecentForDownloadIdAsync(string downloadId, CancellationToken cancellationToken = default);
@@ -45,124 +32,6 @@ namespace NzbDrone.Core.History
         {
         }
 
-        public EpisodeHistory MostRecentForEpisode(int episodeId)
-        {
-            return Query(h => h.EpisodeId == episodeId).MaxBy(h => h.Date);
-        }
-
-        public List<EpisodeHistory> FindByEpisodeId(int episodeId)
-        {
-            return Query(h => h.EpisodeId == episodeId)
-                        .OrderByDescending(h => h.Date)
-                        .ToList();
-        }
-
-        public EpisodeHistory MostRecentForDownloadId(string downloadId)
-        {
-            return Query(h => h.DownloadId == downloadId).MaxBy(h => h.Date);
-        }
-
-        public List<EpisodeHistory> FindByDownloadId(string downloadId)
-        {
-            return Query(h => h.DownloadId == downloadId);
-        }
-
-        public List<EpisodeHistory> GetBySeries(int seriesId, EpisodeHistoryEventType? eventType)
-        {
-            var builder = Builder().Join<EpisodeHistory, Series>((h, a) => h.SeriesId == a.Id)
-                                   .Join<EpisodeHistory, Episode>((h, a) => h.EpisodeId == a.Id)
-                                   .Where<EpisodeHistory>(h => h.SeriesId == seriesId);
-
-            if (eventType.HasValue)
-            {
-                builder.Where<EpisodeHistory>(h => h.EventType == eventType);
-            }
-
-            return Query(builder).OrderByDescending(h => h.Date).ToList();
-        }
-
-        public List<EpisodeHistory> GetBySeason(int seriesId, int seasonNumber, EpisodeHistoryEventType? eventType)
-        {
-            var builder = Builder()
-                .Join<EpisodeHistory, Episode>((h, a) => h.EpisodeId == a.Id)
-                .Join<EpisodeHistory, Series>((h, a) => h.SeriesId == a.Id)
-                .Where<EpisodeHistory>(h => h.SeriesId == seriesId && h.Episode.SeasonNumber == seasonNumber);
-
-            if (eventType.HasValue)
-            {
-                builder.Where<EpisodeHistory>(h => h.EventType == eventType);
-            }
-
-            return _database.QueryJoined<EpisodeHistory, Episode>(
-                builder,
-                (history, episode) =>
-                {
-                    history.Episode = episode;
-                    return history;
-                }).OrderByDescending(h => h.Date).ToList();
-        }
-
-        public List<EpisodeHistory> GetByEpisode(int episodeId, EpisodeHistoryEventType? eventType)
-        {
-            var builder = Builder()
-                .Join<EpisodeHistory, Series>((h, a) => h.SeriesId == a.Id)
-                .Join<EpisodeHistory, Episode>((h, a) => h.EpisodeId == a.Id)
-                .Where<EpisodeHistory>(h => h.EpisodeId == episodeId);
-
-            if (eventType.HasValue)
-            {
-                builder.Where<EpisodeHistory>(h => h.EventType == eventType);
-            }
-
-            return Query(builder).OrderByDescending(h => h.Date).ToList();
-        }
-
-        public List<EpisodeHistory> FindDownloadHistory(int idSeriesId, QualityModel quality)
-        {
-            return Query(h =>
-                 h.SeriesId == idSeriesId &&
-                 h.Quality == quality &&
-                 (h.EventType == EpisodeHistoryEventType.Grabbed ||
-                 h.EventType == EpisodeHistoryEventType.DownloadFailed ||
-                 h.EventType == EpisodeHistoryEventType.DownloadFolderImported))
-                 .ToList();
-        }
-
-        public void DeleteForSeries(List<int> seriesIds)
-        {
-            Delete(c => seriesIds.Contains(c.SeriesId));
-        }
-
-        public List<EpisodeHistory> Since(DateTime date, EpisodeHistoryEventType? eventType)
-        {
-            var builder = Builder()
-                .Join<EpisodeHistory, Series>((h, a) => h.SeriesId == a.Id)
-                .Join<EpisodeHistory, Episode>((h, a) => h.EpisodeId == a.Id)
-                .Where<EpisodeHistory>(x => x.Date >= date);
-
-            if (eventType.HasValue)
-            {
-                builder.Where<EpisodeHistory>(h => h.EventType == eventType);
-            }
-
-            return _database.QueryJoined<EpisodeHistory, Series, Episode>(builder, (history, series, episode) =>
-            {
-                history.Series = series;
-                history.Episode = episode;
-                return history;
-            }).OrderBy(h => h.Date).ToList();
-        }
-
-        public PagingSpec<EpisodeHistory> GetPaged(PagingSpec<EpisodeHistory> pagingSpec, int[] languages, int[] qualities)
-        {
-            pagingSpec.Records = GetPagedRecords(PagedBuilder(languages, qualities), pagingSpec, PagedQuery);
-
-            var countTemplate = $"SELECT COUNT(*) FROM (SELECT /**select**/ FROM \"{TableMapping.Mapper.TableNameMapping(typeof(EpisodeHistory))}\" /**join**/ /**innerjoin**/ /**leftjoin**/ /**where**/ /**groupby**/ /**having**/) AS \"Inner\"";
-            pagingSpec.TotalRecords = GetPagedRecordCount(PagedBuilder(languages, qualities).Select(typeof(EpisodeHistory)), pagingSpec, countTemplate);
-
-            return pagingSpec;
-        }
-
         private SqlBuilder PagedBuilder(int[] languages, int[] qualities)
         {
             var builder = Builder()
@@ -181,14 +50,6 @@ namespace NzbDrone.Core.History
 
             return builder;
         }
-
-        protected override IEnumerable<EpisodeHistory> PagedQuery(SqlBuilder builder) =>
-            _database.QueryJoined<EpisodeHistory, Series, Episode>(builder, (history, series, episode) =>
-            {
-                history.Series = series;
-                history.Episode = episode;
-                return history;
-            });
 
         private string BuildLanguageWhereClause(int[] languages)
         {
@@ -216,8 +77,6 @@ namespace NzbDrone.Core.History
 
             return $"({string.Join(" OR ", clauses)})";
         }
-
-        // Async methods
 
         public async Task<EpisodeHistory> MostRecentForEpisodeAsync(int episodeId, CancellationToken cancellationToken = default)
         {

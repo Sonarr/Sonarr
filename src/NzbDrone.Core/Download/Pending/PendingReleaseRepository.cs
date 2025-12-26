@@ -10,11 +10,6 @@ namespace NzbDrone.Core.Download.Pending
 {
     public interface IPendingReleaseRepository : IBasicRepository<PendingRelease>
     {
-        void DeleteBySeriesIds(List<int> seriesIds);
-        List<PendingRelease> AllBySeriesId(int seriesId);
-        List<PendingRelease> WithoutFallback();
-
-        // Async methods
         Task DeleteBySeriesIdsAsync(List<int> seriesIds, CancellationToken cancellationToken = default);
         Task<List<PendingRelease>> AllBySeriesIdAsync(int seriesId, CancellationToken cancellationToken = default);
         Task<List<PendingRelease>> WithoutFallbackAsync(CancellationToken cancellationToken = default);
@@ -25,25 +20,6 @@ namespace NzbDrone.Core.Download.Pending
         public PendingReleaseRepository(IMainDatabase database, IEventAggregator eventAggregator)
             : base(database, eventAggregator)
         {
-        }
-
-        public void DeleteBySeriesIds(List<int> seriesIds)
-        {
-            Delete(r => seriesIds.Contains(r.SeriesId));
-        }
-
-        public List<PendingRelease> AllBySeriesId(int seriesId)
-        {
-            return Query(p => p.SeriesId == seriesId);
-        }
-
-        public List<PendingRelease> WithoutFallback()
-        {
-            var builder = new SqlBuilder(_database.DatabaseType)
-                .InnerJoin<PendingRelease, Series>((p, s) => p.SeriesId == s.Id)
-                .Where<PendingRelease>(p => p.Reason != PendingReleaseReason.Fallback);
-
-            return Query(builder);
         }
 
         public async Task<List<PendingRelease>> AllBySeriesIdAsync(int seriesId, CancellationToken cancellationToken = default)

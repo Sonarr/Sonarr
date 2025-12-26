@@ -12,10 +12,6 @@ namespace NzbDrone.Core.SeriesStats
 {
     public interface ISeriesStatisticsRepository
     {
-        List<SeasonStatistics> SeriesStatistics();
-        List<SeasonStatistics> SeriesStatistics(int seriesId);
-
-        // Async methods
         Task<List<SeasonStatistics>> SeriesStatisticsAsync(CancellationToken cancellationToken = default);
         Task<List<SeasonStatistics>> SeriesStatisticsAsync(int seriesId, CancellationToken cancellationToken = default);
     }
@@ -32,21 +28,6 @@ namespace NzbDrone.Core.SeriesStats
             _database = database;
         }
 
-        public List<SeasonStatistics> SeriesStatistics()
-        {
-            var time = DateTime.UtcNow;
-            return MapResults(Query(EpisodesBuilder(time), _selectEpisodesTemplate),
-                Query(EpisodeFilesBuilder(), _selectEpisodeFilesTemplate));
-        }
-
-        public List<SeasonStatistics> SeriesStatistics(int seriesId)
-        {
-            var time = DateTime.UtcNow;
-
-            return MapResults(Query(EpisodesBuilder(time).Where<Episode>(x => x.SeriesId == seriesId), _selectEpisodesTemplate),
-                Query(EpisodeFilesBuilder().Where<EpisodeFile>(x => x.SeriesId == seriesId), _selectEpisodeFilesTemplate));
-        }
-
         private List<SeasonStatistics> MapResults(List<SeasonStatistics> episodesResult, List<SeasonStatistics> filesResult)
         {
             episodesResult.ForEach(e =>
@@ -58,16 +39,6 @@ namespace NzbDrone.Core.SeriesStats
             });
 
             return episodesResult;
-        }
-
-        private List<SeasonStatistics> Query(SqlBuilder builder, string template)
-        {
-            var sql = builder.AddTemplate(template).LogQuery();
-
-            using (var conn = _database.OpenConnection())
-            {
-                return conn.Query<SeasonStatistics>(sql.RawSql, sql.Parameters).ToList();
-            }
         }
 
         private SqlBuilder EpisodesBuilder(DateTime currentDate)
@@ -114,8 +85,6 @@ namespace NzbDrone.Core.SeriesStats
                 .GroupBy<EpisodeFile>(x => x.SeriesId)
                 .GroupBy<EpisodeFile>(x => x.SeasonNumber);
         }
-
-        // Async methods
 
         public async Task<List<SeasonStatistics>> SeriesStatisticsAsync(CancellationToken cancellationToken = default)
         {

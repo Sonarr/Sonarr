@@ -9,14 +9,6 @@ namespace NzbDrone.Core.MediaFiles
 {
     public interface IMediaFileRepository : IBasicRepository<EpisodeFile>
     {
-        List<EpisodeFile> GetFilesBySeries(int seriesId);
-        List<EpisodeFile> GetFilesBySeriesIds(List<int> seriesIds);
-        List<EpisodeFile> GetFilesBySeason(int seriesId, int seasonNumber);
-        List<EpisodeFile> GetFilesWithoutMediaInfo();
-        List<EpisodeFile> GetFilesWithRelativePath(int seriesId, string relativePath);
-        void DeleteForSeries(List<int> seriesIds);
-
-        // Async
         Task<List<EpisodeFile>> GetFilesBySeriesAsync(int seriesId, CancellationToken cancellationToken = default);
         Task<List<EpisodeFile>> GetFilesBySeriesIdsAsync(List<int> seriesIds, CancellationToken cancellationToken = default);
         Task<List<EpisodeFile>> GetFilesBySeasonAsync(int seriesId, int seasonNumber, CancellationToken cancellationToken = default);
@@ -31,39 +23,6 @@ namespace NzbDrone.Core.MediaFiles
             : base(database, eventAggregator)
         {
         }
-
-        public List<EpisodeFile> GetFilesBySeries(int seriesId)
-        {
-            return Query(c => c.SeriesId == seriesId).ToList();
-        }
-
-        public List<EpisodeFile> GetFilesBySeriesIds(List<int> seriesIds)
-        {
-            return Query(c => seriesIds.Contains(c.SeriesId)).ToList();
-        }
-
-        public List<EpisodeFile> GetFilesBySeason(int seriesId, int seasonNumber)
-        {
-            return Query(c => c.SeriesId == seriesId && c.SeasonNumber == seasonNumber).ToList();
-        }
-
-        public List<EpisodeFile> GetFilesWithoutMediaInfo()
-        {
-            return Query(c => c.MediaInfo == null).ToList();
-        }
-
-        public List<EpisodeFile> GetFilesWithRelativePath(int seriesId, string relativePath)
-        {
-            return Query(c => c.SeriesId == seriesId && c.RelativePath == relativePath)
-                        .ToList();
-        }
-
-        public void DeleteForSeries(List<int> seriesIds)
-        {
-            Delete(x => seriesIds.Contains(x.SeriesId));
-        }
-
-        // Async
 
         public async Task<List<EpisodeFile>> GetFilesBySeriesAsync(int seriesId, CancellationToken cancellationToken = default)
         {

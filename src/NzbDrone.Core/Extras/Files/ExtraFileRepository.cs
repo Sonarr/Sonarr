@@ -10,15 +10,6 @@ namespace NzbDrone.Core.Extras.Files
     public interface IExtraFileRepository<TExtraFile> : IBasicRepository<TExtraFile>
         where TExtraFile : ExtraFile, new()
     {
-        void DeleteForSeriesIds(List<int> seriesIds);
-        void DeleteForSeason(int seriesId, int seasonNumber);
-        void DeleteForEpisodeFile(int episodeFileId);
-        List<TExtraFile> GetFilesBySeries(int seriesId);
-        List<TExtraFile> GetFilesBySeason(int seriesId, int seasonNumber);
-        List<TExtraFile> GetFilesByEpisodeFile(int episodeFileId);
-        TExtraFile FindByPath(int seriesId, string path);
-
-        // Async methods
         Task DeleteForSeriesIdsAsync(List<int> seriesIds, CancellationToken cancellationToken = default);
         Task DeleteForSeasonAsync(int seriesId, int seasonNumber, CancellationToken cancellationToken = default);
         Task DeleteForEpisodeFileAsync(int episodeFileId, CancellationToken cancellationToken = default);
@@ -36,42 +27,6 @@ namespace NzbDrone.Core.Extras.Files
         {
         }
 
-        public void DeleteForSeriesIds(List<int> seriesIds)
-        {
-            Delete(c => seriesIds.Contains(c.SeriesId));
-        }
-
-        public void DeleteForSeason(int seriesId, int seasonNumber)
-        {
-            Delete(c => c.SeriesId == seriesId && c.SeasonNumber == seasonNumber);
-        }
-
-        public void DeleteForEpisodeFile(int episodeFileId)
-        {
-            Delete(c => c.EpisodeFileId == episodeFileId);
-        }
-
-        public List<TExtraFile> GetFilesBySeries(int seriesId)
-        {
-            return Query(c => c.SeriesId == seriesId);
-        }
-
-        public List<TExtraFile> GetFilesBySeason(int seriesId, int seasonNumber)
-        {
-            return Query(c => c.SeriesId == seriesId && c.SeasonNumber == seasonNumber);
-        }
-
-        public List<TExtraFile> GetFilesByEpisodeFile(int episodeFileId)
-        {
-            return Query(c => c.EpisodeFileId == episodeFileId);
-        }
-
-        public TExtraFile FindByPath(int seriesId, string path)
-        {
-            return Query(c => c.SeriesId == seriesId && c.RelativePath == path).SingleOrDefault();
-        }
-
-        // Async methods
         public async Task DeleteForSeriesIdsAsync(List<int> seriesIds, CancellationToken cancellationToken = default)
         {
             await DeleteAsync(c => seriesIds.Contains(c.SeriesId), cancellationToken).ConfigureAwait(false);

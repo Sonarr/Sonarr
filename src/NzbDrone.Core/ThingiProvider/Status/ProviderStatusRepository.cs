@@ -9,10 +9,6 @@ namespace NzbDrone.Core.ThingiProvider.Status
     public interface IProviderStatusRepository<TModel> : IBasicRepository<TModel>
         where TModel : ProviderStatusBase, new()
     {
-        TModel FindByProviderId(int providerId);
-        void DeleteByProviderId(int providerId);
-
-        // Async
         Task<TModel> FindByProviderIdAsync(int providerId, CancellationToken cancellationToken = default);
         Task DeleteByProviderIdAsync(int providerId, CancellationToken cancellationToken = default);
     }
@@ -24,18 +20,6 @@ namespace NzbDrone.Core.ThingiProvider.Status
             : base(database, eventAggregator)
         {
         }
-
-        public TModel FindByProviderId(int providerId)
-        {
-            return Query(c => c.ProviderId == providerId).SingleOrDefault();
-        }
-
-        public void DeleteByProviderId(int providerId)
-        {
-            Delete(c => c.ProviderId == providerId);
-        }
-
-        // Async
 
         public async Task<TModel> FindByProviderIdAsync(int providerId, CancellationToken cancellationToken = default)
         {

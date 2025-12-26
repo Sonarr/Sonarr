@@ -9,10 +9,6 @@ namespace NzbDrone.Core.Authentication
 {
     public interface IUserRepository : IBasicRepository<User>
     {
-        User FindUser(string username);
-        User FindUser(Guid identifier);
-
-        // Async methods
         Task<User> FindUserAsync(string username, CancellationToken cancellationToken = default);
         Task<User> FindUserAsync(Guid identifier, CancellationToken cancellationToken = default);
     }
@@ -24,17 +20,6 @@ namespace NzbDrone.Core.Authentication
         {
         }
 
-        public User FindUser(string username)
-        {
-            return Query(x => x.Username == username).SingleOrDefault();
-        }
-
-        public User FindUser(Guid identifier)
-        {
-            return Query(x => x.Identifier == identifier).SingleOrDefault();
-        }
-
-        // Async methods
         public async Task<User> FindUserAsync(string username, CancellationToken cancellationToken = default)
         {
             var users = await QueryAsync(x => x.Username == username, cancellationToken).ConfigureAwait(false);

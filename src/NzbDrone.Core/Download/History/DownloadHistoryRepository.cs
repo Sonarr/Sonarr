@@ -9,10 +9,6 @@ namespace NzbDrone.Core.Download.History
 {
     public interface IDownloadHistoryRepository : IBasicRepository<DownloadHistory>
     {
-        List<DownloadHistory> FindByDownloadId(string downloadId);
-        void DeleteBySeriesIds(List<int> seriesIds);
-
-        // Async methods
         Task<List<DownloadHistory>> FindByDownloadIdAsync(string downloadId, CancellationToken cancellationToken = default);
         Task DeleteBySeriesIdsAsync(List<int> seriesIds, CancellationToken cancellationToken = default);
     }
@@ -24,17 +20,6 @@ namespace NzbDrone.Core.Download.History
         {
         }
 
-        public List<DownloadHistory> FindByDownloadId(string downloadId)
-        {
-            return Query(h => h.DownloadId == downloadId).OrderByDescending(h => h.Date).ToList();
-        }
-
-        public void DeleteBySeriesIds(List<int> seriesIds)
-        {
-            Delete(r => seriesIds.Contains(r.SeriesId));
-        }
-
-        // Async methods
         public async Task<List<DownloadHistory>> FindByDownloadIdAsync(string downloadId, CancellationToken cancellationToken = default)
         {
             var downloadHistories = await QueryAsync(h => h.DownloadId == downloadId, cancellationToken).ConfigureAwait(false);

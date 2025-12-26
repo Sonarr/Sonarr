@@ -9,9 +9,6 @@ namespace NzbDrone.Core.Indexers
 {
     public interface IIndexerRepository : IProviderRepository<IndexerDefinition>
     {
-        IndexerDefinition FindByName(string name);
-
-        // Async
         Task<IndexerDefinition> FindByNameAsync(string name, CancellationToken cancellationToken = default);
     }
 
@@ -21,13 +18,6 @@ namespace NzbDrone.Core.Indexers
             : base(database, eventAggregator)
         {
         }
-
-        public IndexerDefinition FindByName(string name)
-        {
-            return Query(i => i.Name == name).SingleOrDefault();
-        }
-
-        // Async
 
         public async Task<IndexerDefinition> FindByNameAsync(string name, CancellationToken cancellationToken = default)
         {
