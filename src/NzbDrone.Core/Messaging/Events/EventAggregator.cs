@@ -7,6 +7,7 @@ using NzbDrone.Common;
 using NzbDrone.Common.EnsureThat;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Messaging;
+using NzbDrone.Common.Reflection;
 using NzbDrone.Common.TPL;
 
 namespace NzbDrone.Core.Messaging.Events
@@ -56,9 +57,9 @@ namespace NzbDrone.Core.Messaging.Events
 
             var eventName = GetEventName(@event.GetType());
 
-            if (_runtimeInfo.IsExiting && Attribute.IsDefined(@event.GetType(), typeof(LifecycleEventAttribute)))
+            if (_runtimeInfo.IsExiting && @event.GetType().HasAttribute<LifecycleEventAttribute>())
             {
-                _logger.Debug("Event {0} blocked due to application shutdown", eventName);
+                _logger.Warn("Event {0} blocked due to application shutdown", eventName);
                 return;
             }
 
@@ -86,7 +87,15 @@ namespace NzbDrone.Core.Messaging.Events
             {
                 if (!_eventSubscribers.TryGetValue(eventName, out var target))
                 {
-                    _eventSubscribers[eventName] = target = new EventSubscribers<TEvent>(_serviceFactory);
+                    try
+                    {
+                        _eventSubscribers[eventName] = target = new EventSubscribers<TEvent>(_serviceFactory);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.Warn(ex, "Unable to resolve event subscribers for {0}, container may be disposed", eventName);
+                        return;
+                    }
                 }
 
                 subscribers = target as EventSubscribers<TEvent>;
