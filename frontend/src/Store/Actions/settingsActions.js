@@ -1,4 +1,3 @@
-import { createAction } from 'redux-actions';
 import { handleThunks } from 'Store/thunks';
 import createHandleActions from './Creators/createHandleActions';
 import autoTaggings from './Settings/autoTaggings';
@@ -91,19 +90,8 @@ export const defaultState = {
 };
 
 export const persistState = [
-  'settings.advancedSettings',
   'settings.importListExclusions.pageSize'
 ];
-
-//
-// Actions Types
-
-export const TOGGLE_ADVANCED_SETTINGS = 'settings/toggleAdvancedSettings';
-
-//
-// Action Creators
-
-export const toggleAdvancedSettings = createAction(TOGGLE_ADVANCED_SETTINGS);
 
 //
 // Action Handlers
@@ -140,11 +128,6 @@ export const actionHandlers = handleThunks({
 // Reducers
 
 export const reducers = createHandleActions({
-
-  [TOGGLE_ADVANCED_SETTINGS]: (state, { payload }) => {
-    return Object.assign({}, state, { advancedSettings: !state.advancedSettings });
-  },
-
   ...autoTaggingSpecifications.reducers,
   ...autoTaggings.reducers,
   ...customFormatSpecifications.reducers,

@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import AppState from 'App/State/AppState';
+import { useDispatch } from 'react-redux';
 import Modal from 'Components/Modal/Modal';
 import { sizes } from 'Helpers/Props';
+import { useShowAdvancedSettings } from 'Settings/advancedSettingsStore';
 import { clearPendingChanges } from 'Store/Actions/baseActions';
 import EditMetadataModalContent, {
   EditMetadataModalContentProps,
@@ -20,9 +20,7 @@ function EditMetadataModal({
 }: EditMetadataModalProps) {
   const dispatch = useDispatch();
 
-  const advancedSettings = useSelector(
-    (state: AppState) => state.settings.advancedSettings
-  );
+  const advancedSettings = useShowAdvancedSettings();
 
   const handleModalClose = useCallback(() => {
     dispatch(clearPendingChanges({ section: 'metadata' }));
