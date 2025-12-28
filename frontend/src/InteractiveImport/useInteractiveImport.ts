@@ -165,7 +165,6 @@ export const useReprocessInteractiveImportItems = () => {
       })[0];
 
       if (!currentData) {
-        console.info('\x1b[36m[MarkTest] no data\x1b[0m');
         return;
       }
 

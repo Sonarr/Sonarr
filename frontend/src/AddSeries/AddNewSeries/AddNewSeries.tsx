@@ -38,11 +38,7 @@ function AddNewSeries() {
     setIsFetching(false);
   }, []);
 
-  const {
-    isFetching: isFetchingApi,
-    error,
-    data = [],
-  } = useLookupSeries(query);
+  const { isFetching: isFetchingApi, error, data } = useLookupSeries(query);
 
   useEffect(() => {
     setIsFetching(isFetchingApi);

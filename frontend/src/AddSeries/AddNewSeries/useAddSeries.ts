@@ -12,18 +12,25 @@ interface AddSeriesPayload
       'monitor' | 'searchForMissingEpisodes' | 'searchForCutoffUnmetEpisodes'
     > {}
 
-export const useLookupSeries = (query: string) => {
-  return useApiQuery<AddSeries[]>({
+const DEFAULT_SERIES: AddSeries[] = [];
+
+export const useLookupSeries = (query: string, isEnabled = true) => {
+  const result = useApiQuery<AddSeries[]>({
     path: '/series/lookup',
     queryParams: {
       term: query,
     },
     queryOptions: {
-      enabled: !!query,
+      enabled: isEnabled && !!query,
       // Disable refetch on window focus to prevent refetching when the user switch tabs
       refetchOnWindowFocus: false,
     },
   });
+
+  return {
+    ...result,
+    data: result.data ?? DEFAULT_SERIES,
+  };
 };
 
 export const useAddSeries = () => {

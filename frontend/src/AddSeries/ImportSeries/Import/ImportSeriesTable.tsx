@@ -1,33 +1,25 @@
-import React, { RefObject, useCallback, useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { RefObject, useCallback, useRef } from 'react';
 import { FixedSizeList, ListChildComponentProps } from 'react-window';
-import { useAddSeriesOptions } from 'AddSeries/addSeriesOptionsStore';
 import { useAppDimension } from 'App/appStore';
 import { useSelect } from 'App/Select/SelectContext';
-import AppState from 'App/State/AppState';
-import { ImportSeries } from 'App/State/ImportSeriesAppState';
 import VirtualTable from 'Components/Table/VirtualTable';
-import usePrevious from 'Helpers/Hooks/usePrevious';
-import useSeries from 'Series/useSeries';
-import {
-  queueLookupSeries,
-  setImportSeriesValue,
-} from 'Store/Actions/importSeriesActions';
 import { CheckInputChanged } from 'typings/inputs';
-import { SelectStateInputProps } from 'typings/props';
-import { UnmappedFolder } from 'typings/RootFolder';
 import ImportSeriesHeader from './ImportSeriesHeader';
 import ImportSeriesRow from './ImportSeriesRow';
+import {
+  UnamppedFolderItem,
+  useEnsureImportSeriesItems,
+} from './importSeriesStore';
 import styles from './ImportSeriesTable.css';
 
 const ROW_HEIGHT = 52;
 
 interface RowItemData {
-  items: ImportSeries[];
+  items: UnamppedFolderItem[];
 }
 
 interface ImportSeriesTableProps {
-  unmappedFolders: UnmappedFolder[];
+  items: UnamppedFolderItem[];
   scrollerRef: RefObject<HTMLElement>;
 }
 
@@ -49,42 +41,17 @@ function Row({ index, style, data }: ListChildComponentProps<RowItemData>) {
       }}
       className={styles.row}
     >
-      <ImportSeriesRow key={item.id} id={item.id} />
+      <ImportSeriesRow key={item.id} unmappedFolder={item} />
     </div>
   );
 }
 
-function ImportSeriesTable({
-  unmappedFolders,
-  scrollerRef,
-}: ImportSeriesTableProps) {
-  const dispatch = useDispatch();
-
-  const { monitor, qualityProfileId, seriesType, seasonFolder } =
-    useAddSeriesOptions();
-
-  const items = useSelector((state: AppState) => state.importSeries.items);
+function ImportSeriesTable({ items, scrollerRef }: ImportSeriesTableProps) {
   const isSmallScreen = useAppDimension('isSmallScreen');
-  const { data: allSeries } = useSeries();
-  const {
-    allSelected,
-    allUnselected,
-    getIsSelected,
-    toggleSelected,
-    selectAll,
-    unselectAll,
-  } = useSelect();
-
-  const defaultValues = useRef({
-    monitor,
-    qualityProfileId,
-    seriesType,
-    seasonFolder,
-  });
+  const { allSelected, allUnselected, selectAll, unselectAll, useHasItems } =
+    useSelect();
 
   const listRef = useRef<FixedSizeList<RowItemData>>(null);
-  const initialUnmappedFolders = useRef(unmappedFolders);
-  const previousItems = usePrevious(items);
 
   const handleSelectAllChange = useCallback(
     ({ value }: CheckInputChanged) => {
@@ -97,95 +64,11 @@ function ImportSeriesTable({
     [selectAll, unselectAll]
   );
 
-  const handleSelectedChange = useCallback(
-    ({ id, value, shiftKey }: SelectStateInputProps<string>) => {
-      toggleSelected({
-        id,
-        isSelected: value,
-        shiftKey,
-      });
-    },
-    [toggleSelected]
-  );
+  const hasSelectItems = useHasItems();
 
-  // TODO: Check if this is still needed
-  const handleRemoveSelectedStateItem = useCallback((_id: string) => {
-    // selectDispatch({
-    //   type: 'removeItem',
-    //   id,
-    // });
-  }, []);
+  useEnsureImportSeriesItems(items);
 
-  useEffect(() => {
-    initialUnmappedFolders.current.forEach(({ name, path, relativePath }) => {
-      dispatch(
-        queueLookupSeries({
-          name,
-          path,
-          relativePath,
-          term: name,
-        })
-      );
-
-      dispatch(
-        // @ts-expect-error - actions are not typed
-        setImportSeriesValue({
-          id: name,
-          ...defaultValues.current,
-        })
-      );
-    });
-  }, [dispatch]);
-
-  useEffect(() => {
-    previousItems?.forEach((prevItem) => {
-      const { id } = prevItem;
-
-      const item = items.find((i) => i.id === id);
-
-      if (!item) {
-        handleRemoveSelectedStateItem(id);
-        return;
-      }
-
-      const selectedSeries = item.selectedSeries;
-      const isSelected = getIsSelected(id);
-
-      const isExistingSeries =
-        !!selectedSeries &&
-        allSeries.some((s) => s.tvdbId === selectedSeries.tvdbId);
-
-      if (
-        (!selectedSeries && prevItem.selectedSeries) ||
-        (isExistingSeries && !prevItem.selectedSeries)
-      ) {
-        handleSelectedChange({ id, value: false, shiftKey: false });
-
-        return;
-      }
-
-      if (isSelected && (!selectedSeries || isExistingSeries)) {
-        handleSelectedChange({ id, value: false, shiftKey: false });
-
-        return;
-      }
-
-      if (selectedSeries && selectedSeries !== prevItem.selectedSeries) {
-        handleSelectedChange({ id, value: true, shiftKey: false });
-
-        return;
-      }
-    });
-  }, [
-    allSeries,
-    items,
-    previousItems,
-    handleRemoveSelectedStateItem,
-    handleSelectedChange,
-    getIsSelected,
-  ]);
-
-  if (!items.length) {
+  if (!items.length || !hasSelectItems) {
     return null;
   }
 

@@ -214,6 +214,15 @@ export default function useSelectStore<T extends SelectStoreModel<Id>>(
     );
   };
 
+  const useHasItems = () => {
+    return useStore(
+      store.current,
+      useShallow((state) => {
+        return state.itemState.size > 0;
+      })
+    );
+  };
+
   useEffect(() => {
     const unsubscribe = store.current.subscribe((state) => {
       const itemState = state.itemState;
@@ -231,7 +240,9 @@ export default function useSelectStore<T extends SelectStoreModel<Id>>(
             return acc;
           },
           {
-            allSelected: itemState.size > 0,
+            allSelected:
+              itemState.size > 0 &&
+              itemState.values().some((i) => i.isSelected),
             allUnselected: true,
             anySelected: false,
             selectedCount: 0,
@@ -296,6 +307,7 @@ export default function useSelectStore<T extends SelectStoreModel<Id>>(
     toggleDisabled,
     toggleSelected,
     unselectAll,
+    useHasItems,
     useIsSelected,
     useSelectedIds,
   };

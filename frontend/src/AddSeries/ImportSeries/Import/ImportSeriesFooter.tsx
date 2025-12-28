@@ -1,12 +1,10 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import {
   AddSeriesOptions,
   setAddSeriesOption,
   useAddSeriesOptions,
 } from 'AddSeries/addSeriesOptionsStore';
 import { useSelect } from 'App/Select/SelectContext';
-import AppState from 'App/State/AppState';
 import CheckInput from 'Components/Form/CheckInput';
 import FormInputGroup from 'Components/Form/FormInputGroup';
 import Icon from 'Components/Icon';
@@ -17,20 +15,22 @@ import PageContentFooter from 'Components/Page/PageContentFooter';
 import Popover from 'Components/Tooltip/Popover';
 import { icons, inputTypes, kinds, tooltipPositions } from 'Helpers/Props';
 import { SeriesMonitor, SeriesType } from 'Series/Series';
-import {
-  cancelLookupSeries,
-  importSeries,
-  lookupUnsearchedSeries,
-  setImportSeriesValue,
-} from 'Store/Actions/importSeriesActions';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
+import {
+  ImportSeriesItem,
+  startProcessing,
+  stopProcessing,
+  updateImportSeriesItem,
+  useImportSeriesItems,
+  useLookupQueueHasItems,
+} from './importSeriesStore';
+import { useImportSeries } from './useImportSeries';
 import styles from './ImportSeriesFooter.css';
 
 type MixedType = 'mixed';
 
 function ImportSeriesFooter() {
-  const dispatch = useDispatch();
   const {
     monitor: defaultMonitor,
     qualityProfileId: defaultQualityProfileId,
@@ -38,9 +38,8 @@ function ImportSeriesFooter() {
     seasonFolder: defaultSeasonFolder,
   } = useAddSeriesOptions();
 
-  const { isLookingUpSeries, isImporting, items, importError } = useSelector(
-    (state: AppState) => state.importSeries
-  );
+  const items = useImportSeriesItems();
+  const isLookingUpSeries = useLookupQueueHasItems();
 
   const [monitor, setMonitor] = useState<SeriesMonitor | MixedType>(
     defaultMonitor
@@ -55,7 +54,9 @@ function ImportSeriesFooter() {
     defaultSeasonFolder
   );
 
-  const { selectedCount, getSelectedIds } = useSelect();
+  const { selectedCount, getSelectedIds } = useSelect<ImportSeriesItem>();
+
+  const { importSeries, isImporting, importError } = useImportSeries();
 
   const {
     hasUnsearchedItems,
@@ -87,7 +88,7 @@ function ImportSeriesFooter() {
         isSeasonFolderMixed = true;
       }
 
-      if (!item.isPopulated) {
+      if (!item.hasSearched) {
         hasUnsearchedItems = true;
       }
     });
@@ -123,29 +124,26 @@ function ImportSeriesFooter() {
       setAddSeriesOption(name as keyof AddSeriesOptions, value);
 
       getSelectedIds().forEach((id) => {
-        dispatch(
-          // @ts-expect-error - actions are not typed
-          setImportSeriesValue({
-            id,
-            [name]: value,
-          })
-        );
+        updateImportSeriesItem({
+          id,
+          [name]: value,
+        });
       });
     },
-    [getSelectedIds, dispatch]
+    [getSelectedIds]
   );
 
   const handleLookupPress = useCallback(() => {
-    dispatch(lookupUnsearchedSeries());
-  }, [dispatch]);
+    startProcessing();
+  }, []);
 
   const handleCancelLookupPress = useCallback(() => {
-    dispatch(cancelLookupSeries());
-  }, [dispatch]);
+    stopProcessing();
+  }, []);
 
   const handleImportPress = useCallback(() => {
-    dispatch(importSeries({ ids: getSelectedIds() }));
-  }, [getSelectedIds, dispatch]);
+    importSeries(getSelectedIds());
+  }, [importSeries, getSelectedIds]);
 
   useEffect(() => {
     if (isMonitorMixed && monitor !== 'mixed') {
@@ -286,12 +284,12 @@ function ImportSeriesFooter() {
               title={translate('ImportErrors')}
               body={
                 <ul>
-                  {Array.isArray(importError.responseJSON) ? (
-                    importError.responseJSON.map((error, index) => {
+                  {Array.isArray(importError.statusBody) ? (
+                    importError.statusBody.map((error, index) => {
                       return <li key={index}>{error.errorMessage}</li>;
                     })
                   ) : (
-                    <li>{JSON.stringify(importError.responseJSON)}</li>
+                    <li>{JSON.stringify(importError.statusBody)}</li>
                   )}
                 </ul>
               }

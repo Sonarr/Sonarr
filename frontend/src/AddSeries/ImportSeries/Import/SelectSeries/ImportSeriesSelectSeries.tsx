@@ -7,23 +7,27 @@ import {
   useFloating,
   useInteractions,
 } from '@floating-ui/react';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import useImportSeriesItem from 'AddSeries/ImportSeries/Import/useImportSeriesItem';
-import AppState from 'App/State/AppState';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useLookupSeries } from 'AddSeries/AddNewSeries/useAddSeries';
 import FormInputButton from 'Components/Form/FormInputButton';
 import TextInput from 'Components/Form/TextInput';
 import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
+import useDebounce from 'Helpers/Hooks/useDebounce';
 import { icons, kinds } from 'Helpers/Props';
-import {
-  queueLookupSeries,
-  setImportSeriesValue,
-} from 'Store/Actions/importSeriesActions';
+import useExistingSeries from 'Series/useExistingSeries';
 import { InputChanged } from 'typings/inputs';
 import getErrorMessage from 'Utilities/Object/getErrorMessage';
 import translate from 'Utilities/String/translate';
+import {
+  addToLookupQueue,
+  removeFromLookupQueue,
+  updateImportSeriesItem,
+  useImportSeriesItem,
+  useIsCurrentedItemQueued,
+  useIsCurrentLookupQueueItem,
+} from '../importSeriesStore';
 import ImportSeriesSearchResult from './ImportSeriesSearchResult';
 import ImportSeriesTitle from './ImportSeriesTitle';
 import styles from './ImportSeriesSelectSeries.css';
@@ -37,28 +41,23 @@ function ImportSeriesSelectSeries({
   id,
   onInputChange,
 }: ImportSeriesSelectSeriesProps) {
-  const dispatch = useDispatch();
-  const isLookingUpSeries = useSelector(
-    (state: AppState) => state.importSeries.isLookingUpSeries
+  const importSeriesItem = useImportSeriesItem(id);
+  const { selectedSeries, name } = importSeriesItem ?? {};
+  const isExistingSeries = useExistingSeries(selectedSeries?.tvdbId);
+
+  const [term, setTerm] = useState(name);
+  const [isOpen, setIsOpen] = useState(false);
+  const query = useDebounce(term, term ? 300 : 0);
+  const isCurrentLookupQueueItem = useIsCurrentLookupQueueItem(id);
+  const isQueued = useIsCurrentedItemQueued(id);
+
+  const { isFetching, isFetched, error, data, refetch } = useLookupSeries(
+    query,
+    isCurrentLookupQueueItem
   );
 
-  const {
-    error,
-    isFetching = true,
-    isPopulated = false,
-    items = [],
-    isQueued = true,
-    selectedSeries,
-    isExistingSeries,
-    term: itemTerm,
-  } = useImportSeriesItem(id);
-
-  const seriesLookupTimeout = useRef<ReturnType<typeof setTimeout>>();
-
-  const [term, setTerm] = useState('');
-  const [isOpen, setIsOpen] = useState(false);
-
   const errorMessage = getErrorMessage(error);
+  const isLookingUpSeries = isFetching || isQueued;
 
   const handlePress = useCallback(() => {
     setIsOpen((prevIsOpen) => !prevIsOpen);
@@ -66,48 +65,26 @@ function ImportSeriesSelectSeries({
 
   const handleSearchInputChange = useCallback(
     ({ value }: InputChanged<string>) => {
-      if (seriesLookupTimeout.current) {
-        clearTimeout(seriesLookupTimeout.current);
-      }
-
       setTerm(value);
-
-      seriesLookupTimeout.current = setTimeout(() => {
-        dispatch(
-          queueLookupSeries({
-            name: id,
-            term: value,
-            topOfQueue: true,
-          })
-        );
-      }, 200);
+      addToLookupQueue(id);
     },
-    [id, dispatch]
+    [id]
   );
 
   const handleRefreshPress = useCallback(() => {
-    dispatch(
-      queueLookupSeries({
-        name: id,
-        term,
-        topOfQueue: true,
-      })
-    );
-  }, [id, term, dispatch]);
+    refetch();
+  }, [refetch]);
 
   const handleSeriesSelect = useCallback(
     (tvdbId: number) => {
       setIsOpen(false);
 
-      const selectedSeries = items.find((item) => item.tvdbId === tvdbId)!;
+      const selectedSeries = data.find((item) => item.tvdbId === tvdbId)!;
 
-      dispatch(
-        // @ts-expect-error - actions are not typed
-        setImportSeriesValue({
-          id,
-          selectedSeries,
-        })
-      );
+      updateImportSeriesItem({
+        id,
+        selectedSeries,
+      });
 
       if (selectedSeries.seriesType !== 'standard') {
         onInputChange({
@@ -116,12 +93,24 @@ function ImportSeriesSelectSeries({
         });
       }
     },
-    [id, items, dispatch, onInputChange]
+    [id, data, onInputChange]
   );
 
   useEffect(() => {
-    setTerm(itemTerm);
-  }, [itemTerm]);
+    if (isFetched) {
+      updateImportSeriesItem({
+        id,
+        hasSearched: isFetched,
+        selectedSeries: data[0],
+      });
+
+      removeFromLookupQueue(id);
+    }
+  }, [id, isFetched, data]);
+
+  useEffect(() => {
+    setTerm(name);
+  }, [name]);
 
   const { refs, context, floatingStyles } = useFloating({
     middleware: [
@@ -148,11 +137,11 @@ function ImportSeriesSelectSeries({
     <>
       <div ref={refs.setReference} {...getReferenceProps()}>
         <Link className={styles.button} component="div" onPress={handlePress}>
-          {isLookingUpSeries && isQueued && !isPopulated ? (
+          {isLookingUpSeries && isQueued && !isFetched ? (
             <LoadingIndicator className={styles.loading} size={20} />
           ) : null}
 
-          {isPopulated && selectedSeries && isExistingSeries ? (
+          {isFetched && selectedSeries && isExistingSeries ? (
             <Icon
               className={styles.warningIcon}
               name={icons.WARNING}
@@ -160,7 +149,7 @@ function ImportSeriesSelectSeries({
             />
           ) : null}
 
-          {isPopulated && selectedSeries ? (
+          {isFetched && selectedSeries ? (
             <ImportSeriesTitle
               title={selectedSeries.title}
               year={selectedSeries.year}
@@ -169,7 +158,7 @@ function ImportSeriesSelectSeries({
             />
           ) : null}
 
-          {isPopulated && !selectedSeries ? (
+          {isFetched && !selectedSeries ? (
             <div>
               <Icon
                 className={styles.warningIcon}
@@ -199,6 +188,7 @@ function ImportSeriesSelectSeries({
           </div>
         </Link>
       </div>
+
       {isOpen ? (
         <FloatingPortal id="portal-root">
           <div
@@ -233,7 +223,7 @@ function ImportSeriesSelectSeries({
                 </div>
 
                 <div className={styles.results}>
-                  {items.map((item) => {
+                  {data.map((item) => {
                     return (
                       <ImportSeriesSearchResult
                         key={item.tvdbId}
