@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query';
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import Alert from 'Components/Alert';
@@ -10,7 +11,6 @@ import {
   fetchImportLists,
   fetchIndexers,
   fetchNotifications,
-  fetchReleaseProfiles,
 } from 'Store/Actions/settingsActions';
 import useTagDetails from 'Tags/useTagDetails';
 import useTags, { useSortedTagList } from 'Tags/useTags';
@@ -20,6 +20,7 @@ import styles from './Tags.css';
 
 function Tags() {
   const dispatch = useDispatch();
+  const queryClient = useQueryClient();
 
   const { isFetching, isFetched, error } = useTags();
   const items = useSortedTagList();
@@ -33,10 +34,11 @@ function Tags() {
     dispatch(fetchDelayProfiles());
     dispatch(fetchImportLists());
     dispatch(fetchNotifications());
-    dispatch(fetchReleaseProfiles());
     dispatch(fetchIndexers());
     dispatch(fetchDownloadClients());
-  }, [dispatch]);
+
+    queryClient.invalidateQueries({ queryKey: ['releaseprofile'] });
+  }, [dispatch, queryClient]);
 
   if (!items.length) {
     return (

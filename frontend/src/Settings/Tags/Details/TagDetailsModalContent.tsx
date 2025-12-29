@@ -12,6 +12,7 @@ import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import { kinds } from 'Helpers/Props';
 import useSeries from 'Series/useSeries';
+import { useReleaseProfilesWithIds } from 'Settings/Profiles/Release/useReleaseProfiles';
 import translate from 'Utilities/String/translate';
 import TagDetailsDelayProfile from './TagDetailsDelayProfile';
 import styles from './TagDetailsModalContent.css';
@@ -102,12 +103,7 @@ function TagDetailsModalContent({
     )
   );
 
-  const releaseProfiles = useSelector(
-    createMatchingItemSelector(
-      releaseProfileIds,
-      (state: AppState) => state.settings.releaseProfiles.items
-    )
-  );
+  const releaseProfiles = useReleaseProfilesWithIds(releaseProfileIds);
 
   const indexers = useSelector(
     createMatchingItemSelector(

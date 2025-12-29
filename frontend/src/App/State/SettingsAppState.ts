@@ -27,7 +27,6 @@ import IndexerOptions from 'typings/Settings/IndexerOptions';
 import MediaManagement from 'typings/Settings/MediaManagement';
 import NamingConfig from 'typings/Settings/NamingConfig';
 import NamingExample from 'typings/Settings/NamingExample';
-import ReleaseProfile from 'typings/Settings/ReleaseProfile';
 import MetadataAppState from './MetadataAppState';
 
 type Presets<T> = T & {
@@ -116,12 +115,6 @@ export interface QualityProfilesAppState
     AppSectionDeleteState,
     AppSectionSaveState {}
 
-export interface ReleaseProfilesAppState
-  extends AppSectionState<ReleaseProfile>,
-    AppSectionSaveState {
-  pendingChanges: Partial<ReleaseProfile>;
-}
-
 export interface CustomFormatAppState
   extends AppSectionState<CustomFormat>,
     AppSectionDeleteState,
@@ -171,7 +164,6 @@ interface SettingsAppState {
   notifications: NotificationAppState;
   qualityDefinitions: QualityDefinitionsAppState;
   qualityProfiles: QualityProfilesAppState;
-  releaseProfiles: ReleaseProfilesAppState;
 }
 
 export default SettingsAppState;

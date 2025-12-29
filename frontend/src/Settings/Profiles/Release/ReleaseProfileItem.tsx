@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react';
-import { useDispatch } from 'react-redux';
 import Card from 'Components/Card';
 import Label from 'Components/Label';
 import MiddleTruncate from 'Components/MiddleTruncate';
@@ -7,15 +6,17 @@ import ConfirmModal from 'Components/Modal/ConfirmModal';
 import TagList from 'Components/TagList';
 import useModalOpenState from 'Helpers/Hooks/useModalOpenState';
 import { kinds } from 'Helpers/Props';
-import { deleteReleaseProfile } from 'Store/Actions/Settings/releaseProfiles';
 import { Tag } from 'Tags/useTags';
 import Indexer from 'typings/Indexer';
-import ReleaseProfile from 'typings/Settings/ReleaseProfile';
 import translate from 'Utilities/String/translate';
 import EditReleaseProfileModal from './EditReleaseProfileModal';
+import {
+  ReleaseProfileModel,
+  useDeleteReleaseProfile,
+} from './useReleaseProfiles';
 import styles from './ReleaseProfileItem.css';
 
-interface ReleaseProfileProps extends ReleaseProfile {
+interface ReleaseProfileProps extends ReleaseProfileModel {
   tagList: Tag[];
   indexerList: Indexer[];
 }
@@ -34,7 +35,7 @@ function ReleaseProfileItem(props: ReleaseProfileProps) {
     indexerList,
   } = props;
 
-  const dispatch = useDispatch();
+  const { deleteReleaseProfile } = useDeleteReleaseProfile(id);
 
   const [
     isEditReleaseProfileModalOpen,
@@ -49,8 +50,8 @@ function ReleaseProfileItem(props: ReleaseProfileProps) {
   ] = useModalOpenState(false);
 
   const handleDeletePress = useCallback(() => {
-    dispatch(deleteReleaseProfile({ id }));
-  }, [id, dispatch]);
+    deleteReleaseProfile();
+  }, [deleteReleaseProfile]);
 
   const indexer =
     indexerId !== 0 && indexerList.find((i) => i.id === indexerId);

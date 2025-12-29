@@ -1,7 +1,4 @@
 import React, { useCallback, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { createSelector } from 'reselect';
-import AppState from 'App/State/AppState';
 import Form from 'Components/Form/Form';
 import FormGroup from 'Components/Form/FormGroup';
 import FormInputGroup from 'Components/Form/FormInputGroup';
@@ -14,54 +11,12 @@ import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import usePrevious from 'Helpers/Hooks/usePrevious';
 import { inputTypes, kinds } from 'Helpers/Props';
-import {
-  saveReleaseProfile,
-  setReleaseProfileValue,
-} from 'Store/Actions/Settings/releaseProfiles';
-import selectSettings from 'Store/Selectors/selectSettings';
 import { InputChanged } from 'typings/inputs';
-import ReleaseProfile from 'typings/Settings/ReleaseProfile';
 import translate from 'Utilities/String/translate';
+import { useManageReleaseProfile } from './useReleaseProfiles';
 import styles from './EditReleaseProfileModalContent.css';
 
 const tagInputDelimiters = ['Tab', 'Enter'];
-
-const newReleaseProfile: ReleaseProfile = {
-  id: 0,
-  name: '',
-  enabled: true,
-  required: [],
-  ignored: [],
-  tags: [],
-  excludedTags: [],
-  indexerId: 0,
-};
-
-function createReleaseProfileSelector(id?: number) {
-  return createSelector(
-    (state: AppState) => state.settings.releaseProfiles,
-    (releaseProfiles) => {
-      const { items, isFetching, error, isSaving, saveError, pendingChanges } =
-        releaseProfiles;
-
-      const mapping = id ? items.find((i) => i.id === id)! : newReleaseProfile;
-      const settings = selectSettings<ReleaseProfile>(
-        mapping,
-        pendingChanges,
-        saveError
-      );
-
-      return {
-        isFetching,
-        error,
-        isSaving,
-        saveError,
-        item: settings.settings,
-        ...settings,
-      };
-    }
-  );
-}
 
 interface EditReleaseProfileModalContentProps {
   id?: number;
@@ -74,42 +29,38 @@ function EditReleaseProfileModalContent({
   onModalClose,
   onDeleteReleaseProfilePress,
 }: EditReleaseProfileModalContentProps) {
-  const { item, isFetching, isSaving, error, saveError, ...otherProps } =
-    useSelector(createReleaseProfileSelector(id));
+  const {
+    item,
+    isSaving,
+    saveError,
+    validationErrors,
+    validationWarnings,
+    updateValue,
+    saveProvider,
+  } = useManageReleaseProfile(id ?? 0);
 
   const { name, enabled, required, ignored, tags, excludedTags, indexerId } =
     item;
 
-  const dispatch = useDispatch();
-  const previousIsSaving = usePrevious(isSaving);
-
-  useEffect(() => {
-    if (!id) {
-      Object.entries(newReleaseProfile).forEach(([name, value]) => {
-        // @ts-expect-error 'setReleaseProfileValue' isn't typed yet
-        dispatch(setReleaseProfileValue({ name, value }));
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    if (previousIsSaving && !isSaving && !saveError) {
-      onModalClose();
-    }
-  }, [previousIsSaving, isSaving, saveError, onModalClose]);
-
-  const handleSavePress = useCallback(() => {
-    dispatch(saveReleaseProfile({ id }));
-  }, [dispatch, id]);
+  const wasSaving = usePrevious(isSaving);
 
   const handleInputChange = useCallback(
     (change: InputChanged) => {
-      // @ts-expect-error 'setReleaseProfileValue' isn't typed yet
-      dispatch(setReleaseProfileValue(change));
+      // @ts-expect-error - change is not yet typed
+      updateValue(change.name, change.value);
     },
-    [dispatch]
+    [updateValue]
   );
+
+  const handleSavePress = useCallback(() => {
+    saveProvider();
+  }, [saveProvider]);
+
+  useEffect(() => {
+    if (wasSaving && !isSaving && !saveError) {
+      onModalClose();
+    }
+  }, [isSaving, wasSaving, saveError, onModalClose]);
 
   return (
     <ModalContent onModalClose={onModalClose}>
@@ -118,7 +69,10 @@ function EditReleaseProfileModalContent({
       </ModalHeader>
 
       <ModalBody>
-        <Form {...otherProps}>
+        <Form
+          validationErrors={validationErrors}
+          validationWarnings={validationWarnings}
+        >
           <FormGroup>
             <FormLabel>{translate('Name')}</FormLabel>
 
@@ -219,6 +173,7 @@ function EditReleaseProfileModalContent({
           </FormGroup>
         </Form>
       </ModalBody>
+
       <ModalFooter>
         {id ? (
           <Button
