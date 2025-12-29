@@ -1981,8 +1981,6 @@
     "ShowTags": "Näytä tunnisteet",
     "ShowTagsHelpText": "Näytä tunnisteet julisteen alla.",
     "ShowTitle": "Näytä nimi",
-    "ShowUnknownSeriesItems": "Näytä tuntemattomien sarjojen kohteet",
-    "ShowUnknownSeriesItemsHelpText": "Näytä jonossa kohteet, joiden sarja ei ole tiedossa. Tämä voi sisältää poistettuja sarjoja, elokuvia tai mitä tahansa muuta {appName}in kategoriasta.",
     "ShownClickToHide": "Näytetään, piilota painamalla tästä",
     "Shutdown": "Sammuta",
     "SingleEpisode": "Yksittäinen jakso",

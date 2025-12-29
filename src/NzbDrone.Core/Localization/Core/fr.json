@@ -1978,8 +1978,6 @@
     "ShowTags": "Afficher les étiquettes",
     "ShowTagsHelpText": "Afficher les étiquettes sous l'affiche",
     "ShowTitle": "Afficher le titre",
-    "ShowUnknownSeriesItems": "Afficher les éléments de série inconnus",
-    "ShowUnknownSeriesItemsHelpText": "Afficher les éléments sans série dans la file d'attente. Cela peut inclure des séries, des films ou tout autre élément supprimé dans la catégorie de {appName}",
     "ShownClickToHide": "Affiché, cliquez pour masquer",
     "Shutdown": "Éteindre",
     "SingleEpisode": "Épisode unique",

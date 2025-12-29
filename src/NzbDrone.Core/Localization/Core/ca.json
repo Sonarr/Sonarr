@@ -1954,8 +1954,6 @@
     "ShowTags": "Mostra les etiquetes",
     "ShowTagsHelpText": "Mostra les etiquetes sota el cartell",
     "ShowTitle": "Mostra el títol",
-    "ShowUnknownSeriesItems": "Mostra els elements de la sèrie desconeguts",
-    "ShowUnknownSeriesItemsHelpText": "Mostra els elements sense sèrie a la cua, això podria incloure sèries eliminades, pel·lícules o qualsevol altra cosa a la categoria {appName}",
     "ShownClickToHide": "Es mostra, feu clic per a amagar",
     "Shutdown": "Apaga",
     "SingleEpisode": "Episodi únic",

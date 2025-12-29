@@ -1966,8 +1966,6 @@
     "ShowTags": "Etiketleri göster",
     "ShowTagsHelpText": "Etiketleri posterin altında göster",
     "ShowTitle": "Başlığı göster",
-    "ShowUnknownSeriesItems": "Bilinmeyen Dizi Öğelerini Göster",
-    "ShowUnknownSeriesItemsHelpText": "Sırada dizi olmayan öğeleri göster, buna {appName} kategorisindeki kaldırılmış diziler, filmler veya başka herhangi bir şey dahil olabilir",
     "ShownClickToHide": "Gösterildi, gizlemek için tıklayın",
     "Shutdown": "Kapat",
     "SingleEpisode": "Tek Bölüm",

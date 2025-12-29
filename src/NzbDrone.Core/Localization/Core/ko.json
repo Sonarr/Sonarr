@@ -1920,8 +1920,6 @@
     "ShowTags": "태그 표시",
     "ShowTagsHelpText": "포스터 아래에 태그 표시",
     "ShowTitle": "제목 표시",
-    "ShowUnknownSeriesItems": "알 수 없는 시리즈 항목 표시",
-    "ShowUnknownSeriesItemsHelpText": "대기열에 시리즈가 없는 항목을 표시합니다. 여기에는 제거된 시리즈, 영화 또는 {appName}의 카테고리에 있는 다른 항목이 포함될 수 있습니다",
     "ShownClickToHide": "표시됨, 숨기려면 클릭",
     "Shutdown": "끄기",
     "SingleEpisode": "단일 에피소드",

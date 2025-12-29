@@ -1750,8 +1750,6 @@
     "ShowTags": "显示标签",
     "ShowTagsHelpText": "在海报下显示标签",
     "ShowTitle": "显示标题",
-    "ShowUnknownSeriesItems": "实现未知剧集项目",
-    "ShowUnknownSeriesItemsHelpText": "显示队列中没有剧集的项目，这可能包括已删除的剧集、电影或 {appName} 分类中的任何其他内容",
     "ShownClickToHide": "显示，点击隐藏",
     "Shutdown": "关机",
     "SingleEpisode": "单集",

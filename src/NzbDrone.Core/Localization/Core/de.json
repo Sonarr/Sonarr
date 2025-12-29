@@ -1919,8 +1919,6 @@
     "ShowTags": "Tags anzeigen",
     "ShowTagsHelpText": "Tags unter dem Poster anzeigen",
     "ShowTitle": "Titel anzeigen",
-    "ShowUnknownSeriesItems": "Unbekannte Serienobjekte anzeigen",
-    "ShowUnknownSeriesItemsHelpText": "Objekte ohne Serie in der Warteschlange anzeigen, dies kann entfernte Serien, Filme oder andere Objekte in der {appName}-Kategorie umfassen",
     "ShownClickToHide": "Angezeigt, zum Ausblenden klicken",
     "Shutdown": "Herunterfahren",
     "SingleEpisode": "Einzelne Episode",
