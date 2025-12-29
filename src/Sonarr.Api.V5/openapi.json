@@ -2321,7 +2321,7 @@
             "in": "query",
             "schema": {
               "type": "boolean",
-              "default": false
+              "default": true
             }
           },
           {
@@ -2643,6 +2643,171 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ReleasePushResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/remotepathmapping": {
+      "post": {
+        "tags": [
+          "RemotePathMapping"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RemotePathMappingResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/RemotePathMappingResource"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RemotePathMappingResource"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RemotePathMappingResource"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "RemotePathMapping"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RemotePathMappingResource"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/remotepathmapping/{id}": {
+      "delete": {
+        "tags": [
+          "RemotePathMapping"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "RemotePathMapping"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RemotePathMappingResource"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RemotePathMappingResource"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/RemotePathMappingResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/RemotePathMappingResource"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RemotePathMappingResource"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RemotePathMappingResource"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "RemotePathMapping"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RemotePathMappingResource"
                 }
               }
             }
@@ -3166,6 +3331,46 @@
         }
       }
     },
+    "/api/v5/series/import": {
+      "post": {
+        "tags": [
+          "SeriesImport"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/SeriesResource"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/SeriesResource"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/SeriesResource"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/v5/series/lookup": {
       "get": {
         "tags": [
@@ -3600,6 +3805,101 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TaskResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/settings/ui/{id}": {
+      "put": {
+        "tags": [
+          "UiSettings"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UiSettingsResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/UiSettingsResource"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UiSettingsResource"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UiSettingsResource"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "UiSettings"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UiSettingsResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/settings/ui": {
+      "get": {
+        "tags": [
+          "UiSettings"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UiSettingsResource"
                 }
               }
             }
@@ -6506,6 +6806,28 @@
         ],
         "type": "string"
       },
+      "RemotePathMappingResource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "host": {
+            "type": "string",
+            "nullable": true
+          },
+          "remotePath": {
+            "type": "string",
+            "nullable": true
+          },
+          "localPath": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "RenameEpisodeResource": {
         "type": "object",
         "properties": {
@@ -6709,6 +7031,10 @@
             "format": "int32"
           },
           "totalEpisodeCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "monitoredEpisodeCount": {
             "type": "integer",
             "format": "int32"
           },
@@ -7037,6 +7363,10 @@
             "format": "int32"
           },
           "totalEpisodeCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "monitoredEpisodeCount": {
             "type": "integer",
             "format": "int32"
           },
@@ -7425,6 +7755,54 @@
         },
         "additionalProperties": false
       },
+      "UiSettingsResource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "firstDayOfWeek": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "calendarWeekColumnHeader": {
+            "type": "string",
+            "nullable": true
+          },
+          "shortDateFormat": {
+            "type": "string",
+            "nullable": true
+          },
+          "longDateFormat": {
+            "type": "string",
+            "nullable": true
+          },
+          "timeFormat": {
+            "type": "string",
+            "nullable": true
+          },
+          "timeZone": {
+            "type": "string",
+            "nullable": true
+          },
+          "showRelativeDates": {
+            "type": "boolean"
+          },
+          "enableColorImpairedMode": {
+            "type": "boolean"
+          },
+          "theme": {
+            "type": "string",
+            "nullable": true
+          },
+          "uiLanguage": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
       "UnmappedFolder": {
         "type": "object",
         "properties": {
@@ -7669,6 +8047,9 @@
       "name": "ReleasePush"
     },
     {
+      "name": "RemotePathMapping"
+    },
+    {
       "name": "RenameEpisode"
     },
     {
@@ -7687,6 +8068,9 @@
       "name": "SeriesFolder"
     },
     {
+      "name": "SeriesImport"
+    },
+    {
       "name": "SeriesLookup"
     },
     {
@@ -7700,6 +8084,9 @@
     },
     {
       "name": "Task"
+    },
+    {
+      "name": "UiSettings"
     },
     {
       "name": "Update"
