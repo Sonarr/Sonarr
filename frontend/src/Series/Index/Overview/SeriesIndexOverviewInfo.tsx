@@ -1,11 +1,12 @@
 import React, { useMemo } from 'react';
-import { useSelector } from 'react-redux';
 import { IconName } from 'Components/Icon';
 import { icons } from 'Helpers/Props';
-import createUISettingsSelector from 'Store/Selectors/createUISettingsSelector';
+import {
+  UiSettingsModel,
+  useUiSettingsValues,
+} from 'Settings/UI/useUiSettings';
 import dimensions from 'Styles/Variables/dimensions';
 import QualityProfile from 'typings/QualityProfile';
-import UiSettings from 'typings/Settings/UiSettings';
 import formatDateTime from 'Utilities/Date/formatDateTime';
 import getRelativeDate from 'Utilities/Date/getRelativeDate';
 import formatBytes from 'Utilities/Number/formatBytes';
@@ -95,7 +96,7 @@ const rows = [
 function getInfoRowProps(
   row: RowProps,
   props: SeriesIndexOverviewInfoProps,
-  uiSettings: UiSettings
+  uiSettings: UiSettingsModel
 ): RowInfoProps | null {
   const { name } = row;
 
@@ -209,8 +210,7 @@ function getInfoRowProps(
 function SeriesIndexOverviewInfo(props: SeriesIndexOverviewInfoProps) {
   const { height, nextAiring } = props;
 
-  const uiSettings = useSelector(createUISettingsSelector());
-
+  const uiSettings = useUiSettingsValues();
   const { shortDateFormat, showRelativeDates, longDateFormat, timeFormat } =
     uiSettings;
 

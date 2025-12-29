@@ -1,6 +1,5 @@
 import classNames from 'classnames';
 import React, { useCallback, useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useIsDownloadingEpisodes } from 'Activity/Queue/Details/QueueDetailsProvider';
 import { useCalendarOptions } from 'Calendar/calendarOptionsStore';
 import getStatusStyle from 'Calendar/getStatusStyle';
@@ -9,7 +8,7 @@ import Link from 'Components/Link/Link';
 import getFinaleTypeName from 'Episode/getFinaleTypeName';
 import { icons, kinds } from 'Helpers/Props';
 import { useSingleSeries } from 'Series/useSeries';
-import createUISettingsSelector from 'Store/Selectors/createUISettingsSelector';
+import { useUiSettingsValues } from 'Settings/UI/useUiSettings';
 import { CalendarItem } from 'typings/Calendar';
 import { convertToTimezone } from 'Utilities/Date/convertToTimezone';
 import formatTime from 'Utilities/Date/formatTime';
@@ -34,9 +33,8 @@ function CalendarEventGroup({
   const isDownloading = useIsDownloadingEpisodes(episodeIds);
   const series = useSingleSeries(seriesId)!;
 
-  const { timeFormat, enableColorImpairedMode, timeZone } = useSelector(
-    createUISettingsSelector()
-  );
+  const { timeFormat, enableColorImpairedMode, timeZone } =
+    useUiSettingsValues();
 
   const { showEpisodeInformation, showFinaleIcon, fullColorEvents } =
     useCalendarOptions();

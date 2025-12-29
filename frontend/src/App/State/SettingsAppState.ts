@@ -29,7 +29,6 @@ import NamingConfig from 'typings/Settings/NamingConfig';
 import NamingExample from 'typings/Settings/NamingExample';
 import ReleaseProfile from 'typings/Settings/ReleaseProfile';
 import RemotePathMapping from 'typings/Settings/RemotePathMapping';
-import UiSettings from 'typings/Settings/UiSettings';
 import MetadataAppState from './MetadataAppState';
 
 type Presets<T> = T & {
@@ -156,7 +155,6 @@ export interface RemotePathMappingsAppState
 
 export type IndexerFlagSettingsAppState = AppSectionState<IndexerFlag>;
 export type LanguageSettingsAppState = AppSectionState<Language>;
-export type UiSettingsAppState = AppSectionItemState<UiSettings>;
 
 interface SettingsAppState {
   autoTaggings: AutoTaggingAppState;
@@ -183,7 +181,6 @@ interface SettingsAppState {
   qualityProfiles: QualityProfilesAppState;
   releaseProfiles: ReleaseProfilesAppState;
   remotePathMappings: RemotePathMappingsAppState;
-  ui: UiSettingsAppState;
 }
 
 export default SettingsAppState;

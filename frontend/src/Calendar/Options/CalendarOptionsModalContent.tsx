@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import {
   CalendarOptions,
   setCalendarOption,
@@ -22,10 +21,12 @@ import {
   timeFormatOptions,
   weekColumnOptions,
 } from 'Settings/UI/UISettings';
-import { saveUISettings } from 'Store/Actions/settingsActions';
-import createUISettingsSelector from 'Store/Selectors/createUISettingsSelector';
+import {
+  UiSettingsModel,
+  useSaveUiSettings,
+  useUiSettingsValues,
+} from 'Settings/UI/useUiSettings';
 import { InputChanged } from 'typings/inputs';
-import UiSettings from 'typings/Settings/UiSettings';
 import translate from 'Utilities/String/translate';
 
 interface CalendarOptionsModalContentProps {
@@ -35,8 +36,6 @@ interface CalendarOptionsModalContentProps {
 function CalendarOptionsModalContent({
   onModalClose,
 }: CalendarOptionsModalContentProps) {
-  const dispatch = useDispatch();
-
   const {
     collapseMultipleEpisodes,
     showEpisodeInformation,
@@ -46,9 +45,10 @@ function CalendarOptionsModalContent({
     fullColorEvents,
   } = useCalendarOptions();
 
-  const uiSettings = useSelector(createUISettingsSelector());
+  const uiSettings = useUiSettingsValues();
+  const saveUiSettings = useSaveUiSettings();
 
-  const [state, setState] = useState<Partial<UiSettings>>({
+  const [state, setState] = useState<Partial<UiSettingsModel>>({
     firstDayOfWeek: uiSettings.firstDayOfWeek,
     calendarWeekColumnHeader: uiSettings.calendarWeekColumnHeader,
     timeFormat: uiSettings.timeFormat,
@@ -73,9 +73,9 @@ function CalendarOptionsModalContent({
     ({ name, value }: InputChanged) => {
       setState((prevState) => ({ ...prevState, [name]: value }));
 
-      dispatch(saveUISettings({ [name]: value }));
+      saveUiSettings({ [name]: value });
     },
-    [dispatch]
+    [saveUiSettings]
   );
 
   useEffect(() => {

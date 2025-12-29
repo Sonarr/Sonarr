@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useAppValue } from 'App/appStore';
 import CommandNames from 'Commands/CommandNames';
 import { useCommandExecuting, useExecuteCommand } from 'Commands/useCommands';
@@ -14,8 +14,8 @@ import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
 import { icons, kinds } from 'Helpers/Props';
 import useUpdateSettings from 'Settings/General/useUpdateSettings';
+import { useUiSettingsValues } from 'Settings/UI/useUiSettings';
 import { fetchGeneralSettings } from 'Store/Actions/settingsActions';
-import createUISettingsSelector from 'Store/Selectors/createUISettingsSelector';
 import { useSystemStatusData } from 'System/Status/useSystemStatus';
 import { UpdateMechanism } from 'typings/Settings/General';
 import formatDate from 'Utilities/Date/formatDate';
@@ -31,9 +31,7 @@ function Updates() {
   const currentVersion = useAppValue('version');
   const { packageUpdateMechanismMessage } = useSystemStatusData();
 
-  const { shortDateFormat, longDateFormat, timeFormat } = useSelector(
-    createUISettingsSelector()
-  );
+  const { shortDateFormat, longDateFormat, timeFormat } = useUiSettingsValues();
   const isInstallingUpdate = useCommandExecuting(
     CommandNames.ApplicationUpdate
   );

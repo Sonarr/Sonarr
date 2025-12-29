@@ -24,7 +24,6 @@ import qualityDefinitions from './Settings/qualityDefinitions';
 import qualityProfiles from './Settings/qualityProfiles';
 import releaseProfiles from './Settings/releaseProfiles';
 import remotePathMappings from './Settings/remotePathMappings';
-import ui from './Settings/ui';
 
 export * from './Settings/autoTaggingSpecifications';
 export * from './Settings/autoTaggings';
@@ -50,7 +49,6 @@ export * from './Settings/qualityDefinitions';
 export * from './Settings/qualityProfiles';
 export * from './Settings/releaseProfiles';
 export * from './Settings/remotePathMappings';
-export * from './Settings/ui';
 
 //
 // Variables
@@ -85,8 +83,7 @@ export const defaultState = {
   qualityDefinitions: qualityDefinitions.defaultState,
   qualityProfiles: qualityProfiles.defaultState,
   releaseProfiles: releaseProfiles.defaultState,
-  remotePathMappings: remotePathMappings.defaultState,
-  ui: ui.defaultState
+  remotePathMappings: remotePathMappings.defaultState
 };
 
 export const persistState = [
@@ -120,8 +117,7 @@ export const actionHandlers = handleThunks({
   ...qualityDefinitions.actionHandlers,
   ...qualityProfiles.actionHandlers,
   ...releaseProfiles.actionHandlers,
-  ...remotePathMappings.actionHandlers,
-  ...ui.actionHandlers
+  ...remotePathMappings.actionHandlers
 });
 
 //
@@ -151,7 +147,6 @@ export const reducers = createHandleActions({
   ...qualityDefinitions.reducers,
   ...qualityProfiles.reducers,
   ...releaseProfiles.reducers,
-  ...remotePathMappings.reducers,
-  ...ui.reducers
+  ...remotePathMappings.reducers
 
 }, defaultState, section);

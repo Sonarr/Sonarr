@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useCallback, useMemo } from 'react';
+import { useSelector } from 'react-redux';
 import Alert from 'Components/Alert';
 import FieldSet from 'Components/FieldSet';
 import Form from 'Components/Form/Form';
@@ -12,20 +12,13 @@ import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
 import { inputTypes, kinds } from 'Helpers/Props';
 import SettingsToolbar from 'Settings/SettingsToolbar';
-import {
-  fetchUISettings,
-  saveUISettings,
-  setUISettingsValue,
-} from 'Store/Actions/settingsActions';
 import createLanguagesSelector from 'Store/Selectors/createLanguagesSelector';
-import createSettingsSectionSelector from 'Store/Selectors/createSettingsSectionSelector';
 import themes from 'Styles/Themes';
 import { InputChanged } from 'typings/inputs';
 import timeZoneOptions from 'Utilities/Date/timeZoneOptions';
 import titleCase from 'Utilities/String/titleCase';
 import translate from 'Utilities/String/translate';
-
-const SECTION = 'ui';
+import { useManageUiSettings } from './useUiSettings';
 
 export const firstDayOfWeekOptions: EnhancedSelectInputValue<number>[] = [
   {
@@ -69,8 +62,6 @@ export const timeFormatOptions: EnhancedSelectInputValue<string>[] = [
 ];
 
 function UISettings() {
-  const dispatch = useDispatch();
-
   const {
     items,
     isFetching: isLanguagesFetching,
@@ -86,15 +77,17 @@ function UISettings() {
 
   const {
     isFetching: isSettingsFetching,
-    isPopulated: isSettingsPopulated,
+    isFetched: isSettingsPopulated,
     error: settingsError,
+    hasPendingChanges,
     hasSettings,
     settings,
-    hasPendingChanges,
     isSaving,
     validationErrors,
     validationWarnings,
-  } = useSelector(createSettingsSectionSelector(SECTION));
+    saveSettings,
+    updateSetting,
+  } = useManageUiSettings();
 
   const isFetching = isLanguagesFetching || isSettingsFetching;
   const isPopulated = isLanguagesPopulated && isSettingsPopulated;
@@ -116,23 +109,15 @@ function UISettings() {
 
   const handleInputChange = useCallback(
     (change: InputChanged) => {
-      // @ts-expect-error - actions aren't typed
-      dispatch(setUISettingsValue(change));
+      // @ts-expect-error name needs to be keyof UiSettingsModel
+      updateSetting(change.name, change.value);
     },
-    [dispatch]
+    [updateSetting]
   );
+
   const handleSavePress = useCallback(() => {
-    dispatch(saveUISettings());
-  }, [dispatch]);
-
-  useEffect(() => {
-    dispatch(fetchUISettings());
-
-    return () => {
-      // @ts-expect-error - actions aren't typed
-      dispatch(setUISettingsValue({ section: `settings.${SECTION}` }));
-    };
-  }, [dispatch]);
+    saveSettings();
+  }, [saveSettings]);
 
   return (
     <PageContent title={translate('UiSettings')}>

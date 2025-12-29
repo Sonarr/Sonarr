@@ -1,6 +1,5 @@
 import moment from 'moment';
 import React, { useCallback, useMemo } from 'react';
-import { useSelector } from 'react-redux';
 import { useAppDimensions } from 'App/appStore';
 import {
   setCalendarOption,
@@ -22,7 +21,7 @@ import MenuButton from 'Components/Menu/MenuButton';
 import MenuContent from 'Components/Menu/MenuContent';
 import ViewMenuItem from 'Components/Menu/ViewMenuItem';
 import { align, icons } from 'Helpers/Props';
-import createUISettingsSelector from 'Store/Selectors/createUISettingsSelector';
+import { useUiSettingsValues } from 'Settings/UI/useUiSettings';
 import translate from 'Utilities/String/translate';
 import CalendarHeaderViewButton from './CalendarHeaderViewButton';
 import styles from './CalendarHeader.css';
@@ -35,7 +34,7 @@ function CalendarHeader() {
 
   const { isSmallScreen, isLargeScreen } = useAppDimensions();
 
-  const { longDateFormat } = useSelector(createUISettingsSelector());
+  const { longDateFormat } = useUiSettingsValues();
 
   const handleViewChange = useCallback((newView: string) => {
     setCalendarOption('view', newView as CalendarView);

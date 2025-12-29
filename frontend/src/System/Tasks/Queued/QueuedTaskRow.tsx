@@ -1,6 +1,5 @@
 import moment from 'moment';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { CommandBody } from 'Commands/Command';
 import { useCancelCommand } from 'Commands/useCommands';
 import Icon, { IconProps } from 'Components/Icon';
@@ -10,7 +9,7 @@ import TableRowCell from 'Components/Table/Cells/TableRowCell';
 import TableRow from 'Components/Table/TableRow';
 import useModalOpenState from 'Helpers/Hooks/useModalOpenState';
 import { icons, kinds } from 'Helpers/Props';
-import createUISettingsSelector from 'Store/Selectors/createUISettingsSelector';
+import { useUiSettingsValues } from 'Settings/UI/useUiSettings';
 import formatDate from 'Utilities/Date/formatDate';
 import formatDateTime from 'Utilities/Date/formatDateTime';
 import formatTimeSpan from 'Utilities/Date/formatTimeSpan';
@@ -120,7 +119,7 @@ export default function QueuedTaskRow(props: QueuedTaskRowProps) {
 
   const { cancelCommand } = useCancelCommand(id);
   const { longDateFormat, shortDateFormat, showRelativeDates, timeFormat } =
-    useSelector(createUISettingsSelector());
+    useUiSettingsValues();
 
   const updateTimeTimeoutId = useRef<ReturnType<typeof setTimeout> | null>(
     null

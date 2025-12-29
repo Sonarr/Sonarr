@@ -1,6 +1,5 @@
 import classNames from 'classnames';
 import React, { useCallback, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useQueueItemForEpisode } from 'Activity/Queue/Details/QueueDetailsProvider';
 import { useCalendarOptions } from 'Calendar/calendarOptionsStore';
 import CalendarEventQueueDetails from 'Calendar/Events/CalendarEventQueueDetails';
@@ -13,7 +12,7 @@ import getFinaleTypeName from 'Episode/getFinaleTypeName';
 import { useEpisodeFile } from 'EpisodeFile/EpisodeFileProvider';
 import { icons, kinds } from 'Helpers/Props';
 import { useSingleSeries } from 'Series/useSeries';
-import createUISettingsSelector from 'Store/Selectors/createUISettingsSelector';
+import { useUiSettingsValues } from 'Settings/UI/useUiSettings';
 import { convertToTimezone } from 'Utilities/Date/convertToTimezone';
 import formatTime from 'Utilities/Date/formatTime';
 import padNumber from 'Utilities/Number/padNumber';
@@ -59,7 +58,7 @@ function AgendaEvent(props: AgendaEventProps) {
   const episodeFile = useEpisodeFile(episodeFileId);
   const queueItem = useQueueItemForEpisode(id);
   const { timeFormat, longDateFormat, enableColorImpairedMode, timeZone } =
-    useSelector(createUISettingsSelector());
+    useUiSettingsValues();
 
   const {
     showEpisodeInformation,

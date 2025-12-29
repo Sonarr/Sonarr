@@ -1,14 +1,13 @@
 import { keepPreviousData } from '@tanstack/react-query';
 import moment from 'moment';
 import { useEffect, useMemo } from 'react';
-import { useSelector } from 'react-redux';
 import { create } from 'zustand';
-import AppState from 'App/State/AppState';
 import { setEpisodeQueryKey } from 'Episode/useEpisode';
 import { Filter, FilterBuilderProp } from 'Filters/Filter';
 import { useCustomFiltersList } from 'Filters/useCustomFilters';
 import useApiQuery from 'Helpers/Hooks/useApiQuery';
 import { filterBuilderValueTypes } from 'Helpers/Props';
+import { useUiSettingsValues } from 'Settings/UI/useUiSettings';
 import { CalendarItem } from 'typings/Calendar';
 import findSelectedFilters from 'Utilities/Filter/findSelectedFilters';
 import translate from 'Utilities/String/translate';
@@ -156,9 +155,7 @@ export const useCalendarPage = () => {
   const dayCount = useCalendarDayCount();
   const time = useCalendarTime();
   const view = useCalendarOption('view');
-  const firstDayOfWeek = useSelector(
-    (state: AppState) => state.settings.ui.item.firstDayOfWeek
-  );
+  const { firstDayOfWeek } = useUiSettingsValues();
 
   useEffect(() => {
     const { dates } = getDates(time, view, firstDayOfWeek, dayCount);

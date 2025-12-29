@@ -1,18 +1,10 @@
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { createSelector } from 'reselect';
-import AppState from 'App/State/AppState';
+import { useUiSettingsValues } from 'Settings/UI/useUiSettings';
 import themes from 'Styles/Themes';
 
-function createThemeSelector() {
-  return createSelector(
-    (state: AppState) => state.settings.ui.item.theme || window.Sonarr.theme,
-    (theme) => theme
-  );
-}
-
 const useTheme = () => {
-  const selectedTheme = useSelector(createThemeSelector());
+  const { theme } = useUiSettingsValues();
+  const selectedTheme = theme ?? window.Sonarr.theme;
   const [resolvedTheme, setResolvedTheme] = useState(selectedTheme);
 
   useEffect(() => {

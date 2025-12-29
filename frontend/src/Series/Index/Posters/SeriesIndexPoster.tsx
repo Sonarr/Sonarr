@@ -1,6 +1,5 @@
 import classNames from 'classnames';
 import React, { useCallback, useState } from 'react';
-import { useSelector } from 'react-redux';
 import CommandNames from 'Commands/CommandNames';
 import { useExecuteCommand } from 'Commands/useCommands';
 import Label from 'Components/Label';
@@ -16,7 +15,7 @@ import SeriesIndexPosterSelect from 'Series/Index/Select/SeriesIndexPosterSelect
 import { Statistics } from 'Series/Series';
 import { useSeriesPosterOptions } from 'Series/seriesOptionsStore';
 import SeriesPoster from 'Series/SeriesPoster';
-import createUISettingsSelector from 'Store/Selectors/createUISettingsSelector';
+import { useUiSettingsValues } from 'Settings/UI/useUiSettings';
 import formatDateTime from 'Utilities/Date/formatDateTime';
 import getRelativeDate from 'Utilities/Date/getRelativeDate';
 import translate from 'Utilities/String/translate';
@@ -48,7 +47,7 @@ function SeriesIndexPoster(props: SeriesIndexPosterProps) {
   } = useSeriesPosterOptions();
 
   const { showRelativeDates, shortDateFormat, longDateFormat, timeFormat } =
-    useSelector(createUISettingsSelector());
+    useUiSettingsValues();
 
   const executeCommand = useExecuteCommand();
   const [hasPosterError, setHasPosterError] = useState(false);
