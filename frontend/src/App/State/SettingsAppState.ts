@@ -28,7 +28,6 @@ import MediaManagement from 'typings/Settings/MediaManagement';
 import NamingConfig from 'typings/Settings/NamingConfig';
 import NamingExample from 'typings/Settings/NamingExample';
 import ReleaseProfile from 'typings/Settings/ReleaseProfile';
-import RemotePathMapping from 'typings/Settings/RemotePathMapping';
 import MetadataAppState from './MetadataAppState';
 
 type Presets<T> = T & {
@@ -146,13 +145,6 @@ export interface ImportListExclusionsSettingsAppState
   pendingChanges: Partial<ImportListExclusion>;
 }
 
-export interface RemotePathMappingsAppState
-  extends AppSectionState<RemotePathMapping>,
-    AppSectionDeleteState,
-    AppSectionSaveState {
-  pendingChanges: Partial<RemotePathMapping>;
-}
-
 export type IndexerFlagSettingsAppState = AppSectionState<IndexerFlag>;
 export type LanguageSettingsAppState = AppSectionState<Language>;
 
@@ -180,7 +172,6 @@ interface SettingsAppState {
   qualityDefinitions: QualityDefinitionsAppState;
   qualityProfiles: QualityProfilesAppState;
   releaseProfiles: ReleaseProfilesAppState;
-  remotePathMappings: RemotePathMappingsAppState;
 }
 
 export default SettingsAppState;
