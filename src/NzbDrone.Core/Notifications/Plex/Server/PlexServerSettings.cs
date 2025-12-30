@@ -36,7 +36,7 @@ namespace NzbDrone.Core.Notifications.Plex.Server
         [FieldDefinition(1, Label = "Host")]
         public string Host { get; set; }
 
-        [FieldDefinition(2, Label = "Port")]
+        [FieldDefinition(2, Label = "Port", Type = FieldType.Number)]
         public int Port { get; set; }
 
         [FieldDefinition(3, Label = "UseSsl", Type = FieldType.Checkbox, HelpText = "NotificationsSettingsUseSslHelpText")]
