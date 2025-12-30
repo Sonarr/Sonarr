@@ -17,7 +17,6 @@ import ImportListExclusion from 'typings/ImportListExclusion';
 import ImportListOptionsSettings from 'typings/ImportListOptionsSettings';
 import Indexer from 'typings/Indexer';
 import IndexerFlag from 'typings/IndexerFlag';
-import Notification from 'typings/Notification';
 import DownloadClientOptions from 'typings/Settings/DownloadClientOptions';
 import General from 'typings/Settings/General';
 import IndexerOptions from 'typings/Settings/IndexerOptions';
@@ -92,12 +91,6 @@ export interface IndexerAppState
   isTestingAll: boolean;
 }
 
-export interface NotificationAppState
-  extends AppSectionState<Notification>,
-    AppSectionDeleteState,
-    AppSectionSaveState,
-    AppSectionSchemaState<Presets<Notification>> {}
-
 export interface CustomFormatAppState
   extends AppSectionState<CustomFormat>,
     AppSectionDeleteState,
@@ -144,7 +137,6 @@ interface SettingsAppState {
   metadata: MetadataAppState;
   naming: NamingAppState;
   namingExamples: NamingExamplesAppState;
-  notifications: NotificationAppState;
 }
 
 export default SettingsAppState;

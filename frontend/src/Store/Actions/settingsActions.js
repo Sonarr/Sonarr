@@ -19,7 +19,6 @@ import mediaManagement from './Settings/mediaManagement';
 import metadata from './Settings/metadata';
 import naming from './Settings/naming';
 import namingExamples from './Settings/namingExamples';
-import notifications from './Settings/notifications';
 
 export * from './Settings/autoTaggingSpecifications';
 export * from './Settings/autoTaggings';
@@ -40,7 +39,6 @@ export * from './Settings/mediaManagement';
 export * from './Settings/metadata';
 export * from './Settings/naming';
 export * from './Settings/namingExamples';
-export * from './Settings/notifications';
 
 //
 // Variables
@@ -70,8 +68,7 @@ export const defaultState = {
   mediaManagement: mediaManagement.defaultState,
   metadata: metadata.defaultState,
   naming: naming.defaultState,
-  namingExamples: namingExamples.defaultState,
-  notifications: notifications.defaultState
+  namingExamples: namingExamples.defaultState
 };
 
 export const persistState = [
@@ -100,8 +97,7 @@ export const actionHandlers = handleThunks({
   ...mediaManagement.actionHandlers,
   ...metadata.actionHandlers,
   ...naming.actionHandlers,
-  ...namingExamples.actionHandlers,
-  ...notifications.actionHandlers
+  ...namingExamples.actionHandlers
 });
 
 //
@@ -126,7 +122,6 @@ export const reducers = createHandleActions({
   ...mediaManagement.reducers,
   ...metadata.reducers,
   ...naming.reducers,
-  ...namingExamples.reducers,
-  ...notifications.reducers
+  ...namingExamples.reducers
 
 }, defaultState, section);

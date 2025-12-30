@@ -1,12 +1,37 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import ModelBase from 'App/ModelBase';
 import useApiMutation from 'Helpers/Hooks/useApiMutation';
 import useApiQuery, { QueryOptions } from 'Helpers/Hooks/useApiQuery';
 import { usePendingChangesStore } from 'Helpers/Hooks/usePendingChangesStore';
+import { usePendingFieldsStore } from 'Helpers/Hooks/usePendingFieldsStore';
 import selectSettings from 'Store/Selectors/selectSettings';
+import { PendingSection } from 'typings/pending';
+import Provider from 'typings/Provider';
+import { ApiError } from 'Utilities/Fetch/fetchJson';
 
-export const useProvider = <T extends ModelBase>(
+interface ManageProviderSettings<T extends ModelBase>
+  extends Omit<ReturnType<typeof selectSettings<T>>, 'settings'> {
+  item: PendingSection<T>;
+  updateValue: <K extends keyof T>(key: K, value: T[K]) => void;
+  saveProvider: () => void;
+  isSaving: boolean;
+  saveError: ApiError | null;
+  testProvider: () => void;
+  isTesting: boolean;
+  updateFieldValue?: (fieldProperties: Record<string, unknown>) => void;
+}
+
+const isProviderWithFields = (provider: unknown): provider is Provider => {
+  return (
+    typeof provider === 'object' &&
+    provider !== null &&
+    'fields' in provider &&
+    Array.isArray((provider as Provider).fields)
+  );
+};
+
+export const useProviderWithDefault = <T extends ModelBase>(
   id: number | undefined,
   defaultProvider: T,
   path: string
@@ -42,7 +67,8 @@ export const useProviderSettings = <T extends ModelBase>(
 export const useSaveProviderSettings = <T extends ModelBase>(
   id: number,
   path: string,
-  onSuccess?: () => void
+  onSuccess?: (updatedSettings: T) => void,
+  onError?: (error: ApiError) => void
 ) => {
   const queryClient = useQueryClient();
 
@@ -60,8 +86,9 @@ export const useSaveProviderSettings = <T extends ModelBase>(
 
           return [...oldData, updatedSettings];
         });
-        onSuccess?.();
+        onSuccess?.(updatedSettings);
       },
+      onError,
     },
   });
 
@@ -72,12 +99,34 @@ export const useSaveProviderSettings = <T extends ModelBase>(
   };
 };
 
+export const useTestProvider = <T extends ModelBase>(
+  path: string,
+  onSuccess?: () => void,
+  onError?: (error: ApiError) => void
+) => {
+  const { mutate, isPending, error } = useApiMutation<void, T>({
+    path: `${path}/test`,
+    method: 'POST',
+    mutationOptions: {
+      onSuccess,
+      onError,
+    },
+  });
+
+  return {
+    test: mutate,
+    isTesting: isPending,
+    testError: error,
+  };
+};
+
 export const useManageProviderSettings = <T extends ModelBase>(
   id: number | undefined,
   defaultProvider: T,
   path: string
-) => {
-  const provider = useProvider<T>(id, defaultProvider, path);
+): ManageProviderSettings<T> => {
+  const provider = useProviderWithDefault<T>(id, defaultProvider, path);
+  const [mutationError, setMutationError] = useState<ApiError | null>(null);
 
   const {
     pendingChanges,
@@ -86,24 +135,111 @@ export const useManageProviderSettings = <T extends ModelBase>(
     clearPendingChanges,
   } = usePendingChangesStore<T>({});
 
-  const { save, isSaving, saveError } = useSaveProviderSettings<T>(
+  const {
+    pendingFields,
+    setPendingFields,
+    clearPendingFields,
+    hasPendingFields,
+  } = usePendingFieldsStore();
+
+  const handleSaveSuccess = useCallback(() => {
+    setMutationError(null);
+    clearPendingChanges();
+    clearPendingFields();
+  }, [clearPendingChanges, clearPendingFields]);
+
+  const handleTestSuccess = useCallback(() => {
+    setMutationError(null);
+  }, []);
+
+  const { save, isSaving } = useSaveProviderSettings<T>(
     provider.id,
     path,
-    clearPendingChanges
+    handleSaveSuccess,
+    setMutationError
+  );
+
+  const { test, isTesting } = useTestProvider<T>(
+    path,
+    handleTestSuccess,
+    setMutationError
   );
 
   const { settings: item, ...settings } = useMemo(() => {
-    return selectSettings<T>(provider, pendingChanges, saveError);
-  }, [provider, pendingChanges, saveError]);
+    // Create a combined pending changes object that includes fields
+    const combinedPendingChanges = hasPendingFields
+      ? {
+          ...pendingChanges,
+          fields: Object.fromEntries(pendingFields),
+        }
+      : pendingChanges;
+
+    return selectSettings<T>(provider, combinedPendingChanges, mutationError);
+  }, [
+    provider,
+    pendingChanges,
+    pendingFields,
+    hasPendingFields,
+    mutationError,
+  ]);
 
   const saveProvider = useCallback(() => {
-    const updatedSettings = {
+    let updatedSettings: T = {
       ...provider,
       ...pendingChanges,
     };
 
+    // If there are pending field changes and the provider has fields
+    if (isProviderWithFields(provider)) {
+      const fields = provider.fields.map((field) => {
+        if (pendingFields.has(field.name)) {
+          return {
+            name: field.name,
+            value: pendingFields.get(field.name),
+          };
+        }
+
+        return {
+          name: field.name,
+          value: field.value,
+        };
+      });
+
+      updatedSettings = {
+        ...updatedSettings,
+        fields,
+      } as T;
+    }
+
     save(updatedSettings);
-  }, [provider, pendingChanges, save]);
+  }, [provider, pendingChanges, pendingFields, save]);
+
+  const testProvider = useCallback(() => {
+    let updatedSettings: T = {
+      ...provider,
+      ...pendingChanges,
+    };
+
+    // If there are pending field changes and the provider has fields
+    if (isProviderWithFields(provider)) {
+      const fields = provider.fields.map((field) => {
+        if (pendingFields.has(field.name)) {
+          return {
+            ...field,
+            value: pendingFields.get(field.name),
+          };
+        }
+        return field;
+      });
+
+      updatedSettings = {
+        ...updatedSettings,
+        fields,
+      } as T;
+    }
+
+    test(updatedSettings);
+  }, [provider, pendingChanges, pendingFields, test]);
 
   const updateValue = useCallback(
     <K extends keyof T>(key: K, value: T[K]) => {
@@ -116,14 +252,54 @@ export const useManageProviderSettings = <T extends ModelBase>(
     [provider, setPendingChange, unsetPendingChange]
   );
 
-  return {
+  const hasFields = useMemo(() => {
+    return 'fields' in provider && Array.isArray(provider.fields);
+  }, [provider]);
+
+  const updateFieldValue = useCallback(
+    (fieldProperties: Record<string, unknown>) => {
+      if (!isProviderWithFields(provider)) {
+        throw new Error('updateFieldValue called on provider without fields');
+      }
+
+      const providerFields = provider.fields;
+      const currentFields = pendingFields;
+      const newFields = { ...currentFields, ...fieldProperties };
+
+      // Check if the new fields are different from the provider's current fields
+      const hasChanges = Object.entries(newFields).some(([key, value]) => {
+        const currentField = providerFields.find((f) => f.name === key);
+        return currentField?.value !== value;
+      });
+
+      if (hasChanges) {
+        setPendingFields(newFields);
+      } else {
+        clearPendingFields();
+      }
+    },
+    [pendingFields, provider, setPendingFields, clearPendingFields]
+  );
+
+  const baseReturn = {
     ...settings,
     item,
     updateValue,
     saveProvider,
     isSaving,
-    saveError,
+    saveError: mutationError,
+    testProvider,
+    isTesting,
   };
+
+  if (hasFields) {
+    return {
+      ...baseReturn,
+      updateFieldValue,
+    };
+  }
+
+  return baseReturn;
 };
 
 export const useDeleteProvider = <T extends ModelBase>(

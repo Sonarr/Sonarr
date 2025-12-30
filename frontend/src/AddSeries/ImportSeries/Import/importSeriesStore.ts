@@ -73,8 +73,6 @@ export const useEnsureImportSeriesItems = (
 export const updateImportSeriesItem = (
   itemData: Partial<ImportSeriesItem> & Pick<ImportSeriesItem, 'id'>
 ) => {
-  console.info('\x1b[36m[MarkTest] updating item\x1b[0m', itemData);
-
   importSeriesStore.setState((state) => {
     const existingItem = state.items[itemData.id];
 

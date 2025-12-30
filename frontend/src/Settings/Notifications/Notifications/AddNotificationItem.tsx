@@ -1,13 +1,12 @@
 import React, { useCallback } from 'react';
-import { useDispatch } from 'react-redux';
 import Button from 'Components/Link/Button';
 import Link from 'Components/Link/Link';
 import Menu from 'Components/Menu/Menu';
 import MenuContent from 'Components/Menu/MenuContent';
 import { sizes } from 'Helpers/Props';
-import { selectNotificationSchema } from 'Store/Actions/settingsActions';
-import Notification from 'typings/Notification';
+import { SelectedSchema } from 'Settings/useProviderSchema';
 import translate from 'Utilities/String/translate';
+import { NotificationModel } from '../useConnections';
 import AddNotificationPresetMenuItem from './AddNotificationPresetMenuItem';
 import styles from './AddNotificationItem.css';
 
@@ -15,8 +14,8 @@ interface AddNotificationItemProps {
   implementation: string;
   implementationName: string;
   infoLink: string;
-  presets?: Notification[];
-  onNotificationSelect: () => void;
+  presets?: NotificationModel[];
+  onNotificationSelect: (selectedScehema: SelectedSchema) => void;
 }
 
 function AddNotificationItem({
@@ -26,19 +25,11 @@ function AddNotificationItem({
   presets,
   onNotificationSelect,
 }: AddNotificationItemProps) {
-  const dispatch = useDispatch();
   const hasPresets = !!presets && !!presets.length;
 
   const handleNotificationSelect = useCallback(() => {
-    dispatch(
-      selectNotificationSchema({
-        implementation,
-        implementationName,
-      })
-    );
-
-    onNotificationSelect();
-  }, [implementation, implementationName, dispatch, onNotificationSelect]);
+    onNotificationSelect({ implementation, implementationName });
+  }, [implementation, implementationName, onNotificationSelect]);
 
   return (
     <div className={styles.notification}>
