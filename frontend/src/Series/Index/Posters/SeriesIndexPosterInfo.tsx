@@ -1,7 +1,7 @@
 import React from 'react';
 import SeriesTagList from 'Components/SeriesTagList';
 import Language from 'Language/Language';
-import QualityProfile from 'typings/QualityProfile';
+import { QualityProfileModel } from 'Settings/Profiles/Quality/useQualityProfiles';
 import formatDateTime from 'Utilities/Date/formatDateTime';
 import getRelativeDate from 'Utilities/Date/getRelativeDate';
 import formatBytes from 'Utilities/Number/formatBytes';
@@ -12,7 +12,7 @@ interface SeriesIndexPosterInfoProps {
   originalLanguage?: Language;
   network?: string;
   showQualityProfile: boolean;
-  qualityProfile?: QualityProfile;
+  qualityProfile?: QualityProfileModel;
   previousAiring?: string;
   added?: string;
   seasonCount: number;

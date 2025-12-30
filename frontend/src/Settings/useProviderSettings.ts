@@ -2,19 +2,19 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useCallback, useMemo } from 'react';
 import ModelBase from 'App/ModelBase';
 import useApiMutation from 'Helpers/Hooks/useApiMutation';
-import useApiQuery from 'Helpers/Hooks/useApiQuery';
+import useApiQuery, { QueryOptions } from 'Helpers/Hooks/useApiQuery';
 import { usePendingChangesStore } from 'Helpers/Hooks/usePendingChangesStore';
 import selectSettings from 'Store/Selectors/selectSettings';
 
 export const useProvider = <T extends ModelBase>(
-  id: number,
+  id: number | undefined,
   defaultProvider: T,
   path: string
 ) => {
-  const { data } = useProviderSettings<T>(path);
+  const { data } = useProviderSettings<T>({ path });
 
   return useMemo(() => {
-    if (id === 0) {
+    if (!id) {
       return defaultProvider;
     }
 
@@ -28,10 +28,10 @@ export const useProvider = <T extends ModelBase>(
   }, [data, defaultProvider, id]);
 };
 
-export const useProviderSettings = <T extends ModelBase>(path: string) => {
-  const result = useApiQuery<T[]>({
-    path,
-  });
+export const useProviderSettings = <T extends ModelBase>(
+  options: QueryOptions<T[]>
+) => {
+  const result = useApiQuery<T[]>(options);
 
   return {
     ...result,
@@ -47,18 +47,18 @@ export const useSaveProviderSettings = <T extends ModelBase>(
   const queryClient = useQueryClient();
 
   const { mutate, isPending, error } = useApiMutation<T, T>({
-    path: id === 0 ? path : `${path}/${id}`,
-    method: id === 0 ? 'POST' : 'PUT',
+    path: id ? `${path}/${id}` : path,
+    method: id ? 'PUT' : 'POST',
     mutationOptions: {
       onSuccess: (updatedSettings: T) => {
         queryClient.setQueryData<T[]>([path], (oldData = []) => {
-          if (id === 0) {
-            return [...oldData, updatedSettings];
+          if (id) {
+            return oldData.map((item) =>
+              item.id === updatedSettings.id ? updatedSettings : item
+            );
           }
 
-          return oldData.map((item) =>
-            item.id === updatedSettings.id ? updatedSettings : item
-          );
+          return [...oldData, updatedSettings];
         });
         onSuccess?.();
       },
@@ -73,7 +73,7 @@ export const useSaveProviderSettings = <T extends ModelBase>(
 };
 
 export const useManageProviderSettings = <T extends ModelBase>(
-  id: number,
+  id: number | undefined,
   defaultProvider: T,
   path: string
 ) => {

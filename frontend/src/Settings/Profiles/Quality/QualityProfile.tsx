@@ -1,15 +1,16 @@
 import React, { useCallback, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import Card from 'Components/Card';
 import Label from 'Components/Label';
 import IconButton from 'Components/Link/IconButton';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import Tooltip from 'Components/Tooltip/Tooltip';
 import { icons, kinds, tooltipPositions } from 'Helpers/Props';
-import { deleteQualityProfile } from 'Store/Actions/settingsActions';
-import { QualityProfileItems } from 'typings/QualityProfile';
 import translate from 'Utilities/String/translate';
 import EditQualityProfileModal from './EditQualityProfileModal';
+import {
+  QualityProfileItems,
+  useDeleteQualityProfile,
+} from './useQualityProfiles';
 import styles from './QualityProfile.css';
 
 interface QualityProfileProps {
@@ -18,7 +19,6 @@ interface QualityProfileProps {
   upgradeAllowed: boolean;
   cutoff: number;
   items: QualityProfileItems;
-
   isDeleting: boolean;
   onCloneQualityProfilePress: (id: number) => void;
 }
@@ -32,7 +32,7 @@ function QualityProfile({
   isDeleting,
   onCloneQualityProfilePress,
 }: QualityProfileProps) {
-  const dispatch = useDispatch();
+  const { deleteQualityProfile } = useDeleteQualityProfile(id);
 
   const [isEditQualityProfileModalOpen, setIsEditQualityProfileModalOpen] =
     useState(false);
@@ -57,8 +57,8 @@ function QualityProfile({
   }, []);
 
   const handleConfirmDeleteQualityProfile = useCallback(() => {
-    dispatch(deleteQualityProfile({ id }));
-  }, [id, dispatch]);
+    deleteQualityProfile();
+  }, [deleteQualityProfile]);
 
   const handleCloneQualityProfilePress = useCallback(() => {
     onCloneQualityProfilePress(id);

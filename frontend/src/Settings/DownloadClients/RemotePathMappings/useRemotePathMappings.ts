@@ -23,7 +23,7 @@ const NEW_REMOTE_PATH_MAPPING: RemotePathMappingModel = {
 export const useRemotePathMapping = () => {};
 
 export const useRemotePathMappings = () => {
-  return useProviderSettings<RemotePathMappingModel>(PATH);
+  return useProviderSettings<RemotePathMappingModel>({ path: PATH });
 };
 
 export const useManageRemotePathMappings = (id: number) => {

@@ -1,16 +1,13 @@
 import { maxBy } from 'lodash';
-import { useSelector } from 'react-redux';
 import CommandNames from 'Commands/CommandNames';
 import { useCommandExecuting } from 'Commands/useCommands';
 import { Season } from 'Series/Series';
 import { useSingleSeries } from 'Series/useSeries';
-import createSeriesQualityProfileSelector from 'Store/Selectors/createSeriesQualityProfileSelector';
+import useSeriesQualityProfile from 'Series/useSeriesQualityProfile';
 
 export function useSeriesIndexItem(seriesId: number) {
   const series = useSingleSeries(seriesId);
-  const qualityProfile = useSelector(
-    createSeriesQualityProfileSelector(series)
-  );
+  const qualityProfile = useSeriesQualityProfile(series);
 
   const isRefreshingSeries = useCommandExecuting(CommandNames.RefreshSeries, {
     seriesIds: [seriesId],

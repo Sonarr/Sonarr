@@ -1,12 +1,12 @@
 import React, { useMemo } from 'react';
 import { IconName } from 'Components/Icon';
 import { icons } from 'Helpers/Props';
+import { QualityProfileModel } from 'Settings/Profiles/Quality/useQualityProfiles';
 import {
   UiSettingsModel,
   useUiSettingsValues,
 } from 'Settings/UI/useUiSettings';
 import dimensions from 'Styles/Variables/dimensions';
-import QualityProfile from 'typings/QualityProfile';
 import formatDateTime from 'Utilities/Date/formatDateTime';
 import getRelativeDate from 'Utilities/Date/getRelativeDate';
 import formatBytes from 'Utilities/Number/formatBytes';
@@ -39,7 +39,7 @@ interface SeriesIndexOverviewInfoProps {
   monitored: boolean;
   nextAiring?: string;
   network?: string;
-  qualityProfile?: QualityProfile;
+  qualityProfile?: QualityProfileModel;
   previousAiring?: string;
   added?: string;
   seasonCount: number;

@@ -37,7 +37,7 @@ export const useReleaseProfilesWithIds = (ids: number[]) => {
 };
 
 export const useReleaseProfiles = () => {
-  return useProviderSettings<ReleaseProfileModel>(PATH);
+  return useProviderSettings<ReleaseProfileModel>({ path: PATH });
 };
 
 export const useManageReleaseProfile = (id: number) => {

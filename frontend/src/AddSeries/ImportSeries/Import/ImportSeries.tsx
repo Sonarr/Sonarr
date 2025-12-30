@@ -1,18 +1,17 @@
 import React, { useEffect, useMemo, useRef } from 'react';
-import { useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import {
   setAddSeriesOption,
   useAddSeriesOption,
 } from 'AddSeries/addSeriesOptionsStore';
 import { SelectProvider } from 'App/Select/SelectContext';
-import AppState from 'App/State/AppState';
 import Alert from 'Components/Alert';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
 import { kinds } from 'Helpers/Props';
 import useRootFolders, { useRootFolder } from 'RootFolder/useRootFolders';
+import { useQualityProfilesData } from 'Settings/Profiles/Quality/useQualityProfiles';
 import translate from 'Utilities/String/translate';
 import ImportSeriesFooter from './ImportSeriesFooter';
 import { clearImportSeries } from './importSeriesStore';
@@ -48,9 +47,7 @@ function ImportSeries() {
     };
   }, [rootFolders, rootFolderId]);
 
-  const qualityProfiles = useSelector(
-    (state: AppState) => state.settings.qualityProfiles.items
-  );
+  const qualityProfiles = useQualityProfilesData();
 
   const defaultQualityProfileId = useAddSeriesOption('qualityProfileId');
 
