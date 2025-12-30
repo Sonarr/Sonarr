@@ -1,10 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29806.167
-MinimumVisualStudioVersion = 10.0.40219.1
-# Visual Studio Version 17
-VisualStudioVersion = 17.2.32516.85
+# Visual Studio Version 18
+VisualStudioVersion = 18.1.11312.151
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sonarr.Console", "NzbDrone.Console\Sonarr.Console.csproj", "{3DCA7B58-B8B3-49AC-9D9E-56F4A0460976}"
 EndProject
@@ -69,6 +66,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0C7E5F5A-C4CC-4945-B399-1E1C9817CC45}"
 	ProjectSection(SolutionItems) = preProject
 		..\.editorconfig = ..\.editorconfig
+		appsettings.llm.template.json = appsettings.llm.template.json
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sonarr.Mono", "NzbDrone.Mono\Sonarr.Mono.csproj", "{22F71728-AB73-4774-8DC2-6D2D7734AE0C}"

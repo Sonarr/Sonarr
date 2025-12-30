@@ -100,5 +100,15 @@ namespace NzbDrone.Core.Configuration
 
         CertificateValidationType CertificateValidation { get; }
         string ApplicationUrl { get; }
+
+        // LLM Settings
+        bool LlmMatchingEnabled { get; }
+        string OpenAiApiKey { get; }
+        string OpenAiApiEndpoint { get; }
+        string OpenAiModel { get; }
+        double LlmConfidenceThreshold { get; }
+        int LlmMaxCallsPerHour { get; }
+        bool LlmCacheEnabled { get; }
+        int LlmCacheDurationHours { get; }
     }
 }

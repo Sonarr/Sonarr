@@ -421,6 +421,17 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("TrustCgnatIpAddresses", value); }
         }
 
+        // LLM Configuration
+
+        public bool LlmMatchingEnabled => GetValueBoolean("LlmMatchingEnabled", false);
+        public string OpenAiApiKey => GetValue("OpenAiApiKey", string.Empty, true);
+        public string OpenAiApiEndpoint => GetValue("OpenAiApiEndpoint", "https://api.openai.com/v1/chat/completions");
+        public string OpenAiModel => GetValue("OpenAiModel", "gpt-4o-mini");
+        public double LlmConfidenceThreshold => GetValueDouble("LlmConfidenceThreshold", 0.7);
+        public int LlmMaxCallsPerHour => GetValueInt("LlmMaxCallsPerHour", 60);
+        public bool LlmCacheEnabled => GetValueBoolean("LlmCacheEnabled", true);
+        public int LlmCacheDurationHours => GetValueInt("LlmCacheDurationHours", 24);
+
         private string GetValue(string key)
         {
             return GetValue(key, string.Empty);

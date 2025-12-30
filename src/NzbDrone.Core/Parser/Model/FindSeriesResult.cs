@@ -1,4 +1,4 @@
-﻿using NzbDrone.Core.Tv;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Parser.Model
 {
@@ -19,6 +19,7 @@ namespace NzbDrone.Core.Parser.Model
         Unknown = 0,
         Title = 1,
         Alias = 2,
-        Id = 3
+        Id = 3,
+        Llm = 4
     }
 }

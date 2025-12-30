@@ -25,6 +25,7 @@ using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Instrumentation;
 using NzbDrone.Core.Lifecycle;
 using NzbDrone.Core.Messaging.Events;
+using NzbDrone.Core.Parser.LlmMatching;
 using NzbDrone.Host.AccessControl;
 using NzbDrone.Http.Authentication;
 using NzbDrone.SignalR;
@@ -222,6 +223,12 @@ namespace NzbDrone.Host
 
             services.AddSingleton<IAuthorizationPolicyProvider, UiAuthorizationPolicyProvider>();
             services.AddSingleton<IAuthorizationHandler, UiAuthorizationHandler>();
+
+            services.AddSingleton<OpenAiSeriesMatchingService>();
+            services.AddSingleton<CachedLlmSeriesMatchingService>();
+            services.AddSingleton<RateLimitedLlmSeriesMatchingService>();
+            services.AddSingleton<ILlmSeriesMatchingService>(sp =>
+                sp.GetRequiredService<RateLimitedLlmSeriesMatchingService>());
 
             services.AddAuthorization(options =>
             {
