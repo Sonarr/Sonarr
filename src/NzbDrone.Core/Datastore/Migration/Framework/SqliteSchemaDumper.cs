@@ -120,7 +120,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
                 column.IsPrimaryKey = upper.Contains("PRIMARY KEY");
                 column.IsIdentity = upper.Contains("AUTOINCREMENT");
                 column.IsNullable = !upper.Contains("NOT NULL") && !upper.Contains("PRIMARY KEY");
-                column.IsUnique = upper.Contains("UNIQUE") || upper.Contains("PRIMARY KEY");
+                column.IsUnique = upper.Contains("UNIQUE");
             }
 
             return column;
