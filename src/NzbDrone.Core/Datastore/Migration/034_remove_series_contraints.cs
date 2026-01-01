@@ -9,6 +9,7 @@ namespace NzbDrone.Core.Datastore.Migration
         protected override void MainDbUpgrade()
         {
             Alter.Table("Series")
+                .AlterColumn("TvRageId").AsInt32()
                 .AlterColumn("ImdbId").AsString().Nullable()
                 .AlterColumn("TitleSlug").AsString().Nullable();
         }
