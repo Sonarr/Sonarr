@@ -2072,6 +2072,7 @@
   "TheTvdb": "TheTVDB",
   "Theme": "Theme",
   "ThemeHelpText": "Change Application UI Theme, 'Auto' Theme will use your OS Theme to set Light or Dark mode. Inspired by Theme.Park",
+  "Threshold": "Threshold",
   "Time": "Time",
   "TimeFormat": "Time Format",
   "TimeLeft": "Time Left",
