@@ -1,5 +1,5 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import AppState from 'App/State/AppState';
 import Card from 'Components/Card';
 import FieldSet from 'Components/FieldSet';
@@ -7,6 +7,7 @@ import Icon from 'Components/Icon';
 import PageSectionContent from 'Components/Page/PageSectionContent';
 import useModalOpenState from 'Helpers/Hooks/useModalOpenState';
 import { icons } from 'Helpers/Props';
+import { fetchIndexers } from 'Store/Actions/settingsActions';
 import { useTagList } from 'Tags/useTags';
 import translate from 'Utilities/String/translate';
 import EditReleaseProfileModal from './EditReleaseProfileModal';
@@ -15,6 +16,7 @@ import { useReleaseProfiles } from './useReleaseProfiles';
 import styles from './ReleaseProfiles.css';
 
 function ReleaseProfiles() {
+  const dispatch = useDispatch();
   const { data, isFetching, isFetched, error } = useReleaseProfiles();
 
   const tagList = useTagList();
@@ -27,6 +29,10 @@ function ReleaseProfiles() {
     setAddReleaseProfileModalOpen,
     setAddReleaseProfileModalClosed,
   ] = useModalOpenState(false);
+
+  useEffect(() => {
+    dispatch(fetchIndexers());
+  }, [dispatch]);
 
   return (
     <FieldSet legend={translate('ReleaseProfiles')}>
