@@ -156,7 +156,7 @@ public class SeriesController : RestControllerWithSignalR<SeriesResource, NzbDro
 
     protected override SeriesResource? GetResourceById(int id)
     {
-        var includeSubresources = Request.Query["includeSubresources"].Select(v =>
+        var includeSubresources = Request?.Query["includeSubresources"].Select(v =>
         {
             if (Enum.TryParse<SeriesSubresource>(v, true, out var enumValue))
             {
@@ -164,7 +164,7 @@ public class SeriesController : RestControllerWithSignalR<SeriesResource, NzbDro
             }
 
             throw new BadRequestException($"The value '{v}' is not valid.");
-        });
+        }) ?? [];
 
         var includeSeasonImages = includeSubresources.Contains(SeriesSubresource.SeasonImages);
 
