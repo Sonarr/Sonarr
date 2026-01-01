@@ -1,7 +1,5 @@
-import React, { useCallback, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useCallback } from 'react';
 import { SelectProvider, useSelect } from 'App/Select/SelectContext';
-import AppState from 'App/State/AppState';
 import CommandNames from 'Commands/CommandNames';
 import { useExecuteCommand } from 'Commands/useCommands';
 import Alert from 'Components/Alert';
@@ -16,7 +14,7 @@ import ModalHeader from 'Components/Modal/ModalHeader';
 import { kinds } from 'Helpers/Props';
 import formatSeason from 'Season/formatSeason';
 import { useSingleSeries } from 'Series/useSeries';
-import { fetchNamingSettings } from 'Store/Actions/settingsActions';
+import { useNamingSettings } from 'Settings/MediaManagement/Naming/useNamingSettings';
 import { CheckInputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
 import OrganizePreviewRow from './OrganizePreviewRow';
@@ -44,7 +42,6 @@ function OrganizePreviewModalContentInner({
   seasonNumber,
   onModalClose,
 }: OrganizePreviewModalContentProps) {
-  const dispatch = useDispatch();
   const executeCommand = useExecuteCommand();
   const {
     items,
@@ -55,10 +52,10 @@ function OrganizePreviewModalContentInner({
 
   const {
     isFetching: isNamingFetching,
-    isPopulated: isNamingPopulated,
+    isFetched: isNamingFetched,
     error: namingError,
-    item: naming,
-  } = useSelector((state: AppState) => state.settings.naming);
+    data: naming,
+  } = useNamingSettings();
 
   const series = useSingleSeries(seriesId)!;
 
@@ -66,7 +63,7 @@ function OrganizePreviewModalContentInner({
     useSelect<OrganizePreviewModel>();
 
   const isFetching = isPreviewFetching || isNamingFetching;
-  const isPopulated = isPreviewFetched && isNamingPopulated;
+  const isPopulated = isPreviewFetched && isNamingFetched;
   const error = previewError || namingError;
   const { renameEpisodes } = naming;
   const episodeFormat = naming[`${series.seriesType}EpisodeFormat`];
@@ -95,10 +92,6 @@ function OrganizePreviewModalContentInner({
 
     onModalClose();
   }, [seriesId, getSelectedIds, executeCommand, onModalClose]);
-
-  useEffect(() => {
-    dispatch(fetchNamingSettings());
-  }, [dispatch]);
 
   return (
     <ModalContent onModalClose={onModalClose}>

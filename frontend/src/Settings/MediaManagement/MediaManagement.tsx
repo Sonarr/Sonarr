@@ -1,6 +1,5 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import AppState from 'App/State/AppState';
 import Alert from 'Components/Alert';
 import FieldSet from 'Components/FieldSet';
 import Form from 'Components/Form/Form';
@@ -19,13 +18,12 @@ import { clearPendingChanges } from 'Store/Actions/baseActions';
 import {
   fetchMediaManagementSettings,
   saveMediaManagementSettings,
-  saveNamingSettings,
   setMediaManagementSettingsValue,
 } from 'Store/Actions/settingsActions';
 import createSettingsSectionSelector from 'Store/Selectors/createSettingsSectionSelector';
 import { useIsWindows } from 'System/Status/useSystemStatus';
 import { InputChanged } from 'typings/inputs';
-import isEmpty from 'Utilities/Object/isEmpty';
+import { SettingsStateChange } from 'typings/Settings/SettingsState';
 import translate from 'Utilities/String/translate';
 import Naming from './Naming/Naming';
 import AddRootFolder from './RootFolder/AddRootFolder';
@@ -140,10 +138,9 @@ const seasonPackUpgradeOptions: EnhancedSelectInputValue<string>[] = [
 function MediaManagement() {
   const dispatch = useDispatch();
   const showAdvancedSettings = useShowAdvancedSettings();
-  const hasNamingPendingChanges = !isEmpty(
-    useSelector((state: AppState) => state.settings.naming.pendingChanges)
-  );
+
   const isWindows = useIsWindows();
+
   const {
     isFetching,
     isPopulated,
@@ -156,9 +153,24 @@ function MediaManagement() {
     validationWarnings,
   } = useSelector(createSettingsSectionSelector(SECTION));
 
+  const [naming, setNaming] = useState<SettingsStateChange>({
+    isSaving: false,
+    hasPendingChanges: false,
+  });
+
+  const saveSettings = useRef<{
+    naming: () => void;
+  }>({
+    naming: () => {},
+  });
+
+  const handleSetNamingSave = useCallback((saveCallback: () => void) => {
+    saveSettings.current.naming = saveCallback;
+  }, []);
+
   const handleSavePress = useCallback(() => {
     dispatch(saveMediaManagementSettings());
-    dispatch(saveNamingSettings());
+    saveSettings.current.naming();
   }, [dispatch]);
 
   const handleInputChange = useCallback(
@@ -180,13 +192,16 @@ function MediaManagement() {
   return (
     <PageContent title={translate('MediaManagementSettings')}>
       <SettingsToolbar
-        isSaving={isSaving}
-        hasPendingChanges={hasNamingPendingChanges || hasPendingChanges}
+        isSaving={isSaving || naming.isSaving}
+        hasPendingChanges={naming.hasPendingChanges || hasPendingChanges}
         onSavePress={handleSavePress}
       />
 
       <PageContentBody>
-        <Naming />
+        <Naming
+          setChildSave={handleSetNamingSave}
+          onChildStateChange={setNaming}
+        />
 
         {isFetching ? (
           <FieldSet legend={translate('NamingSettings')}>

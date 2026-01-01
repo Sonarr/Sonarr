@@ -1,7 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { createSelector } from 'reselect';
-import AppState from 'App/State/AppState';
+import React, { useCallback, useEffect, useState } from 'react';
 import Alert from 'Components/Alert';
 import FieldSet from 'Components/FieldSet';
 import Form from 'Components/Form/Form';
@@ -11,41 +8,23 @@ import FormInputGroup from 'Components/Form/FormInputGroup';
 import FormLabel from 'Components/Form/FormLabel';
 import { EnhancedSelectInputValue } from 'Components/Form/Select/EnhancedSelectInput';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
+import useDebounce from 'Helpers/Hooks/useDebounce';
 import useModalOpenState from 'Helpers/Hooks/useModalOpenState';
 import { inputTypes, kinds, sizes } from 'Helpers/Props';
 import { useShowAdvancedSettings } from 'Settings/advancedSettingsStore';
-import { clearPendingChanges } from 'Store/Actions/baseActions';
-import {
-  fetchNamingExamples,
-  fetchNamingSettings,
-  setNamingSettingsValue,
-} from 'Store/Actions/settingsActions';
-import createSettingsSectionSelector from 'Store/Selectors/createSettingsSectionSelector';
 import { InputChanged } from 'typings/inputs';
-import NamingConfig from 'typings/Settings/NamingConfig';
 import translate from 'Utilities/String/translate';
 import NamingModal from './NamingModal';
+import {
+  NamingSettingsModel,
+  useManageNamingSettings,
+  useNamingExamples,
+} from './useNamingSettings';
 import styles from './Naming.css';
-
-const SECTION = 'naming';
-
-function createNamingSelector() {
-  return createSelector(
-    (state: AppState) => state.settings.namingExamples,
-    createSettingsSectionSelector(SECTION),
-    (namingExamples, sectionSettings) => {
-      return {
-        examples: namingExamples.item,
-        examplesPopulated: namingExamples.isPopulated,
-        ...sectionSettings,
-      };
-    }
-  );
-}
 
 interface NamingModalOptions {
   name: keyof Pick<
-    NamingConfig,
+    NamingSettingsModel,
     | 'standardEpisodeFormat'
     | 'dailyEpisodeFormat'
     | 'animeEpisodeFormat'
@@ -60,51 +39,46 @@ interface NamingModalOptions {
   additional?: boolean;
 }
 
-function Naming() {
+interface NamingProps {
+  setChildSave: (saveCallback: () => void) => void;
+  onChildStateChange: (state: {
+    isSaving: boolean;
+    hasPendingChanges: boolean;
+  }) => void;
+}
+
+function Naming({ setChildSave, onChildStateChange }: NamingProps) {
   const advancedSettings = useShowAdvancedSettings();
   const {
+    settings,
+    updateSetting,
     isFetching,
     error,
-    settings,
     hasSettings,
-    examples,
-    examplesPopulated,
-  } = useSelector(createNamingSelector());
+    hasPendingChanges,
+    isSaving,
+    saveSettings,
+  } = useManageNamingSettings();
 
-  const dispatch = useDispatch();
+  const debouncedSettings = useDebounce(settings, 300);
+  const { examples } = useNamingExamples(debouncedSettings);
+  const examplesPopulated = !!examples;
 
   const [isNamingModalOpen, setNamingModalOpen, setNamingModalClosed] =
     useModalOpenState(false);
   const [namingModalOptions, setNamingModalOptions] =
     useState<NamingModalOptions | null>(null);
-  const namingExampleTimeout = useRef<ReturnType<typeof setTimeout>>();
-
-  useEffect(() => {
-    dispatch(fetchNamingSettings());
-    dispatch(fetchNamingExamples());
-
-    return () => {
-      dispatch(clearPendingChanges({ section: 'settings.naming' }));
-    };
-  }, [dispatch]);
 
   const handleInputChange = useCallback(
     (change: InputChanged) => {
-      // @ts-expect-error 'setNamingSettingsValue' isn't typed yet
-      dispatch(setNamingSettingsValue(change));
+      const key = change.name as keyof NamingSettingsModel;
 
-      if (namingExampleTimeout.current) {
-        clearTimeout(namingExampleTimeout.current);
-      }
-
-      namingExampleTimeout.current = setTimeout(() => {
-        dispatch(fetchNamingExamples());
-      }, 1000);
+      updateSetting(key, change.value as NamingSettingsModel[typeof key]);
     },
-    [dispatch]
+    [updateSetting]
   );
 
-  const onStandardNamingModalOpenClick = useCallback(() => {
+  const handleStandardNamingModalOpenClick = useCallback(() => {
     setNamingModalOpen();
 
     setNamingModalOptions({
@@ -115,7 +89,7 @@ function Naming() {
     });
   }, [setNamingModalOpen, setNamingModalOptions]);
 
-  const onDailyNamingModalOpenClick = useCallback(() => {
+  const handleDailyNamingModalOpenClick = useCallback(() => {
     setNamingModalOpen();
 
     setNamingModalOptions({
@@ -127,7 +101,7 @@ function Naming() {
     });
   }, [setNamingModalOpen, setNamingModalOptions]);
 
-  const onAnimeNamingModalOpenClick = useCallback(() => {
+  const handleAnimeNamingModalOpenClick = useCallback(() => {
     setNamingModalOpen();
 
     setNamingModalOptions({
@@ -139,7 +113,7 @@ function Naming() {
     });
   }, [setNamingModalOpen, setNamingModalOptions]);
 
-  const onSeriesFolderNamingModalOpenClick = useCallback(() => {
+  const handleSeriesFolderNamingModalOpenClick = useCallback(() => {
     setNamingModalOpen();
 
     setNamingModalOptions({
@@ -147,7 +121,7 @@ function Naming() {
     });
   }, [setNamingModalOpen, setNamingModalOptions]);
 
-  const onSeasonFolderNamingModalOpenClick = useCallback(() => {
+  const handleSeasonFolderNamingModalOpenClick = useCallback(() => {
     setNamingModalOpen();
 
     setNamingModalOptions({
@@ -156,7 +130,7 @@ function Naming() {
     });
   }, [setNamingModalOpen, setNamingModalOptions]);
 
-  const onSpecialsFolderNamingModalOpenClick = useCallback(() => {
+  const handleSpecialsFolderNamingModalOpenClick = useCallback(() => {
     setNamingModalOpen();
 
     setNamingModalOptions({
@@ -282,6 +256,17 @@ function Naming() {
     }
   }
 
+  useEffect(() => {
+    onChildStateChange({
+      hasPendingChanges,
+      isSaving,
+    });
+  }, [hasPendingChanges, isSaving, onChildStateChange]);
+
+  useEffect(() => {
+    setChildSave(saveSettings);
+  }, [setChildSave, saveSettings]);
+
   return (
     <FieldSet legend={translate('EpisodeNaming')}>
       {isFetching ? <LoadingIndicator /> : null}
@@ -358,7 +343,9 @@ function Naming() {
                   type={inputTypes.TEXT}
                   name="standardEpisodeFormat"
                   buttons={
-                    <FormInputButton onPress={onStandardNamingModalOpenClick}>
+                    <FormInputButton
+                      onPress={handleStandardNamingModalOpenClick}
+                    >
                       ?
                     </FormInputButton>
                   }
@@ -380,7 +367,7 @@ function Naming() {
                   type={inputTypes.TEXT}
                   name="dailyEpisodeFormat"
                   buttons={
-                    <FormInputButton onPress={onDailyNamingModalOpenClick}>
+                    <FormInputButton onPress={handleDailyNamingModalOpenClick}>
                       ?
                     </FormInputButton>
                   }
@@ -402,7 +389,7 @@ function Naming() {
                   type={inputTypes.TEXT}
                   name="animeEpisodeFormat"
                   buttons={
-                    <FormInputButton onPress={onAnimeNamingModalOpenClick}>
+                    <FormInputButton onPress={handleAnimeNamingModalOpenClick}>
                       ?
                     </FormInputButton>
                   }
@@ -430,7 +417,9 @@ function Naming() {
               type={inputTypes.TEXT}
               name="seriesFolderFormat"
               buttons={
-                <FormInputButton onPress={onSeriesFolderNamingModalOpenClick}>
+                <FormInputButton
+                  onPress={handleSeriesFolderNamingModalOpenClick}
+                >
                   ?
                 </FormInputButton>
               }
@@ -455,7 +444,9 @@ function Naming() {
               type={inputTypes.TEXT}
               name="seasonFolderFormat"
               buttons={
-                <FormInputButton onPress={onSeasonFolderNamingModalOpenClick}>
+                <FormInputButton
+                  onPress={handleSeasonFolderNamingModalOpenClick}
+                >
                   ?
                 </FormInputButton>
               }
@@ -481,7 +472,9 @@ function Naming() {
               type={inputTypes.TEXT}
               name="specialsFolderFormat"
               buttons={
-                <FormInputButton onPress={onSpecialsFolderNamingModalOpenClick}>
+                <FormInputButton
+                  onPress={handleSpecialsFolderNamingModalOpenClick}
+                >
                   ?
                 </FormInputButton>
               }
