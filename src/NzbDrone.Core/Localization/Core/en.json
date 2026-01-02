@@ -562,7 +562,7 @@
   "DownloadClientValidationApiKeyIncorrect": "API Key Incorrect",
   "DownloadClientValidationApiKeyRequired": "API Key Required",
   "DownloadClientValidationAuthenticationFailure": "Authentication Failure",
-  "DownloadClientValidationAuthenticationFailureDetail": "Please verify your username and password. Also verify if the host running {appName} isn't blocked from accessing {clientName} by WhiteList limitations in the {clientName} configuration.",
+  "DownloadClientValidationAuthenticationFailureDetail": "Please verify your credentials. Also verify if the host running {appName} isn't blocked from accessing {clientName} by WhiteList limitations in the {clientName} configuration.",
   "DownloadClientValidationCategoryMissing": "Category does not exist",
   "DownloadClientValidationCategoryMissingDetail": "The category you entered doesn't exist in {clientName}. Create it in {clientName} first.",
   "DownloadClientValidationErrorVersion": "{clientName} version should be at least {requiredVersion}. Version reported is {reportedVersion}",
