@@ -422,13 +422,12 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                 _authCookieCache.Remove(authKey);
 
                 var authRequestBuilder = BuildRequest(settings);
-                authRequestBuilder.NetworkCredential = new BasicNetworkCredential(settings.Username, settings.Password);
 
                 var authLoginRequest = authRequestBuilder.Resource("/api/v2/auth/login")
-                                                             .Post()
-                                                             .AddFormParameter("username", settings.Username ?? string.Empty)
-                                                             .AddFormParameter("password", settings.Password ?? string.Empty)
-                                                             .Build();
+                    .Post()
+                    .AddFormParameter("username", settings.Username ?? string.Empty)
+                    .AddFormParameter("password", settings.Password ?? string.Empty)
+                    .Build();
 
                 HttpResponse response;
                 try
@@ -438,6 +437,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                 catch (HttpException ex)
                 {
                     _logger.Debug(ex, "qbitTorrent authentication failed.");
+
                     if (ex.Response.StatusCode is HttpStatusCode.Unauthorized or HttpStatusCode.Forbidden)
                     {
                         throw new DownloadClientAuthenticationException("Failed to authenticate with qBittorrent.", ex);
