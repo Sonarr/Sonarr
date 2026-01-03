@@ -1,43 +1,21 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { createSelector } from 'reselect';
-import MetadataAppState from 'App/State/MetadataAppState';
+import React from 'react';
 import FieldSet from 'Components/FieldSet';
 import PageSectionContent from 'Components/Page/PageSectionContent';
-import { fetchMetadata } from 'Store/Actions/settingsActions';
-import createSortedSectionSelector from 'Store/Selectors/createSortedSectionSelector';
-import MetadataType from 'typings/Metadata';
-import sortByProp from 'Utilities/Array/sortByProp';
 import translate from 'Utilities/String/translate';
+import { useSortedMetadata } from '../useMetadata';
 import Metadata from './Metadata';
 import styles from './Metadatas.css';
 
-function createMetadatasSelector() {
-  return createSelector(
-    createSortedSectionSelector<MetadataType, MetadataAppState>(
-      'settings.metadata',
-      sortByProp('name')
-    ),
-    (metadata: MetadataAppState) => metadata
-  );
-}
-
 function Metadatas() {
-  const dispatch = useDispatch();
-  const { isFetching, error, items, ...otherProps } = useSelector(
-    createMetadatasSelector()
-  );
-
-  useEffect(() => {
-    dispatch(fetchMetadata());
-  }, [dispatch]);
+  const { data: items, isFetching, isFetched, error } = useSortedMetadata();
 
   return (
     <FieldSet legend={translate('Metadata')}>
       <PageSectionContent
-        isFetching={isFetching}
+        error={error}
         errorMessage={translate('MetadataLoadError')}
-        {...otherProps}
+        isFetching={isFetching}
+        isPopulated={isFetched}
       >
         <div className={styles.metadatas}>
           {items.map((item) => {

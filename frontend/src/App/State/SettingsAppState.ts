@@ -25,7 +25,6 @@ import DownloadClientOptions from 'typings/Settings/DownloadClientOptions';
 import General from 'typings/Settings/General';
 import IndexerOptions from 'typings/Settings/IndexerOptions';
 import MediaManagement from 'typings/Settings/MediaManagement';
-import MetadataAppState from './MetadataAppState';
 
 type Presets<T> = T & {
   presets: T[];
@@ -136,7 +135,6 @@ interface SettingsAppState {
   indexers: IndexerAppState;
   languages: LanguageSettingsAppState;
   mediaManagement: MediaManagementAppState;
-  metadata: MetadataAppState;
   naming: NamingAppState;
   namingExamples: NamingExamplesAppState;
 }

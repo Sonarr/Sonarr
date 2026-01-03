@@ -1,6 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import AppState from 'App/State/AppState';
+import React, { useCallback, useEffect } from 'react';
 import Alert from 'Components/Alert';
 import Form from 'Components/Form/Form';
 import FormGroup from 'Components/Form/FormGroup';
@@ -15,14 +13,10 @@ import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import usePrevious from 'Helpers/Hooks/usePrevious';
 import { inputTypes } from 'Helpers/Props';
-import {
-  saveMetadata,
-  setMetadataFieldValue,
-  setMetadataValue,
-} from 'Store/Actions/settingsActions';
-import selectSettings from 'Store/Selectors/selectSettings';
 import { InputChanged } from 'typings/inputs';
+import Metadata from 'typings/Metadata';
 import translate from 'Utilities/String/translate';
+import { useManageMetadata } from '../useMetadata';
 import styles from './EditMetadataModalContent.css';
 
 export interface EditMetadataModalContentProps {
@@ -36,41 +30,39 @@ function EditMetadataModalContent({
   advancedSettings,
   onModalClose,
 }: EditMetadataModalContentProps) {
-  const dispatch = useDispatch();
-
-  const { isSaving, saveError, pendingChanges, items } = useSelector(
-    (state: AppState) => state.settings.metadata
-  );
+  const {
+    item,
+    updateValue,
+    updateFieldValue,
+    saveProvider,
+    isSaving,
+    saveError,
+    ...otherSettings
+  } = useManageMetadata(id);
 
   const wasSaving = usePrevious(isSaving);
 
-  const { settings, ...otherSettings } = useMemo(() => {
-    const item = items.find((item) => item.id === id)!;
-
-    return selectSettings(item, pendingChanges, saveError);
-  }, [id, items, pendingChanges, saveError]);
-
-  const { name, enable, fields, message } = settings;
+  const { name, enable, fields, message } = item;
 
   const handleInputChange = useCallback(
     ({ name, value }: InputChanged) => {
-      // @ts-expect-error not typed
-      dispatch(setMetadataValue({ name, value }));
+      const key = name as keyof Metadata;
+
+      updateValue(key, value as Metadata[typeof key]);
     },
-    [dispatch]
+    [updateValue]
   );
 
   const handleFieldChange = useCallback(
     ({ name, value }: InputChanged) => {
-      // @ts-expect-error not typed
-      dispatch(setMetadataFieldValue({ name, value }));
+      updateFieldValue?.({ [name]: value });
     },
-    [dispatch]
+    [updateFieldValue]
   );
 
   const handleSavePress = useCallback(() => {
-    dispatch(saveMetadata({ id }));
-  }, [id, dispatch]);
+    saveProvider();
+  }, [saveProvider]);
 
   useEffect(() => {
     if (wasSaving && !isSaving && !saveError) {

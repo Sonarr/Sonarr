@@ -16,7 +16,6 @@ import indexerOptions from './Settings/indexerOptions';
 import indexers from './Settings/indexers';
 import languages from './Settings/languages';
 import mediaManagement from './Settings/mediaManagement';
-import metadata from './Settings/metadata';
 
 export * from './Settings/autoTaggingSpecifications';
 export * from './Settings/autoTaggings';
@@ -34,7 +33,6 @@ export * from './Settings/indexerOptions';
 export * from './Settings/indexers';
 export * from './Settings/languages';
 export * from './Settings/mediaManagement';
-export * from './Settings/metadata';
 
 //
 // Variables
@@ -61,8 +59,7 @@ export const defaultState = {
   indexerOptions: indexerOptions.defaultState,
   indexers: indexers.defaultState,
   languages: languages.defaultState,
-  mediaManagement: mediaManagement.defaultState,
-  metadata: metadata.defaultState
+  mediaManagement: mediaManagement.defaultState
 };
 
 export const persistState = [
@@ -88,8 +85,7 @@ export const actionHandlers = handleThunks({
   ...indexerOptions.actionHandlers,
   ...indexers.actionHandlers,
   ...languages.actionHandlers,
-  ...mediaManagement.actionHandlers,
-  ...metadata.actionHandlers
+  ...mediaManagement.actionHandlers
 });
 
 //
@@ -111,7 +107,6 @@ export const reducers = createHandleActions({
   ...indexerOptions.reducers,
   ...indexers.reducers,
   ...languages.reducers,
-  ...mediaManagement.reducers,
-  ...metadata.reducers
+  ...mediaManagement.reducers
 
 }, defaultState, section);
