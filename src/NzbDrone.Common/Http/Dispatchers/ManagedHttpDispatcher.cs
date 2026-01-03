@@ -53,11 +53,9 @@ namespace NzbDrone.Common.Http.Dispatchers
 
         public async Task<HttpResponse> GetResponseAsync(HttpRequest request, CookieContainer cookies)
         {
-            var requestMessage = new HttpRequestMessage(request.Method, (Uri)request.Url)
-            {
-                Version = HttpVersion.Version20,
-                VersionPolicy = HttpVersionPolicy.RequestVersionOrLower
-            };
+            using var requestMessage = new HttpRequestMessage(request.Method, (Uri)request.Url);
+            requestMessage.Version = HttpVersion.Version20;
+            requestMessage.VersionPolicy = HttpVersionPolicy.RequestVersionOrLower;
             requestMessage.Headers.UserAgent.ParseAdd(_userAgentBuilder.GetUserAgent(request.UseSimplifiedUserAgent));
             requestMessage.Headers.ConnectionClose = !request.ConnectionKeepAlive;
 
@@ -113,31 +111,30 @@ namespace NzbDrone.Common.Http.Dispatchers
             try
             {
                 using var responseMessage = await httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cts.Token);
+
+                byte[] data = null;
+
+                try
                 {
-                    byte[] data = null;
-
-                    try
+                    if (request.ResponseStream != null && responseMessage.StatusCode == HttpStatusCode.OK)
                     {
-                        if (request.ResponseStream != null && responseMessage.StatusCode == HttpStatusCode.OK)
-                        {
-                            await responseMessage.Content.CopyToAsync(request.ResponseStream, null, cts.Token);
-                        }
-                        else
-                        {
-                            data = await responseMessage.Content.ReadAsByteArrayAsync(cts.Token);
-                        }
+                        await responseMessage.Content.CopyToAsync(request.ResponseStream, null, cts.Token);
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        throw new WebException("Failed to read complete http response", ex, WebExceptionStatus.ReceiveFailure, null);
+                        data = await responseMessage.Content.ReadAsByteArrayAsync(cts.Token);
                     }
-
-                    var headers = responseMessage.Headers.ToNameValueCollection();
-
-                    headers.Add(responseMessage.Content.Headers.ToNameValueCollection());
-
-                    return new HttpResponse(request, new HttpHeader(headers), data, responseMessage.StatusCode, responseMessage.Version);
                 }
+                catch (Exception ex)
+                {
+                    throw new WebException("Failed to read complete http response", ex, WebExceptionStatus.ReceiveFailure, null);
+                }
+
+                var headers = responseMessage.Headers.ToNameValueCollection();
+
+                headers.Add(responseMessage.Content.Headers.ToNameValueCollection());
+
+                return new HttpResponse(request, new HttpHeader(headers), data, responseMessage.StatusCode, responseMessage.Version);
             }
             catch (OperationCanceledException ex) when (cts.IsCancellationRequested)
             {
