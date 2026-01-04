@@ -128,9 +128,9 @@ export const useCommand = (
   const { data: commands } = useCommands();
 
   return useMemo(() => {
-    return commands.find((command) => {
+    return commands.findLast((command) => {
       if (command.name !== commandName) {
-        return undefined;
+        return false;
       }
 
       return (Object.keys(constraints) as Array<keyof CommandBody>).every(
