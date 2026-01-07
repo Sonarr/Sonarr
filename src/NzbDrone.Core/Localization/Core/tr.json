@@ -1420,7 +1420,6 @@
     "NotificationsKodiSettingsDisplayTimeHelpText": "Bildirimin ne kadar süreyle görüntüleneceği (Saniye cinsinden)",
     "NotificationsKodiSettingsGuiNotification": "GUI Bildirimi",
     "NotificationsKodiSettingsUpdateLibraryHelpText": "İçe Aktarma ve Yeniden Adlandırmada kitaplık güncellensin mi?",
-    "NotificationsLoadError": "Bildirimler yüklenemiyor",
     "NotificationsMailgunSettingsApiKeyHelpText": "MailGun'dan oluşturulan API anahtarı",
     "NotificationsMailgunSettingsSenderDomain": "Gönderen Alanı",
     "NotificationsMailgunSettingsUseEuEndpoint": "AB Uç Noktasını Kullan",

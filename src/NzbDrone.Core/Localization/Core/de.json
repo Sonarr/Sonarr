@@ -1388,7 +1388,6 @@
     "NotificationsKodiSettingsDisplayTimeHelpText": "Wie lange die Benachrichtigung angezeigt wird (in Sekunden)",
     "NotificationsKodiSettingsGuiNotification": "GUI-Benachrichtigung",
     "NotificationsKodiSettingsUpdateLibraryHelpText": "Bibliothek bei Import & Umbenennung aktualisieren?",
-    "NotificationsLoadError": "Benachrichtigungen können nicht geladen werden",
     "NotificationsMailgunSettingsApiKeyHelpText": "Der von MailGun generierte API-Schlüssel",
     "NotificationsMailgunSettingsSenderDomain": "Absenderdomain",
     "NotificationsMailgunSettingsUseEuEndpoint": "EU-Endpunkt verwenden",

@@ -1436,7 +1436,6 @@
     "NotificationsKodiSettingsDisplayTimeHelpText": "Por quanto tempo a notificação será exibida (em segundos)",
     "NotificationsKodiSettingsGuiNotification": "Notificação na interface gráfica",
     "NotificationsKodiSettingsUpdateLibraryHelpText": "Atualizar biblioteca ao importar e renomear?",
-    "NotificationsLoadError": "Não foi possível carregar as notificações",
     "NotificationsMailgunSettingsApiKeyHelpText": "A chave da API gerada pelo MailGun",
     "NotificationsMailgunSettingsSenderDomain": "Domínio do remetente",
     "NotificationsMailgunSettingsUseEuEndpoint": "Usar ponto de extremidade na Europa",

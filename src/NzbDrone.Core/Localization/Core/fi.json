@@ -1431,7 +1431,6 @@
     "NotificationsKodiSettingsDisplayTimeHelpText": "Määrittää ilmoituksen näyttöajan sekunteina.",
     "NotificationsKodiSettingsGuiNotification": "Ilmoita käyttöliittymässä",
     "NotificationsKodiSettingsUpdateLibraryHelpText": "Määrittää päivitetäänkö Kodin kirjasto tuonnin ja uudelleennimeämisen yhteydessä.",
-    "NotificationsLoadError": "Ilmoituspalveluiden lataus epäonnistui",
     "NotificationsMailgunSettingsApiKeyHelpText": "MailGunissa luotu rajapinnan (API) avain.",
     "NotificationsMailgunSettingsSenderDomain": "Lähettäjän verkkotunnus",
     "NotificationsMailgunSettingsUseEuEndpoint": "Käytä EU-päätepistettä",

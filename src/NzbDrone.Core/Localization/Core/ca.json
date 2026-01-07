@@ -1436,7 +1436,6 @@
     "NotificationsKodiSettingsDisplayTimeHelpText": "Quant de temps es mostrarà la notificació (En segons)",
     "NotificationsKodiSettingsGuiNotification": "Notificació d'interfície gràfica",
     "NotificationsKodiSettingsUpdateLibraryHelpText": "Voleu actualitzar la biblioteca en Importa & Canvia el nom?",
-    "NotificationsLoadError": "No es poden carregar les notificacions",
     "NotificationsMailgunSettingsApiKeyHelpText": "La clau API generada des de MailGun",
     "NotificationsMailgunSettingsSenderDomain": "Domini del remitent",
     "NotificationsMailgunSettingsUseEuEndpoint": "Utilitza el punt final de la UE",

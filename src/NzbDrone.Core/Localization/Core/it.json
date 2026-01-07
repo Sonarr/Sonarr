@@ -724,7 +724,6 @@
     "NotificationsGotifySettingsServerHelpText": "URL server Gotify, includendo http(s):// e porta se necessario",
     "NotificationsKodiSettingsCleanLibrary": "Pulisci Libreria",
     "NotificationsKodiSettingsCleanLibraryHelpText": "Pulisci libreria dopo l'aggiornamento",
-    "NotificationsLoadError": "Impossibile caricare Notifiche",
     "NotificationsMailgunSettingsUseEuEndpoint": "Usa Endpoint EU",
     "NotificationsMailgunSettingsUseEuEndpointHelpText": "Abilita per usare l'endpoint EU di MailGun",
     "NotificationsNtfySettingsPasswordHelpText": "Password opzionale",

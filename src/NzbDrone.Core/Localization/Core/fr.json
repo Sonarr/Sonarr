@@ -1428,7 +1428,6 @@
     "NotificationsKodiSettingsDisplayTimeHelpText": "Combien de temps la notification doit être affichée (en seconde)",
     "NotificationsKodiSettingsGuiNotification": "Notification GUI",
     "NotificationsKodiSettingsUpdateLibraryHelpText": "Mettre à jour la bibliothèque lors de l'importation et du renommage ?",
-    "NotificationsLoadError": "Impossible de charger les notifications",
     "NotificationsMailgunSettingsApiKeyHelpText": "La clé API générée depuis MailGun",
     "NotificationsMailgunSettingsSenderDomain": "Domaine de l'expéditeur",
     "NotificationsMailgunSettingsUseEuEndpoint": "Utiliser un point de terminaison européen",

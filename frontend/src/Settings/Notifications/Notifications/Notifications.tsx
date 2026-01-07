@@ -47,7 +47,7 @@ function Notifications() {
   return (
     <FieldSet legend={translate('Connections')}>
       <PageSectionContent
-        errorMessage={translate('NotificationsLoadError')}
+        errorMessage={translate('ConnectionsLoadError')}
         error={error}
         isFetching={isFetching}
         isPopulated={isFetched}

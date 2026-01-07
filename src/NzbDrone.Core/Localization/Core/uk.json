@@ -1428,7 +1428,6 @@
     "NotificationsKodiSettingsDisplayTimeHelpText": "Як довго буде відображатися сповіщення (в секундах)",
     "NotificationsKodiSettingsGuiNotification": "Сповіщення(GUI)",
     "NotificationsKodiSettingsUpdateLibraryHelpText": "Оновити бібліотеку при імпорті та перейменуванні?",
-    "NotificationsLoadError": "Не вдалося завантажити сповіщення",
     "NotificationsMailgunSettingsApiKeyHelpText": "Ключ API, згенерований з MailGun",
     "NotificationsMailgunSettingsSenderDomain": "Домен відправника",
     "NotificationsMailgunSettingsUseEuEndpoint": "Використовувати кінцеву точку ЄС",

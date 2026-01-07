@@ -1239,7 +1239,6 @@
     "NotificationsKodiSettingsDisplayTimeHelpText": "通知显示时长（秒）",
     "NotificationsKodiSettingsGuiNotification": "图形界面通知",
     "NotificationsKodiSettingsUpdateLibraryHelpText": "导入和重命名时更新资源库？",
-    "NotificationsLoadError": "无法加载通知连接",
     "NotificationsMailgunSettingsApiKeyHelpText": "Mailgun 生成的 API Key",
     "NotificationsMailgunSettingsSenderDomain": "发送域名",
     "NotificationsMailgunSettingsUseEuEndpoint": "使用欧洲（EU）端点",

@@ -1386,7 +1386,6 @@
     "NotificationsKodiSettingsDisplayTimeHelpText": "알림이 표시되는 시간(초)",
     "NotificationsKodiSettingsGuiNotification": "GUI 알림",
     "NotificationsKodiSettingsUpdateLibraryHelpText": "가져오기 및 이름 바꾸기에서 라이브러리를 업데이트하시겠습니까?",
-    "NotificationsLoadError": "알림을 로드할 수 없음",
     "NotificationsMailgunSettingsApiKeyHelpText": "MailGun에서 생성된 API 키",
     "NotificationsMailgunSettingsSenderDomain": "발신자 도메인",
     "NotificationsMailgunSettingsUseEuEndpoint": "EU 엔드포인트 사용",
