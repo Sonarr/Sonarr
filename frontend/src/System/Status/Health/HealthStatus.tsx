@@ -2,6 +2,7 @@ import React, { useEffect, useMemo } from 'react';
 import { useAppValues } from 'App/appStore';
 import PageSidebarStatus from 'Components/Page/Sidebar/PageSidebarStatus';
 import usePrevious from 'Helpers/Hooks/usePrevious';
+import translate from 'Utilities/String/translate';
 import useHealth from './useHealth';
 
 function HealthStatus() {
@@ -41,7 +42,16 @@ function HealthStatus() {
   }, [isConnected, wasReconnecting, refetch]);
 
   return (
-    <PageSidebarStatus count={count} errors={errors} warnings={warnings} />
+    <PageSidebarStatus
+      aria-label={
+        count === 1
+          ? translate('HealthIssue')
+          : translate('HealthIssues', { count })
+      }
+      count={count}
+      errors={errors}
+      warnings={warnings}
+    />
   );
 }
 
