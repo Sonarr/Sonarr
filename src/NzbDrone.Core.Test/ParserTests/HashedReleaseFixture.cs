@@ -143,7 +143,14 @@ namespace NzbDrone.Core.Test.ParserTests
                 "Series Title 2019",
                 Quality.WEBDL1080p,
                 "NTb"
-            }
+            },
+            new object[]
+            {
+                @"C:\Test\Fake.Dir.S01E01-Test\11E-20S seires.mkv".AsOsAgnostic(),
+                "series",
+                Quality.HDTV720p,
+                null
+            },
         };
 
         [Test]
