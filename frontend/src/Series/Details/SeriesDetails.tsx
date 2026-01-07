@@ -526,6 +526,7 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
                 images={images}
                 size={500}
                 lazy={false}
+                title={title}
               />
 
               <div className={styles.info}>

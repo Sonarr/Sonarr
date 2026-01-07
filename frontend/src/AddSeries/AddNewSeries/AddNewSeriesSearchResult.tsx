@@ -74,6 +74,7 @@ function AddNewSeriesSearchResult({ series }: AddNewSeriesSearchResultProps) {
             size={250}
             overflow={true}
             lazy={false}
+            title={title}
           />
         )}
 
