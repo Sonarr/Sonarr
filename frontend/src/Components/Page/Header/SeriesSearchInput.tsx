@@ -289,6 +289,10 @@ function SeriesSearchInput() {
         return;
       }
 
+      if (!inputRef.current?.value) {
+        return;
+      }
+
       const { highlightedSectionIndex, highlightedSuggestionIndex } =
         autosuggestRef.current.state;
 

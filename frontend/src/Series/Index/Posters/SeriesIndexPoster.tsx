@@ -141,6 +141,7 @@ function SeriesIndexPoster(props: SeriesIndexPosterProps) {
             name={icons.REFRESH}
             title={translate('RefreshSeries')}
             isSpinning={isRefreshingSeries}
+            tabIndex={-1}
             onPress={onRefreshPress}
           />
 
@@ -150,6 +151,7 @@ function SeriesIndexPoster(props: SeriesIndexPosterProps) {
               name={icons.SEARCH}
               title={translate('SearchForMonitoredEpisodes')}
               isSpinning={isSearchingSeries}
+              tabIndex={-1}
               onPress={onSearchPress}
             />
           ) : null}
@@ -158,6 +160,7 @@ function SeriesIndexPoster(props: SeriesIndexPosterProps) {
             className={styles.action}
             name={icons.EDIT}
             title={translate('EditSeries')}
+            tabIndex={-1}
             onPress={onEditSeriesPress}
           />
         </Label>
