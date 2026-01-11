@@ -239,14 +239,6 @@ namespace NzbDrone.Core.Parser
                 new Regex(@"^(?<title>.+?)[-_. ]+S(?<season>(?<!\d+)\d{3}(?!\d+))E(?<episode>(?<!\d+)\d{2}(?!\d+))(?:-[ex](?<episode>(?<!\d+)\d{2}(?!\d+)))?([_. ]|$)(?!\\)",
                     RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
-                // Mini-Series, treated as season 1, episodes are labelled as Part01, Part 01, Part.1
-                new Regex(@"^(?<title>.+?)(?:\W+(?:(?:(?<!\()Part\W?|(?<!\d+\W+)e)(?<episode>\d{1,2}(?!\d+|\))))+)",
-                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
-
-                // Mini-Series, treated as season 1, episodes are labelled as Part One/Two/Three/...Nine, Part.One, Part_One
-                new Regex(@"^(?<title>.+?)(?:\W+(?:Part[-._ ](?<episode>One|Two|Three|Four|Five|Six|Seven|Eight|Nine)(?>[-._ ])))",
-                          RegexOptions.IgnoreCase | RegexOptions.Compiled),
-
                 // Mini-Series, treated as season 1, episodes are labelled as XofY
                 new Regex(@"^(?<title>.+?)(?:\W+(?:(?<episode>(?<!\d+)\d{1,2}(?!\d+))of\d+)+)",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
@@ -279,6 +271,7 @@ namespace NzbDrone.Core.Parser
                 new Regex(@"(?:.*(?:^))(?<title>.*?)[-._ ]+\(S(?<season>(?<!\d+)\d{1}(?!\d+))(?:[E-]{1,2}(?<episode>(?<!\d+)\d{1,2}(?!\d+)))+([._ ]+of[._ ]+[\dx]+)?\)",
                     RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
+                // TODO: Here
                 // Single episode season or episode S1E1 or S1-E1 or S1.Ep1 or S01.Ep.01
                 new Regex(@"(?:.*(?:\""|^))(?<title>.*?)(?:\W?|_)S(?<season>(?<!\d+)\d{1,2}(?!\d+))(?:\W|_)?Ep?[ ._]?(?<episode>(?<!\d+)\d{1,2}(?!\d+))",
                           RegexOptions.IgnoreCase | RegexOptions.Compiled),
@@ -396,6 +389,15 @@ namespace NzbDrone.Core.Parser
 
                 // iTunes 1-05 Title (Quality).ext
                 new Regex(@"^(?:(?<season>(?<!\d+)(?:\d{1,2})(?!\d+))(?:-(?<episode>\d{2,3}(?!\d+))))",
+                    RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
+                // TODO: Picked up as mini-series
+                // Mini-Series, treated as season 1, episodes are labelled as Part01, Part 01, Part.1
+                new Regex(@"^(?<title>.+?)(?:\W+(?:(?:(?<!\()Part\W?|(?<!\d+\W+)e)(?<episode>\d{1,2}(?!\d+|\))))+)",
+                    RegexOptions.IgnoreCase | RegexOptions.Compiled),
+
+                // Mini-Series, treated as season 1, episodes are labelled as Part One/Two/Three/...Nine, Part.One, Part_One
+                new Regex(@"^(?<title>.+?)(?:\W+(?:Part[-._ ](?<episode>One|Two|Three|Four|Five|Six|Seven|Eight|Nine)(?>[-._ ])))",
                     RegexOptions.IgnoreCase | RegexOptions.Compiled),
 
                 // Anime Range - Title Absolute Episode Number (ep01-12)
