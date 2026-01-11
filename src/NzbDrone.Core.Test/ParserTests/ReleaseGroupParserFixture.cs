@@ -192,5 +192,13 @@ namespace NzbDrone.Core.Test.ParserTests
         {
             Parser.ReleaseGroupParser.ParseReleaseGroup(title).Should().BeNull();
         }
+
+        [TestCase("Some TV (1979) - S02E10 - Hart-Shaped Murder [SDTV][AAC 2.0][x264]")]
+        [TestCase("Some TV (1979) - S02E10 - Hart-Shaped Murder [HDTV-480p][AAC 2.0][x264]")]
+        [TestCase("Some TV (1979) - S02E10 - Hart-Shaped Murder [480p-HDTV][AAC 2.0][x264]")]
+        public void should_not_parse_episode_title_as_release_group(string title)
+        {
+            Parser.ReleaseGroupParser.ParseReleaseGroup(title).Should().BeNull();
+        }
     }
 }
