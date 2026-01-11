@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using NzbDrone.Common.Composition;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Core.Datastore.Events;
-using NzbDrone.Core.MediaFiles.EpisodeImport.Manual;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.ProgressMessaging;
@@ -58,10 +57,6 @@ public class CommandController : RestControllerWithSignalR<CommandResource, Comm
         using (var reader = new StreamReader(Request.Body))
         {
             var body = reader.ReadToEnd();
-            var priority = commandType == typeof(ManualImportCommand)
-                ? CommandPriority.High
-                : CommandPriority.Normal;
-
             var command = STJson.Deserialize(body, commandType) as Command;
 
             if (command == null)
@@ -73,7 +68,7 @@ public class CommandController : RestControllerWithSignalR<CommandResource, Comm
             command.SendUpdatesToClient = true;
             command.ClientUserAgent = Request.Headers["UserAgent"];
 
-            var trackedCommand = _commandQueueManager.Push(command, priority, CommandTrigger.Manual);
+            var trackedCommand = _commandQueueManager.Push(command, commandResource.Priority, CommandTrigger.Manual);
 
             return Created(trackedCommand.Id);
         }

@@ -11,6 +11,7 @@ export type CommandStatus =
   | 'orphaned';
 
 export type CommandResult = 'unknown' | 'successful' | 'unsuccessful';
+export type CommandPriority = 'low' | 'normal' | 'high';
 
 // Base command body with common properties
 export interface BaseCommandBody {
@@ -85,6 +86,7 @@ export type CommandBody =
 // Simplified interface for creating new commands
 export interface NewCommandBody {
   name: string;
+  priority?: CommandPriority;
   seriesId?: number;
   seriesIds?: number[];
   seasonNumber?: number;
@@ -126,7 +128,7 @@ interface Command extends ModelBase {
   commandName: string;
   message: string;
   body: CommandBody;
-  priority: string;
+  priority: CommandPriority;
   status: CommandStatus;
   result: CommandResult;
   queued: string;

@@ -12,7 +12,7 @@ public class CommandResource : RestResource
     public string? CommandName { get; set; }
     public string? Message { get; set; }
     public Command? Body { get; set; }
-    public CommandPriority Priority { get; set; }
+    public CommandPriority Priority { get; set; } = CommandPriority.Normal;
     public CommandStatus Status { get; set; }
     public CommandResult Result { get; set; }
     public DateTime Queued { get; set; }

@@ -598,6 +598,7 @@ function InteractiveImportModalContentInner(
         name: CommandNames.ManualImport,
         files,
         importMode: finalImportMode,
+        priority: 'high',
       });
 
       shouldClose = true;
