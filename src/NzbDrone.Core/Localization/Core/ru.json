@@ -561,7 +561,7 @@
     "DownloadClientValidationApiKeyIncorrect": "Ключ API неверен",
     "DownloadClientValidationApiKeyRequired": "Требуется ключ API",
     "DownloadClientValidationAuthenticationFailure": "Ошибка аутентификации",
-    "DownloadClientValidationAuthenticationFailureDetail": "Пожалуйста, подтвердите свое имя пользователя и пароль. Также проверьте, не заблокирован ли хост, на котором работает {appName}, доступ к {clientName} ограничениями белого списка в конфигурации {clientName}.",
+    "DownloadClientValidationAuthenticationFailureDetail": "Пожалуйста, проверьте свои данные для входа. Также проверьте, что хост, на котором работает {appName}, не заблокирован {clientName} ограничениями белого списка в конфигурации {clientName}.",
     "DownloadClientValidationCategoryMissing": "Категория не существует",
     "DownloadClientValidationCategoryMissingDetail": "Введенная вами категория не существует в {clientName}. Сначала создайте ее в {clientName}.",
     "DownloadClientValidationErrorVersion": "Версия {clientName} должна быть не ниже {requiredVersion}. Сообщенная версия: {reportedVersion}",

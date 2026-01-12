@@ -840,7 +840,7 @@
     "Import": "İçe aktar",
     "ImportCountSeries": "{selectedCount} Dizisini İçe Aktar",
     "ImportCustomFormat": "Özel Formatı İçe Aktar",
-    "ImportErrors": "Hataları İçe Aktar",
+    "ImportErrors": "İçe Aktarma Hatası",
     "ImportExistingSeries": "Mevcut Diziyi İçe Aktar",
     "ImportExtraFiles": "Ekstra Dosyaları İçe Aktar",
     "ImportExtraFilesEpisodeHelpText": "Bir bölüm dosyasını içe aktardıktan sonra eşleşen ekstra dosyaları (altyazılar, nfo, vb.) içe aktarın",
