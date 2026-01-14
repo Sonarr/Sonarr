@@ -7,7 +7,7 @@
 		<PackageReference Include="MiniProfiler.AspNetCore.Mvc" Version="4.5.4" />
 		<PackageReference Include="NLog.Extensions.Logging" Version="5.5.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="10.1.0" />
-		<PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="10.0.1" />
+		<PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="10.0.2" />
 		<PackageReference Include="DryIoc.dll" Version="5.4.3" />
 		<PackageReference Include="DryIoc.Microsoft.DependencyInjection" Version="6.2.0" />
 	</ItemGroup>
