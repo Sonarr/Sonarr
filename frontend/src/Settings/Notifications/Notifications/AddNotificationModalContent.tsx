@@ -1,6 +1,5 @@
 import React from 'react';
 import Alert from 'Components/Alert';
-import FieldSet from 'Components/FieldSet';
 import Button from 'Components/Link/Button';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import ModalBody from 'Components/Modal/ModalBody';
@@ -28,36 +27,27 @@ function AddNotificationModalContent({
 
   return (
     <ModalContent onModalClose={onModalClose}>
-      <ModalHeader>{translate('AddNotification')}</ModalHeader>
+      <ModalHeader>{translate('AddConnection')}</ModalHeader>
 
       <ModalBody>
         {isSchemaFetching && !isSchemaFetched ? <LoadingIndicator /> : null}
 
         {!isSchemaFetching && !!schemaError ? (
-          <Alert kind={kinds.DANGER}>{translate('AddNotificationError')}</Alert>
+          <Alert kind={kinds.DANGER}>{translate('AddConnectionError')}</Alert>
         ) : null}
 
         {isSchemaFetched && !schemaError ? (
-          <div>
-            <Alert kind={kinds.INFO}>
-              <div>{translate('SupportedNotifications')}</div>
-              <div>{translate('SupportedNotificationsMoreInfo')}</div>
-            </Alert>
-
-            <FieldSet legend={translate('Email')}>
-              <div className={styles.notifications}>
-                {schema.map((notification) => {
-                  return (
-                    <AddNotificationItem
-                      key={notification.implementation}
-                      {...notification}
-                      implementation={notification.implementation}
-                      onNotificationSelect={onNotificationSelect}
-                    />
-                  );
-                })}
-              </div>
-            </FieldSet>
+          <div className={styles.notifications}>
+            {schema.map((notification) => {
+              return (
+                <AddNotificationItem
+                  key={notification.implementation}
+                  {...notification}
+                  implementation={notification.implementation}
+                  onNotificationSelect={onNotificationSelect}
+                />
+              );
+            })}
           </div>
         ) : null}
       </ModalBody>

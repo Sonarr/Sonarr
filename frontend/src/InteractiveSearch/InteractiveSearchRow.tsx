@@ -246,7 +246,7 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
             kind={kinds.DANGER}
             title={
               history?.failed
-                ? `${translate('BlockListedAt', {
+                ? `${translate('BlocklistedAt', {
                     date: formatDateTime(
                       history.failed,
                       longDateFormat,
