@@ -27,18 +27,34 @@ namespace NzbDrone.Core.DecisionEngine
 
         public int Compare(DownloadDecision x, DownloadDecision y)
         {
-            var comparers = new List<CompareDelegate>
+            var comparers = new List<CompareDelegate>();
+            var seedersPreference = _configService.SeedersPreference;
+
+            if (seedersPreference == SeedersPreferenceType.Highest)
             {
-                CompareQuality,
-                CompareCustomFormatScore,
-                CompareProtocol,
-                CompareEpisodeCount,
-                CompareEpisodeNumber,
-                CompareIndexerPriority,
-                ComparePeersIfTorrent,
-                CompareAgeIfUsenet,
-                CompareSize
-            };
+                comparers.Add(ComparePeersIfTorrent);
+            }
+
+            comparers.Add(CompareQuality);
+
+            if (seedersPreference == SeedersPreferenceType.High)
+            {
+                comparers.Add(ComparePeersIfTorrent);
+            }
+
+            comparers.Add(CompareCustomFormatScore);
+            comparers.Add(CompareProtocol);
+            comparers.Add(CompareEpisodeCount);
+            comparers.Add(CompareEpisodeNumber);
+            comparers.Add(CompareIndexerPriority);
+
+            if (seedersPreference == SeedersPreferenceType.Default)
+            {
+                comparers.Add(ComparePeersIfTorrent);
+            }
+
+            comparers.Add(CompareAgeIfUsenet);
+            comparers.Add(CompareSize);
 
             return comparers.Select(comparer => comparer(x, y)).FirstOrDefault(result => result != 0);
         }

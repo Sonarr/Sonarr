@@ -124,6 +124,13 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("MinimumAge", value); }
         }
 
+        public SeedersPreferenceType SeedersPreference
+        {
+            get { return GetValueEnum("SeedersPreference", SeedersPreferenceType.Default); }
+
+            set { SetValue("SeedersPreference", value); }
+        }
+
         public ProperDownloadTypes DownloadPropersAndRepacks
         {
             get { return GetValueEnum("DownloadPropersAndRepacks", ProperDownloadTypes.PreferAndUpgrade); }

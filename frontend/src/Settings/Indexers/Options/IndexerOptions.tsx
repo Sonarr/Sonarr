@@ -6,6 +6,7 @@ import Form from 'Components/Form/Form';
 import FormGroup from 'Components/Form/FormGroup';
 import FormInputGroup from 'Components/Form/FormInputGroup';
 import FormLabel from 'Components/Form/FormLabel';
+import { EnhancedSelectInputValue } from 'Components/Form/Select/EnhancedSelectInput';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import { inputTypes, kinds } from 'Helpers/Props';
 import { useShowAdvancedSettings } from 'Settings/advancedSettingsStore';
@@ -24,6 +25,27 @@ import {
 import translate from 'Utilities/String/translate';
 
 const SECTION = 'indexerOptions';
+
+const seedersPreferenceOptions: EnhancedSelectInputValue<string>[] = [
+  {
+    key: 'default',
+    get value() {
+      return translate('SeedersPreferenceDefault');
+    },
+  },
+  {
+    key: 'high',
+    get value() {
+      return translate('SeedersPreferenceHigh');
+    },
+  },
+  {
+    key: 'highest',
+    get value() {
+      return translate('SeedersPreferenceHighest');
+    },
+  },
+];
 
 interface IndexerOptionsProps {
   setChildSave: SetChildSave;
@@ -141,6 +163,19 @@ function IndexerOptions({
               helpLink="https://wiki.servarr.com/sonarr/faq#how-does-sonarr-find-episodes"
               onChange={handleInputChange}
               {...settings.rssSyncInterval}
+            />
+          </FormGroup>
+
+          <FormGroup advancedSettings={showAdvancedSettings} isAdvanced={true}>
+            <FormLabel>{translate('SeedersPreference')}</FormLabel>
+
+            <FormInputGroup
+              type={inputTypes.SELECT}
+              name="seedersPreference"
+              helpText={translate('SeedersPreferenceHelpText')}
+              values={seedersPreferenceOptions}
+              onChange={handleInputChange}
+              {...settings.seedersPreference}
             />
           </FormGroup>
         </Form>

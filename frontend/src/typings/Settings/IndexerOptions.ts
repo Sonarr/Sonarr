@@ -3,4 +3,5 @@ export default interface IndexerOptions {
   retention: number;
   maximumSize: number;
   rssSyncInterval: number;
+  seedersPreference: string;
 }
