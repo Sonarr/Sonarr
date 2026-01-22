@@ -254,6 +254,7 @@
     "ConnectionLostToBackend": "{appName} потерял связь с сервером и его необходимо перезагрузить, чтобы восстановить работоспособность.",
     "ConnectionSettingsUrlBaseHelpText": "Добавляет префикс к URL-адресу {connectionName}, например {url}",
     "Connections": "Соединения",
+    "ConnectionsLoadError": "Не удалось загрузить соединения",
     "Continuing": "Продолжается",
     "ContinuingOnly": "Только в стадии показа",
     "ContinuingSeriesDescription": "Ожидается больше эпизодов/еще один сезон",

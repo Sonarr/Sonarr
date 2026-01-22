@@ -255,6 +255,7 @@
     "ConnectionLostToBackend": "O {appName} perdeu a conexão com o backend e precisa ser recarregado para restaurar a funcionalidade.",
     "ConnectionSettingsUrlBaseHelpText": "Adiciona um prefixo ao URL {connectionName}, como {url}",
     "Connections": "Conexões",
+    "ConnectionsLoadError": "Não foi possível carregar Conexões",
     "Continuing": "Continuando",
     "ContinuingOnly": "Continuando apenas",
     "ContinuingSeriesDescription": "Espera-se mais episódios ou outra temporada",
