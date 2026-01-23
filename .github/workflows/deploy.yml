@@ -19,9 +19,6 @@ on:
         description: 'Sonarr version'
         type: string
         required: true
-    secrets:
-      SERVICES_API_KEY:
-        required: true
 
 jobs:
   package:
@@ -105,56 +102,3 @@ jobs:
         prerelease: ${{ inputs.branch != 'main' }}
         skipIfReleaseExists: true
         tag: v${{ inputs.version }}
-
-    - name: Publish to Services
-      shell: bash
-      working-directory: _artifacts
-      run: |
-        branch=${{ inputs.branch }}
-        version=${{ inputs.version }}
-        lastCommit=${{ github.sha }}
-        
-        hashes="["
-        
-        addHash() {
-          path=$1
-          os=$2
-          arch=$3
-          type=$4
-        
-          local hash=$(sha256sum *.$version.$path | awk '{ print $1; }')
-          echo "{ \""Os\"": \""$os\"", \""Arch\"": \""$arch\"", \""Type\"": \""$type\"", \""Hash\"": \""$hash\"" }"
-        }
-        
-        hashes="$hashes $(addHash "linux-arm.tar.gz" "linux" "arm" "archive")"
-        hashes="$hashes, $(addHash "linux-arm64.tar.gz" "linux" "arm64" "archive")"
-        hashes="$hashes, $(addHash "linux-x64.tar.gz" "linux" "x64" "archive")"
-        # hashes="$hashes, $(addHash "linux-x86.tar.gz" "linux" "x86" "archive")"
-        
-        # hashes="$hashes, $(addHash "linux-musl-arm.tar.gz" "linuxmusl" "arm" "archive")"
-        hashes="$hashes, $(addHash "linux-musl-arm64.tar.gz" "linuxmusl" "arm64" "archive")"
-        hashes="$hashes, $(addHash "linux-musl-x64.tar.gz" "linuxmusl" "x64" "archive")"
-        
-        hashes="$hashes, $(addHash "osx-arm64.tar.gz" "osx" "arm64" "archive")"
-        hashes="$hashes, $(addHash "osx-x64.tar.gz" "osx" "x64" "archive")"
-        
-        hashes="$hashes, $(addHash "osx-arm64-app.zip" "osx" "arm64" "installer")"
-        hashes="$hashes, $(addHash "osx-x64-app.zip" "osx" "x64" "installer")"
-        
-        hashes="$hashes, $(addHash "win-x64.zip" "windows" "x64" "archive")"
-        hashes="$hashes, $(addHash "win-x86.zip" "windows" "x86" "archive")"
-        
-        hashes="$hashes, $(addHash "win-x64-installer.exe" "windows" "x64" "installer")"
-        hashes="$hashes, $(addHash "win-x86-installer.exe" "windows" "x86" "installer")"
-        
-        hashes="$hashes, $(addHash "freebsd-x64.tar.gz" "freebsd" "x64" "archive")"
-        
-        hashes="$hashes ]"
-        
-        json="{\""branch\"":\""$branch\"", \""version\"":\""$version\"", \""lastCommit\"":\""$lastCommit\"", \""hashes\"":$hashes, \""gitHubRelease\"":true}"
-        url="https://services.sonarr.tv/v1/update"
-        
-        echo "Publishing update $version ($branch) to: $url"
-        echo "$json"
-        
-        curl -H "Content-Type: application/json" -H "X-Api-Key: ${{ secrets.SERVICES_API_KEY }}" -X POST -d "$json" --fail-with-body $url
