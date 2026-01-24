@@ -7,6 +7,7 @@ using NzbDrone.Common.Composition;
 using NzbDrone.Common.Serializer;
 using NzbDrone.Common.TPL;
 using NzbDrone.Core.Datastore.Events;
+using NzbDrone.Core.Download;
 using NzbDrone.Core.MediaFiles.EpisodeImport.Manual;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
@@ -62,7 +63,7 @@ namespace Sonarr.Api.V3.Commands
             using (var reader = new StreamReader(Request.Body))
             {
                 var body = reader.ReadToEnd();
-                var priority = commandType == typeof(ManualImportCommand)
+                var priority = commandType == typeof(ManualImportCommand) || commandType == typeof(RefreshMonitoredDownloadsCommand)
                     ? CommandPriority.High
                     : CommandPriority.Normal;
 
