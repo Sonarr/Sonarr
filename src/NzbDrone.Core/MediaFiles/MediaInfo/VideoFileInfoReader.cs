@@ -117,7 +117,10 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                 // if it looks like PQ10 or similar HDR, do a frame analysis to figure out which type it is
                 if (PqTransferFunctions.Contains(mediaInfoModel.VideoTransferCharacteristics))
                 {
-                    var frameOutput = FFProbe.GetFrameJson(filename, ffOptions: new () { ExtraArguments = $"-read_intervals \"%+#1\" -select_streams v:{primaryVideoStream?.Index ?? 0}" });
+                    var videoStreamIndex = analysis.VideoStreams.Count == 1 ? 0
+                        : analysis.VideoStreams.FindIndex(s => Equals(s?.Index, primaryVideoStream?.Index));
+                    _logger.Debug("Reading video stream at index {0} with relative index v:{1}", primaryVideoStream?.Index, videoStreamIndex);
+                    var frameOutput = FFProbe.GetFrameJson(filename, ffOptions: new () { ExtraArguments = $"-read_intervals \"%+#1\" -select_streams v:{videoStreamIndex}" });
                     mediaInfoModel.RawFrameData = frameOutput;
 
                     frames = FFProbe.AnalyseFrameJson(frameOutput);
