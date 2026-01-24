@@ -110,7 +110,7 @@ jobs:
       contents: read
       packages: write
     env:
-      IMAGE_NAME: ghcr.io/${{ github.repository }}/sonarr
+      IMAGE_NAME: ghcr.io/${{ github.repository }}
     steps:
     - name: Check out
       uses: actions/checkout@v4

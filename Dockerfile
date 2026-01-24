@@ -7,7 +7,7 @@ ARG VERSION
 ARG SONARR_BRANCH=develop
 ARG PACKAGE_AUTHOR="github.com/realzombee/Sonarr"
 ARG SONARR_REPO="realzombee/Sonarr"
-ARG SONARR_RUNTIME="linux-x64"
+ARG SONARR_RUNTIME="linux-musl-x64"
 
 LABEL org.opencontainers.image.created="${BUILD_DATE}" \
   org.opencontainers.image.source="${PACKAGE_AUTHOR}" \
