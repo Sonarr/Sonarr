@@ -112,8 +112,10 @@ namespace NzbDrone.Core.Download
                 Enum.TryParse(historyItem.Data.GetValueOrDefault(EpisodeHistory.SERIES_MATCH_TYPE, SeriesMatchType.Unknown.ToString()), out SeriesMatchType seriesMatchType);
                 Enum.TryParse(historyItem.Data.GetValueOrDefault(EpisodeHistory.RELEASE_SOURCE, ReleaseSourceType.Unknown.ToString()), out ReleaseSourceType releaseSource);
 
+                var ignoreMatchByIdWarning = bool.TryParse(Environment.GetEnvironmentVariable("IGNORE_MATCH_BY_ID_WARNING"), out var skipWarning) && skipWarning;
+
                 // Show a warning if the release was matched by ID and the source is not interactive search
-                if (seriesMatchType == SeriesMatchType.Id && releaseSource != ReleaseSourceType.InteractiveSearch)
+                if (seriesMatchType == SeriesMatchType.Id && releaseSource != ReleaseSourceType.InteractiveSearch && !ignoreMatchByIdWarning)
                 {
                     trackedDownload.Warn("Found matching series via grab history, but release was matched to series by ID. Automatic import is not possible. See the FAQ for details.");
                     SetStateToImportBlocked(trackedDownload);
