@@ -7,6 +7,28 @@
 
 Sonarr is a PVR for Usenet and BitTorrent users. It can monitor multiple RSS feeds for new episodes of your favorite shows and will grab, sort and rename them. It can also be configured to automatically upgrade the quality of files already downloaded when a better quality format becomes available.
 
+## Why this fork?
+
+This fork aims to improve certain aspects of Sonarr to make it work better with remote "infinite" library setups (Debrid/Usenet streaming, etc). This fork will be kept up-to-date with the Sonarr develop branch and is designed to be a drop-in replacement if you're using [linuxserver's docker images](https://hub.docker.com/r/linuxserver/sonarr). The changes in this fork are fully compatible with the original Sonarr configs so you can freely swap back and forth between them.
+
+This fork provides two categories of changes:
+
+### Fixes
+ These are universal bug-fixes that should be fixed in the original Sonarr project. These will be submitted as pull requests eventually but might not make it into a general release until the v5 migration is complete.
+
+- ffprobe issues: There's a bug in VideoFileInfoReader that causes ffprobe to read the entire file during HDR analysis if the video stream is at a non-zero index. This is especially problematic for remote files since it uses bandwidth unnecessarily.
+- RefreshMonitoredDownloadsCommand: Tools like decypharr and nzbdav issue this command after processing a download. But when this command is issued through the API or through the UI, it has a `Normal` priority, causing a buildup of queue items if lots of searches are triggered at once.
+
+### Tweaks
+These are small changes to Sonarr behavior to optimize for debrid/usenet streaming setups. These can be turned on/off through environment variables. 
+
+| Env variable | Default | Recommended value | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+|-------------------------------|---------|-------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ACCEPT_RELEASE_ANY_UPGRADABLE | false | true              | Sonarr does not download season packs if it does not result in an upgrade for ALL episodes in a season. This is a good choice for regular setups where downloads take a long time and downloading a season pack just to upgrade a single episode is not pragmatic. But with "infinite" setups, downloads take seconds. Furthermore, debrid services often expire certain files from a season pack and sonarr wouldn't download another season pack to replace it, which can result in Sonarr grabbing a lower quality single episode release which is not ideal. |
+
+
+
+
 ## Getting Started
 
 - [Download/Installation](https://sonarr.tv/#downloads-v3)
