@@ -52,7 +52,9 @@ function SelectEpisodeRow({
 
       <TableRowCell>
         {episodeNumber}
-        {isAnime ? ` (${absoluteEpisodeNumber})` : ''}
+        {isAnime && !!absoluteEpisodeNumber
+          ? ` (${absoluteEpisodeNumber})`
+          : ''}
       </TableRowCell>
 
       <TableRowCell>{title}</TableRowCell>
