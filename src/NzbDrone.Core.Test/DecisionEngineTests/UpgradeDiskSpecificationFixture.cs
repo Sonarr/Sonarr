@@ -161,17 +161,61 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         }
 
         [Test]
-        public void should_be_not_upgradable_if_only_first_episodes_is_upgradable()
+        public void should_be_not_upgradable_if_only_first_episodes_is_upgradable_and_any_upgradable_is_false()
         {
-            WithFirstFileUpgradable();
+            var previous = Environment.GetEnvironmentVariable("ACCEPT_RELEASE_ANY_UPGRADABLE");
+
+            try
+            {
+                Environment.SetEnvironmentVariable("ACCEPT_RELEASE_ANY_UPGRADABLE", "false");
+                WithFirstFileUpgradable();
+                _upgradeDisk.IsSatisfiedBy(_parseResultMulti, null).Accepted.Should().BeFalse();
+            }
+            finally
+            {
+                Environment.SetEnvironmentVariable("ACCEPT_RELEASE_ANY_UPGRADABLE", previous);
+            }
+        }
+
+        [Test]
+        public void should_be_upgradable_if_only_first_episodes_is_upgradable_and_any_upgradable_is_true()
+        {
+            var previous = Environment.GetEnvironmentVariable("ACCEPT_RELEASE_ANY_UPGRADABLE");
+
+            try
+            {
+                Environment.SetEnvironmentVariable("ACCEPT_RELEASE_ANY_UPGRADABLE", "true");
+                WithFirstFileUpgradable();
+                _upgradeDisk.IsSatisfiedBy(_parseResultMulti, null).Accepted.Should().BeTrue();
+            }
+            finally
+            {
+                Environment.SetEnvironmentVariable("ACCEPT_RELEASE_ANY_UPGRADABLE", previous);
+            }
+        }
+
+        [Test]
+        public void should_be_not_upgradable_if_only_second_episodes_is_upgradable_and_any_upgradable_is_not_set()
+        {
+            WithSecondFileUpgradable();
             _upgradeDisk.IsSatisfiedBy(_parseResultMulti, null).Accepted.Should().BeFalse();
         }
 
         [Test]
-        public void should_be_not_upgradable_if_only_second_episodes_is_upgradable()
+        public void should_be_upgradable_if_only_second_episodes_is_upgradable_and_any_upgradable_is_true()
         {
-            WithSecondFileUpgradable();
-            _upgradeDisk.IsSatisfiedBy(_parseResultMulti, null).Accepted.Should().BeFalse();
+            var previous = Environment.GetEnvironmentVariable("ACCEPT_RELEASE_ANY_UPGRADABLE");
+
+            try
+            {
+                Environment.SetEnvironmentVariable("ACCEPT_RELEASE_ANY_UPGRADABLE", "true");
+                WithSecondFileUpgradable();
+                _upgradeDisk.IsSatisfiedBy(_parseResultMulti, null).Accepted.Should().BeTrue();
+            }
+            finally
+            {
+                Environment.SetEnvironmentVariable("ACCEPT_RELEASE_ANY_UPGRADABLE", previous);
+            }
         }
 
         [Test]

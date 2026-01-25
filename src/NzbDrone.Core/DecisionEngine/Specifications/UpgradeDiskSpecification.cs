@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using NLog;
 using NzbDrone.Core.CustomFormats;
@@ -27,6 +28,10 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
         public virtual DownloadSpecDecision IsSatisfiedBy(RemoteEpisode subject, SearchCriteriaBase searchCriteria)
         {
             var qualityProfile = subject.Series.QualityProfile.Value;
+            var acceptAnyUpgradable = bool.TryParse(Environment.GetEnvironmentVariable("ACCEPT_RELEASE_ANY_UPGRADABLE"), out var requireAll) && requireAll;
+
+            DownloadSpecDecision rejection = null;
+            var hasUpgradableFile = false;
 
             foreach (var file in subject.Episodes.Where(c => c.EpisodeFileId != 0).Select(c => c.EpisodeFile.Value))
             {
@@ -48,7 +53,8 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                     var cutoff = qualityProfile.UpgradeAllowed ? qualityProfile.Cutoff : qualityProfile.FirststAllowedQuality().Id;
                     var qualityCutoff = qualityProfile.Items[qualityProfile.GetIndex(cutoff).Index];
 
-                    return DownloadSpecDecision.Reject(DownloadRejectionReason.DiskCutoffMet, "Existing file meets cutoff: {0}", qualityCutoff);
+                    rejection ??= DownloadSpecDecision.Reject(DownloadRejectionReason.DiskCutoffMet, "Existing file meets cutoff: {0}", qualityCutoff);
+                    continue;
                 }
 
                 var customFormats = _formatService.ParseCustomFormat(file);
@@ -62,32 +68,45 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 switch (upgradeableRejectReason)
                 {
                     case UpgradeableRejectReason.None:
+                        hasUpgradableFile = true;
                         continue;
 
                     case UpgradeableRejectReason.BetterQuality:
-                        return DownloadSpecDecision.Reject(DownloadRejectionReason.DiskHigherPreference, "Existing file on disk is of equal or higher preference: {0}", file.Quality);
+                        rejection ??= DownloadSpecDecision.Reject(DownloadRejectionReason.DiskHigherPreference, "Existing file on disk is of equal or higher preference: {0}", file.Quality);
+                        continue;
 
                     case UpgradeableRejectReason.BetterRevision:
-                        return DownloadSpecDecision.Reject(DownloadRejectionReason.DiskHigherRevision, "Existing file on disk is of equal or higher revision: {0}", file.Quality.Revision);
+                        rejection ??= DownloadSpecDecision.Reject(DownloadRejectionReason.DiskHigherRevision, "Existing file on disk is of equal or higher revision: {0}", file.Quality.Revision);
+                        continue;
 
                     case UpgradeableRejectReason.QualityCutoff:
-                        return DownloadSpecDecision.Reject(DownloadRejectionReason.DiskCutoffMet, "Existing file on disk meets quality cutoff: {0}", qualityProfile.Items[qualityProfile.GetIndex(qualityProfile.Cutoff).Index]);
+                        rejection ??= DownloadSpecDecision.Reject(DownloadRejectionReason.DiskCutoffMet, "Existing file on disk meets quality cutoff: {0}", qualityProfile.Items[qualityProfile.GetIndex(qualityProfile.Cutoff).Index]);
+                        continue;
 
                     case UpgradeableRejectReason.CustomFormatCutoff:
-                        return DownloadSpecDecision.Reject(DownloadRejectionReason.DiskCustomFormatCutoffMet, "Existing file on disk meets Custom Format cutoff: {0}", qualityProfile.CutoffFormatScore);
+                        rejection ??= DownloadSpecDecision.Reject(DownloadRejectionReason.DiskCustomFormatCutoffMet, "Existing file on disk meets Custom Format cutoff: {0}", qualityProfile.CutoffFormatScore);
+                        continue;
 
                     case UpgradeableRejectReason.CustomFormatScore:
-                        return DownloadSpecDecision.Reject(DownloadRejectionReason.DiskCustomFormatScore, "Existing file on disk has a equal or higher Custom Format score: {0}", qualityProfile.CalculateCustomFormatScore(customFormats));
+                        rejection ??= DownloadSpecDecision.Reject(DownloadRejectionReason.DiskCustomFormatScore, "Existing file on disk has a equal or higher Custom Format score: {0}", qualityProfile.CalculateCustomFormatScore(customFormats));
+                        continue;
 
                     case UpgradeableRejectReason.MinCustomFormatScore:
-                        return DownloadSpecDecision.Reject(DownloadRejectionReason.DiskCustomFormatScoreIncrement, "Existing file on disk has Custom Format score within Custom Format score increment: {0}", qualityProfile.MinUpgradeFormatScore);
+                        rejection ??= DownloadSpecDecision.Reject(DownloadRejectionReason.DiskCustomFormatScoreIncrement, "Existing file on disk has Custom Format score within Custom Format score increment: {0}", qualityProfile.MinUpgradeFormatScore);
+                        continue;
 
                     case UpgradeableRejectReason.UpgradesNotAllowed:
-                        return DownloadSpecDecision.Reject(DownloadRejectionReason.DiskUpgradesNotAllowed, "Existing file on disk and Quality Profile '{0}' does not allow upgrades", qualityProfile.Name);
+                        rejection ??= DownloadSpecDecision.Reject(DownloadRejectionReason.DiskUpgradesNotAllowed, "Existing file on disk and Quality Profile '{0}' does not allow upgrades", qualityProfile.Name);
+                        continue;
                 }
             }
 
-            return DownloadSpecDecision.Accept();
+            if (acceptAnyUpgradable && hasUpgradableFile)
+            {
+                return DownloadSpecDecision.Accept();
+            }
+
+            return rejection ?? DownloadSpecDecision.Accept();
         }
     }
 }
