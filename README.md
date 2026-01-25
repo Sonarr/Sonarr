@@ -7,6 +7,12 @@
 
 Sonarr is a PVR for Usenet and BitTorrent users. It can monitor multiple RSS feeds for new episodes of your favorite shows and will grab, sort and rename them. It can also be configured to automatically upgrade the quality of files already downloaded when a better quality format becomes available.
 
+## Docker Image
+
+```bash
+ghcr.io/realzombee/sonarr:develop
+```
+
 ## Why this fork?
 
 This fork aims to improve certain aspects of Sonarr to make it work better with remote "infinite" library setups (Debrid/Usenet streaming, etc). This fork will be kept up-to-date with the Sonarr develop branch and is designed to be a drop-in replacement if you're using [linuxserver's docker images](https://hub.docker.com/r/linuxserver/sonarr). The changes in this fork are fully compatible with the original Sonarr configs so you can freely swap back and forth between them.
