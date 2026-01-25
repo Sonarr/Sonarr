@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using NLog;
 using NzbDrone.Core.CustomFormats;
 using NzbDrone.Core.IndexerSearch.Definitions;
@@ -33,11 +32,19 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             DownloadSpecDecision rejection = null;
             var hasUpgradableFile = false;
 
-            foreach (var file in subject.Episodes.Where(c => c.EpisodeFileId != 0).Select(c => c.EpisodeFile.Value))
+            foreach (var episode in subject.Episodes)
             {
+                if (!episode.HasFile)
+                {
+                    hasUpgradableFile = true;
+                    continue;
+                }
+
+                var file = episode.EpisodeFile.Value;
+
                 if (file == null)
                 {
-                    _logger.Debug("File is no longer available, skipping this file.");
+                    hasUpgradableFile = true;
                     continue;
                 }
 
