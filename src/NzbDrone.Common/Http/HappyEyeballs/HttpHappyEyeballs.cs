@@ -38,7 +38,7 @@ public class HttpHappyEyeballs
 
         var happyEyeballs = CreateHappyEyeballs(endPoint);
         var socket = await happyEyeballs.Connect(resolvedAddresses, cancellationToken).ConfigureAwait(false);
-        _logger.Trace("Successfully connected {0} to address: {1}", endPoint.HostPort(), socket.RemoteEndPoint);
+        _logger.Trace("Successfully connected {0} to address: {1}", endPoint.HostPort, socket.RemoteEndPoint);
 
         return new NetworkStream(socket, ownsSocket: true);
     }
@@ -54,7 +54,7 @@ public class HttpHappyEyeballs
     {
         cancellationToken.ThrowIfCancellationRequested();
         var timeSpan = TimeSpan.FromMilliseconds(ConnectionAttemptDelay);
-        _logger.Trace("Waiting on {0} connection attempt delay for {1}", endPoint.HostPort(), timeSpan);
+        _logger.Trace("Waiting on {0} connection attempt delay for {1}", endPoint.HostPort, timeSpan);
 
         await Task.Delay(timeSpan, cancellationToken).ConfigureAwait(false);
     }
@@ -75,7 +75,7 @@ public class HttpHappyEyeballs
             NoDelay = true
         };
 
-        _logger.Trace("Trying Happy Eyeballs connection to {0} for host {1}", ipAddress, endPoint.HostPort());
+        _logger.Trace("Trying Happy Eyeballs connection to {0} for host {1}", ipAddress, endPoint.HostPort);
 
         try
         {
@@ -84,7 +84,7 @@ public class HttpHappyEyeballs
         catch (Exception e)
         {
             socket.Dispose();
-            _logger.Trace(e, "Happy Eyeballs connection to {0} for host {1} failed", ipAddress, endPoint.HostPort());
+            _logger.Trace(e, "Happy Eyeballs connection to {0} for host {1} failed", ipAddress, endPoint.HostPort);
             throw;
         }
 
