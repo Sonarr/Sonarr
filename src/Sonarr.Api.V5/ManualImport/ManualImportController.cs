@@ -82,6 +82,11 @@ public class ManualImportController : Controller
                 processedItem.ReleaseGroup = item.ReleaseGroup;
             }
 
+            if (item.SeasonNumber.HasValue && !processedItem.SeasonNumber.HasValue)
+            {
+                processedItem.SeasonNumber = item.SeasonNumber;
+            }
+
             updatedItems.Add(processedItem);
         }
 
