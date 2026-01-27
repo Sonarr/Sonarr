@@ -596,6 +596,256 @@
         }
       }
     },
+    "/api/v5/connection": {
+      "get": {
+        "tags": [
+          "Connection"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ConnectionResource"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Connection"
+        ],
+        "parameters": [
+          {
+            "name": "forceSave",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConnectionResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConnectionResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/connection/{id}": {
+      "put": {
+        "tags": [
+          "Connection"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "forceSave",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConnectionResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConnectionResource"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Connection"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Connection"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConnectionResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/connection/schema": {
+      "get": {
+        "tags": [
+          "Connection"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ConnectionResource"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/connection/test": {
+      "post": {
+        "tags": [
+          "Connection"
+        ],
+        "parameters": [
+          {
+            "name": "forceTest",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConnectionResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v5/connection/testall": {
+      "post": {
+        "tags": [
+          "Connection"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v5/connection/action/{name}": {
+      "post": {
+        "tags": [
+          "Connection"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConnectionResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/v5/customfilter": {
       "get": {
         "tags": [
@@ -2069,6 +2319,229 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/api/v5/settings/naming": {
+      "get": {
+        "tags": [
+          "NamingSettings"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/NamingSettingsResource"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NamingSettingsResource"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NamingSettingsResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/settings/naming/{id}": {
+      "put": {
+        "tags": [
+          "NamingSettings"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NamingSettingsResource"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NamingSettingsResource"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/NamingSettingsResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/NamingSettingsResource"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NamingSettingsResource"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NamingSettingsResource"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "NamingSettings"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NamingSettingsResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/settings/naming/examples": {
+      "get": {
+        "tags": [
+          "NamingSettings"
+        ],
+        "parameters": [
+          {
+            "name": "renameEpisodes",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "replaceIllegalCharacters",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "colonReplacementFormat",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "customColonReplacementFormat",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "multiEpisodeStyle",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "standardEpisodeFormat",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "dailyEpisodeFormat",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "animeEpisodeFormat",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "seriesFolderFormat",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "seasonFolderFormat",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "specialsFolderFormat",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "resourceName",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -5028,6 +5501,151 @@
         ],
         "type": "string"
       },
+      "ConnectionResource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Field"
+            },
+            "nullable": true
+          },
+          "implementationName": {
+            "type": "string",
+            "nullable": true
+          },
+          "implementation": {
+            "type": "string",
+            "nullable": true
+          },
+          "configContract": {
+            "type": "string",
+            "nullable": true
+          },
+          "infoLink": {
+            "type": "string",
+            "nullable": true
+          },
+          "message": {
+            "$ref": "#/components/schemas/ProviderMessage"
+          },
+          "tags": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          },
+          "presets": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ConnectionResource"
+            },
+            "nullable": true
+          },
+          "link": {
+            "type": "string",
+            "nullable": true
+          },
+          "onGrab": {
+            "type": "boolean"
+          },
+          "onDownload": {
+            "type": "boolean"
+          },
+          "onUpgrade": {
+            "type": "boolean"
+          },
+          "onImportComplete": {
+            "type": "boolean"
+          },
+          "onRename": {
+            "type": "boolean"
+          },
+          "onSeriesAdd": {
+            "type": "boolean"
+          },
+          "onSeriesDelete": {
+            "type": "boolean"
+          },
+          "onEpisodeFileDelete": {
+            "type": "boolean"
+          },
+          "onEpisodeFileDeleteForUpgrade": {
+            "type": "boolean"
+          },
+          "onHealthIssue": {
+            "type": "boolean"
+          },
+          "includeHealthWarnings": {
+            "type": "boolean"
+          },
+          "onHealthRestored": {
+            "type": "boolean"
+          },
+          "onApplicationUpdate": {
+            "type": "boolean"
+          },
+          "onManualInteractionRequired": {
+            "type": "boolean"
+          },
+          "supportsOnGrab": {
+            "type": "boolean"
+          },
+          "supportsOnDownload": {
+            "type": "boolean"
+          },
+          "supportsOnUpgrade": {
+            "type": "boolean"
+          },
+          "supportsOnImportComplete": {
+            "type": "boolean"
+          },
+          "supportsOnRename": {
+            "type": "boolean"
+          },
+          "supportsOnSeriesAdd": {
+            "type": "boolean"
+          },
+          "supportsOnSeriesDelete": {
+            "type": "boolean"
+          },
+          "supportsOnEpisodeFileDelete": {
+            "type": "boolean"
+          },
+          "supportsOnEpisodeFileDeleteForUpgrade": {
+            "type": "boolean"
+          },
+          "supportsOnHealthIssue": {
+            "type": "boolean"
+          },
+          "supportsOnHealthRestored": {
+            "type": "boolean"
+          },
+          "supportsOnApplicationUpdate": {
+            "type": "boolean"
+          },
+          "supportsOnManualInteractionRequired": {
+            "type": "boolean"
+          },
+          "testCommand": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "CustomFilterResource": {
         "type": "object",
         "properties": {
@@ -6258,30 +6876,48 @@
         ],
         "type": "string"
       },
+      "MediaInfoAudioStreamResource": {
+        "type": "object",
+        "properties": {
+          "language": {
+            "type": "string",
+            "nullable": true
+          },
+          "codec": {
+            "type": "string",
+            "nullable": true
+          },
+          "codecId": {
+            "type": "string",
+            "nullable": true
+          },
+          "profile": {
+            "type": "string",
+            "nullable": true
+          },
+          "bitrate": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "channels": {
+            "type": "number",
+            "format": "double"
+          },
+          "channelPositions": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "MediaInfoResource": {
         "type": "object",
         "properties": {
           "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "audioBitrate": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "audioChannels": {
-            "type": "number",
-            "format": "double"
-          },
-          "audioCodec": {
-            "type": "string",
-            "nullable": true
-          },
-          "audioLanguages": {
-            "type": "string",
-            "nullable": true
-          },
-          "audioStreamCount": {
             "type": "integer",
             "format": "int32"
           },
@@ -6321,8 +6957,44 @@
             "type": "string",
             "nullable": true
           },
-          "subtitles": {
+          "audioStreams": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MediaInfoAudioStreamResource"
+            },
+            "nullable": true
+          },
+          "subtitleStreams": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MediaInfoSubtitleStreamResource"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "MediaInfoSubtitleStreamResource": {
+        "type": "object",
+        "properties": {
+          "language": {
             "type": "string",
+            "nullable": true
+          },
+          "format": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "forced": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "hearingImpaired": {
+            "type": "boolean",
             "nullable": true
           }
         },
@@ -6359,6 +7031,58 @@
         "properties": {
           "monitor": {
             "$ref": "#/components/schemas/MonitorTypes"
+          }
+        },
+        "additionalProperties": false
+      },
+      "NamingSettingsResource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "renameEpisodes": {
+            "type": "boolean"
+          },
+          "replaceIllegalCharacters": {
+            "type": "boolean"
+          },
+          "colonReplacementFormat": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "customColonReplacementFormat": {
+            "type": "string",
+            "nullable": true
+          },
+          "multiEpisodeStyle": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "standardEpisodeFormat": {
+            "type": "string",
+            "nullable": true
+          },
+          "dailyEpisodeFormat": {
+            "type": "string",
+            "nullable": true
+          },
+          "animeEpisodeFormat": {
+            "type": "string",
+            "nullable": true
+          },
+          "seriesFolderFormat": {
+            "type": "string",
+            "nullable": true
+          },
+          "seasonFolderFormat": {
+            "type": "string",
+            "nullable": true
+          },
+          "specialsFolderFormat": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -6669,6 +7393,27 @@
           }
         },
         "additionalProperties": false
+      },
+      "ProviderMessage": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "$ref": "#/components/schemas/ProviderMessageType"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProviderMessageType": {
+        "enum": [
+          "info",
+          "warning",
+          "error"
+        ],
+        "type": "string"
       },
       "Quality": {
         "type": "object",
@@ -7305,9 +8050,13 @@
             },
             "nullable": true
           },
-          "indexerId": {
-            "type": "integer",
-            "format": "int32"
+          "indexerIds": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
           },
           "tags": {
             "uniqueItems": true,
@@ -8706,6 +9455,9 @@
       "name": "Command"
     },
     {
+      "name": "Connection"
+    },
+    {
       "name": "CustomFilter"
     },
     {
@@ -8743,6 +9495,9 @@
     },
     {
       "name": "Missing"
+    },
+    {
+      "name": "NamingSettings"
     },
     {
       "name": "Parse"
