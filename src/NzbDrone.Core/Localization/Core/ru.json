@@ -43,7 +43,6 @@
     "AddNewSeriesRootFolderHelpText": "Подпапка '{folder}' будет создана автоматически",
     "AddNewSeriesSearchForCutoffUnmetEpisodes": "Начать поиск отклонённых эпизодов",
     "AddNewSeriesSearchForMissingEpisodes": "Начать поиск отсутствующих эпизодов",
-    "AddNotificationError": "Невозможно добавить новое уведомление, попробуйте еще раз.",
     "AddQualityProfile": "Добавить профиль качества",
     "AddQualityProfileError": "Не удалось добавить новый профиль качества. Повторите попытку.",
     "AddReleaseProfile": "Добавить профиль выпуска",

@@ -43,7 +43,6 @@
     "AddNewSeriesRootFolderHelpText": "'{folder}' 하위 폴더가 자동으로 생성됩니다",
     "AddNewSeriesSearchForCutoffUnmetEpisodes": "조건 미충족 에피소드 검색 시작",
     "AddNewSeriesSearchForMissingEpisodes": "누락된 에피소드 검색 시작",
-    "AddNotificationError": "새로운 알림을 추가할 수 없음, 다시 시도해주세요.",
     "AddQualityProfile": "품질 프로필 추가",
     "AddQualityProfileError": "새로운 품질 프로필을 추가할 수 없음, 다시 시도해주세요.",
     "AddReleaseProfile": "릴리스 프로필 편집",

@@ -43,7 +43,6 @@
     "AddNewSeriesRootFolderHelpText": "'{folder}' submap zal automatisch worden aangemaakt",
     "AddNewSeriesSearchForCutoffUnmetEpisodes": "Start het zoeken naar afleveringen zonder voorwaarden",
     "AddNewSeriesSearchForMissingEpisodes": "Start het zoeken naar ontbrekende afleveringen",
-    "AddNotificationError": "Het toevoegen van de notificatietype is niet gelukt, probeer het nogmaals.",
     "AddQualityProfile": "Kwaliteitsprofiel toevoegen",
     "AddQualityProfileError": "Kon geen nieuw Kwaliteitsprofiel toevoegen, probeer het opnieuw.",
     "AddReleaseProfile": "Voeg Releaseprofiel toe",
