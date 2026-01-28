@@ -1,6 +1,8 @@
 import React from 'react';
+import HeartRating from 'Components/HeartRating';
 import SeriesTagList from 'Components/SeriesTagList';
 import Language from 'Language/Language';
+import { Ratings } from 'Series/Series';
 import { QualityProfileModel } from 'Settings/Profiles/Quality/useQualityProfiles';
 import formatDateTime from 'Utilities/Date/formatDateTime';
 import getRelativeDate from 'Utilities/Date/getRelativeDate';
@@ -18,6 +20,7 @@ interface SeriesIndexPosterInfoProps {
   seasonCount: number;
   path: string;
   sizeOnDisk?: number;
+  ratings: Ratings;
   tags: number[];
   sortKey: string;
   showRelativeDates: boolean;
@@ -38,6 +41,7 @@ function SeriesIndexPosterInfo(props: SeriesIndexPosterInfoProps) {
     seasonCount,
     path,
     sizeOnDisk = 0,
+    ratings,
     tags,
     sortKey,
     showRelativeDates,
@@ -149,6 +153,14 @@ function SeriesIndexPosterInfo(props: SeriesIndexPosterInfoProps) {
     return (
       <div className={styles.info} title={translate('SizeOnDisk')}>
         {formatBytes(sizeOnDisk)}
+      </div>
+    );
+  }
+
+  if (sortKey === 'ratings' && ratings.value) {
+    return (
+      <div className={styles.info} title={translate('Rating')}>
+        <HeartRating rating={ratings.value} votes={ratings.votes} />
       </div>
     );
   }
