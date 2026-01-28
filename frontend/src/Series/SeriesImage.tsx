@@ -60,7 +60,7 @@ function SeriesImage({
 
     switch (coverType) {
       case 'banner':
-        type = translate('Banner');
+        type = translate('ImageBanner');
         break;
       case 'fanart':
         type = translate('ImageFanart');
