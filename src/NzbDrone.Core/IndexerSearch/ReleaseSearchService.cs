@@ -415,9 +415,13 @@ namespace NzbDrone.Core.IndexerSearch
                 downloadDecisions.AddRange(decisions);
             }
 
-            foreach (var episode in episodesToSearch)
+            var skipEpisodeSearch = bool.TryParse(Environment.GetEnvironmentVariable("FIX_ANIME_SEASON_SEARCH"), out var enabled) && enabled;
+            if (!skipEpisodeSearch)
             {
-                downloadDecisions.AddRange(await SearchAnime(series, episode, monitoredOnly, userInvokedSearch, interactiveSearch, true));
+                foreach (var episode in episodesToSearch)
+                {
+                    downloadDecisions.AddRange(await SearchAnime(series, episode, monitoredOnly, userInvokedSearch, interactiveSearch, true));
+                }
             }
 
             return DeDupeDecisions(downloadDecisions);

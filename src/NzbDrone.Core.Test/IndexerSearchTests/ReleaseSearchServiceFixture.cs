@@ -12,6 +12,7 @@ using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.IndexerSearch;
 using NzbDrone.Core.IndexerSearch.Definitions;
+using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 
@@ -35,7 +36,7 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
                   .Returns(new List<IIndexer> { _mockIndexer.Object });
 
             Mocker.GetMock<IMakeDownloadDecision>()
-                .Setup(s => s.GetSearchDecision(It.IsAny<List<Parser.Model.ReleaseInfo>>(), It.IsAny<SearchCriteriaBase>()))
+                .Setup(s => s.GetSearchDecision(It.IsAny<List<ReleaseInfo>>(), It.IsAny<SearchCriteriaBase>()))
                 .Returns(new List<DownloadDecision>());
 
             _xemSeries = Builder<Series>.CreateNew()
@@ -111,31 +112,31 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
 
             _mockIndexer.Setup(v => v.Fetch(It.IsAny<SingleEpisodeSearchCriteria>()))
                 .Callback<SingleEpisodeSearchCriteria>(s => result.Add(s))
-                .Returns(Task.FromResult<IList<Parser.Model.ReleaseInfo>>(new List<Parser.Model.ReleaseInfo>()));
+                .Returns(Task.FromResult<IList<ReleaseInfo>>(new List<ReleaseInfo>()));
 
             _mockIndexer.Setup(v => v.Fetch(It.IsAny<SeasonSearchCriteria>()))
                 .Callback<SeasonSearchCriteria>(s => result.Add(s))
-                .Returns(Task.FromResult<IList<Parser.Model.ReleaseInfo>>(new List<Parser.Model.ReleaseInfo>()));
+                .Returns(Task.FromResult<IList<ReleaseInfo>>(new List<ReleaseInfo>()));
 
             _mockIndexer.Setup(v => v.Fetch(It.IsAny<DailyEpisodeSearchCriteria>()))
                 .Callback<DailyEpisodeSearchCriteria>(s => result.Add(s))
-                .Returns(Task.FromResult<IList<Parser.Model.ReleaseInfo>>(new List<Parser.Model.ReleaseInfo>()));
+                .Returns(Task.FromResult<IList<ReleaseInfo>>(new List<ReleaseInfo>()));
 
             _mockIndexer.Setup(v => v.Fetch(It.IsAny<DailySeasonSearchCriteria>()))
                 .Callback<DailySeasonSearchCriteria>(s => result.Add(s))
-                .Returns(Task.FromResult<IList<Parser.Model.ReleaseInfo>>(new List<Parser.Model.ReleaseInfo>()));
+                .Returns(Task.FromResult<IList<ReleaseInfo>>(new List<ReleaseInfo>()));
 
             _mockIndexer.Setup(v => v.Fetch(It.IsAny<AnimeEpisodeSearchCriteria>()))
                 .Callback<AnimeEpisodeSearchCriteria>(s => result.Add(s))
-                .Returns(Task.FromResult<IList<Parser.Model.ReleaseInfo>>(new List<Parser.Model.ReleaseInfo>()));
+                .Returns(Task.FromResult<IList<ReleaseInfo>>(new List<ReleaseInfo>()));
 
             _mockIndexer.Setup(v => v.Fetch(It.IsAny<AnimeSeasonSearchCriteria>()))
                 .Callback<AnimeSeasonSearchCriteria>(s => result.Add(s))
-                .Returns(Task.FromResult<IList<Parser.Model.ReleaseInfo>>(new List<Parser.Model.ReleaseInfo>()));
+                .Returns(Task.FromResult<IList<ReleaseInfo>>(new List<ReleaseInfo>()));
 
             _mockIndexer.Setup(v => v.Fetch(It.IsAny<SpecialEpisodeSearchCriteria>()))
                 .Callback<SpecialEpisodeSearchCriteria>(s => result.Add(s))
-                .Returns(Task.FromResult<IList<Parser.Model.ReleaseInfo>>(new List<Parser.Model.ReleaseInfo>()));
+                .Returns(Task.FromResult<IList<ReleaseInfo>>(new List<ReleaseInfo>()));
 
             return result;
         }
@@ -346,6 +347,33 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
             var criteria = allCriteria.OfType<AnimeEpisodeSearchCriteria>().ToList();
 
             criteria.Count.Should().Be(_xemEpisodes.Count(e => e.SeasonNumber == seasonNumber));
+        }
+
+        [Test]
+        public async Task season_search_for_anime_should_not_search_for_each_monitored_episode_when_anime_fix_enabled()
+        {
+            var previous = Environment.GetEnvironmentVariable("FIX_ANIME_SEASON_SEARCH");
+
+            try
+            {
+                Environment.SetEnvironmentVariable("FIX_ANIME_SEASON_SEARCH", "true");
+                WithEpisodes();
+                _xemSeries.SeriesType = SeriesTypes.Anime;
+                _xemEpisodes.ForEach(e => e.EpisodeFileId = 0);
+
+                var seasonNumber = 1;
+                var allCriteria = WatchForSearchCriteria();
+
+                await Subject.SeasonSearch(_xemSeries.Id, seasonNumber, true, false, true, false);
+
+                var criteria = allCriteria.OfType<AnimeEpisodeSearchCriteria>().ToList();
+
+                criteria.Count.Should().Be(0);
+            }
+            finally
+            {
+                Environment.SetEnvironmentVariable("FIX_ANIME_SEASON_SEARCH", previous);
+            }
         }
 
         [Test]

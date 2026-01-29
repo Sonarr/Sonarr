@@ -1,114 +1,67 @@
 # <img width="24px" src="./Logo/256.png" alt="Sonarr"></img> Sonarr
 
-[![Translated](https://translate.servarr.com/widget/servarr/sonarr/svg-badge.svg)](https://translate.servarr.com/engage/servarr/)
-[![Backers on Open Collective](https://opencollective.com/Sonarr/backers/badge.svg)](#backers)
-[![Sponsors on Open Collective](https://opencollective.com/Sonarr/sponsors/badge.svg)](#sponsors)
-[![Mega Sponsors on Open Collective](https://opencollective.com/Sonarr/megasponsors/badge.svg)](#mega-sponsors)
+## Installation
 
-Sonarr is a PVR for Usenet and BitTorrent users. It can monitor multiple RSS feeds for new episodes of your favorite shows and will grab, sort and rename them. It can also be configured to automatically upgrade the quality of files already downloaded when a better quality format becomes available.
+This fork is designed to be a drop-in replacement for existing Sonarr docker installations. Simply replace your sonarr docker image with `ghcr.io/realzombee/sonarr:develop`
 
-## Docker Image
-
-```bash
-ghcr.io/realzombee/sonarr:develop
+Sample docker compose:
+```docker
+sonarr:
+    image: ghcr.io/realzombee/sonarr:develop
+    container_name: sonarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      # Add env vars for any tweaks you want to enable
+      - ACCEPT_RELEASE_ANY_UPGRADABLE=true
+      - IGNORE_MATCH_BY_ID_WARNING=true
+      - FIX_ANIME_SEASON_SEARCH=true
+    volumes:
+      - /path/to/sonarr/data:/config
+      # Additional volume mounts for your media, etc
+    ports:
+      - 8989:8989
+    restart: unless-stopped
 ```
 
 ## Why this fork?
 
-This fork aims to improve certain aspects of Sonarr to make it work better with remote "infinite" library setups (Debrid/Usenet streaming, etc). This fork will be kept up-to-date with the Sonarr develop branch and is designed to be a drop-in replacement if you're using [linuxserver's docker images](https://hub.docker.com/r/linuxserver/sonarr). The changes in this fork are fully compatible with the original Sonarr configs so you can freely swap back and forth between them.
+This fork aims to improve certain aspects of Sonarr to make it work better with remote "infinite" library setups (Debrid/Usenet streaming, etc). This fork will be kept up-to-date with the Sonarr develop branch and the changes in this fork are fully compatible with the original Sonarr configs so you can freely swap back and forth between them.
 
 This fork provides two categories of changes:
 
-### Fixes
+## Fixes
  These are universal bug-fixes that should be fixed in the original Sonarr project. These will be submitted as pull requests eventually but might not make it into a general release until the v5 migration is complete.
 
 - ffprobe issues: There's a bug in VideoFileInfoReader that causes ffprobe to read the entire file during HDR analysis if the video stream is at a non-zero index. This is especially problematic for remote files since it uses bandwidth unnecessarily.
 - RefreshMonitoredDownloadsCommand: Tools like decypharr and nzbdav issue this command after processing a download. But when this command is issued through the API or through the UI, it has a `Normal` priority, causing a buildup of queue items if lots of searches are triggered at once.
 
-### Tweaks
-These are small changes to Sonarr behavior to optimize for debrid/usenet streaming setups. These can be turned on/off through environment variables. 
+## Tweaks
+These are small changes to Sonarr behavior to optimize for debrid/usenet streaming setups. These can be turned on through environment variables. 
 
-| Env variable                  | Default | Recommended value | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
-|-------------------------------|---------|-------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| ACCEPT_RELEASE_ANY_UPGRADABLE | false   | true              | Sonarr does not download season packs if it does not result in an upgrade for ALL episodes in a season. This is a good choice for regular setups where downloads take a long time and downloading a season pack just to upgrade a single episode is not pragmatic. But with "infinite" setups, downloads take seconds. Furthermore, debrid services often expire certain files from a season pack and sonarr wouldn't download another season pack to replace it, which can result in Sonarr grabbing a lower quality single episode release which is not ideal.            |
-| IGNORE_MATCH_BY_ID_WARNING    | false   | true              | This setting turns off the warning `Found matching series via grab history, but release was matched to series by ID. Automatic import is not possible`. This generally happens on usenet indexers that include a tvdbId in releases that sonarr uses to match against series while downloading. But during imports, if the files are obfuscated or the file/series name doesn't match up with sonarr's expectations, it blocks automatic import. <br/> ⚠️ Only use this setting if you trust your indexers to provide the correct tvdbIds when they're present on releases. |
+#### ACCEPT_RELEASE_ANY_UPGRADABLE
 
+This setting allows Sonarr to download season packs even if it already has some episodes. Generally you should turn this on for debrid setups.
 
+Sonarr does not download season packs if it does not result in an upgrade for ALL episodes in a season. This is a good choice for regular setups where downloads take a long time and downloading a season pack just to upgrade a single episode is not pragmatic. But with "infinite" setups, downloads take seconds. Furthermore, debrid services often expire certain files from a season pack and by default, sonarr doesn't download another season pack to replace it, which can result in Sonarr grabbing a lower quality single episode.
 
+#### IGNORE_MATCH_BY_ID_WARNING
 
-## Getting Started
+This setting turns off the warning 
 
-- [Download/Installation](https://sonarr.tv/#downloads-v3)
-- [FAQ](https://wiki.servarr.com/sonarr/faq)
-- [Wiki](https://wiki.servarr.com/Sonarr)
-- [v4 Beta API Documentation](https://sonarr.tv/docs/api)
-- [Donate](https://sonarr.tv/donate)
+```
+Found matching series via grab history, but release was matched to series by ID. Automatic import is not possible
+``` 
 
-## Support
+This generally happens on usenet indexers that include a tvdbId in releases that sonarr uses to match against series while downloading. But during imports, if the files are obfuscated or the file/series name doesn't match up with sonarr's expectations, it blocks automatic import. 
+ 
+⚠️ Only use this setting if you trust your indexers to provide the correct tvdbIds when they're present on releases.
 
-Note: GitHub Issues are for Bugs and Feature Requests Only
+#### FIX_ANIME_SEASON_SEARCH
 
-- [Forums](https://forums.sonarr.tv/)
-- [Discord](https://discord.gg/M6BvZn5)
-- [GitHub - Bugs and Feature Requests Only](https://github.com/Sonarr/Sonarr/issues)
-- [IRC](https://web.libera.chat/?channels=#sonarr)
-- [Reddit](https://www.reddit.com/r/sonarr)
-- [Wiki](https://wiki.servarr.com/sonarr)
-
-## Features
-
-### Current Features
-
-- Support for major platforms: Windows, Linux, macOS, Raspberry Pi, etc.
-- Automatically detects new episodes
-- Can scan your existing library and download any missing episodes
-- Can watch for better quality of the episodes you already have and do an automatic upgrade. _eg. from DVD to Blu-Ray_
-- Automatic failed download handling will try another release if one fails
-- Manual search so you can pick any release or to see why a release was not downloaded automatically
-- Fully configurable episode renaming
-- Full integration with SABnzbd and NZBGet
-- Full integration with Kodi, Plex (notification, library update, metadata)
-- Full support for specials and multi-episode releases
-- And a beautiful UI
+Sonarr's default anime season search is **VERY** slow since it also searches for each episode individually. This setting allows you to bypass that and just search by season, which most indexers support. This significantly improves the search experience for anime.
 
 ## Contributing
 
-### Development
-
-This project exists thanks to all the people who contribute. [Contribute](CONTRIBUTING.md).
-
-<a href="https://github.com/Sonarr/Sonarr/graphs/contributors"><img src="https://opencollective.com/Sonarr/contributors.svg?width=890&button=false" /></a>
-
-### Supporters
-
-This project would not be possible without the support of our users and software providers.
-[**Become a sponsor or backer**](https://opencollective.com/sonarr) to help us out!
-
-#### Mega Sponsors
-
-[![Sponsors](https://opencollective.com/sonarr/tiers/mega-sponsor.svg?width=890)](https://opencollective.com/sonarr/contribute/mega-sponsor-21443/checkout)
-
-#### Sponsors
-
-[![Flexible Sponsors](https://opencollective.com/sonarr/sponsors.svg?width=890)](https://opencollective.com/sonarr/contribute/sponsor-21457/checkout)
-
-#### Backers
-
-[![Backers](https://opencollective.com/sonarr/backers.svg?width=890)](https://opencollective.com/sonarr/contribute/backer-21442/checkout)
-
-#### JetBrains
-
-Thank you to [<img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jetbrains.png" alt="JetBrains" width="96">](http://www.jetbrains.com/) for providing us with free licenses to their great tools
-
-[<img src="https://resources.jetbrains.com/storage/products/company/brand/logos/TeamCity.png" alt="TeamCity" width="64">](http://www.jetbrains.com/teamcity/)
-
-[<img src="https://resources.jetbrains.com/storage/products/company/brand/logos/ReSharper.png" alt="ReSharper" width="64">](http://www.jetbrains.com/resharper/)
-
-[<img src="https://resources.jetbrains.com/storage/products/company/brand/logos/dotTrace.png" alt="dotTrace" width="64">](http://www.jetbrains.com/dottrace/)
-
-[<img src="https://resources.jetbrains.com/storage/products/company/brand/logos/Rider.png" alt="Rider" width="64">](http://www.jetbrains.com/rider/)
-
-### Licenses
-
-- [GNU GPL v3](http://www.gnu.org/licenses/gpl.html)
-- Copyright 2010-2024
+Feel free to open issues or pull requests for any changes you'd like to see.
