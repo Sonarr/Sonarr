@@ -28,6 +28,7 @@ import {
 } from 'Series/seriesOptionsStore';
 import { FILTERS, useSeriesIndex } from 'Series/useSeries';
 import scrollPositions from 'Store/scrollPositions';
+import { TableOptionsChangePayload } from 'typings/Table';
 import translate from 'Utilities/String/translate';
 import SeriesIndexFilterMenu from './Menus/SeriesIndexFilterMenu';
 import SeriesIndexSortMenu from './Menus/SeriesIndexSortMenu';
@@ -98,11 +99,20 @@ const SeriesIndex = withScrollPosition((props: SeriesIndexProps) => {
     setIsSelectMode(!isSelectMode);
   }, [isSelectMode, setIsSelectMode]);
 
-  const onTableOptionChange = useCallback((payload: unknown) => {
-    setSeriesTableOptions(
-      payload as Partial<{ showBanners: boolean; showSearchAction: boolean }>
-    );
-  }, []);
+  const onTableOptionChange = useCallback(
+    (
+      payload: TableOptionsChangePayload & {
+        tableOptions?: { showBanners?: boolean; showSearchAction?: boolean };
+      }
+    ) => {
+      if (payload.tableOptions) {
+        setSeriesTableOptions(payload.tableOptions);
+      } else if (payload.columns) {
+        setSeriesOption('columns', payload.columns);
+      }
+    },
+    []
+  );
 
   const onViewSelect = useCallback(
     (value: string) => {
