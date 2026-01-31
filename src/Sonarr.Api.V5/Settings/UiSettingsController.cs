@@ -6,10 +6,10 @@ using NzbDrone.Core.Languages;
 using Sonarr.Http;
 using Sonarr.Http.REST.Attributes;
 
-namespace Sonarr.Api.V5.Config;
+namespace Sonarr.Api.V5.Settings;
 
 [V5ApiController("settings/ui")]
-public class UiSettingsController : ConfigController<UiSettingsResource>
+public class UiSettingsController : SettingsController<UiSettingsResource>
 {
     private readonly IConfigFileProvider _configFileProvider;
 
