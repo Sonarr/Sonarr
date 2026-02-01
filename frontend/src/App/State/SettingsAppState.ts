@@ -24,7 +24,6 @@ import IndexerFlag from 'typings/IndexerFlag';
 import DownloadClientOptions from 'typings/Settings/DownloadClientOptions';
 import General from 'typings/Settings/General';
 import IndexerOptions from 'typings/Settings/IndexerOptions';
-import MediaManagement from 'typings/Settings/MediaManagement';
 
 type Presets<T> = T & {
   presets: T[];
@@ -60,10 +59,6 @@ export interface DownloadClientOptionsAppState
 
 export interface GeneralAppState
   extends AppSectionItemState<General>,
-    AppSectionSaveState {}
-
-export interface MediaManagementAppState
-  extends AppSectionItemState<MediaManagement>,
     AppSectionSaveState {}
 
 export interface NamingAppState
@@ -134,7 +129,6 @@ interface SettingsAppState {
   indexerOptions: IndexerOptionsAppState;
   indexers: IndexerAppState;
   languages: LanguageSettingsAppState;
-  mediaManagement: MediaManagementAppState;
   naming: NamingAppState;
   namingExamples: NamingExamplesAppState;
 }

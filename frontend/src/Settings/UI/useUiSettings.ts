@@ -40,10 +40,7 @@ export const useSaveUiSettings = () => {
 
   const saveSettings = useCallback(
     (changes: Partial<UiSettingsModel>) => {
-      const updatedSettings = {
-        ...data,
-        ...changes,
-      };
+      const updatedSettings = { ...data, ...changes };
 
       save(updatedSettings);
     },
