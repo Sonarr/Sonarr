@@ -129,6 +129,18 @@
   flex: 0 0 175px;
 }
 
+.language {
+  composes: headerCell from 'Components/Table/VirtualTableHeaderCell.module.css';
+
+  flex: 0 0 130px;
+}
+
+.seasonType {
+  composes: headerCell from 'Components/Table/VirtualTableHeaderCell.module.css';
+
+  flex: 0 0 110px;
+}
+
 .actions {
   composes: headerCell from 'Components/Table/VirtualTableHeaderCell.module.css';
 

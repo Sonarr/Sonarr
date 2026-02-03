@@ -1,4 +1,11 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import {
+  setAddSeriesLanguage,
+  useAddSeriesOption,
+} from 'AddSeries/addSeriesOptionsStore';
+import LanguageSelectInput, {
+  LanguageSelectInputOnChangeProps,
+} from 'Components/Form/Select/LanguageSelectInput';
 import TextInput from 'Components/Form/TextInput';
 import Icon from 'Components/Icon';
 import Button from 'Components/Link/Button';
@@ -10,6 +17,7 @@ import PageHeading from 'Components/Page/PageHeading';
 import useDebounce from 'Helpers/Hooks/useDebounce';
 import useQueryParams from 'Helpers/Hooks/useQueryParams';
 import { icons, kinds } from 'Helpers/Props';
+import Language from 'Language/Language';
 import { useHasSeries } from 'Series/useSeries';
 import { InputChanged } from 'typings/inputs';
 import getErrorMessage from 'Utilities/Object/getErrorMessage';
@@ -21,15 +29,26 @@ import styles from './AddNewSeries.module.css';
 function AddNewSeries() {
   const { term: initialTerm = '' } = useQueryParams<{ term: string }>();
   const hasSeries = useHasSeries();
+  const defaultLanguage = useAddSeriesOption('language');
   const [term, setTerm] = useState(initialTerm);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const [isFetching, setIsFetching] = useState(false);
+  const [language, setLanguage] = useState(defaultLanguage);
   const query = useDebounce(term, term ? 300 : 0);
 
   const handleSearchInputChange = useCallback(
     ({ value }: InputChanged<string>) => {
       setTerm(value);
       setIsFetching(!!value.trim());
+      setLanguage(defaultLanguage);
+    },
+    [defaultLanguage]
+  );
+
+  const handleLanguageChange = useCallback(
+    ({ value }: LanguageSelectInputOnChangeProps) => {
+      setAddSeriesLanguage(value as Language);
+      setLanguage(value as Language);
     },
     []
   );
@@ -40,7 +59,11 @@ function AddNewSeries() {
     searchInputRef.current?.focus();
   }, []);
 
-  const { isFetching: isFetchingApi, error, data } = useLookupSeries(query);
+  const {
+    isFetching: isFetchingApi,
+    error,
+    data,
+  } = useLookupSeries(query, language);
 
   useEffect(() => {
     setIsFetching(isFetchingApi);
@@ -59,27 +82,40 @@ function AddNewSeries() {
         />
 
         <div className={styles.searchSticky}>
-          <div className={styles.searchWrap}>
-            <Icon className={styles.searchIcon} name={icons.SEARCH} size={18} />
+          <div className={styles.searchRow}>
+            <div className={styles.searchWrap}>
+              <Icon
+                className={styles.searchIcon}
+                name={icons.SEARCH}
+                size={18}
+              />
 
-            <TextInput
-              ref={searchInputRef}
-              className={styles.searchInput}
-              name="seriesLookup"
-              value={term}
-              placeholder="eg. Breaking Bad, tvdb:####"
-              autoFocus={true}
-              onChange={handleSearchInputChange}
+              <TextInput
+                ref={searchInputRef}
+                className={styles.searchInput}
+                name="seriesLookup"
+                value={term}
+                placeholder="eg. Breaking Bad, tvdb:####"
+                autoFocus={true}
+                onChange={handleSearchInputChange}
+              />
+
+              {term ? (
+                <Button
+                  className={styles.clearLookupButton}
+                  onPress={handleClearSeriesLookupPress}
+                >
+                  <Icon name={icons.REMOVE} size={14} />
+                </Button>
+              ) : null}
+            </div>
+
+            <LanguageSelectInput
+              className={styles.languageInput}
+              name="language"
+              value={defaultLanguage}
+              onChange={handleLanguageChange}
             />
-
-            {term ? (
-              <Button
-                className={styles.clearLookupButton}
-                onPress={handleClearSeriesLookupPress}
-              >
-                <Icon name={icons.REMOVE} size={14} />
-              </Button>
-            ) : null}
           </div>
         </div>
 

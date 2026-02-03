@@ -174,6 +174,7 @@ function ImportSeriesFooter() {
     importableIds.forEach((id) => {
       updateImportSeriesItem({
         id,
+        language: defaults.language,
         monitor: defaults.monitor,
         qualityProfileId: defaults.qualityProfileId,
         seasonFolder: defaults.seasonFolder,

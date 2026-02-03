@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import React, { useCallback, useState } from 'react';
 import AddSeries from 'AddSeries/AddSeries';
+import { useAddSeriesOption } from 'AddSeries/addSeriesOptionsStore';
 import { useAppDimension } from 'App/appStore';
 import HeartRating from 'Components/HeartRating';
 import Icon from 'Components/Icon';
@@ -38,7 +39,8 @@ function AddNewSeriesSearchResult({ series }: AddNewSeriesSearchResultProps) {
   const {
     tvdbId,
     titleSlug,
-    title,
+    title: lookupTitle,
+    originalTitle,
     year,
     network,
     originalLanguage,
@@ -46,17 +48,23 @@ function AddNewSeriesSearchResult({ series }: AddNewSeriesSearchResultProps) {
     status,
     statistics = {} as Statistics,
     ratings,
-    overview,
+    overview: lookupOverview,
     seriesType,
+    translations,
     images,
     isExcluded,
   } = series;
 
+  const language = useAddSeriesOption('language');
   const isExistingSeries = useExistingSeries(tvdbId);
   const isSmallScreen = useAppDimension('isSmallScreen');
   const [isNewAddSeriesModalOpen, setIsNewAddSeriesModalOpen] = useState(false);
 
   const seasonCount = statistics.seasonCount;
+  const translation = translations.find((t) => t.language.id === language.id);
+  const title = translation?.title ?? originalTitle ?? lookupTitle;
+  const overview = translation?.overview ?? lookupOverview;
+
   const handlePress = useCallback(() => {
     setIsNewAddSeriesModalOpen(true);
   }, []);

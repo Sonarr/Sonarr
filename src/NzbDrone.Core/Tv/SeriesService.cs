@@ -211,7 +211,7 @@ namespace NzbDrone.Core.Tv
             {
                 foreach (var season in series.Seasons)
                 {
-                    var storedSeason = storedSeries.Seasons.SingleOrDefault(s => s.SeasonNumber == season.SeasonNumber);
+                    var storedSeason = storedSeries.Seasons.FirstOrDefault(s => s.SeasonNumber == season.SeasonNumber);
 
                     if (storedSeason != null && season.Monitored != storedSeason.Monitored)
                     {

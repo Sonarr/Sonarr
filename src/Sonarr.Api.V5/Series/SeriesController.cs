@@ -41,6 +41,7 @@ public class SeriesController : RestControllerWithSignalR<SeriesResource, NzbDro
     private readonly IAddSeriesService _addSeriesService;
     private readonly ISeriesStatisticsService _seriesStatisticsService;
     private readonly ISceneMappingService _sceneMappingService;
+    private readonly ISeriesTranslationService _seriesTranslationService;
     private readonly IMapCoversToLocal _coverMapper;
     private readonly IManageCommandQueue _commandQueueManager;
     private readonly IRootFolderService _rootFolderService;
@@ -52,6 +53,7 @@ public class SeriesController : RestControllerWithSignalR<SeriesResource, NzbDro
                         IAddSeriesService addSeriesService,
                         ISeriesStatisticsService seriesStatisticsService,
                         ISceneMappingService sceneMappingService,
+                        ISeriesTranslationService seriesTranslationService,
                         IMapCoversToLocal coverMapper,
                         IManageCommandQueue commandQueueManager,
                         IRootFolderService rootFolderService,
@@ -70,6 +72,7 @@ public class SeriesController : RestControllerWithSignalR<SeriesResource, NzbDro
         _addSeriesService = addSeriesService;
         _seriesStatisticsService = seriesStatisticsService;
         _sceneMappingService = sceneMappingService;
+        _seriesTranslationService = seriesTranslationService;
 
         _coverMapper = coverMapper;
         _commandQueueManager = commandQueueManager;
@@ -127,6 +130,7 @@ public class SeriesController : RestControllerWithSignalR<SeriesResource, NzbDro
         MapCoversToLocal(seriesResources.ToArray());
         LinkSeriesStatistics(seriesResources, seriesStats.ToDictionary(x => x.SeriesId));
         PopulateAlternateTitles(seriesResources);
+        PopulateTranslations(seriesResources);
         seriesResources.ForEach(LinkRootFolderPath);
 
         return TypedResults.Ok(seriesResources);
@@ -211,7 +215,12 @@ public class SeriesController : RestControllerWithSignalR<SeriesResource, NzbDro
                 trigger: CommandTrigger.Manual);
         }
 
+        var seasonType = series.SeasonType;
+
         var model = seriesResource.ToModel(series);
+
+        // Don't change the season type for an existing series
+        model.SeasonType = seasonType;
 
         _seriesService.UpdateSeries(model);
 
@@ -264,6 +273,7 @@ public class SeriesController : RestControllerWithSignalR<SeriesResource, NzbDro
         MapCoversToLocal(resource);
         FetchAndLinkSeriesStatistics(resource);
         PopulateAlternateTitles(resource);
+        PopulateTranslations(resource);
         LinkRootFolderPath(resource);
 
         return resource;
@@ -309,6 +319,32 @@ public class SeriesController : RestControllerWithSignalR<SeriesResource, NzbDro
                 season.Statistics = seriesStatistics.SeasonStatistics?.SingleOrDefault(s => s.SeasonNumber == season.SeasonNumber)?.ToResource();
             }
         }
+    }
+
+    private void PopulateTranslations(List<SeriesResource> resources)
+    {
+        var translations = _seriesTranslationService.GetTranslations()
+            .GroupBy(t => t.SeriesId)
+            .ToDictionary(g => g.Key, g => g.ToList());
+
+        foreach (var resource in resources)
+        {
+            if (translations.TryGetValue(resource.Id, out var seriesTranslations))
+            {
+                resource.Translations = seriesTranslations
+                    .Select(t => new SeriesTranslationResource
+                    {
+                        Language = t.Language,
+                        Title = t.Title
+                    })
+                    .ToList();
+            }
+        }
+    }
+
+    private void PopulateTranslations(SeriesResource resource)
+    {
+        resource.Translations = _seriesTranslationService.GetTranslations(resource.Id).ToResource();
     }
 
     private void PopulateAlternateTitles(List<SeriesResource> resources)

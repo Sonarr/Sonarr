@@ -1,11 +1,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using NzbDrone.Core.Languages;
 using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.MetadataSource;
 using NzbDrone.Core.Organizer;
+using NzbDrone.Core.Parser;
 using NzbDrone.Core.SeriesStats;
 using Sonarr.Http;
+using Sonarr.Http.REST;
 
 namespace Sonarr.Api.V3.Series
 {
@@ -24,9 +27,17 @@ namespace Sonarr.Api.V3.Series
         }
 
         [HttpGet]
-        public IEnumerable<SeriesResource> Search([FromQuery] string term)
+        public IEnumerable<SeriesResource> Search([FromQuery] string term, [FromQuery] int? language = null)
         {
-            var tvDbResults = _searchProxy.SearchForNewSeries(term);
+            var languageId = language ?? Language.English.Id;
+            var searchLanguage = Language.All.FirstOrDefault(l => l.Id == languageId);
+
+            if (searchLanguage == null || IsoLanguages.Get(searchLanguage) == null)
+            {
+                throw new BadRequestException($"Invalid language: {languageId}");
+            }
+
+            var tvDbResults = _searchProxy.SearchForNewSeries(term, searchLanguage);
             return MapToResource(tvDbResults);
         }
 
@@ -46,7 +57,18 @@ namespace Sonarr.Api.V3.Series
                 }
 
                 resource.Folder = _fileNameBuilder.GetSeriesFolder(currentSeries);
+                resource.Folders = new List<SeriesFolderResource>();
                 resource.Statistics = new SeriesStatistics().ToResource(resource.Seasons);
+                resource.Translations = currentSeries.Translations.ToResource();
+
+                foreach (var translation in currentSeries.Translations)
+                {
+                    resource.Folders.Add(new SeriesFolderResource
+                    {
+                        Language = translation.Language,
+                        Folder = _fileNameBuilder.GetSeriesFolder(currentSeries, translation.Title)
+                    });
+                }
 
                 yield return resource;
             }

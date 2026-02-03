@@ -6,6 +6,7 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Core.Languages;
 using NzbDrone.Core.MetadataSource.SkyHook;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
@@ -26,7 +27,7 @@ namespace NzbDrone.Core.Test.TvTests
         {
             UseRealHttp();
 
-            _gameOfThrones = Mocker.Resolve<SkyHookProxy>().GetSeriesInfo(121361); // Game of thrones
+            _gameOfThrones = Mocker.Resolve<SkyHookProxy>().GetSeriesInfo(121361, Language.English, SeasonType.Official); // Game of thrones
 
             // Remove specials.
             _gameOfThrones.Item2.RemoveAll(v => v.SeasonNumber == 0);

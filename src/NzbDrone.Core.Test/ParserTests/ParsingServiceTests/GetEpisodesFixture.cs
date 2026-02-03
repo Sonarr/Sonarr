@@ -29,6 +29,7 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
             _series = Builder<Series>.CreateNew()
                 .With(s => s.Title = "30 Stone")
                 .With(s => s.CleanTitle = "stone")
+                .With(s => s.SeasonType = SeasonType.Official)
                 .Build();
 
             _episodes = Builder<Episode>.CreateListOfSize(1)

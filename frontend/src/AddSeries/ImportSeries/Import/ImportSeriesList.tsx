@@ -29,7 +29,7 @@ import styles from './ImportSeriesList.module.css';
 
 const ITEM_HEIGHT = 112;
 const ITEM_HEIGHT_COMPACT = 64;
-const ITEM_HEIGHT_STACKED = 203;
+const ITEM_HEIGHT_STACKED = 261;
 const ITEM_HEIGHT_STACKED_UNMATCHED = 80;
 const STACKED_WIDTH = 960;
 

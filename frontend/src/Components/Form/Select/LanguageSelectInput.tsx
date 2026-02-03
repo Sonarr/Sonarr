@@ -15,6 +15,7 @@ export interface LanguageSelectInputProps {
   className?: string;
   name: string;
   value: number | string | Language;
+  modalTitle?: string;
   includeNoChange?: boolean;
   includeNoChangeDisabled?: boolean;
   includeMixed?: boolean;

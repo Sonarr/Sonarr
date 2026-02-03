@@ -233,6 +233,19 @@ namespace NzbDrone.Core.Parser
             {
                 remoteEpisode.Series = series;
 
+                // Non-official order doesn't support remapped season numbers, clearing it out
+                if (series.SeasonType != SeasonType.Official)
+                {
+                    if (parsedEpisodeInfo.SeasonNumber.HasValue)
+                    {
+                        remoteEpisode.MappedSeasonNumber = parsedEpisodeInfo.SeasonNumber;
+                    }
+
+                    remoteEpisode.SceneMapping = null;
+
+                    sceneSource = false;
+                }
+
                 if (remoteEpisode.MappedSeasonNumber.HasValue &&
                     ValidateParsedEpisodeInfo.ValidateForSeriesType(parsedEpisodeInfo, series))
                 {
@@ -443,6 +456,12 @@ namespace NzbDrone.Core.Parser
 
             if (searchCriteria != null)
             {
+                if (searchCriteria.Series.CleanOriginalTitle.IsNotNullOrWhiteSpace() &&
+                    searchCriteria.Series.CleanOriginalTitle == parsedEpisodeInfo.SeriesTitle.CleanSeriesTitle())
+                {
+                    return new FindSeriesResult(searchCriteria.Series, SeriesMatchType.Title);
+                }
+
                 if (searchCriteria.Series.CleanTitle == parsedEpisodeInfo.SeriesTitle.CleanSeriesTitle())
                 {
                     return new FindSeriesResult(searchCriteria.Series, SeriesMatchType.Title);

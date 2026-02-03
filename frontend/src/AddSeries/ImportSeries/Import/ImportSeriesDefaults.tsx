@@ -7,11 +7,13 @@ import {
 import EnhancedSelectInput, {
   EnhancedSelectInputValue,
 } from 'Components/Form/Select/EnhancedSelectInput';
+import LanguageSelectInput from 'Components/Form/Select/LanguageSelectInput';
 import MonitorEpisodesSelectInput from 'Components/Form/Select/MonitorEpisodesSelectInput';
 import QualityProfileSelectInput from 'Components/Form/Select/QualityProfileSelectInput';
 import SeriesTypeSelectInput from 'Components/Form/Select/SeriesTypeSelectInput';
 import Button from 'Components/Link/Button';
 import { kinds } from 'Helpers/Props';
+import Language from 'Language/Language';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
 import styles from './ImportSeriesDefaults.module.css';
@@ -27,7 +29,7 @@ function ImportSeriesDefaults({
   isApplyDisabled,
   onApplyDefaults,
 }: ImportSeriesDefaultsProps) {
-  const { monitor, qualityProfileId, seasonFolder, seriesType } =
+  const { language, monitor, qualityProfileId, seasonFolder, seriesType } =
     useAddSeriesOptions();
 
   const seasonFolderOptions: EnhancedSelectInputValue<boolean>[] = useMemo(
@@ -39,7 +41,10 @@ function ImportSeriesDefaults({
   );
 
   const handleInputChange = useCallback(
-    ({ name, value }: InputChanged<string | number | boolean | number[]>) => {
+    ({
+      name,
+      value,
+    }: InputChanged<string | number | boolean | number[] | Language>) => {
       setAddSeriesOption(name as keyof AddSeriesOptions, value);
     },
     []
@@ -81,6 +86,16 @@ function ImportSeriesDefaults({
             value={seriesType}
             modalTitle={translate('SeriesType')}
             selectedValueOptions={HIDE_HINT}
+            onChange={handleInputChange}
+          />
+        </div>
+
+        <div className={styles.setting}>
+          <div className={styles.settingLabel}>{translate('Language')}</div>
+          <LanguageSelectInput
+            name="language"
+            value={language}
+            modalTitle={translate('Language')}
             onChange={handleInputChange}
           />
         </div>

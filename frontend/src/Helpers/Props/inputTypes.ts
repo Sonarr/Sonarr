@@ -20,6 +20,7 @@ export const SELECT = 'select';
 export const SERIES_TAG = 'seriesTag';
 export const DYNAMIC_SELECT = 'dynamicSelect';
 export const SERIES_TYPE_SELECT = 'seriesTypeSelect';
+export const SEASON_TYPE_SELECT = 'seasonTypeSelect';
 export const TAG = 'tag';
 export const TEXT = 'text';
 export const TEXT_AREA = 'textArea';
@@ -87,4 +88,5 @@ export type InputType =
   | 'textArea'
   | 'textTag'
   | 'tagSelect'
-  | 'umask';
+  | 'umask'
+  | 'seasonTypeSelect';

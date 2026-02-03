@@ -52,6 +52,8 @@ export const useImportSeries = () => {
             qualityProfileId: item.qualityProfileId,
             path: item.path,
             seriesType: item.seriesType,
+            language: item.language,
+            seasonType: item.seasonType,
             seasonFolder: item.seasonFolder,
             addOptions: {
               monitor: item.monitor,
