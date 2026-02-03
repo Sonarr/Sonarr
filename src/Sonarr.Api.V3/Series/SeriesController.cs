@@ -39,6 +39,7 @@ namespace Sonarr.Api.V3.Series
                                 IHandle<MediaCoversUpdatedEvent>
     {
         private readonly ISeriesService _seriesService;
+        private readonly ISeriesTranslationService _seriesTranslationService;
         private readonly IAddSeriesService _addSeriesService;
         private readonly ISeriesStatisticsService _seriesStatisticsService;
         private readonly ISceneMappingService _sceneMappingService;
@@ -48,6 +49,7 @@ namespace Sonarr.Api.V3.Series
 
         public SeriesController(IBroadcastSignalRMessage signalRBroadcaster,
                             ISeriesService seriesService,
+                            ISeriesTranslationService seriesTranslationService,
                             IAddSeriesService addSeriesService,
                             ISeriesStatisticsService seriesStatisticsService,
                             ISceneMappingService sceneMappingService,
@@ -66,6 +68,7 @@ namespace Sonarr.Api.V3.Series
             : base(signalRBroadcaster)
         {
             _seriesService = seriesService;
+            _seriesTranslationService = seriesTranslationService;
             _addSeriesService = addSeriesService;
             _seriesStatisticsService = seriesStatisticsService;
             _sceneMappingService = sceneMappingService;
@@ -112,6 +115,7 @@ namespace Sonarr.Api.V3.Series
         {
             var seriesStats = _seriesStatisticsService.SeriesStatistics();
             var seriesResources = new List<SeriesResource>();
+            var translations = new List<SeriesTranslation>();
 
             if (tvdbId.HasValue)
             {
@@ -122,9 +126,19 @@ namespace Sonarr.Api.V3.Series
                 seriesResources.AddRange(_seriesService.GetAllSeries().Select(s => s.ToResource(includeSeasonImages)));
             }
 
+            if (seriesResources.Count == 1)
+            {
+                translations.AddRange(_seriesTranslationService.GetTranslations(seriesResources.First().Id));
+            }
+            else if (seriesResources.Count > 1)
+            {
+                translations.AddRange(_seriesTranslationService.GetTranslations());
+            }
+
             MapCoversToLocal(seriesResources.ToArray());
             LinkSeriesStatistics(seriesResources, seriesStats.ToDictionary(x => x.SeriesId));
             PopulateAlternateTitles(seriesResources);
+            PopulateTranslations(seriesResources, translations.GroupBy(x => x.SeriesId).ToDictionary(x => x.Key, g => g.ToList()));
             seriesResources.ForEach(LinkRootFolderPath);
 
             return seriesResources;
@@ -197,7 +211,14 @@ namespace Sonarr.Api.V3.Series
                     trigger: CommandTrigger.Manual);
             }
 
+            var seasonType = series.SeasonType;
+            var language = series.Language;
+
             var model = seriesResource.ToModel(series);
+
+            // Don't change the season type for an existing series
+            model.SeasonType = seasonType;
+            model.Language = seriesResource.Language ?? language;
 
             _seriesService.UpdateSeries(model);
 
@@ -223,6 +244,7 @@ namespace Sonarr.Api.V3.Series
             MapCoversToLocal(resource);
             FetchAndLinkSeriesStatistics(resource);
             PopulateAlternateTitles(resource);
+            FetchAndPopulateTranslations(resource);
             LinkRootFolderPath(resource);
 
             return resource;
@@ -288,6 +310,29 @@ namespace Sonarr.Api.V3.Series
             }
 
             resource.AlternateTitles = mappings.ConvertAll(AlternateTitleResourceMapper.ToResource);
+        }
+
+        private void FetchAndPopulateTranslations(SeriesResource resource)
+        {
+            var translations = _seriesTranslationService.GetTranslations(resource.Id);
+
+            PopulateTranslations(resource, translations);
+        }
+
+        private void PopulateTranslations(List<SeriesResource> resources, Dictionary<int, List<SeriesTranslation>> translations)
+        {
+            foreach (var resource in resources)
+            {
+                if (translations.TryGetValue(resource.Id, out var seriesTranslations))
+                {
+                    PopulateTranslations(resource, seriesTranslations);
+                }
+            }
+        }
+
+        private void PopulateTranslations(SeriesResource resource, List<SeriesTranslation> translations)
+        {
+            resource.Translations = translations.ToResource();
         }
 
         private void LinkRootFolderPath(SeriesResource resource)

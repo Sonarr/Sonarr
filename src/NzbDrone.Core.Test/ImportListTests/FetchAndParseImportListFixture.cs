@@ -7,6 +7,7 @@ using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.ImportLists;
 using NzbDrone.Core.ImportLists.ImportListItems;
+using NzbDrone.Core.Languages;
 using NzbDrone.Core.MetadataSource;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Test.Framework;
@@ -32,8 +33,8 @@ namespace NzbDrone.Core.Test.ImportListTests
                 .Build().ToList();
 
             Mocker.GetMock<ISearchForNewSeries>()
-                .Setup(v => v.SearchForNewSeriesByImdbId(It.IsAny<string>()))
-                .Returns((string value) => new List<Tv.Series>() { new Tv.Series() { ImdbId = value } });
+                .Setup(v => v.SearchForNewSeriesByImdbId(It.IsAny<string>(), It.IsAny<Language>()))
+                .Returns((string value, Language _) => new List<Tv.Series>() { new Tv.Series() { ImdbId = value } });
         }
 
         private Mock<IImportList> WithList(int id, bool enabled, bool enabledAuto, ImportListFetchResult fetchResult, TimeSpan? minRefresh = null, int? lastSyncOffset = null, int? syncDeletedCount = null)

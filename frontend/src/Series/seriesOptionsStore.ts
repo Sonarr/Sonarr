@@ -256,6 +256,18 @@ const { useOptions, useOption, setOptions, setOption, setSort, getOptions } =
           isVisible: false,
         },
         {
+          name: 'language',
+          label: () => translate('Language'),
+          isSortable: true,
+          isVisible: false,
+        },
+        {
+          name: 'seasonType',
+          label: () => translate('SeasonType'),
+          isSortable: true,
+          isVisible: false,
+        },
+        {
           name: 'actions',
           label: '',
           columnLabel: () => translate('Actions'),

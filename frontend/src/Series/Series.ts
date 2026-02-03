@@ -68,6 +68,19 @@ export interface SeriesAddOptions {
   searchForCutoffUnmetEpisodes: boolean;
 }
 
+export interface Translation {
+  language: Language;
+  title: string;
+  overview: string;
+}
+
+export interface SeasonType {
+  name: string;
+  type: string;
+  seasonNumbers: number[];
+  episodeCount: number;
+}
+
 interface Series extends ModelBase {
   added: string;
   alternateTitles: AlternateTitle[];
@@ -84,6 +97,7 @@ interface Series extends ModelBase {
   network: string;
   originalCountry: string;
   originalLanguage: Language;
+  language: Language;
   overview: string;
   path: string;
   previousAiring?: string;
@@ -100,12 +114,16 @@ interface Series extends ModelBase {
   status: SeriesStatus;
   tags: number[];
   title: string;
+  originalTitle?: string;
   titleSlug: string;
   tvdbId: number;
   tvMazeId: number;
   tvRageId: number;
   tmdbId: number;
   useSceneNumbering: boolean;
+  seasonType: string;
+  seasonTypes: SeasonType[];
+  translations: Translation[];
   year: number;
   addOptions: SeriesAddOptions;
 }

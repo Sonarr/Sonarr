@@ -153,7 +153,7 @@ namespace NzbDrone.Core.ImportLists
                 // Map by IMDb ID if we have it
                 if (item.TvdbId <= 0 && item.ImdbId.IsNotNullOrWhiteSpace())
                 {
-                    var mappedSeries = _seriesSearchService.SearchForNewSeriesByImdbId(item.ImdbId)
+                    var mappedSeries = _seriesSearchService.SearchForNewSeriesByImdbId(item.ImdbId, importList.Language)
                         .FirstOrDefault();
 
                     if (mappedSeries != null)
@@ -166,7 +166,7 @@ namespace NzbDrone.Core.ImportLists
                 // Map by TMDb ID if we have it
                 if (item.TvdbId <= 0 && item.TmdbId > 0)
                 {
-                    var mappedSeries = _seriesSearchService.SearchForNewSeriesByTmdbId(item.TmdbId)
+                    var mappedSeries = _seriesSearchService.SearchForNewSeriesByTmdbId(item.TmdbId, importList.Language)
                         .FirstOrDefault();
 
                     if (mappedSeries != null)
@@ -179,7 +179,7 @@ namespace NzbDrone.Core.ImportLists
                 // Map by AniList ID if we have it
                 if (item.TvdbId <= 0 && item.AniListId > 0)
                 {
-                    var mappedSeries = _seriesSearchService.SearchForNewSeriesByAniListId(item.AniListId)
+                    var mappedSeries = _seriesSearchService.SearchForNewSeriesByAniListId(item.AniListId, importList.Language)
                         .FirstOrDefault();
 
                     if (mappedSeries == null)
@@ -196,7 +196,7 @@ namespace NzbDrone.Core.ImportLists
                 // Map by MyAniList ID if we have it
                 if (item.TvdbId <= 0 && item.MalId > 0)
                 {
-                    var mappedSeries = _seriesSearchService.SearchForNewSeriesByMyAnimeListId(item.MalId)
+                    var mappedSeries = _seriesSearchService.SearchForNewSeriesByMyAnimeListId(item.MalId, importList.Language)
                         .FirstOrDefault();
 
                     if (mappedSeries == null)
@@ -255,6 +255,8 @@ namespace NzbDrone.Core.ImportLists
                         RootFolderPath = importList.RootFolderPath,
                         QualityProfileId = importList.QualityProfileId,
                         SeriesType = importList.SeriesType,
+                        SeasonType = SeasonType.Official,
+                        Language = importList.Language,
                         SeasonFolder = importList.SeasonFolder,
                         Seasons = item.Seasons,
                         Tags = importList.Tags,

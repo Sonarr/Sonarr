@@ -14,6 +14,8 @@ namespace NzbDrone.Core.Tv
             Images = new List<MediaCover.MediaCover>();
             Genres = new List<string>();
             Actors = new List<Actor>();
+            SeasonTypes = new List<SeasonType>();
+            Translations = new List<SeriesTranslation>();
             Seasons = new List<Season>();
             Tags = new HashSet<int>();
             OriginalLanguage = Language.English;
@@ -56,8 +58,14 @@ namespace NzbDrone.Core.Tv
         public DateTime? FirstAired { get; set; }
         public DateTime? LastAired { get; set; }
         public LazyLoaded<QualityProfile> QualityProfile { get; set; }
+        public Language Language { get; set; }
         public Language OriginalLanguage { get; set; }
         public string OriginalCountry { get; set; }
+        public string OriginalTitle { get; set; }
+        public string CleanOriginalTitle { get; set; }
+        public string SeasonType { get; set; }
+        public List<SeasonType> SeasonTypes { get; set; }
+        public List<SeriesTranslation> Translations { get; set; }
         public List<Season> Seasons { get; set; }
         public HashSet<int> Tags { get; set; }
         public AddSeriesOptions AddOptions { get; set; }
@@ -83,6 +91,9 @@ namespace NzbDrone.Core.Tv
             RootFolderPath = otherSeries.RootFolderPath;
             Tags = otherSeries.Tags;
             AddOptions = otherSeries.AddOptions;
+
+            Language = otherSeries.Language;
+            SeasonType = otherSeries.SeasonType;
         }
     }
 }

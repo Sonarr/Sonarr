@@ -3,6 +3,7 @@ import { create } from 'zustand';
 import { useShallow } from 'zustand/react/shallow';
 import { useAddSeriesOptions } from 'AddSeries/addSeriesOptionsStore';
 import { createOptionsStore } from 'Helpers/Hooks/useOptionsStore';
+import Language from 'Language/Language';
 import { UnmappedFolder } from 'RootFolder/useRootFolders';
 import Series, { SeriesMonitor, SeriesType } from 'Series/Series';
 
@@ -28,11 +29,13 @@ export interface UnamppedFolderItem extends UnmappedFolder {
 
 export interface ImportSeriesItem {
   id: string;
+  language: Language;
   monitor: SeriesMonitor;
   path: string;
   qualityProfileId: number;
   relativePath: string;
   seasonFolder: boolean;
+  seasonType: string;
   selectedSeries?: Series;
   seriesType: SeriesType;
   name: string;
@@ -56,7 +59,7 @@ const importSeriesStore = create<ImportSeriesState>()(() => defaultState);
 export const useEnsureImportSeriesItems = (
   unmappedFolders: UnamppedFolderItem[]
 ) => {
-  const { monitor, qualityProfileId, seriesType, seasonFolder } =
+  const { language, monitor, qualityProfileId, seriesType, seasonFolder } =
     useAddSeriesOptions();
 
   useEffect(() => {
@@ -70,10 +73,12 @@ export const useEnsureImportSeriesItems = (
 
       const newItem: ImportSeriesItem = {
         ...unmappedFolder,
+        language,
         monitor,
         qualityProfileId,
         seriesType,
         seasonFolder,
+        seasonType: 'official',
         hasSearched: false,
       };
 
@@ -84,7 +89,14 @@ export const useEnsureImportSeriesItems = (
         },
       }));
     });
-  }, [unmappedFolders, monitor, qualityProfileId, seriesType, seasonFolder]);
+  }, [
+    unmappedFolders,
+    language,
+    monitor,
+    qualityProfileId,
+    seriesType,
+    seasonFolder,
+  ]);
 };
 
 export const updateImportSeriesItem = (
@@ -145,13 +157,17 @@ export const stopProcessing = () => {
   importSeriesStore.setState({ isProcessing: false, lookupQueue: [] });
 };
 
-export const addToLookupQueue = (id: string) => {
+export const addToLookupQueue = (id: string, addToStart = false) => {
   importSeriesStore.setState((state) => {
     if (state.lookupQueue.includes(id)) {
       return state;
     }
 
-    return { lookupQueue: [...state.lookupQueue, id] };
+    return {
+      lookupQueue: addToStart
+        ? [id, ...state.lookupQueue]
+        : [...state.lookupQueue, id],
+    };
   });
 };
 

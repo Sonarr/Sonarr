@@ -5,6 +5,7 @@ import useApiMutation, {
   addOrUpdateQueryClientItem,
 } from 'Helpers/Hooks/useApiMutation';
 import useApiQuery from 'Helpers/Hooks/useApiQuery';
+import Language from 'Language/Language';
 import Series from 'Series/Series';
 
 interface AddSeriesPayload
@@ -16,11 +17,16 @@ interface AddSeriesPayload
 
 const DEFAULT_SERIES: AddSeries[] = [];
 
-export const useLookupSeries = (query: string, isEnabled = true) => {
+export const useLookupSeries = (
+  query: string,
+  language: Language,
+  isEnabled = true
+) => {
   const result = useApiQuery<AddSeries[]>({
     path: '/series/lookup',
     queryParams: {
       term: query,
+      language: language.id,
     },
     queryOptions: {
       enabled: isEnabled && !!query,

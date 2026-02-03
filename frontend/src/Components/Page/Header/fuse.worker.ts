@@ -13,6 +13,7 @@ const fuseOptions = {
   keys: [
     'title',
     'alternateTitles.title',
+    'translations.title',
     'tvdbId',
     'tvMazeId',
     'imdbId',
