@@ -176,6 +176,18 @@ const SORT_PREDICATES = {
     return originalLanguage?.name ?? '';
   },
 
+  language: (item: Series, _: SortDirection) => {
+    const { language } = item;
+
+    return language?.name ?? '';
+  },
+
+  seasonType: (item: Series, _: SortDirection) => {
+    const { seasonType, seasonTypes } = item;
+
+    return seasonTypes?.find((s) => s.type === seasonType)?.name ?? seasonType;
+  },
+
   ratings: (item: Series, _: SortDirection) => {
     const { ratings } = item;
 

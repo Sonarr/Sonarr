@@ -1,6 +1,9 @@
+using NzbDrone.Core.Languages;
+
 namespace Sonarr.Api.V5.Series;
 
 public class SeriesFolderResource
 {
-    public string? Folder { get; set; }
+    public required Language Language { get; set; }
+    public required string Folder { get; set; }
 }

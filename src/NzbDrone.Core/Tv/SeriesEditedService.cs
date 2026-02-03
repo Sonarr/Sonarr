@@ -17,7 +17,8 @@ namespace NzbDrone.Core.Tv
 
         public void Handle(SeriesEditedEvent message)
         {
-            if (message.Series.SeriesType != message.OldSeries.SeriesType)
+            if (message.Series.SeriesType != message.OldSeries.SeriesType ||
+                message.Series.Language != message.OldSeries.Language)
             {
                 _commandQueueManager.Push(new RefreshSeriesCommand(new List<int> { message.Series.Id }, false));
             }

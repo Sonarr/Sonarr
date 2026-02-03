@@ -24,6 +24,7 @@ import ModalHeader from 'Components/Modal/ModalHeader';
 import Popover from 'Components/Tooltip/Popover';
 import { getValidationFailures } from 'Helpers/Hooks/useApiMutation';
 import { icons, inputTypes, kinds, tooltipPositions } from 'Helpers/Props';
+import Language from 'Language/Language';
 import { SeriesType } from 'Series/Series';
 import SeriesPoster from 'Series/SeriesPoster';
 import { useIsWindows } from 'System/Status/useSystemStatus';
@@ -44,7 +45,17 @@ function AddNewSeriesModalContent({
   initialSeriesType,
   onModalClose,
 }: AddNewSeriesModalContentProps) {
-  const { title, year, overview, images, folder } = series;
+  const {
+    title: lookupTitle,
+    originalTitle,
+    year,
+    overview: lookupOverview,
+    images,
+    seasonTypes,
+    translations,
+    folder: originalFolder,
+    folders,
+  } = series;
   const options = useAddSeriesOptions();
   const isSmallScreen = useAppDimension('isSmallScreen');
   const isWindows = useIsWindows();
@@ -63,8 +74,15 @@ function AddNewSeriesModalContent({
       ? settings.seriesType.value
       : initialSeriesType
   );
+  const [seasonType, setSeasonType] = useState(
+    () =>
+      seasonTypes.find((s) => s.type === 'official')?.type ??
+      seasonTypes[0]?.type ??
+      'official'
+  );
 
   const {
+    language,
     monitor,
     qualityProfileId,
     rootFolderPath,
@@ -75,9 +93,28 @@ function AddNewSeriesModalContent({
     tags,
   } = settings;
 
+  const translation = translations.find(
+    (t) => t.language.id === language.value.id
+  );
+  const title = translation?.title ?? originalTitle ?? lookupTitle;
+  const overview = translation?.overview ?? lookupOverview;
+  const folder =
+    folders.find((f) => f.language.id === language.value.id)?.folder ??
+    originalFolder;
+
   const handleInputChange = useCallback(
-    ({ name, value }: InputChanged<string | number | boolean | number[]>) => {
+    ({
+      name,
+      value,
+    }: InputChanged<string | number | boolean | number[] | Language>) => {
       setAddSeriesOption(name as keyof AddSeriesOptions, value);
+    },
+    []
+  );
+
+  const handleSeasonTypeChange = useCallback(
+    ({ value }: InputChanged<string>) => {
+      setSeasonType(value);
     },
     []
   );
@@ -100,13 +137,17 @@ function AddNewSeriesModalContent({
       },
       qualityProfileId: qualityProfileId.value,
       seriesType,
+      seasonType,
+      language: language.value,
       seasonFolder: seasonFolder.value,
       tags: tags.value,
     });
   }, [
     series,
     seriesType,
+    seasonType,
     rootFolderPath,
+    language,
     monitor,
     qualityProfileId,
     seasonFolder,
@@ -247,6 +288,33 @@ function AddNewSeriesModalContent({
                   onChange={handleInputChange}
                   {...seriesTypeSetting}
                   value={seriesType}
+                />
+              </FormRow>
+
+              <FormRow>
+                <FormLabel>{translate('Language')}</FormLabel>
+
+                <FormInputHelpText text={translate('SeriesLanguageHelpText')} />
+                <FormInput
+                  type={inputTypes.LANGUAGE_SELECT}
+                  name="language"
+                  {...settings.language}
+                  onChange={handleInputChange}
+                />
+              </FormRow>
+
+              <FormRow>
+                <FormLabel>{translate('SeasonType')}</FormLabel>
+
+                <FormInputHelpText text={translate('SeasonTypeHelpText')} />
+                <FormInput
+                  type={inputTypes.SEASON_TYPE_SELECT}
+                  name="seasonType"
+                  value={seasonType}
+                  seasonTypes={seasonTypes}
+                  includeNoChange={false}
+                  includeMixed={false}
+                  onChange={handleSeasonTypeChange}
                 />
               </FormRow>
             </Form>

@@ -37,6 +37,13 @@ namespace NzbDrone.Core.DataAugmentation.Xem
 
             try
             {
+                if (series.SeasonType != SeasonType.Official)
+                {
+                    _logger.Debug("{0} is not using official aired order, skipping", series);
+
+                    return;
+                }
+
                 var mappings = _xemProxy.GetSceneTvdbMappings(series.TvdbId);
 
                 if (!mappings.Any() && !series.UseSceneNumbering)
