@@ -8,6 +8,7 @@ using NzbDrone.Common.Cloud;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Http;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.DataAugmentation.DailySeries;
 using NzbDrone.Core.Exceptions;
 using NzbDrone.Core.Languages;
@@ -24,25 +25,29 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
         private readonly Logger _logger;
         private readonly ISeriesService _seriesService;
         private readonly IDailySeriesService _dailySeriesService;
+        private readonly IConfigService _configService;
         private readonly IHttpRequestBuilderFactory _requestBuilder;
 
         public SkyHookProxy(IHttpClient httpClient,
                             ISonarrCloudRequestBuilder requestBuilder,
+                            IConfigService configService,
                             ISeriesService seriesService,
                             IDailySeriesService dailySeriesService,
                             Logger logger)
         {
             _httpClient = httpClient;
             _requestBuilder = requestBuilder.SkyHookTvdb;
+            _configService = configService;
             _logger = logger;
             _seriesService = seriesService;
             _dailySeriesService = dailySeriesService;
-            _requestBuilder = requestBuilder.SkyHookTvdb;
         }
 
         public Tuple<Series, List<Episode>> GetSeriesInfo(int tvdbSeriesId)
         {
+            var language = _configService.TvdbMetadataLanguage ?? "en";
             var httpRequest = _requestBuilder.Create()
+                                             .SetSegment("language", language)
                                              .SetSegment("route", "shows")
                                              .Resource(tvdbSeriesId.ToString())
                                              .Build();
@@ -141,7 +146,9 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
                     }
                 }
 
+                var language = _configService.TvdbMetadataLanguage ?? "en";
                 var httpRequest = _requestBuilder.Create()
+                                                 .SetSegment("language", language)
                                                  .SetSegment("route", "search")
                                                  .AddQueryParam("term", title.ToLower().Trim())
                                                  .Build();

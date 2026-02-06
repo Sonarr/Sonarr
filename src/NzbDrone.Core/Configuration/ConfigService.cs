@@ -371,6 +371,12 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("UILanguage", value); }
         }
 
+        public string TvdbMetadataLanguage
+        {
+            get { return GetValue("TvdbMetadataLanguage", "en"); }
+            set { SetValue("TvdbMetadataLanguage", value); }
+        }
+
         public bool CleanupMetadataImages
         {
             get { return GetValueBoolean("CleanupMetadataImages", true); }

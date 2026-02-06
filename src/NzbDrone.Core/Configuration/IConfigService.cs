@@ -65,6 +65,9 @@ namespace NzbDrone.Core.Configuration
         int FirstDayOfWeek { get; set; }
         string CalendarWeekColumnHeader { get; set; }
 
+        // Metadata Source (TVDB via SkyHook)
+        string TvdbMetadataLanguage { get; set; }
+
         string ShortDateFormat { get; set; }
         string LongDateFormat { get; set; }
         string TimeFormat { get; set; }

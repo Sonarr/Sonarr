@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
@@ -32,6 +32,20 @@ namespace NzbDrone.Core.Test.Configuration
         public void Get_value_should_return_default_when_no_value()
         {
             Subject.RssSyncInterval.Should().Be(15);
+        }
+
+        [Test]
+        public void TvdbMetadataLanguage_should_default_to_en()
+        {
+            Subject.TvdbMetadataLanguage.Should().Be("en");
+        }
+
+        [Test]
+        public void TvdbMetadataLanguage_should_persist()
+        {
+            const string value = "de";
+            Subject.TvdbMetadataLanguage = value;
+            AssertUpsert("TvdbMetadataLanguage", value);
         }
 
         [Test]
