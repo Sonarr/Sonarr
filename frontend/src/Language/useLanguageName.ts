@@ -1,4 +1,5 @@
-import { useCallback } from 'react';
+import moment from 'moment';
+import { useCallback, useEffect } from 'react';
 import useApiQuery from 'Helpers/Hooks/useApiQuery';
 
 interface LanguageResponse {
@@ -22,7 +23,11 @@ const useLanguage = () => {
 };
 
 export const useInitializeLanguage = () => {
-  useLanguage();
+  const { data } = useLanguage();
+
+  useEffect(() => {
+    moment.locale(data?.identifier);
+  }, [data]);
 };
 
 const useLanguageName = () => {
