@@ -1,13 +1,15 @@
 import React from 'react';
 import DescriptionList from 'Components/DescriptionList/DescriptionList';
 import DescriptionListItem from 'Components/DescriptionList/DescriptionListItem';
+import useLanguageName from 'Language/useLanguageName';
 import MediaInfoProps from 'typings/MediaInfo';
 import formatBitrate from 'Utilities/Number/formatBitrate';
 import getEntries from 'Utilities/Object/getEntries';
-import getLanguageName from 'Utilities/String/getLanguageName';
 import translate from 'Utilities/String/translate';
 
 function MediaInfo(props: MediaInfoProps) {
+  const getLanguageName = useLanguageName();
+
   return (
     <DescriptionList>
       {getEntries(props).map(([key, value]) => {

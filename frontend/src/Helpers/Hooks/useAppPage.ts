@@ -5,6 +5,7 @@ import AppState from 'App/State/AppState';
 import { useTranslations } from 'App/useTranslations';
 import useCommands from 'Commands/useCommands';
 import useCustomFilters from 'Filters/useCustomFilters';
+import { useInitializeLanguage } from 'Language/useLanguageName';
 import useSeries from 'Series/useSeries';
 import { useQualityProfiles } from 'Settings/Profiles/Quality/useQualityProfiles';
 import { useUiSettings } from 'Settings/UI/useUiSettings';
@@ -76,6 +77,7 @@ const useAppPage = () => {
   const dispatch = useDispatch();
 
   useCommands();
+  useInitializeLanguage();
 
   const { isFetched: isCustomFiltersFetched, error: customFiltersError } =
     useCustomFilters();
