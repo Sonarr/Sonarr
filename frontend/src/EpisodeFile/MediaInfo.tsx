@@ -1,9 +1,12 @@
 import React from 'react';
-import getLanguageName from 'Utilities/String/getLanguageName';
+import useLanguageName from 'Language/useLanguageName';
 import translate from 'Utilities/String/translate';
 import { useEpisodeFile } from './EpisodeFileProvider';
 
-function formatLanguages(languages: string[] | undefined) {
+function formatLanguages(
+  languages: string[] | undefined,
+  getLanguageName: (code: string) => string
+) {
   if (!languages) {
     return null;
   }
@@ -43,6 +46,7 @@ interface MediaInfoProps {
 }
 
 function MediaInfo({ episodeFileId, type }: MediaInfoProps) {
+  const getLanguageName = useLanguageName();
   const episodeFile = useEpisodeFile(episodeFileId);
 
   if (!episodeFile?.mediaInfo) {
@@ -76,11 +80,17 @@ function MediaInfo({ episodeFileId, type }: MediaInfoProps) {
   }
 
   if (type === 'audioLanguages') {
-    return formatLanguages(audioStreams.map(({ language }) => language));
+    return formatLanguages(
+      audioStreams.map(({ language }) => language),
+      getLanguageName
+    );
   }
 
   if (type === 'subtitles') {
-    return formatLanguages(subtitleStreams.map(({ language }) => language));
+    return formatLanguages(
+      subtitleStreams.map(({ language }) => language),
+      getLanguageName
+    );
   }
 
   if (type === 'video') {
