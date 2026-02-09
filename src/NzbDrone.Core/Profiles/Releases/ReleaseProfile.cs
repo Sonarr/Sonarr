@@ -9,6 +9,8 @@ namespace NzbDrone.Core.Profiles.Releases
         public bool Enabled { get; set; }
         public List<string> Required { get; set; }
         public List<string> Ignored { get; set; }
+        public bool AirDateRestriction { get; set; }
+        public int AirDateGracePeriod { get; set; }
         public List<int> IndexerIds { get; set; }
         public HashSet<int> Tags { get; set; }
         public HashSet<int> ExcludedTags { get; set; }

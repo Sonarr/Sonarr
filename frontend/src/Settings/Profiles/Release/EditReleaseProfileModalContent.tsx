@@ -39,8 +39,17 @@ function EditReleaseProfileModalContent({
     saveProvider,
   } = useManageReleaseProfile(id ?? 0);
 
-  const { name, enabled, required, ignored, indexerIds, tags, excludedTags } =
-    item;
+  const {
+    name,
+    enabled,
+    required,
+    ignored,
+    airDateRestriction,
+    airDateGracePeriod,
+    indexerIds,
+    tags,
+    excludedTags,
+  } = item;
 
   const wasSaving = usePrevious(isSaving);
 
@@ -130,6 +139,33 @@ function EditReleaseProfileModalContent({
               onChange={handleInputChange}
             />
           </FormGroup>
+
+          <FormGroup>
+            <FormLabel>{translate('AirDateRestriction')}</FormLabel>
+
+            <FormInputGroup
+              {...airDateRestriction}
+              type={inputTypes.CHECK}
+              name="airDateRestriction"
+              helpText={translate('AirDateRestrictionHelpText')}
+              onChange={handleInputChange}
+            />
+          </FormGroup>
+
+          {airDateRestriction.value ? (
+            <FormGroup>
+              <FormLabel>{translate('AirDateGracePeriod')}</FormLabel>
+
+              <FormInputGroup
+                {...airDateGracePeriod}
+                type={inputTypes.NUMBER}
+                unit="days"
+                name="airDateGracePeriod"
+                helpText={translate('AirDateGracePeriodHelpText')}
+                onChange={handleInputChange}
+              />
+            </FormGroup>
+          ) : null}
 
           <FormGroup>
             <FormLabel>{translate('Indexer')}</FormLabel>
