@@ -21,7 +21,7 @@ public class ReleaseProfileController : RestController<ReleaseProfileResource>
 
         SharedValidator.RuleFor(d => d).Custom((restriction, context) =>
         {
-            if (restriction.Required.Empty() && restriction.Ignored.Empty())
+            if (restriction.Required.Empty() && restriction.Ignored.Empty() && !restriction.AirDateRestriction)
             {
                 context.AddFailure(nameof(ReleaseProfileResource.Required), "'Must contain' or 'Must not contain' is required");
             }
