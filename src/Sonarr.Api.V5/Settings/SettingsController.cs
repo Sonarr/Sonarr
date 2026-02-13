@@ -4,14 +4,14 @@ using NzbDrone.Core.Configuration;
 using Sonarr.Http.REST;
 using Sonarr.Http.REST.Attributes;
 
-namespace Sonarr.Api.V5.Config
+namespace Sonarr.Api.V5.Settings
 {
-    public abstract class ConfigController<TResource> : RestController<TResource>
+    public abstract class SettingsController<TResource> : RestController<TResource>
         where TResource : RestResource, new()
     {
         protected readonly IConfigService _configService;
 
-        protected ConfigController(IConfigService configService)
+        protected SettingsController(IConfigService configService)
         {
             _configService = configService;
         }

@@ -15,10 +15,6 @@ import indexerFlags from './Settings/indexerFlags';
 import indexerOptions from './Settings/indexerOptions';
 import indexers from './Settings/indexers';
 import languages from './Settings/languages';
-import mediaManagement from './Settings/mediaManagement';
-import metadata from './Settings/metadata';
-import naming from './Settings/naming';
-import namingExamples from './Settings/namingExamples';
 
 export * from './Settings/autoTaggingSpecifications';
 export * from './Settings/autoTaggings';
@@ -35,10 +31,6 @@ export * from './Settings/indexerFlags';
 export * from './Settings/indexerOptions';
 export * from './Settings/indexers';
 export * from './Settings/languages';
-export * from './Settings/mediaManagement';
-export * from './Settings/metadata';
-export * from './Settings/naming';
-export * from './Settings/namingExamples';
 
 //
 // Variables
@@ -64,11 +56,7 @@ export const defaultState = {
   indexerFlags: indexerFlags.defaultState,
   indexerOptions: indexerOptions.defaultState,
   indexers: indexers.defaultState,
-  languages: languages.defaultState,
-  mediaManagement: mediaManagement.defaultState,
-  metadata: metadata.defaultState,
-  naming: naming.defaultState,
-  namingExamples: namingExamples.defaultState
+  languages: languages.defaultState
 };
 
 export const persistState = [
@@ -93,11 +81,7 @@ export const actionHandlers = handleThunks({
   ...indexerFlags.actionHandlers,
   ...indexerOptions.actionHandlers,
   ...indexers.actionHandlers,
-  ...languages.actionHandlers,
-  ...mediaManagement.actionHandlers,
-  ...metadata.actionHandlers,
-  ...naming.actionHandlers,
-  ...namingExamples.actionHandlers
+  ...languages.actionHandlers
 });
 
 //
@@ -118,10 +102,6 @@ export const reducers = createHandleActions({
   ...indexerFlags.reducers,
   ...indexerOptions.reducers,
   ...indexers.reducers,
-  ...languages.reducers,
-  ...mediaManagement.reducers,
-  ...metadata.reducers,
-  ...naming.reducers,
-  ...namingExamples.reducers
+  ...languages.reducers
 
 }, defaultState, section);

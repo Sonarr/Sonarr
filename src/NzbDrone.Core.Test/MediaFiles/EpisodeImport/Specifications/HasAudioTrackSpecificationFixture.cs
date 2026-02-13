@@ -54,7 +54,9 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
         [Test]
         public void should_reject_if_audio_stream_count_is_0()
         {
-            _localEpisode.MediaInfo = Builder<MediaInfoModel>.CreateNew().With(m => m.AudioStreamCount = 0).Build();
+            _localEpisode.MediaInfo = Builder<MediaInfoModel>.CreateNew()
+                .With(m => m.AudioStreams = [])
+                .Build();
 
             Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeFalse();
         }
@@ -62,7 +64,12 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
         [Test]
         public void should_accept_if_audio_stream_count_is_0()
         {
-            _localEpisode.MediaInfo = Builder<MediaInfoModel>.CreateNew().With(m => m.AudioStreamCount = 1).Build();
+            _localEpisode.MediaInfo = Builder<MediaInfoModel>.CreateNew()
+                .With(m => m.AudioStreams =
+                [
+                    new MediaInfoAudioStreamModel { Language = "eng" },
+                ])
+                .Build();
 
             Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeTrue();
         }

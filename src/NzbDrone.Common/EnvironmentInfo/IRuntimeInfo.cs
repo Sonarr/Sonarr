@@ -9,6 +9,8 @@ namespace NzbDrone.Common.EnvironmentInfo
         bool IsAdmin { get; }
         bool IsWindowsService { get; }
         bool IsWindowsTray { get; }
+        bool IsSystemdService { get; }
+        bool IsContainerized { get; }
         bool IsStarting { get; set; }
         bool IsExiting { get; set; }
         bool IsTray { get; }

@@ -9,6 +9,7 @@
     "AddCondition": "הוסף תנאי",
     "AddConditionError": "לא ניתן להוסיף תנאי חדש, נסה שנית.",
     "AddConnection": "הוסף חיבור",
+    "AddConnectionImplementation": "הוסף חיבור - {implementationName}",
     "Added": "נוסף",
     "ApiKeyValidationHealthCheckMessage": "עדכן בבקשה את מפתח ה־API שלך כדי שיהיה באורך של לפחות {length} תווים. תוכל לעשות זאת בהגדרות או דרך קובץ הקונפיגורציה.",
     "Indexer": "אינדקסר"

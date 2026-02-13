@@ -1,7 +1,7 @@
 using NzbDrone.Core.Configuration;
 using Sonarr.Http.REST;
 
-namespace Sonarr.Api.V5.Config;
+namespace Sonarr.Api.V5.Settings;
 
 public class UiSettingsResource : RestResource
 {

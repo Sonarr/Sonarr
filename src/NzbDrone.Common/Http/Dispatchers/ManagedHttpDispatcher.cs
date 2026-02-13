@@ -1,9 +1,6 @@
 using System;
-using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Net.NetworkInformation;
 using System.Net.Security;
 using System.Net.Sockets;
 using System.Text;
@@ -12,6 +9,7 @@ using System.Threading.Tasks;
 using NLog;
 using NzbDrone.Common.Cache;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Common.Http.HappyEyeballs;
 using NzbDrone.Common.Http.Proxy;
 
 namespace NzbDrone.Common.Http.Dispatchers
@@ -20,18 +18,13 @@ namespace NzbDrone.Common.Http.Dispatchers
     {
         private const string NO_PROXY_KEY = "no-proxy";
 
-        private const int connection_establish_timeout = 2000;
-        private static bool useIPv6 = Socket.OSSupportsIPv6;
-        private static bool hasResolvedIPv6Availability;
-
         private readonly IHttpProxySettingsProvider _proxySettingsProvider;
         private readonly ICreateManagedWebProxy _createManagedWebProxy;
         private readonly ICertificateValidationService _certificateValidationService;
         private readonly IUserAgentBuilder _userAgentBuilder;
         private readonly ICached<System.Net.Http.HttpClient> _httpClientCache;
         private readonly ICached<CredentialCache> _credentialCache;
-
-        private readonly Logger _logger;
+        private readonly HttpHappyEyeballs _httpHappyEyeballs;
 
         public ManagedHttpDispatcher(IHttpProxySettingsProvider proxySettingsProvider,
             ICreateManagedWebProxy createManagedWebProxy,
@@ -48,7 +41,7 @@ namespace NzbDrone.Common.Http.Dispatchers
             _httpClientCache = cacheManager.GetCache<System.Net.Http.HttpClient>(typeof(ManagedHttpDispatcher));
             _credentialCache = cacheManager.GetCache<CredentialCache>(typeof(ManagedHttpDispatcher), "credentialcache");
 
-            _logger = logger;
+            _httpHappyEyeballs = new HttpHappyEyeballs(logger);
         }
 
         public async Task<HttpResponse> GetResponseAsync(HttpRequest request, CookieContainer cookies)
@@ -161,7 +154,7 @@ namespace NzbDrone.Common.Http.Dispatchers
                 Credentials = GetCredentialCache(),
                 PreAuthenticate = true,
                 MaxConnectionsPerServer = 12,
-                ConnectCallback = onConnect,
+                ConnectCallback = Socket.OSSupportsIPv6 ? _httpHappyEyeballs.OnConnect : null,
                 SslOptions = new SslClientAuthenticationOptions
                 {
                     RemoteCertificateValidationCallback = _certificateValidationService.ShouldByPassValidationError
@@ -250,88 +243,6 @@ namespace NzbDrone.Common.Http.Dispatchers
         private CredentialCache GetCredentialCache()
         {
             return _credentialCache.Get("credentialCache", () => new CredentialCache());
-        }
-
-        private bool HasRoutableIPv4Address()
-        {
-            // Get all IPv4 addresses from all interfaces and return true if there are any with non-loopback addresses
-            try
-            {
-                var networkInterfaces = NetworkInterface.GetAllNetworkInterfaces();
-
-                return networkInterfaces.Any(ni =>
-                    ni.OperationalStatus == OperationalStatus.Up &&
-                    ni.GetIPProperties().UnicastAddresses.Any(ip =>
-                        ip.Address.AddressFamily == AddressFamily.InterNetwork &&
-                        !IPAddress.IsLoopback(ip.Address)));
-            }
-            catch (Exception e)
-            {
-                _logger.Debug(e, "Caught exception while GetAllNetworkInterfaces assuming IPv4 connectivity: {0}", e.Message);
-                return true;
-            }
-        }
-
-        private async ValueTask<Stream> onConnect(SocketsHttpConnectionContext context, CancellationToken cancellationToken)
-        {
-            // Until .NET supports an implementation of Happy Eyeballs (https://tools.ietf.org/html/rfc8305#section-2), let's make IPv4 fallback work in a simple way.
-            // This issue is being tracked at https://github.com/dotnet/runtime/issues/26177 and expected to be fixed in .NET 6.
-            if (useIPv6)
-            {
-                try
-                {
-                    var localToken = cancellationToken;
-
-                    if (!hasResolvedIPv6Availability)
-                    {
-                        // to make things move fast, use a very low timeout for the initial ipv6 attempt.
-                        var quickFailCts = new CancellationTokenSource(connection_establish_timeout);
-                        var linkedTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, quickFailCts.Token);
-
-                        localToken = linkedTokenSource.Token;
-                    }
-
-                    return await attemptConnection(AddressFamily.InterNetworkV6, context, localToken);
-                }
-                catch
-                {
-                    // Do not retry IPv6 if a routable IPv4 address is available, otherwise continue to attempt IPv6 connections.
-                    var routableIPv4 = HasRoutableIPv4Address();
-                    _logger.Info("IPv4 is available: {0}, IPv6 will be {1}", routableIPv4, routableIPv4 ? "disabled" : "left enabled");
-                    useIPv6 = !routableIPv4;
-                }
-                finally
-                {
-                    hasResolvedIPv6Availability = true;
-                }
-            }
-
-            // fallback to IPv4.
-            return await attemptConnection(AddressFamily.InterNetwork, context, cancellationToken);
-        }
-
-        private static async ValueTask<Stream> attemptConnection(AddressFamily addressFamily, SocketsHttpConnectionContext context, CancellationToken cancellationToken)
-        {
-            // The following socket constructor will create a dual-mode socket on systems where IPV6 is available.
-            var socket = new Socket(addressFamily, SocketType.Stream, ProtocolType.Tcp)
-            {
-                // Turn off Nagle's algorithm since it degrades performance in most HttpClient scenarios.
-                NoDelay = true
-            };
-
-            try
-            {
-                await socket.ConnectAsync(context.DnsEndPoint, cancellationToken).ConfigureAwait(false);
-
-                // The stream should take the ownership of the underlying socket,
-                // closing it when it's disposed.
-                return new NetworkStream(socket, ownsSocket: true);
-            }
-            catch
-            {
-                socket.Dispose();
-                throw;
-            }
         }
     }
 }

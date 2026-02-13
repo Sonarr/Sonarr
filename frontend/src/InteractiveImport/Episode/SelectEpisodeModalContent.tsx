@@ -220,6 +220,7 @@ function SelectEpisodeModalContentInner(props: SelectEpisodeModalContentProps) {
                       title={item.title}
                       airDate={item.airDate}
                       isAnime={isAnime}
+                      unverifiedSceneNumbering={item.unverifiedSceneNumbering}
                     />
                   ) : null;
                 })}

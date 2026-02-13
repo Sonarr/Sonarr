@@ -23,6 +23,10 @@ $hoverScale: 1.05;
     color: var(--defaultColor);
     text-decoration: none;
   }
+
+  .posterContainer & {
+    background-color: var(--seriesBackgroundColor);
+  }
 }
 
 .status {

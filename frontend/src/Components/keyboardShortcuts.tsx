@@ -35,13 +35,6 @@ export const shortcuts: Record<string, Shortcut> = {
     },
   },
 
-  ACCEPT_CONFIRM_MODAL: {
-    key: 'Enter',
-    get name() {
-      return translate('KeyboardShortcutsConfirmModal');
-    },
-  },
-
   SERIES_SEARCH_INPUT: {
     key: 's',
     get name() {

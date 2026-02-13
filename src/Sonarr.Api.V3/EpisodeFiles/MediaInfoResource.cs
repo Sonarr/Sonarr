@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.MediaFiles.MediaInfo;
 using Sonarr.Http.REST;
@@ -35,11 +36,11 @@ namespace Sonarr.Api.V3.EpisodeFiles
 
             return new MediaInfoResource
             {
-                AudioBitrate = model.AudioBitrate,
-                AudioChannels = MediaInfoFormatter.FormatAudioChannels(model),
-                AudioLanguages = model.AudioLanguages.ConcatToString("/"),
-                AudioStreamCount = model.AudioStreamCount,
-                AudioCodec = MediaInfoFormatter.FormatAudioCodec(model, sceneName),
+                AudioBitrate = model.PrimaryAudioStream?.Bitrate ?? 0,
+                AudioChannels = MediaInfoFormatter.FormatAudioChannels(model.PrimaryAudioStream),
+                AudioLanguages = model.AudioStreams?.Select(l => l.Language).ConcatToString("/"),
+                AudioStreamCount = model.AudioStreams?.Count ?? 0,
+                AudioCodec = MediaInfoFormatter.FormatAudioCodec(model.PrimaryAudioStream, sceneName),
                 VideoBitDepth = model.VideoBitDepth,
                 VideoBitrate = model.VideoBitrate,
                 VideoCodec = MediaInfoFormatter.FormatVideoCodec(model, sceneName),
@@ -49,7 +50,7 @@ namespace Sonarr.Api.V3.EpisodeFiles
                 Resolution = $"{model.Width}x{model.Height}",
                 RunTime = FormatRuntime(model.RunTime),
                 ScanType = model.ScanType,
-                Subtitles = model.Subtitles.ConcatToString("/")
+                Subtitles = model.SubtitleStreams?.Select(l => l.Language).ConcatToString("/")
             };
         }
 

@@ -13,12 +13,12 @@ namespace NzbDrone.Core.Notifications.Webhook
 
         public WebhookEpisodeFileMediaInfo(EpisodeFile episodeFile)
         {
-            AudioChannels = MediaInfoFormatter.FormatAudioChannels(episodeFile.MediaInfo);
-            AudioCodec = MediaInfoFormatter.FormatAudioCodec(episodeFile.MediaInfo, episodeFile.SceneName);
-            AudioLanguages = episodeFile.MediaInfo.AudioLanguages.Distinct().ToList();
+            AudioChannels = MediaInfoFormatter.FormatAudioChannels(episodeFile.MediaInfo.PrimaryAudioStream);
+            AudioCodec = MediaInfoFormatter.FormatAudioCodec(episodeFile.MediaInfo.PrimaryAudioStream, episodeFile.SceneName);
+            AudioLanguages = episodeFile.MediaInfo.AudioStreams?.Select(l => l.Language).Distinct().ToList();
             Height = episodeFile.MediaInfo.Height;
             Width = episodeFile.MediaInfo.Width;
-            Subtitles = episodeFile.MediaInfo.Subtitles.Distinct().ToList();
+            Subtitles = episodeFile.MediaInfo.SubtitleStreams?.Select(l => l.Language).Distinct().ToList();
             VideoCodec = MediaInfoFormatter.FormatVideoCodec(episodeFile.MediaInfo, episodeFile.SceneName);
             VideoDynamicRange = MediaInfoFormatter.FormatVideoDynamicRange(episodeFile.MediaInfo);
             VideoDynamicRangeType = MediaInfoFormatter.FormatVideoDynamicRangeType(episodeFile.MediaInfo);

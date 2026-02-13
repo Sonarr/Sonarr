@@ -17,7 +17,6 @@ namespace NzbDrone.Host
         private readonly IRuntimeInfo _runtimeInfo;
         private readonly IStartupContext _startupContext;
         private readonly IBrowserService _browserService;
-        private readonly IProcessProvider _processProvider;
         private readonly IEventAggregator _eventAggregator;
         private readonly Logger _logger;
 
@@ -35,7 +34,6 @@ namespace NzbDrone.Host
             _runtimeInfo = runtimeInfo;
             _startupContext = startupContext;
             _browserService = browserService;
-            _processProvider = processProvider;
             _eventAggregator = eventAggregator;
             _logger = logger;
 
@@ -69,12 +67,13 @@ namespace NzbDrone.Host
 
         private void OnAppStopped()
         {
-            if (_runtimeInfo.RestartPending && !_runtimeInfo.IsWindowsService)
+            if (_runtimeInfo.RestartPending)
             {
-                var restartArgs = GetRestartArgs();
-
-                _logger.Info("Attempting restart with arguments: {0}", restartArgs);
-                _processProvider.SpawnNewProcess(_runtimeInfo.ExecutingApplication, restartArgs);
+                _logger.Info("Restart pending.");
+            }
+            else
+            {
+                _logger.Info("Application stopped without restart pending");
             }
         }
 
@@ -86,32 +85,20 @@ namespace NzbDrone.Host
             _appLifetime.StopApplication();
         }
 
-        private string GetRestartArgs()
-        {
-            var args = _startupContext.PreservedArguments;
-
-            args += " /restart";
-
-            if (!args.Contains("/nobrowser"))
-            {
-                args += " /nobrowser";
-            }
-
-            return args;
-        }
-
         public void Handle(ApplicationShutdownRequested message)
         {
-            if (!_runtimeInfo.IsWindowsService)
+            if (message.Restarting)
             {
-                if (message.Restarting)
-                {
-                    _runtimeInfo.RestartPending = true;
-                }
-
-                LogManager.Configuration = null;
-                Shutdown();
+                _runtimeInfo.RestartPending = true;
+                _logger.Debug("Restart requested");
             }
+            else
+            {
+                _logger.Debug("Shutdown requested");
+                LogManager.Configuration = null;
+            }
+
+            Shutdown();
         }
     }
 }

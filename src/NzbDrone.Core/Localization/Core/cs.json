@@ -43,7 +43,6 @@
     "AddNewSeriesRootFolderHelpText": "'{folder}' posdložka bude vytvořena automaticky",
     "AddNewSeriesSearchForCutoffUnmetEpisodes": "Zahájit hledání Neodpovídajících vynechaných epizod",
     "AddNewSeriesSearchForMissingEpisodes": "Zahájit hledání chybějících epizod",
-    "AddNotificationError": "Nebylo možné přidat nové oznámení, prosím zkuste to později.",
     "AddQualityProfile": "Přidat profil kvality",
     "AddQualityProfileError": "Nebylo možné přidat nový profil kvality, prosím zkuste to později.",
     "AddReleaseProfile": "Přidat profil vydání",

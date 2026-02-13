@@ -264,8 +264,10 @@ function InteractiveImportModalContentInner(
   const { updateInteractiveImportItem } = useUpdateInteractiveImportItem();
   const { updateInteractiveImportItems } = useUpdateInteractiveImportItems();
 
-  const { reprocessInteractiveImportItems } =
+  const { reprocessInteractiveImportItems, isReprocessing } =
     useReprocessInteractiveImportItems();
+
+  const wasReprocessing = usePrevious(isReprocessing);
 
   const items = data;
 
@@ -825,6 +827,12 @@ function InteractiveImportModalContentInner(
     error,
     translate('InteractiveImportLoadError')
   );
+
+  useEffect(() => {
+    if (!isReprocessing && wasReprocessing) {
+      setReprocessingItems(new Set());
+    }
+  }, [isReprocessing, wasReprocessing]);
 
   return (
     <ModalContent onModalClose={onModalClose}>

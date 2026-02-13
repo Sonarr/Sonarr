@@ -158,6 +158,7 @@ export default function SeriesIndexPosters({
       case 'added':
       case 'path':
       case 'sizeOnDisk':
+      case 'ratings':
         heights.push(19);
         break;
       case 'qualityProfileId':

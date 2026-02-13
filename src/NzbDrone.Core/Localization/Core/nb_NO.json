@@ -36,7 +36,6 @@
     "AddNewSeriesHelpText": "Det er enkelt å legge til en ny serie. Bare begynn å taste navnet på serien du vil legge til.",
     "AddNewSeriesRootFolderHelpText": "Undermappa \"{folder}\" vil bli automatisk laget",
     "AddNewSeriesSearchForMissingEpisodes": "Søk etter manglende episoder",
-    "AddNotificationError": "Kunne ikke legge til ny varsling, vennligst prøv igjen.",
     "AddQualityProfile": "Legg til kvalitetsprofil",
     "AddQualityProfileError": "Kunne ikke legge til ny kvalitetsprofil, vennligst prøv igjen.",
     "AddReleaseProfile": "Legg til utgivelsesprofil",

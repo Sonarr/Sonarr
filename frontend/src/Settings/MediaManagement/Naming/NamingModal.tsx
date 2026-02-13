@@ -10,11 +10,11 @@ import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import { sizes } from 'Helpers/Props';
-import NamingConfig from 'typings/Settings/NamingConfig';
 import translate from 'Utilities/String/translate';
 import NamingOption from './NamingOption';
 import TokenCase from './TokenCase';
 import TokenSeparator from './TokenSeparator';
+import { NamingSettingsModel } from './useNamingSettings';
 import styles from './NamingModal.css';
 
 type SeparatorInputOption = Omit<SelectInputOption, 'key'> & {
@@ -274,7 +274,7 @@ const originalTokens = [
 interface NamingModalProps {
   isOpen: boolean;
   name: keyof Pick<
-    NamingConfig,
+    NamingSettingsModel,
     | 'standardEpisodeFormat'
     | 'dailyEpisodeFormat'
     | 'animeEpisodeFormat'

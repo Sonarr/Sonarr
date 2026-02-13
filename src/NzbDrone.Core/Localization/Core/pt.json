@@ -43,7 +43,6 @@
     "AddNewSeriesRootFolderHelpText": "A subpasta '{folder}' será criada automaticamente",
     "AddNewSeriesSearchForCutoffUnmetEpisodes": "Iniciar busca por episódios de corte não atendidos",
     "AddNewSeriesSearchForMissingEpisodes": "Iniciar pesquisa por episódios ausentes",
-    "AddNotificationError": "Não foi possível adicionar uma nova notificação, tente novamente.",
     "AddQualityProfile": "Adicionar Perfil de Qualidade",
     "AddQualityProfileError": "Não foi possível adicionar um novo perfil de qualidade, tente novamente.",
     "AddReleaseProfile": "Adicionar Perfil de Lançamento",

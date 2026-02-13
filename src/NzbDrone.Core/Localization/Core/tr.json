@@ -43,7 +43,6 @@
     "AddNewSeriesRootFolderHelpText": "'{folder}' alt klasörü otomatik olarak oluşturulacaktır",
     "AddNewSeriesSearchForCutoffUnmetEpisodes": "Karşılanmamış bölümleri aramaya başlayın",
     "AddNewSeriesSearchForMissingEpisodes": "Kayıp bölümleri aramaya başlayın",
-    "AddNotificationError": "Yeni bir bildirim eklenemiyor, lütfen tekrar deneyin.",
     "AddQualityProfile": "Kalite Profili Ekle",
     "AddQualityProfileError": "Yeni kalite profili eklenemiyor, lütfen tekrar deneyin.",
     "AddReleaseProfile": "Yayın Profili Ekle",

@@ -43,7 +43,6 @@
     "AddNewSeriesRootFolderHelpText": "将自动创建 '{folder}' 子文件夹",
     "AddNewSeriesSearchForCutoffUnmetEpisodes": "开始搜索未达截止条件的集",
     "AddNewSeriesSearchForMissingEpisodes": "开始搜索缺失集",
-    "AddNotificationError": "无法添加新通知，请稍后重试。",
     "AddQualityProfile": "添加质量配置",
     "AddQualityProfileError": "无法添加新质量配置，请稍后重试。",
     "AddReleaseProfile": "添加发布资源配置",

@@ -10,6 +10,7 @@ import VirtualTableSelectAllHeaderCell from 'Components/Table/VirtualTableSelect
 import { icons } from 'Helpers/Props';
 import { SortDirection } from 'Helpers/Props/sortDirections';
 import {
+  setSeriesOption,
   setSeriesSort,
   setSeriesTableOptions,
 } from 'Series/seriesOptionsStore';
@@ -46,9 +47,8 @@ function SeriesIndexTableHeader(props: SeriesIndexTableHeaderProps) {
     ) => {
       if (payload.tableOptions) {
         setSeriesTableOptions(payload.tableOptions);
-      } else {
-        // Handle standard table options like columns - for now just ignore
-        // as series table only uses the tableOptions property
+      } else if (payload.columns) {
+        setSeriesOption('columns', payload.columns);
       }
     },
     []
