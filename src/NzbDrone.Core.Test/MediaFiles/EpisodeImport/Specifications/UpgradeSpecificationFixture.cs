@@ -9,6 +9,7 @@ using NzbDrone.Core.CustomFormats;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.MediaFiles.EpisodeImport;
 using NzbDrone.Core.MediaFiles.EpisodeImport.Specifications;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Profiles;
@@ -564,6 +565,49 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport.Specifications
                 .ToList();
 
             Subject.IsSatisfiedBy(_localEpisode, null).Accepted.Should().BeFalse();
+        }
+
+        [Test]
+        public void should_return_false_and_a_specific_reason_if_not_upgrade_to_custom_format_score_after_local_file_rename_but_was_before()
+        {
+            var episodeFileCustomFormats = Builder<CustomFormat>.CreateListOfSize(1).Build().ToList();
+
+            var episodeFile = new EpisodeFile
+            {
+                Quality = new QualityModel(Quality.Bluray1080p)
+            };
+
+            _series.QualityProfile.Value.FormatItems = episodeFileCustomFormats.Select(c => new ProfileFormatItem
+                {
+                    Format = c,
+                    Score = 50
+                })
+                .ToList();
+
+            Mocker.GetMock<IConfigService>()
+                .Setup(s => s.DownloadPropersAndRepacks)
+                .Returns(ProperDownloadTypes.DoNotPrefer);
+
+            Mocker.GetMock<ICustomFormatCalculationService>()
+                .Setup(s => s.ParseCustomFormat(episodeFile))
+                .Returns(episodeFileCustomFormats);
+
+            _localEpisode.Quality = new QualityModel(Quality.Bluray1080p);
+            _localEpisode.CustomFormats = Builder<CustomFormat>.CreateListOfSize(1).Build().ToList();
+            _localEpisode.CustomFormatScore = 20;
+            _localEpisode.OriginalFileNameCustomFormats = Builder<CustomFormat>.CreateListOfSize(1).Build().ToList();
+            _localEpisode.OriginalFileNameCustomFormatScore = 60;
+
+            _localEpisode.Episodes = Builder<Episode>.CreateListOfSize(1)
+                .All()
+                .With(e => e.EpisodeFileId = 1)
+                .With(e => e.EpisodeFile = new LazyLoaded<EpisodeFile>(episodeFile))
+                .Build()
+                .ToList();
+
+            var result = Subject.IsSatisfiedBy(_localEpisode, null);
+            result.Accepted.Should().BeFalse();
+            result.Reason.Should().Be(ImportRejectionReason.NotCustomFormatUpgradeAfterRename);
         }
     }
 }
