@@ -1,7 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
-import { useSelector } from 'react-redux';
 import Language from 'Language/Language';
-import createLanguagesSelector from 'Store/Selectors/createLanguagesSelector';
+import { useFilteredLanguages } from 'Language/useLanguages';
 import translate from 'Utilities/String/translate';
 import EnhancedSelectInput, {
   EnhancedSelectInputValue,
@@ -31,13 +30,11 @@ export default function LanguageSelectInput({
   onChange,
   ...otherProps
 }: LanguageSelectInputProps) {
-  const { items } = useSelector(
-    createLanguagesSelector({
-      Any: true,
-      Original: true,
-      Unknown: true,
-    })
-  );
+  const { data: items = [] } = useFilteredLanguages({
+    includeAny: true,
+    includeOriginal: true,
+    includeUnknown: true,
+  });
 
   const values = useMemo(() => {
     const result: EnhancedSelectInputValue<number | string>[] = items.map(

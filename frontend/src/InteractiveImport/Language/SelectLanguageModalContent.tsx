@@ -1,5 +1,4 @@
 import React, { useCallback, useState } from 'react';
-import { useSelector } from 'react-redux';
 import Alert from 'Components/Alert';
 import Form from 'Components/Form/Form';
 import FormGroup from 'Components/Form/FormGroup';
@@ -13,7 +12,7 @@ import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import { inputTypes, kinds, sizes } from 'Helpers/Props';
 import Language from 'Language/Language';
-import createLanguagesSelector from 'Store/Selectors/createLanguagesSelector';
+import { useFilteredLanguages } from 'Language/useLanguages';
 import translate from 'Utilities/String/translate';
 import styles from './SelectLanguageModalContent.css';
 
@@ -27,12 +26,15 @@ interface SelectLanguageModalContentProps {
 function SelectLanguageModalContent(props: SelectLanguageModalContentProps) {
   const { modalTitle, onLanguagesSelect, onModalClose } = props;
 
-  const { isFetching, isPopulated, error, items } = useSelector(
-    createLanguagesSelector({
-      Any: true,
-      Original: true,
-    })
-  );
+  const {
+    data: items = [],
+    isFetching,
+    isFetched: isPopulated,
+    error,
+  } = useFilteredLanguages({
+    includeAny: true,
+    includeOriginal: true,
+  });
 
   const [languageIds, setLanguageIds] = useState(props.languageIds);
 
