@@ -293,5 +293,55 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
 
             result.MappedSeasonNumber.Should().Be(sceneMapping.SceneSeasonNumber);
         }
+
+        [Test]
+        public void should_use_tvdbid_matching_when_alias_without_year_is_found()
+        {
+            var alias = "Series Alias";
+
+            _parsedEpisodeInfo.SeriesTitle = $"{alias} {_series.Year}";
+            _parsedEpisodeInfo.SeriesTitleInfo.TitleWithoutYear = alias;
+            _parsedEpisodeInfo.SeriesTitleInfo.Year = _series.Year;
+
+            Mocker.GetMock<ISceneMappingService>()
+                .Setup(s => s.FindTvdbId(alias, It.IsAny<string>(), It.IsAny<int>()))
+                .Returns(_series.TvdbId);
+
+            Mocker.GetMock<ISeriesService>()
+                .Setup(s => s.FindByTvdbId(_series.Id))
+                .Returns(_series);
+
+            var result = Subject.Map(_parsedEpisodeInfo, _series.TvdbId, _series.TvRageId, _series.ImdbId, null);
+
+            result.Series.Should().Be(_series);
+
+            Mocker.GetMock<ISeriesService>()
+                .Verify(v => v.FindByTvdbId(It.IsAny<int>()), Times.Once());
+        }
+
+        [Test]
+        public void should_not_use_tvdbid_matching_when_alias_without_year_is_found_with_wrong_year()
+        {
+            var alias = "Series Alias";
+
+            _parsedEpisodeInfo.SeriesTitle = $"{alias} {_series.Year}";
+            _parsedEpisodeInfo.SeriesTitleInfo.TitleWithoutYear = alias;
+            _parsedEpisodeInfo.SeriesTitleInfo.Year = _series.Year + 1;
+
+            Mocker.GetMock<ISceneMappingService>()
+                .Setup(s => s.FindTvdbId(alias, It.IsAny<string>(), It.IsAny<int>()))
+                .Returns(_series.TvdbId);
+
+            Mocker.GetMock<ISeriesService>()
+                .Setup(s => s.FindByTvdbId(_series.Id))
+                .Returns(_series);
+
+            var result = Subject.Map(_parsedEpisodeInfo, 0, 0, "", null);
+
+            result.Series.Should().BeNull();
+
+            Mocker.GetMock<ISeriesService>()
+                .Verify(v => v.FindByTvdbId(It.IsAny<int>()), Times.Once());
+        }
     }
 }
