@@ -35,6 +35,7 @@ namespace NzbDrone.Core.IndexerSearch
             var series = _seriesService.GetSeries(message.SeriesId);
             var downloadedCount = 0;
             var userInvokedSearch = message.Trigger == CommandTrigger.Manual;
+            var profile = series.QualityProfile.Value;
 
             if (series.Seasons.None(s => s.Monitored))
             {
@@ -64,7 +65,7 @@ namespace NzbDrone.Core.IndexerSearch
                         continue;
                     }
 
-                    var decisions = _releaseSearchService.SeasonSearch(message.SeriesId, season.SeasonNumber, false, true, userInvokedSearch, false).GetAwaiter().GetResult();
+                    var decisions = _releaseSearchService.SeasonSearch(message.SeriesId, season.SeasonNumber, !profile.UpgradeAllowed, true, userInvokedSearch, false).GetAwaiter().GetResult();
                     var processDecisions = _processDownloadDecisions.ProcessDecisions(decisions).GetAwaiter().GetResult();
                     downloadedCount += processDecisions.Grabbed.Count;
                 }
