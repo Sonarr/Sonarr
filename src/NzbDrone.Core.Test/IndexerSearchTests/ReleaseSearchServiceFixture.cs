@@ -332,6 +332,21 @@ namespace NzbDrone.Core.Test.IndexerSearchTests
         }
 
         [Test]
+        public async Task scene_seasonsearch_should_skip_search_if_no_episodes_after_filtering()
+        {
+            WithEpisodes();
+            _xemEpisodes.ForEach(e => e.EpisodeFileId = 1);
+
+            var allCriteria = WatchForSearchCriteria();
+
+            await Subject.SeasonSearch(_xemSeries.Id, 1, true, false, true, false);
+
+            var criteria = allCriteria.OfType<SeasonSearchCriteria>().ToList();
+
+            criteria.Count.Should().Be(0);
+        }
+
+        [Test]
         public async Task season_search_for_anime_should_search_for_each_monitored_episode()
         {
             WithEpisodes();
