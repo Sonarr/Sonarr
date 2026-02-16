@@ -13,8 +13,8 @@ import ConfirmModal from 'Components/Modal/ConfirmModal';
 import { icons, inputTypes, kinds } from 'Helpers/Props';
 import { InputChanged } from 'typings/inputs';
 import { PendingSection } from 'typings/pending';
-import General from 'typings/Settings/General';
 import translate from 'Utilities/String/translate';
+import { GeneralSettingsModel } from './useGeneralSettings';
 
 export const authenticationMethodOptions: EnhancedSelectInputValue<string>[] = [
   {
@@ -85,13 +85,13 @@ const certificateValidationOptions: EnhancedSelectInputValue<string>[] = [
 ];
 
 interface SecuritySettingsProps {
-  authenticationMethod: PendingSection<General>['authenticationMethod'];
-  authenticationRequired: PendingSection<General>['authenticationRequired'];
-  username: PendingSection<General>['username'];
-  password: PendingSection<General>['password'];
-  passwordConfirmation: PendingSection<General>['passwordConfirmation'];
-  apiKey: PendingSection<General>['apiKey'];
-  certificateValidation: PendingSection<General>['certificateValidation'];
+  authenticationMethod: PendingSection<GeneralSettingsModel>['authenticationMethod'];
+  authenticationRequired: PendingSection<GeneralSettingsModel>['authenticationRequired'];
+  username: PendingSection<GeneralSettingsModel>['username'];
+  password: PendingSection<GeneralSettingsModel>['password'];
+  passwordConfirmation: PendingSection<GeneralSettingsModel>['passwordConfirmation'];
+  apiKey: PendingSection<GeneralSettingsModel>['apiKey'];
+  certificateValidation: PendingSection<GeneralSettingsModel>['certificateValidation'];
   isResettingApiKey: boolean;
   onInputChange: (change: InputChanged) => void;
 }

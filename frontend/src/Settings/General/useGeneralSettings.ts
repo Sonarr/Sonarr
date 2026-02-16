@@ -1,3 +1,9 @@
+import {
+  useManageSettings,
+  useSaveSettings,
+  useSettings,
+} from 'Settings/useSettings';
+
 export type UpdateMechanism =
   | 'builtIn'
   | 'script'
@@ -5,7 +11,7 @@ export type UpdateMechanism =
   | 'apt'
   | 'docker';
 
-export default interface General {
+export interface GeneralSettingsModel {
   bindAddress: string;
   port: number;
   sslPort: number;
@@ -45,3 +51,17 @@ export default interface General {
   backupRetention: number;
   id: number;
 }
+
+const PATH = '/settings/general';
+
+export const useGeneralSettings = () => {
+  return useSettings<GeneralSettingsModel>(PATH);
+};
+
+export const useManageGeneralSettings = () => {
+  return useManageSettings<GeneralSettingsModel>(PATH);
+};
+
+export const useSaveGeneralSettings = () => {
+  return useSaveSettings<GeneralSettingsModel>(PATH);
+};

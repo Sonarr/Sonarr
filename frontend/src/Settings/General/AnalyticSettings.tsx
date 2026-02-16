@@ -6,11 +6,11 @@ import FormLabel from 'Components/Form/FormLabel';
 import { inputTypes, sizes } from 'Helpers/Props';
 import { InputChanged } from 'typings/inputs';
 import { PendingSection } from 'typings/pending';
-import General from 'typings/Settings/General';
 import translate from 'Utilities/String/translate';
+import { GeneralSettingsModel } from './useGeneralSettings';
 
 interface AnalyticSettingsProps {
-  analyticsEnabled: PendingSection<General>['analyticsEnabled'];
+  analyticsEnabled: PendingSection<GeneralSettingsModel>['analyticsEnabled'];
   onInputChange: (change: InputChanged) => void;
 }
 

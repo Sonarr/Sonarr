@@ -7,13 +7,13 @@ import { inputTypes } from 'Helpers/Props';
 import { useShowAdvancedSettings } from 'Settings/advancedSettingsStore';
 import { InputChanged } from 'typings/inputs';
 import { PendingSection } from 'typings/pending';
-import General from 'typings/Settings/General';
 import translate from 'Utilities/String/translate';
+import { GeneralSettingsModel } from './useGeneralSettings';
 
 interface BackupSettingsProps {
-  backupFolder: PendingSection<General>['backupFolder'];
-  backupInterval: PendingSection<General>['backupInterval'];
-  backupRetention: PendingSection<General>['backupRetention'];
+  backupFolder: PendingSection<GeneralSettingsModel>['backupFolder'];
+  backupInterval: PendingSection<GeneralSettingsModel>['backupInterval'];
+  backupRetention: PendingSection<GeneralSettingsModel>['backupRetention'];
   onInputChange: (change: InputChanged) => void;
 }
 

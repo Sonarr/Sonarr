@@ -8,21 +8,21 @@ import { useShowAdvancedSettings } from 'Settings/advancedSettingsStore';
 import { useIsWindowsService } from 'System/Status/useSystemStatus';
 import { InputChanged } from 'typings/inputs';
 import { PendingSection } from 'typings/pending';
-import General from 'typings/Settings/General';
 import translate from 'Utilities/String/translate';
+import { GeneralSettingsModel } from './useGeneralSettings';
 
 interface HostSettingsProps {
-  bindAddress: PendingSection<General>['bindAddress'];
-  port: PendingSection<General>['port'];
-  urlBase: PendingSection<General>['urlBase'];
-  instanceName: PendingSection<General>['instanceName'];
-  applicationUrl: PendingSection<General>['applicationUrl'];
-  enableSsl: PendingSection<General>['enableSsl'];
-  sslPort: PendingSection<General>['sslPort'];
-  sslKeyPath: PendingSection<General>['sslKeyPath'];
-  sslCertPath: PendingSection<General>['sslCertPath'];
-  sslCertPassword: PendingSection<General>['sslCertPassword'];
-  launchBrowser: PendingSection<General>['launchBrowser'];
+  bindAddress: PendingSection<GeneralSettingsModel>['bindAddress'];
+  port: PendingSection<GeneralSettingsModel>['port'];
+  urlBase: PendingSection<GeneralSettingsModel>['urlBase'];
+  instanceName: PendingSection<GeneralSettingsModel>['instanceName'];
+  applicationUrl: PendingSection<GeneralSettingsModel>['applicationUrl'];
+  enableSsl: PendingSection<GeneralSettingsModel>['enableSsl'];
+  sslPort: PendingSection<GeneralSettingsModel>['sslPort'];
+  sslKeyPath: PendingSection<GeneralSettingsModel>['sslKeyPath'];
+  sslCertPath: PendingSection<GeneralSettingsModel>['sslCertPath'];
+  sslCertPassword: PendingSection<GeneralSettingsModel>['sslCertPassword'];
+  launchBrowser: PendingSection<GeneralSettingsModel>['launchBrowser'];
   onInputChange: (change: InputChanged) => void;
 }
 

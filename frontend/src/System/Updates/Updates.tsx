@@ -1,5 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useAppValue } from 'App/appStore';
 import CommandNames from 'Commands/CommandNames';
 import { useCommandExecuting, useExecuteCommand } from 'Commands/useCommands';
@@ -13,11 +12,13 @@ import ConfirmModal from 'Components/Modal/ConfirmModal';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
 import { icons, kinds } from 'Helpers/Props';
+import {
+  UpdateMechanism,
+  useGeneralSettings,
+} from 'Settings/General/useGeneralSettings';
 import useUpdateSettings from 'Settings/General/useUpdateSettings';
 import { useUiSettingsValues } from 'Settings/UI/useUiSettings';
-import { fetchGeneralSettings } from 'Store/Actions/settingsActions';
 import { useSystemStatusData } from 'System/Status/useSystemStatus';
-import { UpdateMechanism } from 'typings/Settings/General';
 import formatDate from 'Utilities/Date/formatDate';
 import formatDateTime from 'Utilities/Date/formatDateTime';
 import translate from 'Utilities/String/translate';
@@ -49,7 +50,6 @@ function Updates() {
     error: settingsError,
   } = useUpdateSettings();
 
-  const dispatch = useDispatch();
   const executeCommand = useExecuteCommand();
   const [isMajorUpdateModalOpen, setIsMajorUpdateModalOpen] = useState(false);
   const isFetching = isLoadingUpdates || isLoadingSettings;
@@ -107,9 +107,7 @@ function Updates() {
     setIsMajorUpdateModalOpen(false);
   }, [setIsMajorUpdateModalOpen]);
 
-  useEffect(() => {
-    dispatch(fetchGeneralSettings());
-  }, [dispatch]);
+  useGeneralSettings();
 
   return (
     <PageContent title={translate('Updates')}>
