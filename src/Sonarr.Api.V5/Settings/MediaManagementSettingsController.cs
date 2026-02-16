@@ -11,16 +11,17 @@ namespace Sonarr.Api.V5.Settings;
 [V5ApiController("settings/mediamanagement")]
 public class MediaManagementSettingsController : SettingsController<MediaManagementSettingsResource>
 {
-    public MediaManagementSettingsController(IConfigService configService,
-                                       PathExistsValidator pathExistsValidator,
-                                       FolderChmodValidator folderChmodValidator,
-                                       FolderWritableValidator folderWritableValidator,
-                                       SeriesPathValidator seriesPathValidator,
-                                       StartupFolderValidator startupFolderValidator,
-                                       SystemFolderValidator systemFolderValidator,
-                                       RootFolderAncestorValidator rootFolderAncestorValidator,
-                                       RootFolderValidator rootFolderValidator)
-        : base(configService)
+    public MediaManagementSettingsController(IConfigFileProvider configFileProvider,
+        IConfigService configService,
+        PathExistsValidator pathExistsValidator,
+        FolderChmodValidator folderChmodValidator,
+        FolderWritableValidator folderWritableValidator,
+        SeriesPathValidator seriesPathValidator,
+        StartupFolderValidator startupFolderValidator,
+        SystemFolderValidator systemFolderValidator,
+        RootFolderAncestorValidator rootFolderAncestorValidator,
+        RootFolderValidator rootFolderValidator)
+        : base(configFileProvider, configService)
     {
         SharedValidator.RuleFor(c => c.RecycleBinCleanupDays).GreaterThanOrEqualTo(0);
         SharedValidator.RuleFor(c => c.ChmodFolder).SetValidator(folderChmodValidator).When(c => !string.IsNullOrEmpty(c.ChmodFolder) && (OsInfo.IsLinux || OsInfo.IsOsx));
@@ -62,7 +63,7 @@ public class MediaManagementSettingsController : SettingsController<MediaManagem
         });
     }
 
-    protected override MediaManagementSettingsResource ToResource(IConfigService model)
+    protected override MediaManagementSettingsResource ToResource(IConfigFileProvider configFile, IConfigService model)
     {
         return MediaManagementConfigResourceMapper.ToResource(model);
     }

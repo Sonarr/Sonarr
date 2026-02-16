@@ -9,10 +9,12 @@ namespace Sonarr.Api.V5.Settings
     public abstract class SettingsController<TResource> : RestController<TResource>
         where TResource : RestResource, new()
     {
-        protected readonly IConfigService _configService;
+        private readonly IConfigFileProvider _configFileProvider;
+        private readonly IConfigService _configService;
 
-        protected SettingsController(IConfigService configService)
+        protected SettingsController(IConfigFileProvider configFileProvider, IConfigService configService)
         {
+            _configFileProvider = configFileProvider;
             _configService = configService;
         }
 
@@ -25,7 +27,7 @@ namespace Sonarr.Api.V5.Settings
         [Produces("application/json")]
         public TResource GetConfig()
         {
-            var resource = ToResource(_configService);
+            var resource = ToResource(_configFileProvider, _configService);
             resource.Id = 1;
 
             return resource;
@@ -33,17 +35,18 @@ namespace Sonarr.Api.V5.Settings
 
         [RestPutById]
         [Consumes("application/json")]
-        public virtual ActionResult<TResource> SaveConfig([FromBody] TResource resource)
+        public virtual ActionResult<TResource> SaveSettings([FromBody] TResource resource)
         {
             var dictionary = resource.GetType()
                 .GetProperties(BindingFlags.Instance | BindingFlags.Public)
                 .ToDictionary(prop => prop.Name, prop => prop.GetValue(resource, null));
 
+            _configFileProvider.SaveConfigDictionary(dictionary);
             _configService.SaveConfigDictionary(dictionary);
 
             return Accepted(resource.Id);
         }
 
-        protected abstract TResource ToResource(IConfigService model);
+        protected abstract TResource ToResource(IConfigFileProvider configFile, IConfigService model);
     }
 }
