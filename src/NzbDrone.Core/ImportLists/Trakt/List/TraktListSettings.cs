@@ -13,11 +13,6 @@ namespace NzbDrone.Core.ImportLists.Trakt.List
             RuleFor(c => c.Username).NotEmpty();
             RuleFor(c => c.Listname).NotEmpty();
 
-            RuleFor(c => c.Rating)
-                .Matches(@"^\d+\-\d+$", RegexOptions.IgnoreCase)
-                .When(c => c.Rating.IsNotNullOrWhiteSpace())
-                .WithMessage("Not a valid rating");
-
             RuleFor(c => c.Years)
                 .Matches(@"^\d+(\-\d+)?$", RegexOptions.IgnoreCase)
                 .When(c => c.Years.IsNotNullOrWhiteSpace())
@@ -35,17 +30,8 @@ namespace NzbDrone.Core.ImportLists.Trakt.List
         [FieldDefinition(2, Label = "ImportListsTraktSettingsListName", HelpText = "ImportListsTraktSettingsListNameHelpText")]
         public string Listname { get; set; }
 
-        [FieldDefinition(3, Label = "ImportListsTraktSettingsRating", HelpText = "ImportListsTraktSettingsRatingSeriesHelpText")]
-        public string Rating { get; set; }
-
-        [FieldDefinition(4, Label = "ImportListsTraktSettingsGenres", HelpText = "ImportListsTraktSettingsGenresSeriesHelpText")]
-        public string Genres { get; set; }
-
-        [FieldDefinition(5, Label = "ImportListsTraktSettingsYears", HelpText = "ImportListsTraktSettingsYearsSeriesHelpText")]
+        [FieldDefinition(3, Label = "ImportListsTraktSettingsYears", HelpText = "ImportListsTraktSettingsYearsSeriesHelpText")]
         public string Years { get; set; }
-
-        [FieldDefinition(6, Label = "ImportListsTraktSettingsAdditionalParameters", HelpText = "ImportListsTraktSettingsAdditionalParametersHelpText", Advanced = true)]
-        public string TraktAdditionalParameters { get; set; }
 
         public override NzbDroneValidationResult Validate()
         {
