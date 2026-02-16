@@ -7,16 +7,6 @@ namespace NzbDrone.Core.ImportLists.Trakt
 {
     public static class TraktQueryHelper
     {
-        private static readonly HashSet<string> CommaSeparatedParams = new(StringComparer.OrdinalIgnoreCase)
-        {
-            "genres",
-            "certifications",
-            "networks",
-            "languages",
-            "countries",
-            "status"
-        };
-
         public static Dictionary<string, string> BuildFilterParameters(string rating, string genres, string years, int limit, string additionalParameters)
         {
             var parameters = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
@@ -32,38 +22,27 @@ namespace NzbDrone.Core.ImportLists.Trakt
 
                     if (parts.Length == 2 && parts[0].IsNotNullOrWhiteSpace())
                     {
-                        parameters[parts[0].Trim()] = parts[1].Trim();
+                        var key = parts[0].Trim();
+
+                        // Skip explicitly handled parameters
+                        if (key.Equals("genres", StringComparison.OrdinalIgnoreCase) ||
+                            key.Equals("ratings", StringComparison.OrdinalIgnoreCase) ||
+                            key.Equals("years", StringComparison.OrdinalIgnoreCase) ||
+                            key.Equals("limit", StringComparison.OrdinalIgnoreCase))
+                        {
+                            continue;
+                        }
+
+                        parameters[key] = parts[1].Trim();
                     }
                 }
             }
 
-            // Apply explicit settings (higher priority)
-            // For comma-separated params like genres, combine values from both sources
             if (genres.IsNotNullOrWhiteSpace())
             {
-                if (parameters.TryGetValue("genres", out var existingGenres) && existingGenres.IsNotNullOrWhiteSpace())
-                {
-                    var allGenres = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-
-                    foreach (var g in genres.ToLower().Split(',', StringSplitOptions.RemoveEmptyEntries))
-                    {
-                        allGenres.Add(g.Trim());
-                    }
-
-                    foreach (var g in existingGenres.ToLower().Split(',', StringSplitOptions.RemoveEmptyEntries))
-                    {
-                        allGenres.Add(g.Trim());
-                    }
-
-                    parameters["genres"] = string.Join(",", allGenres);
-                }
-                else
-                {
-                    parameters["genres"] = genres.ToLower();
-                }
+                parameters["genres"] = genres.ToLower();
             }
 
-            // For ratings and years, explicit settings override additional parameters
             if (rating.IsNotNullOrWhiteSpace())
             {
                 parameters["ratings"] = rating;

@@ -1,4 +1,5 @@
 using System;
+using System.Text.RegularExpressions;
 using FluentValidation;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Annotations;
@@ -31,6 +32,11 @@ namespace NzbDrone.Core.ImportLists.Trakt
             RuleFor(c => c.Limit)
                 .GreaterThan(0)
                 .WithMessage("Must be integer greater than 0");
+
+            RuleFor(c => c.Rating)
+                .Matches(@"^\d+\-\d+$", RegexOptions.IgnoreCase)
+                .When(c => c.Rating.IsNotNullOrWhiteSpace())
+                .WithMessage("Not a valid rating");
         }
     }
 
@@ -58,6 +64,15 @@ namespace NzbDrone.Core.ImportLists.Trakt
 
         [FieldDefinition(0, Label = "ImportListsSettingsAuthUser", Type = FieldType.Textbox, Hidden = HiddenType.Hidden)]
         public string AuthUser { get; set; }
+
+        [FieldDefinition(95, Label = "ImportListsTraktSettingsRating", HelpText = "ImportListsTraktSettingsRatingSeriesHelpText")]
+        public string Rating { get; set; }
+
+        [FieldDefinition(96, Label = "ImportListsTraktSettingsGenres", HelpText = "ImportListsTraktSettingsGenresSeriesHelpText")]
+        public string Genres { get; set; }
+
+        [FieldDefinition(97, Label = "ImportListsTraktSettingsAdditionalParameters", HelpText = "ImportListsTraktSettingsAdditionalParametersHelpText", Advanced = true)]
+        public string TraktAdditionalParameters { get; set; }
 
         [FieldDefinition(98, Label = "ImportListsTraktSettingsLimit", HelpText = "ImportListsTraktSettingsLimitSeriesHelpText")]
         public int Limit { get; set; }

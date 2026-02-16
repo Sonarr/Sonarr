@@ -21,63 +21,72 @@ namespace NzbDrone.Core.ImportLists.Trakt.Popular
 
         private IEnumerable<ImportListRequest> GetSeriesRequest()
         {
-            var link = Settings.BaseUrl.Trim();
+            var requestBuilder = new HttpRequestBuilder(Settings.BaseUrl.Trim());
+
+            var resource = "/shows";
 
             switch (Settings.TraktListType)
             {
                 case (int)TraktPopularListType.Trending:
-                    link += "/shows/trending";
+                    resource += "/trending";
                     break;
                 case (int)TraktPopularListType.Popular:
-                    link += "/shows/popular";
+                    resource += "/popular";
                     break;
                 case (int)TraktPopularListType.Anticipated:
-                    link += "/shows/anticipated";
+                    resource += "/anticipated";
                     break;
                 case (int)TraktPopularListType.TopWatchedByWeek:
-                    link += "/shows/watched/weekly";
+                    resource += "/watched/weekly";
                     break;
                 case (int)TraktPopularListType.TopWatchedByMonth:
-                    link += "/shows/watched/monthly";
+                    resource += "/watched/monthly";
                     break;
 #pragma warning disable CS0612
                 case (int)TraktPopularListType.TopWatchedByYear:
 #pragma warning restore CS0612
-                    link += "/shows/watched/yearly";
+                    resource += "/watched/yearly";
                     break;
                 case (int)TraktPopularListType.TopWatchedByAllTime:
-                    link += "/shows/watched/all";
+                    resource += "/watched/all";
                     break;
                 case (int)TraktPopularListType.RecommendedByWeek:
-                    link += "/shows/recommended/weekly";
+                    resource += "/recommended/weekly";
                     break;
                 case (int)TraktPopularListType.RecommendedByMonth:
-                    link += "/shows/recommended/monthly";
+                    resource += "/recommended/monthly";
                     break;
 #pragma warning disable CS0612
                 case (int)TraktPopularListType.RecommendedByYear:
 #pragma warning restore CS0612
-                    link += "/shows/recommended/yearly";
+                    resource += "/recommended/yearly";
                     break;
                 case (int)TraktPopularListType.RecommendedByAllTime:
-                    link += "/shows/recommended/all";
+                    resource += "/recommended/all";
                     break;
             }
 
+            requestBuilder
+                .Resource(resource)
+                .Accept(HttpAccept.Json);
+
             var filterParams = TraktQueryHelper.BuildFilterParameters(Settings.Rating, Settings.Genres, Settings.Years, Settings.Limit, Settings.TraktAdditionalParameters);
-            link += "?" + filterParams.ToQueryString();
 
-            var request = new ImportListRequest(link, HttpAccept.Json);
+            foreach (var param in filterParams)
+            {
+                requestBuilder.AddQueryParam(param.Key, param.Value);
+            }
 
-            request.HttpRequest.Headers.Add("trakt-api-version", "2");
-            request.HttpRequest.Headers.Add("trakt-api-key", ClientId);
+            requestBuilder
+                .SetHeader("trakt-api-version", "2")
+                .SetHeader("trakt-api-key", ClientId);
 
             if (Settings.AccessToken.IsNotNullOrWhiteSpace())
             {
-                request.HttpRequest.Headers.Add("Authorization", "Bearer " + Settings.AccessToken);
+                requestBuilder.SetHeader("Authorization", $"Bearer {Settings.AccessToken}");
             }
 
-            yield return request;
+            yield return new ImportListRequest(requestBuilder.Build());
         }
     }
 }

@@ -45,17 +45,8 @@ namespace NzbDrone.Core.ImportLists.Trakt.Popular
         [FieldDefinition(1, Label = "ImportListsTraktSettingsListType", Type = FieldType.Select, SelectOptions = typeof(TraktPopularListType), HelpText = "ImportListsTraktSettingsListTypeHelpText")]
         public int TraktListType { get; set; }
 
-        [FieldDefinition(2, Label = "ImportListsTraktSettingsRating", HelpText = "ImportListsTraktSettingsRatingSeriesHelpText")]
-        public string Rating { get; set; }
-
-        [FieldDefinition(4, Label = "ImportListsTraktSettingsGenres", HelpText = "ImportListsTraktSettingsGenresSeriesHelpText")]
-        public string Genres { get; set; }
-
-        [FieldDefinition(5, Label = "ImportListsTraktSettingsYears", HelpText = "ImportListsTraktSettingsYearsSeriesHelpText")]
+        [FieldDefinition(2, Label = "ImportListsTraktSettingsYears", HelpText = "ImportListsTraktSettingsYearsSeriesHelpTextPopular")]
         public string Years { get; set; }
-
-        [FieldDefinition(6, Label = "ImportListsTraktSettingsAdditionalParameters", HelpText = "ImportListsTraktSettingsAdditionalParametersHelpText", Advanced = true)]
-        public string TraktAdditionalParameters { get; set; }
 
         public override NzbDroneValidationResult Validate()
         {
