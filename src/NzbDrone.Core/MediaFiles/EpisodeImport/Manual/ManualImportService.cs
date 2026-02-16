@@ -290,9 +290,10 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                 return processedFiles.Concat(processedFolders).Where(i => i != null).ToList();
             }
 
+            var downloadClientItemInfo = downloadClientItem == null ? null : Parser.Parser.ParseTitle(downloadClientItem.Title);
             var folderInfo = Parser.Parser.ParseTitle(directoryInfo.Name);
             var seriesFiles = _diskScanService.FilterPaths(rootFolder, _diskScanService.GetVideoFiles(baseFolder).ToList());
-            var decisions = _importDecisionMaker.GetImportDecisions(seriesFiles, series, downloadClientItem, folderInfo, SceneSource(series, baseFolder), filterExistingFiles);
+            var decisions = _importDecisionMaker.GetImportDecisions(seriesFiles, series, downloadClientItem, downloadClientItemInfo, folderInfo, SceneSource(series, baseFolder), filterExistingFiles);
 
             return decisions.Select(decision => MapItem(decision, rootFolder, downloadId, directoryInfo.Name)).ToList();
         }
@@ -345,9 +346,12 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                         null);
                 }
 
+                var downloadClientItemInfo = trackedDownload?.DownloadItem == null ? null : Parser.Parser.ParseTitle(trackedDownload.DownloadItem.Title);
+
                 var importDecisions = _importDecisionMaker.GetImportDecisions(new List<string> { file },
                     series,
                     trackedDownload?.DownloadItem,
+                    downloadClientItemInfo,
                     null,
                     SceneSource(series, baseFolder));
 
