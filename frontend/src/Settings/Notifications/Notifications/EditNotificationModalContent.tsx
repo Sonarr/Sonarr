@@ -37,9 +37,9 @@ function EditNotificationModalContent({
 }: EditNotificationModalContentProps) {
   const showAdvancedSettings = useShowAdvancedSettings();
 
-  const result = useManageConnection(id, selectedSchema);
   const {
     item,
+    updateFieldValue,
     updateValue,
     saveProvider,
     isSaving,
@@ -48,12 +48,7 @@ function EditNotificationModalContent({
     isTesting,
     validationErrors,
     validationWarnings,
-  } = result;
-
-  // updateFieldValue is guaranteed to exist for NotificationModel since it extends Provider
-  const { updateFieldValue } = result as typeof result & {
-    updateFieldValue: (fieldProperties: Record<string, unknown>) => void;
-  };
+  } = useManageConnection(id, selectedSchema);
 
   const wasSaving = usePrevious(isSaving);
 

@@ -15,7 +15,7 @@ interface AddNotificationItemProps {
   implementationName: string;
   infoLink: string;
   presets?: NotificationModel[];
-  onNotificationSelect: (selectedScehema: SelectedSchema) => void;
+  onNotificationSelect: (selectedSchema: SelectedSchema) => void;
 }
 
 function AddNotificationItem({

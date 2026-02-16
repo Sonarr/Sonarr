@@ -7,7 +7,7 @@ import TableSelectCell from 'Components/Table/Cells/TableSelectCell';
 import Column from 'Components/Table/Column';
 import TableRow from 'Components/Table/TableRow';
 import { kinds } from 'Helpers/Props';
-import Indexer from 'typings/Indexer';
+import { IndexerModel } from 'Settings/Indexers/useIndexers';
 import { SelectStateInputProps } from 'typings/props';
 import translate from 'Utilities/String/translate';
 import styles from './ManageIndexersModalRow.css';
@@ -38,7 +38,7 @@ function ManageIndexersModalRow(props: ManageIndexersModalRowProps) {
     tags,
   } = props;
 
-  const { toggleSelected, useIsSelected } = useSelect<Indexer>();
+  const { toggleSelected, useIsSelected } = useSelect<IndexerModel>();
   const isSelected = useIsSelected(id);
 
   const onSelectedChangeWrapper = useCallback(

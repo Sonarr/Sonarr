@@ -1,42 +1,8 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { createSelector } from 'reselect';
-import AppState from 'App/State/AppState';
-import { fetchIndexers } from 'Store/Actions/settingsActions';
+import React, { useMemo } from 'react';
+import { useSortedIndexers } from 'Settings/Indexers/useIndexers';
 import { EnhancedSelectInputChanged } from 'typings/inputs';
-import sortByProp from 'Utilities/Array/sortByProp';
 import translate from 'Utilities/String/translate';
 import EnhancedSelectInput from './EnhancedSelectInput';
-
-function createIndexersSelector(includeAny: boolean) {
-  return createSelector(
-    (state: AppState) => state.settings.indexers,
-    (indexers) => {
-      const { isFetching, isPopulated, error, items } = indexers;
-
-      const values = items.sort(sortByProp('name')).map((indexer) => {
-        return {
-          key: indexer.id,
-          value: indexer.name,
-        };
-      });
-
-      if (includeAny) {
-        values.unshift({
-          key: 0,
-          value: `(${translate('Any')})`,
-        });
-      }
-
-      return {
-        isFetching,
-        isPopulated,
-        error,
-        values,
-      };
-    }
-  );
-}
 
 export interface IndexerSelectInputProps {
   name: string;
@@ -51,16 +17,23 @@ function IndexerSelectInput({
   includeAny = false,
   onChange,
 }: IndexerSelectInputProps) {
-  const dispatch = useDispatch();
-  const { isFetching, isPopulated, values } = useSelector(
-    createIndexersSelector(includeAny)
-  );
+  const { isFetching, data } = useSortedIndexers();
 
-  useEffect(() => {
-    if (!isPopulated) {
-      dispatch(fetchIndexers());
+  const values = useMemo(() => {
+    const indexerOptions = data.map((indexer) => ({
+      key: indexer.id,
+      value: indexer.name,
+    }));
+
+    if (includeAny) {
+      indexerOptions.unshift({
+        key: 0,
+        value: `(${translate('Any')})`,
+      });
     }
-  }, [isPopulated, dispatch]);
+
+    return indexerOptions;
+  }, [data, includeAny]);
 
   return (
     <EnhancedSelectInput

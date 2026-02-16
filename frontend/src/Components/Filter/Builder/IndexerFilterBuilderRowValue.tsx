@@ -1,7 +1,5 @@
-import React, { useEffect, useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import AppState from 'App/State/AppState';
-import { fetchIndexers } from 'Store/Actions/settingsActions';
+import React, { useMemo } from 'react';
+import { useSortedIndexers } from 'Settings/Indexers/useIndexers';
 import FilterBuilderRowValue, {
   FilterBuilderRowValueProps,
 } from './FilterBuilderRowValue';
@@ -14,26 +12,16 @@ type IndexerFilterBuilderRowValueProps<T> = Omit<
 function IndexerFilterBuilderRowValue<T>(
   props: IndexerFilterBuilderRowValueProps<T>
 ) {
-  const dispatch = useDispatch();
-
-  const { isPopulated, items } = useSelector(
-    (state: AppState) => state.settings.indexers
-  );
+  const { data } = useSortedIndexers();
 
   const tagList = useMemo(() => {
-    return items.map((item) => {
+    return data.map((item) => {
       return {
         id: item.id,
         name: item.name,
       };
     });
-  }, [items]);
-
-  useEffect(() => {
-    if (!isPopulated) {
-      dispatch(fetchIndexers());
-    }
-  }, [isPopulated, dispatch]);
+  }, [data]);
 
   return <FilterBuilderRowValue {...props} tagList={tagList} />;
 }

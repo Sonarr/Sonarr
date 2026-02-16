@@ -12,7 +12,6 @@ import importListOptions from './Settings/importListOptions';
 import importLists from './Settings/importLists';
 import indexerFlags from './Settings/indexerFlags';
 import indexerOptions from './Settings/indexerOptions';
-import indexers from './Settings/indexers';
 
 export * from './Settings/autoTaggingSpecifications';
 export * from './Settings/autoTaggings';
@@ -26,7 +25,6 @@ export * from './Settings/importLists';
 export * from './Settings/importListExclusions';
 export * from './Settings/indexerFlags';
 export * from './Settings/indexerOptions';
-export * from './Settings/indexers';
 
 //
 // Variables
@@ -49,8 +47,7 @@ export const defaultState = {
   importListExclusions: importListExclusions.defaultState,
   importListOptions: importListOptions.defaultState,
   indexerFlags: indexerFlags.defaultState,
-  indexerOptions: indexerOptions.defaultState,
-  indexers: indexers.defaultState
+  indexerOptions: indexerOptions.defaultState
 };
 
 export const persistState = [
@@ -72,8 +69,7 @@ export const actionHandlers = handleThunks({
   ...importListExclusions.actionHandlers,
   ...importListOptions.actionHandlers,
   ...indexerFlags.actionHandlers,
-  ...indexerOptions.actionHandlers,
-  ...indexers.actionHandlers
+  ...indexerOptions.actionHandlers
 });
 
 //
@@ -91,7 +87,6 @@ export const reducers = createHandleActions({
   ...importListExclusions.reducers,
   ...importListOptions.reducers,
   ...indexerFlags.reducers,
-  ...indexerOptions.reducers,
-  ...indexers.reducers
+  ...indexerOptions.reducers
 
 }, defaultState, section);

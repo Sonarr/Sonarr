@@ -12,6 +12,7 @@ import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import { kinds } from 'Helpers/Props';
 import useSeries from 'Series/useSeries';
+import { useIndexersWithIds } from 'Settings/Indexers/useIndexers';
 import { useConnectionsWithIds } from 'Settings/Notifications/useConnections';
 import { useReleaseProfilesWithIds } from 'Settings/Profiles/Release/useReleaseProfiles';
 import translate from 'Utilities/String/translate';
@@ -99,13 +100,7 @@ function TagDetailsModalContent({
 
   const releaseProfiles = useReleaseProfilesWithIds(releaseProfileIds);
   const notifications = useConnectionsWithIds(notificationIds);
-
-  const indexers = useSelector(
-    createMatchingItemSelector(
-      indexerIds,
-      (state: AppState) => state.settings.indexers.items
-    )
-  );
+  const indexers = useIndexersWithIds(indexerIds);
 
   const downloadClients = useSelector(
     createMatchingItemSelector(

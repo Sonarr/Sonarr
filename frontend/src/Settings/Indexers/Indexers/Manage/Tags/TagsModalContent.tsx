@@ -1,8 +1,5 @@
 import { uniq } from 'lodash';
 import React, { useCallback, useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
-import AppState from 'App/State/AppState';
-import { IndexerAppState } from 'App/State/SettingsAppState';
 import Form from 'Components/Form/Form';
 import FormGroup from 'Components/Form/FormGroup';
 import FormInputGroup from 'Components/Form/FormInputGroup';
@@ -15,8 +12,8 @@ import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import { inputTypes, kinds, sizes } from 'Helpers/Props';
+import { useIndexersData } from 'Settings/Indexers/useIndexers';
 import { Tag, useTagList } from 'Tags/useTags';
-import Indexer from 'typings/Indexer';
 import translate from 'Utilities/String/translate';
 import styles from './TagsModalContent.css';
 
@@ -26,12 +23,31 @@ interface TagsModalContentProps {
   onModalClose: () => void;
 }
 
+const applyTagsOptions: EnhancedSelectInputValue<string>[] = [
+  {
+    key: 'add',
+    get value() {
+      return translate('Add');
+    },
+  },
+  {
+    key: 'remove',
+    get value() {
+      return translate('Remove');
+    },
+  },
+  {
+    key: 'replace',
+    get value() {
+      return translate('Replace');
+    },
+  },
+];
+
 function TagsModalContent(props: TagsModalContentProps) {
   const { ids, onModalClose, onApplyTagsPress } = props;
 
-  const allIndexers: IndexerAppState = useSelector(
-    (state: AppState) => state.settings.indexers
-  );
+  const allIndexers = useIndexersData();
   const tagList: Tag[] = useTagList();
 
   const [tags, setTags] = useState<number[]>([]);
@@ -39,7 +55,7 @@ function TagsModalContent(props: TagsModalContentProps) {
 
   const indexersTags = useMemo(() => {
     const tags = ids.reduce((acc: number[], id) => {
-      const s = allIndexers.items.find((s: Indexer) => s.id === id);
+      const s = allIndexers.find((s) => s.id === id);
 
       if (s) {
         acc.push(...s.tags);
@@ -68,27 +84,6 @@ function TagsModalContent(props: TagsModalContentProps) {
   const onApplyPress = useCallback(() => {
     onApplyTagsPress(tags, applyTags);
   }, [tags, applyTags, onApplyTagsPress]);
-
-  const applyTagsOptions: EnhancedSelectInputValue<string>[] = [
-    {
-      key: 'add',
-      get value() {
-        return translate('Add');
-      },
-    },
-    {
-      key: 'remove',
-      get value() {
-        return translate('Remove');
-      },
-    },
-    {
-      key: 'replace',
-      get value() {
-        return translate('Replace');
-      },
-    },
-  ];
 
   return (
     <ModalContent onModalClose={onModalClose}>

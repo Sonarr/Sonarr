@@ -14,10 +14,8 @@ import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import TableRow from 'Components/Table/TableRow';
 import { icons, kinds } from 'Helpers/Props';
-import {
-  testAllDownloadClients,
-  testAllIndexers,
-} from 'Store/Actions/settingsActions';
+import { useTestAllIndexers } from 'Settings/Indexers/useIndexers';
+import { testAllDownloadClients } from 'Store/Actions/settingsActions';
 import titleCase from 'Utilities/String/titleCase';
 import translate from 'Utilities/String/translate';
 import HealthItemLink from './HealthItemLink';
@@ -49,9 +47,8 @@ function Health() {
   const isTestingAllDownloadClients = useSelector(
     (state: AppState) => state.settings.downloadClients.isTestingAll
   );
-  const isTestingAllIndexers = useSelector(
-    (state: AppState) => state.settings.indexers.isTestingAll
-  );
+
+  const { testAllIndexers, isTestingAllIndexers } = useTestAllIndexers();
 
   const healthIssues = !!data.length;
 
@@ -60,8 +57,8 @@ function Health() {
   }, [dispatch]);
 
   const handleTestAllIndexersPress = useCallback(() => {
-    dispatch(testAllIndexers());
-  }, [dispatch]);
+    testAllIndexers();
+  }, [testAllIndexers]);
 
   return (
     <FieldSet
