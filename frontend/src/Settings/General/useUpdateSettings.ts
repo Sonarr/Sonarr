@@ -1,5 +1,5 @@
 import useApiQuery from 'Helpers/Hooks/useApiQuery';
-import { UpdateMechanism } from 'typings/Settings/General';
+import { UpdateMechanism } from './useGeneralSettings';
 
 interface UpdateSettings {
   branch: string;

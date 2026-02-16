@@ -8,8 +8,8 @@ import { inputTypes } from 'Helpers/Props';
 import { useShowAdvancedSettings } from 'Settings/advancedSettingsStore';
 import { InputChanged } from 'typings/inputs';
 import { PendingSection } from 'typings/pending';
-import General from 'typings/Settings/General';
 import translate from 'Utilities/String/translate';
+import { GeneralSettingsModel } from './useGeneralSettings';
 
 const logLevelOptions: EnhancedSelectInputValue<string>[] = [
   {
@@ -33,8 +33,8 @@ const logLevelOptions: EnhancedSelectInputValue<string>[] = [
 ];
 
 interface LoggingSettingsProps {
-  logLevel: PendingSection<General>['logLevel'];
-  logSizeLimit: PendingSection<General>['logSizeLimit'];
+  logLevel: PendingSection<GeneralSettingsModel>['logLevel'];
+  logSizeLimit: PendingSection<GeneralSettingsModel>['logSizeLimit'];
   onInputChange: (change: InputChanged) => void;
 }
 
