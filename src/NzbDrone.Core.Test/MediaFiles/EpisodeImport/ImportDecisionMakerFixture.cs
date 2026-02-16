@@ -103,7 +103,7 @@ namespace NzbDrone.Core.Test.MediaFiles.EpisodeImport
             GivenAugmentationSuccess();
             GivenSpecifications(_pass1, _pass2, _pass3, _fail1, _fail2, _fail3);
 
-            Subject.GetImportDecisions(_videoFiles, _series, downloadClientItem, null, false, true);
+            Subject.GetImportDecisions(_videoFiles, _series, downloadClientItem, null, null, false, true);
 
             _fail1.Verify(c => c.IsSatisfiedBy(It.IsAny<LocalEpisode>(), downloadClientItem), Times.Once());
             _fail2.Verify(c => c.IsSatisfiedBy(It.IsAny<LocalEpisode>(), downloadClientItem), Times.Once());

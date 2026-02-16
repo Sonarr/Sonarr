@@ -16,8 +16,8 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
     {
         List<ImportDecision> GetImportDecisions(List<string> videoFiles, Series series);
         List<ImportDecision> GetImportDecisions(List<string> videoFiles, Series series, bool filterExistingFiles);
-        List<ImportDecision> GetImportDecisions(List<string> videoFiles, Series series, DownloadClientItem downloadClientItem, ParsedEpisodeInfo folderInfo, bool sceneSource);
-        List<ImportDecision> GetImportDecisions(List<string> videoFiles, Series series, DownloadClientItem downloadClientItem, ParsedEpisodeInfo folderInfo, bool sceneSource, bool filterExistingFiles);
+        List<ImportDecision> GetImportDecisions(List<string> videoFiles, Series series, DownloadClientItem downloadClientItem, ParsedEpisodeInfo downloadClientItemInfo, ParsedEpisodeInfo folderInfo, bool sceneSource);
+        List<ImportDecision> GetImportDecisions(List<string> videoFiles, Series series, DownloadClientItem downloadClientItem, ParsedEpisodeInfo downloadClientItemInfo, ParsedEpisodeInfo folderInfo, bool sceneSource, bool filterExistingFiles);
         ImportDecision GetDecision(LocalEpisode localEpisode, DownloadClientItem downloadClientItem);
     }
 
@@ -58,26 +58,19 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
         public List<ImportDecision> GetImportDecisions(List<string> videoFiles, Series series, bool filterExistingFiles)
         {
-            return GetImportDecisions(videoFiles, series, null, null, false, filterExistingFiles);
+            return GetImportDecisions(videoFiles, series, null, null, null, false, filterExistingFiles);
         }
 
-        public List<ImportDecision> GetImportDecisions(List<string> videoFiles, Series series, DownloadClientItem downloadClientItem, ParsedEpisodeInfo folderInfo, bool sceneSource)
+        public List<ImportDecision> GetImportDecisions(List<string> videoFiles, Series series, DownloadClientItem downloadClientItem, ParsedEpisodeInfo downloadClientItemInfo, ParsedEpisodeInfo folderInfo, bool sceneSource)
         {
-            return GetImportDecisions(videoFiles, series, downloadClientItem, folderInfo, sceneSource, true);
+            return GetImportDecisions(videoFiles, series, downloadClientItem, downloadClientItemInfo, folderInfo, sceneSource, true);
         }
 
-        public List<ImportDecision> GetImportDecisions(List<string> videoFiles, Series series, DownloadClientItem downloadClientItem, ParsedEpisodeInfo folderInfo, bool sceneSource, bool filterExistingFiles)
+        public List<ImportDecision> GetImportDecisions(List<string> videoFiles, Series series, DownloadClientItem downloadClientItem, ParsedEpisodeInfo downloadClientItemInfo, ParsedEpisodeInfo folderInfo, bool sceneSource, bool filterExistingFiles)
         {
             var newFiles = filterExistingFiles ? _mediaFileService.FilterExistingFiles(videoFiles.ToList(), series) : videoFiles.ToList();
 
             _logger.Debug("Analyzing {0}/{1} files.", newFiles.Count, videoFiles.Count);
-
-            ParsedEpisodeInfo downloadClientItemInfo = null;
-
-            if (downloadClientItem != null)
-            {
-                downloadClientItemInfo = Parser.Parser.ParseTitle(downloadClientItem.Title);
-            }
 
             // If not importing from a scene source (series folder for example), then assume all files are not samples
             // to avoid using media info on every file needlessly (especially if Analyse Media Files is disabled).

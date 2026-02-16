@@ -172,6 +172,13 @@ namespace NzbDrone.Core.Download
                 {
                     return;
                 }
+
+                if (firstResult.ImportDecision.Rejections.FirstOrDefault()?.Reason == ImportRejectionReason.MultiSeason)
+                {
+                    trackedDownload.Warn(new TrackedDownloadStatusMessage(trackedDownload.DownloadItem.Title, firstResult.Errors));
+                    SetStateToImportBlocked(trackedDownload);
+                    return;
+                }
             }
 
             var statusMessages = new List<TrackedDownloadStatusMessage>

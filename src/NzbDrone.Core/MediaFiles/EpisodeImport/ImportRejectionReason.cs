@@ -37,5 +37,6 @@ public enum ImportRejectionReason
     NotQualityUpgrade,
     NotRevisionUpgrade,
     NotCustomFormatUpgrade,
-    NotCustomFormatUpgradeAfterRename
+    NotCustomFormatUpgradeAfterRename,
+    MultiSeason
 }

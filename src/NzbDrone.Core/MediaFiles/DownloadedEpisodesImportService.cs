@@ -187,6 +187,7 @@ namespace NzbDrone.Core.MediaFiles
 
             var folderInfo = Parser.Parser.ParseTitle(directoryInfo.Name);
             var videoFiles = _diskScanService.FilterPaths(directoryInfo.FullName, _diskScanService.GetVideoFiles(directoryInfo.FullName));
+            var downloadClientItemInfo = downloadClientItem == null ? null : Parser.Parser.ParseTitle(downloadClientItem.Title);
 
             if (downloadClientItem == null)
             {
@@ -202,7 +203,17 @@ namespace NzbDrone.Core.MediaFiles
                 }
             }
 
-            var decisions = _importDecisionMaker.GetImportDecisions(videoFiles.ToList(), series, downloadClientItem, folderInfo, true);
+            if (downloadClientItemInfo is { IsMultiSeason: true })
+            {
+                _logger.Debug("Download client item is marked as multi-season, not processing automatically to avoid importing incorrect files");
+
+                return new List<ImportResult>
+                {
+                    RejectionResult(ImportRejectionReason.MultiSeason, "Multi-season download, unable to import automatically")
+                };
+            }
+
+            var decisions = _importDecisionMaker.GetImportDecisions(videoFiles.ToList(), series, downloadClientItem, downloadClientItemInfo, folderInfo, true);
             var importResults = _importApprovedEpisodes.Import(decisions, true, downloadClientItem, importMode);
 
             if (importMode == ImportMode.Auto)
@@ -328,7 +339,8 @@ namespace NzbDrone.Core.MediaFiles
                 }
             }
 
-            var decisions = _importDecisionMaker.GetImportDecisions(new List<string>() { fileInfo.FullName }, series, downloadClientItem, null, true);
+            var downloadClientItemInfo = downloadClientItem == null ? null : Parser.Parser.ParseTitle(downloadClientItem.Title);
+            var decisions = _importDecisionMaker.GetImportDecisions(new List<string>() { fileInfo.FullName }, series, downloadClientItem, downloadClientItemInfo, null, true);
 
             return _importApprovedEpisodes.Import(decisions, true, downloadClientItem, importMode);
         }
