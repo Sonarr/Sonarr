@@ -141,8 +141,9 @@ namespace NzbDrone.Core.Notifications.Plex.Server
             var separator = location.Path.Contains('\\') ? "\\" : "/";
             var locationRelativePath = seriesRelativePath.Replace("\\", separator).Replace("/", separator);
 
-            // Plex location paths trim trailing extraneous separator characters, so it doesn't need to be trimmed
-            var pathToUpdate = $"{location.Path}{separator}{locationRelativePath}";
+            // Plex location paths trim trailing extraneous separator characters,
+            // unless it's a Windows drive letter (S:\) that needs to be trimmed.
+            var pathToUpdate = $"{location.Path.TrimEnd(separator)}{separator}{locationRelativePath}";
 
             _logger.Debug("Updating section location, {0}", location.Path);
             _plexServerProxy.Update(section.Id, pathToUpdate, settings);
