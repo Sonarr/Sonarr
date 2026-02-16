@@ -22,27 +22,10 @@ namespace NzbDrone.Core.ImportLists.Trakt.List
         {
             var link = Settings.BaseUrl.Trim();
 
-            link += $"/users/{Settings.Username.Trim()}/lists/{Settings.Listname.ToUrlSlug()}/items/show,season,episode?limit={Settings.Limit}";
+            link += $"/users/{Settings.Username.Trim()}/lists/{Settings.Listname.ToUrlSlug()}/items/show,season,episode";
 
-            if (Settings.Rating.IsNotNullOrWhiteSpace())
-            {
-                link += $"&ratings={Settings.Rating}";
-            }
-
-            if (Settings.Genres.IsNotNullOrWhiteSpace())
-            {
-                link += $"&genres={Settings.Genres.ToLower()}";
-            }
-
-            if (Settings.Years.IsNotNullOrWhiteSpace())
-            {
-                link += $"&years={Settings.Years}";
-            }
-
-            if (Settings.TraktAdditionalParameters.IsNotNullOrWhiteSpace())
-            {
-                link += $"&{Settings.TraktAdditionalParameters.TrimStart('?').TrimStart('&')}";
-            }
+            var filterParams = TraktQueryHelper.BuildFilterParameters(Settings.Rating, Settings.Genres, Settings.Years, Settings.Limit, Settings.TraktAdditionalParameters);
+            link += "?" + filterParams.ToQueryString();
 
             var request = new ImportListRequest(link, HttpAccept.Json);
 

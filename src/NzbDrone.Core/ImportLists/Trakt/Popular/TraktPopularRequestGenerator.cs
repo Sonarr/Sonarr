@@ -64,8 +64,8 @@ namespace NzbDrone.Core.ImportLists.Trakt.Popular
                     break;
             }
 
-            var filtersAndLimit = $"?years={Settings.Years}&genres={Settings.Genres?.ToLower()}&ratings={Settings.Rating}&limit={Settings.Limit}{Settings.TraktAdditionalParameters}";
-            link += filtersAndLimit;
+            var filterParams = TraktQueryHelper.BuildFilterParameters(Settings.Rating, Settings.Genres, Settings.Years, Settings.Limit, Settings.TraktAdditionalParameters);
+            link += "?" + filterParams.ToQueryString();
 
             var request = new ImportListRequest(link, HttpAccept.Json);
 
