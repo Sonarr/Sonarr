@@ -6,8 +6,8 @@ import ConfirmModal from 'Components/Modal/ConfirmModal';
 import TagList from 'Components/TagList';
 import useModalOpenState from 'Helpers/Hooks/useModalOpenState';
 import { kinds } from 'Helpers/Props';
+import { IndexerModel } from 'Settings/Indexers/useIndexers';
 import { Tag } from 'Tags/useTags';
-import Indexer from 'typings/Indexer';
 import translate from 'Utilities/String/translate';
 import EditReleaseProfileModal from './EditReleaseProfileModal';
 import {
@@ -18,7 +18,7 @@ import styles from './ReleaseProfileItem.css';
 
 interface ReleaseProfileProps extends ReleaseProfileModel {
   tagList: Tag[];
-  indexerList: Indexer[];
+  indexerList: IndexerModel[];
 }
 
 function ReleaseProfileItem(props: ReleaseProfileProps) {

@@ -14,6 +14,7 @@ import Episode from 'Episode/Episode';
 import { EpisodeFile } from 'EpisodeFile/EpisodeFile';
 import { PagedQueryResponse } from 'Helpers/Hooks/usePagedApiQuery';
 import Series from 'Series/Series';
+import { IndexerModel } from 'Settings/Indexers/useIndexers';
 import { removeItem, updateItem } from 'Store/Actions/baseActions';
 import { repopulatePage } from 'Utilities/pagePopulator';
 import SignalRLogger from 'Utilities/SignalRLogger';
@@ -256,12 +257,12 @@ function SignalRListener() {
     }
 
     if (name === 'indexer') {
-      const section = 'settings.indexers';
+      const updatedItem = body.resource as IndexerModel;
 
       if (body.action === 'created' || body.action === 'updated') {
-        dispatch(updateItem({ section, ...body.resource }));
+        updateQueryClientItem(queryClient, ['/indexer'], updatedItem, true);
       } else if (body.action === 'deleted') {
-        dispatch(removeItem({ section, id: body.resource.id }));
+        removeQueryClientItem(queryClient, ['/indexer'], body.resource.id);
       }
 
       return;
@@ -520,4 +521,51 @@ const updatePagedItem = <T extends ModelBase>(
       };
     }
   );
+};
+
+const updateQueryClientItem = <T extends ModelBase>(
+  queryClient: ReturnType<typeof useQueryClient>,
+  queryKey: QueryKey,
+  updatedItem: T,
+  addMissing: boolean
+) => {
+  queryClient.setQueriesData({ queryKey }, (oldData: T[] | undefined) => {
+    if (!oldData) {
+      return oldData;
+    }
+
+    const itemIndex = oldData.findIndex((item) => item.id === updatedItem.id);
+
+    if (itemIndex === -1 && addMissing) {
+      return [...oldData, updatedItem];
+    }
+
+    return oldData.map((item) => {
+      if (item.id === updatedItem.id) {
+        return updatedItem;
+      }
+
+      return item;
+    });
+  });
+};
+
+const removeQueryClientItem = <T extends ModelBase>(
+  queryClient: ReturnType<typeof useQueryClient>,
+  queryKey: QueryKey,
+  id: T['id']
+) => {
+  queryClient.setQueriesData({ queryKey }, (oldData: T[] | undefined) => {
+    if (!oldData) {
+      return oldData;
+    }
+
+    const itemIndex = oldData.findIndex((item) => item.id === updatedItem.id);
+
+    if (itemIndex === -1) {
+      return oldData;
+    }
+
+    return oldData.filter((item) => item.id !== id);
+  });
 };

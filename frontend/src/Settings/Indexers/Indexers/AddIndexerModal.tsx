@@ -1,11 +1,11 @@
 import React from 'react';
 import Modal from 'Components/Modal/Modal';
-import AddIndexerModalContent from './AddIndexerModalContent';
+import AddIndexerModalContent, {
+  AddIndexerModalContentProps,
+} from './AddIndexerModalContent';
 
-interface AddIndexerModalProps {
+interface AddIndexerModalProps extends AddIndexerModalContentProps {
   isOpen: boolean;
-  onIndexerSelect: () => void;
-  onModalClose: () => void;
 }
 
 function AddIndexerModal({

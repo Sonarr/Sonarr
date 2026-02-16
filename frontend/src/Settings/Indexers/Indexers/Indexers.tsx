@@ -1,49 +1,42 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { IndexerAppState } from 'App/State/SettingsAppState';
+import React, { useCallback, useState } from 'react';
 import Card from 'Components/Card';
 import FieldSet from 'Components/FieldSet';
 import Icon from 'Components/Icon';
 import PageSectionContent from 'Components/Page/PageSectionContent';
 import { icons } from 'Helpers/Props';
-import { cloneIndexer, fetchIndexers } from 'Store/Actions/settingsActions';
-import createSortedSectionSelector from 'Store/Selectors/createSortedSectionSelector';
-import IndexerModel from 'typings/Indexer';
-import sortByProp from 'Utilities/Array/sortByProp';
+import { SelectedSchema } from 'Settings/useProviderSchema';
 import translate from 'Utilities/String/translate';
+import { useSortedIndexers } from '../useIndexers';
 import AddIndexerModal from './AddIndexerModal';
 import EditIndexerModal from './EditIndexerModal';
 import Indexer from './Indexer';
 import styles from './Indexers.css';
 
 function Indexers() {
-  const dispatch = useDispatch();
-
-  const { isFetching, isPopulated, items, error } = useSelector(
-    createSortedSectionSelector<IndexerModel, IndexerAppState>(
-      'settings.indexers',
-      sortByProp('name')
-    )
-  );
+  const { isFetching, isFetched, data, error } = useSortedIndexers();
 
   const [isAddIndexerModalOpen, setIsAddIndexerModalOpen] = useState(false);
   const [isEditIndexerModalOpen, setIsEditIndexerModalOpen] = useState(false);
+  const [cloneIndexerId, setCloneIndexerId] = useState<number | null>(null);
 
-  const showPriority = items.some((index) => index.priority !== 25);
+  const showPriority = data.some((index) => index.priority !== 25);
+
+  const [selectedSchema, setSelectedSchema] = useState<
+    SelectedSchema | undefined
+  >(undefined);
 
   const handleAddIndexerPress = useCallback(() => {
+    setCloneIndexerId(null);
     setIsAddIndexerModalOpen(true);
   }, []);
 
-  const handleCloneIndexerPress = useCallback(
-    (id: number) => {
-      dispatch(cloneIndexer({ id }));
-      setIsEditIndexerModalOpen(true);
-    },
-    [dispatch]
-  );
+  const handleCloneIndexerPress = useCallback((id: number) => {
+    setCloneIndexerId(id);
+    setIsEditIndexerModalOpen(true);
+  }, []);
 
-  const handleIndexerSelect = useCallback(() => {
+  const handleIndexerSelect = useCallback((selected: SelectedSchema) => {
+    setSelectedSchema(selected);
     setIsAddIndexerModalOpen(false);
     setIsEditIndexerModalOpen(true);
   }, []);
@@ -53,12 +46,9 @@ function Indexers() {
   }, []);
 
   const handleEditIndexerModalClose = useCallback(() => {
+    setCloneIndexerId(null);
     setIsEditIndexerModalOpen(false);
   }, []);
-
-  useEffect(() => {
-    dispatch(fetchIndexers());
-  }, [dispatch]);
 
   return (
     <FieldSet legend={translate('Indexers')}>
@@ -66,10 +56,10 @@ function Indexers() {
         errorMessage={translate('IndexersLoadError')}
         error={error}
         isFetching={isFetching}
-        isPopulated={isPopulated}
+        isPopulated={isFetched}
       >
         <div className={styles.indexers}>
-          {items.map((item) => {
+          {data.map((item) => {
             return (
               <Indexer
                 key={item.id}
@@ -95,6 +85,8 @@ function Indexers() {
 
         <EditIndexerModal
           isOpen={isEditIndexerModalOpen}
+          cloneId={cloneIndexerId ?? undefined}
+          selectedSchema={selectedSchema}
           onModalClose={handleEditIndexerModalClose}
         />
       </PageSectionContent>

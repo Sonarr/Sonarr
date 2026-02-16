@@ -5,13 +5,13 @@ import Alert from 'Components/Alert';
 import FieldSet from 'Components/FieldSet';
 import PageSectionContent from 'Components/Page/PageSectionContent';
 import { kinds } from 'Helpers/Props';
+import { useIndexers } from 'Settings/Indexers/useIndexers';
 import { useConnections } from 'Settings/Notifications/useConnections';
 import { useReleaseProfiles } from 'Settings/Profiles/Release/useReleaseProfiles';
 import {
   fetchDelayProfiles,
   fetchDownloadClients,
   fetchImportLists,
-  fetchIndexers,
 } from 'Store/Actions/settingsActions';
 import useTagDetails from 'Tags/useTagDetails';
 import useTags, { useSortedTagList } from 'Tags/useTags';
@@ -33,11 +33,11 @@ function Tags() {
 
   useReleaseProfiles();
   useConnections();
+  useIndexers();
 
   useEffect(() => {
     dispatch(fetchDelayProfiles());
     dispatch(fetchImportLists());
-    dispatch(fetchIndexers());
     dispatch(fetchDownloadClients());
 
     queryClient.invalidateQueries({ queryKey: ['releaseprofile'] });

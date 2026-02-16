@@ -14,7 +14,7 @@ import AddNotificationItem from './AddNotificationItem';
 import styles from './AddNotificationModalContent.css';
 
 export interface AddNotificationModalContentProps {
-  onNotificationSelect: (selectedScehema: SelectedSchema) => void;
+  onNotificationSelect: (selectedSchema: SelectedSchema) => void;
   onModalClose: () => void;
 }
 

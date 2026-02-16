@@ -6,7 +6,7 @@ interface AddNotificationPresetMenuItemProps {
   name: string;
   implementation: string;
   implementationName: string;
-  onPress: (selectedScehema: SelectedSchema) => void;
+  onPress: (selectedSchema: SelectedSchema) => void;
 }
 
 function AddNotificationPresetMenuItem({
