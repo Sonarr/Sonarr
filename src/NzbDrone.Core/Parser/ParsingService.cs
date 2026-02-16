@@ -116,6 +116,25 @@ namespace NzbDrone.Core.Parser
             return foundSeries;
         }
 
+        private Series GetSeriesAliasTitleAndYear(ParsedEpisodeInfo parsedEpisodeInfo)
+        {
+            var year = parsedEpisodeInfo.SeriesTitleInfo.Year;
+            var titleWithoutyear = parsedEpisodeInfo.SeriesTitleInfo.TitleWithoutYear;
+            var tvdbId = _sceneMappingService.FindTvdbId(titleWithoutyear, parsedEpisodeInfo.ReleaseTitle, parsedEpisodeInfo.SeasonNumber);
+
+            if (tvdbId.HasValue)
+            {
+                var series = _seriesService.FindByTvdbId(tvdbId.Value);
+
+                if (series.Year == year)
+                {
+                    return series;
+                }
+            }
+
+            return null;
+        }
+
         public RemoteEpisode Map(ParsedEpisodeInfo parsedEpisodeInfo, int tvdbId, int tvRageId, string imdbId, SearchCriteriaBase searchCriteria = null)
         {
             return Map(parsedEpisodeInfo, tvdbId, tvRageId, imdbId, null, searchCriteria);
@@ -449,6 +468,12 @@ namespace NzbDrone.Core.Parser
             {
                 series = _seriesService.FindByTitle(parsedEpisodeInfo.SeriesTitleInfo.TitleWithoutYear, parsedEpisodeInfo.SeriesTitleInfo.Year);
                 matchType = SeriesMatchType.Title;
+
+                if (series == null)
+                {
+                    series = GetSeriesAliasTitleAndYear(parsedEpisodeInfo);
+                    matchType = SeriesMatchType.Alias;
+                }
             }
 
             if (series == null && tvdbId > 0)

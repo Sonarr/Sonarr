@@ -1,5 +1,4 @@
 import React, { useCallback, useMemo } from 'react';
-import { useSelector } from 'react-redux';
 import Alert from 'Components/Alert';
 import FieldSet from 'Components/FieldSet';
 import Form from 'Components/Form/Form';
@@ -11,8 +10,8 @@ import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
 import { inputTypes, kinds } from 'Helpers/Props';
+import { useFilteredLanguages } from 'Language/useLanguages';
 import SettingsToolbar from 'Settings/SettingsToolbar';
-import createLanguagesSelector from 'Store/Selectors/createLanguagesSelector';
 import themes from 'Styles/Themes';
 import { InputChanged } from 'typings/inputs';
 import timeZoneOptions from 'Utilities/Date/timeZoneOptions';
@@ -63,17 +62,15 @@ export const timeFormatOptions: EnhancedSelectInputValue<string>[] = [
 
 function UISettings() {
   const {
-    items,
+    data: languageItems = [],
     isFetching: isLanguagesFetching,
-    isPopulated: isLanguagesPopulated,
+    isFetched: isLanguagesPopulated,
     error: languagesError,
-  } = useSelector(
-    createLanguagesSelector({
-      Any: true,
-      Original: true,
-      Unknown: true,
-    })
-  );
+  } = useFilteredLanguages({
+    includeAny: true,
+    includeOriginal: true,
+    includeUnknown: true,
+  });
 
   const {
     isFetching: isSettingsFetching,
@@ -94,13 +91,13 @@ function UISettings() {
   const error = languagesError || settingsError;
 
   const languages = useMemo(() => {
-    return items.map((item) => {
+    return languageItems.map((item) => {
       return {
         key: item.id,
         value: item.name,
       };
     });
-  }, [items]);
+  }, [languageItems]);
 
   const themeOptions = Object.keys(themes).map((theme) => ({
     key: theme,

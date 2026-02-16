@@ -168,6 +168,8 @@ namespace NzbDrone.Core.Test.ParserTests
         }
 
         [TestCase("[Underwater] Another OVA - The Other -Karma- (BD 1080p) [3A561D0E].mkv", "Another", 0)]
+        [TestCase("[sam] Long Series - NCOP [BD 1080p FLAC] [BBC3BC68].mkv", "Long Series", 0)]
+        [TestCase("[sam] Long Series - NCED [BD 1080p FLAC] [BBC3BC68].mkv", "Long Series", 0)]
         public void should_parse_absolute_specials_without_absolute_number(string postTitle, string title, int absoluteEpisodeNumber)
         {
             var result = Parser.Parser.ParseTitle(postTitle);
