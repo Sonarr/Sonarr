@@ -63,9 +63,39 @@ namespace NzbDrone.Core.ImportLists.Trakt.User
                 .SetHeader("trakt-api-key", _clientId)
                 .AddQueryParam("limit", _settings.Limit.ToString());
 
+            if (_settings.Rating.IsNotNullOrWhiteSpace())
+            {
+                requestBuilder.AddQueryParam("ratings", _settings.Rating);
+            }
+
+            if (_settings.Genres.IsNotNullOrWhiteSpace())
+            {
+                requestBuilder.AddQueryParam("genres", _settings.Genres.ToLower());
+            }
+
+            if (_settings.Years.IsNotNullOrWhiteSpace())
+            {
+                requestBuilder.AddQueryParam("years", _settings.Years);
+            }
+
             if (_settings.AccessToken.IsNotNullOrWhiteSpace())
             {
                 requestBuilder.SetHeader("Authorization", $"Bearer {_settings.AccessToken}");
+            }
+
+            if (_settings.TraktAdditionalParameters.IsNotNullOrWhiteSpace())
+            {
+                var additionalParams = _settings.TraktAdditionalParameters.TrimStart('?').TrimStart('&');
+
+                foreach (var param in additionalParams.Split('&'))
+                {
+                    var parts = param.Split('=', 2);
+
+                    if (parts.Length == 2)
+                    {
+                        requestBuilder.AddQueryParam(parts[0], parts[1]);
+                    }
+                }
             }
 
             yield return new ImportListRequest(requestBuilder.Build());
