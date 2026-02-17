@@ -15,6 +15,7 @@ import { EpisodeFile } from 'EpisodeFile/EpisodeFile';
 import { PagedQueryResponse } from 'Helpers/Hooks/usePagedApiQuery';
 import Series from 'Series/Series';
 import { IndexerModel } from 'Settings/Indexers/useIndexers';
+import { NotificationModel } from 'Settings/Notifications/useConnections';
 import { removeItem, updateItem } from 'Store/Actions/baseActions';
 import { repopulatePage } from 'Utilities/pagePopulator';
 import SignalRLogger from 'Utilities/SignalRLogger';
@@ -142,30 +143,11 @@ function SignalRListener() {
       if (body.action === 'updated') {
         const updatedItem = body.resource as Episode;
 
-        queryClient.setQueriesData(
-          { queryKey: ['/episode'] },
-          (oldData: Episode[] | undefined) => {
-            if (!oldData) {
-              return oldData;
-            }
-
-            const itemIndex = oldData.findIndex(
-              (item) => item.id === updatedItem.id
-            );
-
-            // Don't add episode if not found
-            if (itemIndex === -1) {
-              return oldData;
-            }
-
-            return oldData.map((item) => {
-              if (item.id === updatedItem.id) {
-                return updatedItem;
-              }
-
-              return item;
-            });
-          }
+        updateQueryClientItem(
+          queryClient,
+          ['/episode'],
+          updatedItem,
+          false // Don't add the episode to the list if it doesn't exist. Episodes should already be in the list since they are included in the series details.
         );
       }
 
@@ -180,30 +162,11 @@ function SignalRListener() {
       if (body.action === 'updated') {
         const updatedItem = body.resource as EpisodeFile;
 
-        queryClient.setQueriesData(
-          { queryKey: ['/episodeFile'] },
-          (oldData: EpisodeFile[] | undefined) => {
-            if (!oldData) {
-              return oldData;
-            }
-
-            const itemIndex = oldData.findIndex(
-              (item) => item.id === updatedItem.id
-            );
-
-            // Add episode file to the end
-            if (itemIndex === -1) {
-              return [...oldData, updatedItem];
-            }
-
-            return oldData.map((item) => {
-              if (item.id === updatedItem.id) {
-                return updatedItem;
-              }
-
-              return item;
-            });
-          }
+        updateQueryClientItem(
+          queryClient,
+          ['/episodeFile'],
+          updatedItem,
+          true // Add the episode file to the list if it doesn't exist. This can happen when an episode file is imported and wasn't previously in the list of episode files.
         );
 
         // Repopulate the page to handle recently imported file
@@ -211,24 +174,7 @@ function SignalRListener() {
       } else if (body.action === 'deleted') {
         const id = body.resource.id;
 
-        queryClient.setQueriesData(
-          { queryKey: ['/episodeFile'] },
-          (oldData: EpisodeFile[] | undefined) => {
-            if (!oldData) {
-              return oldData;
-            }
-
-            const itemIndex = oldData.findIndex((item) => item.id === id);
-
-            // Add episode file to the end
-            if (itemIndex === -1) {
-              return oldData;
-            }
-
-            return oldData.filter((item) => item.id !== id);
-          }
-        );
-
+        removeQueryClientItem(queryClient, ['/episodeFile'], id);
         repopulatePage('episodeFileDeleted');
       }
 
@@ -269,22 +215,27 @@ function SignalRListener() {
     }
 
     if (name === 'metadata') {
-      const section = 'settings.metadata';
+      const updatedItem = body.resource as ModelBase;
 
       if (body.action === 'updated') {
-        dispatch(updateItem({ section, ...body.resource }));
+        updateQueryClientItem(queryClient, ['/metadata'], updatedItem, false);
       }
 
       return;
     }
 
-    if (name === 'notification') {
-      const section = 'settings.notifications';
+    if (name === 'connection') {
+      const updatedItem = body.resource as NotificationModel;
 
       if (body.action === 'created' || body.action === 'updated') {
-        dispatch(updateItem({ section, ...body.resource }));
+        updateQueryClientItem(
+          queryClient,
+          ['/connection'],
+          updatedItem,
+          body.action === 'created' // Only add the connection to the list if it was created. If it was updated and it doesn't exist in the list, it likely means the connection is disabled and shouldn't be shown in the list.
+        );
       } else if (body.action === 'deleted') {
-        dispatch(removeItem({ section, id: body.resource.id }));
+        removeQueryClientItem(queryClient, ['/connection'], body.resource.id);
       }
 
       return;
@@ -351,42 +302,16 @@ function SignalRListener() {
       if (body.action === 'updated') {
         const updatedItem = body.resource as Series;
 
-        queryClient.setQueryData<Series[]>(
+        updateQueryClientItem(
+          queryClient,
           ['/series'],
-          (oldData: Series[] | undefined) => {
-            if (!oldData) {
-              return oldData;
-            }
-
-            return oldData.map((item) => {
-              if (item.id === updatedItem.id) {
-                return {
-                  ...item,
-                  ...updatedItem,
-                };
-              }
-
-              return item;
-            });
-          }
+          updatedItem,
+          false // Don't add the series to the list if it doesn't exist. Series should already be in the list since they are included in the calendar and series details.
         );
 
         repopulatePage('seriesUpdated');
       } else if (body.action === 'deleted') {
-        dispatch(removeItem({ section: 'series', id: body.resource.id }));
-
-        queryClient.setQueriesData(
-          { queryKey: ['/series'] },
-          (oldData: Series[] | undefined) => {
-            if (!oldData) {
-              return oldData;
-            }
-
-            return oldData.filter((item) => {
-              return item.id !== body.resource.id;
-            });
-          }
-        );
+        removeQueryClientItem(queryClient, ['/series'], body.resource.id);
       }
 
       return;
@@ -560,7 +485,7 @@ const removeQueryClientItem = <T extends ModelBase>(
       return oldData;
     }
 
-    const itemIndex = oldData.findIndex((item) => item.id === updatedItem.id);
+    const itemIndex = oldData.findIndex((item) => item.id === id);
 
     if (itemIndex === -1) {
       return oldData;
