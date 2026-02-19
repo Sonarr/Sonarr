@@ -4,6 +4,10 @@
   position: relative;
 }
 
+.buttonText {
+  margin: 0 5px;
+}
+
 .stateIconContainer {
   position: absolute;
   top: 50%;

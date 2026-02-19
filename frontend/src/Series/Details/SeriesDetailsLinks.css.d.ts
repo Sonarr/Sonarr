@@ -2,6 +2,7 @@
 // Please do not change this file!
 interface CssExports {
   'link': string;
+  'linkBlock': string;
   'linkLabel': string;
   'links': string;
 }
