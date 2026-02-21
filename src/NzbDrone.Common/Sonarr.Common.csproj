@@ -4,6 +4,7 @@
     <DefineConstants Condition="'$(RuntimeIdentifier)' == 'linux-musl-x64' or '$(RuntimeIdentifier)' == 'linux-musl-arm64'">ISMUSL</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Diacritical.Net" Version="1.0.5" />
     <PackageReference Include="DryIoc.dll" Version="5.4.3" />
     <PackageReference Include="IPAddressRange" Version="6.3.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.3" />

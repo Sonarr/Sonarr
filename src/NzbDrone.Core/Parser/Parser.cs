@@ -827,7 +827,7 @@ namespace NzbDrone.Core.Parser
             // Replace `%` with `percent` to deal with the 3% case
             title = PercentRegex.Replace(title, "percent");
 
-            return NormalizeRegex.Replace(title).ToLowerInvariant().RemoveAccent();
+            return NormalizeRegex.Replace(title).ToLowerInvariant().RemoveDiacritics();
         }
 
         public static string NormalizeEpisodeTitle(string title)

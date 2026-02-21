@@ -773,7 +773,7 @@ namespace NzbDrone.Core.Datastore.Migration
 
                 try
                 {
-                    var cultureInfo = cultures.FirstOrDefault(p => p.EnglishName.RemoveAccent() == tokens[i]);
+                    var cultureInfo = cultures.FirstOrDefault(p => p.EnglishName.RemoveDiacritics() == tokens[i]);
 
                     if (cultureInfo != null)
                     {
