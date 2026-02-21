@@ -343,5 +343,49 @@ namespace NzbDrone.Core.Test.ParserTests.ParsingServiceTests
             Mocker.GetMock<ISeriesService>()
                 .Verify(v => v.FindByTvdbId(It.IsAny<int>()), Times.Once());
         }
+
+        [Test]
+        public void should_use_year_when_looking_up_by_all_titles_in_release_title()
+        {
+            var alias = "Series Alias";
+            var title = "Series Title";
+
+            _parsedEpisodeInfo.SeriesTitle = $"Series Title AKA Series Alias {_series.Year}";
+            _parsedEpisodeInfo.SeriesTitleInfo.AllTitles = [
+                title,
+                alias
+            ];
+            _parsedEpisodeInfo.SeriesTitleInfo.Year = _series.Year;
+
+            Mocker.GetMock<ISeriesService>()
+                .Setup(s => s.FindByTitle(title, _series.Year))
+                .Returns(_series);
+
+            var result = Subject.Map(_parsedEpisodeInfo, 0, 0, "", null);
+
+            result.Series.Should().Be(_series);
+        }
+
+        [Test]
+        public void should_use_title_with_year_when_looking_up_by_all_titles_in_release_title()
+        {
+            var alias = "Series Alias";
+            var title = "Series Title";
+
+            _parsedEpisodeInfo.SeriesTitle = $"Series Title AKA Series Alias {_series.Year}";
+            _parsedEpisodeInfo.SeriesTitleInfo.AllTitles = [
+                title,
+                alias
+            ];
+            _parsedEpisodeInfo.SeriesTitleInfo.Year = _series.Year;
+
+            Mocker.GetMock<ISeriesService>()
+                .Setup(s => s.FindByTitle($"{title} {_series.Year}"))
+                .Returns(_series);
+
+            var result = Subject.Map(_parsedEpisodeInfo, 0, 0, "", null);
+
+            result.Series.Should().Be(_series);
+        }
     }
 }

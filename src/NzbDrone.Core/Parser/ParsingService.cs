@@ -74,13 +74,31 @@ namespace NzbDrone.Core.Parser
 
         private Series GetSeriesByAllTitles(ParsedEpisodeInfo parsedEpisodeInfo)
         {
+            var year = parsedEpisodeInfo.SeriesTitleInfo.Year;
             Series foundSeries = null;
             int? foundTvdbId = null;
 
             // Match each title individually, they must all resolve to the same tvdbid
             foreach (var title in parsedEpisodeInfo.SeriesTitleInfo.AllTitles)
             {
-                var series = _seriesService.FindByTitle(title);
+                Series series = null;
+
+                if (year > 0)
+                {
+                    series = _seriesService.FindByTitle(title, year);
+
+                    // Fall back to title + year being part of the title, this will allow
+                    // matching series with the same name that include the year in the title.
+                    if (series == null)
+                    {
+                        series = _seriesService.FindByTitle($"{title} {year}");
+                    }
+                }
+                else
+                {
+                    series = _seriesService.FindByTitle(title);
+                }
+
                 var tvdbId = series?.TvdbId;
 
                 if (series == null)
