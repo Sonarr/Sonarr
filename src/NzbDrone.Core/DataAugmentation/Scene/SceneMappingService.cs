@@ -62,7 +62,6 @@ namespace NzbDrone.Core.DataAugmentation.Scene
             var names = mappings.Where(n => seasonNumbers.Contains(n.SeasonNumber ?? -1) ||
                                             sceneSeasonNumbers.Contains(n.SceneSeasonNumber ?? -1) ||
                                             ((n.SeasonNumber ?? -1) == -1 && (n.SceneSeasonNumber ?? -1) == -1 && n.SceneOrigin != "tvdb"))
-                                .Where(n => IsEnglish(n.SearchTerm))
                                 .Select(n => n.SearchTerm)
                                 .Distinct(StringComparer.InvariantCultureIgnoreCase)
                                 .ToList();
@@ -272,11 +271,6 @@ namespace NzbDrone.Core.DataAugmentation.Scene
             }
 
             return normalCandidates;
-        }
-
-        private bool IsEnglish(string title)
-        {
-            return title.All(c => c <= 255);
         }
 
         public void Handle(SeriesRefreshStartingEvent message)
