@@ -1,17 +1,23 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
+using Diacritical;
+using NzbDrone.Common.Globalization;
 
 namespace NzbDrone.Common.Extensions
 {
     public static class StringExtensions
     {
         private static readonly Regex CamelCaseRegex = new Regex("(?<!^)[A-Z]", RegexOptions.Compiled);
+
+        static StringExtensions()
+        {
+            DiacriticMap.AddProviders(new AdditionalDiacriticsProvider());
+        }
 
         public static string NullSafe(this string target)
         {
@@ -62,21 +68,9 @@ namespace NzbDrone.Common.Extensions
             return text;
         }
 
-        public static string RemoveAccent(this string text)
+        public static string RemoveDiacritics(this string text)
         {
-            var normalizedString = text.Normalize(NormalizationForm.FormD);
-            var stringBuilder = new StringBuilder();
-
-            foreach (var c in normalizedString)
-            {
-                var unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(c);
-                if (unicodeCategory != UnicodeCategory.NonSpacingMark)
-                {
-                    stringBuilder.Append(c);
-                }
-            }
-
-            return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
+            return Diacritical.StringExtensions.RemoveDiacritics(text);
         }
 
         public static string TrimEnd(this string text, string postfix)
@@ -180,7 +174,7 @@ namespace NzbDrone.Common.Extensions
             value = value.ToLowerInvariant();
 
             // Remove all accents
-            value = value.RemoveAccent();
+            value = value.RemoveDiacritics();
 
             // Replace spaces
             value = Regex.Replace(value, @"\s", "-", RegexOptions.Compiled);
