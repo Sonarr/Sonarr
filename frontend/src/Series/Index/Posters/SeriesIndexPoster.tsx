@@ -103,6 +103,7 @@ function SeriesIndexPoster(props: SeriesIndexPosterProps) {
     status,
     path,
     titleSlug,
+    originalCountry,
     originalLanguage,
     network,
     nextAiring,
@@ -256,6 +257,7 @@ function SeriesIndexPoster(props: SeriesIndexPosterProps) {
       ) : null}
 
       <SeriesIndexPosterInfo
+        originalCountry={originalCountry}
         originalLanguage={originalLanguage}
         network={network}
         previousAiring={previousAiring}

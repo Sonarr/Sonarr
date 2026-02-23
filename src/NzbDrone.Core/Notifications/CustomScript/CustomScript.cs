@@ -61,21 +61,9 @@ namespace NzbDrone.Core.Notifications.CustomScript
             var releaseGroup = remoteEpisode.ParsedEpisodeInfo.ReleaseGroup;
             var environmentVariables = new StringDictionary();
 
-            environmentVariables.Add("Sonarr_EventType", "Grab");
-            environmentVariables.Add("Sonarr_InstanceName", _configFileProvider.InstanceName);
-            environmentVariables.Add("Sonarr_ApplicationUrl", _configService.ApplicationUrl);
-            environmentVariables.Add("Sonarr_Series_Id", series.Id.ToString());
-            environmentVariables.Add("Sonarr_Series_Title", series.Title);
-            environmentVariables.Add("Sonarr_Series_TitleSlug", series.TitleSlug);
-            environmentVariables.Add("Sonarr_Series_TvdbId", series.TvdbId.ToString());
-            environmentVariables.Add("Sonarr_Series_TvMazeId", series.TvMazeId.ToString());
-            environmentVariables.Add("Sonarr_Series_TmdbId", series.TmdbId.ToString());
-            environmentVariables.Add("Sonarr_Series_ImdbId", series.ImdbId ?? string.Empty);
-            environmentVariables.Add("Sonarr_Series_Type", series.SeriesType.ToString());
-            environmentVariables.Add("Sonarr_Series_Year", series.Year.ToString());
-            environmentVariables.Add("Sonarr_Series_OriginalLanguage", IsoLanguages.Get(series.OriginalLanguage).ThreeLetterCode);
-            environmentVariables.Add("Sonarr_Series_Genres", string.Join("|", series.Genres));
-            environmentVariables.Add("Sonarr_Series_Tags", string.Join("|", GetTagLabels(series)));
+            AddInstanceVariables(environmentVariables, "Grab");
+            AddSeriesVariables(environmentVariables, series);
+
             environmentVariables.Add("Sonarr_Release_EpisodeCount", remoteEpisode.Episodes.Count.ToString());
             environmentVariables.Add("Sonarr_Release_SeasonNumber", remoteEpisode.Episodes.First().SeasonNumber.ToString());
             environmentVariables.Add("Sonarr_Release_EpisodeNumbers", string.Join(",", remoteEpisode.Episodes.Select(e => e.EpisodeNumber)));
@@ -109,23 +97,10 @@ namespace NzbDrone.Core.Notifications.CustomScript
             var sourcePath = message.SourcePath;
             var environmentVariables = new StringDictionary();
 
-            environmentVariables.Add("Sonarr_EventType", "Download");
-            environmentVariables.Add("Sonarr_InstanceName", _configFileProvider.InstanceName);
-            environmentVariables.Add("Sonarr_ApplicationUrl", _configService.ApplicationUrl);
+            AddInstanceVariables(environmentVariables, "Download");
+            AddSeriesVariables(environmentVariables, series);
+
             environmentVariables.Add("Sonarr_IsUpgrade", message.OldFiles.Any().ToString());
-            environmentVariables.Add("Sonarr_Series_Id", series.Id.ToString());
-            environmentVariables.Add("Sonarr_Series_Title", series.Title);
-            environmentVariables.Add("Sonarr_Series_TitleSlug", series.TitleSlug);
-            environmentVariables.Add("Sonarr_Series_Path", series.Path);
-            environmentVariables.Add("Sonarr_Series_TvdbId", series.TvdbId.ToString());
-            environmentVariables.Add("Sonarr_Series_TvMazeId", series.TvMazeId.ToString());
-            environmentVariables.Add("Sonarr_Series_TmdbId", series.TmdbId.ToString());
-            environmentVariables.Add("Sonarr_Series_ImdbId", series.ImdbId ?? string.Empty);
-            environmentVariables.Add("Sonarr_Series_Type", series.SeriesType.ToString());
-            environmentVariables.Add("Sonarr_Series_Year", series.Year.ToString());
-            environmentVariables.Add("Sonarr_Series_OriginalLanguage", IsoLanguages.Get(series.OriginalLanguage).ThreeLetterCode);
-            environmentVariables.Add("Sonarr_Series_Genres", string.Join("|", series.Genres));
-            environmentVariables.Add("Sonarr_Series_Tags", string.Join("|", GetTagLabels(series)));
             environmentVariables.Add("Sonarr_EpisodeFile_Id", episodeFile.Id.ToString());
             environmentVariables.Add("Sonarr_EpisodeFile_EpisodeCount", episodeFile.Episodes.Value.Count.ToString());
             environmentVariables.Add("Sonarr_EpisodeFile_RelativePath", episodeFile.RelativePath);
@@ -182,22 +157,9 @@ namespace NzbDrone.Core.Notifications.CustomScript
             var sourcePath = message.SourcePath;
             var environmentVariables = new StringDictionary();
 
-            environmentVariables.Add("Sonarr_EventType", "Download");
-            environmentVariables.Add("Sonarr_InstanceName", _configFileProvider.InstanceName);
-            environmentVariables.Add("Sonarr_ApplicationUrl", _configService.ApplicationUrl);
-            environmentVariables.Add("Sonarr_Series_Id", series.Id.ToString());
-            environmentVariables.Add("Sonarr_Series_Title", series.Title);
-            environmentVariables.Add("Sonarr_Series_TitleSlug", series.TitleSlug);
-            environmentVariables.Add("Sonarr_Series_Path", series.Path);
-            environmentVariables.Add("Sonarr_Series_TvdbId", series.TvdbId.ToString());
-            environmentVariables.Add("Sonarr_Series_TvMazeId", series.TvMazeId.ToString());
-            environmentVariables.Add("Sonarr_Series_TmdbId", series.TmdbId.ToString());
-            environmentVariables.Add("Sonarr_Series_ImdbId", series.ImdbId ?? string.Empty);
-            environmentVariables.Add("Sonarr_Series_Type", series.SeriesType.ToString());
-            environmentVariables.Add("Sonarr_Series_Year", series.Year.ToString());
-            environmentVariables.Add("Sonarr_Series_OriginalLanguage", IsoLanguages.Get(series.OriginalLanguage).ThreeLetterCode);
-            environmentVariables.Add("Sonarr_Series_Genres", string.Join("|", series.Genres));
-            environmentVariables.Add("Sonarr_Series_Tags", string.Join("|", GetTagLabels(series)));
+            AddInstanceVariables(environmentVariables, "Download");
+            AddSeriesVariables(environmentVariables, series);
+
             environmentVariables.Add("Sonarr_EpisodeFile_Ids", string.Join("|", episodeFiles.Select(f => f.Id)));
             environmentVariables.Add("Sonarr_EpisodeFile_Count", message.EpisodeFiles.Count.ToString());
             environmentVariables.Add("Sonarr_EpisodeFile_RelativePaths", string.Join("|", episodeFiles.Select(f => f.RelativePath)));
@@ -238,22 +200,9 @@ namespace NzbDrone.Core.Notifications.CustomScript
         {
             var environmentVariables = new StringDictionary();
 
-            environmentVariables.Add("Sonarr_EventType", "Rename");
-            environmentVariables.Add("Sonarr_InstanceName", _configFileProvider.InstanceName);
-            environmentVariables.Add("Sonarr_ApplicationUrl", _configService.ApplicationUrl);
-            environmentVariables.Add("Sonarr_Series_Id", series.Id.ToString());
-            environmentVariables.Add("Sonarr_Series_Title", series.Title);
-            environmentVariables.Add("Sonarr_Series_TitleSlug", series.TitleSlug);
-            environmentVariables.Add("Sonarr_Series_Path", series.Path);
-            environmentVariables.Add("Sonarr_Series_TvdbId", series.TvdbId.ToString());
-            environmentVariables.Add("Sonarr_Series_TvMazeId", series.TvMazeId.ToString());
-            environmentVariables.Add("Sonarr_Series_TmdbId", series.TmdbId.ToString());
-            environmentVariables.Add("Sonarr_Series_ImdbId", series.ImdbId ?? string.Empty);
-            environmentVariables.Add("Sonarr_Series_Type", series.SeriesType.ToString());
-            environmentVariables.Add("Sonarr_Series_Year", series.Year.ToString());
-            environmentVariables.Add("Sonarr_Series_OriginalLanguage", IsoLanguages.Get(series.OriginalLanguage).ThreeLetterCode);
-            environmentVariables.Add("Sonarr_Series_Genres", string.Join("|", series.Genres));
-            environmentVariables.Add("Sonarr_Series_Tags", string.Join("|", GetTagLabels(series)));
+            AddInstanceVariables(environmentVariables, "Rename");
+            AddSeriesVariables(environmentVariables, series);
+
             environmentVariables.Add("Sonarr_EpisodeFile_Ids", string.Join(",", renamedFiles.Select(e => e.EpisodeFile.Id)));
             environmentVariables.Add("Sonarr_EpisodeFile_RelativePaths", string.Join("|", renamedFiles.Select(e => e.EpisodeFile.RelativePath)));
             environmentVariables.Add("Sonarr_EpisodeFile_Paths", string.Join("|", renamedFiles.Select(e => Path.Combine(series.Path, e.EpisodeFile.RelativePath))));
@@ -270,23 +219,9 @@ namespace NzbDrone.Core.Notifications.CustomScript
 
             var environmentVariables = new StringDictionary();
 
-            environmentVariables.Add("Sonarr_EventType", "EpisodeFileDelete");
-            environmentVariables.Add("Sonarr_InstanceName", _configFileProvider.InstanceName);
-            environmentVariables.Add("Sonarr_ApplicationUrl", _configService.ApplicationUrl);
-            environmentVariables.Add("Sonarr_EpisodeFile_DeleteReason", deleteMessage.Reason.ToString());
-            environmentVariables.Add("Sonarr_Series_Id", series.Id.ToString());
-            environmentVariables.Add("Sonarr_Series_Title", series.Title);
-            environmentVariables.Add("Sonarr_Series_TitleSlug", series.TitleSlug);
-            environmentVariables.Add("Sonarr_Series_Path", series.Path);
-            environmentVariables.Add("Sonarr_Series_TvdbId", series.TvdbId.ToString());
-            environmentVariables.Add("Sonarr_Series_TvMazeId", series.TvMazeId.ToString());
-            environmentVariables.Add("Sonarr_Series_TmdbId", series.TmdbId.ToString());
-            environmentVariables.Add("Sonarr_Series_ImdbId", series.ImdbId ?? string.Empty);
-            environmentVariables.Add("Sonarr_Series_Type", series.SeriesType.ToString());
-            environmentVariables.Add("Sonarr_Series_Year", series.Year.ToString());
-            environmentVariables.Add("Sonarr_Series_OriginalLanguage", IsoLanguages.Get(series.OriginalLanguage).ThreeLetterCode);
-            environmentVariables.Add("Sonarr_Series_Genres", string.Join("|", series.Genres));
-            environmentVariables.Add("Sonarr_Series_Tags", string.Join("|", GetTagLabels(series)));
+            AddInstanceVariables(environmentVariables, "EpisodeFileDelete");
+            AddSeriesVariables(environmentVariables, series);
+
             environmentVariables.Add("Sonarr_EpisodeFile_Id", episodeFile.Id.ToString());
             environmentVariables.Add("Sonarr_EpisodeFile_EpisodeCount", episodeFile.Episodes.Value.Count.ToString());
             environmentVariables.Add("Sonarr_EpisodeFile_RelativePath", episodeFile.RelativePath);
@@ -311,22 +246,8 @@ namespace NzbDrone.Core.Notifications.CustomScript
             var series = message.Series;
             var environmentVariables = new StringDictionary();
 
-            environmentVariables.Add("Sonarr_EventType", "SeriesAdd");
-            environmentVariables.Add("Sonarr_InstanceName", _configFileProvider.InstanceName);
-            environmentVariables.Add("Sonarr_ApplicationUrl", _configService.ApplicationUrl);
-            environmentVariables.Add("Sonarr_Series_Id", series.Id.ToString());
-            environmentVariables.Add("Sonarr_Series_Title", series.Title);
-            environmentVariables.Add("Sonarr_Series_TitleSlug", series.TitleSlug);
-            environmentVariables.Add("Sonarr_Series_Path", series.Path);
-            environmentVariables.Add("Sonarr_Series_TvdbId", series.TvdbId.ToString());
-            environmentVariables.Add("Sonarr_Series_TvMazeId", series.TvMazeId.ToString());
-            environmentVariables.Add("Sonarr_Series_TmdbId", series.TmdbId.ToString());
-            environmentVariables.Add("Sonarr_Series_ImdbId", series.ImdbId ?? string.Empty);
-            environmentVariables.Add("Sonarr_Series_Type", series.SeriesType.ToString());
-            environmentVariables.Add("Sonarr_Series_Year", series.Year.ToString());
-            environmentVariables.Add("Sonarr_Series_OriginalLanguage", IsoLanguages.Get(series.OriginalLanguage).ThreeLetterCode);
-            environmentVariables.Add("Sonarr_Series_Genres", string.Join("|", series.Genres));
-            environmentVariables.Add("Sonarr_Series_Tags", string.Join("|", GetTagLabels(series)));
+            AddInstanceVariables(environmentVariables, "SeriesAdd");
+            AddSeriesVariables(environmentVariables, series);
 
             ExecuteScript(environmentVariables);
         }
@@ -336,23 +257,8 @@ namespace NzbDrone.Core.Notifications.CustomScript
             var series = deleteMessage.Series;
             var environmentVariables = new StringDictionary();
 
-            environmentVariables.Add("Sonarr_EventType", "SeriesDelete");
-            environmentVariables.Add("Sonarr_InstanceName", _configFileProvider.InstanceName);
-            environmentVariables.Add("Sonarr_ApplicationUrl", _configService.ApplicationUrl);
-            environmentVariables.Add("Sonarr_Series_Id", series.Id.ToString());
-            environmentVariables.Add("Sonarr_Series_Title", series.Title);
-            environmentVariables.Add("Sonarr_Series_TitleSlug", series.TitleSlug);
-            environmentVariables.Add("Sonarr_Series_Path", series.Path);
-            environmentVariables.Add("Sonarr_Series_TvdbId", series.TvdbId.ToString());
-            environmentVariables.Add("Sonarr_Series_TvMazeId", series.TvMazeId.ToString());
-            environmentVariables.Add("Sonarr_Series_TmdbId", series.TmdbId.ToString());
-            environmentVariables.Add("Sonarr_Series_ImdbId", series.ImdbId ?? string.Empty);
-            environmentVariables.Add("Sonarr_Series_Type", series.SeriesType.ToString());
-            environmentVariables.Add("Sonarr_Series_Year", series.Year.ToString());
-            environmentVariables.Add("Sonarr_Series_OriginalLanguage", IsoLanguages.Get(series.OriginalLanguage).ThreeLetterCode);
-            environmentVariables.Add("Sonarr_Series_Genres", string.Join("|", series.Genres));
-            environmentVariables.Add("Sonarr_Series_Tags", string.Join("|", GetTagLabels(series)));
-            environmentVariables.Add("Sonarr_Series_DeletedFiles", deleteMessage.DeletedFiles.ToString());
+            AddInstanceVariables(environmentVariables, "SeriesDelete");
+            AddSeriesVariables(environmentVariables, series);
 
             ExecuteScript(environmentVariables);
         }
@@ -361,9 +267,8 @@ namespace NzbDrone.Core.Notifications.CustomScript
         {
             var environmentVariables = new StringDictionary();
 
-            environmentVariables.Add("Sonarr_EventType", "HealthIssue");
-            environmentVariables.Add("Sonarr_InstanceName", _configFileProvider.InstanceName);
-            environmentVariables.Add("Sonarr_ApplicationUrl", _configService.ApplicationUrl);
+            AddInstanceVariables(environmentVariables, "HealthIssue");
+
             environmentVariables.Add("Sonarr_Health_Issue_Level", Enum.GetName(typeof(HealthCheckResult), healthCheck.Type));
             environmentVariables.Add("Sonarr_Health_Issue_Message", healthCheck.Message);
             environmentVariables.Add("Sonarr_Health_Issue_Type", healthCheck.Source.Name);
@@ -376,9 +281,8 @@ namespace NzbDrone.Core.Notifications.CustomScript
         {
             var environmentVariables = new StringDictionary();
 
-            environmentVariables.Add("Sonarr_EventType", "HealthRestored");
-            environmentVariables.Add("Sonarr_InstanceName", _configFileProvider.InstanceName);
-            environmentVariables.Add("Sonarr_ApplicationUrl", _configService.ApplicationUrl);
+            AddInstanceVariables(environmentVariables, "HealthRestored");
+
             environmentVariables.Add("Sonarr_Health_Restored_Level", Enum.GetName(typeof(HealthCheckResult), previousCheck.Type));
             environmentVariables.Add("Sonarr_Health_Restored_Message", previousCheck.Message);
             environmentVariables.Add("Sonarr_Health_Restored_Type", previousCheck.Source.Name);
@@ -391,9 +295,8 @@ namespace NzbDrone.Core.Notifications.CustomScript
         {
             var environmentVariables = new StringDictionary();
 
-            environmentVariables.Add("Sonarr_EventType", "ApplicationUpdate");
-            environmentVariables.Add("Sonarr_InstanceName", _configFileProvider.InstanceName);
-            environmentVariables.Add("Sonarr_ApplicationUrl", _configService.ApplicationUrl);
+            AddInstanceVariables(environmentVariables, "ApplicationUpdate");
+
             environmentVariables.Add("Sonarr_Update_Message", updateMessage.Message);
             environmentVariables.Add("Sonarr_Update_NewVersion", updateMessage.NewVersion.ToString());
             environmentVariables.Add("Sonarr_Update_PreviousVersion", updateMessage.PreviousVersion.ToString());
@@ -406,22 +309,9 @@ namespace NzbDrone.Core.Notifications.CustomScript
             var series = message.Series;
             var environmentVariables = new StringDictionary();
 
-            environmentVariables.Add("Sonarr_EventType", "ManualInteractionRequired");
-            environmentVariables.Add("Sonarr_InstanceName", _configFileProvider.InstanceName);
-            environmentVariables.Add("Sonarr_ApplicationUrl", _configService.ApplicationUrl);
-            environmentVariables.Add("Sonarr_Series_Id", series?.Id.ToString());
-            environmentVariables.Add("Sonarr_Series_Title", series?.Title);
-            environmentVariables.Add("Sonarr_Series_TitleSlug", series?.TitleSlug);
-            environmentVariables.Add("Sonarr_Series_Path", series?.Path);
-            environmentVariables.Add("Sonarr_Series_TvdbId", series?.TvdbId.ToString());
-            environmentVariables.Add("Sonarr_Series_TvMazeId", series?.TvMazeId.ToString());
-            environmentVariables.Add("Sonarr_Series_TmdbId", series?.TmdbId.ToString());
-            environmentVariables.Add("Sonarr_Series_ImdbId", series?.ImdbId ?? string.Empty);
-            environmentVariables.Add("Sonarr_Series_Type", series?.SeriesType.ToString());
-            environmentVariables.Add("Sonarr_Series_Year", series?.Year.ToString());
-            environmentVariables.Add("Sonarr_Series_OriginalLanguage", IsoLanguages.Get(series?.OriginalLanguage)?.ThreeLetterCode);
-            environmentVariables.Add("Sonarr_Series_Genres", string.Join("|", series?.Genres ?? new List<string>()));
-            environmentVariables.Add("Sonarr_Series_Tags", string.Join("|", GetTagLabels(series)));
+            AddInstanceVariables(environmentVariables, "ManualInteractionRequired");
+            AddSeriesVariables(environmentVariables, series);
+
             environmentVariables.Add("Sonarr_Download_Client", message.DownloadClientInfo?.Name ?? string.Empty);
             environmentVariables.Add("Sonarr_Download_Client_Type", message.DownloadClientInfo?.Type ?? string.Empty);
             environmentVariables.Add("Sonarr_Download_Id", message.DownloadId ?? string.Empty);
@@ -495,6 +385,31 @@ namespace NzbDrone.Core.Notifications.CustomScript
                 .Where(l => l.IsNotNullOrWhiteSpace())
                 .OrderBy(l => l)
                 .ToList();
+        }
+
+        private void AddInstanceVariables(StringDictionary environmentVariables, string eventType)
+        {
+            environmentVariables.Add("Sonarr_EventType", eventType);
+            environmentVariables.Add("Sonarr_InstanceName", _configFileProvider.InstanceName);
+            environmentVariables.Add("Sonarr_ApplicationUrl", _configService.ApplicationUrl);
+        }
+
+        private void AddSeriesVariables(StringDictionary environmentVariables, Series series)
+        {
+            environmentVariables.Add("Sonarr_Series_Id", series.Id.ToString());
+            environmentVariables.Add("Sonarr_Series_Title", series.Title);
+            environmentVariables.Add("Sonarr_Series_TitleSlug", series.TitleSlug);
+            environmentVariables.Add("Sonarr_Series_Path", series.Path);
+            environmentVariables.Add("Sonarr_Series_TvdbId", series.TvdbId.ToString());
+            environmentVariables.Add("Sonarr_Series_TvMazeId", series.TvMazeId.ToString());
+            environmentVariables.Add("Sonarr_Series_TmdbId", series.TmdbId.ToString());
+            environmentVariables.Add("Sonarr_Series_ImdbId", series.ImdbId ?? string.Empty);
+            environmentVariables.Add("Sonarr_Series_Type", series.SeriesType.ToString());
+            environmentVariables.Add("Sonarr_Series_Year", series.Year.ToString());
+            environmentVariables.Add("Sonarr_Series_OriginalCountry", series.OriginalCountry);
+            environmentVariables.Add("Sonarr_Series_OriginalLanguage", IsoLanguages.Get(series.OriginalLanguage).ThreeLetterCode);
+            environmentVariables.Add("Sonarr_Series_Genres", string.Join("|", series.Genres));
+            environmentVariables.Add("Sonarr_Series_Tags", string.Join("|", GetTagLabels(series)));
         }
     }
 }

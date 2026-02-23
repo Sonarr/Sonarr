@@ -30,6 +30,7 @@ import {
   tooltipPositions,
 } from 'Helpers/Props';
 import InteractiveImportModal from 'InteractiveImport/InteractiveImportModal';
+import useCountryName from 'Internationalization/useCountryName';
 import OrganizePreviewModal from 'Organize/OrganizePreviewModal';
 import DeleteSeriesModal from 'Series/Delete/DeleteSeriesModal';
 import EditSeriesModal from 'Series/Edit/EditSeriesModal';
@@ -347,6 +348,8 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
     refetchEpisodes();
     refetchEpisodeFiles();
   }, [refetchEpisodes, refetchEpisodeFiles]);
+
+  const originalCountryName = useCountryName(series?.originalCountry);
 
   useEffect(() => {
     populate();
@@ -689,6 +692,21 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
                         <Icon name={icons.LANGUAGE} size={17} />
                         <span className={styles.originalLanguageName}>
                           {originalLanguage.name}
+                        </span>
+                      </div>
+                    </Label>
+                  ) : null}
+
+                  {originalCountryName ? (
+                    <Label
+                      className={styles.detailsLabel}
+                      title={translate('OriginalCountry')}
+                      size={sizes.LARGE}
+                    >
+                      <div>
+                        <Icon name={icons.GLOBE} size={17} />
+                        <span className={styles.originalCountry}>
+                          {originalCountryName}
                         </span>
                       </div>
                     </Label>

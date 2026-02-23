@@ -239,6 +239,7 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
             series.Status = MapSeriesStatus(show.Status);
             series.Ratings = MapRatings(show.Rating);
             series.Genres = show.Genres;
+            series.OriginalCountry = show.OriginalCountry;
 
             if (show.ContentRating.IsNotNullOrWhiteSpace())
             {

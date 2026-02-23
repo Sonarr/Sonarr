@@ -1,6 +1,7 @@
 import React from 'react';
 import HeartRating from 'Components/HeartRating';
 import SeriesTagList from 'Components/SeriesTagList';
+import useCountryName from 'Internationalization/useCountryName';
 import Language from 'Language/Language';
 import { Ratings } from 'Series/Series';
 import { QualityProfileModel } from 'Settings/Profiles/Quality/useQualityProfiles';
@@ -11,6 +12,7 @@ import translate from 'Utilities/String/translate';
 import styles from './SeriesIndexPosterInfo.css';
 
 interface SeriesIndexPosterInfoProps {
+  originalCountry?: string;
   originalLanguage?: Language;
   network?: string;
   showQualityProfile: boolean;
@@ -32,6 +34,7 @@ interface SeriesIndexPosterInfoProps {
 
 function SeriesIndexPosterInfo(props: SeriesIndexPosterInfoProps) {
   const {
+    originalCountry,
     originalLanguage,
     network,
     qualityProfile,
@@ -51,10 +54,20 @@ function SeriesIndexPosterInfo(props: SeriesIndexPosterInfoProps) {
     showTags,
   } = props;
 
+  const originalCountryName = useCountryName(originalCountry);
+
   if (sortKey === 'network' && network) {
     return (
       <div className={styles.info} title={translate('Network')}>
         {network}
+      </div>
+    );
+  }
+
+  if (sortKey === 'originalCountry' && !!originalCountryName) {
+    return (
+      <div className={styles.info} title={translate('OriginalCountry')}>
+        {originalCountryName}
       </div>
     );
   }

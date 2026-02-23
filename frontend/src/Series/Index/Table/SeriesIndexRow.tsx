@@ -14,6 +14,7 @@ import VirtualTableRowCell from 'Components/Table/Cells/VirtualTableRowCell';
 import VirtualTableSelectCell from 'Components/Table/Cells/VirtualTableSelectCell';
 import Column from 'Components/Table/Column';
 import { icons } from 'Helpers/Props';
+import useCountryName from 'Internationalization/useCountryName';
 import DeleteSeriesModal from 'Series/Delete/DeleteSeriesModal';
 import EditSeriesModal from 'Series/Edit/EditSeriesModal';
 import { Statistics } from 'Series/Series';
@@ -56,6 +57,7 @@ function SeriesIndexRow(props: SeriesIndexRowProps) {
   const [isEditSeriesModalOpen, setIsEditSeriesModalOpen] = useState(false);
   const [isDeleteSeriesModalOpen, setIsDeleteSeriesModalOpen] = useState(false);
   const { getIsSelected, toggleSelected } = useSelect();
+  const originalCountryName = useCountryName(series?.originalCountry);
 
   const onRefreshPress = useCallback(() => {
     executeCommand({
@@ -226,6 +228,14 @@ function SeriesIndexRow(props: SeriesIndexRowProps) {
           return (
             <VirtualTableRowCell key={name} className={styles[name]}>
               {network}
+            </VirtualTableRowCell>
+          );
+        }
+
+        if (name === 'originalCountry') {
+          return (
+            <VirtualTableRowCell key={name} className={styles[name]}>
+              {originalCountryName}
             </VirtualTableRowCell>
           );
         }

@@ -16,6 +16,7 @@ interface CssExports {
   'links': string;
   'monitorToggleButton': string;
   'network': string;
+  'originalCountry': string;
   'originalLanguageName': string;
   'overview': string;
   'path': string;

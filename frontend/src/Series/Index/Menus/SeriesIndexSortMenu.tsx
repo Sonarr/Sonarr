@@ -47,6 +47,15 @@ function SeriesIndexSortMenu(props: SeriesIndexSortMenuProps) {
         </SortMenuItem>
 
         <SortMenuItem
+          name="originalCountry"
+          sortKey={sortKey}
+          sortDirection={sortDirection}
+          onPress={onSortSelect}
+        >
+          {translate('OriginalCountry')}
+        </SortMenuItem>
+
+        <SortMenuItem
           name="originalLanguage"
           sortKey={sortKey}
           sortDirection={sortDirection}
