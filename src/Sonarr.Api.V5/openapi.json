@@ -1936,6 +1936,74 @@
         }
       }
     },
+    "/api/v5/language": {
+      "get": {
+        "tags": [
+          "Language"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LanguageResource"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LanguageResource"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LanguageResource"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/language/{id}": {
+      "get": {
+        "tags": [
+          "Language"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LanguageResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v5/localization": {
       "get": {
         "tags": [
@@ -6226,7 +6294,8 @@
           "diskCustomFormatScore",
           "diskCustomFormatScoreIncrement",
           "diskUpgradesNotAllowed",
-          "diskNotUpgrade"
+          "diskNotUpgrade",
+          "beforeAirDate"
         ],
         "type": "string"
       },
@@ -6896,6 +6965,25 @@
           "name": {
             "type": "string",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "LanguageResource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "nameLower": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
           }
         },
         "additionalProperties": false
@@ -8566,6 +8654,13 @@
             },
             "nullable": true
           },
+          "airDateRestriction": {
+            "type": "boolean"
+          },
+          "airDateGracePeriod": {
+            "type": "integer",
+            "format": "int32"
+          },
           "indexerIds": {
             "type": "array",
             "items": {
@@ -10012,6 +10107,9 @@
     },
     {
       "name": "History"
+    },
+    {
+      "name": "Language"
     },
     {
       "name": "Localization"
