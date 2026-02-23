@@ -12,7 +12,7 @@ function getDisplayName(code: string) {
     : null;
 }
 
-const useLanguage = () => {
+export const useLanguage = () => {
   return useApiQuery<LanguageResponse>({
     path: '/localization/language',
     queryOptions: {

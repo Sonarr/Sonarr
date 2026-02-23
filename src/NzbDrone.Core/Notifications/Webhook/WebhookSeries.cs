@@ -23,6 +23,7 @@ namespace NzbDrone.Core.Notifications.Webhook
         public List<WebhookImage> Images { get; set; }
         public List<string> Tags { get; set; }
         public Language OriginalLanguage { get; set; }
+        public string OriginalCountry { get; set; }
 
         public WebhookSeries()
         {
@@ -46,6 +47,7 @@ namespace NzbDrone.Core.Notifications.Webhook
             Images = series.Images.Select(i => new WebhookImage(i)).ToList();
             Tags = tags;
             OriginalLanguage = series.OriginalLanguage;
+            OriginalCountry = series.OriginalCountry;
         }
     }
 }

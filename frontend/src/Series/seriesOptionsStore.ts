@@ -126,6 +126,12 @@ const { useOptions, useOption, setOptions, setOption, setSort, getOptions } =
           isVisible: false,
         },
         {
+          name: 'originalCountry',
+          label: () => translate('OriginalCountry'),
+          isSortable: true,
+          isVisible: false,
+        },
+        {
           name: 'originalLanguage',
           label: () => translate('OriginalLanguage'),
           isSortable: true,

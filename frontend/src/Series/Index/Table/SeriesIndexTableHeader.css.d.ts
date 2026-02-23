@@ -13,6 +13,7 @@ interface CssExports {
   'monitorNewItems': string;
   'network': string;
   'nextAiring': string;
+  'originalCountry': string;
   'originalLanguage': string;
   'path': string;
   'previousAiring': string;

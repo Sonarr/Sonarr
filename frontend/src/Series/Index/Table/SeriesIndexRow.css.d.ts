@@ -17,6 +17,7 @@ interface CssExports {
   'monitorNewItems': string;
   'network': string;
   'nextAiring': string;
+  'originalCountry': string;
   'originalLanguage': string;
   'overlayTitle': string;
   'path': string;

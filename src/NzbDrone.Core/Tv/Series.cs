@@ -57,7 +57,7 @@ namespace NzbDrone.Core.Tv
         public DateTime? LastAired { get; set; }
         public LazyLoaded<QualityProfile> QualityProfile { get; set; }
         public Language OriginalLanguage { get; set; }
-
+        public string OriginalCountry { get; set; }
         public List<Season> Seasons { get; set; }
         public HashSet<int> Tags { get; set; }
         public AddSeriesOptions AddOptions { get; set; }
