@@ -53,6 +53,7 @@ public class SeriesResource : RestResource
     public Ratings? Ratings { get; set; }
     public SeriesStatisticsResource? Statistics { get; set; }
     public bool? EpisodesChanged { get; set; }
+    public bool ImportListExclusion { get; set; }
 }
 
 public static class SeriesResourceMapper
