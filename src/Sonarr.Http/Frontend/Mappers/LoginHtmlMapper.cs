@@ -9,6 +9,7 @@ namespace Sonarr.Http.Frontend.Mappers
 {
     public class LoginHtmlMapper : HtmlMapperBase
     {
+        private readonly IAppFolderInfo _appFolderInfo;
         private readonly IConfigFileProvider _configFileProvider;
 
         public LoginHtmlMapper(IAppFolderInfo appFolderInfo,
@@ -16,14 +17,16 @@ namespace Sonarr.Http.Frontend.Mappers
                                Lazy<ICacheBreakerProvider> cacheBreakProviderFactory,
                                IConfigFileProvider configFileProvider,
                                Logger logger)
-            : base(diskProvider, cacheBreakProviderFactory, logger)
+            : base(diskProvider, configFileProvider, cacheBreakProviderFactory, logger)
         {
+            _appFolderInfo = appFolderInfo;
             _configFileProvider = configFileProvider;
-            HtmlPath = Path.Combine(appFolderInfo.StartUpFolder, configFileProvider.UiFolder, "login.html");
-            UrlBase = configFileProvider.UrlBase;
         }
 
-        public override string Map(string resourceUrl)
+        protected override string FolderPath => Path.Combine(_appFolderInfo.StartUpFolder, _configFileProvider.UiFolder);
+        protected override string HtmlPath => Path.Combine(FolderPath, "login.html");
+
+        protected override string MapPath(string resourceUrl)
         {
             return HtmlPath;
         }

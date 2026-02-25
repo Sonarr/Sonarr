@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
+using NzbDrone.Core.Configuration;
 
 namespace Sonarr.Http.Frontend.Mappers
 {
@@ -13,19 +14,22 @@ namespace Sonarr.Http.Frontend.Mappers
         private readonly Lazy<ICacheBreakerProvider> _cacheBreakProviderFactory;
         private static readonly Regex ReplaceRegex = new Regex(@"(?:(?<attribute>href|src)=\"")(?<path>.*?(?<extension>css|js|png|ico|ics|svg|json))(?:\"")(?:\s(?<nohash>data-no-hash))?", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
+        private string _urlBase;
         private string _generatedContent;
 
         protected HtmlMapperBase(IDiskProvider diskProvider,
+                                 IConfigFileProvider configFileProvider,
                                  Lazy<ICacheBreakerProvider> cacheBreakProviderFactory,
                                  Logger logger)
             : base(diskProvider, logger)
         {
             _diskProvider = diskProvider;
             _cacheBreakProviderFactory = cacheBreakProviderFactory;
+
+            _urlBase = configFileProvider.UrlBase;
         }
 
-        protected string HtmlPath;
-        protected string UrlBase;
+        protected abstract string HtmlPath { get; }
 
         protected override Stream GetContentStream(string filePath)
         {
@@ -62,10 +66,10 @@ namespace Sonarr.Http.Frontend.Mappers
                     url = cacheBreakProvider.AddCacheBreakerToPath(match.Groups["path"].Value);
                 }
 
-                return $"{match.Groups["attribute"].Value}=\"{UrlBase}{url}\"";
+                return $"{match.Groups["attribute"].Value}=\"{_urlBase}{url}\"";
             });
 
-            text = text.Replace("__URL_BASE__", UrlBase);
+            text = text.Replace("__URL_BASE__", _urlBase);
 
             _generatedContent = text;
 

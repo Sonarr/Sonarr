@@ -18,7 +18,9 @@ namespace Sonarr.Http.Frontend.Mappers
             _configFileProvider = configFileProvider;
         }
 
-        public override string Map(string resourceUrl)
+        protected override string FolderPath => Path.Combine(_appFolderInfo.StartUpFolder, _configFileProvider.UiFolder);
+
+        protected override string MapPath(string resourceUrl)
         {
             var fileName = "favicon.ico";
 
@@ -29,7 +31,7 @@ namespace Sonarr.Http.Frontend.Mappers
 
             var path = Path.Combine("Content", "Images", "Icons", fileName);
 
-            return Path.Combine(_appFolderInfo.StartUpFolder, _configFileProvider.UiFolder, path);
+            return Path.Combine(FolderPath, path);
         }
 
         public override bool CanHandle(string resourceUrl)

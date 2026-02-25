@@ -20,9 +20,9 @@ namespace Sonarr.Http.Frontend.Mappers
             _urlBase = configFileProvider.UrlBase;
         }
 
-        protected string FilePath;
+        protected abstract string FilePath { get; }
 
-        public override string Map(string resourceUrl)
+        protected override string MapPath(string resourceUrl)
         {
             return FilePath;
         }

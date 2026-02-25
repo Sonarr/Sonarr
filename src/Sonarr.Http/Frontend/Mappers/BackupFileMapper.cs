@@ -15,11 +15,13 @@ namespace Sonarr.Http.Frontend.Mappers
             _backupService = backupService;
         }
 
-        public override string Map(string resourceUrl)
+        protected override string FolderPath => _backupService.GetBackupFolder();
+
+        protected override string MapPath(string resourceUrl)
         {
             var path = resourceUrl.Replace("/backup/", "").Replace('/', Path.DirectorySeparatorChar);
 
-            return Path.Combine(_backupService.GetBackupFolder(), path);
+            return Path.Combine(FolderPath, path);
         }
 
         public override bool CanHandle(string resourceUrl)

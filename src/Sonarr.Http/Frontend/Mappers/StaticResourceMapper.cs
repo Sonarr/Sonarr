@@ -18,12 +18,14 @@ namespace Sonarr.Http.Frontend.Mappers
             _configFileProvider = configFileProvider;
         }
 
-        public override string Map(string resourceUrl)
+        protected override string FolderPath => Path.Combine(_appFolderInfo.StartUpFolder, _configFileProvider.UiFolder);
+
+        protected override string MapPath(string resourceUrl)
         {
             var path = resourceUrl.Replace('/', Path.DirectorySeparatorChar);
             path = path.Trim(Path.DirectorySeparatorChar);
 
-            return Path.Combine(_appFolderInfo.StartUpFolder, _configFileProvider.UiFolder, path);
+            return Path.Combine(FolderPath, path);
         }
 
         public override bool CanHandle(string resourceUrl)

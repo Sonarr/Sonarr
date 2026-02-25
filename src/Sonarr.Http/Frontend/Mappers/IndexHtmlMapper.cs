@@ -9,6 +9,7 @@ namespace Sonarr.Http.Frontend.Mappers
 {
     public class IndexHtmlMapper : HtmlMapperBase
     {
+        private readonly IAppFolderInfo _appFolderInfo;
         private readonly IConfigFileProvider _configFileProvider;
 
         public IndexHtmlMapper(IAppFolderInfo appFolderInfo,
@@ -16,15 +17,16 @@ namespace Sonarr.Http.Frontend.Mappers
                                IConfigFileProvider configFileProvider,
                                Lazy<ICacheBreakerProvider> cacheBreakProviderFactory,
                                Logger logger)
-            : base(diskProvider, cacheBreakProviderFactory, logger)
+            : base(diskProvider, configFileProvider, cacheBreakProviderFactory, logger)
         {
+            _appFolderInfo = appFolderInfo;
             _configFileProvider = configFileProvider;
-
-            HtmlPath = Path.Combine(appFolderInfo.StartUpFolder, _configFileProvider.UiFolder, "index.html");
-            UrlBase = configFileProvider.UrlBase;
         }
 
-        public override string Map(string resourceUrl)
+        protected override string FolderPath => Path.Combine(_appFolderInfo.StartUpFolder, _configFileProvider.UiFolder);
+        protected override string HtmlPath => Path.Combine(FolderPath, "index.html");
+
+        protected override string MapPath(string resourceUrl)
         {
             return HtmlPath;
         }

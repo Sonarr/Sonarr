@@ -22,7 +22,9 @@ namespace Sonarr.Http.Frontend.Mappers
             _diskProvider = diskProvider;
         }
 
-        public override string Map(string resourceUrl)
+        protected override string FolderPath => Path.Combine(_appFolderInfo.GetAppDataPath(), "MediaCover");
+
+        protected override string MapPath(string resourceUrl)
         {
             var path = resourceUrl.Replace('/', Path.DirectorySeparatorChar);
             path = path.Trim(Path.DirectorySeparatorChar);
