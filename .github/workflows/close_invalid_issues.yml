@@ -1,0 +1,26 @@
+name: Close issues without labels
+
+on:
+  issues:
+    types:
+      - opened
+      - reopened
+
+jobs:
+  close-issue:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          sparse-checkout: |
+            .github
+      - name: Close issue if no labels found
+        if: join(github.event.issue.labels) == ''
+        run: |
+          gh issue comment ${{ github.event.issue.number }} --body ":wave: @${{ github.event.issue.user.login }}, this issue was closed automatically because it was created without following an issue template. Please update the issue following the correct template for this issue. Once updated please reply to this issue so we can review and re-open. In the future, use the [issue templates](https://github.com/${{ github.repository }}/issues/new/choose) instead of creating your own."
+          gh issue close ${{ github.event.issue.number }} --reason "not planned"
+        env:
+          GH_TOKEN: ${{ github.token }}
