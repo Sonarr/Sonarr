@@ -34,6 +34,7 @@ function AddNewSeriesSearchResult({ series }: AddNewSeriesSearchResultProps) {
     overview,
     seriesType,
     images,
+    importListExclusion,
   } = series;
 
   const isExistingSeries = useExistingSeries(tvdbId);
@@ -97,6 +98,15 @@ function AddNewSeriesSearchResult({ series }: AddNewSeriesSearchResultProps) {
                   name={icons.CHECK_CIRCLE}
                   size={36}
                   title={translate('AlreadyInYourLibrary')}
+                />
+              ) : null}
+
+              {importListExclusion ? (
+                <Icon
+                  className={styles.importListExclusionIcon}
+                  name={icons.DANGER}
+                  size={36}
+                  title={translate('SeriesInImportListExclusions')}
                 />
               ) : null}
 

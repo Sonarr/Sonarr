@@ -78,6 +78,7 @@
   "AllSeriesInRootFolderHaveBeenImported": "All series in {path} have been imported",
   "AllTitles": "All Titles",
   "AlreadyInYourLibrary": "Already in your library",
+  "SeriesInImportListExclusions": "Series is in Import List Exclusions",
   "AlternateTitles": "Alternate Titles",
   "Always": "Always",
   "AnEpisodeIsDownloading": "An Episode is downloading",

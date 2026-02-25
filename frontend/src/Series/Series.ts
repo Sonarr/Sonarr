@@ -103,6 +103,7 @@ interface Series extends ModelBase {
   useSceneNumbering: boolean;
   year: number;
   addOptions: SeriesAddOptions;
+  importListExclusion: boolean;
 }
 
 export default Series;
