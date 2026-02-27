@@ -102,8 +102,8 @@ interface Series extends ModelBase {
   tmdbId: number;
   useSceneNumbering: boolean;
   year: number;
+  isExcluded: boolean;
   addOptions: SeriesAddOptions;
-  importListExclusion: boolean;
 }
 
 export default Series;

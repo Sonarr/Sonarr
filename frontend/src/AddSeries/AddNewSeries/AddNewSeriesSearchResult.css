@@ -97,7 +97,7 @@
   pointer-events: all;
 }
 
-.importListExclusionIcon {
+.excludedIcon {
   margin-left: 10px;
   color: var(--dangerColor);
   pointer-events: all;

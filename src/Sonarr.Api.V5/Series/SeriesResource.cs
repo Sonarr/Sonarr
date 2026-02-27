@@ -1,8 +1,10 @@
+using System.Text.Json.Serialization;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.MediaCover;
 using NzbDrone.Core.Tv;
 using Sonarr.Http.REST;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Sonarr.Api.V5.Series;
 
@@ -53,7 +55,9 @@ public class SeriesResource : RestResource
     public Ratings? Ratings { get; set; }
     public SeriesStatisticsResource? Statistics { get; set; }
     public bool? EpisodesChanged { get; set; }
-    public bool ImportListExclusion { get; set; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    [SwaggerIgnore]
+    public bool? IsExcluded { get; set; }
 }
 
 public static class SeriesResourceMapper

@@ -3,9 +3,9 @@
 interface CssExports {
   'alreadyExistsIcon': string;
   'content': string;
+  'excludedIcon': string;
   'genres': string;
   'icons': string;
-  'importListExclusionIcon': string;
   'network': string;
   'originalLanguageName': string;
   'overlay': string;

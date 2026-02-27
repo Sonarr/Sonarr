@@ -48,7 +48,7 @@ public class SeriesLookupController : Controller
 
             resource.Folder = _fileNameBuilder.GetSeriesFolder(currentSeries);
             resource.Statistics = new SeriesStatistics().ToResource(resource.Seasons);
-            resource.ImportListExclusion = _importListExclusionService.FindByTvdbId(currentSeries.TvdbId) is not null;
+            resource.IsExcluded = _importListExclusionService.FindByTvdbId(currentSeries.TvdbId) is not null;
 
             yield return resource;
         }
