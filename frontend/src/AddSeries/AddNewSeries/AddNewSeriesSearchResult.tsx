@@ -34,7 +34,7 @@ function AddNewSeriesSearchResult({ series }: AddNewSeriesSearchResultProps) {
     overview,
     seriesType,
     images,
-    isExcluded,
+    isExcluded = false,
   } = series;
 
   const isExistingSeries = useExistingSeries(tvdbId);
