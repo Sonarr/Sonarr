@@ -1,4 +1,6 @@
 .links {
+  display: flex;
+  flex-wrap: wrap;
   margin: 0;
 }
 
@@ -9,12 +11,22 @@
 .linkLabel {
   composes: label from '~Components/Label.css';
 
-  cursor: pointer;
+  margin: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.linkBlock {
+  display: flex;
+  margin: 3px;
 }
 
 @media only screen and (max-width: $breakpointExtraSmall) {
   .links {
-    display: flex;
     flex-flow: column wrap;
   }
 }

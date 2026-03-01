@@ -8,6 +8,7 @@ import styles from './ClipboardButton.css';
 
 export interface ClipboardButtonProps extends Omit<ButtonProps, 'children'> {
   value: string;
+  label?: string | number;
 }
 
 export type ClipboardState = 'success' | 'error' | null;
@@ -15,6 +16,7 @@ export type ClipboardState = 'success' | 'error' | null;
 export default function ClipboardButton({
   id,
   value,
+  label,
   className = styles.button,
   ...otherProps
 }: ClipboardButtonProps) {
@@ -68,6 +70,7 @@ export default function ClipboardButton({
         ) : null}
 
         <span className={styles.clipboardIconContainer}>
+          {label ? <span className={styles.buttonText}>{label}</span> : null}
           <Icon name={icons.CLIPBOARD} />
         </span>
       </span>

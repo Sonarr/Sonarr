@@ -2,6 +2,7 @@
 // Please do not change this file!
 interface CssExports {
   'button': string;
+  'buttonText': string;
   'clipboardIconContainer': string;
   'showStateIcon': string;
   'stateIconContainer': string;
