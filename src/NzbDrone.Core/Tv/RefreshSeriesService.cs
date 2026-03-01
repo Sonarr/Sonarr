@@ -5,7 +5,6 @@ using System.Linq;
 using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Instrumentation.Extensions;
-using NzbDrone.Core.AutoTagging;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Exceptions;
 using NzbDrone.Core.MediaFiles;
@@ -27,7 +26,7 @@ namespace NzbDrone.Core.Tv
         private readonly IDiskScanService _diskScanService;
         private readonly ICheckIfSeriesShouldBeRefreshed _checkIfSeriesShouldBeRefreshed;
         private readonly IConfigService _configService;
-        private readonly IAutoTaggingService _autoTaggingService;
+        private readonly ICommandResultReporter _commandResultReporter;
         private readonly Logger _logger;
 
         public RefreshSeriesService(IProvideSeriesInfo seriesInfo,
@@ -37,7 +36,7 @@ namespace NzbDrone.Core.Tv
                                     IDiskScanService diskScanService,
                                     ICheckIfSeriesShouldBeRefreshed checkIfSeriesShouldBeRefreshed,
                                     IConfigService configService,
-                                    IAutoTaggingService autoTaggingService,
+                                    ICommandResultReporter commandResultReporter,
                                     Logger logger)
         {
             _seriesInfo = seriesInfo;
@@ -47,7 +46,7 @@ namespace NzbDrone.Core.Tv
             _diskScanService = diskScanService;
             _checkIfSeriesShouldBeRefreshed = checkIfSeriesShouldBeRefreshed;
             _configService = configService;
-            _autoTaggingService = autoTaggingService;
+            _commandResultReporter = commandResultReporter;
             _logger = logger;
         }
 
@@ -229,13 +228,20 @@ namespace NzbDrone.Core.Tv
                     catch (SeriesNotFoundException)
                     {
                         _logger.Error("Series '{0}' (tvdbid {1}) was not found, it may have been removed from TheTVDB.", series.Title, series.TvdbId);
+
+                        // Mark the result as indeterminate so it's not marked as a full success,
+                        // // but we can still process other series if needed.
+                        _commandResultReporter.Report(CommandResult.Indeterminate);
                     }
                     catch (Exception e)
                     {
                         _logger.Error(e, "Couldn't refresh info for {0}", series);
                         UpdateTags(series);
                         RescanSeries(series, isNew, trigger);
-                        throw;
+
+                        // Mark the result as indeterminate so it's not marked as a full success,
+                        // but we can still process other series if needed.
+                        _commandResultReporter.Report(CommandResult.Indeterminate);
                     }
                 }
             }

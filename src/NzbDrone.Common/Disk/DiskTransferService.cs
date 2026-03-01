@@ -28,15 +28,15 @@ namespace NzbDrone.Common.Disk
 
         private string ResolveRealParentPath(string path)
         {
-            var parentPath = path.GetParentPath();
-            if (!_diskProvider.FolderExists(parentPath))
+            if (!_diskProvider.FolderExists(path.GetParentPath()))
             {
                 return path;
             }
 
+            var cleanPath = path.GetCleanPath();
+            var parentPath = cleanPath.GetParentPath();
             var realParentPath = parentPath.GetActualCasing();
-
-            var partialChildPath = path.Substring(parentPath.Length);
+            var partialChildPath = cleanPath.Substring(parentPath.Length);
 
             return realParentPath + partialChildPath;
         }
@@ -340,41 +340,15 @@ namespace NzbDrone.Common.Disk
             var targetDriveFormat = targetMount?.DriveFormat ?? string.Empty;
 
             var isCifs = targetDriveFormat == "cifs";
-            var isBtrfs = sourceDriveFormat == "btrfs" && targetDriveFormat == "btrfs";
-            var isZfs = sourceDriveFormat == "zfs" && targetDriveFormat == "zfs";
 
             if (mode.HasFlag(TransferMode.Copy))
             {
-                if (isBtrfs || isZfs)
-                {
-                    if (_diskProvider.TryCreateRefLink(sourcePath, targetPath))
-                    {
-                        return TransferMode.Copy;
-                    }
-                }
-
                 TryCopyFileVerified(sourcePath, targetPath, originalSize);
                 return TransferMode.Copy;
             }
 
             if (mode.HasFlag(TransferMode.Move))
             {
-                if (isBtrfs || isZfs)
-                {
-                    if (isSameMount && _diskProvider.TryRenameFile(sourcePath, targetPath))
-                    {
-                        _logger.Trace("Renamed [{0}] to [{1}].", sourcePath, targetPath);
-                        return TransferMode.Move;
-                    }
-
-                    if (_diskProvider.TryCreateRefLink(sourcePath, targetPath))
-                    {
-                        _logger.Trace("Reflink successful, deleting source [{0}].", sourcePath);
-                        _diskProvider.DeleteFile(sourcePath);
-                        return TransferMode.Move;
-                    }
-                }
-
                 if (isCifs && !isSameMount)
                 {
                     _logger.Trace("On cifs mount. Starting verified copy [{0}] to [{1}].", sourcePath, targetPath);

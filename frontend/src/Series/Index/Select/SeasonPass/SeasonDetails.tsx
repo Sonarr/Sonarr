@@ -19,12 +19,7 @@ function SeasonDetails(props: SeasonDetailsProps) {
   return (
     <div className={styles.seasons}>
       {latestSeasons.map((season) => {
-        const {
-          seasonNumber,
-          monitored,
-          statistics,
-          isSaving = false,
-        } = season;
+        const { seasonNumber, monitored, statistics } = season;
 
         return (
           <SeasonPassSeason
@@ -33,7 +28,6 @@ function SeasonDetails(props: SeasonDetailsProps) {
             seasonNumber={seasonNumber}
             monitored={monitored}
             statistics={statistics}
-            isSaving={isSaving}
           />
         );
       })}

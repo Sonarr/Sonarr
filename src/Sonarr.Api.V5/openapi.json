@@ -344,7 +344,7 @@
             }
           },
           {
-            "name": "unmonitored",
+            "name": "includeUnmonitored",
             "in": "query",
             "schema": {
               "type": "boolean",
@@ -352,27 +352,11 @@
             }
           },
           {
-            "name": "includeSeries",
+            "name": "includeSpecials",
             "in": "query",
             "schema": {
               "type": "boolean",
-              "default": false
-            }
-          },
-          {
-            "name": "includeEpisodeFile",
-            "in": "query",
-            "schema": {
-              "type": "boolean",
-              "default": false
-            }
-          },
-          {
-            "name": "includeEpisodeImages",
-            "in": "query",
-            "schema": {
-              "type": "boolean",
-              "default": false
+              "default": true
             }
           },
           {
@@ -381,6 +365,16 @@
             "schema": {
               "type": "string",
               "default": ""
+            }
+          },
+          {
+            "name": "includeSubresources",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/CalendarSubresource"
+              }
             }
           }
         ],
@@ -486,8 +480,365 @@
               "type": "boolean",
               "default": false
             }
+          },
+          {
+            "name": "includeSpecials",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
           }
         ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v5/command": {
+      "post": {
+        "tags": [
+          "Command"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CommandResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommandResource"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Command"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CommandResource"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/command/{id}": {
+      "delete": {
+        "tags": [
+          "Command"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Command"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommandResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/connection": {
+      "get": {
+        "tags": [
+          "Connection"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ConnectionResource"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Connection"
+        ],
+        "parameters": [
+          {
+            "name": "forceSave",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConnectionResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConnectionResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/connection/{id}": {
+      "put": {
+        "tags": [
+          "Connection"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "forceSave",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConnectionResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConnectionResource"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Connection"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Connection"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConnectionResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/connection/schema": {
+      "get": {
+        "tags": [
+          "Connection"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ConnectionResource"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/connection/test": {
+      "post": {
+        "tags": [
+          "Connection"
+        ],
+        "parameters": [
+          {
+            "name": "forceTest",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConnectionResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v5/connection/testall": {
+      "post": {
+        "tags": [
+          "Connection"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v5/connection/action/{name}": {
+      "post": {
+        "tags": [
+          "Connection"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConnectionResource"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "OK"
@@ -689,35 +1040,21 @@
             }
           },
           {
-            "name": "includeSeries",
-            "in": "query",
-            "schema": {
-              "type": "boolean",
-              "default": false
-            }
-          },
-          {
-            "name": "includeEpisodeFile",
-            "in": "query",
-            "schema": {
-              "type": "boolean",
-              "default": false
-            }
-          },
-          {
-            "name": "includeImages",
-            "in": "query",
-            "schema": {
-              "type": "boolean",
-              "default": false
-            }
-          },
-          {
             "name": "monitored",
             "in": "query",
             "schema": {
               "type": "boolean",
               "default": true
+            }
+          },
+          {
+            "name": "includeSubresources",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/CutoffSubresource"
+              }
             }
           }
         ],
@@ -829,27 +1166,13 @@
             }
           },
           {
-            "name": "includeSeries",
+            "name": "includeSubresources",
             "in": "query",
             "schema": {
-              "type": "boolean",
-              "default": false
-            }
-          },
-          {
-            "name": "includeEpisodeFile",
-            "in": "query",
-            "schema": {
-              "type": "boolean",
-              "default": false
-            }
-          },
-          {
-            "name": "includeImages",
-            "in": "query",
-            "schema": {
-              "type": "boolean",
-              "default": false
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/EpisodeSubresource"
+              }
             }
           }
         ],
@@ -954,11 +1277,13 @@
         ],
         "parameters": [
           {
-            "name": "includeImages",
+            "name": "includeSubresources",
             "in": "query",
             "schema": {
-              "type": "boolean",
-              "default": false
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/EpisodeSubresource"
+              }
             }
           }
         ],
@@ -1301,20 +1626,6 @@
             }
           },
           {
-            "name": "includeSeries",
-            "in": "query",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "includeEpisode",
-            "in": "query",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
             "name": "eventType",
             "in": "query",
             "schema": {
@@ -1372,6 +1683,16 @@
                 "format": "int32"
               }
             }
+          },
+          {
+            "name": "includeSubresources",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/HistorySubresource"
+              }
+            }
           }
         ],
         "responses": {
@@ -1410,19 +1731,13 @@
             }
           },
           {
-            "name": "includeSeries",
+            "name": "includeSubresources",
             "in": "query",
             "schema": {
-              "type": "boolean",
-              "default": false
-            }
-          },
-          {
-            "name": "includeEpisode",
-            "in": "query",
-            "schema": {
-              "type": "boolean",
-              "default": false
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/HistorySubresource"
+              }
             }
           }
         ],
@@ -1465,19 +1780,13 @@
             }
           },
           {
-            "name": "includeSeries",
+            "name": "includeSubresources",
             "in": "query",
             "schema": {
-              "type": "boolean",
-              "default": false
-            }
-          },
-          {
-            "name": "includeEpisode",
-            "in": "query",
-            "schema": {
-              "type": "boolean",
-              "default": false
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/HistorySubresource"
+              }
             }
           }
         ],
@@ -1528,19 +1837,13 @@
             }
           },
           {
-            "name": "includeSeries",
+            "name": "includeSubresources",
             "in": "query",
             "schema": {
-              "type": "boolean",
-              "default": false
-            }
-          },
-          {
-            "name": "includeEpisode",
-            "in": "query",
-            "schema": {
-              "type": "boolean",
-              "default": false
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/HistorySubresource"
+              }
             }
           }
         ],
@@ -1583,19 +1886,13 @@
             }
           },
           {
-            "name": "includeSeries",
+            "name": "includeSubresources",
             "in": "query",
             "schema": {
-              "type": "boolean",
-              "default": false
-            }
-          },
-          {
-            "name": "includeEpisode",
-            "in": "query",
-            "schema": {
-              "type": "boolean",
-              "default": false
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/HistorySubresource"
+              }
             }
           }
         ],
@@ -1635,6 +1932,142 @@
         "responses": {
           "200": {
             "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v5/language": {
+      "get": {
+        "tags": [
+          "Language"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LanguageResource"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LanguageResource"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LanguageResource"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/language/{id}": {
+      "get": {
+        "tags": [
+          "Language"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LanguageResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/localization": {
+      "get": {
+        "tags": [
+          "Localization"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LocalizationResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/localization/language": {
+      "get": {
+        "tags": [
+          "Localization"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LocalizationLanguageResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/localization/{id}": {
+      "get": {
+        "tags": [
+          "Localization"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LocalizationResource"
+                }
+              }
+            }
           }
         }
       }
@@ -1744,6 +2177,464 @@
         }
       }
     },
+    "/api/v5/manualimport": {
+      "get": {
+        "tags": [
+          "ManualImport"
+        ],
+        "parameters": [
+          {
+            "name": "folder",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "downloadIds",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "seriesId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "seasonNumber",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "filterExistingFiles",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ManualImportResource"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "ManualImport"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ManualImportReprocessResource"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ManualImportResource"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ManualImportResource"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ManualImportResource"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/settings/mediamanagement": {
+      "get": {
+        "tags": [
+          "MediaManagementSettings"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MediaManagementSettingsResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/settings/mediamanagement/{id}": {
+      "put": {
+        "tags": [
+          "MediaManagementSettings"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MediaManagementSettingsResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/MediaManagementSettingsResource"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MediaManagementSettingsResource"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MediaManagementSettingsResource"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "MediaManagementSettings"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MediaManagementSettingsResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/metadata": {
+      "get": {
+        "tags": [
+          "Metadata"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MetadataResource"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Metadata"
+        ],
+        "parameters": [
+          {
+            "name": "forceSave",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MetadataResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MetadataResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/metadata/{id}": {
+      "put": {
+        "tags": [
+          "Metadata"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "forceSave",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MetadataResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MetadataResource"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Metadata"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Metadata"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MetadataResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/metadata/schema": {
+      "get": {
+        "tags": [
+          "Metadata"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MetadataResource"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/metadata/test": {
+      "post": {
+        "tags": [
+          "Metadata"
+        ],
+        "parameters": [
+          {
+            "name": "forceTest",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MetadataResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v5/metadata/testall": {
+      "post": {
+        "tags": [
+          "Metadata"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v5/metadata/action/{name}": {
+      "post": {
+        "tags": [
+          "Metadata"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MetadataResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/v5/wanted/missing": {
       "get": {
         "tags": [
@@ -1783,27 +2674,21 @@
             }
           },
           {
-            "name": "includeSeries",
-            "in": "query",
-            "schema": {
-              "type": "boolean",
-              "default": false
-            }
-          },
-          {
-            "name": "includeImages",
-            "in": "query",
-            "schema": {
-              "type": "boolean",
-              "default": false
-            }
-          },
-          {
             "name": "monitored",
             "in": "query",
             "schema": {
               "type": "boolean",
               "default": true
+            }
+          },
+          {
+            "name": "includeSubresources",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/MissingSubresource"
+              }
             }
           }
         ],
@@ -1847,6 +2732,229 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/api/v5/settings/naming": {
+      "get": {
+        "tags": [
+          "NamingSettings"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/NamingSettingsResource"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NamingSettingsResource"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NamingSettingsResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/settings/naming/{id}": {
+      "put": {
+        "tags": [
+          "NamingSettings"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NamingSettingsResource"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NamingSettingsResource"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/NamingSettingsResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/NamingSettingsResource"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NamingSettingsResource"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NamingSettingsResource"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "NamingSettings"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NamingSettingsResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/settings/naming/examples": {
+      "get": {
+        "tags": [
+          "NamingSettings"
+        ],
+        "parameters": [
+          {
+            "name": "renameEpisodes",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "replaceIllegalCharacters",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "colonReplacementFormat",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "customColonReplacementFormat",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "multiEpisodeStyle",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "standardEpisodeFormat",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "dailyEpisodeFormat",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "animeEpisodeFormat",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "seriesFolderFormat",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "seasonFolderFormat",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "specialsFolderFormat",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "resourceName",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -1915,6 +3023,352 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/PingResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/qualitydefinition/{id}": {
+      "put": {
+        "tags": [
+          "QualityDefinition"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QualityDefinitionResource"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QualityDefinitionResource"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/QualityDefinitionResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/QualityDefinitionResource"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QualityDefinitionResource"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QualityDefinitionResource"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "QualityDefinition"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QualityDefinitionResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/qualitydefinition": {
+      "get": {
+        "tags": [
+          "QualityDefinition"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/QualityDefinitionResource"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/QualityDefinitionResource"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/QualityDefinitionResource"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "QualityDefinition"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QualityDefinitionResource"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QualityDefinitionResource"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/QualityDefinitionResource"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v5/qualityprofile": {
+      "post": {
+        "tags": [
+          "QualityProfile"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QualityProfileResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/QualityProfileResource"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QualityProfileResource"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QualityProfileResource"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "QualityProfile"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/QualityProfileResource"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/qualityprofile/{id}": {
+      "delete": {
+        "tags": [
+          "QualityProfile"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "QualityProfile"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QualityProfileResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/QualityProfileResource"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QualityProfileResource"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QualityProfileResource"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "QualityProfile"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QualityProfileResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/qualityprofile/schema": {
+      "get": {
+        "tags": [
+          "QualityProfileSchema"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/QualityProfileResource"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QualityProfileResource"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QualityProfileResource"
                 }
               }
             }
@@ -2099,23 +3553,7 @@
             "in": "query",
             "schema": {
               "type": "boolean",
-              "default": false
-            }
-          },
-          {
-            "name": "includeSeries",
-            "in": "query",
-            "schema": {
-              "type": "boolean",
-              "default": false
-            }
-          },
-          {
-            "name": "includeEpisodes",
-            "in": "query",
-            "schema": {
-              "type": "boolean",
-              "default": false
+              "default": true
             }
           },
           {
@@ -2165,6 +3603,16 @@
               "type": "array",
               "items": {
                 "$ref": "#/components/schemas/QueueStatus"
+              }
+            }
+          },
+          {
+            "name": "includeSubresources",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/QueueSubresource"
               }
             }
           }
@@ -2253,19 +3701,13 @@
             }
           },
           {
-            "name": "includeSeries",
+            "name": "includeSubresources",
             "in": "query",
             "schema": {
-              "type": "boolean",
-              "default": false
-            }
-          },
-          {
-            "name": "includeEpisodes",
-            "in": "query",
-            "schema": {
-              "type": "boolean",
-              "default": false
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/QueueSubresource"
+              }
             }
           }
         ],
@@ -2372,6 +3814,197 @@
         }
       }
     },
+    "/api/v5/releaseprofile": {
+      "post": {
+        "tags": [
+          "ReleaseProfile"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReleaseProfileResource"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReleaseProfileResource"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReleaseProfileResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReleaseProfileResource"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReleaseProfileResource"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReleaseProfileResource"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "ReleaseProfile"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ReleaseProfileResource"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ReleaseProfileResource"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ReleaseProfileResource"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/releaseprofile/{id}": {
+      "delete": {
+        "tags": [
+          "ReleaseProfile"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "ReleaseProfile"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReleaseProfileResource"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReleaseProfileResource"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReleaseProfileResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReleaseProfileResource"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReleaseProfileResource"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReleaseProfileResource"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "ReleaseProfile"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReleaseProfileResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v5/release/push": {
       "post": {
         "tags": [
@@ -2433,6 +4066,246 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ReleasePushResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/remotepathmapping": {
+      "post": {
+        "tags": [
+          "RemotePathMapping"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RemotePathMappingResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/RemotePathMappingResource"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RemotePathMappingResource"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RemotePathMappingResource"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "RemotePathMapping"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RemotePathMappingResource"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/remotepathmapping/{id}": {
+      "delete": {
+        "tags": [
+          "RemotePathMapping"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "RemotePathMapping"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RemotePathMappingResource"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RemotePathMappingResource"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/RemotePathMappingResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/RemotePathMappingResource"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RemotePathMappingResource"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RemotePathMappingResource"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "RemotePathMapping"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RemotePathMappingResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/rename": {
+      "get": {
+        "tags": [
+          "RenameEpisode"
+        ],
+        "parameters": [
+          {
+            "name": "seriesId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "seasonNumber",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RenameEpisodeResource"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/rename/bulk": {
+      "get": {
+        "tags": [
+          "RenameEpisode"
+        ],
+        "parameters": [
+          {
+            "name": "seriesIds",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RenameEpisodeResource"
+                  }
                 }
               }
             }
@@ -2549,6 +4422,27 @@
         }
       }
     },
+    "/api/v5/seasonpass": {
+      "post": {
+        "tags": [
+          "SeasonPass"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SeasonPassResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/v5/series": {
       "get": {
         "tags": [
@@ -2564,11 +4458,13 @@
             }
           },
           {
-            "name": "includeSeasonImages",
+            "name": "includeSubresources",
             "in": "query",
             "schema": {
-              "type": "boolean",
-              "default": false
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/SeriesSubresource"
+              }
             }
           }
         ],
@@ -2631,11 +4527,13 @@
             }
           },
           {
-            "name": "includeSeasonImages",
+            "name": "includeSubresources",
             "in": "query",
             "schema": {
-              "type": "boolean",
-              "default": false
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/SeriesSubresource"
+              }
             }
           }
         ],
@@ -2734,6 +4632,105 @@
         }
       }
     },
+    "/api/v5/series/{id}/season": {
+      "put": {
+        "tags": [
+          "Series"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SeasonResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SeasonResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/series/editor": {
+      "put": {
+        "tags": [
+          "SeriesEditor"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SeriesEditorResource"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SeriesEditorResource"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SeriesEditorResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "SeriesEditor"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SeriesEditorResource"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SeriesEditorResource"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SeriesEditorResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/v5/series/{id}/folder": {
       "get": {
         "tags": [
@@ -2750,6 +4747,46 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v5/series/import": {
+      "post": {
+        "tags": [
+          "SeriesImport"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/SeriesResource"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/SeriesResource"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/SeriesResource"
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "OK"
@@ -3198,6 +5235,101 @@
         }
       }
     },
+    "/api/v5/settings/ui/{id}": {
+      "put": {
+        "tags": [
+          "UiSettings"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UiSettingsResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/UiSettingsResource"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UiSettingsResource"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UiSettingsResource"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "UiSettings"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UiSettingsResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/settings/ui": {
+      "get": {
+        "tags": [
+          "UiSettings"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UiSettingsResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v5/update": {
       "get": {
         "tags": [
@@ -3422,6 +5554,14 @@
         },
         "additionalProperties": false
       },
+      "ApplyTags": {
+        "enum": [
+          "add",
+          "remove",
+          "replace"
+        ],
+        "type": "string"
+      },
       "AuthenticationType": {
         "enum": [
           "none",
@@ -3594,6 +5734,331 @@
         },
         "additionalProperties": false
       },
+      "CalendarSubresource": {
+        "enum": [
+          "series",
+          "episodeFile",
+          "images"
+        ],
+        "type": "string"
+      },
+      "Command": {
+        "type": "object",
+        "properties": {
+          "sendUpdatesToClient": {
+            "type": "boolean"
+          },
+          "updateScheduledTask": {
+            "type": "boolean",
+            "readOnly": true
+          },
+          "completionMessage": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "requiresDiskAccess": {
+            "type": "boolean",
+            "readOnly": true
+          },
+          "isExclusive": {
+            "type": "boolean",
+            "readOnly": true
+          },
+          "isLongRunning": {
+            "type": "boolean",
+            "readOnly": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "lastExecutionTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "lastStartTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "trigger": {
+            "$ref": "#/components/schemas/CommandTrigger"
+          },
+          "suppressMessages": {
+            "type": "boolean"
+          },
+          "clientUserAgent": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CommandPriority": {
+        "enum": [
+          "normal",
+          "high",
+          "low"
+        ],
+        "type": "string"
+      },
+      "CommandResource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "commandName": {
+            "type": "string",
+            "nullable": true
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "body": {
+            "$ref": "#/components/schemas/Command"
+          },
+          "priority": {
+            "$ref": "#/components/schemas/CommandPriority"
+          },
+          "status": {
+            "$ref": "#/components/schemas/CommandStatus"
+          },
+          "result": {
+            "$ref": "#/components/schemas/CommandResult"
+          },
+          "queued": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "started": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "ended": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "duration": {
+            "type": "string",
+            "format": "date-span",
+            "nullable": true
+          },
+          "exception": {
+            "type": "string",
+            "nullable": true
+          },
+          "trigger": {
+            "$ref": "#/components/schemas/CommandTrigger"
+          },
+          "clientUserAgent": {
+            "type": "string",
+            "nullable": true
+          },
+          "stateChangeTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "sendUpdatesToClient": {
+            "type": "boolean"
+          },
+          "updateScheduledTask": {
+            "type": "boolean"
+          },
+          "lastExecutionTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CommandResult": {
+        "enum": [
+          "unknown",
+          "successful",
+          "unsuccessful",
+          "indeterminate"
+        ],
+        "type": "string"
+      },
+      "CommandStatus": {
+        "enum": [
+          "queued",
+          "started",
+          "completed",
+          "failed",
+          "aborted",
+          "cancelled",
+          "orphaned"
+        ],
+        "type": "string"
+      },
+      "CommandTrigger": {
+        "enum": [
+          "unspecified",
+          "manual",
+          "scheduled"
+        ],
+        "type": "string"
+      },
+      "ConnectionResource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Field"
+            },
+            "nullable": true
+          },
+          "implementationName": {
+            "type": "string",
+            "nullable": true
+          },
+          "implementation": {
+            "type": "string",
+            "nullable": true
+          },
+          "configContract": {
+            "type": "string",
+            "nullable": true
+          },
+          "infoLink": {
+            "type": "string",
+            "nullable": true
+          },
+          "message": {
+            "$ref": "#/components/schemas/ProviderMessage"
+          },
+          "tags": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          },
+          "presets": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ConnectionResource"
+            },
+            "nullable": true
+          },
+          "link": {
+            "type": "string",
+            "nullable": true
+          },
+          "onGrab": {
+            "type": "boolean"
+          },
+          "onDownload": {
+            "type": "boolean"
+          },
+          "onUpgrade": {
+            "type": "boolean"
+          },
+          "onImportComplete": {
+            "type": "boolean"
+          },
+          "onRename": {
+            "type": "boolean"
+          },
+          "onSeriesAdd": {
+            "type": "boolean"
+          },
+          "onSeriesDelete": {
+            "type": "boolean"
+          },
+          "onEpisodeFileDelete": {
+            "type": "boolean"
+          },
+          "onEpisodeFileDeleteForUpgrade": {
+            "type": "boolean"
+          },
+          "onHealthIssue": {
+            "type": "boolean"
+          },
+          "includeHealthWarnings": {
+            "type": "boolean"
+          },
+          "onHealthRestored": {
+            "type": "boolean"
+          },
+          "onApplicationUpdate": {
+            "type": "boolean"
+          },
+          "onManualInteractionRequired": {
+            "type": "boolean"
+          },
+          "supportsOnGrab": {
+            "type": "boolean"
+          },
+          "supportsOnDownload": {
+            "type": "boolean"
+          },
+          "supportsOnUpgrade": {
+            "type": "boolean"
+          },
+          "supportsOnImportComplete": {
+            "type": "boolean"
+          },
+          "supportsOnRename": {
+            "type": "boolean"
+          },
+          "supportsOnSeriesAdd": {
+            "type": "boolean"
+          },
+          "supportsOnSeriesDelete": {
+            "type": "boolean"
+          },
+          "supportsOnEpisodeFileDelete": {
+            "type": "boolean"
+          },
+          "supportsOnEpisodeFileDeleteForUpgrade": {
+            "type": "boolean"
+          },
+          "supportsOnHealthIssue": {
+            "type": "boolean"
+          },
+          "supportsOnHealthRestored": {
+            "type": "boolean"
+          },
+          "supportsOnApplicationUpdate": {
+            "type": "boolean"
+          },
+          "supportsOnManualInteractionRequired": {
+            "type": "boolean"
+          },
+          "testCommand": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "CustomFilterResource": {
         "type": "object",
         "properties": {
@@ -3700,6 +6165,14 @@
           }
         },
         "additionalProperties": false
+      },
+      "CutoffSubresource": {
+        "enum": [
+          "series",
+          "episodeFile",
+          "images"
+        ],
+        "type": "string"
       },
       "DatabaseType": {
         "enum": [
@@ -3821,7 +6294,8 @@
           "diskCustomFormatScore",
           "diskCustomFormatScoreIncrement",
           "diskUpgradesNotAllowed",
-          "diskNotUpgrade"
+          "diskNotUpgrade",
+          "beforeAirDate"
         ],
         "type": "string"
       },
@@ -4089,6 +6563,22 @@
         },
         "additionalProperties": false
       },
+      "EpisodeSubresource": {
+        "enum": [
+          "series",
+          "episodeFile",
+          "images"
+        ],
+        "type": "string"
+      },
+      "EpisodeTitleRequiredType": {
+        "enum": [
+          "always",
+          "bulkSeasonReleases",
+          "never"
+        ],
+        "type": "string"
+      },
       "EpisodesMonitoredResource": {
         "required": [
           "episodeIds"
@@ -4181,6 +6671,14 @@
           }
         },
         "additionalProperties": false
+      },
+      "FileDateType": {
+        "enum": [
+          "none",
+          "localAirDate",
+          "utcAirDate"
+        ],
+        "type": "string"
       },
       "HealthCheckReason": {
         "enum": [
@@ -4394,6 +6892,69 @@
         },
         "additionalProperties": false
       },
+      "HistorySubresource": {
+        "enum": [
+          "series",
+          "episode"
+        ],
+        "type": "string"
+      },
+      "ImportRejectionReason": {
+        "enum": [
+          "unknown",
+          "fileLocked",
+          "unknownSeries",
+          "dangerousFile",
+          "executableFile",
+          "userRejectedExtension",
+          "archiveFile",
+          "seriesFolder",
+          "invalidFilePath",
+          "unsupportedExtension",
+          "partialSeason",
+          "seasonExtra",
+          "invalidSeasonOrEpisode",
+          "unableToParse",
+          "error",
+          "decisionError",
+          "noEpisodes",
+          "missingAbsoluteEpisodeNumber",
+          "episodeAlreadyImported",
+          "titleMissing",
+          "titleTba",
+          "minimumFreeSpace",
+          "fullSeason",
+          "noAudio",
+          "episodeUnexpected",
+          "episodeNotFoundInRelease",
+          "sample",
+          "sampleIndeterminate",
+          "unpacking",
+          "existingFileHasMoreEpisodes",
+          "splitEpisode",
+          "unverifiedSceneMapping",
+          "notQualityUpgrade",
+          "notRevisionUpgrade",
+          "notCustomFormatUpgrade"
+        ],
+        "type": "string"
+      },
+      "ImportRejectionResource": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "$ref": "#/components/schemas/ImportRejectionReason"
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "$ref": "#/components/schemas/RejectionType"
+          }
+        },
+        "additionalProperties": false
+      },
       "Language": {
         "type": "object",
         "properties": {
@@ -4403,6 +6964,52 @@
           },
           "name": {
             "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "LanguageResource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "nameLower": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "LocalizationLanguageResource": {
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "LocalizationResource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "strings": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
             "nullable": true
           }
         },
@@ -4511,6 +7118,184 @@
         },
         "additionalProperties": false
       },
+      "ManualImportReprocessResource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "path": {
+            "type": "string",
+            "nullable": true
+          },
+          "seriesId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "seasonNumber": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "episodes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EpisodeResource"
+            },
+            "nullable": true
+          },
+          "episodeIds": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          },
+          "quality": {
+            "$ref": "#/components/schemas/QualityModel"
+          },
+          "languages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Language"
+            },
+            "nullable": true
+          },
+          "releaseGroup": {
+            "type": "string",
+            "nullable": true
+          },
+          "downloadId": {
+            "type": "string",
+            "nullable": true
+          },
+          "customFormats": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CustomFormatResource"
+            },
+            "nullable": true
+          },
+          "customFormatScore": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "indexerFlags": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "releaseType": {
+            "$ref": "#/components/schemas/ReleaseType"
+          },
+          "rejections": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ImportRejectionResource"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ManualImportResource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "path": {
+            "type": "string",
+            "nullable": true
+          },
+          "relativePath": {
+            "type": "string",
+            "nullable": true
+          },
+          "folderName": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "size": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "series": {
+            "$ref": "#/components/schemas/SeriesResource"
+          },
+          "seasonNumber": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "episodes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EpisodeResource"
+            },
+            "nullable": true
+          },
+          "episodeFileId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "releaseGroup": {
+            "type": "string",
+            "nullable": true
+          },
+          "quality": {
+            "$ref": "#/components/schemas/QualityModel"
+          },
+          "languages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Language"
+            },
+            "nullable": true
+          },
+          "qualityWeight": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "downloadId": {
+            "type": "string",
+            "nullable": true
+          },
+          "customFormats": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CustomFormatResource"
+            },
+            "nullable": true
+          },
+          "customFormatScore": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "indexerFlags": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "releaseType": {
+            "$ref": "#/components/schemas/ReleaseType"
+          },
+          "rejections": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ImportRejectionResource"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "MediaCover": {
         "type": "object",
         "properties": {
@@ -4540,30 +7325,48 @@
         ],
         "type": "string"
       },
+      "MediaInfoAudioStreamResource": {
+        "type": "object",
+        "properties": {
+          "language": {
+            "type": "string",
+            "nullable": true
+          },
+          "codec": {
+            "type": "string",
+            "nullable": true
+          },
+          "codecId": {
+            "type": "string",
+            "nullable": true
+          },
+          "profile": {
+            "type": "string",
+            "nullable": true
+          },
+          "bitrate": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "channels": {
+            "type": "number",
+            "format": "double"
+          },
+          "channelPositions": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "MediaInfoResource": {
         "type": "object",
         "properties": {
           "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "audioBitrate": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "audioChannels": {
-            "type": "number",
-            "format": "double"
-          },
-          "audioCodec": {
-            "type": "string",
-            "nullable": true
-          },
-          "audioLanguages": {
-            "type": "string",
-            "nullable": true
-          },
-          "audioStreamCount": {
             "type": "integer",
             "format": "int32"
           },
@@ -4603,12 +7406,202 @@
             "type": "string",
             "nullable": true
           },
-          "subtitles": {
-            "type": "string",
+          "audioStreams": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MediaInfoAudioStreamResource"
+            },
+            "nullable": true
+          },
+          "subtitleStreams": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MediaInfoSubtitleStreamResource"
+            },
             "nullable": true
           }
         },
         "additionalProperties": false
+      },
+      "MediaInfoSubtitleStreamResource": {
+        "type": "object",
+        "properties": {
+          "language": {
+            "type": "string",
+            "nullable": true
+          },
+          "format": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "forced": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "hearingImpaired": {
+            "type": "boolean",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "MediaManagementSettingsResource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "autoUnmonitorPreviouslyDownloadedEpisodes": {
+            "type": "boolean"
+          },
+          "recycleBin": {
+            "type": "string",
+            "nullable": true
+          },
+          "recycleBinCleanupDays": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "downloadPropersAndRepacks": {
+            "$ref": "#/components/schemas/ProperDownloadTypes"
+          },
+          "createEmptySeriesFolders": {
+            "type": "boolean"
+          },
+          "deleteEmptyFolders": {
+            "type": "boolean"
+          },
+          "fileDate": {
+            "$ref": "#/components/schemas/FileDateType"
+          },
+          "rescanAfterRefresh": {
+            "$ref": "#/components/schemas/RescanAfterRefreshType"
+          },
+          "setPermissionsLinux": {
+            "type": "boolean"
+          },
+          "chmodFolder": {
+            "type": "string",
+            "nullable": true
+          },
+          "chownGroup": {
+            "type": "string",
+            "nullable": true
+          },
+          "episodeTitleRequired": {
+            "$ref": "#/components/schemas/EpisodeTitleRequiredType"
+          },
+          "skipFreeSpaceCheckWhenImporting": {
+            "type": "boolean"
+          },
+          "minimumFreeSpaceWhenImporting": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "copyUsingHardlinks": {
+            "type": "boolean"
+          },
+          "useScriptImport": {
+            "type": "boolean"
+          },
+          "scriptImportPath": {
+            "type": "string",
+            "nullable": true
+          },
+          "importExtraFiles": {
+            "type": "boolean"
+          },
+          "extraFileExtensions": {
+            "type": "string",
+            "nullable": true
+          },
+          "enableMediaInfo": {
+            "type": "boolean"
+          },
+          "userRejectedExtensions": {
+            "type": "string",
+            "nullable": true
+          },
+          "seasonPackUpgrade": {
+            "$ref": "#/components/schemas/SeasonPackUpgradeType"
+          },
+          "seasonPackUpgradeThreshold": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "MetadataResource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Field"
+            },
+            "nullable": true
+          },
+          "implementationName": {
+            "type": "string",
+            "nullable": true
+          },
+          "implementation": {
+            "type": "string",
+            "nullable": true
+          },
+          "configContract": {
+            "type": "string",
+            "nullable": true
+          },
+          "infoLink": {
+            "type": "string",
+            "nullable": true
+          },
+          "message": {
+            "$ref": "#/components/schemas/ProviderMessage"
+          },
+          "tags": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          },
+          "presets": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MetadataResource"
+            },
+            "nullable": true
+          },
+          "enable": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "MissingSubresource": {
+        "enum": [
+          "series",
+          "images"
+        ],
+        "type": "string"
       },
       "MonitorTypes": {
         "enum": [
@@ -4628,6 +7621,67 @@
           "skip"
         ],
         "type": "string"
+      },
+      "MonitoringOptionsResource": {
+        "type": "object",
+        "properties": {
+          "monitor": {
+            "$ref": "#/components/schemas/MonitorTypes"
+          }
+        },
+        "additionalProperties": false
+      },
+      "NamingSettingsResource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "renameEpisodes": {
+            "type": "boolean"
+          },
+          "replaceIllegalCharacters": {
+            "type": "boolean"
+          },
+          "colonReplacementFormat": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "customColonReplacementFormat": {
+            "type": "string",
+            "nullable": true
+          },
+          "multiEpisodeStyle": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "standardEpisodeFormat": {
+            "type": "string",
+            "nullable": true
+          },
+          "dailyEpisodeFormat": {
+            "type": "string",
+            "nullable": true
+          },
+          "animeEpisodeFormat": {
+            "type": "string",
+            "nullable": true
+          },
+          "seriesFolderFormat": {
+            "type": "string",
+            "nullable": true
+          },
+          "seasonFolderFormat": {
+            "type": "string",
+            "nullable": true
+          },
+          "specialsFolderFormat": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
       },
       "NewItemMonitorTypes": {
         "enum": [
@@ -4914,6 +7968,57 @@
         ],
         "type": "string"
       },
+      "ProfileFormatItemResource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "format": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "score": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProperDownloadTypes": {
+        "enum": [
+          "preferAndUpgrade",
+          "doNotUpgrade",
+          "doNotPrefer"
+        ],
+        "type": "string"
+      },
+      "ProviderMessage": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "$ref": "#/components/schemas/ProviderMessageType"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProviderMessageType": {
+        "enum": [
+          "info",
+          "warning",
+          "error"
+        ],
+        "type": "string"
+      },
       "Quality": {
         "type": "object",
         "properties": {
@@ -4935,6 +8040,27 @@
         },
         "additionalProperties": false
       },
+      "QualityDefinitionResource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "quality": {
+            "$ref": "#/components/schemas/Quality"
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "weight": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
       "QualityModel": {
         "type": "object",
         "properties": {
@@ -4943,6 +8069,95 @@
           },
           "revision": {
             "$ref": "#/components/schemas/Revision"
+          }
+        },
+        "additionalProperties": false
+      },
+      "QualityProfileQualityItemResource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "quality": {
+            "$ref": "#/components/schemas/Quality"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QualityProfileQualityItemResource"
+            },
+            "nullable": true
+          },
+          "allowed": {
+            "type": "boolean"
+          },
+          "minSize": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "maxSize": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "preferredSize": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "QualityProfileResource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "upgradeAllowed": {
+            "type": "boolean"
+          },
+          "cutoff": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QualityProfileQualityItemResource"
+            },
+            "nullable": true
+          },
+          "minFormatScore": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "cutoffFormatScore": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "minUpgradeFormatScore": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "formatItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProfileFormatItemResource"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -5196,6 +8411,13 @@
         },
         "additionalProperties": false
       },
+      "QueueSubresource": {
+        "enum": [
+          "series",
+          "episodes"
+        ],
+        "type": "string"
+      },
       "Ratings": {
         "type": "object",
         "properties": {
@@ -5404,6 +8626,70 @@
         },
         "additionalProperties": false
       },
+      "ReleaseProfileResource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "required": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "ignored": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "airDateRestriction": {
+            "type": "boolean"
+          },
+          "airDateGracePeriod": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "indexerIds": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          },
+          "tags": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          },
+          "excludedTags": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "ReleasePushResource": {
         "type": "object",
         "properties": {
@@ -5602,6 +8888,74 @@
         ],
         "type": "string"
       },
+      "RemotePathMappingResource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "host": {
+            "type": "string",
+            "nullable": true
+          },
+          "remotePath": {
+            "type": "string",
+            "nullable": true
+          },
+          "localPath": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "RenameEpisodeResource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "seriesId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "seasonNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "episodeNumbers": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          },
+          "episodeFileId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "existingPath": {
+            "type": "string",
+            "nullable": true
+          },
+          "newPath": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "RescanAfterRefreshType": {
+        "enum": [
+          "always",
+          "afterManual",
+          "never"
+        ],
+        "type": "string"
+      },
       "Revision": {
         "type": "object",
         "properties": {
@@ -5685,6 +9039,51 @@
         },
         "additionalProperties": false
       },
+      "SeasonPackUpgradeType": {
+        "enum": [
+          "all",
+          "threshold",
+          "any"
+        ],
+        "type": "string"
+      },
+      "SeasonPassResource": {
+        "type": "object",
+        "properties": {
+          "series": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SeasonPassSeriesResource"
+            },
+            "nullable": true
+          },
+          "monitoringOptions": {
+            "$ref": "#/components/schemas/MonitoringOptionsResource"
+          }
+        },
+        "additionalProperties": false
+      },
+      "SeasonPassSeriesResource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "monitored": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "seasons": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SeasonResource"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "SeasonResource": {
         "type": "object",
         "properties": {
@@ -5733,6 +9132,10 @@
             "type": "integer",
             "format": "int32"
           },
+          "monitoredEpisodeCount": {
+            "type": "integer",
+            "format": "int32"
+          },
           "sizeOnDisk": {
             "type": "integer",
             "format": "int64"
@@ -5770,6 +9173,63 @@
           "hint": {
             "type": "string",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SeriesEditorResource": {
+        "type": "object",
+        "properties": {
+          "seriesIds": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          },
+          "monitored": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "monitorNewItems": {
+            "$ref": "#/components/schemas/NewItemMonitorTypes"
+          },
+          "qualityProfileId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "seriesType": {
+            "$ref": "#/components/schemas/SeriesTypes"
+          },
+          "seasonFolder": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "rootFolderPath": {
+            "type": "string",
+            "nullable": true
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          },
+          "applyTags": {
+            "$ref": "#/components/schemas/ApplyTags"
+          },
+          "moveFiles": {
+            "type": "boolean"
+          },
+          "deleteFiles": {
+            "type": "boolean"
+          },
+          "addImportListExclusion": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -6004,6 +9464,10 @@
             "type": "integer",
             "format": "int32"
           },
+          "monitoredEpisodeCount": {
+            "type": "integer",
+            "format": "int32"
+          },
           "sizeOnDisk": {
             "type": "integer",
             "format": "int64"
@@ -6029,6 +9493,12 @@
           "ended",
           "upcoming",
           "deleted"
+        ],
+        "type": "string"
+      },
+      "SeriesSubresource": {
+        "enum": [
+          "seasonImages"
         ],
         "type": "string"
       },
@@ -6383,6 +9853,54 @@
         },
         "additionalProperties": false
       },
+      "UiSettingsResource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "firstDayOfWeek": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "calendarWeekColumnHeader": {
+            "type": "string",
+            "nullable": true
+          },
+          "shortDateFormat": {
+            "type": "string",
+            "nullable": true
+          },
+          "longDateFormat": {
+            "type": "string",
+            "nullable": true
+          },
+          "timeFormat": {
+            "type": "string",
+            "nullable": true
+          },
+          "timeZone": {
+            "type": "string",
+            "nullable": true
+          },
+          "showRelativeDates": {
+            "type": "boolean"
+          },
+          "enableColorImpairedMode": {
+            "type": "boolean"
+          },
+          "theme": {
+            "type": "string",
+            "nullable": true
+          },
+          "uiLanguage": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
       "UnmappedFolder": {
         "type": "object",
         "properties": {
@@ -6536,6 +10054,173 @@
     },
     {
       "apikey": [ ]
+    }
+  ],
+  "tags": [
+    {
+      "name": "ApiInfo"
+    },
+    {
+      "name": "Authentication"
+    },
+    {
+      "name": "StaticResource"
+    },
+    {
+      "name": "Backup"
+    },
+    {
+      "name": "Blocklist"
+    },
+    {
+      "name": "Calendar"
+    },
+    {
+      "name": "CalendarFeed"
+    },
+    {
+      "name": "Command"
+    },
+    {
+      "name": "Connection"
+    },
+    {
+      "name": "CustomFilter"
+    },
+    {
+      "name": "Cutoff"
+    },
+    {
+      "name": "DiskSpace"
+    },
+    {
+      "name": "Episode"
+    },
+    {
+      "name": "EpisodeFile"
+    },
+    {
+      "name": "FileSystem"
+    },
+    {
+      "name": "Health"
+    },
+    {
+      "name": "History"
+    },
+    {
+      "name": "Language"
+    },
+    {
+      "name": "Localization"
+    },
+    {
+      "name": "Log"
+    },
+    {
+      "name": "LogFile"
+    },
+    {
+      "name": "ManualImport"
+    },
+    {
+      "name": "MediaManagementSettings"
+    },
+    {
+      "name": "Metadata"
+    },
+    {
+      "name": "Missing"
+    },
+    {
+      "name": "NamingSettings"
+    },
+    {
+      "name": "Parse"
+    },
+    {
+      "name": "Ping"
+    },
+    {
+      "name": "QualityDefinition"
+    },
+    {
+      "name": "QualityProfile"
+    },
+    {
+      "name": "QualityProfileSchema"
+    },
+    {
+      "name": "Queue"
+    },
+    {
+      "name": "QueueAction"
+    },
+    {
+      "name": "QueueDetails"
+    },
+    {
+      "name": "QueueStatus"
+    },
+    {
+      "name": "Release"
+    },
+    {
+      "name": "ReleaseProfile"
+    },
+    {
+      "name": "ReleasePush"
+    },
+    {
+      "name": "RemotePathMapping"
+    },
+    {
+      "name": "RenameEpisode"
+    },
+    {
+      "name": "RootFolder"
+    },
+    {
+      "name": "SeasonPass"
+    },
+    {
+      "name": "Series"
+    },
+    {
+      "name": "SeriesEditor"
+    },
+    {
+      "name": "SeriesFolder"
+    },
+    {
+      "name": "SeriesImport"
+    },
+    {
+      "name": "SeriesLookup"
+    },
+    {
+      "name": "System"
+    },
+    {
+      "name": "Tag"
+    },
+    {
+      "name": "TagDetails"
+    },
+    {
+      "name": "Task"
+    },
+    {
+      "name": "UiSettings"
+    },
+    {
+      "name": "Update"
+    },
+    {
+      "name": "UpdateLogFile"
+    },
+    {
+      "name": "UpdateSettings"
     }
   ]
 }

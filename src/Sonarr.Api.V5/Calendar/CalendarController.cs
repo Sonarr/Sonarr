@@ -28,11 +28,11 @@ namespace Sonarr.Api.V5.Calendar
 
         [HttpGet]
         [Produces("application/json")]
-        public List<EpisodeResource> GetCalendar(DateTime? start, DateTime? end, bool unmonitored = false, bool includeSeries = false, bool includeEpisodeFile = false, bool includeEpisodeImages = false, string tags = "")
+        public List<EpisodeResource> GetCalendar(DateTime? start, DateTime? end, bool includeUnmonitored = false, bool includeSpecials = true, string tags = "", [FromQuery] CalendarSubresource[]? includeSubresources = null)
         {
             var startUse = start ?? DateTime.Today;
             var endUse = end ?? DateTime.Today.AddDays(2);
-            var episodes = _episodeService.EpisodesBetweenDates(startUse, endUse, unmonitored);
+            var episodes = _episodeService.EpisodesBetweenDates(startUse, endUse, includeUnmonitored, includeSpecials);
             var allSeries = _seriesService.GetAllSeries();
             var parsedTags = new List<int>();
             var result = new List<Episode>();
@@ -58,6 +58,10 @@ namespace Sonarr.Api.V5.Calendar
 
                 result.Add(episode);
             }
+
+            var includeSeries = includeSubresources.Contains(CalendarSubresource.Series);
+            var includeEpisodeFile = includeSubresources.Contains(CalendarSubresource.EpisodeFile);
+            var includeEpisodeImages = includeSubresources.Contains(CalendarSubresource.Images);
 
             var resources = MapToResource(result, includeSeries, includeEpisodeFile, includeEpisodeImages);
 

@@ -11,7 +11,7 @@ import EpisodeLanguages from 'Episode/EpisodeLanguages';
 import EpisodeQuality from 'Episode/EpisodeQuality';
 import { icons, kinds } from 'Helpers/Props';
 import SeriesTitleLink from 'Series/SeriesTitleLink';
-import useSeries from 'Series/useSeries';
+import { useSingleSeries } from 'Series/useSeries';
 import Blocklist from 'typings/Blocklist';
 import { SelectStateInputProps } from 'typings/props';
 import translate from 'Utilities/String/translate';
@@ -37,7 +37,7 @@ function BlocklistRow({
   source,
   columns,
 }: BlocklistRowProps) {
-  const series = useSeries(seriesId);
+  const series = useSingleSeries(seriesId);
   const { isRemoving, removeBlocklistItem } = useRemoveBlocklistItem(id);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
   const { toggleSelected, useIsSelected } = useSelect<Blocklist>();

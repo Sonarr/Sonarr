@@ -1,7 +1,7 @@
 import moment from 'moment';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import * as commandNames from 'Commands/commandNames';
+import CommandNames from 'Commands/CommandNames';
+import { useCommands, useExecuteCommand } from 'Commands/useCommands';
 import Alert from 'Components/Alert';
 import HeartRating from 'Components/HeartRating';
 import Icon from 'Components/Icon';
@@ -39,12 +39,11 @@ import { Image, Statistics } from 'Series/Series';
 import SeriesGenres from 'Series/SeriesGenres';
 import SeriesPoster from 'Series/SeriesPoster';
 import { getSeriesStatusDetails } from 'Series/SeriesStatus';
-import useSeries from 'Series/useSeries';
+import useSeries, {
+  useSingleSeries,
+  useToggleSeriesMonitored,
+} from 'Series/useSeries';
 import QualityProfileName from 'Settings/Profiles/Quality/QualityProfileName';
-import { executeCommand } from 'Store/Actions/commandActions';
-import { toggleSeriesMonitored } from 'Store/Actions/seriesActions';
-import createAllSeriesSelector from 'Store/Selectors/createAllSeriesSelector';
-import createCommandsSelector from 'Store/Selectors/createCommandsSelector';
 import sortByProp from 'Utilities/Array/sortByProp';
 import { findCommand, isCommandExecuting } from 'Utilities/Command';
 import formatBytes from 'Utilities/Number/formatBytes';
@@ -84,10 +83,12 @@ interface SeriesDetailsProps {
 }
 
 function SeriesDetails({ seriesId }: SeriesDetailsProps) {
-  const dispatch = useDispatch();
+  const executeCommand = useExecuteCommand();
 
-  const series = useSeries(seriesId);
-  const allSeries = useSelector(createAllSeriesSelector());
+  const series = useSingleSeries(seriesId);
+  const { toggleSeriesMonitored, isTogglingSeriesMonitored } =
+    useToggleSeriesMonitored(seriesId);
+  const { data: allSeries } = useSeries();
 
   const {
     isFetching: isEpisodesFetching,
@@ -109,13 +110,14 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
     isFetched: isEpisodeFilesFetched,
     error: episodeFilesError,
     hasEpisodeFiles,
+    refetch: refetchEpisodeFiles,
   } = useEpisodeFiles({ seriesId });
 
-  const commands = useSelector(createCommandsSelector());
+  const { data: commands } = useCommands();
 
   const { isRefreshing, isRenaming, isSearching } = useMemo(() => {
     const seriesRefreshingCommand = findCommand(commands, {
-      name: commandNames.REFRESH_SERIES,
+      name: CommandNames.RefreshSeries,
     });
 
     const isSeriesRefreshingCommandExecuting = isCommandExecuting(
@@ -124,33 +126,39 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
 
     const allSeriesRefreshing =
       isSeriesRefreshingCommandExecuting &&
-      !seriesRefreshingCommand?.body.seriesIds?.length;
+      seriesRefreshingCommand &&
+      (!('seriesIds' in seriesRefreshingCommand.body) ||
+        seriesRefreshingCommand.body.seriesIds.length === 0);
 
     const isSeriesRefreshing =
       isSeriesRefreshingCommandExecuting &&
-      seriesRefreshingCommand?.body.seriesIds?.includes(seriesId);
+      seriesRefreshingCommand &&
+      'seriesIds' in seriesRefreshingCommand.body &&
+      seriesRefreshingCommand.body.seriesIds.includes(seriesId);
 
     const isSearchingExecuting = isCommandExecuting(
       findCommand(commands, {
-        name: commandNames.SERIES_SEARCH,
+        name: CommandNames.SeriesSearch,
         seriesId,
       })
     );
 
     const isRenamingFiles = isCommandExecuting(
       findCommand(commands, {
-        name: commandNames.RENAME_FILES,
+        name: CommandNames.RenameFiles,
         seriesId,
       })
     );
 
     const isRenamingSeriesCommand = findCommand(commands, {
-      name: commandNames.RENAME_SERIES,
+      name: CommandNames.RenameSeries,
     });
 
     const isRenamingSeries =
       isCommandExecuting(isRenamingSeriesCommand) &&
-      isRenamingSeriesCommand?.body?.seriesIds?.includes(seriesId);
+      isRenamingSeriesCommand &&
+      'seriesIds' in isRenamingSeriesCommand.body &&
+      isRenamingSeriesCommand.body.seriesIds.includes(seriesId);
 
     return {
       isRefreshing: isSeriesRefreshing || allSeriesRefreshing,
@@ -314,37 +322,31 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
 
   const handleMonitorTogglePress = useCallback(
     (value: boolean) => {
-      dispatch(
-        toggleSeriesMonitored({
-          seriesId,
-          monitored: value,
-        })
-      );
+      toggleSeriesMonitored({
+        monitored: value,
+      });
     },
-    [seriesId, dispatch]
+    [toggleSeriesMonitored]
   );
 
   const handleRefreshPress = useCallback(() => {
-    dispatch(
-      executeCommand({
-        name: commandNames.REFRESH_SERIES,
-        seriesId,
-      })
-    );
-  }, [seriesId, dispatch]);
+    executeCommand({
+      name: CommandNames.RefreshSeries,
+      seriesId,
+    });
+  }, [seriesId, executeCommand]);
 
   const handleSearchPress = useCallback(() => {
-    dispatch(
-      executeCommand({
-        name: commandNames.SERIES_SEARCH,
-        seriesId,
-      })
-    );
-  }, [seriesId, dispatch]);
+    executeCommand({
+      name: CommandNames.SeriesSearch,
+      seriesId,
+    });
+  }, [seriesId, executeCommand]);
 
   const populate = useCallback(() => {
     refetchEpisodes();
-  }, [refetchEpisodes]);
+    refetchEpisodeFiles();
+  }, [refetchEpisodes, refetchEpisodeFiles]);
 
   useEffect(() => {
     populate();
@@ -356,7 +358,7 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
     return () => {
       unregisterPagePopulator(populate);
     };
-  }, [populate, dispatch]);
+  }, [populate]);
 
   useEffect(() => {
     if ((!isRefreshing && wasRefreshing) || (!isRenaming && wasRenaming)) {
@@ -389,7 +391,6 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
     genres,
     tags,
     year,
-    isSaving = false,
   } = series;
 
   const {
@@ -525,6 +526,7 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
                 images={images}
                 size={500}
                 lazy={false}
+                title={title}
               />
 
               <div className={styles.info}>
@@ -534,7 +536,7 @@ function SeriesDetails({ seriesId }: SeriesDetailsProps) {
                       <MonitorToggleButton
                         className={styles.monitorToggleButton}
                         monitored={monitored}
-                        isSaving={isSaving}
+                        isSaving={isTogglingSeriesMonitored}
                         size={40}
                         onPress={handleMonitorTogglePress}
                       />

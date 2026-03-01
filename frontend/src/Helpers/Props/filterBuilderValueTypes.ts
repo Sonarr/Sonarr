@@ -9,7 +9,7 @@ export const PROTOCOL = 'protocol';
 export const QUALITY = 'quality';
 export const QUALITY_PROFILE = 'qualityProfile';
 export const QUEUE_STATUS = 'queueStatus';
-export const SEASONS_MONITORED_STATUS = 'seasonsMonitoredStatus';
+export const MONITORED_STATUS = 'monitoredStatus';
 export const SERIES = 'series';
 export const SERIES_STATUS = 'seriesStatus';
 export const SERIES_TYPES = 'seriesType';
@@ -27,7 +27,7 @@ export type FilterBuildValueType =
   | 'quality'
   | 'qualityProfile'
   | 'queueStatus'
-  | 'seasonsMonitoredStatus'
+  | 'monitoredStatus'
   | 'series'
   | 'seriesStatus'
   | 'seriesType'

@@ -13,14 +13,12 @@ interface QueueRemovalOptions {
 }
 
 export interface QueueOptions extends PageableOptions {
-  includeUnknownSeriesItems: boolean;
   removalOptions: QueueRemovalOptions;
 }
 
 const { useOptions, useOption, setOptions, setOption, setSort } =
   createOptionsStore<QueueOptions>('queue_options', () => {
     return {
-      includeUnknownSeriesItems: true,
       pageSize: 20,
       selectedFilterKey: 'all',
       sortKey: 'time',

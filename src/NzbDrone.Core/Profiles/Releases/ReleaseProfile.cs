@@ -9,7 +9,9 @@ namespace NzbDrone.Core.Profiles.Releases
         public bool Enabled { get; set; }
         public List<string> Required { get; set; }
         public List<string> Ignored { get; set; }
-        public int IndexerId { get; set; }
+        public bool AirDateRestriction { get; set; }
+        public int AirDateGracePeriod { get; set; }
+        public List<int> IndexerIds { get; set; }
         public HashSet<int> Tags { get; set; }
         public HashSet<int> ExcludedTags { get; set; }
 
@@ -18,9 +20,9 @@ namespace NzbDrone.Core.Profiles.Releases
             Enabled = true;
             Required = new List<string>();
             Ignored = new List<string>();
+            IndexerIds = new List<int>();
             Tags = new HashSet<int>();
             ExcludedTags = new HashSet<int>();
-            IndexerId = 0;
         }
     }
 

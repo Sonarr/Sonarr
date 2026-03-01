@@ -47,7 +47,7 @@ namespace Sonarr.Api.V3.Config
                 }
                 else if (type == X509ContentType.Pkcs12)
                 {
-                    new X509Certificate2(certPath, certPassword, X509KeyStorageFlags.DefaultKeySet);
+                    X509CertificateLoader.LoadPkcs12FromFile(certPath, certPassword, X509KeyStorageFlags.DefaultKeySet);
                 }
                 else
                 {

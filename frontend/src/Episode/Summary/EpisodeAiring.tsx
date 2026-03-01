@@ -1,9 +1,8 @@
 import moment from 'moment';
 import React from 'react';
-import { useSelector } from 'react-redux';
 import Label from 'Components/Label';
 import { kinds, sizes } from 'Helpers/Props';
-import createUISettingsSelector from 'Store/Selectors/createUISettingsSelector';
+import { useUiSettingsValues } from 'Settings/UI/useUiSettings';
 import formatTime from 'Utilities/Date/formatTime';
 import isInNextWeek from 'Utilities/Date/isInNextWeek';
 import isToday from 'Utilities/Date/isToday';
@@ -18,9 +17,8 @@ interface EpisodeAiringProps {
 function EpisodeAiring(props: EpisodeAiringProps) {
   const { airDateUtc, network } = props;
 
-  const { shortDateFormat, showRelativeDates, timeFormat } = useSelector(
-    createUISettingsSelector()
-  );
+  const { shortDateFormat, showRelativeDates, timeFormat } =
+    useUiSettingsValues();
 
   const networkLabel = (
     <Label kind={kinds.INFO} size={sizes.MEDIUM}>

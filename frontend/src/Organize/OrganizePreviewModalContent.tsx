@@ -1,9 +1,7 @@
-import React, { useCallback, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useCallback } from 'react';
 import { SelectProvider, useSelect } from 'App/Select/SelectContext';
-import AppState from 'App/State/AppState';
-import { OrganizePreviewModel } from 'App/State/OrganizePreviewAppState';
-import * as commandNames from 'Commands/commandNames';
+import CommandNames from 'Commands/CommandNames';
+import { useExecuteCommand } from 'Commands/useCommands';
 import Alert from 'Components/Alert';
 import CheckInput from 'Components/Form/CheckInput';
 import Button from 'Components/Link/Button';
@@ -15,13 +13,12 @@ import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import { kinds } from 'Helpers/Props';
 import formatSeason from 'Season/formatSeason';
-import useSeries from 'Series/useSeries';
-import { executeCommand } from 'Store/Actions/commandActions';
-import { fetchOrganizePreview } from 'Store/Actions/organizePreviewActions';
-import { fetchNamingSettings } from 'Store/Actions/settingsActions';
+import { useSingleSeries } from 'Series/useSeries';
+import { useNamingSettings } from 'Settings/MediaManagement/Naming/useNamingSettings';
 import { CheckInputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
 import OrganizePreviewRow from './OrganizePreviewRow';
+import useOrganizePreview, { OrganizePreviewModel } from './useOrganizePreview';
 import styles from './OrganizePreviewModalContent.css';
 
 function getValue(allSelected: boolean, allUnselected: boolean) {
@@ -45,28 +42,28 @@ function OrganizePreviewModalContentInner({
   seasonNumber,
   onModalClose,
 }: OrganizePreviewModalContentProps) {
-  const dispatch = useDispatch();
+  const executeCommand = useExecuteCommand();
   const {
     items,
     isFetching: isPreviewFetching,
-    isPopulated: isPreviewPopulated,
+    isFetched: isPreviewFetched,
     error: previewError,
-  } = useSelector((state: AppState) => state.organizePreview);
+  } = useOrganizePreview(seriesId, seasonNumber);
 
   const {
     isFetching: isNamingFetching,
-    isPopulated: isNamingPopulated,
+    isFetched: isNamingFetched,
     error: namingError,
-    item: naming,
-  } = useSelector((state: AppState) => state.settings.naming);
+    data: naming,
+  } = useNamingSettings();
 
-  const series = useSeries(seriesId)!;
+  const series = useSingleSeries(seriesId)!;
 
   const { allSelected, allUnselected, getSelectedIds, selectAll, unselectAll } =
     useSelect<OrganizePreviewModel>();
 
   const isFetching = isPreviewFetching || isNamingFetching;
-  const isPopulated = isPreviewPopulated && isNamingPopulated;
+  const isPopulated = isPreviewFetched && isNamingFetched;
   const error = previewError || namingError;
   const { renameEpisodes } = naming;
   const episodeFormat = naming[`${series.seriesType}EpisodeFormat`];
@@ -87,21 +84,14 @@ function OrganizePreviewModalContentInner({
   const handleOrganizePress = useCallback(() => {
     const files = getSelectedIds();
 
-    dispatch(
-      executeCommand({
-        name: commandNames.RENAME_FILES,
-        files,
-        seriesId,
-      })
-    );
+    executeCommand({
+      name: CommandNames.RenameFiles,
+      files,
+      seriesId,
+    });
 
     onModalClose();
-  }, [seriesId, getSelectedIds, dispatch, onModalClose]);
-
-  useEffect(() => {
-    dispatch(fetchOrganizePreview({ seriesId, seasonNumber }));
-    dispatch(fetchNamingSettings());
-  }, [seriesId, seasonNumber, dispatch]);
+  }, [seriesId, getSelectedIds, executeCommand, onModalClose]);
 
   return (
     <ModalContent onModalClose={onModalClose}>
@@ -192,7 +182,7 @@ function OrganizePreviewModalContent({
   seasonNumber,
   onModalClose,
 }: OrganizePreviewModalContentProps) {
-  const { items } = useSelector((state: AppState) => state.organizePreview);
+  const { items } = useOrganizePreview(seriesId, seasonNumber);
 
   return (
     <SelectProvider<OrganizePreviewModel> items={items}>

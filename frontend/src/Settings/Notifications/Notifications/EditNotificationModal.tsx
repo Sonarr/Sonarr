@@ -3,10 +3,6 @@ import { useDispatch } from 'react-redux';
 import Modal from 'Components/Modal/Modal';
 import { sizes } from 'Helpers/Props';
 import { clearPendingChanges } from 'Store/Actions/baseActions';
-import {
-  cancelSaveNotification,
-  cancelTestNotification,
-} from 'Store/Actions/settingsActions';
 import EditNotificationModalContent, {
   EditNotificationModalContentProps,
 } from './EditNotificationModalContent';
@@ -26,8 +22,6 @@ function EditNotificationModal({
 
   const handleModalClose = useCallback(() => {
     dispatch(clearPendingChanges({ section }));
-    dispatch(cancelTestNotification({ section }));
-    dispatch(cancelSaveNotification({ section }));
     onModalClose();
   }, [dispatch, onModalClose]);
 

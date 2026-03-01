@@ -1,4 +1,5 @@
 using System.IO;
+using Microsoft.AspNetCore.Http;
 using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
@@ -27,7 +28,7 @@ namespace Sonarr.Http.Frontend.Mappers
             return FilePath;
         }
 
-        protected override Stream GetContentStream(string filePath)
+        protected override Stream GetContentStream(HttpContext context, string filePath)
         {
             var text = GetFileText();
 

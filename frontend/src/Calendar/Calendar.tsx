@@ -1,12 +1,11 @@
 import React, { useCallback, useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import * as commandNames from 'Commands/commandNames';
+import CommandNames from 'Commands/CommandNames';
+import { useCommandExecuting } from 'Commands/useCommands';
 import Alert from 'Components/Alert';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import useCurrentPage from 'Helpers/Hooks/useCurrentPage';
 import usePrevious from 'Helpers/Hooks/usePrevious';
 import { kinds } from 'Helpers/Props';
-import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
 import {
   registerPagePopulator,
   unregisterPagePopulator,
@@ -23,16 +22,13 @@ import styles from './Calendar.css';
 const UPDATE_DELAY = 3600000; // 1 hour
 
 function Calendar() {
-  const dispatch = useDispatch();
   const requestCurrentPage = useCurrentPage();
   const updateTimeout = useRef<ReturnType<typeof setTimeout>>();
 
   const { isFetching, isLoading, error, refetch } = useCalendar();
   const view = useCalendarOption('view');
 
-  const isRefreshingSeries = useSelector(
-    createCommandExecutingSelector(commandNames.REFRESH_SERIES)
-  );
+  const isRefreshingSeries = useCommandExecuting(CommandNames.RefreshSeries);
 
   const wasRefreshingSeries = usePrevious(isRefreshingSeries);
 
@@ -59,7 +55,7 @@ function Calendar() {
     if (!requestCurrentPage) {
       goToToday();
     }
-  }, [requestCurrentPage, dispatch]);
+  }, [requestCurrentPage]);
 
   useEffect(() => {
     const repopulate = () => {

@@ -43,6 +43,11 @@ namespace NzbDrone.Core.Test.ParserTests
         [TestCase("Series Title - S01E01 - Pilot.en.sub")]
         [TestCase("Series.Title.S01E01.SUBFRENCH.1080p.WEB.x264-GROUP")]
         [TestCase("[Judas] Series Japanese Name (Series English Name) - S02E10 [1080P][HEVC x256 10bit][Eng-Subs] (Weekly)")]
+        [TestCase("Detektiv.Conan.1996.S33E39.Ger.Eng.Sub.AAC.1080p.WEB.H264-WeebPinn")]
+        [TestCase("Detektiv.Conan.1996.S33E39.Ger.Eng.Fre.Sub.AAC.1080p.WEB.H264-WeebPinn")]
+        [TestCase("Detektiv.Conan.1996.S33E39.Ger.Fre.Eng.Sub.AAC.1080p.WEB.H264-WeebPinn")]
+        [TestCase("Detektiv.Conan.1996.S33E39.Ger.Eng.Spa.Sub.AAC.1080p.WEB.H264-WeebPinn")]
+        [TestCase("Detektiv.Conan.1996.S33E39.Ger.Spa.Eng.Sub.AAC.1080p.WEB.H264-WeebPinn")]
         public void should_parse_language_unknown(string postTitle)
         {
             var result = LanguageParser.ParseLanguages(postTitle);

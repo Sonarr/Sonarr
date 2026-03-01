@@ -1,5 +1,4 @@
 import React, { SyntheticEvent, useCallback } from 'react';
-import { useDispatch } from 'react-redux';
 import IconButton from 'Components/Link/IconButton';
 import RelativeDateCell from 'Components/Table/Cells/RelativeDateCell';
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
@@ -9,7 +8,7 @@ import {
   addFavoriteFolder,
   removeFavoriteFolder,
   removeRecentFolder,
-} from 'Store/Actions/interactiveImportActions';
+} from 'InteractiveImport/interactiveImportFoldersStore';
 import translate from 'Utilities/String/translate';
 import styles from './RecentFolderRow.css';
 
@@ -26,8 +25,6 @@ function RecentFolderRow({
   isFavorite,
   onPress,
 }: RecentFolderRowProps) {
-  const dispatch = useDispatch();
-
   const handlePress = useCallback(() => {
     onPress(folder);
   }, [folder, onPress]);
@@ -37,21 +34,21 @@ function RecentFolderRow({
       e.stopPropagation();
 
       if (isFavorite) {
-        dispatch(removeFavoriteFolder({ folder }));
+        removeFavoriteFolder(folder);
       } else {
-        dispatch(addFavoriteFolder({ folder }));
+        addFavoriteFolder(folder);
       }
     },
-    [folder, isFavorite, dispatch]
+    [folder, isFavorite]
   );
 
   const handleRemovePress = useCallback(
     (e: SyntheticEvent) => {
       e.stopPropagation();
 
-      dispatch(removeRecentFolder({ folder }));
+      removeRecentFolder(folder);
     },
-    [folder, dispatch]
+    [folder]
   );
 
   return (

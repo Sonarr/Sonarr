@@ -1,55 +1,40 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { QualityProfilesAppState } from 'App/State/SettingsAppState';
+import React, { useCallback, useState } from 'react';
 import Card from 'Components/Card';
 import FieldSet from 'Components/FieldSet';
 import Icon from 'Components/Icon';
 import PageSectionContent from 'Components/Page/PageSectionContent';
 import { icons } from 'Helpers/Props';
-import {
-  cloneQualityProfile,
-  fetchQualityProfiles,
-} from 'Store/Actions/settingsActions';
-import createSortedSectionSelector from 'Store/Selectors/createSortedSectionSelector';
-import QualityProfileModel from 'typings/QualityProfile';
 import sortByProp from 'Utilities/Array/sortByProp';
 import translate from 'Utilities/String/translate';
 import EditQualityProfileModal from './EditQualityProfileModal';
 import QualityProfile from './QualityProfile';
+import { useQualityProfiles } from './useQualityProfiles';
 import styles from './QualityProfiles.css';
 
 function QualityProfiles() {
-  const dispatch = useDispatch();
+  const { data, error, isFetching, isFetched } = useQualityProfiles();
 
-  const { error, isFetching, isPopulated, isDeleting, items } = useSelector(
-    createSortedSectionSelector<QualityProfileModel, QualityProfilesAppState>(
-      'settings.qualityProfiles',
-      sortByProp('name')
-    )
-  ) as QualityProfilesAppState;
+  // Sort the data by name
+  const sortedItems = data ? data.sort(sortByProp('name')) : [];
 
   const [isQualityProfileModalOpen, setIsQualityProfileModalOpen] =
     useState(false);
+  const [cloneProfileId, setCloneProfileId] = useState<number | null>(null);
 
-  const handleEditQualityProfilePress = useCallback(() => {
+  const handleAddQualityProfilePress = useCallback(() => {
+    setCloneProfileId(null);
     setIsQualityProfileModalOpen(true);
   }, []);
 
-  const handleEditQualityProfileClosePress = useCallback(() => {
+  const handleAddQualityProfileClosePress = useCallback(() => {
+    setCloneProfileId(null);
     setIsQualityProfileModalOpen(false);
   }, []);
 
-  const handleCloneQualityProfilePress = useCallback(
-    (id: number) => {
-      dispatch(cloneQualityProfile({ id }));
-      setIsQualityProfileModalOpen(true);
-    },
-    [dispatch]
-  );
-
-  useEffect(() => {
-    dispatch(fetchQualityProfiles());
-  }, [dispatch]);
+  const handleCloneQualityProfilePress = useCallback((id: number) => {
+    setCloneProfileId(id);
+    setIsQualityProfileModalOpen(true);
+  }, []);
 
   return (
     <FieldSet legend={translate('QualityProfiles')}>
@@ -57,15 +42,15 @@ function QualityProfiles() {
         errorMessage={translate('QualityProfilesLoadError')}
         error={error}
         isFetching={isFetching}
-        isPopulated={isPopulated}
+        isPopulated={isFetched}
       >
         <div className={styles.qualityProfiles}>
-          {items.map((item) => {
+          {sortedItems.map((item) => {
             return (
               <QualityProfile
                 key={item.id}
                 {...item}
-                isDeleting={isDeleting}
+                isDeleting={false}
                 onCloneQualityProfilePress={handleCloneQualityProfilePress}
               />
             );
@@ -73,7 +58,7 @@ function QualityProfiles() {
 
           <Card
             className={styles.addQualityProfile}
-            onPress={handleEditQualityProfilePress}
+            onPress={handleAddQualityProfilePress}
           >
             <div className={styles.center}>
               <Icon name={icons.ADD} size={45} />
@@ -83,7 +68,8 @@ function QualityProfiles() {
 
         <EditQualityProfileModal
           isOpen={isQualityProfileModalOpen}
-          onModalClose={handleEditQualityProfileClosePress}
+          cloneId={cloneProfileId ?? undefined}
+          onModalClose={handleAddQualityProfileClosePress}
         />
       </PageSectionContent>
     </FieldSet>

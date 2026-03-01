@@ -22,6 +22,17 @@ export const FILTERS: Filter[] = [
     label: () => translate('All'),
     filters: [],
   },
+  {
+    key: 'excludeUnknownSeriesItems',
+    label: () => translate('ExcludeUnknownSeriesItems'),
+    filters: [
+      {
+        key: 'includeUnknownSeriesItems',
+        value: [false],
+        type: 'equal',
+      },
+    ],
+  },
 ];
 
 export const FILTER_BUILDER: FilterBuilderProp<Queue>[] = [
@@ -55,17 +66,18 @@ export const FILTER_BUILDER: FilterBuilderProp<Queue>[] = [
     type: 'equal',
     valueType: filterBuilderValueTypes.QUEUE_STATUS,
   },
+  {
+    name: 'includeUnknownSeriesItems',
+    label: () => translate('UnknownSeriesItems'),
+    type: 'equal',
+    valueType: filterBuilderValueTypes.BOOL,
+  },
 ];
 
 const useQueue = () => {
   const { page, goToPage } = usePage('queue');
-  const {
-    includeUnknownSeriesItems,
-    pageSize,
-    selectedFilterKey,
-    sortKey,
-    sortDirection,
-  } = useQueueOptions();
+  const { pageSize, selectedFilterKey, sortKey, sortDirection } =
+    useQueueOptions();
   const customFilters = useCustomFiltersList('queue');
 
   const filters = useMemo(() => {
@@ -77,9 +89,6 @@ const useQueue = () => {
     page,
     pageSize,
     filters,
-    queryParams: {
-      includeUnknownSeriesItems,
-    },
     sortKey,
     sortDirection,
     queryOptions: {

@@ -15,5 +15,5 @@ export interface FileInputChanged extends InputChanged<string> {
 
 export interface EnhancedSelectInputChanged<T> extends InputChanged<T> {
   value: T;
-  additionalProperties?: unknown;
+  additionalProperties?: object;
 }

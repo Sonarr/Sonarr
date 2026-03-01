@@ -23,8 +23,12 @@ public class EpisodeController : EpisodeControllerWithSignalR
 
     [HttpGet]
     [Produces("application/json")]
-    public List<EpisodeResource> GetEpisodes(int? seriesId, int? seasonNumber, [FromQuery]List<int> episodeIds, int? episodeFileId, bool includeSeries = false, bool includeEpisodeFile = false, bool includeImages = false)
+    public List<EpisodeResource> GetEpisodes(int? seriesId, int? seasonNumber, [FromQuery]List<int> episodeIds, int? episodeFileId, [FromQuery] EpisodeSubresource[]? includeSubresources = null)
     {
+        var includeSeries = includeSubresources.Contains(EpisodeSubresource.Series);
+        var includeEpisodeFile = includeSubresources.Contains(EpisodeSubresource.EpisodeFile);
+        var includeImages = includeSubresources.Contains(EpisodeSubresource.Images);
+
         if (seriesId.HasValue)
         {
             if (seasonNumber.HasValue)
@@ -59,8 +63,10 @@ public class EpisodeController : EpisodeControllerWithSignalR
 
     [HttpPut("monitor")]
     [Consumes("application/json")]
-    public IActionResult SetEpisodesMonitored([FromBody] EpisodesMonitoredResource resource, [FromQuery] bool includeImages = false)
+    public IActionResult SetEpisodesMonitored([FromBody] EpisodesMonitoredResource resource, [FromQuery] EpisodeSubresource[]? includeSubresources = null)
     {
+        var includeImages = includeSubresources.Contains(EpisodeSubresource.Images);
+
         if (resource.EpisodeIds.Count == 1)
         {
             _episodeService.SetEpisodeMonitored(resource.EpisodeIds.First(), resource.Monitored);

@@ -125,10 +125,6 @@ export default function SeriesTagInput<V extends number | number[]>({
     formInputActions?.setClientWarnings(addTagError?.warnings ?? []);
   }, [addTagError, formInputActions]);
 
-  useEffect(() => {
-    console.info('\x1b[36m[MarkTest] formInputActions has changed\x1b[0m');
-  }, [formInputActions]);
-
   return (
     <TagInput
       {...otherProps}

@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using FizzWare.NBuilder;
 using FluentAssertions;
-using Moq;
 using NUnit.Framework;
 using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.Parser.Model;
@@ -38,9 +36,6 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
                     Title = "Series.Title.S01.720p.BluRay.X264-RlsGrp"
                 }
             };
-
-            Mocker.GetMock<IEpisodeService>().Setup(s => s.EpisodesBetweenDates(It.IsAny<DateTime>(), It.IsAny<DateTime>(), false))
-                                             .Returns(new List<Episode>());
         }
 
         [Test]

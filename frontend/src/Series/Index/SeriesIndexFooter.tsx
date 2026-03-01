@@ -1,43 +1,15 @@
 import classNames from 'classnames';
 import React from 'react';
-import { useSelector } from 'react-redux';
-import { createSelector } from 'reselect';
 import { ColorImpairedConsumer } from 'App/ColorImpairedContext';
-import SeriesAppState from 'App/State/SeriesAppState';
 import DescriptionList from 'Components/DescriptionList/DescriptionList';
 import DescriptionListItem from 'Components/DescriptionList/DescriptionListItem';
-import createClientSideCollectionSelector from 'Store/Selectors/createClientSideCollectionSelector';
-import createDeepEqualSelector from 'Store/Selectors/createDeepEqualSelector';
+import useSeries from 'Series/useSeries';
 import formatBytes from 'Utilities/Number/formatBytes';
 import translate from 'Utilities/String/translate';
 import styles from './SeriesIndexFooter.css';
 
-function createUnoptimizedSelector() {
-  return createSelector(
-    createClientSideCollectionSelector('series', 'seriesIndex'),
-    (series: SeriesAppState) => {
-      return series.items.map((s) => {
-        const { monitored, status, statistics } = s;
-
-        return {
-          monitored,
-          status,
-          statistics,
-        };
-      });
-    }
-  );
-}
-
-function createSeriesSelector() {
-  return createDeepEqualSelector(
-    createUnoptimizedSelector(),
-    (series) => series
-  );
-}
-
 export default function SeriesIndexFooter() {
-  const series = useSelector(createSeriesSelector());
+  const { data: series } = useSeries();
   const count = series.length;
   let episodes = 0;
   let episodeFiles = 0;

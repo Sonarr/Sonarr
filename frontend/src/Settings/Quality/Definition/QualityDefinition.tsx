@@ -1,31 +1,29 @@
 import React, { useCallback } from 'react';
-import { useDispatch } from 'react-redux';
 import TextInput from 'Components/Form/TextInput';
 import Quality from 'Quality/Quality';
-import { setQualityDefinitionValue } from 'Store/Actions/settingsActions';
+import { useManageQualityDefinitions } from './useQualityDefinitions';
 import styles from './QualityDefinition.css';
 
 interface QualityDefinitionProps {
   id: number;
   quality: Quality;
   title: string;
+  updateDefinition: ReturnType<
+    typeof useManageQualityDefinitions
+  >['updateDefinition'];
 }
 
-function QualityDefinition(props: QualityDefinitionProps) {
-  const { id, quality, title } = props;
-  const dispatch = useDispatch();
-
+function QualityDefinition({
+  id,
+  quality,
+  title,
+  updateDefinition,
+}: QualityDefinitionProps) {
   const handleTitleChange = useCallback(
     ({ value }: { value: string }) => {
-      dispatch(
-        setQualityDefinitionValue({
-          id,
-          name: 'title',
-          value,
-        })
-      );
+      updateDefinition(id, 'title', value);
     },
-    [id, dispatch]
+    [id, updateDefinition]
   );
 
   return (

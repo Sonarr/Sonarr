@@ -62,7 +62,7 @@ public class HistoryController : Controller
 
     [HttpGet]
     [Produces("application/json")]
-    public PagingResource<HistoryResource> GetHistory([FromQuery] PagingRequestResource paging, bool includeSeries, bool includeEpisode, [FromQuery(Name = "eventType")] int[]? eventTypes, int? episodeId, string? downloadId, [FromQuery] int[]? seriesIds = null, [FromQuery] int[]? languages = null, [FromQuery] int[]? quality = null)
+    public PagingResource<HistoryResource> GetHistory([FromQuery] PagingRequestResource paging, [FromQuery(Name = "eventType")] int[]? eventTypes, int? episodeId, string? downloadId, [FromQuery] int[]? seriesIds = null, [FromQuery] int[]? languages = null, [FromQuery] int[]? quality = null, [FromQuery] HistorySubresource[]? includeSubresources = null)
     {
         var pagingResource = new PagingResource<HistoryResource>(paging);
         var pagingSpec = pagingResource.MapToPagingSpec<HistoryResource, EpisodeHistory>(
@@ -94,21 +94,29 @@ public class HistoryController : Controller
             pagingSpec.FilterExpressions.Add(h => seriesIds.Contains(h.SeriesId));
         }
 
+        var includeSeries = includeSubresources.Contains(HistorySubresource.Series);
+        var includeEpisode = includeSubresources.Contains(HistorySubresource.Episode);
+
         return pagingSpec.ApplyToPage(h => _historyService.Paged(pagingSpec, languages, quality), h => MapToResource(h, includeSeries, includeEpisode));
     }
 
     [HttpGet("since")]
     [Produces("application/json")]
-    public List<HistoryResource> GetHistorySince(DateTime date, EpisodeHistoryEventType? eventType = null, bool includeSeries = false, bool includeEpisode = false)
+    public List<HistoryResource> GetHistorySince(DateTime date, EpisodeHistoryEventType? eventType = null, [FromQuery] HistorySubresource[]? includeSubresources = null)
     {
+        var includeSeries = includeSubresources.Contains(HistorySubresource.Series);
+        var includeEpisode = includeSubresources.Contains(HistorySubresource.Episode);
+
         return _historyService.Since(date, eventType).Select(h => MapToResource(h, includeSeries, includeEpisode)).ToList();
     }
 
     [HttpGet("series")]
     [Produces("application/json")]
-    public List<HistoryResource> GetSeriesHistory(int seriesId, EpisodeHistoryEventType? eventType = null, bool includeSeries = false, bool includeEpisode = false)
+    public List<HistoryResource> GetSeriesHistory(int seriesId, EpisodeHistoryEventType? eventType = null, [FromQuery] HistorySubresource[]? includeSubresources = null)
     {
         var series = _seriesService.GetSeries(seriesId);
+        var includeSeries = includeSubresources.Contains(HistorySubresource.Series);
+        var includeEpisode = includeSubresources.Contains(HistorySubresource.Episode);
 
         return _historyService.GetBySeries(seriesId, eventType).Select(h =>
         {
@@ -120,9 +128,11 @@ public class HistoryController : Controller
 
     [HttpGet("season")]
     [Produces("application/json")]
-    public List<HistoryResource> GetSeasonHistory(int seriesId, int seasonNumber, EpisodeHistoryEventType? eventType = null, bool includeSeries = false, bool includeEpisode = false)
+    public List<HistoryResource> GetSeasonHistory(int seriesId, int seasonNumber, EpisodeHistoryEventType? eventType = null, [FromQuery] HistorySubresource[]? includeSubresources = null)
     {
         var series = _seriesService.GetSeries(seriesId);
+        var includeSeries = includeSubresources.Contains(HistorySubresource.Series);
+        var includeEpisode = includeSubresources.Contains(HistorySubresource.Episode);
 
         return _historyService.GetBySeason(seriesId, seasonNumber, eventType).Select(h =>
         {
@@ -134,10 +144,12 @@ public class HistoryController : Controller
 
     [HttpGet("episode")]
     [Produces("application/json")]
-    public List<HistoryResource> GetEpisodeHistory(int episodeId, EpisodeHistoryEventType? eventType = null, bool includeSeries = false, bool includeEpisode = false)
+    public List<HistoryResource> GetEpisodeHistory(int episodeId, EpisodeHistoryEventType? eventType = null, [FromQuery] HistorySubresource[]? includeSubresources = null)
     {
         var episode = _episodeService.GetEpisode(episodeId);
         var series = _seriesService.GetSeries(episode.SeriesId);
+        var includeSeries = includeSubresources.Contains(HistorySubresource.Series);
+        var includeEpisode = includeSubresources.Contains(HistorySubresource.Episode);
 
         return _historyService.GetByEpisode(episodeId, eventType)
             .Select(h =>

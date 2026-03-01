@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
 import ModelBase from 'App/ModelBase';
@@ -11,7 +11,9 @@ import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import { kinds } from 'Helpers/Props';
-import createAllSeriesSelector from 'Store/Selectors/createAllSeriesSelector';
+import useSeries from 'Series/useSeries';
+import { useConnectionsWithIds } from 'Settings/Notifications/useConnections';
+import { useReleaseProfilesWithIds } from 'Settings/Profiles/Release/useReleaseProfiles';
 import translate from 'Utilities/String/translate';
 import TagDetailsDelayProfile from './TagDetailsDelayProfile';
 import styles from './TagDetailsModalContent.css';
@@ -22,30 +24,25 @@ function findMatchingItems<T extends ModelBase>(ids: number[], items: T[]) {
   });
 }
 
-function createUnorderedMatchingSeriesSelector(seriesIds: number[]) {
-  return createSelector(createAllSeriesSelector(), (series) =>
-    findMatchingItems(seriesIds, series)
-  );
-}
+function useMatchingSeries(seriesIds: number[]) {
+  const { data: allSeries = [] } = useSeries();
 
-function createMatchingSeriesSelector(seriesIds: number[]) {
-  return createSelector(
-    createUnorderedMatchingSeriesSelector(seriesIds),
-    (series) => {
-      return series.sort((seriesA, seriesB) => {
-        const sortTitleA = seriesA.sortTitle;
-        const sortTitleB = seriesB.sortTitle;
+  return useMemo(() => {
+    const matchingSeries = findMatchingItems(seriesIds, allSeries);
 
-        if (sortTitleA > sortTitleB) {
-          return 1;
-        } else if (sortTitleA < sortTitleB) {
-          return -1;
-        }
+    return matchingSeries.sort((seriesA, seriesB) => {
+      const sortTitleA = seriesA.sortTitle;
+      const sortTitleB = seriesB.sortTitle;
 
-        return 0;
-      });
-    }
-  );
+      if (sortTitleA > sortTitleB) {
+        return 1;
+      } else if (sortTitleA < sortTitleB) {
+        return -1;
+      }
+
+      return 0;
+    });
+  }, [seriesIds, allSeries]);
 }
 
 function createMatchingItemSelector<T extends ModelBase>(
@@ -84,7 +81,7 @@ function TagDetailsModalContent({
   onModalClose,
   onDeleteTagPress,
 }: TagDetailsModalContentProps) {
-  const series = useSelector(createMatchingSeriesSelector(seriesIds));
+  const series = useMatchingSeries(seriesIds);
 
   const delayProfiles = useSelector(
     createMatchingItemSelector(
@@ -100,19 +97,8 @@ function TagDetailsModalContent({
     )
   );
 
-  const notifications = useSelector(
-    createMatchingItemSelector(
-      notificationIds,
-      (state: AppState) => state.settings.notifications.items
-    )
-  );
-
-  const releaseProfiles = useSelector(
-    createMatchingItemSelector(
-      releaseProfileIds,
-      (state: AppState) => state.settings.releaseProfiles.items
-    )
-  );
+  const releaseProfiles = useReleaseProfilesWithIds(releaseProfileIds);
+  const notifications = useConnectionsWithIds(notificationIds);
 
   const indexers = useSelector(
     createMatchingItemSelector(

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { useAppValue } from 'App/appStore';
 import { Error } from 'App/State/AppSectionState';
-import AppState from 'App/State/AppState';
 import TextInput from 'Components/Form/TextInput';
 import Icon, { IconName, IconProps } from 'Components/Icon';
 import Button from 'Components/Link/Button';
@@ -79,7 +79,7 @@ function RestoreBackupModalContent({
   name,
   onModalClose,
 }: RestoreBackupModalContentProps) {
-  const { isRestarting } = useSelector((state: AppState) => state.app);
+  const isRestarting = useAppValue('isRestarting');
   const dispatch = useDispatch();
 
   const { restoreBackupById, isRestoringBackup, restoreBackupError } =

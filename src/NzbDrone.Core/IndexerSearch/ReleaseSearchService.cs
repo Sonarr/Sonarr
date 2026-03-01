@@ -102,6 +102,12 @@ namespace NzbDrone.Core.IndexerSearch
                 episodes = episodes.Where(e => !e.HasFile).ToList();
             }
 
+            if (episodes.Count == 0)
+            {
+                _logger.Debug("No wanted episodes found for season {0}", seasonNumber);
+                return new List<DownloadDecision>();
+            }
+
             return await SeasonSearch(seriesId, seasonNumber, episodes, monitoredOnly, userInvokedSearch, interactiveSearch);
         }
 

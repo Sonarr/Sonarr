@@ -3,7 +3,6 @@ using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 using NLog;
 using NzbDrone.Common.Extensions;
-using NzbDrone.Core.Datastore;
 using NzbDrone.Core.DecisionEngine;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Indexers;
@@ -86,58 +85,34 @@ public class ReleasePushController : RestController<ReleasePushResource>
 
     private void ResolveIndexer(ReleaseInfo release)
     {
-        if (release.IndexerId == 0 && release.Indexer.IsNotNullOrWhiteSpace())
-        {
-            var indexer = _indexerFactory.All().FirstOrDefault(v => v.Name.EqualsIgnoreCase(release.Indexer));
+        var indexer = _indexerFactory.ResolveIndexer(release.IndexerId, release.Indexer);
 
-            if (indexer != null)
-            {
-                release.IndexerId = indexer.Id;
-                _logger.Debug("Push Release {0} associated with indexer {1} - {2}.", release.Title, release.IndexerId, release.Indexer);
-            }
-            else
-            {
-                _logger.Debug("Push Release {0} not associated with known indexer {1}.", release.Title, release.Indexer);
-            }
-        }
-        else if (release.IndexerId != 0 && release.Indexer.IsNullOrWhiteSpace())
+        if (indexer == null)
         {
-            try
-            {
-                var indexer = _indexerFactory.Get(release.IndexerId);
-                release.Indexer = indexer.Name;
-                _logger.Debug("Push Release {0} associated with indexer {1} - {2}.", release.Title, release.IndexerId, release.Indexer);
-            }
-            catch (ModelNotFoundException)
-            {
-                _logger.Debug("Push Release {0} not associated with known indexer {1}.", release.Title, release.IndexerId);
-                release.IndexerId = 0;
-            }
+            _logger.Debug("Push Release {0} not associated with an indexer.", release.Title);
         }
         else
         {
-            _logger.Debug("Push Release {0} not associated with an indexer.", release.Title);
+            _logger.Debug("Push Release {0} associated with indexer '{1} ({2})", release.Title, indexer.Name, indexer.Id);
+
+            release.IndexerId = indexer.Id;
+            release.Indexer = indexer.Name;
         }
     }
 
     private int? ResolveDownloadClientId(ReleasePushResource release)
     {
-        var downloadClientId = release.DownloadClientId.GetValueOrDefault();
+        var downloadClient = _downloadClientFactory.ResolveDownloadClient(release.DownloadClientId, release.DownloadClientName);
 
-        if (downloadClientId == 0 && release.DownloadClientName.IsNotNullOrWhiteSpace())
+        if (downloadClient == null)
         {
-            var downloadClient = _downloadClientFactory.All().FirstOrDefault(v => v.Name.EqualsIgnoreCase(release.DownloadClientName));
-
-            if (downloadClient != null)
-            {
-                _logger.Debug("Push Release {0} associated with download client {1} - {2}.", release.Title, downloadClientId, release.DownloadClientName);
-
-                return downloadClient.Id;
-            }
-
-            _logger.Debug("Push Release {0} not associated with known download client {1}.", release.Title, release.DownloadClientName);
+            _logger.Debug("Push Release {0} not associated with a download client.", release.Title);
+        }
+        else
+        {
+            _logger.Debug("Push Release {0} associated with download client '{1} ({2})", release.Title, downloadClient.Name, downloadClient.Id);
         }
 
-        return release.DownloadClientId;
+        return downloadClient?.Id;
     }
 }

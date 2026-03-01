@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import * as commandNames from 'Commands/commandNames';
+import CommandNames from 'Commands/CommandNames';
+import { useCommandExecuting } from 'Commands/useCommands';
 import Alert from 'Components/Alert';
 import Form from 'Components/Form/Form';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
@@ -16,7 +17,6 @@ import {
   saveGeneralSettings,
   setGeneralSettingsValue,
 } from 'Store/Actions/settingsActions';
-import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
 import createSettingsSectionSelector from 'Store/Selectors/createSettingsSectionSelector';
 import { useIsWindowsService } from 'System/Status/useSystemStatus';
 import { useRestart } from 'System/useSystem';
@@ -47,9 +47,7 @@ function GeneralSettings() {
   const dispatch = useDispatch();
   const isWindowsService = useIsWindowsService();
   const { mutate: restart } = useRestart();
-  const isResettingApiKey = useSelector(
-    createCommandExecutingSelector(commandNames.RESET_API_KEY)
-  );
+  const isResettingApiKey = useCommandExecuting(CommandNames.ResetApiKey);
 
   const {
     isFetching,

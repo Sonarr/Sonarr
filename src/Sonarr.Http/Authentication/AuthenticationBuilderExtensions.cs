@@ -1,9 +1,11 @@
 using System;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Diacritical;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Net.Http.Headers;
 using NzbDrone.Core.Authentication;
 using NzbDrone.Core.Configuration;
 
@@ -44,6 +46,8 @@ namespace Sonarr.Http.Authentication
                     options.ExpireTimeSpan = TimeSpan.FromDays(7);
                     options.SlidingExpiration = true;
                     options.ReturnUrlParameter = "returnUrl";
+                    options.Events.OnRedirectToLogin = context => EventOnRedirectCookiesLogin(context, 401);
+                    options.Events.OnRedirectToAccessDenied = context => EventOnRedirectCookiesLogin(context, 403);
                 });
 
             return services.AddAuthentication()
@@ -60,6 +64,22 @@ namespace Sonarr.Http.Authentication
                     options.HeaderName = "X-Api-Key";
                     options.QueryName = "access_token";
                 });
+        }
+
+        private static Task EventOnRedirectCookiesLogin(RedirectContext<CookieAuthenticationOptions> context, int statusCode)
+        {
+            if (string.Equals(context.Request.Query[HeaderNames.XRequestedWith], "XMLHttpRequest", StringComparison.Ordinal) ||
+                string.Equals(context.Request.Headers.XRequestedWith, "XMLHttpRequest", StringComparison.Ordinal))
+            {
+                context.Response.Headers.Location = context.RedirectUri;
+                context.Response.StatusCode = statusCode;
+            }
+            else
+            {
+                context.Response.Redirect(context.RedirectUri);
+            }
+
+            return Task.CompletedTask;
         }
     }
 }

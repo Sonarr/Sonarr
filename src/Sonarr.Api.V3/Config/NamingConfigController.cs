@@ -65,14 +65,14 @@ namespace Sonarr.Api.V3.Config
         }
 
         [HttpGet("examples")]
-        public object GetExamples([FromQuery]NamingConfigResource config)
+        public object GetExamples([FromQuery]NamingConfigResource settings)
         {
-            if (config.Id == 0)
+            if (settings.Id == 0)
             {
-                config = GetNamingConfig();
+                settings = GetNamingConfig();
             }
 
-            var nameSpec = config.ToModel();
+            var nameSpec = settings.ToModel();
             var sampleResource = new NamingExampleResource();
 
             var singleEpisodeSampleResult = _filenameSampleService.GetStandardSample(nameSpec);

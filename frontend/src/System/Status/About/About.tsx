@@ -17,7 +17,7 @@ function About() {
     packageVersion,
     packageAuthor,
     isNetCore,
-    isDocker,
+    isContainerized,
     runtimeVersion,
     databaseVersion,
     databaseType,
@@ -62,7 +62,7 @@ function About() {
           />
         ) : null}
 
-        {isDocker ? (
+        {isContainerized ? (
           <DescriptionListItem title={translate('Docker')} data="Yes" />
         ) : null}
 

@@ -22,7 +22,7 @@ export interface PropertyFilter {
 }
 
 export interface Filter {
-  key: string;
+  key: string | number;
   label: string | (() => string);
   filters: PropertyFilter[];
 }

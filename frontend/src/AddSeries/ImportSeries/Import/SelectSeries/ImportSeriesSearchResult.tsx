@@ -1,9 +1,8 @@
 import React, { useCallback } from 'react';
-import { useSelector } from 'react-redux';
 import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
 import { icons } from 'Helpers/Props';
-import createExistingSeriesSelector from 'Store/Selectors/createExistingSeriesSelector';
+import useExistingSeries from 'Series/useExistingSeries';
 import ImportSeriesTitle from './ImportSeriesTitle';
 import styles from './ImportSeriesSearchResult.css';
 
@@ -22,7 +21,7 @@ function ImportSeriesSearchResult({
   network,
   onPress,
 }: ImportSeriesSearchResultProps) {
-  const isExistingSeries = useSelector(createExistingSeriesSelector(tvdbId));
+  const isExistingSeries = useExistingSeries(tvdbId);
 
   const handlePress = useCallback(() => {
     onPress(tvdbId);

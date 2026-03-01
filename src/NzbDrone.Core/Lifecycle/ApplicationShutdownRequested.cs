@@ -2,6 +2,7 @@
 
 namespace NzbDrone.Core.Lifecycle
 {
+    [LifecycleEvent]
     public class ApplicationShutdownRequested : IEvent
     {
         public bool Restarting { get; }

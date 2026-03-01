@@ -1,5 +1,7 @@
 ﻿using System;
-using System.Data;
+using System.Data.Common;
+using StackExchange.Profiling;
+using StackExchange.Profiling.Data;
 
 namespace NzbDrone.Core.Datastore
 {
@@ -18,9 +20,16 @@ namespace NzbDrone.Core.Datastore
             _databaseType = _database == null ? DatabaseType.SQLite : _database.DatabaseType;
         }
 
-        public IDbConnection OpenConnection()
+        public DbConnection OpenConnection()
         {
-            return _database.OpenConnection();
+            var connection = _database.OpenConnection();
+
+            if (_databaseType == DatabaseType.PostgreSQL)
+            {
+                return new ProfiledImplementations.NpgSqlConnection(connection, MiniProfiler.Current);
+            }
+
+            return new ProfiledDbConnection(connection, MiniProfiler.Current);
         }
 
         public Version Version => _database.Version;

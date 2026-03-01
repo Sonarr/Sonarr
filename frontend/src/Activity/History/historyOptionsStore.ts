@@ -12,7 +12,6 @@ export type HistoryOptions = PageableOptions;
 const { useOptions, useOption, setOptions, setOption, setSort } =
   createOptionsStore<HistoryOptions>('history_options', () => {
     return {
-      includeUnknownSeriesItems: true,
       pageSize: 20,
       selectedFilterKey: 'all',
       sortKey: 'time',

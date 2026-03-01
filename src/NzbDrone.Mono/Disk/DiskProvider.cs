@@ -21,13 +21,11 @@ namespace NzbDrone.Mono.Disk
         private readonly Logger _logger;
         private readonly IProcMountProvider _procMountProvider;
         private readonly ISymbolicLinkResolver _symLinkResolver;
-        private readonly ICreateRefLink _createRefLink;
 
-        public DiskProvider(IProcMountProvider procMountProvider, ISymbolicLinkResolver symLinkResolver, ICreateRefLink createRefLink, Logger logger)
+        public DiskProvider(IProcMountProvider procMountProvider, ISymbolicLinkResolver symLinkResolver, Logger logger)
         {
             _procMountProvider = procMountProvider;
             _symLinkResolver = symLinkResolver;
-            _createRefLink = createRefLink;
             _logger = logger;
         }
 
@@ -232,19 +230,6 @@ namespace NzbDrone.Mono.Disk
             var mount = GetMount(path);
 
             return mount?.TotalSize;
-        }
-
-        protected override void CloneFileInternal(string source, string destination, bool overwrite)
-        {
-            if (!File.Exists(destination) && !UnixFileSystemInfo.GetFileSystemEntry(source).IsSymbolicLink)
-            {
-                if (_createRefLink.TryCreateRefLink(source, destination))
-                {
-                    return;
-                }
-            }
-
-            CopyFileInternal(source, destination, overwrite);
         }
 
         protected override void CopyFileInternal(string source, string destination, bool overwrite)
@@ -462,11 +447,6 @@ namespace NzbDrone.Mono.Disk
                 _logger.Debug(ex, "Hardlink '{0}' to '{1}' failed.", source, destination);
                 return false;
             }
-        }
-
-        public override bool TryCreateRefLink(string source, string destination)
-        {
-            return _createRefLink.TryCreateRefLink(source, destination);
         }
 
         private uint GetUserId(string user)

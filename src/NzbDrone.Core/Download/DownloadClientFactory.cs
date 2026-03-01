@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentValidation.Results;
 using NLog;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.ThingiProvider;
 
@@ -11,6 +12,7 @@ namespace NzbDrone.Core.Download
     public interface IDownloadClientFactory : IProviderFactory<IDownloadClient, DownloadClientDefinition>
     {
         List<IDownloadClient> DownloadHandlingEnabled(bool filterBlockedClients = true);
+        DownloadClientDefinition ResolveDownloadClient(int? id, string name);
     }
 
     public class DownloadClientFactory : ProviderFactory<IDownloadClient, DownloadClientDefinition>, IDownloadClientFactory
@@ -52,6 +54,42 @@ namespace NzbDrone.Core.Download
             }
 
             return enabledClients.ToList();
+        }
+
+        public DownloadClientDefinition ResolveDownloadClient(int? id, string name)
+        {
+            var all = All();
+            var clientByName = name.IsNullOrWhiteSpace() ? null : all.FirstOrDefault(c => c.Name.EqualsIgnoreCase(name));
+            var clientById = id.HasValue ? all.FirstOrDefault(c => c.Id == id.Value) : null;
+
+            if (id.HasValue && clientById == null)
+            {
+                throw new ResolveDownloadClientException("Download client with ID '{0}' could not be found", id.Value);
+            }
+
+            if (name.IsNotNullOrWhiteSpace() && clientByName == null)
+            {
+                throw new ResolveDownloadClientException("Download client with name '{0}' could not be found", name);
+            }
+
+            if (clientByName == null && clientById == null)
+            {
+                return null;
+            }
+
+            if (clientByName != null && clientById != null && clientByName.Id != clientById.Id)
+            {
+                throw new ResolveDownloadClientException("Download client with name '{0}' does not match download client with ID '{1}'", name, id.Value);
+            }
+
+            var client = clientById ?? clientByName;
+
+            if (!client.Enable)
+            {
+                throw new ResolveDownloadClientException("Download client '{0}' ({1}) is not enabled", client.Name, id);
+            }
+
+            return client;
         }
 
         private IEnumerable<IDownloadClient> FilterBlockedClients(IEnumerable<IDownloadClient> clients)

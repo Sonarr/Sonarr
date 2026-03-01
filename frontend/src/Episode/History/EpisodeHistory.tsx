@@ -1,6 +1,5 @@
-import React, { useCallback, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import AppState from 'App/State/AppState';
+import React from 'react';
+import useEpisodeHistory from 'Activity/History/useEpisodeHistory';
 import Alert from 'Components/Alert';
 import Icon from 'Components/Icon';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
@@ -8,11 +7,6 @@ import Column from 'Components/Table/Column';
 import Table from 'Components/Table/Table';
 import TableBody from 'Components/Table/TableBody';
 import { icons, kinds } from 'Helpers/Props';
-import {
-  clearEpisodeHistory,
-  episodeHistoryMarkAsFailed,
-  fetchEpisodeHistory,
-} from 'Store/Actions/episodeHistoryActions';
 import translate from 'Utilities/String/translate';
 import EpisodeHistoryRow from './EpisodeHistoryRow';
 
@@ -69,27 +63,9 @@ interface EpisodeHistoryProps {
 }
 
 function EpisodeHistory({ episodeId }: EpisodeHistoryProps) {
-  const dispatch = useDispatch();
-  const { items, isFetching, isPopulated, error } = useSelector(
-    (state: AppState) => state.episodeHistory
-  );
+  const { data, isFetching, isFetched, error } = useEpisodeHistory(episodeId);
 
-  const handleMarkAsFailedPress = useCallback(
-    (historyId: number) => {
-      dispatch(episodeHistoryMarkAsFailed({ historyId, episodeId }));
-    },
-    [episodeId, dispatch]
-  );
-
-  const hasItems = !!items.length;
-
-  useEffect(() => {
-    dispatch(fetchEpisodeHistory({ episodeId }));
-
-    return () => {
-      dispatch(clearEpisodeHistory());
-    };
-  }, [episodeId, dispatch]);
+  const hasItems = !!data.length;
 
   if (isFetching) {
     return <LoadingIndicator />;
@@ -101,22 +77,16 @@ function EpisodeHistory({ episodeId }: EpisodeHistoryProps) {
     );
   }
 
-  if (isPopulated && !hasItems && !error) {
+  if (isFetched && !hasItems && !error) {
     return <Alert kind={kinds.INFO}>{translate('NoEpisodeHistory')}</Alert>;
   }
 
-  if (isPopulated && hasItems && !error) {
+  if (isFetched && hasItems && !error) {
     return (
       <Table columns={columns}>
         <TableBody>
-          {items.map((item) => {
-            return (
-              <EpisodeHistoryRow
-                key={item.id}
-                {...item}
-                onMarkAsFailedPress={handleMarkAsFailedPress}
-              />
-            );
+          {data.map((item) => {
+            return <EpisodeHistoryRow key={item.id} {...item} />;
           })}
         </TableBody>
       </Table>

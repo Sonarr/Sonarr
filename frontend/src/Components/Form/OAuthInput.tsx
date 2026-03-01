@@ -1,17 +1,17 @@
 import React, { useCallback, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import AppState from 'App/State/AppState';
 import SpinnerErrorButton from 'Components/Link/SpinnerErrorButton';
 import { kinds } from 'Helpers/Props';
-import { resetOAuth, startOAuth } from 'Store/Actions/oAuthActions';
+import useOAuth from 'OAuth/useOAuth';
+import { getValidationFailures } from 'Store/Selectors/selectSettings';
 import { InputOnChange } from 'typings/inputs';
+import { useFormInputGroup } from './FormInputGroupContext';
 
 export interface OAuthInputProps {
   label?: string;
   name: string;
   provider: string;
-  providerData: object;
-  section: string;
+  providerData: Record<string, unknown>;
+  section?: string;
   onChange: InputOnChange<unknown>;
 }
 
@@ -23,21 +23,17 @@ function OAuthInput({
   section,
   onChange,
 }: OAuthInputProps) {
-  const dispatch = useDispatch();
-  const { authorizing, error, result } = useSelector(
-    (state: AppState) => state.oAuth
-  );
+  const formInputActions = useFormInputGroup();
+  const { authorizing, error, result, startOAuth, resetOAuth } = useOAuth();
 
   const handlePress = useCallback(() => {
-    dispatch(
-      startOAuth({
-        name,
-        provider,
-        providerData,
-        section,
-      })
-    );
-  }, [name, provider, providerData, section, dispatch]);
+    startOAuth({
+      name,
+      provider,
+      providerData,
+      section,
+    });
+  }, [name, provider, providerData, section, startOAuth]);
 
   useEffect(() => {
     if (!result) {
@@ -51,9 +47,16 @@ function OAuthInput({
 
   useEffect(() => {
     return () => {
-      dispatch(resetOAuth());
+      resetOAuth();
     };
-  }, [dispatch]);
+  }, [resetOAuth]);
+
+  useEffect(() => {
+    const validationFailures = getValidationFailures(error);
+
+    formInputActions?.setClientErrors(validationFailures?.errors ?? []);
+    formInputActions?.setClientWarnings(validationFailures?.warnings ?? []);
+  }, [name, error, formInputActions]);
 
   return (
     <div>

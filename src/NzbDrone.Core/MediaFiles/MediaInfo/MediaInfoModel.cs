@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json.Serialization;
-using FFMpegCore;
 using NzbDrone.Core.Datastore;
 
 namespace NzbDrone.Core.MediaFiles.MediaInfo
@@ -9,7 +9,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
     public class MediaInfoModel : IEmbeddedDocument
     {
         public string RawStreamData { get; set; }
-        public string RawFrameData { get; set; }
+
         public int SchemaRevision { get; set; }
 
         public string ContainerFormat { get; set; }
@@ -27,35 +27,21 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
 
         public string VideoTransferCharacteristics { get; set; }
 
-        public DoviConfigurationRecordSideData DoviConfigurationRecord { get; set; }
-
         public HdrFormat VideoHdrFormat { get; set; }
 
         public int Height { get; set; }
 
         public int Width { get; set; }
 
-        public string AudioFormat { get; set; }
-
-        public string AudioCodecID { get; set; }
-
-        public string AudioProfile { get; set; }
-
-        public long AudioBitrate { get; set; }
-
         public TimeSpan RunTime { get; set; }
-
-        public int AudioStreamCount { get; set; }
-
-        public int AudioChannels { get; set; }
-
-        public string AudioChannelPositions { get; set; }
 
         public decimal VideoFps { get; set; }
 
-        public List<string> AudioLanguages { get; set; }
+        public MediaInfoAudioStreamModel PrimaryAudioStream => AudioStreams?.FirstOrDefault();
 
-        public List<string> Subtitles { get; set; }
+        public List<MediaInfoAudioStreamModel> AudioStreams { get; set; }
+
+        public List<MediaInfoSubtitleStreamModel> SubtitleStreams { get; set; }
 
         public string ScanType { get; set; }
 

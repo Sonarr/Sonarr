@@ -1,25 +1,23 @@
 import React, { useEffect, useMemo, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import {
   setAddSeriesOption,
   useAddSeriesOption,
 } from 'AddSeries/addSeriesOptionsStore';
 import { SelectProvider } from 'App/Select/SelectContext';
-import AppState from 'App/State/AppState';
 import Alert from 'Components/Alert';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import PageContent from 'Components/Page/PageContent';
 import PageContentBody from 'Components/Page/PageContentBody';
 import { kinds } from 'Helpers/Props';
 import useRootFolders, { useRootFolder } from 'RootFolder/useRootFolders';
-import { clearImportSeries } from 'Store/Actions/importSeriesActions';
+import { useQualityProfilesData } from 'Settings/Profiles/Quality/useQualityProfiles';
 import translate from 'Utilities/String/translate';
 import ImportSeriesFooter from './ImportSeriesFooter';
+import { clearImportSeries } from './importSeriesStore';
 import ImportSeriesTable from './ImportSeriesTable';
 
 function ImportSeries() {
-  const dispatch = useDispatch();
   const { rootFolderId: rootFolderIdString } = useParams<{
     rootFolderId: string;
   }>();
@@ -49,9 +47,7 @@ function ImportSeries() {
     };
   }, [rootFolders, rootFolderId]);
 
-  const qualityProfiles = useSelector(
-    (state: AppState) => state.settings.qualityProfiles.items
-  );
+  const qualityProfiles = useQualityProfilesData();
 
   const defaultQualityProfileId = useAddSeriesOption('qualityProfileId');
 
@@ -68,9 +64,9 @@ function ImportSeries() {
 
   useEffect(() => {
     return () => {
-      dispatch(clearImportSeries());
+      clearImportSeries();
     };
-  }, [rootFolderId, dispatch]);
+  }, [rootFolderId]);
 
   useEffect(() => {
     if (
@@ -79,13 +75,15 @@ function ImportSeries() {
     ) {
       setAddSeriesOption('qualityProfileId', qualityProfiles[0].id);
     }
-  }, [defaultQualityProfileId, qualityProfiles, dispatch]);
+  }, [defaultQualityProfileId, qualityProfiles]);
 
   return (
     <SelectProvider items={items}>
       <PageContent title={translate('ImportSeries')}>
         <PageContentBody ref={scrollerRef}>
-          {rootFoldersFetching ? <LoadingIndicator /> : null}
+          {rootFoldersFetching && !rootFoldersFetched ? (
+            <LoadingIndicator />
+          ) : null}
 
           {!rootFoldersFetching && !!rootFoldersError ? (
             <Alert kind={kinds.DANGER}>
@@ -103,20 +101,14 @@ function ImportSeries() {
           ) : null}
 
           {!rootFoldersError &&
-          !rootFoldersFetching &&
           rootFoldersFetched &&
           !!unmappedFolders.length &&
           scrollerRef.current ? (
-            <ImportSeriesTable
-              unmappedFolders={unmappedFolders}
-              scrollerRef={scrollerRef}
-            />
+            <ImportSeriesTable items={items} scrollerRef={scrollerRef} />
           ) : null}
         </PageContentBody>
 
-        {!rootFoldersError &&
-        !rootFoldersFetching &&
-        !!unmappedFolders.length ? (
+        {!rootFoldersError && rootFoldersFetched && !!unmappedFolders.length ? (
           <ImportSeriesFooter />
         ) : null}
       </PageContent>

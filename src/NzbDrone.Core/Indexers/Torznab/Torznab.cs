@@ -10,7 +10,6 @@ using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Indexers.Newznab;
 using NzbDrone.Core.Localization;
 using NzbDrone.Core.Parser;
-using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Validation;
 
 namespace NzbDrone.Core.Indexers.Torznab
@@ -43,14 +42,6 @@ namespace NzbDrone.Core.Indexers.Torznab
         public override IParseIndexerResponse GetParser()
         {
             return new TorznabRssParser();
-        }
-
-        public override IEnumerable<ProviderDefinition> DefaultDefinitions
-        {
-            get
-            {
-                yield return GetDefinition("AnimeTosho Torrents", GetSettings("https://feed.animetosho.org", apiPath: @"/nabapi", categories: Array.Empty<int>(), animeCategories: new[] { 5070 }));
-            }
         }
 
         private IndexerDefinition GetDefinition(string name, TorznabSettings settings)

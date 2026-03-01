@@ -37,11 +37,13 @@ namespace Sonarr.Api.V5.Queue
 
         [HttpGet]
         [Produces("application/json")]
-        public List<QueueResource> GetQueue(int? seriesId, [FromQuery]List<int> episodeIds, bool includeSeries = false, bool includeEpisodes = false)
+        public List<QueueResource> GetQueue(int? seriesId, [FromQuery]List<int> episodeIds, [FromQuery] QueueSubresource[]? includeSubresources = null)
         {
             var queue = _queueService.GetQueue();
             var pending = _pendingReleaseService.GetPendingQueue();
             var fullQueue = queue.Concat(pending);
+            var includeSeries = includeSubresources.Contains(QueueSubresource.Series);
+            var includeEpisodes = includeSubresources.Contains(QueueSubresource.Episodes);
 
             if (seriesId.HasValue)
             {

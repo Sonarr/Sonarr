@@ -4,7 +4,29 @@ import TableRowCell from 'Components/Table/Cells/TableRowCell';
 import TableSelectCell from 'Components/Table/Cells/TableSelectCell';
 import TableRowButton from 'Components/Table/TableRowButton';
 import Episode from 'Episode/Episode';
+import { icons, kinds } from 'Helpers/Props';
 import { SelectStateInputProps } from 'typings/props';
+import translate from 'Utilities/String/translate';
+import Icon from '../../Components/Icon';
+import styles from './SelectEpisodeRow.css';
+
+function getWarningMessage(
+  unverifiedSceneNumbering: boolean,
+  isAnime: boolean,
+  absoluteEpisodeNumber: number | undefined
+) {
+  const messages = [];
+
+  if (unverifiedSceneNumbering) {
+    messages.push(translate('SceneNumberNotVerified'));
+  }
+
+  if (isAnime && !absoluteEpisodeNumber) {
+    messages.push(translate('EpisodeMissingAbsoluteNumber'));
+  }
+
+  return messages.join('\n');
+}
 
 interface SelectEpisodeRowProps {
   id: number;
@@ -14,6 +36,7 @@ interface SelectEpisodeRowProps {
   airDate: string;
   isAnime: boolean;
   isSelected?: boolean;
+  unverifiedSceneNumbering?: boolean;
 }
 
 function SelectEpisodeRow({
@@ -23,6 +46,7 @@ function SelectEpisodeRow({
   title,
   airDate,
   isAnime,
+  unverifiedSceneNumbering = false,
 }: SelectEpisodeRowProps) {
   const { toggleSelected, useIsSelected } = useSelect<Episode>();
   const isSelected = useIsSelected(id);
@@ -42,6 +66,12 @@ function SelectEpisodeRow({
     handleSelectedChange({ id, value: !isSelected, shiftKey: false });
   }, [id, isSelected, handleSelectedChange]);
 
+  const warningMessage = getWarningMessage(
+    unverifiedSceneNumbering,
+    isAnime,
+    absoluteEpisodeNumber
+  );
+
   return (
     <TableRowButton onPress={handlePress}>
       <TableSelectCell
@@ -52,7 +82,17 @@ function SelectEpisodeRow({
 
       <TableRowCell>
         {episodeNumber}
-        {isAnime ? ` (${absoluteEpisodeNumber})` : ''}
+        {isAnime && !!absoluteEpisodeNumber
+          ? ` (${absoluteEpisodeNumber})`
+          : ''}
+        {warningMessage ? (
+          <Icon
+            className={styles.warning}
+            name={icons.WARNING}
+            kind={kinds.WARNING}
+            title={warningMessage}
+          />
+        ) : null}
       </TableRowCell>
 
       <TableRowCell>{title}</TableRowCell>

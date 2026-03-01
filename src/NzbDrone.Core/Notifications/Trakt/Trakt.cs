@@ -344,7 +344,7 @@ namespace NzbDrone.Core.Notifications.Trakt
 
         private string MapAudio(EpisodeFile episodeFile)
         {
-            var audioCodec = episodeFile.MediaInfo != null ? MediaInfoFormatter.FormatAudioCodec(episodeFile.MediaInfo, episodeFile.SceneName) : string.Empty;
+            var audioCodec = episodeFile.MediaInfo is { PrimaryAudioStream: not null } ? MediaInfoFormatter.FormatAudioCodec(episodeFile.MediaInfo.PrimaryAudioStream, episodeFile.SceneName) : string.Empty;
 
             var traktAudioFormat = audioCodec switch
             {
@@ -374,7 +374,7 @@ namespace NzbDrone.Core.Notifications.Trakt
 
         private string MapAudioChannels(EpisodeFile episodeFile, string audioFormat)
         {
-            var audioChannels = episodeFile.MediaInfo != null ? MediaInfoFormatter.FormatAudioChannels(episodeFile.MediaInfo).ToString("0.0") : string.Empty;
+            var audioChannels = episodeFile.MediaInfo is { PrimaryAudioStream: not null } ? MediaInfoFormatter.FormatAudioChannels(episodeFile.MediaInfo.PrimaryAudioStream).ToString("0.0") : string.Empty;
 
             return audioChannels;
         }

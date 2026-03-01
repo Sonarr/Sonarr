@@ -1,8 +1,7 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { CommandBody } from 'Commands/Command';
 import TableRowCell from 'Components/Table/Cells/TableRowCell';
-import createMultiSeriesSelector from 'Store/Selectors/createMultiSeriesSelector';
+import { useMultipleSeries } from 'Series/useSeries';
 import sortByProp from 'Utilities/Array/sortByProp';
 import translate from 'Utilities/String/translate';
 import styles from './QueuedTaskRowNameCell.css';
@@ -33,13 +32,13 @@ export default function QueuedTaskRowNameCell(
   props: QueuedTaskRowNameCellProps
 ) {
   const { commandName, body, clientUserAgent } = props;
-  const seriesIds = [...(body.seriesIds ?? [])];
+  const seriesIds = 'seriesIds' in body ? [...body.seriesIds] : [];
 
-  if (body.seriesId) {
+  if ('seriesId' in body && body.seriesId) {
     seriesIds.push(body.seriesId);
   }
 
-  const series = useSelector(createMultiSeriesSelector(seriesIds));
+  const series = useMultipleSeries(seriesIds);
   const sortedSeries = series.sort(sortByProp('sortTitle'));
 
   return (
@@ -49,7 +48,7 @@ export default function QueuedTaskRowNameCell(
         {sortedSeries.length ? (
           <span> - {formatTitles(sortedSeries.map((s) => s.title))}</span>
         ) : null}
-        {body.seasonNumber ? (
+        {'seasonNumber' in body && body.seasonNumber ? (
           <span>
             {' '}
             {translate('SeasonNumberToken', {

@@ -11,7 +11,7 @@ import { useEpisodeFile } from 'EpisodeFile/EpisodeFileProvider';
 import { useDeleteEpisodeFile } from 'EpisodeFile/useEpisodeFiles';
 import { icons, kinds, sizes } from 'Helpers/Props';
 import Series from 'Series/Series';
-import useSeries from 'Series/useSeries';
+import { useSingleSeries } from 'Series/useSeries';
 import QualityProfileName from 'Settings/Profiles/Quality/QualityProfileName';
 import translate from 'Utilities/String/translate';
 import EpisodeAiring from './EpisodeAiring';
@@ -80,7 +80,7 @@ function EpisodeSummary({
   episodeFileId,
 }: EpisodeSummaryProps) {
   const queryClient = useQueryClient();
-  const { qualityProfileId, network } = useSeries(seriesId) as Series;
+  const { qualityProfileId, network } = useSingleSeries(seriesId) as Series;
 
   const { airDateUtc, overview } = useEpisode(
     episodeId,

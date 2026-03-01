@@ -16,7 +16,7 @@ import { icons, tooltipPositions } from 'Helpers/Props';
 import Language from 'Language/Language';
 import { QualityModel } from 'Quality/Quality';
 import SeriesTitleLink from 'Series/SeriesTitleLink';
-import useSeries from 'Series/useSeries';
+import { useSingleSeries } from 'Series/useSeries';
 import CustomFormat from 'typings/CustomFormat';
 import { HistoryData, HistoryEventType } from 'typings/History';
 import formatCustomFormatScore from 'Utilities/Number/formatCustomFormatScore';
@@ -61,7 +61,7 @@ function HistoryRow(props: HistoryRowProps) {
     columns,
   } = props;
 
-  const series = useSeries(seriesId);
+  const series = useSingleSeries(seriesId);
   const episode = useEpisode(episodeId, 'episodes');
 
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);

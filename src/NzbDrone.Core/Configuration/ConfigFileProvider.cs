@@ -69,6 +69,8 @@ namespace NzbDrone.Core.Configuration
         string PostgresMainDbConnectionString { get; }
         string PostgresLogDbConnectionString { get; }
         bool TrustCgnatIpAddresses { get; }
+        bool ProfilerEnabled { get; }
+        string ProfilerPosition { get; }
     }
 
     public class ConfigFileProvider : IConfigFileProvider
@@ -234,6 +236,8 @@ namespace NzbDrone.Core.Configuration
                 ? enumValue
                 : GetValueEnum("AuthenticationRequired", AuthenticationRequiredType.Enabled);
 
+        public bool TrustCgnatIpAddresses => _authOptions.TrustCgnatIpAddresses ?? GetValueBoolean("TrustCgnatIpAddresses", false, persist: false);
+
         public bool AnalyticsEnabled => _logOptions.AnalyticsEnabled ?? GetValueBoolean("AnalyticsEnabled", true, persist: false);
 
         public string Branch => _updateOptions.Branch ?? GetValue("Branch", "main").ToLowerInvariant();
@@ -311,6 +315,9 @@ namespace NzbDrone.Core.Configuration
         public int SyslogPort => _logOptions.SyslogPort ?? GetValueInt("SyslogPort", 514, persist: false);
 
         public string SyslogLevel => _logOptions.SyslogLevel ?? GetValue("SyslogLevel", LogLevel, persist: false).ToLowerInvariant();
+
+        public bool ProfilerEnabled => _appOptions.ProfilerEnabled ?? GetValueBoolean("ProfilerEnabled", false, persist: false);
+        public string ProfilerPosition => _appOptions.ProfilerPosition ?? GetValue("ProfilerPosition", "bottom-right", persist: false);
 
         public int GetValueInt(string key, int defaultValue, bool persist = true)
         {
@@ -499,7 +506,5 @@ namespace NzbDrone.Core.Configuration
         {
             SetValue("ApiKey", GenerateApiKey());
         }
-
-        public bool TrustCgnatIpAddresses => _authOptions.TrustCgnatIpAddresses ?? GetValueBoolean("TrustCgnatIpAddresses", false, persist: false);
     }
 }

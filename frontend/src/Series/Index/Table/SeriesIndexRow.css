@@ -37,7 +37,7 @@
   position: relative;
   display: block;
   height: 70px;
-  background-color: var(--defaultColor);
+  background-color: var(--seriesBackgroundColor);
 }
 
 .bannerImage {

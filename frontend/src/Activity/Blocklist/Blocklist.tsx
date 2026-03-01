@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { setQueueOptions } from 'Activity/Queue/queueOptionsStore';
 import { SelectProvider, useSelect } from 'App/Select/SelectContext';
-import * as commandNames from 'Commands/commandNames';
+import CommandNames from 'Commands/CommandNames';
+import { useCommandExecuting, useExecuteCommand } from 'Commands/useCommands';
 import Alert from 'Components/Alert';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import FilterMenu from 'Components/Menu/FilterMenu';
@@ -19,8 +19,6 @@ import TablePager from 'Components/Table/TablePager';
 import { useCustomFiltersList } from 'Filters/useCustomFilters';
 import { align, icons, kinds } from 'Helpers/Props';
 import { SortDirection } from 'Helpers/Props/sortDirections';
-import { executeCommand } from 'Store/Actions/commandActions';
-import createCommandExecutingSelector from 'Store/Selectors/createCommandExecutingSelector';
 import BlockListModel from 'typings/Blocklist';
 import { CheckInputChanged } from 'typings/inputs';
 import { TableOptionsChangePayload } from 'typings/Table';
@@ -62,10 +60,10 @@ function BlocklistContent() {
   const { isRemoving, removeBlocklistItems } = useRemoveBlocklistItems();
 
   const customFilters = useCustomFiltersList('blocklist');
-  const isClearingBlocklistExecuting = useSelector(
-    createCommandExecutingSelector(commandNames.CLEAR_BLOCKLIST)
+  const executeCommand = useExecuteCommand();
+  const isClearingBlocklistExecuting = useCommandExecuting(
+    CommandNames.ClearBlocklist
   );
-  const dispatch = useDispatch();
 
   const [isConfirmRemoveModalOpen, setIsConfirmRemoveModalOpen] =
     useState(false);
@@ -109,16 +107,11 @@ function BlocklistContent() {
   }, [setIsConfirmClearModalOpen]);
 
   const handleClearBlocklistConfirmed = useCallback(() => {
-    dispatch(
-      executeCommand({
-        name: commandNames.CLEAR_BLOCKLIST,
-        commandFinished: () => {
-          goToPage(1);
-        },
-      })
-    );
+    executeCommand({ name: CommandNames.ClearBlocklist }, () => {
+      goToPage(1);
+    });
     setIsConfirmClearModalOpen(false);
-  }, [setIsConfirmClearModalOpen, goToPage, dispatch]);
+  }, [setIsConfirmClearModalOpen, goToPage, executeCommand]);
 
   const handleConfirmClearModalClose = useCallback(() => {
     setIsConfirmClearModalOpen(false);

@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import HistoryDetails from 'Activity/History/Details/HistoryDetails';
 import HistoryEventTypeCell from 'Activity/History/HistoryEventTypeCell';
+import { useMarkAsFailed } from 'Activity/History/useHistory';
 import Icon from 'Components/Icon';
 import IconButton from 'Components/Link/IconButton';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
@@ -51,7 +52,6 @@ interface EpisodeHistoryRowProps {
   date: string;
   data: HistoryData;
   downloadId?: string;
-  onMarkAsFailedPress: (id: number) => void;
 }
 
 function EpisodeHistoryRow({
@@ -66,18 +66,18 @@ function EpisodeHistoryRow({
   date,
   data,
   downloadId,
-  onMarkAsFailedPress,
 }: EpisodeHistoryRowProps) {
   const [isMarkAsFailedModalOpen, setIsMarkAsFailedModalOpen] = useState(false);
+  const { markAsFailed } = useMarkAsFailed(id, 'episode');
 
   const handleMarkAsFailedPress = useCallback(() => {
     setIsMarkAsFailedModalOpen(true);
   }, []);
 
   const handleConfirmMarkAsFailed = useCallback(() => {
-    onMarkAsFailedPress(id);
+    markAsFailed();
     setIsMarkAsFailedModalOpen(false);
-  }, [id, onMarkAsFailedPress]);
+  }, [markAsFailed]);
 
   const handleMarkAsFailedModalClose = useCallback(() => {
     setIsMarkAsFailedModalOpen(false);

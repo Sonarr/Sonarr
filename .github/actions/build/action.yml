@@ -23,6 +23,12 @@ runs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v5
 
+    - name: Setup NuGet registry source
+      shell: bash
+      if: ${{ startsWith(inputs.runtime, 'freebsd') }}
+      run:
+        dotnet nuget add source --configfile src/NuGet.Config --name gh-openur https://nuget.pkg.github.com/openur/index.json --username ${{ github.repository_owner }} --password ${{ github.token }} --store-password-in-clear-text
+
     - name: Setup Environment Variables
       id: variables
       shell: bash
@@ -86,7 +92,7 @@ runs:
 
         echo "Building Sonarr for $runtime, Platform: $platform"
 
-        dotnet msbuild -restore $slnFile -p:SelfContained=True -p:Configuration=Release -p:Platform=$platform -p:RuntimeIdentifiers=$runtime -p:EnableWindowsTargeting=true -t:PublishAllRids
+        dotnet msbuild -restore $slnFile -p:SelfContained=true -p:Configuration=Release -p:Platform=$platform -p:RuntimeIdentifiers=$runtime -p:EnableWindowsTargeting=true -t:PublishAllRids
 
     - name: Package
       shell: bash

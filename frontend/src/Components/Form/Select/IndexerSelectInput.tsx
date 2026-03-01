@@ -40,9 +40,9 @@ function createIndexersSelector(includeAny: boolean) {
 
 export interface IndexerSelectInputProps {
   name: string;
-  value: number;
+  value: number | number[];
   includeAny?: boolean;
-  onChange: (change: EnhancedSelectInputChanged<number>) => void;
+  onChange: (change: EnhancedSelectInputChanged<number | number[]>) => void;
 }
 
 function IndexerSelectInput({

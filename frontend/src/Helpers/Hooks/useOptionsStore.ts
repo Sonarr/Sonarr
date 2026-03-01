@@ -81,7 +81,7 @@ export const createOptionsStore = <T extends TSettings>(
     sortDirection,
   }: {
     sortKey: string;
-    sortDirection: SortDirection | undefined;
+    sortDirection?: SortDirection;
   }) => {
     // @ts-expect-error - Cannot verify if T has sortKey and sortDirection
     store.setState((state) => {
@@ -176,7 +176,7 @@ export const applySort = <T extends TSettings>(
   sortKey: string,
   sortDirection: SortDirection | undefined
 ) => {
-  if ('sortKey' in state === false || 'sortDirection' in state === false) {
+  if (!('sortKey' in state) || !('sortDirection' in state)) {
     return state;
   }
 

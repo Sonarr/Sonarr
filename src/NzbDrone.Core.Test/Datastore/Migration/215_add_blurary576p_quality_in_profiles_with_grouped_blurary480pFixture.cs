@@ -27,7 +27,6 @@ namespace NzbDrone.Core.Test.Datastore.Migration
             {
                 c.Insert.IntoTable("QualityProfiles").Row(new
                 {
-                    Id = 0,
                     Name = "Bluray",
                     Cutoff = 7,
                     Items = $"[{GenerateQualityJson((int)Quality.DVD, true)}, {GenerateQualityJson((int)Quality.Bluray480p, true)}, {GenerateQualityJson((int)Quality.Bluray720p, false)}]"
@@ -50,7 +49,6 @@ namespace NzbDrone.Core.Test.Datastore.Migration
             {
                 c.Insert.IntoTable("QualityProfiles").Row(new
                 {
-                    Id = 0,
                     Name = "Bluray",
                     Cutoff = 7,
                     Items = $"[{GenerateQualityJson((int)Quality.DVD, true)}, {GenerateQualityJson((int)Quality.Bluray480p, false)}, {GenerateQualityJson((int)Quality.Bluray720p, false)}]"
@@ -73,7 +71,6 @@ namespace NzbDrone.Core.Test.Datastore.Migration
             {
                 c.Insert.IntoTable("QualityProfiles").Row(new
                 {
-                    Id = 0,
                     Name = "Bluray",
                     Cutoff = 7,
                     Items = $"[{GenerateQualityGroupJson(1000, "DVD", new[] { (int)Quality.DVD, (int)Quality.Bluray480p }, true)}, {GenerateQualityJson((int)Quality.Bluray720p, false)}]"
@@ -97,7 +94,6 @@ namespace NzbDrone.Core.Test.Datastore.Migration
             {
                 c.Insert.IntoTable("QualityProfiles").Row(new
                 {
-                    Id = 0,
                     Name = "Bluray",
                     Cutoff = 7,
                     Items = $"[{GenerateQualityJson((int)Quality.DVD, true)}, {GenerateQualityJson((int)Quality.Bluray480p, false)}, {GenerateQualityJson((int)Quality.Bluray576p, false)}, {GenerateQualityJson((int)Quality.Bluray720p, false)}]"
@@ -120,7 +116,6 @@ namespace NzbDrone.Core.Test.Datastore.Migration
             {
                 c.Insert.IntoTable("QualityProfiles").Row(new
                 {
-                    Id = 0,
                     Name = "Bluray",
                     Cutoff = 7,
                     Items = $"[{GenerateQualityGroupJson(1000, "DVD", new[] { (int)Quality.DVD, (int)Quality.Bluray480p, (int)Quality.Bluray576p }, true)}, {GenerateQualityJson((int)Quality.Bluray720p, false)}]"

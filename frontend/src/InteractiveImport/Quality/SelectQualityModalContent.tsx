@@ -1,7 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { createSelector } from 'reselect';
-import AppState from 'App/State/AppState';
+import React, { useCallback, useMemo, useState } from 'react';
 import Alert from 'Components/Alert';
 import Form from 'Components/Form/Form';
 import FormGroup from 'Components/Form/FormGroup';
@@ -16,29 +13,10 @@ import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import { inputTypes, kinds } from 'Helpers/Props';
 import Quality, { QualityModel } from 'Quality/Quality';
-import { fetchQualityProfileSchema } from 'Store/Actions/settingsActions';
+import { useQualityProfileSchema } from 'Settings/Profiles/Quality/useQualityProfiles';
 import { InputChanged } from 'typings/inputs';
 import getQualities from 'Utilities/Quality/getQualities';
 import translate from 'Utilities/String/translate';
-
-function createQualitySchemaSelector() {
-  return createSelector(
-    (state: AppState) => state.settings.qualityProfiles,
-    (qualityProfiles) => {
-      const { isSchemaFetching, isSchemaPopulated, schemaError, schema } =
-        qualityProfiles;
-
-      const items = getQualities(schema.items);
-
-      return {
-        isFetching: isSchemaFetching,
-        isPopulated: isSchemaPopulated,
-        error: schemaError,
-        items,
-      };
-    }
-  );
-}
 
 interface SelectQualityModalContentProps {
   qualityId: number;
@@ -56,18 +34,12 @@ function SelectQualityModalContent(props: SelectQualityModalContentProps) {
   const [proper, setProper] = useState(props.proper);
   const [real, setReal] = useState(props.real);
 
-  const { isFetching, isPopulated, error, items } = useSelector(
-    createQualitySchemaSelector()
-  );
-  const dispatch = useDispatch();
+  const { schema, isSchemaFetching, isSchemaFetched, schemaError } =
+    useQualityProfileSchema(true);
 
-  useEffect(
-    () => {
-      dispatch(fetchQualityProfileSchema());
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
+  const items = useMemo(() => {
+    return getQualities(schema.items);
+  }, [schema]);
 
   const qualityOptions = useMemo(() => {
     return items.map(({ id, name }): EnhancedSelectInputValue<number> => {
@@ -119,13 +91,13 @@ function SelectQualityModalContent(props: SelectQualityModalContentProps) {
       <ModalHeader>{modalTitle} - Select Quality</ModalHeader>
 
       <ModalBody>
-        {isFetching ? <LoadingIndicator /> : null}
+        {isSchemaFetching ? <LoadingIndicator /> : null}
 
-        {!isFetching && error ? (
+        {!isSchemaFetching && schemaError ? (
           <Alert kind={kinds.DANGER}>{translate('QualitiesLoadError')}</Alert>
         ) : null}
 
-        {isPopulated && !error ? (
+        {isSchemaFetched && !schemaError ? (
           <Form>
             <FormGroup>
               <FormLabel>{translate('Quality')}</FormLabel>

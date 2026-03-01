@@ -1,4 +1,3 @@
-using NzbDrone.Common.Extensions;
 using NzbDrone.Core.MediaFiles.MediaInfo;
 using Sonarr.Http.REST;
 
@@ -6,11 +5,6 @@ namespace Sonarr.Api.V5.EpisodeFiles
 {
     public class MediaInfoResource : RestResource
     {
-        public long AudioBitrate { get; set; }
-        public decimal AudioChannels { get; set; }
-        public string? AudioCodec { get; set; }
-        public string? AudioLanguages { get; set; }
-        public int AudioStreamCount { get; set; }
         public int VideoBitDepth { get; set; }
         public long VideoBitrate { get; set; }
         public string? VideoCodec { get; set; }
@@ -20,7 +14,8 @@ namespace Sonarr.Api.V5.EpisodeFiles
         public string? Resolution { get; set; }
         public string? RunTime { get; set; }
         public string? ScanType { get; set; }
-        public string? Subtitles { get; set; }
+        public List<MediaInfoAudioStreamResource>? AudioStreams { get; set; }
+        public List<MediaInfoSubtitleStreamResource>? SubtitleStreams { get; set; }
     }
 
     public static class MediaInfoResourceMapper
@@ -34,11 +29,6 @@ namespace Sonarr.Api.V5.EpisodeFiles
 
             return new MediaInfoResource
             {
-                AudioBitrate = model.AudioBitrate,
-                AudioChannels = MediaInfoFormatter.FormatAudioChannels(model),
-                AudioLanguages = model.AudioLanguages.ConcatToString("/"),
-                AudioStreamCount = model.AudioStreamCount,
-                AudioCodec = MediaInfoFormatter.FormatAudioCodec(model, sceneName),
                 VideoBitDepth = model.VideoBitDepth,
                 VideoBitrate = model.VideoBitrate,
                 VideoCodec = MediaInfoFormatter.FormatVideoCodec(model, sceneName),
@@ -48,7 +38,8 @@ namespace Sonarr.Api.V5.EpisodeFiles
                 Resolution = $"{model.Width}x{model.Height}",
                 RunTime = FormatRuntime(model.RunTime),
                 ScanType = model.ScanType,
-                Subtitles = model.Subtitles.ConcatToString("/")
+                AudioStreams = model.AudioStreams?.Select(stream => stream.ToResource(sceneName)).ToList(),
+                SubtitleStreams = model.SubtitleStreams?.Select(stream => stream.ToResource()).ToList()
             };
         }
 

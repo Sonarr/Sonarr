@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import HistoryDetails from 'Activity/History/Details/HistoryDetails';
 import HistoryEventTypeCell from 'Activity/History/HistoryEventTypeCell';
+import { useMarkAsFailed } from 'Activity/History/useHistory';
 import Icon from 'Components/Icon';
 import IconButton from 'Components/Link/IconButton';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
@@ -17,7 +18,7 @@ import useEpisode from 'Episode/useEpisode';
 import { icons, kinds, tooltipPositions } from 'Helpers/Props';
 import Language from 'Language/Language';
 import { QualityModel } from 'Quality/Quality';
-import useSeries from 'Series/useSeries';
+import { useSingleSeries } from 'Series/useSeries';
 import CustomFormat from 'typings/CustomFormat';
 import { HistoryData, HistoryEventType } from 'typings/History';
 import formatCustomFormatScore from 'Utilities/Number/formatCustomFormatScore';
@@ -39,7 +40,6 @@ interface SeriesHistoryRowProps {
   downloadId?: string;
   fullSeries: boolean;
   customFormatScore: number;
-  onMarkAsFailedPress: (historyId: number) => void;
 }
 
 function SeriesHistoryRow({
@@ -57,11 +57,10 @@ function SeriesHistoryRow({
   downloadId,
   fullSeries,
   customFormatScore,
-  onMarkAsFailedPress,
 }: SeriesHistoryRowProps) {
-  const series = useSeries(seriesId);
+  const series = useSingleSeries(seriesId);
   const episode = useEpisode(episodeId, 'episodes');
-
+  const { markAsFailed } = useMarkAsFailed(id, 'series');
   const [isMarkAsFailedModalOpen, setIsMarkAsFailedModalOpen] = useState(false);
 
   const EpisodeComponent = fullSeries ? SeasonEpisodeNumber : EpisodeNumber;
@@ -90,9 +89,8 @@ function SeriesHistoryRow({
   }, []);
 
   const handleConfirmMarkAsFailed = useCallback(() => {
-    onMarkAsFailedPress(id);
-    setIsMarkAsFailedModalOpen(false);
-  }, [id, onMarkAsFailedPress]);
+    markAsFailed();
+  }, [markAsFailed]);
 
   const handleMarkAsFailedModalClose = useCallback(() => {
     setIsMarkAsFailedModalOpen(false);

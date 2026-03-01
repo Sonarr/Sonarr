@@ -20,9 +20,9 @@ import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import Popover from 'Components/Tooltip/Popover';
 import usePrevious from 'Helpers/Hooks/usePrevious';
-import useShowAdvancedSettings from 'Helpers/Hooks/useShowAdvancedSettings';
 import { icons, inputTypes, kinds, tooltipPositions } from 'Helpers/Props';
 import AdvancedSettingsButton from 'Settings/AdvancedSettingsButton';
+import { useShowAdvancedSettings } from 'Settings/advancedSettingsStore';
 import {
   saveImportList,
   setImportListFieldValue,

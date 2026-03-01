@@ -7,6 +7,7 @@ import EditQualityProfileModalContent from './EditQualityProfileModalContent';
 
 interface EditQualityProfileModalProps {
   id?: number;
+  cloneId?: number;
   isOpen: boolean;
   onDeleteQualityProfilePress?: () => void;
   onModalClose: () => void;
@@ -14,6 +15,7 @@ interface EditQualityProfileModalProps {
 
 function EditQualityProfileModal({
   id,
+  cloneId,
   isOpen,
   onDeleteQualityProfilePress,
   onModalClose,
@@ -44,6 +46,7 @@ function EditQualityProfileModal({
     >
       <EditQualityProfileModalContent
         id={id}
+        cloneId={cloneId}
         onContentHeightChange={handleContentHeightChange}
         onDeleteQualityProfilePress={onDeleteQualityProfilePress}
         onModalClose={handleOnModalClose}

@@ -1,5 +1,5 @@
 import Quality from 'Quality/Quality';
-import { QualityProfileItems } from 'typings/QualityProfile';
+import { QualityProfileItems } from 'Settings/Profiles/Quality/useQualityProfiles';
 
 export default function getQualities(qualities?: QualityProfileItems) {
   if (!qualities) {

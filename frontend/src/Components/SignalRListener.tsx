@@ -6,20 +6,15 @@ import {
 import { QueryKey, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
+import { setAppValue, setVersion } from 'App/appStore';
 import ModelBase from 'App/ModelBase';
 import Command from 'Commands/Command';
+import { useUpdateCommand } from 'Commands/useCommands';
 import Episode from 'Episode/Episode';
 import { EpisodeFile } from 'EpisodeFile/EpisodeFile';
 import { PagedQueryResponse } from 'Helpers/Hooks/usePagedApiQuery';
-import { setAppValue, setVersion } from 'Store/Actions/appActions';
+import Series from 'Series/Series';
 import { removeItem, updateItem } from 'Store/Actions/baseActions';
-import {
-  fetchCommands,
-  finishCommand,
-  updateCommand,
-} from 'Store/Actions/commandActions';
-import { fetchSeries } from 'Store/Actions/seriesActions';
-import { fetchQualityDefinitions } from 'Store/Actions/settingsActions';
 import { repopulatePage } from 'Utilities/pagePopulator';
 import SignalRLogger from 'Utilities/SignalRLogger';
 
@@ -37,6 +32,7 @@ interface SignalRMessage {
 
 function SignalRListener() {
   const queryClient = useQueryClient();
+  const updateCommand = useUpdateCommand();
   const dispatch = useDispatch();
 
   const connection = useRef<HubConnection | null>(null);
@@ -45,47 +41,43 @@ function SignalRListener() {
     console.error('[signalR] failed to connect');
     console.error(error);
 
-    dispatch(
-      setAppValue({
-        isConnected: false,
-        isReconnecting: false,
-        isDisconnected: false,
-        isRestarting: false,
-      })
-    );
+    setAppValue({
+      isConnected: false,
+      isReconnecting: false,
+      isDisconnected: false,
+      isRestarting: false,
+    });
   });
 
   const handleStart = useRef(() => {
     console.debug('[signalR] connected');
 
-    dispatch(
-      setAppValue({
-        isConnected: true,
-        isReconnecting: false,
-        isDisconnected: false,
-        isRestarting: false,
-      })
-    );
+    setAppValue({
+      isConnected: true,
+      isReconnecting: false,
+      isDisconnected: false,
+      isRestarting: false,
+    });
   });
 
   const handleReconnecting = useRef(() => {
-    dispatch(setAppValue({ isReconnecting: true }));
+    setAppValue({ isReconnecting: true });
   });
 
   const handleReconnected = useRef(() => {
-    dispatch(
-      setAppValue({
-        isConnected: true,
-        isReconnecting: false,
-        isDisconnected: false,
-        isRestarting: false,
-      })
-    );
+    setAppValue({
+      isConnected: true,
+      isReconnecting: false,
+      isDisconnected: false,
+      isRestarting: false,
+    });
 
     // Repopulate the page (if a repopulator is set) to ensure things
     // are in sync after reconnecting.
-    dispatch(fetchSeries());
-    dispatch(fetchCommands());
+    queryClient.invalidateQueries({ queryKey: ['/series'] });
+
+    queryClient.invalidateQueries({ queryKey: ['/command'] });
+
     repopulatePage();
   });
 
@@ -118,21 +110,13 @@ function SignalRListener() {
 
     if (name === 'command') {
       if (body.action === 'sync') {
-        dispatch(fetchCommands());
+        queryClient.invalidateQueries({ queryKey: ['/command'] });
         return;
       }
 
       const resource = body.resource as Command;
-      const status = resource.status;
 
-      // Both successful and failed commands need to be
-      // completed, otherwise they spin until they time out.
-
-      if (status === 'completed' || status === 'failed') {
-        dispatch(finishCommand(resource));
-      } else {
-        dispatch(updateCommand(resource));
-      }
+      updateCommand(resource);
 
       return;
     }
@@ -306,7 +290,11 @@ function SignalRListener() {
     }
 
     if (name === 'qualitydefinition') {
-      dispatch(fetchQualityDefinitions());
+      if (version < 5) {
+        return;
+      }
+
+      queryClient.invalidateQueries({ queryKey: ['/qualitydefinition'] });
       return;
     }
 
@@ -355,12 +343,49 @@ function SignalRListener() {
     }
 
     if (name === 'series') {
+      if (version < 5) {
+        return;
+      }
+
       if (body.action === 'updated') {
-        dispatch(updateItem({ section: 'series', ...body.resource }));
+        const updatedItem = body.resource as Series;
+
+        queryClient.setQueryData<Series[]>(
+          ['/series'],
+          (oldData: Series[] | undefined) => {
+            if (!oldData) {
+              return oldData;
+            }
+
+            return oldData.map((item) => {
+              if (item.id === updatedItem.id) {
+                return {
+                  ...item,
+                  ...updatedItem,
+                };
+              }
+
+              return item;
+            });
+          }
+        );
 
         repopulatePage('seriesUpdated');
       } else if (body.action === 'deleted') {
         dispatch(removeItem({ section: 'series', id: body.resource.id }));
+
+        queryClient.setQueriesData(
+          { queryKey: ['/series'] },
+          (oldData: Series[] | undefined) => {
+            if (!oldData) {
+              return oldData;
+            }
+
+            return oldData.filter((item) => {
+              return item.id !== body.resource.id;
+            });
+          }
+        );
       }
 
       return;
@@ -387,7 +412,7 @@ function SignalRListener() {
     }
 
     if (name === 'version') {
-      dispatch(setVersion({ version: body.version }));
+      setVersion({ version: body.version });
       return;
     }
 
@@ -435,7 +460,7 @@ function SignalRListener() {
       .withAutomaticReconnect({
         nextRetryDelayInMilliseconds: (retryContext) => {
           if (retryContext.elapsedMilliseconds > 180000) {
-            dispatch(setAppValue({ isDisconnected: true }));
+            setAppValue({ isDisconnected: true });
           }
           return Math.min(retryContext.previousRetryCount, 10) * 1000;
         },

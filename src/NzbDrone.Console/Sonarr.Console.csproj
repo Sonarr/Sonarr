@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>net8.0</TargetFrameworks>
+    <TargetFrameworks>net10.0</TargetFrameworks>
 
     <ApplicationIcon>..\NzbDrone.Host\Sonarr.ico</ApplicationIcon>
   </PropertyGroup>

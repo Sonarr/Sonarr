@@ -1,10 +1,8 @@
 import classNames from 'classnames';
 import React, { useEffect, useMemo, useRef } from 'react';
-import { useDispatch } from 'react-redux';
-import { MessageType } from 'App/State/MessagesAppState';
+import { hideMessage, MessageType } from 'App/messagesStore';
 import Icon, { IconName } from 'Components/Icon';
 import { icons } from 'Helpers/Props';
-import { hideMessage } from 'Store/Actions/appActions';
 import styles from './Message.css';
 
 interface MessageProps {
@@ -16,7 +14,6 @@ interface MessageProps {
 }
 
 function Message({ id, hideAfter, name, message, type }: MessageProps) {
-  const dispatch = useDispatch();
   const dismissTimeout = useRef<ReturnType<typeof setTimeout>>();
 
   const icon: IconName = useMemo(() => {
@@ -49,7 +46,7 @@ function Message({ id, hideAfter, name, message, type }: MessageProps) {
   useEffect(() => {
     if (hideAfter) {
       dismissTimeout.current = setTimeout(() => {
-        dispatch(hideMessage({ id }));
+        hideMessage({ id });
 
         dismissTimeout.current = undefined;
       }, hideAfter * 1000);
@@ -60,7 +57,7 @@ function Message({ id, hideAfter, name, message, type }: MessageProps) {
         clearTimeout(dismissTimeout.current);
       }
     };
-  }, [id, hideAfter, message, type, dispatch]);
+  }, [id, hideAfter, message, type]);
 
   return (
     <div className={classNames(styles.message, styles[type])}>

@@ -112,6 +112,13 @@ export const FILTER_BUILDER: FilterBuilderProp<History>[] = [
   },
 ];
 
+type HistoryType = 'episode' | 'series';
+
+const MARK_AS_FAILED_QUERY_KEYS: Record<HistoryType, string> = {
+  episode: '/history/episode',
+  series: '/history/series',
+} as const;
+
 const useHistory = () => {
   const { page, goToPage } = usePage('history');
   const { pageSize, selectedFilterKey, sortKey, sortDirection } =
@@ -155,7 +162,7 @@ export const useFilters = () => {
   return FILTERS;
 };
 
-export const useMarkAsFailed = (id: number) => {
+export const useMarkAsFailed = (id: number, type?: HistoryType) => {
   const queryClient = useQueryClient();
   const [error, setError] = useState<string | null>(null);
 
@@ -167,7 +174,9 @@ export const useMarkAsFailed = (id: number) => {
         setError(null);
       },
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ['/history'] });
+        const queryKey = type ? MARK_AS_FAILED_QUERY_KEYS[type] : '/history';
+
+        queryClient.invalidateQueries({ queryKey: [queryKey] });
       },
       onError: () => {
         setError('Error marking history item as failed');

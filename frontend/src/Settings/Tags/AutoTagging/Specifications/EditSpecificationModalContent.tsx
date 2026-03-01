@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import AppState from 'App/State/AppState';
 import { AutoTaggingSpecificationAppState } from 'App/State/SettingsAppState';
 import Alert from 'Components/Alert';
 import Form from 'Components/Form/Form';
@@ -16,6 +15,7 @@ import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import { inputTypes, kinds } from 'Helpers/Props';
+import { useShowAdvancedSettings } from 'Settings/advancedSettingsStore';
 import {
   clearAutoTaggingSpecificationPending,
   saveAutoTaggingSpecification,
@@ -39,9 +39,7 @@ function EditSpecificationModalContent({
   onDeleteSpecificationPress,
   onModalClose,
 }: EditSpecificationModalContentProps) {
-  const advancedSettings = useSelector(
-    (state: AppState) => state.settings.advancedSettings
-  );
+  const advancedSettings = useShowAdvancedSettings();
 
   const { item, ...otherFormProps } = useSelector(
     createProviderSettingsSelectorHook<

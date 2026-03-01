@@ -4,10 +4,10 @@ import { DragSourceMonitor, useDrag, useDrop, XYCoord } from 'react-dnd';
 import DragType from 'Helpers/DragType';
 import useMeasure from 'Helpers/Hooks/useMeasure';
 import { qualityProfileItemHeight } from 'Styles/Variables/dimensions';
-import { QualityProfileQualityItem } from 'typings/QualityProfile';
 import QualityProfileItem from './QualityProfileItem';
 import QualityProfileItemGroup from './QualityProfileItemGroup';
 import { SizeChanged } from './QualityProfileItemSize';
+import { QualityProfileQualityItem } from './useQualityProfiles';
 import styles from './QualityProfileItemDragSource.css';
 
 export interface DragMoveState {

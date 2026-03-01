@@ -1,12 +1,11 @@
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using FFMpegCore;
+using System.Text.Json.Nodes;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Disk;
-using NzbDrone.Common.Extensions;
 using NzbDrone.Core.MediaFiles.MediaInfo;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Test.Common.Categories;
@@ -47,17 +46,17 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo
             info.VideoFormat.Should().Be("h264");
             info.VideoCodecID.Should().Be("avc1");
             info.VideoProfile.Should().Be("Constrained Baseline");
-            info.AudioFormat.Should().Be("aac");
-            info.AudioCodecID.Should().Be("mp4a");
-            info.AudioProfile.Should().Be("LC");
-            info.AudioBitrate.Should().Be(125509);
-            info.AudioChannels.Should().Be(2);
-            info.AudioChannelPositions.Should().Be("stereo");
-            info.AudioLanguages.Should().BeEquivalentTo("eng");
+            info.PrimaryAudioStream.Format.Should().Be("aac");
+            info.PrimaryAudioStream.CodecId.Should().Be("mp4a");
+            info.PrimaryAudioStream.Profile.Should().Be("LC");
+            info.PrimaryAudioStream.Bitrate.Should().Be(125509);
+            info.PrimaryAudioStream.Channels.Should().Be(2);
+            info.PrimaryAudioStream.ChannelPositions.Should().Be("stereo");
+            info.AudioStreams?.Select(l => l.Language).Should().BeEquivalentTo("eng");
             info.Height.Should().Be(320);
             info.RunTime.Seconds.Should().Be(10);
             info.ScanType.Should().Be("Progressive");
-            info.Subtitles.Should().BeEmpty();
+            info.SubtitleStreams?.Select(l => l.Language).Should().BeEmpty();
             info.VideoBitrate.Should().Be(193694);
             info.VideoFps.Should().Be(24);
             info.Width.Should().Be(480);
@@ -84,17 +83,17 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo
             info.VideoFormat.Should().Be("h264");
             info.VideoCodecID.Should().Be("avc1");
             info.VideoProfile.Should().Be("Constrained Baseline");
-            info.AudioFormat.Should().Be("aac");
-            info.AudioCodecID.Should().Be("mp4a");
-            info.AudioProfile.Should().Be("LC");
-            info.AudioBitrate.Should().Be(125509);
-            info.AudioChannels.Should().Be(2);
-            info.AudioChannelPositions.Should().Be("stereo");
-            info.AudioLanguages.Should().BeEquivalentTo("eng");
+            info.PrimaryAudioStream.Format.Should().Be("aac");
+            info.PrimaryAudioStream.CodecId.Should().Be("mp4a");
+            info.PrimaryAudioStream.Profile.Should().Be("LC");
+            info.PrimaryAudioStream.Bitrate.Should().Be(125509);
+            info.PrimaryAudioStream.Channels.Should().Be(2);
+            info.PrimaryAudioStream.ChannelPositions.Should().Be("stereo");
+            info.AudioStreams?.Select(l => l.Language).Should().BeEquivalentTo("eng");
             info.Height.Should().Be(320);
             info.RunTime.Seconds.Should().Be(10);
             info.ScanType.Should().Be("Progressive");
-            info.Subtitles.Should().BeEmpty();
+            info.SubtitleStreams?.Select(l => l.Language).Should().BeEmpty();
             info.VideoBitrate.Should().Be(193694);
             info.VideoFps.Should().Be(24);
             info.Width.Should().Be(480);
@@ -103,39 +102,39 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaInfo
             info.Title.Should().Be("Sample Title");
         }
 
-        [TestCase(8, "", "", "", null, HdrFormat.None)]
-        [TestCase(10, "", "", "", null, HdrFormat.None)]
-        [TestCase(10, "bt709", "bt709", "", null, HdrFormat.None)]
-        [TestCase(8, "bt2020", "smpte2084", "", null, HdrFormat.None)]
-        [TestCase(10, "bt2020", "bt2020-10", "", null, HdrFormat.None)]
-        [TestCase(10, "bt2020", "arib-std-b67", "", null, HdrFormat.Hlg10)]
-        [TestCase(10, "bt2020", "smpte2084", "", null, HdrFormat.Pq10)]
-        [TestCase(10, "bt2020", "smpte2084", "FFMpegCore.SideData", null, HdrFormat.Pq10)]
-        [TestCase(10, "bt2020", "smpte2084", "FFMpegCore.MasteringDisplayMetadata", null, HdrFormat.Hdr10)]
-        [TestCase(10, "bt2020", "smpte2084", "FFMpegCore.ContentLightLevelMetadata", null, HdrFormat.Hdr10)]
-        [TestCase(10, "bt2020", "smpte2084", "FFMpegCore.HdrDynamicMetadataSpmte2094", null, HdrFormat.Hdr10Plus)]
-        [TestCase(10, "bt2020", "smpte2084", "FFMpegCore.DoviConfigurationRecordSideData", null, HdrFormat.DolbyVision)]
-        [TestCase(10, "bt2020", "smpte2084", "FFMpegCore.DoviConfigurationRecordSideData", 1, HdrFormat.DolbyVisionHdr10)]
-        [TestCase(10, "bt2020", "smpte2084", "FFMpegCore.DoviConfigurationRecordSideData,FFMpegCore.HdrDynamicMetadataSpmte2094", 1, HdrFormat.DolbyVisionHdr10Plus)]
-        [TestCase(10, "bt2020", "smpte2084", "FFMpegCore.DoviConfigurationRecordSideData,FFMpegCore.HdrDynamicMetadataSpmte2094", 6, HdrFormat.DolbyVisionHdr10Plus)]
-        [TestCase(10, "bt2020", "smpte2084", "FFMpegCore.DoviConfigurationRecordSideData", 2, HdrFormat.DolbyVisionSdr)]
-        [TestCase(10, "bt2020", "smpte2084", "FFMpegCore.DoviConfigurationRecordSideData", 4, HdrFormat.DolbyVisionHlg)]
-        public void should_detect_hdr_correctly(int bitDepth, string colourPrimaries, string transferFunction, string sideDataTypes, int? doviConfigId, HdrFormat expected)
+        [TestCase(8, "", "", null, null, HdrFormat.None)]
+        [TestCase(10, "", "", null, null, HdrFormat.None)]
+        [TestCase(10, "bt709", "bt709", null, null, HdrFormat.None)]
+        [TestCase(8, "bt2020", "smpte2084", null, null, HdrFormat.None)]
+        [TestCase(10, "bt2020", "bt2020-10", null, null, HdrFormat.None)]
+        [TestCase(10, "bt2020", "arib-std-b67", null, null, HdrFormat.Hlg10)]
+        [TestCase(10, "bt2020", "smpte2084", null, null, HdrFormat.Pq10)]
+        [TestCase(10, "bt2020", "smpte2084", new[] { "" }, null, HdrFormat.Pq10)]
+        [TestCase(10, "bt2020", "smpte2084", new[] { FFMpegCoreSideDataTypes.MasteringDisplayMetadata }, null, HdrFormat.Hdr10)]
+        [TestCase(10, "bt2020", "smpte2084", new[] { FFMpegCoreSideDataTypes.ContentLightLevelMetadata }, null, HdrFormat.Hdr10)]
+        [TestCase(10, "bt2020", "smpte2084", new[] { FFMpegCoreSideDataTypes.HdrDynamicMetadataSpmte2094 }, null, HdrFormat.Hdr10Plus)]
+        [TestCase(10, "bt2020", "smpte2084", new[] { FFMpegCoreSideDataTypes.DoviConfigurationRecordSideData }, null, HdrFormat.DolbyVision)]
+        [TestCase(10, "bt2020", "smpte2084", new[] { FFMpegCoreSideDataTypes.DoviConfigurationRecordSideData }, 1, HdrFormat.DolbyVisionHdr10)]
+        [TestCase(10, "bt2020", "smpte2084", new[] { FFMpegCoreSideDataTypes.DoviConfigurationRecordSideData, FFMpegCoreSideDataTypes.HdrDynamicMetadataSpmte2094 }, 1, HdrFormat.DolbyVisionHdr10Plus)]
+        [TestCase(10, "bt2020", "smpte2084", new[] { FFMpegCoreSideDataTypes.DoviConfigurationRecordSideData, FFMpegCoreSideDataTypes.HdrDynamicMetadataSpmte2094 }, 6, HdrFormat.DolbyVisionHdr10Plus)]
+        [TestCase(10, "bt2020", "smpte2084", new[] { FFMpegCoreSideDataTypes.DoviConfigurationRecordSideData }, 2, HdrFormat.DolbyVisionSdr)]
+        [TestCase(10, "bt2020", "smpte2084", new[] { FFMpegCoreSideDataTypes.DoviConfigurationRecordSideData }, 4, HdrFormat.DolbyVisionHlg)]
+        public void should_detect_hdr_correctly(int bitDepth, string colourPrimaries, string transferFunction, string[] sideDataTypes, int? doviConfigId, HdrFormat expected)
         {
-            var assembly = Assembly.GetAssembly(typeof(FFProbe));
-            var types = sideDataTypes.Split(",").Select(x => x.Trim()).ToList();
-            var sideData = types.Where(x => x.IsNotNullOrWhiteSpace()).Select(x => assembly.CreateInstance(x)).Cast<SideData>().ToList();
-
-            if (doviConfigId.HasValue)
+            var sideData = sideDataTypes?.Select(sideDataType =>
             {
-                sideData.ForEach(x =>
+                var sideData = new Dictionary<string, JsonNode>
                 {
-                    if (x.GetType().Name == "DoviConfigurationRecordSideData")
-                    {
-                        ((DoviConfigurationRecordSideData)x).DvBlSignalCompatibilityId = doviConfigId.Value;
-                    }
-                });
-            }
+                    { "side_data_type", JsonValue.Create(sideDataType) }
+                };
+
+                if (doviConfigId.HasValue)
+                {
+                    sideData.Add("dv_bl_signal_compatibility_id", JsonValue.Create(doviConfigId.Value));
+                }
+
+                return sideData;
+            }).ToList();
 
             var result = VideoFileInfoReader.GetHdrFormat(bitDepth, colourPrimaries, transferFunction, sideData);
 

@@ -1,15 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { saveDimensions, useAppValue } from 'App/appStore';
 import AppUpdatedModal from 'App/AppUpdatedModal';
 import ColorImpairedContext from 'App/ColorImpairedContext';
 import ConnectionLostModal from 'App/ConnectionLostModal';
-import AppState from 'App/State/AppState';
 import SignalRListener from 'Components/SignalRListener';
 import AuthenticationRequiredModal from 'FirstRun/AuthenticationRequiredModal';
 import useAppPage from 'Helpers/Hooks/useAppPage';
-import { saveDimensions } from 'Store/Actions/appActions';
-import createDimensionsSelector from 'Store/Selectors/createDimensionsSelector';
-import createUISettingsSelector from 'Store/Selectors/createUISettingsSelector';
+import { useUiSettingsValues } from 'Settings/UI/useUiSettings';
 import { useSystemStatusData } from 'System/Status/useSystemStatus';
 import ErrorPage from './ErrorPage';
 import PageHeader from './Header/PageHeader';
@@ -22,34 +19,30 @@ interface PageProps {
 }
 
 function Page({ children }: PageProps) {
-  const dispatch = useDispatch();
+  const isUpdated = useAppValue('isUpdated');
+  const isDisconnected = useAppValue('isDisconnected');
+  const version = useAppValue('version');
   const { hasError, errors, isPopulated, isLocalStorageSupported } =
     useAppPage();
   const [isUpdatedModalOpen, setIsUpdatedModalOpen] = useState(false);
   const [isConnectionLostModalOpen, setIsConnectionLostModalOpen] =
     useState(false);
 
-  const { enableColorImpairedMode } = useSelector(createUISettingsSelector());
-  const { isSmallScreen } = useSelector(createDimensionsSelector());
+  const { enableColorImpairedMode } = useUiSettingsValues();
   const { authentication } = useSystemStatusData();
 
   const authenticationEnabled = authentication !== 'none';
-  const { isSidebarVisible, isUpdated, isDisconnected, version } = useSelector(
-    (state: AppState) => state.app
-  );
 
   const handleUpdatedModalClose = useCallback(() => {
     setIsUpdatedModalOpen(false);
   }, []);
 
   const handleResize = useCallback(() => {
-    dispatch(
-      saveDimensions({
-        width: window.innerWidth,
-        height: window.innerHeight,
-      })
-    );
-  }, [dispatch]);
+    saveDimensions({
+      width: window.innerWidth,
+      height: window.innerHeight,
+    });
+  }, []);
 
   useEffect(() => {
     window.addEventListener('resize', handleResize);
@@ -93,10 +86,7 @@ function Page({ children }: PageProps) {
         <PageHeader />
 
         <div className={styles.main}>
-          <PageSidebar
-            isSmallScreen={isSmallScreen}
-            isSidebarVisible={isSidebarVisible}
-          />
+          <PageSidebar />
 
           {children}
         </div>

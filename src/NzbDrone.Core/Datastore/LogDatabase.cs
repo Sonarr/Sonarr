@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Data;
+using System.Data.Common;
 
 namespace NzbDrone.Core.Datastore
 {
@@ -18,7 +18,7 @@ namespace NzbDrone.Core.Datastore
             _databaseType = _database == null ? DatabaseType.SQLite : _database.DatabaseType;
         }
 
-        public IDbConnection OpenConnection()
+        public DbConnection OpenConnection()
         {
             return _database.OpenConnection();
         }

@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { createSelector } from 'reselect';
-import * as commandNames from 'Commands/commandNames';
+import { useDispatch } from 'react-redux';
+import { useAppDimension } from 'App/appStore';
+import CommandNames from 'Commands/CommandNames';
+import { useCommands } from 'Commands/useCommands';
 import Icon from 'Components/Icon';
 import Label from 'Components/Label';
 import IconButton from 'Components/Link/IconButton';
@@ -32,10 +33,7 @@ import OrganizePreviewModal from 'Organize/OrganizePreviewModal';
 import SeriesHistoryModal from 'Series/History/SeriesHistoryModal';
 import SeasonInteractiveSearchModal from 'Series/Search/SeasonInteractiveSearchModal';
 import { Statistics } from 'Series/Series';
-import useSeries from 'Series/useSeries';
-import { toggleSeasonMonitored } from 'Store/Actions/seriesActions';
-import createCommandsSelector from 'Store/Selectors/createCommandsSelector';
-import createDimensionsSelector from 'Store/Selectors/createDimensionsSelector';
+import { useSingleSeries, useToggleSeasonMonitored } from 'Series/useSeries';
 import { TableOptionsChangePayload } from 'typings/Table';
 import { findCommand, isCommandExecuting } from 'Utilities/Command';
 import isAfter from 'Utilities/Date/isAfter';
@@ -86,16 +84,15 @@ function getSeasonStatistics(episodes: Episode[]) {
   };
 }
 
-function createIsSearchingSelector(seriesId: number, seasonNumber: number) {
-  return createSelector(createCommandsSelector(), (commands) => {
-    return isCommandExecuting(
-      findCommand(commands, {
-        name: commandNames.SEASON_SEARCH,
-        seriesId,
-        seasonNumber,
-      })
-    );
-  });
+function useIsSearching(seriesId: number, seasonNumber: number) {
+  const { data: commands } = useCommands();
+  return isCommandExecuting(
+    findCommand(commands, {
+      name: CommandNames.SeasonSearch,
+      seriesId,
+      seasonNumber,
+    })
+  );
 }
 
 interface SeriesDetailsSeasonProps {
@@ -103,7 +100,6 @@ interface SeriesDetailsSeasonProps {
   monitored: boolean;
   seasonNumber: number;
   statistics?: Statistics;
-  isSaving?: boolean;
   isExpanded?: boolean;
   onExpandPress: (seasonNumber: number, isExpanded: boolean) => void;
 }
@@ -113,20 +109,17 @@ function SeriesDetailsSeason({
   monitored,
   seasonNumber,
   statistics = {} as Statistics,
-  isSaving,
   isExpanded,
   onExpandPress,
 }: SeriesDetailsSeasonProps) {
   const dispatch = useDispatch();
-  const { monitored: seriesMonitored, path } = useSeries(seriesId)!;
+  const { monitored: seriesMonitored, path } = useSingleSeries(seriesId)!;
   const { data: items } = useSeasonEpisodes(seriesId, seasonNumber);
 
   const { columns, sortKey, sortDirection } = useEpisodeOptions();
 
-  const { isSmallScreen } = useSelector(createDimensionsSelector());
-  const isSearching = useSelector(
-    createIsSearchingSelector(seriesId, seasonNumber)
-  );
+  const isSmallScreen = useAppDimension('isSmallScreen');
+  const isSearching = useIsSearching(seriesId, seasonNumber);
 
   const { sizeOnDisk = 0 } = statistics;
 
@@ -149,6 +142,9 @@ function SeriesDetailsSeason({
   const { toggleEpisodesMonitored, isToggling, togglingEpisodeIds } =
     useToggleEpisodesMonitored(getQueryKey('episodes')!);
 
+  const { toggleSeasonMonitored, isTogglingSeasonMonitored } =
+    useToggleSeasonMonitored(seriesId);
+
   const lastToggledEpisode = useRef<number | null>(null);
   const hasSetInitalExpand = useRef(false);
 
@@ -159,15 +155,12 @@ function SeriesDetailsSeason({
 
   const handleMonitorSeasonPress = useCallback(
     (value: boolean) => {
-      dispatch(
-        toggleSeasonMonitored({
-          seriesId,
-          seasonNumber,
-          monitored: value,
-        })
-      );
+      toggleSeasonMonitored({
+        seasonNumber,
+        monitored: value,
+      });
     },
-    [seriesId, seasonNumber, dispatch]
+    [seasonNumber, toggleSeasonMonitored]
   );
 
   const handleExpandPress = useCallback(() => {
@@ -202,7 +195,7 @@ function SeriesDetailsSeason({
 
   const handleSearchPress = useCallback(() => {
     dispatch({
-      name: commandNames.SEASON_SEARCH,
+      name: CommandNames.SeasonSearch,
       seriesId,
       seasonNumber,
     });
@@ -287,7 +280,7 @@ function SeriesDetailsSeason({
           <MonitorToggleButton
             monitored={monitored}
             isDisabled={!seriesMonitored}
-            isSaving={isSaving}
+            isSaving={isTogglingSeasonMonitored}
             size={24}
             onPress={handleMonitorSeasonPress}
           />

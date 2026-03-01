@@ -74,7 +74,7 @@ function getRelativeDate({
 
   if (isInNextWeek(date)) {
     const dateTime = convertToTimezone(date, timeZone);
-    const day = dateTime.format('dddd');
+    const day = getDayOfWeek(dateTime.day());
 
     return includeTime ? translate('DayOfWeekAt', { day, time }) : day;
   }
@@ -88,3 +88,24 @@ function getRelativeDate({
 }
 
 export default getRelativeDate;
+
+function getDayOfWeek(dayNumber: number) {
+  switch (dayNumber) {
+    case 0:
+      return translate('Sunday');
+    case 1:
+      return translate('Monday');
+    case 2:
+      return translate('Tuesday');
+    case 3:
+      return translate('Wednesday');
+    case 4:
+      return translate('Thursday');
+    case 5:
+      return translate('Friday');
+    case 6:
+      return translate('Saturday');
+    default:
+      return '';
+  }
+}

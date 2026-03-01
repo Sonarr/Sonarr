@@ -1,34 +1,25 @@
 import React, { useCallback } from 'react';
-import { useSelector } from 'react-redux';
 import FormGroup from 'Components/Form/FormGroup';
 import FormInputGroup from 'Components/Form/FormInputGroup';
 import FormLabel from 'Components/Form/FormLabel';
 import { inputTypes } from 'Helpers/Props';
+import {
+  setSeriesTableOptions,
+  useSeriesTableOptions,
+} from 'Series/seriesOptionsStore';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
-import selectTableOptions from './selectTableOptions';
 
-interface SeriesIndexTableOptionsProps {
-  onTableOptionChange(...args: unknown[]): unknown;
-}
+function SeriesIndexTableOptions() {
+  const { showBanners, showSearchAction } = useSeriesTableOptions();
 
-function SeriesIndexTableOptions(props: SeriesIndexTableOptionsProps) {
-  const { onTableOptionChange } = props;
-
-  const tableOptions = useSelector(selectTableOptions);
-
-  const { showBanners, showSearchAction } = tableOptions;
-
-  const onTableOptionChangeWrapper = useCallback(
+  const handleTableOptionChange = useCallback(
     ({ name, value }: InputChanged<boolean>) => {
-      onTableOptionChange({
-        tableOptions: {
-          ...tableOptions,
-          [name]: value,
-        },
+      setSeriesTableOptions({
+        [name]: value,
       });
     },
-    [tableOptions, onTableOptionChange]
+    []
   );
 
   return (
@@ -41,7 +32,7 @@ function SeriesIndexTableOptions(props: SeriesIndexTableOptionsProps) {
           name="showBanners"
           value={showBanners}
           helpText={translate('ShowBannersHelpText')}
-          onChange={onTableOptionChangeWrapper}
+          onChange={handleTableOptionChange}
         />
       </FormGroup>
 
@@ -53,7 +44,7 @@ function SeriesIndexTableOptions(props: SeriesIndexTableOptionsProps) {
           name="showSearchAction"
           value={showSearchAction}
           helpText={translate('ShowSearchHelpText')}
-          onChange={onTableOptionChangeWrapper}
+          onChange={handleTableOptionChange}
         />
       </FormGroup>
     </>

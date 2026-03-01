@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Json.Nodes;
 using FFMpegCore;
 using NLog;
 using NzbDrone.Common.Disk;
@@ -19,10 +20,9 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
     {
         private readonly IDiskProvider _diskProvider;
         private readonly Logger _logger;
-        private readonly List<FFProbePixelFormat> _pixelFormats;
 
-        public const int MINIMUM_MEDIA_INFO_SCHEMA_REVISION = 12;
-        public const int CURRENT_MEDIA_INFO_SCHEMA_REVISION = 12;
+        public const int MINIMUM_MEDIA_INFO_SCHEMA_REVISION = 14;
+        public const int CURRENT_MEDIA_INFO_SCHEMA_REVISION = 14;
 
         private static readonly string[] ValidHdrColourPrimaries = { "bt2020" };
         private static readonly string[] HlgTransferFunctions = { "arib-std-b67" };
@@ -36,16 +36,6 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
 
             // We bundle ffprobe for all platforms
             GlobalFFOptions.Configure(options => options.BinaryFolder = AppDomain.CurrentDomain.BaseDirectory);
-
-            try
-            {
-                _pixelFormats = FFProbe.GetPixelFormats();
-            }
-            catch (Exception e)
-            {
-                _logger.Error(e, "Failed to get supported pixel formats from ffprobe");
-                _pixelFormats = new List<FFProbePixelFormat>();
-            }
         }
 
         public MediaInfoModel GetMediaInfo(string filename)
@@ -65,15 +55,13 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
             try
             {
                 _logger.Debug("Getting media info from {0}", filename);
-                var ffprobeOutput = FFProbe.GetStreamJson(filename, ffOptions: new FFOptions { ExtraArguments = "-probesize 50000000" });
 
-                var analysis = FFProbe.AnalyseStreamJson(ffprobeOutput);
+                var analysis = FFProbe.Analyse(filename, customArguments: "-probesize 50000000");
                 var primaryVideoStream = GetPrimaryVideoStream(analysis);
 
                 if (analysis.PrimaryAudioStream?.ChannelLayout.IsNullOrWhiteSpace() ?? true)
                 {
-                    ffprobeOutput = FFProbe.GetStreamJson(filename, ffOptions: new FFOptions { ExtraArguments = "-probesize 150000000 -analyzeduration 150000000" });
-                    analysis = FFProbe.AnalyseStreamJson(ffprobeOutput);
+                    analysis = FFProbe.Analyse(filename, customArguments: "-probesize 150000000 -analyzeduration 150000000");
                 }
 
                 var mediaInfoModel = new MediaInfoModel();
@@ -85,26 +73,72 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                 mediaInfoModel.VideoBitDepth = GetPixelFormat(primaryVideoStream?.PixelFormat)?.Components.Min(x => x.BitDepth) ?? 8;
                 mediaInfoModel.VideoColourPrimaries = primaryVideoStream?.ColorPrimaries;
                 mediaInfoModel.VideoTransferCharacteristics = primaryVideoStream?.ColorTransfer;
-                mediaInfoModel.DoviConfigurationRecord = primaryVideoStream?.SideDataList?.Find(x => x.GetType().Name == nameof(DoviConfigurationRecordSideData)) as DoviConfigurationRecordSideData;
                 mediaInfoModel.Height = primaryVideoStream?.Height ?? 0;
                 mediaInfoModel.Width = primaryVideoStream?.Width ?? 0;
-                mediaInfoModel.AudioFormat = analysis.PrimaryAudioStream?.CodecName;
-                mediaInfoModel.AudioCodecID = analysis.PrimaryAudioStream?.CodecTagString;
-                mediaInfoModel.AudioProfile = analysis.PrimaryAudioStream?.Profile;
-                mediaInfoModel.AudioBitrate = GetBitrate(analysis.PrimaryAudioStream);
                 mediaInfoModel.RunTime = GetBestRuntime(analysis.PrimaryAudioStream?.Duration, primaryVideoStream?.Duration, analysis.Format.Duration);
-                mediaInfoModel.AudioStreamCount = analysis.AudioStreams.Count;
-                mediaInfoModel.AudioChannels = analysis.PrimaryAudioStream?.Channels ?? 0;
-                mediaInfoModel.AudioChannelPositions = analysis.PrimaryAudioStream?.ChannelLayout;
                 mediaInfoModel.VideoFps = primaryVideoStream?.FrameRate ?? 0;
-                mediaInfoModel.AudioLanguages = analysis.AudioStreams?.Select(x => x.Language)
-                    .Where(l => l.IsNotNullOrWhiteSpace())
+                mediaInfoModel.ScanType = primaryVideoStream?.FieldOrder switch
+                {
+                    "tt" or "bb" or "tb" or "bt" => "Interlaced",
+                    _ => "Progressive"
+                };
+                mediaInfoModel.RawStreamData = string.Concat(analysis.OutputData);
+
+                mediaInfoModel.AudioStreams = analysis.AudioStreams?
+                    .Where(stream => stream.Language.IsNotNullOrWhiteSpace())
+                    .OrderBy(stream => stream.Index)
+                    .Select(stream =>
+                    {
+                        var model = new MediaInfoAudioStreamModel
+                        {
+                            Language = stream.Language,
+                            Format = stream.CodecName,
+                            CodecId = stream.CodecTagString,
+                            Profile = stream.Profile,
+                            Bitrate = GetBitrate(stream),
+                            Channels = stream.Channels,
+                            ChannelPositions = stream.ChannelLayout
+                        };
+
+                        if ((stream.Tags?.TryGetValue("title", out var audioTitle) ?? false) && audioTitle.IsNotNullOrWhiteSpace())
+                        {
+                            model.Title = audioTitle.Trim();
+                        }
+
+                        return  model;
+                    })
                     .ToList();
-                mediaInfoModel.Subtitles = analysis.SubtitleStreams?.Select(x => x.Language)
-                    .Where(l => l.IsNotNullOrWhiteSpace())
+
+                mediaInfoModel.SubtitleStreams = analysis.SubtitleStreams?
+                    .Where(stream => stream.Language.IsNotNullOrWhiteSpace())
+                    .OrderBy(stream => stream.Index)
+                    .Select(stream =>
+                    {
+                        var model = new MediaInfoSubtitleStreamModel
+                        {
+                            Language = stream.Language,
+                            Format = stream.CodecName,
+                        };
+
+                        if ((stream.Tags?.TryGetValue("title", out var subtitleTitle) ?? false) && subtitleTitle.IsNotNullOrWhiteSpace())
+                        {
+                            model.Title = subtitleTitle.Trim();
+                        }
+
+                        if (stream.Disposition?.TryGetValue("forced", out var forcedSubtitle) ?? false)
+                        {
+                            model.Forced = forcedSubtitle;
+                        }
+
+                        if (stream.Disposition?.TryGetValue("hearing_impaired", out var hearingImpairedSubtitle) ?? false)
+                        {
+                            model.HearingImpaired = hearingImpairedSubtitle;
+                        }
+
+                        return  model;
+                    })
                     .ToList();
-                mediaInfoModel.ScanType = "Progressive";
-                mediaInfoModel.RawStreamData = ffprobeOutput;
+
                 mediaInfoModel.SchemaRevision = CURRENT_MEDIA_INFO_SCHEMA_REVISION;
 
                 if (analysis.Format.Tags?.TryGetValue("title", out var title) ?? false)
@@ -117,14 +151,12 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
                 // if it looks like PQ10 or similar HDR, do a frame analysis to figure out which type it is
                 if (PqTransferFunctions.Contains(mediaInfoModel.VideoTransferCharacteristics))
                 {
-                    var frameOutput = FFProbe.GetFrameJson(filename, ffOptions: new() { ExtraArguments = $"-read_intervals \"%+#1\" -select_streams v:{primaryVideoStream?.Index ?? 0}" });
-                    mediaInfoModel.RawFrameData = frameOutput;
-
-                    frames = FFProbe.AnalyseFrameJson(frameOutput);
+                    var videoStreamIndex = analysis.VideoStreams.FindIndex(stream => stream.Index == primaryVideoStream?.Index);
+                    frames = FFProbe.GetFrames(filename, customArguments: $"-read_intervals \"%+#1\" -select_streams v:{(videoStreamIndex == -1 ? 0 : videoStreamIndex)}");
                 }
 
-                var streamSideData = primaryVideoStream?.SideDataList ?? new();
-                var framesSideData = frames?.Frames?.Count > 0 ? frames?.Frames[0]?.SideDataList ?? new() : new();
+                var streamSideData = primaryVideoStream?.SideData ?? new();
+                var framesSideData = frames?.Frames.FirstOrDefault()?.SideData ?? new();
 
                 var sideData = streamSideData.Concat(framesSideData).ToList();
                 mediaInfoModel.VideoHdrFormat = GetHdrFormat(mediaInfoModel.VideoBitDepth, mediaInfoModel.VideoColourPrimaries, mediaInfoModel.VideoTransferCharacteristics, sideData);
@@ -176,7 +208,7 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
             return 0;
         }
 
-        private VideoStream GetPrimaryVideoStream(IMediaAnalysis mediaAnalysis)
+        private static VideoStream GetPrimaryVideoStream(IMediaAnalysis mediaAnalysis)
         {
             if (mediaAnalysis.VideoStreams.Count <= 1)
             {
@@ -189,23 +221,30 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
             return mediaAnalysis.VideoStreams.FirstOrDefault(s => !codecFilter.Contains(s.CodecName)) ?? mediaAnalysis.PrimaryVideoStream;
         }
 
-        private FFProbePixelFormat GetPixelFormat(string format)
+        private static FFProbePixelFormat GetPixelFormat(string format)
         {
-            return _pixelFormats.Find(x => x.Name == format);
+            if (format.IsNullOrWhiteSpace())
+            {
+                return null;
+            }
+
+            return FFProbe.TryGetPixelFormat(format, out var pixelFormat) ? pixelFormat : null;
         }
 
-        public static HdrFormat GetHdrFormat(int bitDepth, string colorPrimaries, string transferFunction, List<SideData> sideData)
+        public static HdrFormat GetHdrFormat(int bitDepth, string colorPrimaries, string transferFunction, List<Dictionary<string, JsonNode>> sideData)
         {
             if (bitDepth < 10)
             {
                 return HdrFormat.None;
             }
 
-            if (TryGetSideData<DoviConfigurationRecordSideData>(sideData, out var dovi))
+            if (TryGetSideData(sideData, FFMpegCoreSideDataTypes.DoviConfigurationRecordSideData, out var dovi))
             {
-                var hasHdr10Plus = TryGetSideData<HdrDynamicMetadataSpmte2094>(sideData, out _);
+                var hasHdr10Plus = TryGetSideData(sideData, FFMpegCoreSideDataTypes.HdrDynamicMetadataSpmte2094, out _);
 
-                return dovi.DvBlSignalCompatibilityId switch
+                dovi.TryGetValue("dv_bl_signal_compatibility_id", out var dvBlSignalCompatibilityId);
+
+                return dvBlSignalCompatibilityId?.GetValue<int>() switch
                 {
                     1 => hasHdr10Plus ? HdrFormat.DolbyVisionHdr10Plus : HdrFormat.DolbyVisionHdr10,
                     2 => HdrFormat.DolbyVisionSdr,
@@ -227,13 +266,13 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
 
             if (PqTransferFunctions.Contains(transferFunction))
             {
-                if (TryGetSideData<HdrDynamicMetadataSpmte2094>(sideData, out _))
+                if (TryGetSideData(sideData, FFMpegCoreSideDataTypes.HdrDynamicMetadataSpmte2094, out _))
                 {
                     return HdrFormat.Hdr10Plus;
                 }
 
-                if (TryGetSideData<MasteringDisplayMetadata>(sideData, out _) ||
-                    TryGetSideData<ContentLightLevelMetadata>(sideData, out _))
+                if (TryGetSideData(sideData, FFMpegCoreSideDataTypes.MasteringDisplayMetadata, out _) ||
+                    TryGetSideData(sideData, FFMpegCoreSideDataTypes.ContentLightLevelMetadata, out _))
                 {
                     return HdrFormat.Hdr10;
                 }
@@ -244,10 +283,11 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
             return HdrFormat.None;
         }
 
-        private static bool TryGetSideData<T>(List<SideData> list, out T result)
-        where T : SideData
+        private static bool TryGetSideData(IReadOnlyList<Dictionary<string, JsonNode>> list, string name, out Dictionary<string, JsonNode> result)
         {
-            result = (T)list?.FirstOrDefault(x => x.GetType().Name == typeof(T).Name);
+            result = list?.FirstOrDefault(item =>
+                item.TryGetValue("side_data_type", out var rawSideDataType) &&
+                rawSideDataType.GetValue<string>().Equals(name, StringComparison.OrdinalIgnoreCase));
 
             return result != null;
         }

@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import Form from 'Components/Form/Form';
 import FormGroup from 'Components/Form/FormGroup';
 import FormInputGroup from 'Components/Form/FormInputGroup';
@@ -11,8 +10,10 @@ import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import { inputTypes } from 'Helpers/Props';
-import selectPosterOptions from 'Series/Index/Posters/selectPosterOptions';
-import { setSeriesPosterOption } from 'Store/Actions/seriesIndexActions';
+import {
+  setSeriesPosterOptions,
+  useSeriesPosterOptions,
+} from 'Series/seriesOptionsStore';
 import translate from 'Utilities/String/translate';
 
 const posterSizeOptions: EnhancedSelectInputValue<string>[] = [
@@ -40,13 +41,9 @@ interface SeriesIndexPosterOptionsModalContentProps {
   onModalClose(...args: unknown[]): unknown;
 }
 
-function SeriesIndexPosterOptionsModalContent(
-  props: SeriesIndexPosterOptionsModalContentProps
-) {
-  const { onModalClose } = props;
-
-  const posterOptions = useSelector(selectPosterOptions);
-
+function SeriesIndexPosterOptionsModalContent({
+  onModalClose,
+}: SeriesIndexPosterOptionsModalContentProps) {
   const {
     detailedProgressBar,
     size,
@@ -55,15 +52,13 @@ function SeriesIndexPosterOptionsModalContent(
     showQualityProfile,
     showTags,
     showSearchAction,
-  } = posterOptions;
-
-  const dispatch = useDispatch();
+  } = useSeriesPosterOptions();
 
   const onPosterOptionChange = useCallback(
     ({ name, value }: { name: string; value: unknown }) => {
-      dispatch(setSeriesPosterOption({ [name]: value }));
+      setSeriesPosterOptions({ [name]: value });
     },
-    [dispatch]
+    []
   );
 
   return (

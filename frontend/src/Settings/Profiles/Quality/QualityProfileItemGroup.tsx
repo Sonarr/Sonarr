@@ -8,12 +8,12 @@ import Label from 'Components/Label';
 import IconButton from 'Components/Link/IconButton';
 import { icons } from 'Helpers/Props';
 import { InputChanged } from 'typings/inputs';
-import { QualityProfileQualityItem } from 'typings/QualityProfile';
 import translate from 'Utilities/String/translate';
 import QualityProfileItemDragSource, {
   DragMoveState,
 } from './QualityProfileItemDragSource';
 import { SizeChanged } from './QualityProfileItemSize';
+import { QualityProfileQualityItem } from './useQualityProfiles';
 import styles from './QualityProfileItemGroup.css';
 
 interface QualityProfileItemGroupProps {

@@ -1,13 +1,12 @@
 import classNames from 'classnames';
 import React, { useCallback, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import { icons, kinds } from 'Helpers/Props';
-import { deleteRemotePathMapping } from 'Store/Actions/settingsActions';
 import translate from 'Utilities/String/translate';
 import EditRemotePathMappingModal from './EditRemotePathMappingModal';
+import { useDeleteRemotePathMapping } from './useRemotePathMappings';
 import styles from './RemotePathMapping.css';
 
 interface RemotePathMappingProps {
@@ -23,7 +22,7 @@ function RemotePathMapping({
   remotePath,
   localPath,
 }: RemotePathMappingProps) {
-  const dispatch = useDispatch();
+  const { deleteRemotePathMapping } = useDeleteRemotePathMapping(id);
 
   const [
     isEditRemotePathMappingModalOpen,
@@ -53,8 +52,8 @@ function RemotePathMapping({
   }, []);
 
   const handleConfirmDeleteRemotePathMapping = useCallback(() => {
-    dispatch(deleteRemotePathMapping({ id }));
-  }, [id, dispatch]);
+    deleteRemotePathMapping();
+  }, [deleteRemotePathMapping]);
 
   return (
     <div className={classNames(styles.remotePathMapping)}>

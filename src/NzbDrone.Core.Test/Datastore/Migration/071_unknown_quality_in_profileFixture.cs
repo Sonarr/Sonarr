@@ -18,7 +18,6 @@ namespace NzbDrone.Core.Test.Datastore.Migration
             {
                 c.Insert.IntoTable("Profiles").Row(new
                 {
-                    Id = 0,
                     Name = "SDTV",
                     Cutoff = 1,
                     Items = new List<object>

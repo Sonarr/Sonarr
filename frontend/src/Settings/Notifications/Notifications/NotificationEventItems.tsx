@@ -5,13 +5,13 @@ import FormInputHelpText from 'Components/Form/FormInputHelpText';
 import FormLabel from 'Components/Form/FormLabel';
 import { inputTypes } from 'Helpers/Props';
 import { CheckInputChanged } from 'typings/inputs';
-import Notification from 'typings/Notification';
 import { PendingSection } from 'typings/pending';
 import translate from 'Utilities/String/translate';
+import { NotificationModel } from '../useConnections';
 import styles from './NotificationEventItems.css';
 
 interface NotificationEventItemsProps {
-  item: PendingSection<Notification>;
+  item: PendingSection<NotificationModel>;
   onInputChange: (change: CheckInputChanged) => void;
 }
 

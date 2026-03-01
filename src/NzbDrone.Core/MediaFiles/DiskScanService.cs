@@ -245,6 +245,28 @@ namespace NzbDrone.Core.MediaFiles
             return filteredPaths;
         }
 
+        public static List<string> FilteredSubFolderMatches(string subfolder)
+        {
+            var matches = new List<string>();
+
+            foreach (var match in ExcludedSubFoldersRegex.Matches(subfolder))
+            {
+                matches.Add(match.ToString());
+            }
+
+            foreach (var match in ExcludedExtrasSubFolderRegex.Matches(subfolder))
+            {
+                matches.Add(match.ToString());
+            }
+
+            foreach (var match in ExcludedExtraFilesRegex.Matches(subfolder))
+            {
+                matches.Add(match.ToString());
+            }
+
+            return matches;
+        }
+
         private void SetPermissions(string path)
         {
             if (!_configService.SetPermissionsLinux)

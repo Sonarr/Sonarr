@@ -1,7 +1,5 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
-import Series from 'Series/Series';
-import createAllSeriesSelector from 'Store/Selectors/createAllSeriesSelector';
+import useSeries from 'Series/useSeries';
 import sortByProp from 'Utilities/Array/sortByProp';
 import FilterBuilderRowValue, {
   FilterBuilderRowValueProps,
@@ -15,7 +13,7 @@ type SeriesFilterBuilderRowValueProps<T> = Omit<
 function SeriesFilterBuilderRowValue<T>(
   props: SeriesFilterBuilderRowValueProps<T>
 ) {
-  const allSeries: Series[] = useSelector(createAllSeriesSelector());
+  const { data: allSeries = [] } = useSeries();
 
   const tagList = allSeries
     .map((series) => ({ id: series.id, name: series.title }))

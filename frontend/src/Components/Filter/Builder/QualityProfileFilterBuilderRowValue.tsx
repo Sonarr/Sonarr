@@ -1,20 +1,9 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
-import { createSelector } from 'reselect';
-import AppState from 'App/State/AppState';
+import { useQualityProfilesData } from 'Settings/Profiles/Quality/useQualityProfiles';
 import sortByProp from 'Utilities/Array/sortByProp';
 import FilterBuilderRowValue, {
   FilterBuilderRowValueProps,
 } from './FilterBuilderRowValue';
-
-function createQualityProfilesSelector() {
-  return createSelector(
-    (state: AppState) => state.settings.qualityProfiles.items,
-    (qualityProfiles) => {
-      return qualityProfiles;
-    }
-  );
-}
 
 type QualityProfileFilterBuilderRowValueProps<T> = Omit<
   FilterBuilderRowValueProps<T, number, string>,
@@ -24,7 +13,7 @@ type QualityProfileFilterBuilderRowValueProps<T> = Omit<
 function QualityProfileFilterBuilderRowValue<T>(
   props: QualityProfileFilterBuilderRowValueProps<T>
 ) {
-  const qualityProfiles = useSelector(createQualityProfilesSelector());
+  const qualityProfiles = useQualityProfilesData();
 
   const tagList = qualityProfiles
     .map(({ id, name }) => ({ id, name }))

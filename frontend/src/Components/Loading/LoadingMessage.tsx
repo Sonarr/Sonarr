@@ -15,7 +15,7 @@ const messages = [
   "Don't forget to rewind your episodes",
   'Congratulations! You are the 1000th visitor.',
   "HELP! I'm being held hostage and forced to write these stupid lines!",
-  'RE-calibrating the internet...',
+  'Re-calibrating the internet...',
   "I'll be here all week",
   "Don't forget to tip your waitress",
   'Apply directly to the forehead',

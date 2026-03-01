@@ -22,9 +22,9 @@ import { ReleaseEpisode, useGrabRelease } from 'InteractiveSearch/useReleases';
 import Language from 'Language/Language';
 import { QualityModel } from 'Quality/Quality';
 import Series from 'Series/Series';
+import { useSingleSeries } from 'Series/useSeries';
 import { fetchDownloadClients } from 'Store/Actions/settingsActions';
 import createEnabledDownloadClientsSelector from 'Store/Selectors/createEnabledDownloadClientsSelector';
-import { createSeriesSelectorForHook } from 'Store/Selectors/createSeriesSelector';
 import translate from 'Utilities/String/translate';
 import SelectDownloadClientModal from './DownloadClient/SelectDownloadClientModal';
 import OverrideMatchData from './OverrideMatchData';
@@ -81,9 +81,7 @@ function OverrideMatchModalContent(props: OverrideMatchModalContentProps) {
   const previousIsGrabbing = usePrevious(isGrabbing);
 
   const dispatch = useDispatch();
-  const series: Series | undefined = useSelector(
-    createSeriesSelectorForHook(seriesId)
-  );
+  const series: Series | undefined = useSingleSeries(seriesId);
   const { items: downloadClients } = useSelector(
     createEnabledDownloadClientsSelector(protocol)
   );

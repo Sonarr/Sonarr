@@ -1,8 +1,13 @@
 {
     "About": "約",
-    "AddANewPath": "新しいパスを追加",
+    "Activity": "アクティビティ",
     "Add": "追加",
+    "AddANewPath": "新しいパスを追加",
     "AddCondition": "条件の追加",
-    "DeleteAutoTagHelpText": "オートタグ'{name}'を削除してもよろしいですか？",
-    "Activity": "アクティビティ"
+    "AddConnection": "接続を追加",
+    "AddCustomFilter": "カスタムフィルターを追加",
+    "AddCustomFormat": "カスタムフォーマットを追加",
+    "AddCustomFormatError": "カスタムフォーマットを追加できません。もう一度試してください。",
+    "AddIndexer": "インデクサーを追加",
+    "DeleteAutoTagHelpText": "オートタグ'{name}'を削除してもよろしいですか？"
 }

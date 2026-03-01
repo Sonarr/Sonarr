@@ -272,6 +272,7 @@ public class ReleaseController : RestController<ReleaseResource>
             var release = downloadDecision.MapDecision(result.Count, _qualityProfile);
 
             release.History = AddHistory(downloadDecision.RemoteEpisode.Release, history);
+            _remoteEpisodeCache.Set(GetCacheKey(release), downloadDecision.RemoteEpisode, TimeSpan.FromMinutes(30));
 
             result.Add(release);
         }

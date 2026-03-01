@@ -25,7 +25,7 @@ public class CalendarFeedController : Controller
     }
 
     [HttpGet("Sonarr.ics")]
-    public IActionResult GetCalendarFeed(int pastDays = 7, int futureDays = 28, string tags = "", bool unmonitored = false, bool premieresOnly = false, bool asAllDay = false)
+    public IActionResult GetCalendarFeed(int pastDays = 7, int futureDays = 28, string tags = "", bool unmonitored = false, bool premieresOnly = false, bool asAllDay = false, bool includeSpecials = true)
     {
         var start = DateTime.Today.AddDays(-pastDays);
         var end = DateTime.Today.AddDays(futureDays);
@@ -36,7 +36,7 @@ public class CalendarFeedController : Controller
             parsedTags.AddRange(tags.Split(',').Select(_tagService.GetTag).Select(t => t.Id));
         }
 
-        var episodes = _episodeService.EpisodesBetweenDates(start, end, unmonitored);
+        var episodes = _episodeService.EpisodesBetweenDates(start, end, unmonitored, includeSpecials);
         var allSeries = _seriesService.GetAllSeries();
         var calendar = new Ical.Net.Calendar
         {

@@ -28,7 +28,7 @@ public class CutoffController : EpisodeControllerWithSignalR
 
     [HttpGet]
     [Produces("application/json")]
-    public PagingResource<EpisodeResource> GetCutoffUnmetEpisodes([FromQuery] PagingRequestResource paging, bool includeSeries = false, bool includeEpisodeFile = false, bool includeImages = false, bool monitored = true)
+    public PagingResource<EpisodeResource> GetCutoffUnmetEpisodes([FromQuery] PagingRequestResource paging, bool monitored = true, [FromQuery] CutoffSubresource[]? includeSubresources = null)
     {
         var pagingResource = new PagingResource<EpisodeResource>(paging);
         var pagingSpec = pagingResource.MapToPagingSpec<EpisodeResource, Episode>(
@@ -49,6 +49,10 @@ public class CutoffController : EpisodeControllerWithSignalR
         {
             pagingSpec.FilterExpressions.Add(v => v.Monitored == false || v.Series.Monitored == false);
         }
+
+        var includeSeries = includeSubresources.Contains(CutoffSubresource.Series);
+        var includeEpisodeFile = includeSubresources.Contains(CutoffSubresource.EpisodeFile);
+        var includeImages = includeSubresources.Contains(CutoffSubresource.Images);
 
         var resource = pagingSpec.ApplyToPage(_episodeCutoffService.EpisodesWhereCutoffUnmet, v => MapToResource(v, includeSeries, includeEpisodeFile, includeImages));
 

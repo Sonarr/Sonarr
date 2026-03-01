@@ -7,6 +7,7 @@ export interface QueryParams {
     | boolean
     | PropertyFilter[]
     | number[]
+    | string[]
     | undefined;
 }
 

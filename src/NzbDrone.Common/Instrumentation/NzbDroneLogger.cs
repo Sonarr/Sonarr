@@ -15,7 +15,7 @@ namespace NzbDrone.Common.Instrumentation
         private const string FileLogLayout = @"${date:format=yyyy-MM-dd HH\:mm\:ss.f}|${level}|${logger}|${message}${onexception:inner=${newline}${newline}[v${assembly-version}] ${exception:format=ToString}${newline}}";
         private const string ConsoleFormat = "[${level}] ${logger}: ${message} ${onexception:inner=${newline}${newline}[v${assembly-version}] ${exception:format=ToString}${newline}}";
 
-        private static readonly CleansingConsoleLogLayout CleansingConsoleLayout  = new(ConsoleFormat);
+        private static readonly CleansingConsoleLogLayout CleansingConsoleLayout = new(ConsoleFormat);
         private static readonly CleansingClefLogLayout ClefLogLayout = new();
 
         private static bool _isConfigured;
@@ -236,6 +236,13 @@ namespace NzbDrone.Common.Instrumentation
                 ConsoleLogFormat.Clef => NzbDroneLogger.ClefLogLayout,
                 _ => NzbDroneLogger.CleansingConsoleLayout
             };
+        }
+
+        public static void ResetAllTargets(IStartupContext startupContext, bool updateApp, bool inConsole)
+        {
+            LogManager.Configuration = new LoggingConfiguration();
+            _isConfigured = false;
+            Register(startupContext, updateApp, inConsole);
         }
     }
 

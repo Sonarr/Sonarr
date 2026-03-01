@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import React, { useCallback, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { REFRESH_SERIES, SERIES_SEARCH } from 'Commands/commandNames';
+import CommandNames from 'Commands/CommandNames';
+import { useExecuteCommand } from 'Commands/useCommands';
 import Label from 'Components/Label';
 import IconButton from 'Components/Link/IconButton';
 import Link from 'Components/Link/Link';
@@ -13,14 +13,13 @@ import EditSeriesModal from 'Series/Edit/EditSeriesModal';
 import SeriesIndexProgressBar from 'Series/Index/ProgressBar/SeriesIndexProgressBar';
 import SeriesIndexPosterSelect from 'Series/Index/Select/SeriesIndexPosterSelect';
 import { Statistics } from 'Series/Series';
+import { useSeriesPosterOptions } from 'Series/seriesOptionsStore';
 import SeriesPoster from 'Series/SeriesPoster';
-import { executeCommand } from 'Store/Actions/commandActions';
-import createUISettingsSelector from 'Store/Selectors/createUISettingsSelector';
+import { useUiSettingsValues } from 'Settings/UI/useUiSettings';
 import formatDateTime from 'Utilities/Date/formatDateTime';
 import getRelativeDate from 'Utilities/Date/getRelativeDate';
 import translate from 'Utilities/String/translate';
-import createSeriesIndexItemSelector from '../createSeriesIndexItemSelector';
-import selectPosterOptions from './selectPosterOptions';
+import useSeriesIndexItem from '../useSeriesIndexItem';
 import SeriesIndexPosterInfo from './SeriesIndexPosterInfo';
 import styles from './SeriesIndexPoster.css';
 
@@ -36,7 +35,7 @@ function SeriesIndexPoster(props: SeriesIndexPosterProps) {
   const { seriesId, sortKey, isSelectMode, posterWidth, posterHeight } = props;
 
   const { series, qualityProfile, isRefreshingSeries, isSearchingSeries } =
-    useSelector(createSeriesIndexItemSelector(props.seriesId));
+    useSeriesIndexItem(seriesId);
 
   const {
     detailedProgressBar,
@@ -45,57 +44,29 @@ function SeriesIndexPoster(props: SeriesIndexPosterProps) {
     showQualityProfile,
     showTags,
     showSearchAction,
-  } = useSelector(selectPosterOptions);
+  } = useSeriesPosterOptions();
 
   const { showRelativeDates, shortDateFormat, longDateFormat, timeFormat } =
-    useSelector(createUISettingsSelector());
+    useUiSettingsValues();
 
-  const {
-    title,
-    monitored,
-    status,
-    path,
-    titleSlug,
-    originalLanguage,
-    network,
-    nextAiring,
-    previousAiring,
-    added,
-    statistics = {} as Statistics,
-    images,
-    tags,
-  } = series;
-
-  const {
-    seasonCount = 0,
-    episodeCount = 0,
-    episodeFileCount = 0,
-    totalEpisodeCount = 0,
-    sizeOnDisk = 0,
-  } = statistics;
-
-  const dispatch = useDispatch();
+  const executeCommand = useExecuteCommand();
   const [hasPosterError, setHasPosterError] = useState(false);
   const [isEditSeriesModalOpen, setIsEditSeriesModalOpen] = useState(false);
   const [isDeleteSeriesModalOpen, setIsDeleteSeriesModalOpen] = useState(false);
 
   const onRefreshPress = useCallback(() => {
-    dispatch(
-      executeCommand({
-        name: REFRESH_SERIES,
-        seriesIds: [seriesId],
-      })
-    );
-  }, [seriesId, dispatch]);
+    executeCommand({
+      name: CommandNames.RefreshSeries,
+      seriesIds: [seriesId],
+    });
+  }, [seriesId, executeCommand]);
 
   const onSearchPress = useCallback(() => {
-    dispatch(
-      executeCommand({
-        name: SERIES_SEARCH,
-        seriesId,
-      })
-    );
-  }, [seriesId, dispatch]);
+    executeCommand({
+      name: CommandNames.SeriesSearch,
+      seriesId,
+    });
+  }, [seriesId, executeCommand]);
 
   const onPosterLoadError = useCallback(() => {
     setHasPosterError(true);
@@ -122,6 +93,35 @@ function SeriesIndexPoster(props: SeriesIndexPosterProps) {
     setIsDeleteSeriesModalOpen(false);
   }, [setIsDeleteSeriesModalOpen]);
 
+  if (!series) {
+    return null;
+  }
+
+  const {
+    title,
+    monitored,
+    status,
+    path,
+    titleSlug,
+    originalLanguage,
+    network,
+    nextAiring,
+    previousAiring,
+    added,
+    statistics = {} as Statistics,
+    images,
+    ratings,
+    tags,
+  } = series;
+
+  const {
+    seasonCount = 0,
+    episodeCount = 0,
+    episodeFileCount = 0,
+    totalEpisodeCount = 0,
+    sizeOnDisk = 0,
+  } = statistics;
+
   const link = `/series/${titleSlug}`;
 
   const elementStyle = {
@@ -142,6 +142,7 @@ function SeriesIndexPoster(props: SeriesIndexPosterProps) {
             name={icons.REFRESH}
             title={translate('RefreshSeries')}
             isSpinning={isRefreshingSeries}
+            tabIndex={-1}
             onPress={onRefreshPress}
           />
 
@@ -151,6 +152,7 @@ function SeriesIndexPoster(props: SeriesIndexPosterProps) {
               name={icons.SEARCH}
               title={translate('SearchForMonitoredEpisodes')}
               isSpinning={isSearchingSeries}
+              tabIndex={-1}
               onPress={onSearchPress}
             />
           ) : null}
@@ -159,6 +161,7 @@ function SeriesIndexPoster(props: SeriesIndexPosterProps) {
             className={styles.action}
             name={icons.EDIT}
             title={translate('EditSeries')}
+            tabIndex={-1}
             onPress={onEditSeriesPress}
           />
         </Label>
@@ -184,6 +187,7 @@ function SeriesIndexPoster(props: SeriesIndexPosterProps) {
             size={250}
             lazy={false}
             overflow={true}
+            title={title}
             onError={onPosterLoadError}
             onLoad={onPosterLoad}
           />
@@ -268,6 +272,7 @@ function SeriesIndexPoster(props: SeriesIndexPosterProps) {
         timeFormat={timeFormat}
         tags={tags}
         showTags={showTags}
+        ratings={ratings}
       />
 
       <EditSeriesModal

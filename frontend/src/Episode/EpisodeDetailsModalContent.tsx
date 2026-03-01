@@ -15,7 +15,7 @@ import useEpisode, {
   useToggleEpisodesMonitored,
 } from 'Episode/useEpisode';
 import Series from 'Series/Series';
-import useSeries from 'Series/useSeries';
+import { useSingleSeries } from 'Series/useSeries';
 import translate from 'Utilities/String/translate';
 import EpisodeHistory from './History/EpisodeHistory';
 import EpisodeSearch from './Search/EpisodeSearch';
@@ -55,7 +55,7 @@ function EpisodeDetailsModalContent({
     titleSlug,
     monitored: seriesMonitored,
     seriesType,
-  } = useSeries(seriesId) as Series;
+  } = useSingleSeries(seriesId) as Series;
 
   const {
     episodeFileId,

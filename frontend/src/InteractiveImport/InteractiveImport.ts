@@ -39,6 +39,7 @@ interface InteractiveImport extends ModelBase {
   releaseType: ReleaseType;
   rejections: Rejection[];
   episodeFileId?: number;
+  downloadId?: string;
 }
 
 export default InteractiveImport;

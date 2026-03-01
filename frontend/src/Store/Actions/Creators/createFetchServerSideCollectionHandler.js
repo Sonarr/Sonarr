@@ -6,8 +6,6 @@ import getSectionState from 'Utilities/State/getSectionState';
 import { set, updateServerSideCollection } from '../baseActions';
 
 function createFetchServerSideCollectionHandler(section, url, fetchDataAugmenter) {
-  const [baseSection] = section.split('.');
-
   return function(getState, payload, dispatch) {
     dispatch(set({ section, isFetching: true }));
 
@@ -30,11 +28,7 @@ function createFetchServerSideCollectionHandler(section, url, fetchDataAugmenter
       filters
     } = sectionState;
 
-    const customFilters = getState().customFilters.items.filter((customFilter) => {
-      return customFilter.type === section || customFilter.type === baseSection;
-    });
-
-    const selectedFilters = findSelectedFilters(selectedFilterKey, filters, customFilters);
+    const selectedFilters = findSelectedFilters(selectedFilterKey, filters);
 
     selectedFilters.forEach((filter) => {
       data[filter.key] = filter.value;

@@ -16,11 +16,11 @@ import DefaultFilterBuilderRowValue from './DefaultFilterBuilderRowValue';
 import HistoryEventTypeFilterBuilderRowValue from './HistoryEventTypeFilterBuilderRowValue';
 import IndexerFilterBuilderRowValue from './IndexerFilterBuilderRowValue';
 import LanguageFilterBuilderRowValue from './LanguageFilterBuilderRowValue';
+import MonitoredStatusFilterBuilderRowValue from './MonitoredStatusFilterBuilderRowValue';
 import ProtocolFilterBuilderRowValue from './ProtocolFilterBuilderRowValue';
 import QualityFilterBuilderRowValue from './QualityFilterBuilderRowValue';
 import QualityProfileFilterBuilderRowValue from './QualityProfileFilterBuilderRowValue';
 import QueueStatusFilterBuilderRowValue from './QueueStatusFilterBuilderRowValue';
-import SeasonsMonitoredStatusFilterBuilderRowValue from './SeasonsMonitoredStatusFilterBuilderRowValue';
 import SeriesFilterBuilderRowValue from './SeriesFilterBuilderRowValue';
 import SeriesStatusFilterBuilderRowValue from './SeriesStatusFilterBuilderRowValue';
 import SeriesTypeFilterBuilderRowValue from './SeriesTypeFilterBuilderRowValue';
@@ -109,8 +109,8 @@ function getRowValueConnector<T>(
     case filterBuilderValueTypes.QUEUE_STATUS:
       return QueueStatusFilterBuilderRowValue;
 
-    case filterBuilderValueTypes.SEASONS_MONITORED_STATUS:
-      return SeasonsMonitoredStatusFilterBuilderRowValue;
+    case filterBuilderValueTypes.MONITORED_STATUS:
+      return MonitoredStatusFilterBuilderRowValue;
 
     case filterBuilderValueTypes.SERIES:
       return SeriesFilterBuilderRowValue;

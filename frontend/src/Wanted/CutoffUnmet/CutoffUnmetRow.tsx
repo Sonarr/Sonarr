@@ -12,7 +12,7 @@ import EpisodeTitleLink from 'Episode/EpisodeTitleLink';
 import SeasonEpisodeNumber from 'Episode/SeasonEpisodeNumber';
 import EpisodeFileLanguages from 'EpisodeFile/EpisodeFileLanguages';
 import SeriesTitleLink from 'Series/SeriesTitleLink';
-import useSeries from 'Series/useSeries';
+import { useSingleSeries } from 'Series/useSeries';
 import { SelectStateInputProps } from 'typings/props';
 import styles from './CutoffUnmetRow.css';
 
@@ -49,7 +49,7 @@ function CutoffUnmetRow({
   title,
   columns,
 }: CutoffUnmetRowProps) {
-  const series = useSeries(seriesId);
+  const series = useSingleSeries(seriesId);
   const { toggleSelected, useIsSelected } = useSelect<Episode>();
   const isSelected = useIsSelected(id);
 

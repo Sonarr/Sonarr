@@ -29,8 +29,8 @@ namespace NzbDrone.Core.Test.Download
             _downloadClients = new List<IDownloadClient>();
 
             Mocker.GetMock<IProvideDownloadClient>()
-                .Setup(v => v.GetDownloadClients(It.IsAny<bool>()))
-                .Returns(_downloadClients);
+                .Setup(v => v.GetDownloadClients(It.IsAny<DownloadProtocol>(), It.IsAny<int>(), It.IsAny<bool>(), It.IsAny<HashSet<int>>()))
+                .Returns<DownloadProtocol, int, bool, HashSet<int>>((v, i, f, t) => _downloadClients.Where(d => d.Protocol == v));
 
             Mocker.GetMock<IProvideDownloadClient>()
                 .Setup(v => v.GetDownloadClient(It.IsAny<DownloadProtocol>(), It.IsAny<int>(), It.IsAny<bool>(), It.IsAny<HashSet<int>>()))
@@ -107,7 +107,7 @@ namespace NzbDrone.Core.Test.Download
             mock.Setup(s => s.Download(It.IsAny<RemoteEpisode>(), It.IsAny<IIndexer>()))
                 .Throws(new WebException());
 
-            Assert.ThrowsAsync<WebException>(async () => await Subject.DownloadReport(_parseResult, null));
+            Assert.ThrowsAsync<DownloadClientUnavailableException>(async () => await Subject.DownloadReport(_parseResult, null));
 
             VerifyEventNotPublished<EpisodeGrabbedEvent>();
         }
@@ -177,7 +177,7 @@ namespace NzbDrone.Core.Test.Download
             mock.Setup(s => s.Download(It.IsAny<RemoteEpisode>(), It.IsAny<IIndexer>()))
                 .Throws(new DownloadClientException("Some Error"));
 
-            Assert.ThrowsAsync<DownloadClientException>(async () => await Subject.DownloadReport(_parseResult, null));
+            Assert.ThrowsAsync<DownloadClientUnavailableException>(async () => await Subject.DownloadReport(_parseResult, null));
 
             Mocker.GetMock<IIndexerStatusService>()
                 .Verify(v => v.RecordFailure(It.IsAny<int>(), It.IsAny<TimeSpan>()), Times.Never());

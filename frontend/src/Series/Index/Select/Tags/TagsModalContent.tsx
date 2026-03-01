@@ -1,6 +1,5 @@
 import { uniq } from 'lodash';
 import React, { useCallback, useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useSelect } from 'App/Select/SelectContext';
 import Form from 'Components/Form/Form';
 import FormGroup from 'Components/Form/FormGroup';
@@ -15,7 +14,7 @@ import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import { inputTypes, kinds, sizes } from 'Helpers/Props';
 import Series from 'Series/Series';
-import createAllSeriesSelector from 'Store/Selectors/createAllSeriesSelector';
+import { useMultipleSeries } from 'Series/useSeries';
 import { Tag, useTagList } from 'Tags/useTags';
 import translate from 'Utilities/String/translate';
 import styles from './TagsModalContent.css';
@@ -29,27 +28,24 @@ function TagsModalContent({
   onModalClose,
   onApplyTagsPress,
 }: TagsModalContentProps) {
-  const allSeries: Series[] = useSelector(createAllSeriesSelector());
   const tagList: Tag[] = useTagList();
-
   const [tags, setTags] = useState<number[]>([]);
   const [applyTags, setApplyTags] = useState('add');
   const { useSelectedIds } = useSelect<Series>();
   const seriesIds = useSelectedIds();
+  const selectedSeries = useMultipleSeries(seriesIds);
 
   const seriesTags = useMemo(() => {
-    const tags = seriesIds.reduce((acc: number[], id) => {
-      const s = allSeries.find((s) => s.id === id);
-
-      if (s) {
-        acc.push(...s.tags);
+    const tags = selectedSeries.reduce((acc: number[], series) => {
+      if (series) {
+        acc.push(...series.tags);
       }
 
       return acc;
     }, []);
 
     return uniq(tags);
-  }, [allSeries, seriesIds]);
+  }, [selectedSeries]);
 
   const onTagsChange = useCallback(
     ({ value }: { value: number[] }) => {

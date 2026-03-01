@@ -7,11 +7,11 @@ import Icon from 'Components/Icon';
 import Button from 'Components/Link/Button';
 import { icons, kinds, sizes } from 'Helpers/Props';
 import { Failure } from 'typings/pending';
-import { QualityProfileItems as Items } from 'typings/QualityProfile';
 import translate from 'Utilities/String/translate';
 import QualityProfileItemDragSource, {
   QualityProfileItemDragSourceActionProps,
 } from './QualityProfileItemDragSource';
+import { QualityProfileItems as Items } from './useQualityProfiles';
 import styles from './QualityProfileItems.css';
 
 export type EditQualityProfileMode = 'default' | 'editGroups' | 'editSizes';
