@@ -1565,6 +1565,101 @@
         }
       }
     },
+    "/api/v5/settings/general/{id}": {
+      "put": {
+        "tags": [
+          "GeneralSettings"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GeneralSettingsResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/GeneralSettingsResource"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GeneralSettingsResource"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GeneralSettingsResource"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "GeneralSettings"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GeneralSettingsResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/settings/general": {
+      "get": {
+        "tags": [
+          "GeneralSettings"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GeneralSettingsResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v5/health": {
       "get": {
         "tags": [
@@ -1932,6 +2027,341 @@
         "responses": {
           "200": {
             "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v5/indexer": {
+      "get": {
+        "tags": [
+          "Indexer"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IndexerResource"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Indexer"
+        ],
+        "parameters": [
+          {
+            "name": "forceSave",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IndexerResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IndexerResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/indexer/{id}": {
+      "put": {
+        "tags": [
+          "Indexer"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "forceSave",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IndexerResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IndexerResource"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Indexer"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Indexer"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IndexerResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/indexer/bulk": {
+      "put": {
+        "tags": [
+          "Indexer"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IndexerBulkResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IndexerResource"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Indexer"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IndexerBulkResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v5/indexer/schema": {
+      "get": {
+        "tags": [
+          "Indexer"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IndexerResource"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/indexer/test": {
+      "post": {
+        "tags": [
+          "Indexer"
+        ],
+        "parameters": [
+          {
+            "name": "forceTest",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IndexerResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v5/indexer/testall": {
+      "post": {
+        "tags": [
+          "Indexer"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v5/indexer/action/{name}": {
+      "post": {
+        "tags": [
+          "Indexer"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IndexerResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v5/indexerflag": {
+      "get": {
+        "tags": [
+          "IndexerFlag"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IndexerFlagResource"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IndexerFlagResource"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IndexerFlagResource"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -5235,6 +5665,25 @@
         }
       }
     },
+    "/api/v5/settings/ui": {
+      "get": {
+        "tags": [
+          "UiSettings"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UiSettingsResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v5/settings/ui/{id}": {
       "put": {
         "tags": [
@@ -5296,25 +5745,6 @@
               "format": "int32"
             }
           }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UiSettingsResource"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v5/settings/ui": {
-      "get": {
-        "tags": [
-          "UiSettings"
         ],
         "responses": {
           "200": {
@@ -5406,17 +5836,7 @@
           "200": {
             "description": "OK",
             "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/UpdateSettingsResource"
-                }
-              },
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UpdateSettingsResource"
-                }
-              },
-              "text/json": {
                 "schema": {
                   "$ref": "#/components/schemas/UpdateSettingsResource"
                 }
@@ -5424,24 +5844,26 @@
             }
           }
         }
-      },
+      }
+    },
+    "/api/v5/settings/update/{id}": {
       "put": {
         "tags": [
           "UpdateSettings"
         ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateSettingsResource"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateSettingsResource"
-              }
-            },
-            "application/*+json": {
               "schema": {
                 "$ref": "#/components/schemas/UpdateSettingsResource"
               }
@@ -5470,9 +5892,7 @@
             }
           }
         }
-      }
-    },
-    "/api/v5/settings/update/{id}": {
+      },
       "get": {
         "tags": [
           "UpdateSettings"
@@ -5559,6 +5979,13 @@
           "add",
           "remove",
           "replace"
+        ],
+        "type": "string"
+      },
+      "AuthenticationRequiredType": {
+        "enum": [
+          "enabled",
+          "disabledForLocalAddresses"
         ],
         "type": "string"
       },
@@ -5739,6 +6166,14 @@
           "series",
           "episodeFile",
           "images"
+        ],
+        "type": "string"
+      },
+      "CertificateValidationType": {
+        "enum": [
+          "enabled",
+          "disabledForLocalAddresses",
+          "disabled"
         ],
         "type": "string"
       },
@@ -6680,6 +7115,153 @@
         ],
         "type": "string"
       },
+      "GeneralSettingsResource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "bindAddress": {
+            "type": "string",
+            "nullable": true
+          },
+          "port": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sslPort": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "enableSsl": {
+            "type": "boolean"
+          },
+          "launchBrowser": {
+            "type": "boolean"
+          },
+          "authenticationMethod": {
+            "$ref": "#/components/schemas/AuthenticationType"
+          },
+          "authenticationRequired": {
+            "$ref": "#/components/schemas/AuthenticationRequiredType"
+          },
+          "analyticsEnabled": {
+            "type": "boolean"
+          },
+          "username": {
+            "type": "string",
+            "nullable": true
+          },
+          "password": {
+            "type": "string",
+            "nullable": true
+          },
+          "passwordConfirmation": {
+            "type": "string",
+            "nullable": true
+          },
+          "logLevel": {
+            "type": "string",
+            "nullable": true
+          },
+          "logSizeLimit": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "consoleLogLevel": {
+            "type": "string",
+            "nullable": true
+          },
+          "branch": {
+            "type": "string",
+            "nullable": true
+          },
+          "apiKey": {
+            "type": "string",
+            "nullable": true
+          },
+          "sslCertPath": {
+            "type": "string",
+            "nullable": true
+          },
+          "sslKeyPath": {
+            "type": "string",
+            "nullable": true
+          },
+          "sslCertPassword": {
+            "type": "string",
+            "nullable": true
+          },
+          "urlBase": {
+            "type": "string",
+            "nullable": true
+          },
+          "instanceName": {
+            "type": "string",
+            "nullable": true
+          },
+          "applicationUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "updateAutomatically": {
+            "type": "boolean"
+          },
+          "updateMechanism": {
+            "$ref": "#/components/schemas/UpdateMechanism"
+          },
+          "updateScriptPath": {
+            "type": "string",
+            "nullable": true
+          },
+          "proxyEnabled": {
+            "type": "boolean"
+          },
+          "proxyType": {
+            "$ref": "#/components/schemas/ProxyType"
+          },
+          "proxyHostname": {
+            "type": "string",
+            "nullable": true
+          },
+          "proxyPort": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "proxyUsername": {
+            "type": "string",
+            "nullable": true
+          },
+          "proxyPassword": {
+            "type": "string",
+            "nullable": true
+          },
+          "proxyBypassFilter": {
+            "type": "string",
+            "nullable": true
+          },
+          "proxyBypassLocalAddresses": {
+            "type": "boolean"
+          },
+          "certificateValidation": {
+            "$ref": "#/components/schemas/CertificateValidationType"
+          },
+          "backupFolder": {
+            "type": "string",
+            "nullable": true
+          },
+          "backupInterval": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "backupRetention": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
       "HealthCheckReason": {
         "enum": [
           "appDataLocation",
@@ -6935,7 +7517,8 @@
           "unverifiedSceneMapping",
           "notQualityUpgrade",
           "notRevisionUpgrade",
-          "notCustomFormatUpgrade"
+          "notCustomFormatUpgrade",
+          "notCustomFormatUpgradeAfterRename"
         ],
         "type": "string"
       },
@@ -6951,6 +7534,158 @@
           },
           "type": {
             "$ref": "#/components/schemas/RejectionType"
+          }
+        },
+        "additionalProperties": false
+      },
+      "IndexerBulkResource": {
+        "type": "object",
+        "properties": {
+          "ids": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          },
+          "applyTags": {
+            "$ref": "#/components/schemas/ApplyTags"
+          },
+          "enableRss": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "enableAutomaticSearch": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "enableInteractiveSearch": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "priority": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "seasonSearchMaximumSingleEpisodeAge": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "IndexerFlagResource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "nameLower": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "IndexerResource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Field"
+            },
+            "nullable": true
+          },
+          "implementationName": {
+            "type": "string",
+            "nullable": true
+          },
+          "implementation": {
+            "type": "string",
+            "nullable": true
+          },
+          "configContract": {
+            "type": "string",
+            "nullable": true
+          },
+          "infoLink": {
+            "type": "string",
+            "nullable": true
+          },
+          "message": {
+            "$ref": "#/components/schemas/ProviderMessage"
+          },
+          "tags": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          },
+          "presets": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IndexerResource"
+            },
+            "nullable": true
+          },
+          "enableRss": {
+            "type": "boolean"
+          },
+          "enableAutomaticSearch": {
+            "type": "boolean"
+          },
+          "enableInteractiveSearch": {
+            "type": "boolean"
+          },
+          "supportsRss": {
+            "type": "boolean"
+          },
+          "supportsSearch": {
+            "type": "boolean"
+          },
+          "protocol": {
+            "$ref": "#/components/schemas/DownloadProtocol"
+          },
+          "priority": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "seasonSearchMaximumSingleEpisodeAge": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "downloadClientId": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false
@@ -8016,6 +8751,14 @@
           "info",
           "warning",
           "error"
+        ],
+        "type": "string"
+      },
+      "ProxyType": {
+        "enum": [
+          "http",
+          "socks4",
+          "socks5"
         ],
         "type": "string"
       },
@@ -9416,6 +10159,10 @@
             },
             "nullable": true
           },
+          "originalCountry": {
+            "type": "string",
+            "nullable": true
+          },
           "tags": {
             "uniqueItems": true,
             "type": "array",
@@ -10103,10 +10850,19 @@
       "name": "FileSystem"
     },
     {
+      "name": "GeneralSettings"
+    },
+    {
       "name": "Health"
     },
     {
       "name": "History"
+    },
+    {
+      "name": "Indexer"
+    },
+    {
+      "name": "IndexerFlag"
     },
     {
       "name": "Language"
