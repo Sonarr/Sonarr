@@ -31,7 +31,7 @@ namespace Sonarr.Api.V5.Queue
 
             await _downloadService.DownloadReport(pendingRelease.RemoteEpisode, null);
 
-            return new { };
+            return NoContent();
         }
 
         [HttpPost("grab/bulk")]
@@ -50,7 +50,7 @@ namespace Sonarr.Api.V5.Queue
                 await _downloadService.DownloadReport(pendingRelease.RemoteEpisode, null);
             }
 
-            return new { };
+            return NoContent();
         }
     }
 }

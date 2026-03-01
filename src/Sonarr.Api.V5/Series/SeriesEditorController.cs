@@ -109,6 +109,6 @@ public class SeriesEditorController : Controller
     {
         _seriesService.DeleteSeries(resource.SeriesIds, resource.DeleteFiles, resource.AddImportListExclusion);
 
-        return new { };
+        return NoContent();
     }
 }
