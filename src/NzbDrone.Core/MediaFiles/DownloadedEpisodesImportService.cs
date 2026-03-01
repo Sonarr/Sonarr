@@ -8,6 +8,7 @@ using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Download;
+using NzbDrone.Core.Download.TrackedDownloads;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
@@ -33,6 +34,8 @@ namespace NzbDrone.Core.MediaFiles
         private readonly IDetectSample _detectSample;
         private readonly IRuntimeInfo _runtimeInfo;
         private readonly IConfigService _configService;
+        private readonly ITrackedDownloadService _trackedDownloadService;
+        private readonly IFailedDownloadService _failedDownloadService;
         private readonly Logger _logger;
 
         public DownloadedEpisodesImportService(IDiskProvider diskProvider,
@@ -44,6 +47,8 @@ namespace NzbDrone.Core.MediaFiles
                                                IDetectSample detectSample,
                                                IRuntimeInfo runtimeInfo,
                                                IConfigService configService,
+                                               ITrackedDownloadService trackedDownloadService,
+                                               IFailedDownloadService failedDownloadService,
                                                Logger logger)
         {
             _diskProvider = diskProvider;
@@ -55,6 +60,8 @@ namespace NzbDrone.Core.MediaFiles
             _detectSample = detectSample;
             _runtimeInfo = runtimeInfo;
             _configService = configService;
+            _trackedDownloadService = trackedDownloadService;
+            _failedDownloadService = failedDownloadService;
             _logger = logger;
         }
 
@@ -214,6 +221,20 @@ namespace NzbDrone.Core.MediaFiles
             }
 
             var decisions = _importDecisionMaker.GetImportDecisions(videoFiles.ToList(), series, downloadClientItem, downloadClientItemInfo, folderInfo, true);
+
+            if (downloadClientItem != null && decisions != null)
+            {
+                foreach (var rejectedDecision in decisions.Where(x => x.Rejections.Any(r => r.Reason == ImportRejectionReason.NotCustomFormatUpgrade)))
+                {
+                    var trackedDownload = _trackedDownloadService.Find(downloadClientItem.DownloadId);
+                    if (trackedDownload != null && trackedDownload.RemoteEpisode.CustomFormatScore > rejectedDecision.LocalEpisode.CustomFormatScore)
+                    {
+                        _failedDownloadService.MarkAsFailed(trackedDownload, "Custom score was lower upon inspection of downloaded file.");
+                        break;
+                    }
+                }
+            }
+
             var importResults = _importApprovedEpisodes.Import(decisions, true, downloadClientItem, importMode);
 
             if (importMode == ImportMode.Auto)
@@ -341,6 +362,19 @@ namespace NzbDrone.Core.MediaFiles
 
             var downloadClientItemInfo = downloadClientItem == null ? null : Parser.Parser.ParseTitle(downloadClientItem.Title);
             var decisions = _importDecisionMaker.GetImportDecisions(new List<string>() { fileInfo.FullName }, series, downloadClientItem, downloadClientItemInfo, null, true);
+
+            if (downloadClientItem != null)
+            {
+                foreach (var rejectedDecision in decisions.Where(x => x.Rejections.Any(r => r.Reason == ImportRejectionReason.NotCustomFormatUpgrade)))
+                {
+                    var trackedDownload = _trackedDownloadService.Find(downloadClientItem.DownloadId);
+                    if (trackedDownload != null && trackedDownload.RemoteEpisode.CustomFormatScore > rejectedDecision.LocalEpisode.CustomFormatScore)
+                    {
+                        _failedDownloadService.MarkAsFailed(trackedDownload, "Custom score was lower upon inspection of downloaded file.");
+                        break;
+                    }
+                }
+            }
 
             return _importApprovedEpisodes.Import(decisions, true, downloadClientItem, importMode);
         }

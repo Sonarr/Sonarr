@@ -89,6 +89,29 @@ namespace NzbDrone.Core.Test.MediaFiles
                   .Callback(() => WasImportedResponse());
         }
 
+        private LocalEpisode GivenRejectedImportDecision(ImportRejectionReason reason)
+        {
+            var localEpisode = new LocalEpisode();
+
+            var imported = new List<ImportDecision>();
+            imported.Add(new ImportDecision(localEpisode, new ImportRejection(reason, "reason")));
+
+            Mocker.GetMock<IMakeImportDecision>()
+                .Setup(s => s.GetImportDecisions(It.IsAny<List<string>>(), It.IsAny<Series>(), It.IsAny<DownloadClientItem>(), It.IsAny<ParsedEpisodeInfo>(), null, true))
+                .Returns(imported);
+
+            Mocker.GetMock<ITrackedDownloadService>()
+                .Setup(s => s.Find(It.IsAny<string>()))
+                .Returns(_trackedDownload);
+
+            Mocker.GetMock<IImportApprovedEpisodes>()
+                .Setup(s => s.Import(It.IsAny<List<ImportDecision>>(), It.IsAny<bool>(), It.IsAny<DownloadClientItem>(), It.IsAny<ImportMode>()))
+                .Returns(imported.Select(i => new ImportResult(i)).ToList())
+                .Callback(() => WasImportedResponse());
+
+            return localEpisode;
+        }
+
         private void WasImportedResponse()
         {
             Mocker.GetMock<IDiskScanService>().Setup(c => c.GetVideoFiles(It.IsAny<string>(), It.IsAny<bool>()))
@@ -524,6 +547,67 @@ namespace NzbDrone.Core.Test.MediaFiles
                     Times.Never());
 
             VerifyNoImport();
+        }
+
+        [Test]
+        public void should_not_mark_download_failed_if_rejected_import_did_not_have_lower_custom_format_score_upon_download()
+        {
+            GivenValidSeries();
+
+            var localEpisode = GivenRejectedImportDecision(ImportRejectionReason.NotCustomFormatUpgrade);
+            localEpisode.CustomFormatScore = 1;
+            _trackedDownload.RemoteEpisode.CustomFormatScore = 1;
+
+            Subject.ProcessPath(_droneFactory, ImportMode.Move, _trackedDownload.RemoteEpisode.Series, _trackedDownload.DownloadItem);
+
+            Mocker.GetMock<IFailedDownloadService>()
+                .Verify(v => v.MarkAsFailed(_trackedDownload, "Custom score was lower upon inspection of downloaded file.", null, false), Times.Never());
+        }
+
+        [Test]
+        public void should_mark_download_failed_if_rejected_by_not_custom_format_upgrade_and_local_episode_score_is_lower_than_remote_when_importing_folder()
+        {
+            var folderName = @"C:\media\ba09030e-1234-1234-1234-123456789abc\Torrents\SomeFolder".AsOsAgnostic();
+
+            Mocker.GetMock<IDiskProvider>().Setup(c => c.FolderExists(folderName))
+                .Returns(true);
+
+            Mocker.GetMock<IDiskProvider>().Setup(c => c.FileExists(folderName))
+                .Returns(false);
+
+            GivenValidSeries();
+
+            var localEpisode = GivenRejectedImportDecision(ImportRejectionReason.NotCustomFormatUpgrade);
+            localEpisode.CustomFormatScore = 1;
+            _trackedDownload.RemoteEpisode.CustomFormatScore = 2;
+
+            Subject.ProcessPath(folderName, ImportMode.Move, _trackedDownload.RemoteEpisode.Series, _trackedDownload.DownloadItem);
+
+            Mocker.GetMock<IFailedDownloadService>()
+                .Verify(v => v.MarkAsFailed(_trackedDownload, "Custom score was lower upon inspection of downloaded file.", null, false), Times.Once());
+        }
+
+        [Test]
+        public void should_mark_download_failed_if_rejected_by_not_custom_format_upgrade_after_rename_when_importing_file()
+        {
+            var fileName = @"C:\media\ba09030e-1234-1234-1234-123456789abc\Torrents\[HorribleSubs] Maria the Virgin Witch - 09 [720p].mkv".AsOsAgnostic();
+
+            Mocker.GetMock<IDiskProvider>().Setup(c => c.FolderExists(fileName))
+                .Returns(false);
+
+            Mocker.GetMock<IDiskProvider>().Setup(c => c.FileExists(fileName))
+                .Returns(true);
+
+            GivenValidSeries();
+
+            var localEpisode = GivenRejectedImportDecision(ImportRejectionReason.NotCustomFormatUpgrade);
+            localEpisode.CustomFormatScore = 1;
+            _trackedDownload.RemoteEpisode.CustomFormatScore = 2;
+
+            Subject.ProcessPath(fileName, ImportMode.Move, _trackedDownload.RemoteEpisode.Series, _trackedDownload.DownloadItem);
+
+            Mocker.GetMock<IFailedDownloadService>()
+                .Verify(v => v.MarkAsFailed(_trackedDownload, "Custom score was lower upon inspection of downloaded file.", null, false), Times.Once());
         }
 
         private void VerifyNoImport()
