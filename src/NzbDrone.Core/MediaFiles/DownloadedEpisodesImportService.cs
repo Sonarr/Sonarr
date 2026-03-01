@@ -6,6 +6,7 @@ using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Core.Blocklisting;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.TrackedDownloads;
@@ -35,7 +36,7 @@ namespace NzbDrone.Core.MediaFiles
         private readonly IRuntimeInfo _runtimeInfo;
         private readonly IConfigService _configService;
         private readonly ITrackedDownloadService _trackedDownloadService;
-        private readonly IFailedDownloadService _failedDownloadService;
+        private readonly IBlocklistService _blocklistService;
         private readonly Logger _logger;
 
         public DownloadedEpisodesImportService(IDiskProvider diskProvider,
@@ -48,7 +49,7 @@ namespace NzbDrone.Core.MediaFiles
                                                IRuntimeInfo runtimeInfo,
                                                IConfigService configService,
                                                ITrackedDownloadService trackedDownloadService,
-                                               IFailedDownloadService failedDownloadService,
+                                               IBlocklistService blocklistService,
                                                Logger logger)
         {
             _diskProvider = diskProvider;
@@ -61,7 +62,7 @@ namespace NzbDrone.Core.MediaFiles
             _runtimeInfo = runtimeInfo;
             _configService = configService;
             _trackedDownloadService = trackedDownloadService;
-            _failedDownloadService = failedDownloadService;
+            _blocklistService = blocklistService;
             _logger = logger;
         }
 
@@ -229,7 +230,7 @@ namespace NzbDrone.Core.MediaFiles
                     var trackedDownload = _trackedDownloadService.Find(downloadClientItem.DownloadId);
                     if (trackedDownload != null && trackedDownload.RemoteEpisode.CustomFormatScore > rejectedDecision.LocalEpisode.CustomFormatScore)
                     {
-                        _failedDownloadService.MarkAsFailed(trackedDownload, "Custom score was lower upon inspection of downloaded file.");
+                        _blocklistService.Block(trackedDownload.RemoteEpisode, "Custom score was lower upon inspection of downloaded file.", null);
                         break;
                     }
                 }
@@ -370,7 +371,7 @@ namespace NzbDrone.Core.MediaFiles
                     var trackedDownload = _trackedDownloadService.Find(downloadClientItem.DownloadId);
                     if (trackedDownload != null && trackedDownload.RemoteEpisode.CustomFormatScore > rejectedDecision.LocalEpisode.CustomFormatScore)
                     {
-                        _failedDownloadService.MarkAsFailed(trackedDownload, "Custom score was lower upon inspection of downloaded file.");
+                        _blocklistService.Block(trackedDownload.RemoteEpisode, "Custom score was lower upon inspection of downloaded file.", null);
                         break;
                     }
                 }

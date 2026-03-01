@@ -8,6 +8,7 @@ using Moq;
 using NUnit.Framework;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
+using NzbDrone.Core.Blocklisting;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.TrackedDownloads;
 using NzbDrone.Core.MediaFiles;
@@ -560,8 +561,8 @@ namespace NzbDrone.Core.Test.MediaFiles
 
             Subject.ProcessPath(_droneFactory, ImportMode.Move, _trackedDownload.RemoteEpisode.Series, _trackedDownload.DownloadItem);
 
-            Mocker.GetMock<IFailedDownloadService>()
-                .Verify(v => v.MarkAsFailed(_trackedDownload, "Custom score was lower upon inspection of downloaded file.", null, false), Times.Never());
+            Mocker.GetMock<IBlocklistService>()
+                .Verify(v => v.Block(_trackedDownload.RemoteEpisode, "Custom score was lower upon inspection of downloaded file.", null), Times.Never());
         }
 
         [Test]
@@ -583,8 +584,8 @@ namespace NzbDrone.Core.Test.MediaFiles
 
             Subject.ProcessPath(folderName, ImportMode.Move, _trackedDownload.RemoteEpisode.Series, _trackedDownload.DownloadItem);
 
-            Mocker.GetMock<IFailedDownloadService>()
-                .Verify(v => v.MarkAsFailed(_trackedDownload, "Custom score was lower upon inspection of downloaded file.", null, false), Times.Once());
+            Mocker.GetMock<IBlocklistService>()
+                .Verify(v => v.Block(_trackedDownload.RemoteEpisode, "Custom score was lower upon inspection of downloaded file.", null), Times.Once());
         }
 
         [Test]
@@ -606,8 +607,8 @@ namespace NzbDrone.Core.Test.MediaFiles
 
             Subject.ProcessPath(fileName, ImportMode.Move, _trackedDownload.RemoteEpisode.Series, _trackedDownload.DownloadItem);
 
-            Mocker.GetMock<IFailedDownloadService>()
-                .Verify(v => v.MarkAsFailed(_trackedDownload, "Custom score was lower upon inspection of downloaded file.", null, false), Times.Once());
+            Mocker.GetMock<IBlocklistService>()
+                .Verify(v => v.Block(_trackedDownload.RemoteEpisode, "Custom score was lower upon inspection of downloaded file.", null), Times.Once());
         }
 
         private void VerifyNoImport()
