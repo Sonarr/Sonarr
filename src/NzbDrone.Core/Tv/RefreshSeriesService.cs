@@ -231,7 +231,7 @@ namespace NzbDrone.Core.Tv
                         _logger.Error("Series '{0}' (tvdbid {1}) was not found, it may have been removed from TheTVDB.", series.Title, series.TvdbId);
 
                         // Mark the result as indeterminate so it's not marked as a full success,
-                        // // but we can still process other series if needed.
+                        // but we can still process other series if needed.
                         _commandResultReporter.Report(CommandResult.Indeterminate);
                     }
                     catch (Exception e)

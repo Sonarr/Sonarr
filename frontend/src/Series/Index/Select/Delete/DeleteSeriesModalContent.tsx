@@ -1,6 +1,4 @@
-import { orderBy } from 'lodash';
-import React, { useCallback, useMemo, useState } from 'react';
-import { useSelect } from 'App/Select/SelectContext';
+import React, { useCallback, useState } from 'react';
 import FormGroup from 'Components/Form/FormGroup';
 import FormInputGroup from 'Components/Form/FormInputGroup';
 import FormLabel from 'Components/Form/FormLabel';
@@ -10,15 +8,15 @@ import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import { inputTypes, kinds } from 'Helpers/Props';
-import Series from 'Series/Series';
 import {
   setSeriesDeleteOptions,
   useSeriesDeleteOptions,
 } from 'Series/seriesOptionsStore';
-import useSeries, { useBulkDeleteSeries } from 'Series/useSeries';
+import { useBulkDeleteSeries } from 'Series/useSeries';
 import { InputChanged } from 'typings/inputs';
-import formatBytes from 'Utilities/Number/formatBytes';
 import translate from 'Utilities/String/translate';
+import SeriesDeleteList from './SeriesDeleteList';
+import useSelectedSeriesStats from './useSelectedSeriesStats';
 import styles from './DeleteSeriesModalContent.css';
 
 export interface DeleteSeriesModalContentProps {
@@ -29,19 +27,10 @@ function DeleteSeriesModalContent({
   onModalClose,
 }: DeleteSeriesModalContentProps) {
   const { addImportListExclusion } = useSeriesDeleteOptions();
-  const { data: allSeries } = useSeries();
   const { bulkDeleteSeries } = useBulkDeleteSeries();
   const [deleteFiles, setDeleteFiles] = useState(false);
-  const { useSelectedIds } = useSelect<Series>();
-  const seriesIds = useSelectedIds();
-
-  const series = useMemo((): Series[] => {
-    const seriesList = seriesIds.map((id) => {
-      return allSeries.find((s) => s.id === id);
-    }) as Series[];
-
-    return orderBy(seriesList, ['sortTitle']);
-  }, [allSeries, seriesIds]);
+  const { series, seriesIds, totalEpisodeFileCount, totalSizeOnDisk } =
+    useSelectedSeriesStats();
 
   const onDeleteFilesChange = useCallback(
     ({ value }: InputChanged<boolean>) => {
@@ -77,23 +66,6 @@ function DeleteSeriesModalContent({
     bulkDeleteSeries,
     onModalClose,
   ]);
-
-  const { totalEpisodeFileCount, totalSizeOnDisk } = useMemo(() => {
-    return series.reduce(
-      (acc, { statistics = {} }) => {
-        const { episodeFileCount = 0, sizeOnDisk = 0 } = statistics;
-
-        acc.totalEpisodeFileCount += episodeFileCount;
-        acc.totalSizeOnDisk += sizeOnDisk;
-
-        return acc;
-      },
-      {
-        totalEpisodeFileCount: 0,
-        totalSizeOnDisk: 0,
-      }
-    );
-  }, [series]);
 
   return (
     <ModalContent onModalClose={onModalClose}>
@@ -145,45 +117,13 @@ function DeleteSeriesModalContent({
               })}
         </div>
 
-        <ul>
-          {series.map(({ title, path, statistics = {} }) => {
-            const { episodeFileCount = 0, sizeOnDisk = 0 } = statistics;
-
-            return (
-              <li key={title}>
-                <span>{title}</span>
-
-                {deleteFiles && (
-                  <span>
-                    <span className={styles.pathContainer}>
-                      -<span className={styles.path}>{path}</span>
-                    </span>
-
-                    {!!episodeFileCount && (
-                      <span className={styles.statistics}>
-                        (
-                        {translate('DeleteSeriesFolderEpisodeCount', {
-                          episodeFileCount,
-                          size: formatBytes(sizeOnDisk),
-                        })}
-                        )
-                      </span>
-                    )}
-                  </span>
-                )}
-              </li>
-            );
-          })}
-        </ul>
-
-        {deleteFiles && !!totalEpisodeFileCount ? (
-          <div className={styles.deleteFilesMessage}>
-            {translate('DeleteSeriesFolderEpisodeCount', {
-              episodeFileCount: totalEpisodeFileCount,
-              size: formatBytes(totalSizeOnDisk),
-            })}
-          </div>
-        ) : null}
+        <SeriesDeleteList
+          series={series}
+          showFileDetails={deleteFiles}
+          totalEpisodeFileCount={totalEpisodeFileCount}
+          totalSizeOnDisk={totalSizeOnDisk}
+          styles={styles}
+        />
       </ModalBody>
 
       <ModalFooter>

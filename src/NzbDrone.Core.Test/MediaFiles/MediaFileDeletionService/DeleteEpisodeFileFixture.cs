@@ -5,6 +5,7 @@ using NUnit.Framework;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.Exceptions;
 using NzbDrone.Core.MediaFiles;
+using NzbDrone.Core.RootFolders;
 using NzbDrone.Core.Test.Framework;
 using NzbDrone.Core.Tv;
 using NzbDrone.Test.Common;
@@ -41,6 +42,10 @@ namespace NzbDrone.Core.Test.MediaFiles.MediaFileDeletionService
 
         private void GivenRootFolderExists()
         {
+            Mocker.GetMock<IRootFolderService>()
+                .Setup(s => s.GetBestRootFolderPath(_series.Path))
+                .Returns(ROOT_FOLDER);
+
             Mocker.GetMock<IDiskProvider>()
                   .Setup(s => s.FolderExists(ROOT_FOLDER))
                   .Returns(true);

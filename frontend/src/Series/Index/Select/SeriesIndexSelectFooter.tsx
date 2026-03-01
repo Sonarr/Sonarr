@@ -14,6 +14,7 @@ import {
 } from 'Series/useSeries';
 import translate from 'Utilities/String/translate';
 import DeleteSeriesModal from './Delete/DeleteSeriesModal';
+import DeleteSeriesFilesModal from './Delete/Files/DeleteSeriesFilesModal';
 import EditSeriesModal from './Edit/EditSeriesModal';
 import OrganizeSeriesModal from './Organize/OrganizeSeriesModal';
 import ChangeMonitoringModal from './SeasonPass/ChangeMonitoringModal';
@@ -34,6 +35,9 @@ function SeriesIndexSelectFooter() {
   const { updateSeriesMonitor, isUpdatingSeriesMonitor } =
     useUpdateSeriesMonitor();
   const { isBulkDeleting, bulkDeleteError } = useBulkDeleteSeries();
+  const isDeleteFilesCommandExecuting = useCommandExecuting(
+    CommandNames.DeleteSeriesFiles
+  );
 
   const isOrganizingSeries = useCommandExecuting(CommandNames.RenameSeries);
 
@@ -46,6 +50,7 @@ function SeriesIndexSelectFooter() {
   const [isTagsModalOpen, setIsTagsModalOpen] = useState(false);
   const [isMonitoringModalOpen, setIsMonitoringModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isDeleteFilesModalOpen, setIsDeleteFilesModalOpen] = useState(false);
   const [isSavingSeries, setIsSavingSeries] = useState(false);
   const [isSavingTags, setIsSavingTags] = useState(false);
   const [isSavingMonitoring, setIsSavingMonitoring] = useState(false);
@@ -132,6 +137,14 @@ function SeriesIndexSelectFooter() {
     setIsDeleteModalOpen(false);
   }, []);
 
+  const onDeleteFilesPress = useCallback(() => {
+    setIsDeleteFilesModalOpen(true);
+  }, []);
+
+  const onDeleteFilesModalClose = useCallback(() => {
+    setIsDeleteFilesModalOpen(false);
+  }, []);
+
   useEffect(() => {
     if (!isSaving) {
       setIsSavingSeries(false);
@@ -195,6 +208,15 @@ function SeriesIndexSelectFooter() {
           >
             {translate('Delete')}
           </SpinnerButton>
+
+          <SpinnerButton
+            kind={kinds.DANGER}
+            isSpinning={isDeleteFilesCommandExecuting}
+            isDisabled={!anySelected || isDeleteFilesCommandExecuting}
+            onPress={onDeleteFilesPress}
+          >
+            {translate('DeleteFiles')}
+          </SpinnerButton>
         </div>
       </div>
 
@@ -228,6 +250,11 @@ function SeriesIndexSelectFooter() {
       <DeleteSeriesModal
         isOpen={isDeleteModalOpen}
         onModalClose={onDeleteModalClose}
+      />
+
+      <DeleteSeriesFilesModal
+        isOpen={isDeleteFilesModalOpen}
+        onModalClose={onDeleteFilesModalClose}
       />
     </PageContentFooter>
   );

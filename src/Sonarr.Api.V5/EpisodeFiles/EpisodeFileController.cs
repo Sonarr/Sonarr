@@ -135,7 +135,7 @@ public class EpisodeFileController : RestControllerWithSignalR<EpisodeFileResour
             _mediaFileDeletionService.DeleteEpisodeFile(series, episodeFile);
         }
 
-        return new { };
+        return NoContent();
     }
 
     [HttpPut("bulk")]
