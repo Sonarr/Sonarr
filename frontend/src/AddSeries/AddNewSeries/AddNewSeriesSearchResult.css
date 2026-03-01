@@ -97,6 +97,12 @@
   pointer-events: all;
 }
 
+.excludedIcon {
+  margin-left: 10px;
+  color: var(--dangerColor);
+  pointer-events: all;
+}
+
 .overview {
   margin-top: 20px;
 }
