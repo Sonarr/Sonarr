@@ -62,6 +62,8 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                 var currentFormatScore = qualityProfile.CalculateCustomFormatScore(currentFormats);
                 var newFormats = localEpisode.CustomFormats;
                 var newFormatScore = localEpisode.CustomFormatScore;
+                var newFormatsBeforeRename = localEpisode.OriginalFileNameCustomFormats;
+                var newFormatScoreBeforeRename = localEpisode.OriginalFileNameCustomFormatScore;
 
                 if (qualityCompare == 0 && newFormatScore < currentFormatScore)
                 {
@@ -70,6 +72,18 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Specifications
                         newFormatScore,
                         currentFormats != null ? currentFormats.ConcatToString() : "",
                         currentFormatScore);
+
+                    if (newFormatScoreBeforeRename > currentFormatScore)
+                    {
+                        return ImportSpecDecision.Reject(ImportRejectionReason.NotCustomFormatUpgradeAfterRename,
+                            "Not a Custom Format upgrade for existing episode file(s). AfterRename: [{0}] ({1}) do not improve on Existing: [{2}] ({3}) even though BeforeRename: [{4}] ({5}) did.",
+                            newFormats != null ? newFormats.ConcatToString() : "",
+                            newFormatScore,
+                            currentFormats != null ? currentFormats.ConcatToString() : "",
+                            currentFormatScore,
+                            newFormatsBeforeRename != null ? newFormatsBeforeRename.ConcatToString() : "",
+                            newFormatScoreBeforeRename);
+                    }
 
                     return ImportSpecDecision.Reject(ImportRejectionReason.NotCustomFormatUpgrade,
                         "Not a Custom Format upgrade for existing episode file(s). New: [{0}] ({1}) do not improve on Existing: [{2}] ({3})",

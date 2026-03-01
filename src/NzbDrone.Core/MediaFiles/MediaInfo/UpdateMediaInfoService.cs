@@ -85,7 +85,12 @@ namespace NzbDrone.Core.MediaFiles.MediaInfo
             }
 
             episodeFile.MediaInfo = updatedMediaInfo;
-            _mediaFileService.Update(episodeFile);
+
+            if (episodeFile.Id != 0)
+            {
+                _mediaFileService.Update(episodeFile);
+            }
+
             _logger.Debug("Updated MediaInfo for '{0}'", path);
 
             return true;

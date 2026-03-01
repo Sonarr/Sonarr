@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Common.Extensions;
@@ -13,13 +14,6 @@ namespace NzbDrone.Core.Parser.Model
 {
     public class LocalEpisode
     {
-        public LocalEpisode()
-        {
-            Episodes = new List<Episode>();
-            Languages = new List<Language>();
-            CustomFormats = new List<CustomFormat>();
-        }
-
         public string Path { get; set; }
         public long Size { get; set; }
         public ParsedEpisodeInfo FileEpisodeInfo { get; set; }
@@ -27,10 +21,10 @@ namespace NzbDrone.Core.Parser.Model
         public DownloadClientItem DownloadItem { get; set; }
         public ParsedEpisodeInfo FolderEpisodeInfo { get; set; }
         public Series Series { get; set; }
-        public List<Episode> Episodes { get; set; }
+        public List<Episode> Episodes { get; set; } = new();
         public List<DeletedEpisodeFile> OldFiles { get; set; }
         public QualityModel Quality { get; set; }
-        public List<Language> Languages { get; set; }
+        public List<Language> Languages { get; set; } = new();
         public IndexerFlags IndexerFlags { get; set; }
         public ReleaseType ReleaseType { get; set; }
         public MediaInfoModel MediaInfo { get; set; }
@@ -40,11 +34,14 @@ namespace NzbDrone.Core.Parser.Model
         public string ReleaseHash { get; set; }
         public string SceneName { get; set; }
         public bool OtherVideoFiles { get; set; }
-        public List<CustomFormat> CustomFormats { get; set; }
+        public List<CustomFormat> CustomFormats { get; set; } = new();
         public int CustomFormatScore { get; set; }
+        public List<CustomFormat> OriginalFileNameCustomFormats { get; set; } = new();
+        public int OriginalFileNameCustomFormatScore { get; set; }
         public GrabbedReleaseInfo Release { get; set; }
         public bool ScriptImported { get; set; }
         public string FileNameBeforeRename { get; set; }
+        public string FileNameUsedForCustomFormatCalculation { get; set; }
         public bool ShouldImportExtras { get; set; }
         public List<string> PossibleExtraFiles { get; set; }
         public SubtitleTitleInfo SubtitleInfo { get; set; }
@@ -74,6 +71,81 @@ namespace NzbDrone.Core.Parser.Model
         public override string ToString()
         {
             return Path;
+        }
+
+        public string GetSceneOrFileName()
+        {
+            if (SceneName.IsNotNullOrWhiteSpace())
+            {
+                return SceneName;
+            }
+
+            if (Path.IsNotNullOrWhiteSpace())
+            {
+                return System.IO.Path.GetFileNameWithoutExtension(Path);
+            }
+
+            return string.Empty;
+        }
+
+        public EpisodeFile ToEpisodeFile()
+        {
+            var episodeFile = new EpisodeFile
+            {
+                DateAdded = DateTime.UtcNow,
+                SeriesId = Series.Id,
+                Path = Path.CleanFilePath(),
+                Quality = Quality,
+                MediaInfo = MediaInfo,
+                Series = Series,
+                SeasonNumber = SeasonNumber,
+                Episodes = Episodes,
+                ReleaseGroup = ReleaseGroup,
+                ReleaseHash = ReleaseHash,
+                Languages = Languages,
+                IndexerFlags = IndexerFlags,
+                ReleaseType = ReleaseType,
+                SceneName = SceneName,
+                OriginalFilePath = GetOriginalFilePath()
+            };
+
+            if (Series.Path.IsParentPath(episodeFile.Path))
+            {
+                episodeFile.RelativePath = Series.Path.GetRelativePath(Path.CleanFilePath());
+            }
+
+            if (episodeFile.ReleaseType == ReleaseType.Unknown)
+            {
+                episodeFile.ReleaseType = DownloadClientEpisodeInfo?.ReleaseType ??
+                                          FolderEpisodeInfo?.ReleaseType ??
+                                          FileEpisodeInfo?.ReleaseType ??
+                                          ReleaseType.Unknown;
+            }
+
+            return episodeFile;
+        }
+
+        private string GetOriginalFilePath()
+        {
+            if (FolderEpisodeInfo != null)
+            {
+                var folderPath = Path.GetAncestorPath(FolderEpisodeInfo.ReleaseTitle);
+
+                if (folderPath != null)
+                {
+                    return folderPath.GetParentPath().GetRelativePath(Path);
+                }
+            }
+
+            var parentPath = Path.GetParentPath();
+            var grandparentPath = parentPath.GetParentPath();
+
+            if (grandparentPath != null)
+            {
+                return grandparentPath.GetRelativePath(Path);
+            }
+
+            return System.IO.Path.GetFileName(Path);
         }
     }
 }

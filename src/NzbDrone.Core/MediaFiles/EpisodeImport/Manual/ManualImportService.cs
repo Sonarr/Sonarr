@@ -41,6 +41,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
         private readonly IDownloadedEpisodesImportService _downloadedEpisodesImportService;
         private readonly IMediaFileService _mediaFileService;
         private readonly ICustomFormatCalculationService _formatCalculator;
+        private readonly ILocalEpisodeCustomFormatCalculationService _localEpisodeFormatCalculator;
         private readonly IEventAggregator _eventAggregator;
         private readonly Logger _logger;
 
@@ -55,6 +56,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                                    ITrackedDownloadService trackedDownloadService,
                                    IDownloadedEpisodesImportService downloadedEpisodesImportService,
                                    IMediaFileService mediaFileService,
+                                   ILocalEpisodeCustomFormatCalculationService localEpisodeFormatCalculator,
                                    ICustomFormatCalculationService formatCalculator,
                                    IEventAggregator eventAggregator,
                                    Logger logger)
@@ -70,6 +72,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
             _trackedDownloadService = trackedDownloadService;
             _downloadedEpisodesImportService = downloadedEpisodesImportService;
             _mediaFileService = mediaFileService;
+            _localEpisodeFormatCalculator = localEpisodeFormatCalculator;
             _formatCalculator = formatCalculator;
             _eventAggregator = eventAggregator;
             _logger = logger;
@@ -180,8 +183,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                 localEpisode.IndexerFlags = (IndexerFlags)indexerFlags;
                 localEpisode.ReleaseType = releaseType;
 
-                localEpisode.CustomFormats = _formatCalculator.ParseCustomFormat(localEpisode);
-                localEpisode.CustomFormatScore = localEpisode.Series?.QualityProfile?.Value.CalculateCustomFormatScore(localEpisode.CustomFormats) ?? 0;
+                _localEpisodeFormatCalculator.UpdateEpisodeCustomFormats(localEpisode);
 
                 // Augment episode file so imported files have all additional information an automatic import would
                 localEpisode = _aggregationService.Augment(localEpisode, downloadClientItem);
@@ -445,8 +447,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
             if (decision.LocalEpisode.Series != null)
             {
                 item.Series = decision.LocalEpisode.Series;
-
-                item.CustomFormats = _formatCalculator.ParseCustomFormat(decision.LocalEpisode);
+                item.CustomFormats = _localEpisodeFormatCalculator.ParseEpisodeCustomFormats(decision.LocalEpisode);
                 item.CustomFormatScore = item.Series.QualityProfile?.Value.CalculateCustomFormatScore(item.CustomFormats) ?? 0;
             }
 
@@ -537,8 +538,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                 localEpisode.IndexerFlags = (IndexerFlags)file.IndexerFlags;
                 localEpisode.ReleaseType = file.ReleaseType;
 
-                localEpisode.CustomFormats = _formatCalculator.ParseCustomFormat(localEpisode);
-                localEpisode.CustomFormatScore = localEpisode.Series.QualityProfile?.Value.CalculateCustomFormatScore(localEpisode.CustomFormats) ?? 0;
+                _localEpisodeFormatCalculator.UpdateEpisodeCustomFormats(localEpisode);
 
                 // TODO: Cleanup non-tracked downloads
 
