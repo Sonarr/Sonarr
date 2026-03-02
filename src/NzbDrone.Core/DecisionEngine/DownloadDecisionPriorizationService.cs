@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NzbDrone.Core.Configuration;
+using NzbDrone.Core.DecisionEngine.ExternalDecisions;
 using NzbDrone.Core.Profiles.Delay;
 
 namespace NzbDrone.Core.DecisionEngine
@@ -14,15 +15,19 @@ namespace NzbDrone.Core.DecisionEngine
     {
         private readonly IConfigService _configService;
         private readonly IDelayProfileService _delayProfileService;
+        private readonly IExternalPrioritizationService _externalPrioritizationService;
 
-        public DownloadDecisionPriorizationService(IConfigService configService, IDelayProfileService delayProfileService)
+        public DownloadDecisionPriorizationService(IConfigService configService, IDelayProfileService delayProfileService, IExternalPrioritizationService externalPrioritizationService)
         {
             _configService = configService;
             _delayProfileService = delayProfileService;
+            _externalPrioritizationService = externalPrioritizationService;
         }
 
         public List<DownloadDecision> PrioritizeDecisions(List<DownloadDecision> decisions)
         {
+            _externalPrioritizationService.PopulateExternalPriorityScores(decisions);
+
             return decisions.Where(c => c.RemoteEpisode.Series != null)
                             .GroupBy(c => c.RemoteEpisode.Series.Id, (seriesId, downloadDecisions) =>
                                 {

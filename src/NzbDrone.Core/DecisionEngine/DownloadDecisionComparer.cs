@@ -31,6 +31,7 @@ namespace NzbDrone.Core.DecisionEngine
             {
                 CompareQuality,
                 CompareCustomFormatScore,
+                CompareExternalPriorityScore,
                 CompareProtocol,
                 CompareEpisodeCount,
                 CompareEpisodeNumber,
@@ -83,6 +84,11 @@ namespace NzbDrone.Core.DecisionEngine
         private int CompareCustomFormatScore(DownloadDecision x, DownloadDecision y)
         {
             return CompareBy(x.RemoteEpisode, y.RemoteEpisode, remoteMovie => remoteMovie.CustomFormatScore);
+        }
+
+        private int CompareExternalPriorityScore(DownloadDecision x, DownloadDecision y)
+        {
+            return CompareBy(x.RemoteEpisode, y.RemoteEpisode, remoteEpisode => remoteEpisode.ExternalPriorityScore);
         }
 
         private int CompareProtocol(DownloadDecision x, DownloadDecision y)

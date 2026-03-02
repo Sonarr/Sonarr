@@ -8,6 +8,7 @@ using NUnit.Framework;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.DecisionEngine;
+using NzbDrone.Core.DecisionEngine.ExternalDecisions;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Languages;
 using NzbDrone.Core.Parser.Model;
@@ -28,6 +29,9 @@ namespace NzbDrone.Core.Test.DecisionEngineTests
         public void Setup()
         {
             GivenPreferredDownloadProtocol(DownloadProtocol.Usenet);
+
+            Mocker.GetMock<IExternalPrioritizationService>()
+                  .Setup(s => s.PopulateExternalPriorityScores(It.IsAny<List<DownloadDecision>>()));
 
             _series = Builder<Series>.CreateNew()
                 .With(e => e.Runtime = 60)

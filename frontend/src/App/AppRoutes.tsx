@@ -12,6 +12,7 @@ import SeriesDetailsPage from 'Series/Details/SeriesDetailsPage';
 import SeriesIndex from 'Series/Index/SeriesIndex';
 import CustomFormatSettingsPage from 'Settings/CustomFormats/CustomFormatSettingsPage';
 import DownloadClientSettings from 'Settings/DownloadClients/DownloadClientSettings';
+import ExternalDecisionSettings from 'Settings/ExternalDecisions/ExternalDecisionSettings';
 import GeneralSettings from 'Settings/General/GeneralSettings';
 import ImportListSettings from 'Settings/ImportLists/ImportListSettings';
 import IndexerSettings from 'Settings/Indexers/IndexerSettings';
@@ -119,6 +120,11 @@ function AppRoutes() {
       <Route path="/settings/importlists" component={ImportListSettings} />
 
       <Route path="/settings/connect" component={NotificationSettings} />
+
+      <Route
+        path="/settings/externaldecisions"
+        component={ExternalDecisionSettings}
+      />
 
       <Route path="/settings/metadata" component={MetadataSettings} />
 

@@ -84,6 +84,7 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
     languages,
     customFormatScore,
     customFormats,
+    externalPriorityScore,
     sceneMapping,
     mappedSeriesId,
     mappedSeasonNumber,
@@ -285,6 +286,10 @@ function InteractiveSearchRow(props: InteractiveSearchRowProps) {
           tooltip={<EpisodeFormats formats={customFormats} />}
           position={tooltipPositions.LEFT}
         />
+      </TableRowCell>
+
+      <TableRowCell className={styles.externalPriorityScore}>
+        {formatCustomFormatScore(externalPriorityScore)}
       </TableRowCell>
 
       <TableRowCell className={styles.indexerFlags}>

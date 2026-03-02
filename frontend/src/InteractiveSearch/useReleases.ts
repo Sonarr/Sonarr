@@ -55,6 +55,7 @@ export interface Release extends ModelBase {
   releaseWeight: number;
   customFormats: CustomFormat[];
   customFormatScore: number;
+  externalPriorityScore: number;
   indexerFlags: number;
   sceneMapping?: AlternateTitle;
 }

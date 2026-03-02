@@ -1,0 +1,11 @@
+.deleteButton {
+  composes: button from '~Components/Link/Button.css';
+
+  margin-right: auto;
+}
+
+.message {
+  composes: alert from '~Components/Alert.css';
+
+  margin-bottom: 30px;
+}
