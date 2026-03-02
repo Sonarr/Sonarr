@@ -58,5 +58,21 @@ namespace NzbDrone.Core.Test.IndexerTests
             result.First().CommentUrl.Should().Be("http://my.indexer.com/details/123#comments");
             result.First().DownloadUrl.Should().Be("http://my.indexer.com/getnzb/123.nzb&i=782&r=123");
         }
+
+        [Test]
+        public void should_decode_html_entities_in_item_title()
+        {
+            var xml = "<rss><channel><item>" +
+                      "<title>Law.&amp;amp;.Order.S01E01</title>" +
+                      "<guid>g1</guid>" +
+                      "<pubDate>Mon, 01 Jan 2024 00:00:00 +0000</pubDate>" +
+                      "<link>http://my.indexer.com/get/1</link>" +
+                      "</item></channel></rss>";
+
+            var result = Subject.ParseResponse(CreateResponse("http://my.indexer.com/rss", xml));
+
+            result.Should().HaveCount(1);
+            result.First().Title.Should().Be("Law.&.Order.S01E01");
+        }
     }
 }
