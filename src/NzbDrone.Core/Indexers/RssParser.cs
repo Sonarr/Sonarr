@@ -186,7 +186,9 @@ namespace NzbDrone.Core.Indexers
 
         protected virtual string GetTitle(XElement item)
         {
-            return item.TryGetValue("title", "Unknown");
+            var title = item.TryGetValue("title", "Unknown");
+
+            return WebUtility.HtmlDecode(title);
         }
 
         protected virtual DateTime GetPublishDate(XElement item)

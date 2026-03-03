@@ -58,5 +58,16 @@ namespace NzbDrone.Core.Test.IndexerTests
             result.First().CommentUrl.Should().Be("http://my.indexer.com/details/123#comments");
             result.First().DownloadUrl.Should().Be("http://my.indexer.com/getnzb/123.nzb&i=782&r=123");
         }
+
+        [Test]
+        public void should_decode_html_entities_in_item_title()
+        {
+            var xml = ReadAllText("Files/Indexers/encoded_title.xml");
+
+            var result = Subject.ParseResponse(CreateResponse("http://my.indexer.com/rss", xml));
+
+            result.Should().HaveCount(1);
+            result.First().Title.Should().Be("Series.&.Title.S02E19.EAC3.5.1.1080p.WEBRip.x265-iVy");
+        }
     }
 }

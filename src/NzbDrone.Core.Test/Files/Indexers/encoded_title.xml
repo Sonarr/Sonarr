@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+
+  <channel>
+
+    <item>
+      <title>Series.&amp;amp;.Title.S02E19.EAC3.5.1.1080p.WEBRip.x265-iVy</title>
+      <guid isPermaLink="true">https://my.indexer.com/info.php?guid=abc123</guid>
+      <link>https://my.indexer.com/api?t=get&amp;id=abc123&amp;apikey=secret</link>
+      <comments>https://my.indexer.com/info.php?guid=abc123</comments>
+      <pubDate>Fri, 20 Dec 2024 05:16:34 +0000</pubDate>
+      <category>TV > HD</category>
+      <description>Series.&amp;.Title.S02E19.EAC3.5.1.1080p.WEBRip.x265-iVy</description>
+      <enclosure url="https://my.indexer.com/api?t=get&amp;id=abc123&amp;apikey=secret" length="724655000" type="application/x-nzb"/>
+    </item>
+
+  </channel>
+</rss>
