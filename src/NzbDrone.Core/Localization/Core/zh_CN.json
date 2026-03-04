@@ -467,6 +467,7 @@
     "DownloadClientFreeboxSettingsPortHelpText": "用于访问 Freebox 接口的端口，默认为 '{port}'",
     "DownloadClientFreeboxUnableToReachFreebox": "无法访问 Freebox API。请检查 “主机名”、“端口” 或 “使用 SSL” 的设置（错误： {exceptionMessage}）",
     "DownloadClientFreeboxUnableToReachFreeboxApi": "无法访问 Freebox API。 请检查 “API 地址” 的基础地址和版本。",
+    "DownloadClientItemErrorMessage": "{clientName}回報錯誤：{message}",
     "DownloadClientNzbVortexMultipleFilesMessage": "下载包含多个文件且不在作业文件夹中：{outputPath}",
     "DownloadClientNzbgetSettingsAddPausedHelpText": "此选项至少需要 NzbGet 版本 16.0",
     "DownloadClientNzbgetValidationKeepHistoryOverMax": "NzbGet 设置 KeepHistory 应小于 25000",
