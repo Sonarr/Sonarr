@@ -144,7 +144,7 @@
     "style-loader": "3.3.2",
     "stylelint": "15.6.1",
     "stylelint-order": "6.0.4",
-    "terser-webpack-plugin": "5.3.10",
+    "terser-webpack-plugin": "5.3.17",
     "ts-loader": "9.5.1",
     "typescript-plugin-css-modules": "5.0.1",
     "url-loader": "4.1.1",
