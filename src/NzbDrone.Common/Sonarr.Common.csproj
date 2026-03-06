@@ -11,7 +11,7 @@
     <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="10.0.3" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="NLog" Version="5.5.1" />
-    <PackageReference Include="NLog.Layouts.ClefJsonLayout" Version="1.0.4" />
+    <PackageReference Include="NLog.Layouts.ClefJsonLayout" Version="1.0.5" />
     <PackageReference Include="NLog.Targets.Syslog" Version="7.0.0" />
     <PackageReference Include="NLog.Extensions.Logging" Version="5.5.0" />
     <PackageReference Include="Sentry" Version="5.16.3" />
