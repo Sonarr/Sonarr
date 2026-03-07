@@ -76,13 +76,13 @@ namespace Sonarr.Api.V5.Provider
         [RestPostById]
         [Consumes("application/json")]
         [Produces("application/json")]
-        public ActionResult<TProviderResource> CreateProvider([FromBody] TProviderResource providerResource, [FromQuery] bool forceSave = false)
+        public ActionResult<TProviderResource> CreateProvider([FromBody] TProviderResource providerResource, [FromQuery] bool skipTesting = false, [FromQuery] SkipValidation skipValidation = SkipValidation.None)
         {
-            var providerDefinition = GetDefinition(providerResource, null, true, !forceSave, false);
+            var providerDefinition = GetDefinition(providerResource, null, skipValidation, false);
 
-            if (providerDefinition.Enable)
+            if (providerDefinition.Enable && !skipTesting)
             {
-                Test(providerDefinition, !forceSave);
+                Test(providerDefinition, skipValidation);
             }
 
             providerDefinition = _providerFactory.Create(providerDefinition);
@@ -93,7 +93,7 @@ namespace Sonarr.Api.V5.Provider
         [RestPutById]
         [Consumes("application/json")]
         [Produces("application/json")]
-        public ActionResult<TProviderResource> UpdateProvider([FromRoute] int id, [FromBody] TProviderResource providerResource, [FromQuery] bool forceSave = false)
+        public ActionResult<TProviderResource> UpdateProvider([FromRoute] int id, [FromBody] TProviderResource providerResource, [FromQuery] bool skipTesting = false, [FromQuery] SkipValidation skipValidation = SkipValidation.None)
         {
             // TODO: Remove fallback to Id from body in next API version bump
             var existingDefinition = _providerFactory.Find(id) ?? _providerFactory.Find(providerResource.Id);
@@ -103,15 +103,15 @@ namespace Sonarr.Api.V5.Provider
                 return NotFound();
             }
 
-            var providerDefinition = GetDefinition(providerResource, existingDefinition, true, !forceSave, false);
+            var providerDefinition = GetDefinition(providerResource, existingDefinition, skipValidation, false);
 
             // Compare settings separately because they are not serialized with the definition.
             var hasDefinitionChanged = !existingDefinition.Equals(providerDefinition) || !existingDefinition.Settings.Equals(providerDefinition.Settings);
 
-            // Only test existing definitions if it is enabled and forceSave isn't set and the definition has changed.
-            if (providerDefinition.Enable && !forceSave && hasDefinitionChanged)
+            // Only test existing definitions if it is enabled, skipTesting isn't set and the definition has changed.
+            if (providerDefinition.Enable && !skipTesting && hasDefinitionChanged)
             {
-                Test(providerDefinition, true);
+                Test(providerDefinition, skipValidation);
             }
 
             if (hasDefinitionChanged)
@@ -163,13 +163,13 @@ namespace Sonarr.Api.V5.Provider
             return Accepted(_providerFactory.Update(definitionsToUpdate).Select(x => _resourceMapper.ToResource(x)));
         }
 
-        private TProviderDefinition GetDefinition(TProviderResource providerResource, TProviderDefinition? existingDefinition, bool validate, bool includeWarnings, bool forceValidate)
+        private TProviderDefinition GetDefinition(TProviderResource providerResource, TProviderDefinition? existingDefinition, SkipValidation skipValidation, bool forceValidate)
         {
             var definition = _resourceMapper.ToModel(providerResource, existingDefinition);
 
-            if (validate && (definition.Enable || forceValidate))
+            if (skipValidation != SkipValidation.All && (definition.Enable || forceValidate))
             {
-                Validate(definition, includeWarnings);
+                Validate(definition, skipValidation);
             }
 
             return definition;
@@ -218,12 +218,12 @@ namespace Sonarr.Api.V5.Provider
         [SkipValidation(true, false)]
         [HttpPost("test")]
         [Consumes("application/json")]
-        public ActionResult Test([FromBody] TProviderResource providerResource, [FromQuery] bool forceTest = false)
+        public ActionResult Test([FromBody] TProviderResource providerResource, [FromQuery] SkipValidation skipValidation = SkipValidation.None)
         {
             var existingDefinition = providerResource.Id > 0 ? _providerFactory.Find(providerResource.Id) : null;
-            var providerDefinition = GetDefinition(providerResource, existingDefinition, true, !forceTest, true);
+            var providerDefinition = GetDefinition(providerResource, existingDefinition, skipValidation, true);
 
-            Test(providerDefinition, true);
+            Test(providerDefinition, skipValidation);
 
             return NoContent();
         }
@@ -261,7 +261,7 @@ namespace Sonarr.Api.V5.Provider
         public IActionResult RequestAction([FromRoute] string name, [FromBody] TProviderResource providerResource)
         {
             var existingDefinition = providerResource.Id > 0 ? _providerFactory.Find(providerResource.Id) : null;
-            var providerDefinition = GetDefinition(providerResource, existingDefinition, false, false, false);
+            var providerDefinition = GetDefinition(providerResource, existingDefinition, SkipValidation.All, false);
 
             var query = Request.Query.ToDictionary(x => x.Key, x => x.Value.ToString());
 
@@ -288,30 +288,30 @@ namespace Sonarr.Api.V5.Provider
             BroadcastResourceChange(ModelAction.Deleted, message.ProviderId);
         }
 
-        private void Validate(TProviderDefinition definition, bool includeWarnings)
+        private void Validate(TProviderDefinition definition, SkipValidation skipValidation)
         {
             var validationResult = definition.Settings.Validate();
 
-            VerifyValidationResult(validationResult, includeWarnings);
+            VerifyValidationResult(validationResult, skipValidation);
         }
 
-        protected virtual void Test(TProviderDefinition definition, bool includeWarnings)
+        protected virtual void Test(TProviderDefinition definition, SkipValidation skipValidation)
         {
             var validationResult = _providerFactory.Test(definition);
 
-            VerifyValidationResult(validationResult, includeWarnings);
+            VerifyValidationResult(validationResult, skipValidation);
         }
 
-        protected void VerifyValidationResult(ValidationResult validationResult, bool includeWarnings)
+        protected void VerifyValidationResult(ValidationResult validationResult, SkipValidation skipValidation)
         {
             var result = validationResult as NzbDroneValidationResult ?? new NzbDroneValidationResult(validationResult.Errors);
 
-            if (includeWarnings && (!result.IsValid || result.HasWarnings))
+            if (skipValidation == SkipValidation.None && (!result.IsValid || result.HasWarnings))
             {
                 throw new ValidationException(result.Failures);
             }
 
-            if (!result.IsValid)
+            if (skipValidation == SkipValidation.Warnings && !result.IsValid)
             {
                 throw new ValidationException(result.Errors);
             }
