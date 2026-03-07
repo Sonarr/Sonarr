@@ -1,14 +1,24 @@
-import { useQueryClient } from '@tanstack/react-query';
-import { useCallback, useMemo, useState } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import ModelBase from 'App/ModelBase';
-import useApiMutation from 'Helpers/Hooks/useApiMutation';
+import useApiMutation, {
+  getValidationFailures,
+} from 'Helpers/Hooks/useApiMutation';
 import useApiQuery, { QueryOptions } from 'Helpers/Hooks/useApiQuery';
 import { usePendingChangesStore } from 'Helpers/Hooks/usePendingChangesStore';
 import { usePendingFieldsStore } from 'Helpers/Hooks/usePendingFieldsStore';
 import selectSettings from 'Store/Selectors/selectSettings';
 import { PendingSection } from 'typings/pending';
 import Provider from 'typings/Provider';
-import { ApiError } from 'Utilities/Fetch/fetchJson';
+import fetchJson, { ApiError } from 'Utilities/Fetch/fetchJson';
+import getQueryPath from 'Utilities/Fetch/getQueryPath';
+import getQueryString, { QueryParams } from 'Utilities/Fetch/getQueryString';
+
+export type SkipValidation = 'none' | 'warnings' | 'all';
+export interface SaveOptions {
+  skipTesting?: boolean;
+  skipValidation?: SkipValidation;
+}
 
 interface BaseManageProviderSettings<T extends ModelBase>
   extends Omit<ReturnType<typeof selectSettings<T>>, 'settings'> {
@@ -80,28 +90,60 @@ export const useSaveProviderSettings = <T extends ModelBase>(
 ) => {
   const queryClient = useQueryClient();
 
-  const { mutate, isPending, error } = useApiMutation<T, T>({
-    path: id ? `${path}/${id}` : path,
-    method: id ? 'PUT' : 'POST',
-    mutationOptions: {
-      onSuccess: (updatedSettings: T) => {
-        queryClient.setQueryData<T[]>([path], (oldData = []) => {
-          if (id) {
-            return oldData.map((item) =>
-              item.id === updatedSettings.id ? updatedSettings : item
-            );
-          }
+  const { mutate, isPending, error } = useMutation<
+    T,
+    ApiError,
+    {
+      data: T;
+    } & SaveOptions
+  >({
+    mutationFn: async ({ data, skipTesting, skipValidation }) => {
+      const queryParams: QueryParams = {};
 
-          return [...oldData, updatedSettings];
-        });
-        onSuccess?.(updatedSettings);
-      },
-      onError,
+      if (skipTesting) {
+        queryParams.skipTesting = true;
+      }
+
+      if (skipValidation && skipValidation !== 'none') {
+        queryParams.skipValidation = skipValidation;
+      }
+
+      return fetchJson<T, T>({
+        path:
+          getQueryPath(id ? `${path}/${id}` : path) +
+          getQueryString(queryParams),
+        method: id ? 'PUT' : 'POST',
+        headers: {
+          'X-Api-Key': window.Sonarr.apiKey,
+          'X-Sonarr-Client': 'Sonarr',
+        },
+        body: data,
+      });
     },
+    onSuccess: (updatedSettings: T) => {
+      queryClient.setQueryData<T[]>([path], (oldData = []) => {
+        if (id) {
+          return oldData.map((item) =>
+            item.id === updatedSettings.id ? updatedSettings : item
+          );
+        }
+
+        return [...oldData, updatedSettings];
+      });
+      onSuccess?.(updatedSettings);
+    },
+    onError,
   });
 
+  const save = useCallback(
+    (data: T, options?: SaveOptions) => {
+      mutate({ data, ...options });
+    },
+    [mutate]
+  );
+
   return {
-    save: mutate,
+    save,
     isSaving: isPending,
     saveError: error,
   };
@@ -112,17 +154,41 @@ export const useTestProvider = <T extends ModelBase>(
   onSuccess?: () => void,
   onError?: (error: ApiError) => void
 ) => {
-  const { mutate, isPending, error } = useApiMutation<void, T>({
-    path: `${path}/test`,
-    method: 'POST',
-    mutationOptions: {
-      onSuccess,
-      onError,
+  const { mutate, isPending, error } = useMutation<
+    void,
+    ApiError,
+    { data: T } & SaveOptions
+  >({
+    mutationFn: async ({ data, skipValidation }) => {
+      const queryParams: QueryParams = {};
+
+      if (skipValidation && skipValidation !== 'none') {
+        queryParams.skipValidation = skipValidation;
+      }
+
+      return fetchJson<void, T>({
+        path: getQueryPath(`${path}/test`) + getQueryString(queryParams),
+        method: 'POST',
+        headers: {
+          'X-Api-Key': window.Sonarr.apiKey,
+          'X-Sonarr-Client': 'Sonarr',
+        },
+        body: data,
+      });
     },
+    onSuccess,
+    onError,
   });
 
+  const test = useCallback(
+    (data: T, options?: SaveOptions) => {
+      mutate({ data, ...options });
+    },
+    [mutate]
+  );
+
   return {
-    test: mutate,
+    test,
     isTesting: isPending,
     testError: error,
   };
@@ -135,12 +201,14 @@ export const useManageProviderSettings = <T extends ModelBase>(
 ): ManageProviderSettings<T> => {
   const provider = useProviderWithDefault<T>(id, defaultProvider, path);
   const [mutationError, setMutationError] = useState<ApiError | null>(null);
+  const lastSaveData = useRef<string | null>(null);
 
   const {
     pendingChanges,
     setPendingChange,
     unsetPendingChange,
     clearPendingChanges,
+    hasPendingChanges,
   } = usePendingChangesStore<T>({});
 
   const {
@@ -154,6 +222,7 @@ export const useManageProviderSettings = <T extends ModelBase>(
     setMutationError(null);
     clearPendingChanges();
     clearPendingFields();
+    lastSaveData.current = null;
   }, [clearPendingChanges, clearPendingFields]);
 
   const handleTestSuccess = useCallback(() => {
@@ -219,8 +288,40 @@ export const useManageProviderSettings = <T extends ModelBase>(
       } as T;
     }
 
-    save(updatedSettings);
-  }, [provider, pendingChanges, pendingFields, save]);
+    const serializedSettings = JSON.stringify(updatedSettings);
+    const isResave = lastSaveData.current === serializedSettings;
+    lastSaveData.current = serializedSettings;
+
+    const saveOptions: SaveOptions = {};
+
+    // For existing providers with no pending changes, skip testing and all validation.
+    if (provider.id > 0 && !hasPendingChanges && !hasPendingFields) {
+      saveOptions.skipTesting = true;
+      saveOptions.skipValidation = 'all';
+    } else {
+      // If resaving the exact same settings as the previous attempt, skip testing.
+      if (isResave) {
+        saveOptions.skipTesting = true;
+      }
+
+      // If the last save returned only warnings, skip warning validation on the next save.
+      const { errors, warnings } = getValidationFailures(mutationError);
+
+      if (errors.length === 0 && warnings.length > 0) {
+        saveOptions.skipValidation = 'warnings';
+      }
+    }
+
+    save(updatedSettings, saveOptions);
+  }, [
+    provider,
+    pendingChanges,
+    pendingFields,
+    hasPendingChanges,
+    hasPendingFields,
+    mutationError,
+    save,
+  ]);
 
   const testProvider = useCallback(() => {
     let updatedSettings: T = {
@@ -246,8 +347,17 @@ export const useManageProviderSettings = <T extends ModelBase>(
       } as T;
     }
 
-    test(updatedSettings);
-  }, [provider, pendingChanges, pendingFields, test]);
+    const testOptions: SaveOptions = {};
+
+    // If the last operation returned only warnings, skip warning validation on the next test.
+    const { errors, warnings } = getValidationFailures(mutationError);
+
+    if (errors.length === 0 && warnings.length > 0) {
+      testOptions.skipValidation = 'warnings';
+    }
+
+    test(updatedSettings, testOptions);
+  }, [provider, pendingChanges, pendingFields, mutationError, test]);
 
   const updateValue = useCallback(
     <K extends keyof T>(key: K, value: T[K]) => {
