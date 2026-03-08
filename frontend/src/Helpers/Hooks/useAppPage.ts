@@ -8,19 +8,18 @@ import useCustomFilters from 'Filters/useCustomFilters';
 import { useInitializeLanguage } from 'Language/useLanguageName';
 import { useLanguages } from 'Language/useLanguages';
 import useSeries from 'Series/useSeries';
+import useIndexerFlags from 'Settings/Indexers/useIndexerFlags';
 import { useQualityProfiles } from 'Settings/Profiles/Quality/useQualityProfiles';
 import { useUiSettings } from 'Settings/UI/useUiSettings';
 import { fetchCustomFilters } from 'Store/Actions/customFilterActions';
-import {
-  fetchImportLists,
-  fetchIndexerFlags,
-} from 'Store/Actions/settingsActions';
+import { fetchImportLists } from 'Store/Actions/settingsActions';
 import useSystemStatus from 'System/Status/useSystemStatus';
 import useTags from 'Tags/useTags';
 import { ApiError } from 'Utilities/Fetch/fetchJson';
 
 const createErrorsSelector = ({
   customFiltersError,
+  indexerFlagsError,
   systemStatusError,
   tagsError,
   translationsError,
@@ -30,6 +29,7 @@ const createErrorsSelector = ({
   languagesError,
 }: {
   customFiltersError: ApiError | null;
+  indexerFlagsError: ApiError | null;
   systemStatusError: ApiError | null;
   tagsError: ApiError | null;
   translationsError: ApiError | null;
@@ -40,8 +40,7 @@ const createErrorsSelector = ({
 }) =>
   createSelector(
     (state: AppState) => state.settings.importLists.error,
-    (state: AppState) => state.settings.indexerFlags.error,
-    (importListsError, indexerFlagsError) => {
+    (importListsError) => {
       const hasError = !!(
         customFiltersError ||
         seriesError ||
@@ -102,15 +101,17 @@ const useAppPage = () => {
   const { isFetched: isLanguagesFetched, error: languagesError } =
     useLanguages();
 
+  const { isFetched: isIndexerFlagsFetched, error: indexerFlagsError } =
+    useIndexerFlags();
+
   const isAppStatePopulated = useSelector(
-    (state: AppState) =>
-      state.settings.importLists.isPopulated &&
-      state.settings.indexerFlags.isPopulated
+    (state: AppState) => state.settings.importLists.isPopulated
   );
 
   const isPopulated =
     isAppStatePopulated &&
     isCustomFiltersFetched &&
+    isIndexerFlagsFetched &&
     isSeriesFetched &&
     isSystemStatusFetched &&
     isTagsFetched &&
@@ -122,6 +123,7 @@ const useAppPage = () => {
   const { hasError, errors } = useSelector(
     createErrorsSelector({
       customFiltersError,
+      indexerFlagsError,
       seriesError,
       systemStatusError,
       tagsError,
@@ -148,7 +150,6 @@ const useAppPage = () => {
   useEffect(() => {
     dispatch(fetchCustomFilters());
     dispatch(fetchImportLists());
-    dispatch(fetchIndexerFlags());
   }, [dispatch]);
 
   return useMemo(() => {

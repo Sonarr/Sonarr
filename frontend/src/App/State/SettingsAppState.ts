@@ -14,7 +14,6 @@ import DownloadClient from 'typings/DownloadClient';
 import ImportList from 'typings/ImportList';
 import ImportListExclusion from 'typings/ImportListExclusion';
 import ImportListOptionsSettings from 'typings/ImportListOptionsSettings';
-import IndexerFlag from 'typings/IndexerFlag';
 import DownloadClientOptions from 'typings/Settings/DownloadClientOptions';
 
 type Presets<T> = T & {
@@ -80,8 +79,6 @@ export interface ImportListExclusionsSettingsAppState
   pendingChanges: Partial<ImportListExclusion>;
 }
 
-export type IndexerFlagSettingsAppState = AppSectionState<IndexerFlag>;
-
 interface SettingsAppState {
   autoTaggings: AutoTaggingAppState;
   autoTaggingSpecifications: AutoTaggingSpecificationAppState;
@@ -93,7 +90,6 @@ interface SettingsAppState {
   importListExclusions: ImportListExclusionsSettingsAppState;
   importListOptions: ImportListOptionsSettingsAppState;
   importLists: ImportListAppState;
-  indexerFlags: IndexerFlagSettingsAppState;
 }
 
 export default SettingsAppState;
