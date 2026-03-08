@@ -7,7 +7,7 @@ namespace NzbDrone.Core.DataAugmentation.Scene
     public interface ISceneMappingRepository : IBasicRepository<SceneMapping>
     {
         List<SceneMapping> FindByTvdbid(int tvdbId);
-        void Clear(string type);
+        List<SceneMapping> GetAllByType(string type);
     }
 
     public class SceneMappingRepository : BasicRepository<SceneMapping>, ISceneMappingRepository
@@ -22,9 +22,9 @@ namespace NzbDrone.Core.DataAugmentation.Scene
             return Query(x => x.TvdbId == tvdbId);
         }
 
-        public void Clear(string type)
+        public List<SceneMapping> GetAllByType(string type)
         {
-            Delete(s => s.Type == type);
+            return Query(x => x.Type == type);
         }
     }
 }

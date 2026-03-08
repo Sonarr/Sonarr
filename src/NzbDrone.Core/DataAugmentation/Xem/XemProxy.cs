@@ -101,6 +101,7 @@ namespace NzbDrone.Core.DataAugmentation.Xem
 
                         result.Add(new SceneMapping
                                    {
+                                       MappingId = $"x-{series.Key}_S{seasonNumber}_{n.Key.Replace(' ', '_')}",
                                        Title = n.Key,
                                        SearchTerm = n.Key,
                                        SceneSeasonNumber = seasonNumber,
