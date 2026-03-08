@@ -116,6 +116,7 @@ export const useUpdateInteractiveImportItems = () => {
 
 interface ReprocessInteractiveImportItem extends ModelBase {
   path: string;
+  relativePath: string;
   seriesId: number | undefined;
   seasonNumber: number | undefined;
   episodeIds: number[] | undefined;
@@ -179,6 +180,7 @@ export const useReprocessInteractiveImportItems = () => {
           acc.push({
             id,
             path: item.path,
+            relativePath: item.relativePath,
             seriesId: item.series ? item.series.id : undefined,
             seasonNumber: item.seasonNumber,
             episodeIds: (item.episodes || []).map((e) => e.id),
