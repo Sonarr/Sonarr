@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import Alert from 'Components/Alert';
 import FieldSet from 'Components/FieldSet';
 import Form from 'Components/Form/Form';
@@ -9,21 +8,13 @@ import FormLabel from 'Components/Form/FormLabel';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import { inputTypes, kinds } from 'Helpers/Props';
 import { useShowAdvancedSettings } from 'Settings/advancedSettingsStore';
-import { clearPendingChanges } from 'Store/Actions/baseActions';
-import {
-  fetchIndexerOptions,
-  saveIndexerOptions,
-  setIndexerOptionsValue,
-} from 'Store/Actions/settingsActions';
-import createSettingsSectionSelector from 'Store/Selectors/createSettingsSectionSelector';
 import { InputChanged } from 'typings/inputs';
 import {
   OnChildStateChange,
   SetChildSave,
 } from 'typings/Settings/SettingsState';
 import translate from 'Utilities/String/translate';
-
-const SECTION = 'indexerOptions';
+import { useManageIndexerSettings } from './useIndexerSettings';
 
 interface IndexerOptionsProps {
   setChildSave: SetChildSave;
@@ -34,31 +25,31 @@ function IndexerOptions({
   setChildSave,
   onChildStateChange,
 }: IndexerOptionsProps) {
-  const dispatch = useDispatch();
   const {
     isFetching,
-    isPopulated,
+    isFetched,
     isSaving,
     error,
     settings,
     hasSettings,
     hasPendingChanges,
-  } = useSelector(createSettingsSectionSelector(SECTION));
+    saveSettings,
+    updateSetting,
+  } = useManageIndexerSettings();
 
   const showAdvancedSettings = useShowAdvancedSettings();
 
   const handleInputChange = useCallback(
-    (change: InputChanged) => {
-      // @ts-expect-error - actions aren't typed
-      dispatch(setIndexerOptionsValue(change));
+    ({ name, value }: InputChanged) => {
+      // @ts-expect-error - InputChanged name/value are not typed as keyof IndexerSettingsModel
+      updateSetting(name, value);
     },
-    [dispatch]
+    [updateSetting]
   );
 
   useEffect(() => {
-    dispatch(fetchIndexerOptions());
-    setChildSave(() => dispatch(saveIndexerOptions()));
-  }, [dispatch, setChildSave]);
+    setChildSave(saveSettings);
+  }, [saveSettings, setChildSave]);
 
   useEffect(() => {
     onChildStateChange({
@@ -66,12 +57,6 @@ function IndexerOptions({
       hasPendingChanges,
     });
   }, [hasPendingChanges, isSaving, onChildStateChange]);
-
-  useEffect(() => {
-    return () => {
-      dispatch(clearPendingChanges({ section: `settings.${SECTION}` }));
-    };
-  }, [dispatch]);
 
   return (
     <FieldSet legend={translate('Options')}>
@@ -83,7 +68,7 @@ function IndexerOptions({
         </Alert>
       ) : null}
 
-      {hasSettings && isPopulated && !error ? (
+      {hasSettings && isFetched && !error ? (
         <Form>
           <FormGroup>
             <FormLabel>{translate('MinimumAge')}</FormLabel>
