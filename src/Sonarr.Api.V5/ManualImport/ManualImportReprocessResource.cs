@@ -10,6 +10,7 @@ namespace Sonarr.Api.V5.ManualImport;
 public class ManualImportReprocessResource : RestResource
 {
     public string? Path { get; set; }
+    public string? RelativePath { get; set; }
     public int SeriesId { get; set; }
     public int? SeasonNumber { get; set; }
     public List<EpisodeResource> Episodes { get; set; } = [];
