@@ -5,6 +5,7 @@ namespace NzbDrone.Core.DataAugmentation.Scene
 {
     public class SceneMapping : ModelBase
     {
+        public string MappingId { get; set; }
         public string Title { get; set; }
         public string ParseTerm { get; set; }
 

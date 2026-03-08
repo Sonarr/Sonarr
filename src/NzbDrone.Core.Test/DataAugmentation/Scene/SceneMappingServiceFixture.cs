@@ -46,6 +46,10 @@ namespace NzbDrone.Core.Test.DataAugmentation.Scene
 
             _provider2 = new Mock<ISceneMappingProvider>();
             _provider2.Setup(s => s.GetSceneMappings()).Returns(_fakeMappings);
+
+            Mocker.GetMock<ISceneMappingRepository>()
+                  .Setup(c => c.GetAllByType(It.IsAny<string>()))
+                  .Returns(new List<SceneMapping>());
         }
 
         private void GivenProviders(IEnumerable<Mock<ISceneMappingProvider>> providers)
@@ -375,15 +379,15 @@ namespace NzbDrone.Core.Test.DataAugmentation.Scene
         private void AssertNoUpdate()
         {
             _provider1.Verify(c => c.GetSceneMappings(), Times.Once());
-            Mocker.GetMock<ISceneMappingRepository>().Verify(c => c.Clear(It.IsAny<string>()), Times.Never());
-            Mocker.GetMock<ISceneMappingRepository>().Verify(c => c.InsertMany(_fakeMappings), Times.Never());
+            Mocker.GetMock<ISceneMappingRepository>().Verify(c => c.InsertMany(It.IsAny<IList<SceneMapping>>()), Times.Never());
+            Mocker.GetMock<ISceneMappingRepository>().Verify(c => c.UpdateMany(It.IsAny<IList<SceneMapping>>()), Times.Never());
+            Mocker.GetMock<ISceneMappingRepository>().Verify(c => c.DeleteMany(It.IsAny<List<SceneMapping>>()), Times.Never());
         }
 
         private void AssertMappingUpdated()
         {
             _provider1.Verify(c => c.GetSceneMappings(), Times.Once());
-            Mocker.GetMock<ISceneMappingRepository>().Verify(c => c.Clear(It.IsAny<string>()), Times.Once());
-            Mocker.GetMock<ISceneMappingRepository>().Verify(c => c.InsertMany(_fakeMappings), Times.Once());
+            Mocker.GetMock<ISceneMappingRepository>().Verify(c => c.InsertMany(It.IsAny<IList<SceneMapping>>()), Times.Once());
 
             foreach (var sceneMapping in _fakeMappings)
             {

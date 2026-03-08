@@ -143,7 +143,7 @@ namespace NzbDrone.Core.DataAugmentation.Scene
 
                     if (mappings.Any())
                     {
-                        _repository.Clear(sceneMappingProvider.GetType().Name);
+                        var providerType = sceneMappingProvider.GetType().Name;
 
                         mappings.RemoveAll(sceneMapping =>
                         {
@@ -160,10 +160,45 @@ namespace NzbDrone.Core.DataAugmentation.Scene
                         foreach (var sceneMapping in mappings)
                         {
                             sceneMapping.ParseTerm = sceneMapping.Title.CleanSeriesTitle();
-                            sceneMapping.Type = sceneMappingProvider.GetType().Name;
+                            sceneMapping.Type = providerType;
                         }
 
-                        _repository.InsertMany(mappings.ToList());
+                        var existing = _repository.GetAllByType(providerType);
+                        var existingByMappingId = new Dictionary<string, SceneMapping>();
+
+                        foreach (var e in existing)
+                        {
+                            existingByMappingId[e.MappingId ?? $"{e.Id}"] = e;
+                        }
+
+                        var toInsert = new List<SceneMapping>();
+                        var toUpdate = new List<SceneMapping>();
+
+                        foreach (var mapping in mappings)
+                        {
+                            if (mapping.MappingId.IsNullOrWhiteSpace())
+                            {
+                                _logger.Warn("Scene mapping with missing MappingId found for: {0} {1}, skipping", mapping.TvdbId, mapping.Title);
+                                continue;
+                            }
+
+                            if (existingByMappingId.TryGetValue(mapping.MappingId, out var existingMapping))
+                            {
+                                mapping.Id = existingMapping.Id;
+                                toUpdate.Add(mapping);
+                                existingByMappingId.Remove(mapping.MappingId);
+                            }
+                            else
+                            {
+                                toInsert.Add(mapping);
+                            }
+                        }
+
+                        var toDelete = existingByMappingId.Values.ToList();
+
+                        _repository.DeleteMany(toDelete);
+                        _repository.UpdateMany(toUpdate);
+                        _repository.InsertMany(toInsert);
                     }
                     else
                     {
