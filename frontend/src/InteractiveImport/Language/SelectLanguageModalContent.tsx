@@ -32,8 +32,8 @@ function SelectLanguageModalContent(props: SelectLanguageModalContentProps) {
     isFetched: isPopulated,
     error,
   } = useFilteredLanguages({
-    includeAny: true,
-    includeOriginal: true,
+    Any: true,
+    Original: true,
   });
 
   const [languageIds, setLanguageIds] = useState(props.languageIds);

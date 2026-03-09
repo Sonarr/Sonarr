@@ -18,6 +18,9 @@ export interface LanguageSelectInputProps {
   includeNoChange?: boolean;
   includeNoChangeDisabled?: boolean;
   includeMixed?: boolean;
+  includeAny?: boolean;
+  includeOriginal?: boolean;
+  includeUnknown?: boolean;
   isDisabled?: boolean;
   onChange: (payload: LanguageSelectInputOnChangeProps) => void;
 }
@@ -27,13 +30,16 @@ export default function LanguageSelectInput({
   includeNoChange = false,
   includeNoChangeDisabled,
   includeMixed = false,
+  includeAny = true,
+  includeOriginal = false,
+  includeUnknown = false,
   onChange,
   ...otherProps
 }: LanguageSelectInputProps) {
   const { data: items = [] } = useFilteredLanguages({
-    includeAny: true,
-    includeOriginal: true,
-    includeUnknown: true,
+    Any: !includeAny,
+    Original: !includeOriginal,
+    Unknown: !includeUnknown,
   });
 
   const values = useMemo(() => {
