@@ -4,9 +4,9 @@ import Language from 'Language/Language';
 
 interface LanguageFilter {
   [key: string]: boolean | undefined;
-  includeAny: boolean;
-  includeOriginal?: boolean;
-  includeUnknown?: boolean;
+  Any: boolean;
+  Original?: boolean;
+  Unknown?: boolean;
 }
 
 const PATH = '/language';
@@ -22,12 +22,14 @@ export const useLanguages = () => {
 };
 
 export const useFilteredLanguages = (
-  excludeLanguages: LanguageFilter = { includeAny: true }
+  excludeLanguages: LanguageFilter = { Any: true }
 ) => {
   const { data, isFetching, isFetched, error } = useLanguages();
 
   const filteredItems = useMemo(() => {
-    if (!data) return [];
+    if (!data) {
+      return [];
+    }
 
     return data.filter((lang) => !excludeLanguages[lang.name]);
   }, [data, excludeLanguages]);
