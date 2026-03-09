@@ -329,6 +329,7 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
             return new Season
             {
                 SeasonNumber = seasonResource.SeasonNumber,
+                Title = seasonResource.Title,
                 Images = seasonResource.Images.Select(MapImage).ToList(),
                 Monitored = seasonResource.SeasonNumber > 0
             };

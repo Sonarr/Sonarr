@@ -34,18 +34,30 @@
   align-items: center;
   margin-right: 8px;
   margin-left: 4px;
+  min-width: 0;
   color: var(--inkSoft);
+  gap: 16px;
 }
 
 .seasonNumber {
+  flex-shrink: 0;
   color: var(--ink);
   white-space: nowrap;
   line-height: 1.2;
 }
 
+.seasonTitle {
+  overflow: hidden;
+  color: var(--dimColor);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 14px;
+}
+
 .seasonStats {
   display: flex;
   align-items: center;
+  flex-shrink: 0;
   flex-flow: row wrap;
   margin-left: 16px;
   gap: 8px;
@@ -101,7 +113,9 @@
 .left {
   display: flex;
   align-items: center;
-  flex: 0 1 350px;
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: calc(50% - 40px);
   gap: 6px;
 }
 
@@ -113,6 +127,7 @@
 .actions {
   display: flex;
   align-items: center;
+  flex-shrink: 0;
 }
 
 .actionsMenu {
@@ -233,6 +248,18 @@
   .left {
     flex: 1;
     min-width: 0;
+    max-width: none;
+  }
+
+  .seasonInfo {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .seasonTitle {
+    max-width: 100%;
+    font-size: 12px;
   }
 
   .expandButton {
