@@ -34,13 +34,23 @@
   align-items: center;
   margin-right: 8px;
   margin-left: 4px;
+  min-width: 0;
   color: var(--inkSoft);
+  gap: 16px;
 }
 
 .seasonNumber {
   color: var(--ink);
   white-space: nowrap;
   line-height: 1.2;
+}
+
+.seasonTitle {
+  overflow: hidden;
+  color: var(--dimColor);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 14px;
 }
 
 .seasonStats {

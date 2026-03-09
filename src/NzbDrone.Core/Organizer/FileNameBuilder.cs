@@ -289,16 +289,18 @@ namespace NzbDrone.Core.Organizer
                 namingConfig = _namingConfigService.GetConfig();
             }
 
+            var title = series.Seasons.FirstOrDefault(s => s.SeasonNumber == seasonNumber)?.Title;
             var tokenHandlers = new Dictionary<string, Func<TokenMatch, string>>(FileNameBuilderTokenEqualityComparer.Instance);
 
             AddSeriesTokens(tokenHandlers, series, series.Title);
             AddIdTokens(tokenHandlers, series);
-            AddSeasonTokens(tokenHandlers, seasonNumber);
+            AddSeasonNumberToken(tokenHandlers, seasonNumber);
+            AddSeasonTitleToken(tokenHandlers, title);
 
             var format = seasonNumber == 0 ? namingConfig.SpecialsFolderFormat : namingConfig.SeasonFolderFormat;
             var folderName = ReplaceTokens(format, tokenHandlers, namingConfig);
 
-            folderName = CleanFolderName(folderName);
+            folderName = CleanFolderName(folderName).Trim(' ', '.', '-', '_');
             folderName = ReplaceReservedDeviceNames(folderName);
             folderName = folderName.Replace("{ellipsis}", "...");
 
@@ -521,7 +523,7 @@ namespace NzbDrone.Core.Organizer
                 tokenHandlers[token] = m => seasonEpisodePattern;
             }
 
-            AddSeasonTokens(tokenHandlers, episodes.First().SeasonNumber);
+            AddSeasonNumberToken(tokenHandlers, episodes.First().SeasonNumber);
 
             if (episodes.Count > 1)
             {
@@ -598,9 +600,15 @@ namespace NzbDrone.Core.Organizer
             return pattern;
         }
 
-        private void AddSeasonTokens(Dictionary<string, Func<TokenMatch, string>> tokenHandlers, int seasonNumber)
+        private void AddSeasonNumberToken(Dictionary<string, Func<TokenMatch, string>> tokenHandlers, int seasonNumber)
         {
             tokenHandlers["{Season}"] = m => seasonNumber.ToString(m.CustomFormat);
+        }
+
+        private void AddSeasonTitleToken(Dictionary<string, Func<TokenMatch, string>> tokenHandlers, string title)
+        {
+            tokenHandlers["{Season Title}"] = m => title.IsNullOrWhiteSpace() ? string.Empty : Truncate(title, m.CustomFormat);
+            tokenHandlers["{Season CleanTitle}"] = m => title.IsNullOrWhiteSpace() ? string.Empty : Truncate(CleanTitle(title), m.CustomFormat);
         }
 
         private void AddEpisodeTokens(Dictionary<string, Func<TokenMatch, string>> tokenHandlers, List<Episode> episodes)
