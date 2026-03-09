@@ -2,10 +2,18 @@ import { useEffect, useState } from 'react';
 import { useUiSettingsValues } from 'Settings/UI/useUiSettings';
 import themes from 'Styles/Themes';
 
-const useTheme = () => {
+const useTheme = (): 'dark' | 'light' => {
   const { theme } = useUiSettingsValues();
   const selectedTheme = theme ?? window.Sonarr.theme;
-  const [resolvedTheme, setResolvedTheme] = useState(selectedTheme);
+  const [resolvedTheme, setResolvedTheme] = useState(() => {
+    if (selectedTheme === 'auto') {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches
+        ? 'dark'
+        : 'light';
+    }
+
+    return selectedTheme;
+  });
 
   useEffect(() => {
     if (selectedTheme !== 'auto') {
