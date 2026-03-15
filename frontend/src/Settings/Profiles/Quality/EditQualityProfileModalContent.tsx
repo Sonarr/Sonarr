@@ -4,6 +4,7 @@ import Form from 'Components/Form/Form';
 import FormGroup from 'Components/Form/FormGroup';
 import FormInputGroup from 'Components/Form/FormInputGroup';
 import FormLabel from 'Components/Form/FormLabel';
+import Icon from 'Components/Icon';
 import Button from 'Components/Link/Button';
 import SpinnerErrorButton from 'Components/Link/SpinnerErrorButton';
 import LoadingIndicator from 'Components/Loading/LoadingIndicator';
@@ -11,9 +12,10 @@ import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
+import Popover from 'Components/Tooltip/Popover';
 import useMeasure from 'Helpers/Hooks/useMeasure';
 import usePrevious from 'Helpers/Hooks/usePrevious';
-import { inputTypes, kinds, sizes } from 'Helpers/Props';
+import { icons, inputTypes, kinds, sizes } from 'Helpers/Props';
 import useQualityProfileInUse from 'Settings/Profiles/Quality/useQualityProfileInUse';
 import dimensions from 'Styles/Variables/dimensions';
 import { InputChanged } from 'typings/inputs';
@@ -69,7 +71,8 @@ function EditQualityProfileModalContent({
     saveProvider,
   } = useManageQualityProfile(id, cloneId);
 
-  const isInUse = useQualityProfileInUse(id);
+  const { seriesCount, importListCount } = useQualityProfileInUse(id);
+  const isInUse = seriesCount !== 0 || importListCount !== 0;
 
   const [measureHeaderRef, { height: headerHeight }] = useMeasure();
   const [measureBodyRef, { height: bodyHeight }] = useMeasure();
@@ -699,6 +702,35 @@ function EditQualityProfileModalContent({
             >
               {translate('Delete')}
             </Button>
+            {isInUse ? (
+              <Popover
+                title="Quality Profile Usage"
+                body={
+                  <div>
+                    {seriesCount ? (
+                      <div>
+                        {translate('QualityProfileUsedInXSeries', {
+                          seriesCount,
+                        })}
+                      </div>
+                    ) : null}
+                    {importListCount ? (
+                      <div>
+                        {translate('QualityProfileUsedInXImportLists', {
+                          importListCount,
+                        })}
+                      </div>
+                    ) : null}
+                  </div>
+                }
+                anchor={
+                  <Icon
+                    className={styles.deleteButtonInfoIcon}
+                    name={icons.INFO}
+                  />
+                }
+              />
+            ) : null}
           </div>
         ) : null}
 
