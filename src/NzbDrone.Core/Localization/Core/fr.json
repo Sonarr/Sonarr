@@ -24,7 +24,7 @@
     "AddDownloadClientImplementation": "Ajouter un client de téléchargement - {implementationName}",
     "AddExclusion": "Ajouter une exclusion",
     "AddImportList": "Ajouter une liste d'importation",
-    "AddImportListExclusion": "Ajouter une exclusion à la liste des importations",
+    "AddImportListExclusion": "Ajouter une liste d'exclusion",
     "AddImportListExclusionError": "Impossible d'ajouter une nouvelle exclusion de liste d'importation, veuillez réessayer.",
     "AddImportListImplementation": "Ajouter une liste d'importation - {implementationName}",
     "AddIndexer": "Ajouter un indexeur",
