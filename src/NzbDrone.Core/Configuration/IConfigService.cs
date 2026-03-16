@@ -5,6 +5,7 @@ using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.EpisodeImport;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Security;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Configuration
 {
@@ -100,5 +101,9 @@ namespace NzbDrone.Core.Configuration
 
         CertificateValidationType CertificateValidation { get; }
         string ApplicationUrl { get; }
+
+        // TVDB API v4
+        string TvdbApiKey { get; set; }
+        IndexerOrderMatching IndexerOrderMatching { get; set; }
     }
 }

@@ -26,11 +26,14 @@ namespace NzbDrone.Core.Test.TvTests
         public void Setup()
         {
             var season1 = Builder<Season>.CreateNew()
+                                         .With(s => s.EpisodeOrderOverride = null)
                                          .With(s => s.SeasonNumber = 1)
+                                         .With(s => s.EpisodeOrderOverride = null)
                                          .Build();
 
             _series = Builder<Series>.CreateNew()
                                      .With(s => s.Status = SeriesStatusType.Continuing)
+                                     .With(s => s.EpisodeOrder = EpisodeOrderType.Default)
                                      .With(s => s.Seasons = new List<Season>
                                                             {
                                                                 season1
@@ -64,6 +67,7 @@ namespace NzbDrone.Core.Test.TvTests
 
             var newSeriesInfo = _series.JsonClone();
             newSeriesInfo.Seasons.Add(Builder<Season>.CreateNew()
+                                         .With(s => s.EpisodeOrderOverride = null)
                                          .With(s => s.SeasonNumber = 2)
                                          .Build());
 
@@ -82,6 +86,7 @@ namespace NzbDrone.Core.Test.TvTests
 
             var newSeriesInfo = _series.JsonClone();
             newSeriesInfo.Seasons.Add(Builder<Season>.CreateNew()
+                .With(s => s.EpisodeOrderOverride = null)
                 .With(s => s.SeasonNumber = 2)
                 .Build());
 
@@ -98,6 +103,7 @@ namespace NzbDrone.Core.Test.TvTests
         {
             var series = _series.JsonClone();
             series.Seasons.Add(Builder<Season>.CreateNew()
+                                         .With(s => s.EpisodeOrderOverride = null)
                                          .With(s => s.SeasonNumber = 0)
                                          .Build());
 
@@ -207,14 +213,17 @@ namespace NzbDrone.Core.Test.TvTests
         {
             var newSeriesInfo = _series.JsonClone();
             newSeriesInfo.Seasons.Add(Builder<Season>.CreateNew()
+                                         .With(s => s.EpisodeOrderOverride = null)
                                          .With(s => s.SeasonNumber = 2)
                                          .Build());
 
             _series.Seasons.Add(Builder<Season>.CreateNew()
+                                         .With(s => s.EpisodeOrderOverride = null)
                                          .With(s => s.SeasonNumber = 2)
                                          .Build());
 
             _series.Seasons.Add(Builder<Season>.CreateNew()
+                                         .With(s => s.EpisodeOrderOverride = null)
                                          .With(s => s.SeasonNumber = 2)
                                          .Build());
 
@@ -231,10 +240,12 @@ namespace NzbDrone.Core.Test.TvTests
         {
             var newSeriesInfo = _series.JsonClone();
             newSeriesInfo.Seasons.Add(Builder<Season>.CreateNew()
+                                         .With(s => s.EpisodeOrderOverride = null)
                                          .With(s => s.SeasonNumber = 2)
                                          .Build());
 
             newSeriesInfo.Seasons.Add(Builder<Season>.CreateNew()
+                                         .With(s => s.EpisodeOrderOverride = null)
                                          .With(s => s.SeasonNumber = 2)
                                          .Build());
 

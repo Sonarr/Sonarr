@@ -61,6 +61,7 @@ namespace NzbDrone.Core.Tv
         public List<Season> Seasons { get; set; }
         public HashSet<int> Tags { get; set; }
         public AddSeriesOptions AddOptions { get; set; }
+        public EpisodeOrderType EpisodeOrder { get; set; }
 
         public override string ToString()
         {
@@ -83,6 +84,7 @@ namespace NzbDrone.Core.Tv
             RootFolderPath = otherSeries.RootFolderPath;
             Tags = otherSeries.Tags;
             AddOptions = otherSeries.AddOptions;
+            EpisodeOrder = otherSeries.EpisodeOrder;
         }
     }
 }

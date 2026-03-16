@@ -658,6 +658,7 @@ interface ToggleSeriesMonitoredPayload {
 interface ToggleSeasonMonitoredPayload {
   seasonNumber: number;
   monitored: boolean;
+  episodeOrderOverride?: string;
 }
 
 interface UpdateSeriesMonitorPayload {

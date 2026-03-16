@@ -2,6 +2,7 @@ using NzbDrone.Common.Http.Proxy;
 using NzbDrone.Core.Authentication;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Security;
+using NzbDrone.Core.Tv;
 using NzbDrone.Core.Update;
 using Sonarr.Http.REST;
 
@@ -46,6 +47,8 @@ public class GeneralSettingsResource : RestResource
     public string? BackupFolder { get; set; }
     public int BackupInterval { get; set; }
     public int BackupRetention { get; set; }
+    public string? TvdbApiKey { get; set; }
+    public IndexerOrderMatching IndexerOrderMatching { get; set; }
 }
 
 public static class GeneralSettingsResourceMapper
@@ -87,7 +90,9 @@ public static class GeneralSettingsResourceMapper
             BackupFolder = configService.BackupFolder,
             BackupInterval = configService.BackupInterval,
             BackupRetention = configService.BackupRetention,
-            ApplicationUrl = configService.ApplicationUrl
+            ApplicationUrl = configService.ApplicationUrl,
+            TvdbApiKey = configService.TvdbApiKey,
+            IndexerOrderMatching = configService.IndexerOrderMatching
         };
     }
 }

@@ -7,6 +7,7 @@ public class SeasonResource
 {
     public int SeasonNumber { get; set; }
     public bool Monitored { get; set; }
+    public EpisodeOrderType? EpisodeOrderOverride { get; set; }
     public SeasonStatisticsResource? Statistics { get; set; }
     public List<MediaCover>? Images { get; set; }
 }
@@ -19,6 +20,7 @@ public static class SeasonResourceMapper
         {
             SeasonNumber = model.SeasonNumber,
             Monitored = model.Monitored,
+            EpisodeOrderOverride = model.EpisodeOrderOverride,
             Images = includeImages ? model.Images : null
         };
     }
@@ -28,7 +30,8 @@ public static class SeasonResourceMapper
         return new Season
         {
             SeasonNumber = resource.SeasonNumber,
-            Monitored = resource.Monitored
+            Monitored = resource.Monitored,
+            EpisodeOrderOverride = resource.EpisodeOrderOverride
         };
     }
 

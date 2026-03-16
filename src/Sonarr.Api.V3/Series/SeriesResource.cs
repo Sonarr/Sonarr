@@ -65,6 +65,7 @@ namespace Sonarr.Api.V3.Series
         public HashSet<int> Tags { get; set; }
         public DateTime Added { get; set; }
         public AddSeriesOptions AddOptions { get; set; }
+        public EpisodeOrderType EpisodeOrder { get; set; }
         public Ratings Ratings { get; set; }
 
         public SeriesStatisticsResource Statistics { get; set; }
@@ -140,6 +141,7 @@ namespace Sonarr.Api.V3.Series
                        Tags = model.Tags,
                        Added = model.Added,
                        AddOptions = model.AddOptions,
+                       EpisodeOrder = model.EpisodeOrder,
                        Ratings = model.Ratings
                    };
         }
@@ -201,6 +203,7 @@ namespace Sonarr.Api.V3.Series
                        Tags = resource.Tags,
                        Added = resource.Added,
                        AddOptions = resource.AddOptions,
+                       EpisodeOrder = resource.EpisodeOrder,
                        Ratings = resource.Ratings
                    };
         }

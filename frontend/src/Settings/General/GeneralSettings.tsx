@@ -20,6 +20,7 @@ import HostSettings from './HostSettings';
 import LoggingSettings from './LoggingSettings';
 import ProxySettings from './ProxySettings';
 import SecuritySettings from './SecuritySettings';
+import TvdbSettings from './TvdbSettings';
 import UpdateSettings from './UpdateSettings';
 import { useManageGeneralSettings } from './useGeneralSettings';
 
@@ -159,6 +160,12 @@ function GeneralSettings() {
               proxyPassword={settings.proxyPassword}
               proxyBypassFilter={settings.proxyBypassFilter}
               proxyBypassLocalAddresses={settings.proxyBypassLocalAddresses}
+              onInputChange={handleInputChange}
+            />
+
+            <TvdbSettings
+              tvdbApiKey={settings.tvdbApiKey}
+              indexerOrderMatching={settings.indexerOrderMatching}
               onInputChange={handleInputChange}
             />
 

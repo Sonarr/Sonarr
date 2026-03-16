@@ -12,6 +12,8 @@ using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.MetadataSource;
+using NzbDrone.Core.MetadataSource.Tvdb;
+using NzbDrone.Core.MetadataSource.Tvdb.Resource;
 using NzbDrone.Core.Tv.Commands;
 using NzbDrone.Core.Tv.Events;
 
@@ -27,6 +29,7 @@ namespace NzbDrone.Core.Tv
         private readonly ICheckIfSeriesShouldBeRefreshed _checkIfSeriesShouldBeRefreshed;
         private readonly IConfigService _configService;
         private readonly ICommandResultReporter _commandResultReporter;
+        private readonly ITvdbApiClient _tvdbApiClient;
         private readonly Logger _logger;
 
         public RefreshSeriesService(IProvideSeriesInfo seriesInfo,
@@ -37,6 +40,7 @@ namespace NzbDrone.Core.Tv
                                     ICheckIfSeriesShouldBeRefreshed checkIfSeriesShouldBeRefreshed,
                                     IConfigService configService,
                                     ICommandResultReporter commandResultReporter,
+                                    ITvdbApiClient tvdbApiClient,
                                     Logger logger)
         {
             _seriesInfo = seriesInfo;
@@ -47,6 +51,7 @@ namespace NzbDrone.Core.Tv
             _checkIfSeriesShouldBeRefreshed = checkIfSeriesShouldBeRefreshed;
             _configService = configService;
             _commandResultReporter = commandResultReporter;
+            _tvdbApiClient = tvdbApiClient;
             _logger = logger;
         }
 
@@ -125,8 +130,20 @@ namespace NzbDrone.Core.Tv
 
             series.Seasons = UpdateSeasons(series, seriesInfo);
 
+            // Apply alternative episode ordering from TVDB if configured
+            var hadAlternativeOrdering = series.EpisodeOrder != EpisodeOrderType.Default ||
+                                          (series.Seasons != null && series.Seasons.Any(s => s.EpisodeOrderOverride.HasValue));
+            episodes = ApplyAlternativeOrdering(series, episodes);
+
             _seriesService.UpdateSeries(series, publishUpdatedEvent: false);
             _refreshEpisodeService.RefreshEpisodeInfo(series, episodes);
+
+            if (hadAlternativeOrdering)
+            {
+                _logger.ProgressInfo(
+                    "Episode ordering updated for {0}. Use Preview Rename to rename files to match the new numbering.",
+                    series.Title);
+            }
 
             _logger.Debug("Finished series refresh for {0}", series.Title);
             _eventAggregator.PublishEvent(new SeriesUpdatedEvent(series));
@@ -159,10 +176,128 @@ namespace NzbDrone.Core.Tv
                 else
                 {
                     season.Monitored = existingSeason.Monitored;
+                    season.EpisodeOrderOverride = existingSeason.EpisodeOrderOverride;
                 }
             }
 
             return seasons;
+        }
+
+        private List<Episode> ApplyAlternativeOrdering(Series series, List<Episode> episodes)
+        {
+            if (series.EpisodeOrder == EpisodeOrderType.Default &&
+                (series.Seasons == null || series.Seasons.All(s => !s.EpisodeOrderOverride.HasValue)))
+            {
+                return episodes;
+            }
+
+            var tvdbApiKey = _configService.TvdbApiKey;
+            if (string.IsNullOrWhiteSpace(tvdbApiKey))
+            {
+                _logger.Warn("Alternative episode ordering is configured for {0} but no TVDB API key is set. Using default ordering.", series.Title);
+                return episodes;
+            }
+
+            // Build a lookup of which ordering each season should use
+            var seasonOrderings = new Dictionary<int, EpisodeOrderType>();
+            foreach (var season in series.Seasons)
+            {
+                var effectiveOrder = season.EpisodeOrderOverride ?? series.EpisodeOrder;
+                if (effectiveOrder != EpisodeOrderType.Default)
+                {
+                    seasonOrderings[season.SeasonNumber] = effectiveOrder;
+                }
+            }
+
+            if (!seasonOrderings.Any())
+            {
+                return episodes;
+            }
+
+            // Group seasons by ordering type to minimise API calls
+            var orderingGroups = seasonOrderings.GroupBy(kv => kv.Value).ToList();
+
+            foreach (var group in orderingGroups)
+            {
+                var orderType = group.Key;
+                var seasonNumbers = new HashSet<int>(group.Select(kv => kv.Key));
+
+                _logger.Debug(
+                    "Fetching {0} ordering from TVDB for {1} seasons {2}",
+                    orderType,
+                    series.Title,
+                    string.Join(", ", seasonNumbers.OrderBy(s => s)));
+
+                List<TvdbEpisodeResource> tvdbEpisodes;
+
+                try
+                {
+                    tvdbEpisodes = _tvdbApiClient.GetEpisodesByOrdering(series.TvdbId, orderType);
+                }
+                catch (Exception ex)
+                {
+                    _logger.Warn(ex, "Failed to fetch {0} ordering from TVDB for {1}. Using default ordering for affected seasons.", orderType, series.Title);
+                    continue;
+                }
+
+                if (tvdbEpisodes == null || !tvdbEpisodes.Any())
+                {
+                    _logger.Warn("No episodes returned from TVDB for {0} ordering of {1}. Using default ordering.", orderType, series.Title);
+                    continue;
+                }
+
+                // Build lookup: TVDB episode ID → alternative S/E numbers
+                var tvdbLookup = tvdbEpisodes
+                    .Where(e => e.SeasonNumber.HasValue && e.Number.HasValue)
+                    .ToDictionary(e => e.Id, e => e);
+
+                foreach (var episode in episodes)
+                {
+                    if (episode.TvdbId == 0 || !seasonOrderings.ContainsKey(episode.SeasonNumber))
+                    {
+                        continue;
+                    }
+
+                    // Only remap if this episode's current season uses this ordering type
+                    if (seasonOrderings[episode.SeasonNumber] != orderType)
+                    {
+                        continue;
+                    }
+
+                    if (tvdbLookup.TryGetValue(episode.TvdbId, out var tvdbEpisode))
+                    {
+                        _logger.Trace(
+                            "Remapping episode {0} (TvdbId {1}): S{2:00}E{3:00} → S{4:00}E{5:00} ({6})",
+                            episode.Title,
+                            episode.TvdbId,
+                            episode.SeasonNumber,
+                            episode.EpisodeNumber,
+                            tvdbEpisode.SeasonNumber,
+                            tvdbEpisode.Number,
+                            orderType);
+
+                        episode.SeasonNumber = tvdbEpisode.SeasonNumber.Value;
+                        episode.EpisodeNumber = tvdbEpisode.Number.Value;
+
+                        if (tvdbEpisode.AbsoluteNumber.HasValue)
+                        {
+                            episode.AbsoluteEpisodeNumber = tvdbEpisode.AbsoluteNumber;
+                        }
+                    }
+                    else
+                    {
+                        _logger.Warn(
+                            "Episode '{0}' (TvdbId {1}) not found in {2} ordering. Keeping default S{3:00}E{4:00}.",
+                            episode.Title,
+                            episode.TvdbId,
+                            orderType,
+                            episode.SeasonNumber,
+                            episode.EpisodeNumber);
+                    }
+                }
+            }
+
+            return episodes;
         }
 
         private void RescanSeries(Series series, bool isNew, CommandTrigger trigger)

@@ -1,5 +1,6 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using NLog;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.TPL;
 using NzbDrone.Core.DataAugmentation.Scene;
@@ -10,6 +11,7 @@ using NzbDrone.Core.MediaFiles;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Commands;
 using NzbDrone.Core.Messaging.Events;
+using NzbDrone.Core.MetadataSource.Tvdb;
 using NzbDrone.Core.RootFolders;
 using NzbDrone.Core.SeriesStats;
 using NzbDrone.Core.Tv;
@@ -42,6 +44,8 @@ public class SeriesController : RestControllerWithSignalR<SeriesResource, NzbDro
     private readonly IMapCoversToLocal _coverMapper;
     private readonly IManageCommandQueue _commandQueueManager;
     private readonly IRootFolderService _rootFolderService;
+    private readonly ITvdbApiClient _tvdbApiClient;
+    private readonly Logger _logger;
 
     private readonly LockByIdPool _seriesLockPool = new();
 
@@ -53,6 +57,8 @@ public class SeriesController : RestControllerWithSignalR<SeriesResource, NzbDro
                         IMapCoversToLocal coverMapper,
                         IManageCommandQueue commandQueueManager,
                         IRootFolderService rootFolderService,
+                        ITvdbApiClient tvdbApiClient,
+                        Logger logger,
                         RootFolderValidator rootFolderValidator,
                         MappedNetworkDriveValidator mappedNetworkDriveValidator,
                         SeriesPathValidator seriesPathValidator,
@@ -72,6 +78,8 @@ public class SeriesController : RestControllerWithSignalR<SeriesResource, NzbDro
         _coverMapper = coverMapper;
         _commandQueueManager = commandQueueManager;
         _rootFolderService = rootFolderService;
+        _tvdbApiClient = tvdbApiClient;
+        _logger = logger;
 
         SharedValidator.RuleFor(s => s.Path).Cascade(CascadeMode.Stop)
             .IsValidPath()
@@ -195,6 +203,22 @@ public class SeriesController : RestControllerWithSignalR<SeriesResource, NzbDro
     {
         var series = _seriesService.GetSeries(seriesResource.Id);
 
+        // Detect if episode ordering has changed (series-level or season-level)
+        var orderingChanged = series.EpisodeOrder != seriesResource.EpisodeOrder;
+
+        if (!orderingChanged && seriesResource.Seasons != null)
+        {
+            foreach (var seasonResource in seriesResource.Seasons)
+            {
+                var existingSeason = series.Seasons?.FirstOrDefault(s => s.SeasonNumber == seasonResource.SeasonNumber);
+                if (existingSeason != null && existingSeason.EpisodeOrderOverride != seasonResource.EpisodeOrderOverride)
+                {
+                    orderingChanged = true;
+                    break;
+                }
+            }
+        }
+
         if (moveFiles)
         {
             var sourcePath = series.Path;
@@ -212,6 +236,14 @@ public class SeriesController : RestControllerWithSignalR<SeriesResource, NzbDro
         var model = seriesResource.ToModel(series);
 
         _seriesService.UpdateSeries(model);
+
+        // If ordering changed, trigger a refresh to remap episode numbers from TVDB,
+        // then the user can use the standard rename flow to update file names.
+        if (orderingChanged)
+        {
+            _commandQueueManager.Push(new RefreshSeriesCommand(new List<int> { series.Id }),
+                trigger: CommandTrigger.Manual);
+        }
 
         BroadcastResourceChange(ModelAction.Updated, seriesResource);
 
@@ -235,11 +267,57 @@ public class SeriesController : RestControllerWithSignalR<SeriesResource, NzbDro
 
             season.Monitored = seasonResource.Monitored;
 
+            var orderingChanged = season.EpisodeOrderOverride != seasonResource.EpisodeOrderOverride;
+            season.EpisodeOrderOverride = seasonResource.EpisodeOrderOverride;
+
             _seriesService.UpdateSeries(series);
+
+            if (orderingChanged)
+            {
+                _commandQueueManager.Push(new RefreshSeriesCommand(new List<int> { series.Id }),
+                    trigger: CommandTrigger.Manual);
+            }
 
             BroadcastResourceChange(ModelAction.Updated, series.ToResource());
 
             return season.ToResource();
+        }
+    }
+
+    [HttpGet("{id}/availableOrderings")]
+    [Produces("application/json")]
+    public ActionResult<List<EpisodeOrderingResource>> GetAvailableOrderings(int id)
+    {
+        var series = _seriesService.GetSeries(id);
+
+        try
+        {
+            var seasonTypes = _tvdbApiClient.GetAvailableOrderings(series.TvdbId);
+
+            var orderings = seasonTypes
+                .Select(st => new EpisodeOrderingResource
+                {
+                    Type = TvdbApiClient.MapSeasonTypeToOrderType(st),
+                    Name = st,
+                })
+                .ToList();
+
+            return orderings;
+        }
+        catch (Exception ex)
+        {
+            // If TVDB is unavailable, return all known orderings so the UI isn't broken
+            _logger.Warn(ex, "Failed to fetch available orderings from TVDB for series {0}, returning all orderings as fallback", id);
+
+            return new List<EpisodeOrderingResource>
+            {
+                new EpisodeOrderingResource { Type = EpisodeOrderType.Default, Name = "official" },
+                new EpisodeOrderingResource { Type = EpisodeOrderType.Dvd, Name = "dvd" },
+                new EpisodeOrderingResource { Type = EpisodeOrderType.Absolute, Name = "absolute" },
+                new EpisodeOrderingResource { Type = EpisodeOrderType.Alternate, Name = "alternate" },
+                new EpisodeOrderingResource { Type = EpisodeOrderType.AltDvd, Name = "altdvd" },
+                new EpisodeOrderingResource { Type = EpisodeOrderType.Regional, Name = "regional" },
+            };
         }
     }
 

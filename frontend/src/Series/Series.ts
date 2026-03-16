@@ -2,6 +2,15 @@ import ModelBase from 'App/ModelBase';
 import Language from 'Language/Language';
 
 export type SeriesType = 'anime' | 'daily' | 'standard';
+
+export type EpisodeOrderType =
+  | 'default'
+  | 'dvd'
+  | 'absolute'
+  | 'alternate'
+  | 'altDvd'
+  | 'regional';
+
 export type SeriesMonitor =
   | 'all'
   | 'future'
@@ -44,6 +53,7 @@ export interface Season {
   monitored: boolean;
   seasonNumber: number;
   statistics: Statistics;
+  episodeOrderOverride?: EpisodeOrderType;
 }
 
 export interface Ratings {
@@ -101,6 +111,7 @@ interface Series extends ModelBase {
   tvMazeId: number;
   tvRageId: number;
   tmdbId: number;
+  episodeOrder: EpisodeOrderType;
   useSceneNumbering: boolean;
   year: number;
   addOptions: SeriesAddOptions;

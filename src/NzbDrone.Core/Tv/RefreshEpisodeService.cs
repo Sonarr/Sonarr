@@ -38,6 +38,8 @@ namespace NzbDrone.Core.Tv
 
             var updateList = new List<Episode>();
             var newList = new List<Episode>();
+            var hasAlternativeOrdering = series.EpisodeOrder != EpisodeOrderType.Default ||
+                                         (series.Seasons != null && series.Seasons.Any(s => s.EpisodeOrderOverride.HasValue));
             var dupeFreeRemoteEpisodes = remoteEpisodes.DistinctBy(m => new { m.SeasonNumber, m.EpisodeNumber }).ToList();
 
             if (series.SeriesType == SeriesTypes.Anime)
@@ -53,7 +55,12 @@ namespace NzbDrone.Core.Tv
             {
                 try
                 {
-                    var episodeToUpdate = existingEpisodes.FirstOrDefault(e => e.SeasonNumber == episode.SeasonNumber && e.EpisodeNumber == episode.EpisodeNumber);
+                    // When alternative ordering is active, episode S/E numbers change but TvdbId stays the same.
+                    // Match by TvdbId first to preserve file associations across ordering switches.
+                    var episodeToUpdate = hasAlternativeOrdering && episode.TvdbId > 0
+                        ? existingEpisodes.FirstOrDefault(e => e.TvdbId == episode.TvdbId)
+                          ?? existingEpisodes.FirstOrDefault(e => e.SeasonNumber == episode.SeasonNumber && e.EpisodeNumber == episode.EpisodeNumber)
+                        : existingEpisodes.FirstOrDefault(e => e.SeasonNumber == episode.SeasonNumber && e.EpisodeNumber == episode.EpisodeNumber);
 
                     if (episodeToUpdate != null)
                     {

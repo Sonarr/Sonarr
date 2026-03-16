@@ -182,6 +182,22 @@ namespace Sonarr.Api.V3.Series
         {
             var series = _seriesService.GetSeries(seriesResource.Id);
 
+            // Detect if episode ordering has changed
+            var orderingChanged = series.EpisodeOrder != seriesResource.EpisodeOrder;
+
+            if (!orderingChanged && seriesResource.Seasons != null)
+            {
+                foreach (var seasonResource in seriesResource.Seasons)
+                {
+                    var existingSeason = series.Seasons?.FirstOrDefault(s => s.SeasonNumber == seasonResource.SeasonNumber);
+                    if (existingSeason != null && existingSeason.EpisodeOrderOverride != seasonResource.EpisodeOrderOverride)
+                    {
+                        orderingChanged = true;
+                        break;
+                    }
+                }
+            }
+
             if (moveFiles)
             {
                 var sourcePath = series.Path;
@@ -199,6 +215,12 @@ namespace Sonarr.Api.V3.Series
             var model = seriesResource.ToModel(series);
 
             _seriesService.UpdateSeries(model);
+
+            if (orderingChanged)
+            {
+                _commandQueueManager.Push(new RefreshSeriesCommand(new List<int> { series.Id }),
+                    trigger: CommandTrigger.Manual);
+            }
 
             BroadcastResourceChange(ModelAction.Updated, seriesResource);
 

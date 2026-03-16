@@ -18,6 +18,9 @@
 }
 
 .seasonInfo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   margin-right: 10px;
   margin-left: 5px;
 }
@@ -64,6 +67,8 @@
   display: flex;
   align-items: center;
   flex: 0 1 350px;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .left,

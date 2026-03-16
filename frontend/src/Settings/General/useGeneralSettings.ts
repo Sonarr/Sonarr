@@ -49,6 +49,8 @@ export interface GeneralSettingsModel {
   backupFolder: string;
   backupInterval: number;
   backupRetention: number;
+  tvdbApiKey: string;
+  indexerOrderMatching: string;
   id: number;
 }
 

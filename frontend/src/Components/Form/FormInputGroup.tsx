@@ -22,6 +22,9 @@ import DownloadClientSelectInput, {
 import EnhancedSelectInput, {
   EnhancedSelectInputProps,
 } from './Select/EnhancedSelectInput';
+import EpisodeOrderSelectInput, {
+  EpisodeOrderSelectInputProps,
+} from './Select/EpisodeOrderSelectInput';
 import IndexerFlagsSelectInput, {
   IndexerFlagsSelectInputProps,
 } from './Select/IndexerFlagsSelectInput';
@@ -66,6 +69,7 @@ const componentMap: Record<InputType, ElementType> = {
   device: DeviceInput,
   downloadClientSelect: DownloadClientSelectInput,
   dynamicSelect: ProviderDataSelectInput,
+  episodeOrderSelect: EpisodeOrderSelectInput,
   file: TextInput,
   float: FloatInput,
   indexerFlagsSelect: IndexerFlagsSelectInput,
@@ -109,6 +113,8 @@ type PickProps<V, C extends InputType> = C extends 'text'
   ? DownloadClientSelectInputProps
   : C extends 'dynamicSelect'
   ? ProviderOptionSelectInputProps
+  : C extends 'episodeOrderSelect'
+  ? EpisodeOrderSelectInputProps
   : C extends 'file'
   ? TextInputProps
   : C extends 'float'

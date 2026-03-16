@@ -53,6 +53,7 @@ public class SeriesResource : RestResource
     public HashSet<int>? Tags { get; set; }
     public DateTime Added { get; set; }
     public AddSeriesOptions? AddOptions { get; set; }
+    public EpisodeOrderType EpisodeOrder { get; set; }
     public Ratings? Ratings { get; set; }
     public SeriesStatisticsResource? Statistics { get; set; }
     public bool? EpisodesChanged { get; set; }
@@ -103,6 +104,7 @@ public static class SeriesResourceMapper
             Tags = model.Tags,
             Added = model.Added,
             AddOptions = model.AddOptions,
+            EpisodeOrder = model.EpisodeOrder,
             Ratings = model.Ratings
         };
     }
@@ -146,6 +148,7 @@ public static class SeriesResourceMapper
             Tags = resource.Tags,
             Added = resource.Added,
             AddOptions = resource.AddOptions,
+            EpisodeOrder = resource.EpisodeOrder,
             Ratings = resource.Ratings
         };
     }

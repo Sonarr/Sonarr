@@ -24,6 +24,7 @@ import {
 import {
   faArrowCircleLeft as fasArrowCircleLeft,
   faArrowCircleRight as fasArrowCircleRight,
+  faArrowDown19 as fasArrowDown19,
   faAsterisk as fasAsterisk,
   faBackward as fasBackward,
   faBan as fasBan,
@@ -208,6 +209,7 @@ export const REMOVE = fasTimes;
 export const RESTART = fasRedoAlt;
 export const RESTORE = fasHistory;
 export const REORDER = fasBars;
+export const EPISODE_ORDER = fasArrowDown19;
 export const ROOT_FOLDER = farFolderTree;
 export const RSS = fasRss;
 export const SAVE = fasSave;

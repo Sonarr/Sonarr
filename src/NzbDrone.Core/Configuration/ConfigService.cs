@@ -13,6 +13,7 @@ using NzbDrone.Core.MediaFiles.EpisodeImport;
 using NzbDrone.Core.Messaging.Events;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Security;
+using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Configuration
 {
@@ -419,6 +420,18 @@ namespace NzbDrone.Core.Configuration
             GetValueEnum("CertificateValidation", CertificateValidationType.Enabled);
 
         public string ApplicationUrl => GetValue("ApplicationUrl", string.Empty);
+
+        public string TvdbApiKey
+        {
+            get { return GetValue("TvdbApiKey", string.Empty); }
+            set { SetValue("TvdbApiKey", value); }
+        }
+
+        public IndexerOrderMatching IndexerOrderMatching
+        {
+            get { return GetValueEnum("IndexerOrderMatching", IndexerOrderMatching.AiredOrder); }
+            set { SetValue("IndexerOrderMatching", value); }
+        }
 
         public bool TrustCgnatIpAddresses
         {

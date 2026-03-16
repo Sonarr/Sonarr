@@ -32,7 +32,7 @@ import InteractiveImportModal from 'InteractiveImport/InteractiveImportModal';
 import OrganizePreviewModal from 'Organize/OrganizePreviewModal';
 import SeriesHistoryModal from 'Series/History/SeriesHistoryModal';
 import SeasonInteractiveSearchModal from 'Series/Search/SeasonInteractiveSearchModal';
-import { Statistics } from 'Series/Series';
+import { EpisodeOrderType, Statistics } from 'Series/Series';
 import { useSingleSeries, useToggleSeasonMonitored } from 'Series/useSeries';
 import { TableOptionsChangePayload } from 'typings/Table';
 import { findCommand, isCommandExecuting } from 'Utilities/Command';
@@ -41,10 +41,24 @@ import isBefore from 'Utilities/Date/isBefore';
 import formatBytes from 'Utilities/Number/formatBytes';
 import translate from 'Utilities/String/translate';
 import getToggledRange from 'Utilities/Table/getToggledRange';
+import EpisodeOrderModal from './EpisodeOrderModal';
 import EpisodeRow from './EpisodeRow';
 import SeasonInfo from './SeasonInfo';
 import SeasonProgressLabel from './SeasonProgressLabel';
 import styles from './SeriesDetailsSeason.css';
+
+function getEpisodeOrderLabel(type: string): string {
+  const labels: Record<string, string> = {
+    default: translate('AiredOrderShort'),
+    dvd: translate('DvdOrderShort'),
+    absolute: translate('AbsoluteOrderShort'),
+    alternate: translate('AlternateOrderShort'),
+    altDvd: translate('AlternateDvdOrderShort'),
+    regional: translate('RegionalOrderShort'),
+  };
+
+  return labels[type] ?? type;
+}
 
 function getSeasonStatistics(episodes: Episode[]) {
   let episodeCount = 0;
@@ -100,6 +114,7 @@ interface SeriesDetailsSeasonProps {
   monitored: boolean;
   seasonNumber: number;
   statistics?: Statistics;
+  episodeOrderOverride?: EpisodeOrderType;
   isExpanded?: boolean;
   onExpandPress: (seasonNumber: number, isExpanded: boolean) => void;
 }
@@ -109,11 +124,16 @@ function SeriesDetailsSeason({
   monitored,
   seasonNumber,
   statistics = {} as Statistics,
+  episodeOrderOverride,
   isExpanded,
   onExpandPress,
 }: SeriesDetailsSeasonProps) {
   const dispatch = useDispatch();
-  const { monitored: seriesMonitored, path } = useSingleSeries(seriesId)!;
+  const {
+    monitored: seriesMonitored,
+    episodeOrder,
+    path,
+  } = useSingleSeries(seriesId)!;
   const { data: items } = useSeasonEpisodes(seriesId, seasonNumber);
 
   const { columns, sortKey, sortDirection } = useEpisodeOptions();
@@ -138,6 +158,7 @@ function SeriesDetailsSeason({
   const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
   const [isInteractiveSearchModalOpen, setIsInteractiveSearchModalOpen] =
     useState(false);
+  const [isEpisodeOrderModalOpen, setIsEpisodeOrderModalOpen] = useState(false);
 
   const { toggleEpisodesMonitored, isToggling, togglingEpisodeIds } =
     useToggleEpisodesMonitored(getQueryKey('episodes')!);
@@ -162,6 +183,14 @@ function SeriesDetailsSeason({
     },
     [seasonNumber, toggleSeasonMonitored]
   );
+
+  const handleEpisodeOrderPress = useCallback(() => {
+    setIsEpisodeOrderModalOpen(true);
+  }, []);
+
+  const handleEpisodeOrderModalClose = useCallback(() => {
+    setIsEpisodeOrderModalOpen(false);
+  }, []);
 
   const handleExpandPress = useCallback(() => {
     onExpandPress(seasonNumber, !isExpanded);
@@ -287,6 +316,12 @@ function SeriesDetailsSeason({
 
           <div className={styles.seasonInfo}>
             <div className={styles.seasonNumber}>{seasonNumberTitle}</div>
+
+            {episodeOrderOverride ? (
+              <Label kind="info" size="medium">
+                {getEpisodeOrderLabel(episodeOrderOverride)}
+              </Label>
+            ) : null}
           </div>
 
           <div className={styles.seasonStats}>
@@ -408,6 +443,16 @@ function SeriesDetailsSeason({
 
                 {translate('History')}
               </MenuItem>
+
+              {episodeOrder && episodeOrder !== 'default' ? (
+                <MenuItem onPress={handleEpisodeOrderPress}>
+                  <Icon
+                    className={styles.actionMenuIcon}
+                    name={icons.EPISODE_ORDER}
+                  />
+                  {translate('EpisodeOrdering')}
+                </MenuItem>
+              ) : null}
             </MenuContent>
           </Menu>
         ) : (
@@ -463,6 +508,16 @@ function SeriesDetailsSeason({
               isDisabled={!totalEpisodeCount}
               onPress={handleHistoryPress}
             />
+
+            {episodeOrder && episodeOrder !== 'default' ? (
+              <IconButton
+                className={styles.actionButton}
+                name={icons.EPISODE_ORDER}
+                title={translate('EpisodeOrdering')}
+                size={24}
+                onPress={handleEpisodeOrderPress}
+              />
+            ) : null}
           </div>
         )}
       </div>
@@ -549,6 +604,16 @@ function SeriesDetailsSeason({
         seriesId={seriesId}
         seasonNumber={seasonNumber}
         onModalClose={handleInteractiveSearchModalClose}
+      />
+
+      <EpisodeOrderModal
+        isOpen={isEpisodeOrderModalOpen}
+        seriesId={seriesId}
+        seasonNumber={seasonNumber}
+        currentOverride={episodeOrderOverride}
+        seriesEpisodeOrder={episodeOrder}
+        monitored={monitored}
+        onModalClose={handleEpisodeOrderModalClose}
       />
     </div>
   );

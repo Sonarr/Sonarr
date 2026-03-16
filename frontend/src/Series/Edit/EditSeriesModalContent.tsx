@@ -24,7 +24,9 @@ import {
 } from 'Helpers/Props';
 import MoveSeriesModal from 'Series/MoveSeries/MoveSeriesModal';
 import Series from 'Series/Series';
+import useAvailableOrderings from 'Series/useAvailableOrderings';
 import { useSaveSeries, useSingleSeries } from 'Series/useSeries';
+import { useGeneralSettings } from 'Settings/General/useGeneralSettings';
 import selectSettings from 'Store/Selectors/selectSettings';
 import { InputChanged } from 'typings/inputs';
 import translate from 'Utilities/String/translate';
@@ -43,6 +45,16 @@ function EditSeriesModalContent({
   onDeleteSeriesPress,
 }: EditSeriesModalContentProps) {
   const series = useSingleSeries(seriesId)!;
+  const { data: generalSettings } = useGeneralSettings();
+  const hasTvdbApiKey = !!generalSettings?.tvdbApiKey;
+  const { data: availableOrderings } = useAvailableOrderings(
+    seriesId,
+    hasTvdbApiKey
+  );
+  const availableTypes = useMemo(
+    () => availableOrderings.map((o) => o.type),
+    [availableOrderings]
+  );
 
   const {
     title,
@@ -51,6 +63,7 @@ function EditSeriesModalContent({
     seasonFolder,
     qualityProfileId,
     seriesType,
+    episodeOrder,
     path,
     tags,
     rootFolderPath: initialRootFolderPath,
@@ -78,6 +91,7 @@ function EditSeriesModalContent({
         seasonFolder,
         qualityProfileId,
         seriesType,
+        episodeOrder,
         path,
         tags,
       },
@@ -90,6 +104,7 @@ function EditSeriesModalContent({
     seasonFolder,
     qualityProfileId,
     seriesType,
+    episodeOrder,
     path,
     tags,
     pendingChanges,
@@ -231,6 +246,24 @@ function EditSeriesModalContent({
               name="seriesType"
               {...settings.seriesType}
               helpText={translate('SeriesTypesHelpText')}
+              onChange={handleInputChange}
+            />
+          </FormGroup>
+
+          <FormGroup size={sizes.MEDIUM}>
+            <FormLabel>{translate('EpisodeOrder')}</FormLabel>
+
+            <FormInputGroup
+              type={inputTypes.EPISODE_ORDER_SELECT}
+              name="episodeOrder"
+              {...settings.episodeOrder}
+              isDisabled={!hasTvdbApiKey}
+              availableTypes={availableTypes}
+              helpText={
+                hasTvdbApiKey
+                  ? translate('EpisodeOrderingHelpText')
+                  : translate('TvdbApiKeyRequired')
+              }
               onChange={handleInputChange}
             />
           </FormGroup>
