@@ -702,9 +702,10 @@ function EditQualityProfileModalContent({
             >
               {translate('Delete')}
             </Button>
+
             {isInUse ? (
               <Popover
-                title="Quality Profile Usage"
+                title={translate('QualityProfileUsage')}
                 body={
                   <div>
                     {seriesCount ? (
