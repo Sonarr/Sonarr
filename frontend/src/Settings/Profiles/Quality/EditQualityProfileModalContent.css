@@ -12,6 +12,10 @@
   margin-right: auto;
 }
 
+.deleteButtonInfoIcon {
+  margin-left: 8px;
+}
+
 .formatItemSmall {
   display: none;
 }
