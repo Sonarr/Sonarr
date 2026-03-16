@@ -157,7 +157,7 @@ function Menu({
           {React.cloneElement(childrenArray[1] as ReactElement, {
             forwardedRef: refs.setFloating,
             style: {
-              maxHeight,
+              maxHeight: enforceMaxHeight ? maxHeight : undefined,
               ...floatingStyles,
             },
             isOpen: isMenuOpen,
