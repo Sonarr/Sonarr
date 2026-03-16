@@ -7518,7 +7518,8 @@
           "notQualityUpgrade",
           "notRevisionUpgrade",
           "notCustomFormatUpgrade",
-          "notCustomFormatUpgradeAfterRename"
+          "notCustomFormatUpgradeAfterRename",
+          "multiSeason"
         ],
         "type": "string"
       },
