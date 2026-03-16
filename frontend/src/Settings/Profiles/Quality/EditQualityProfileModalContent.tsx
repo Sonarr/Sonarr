@@ -709,15 +709,15 @@ function EditQualityProfileModalContent({
                   <div>
                     {seriesCount ? (
                       <div>
-                        {translate('QualityProfileUsedInXSeries', {
-                          seriesCount,
+                        {translate('QualityProfileUsedInCountSeries', {
+                          count: seriesCount,
                         })}
                       </div>
                     ) : null}
                     {importListCount ? (
                       <div>
-                        {translate('QualityProfileUsedInXImportLists', {
-                          importListCount,
+                        {translate('QualityProfileUsedInCountImportLists', {
+                          count: importListCount,
                         })}
                       </div>
                     ) : null}
