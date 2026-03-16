@@ -415,9 +415,22 @@ namespace NzbDrone.Core.IndexerSearch
                 downloadDecisions.AddRange(decisions);
             }
 
-            foreach (var episode in episodesToSearch)
+            // Skip per-episode search if the season search already found an approved result
+            // that covers all wanted episodes (i.e. a season pack). For interactive searches,
+            // still search per-episode so the user can see all available results.
+            var hasAcceptableSeasonPack = downloadDecisions
+                .Any(d => d.Approved && d.RemoteEpisode.Episodes.Count >= episodesToSearch.Count);
+
+            if (!hasAcceptableSeasonPack || interactiveSearch)
             {
-                downloadDecisions.AddRange(await SearchAnime(series, episode, monitoredOnly, userInvokedSearch, interactiveSearch, true));
+                foreach (var episode in episodesToSearch)
+                {
+                    downloadDecisions.AddRange(await SearchAnime(series, episode, monitoredOnly, userInvokedSearch, interactiveSearch, true));
+                }
+            }
+            else
+            {
+                _logger.Debug("Skipping per-episode search for {0}, acceptable season pack already found", series.Title);
             }
 
             return DeDupeDecisions(downloadDecisions);
