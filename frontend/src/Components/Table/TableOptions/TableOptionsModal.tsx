@@ -110,7 +110,7 @@ function TableOptionsModal({
 
   const handleColumnDragEnd = useCallback(
     (didDrop: boolean) => {
-      if (didDrop && dragIndex && dropIndex !== null) {
+      if (didDrop && dragIndex !== null && dropIndex !== null) {
         const newColumns = [...columns];
         const items = newColumns.splice(dragIndex, 1);
         newColumns.splice(dropIndex, 0, items[0]);
