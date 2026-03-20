@@ -8,7 +8,7 @@
     <PackageReference Include="Equ" Version="2.3.0" />
     <PackageReference Include="MailKit" Version="4.15.1" />
     <PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="10.0.5" />
-    <PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.4" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="7.0.0" />
     <PackageReference Include="MiniProfiler.AspNetCore" Version="4.5.4" />
     <PackageReference Include="Openur.FFMpegCore" Version="5.4.0.31" />
     <PackageReference Include="Openur.FFprobeStatic" Version="8.1.0.334" />
