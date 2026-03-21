@@ -47,7 +47,6 @@ const usePaths = ({
     path: '/filesystem',
     queryParams: { path, allowFoldersWithoutTrailingSlashes, includeFiles },
     queryOptions: {
-      enabled: path.trim().length > 0,
       placeholderData: keepPreviousData,
     },
   });
