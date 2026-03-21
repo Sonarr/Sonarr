@@ -133,7 +133,11 @@ function FileBrowserModalContent({
           className={styles.scroller}
           scrollDirection="both"
         >
-          {error ? <div>{translate('ErrorLoadingContents')}</div> : null}
+          {error ? (
+            <Alert kind={kinds.DANGER}>
+              {translate('ErrorLoadingContents')}
+            </Alert>
+          ) : null}
 
           {isFetched && !error ? (
             <Table horizontalScroll={false} columns={columns}>
