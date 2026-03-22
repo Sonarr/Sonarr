@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Alert from 'Components/Alert';
-import TextInput from 'Components/Form/TextInput';
+import TextInput, { TextInputHandle } from 'Components/Form/TextInput';
 import Icon from 'Components/Icon';
 import Button from 'Components/Link/Button';
 import Link from 'Components/Link/Link';
@@ -22,6 +22,7 @@ function AddNewSeries() {
   const { term: initialTerm = '' } = useQueryParams<{ term: string }>();
   const hasSeries = useHasSeries();
   const [term, setTerm] = useState(initialTerm);
+  const searchInputRef = useRef<TextInputHandle>(null);
   const [isFetching, setIsFetching] = useState(false);
   const query = useDebounce(term, term ? 300 : 0);
 
@@ -36,6 +37,7 @@ function AddNewSeries() {
   const handleClearSeriesLookupPress = useCallback(() => {
     setTerm('');
     setIsFetching(false);
+    searchInputRef.current?.focus();
   }, []);
 
   const { isFetching: isFetchingApi, error, data } = useLookupSeries(query);
@@ -57,6 +59,7 @@ function AddNewSeries() {
           </div>
 
           <TextInput
+            ref={searchInputRef}
             className={styles.searchInput}
             name="seriesLookup"
             value={term}
