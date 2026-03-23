@@ -2,8 +2,8 @@ import classNames from 'classnames';
 import React, {
   ChangeEvent,
   FocusEvent,
-  SyntheticEvent,
   forwardRef,
+  SyntheticEvent,
   useCallback,
   useEffect,
   useImperativeHandle,
@@ -46,7 +46,7 @@ export interface TextInputHandle {
 }
 
 const TextInput = forwardRef<TextInputHandle, TextInputProps | FileInputProps>(
-  function TextInput(
+  (
     {
       className = styles.input,
       type = 'text',
@@ -68,12 +68,16 @@ const TextInput = forwardRef<TextInputHandle, TextInputProps | FileInputProps>(
       onSelectionChange,
     }: TextInputProps | FileInputProps,
     ref
-  ) {
+  ) => {
     const inputRef = useRef<HTMLInputElement>(null);
 
-    useImperativeHandle(ref, () => ({
-      focus: () => inputRef.current?.focus(),
-    }), []);
+    useImperativeHandle(
+      ref,
+      () => ({
+        focus: () => inputRef.current?.focus(),
+      }),
+      []
+    );
 
     const selectionTimeout = useRef<ReturnType<typeof setTimeout>>();
     const selectionStart = useRef<number | null>();
