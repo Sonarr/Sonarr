@@ -948,7 +948,7 @@
   "ImportListsTraktSettingsAdditionalParametersHelpText": "Additional Trakt API parameters",
   "ImportListsTraktSettingsAuthenticateWithTrakt": "Authenticate with Trakt",
   "ImportListsTraktSettingsGenres": "Genres",
-  "ImportListsTraktSettingsGenresSeriesHelpText": "Filter series by Trakt Genre slug (action,comedy)",
+  "ImportListsTraktSettingsGenresSeriesHelpText": "Filter series by Trakt Genre slug, comma separated (action,comedy)",
   "ImportListsTraktSettingsLimit": "Limit",
   "ImportListsTraktSettingsLimitSeriesHelpText": "Limit the number of series to get",
   "ImportListsTraktSettingsListName": "List Name",
