@@ -17,6 +17,8 @@ namespace NzbDrone.Common.Test.ExtensionTests
         [TestCase(-1000000, "-976.6 KB")]
         [TestCase(-377487360, "-360.0 MB")]
         [TestCase(-1255864686, "-1.2 GB")]
+        [TestCase(long.MinValue, "-8.0 EB")]
+        [TestCase(long.MaxValue, "8.0 EB")]
         public void should_calculate_string_correctly(long bytes, string expected)
         {
             bytes.SizeSuffix().Should().Be(expected);

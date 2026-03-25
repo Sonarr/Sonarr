@@ -22,7 +22,9 @@ namespace NzbDrone.Core
 
         public static long Round(this long number, long level)
         {
-            return Convert.ToInt64(Math.Floor((decimal)number / level) * level);
+            return number < 0
+                ? Convert.ToInt64(Math.Ceiling((decimal)number / level) * level)
+                : Convert.ToInt64(Math.Floor((decimal)number / level) * level);
         }
 
         public static string ToBestDateString(this DateTime dateTime)
