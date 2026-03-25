@@ -32,6 +32,7 @@ namespace Sonarr.Api.V3.Notifications
         public bool SupportsOnHealthRestored { get; set; }
         public bool SupportsOnApplicationUpdate { get; set; }
         public bool SupportsOnManualInteractionRequired { get; set; }
+        public int NotificationTemplateId { get; set; }
         public string TestCommand { get; set; }
     }
 
@@ -73,6 +74,7 @@ namespace Sonarr.Api.V3.Notifications
             resource.SupportsOnHealthRestored = definition.SupportsOnHealthRestored;
             resource.SupportsOnApplicationUpdate = definition.SupportsOnApplicationUpdate;
             resource.SupportsOnManualInteractionRequired = definition.SupportsOnManualInteractionRequired;
+            resource.NotificationTemplateId = definition.NotificationTemplateId;
 
             return resource;
         }
@@ -113,6 +115,7 @@ namespace Sonarr.Api.V3.Notifications
             definition.SupportsOnHealthRestored = resource.SupportsOnHealthRestored;
             definition.SupportsOnApplicationUpdate = resource.SupportsOnApplicationUpdate;
             definition.SupportsOnManualInteractionRequired = resource.SupportsOnManualInteractionRequired;
+            definition.NotificationTemplateId = resource.NotificationTemplateId;
 
             return definition;
         }
