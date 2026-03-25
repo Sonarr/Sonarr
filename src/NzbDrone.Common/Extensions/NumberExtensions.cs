@@ -11,14 +11,19 @@ namespace NzbDrone.Common.Extensions
         {
             const int bytesInKb = 1024;
 
-            if (bytes < 0)
-            {
-                return "-" + SizeSuffix(-bytes);
-            }
-
             if (bytes == 0)
             {
                 return "0 B";
+            }
+
+            if (bytes == long.MinValue)
+            {
+                return "-" + SizeSuffix(long.MaxValue);
+            }
+
+            if (bytes < 0)
+            {
+                return "-" + SizeSuffix(Math.Abs(bytes));
             }
 
             var mag = (int)Math.Log(bytes, bytesInKb);
