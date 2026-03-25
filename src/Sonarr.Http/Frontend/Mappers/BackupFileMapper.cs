@@ -15,7 +15,7 @@ namespace Sonarr.Http.Frontend.Mappers
             _backupService = backupService;
         }
 
-        protected override string FolderPath => _backupService.GetBackupFolder();
+        protected override string FolderPath => _backupService.GetBackupFolder().TrimEnd(Path.DirectorySeparatorChar);
 
         protected override string MapPath(string resourceUrl)
         {
