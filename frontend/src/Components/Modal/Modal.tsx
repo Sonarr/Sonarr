@@ -15,6 +15,7 @@ import { Size } from 'Helpers/Props/sizes';
 import { isIOS } from 'Utilities/browser';
 import * as keyCodes from 'Utilities/Constants/keyCodes';
 import { setScrollLock } from 'Utilities/scrollLock';
+import { ModalContext } from './ModalContext';
 import ModalError from './ModalError';
 import styles from './Modal.css';
 
@@ -163,26 +164,36 @@ function Modal({
     return null;
   }
 
+  const headerId = `${modalId}-header`;
+
   return ReactDOM.createPortal(
-    <FocusLock disabled={false}>
-      <div className={styles.modalContainer}>
-        <div
-          ref={backgroundRef}
-          className={backdropClassName}
-          onMouseDown={handleBackdropBeginPress}
-          onMouseUp={handleBackdropEndPress}
-        >
-          <div className={classNames(className, styles[size])} style={style}>
-            <ErrorBoundary
-              errorComponent={ModalError}
-              onModalClose={onModalClose}
+    <ModalContext.Provider value={{ headerId }}>
+      <FocusLock disabled={false}>
+        <div className={styles.modalContainer}>
+          <div
+            ref={backgroundRef}
+            className={backdropClassName}
+            onMouseDown={handleBackdropBeginPress}
+            onMouseUp={handleBackdropEndPress}
+          >
+            <div
+              className={classNames(className, styles[size])}
+              style={style}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby={headerId}
             >
-              {children}
-            </ErrorBoundary>
+              <ErrorBoundary
+                errorComponent={ModalError}
+                onModalClose={onModalClose}
+              >
+                {children}
+              </ErrorBoundary>
+            </div>
           </div>
         </div>
-      </div>
-    </FocusLock>,
+      </FocusLock>
+    </ModalContext.Provider>,
     node!
   );
 }

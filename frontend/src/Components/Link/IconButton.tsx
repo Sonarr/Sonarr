@@ -1,7 +1,6 @@
 import classNames from 'classnames';
 import React from 'react';
 import Icon, { IconProps } from 'Components/Icon';
-import translate from 'Utilities/String/translate';
 import Link, { LinkProps } from './Link';
 import styles from './IconButton.css';
 
@@ -26,7 +25,6 @@ export default function IconButton({
         className,
         otherProps.isDisabled && styles.isDisabled
       )}
-      aria-label={translate('TableOptionsButton')}
       {...otherProps}
     >
       <Icon
@@ -35,6 +33,7 @@ export default function IconButton({
         kind={kind}
         size={size}
         isSpinning={isSpinning}
+        aria-hidden={true}
       />
     </Link>
   );
