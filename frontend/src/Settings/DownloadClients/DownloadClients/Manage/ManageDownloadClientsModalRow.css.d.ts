@@ -5,6 +5,7 @@ interface CssExports {
   'implementation': string;
   'name': string;
   'priority': string;
+  'protocol': string;
   'removeCompletedDownloads': string;
   'removeFailedDownloads': string;
   'tags': string;
