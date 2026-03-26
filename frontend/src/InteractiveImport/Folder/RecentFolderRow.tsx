@@ -64,6 +64,11 @@ function RecentFolderRow({
               ? translate('FavoriteFolderRemove')
               : translate('FavoriteFolderAdd')
           }
+          aria-label={
+            isFavorite
+              ? translate('FavoriteFolderRemove')
+              : translate('FavoriteFolderAdd')
+          }
           kind={isFavorite ? 'danger' : 'default'}
           name={isFavorite ? icons.HEART : icons.HEART_OUTLINE}
           onPress={handleFavoritePress}
@@ -71,6 +76,7 @@ function RecentFolderRow({
 
         <IconButton
           title={translate('Remove')}
+          aria-label={translate('Remove')}
           name={icons.REMOVE}
           onPress={handleRemovePress}
         />

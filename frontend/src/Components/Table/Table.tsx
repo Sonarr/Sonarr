@@ -94,7 +94,7 @@ function Table({
                     canModifyColumns={canModifyColumns}
                     onTableOptionChange={onTableOptionChange}
                   >
-                    <IconButton name={icons.ADVANCED_SETTINGS} />
+                    <IconButton name={icons.ADVANCED_SETTINGS} aria-label="Advanced Settings" />
                   </TableOptionsModalWrapper>
                 </TableHeaderCell>
               );

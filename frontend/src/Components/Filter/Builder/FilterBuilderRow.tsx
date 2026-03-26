@@ -300,11 +300,12 @@ function FilterBuilderRow<T>({
       <div className={styles.actionsContainer}>
         <IconButton
           name={icons.SUBTRACT}
+          aria-label="Remove"
           isDisabled={filterCount === 1}
           onPress={handleRemovePress}
         />
 
-        <IconButton name={icons.ADD} onPress={handleAddPress} />
+        <IconButton name={icons.ADD} aria-label="Add" onPress={handleAddPress} />
       </div>
     </div>
   );

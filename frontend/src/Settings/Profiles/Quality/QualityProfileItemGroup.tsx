@@ -89,6 +89,7 @@ function QualityProfileItemGroup({
               className={styles.deleteGroupButton}
               name={icons.UNGROUP}
               title={translate('Ungroup')}
+              aria-label={translate('Ungroup')}
               onPress={handleDeleteGroupPress}
             />
 

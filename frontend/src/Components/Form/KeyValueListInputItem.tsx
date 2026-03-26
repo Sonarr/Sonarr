@@ -77,6 +77,7 @@ function KeyValueListInputItem({
         {isNew ? null : (
           <IconButton
             name={icons.REMOVE}
+            aria-label="Remove"
             tabIndex={-1}
             onPress={handleRemovePress}
           />

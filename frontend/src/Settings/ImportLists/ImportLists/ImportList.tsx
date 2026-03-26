@@ -76,6 +76,7 @@ function ImportList({
         <IconButton
           className={styles.cloneButton}
           title={translate('CloneImportList')}
+          aria-label={translate('CloneImportList')}
           name={icons.CLONE}
           onPress={handleCloneImportListPress}
         />

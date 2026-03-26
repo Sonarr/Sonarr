@@ -219,6 +219,7 @@ export default function QueuedTaskRow(props: QueuedTaskRowProps) {
         {status === 'queued' && (
           <IconButton
             title={translate('RemovedFromTaskQueue')}
+            aria-label={translate('RemovedFromTaskQueue')}
             name={icons.REMOVE}
             onPress={openCancelConfirmModal}
           />

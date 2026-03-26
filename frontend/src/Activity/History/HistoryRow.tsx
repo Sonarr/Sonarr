@@ -221,7 +221,7 @@ function HistoryRow(props: HistoryRowProps) {
         if (name === 'details') {
           return (
             <TableRowCell key={name} className={styles.details}>
-              <IconButton name={icons.INFO} onPress={handleDetailsPress} />
+              <IconButton name={icons.INFO} aria-label="Details" onPress={handleDetailsPress} />
             </TableRowCell>
           );
         }

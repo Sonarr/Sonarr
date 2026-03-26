@@ -68,6 +68,7 @@ function ImportListExclusionRow({
       <TableRowCell className={styles.actions}>
         <IconButton
           name={icons.EDIT}
+          aria-label={translate('Edit')}
           onPress={setEditImportListExclusionModalOpen}
         />
       </TableRowCell>

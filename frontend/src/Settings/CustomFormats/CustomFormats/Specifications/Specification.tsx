@@ -73,6 +73,7 @@ function Specification({
         <IconButton
           className={styles.cloneButton}
           title={translate('CloneCondition')}
+          aria-label={translate('CloneCondition')}
           name={icons.CLONE}
           onPress={handleCloneSpecificationPress}
         />

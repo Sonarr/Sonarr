@@ -76,6 +76,7 @@ function QualityProfile({
         <IconButton
           className={styles.cloneButton}
           title={translate('CloneProfile')}
+          aria-label={translate('CloneProfile')}
           name={icons.CLONE}
           onPress={handleCloneQualityProfilePress}
         />

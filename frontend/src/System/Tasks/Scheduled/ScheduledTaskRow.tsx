@@ -138,6 +138,7 @@ function ScheduledTaskRow({
         <SpinnerIconButton
           name={icons.REFRESH}
           spinningName={icons.REFRESH}
+          aria-label="Run"
           isSpinning={isExecuting}
           onPress={handleExecutePress}
         />

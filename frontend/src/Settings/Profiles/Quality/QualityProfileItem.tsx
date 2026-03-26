@@ -75,6 +75,7 @@ function QualityProfileItem({
             className={styles.createGroupButton}
             name={icons.GROUP}
             title={translate('Group')}
+            aria-label={translate('Group')}
             onPress={handleCreateGroupPress}
           />
         )}
