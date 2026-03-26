@@ -7,6 +7,7 @@ interface CssExports {
   'implementation': string;
   'name': string;
   'priority': string;
+  'protocol': string;
   'seasonSearchMaximumSingleEpisodeAge': string;
   'tags': string;
 }
