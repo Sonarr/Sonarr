@@ -40,6 +40,12 @@ const COLUMNS: Column[] = [
     isVisible: true,
   },
   {
+    name: 'protocol',
+    label: () => translate('Protocol'),
+    isSortable: true,
+    isVisible: true,
+  },
+  {
     name: 'implementation',
     label: () => translate('Implementation'),
     isSortable: true,
