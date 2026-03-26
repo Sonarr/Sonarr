@@ -1984,6 +1984,7 @@
   "TableColumns": "Columns",
   "TableColumnsHelpText": "Choose which columns are visible and which order they appear in",
   "MainNavigation": "Main navigation",
+  "ToggleSidebar": "Toggle sidebar",
   "PagerGoToFirstPage": "Go to first page",
   "PagerGoToLastPage": "Go to last page",
   "PagerGoToNextPage": "Go to next page",

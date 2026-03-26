@@ -97,6 +97,7 @@ function Table(props) {
                     >
                       <IconButton
                         name={icons.ADVANCED_SETTINGS}
+                        aria-label={translate('TableOptions')}
                       />
                     </TableOptionsModalWrapper>
                   </TableHeaderCell>

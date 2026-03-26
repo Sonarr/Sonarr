@@ -86,6 +86,7 @@ class CustomFilter extends Component {
         <div className={styles.actions}>
           <IconButton
             name={icons.EDIT}
+            aria-label={translate('Edit')}
             onPress={this.onEditPress}
           />
 

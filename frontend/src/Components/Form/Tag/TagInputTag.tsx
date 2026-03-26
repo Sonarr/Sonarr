@@ -67,6 +67,7 @@ function TagInputTag<T extends TagBase>({
               className={styles.editButton}
               name={icons.EDIT}
               size={9}
+              aria-label={translate('Edit')}
               onPress={handleEdit}
             />
           </div>

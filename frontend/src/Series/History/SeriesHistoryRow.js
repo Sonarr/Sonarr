@@ -162,6 +162,7 @@ class SeriesHistoryRow extends Component {
             eventType === 'grabbed' &&
               <IconButton
                 title={translate('MarkAsFailed')}
+                aria-label={translate('MarkAsFailed')}
                 name={icons.REMOVE}
                 size={14}
                 onPress={this.onMarkAsFailedPress}

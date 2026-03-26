@@ -279,12 +279,14 @@ class FilterBuilderRow extends Component {
         <div className={styles.actionsContainer}>
           <IconButton
             name={icons.SUBTRACT}
+            aria-label={translate('Remove')}
             isDisabled={filterCount === 1}
             onPress={this.onRemovePress}
           />
 
           <IconButton
             name={icons.ADD}
+            aria-label={translate('Add')}
             onPress={this.onAddPress}
           />
         </div>

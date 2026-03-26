@@ -74,6 +74,7 @@ function RootFolderRow(props: RootFolderRowProps) {
       <TableRowCell className={styles.actions}>
         <IconButton
           title={translate('RemoveRootFolder')}
+          aria-label={translate('RemoveRootFolder')}
           name={icons.REMOVE}
           onPress={onDeletePress}
         />

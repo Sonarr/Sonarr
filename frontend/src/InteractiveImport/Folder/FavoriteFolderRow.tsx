@@ -36,6 +36,7 @@ function FavoriteFolderRow({ folder, onPress }: FavoriteFolderRowProps) {
       <TableRowCell className={styles.actions}>
         <IconButton
           title={translate('FavoriteFolderRemove')}
+          aria-label={translate('FavoriteFolderRemove')}
           kind="danger"
           name={icons.HEART}
           onPress={handleRemoveFavoritePress}

@@ -212,6 +212,7 @@ function SeriesIndexOverview(props: SeriesIndexOverviewProps) {
               <IconButton
                 name={icons.EDIT}
                 title={translate('EditSeries')}
+                aria-label={translate('EditSeries')}
                 onPress={onEditSeriesPress}
               />
             </div>

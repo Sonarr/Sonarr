@@ -128,6 +128,7 @@ function Health() {
                         name={icons.WIKI}
                         to={item.wikiUrl}
                         title={translate('ReadTheWikiForMoreInformation')}
+                        aria-label={translate('ReadTheWikiForMoreInformation')}
                       />
 
                       <HealthItemLink source={source} />

@@ -387,6 +387,7 @@ class SeriesDetails extends Component {
                       name={icons.ARROW_LEFT}
                       size={30}
                       title={translate('SeriesDetailsGoTo', { title: previousSeries.title })}
+                      aria-label={translate('SeriesDetailsGoTo', { title: previousSeries.title })}
                       to={`/series/${previousSeries.titleSlug}`}
                     />
 
@@ -395,6 +396,7 @@ class SeriesDetails extends Component {
                       name={icons.ARROW_RIGHT}
                       size={30}
                       title={translate('SeriesDetailsGoTo', { title: nextSeries.title })}
+                      aria-label={translate('SeriesDetailsGoTo', { title: nextSeries.title })}
                       to={`/series/${nextSeries.titleSlug}`}
                     />
                   </div>

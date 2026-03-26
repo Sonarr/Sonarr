@@ -85,7 +85,7 @@ function SeriesIndexTableHeader(props: SeriesIndexTableHeaderProps) {
                 optionsComponent={SeriesIndexTableOptions}
                 onTableOptionChange={onTableOptionChange}
               >
-                <IconButton name={icons.ADVANCED_SETTINGS} />
+                <IconButton name={icons.ADVANCED_SETTINGS} aria-label={translate('TableOptions')} />
               </TableOptionsModalWrapper>
             </VirtualTableHeaderCell>
           );

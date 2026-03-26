@@ -55,6 +55,7 @@ function EpisodeSearchCell(props: EpisodeSearchCellProps) {
       <IconButton
         name={icons.INTERACTIVE}
         title={translate('InteractiveSearch')}
+        aria-label={translate('InteractiveSearch')}
         onPress={setDetailsModalOpen}
       />
 

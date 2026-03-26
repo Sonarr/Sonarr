@@ -117,12 +117,14 @@ class BackupRow extends Component {
         <TableRowCell className={styles.actions}>
           <IconButton
             title={translate('RestoreBackup')}
+            aria-label={translate('RestoreBackup')}
             name={icons.RESTORE}
             onPress={this.onRestorePress}
           />
 
           <IconButton
             title={translate('DeleteBackup')}
+            aria-label={translate('DeleteBackup')}
             name={icons.DELETE}
             onPress={this.onDeletePress}
           />
