@@ -1,9 +1,11 @@
 import React, { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import ProtocolLabel from 'Activity/Queue/ProtocolLabel';
 import Card from 'Components/Card';
 import Label from 'Components/Label';
 import ConfirmModal from 'Components/Modal/ConfirmModal';
 import TagList from 'Components/TagList';
+import DownloadProtocol from 'DownloadClient/DownloadProtocol';
 import { kinds } from 'Helpers/Props';
 import { deleteDownloadClient } from 'Store/Actions/settingsActions';
 import { useTagList } from 'Tags/useTags';
@@ -14,6 +16,7 @@ import styles from './DownloadClient.css';
 interface DownloadClientProps {
   id: number;
   name: string;
+  protocol: DownloadProtocol;
   enable: boolean;
   priority: number;
   tags: number[];
@@ -22,6 +25,7 @@ interface DownloadClientProps {
 function DownloadClient({
   id,
   name,
+  protocol,
   enable,
   priority,
   tags,
@@ -65,6 +69,8 @@ function DownloadClient({
       <div className={styles.name}>{name}</div>
 
       <div className={styles.enabled}>
+        <ProtocolLabel protocol={protocol} />
+
         {enable ? (
           <Label kind={kinds.SUCCESS}>{translate('Enabled')}</Label>
         ) : (

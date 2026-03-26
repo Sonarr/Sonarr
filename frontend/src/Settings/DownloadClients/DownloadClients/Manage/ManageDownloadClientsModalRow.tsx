@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react';
+import ProtocolLabel from 'Activity/Queue/ProtocolLabel';
 import { useSelect } from 'App/Select/SelectContext';
 import Label from 'Components/Label';
 import SeriesTagList from 'Components/SeriesTagList';
@@ -6,6 +7,7 @@ import TableRowCell from 'Components/Table/Cells/TableRowCell';
 import TableSelectCell from 'Components/Table/Cells/TableSelectCell';
 import Column from 'Components/Table/Column';
 import TableRow from 'Components/Table/TableRow';
+import DownloadProtocol from 'DownloadClient/DownloadProtocol';
 import { kinds } from 'Helpers/Props';
 import DownloadClient from 'typings/DownloadClient';
 import { SelectStateInputProps } from 'typings/props';
@@ -15,6 +17,7 @@ import styles from './ManageDownloadClientsModalRow.css';
 interface ManageDownloadClientsModalRowProps {
   id: number;
   name: string;
+  protocol: DownloadProtocol;
   enable: boolean;
   priority: number;
   removeCompletedDownloads: boolean;
@@ -30,6 +33,7 @@ function ManageDownloadClientsModalRow(
   const {
     id,
     name,
+    protocol,
     enable,
     priority,
     removeCompletedDownloads,
@@ -61,6 +65,10 @@ function ManageDownloadClientsModalRow(
       />
 
       <TableRowCell className={styles.name}>{name}</TableRowCell>
+
+      <TableRowCell className={styles.protocol}>
+        <ProtocolLabel protocol={protocol} />
+      </TableRowCell>
 
       <TableRowCell className={styles.implementation}>
         {implementation}
