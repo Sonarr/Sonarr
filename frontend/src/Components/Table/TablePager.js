@@ -89,10 +89,11 @@ class TablePager extends Component {
                 styles.pageLink,
                 isFirstPage && styles.disabledPageButton
               )}
+              aria-label={translate('PagerGoToFirstPage')}
               isDisabled={isFirstPage}
               onPress={onFirstPagePress}
             >
-              <Icon name={icons.PAGE_FIRST} />
+              <Icon name={icons.PAGE_FIRST} aria-hidden={true} />
             </Link>
 
             <Link
@@ -100,16 +101,18 @@ class TablePager extends Component {
                 styles.pageLink,
                 isFirstPage && styles.disabledPageButton
               )}
+              aria-label={translate('PagerGoToPreviousPage')}
               isDisabled={isFirstPage}
               onPress={onPreviousPagePress}
             >
-              <Icon name={icons.PAGE_PREVIOUS} />
+              <Icon name={icons.PAGE_PREVIOUS} aria-hidden={true} />
             </Link>
 
             <div className={styles.pageNumber}>
               {
                 !isShowingPageSelect &&
                   <Link
+                    aria-label={translate('PagerGoToPage', { page, totalPages })}
                     isDisabled={totalPages === 1}
                     onPress={this.onOpenPageSelectClick}
                   >
@@ -136,10 +139,11 @@ class TablePager extends Component {
                 styles.pageLink,
                 isLastPage && styles.disabledPageButton
               )}
+              aria-label={translate('PagerGoToNextPage')}
               isDisabled={isLastPage}
               onPress={onNextPagePress}
             >
-              <Icon name={icons.PAGE_NEXT} />
+              <Icon name={icons.PAGE_NEXT} aria-hidden={true} />
             </Link>
 
             <Link
@@ -147,10 +151,11 @@ class TablePager extends Component {
                 styles.pageLink,
                 isLastPage && styles.disabledPageButton
               )}
+              aria-label={translate('PagerGoToLastPage')}
               isDisabled={isLastPage}
               onPress={onLastPagePress}
             >
-              <Icon name={icons.PAGE_LAST} />
+              <Icon name={icons.PAGE_LAST} aria-hidden={true} />
             </Link>
           </div>
         </div>

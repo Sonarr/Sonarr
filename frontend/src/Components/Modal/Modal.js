@@ -13,6 +13,8 @@ import { setScrollLock } from 'Utilities/scrollLock';
 import ModalError from './ModalError';
 import styles from './Modal.css';
 
+export const ModalContext = React.createContext({ headerId: null });
+
 const openModals = [];
 
 function removeFromOpenModals(id) {
@@ -182,33 +184,38 @@ class Modal extends Component {
     }
 
     return ReactDOM.createPortal(
-      <FocusLock disabled={false}>
-        <div
-          className={styles.modalContainer}
-        >
+      <ModalContext.Provider value={{ headerId: this._modalId }}>
+        <FocusLock disabled={false}>
           <div
-            ref={this._setBackgroundRef}
-            className={backdropClassName}
-            onMouseDown={this.onBackdropBeginPress}
-            onMouseUp={this.onBackdropEndPress}
+            className={styles.modalContainer}
           >
             <div
-              className={classNames(
-                className,
-                styles[size]
-              )}
-              style={style}
+              ref={this._setBackgroundRef}
+              className={backdropClassName}
+              onMouseDown={this.onBackdropBeginPress}
+              onMouseUp={this.onBackdropEndPress}
             >
-              <ErrorBoundary
-                errorComponent={ModalError}
-                onModalClose={onModalClose}
+              <div
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby={this._modalId}
+                className={classNames(
+                  className,
+                  styles[size]
+                )}
+                style={style}
               >
-                {children}
-              </ErrorBoundary>
+                <ErrorBoundary
+                  errorComponent={ModalError}
+                  onModalClose={onModalClose}
+                >
+                  {children}
+                </ErrorBoundary>
+              </div>
             </div>
           </div>
-        </div>
-      </FocusLock>,
+        </FocusLock>
+      </ModalContext.Provider>,
       this._node
     );
   }

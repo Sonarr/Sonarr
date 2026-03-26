@@ -453,12 +453,13 @@ class PageSidebar extends Component {
     const ScrollerComponent = isSmallScreen ? Scroller : OverlayScroller;
 
     return (
-      <div
+      <nav
         ref={this._setSidebarRef}
         className={classNames(
           styles.sidebarContainer
         )}
         style={containerStyle}
+        aria-label={translate('MainNavigation')}
       >
         <ScrollerComponent
           className={styles.sidebar}
@@ -515,7 +516,7 @@ class PageSidebar extends Component {
 
           <MessagesConnector />
         </ScrollerComponent>
-      </div>
+      </nav>
     );
   }
 }

@@ -48,6 +48,10 @@ class TableHeaderCell extends Component {
       icons.SORT_ASCENDING :
       icons.SORT_DESCENDING;
 
+    const ariaSortValue = isSorting
+      ? (sortDirection === sortDirections.ASCENDING ? 'ascending' : 'descending')
+      : (isSortable ? 'none' : undefined);
+
     return (
       isSortable ?
         <Link
@@ -56,6 +60,8 @@ class TableHeaderCell extends Component {
           className={className}
           label={typeof label === 'function' ? label() : label}
           title={typeof columnLabel === 'function' ? columnLabel() : columnLabel}
+          scope="col"
+          aria-sort={ariaSortValue}
           onPress={this.onPress}
         >
           {children}
@@ -65,11 +71,12 @@ class TableHeaderCell extends Component {
               <Icon
                 name={sortIcon}
                 className={styles.sortIcon}
+                aria-hidden={true}
               />
           }
         </Link> :
 
-        <th className={className}>
+        <th className={className} scope="col">
           {children}
         </th>
     );
