@@ -5,6 +5,7 @@ import Link from 'Components/Link/Link';
 import MiddleTruncate from 'Components/MiddleTruncate';
 import { icons } from 'Helpers/Props';
 import { TagBase } from './TagInput';
+import translate from 'Utilities/String/translate';
 import styles from './TagInputTag.css';
 
 export interface DeletedTag<T extends TagBase> {
@@ -66,7 +67,7 @@ function TagInputTag<T extends TagBase>({
             <IconButton
               className={styles.editButton}
               name={icons.EDIT}
-              aria-label="Edit"
+              aria-label={translate('Edit')}
               size={9}
               onPress={handleEdit}
             />

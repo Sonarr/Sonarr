@@ -25,6 +25,7 @@ import SeriesFilterBuilderRowValue from './SeriesFilterBuilderRowValue';
 import SeriesStatusFilterBuilderRowValue from './SeriesStatusFilterBuilderRowValue';
 import SeriesTypeFilterBuilderRowValue from './SeriesTypeFilterBuilderRowValue';
 import TagFilterBuilderRowValue from './TagFilterBuilderRowValue';
+import translate from 'Utilities/String/translate';
 import styles from './FilterBuilderRow.css';
 
 function getselectedFilterBuilderProp<T>(
@@ -300,12 +301,12 @@ function FilterBuilderRow<T>({
       <div className={styles.actionsContainer}>
         <IconButton
           name={icons.SUBTRACT}
-          aria-label="Remove"
+          aria-label={translate('Remove')}
           isDisabled={filterCount === 1}
           onPress={handleRemovePress}
         />
 
-        <IconButton name={icons.ADD} aria-label="Add" onPress={handleAddPress} />
+        <IconButton name={icons.ADD} aria-label={translate('Add')} onPress={handleAddPress} />
       </div>
     </div>
   );

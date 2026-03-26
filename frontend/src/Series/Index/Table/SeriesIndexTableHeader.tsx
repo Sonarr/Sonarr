@@ -18,6 +18,7 @@ import { CheckInputChanged } from 'typings/inputs';
 import { TableOptionsChangePayload } from 'typings/Table';
 import hasGrowableColumns from './hasGrowableColumns';
 import SeriesIndexTableOptions from './SeriesIndexTableOptions';
+import translate from 'Utilities/String/translate';
 import styles from './SeriesIndexTableHeader.css';
 
 interface SeriesIndexTableHeaderProps {
@@ -95,7 +96,7 @@ function SeriesIndexTableHeader(props: SeriesIndexTableHeaderProps) {
                 optionsComponent={SeriesIndexTableOptions}
                 onTableOptionChange={onTableOptionChange}
               >
-                <IconButton name={icons.ADVANCED_SETTINGS} aria-label="Advanced Settings" />
+                <IconButton name={icons.ADVANCED_SETTINGS} aria-label={translate('AdvancedSettings')} />
               </TableOptionsModalWrapper>
             </VirtualTableHeaderCell>
           );

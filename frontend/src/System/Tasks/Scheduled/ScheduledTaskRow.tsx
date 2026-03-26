@@ -10,6 +10,7 @@ import { isCommandExecuting } from 'Utilities/Command';
 import formatDate from 'Utilities/Date/formatDate';
 import formatDateTime from 'Utilities/Date/formatDateTime';
 import formatTimeSpan from 'Utilities/Date/formatTimeSpan';
+import translate from 'Utilities/String/translate';
 import styles from './ScheduledTaskRow.css';
 
 interface ScheduledTaskRowProps {
@@ -138,7 +139,7 @@ function ScheduledTaskRow({
         <SpinnerIconButton
           name={icons.REFRESH}
           spinningName={icons.REFRESH}
-          aria-label="Run"
+          aria-label={translate('Run')}
           isSpinning={isExecuting}
           onPress={handleExecutePress}
         />
