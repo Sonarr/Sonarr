@@ -8,7 +8,7 @@ RUN yarn install --frozen-lockfile
 # Copy frontend source and build
 COPY frontend/ frontend/
 COPY tsconfig.json ./
-RUN yarn build
+RUN yarn build --env production
 
 # Use the official linuxserver image as base — all config, volumes, PUID/PGID work unchanged
 FROM lscr.io/linuxserver/sonarr:latest
