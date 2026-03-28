@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import Icon from 'Components/Icon';
 import Link from 'Components/Link/Link';
 import { icons, sortDirections } from 'Helpers/Props';
@@ -41,13 +41,15 @@ function TableHeaderCell({
       ? icons.SORT_ASCENDING
       : icons.SORT_DESCENDING;
 
-  const ariaSortValue = isSorting
-    ? sortDirection === sortDirections.ASCENDING
-      ? ('ascending' as const)
-      : ('descending' as const)
-    : isSortable
-      ? ('none' as const)
-      : undefined;
+  const ariaSortValue = useMemo(() => {
+    if (!isSortable) {
+      return undefined;
+    }
+    if (!isSorting) {
+      return 'none';
+    }
+    return sortDirection === sortDirections.ASCENDING ? 'ascending' : 'descending';
+  }, [isSorting, sortDirection, isSortable]);
 
   const handlePress = useCallback(() => {
     if (fixedSortDirection) {
