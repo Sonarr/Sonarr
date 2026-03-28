@@ -1,114 +1,69 @@
 import React, { useCallback, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { createSelector } from 'reselect';
-import AppState from 'App/State/AppState';
-import Alert from 'Components/Alert';
 import Form from 'Components/Form/Form';
 import FormGroup from 'Components/Form/FormGroup';
 import FormInputGroup from 'Components/Form/FormInputGroup';
 import FormLabel from 'Components/Form/FormLabel';
 import Button from 'Components/Link/Button';
 import SpinnerErrorButton from 'Components/Link/SpinnerErrorButton';
-import LoadingIndicator from 'Components/Loading/LoadingIndicator';
 import ModalBody from 'Components/Modal/ModalBody';
 import ModalContent from 'Components/Modal/ModalContent';
 import ModalFooter from 'Components/Modal/ModalFooter';
 import ModalHeader from 'Components/Modal/ModalHeader';
 import usePrevious from 'Helpers/Hooks/usePrevious';
 import { inputTypes, kinds } from 'Helpers/Props';
-import {
-  saveImportListExclusion,
-  setImportListExclusionValue,
-} from 'Store/Actions/settingsActions';
-import selectSettings from 'Store/Selectors/selectSettings';
-import ImportListExclusion from 'typings/ImportListExclusion';
 import { InputChanged } from 'typings/inputs';
-import { PendingSection } from 'typings/pending';
 import translate from 'Utilities/String/translate';
+import { useManageImportListExclusion } from './useImportListExclusions';
 import styles from './EditImportListExclusionModalContent.css';
-
-const newImportListExclusion = {
-  title: '',
-  tvdbId: 0,
-};
-
-function createImportListExclusionSelector(id?: number) {
-  return createSelector(
-    (state: AppState) => state.settings.importListExclusions,
-    (importListExclusions) => {
-      const { isFetching, error, isSaving, saveError, pendingChanges, items } =
-        importListExclusions;
-
-      const mapping = id
-        ? items.find((i) => i.id === id)!
-        : newImportListExclusion;
-      const settings = selectSettings(mapping, pendingChanges, saveError);
-
-      return {
-        isFetching,
-        error,
-        isSaving,
-        saveError,
-        item: settings.settings as PendingSection<ImportListExclusion>,
-        ...settings,
-      };
-    }
-  );
-}
 
 interface EditImportListExclusionModalContentProps {
   id?: number;
+  title?: string;
+  tvdbId?: number;
   onModalClose: () => void;
   onDeleteImportListExclusionPress?: () => void;
 }
 
 function EditImportListExclusionModalContent({
   id,
+  title: existingTitle,
+  tvdbId: existingTvdbId,
   onModalClose,
   onDeleteImportListExclusionPress,
 }: EditImportListExclusionModalContentProps) {
-  const { isFetching, isSaving, item, error, saveError, ...otherProps } =
-    useSelector(createImportListExclusionSelector(id));
+  const {
+    item,
+    isSaving,
+    saveError,
+    validationErrors,
+    validationWarnings,
+    updateValue,
+    save,
+  } = useManageImportListExclusion({
+    id,
+    title: existingTitle,
+    tvdbId: existingTvdbId,
+  });
 
   const { title, tvdbId } = item;
-
-  const dispatch = useDispatch();
-  const previousIsSaving = usePrevious(isSaving);
-
-  const dispatchSetImportListExclusionValue = (payload: {
-    name: string;
-    value: string | number;
-  }) => {
-    // @ts-expect-error 'setImportListExclusionValue' isn't typed yet
-    dispatch(setImportListExclusionValue(payload));
-  };
+  const wasSaving = usePrevious(isSaving);
 
   useEffect(() => {
-    if (!id) {
-      Object.entries(newImportListExclusion).forEach(([name, value]) => {
-        dispatchSetImportListExclusionValue({ name, value });
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    if (previousIsSaving && !isSaving && !saveError) {
+    if (wasSaving && !isSaving && !saveError) {
       onModalClose();
     }
-  }, [previousIsSaving, isSaving, saveError, onModalClose]);
+  }, [isSaving, wasSaving, saveError, onModalClose]);
 
-  const onSavePress = useCallback(() => {
-    dispatch(saveImportListExclusion({ id }));
-  }, [dispatch, id]);
-
-  const onInputChange = useCallback(
-    (change: InputChanged) => {
-      // @ts-expect-error 'setImportListExclusionValue' isn't typed yet
-      dispatch(setImportListExclusionValue(change));
+  const handleInputChange = useCallback(
+    ({ name, value }: InputChanged) => {
+      updateValue(name, value);
     },
-    [dispatch]
+    [updateValue]
   );
+
+  const handleSavePress = useCallback(() => {
+    save();
+  }, [save]);
 
   return (
     <ModalContent onModalClose={onModalClose}>
@@ -118,42 +73,35 @@ function EditImportListExclusionModalContent({
           : translate('AddImportListExclusion')}
       </ModalHeader>
 
-      <ModalBody className={styles.body}>
-        {isFetching ? <LoadingIndicator /> : null}
+      <ModalBody>
+        <Form
+          validationErrors={validationErrors}
+          validationWarnings={validationWarnings}
+        >
+          <FormGroup>
+            <FormLabel>{translate('Title')}</FormLabel>
 
-        {!isFetching && error ? (
-          <Alert kind={kinds.DANGER}>
-            {translate('AddImportListExclusionError')}
-          </Alert>
-        ) : null}
+            <FormInputGroup
+              type={inputTypes.TEXT}
+              name="title"
+              helpText={translate('SeriesTitleToExcludeHelpText')}
+              {...title}
+              onChange={handleInputChange}
+            />
+          </FormGroup>
 
-        {!isFetching && !error ? (
-          <Form {...otherProps}>
-            <FormGroup>
-              <FormLabel>{translate('Title')}</FormLabel>
+          <FormGroup>
+            <FormLabel>{translate('TvdbId')}</FormLabel>
 
-              <FormInputGroup
-                type={inputTypes.TEXT}
-                name="title"
-                helpText={translate('SeriesTitleToExcludeHelpText')}
-                {...title}
-                onChange={onInputChange}
-              />
-            </FormGroup>
-
-            <FormGroup>
-              <FormLabel>{translate('TvdbId')}</FormLabel>
-
-              <FormInputGroup
-                type={inputTypes.NUMBER}
-                name="tvdbId"
-                helpText={translate('TvdbIdExcludeHelpText')}
-                {...tvdbId}
-                onChange={onInputChange}
-              />
-            </FormGroup>
-          </Form>
-        ) : null}
+            <FormInputGroup
+              type={inputTypes.NUMBER}
+              name="tvdbId"
+              helpText={translate('TvdbIdExcludeHelpText')}
+              {...tvdbId}
+              onChange={handleInputChange}
+            />
+          </FormGroup>
+        </Form>
       </ModalBody>
 
       <ModalFooter>
@@ -172,7 +120,7 @@ function EditImportListExclusionModalContent({
         <SpinnerErrorButton
           isSpinning={isSaving}
           error={saveError}
-          onPress={onSavePress}
+          onPress={handleSavePress}
         >
           {translate('Save')}
         </SpinnerErrorButton>

@@ -4,7 +4,6 @@ import AppSectionState, {
   AppSectionListState,
   AppSectionSaveState,
   AppSectionSchemaState,
-  PagedAppSectionState,
 } from 'App/State/AppSectionState';
 import AutoTagging, { AutoTaggingSpecification } from 'typings/AutoTagging';
 import CustomFormat from 'typings/CustomFormat';
@@ -12,7 +11,6 @@ import CustomFormatSpecification from 'typings/CustomFormatSpecification';
 import DelayProfile from 'typings/DelayProfile';
 import DownloadClient from 'typings/DownloadClient';
 import ImportList from 'typings/ImportList';
-import ImportListExclusion from 'typings/ImportListExclusion';
 import ImportListOptionsSettings from 'typings/ImportListOptionsSettings';
 import DownloadClientOptions from 'typings/Settings/DownloadClientOptions';
 
@@ -71,14 +69,6 @@ export interface ImportListOptionsSettingsAppState
   extends AppSectionItemState<ImportListOptionsSettings>,
     AppSectionSaveState {}
 
-export interface ImportListExclusionsSettingsAppState
-  extends AppSectionState<ImportListExclusion>,
-    AppSectionSaveState,
-    PagedAppSectionState,
-    AppSectionDeleteState {
-  pendingChanges: Partial<ImportListExclusion>;
-}
-
 interface SettingsAppState {
   autoTaggings: AutoTaggingAppState;
   autoTaggingSpecifications: AutoTaggingSpecificationAppState;
@@ -87,7 +77,6 @@ interface SettingsAppState {
   delayProfiles: DelayProfileAppState;
   downloadClients: DownloadClientAppState;
   downloadClientOptions: DownloadClientOptionsAppState;
-  importListExclusions: ImportListExclusionsSettingsAppState;
   importListOptions: ImportListOptionsSettingsAppState;
   importLists: ImportListAppState;
 }

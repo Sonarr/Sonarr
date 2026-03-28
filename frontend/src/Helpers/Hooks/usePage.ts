@@ -7,6 +7,7 @@ interface PageStore {
   cutoffUnmet: number;
   events: number;
   history: number;
+  importListExclusion: number;
   missing: number;
   queue: number;
 }
@@ -16,6 +17,7 @@ const pageStore = create<PageStore>(() => ({
   cutoffUnmet: 1,
   events: 1,
   history: 1,
+  importListExclusion: 1,
   missing: 1,
   queue: 1,
 }));
