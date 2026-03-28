@@ -34,8 +34,15 @@ namespace NzbDrone.Core.Datastore.Converters
 
     public class LanguageIntConverter : JsonConverter<Language>
     {
+        public override bool HandleNull => true;
+
         public override Language Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
+            if (reader.TokenType == JsonTokenType.Null)
+            {
+                return Language.Unknown;
+            }
+
             var item = reader.GetInt32();
             return (Language)item;
         }
