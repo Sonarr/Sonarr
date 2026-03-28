@@ -18,7 +18,7 @@ export interface UiSettingsModel {
   uiLanguage: number;
 }
 
-const PATH = '/config/ui';
+const PATH = '/settings/ui';
 
 export const useUiSettingsValues = () => {
   const { data } = useSettings<UiSettingsModel>(PATH);
