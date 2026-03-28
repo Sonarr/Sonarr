@@ -122,13 +122,17 @@ export const useSaveProviderSettings = <T extends ModelBase>(
     },
     onSuccess: (updatedSettings: T) => {
       queryClient.setQueryData<T[]>([path], (oldData = []) => {
-        if (id) {
-          return oldData.map((item) =>
-            item.id === updatedSettings.id ? updatedSettings : item
-          );
+        const existingIndex = oldData.findIndex(
+          (item) => item.id === updatedSettings.id
+        );
+
+        if (existingIndex === -1) {
+          return [...oldData, updatedSettings];
         }
 
-        return [...oldData, updatedSettings];
+        return oldData.map((item) =>
+          item.id === updatedSettings.id ? updatedSettings : item
+        );
       });
       onSuccess?.(updatedSettings);
     },
