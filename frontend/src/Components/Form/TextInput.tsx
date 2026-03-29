@@ -6,7 +6,6 @@ import React, {
   SyntheticEvent,
   useCallback,
   useEffect,
-  useImperativeHandle,
   useRef,
 } from 'react';
 import { FileInputChanged, InputChanged } from 'typings/inputs';
@@ -41,11 +40,7 @@ export interface FileInputProps extends CommonTextInputProps {
   onChange: (change: FileInputChanged) => void;
 }
 
-export interface TextInputHandle {
-  focus: () => void;
-}
-
-const TextInput = forwardRef<TextInputHandle, TextInputProps | FileInputProps>(
+const TextInput = forwardRef<HTMLInputElement, TextInputProps | FileInputProps>(
   (
     {
       className = styles.input,
@@ -71,12 +66,18 @@ const TextInput = forwardRef<TextInputHandle, TextInputProps | FileInputProps>(
   ) => {
     const inputRef = useRef<HTMLInputElement>(null);
 
-    useImperativeHandle(
-      ref,
-      () => ({
-        focus: () => inputRef.current?.focus(),
-      }),
-      []
+    const setRef = useCallback(
+      (node: HTMLInputElement | null) => {
+        (inputRef as React.MutableRefObject<HTMLInputElement | null>).current =
+          node;
+        if (typeof ref === 'function') {
+          ref(node);
+        } else if (ref) {
+          (ref as React.MutableRefObject<HTMLInputElement | null>).current =
+            node;
+        }
+      },
+      [ref]
     );
 
     const selectionTimeout = useRef<ReturnType<typeof setTimeout>>();
@@ -171,7 +172,7 @@ const TextInput = forwardRef<TextInputHandle, TextInputProps | FileInputProps>(
 
     return (
       <input
-        ref={inputRef}
+        ref={setRef}
         type={type}
         readOnly={readOnly}
         autoFocus={autoFocus}
