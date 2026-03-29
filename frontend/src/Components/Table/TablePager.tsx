@@ -130,7 +130,10 @@ function TablePager({
             {isShowingPageSelect ? null : (
               <Link
                 isDisabled={totalPages === 1}
-                aria-label={translate('PagerGoToPage', { page, totalPages: totalPages ?? 0 })}
+                aria-label={translate('PagerGoToPage', {
+                  page,
+                  totalPages: totalPages ?? 0,
+                })}
                 onPress={handleOpenPageSelectClick}
               >
                 {page} / {totalPages}

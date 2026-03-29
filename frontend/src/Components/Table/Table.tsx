@@ -95,7 +95,10 @@ function Table({
                     canModifyColumns={canModifyColumns}
                     onTableOptionChange={onTableOptionChange}
                   >
-                    <IconButton name={icons.ADVANCED_SETTINGS} aria-label={translate('AdvancedSettings')} />
+                    <IconButton
+                      name={icons.ADVANCED_SETTINGS}
+                      aria-label={translate('AdvancedSettings')}
+                    />
                   </TableOptionsModalWrapper>
                 </TableHeaderCell>
               );

@@ -10,6 +10,7 @@ import {
 import { DateFilterValue, FilterType } from 'Helpers/Props/filterTypes';
 import { InputChanged } from 'typings/inputs';
 import sortByProp from 'Utilities/Array/sortByProp';
+import translate from 'Utilities/String/translate';
 import BoolFilterBuilderRowValue from './BoolFilterBuilderRowValue';
 import DateFilterBuilderRowValue from './DateFilterBuilderRowValue';
 import DefaultFilterBuilderRowValue from './DefaultFilterBuilderRowValue';
@@ -25,7 +26,6 @@ import SeriesFilterBuilderRowValue from './SeriesFilterBuilderRowValue';
 import SeriesStatusFilterBuilderRowValue from './SeriesStatusFilterBuilderRowValue';
 import SeriesTypeFilterBuilderRowValue from './SeriesTypeFilterBuilderRowValue';
 import TagFilterBuilderRowValue from './TagFilterBuilderRowValue';
-import translate from 'Utilities/String/translate';
 import styles from './FilterBuilderRow.css';
 
 function getselectedFilterBuilderProp<T>(
@@ -306,7 +306,11 @@ function FilterBuilderRow<T>({
           onPress={handleRemovePress}
         />
 
-        <IconButton name={icons.ADD} aria-label={translate('Add')} onPress={handleAddPress} />
+        <IconButton
+          name={icons.ADD}
+          aria-label={translate('Add')}
+          onPress={handleAddPress}
+        />
       </div>
     </div>
   );

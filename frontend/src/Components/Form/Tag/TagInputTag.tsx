@@ -4,8 +4,8 @@ import IconButton from 'Components/Link/IconButton';
 import Link from 'Components/Link/Link';
 import MiddleTruncate from 'Components/MiddleTruncate';
 import { icons } from 'Helpers/Props';
-import { TagBase } from './TagInput';
 import translate from 'Utilities/String/translate';
+import { TagBase } from './TagInput';
 import styles from './TagInputTag.css';
 
 export interface DeletedTag<T extends TagBase> {

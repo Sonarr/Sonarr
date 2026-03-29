@@ -67,7 +67,9 @@ function AddNewSeriesSearchResult({ series }: AddNewSeriesSearchResultProps) {
     <div className={styles.searchResult}>
       <Link
         className={styles.underlay}
-        aria-label={isExistingSeries ? title : translate('AddSeriesWithTitle', { title })}
+        aria-label={
+          isExistingSeries ? title : translate('AddSeriesWithTitle', { title })
+        }
         {...linkProps}
       />
 

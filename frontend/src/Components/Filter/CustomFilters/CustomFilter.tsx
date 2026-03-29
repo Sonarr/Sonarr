@@ -59,7 +59,11 @@ function CustomFilter({
       <div className={styles.label}>{label}</div>
 
       <div className={styles.actions}>
-        <IconButton name={icons.EDIT} aria-label={translate('Edit')} onPress={handleEditPress} />
+        <IconButton
+          name={icons.EDIT}
+          aria-label={translate('Edit')}
+          onPress={handleEditPress}
+        />
 
         <SpinnerIconButton
           title={translate('RemoveFilter')}

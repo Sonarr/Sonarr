@@ -48,7 +48,9 @@ function TableHeaderCell({
     if (!isSorting) {
       return 'none';
     }
-    return sortDirection === sortDirections.ASCENDING ? 'ascending' : 'descending';
+    return sortDirection === sortDirections.ASCENDING
+      ? 'ascending'
+      : 'descending';
   }, [isSorting, sortDirection, isSortable]);
 
   const handlePress = useCallback(() => {
@@ -77,7 +79,9 @@ function TableHeaderCell({
       )}
     </Link>
   ) : (
-    <th className={className} scope="col">{children}</th>
+    <th className={className} scope="col">
+      {children}
+    </th>
   );
 }
 
