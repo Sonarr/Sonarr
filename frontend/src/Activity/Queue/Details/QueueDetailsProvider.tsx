@@ -46,7 +46,7 @@ export function useQueueItemForEpisode(episodeId: number) {
   const queue = useContext(QueueDetailsContext);
 
   return useMemo(() => {
-    return queue?.find((item) => item.episodeIds.includes(episodeId));
+    return queue?.find((item) => item.episodeIds?.includes(episodeId));
   }, [episodeId, queue]);
 }
 
