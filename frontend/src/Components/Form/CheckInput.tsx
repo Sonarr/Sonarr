@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, { SyntheticEvent, useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import Icon from 'Components/Icon';
 import { icons } from 'Helpers/Props';
 import { Kind } from 'Helpers/Props/kinds';
@@ -7,7 +7,7 @@ import { CheckInputChanged } from 'typings/inputs';
 import FormInputHelpText from './FormInputHelpText';
 import styles from './CheckInput.css';
 
-interface ChangeEvent<T = Element> extends SyntheticEvent<T, MouseEvent> {
+interface ChangeEvent<T = Element> extends React.SyntheticEvent<T, MouseEvent> {
   target: EventTarget & T;
 }
 
@@ -41,6 +41,7 @@ function CheckInput(props: CheckInputProps) {
   } = props;
 
   const inputRef = useRef<HTMLInputElement>(null);
+  const shiftKeyRef = useRef(false);
 
   const isChecked = value === checkedValue;
   const isUnchecked = value === uncheckedValue;
@@ -61,25 +62,15 @@ function CheckInput(props: CheckInputProps) {
     [name, value, checkedValue, uncheckedValue, onChange]
   );
 
-  const handleClick = useCallback(
-    (event: SyntheticEvent<HTMLElement, MouseEvent>) => {
-      if (isDisabled) {
-        return;
-      }
-
-      const shiftKey = event.nativeEvent.shiftKey;
-      const checked = !(inputRef.current?.checked ?? false);
-
-      event.preventDefault();
-      toggleChecked(checked, shiftKey);
-    },
-    [isDisabled, toggleChecked]
-  );
+  const handleLabelClick = useCallback((event: React.MouseEvent) => {
+    shiftKeyRef.current = event.nativeEvent.shiftKey;
+  }, []);
 
   const handleChange = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
       const checked = event.target.checked;
-      const shiftKey = event.nativeEvent.shiftKey;
+      const shiftKey = shiftKeyRef.current;
+      shiftKeyRef.current = false;
 
       toggleChecked(checked, shiftKey);
     },
@@ -97,7 +88,7 @@ function CheckInput(props: CheckInputProps) {
 
   return (
     <div className={containerClassName}>
-      <label className={styles.label} onClick={handleClick}>
+      <label className={styles.label} onClick={handleLabelClick}>
         <input
           ref={inputRef}
           className={styles.checkbox}
