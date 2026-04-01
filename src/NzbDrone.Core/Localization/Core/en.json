@@ -1121,7 +1121,7 @@
   "InteractiveSearchGrabError": "Failed to add to download queue",
   "InteractiveSearchModalHeader": "Interactive Search",
   "InteractiveSearchModalHeaderSeason": "Interactive Search - {season}",
-  "InteractiveSearchResultsSeriesFailedErrorMessage": "Search failed because its {message}. Try refreshing the series info and verify the necessary information is present before searching again.",
+  "InteractiveSearchResultsSeriesFailedErrorMessage": "Search failed because {message}. Try refreshing the series info and verify the necessary information is present before searching again. Check disk I/O and/or admin permissions.",
   "InteractiveSearchSeason": "Interactive search for all episodes in this season",
   "Interval": "Interval",
   "InvalidFormat": "Invalid Format",
