@@ -1054,10 +1054,27 @@ namespace NzbDrone.Core.Parser
                     }
                 }
 
-                // If more than 1 season was parsed set IsMultiSeason to true so it can be rejected later
+                // If more than 1 season was parsed set IsMultiSeason to true
                 if (seasons.Distinct().Count() > 1)
                 {
                     result.IsMultiSeason = true;
+
+                    var distinctSeasons = seasons.Distinct().OrderBy(s => s).ToArray();
+
+                    if (distinctSeasons.Length == 2)
+                    {
+                        // Range format (e.g., S01-S09) where regex captures only endpoints, expand to full range
+                        result.SeasonNumbers = Enumerable.Range(distinctSeasons[0], distinctSeasons[1] - distinctSeasons[0] + 1).ToArray();
+                    }
+                    else
+                    {
+                        // Discrete seasons explicitly named (e.g., S01 S03 S05), keep as-is
+                        result.SeasonNumbers = distinctSeasons;
+                    }
+                }
+                else if (seasons.Any())
+                {
+                    result.SeasonNumbers = seasons.Distinct().ToArray();
                 }
 
                 if (seasons.Any())
