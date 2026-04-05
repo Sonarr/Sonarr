@@ -6,6 +6,7 @@ using NLog;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Instrumentation.Extensions;
+using NzbDrone.Core.Configuration;
 using NzbDrone.Core.CustomFormats;
 using NzbDrone.Core.Download;
 using NzbDrone.Core.Download.TrackedDownloads;
@@ -42,6 +43,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
         private readonly IMediaFileService _mediaFileService;
         private readonly ICustomFormatCalculationService _formatCalculator;
         private readonly ILocalEpisodeCustomFormatCalculationService _localEpisodeFormatCalculator;
+        private readonly IConfigService _configService;
         private readonly IEventAggregator _eventAggregator;
         private readonly Logger _logger;
 
@@ -58,6 +60,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
                                    IMediaFileService mediaFileService,
                                    ILocalEpisodeCustomFormatCalculationService localEpisodeFormatCalculator,
                                    ICustomFormatCalculationService formatCalculator,
+                                   IConfigService configService,
                                    IEventAggregator eventAggregator,
                                    Logger logger)
         {
@@ -74,6 +77,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
             _mediaFileService = mediaFileService;
             _localEpisodeFormatCalculator = localEpisodeFormatCalculator;
             _formatCalculator = formatCalculator;
+            _configService = configService;
             _eventAggregator = eventAggregator;
             _logger = logger;
         }
@@ -486,6 +490,16 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
         {
             _logger.ProgressTrace("Manually importing {0} files using mode {1}", message.Files.Count, message.ImportMode);
 
+            var importMode = message.ImportMode;
+
+            // When ImportMode is Auto and CopyUsingHardlinks is enabled, default to Copy
+            // to preserve original files for seeding and use hardlinks instead of moving.
+            if (importMode == ImportMode.Auto && _configService.CopyUsingHardlinks)
+            {
+                importMode = ImportMode.Copy;
+                _logger.Debug("ImportMode Auto resolved to Copy because CopyUsingHardlinks is enabled");
+            }
+
             var imported = new List<ImportResult>();
             var importedTrackedDownload = new List<ManuallyImportedFile>();
             var importedUntrackedDownload = new List<ImportResult>();
@@ -550,14 +564,14 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport.Manual
 
                 if (trackedDownload == null)
                 {
-                    var importResult = _importApprovedEpisodes.Import(new List<ImportDecision> { importDecision }, !existingFile, null, message.ImportMode);
+                    var importResult = _importApprovedEpisodes.Import(new List<ImportDecision> { importDecision }, !existingFile, null, importMode);
 
                     imported.AddRange(importResult);
                     importedUntrackedDownload.AddRange(importResult);
                 }
                 else
                 {
-                    var importResult = _importApprovedEpisodes.Import(new List<ImportDecision> { importDecision }, true, trackedDownload.DownloadItem, message.ImportMode).First();
+                    var importResult = _importApprovedEpisodes.Import(new List<ImportDecision> { importDecision }, true, trackedDownload.DownloadItem, importMode).First();
 
                     imported.Add(importResult);
 
