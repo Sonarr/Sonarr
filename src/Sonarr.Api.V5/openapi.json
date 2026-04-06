@@ -623,11 +623,18 @@
         ],
         "parameters": [
           {
-            "name": "forceSave",
+            "name": "skipTesting",
             "in": "query",
             "schema": {
               "type": "boolean",
               "default": false
+            }
+          },
+          {
+            "name": "skipValidation",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/SkipValidation"
             }
           }
         ],
@@ -670,11 +677,18 @@
             }
           },
           {
-            "name": "forceSave",
+            "name": "skipTesting",
             "in": "query",
             "schema": {
               "type": "boolean",
               "default": false
+            }
+          },
+          {
+            "name": "skipValidation",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/SkipValidation"
             }
           }
         ],
@@ -779,11 +793,10 @@
         ],
         "parameters": [
           {
-            "name": "forceTest",
+            "name": "skipValidation",
             "in": "query",
             "schema": {
-              "type": "boolean",
-              "default": false
+              "$ref": "#/components/schemas/SkipValidation"
             }
           }
         ],
@@ -2058,11 +2071,18 @@
         ],
         "parameters": [
           {
-            "name": "forceSave",
+            "name": "skipTesting",
             "in": "query",
             "schema": {
               "type": "boolean",
               "default": false
+            }
+          },
+          {
+            "name": "skipValidation",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/SkipValidation"
             }
           }
         ],
@@ -2105,11 +2125,18 @@
             }
           },
           {
-            "name": "forceSave",
+            "name": "skipTesting",
             "in": "query",
             "schema": {
               "type": "boolean",
               "default": false
+            }
+          },
+          {
+            "name": "skipValidation",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/SkipValidation"
             }
           }
         ],
@@ -2261,11 +2288,10 @@
         ],
         "parameters": [
           {
-            "name": "forceTest",
+            "name": "skipValidation",
             "in": "query",
             "schema": {
-              "type": "boolean",
-              "default": false
+              "$ref": "#/components/schemas/SkipValidation"
             }
           }
         ],
@@ -2359,6 +2385,101 @@
                   "items": {
                     "$ref": "#/components/schemas/IndexerFlagResource"
                   }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/settings/indexer": {
+      "get": {
+        "tags": [
+          "IndexerSettings"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IndexerSettingsResource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v5/settings/indexer/{id}": {
+      "put": {
+        "tags": [
+          "IndexerSettings"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IndexerSettingsResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/IndexerSettingsResource"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IndexerSettingsResource"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IndexerSettingsResource"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "IndexerSettings"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IndexerSettingsResource"
                 }
               }
             }
@@ -2842,11 +2963,18 @@
         ],
         "parameters": [
           {
-            "name": "forceSave",
+            "name": "skipTesting",
             "in": "query",
             "schema": {
               "type": "boolean",
               "default": false
+            }
+          },
+          {
+            "name": "skipValidation",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/SkipValidation"
             }
           }
         ],
@@ -2889,11 +3017,18 @@
             }
           },
           {
-            "name": "forceSave",
+            "name": "skipTesting",
             "in": "query",
             "schema": {
               "type": "boolean",
               "default": false
+            }
+          },
+          {
+            "name": "skipValidation",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/SkipValidation"
             }
           }
         ],
@@ -2998,11 +3133,10 @@
         ],
         "parameters": [
           {
-            "name": "forceTest",
+            "name": "skipValidation",
             "in": "query",
             "schema": {
-              "type": "boolean",
-              "default": false
+              "$ref": "#/components/schemas/SkipValidation"
             }
           }
         ],
@@ -7691,6 +7825,32 @@
         },
         "additionalProperties": false
       },
+      "IndexerSettingsResource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "minimumAge": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "retention": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "maximumSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rssSyncInterval": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
       "Language": {
         "type": "object",
         "properties": {
@@ -7862,6 +8022,10 @@
             "format": "int32"
           },
           "path": {
+            "type": "string",
+            "nullable": true
+          },
+          "relativePath": {
             "type": "string",
             "nullable": true
           },
@@ -10283,6 +10447,14 @@
         ],
         "type": "string"
       },
+      "SkipValidation": {
+        "enum": [
+          "none",
+          "warnings",
+          "all"
+        ],
+        "type": "string"
+      },
       "SortDirection": {
         "enum": [
           "default",
@@ -10864,6 +11036,9 @@
     },
     {
       "name": "IndexerFlag"
+    },
+    {
+      "name": "IndexerSettings"
     },
     {
       "name": "Language"
