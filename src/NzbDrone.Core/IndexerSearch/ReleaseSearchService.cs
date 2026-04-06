@@ -421,13 +421,16 @@ namespace NzbDrone.Core.IndexerSearch
                 downloadDecisions.AddRange(decisions);
             }
 
-            if (downloadDecisions.Any())
+            // Only skip per-episode fallback if we got approved season results.
+            // Indexers like AB return all results for a title regardless of season
+            // params, so raw result count alone is not reliable.
+            if (downloadDecisions.Any(d => d.Approved))
             {
-                _logger.Debug("Season search returned results for {0}, skipping per-episode search for {1} episodes", series.Title, episodesToSearch.Count);
+                _logger.Debug("Season search returned approved results for {0}, skipping per-episode search for {1} episodes", series.Title, episodesToSearch.Count);
             }
             else
             {
-                _logger.Debug("No season results for {0}, falling back to per-episode search for {1} episodes", series.Title, episodesToSearch.Count);
+                _logger.Debug("No approved season results for {0}, falling back to per-episode search for {1} episodes", series.Title, episodesToSearch.Count);
 
                 foreach (var episode in episodesToSearch)
                 {
