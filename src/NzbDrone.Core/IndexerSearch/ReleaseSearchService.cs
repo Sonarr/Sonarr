@@ -421,9 +421,18 @@ namespace NzbDrone.Core.IndexerSearch
                 downloadDecisions.AddRange(decisions);
             }
 
-            foreach (var episode in episodesToSearch)
+            if (downloadDecisions.Any())
             {
-                downloadDecisions.AddRange(await SearchAnime(series, episode, monitoredOnly, userInvokedSearch, interactiveSearch, true));
+                _logger.Debug("Season search returned results for {0}, skipping per-episode search for {1} episodes", series.Title, episodesToSearch.Count);
+            }
+            else
+            {
+                _logger.Debug("No season results for {0}, falling back to per-episode search for {1} episodes", series.Title, episodesToSearch.Count);
+
+                foreach (var episode in episodesToSearch)
+                {
+                    downloadDecisions.AddRange(await SearchAnime(series, episode, monitoredOnly, userInvokedSearch, interactiveSearch, true));
+                }
             }
 
             return DeDupeDecisions(downloadDecisions);
