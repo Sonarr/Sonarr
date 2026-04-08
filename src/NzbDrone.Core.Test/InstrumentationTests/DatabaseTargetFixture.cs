@@ -100,7 +100,7 @@ namespace NzbDrone.Core.Test.InstrumentationTests
         public void null_string_as_arg_should_not_fail()
         {
             var epFile = new EpisodeFile();
-            _logger.Debug("File {0} no longer exists on disk. removing from database.", epFile.RelativePath);
+            _logger.Debug("File {RelativePath} no longer exists on disk. removing from database.", epFile.RelativePath);
 
             Thread.Sleep(1000);
 

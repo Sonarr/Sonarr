@@ -50,7 +50,7 @@ namespace Sonarr.Api.V3.Indexers
         [Consumes("application/json")]
         public ActionResult<List<ReleaseResource>> Create([FromBody] ReleaseResource release)
         {
-            _logger.Info("Release pushed: {0} - {1}", release.Title, release.DownloadUrl ?? release.MagnetUrl);
+            _logger.Info("Release pushed: {Title} - {DownloadUrl}", release.Title, release.DownloadUrl ?? release.MagnetUrl);
 
             ValidateResource(release);
 
@@ -87,11 +87,11 @@ namespace Sonarr.Api.V3.Indexers
 
             if (indexer == null)
             {
-                _logger.Debug("Push Release {0} not associated with an indexer.", release.Title);
+                _logger.Debug("Push Release {Title} not associated with an indexer.", release.Title);
             }
             else
             {
-                _logger.Debug("Push Release {0} associated with indexer '{1} ({2})", release.Title, indexer.Name, indexer.Id);
+                _logger.Debug("Push Release {Title} associated with indexer '{IndexerName} ({IndexerId})", release.Title, indexer.Name, indexer.Id);
 
                 release.IndexerId = indexer.Id;
                 release.Indexer = indexer.Name;
@@ -104,11 +104,11 @@ namespace Sonarr.Api.V3.Indexers
 
             if (downloadClient == null)
             {
-                _logger.Debug("Push Release {0} not associated with a download client.", release.Title);
+                _logger.Debug("Push Release {Title} not associated with a download client.", release.Title);
             }
             else
             {
-                _logger.Debug("Push Release {0} associated with download client '{1} ({2})", release.Title, downloadClient.Name, downloadClient.Id);
+                _logger.Debug("Push Release {Title} associated with download client '{DownloadClientName} ({DownloadClientId})", release.Title, downloadClient.Name, downloadClient.Id);
             }
 
             return downloadClient?.Id;
