@@ -49,7 +49,7 @@ namespace NzbDrone.Common.Disk
             sourcePath = ResolveRealParentPath(sourcePath);
             targetPath = ResolveRealParentPath(targetPath);
 
-            _logger.Debug("{0} Directory [{1}] > [{2}]", mode, sourcePath, targetPath);
+            _logger.Debug("{TransferMode} Directory [{SourcePath}] > [{TargetPath}]", mode, sourcePath, targetPath);
 
             if (sourcePath == targetPath)
             {
@@ -60,19 +60,19 @@ namespace NzbDrone.Common.Disk
             {
                 // Move folder out of the way to allow case-insensitive renames
                 var tempPath = sourcePath + ".backup~";
-                _logger.Trace("Rename Intermediate Directory [{0}] > [{1}]", sourcePath, tempPath);
+                _logger.Trace("Rename Intermediate Directory [{SourcePath}] > [{TargetPath}]", sourcePath, tempPath);
                 _diskProvider.MoveFolder(sourcePath, tempPath);
 
                 if (!_diskProvider.FolderExists(targetPath))
                 {
-                    _logger.Trace("Rename Intermediate Directory [{0}] > [{1}]", tempPath, targetPath);
-                    _logger.Debug("Rename Directory [{0}] > [{1}]", sourcePath, targetPath);
+                    _logger.Trace("Rename Intermediate Directory [{SourcePath}] > [{TargetPath}]", tempPath, targetPath);
+                    _logger.Debug("Rename Directory [{SourcePath}] > [{TargetPath}]", sourcePath, targetPath);
                     _diskProvider.MoveFolder(tempPath, targetPath);
                     return mode;
                 }
 
                 // There were two separate folders, revert the intermediate rename and let the recursion deal with it
-                _logger.Trace("Rename Intermediate Directory [{0}] > [{1}]", tempPath, sourcePath);
+                _logger.Trace("Rename Intermediate Directory [{SourcePath}] > [{TargetPath}]", tempPath, sourcePath);
                 _diskProvider.MoveFolder(tempPath, sourcePath);
             }
 
@@ -84,7 +84,7 @@ namespace NzbDrone.Common.Disk
                 // If we're on the same mount, do a simple folder move.
                 if (sourceMount != null && targetMount != null && sourceMount.RootDirectory == targetMount.RootDirectory)
                 {
-                    _logger.Debug("Rename Directory [{0}] > [{1}]", sourcePath, targetPath);
+                    _logger.Debug("Rename Directory [{SourcePath}] > [{TargetPath}]", sourcePath, targetPath);
                     _diskProvider.MoveFolder(sourcePath, targetPath);
                     return mode;
                 }
@@ -146,7 +146,7 @@ namespace NzbDrone.Common.Disk
             sourcePath = ResolveRealParentPath(sourcePath);
             targetPath = ResolveRealParentPath(targetPath);
 
-            _logger.Debug("Mirror Folder [{0}] > [{1}]", sourcePath, targetPath);
+            _logger.Debug("Mirror Folder [{SourcePath}] > [{TargetPath}]", sourcePath, targetPath);
 
             if (!_diskProvider.FolderExists(targetPath))
             {
@@ -261,7 +261,7 @@ namespace NzbDrone.Common.Disk
             sourcePath = ResolveRealParentPath(sourcePath);
             targetPath = ResolveRealParentPath(targetPath);
 
-            _logger.Debug("{0} [{1}] > [{2}]", mode, sourcePath, targetPath);
+            _logger.Debug("{TransferMode} [{SourcePath}] > [{TargetPath}]", mode, sourcePath, targetPath);
 
             var originalSize = _diskProvider.GetFileSize(sourcePath);
 
@@ -351,9 +351,9 @@ namespace NzbDrone.Common.Disk
             {
                 if (isCifs && !isSameMount)
                 {
-                    _logger.Trace("On cifs mount. Starting verified copy [{0}] to [{1}].", sourcePath, targetPath);
+                    _logger.Trace("On cifs mount. Starting verified copy [{SourcePath}] to [{TargetPath}].", sourcePath, targetPath);
                     TryCopyFileVerified(sourcePath, targetPath, originalSize);
-                    _logger.Trace("Copy successful, deleting source [{0}].", sourcePath);
+                    _logger.Trace("Copy successful, deleting source [{SourcePath}].", sourcePath);
                     _diskProvider.DeleteFile(sourcePath);
                     return TransferMode.Move;
                 }
@@ -384,7 +384,7 @@ namespace NzbDrone.Common.Disk
         {
             try
             {
-                _logger.Debug("Rolling back incomplete file move [{0}] to [{1}].", sourcePath, targetPath);
+                _logger.Debug("Rolling back incomplete file move [{SourcePath}] to [{TargetPath}].", sourcePath, targetPath);
 
                 WaitForIO();
 
@@ -394,12 +394,12 @@ namespace NzbDrone.Common.Disk
                 }
                 else
                 {
-                    _logger.Error("Failed to properly rollback the file move [{0}] to [{1}], incomplete file may be left in target path.", sourcePath, targetPath);
+                    _logger.Error("Failed to properly rollback the file move [{SourcePath}] to [{TargetPath}], incomplete file may be left in target path.", sourcePath, targetPath);
                 }
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "Failed to properly rollback the file move [{0}] to [{1}], incomplete file may be left in target path.", sourcePath, targetPath);
+                _logger.Error(ex, "Failed to properly rollback the file move [{SourcePath}] to [{TargetPath}], incomplete file may be left in target path.", sourcePath, targetPath);
             }
         }
 
@@ -407,7 +407,7 @@ namespace NzbDrone.Common.Disk
         {
             try
             {
-                _logger.Debug("Rolling back file move [{0}] to [{1}].", sourcePath, targetPath);
+                _logger.Debug("Rolling back file move [{SourcePath}] to [{TargetPath}].", sourcePath, targetPath);
 
                 WaitForIO();
 
@@ -415,7 +415,7 @@ namespace NzbDrone.Common.Disk
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "Failed to properly rollback the file move [{0}] to [{1}], file may be left in target path.", sourcePath, targetPath);
+                _logger.Error(ex, "Failed to properly rollback the file move [{SourcePath}] to [{TargetPath}], file may be left in target path.", sourcePath, targetPath);
             }
         }
 
@@ -423,7 +423,7 @@ namespace NzbDrone.Common.Disk
         {
             try
             {
-                _logger.Debug("Rolling back file copy [{0}] to [{1}].", sourcePath, targetPath);
+                _logger.Debug("Rolling back file copy [{SourcePath}] to [{TargetPath}].", sourcePath, targetPath);
 
                 WaitForIO();
 
@@ -434,7 +434,7 @@ namespace NzbDrone.Common.Disk
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "Failed to properly rollback the file copy [{0}] to [{1}], file may be left in target path.", sourcePath, targetPath);
+                _logger.Error(ex, "Failed to properly rollback the file copy [{SourcePath}] to [{TargetPath}], file may be left in target path.", sourcePath, targetPath);
             }
         }
 
@@ -485,7 +485,7 @@ namespace NzbDrone.Common.Disk
                 return;
             }
 
-            _logger.Debug("File {0} incomplete, waiting in case filesystem is not synchronized. [{1}] was {2} bytes long instead of the expected {3}.", action, targetPath, targetSize, originalSize);
+            _logger.Debug("File {Action} incomplete, waiting in case filesystem is not synchronized. [{TargetPath}] was {ActualSize} bytes long instead of the expected {ExpectedSize}.", action, targetPath, targetSize, originalSize);
             WaitForIO();
             targetSize = _diskProvider.GetFileSize(targetPath);
 
@@ -501,7 +501,7 @@ namespace NzbDrone.Common.Disk
         {
             if (folder.Name.StartsWith(".nfs"))
             {
-                _logger.Trace("Ignoring folder {0}", folder.FullName);
+                _logger.Trace("Ignoring folder {FolderPath}", folder.FullName);
                 return true;
             }
 
@@ -512,7 +512,7 @@ namespace NzbDrone.Common.Disk
         {
             if (file.Name.StartsWith(".nfs") || file.Name == "debug.log" || file.Name.EndsWith(".socket"))
             {
-                _logger.Trace("Ignoring file {0}", file.FullName);
+                _logger.Trace("Ignoring file {FilePath}", file.FullName);
                 return true;
             }
 

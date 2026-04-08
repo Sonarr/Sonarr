@@ -37,7 +37,7 @@ namespace NzbDrone.Common
 
         public virtual bool ServiceExist(string name)
         {
-            _logger.Debug("Checking if service {0} exists.", name);
+            _logger.Debug("Checking if service {ServiceName} exists.", name);
             return
                 ServiceController.GetServices().Any(
                     s => string.Equals(s.ServiceName, name, StringComparison.InvariantCultureIgnoreCase));
@@ -45,7 +45,7 @@ namespace NzbDrone.Common
 
         public virtual bool IsServiceRunning(string name)
         {
-            _logger.Debug("Checking if '{0}' service is running", name);
+            _logger.Debug("Checking if '{ServiceName}' service is running", name);
 
             var service = ServiceController.GetServices()
                 .SingleOrDefault(s => string.Equals(s.ServiceName, name, StringComparison.InvariantCultureIgnoreCase));
@@ -59,7 +59,7 @@ namespace NzbDrone.Common
 
         public virtual void Install(string serviceName)
         {
-            _logger.Info("Installing service '{0}'", serviceName);
+            _logger.Info("Installing service '{ServiceName}'", serviceName);
 
             var args = $"create {serviceName} " +
                 $"DisplayName= \"{serviceName}\" " +
@@ -94,14 +94,14 @@ namespace NzbDrone.Common
 
         public virtual void Uninstall(string serviceName)
         {
-            _logger.Info("Uninstalling {0} service", serviceName);
+            _logger.Info("Uninstalling {ServiceName} service", serviceName);
 
             Stop(serviceName);
 
             var output = _processProvider.StartAndCapture("sc.exe", $"delete {serviceName}");
             _logger.Info(output.Lines.Select(x => x.Content).ConcatToString("\n"));
 
-            _logger.Info("{0} successfully uninstalled", serviceName);
+            _logger.Info("{ServiceName} successfully uninstalled", serviceName);
         }
 
         public virtual void Run(ServiceBase service)
@@ -116,15 +116,15 @@ namespace NzbDrone.Common
 
         public virtual void Stop(string serviceName)
         {
-            _logger.Info("Stopping {0} Service...", serviceName);
+            _logger.Info("Stopping {ServiceName} Service...", serviceName);
             var service = GetService(serviceName);
             if (service == null)
             {
-                _logger.Warn("Unable to stop {0}. no service with that name exists.", serviceName);
+                _logger.Warn("Unable to stop {ServiceName}. no service with that name exists.", serviceName);
                 return;
             }
 
-            _logger.Info("Service is currently {0}", service.Status);
+            _logger.Info("Service is currently {ServiceStatus}", service.Status);
 
             if (service.Status != ServiceControllerStatus.Stopped)
             {
@@ -134,16 +134,16 @@ namespace NzbDrone.Common
                 service.Refresh();
                 if (service.Status == ServiceControllerStatus.Stopped)
                 {
-                    _logger.Info("{0} has stopped successfully.", serviceName);
+                    _logger.Info("{ServiceName} has stopped successfully.", serviceName);
                 }
                 else
                 {
-                    _logger.Error("Service stop request has timed out. {0}", service.Status);
+                    _logger.Error("Service stop request has timed out. {ServiceStatus}", service.Status);
                 }
             }
             else
             {
-                _logger.Warn("Service {0} is already in stopped state.", service.ServiceName);
+                _logger.Warn("Service {ServiceName} is already in stopped state.", service.ServiceName);
             }
         }
 
@@ -154,17 +154,17 @@ namespace NzbDrone.Common
 
         public void Start(string serviceName)
         {
-            _logger.Info("Starting {0} Service...", serviceName);
+            _logger.Info("Starting {ServiceName} Service...", serviceName);
             var service = GetService(serviceName);
             if (service == null)
             {
-                _logger.Warn("Unable to start '{0}' no service with that name exists.", serviceName);
+                _logger.Warn("Unable to start '{ServiceName}' no service with that name exists.", serviceName);
                 return;
             }
 
             if (service.Status != ServiceControllerStatus.Paused && service.Status != ServiceControllerStatus.Stopped)
             {
-                _logger.Warn("Service is in a state that can't be started. Current status: {0}", service.Status);
+                _logger.Warn("Service is in a state that can't be started. Current status: {ServiceStatus}", service.Status);
             }
 
             service.Start();
@@ -174,11 +174,11 @@ namespace NzbDrone.Common
 
             if (service.Status == ServiceControllerStatus.Running)
             {
-                _logger.Info("{0} has started successfully.", serviceName);
+                _logger.Info("{ServiceName} has started successfully.", serviceName);
             }
             else
             {
-                _logger.Error("Service start request has timed out. {0}", service.Status);
+                _logger.Error("Service start request has timed out. {ServiceStatus}", service.Status);
             }
         }
 

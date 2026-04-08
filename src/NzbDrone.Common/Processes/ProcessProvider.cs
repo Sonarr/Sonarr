@@ -70,17 +70,17 @@ namespace NzbDrone.Common.Processes
 
         public ProcessInfo GetProcessById(int id)
         {
-            _logger.Debug("Finding process with Id:{0}", id);
+            _logger.Debug("Finding process with Id:{ProcessId}", id);
 
             var processInfo = ConvertToProcessInfo(Process.GetProcesses().FirstOrDefault(p => p.Id == id));
 
             if (processInfo == null)
             {
-                _logger.Warn("Unable to find process with ID {0}", id);
+                _logger.Warn("Unable to find process with ID {ProcessId}", id);
             }
             else
             {
-                _logger.Debug("Found process {0}", processInfo.ToString());
+                _logger.Debug("Found process {ProcessInfo}", processInfo.ToString());
             }
 
             return processInfo;
@@ -93,7 +93,7 @@ namespace NzbDrone.Common.Processes
 
         public void OpenDefaultBrowser(string url)
         {
-            _logger.Info("Opening URL [{0}]", url);
+            _logger.Info("Opening URL [{Url}]", url);
 
             var process = new Process
             {
@@ -129,7 +129,7 @@ namespace NzbDrone.Common.Processes
                 {
                     try
                     {
-                        _logger.Trace("Setting environment variable '{0}' to '{1}'", environmentVariable.Key, environmentVariable.Value);
+                        _logger.Trace("Setting environment variable '{EnvKey}' to '{EnvValue}'", environmentVariable.Key, environmentVariable.Value);
 
                         var key = environmentVariable.Key.ToString();
                         var value = environmentVariable.Value?.ToString();
@@ -140,11 +140,11 @@ namespace NzbDrone.Common.Processes
                     {
                         if (environmentVariable.Value == null)
                         {
-                            _logger.Error(e, "Unable to set environment variable '{0}', value is null", environmentVariable.Key);
+                            _logger.Error(e, "Unable to set environment variable '{EnvKey}', value is null", environmentVariable.Key);
                         }
                         else
                         {
-                            _logger.Error(e, "Unable to set environment variable '{0}'", environmentVariable.Key);
+                            _logger.Error(e, "Unable to set environment variable '{EnvKey}'", environmentVariable.Key);
                         }
 
                         throw;
@@ -152,7 +152,7 @@ namespace NzbDrone.Common.Processes
                 }
             }
 
-            logger.Debug("Starting {0} {1}", path, args);
+            logger.Debug("Starting {ProcessPath} {ProcessArgs}", path, args);
 
             var process = new Process
             {
@@ -201,7 +201,7 @@ namespace NzbDrone.Common.Processes
         {
             (path, args) = GetPathAndArgs(path, args);
 
-            _logger.Debug("Starting {0} {1}", path, args);
+            _logger.Debug("Starting {ProcessPath} {ProcessArgs}", path, args);
 
             var startInfo = new ProcessStartInfo(path, args);
             startInfo.CreateNoWindow = noWindow;
@@ -234,7 +234,7 @@ namespace NzbDrone.Common.Processes
 
         public void WaitForExit(Process process)
         {
-            _logger.Debug("Waiting for process {0} to exit.", process.ProcessName);
+            _logger.Debug("Waiting for process {ProcessName} to exit.", process.ProcessName);
 
             process.WaitForExit();
         }
@@ -243,7 +243,7 @@ namespace NzbDrone.Common.Processes
         {
             var process = Process.GetProcessById(processId);
 
-            _logger.Info("Updating [{0}] process priority from {1} to {2}",
+            _logger.Info("Updating [{ProcessName}] process priority from {CurrentPriority} to {NewPriority}",
                         process.ProcessName,
                         process.PriorityClass,
                         priority);
@@ -257,7 +257,7 @@ namespace NzbDrone.Common.Processes
 
             if (process == null)
             {
-                _logger.Warn("Cannot find process with id: {0}", processId);
+                _logger.Warn("Cannot find process with id: {ProcessId}", processId);
                 return;
             }
 
@@ -269,28 +269,28 @@ namespace NzbDrone.Common.Processes
                 return;
             }
 
-            _logger.Info("[{0}]: Killing process", process.Id);
+            _logger.Info("[{ProcessId}]: Killing process", process.Id);
             process.Kill();
-            _logger.Info("[{0}]: Waiting for exit", process.Id);
+            _logger.Info("[{ProcessId}]: Waiting for exit", process.Id);
             process.WaitForExit();
-            _logger.Info("[{0}]: Process terminated successfully", process.Id);
+            _logger.Info("[{ProcessId}]: Process terminated successfully", process.Id);
         }
 
         public void KillAll(string processName)
         {
             var processes = GetProcessesByName(processName);
 
-            _logger.Debug("Found {0} processes to kill", processes.Count);
+            _logger.Debug("Found {ProcessCount} processes to kill", processes.Count);
 
             foreach (var processInfo in processes)
             {
                 if (processInfo.Id == GetCurrentProcessId())
                 {
-                    _logger.Debug("Tried killing own process, skipping: {0} [{1}]", processInfo.Id, processInfo.ProcessName);
+                    _logger.Debug("Tried killing own process, skipping: {ProcessId} [{ProcessName}]", processInfo.Id, processInfo.ProcessName);
                     continue;
                 }
 
-                _logger.Debug("Killing process: {0} [{1}]", processInfo.Id, processInfo.ProcessName);
+                _logger.Debug("Killing process: {ProcessId} [{ProcessName}]", processInfo.Id, processInfo.ProcessName);
                 Kill(processInfo.Id);
             }
         }
@@ -335,13 +335,13 @@ namespace NzbDrone.Common.Processes
         {
             var processes = Process.GetProcessesByName(name).ToList();
 
-            _logger.Debug("Found {0} processes with the name: {1}", processes.Count, name);
+            _logger.Debug("Found {ProcessCount} processes with the name: {ProcessName}", processes.Count, name);
 
             try
             {
                 foreach (var process in processes)
                 {
-                    _logger.Debug(" - [{0}] {1}", process.Id, process.ProcessName);
+                    _logger.Debug(" - [{ProcessId}] {ProcessName}", process.Id, process.ProcessName);
                 }
             }
             catch

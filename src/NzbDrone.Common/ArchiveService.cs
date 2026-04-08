@@ -26,7 +26,7 @@ namespace NzbDrone.Common
 
         public void Extract(string compressedFile, string destination)
         {
-            _logger.Debug("Extracting archive [{0}] to [{1}]", compressedFile, destination);
+            _logger.Debug("Extracting archive [{ArchivePath}] to [{Destination}]", compressedFile, destination);
 
             if (compressedFile.EndsWith(".zip", StringComparison.InvariantCultureIgnoreCase))
             {
@@ -42,7 +42,7 @@ namespace NzbDrone.Common
 
         public void CreateZip(string path, IEnumerable<string> files)
         {
-            _logger.Debug("Creating archive {0}", path);
+            _logger.Debug("Creating archive {ArchivePath}", path);
 
             using var zipFile = ZipFile.Create(path);
 
@@ -62,7 +62,7 @@ namespace NzbDrone.Common
             {
                 var zipFile = new ZipFile(fileStream);
 
-                _logger.Debug("Validating Archive {0}", compressedFile);
+                _logger.Debug("Validating Archive {ArchivePath}", compressedFile);
 
                 if (!zipFile.TestArchive(true, TestStrategy.FindFirstError, OnZipError))
                 {
@@ -121,7 +121,7 @@ namespace NzbDrone.Common
         {
             if (!string.IsNullOrWhiteSpace(message))
             {
-                _logger.Error("File {0} failed zip validation. {1}", status.File.Name, message);
+                _logger.Error("File {FileName} failed zip validation. {ValidationMessage}", status.File.Name, message);
             }
         }
     }

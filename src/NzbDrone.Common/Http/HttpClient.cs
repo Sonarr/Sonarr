@@ -77,7 +77,7 @@ namespace NzbDrone.Common.Http
                     request.Url += new HttpUri(response.Headers.GetSingleValue("Location"));
                     autoRedirectChain.Add(request.Url.ToString());
 
-                    _logger.Trace("Redirected to {0}", request.Url);
+                    _logger.Trace("Redirected to {Url}", request.Url);
 
                     if (autoRedirectChain.Count > MaxRedirects)
                     {
@@ -99,14 +99,14 @@ namespace NzbDrone.Common.Http
 
             if (response.HasHttpRedirect && !RuntimeInfo.IsProduction)
             {
-                _logger.Error("Server requested a redirect to [{0}] while in developer mode. Update the request URL to avoid this redirect.", response.Headers["Location"]);
+                _logger.Error("Server requested a redirect to [{RedirectUrl}] while in developer mode. Update the request URL to avoid this redirect.", response.Headers["Location"]);
             }
 
             if (!request.SuppressHttpError && response.HasHttpError && (request.SuppressHttpErrorStatusCodes == null || !request.SuppressHttpErrorStatusCodes.Contains(response.StatusCode)))
             {
                 if (request.LogHttpError)
                 {
-                    _logger.Warn("HTTP Error - {0}", response);
+                    _logger.Warn("HTTP Error - {Response}", response);
                 }
 
                 if ((int)response.StatusCode == 429)
@@ -159,7 +159,7 @@ namespace NzbDrone.Common.Http
 
             stopWatch.Stop();
 
-            _logger.Trace("{0} ({1} ms)", response, stopWatch.ElapsedMilliseconds);
+            _logger.Trace("{Response} ({ElapsedMs} ms)", response, stopWatch.ElapsedMilliseconds);
 
             foreach (var interceptor in _requestInterceptors)
             {
@@ -168,7 +168,7 @@ namespace NzbDrone.Common.Http
 
             if (request.LogResponseContent && response.ResponseData != null)
             {
-                _logger.Trace("Response content ({0} bytes): {1}", response.ResponseData.Length, response.Content);
+                _logger.Trace("Response content ({ContentLength} bytes): {Content}", response.ResponseData.Length, response.Content);
             }
 
             return response;
@@ -256,7 +256,7 @@ namespace NzbDrone.Common.Http
                 }
                 catch (Exception ex)
                 {
-                    _logger.Debug(ex, "Invalid cookie in {0}", url);
+                    _logger.Debug(ex, "Invalid cookie in {Url}", url);
                 }
             }
         }
@@ -273,7 +273,7 @@ namespace NzbDrone.Common.Http
                     fileInfo.Directory.Create();
                 }
 
-                _logger.Debug("Downloading [{0}] to [{1}]", url, fileName);
+                _logger.Debug("Downloading [{Url}] to [{FileName}]", url, fileName);
 
                 var stopWatch = Stopwatch.StartNew();
                 await using (var fileStream = new FileStream(fileNamePart, FileMode.Create, FileAccess.ReadWrite))
@@ -298,7 +298,7 @@ namespace NzbDrone.Common.Http
                 }
 
                 File.Move(fileNamePart, fileName);
-                _logger.Debug("Downloading Completed. took {0:0}s", stopWatch.Elapsed.Seconds);
+                _logger.Debug("Downloading Completed. took {Elapsed:0}s", stopWatch.Elapsed.Seconds);
             }
             finally
             {

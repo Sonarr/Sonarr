@@ -189,7 +189,7 @@ namespace NzbDrone.Common.EnvironmentInfo
 
         private void MoveSqliteDatabase(string source, string destination)
         {
-            _logger.Info("Moving {0}* to {1}*", source, destination);
+            _logger.Info("Moving {SourcePath}* to {DestinationPath}*", source, destination);
 
             var dbSuffixes = new[] { "", "-shm", "-wal", "-journal" };
 

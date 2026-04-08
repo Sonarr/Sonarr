@@ -42,7 +42,7 @@ namespace NzbDrone.Common.TPL
 
             if (delay.TotalSeconds > 0.0)
             {
-                _logger.Trace("Rate Limit triggered, delaying '{0}' for {1:0.000} sec", key, delay.TotalSeconds);
+                _logger.Trace("Rate Limit triggered, delaying '{RateLimitKey}' for {DelaySeconds:0.000} sec", key, delay.TotalSeconds);
                 System.Threading.Thread.Sleep(delay);
             }
         }
@@ -53,7 +53,7 @@ namespace NzbDrone.Common.TPL
 
             if (delay.TotalSeconds > 0.0)
             {
-                _logger.Trace("Rate Limit triggered, delaying '{0}' for {1:0.000} sec", key, delay.TotalSeconds);
+                _logger.Trace("Rate Limit triggered, delaying '{RateLimitKey}' for {DelaySeconds:0.000} sec", key, delay.TotalSeconds);
                 await Task.Delay(delay);
             }
         }
