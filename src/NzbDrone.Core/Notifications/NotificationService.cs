@@ -108,7 +108,7 @@ namespace NzbDrone.Core.Notifications
                 return true;
             }
 
-            _logger.Debug("{0} does not have any intersecting tags with {1}. Notification will not be sent.", definition.Name, series.Title);
+            _logger.Debug("{NotificationName} does not have any intersecting tags with {SeriesTitle}. Notification will not be sent.", definition.Name, series.Title);
             return false;
         }
 
@@ -155,7 +155,7 @@ namespace NzbDrone.Core.Notifications
                 catch (Exception ex)
                 {
                     _notificationStatusService.RecordFailure(notification.Definition.Id);
-                    _logger.Error(ex, "Unable to send OnGrab notification to {0}", notification.Definition.Name);
+                    _logger.Error(ex, "Unable to send OnGrab notification to {NotificationName}", notification.Definition.Name);
                 }
             }
         }
@@ -376,7 +376,7 @@ namespace NzbDrone.Core.Notifications
                 catch (Exception ex)
                 {
                     _notificationStatusService.RecordFailure(notification.Definition.Id);
-                    _logger.Error(ex, "Unable to send OnManualInteractionRequired notification to {0}", notification.Definition.Name);
+                    _logger.Error(ex, "Unable to send OnManualInteractionRequired notification to {NotificationName}", notification.Definition.Name);
                 }
             }
         }

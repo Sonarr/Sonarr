@@ -180,7 +180,7 @@ namespace NzbDrone.Core.Notifications
             {
                 if (blockedNotifications.TryGetValue(notification.Definition.Id, out var notificationStatus))
                 {
-                    _logger.Debug("Temporarily ignoring notification {0} till {1} due to recent failures.", notification.Definition.Name, notificationStatus.DisabledTill.Value.ToLocalTime());
+                    _logger.Debug("Temporarily ignoring notification {NotificationName} till {DisabledTill} due to recent failures.", notification.Definition.Name, notificationStatus.DisabledTill.Value.ToLocalTime());
                     continue;
                 }
 

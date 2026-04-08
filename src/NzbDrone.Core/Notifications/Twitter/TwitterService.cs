@@ -74,14 +74,14 @@ namespace NzbDrone.Core.Notifications.Twitter
                     {
                         if (responseStream == null)
                         {
-                            _logger.Trace("Status Code: {0}", httpResponse.StatusCode);
+                            _logger.Trace("Status Code: {StatusCode}", httpResponse.StatusCode);
                             throw new TwitterException("Error received from Twitter: " + httpResponse.StatusCode, ex);
                         }
 
                         using (var reader = new StreamReader(responseStream))
                         {
                             var responseBody = reader.ReadToEnd();
-                            _logger.Trace("Response: {0} Status Code: {1}", responseBody, httpResponse.StatusCode);
+                            _logger.Trace("Response: {ResponseBody} Status Code: {StatusCode}", responseBody, httpResponse.StatusCode);
                             throw new TwitterException("Error received from Twitter: " + responseBody, ex);
                         }
                     }

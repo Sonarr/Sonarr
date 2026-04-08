@@ -119,21 +119,21 @@ namespace NzbDrone.Core.Notifications.Email
                 Text = body
             };
 
-            _logger.Debug("Sending email Subject: {0}", subject);
+            _logger.Debug("Sending email Subject: {Subject}", subject);
 
             try
             {
                 Send(email, settings);
-                _logger.Debug("Email sent. Subject: {0}", subject);
+                _logger.Debug("Email sent. Subject: {Subject}", subject);
             }
             catch (Exception ex)
             {
-                _logger.Error("Error sending email. Subject: {0}", email.Subject);
+                _logger.Error("Error sending email. Subject: {Subject}", email.Subject);
                 _logger.Debug(ex, ex.Message);
                 throw;
             }
 
-            _logger.Debug("Finished sending email. Subject: {0}", subject);
+            _logger.Debug("Finished sending email. Subject: {Subject}", subject);
         }
 
         private void Send(MimeMessage email, EmailSettings settings)
@@ -201,7 +201,7 @@ namespace NzbDrone.Core.Notifications.Email
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "{0} email address '{1}' invalid", type, address);
+                _logger.Error(ex, "{AddressType} email address '{EmailAddress}' invalid", type, address);
                 throw;
             }
         }

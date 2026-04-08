@@ -70,7 +70,7 @@ namespace NzbDrone.Core.Notifications.Pushcut
             }
             catch (HttpException exception)
             {
-                _logger.Error(exception, "Unable to send Pushcut notification: {0}", exception.Message);
+                _logger.Error(exception, "Unable to send Pushcut notification: {Message}", exception.Message);
                 throw new PushcutException("Unable to send Pushcut notification: {0}", exception.Message, exception);
             }
         }
@@ -87,7 +87,7 @@ namespace NzbDrone.Core.Notifications.Pushcut
             {
                 if (httpException.Response.StatusCode == HttpStatusCode.Forbidden)
                 {
-                    _logger.Error(pushcutException, "API Key is invalid: {0}", pushcutException.Message);
+                    _logger.Error(pushcutException, "API Key is invalid: {Message}", pushcutException.Message);
                     return new ValidationFailure("API Key", _localizationService.GetLocalizedString("NotificationsValidationInvalidApiKeyExceptionMessage", new Dictionary<string, object> { { "exceptionMessage", pushcutException.Message } }));
                 }
 
@@ -95,11 +95,11 @@ namespace NzbDrone.Core.Notifications.Pushcut
                 {
                     var response = Json.Deserialize<PushcutResponse>(httpException.Response.Content);
 
-                    _logger.Error(pushcutException, "Unable to send test notification. Response from Pushcut: {0}", response.Error);
+                    _logger.Error(pushcutException, "Unable to send test notification. Response from Pushcut: {ApiError}", response.Error);
                     return new ValidationFailure("Url", _localizationService.GetLocalizedString("NotificationsValidationUnableToSendTestMessageApiResponse", new Dictionary<string, object> { { "error", response.Error } }));
                 }
 
-                _logger.Error(pushcutException, "Unable to connect to Pushcut API. Server connection failed: ({0}) {1}", httpException.Response.StatusCode, pushcutException.Message);
+                _logger.Error(pushcutException, "Unable to connect to Pushcut API. Server connection failed: ({StatusCode}) {Message}", httpException.Response.StatusCode, pushcutException.Message);
                 return new ValidationFailure("Host", _localizationService.GetLocalizedString("NotificationsValidationUnableToConnectToApi", new Dictionary<string, object> { { "responseCode", httpException.Response.StatusCode }, { "exceptionMessage", pushcutException.Message } }));
             }
 

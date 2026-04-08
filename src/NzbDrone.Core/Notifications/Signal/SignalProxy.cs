@@ -74,12 +74,12 @@ namespace NzbDrone.Core.Notifications.Signal
             }
             catch (WebException ex)
             {
-                _logger.Error(ex, "Unable to send test message: {0}", ex.Message);
+                _logger.Error(ex, "Unable to send test message: {Message}", ex.Message);
                 return new ValidationFailure("Host", _localizationService.GetLocalizedString("NotificationsValidationUnableToSendTestMessage", new Dictionary<string, object> { { "exceptionMessage", ex.Message } }));
             }
             catch (HttpException ex)
             {
-                _logger.Error(ex, "Unable to send test message: {0}", ex.Message);
+                _logger.Error(ex, "Unable to send test message: {Message}", ex.Message);
 
                 if (ex.Response.StatusCode == HttpStatusCode.BadRequest)
                 {
@@ -113,7 +113,7 @@ namespace NzbDrone.Core.Notifications.Signal
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "Unable to send test message: {0}", ex.Message);
+                _logger.Error(ex, "Unable to send test message: {Message}", ex.Message);
                 return new ValidationFailure("Host", _localizationService.GetLocalizedString("NotificationsValidationUnableToSendTestMessage", new Dictionary<string, object> { { "exceptionMessage", ex.Message } }));
             }
 

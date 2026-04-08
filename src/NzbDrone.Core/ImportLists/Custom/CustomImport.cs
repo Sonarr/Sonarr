@@ -55,7 +55,7 @@ namespace NzbDrone.Core.ImportLists.Custom
             catch (Exception ex)
             {
                 anyFailure = true;
-                _logger.Debug(ex, "Failed to fetch data for list {0} ({1})", Definition.Name, Name);
+                _logger.Debug(ex, "Failed to fetch data for list {DefinitionName} ({ImportListName})", Definition.Name, Name);
 
                 _importListStatusService.RecordFailure(Definition.Id);
             }

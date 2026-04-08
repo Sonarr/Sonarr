@@ -38,7 +38,7 @@ namespace NzbDrone.Core.Notifications.Discord
             }
             catch (HttpException ex)
             {
-                _logger.Error(ex, "Unable to post payload {0}", payload);
+                _logger.Error(ex, "Unable to post payload {Payload}", payload);
                 throw new DiscordException("Unable to post payload", ex);
             }
         }

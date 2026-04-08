@@ -63,7 +63,7 @@ namespace NzbDrone.Core.ImportLists
             {
                 if (blockedImportLists.TryGetValue(importList.Definition.Id, out var blockedImportListStatus))
                 {
-                    _logger.Debug("Temporarily ignoring import list {0} till {1} due to recent failures.", importList.Definition.Name, blockedImportListStatus.DisabledTill.Value.ToLocalTime());
+                    _logger.Debug("Temporarily ignoring import list {ImportListName} till {DisabledTill} due to recent failures.", importList.Definition.Name, blockedImportListStatus.DisabledTill.Value.ToLocalTime());
                     continue;
                 }
 

@@ -61,7 +61,7 @@ namespace NzbDrone.Core.Notifications.Plex.Server
                     UpdateSections(series, sections, settings);
                 }
 
-                _logger.Debug("Finished sending Update Request to Plex Server (took {0} ms)", watch.ElapsedMilliseconds);
+                _logger.Debug("Finished sending Update Request to Plex Server (took {ElapsedMs} ms)", watch.ElapsedMilliseconds);
             }
             catch (Exception ex)
             {
@@ -72,7 +72,7 @@ namespace NzbDrone.Core.Notifications.Plex.Server
 
         private List<PlexSection> GetSections(PlexServerSettings settings)
         {
-            _logger.Debug("Getting sections from Plex host: {0}", settings.Host);
+            _logger.Debug("Getting sections from Plex host: {Host}", settings.Host);
 
             return _plexServerProxy.GetTvSections(settings).ToList();
         }
@@ -87,7 +87,7 @@ namespace NzbDrone.Core.Notifications.Plex.Server
 
         private Version GetVersion(PlexServerSettings settings)
         {
-            _logger.Debug("Getting version from Plex host: {0}", settings.Host);
+            _logger.Debug("Getting version from Plex host: {Host}", settings.Host);
 
             var rawVersion = _plexServerProxy.Version(settings);
             var version = new Version(Regex.Match(rawVersion, @"^(\d+[.-]){4}").Value.Trim('.', '-'));
@@ -112,12 +112,12 @@ namespace NzbDrone.Core.Notifications.Plex.Server
                     {
                         mappedPath = new OsPath(settings.MapTo) + (rootFolder - new OsPath(settings.MapFrom));
 
-                        _logger.Trace("Mapping Path from {0} to {1} for partial scan", rootFolder, mappedPath);
+                        _logger.Trace("Mapping Path from {RootFolder} to {MappedPath} for partial scan", rootFolder, mappedPath);
                     }
 
                     if (location.Path.PathEquals(mappedPath.FullPath))
                     {
-                        _logger.Debug("Updating matching section location, {0}", location.Path);
+                        _logger.Debug("Updating matching section location, {LocationPath}", location.Path);
                         UpdateSectionPath(seriesRelativePath, section, location, settings);
 
                         return;
@@ -145,7 +145,7 @@ namespace NzbDrone.Core.Notifications.Plex.Server
             // unless it's a Windows drive letter (S:\) that needs to be trimmed.
             var pathToUpdate = $"{location.Path.TrimEnd(separator)}{separator}{locationRelativePath}";
 
-            _logger.Debug("Updating section location, {0}", location.Path);
+            _logger.Debug("Updating section location, {LocationPath}", location.Path);
             _plexServerProxy.Update(section.Id, pathToUpdate, settings);
         }
 

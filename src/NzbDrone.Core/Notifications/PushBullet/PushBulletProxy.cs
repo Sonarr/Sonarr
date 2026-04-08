@@ -50,7 +50,7 @@ namespace NzbDrone.Core.Notifications.PushBullet
                     }
                     catch (PushBulletException ex)
                     {
-                        _logger.Error(ex, "Unable to send test message to {0}", channelTag);
+                        _logger.Error(ex, "Unable to send test message to {ChannelTag}", channelTag);
                         error = true;
                     }
                 }
@@ -69,7 +69,7 @@ namespace NzbDrone.Core.Notifications.PushBullet
                         }
                         catch (PushBulletException ex)
                         {
-                            _logger.Error(ex, "Unable to send test message to {0}", deviceId);
+                            _logger.Error(ex, "Unable to send test message to {DeviceId}", deviceId);
                             error = true;
                         }
                     }

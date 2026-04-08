@@ -110,11 +110,11 @@ namespace NzbDrone.Core.ImportLists
                 if (webException.Message.Contains("502") || webException.Message.Contains("503") ||
                     webException.Message.Contains("timed out"))
                 {
-                    _logger.Warn("{0} server is currently unavailable. {1} {2}", this, url, webException.Message);
+                    _logger.Warn("{ImportList} server is currently unavailable. {Url} {Message}", this, url, webException.Message);
                 }
                 else
                 {
-                    _logger.Warn("{0} {1} {2}", this, url, webException.Message);
+                    _logger.Warn("{ImportList} {Url} {Message}", this, url, webException.Message);
                 }
             }
             catch (TooManyRequestsException ex)
@@ -128,17 +128,17 @@ namespace NzbDrone.Core.ImportLists
                     _importListStatusService.RecordFailure(Definition.Id, TimeSpan.FromHours(1));
                 }
 
-                _logger.Warn("API Request Limit reached for {0}", this);
+                _logger.Warn("API Request Limit reached for {ImportList}", this);
             }
             catch (HttpException ex)
             {
                 _importListStatusService.RecordFailure(Definition.Id);
-                _logger.Warn("{0} {1}", this, ex.Message);
+                _logger.Warn("{ImportList} {Message}", this, ex.Message);
             }
             catch (RequestLimitReachedException)
             {
                 _importListStatusService.RecordFailure(Definition.Id, TimeSpan.FromHours(1));
-                _logger.Warn("API Request Limit reached for {0}", this);
+                _logger.Warn("API Request Limit reached for {ImportList}", this);
             }
             catch (CloudFlareCaptchaException ex)
             {
@@ -146,23 +146,23 @@ namespace NzbDrone.Core.ImportLists
                 ex.WithData("FeedUrl", url);
                 if (ex.IsExpired)
                 {
-                    _logger.Error(ex, "Expired CAPTCHA token for {0}, please refresh in import list settings.", this);
+                    _logger.Error(ex, "Expired CAPTCHA token for {ImportList}, please refresh in import list settings.", this);
                 }
                 else
                 {
-                    _logger.Error(ex, "CAPTCHA token required for {0}, check import list settings.", this);
+                    _logger.Error(ex, "CAPTCHA token required for {ImportList}, check import list settings.", this);
                 }
             }
             catch (ImportListException ex)
             {
                 _importListStatusService.RecordFailure(Definition.Id);
-                _logger.Warn(ex, "{0}", url);
+                _logger.Warn(ex, "{Url}", url);
             }
             catch (Exception ex)
             {
                 _importListStatusService.RecordFailure(Definition.Id);
                 ex.WithData("FeedUrl", url);
-                _logger.Error(ex, "An error occurred while processing feed. {0}", url);
+                _logger.Error(ex, "An error occurred while processing feed. {Url}", url);
             }
 
             return new ImportListFetchResult(CleanupListItems(releases), anyFailure);

@@ -26,7 +26,7 @@ namespace NzbDrone.Core.Notifications.Emby
             request.Headers.Add("X-MediaBrowser-Token", settings.ApiKey);
 
             var response = _httpClient.Get(request);
-            _logger.Trace("Response: {0}", response.Content);
+            _logger.Trace("Response: {ResponseContent}", response.Content);
         }
 
         public void Notify(MediaBrowserSettings settings, string title, string message)
@@ -105,7 +105,7 @@ namespace NzbDrone.Core.Notifications.Emby
                     return new HashSet<string>();
                 }
 
-                _logger.Trace("Found series by name/id: {0}", string.Join(" ", paths));
+                _logger.Trace("Found series by name/id: {Paths}", string.Join(" ", paths));
 
                 return paths.ToHashSet();
             }
@@ -144,7 +144,7 @@ namespace NzbDrone.Core.Notifications.Emby
             request.Headers.Add("X-MediaBrowser-Token", settings.ApiKey);
 
             var response = _httpClient.Get<T>(request);
-            _logger.Trace("Response: {0}", response.Content);
+            _logger.Trace("Response: {ResponseContent}", response.Content);
 
             CheckForError(response);
 
@@ -156,7 +156,7 @@ namespace NzbDrone.Core.Notifications.Emby
             request.Headers.Add("X-MediaBrowser-Token", settings.ApiKey);
 
             var response = _httpClient.Post(request);
-            _logger.Trace("Response: {0}", response.Content);
+            _logger.Trace("Response: {ResponseContent}", response.Content);
 
             CheckForError(response);
 
@@ -178,7 +178,7 @@ namespace NzbDrone.Core.Notifications.Emby
 
         private void CheckForError(HttpResponse response)
         {
-            _logger.Debug("Looking for error in response: {0}", response);
+            _logger.Debug("Looking for error in response: {Response}", response);
 
             // TODO: actually check for the error
         }

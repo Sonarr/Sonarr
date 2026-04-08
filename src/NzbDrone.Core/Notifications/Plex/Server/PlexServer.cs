@@ -71,7 +71,7 @@ namespace NzbDrone.Core.Notifications.Plex.Server
 
             if (Settings.UpdateLibrary)
             {
-                _logger.Debug("Scheduling library update for series {0} {1}", series.Id, series.Title);
+                _logger.Debug("Scheduling library update for series {SeriesId} {SeriesTitle}", series.Id, series.Title);
                 _updateQueue.Add(Settings.Host, series, false);
             }
         }
@@ -82,7 +82,7 @@ namespace NzbDrone.Core.Notifications.Plex.Server
             {
                 if (Settings.UpdateLibrary)
                 {
-                    _logger.Debug("Performing library update for {0} series", items.Count);
+                    _logger.Debug("Performing library update for {Count} series", items.Count);
                     _plexServerService.UpdateLibrary(items.Select(i => i.Series), Settings);
                 }
             });

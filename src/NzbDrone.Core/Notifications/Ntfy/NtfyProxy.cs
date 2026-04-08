@@ -48,7 +48,7 @@ namespace NzbDrone.Core.Notifications.Ntfy
                 }
                 catch (NtfyException ex)
                 {
-                    _logger.Error(ex, "Unable to send test message to {0}", topic);
+                    _logger.Error(ex, "Unable to send test message to {Topic}", topic);
                     error = true;
                 }
             }

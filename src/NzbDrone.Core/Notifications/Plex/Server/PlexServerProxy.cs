@@ -120,7 +120,7 @@ namespace NzbDrone.Core.Notifications.Plex.Server
 
             HttpResponse response;
 
-            _logger.Debug("Url: {0}", httpRequest.Url);
+            _logger.Debug("Url: {Url}", httpRequest.Url);
 
             try
             {

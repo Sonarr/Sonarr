@@ -41,7 +41,7 @@ namespace NzbDrone.Core.ImportLists
                 return result;
             }
 
-            _logger.Debug("Available import lists {0}", importLists.Count);
+            _logger.Debug("Available import lists {Count}", importLists.Count);
 
             var taskList = new List<Task>();
             var taskFactory = new TaskFactory(TaskCreationOptions.LongRunning, TaskContinuationOptions.None);
@@ -57,7 +57,7 @@ namespace NzbDrone.Core.ImportLists
 
                     if (DateTime.UtcNow < importListNextSync)
                     {
-                        _logger.Trace("Skipping refresh of Import List {0} ({1}) due to minimum refresh interval. Next sync after {2}", importList.Name, importListLocal.Definition.Name, importListNextSync);
+                        _logger.Trace("Skipping refresh of Import List {ImportListName} ({DefinitionName}) due to minimum refresh interval. Next sync after {NextSync}", importList.Name, importListLocal.Definition.Name, importListNextSync);
                         continue;
                     }
                 }
@@ -71,7 +71,7 @@ namespace NzbDrone.Core.ImportLists
 
                              lock (result)
                              {
-                                 _logger.Debug("Found {0} reports from {1} ({2})", importListReports.Count, importList.Name, importListLocal.Definition.Name);
+                                 _logger.Debug("Found {ReportCount} reports from {ImportListName} ({DefinitionName})", importListReports.Count, importList.Name, importListLocal.Definition.Name);
 
                                  if (!fetchResult.AnyFailure)
                                  {
@@ -86,7 +86,7 @@ namespace NzbDrone.Core.ImportLists
                          }
                          catch (Exception e)
                          {
-                             _logger.Error(e, "Error during Import List Sync of {0} ({1})", importList.Name, importListLocal.Definition.Name);
+                             _logger.Error(e, "Error during Import List Sync of {ImportListName} ({DefinitionName})", importList.Name, importListLocal.Definition.Name);
                          }
                      }).LogExceptions();
 
@@ -97,7 +97,7 @@ namespace NzbDrone.Core.ImportLists
 
             result.Series = result.Series.DistinctBy(r => new { r.TvdbId, r.ImdbId, r.Title }).ToList();
 
-            _logger.Debug("Found {0} total reports from {1} lists", result.Series.Count, importLists.Count);
+            _logger.Debug("Found {ReportCount} total reports from {ListCount} lists", result.Series.Count, importLists.Count);
 
             return result;
         }
@@ -110,7 +110,7 @@ namespace NzbDrone.Core.ImportLists
 
             if (importList == null || !definition.EnableAutomaticAdd)
             {
-                _logger.Debug("Import List {0} ({1}) is not enabled, skipping.", importList.Name, importList.Definition.Name);
+                _logger.Debug("Import List {ImportListName} ({DefinitionName}) is not enabled, skipping.", importList.Name, importList.Definition.Name);
                 return result;
             }
 
@@ -128,7 +128,7 @@ namespace NzbDrone.Core.ImportLists
 
                     lock (result)
                     {
-                        _logger.Debug("Found {0} reports from {1} ({2})", importListReports.Count, importList.Name, importListLocal.Definition.Name);
+                        _logger.Debug("Found {ReportCount} reports from {ImportListName} ({DefinitionName})", importListReports.Count, importList.Name, importListLocal.Definition.Name);
 
                         if (!fetchResult.AnyFailure)
                         {
@@ -145,7 +145,7 @@ namespace NzbDrone.Core.ImportLists
                 }
                 catch (Exception e)
                 {
-                    _logger.Error(e, "Error during Import List Sync of {0} ({1})", importList.Name, importListLocal.Definition.Name);
+                    _logger.Error(e, "Error during Import List Sync of {ImportListName} ({DefinitionName})", importList.Name, importListLocal.Definition.Name);
                 }
             }).LogExceptions();
 

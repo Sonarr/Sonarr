@@ -88,7 +88,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
             }
 
             var response = _httpClient.Execute(request);
-            _logger.Trace("Response: {0}", response.Content);
+            _logger.Trace("Response: {ResponseContent}", response.Content);
 
             CheckForError(response);
 
@@ -102,7 +102,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
                 throw new XbmcJsonException("Invalid response from XBMC, the response is not valid JSON");
             }
 
-            _logger.Trace("Looking for error in response, {0}", response.Content);
+            _logger.Trace("Looking for error in response, {ResponseContent}", response.Content);
 
             if (response.Content.StartsWith("{\"error\""))
             {

@@ -104,7 +104,7 @@ namespace NzbDrone.Core.ImportLists
 
         private void SyncList(ImportListDefinition definition)
         {
-            _logger.ProgressInfo("Starting Import List Refresh for List {0}", definition.Name);
+            _logger.ProgressInfo("Starting Import List Refresh for List {ImportListName}", definition.Name);
 
             var result = _listFetcherAndParser.FetchSingleList(definition);
 
@@ -126,7 +126,7 @@ namespace NzbDrone.Core.ImportLists
                 return;
             }
 
-            _logger.ProgressInfo("Processing {0} list items", items.Count);
+            _logger.ProgressInfo("Processing {Count} list items", items.Count);
 
             var reportNumber = 1;
 
@@ -136,7 +136,7 @@ namespace NzbDrone.Core.ImportLists
 
             foreach (var item in items)
             {
-                _logger.ProgressTrace("Processing list item {0}/{1}", reportNumber, items.Count);
+                _logger.ProgressTrace("Processing list item {ReportNumber}/{Count}", reportNumber, items.Count);
 
                 reportNumber++;
 
@@ -181,7 +181,7 @@ namespace NzbDrone.Core.ImportLists
 
                     if (mappedSeries == null)
                     {
-                        _logger.Debug("Rejected, unable to find matching TVDB ID for Anilist ID: {0} [{1}]", item.AniListId, item.Title);
+                        _logger.Debug("Rejected, unable to find matching TVDB ID for Anilist ID: {AniListId} [{Title}]", item.AniListId, item.Title);
 
                         continue;
                     }
@@ -198,7 +198,7 @@ namespace NzbDrone.Core.ImportLists
 
                     if (mappedSeries == null)
                     {
-                        _logger.Debug("Rejected, unable to find matching TVDB ID for MAL ID: {0} [{1}]", item.MalId, item.Title);
+                        _logger.Debug("Rejected, unable to find matching TVDB ID for MAL ID: {MalId} [{Title}]", item.MalId, item.Title);
 
                         continue;
                     }
@@ -209,7 +209,7 @@ namespace NzbDrone.Core.ImportLists
 
                 if (item.TvdbId == 0)
                 {
-                    _logger.Debug("[{0}] Rejected, unable to find TVDB ID", item.Title);
+                    _logger.Debug("[{Title}] Rejected, unable to find TVDB ID", item.Title);
                     continue;
                 }
 
@@ -218,14 +218,14 @@ namespace NzbDrone.Core.ImportLists
 
                 if (excludedSeries != null)
                 {
-                    _logger.Debug("{0} [{1}] Rejected due to list exclusion", item.TvdbId, item.Title);
+                    _logger.Debug("{TvdbId} [{Title}] Rejected due to list exclusion", item.TvdbId, item.Title);
                     continue;
                 }
 
                 // Break if Series Exists in DB
                 if (existingTvdbIds.Any(x => x == item.TvdbId))
                 {
-                    _logger.Debug("{0} [{1}] Rejected, series exists in database", item.TvdbId, item.Title);
+                    _logger.Debug("{TvdbId} [{Title}] Rejected, series exists in database", item.TvdbId, item.Title);
                     continue;
                 }
 
@@ -260,7 +260,7 @@ namespace NzbDrone.Core.ImportLists
 
             _addSeriesService.AddSeries(seriesToAdd, true);
 
-            _logger.ProgressInfo("Import List Sync Completed. Items found: {0}, Series added: {1}", items.Count, seriesToAdd.Count);
+            _logger.ProgressInfo("Import List Sync Completed. Items found: {ItemCount}, Series added: {SeriesCount}", items.Count, seriesToAdd.Count);
         }
 
         public void Execute(ImportListSyncCommand message)
@@ -313,15 +313,15 @@ namespace NzbDrone.Core.ImportLists
                     switch (_configService.ListSyncLevel)
                     {
                         case ListSyncLevelType.LogOnly:
-                            _logger.Info("{0} was in your library, but not found in your lists --> You might want to unmonitor or remove it", series);
+                            _logger.Info("{Series} was in your library, but not found in your lists --> You might want to unmonitor or remove it", series);
                             break;
                         case ListSyncLevelType.KeepAndUnmonitor when series.Monitored:
-                            _logger.Info("{0} was in your library, but not found in your lists --> Keeping in library but unmonitoring it", series);
+                            _logger.Info("{Series} was in your library, but not found in your lists --> Keeping in library but unmonitoring it", series);
                             series.Monitored = false;
                             seriesToUpdate.Add(series);
                             break;
                         case ListSyncLevelType.KeepAndTag when !series.Tags.Contains(_configService.ListSyncTag):
-                            _logger.Info("{0} was in your library, but not found in your lists --> Keeping in library but tagging it", series);
+                            _logger.Info("{Series} was in your library, but not found in your lists --> Keeping in library but tagging it", series);
                             series.Tags.Add(_configService.ListSyncTag);
                             seriesToUpdate.Add(series);
                             break;

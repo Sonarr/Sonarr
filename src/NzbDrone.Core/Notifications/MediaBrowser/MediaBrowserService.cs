@@ -61,7 +61,7 @@ namespace NzbDrone.Core.Notifications.Emby
         {
             try
             {
-                _logger.Debug("Testing connection to Emby/Jellyfin : {0}", settings.Address);
+                _logger.Debug("Testing connection to Emby/Jellyfin : {Address}", settings.Address);
                 _proxy.TestConnection(settings);
             }
             catch (HttpException ex)

@@ -358,12 +358,12 @@ namespace NzbDrone.Core.Notifications.CustomScript
 
         private ProcessOutput ExecuteScript(StringDictionary environmentVariables)
         {
-            _logger.Debug("Executing external script: {0}", Settings.Path);
+            _logger.Debug("Executing external script: {FilePath}", Settings.Path);
 
             var processOutput = _processProvider.StartAndCapture(Settings.Path, Settings.Arguments, environmentVariables);
 
-            _logger.Debug("Executed external script: {0} - Status: {1}", Settings.Path, processOutput.ExitCode);
-            _logger.Debug("Script Output: \r\n{0}", string.Join("\r\n", processOutput.Lines));
+            _logger.Debug("Executed external script: {FilePath} - Status: {ExitCode}", Settings.Path, processOutput.ExitCode);
+            _logger.Debug("Script Output: \r\n{ScriptOutput}", string.Join("\r\n", processOutput.Lines));
 
             return processOutput;
         }

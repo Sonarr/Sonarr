@@ -106,7 +106,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
         {
             _updateQueue.ProcessQueue(Settings.Host, (items) =>
             {
-                _logger.Debug("Performing library update for {0} series", items.Count);
+                _logger.Debug("Performing library update for {Count} series", items.Count);
 
                 items.ForEach(item =>
                 {
@@ -160,7 +160,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
         {
             if (Settings.UpdateLibrary || Settings.CleanLibrary)
             {
-                _logger.Debug("Scheduling library update for series {0} {1}", series.Id, series.Title);
+                _logger.Debug("Scheduling library update for series {SeriesId} {SeriesTitle}", series.Id, series.Title);
                 _updateQueue.Add(Settings.Host, series, clean);
             }
         }

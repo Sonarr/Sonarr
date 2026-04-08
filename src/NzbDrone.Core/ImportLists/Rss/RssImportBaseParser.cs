@@ -53,7 +53,7 @@ namespace NzbDrone.Core.ImportLists.Rss
                 {
                     itemEx.WithData("FeedUrl", importResponse.Request.Url);
                     itemEx.WithData("ItemTitle", item.Title());
-                    _logger.Error(itemEx, "An error occurred while processing feed item from {0}", importResponse.Request.Url);
+                    _logger.Error(itemEx, "An error occurred while processing feed item from {Url}", importResponse.Request.Url);
                 }
             }
 
@@ -90,7 +90,7 @@ namespace NzbDrone.Core.ImportLists.Rss
             catch (XmlException ex)
             {
                 var contentSample = importListResponse.Content.Substring(0, Math.Min(importListResponse.Content.Length, 512));
-                _logger.Debug("Truncated response content (originally {0} characters): {1}", importListResponse.Content.Length, contentSample);
+                _logger.Debug("Truncated response content (originally {ContentLength} characters): {ContentSample}", importListResponse.Content.Length, contentSample);
 
                 ex.WithData(importListResponse.HttpResponse);
 

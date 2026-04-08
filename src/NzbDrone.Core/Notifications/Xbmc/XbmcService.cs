@@ -91,18 +91,18 @@ namespace NzbDrone.Core.Notifications.Xbmc
 
                 if (seriesPath != null)
                 {
-                    _logger.Debug("Updating series {0} (Kodi path: {1}) on Kodi host: {2}", series, seriesPath, settings.Address);
+                    _logger.Debug("Updating series {Series} (Kodi path: {KodiPath}) on Kodi host: {Address}", series, seriesPath, settings.Address);
                 }
                 else
                 {
-                    _logger.Debug("Series {0} doesn't exist on Kodi host: {1}, Updating Entire Library", series, settings.Address);
+                    _logger.Debug("Series {Series} doesn't exist on Kodi host: {Address}, Updating Entire Library", series, settings.Address);
                 }
 
                 var response = _proxy.UpdateLibrary(settings, seriesPath);
 
                 if (!response.Equals("OK", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    _logger.Debug("Failed to update library for: {0}", settings.Address);
+                    _logger.Debug("Failed to update library for: {Address}", settings.Address);
                 }
             }
             catch (Exception ex)
@@ -118,7 +118,7 @@ namespace NzbDrone.Core.Notifications.Xbmc
                 return false;
             }
 
-            _logger.Debug("Determining if there are any active players on Kodi host: {0}", settings.Address);
+            _logger.Debug("Determining if there are any active players on Kodi host: {Address}", settings.Address);
             var activePlayers = _proxy.GetActivePlayers(settings);
 
             return activePlayers.Any(a => a.Type.Equals("video"));
