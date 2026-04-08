@@ -108,13 +108,13 @@ namespace NzbDrone.Core.Parser
 
                 if (!tvdbId.HasValue)
                 {
-                    _logger.Trace("Title {0} not matching any series.", title);
+                    _logger.Trace("Title {SeriesTitle} not matching any series.", title);
                     continue;
                 }
 
                 if (foundTvdbId.HasValue && tvdbId != foundTvdbId)
                 {
-                    _logger.Trace("Title {0} both matches tvdbid {1} and {2}, no series selected.", parsedEpisodeInfo.SeriesTitle, foundTvdbId, tvdbId);
+                    _logger.Trace("Title {SeriesTitle} both matches tvdbid {FoundTvdbId} and {TvdbId}, no series selected.", parsedEpisodeInfo.SeriesTitle, foundTvdbId, tvdbId);
                     return null;
                 }
 
@@ -354,7 +354,7 @@ namespace NzbDrone.Core.Parser
 
             if (series == null)
             {
-                _logger.Debug("No matching series {0}", releaseTitle);
+                _logger.Debug("No matching series {ReleaseTitle}", releaseTitle);
                 return null;
             }
 
@@ -395,7 +395,7 @@ namespace NzbDrone.Core.Parser
                     Special = true
                 };
 
-                _logger.Debug("Found special episode {0} for title '{1}'", info, releaseTitle);
+                _logger.Debug("Found special episode {EpisodeInfo} for title '{ReleaseTitle}'", info, releaseTitle);
                 return info;
             }
 
@@ -417,7 +417,7 @@ namespace NzbDrone.Core.Parser
 
                 if (series == null)
                 {
-                    _logger.Debug("No matching series {0}", parsedEpisodeInfo.SeriesTitle);
+                    _logger.Debug("No matching series {SeriesTitle}", parsedEpisodeInfo.SeriesTitle);
                     return null;
                 }
 
@@ -547,7 +547,7 @@ namespace NzbDrone.Core.Parser
 
             if (series == null)
             {
-                _logger.Debug("No matching series {0}", parsedEpisodeInfo.SeriesTitle);
+                _logger.Debug("No matching series {SeriesTitle}", parsedEpisodeInfo.SeriesTitle);
                 return null;
             }
 
@@ -632,7 +632,7 @@ namespace NzbDrone.Core.Parser
 
                 foreach (var episode in episodes)
                 {
-                    _logger.Debug("Using absolute episode number {0} for: {1} - TVDB: {2}x{3:00}",
+                    _logger.Debug("Using absolute episode number {AbsoluteEpisodeNumber} for: {SeriesTitle} - TVDB: {SeasonNumber}x{EpisodeNumber:00}",
                                 absoluteEpisodeNumber,
                                 series.Title,
                                 episode.SeasonNumber,
@@ -673,7 +673,7 @@ namespace NzbDrone.Core.Parser
 
                     if (episodes != null && episodes.Any())
                     {
-                        _logger.Debug("Using Scene to TVDB Mapping for: {0} - Scene: {1}x{2:00} - TVDB: {3}",
+                        _logger.Debug("Using Scene to TVDB Mapping for: {SeriesTitle} - Scene: {SceneSeasonNumber}x{SceneEpisodeNumber:00} - TVDB: {TvdbMapping}",
                                     series.Title,
                                     episodes.First().SceneSeasonNumber,
                                     episodes.First().SceneEpisodeNumber,
@@ -702,7 +702,7 @@ namespace NzbDrone.Core.Parser
                 }
                 else
                 {
-                    _logger.Debug("Unable to find {0}", parsedEpisodeInfo);
+                    _logger.Debug("Unable to find {ParsedEpisodeInfo}", parsedEpisodeInfo);
                 }
             }
 

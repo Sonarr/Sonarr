@@ -53,38 +53,38 @@ namespace NzbDrone.Core.Tv
             switch (monitoringOptions.Monitor)
             {
                 case MonitorTypes.All:
-                    _logger.Debug("[{0}] Monitoring all episodes", series.Title);
+                    _logger.Debug("[{SeriesTitle}] Monitoring all episodes", series.Title);
                     ToggleEpisodesMonitoredState(episodes, e => e.SeasonNumber > 0);
 
                     break;
 
                 case MonitorTypes.Future:
-                    _logger.Debug("[{0}] Monitoring future episodes", series.Title);
+                    _logger.Debug("[{SeriesTitle}] Monitoring future episodes", series.Title);
                     ToggleEpisodesMonitoredState(episodes, e => e.SeasonNumber > 0 && (!e.AirDateUtc.HasValue || e.AirDateUtc >= DateTime.UtcNow));
 
                     break;
 
                 case MonitorTypes.Missing:
-                    _logger.Debug("[{0}] Monitoring missing episodes", series.Title);
+                    _logger.Debug("[{SeriesTitle}] Monitoring missing episodes", series.Title);
                     ToggleEpisodesMonitoredState(episodes, e => e.SeasonNumber > 0 && !e.HasFile);
 
                     break;
 
                 case MonitorTypes.Existing:
-                    _logger.Debug("[{0}] Monitoring existing episodes", series.Title);
+                    _logger.Debug("[{SeriesTitle}] Monitoring existing episodes", series.Title);
                     ToggleEpisodesMonitoredState(episodes, e => e.SeasonNumber > 0 && e.HasFile);
 
                     break;
 
                 case MonitorTypes.Pilot:
-                    _logger.Debug("[{0}] Monitoring first episode episodes", series.Title);
+                    _logger.Debug("[{SeriesTitle}] Monitoring first episode episodes", series.Title);
                     ToggleEpisodesMonitoredState(episodes,
                         e => e.SeasonNumber > 0 && e.SeasonNumber == firstSeason && e.EpisodeNumber == 1);
 
                     break;
 
                 case MonitorTypes.FirstSeason:
-                    _logger.Debug("[{0}] Monitoring first season episodes", series.Title);
+                    _logger.Debug("[{SeriesTitle}] Monitoring first season episodes", series.Title);
                     ToggleEpisodesMonitoredState(episodes, e => e.SeasonNumber > 0 && e.SeasonNumber == firstSeason);
 
                     break;
@@ -93,14 +93,14 @@ namespace NzbDrone.Core.Tv
                 #pragma warning disable CS0612
                 case MonitorTypes.LatestSeason:
                 #pragma warning restore CS0612
-                    _logger.Debug("[{0}] Monitoring latest season episodes", series.Title);
+                    _logger.Debug("[{SeriesTitle}] Monitoring latest season episodes", series.Title);
 
                     ToggleEpisodesMonitoredState(episodes, e => e.SeasonNumber > 0 && e.SeasonNumber == lastSeason);
 
                     break;
 
                 case MonitorTypes.Recent:
-                    _logger.Debug("[{0}] Monitoring recent and future episodes", series.Title);
+                    _logger.Debug("[{SeriesTitle}] Monitoring recent and future episodes", series.Title);
 
                     ToggleEpisodesMonitoredState(episodes, e => e.SeasonNumber > 0 &&
                                                                 (!e.AirDateUtc.HasValue || (
@@ -111,19 +111,19 @@ namespace NzbDrone.Core.Tv
                     break;
 
                 case MonitorTypes.MonitorSpecials:
-                    _logger.Debug("[{0}] Monitoring special episodes", series.Title);
+                    _logger.Debug("[{SeriesTitle}] Monitoring special episodes", series.Title);
                     ToggleEpisodesMonitoredState(episodes.Where(e => e.SeasonNumber == 0), true);
 
                     break;
 
                 case MonitorTypes.UnmonitorSpecials:
-                    _logger.Debug("[{0}] Unmonitoring special episodes", series.Title);
+                    _logger.Debug("[{SeriesTitle}] Unmonitoring special episodes", series.Title);
                     ToggleEpisodesMonitoredState(episodes.Where(e => e.SeasonNumber == 0), false);
 
                     break;
 
                 case MonitorTypes.None:
-                    _logger.Debug("[{0}] Unmonitoring all episodes", series.Title);
+                    _logger.Debug("[{SeriesTitle}] Unmonitoring all episodes", series.Title);
                     ToggleEpisodesMonitoredState(episodes, e => false);
 
                     break;
@@ -174,7 +174,7 @@ namespace NzbDrone.Core.Tv
 
         private void LegacySetEpisodeMonitoredStatus(Series series, MonitoringOptions monitoringOptions)
         {
-            _logger.Debug("[{0}] Setting episode monitored status.", series.Title);
+            _logger.Debug("[{SeriesTitle}] Setting episode monitored status.", series.Title);
 
             var episodes = _episodeService.GetEpisodeBySeries(series.Id);
 
@@ -210,7 +210,7 @@ namespace NzbDrone.Core.Tv
 
                 if (!season.Monitored)
                 {
-                    _logger.Debug("Unmonitoring all episodes in season {0}", season.SeasonNumber);
+                    _logger.Debug("Unmonitoring all episodes in season {SeasonNumber}", season.SeasonNumber);
                     ToggleEpisodesMonitoredState(episodes.Where(e => e.SeasonNumber == season.SeasonNumber), false);
                 }
 
@@ -220,7 +220,7 @@ namespace NzbDrone.Core.Tv
                 {
                     if (episodes.Where(e => e.SeasonNumber == season.SeasonNumber).All(e => !e.Monitored))
                     {
-                        _logger.Debug("Unmonitoring season {0} because all episodes are not monitored", season.SeasonNumber);
+                        _logger.Debug("Unmonitoring season {SeasonNumber} because all episodes are not monitored", season.SeasonNumber);
                         season.Monitored = false;
                     }
                 }

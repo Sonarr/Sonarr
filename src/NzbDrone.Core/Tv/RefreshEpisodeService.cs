@@ -28,7 +28,7 @@ namespace NzbDrone.Core.Tv
 
         public void RefreshEpisodeInfo(Series series, IEnumerable<Episode> remoteEpisodes)
         {
-            _logger.Info("Starting episode info refresh for: {0}", series);
+            _logger.Info("Starting episode info refresh for: {SeriesTitle}", series);
             var successCount = 0;
             var failCount = 0;
 
@@ -110,7 +110,7 @@ namespace NzbDrone.Core.Tv
                 }
                 catch (Exception e)
                 {
-                    _logger.Fatal(e, "An error has occurred while updating episode info for series {0}. {1}", series, episode);
+                    _logger.Fatal(e, "An error has occurred while updating episode info for series {SeriesTitle}. {EpisodeTitle}", series, episode);
                     failCount++;
                 }
             }
@@ -132,14 +132,14 @@ namespace NzbDrone.Core.Tv
 
             if (failCount != 0)
             {
-                _logger.Info("Finished episode refresh for series: {0}. Successful: {1} - Failed: {2} ",
+                _logger.Info("Finished episode refresh for series: {SeriesTitle}. Successful: {SuccessCount} - Failed: {FailCount} ",
                     series.Title,
                     successCount,
                     failCount);
             }
             else
             {
-                _logger.Info("Finished episode refresh for series: {0}.", series);
+                _logger.Info("Finished episode refresh for series: {SeriesTitle}.", series);
             }
         }
 
@@ -169,7 +169,7 @@ namespace NzbDrone.Core.Tv
             {
                 if (hasExisting)
                 {
-                    _logger.Warn("Show {0} ({1}) had {2} old episodes appear, please check monitored status.", series.TvdbId, series.Title, oldEpisodes.Count);
+                    _logger.Warn("Show {TvdbId} ({SeriesTitle}) had {Count} old episodes appear, please check monitored status.", series.TvdbId, series.Title, oldEpisodes.Count);
                 }
                 else
                 {
@@ -183,7 +183,7 @@ namespace NzbDrone.Core.Tv
                         }
                     }
 
-                    _logger.Warn("Show {0} ({1}) had {2} old episodes appear, unmonitored aired episodes to prevent unexpected downloads.", series.TvdbId, series.Title, oldEpisodes.Count);
+                    _logger.Warn("Show {TvdbId} ({SeriesTitle}) had {Count} old episodes appear, unmonitored aired episodes to prevent unexpected downloads.", series.TvdbId, series.Title, oldEpisodes.Count);
                 }
             }
         }
@@ -199,7 +199,7 @@ namespace NzbDrone.Core.Tv
             {
                 if (group.Key.SeasonNumber != 0 && group.Count() > 3)
                 {
-                    _logger.Debug("Not adjusting multi-episode air times for series {0} season {1} since more than 3 episodes 'aired' on the same day", series.Title, group.Key.SeasonNumber);
+                    _logger.Debug("Not adjusting multi-episode air times for series {SeriesTitle} season {SeasonNumber} since more than 3 episodes 'aired' on the same day", series.Title, group.Key.SeasonNumber);
                     continue;
                 }
 

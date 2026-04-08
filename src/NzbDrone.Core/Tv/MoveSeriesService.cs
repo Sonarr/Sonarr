@@ -39,28 +39,28 @@ namespace NzbDrone.Core.Tv
         {
             if (!sourcePath.IsPathValid(PathValidationType.CurrentOs))
             {
-                _logger.Warn("Folder '{0}' for '{1}' is invalid, unable to move series. Try moving files manually", sourcePath, series.Title);
+                _logger.Warn("Folder '{FolderPath}' for '{SeriesTitle}' is invalid, unable to move series. Try moving files manually", sourcePath, series.Title);
                 return;
             }
 
             if (!_diskProvider.FolderExists(sourcePath))
             {
-                _logger.Debug("Folder '{0}' for '{1}' does not exist, not moving.", sourcePath, series.Title);
+                _logger.Debug("Folder '{FolderPath}' for '{SeriesTitle}' does not exist, not moving.", sourcePath, series.Title);
                 return;
             }
 
             if (index != null && total != null)
             {
-                _logger.ProgressInfo("Moving {0} from '{1}' to '{2}' ({3}/{4})", series.Title, sourcePath, destinationPath, index + 1, total);
+                _logger.ProgressInfo("Moving {SeriesTitle} from '{SourcePath}' to '{DestinationPath}' ({Index}/{Total})", series.Title, sourcePath, destinationPath, index + 1, total);
             }
             else
             {
-                _logger.ProgressInfo("Moving {0} from '{1}' to '{2}'", series.Title, sourcePath, destinationPath);
+                _logger.ProgressInfo("Moving {SeriesTitle} from '{SourcePath}' to '{DestinationPath}'", series.Title, sourcePath, destinationPath);
             }
 
             if (sourcePath.PathEquals(destinationPath))
             {
-                _logger.ProgressInfo("{0} is already in the specified location '{1}'.", series, destinationPath);
+                _logger.ProgressInfo("{SeriesTitle} is already in the specified location '{DestinationPath}'.", series, destinationPath);
                 return;
             }
 
@@ -71,13 +71,13 @@ namespace NzbDrone.Core.Tv
                 _diskProvider.CreateFolder(new DirectoryInfo(destinationPath).Parent.FullName);
                 _diskTransferService.TransferFolder(sourcePath, destinationPath, TransferMode.Move);
 
-                _logger.ProgressInfo("{0} moved successfully to {1}", series.Title, destinationPath);
+                _logger.ProgressInfo("{SeriesTitle} moved successfully to {DestinationPath}", series.Title, destinationPath);
 
                 _eventAggregator.PublishEvent(new SeriesMovedEvent(series, sourcePath, destinationPath));
             }
             catch (IOException ex)
             {
-                _logger.Error(ex, "Unable to move series from '{0}' to '{1}'. Try moving files manually", sourcePath, destinationPath);
+                _logger.Error(ex, "Unable to move series from '{SourcePath}' to '{DestinationPath}'. Try moving files manually", sourcePath, destinationPath);
 
                 RevertPath(series.Id, sourcePath);
             }
@@ -102,7 +102,7 @@ namespace NzbDrone.Core.Tv
             var seriesToMove = message.Series;
             var destinationRootFolder = message.DestinationRootFolder;
 
-            _logger.ProgressInfo("Moving {0} series to '{1}'", seriesToMove.Count, destinationRootFolder);
+            _logger.ProgressInfo("Moving {Count} series to '{DestinationRootFolder}'", seriesToMove.Count, destinationRootFolder);
 
             for (var index = 0; index < seriesToMove.Count; index++)
             {
@@ -113,7 +113,7 @@ namespace NzbDrone.Core.Tv
                 MoveSingleSeries(series, s.SourcePath, destinationPath, index, seriesToMove.Count);
             }
 
-            _logger.ProgressInfo("Finished moving {0} series to '{1}'", seriesToMove.Count, destinationRootFolder);
+            _logger.ProgressInfo("Finished moving {Count} series to '{DestinationRootFolder}'", seriesToMove.Count, destinationRootFolder);
         }
     }
 }

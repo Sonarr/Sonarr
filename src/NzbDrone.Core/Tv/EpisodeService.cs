@@ -180,7 +180,7 @@ namespace NzbDrone.Core.Tv
             var episode = _episodeRepository.Get(episodeId);
             _episodeRepository.SetMonitoredFlat(episode, monitored);
 
-            _logger.Debug("Monitored flag for Episode:{0} was set to {1}", episodeId, monitored);
+            _logger.Debug("Monitored flag for Episode:{EpisodeId} was set to {Monitored}", episodeId, monitored);
         }
 
         public void SetMonitored(IEnumerable<int> ids, bool monitored)
@@ -264,7 +264,7 @@ namespace NzbDrone.Core.Tv
         {
             foreach (var episode in GetEpisodesByFileId(message.EpisodeFile.Id))
             {
-                _logger.Debug("Detaching episode {0} from file.", episode.Id);
+                _logger.Debug("Detaching episode {EpisodeId} from file.", episode.Id);
 
                 var unmonitorEpisodes = _configService.AutoUnmonitorPreviouslyDownloadedEpisodes;
 
@@ -303,7 +303,7 @@ namespace NzbDrone.Core.Tv
                     }
                 }
 
-                _logger.Debug("Linking [{0}] > [{1}]", message.EpisodeFile.RelativePath, episode);
+                _logger.Debug("Linking [{RelativePath}] > [{EpisodeTitle}]", message.EpisodeFile.RelativePath, episode);
             }
         }
 

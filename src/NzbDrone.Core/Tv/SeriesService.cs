@@ -140,10 +140,10 @@ namespace NzbDrone.Core.Tv
             // series are usually the first thing in release title, so we select the leftmost and longest match
             var match = query.First().series;
 
-            _logger.Debug("Multiple series matched {0} from title {1}", match.Title, title);
+            _logger.Debug("Multiple series matched {MatchTitle} from title {Title}", match.Title, title);
             foreach (var entry in list)
             {
-                _logger.Debug("Multiple series match candidate: {0} cleantitle: {1}", entry.Title, entry.CleanTitle);
+                _logger.Debug("Multiple series match candidate: {SeriesTitle} cleantitle: {CleanTitle}", entry.Title, entry.CleanTitle);
             }
 
             return match;
@@ -229,28 +229,28 @@ namespace NzbDrone.Core.Tv
 
         public List<Series> UpdateSeries(List<Series> series, bool useExistingRelativeFolder)
         {
-            _logger.Debug("Updating {0} series", series.Count);
+            _logger.Debug("Updating {Count} series", series.Count);
 
             foreach (var s in series)
             {
-                _logger.Trace("Updating: {0}", s.Title);
+                _logger.Trace("Updating: {SeriesTitle}", s.Title);
 
                 if (!s.RootFolderPath.IsNullOrWhiteSpace())
                 {
                     s.Path = _seriesPathBuilder.BuildPath(s, useExistingRelativeFolder);
 
-                    _logger.Trace("Changing path for {0} to {1}", s.Title, s.Path);
+                    _logger.Trace("Changing path for {SeriesTitle} to {Path}", s.Title, s.Path);
                 }
                 else
                 {
-                    _logger.Trace("Not changing path for: {0}", s.Title);
+                    _logger.Trace("Not changing path for: {SeriesTitle}", s.Title);
                 }
 
                 UpdateTags(s);
             }
 
             _seriesRepository.UpdateMany(series);
-            _logger.Debug("{0} series updated", series.Count);
+            _logger.Debug("{Count} series updated", series.Count);
             _eventAggregator.PublishEvent(new SeriesBulkEditedEvent(series));
 
             return series;
@@ -268,7 +268,7 @@ namespace NzbDrone.Core.Tv
 
         public bool UpdateTags(Series series)
         {
-            _logger.Trace("Updating tags for {0}", series);
+            _logger.Trace("Updating tags for {SeriesTitle}", series);
 
             var tagsAdded = new HashSet<int>();
             var tagsRemoved = new HashSet<int>();
@@ -294,12 +294,12 @@ namespace NzbDrone.Core.Tv
 
             if (tagsAdded.Any() || tagsRemoved.Any())
             {
-                _logger.Debug("Updated tags for '{0}'. Added: {1}, Removed: {2}", series.Title, tagsAdded.Count, tagsRemoved.Count);
+                _logger.Debug("Updated tags for '{SeriesTitle}'. Added: {TagsAdded}, Removed: {TagsRemoved}", series.Title, tagsAdded.Count, tagsRemoved.Count);
 
                 return true;
             }
 
-            _logger.Debug("Tags not updated for '{0}'", series.Title);
+            _logger.Debug("Tags not updated for '{SeriesTitle}'", series.Title);
 
             return false;
         }

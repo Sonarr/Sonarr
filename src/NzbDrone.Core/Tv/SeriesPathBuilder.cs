@@ -52,7 +52,7 @@ namespace NzbDrone.Core.Tv
 
             var directoryName = series.Path.GetDirectoryName();
 
-            _logger.Warn("Unable to get relative path for series path {0}, using series folder name {1}", series.Path, directoryName);
+            _logger.Warn("Unable to get relative path for series path {SeriesPath}, using series folder name {DirectoryName}", series.Path, directoryName);
 
             return directoryName;
         }

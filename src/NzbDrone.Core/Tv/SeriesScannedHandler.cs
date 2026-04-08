@@ -43,7 +43,7 @@ namespace NzbDrone.Core.Tv
                 return;
             }
 
-            _logger.Info("[{0}] was recently added, performing post-add actions", series.Title);
+            _logger.Info("[{SeriesTitle}] was recently added, performing post-add actions", series.Title);
             _episodeMonitoredService.SetEpisodeMonitoredStatus(series, addOptions);
 
             _eventAggregator.PublishEvent(new SeriesAddCompletedEvent(series));
