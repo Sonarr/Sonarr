@@ -428,7 +428,9 @@ namespace NzbDrone.Core.IndexerSearch
             // Only skip per-episode fallback if we got approved season results.
             // Indexers like AB return all results for a title regardless of season
             // params, so raw result count alone is not reliable.
-            if (downloadDecisions.Any(d => d.Approved))
+            // For interactive search, always run per-episode so the user can see
+            // and pick individual releases regardless of whether a pack was found.
+            if (!interactiveSearch && downloadDecisions.Any(d => d.Approved))
             {
                 _logger.Debug("Season search returned approved results for {0}, skipping per-episode search for {1} episodes", series.Title, episodesToSearch.Count);
             }
@@ -437,14 +439,14 @@ namespace NzbDrone.Core.IndexerSearch
                 var fallbackSetting = _configService.AnimeSeasonSearchFallback;
                 var allEpisodesAired = episodesToSearch.All(e => e.AirDateUtc.HasValue && e.AirDateUtc.Value.Before(DateTime.UtcNow));
 
-                var shouldFallback = fallbackSetting switch
+                var shouldFallback = interactiveSearch || (fallbackSetting switch
                 {
                     AnimeSeasonSearchFallback.Never => false,
                     AnimeSeasonSearchFallback.Always => true,
                     AnimeSeasonSearchFallback.FullSeasonAired => allEpisodesAired,
                     AnimeSeasonSearchFallback.FullSeasonNotAired => !allEpisodesAired,
                     _ => !allEpisodesAired
-                };
+                });
 
                 if (shouldFallback)
                 {
