@@ -37,7 +37,7 @@ namespace NzbDrone.Core.Indexers.TorrentRss
         /// <returns>Parsed Settings or <c>null</c></returns>
         public TorrentRssIndexerParserSettings Detect(TorrentRssIndexerSettings settings)
         {
-            _logger.Debug("Evaluating TorrentRss feed '{0}'", settings.BaseUrl);
+            _logger.Debug("Evaluating TorrentRss feed '{FeedUrl}'", settings.BaseUrl);
 
             try
             {
@@ -51,7 +51,7 @@ namespace NzbDrone.Core.Indexers.TorrentRss
                 }
                 catch (Exception ex)
                 {
-                    _logger.Warn(ex, string.Format("Unable to connect to indexer {0}: {1}", request.Url, ex.Message));
+                    _logger.Warn(ex, "Unable to connect to indexer {Url}: {Message}", request.Url, ex.Message);
                     return null;
                 }
 
@@ -180,7 +180,7 @@ namespace NzbDrone.Core.Indexers.TorrentRss
             {
                 if (releases.Any(r => r.Size < ValidSizeThreshold))
                 {
-                    _logger.Debug("Feed {0} contains very small releases.", response.Request.Url);
+                    _logger.Debug("Feed {FeedUrl} contains very small releases.", response.Request.Url);
                 }
 
                 _logger.Trace("Feed has valid size in description.");
@@ -261,7 +261,7 @@ namespace NzbDrone.Core.Indexers.TorrentRss
 
             var torrentInfo = releases.First();
 
-            _logger.Trace("TorrentInfo: \n{0}", torrentInfo.ToString("L"));
+            _logger.Trace("TorrentInfo: \n{TorrentInfo}", torrentInfo.ToString("L"));
 
             if (releases.Any(r => r.Title.IsNullOrWhiteSpace()))
             {

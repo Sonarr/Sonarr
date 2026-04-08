@@ -79,7 +79,7 @@ namespace NzbDrone.Core.Indexers
                 {
                     itemEx.WithData("FeedUrl", indexerResponse.Request.Url);
                     itemEx.WithData("ItemTitle", item.Title());
-                    _logger.Error(itemEx, "An error occurred while processing feed item from {0}", indexerResponse.Request.Url);
+                    _logger.Error(itemEx, "An error occurred while processing feed item from {FeedUrl}", indexerResponse.Request.Url);
                 }
             }
 
@@ -106,7 +106,7 @@ namespace NzbDrone.Core.Indexers
             catch (XmlException ex)
             {
                 var contentSample = indexerResponse.Content.Substring(0, Math.Min(indexerResponse.Content.Length, 512));
-                _logger.Debug("Truncated response content (originally {0} characters): {1}", indexerResponse.Content.Length, contentSample);
+                _logger.Debug("Truncated response content (originally {ContentLength} characters): {ContentSample}", indexerResponse.Content.Length, contentSample);
 
                 ex.WithData(indexerResponse.HttpResponse);
 
@@ -147,7 +147,7 @@ namespace NzbDrone.Core.Indexers
 
             releaseInfo = ProcessItem(item, releaseInfo);
 
-            _logger.Trace("Parsed: {0}", releaseInfo.Title);
+            _logger.Trace("Parsed: {ReleaseTitle}", releaseInfo.Title);
 
             return PostProcessItem(item, releaseInfo);
         }
@@ -277,7 +277,7 @@ namespace NzbDrone.Core.Indexers
                     }
                     catch (Exception ex)
                     {
-                        _logger.Warn(ex, "Failed to get enclosure for: {0}", item.Title());
+                        _logger.Warn(ex, "Failed to get enclosure for: {ItemTitle}", item.Title());
                     }
 
                     return null;
@@ -357,7 +357,7 @@ namespace NzbDrone.Core.Indexers
             }
             catch (Exception ex)
             {
-                _logger.Debug(ex, string.Format("Failed to parse Url {0}, ignoring.", value));
+                _logger.Debug(ex, "Failed to parse Url {Url}, ignoring.", value);
                 return null;
             }
         }

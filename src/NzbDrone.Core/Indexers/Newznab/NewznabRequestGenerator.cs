@@ -217,14 +217,14 @@ namespace NzbDrone.Core.Indexers.Newznab
 
             if (!SupportsEpisodeSearch)
             {
-                _logger.Debug("Indexer capabilities lacking season & ep query parameters, no Standard series search possible: {0}", Definition.Name);
+                _logger.Debug("Indexer capabilities lacking season & ep query parameters, no Standard series search possible: {IndexerName}", Definition.Name);
 
                 return pageableRequests;
             }
 
             if (!SupportsTvTextSearches && !SupportsTvIdSearches)
             {
-                _logger.Debug("Indexer capabilities lacking q, title, tvdbid, imdbid, rid and tvmazeid parameters, no Standard series search possible: {0}", Definition.Name);
+                _logger.Debug("Indexer capabilities lacking q, title, tvdbid, imdbid, rid and tvmazeid parameters, no Standard series search possible: {IndexerName}", Definition.Name);
 
                 return pageableRequests;
             }
@@ -266,14 +266,14 @@ namespace NzbDrone.Core.Indexers.Newznab
 
             if (!SupportsSeasonSearch)
             {
-                _logger.Debug("Indexer capabilities lacking season query parameter, no Standard series search possible: {0}", Definition.Name);
+                _logger.Debug("Indexer capabilities lacking season query parameter, no Standard series search possible: {IndexerName}", Definition.Name);
 
                 return pageableRequests;
             }
 
             if (!SupportsTvTextSearches && !SupportsTvIdSearches)
             {
-                _logger.Debug("Indexer capabilities lacking q, title, tvdbid, imdbid, rid and tvmazeid parameters, no Standard series search possible: {0}", Definition.Name);
+                _logger.Debug("Indexer capabilities lacking q, title, tvdbid, imdbid, rid and tvmazeid parameters, no Standard series search possible: {IndexerName}", Definition.Name);
 
                 return pageableRequests;
             }
@@ -313,14 +313,14 @@ namespace NzbDrone.Core.Indexers.Newznab
 
             if (!SupportsEpisodeSearch)
             {
-                _logger.Debug("Indexer capabilities lacking season & ep query parameters, no Daily series search possible: {0}", Definition.Name);
+                _logger.Debug("Indexer capabilities lacking season & ep query parameters, no Daily series search possible: {IndexerName}", Definition.Name);
 
                 return pageableRequests;
             }
 
             if (!SupportsTvTextSearches && !SupportsTvIdSearches)
             {
-                _logger.Debug("Indexer capabilities lacking q, title, tvdbid, imdbid, rid and tvmazeid parameters, no Daily series search possible: {0}", Definition.Name);
+                _logger.Debug("Indexer capabilities lacking q, title, tvdbid, imdbid, rid and tvmazeid parameters, no Daily series search possible: {IndexerName}", Definition.Name);
 
                 return pageableRequests;
             }
@@ -360,14 +360,14 @@ namespace NzbDrone.Core.Indexers.Newznab
 
             if (!SupportsEpisodeSearch)
             {
-                _logger.Debug("Indexer capabilities lacking season query parameter, no Daily series search possible: {0}", Definition.Name);
+                _logger.Debug("Indexer capabilities lacking season query parameter, no Daily series search possible: {IndexerName}", Definition.Name);
 
                 return pageableRequests;
             }
 
             if (!SupportsTvTextSearches && !SupportsTvIdSearches)
             {
-                _logger.Debug("Indexer capabilities lacking q, title, tvdbid, imdbid, rid and tvmazeid parameters, no Daily series search possible: {0}", Definition.Name);
+                _logger.Debug("Indexer capabilities lacking q, title, tvdbid, imdbid, rid and tvmazeid parameters, no Daily series search possible: {IndexerName}", Definition.Name);
 
                 return pageableRequests;
             }

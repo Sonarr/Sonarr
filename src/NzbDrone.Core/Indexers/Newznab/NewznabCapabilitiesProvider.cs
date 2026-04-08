@@ -59,7 +59,7 @@ namespace NzbDrone.Core.Indexers.Newznab
             }
             catch (Exception ex)
             {
-                _logger.Debug(ex, "Failed to get newznab api capabilities from {0}", indexerSettings.BaseUrl);
+                _logger.Debug(ex, "Failed to get newznab api capabilities from {IndexerUrl}", indexerSettings.BaseUrl);
                 throw;
             }
 
@@ -70,22 +70,22 @@ namespace NzbDrone.Core.Indexers.Newznab
             catch (XmlException ex)
             {
                 ex.WithData(response, 128 * 1024);
-                _logger.Trace("Unexpected Response content ({0} bytes): {1}", response.ResponseData.Length, response.Content);
-                _logger.Debug(ex, "Failed to parse newznab api capabilities for {0}", indexerSettings.BaseUrl);
+                _logger.Trace("Unexpected Response content ({ResponseSize} bytes): {ResponseContent}", response.ResponseData.Length, response.Content);
+                _logger.Debug(ex, "Failed to parse newznab api capabilities for {IndexerUrl}", indexerSettings.BaseUrl);
                 throw;
             }
             catch (ApiKeyException ex)
             {
                 ex.WithData(response, 128 * 1024);
-                _logger.Trace("Unexpected Response content ({0} bytes): {1}", response.ResponseData.Length, response.Content);
-                _logger.Debug(ex, "Failed to parse newznab api capabilities for {0}, invalid API key", indexerSettings.BaseUrl);
+                _logger.Trace("Unexpected Response content ({ResponseSize} bytes): {ResponseContent}", response.ResponseData.Length, response.Content);
+                _logger.Debug(ex, "Failed to parse newznab api capabilities for {IndexerUrl}, invalid API key", indexerSettings.BaseUrl);
                 throw;
             }
             catch (Exception ex)
             {
                 ex.WithData(response, 128 * 1024);
-                _logger.Trace("Unexpected Response content ({0} bytes): {1}", response.ResponseData.Length, response.Content);
-                _logger.Error(ex, "Failed to determine newznab api capabilities for {0}, using the defaults instead till Sonarr restarts", indexerSettings.BaseUrl);
+                _logger.Trace("Unexpected Response content ({ResponseSize} bytes): {ResponseContent}", response.ResponseData.Length, response.Content);
+                _logger.Error(ex, "Failed to determine newznab api capabilities for {IndexerUrl}, using the defaults instead till Sonarr restarts", indexerSettings.BaseUrl);
             }
 
             return capabilities;

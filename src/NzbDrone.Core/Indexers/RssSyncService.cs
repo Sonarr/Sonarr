@@ -47,11 +47,11 @@ namespace NzbDrone.Core.Indexers
 
             if (processed.Pending.Any())
             {
-                _logger.ProgressInfo("RSS Sync Completed. Reports found: {0}, Reports grabbed: {1}, Reports pending: {2}", reports.Count, processed.Grabbed.Count, processed.Pending.Count);
+                _logger.ProgressInfo("RSS Sync Completed. Reports found: {ReportCount}, Reports grabbed: {GrabbedCount}, Reports pending: {PendingCount}", reports.Count, processed.Grabbed.Count, processed.Pending.Count);
             }
             else
             {
-                _logger.ProgressInfo("RSS Sync Completed. Reports found: {0}, Reports grabbed: {1}", reports.Count, processed.Grabbed.Count);
+                _logger.ProgressInfo("RSS Sync Completed. Reports found: {ReportCount}, Reports grabbed: {GrabbedCount}", reports.Count, processed.Grabbed.Count);
             }
 
             return processed;

@@ -33,7 +33,7 @@ namespace NzbDrone.Core.Indexers
                 return new List<ReleaseInfo>();
             }
 
-            _logger.Debug("Available indexers {0}", indexers.Count);
+            _logger.Debug("Available indexers {IndexerCount}", indexers.Count);
 
             var tasks = indexers.Select(FetchIndexer);
 
@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Indexers
 
             var result = batch.SelectMany(x => x).ToList();
 
-            _logger.Debug("Found {0} reports", result.Count);
+            _logger.Debug("Found {ReportCount} reports", result.Count);
 
             return result;
         }

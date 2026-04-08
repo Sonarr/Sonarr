@@ -212,7 +212,7 @@ namespace NzbDrone.Core.Indexers
                     {
                         var gapStart = lastReleaseInfo.PublishDate;
                         var gapEnd = ordered.Last().PublishDate;
-                        _logger.Warn("Indexer {0} rss sync didn't cover the period between {1} and {2} UTC. Search may be required.", Definition.Name, gapStart, gapEnd);
+                        _logger.Warn("Indexer {IndexerName} rss sync didn't cover the period between {GapStart} and {GapEnd} UTC. Search may be required.", Definition.Name, gapStart, gapEnd);
                     }
 
                     lastReleaseInfo = ordered.First();
@@ -235,11 +235,11 @@ namespace NzbDrone.Core.Indexers
                 if (webException.Message.Contains("502") || webException.Message.Contains("503") ||
                     webException.Message.Contains("504") || webException.Message.Contains("timed out"))
                 {
-                    _logger.Warn("{0} server is currently unavailable. {1} {2}", this, url, webException.Message);
+                    _logger.Warn("{Indexer} server is currently unavailable. {Url} {ExceptionMessage}", this, url, webException.Message);
                 }
                 else
                 {
-                    _logger.Warn("{0} {1} {2}", this, url, webException.Message);
+                    _logger.Warn("{Indexer} {Url} {ExceptionMessage}", this, url, webException.Message);
                 }
             }
             catch (TooManyRequestsException ex)
@@ -247,18 +247,18 @@ namespace NzbDrone.Core.Indexers
                 var retryTime = ex.RetryAfter != TimeSpan.Zero ? ex.RetryAfter : minimumBackoff;
                 _indexerStatusService.RecordFailure(Definition.Id, retryTime);
 
-                _logger.Warn("API Request Limit reached for {0}. Disabled for {1}", this, retryTime);
+                _logger.Warn("API Request Limit reached for {Indexer}. Disabled for {RetryTime}", this, retryTime);
             }
             catch (HttpException ex)
             {
                 _indexerStatusService.RecordFailure(Definition.Id);
                 if (ex.Response.HasHttpServerError)
                 {
-                    _logger.Warn("Unable to connect to {0} at [{1}]. Indexer's server is unavailable. Try again later. {2}", this, url, ex.Message);
+                    _logger.Warn("Unable to connect to {Indexer} at [{Url}]. Indexer's server is unavailable. Try again later. {ExceptionMessage}", this, url, ex.Message);
                 }
                 else
                 {
-                    _logger.Warn("{0} {1}", this, ex.Message);
+                    _logger.Warn("{Indexer} {ExceptionMessage}", this, ex.Message);
                 }
             }
             catch (RequestLimitReachedException ex)
@@ -266,12 +266,12 @@ namespace NzbDrone.Core.Indexers
                 var retryTime = ex.RetryAfter != TimeSpan.Zero ? ex.RetryAfter : minimumBackoff;
                 _indexerStatusService.RecordFailure(Definition.Id, retryTime);
 
-                _logger.Warn("API Request Limit reached for {0}. Disabled for {1}", this, retryTime);
+                _logger.Warn("API Request Limit reached for {Indexer}. Disabled for {RetryTime}", this, retryTime);
             }
             catch (ApiKeyException)
             {
                 _indexerStatusService.RecordFailure(Definition.Id);
-                _logger.Warn("Invalid API Key for {0} {1}", this, url);
+                _logger.Warn("Invalid API Key for {Indexer} {Url}", this, url);
             }
             catch (CloudFlareCaptchaException ex)
             {
@@ -279,28 +279,28 @@ namespace NzbDrone.Core.Indexers
                 ex.WithData("FeedUrl", url);
                 if (ex.IsExpired)
                 {
-                    _logger.Error(ex, "Expired CAPTCHA token for {0}, please refresh in indexer settings.", this);
+                    _logger.Error(ex, "Expired CAPTCHA token for {Indexer}, please refresh in indexer settings.", this);
                 }
                 else
                 {
-                    _logger.Error(ex, "CAPTCHA token required for {0}, check indexer settings.", this);
+                    _logger.Error(ex, "CAPTCHA token required for {Indexer}, check indexer settings.", this);
                 }
             }
             catch (TaskCanceledException ex)
             {
                 _indexerStatusService.RecordFailure(Definition.Id);
-                _logger.Warn(ex, "Unable to connect to indexer, possibly due to a timeout. {0}", url);
+                _logger.Warn(ex, "Unable to connect to indexer, possibly due to a timeout. {Url}", url);
             }
             catch (IndexerException ex)
             {
                 _indexerStatusService.RecordFailure(Definition.Id);
-                _logger.Warn(ex, "{0}", url);
+                _logger.Warn(ex, "{Url}", url);
             }
             catch (Exception ex)
             {
                 _indexerStatusService.RecordFailure(Definition.Id);
                 ex.WithData("FeedUrl", url);
-                _logger.Error(ex, "An error occurred while processing feed. {0}", url);
+                _logger.Error(ex, "An error occurred while processing feed. {Url}", url);
             }
 
             return CleanupReleases(releases);
@@ -310,14 +310,14 @@ namespace NzbDrone.Core.Indexers
         {
             if (release.Title.IsNullOrWhiteSpace())
             {
-                _logger.Trace("Invalid Release: '{0}' from indexer: {1}. No title provided.", release.InfoUrl, Definition.Name);
+                _logger.Trace("Invalid Release: '{InfoUrl}' from indexer: {IndexerName}. No title provided.", release.InfoUrl, Definition.Name);
 
                 return false;
             }
 
             if (release.DownloadUrl.IsNullOrWhiteSpace())
             {
-                _logger.Trace("Invalid Release: '{0}' from indexer: {1}. No Download URL provided.", release.Title, Definition.Name);
+                _logger.Trace("Invalid Release: '{ReleaseTitle}' from indexer: {IndexerName}. No Download URL provided.", release.Title, Definition.Name);
 
                 return false;
             }
@@ -341,7 +341,7 @@ namespace NzbDrone.Core.Indexers
             catch (Exception ex)
             {
                 ex.WithData(response.HttpResponse, 128 * 1024);
-                _logger.Trace("Unexpected Response content ({0} bytes): {1}", response.HttpResponse.ResponseData.Length, response.HttpResponse.Content);
+                _logger.Trace("Unexpected Response content ({ResponseSize} bytes): {ResponseContent}", response.HttpResponse.ResponseData.Length, response.HttpResponse.Content);
                 throw;
             }
         }

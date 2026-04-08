@@ -43,7 +43,7 @@ public class CachedIndexerSettingsProvider : ICachedIndexerSettingsProvider, IHa
 
         if (indexer?.Settings is not IIndexerSettings indexerSettings)
         {
-            Logger.Trace("Could not load settings for indexer ID: {0}", indexerId);
+            Logger.Trace("Could not load settings for indexer ID: {IndexerId}", indexerId);
 
             return null;
         }

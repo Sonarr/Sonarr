@@ -64,12 +64,12 @@ namespace NzbDrone.Core.Indexers.Torznab
             {
                 if (enclosureTypes.Intersect(UsenetEnclosureMimeTypes).Any())
                 {
-                    _logger.Warn("{0} does not contain {1}, found {2}, did you intend to add a Newznab indexer?", indexerResponse.Request.Url, TorrentEnclosureMimeType, enclosureTypes[0]);
+                    _logger.Warn("{FeedUrl} does not contain {ExpectedMimeType}, found {ActualMimeType}, did you intend to add a Newznab indexer?", indexerResponse.Request.Url, TorrentEnclosureMimeType, enclosureTypes[0]);
 
                     return false;
                 }
 
-                _logger.Warn("{0} does not contain {1}, found {2}.", indexerResponse.Request.Url, TorrentEnclosureMimeType, enclosureTypes[0]);
+                _logger.Warn("{FeedUrl} does not contain {ExpectedMimeType}, found {ActualMimeType}.", indexerResponse.Request.Url, TorrentEnclosureMimeType, enclosureTypes[0]);
             }
 
             return true;
