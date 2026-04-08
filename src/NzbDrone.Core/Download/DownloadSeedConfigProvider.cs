@@ -64,7 +64,7 @@ namespace NzbDrone.Core.Download
 
             if (historyItem == null)
             {
-                _logger.Debug("No download history item for infohash {0}, unable to provide seed configuration", infoHash);
+                _logger.Debug("No download history item for infohash {InfoHash}, unable to provide seed configuration", infoHash);
                 return null;
             }
 
@@ -76,7 +76,7 @@ namespace NzbDrone.Core.Download
 
             if (parsedEpisodeInfo == null)
             {
-                _logger.Debug("No parsed title in download history item for infohash {0}, unable to provide seed configuration", infoHash);
+                _logger.Debug("No parsed title in download history item for infohash {InfoHash}, unable to provide seed configuration", infoHash);
                 return null;
             }
 

@@ -65,7 +65,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                 }
                 catch (DownloadClientException)
                 {
-                    _logger.Warn("Failed to set post-import torrent label \"{0}\" for {1} in qBittorrent. Does the label exist?",
+                    _logger.Warn("Failed to set post-import torrent label \"{ImportedCategory}\" for {DownloadTitle} in qBittorrent. Does the label exist?",
                         Settings.TvImportedCategory,
                         downloadClientItem.Title);
                 }
@@ -102,7 +102,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                     }
                     catch (Exception ex)
                     {
-                        _logger.Warn(ex, "Failed to set the torrent seed criteria for {0}.", hash);
+                        _logger.Warn(ex, "Failed to set the torrent seed criteria for {InfoHash}.", hash);
                     }
                 }
 
@@ -114,7 +114,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                     }
                     catch (Exception ex)
                     {
-                        _logger.Warn(ex, "Failed to set the torrent priority for {0}.", hash);
+                        _logger.Warn(ex, "Failed to set the torrent priority for {InfoHash}.", hash);
                     }
                 }
 
@@ -126,7 +126,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                     }
                     catch (Exception ex)
                     {
-                        _logger.Warn(ex, "Failed to set ForceStart for {0}.", hash);
+                        _logger.Warn(ex, "Failed to set ForceStart for {InfoHash}.", hash);
                     }
                 }
 
@@ -138,7 +138,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                     }
                     catch (Exception ex)
                     {
-                        _logger.Warn(ex, "Failed to add tags for {0}.", hash);
+                        _logger.Warn(ex, "Failed to add tags for {InfoHash}.", hash);
                     }
                 }
             }
@@ -171,7 +171,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                     }
                     catch (Exception ex)
                     {
-                        _logger.Warn(ex, "Failed to set the torrent seed criteria for {0}.", hash);
+                        _logger.Warn(ex, "Failed to set the torrent seed criteria for {InfoHash}.", hash);
                     }
                 }
 
@@ -183,7 +183,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                     }
                     catch (Exception ex)
                     {
-                        _logger.Warn(ex, "Failed to set the torrent priority for {0}.", hash);
+                        _logger.Warn(ex, "Failed to set the torrent priority for {InfoHash}.", hash);
                     }
                 }
 
@@ -195,7 +195,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                     }
                     catch (Exception ex)
                     {
-                        _logger.Warn(ex, "Failed to set ForceStart for {0}.", hash);
+                        _logger.Warn(ex, "Failed to set ForceStart for {InfoHash}.", hash);
                     }
                 }
 
@@ -207,7 +207,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                     }
                     catch (Exception ex)
                     {
-                        _logger.Warn(ex, "Failed to add tags for {0}.", hash);
+                        _logger.Warn(ex, "Failed to add tags for {InfoHash}.", hash);
                     }
                 }
             }
@@ -232,12 +232,12 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
                 {
                 }
 
-                _logger.Trace("Torrent '{0}' not yet visible in qbit, waiting 100ms.", hash);
+                _logger.Trace("Torrent '{InfoHash}' not yet visible in qbit, waiting 100ms.", hash);
                 System.Threading.Thread.Sleep(100);
                 count--;
             }
 
-            _logger.Warn("Failed to load torrent '{0}' within 500 ms, skipping additional parameters.", hash);
+            _logger.Warn("Failed to load torrent '{InfoHash}' within 500 ms, skipping additional parameters.", hash);
             return false;
         }
 
@@ -412,7 +412,7 @@ namespace NzbDrone.Core.Download.Clients.QBittorrent
 
                     if (savePath.StartsWith("//"))
                     {
-                        _logger.Trace("Replacing double forward slashes in path '{0}'. If this is not meant to be a Windows UNC path fix the 'Save Path' in qBittorrent's {1} category", savePath, Settings.TvCategory);
+                        _logger.Trace("Replacing double forward slashes in path '{SavePath}'. If this is not meant to be a Windows UNC path fix the 'Save Path' in qBittorrent's {TvCategory} category", savePath, Settings.TvCategory);
                         savePath = savePath.Replace('/', '\\');
                     }
 

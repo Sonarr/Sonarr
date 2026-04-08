@@ -131,7 +131,7 @@ namespace NzbDrone.Core.Download.Clients.RQBit
                     }
                     catch (Exception ex)
                     {
-                        _logger.Error(ex, "Failed to process torrent {0}", torrentWithStats.InfoHash);
+                        _logger.Error(ex, "Failed to process torrent {InfoHash}", torrentWithStats.InfoHash);
                     }
                 }
             }

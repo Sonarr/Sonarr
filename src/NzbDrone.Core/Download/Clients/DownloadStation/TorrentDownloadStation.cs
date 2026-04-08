@@ -149,7 +149,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
             }
 
             DsTaskProxy.RemoveTask(ParseDownloadId(item.DownloadId), Settings);
-            _logger.Debug("{0} removed correctly", item.DownloadId);
+            _logger.Debug("{DownloadId} removed correctly", item.DownloadId);
         }
 
         protected OsPath GetOutputPath(OsPath outputPath, DownloadStationTask torrent, string serialNumber)
@@ -173,11 +173,11 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
             if (item != null)
             {
-                _logger.Debug("{0} added correctly", remoteEpisode);
+                _logger.Debug("{DownloadTitle} added correctly", remoteEpisode);
                 return CreateDownloadId(item.Id, hashedSerialNumber);
             }
 
-            _logger.Debug("No such task {0} in Download Station", magnetLink);
+            _logger.Debug("No such task {MagnetLink} in Download Station", magnetLink);
 
             throw new DownloadClientException("Failed to add magnet task to Download Station");
         }
@@ -194,11 +194,11 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
             if (item != null)
             {
-                _logger.Debug("{0} added correctly", remoteEpisode);
+                _logger.Debug("{DownloadTitle} added correctly", remoteEpisode);
                 return CreateDownloadId(item.Id, hashedSerialNumber);
             }
 
-            _logger.Debug("No such task {0} in Download Station", filename);
+            _logger.Debug("No such task {Filename} in Download Station", filename);
 
             throw new DownloadClientException("Failed to add torrent task to Download Station");
         }
@@ -266,7 +266,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
             if (downloadedString.IsNullOrWhiteSpace() || !long.TryParse(downloadedString, out var downloadedSize))
             {
-                _logger.Debug("Torrent {0} has invalid size_downloaded: {1}", torrent.Title, downloadedString);
+                _logger.Debug("Torrent {TorrentTitle} has invalid size_downloaded: {SizeDownloaded}", torrent.Title, downloadedString);
                 downloadedSize = 0;
             }
 
@@ -279,7 +279,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
             if (speedString.IsNullOrWhiteSpace() || !long.TryParse(speedString, out var downloadSpeed))
             {
-                _logger.Debug("Torrent {0} has invalid speed_download: {1}", torrent.Title, speedString);
+                _logger.Debug("Torrent {TorrentTitle} has invalid speed_download: {SpeedDownload}", torrent.Title, speedString);
                 downloadSpeed = 0;
             }
 
@@ -399,7 +399,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
         {
             var info = DsTaskProxy.GetApiInfo(Settings);
 
-            _logger.Debug("Download Station api version information: Min {0} - Max {1}", info.MinVersion, info.MaxVersion);
+            _logger.Debug("Download Station api version information: Min {MinVersion} - Max {MaxVersion}", info.MinVersion, info.MaxVersion);
 
             if (info.MinVersion > 2 || info.MaxVersion < 2)
             {

@@ -36,7 +36,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
             }
             catch (Exception ex)
             {
-                _logger.Warn(ex, "Could not get the serial number from Download Station {0}:{1}", settings.Host, settings.Port);
+                _logger.Warn(ex, "Could not get the serial number from Download Station {Host}:{Port}", settings.Host, settings.Port);
                 throw;
             }
         }

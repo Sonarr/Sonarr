@@ -217,7 +217,7 @@ namespace NzbDrone.Core.Download.Clients.Aria2
                 Thread.Sleep(retryDelay);
             }
 
-            _logger.Debug("Could not find hash {0} in {1} tries at {2} ms intervals.", hash, tries, retryDelay);
+            _logger.Debug("Could not find hash {InfoHash} in {Tries} tries at {RetryDelay} ms intervals.", hash, tries, retryDelay);
 
             return false;
         }

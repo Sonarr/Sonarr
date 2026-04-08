@@ -42,7 +42,7 @@ namespace NzbDrone.Core.Download.Clients.RQBit
         {
             var torrents = _proxy.GetTorrents(Settings);
 
-            _logger.Debug("Retrieved metadata of {0} torrents in client", torrents.Count);
+            _logger.Debug("Retrieved metadata of {TorrentCount} torrents in client", torrents.Count);
 
             var items = new List<DownloadClientItem>();
             foreach (var torrent in torrents)
@@ -50,13 +50,13 @@ namespace NzbDrone.Core.Download.Clients.RQBit
                 // Ignore torrents with an empty path
                 if (torrent.Path.IsNullOrWhiteSpace())
                 {
-                    _logger.Warn("Torrent '{0}' has an empty download path and will not be processed", torrent.Name);
+                    _logger.Warn("Torrent '{TorrentName}' has an empty download path and will not be processed", torrent.Name);
                     continue;
                 }
 
                 if (torrent.Path.StartsWith("."))
                 {
-                    _logger.Warn("Torrent '{0}' has a download path starting with '.' and will not be processed", torrent.Name);
+                    _logger.Warn("Torrent '{TorrentName}' has a download path starting with '.' and will not be processed", torrent.Name);
                     continue;
                 }
 

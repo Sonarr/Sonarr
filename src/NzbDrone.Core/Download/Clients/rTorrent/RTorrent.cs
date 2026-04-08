@@ -59,7 +59,7 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
                 catch (Exception ex)
                 {
                     _logger.Warn(ex,
-                        "Failed to set torrent post-import label \"{0}\" for {1} in rTorrent. Does the label exist?",
+                        "Failed to set torrent post-import label \"{ImportedCategory}\" for {DownloadTitle} in rTorrent. Does the label exist?",
                         Settings.TvImportedCategory,
                         downloadClientItem.Title);
                 }
@@ -73,7 +73,7 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
             catch (Exception ex)
             {
                 _logger.Warn(ex,
-                    "Failed to set torrent post-import view \"{0}\" for {1} in rTorrent.",
+                    "Failed to set torrent post-import view \"{ImportedView}\" for {DownloadTitle} in rTorrent.",
                     _imported_view,
                     downloadClientItem.Title);
             }
@@ -91,7 +91,7 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
             // Wait a bit for the magnet to be resolved.
             if (!WaitForTorrent(hash, tries, retryDelay))
             {
-                _logger.Warn("rTorrent could not resolve magnet within {0} seconds, download may remain stuck: {1}.", tries * retryDelay / 1000, magnetLink);
+                _logger.Warn("rTorrent could not resolve magnet within {Seconds} seconds, download may remain stuck: {MagnetLink}.", tries * retryDelay / 1000, magnetLink);
 
                 return hash;
             }
@@ -109,7 +109,7 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
             var retryDelay = 500;
             if (!WaitForTorrent(hash, tries, retryDelay))
             {
-                _logger.Debug("rTorrent didn't add the torrent within {0} seconds: {1}.", tries * retryDelay / 1000, filename);
+                _logger.Debug("rTorrent didn't add the torrent within {Seconds} seconds: {Filename}.", tries * retryDelay / 1000, filename);
 
                 throw new ReleaseDownloadException(remoteEpisode.Release, "Downloading torrent failed");
             }
@@ -125,7 +125,7 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
         {
             var torrents = _proxy.GetTorrents(Settings);
 
-            _logger.Debug("Retrieved metadata of {0} torrents in client", torrents.Count);
+            _logger.Debug("Retrieved metadata of {TorrentCount} torrents in client", torrents.Count);
 
             var items = new List<DownloadClientItem>();
             foreach (var torrent in torrents)
@@ -139,13 +139,13 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
                 // Ignore torrents with an empty path
                 if (torrent.Path.IsNullOrWhiteSpace())
                 {
-                    _logger.Warn("Torrent '{0}' has an empty download path and will not be processed. Adjust this to an absolute path in rTorrent", torrent.Name);
+                    _logger.Warn("Torrent '{TorrentName}' has an empty download path and will not be processed. Adjust this to an absolute path in rTorrent", torrent.Name);
                     continue;
                 }
 
                 if (torrent.Path.StartsWith("."))
                 {
-                    _logger.Warn("Torrent '{0}' has a download path starting with '.' and will not be processed. Adjust this to an absolute path in rTorrent", torrent.Name);
+                    _logger.Warn("Torrent '{TorrentName}' has a download path starting with '.' and will not be processed. Adjust this to an absolute path in rTorrent", torrent.Name);
                     continue;
                 }
 
@@ -316,7 +316,7 @@ namespace NzbDrone.Core.Download.Clients.RTorrent
                 Thread.Sleep(retryDelay);
             }
 
-            _logger.Debug("Could not find hash {0} in {1} tries at {2} ms intervals.", hash, tries, retryDelay);
+            _logger.Debug("Could not find hash {InfoHash} in {Tries} tries at {RetryDelay} ms intervals.", hash, tries, retryDelay);
 
             return false;
         }

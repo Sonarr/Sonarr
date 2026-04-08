@@ -49,7 +49,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
 
                 if (torrent == null)
                 {
-                    _logger.Warn("Could not find torrent with hash \"{0}\" in Transmission.", hash);
+                    _logger.Warn("Could not find torrent with hash \"{InfoHash}\" in Transmission.", hash);
                     return;
                 }
 
@@ -67,7 +67,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
                 }
                 catch (DownloadClientException ex)
                 {
-                    _logger.Warn(ex, "Failed to set post-import torrent label \"{0}\" for {1} in Transmission.", Settings.TvImportedCategory, downloadClientItem.Title);
+                    _logger.Warn(ex, "Failed to set post-import torrent label \"{ImportedCategory}\" for {DownloadTitle} in Transmission.", Settings.TvImportedCategory, downloadClientItem.Title);
                 }
             }
         }
@@ -76,7 +76,7 @@ namespace NzbDrone.Core.Download.Clients.Transmission
         {
             var versionString = _proxy.GetClientVersion(Settings, true);
 
-            _logger.Debug("Transmission version information: {0}", versionString);
+            _logger.Debug("Transmission version information: {Version}", versionString);
 
             var versionResult = Regex.Match(versionString, @"(?<!\(|(\d|\.)+)(\d|\.)+(?!\)|(\d|\.)+)").Value;
             var version = Version.Parse(versionResult);

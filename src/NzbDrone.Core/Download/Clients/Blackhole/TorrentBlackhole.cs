@@ -60,7 +60,7 @@ namespace NzbDrone.Core.Download.Clients.Blackhole
                 stream.Write(fileContent, 0, fileContent.Length);
             }
 
-            _logger.Debug("Saving magnet link succeeded, saved to: {0}", filepath);
+            _logger.Debug("Saving magnet link succeeded, saved to: {FilePath}", filepath);
 
             return null;
         }
@@ -78,7 +78,7 @@ namespace NzbDrone.Core.Download.Clients.Blackhole
                 stream.Write(fileContent, 0, fileContent.Length);
             }
 
-            _logger.Debug("Torrent Download succeeded, saved to: {0}", filepath);
+            _logger.Debug("Torrent Download succeeded, saved to: {FilePath}", filepath);
 
             return null;
         }

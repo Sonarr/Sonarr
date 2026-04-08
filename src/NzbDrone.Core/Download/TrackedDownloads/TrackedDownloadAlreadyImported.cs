@@ -22,11 +22,11 @@ namespace NzbDrone.Core.Download.TrackedDownloads
 
         public bool IsImported(TrackedDownload trackedDownload, List<EpisodeHistory> historyItems)
         {
-            _logger.Trace("Checking if all episodes for '{0}' have been imported", trackedDownload.DownloadItem.Title);
+            _logger.Trace("Checking if all episodes for '{DownloadTitle}' have been imported", trackedDownload.DownloadItem.Title);
 
             if (historyItems.Empty())
             {
-                _logger.Trace("No history for {0}", trackedDownload.DownloadItem.Title);
+                _logger.Trace("No history for {DownloadTitle}", trackedDownload.DownloadItem.Title);
                 return false;
             }
 
@@ -36,16 +36,16 @@ namespace NzbDrone.Core.Download.TrackedDownloads
 
                 if (lastHistoryItem == null)
                 {
-                    _logger.Trace("No history for episode: S{0:00}E{1:00} [{2}]", e.SeasonNumber, e.EpisodeNumber, e.Id);
+                    _logger.Trace("No history for episode: S{SeasonNumber:00}E{EpisodeNumber:00} [{EpisodeId}]", e.SeasonNumber, e.EpisodeNumber, e.Id);
                     return false;
                 }
 
-                _logger.Trace("Last event for episode: S{0:00}E{1:00} [{2}] is: {3}", e.SeasonNumber, e.EpisodeNumber, e.Id, lastHistoryItem.EventType);
+                _logger.Trace("Last event for episode: S{SeasonNumber:00}E{EpisodeNumber:00} [{EpisodeId}] is: {EventType}", e.SeasonNumber, e.EpisodeNumber, e.Id, lastHistoryItem.EventType);
 
                 return lastHistoryItem.EventType == EpisodeHistoryEventType.DownloadFolderImported;
             });
 
-            _logger.Trace("All episodes for '{0}' have been imported: {1}", trackedDownload.DownloadItem.Title, allEpisodesImportedInHistory);
+            _logger.Trace("All episodes for '{DownloadTitle}' have been imported: {AllImported}", trackedDownload.DownloadItem.Title, allEpisodesImportedInHistory);
 
             return allEpisodesImportedInHistory;
         }

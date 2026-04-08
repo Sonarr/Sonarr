@@ -132,23 +132,23 @@ namespace NzbDrone.Core.Download.Pending
                         {
                             if (matchingReport.Reason == PendingReleaseReason.DownloadClientUnavailable)
                             {
-                                _logger.Debug("The release {0} is already pending with reason {1}, not changing reason", decision.RemoteEpisode, matchingReport.Reason);
+                                _logger.Debug("The release {DownloadTitle} is already pending with reason {Reason}, not changing reason", decision.RemoteEpisode, matchingReport.Reason);
                             }
                             else
                             {
-                                _logger.Debug("The release {0} is already pending with reason {1}, changing to {2}", decision.RemoteEpisode, matchingReport.Reason, reason);
+                                _logger.Debug("The release {DownloadTitle} is already pending with reason {OldReason}, changing to {NewReason}", decision.RemoteEpisode, matchingReport.Reason, reason);
                                 matchingReport.Reason = reason;
                                 _repository.Update(matchingReport);
                             }
                         }
                         else
                         {
-                            _logger.Debug("The release {0} is already pending with reason {1}, not adding again", decision.RemoteEpisode, reason);
+                            _logger.Debug("The release {DownloadTitle} is already pending with reason {Reason}, not adding again", decision.RemoteEpisode, reason);
                         }
 
                         if (matchingReports.Count > 1)
                         {
-                            _logger.Debug("The release {0} had {1} duplicate pending, removing duplicates.", decision.RemoteEpisode, matchingReports.Count - 1);
+                            _logger.Debug("The release {DownloadTitle} had {DuplicateCount} duplicate pending, removing duplicates.", decision.RemoteEpisode, matchingReports.Count - 1);
 
                             foreach (var duplicate in matchingReports.Skip(1))
                             {
@@ -161,7 +161,7 @@ namespace NzbDrone.Core.Download.Pending
                         continue;
                     }
 
-                    _logger.Debug("Adding release {0} to pending releases with reason {1}", decision.RemoteEpisode, reason);
+                    _logger.Debug("Adding release {DownloadTitle} to pending releases with reason {Reason}", decision.RemoteEpisode, reason);
                     Insert(decision, reason);
                 }
             }

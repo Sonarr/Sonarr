@@ -44,12 +44,12 @@ namespace NzbDrone.Core.Download.Clients.Vuze
             // We have to make sure the return value points to the job folder OR file.
             if (outputPath.FileName == torrent.Name || torrent.FileCount > 1)
             {
-                _logger.Trace("Vuze output directory: {0}", outputPath);
+                _logger.Trace("Vuze output directory: {OutputPath}", outputPath);
             }
             else
             {
                 outputPath = outputPath + torrent.Name;
-                _logger.Trace("Vuze output file: {0}", outputPath);
+                _logger.Trace("Vuze output file: {OutputPath}", outputPath);
             }
 
             return outputPath;
@@ -59,7 +59,7 @@ namespace NzbDrone.Core.Download.Clients.Vuze
         {
             var versionString = _proxy.GetProtocolVersion(Settings);
 
-            _logger.Debug("Vuze protocol version information: {0}", versionString);
+            _logger.Debug("Vuze protocol version information: {Version}", versionString);
 
             if (!int.TryParse(versionString, out var version) || version < MINIMUM_SUPPORTED_PROTOCOL_VERSION)
             {

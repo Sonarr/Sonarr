@@ -48,7 +48,7 @@ namespace NzbDrone.Core.Download.Clients.Blackhole
                 stream.Write(fileContent, 0, fileContent.Length);
             }
 
-            _logger.Debug("NZB Download succeeded, saved to: {0}", filepath);
+            _logger.Debug("NZB Download succeeded, saved to: {FilePath}", filepath);
 
             return null;
         }

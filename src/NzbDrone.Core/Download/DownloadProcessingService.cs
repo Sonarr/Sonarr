@@ -70,7 +70,7 @@ namespace NzbDrone.Core.Download
                 }
                 catch (Exception e)
                 {
-                    _logger.Debug(e, "Failed to process download: {0}", trackedDownload.DownloadItem.Title);
+                    _logger.Debug(e, "Failed to process download: {DownloadTitle}", trackedDownload.DownloadItem.Title);
                 }
             }
 

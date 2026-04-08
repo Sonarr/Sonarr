@@ -35,7 +35,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
             }
             catch (Exception ex)
             {
-                _logger.Warn(ex, "Failed to get shared folder {0} from Disk Station {1}:{2}", sharedFolder, settings.Host, settings.Port);
+                _logger.Warn(ex, "Failed to get shared folder {SharedFolder} from Disk Station {Host}:{Port}", sharedFolder, settings.Host, settings.Port);
 
                 throw;
             }

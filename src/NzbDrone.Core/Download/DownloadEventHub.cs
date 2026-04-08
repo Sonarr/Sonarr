@@ -88,17 +88,17 @@ namespace NzbDrone.Core.Download
         {
             try
             {
-                _logger.Debug("[{0}] Removing download from {1} history", trackedDownload.DownloadItem.Title, trackedDownload.DownloadItem.DownloadClientInfo.Name);
+                _logger.Debug("[{DownloadTitle}] Removing download from {ClientName} history", trackedDownload.DownloadItem.Title, trackedDownload.DownloadItem.DownloadClientInfo.Name);
                 downloadClient.RemoveItem(trackedDownload.DownloadItem, true);
                 trackedDownload.DownloadItem.Removed = true;
             }
             catch (NotSupportedException)
             {
-                _logger.Warn("Removing item not supported by your download client ({0}).", downloadClient.Definition.Name);
+                _logger.Warn("Removing item not supported by your download client ({ClientName}).", downloadClient.Definition.Name);
             }
             catch (Exception e)
             {
-                _logger.Error(e, "Couldn't remove item {0} from client {1}", trackedDownload.DownloadItem.Title, downloadClient.Name);
+                _logger.Error(e, "Couldn't remove item {DownloadTitle} from client {ClientName}", trackedDownload.DownloadItem.Title, downloadClient.Name);
             }
         }
 
@@ -106,7 +106,7 @@ namespace NzbDrone.Core.Download
         {
             try
             {
-                _logger.Debug("[{0}] Marking download as imported from {1}", trackedDownload.DownloadItem.Title, trackedDownload.DownloadItem.DownloadClientInfo.Name);
+                _logger.Debug("[{DownloadTitle}] Marking download as imported from {ClientName}", trackedDownload.DownloadItem.Title, trackedDownload.DownloadItem.DownloadClientInfo.Name);
                 downloadClient.MarkItemAsImported(trackedDownload.DownloadItem);
             }
             catch (NotSupportedException e)
@@ -115,7 +115,7 @@ namespace NzbDrone.Core.Download
             }
             catch (Exception e)
             {
-                _logger.Error(e, "Couldn't mark item {0} as imported from client {1}", trackedDownload.DownloadItem.Title, downloadClient.Name);
+                _logger.Error(e, "Couldn't mark item {DownloadTitle} as imported from client {ClientName}", trackedDownload.DownloadItem.Title, downloadClient.Name);
             }
         }
     }

@@ -159,7 +159,7 @@ namespace NzbDrone.Core.Download
 
             if (importResults.Empty())
             {
-                trackedDownload.Warn("No files found are eligible for import in {0}", outputPath);
+                trackedDownload.Warn("No files found are eligible for import in {OutputPath}", outputPath);
 
                 return;
             }
@@ -220,7 +220,7 @@ namespace NzbDrone.Core.Download
 
             if (allEpisodesImported)
             {
-                _logger.Debug("All episodes were imported for {0}", trackedDownload.DownloadItem.Title);
+                _logger.Debug("All episodes were imported for {DownloadTitle}", trackedDownload.DownloadItem.Title);
                 trackedDownload.State = TrackedDownloadState.Imported;
 
                 _eventAggregator.PublishEvent(new DownloadCompletedEvent(trackedDownload,
@@ -250,7 +250,7 @@ namespace NzbDrone.Core.Download
 
                 if (atLeastOneEpisodeImported)
                 {
-                    _logger.Debug("All episodes were imported in history for {0}", trackedDownload.DownloadItem.Title);
+                    _logger.Debug("All episodes were imported in history for {DownloadTitle}", trackedDownload.DownloadItem.Title);
                 }
                 else
                 {
@@ -273,7 +273,7 @@ namespace NzbDrone.Core.Download
                 return true;
             }
 
-            _logger.Debug("Not all episodes have been imported for the release '{0}'", trackedDownload.DownloadItem.Title);
+            _logger.Debug("Not all episodes have been imported for the release '{DownloadTitle}'", trackedDownload.DownloadItem.Title);
             return false;
         }
 
@@ -312,7 +312,7 @@ namespace NzbDrone.Core.Download
             if ((OsInfo.IsWindows && !downloadItemOutputPath.IsWindowsPath) ||
                 (OsInfo.IsNotWindows && !downloadItemOutputPath.IsUnixPath))
             {
-                trackedDownload.Warn("[{0}] is not a valid local path. You may need a Remote Path Mapping. Check the download troubleshooting entry on the wiki for details.", downloadItemOutputPath);
+                trackedDownload.Warn("[{OutputPath}] is not a valid local path. You may need a Remote Path Mapping. Check the download troubleshooting entry on the wiki for details.", downloadItemOutputPath);
                 return false;
             }
 

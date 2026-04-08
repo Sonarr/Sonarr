@@ -50,10 +50,10 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
             // Save to the Pneumatic directory (The user will need to ensure its accessible by XBMC)
             var nzbFile = Path.Combine(Settings.NzbFolder, title + ".nzb");
 
-            _logger.Debug("Downloading NZB from: {0} to: {1}", url, nzbFile);
+            _logger.Debug("Downloading NZB from: {Url} to: {FilePath}", url, nzbFile);
             await _httpClient.DownloadFileAsync(url, nzbFile);
 
-            _logger.Debug("NZB Download succeeded, saved to: {0}", nzbFile);
+            _logger.Debug("NZB Download succeeded, saved to: {FilePath}", nzbFile);
 
             var strmFile = WriteStrmFile(title, nzbFile);
 

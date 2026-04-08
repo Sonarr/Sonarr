@@ -84,7 +84,7 @@ namespace NzbDrone.Core.Download
                             throw;
                         }
 
-                        _logger.Debug("Torrent download failed, trying magnet. ({0})", ex.Message);
+                        _logger.Debug("Torrent download failed, trying magnet. ({Message})", ex.Message);
                     }
                 }
 
@@ -115,7 +115,7 @@ namespace NzbDrone.Core.Download
                             throw new ReleaseDownloadException(remoteEpisode.Release, "Magnet not supported by download client. ({0})", ex.Message);
                         }
 
-                        _logger.Debug("Magnet not supported by download client, trying torrent. ({0})", ex.Message);
+                        _logger.Debug("Magnet not supported by download client, trying torrent. ({Message})", ex.Message);
                     }
                 }
 
@@ -149,7 +149,7 @@ namespace NzbDrone.Core.Download
                 {
                     var locationHeader = response.Headers.GetSingleValue("Location");
 
-                    _logger.Trace("Torrent request is being redirected to: {0}", locationHeader);
+                    _logger.Trace("Torrent request is being redirected to: {Url}", locationHeader);
 
                     if (locationHeader != null)
                     {
@@ -168,30 +168,30 @@ namespace NzbDrone.Core.Download
 
                 torrentFile = response.ResponseData;
 
-                _logger.Debug("Downloading torrent for episode '{0}' finished ({1} bytes from {2})", remoteEpisode.Release.Title, torrentFile.Length, torrentUrl);
+                _logger.Debug("Downloading torrent for episode '{EpisodeTitle}' finished ({Bytes} bytes from {Url})", remoteEpisode.Release.Title, torrentFile.Length, torrentUrl);
             }
             catch (HttpException ex)
             {
                 if (ex.Response.StatusCode is HttpStatusCode.NotFound or HttpStatusCode.Gone)
                 {
-                    _logger.Error(ex, "Downloading torrent file for episode '{0}' failed since it no longer exists ({1})", remoteEpisode.Release.Title, torrentUrl);
+                    _logger.Error(ex, "Downloading torrent file for episode '{EpisodeTitle}' failed since it no longer exists ({Url})", remoteEpisode.Release.Title, torrentUrl);
                     throw new ReleaseUnavailableException(remoteEpisode.Release, "Downloading torrent failed", ex);
                 }
 
                 if ((int)ex.Response.StatusCode == 429)
                 {
-                    _logger.Error("API Grab Limit reached for {0}", torrentUrl);
+                    _logger.Error("API Grab Limit reached for {Url}", torrentUrl);
                 }
                 else
                 {
-                    _logger.Error(ex, "Downloading torrent file for episode '{0}' failed ({1})", remoteEpisode.Release.Title, torrentUrl);
+                    _logger.Error(ex, "Downloading torrent file for episode '{EpisodeTitle}' failed ({Url})", remoteEpisode.Release.Title, torrentUrl);
                 }
 
                 throw new ReleaseDownloadException(remoteEpisode.Release, "Downloading torrent failed", ex);
             }
             catch (WebException ex)
             {
-                _logger.Error(ex, "Downloading torrent file for episode '{0}' failed ({1})", remoteEpisode.Release.Title, torrentUrl);
+                _logger.Error(ex, "Downloading torrent file for episode '{EpisodeTitle}' failed ({Url})", remoteEpisode.Release.Title, torrentUrl);
 
                 throw new ReleaseDownloadException(remoteEpisode.Release, "Downloading torrent failed", ex);
             }

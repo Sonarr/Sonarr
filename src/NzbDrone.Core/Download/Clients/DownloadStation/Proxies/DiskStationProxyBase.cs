@@ -94,7 +94,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
                 throw new DownloadClientUnavailableException("Unable to connect to Diskstation, please check your settings", ex);
             }
 
-            _logger.Debug("Trying to {0}", operation);
+            _logger.Debug("Trying to {Operation}", operation);
 
             if (response.StatusCode == HttpStatusCode.OK)
             {
@@ -251,7 +251,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation.Proxies
                 {
                     if (api == DiskStationApi.DownloadStation2Task)
                     {
-                        _logger.Warn("Info of {0} not found on {1}:{2}", api, settings.Host, settings.Port);
+                        _logger.Warn("Info of {ApiType} not found on {Host}:{Port}", api, settings.Host, settings.Port);
                     }
                     else
                     {

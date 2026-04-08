@@ -41,19 +41,19 @@ public class RejectedImportService : IRejectedImportService
         if (rejectionReason == ImportRejectionReason.DangerousFile &&
             indexerSettings.FailDownloads.Contains(FailDownloads.PotentiallyDangerous))
         {
-            _logger.Trace("Download '{0}' contains potentially dangerous file, marking as failed", trackedDownload.DownloadItem.Title);
+            _logger.Trace("Download '{DownloadTitle}' contains potentially dangerous file, marking as failed", trackedDownload.DownloadItem.Title);
             trackedDownload.Fail();
         }
         else if (rejectionReason == ImportRejectionReason.ExecutableFile &&
             indexerSettings.FailDownloads.Contains(FailDownloads.Executables))
         {
-            _logger.Trace("Download '{0}' contains executable file, marking as failed", trackedDownload.DownloadItem.Title);
+            _logger.Trace("Download '{DownloadTitle}' contains executable file, marking as failed", trackedDownload.DownloadItem.Title);
             trackedDownload.Fail();
         }
         else if (rejectionReason == ImportRejectionReason.UserRejectedExtension &&
                  indexerSettings.FailDownloads.Contains(FailDownloads.UserDefinedExtensions))
         {
-            _logger.Trace("Download '{0}' contains user defined rejected file extension, marking as failed", trackedDownload.DownloadItem.Title);
+            _logger.Trace("Download '{DownloadTitle}' contains user defined rejected file extension, marking as failed", trackedDownload.DownloadItem.Title);
             trackedDownload.Fail();
         }
         else

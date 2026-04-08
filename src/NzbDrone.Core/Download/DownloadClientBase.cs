@@ -47,11 +47,11 @@ namespace NzbDrone.Core.Download
 
                     if (exception is not null)
                     {
-                        _logger.Info(exception, "Request for {0} failed with exception '{1}'. Retrying in {2}s.", Definition.Name, exception.Message, args.RetryDelay.TotalSeconds);
+                        _logger.Info(exception, "Request for {ClientName} failed with exception '{Message}'. Retrying in {RetryDelay}s.", Definition.Name, exception.Message, args.RetryDelay.TotalSeconds);
                     }
                     else
                     {
-                        _logger.Info("Request for {0} failed with status {1}. Retrying in {2}s.", Definition.Name, args.Outcome.Result?.StatusCode, args.RetryDelay.TotalSeconds);
+                        _logger.Info("Request for {ClientName} failed with status {StatusCode}. Retrying in {RetryDelay}s.", Definition.Name, args.Outcome.Result?.StatusCode, args.RetryDelay.TotalSeconds);
                     }
 
                     return default;
@@ -116,7 +116,7 @@ namespace NzbDrone.Core.Download
 
             if (item.OutputPath.IsEmpty)
             {
-                _logger.Trace("[{0}] Doesn't have an outputPath, skipping delete data.", item.Title);
+                _logger.Trace("[{DownloadTitle}] Doesn't have an outputPath, skipping delete data.", item.Title);
                 return;
             }
 
@@ -124,24 +124,24 @@ namespace NzbDrone.Core.Download
             {
                 if (_diskProvider.FolderExists(item.OutputPath.FullPath))
                 {
-                    _logger.Debug("[{0}] Deleting folder '{1}'.", item.Title, item.OutputPath);
+                    _logger.Debug("[{DownloadTitle}] Deleting folder '{OutputPath}'.", item.Title, item.OutputPath);
 
                     _diskProvider.DeleteFolder(item.OutputPath.FullPath, true);
                 }
                 else if (_diskProvider.FileExists(item.OutputPath.FullPath))
                 {
-                    _logger.Debug("[{0}] Deleting file '{1}'.", item.Title, item.OutputPath);
+                    _logger.Debug("[{DownloadTitle}] Deleting file '{OutputPath}'.", item.Title, item.OutputPath);
 
                     _diskProvider.DeleteFile(item.OutputPath.FullPath);
                 }
                 else
                 {
-                    _logger.Trace("[{0}] File or folder '{1}' doesn't exist, skipping cleanup.", item.Title, item.OutputPath);
+                    _logger.Trace("[{DownloadTitle}] File or folder '{OutputPath}' doesn't exist, skipping cleanup.", item.Title, item.OutputPath);
                 }
             }
             catch (Exception ex)
             {
-                _logger.Warn(ex, string.Format("[{0}] Error occurred while trying to delete data from '{1}'.", item.Title, item.OutputPath));
+                _logger.Warn(ex, "[{DownloadTitle}] Error occurred while trying to delete data from '{OutputPath}'.", item.Title, item.OutputPath);
             }
         }
 
@@ -176,7 +176,7 @@ namespace NzbDrone.Core.Download
 
             if (mustBeWritable && !_diskProvider.FolderWritable(folder))
             {
-                _logger.Error("Folder '{0}' is not writable.", folder);
+                _logger.Error("Folder '{FolderPath}' is not writable.", folder);
                 return new NzbDroneValidationFailure(propertyName, "Unable to write to folder")
                 {
                     DetailedDescription = string.Format("The folder you specified is not writable. Please verify the folder permissions for the user account '{0}', which is used to execute Sonarr.", Environment.UserName)

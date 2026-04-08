@@ -88,7 +88,7 @@ namespace NzbDrone.Core.Download
 
                 try
                 {
-                    _logger.Debug("Attempting download with client: {0}", downloadClient.Definition.Name);
+                    _logger.Debug("Attempting download with client: {ClientName}", downloadClient.Definition.Name);
                     await DownloadReport(remoteEpisode, downloadClient);
 
                     _downloadClientProvider.ReportSuccessfulDownloadClient(
@@ -99,7 +99,7 @@ namespace NzbDrone.Core.Download
                 }
                 catch (DownloadClientException ex)
                 {
-                    _logger.Trace(ex, "Unable to add report to download client: {0}", downloadClient.Definition.Name);
+                    _logger.Trace(ex, "Unable to add report to download client: {ClientName}", downloadClient.Definition.Name);
                     triedClients.Add(downloadClient.Definition.Id);
                 }
                 catch (Exception ex)
@@ -110,12 +110,12 @@ namespace NzbDrone.Core.Download
                         throw;
                     }
 
-                    _logger.Trace(ex, "Unable to add report to download client: {0}", downloadClient.Definition.Name);
+                    _logger.Trace(ex, "Unable to add report to download client: {ClientName}", downloadClient.Definition.Name);
                     triedClients.Add(downloadClient.Definition.Id);
                 }
             }
 
-            throw new DownloadClientUnavailableException("All '{0}' download clients failed", remoteEpisode.Release.DownloadProtocol);
+            throw new DownloadClientUnavailableException("All '{DownloadProtocol}' download clients failed", remoteEpisode.Release.DownloadProtocol);
         }
 
         private async Task DownloadReport(RemoteEpisode remoteEpisode, IDownloadClient downloadClient)
@@ -156,17 +156,17 @@ namespace NzbDrone.Core.Download
             }
             catch (ReleaseUnavailableException)
             {
-                _logger.Trace("Release {0} no longer available on indexer.", remoteEpisode);
+                _logger.Trace("Release {DownloadTitle} no longer available on indexer.", remoteEpisode);
                 throw;
             }
             catch (ReleaseBlockedException)
             {
-                _logger.Trace("Release {0} previously added to blocklist, not sending to download client again.", remoteEpisode);
+                _logger.Trace("Release {DownloadTitle} previously added to blocklist, not sending to download client again.", remoteEpisode);
                 throw;
             }
             catch (DownloadClientRejectedReleaseException)
             {
-                _logger.Trace("Release {0} rejected by download client, possible duplicate.", remoteEpisode);
+                _logger.Trace("Release {DownloadTitle} rejected by download client, possible duplicate.", remoteEpisode);
                 throw;
             }
             catch (ReleaseDownloadException ex)
@@ -193,7 +193,7 @@ namespace NzbDrone.Core.Download
                 episodeGrabbedEvent.DownloadId = downloadClientId;
             }
 
-            _logger.ProgressInfo("Report sent to {0}. Indexer {1}. {2}", downloadClient.Definition.Name, remoteEpisode.Release.Indexer, downloadTitle);
+            _logger.ProgressInfo("Report sent to {ClientName}. Indexer {Indexer}. {DownloadTitle}", downloadClient.Definition.Name, remoteEpisode.Release.Indexer, downloadTitle);
             _eventAggregator.PublishEvent(episodeGrabbedEvent);
         }
     }

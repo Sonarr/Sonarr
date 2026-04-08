@@ -170,7 +170,7 @@ namespace NzbDrone.Core.Download.Clients.Blackhole
             }
             catch (Exception ex)
             {
-                _logger.Trace(ex, "Ignored hashing error during scan for {0}", folder);
+                _logger.Trace(ex, "Ignored hashing error during scan for {FolderPath}", folder);
             }
 
             foreach (var file in files.OrderBy(v => v))
@@ -193,7 +193,7 @@ namespace NzbDrone.Core.Download.Clients.Blackhole
             }
             catch (Exception ex)
             {
-                _logger.Trace(ex, "Ignored hashing error during scan for {0}", file);
+                _logger.Trace(ex, "Ignored hashing error during scan for {FilePath}", file);
             }
 
             return HashConverter.GetHash(data.ToString()).ToHexString();

@@ -190,7 +190,7 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
 
             HttpResponse response;
 
-            _logger.Debug("Url: {0}", httpRequest.Url);
+            _logger.Debug("Url: {Url}", httpRequest.Url);
 
             try
             {

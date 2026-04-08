@@ -200,26 +200,26 @@ namespace NzbDrone.Core.Download
 
             try
             {
-                _logger.Trace("Grabbing release '{0}' from Indexer {1} at priority {2}.", remoteEpisode, remoteIndexer, remoteEpisode.Release.IndexerPriority);
+                _logger.Trace("Grabbing release '{DownloadTitle}' from Indexer {Indexer} at priority {IndexerPriority}.", remoteEpisode, remoteIndexer, remoteEpisode.Release.IndexerPriority);
                 await _downloadService.DownloadReport(remoteEpisode, downloadClientId);
 
                 return ProcessedDecisionResult.Grabbed;
             }
             catch (ReleaseUnavailableException)
             {
-                _logger.Warn("Failed to download release '{0}' from Indexer {1}. Release not available", remoteEpisode, remoteIndexer);
+                _logger.Warn("Failed to download release '{DownloadTitle}' from Indexer {Indexer}. Release not available", remoteEpisode, remoteIndexer);
                 return ProcessedDecisionResult.Rejected;
             }
             catch (Exception ex)
             {
                 if (ex is DownloadClientUnavailableException || ex is DownloadClientAuthenticationException)
                 {
-                    _logger.Debug(ex, "Failed to send release '{0}' from Indexer {1} to download client, storing until later.", remoteEpisode, remoteIndexer);
+                    _logger.Debug(ex, "Failed to send release '{DownloadTitle}' from Indexer {Indexer} to download client, storing until later.", remoteEpisode, remoteIndexer);
                     return ProcessedDecisionResult.Failed;
                 }
                 else
                 {
-                    _logger.Warn(ex, "Couldn't add release '{0}' from Indexer {1} to download queue.", remoteEpisode, remoteIndexer);
+                    _logger.Warn(ex, "Couldn't add release '{DownloadTitle}' from Indexer {Indexer} to download queue.", remoteEpisode, remoteIndexer);
                     return ProcessedDecisionResult.Skipped;
                 }
             }

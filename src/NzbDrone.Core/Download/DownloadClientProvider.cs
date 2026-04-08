@@ -165,7 +165,7 @@ namespace NzbDrone.Core.Download
             {
                 if (blockedClients.TryGetValue(client.Definition.Id, out var blockedClientStatus))
                 {
-                    _logger.Debug("Temporarily ignoring client {0} till {1} due to recent failures.", client.Definition.Name, blockedClientStatus.DisabledTill.Value.ToLocalTime());
+                    _logger.Debug("Temporarily ignoring client {ClientName} till {DisabledTill} due to recent failures.", client.Definition.Name, blockedClientStatus.DisabledTill.Value.ToLocalTime());
                     continue;
                 }
 
@@ -234,7 +234,7 @@ namespace NzbDrone.Core.Download
                 }
                 else
                 {
-                    _logger.Trace("No non-blocked Download Client available{0}.", forSingleClient ? ", retrying blocked one" : $" for {downloadProtocol}, returning all clients");
+                    _logger.Trace("No non-blocked Download Client available{Suffix}.", forSingleClient ? ", retrying blocked one" : $" for {downloadProtocol}, returning all clients");
                 }
             }
 

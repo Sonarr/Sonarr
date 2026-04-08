@@ -52,7 +52,7 @@ namespace NzbDrone.Core.Download.Clients.Tribler
         {
             var httpRequest = requestBuilder;
 
-            _logger.Debug("Url: {0}", httpRequest.Url);
+            _logger.Debug("Url: {Url}", httpRequest.Url);
 
             try
             {
@@ -66,7 +66,7 @@ namespace NzbDrone.Core.Download.Clients.Tribler
                     throw new DownloadClientAuthenticationException("Unauthorized - AuthToken is invalid", ex);
                 }
 
-                throw new DownloadClientUnavailableException("Unable to connect to Tribler. Status Code: {0}", ex.Response.StatusCode, ex);
+                throw new DownloadClientUnavailableException("Unable to connect to Tribler. Status Code: {StatusCode}", ex.Response.StatusCode, ex);
             }
         }
 

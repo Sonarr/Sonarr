@@ -130,7 +130,7 @@ namespace NzbDrone.Core.Download.TrackedDownloads
             }
             catch (Exception e)
             {
-                _logger.Error(e, "Couldn't process tracked download {0}", downloadItem.Title);
+                _logger.Error(e, "Couldn't process tracked download {DownloadTitle}", downloadItem.Title);
             }
 
             return trackedDownload;

@@ -98,7 +98,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             var editResult = EditQueue("GroupSetParameter", 0, "drone=" + droneId, item.NzbId, settings);
             if (editResult)
             {
-                _logger.Debug("Nzbget download drone parameter set to: {0}", droneId);
+                _logger.Debug("Nzbget download drone parameter set to: {DroneId}", droneId);
             }
 
             return droneId;
@@ -125,7 +125,7 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
             if (editResult)
             {
-                _logger.Debug("Nzbget download drone parameter set to: {0}", droneId);
+                _logger.Debug("Nzbget download drone parameter set to: {DroneId}", droneId);
             }
 
             return droneId;
@@ -184,19 +184,19 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             {
                 if (!EditQueue("GroupFinalDelete", 0, "", queueItem.NzbId, settings))
                 {
-                    _logger.Warn("Failed to remove item from nzbget queue, {0} [{1}]", queueItem.NzbName, queueItem.NzbId);
+                    _logger.Warn("Failed to remove item from nzbget queue, {NzbName} [{NzbId}]", queueItem.NzbName, queueItem.NzbId);
                 }
             }
             else if (historyItem != null)
             {
                 if (!EditQueue("HistoryDelete", 0, "", historyItem.Id, settings))
                 {
-                    _logger.Warn("Failed to remove item from nzbget history, {0} [{1}]", historyItem.Name, historyItem.Id);
+                    _logger.Warn("Failed to remove item from nzbget history, {NzbName} [{NzbId}]", historyItem.Name, historyItem.Id);
                 }
             }
             else
             {
-                _logger.Warn("Unable to remove item from nzbget, Unknown ID: {0}", id);
+                _logger.Warn("Unable to remove item from nzbget, Unknown ID: {DownloadId}", id);
                 return;
             }
         }
@@ -208,13 +208,13 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
 
             if (item == null)
             {
-                _logger.Warn("Unable to return item to queue, Unknown ID: {0}", id);
+                _logger.Warn("Unable to return item to queue, Unknown ID: {DownloadId}", id);
                 return;
             }
 
             if (!EditQueue("HistoryRedownload", 0, "", item.Id, settings))
             {
-                _logger.Warn("Failed to return item to queue from history, {0} [{1}]", item.Name, item.Id);
+                _logger.Warn("Failed to return item to queue from history, {NzbName} [{NzbId}]", item.Name, item.Id);
             }
         }
 

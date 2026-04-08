@@ -171,7 +171,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
             }
 
             DsTaskProxy.RemoveTask(ParseDownloadId(item.DownloadId), Settings);
-            _logger.Debug("{0} removed correctly", item.DownloadId);
+            _logger.Debug("{DownloadId} removed correctly", item.DownloadId);
         }
 
         protected override string AddFromNzbFile(RemoteEpisode remoteEpisode, string filename, byte[] fileContent)
@@ -186,11 +186,11 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
             if (item != null)
             {
-                _logger.Debug("{0} added correctly", remoteEpisode);
+                _logger.Debug("{DownloadTitle} added correctly", remoteEpisode);
                 return CreateDownloadId(item.Id, hashedSerialNumber);
             }
 
-            _logger.Debug("No such task {0} in Download Station", filename);
+            _logger.Debug("No such task {Filename} in Download Station", filename);
 
             throw new DownloadClientException("Failed to add NZB task to Download Station");
         }
@@ -301,7 +301,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
         {
             var info = DsTaskProxy.GetApiInfo(Settings);
 
-            _logger.Debug("Download Station api version information: Min {0} - Max {1}", info.MinVersion, info.MaxVersion);
+            _logger.Debug("Download Station api version information: Min {MinVersion} - Max {MaxVersion}", info.MinVersion, info.MaxVersion);
 
             if (info.MinVersion > 2 || info.MaxVersion < 2)
             {
@@ -362,7 +362,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
             if (downloadedString.IsNullOrWhiteSpace() || !long.TryParse(downloadedString, out var downloadedSize))
             {
-                _logger.Debug("Task {0} has invalid size_downloaded: {1}", task.Title, downloadedString);
+                _logger.Debug("Task {TaskTitle} has invalid size_downloaded: {SizeDownloaded}", task.Title, downloadedString);
                 downloadedSize = 0;
             }
 
@@ -375,7 +375,7 @@ namespace NzbDrone.Core.Download.Clients.DownloadStation
 
             if (speedString.IsNullOrWhiteSpace() || !long.TryParse(speedString, out var downloadSpeed))
             {
-                _logger.Debug("Task {0} has invalid speed_download: {1}", task.Title, speedString);
+                _logger.Debug("Task {TaskTitle} has invalid speed_download: {SpeedDownload}", task.Title, speedString);
                 downloadSpeed = 0;
             }
 

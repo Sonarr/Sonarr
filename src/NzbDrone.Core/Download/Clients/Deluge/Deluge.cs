@@ -48,7 +48,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
                 }
                 catch (DownloadClientUnavailableException)
                 {
-                    _logger.Warn("Failed to set torrent post-import label \"{0}\" for {1} in Deluge. Does the label exist?",
+                    _logger.Warn("Failed to set torrent post-import label \"{ImportedCategory}\" for {DownloadTitle} in Deluge. Does the label exist?",
                         Settings.TvImportedCategory,
                         downloadClientItem.Title);
                 }
@@ -155,7 +155,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
                 }
                 catch (OverflowException ex)
                 {
-                    _logger.Debug(ex, "ETA for {0} is too long: {1}", torrent.Name, torrent.Eta);
+                    _logger.Debug(ex, "ETA for {TorrentName} is too long: {Eta}", torrent.Name, torrent.Eta);
                     item.RemainingTime = TimeSpan.MaxValue;
                 }
 
@@ -199,7 +199,7 @@ namespace NzbDrone.Core.Download.Clients.Deluge
             {
                 if (_hasAttemptedReconnecting)
                 {
-                    _logger.Warn("{0} torrent(s) were ignored because they did not have a hash or title. Deluge may have disconnected from it's daemon. If you continue to see this error, check Deluge for invalid torrents.", ignoredCount);
+                    _logger.Warn("{IgnoredCount} torrent(s) were ignored because they did not have a hash or title. Deluge may have disconnected from it's daemon. If you continue to see this error, check Deluge for invalid torrents.", ignoredCount);
                 }
                 else
                 {

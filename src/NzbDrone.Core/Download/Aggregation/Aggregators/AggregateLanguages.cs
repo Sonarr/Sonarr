@@ -34,7 +34,7 @@ namespace NzbDrone.Core.Download.Aggregation.Aggregators
 
             if (series == null)
             {
-                _logger.Debug("Unable to aggregate languages, using parsed values: {0}", string.Join(", ", languages.ToList()));
+                _logger.Debug("Unable to aggregate languages, using parsed values: {Languages}", string.Join(", ", languages.ToList()));
 
                 remoteEpisode.Languages = releaseInfo != null && releaseInfo.Languages.Any() ? releaseInfo.Languages : languages;
 
@@ -43,7 +43,7 @@ namespace NzbDrone.Core.Download.Aggregation.Aggregators
 
             if (releaseInfo != null && releaseInfo.Languages.Any())
             {
-                _logger.Debug("Languages provided by indexer, using release values: {0}", string.Join(", ", releaseInfo.Languages));
+                _logger.Debug("Languages provided by indexer, using release values: {Languages}", string.Join(", ", releaseInfo.Languages));
 
                 // Use languages from release (given by indexer or user) if available
                 languages = releaseInfo.Languages;
@@ -108,7 +108,7 @@ namespace NzbDrone.Core.Download.Aggregation.Aggregators
             if (languages.Count == 0 || (languages.Count == 1 && languages.First() == Language.Unknown))
             {
                 languages = new List<Language> { series.OriginalLanguage };
-                _logger.Debug("Language couldn't be parsed from release, fallback to series original language: {0}", series.OriginalLanguage.Name);
+                _logger.Debug("Language couldn't be parsed from release, fallback to series original language: {OriginalLanguage}", series.OriginalLanguage.Name);
             }
 
             if (languages.Contains(Language.Original))
@@ -125,7 +125,7 @@ namespace NzbDrone.Core.Download.Aggregation.Aggregators
                 }
             }
 
-            _logger.Debug("Selected languages: {0}", string.Join(", ", languages.ToList()));
+            _logger.Debug("Selected languages: {Languages}", string.Join(", ", languages.ToList()));
 
             remoteEpisode.Languages = languages;
 
