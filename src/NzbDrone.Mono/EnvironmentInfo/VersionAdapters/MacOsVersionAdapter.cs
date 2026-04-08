@@ -28,7 +28,7 @@ namespace NzbDrone.Mono.EnvironmentInfo.VersionAdapters
 
             if (!_diskProvider.FolderExists(PLIST_DIR))
             {
-                _logger.Debug("Directory {0} doesn't exist", PLIST_DIR);
+                _logger.Debug("Directory {Directory} doesn't exist", PLIST_DIR);
                 return null;
             }
 
@@ -40,7 +40,7 @@ namespace NzbDrone.Mono.EnvironmentInfo.VersionAdapters
 
             if (string.IsNullOrWhiteSpace(versionFile))
             {
-                _logger.Debug("Couldn't find version plist file in {0}", PLIST_DIR);
+                _logger.Debug("Couldn't find version plist file in {Directory}", PLIST_DIR);
                 return null;
             }
 

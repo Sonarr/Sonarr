@@ -85,15 +85,15 @@ namespace NzbDrone.Update.UpdateEngine
 
         public void Start(string installationFolder, int processId)
         {
-            _logger.Info("Installation Folder: {0}", installationFolder);
-            _logger.Info("Updating Sonarr from version {0} to version {1}", _detectExistingVersion.GetExistingVersion(installationFolder), BuildInfo.Version);
+            _logger.Info("Installation Folder: {InstallationFolder}", installationFolder);
+            _logger.Info("Updating Sonarr from version {ExistingVersion} to version {NewVersion}", _detectExistingVersion.GetExistingVersion(installationFolder), BuildInfo.Version);
 
             Verify(installationFolder, processId);
 
             if (installationFolder.EndsWith(@"\bin\Sonarr") || installationFolder.EndsWith(@"/bin/Sonarr"))
             {
                 installationFolder = installationFolder.GetParentPath();
-                _logger.Info("Fixed Installation Folder: {0}", installationFolder);
+                _logger.Info("Fixed Installation Folder: {InstallationFolder}", installationFolder);
             }
 
             var appType = _detectApplicationType.GetAppType();

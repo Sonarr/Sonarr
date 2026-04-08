@@ -52,7 +52,7 @@ public class ReleasePushController : RestController<ReleasePushResource>
     [Consumes("application/json")]
     public ActionResult<ReleaseResource> Create([FromBody] ReleasePushResource release)
     {
-        _logger.Info("Release pushed: {0} - {1}", release.Title, release.DownloadUrl ?? release.MagnetUrl);
+        _logger.Info("Release pushed: {ReleaseTitle} - {DownloadUrl}", release.Title, release.DownloadUrl ?? release.MagnetUrl);
 
         ValidateResource(release);
 
@@ -89,11 +89,11 @@ public class ReleasePushController : RestController<ReleasePushResource>
 
         if (indexer == null)
         {
-            _logger.Debug("Push Release {0} not associated with an indexer.", release.Title);
+            _logger.Debug("Push Release {ReleaseTitle} not associated with an indexer.", release.Title);
         }
         else
         {
-            _logger.Debug("Push Release {0} associated with indexer '{1} ({2})", release.Title, indexer.Name, indexer.Id);
+            _logger.Debug("Push Release {ReleaseTitle} associated with indexer '{IndexerName} ({IndexerId})", release.Title, indexer.Name, indexer.Id);
 
             release.IndexerId = indexer.Id;
             release.Indexer = indexer.Name;
@@ -106,11 +106,11 @@ public class ReleasePushController : RestController<ReleasePushResource>
 
         if (downloadClient == null)
         {
-            _logger.Debug("Push Release {0} not associated with a download client.", release.Title);
+            _logger.Debug("Push Release {ReleaseTitle} not associated with a download client.", release.Title);
         }
         else
         {
-            _logger.Debug("Push Release {0} associated with download client '{1} ({2})", release.Title, downloadClient.Name, downloadClient.Id);
+            _logger.Debug("Push Release {ReleaseTitle} associated with download client '{DownloadClientName} ({DownloadClientId})", release.Title, downloadClient.Name, downloadClient.Id);
         }
 
         return downloadClient?.Id;

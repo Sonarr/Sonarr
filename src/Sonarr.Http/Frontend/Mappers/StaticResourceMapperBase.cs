@@ -49,7 +49,7 @@ namespace Sonarr.Http.Frontend.Mappers
                 }));
             }
 
-            _logger.Warn("File {0} not found", filePath);
+            _logger.Warn("File {FilePath} not found", filePath);
 
             return Task.FromResult<IActionResult>(null);
         }

@@ -44,7 +44,7 @@ namespace NzbDrone.Mono.Disk
 
             if (mount == null)
             {
-                _logger.Debug("Unable to get free space for '{0}', unable to find suitable drive", path);
+                _logger.Debug("Unable to get free space for '{Path}', unable to find suitable drive", path);
                 return null;
             }
 
@@ -80,7 +80,7 @@ namespace NzbDrone.Mono.Disk
 
         protected void SetPermissions(string path, string mask, string group, FilePermissions permissions)
         {
-            _logger.Debug("Setting permissions: {0} on {1}", mask, path);
+            _logger.Debug("Setting permissions: {Mask} on {Path}", mask, path);
 
             // Preserve non-access permissions
             if (Syscall.stat(path, out var curStat) < 0)
@@ -160,7 +160,7 @@ namespace NzbDrone.Mono.Disk
             }
             catch (Exception ex)
             {
-                _logger.Debug(ex, "Failed to copy permissions from {0} to {1}", sourcePath, targetPath);
+                _logger.Debug(ex, "Failed to copy permissions from {SourcePath} to {TargetPath}", sourcePath, targetPath);
             }
         }
 
@@ -188,7 +188,7 @@ namespace NzbDrone.Mono.Disk
                         }
                         catch (Exception ex)
                         {
-                            _logger.Debug(ex, "Failed to fetch drive info for mount point: {0}", d.Name);
+                            _logger.Debug(ex, "Failed to fetch drive info for mount point: {MountPoint}", d.Name);
 
                             return null;
                         }
@@ -325,7 +325,7 @@ namespace NzbDrone.Mono.Disk
                     Syscall.lstat(destination, out var deststat) != 0 &&
                     Syscall.rename(source, destination) == 0)
                 {
-                    _logger.Trace("Moved '{0}' -> '{1}' using Syscall.rename", source, destination);
+                    _logger.Trace("Moved '{Source}' -> '{Destination}' using Syscall.rename", source, destination);
                     return;
                 }
             }
@@ -350,7 +350,7 @@ namespace NzbDrone.Mono.Disk
                 if (exists && dstInfo.Length == srcInfo.Length)
                 {
                     // mono 6.0, mono 6.4 and netcore 3.1 bug: full length file since utime and chmod happens at the end
-                    _logger.Debug("{3} failed to {2} file likely due to known {3} bug, attempting to {2} directly. '{0}' -> '{1}'", source, destination, move ? "move" : "copy", PlatformInfo.PlatformName);
+                    _logger.Debug("{PlatformName} failed to {Operation} file likely due to known platform bug, attempting to {Operation2} directly. '{Source}' -> '{Destination}'", PlatformInfo.PlatformName, move ? "move" : "copy", move ? "move" : "copy", source, destination);
 
                     // Check at least part of the file since UnauthorizedAccess can happen due to legitimate reasons too
                     var checkLength = (int)Math.Min(64 * 1024, dstInfo.Length);
@@ -359,7 +359,7 @@ namespace NzbDrone.Mono.Disk
                         var srcData = new byte[checkLength];
                         var dstData = new byte[checkLength];
 
-                        _logger.Trace("Check last {0} bytes from {1}", checkLength, destination);
+                        _logger.Trace("Check last {CheckLength} bytes from {Destination}", checkLength, destination);
 
                         using (var srcStream = new FileStream(source, FileMode.Open, FileAccess.Read))
                         using (var dstStream = new FileStream(destination, FileMode.Open, FileAccess.Read))
@@ -381,7 +381,7 @@ namespace NzbDrone.Mono.Disk
                             }
                         }
 
-                        _logger.Trace("Copy was complete, finishing {0} operation", move ? "move" : "copy");
+                        _logger.Trace("Copy was complete, finishing {Operation} operation", move ? "move" : "copy");
                     }
                 }
                 else
@@ -398,12 +398,12 @@ namespace NzbDrone.Mono.Disk
                     }
                     catch
                     {
-                        _logger.Debug("Unable to change last modified date for {0}, skipping.", destination);
+                        _logger.Debug("Unable to change last modified date for {Destination}, skipping.", destination);
                     }
 
                     if (move)
                     {
-                        _logger.Trace("Removing source file {0}", source);
+                        _logger.Trace("Removing source file {Source}", source);
                         File.Delete(source);
                     }
                 }
@@ -433,18 +433,18 @@ namespace NzbDrone.Mono.Disk
             {
                 if (ex.ErrorCode == Errno.EXDEV)
                 {
-                    _logger.Trace("Hardlink '{0}' to '{1}' failed due to cross-device access.", source, destination);
+                    _logger.Trace("Hardlink '{Source}' to '{Destination}' failed due to cross-device access.", source, destination);
                 }
                 else
                 {
-                    _logger.Debug(ex, "Hardlink '{0}' to '{1}' failed.", source, destination);
+                    _logger.Debug(ex, "Hardlink '{Source}' to '{Destination}' failed.", source, destination);
                 }
 
                 return false;
             }
             catch (Exception ex)
             {
-                _logger.Debug(ex, "Hardlink '{0}' to '{1}' failed.", source, destination);
+                _logger.Debug(ex, "Hardlink '{Source}' to '{Destination}' failed.", source, destination);
                 return false;
             }
         }

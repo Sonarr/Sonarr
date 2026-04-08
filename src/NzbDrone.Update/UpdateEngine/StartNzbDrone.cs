@@ -72,7 +72,7 @@ namespace NzbDrone.Update.UpdateEngine
 
         private void Start(string installationFolder, string fileName)
         {
-            _logger.Info("Starting {0}", fileName);
+            _logger.Info("Starting {FileName}", fileName);
             var path = Path.Combine(installationFolder, fileName);
 
             if (!_startupContext.Flags.Contains(StartupContext.NO_BROWSER))

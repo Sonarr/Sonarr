@@ -33,7 +33,7 @@ namespace NzbDrone.Host
             {
                 if (_runtimeInfo.IsUserInteractive)
                 {
-                    _logger.Info("Starting default browser. {0}", url);
+                    _logger.Info("Starting default browser. {Url}", url);
                     _processProvider.OpenDefaultBrowser(url);
                 }
                 else
@@ -43,7 +43,7 @@ namespace NzbDrone.Host
             }
             catch (Exception e)
             {
-                _logger.Error(e, "Couldn't open default browser to {0}", url);
+                _logger.Error(e, "Couldn't open default browser to {Url}", url);
             }
         }
     }

@@ -34,7 +34,7 @@ namespace NzbDrone.Update.UpdateEngine
         {
             _logger.Info("Attempting to rollback upgrade");
             var count = _diskTransferService.MirrorFolder(_appFolderInfo.GetUpdateBackUpFolder(), target);
-            _logger.Info("Rolled back {0} files", count);
+            _logger.Info("Rolled back {FileCount} files", count);
         }
     }
 }

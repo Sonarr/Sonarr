@@ -38,14 +38,14 @@ namespace Sonarr.Http.ErrorManagement
 
             if (exception is ApiException apiException)
             {
-                _logger.Warn(apiException, "API Error:\n{0}", apiException.Message);
+                _logger.Warn(apiException, "API Error:\n{Message}", apiException.Message);
 
                 errorModel = new ErrorModel(apiException);
                 statusCode = apiException.StatusCode;
             }
             else if (exception is ValidationException validationException)
             {
-                _logger.Warn("Invalid request {0}", validationException.Message);
+                _logger.Warn("Invalid request {Message}", validationException.Message);
 
                 response.StatusCode = (int)HttpStatusCode.BadRequest;
                 response.ContentType = "application/json";
@@ -74,11 +74,11 @@ namespace Sonarr.Http.ErrorManagement
                     }
                 }
 
-                _logger.Error(sqLiteException, "[{0} {1}]", context.Request.Method, context.Request.Path);
+                _logger.Error(sqLiteException, "[{Method} {Path}]", context.Request.Method, context.Request.Path);
             }
             else
             {
-                _logger.Fatal(exception, "Request Failed. {0} {1}", context.Request.Method, context.Request.Path);
+                _logger.Fatal(exception, "Request Failed. {Method} {Path}", context.Request.Method, context.Request.Path);
             }
 
             await errorModel.WriteToResponse(response, statusCode);

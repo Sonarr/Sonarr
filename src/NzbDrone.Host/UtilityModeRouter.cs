@@ -38,7 +38,7 @@ namespace NzbDrone.Host
 
         public void Route(ApplicationModes applicationModes)
         {
-            _logger.Info("Application mode: {0}", applicationModes);
+            _logger.Info("Application mode: {ApplicationMode}", applicationModes);
 
             switch (applicationModes)
             {

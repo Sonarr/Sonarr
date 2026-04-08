@@ -69,7 +69,7 @@ namespace Sonarr.Http.Frontend
                 return NotFound();
             }
 
-            _logger.Warn("Couldn't find handler for {0}", path);
+            _logger.Warn("Couldn't find handler for {Path}", path);
 
             return NotFound();
         }

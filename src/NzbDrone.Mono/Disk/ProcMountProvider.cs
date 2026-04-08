@@ -49,7 +49,7 @@ namespace NzbDrone.Mono.Disk
             {
                 if (!_hasLoggedProcMountFailure)
                 {
-                    _logger.Debug(ex, "Failed to retrieve mounts from {0}", PROC_MOUNTS_FILENAME);
+                    _logger.Debug(ex, "Failed to retrieve mounts from {FileName}", PROC_MOUNTS_FILENAME);
                     _hasLoggedProcMountFailure = true;
                 }
             }
@@ -78,7 +78,7 @@ namespace NzbDrone.Mono.Disk
                 }
                 catch (Exception ex)
                 {
-                    _logger.Debug(ex, "Failed to get filesystem types from {0}, using default set.", PROC_FILESYSTEMS_FILENAME);
+                    _logger.Debug(ex, "Failed to get filesystem types from {FileName}, using default set.", PROC_FILESYSTEMS_FILENAME);
                 }
 
                 if (result.Empty())
@@ -101,7 +101,7 @@ namespace NzbDrone.Mono.Disk
 
             if (split.Length != 6)
             {
-                _logger.Debug("Unable to parse {0} line: {1}", PROC_MOUNTS_FILENAME, line);
+                _logger.Debug("Unable to parse {FileName} line: {Line}", PROC_MOUNTS_FILENAME, line);
                 return null;
             }
 

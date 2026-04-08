@@ -62,11 +62,11 @@ namespace Sonarr.Http.Authentication
             {
                 if (e.InnerException is XmlException)
                 {
-                    _logger.Error(e, "Failed to authenticate user due to corrupt XML. Please remove all XML files from {0} and restart Sonarr", Path.Combine(_appFolderInfo.AppDataFolder, "asp"));
+                    _logger.Error(e, "Failed to authenticate user due to corrupt XML. Please remove all XML files from {FilePath} and restart Sonarr", Path.Combine(_appFolderInfo.AppDataFolder, "asp"));
                 }
                 else
                 {
-                    _logger.Error(e, "Failed to authenticate user. {0}", e.Message);
+                    _logger.Error(e, "Failed to authenticate user. {Message}", e.Message);
                 }
 
                 return Unauthorized();

@@ -31,13 +31,13 @@ namespace NzbDrone.Host.AccessControl
             {
                 if (!IsNzbDronePortOpen(_configFileProvider.Port))
                 {
-                    _logger.Debug("Opening Port for NzbDrone: {0}", _configFileProvider.Port);
+                    _logger.Debug("Opening Port for NzbDrone: {Port}", _configFileProvider.Port);
                     OpenFirewallPort(_configFileProvider.Port);
                 }
 
                 if (_configFileProvider.EnableSsl && !IsNzbDronePortOpen(_configFileProvider.SslPort))
                 {
-                    _logger.Debug("Opening SSL Port for NzbDrone: {0}", _configFileProvider.SslPort);
+                    _logger.Debug("Opening SSL Port for NzbDrone: {SslPort}", _configFileProvider.SslPort);
                     OpenFirewallPort(_configFileProvider.SslPort);
                 }
             }

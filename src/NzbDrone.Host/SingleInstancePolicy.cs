@@ -73,7 +73,7 @@ namespace NzbDrone.Host
 
                 if (otherProcesses.Any())
                 {
-                    _logger.Info("{0} instance(s) of Sonarr are running", otherProcesses.Count);
+                    _logger.Info("{InstanceCount} instance(s) of Sonarr are running", otherProcesses.Count);
                 }
 
                 return otherProcesses;

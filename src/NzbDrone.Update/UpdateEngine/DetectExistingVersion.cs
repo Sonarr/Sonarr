@@ -33,7 +33,7 @@ namespace NzbDrone.Update.UpdateEngine
             }
             catch (Exception ex)
             {
-                _logger.Warn(ex, "Failed to get existing version from {0}", targetFolder);
+                _logger.Warn(ex, "Failed to get existing version from {TargetFolder}", targetFolder);
             }
 
             return "(unknown)";

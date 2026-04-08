@@ -115,7 +115,7 @@ namespace Sonarr.Http.REST
             var controllerAttributes = descriptor.ControllerTypeInfo.CustomAttributes;
             if (controllerAttributes.Any(x => x.AttributeType == DEPRECATED_ATTRIBUTE) || attributes.Any(x => x.AttributeType == DEPRECATED_ATTRIBUTE))
             {
-                _logger.Warn("API call made to deprecated endpoint from {0}", Request.Headers.UserAgent.ToString());
+                _logger.Warn("API call made to deprecated endpoint from {UserAgent}", Request.Headers.UserAgent.ToString());
                 Response.Headers["Deprecation"] = "true";
             }
 
