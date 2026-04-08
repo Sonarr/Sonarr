@@ -216,7 +216,7 @@ namespace NzbDrone.Core.Extras.Metadata
                             }
                             catch (Exception ex)
                             {
-                                _logger.Warn(ex, "Unable to move metadata file after rename: {0}", existingFileName);
+                                _logger.Warn(ex, "Unable to move metadata file after rename: {ExistingFileName}", existingFileName);
                             }
                         }
                     }
@@ -276,7 +276,7 @@ namespace NzbDrone.Core.Extras.Metadata
 
             var fullPath = Path.Combine(series.Path, seriesMetadata.RelativePath);
 
-            _logger.Debug("Writing Series Metadata to: {0}", fullPath);
+            _logger.Debug("Writing Series Metadata to: {FullPath}", fullPath);
             SaveMetadataFile(fullPath, seriesMetadata.Contents);
 
             metadata.Hash = hash;
@@ -331,7 +331,7 @@ namespace NzbDrone.Core.Extras.Metadata
                 return null;
             }
 
-            _logger.Debug("Writing Episode Metadata to: {0}", fullPath);
+            _logger.Debug("Writing Episode Metadata to: {FullPath}", fullPath);
             SaveMetadataFile(fullPath, episodeMetadata.Contents);
 
             metadata.Hash = hash;
@@ -349,7 +349,7 @@ namespace NzbDrone.Core.Extras.Metadata
 
                 if (_diskProvider.FileExists(fullPath))
                 {
-                    _logger.Debug("Series image already exists: {0}", fullPath);
+                    _logger.Debug("Series image already exists: {FullPath}", fullPath);
                     continue;
                 }
 
@@ -386,7 +386,7 @@ namespace NzbDrone.Core.Extras.Metadata
 
                     if (_diskProvider.FileExists(fullPath))
                     {
-                        _logger.Debug("Season image already exists: {0}", fullPath);
+                        _logger.Debug("Season image already exists: {FullPath}", fullPath);
                         continue;
                     }
 
@@ -424,7 +424,7 @@ namespace NzbDrone.Core.Extras.Metadata
 
                 if (_diskProvider.FileExists(fullPath))
                 {
-                    _logger.Debug("Episode image already exists: {0}", fullPath);
+                    _logger.Debug("Episode image already exists: {FullPath}", fullPath);
                     continue;
                 }
 
@@ -492,15 +492,15 @@ namespace NzbDrone.Core.Extras.Metadata
             }
             catch (HttpException ex)
             {
-                _logger.Warn(ex, "Couldn't download image {0} for {1}. {2}", image.Url, series, ex.Message);
+                _logger.Warn(ex, "Couldn't download image {ImageUrl} for {SeriesTitle}. {ErrorMessage}", image.Url, series, ex.Message);
             }
             catch (WebException ex)
             {
-                _logger.Warn(ex, "Couldn't download image {0} for {1}. {2}", image.Url, series, ex.Message);
+                _logger.Warn(ex, "Couldn't download image {ImageUrl} for {SeriesTitle}. {ErrorMessage}", image.Url, series, ex.Message);
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "Couldn't download image {0} for {1}. {2}", image.Url, series, ex.Message);
+                _logger.Error(ex, "Couldn't download image {ImageUrl} for {SeriesTitle}. {ErrorMessage}", image.Url, series, ex.Message);
             }
         }
 
@@ -524,7 +524,7 @@ namespace NzbDrone.Core.Extras.Metadata
             {
                 var path = Path.Combine(series.Path, file.RelativePath);
 
-                _logger.Debug("Removing duplicate Metadata file: {0}", path);
+                _logger.Debug("Removing duplicate Metadata file: {FilePath}", path);
 
                 var subfolder = _diskProvider.GetParentFolder(series.Path).GetRelativePath(_diskProvider.GetParentFolder(path));
                 _recycleBinProvider.DeleteFile(path, subfolder);

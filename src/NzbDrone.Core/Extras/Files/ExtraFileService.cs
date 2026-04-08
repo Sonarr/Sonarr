@@ -97,7 +97,7 @@ namespace NzbDrone.Core.Extras.Files
 
         public void HandleAsync(SeriesDeletedEvent message)
         {
-            _logger.Debug("Deleting Extra from database for series: {0}", string.Join(',', message.Series));
+            _logger.Debug("Deleting Extra from database for series: {SeriesTitles}", string.Join(',', message.Series));
             _repository.DeleteForSeriesIds(message.Series.Select(m => m.Id).ToList());
         }
 
@@ -126,7 +126,7 @@ namespace NzbDrone.Core.Extras.Files
                 }
             }
 
-            _logger.Debug("Deleting Extra from database for episode file: {0}", episodeFile);
+            _logger.Debug("Deleting Extra from database for episode file: {EpisodeFile}", episodeFile);
             _repository.DeleteForEpisodeFile(episodeFile.Id);
         }
     }

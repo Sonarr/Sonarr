@@ -29,10 +29,10 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             var age = subject.Release.Age;
             var retention = _configService.Retention;
 
-            _logger.Debug("Checking if report meets retention requirements. {0}", age);
+            _logger.Debug("Checking if report meets retention requirements. {AgeDays}", age);
             if (retention > 0 && age > retention)
             {
-                _logger.Debug("Report age: {0} rejected by user's retention limit", age);
+                _logger.Debug("Report age: {AgeDays} rejected by user's retention limit", age);
                 return DownloadSpecDecision.Reject(DownloadRejectionReason.MaximumAge, "Older than configured retention");
             }
 

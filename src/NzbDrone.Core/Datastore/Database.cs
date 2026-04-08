@@ -70,13 +70,13 @@ namespace NzbDrone.Core.Datastore
         {
             try
             {
-                _logger.Info("Vacuuming {0} database", _databaseName);
+                _logger.Info("Vacuuming {DatabaseName} database", _databaseName);
                 using (var db = _datamapperFactory())
                 {
                     db.Execute("Vacuum;");
                 }
 
-                _logger.Info("{0} database compressed", _databaseName);
+                _logger.Info("{DatabaseName} database compressed", _databaseName);
             }
             catch (Exception e)
             {

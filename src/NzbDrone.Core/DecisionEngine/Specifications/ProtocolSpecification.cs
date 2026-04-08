@@ -26,13 +26,13 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
             if (subject.Release.DownloadProtocol == DownloadProtocol.Usenet && !delayProfile.EnableUsenet)
             {
-                _logger.Debug("[{0}] Usenet is not enabled for this series", subject.Release.Title);
+                _logger.Debug("[{ReleaseTitle}] Usenet is not enabled for this series", subject.Release.Title);
                 return DownloadSpecDecision.Reject(DownloadRejectionReason.ProtocolDisabled, "Usenet is not enabled for this series");
             }
 
             if (subject.Release.DownloadProtocol == DownloadProtocol.Torrent && !delayProfile.EnableTorrent)
             {
-                _logger.Debug("[{0}] Torrent is not enabled for this series", subject.Release.Title);
+                _logger.Debug("[{ReleaseTitle}] Torrent is not enabled for this series", subject.Release.Title);
                 return DownloadSpecDecision.Reject(DownloadRejectionReason.ProtocolDisabled, "Torrent is not enabled for this series");
             }
 

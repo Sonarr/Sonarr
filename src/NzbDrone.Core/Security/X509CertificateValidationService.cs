@@ -42,7 +42,7 @@ namespace NzbDrone.Core.Security
 
             if (certificate is X509Certificate2 cert2 && cert2.SignatureAlgorithm.FriendlyName == "md5RSA")
             {
-                _logger.Error("https://{0} uses the obsolete md5 hash in it's https certificate, if that is your certificate, please (re)create certificate with better algorithm as soon as possible.", targetHostName);
+                _logger.Error("https://{TargetHostName} uses the obsolete md5 hash in it's https certificate, if that is your certificate, please (re)create certificate with better algorithm as soon as possible.", targetHostName);
             }
 
             if (sslPolicyErrors == SslPolicyErrors.None)
@@ -69,7 +69,7 @@ namespace NzbDrone.Core.Security
                 return true;
             }
 
-            _logger.Error("Certificate validation for {0} failed. {1}", targetHostName, sslPolicyErrors);
+            _logger.Error("Certificate validation for {TargetHostName} failed. {SslPolicyErrors}", targetHostName, sslPolicyErrors);
 
             return false;
         }

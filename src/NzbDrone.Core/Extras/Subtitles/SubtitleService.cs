@@ -148,7 +148,7 @@ namespace NzbDrone.Core.Extras.Subtitles
                 }
                 catch (Exception ex)
                 {
-                    _logger.Warn(ex, "Failed to import subtitle file: {0}", file);
+                    _logger.Warn(ex, "Failed to import subtitle file: {FilePath}", file);
                 }
             }
 
@@ -181,7 +181,7 @@ namespace NzbDrone.Core.Extras.Subtitles
                 {
                     matchingFiles.AddRange(filteredFiles);
 
-                    _logger.Warn("Imported any available subtitle file for episode: {0}", localEpisode);
+                    _logger.Warn("Imported any available subtitle file for episode: {EpisodeTitle}", localEpisode);
                 }
             }
 
@@ -230,7 +230,7 @@ namespace NzbDrone.Core.Extras.Subtitles
                     }
                     catch (Exception ex)
                     {
-                        _logger.Warn(ex, "Failed to import subtitle file: {0}", path);
+                        _logger.Warn(ex, "Failed to import subtitle file: {FilePath}", path);
                     }
                 }
             }

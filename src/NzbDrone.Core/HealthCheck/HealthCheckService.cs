@@ -94,9 +94,9 @@ namespace NzbDrone.Core.HealthCheck
             {
                 var results = healthChecks.Select(c =>
                     {
-                        _logger.Trace("Check health -> {0}", c.GetType().Name);
+                        _logger.Trace("Check health -> {HealthCheckType}", c.GetType().Name);
                         var result = c.Check();
-                        _logger.Trace("Check health <- {0}", c.GetType().Name);
+                        _logger.Trace("Check health <- {HealthCheckType}", c.GetType().Name);
 
                         return result;
                     })

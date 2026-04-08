@@ -463,7 +463,7 @@ namespace NzbDrone.Core.Configuration
                 return dbValue;
             }
 
-            _logger.Trace("Using default config value for '{0}' defaultValue:'{1}'", key, defaultValue);
+            _logger.Trace("Using default config value for '{ConfigKey}' defaultValue:'{DefaultValue}'", key, defaultValue);
 
             if (persist)
             {
@@ -497,7 +497,7 @@ namespace NzbDrone.Core.Configuration
         {
             key = key.ToLowerInvariant();
 
-            _logger.Trace("Writing Setting to database. Key:'{0}' Value:'{1}'", key, value);
+            _logger.Trace("Writing Setting to database. Key:'{ConfigKey}' Value:'{ConfigValue}'", key, value);
             _repository.Upsert(key, value);
 
             ClearCache();

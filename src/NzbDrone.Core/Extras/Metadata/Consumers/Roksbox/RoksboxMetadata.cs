@@ -50,7 +50,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Roksbox
                 return GetEpisodeMetadataFilename(episodeFilePath);
             }
 
-            _logger.Debug("Unknown episode file metadata: {0}", metadataFile.RelativePath);
+            _logger.Debug("Unknown episode file metadata: {RelativePath}", metadataFile.RelativePath);
             return Path.Combine(series.Path, metadataFile.RelativePath);
         }
 
@@ -137,7 +137,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Roksbox
                 return null;
             }
 
-            _logger.Debug("Generating Episode Metadata for: {0}", episodeFile.RelativePath);
+            _logger.Debug("Generating Episode Metadata for: {RelativePath}", episodeFile.RelativePath);
 
             var xmlResult = string.Empty;
             foreach (var episode in episodeFile.Episodes.Value)
@@ -191,7 +191,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Roksbox
             var image = series.Images.SingleOrDefault(c => c.CoverType == MediaCoverTypes.Poster) ?? series.Images.FirstOrDefault();
             if (image == null)
             {
-                _logger.Trace("Failed to find suitable Series image for series {0}.", series.Title);
+                _logger.Trace("Failed to find suitable Series image for series {SeriesTitle}.", series.Title);
                 return new List<ImageFileResult>();
             }
 
@@ -212,7 +212,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Roksbox
 
             if (!seasonFolders.TryGetValue(season.SeasonNumber, out var seasonFolder))
             {
-                _logger.Trace("Failed to find season folder for series {0}, season {1}.", series.Title, season.SeasonNumber);
+                _logger.Trace("Failed to find season folder for series {SeriesTitle}, season {SeasonNumber}.", series.Title, season.SeasonNumber);
                 return new List<ImageFileResult>();
             }
 
@@ -220,7 +220,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Roksbox
             var image = season.Images.SingleOrDefault(c => c.CoverType == MediaCoverTypes.Poster) ?? season.Images.FirstOrDefault();
             if (image == null)
             {
-                _logger.Trace("Failed to find suitable season image for series {0}, season {1}.", series.Title, season.SeasonNumber);
+                _logger.Trace("Failed to find suitable season image for series {SeriesTitle}, season {SeasonNumber}.", series.Title, season.SeasonNumber);
                 return new List<ImageFileResult>();
             }
 
@@ -283,13 +283,13 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Roksbox
                         }
                         else
                         {
-                            _logger.Debug("Failed to parse season number from {0} for series {1}.", folder, series.Title);
+                            _logger.Debug("Failed to parse season number from {FolderPath} for series {SeriesTitle}.", folder, series.Title);
                         }
                     }
                 }
                 else
                 {
-                    _logger.Debug("Rejecting folder {0} for series {1}.", Path.GetDirectoryName(folder), series.Title);
+                    _logger.Debug("Rejecting folder {FolderPath} for series {SeriesTitle}.", Path.GetDirectoryName(folder), series.Title);
                 }
             }
 

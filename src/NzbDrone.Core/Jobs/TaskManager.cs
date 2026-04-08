@@ -136,13 +136,13 @@ namespace NzbDrone.Core.Jobs
 
             var currentTasks = _scheduledTaskRepository.All().ToList();
 
-            _logger.Trace("Initializing jobs. Available: {0} Existing: {1}", defaultTasks.Count, currentTasks.Count);
+            _logger.Trace("Initializing jobs. Available: {AvailableCount} Existing: {ExistingCount}", defaultTasks.Count, currentTasks.Count);
 
             foreach (var job in currentTasks)
             {
                 if (!defaultTasks.Any(c => c.TypeName == job.TypeName))
                 {
-                    _logger.Trace("Removing job from database '{0}'", job.TypeName);
+                    _logger.Trace("Removing job from database '{JobTypeName}'", job.TypeName);
                     _scheduledTaskRepository.Delete(job.Id);
                 }
             }
@@ -205,7 +205,7 @@ namespace NzbDrone.Core.Jobs
 
             if (scheduledTask != null && message.Command.Body.UpdateScheduledTask)
             {
-                _logger.Trace("Updating last run time for: {0}", scheduledTask.TypeName);
+                _logger.Trace("Updating last run time for: {JobTypeName}", scheduledTask.TypeName);
 
                 var lastExecution = DateTime.UtcNow;
                 var startTime = message.Command.StartedAt.Value;

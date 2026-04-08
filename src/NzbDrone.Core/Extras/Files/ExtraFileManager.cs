@@ -88,7 +88,7 @@ namespace NzbDrone.Core.Extras.Files
 
         protected TExtraFile MoveFile(Series series, EpisodeFile episodeFile, TExtraFile extraFile, string fileNameSuffix = null)
         {
-            _logger.Trace("Renaming extra file: {0}", extraFile);
+            _logger.Trace("Renaming extra file: {ExtraFile}", extraFile);
 
             var newFolder = Path.GetDirectoryName(Path.Combine(series.Path, episodeFile.RelativePath));
             var filenameBuilder = new StringBuilder(Path.GetFileNameWithoutExtension(episodeFile.RelativePath));
@@ -107,18 +107,18 @@ namespace NzbDrone.Core.Extras.Files
             {
                 try
                 {
-                    _logger.Trace("Renaming extra file: {0} to {1}", extraFile, newFileName);
+                    _logger.Trace("Renaming extra file: {ExtraFile} to {NewFileName}", extraFile, newFileName);
 
                     _diskProvider.MoveFile(existingFileName, newFileName);
                     extraFile.RelativePath = series.Path.GetRelativePath(newFileName);
 
-                    _logger.Trace("Renamed extra file from: {0}", extraFile);
+                    _logger.Trace("Renamed extra file from: {ExtraFile}", extraFile);
 
                     return extraFile;
                 }
                 catch (Exception ex)
                 {
-                    _logger.Warn(ex, "Unable to move file after rename: {0}", existingFileName);
+                    _logger.Warn(ex, "Unable to move file after rename: {ExistingFileName}", existingFileName);
                 }
             }
 

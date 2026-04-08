@@ -134,7 +134,7 @@ namespace NzbDrone.Core.Extras.Others
                 }
                 catch (Exception ex)
                 {
-                    _logger.Warn(ex, "Failed to import extra file: {0}", file);
+                    _logger.Warn(ex, "Failed to import extra file: {FilePath}", file);
                 }
             }
 
@@ -149,7 +149,7 @@ namespace NzbDrone.Core.Extras.Others
                 }
                 catch (Exception ex)
                 {
-                    _logger.Warn(ex, "Failed to import extra file: {0}", file);
+                    _logger.Warn(ex, "Failed to import extra file: {FilePath}", file);
                 }
             }
 

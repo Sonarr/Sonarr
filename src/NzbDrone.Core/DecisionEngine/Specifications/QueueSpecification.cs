@@ -57,7 +57,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
                 var queuedItemCustomFormats = _formatService.ParseCustomFormat(remoteEpisode, (long)queueItem.Size);
 
-                _logger.Debug("Checking if existing release in queue meets cutoff. Queued: {0}", remoteEpisode.ParsedEpisodeInfo.Quality);
+                _logger.Debug("Checking if existing release in queue meets cutoff. Queued: {QueuedQuality}", remoteEpisode.ParsedEpisodeInfo.Quality);
 
                 if (!_upgradableSpecification.CutoffNotMet(qualityProfile,
                     remoteEpisode.ParsedEpisodeInfo.Quality,
@@ -67,7 +67,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                     return DownloadSpecDecision.Reject(DownloadRejectionReason.QueueCutoffMet, "Release in queue already meets cutoff: {0}", remoteEpisode.ParsedEpisodeInfo.Quality);
                 }
 
-                _logger.Debug("Checking if release is higher quality than queued release. Queued: {0}", remoteEpisode.ParsedEpisodeInfo.Quality);
+                _logger.Debug("Checking if release is higher quality than queued release. Queued: {QueuedQuality}", remoteEpisode.ParsedEpisodeInfo.Quality);
 
                 var upgradeableRejectReason = _upgradableSpecification.IsUpgradable(qualityProfile,
                     remoteEpisode.ParsedEpisodeInfo.Quality,

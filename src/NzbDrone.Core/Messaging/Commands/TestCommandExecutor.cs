@@ -15,7 +15,7 @@ namespace NzbDrone.Core.Messaging.Commands
 
         public void Execute(TestCommand message)
         {
-            _logger.ProgressInfo("Starting Test command. duration {0}", message.Duration);
+            _logger.ProgressInfo("Starting Test command. duration {Duration}", message.Duration);
             Thread.Sleep(message.Duration);
             _logger.ProgressInfo("Completed Test command");
         }

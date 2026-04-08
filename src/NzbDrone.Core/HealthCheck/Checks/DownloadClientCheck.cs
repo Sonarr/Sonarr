@@ -45,7 +45,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 }
                 catch (Exception ex)
                 {
-                    _logger.Debug(ex, "Unable to communicate with {0}", downloadClient.Definition.Name);
+                    _logger.Debug(ex, "Unable to communicate with {DownloadClientName}", downloadClient.Definition.Name);
 
                     return new HealthCheck(GetType(),
                         HealthCheckResult.Error,

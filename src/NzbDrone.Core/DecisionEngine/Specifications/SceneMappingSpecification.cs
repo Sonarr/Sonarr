@@ -36,11 +36,11 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
             if (remoteEpisode.SceneMapping.Comment.IsNotNullOrWhiteSpace())
             {
-                _logger.Debug("SceneMapping has origin {0} with comment '{1}'.", remoteEpisode.SceneMapping.SceneOrigin, remoteEpisode.SceneMapping.Comment);
+                _logger.Debug("SceneMapping has origin {SceneOrigin} with comment '{Comment}'.", remoteEpisode.SceneMapping.SceneOrigin, remoteEpisode.SceneMapping.Comment);
             }
             else
             {
-                _logger.Debug("SceneMapping has origin {0}.", remoteEpisode.SceneMapping.SceneOrigin);
+                _logger.Debug("SceneMapping has origin {SceneOrigin}.", remoteEpisode.SceneMapping.SceneOrigin);
             }
 
             if (split[0] == "mixed")
@@ -61,7 +61,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             {
                 var type = split.Length >= 2 ? split[1] : "scene";
 
-                _logger.Debug("SceneMapping origin is explicitly unknown, unsure what numbering scheme it uses but '{0}' will be assumed. Provide full release title to Sonarr/TheXEM team.", type);
+                _logger.Debug("SceneMapping origin is explicitly unknown, unsure what numbering scheme it uses but '{NumberingType}' will be assumed. Provide full release title to Sonarr/TheXEM team.", type);
             }
 
             return DownloadSpecDecision.Accept();

@@ -50,7 +50,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
 
                     if (file.DateAdded < DateTime.Today.AddDays(-7))
                     {
-                        _logger.Debug("Proper for old file, rejecting: {0}", subject);
+                        _logger.Debug("Proper for old file, rejecting: {ReleaseTitle}", subject);
                         return DownloadSpecDecision.Reject(DownloadRejectionReason.ProperForOldFile, "Proper for old file");
                     }
                 }

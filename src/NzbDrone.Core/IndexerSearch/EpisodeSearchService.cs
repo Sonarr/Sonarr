@@ -42,7 +42,7 @@ namespace NzbDrone.Core.IndexerSearch
 
         private async Task SearchForBulkEpisodes(List<Episode> episodes, bool monitoredOnly, bool userInvokedSearch)
         {
-            _logger.ProgressInfo("Performing search for {0} episodes", episodes.Count);
+            _logger.ProgressInfo("Performing search for {EpisodeCount} episodes", episodes.Count);
             var downloadedCount = 0;
             var groups = new List<EpisodeSearchGroup>();
 
@@ -75,7 +75,7 @@ namespace NzbDrone.Core.IndexerSearch
                     }
                     catch (Exception ex)
                     {
-                        _logger.Error(ex, "Unable to search for episodes in season {0} of [{1}]", seasonNumber, seriesId);
+                        _logger.Error(ex, "Unable to search for episodes in season {SeasonNumber} of [{SeriesId}]", seasonNumber, seriesId);
                         continue;
                     }
                 }
@@ -89,7 +89,7 @@ namespace NzbDrone.Core.IndexerSearch
                     }
                     catch (Exception ex)
                     {
-                        _logger.Error(ex, "Unable to search for episode: [{0}]", episode);
+                        _logger.Error(ex, "Unable to search for episode: [{EpisodeTitle}]", episode);
                         continue;
                     }
                 }
@@ -99,7 +99,7 @@ namespace NzbDrone.Core.IndexerSearch
                 downloadedCount += processed.Grabbed.Count;
             }
 
-            _logger.ProgressInfo("Completed search for {0} episodes. {1} reports downloaded.", episodes.Count, downloadedCount);
+            _logger.ProgressInfo("Completed search for {EpisodeCount} episodes. {DownloadedCount} reports downloaded.", episodes.Count, downloadedCount);
         }
 
         private bool IsMonitored(bool episodeMonitored, bool seriesMonitored)
@@ -114,7 +114,7 @@ namespace NzbDrone.Core.IndexerSearch
                 var decisions = _releaseSearchService.EpisodeSearch(episodeId, message.Trigger == CommandTrigger.Manual, false).GetAwaiter().GetResult();
                 var processed = _processDownloadDecisions.ProcessDecisions(decisions).GetAwaiter().GetResult();
 
-                _logger.ProgressInfo("Episode search completed. {0} reports downloaded.", processed.Grabbed.Count);
+                _logger.ProgressInfo("Episode search completed. {DownloadedCount} reports downloaded.", processed.Grabbed.Count);
             }
         }
 

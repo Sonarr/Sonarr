@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
         {
             var sw = Stopwatch.StartNew();
 
-            _logger.Info("*** Migrating {0} ***", connectionString);
+            _logger.Info("*** Migrating {ConnectionString} ***", connectionString);
 
             var db = databaseType switch
             {
@@ -84,7 +84,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
 
             sw.Stop();
 
-            _logger.Debug("Took: {0}", sw.Elapsed);
+            _logger.Debug("Took: {Elapsed}", sw.Elapsed);
         }
     }
 }

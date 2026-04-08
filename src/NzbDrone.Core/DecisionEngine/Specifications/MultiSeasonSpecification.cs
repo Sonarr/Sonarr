@@ -19,7 +19,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
         {
             if (subject.ParsedEpisodeInfo.IsMultiSeason)
             {
-                _logger.Debug("Multi-season release {0} rejected. Not supported", subject.Release.Title);
+                _logger.Debug("Multi-season release {ReleaseTitle} rejected. Not supported", subject.Release.Title);
                 return DownloadSpecDecision.Reject(DownloadRejectionReason.MultiSeason, "Multi-season releases are not supported");
             }
 

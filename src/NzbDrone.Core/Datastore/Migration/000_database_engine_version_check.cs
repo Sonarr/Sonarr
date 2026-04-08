@@ -35,7 +35,7 @@ namespace NzbDrone.Core.Datastore.Migration
                     {
                         var version = reader.GetString(0);
 
-                        _logger.Info("SQLite {0}", version);
+                        _logger.Info("SQLite {Version}", version);
                     }
                 }
             }
@@ -55,7 +55,7 @@ namespace NzbDrone.Core.Datastore.Migration
                         var version = reader.GetString(0);
                         var cleanVersion = Regex.Replace(version, @"\(.*?\)", "");
 
-                        _logger.Info("Postgres {0}", cleanVersion);
+                        _logger.Info("Postgres {Version}", cleanVersion);
                     }
                 }
             }

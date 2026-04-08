@@ -45,7 +45,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 // Count missing episodes as upgradable
                 var missingEpisodesCount = subject.Episodes.Count(c => c.EpisodeFileId == 0);
                 var upgradedCount = missingEpisodesCount;
-                _logger.Debug("{0} episodes are missing from disk and are considered upgradable.", upgradedCount);
+                _logger.Debug("{MissingEpisodesCount} episodes are missing from disk and are considered upgradable.", upgradedCount);
 
                 // Filter for episodes that already exist on disk to check for quality upgrades
                 var existingEpisodeFiles = subject.Episodes.Where(c => c.EpisodeFileId != 0)
@@ -62,7 +62,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 // Check if any of the existing files can also be upgraded
                 foreach (var file in existingEpisodeFiles)
                 {
-                    _logger.Debug("Comparing file quality with report. Existing file is {0}.", file.Quality);
+                    _logger.Debug("Comparing file quality with report. Existing file is {ExistingQuality}.", file.Quality);
 
                     if (!_upgradableSpecification.CutoffNotMet(qualityProfile,
                             file.Quality,
@@ -90,7 +90,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
                 var seasonPackUpgrade = _configService.SeasonPackUpgrade;
                 var seasonPackUpgradeThreshold = _configService.SeasonPackUpgradeThreshold;
-                _logger.Debug("Total upgradable episodes: {0} out of {1}. Season import setting: {2}, Threshold: {3}%", upgradedCount, totalEpisodesInPack, seasonPackUpgrade, seasonPackUpgradeThreshold);
+                _logger.Debug("Total upgradable episodes: {UpgradedCount} out of {TotalEpisodesCount}. Season import setting: {SeasonPackUpgrade}, Threshold: {ThresholdPercent}%", upgradedCount, totalEpisodesInPack, seasonPackUpgrade, seasonPackUpgradeThreshold);
                 var upgradablePercentage = (double)upgradedCount / totalEpisodesInPack * 100;
                 if (seasonPackUpgrade == SeasonPackUpgradeType.Any)
                 {
@@ -133,7 +133,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 return null;
             }
 
-            _logger.Debug("Comparing file quality with report. Existing file is {0}.", file.Quality);
+            _logger.Debug("Comparing file quality with report. Existing file is {ExistingQuality}.", file.Quality);
 
             if (!_upgradableSpecification.CutoffNotMet(qualityProfile,
                     file.Quality,

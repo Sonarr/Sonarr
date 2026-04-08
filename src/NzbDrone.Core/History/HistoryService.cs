@@ -100,7 +100,7 @@ namespace NzbDrone.Core.History
 
         public string FindDownloadId(EpisodeImportedEvent trackedDownload)
         {
-            _logger.Debug("Trying to find downloadId for {0} from history", trackedDownload.ImportedEpisode.Path);
+            _logger.Debug("Trying to find downloadId for {FilePath} from history", trackedDownload.ImportedEpisode.Path);
 
             var episodeIds = trackedDownload.EpisodeInfo.Episodes.Select(c => c.Id).ToList();
             var allHistory = _historyRepository.FindDownloadHistory(trackedDownload.EpisodeInfo.Series.Id, trackedDownload.ImportedEpisode.Quality);

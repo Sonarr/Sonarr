@@ -104,7 +104,7 @@ namespace NzbDrone.Core.IndexerSearch
 
             if (episodes.Count == 0)
             {
-                _logger.Debug("No wanted episodes found for season {0}", seasonNumber);
+                _logger.Debug("No wanted episodes found for season {SeasonNumber}", seasonNumber);
                 return new List<DownloadDecision>();
             }
 
@@ -526,7 +526,7 @@ namespace NzbDrone.Core.IndexerSearch
             // Filter indexers to untagged indexers and indexers with intersecting tags
             indexers = indexers.Where(i => i.Definition.Tags.Empty() || i.Definition.Tags.Intersect(criteriaBase.Series.Tags).Any()).ToList();
 
-            _logger.ProgressInfo("Searching indexers for {0}. {1} active indexers", criteriaBase, indexers.Count);
+            _logger.ProgressInfo("Searching indexers for {SearchCriteria}. {IndexerCount} active indexers", criteriaBase, indexers.Count);
 
             var tasks = indexers.Select(indexer => DispatchIndexer(searchAction, indexer, criteriaBase));
 
@@ -534,13 +534,13 @@ namespace NzbDrone.Core.IndexerSearch
 
             var reports = batch.SelectMany(x => x).ToList();
 
-            _logger.ProgressDebug("Total of {0} reports were found for {1} from {2} indexers", reports.Count, criteriaBase, indexers.Count);
+            _logger.ProgressDebug("Total of {ReportCount} reports were found for {SearchCriteria} from {IndexerCount} indexers", reports.Count, criteriaBase, indexers.Count);
 
             // Update the last search time for all episodes if at least 1 indexer was searched.
             if (indexers.Any())
             {
                 var lastSearchTime = DateTime.UtcNow;
-                _logger.Debug("Setting last search time to: {0}", lastSearchTime);
+                _logger.Debug("Setting last search time to: {LastSearchTime}", lastSearchTime);
 
                 criteriaBase.Episodes.ForEach(e => e.LastSearchTime = lastSearchTime);
                 _episodeService.UpdateLastSearchTime(criteriaBase.Episodes);
@@ -557,7 +557,7 @@ namespace NzbDrone.Core.IndexerSearch
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "Error while searching for {0}", criteriaBase);
+                _logger.Error(ex, "Error while searching for {SearchCriteria}", criteriaBase);
             }
 
             return Array.Empty<ReleaseInfo>();

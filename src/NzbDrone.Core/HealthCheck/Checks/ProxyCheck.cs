@@ -62,7 +62,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 // We only care about 400 responses, other error codes can be ignored
                 if (response.StatusCode == HttpStatusCode.BadRequest)
                 {
-                    _logger.Error("Proxy Health Check failed: {0}", response.StatusCode);
+                    _logger.Error("Proxy Health Check failed: {StatusCode}", response.StatusCode);
 
                     return new HealthCheck(GetType(),
                         HealthCheckResult.Error,

@@ -161,7 +161,7 @@ namespace NzbDrone.Core.Localization
         {
             if (!File.Exists(resourcePath))
             {
-                _logger.Error("Missing translation/culture resource: {0}", resourcePath);
+                _logger.Error("Missing translation/culture resource: {ResourcePath}", resourcePath);
                 return;
             }
 

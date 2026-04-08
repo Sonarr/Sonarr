@@ -134,15 +134,15 @@ namespace NzbDrone.Core.MediaCover
                 }
                 catch (HttpException e)
                 {
-                    _logger.Warn("Couldn't download media cover for {0}. {1}", series, e.Message);
+                    _logger.Warn("Couldn't download media cover for {SeriesTitle}. {ErrorMessage}", series, e.Message);
                 }
                 catch (WebException e)
                 {
-                    _logger.Warn("Couldn't download media cover for {0}. {1}", series, e.Message);
+                    _logger.Warn("Couldn't download media cover for {SeriesTitle}. {ErrorMessage}", series, e.Message);
                 }
                 catch (Exception e)
                 {
-                    _logger.Error(e, "Couldn't download media cover for {0}", series);
+                    _logger.Error(e, "Couldn't download media cover for {SeriesTitle}", series);
                 }
 
                 toResize.Add(Tuple.Create(cover, alreadyExists));
@@ -169,7 +169,7 @@ namespace NzbDrone.Core.MediaCover
         {
             var fileName = GetCoverPath(series.Id, cover.CoverType);
 
-            _logger.Info("Downloading {0} for {1} {2}", cover.CoverType, series, cover.RemoteUrl);
+            _logger.Info("Downloading {CoverType} for {SeriesTitle} {RemoteUrl}", cover.CoverType, series, cover.RemoteUrl);
             _httpClient.DownloadFile(cover.RemoteUrl, fileName);
         }
 
@@ -204,7 +204,7 @@ namespace NzbDrone.Core.MediaCover
 
                 if (forceResize || !_diskProvider.FileExists(resizeFileName) || _diskProvider.GetFileSize(resizeFileName) == 0)
                 {
-                    _logger.Debug("Resizing {0}-{1} for {2}", cover.CoverType, height, series);
+                    _logger.Debug("Resizing {CoverType}-{Height} for {SeriesTitle}", cover.CoverType, height, series);
 
                     try
                     {
@@ -212,7 +212,7 @@ namespace NzbDrone.Core.MediaCover
                     }
                     catch
                     {
-                        _logger.Debug("Couldn't resize media cover {0}-{1} for {2}, using full size image instead.", cover.CoverType, height, series);
+                        _logger.Debug("Couldn't resize media cover {CoverType}-{Height} for {SeriesTitle}, using full size image instead.", cover.CoverType, height, series);
                     }
                 }
             }

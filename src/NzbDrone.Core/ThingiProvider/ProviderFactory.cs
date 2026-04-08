@@ -169,7 +169,7 @@ namespace NzbDrone.Core.ThingiProvider
 
         public void Handle(ApplicationStartedEvent message)
         {
-            _logger.Debug("Initializing Providers. Count {0}", _providers.Count);
+            _logger.Debug("Initializing Providers. Count {ProviderCount}", _providers.Count);
 
             RemoveMissingImplementations();
 
@@ -202,7 +202,7 @@ namespace NzbDrone.Core.ThingiProvider
 
             foreach (var invalidDefinition in storedProvider.Where(def => GetImplementation(def) == null))
             {
-                _logger.Warn("Removing {0}", invalidDefinition.Name);
+                _logger.Warn("Removing {ProviderName}", invalidDefinition.Name);
                 _providerRepository.Delete(invalidDefinition);
             }
         }

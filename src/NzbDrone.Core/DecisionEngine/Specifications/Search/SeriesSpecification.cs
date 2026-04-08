@@ -28,7 +28,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.Search
 
             if (remoteEpisode.Series.Id != searchCriteria.Series.Id)
             {
-                _logger.Debug("Series {0} does not match {1}", remoteEpisode.Series, searchCriteria.Series);
+                _logger.Debug("Series {RemoteSeriesTitle} does not match {SearchSeriesTitle}", remoteEpisode.Series, searchCriteria.Series);
                 return DownloadSpecDecision.Reject(DownloadRejectionReason.WrongSeries, "Wrong series");
             }
 

@@ -25,7 +25,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
         public virtual DownloadSpecDecision IsSatisfiedBy(RemoteEpisode subject, ReleaseDecisionInformation information)
         {
-            _logger.Debug("Checking if release meets restrictions: {0}", subject);
+            _logger.Debug("Checking if release meets restrictions: {ReleaseTitle}", subject);
 
             var title = subject.Release.Title;
             var releaseProfiles = _releaseProfileService.EnabledForTags(subject.Series.Tags, subject.Release.IndexerId);
@@ -41,7 +41,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 if (foundTerms.Empty())
                 {
                     var terms = string.Join(", ", requiredTerms);
-                    _logger.Debug("[{0}] does not contain one of the required terms: {1}", title, terms);
+                    _logger.Debug("[{ReleaseTitle}] does not contain one of the required terms: {RequiredTerms}", title, terms);
                     return DownloadSpecDecision.Reject(DownloadRejectionReason.MustContainMissing, "Does not contain one of the required terms: {0}", terms);
                 }
             }
@@ -54,12 +54,12 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 if (foundTerms.Any())
                 {
                     var terms = string.Join(", ", foundTerms);
-                    _logger.Debug("[{0}] contains these ignored terms: {1}", title, terms);
+                    _logger.Debug("[{ReleaseTitle}] contains these ignored terms: {IgnoredTerms}", title, terms);
                     return DownloadSpecDecision.Reject(DownloadRejectionReason.MustNotContainPresent, "Contains these ignored terms: {0}", terms);
                 }
             }
 
-            _logger.Debug("[{0}] No restrictions apply, allowing", subject);
+            _logger.Debug("[{ReleaseTitle}] No restrictions apply, allowing", subject);
             return DownloadSpecDecision.Accept();
         }
 

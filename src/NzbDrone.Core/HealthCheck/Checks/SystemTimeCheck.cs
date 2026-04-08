@@ -36,7 +36,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 // +/- more than 1 day
                 if (Math.Abs(result.DateTimeUtc.Subtract(systemTime).TotalDays) >= 1)
                 {
-                    _logger.Error("System time mismatch. SystemTime: {0} Expected Time: {1}. Update system time", systemTime, result.DateTimeUtc);
+                    _logger.Error("System time mismatch. SystemTime: {SystemTime} Expected Time: {ExpectedTime}. Update system time", systemTime, result.DateTimeUtc);
                     return new HealthCheck(GetType(),
                         HealthCheckResult.Error,
                         HealthCheckReason.SystemTime,

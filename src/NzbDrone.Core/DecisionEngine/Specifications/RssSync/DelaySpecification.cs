@@ -45,11 +45,11 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
 
             if (delay == 0)
             {
-                _logger.Debug("Delay Profile does not require a waiting period before download for {0}.", subject.Release.DownloadProtocol);
+                _logger.Debug("Delay Profile does not require a waiting period before download for {DownloadProtocol}.", subject.Release.DownloadProtocol);
                 return DownloadSpecDecision.Accept();
             }
 
-            _logger.Debug("Delay Profile requires a waiting period of {0} minutes for {1}", delay, subject.Release.DownloadProtocol);
+            _logger.Debug("Delay Profile requires a waiting period of {DelayMinutes} minutes for {DownloadProtocol}", delay, subject.Release.DownloadProtocol);
 
             var qualityComparer = new QualityModelComparer(qualityProfile);
 
@@ -90,7 +90,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
 
                 if (score >= minimum && isPreferredProtocol)
                 {
-                    _logger.Debug("Custom format score ({0}) meets minimum ({1}) for preferred protocol, will not delay", score, minimum);
+                    _logger.Debug("Custom format score ({CustomFormatScore}) meets minimum ({MinimumScore}) for preferred protocol, will not delay", score, minimum);
                     return DownloadSpecDecision.Accept();
                 }
             }
@@ -101,13 +101,13 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
 
             if (oldest != null && oldest.Release.AgeMinutes > delay)
             {
-                _logger.Debug("Oldest pending release {0} has been delayed for {1}, longer than the set delay of {2}. Release will be accepted", oldest.Release.Title, oldest.Release.AgeMinutes, delay);
+                _logger.Debug("Oldest pending release {ReleaseTitle} has been delayed for {AgeMinutes}, longer than the set delay of {DelayMinutes}. Release will be accepted", oldest.Release.Title, oldest.Release.AgeMinutes, delay);
                 return DownloadSpecDecision.Accept();
             }
 
             if (subject.Release.AgeMinutes < delay)
             {
-                _logger.Debug("Waiting for better quality release, There is a {0} minute delay on {1}", delay, subject.Release.DownloadProtocol);
+                _logger.Debug("Waiting for better quality release, There is a {DelayMinutes} minute delay on {DownloadProtocol}", delay, subject.Release.DownloadProtocol);
                 return DownloadSpecDecision.Reject(DownloadRejectionReason.MinimumAgeDelay, "Waiting for better quality release");
             }
 

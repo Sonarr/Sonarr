@@ -30,7 +30,7 @@ namespace NzbDrone.Core.Extras.Others
 
         public override IEnumerable<ExtraFile> ProcessFiles(Series series, List<string> filesOnDisk, List<string> importedFiles, string fileNameBeforeRename)
         {
-            _logger.Debug("Looking for existing extra files in {0}", series.Path);
+            _logger.Debug("Looking for existing extra files in {SeriesPath}", series.Path);
 
             var extraFiles = new List<OtherExtraFile>();
             var filterResult = FilterAndClean(series, filesOnDisk, importedFiles, fileNameBeforeRename is not null);
@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Extras.Others
 
                 if (extension.IsNullOrWhiteSpace())
                 {
-                    _logger.Debug("No extension for file: {0}", possibleExtraFile);
+                    _logger.Debug("No extension for file: {FilePath}", possibleExtraFile);
                     continue;
                 }
 
@@ -58,19 +58,19 @@ namespace NzbDrone.Core.Extras.Others
                 }
                 catch (AugmentingFailedException)
                 {
-                    _logger.Debug("Unable to parse extra file: {0}", possibleExtraFile);
+                    _logger.Debug("Unable to parse extra file: {FilePath}", possibleExtraFile);
                     continue;
                 }
 
                 if (localEpisode.Episodes.Empty())
                 {
-                    _logger.Debug("Cannot find related episodes for: {0}", possibleExtraFile);
+                    _logger.Debug("Cannot find related episodes for: {FilePath}", possibleExtraFile);
                     continue;
                 }
 
                 if (localEpisode.Episodes.DistinctBy(e => e.EpisodeFileId).Count() > 1)
                 {
-                    _logger.Debug("Extra file: {0} does not match existing files.", possibleExtraFile);
+                    _logger.Debug("Extra file: {FilePath} does not match existing files.", possibleExtraFile);
                     continue;
                 }
 
@@ -86,7 +86,7 @@ namespace NzbDrone.Core.Extras.Others
                 extraFiles.Add(extraFile);
             }
 
-            _logger.Info("Found {0} existing other extra files", extraFiles.Count);
+            _logger.Info("Found {ExtraFilesCount} existing other extra files", extraFiles.Count);
             _otherExtraFileService.Upsert(extraFiles);
 
             // Return files that were just imported along with files that were

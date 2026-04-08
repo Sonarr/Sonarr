@@ -117,7 +117,7 @@ namespace NzbDrone.Core.DataAugmentation.Scene
             if (distinctMappings.Count == 1)
             {
                 var mapping = distinctMappings.First();
-                _logger.Debug("Found scene mapping for: {0}. TVDB ID for mapping: {1}", seriesTitle, mapping.TvdbId);
+                _logger.Debug("Found scene mapping for: {SeriesTitle}. TVDB ID for mapping: {TvdbId}", seriesTitle, mapping.TvdbId);
                 return distinctMappings.First();
             }
 
@@ -150,7 +150,7 @@ namespace NzbDrone.Core.DataAugmentation.Scene
                             if (sceneMapping.Title.IsNullOrWhiteSpace() ||
                                 sceneMapping.SearchTerm.IsNullOrWhiteSpace())
                             {
-                                _logger.Warn("Invalid scene mapping found for: {0}, skipping", sceneMapping.TvdbId);
+                                _logger.Warn("Invalid scene mapping found for: {TvdbId}, skipping", sceneMapping.TvdbId);
                                 return true;
                             }
 
@@ -178,7 +178,7 @@ namespace NzbDrone.Core.DataAugmentation.Scene
                         {
                             if (mapping.MappingId.IsNullOrWhiteSpace())
                             {
-                                _logger.Warn("Scene mapping with missing MappingId found for: {0} {1}, skipping", mapping.TvdbId, mapping.Title);
+                                _logger.Warn("Scene mapping with missing MappingId found for: {TvdbId} {MappingTitle}, skipping", mapping.TvdbId, mapping.Title);
                                 continue;
                             }
 

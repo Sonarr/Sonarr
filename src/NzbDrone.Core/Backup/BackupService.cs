@@ -229,7 +229,7 @@ namespace NzbDrone.Core.Backup
         {
             var retention = _configService.BackupRetention;
 
-            _logger.Debug("Cleaning up backup files older than {0} days", retention);
+            _logger.Debug("Cleaning up backup files older than {RetentionDays} days", retention);
             var files = GetBackupFiles(GetBackupFolder(backupType));
 
             foreach (var file in files)
@@ -238,7 +238,7 @@ namespace NzbDrone.Core.Backup
 
                 if (lastWriteTime.AddDays(retention) < DateTime.UtcNow)
                 {
-                    _logger.Debug("Deleting old backup file: {0}", file);
+                    _logger.Debug("Deleting old backup file: {BackupFile}", file);
                     _diskProvider.DeleteFile(file);
                 }
             }

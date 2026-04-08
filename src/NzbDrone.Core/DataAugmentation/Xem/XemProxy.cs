@@ -57,7 +57,7 @@ namespace NzbDrone.Core.DataAugmentation.Xem
 
         public List<XemSceneTvdbMapping> GetSceneTvdbMappings(int id)
         {
-            _logger.Debug("Fetching Mappings for: {0}", id);
+            _logger.Debug("Fetching Mappings for: {TvdbId}", id);
 
             var request = _xemRequestBuilder.Create()
                                             .Resource("/all")

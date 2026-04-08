@@ -22,7 +22,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
         public DownloadSpecDecision IsSatisfiedBy(RemoteEpisode subject, ReleaseDecisionInformation information)
         {
-            _logger.Debug("Beginning size check for: {0}", subject);
+            _logger.Debug("Beginning size check for: {ReleaseTitle}", subject);
 
             var quality = subject.ParsedEpisodeInfo.Quality.Quality;
 
@@ -91,7 +91,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 {
                     var runtimeMessage = subject.Episodes.Count == 1 ? $"{runtime}min" : $"{subject.Episodes.Count} episodes totalling {runtime}min";
 
-                    _logger.Debug("Item: {0}, Size: {1} is smaller than minimum allowed size ({2} bytes for {3}), rejecting.", subject, subject.Release.Size, minSize, runtimeMessage);
+                    _logger.Debug("Item: {ReleaseTitle}, Size: {ReleaseSize} is smaller than minimum allowed size ({MinSize} bytes for {RuntimeMessage}), rejecting.", subject, subject.Release.Size, minSize, runtimeMessage);
                     return DownloadSpecDecision.Reject(DownloadRejectionReason.BelowMinimumSize, "{0} is smaller than minimum allowed {1} (for {2})", subject.Release.Size.SizeSuffix(), minSize.SizeSuffix(), runtimeMessage);
                 }
             }
@@ -112,12 +112,12 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 {
                     var runtimeMessage = subject.Episodes.Count == 1 ? $"{runtime}min" : $"{subject.Episodes.Count} episodes totalling {runtime}min";
 
-                    _logger.Debug("Item: {0}, Size: {1} is greater than maximum allowed size ({2} for {3}), rejecting", subject, subject.Release.Size, maxSize, runtimeMessage);
+                    _logger.Debug("Item: {ReleaseTitle}, Size: {ReleaseSize} is greater than maximum allowed size ({MaxSize} for {RuntimeMessage}), rejecting", subject, subject.Release.Size, maxSize, runtimeMessage);
                     return DownloadSpecDecision.Reject(DownloadRejectionReason.AboveMaximumSize, "{0} is larger than maximum allowed {1} (for {2})", subject.Release.Size.SizeSuffix(), maxSize.SizeSuffix(), runtimeMessage);
                 }
             }
 
-            _logger.Debug("Item: {0}, meets size constraints", subject);
+            _logger.Debug("Item: {ReleaseTitle}, meets size constraints", subject);
             return DownloadSpecDecision.Accept();
         }
     }

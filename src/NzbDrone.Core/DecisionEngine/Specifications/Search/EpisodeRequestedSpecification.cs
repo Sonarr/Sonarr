@@ -28,7 +28,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.Search
 
             if (!criteriaEpisodes.Intersect(remoteEpisodes).Any())
             {
-                _logger.Debug("Release rejected since the episode wasn't requested: {0}", remoteEpisode.ParsedEpisodeInfo);
+                _logger.Debug("Release rejected since the episode wasn't requested: {ParsedEpisodeInfo}", remoteEpisode.ParsedEpisodeInfo);
 
                 if (remoteEpisodes.Any())
                 {

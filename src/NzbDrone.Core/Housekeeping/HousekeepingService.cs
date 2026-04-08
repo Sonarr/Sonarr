@@ -27,13 +27,13 @@ namespace NzbDrone.Core.Housekeeping
             {
                 try
                 {
-                    _logger.Debug("Starting {0}", housekeeper.GetType().Name);
+                    _logger.Debug("Starting {HousekeeperType}", housekeeper.GetType().Name);
                     housekeeper.Clean();
-                    _logger.Debug("Completed {0}", housekeeper.GetType().Name);
+                    _logger.Debug("Completed {HousekeeperType}", housekeeper.GetType().Name);
                 }
                 catch (Exception ex)
                 {
-                    _logger.Error(ex, "Error running housekeeping task: {0}", housekeeper.GetType().Name);
+                    _logger.Error(ex, "Error running housekeeping task: {HousekeeperType}", housekeeper.GetType().Name);
                 }
             }
 

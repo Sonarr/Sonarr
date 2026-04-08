@@ -36,13 +36,13 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
             if (qualityCompare > 0 && QualityCutoffNotMet(qualityProfile, currentQuality, newQuality))
             {
-                _logger.Debug("New item has a better quality. Existing: {0}. New: {1}", currentQuality, newQuality);
+                _logger.Debug("New item has a better quality. Existing: {ExistingQuality}. New: {NewQuality}", currentQuality, newQuality);
                 return UpgradeableRejectReason.None;
             }
 
             if (qualityCompare < 0)
             {
-                _logger.Debug("Existing item has better quality, skipping. Existing: {0}. New: {1}", currentQuality, newQuality);
+                _logger.Debug("Existing item has better quality, skipping. Existing: {ExistingQuality}. New: {NewQuality}", currentQuality, newQuality);
                 return UpgradeableRejectReason.BetterQuality;
             }
 
@@ -53,13 +53,13 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             if (downloadPropersAndRepacks != ProperDownloadTypes.DoNotPrefer &&
                 qualityRevisionCompare > 0)
             {
-                _logger.Debug("New item has a better quality revision, skipping. Existing: {0}. New: {1}", currentQuality, newQuality);
+                _logger.Debug("New item has a better quality revision, skipping. Existing: {ExistingQuality}. New: {NewQuality}", currentQuality, newQuality);
                 return UpgradeableRejectReason.None;
             }
 
             if (!qualityProfile.UpgradeAllowed)
             {
-                _logger.Debug("Quality profile '{0}' does not allow upgrading. Skipping.", qualityProfile.Name);
+                _logger.Debug("Quality profile '{ProfileName}' does not allow upgrading. Skipping.", qualityProfile.Name);
 
                 return UpgradeableRejectReason.UpgradesNotAllowed;
             }
@@ -68,13 +68,13 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             if (downloadPropersAndRepacks != ProperDownloadTypes.DoNotPrefer &&
                 qualityRevisionCompare < 0)
             {
-                _logger.Debug("Existing item has a better quality revision, skipping. Existing: {0}. New: {1}", currentQuality, newQuality);
+                _logger.Debug("Existing item has a better quality revision, skipping. Existing: {ExistingQuality}. New: {NewQuality}", currentQuality, newQuality);
                 return UpgradeableRejectReason.BetterRevision;
             }
 
             if (qualityCompare > 0)
             {
-                _logger.Debug("Existing item meets cut-off for quality, skipping. Existing: {0}. Cutoff: {1}",
+                _logger.Debug("Existing item meets cut-off for quality, skipping. Existing: {ExistingQuality}. Cutoff: {CutoffQuality}",
                     currentQuality,
                     qualityProfile.Items[qualityProfile.GetIndex(qualityProfile.Cutoff).Index]);
                 return UpgradeableRejectReason.QualityCutoff;
@@ -85,7 +85,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
             if (newFormatScore <= currentFormatScore)
             {
-                _logger.Debug("New item's custom formats [{0}] ({1}) do not improve on [{2}] ({3}), skipping",
+                _logger.Debug("New item's custom formats [{NewCustomFormats}] ({NewFormatScore}) do not improve on [{CurrentCustomFormats}] ({CurrentFormatScore}), skipping",
                     newCustomFormats.ConcatToString(),
                     newFormatScore,
                     currentCustomFormats.ConcatToString(),
@@ -95,7 +95,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
             if (currentFormatScore >= qualityProfile.CutoffFormatScore)
             {
-                _logger.Debug("Existing item meets cut-off for custom formats, skipping. Existing: [{0}] ({1}). Cutoff score: {2}",
+                _logger.Debug("Existing item meets cut-off for custom formats, skipping. Existing: [{CurrentCustomFormats}] ({CurrentFormatScore}). Cutoff score: {CutoffFormatScore}",
                     currentCustomFormats.ConcatToString(),
                     currentFormatScore,
                     qualityProfile.CutoffFormatScore);
@@ -104,7 +104,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
             if (newFormatScore < currentFormatScore + qualityProfile.MinUpgradeFormatScore)
             {
-                _logger.Debug("New item's custom formats [{0}] ({1}) do not meet minimum custom format score increment of {3} required for upgrade, skipping. Existing: [{4}] ({5}).",
+                _logger.Debug("New item's custom formats [{NewCustomFormats}] ({NewFormatScore}) do not meet minimum custom format score increment of {MinUpgradeFormatScore} required for upgrade, skipping. Existing: [{CurrentCustomFormats}] ({CurrentFormatScore}).",
                               newCustomFormats.ConcatToString(),
                               newFormatScore,
                               qualityProfile.MinUpgradeFormatScore,
@@ -113,7 +113,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 return UpgradeableRejectReason.MinCustomFormatScore;
             }
 
-            _logger.Debug("New item's custom formats [{0}] ({1}) improve on [{2}] ({3}), accepting",
+            _logger.Debug("New item's custom formats [{NewCustomFormats}] ({NewFormatScore}) improve on [{CurrentCustomFormats}] ({CurrentFormatScore}), accepting",
                 newCustomFormats.ConcatToString(),
                 newFormatScore,
                 currentCustomFormats.ConcatToString(),
@@ -159,7 +159,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 return true;
             }
 
-            _logger.Debug("Existing item meets cut-off, skipping. Existing: {0} [{1}] ({2})",
+            _logger.Debug("Existing item meets cut-off, skipping. Existing: {ExistingQuality} [{CurrentCustomFormats}] ({CurrentFormatScore})",
                 currentQuality,
                 currentFormats.ConcatToString(),
                 profile.CalculateCustomFormatScore(currentFormats));
@@ -174,7 +174,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             // Comparing the quality directly because we don't want to upgrade to a proper for a webrip from a webdl or vice versa
             if (currentQuality.Quality == newQuality.Quality && compare > 0)
             {
-                _logger.Debug("New quality is a better revision for existing quality. Existing: {0}. New: {1}", currentQuality, newQuality);
+                _logger.Debug("New quality is a better revision for existing quality. Existing: {ExistingQuality}. New: {NewQuality}", currentQuality, newQuality);
                 return true;
             }
 
@@ -188,7 +188,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
             if (IsRevisionUpgrade(currentQuality, newQuality))
             {
-                _logger.Debug("New quality '{0}' is a revision upgrade for '{1}'", newQuality, currentQuality);
+                _logger.Debug("New quality '{NewQuality}' is a revision upgrade for '{ExistingQuality}'", newQuality, currentQuality);
                 return true;
             }
 

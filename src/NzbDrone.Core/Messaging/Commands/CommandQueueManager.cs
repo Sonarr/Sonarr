@@ -58,7 +58,7 @@ namespace NzbDrone.Core.Messaging.Commands
         public List<CommandModel> PushMany<TCommand>(List<TCommand> commands)
             where TCommand : Command
         {
-            _logger.Trace("Publishing {0} commands", commands.Count);
+            _logger.Trace("Publishing {CommandCount} commands", commands.Count);
 
             lock (_commandQueue)
             {
@@ -103,8 +103,8 @@ namespace NzbDrone.Core.Messaging.Commands
         {
             Ensure.That(command, () => command).IsNotNull();
 
-            _logger.Trace("Publishing {0}", command.Name);
-            _logger.Trace("Checking if command is queued or started: {0}", command.Name);
+            _logger.Trace("Publishing {CommandName}", command.Name);
+            _logger.Trace("Checking if command is queued or started: {CommandName}", command.Name);
 
             command.Trigger = trigger;
 
@@ -115,7 +115,7 @@ namespace NzbDrone.Core.Messaging.Commands
 
                 if (existing != null)
                 {
-                    _logger.Trace("Command is already in progress: {0}", command.Name);
+                    _logger.Trace("Command is already in progress: {CommandName}", command.Name);
 
                     return existing;
                 }
@@ -130,7 +130,7 @@ namespace NzbDrone.Core.Messaging.Commands
                     Status = CommandStatus.Queued
                 };
 
-                _logger.Trace("Inserting new command: {0}", commandModel.Name);
+                _logger.Trace("Inserting new command: {CommandName}", commandModel.Name);
 
                 _repo.Insert(commandModel);
                 _commandQueue.Add(commandModel);
@@ -190,7 +190,7 @@ namespace NzbDrone.Core.Messaging.Commands
         public void Start(CommandModel command)
         {
             // Marks the command as started in the DB, the queue takes care of marking it as started on it's own
-            _logger.Trace("Marking command as started: {0}", command.Name);
+            _logger.Trace("Marking command as started: {CommandName}", command.Name);
             _repo.Start(command);
         }
 

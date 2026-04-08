@@ -35,7 +35,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
             }
             catch (ModelNotFoundException)
             {
-                _logger.Debug("Indexer with id {0} does not exist, skipping indexer tags check", subject.Release.IndexerId);
+                _logger.Debug("Indexer with id {IndexerId} does not exist, skipping indexer tags check", subject.Release.IndexerId);
                 return DownloadSpecDecision.Accept();
             }
 
@@ -44,7 +44,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
 
             if (indexerTags.Any() && indexerTags.Intersect(subject.Series.Tags).Empty())
             {
-                _logger.Debug("Indexer {0} has tags. None of these are present on series {1}. Rejecting", subject.Release.Indexer, subject.Series);
+                _logger.Debug("Indexer {Indexer} has tags. None of these are present on series {SeriesTitle}. Rejecting", subject.Release.Indexer, subject.Series);
 
                 return DownloadSpecDecision.Reject(DownloadRejectionReason.NoMatchingTag, "Series tags do not match any of the indexer tags");
             }

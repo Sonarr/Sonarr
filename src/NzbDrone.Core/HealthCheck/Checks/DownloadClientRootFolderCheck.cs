@@ -65,11 +65,11 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 }
                 catch (DownloadClientException ex)
                 {
-                    _logger.Debug(ex, "Unable to communicate with {0}", client.Definition.Name);
+                    _logger.Debug(ex, "Unable to communicate with {DownloadClientName}", client.Definition.Name);
                 }
                 catch (HttpRequestException ex)
                 {
-                    _logger.Debug(ex, "Unable to communicate with {0}", client.Definition.Name);
+                    _logger.Debug(ex, "Unable to communicate with {DownloadClientName}", client.Definition.Name);
                 }
                 catch (Exception ex)
                 {

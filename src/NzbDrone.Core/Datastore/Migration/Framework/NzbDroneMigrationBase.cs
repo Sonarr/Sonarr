@@ -65,7 +65,7 @@ namespace NzbDrone.Core.Datastore.Migration.Framework
 
         private void LogMigrationMessage(MigrationType type)
         {
-            _logger.Info("Starting migration of {0} DB to {1}", type.ToString(), Version);
+            _logger.Info("Starting migration of {DatabaseType} DB to {Version}", type.ToString(), Version);
         }
     }
 }

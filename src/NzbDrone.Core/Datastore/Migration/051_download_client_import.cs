@@ -246,7 +246,7 @@ namespace NzbDrone.Core.Datastore.Migration
                 }
             }
 
-            _logger.Info("Updated old History items. {0}/{1} old ImportedEvents were associated with GrabbedEvents.", historyItemsToAssociate.Count, numHistoryItemsNotAssociated);
+            _logger.Info("Updated old History items. {AssociatedCount}/{NotAssociatedCount} old ImportedEvents were associated with GrabbedEvents.", historyItemsToAssociate.Count, numHistoryItemsNotAssociated);
         }
     }
 }

@@ -35,7 +35,7 @@ namespace NzbDrone.Core.Extras.Metadata
 
         public override IEnumerable<ExtraFile> ProcessFiles(Series series, List<string> filesOnDisk, List<string> importedFiles, string fileNameBeforeRename)
         {
-            _logger.Debug("Looking for existing metadata in {0}", series.Path);
+            _logger.Debug("Looking for existing metadata in {SeriesPath}", series.Path);
 
             var metadataFiles = new List<MetadataFile>();
             var filterResult = FilterAndClean(series, filesOnDisk, importedFiles, fileNameBeforeRename is not null);
@@ -74,19 +74,19 @@ namespace NzbDrone.Core.Extras.Metadata
                         }
                         catch (AugmentingFailedException)
                         {
-                            _logger.Debug("Unable to parse extra file: {0}", possibleMetadataFile);
+                            _logger.Debug("Unable to parse extra file: {FilePath}", possibleMetadataFile);
                             continue;
                         }
 
                         if (localEpisode.Episodes.Empty())
                         {
-                            _logger.Debug("Cannot find related episodes for: {0}", possibleMetadataFile);
+                            _logger.Debug("Cannot find related episodes for: {FilePath}", possibleMetadataFile);
                             continue;
                         }
 
                         if (localEpisode.Episodes.DistinctBy(e => e.EpisodeFileId).Count() > 1)
                         {
-                            _logger.Debug("Extra file: {0} does not match existing files.", possibleMetadataFile);
+                            _logger.Debug("Extra file: {FilePath} does not match existing files.", possibleMetadataFile);
                             continue;
                         }
 
@@ -100,7 +100,7 @@ namespace NzbDrone.Core.Extras.Metadata
                 }
             }
 
-            _logger.Info("Found {0} existing metadata files", metadataFiles.Count);
+            _logger.Info("Found {MetadataFilesCount} existing metadata files", metadataFiles.Count);
             _metadataFileService.Upsert(metadataFiles);
 
             // Return files that were just imported along with files that were

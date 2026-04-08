@@ -43,7 +43,7 @@ namespace NzbDrone.Core.Messaging.Commands
                     }
                     catch (Exception ex)
                     {
-                        _logger.Error(ex, "Error occurred while executing task {0}", command.Name);
+                        _logger.Error(ex, "Error occurred while executing task {CommandName}", command.Name);
                     }
                 }
             }
@@ -71,7 +71,7 @@ namespace NzbDrone.Core.Messaging.Commands
             {
                 handler = (IExecute<TCommand>)_serviceFactory.Build(typeof(IExecute<TCommand>));
 
-                _logger.Trace("{0} -> {1}", command.GetType().Name, handler.GetType().Name);
+                _logger.Trace("{CommandType} -> {HandlerType}", command.GetType().Name, handler.GetType().Name);
 
                 _commandQueueManager.Start(commandModel);
                 BroadcastCommandUpdate(commandModel);
@@ -110,7 +110,7 @@ namespace NzbDrone.Core.Messaging.Commands
 
                 if (handler != null)
                 {
-                    _logger.Trace("{0} <- {1} [{2}]", command.GetType().Name, handler.GetType().Name, commandModel.Duration.ToString());
+                    _logger.Trace("{CommandType} <- {HandlerType} [{Duration}]", command.GetType().Name, handler.GetType().Name, commandModel.Duration.ToString());
                 }
             }
         }

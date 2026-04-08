@@ -110,7 +110,7 @@ namespace NzbDrone.Core.Update
 
             if (_diskProvider.GetTotalSize(tempFolder) < 1.Gigabytes())
             {
-                _logger.Warn("Temporary location '{0}' has less than 1 GB free space, Sonarr may not be able to update itself.", tempFolder);
+                _logger.Warn("Temporary location '{TempFolder}' has less than 1 GB free space, Sonarr may not be able to update itself.", tempFolder);
             }
 
             var packageDestination = Path.Combine(updateSandboxFolder, updatePackage.FileName);
@@ -121,8 +121,8 @@ namespace NzbDrone.Core.Update
                 _diskProvider.DeleteFolder(updateSandboxFolder, true);
             }
 
-            _logger.ProgressInfo("Downloading update {0}", updatePackage.Version);
-            _logger.Debug("Downloading update package from [{0}] to [{1}]", updatePackage.Url, packageDestination);
+            _logger.ProgressInfo("Downloading update {Version}", updatePackage.Version);
+            _logger.Debug("Downloading update package from [{Url}] to [{Destination}]", updatePackage.Url, packageDestination);
             _httpClient.DownloadFile(updatePackage.Url, packageDestination);
 
             _logger.ProgressInfo("Verifying update package");
@@ -156,7 +156,7 @@ namespace NzbDrone.Core.Update
 
             if (!_diskProvider.FileExists(updateClientExePath))
             {
-                _logger.Warn("Update client {0} does not exist, aborting update.", updateClientExePath);
+                _logger.Warn("Update client {UpdateClientPath} does not exist, aborting update.", updateClientExePath);
                 return false;
             }
 
@@ -166,7 +166,7 @@ namespace NzbDrone.Core.Update
                 _diskProvider.SetFilePermissions(updateClientExePath, "755", null);
             }
 
-            _logger.Info("Starting update client {0}", updateClientExePath);
+            _logger.Info("Starting update client {UpdateClientPath}", updateClientExePath);
             _logger.ProgressInfo("Sonarr will restart shortly.");
 
             _processProvider.Start(updateClientExePath, GetUpdaterArgs(updateSandboxFolder));
@@ -181,14 +181,14 @@ namespace NzbDrone.Core.Update
             {
                 try
                 {
-                    _logger.Info("Branch [{0}] is being redirected to [{1}]]", currentBranch, package.Branch);
+                    _logger.Info("Branch [{CurrentBranch}] is being redirected to [{NewBranch}]]", currentBranch, package.Branch);
                     var config = new Dictionary<string, object>();
                     config["Branch"] = package.Branch;
                     _configFileProvider.SaveConfigDictionary(config);
                 }
                 catch (Exception e)
                 {
-                    _logger.Error(e, "Couldn't change the branch from [{0}] to [{1}].", currentBranch, package.Branch);
+                    _logger.Error(e, "Couldn't change the branch from [{CurrentBranch}] to [{NewBranch}].", currentBranch, package.Branch);
                 }
             }
         }
@@ -210,7 +210,7 @@ namespace NzbDrone.Core.Update
             _logger.Info("Removing Sonarr.Update");
             _diskProvider.DeleteFolder(_appFolderInfo.GetUpdateClientFolder(), true);
 
-            _logger.ProgressInfo("Starting update script: {0}", _configFileProvider.UpdateScriptPath);
+            _logger.ProgressInfo("Starting update script: {UpdateScriptPath}", _configFileProvider.UpdateScriptPath);
             _processProvider.Start(scriptPath, GetUpdaterArgs(updateSandboxFolder));
         }
 
@@ -264,12 +264,12 @@ namespace NzbDrone.Core.Update
             // Safety net, ConfigureUpdateMechanism should take care of invalid settings
             if (_configFileProvider.UpdateMechanism == UpdateMechanism.BuiltIn && _deploymentInfoProvider.IsExternalUpdateMechanism)
             {
-                _logger.ProgressDebug("Built-In updater disabled, please use {0} to install", _deploymentInfoProvider.PackageUpdateMechanism);
+                _logger.ProgressDebug("Built-In updater disabled, please use {PackageUpdateMechanism} to install", _deploymentInfoProvider.PackageUpdateMechanism);
                 return null;
             }
             else if (_configFileProvider.UpdateMechanism != UpdateMechanism.Script && _deploymentInfoProvider.IsExternalUpdateMechanism)
             {
-                _logger.ProgressDebug("Update available, please use {0} to install", _deploymentInfoProvider.PackageUpdateMechanism);
+                _logger.ProgressDebug("Update available, please use {PackageUpdateMechanism} to install", _deploymentInfoProvider.PackageUpdateMechanism);
                 return null;
             }
 
@@ -344,7 +344,7 @@ namespace NzbDrone.Core.Update
                     return;
                 }
 
-                _logger.Info("Installing post-install update from {0} to {1}", BuildInfo.Version, latestAvailable.Version);
+                _logger.Info("Installing post-install update from {CurrentVersion} to {NewVersion}", BuildInfo.Version, latestAvailable.Version);
                 _diskProvider.DeleteFile(updateMarker);
 
                 var installing = InstallUpdate(latestAvailable);

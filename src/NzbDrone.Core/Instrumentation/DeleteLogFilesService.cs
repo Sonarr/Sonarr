@@ -26,13 +26,13 @@ namespace NzbDrone.Core.Instrumentation
 
         public void Execute(DeleteLogFilesCommand message)
         {
-            _logger.Debug("Deleting all files in: {0}", _appFolderInfo.GetLogFolder());
+            _logger.Debug("Deleting all files in: {FolderPath}", _appFolderInfo.GetLogFolder());
             _diskProvider.EmptyFolder(_appFolderInfo.GetLogFolder());
         }
 
         public void Execute(DeleteUpdateLogFilesCommand message)
         {
-            _logger.Debug("Deleting all files in: {0}", _appFolderInfo.GetUpdateLogFolder());
+            _logger.Debug("Deleting all files in: {FolderPath}", _appFolderInfo.GetUpdateLogFolder());
             _diskProvider.EmptyFolder(_appFolderInfo.GetUpdateLogFolder());
         }
     }

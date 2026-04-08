@@ -46,7 +46,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
             if (!freeSpace.HasValue)
             {
-                _logger.Debug("Unable to get available space for {0}. Skipping", path);
+                _logger.Debug("Unable to get available space for {FolderPath}. Skipping", path);
 
                 return DownloadSpecDecision.Accept();
             }

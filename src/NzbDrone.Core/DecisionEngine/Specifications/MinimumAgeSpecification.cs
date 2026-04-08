@@ -37,15 +37,15 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 return DownloadSpecDecision.Accept();
             }
 
-            _logger.Debug("Checking if report meets minimum age requirements. {0}", ageRounded);
+            _logger.Debug("Checking if report meets minimum age requirements. {AgeMinutes}", ageRounded);
 
             if (age < minimumAge)
             {
-                _logger.Debug("Only {0} minutes old, minimum age is {1} minutes", ageRounded, minimumAge);
+                _logger.Debug("Only {AgeMinutes} minutes old, minimum age is {MinimumAge} minutes", ageRounded, minimumAge);
                 return DownloadSpecDecision.Reject(DownloadRejectionReason.MinimumAge, "Only {0} minutes old, minimum age is {1} minutes", ageRounded, minimumAge);
             }
 
-            _logger.Debug("Release is {0} minutes old, greater than minimum age of {1} minutes", ageRounded, minimumAge);
+            _logger.Debug("Release is {AgeMinutes} minutes old, greater than minimum age of {MinimumAge} minutes", ageRounded, minimumAge);
 
             return DownloadSpecDecision.Accept();
         }

@@ -41,7 +41,7 @@ namespace NzbDrone.Core.Update
                 if ((packageUpdateMechanism != externalMechanism && updateMechanism == externalMechanism) ||
                     (packageUpdateMechanism == externalMechanism && updateMechanism == UpdateMechanism.BuiltIn))
                 {
-                    _logger.Info("Update mechanism {0} not supported in the current configuration, changing to {1}.", updateMechanism, packageUpdateMechanism);
+                    _logger.Info("Update mechanism {UpdateMechanism} not supported in the current configuration, changing to {PackageUpdateMechanism}.", updateMechanism, packageUpdateMechanism);
                     ChangeUpdateMechanism(packageUpdateMechanism);
                     break;
                 }
@@ -53,7 +53,7 @@ namespace NzbDrone.Core.Update
                 var packageBranch = _deploymentInfoProvider.PackageBranch;
                 if (packageBranch.IsNotNullOrWhiteSpace() && packageBranch != currentBranch)
                 {
-                    _logger.Info("External updater uses branch {0} instead of the currently selected {1}, changing to {0}.", packageBranch, currentBranch);
+                    _logger.Info("External updater uses branch {PackageBranch} instead of the currently selected {CurrentBranch}, changing to {PackageBranch}.", packageBranch, currentBranch);
                     ChangeBranch(packageBranch);
                 }
             }

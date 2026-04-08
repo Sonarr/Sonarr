@@ -36,7 +36,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 return DownloadSpecDecision.Accept();
             }
 
-            _logger.Debug("Checking if release meets maximum size requirements. {0}", size.SizeSuffix());
+            _logger.Debug("Checking if release meets maximum size requirements. {ReleaseSize}", size.SizeSuffix());
 
             if (size > maximumSize)
             {

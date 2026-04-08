@@ -27,7 +27,7 @@ namespace NzbDrone.Core.HealthCheck.Checks
         {
             if (_configFileProvider.ApiKey.Length < MinimumLength)
             {
-                _logger.Warn("Please update your API key to be at least {0} characters long. You can do this via settings or the config file", MinimumLength);
+                _logger.Warn("Please update your API key to be at least {MinimumLength} characters long. You can do this via settings or the config file", MinimumLength);
 
                 return new HealthCheck(GetType(),
                     HealthCheckResult.Warning,

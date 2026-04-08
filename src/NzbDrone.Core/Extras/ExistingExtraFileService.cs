@@ -27,7 +27,7 @@ namespace NzbDrone.Core.Extras
 
         public List<string> ImportExtraFiles(Series series, List<string> possibleExtraFiles, string fileNameBeforeRename)
         {
-            _logger.Debug("Looking for existing extra files in {0}", series.Path);
+            _logger.Debug("Looking for existing extra files in {SeriesPath}", series.Path);
 
             var importedFiles = new List<string>();
 
@@ -47,7 +47,7 @@ namespace NzbDrone.Core.Extras
             var possibleExtraFiles = message.PossibleExtraFiles;
             var importedFiles = ImportExtraFiles(series, possibleExtraFiles, null);
 
-            _logger.Info("Found {0} possible extra files, imported {1} files.", possibleExtraFiles.Count, importedFiles.Count);
+            _logger.Info("Found {PossibleExtraFilesCount} possible extra files, imported {ImportedFilesCount} files.", possibleExtraFiles.Count, importedFiles.Count);
         }
     }
 }

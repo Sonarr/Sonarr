@@ -33,7 +33,7 @@ namespace NzbDrone.Core.DataAugmentation.Xem
 
         private void PerformUpdate(Series series)
         {
-            _logger.Debug("Updating scene numbering mapping for: {0}", series);
+            _logger.Debug("Updating scene numbering mapping for: {SeriesTitle}", series);
 
             try
             {
@@ -41,7 +41,7 @@ namespace NzbDrone.Core.DataAugmentation.Xem
 
                 if (!mappings.Any() && !series.UseSceneNumbering)
                 {
-                    _logger.Debug("Mappings for: {0} are empty, skipping", series);
+                    _logger.Debug("Mappings for: {SeriesTitle} are empty, skipping", series);
                     return;
                 }
 
@@ -57,7 +57,7 @@ namespace NzbDrone.Core.DataAugmentation.Xem
 
                 foreach (var mapping in mappings)
                 {
-                    _logger.Debug("Setting scene numbering mappings for {0} S{1:00}E{2:00}", series, mapping.Tvdb.Season, mapping.Tvdb.Episode);
+                    _logger.Debug("Setting scene numbering mappings for {SeriesTitle} S{SeasonNumber:00}E{EpisodeNumber:00}", series, mapping.Tvdb.Season, mapping.Tvdb.Episode);
 
                     var episode = episodes.SingleOrDefault(e => e.SeasonNumber == mapping.Tvdb.Season && e.EpisodeNumber == mapping.Tvdb.Episode);
 
@@ -71,7 +71,7 @@ namespace NzbDrone.Core.DataAugmentation.Xem
                         mapping.Scene.Season == 0 &&
                         mapping.Scene.Episode == 0)
                     {
-                        _logger.Debug("Mapping for {0} S{1:00}E{2:00} is invalid, skipping", series, mapping.Tvdb.Season, mapping.Tvdb.Episode);
+                        _logger.Debug("Mapping for {SeriesTitle} S{SeasonNumber:00}E{EpisodeNumber:00} is invalid, skipping", series, mapping.Tvdb.Season, mapping.Tvdb.Episode);
                         continue;
                     }
 
@@ -89,11 +89,11 @@ namespace NzbDrone.Core.DataAugmentation.Xem
                 series.UseSceneNumbering = mappings.Any();
                 _seriesService.UpdateSeries(series);
 
-                _logger.Debug("XEM mapping updated for {0}", series);
+                _logger.Debug("XEM mapping updated for {SeriesTitle}", series);
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "Error updating scene numbering mappings for {0}", series);
+                _logger.Error(ex, "Error updating scene numbering mappings for {SeriesTitle}", series);
             }
         }
 
@@ -247,7 +247,7 @@ namespace NzbDrone.Core.DataAugmentation.Xem
 
             if (!_cache.Find(message.Series.TvdbId.ToString()) && !message.Series.UseSceneNumbering)
             {
-                _logger.Debug("Scene numbering is not available for {0} [{1}]", message.Series.Title, message.Series.TvdbId);
+                _logger.Debug("Scene numbering is not available for {SeriesTitle} [{TvdbId}]", message.Series.Title, message.Series.TvdbId);
                 return;
             }
 

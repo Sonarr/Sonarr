@@ -59,7 +59,7 @@ namespace NzbDrone.Core.Messaging.Events
 
             if (_runtimeInfo.IsExiting && @event.GetType().HasAttribute<LifecycleEventAttribute>())
             {
-                _logger.Warn("Event {0} blocked due to application shutdown", eventName);
+                _logger.Warn("Event {EventName} blocked due to application shutdown", eventName);
                 return;
             }
 
@@ -80,7 +80,7 @@ namespace NzbDrone.Core.Messaging.Events
                         _logger.Warn("Thread pool state WT:{0} PT:{1}  MAXWT:{2} MAXPT:{3} MINWT:{4} MINPT:{5}", workerThreads, completionPortThreads, maxWorkerThreads, maxCompletionPortThreads, minWorkerThreads, minCompletionPortThreads);
             */
 
-            _logger.Trace("Publishing {0}", eventName);
+            _logger.Trace("Publishing {EventName}", eventName);
 
             EventSubscribers<TEvent> subscribers;
             lock (_eventSubscribers)
@@ -93,7 +93,7 @@ namespace NzbDrone.Core.Messaging.Events
                     }
                     catch (Exception ex)
                     {
-                        _logger.Warn(ex, "Unable to resolve event subscribers for {0}, container may be disposed", eventName);
+                        _logger.Warn(ex, "Unable to resolve event subscribers for {EventName}, container may be disposed", eventName);
                         return;
                     }
                 }
@@ -107,13 +107,13 @@ namespace NzbDrone.Core.Messaging.Events
             {
                 try
                 {
-                    _logger.Trace("{0} -> {1}", eventName, handler.GetType().Name);
+                    _logger.Trace("{EventName} -> {HandlerType}", eventName, handler.GetType().Name);
                     handler.Handle(@event);
-                    _logger.Trace("{0} <- {1}", eventName, handler.GetType().Name);
+                    _logger.Trace("{EventName} <- {HandlerType}", eventName, handler.GetType().Name);
                 }
                 catch (Exception e)
                 {
-                    _logger.Error(e, "{0} failed while processing [{1}]", handler.GetType().Name, eventName);
+                    _logger.Error(e, "{HandlerType} failed while processing [{EventName}]", handler.GetType().Name, eventName);
                 }
             }
 
@@ -135,9 +135,9 @@ namespace NzbDrone.Core.Messaging.Events
 
                 _taskFactory.StartNew(() =>
                 {
-                    _logger.Trace("{0} ~> {1}", eventName, handlerLocal.GetType().Name);
+                    _logger.Trace("{EventName} ~> {HandlerType}", eventName, handlerLocal.GetType().Name);
                     handlerLocal.HandleAsync(@event);
-                    _logger.Trace("{0} <~ {1}", eventName, handlerLocal.GetType().Name);
+                    _logger.Trace("{EventName} <~ {HandlerType}", eventName, handlerLocal.GetType().Name);
                 },
                         TaskCreationOptions.PreferFairness)
                 .LogExceptions();

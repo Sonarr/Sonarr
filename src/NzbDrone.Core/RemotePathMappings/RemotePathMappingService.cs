@@ -139,15 +139,15 @@ namespace NzbDrone.Core.RemotePathMappings
                 return remotePath;
             }
 
-            _logger.Trace("Evaluating remote path remote mappings for match to host [{0}] and remote path [{1}]", host, remotePath.FullPath);
+            _logger.Trace("Evaluating remote path remote mappings for match to host [{Host}] and remote path [{RemotePath}]", host, remotePath.FullPath);
 
             foreach (var mapping in mappings)
             {
-                _logger.Trace("Checking configured remote path mapping: {0} - {1}", mapping.Host, mapping.RemotePath);
+                _logger.Trace("Checking configured remote path mapping: {Host} - {RemotePath}", mapping.Host, mapping.RemotePath);
                 if (host.Equals(mapping.Host, StringComparison.InvariantCultureIgnoreCase) && new OsPath(mapping.RemotePath).Contains(remotePath))
                 {
                     var localPath = new OsPath(mapping.LocalPath) + (remotePath - new OsPath(mapping.RemotePath));
-                    _logger.Debug("Remapped remote path [{0}] to local path [{1}] for host [{2}]", remotePath, localPath, host);
+                    _logger.Debug("Remapped remote path [{RemotePath}] to local path [{LocalPath}] for host [{Host}]", remotePath, localPath, host);
 
                     return localPath;
                 }
@@ -170,15 +170,15 @@ namespace NzbDrone.Core.RemotePathMappings
                 return localPath;
             }
 
-            _logger.Trace("Evaluating remote path local mappings for match to host [{0}] and local path [{1}]", host, localPath.FullPath);
+            _logger.Trace("Evaluating remote path local mappings for match to host [{Host}] and local path [{LocalPath}]", host, localPath.FullPath);
 
             foreach (var mapping in mappings)
             {
-                _logger.Trace("Checking configured remote path mapping {0} - {1}", mapping.Host, mapping.RemotePath);
+                _logger.Trace("Checking configured remote path mapping {Host} - {RemotePath}", mapping.Host, mapping.RemotePath);
                 if (host.Equals(mapping.Host, StringComparison.InvariantCultureIgnoreCase) && new OsPath(mapping.LocalPath).Contains(localPath))
                 {
                     var remotePath = new OsPath(mapping.RemotePath) + (localPath - new OsPath(mapping.LocalPath));
-                    _logger.Debug("Remapped local path [{0}] to remote path [{1}] for host [{2}]", localPath, remotePath, host);
+                    _logger.Debug("Remapped local path [{LocalPath}] to remote path [{RemotePath}] for host [{Host}]", localPath, remotePath, host);
 
                     return remotePath;
                 }

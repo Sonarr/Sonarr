@@ -13,7 +13,7 @@ namespace NzbDrone.Core.Messaging.Commands
 
         public void Execute(UnknownCommand message)
         {
-            _logger.Debug("Ignoring unknown command {0}", message.ContractName);
+            _logger.Debug("Ignoring unknown command {CommandName}", message.ContractName);
         }
     }
 }

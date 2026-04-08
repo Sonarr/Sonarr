@@ -35,7 +35,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             }
             catch (ModelNotFoundException)
             {
-                _logger.Debug("Indexer with id {0} does not exist, skipping seeders check", torrentInfo.IndexerId);
+                _logger.Debug("Indexer with id {IndexerId} does not exist, skipping seeders check", torrentInfo.IndexerId);
                 return DownloadSpecDecision.Accept();
             }
 
@@ -47,7 +47,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
                 if (torrentInfo.Seeders.HasValue && torrentInfo.Seeders.Value < minimumSeeders)
                 {
-                    _logger.Debug("Not enough seeders: {0}. Minimum seeders: {1}", torrentInfo.Seeders, minimumSeeders);
+                    _logger.Debug("Not enough seeders: {Seeders}. Minimum seeders: {MinimumSeeders}", torrentInfo.Seeders, minimumSeeders);
                     return DownloadSpecDecision.Reject(DownloadRejectionReason.MinimumSeeders, "Not enough seeders: {0}. Minimum seeders: {1}", torrentInfo.Seeders, minimumSeeders);
                 }
             }

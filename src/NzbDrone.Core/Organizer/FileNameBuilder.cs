@@ -652,7 +652,7 @@ namespace NzbDrone.Core.Organizer
         {
             if (episodeFile.MediaInfo == null)
             {
-                _logger.Trace("Media info is unavailable for {0}", episodeFile);
+                _logger.Trace("Media info is unavailable for {EpisodeFile}", episodeFile);
 
                 return;
             }

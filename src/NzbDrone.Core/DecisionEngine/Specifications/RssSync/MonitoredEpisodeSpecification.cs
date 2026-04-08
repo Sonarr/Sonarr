@@ -26,7 +26,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
 
             if (!subject.Series.Monitored)
             {
-                _logger.Debug("{0} is present in the DB but not tracked. Rejecting", subject.Series);
+                _logger.Debug("{SeriesTitle} is present in the DB but not tracked. Rejecting", subject.Series);
                 return DownloadSpecDecision.Reject(DownloadRejectionReason.SeriesNotMonitored, "Series is not monitored");
             }
 
@@ -48,7 +48,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
             }
             else
             {
-                _logger.Debug("Only {0}/{1} episodes in the release are monitored. Rejecting", monitoredCount, subject.Episodes.Count);
+                _logger.Debug("Only {MonitoredCount}/{EpisodeCount} episodes in the release are monitored. Rejecting", monitoredCount, subject.Episodes.Count);
             }
 
             return DownloadSpecDecision.Reject(DownloadRejectionReason.EpisodeNotMonitored, "One or more episodes is not monitored");

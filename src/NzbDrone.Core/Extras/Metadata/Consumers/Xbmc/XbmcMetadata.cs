@@ -62,7 +62,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
                 return GetEpisodeMetadataFilename(episodeFilePath);
             }
 
-            _logger.Debug("Unknown episode file metadata: {0}", metadataFile.RelativePath);
+            _logger.Debug("Unknown episode file metadata: {RelativePath}", metadataFile.RelativePath);
             return Path.Combine(series.Path, metadataFile.RelativePath);
         }
 
@@ -149,7 +149,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
 
             if (Settings.SeriesMetadata)
             {
-                _logger.Debug("Generating Series Metadata for: {0}", series.Title);
+                _logger.Debug("Generating Series Metadata for: {SeriesTitle}", series.Title);
 
                 var tvShow = new XElement("tvshow");
 
@@ -282,7 +282,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
                 return null;
             }
 
-            _logger.Debug("Generating Episode Metadata for: {0}", Path.Combine(series.Path, episodeFile.RelativePath));
+            _logger.Debug("Generating Episode Metadata for: {EpisodeFilePath}", Path.Combine(series.Path, episodeFile.RelativePath));
 
             var watched = GetExistingWatchedStatus(series, episodeFile.RelativePath);
 
@@ -474,7 +474,7 @@ namespace NzbDrone.Core.Extras.Metadata.Consumers.Xbmc
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "Unable to process episode image for file: {0}", Path.Combine(series.Path, episodeFile.RelativePath));
+                _logger.Error(ex, "Unable to process episode image for file: {EpisodeFilePath}", Path.Combine(series.Path, episodeFile.RelativePath));
 
                 return new List<ImageFileResult>();
             }

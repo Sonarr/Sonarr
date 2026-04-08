@@ -25,7 +25,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
         public virtual DownloadSpecDecision IsSatisfiedBy(RemoteEpisode subject, ReleaseDecisionInformation information)
         {
-            _logger.Debug("Checking if release meets air date restrictions: {0}", subject);
+            _logger.Debug("Checking if release meets air date restrictions: {ReleaseTitle}", subject);
 
             var releaseProfiles = _releaseProfileService.EnabledForTags(subject.Series.Tags, subject.Release.IndexerId);
 

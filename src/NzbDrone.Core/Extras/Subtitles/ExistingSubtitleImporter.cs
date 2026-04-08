@@ -31,7 +31,7 @@ namespace NzbDrone.Core.Extras.Subtitles
 
         public override IEnumerable<ExtraFile> ProcessFiles(Series series, List<string> filesOnDisk, List<string> importedFiles, string fileNameBeforeRename)
         {
-            _logger.Debug("Looking for existing subtitle files in {0}", series.Path);
+            _logger.Debug("Looking for existing subtitle files in {SeriesPath}", series.Path);
 
             var subtitleFiles = new List<SubtitleFile>();
             var filterResult = FilterAndClean(series, filesOnDisk, importedFiles, fileNameBeforeRename is not null);
@@ -56,19 +56,19 @@ namespace NzbDrone.Core.Extras.Subtitles
                     }
                     catch (AugmentingFailedException)
                     {
-                        _logger.Debug("Unable to parse extra file: {0}", possibleSubtitleFile);
+                        _logger.Debug("Unable to parse extra file: {FilePath}", possibleSubtitleFile);
                         continue;
                     }
 
                     if (localEpisode.Episodes.Empty())
                     {
-                        _logger.Debug("Cannot find related episodes for: {0}", possibleSubtitleFile);
+                        _logger.Debug("Cannot find related episodes for: {FilePath}", possibleSubtitleFile);
                         continue;
                     }
 
                     if (localEpisode.Episodes.DistinctBy(e => e.EpisodeFileId).Count() > 1)
                     {
-                        _logger.Debug("Subtitle file: {0} does not match existing files.", possibleSubtitleFile);
+                        _logger.Debug("Subtitle file: {FilePath} does not match existing files.", possibleSubtitleFile);
                         continue;
                     }
 
@@ -91,7 +91,7 @@ namespace NzbDrone.Core.Extras.Subtitles
                 }
             }
 
-            _logger.Info("Found {0} existing subtitle files", subtitleFiles.Count);
+            _logger.Info("Found {SubtitleFilesCount} existing subtitle files", subtitleFiles.Count);
             _subtitleFileService.Upsert(subtitleFiles);
 
             // Return files that were just imported along with files that were

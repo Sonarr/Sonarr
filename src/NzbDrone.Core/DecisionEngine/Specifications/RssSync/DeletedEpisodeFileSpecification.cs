@@ -49,7 +49,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications.RssSync
             {
                 foreach (var missingEpisodeFile in missingEpisodeFiles)
                 {
-                    _logger.Trace("Episode file {0} is missing from disk.", missingEpisodeFile.RelativePath);
+                    _logger.Trace("Episode file {RelativePath} is missing from disk.", missingEpisodeFile.RelativePath);
                 }
 
                 _logger.Debug("Files for this episode exist in the database but not on disk, will be unmonitored on next diskscan. skipping.");

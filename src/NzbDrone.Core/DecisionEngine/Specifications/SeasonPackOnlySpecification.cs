@@ -37,7 +37,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
                     if (subset.Count > 0 && subset.Max(e => e.AirDateUtc).Value.Before(DateTime.UtcNow - TimeSpan.FromDays(subject.Release.SeasonSearchMaximumSingleEpisodeAge)))
                     {
-                        _logger.Debug("Release {0}: last episode in this season aired more than {1} days ago, season pack required.", subject.Release.Title, subject.Release.SeasonSearchMaximumSingleEpisodeAge);
+                        _logger.Debug("Release {ReleaseTitle}: last episode in this season aired more than {MaxAgeDays} days ago, season pack required.", subject.Release.Title, subject.Release.SeasonSearchMaximumSingleEpisodeAge);
                         return DownloadSpecDecision.Reject(DownloadRejectionReason.NotSeasonPack, "Last episode in this season aired more than {0} days ago, season pack required.", subject.Release.SeasonSearchMaximumSingleEpisodeAge);
                     }
                 }

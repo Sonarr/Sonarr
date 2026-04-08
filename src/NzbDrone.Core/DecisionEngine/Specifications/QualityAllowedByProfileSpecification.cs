@@ -17,7 +17,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
         public virtual DownloadSpecDecision IsSatisfiedBy(RemoteEpisode subject, ReleaseDecisionInformation information)
         {
-            _logger.Debug("Checking if report meets quality requirements. {0}", subject.ParsedEpisodeInfo.Quality);
+            _logger.Debug("Checking if report meets quality requirements. {Quality}", subject.ParsedEpisodeInfo.Quality);
 
             var profile = subject.Series.QualityProfile.Value;
             var qualityIndex = profile.GetIndex(subject.ParsedEpisodeInfo.Quality.Quality);
@@ -25,7 +25,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
             if (!qualityOrGroup.Allowed)
             {
-                _logger.Debug("Quality {0} rejected by Series' quality profile", subject.ParsedEpisodeInfo.Quality);
+                _logger.Debug("Quality {Quality} rejected by Series' quality profile", subject.ParsedEpisodeInfo.Quality);
                 return DownloadSpecDecision.Reject(DownloadRejectionReason.QualityNotWanted, "{0} is not wanted in profile", subject.ParsedEpisodeInfo.Quality.Quality);
             }
 

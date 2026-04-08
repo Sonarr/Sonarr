@@ -59,7 +59,7 @@ namespace NzbDrone.Core.DecisionEngine
         {
             if (reports.Any())
             {
-                _logger.ProgressInfo("Processing {0} releases", reports.Count);
+                _logger.ProgressInfo("Processing {ReleaseCount} releases", reports.Count);
             }
             else
             {
@@ -71,8 +71,8 @@ namespace NzbDrone.Core.DecisionEngine
             foreach (var report in reports)
             {
                 DownloadDecision decision = null;
-                _logger.ProgressTrace("Processing release {0}/{1}", reportNumber, reports.Count);
-                _logger.Debug("Processing release '{0}' from '{1}'", report.Title, report.Indexer);
+                _logger.ProgressTrace("Processing release {ReleaseNumber}/{ReleaseCount}", reportNumber, reports.Count);
+                _logger.Debug("Processing release '{ReleaseTitle}' from '{Indexer}'", report.Title, report.Indexer);
 
                 try
                 {
@@ -118,7 +118,7 @@ namespace NzbDrone.Core.DecisionEngine
                             remoteEpisode.CustomFormats = _formatCalculator.ParseCustomFormat(remoteEpisode, remoteEpisode.Release.Size);
                             remoteEpisode.CustomFormatScore = remoteEpisode?.Series?.QualityProfile?.Value.CalculateCustomFormatScore(remoteEpisode.CustomFormats) ?? 0;
 
-                            _logger.Trace("Custom Format Score of '{0}' [{1}] calculated for '{2}'", remoteEpisode.CustomFormatScore, remoteEpisode.CustomFormats?.ConcatToString(), report.Title);
+                            _logger.Trace("Custom Format Score of '{CustomFormatScore}' [{CustomFormats}] calculated for '{ReleaseTitle}'", remoteEpisode.CustomFormatScore, remoteEpisode.CustomFormats?.ConcatToString(), report.Title);
 
                             remoteEpisode.DownloadAllowed = remoteEpisode.Episodes.Any();
                             decision = GetDecisionForReport(remoteEpisode, new ReleaseDecisionInformation(pushedRelease, searchCriteria));
@@ -165,11 +165,11 @@ namespace NzbDrone.Core.DecisionEngine
                 {
                     if (decision.Rejections.Any())
                     {
-                        _logger.Debug("Release '{0}' from '{1}' rejected for the following reasons: {2}", report.Title, report.Indexer, string.Join(", ", decision.Rejections));
+                        _logger.Debug("Release '{ReleaseTitle}' from '{Indexer}' rejected for the following reasons: {RejectionReasons}", report.Title, report.Indexer, string.Join(", ", decision.Rejections));
                     }
                     else
                     {
-                        _logger.Debug("Release '{0}' from '{1}' accepted", report.Title, report.Indexer);
+                        _logger.Debug("Release '{ReleaseTitle}' from '{Indexer}' accepted", report.Title, report.Indexer);
                     }
 
                     yield return decision;
@@ -211,7 +211,7 @@ namespace NzbDrone.Core.DecisionEngine
             {
                 e.Data.Add("report", remoteEpisode.Release.ToJson());
                 e.Data.Add("parsed", remoteEpisode.ParsedEpisodeInfo.ToJson());
-                _logger.Error(e, "Couldn't evaluate decision on {0}", remoteEpisode.Release.Title);
+                _logger.Error(e, "Couldn't evaluate decision on {ReleaseTitle}", remoteEpisode.Release.Title);
                 return new DownloadRejection(DownloadRejectionReason.DecisionError, $"{spec.GetType().Name}: {e.Message}");
             }
 

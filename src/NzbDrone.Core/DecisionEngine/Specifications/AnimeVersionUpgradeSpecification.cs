@@ -64,7 +64,7 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
 
                     if (file.ReleaseGroup != releaseGroup)
                     {
-                        _logger.Debug("Existing Release group is: {0} - release's release group is: {1}", file.ReleaseGroup, releaseGroup);
+                        _logger.Debug("Existing Release group is: {ExistingReleaseGroup} - release's release group is: {ReleaseGroup}", file.ReleaseGroup, releaseGroup);
                         return DownloadSpecDecision.Reject(DownloadRejectionReason.ReleaseGroupDoesNotMatch, "{0} does not match existing release group {1}", releaseGroup, file.ReleaseGroup);
                     }
                 }
