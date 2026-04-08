@@ -132,7 +132,7 @@ namespace NzbDrone.Core.Configuration
 
         public AnimeSeasonSearchFallback AnimeSeasonSearchFallback
         {
-            get { return GetValueEnum("AnimeSeasonSearchFallback", AnimeSeasonSearchFallback.FullSeasonNotAired); }
+            get { return GetValueEnum("AnimeSeasonSearchFallback", AnimeSeasonSearchFallback.Always); }
 
             set { SetValue("AnimeSeasonSearchFallback", value); }
         }
